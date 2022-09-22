@@ -3,10 +3,10 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="form-inline">
-    <div class="col-md-12 k-header-alignment">
+    <div class="col-md-12 k-header-alignment k-allign">
         <h3>Legal Classification</h3>
     </div>
-    <p style="margin-left: 35px;">Use the tool below to control what products will be cost tested and at what level.</p>
+    <p style="margin-left: 15px;">Use the tool below to control what products will be cost tested and at what level.</p>
     <div class="col-md-12">
         <div class="alert alert-danger" *ngIf="validationMessage !=''">{{validationMessage}} </div>
     </div>
@@ -129,67 +129,71 @@
                     <div class="panel-heading">
                         <button class="btn btn-primary small k-grid-add" (click)="savePCTRules()"
                                 type="submit" [disabled]="!form.isValid">
-                            <span class="intelicon-check"></span>Save Changes
+                            <span class="intelicon-check fa-tan"></span>Save Changes
                         </button><button class="btn btn-primary small k-grid-add" (click)="cancel()">
-                            <span class="fa fa-ban"></span>Cancel Changes
+                            <span class="fa fa-ban fa-tan"></span>Cancel Changes
                         </button>
                     </div>
                     <div class="panel-body" style="padding-bottom: 40px;height:65vh;overflow-y:scroll">
                         <div class="col-sm-12">
                             <div class="row form-inline">
                                 <div class="col-md-3">
-                                    <p><label class="control-label">Select Product Type:</label></p>
-                                    <kendo-combobox id="productDropdown" title="Select a Product Type"
-                                                    placeholder="Select..." [(ngModel)]="pctRule.DEAL_PRD_TYPE_SID"
-                                                    [data]="distinctProductType | orderBy: 'PRD_TYPE'"
-                                                    [ngModelOptions]="{standalone: true}" [clearButton]="false"
-                                                    [allowCustom]="false" [required]="true" [filterable]="true" textField="PRD_TYPE"
-                                                    valueField="PRD_TYPE_SID" [valuePrimitive]="true"
-                                                    (valueChange)="prdTypeChange($event)"
-                                                    (filterChange)="handleFilter($event,'ProductType')"></kendo-combobox>
-                                </div>
-                                <div class="col-md-2">
-                                    <p><label class="control-label">Select Product Vertical:</label></p>
-                                    <kendo-combobox id="productDropdown" title="Select a Vertical"
-                                                    placeholder="Select..." [(ngModel)]="pctRule.PRD_CAT_NM_SID"
-                                                    [data]="ProductVertical" [ngModelOptions]="{standalone: true}"
-                                                    [clearButton]="false" [allowCustom]="false" [required]="true"
-                                                    [filterable]="true" textField="VERTICAL" valueField="VERTICAL_SID"
-                                                    [valuePrimitive]="true" (valueChange)="verticalChange($event)"
-                                                    (filterChange)="handleFilter($event,'Vertical')"
-                                                    [disabled]="pctRule.DEAL_PRD_TYPE_SID=='' || pctRule.DEAL_PRD_TYPE_SID==null">
-                                    </kendo-combobox>
-                                </div>
-                                <div class="col-md-2">
-                                    <label class="control-label">Select Level:</label>
-                                    <div id="radioButton">
-                                        <div class="radio-inline" *ngFor="let type of costTestProductType">
-                                            <input type="radio" title="type.name" [value]="type.name"
-                                                   [(ngModel)]="pctRule.COST_TEST_TYPE"
-                                                   [ngModelOptions]="{standalone: true}">{{type.name}}
-                                        </div>
+                                    <div class="opp-d-filter">
+                                        <p><label class="control-label">Select Product Type:</label></p>
+                                        <kendo-combobox id="productDropdown" title="Select a Product Type"
+                                                        placeholder="Select..." [(ngModel)]="pctRule.DEAL_PRD_TYPE_SID"
+                                                        [data]="distinctProductType | orderBy: 'PRD_TYPE'"
+                                                        [ngModelOptions]="{standalone: true}" [clearButton]="false"
+                                                        [allowCustom]="false" [required]="true" [filterable]="true" textField="PRD_TYPE"
+                                                        valueField="PRD_TYPE_SID" [valuePrimitive]="true"
+                                                        (valueChange)="prdTypeChange($event)"
+                                                        (filterChange)="handleFilter($event,'ProductType')"></kendo-combobox>
                                     </div>
                                 </div>
-                                <div class="col-md-5 commentbar" [hidden]="!showCommentbar">
-                                    You have assigned
-                                    <span>{{dealPrdTypeNm()}} </span><span>{{dealPrdVerticalNm()}}</span>to
-                                    <span>{{pctRule.COST_TEST_TYPE}}</span>for Cost Test
-                                </div>
-                                <div class="clearboth"></div>
-                                <div class="col-md-12" style="padding-top: 20px;" *ngIf="showQueryBuilder">
-                                    <div class="fl">Add more</div>
-                                    <kendo-dropdownlist [(ngModel)]="pctRule.CRITERIA" [data]="conditionCriteria"
-                                                        [ngModelOptions]="{standalone: true}" class="fl" style="margin: 0 10px;"
-                                                        title="Select a Criteria" [required]="true" textField="name" valueField="name"
-                                                        [valuePrimitive]="true"></kendo-dropdownlist>
-                                    <div class="fl">conditions below if required:</div>
+                                <div class="col-md-2">
+                                    <div class="opp-d-filter">
+                                        <p><label class="control-label">Select Product Vertical:</label></p>
+                                        <kendo-combobox id="productDropdown" title="Select a Vertical"
+                                                        placeholder="Select..." [(ngModel)]="pctRule.PRD_CAT_NM_SID"
+                                                        [data]="ProductVertical" [ngModelOptions]="{standalone: true}"
+                                                        [clearButton]="false" [allowCustom]="false" [required]="true"
+                                                        [filterable]="true" textField="VERTICAL" valueField="VERTICAL_SID"
+                                                        [valuePrimitive]="true" (valueChange)="verticalChange($event)"
+                                                        (filterChange)="handleFilter($event,'Vertical')"
+                                                        [disabled]="pctRule.DEAL_PRD_TYPE_SID=='' || pctRule.DEAL_PRD_TYPE_SID==null">
+                                        </kendo-combobox>
+                                    </div>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <label class="control-label">Select Level:</label>
+                                        <div id="radioButton">
+                                            <div class="radio-inline" *ngFor="let type of costTestProductType">
+                                                <input type="radio" title="type.name" [value]="type.name"
+                                                       [(ngModel)]="pctRule.COST_TEST_TYPE"
+                                                       [ngModelOptions]="{standalone: true}">{{type.name}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-5 commentbar" [hidden]="!showCommentbar">
+                                        You have assigned
+                                        <span>{{dealPrdTypeNm()}} </span><span>{{dealPrdVerticalNm()}}</span>&nbsp;to&nbsp;
+                                        <span>{{pctRule.COST_TEST_TYPE}}</span>&nbsp;for Cost Test&nbsp;
+                                    </div>
                                     <div class="clearboth"></div>
-                                    <pct-query-builder-angular *ngIf="isAttributeLoaded | async" [group]="filter.group"
-                                                               [parent]="initial" [form]="form" [operators]="operators"
-                                                               [leftValues]="leftValues" (saveEnable)="enableSaveHandler($event)">
-                                    </pct-query-builder-angular>
+                                    <div class="col-md-12" style="padding-top: 20px;" *ngIf="showQueryBuilder">
+                                        <div class="fl">Add more</div>
+                                        <kendo-dropdownlist [(ngModel)]="pctRule.CRITERIA" [data]="conditionCriteria"
+                                                            [ngModelOptions]="{standalone: true}" class="fl" style="margin: 0 10px;"
+                                                            title="Select a Criteria" [required]="true" textField="name" valueField="name"
+                                                            [valuePrimitive]="true"></kendo-dropdownlist>
+                                        <div class="fl">conditions below if required:</div>
+                                        <div class="clearboth"></div>
+                                        <pct-query-builder-angular *ngIf="isAttributeLoaded | async" [group]="filter.group"
+                                                                   [parent]="initial" [form]="form" [operators]="operators"
+                                                                   [leftValues]="leftValues" (saveEnable)="enableSaveHandler($event)">
+                                        </pct-query-builder-angular>
+                                    </div>
                                 </div>
-                            </div>
                         </div>
                     </div>
                 </div>

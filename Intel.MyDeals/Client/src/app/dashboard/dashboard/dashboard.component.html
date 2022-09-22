@@ -32,7 +32,7 @@
 
                 <div class="fr" style="width:254px">
                     <kendo-multiselect  kendoMultiSelectSummaryTag [placeholder]="'Select Customers...'" class="fr opUiContainer md" style="width: 250px; margin-right: 7px;" #cmbmulti [data]="custData" textField="CUST_NM" valueField="CUST_SID"
-                                       [(ngModel)]="selectedCustNames" (valueChange)="onCustomerChange($event)"></kendo-multiselect>
+                                       [autoClose]="false" [(ngModel)]="selectedCustNames" (valueChange)="onCustomerChange($event)"></kendo-multiselect>
                 </div>
 
                 <div class="fr" style="margin: 5px 5px 0 15px; color: #aaaaaa; font-size: 14px; ">
@@ -45,9 +45,9 @@
 
     <div class=" overFlowWidget">
         <div class="row" style="overflow-x: hidden;">
-            <div style="width: 100vw; height: 85vh;">
-                <gridster [options]="options" class="another-parent">
-                    <gridster-item [item]="item" *ngFor="let item of dashboard; let indx = index" class="attr-li-{{item.id}}">
+            <div id="height-grids" class="sum-fixes">
+                <gridster [options]="options" class="another-parent" id="parentID">
+                    <gridster-item [item]="item" *ngFor="let item of dashboard; let indx = index" class="attr-li-{{item.id}} few-grid-find">
                         <div class="widgetFull">
                             <div class="row widgetHeader">
                                 <div class="col-md-10">

@@ -8,7 +8,7 @@
 <loading-panel-angular id="CNTTRLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
                        [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
 
-<div id="horizontal" [ngClass]="{'collapsed': true, 'expanded': false, 'hideLnav': true}">
+<div id="horizontal" [ngClass]="{'collapsed': true, 'expanded': false, 'hideLnav': true}" class="new-bus-contract">
     <div id="center-pane" class="fr" [ngClass]="{'overFlowHidden': isTenderContract==true}">
         <div id="contractContainerWrapper">
             <div id="contractContainer" class="fullHeight">
@@ -40,7 +40,7 @@
                                         <div *ngIf="!isCustomerDivHidden" class="inputWidth">
                                             <div class="fl opUiLabel">Division:</div>
                                             <kendo-multiselect #CUST_MBR_DIV_Multi class="kendoInput" [data]="Customer_Divs"
-                                                               [(ngModel)]="CUST_NM_DIV"
+                                                               [(ngModel)]="CUST_NM_DIV" [autoClose]="false"
                                                                name="CUST_NM_DIV" textField="CUST_DIV_NM" valueField="CUST_DIV_NM"></kendo-multiselect>
                                             <div class="description">Blank means that ALL divisions are included</div>
                                         </div>
@@ -123,7 +123,7 @@
                                     </div>
                                     <div class="col-md-11 display slidermbottom">
                                         <label class="fl opUiLabel"
-                                               style="font-weight:normal" for="noenddate">No end date:</label><input style="margin-top:10px" type="checkbox" id="noenddate" name="noenddate"
+                                               style="font-weight:normal" for="noenddate">No end date:</label><input style="margin-top:-3px" type="checkbox" id="noenddate" name="noenddate"
                                                                                                                      [(ngModel)]="NO_END_DT" title="This will set the End Date to +20 years"
                                                                                                                      (change)="noEndDate()" />
                                     </div>
@@ -225,13 +225,13 @@
                                     </div>
                                     <div class="col-md-11 blockdisplay">
                                         <div>
-                                            <span class="f1 opUiLabel opUiLableWidth">
+                                            <span class="f1 opUiLabel opUiLableWidth label-color">
                                                 <span *ngIf="contractData?.IsAttachmentRequired" class="isReqField">
                                                     *
                                                 </span>Attachments:
                                             </span><span kendoTooltip>
                                                 <a title="Attach multiple files.<br/>Allowed File Types: doc, xls, txt, bmp, jpg, pdf, ppt, zip, xlsx, docx, pptx, odt, ods, ott, sxw, sxc, png, 7z, xps."
-                                                   class="opElementHelpIcon intelicon-information-outlined"></a>
+                                                   class="icon-color opElementHelpIcon intelicon-information-outlined"></a>
                                             </span><span class="description">
                                                 Your attachments will upload after clicking the Save
                                                 Contract button.
@@ -315,7 +315,7 @@
                                             <h6 class="noBottemBorder">Notes</h6>
                                         </div>
                                         <div class="col-md-11">
-                                            <kendo-textarea style="width:100%;padding-right:0px" resizable="vertical"
+                                            <kendo-textarea style="width: 100%; padding-right: 0px; box-shadow: none; border-color: #e7e7e7;" resizable="vertical"
                                                             [rows]="4" [(ngModel)]="NOTES" name="NOTES"></kendo-textarea>
                                         </div>
                                     </div>

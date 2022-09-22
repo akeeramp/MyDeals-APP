@@ -1,6 +1,6 @@
 <div id="sum-wrapper" *ngIf="showData">
     <div id="sum-header" style="min-width: 800px;height:106px">
-        <div class="divine-pro" style="margin-bottom:10px;font-size: 14px; line-height:2.9em; text-align: center; position: absolute; top: 16px; right:20px !important;">    
+        <div class="divine-pro" style="margin-bottom: 10px; font-size: 14px; line-height: 2.9em; text-align: center; position: absolute; top: -4px; right: 10px !important; ">    
             <span style="color: #0071C5; padding-right:22px">Customer Acceptance</span>
             <span id="toggle-container" [title]="(isCustAcptReadOnly == true && custAccptButton !== 'Pending')? '' :'Click to Change Contract Acceptance Criteria'">
                 <button type="button" class="btn  bts-btns" style="width:140px;line-height: 1em !important;height: 26px !important;" [ngClass]="custAccptButton === 'Pending' ? 'btn-primary' : 'btn-success' " (click)="pendingChange()" [disabled]="(isCustAcptReadOnly == true && custAccptButton !== 'Pending')">{{custAccptButton}}</button>            

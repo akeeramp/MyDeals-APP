@@ -140,15 +140,15 @@
         <!-- /.navbar-collapse -->
         @*<security-loader></security-loader>*@
     </div>
-    <div class="menu-bar">
-        <ul class="nav nav-tabs nav-tabs-intel-blocks header-fixes" id="myTab" role="tablist">
+    <div class="menu-bar above-limited">
+        <ul class="nav nav-tabs nav-tabs-intel-blocks header-fixes menu-one" id="myTab" role="tablist">
             @*<li class="dropdown">
-                <a class="btn btn-primary" id="dLabel" role="button" href="/" data-toggle="dropdown" data-target="#">Contracts <i class="intelicon-down"></i></a>
-                <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
-                <li><a href="@Url.Action("New", "Contract")">New Contract</a></li>
-                <li><a href="@Url.Action("Find", "Contract")">Find a Contract</a></li>
-                </ul>
-                </li>*@
+            <a class="btn btn-primary" id="dLabel" role="button" href="/" data-toggle="dropdown" data-target="#">Contracts <i class="intelicon-down"></i></a>
+            <ul class="dropdown-menu multi-level" role="menu" aria-labelledby="dropdownMenu">
+            <li><a href="@Url.Action("New", "Contract")">New Contract</a></li>
+            <li><a href="@Url.Action("Find", "Contract")">Find a Contract</a></li>
+            </ul>
+            </li>*@
 
             <li><a class="mainMenu" href="@Url.Action("Index", "Home", new { Area = "" })" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs"> Home</span></a></li>
             @*<li><a href="/Dashboard#/portal" title="Dashboard"><i class="intelicon-line-chart-outlined"></i><span class="hidden-xs"> Dashboard</span></a></li>*@
@@ -157,7 +157,7 @@
             @if (isDeveloper)
             {
                 <li class="dropdown">
-                    <a class="btn btn-primary mainMenu" role="button" href="/" data-toggle="dropdown" data-target="#" title="Developer Documents"><i class="intelicon-attach-document-solid"></i><span class="hidden-xs"> Docs </span><i class="intelicon-down"></i></a>
+                    <a class="btn btn-primary mainMenu primary-one" role="button" href="/" data-toggle="dropdown" data-target="#" title="Developer Documents"><i class="intelicon-attach-document-solid"></i><span class="hidden-xs"> Docs </span><i class="intelicon-down"></i></a>
                     <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
                         <li><a href="@Url.Action("Index", "CodingPractices", new { Area = "" })">Coding Practices</a></li>
                     </ul>
@@ -165,10 +165,10 @@
             }
 
             @*Instead of using href can use the ui-sref to translate routes,
-                however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@
+            however as we want to retain the # routing to distinguish between MVC and angular routes hence using href*@
 
             <li class="dropdown">
-                <a class="btn btn-primary mainMenu" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#" title="Administrative Tools"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Admin</span> <i class="intelicon-down"></i></a>
+                <a class="btn btn-primary mainMenu primary-one" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#" title="Administrative Tools"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Admin</span> <i class="intelicon-down"></i></a>
                 <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
                     @if (isDeveloper)
                     {
@@ -290,7 +290,7 @@
                                 @*<li><a href="Admin#/productAlias">Product Alias</a></li>*@
                                 <li ui-sref-active="active"><a ui-sref="productAlias">Product Alias</a></li>
                                 @*<li><a href="Admin#/productSelector">Product Entry</a></li>
-                    <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
+                                <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
 
                                 @*<li><a href="Admin#/products">Product Hierarchy</a></li>*@
                                 <li ui-sref-active="active"><a ui-sref="products">Product Hierarchy</a></li>
@@ -427,7 +427,7 @@
             @if (isReportingUser)
             {
                 <li class="dropdown">
-                    <a class="btn btn-primary mainMenu" role="button" href="/" data-toggle="dropdown" data-target="#" title="Reporting Dashboard">
+                    <a class="btn btn-primary mainMenu primary-one" role="button" href="/" data-toggle="dropdown" data-target="#" title="Reporting Dashboard">
                         <i class="intelicon-reports-solid"></i><span class="hidden-xs"> Report </span><i class="intelicon-down"></i>
                     </a>
                     <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
@@ -435,11 +435,9 @@
                     </ul>
                 </li>
             }
-     
-            @Html.Partial("_Search")
-            @*<global-search-angular></global-search-angular> will be replace once header component is ready*@
-
         </ul>
+        @*@Html.Partial("_Search")*@
+        <global-search-angular></global-search-angular>
     </div>
 </nav>
 
@@ -495,6 +493,43 @@
     .header-fixes li.dropdown ul.dropdown-menu {
         border-radius: 0;
     }
+    .menu-one.nav {
+        background-color: transparent !important;
+        font-size: 14px;
+        border-bottom: none;
+        margin: 0;
+    }
+
+    .menu-one.nav li a {
+        padding: 5px 10px !important;
+        background-color: #0071c5 !important;
+        color: #fff !important;
+        border-right: 0 solid transparent !important;
+        border: none;
+    }
+
+    .menu-one.nav li.dropdown ul.dropdown-menu li a {
+        background-color: #fff !important;
+        color: #111 !important;
+    }
+
+    .menu-one.nav li.dropdown ul.dropdown-menu li a:after {
+        margin-right: 0px;
+    }
+
+    .primary-one {
+        background-color: none !important;
+        border-color: none !important;
+    }
+
+    .above-limited {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        position: relative;
+        width: 100%;
+    }
+
 </style>
 
 <script>

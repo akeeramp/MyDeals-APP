@@ -46,3 +46,23 @@
 .dashboard-header {
     margin-top: 48px !important;
 }
+
+kendo-window-titlebar.kendo-titlebar-custom {
+    padding: 3px 15px;
+}
+
+kendo-window-titlebar.kendo-titlebar-custom .k-button-icon {
+    color: #fff;
+    position: relative;
+    height: 35px;
+    width: 35px;
+    top: 0;
+    bottom: 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+kendo-window-titlebar.kendo-titlebar-custom .k-button-icon .k-i-close {
+    color: #fff;
+}

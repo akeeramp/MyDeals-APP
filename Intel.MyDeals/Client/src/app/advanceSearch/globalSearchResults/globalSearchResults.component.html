@@ -1,13 +1,13 @@
 <div class="container">
     <div class="row justify-content-start" style="margin-bottom: 15px;">
-        <div class="col-md-5" style="text-align:center;">
-            <span class="search intelicon-search" style="margin-right: 10px; font-size: 28px; color: #0071C5; vertical-align: sub;"></span>
-            <kendo-textbox style="width: auto;" [clearButton]="true" [(ngModel)]="searchText" (keypress)="txtEnterPressed($event)"></kendo-textbox>
-        </div>
-        <div class="col-md-7">
-            <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-                <mat-button-toggle class="btn btn-primary" *ngFor="let toggle of opTypes" [checked]="opType==toggle.value" value="{{toggle.value}}" (change)="onOpTypeChange(toggle.value)">{{toggle.label}} </mat-button-toggle>
-            </mat-button-toggle-group>
+        <div class="applied-products">
+            <span class="search intelicon-search" style=" margin-right: 8px; font-size: 28px; color: #0071C5; vertical-align: sub;"></span>
+            <kendo-textbox class="searchResultInpt" [clearButton]="true" [(ngModel)]="searchText" (keypress)="txtEnterPressed($event)"></kendo-textbox>
+            <div class="copper-btns">
+                <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
+                    <mat-button-toggle class="btn btn-primary" *ngFor="let toggle of opTypes" [checked]="opType==toggle.value" value="{{toggle.value}}" (change)="onOpTypeChange(toggle.value)">{{toggle.label}} </mat-button-toggle>
+                </mat-button-toggle-group>
+            </div>
         </div>
     </div>
     <div class="row no-gutters justify-content-start">

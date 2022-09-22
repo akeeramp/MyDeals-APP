@@ -389,3 +389,48 @@ gridster-item.attr-li-7 .container-fluid.widget-container {
     font-size: 14px !important;
     padding-top: 0.275rem;
 }
+
+kendo-slider.before-ques .k-slider-wrap .k-slider-track-wrap ul li span.k-label:before {
+    content: 'Q';
+}
+
+kendo-slider.before-ques .k-slider-wrap .k-slider-track-wrap ul li span.k-label {
+    position: relative;
+    display: inline-block;
+    padding-top: 10px;
+}
+
+.ss-loading-overlay {
+    top: 20px;
+    display: flex;
+    justify-content: center;
+}
+
+.few-oracle-css {
+    position: relative;
+    width: 100%;
+}
+
+.parent-one pricing-table-editor .row {
+    margin-left: 0px;
+}
+
+.sum-fixes {
+    width: 100vw;
+    height: 85vh;
+}
+
+.sum-fixes-plus {
+    width: 100vw;
+    height: calc(85vh + 320px);
+}
+
+#parentID gridster-preview{
+    background-color: #fff!important;
+}
+
+.copper-btns mat-button-toggle button .mat-button-toggle-label-content {
+    padding: 0 !important;
+    line-height: 21px !important;
+    font-size: 14px;
+}

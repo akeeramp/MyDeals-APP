@@ -17,6 +17,9 @@ import { overLappingDealsService } from "./overLapping.service";
 export class overLappingDealsComponent {
     S_ID: any;
     constructor(private overLappingDealsSvc: overLappingDealsService, private loggerSvc: logger) {
+        //pls dont remove this even it its not as part of the route this is to handle condtions when we traverse between contract details with in manage tab
+        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
+        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
     @Input() contractData: any;
     @Input() UItemplate: any;

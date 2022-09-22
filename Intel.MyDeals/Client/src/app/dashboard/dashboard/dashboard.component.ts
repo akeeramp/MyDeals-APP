@@ -1,5 +1,5 @@
 import * as angular from "angular";
-import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, ViewChild, ViewEncapsulation, OnChanges } from '@angular/core';
 import { DisplayGrid, GridsterConfig, GridsterItem, GridType, CompactType } from 'angular-gridster2';
 import { downgradeComponent } from "@angular/upgrade/static";
 import { MatDialog } from '@angular/material/dialog';
@@ -62,6 +62,7 @@ export class DashboardComponent implements OnInit {
         $event.stopPropagation();
         this.dashboard.splice(this.dashboard.indexOf(item), 1);
         this.saveLayout();
+        this.gridValsMinus();
     }
 
     onCustomerChange(custData) {
@@ -107,6 +108,7 @@ export class DashboardComponent implements OnInit {
                     // Don't set a position, so that the widget will be added "smartly" wherever space is available.
                     this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: null, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: null, rows: null, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
                     this.saveLayout();
+                    this.gridValsPlus();
                 }
                 this.options.api.optionsChanged();
             }
@@ -356,6 +358,46 @@ export class DashboardComponent implements OnInit {
         $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
         $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
+
+    gridValsPlus() {
+        var parent = document.getElementById("parentID");
+        var nodesSameClass = parent.getElementsByClassName("few-grid-find");
+        var testnodesSameClass = nodesSameClass.length + 1;
+        if (testnodesSameClass > 3) {
+            $("#height-grids").removeClass("sum-fixes");
+            $("#height-grids").addClass("sum-fixes-plus");
+        } else {
+            $("#height-grids").addClass("sum-fixes");
+            $("#height-grids").removeClass("sum-fixes-plus");
+        }
+    }
+
+    gridValsMinus() {
+        var parentMin = document.getElementById("parentID");
+        var nodesSameClassMin = parentMin.getElementsByClassName("few-grid-find");
+        var testnodesSameClassMin = nodesSameClassMin.length - 1;
+        if (testnodesSameClassMin > 3) {
+            $("#height-grids").removeClass("sum-fixes");
+            $("#height-grids").addClass("sum-fixes-plus");
+        } else {
+            $("#height-grids").addClass("sum-fixes");
+            $("#height-grids").removeClass("sum-fixes-plus");
+        }
+    }
+
+    /*gridValsCheck() {
+        var parentCheck = document.getElementById("parentID");
+        var nodesSameClassCheck = parentCheck.getElementsByClassName("few-grid-find");
+        var testnodesSameClassCheck = nodesSameClassCheck.length;
+        if (testnodesSameClassCheck > 3) {
+            $("#height-grids").removeClass("sum-fixes");
+            $("#height-grids").addClass("sum-fixes-plus");
+        } else {
+            $("#height-grids").addClass("sum-fixes");
+            $("#height-grids").removeClass("sum-fixes-plus");
+        }
+    }*/
+
 }
 
 angular.module("app").directive(

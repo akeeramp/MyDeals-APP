@@ -115,38 +115,38 @@
                         </div>
                     </div>
                 </div>
-                <div *ngIf="selLnav=='MeetComp'">
+                <div *ngIf="selLnav=='MeetComp'" class="few-oracle-css">
                     <meet-comp-contract [objSid]="contractData.DC_ID" [isAdhoc]="'1'" [objTypeId]="'1'" [lastMeetCompRun]="contractData.LAST_COST_TEST_RUN" [pageNm]="'WIDGET'"></meet-comp-contract>
                 </div>
-                <div *ngIf="selLnav=='Manage' || selLnav=='approvalDiv'">
+                <div *ngIf="selLnav=='Manage' || selLnav=='approvalDiv'" class="few-oracle-css">
                     <contract-manager [contractData]="contractData" [UItemplate]="UItemplate" (modelChange)="loadModel($event)" (refreshedContractData)="refreshContractData($event)">
                     </contract-manager>
                 </div>
-                <div *ngIf="selLnav=='overlapDiv'">
+                <div *ngIf="selLnav=='overlapDiv'" class="few-oracle-css">
                     <overlapping-deals [contractData]="contractData" [UItemplate]="UItemplate"></overlapping-deals>
                 </div>
-                <div *ngIf="selLnav=='groupExclusionDiv'">
+                <div *ngIf="selLnav=='groupExclusionDiv'" class="few-oracle-css">
                     <manager-pct [contractData]="contractData" [UItemplate]="UItemplate" [tab]="selLnav"></manager-pct>
                 </div>
-                <div *ngIf="selLnav=='contractDetailsDiv'">
+                <div *ngIf="selLnav=='contractDetailsDiv'" class="few-oracle-css">
                     <contract-details [C_ID]="contractData?.DC_ID"></contract-details>
                 </div>
-                <div *ngIf="selLnav=='historyDiv'">
+                <div *ngIf="selLnav=='historyDiv'" class="few-oracle-css">
                     <contract-history [contractData]="contractData" [UItemplate]="UItemplate"></contract-history>
                 </div>
-                <div *ngIf="selLnav=='contractReviewDiv'">
+                <div *ngIf="selLnav=='contractReviewDiv'" class="few-oracle-css">
                     <contract-export [contractData]="contractData" [UItemplate]="UItemplate"></contract-export>
                 </div>
-                <div *ngIf="selLnav=='dealReviewDiv'">
+                <div *ngIf="selLnav=='dealReviewDiv'" class="few-oracle-css">
                     <all-deals [contractData]="contractData" [UItemplate]="UItemplate"></all-deals>
                 </div>
-                <div *ngIf="selLnav=='dealProducts'">
+                <div *ngIf="selLnav=='dealProducts'" class="few-oracle-css">
                     <missing-cap [contractData]="contractData" [UItemplate]="UItemplate"></missing-cap>
                 </div>
-                <div *ngIf="selLnav=='pctDiv'">
+                <div *ngIf="selLnav=='pctDiv'" class="few-oracle-css">
                     <manager-pct [contractData]="contractData" [UItemplate]="UItemplate" [tab]="selLnav"></manager-pct>
                 </div>
-                <div *ngIf="selLnav=='ViewContractDetails'">
+                <div *ngIf="selLnav=='ViewContractDetails'" class="few-oracle-css">
                     <contract-details [C_ID]="contractData?.DC_ID"></contract-details>
                 </div>
             </div>

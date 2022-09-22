@@ -36,3 +36,24 @@
 #directiveDropdown {
     min-width: 15%;
 }
+
+.k-grid-add {
+    font-size: 18px !important;
+}
+
+.fa-tan {
+    margin-right: 4px;
+}
+
+.k-allign {
+    padding-left: 15px !important;
+}
+
+.opp-d-filter {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+.opp-d-filter kendo-combobox {
+    padding-right: 0 !important;
+}

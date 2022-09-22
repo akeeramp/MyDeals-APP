@@ -78,3 +78,41 @@ mat-list-item:hover {
 .dropdown-search li {
     cursor: pointer
 }
+
+.applied-products {
+    margin-bottom: 25px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    width: 100%;
+}
+
+.copper-btns mat-button-toggle {
+    border-radius: 0 !important;
+    padding: 5px;
+}
+
+.copper-btns mat-button-toggle:first-child {
+    border-top-left-radius: 3px !important;
+    border-bottom-left-radius: 3px !important;
+}
+
+.copper-btns mat-button-toggle:last-child {
+    border-top-right-radius: 3px !important;
+    border-bottom-right-radius: 3px !important;
+}
+
+.copper-btns {
+    margin-left: 5px;
+}
+
+.applied-products .searchResultInpt {
+    background-color: #fff;
+    color: #444;
+    border: 1px solid #e6e6e6;
+    margin-bottom: 0;
+    padding-left: 5px;
+    margin-right: 6px;
+    width: 325px;
+}

@@ -84,3 +84,17 @@ label {
     margin-bottom: 5px !important;
     font-weight: bold !important;
 }
+
+.dis-approve {
+    margin-left: 67px;
+}
+
+.k-grid.append-grid-changes td {
+    border: 0px !important;
+}
+
+.app-layers {
+    width: 375px;
+    margin-top: 10px;
+    margin-left: 67px;
+}

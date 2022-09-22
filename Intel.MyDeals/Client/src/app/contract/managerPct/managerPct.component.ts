@@ -19,7 +19,9 @@ import { FormBuilder } from "@angular/forms";
 
 export class managerPctComponent {
     constructor(private loggerSvc: logger, private managerPctSvc: managerPctservice, private lnavSvc: lnavService, private headerSvc: headerService, private formBuilder: FormBuilder) {
-        
+        //pls dont remove this even it its not as part of the route this is to handle condtions when we traverse between contract details with in manage tab
+        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
+        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
     //public view: GridDataResult;
     public isLoading: boolean;

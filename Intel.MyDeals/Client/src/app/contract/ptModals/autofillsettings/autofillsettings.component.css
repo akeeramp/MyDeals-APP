@@ -1,6 +1,8 @@
-.modal-header {
+.modal-header .autofillhead {
     padding-top: 5px !important;
     padding-bottom: 5px !important;
+    border-bottom: 0px solid #dee2e6 !important;
+    margin-top: 18px !important;
 }
 
 .buttongroup-btn {
@@ -26,9 +28,9 @@
     text-align: center;
 }
 
-.autoFillOverarching .k-numerictextbox {
+/*.autoFillOverarching .k-numerictextbox {
     padding: 0px;
-}
+}*/
 
 .minPadding {
     padding: 2px;
@@ -36,11 +38,22 @@
 
 .autoFillOverarchingTitle {
     color: darkslategray;
-    font-size: 14px !important;
+    font-size: 13px !important;
     font-weight: 600;
-    margin: -5px 0 -15px 0;
+    /* margin: -5px 0 -15px 0;*/
+    margin-top: -8px;
+    margin-left: -2px
 }
 
+.autofill-settings.modal-header.autofillhead {
+    padding: 15px;
+}
+
+.autofill-settings.modal-body.settingbody {
+    padding: 15px;
+    position: relative;
+    width: 100%;
+}
 
 /*This "opUiContainer.md .opUiLabel" overrides site-wide CSS*/
 
@@ -49,24 +62,24 @@
     width: 203px;
 }
 
-.matbutton {
+.mattoggelbutton.matbutton {
     color: #fff;
     border-radius: 5px
 }
-
-.mat-icon {
+.mattoggelbutton .mat-icon {
     height: 30px;
 }
 
-.mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
-    font-size: 19px;
-    line-height: 1.33333;
+.mattoggelbutton .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+    font-size: 10px !important;
+    /* line-height: 1.33333;*/
     font-weight: normal;
     padding: 0 12px;
 }
 
 
-.mat-button-toggle-button {
+
+.mattoggelbutton .mat-button-toggle-button {
     border: 0;
     color: inherit;
     padding: 0;
@@ -76,22 +89,23 @@
     width: 100%;
     height: 30px;
     cursor: pointer;
+    margin-left: -10px;
 }
 
-.mat-button-toggle-appearance-standard {
+.mattoggelbutton .mat-button-toggle-appearance-standard {
     background: #777777 !important;
 }
 
-.mat-button-toggle-checked.mat-button-toggle-appearance-standard {
+.mattoggelbutton .mat-button-toggle-checked.mat-button-toggle-appearance-standard {
     color: rgba(0,0,0,.87);
     background: #00AEEF !important;
 }
 
-.mat-button-toggle-standalone.mat-button-toggle-appearance-standard, .mat-button-toggle-group-appearance-standard {
+.mattoggelbutton .mat-button-toggle-standalone.mat-button-toggle-appearance-standard, .mat-button-toggle-group-appearance-standard {
     border: none;
 }
 
-mat-button-toggle-label-content {
+.mattoggelbutton mat-button-toggle-label-content {
     font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
     font-size: 15px;
     line-height: 1.5;
@@ -99,13 +113,15 @@ mat-button-toggle-label-content {
     background-color: #fff;
 }
 
-.modal-content {
-    background: #003c71;
+.totalcontent.modal-content {
+    background: #fff !important;
     resize: horizontal;
     min-width: 750px !important;
+    border: none;
+    box-shadow: none;
 }
 
-.mat-button-toggle-appearance-standard, .mat-button-toggle-label-content {
+.mattoggelbutton.mat-button-toggle-appearance-standard, .mat-button-toggle-label-content {
     font-size: 15px !important;
     line-height: 2 !important;
     font-weight: bold !important;
@@ -115,23 +131,32 @@ mat-button-toggle-label-content {
 }
 
 .autofillrow {
-    display:flex;
-    flex-wrap:nowrap;
-    justify-content:left;
+    display: flex;
+    flex-wrap: nowrap;
+    justify-content: left;
+  /*  margin-left: 231px;*/
+    margin-top: -103px
 }
 
-    .autofillrow > div {
-    width:100%;
-    margin:2px;
-    text-align:left;
-    }
-.headstyle {
-    font-family: Bruum FY;
-    font-weight: bold !important;
-    font-size: 15px !important;
-    color: #1a3e6f;
+/*.firstrow {
+    margin-left: -220px;
+    margin-top: 210px;
+}*/
+
+.autofillrow > div {
+    width: 100%;
+    margin: 2px;
+    text-align: left;
 }
-    
+
+.headstyle {
+    font-family: 'Intel Clear';
+    font-weight: bold !important;
+    font-size: 13px !important;
+    color: #1a3e6f;
+    display: flex;
+}
+
 .row {
     display: -ms-flexbox;
     display: flex;
@@ -142,9 +167,89 @@ mat-button-toggle-label-content {
     width: 100%
 }
 
-.k-treeview {
-    height: 250px !important;
+.autofilltreeview .k-treeview {
     border: 1px solid #ccc !important;
     box-shadow: 2px 2px 4px #000 !important;
     background-color: white !important;
+    width: 100% !important;
+    font-size: 12px !important;
+    font-family: 'Intel Clear' !important;
+    height: 235px !important;
+}
+
+/*.mat-dialog-container {
+    padding: inherit !important;
+    overflow-y: auto;
+}*/
+
+.mattoggelbutton .mat-button-toggle-group {
+    width: 97% !important;
+}
+
+.settingbody {
+    position: relative;
+    flex: 1 1 auto;
+    margin-bottom: 141px !important
+}
+
+.helpset.opElementHelpIcon {
+    font-size: 18px;
+    color: #979797;
+    margin-top: 12px;
+    padding-bottom: 3px;
+}
+
+.opUiLabel {
+    margin-top: 106px;
+    margin-left: -240px;
+}
+
+.label {
+    margin-top: 6px;
+    margin-left: -6px;
+}
+
+.autofillrow .k-numerictextbox .k-numeric-wrap {
+    border-color: #ced4da;
+    color: #495057;
+    background-color: #ffffff;
+    /*margin-top: 104px;
+    margin-left: -17px;*/
+    width: 185px !important
+}
+
+
+#mat-button-toggle-98-button .mattoggelbutton .mat-button-toggle-button {
+    margin-left: -14px !important;
+}
+
+/*.k-multiselect .k-multiselect-wrap .k-button:last-child, .k-dropdowntree .k-multiselect-wrap .k-button:last-child {
+    margin-bottom: calc(0.25rem - 1px);
+    font-size: 12px;
+    font-family: 'Intel Clear';
+}*/
+
+.mattoggelbutton .mat-button-toggle-group-appearance-standard {
+    margin-left: 5px !important;
+}
+.headingcontent .modal-content {
+    background-color: #fff !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-left: none;
+    border-right: none;
+    padding: 0px
+}
+.autofillabel {
+    margin-left: 0 !important;
+    margin-top: 0;
+}
+.md .intel.titleclass {
+    float: right;
+    margin: -19px;
+    padding-right: 41px;
+    color: #1a3e6f;
+    font-weight: bold;
+    font-family: 'Intel Clear';
+    font-size: 13px
 }

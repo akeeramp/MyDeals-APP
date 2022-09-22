@@ -1,4 +1,4 @@
-﻿#secBasicContainerWrapper {
+﻿.new-bus-contract #secBasicContainerWrapper {
     height: 100%;
     padding: 2px 0 50px 0;
     -webkit-box-sizing: border-box;
@@ -6,20 +6,20 @@
     box-sizing: border-box
 }
 
-.input-error {
+.new-bus-contract .input-error {
     border: 1px solid red
 }
 
-.inputWidth {
+.new-bus-contract .inputWidth {
     width: 100%
 }
 
-.kendoInput {
+.new-bus-contract .kendoInput {
     width: 100%;
     padding: 0px
 }
 
-.blockdisplay {
+.new-bus-contract .blockdisplay {
     display: flex;
     flex-direction: column;
     margin-bottom: 20px;
@@ -27,110 +27,112 @@
     width: 100%
 }
 
-.margindisplay {
+.new-bus-contract .margindisplay {
     margin-top: 10px
 }
 
-#contractContainerWrapper {
+.new-bus-contract #contractContainerWrapper {
     margin-top: 33px !important
 }
 
-.dialog {
+.new-bus-contract .dialog {
     display: flex
 }
 
-.dialogbutton {
+.new-bus-contract .dialogbutton {
     flex-grow: 1
 }
 
-.dialogmsg {
+.new-bus-contract .dialogmsg {
     margin: 30px;
-    text-align: center
+    text-align: center;
+    font-family: 'Intel Clear' !important;
+    font-size: 15px !important
 }
 
-.mleft {
+.new-bus-contract .mleft {
     margin-left: 30px;
 }
 
-#secContainer {
+.new-bus-contract #secContainer {
     overflow: auto !important;
     height: 73vh;
     line-height: 1.5
 }
 
-.isReqField {
+.new-bus-contract .isReqField {
     color: red
 }
 
-.contract-detail-form .opUiLabel {
+.new-bus-contract .contract-detail-form .opUiLabel {
     font-size: 14px;
     width: 160px;
     font-weight: bold
 }
 
-.padTop30 {
+.new-bus-contract .padTop30 {
     padding-top: 30px
 }
 
-.k-dialog .promptUserDialog {
+.new-bus-contract .k-dialog .promptUserDialog {
     text-align: center;
     padding: 10px 0 0 0
 }
 
-.k-dialog .promptUserDialog h4 {
-    color: #003C71;
-    font-size: 18px;
-    font-weight: 600;
-    margin-top: 0
-}
+    .new-bus-contract .k-dialog .promptUserDialog h4 {
+        color: #003C71;
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 0
+    }
 
-.k-dialog .promptUserDialog p {
-    font-size: 12px;
-    padding: 10px 20px
-}
+    .new-bus-contract .k-dialog .promptUserDialog p {
+        font-size: 12px;
+        padding: 10px 20px
+    }
 
-.delete-attach-icon {
+.new-bus-contract .delete-attach-icon {
     font-size: 16px;
     cursor: pointer
 }
 
-.delete-attach-icon:hover {
-    text-decoration: none
-}
+    .new-bus-contract .delete-attach-icon:hover {
+        text-decoration: none
+    }
 
-.btn-primary {
+.new-bus-contract .btn-primary {
     background-color: #00AEFF !important
 }
 
-a {
+.new-bus-contract a {
     color: #00aeef !important
 }
 
-.hint-collapse {
+.new-bus-contract .hint-collapse {
     display: none
 }
 
 @media (max-width:1000px) {
-    .hint-collapse {
+    .new-bus-contract .hint-collapse {
         background-color: #f3D54E;
         color: #ffffff;
         display: inherit
     }
 
-    .no-hint-collapse {
+    .new-bus-contract .no-hint-collapse {
         display: none
     }
 }
 
-.disabled-section {
+.new-bus-contract .disabled-section {
     background-color: #f2f2f2
 }
 
-.slidermbottom {
-    margin-bottom: 21px
+.new-bus-contract .slidermbottom {
+    margin-bottom: 10px;
 }
 
-#secFooter {
+.new-bus-contract #secFooter {
     margin: 0 0 -50px 0;
     height: 50px;
     border-top: 1px solid #eeeeee;
@@ -144,84 +146,84 @@ a {
     bottom: 64.5px !important
 }
 
-.fullHeight {
+.new-bus-contract .fullHeight {
     height: 100%
 }
 
-#contractHeading {
+.new-bus-contract #contractHeading {
     padding: 0
 }
 
-.contract-detail-form .opUiLabel {
+.new-bus-contract .contract-detail-form .opUiLabel {
     font-size: 14px;
     width: 160px;
     font-weight: bold
 }
 
-.radioControl {
+.new-bus-contract .radioControl {
     cursor: pointer !important;
     font-weight: normal !important
 }
 
-.radioButtonGroup {
+.new-bus-contract .radioButtonGroup {
     display: inline-flex !important;
     align-items: flex-start;
 }
 
-.contract-detail-form {
+.new-bus-contract .contract-detail-form {
     padding-bottom: 85px !important
 }
 
-.display {
+.new-bus-contract .display {
     margin-top: 20px;
     display: flex;
     padding: 0;
     width: 100%
 }
 
-.top {
+.new-bus-contract .top {
     margin-top: 20px
 }
 
-.displayblock {
+.new-bus-contract .displayblock {
     flex-flow: wrap
 }
 
-.row {
-    margin-bottom: 20px !important;
+.new-bus-contract .row {
+    margin-bottom: 4px !important;
     padding: 0 !important
 }
 
-.k-button-icon {
+.new-bus-contract .k-button-icon {
     left: 0px !important;
-    padding-top:0px !important;
+    padding-top: 0px !important;
 }
 
-kendo-dropdownlist,
-.inlineDisplay {
+.new-bus-contract kendo-dropdownlist,
+.new-bus-contract .inlineDisplay {
     flex-grow: 1
 }
 
 
-kendo-upload-action-buttons{
-    display:none!important;
+.new-bus-contract kendo-upload-action-buttons {
+    display: none !important;
 }
 
-.opUiLabel {
+.new-bus-contract .opUiLabel {
     width: 200px
 }
 
-.fl.opUiLabel {
+.new-bus-contract .fl.opUiLabel {
     padding-left: 0
 }
 
-.contract-detail-form .C2ALabel .opUiLabel {
+.new-bus-contract .contract-detail-form .C2ALabel .opUiLabel {
     font-weight: bold;
     font-size: 14px;
     width: 200px
 }
 
-.showMore {
+.new-bus-contract .showMore {
     cursor: pointer;
     font-size: 12px;
     font-weight: 800;
@@ -233,15 +235,15 @@ kendo-upload-action-buttons{
     margin-top: 5px;
 }
 
-.showMore:hover {
-    text-decoration: none;
-}
+    .new-bus-contract .showMore:hover {
+        text-decoration: none;
+    }
 
-#fileAttachmentGrid {
+.new-bus-contract #fileAttachmentGrid {
     height: fit-content !important;
 }
 
-.details {
+.new-bus-contract .details {
     border: 2px solid #cccccc;
     border-radius: 0.5em;
     padding: 0.3em;
@@ -249,26 +251,26 @@ kendo-upload-action-buttons{
     width: 100%;
 }
 
-    .details > p {
+    .new-bus-contract .details > p {
         margin-top: 5px;
         color: rgb(0, 113, 197);
         font-weight: 800;
         font-size: 12px;
     }
 
-.atbrDetails {
+.new-bus-contract .atbrDetails {
     float: left;
     width: 60%;
     text-align: left;
 }
 
-.atbrDate {
+.new-bus-contract .atbrDate {
     float: right;
     width: 40%;
     text-align: right;
 }
 
-.updateBy {
+.new-bus-contract .updateBy {
     color: #0071c5;
     font-size: 12px;
     font-weight: 800;
@@ -282,12 +284,10 @@ kendo-upload-action-buttons{
     overflow: hidden;
 }
 
-kendo-slider.before-ques .k-slider-wrap .k-slider-track-wrap ul li span.k-label:before {
-    content: 'Q';
+.new-bus-contract .icon-color {
+    color: #979797 !important;
 }
 
-kendo-slider.before-ques .k-slider-wrap .k-slider-track-wrap ul li span.k-label {
-    position: relative;
-    display: inline-block;
-    padding-top: 10px;
+.new-bus-contract .label-color {
+    font-weight: normal !important;
 }

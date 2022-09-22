@@ -11,7 +11,7 @@ import { FormGroup } from "@angular/forms";
 @Component({
     selector: "adminDealTypes",
     templateUrl: "Client/src/app/admin/dealTypes/admin.dealTypes.component.html",
-    //styleUrls: ['Client/src/app/admin/dealTypes/admin.dealTypes.component.css']
+    styleUrls: ['Client/src/app/admin/dealTypes/admin.dealTypes.component.css']
 })
 export class adminDealTypesComponent {
     constructor(private dealTypesSvc: dealTypesService, private loggerSvc: logger) {

@@ -90,7 +90,7 @@ td:not(.error-cell).readonly-cell {
     color: #0071c5;
 }
 .dirty {
-    font-weight: bolder !important;
+    /*font-weight: bolder !important;*/
     color: #00AEEF !important;
 }
 
@@ -170,5 +170,5 @@ kendo-toolbar-renderer {
 .mat-dialog-container {
     background: #fff;
     color: rgba(0,0,0,.87);
-    padding: 0px;
+    /*padding: 0px;*/
 }

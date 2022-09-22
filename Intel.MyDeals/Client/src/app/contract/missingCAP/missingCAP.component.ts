@@ -21,6 +21,9 @@ import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 export class missingCAPComponent {
     constructor(private missingCapSvc: missingCAPService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
+        //pls dont remove this even it its not as part of the route this is to handle condtions when we traverse between contract details with in manage tab
+        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
+        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
     @Input() contractData: any;
     @Input() UItemplate: any;

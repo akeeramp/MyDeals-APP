@@ -6,15 +6,18 @@
     <div class="container">
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2">
-                <div><label>Customers: </label> {{copyCntrctCustomerName}} </div>
-                <div><label>Date Range: </label> {{copyCntrctStartDate}} -{{copyCntrctEndDate}} </div>
+                <div class="dis-approve">
+                    <div><label>Customers: </label> {{copyCntrctCustomerName}} </div>
+                    <div><label>Date Range: </label> {{copyCntrctStartDate}} -{{copyCntrctEndDate}} </div>
+                </div>
             </div>
         </div>
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2">
-                <div class="inner-addon right-addon" style="width:375px; margin-top:20px"><i
-                        class="glyphicon glyphicon-search"></i><input type="text" class="form-control"
-                        style="height:30px" maxlength="40" (input)="onCopyCntrctSearchTextChanged($event.target.value)" /></div>
+                <div class="inner-addon right-addon app-layers">
+                    <i class="glyphicon glyphicon-search"></i>
+                    <input type="text" class="form-control" style="height:30px" maxlength="40" (input)="onCopyCntrctSearchTextChanged($event.target.value)" />
+                </div>
             </div>
         </div>
     </div><br />
@@ -22,7 +25,7 @@
         <kendo-grid id="copyCntrctGrid" [loading]="!isCopyCntrctListLoaded" [data]="gridData" [skip]="state.skip"
             [height]="345" [sortable]="true" [sort]="state.sort" [group]="state.group" [navigable]="true"
             [resizable]="true" (dataStateChange)="dataStateChange($event)" [selectable]="true"
-            (selectionChange)="rowSelectionChange($event)">
+            (selectionChange)="rowSelectionChange($event)" class="append-grid-changes">
             <kendo-grid-column field="CNTRCT_OBJ_SID" title="Contract ID" width="35"
                 [headerClass]="{'headerClass':true}"></kendo-grid-column>
             <kendo-grid-column field="TITLE" title="Contract Title" width="140" [headerClass]="{'headerClass':true}">

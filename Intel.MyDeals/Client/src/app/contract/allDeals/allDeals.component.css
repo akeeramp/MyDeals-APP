@@ -169,3 +169,7 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper {
     padding: 0 !important;
     padding-top: 10px !important;
 }
+
+.positon-deal-tag {
+    top: 11px !important;
+}

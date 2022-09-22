@@ -1,7 +1,7 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <div class="container-fluid overflow">
-    <div class="modal-content" style="background-color:white;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none;padding:15px;">
-        <div class="autofill-settings modal-header">
+    <div class="modal-content headingcontent totalcontent">
+        <div class="autofill-settings modal-header autofillhead" style="border:0px !important">
             <div class="row" style="width:100%">
                 <div class="col">
                     <div class="cursorArea autofillHeader">
@@ -11,8 +11,8 @@
                 </div>
             </div>
         </div>
-        <div class="autofill-settings modal-body">
-            <div class="row" style="padding-bottom:50px">
+        <div class="autofill-settings modal-body settingbody">
+            <div class="row">
                 <div class="col-md-8">
                     <div *ngFor="let item of autofillData.DEFAULT |keyvalue : asIsOrder">
                         <div *ngIf="item.value.type == 'BUTTONGROUP'" [hidden]="item.value.isHidden">
@@ -20,10 +20,10 @@
                             op-extra="value.extra" op-ui-mode="'HORIZONTAL'"></div> -->
                             <!-- Conditions to check the dropdown  attribute  match with buttongroup attribute and iterate over dropdown values-->
                             <div class="row">
-                                <div class="md intel">
+                                <div class="md intel titleclass">
                                     <h5 class="headstyle">{{item.value.label}}</h5>
                                     <span *ngIf="isMultipleGeosSelected && item.key == 'GEO_COMBINED'" class="geo-desc">** This will create a deal for each geo in the same line unless you select to blend. For Hybrid it is not allowed without BLEND. </span>
-                                    <span *ngIf="(item.key == 'GEO_COMBINED')" style="float:right">
+                                    <span *ngIf="(item.key == 'GEO_COMBINED')"style="float: right; margin-top: -21px; margin-right: 25px;">
                                         <input type="checkbox" [(ngModel)]="isBlend" (change)="updateBlend(item.key)" /> Blend Geos
                                     </span>
                                 </div>
@@ -31,8 +31,8 @@
                             <div class="row">
                                 <div class="md intel">
                                     <div *ngFor="let drops of dropdownResponses |keyvalue">
-                                        <div *ngIf="drops.key==item.key">
-                                            <div *ngIf="item.value.opLookupText=='DROP_DOWN'">
+                                        <div *ngIf="drops.key==item.key" class="mattoggelbutton">
+                                            <div *ngIf="item.value.opLookupText=='DROP_DOWN'" class="another-container">
                                                 <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="matbutton mat-icon" style="width:100%; margin:1%">
                                                     <mat-button-toggle style="width:100%" *ngFor="let elem of drops.value" value="{{elem.DROP_DOWN}}" [checked]="item.value.value==elem.DROP_DOWN" (change)="onAutoChange(item.key,elem.DROP_DOWN)" [disabled]="isUIDisable(item.key, elem.DROP_DOWN)">
                                                         <a style=" text-transform: uppercase; font-weight: bold !important;"> {{elem.DROP_DOWN}}</a>
@@ -61,13 +61,17 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4" style="padding-left:40px">
+                <div class="col-md-4">
                     <!--<div *ngFor="let item of autofillData.DEFAULT |keyvalue">-->
-                    <div [hidden]="(autofillData.DEFAULT['MRKT_SEG'].value.type == 'EMBEDDEDMULTISELECT')">
+                    <div [hidden]="(autofillData.DEFAULT['MRKT_SEG'].value.type == 'EMBEDDEDMULTISELECT')" class="autofilltreeview">
                         <div class="row">
                             <div class="col">
-                                <h5 class="headstyle">Marketting Segment</h5>
+                                <h5 class="headstyle" style="margin-bottom:-25px !important">Marketting Segment</h5>
+                                <div kendoTooltip class="helpset opElementHelpIcon intelicon-information-outlined" style="float: right; color: #f3d54e !important; font-size: 14px; "
+                                     title="You cannot mix ALL & other market segments.Non Corp selects: Consumer retail pull,Education,Goverment,& SMB">
+                                </div>
                             </div>
+
                         </div>
                         <kendo-multiselect [(ngModel)]="mkgvalues" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false"></kendo-multiselect>
                         <kendo-treeview [nodes]="marketSeglist"
@@ -85,32 +89,48 @@
                     <!--</div>-->
                     <br />
 
-                    <div style="height:217px;"></div>
-                    <div *ngIf="autofillData.isVistexHybrid == true || dealType == 'FLEX'" class="autoFillOverarching">
-                        <div *ngIf="autofillData.isVistexHybrid == true" class="autoFillOverarchingTitle" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 15px !important; color: darkslategray ">
-                            Please fill out either Max Volume or Amount, but not both.
-                        </div>
-                        <br />
-                        <div class="col-md-11 autofillrow" *ngIf="autofillData.isVistexHybrid == true">
-                            <div><p class="fl opUiLabel ng-binding">Overarching Maximum Volume:</p></div>
-                            <div>
-                                <kendo-numerictextbox [(ngModel)]="autofillData.DEFAULT.REBATE_OA_MAX_VOL.value" [min]="0" [max]="999999999" [autoCorrect]="false">
-                                    <a style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;"></a>
-                                </kendo-numerictextbox>
-                                <kendo-formerror><a style="color: #ff6e77; font-family:'Intel Clear'; font-size: 11px !important; font-weight:bold !important">{{opValidMsg}}</a></kendo-formerror>
+                    <!--<div style="height:217px;"></div>-->
+                    <div *ngIf="autofillData.isVistexHybrid == true || dealType == 'FLEX'" class="autoFillOverarching row">
+                        <div class="col-md-12">
+                            <div *ngIf="autofillData.isVistexHybrid == true" class="autoFillOverarchingTitle" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 15px !important; color: darkslategray ">
+                                Please fill out either Max Volume or Amount, but not both.
                             </div>
-                            <!--<div ng-if="opIsError && opIsForm" class="err-Control"></div>-->
+                            <br />
                         </div>
-                        <div class="col-md-11 autofillrow">
-                            <div><p class="fl opUiLabel ng-binding" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;">Overarching Maximum Dollar($):</p></div>
-                            <div>
-                                <kendo-numerictextbox [(ngModel)]="autofillData.DEFAULT.REBATE_OA_MAX_AMT.value" [min]="0" [max]="999999999" [autoCorrect]="false">
-                                    <a style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;"></a>
-                                </kendo-numerictextbox>
+                        <div class="col-md-12 firstrow" *ngIf="autofillData.isVistexHybrid == true">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div><p class="fl label ng-binding" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;">Overarching Maximum Volume:</p></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div>
+                                        <kendo-numerictextbox [(ngModel)]="autofillData.DEFAULT.REBATE_OA_MAX_VOL.value" [min]="0" [max]="999999999" [autoCorrect]="false">
+                                            <a style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;"></a>
+                                        </kendo-numerictextbox>
+                                        <kendo-formerror><a style="color: #ff6e77; font-family:'Intel Clear'; font-size: 11px !important; font-weight:bold !important">{{opValidMsg}}</a></kendo-formerror>
+                                    </div>
+                                </div>
+                            </div>
+                                    
+                                    <!--<div ng-if="opIsError && opIsForm" class="err-Control"></div>-->
+                                </div>
+                                <div class="col-md-12 autofillrow">
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div><p class="fl opUiLabel autofillabel ng-binding" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;">Overarching Maximum Dollar($):</p></div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div>
+                                                <kendo-numerictextbox [(ngModel)]="autofillData.DEFAULT.REBATE_OA_MAX_AMT.value" [min]="0" [max]="999999999" [autoCorrect]="false">
+                                                    <a style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;"></a>
+                                                </kendo-numerictextbox>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
                             </div>
                         </div>
-                    </div>
-                </div>
             </div>
             <div class="col-md-10">
                 <!--empty space-->
@@ -122,10 +142,10 @@
                     <!--empty space-->
                 </div>
                 <div class="col-md-2">
-                    <button mat-button (click)="onNoClick()" class="afBtn afClsBtn">Cancel</button>
+                    <button mat-button (click)="onNoClick()" class="afBtn afClsBtn" style="margin-bottom: -50px !important">Cancel</button>
                 </div>
                 <div class="col-md-2">
-                    <button mat-button (click)="onSave()" cdkFocusInitial class="afBtn afSaveBtn">Save & Close</button>
+                    <button mat-button (click)="onSave()" cdkFocusInitial class="afBtn afSaveBtn" style="margin-bottom: -50px !important; border: 1px solid;">Save & Close</button>
                 </div>
             </div>
 

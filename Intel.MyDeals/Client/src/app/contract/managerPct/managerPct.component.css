@@ -459,3 +459,16 @@ input:focus-visible {
     position: relative;
     width: 100%;
 }
+
+.either-pin kendo-grid kendo-grid-list .k-icon {
+    padding-top: 8px !important;
+    font-size: 18px !important;
+}
+
+.either-pin kendo-grid kendo-grid-list .k-icon.k-i-plus:before {
+    content: "\e005" !important;
+}
+
+.either-pin kendo-grid kendo-grid-list .k-icon.k-i-minus:before {
+    content: "\e001" !important;
+}

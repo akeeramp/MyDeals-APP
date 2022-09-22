@@ -9,7 +9,7 @@
 .meet-conduct .k-label {
     padding: 1px;
     min-width: 7px;
-    width: 120px !important;
+    /*width: 120px !important;*/
     display: inline-block;
     font-size: 12px !important;
 }
@@ -413,10 +413,10 @@
     margin: 0 !important;
     width: 100%;
 }
-    
-.meet-conduct .k-grid {
+
+/*.meet-conduct .k-grid {
     border-color: #ffffff !important;
-}
+}*/
 
 .meet-conduct .k-grid-pager {
     border-color: #ffffff !important;
@@ -488,4 +488,17 @@
     background-color: #0071C5 !important;
     border: 1px solid #0071C5 !important;
     color: #ffffff !important;
+}
+
+.either-pin kendo-grid kendo-grid-list .k-icon {
+    padding-top: 8px !important;
+    font-size: 18px !important;
+}
+
+.either-pin kendo-grid kendo-grid-list .k-icon.k-i-plus:before {
+    content: "\e005" !important;
+}
+
+.either-pin kendo-grid kendo-grid-list .k-icon.k-i-minus:before {
+    content: "\e001" !important;
 }
