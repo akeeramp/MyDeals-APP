@@ -15,7 +15,12 @@ try {
      & Invoke-Command -computername $SERVER -credential $cred -ScriptBlock {
        Remove-Item "D:\WebSites\MyDeals\Client\*" -Force -Recurse;
        Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDeals\Client.zip", "D:\WebSites\MyDeals\Client\");
-       Restart-WebAppPool -Name "cinmydeals.intel.com";
+       if(Get-IISAppPool "cinmydeals.intel.com"){ 
+           Restart-WebAppPool -Name "cinmydeals.intel.com";
+        }
+        else{ 
+          Restart-WebAppPool -Name "uttmydeals.intel.com";
+        }
        };
     }
     else {

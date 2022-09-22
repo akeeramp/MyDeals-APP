@@ -1,7 +1,7 @@
 name: Angular Automation
 on:
   push:
-    branches: [MyDeals_Migration]
+    branches: [MyDeals_Migration,MyDeals_Migration_RLS]
 env:
   SERVER: DEV
   NUGET_PATH: C:\NuGet\nuget.exe
