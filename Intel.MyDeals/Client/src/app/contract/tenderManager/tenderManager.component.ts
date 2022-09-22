@@ -144,7 +144,7 @@ export class tenderManagerComponent {
             }
 
         else if (selectedTab == 'PD') {
-            if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Pass' && !this.mcForceRunReq) {
+            if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && (this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Pass' || this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Fail')&& !this.mcForceRunReq) {
                 await this.redirectingFn(selectedTab);
             }
             else {
