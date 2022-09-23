@@ -993,7 +993,7 @@ export class meetCompContractComponent implements OnInit {
             }
             this.reBindGridData();
         }
-        if (isValid && this.isTender == "1" && (this.gridData.data[0].MEET_COMP_STS == 'Pass' || this.gridData.data[0].MEET_COMP_STS == 'Fail')) {
+        if (isValid && this.isTender == "1" && (this.gridData.data[0].MEET_COMP_STS == 'Pass' || this.gridData.data[0].MEET_COMP_STS == 'Fail') || this.gridData.data[0].CAP_MISSING_FLG == 1) {
             this.tmDirec.emit('PD');
         } 
     }

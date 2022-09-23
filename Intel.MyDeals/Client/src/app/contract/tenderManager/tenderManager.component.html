@@ -18,7 +18,7 @@
     <div class="valid_{{pricingTableData.PRC_ST[0].PASSED_VALIDATION}}" style="padding: 5px 8px;"><span style="opacity: 0.5;">TENDER SHEET:</span> {{ pricingTableData.PRC_ST[0].WF_STG_CD }}</div>
 </div>
 
-<div class="row wizard" style="padding-top: 50px;width:80%;" *ngIf="pricingTableData != undefined">
+<div class="row wizard" style="padding-top: 50px;" *ngIf="pricingTableData != undefined">
     <div class="col-xs-3 col-md-3">
         <div class="wizard-panel first" [ngClass]="{'complete': isPTRPartiallyComplete() == true }">
             <a id="tenderWidPTR" (click)="tenderWidgetPathManager('backToPricingTable', 'PTR')">

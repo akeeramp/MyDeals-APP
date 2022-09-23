@@ -76,7 +76,7 @@ export class tenderManagerComponent {
     }
 
     forMC() {
-        if ((this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'InComplete' && this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'Not Run Yet' && !this.isMCForceRunReq()) || this.inCompleteCapMissing) {
+        if ((this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'InComplete' && this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'Not Run Yet' && !this.isMCForceRunReq()) || this.pricingTableData.PRC_ST[0].CAP_MISSING_FLG == 1) {
             return true;
         } else return false;
     }
@@ -149,7 +149,7 @@ export class tenderManagerComponent {
             }
 
         else if (selectedTab == 'PD') {
-            if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && (this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Pass' || this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Fail')&& !this.mcForceRunReq) {
+            if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && (this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Pass' || this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Fail') && !this.mcForceRunReq || this.pricingTableData.PRC_ST[0].CAP_MISSING_FLG == 1) {
                 await this.redirectingFn(selectedTab);
             }
             else {
