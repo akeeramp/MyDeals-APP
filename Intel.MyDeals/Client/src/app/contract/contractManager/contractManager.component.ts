@@ -15,6 +15,7 @@ import { actionSummaryModal } from "./actionSummaryModal/actionSummaryModal.comp
 import { messageBoardModal } from "./messageBoard/messageBoard.component";
 import { emailModal } from "./emailModal/emailModal.component";
 import { FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
+import * as _ from 'underscore';
 
 export interface contractIds {
     Model: string;
@@ -90,18 +91,9 @@ export class contractManagerComponent {
     isPTEToolsOpen =[];
     isPSExpanded = []; isPTExpanded = {}; TrackerNbr = {}; emailCheck = {}; reviseCheck = {}; apprvCheck = {};
     private isCustAcptReadOnly: boolean = false;
-    public state: State = {
-        skip: 0,
-        take: 25,
-        group: [],
-        // Initial filter descriptor
-        filter: {
-            logic: "and",
-            filters: [],
-        },
-    };
+    public state: State[] = [];
     grid = { isECAPGrid: false, KITGrid: false, OtherGrid:false}
-    public gridData: GridDataResult;
+    public gridData: GridDataResult[]= [];
     gridDataSet = {}; approveCheckBox = false; emailCheckBox = false; reviseCheckBox = false;
     titleFilter = ""; canActionIcon = true; public isAllCollapsed = false; canEdit = true;
     title='';
@@ -117,6 +109,7 @@ export class contractManagerComponent {
     public filteredData: any;
     uploadSuccess = false;
     private isGridLoading = false;
+    private filteringData : any[][]= [];
     // Allowed extensions for the attachments field
     myRestrictions: FileRestrictions = {
         allowedExtensions: ["doc", "xls", "txt", "bmp", "jpg", "pdf", "ppt", "zip", "xlsx", "docx", "pptx", "odt", "ods", "ott", "sxw", "sxc", "png", "7z", "xps"],
@@ -535,7 +528,7 @@ export class contractManagerComponent {
     }
 
     distinctPrimitive(fieldName: string, id) {
-        return distinct(this.gridDataSet[id], fieldName).map(item => item[fieldName]);
+        this.filteringData[id][fieldName] = distinct(this.gridDataSet[id], fieldName).map(item =>{ if(item[fieldName] != undefined && item[fieldName] != null ) return item[fieldName].toString()});
     }
     clkAllRow(e, checkBoxType) {
         const isItemChecked = e.currentTarget.checked;
@@ -627,7 +620,15 @@ export class contractManagerComponent {
                     this.isPTEToolsOpen.push(this.allPTEData);
                     this.gridDataSet[pt.DC_ID] = response;
                     this.grid_Result= this.gridDataSet[pt.DC_ID];
-                    this.gridData = process(this.gridDataSet[pt.DC_ID], this.state);
+                    var filterableColumns = ['DC_ID','OBJ_SET_TYPE_CD',"START_DT", "TITLE",
+                    "REBATE_TYPE","COST_TEST_RESULT","MEETCOMP_TEST_RESULT","MAX_RPU", "END_CUSTOMER_RETAIL" ,"DEAL_DESC",
+                    "WF_STG_CD","EXPIRE_FLG"];
+                    this.filteringData[ptDcId]=[];
+
+                    for(let i=0; i<filterableColumns.length;i++){
+                        this.distinctPrimitive(filterableColumns[i],ptDcId);
+                    }
+                    this.gridData[pt.DC_ID] = process(this.gridDataSet[pt.DC_ID], this.state[pt.DC_ID]);
                     this.isGridLoading = false;
                 }
                 this.isLoading = false;
@@ -641,8 +642,9 @@ export class contractManagerComponent {
         }
     }
     dataStateChange(state: DataStateChangeEvent, id): void {
-        this.state = state;
-        this.gridData = process(this.gridDataSet[id], this.state);
+        this.state[id] = state;
+        let data =  process(this.gridData[id].data,  this.state[id]);
+        this.gridDataSet[id]= data.data;
     }
     needMct() {
         if (!this.contractData.PRC_ST || this.contractData.PRC_ST.length === 0) return false;
@@ -920,7 +922,21 @@ export class contractManagerComponent {
         this.contractId= this.contractData.DC_ID;
         window.location.href = "#contractmanager/CNTRCT/" + this.contractId + "/0/0/0";
         this.lastRun = this.contractData.LAST_COST_TEST_RUN;
-        this.custAccptButton = this.contractData.CUST_ACCPT;        
+        this.custAccptButton = this.contractData.CUST_ACCPT;
+        _.each(this.contractData.PRC_ST, (prcSt) => {
+            _.each(prcSt.PRC_TBL, (prcTbl) => {
+                this.state[prcTbl.DC_ID] = {
+                    skip: 0,
+                    take: 25,
+                    group: [],
+                    // Initial filter descriptor
+                    filter: {
+                        logic: "and",
+                        filters: [],
+                    },
+                };
+            })
+        })
         this.loadContractDetails();
         if(this.contractData.CUST_ACCPT === "Pending"){
             this.isPending = true;

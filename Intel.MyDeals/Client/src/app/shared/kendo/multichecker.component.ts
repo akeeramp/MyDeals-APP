@@ -72,6 +72,18 @@ export class MultiCheckFilterComponent implements AfterViewInit {
 
     public ngAfterViewInit() {
         this.currentData = this.data;
+        if (this.textField != undefined && this.textField != null && this.textField != '' && this.valueField != undefined && this.valueField != null && this.valueField != null) {
+          if (this.data.filter(x => x[this.textField] == 'Select All').length == 0) {
+              let selectAlldata: any = {};
+              selectAlldata[this.textField] = 'Select All';
+              selectAlldata[this.valueField] = 'Select All';
+              this.currentData.unshift(selectAlldata);
+          }
+      }
+      else {
+          if (!this.data.includes('Select All'))
+          this.currentData.unshift('Select All')
+      }
         this.value = this.currentFilter.filters.map((f: FilterDescriptor) => f.value);
 
         this.showFilter = typeof this.textAccessor(this.currentData[0]) === 'string';
@@ -93,7 +105,10 @@ export class MultiCheckFilterComponent implements AfterViewInit {
             this.value.push(item);
         }
         if (this.value.includes('Select All') && item=='Select All') {
-            this.value = this.currentData.map(x => x[this.valueField]);
+           if(this.valueField != undefined && this.valueField != null && this.valueField != '') 
+           this.value = this.currentData.map(x => x[this.valueField]);
+           else 
+           this.value = this.currentData;
         }
         _.each(this.value,itm=>{
          let operator='eq';

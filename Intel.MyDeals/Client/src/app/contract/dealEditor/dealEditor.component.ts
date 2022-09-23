@@ -184,7 +184,6 @@ export class dealEditorComponent {
                         else if (item[col.field] != undefined && item[col.field] != null)
                             return { Text: item[col.field].toString(), Value: item[col.field] }
                     });
-                    distinctData.unshift({ Text: 'Select All', Value: 'Select All' });
                 }
                 this.filteringData[col.field] = distinctData;
             }
