@@ -58,7 +58,6 @@ export class contractManagerComponent {
     requestBody: any ={};
     showMeetCompDetails: boolean= false;
     public uploadSaveUrl = "/FileAttachments/Save";
-    is_Deal_Tools_Checked: any = false;
     grid_Result: any;
     showMultipleDialog: boolean= false;
     pteTableData: any;
@@ -137,11 +136,12 @@ export class contractManagerComponent {
         this.contractData._behaviors.isRequired.C2A_DATA_C2A_ID = false;
         this.contractData["HAS_ATTACHED_FILES"] = "1";
     }
-    selectAllIDs(event) {
-        this.is_Deal_Tools_Checked = event.target.checked;
-        for (let i = 0; i < this.grid_Result.length; i++) {
-            if (!(this.grid_Result[i].SALESFORCE_ID !== "" && this.grid_Result[i].WF_STG_CD === 'Offer'))
-                this.grid_Result[i].isLinked = this.is_Deal_Tools_Checked;
+    selectAllIDs(event, id) {
+        let isChecked = (document.getElementById("chkDealTools_" + id) as HTMLInputElement).checked;
+        // let dataDetails = (document.getElementById("detailGrid_" + id) as HTMLBodyElement);
+        for (let i = 0; i < this.gridDataSet[id].length; i++) {
+            if (!(this.gridDataSet[id][i].SALESFORCE_ID !== "" && this.gridDataSet[id][i].WF_STG_CD === 'Offer'))
+                this.gridDataSet[id][i].isLinked = isChecked;
         }
     }
     checkAllSelected() {
@@ -534,8 +534,8 @@ export class contractManagerComponent {
         if (ids.length > 0) data[actn] = ids;
     }
 
-    distinctPrimitive(fieldName: string) {
-        return distinct(this.grid_Result, fieldName).map(item => item[fieldName]);
+    distinctPrimitive(fieldName: string, id) {
+        return distinct(this.gridDataSet[id], fieldName).map(item => item[fieldName]);
     }
     clkAllRow(e, checkBoxType) {
         const isItemChecked = e.currentTarget.checked;
@@ -559,7 +559,8 @@ export class contractManagerComponent {
                         this.emailCheckBox = false;
                         }
                     else if (checkBoxType == "Email" && this.canEmailIcon) {
-                        this.emailCheck[x.DC_ID] = isItemChecked ? true : false;                         this.approveCheckBox = false;
+                        this.emailCheck[x.DC_ID] = isItemChecked ? true : false;                        
+                        this.approveCheckBox = false;
                         this.reviseCheckBox = false;
                         this.emailCheckBox = true; 
                      }
@@ -625,7 +626,7 @@ export class contractManagerComponent {
                     this.isPTEToolsOpen.push(this.allPTEData);
                     this.gridDataSet[pt.DC_ID] = response;
                     this.grid_Result= this.gridDataSet[pt.DC_ID];
-                    this.gridData = process(this.grid_Result, this.state);
+                    this.gridData = process(this.gridDataSet[pt.DC_ID], this.state);
                     this.isGridLoading = false;
                 }
             }, (error) => {
@@ -636,9 +637,9 @@ export class contractManagerComponent {
             this.isPTEToolsOpen.pop();
         }
     }
-    dataStateChange(state: DataStateChangeEvent): void {
+    dataStateChange(state: DataStateChangeEvent, id): void {
         this.state = state;
-        this.gridData = process(this.grid_Result, this.state);
+        this.gridData = process(this.gridDataSet[id], this.state);
     }
     needMct() {
         if (!this.contractData.PRC_ST || this.contractData.PRC_ST.length === 0) return false;
@@ -913,7 +914,6 @@ export class contractManagerComponent {
         this.refreshedContractData.emit({ contractData: this.contractData });
     }
     ngOnInit() {
-        this.is_Deal_Tools_Checked= false;
         this.contractId= this.contractData.DC_ID;
         window.location.href = "#contractmanager/CNTRCT/" + this.contractId + "/0/0/0";
         this.lastRun = this.contractData.LAST_COST_TEST_RUN;
