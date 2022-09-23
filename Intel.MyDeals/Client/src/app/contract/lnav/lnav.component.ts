@@ -211,7 +211,8 @@ export class lnavComponent {
             this.showAddPricingTable(ps);
             this.loggerSvc.success("Save Successful", "Added Pricing Strategy");
             this.newStrategy.TITLE = "";
-            this.newStrategy.IS_HYBRID_PRC_STRAT = false;
+            //this condition need to revisit will check later
+            this.newStrategy.IS_HYBRID_PRC_STRAT = ps.IS_HYBRID_PRC_STRAT=="1"?true:false;
             this.curPricingStrategy = ps;
             this.curPricingStrategyId = ps.DC_ID;
             this.contractDetailsSvc.readContract(contractId).subscribe((response: Array<any>) => {

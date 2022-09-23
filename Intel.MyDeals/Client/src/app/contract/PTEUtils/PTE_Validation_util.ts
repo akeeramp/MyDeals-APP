@@ -85,6 +85,7 @@ export class PTE_Validation_Util {
     }
 
     static validateMultiGeoForHybrid (data:any,isHybrid:any) {
+        let returnval="0";
         if(isHybrid==1 || isHybrid=='1'){
            //This is Comma Separated GEOS
            var prod_used = [];
@@ -101,7 +102,7 @@ export class PTE_Validation_Util {
                    var lastBracesPos = data[i].GEO_COMBINED.lastIndexOf(']');
                    var lastComma = data[i].GEO_COMBINED.lastIndexOf(',');
                    if (lastComma > lastBracesPos) {
-                       return "1";
+                     returnval= "1";
                    }
                }
            }
@@ -117,15 +118,11 @@ export class PTE_Validation_Util {
                //Duplicate Product Check
                var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
                if (duplicates.length > 0) {
-                   return "2";
+                returnval= "2";
                }
            }
         }
-        else{
-           return "0";
-        }
-        
-           
+        return returnval;
        }
 
     static splitProductForDensity (response) {
