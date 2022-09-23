@@ -97,12 +97,26 @@ export class DE_Validation_Util {
             }
 
             if (curPricingStrategy.IS_HYBRID_PRC_STRAT == "1" || item["OBJ_SET_TYPE_CD"] == "FLEX") {
-                let dictGroupType = {};
-                if (Object.keys(dictGroupType).length == 0) {
+                let dictGroupTypeAcr = {};
+                let dictGroupTypeDrn = {};
+
+                //Calculating Accrual Line
+                if (Object.keys(dictGroupTypeAcr).length == 0) {
                     data.map(function (data, index) {
-                        dictGroupType[data["DEAL_COMB_TYPE"]] = index;
+                        if (data.FLEX_ROW_TYPE.toLowerCase() == 'accrual') {
+                            dictGroupTypeAcr[data["DEAL_COMB_TYPE"]] = index;
+                        }
                     });
                 }
+                //Calculating Draining Line
+                if (Object.keys(dictGroupTypeDrn).length == 0) {
+                    data.map(function (data, index) {
+                        if (data.FLEX_ROW_TYPE.toLowerCase() == 'draining') {
+                            dictGroupTypeDrn[data["DEAL_COMB_TYPE"]] = index;
+                        }
+                    });
+                }
+                
 
                 if (item["OBJ_SET_TYPE_CD"] == "FLEX") {
                     //Delete if there is any previous Error  messages
@@ -116,24 +130,19 @@ export class DE_Validation_Util {
                     }
                 }
 
-                if (item["OBJ_SET_TYPE_CD"] == "FLEX" && restrictGroupFlexOverlap) {
-                    data = PTE_Validation_Util.clearValidation(data, "DEAL_COMB_TYPE");
-                    let objectId = data ? 'DC_PARENT_ID' : 'DC_ID';
-                    let filterData = _.uniq(_.sortBy(data, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
-
-                    let filteredGroupTypeRestriction = filterData.filter((val) => val.DEAL_COMB_TYPE != null && val.DEAL_COMB_TYPE != '' && val.DEAL_COMB_TYPE != "Additive");
-                    if (filteredGroupTypeRestriction.length > 0) {
-                        _.each(filteredGroupTypeRestriction, (item) => {
-                            item._behaviors.isError['DEAL_COMB_TYPE'] = true;
-                            item._behaviors.validMsg['DEAL_COMB_TYPE'] = "FLEX deals having Billings based Accrual and Consumption based Draining products should have Group Type as 'Additive' ";
-                            isShowStopperError = true;
-                        });
+                if (Object.keys(dictGroupTypeAcr).length > 1) {
+                    if (item.FLEX_ROW_TYPE.toLowerCase() == 'accrual') {
+                        item._behaviors.isError['DEAL_COMB_TYPE'] = true;
+                        item._behaviors.validMsg['DEAL_COMB_TYPE'] = "All deals within Accrual should have the same 'Group Type' value";
+                        isShowStopperError = true;
                     }
                 }
-                else if (Object.keys(dictGroupType).length > 1) {
-                    item._behaviors.isError['DEAL_COMB_TYPE'] = true;
-                    item._behaviors.validMsg['DEAL_COMB_TYPE'] = "All deals within a PS should have the same 'Group Type' value";
-                    isShowStopperError = true;
+                if (Object.keys(dictGroupTypeDrn).length > 1) {
+                    if (item.FLEX_ROW_TYPE.toLowerCase() == 'draining') {
+                        item._behaviors.isError['DEAL_COMB_TYPE'] = true;
+                        item._behaviors.validMsg['DEAL_COMB_TYPE'] = "All deals within Draining should have the same 'Group Type' value";
+                        isShowStopperError = true;
+                    }
                 }
 
             }

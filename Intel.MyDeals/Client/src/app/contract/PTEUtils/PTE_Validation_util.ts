@@ -85,48 +85,48 @@ export class PTE_Validation_Util {
     }
 
     static validateMultiGeoForHybrid (data:any,isHybrid:any) {
-     if(isHybrid==1 || isHybrid=='1'){
-        //This is Comma Separated GEOS
-        var prod_used = [];
-        for (var i = 0; i < data.length; i++) {
-            //Add Products
-            var temp_split = (data[i].PTR_USER_PRD.toLowerCase().trim().split(/\s*,\s*/));
-            for (var j = 0; j < temp_split.length; j++) {
-                prod_used.push(temp_split[j]);
-            }
-            //Checking GEO
-            //Added a check to check for Geo_Combined only if it exists.
-            if (data[i].GEO_COMBINED && data[i].GEO_COMBINED.indexOf(',') > -1 ) {
-                var firstBracesPos = data[i].GEO_COMBINED.lastIndexOf('[');
-                var lastBracesPos = data[i].GEO_COMBINED.lastIndexOf(']');
-                var lastComma = data[i].GEO_COMBINED.lastIndexOf(',');
-                if (lastComma > lastBracesPos) {
-                    return "1";
-                }
-            }
+        if(isHybrid==1 || isHybrid=='1'){
+           //This is Comma Separated GEOS
+           var prod_used = [];
+           for (var i = 0; i < data.length; i++) {
+               //Add Products
+               var temp_split = (data[i].PTR_USER_PRD.toLowerCase().trim().split(/\s*,\s*/));
+               for (var j = 0; j < temp_split.length; j++) {
+                   prod_used.push(temp_split[j]);
+               }
+               //Checking GEO
+               //Added a check to check for Geo_Combined only if it exists.
+               if (data[i].GEO_COMBINED && data[i].GEO_COMBINED.indexOf(',') > -1 ) {
+                   var firstBracesPos = data[i].GEO_COMBINED.lastIndexOf('[');
+                   var lastBracesPos = data[i].GEO_COMBINED.lastIndexOf(']');
+                   var lastComma = data[i].GEO_COMBINED.lastIndexOf(',');
+                   if (lastComma > lastBracesPos) {
+                       return "1";
+                   }
+               }
+           }
+           //This is to Check Product Line
+           if (prod_used.length > 0) {
+               var uniq = prod_used
+                   .map(function (e) {
+                       return e;
+                   }).reduce((a, b) => {
+                       a[b] = (a[b] || 0) + 1;
+                       return a
+                   }, {})
+               //Duplicate Product Check
+               var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
+               if (duplicates.length > 0) {
+                   return "2";
+               }
+           }
         }
-        //This is to Check Product Line
-        if (prod_used.length > 0) {
-            var uniq = prod_used
-                .map(function (e) {
-                    return e;
-                }).reduce((a, b) => {
-                    a[b] = (a[b] || 0) + 1;
-                    return a
-                }, {})
-            //Duplicate Product Check
-            var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
-            if (duplicates.length > 0) {
-                return "2";
-            }
+        else{
+           return "0";
         }
-     }
-     else{
-        return "0";
-     }
-     
         
-    }
+           
+       }
 
     static splitProductForDensity (response) {
         let prdObj = {};
@@ -327,7 +327,7 @@ export class PTE_Validation_Util {
 
             var maxAccrualDate = new Date(Math.max.apply(null, filterData.map(function (x) { return new Date(x.START_DT); })));
 
-            var drainingInvalidDates = drainingEntries.filter((val) => moment(val.START_DT) < (moment(maxAccrualDate).add(1, 'days')));
+            var drainingInvalidDates = drainingEntries.filter((val) => moment(val.START_DT) < (moment(maxAccrualDate)));
         }
         return drainingInvalidDates;
     }
@@ -344,10 +344,7 @@ export class PTE_Validation_Util {
         if (cond == 'flexrowtype' && elem == 'FLEX_ROW_TYPE') {
             item._behaviors.validMsg[elem] = "There should be at least one accrual product.";
         }
-        else if (cond == 'invalidDate' && elem == 'START_DT' && !restrictGroupFlexOverlap) {
-            item._behaviors.validMsg[elem] = "Draining products should have at least 1 day delay from Accrual Start date";
-        }
-
+        
         else if (cond == 'nequalpayout' && elem == 'PAYOUT_BASED_ON') {
             item._behaviors.validMsg[elem] = "Products within the same bucket should have same payout based on value";
         }
