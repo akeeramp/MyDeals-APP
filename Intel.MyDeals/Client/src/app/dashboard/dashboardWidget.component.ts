@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation, OnInit } from '@angular/core';
+import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation } from '@angular/core';
 
 @Component({
     selector: 'app-dashboard-widget',
@@ -6,16 +6,11 @@ import { ChangeDetectionStrategy, Component, Input, ViewEncapsulation, OnInit } 
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None
 })
-export class DashboardWidgetComponent implements OnInit {
+export class DashboardWidgetComponent {
 
     @Input() widget;
     @Input() resizeEvent;
-
     @Input() private custIds: string;
     @Input() private startDt: string;
     @Input() private endDt: string;
-
-    ngOnInit(): void {
-
-    }
 }

@@ -86,12 +86,12 @@ export class dealToolsComponent{
     private holdItems = {
         "NoShowHold": { // The rest of this item don't really matter since it is bypassing drawing all together, but....
             "icon": "fa fa-hand-paper-o",
-            "title": "Unable to place a hold on the deal at this stageXX",
+            "title": "Unable to place a hold on the deal at this stage",
             "style": { color: "#e7e7e8" }
         },
         "NoHold": {
             "icon": "fa fa-hand-paper-o",
-            "title": "Unable to place a hold on the deal at this stageXX",
+            "title": "Unable to place a hold on the deal at this stage",
             "style": { color: "#e7e7e8" }
         },
         "TakeOffHold": {
@@ -261,7 +261,7 @@ export class dealToolsComponent{
                 setTimeout(() => {
                     this.setBusy("", "", "","");
                 }, 4000);
-            }, function (response) {
+            }, (response)=> {
                 this.loggerSvc.error("Could not split the Pricing Table Row.", response, response.statusText);
             });
     }
@@ -404,7 +404,7 @@ export class dealToolsComponent{
                 setTimeout(() => {
                     this.setBusy("", "", "","");
                 }, 4000);
-            }, function (response) {
+            }, (response)=> {
                 this.loggerSvc.error("Could not delete the Pricing Table " + ptrId , response, response.statusText);
                 this.setBusy("", "", "","");
             });
@@ -427,7 +427,8 @@ export class dealToolsComponent{
                     this.setBusy("", "", "", "");
                 }, 50);
 
-            }, function (response) {
+            }, (response)=> {
+                this.loggerSvc.error("Unable to update Wip Deal","Error",response);
                 this.setBusy("", "","","");
             });
     }
@@ -457,7 +458,7 @@ export class dealToolsComponent{
                     this.setBusy("", "", "","");
                 }, 4000);
                 this.refreshContract.emit(true);
-            }, function (response) {
+            }, (response)=> {
                 this.loggerSvc.error("Could not Rollback the Pricing Table " + this.contractData.DC_ID, response, response.statusText);
                 this.setBusy("", "", "","");
             });                
@@ -563,7 +564,8 @@ export class dealToolsComponent{
                     this.refreshContract.emit(true);
                 }, 50);
                 this.setBusy("", "", "", "");
-            }, function (response) {
+            }, (response)=> {
+                this.loggerSvc.error("Unable to update hold status of deals","Error",response);
                 this.setBusy("", "", "", "");
             });
     }

@@ -184,6 +184,7 @@ export class RuleOwnerComponent {
     }
 
     GetRules(id, actionName) {
+        this.isLoading = true;
         this.ruleOwnerSvc.getPriceRules(id, actionName)
             .subscribe(response => {
                 this.Rules = response;
@@ -236,10 +237,14 @@ export class RuleOwnerComponent {
                     } else {
                         this.IsSecurityCheckDone = true;
                     }
+                },(err)=>{
+                    this.loggerSvc.error("Unable to get constants by name","Error",err);
                 });
             } else {
                     this.IsSecurityCheckDone = true;
             }
+        },(err)=>{
+            this.loggerSvc.error("Unable to get constants by name","Error",err);
         });
     }
 

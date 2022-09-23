@@ -1,9 +1,7 @@
 import * as angular from "angular";
-import {Component,ElementRef,EventEmitter,Input, Output,ChangeDetectorRef} from "@angular/core";
-import {downgradeComponent} from "@angular/upgrade/static";
+import {Component,EventEmitter,Input, Output,ChangeDetectorRef} from "@angular/core";
 import {globalSearchResultsService} from "./globalSearchResults.service";
 import {logger} from "../../shared/logger/logger";
-import { Observable } from "rxjs";
 import { DynamicEnablementService } from "../../shared/services/dynamicEnablement.service";
 
 @Component({
@@ -25,6 +23,7 @@ export class GlobalSearchResultsComponent  {
     private viewMoreVisible = true;
     //To load angular Contract Manager from search change value to false, will be removed once contract manager migration is done
     public angularEnabled:boolean=false;
+    public isLoading:boolean;
     private opTypes:Array<any> = [
       {
           value: "ALL",
@@ -144,7 +143,9 @@ export class GlobalSearchResultsComponent  {
     }
 
     getIDs(dcId, parentdcID, opType = "") {
+      this.isLoading = true;
         this.globalSearchSVC.getContractIDDetails(dcId,opType).subscribe(res => {
+            this.isLoading = false;
             if (res) {
                 this.response = res;
                 console.log(this.response.ContractId)
@@ -157,6 +158,7 @@ export class GlobalSearchResultsComponent  {
         },
             error => {
                 this.loggerSvc.error("GlobalSearchResultsComponent::getContractIDDetails::Unable to get Contract Data", error);
+                this.isLoading = false;
             }
         );
     }
@@ -178,10 +180,3 @@ export class GlobalSearchResultsComponent  {
    }
    
 }
-
-angular.module("app").directive(
-  "globalSearchResultsAngular",
-  downgradeComponent({
-    component: GlobalSearchResultsComponent,
-  })
-);

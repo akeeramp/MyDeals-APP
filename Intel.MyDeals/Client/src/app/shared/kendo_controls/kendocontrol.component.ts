@@ -19,7 +19,7 @@ interface Item {
 }
 
 @Component({
-    selector: "myKendoControl",
+    selector: "my-kendo-control",
     templateUrl:
         "Client/src/app/shared/kendo_controls/kendocontrol.component.html",
     styleUrls: ["Client/src/app/shared/kendo_controls/kendocontrol.style.css"],

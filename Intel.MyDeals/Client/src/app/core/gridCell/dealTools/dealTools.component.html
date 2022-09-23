@@ -25,8 +25,7 @@
                 <i class="intelicon-org-chart" style="font-size: 20px !important; cursor: pointer; color: #00AEEF; margin-right: 9px;" (click)="openSplit()" *ngIf="!openSplitDialog" title="Split the Group"></i>
             </div>
             <div class='fl md-icon-disabled rotate-270' *ngIf="(this.editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Draft' || dataItem.WF_STG_CD === 'Cancelled')))">
-                <i class="intelicon-org-chart" style="font-size: 20px !important; color: #e7e7e8;"
-                   title="You cannot split this group while it is being re-dealed."></i>
+                <i class="intelicon-org-chart" style="font-size: 20px !important; color: #e7e7e8;" title="You cannot split this group while it is being re-dealed."></i>
             </div>
             <kendo-dialog *ngIf="openSplitDialog" (close)="closeDialogs()" [height]="245" [maxWidth]="485" class="artho-css">
                 <div class="kendoAlert" style="padding: 2.4em;">
@@ -48,7 +47,7 @@
             <div class='fl md-icon' *ngIf="!!dataItem.NOTES && dataItem.NOTES !== ''">
                 <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" *ngIf="!openNotesDialog" (click)="openNotes()"></i>
             </div>
-            <kendo-dialog class="artho-css" *ngIf="openNotesDialog" (close)="closeDialogs()" [width]="500" [height]="350" >
+            <kendo-dialog class="artho-css" *ngIf="openNotesDialog" (close)="closeDialogs()" [width]="500" [height]="350">
                 <div class="notesContent">
                     <div class="notesText">Deal Comments:</div>
                     <textarea [(ngModel)]="notes"></textarea>
@@ -84,8 +83,7 @@
 
         <!-- Cancel/Rollback/Delete icon -->
         <div class='fl md-icon' *ngIf="isDeleteEnabled && editable === true && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
-            <i *ngIf="(!dataItem._actionsPS || !dataItem._actionsPS.Cancel) && dataItem.WF_STG_CD !== 'Cancelled'" class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
-               title="Unable to delete this deal at this stage"></i>
+            <i *ngIf="(!dataItem._actionsPS || !dataItem._actionsPS.Cancel) && dataItem.WF_STG_CD !== 'Cancelled'" class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;" title="Unable to delete this deal at this stage"></i>
             <span *ngIf="dataItem?.TRKR_NBR">
                 <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && !dataItem.TRKR_NBR.hasOwnProperty('20___0') && !alertDelete && !confirmDelete" class='intelicon-trash-solid' style="font-size: 20px !important; cursor: pointer;"
                title="Click to delete this deal" (click)="openDeleteDialog()"></i>
@@ -133,9 +131,9 @@
                 </kendo-dialog-actions>
             </kendo-dialog>
             <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD === 'Hold' && dataItem.HAS_TRACKER === '1' && dataItem.IN_REDEAL === '1'" class='fa fa-undo' style="font-size: 20px !important; color: #e7e7e8;"
-               title="Remove deal from Hold before Rollback is allowed"></i>
-            <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && (dataItem.WF_STG_CD !== 'Cancelled' && dataItem.WF_STG_CD !== 'Hold') && dataItem.HAS_TRACKER === '1' && dataItem.IN_REDEAL === '1' && !confirmRollback && !alertRollback" class='fa fa-undo' style="font-size: 20px !important; cursor: pointer;"
-               title="Click to Rollback this deal" (click)="openRollBackDialog()"></i>
+                title="Remove deal from Hold before Rollback is allowed"></i>
+            <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && (dataItem.WF_STG_CD !== 'Cancelled' && dataItem.WF_STG_CD !== 'Hold') && dataItem.HAS_TRACKER === '1' && dataItem.IN_REDEAL === '1' && !confirmRollback && !alertRollback"
+                class='fa fa-undo' style="font-size: 20px !important; cursor: pointer;" title="Click to Rollback this deal" (click)="openRollBackDialog()"></i>
             <kendo-dialog *ngIf="alertRollback" (close)="closeDialogs()" [maxWidth]="440" [height]="245">
                 <div style="padding: 2.4em;">
                     <h4 style="margin-top: 22px !important; font-size: 24px !important;">Unable to Rollback</h4>
@@ -157,8 +155,7 @@
             </kendo-dialog>
         </div>
         <div class='fl md-icon-disabled' *ngIf="isDeleteEnabled && editable === true && (!!dataItem._parentCnt && dataItem._parentCnt > 1)">
-            <i class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
-               title="This deal shares the same pricing table row as other deals.  You will need to split the group or delete the deal from the Pricing Table."></i>
+            <i class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;" title="This deal shares the same pricing table row as other deals.  You will need to split the group or delete the deal from the Pricing Table."></i>
         </div>
 
         <!-- Hold icon -->
@@ -186,16 +183,18 @@
             </kendo-dialog>
         </div>
         <div class='fl md-icon-disabled' *ngIf="(!!dataItem._parentCnt && dataItem._parentCnt > 1) && isTenderContract == false ">
-            <i class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #e7e7e8;"
-               title="This deal shares the same pricing table row as other deals.  You will need to split the group before you can place this on hold."></i>
+            <i class='fa fa-hand-paper-o' style="font-size: 20px !important; color: #e7e7e8;" title="This deal shares the same pricing table row as other deals.  You will need to split the group before you can place this on hold."></i>
         </div>
 
         <div class='clearboth'></div>
     </div>
+
+    <!-- Below code is just for the reference. This checkbox for 'exclude from price rules' column is being implemented in Tender Publish Screen Component. -->
     <div *ngIf="isPublishable == true">
         <!--Checkbox-->
         <div class='fl'>
-            <input type="checkbox" [(ngModel)]="dataItem.EXCLUDE_AUTOMATION" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;" title="Check to apply changes to all checked rows"></label>
+            <input type="checkbox" [(ngModel)]="dataItem.EXCLUDE_AUTOMATION" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;"
+                title="Check to apply changes to all checked rows"></label>
         </div>
     </div>
 </div>

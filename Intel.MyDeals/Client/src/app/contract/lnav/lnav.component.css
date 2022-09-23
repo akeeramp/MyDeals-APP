@@ -144,6 +144,7 @@
     background-color: #00AEEF !important;
     font-size: 15px !important;
 }
+
 .k-tabstrip .k-tabstrip-items-wrapper .k-tabstrip-items .k-state-default .k-link:hover {
     background-color: #0071c5 !important;
     color: #FFFFFF !important;
@@ -261,7 +262,6 @@
 
 .ptNav .ptBtn {
     display: inline;
-    /*display: none;*/
     font-size: 14px;
     color: #ffffff;
     line-height: 1.3em;
@@ -327,10 +327,8 @@
 
 .textCircle_NeedsWork {
     border-radius: 50%;
-    /*border: 2px solid #000000;*/
     width: 15px;
     height: 15px;
-    /*padding: 0px;*/
     /*Raise 1 px for radius decrease, 2 px was default*/
     padding: 2px;
     color: #FC4C02;
@@ -379,14 +377,6 @@
     background-color: #003C71;
 }
 
-
-/*.menuItem {
-    color: #0071c5 !important;
-}
-.menuItem:hover {
-    background-color: #00aeef !important;
-}*/
-
 .menuItem {
     background-color: #fff;
 }
@@ -405,6 +395,7 @@
     padding-left: 0px;
     color: #003c71;
 }
+
 .contractIdBtn:hover {
     color: #00aeef;
 }
@@ -439,25 +430,19 @@
     border-radius: 0 !important;
 }
 
-/*.k-icon:hover {
-    color: #FFFFFF !important;
-}*/
-
 .active:hover {
     background-color: #0071C5;
     filter: brightness(100%) !important;
 }
-/*.chevron {
-    color: #ffffff;
-    font-size: 15px;
-}*/
+
 .psContainer .chevron {
     color: #ffff;
     font-size: 15px;
-    font-weight:bolder;
+    font-weight: bolder;
 }
-.psContainer .chevron:hover{
-    color:#ffffff;
+
+.psContainer .chevron:hover {
+    color: #ffffff;
 }
 
 .anarchy-anchor-two .nav-extra {

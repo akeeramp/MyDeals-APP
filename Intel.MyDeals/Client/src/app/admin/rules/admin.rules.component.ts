@@ -150,6 +150,7 @@ export class adminRulesComponent {
             } else {
                 this.toolKitHidden = true;
             }
+            this.isLoading = true;
             this.adminRulesSvc.getPriceRules(0, "GET_RULES").subscribe(
                 (result: Array<any>) => {
                     this.gridResult = result;
@@ -221,6 +222,7 @@ export class adminRulesComponent {
     }
 
     deleteConfirmation() {
+        this.isLoading = true;
         this.adminRulesSvc.deletePriceRule(this.deletionId).subscribe(
             (result: number) => {
                 this.gridResult = this.gridResult.filter(x => x.Id != result);
@@ -245,6 +247,8 @@ export class adminRulesComponent {
                     this.adminEmailIDs = result.data.CNST_VAL_TXT === "NA" ? "" : result.data.CNST_VAL_TXT;
                     this.isElligibleForApproval = this.adminEmailIDs.indexOf((<any>window).usrEmail) > -1;
                 }
+            },(err)=>{
+                this.loggerSvc.error("Unable To Get Constant by Name","Error",err);
             });
         if ((<any>window).usrRole != 'DA' && (<any>window).usrRole != 'SA') {
             this.constantSvc.getConstantsByName("PRC_RULE_READ_ACCESS").subscribe(
@@ -281,6 +285,7 @@ export class adminRulesComponent {
                     priceRuleCriteria = { Id: ruleId, RuleStage: isTrue, IsActive: isTrue };
                 } break;
             }
+            this.isLoading = true;
             this.adminRulesSvc.updatePriceRule(priceRuleCriteria, strActionName).subscribe((response) => {
                 if (response.data.Id > 0) {
                     this.gridResult.filter(x => x.Id == response.data.Id)[0].ChangedBy = response.data.ChangedBy;
@@ -442,34 +447,7 @@ export class adminRulesComponent {
                 data: dataItem
             });
             dialogRef.afterClosed().subscribe(() => {
-
             });
-        
-        //$scope.context = dataItem;
-
-        /*let modalInstance = $uibModal.open({
-            animation: true,
-            backdrop: 'static',
-            templateUrl: 'app/admin/rules/ruleDetailsModal.html',
-            controller: 'RuleModalController',
-            controllerAs: 'vm',
-            size: 'lg',
-            windowClass: 'prdSelector-modal-window',
-            resolve: {
-                RuleConfig: ['ruleService', function () {
-                    return this.adminRulesSvc.getPriceRulesConfig().then(function (response) {
-                        return response;
-                    });
-                }],
-                dataItem: function () {
-                    return angular.copy(dataItem);
-                }
-            }
-        });*/
-
-        /*modalInstance.result.then(function (returnData) {
-            vm.cancel();
-        }, function () { });*/
     }
 
     GetRules(id, actionName) {

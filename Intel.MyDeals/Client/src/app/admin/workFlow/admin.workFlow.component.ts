@@ -102,6 +102,7 @@ export class adminWorkFlowComponent {
         if (!((<any>window).isDeveloper)) {
             document.location.href = "/Dashboard#/portal";
         } else {
+            this.isLoading = true;
             this.workflowSvc.GetWorkFlowItems().subscribe(
                 (result: Array<any>) => {
                     this.gridResult = result;

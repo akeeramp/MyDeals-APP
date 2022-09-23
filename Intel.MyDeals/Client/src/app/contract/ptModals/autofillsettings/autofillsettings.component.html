@@ -16,14 +16,12 @@
                 <div class="col-md-8">
                     <div *ngFor="let item of autofillData.DEFAULT |keyvalue : asIsOrder">
                         <div *ngIf="item.value.type == 'BUTTONGROUP'" [hidden]="item.value.isHidden">
-                            <!-- <div op-control-data-element op-class="'md intel'" ng-model="autofillData.DEFAULT" op-cd="key" op-type="value.type" op-label="value.label" op-lookup-url="value.opLookupUrl" op-lookup-text="value.opLookupText" op-lookup-value="value.opLookupValue" op-is-form="true"
-                            op-extra="value.extra" op-ui-mode="'HORIZONTAL'"></div> -->
                             <!-- Conditions to check the dropdown  attribute  match with buttongroup attribute and iterate over dropdown values-->
                             <div class="row">
                                 <div class="md intel titleclass">
                                     <h5 class="headstyle">{{item.value.label}}</h5>
                                     <span *ngIf="isMultipleGeosSelected && item.key == 'GEO_COMBINED'" class="geo-desc">** This will create a deal for each geo in the same line unless you select to blend. For Hybrid it is not allowed without BLEND. </span>
-                                    <span *ngIf="(item.key == 'GEO_COMBINED')"style="float: right; margin-top: -21px; margin-right: 25px;">
+                                    <span *ngIf="(item.key == 'GEO_COMBINED')" style="float: right; margin-top: -21px; margin-right: 25px;">
                                         <input type="checkbox" [(ngModel)]="isBlend" (change)="updateBlend(item.key)" /> Blend Geos
                                     </span>
                                 </div>
@@ -62,34 +60,20 @@
                     </div>
                 </div>
                 <div class="col-md-4">
-                    <!--<div *ngFor="let item of autofillData.DEFAULT |keyvalue">-->
                     <div [hidden]="(autofillData.DEFAULT['MRKT_SEG'].value.type == 'EMBEDDEDMULTISELECT')" class="autofilltreeview">
                         <div class="row">
                             <div class="col">
                                 <h5 class="headstyle" style="margin-bottom:-25px !important">Marketting Segment</h5>
-                                <div kendoTooltip class="helpset opElementHelpIcon intelicon-information-outlined" style="float: right; color: #f3d54e !important; font-size: 14px; "
-                                     title="You cannot mix ALL & other market segments.Non Corp selects: Consumer retail pull,Education,Goverment,& SMB">
+                                <div kendoTooltip class="helpset opElementHelpIcon intelicon-information-outlined" style="float: right; color: #f3d54e !important; font-size: 14px; " title="You cannot mix ALL & other market segments.Non Corp selects: Consumer retail pull,Education,Goverment,& SMB">
                                 </div>
                             </div>
 
                         </div>
                         <kendo-multiselect [(ngModel)]="mkgvalues" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false"></kendo-multiselect>
-                        <kendo-treeview [nodes]="marketSeglist"
-                                        textField="DROP_DOWN"
-                                        [children]="fetchChildren"
-                                        [hasChildren]="hasChildren"
-                                        kendoTreeViewCheckable
-                                        [(checkedKeys)]="mkgvalues"
-                                        checkBy="DROP_DOWN"
-                                        [isChecked]="isChecked"
-                                        (checkedKeysChange)="onMktgValueChange($event)">
+                        <kendo-treeview [nodes]="marketSeglist" textField="DROP_DOWN" [children]="fetchChildren" [hasChildren]="hasChildren" kendoTreeViewCheckable [(checkedKeys)]="mkgvalues" checkBy="DROP_DOWN" [isChecked]="isChecked" (checkedKeysChange)="onMktgValueChange($event)">
                         </kendo-treeview>
-                        <!--<div class="ktest"></div>-->
                     </div>
-                    <!--</div>-->
                     <br />
-
-                    <!--<div style="height:217px;"></div>-->
                     <div *ngIf="autofillData.isVistexHybrid == true || dealType == 'FLEX'" class="autoFillOverarching row">
                         <div class="col-md-12">
                             <div *ngIf="autofillData.isVistexHybrid == true" class="autoFillOverarchingTitle" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 15px !important; color: darkslategray ">
@@ -100,7 +84,9 @@
                         <div class="col-md-12 firstrow" *ngIf="autofillData.isVistexHybrid == true">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div><p class="fl label ng-binding" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;">Overarching Maximum Volume:</p></div>
+                                    <div>
+                                        <p class="fl label ng-binding" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;">Overarching Maximum Volume:</p>
+                                    </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div>
@@ -111,26 +97,27 @@
                                     </div>
                                 </div>
                             </div>
-                                    
-                                    <!--<div ng-if="opIsError && opIsForm" class="err-Control"></div>-->
-                                </div>
-                                <div class="col-md-12 autofillrow">
-                                    <div class="row">
-                                        <div class="col-md-6">
-                                            <div><p class="fl opUiLabel autofillabel ng-binding" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;">Overarching Maximum Dollar($):</p></div>
-                                        </div>
-                                        <div class="col-md-6">
-                                            <div>
-                                                <kendo-numerictextbox [(ngModel)]="autofillData.DEFAULT.REBATE_OA_MAX_AMT.value" [min]="0" [max]="999999999" [autoCorrect]="false">
-                                                    <a style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;"></a>
-                                                </kendo-numerictextbox>
-                                            </div>
-                                        </div>
-                                    </div>
 
+                        </div>
+                        <div class="col-md-12 autofillrow">
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div>
+                                        <p class="fl opUiLabel autofillabel ng-binding" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;">Overarching Maximum Dollar($):</p>
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div>
+                                        <kendo-numerictextbox [(ngModel)]="autofillData.DEFAULT.REBATE_OA_MAX_AMT.value" [min]="0" [max]="999999999" [autoCorrect]="false">
+                                            <a style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;"></a>
+                                        </kendo-numerictextbox>
+                                    </div>
                                 </div>
                             </div>
+
                         </div>
+                    </div>
+                </div>
             </div>
             <div class="col-md-10">
                 <!--empty space-->
@@ -153,5 +140,4 @@
     </div>
 </div>
 
-<loading-panel-angular id="autoLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"
-                       [msgType]="msgType"></loading-panel-angular>
+<loading-panel-angular id="autoLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription" [msgType]="msgType"></loading-panel-angular>

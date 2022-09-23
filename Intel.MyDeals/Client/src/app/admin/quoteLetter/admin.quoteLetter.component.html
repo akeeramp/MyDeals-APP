@@ -2,12 +2,10 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<ccLoader [isLoading]="isLoading" [module]="moduleName" [isInitializing]="false" [message]="loadMessage"></ccLoader>
+<cc-loader [isLoading]="isLoading" [module]="moduleName" [isInitializing]="false" [message]="loadMessage"></cc-loader>
 <div class="form-horizontal" [hidden]="isLoading=='true'" style="margin-top: 35px;">
     <div class="section secondary-section"><label> <b>Template: </b> </label>
-        <kendo-dropdownlist id="templatesCombo" style="width: 210px; margin-left:6px" [data]="menuItems"
-            textField="MenuText" valueField="MenuText" [(ngModel)]="selectedTemplate"
-            (valueChange)="onTemplateChange($event)" (afterValueChanged)="isDropdownsLoaded"></kendo-dropdownlist>
+        <kendo-dropdownlist id="templatesCombo" style="width: 210px; margin-left:6px" [data]="menuItems" textField="MenuText" valueField="MenuText" [(ngModel)]="selectedTemplate" (valueChange)="onTemplateChange($event)" (afterValueChanged)="isDropdownsLoaded"></kendo-dropdownlist>
     </div>
     <div class="section secondary-section" [ngClass]="{'textarea-disabled': selectedTemplate==null}"><label><b>Upper Content Block </b></label>
         <kendo-editor style="width: 1390px" [(ngModel)]="headerInfo">
@@ -63,8 +61,8 @@
             </kendo-toolbar>
         </kendo-editor>
     </div>
-    <div class="pull-right section secondary-section"><button class="btn btn-default btn-lg" [disabled]="selectedTemplate==null"
-            (click)="onGeneratePreviewClick()">Generate Preview</button><button class="btn btn-primary btn-lg"
-            [disabled]="selectedTemplate==null" (click)="onSaveChangesClick($event)" style="margin-left:5px">Save
-            Changes</button></div>
+    <div class="pull-right section secondary-section" style="margin-right: 500px;margin-top: 50px !important;">
+        <button class="btn btn-default btn-lg" [disabled]="selectedTemplate==null" (click)="onGeneratePreviewClick()" style="margin-right: 10px;">Generate Preview</button>
+        <button class="btn btn-primary btn-lg" [disabled]="selectedTemplate==null" (click)="onSaveChangesClick($event)">Save Changes</button>
+    </div>
 </div>

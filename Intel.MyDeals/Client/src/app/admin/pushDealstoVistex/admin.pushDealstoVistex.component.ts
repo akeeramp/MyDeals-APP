@@ -69,11 +69,11 @@ export class adminPushDealsToVistexComponent {
           
     }
     bindPathQueryParam() {
-        let url = window.location.href.split("/");
-        let qString = url[url.length - 1];
+        const url = window.location.href.split("/");
+        const qString = url[url.length - 1];
         let dealIds = '';
         if (qString.indexOf("=") != -1) {
-            var queryParam = qString.split("=");
+            let queryParam = qString.split("=");
             dealIds = (queryParam[queryParam.length - 1]).toString();
         }
         return dealIds;
@@ -86,7 +86,7 @@ export class adminPushDealsToVistexComponent {
     ngOnInit() {
         this.securityCheck();
         //this is useful when validateVistexR3Checks screen redirects to this 'Push Deals to Vistex' page
-        let dealIdString = this.bindPathQueryParam();
+        const dealIdString = this.bindPathQueryParam();
 
         this.pushDealsToVistexForm = this.formBuilder.group({
             DEAL_IDS: [dealIdString, Validators.required],

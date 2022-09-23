@@ -22,7 +22,7 @@ export class pctChildGridComponent {
 
     }
     //public view: Observable<GridDataResult>;
-    public isLoading: boolean;
+    public isLoading = true;
     public skip = 0;
     private color: ThemePalette = 'primary';
     PCTResultView = false;
@@ -80,6 +80,7 @@ export class pctChildGridComponent {
         })
         this.gridResult = this.parent.filter(x => x.DEAL_ID == this.child.DEAL_ID);
         this.gridData = process(this.gridResult, this.childState);
+        this.isLoading = false;
     }
 }
 angular.module("app").directive(

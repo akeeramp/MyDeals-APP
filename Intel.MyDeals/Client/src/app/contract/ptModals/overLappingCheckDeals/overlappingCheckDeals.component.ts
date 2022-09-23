@@ -4,10 +4,8 @@ import { distinct, process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { Component, Inject, Input } from "@angular/core";
 import * as angular from "angular";
-import { MatDialogActions, MatDialogRef, MatDialogState, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { WindowState } from "@progress/kendo-angular-dialog";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { logger } from "../../../shared/logger/logger";
-import { error } from "console";
 import { overLappingcheckDealService } from "./overlappingCheckDeals.service";
 import * as _ from 'underscore';
 
@@ -168,7 +166,9 @@ export class OverlappingCheckComponent {
     }
 
     updateOverlapping(data, YCS2_OVERLAP_OVERRIDE) {
+        this.isLoading = true;
         this.overLappingCheckDealsSvc.updateOverlappingDeals(data, YCS2_OVERLAP_OVERRIDE).subscribe((result: any) => {
+            this.isLoading = false;
             if (result[0].PRICING_TABLES > 0) {
                 if (YCS2_OVERLAP_OVERRIDE === 'N') {
                     for (var j = 0; j < data.length; j++) {
@@ -255,6 +255,8 @@ export class OverlappingCheckComponent {
         });
         this.overLappingCheckDealsSvc.readContract(this.pricingId).subscribe((response: Array<any>) => {
             this.contractDetails = response[0];
+        },(err)=>{
+            this.loggerSvc.error("Unable to get contract data","Error",err);
         });
         this.S_ID = this.contractData.CUST_MBR_SID;
         this.overLappingCheckDealsSvc.getCustomerVendors(this.S_ID).subscribe(

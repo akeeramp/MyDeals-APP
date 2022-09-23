@@ -83,14 +83,14 @@ export class RuleDetailsModalComponent {
     runSimulation() {
         this.gridData = process([], this.state);
         this.isLoading = true;
-        var data = new Array();
+        let data = new Array();
 
-        var dataRuleIds = this.selectedIds;
+        const dataRuleIds = this.selectedIds;
 
-        var dataDealsIds = [];
-        var deals = this.dealsList !== undefined ? this.dealsList.split(",") : [];
-        for (var j = 0; j < deals.length; j++) {
-            var dealId = parseInt(deals[j], 10) || 0;
+        let dataDealsIds = [];
+        const deals = this.dealsList !== undefined ? this.dealsList.split(",") : [];
+        for (let j = 0; j < deals.length; j++) {
+            const dealId = parseInt(deals[j], 10) || 0;
             if (dealId > 0) {
                 dataDealsIds.push(parseInt(deals[j], 10));
             }

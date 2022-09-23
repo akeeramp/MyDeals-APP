@@ -46,17 +46,16 @@ export class PingComponent {
     }
 
     ping() {
-        
         this.pingHost();
-
         this.pingSvc.getBatchStatus()
             .subscribe(output => {
                 this.batchInProgress = false;
                 if (output.CNST_VAL_TXT !== undefined && output.CNST_VAL_TXT.toUpperCase() !== "COMPLETED") {
                     this.batchInProgress = true;
                 }
+            },(err)=>{
+                this.loggerSvc.error("Ping Error","Error",err);
             });
-
     }
 
     pingHost() {

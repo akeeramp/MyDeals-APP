@@ -254,6 +254,8 @@ export class AutoFillComponent {
             this.isLoading = false;
             this.setBusy("", "", "", false);
             this.dialogRef.close(this.autofillData);
+        },(err)=>{
+            this.loggerSvc.error("Unable to update Pricing Table","Error",err);
         })
         this.isLoading = false;
         this.setBusy("", "", "", false);
@@ -293,6 +295,9 @@ export class AutoFillComponent {
             this.isLoading = false;
             this.setBusy("", "", "", false);
             this.dialogRef.close(this.autofillData);            
+        },(err)=>{
+            this.loggerSvc.error("Could Not create Pricing Table","Error",err);
+            this.isLoading = false;
         })
     }
 

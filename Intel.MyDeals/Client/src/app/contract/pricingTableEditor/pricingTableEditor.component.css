@@ -2,15 +2,16 @@ td.error-product {
     color: red !important;
     font-weight: bold !important;
 }
+
 td.success-product {
     color: darkgreen !important;
     font-weight: bold !important;
 }
+
 td.normal-product {
     color: black !important;
     font-weight: normal !important;
 }
-
 
 td.error-border {
     border: 1px solid red !important;
@@ -72,9 +73,11 @@ td:not(.error-cell).readonly-cell {
     width: 1px !important;
     height: 1px !important;
 }
+
 .handsontable .htCommentCell:after {
     border-top-color: red;
 }
+
 .ssToolbarBtn {
     background-color: #ffffff;
     border-radius: 0px;
@@ -89,8 +92,8 @@ td:not(.error-cell).readonly-cell {
     background-color: #f2f2f2;
     color: #0071c5;
 }
+
 .dirty {
-    /*font-weight: bolder !important;*/
     color: #00AEEF !important;
 }
 
@@ -100,7 +103,8 @@ td:not(.error-cell).readonly-cell {
     cursor: not-allowed !important;
 }
 
-.ssToolbarBtn.btn-save, .ssToolbarBtn {
+.ssToolbarBtn.btn-save,
+.ssToolbarBtn {
     background-color: transparent;
 }
 
@@ -167,8 +171,8 @@ kendo-toolbar-renderer {
 .all-spread #spreadsheet {
     width: 100% !important;
 }
+
 .mat-dialog-container {
     background: #fff;
-    color: rgba(0,0,0,.87);
-    /*padding: 0px;*/
+    color: rgba(0, 0, 0, .87);
 }

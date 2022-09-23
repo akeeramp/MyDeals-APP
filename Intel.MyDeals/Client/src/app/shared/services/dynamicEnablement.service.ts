@@ -15,7 +15,7 @@ export class DynamicEnablementService {
         private loggerService: logger) { }
 
     public async getEnablementConfig() {
-        let data = await this.constantsService.getConstantsByName(this.CONSTANT_TITLE).toPromise().catch((error) => {
+        const data = await this.constantsService.getConstantsByName(this.CONSTANT_TITLE).toPromise().catch((error) => {
             this.loggerService.error(`The constant '${ this.CONSTANT_TITLE }' was not found and could not be retrieved; Defaulting to AngularJS components`,
                 `Constant not found`, error);
         });
@@ -30,7 +30,7 @@ export class DynamicEnablementService {
         return this.ANGULAR_ENABLED ;
     }
     public async isAngularEnabled() {
-        let data = await this.constantsService.getConstantsByName(this.CONSTANT_TITLE).toPromise().catch((error) => {
+        const data = await this.constantsService.getConstantsByName(this.CONSTANT_TITLE).toPromise().catch((error) => {
             this.loggerService.error(`The constant '${ this.CONSTANT_TITLE }' was not found and could not be retrieved; Defaulting to AngularJS components`,
                 `Constant not found`, error);
         });

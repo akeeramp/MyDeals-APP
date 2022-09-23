@@ -1,7 +1,5 @@
 ﻿/* eslint-disable @typescript-eslint/no-inferrable-types */
-import * as angular from "angular";
-import { downgradeComponent } from "@angular/upgrade/static";
-import { Input, Component, ViewChild, OnInit, OnChanges, OnDestroy, EventEmitter, Output } from "@angular/core"
+import { Input, Component, ViewChild, OnInit, OnChanges, EventEmitter, Output } from "@angular/core"
 import { GridComponent, GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { GridStatusBoardService } from "./gridStatusBoard.service";
 import { process, State, distinct } from "@progress/kendo-data-query"; /*GroupDescriptor,*/
@@ -16,7 +14,7 @@ import { DynamicEnablementService } from "../../shared/services/dynamicEnablemen
     selector: "grid-status-board-angular",
     templateUrl: "Client/src/app/core/gridStatusBoard/gridStatusBoard.component.html"
 })
-export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
+export class gridStatusBoardComponent implements OnInit, OnChanges {
     @ViewChild(GridComponent) grid: GridComponent;
 
     @Input() private custIds: string;
@@ -31,9 +29,6 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
     public angularEnabled:boolean=false;
 
     constructor(private contractService: GridStatusBoardService, private loggerSvc: logger, public datepipe: DatePipe, private dashboardParent: DashboardComponent, private cntrctWdgtSvc: contractStatusWidgetService, private dynamicEnablementService: DynamicEnablementService) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
 
         this.cntrctWdgtSvc.isRefresh.subscribe(res => {
             if (res) {
@@ -438,19 +433,5 @@ export class gridStatusBoardComponent implements OnInit, OnDestroy, OnChanges {
         //update input values and call loadContractData();
         this.loadContractData();
     }
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
 }
-
-angular.module("app").directive(
-    "gridStatusBoardAngular",
-    downgradeComponent({
-        component: gridStatusBoardComponent,
-        inputs: ['custIds', 'gridFilter', 'favContractIds', 'startDt', 'endDt']
-    })
-);
 

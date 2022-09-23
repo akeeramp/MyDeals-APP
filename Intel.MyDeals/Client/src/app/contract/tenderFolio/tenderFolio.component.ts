@@ -108,6 +108,8 @@ export class TenderFolioComponent {
             else {
                 this.isTitleError = false;
             }
+        },(err)=>{
+            this.loggerSvc.error("Unable to Validate duplicate contract title","Error",err);
         });
     }
     valueChange(value) {
@@ -268,7 +270,9 @@ export class TenderFolioComponent {
             // By default we dont want a contract to be backdated
             this.contractData.START_DT = moment().format('l');
             this.contractData.END_DT = moment(response["QTR_END"]).format('l');
-        })
+        },(err)=>{
+            this.loggerSvc.error("Unable to get customer calender data","Error",err);
+        });
     }
 
     initializeTenderData() {
@@ -297,6 +301,7 @@ export class TenderFolioComponent {
     };
     ngOnInit() {
         this.getAllCustomers();
+        this.isLoading = true;
         this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
             this.templateData = response;
             this.contractData = this.templateData["ObjectTemplates"].CNTRCT.ALL_TYPES;
@@ -304,6 +309,9 @@ export class TenderFolioComponent {
             this.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type so it does not inherit from clone
             this.filterDealTypes();
             this.initializeTenderData();
+            this.isLoading = false;
+        },(err)=>{
+            this.loggerSvc.error("Unable to get Template Data","Error",err);
         })
     }
 }

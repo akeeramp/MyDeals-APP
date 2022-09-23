@@ -90,6 +90,8 @@ export class overLappingDealsComponent {
         });
         this.overLappingDealsSvc.readContract(this.contractId).subscribe((response: Array<any>) => {
             this.contractDetails = response[0];
+        },(err)=>{
+            this.loggerSvc.error("Unable to get contract data","Error",err);
         });
         this.S_ID = this.contractData.CUST_MBR_SID;
 

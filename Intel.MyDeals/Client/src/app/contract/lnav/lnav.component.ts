@@ -219,9 +219,14 @@ export class lnavComponent {
                 this.contractData = response[0];
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
+            },(err)=>{
+                this.loggerSvc.error("Unable to get contract data","Error",err);
             });
             this.isLoading = false;
             this.setBusy("", "", "", false);
+        },(err)=>{
+            this.loggerSvc.error("Unable to create pricing strategy","Error",err);
+            this.isLoading = false;
         })
     }
     refreshContractData(cId) {
@@ -229,6 +234,8 @@ export class lnavComponent {
             .readContract(cId)
             .subscribe((response: Array<any>) => {
                 this.contractData = response[0];
+            },(err)=>{
+                this.loggerSvc.error("Unable to get contract data","Error",err);
             });
     }
     // **** PRICING TABLE Methods ****
@@ -337,9 +344,14 @@ export class lnavComponent {
                 this.loadPTE(pt.DC_PARENT_ID, pt.DC_ID, 0, 0);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
+            },(err)=>{
+                this.loggerSvc.error("Unable to get contract data","Error",err);
             });
             this.isLoading = false;
             this.setBusy("", "", "", false);
+        },(err)=>{
+            this.loggerSvc.error("Unable to create pricing table","Error",err);
+            this.isLoading = false;
         })
     }
     clearNptTemplate() {
@@ -434,11 +446,11 @@ export class lnavComponent {
                 this.refreshContractData(contractId);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
-            }), err => {
+            }, (err) => {
                 this.loggerSvc.error("Could not copy the " + objType + ".", err, err.statusText);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
-                };
+            });
 
         }
         else {
@@ -447,11 +459,11 @@ export class lnavComponent {
                 this.refreshContractData(contractId);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
-            }), err => {
+            }, (err) => {
                 this.loggerSvc.error("Could not copy the " + objType + ".", err, err.statusText);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
-                };
+            });
 
         }
     }
@@ -493,11 +505,11 @@ export class lnavComponent {
                 this.loggerSvc.success("Delete Successful", "Deleted the Pricing Strategy");
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
-            }), err => {
+            }, (err) => {
                 this.loggerSvc.error("Could not delete Pricing Strategy" + ps.DC_ID, err, err.statusText);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
-            };
+            });
         }
     }
 
@@ -632,6 +644,8 @@ export class lnavComponent {
                     this.contractDetailsSvc.readContract(this.contractData.DC_ID).subscribe((response: Array<any>) => {
                         this.contractData = response[0];
                         this.loadPTE(this.newPricingTable.DC_PARENT_ID, this.newPricingTable.DC_ID, 0, 0);
+                    },(err)=>{
+                        this.loggerSvc.error("Unable to get contract data","Error",err);
                     });
                     this.hideAddPricingTable();
                 }
@@ -703,6 +717,8 @@ export class lnavComponent {
                 this.superPrefix = "Super";
                 this.extraUserPrivsDetail.push("Super User");
             }
+        },(err)=>{
+            this.loggerSvc.error("Unable to get user role data","Error",err);
         });
         if (event.title == "Deal Entry") {
             this.loadModel('PTE');

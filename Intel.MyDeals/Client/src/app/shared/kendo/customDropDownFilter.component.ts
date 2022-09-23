@@ -48,7 +48,7 @@ export class CustomDropDownFilterComponent implements AfterViewInit {
             logic: 'or'
         });
         if (this.value != undefined && this.value != null && this.value.length > 0) {
-            let valuesel = this.data.filter(x => x.Value == this.value[0]);
+            const valuesel = this.data.filter(x => x.Value == this.value[0]);
             this.selectedValue = valuesel[0];
         }
     }
@@ -57,7 +57,7 @@ export class CustomDropDownFilterComponent implements AfterViewInit {
         this.currentData = this.data;
         this.value = this.currentFilter.filters.map((f: FilterDescriptor) => f.value);
         if (this.value != undefined && this.value != null && this.value.length > 0) {
-            let valuesel = this.data.filter(x => x.Value == this.value[0]);
+            const valuesel = this.data.filter(x => x.Value == this.value[0]);
             this.selectedValue = valuesel[0];
         }
     }

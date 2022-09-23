@@ -417,6 +417,9 @@ export class contractDetailsComponent {
                 }
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
+            },(err)=>{
+                this.loggerSvc.error("Unable to create contract","Error",err);
+                this.isLoading = false;
             });
     }
 
@@ -455,13 +458,10 @@ export class contractDetailsComponent {
         }
     }
 
-    //backdatePopupClose() {
-    //    this.isBackdatepopupopend = false;
-    //}
     getTimeLineDetails() {
         let contractDetailId = null;
-        let objTypeIds = [1, 2, 3];
-        let objTypeSId = 1;
+        const objTypeIds = [1, 2, 3];
+        const objTypeSId = 1;
         if (this.C_ID) {
             contractDetailId = this.C_ID;
 
@@ -499,6 +499,7 @@ export class contractDetailsComponent {
             }
         }
         if (isValidDataPresent) {
+            this.isLoading = true;
             this.contractDetailsSvc.getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue)
                 .subscribe((response: any) => {
                     if (changeEvent == "START_QTR" || changeEvent == "START_YR" || changeEvent == "START_DT") {
@@ -511,6 +512,10 @@ export class contractDetailsComponent {
                         this.END_QTR = response?.QTR_NBR;
                         this.END_YR = response?.YR_NBR;
                     }
+                    this.isLoading = false;
+                },(err)=>{
+                    this.loggerSvc.error("Unable to get customer quarter data","Error",err);
+                    this.isLoading = false;
                 });
         }
     }
@@ -546,8 +551,10 @@ export class contractDetailsComponent {
             isValidDataPresent = (yearValue != null && yearValue <= this.contractData.MaxDate.split('/').at(-1)) ? true : false;
         }
         if (isValidDataPresent) {
+            this.isLoading = true;
             this.contractDetailsSvc.getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue)
                 .subscribe((response: any) => {
+                    this.isLoading = false;
                     if (response != null) {
                         if (changeEvent == "") {
                             if (moment(response["QTR_END"]) < moment(new Date())) {
@@ -582,6 +589,9 @@ export class contractDetailsComponent {
                     if (this.END_DT != undefined && this.START_DT != undefined) {
                         this.validateDate(changeEvent);
                     }
+                },(err)=>{
+                    this.loggerSvc.error("Unable to get current quarter data","Error",err);
+                    this.isLoading = false;
                 });
         }
     }
@@ -688,8 +698,7 @@ export class contractDetailsComponent {
                 this.loggerSvc.error("Could not create the contract.", error);
                 this.isLoading = false;
                 this.setBusy("", "","",false);
-            }
-            );
+            });
     }
     deleteContract() {
         if (confirm("Are you sure that you want to delete this contract?")) {
@@ -701,6 +710,7 @@ export class contractDetailsComponent {
                 this.setBusy("Delete Successful", "Deleted the Contract","Success",false);
                 window.location.href = '/Dashboard#/portal';
             }), err => {
+                this.loggerSvc.error("Unable to delete contract","Error",err);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             };
@@ -793,7 +803,11 @@ export class contractDetailsComponent {
                                     this.contractData.CUST_ACCNT_DIV_UI = !this.contractData["CUST_ACCNT_DIV"] ? "" : this.contractData["CUST_ACCNT_DIV"].split("/");
                                     this.updateCorpDivision(this.copyContractData.CUST_MBR_SID);
                                     this.pastDateConfirm(this.contractData.START_DT);  // Check for Backdate Reason
+                                },(err)=>{
+                                    this.loggerSvc.error("Unable to fetch contract data","Error",err);
                                 });
+                        },(err)=>{
+                            this.loggerSvc.error("Unable to fetch template data","Error",err);
                         });
                     } else {
                         this.c_Id = Number(url[url.length - 1]);
@@ -811,6 +825,8 @@ export class contractDetailsComponent {
                                     this.contractData = this.initContract();
                                     this.loadContractDetails();
                                     this.getCurrentQuarterDetails();
+                                },(err)=>{
+                                    this.loggerSvc.error("Unable to fetch template data","Error",err);
                                 });
                         }
                         else { //condition for existing contract
@@ -823,6 +839,8 @@ export class contractDetailsComponent {
                                     this.loadContractDetailsData();
                                     this.getTimeLineDetails();
                                     this.getFileAttachmentDetails(this.c_Id);
+                                },(err)=>{
+                                    this.loggerSvc.error("unable to fetch contract data","Error",err);
                                 });
                         }
                     }
@@ -873,7 +891,7 @@ export class contractDetailsComponent {
                     this.loggerSvc.success("Successfully deleted attachment.", "Delete successful");
                     this.getFileAttachmentDetails(this.deleteAttachmentParams.objSid);
                 }, error => {
-                    this.loggerSvc.error("Unable to delete attachment.", "Delete failed");
+                    this.loggerSvc.error("Unable to delete attachment.", "Delete failed",error);
                 })
         }
         else {

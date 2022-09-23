@@ -611,6 +611,7 @@ export class contractManagerComponent {
         this.isGridLoading = true;
         //check whether arrow icon is expanded/collapsed ,only if it is expanded then call API to get the data
         if (this.isPTExpanded[ptDcId]) {
+            this.isLoading = true;
             this.contractManagerSvc.getWipSummary(pt.DC_ID).subscribe((response) => {
                 if (response !== undefined) {
                     for (let i = 0; i < response.length; i++) {
@@ -629,8 +630,10 @@ export class contractManagerComponent {
                     this.gridData = process(this.gridDataSet[pt.DC_ID], this.state);
                     this.isGridLoading = false;
                 }
+                this.isLoading = false;
             }, (error) => {
                 this.loggerSvc.error('Get WIP Summary service', error);
+                this.isLoading = false;
             })
         } else if(!this.isPTExpanded[ptDcId]){
             this.isGridLoading = false;

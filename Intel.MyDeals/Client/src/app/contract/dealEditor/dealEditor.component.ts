@@ -5,7 +5,7 @@ import * as moment from "moment";
 import { MatDialog } from '@angular/material/dialog';
 import { opGridTemplate } from "../../core/angular.constants"
 import { SelectEvent } from "@progress/kendo-angular-layout";
-import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent, CellCloseEvent, GridComponent, FilterService } from "@progress/kendo-angular-grid";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent, CellCloseEvent, GridComponent } from "@progress/kendo-angular-grid";
 import { process, State, distinct, FilterDescriptor, CompositeFilterDescriptor } from "@progress/kendo-data-query";
 import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
 import { DatePipe } from '@angular/common';
@@ -643,10 +643,10 @@ export class dealEditorComponent {
     }
 
     getColumnOrder() {
-        var grid = this.wipTemplate;
-        var columnOrderArr = [];
+        const grid = this.wipTemplate;
+        let columnOrderArr = [];
 
-        for (var i = 0; i < grid.columns.length; i++) {
+        for (let i = 0; i < grid.columns.length; i++) {
             columnOrderArr.push(grid.columns[i]["field"]);
         }
 

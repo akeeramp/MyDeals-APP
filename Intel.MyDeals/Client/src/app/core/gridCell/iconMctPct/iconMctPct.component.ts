@@ -1,6 +1,4 @@
 import { Component, Input,OnInit } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
-import * as angular from "angular";
 import { colorDictionary } from "../../angular.constants"
 
 @Component({
@@ -95,12 +93,6 @@ export class iconMctPctComponent implements OnInit {
         return this.getColor('mct', d, colorDictionary);
     }
 }
-angular
-    .module('app')
-    .directive("iconMctPctAngular", downgradeComponent({
-        component: iconMctPctComponent,
-        inputs: ['dataValue', 'iconClass', 'overrideValue', 'canView', 'canEdit', 'iconStyle','notRunMsg']
-    }));
 
 
 

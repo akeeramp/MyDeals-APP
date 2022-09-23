@@ -1,13 +1,10 @@
 import * as angular from "angular";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { Component, EventEmitter, Inject, Input, Output, ViewEncapsulation } from '@angular/core';
-import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { MatDialog } from '@angular/material/dialog';
 
 import { DomSanitizer } from '@angular/platform-browser';
-import { DataStateChangeEvent, GridDataResult, PageSizeItem } from "@progress/kendo-angular-grid";
-import { process, State } from "@progress/kendo-data-query";
-import { ThemePalette } from "@angular/material/core";
-import { RowClassArgs } from "@progress/kendo-angular-grid";
+import { GridDataResult } from "@progress/kendo-angular-grid";
 import { contractManagerservice } from "../contractManager.service";
 import { logger } from "../../../shared/logger/logger";
 import { emailModal } from "../emailModal/emailModal.component";

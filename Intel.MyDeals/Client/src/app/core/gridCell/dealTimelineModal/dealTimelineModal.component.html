@@ -3,15 +3,13 @@
         Timeline for deal {{dcId}}
         <img *ngIf="loading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" />
     </h5>
-    <i id="btnAnchordisable"  (click)="isExpandable()" [ngClass]="isExpand?'intelicon-locked-outlined': 'intelicon-unlocked-outlined'" title={{isExpandTitle}}></i>
+    <i id="btnAnchordisable" (click)="isExpandable()" [ngClass]="isExpand?'intelicon-locked-outlined': 'intelicon-unlocked-outlined'" title={{isExpandTitle}}></i>
     <i id="btnEnlargeText" (click)="isFontSizeChange()" [ngClass]="isTextIncrease?'intelicon-increase-text-outlined': 'intelicon-decrease-text-outlined'" title={{isTextFontTitle}}></i>
     <i id="btnClose" class="intelicon-close-max" (click)="close()" title="Click to Close"></i>
 </div>
-<div class="modal-body modalBlueBody hresize common-messages" id="modal-body">    
-    <kendo-grid [data]="gridData" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [sortable]="true"
-                [resizable]="true" [scrollable]="true" (dataStateChange)="dataStateChange($event)"
-                (excelExport)="onExcelExport($event)" style="height: calc(100% - 100px); margin-bottom: 20px; border: none;"
-                [ngClass]="isTextIncrease? 'opUiContainer md k-grid k-widget' : 'opUiContainer sm k-grid k-widget'">
+<div class="modal-body modalBlueBody hresize common-messages" id="modal-body">
+    <kendo-grid [data]="gridData" [loading]="loading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [sortable]="true" [resizable]="true" [scrollable]="true" (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)"
+        style="height: calc(100% - 100px); margin-bottom: 20px; border: none;" [ngClass]="isTextIncrease? 'opUiContainer md k-grid k-widget' : 'opUiContainer sm k-grid k-widget'">
         <ng-template kendoGridToolbarTemplate>
             <button [disabled]="loading" type="button" class="excelBtn metho-comp" kendoGridExcelCommand icon="file-excel">
                 EXCEL EXPORT
@@ -24,12 +22,10 @@
         </kendo-grid-column>
         <kendo-grid-column [headerClass]="{'headerClass':true}" field="user" title="Changed By" width="240px" [filterable]="true" [class]="'cellCustomClass'">
         </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" field="HIST_EFF_FR_DTM" title="Date Changed" width="160px" [class]="'cellCustomClass'" >
+        <kendo-grid-column [headerClass]="{'headerClass':true}" field="HIST_EFF_FR_DTM" title="Date Changed" width="160px" [class]="'cellCustomClass'">
         </kendo-grid-column>
         <kendo-grid-excel fileName="MyDealsSearchResults.xlsx" [fetchData]="allData">
-            <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
-                                      title="{{item.value}}" [width]="item.key == 'ATRB_VAL' ? 800 : 250" [cellOptions]="cellOptions"
-                                      [headerCellOptions]="headerCellOptions">
+            <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}" title="{{item.value}}" [width]="item.key == 'ATRB_VAL' ? 800 : 250" [cellOptions]="cellOptions" [headerCellOptions]="headerCellOptions">
             </kendo-excelexport-column>
         </kendo-grid-excel>
     </kendo-grid>

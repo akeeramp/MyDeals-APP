@@ -105,6 +105,7 @@ export class adminWorkflowStagesComponent {
         if (!((<any>window).isDeveloper)) {
             document.location.href = "/Dashboard#/portal";
         } else {
+            this.isLoading = true;
             this.workflowStageSvc.GetWorkFlowStages().subscribe(
                 (result: Array<any>) => {
                     this.gridResult = result;
@@ -139,6 +140,7 @@ export class adminWorkflowStagesComponent {
         if (!((<any>window).isDeveloper)) {
             document.location.href = "/Dashboard#/portal";
         } else {
+            this.isLoading = true;
             this.workflowStageSvc.GetWFStgDDLValues().subscribe(
                 (result: Array<any>) => {
                     this.gridResult = result;

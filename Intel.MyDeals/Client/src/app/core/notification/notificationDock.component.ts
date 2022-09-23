@@ -61,6 +61,8 @@ export class notificationDockComponent {
         this.unreadMessagesCountSubscription = this.notificationSvc.getUnreadNotificationMsgsCount()
             .subscribe((count) => {
                 this.unreadMessagesCount = count;
+            },(err)=>{
+                this.loggerSvc.error("Unable to Fetch Notification Count Data","Error",err);
             });
 
         // Fix some sloopy bug when we are trying to engage an old easter egg

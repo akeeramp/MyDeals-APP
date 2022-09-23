@@ -11,8 +11,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
     selector: "adminProductAlias",
-    templateUrl: "Client/src/app/admin/productAlias/admin.productAlias.component.html",
-    //styleUrls: ['Client/src/app/admin/productAlias/admin.productAlias.component.css']
+    templateUrl: "Client/src/app/admin/productAlias/admin.productAlias.component.html"
 })
 export class adminProductAliasComponent {
     constructor(private productAliasSvc: productAliasService, private loggerSvc: logger) {
@@ -91,6 +90,7 @@ export class adminProductAliasComponent {
         if (!((<any>window).usrRole === 'SA' || (<any>window).isDeveloper)) {
             document.location.href = "/Dashboard#/portal";
         } else {
+            this.isLoading = true;
             this.productAliasSvc.GetProductsFromAlias().subscribe(
                 (result: Array<any>) => {
                     this.gridResult = result;
@@ -139,7 +139,6 @@ export class adminProductAliasComponent {
     addHandler({ sender }) {
         this.closeEditor(sender);
         this.formGroup = new FormGroup({
-            //PRD_ALS_SID: new FormControl(),
             PRD_NM: new FormControl("", Validators.required),
             PRD_ALS_NM: new FormControl("", Validators.required),
         });
@@ -183,7 +182,6 @@ export class adminProductAliasComponent {
             () => {
                 this.loadProductAlias();
                 this.loggerSvc.success("Product Alias Deleted.");
-                /*sender.closeRow(rowIndex);*/
             },
             error => {
                 this.loggerSvc.error("Unable to delete Product Alias Mappings", error.statusText);
@@ -214,7 +212,6 @@ export class adminProductAliasComponent {
                     this.gridResult.push(product_map);
                     this.loadProductAlias();
                     this.loggerSvc.success("Product Alias Mapping successfully added.");
-                    /*sender.closeRow(rowIndex);*/
                 },
                 error => {
                     this.isDialogVisible = true;
@@ -232,7 +229,6 @@ export class adminProductAliasComponent {
                     this.gridResult.push(product_map);
                     this.loadProductAlias();
                     this.loggerSvc.success("Product Alias Mapping successfully updated.");
-                    /*sender.closeRow(rowIndex);*/
                 },
                 error => {
                     this.isDialogVisible = true;

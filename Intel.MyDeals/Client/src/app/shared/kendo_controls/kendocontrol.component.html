@@ -1,5 +1,6 @@
 <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" /><br />
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" />
@@ -210,16 +211,11 @@
         <div class="col-md">
             <kendo-splitter orientation="vertical" style="height:600px;">
                 <kendo-splitter-pane>
-                    <hot-table
-                    [data]="dataset"
-                    [colHeaders]="true"
-                    [rowHeaders]="true"
-                    height="auto"
-                    licenseKey="non-commercial-and-evaluation">
-                      <hot-column data="id" [readOnly]="true" title="ID"></hot-column>
-                      <hot-column data="name" title="Full name"></hot-column>
-                      <hot-column data="address" title="Street name"></hot-column>
-                  </hot-table> 
+                    <hot-table [data]="dataset" [colHeaders]="true" [rowHeaders]="true" height="auto" licenseKey="non-commercial-and-evaluation">
+                        <hot-column data="id" [readOnly]="true" title="ID"></hot-column>
+                        <hot-column data="name" title="Full name"></hot-column>
+                        <hot-column data="address" title="Street name"></hot-column>
+                    </hot-table>
 
                 </kendo-splitter-pane>
                 <kendo-splitter-pane [(size)]="sidebarSize" min="10%">
@@ -259,4 +255,5 @@
             </kendo-splitter>
 
         </div>
-  </div>
+    </div>
+</div>

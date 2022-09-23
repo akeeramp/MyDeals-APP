@@ -96,7 +96,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
                 if (this.colName == "DEAL_SOLD_TO_ID") {
                     this.checkedKeys = [];
                     _.each(this.modalData.cellCurrValues, (item) => {
-                        var selecteddata = this.multiSelectData.filter(x => x[this.multiSelectPopUpModal.opLookupValue] == item);
+                        const selecteddata = this.multiSelectData.filter(x => x[this.multiSelectPopUpModal.opLookupValue] == item);
                         if (selecteddata != undefined && selecteddata != null && selecteddata.length > 0) {
                             this.checkedKeys.push(selecteddata[0][this.multiSelectPopUpModal.opLookupText]);
                         }
@@ -120,7 +120,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
     onSelectionChange() {
         if (this.checkedKeys != undefined && this.checkedKeys.length > 0) {
             if (this.ismrktSeg) {
-                var selectedList = this.checkedKeys.join(",");
+                const selectedList = this.checkedKeys.join(",");
                 //In Market Segment Modal, selected 'All Direct Market Segments' then checkedKey is only 'All Direct Market Segments'
                 if ((_.indexOf(this.checkedKeys, 'All Direct Market Segments') > 0) || (_.indexOf(this.checkedKeys, 'All Direct Market Segments') == 0 && this.checkedKeys.length == 1)) {
                     this.checkedKeys = ['All Direct Market Segments'];
@@ -131,7 +131,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
                         this.checkedKeys.splice(0, 1);
                     //Selected parent Node which has child (like 'Embedded'), checkedKey will be the first childNode of the parent
                     _.each(this.checkedKeys, (key) => {
-                        var selectedData = this.multiSelectData.filter(x => x.DROP_DOWN == key);
+                        const selectedData = this.multiSelectData.filter(x => x.DROP_DOWN == key);
                         if (selectedData != undefined && selectedData != null && selectedData.length > 0 && selectedData[0].items != undefined && selectedData[0].items != null && selectedData[0].items.length > 0) {
                             this.checkedKeys = [selectedData[0].items[0].DROP_DOWN];
                         }
@@ -169,9 +169,9 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
     }
     onSave(): void{
         if (this.colName == "CONSUMPTION_COUNTRY_REGION") {
-            var index = 0;
+            let index = 0;
             _.each(this.checkedKeys, (key) => {
-                var dataExists = this.multiSelectData.filter(x => x.DROP_DOWN == key).length > 0;
+                const dataExists = this.multiSelectData.filter(x => x.DROP_DOWN == key).length > 0;
                 if (dataExists) {
                     this.checkedKeys.splice(index, 1);
                 }
@@ -180,9 +180,9 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
             this.dialogRef.close(this.checkedKeys.join("|"));
         }
         else if (this.colName == "DEAL_SOLD_TO_ID") {
-            var selectedValue = [];
+            let selectedValue = [];
             _.each(this.checkedKeys, (key) => {
-                var selecteddata = this.multiSelectData.filter(x => x[this.multiSelectPopUpModal.opLookupText] == key);
+                const selecteddata = this.multiSelectData.filter(x => x[this.multiSelectPopUpModal.opLookupText] == key);
                 if (selecteddata != undefined && selecteddata != null && selecteddata.length > 0) {
                     selectedValue.push(selecteddata[0][this.multiSelectPopUpModal.opLookupValue]);
                 }
@@ -203,7 +203,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
         this.ismrktSeg = (this.colName == this.mrktSeg);
         this.isTgrRgn = (this.colName == "TRGT_RGN");
         if (this.isTgrRgn) {
-            var elt = Array.from(document.getElementsByTagName("mat-dialog-container") as HTMLCollectionOf<HTMLElement>);
+            let elt = Array.from(document.getElementsByTagName("mat-dialog-container") as HTMLCollectionOf<HTMLElement>);
             if (elt != undefined && elt != null) {
                 _.each(elt, (item) => {
                     item.style.backgroundColor = "#1a3e6f";

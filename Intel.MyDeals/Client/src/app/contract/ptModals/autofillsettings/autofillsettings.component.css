@@ -28,10 +28,6 @@
     text-align: center;
 }
 
-/*.autoFillOverarching .k-numerictextbox {
-    padding: 0px;
-}*/
-
 .minPadding {
     padding: 2px;
 }
@@ -40,7 +36,6 @@
     color: darkslategray;
     font-size: 13px !important;
     font-weight: 600;
-    /* margin: -5px 0 -15px 0;*/
     margin-top: -8px;
     margin-left: -2px
 }
@@ -55,6 +50,7 @@
     width: 100%;
 }
 
+
 /*This "opUiContainer.md .opUiLabel" overrides site-wide CSS*/
 
 .opUiContainer.md .opUiLabel {
@@ -66,18 +62,16 @@
     color: #fff;
     border-radius: 5px
 }
+
 .mattoggelbutton .mat-icon {
     height: 30px;
 }
 
 .mattoggelbutton .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
     font-size: 10px !important;
-    /* line-height: 1.33333;*/
     font-weight: normal;
     padding: 0 12px;
 }
-
-
 
 .mattoggelbutton .mat-button-toggle-button {
     border: 0;
@@ -97,16 +91,17 @@
 }
 
 .mattoggelbutton .mat-button-toggle-checked.mat-button-toggle-appearance-standard {
-    color: rgba(0,0,0,.87);
+    color: rgba(0, 0, 0, .87);
     background: #00AEEF !important;
 }
 
-.mattoggelbutton .mat-button-toggle-standalone.mat-button-toggle-appearance-standard, .mat-button-toggle-group-appearance-standard {
+.mattoggelbutton .mat-button-toggle-standalone.mat-button-toggle-appearance-standard,
+.mat-button-toggle-group-appearance-standard {
     border: none;
 }
 
 .mattoggelbutton mat-button-toggle-label-content {
-    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-size: 15px;
     line-height: 1.5;
     color: #111;
@@ -121,7 +116,8 @@
     box-shadow: none;
 }
 
-.mattoggelbutton.mat-button-toggle-appearance-standard, .mat-button-toggle-label-content {
+.mattoggelbutton.mat-button-toggle-appearance-standard,
+.mat-button-toggle-label-content {
     font-size: 15px !important;
     line-height: 2 !important;
     font-weight: bold !important;
@@ -134,16 +130,10 @@
     display: flex;
     flex-wrap: nowrap;
     justify-content: left;
-  /*  margin-left: 231px;*/
     margin-top: -103px
 }
 
-/*.firstrow {
-    margin-left: -220px;
-    margin-top: 210px;
-}*/
-
-.autofillrow > div {
+.autofillrow>div {
     width: 100%;
     margin: 2px;
     text-align: left;
@@ -177,11 +167,6 @@
     height: 235px !important;
 }
 
-/*.mat-dialog-container {
-    padding: inherit !important;
-    overflow-y: auto;
-}*/
-
 .mattoggelbutton .mat-button-toggle-group {
     width: 97% !important;
 }
@@ -213,25 +198,17 @@
     border-color: #ced4da;
     color: #495057;
     background-color: #ffffff;
-    /*margin-top: 104px;
-    margin-left: -17px;*/
     width: 185px !important
 }
-
 
 #mat-button-toggle-98-button .mattoggelbutton .mat-button-toggle-button {
     margin-left: -14px !important;
 }
 
-/*.k-multiselect .k-multiselect-wrap .k-button:last-child, .k-dropdowntree .k-multiselect-wrap .k-button:last-child {
-    margin-bottom: calc(0.25rem - 1px);
-    font-size: 12px;
-    font-family: 'Intel Clear';
-}*/
-
 .mattoggelbutton .mat-button-toggle-group-appearance-standard {
     margin-left: 5px !important;
 }
+
 .headingcontent .modal-content {
     background-color: #fff !important;
     overflow-y: auto;
@@ -240,10 +217,12 @@
     border-right: none;
     padding: 0px
 }
+
 .autofillabel {
     margin-left: 0 !important;
     margin-top: 0;
 }
+
 .md .intel.titleclass {
     float: right;
     margin: -19px;

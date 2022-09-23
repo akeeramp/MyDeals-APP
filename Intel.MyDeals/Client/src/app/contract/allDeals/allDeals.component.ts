@@ -175,7 +175,7 @@ export class allDealsComponent {
     
     loadAllDealsData() {
         let data: any;
-        let cId = this.contractData.DC_ID;
+        const cId = this.contractData.DC_ID;
         this.allDealsSvc.readWipFromContract(cId).subscribe((result: any) => {
             this.isLoading = false;
             this.gridResult = result.WIP_DEAL;
@@ -216,8 +216,8 @@ export class allDealsComponent {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }
     filterColumnbyGroup(groupName: string) {
-        var group = this.groups.filter(x => x.name == groupName);
-        var show = [
+        let group = this.groups.filter(x => x.name == groupName);
+        let show = [
             "DC_ID", "PASSED_VALIDATION", "CUST_MBR_SID", "TRKR_NBR", "START_DT", "END_DT", "OBJ_SET_TYPE_CD",
             "WF_STG_CD", "PRODUCT_CATEGORIES", "TITLE", "DEAL_COMB_TYPE", "DEAL_DESC", "TIER_NBR", "ECAP_PRICE",
             "KIT_ECAP", "VOLUME", "CONSUMPTION_REASON", "PAYOUT_BASED_ON", "PROGRAM_PAYMENT", "MRKT_SEG", "GEO_COMBINED",
@@ -227,16 +227,16 @@ export class allDealsComponent {
         this.allColumns =[];
         if (group.length > 0) {
             this.wipTemplate = this.UItemplate.ModelTemplates.WIP_DEAL[group[0].dealType];
-                       for (var i = 0; i < this.wipTemplate.columns.length; i++) {
-                if(this.wipTemplate.columns[i].hidden === false){
-                    if((this.wipTemplate.columns[i].field !='details') && (this.wipTemplate.columns[i].field != 'tools') && (this.wipTemplate.columns[i].field !="MISSING_CAP_COST_INFO") && (this.wipTemplate.columns[i].field !="LAST_REDEAL_DT")){
-                        this.allColumns.push(this.wipTemplate.columns[i]);
-                    }
-                }
-            }
+                       for (let i = 0; i < this.wipTemplate.columns.length; i++) {
+                            if(this.wipTemplate.columns[i].hidden === false){
+                                if((this.wipTemplate.columns[i].field !='details') && (this.wipTemplate.columns[i].field != 'tools') && (this.wipTemplate.columns[i].field !="MISSING_CAP_COST_INFO") && (this.wipTemplate.columns[i].field !="LAST_REDEAL_DT")){
+                                    this.allColumns.push(this.wipTemplate.columns[i]);
+                                }
+                            }
+                        }
         }
         if(group[0].name != 'All'){
-            for (var i = 0; i < this.allColumns.length; i++) {
+            for (let i = 0; i < this.allColumns.length; i++) {
                 if(show.indexOf(this.allColumns[i].field) > -1){
                     if((group[0].name == "Kit") && (this.allColumns[i].field !== "TITLE")){
                         this.columns.push(this.allColumns[i]);
@@ -273,7 +273,6 @@ export class allDealsComponent {
         });
     }
     showHelpTopicGroup(helpTopic) {
-        // const helpTopic = "Grouping+Exclusions";
         if (helpTopic && String(helpTopic).length > 0) {
             window.open('https://wiki.ith.intel.com/display/Handbook/' + helpTopic + '?src=contextnavpagetreemode', '_blank');
         } else {

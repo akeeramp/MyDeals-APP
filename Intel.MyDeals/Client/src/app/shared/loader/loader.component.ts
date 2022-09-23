@@ -1,9 +1,7 @@
-import * as angular from 'angular';
 import { Input, Component } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 
 @Component({
-  selector: 'ccLoader',
+  selector: 'cc-loader',
   template: `
   <div class="fullHeight" *ngIf="isLoading=='true'">
     <div class="jumbotron ng-scope">
@@ -30,9 +28,3 @@ export class LoaderComponent  {
     @Input() private isInitializing: string;
     
  }
-angular
-.module('app')
-.directive("ccLoader", downgradeComponent({
-  component: LoaderComponent,
-    inputs: ['isLoading', 'message', 'module', 'isInitializing']
-}));

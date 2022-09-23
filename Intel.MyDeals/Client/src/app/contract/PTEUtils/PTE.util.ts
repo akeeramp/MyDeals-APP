@@ -4,10 +4,8 @@ import { logger } from '../../shared/logger/logger';
 import { PRC_TBL_Model_Attributes, PRC_TBL_Model_Column, PRC_TBL_Model_Field } from '../pricingTableEditor/handsontable.interface';
 import { pricingTableEditorService } from '../pricingTableEditor/pricingTableEditor.service';
 import Handsontable from 'handsontable';
-import { IntlService } from "@progress/kendo-angular-intl";
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util'
 import * as moment from 'moment';
-import { isError } from 'underscore';
 
 export class PTEUtil {
 

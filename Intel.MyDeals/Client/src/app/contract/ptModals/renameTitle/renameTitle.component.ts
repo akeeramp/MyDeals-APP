@@ -34,7 +34,7 @@ export class RenameTitleComponent {
 
     updateAtrbValue(objSetType, ids, atrb, value) {
         this.loggerSvc.info("Saving", "Please wait while your information is being saved.");
-        var data = {
+        const data = {
             objSetType: objSetType,
             ids: [ids],
             attribute: atrb,

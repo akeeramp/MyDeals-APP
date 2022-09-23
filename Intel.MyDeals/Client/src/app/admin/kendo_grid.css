@@ -19,30 +19,26 @@ label {
 .k-grid tbody tr:hover {
     background-color: #ecf8fb!important;
 }
-/*.k-button:focus,.k-button.k-state-focus, .k-button.k-state-focused {
-    box-shadow: 0px !important;
-}*/
-.k-button-primary, .k-button.k-primary {
+
+.k-button-primary,
+.k-button.k-primary {
     border-color: #0071c5;
     background-color: #0071c5;
 }
 
-    .k-button-primary:hover, .k-button.k-primary:hover {
-        background-color: #1187cd!important;
-    }
+.k-button-primary:hover,
+.k-button.k-primary:hover {
+    background-color: #1187cd!important;
+}
+
+
 /*Toggle button styling*/
+
 .mat-slide-toggle {
     transform: scale(1.4);
 }
-/*.mat-slide-toggle-bar {*/
-/*border-radius: 0px !important;
-    width: 20px;*/
-/*background-color: #00aeef;*/
-/*}*/
 
 .mat-slide-toggle-thumb {
-    /*border-radius: 0px !important;
-    width: 8px;*/
     background-color: #b1babf;
     border-color: #b1babf;
 }
@@ -75,32 +71,40 @@ label {
     background-color: #0071c5;
 }
 
-.mat-slide-toggle.mat-disabled .mat-slide-toggle-label, .mat-slide-toggle.mat-disabled .mat-slide-toggle-thumb-container {
+.mat-slide-toggle.mat-disabled .mat-slide-toggle-label,
+.mat-slide-toggle.mat-disabled .mat-slide-toggle-thumb-container {
     cursor: not-allowed;
 }
 
+
 /*columnMenu filter styling*/
+
 .k-columnmenu-item {
     display: block;
     padding: 1.071em;
     line-height: 1.34em;
 }
 
-    .k-columnmenu-item:hover, .k-column-list-item:hover {
-        color: #fff;
-        background-color: #00aeef;
-        border-color: #00aeef;
-        background-image: none,linear-gradient(to bottom, #1891ee 0, #1891ee 100%);
-    }
+.k-columnmenu-item:hover,
+.k-column-list-item:hover {
+    color: #fff;
+    background-color: #00aeef;
+    border-color: #00aeef;
+    background-image: none, linear-gradient(to bottom, #1891ee 0, #1891ee 100%);
+}
 
-    .k-columnmenu-item:focus {
-        box-shadow: none;
-    }
+.k-columnmenu-item:focus {
+    box-shadow: none;
+}
 
 .k-grid-columnmenu-popup.k-popup {
     padding: 0px;
 }
+
+
 /*to align filter content left*/
+
+
 /*.k-columnmenu-item-content {
     left: 230px;
     top: 105px;
@@ -108,7 +112,9 @@ label {
     background-color: #fff;
 }*/
 
+
 /*Scroll styling*/
+
 *::-webkit-scrollbar {
     width: 10px;
     height: 10px;
@@ -119,45 +125,49 @@ label {
 }
 
 *::-webkit-scrollbar-thumb {
-    /*height: 40px;*/
     background-color: #00aeef !important;
     border-radius: 5px;
 }
 
+
 /*Pagination styling*/
+
 .k-pager-numbers .k-link.k-state-selected {
     border-color: #0071c5;
     color: #fff !important;
     background-color: #0071c5 !important;
 }
 
-.k-pager-numbers .k-link, .k-pager-nav.k-link, .k-pager-refresh {
-    /*border-color: #ffffff;*/
+.k-pager-numbers .k-link,
+.k-pager-nav.k-link,
+.k-pager-refresh {
     color: #0071c5 !important;
-    /*background-color: #ffffff;*/
 }
 
-    .k-pager-numbers .k-link:focus, .k-pager-numbers .k-link.k-state-focus {
-        box-shadow: none;
-    }
+.k-pager-numbers .k-link:focus,
+.k-pager-numbers .k-link.k-state-focus {
+    box-shadow: none;
+}
 
-.k-list > .k-state-selected.k-state-focused {
+.k-list>.k-state-selected.k-state-focused {
     background-color: #0071c5 !important;
 }
 
-.k-icon:hover, .k-icon:focus {
+.k-icon:hover,
+.k-icon:focus {
     color: #00aeef;
 }
 
 .k-pager-nav:hover {
     background-color: #ecf8fb !important;
 }
+
+
 /*Toggle styling*/
 
 .k-header-alignment {
     padding-top: 50px;
     padding-left: 35px !important;
-    /*padding-bottom: 10px;*/
 }
 
 .k-column-title {
@@ -216,6 +226,7 @@ a {
     background-color: #0071c5;
 }
 
+
 /*Kendo-header changes*/
 
 .navbar-brand {
@@ -226,16 +237,17 @@ a {
     height: 50px !important;
 }
 
-.nav, .nav-tabs-intel-blocks {
+.nav,
+.nav-tabs-intel-blocks {
     background-color: #0071C5 !important;
     font-size: 14px !important;
     border-bottom: none !important;
     margin: 0 !important;
 }
 
-    .nav-tabs-intel-blocks.nav .btn {
-        font-size: 14px !important;
-    }
+.nav-tabs-intel-blocks.nav .btn {
+    font-size: 14px !important;
+}
 
 .navbar-default .search {
     color: #0071C5;
@@ -266,11 +278,13 @@ a {
     padding: 5px !important;
 }
 
-.btn-primary:hover, .btn-primary:active {
+.btn-primary:hover,
+.btn-primary:active {
     background-color: #367fa9 !important;
 }
 
-.btn-primary:hover, .btn-primary:focus {
+.btn-primary:hover,
+.btn-primary:focus {
     border-color: #00aeef !important;
 }
 
@@ -348,17 +362,12 @@ body {
     font-size: 16px !important;
 }
 
-/*table {
-    padding-top: 7px;
-}
-*/
 .kendo-grid-buttons {
     position: relative !important;
     padding-left: 35px !important;
     padding-right: 25px !important;
     padding-top: 10px !important;
     width: 99% !important;
-   /* height: 200px !important;*/
 }
 
 .k-button {
@@ -377,45 +386,3 @@ body {
 .dropdown-toggle::after {
     content: none !important;
 }
-
-/* .nav-tabs-intel-blocks{
-    border: solid red !important;
-    font-size: 14px !important;
-    margin: 0px !important;
-    padding: 0px !important;
-} */
-/* .globSearch{
-    border: solid magenta !important;
-    height: 25px !important;
-}
-.btn-group{
-    height: 25px !important;
-}
-.globalSearchInpt{
-    height: 25px !important;
-}
-.container-fluid{
-    margin-top: -6px !important;
-} */
-/* .menu-bar {
-    padding: 0 6px 6px 6px !important;
-}
-
-.nav-tabs-intel-blocks li a{
-    border: solid magenta !important;
-    width: auto !important;
-
-    font-size: 14px !important;
-    margin: 0px !important;
-    padding: 0px !important;
-}
- .globalSearchInpt {
-    width: 320px !important;
-    font-size: 14px !important;
-    padding: auto !important;
-    height:auto !important
-} 
-
-.ng-isolate-scope{
-    border: solid green !important;
-}   */

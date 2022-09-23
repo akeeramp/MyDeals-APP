@@ -1,13 +1,10 @@
 ﻿import { downgradeComponent } from "@angular/upgrade/static";
-import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
-import { ThemePalette } from '@angular/material/core';
 import { Component, Inject, Input } from "@angular/core";
 import * as angular from "angular";
-import { MatDialogActions, MatDialogRef, MatDialogState, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { WindowState } from "@progress/kendo-angular-dialog";
+import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { logger } from "../../../shared/logger/logger";
-import { error } from "console";
 import * as _ from 'underscore';
 import { flexoverLappingcheckDealService } from "./flexOverlappingDealsCheck.service";
 import { productSelectorService } from "../productSelector/productselector.service";

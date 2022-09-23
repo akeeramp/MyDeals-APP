@@ -9,12 +9,11 @@
 .meet-conduct .k-label {
     padding: 1px;
     min-width: 7px;
-    /*width: 120px !important;*/
     display: inline-block;
     font-size: 12px !important;
 }
 
-.meet-conduct .k-cell-inner > .k-link:hover {
+.meet-conduct .k-cell-inner>.k-link:hover {
     background: none !important;
     color: #1a3e6f !important;
 }
@@ -28,24 +27,24 @@
 .meet-conduct .k-grid td.k-state-focused,
 .meet-conduct .k-grid th.k-state-focused,
 .meet-conduct .k-grid th:focus,
-.meet-conduct .k-grid .k-master-row > td:focus,
-.meet-conduct .k-grid .k-grouping-row > td:focus,
-.meet-conduct .k-grid .k-detail-row > td:focus,
-.meet-conduct .k-grid .readOnlyCell > td:focus,
-.meet-conduct .k-grid .k-detail-row > td:focus {
+.meet-conduct .k-grid .k-master-row>td:focus,
+.meet-conduct .k-grid .k-grouping-row>td:focus,
+.meet-conduct .k-grid .k-detail-row>td:focus,
+.meet-conduct .k-grid .readOnlyCell>td:focus,
+.meet-conduct .k-grid .k-detail-row>td:focus {
     box-shadow: inset 0 0 0 1px #00aeef !important;
 }
 
-    .meet-conduct .k-grid td.k-state-focused,
-    .meet-conduct .k-grid th.k-state-focused,
-    .meet-conduct .k-grid th:focus:hover,
-    .meet-conduct .k-grid .k-master-row > td:focus:hover,
-    .meet-conduct .k-grid .k-grouping-row > td:focus:hover,
-    .meet-conduct .k-grid .k-detail-row > td:focus:hover,
-    .meet-conduct .k-grid .readOnlyCell > td:focus:hover,
-    .meet-conduct .k-grid .k-detail-row > td:focus:hover {
-        box-shadow: inset 0 0 0 1px #003C71 !important;
-    }
+.meet-conduct .k-grid td.k-state-focused,
+.meet-conduct .k-grid th.k-state-focused,
+.meet-conduct .k-grid th:focus:hover,
+.meet-conduct .k-grid .k-master-row>td:focus:hover,
+.meet-conduct .k-grid .k-grouping-row>td:focus:hover,
+.meet-conduct .k-grid .k-detail-row>td:focus:hover,
+.meet-conduct .k-grid .readOnlyCell>td:focus:hover,
+.meet-conduct .k-grid .k-detail-row>td:focus:hover {
+    box-shadow: inset 0 0 0 1px #003C71 !important;
+}
 
 .meet-conduct .k-grid-content {
     overflow-y: overlay;
@@ -55,7 +54,7 @@
     white-space: nowrap !important;
 }
 
-.meet-conduct .childGrid > .k-grid-content {
+.meet-conduct .childGrid>.k-grid-content {
     height: auto !important
 }
 
@@ -63,9 +62,9 @@
     transition: all linear 0.5s;
 }
 
-    .meet-conduct .meetComp-show-hide.ng-hide {
-        opacity: 0;
-    }
+.meet-conduct .meetComp-show-hide.ng-hide {
+    opacity: 0;
+}
 
 .meet-conduct .btnPctMct {
     font-size: 14px;
@@ -124,12 +123,12 @@
     margin: 0;
 }
 
-    .meet-conduct #tabstrip h2 span {
-        background: none;
-        padding-left: 5px;
-        font-size: .3em;
-        vertical-align: top;
-    }
+.meet-conduct #tabstrip h2 span {
+    background: none;
+    padding-left: 5px;
+    font-size: .3em;
+    vertical-align: top;
+}
 
 .meet-conduct #tabstrip p {
     margin: 0;
@@ -162,7 +161,7 @@
     overflow: hidden !important;
 }
 
-.meet-conduct .k-detail-row > .k-detail-cell > div:first-child {
+.meet-conduct .k-detail-row>.k-detail-cell>div:first-child {
     margin-top: 0px !important;
     margin-left: -6px !important;
     overflow: hidden !important;
@@ -185,7 +184,6 @@
 }
 
 .meet-conduct .errorListRow {
-    /*background: rgba(255, 221, 221, 0.59) !important;*/
     background: transparent !important;
 }
 
@@ -210,7 +208,7 @@
     color: #c7c7c7;
 }
 
-.meet-conduct .k-grid-content > table > tbody > tr > td {
+.meet-conduct .k-grid-content>table>tbody>tr>td {
     padding-left: 5px !important;
 }
 
@@ -269,14 +267,14 @@
     display: none;
 }
 
-.meet-conduct .k-menu .k-item > .k-link {
+.meet-conduct .k-menu .k-item>.k-link {
     padding: 0px;
     color: #00AEEF;
 }
 
-    .meet-conduct .k-menu .k-item > .k-link:hover {
-        color: #FFFFFF;
-    }
+.meet-conduct .k-menu .k-item>.k-link:hover {
+    color: #FFFFFF;
+}
 
 .meet-conduct .dealTools input[type=radio].with-font,
 .meet-conduct .dealTools input[type=checkbox].with-font {
@@ -290,66 +288,66 @@
     width: 1px;
 }
 
-    .meet-conduct .dealTools input[type=radio].with-font + label:before,
-    .meet-conduct .dealTools input[type=checkbox].with-font + label:before {
-        font-family: FontAwesome;
-        display: inline-block;
-        content: "\f096";
-        font-size: 20px;
-        letter-spacing: 10px;
-        color: #00AEEF;
-        margin-left: 10px;
-    }
+.meet-conduct .dealTools input[type=radio].with-font+label:before,
+.meet-conduct .dealTools input[type=checkbox].with-font+label:before {
+    font-family: FontAwesome;
+    display: inline-block;
+    content: "\f096";
+    font-size: 20px;
+    letter-spacing: 10px;
+    color: #00AEEF;
+    margin-left: 10px;
+}
 
-    .meet-conduct .dealTools input[type=radio].with-font:hover + label:before,
-    .meet-conduct .dealTools input[type=checkbox].with-font:hover + label:before {
-        color: #003C71;
-        cursor: pointer;
-    }
+.meet-conduct .dealTools input[type=radio].with-font:hover+label:before,
+.meet-conduct .dealTools input[type=checkbox].with-font:hover+label:before {
+    color: #003C71;
+    cursor: pointer;
+}
 
-    .meet-conduct .dealTools input[type=radio].with-font.disabled + label:before,
-    .meet-conduct .dealTools input[type=checkbox].with-font.disabled + label:before {
-        color: #cccccc;
-        cursor: default;
-    }
+.meet-conduct .dealTools input[type=radio].with-font.disabled+label:before,
+.meet-conduct .dealTools input[type=checkbox].with-font.disabled+label:before {
+    color: #cccccc;
+    cursor: default;
+}
 
-    .meet-conduct .dealTools input[type=radio].with-font:checked + label:before,
-    .meet-conduct .dealTools input[type=checkbox].with-font:checked + label:before {
-        content: "\f046";
-        font-size: 20px;
-        letter-spacing: 5px;
-        color: #C4D600;
-        margin-left: 10px;
-    }
+.meet-conduct .dealTools input[type=radio].with-font:checked+label:before,
+.meet-conduct .dealTools input[type=checkbox].with-font:checked+label:before {
+    content: "\f046";
+    font-size: 20px;
+    letter-spacing: 5px;
+    color: #C4D600;
+    margin-left: 10px;
+}
 
-    .meet-conduct .dealTools input[type=radio].with-font:focus + label:before,
-    .meet-conduct .dealTools input[type=checkbox].with-font:focus + label:before {
-        font-weight: bold;
-        color: #00AEEF;
-    }
+.meet-conduct .dealTools input[type=radio].with-font:focus+label:before,
+.meet-conduct .dealTools input[type=checkbox].with-font:focus+label:before {
+    font-weight: bold;
+    color: #00AEEF;
+}
 
-    .meet-conduct .dealTools input[type=radio].with-font:checked:focus + label:before,
-    .meet-conduct .dealTools input[type=checkbox].with-font:checked:focus + label:before {
-        font-weight: bold;
-        color: #C4D600;
-    }
+.meet-conduct .dealTools input[type=radio].with-font:checked:focus+label:before,
+.meet-conduct .dealTools input[type=checkbox].with-font:checked:focus+label:before {
+    font-weight: bold;
+    color: #C4D600;
+}
 
 .meet-conduct .delete-attach-icon {
     font-size: 16px;
     cursor: pointer;
 }
 
-    .meet-conduct .delete-attach-icon:hover {
-        text-decoration: none;
-    }
+.meet-conduct .delete-attach-icon:hover {
+    text-decoration: none;
+}
 
 .meet-conduct .k-grid td.k-state-focused,
 .meet-conduct .k-grid th.k-state-focused,
 .meet-conduct .k-grid th:focus,
-.meet-conduct .k-grid .k-master-row > td:focus,
-.meet-conduct .k-grid .k-grouping-row > td:focus,
-.meet-conduct .k-grid .k-detail-row > td:focus,
-.meet-conduct .k-grid .k-group-footer > td:focus,
+.meet-conduct .k-grid .k-master-row>td:focus,
+.meet-conduct .k-grid .k-grouping-row>td:focus,
+.meet-conduct .k-grid .k-detail-row>td:focus,
+.meet-conduct .k-grid .k-group-footer>td:focus,
 .meet-conduct .k-grid .k-grid-pager.k-state-focused,
 .meet-conduct .k-grid .k-grid-pager:focus {
     box-shadow: inset 0 0 0 2px rgb(0 0 0 / 8%);
@@ -377,7 +375,7 @@
     height: 100%;
 }
 
-.meet-conduct tr:last-child > td {
+.meet-conduct tr:last-child>td {
     border-bottom: none !important;
 }
 
@@ -414,10 +412,6 @@
     width: 100%;
 }
 
-/*.meet-conduct .k-grid {
-    border-color: #ffffff !important;
-}*/
-
 .meet-conduct .k-grid-pager {
     border-color: #ffffff !important;
     color: #212529;
@@ -450,9 +444,9 @@
     cursor: pointer;
 }
 
-    .meet-conduct .primary-btn:hover {
-        background-color: #0071C5;
-    }
+.meet-conduct .primary-btn:hover {
+    background-color: #0071C5;
+}
 
 .meet-conduct .secondary-btn {
     color: #444444;
@@ -465,9 +459,9 @@
     cursor: pointer;
 }
 
-    .meet-conduct .secondary-btn:hover {
-        background-color: #ebebeb;
-    }
+.meet-conduct .secondary-btn:hover {
+    background-color: #ebebeb;
+}
 
 .meet-conduct .k-dialog {
     border: 0px !important;

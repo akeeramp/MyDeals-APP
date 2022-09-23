@@ -78,6 +78,7 @@ export class adminNotificationsComponent {
 
     loadNotifications() {
         this.mySelection = [];
+        this.isLoading = true;
         this.notificationsSvc.getNotification('SELECT ALL').subscribe(
             (response: Array<any>) => {
                 //as we get the CRE_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
@@ -100,31 +101,39 @@ export class adminNotificationsComponent {
 
     markAsRead() {
         const ids = this.mySelection;
+        this.isLoading = true;
         this.notificationsSvc.manageNotifications("UPDATE", true, ids).subscribe(
             ()=> {
                 this.loadNotifications();
             },
             (error) => {
                 this.loggerSvc.error("adminNotificationsComponent::manageNotifications::Unable to Update Notifications.", error);
+                this.isLoading = false;
             });
     }
 
     markAsUnRead() {
         const ids = this.mySelection;
+        this.isLoading = true;
         this.notificationsSvc.manageNotifications("UPDATE", false, ids).subscribe(
             ()=> {
                 this.loadNotifications();
             },
             (error) => {
                 this.loggerSvc.error("adminNotificationsComponent::manageNotifications::Unable to Update Notifications.", error);
+                this.isLoading = false;
             });
     }
 
     delete() {
         const ids = this.mySelection;
+        this.isLoading = true;
         this.notificationsSvc.manageNotifications("DELETE", false, ids).subscribe(
             ()=> {
                 this.loadNotifications();
+            },(err)=>{
+                this.loggerSvc.error("Unable to Delete","Error",err);
+                this.isLoading = false;
             });
     }
 

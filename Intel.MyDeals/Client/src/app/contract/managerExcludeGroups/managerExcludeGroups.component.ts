@@ -93,6 +93,7 @@ export class managerExcludeGroupsComponent {
     }
 
     loadExcludeGroups() {
+        this.isLoading = true;
         this.managerExcludeGrpSvc.readWipExclusionFromContract(this.contractData.DC_ID).subscribe((result: any) => {
             this.isLoading = false;
             this.gridResult = result.WIP_DEAL;
@@ -107,6 +108,7 @@ export class managerExcludeGroupsComponent {
             this.gridData = process(this.gridResult, this.state);
         }, (error) => {
             this.loggerSvc.error('Customer service', error);
+            this.isLoading = false;
         });
 
     }
@@ -159,17 +161,19 @@ export class managerExcludeGroupsComponent {
 
     saveAndRunPct() {
         const dirtyRecords = this.gridResult.filter(x => x._dirty == true);
+        this.isLoading = true;
         this.managerExcludeGrpSvc.updateWipDeals(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, dirtyRecords).subscribe((result: any) => {
-            this.isLoading = false;
             this.gridResult = result;
             this.gridData = process(this.gridResult, this.state);
             this.managerExcludeGrpSvc.runPctContract(this.contractData.DC_ID).subscribe((res) => {
                 this.loadExcludeGroups();
             }, (err) => {
                 this.loggerSvc.error('Could not run Cost Test in Exclude Groups for contract', err);
+                this.isLoading = false;
             });
         }, (error) => {
             this.loggerSvc.error('Could not update exclude deals', error);
+            this.isLoading = false;
         });
     }
     togglePctFilter() {

@@ -10,6 +10,7 @@
 .k-upload .k-dropzone .k-dropzone-hint {
     visibility: hidden !important;
 }
+
 .k-upload .k-upload-selected {
     color: #0071c5 !important;
     background-color: #fafafa !important;
@@ -23,10 +24,10 @@
     margin-right: 50% !important;
 }
 
-    .k-upload .k-upload-selected:hover {
-        color: #ffffff !important;
-        background-color: #0071c5 !important;
-    }
+.k-upload .k-upload-selected:hover {
+    color: #ffffff !important;
+    background-color: #0071c5 !important;
+}
 
 .k-upload .k-upload-files .k-upload-status .k-icon {
     position: initial !important;
@@ -42,9 +43,11 @@
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
     padding: 9px 14px !important;
 }
+
 .k-clear-selected {
     display: none !important;
 }
+
 .k-grid {
     height: 375px !important;
 }
@@ -75,31 +78,40 @@
     white-space: normal !important;
 }
 
-    .fileCell:hover, .fileCell:focus {
-        color: #004579 !important;
-        text-decoration: underline !important;
-    }
+.fileCell:hover,
+.fileCell:focus {
+    color: #004579 !important;
+    text-decoration: underline !important;
+}
 
 .dialogmsg {
     margin: 30px !important;
     text-align: center !important;
 }
+
 .kendoActn {
     padding: 0px !important;
     gap: 0px !important;
 }
+
 .cancelCell {
     color: #444444 !important;
     border-color: #fafafa !important;
     background-color: #fafafa !important;
 }
-    .cancelCell:hover {
-        color: #444444 !important;
-        border-color: #ebebeb !important;
-        background-color: #ebebeb !important;
-    }
+
+.cancelCell:hover {
+    color: #444444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important;
+}
+
 .deleteCell {
     color: #0071c5 !important;
+}
+
+.deleteIcon {
+    text-overflow: unset !important;
 }
 
 .new-k-btn {
@@ -148,7 +160,6 @@ kendo-upload.fino-css kendo-upload-file-list-item-action-button .k-upload-status
     color: #444 !important;
 }
 
-
 kendo-upload.fino-css kendo-upload-file-list-item-action-button .k-upload-status .k-button span:hover {
     color: #444 !important;
 }
@@ -157,7 +168,7 @@ kendo-upload.fino-css kendo-upload-action-buttons:hover {
     color: #fff !important;
 }
 
-kendo-upload.fino-css kendo-upload-file-list-item-action-button .k-upload-status .k-button span{
+kendo-upload.fino-css kendo-upload-file-list-item-action-button .k-upload-status .k-button span {
     padding-top: 0!important;
 }
 
@@ -175,7 +186,7 @@ kendo-grid.approve-table .k-grid-container .k-grid-content tr td {
     border-left: none !important;
 }
 
-.custom-badge-design{
+.custom-badge-design {
     border-radius: 10px!important;
 }
 
@@ -187,7 +198,7 @@ kendo-grid.approve-table .k-grid-container .k-grid-content tr td {
     border-color: #00AEEF !important;
     font-family: inherit !important;
     font-size: 100% !important;
-    text-transform:uppercase;
+    text-transform: uppercase;
 }
 
 .new-custom-deal-tools button:first-child {

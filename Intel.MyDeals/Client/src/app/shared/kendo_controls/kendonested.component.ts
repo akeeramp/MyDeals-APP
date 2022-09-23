@@ -1,6 +1,4 @@
-import * as angular from 'angular';
 import { Input,Output, Component,EventEmitter } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 
 @Component({
   selector: 'nested-loader',
@@ -36,9 +34,3 @@ export class nestedLoaderComponent  {
    }
       
  }
-angular
-.module('app')
-.directive("nestedLoader", downgradeComponent({
-  component: nestedLoaderComponent,
-    inputs: ['items']
-}));

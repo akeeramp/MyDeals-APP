@@ -1,19 +1,15 @@
 .boderClass {
-    /*border: solid .05px gray !important;*/
     border: 1px solid #eeeeee !important;
     margin: 0 4px;
     padding: 5px;
     overflow: auto;
     height: 250px;
-    /*overflow-y: auto*/
 }
 
 .search-result-item {
     border-bottom: 0 !important;
-    /*padding: 5px;*/
     color: #00AEEF;
     font-size: 12px;
-    /*cursor: pointer;*/
 }
 
 .search-result-item:hover {

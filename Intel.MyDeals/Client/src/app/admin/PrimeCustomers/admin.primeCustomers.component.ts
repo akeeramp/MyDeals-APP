@@ -20,8 +20,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
     selector: "adminPrimeCustomers",
-    templateUrl: "Client/src/app/admin/PrimeCustomers/admin.primeCustomers.component.html",
-    //styleUrls: ['Client/src/app/admin/PrimeCustomers/admin.primeCustomers.component.css']
+    templateUrl: "Client/src/app/admin/PrimeCustomers/admin.primeCustomers.component.html"
 })
 export class adminPrimeCustomersComponent {
     constructor(private primeCustSvc: primeCustomerService, private loggerSvc: logger) {
@@ -341,7 +340,6 @@ export class adminPrimeCustomersComponent {
                         this.gridResult.push(primeCust_map);
                         this.loadPrimeCustomer();
                         this.loggerSvc.success("New Unified Customer Added.");
-                        //sender.closeRow(rowIndex);
                     },
                     error => {
                         this.loggerSvc.error("Unable to insert Unified Customer.", error);
@@ -356,7 +354,6 @@ export class adminPrimeCustomersComponent {
                         this.gridResult.push(primeCust_map);
                         this.loadPrimeCustomer();
                         this.loggerSvc.success("Unified Customer updated.");
-                        //sender.closeRow(rowIndex);
                     },
                     error => {
                         this.loggerSvc.error("Unable to update unified customer data.", error);

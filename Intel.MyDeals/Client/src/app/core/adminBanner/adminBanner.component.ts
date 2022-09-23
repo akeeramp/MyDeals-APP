@@ -28,7 +28,7 @@ export class AdminBannerComponent {
 
             }
         }, (error) => {
-            this.loggerSvc.error('', error.statusText);
+            this.loggerSvc.error('Something Went Wrong', error.statusText);
         });
 
 

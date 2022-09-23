@@ -15,6 +15,4 @@ export class widgetSettingsComponent {
     cancelWidgetSetting(): void {
         this.dialogRef.close();
     }
-    ngOnDestroy() {
-    }
 }

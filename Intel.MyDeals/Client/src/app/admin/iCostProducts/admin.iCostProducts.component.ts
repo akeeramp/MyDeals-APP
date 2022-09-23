@@ -119,6 +119,7 @@ export class iCostProductsComponent {
             document.location.href = "/Dashboard#/portal";
         }
         else {
+            this.isLoading = true;
             this.iCostProductSvc.getProductCostTestRules()
                 .subscribe((result: Array<any>) => {
                     this.gridResult = result;
@@ -294,6 +295,8 @@ export class iCostProductsComponent {
                 }
                 this.leftValues = response;
                 this.isAttributeLoaded = Promise.resolve(true);
+        },(err)=>{
+            this.loggerSvc.error("Unable to get product attribute values","Error",err);
         });
     }
 
@@ -415,6 +418,8 @@ export class iCostProductsComponent {
             .subscribe(response => {
                 this.ProductType = response;
                 this.origDistinctProductType = this.distinctProductType = distinct(response, 'PRD_TYPE');
+            },(err)=>{
+                this.loggerSvc.error("Unable to get product type mappings","Error",err);
             });
     }
 

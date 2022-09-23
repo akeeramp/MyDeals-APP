@@ -2,8 +2,8 @@ import * as angular from "angular";
 import { Component, Input } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
-import { process, State, distinct } from "@progress/kendo-data-query";
+import { PageSizeItem } from "@progress/kendo-angular-grid";
+import {  State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { contractExportService } from "./contractExport.service";
 import { lnavService } from "../lnav/lnav.service";
@@ -61,8 +61,7 @@ export class contractExportComponent {
     ];
 
     loadContractExportData() {
-        let sId = this.contractData.CUST_MBR_SID;
-        let cId = this.contractData.DC_ID;
+        const cId = this.contractData.DC_ID;
 
         this.contractExportSvc.getExportContractData(cId).subscribe((result: Array<any>) => {
             this.isLoading = false;
@@ -105,8 +104,8 @@ export class contractExportComponent {
     }
     loadTimeLineData(){
         let contractDetailId = null;
-        let objTypeIds = [1, 2, 3];
-        let objTypeSId = 1;
+        const objTypeIds = [1, 2, 3];
+        const objTypeSId = 1;
         if(this.contractData.DC_ID){
             contractDetailId = this.contractData.DC_ID;
 
@@ -124,16 +123,19 @@ export class contractExportComponent {
         let htmlBody = [];
         let fname ='#'+this.exportData.DC_ID+"-"+ this.exportData.TITLE + ".pdf";
         htmlBody.push(document.getElementById('pdfContent').innerHTML); 
+        this.isLoading = true;
         let blah = this.contractExportSvc.exportAsPDF(htmlBody).subscribe(response => {
-        let file = new Blob([response], { type: 'application/pdf' });
-        let fileURL = URL.createObjectURL(file);
-        let a = document.createElement("a");
-        document.body.appendChild(a);
-        a.href = fileURL;
-        a.download = fname; //"Test.pdf";
-        a.click();
+            this.isLoading = false;
+            let file = new Blob([response], { type: 'application/pdf' });
+            let fileURL = URL.createObjectURL(file);
+            let a = document.createElement("a");
+            document.body.appendChild(a);
+            a.href = fileURL;
+            a.download = fname; //"Test.pdf";
+            a.click();
         }, error => {
             this.loggerSvc.error("Unable to generate contract PDF.", error);
+            this.isLoading = false;
         });
 
 

@@ -23,9 +23,7 @@
                 <button class="btn btn-primary prdBtn fr" (click)="searchProduct()" style="margin: 0 0 0 10px;">
                     Search
                 </button>
-                <kendo-autocomplete id="productSearch" class="prod-autocomplete fr form-control input-sm" [(ngModel)]="userInput"
-                                    [suggest]="true" [data]="productOptions" (ngModelChange)="changeProductOption(userInput)"
-                                    valueField="Name">
+                <kendo-autocomplete id="productSearch" class="prod-autocomplete fr form-control input-sm" [(ngModel)]="userInput" [suggest]="true" [data]="productOptions" (ngModelChange)="changeProductOption(userInput)" valueField="Name">
                 </kendo-autocomplete>
 
             </div>
@@ -40,9 +38,6 @@
                 </ng-container>
             </ul>
         </div>
-        <!--<div *ngIf="showTree" class="textProdSelector" style="margin-bottom:17px;margin-top:4px;">
-            <i class="fa fa-arrow-circle-left" role="button" (click)="ToggleShowTree(true)" title="Go to Select menu"></i> Exclude Products under : {{excludeProductMessage}}
-        </div>-->
     </div>
     <div style="height:80%;padding-top: 15px;">
         <div class="prodSelector modal-body">
@@ -84,7 +79,6 @@
                                         <div class="filterGrp" *ngIf="curRowCategories.length > 1">
                                             <div class="filterContainer" uib-collapse="isCatCollapsed">
                                                 <div *ngFor="let item of curRowCategories | orderBy: 'name'" style="max-height: 23px;" [ngClass]="{'lblSelected': item.selected, 'lblNotSelected': !item.selected}">
-                                                    <!-- checked='checked' ng-click="onColumnChange(item)" -->
                                                     <input type='checkbox' (click)="clickFilter()" [(ngModel)]="item.selected" class='check ckSm with-sm-font' id="fltrCatChk{{item.id}}" />
                                                     <label for="fltrCatChk{{item.id}}" class="lblFilterProd">
                                                         <span ng-bind-html="item.name"></span>
@@ -95,9 +89,8 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <!--<div id="prodSuggestions" kendo-grid-check-box k-grid-checkbox="vm" kendo-grid="prodSuggestions" class="productSuggestion opUiContainer md kendoGridHeight productSuggestion-grid k-grid" k-options="vm.gridOptionsSuggestions"></div>-->
-                                    <kendo-grid [data]="suggestedProducts" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
-                                                [resizable]="true" (dataStateChange)="dataStateChange($event)">
+                                    <kendo-grid [data]="suggestedProducts" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
+                                        [groupable]="false" [resizable]="true" (dataStateChange)="dataStateChange($event)">
                                         <kendo-grid-column width="65px" [columnMenu]="false">
                                             <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                                                 <div class='dealTools'>
@@ -177,7 +170,7 @@
             </div>
             <div *ngIf="showTree && !showSuggestions" id="prodGrid" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight">
                 <kendo-grid [data]="gridData" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
-                            [resizable]="true" (dataStateChange)="dataStateChange($event)">
+                    [resizable]="true" (dataStateChange)="dataStateChange($event)">
                     <kendo-grid-column width="65px" [columnMenu]="false">
                         <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                             <div class='dealTools'>
@@ -258,7 +251,7 @@
                                         <!-- WIP: Insert CAP Info cell design here -->
                                         {{ dataItem.YCS2}}
                                     </div>
-                                    
+
                                 </ng-template>
                             </div>
                         </kendo-grid-column>
@@ -292,7 +285,7 @@
                         <span class="arcAnimate">
                             <small role="button">&nbsp;({{excludedProducts.length}})</small>
                         </span>
-                    </span>
+                </span>
                 </span>
                 <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')" style="padding-right:5%"></trashcan>
             </div>
@@ -303,9 +296,8 @@
                             Selected Products
                             <span [ngClass]="{'animate':animateInclude}" class="arcAnimate">
                                 <small role="button">&nbsp;({{addedProducts.length}})</small>
-                                <!-- <i style="padding-left:10px;" role="button" ng-if="vm.enableMultipleSelection && (vm.isDeveloper || vm.isTester)" ng-class="{'heirSelected': vm.showTree }" class="fa fa-sitemap" ng-click="vm.ToggleShowTree()" title="Toggle show Deal Products(L4's)"></i> -->
                             </span>
-                        </span>
+                    </span>
                     </span>
                     <trashcan title="Clear products" class="fr" (click)="clearProducts()" style="padding-right:5%"></trashcan>
                 </div>
@@ -316,7 +308,7 @@
                             <span class="arcAnimate">
                                 <small role="button">&nbsp;({{excludedProducts.length}})</small>
                             </span>
-                        </span>
+                    </span>
                     </span>
                     <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')" style="padding-right:5%"></trashcan>
                 </div>
@@ -324,7 +316,6 @@
             <div *ngIf="!excludeMode" class="row">
                 <div [ngClass]="{'col-md-6':enableMultipleSelection,'paddingLeftNone':enableMultipleSelection}">
                     <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:100px; width:95%; overflow:scroll">
-                        <!--<span *ngFor="let item of addedProducts">{{item.HIER_VAL_NM}} &nbsp;</span>-->
                         <span *ngFor="let item of addedProducts">
                             <span (click)="showSingleProductHierarchy(item)" class="product-list"
                                   [ngClass]="{'text-danger': isValidCapDetails(item)}" title="{{isValidCapDetails(item, true)}}">
@@ -366,7 +357,5 @@
             </div>
         </div>
     </div>
-    <!--</div>-->
-    <!--</div>-->
 </div>
 <loading-panel-angular id="PTRLoading" style="z-index: 500" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>

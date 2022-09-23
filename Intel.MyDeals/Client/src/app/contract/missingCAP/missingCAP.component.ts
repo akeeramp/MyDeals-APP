@@ -98,8 +98,8 @@ export class missingCAPComponent {
     };
 
     loadDealProducts() {
-        let sId = this.contractData.CUST_MBR_SID;
-        let cId = this.contractData.DC_ID;
+        const sId = this.contractData.CUST_MBR_SID;
+        const cId = this.contractData.DC_ID;
         this.missingCapSvc.getDealProducts(cId,sId).subscribe((result: Array<any>) => {
             this.isLoading = false;
             this.gridResult = result;

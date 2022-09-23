@@ -68,12 +68,9 @@ nav .hdrIcon a div {
 }
 
 .globalSearchInpt {
-    /*width: 320px;*/
     font-size: 14px;
     line-height: .9em;
-    /*padding: 4px 5px 5px 5px;*/
     border: 0 solid transparent;
-    /*height: auto*/
 }
 
 @media (max-width:970px) {

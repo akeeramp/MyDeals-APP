@@ -46,7 +46,7 @@ export class endCustomerRetailModalComponent {
 
     addRow(e) {
         this.validateFlag = true;
-        var index = this.END_CUST_OBJ.indexOf(e);
+        const index = this.END_CUST_OBJ.indexOf(e);
         if (index > -1) {
             this.END_CUST_OBJ.splice(index + 1, 0,
                 {
@@ -77,7 +77,7 @@ export class endCustomerRetailModalComponent {
             }
             return;
         }
-        var index = this.END_CUST_OBJ.indexOf(e);
+        const index = this.END_CUST_OBJ.indexOf(e);
         if (index > -1) {
             this.END_CUST_OBJ.splice(index, 1);
         }

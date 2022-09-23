@@ -515,6 +515,8 @@ export class ProductSelectorComponent {
             item["YCS2_END"] = rst[0].YCS2_END;
 
             this.manageSelectedProducts('include', item);
+        },(err)=>{
+            this.loggerSvc.error("Unable to get product selection results","Error",err);
         });
     }
     isValidProductCombination(existingProdTypes, newProductType) {
@@ -603,6 +605,7 @@ export class ProductSelectorComponent {
         }
     }
     async searchProduct(isSuggestProduct?) {
+        this.isLoading = true;
         let columnType;
         if (this.userInput == "") return [];
         if (isSuggestProduct) {
@@ -650,8 +653,10 @@ export class ProductSelectorComponent {
                     this.showSuggestions = false;
                     this.processProducts(response);
                 }
+                this.isLoading = false;
             }, (error) => {
                 this.loggerSvc.error("Unable to get products.", error);
+                this.isLoading = false;
             });
         return this.suggestedProducts;
     }

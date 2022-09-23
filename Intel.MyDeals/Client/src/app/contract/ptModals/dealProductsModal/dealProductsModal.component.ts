@@ -2,7 +2,6 @@
 import { logger } from "../../../shared/logger/logger";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, ViewEncapsulation, Inject } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { dealProductsService } from "../dealProductsModal/dealProductsModal.service";
@@ -63,8 +62,8 @@ export class dealProductsModalComponent {
         if (this.copyOfData.length == 0) {
             this.clipboard.copy("");
             return;
-        };
-        var noCAPProducts = this.copyOfData.filter(function (x) {
+        }
+        let noCAPProducts = this.copyOfData.filter(function (x) {
             return x.CAP === null || x.CAP == "No CAP" || x.CAP === "";
         });
         if (noCAPProducts.length == 0) {
@@ -74,7 +73,7 @@ export class dealProductsModalComponent {
         noCAPProducts = noCAPProducts.filter(
             (thing, i, arr) => arr.findIndex(t => t.id === thing.id) === i
         );
-        var noCAPProdNames = noCAPProducts.map(function (x) {
+        let noCAPProdNames = noCAPProducts.map(function (x) {
             return x[columnValue];
         }).join(',');
         this.clipboard.copy(noCAPProdNames);

@@ -46,6 +46,8 @@ export class fileAttachmentComponent {
             filters: [],
         },
     };
+    private isLoading = true;
+
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
         this.gridData = process(this.gridResult, this.state);
@@ -110,6 +112,7 @@ export class fileAttachmentComponent {
         return date;
     }
     loadAttachments() {
+        this.isLoading = true;
         this.dealToolsSvc.getAttachments(this.dataItem.CUST_MBR_SID, this.dataItem.DC_ID, this.dataItem.dc_type).subscribe(response => {
             if (response != undefined && response != null) {
                     this.gridResult = response;
@@ -118,6 +121,7 @@ export class fileAttachmentComponent {
                     this.dataItem = this.dataItem;
                     this.initComplete = true;
                     this.dataItem.HAS_ATTACHED_FILES = this.attachmentCount > 0 ? "1" : "0";
+                    this.isLoading = false;
             }
         }, error => {
                 this.loggerSvc.error("Unable to get Files.", error);

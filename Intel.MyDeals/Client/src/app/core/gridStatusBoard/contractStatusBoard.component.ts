@@ -2,8 +2,7 @@
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { ContractStatusBoardService } from "./contractStatusBoard.service";
-import * as angular from "angular";
-import { downgradeComponent } from "@angular/upgrade/static";
+import { logger } from "../../shared/logger/logger";
 
 @Component({
     selector: "contract-status-board-angular",
@@ -56,7 +55,7 @@ export class contractStatusBoardComponent implements OnInit {
             value: 100,
         },
     ];
-    constructor(private contractDetailsService: ContractStatusBoardService) {
+    constructor(private contractDetailsService: ContractStatusBoardService,private loggerSvc:logger) {
     }
 
     public ngOnInit(): void {
@@ -75,17 +74,16 @@ export class contractStatusBoardComponent implements OnInit {
                 this.gridData = process(this.sbDataChildren, this.state);
                 this.isLoaded = true;
                 this.isCntrctDtlLoaded.emit(true);
+            },(err)=>{
+                this.loggerSvc.error("Unable to get contract data", "Error",err);
             });
     }
 
     recurCalcData(data: Array<any>, defStage: string) {
-
         const ret = [];
         let next = "";
         for (let i = 0; i < data.length; i++) {
-            //vaet next = "";r results = ["Pass", "Fail", "InComplete", "NA"];
             const titleCd = "TITLE";
-
             if (data[i]["dc_type"] === "CNTRCT") {
                 next = "PRC_ST";
                 defStage = "InComplete";
@@ -103,7 +101,6 @@ export class contractStatusBoardComponent implements OnInit {
                 "children": data[i][next] === undefined ? [] : this.recurCalcData(data[i][next], stg)
             });
         }
-
         return ret;
     }
 
@@ -117,9 +114,7 @@ export class contractStatusBoardComponent implements OnInit {
     }
 
     init(responseData) {
-
         let data = this.recurCalcData(responseData, "InComplete")[0];
-
         if (data === undefined || data === null) {
             data = [];
         } else {
@@ -144,7 +139,6 @@ export class contractStatusBoardComponent implements OnInit {
                 });
             }
         }
-
         return d1;
     }
 
@@ -153,10 +147,3 @@ export class contractStatusBoardComponent implements OnInit {
         this.gridData = process(this.sbDataChildren, this.state);
     }
 }
-
-angular.module("app").directive(
-    "contractStatusBoardAngular",
-    downgradeComponent({
-        component: contractStatusBoardComponent
-    })
-);

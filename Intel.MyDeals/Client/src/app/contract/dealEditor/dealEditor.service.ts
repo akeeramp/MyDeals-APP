@@ -1,7 +1,6 @@
 ﻿import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import 'rxjs/add/operator/toPromise';
-import { BehaviorSubject } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
@@ -13,12 +12,12 @@ export class dealEditorService {
     public apiBaseUrl = '/api/UserPreferences/';
 
     public getActions(category, subCategory) {
-        let apiUrl: string = this.apiBaseUrl + 'Get/' + category + '/' + subCategory;
+        const apiUrl: string = this.apiBaseUrl + 'Get/' + category + '/' + subCategory;
         return this.httpClient.get(apiUrl);
     }
 
     public updateActions(category, subCategory, key, value) {
-        var dto = {
+        const dto = {
             'value': value
         }
 
@@ -27,7 +26,7 @@ export class dealEditorService {
     }
 
     public clearAction(category, subCategory) {
-        let apiUrl: string = this.apiBaseUrl + 'Clear/' + category + '/' + subCategory;
+        const apiUrl: string = this.apiBaseUrl + 'Clear/' + category + '/' + subCategory;
         return this.httpClient.post(apiUrl, null);
     }
 }

@@ -88,6 +88,7 @@ export class managerPctComponent {
         const ptDcId = pt.DC_ID;
         //check whether arrow icon is expanded/collapsed ,only if it is expanded then call API to get the data
         if (this.isPTExpanded[ptDcId]) {
+            this.isLoading = true;
             this.managerPctSvc.getPctDetails(pt.DC_ID).subscribe(
                 (response) => {
                     if (response !== undefined) {
@@ -96,6 +97,7 @@ export class managerPctComponent {
                         this.gridDataSet[pt.DC_ID] = distinct(this.gridData, "DEAL_ID");
                         this.parentGridData[pt.DC_ID] = this.gridData;
                     }
+                    this.isLoading = false;
                 },
                 function (response) {
                     this.loggerSvc.error("Could not load data.", response, response.statusText);
@@ -180,6 +182,8 @@ export class managerPctComponent {
                 this.superPrefix = "Super";
                 this.extraUserPrivsDetail.push("Super User");
             }
+        },(err)=>{
+            this.loggerSvc.error("Unable to get user role details","Error",err);
         });
         this.selTab(event.title);
         if (this.pctFilter != "") {

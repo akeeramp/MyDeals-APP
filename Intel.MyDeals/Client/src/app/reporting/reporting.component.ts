@@ -6,7 +6,7 @@ import {reportingService} from "./reporting.service";
 import {List} from "linqts";
 
 @Component({
-  selector: "reportingDashboard",
+  selector: "reporting-dashboard",
     templateUrl: "Client/src/app/reporting/reporting.component.html",
     styleUrls: ['Client/src/app/reporting/reporting.component.css']
 })

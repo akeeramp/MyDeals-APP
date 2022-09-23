@@ -47,6 +47,7 @@ export class notificationsSettingsDialog {
         },
             error => {
                 this.loggerSvc.error("notificationsSettingsDialog::getUserSubscriptions::Unable to get user subscription.", error);
+                this.loading = false;
             }
         );
     }
@@ -73,12 +74,15 @@ export class notificationsSettingsDialog {
 
      //Save data and close
     saveAndClose() {
+        this.loading = true;
         this.notificationsSvc.updateUserSubscriptions(this.subScriptions).subscribe(() => 
         {
             this.dialogRef.close();
+            this.loading = false;
         },
             error => {
                 this.loggerSvc.error("notificationsSettingsDialog::updateUserSubscriptions::Unable to Update user subscription.", error);
+                this.loading = false;
             }
         );
     }

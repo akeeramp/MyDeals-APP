@@ -147,7 +147,9 @@ export class DashboardComponent implements OnInit {
                 }
                 this.initDashboard(key, useSavedWidgetSettings);
             }
-        })
+        },(err)=>{
+            this.loggerSvc.error("Unable to get Widget Data","Error",err);
+        });
     }
 
     saveLayout() {

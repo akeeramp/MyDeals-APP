@@ -51,18 +51,16 @@ export class dealTimelineComponent {
     }
     loadTimeline() {
         this.dealToolsSvc.getTimlelineDs(this.data.item).subscribe(response => {
-            for (var d = 0; d < response.length; d++) {
+            for (let d = 0; d < response.length; d++) {
                 response[d]["user"] = response[d]["FRST_NM"] + " " + response[d]["LST_NM"] + " (" + response[d]["USR_ROLES"] + ") (" + response[d]["CHG_EMP_WWID"] + ")";
                 response[d]["ATRB_VAL"] = response[d]["ATRB_VAL"].replace(/; /g, '<br/>');
-                var regex1 = /Created Deals:/gi;
+                let regex1 = /Created Deals:/gi;
                 response[d]["ATRB_VAL"] = response[d]["ATRB_VAL"].replace(regex1, 'Created Deal(s) for product:');
                 response[d]["HIST_EFF_FR_DTM"] = moment(response[d]["HIST_EFF_FR_DTM"]).format("MM/DD/YYYY hh:mm A");
             }
             this.gridResult = response;
             this.gridData = process(this.gridResult, this.state);
-            setTimeout(() => {
-                this.loading = false;
-            }, 500);
+            this.loading = false;
         }, (error) => {
             this.loggerSvc.error("Unable to load the Deal Timeline Data", error);
         });

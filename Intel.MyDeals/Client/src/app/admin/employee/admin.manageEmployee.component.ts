@@ -285,7 +285,6 @@ export class manageEmployeeComponent {
         }
         this.manageEmployeeSvc.getEmployeeData()
             .subscribe((response: Array<any>) => {
-                this.isLoading = false;
                 this.gridResult = response;
                 for (let i = 0; i < this.gridResult.length; i++) {
                     if (!this.gridResult[i].USR_CUST) {
@@ -301,6 +300,7 @@ export class manageEmployeeComponent {
                     this.gridResult[i].VERT_CLICKABLE = this.verticalsFormatting(this.gridResult[i], 'USR_VERTS', 'USR_ROLE', 'USR_GEOS')['isVertClickable'];
                 }
                 this.gridData = process(this.gridResult, this.state);
+                this.isLoading = false;
             }, (error) => {
                 this.loggerSvc.error('Unable to get User Data.', '', 'manageEmployeeComponent::loadEmployeeData::' + JSON.stringify(error));
             });

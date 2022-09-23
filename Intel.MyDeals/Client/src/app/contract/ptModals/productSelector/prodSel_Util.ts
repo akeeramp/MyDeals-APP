@@ -268,7 +268,7 @@ export class ProdSel_Util {
         ]
     }
     static sortBySelectionLevelColumn(gridResult: any, selectionLevel: number) {
-        var column = "";
+        let column = "";
         switch (selectionLevel) {
             case 7007:
                 column = "DEAL_PRD_NM";
@@ -300,7 +300,7 @@ export class ProdSel_Util {
     }
     static getFormatedGeos = function (geos: any) {
         if (geos == null) { return null; }
-        var isBlendedGeo = (geos.indexOf('[') > -1) ? true : false;
+        const isBlendedGeo = (geos.indexOf('[') > -1) ? true : false;
         if (isBlendedGeo) {
             geos = geos.replace('[', '');
             geos = geos.replace(']', '');
@@ -309,8 +309,8 @@ export class ProdSel_Util {
         return geos;
     }
     static getVerticalSelection(markLevelName: any, selectedPathParts: Array<any>, productSelectionLevels: Array<any>) {
-        var markLevel = selectedPathParts.length == 0 ? 'MRK_LVL1' : 'MRK_LVL2';
-        var verticals = productSelectionLevels.filter((x) => {
+        const markLevel = selectedPathParts.length == 0 ? 'MRK_LVL1' : 'MRK_LVL2';
+        let verticals = productSelectionLevels.filter((x) => {
             return x[markLevel] == markLevelName && x['PRD_CAT_NM'] != null && x['PRD_CAT_NM'] != ""
         });
 
@@ -349,7 +349,7 @@ export class ProdSel_Util {
     }
 
     static getVerticalsUnderMarkLevel(markLevelName: string, selectedPathParts: Array<any>, productSelectionLevels: Array<any>) {
-        let markLevel = selectedPathParts.length == 0 ? 'MRK_LVL1' : 'MRK_LVL2';
+        const markLevel = selectedPathParts.length == 0 ? 'MRK_LVL1' : 'MRK_LVL2';
         let verticals: any = null;
         verticals = productSelectionLevels.filter((x) => {
             return x[markLevel] == markLevelName && x['PRD_CAT_NM'] != null && x['PRD_CAT_NM'] != ""

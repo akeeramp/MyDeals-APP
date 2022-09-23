@@ -54,13 +54,6 @@
                     <div class="row">
                         <div class="col">
                             <p class='filterTitleUnderline' *ngIf="selRowIssues.length > 0">Filter by product</p>
-                            <!--<div *ngFor="let curRow of selRowIssues | orderBy: 'name' ">
-                                <label class="lblFilterProd" style="margin-left:28px">
-                                    <span>{{curRow.name}}</span>
-                                    <span class="badge upperBadge"> {{curRow.len == 0 ? "?" : curRow.len }}</span>
-                                    <br/>
-                                </label>
-                            </div>-->
                             <kendo-treeview class="lblFilterProd" [nodes]="selRowIssues" [(selectedKeys)]="selRowIssuesKeys" textField="name" [hasChildren]="false" selectBy="value" [kendoTreeViewSelectable]="selection" (selectedKeysChange)="onPrdChange($event,'USR_INPUT')">
                                 <ng-template kendoTreeViewNodeTemplate let-dataItem>
                                     {{dataItem.name }}
@@ -318,8 +311,7 @@
                         </kendo-grid-column>
                     </kendo-grid>
                     <div>
-                        <kendo-dialog *ngIf="isDuplicate"
-                                      (close)="closeKendoDialog('cancel')" [minWidth]="250" [width]="450">
+                        <kendo-dialog *ngIf="isDuplicate" (close)="closeKendoDialog('cancel')" [minWidth]="250" [width]="450">
                             <p style="margin: 30px; text-align: center;">
                                 {{duplicateMsg}}
                             </p>

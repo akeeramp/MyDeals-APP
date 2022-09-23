@@ -128,6 +128,7 @@ export class adminVistexCustomerMappingComponent {
         if (!((<any>window).usrRole === 'SA' || (<any>window).isDeveloper)) {
             document.location.href = "/Dashboard#/portal";
         } else {
+            this.isLoading = true;
             this.customerMapSvc.getVistexCustomersMapList().subscribe(
                 (result: Array<any>) => {
                     this.gridResult = result;

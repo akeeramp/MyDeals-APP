@@ -1,6 +1,4 @@
-import * as angular from 'angular';
 import { Input, Component } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 
 @Component({
     selector: 'nested-grid-directive',
@@ -60,9 +58,3 @@ export class nestedGridComponent  {
     }
 
  }
-angular
-.module('app')
-.directive("nestedGridDirective", downgradeComponent({
-  component: nestedGridComponent,
-    inputs: ['group', 'parent', 'form', 'operators','leftValues']
-}));

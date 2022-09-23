@@ -13,7 +13,7 @@ export class productSelectorService {
     public apiBaseUrl = "api/Products/";
 
     TranslateProducts(products, CUST_CD, DEAL_TYPE, contractId, isTender) {
-        var is_Tender = isTender == 1 ? true : false;
+        const is_Tender = isTender == 1 ? true : false;
         return this.httpClient.post(this.apiBaseUrl + 'TranslateProducts/' + CUST_CD + "/" + DEAL_TYPE + "/" + contractId + "/" + is_Tender, products);
     }
 }
