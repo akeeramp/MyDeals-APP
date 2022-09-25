@@ -54,8 +54,22 @@ export class DealDeskWidgetComponent implements OnInit, OnDestroy, OnChanges {
         this.resizeSub = this.resizeEvent.subscribe((widget) => {
             if (widget === this.widget) { // or check id , type or whatever you have there
                 // resize your widget, chart, map , etc.
+                this.gridValsCheck();
             }
         });
+    }
+
+    gridValsCheck() {
+        var parentCheck = document.getElementById("parentID");
+        var nodesSameClassCheck = parentCheck.getElementsByClassName("few-grid-find");
+        var testnodesSameClassCheck = nodesSameClassCheck.length;
+        if (testnodesSameClassCheck > 3) {
+            $("#height-grids").removeClass("sum-fixes");
+            $("#height-grids").addClass("sum-fixes-plus");
+        } else {
+            $("#height-grids").addClass("sum-fixes");
+            $("#height-grids").removeClass("sum-fixes-plus");
+        }
     }
 
     ngOnDestroy(): void {

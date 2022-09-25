@@ -50,3 +50,34 @@ a {
         color: deepskyblue;
         background-color: deeppink;
     }
+
+
+.heading-position-fix {
+    padding-top: 50px;
+    padding-left: 14px !important;
+    padding-bottom: 10px;
+}
+
+.header-bottomsizereduce {
+    line-height: 1.1;
+}
+
+.table-left-rightsizefix {
+    padding-left: 14px !important;
+    padding-right: 5px !important;
+    padding-top: 0px !important;
+}
+
+kendo-grid.grid-heightsize {
+    height: 652px;
+}
+
+.space-remove-btw-two {
+    margin-left: 0.16em !important;
+    margin-right: -1em !important;
+}
+
+.delete-editorspaceremove {
+    margin-left: 0.16em !important;
+    margin-right: -1em !important;
+}

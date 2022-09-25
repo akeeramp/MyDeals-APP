@@ -335,8 +335,7 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active span 
     text-overflow: ellipsis;
 }
 
-gridster-item.attr-li-6,
-gridster-item.attr-li-8 {
+gridster-item.attr-li-6, gridster-item.attr-li-8, gridster-item.attr-li-9, gridster-item.attr-li-10 {
     height: 312px !important;
 }
 
@@ -355,6 +354,7 @@ gridster-item.attr-li-7 .container-fluid.widget-container {
 .oppo-grids.physics-css kendo-grid.k-grid .k-grid-header-wrap table thead tr th {
     padding-right: 1.5rem;
     vertical-align: top;
+    border-color: #ccc;
 }
 
 .oppo-grids.physics-css kendo-grid.k-grid .k-grid-header-wrap table thead tr th .k-cell-inner span.k-icon.k-i-filter {
@@ -414,4 +414,31 @@ kendo-slider.before-ques .k-slider-wrap .k-slider-track-wrap ul li span.k-label 
     padding: 0 !important;
     line-height: 21px !important;
     font-size: 14px;
+}
+
+kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
+    left: 0 !important;
+}
+
+.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th .k-cell-inner kendo-grid-filter-menu a .k-i-filter {
+    color: #00aeef;
+}
+
+.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th{
+    vertical-align: top!important;
+}
+
+.filter-alignment-fixes kendo-grid .k-grid-aria-root kendo-grid-list table tbody tr td .isReadOnlyCell {
+    background: transparent !important;
+}
+
+.filter-alignment-fixes kendo-grid .k-grid-aria-root kendo-grid-list table tbody tr td:first-child deal-editor-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.width-fixes .k-grid .k-grid-edit-row td deal-editor-edit .k-datepicker, .width-fixes .k-grid .k-grid-edit-row td deal-editor-edit .k-numerictextbox {
+    width: 100%;
 }

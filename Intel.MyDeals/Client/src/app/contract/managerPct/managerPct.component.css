@@ -472,3 +472,7 @@ input:focus-visible {
 .either-pin kendo-grid kendo-grid-list .k-icon.k-i-minus:before {
     content: "\e001" !important;
 }
+
+kendo-tabstrip.art-kendo-bars {
+    margin-top: 34px !important;
+}

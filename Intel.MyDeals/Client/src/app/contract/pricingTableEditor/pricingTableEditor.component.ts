@@ -438,7 +438,7 @@ export class pricingTableEditorComponent implements OnChanges {
             }
             this.columns.push(currentColumnConfig);
             nestedHeaders[0].push(sheetObj[index]);
-            nestedHeaders[1].push(`<span style="color:blue;font-style: italic;">${item.title}</span>`);
+            nestedHeaders[1].push(`<span style="color: rgb(0, 60, 113);font-family:'Intel Clear';font-weight: bold;font-size: 13px;">${item.title}</span>`);
         });
         /* Hidden Columns */
         hiddenColumns = PTE_Load_Util.getHiddenColumns(columnTemplates, this.contractData.CustomerDivisions);

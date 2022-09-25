@@ -387,7 +387,7 @@ export class DashboardComponent implements OnInit {
         }
     }
 
-    /*gridValsCheck() {
+    gridValsCheck() {
         var parentCheck = document.getElementById("parentID");
         var nodesSameClassCheck = parentCheck.getElementsByClassName("few-grid-find");
         var testnodesSameClassCheck = nodesSameClassCheck.length;
@@ -398,7 +398,7 @@ export class DashboardComponent implements OnInit {
             $("#height-grids").addClass("sum-fixes");
             $("#height-grids").removeClass("sum-fixes-plus");
         }
-    }*/
+    }
 
 }
 

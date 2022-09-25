@@ -11,6 +11,7 @@ import { ThemePalette } from '@angular/material/core';
 @Component({
     selector: "adminProducts",
     templateUrl: "Client/src/app/admin/products/admin.products.component.html",
+    styleUrls: ["Client/src/app/admin/products/admin.products.component.css"]
 })
 
 export class adminProductsComponent {

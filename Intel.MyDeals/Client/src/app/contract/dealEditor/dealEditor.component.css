@@ -320,7 +320,7 @@ tr:last-child>td {
 
 .isReadOnlyCell {
     color: #000 !important;
-    background-color: rgba(0, 0, 0, .05) !important;
+    background-color: #f9f9f9 !important;
     height: 100% !important;
 }
 
@@ -478,21 +478,16 @@ tr:last-child>td {
     font-weight: bold;
     background: #e7e7e8 !important;
     padding: 10px 3.5px !important;
+    border-color: #ccc !important;
 }
 
-.k-grid .k-grid-header-locked,
-.k-grid .k-grid-content-locked,
-.k-grid .k-grid-header-locked .k-header,
-.k-grid .k-grid-content-locked td {
-    border-color: rgba(33, 37, 41, 0.125) !important;
+.k-grid .k-grid-header-locked, .k-grid .k-grid-content-locked, .k-grid .k-grid-header-locked .k-header, .k-grid .k-grid-content-locked td {
+    border-color: #ccc !important;
 }
 
-.k-grid .k-grid-header-locked,
-.k-grid .k-grid-content-locked,
-.k-grid .k-grid-header-locked .k-header,
-.k-grid .k-grid-content-locked td {
-    border-color: rgba(33, 37, 41, 0.125) !important;
-}
+    .k-grid .k-grid-header-locked, .k-grid .k-grid-content-locked, .k-grid .k-grid-header-locked .k-header, .k-grid .k-grid-content-locked td {
+        border-color: #ccc !important;
+    }
 
 #dealEditor.op-grid.k-grid tr:hover {
     background-color: #ecf8fb !important;
@@ -787,4 +782,13 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
 
 #dealEditor .k-grid-header .headerClass span.k-cell-inner .intelicon-protection-solid {
     color: #00AEEF;
+}
+
+.width-fixes.new-allDeals.fs-increase .k-tabstrip-items-wrapper .k-tabstrip-items li span {
+    font-weight: 400 !important;
+    font-size: 14px;
+}
+
+.width-fixes.new-allDeals.fs-increase .k-tabstrip-items-wrapper .k-tabstrip-items li:last-child {
+    border: none!important;
 }

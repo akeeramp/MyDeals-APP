@@ -3,18 +3,18 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="form-inline">
-    <div class="col-md-12 k-header-alignment k-allign">
-        <h3>Legal Classification</h3>
+    <div class="col-md-12 k-header-alignment k-allign header-align">
+        <h3 class="remove-space-btw">Legal Classification</h3>
     </div>
-    <p style="margin-left: 15px;">Use the tool below to control what products will be cost tested and at what level.</p>
+    <p class="paragraph-align">Use the tool below to control what products will be cost tested and at what level.</p>
     <div class="col-md-12">
         <div class="alert alert-danger" *ngIf="validationMessage !=''">{{validationMessage}} </div>
     </div>
     <div *ngIf="!manageRules">
         <div class="col-md-12">
             <div class="row">
-                <div class="col-md-12 kendo-grid-buttons">
-                    <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+                <div class="col-md-12 kendo-grid-buttons grid-box-margin">
+                    <kendo-grid class="grid-sizefix" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                                 [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                                 [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [reorderable]="true"
                                 [resizable]="true" [group]="state.group" filterable="menu" (cellClick)="editClick($event)"

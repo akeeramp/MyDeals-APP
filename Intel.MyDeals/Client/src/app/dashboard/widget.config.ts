@@ -22,7 +22,7 @@ export const configWidgets = [
     },
     {
         id: '7',
-        size: { x: 2, y: 0 },
+        size: { x: 1, y: 0 },
         position: { rows: 2, cols: 2 },
         name: "Deal Desk",
         desc: "Quick view of status board",
@@ -41,7 +41,7 @@ export const configWidgets = [
     },
     {
         id: '8',
-        size: { x: 1, y: 1 },
+        size: { x: 0, y: 1 },
         position: { rows: 1, cols: 1 },
         name: "Search My Deals Report(s)",
         desc: "Search for contracts, pricing strategies, or pricing tables by entering a name or id",
@@ -63,7 +63,7 @@ export const configWidgets = [
     {
         id: '9',
         size: { x: 1, y: 2 },
-        position: { rows: 1, cols: 1 },
+        position: null,
         name: "Open Contracts By Id",
         desc: "Quickly Navigate to a contract by entering its Id",
         icon: "intelicon-tools",
@@ -83,8 +83,8 @@ export const configWidgets = [
     },
     {
         id: '10',
-        size: { x: 2, y: 2 },
-        position: { rows: 1, cols: 1 },
+        size: { x: 1, y: 0 },
+        position: null,
         name: "Recent",
         desc: "Recently visited My deals contracts or deals",
         icon: "intelicon-time-outlined",

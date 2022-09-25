@@ -470,3 +470,7 @@ kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li:last-child {
     font-weight: 600;
     padding: 0.5rem 1.4rem !important;
 }
+
+kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper .k-tabstrip-items li:hover {
+    background-color: #003c71 !important;
+}

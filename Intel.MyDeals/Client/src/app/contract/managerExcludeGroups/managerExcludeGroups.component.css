@@ -364,3 +364,84 @@ tr.k-alt.grey {
 .medIcon {
     font-size: 18px
 }
+
+.dt-opp {
+    position: absolute;
+    top: 8px !important;
+    right: 0;
+    z-index: 100;
+    font-size: 16px;
+    color: #003C71 !important;
+    font-weight: 600;
+}
+
+.cola-pick {
+    position: relative;
+    width: 100%;
+    padding: 0;
+}
+
+.luna-css {
+    display: flex;
+    width: 100%;
+    align-items: center;
+    justify-content: space-between;
+    position: relative;
+}
+
+.dis-comp {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.comp-calls button.ssToolbarBtn table tr td span.text {
+    font-size: 12px !important;
+    line-height: 18px !important;
+    display: inline-block;
+}
+
+.comp-calls button.ssToolbarBtn table tr td .fa-floppy-o {
+    color: #00AEEF;
+}
+
+.comp-calls button.ssToolbarBtn.dd-out table tr td span.text-out {
+    font-size: 12px !important;
+    line-height: 18px !important;
+    display: inline-block;
+}
+
+.aligner-inputs {
+    width: 270px !important;
+    font-size: 16px !important;
+    padding-left: 0 !important;
+    margin-right: 8px !important;
+}
+
+.aligner-inputs i {
+    height: 100%;
+    font-size: 18px;
+    color: #00AEEF;
+    width: 30px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: #f9f9f9;
+}
+
+.aligner-inputs input {
+    width: 100%;
+    margin: 0;
+    border: none;
+}
+
+.kendo-grid-buttons.there-grid {
+    width: 100% !important;
+    padding-right: 10px !important;
+}
+
+.throw-span {
+    margin-left: 3px;
+    color: #00aeef;
+    margin-top: -5px;
+}

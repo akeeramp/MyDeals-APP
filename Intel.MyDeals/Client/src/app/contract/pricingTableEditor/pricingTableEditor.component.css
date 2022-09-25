@@ -1,10 +1,10 @@
 td.error-product {
-    color: red !important;
+    color: rgb(252, 76, 2) !important;
     font-weight: bold !important;
 }
 
 td.success-product {
-    color: darkgreen !important;
+    color: rgb(155, 198, 0) !important;
     font-weight: bold !important;
 }
 

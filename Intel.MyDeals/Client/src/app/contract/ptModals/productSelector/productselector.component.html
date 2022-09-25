@@ -4,7 +4,7 @@
 <link href="/Client/src/app/contract/ptModals/productSelector/productselector.component.css" rel="stylesheet" />
 
 <div class="product-selector modal-content">
-    <div class="prodSelector modal-header">
+    <div class="prodSelector modal-header" style="padding-left: 15px; padding-right: 15px;padding-top:15px;">
         <div class="row" style="width:100%">
             <div class="col-md-4 col-sm-4 col-xs-4">
                 <p class="prodHeader cursorArea">
@@ -287,7 +287,7 @@
                         </span>
                 </span>
                 </span>
-                <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')" style="padding-right:5%"></trashcan>
+                <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')"></trashcan>
             </div>
             <div *ngIf="!excludeMode" class="row">
                 <div [ngClass]="{'col-md-6':enableMultipleSelection, 'paddingRight15': !enableMultipleSelection}">
@@ -299,7 +299,7 @@
                             </span>
                     </span>
                     </span>
-                    <trashcan title="Clear products" class="fr" (click)="clearProducts()" style="padding-right:5%"></trashcan>
+                    <trashcan title="Clear products" class="fr" (click)="clearProducts()"></trashcan>
                 </div>
                 <div *ngIf="enableMultipleSelection" class="col-md-6">
                     <span>
@@ -310,12 +310,12 @@
                             </span>
                     </span>
                     </span>
-                    <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')" style="padding-right:5%"></trashcan>
+                    <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')"></trashcan>
                 </div>
             </div>
             <div *ngIf="!excludeMode" class="row">
                 <div [ngClass]="{'col-md-6':enableMultipleSelection,'paddingLeftNone':enableMultipleSelection}">
-                    <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:100px; width:95%; overflow:scroll">
+                    <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:100px; width:100%; overflow:hidden auto;">
                         <span *ngFor="let item of addedProducts">
                             <span (click)="showSingleProductHierarchy(item)" class="product-list"
                                   [ngClass]="{'text-danger': isValidCapDetails(item)}" title="{{isValidCapDetails(item, true)}}">
@@ -326,7 +326,7 @@
                     </div>
                 </div>
                 <div *ngIf="enableMultipleSelection" class="col-md-6 paddingRightNone">
-                    <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:100px; width:95%; overflow:scroll">
+                    <div contenteditable="false" class="prodSelected text-left" style="background-color: white; height: 100px; width: 100%; overflow: hidden auto;">
                         <span *ngFor="let item of excludedProducts">
                             <span class="product-list" [ngClass]="{'text-danger': isValidCapDetails(item)}" title="{{isValidCapDetails(item, true)}}">
                                 {{item.HIER_VAL_NM}}  &nbsp;

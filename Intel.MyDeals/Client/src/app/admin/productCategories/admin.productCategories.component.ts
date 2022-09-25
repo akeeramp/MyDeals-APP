@@ -20,7 +20,8 @@ import { Product_categories } from "./admin.productCategories.model";
 
 @Component({
     selector: "adminProductCategories",
-    templateUrl: "Client/src/app/admin/productCategories/admin.productCategories.component.html"
+    templateUrl: "Client/src/app/admin/productCategories/admin.productCategories.component.html",
+    styleUrls: ["Client/src/app/admin/productCategories/admin.productCategories.component.css"]
 })
 
 export class adminProductCategoriesComponent {

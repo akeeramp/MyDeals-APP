@@ -67,3 +67,15 @@
     padding-left: 0px;
     padding-right: 0px;
 }
+
+.step-into h4 {
+    cursor: pointer;
+}
+
+.step-into p {
+    cursor: pointer;
+}
+
+.step-into:hover {
+    text-decoration: underline;
+}

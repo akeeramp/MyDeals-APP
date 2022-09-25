@@ -3,13 +3,13 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="row">
-    <div class="col-md-12 k-header-alignment">
-        <h3>Constants</h3>
+    <div class="col-md-12 k-header-alignment heading-position-fix">
+        <h3 class="header-bottomsizereduce">Constants</h3>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-12 kendo-grid-buttons">
-        <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+    <div class="col-md-12 kendo-grid-buttons table-left-rightsizefix">
+        <kendo-grid class="grid-heightsize" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
             [sort]="state.sort" [filter]="state.filter" [sortable]="true"
             [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
             filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)"
@@ -26,7 +26,7 @@
             <kendo-grid-command-column title="" width="60" [headerClass]="{'headerClass':true}" [columnMenu]="false">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-isNew="isNew"><button id="command-icon"
                         kendoGridEditCommand [hidden]="!dataItem.UI_UPD_FLG"><span
-                            class="k-icon k-i-edit k-icon-sm"></span></button><button kendoGridRemoveCommand
+                            class="k-icon k-i-edit k-icon-sm delete-editorspaceremove"></span></button><button kendoGridRemoveCommand
                         id="command-icon" *ngIf="!opened" [hidden]="!dataItem.UI_UPD_FLG" class="k-button"><span
                             class="k-icon k-i-delete k-icon-sm"></span></button><button id="command-icon"
                         kendoGridSaveCommand [disabled]="formGroup?.invalid"><span

@@ -904,8 +904,11 @@
     <Content Include="Client\src\app\admin\notifications\admin.notificationsSettings.component.html" />
     <Content Include="Client\src\app\admin\oplog\admin.oplog.component.css" />
     <Content Include="Client\src\app\admin\oplog\admin.oplog.component.html" />
+    <Content Include="Client\src\app\admin\ProductAlias\admin.productAlias.component.css" />
+    <Content Include="Client\src\app\admin\productCategories\admin.productCategories.component.css" />
     <Content Include="Client\src\app\admin\productCategories\admin.productCategories.component.html" />
     <Content Include="Client\src\app\admin\ProductAlias\admin.productAlias.component.html" />
+    <Content Include="Client\src\app\admin\products\admin.products.component.css" />
     <Content Include="Client\src\app\admin\products\admin.products.component.html" />
     <Content Include="Client\src\app\admin\pushDealstoVistex\admin.pushDealstoVistex.component.css" />
     <Content Include="Client\src\app\admin\pushDealstoVistex\admin.pushDealstoVistex.component.html" />
@@ -2168,6 +2171,7 @@
     <Content Include="Client\Images\docs\MyDeal UI MT Architecture 50.pdf" />
     <Content Include="Client\Images\docs\MyDeals Error Handling Design Doc.pdf" />
     <Content Include="Client\Images\helpicons.psd" />
+    <Content Include="Client\src\app\admin\ProductAlias\admin.productAlias.component" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
     <Content Include="Scripts\intcAnalytics.js" />

@@ -2,7 +2,7 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <div [ngClass]="{'targetGeoModal': isTgrRgn}">
     <div class="modal-header" *ngIf="!isTgrRgn">
-        <h3 class="modal-title" id="modal-title">Select {{multiSelectPopUpModal.label}}</h3>
+        <h3 class="modal-title" id="modal-title">Select Market Segment *</h3>
     </div>
     <loading-panel-angular id="multiSelectModalLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>
     <div class="container-fluid overflow modal-body">
@@ -56,7 +56,7 @@
                 </div>
                 <div mat-dialog-actions class="fr">
                     <button mat-button (click)="onNoClick()" class="btn btn-warning">Cancel</button> &nbsp;
-                    <button mat-button (click)="onSave()" cdkFocusInitial class="btn btn-primary">Save & Close</button>
+                    <button mat-button (click)="onSave()" cdkFocusInitial class="btn btn-primary">Save And Close</button>
                 </div>
             </div>
         </div>

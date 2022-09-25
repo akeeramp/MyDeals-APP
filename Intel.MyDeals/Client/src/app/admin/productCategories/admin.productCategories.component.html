@@ -6,17 +6,16 @@
 	<div class="col-md-12" style="height:50px"></div>
 </div>
 <div class="row">
-	<div class="col-md-12" style="padding-left: 35px;">
-		<h3>Product Vertical Rules</h3>
+	<div class="col-md-12 head" style="padding-left: 15px;">
+		<h3 class="heading-alignOnproduct">Product Vertical Rules</h3>
 	</div>
 	<div class="col-md-12">
-		<div class="messageBox col-md-12" [ngClass]="{'mb-warning': true}" style="padding-left: 25px;"><b><i
-					class="intelicon-alert-solid icon-lg"></i>Note:
-			</b>Please be aware of potential impacts to live deals & downstream partners before making changes to
-			existing data.
+		<div class="messageBox col-md-12" [ngClass]="{'mb-warning': true}" style="padding-left: 25px;">
+			<b><i class="intelicon-alert-solid icon-lg"></i> Note: </b>
+			Please be aware of potential impacts to live deals & downstream partners before making changes to existing data.
 		</div>
 	</div>
-	<div class="col-md-12 kendo-grid-buttons">
+	<div class="col-md-12 kendo-grid-buttons spread_size">
 		<kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
 			[sort]="state.sort" [filter]="state.filter" [sortable]="true"
 			[pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" filterable="menu"

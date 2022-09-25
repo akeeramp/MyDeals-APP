@@ -1,0 +1,24 @@
+﻿/*kendo-grid.grid_height {
+    height: 652px;
+}*/
+
+.header_fix {
+    padding-top: 50px;
+    padding-left: 14px !important;
+    padding-bottom: 10px;
+}
+
+.grid_box_size {
+    padding-left: 14px !important;
+    padding-right: 5px !important;
+    padding-top: 0px !important;
+}
+
+.delete-space {
+    margin-left: 0.16em !important;
+    margin-right: -1em !important;
+}
+
+.header-height-align {
+    line-height: 1.1;
+}

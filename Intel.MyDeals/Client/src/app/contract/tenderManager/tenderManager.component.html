@@ -3,7 +3,7 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 
-<div *ngIf="pricingTableData != undefined" class="pricing-strategy-status-bar fl" style="margin-top: 20px;position: absolute;">
+<div *ngIf="pricingTableData != undefined" class="pricing-strategy-status-bar fl" style="margin-top: 20px; position: absolute; margin-left: -5px; left: 0px;">
     <div class="valid_{{pricingTableData.PRC_ST[0].PASSED_VALIDATION}}" style="padding: 5px 8px;float:left">
         <span class="contractHeaderId">#{{ contractData.DC_ID }} </span>
         <span>{{contractData.Customer.CUST_NM}}: </span>
@@ -26,7 +26,7 @@
             </a>
         </div>
         <a (click)="tenderWidgetPathManager('backToPricingTable', 'PTR')">
-            <div class="wizard-step-text">
+            <div class="wizard-step-text step-into">
                 <h4><i [hidden]="selectedTAB == 'PTR'" class="intelicon-arrow-forward-right "></i> &nbsp;Tender Table Editor</h4>
                 <p>Adhoc Tender Table Editor Manager</p>
             </div>
@@ -37,7 +37,7 @@
             <span id="tenderWidDE" class="badge wizard-step" [ngStyle]="selectedTab == 'DE'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': isPTREmpty == true}">2</span>
         </div>
         <a (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': isPTREmpty == true}">
-            <div class="wizard-step-text">
+            <div class="wizard-step-text step-into">
                 <h4><i [hidden]="selectedTAB == 'DE'" class="intelicon-arrow-forward-right "></i> &nbsp; Deal Editor</h4>
                 <p>Adhoc Tender Deal Editor Manager</p>
             </div>
@@ -48,7 +48,7 @@
             <span id="tenderWidMC" class="badge wizard-step" (click)="tenderWidgetPathManager('', 'MC')" [ngStyle]="selectedTab == 'MC'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" [ngClass]="{'isDisabled': isPTREmpty == true}">3</span>
         </div>
         <a (click)="tenderWidgetPathManager('', 'MC')" [ngClass]="{'isDisabled': isPTREmpty == true}">
-            <div class="wizard-step-text">
+            <div class="wizard-step-text step-into">
                 <h4><i [hidden]="selectedTAB == 'MC'" class="intelicon-arrow-forward-right "></i> &nbsp; Meet Comp</h4>
                 <p>Tender Meet Comp Manager</p>
             </div>
@@ -60,7 +60,7 @@
             <span kendo-tooltip="" k-content="'Publishing will separate the deals entered in the table below so that they can be individually approved.'" k-position="'left'" class="opElementHelpIcon intelicon-information-outlined" data-role="tooltip"></span>
         </div>
         <a (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabled': forMC() != true && forDE() != true}">
-            <div class="wizard-step-text">
+            <div class="wizard-step-text step-into">
                 <h4><i [hidden]="selectedTAB == 'PD'" class="intelicon-arrow-forward-right"></i> &nbsp; Publish Adhoc Deal</h4>
                 <p>Converting into individual deals.</p>
             </div>

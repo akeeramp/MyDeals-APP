@@ -40,7 +40,7 @@
 .prodHeader {
     color: white;
     font-size: 26px;
-    padding-left: 15px;
+    /*padding-left: 15px;*/
 }
 
 @media (max-width: 1100px) {
@@ -213,7 +213,7 @@ a.prdAnchor {
 }
 
 .prdBtn.btn-primary {
-    background-color: #01AEEF;
+    background-color: #01AEEF!important;
 }
 
     .prdBtn.btn-primary:hover {
@@ -592,19 +592,21 @@ input[type=checkbox].with-sm-font {
 
 .paddingLeftNone {
     padding-left: 0px !important;
+    padding-right:15px !important;
 }
 
 .paddingRightNone {
     padding-right: 0px !important;
+    padding-left: 15px !important;
 }
 
 .paddingRight15 {
     padding-right: 15px !important;
 }
 
-.paddingLeft15 {
+/*.paddingLeft15 {
     padding-left: 15px !important;
-}
+}*/
 
 .arcAnimate {
     width: 60%;
