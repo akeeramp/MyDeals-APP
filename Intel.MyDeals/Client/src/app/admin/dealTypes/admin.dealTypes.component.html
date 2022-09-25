@@ -20,9 +20,10 @@
             [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
             filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" [columnMenu]="true">
             <ng-template kendoGridToolbarTemplate>
-                <button kendoGridAddCommand class="k-button addButton">
+                <!-- In DEV this button is available and its not functional -->
+                <!-- <button kendoGridAddCommand class="k-button addButton">
                     <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RECORD 
-                </button>
+                </button> -->
                 <button (click)="clearFilter()" class="k-button clearButton">
                     <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS 
                 </button>

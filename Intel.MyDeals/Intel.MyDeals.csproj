@@ -2171,7 +2171,6 @@
     <Content Include="Client\Images\docs\MyDeal UI MT Architecture 50.pdf" />
     <Content Include="Client\Images\docs\MyDeals Error Handling Design Doc.pdf" />
     <Content Include="Client\Images\helpicons.psd" />
-    <Content Include="Client\src\app\admin\ProductAlias\admin.productAlias.component" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
     <Content Include="Scripts\intcAnalytics.js" />

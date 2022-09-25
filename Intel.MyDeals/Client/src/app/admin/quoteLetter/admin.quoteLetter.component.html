@@ -2,7 +2,7 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<ccLoader [isLoading]="isLoading" [module]="moduleName" [isInitializing]="false" [message]="loadMessage"></ccLoader>
+<cc-loader [isLoading]="isLoading" [module]="moduleName" [isInitializing]="false" [message]="loadMessage"></cc-loader>
 <div class="form-horizontal" [hidden]="isLoading=='true'" style="margin-top: 35px; padding: 0px 10px;">
     <div class="section secondary-section"><label> <b>Template: </b> </label>
         <kendo-dropdownlist id="templatesCombo" style="width: 210px; margin-left:6px" [data]="menuItems" textField="MenuText" valueField="MenuText" [(ngModel)]="selectedTemplate" (valueChange)="onTemplateChange($event)" (afterValueChanged)="isDropdownsLoaded"></kendo-dropdownlist>

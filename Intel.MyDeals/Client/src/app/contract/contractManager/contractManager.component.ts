@@ -395,7 +395,7 @@ export class contractManagerComponent {
                     "NEW_STG": stItem.WF_STG_CD,
                     "TITLE": stItem.TITLE,
                     "url": rootUrl + "/advancedSearch#/gotoPs/" + stItem.DC_ID,
-                    "contractUrl": rootUrl + "/Contract#/manager/" + this.contractData.DC_ID
+                    "contractUrl": rootUrl + "/Dashboard#/contractmanager/CNTRCT/" + this.contractData.DC_ID+"/0/0/0"
                 };
 
                 if (stageToCheck != "" && stageToCheck != item.NEW_STG) {

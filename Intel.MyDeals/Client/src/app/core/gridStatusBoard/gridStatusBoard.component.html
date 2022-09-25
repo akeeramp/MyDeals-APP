@@ -93,7 +93,7 @@
                             <div style="padding-top: 50px;">Retrieving Data. Please wait...</div>
                             <img src="/images/032.gif" />
                         </div>
-                        <contract-status-board-angular [contractObjSid]="dataItem.CNTRCT_OBJ_SID" (isCntrctDtlLoaded)="cntrctDtlLoadStatus($event)"></contract-status-board-angular>
+                        <contract-status-board-angular [contractObjSid]="dataItem.CNTRCT_OBJ_SID"  [angularEnabled]="angularEnabled" (isCntrctDtlLoaded)="cntrctDtlLoadStatus($event)"></contract-status-board-angular>
                     </div>
                 </kendo-grid>
             </div>

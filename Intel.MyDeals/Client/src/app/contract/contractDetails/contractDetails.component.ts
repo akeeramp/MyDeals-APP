@@ -757,13 +757,13 @@ export class contractDetailsComponent {
         try {
             //loading customer data and dropdowns Data
             this.contractDetailsSvc.GetMyCustomerNames().subscribe((response: Array<any>) => {
-                this.Customers = response;
                 forkJoin({
                     NO_END_DT_RSN: this.contractDetailsSvc.getVendorDropDown('NO_END_DT_RSN'),
                     BACK_DATE_RSN: this.contractDetailsSvc.getVendorDropDown('BACK_DATE_RSN'),
                     CONTRACT_TYPE: this.contractDetailsSvc.getVendorDropDown('CONTRACT_TYPE'),
                     CUST_ACCPT: this.contractDetailsSvc.getVendorDropDown('CUST_ACCPT'),
                 }).subscribe(({ NO_END_DT_RSN, BACK_DATE_RSN, CONTRACT_TYPE, CUST_ACCPT }) => {
+                    this.Customers = response;
                     this.dropDownsData['NO_END_DT_RSN'] = NO_END_DT_RSN;
                     this.dropDownsData['BACK_DATE_RSN'] = BACK_DATE_RSN;
                     this.dropDownsData['CONTRACT_TYPE'] = CONTRACT_TYPE;

@@ -49,7 +49,12 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
             if (result) {
                 //Redirect to contract detail screen for tender creation
                 // document.location.href = "/Contract#/manager/0/details?tender=1";
-                window.location.href = "#tendermanager/" + result;
+                if (this.angularEnabled){
+                    window.location.href = "#tendermanager/" + result;
+                } 
+                else {
+                    window.location.href = "/Contract#/manager/"+result;
+                } 
             }
         });
     }

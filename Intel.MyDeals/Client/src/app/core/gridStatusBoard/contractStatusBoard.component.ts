@@ -3,6 +3,7 @@ import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/ke
 import { process, State } from "@progress/kendo-data-query";
 import { ContractStatusBoardService } from "./contractStatusBoard.service";
 import { logger } from "../../shared/logger/logger";
+import { DynamicEnablementService } from "../../shared/services/dynamicEnablement.service";
 
 @Component({
     selector: "contract-status-board-angular",
@@ -14,6 +15,8 @@ export class contractStatusBoardComponent implements OnInit {
     
     // The contract for which details are displayed
     @Input() public contractObjSid: any;
+     //To load angular Contract Manager from deal desk change value to false, will be removed once contract manager migration is done
+    @Input() angularEnabled:boolean=false;
     @Output() public isCntrctDtlLoaded :EventEmitter<boolean> = new EventEmitter();
 
     private gridData: GridDataResult;
@@ -55,13 +58,17 @@ export class contractStatusBoardComponent implements OnInit {
             value: 100,
         },
     ];
-    constructor(private contractDetailsService: ContractStatusBoardService,private loggerSvc:logger) {
+    constructor(private contractDetailsService: ContractStatusBoardService,private loggerSvc:logger,private dynamicEnablementService: DynamicEnablementService) {
     }
 
-    public ngOnInit(): void {
-        this.getContractDataSource();
+    goToContract(contractId:any){
+        if (this.angularEnabled){
+            window.location.href = `#/contractmanager/CNTRCT/${contractId}/0/0/0`;
+        } 
+        else {
+            window.location.href = `/Contract#/manager/${contractId}`;
+        } 
     }
-
     getContractDataSource() {
         this.isLoaded = false;
         this.isCntrctDtlLoaded.emit(false);
@@ -145,5 +152,8 @@ export class contractStatusBoardComponent implements OnInit {
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
         this.gridData = process(this.sbDataChildren, this.state);
+    }
+    public ngOnInit(): void {
+        this.getContractDataSource();
     }
 }

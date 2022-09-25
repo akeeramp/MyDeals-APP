@@ -119,9 +119,9 @@
                                         <div style="font-size: 9px; color: #ffffff; line-height: 1em; margin-top: 3px;" id="divUsrRole">@superPrefix @usrRoleExtension @usrRole <span style="color: Yellow;">@extraUserPrivs</span></div>
                                     </div>
                                     <div class="fl">
-                                        @*Need to enable notification-dock-angular once Header component got migrated*@
-                                        <notification-dock></notification-dock>
-                                        @*<notification-dock-angular></notification-dock-angular>*@
+                                        @*Need to enable notification-dock-angular once Header component got migrated.. For release purpose enabled now*@
+                                        @*<notification-dock></notification-dock>*@
+                                        <notification-dock-angular></notification-dock-angular>
                                     </div>
                                 </a>
                             </li>
@@ -399,9 +399,9 @@
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Approval Rules Management</a>
                             <ul class="dropdown-menu" style="width: 250px;">
-                                @*<li><a href="Admin#/rules/">Price Rules</a></li>*@
+                                <li><a href="Admin#/rules/">Price Rules</a></li>
                                 @*<li><a href="Admin#/ruleOwner">Rules Ownership Admin</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="rules">Price Rules</a></li>
+                                @*<li ui-sref-active="active"><a ui-sref="rules">Price Rules</a></li>*@
                                 <li ui-sref-active="active"><a ui-sref="ruleOwner">Rules Ownership Admin</a></li>
                             </ul>
                         </li>
