@@ -169,11 +169,16 @@ export class PTEUtil {
     }
     // set PTR_SYS_PRD attr value after getting transform results
     static cookProducts(transformResults:any, rowData:Array<any>): any {
-        let DuplicateProducts:any[]=[]
         _.each(rowData,(data)=>{
             //setting PTR_SYS_PRD for valid products
             _.each(transformResults.ValidProducts,(val,DCID)=>{
                 if(data && data.DC_ID==DCID){
+                    let foramttedTranslatedResult = PTEUtil.massagingObjectsForJSON(DCID, transformResults);
+                    var userInput = PTEUtil.updateUserInput(foramttedTranslatedResult.ValidProducts[DCID]);
+                    var contractProducts = userInput['contractProducts'].toString().replace(/(\r\n|\n|\r)/gm, "");
+                    data.PTR_USER_PRD = contractProducts;
+                    var excludeProducts = userInput['excludeProducts'];
+                    data.PRD_EXCLDS = excludeProducts;
                     data.PTR_SYS_PRD = JSON.stringify(val)
                     PTE_Common_Util.setBehaviors(data);
                     data._behaviors.isError['PTR_USER_PRD']=false;
@@ -183,24 +188,24 @@ export class PTEUtil {
                //setting PTR_SYS_PRD for InValidProducts
            _.each(transformResults.InValidProducts,(val,DCID)=>{
               if(val.I && val.I.length>0){
-                if(data && data.DC_ID==DCID){
+                    if(data && data.DC_ID==DCID){
+                        PTE_Common_Util.setBehaviors(data);
+                        data._behaviors.isError['PTR_USER_PRD'] = true;
+                        data._behaviors.validMsg['PTR_USER_PRD'] = 'Invalid product';
+                    }
+                }
+            });
+            //setting PTR_SYS_PRD for DuplicateProducts
+            _.each(transformResults.DuplicateProducts, (val, DCID) =>{
+                if (data && data.DC_ID == DCID) {
                     PTE_Common_Util.setBehaviors(data);
                     data._behaviors.isError['PTR_USER_PRD']=true;
                     data._behaviors.validMsg['PTR_USER_PRD']='Invalid product';
                 }
-              }
             });
-             //setting PTR_SYS_PRD for DuplicateProducts
-            _.each(transformResults.DuplicateProducts,(val,DCID)=>{
-                  if(data && data.DC_ID==DCID){
-                      PTE_Common_Util.setBehaviors(data);
-                      data._behaviors.isError['PTR_USER_PRD']=true;
-                      data._behaviors.validMsg['PTR_USER_PRD']='Invalid product';
-                  }
-              });
-         });
-      
-         return {rowData};
+        });
+
+        return { rowData };
     }
     static isValidForProdCorrector(transformResults:any){
          let isError=[];
@@ -306,5 +311,154 @@ export class PTEUtil {
         });
 
         return translationInput;
+    }
+
+    static massagingObjectsForJSON(key, transformResult) {
+        for (var validKey in transformResult.ValidProducts[key]) {
+            transformResult.ValidProducts[key][validKey] = transformResult.ValidProducts[key][validKey].map(function (x) {
+                return {
+                    BRND_NM: x.BRND_NM,
+                    CAP: x.CAP,
+                    CAP_END: x.CAP_END,
+                    CAP_START: x.CAP_START,
+                    DEAL_PRD_NM: x.DEAL_PRD_NM,
+                    DEAL_PRD_TYPE: x.DEAL_PRD_TYPE,
+                    DERIVED_USR_INPUT: x.DERIVED_USR_INPUT,
+                    FMLY_NM: x.FMLY_NM,
+                    HAS_L1: x.HAS_L1,
+                    HAS_L2: x.HAS_L2,
+                    HIER_NM_HASH: x.HIER_NM_HASH,
+                    HIER_VAL_NM: x.HIER_VAL_NM,
+                    MM_MEDIA_CD: x.MM_MEDIA_CD,
+                    MTRL_ID: x.MTRL_ID,
+                    MTRL_TYPE_CD: x.MTRL_TYPE_CD == undefined ? "" : x.MTRL_TYPE_CD,
+                    PCSR_NBR: x.PCSR_NBR,
+                    PRD_ATRB_SID: x.PRD_ATRB_SID,
+                    PRD_CAT_NM: x.PRD_CAT_NM,
+                    PRD_END_DTM: x.PRD_END_DTM,
+                    PRD_MBR_SID: x.PRD_MBR_SID,
+                    PRD_STRT_DTM: x.PRD_STRT_DTM,
+                    USR_INPUT: x.USR_INPUT,
+                    YCS2: x.YCS2,
+                    YCS2_END: x.YCS2_END,
+                    YCS2_START: x.YCS2_START,
+                    EXCLUDE: x.EXCLUDE,
+                    NAND_TRUE_DENSITY: x.NAND_TRUE_DENSITY ? x.NAND_TRUE_DENSITY : ''
+                }
+            });
+        }
+        return transformResult;
+    }
+
+    static updateUserInput(validProducts) {
+        if (!validProducts) {
+            return "";
+        }
+        let input = { contractProducts: "", excludeProducts: "" };
+        for (var prd in validProducts) {
+            if (validProducts.hasOwnProperty(prd)) {
+                var contractProducts = "";
+                var excludeProducts = "";
+
+                // Include products
+                var products = validProducts[prd].filter(function (x) {
+                    return x.EXCLUDE === false;
+                });
+                if (products.length !== 0) {
+                    var contDerivedUserInput = _.uniq(products, 'HIER_VAL_NM');
+                    if (products.length === 1 && contDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == contDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
+                        contractProducts = contDerivedUserInput[0].HIER_VAL_NM;
+                    } else {
+                        contractProducts = contDerivedUserInput.length == 1 ? PTE_Common_Util.getFullNameOfProduct(contDerivedUserInput[0], contDerivedUserInput[0].DERIVED_USR_INPUT) : contDerivedUserInput[0].DERIVED_USR_INPUT;
+                    }
+                    if (contractProducts !== "") {
+                        input.contractProducts = input.contractProducts === "" ? contractProducts : input.contractProducts + "," + contractProducts;
+                    }
+                }
+
+                // Exclude Products
+                var products = validProducts[prd].filter(function (x) {
+                    return x.EXCLUDE === true;
+                });
+                if (products.length !== 0) {
+                    var exclDerivedUserInput = _.uniq(products, 'HIER_VAL_NM');
+                    if (products.length === 1 && exclDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() === exclDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
+                        excludeProducts = exclDerivedUserInput[0].HIER_VAL_NM;
+                    } else {
+                        excludeProducts = exclDerivedUserInput.length == 1 ? PTE_Common_Util.getFullNameOfProduct(exclDerivedUserInput[0], exclDerivedUserInput[0].DERIVED_USR_INPUT) : exclDerivedUserInput[0].DERIVED_USR_INPUT;
+                    }
+                    if (excludeProducts !== "") {
+                        input.excludeProducts = input.excludeProducts === "" ? excludeProducts : input.excludeProducts + "," + excludeProducts;
+                    }
+                }
+            }
+        }
+        return input;
+    }
+
+    static updateUserInputFromCorrector(validProducts, autoValidatedProducts) {
+        if (!validProducts) {
+            return "";
+        }
+        var products = { 'contractProducts': '', 'excludeProducts': '' };
+
+        for (var prd in validProducts) {
+            if (!!autoValidatedProducts && autoValidatedProducts.hasOwnProperty(prd)) {
+                var autoTranslated = {};
+                autoTranslated[prd] = autoValidatedProducts[prd];
+
+                var updatedUserInput = PTEUtil.updateUserInput(autoTranslated);
+
+                // Include products
+                var autoValidContProd = updatedUserInput["contractProducts"];
+                if (autoValidContProd !== "") {
+                    products.contractProducts = products.contractProducts === "" ? autoValidContProd : products.contractProducts + "," + autoValidContProd;
+                }
+
+                // Exclude Products
+                var autoValidExcludeProd = updatedUserInput["excludeProducts"];
+                if (autoValidExcludeProd !== "") {
+                    products.excludeProducts = products.excludeProducts === "" ? autoValidExcludeProd : products.excludeProducts + "," + autoValidExcludeProd;
+                }
+            }
+            else if (validProducts.hasOwnProperty(prd)) {
+                products.contractProducts = this.getUserInput(products.contractProducts, validProducts[prd], "I", 'HIER_VAL_NM');
+                products.excludeProducts = this.getUserInput(products.excludeProducts, validProducts[prd], "E", 'HIER_VAL_NM');
+            }
+        }
+        return products;
+    }
+
+    static getUserInput = function (updatedUserInput, products, typeOfProduct, fieldNm) {
+
+        var userInput = products.filter(function (x) {
+            return x.EXCLUDE === (typeOfProduct === "E");
+        });
+        userInput = _.uniq(userInput, fieldNm);
+
+        userInput = userInput.map(function (elem) {
+            return elem[fieldNm];
+        }).join(",");
+
+        if (userInput !== "") {
+            updatedUserInput = updatedUserInput === "" || fieldNm !== 'HIER_VAL_NM' ? userInput : updatedUserInput + "," + userInput;
+        }
+        return updatedUserInput;
+    }
+
+    static getValidDenProducts(item, prdSrc) {
+        /*
+        * A single row can have multiple products & in spreadDs data the products are sorted
+        * Also in case of product corrector the user input is not a valid product until selected from the list.
+        * In that case it will be good to read HIER_VAL_NM from the response as user input
+        */
+        let userInput;
+        if (prdSrc) {
+            userInput = this.updateUserInputFromCorrector(item, "");
+        }
+        else {
+            userInput = this.updateUserInput(item);
+        }
+        return userInput == '' ? userInput : userInput.contractProducts.split(',');
     }
 }

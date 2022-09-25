@@ -1,9 +1,10 @@
+import * as _ from 'underscore';
 import { PTEUtil } from "./PTE.util";
 import { PTE_Load_Util } from "./PTE_Load_util";
 import { PTE_Config_Util } from "./PTE_Config_util";
 
 export class PTE_Helper_Util {
-    static getFormatedGeos (geos) {
+    static getFormatedGeos(geos) {
         if (geos == null) { return null; }
         var isBlendedGeo = (geos.indexOf('[') > -1) ? true : false;
         if (isBlendedGeo) {
@@ -18,7 +19,7 @@ export class PTE_Helper_Util {
     //// Formats a given dictionary key to a format that ignores spaces and capitalization for easier key comparisons.
     //// Note that all keys put into the dealGrpKey should use this function for proper deal grp name merging validation.
     //// </summary>
-    static formatStringForDictKey (valueToFormat) {
+    static formatStringForDictKey(valueToFormat) {
         var result = "";
         if (valueToFormat != null) {
             result = valueToFormat.toString().toUpperCase().replace(/\s/g, "");
@@ -26,13 +27,13 @@ export class PTE_Helper_Util {
         return result;
     }
 
-    static isInt (value) {
+    static isInt(value) {
         return typeof value === 'number' &&
             isFinite(value) &&
             Math.floor(value) === value;
     };
 
-    static hasDataOrPurge (data, rowStart, rowStop) {
+    static hasDataOrPurge(data, rowStart, rowStop) {
         var ids = [];
         if (data.length === 0) return ids;
         for (var n = rowStop; n >= rowStart; n--) {
@@ -50,7 +51,7 @@ export class PTE_Helper_Util {
     /// <summary>
     //	Sanitize data to remove non-ascii characters and hidden line breaks (Mainly for excel copy/paste)
     /// </summary>
-    static sanitizeString (stringToSanitize, lineBreakReplacementCharacter) {
+    static sanitizeString(stringToSanitize, lineBreakReplacementCharacter) {
         var lineBreakMatches = stringToSanitize.match(/\r?\n|\r/g);
         if (lineBreakReplacementCharacter == null) { lineBreakReplacementCharacter = ""; }
 
@@ -60,13 +61,13 @@ export class PTE_Helper_Util {
         return stringToSanitize;
     }
 
-    static fromOaDate (oadate) {
+    static fromOaDate(oadate) {
         var date = new Date(((oadate - 25569) * 86400000));
         var tz = date.getTimezoneOffset();
         return new Date(((oadate - 25569 + (tz / (60 * 24))) * 86400000));
     }
 
-    static clearBehaviors (item, elem) {
+    static clearBehaviors(item, elem) {
         if (!item._behaviors) item._behaviors = {};
         if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
         if (!item._behaviors.isError) item._behaviors.isError = {};
@@ -78,11 +79,11 @@ export class PTE_Helper_Util {
         delete item._behaviors.validMsg[elem];
     }
 
-    static colToInt (colName, rootColToLetter) {
+    static colToInt(colName, rootColToLetter) {
         return rootColToLetter[colName].charCodeAt(0) - "A".charCodeAt(0);
     }
 
-    static isCustDivisonNull (data, custAccntDiv) {
+    static isCustDivisonNull(data, custAccntDiv) {
         if (custAccntDiv != "") {
             for (var i = 0; i < data.length; i++) {
                 if (data[i].CUST_ACCNT_DIV == null || data[i].CUST_ACCNT_DIV == "") {
@@ -96,7 +97,7 @@ export class PTE_Helper_Util {
         }
     }
 
-    static CalculateFirstEdiatableBeforeProductCol (editableColsBeforeProduct, firstEditableColBeforeProduct, rootColToLetter) {
+    static CalculateFirstEdiatableBeforeProductCol(editableColsBeforeProduct, firstEditableColBeforeProduct, rootColToLetter) {
         if (editableColsBeforeProduct.length > 0) {
             for (var i = 0; i < editableColsBeforeProduct.length; i++) {
                 if (firstEditableColBeforeProduct === null) {
@@ -113,7 +114,7 @@ export class PTE_Helper_Util {
         return firstEditableColBeforeProduct;
     }
 
-    static RemoveGhostRows (pricingTableRow, rootSpreadDsData) {
+    static RemoveGhostRows(pricingTableRow, rootSpreadDsData) {
         for (var i = 0; i < pricingTableRow.length; i++) {
             if (pricingTableRow.length != rootSpreadDsData.length) {
                 if (i < rootSpreadDsData.length) {
@@ -130,7 +131,7 @@ export class PTE_Helper_Util {
         }
     }
 
-    static setIndex (objTypeCd, rootColToLetter, intA) {
+    static setIndex(objTypeCd, rootColToLetter, intA) {
         let endVolIndex;
         let strtVolIndex;
         let rateIndex;
@@ -152,7 +153,7 @@ export class PTE_Helper_Util {
         return { endVolIndex, strtVolIndex, rateIndex };
     }
 
-    static resetDirty () {
+    static resetDirty() {
         var field = "isDirty";
         //var mainData = $scope.mainGridOptions.dataSource.data();
 
@@ -184,7 +185,7 @@ export class PTE_Helper_Util {
         //}
     }
 
-    static GetFirstEdiatableBeforeProductCol (firstEditableColBeforeProduct, editableColsBeforeProduct, rootColToLetter) {
+    static GetFirstEdiatableBeforeProductCol(firstEditableColBeforeProduct, editableColsBeforeProduct, rootColToLetter) {
         if (firstEditableColBeforeProduct !== null) {
             return firstEditableColBeforeProduct;
         } else {
@@ -310,5 +311,29 @@ export class PTE_Helper_Util {
         }
 
         return newData;
-    }  
+    }
+
+    static splitProductForDensity = function (response) {
+        let prdObj = {};
+        //skipping the excluded products
+        _.each(response, (prdDet, prd) => {
+            if (prdDet && prdDet.length > 0 && !prdDet[0].EXCLUDE) {
+                prdObj[`${prd}`] = prdDet;
+            }
+        });
+
+        if (response.splitProducts) {
+            let prod = {};
+            let items = Object.keys(prdObj);
+            for (var i = 0; i < items.length; i++) {
+                let obj = {};
+                obj[`${items[i]}`] = prdObj[`${items[i]}`]
+                prod[i + 1] = obj;
+            }
+            return prod;
+        }
+        else {
+            return { "1": prdObj }
+        }
+    }
 }

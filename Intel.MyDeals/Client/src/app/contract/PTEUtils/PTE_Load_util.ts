@@ -48,7 +48,7 @@ export class PTE_Load_Util {
         return isValid;
     }
     //coomon util has same functionality need to modify that with this
-    static setBehaviors (item, elem, cond, curPricingTable) {
+    static setBehaviors(item, elem, cond, curPricingTable) {
         var isFlexDeal = (item.OBJ_SET_TYPE_CD === 'FLEX');
         if (!item._behaviors) item._behaviors = {};
         if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
@@ -140,7 +140,7 @@ export class PTE_Load_Util {
         return item;
     }
     //coomon util has same functionality need to modify that with this
-    static setBehaviorsValidMessage (item, elem, elemLabel, cond, curPricingTable) {
+    static setBehaviorsValidMessage(item, elem, elemLabel, cond, curPricingTable) {
         var isFlexDeal = curPricingTable.OBJ_SET_TYPE_CD === 'FLEX';
         var dealTypeLabel = isFlexDeal === true ? "FLEX PT" : "HYBRID PS";
 
@@ -171,29 +171,29 @@ export class PTE_Load_Util {
                 let msg = "";
                 _.each(item._behaviors.isError, (val, key) => {
                     let colInd = _.findIndex(columns, { field: key });
-                    if(key=='PTR_USER_PRD'){
-                          if(val==true  && item._behaviors.validMsg[`${key}`] && item._behaviors.validMsg[`${key}`]=='Invalid Product'){
-                            cellComments.push({ row: rowInd, col: colInd,comment:{ value:'', readOnly: true }, className: 'error-product' });
+                    if (key == 'PTR_USER_PRD') {
+                        if (val == true && item._behaviors.validMsg[`${key}`] && item._behaviors.validMsg[`${key}`] == 'Invalid Product') {
+                            cellComments.push({ row: rowInd, col: colInd, comment: { value: '', readOnly: true }, className: 'error-product' });
                         }
-                        else if(val==false && item._behaviors.validMsg[`${key}`] && item._behaviors.validMsg[`${key}`]=='Valid Product'){
-                            cellComments.push({ row: rowInd, col: colInd,comment:{ value: '', readOnly: true }, className: 'success-product' });
+                        else if (val == false && item._behaviors.validMsg[`${key}`] && item._behaviors.validMsg[`${key}`] == 'Valid Product') {
+                            cellComments.push({ row: rowInd, col: colInd, comment: { value: '', readOnly: true }, className: 'success-product' });
                         }
-                        else{
+                        else {
                             //this logic is to handle incase a product is success but still there are error binding but we need to maintain the success color but give message
-                            if(val==true &&  item._behaviors.validMsg[`${key}`] && (item._behaviors.validMsg[`${key}`] !='Invalid Product')){
-                                let cellMeta=this.hotTable.getCellMeta(rowInd,colInd);
-                                if(cellMeta && cellMeta.className && cellMeta.className.toString().match('success-product')){
-                                    cellComments.push({ row: rowInd, col: colInd,comment:{ value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'success-product error-border' });
+                            if (val == true && item._behaviors.validMsg[`${key}`] && (item._behaviors.validMsg[`${key}`] != 'Invalid Product')) {
+                                let cellMeta = this.hotTable.getCellMeta(rowInd, colInd);
+                                if (cellMeta && cellMeta.className && cellMeta.className.toString().match('success-product')) {
+                                    cellComments.push({ row: rowInd, col: colInd, comment: { value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'success-product error-border' });
                                 }
-                                else{
-                                    cellComments.push({ row: rowInd, col: colInd,comment:{ value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'error-border' });
+                                else {
+                                    cellComments.push({ row: rowInd, col: colInd, comment: { value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'error-border' });
                                 }
                             }
-                        }   
+                        }
                     }
-                    else{
+                    else {
                         //only if there is error
-                        if(val){
+                        if (val) {
                             cellComments.push({ row: rowInd, col: colInd, comment: { value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'error-border' });
                             msg += columns[colInd].title + ": " + val;
                         }
@@ -257,17 +257,27 @@ export class PTE_Load_Util {
     }
     static getMergeCells(PTR: any, columns: Array<any>, curPricingTable: any): Array<any> {
         let mergCells = [];
+        let startOffset;
         //identify distinct DCID, bcz the merge will happen for each DCID and each DCID can have diff  NUM_OF_TIERS
         let distDCID = _.uniq(PTR, 'DC_ID');
         _.each(distDCID, (item) => {
             let curPTR = _.findWhere(PTR, { DC_ID: item.DC_ID });
+            let rowIndex = _.findIndex(PTR, { DC_ID: item.DC_ID });
+            startOffset = rowIndex;
             //get NUM_OF_TIERS acoording this will be the row_span for handson 
-           // let NUM_OF_TIERS = (curPTR.NUM_OF_TIERS != undefined && curPTR.NUM_OF_TIERS !=null && curPTR.NUM_OF_TIERS !='')  ? parseInt(curPTR.NUM_OF_TIERS) : this.numOfPivot(curPTR,curPricingTable);
-           let NUM_OF_TIERS =  this.numOfPivot(curPTR,curPricingTable);
+            // let NUM_OF_TIERS = (curPTR.NUM_OF_TIERS != undefined && curPTR.NUM_OF_TIERS !=null && curPTR.NUM_OF_TIERS !='')  ? parseInt(curPTR.NUM_OF_TIERS) : this.numOfPivot(curPTR,curPricingTable);
+            let NUM_OF_TIERS = this.numOfPivot(curPTR, curPricingTable);
             _.each(columns, (colItem, ind) => {
-                if (!colItem.isDimKey && !colItem.hidden && NUM_OF_TIERS!=1) {
-                    let rowIndex = _.findIndex(PTR, { DC_ID: item.DC_ID });
+                if (!colItem.isDimKey && !colItem.hidden && NUM_OF_TIERS != 1) {
                     mergCells.push({ row: rowIndex, col: ind, rowspan: NUM_OF_TIERS, colspan: 1 });
+                }
+                if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY' && (colItem.field == 'TIER_NBR' || colItem.field == 'STRT_PB' || colItem.field == 'END_PB')) {
+                    let pivotDensity = parseInt(curPricingTable.NUM_OF_DENSITY);
+                    for (let i = 1; i <= NUM_OF_TIERS; i++) {
+                        mergCells.push({ row: startOffset, col: ind, rowspan: pivotDensity, colspan: 1 });
+                        startOffset = startOffset + pivotDensity;
+                    }
+                    startOffset = rowIndex;
                 }
             })
         });
@@ -318,7 +328,7 @@ export class PTE_Load_Util {
                         else {
                             // HACK: To give end volumes commas, we had to format the nubers as strings with actual commas. Note that we'll have to turn them back into numbers before saving.
                             if (tieredItem === endKey && lData[endKey] !== undefined && lData[endKey].toString().toUpperCase() !== "UNLIMITED") {
-                                lData[endKey] =parseFloat(lData[endKey] || 0);
+                                lData[endKey] = parseFloat(lData[endKey] || 0);
                             }
                         }
 
@@ -486,7 +496,7 @@ export class PTE_Load_Util {
             return true;
         }
     }
-    static assignProductProprties (data, isTenderContract, curPricingTable) {
+    static assignProductProprties(data, isTenderContract, curPricingTable) {
         if (isTenderContract && curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
             for (var d = 0; d < data.length; d++) {
 
@@ -516,10 +526,10 @@ export class PTE_Load_Util {
         }
         return data;
     }
-    static calculateTotalDsctPerLine (dscntPerLine, qty) {
+    static calculateTotalDsctPerLine(dscntPerLine, qty) {
         return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
     }
-    static calculateKitRebate (data, firstTierRowIndex, numOfTiers, isDataPivoted) {
+    static calculateKitRebate(data, firstTierRowIndex, numOfTiers, isDataPivoted) {
         var kitRebateTotalVal = 0;
         for (var i = 0; i < numOfTiers; i++) {
             if (isDataPivoted) {
@@ -656,12 +666,12 @@ export class PTE_Load_Util {
                 if (prop == 'STRT_VOL' && hotTable.getDataAtRowProp(row, 'TIER_NBR') && hotTable.getDataAtRowProp(row, 'TIER_NBR') != 1) {
                     cellProperties['readOnly'] = true;
                 }
-                
+
                 //for tender contract PERIOD_PROFILE and AR_SETTLEMENT_LVL are disable by default 
                 if (isTenderContract && (prop == 'PERIOD_PROFILE' || prop == 'AR_SETTLEMENT_LVL')) {
                     cellProperties['readOnly'] = true;
                 }
-                if (curPricingTable.PS_WF_STG_CD == 'Requested' ) {
+                if (curPricingTable.PS_WF_STG_CD == 'Requested') {
                     if (hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == undefined || hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == null || hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') !== 'Cash') {
                         if (prop == 'SETTLEMENT_PARTNER') {
                             cellProperties['readOnly'] = true;
@@ -714,11 +724,11 @@ export class PTE_Load_Util {
         }
         return cellProperties;
     }
-    static setPrdColor(PTR:any[]):any[]{
-        _.each(PTR,data=>{
+    static setPrdColor(PTR: any[]): any[] {
+        _.each(PTR, data => {
             PTE_Common_Util.setBehaviors(data);
-            data._behaviors.isError['PTR_USER_PRD']=false;
-            data._behaviors.validMsg['PTR_USER_PRD']='Valid Product';
+            data._behaviors.isError['PTR_USER_PRD'] = false;
+            data._behaviors.validMsg['PTR_USER_PRD'] = 'Valid Product';
         })
         return PTR;
     }

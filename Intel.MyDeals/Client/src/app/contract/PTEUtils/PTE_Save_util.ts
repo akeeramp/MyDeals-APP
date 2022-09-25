@@ -4,27 +4,27 @@ import { PTE_Common_Util } from './PTE_Common_util';
 import { PTE_Validation_Util } from './PTE_Validation_util';
 import { DE_Save_Util } from '../DEUtils/DE_Save_util';
 
-export class PTE_Save_Util {    
-    static validatePTE(PTR: Array<any>, curPricingStrategy: any, curPricingTable: any, contractData: any, VendorDropDownResult: any, overlapFlexResult: any):any{
+export class PTE_Save_Util {
+    static validatePTE(PTR: Array<any>, curPricingStrategy: any, curPricingTable: any, contractData: any, VendorDropDownResult: any, overlapFlexResult: any, validMisProd:any): any {
         //this will make sure the neccessary proprty except _behaviours for Save are added
-        this.setPTRBasicPropertyForSave(PTR,curPricingStrategy,curPricingTable,contractData);
-        return this.validatePTEDeal(PTR, curPricingStrategy, VendorDropDownResult, curPricingTable, contractData, overlapFlexResult);
+        this.setPTRBasicPropertyForSave(PTR, curPricingStrategy, curPricingTable, contractData);
+        return this.validatePTEDeal(PTR, curPricingStrategy, VendorDropDownResult, curPricingTable, contractData, overlapFlexResult, validMisProd);
     }
-    static setPTRBasicPropertyForSave(PTR:Array<any>,curPricingStrategy:any,curPricingTable:any,contractData:any){
-     _.each(PTR, item=>{
-        item["_dirty"]=true;
-        item["PS_WF_STG_CD"]=curPricingStrategy.WF_STG_CD;
-        item["DC_PARENT_ID"]=curPricingTable.DC_ID;
-        item["dc_type"]='PRC_TBL_ROW';
-        item["dc_parent_type"]='PRC_TBL';
-        item["OBJ_SET_TYPE_CD"]=curPricingTable.OBJ_SET_TYPE_CD;
-        item["BACK_DATE_RSN_TXT"]=contractData.BACK_DATE_RSN;
-        item["CONTRACT_TYPE"]=contractData.CONTRACT_TYPE;
-        item["IS_HYBRID_PRC_STRAT"]=curPricingStrategy.IS_HYBRID_PRC_STRAT;
-     });
+    static setPTRBasicPropertyForSave(PTR: Array<any>, curPricingStrategy: any, curPricingTable: any, contractData: any) {
+        _.each(PTR, item => {
+            item["_dirty"] = true;
+            item["PS_WF_STG_CD"] = curPricingStrategy.WF_STG_CD;
+            item["DC_PARENT_ID"] = curPricingTable.DC_ID;
+            item["dc_type"] = 'PRC_TBL_ROW';
+            item["dc_parent_type"] = 'PRC_TBL';
+            item["OBJ_SET_TYPE_CD"] = curPricingTable.OBJ_SET_TYPE_CD;
+            item["BACK_DATE_RSN_TXT"] = contractData.BACK_DATE_RSN;
+            item["CONTRACT_TYPE"] = contractData.CONTRACT_TYPE;
+            item["IS_HYBRID_PRC_STRAT"] = curPricingStrategy.IS_HYBRID_PRC_STRAT;
+        });
     }
-    static validatePTEDeal(PTR: Array<any>, curPricingStrategy: any, VendorDropDownResult: any, curPricingTable: any, contractData: any, overlapFlexResult: any):any{
-        _.each(PTR,(item) =>{
+    static validatePTEDeal(PTR: Array<any>, curPricingStrategy: any, VendorDropDownResult: any, curPricingTable: any, contractData: any, overlapFlexResult: any, validMisProd: any): any {
+        _.each(PTR, (item) => {
             //defaulting the behaviours object
             PTE_Common_Util.setBehaviors(item);
         });
@@ -32,6 +32,9 @@ export class PTE_Save_Util {
         PTR = PTE_Validation_Util.validateOverArching(PTR, curPricingStrategy, curPricingTable);
         PTR = PTE_Validation_Util.validateMarketSegment(PTR, undefined, undefined);
         PTR = PTE_Validation_Util.validateHybridFields(PTR, curPricingStrategy, curPricingTable);
+        if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY' && validMisProd && validMisProd.length > 0) {
+            PTR = this.ValidateDensityPTR(PTR, validMisProd)
+        }
         if (overlapFlexResult != undefined) {
             let restrictGroupFlexOverlap = false;
             let OVLPFlexPdtPTRUSRPRDError = false;
@@ -158,36 +161,36 @@ export class PTE_Save_Util {
 
         return PTR;
     }
-    static validatePTEECAP(PTR:Array<any>):any{
+    static validatePTEECAP(PTR: Array<any>): any {
         //check for Ecap price 
-        _.each(PTR,(item) =>{
+        _.each(PTR, (item) => {
             //defaulting the behaviours object
             PTE_Common_Util.setBehaviors(item);
-            if(item.ECAP_PRICE==null || item.ECAP_PRICE==0 || item.ECAP_PRICE=='' || item.ECAP_PRICE <0){
-                PTE_Common_Util.setBehaviorsValidMessage(item,'ECAP_PRICE','ECAP','equal-zero');
+            if (item.ECAP_PRICE == null || item.ECAP_PRICE == 0 || item.ECAP_PRICE == '' || item.ECAP_PRICE < 0) {
+                PTE_Common_Util.setBehaviorsValidMessage(item, 'ECAP_PRICE', 'ECAP', 'equal-zero');
             }
         });
         return PTR;
     }
-    static settlementPartnerValUpdate(PTR:Array<any>){
-     _.each(PTR,item=>{
-        if(item.SETTLEMENT_PARTNER && item.SETTLEMENT_PARTNER !=''){
-            let items= item.SETTLEMENT_PARTNER.split('-');
-            if(items.length>1){
-                item.SETTLEMENT_PARTNER = item.SETTLEMENT_PARTNER.split('-')[1].trim();
+    static settlementPartnerValUpdate(PTR: Array<any>) {
+        _.each(PTR, item => {
+            if (item.SETTLEMENT_PARTNER && item.SETTLEMENT_PARTNER != '') {
+                let items = item.SETTLEMENT_PARTNER.split('-');
+                if (items.length > 1) {
+                    item.SETTLEMENT_PARTNER = item.SETTLEMENT_PARTNER.split('-')[1].trim();
+                }
+                else {
+                    item.SETTLEMENT_PARTNER = item.SETTLEMENT_PARTNER;
+                }
             }
-            else{
-                item.SETTLEMENT_PARTNER = item.SETTLEMENT_PARTNER;
-            }
-        }
-     });
-     return PTR;
-    }    
+        });
+        return PTR;
+    }
     //check for all attribue present
-    static sanitizePTR(PTR:Array<any>,contractData:any):Array<any>{
-        _.each(PTR,(item) =>{
-            if(item && (item.CUST_MBR_SID ==null || item.CUST_MBR_SID=='' || item.CUST_MBR_SID==undefined)){
-                item.CUST_MBR_SID=contractData.CUST_MBR_SID;
+    static sanitizePTR(PTR: Array<any>, contractData: any): Array<any> {
+        _.each(PTR, (item) => {
+            if (item && (item.CUST_MBR_SID == null || item.CUST_MBR_SID == '' || item.CUST_MBR_SID == undefined)) {
+                item.CUST_MBR_SID = contractData.CUST_MBR_SID;
             }
             if (item.QLTR_PROJECT != undefined && item.QLTR_PROJECT != null && item.QLTR_PROJECT != "") {
                 item.QLTR_PROJECT = item.QLTR_PROJECT.toUpperCase();
@@ -198,74 +201,97 @@ export class PTE_Save_Util {
         });
         return PTR;
     }
-    static generatePTRAfterSave(result:any):Array<any>{
-        let PTR=[];
-        const PTRResult=result.Data.PRC_TBL_ROW;
-        if(PTRResult && PTRResult.length>0 && PTRResult[0]._actions){
-            let actions=PTRResult[0]._actions;
-            PTRResult.splice(0,1);
-            _.each(PTRResult,(item)=>{
-                _.each(actions,act=>{
-                    if(item.DC_ID==act.DcID){
-                        item.DC_ID=act.AltID
+    static generatePTRAfterSave(result: any): Array<any> {
+        let PTR = [];
+        const PTRResult = result.Data.PRC_TBL_ROW;
+        if (PTRResult && PTRResult.length > 0 && PTRResult[0]._actions) {
+            let actions = PTRResult[0]._actions;
+            PTRResult.splice(0, 1);
+            _.each(PTRResult, (item) => {
+                _.each(actions, act => {
+                    if (item.DC_ID == act.DcID) {
+                        item.DC_ID = act.AltID
                     }
                 });
             });
             return PTRResult;
         }
-        else{
+        else {
             return PTR;
         }
-        
+
     }
-    static isPTEError(PTR: Array<any>,curPricingTable:any):boolean{
-       //identify the uniq records by DCID and check for errors. 
-       //the error has to bind first object for tier and uniq will give first uniq record
-       //since we dont have client side tier level error we can use this method. But will revisit if require
-       let uniqPTR=_.uniq(PTR,'DC_ID');
-       let iserror= _.find(uniqPTR, (x) => {
-        if (x._behaviors && x._behaviors.isError) {
-            return _.contains(_.values(x._behaviors.isError), true)
-        }
+    static isPTEError(PTR: Array<any>, curPricingTable: any): boolean {
+        //identify the uniq records by DCID and check for errors. 
+        //the error has to bind first object for tier and uniq will give first uniq record
+        //since we dont have client side tier level error we can use this method. But will revisit if require
+        let uniqPTR = _.uniq(PTR, 'DC_ID');
+        let iserror = _.find(uniqPTR, (x) => {
+            if (x._behaviors && x._behaviors.isError) {
+                return _.contains(_.values(x._behaviors.isError), true)
+            }
         });
-        return iserror !=null ? true:false;
+        return iserror != null ? true : false;
     }
 
     static setDataItem(dataItem: any, field: any, value, key?: any) {
-        DE_Save_Util.setDataItem(dataItem, field, value, key);        
+        DE_Save_Util.setDataItem(dataItem, field, value, key);
+    }
+
+    static ValidateDensityPTR(PTR: Array<any>, validMisProd) {
+        if (validMisProd.length > 0) {
+            _.each(PTR, (itm, indx) => {
+                _.each(validMisProd, (Prod) => {
+                    if (itm.DC_ID == Prod.DCID) {
+                        PTE_Common_Util.setBehaviors(itm);
+                        itm._dirty = true;
+                        if (Prod.cond.contains('nullDensity')) {
+                            itm._behaviors.isError['DENSITY_BAND'] = true;
+                            itm._behaviors.validMsg['DENSITY_BAND'] = "One or more of the products do not have density band value associated with it";
+                            //PTE_Load_Util.setBehaviors(itm, 'DENSITY_BAND', 'One or more of the products do not have density band value associated with it', curPricingTable)
+                        }
+                        else if (Prod.cond == 'insufficientDensity')
+                            itm._behaviors.isError['DENSITY_BAND'] = true;
+                        itm._behaviors.validMsg['DENSITY_BAND'] = "The no. of densities selected for the product was " + Prod.selDen + "but the actual no. of densities for the product is" + Prod.actDen;
+                        //PTE_Load_Util.setBehaviors(itm, 'DENSITY_BAND', 'The no. of densities selected for the product was ' + item.selDen + 'but the actual no. of densities for the product is' + item.actDen, curPricingTable);
+                    }
+                })
+            });
+        }
+        return PTR;
     }
 
     static fillingPayLoad(data: any, curPricingTable: any) {
-       _.each(data, (item) => {
-           if (curPricingTable.OBJ_SET_TYPE_CD == 'KIT') {
-               item["TEMP_SUM_TOTAL_DSCNT_PER_LN"] = 0;
-               let obj = JSON.parse(item['PTR_SYS_PRD']);
-               let keys = Object.keys(obj);
-               for (var key in keys) {
-                   if (!Number.isNaN(Number(key))) {
-                       if (obj[keys[key]][0].CAP != undefined && obj[keys[key]][0].CAP != null) {
-                           if ((item['CAP'] == undefined || item['CAP'] == null || item['CAP'] == "" || item['CAP'] == 'No CAP') || (item['CAP'] !== undefined && item['CAP'] != null && item['CAP'] !== "" && parseFloat(item['CAP']) < parseFloat(obj[keys[key]][0].CAP)))
-                               item['CAP'] = obj[keys[key]][0].CAP;
-                       }
-                       if (obj[keys[key]][0].YCS2 != undefined && obj[keys[key]][0].YCS2 != null) {
-                           item['YCS2'] = obj[keys[key]][0].YCS2;
-                       }
-                   }
-               }
-           }
-           if (curPricingTable.OBJ_SET_TYPE_CD == 'VOL_TIER' || curPricingTable.OBJ_SET_TYPE_CD == 'PROGRAM' || curPricingTable.OBJ_SET_TYPE_CD == 'FLEX' || curPricingTable.OBJ_SET_TYPE_CD == 'REV_TIER') {
-               item["VOLUME"] = null;
-               item["ECAP_PRICE"] = null;
-           }
-           if (item['REBATE_OA_MAX_VOL'] != undefined && item['REBATE_OA_MAX_VOL'] != null && item['REBATE_OA_MAX_VOL'] != "") {
-               item['REBATE_OA_MAX_VOL'] = item['REBATE_OA_MAX_VOL'].toString();
-           }
-           if (item['REBATE_OA_MAX_AMT '] != undefined && item['REBATE_OA_MAX_AMT '] != null && item['REBATE_OA_MAX_AMT '] != "") {
-               item['REBATE_OA_MAX_AMT '] = item['REBATE_OA_MAX_AMT '].toString();
-           }
-           if (item['REBATE_OA_MAX_AMT '] != undefined && item['REBATE_OA_MAX_AMT '] != null && item['REBATE_OA_MAX_AMT '] != "") {
-               item['REBATE_OA_MAX_AMT '] = item['REBATE_OA_MAX_AMT '].toString();
-           }
+        _.each(data, (item) => {
+            if (curPricingTable.OBJ_SET_TYPE_CD == 'KIT') {
+                item["TEMP_SUM_TOTAL_DSCNT_PER_LN"] = 0;
+                let obj = JSON.parse(item['PTR_SYS_PRD']);
+                let keys = Object.keys(obj);
+                for (var key in keys) {
+                    if (!Number.isNaN(Number(key))) {
+                        if (obj[keys[key]][0].CAP != undefined && obj[keys[key]][0].CAP != null) {
+                            if ((item['CAP'] == undefined || item['CAP'] == null || item['CAP'] == "" || item['CAP'] == 'No CAP') || (item['CAP'] !== undefined && item['CAP'] != null && item['CAP'] !== "" && parseFloat(item['CAP']) < parseFloat(obj[keys[key]][0].CAP)))
+                                item['CAP'] = obj[keys[key]][0].CAP;
+                        }
+                        if (obj[keys[key]][0].YCS2 != undefined && obj[keys[key]][0].YCS2 != null) {
+                            item['YCS2'] = obj[keys[key]][0].YCS2;
+                        }
+                    }
+                }
+            }
+            if (curPricingTable.OBJ_SET_TYPE_CD == 'VOL_TIER' || curPricingTable.OBJ_SET_TYPE_CD == 'PROGRAM' || curPricingTable.OBJ_SET_TYPE_CD == 'FLEX' || curPricingTable.OBJ_SET_TYPE_CD == 'REV_TIER') {
+                item["VOLUME"] = null;
+                item["ECAP_PRICE"] = null;
+            }
+            if (item['REBATE_OA_MAX_VOL'] != undefined && item['REBATE_OA_MAX_VOL'] != null && item['REBATE_OA_MAX_VOL'] != "") {
+                item['REBATE_OA_MAX_VOL'] = item['REBATE_OA_MAX_VOL'].toString();
+            }
+            if (item['REBATE_OA_MAX_AMT '] != undefined && item['REBATE_OA_MAX_AMT '] != null && item['REBATE_OA_MAX_AMT '] != "") {
+                item['REBATE_OA_MAX_AMT '] = item['REBATE_OA_MAX_AMT '].toString();
+            }
+            if (item['REBATE_OA_MAX_AMT '] != undefined && item['REBATE_OA_MAX_AMT '] != null && item['REBATE_OA_MAX_AMT '] != "") {
+                item['REBATE_OA_MAX_AMT '] = item['REBATE_OA_MAX_AMT '].toString();
+            }
         });
     }
 }

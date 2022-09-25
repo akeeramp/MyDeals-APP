@@ -153,16 +153,18 @@ export class contractDetailsComponent {
     }
 
     onCustomerChange(evt: any) {
-        this.contractData["Customer"] = evt;
-        this.contractData["CUST_MBR_SID"] = evt?.CUST_SID;
-        this.contractData["CUST_ACCNT_DIV_UI"] = this.contractData["CUST_ACCNT_DIV"] = "";
-        this.CUST_NM_DIV = [];
-        this.NO_END_DT = this.contractData.NO_END_DT = false;
-        this.noEndDate();//this.isCustomerSelected = evt != undefined ? true : false;
-        this.updateCorpDivision(evt.CUST_SID);
-        this.getCurrentQuarterDetails();
-        this.applyTodayDate();
-        this.BACK_DATE_RSN = this.NO_END_DT_RSN = undefined;// on change of the contract customer clear the backdate/end date reason values present if any
+        if (evt != undefined) {
+            this.contractData["Customer"] = evt;
+            this.contractData["CUST_MBR_SID"] = evt?.CUST_SID;
+            this.contractData["CUST_ACCNT_DIV_UI"] = this.contractData["CUST_ACCNT_DIV"] = "";
+            this.CUST_NM_DIV = [];
+            this.NO_END_DT = this.contractData.NO_END_DT = false;
+            this.noEndDate();//this.isCustomerSelected = evt != undefined ? true : false;
+            this.updateCorpDivision(evt.CUST_SID);
+            this.getCurrentQuarterDetails();
+            this.applyTodayDate();
+            this.BACK_DATE_RSN = this.NO_END_DT_RSN = undefined;// on change of the contract customer clear the backdate/end date reason values present if any
+        }
     }
 
     loadContractDetails() {

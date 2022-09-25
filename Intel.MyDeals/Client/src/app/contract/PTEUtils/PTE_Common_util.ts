@@ -204,14 +204,25 @@ export class PTE_Common_Util {
                 }
             }
             //incase of tier places the NUM_OF_TIERS
-            if (curPricingTable.OBJ_SET_TYPE_CD == 'VOL_TIER' || curPricingTable.OBJ_SET_TYPE_CD == 'FLEX' || curPricingTable.OBJ_SET_TYPE_CD == 'REV_TIER') {
+            if (curPricingTable.OBJ_SET_TYPE_CD == 'VOL_TIER' || curPricingTable.OBJ_SET_TYPE_CD == 'FLEX'
+                || curPricingTable.OBJ_SET_TYPE_CD == 'REV_TIER' || curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
                 const uniqDCID = _.uniq(PTRResult, 'DC_ID');
                 _.each(uniqDCID, itmsDC => {
                     let DCPTR = _.where(PTRResult, { DC_ID: itmsDC.DC_ID });
-                    let selTier = _.max(DCPTR, (itm: any) => { return parseInt(itm.TIER_NBR) });
+                    let selTier;
+                    if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
+                        let NUM_OF_TIERS = parseInt(curPricingTable.NUM_OF_TIERS);
+                        let pivotDensity = parseInt(curPricingTable.NUM_OF_DENSITY);
+                        let numOfRows = NUM_OF_TIERS * pivotDensity;
+                        selTier = numOfRows;
+                    }
+                    else {
+                        let selRow = _.max(DCPTR, (itm: any) => { return parseInt(itm.TIER_NBR) });
+                        selTier = selRow.TIER_NBR;
+                    }
                     _.each(PTRResult, (item) => {
                         if (item.DC_ID == itmsDC.DC_ID) {
-                            item.NUM_OF_TIERS = selTier.TIER_NBR;
+                            item.NUM_OF_TIERS = selTier;
                         }
                     });
                 });
@@ -232,12 +243,10 @@ export class PTE_Common_Util {
 
     //This function is to add all missing common attributes with expected values for save 
     static addPTEAttributes(PTRResult, curPricingTable) {
-        let PTRgenericAttr: Array<any>;
-        PTRgenericAttr = ["IS_HYBRID_PRC_STRAT"];
-        for (var i = 0; i < PTRgenericAttr.length; i++) {
-            var Attr = PTRgenericAttr[i];
-            for (var j = 0; j < PTRResult.length; j++) {
-                PTRResult[j][Attr] = curPricingTable[Attr] != null ? curPricingTable[Attr] : null;
+        for (var j = 0; j < PTRResult.length; j++) {
+            PTRResult[j]["IS_HYBRID_PRC_STRAT"] = curPricingTable["IS_HYBRID_PRC_STRAT"] != null ? curPricingTable["IS_HYBRID_PRC_STRAT"] : null;
+            if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
+                PTRResult[j]["NUM_OF_DENSITY"] = curPricingTable["NUM_OF_DENSITY"] != null ? curPricingTable["NUM_OF_DENSITY"] : null;
             }
         }
         return PTRResult;

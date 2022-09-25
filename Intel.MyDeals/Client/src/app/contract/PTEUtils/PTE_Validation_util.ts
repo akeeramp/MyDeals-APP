@@ -47,80 +47,43 @@ export class PTE_Validation_Util {
         return data;
     }
 
-    static massagingObjectsForJSON (key, transformResult) {
-        for (var validKey in transformResult.ValidProducts[key]) {
-            transformResult.ValidProducts[key][validKey] = transformResult.ValidProducts[key][validKey].map(function (x) {
-                return {
-                    BRND_NM: x.BRND_NM,
-                    CAP: x.CAP,
-                    CAP_END: x.CAP_END,
-                    CAP_START: x.CAP_START,
-                    DEAL_PRD_NM: x.DEAL_PRD_NM,
-                    DEAL_PRD_TYPE: x.DEAL_PRD_TYPE,
-                    DERIVED_USR_INPUT: x.DERIVED_USR_INPUT,
-                    FMLY_NM: x.FMLY_NM,
-                    HAS_L1: x.HAS_L1,
-                    HAS_L2: x.HAS_L2,
-                    HIER_NM_HASH: x.HIER_NM_HASH,
-                    HIER_VAL_NM: x.HIER_VAL_NM,
-                    MM_MEDIA_CD: x.MM_MEDIA_CD,
-                    MTRL_ID: x.MTRL_ID,
-                    MTRL_TYPE_CD: x.MTRL_TYPE_CD == undefined ? "" : x.MTRL_TYPE_CD,
-                    PCSR_NBR: x.PCSR_NBR,
-                    PRD_ATRB_SID: x.PRD_ATRB_SID,
-                    PRD_CAT_NM: x.PRD_CAT_NM,
-                    PRD_END_DTM: x.PRD_END_DTM,
-                    PRD_MBR_SID: x.PRD_MBR_SID,
-                    PRD_STRT_DTM: x.PRD_STRT_DTM,
-                    USR_INPUT: x.USR_INPUT,
-                    YCS2: x.YCS2,
-                    YCS2_END: x.YCS2_END,
-                    YCS2_START: x.YCS2_START,
-                    EXCLUDE: x.EXCLUDE,
-                    NAND_TRUE_DENSITY: x.NAND_TRUE_DENSITY ? x.NAND_TRUE_DENSITY : ''
+    static validateMultiGeoForHybrid(data: any, isHybrid: any) {
+        let returnval = "0";
+        if (isHybrid == 1 || isHybrid == '1') {
+            //This is Comma Separated GEOS
+            var prod_used = [];
+            for (var i = 0; i < data.length; i++) {
+                //Add Products
+                var temp_split = (data[i].PTR_USER_PRD.toLowerCase().trim().split(/\s*,\s*/));
+                for (var j = 0; j < temp_split.length; j++) {
+                    prod_used.push(temp_split[j]);
                 }
-            });
-        }
-        return transformResult;
-    }
-
-    static validateMultiGeoForHybrid (data:any,isHybrid:any) {
-        let returnval="0";
-        if(isHybrid==1 || isHybrid=='1'){
-           //This is Comma Separated GEOS
-           var prod_used = [];
-           for (var i = 0; i < data.length; i++) {
-               //Add Products
-               var temp_split = (data[i].PTR_USER_PRD.toLowerCase().trim().split(/\s*,\s*/));
-               for (var j = 0; j < temp_split.length; j++) {
-                   prod_used.push(temp_split[j]);
-               }
-               //Checking GEO
-               //Added a check to check for Geo_Combined only if it exists.
-               if (data[i].GEO_COMBINED && data[i].GEO_COMBINED.indexOf(',') > -1 ) {
-                   var firstBracesPos = data[i].GEO_COMBINED.lastIndexOf('[');
-                   var lastBracesPos = data[i].GEO_COMBINED.lastIndexOf(']');
-                   var lastComma = data[i].GEO_COMBINED.lastIndexOf(',');
-                   if (lastComma > lastBracesPos) {
-                     returnval= "1";
-                   }
-               }
-           }
-           //This is to Check Product Line
-           if (prod_used.length > 0) {
-               var uniq = prod_used
-                   .map(function (e) {
-                       return e;
-                   }).reduce((a, b) => {
-                       a[b] = (a[b] || 0) + 1;
-                       return a
-                   }, {})
-               //Duplicate Product Check
-               var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
-               if (duplicates.length > 0) {
-                returnval= "2";
-               }
-           }
+                //Checking GEO
+                //Added a check to check for Geo_Combined only if it exists.
+                if (data[i].GEO_COMBINED && data[i].GEO_COMBINED.indexOf(',') > -1) {
+                    var firstBracesPos = data[i].GEO_COMBINED.lastIndexOf('[');
+                    var lastBracesPos = data[i].GEO_COMBINED.lastIndexOf(']');
+                    var lastComma = data[i].GEO_COMBINED.lastIndexOf(',');
+                    if (lastComma > lastBracesPos) {
+                        returnval = "1";
+                    }
+                }
+            }
+            //This is to Check Product Line
+            if (prod_used.length > 0) {
+                var uniq = prod_used
+                    .map(function (e) {
+                        return e;
+                    }).reduce((a, b) => {
+                        a[b] = (a[b] || 0) + 1;
+                        return a
+                    }, {})
+                //Duplicate Product Check
+                var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
+                if (duplicates.length > 0) {
+                    returnval = "2";
+                }
+            }
         }
         return returnval;
        }
