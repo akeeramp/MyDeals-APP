@@ -730,8 +730,10 @@ export class PTE_Load_Util {
     static setPrdColor(PTR: any[]): any[] {
         _.each(PTR, data => {
             PTE_Common_Util.setBehaviors(data);
-            data._behaviors.isError['PTR_USER_PRD'] = false;
-            data._behaviors.validMsg['PTR_USER_PRD'] = 'Valid Product';
+            if (data._behaviors.isError['PTR_USER_PRD'] != true && data._behaviors.isError['PTR_USER_PRD'] == undefined) {
+                data._behaviors.isError['PTR_USER_PRD'] = false;
+                data._behaviors.validMsg['PTR_USER_PRD'] = 'Valid Product';
+            }
         })
         return PTR;
     }
