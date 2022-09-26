@@ -50,7 +50,8 @@ export class tenderManagerComponent {
             var dealID = this.contractData.DC_ID;
             document.location.href = "/advancedSearch#/tenderDashboard?DealType=" + dealType + "&FolioId=" + dealID + "&search";
         }
-        if(this.contractData && this.contractData.PRC_ST && this.contractData.PRC_ST.length>0){
+        if (response[0].IS_TENDER && response[0].IS_TENDER == 0) window.location.href = "#/contractmanager/CNTRCT/" + this.c_Id + '/0/0/0';
+        else if(this.contractData && this.contractData.PRC_ST && this.contractData.PRC_ST.length>0){
             this.ps_Id = this.contractData.PRC_ST[0].DC_ID;
             this.pt_Id = this.contractData.PRC_ST[0].PRC_TBL[0].DC_ID;
             let result = await this.templatesSvc.readTemplates().toPromise().catch((err) => {

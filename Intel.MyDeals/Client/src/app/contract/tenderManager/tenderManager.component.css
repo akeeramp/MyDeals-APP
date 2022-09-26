@@ -62,7 +62,11 @@
     opacity: 0.5;
     text-decoration: none;
 }
-
+.isDisabledDE {
+    color: currentColor !important;
+    opacity: 0.5;
+    text-decoration: none;
+}
 .parent-one {
     padding-left: 0px;
     padding-right: 0px;

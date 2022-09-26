@@ -671,7 +671,7 @@ export class PTE_Load_Util {
                 if (isTenderContract && (prop == 'PERIOD_PROFILE' || prop == 'AR_SETTLEMENT_LVL')) {
                     cellProperties['readOnly'] = true;
                 }
-                if (curPricingTable.PS_WF_STG_CD == 'Requested') {
+                if (curPricingTable.PS_WF_STG_CD == 'Requested' || curPricingTable.PS_WF_STG_CD == 'Draft' || curPricingTable.PS_WF_STG_CD == '') {
                     if (hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == undefined || hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == null || hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') !== 'Cash') {
                         if (prop == 'SETTLEMENT_PARTNER') {
                             cellProperties['readOnly'] = true;
@@ -699,6 +699,9 @@ export class PTE_Load_Util {
                         }
                     }
                     if ((curPricingTable.OBJ_SET_TYPE_CD == "REV_TIER" || curPricingTable.OBJ_SET_TYPE_CD == "DENSITY") && prop == "RESET_VOLS_ON_PERIOD") {
+                        cellProperties['readOnly'] = true;
+                    }
+                    if (prop == "REBATE_TYPE" && isTenderContract) {
                         cellProperties['readOnly'] = true;
                     }
                     if ((prop == 'REBATE_OA_MAX_AMT' || prop == 'REBATE_OA_MAX_VOL') && curPricingTable.IS_HYBRID_PRC_STRAT == "1" && (hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != undefined && hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != null)) {
