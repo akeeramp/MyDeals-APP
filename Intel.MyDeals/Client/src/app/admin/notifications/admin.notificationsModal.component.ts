@@ -73,8 +73,8 @@ export class notificationsModalDialog {
         this.angularEnabled = await this.dynamicEnablementService.isAngularEnabled();
     }
 
-    ngOnInit() {
-        this.getAngularStatus();
+    async ngOnInit() {
+        await this.getAngularStatus();
         this.loadEmailBody(this.dataItem);
         this.markAsRead(this.dataItem);
     }

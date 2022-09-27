@@ -134,7 +134,7 @@ export class pricingTableComponent {
             if (this.pteComp.dirty) {
                     await this.pteComp.validatePricingTableProducts();
                 let isAnyWarnings = this.pteComp.pricingTableDet.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
-                if (isAnyWarnings) {
+                if (isAnyWarnings || this.pteComp.dirty) {
                     this.isDETab = false; this.isPTETab = true;
                     return;
                 } 
@@ -146,6 +146,11 @@ export class pricingTableComponent {
                 let saveReqd = this.deComp.gridResult.filter(x => x._dirty).length > 0;
                 if (saveReqd)
                     await this.deComp.SaveDeal();
+                let isAnyWarnings = this.deComp.gridResult.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
+                if ((isAnyWarnings && saveReqd) || this.deComp.gridResult.filter(x => x._dirty).length > 0) {
+                    this.isDETab = true; this.isPTETab = false;
+                    return;
+                }
             }
             this.isDETab = false; this.isPTETab = true;
         }
