@@ -72,4 +72,9 @@ export class notificationsService {
         return this.httpClient.get(apiUrl);
     }
 
+    public getEmailBodyTemplateUIAngular(id) {
+        const apiUrl: string = this.apiBaseUrl + 'GetEmailBodyTemplateUIAngular/' + id;
+        return this.httpClient.get(apiUrl);
+    }
+
 }

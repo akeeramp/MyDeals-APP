@@ -89,6 +89,15 @@ namespace Intel.MyDeals.Controllers.API
             );
         }
 
+        [Authorize]
+        [Route("GetEmailBodyTemplateUIAngular/{notificatId}")]
+        public string GetEmailBodyTemplateUIAngular(int notificatId)
+        {
+            return SafeExecutor(() => _notificationsLib.GetEmailBodyTemplateUIAngular(notificatId)
+                , $"Unable to get notifications email body"
+            );
+        }
+
         /// <summary>
         /// We can hit this URL to send pending user subscribed notifications
         /// </summary>

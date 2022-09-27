@@ -442,7 +442,7 @@ export class contractManagerComponent {
         var itemListRowString=``;
         for(let i=0; i<data.items.length; i++){
                 itemListRowString =itemListRowString+ `<tr>
-                <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span>`+data.items[i].CNTRCT+`</span> </td>
+                <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:#1f4e79;'><a href='${data.items[i].contractUrl}'>` + data.items[i].CNTRCT +`</a>*</span> </td>
                 <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span>`+ data.items[i].C2A_ID+`</span> </td>
                 <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:#1f4e79;'><a href='${data.items[i].url}'>`+ data.items[i].DC_ID+`</a>*</span> </td>
                 <td style='width:160px; font-size: 12px; font-family: sans-serif;'><span>`+ data.items[i].TITLE+`</span> </td>
