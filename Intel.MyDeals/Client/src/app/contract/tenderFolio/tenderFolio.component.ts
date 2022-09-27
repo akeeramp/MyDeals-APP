@@ -31,11 +31,11 @@ export class TenderFolioComponent {
     private tenderName;
     private contractType = "Tender Folio";
     private contractData;
-    private selectedData;
+    private selectedData = [];
     private isCustDiv = false;
     private isCustSelected = false;
     private custSIDObj;
-    private CUST_NM_DIV;
+    private CUST_NM_DIV:any;
     private showKendoAlert = false;
     private isTitleError = false;
     private titleErrorMsg: string;
@@ -147,6 +147,12 @@ export class TenderFolioComponent {
         this.contractData.CUST_MBR_SID = this.custSIDObj.CUST_SID;
         this.contractData.TITLE = this.tenderName;
         this.contractData.displayTitle = this.tenderName;
+        let selectedCustDivs = [];
+        if(this.CUST_NM_DIV){
+            selectedCustDivs = this.CUST_NM_DIV.map(data => data.CUST_DIV_NM);
+        }
+        this.contractData.CUST_ACCNT_DIV = selectedCustDivs.length > 0 ? selectedCustDivs.toString().replace(/,/g, '/') : "";
+        this.contractData.CUST_ACCNT_DIV_UI = selectedCustDivs.length > 0 ? selectedCustDivs : "";
 
         //Cloning PS
         const ps = this.templateData.ObjectTemplates.PRC_ST.ALL_TYPES;
