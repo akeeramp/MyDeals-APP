@@ -1,5 +1,5 @@
 ﻿import * as angular from "angular";
-import { Component, Input, ViewEncapsulation } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { DataStateChangeEvent, SelectAllCheckboxState, CellClickEvent, CellCloseEvent } from "@progress/kendo-angular-grid";
@@ -9,6 +9,8 @@ import { ThemePalette } from "@angular/material/core";
 import { lnavService } from "../lnav/lnav.service";
 import { headerService } from "../../shared/header/header.service";
 import { FormBuilder } from "@angular/forms";
+import { contractManagerservice } from "../contractManager/contractManager.service";
+import * as moment from "moment";
 
 @Component({
     selector: "manager-pct",
@@ -18,7 +20,10 @@ import { FormBuilder } from "@angular/forms";
 })
 
 export class managerPctComponent {
-    constructor(private loggerSvc: logger, private managerPctSvc: managerPctservice, private lnavSvc: lnavService, private headerSvc: headerService, private formBuilder: FormBuilder) {
+    isRunning: boolean;
+    contractId: string;
+    lastRun: any;
+    constructor(private loggerSvc: logger, private contractManagerSvc:contractManagerservice,private managerPctSvc: managerPctservice, private lnavSvc: lnavService, private headerSvc: headerService, private formBuilder: FormBuilder) {
         //pls dont remove this even it its not as part of the route this is to handle condtions when we traverse between contract details with in manage tab
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
@@ -30,6 +35,10 @@ export class managerPctComponent {
     @Input() contractData: any;
     @Input() UItemplate: any;
     @Input() tab: any;
+    @Output() refreshedContractData = new EventEmitter;
+    private spinnerMessageHeader = "Complete"; 
+    private spinnerMessageDescription = "Reloading the page now.";
+    public isPctLoading = false;
     userRole = ""; canEmailIcon = true;
     isPSExpanded = []; isPTExpanded = {};
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
@@ -61,6 +70,10 @@ export class managerPctComponent {
     private hasPermissionPrice = (<any>window).usrRole === "DA" || (<any>window).usrRole === "Legal" || ((<any>window).usrRole === "SA" && (<any>window).isSuper);
     // This variable gives Super GA to see RTL_PULL_DLR and CAP (CAP column only for ECAP deals)
     private hasSpecialPricePermission = (this.hasPermissionPrice || ((<any>window).usrRole === "GA" && (<any>window).isSuper));
+    text: string;
+    runIfStaleByHours = 3;
+    forceRunValue = true;
+    enabledPCT = false;
 
     private state: State = {
         skip: 0,
@@ -88,7 +101,6 @@ export class managerPctComponent {
         const ptDcId = pt.DC_ID;
         //check whether arrow icon is expanded/collapsed ,only if it is expanded then call API to get the data
         if (this.isPTExpanded[ptDcId]) {
-            this.isLoading = true;
             this.managerPctSvc.getPctDetails(pt.DC_ID).subscribe(
                 (response) => {
                     if (response !== undefined) {
@@ -97,7 +109,6 @@ export class managerPctComponent {
                         this.gridDataSet[pt.DC_ID] = distinct(this.gridData, "DEAL_ID");
                         this.parentGridData[pt.DC_ID] = this.gridData;
                     }
-                    this.isLoading = false;
                 },
                 function (response) {
                     this.loggerSvc.error("Could not load data.", response, response.statusText);
@@ -151,10 +162,98 @@ export class managerPctComponent {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }
 
-    lastMeetCompRunCalc() {
-        return "Last Run: 2 hrs ago";
+    lastMeetCompRunCalc(value) {
+        this.text = value;
+        if (this.isRunning) {
+            return "Running " + this.text;
+        }
+        
+        if (!this.enabledPCT && this.lastRun) {
+
+            // Get local time in UTC
+            var currentTime = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+            // currentTime.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
+            var localTime = moment(currentTime).format("MM/DD/YY HH:mm:ss");
+            // Get server time from a PST time string... manually convert it to UTC
+            var lastruntime = moment(this.lastRun);
+
+            var serverPstTime = lastruntime.format("MM/DD/YY HH:mm:ss");
+            //var serverPstTime = moment(this.lastRun).add(moment.duration("08:00:00")).format('YYYY-MM-DD HH:mm:ss');
+
+            var timeDiff = moment.duration(moment(serverPstTime).diff(moment(localTime)));
+            var hh = Math.abs(timeDiff.asHours());
+            var mm = Math.abs(timeDiff.asMinutes());
+            var ss = Math.abs(timeDiff.asSeconds());
+
+            var dsplNum = hh;
+            var dsplMsg = " hours ago";
+            this.needToRunPct = this.forceRun() || (this.runIfStaleByHours > 0 && dsplNum >= this.runIfStaleByHours) ? true : false;
+            
+            if (dsplNum < 1) {
+                dsplNum = mm;
+                dsplMsg = " mins ago";
+                if (!this.forceRun()) this.needToRunPct = false;
+            }
+            if (dsplNum < 1) {
+                dsplNum = ss;
+                dsplMsg = " secs ago";
+                if (!this.forceRun()) this.needToRunPct = false;
+            }
+
+            return "Last Run: " + Math.round(dsplNum) + dsplMsg;
+
+        } else {
+            // never ran
+            this.needToRunPct = this.runIfStaleByHours > 0;
+            return "Last Run: Never";
+        }
+    }
+    forceRun() {
+        var data = this.contractData.PRC_ST;
+        if (data !== undefined) {
+            for (var d = 0; d < data.length; d++) {
+                if (data[d].MEETCOMP_TEST_RESULT === "" || data[d].MEETCOMP_TEST_RESULT === "Not Run Yet") return true;
+                if (data[d].COST_TEST_RESULT === "" || data[d].COST_TEST_RESULT === "Not Run Yet") return true;
+            }
+        }
+        return false;
     }
 
+    executePctViaBtn() {
+        this.executePct();
+    }
+    executePct() {
+        this.isRunning = true;
+        this.contractId= this.contractData.DC_ID;
+        this.contractManagerSvc.runPctContract(this.contractData.DC_ID).subscribe((res) => {
+            this.isRunning = false;
+            this.loadPctDetails();
+        }, (err) => {
+            this.isRunning = false;
+            this.loggerSvc.error("Could not run price Cost Test for contract " + this.contractId, err);
+        });
+        
+    }
+    loadPctDetails(){
+        this.isPctLoading = true;
+        this.contractManagerSvc.readContract(this.contractId).subscribe((response: any) => {
+            this.contractData = response[0];
+            this.refreshedContractData.emit({ contractData: this.contractData });
+
+            this.contractId= this.contractData.DC_ID;
+            this.lastRun = this.contractData.LAST_COST_TEST_RUN;
+            this.contractData?.PRC_ST.map((x, i) => {
+                //intially setting all the PS row arrow icons and PT data row arrow icons as collapses. this isPSExpanded,isPTExpanded is used to change the arrow icon css accordingly
+                this.isPSExpanded[i] = false;
+                if (x.PRC_TBL != undefined) x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
+            })
+            this.isPctLoading = false;
+
+        }, (error) => {
+            this.isPctLoading = false;
+            this.loggerSvc.error('Get Upper Contract service', error);
+        });
+    }
     saveAndRunMeetComp() {
         //kujoih
     }
@@ -233,6 +332,13 @@ export class managerPctComponent {
             this.isPSExpanded[i] = false;
             if (x.PRC_TBL != undefined) x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
         })
+        this.lastRun = this.contractData.LAST_COST_TEST_RUN;
+        setTimeout(() => {
+            var isPCForceReq = this.contractData?.PRC_ST?.filter(x => x.COST_TEST_RESULT == 'Not Run Yet' || x.COST_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
+            var isMCForceReq = this.contractData?.PRC_ST?.filter(x => x.MEETCOMP_TEST_RESULT == 'Not Run Yet' || x.MEETCOMP_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
+            if (isMCForceReq || isPCForceReq)
+                this.executePct();
+        }, 2000);
         this.pricingStrategyFilter = this.contractData?.PRC_ST;
     }
 

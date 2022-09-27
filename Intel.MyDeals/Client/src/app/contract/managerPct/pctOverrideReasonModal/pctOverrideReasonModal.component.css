@@ -1,0 +1,86 @@
+.modalBlueBody {
+    background-color: #003C71;
+    color: #ffffff;
+}
+
+.vert-button {
+    width: 100%;
+    height: 300px;
+    background-color: #00AEEF;
+    border-radius: 4px;
+    color: #ffffff;
+    padding: 6px;
+    text-align: center;
+    font-size: 12px;
+    cursor: pointer;
+}
+
+    .vert-button:hover {
+        background-color: #0071C5;
+    }
+
+.big-icon {
+    font-size: 30px;
+}
+
+input[type=radio].with-font,
+input[type=checkbox].with-font {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px;
+}
+
+    input[type=radio].with-font + label:before,
+    input[type=checkbox].with-font + label:before {
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f096";
+        font-size: 20px;
+        letter-spacing: 10px;
+        color: #00AEEF;
+        margin-left: 10px;
+    }
+
+    input[type=radio].with-font:hover + label:before,
+    input[type=checkbox].with-font:hover + label:before {
+        color: #003C71;
+        cursor: pointer;
+    }
+
+    input[type=radio].with-font.disabled + label:before,
+    input[type=checkbox].with-font.disabled + label:before {
+        color: #cccccc;
+        cursor: default;
+    }
+
+    input[type=radio].with-font:checked + label:before,
+    input[type=checkbox].with-font:checked + label:before {
+        content: "\f046";
+        font-size: 20px;
+        letter-spacing: 5px;
+        color: #C4D600;
+        margin-left: 10px;
+    }
+
+    input[type=radio].with-font.disabled:checked + label:before,
+    input[type=checkbox].with-font.disabled:checked + label:before {
+        color: #cccccc;
+        cursor: default;
+    }
+
+    input[type=radio].with-font:focus + label:before,
+    input[type=checkbox].with-font:focus + label:before {
+        font-weight: bold;
+        color: #C4D600;
+    }
+
+.costTestReason-modal-window, .modal-dialog {
+    width: 90%;
+    margin-left: auto;
+    margin-right: auto;
+}

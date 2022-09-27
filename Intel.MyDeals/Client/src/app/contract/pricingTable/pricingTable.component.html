@@ -144,7 +144,7 @@
                     <missing-cap [contractData]="contractData" [UItemplate]="UItemplate"></missing-cap>
                 </div>
                 <div *ngIf="selLnav=='pctDiv'" class="few-oracle-css">
-                    <manager-pct [contractData]="contractData" [UItemplate]="UItemplate" [tab]="selLnav"></manager-pct>
+                    <manager-pct [contractData]="contractData" [UItemplate]="UItemplate" [tab]="selLnav" (refreshedContractData)="refreshContractData($event)"></manager-pct>
                 </div>
                 <div *ngIf="selLnav=='ViewContractDetails'" class="few-oracle-css">
                     <contract-details [C_ID]="contractData?.DC_ID"></contract-details>

@@ -49,10 +49,10 @@
                                 <tbody>
                                     <tr>
                                         <td>
-                                            <div title='Execute Price Cost Test and Meet Comp Test'
-                                                 class="btn btn-skyblue-sm" style="padding-left: 100px; background-color: #00AEEF;">
-                                                <i class="fa fa-refresh fa-fw iconRunPct" style="color:#fff;font-size:20px;"></i>
-                                            </div>
+                                            <button class="btn btn-skyblue-sm" style="padding-left: 100px; background-color: #00AEEF;"
+                                            (click)="executePctViaBtn()" title="Execute Price Cost Test and Meet Comp Test" >
+                                            <i class="fa fa-refresh fa-fw iconRunPct" [ngClass]="isRunning ? 'fa-spin grn' : '' "  aria-hidden="true" style="font-size: 20px"></i>
+                                            </button>
                                         </td>
                                     </tr>
                                 </tbody>
@@ -60,8 +60,8 @@
                         </button>
                     </td>
                     <td style="width: 120px; text-align: center;">
-                        Price Cost Test <div [textContent]="lastMeetCompRunCalc()" class="btnLastRun"
-                                             style="font-size: 9px; color: #00AEEF; line-height: 1.1em;" title="{{lastMetCompRunLocalTime}}"></div>
+                        Price Cost Test <div class="btnLastRun"
+                                             style="font-size: 9px; color: #00AEEF; line-height: 1.1em;" title="{{lastMetCompRunLocalTime}}">{{lastMeetCompRunCalc('Price Cost Test')}}</div>
                     </td>
                     <td style="line-height: 1.1em;">Pricing Strategy / Pricing Table</td>
                     <td style="width: 120px; text-align: center; line-height: 1em;">Stage/Deal type</td>
@@ -284,4 +284,6 @@ dataItem.OEM_PLTFRM_LNCH_DT|
             </div>
         </div>
     </div>
+    <loading-panel-angular [show]="isPctLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription">
+    </loading-panel-angular>
 </div>

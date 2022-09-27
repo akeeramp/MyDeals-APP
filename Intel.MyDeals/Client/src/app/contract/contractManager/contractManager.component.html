@@ -277,7 +277,7 @@
                                 <i *ngIf="ps.CAP_MISSING_FLG !=='0' && ps.COST_MISSING_FLG !=='0'"></i><i *ngIf="ps.CAP_MISSING_FLG==='1' || ps.COST_MISSING_FLG==='1'" style="color:#f3d54e"
                                                                                                           class="intelicon-help-solid bigIcon" title="{{getmissingCapCostTitle(ps)}}"></i>
                             </td>
-                            <td class="bigIcon" style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_COST_TEST || PCTResultView" >
+                            <td class="bigIcon" style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_COST_TEST || PCTResultView" (click)="loadModel('pctDiv')" >
                                 <icon-mct-pct-angular ngDefaultControl [(ngModel)]="ps.COST_TEST_RESULT" [dataValue]="ps.COST_TEST_RESULT" [canEdit]="CAN_EDIT_COST_TEST" [iconClass]="bigIcon"></icon-mct-pct-angular>
                             </td>
                             <td class="bigIcon" style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_MEET_COMP" (click)="loadModel('MeetComp')">

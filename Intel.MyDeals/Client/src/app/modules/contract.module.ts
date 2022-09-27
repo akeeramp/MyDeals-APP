@@ -38,6 +38,7 @@ import {meetCompDealDetailModalComponent} from "../contract/meetComp/meetCompDea
 import { emailModal } from "../contract/contractManager/emailModal/emailModal.component";
 import { messageBoardModal } from "../contract/contractManager/messageBoard/messageBoard.component";
 import { FlexOverlappingCheckComponent } from "../contract/ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.component";
+import { pctOverrideReasonModal } from "../contract/managerPct/pctOverrideReasonModal/pctOverrideReasonModal.component";
 
 export let contractComponents = [
     contractDetailsComponent,
@@ -78,5 +79,6 @@ export let contractComponents = [
     meetCompDealDetailModalComponent,
     messageBoardModal,
     emailModal,
-    FlexOverlappingCheckComponent
+    FlexOverlappingCheckComponent,
+    pctOverrideReasonModal
 ]

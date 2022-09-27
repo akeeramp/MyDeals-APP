@@ -50,9 +50,27 @@
     <kendo-grid-column title="Cost Type" field="CST_TYPE" [headerClass]="{'headerClass':true}" [width]="120"
         [hidden]="!hasPermissionPrice"></kendo-grid-column>
     <kendo-grid-column title="Cost Test Analysis Override" field="COST_TEST_OVRRD_FLG"
-        [headerClass]="{'headerClass':true}" [width]="150" [hidden]="hasNoPermissionOvr"></kendo-grid-column>
+        [headerClass]="{'headerClass':true}" [width]="150" [hidden]="hasNoPermissionOvr">
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            <div style="text-align: center;">
+              <span *ngIf="dataItem.PRC_CST_TST_STS === 'Pass' ||  dataItem.PRC_CST_TST_STS === 'NA' || hasNoPermission === true" (change)="onOff(dataItem.COST_TEST_OVRRD_FLG)" style="vertical-align: -webkit-baseline-middle;"></span>
+              <span *ngIf="dataItem.PRC_CST_TST_STS !=='Pass' && dataItem.PRC_CST_TST_STS !== 'NA' && hasNoPermission !== true">
+                <label class="switch">
+                    <input class="switch-input" type="checkbox" (change)="changeReasonFlg(dataItem)" [(ngModel)]="dataItem.COST_TEST_OVRRD_FLG" />
+                    <span class="switch-label" data-on="Yes" data-off="No"></span> 
+                    <span class="switch-handle"></span> 
+                </label>
+            </span>
+            <div class="boxSave" [ngClass]="{'showReason': dataItem.saved, 'hideReason': !dataItem.saved}">SAVED</div>
+            </div>
+        </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column title="Cost Test Analysis Override Comments" field="COST_TEST_OVRRD_CMT"
-        [headerClass]="{'headerClass':true}" [width]="150" [hidden]="hasNoPermissionOvr"></kendo-grid-column>
+        [headerClass]="{'headerClass':true}" [width]="150" [hidden]="hasNoPermissionOvr">
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+        <button class="btn btn-sm btn-skyblue" *ngIf="dataItem.COST_TEST_OVRRD_FLG === 'Yes' || dataItem.COST_TEST_OVRRD_FLG === true" (click)="openReason(dataItem)" type="button" style="width: 120px;" title="Save and Validate"><span style="color:#FC4C02;">*</span> {{dataItem.COST_TEST_OVRRD_CMT === "" ? "Select" : "View Overrides"}}</button>
+    </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column title="Retail Cycle" field="RTL_CYC_NM" [headerClass]="{'headerClass':true}" [width]="140"
         [hidden]="hasNoPermission"></kendo-grid-column>
     <kendo-grid-column title="Retail Pull $" field="RTL_PULL_DLR" [headerClass]="{'headerClass':true}" [width]="100"

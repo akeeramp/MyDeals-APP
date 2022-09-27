@@ -10,6 +10,8 @@ import { lnavService } from "../lnav/lnav.service";
 import { headerService } from "../../shared/header/header.service";
 import { FormBuilder } from "@angular/forms";
 import { Observable } from "rxjs";
+import { MatDialog } from "@angular/material/dialog";
+import { pctOverrideReasonModal } from "./pctOverrideReasonModal/pctOverrideReasonModal.component";
 
 @Component({
     selector: "pct-child-grid",
@@ -18,11 +20,11 @@ import { Observable } from "rxjs";
 })
 
 export class pctChildGridComponent {
-    constructor(private loggerSvc: logger, private managerPctSvc: managerPctservice, private lnavSvc: lnavService, private headerSvc: headerService, private formBuilder: FormBuilder) {
+    constructor(private loggerSvc: logger,protected dialog: MatDialog,  private managerPctSvc: managerPctservice, private lnavSvc: lnavService, private headerSvc: headerService, private formBuilder: FormBuilder) {
 
     }
     //public view: Observable<GridDataResult>;
-    public isLoading = true;
+    public isLoading: boolean;
     public skip = 0;
     private color: ThemePalette = 'primary';
     PCTResultView = false;
@@ -69,6 +71,48 @@ export class pctChildGridComponent {
         this.skip = skip;
         this.managerPctSvc.queryForCategory(this.parent.DEAL_ID, { skip, take });
     }
+    onOff(val) {
+        return val ? "Yes" : "No";
+    }
+    changeReasonFlg(dataItem) {
+    if (dataItem.COST_TEST_OVRRD_FLG === false) {
+        var newItem = {
+            "CUST_NM_SID": dataItem.CUST_NM_SID,
+            "DEAL_OBJ_TYPE_SID": 5,
+            "DEAL_OBJ_SID": dataItem.DEAL_ID,
+            "PRD_MBR_SIDS": dataItem.PRD_MBR_SIDS,
+            "CST_OVRRD_FLG": 0,
+            "CST_OVRRD_RSN": ""
+        };
+    this.managerPctSvc.setPctOverride(newItem).subscribe(
+        (response) => {
+            dataItem.saved = true;
+            setTimeout(()=>{
+                dataItem.saved = false;
+            }, 3000);
+        },
+        function (response) {
+            this.loggerSvc.error("Could not override Data.", response, response.statusText);
+        }
+    )
+        }
+    }
+
+    openReason(dataItem) {
+        const dialogRef = this.dialog.open(pctOverrideReasonModal, {
+            data: {
+                cellCurrValues: dataItem
+            }
+        });
+        dialogRef.afterClosed().subscribe((returnVal) => {
+            if(returnVal){
+                dataItem.saved = true;
+                setTimeout(()=>{
+                    dataItem.saved = false;
+                }, 3000);
+            }
+        });
+    }
 
     ngOnInit() {
         this.userRole = (<any>window).usrRole;
@@ -80,7 +124,6 @@ export class pctChildGridComponent {
         })
         this.gridResult = this.parent.filter(x => x.DEAL_ID == this.child.DEAL_ID);
         this.gridData = process(this.gridResult, this.childState);
-        this.isLoading = false;
     }
 }
 angular.module("app").directive(

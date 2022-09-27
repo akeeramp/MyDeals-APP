@@ -622,7 +622,7 @@ export class contractManagerComponent {
                     this.grid_Result= this.gridDataSet[pt.DC_ID];
                     var filterableColumns = ['DC_ID','OBJ_SET_TYPE_CD',"START_DT", "TITLE",
                     "REBATE_TYPE","COST_TEST_RESULT","MEETCOMP_TEST_RESULT","MAX_RPU", "END_CUSTOMER_RETAIL" ,"DEAL_DESC",
-                    "WF_STG_CD","EXPIRE_FLG"];
+                    "WF_STG_CD","EXPIRE_FLG",'VOLUME'];
                     this.filteringData[ptDcId]=[];
 
                     for(let i=0; i<filterableColumns.length;i++){

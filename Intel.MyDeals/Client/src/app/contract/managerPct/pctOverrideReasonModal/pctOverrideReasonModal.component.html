@@ -1,0 +1,83 @@
+    <div class="modal-header modalBlueBody">
+        <h5 class="modal-title" id="modal-title">Select Cost Test Exception</h5>
+    </div>
+    <div class="modal-body modalBlueBody" id="modal-body">
+
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 95%;">
+                    <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+                    [sort]="state.sort" [filter]="state.filter" [sortable]="true" [groupable]="false"
+                    [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)">
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" [locked]="true" [filterable]="false" width="50px" title=" " field="isSelected">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                                <div *ngIf='dataItem.MYDL_PCT_LGL_EXCPT_SID<= 0' style='padding-left: 6px;'>
+                                <input type='checkbox' disabled [(ngModel)]='dataItem.isSelected' id='chkId_{{dataItem.MYDL_PCT_LGL_EXCPT_SID}}' class='with-font disabled'/>
+                                <label for='chkId_{{dataItem.MYDL_PCT_LGL_EXCPT_SID}}' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label>
+                                </div>
+                                <div *ngIf='dataItem.MYDL_PCT_LGL_EXCPT_SID > 0' style='padding-left: 6px;'>
+                                <input type='checkbox' [ngClass]='{disabled: dataItem.IS_DSBL}' [disabled]='dataItem.IS_DSBL' [(ngModel)]='dataItem.isSelected' id='chkId_{{dataItem.MYDL_PCT_LGL_EXCPT_SID}}' class='with-font pctOverrideCheckbox'/>
+                                <label for='chkId_{{dataItem.MYDL_PCT_LGL_EXCPT_SID}}' title='{{dataItem.IS_DSBL ? "Exception is disabled for selection. Please contact legal" : ""}}' style='margin-top: 6px; margin-bottom: 0;'>&nbsp;</label>
+                                </div>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" [locked]="true" width="220px" title="Intel Product" field="INTEL_PRD">
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}"  width="370px" title="Scope" field="SCPE">
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}"  width="320px" title="Cost" field="COST" format="{0:c}">
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" width="110px" title="Exception Start Date" field="PCT_LGL_EXCPT_STRT_DT">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            {{dataItem.PCT_LGL_EXCPT_STRT_DT | date: 'M/d/yyyy'}}
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" width="110px" title="Exception End Date" field="PCT_LGL_EXCPT_END_DT">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            {{dataItem.PCT_LGL_EXCPT_END_DT | date: 'M/d/yyyy'}}
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" [hidden]="!seeMore" width="370px" title="Comp Product" field="MEET_COMP_PRD">
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" [hidden]="!seeMore" width="180px" title="Comp Price" field="MEET_COMP_PRC">
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" [hidden]="!seeMore" width="500px" title="Business Object" field="BUSNS_OBJ">
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" [hidden]="!seeMore" width="320px" title="Potential Market Impact" field="PTNTL_MKT_IMPCT">
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" [hidden]="!seeMore" width="120px" title="Approving Attorney" field="APRV_ATRNY">
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" [hidden]="!seeMore" width="120px" title="Date Approved" field="DT_APRV">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            {{dataItem.DT_APRV | date: 'M/d/yyyy'}}
+                        </ng-template>
+                    </kendo-grid-column>
+                    </kendo-grid>
+                </td>
+                <td style="width: 5%;">
+                    <div class="vert-button" (click)="toggleSee()">
+                        <div *ngIf="!seeMore" style="position: relative; top: 50%; transform: translateY(-50%);">
+                            <div>Show<br />more</div>
+                            <i class="intelicon-right-next big-icon"></i>
+                        </div>
+                        <div *ngIf="seeMore" style="position: relative; top: 50%; transform: translateY(-50%);">
+                            <div>Show<br />less</div>
+                            <i class="intelicon-left-previous big-icon"></i>
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </table>
+
+        <br />
+        <div class="row">
+            <div class="col-md-12">
+                <div class="fr">
+                    <button class="btn btn-warning" type="button" style="margin-right: 8px;" (click)="cancel()">Cancel</button>
+                    <button class="btn btn-primary" type="button" (click)="ok()">Save and Close</button>
+                </div>
+            </div>
+        </div>
+
+    </div>
+

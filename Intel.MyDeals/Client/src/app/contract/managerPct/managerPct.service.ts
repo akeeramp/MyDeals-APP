@@ -19,7 +19,14 @@ export class managerPctservice {
         const apiUrl: string = this.apiBasePricingTableUrl + 'GetPctDetails/' + dealId;
         return this.httpClient.get(apiUrl);
     }
-
+    public setPctOverride(data): Observable<any> {
+        const apiUrl: string = this.apiBasePricingTableUrl + 'SetPctOverride';
+        return this.httpClient.post(apiUrl,data);
+    }
+    public GetLegalExceptionsPct(date): Observable<any> {
+        const apiUrl: string = "/api/ProductCostTest/GetLegalExceptionsPct/"+ date;
+        return this.httpClient.get(apiUrl);
+    } 
     public queryForCategory(dealId: number, state?: State): void {
         Object.assign({}, state, {
             filter: {
