@@ -148,7 +148,7 @@ contractSaveUtil.setFlexBehaviors = function (item, elem, cond, restrictGroupFle
     if (cond == 'flexrowtype' && elem == 'FLEX_ROW_TYPE') {
         item._behaviors.validMsg[elem] = "There should be at least one accrual product.";
     }
-    else if (cond == 'invalidDate' && elem == 'START_DT' && !restrictGroupFlexOverlap) {
+    else if (cond == 'invalidDate' && elem == 'START_DT') {
         item._behaviors.validMsg[elem] = "Draining products should have at least 1 day delay from Accrual Start date";
     }
 
@@ -895,12 +895,10 @@ contractSaveUtil.validatePTEdata = function (sData, curPricingStrategy, getVendo
                     if (sData[s]["OBJ_SET_TYPE_CD"] == "FLEX") {
                         //Delete if there is any previous Error  messages
                         if ((invalidFlexDate || invalidFlexDate != undefined)) {
-                            _.each(invalidFlexDate, (item) => {
-                                if (!restrictGroupFlexOverlap) {
-                                    item = contractutil.setFlexBehaviors(item, 'START_DT', 'invalidDate', restrictGroupFlexOverlap);
-                                    if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                                    errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg['START_DT']);
-                                }
+                            _.each(invalidFlexDate, (item) => {                                
+                                item = contractutil.setFlexBehaviors(item, 'START_DT', 'invalidDate', restrictGroupFlexOverlap);
+                                if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                                errs.PRC_TBL_ROW.push(sData[s]._behaviors.validMsg['START_DT']);                                
                             });
                         }
                     }
@@ -1153,12 +1151,10 @@ contractSaveUtil.validateDEdata = function (gData,contractData, curPricingStrate
             if (gData[i]["OBJ_SET_TYPE_CD"] == "FLEX") {
                 //Delete if there is any previous Error  messages
                 if ((invalidFlexDate || invalidFlexDate != undefined)) {
-                    _.each(invalidFlexDate, (item) => {
-                        if (!restrictGroupFlexOverlap) {
-                            item = contractutil.setFlexBehaviors(item, 'START_DT', 'invalidDate', restrictGroupFlexOverlap);
-                            if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                            errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['START_DT']);
-                        }
+                    _.each(invalidFlexDate, (item) => {                        
+                        item = contractutil.setFlexBehaviors(item, 'START_DT', 'invalidDate', restrictGroupFlexOverlap);
+                        if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
+                        errs.PRC_TBL_ROW.push(gData[i]._behaviors.validMsg['START_DT']);                       
                     });
                 }
             }

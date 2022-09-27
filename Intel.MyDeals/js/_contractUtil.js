@@ -332,9 +332,11 @@ contractutil.validateFlexDate = function (data, curPricingTable, wipData) {
         //For multi tiers last record will have latest date, skipping duplicate DC_ID
         var filterData = _.uniq(_.sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
 
-        var maxAccrualDate = new Date(Math.max.apply(null, filterData.map(function (x) { return new Date(x.START_DT); })));
+        var minAccrualDate = new Date(Math.min.apply(null, filterData.map(function (x) { return new Date(x.START_DT); })));
 
-        var drainingInvalidDates = drainingEntries.filter((val) => moment(val.START_DT) < (moment(maxAccrualDate)));
+        var drainingInvalidDates = drainingEntries.filter(
+            (val) => moment(val.START_DT) < (moment(minAccrualDate).add(0, 'days'))
+        );
     }
 
     return drainingInvalidDates;
@@ -351,6 +353,10 @@ contractutil.setFlexBehaviors = function (item, elem, cond, restrictGroupFlexOve
 
     if (cond == 'flexrowtype' && elem == 'FLEX_ROW_TYPE') {
         item._behaviors.validMsg[elem] = "There should be at least one accrual product.";
+    }
+
+    else if (cond == 'invalidDate' && elem == 'START_DT') {
+        item._behaviors.validMsg[elem] = "Accrual Date needs to start on or before the Draining dates.";
     }
     
     else if (cond == 'nequalpayout' && elem == 'PAYOUT_BASED_ON') {

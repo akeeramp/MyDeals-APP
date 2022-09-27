@@ -2624,7 +2624,10 @@
                 if (curPricingTableData.length > 0 && sData != undefined) {
 
                     $scope.OVLPFlexPdtPTRUSRPRDError = false;
-                    sData = $scope.validateOVLPFlexProduct(sData);                    
+                    if (!$scope.restrictGroupFlexOverlap) {
+                        sData = $scope.validateOVLPFlexProduct(sData);    //TWC3179-1217
+                    }
+                    
                     sData = $scope.validateMarketingKIT(sData);
                     //validate density bands
                     sData = $scope.validateDensityBand(sData);
@@ -2652,7 +2655,9 @@
                 if (gData !== undefined && gData !== null) {                    
                     //validate flex overlap products for DE
                     $scope.OVLPFlexPdtPTRUSRPRDError = false;
-                    gData = $scope.validateOVLPFlexProduct(gData);
+                    if (!$scope.restrictGroupFlexOverlap) {
+                        gData = $scope.validateOVLPFlexProduct(gData);// TWC3179-1217
+                    }
                     rData = contractSaveUtil.validateDEdata(gData, $scope.contractData, $scope.curPricingStrategy, $scope.curPricingTable, $scope.getVendorDropDownResult,
                         $scope.wipData, spreadDs, $scope.restrictGroupFlexOverlap, $scope.hybridSaveBlockingColumns, $scope.OVLPFlexPdtPTRUSRPRDError, $scope.uid, $scope.templates, uData, editableArSettlementLevelAfterApproval)
 
@@ -5030,6 +5035,7 @@
                 callback(false);
             }
         }
+        //TWC3179-1217: Dancing near fencing -- Redundant as Business does not needed it.
         $scope.validateOVLPFlexProduct = function (data, mode) {
             if ($scope.curPricingTable.OBJ_SET_TYPE_CD && $scope.curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
                 $scope.restrictGroupFlexOverlap = false;
