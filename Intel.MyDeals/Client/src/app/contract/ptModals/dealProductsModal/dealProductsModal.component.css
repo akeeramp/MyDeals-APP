@@ -1,22 +1,44 @@
-﻿.modalBlueBody {
+﻿.there-modal-body, .there-modal-header {
     background-color: #003C71 !important;
     color: #ffffff !important;
 }
 
-.excelText {
+.differ-artho-excel {
     line-height: 1.2em;
     font-size: 12px;
     float: right;
 }
 
-.excelText span {
+.differ-artho-excel span {
     text-align: left;
 }
 
-.dropdown{
-    left:160px;
+/*.dropdown-all-custom {
+    left: 160px;
+}*/
+
+.dd-btn-app {
+    width: 220px;
 }
 
-#cpyClpBrd{
-    width:220px;
+.deal-pmc-custom mat-dialog-container {
+    padding: 0 !important;
+}
+
+.there-modal-body {
+    padding: 20px !important;
+}
+
+.there-modal-header {
+    border-bottom: 1px solid #fff !important;
+    padding-bottom: 10px !important;
+    padding-top: 10px !important;
+}
+
+.arrow-parent {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    position: relative !important;
 }

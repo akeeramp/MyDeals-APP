@@ -1,30 +1,36 @@
-﻿<div class="modal-header modalBlueBody">
+﻿<div class="modal-header modalBlueBody there-modal-header">
     <div class="col-md-12">
-        <h5 class="modal-title col-md-7" id="modal-title">Products for deal {{data.dataItem.DC_ID}} <img *ngIf="loading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" /></h5>
-        <div *ngIf="showDealProducts" class="dropdown col-md-4">
-            <button class="btn btn-primary dropdown-toggle" id="cpyClpBrd" type="button" data-toggle="dropdown">
-                Copy to clip board
-                <span class="caret"></span>
-            </button>
-            <ul class="dropdown-menu">
-                <li role="button" (click)="copyNoCAPProudcts('HIER_VAL_NM')">
-                    <a>L4's (with No CAP)</a>
-                </li>
-                <li role="button" (click)="copyNoCAPProudcts('PCSR_NBR')">
-                    <a>Processor's (with No CAP)</a>
-                </li>
-            </ul>
+        <div class="arrow-parent">
+            <div class="arrow-fs">
+                <h5 class="modal-title" id="modal-title">Products for deal {{data.dataItem.DC_ID}} <img *ngIf="loading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" /></h5>
+            </div>
+            <div class="arrow-ss">
+                <div *ngIf="showDealProducts" class="dropdown dropdown-all-custom">
+                    <button class="btn btn-primary dropdown-toggle dd-btn-app" id="cpyClpBrd" type="button" data-toggle="dropdown">
+                        Copy to clip board
+                        <span class="caret"></span>
+                    </button>
+                    <ul class="dropdown-menu">
+                        <li role="button" (click)="copyNoCAPProudcts('HIER_VAL_NM')">
+                            <a>L4's (with No CAP)</a>
+                        </li>
+                        <li role="button" (click)="copyNoCAPProudcts('PCSR_NBR')">
+                            <a>Processor's (with No CAP)</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
         </div>
     </div>
 </div>
-<div class="modal-body modalBlueBody" id="modal-body">
+<div class="modal-body modalBlueBody there-modal-body" id="modal-body">
     <kendo-grid id="dealProduct" [data]="gridData" [navigable]="true" [loading]="isLoading" [skip]="state.skip"
                 [sort]="state.sort" [sortable]="true" [resizable]="true"                
                 (dataStateChange)="dataStateChange($event)"
                 class="opUiContainer dashboard op-grid k-grid k-widget k-reorderable k-editable k-grid-lockedcolumns md"
                 data-role="grid">
         <ng-template kendoGridToolbarTemplate>
-            <button type="button" kendoGridExcelCommand icon="file-excel" class="excelText">Export to Excel</button>
+            <button type="button" kendoGridExcelCommand icon="file-excel" class="excelText differ-artho-excel">Export to Excel</button>
         </ng-template>
 
         <kendo-grid-column [headerClass]="{'headerClass': true}" field="HIER_VAL_NM" title="Product" width="160px"></kendo-grid-column>

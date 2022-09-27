@@ -40,12 +40,12 @@
     margin-left: -2px
 }
 
-.autofill-settings.modal-header.autofillhead {
+/*.autofill-settings.modal-header.autofillhead {
     padding: 15px;
-}
+}*/
 
 .autofill-settings.modal-body.settingbody {
-    padding: 15px;
+    /*padding: 15px;*/
     position: relative;
     width: 100%;
 }
@@ -114,6 +114,8 @@
     min-width: 750px !important;
     border: none;
     box-shadow: none;
+    margin-top: 0;
+    margin-bottom: 0;
 }
 
 .mattoggelbutton.mat-button-toggle-appearance-standard,

@@ -7,7 +7,7 @@
         <div *ngIf="isError || changeErrorFlag">
             <p>
                 <span style="color:red;">
-                    <label>Please Fix the below Errors</label>
+                    <label class="appro-label">Please Fix the below Errors</label>
                 </span>
             </p>
         </div>
@@ -15,22 +15,22 @@
             <div *ngFor="let endCust Of END_CUST_OBJ; let i = index">
                 <div class="col-md-12 endCustomerRowStyle" *ngIf="i == 0">
                     <div class="col-md-1 colStyle">
-                        <label>Is Unified</label>
+                        <label class="appro-label">Is Unified</label>
                     </div>
                     <div class="col-md-1 rplColStyle">
-                        <label>RPL Status</label>
+                        <label class="appro-label">RPL Status</label>
                     </div>
                     <div class="col-md-1 rightZeroPadding" *ngIf="!isAdmin">
-                        <label></label>
+                        <label class="appro-label"></label>
                     </div>
                     <div class="textCenterAlign" [ngClass]="{'col-md-5 bigWidth': isAdmin, 'col-md-4 smallWidth': !isAdmin}">
-                        <label>End Customer</label>
+                        <label class="appro-label">End Customer</label>
                     </div>
                     <div [ngClass]="{'col-md-3': isAny, 'col-md-4': !isAny, 'biggerWidth textCenterAlign' :(isAny && isAdmin), 'smallWidth textCenterAlign': (isAny && !isAdmin), 'bigWidth textRightAlign leftMargin':(!isAny && isAdmin),'mediumWidth textRightAlign': (!isAny && !isAdmin) }">
-                        <label>Country/Region</label>
+                        <label class="appro-label">Country/Region</label>
                     </div>
                     <div class="col-md-1 leftZeroPadding textRightAlign floatRight" *ngIf="END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'">
-                        <label>Exclude</label>
+                        <label class="appro-label">Exclude</label>
                     </div>
                 </div>
                 <div class="col-md-12" style="padding-bottom: 15px;">

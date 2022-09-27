@@ -59,7 +59,7 @@
                     [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
             </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRICE_STRATEGY" width="150" title="Pricing Stratergy">
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRICE_STRATEGY" width="150" title="Pricing Strategy">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                 let-filterService="filterService">
                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"

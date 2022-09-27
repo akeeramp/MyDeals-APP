@@ -123,7 +123,7 @@ export class pricingTableEditorComponent implements OnChanges {
                 }
                 else if (this.field && this.field == 'GEO_COMBINED') {
                     modalComponent = GeoSelectorComponent
-                    name = "Geo Selector";
+                    name = "Select Geo *";
                     data = { name: name, source: this.source, selVal: selVal };
                 }
                 else if (this.field && this.field == 'CUST_ACCNT_DIV') {
@@ -1040,6 +1040,7 @@ export class pricingTableEditorComponent implements OnChanges {
             height: '530px',
             width: '800px',
             data: data,
+            panelClass: 'oo-lapping-style'
         });
         dialogRef.afterClosed().subscribe(result => { });
     }

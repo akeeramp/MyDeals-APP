@@ -358,6 +358,7 @@ export class dealEditorComponent {
     openDealProductModal(dataItem) {
         const dialogRef = this.dialog.open(dealProductsModalComponent, {
             width: "1000px",
+            panelClass: 'deal-pmc-custom',
             data: {
                 dataItem: dataItem
             }

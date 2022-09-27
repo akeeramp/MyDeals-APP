@@ -99,7 +99,8 @@ textarea {
         border-color: #ebebeb !important;
         background-color: #ebebeb !important;
     }
-.mat-dialog-container{
+.historyModal mat-dialog-container,
+.attach-style mat-dialog-container {
     padding: 0px !important;
     overflow: hidden !important;
 }

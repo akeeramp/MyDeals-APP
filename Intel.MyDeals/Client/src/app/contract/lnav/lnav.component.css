@@ -474,3 +474,11 @@ kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li:last-child {
 kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper .k-tabstrip-items li:hover {
     background-color: #003c71 !important;
 }
+
+.there-btns .new-comp-style {
+    background-color: #00AEEF !important;
+}
+
+.mr-5 {
+    margin-right: 5px;
+}

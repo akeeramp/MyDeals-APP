@@ -386,3 +386,11 @@ body {
 .dropdown-toggle::after {
     content: none !important;
 }
+
+.admin-table-header kendo-grid .k-grid-header table thead tr th {
+    vertical-align: top;
+}
+
+.admin-table-header kendo-grid .k-grid-header table thead tr th span.k-cell-inner {
+    align-items: flex-start;
+}

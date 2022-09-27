@@ -5,7 +5,7 @@
     </h5>
     <i id="btnAnchordisable" (click)="isExpandable()" [ngClass]="isExpand?'intelicon-locked-outlined': 'intelicon-unlocked-outlined'" title={{isExpandTitle}}></i>
     <i id="btnEnlargeText" (click)="isFontSizeChange()" [ngClass]="isTextIncrease?'intelicon-increase-text-outlined': 'intelicon-decrease-text-outlined'" title={{isTextFontTitle}}></i>
-    <i id="btnClose" class="intelicon-close-max" (click)="close()" title="Click to Close"></i>
+    <i id="btnClose" class="intelicon-close-max btns-close-style" (click)="close()" title="Click to Close"></i>
 </div>
 <div class="modal-body modalBlueBody hresize common-messages" id="modal-body">
     <kendo-grid [data]="gridData" [loading]="loading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [sortable]="true" [resizable]="true" [scrollable]="true" (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)"

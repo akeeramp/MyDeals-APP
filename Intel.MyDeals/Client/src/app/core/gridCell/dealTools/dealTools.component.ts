@@ -341,6 +341,7 @@ export class dealToolsComponent{
         const dialogRef = this.dialog.open(fileAttachmentComponent, {
             maxWidth: '900px',
             height: '620px',
+            panelClass: 'attach-style',
             data: {
                 dataItem: this.dataItem
             }

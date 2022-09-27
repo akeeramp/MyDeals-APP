@@ -25,7 +25,7 @@
     margin-right: 5px;
 }
 
-#btnClose {
+.btns-close-style {
     float: right;
     background: transparent;
     border: 1px solid #00aeef;

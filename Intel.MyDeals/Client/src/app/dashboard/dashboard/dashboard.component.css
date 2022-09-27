@@ -157,10 +157,10 @@ h5 {
     width: 100%;
 }
 
-.k-dialog .k-dialog-buttongroup {
+/*.k-dialog .k-dialog-buttongroup {
     margin: 0;
     padding: 0;
-}
+}*/
 
 .k-dialog .k-dialog-buttongroup.k-dialog-button-layout-stretched .k-button:last-child {
     border-bottom-right-radius: 2px;
@@ -308,9 +308,17 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li span {
     font-weight: 500;
 }
 
-kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active {
-    background: #fff !important;
-}
+    kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li span.badge.error {
+        color: #fff !important;
+    }
+
+    kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li span.badge {
+        border-radius: 10px !important;
+    }
+
+    kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active {
+        background: #fff !important;
+    }
 
 kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active span {
     color: #00AEEF !important
@@ -441,4 +449,86 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
 
 .width-fixes .k-grid .k-grid-edit-row td deal-editor-edit .k-datepicker, .width-fixes .k-grid .k-grid-edit-row td deal-editor-edit .k-numerictextbox {
     width: 100%;
+}
+
+.kendo-grid-buttons.oppo-grids.physics-css.there-grid kendo-grid .k-grid-aria-root .k-grid-header table thead tr th span.k-cell-inner {
+    align-items: flex-start;
+}
+
+.oppo-grids kendo-grid .k-grid-aria-root .k-grid-header table thead tr th span.k-cell-inner {
+    align-items: flex-start;
+}
+
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal Start Date"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal End Date"],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="START_DT"],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="END_DT"],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="ECAP_PRICE"],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="VOLUME"],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="TERMS"] {
+    border-bottom: 3px solid rgb(0, 113, 197) !important;
+    border-bottom-color: rgb(0, 113, 197) !important;
+}
+
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="TRKR_NBR"] {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="TRKR_NBR"] kendo-grid-filter-menu .k-grid-filter {
+    top: 3px;
+    right: 0;
+}
+
+.htDatepickerHolder .pika-single .pika-table th,
+.htDatepickerHolder .pika-single .pika-table td {
+    height: 35px;
+    width: 35px;
+    text-align: center;
+}
+
+.htDatepickerHolder .pika-single .pika-button {
+    color: #444;
+    font-size: 14px;
+    line-height: 24px;
+    text-align: center;
+    background: #fff;
+}
+
+.htDatepickerHolder .pika-button:hover, .htDatepickerHolder .pika-row.pick-whole-week:hover .pika-button {
+    color: #444;
+    background: #eeeeee;
+    border-radius: 50%;
+}
+
+.htDatepickerHolder .is-selected .pika-button, .htDatepickerHolder .has-event .pika-button {
+    width: 35px;
+    height: 35px;
+    text-align: center !important;
+    border-radius: 50% !important;
+    background: #00aeef !important;
+    color: #fff !important;
+}
+
+.htDatepickerHolder .pika-table abbr {
+    color: #444;
+}
+
+.handsontable.listbox tr td.current, .handsontable.listbox tr:hover td {
+    background: #00aeef !important;
+    color: #fff;
+}
+
+.oo-lapping-style mat-dialog-container {
+    padding: 0 !important;
+    overflow: hidden !important;
+}
+
+.menu-one.nav li.dropdown ul.dropdown-menu li a:hover {
+    background-color: #003c71 !important;
+    border-radius: 3px;
+    color: #fff !important;
 }
