@@ -380,7 +380,7 @@ export class pricingTableEditorComponent implements OnChanges {
             vm.isLoading = false;
             vm.setBusy("", "", "", false);
 
-        }, 700);
+        }, 800);
     }
     getTemplateDetails() {
         // Get the Contract and Current Pricing Strategy Data

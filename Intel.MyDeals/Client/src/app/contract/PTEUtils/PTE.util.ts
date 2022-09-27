@@ -71,12 +71,10 @@ export class PTEUtil {
                 }
             } else if (itemField === 'percent') {
                 currentColumnConfig.type = 'numeric';
-
-                // Formatting
                 currentColumnConfig.numericFormat = {
-                    pattern: '0,0.00%',
+                    pattern: '0,0.00',
                     culture: 'en-US'
-                }            
+                }
             } else if (itemField === 'date') {
                 currentColumnConfig.type = 'date';
                 currentColumnConfig.dateFormat = this.defaultDateFormat;
@@ -105,12 +103,7 @@ export class PTEUtil {
         /* Is Required & Nullable */
         if (item.isRequired || !templateColumnFields[item.field].nullable) {
             currentColumnConfig.allowEmpty = false;
-
-            if (item.isRequired) {
-                item.title += ' *'; // Add `*` to header
-            }
         }
-
         /* Sorting */
         if (item.sortable) {
             currentColumnConfig.columnSorting = {

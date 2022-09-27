@@ -245,11 +245,18 @@ export class PTE_Load_Util {
             }
             else {
                 PTE_Config_Util.tenderRequiredColumns.forEach(function (x) {
-                    template.model.fields[x].label += " *";
+                    //checking the last index not *
+                    if(template.model.fields[x].label.charAt(template.model.fields[x].label.length - 1) !='*'){
+                        template.model.fields[x].label += " *";
+                    }
+                      
                 });
                 for (i = 0; i < template.columns.length; i++) {
                     if (PTE_Config_Util.tenderRequiredColumns.indexOf(template.columns[i].field) >= 0) {
-                        template.columns[i].title += " *";
+                           //checking the last index not *
+                        if(template.columns[i].title.charAt(template.columns[i].title.length - 1) !='*'){
+                            template.columns[i].title += " *";
+                        }
                     }
                 }
             }

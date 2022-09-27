@@ -728,9 +728,6 @@ export class PTE_CellChange_Util {
             if ((item.prop) && (item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'INCENTIVE_RATE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE' || item.prop == 'VOLUME' || item.prop == 'FRCST_VOL' || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT')) {
                 let val = this.hotTable.getDataAtRowProp(item.row, item.prop);
                 if (parseFloat(val) >= 0 || parseFloat(val) < 0) {
-                    if (item.prop == 'INCENTIVE_RATE') {
-                        this.hotTable.setDataAtRowProp(item.row, item.prop, parseFloat(val) / 100, 'no-edit');
-                    } else
                         this.hotTable.setDataAtRowProp(item.row, item.prop, parseFloat(val), 'no-edit');
                 } else {
                     this.hotTable.setDataAtRowProp(item.row, item.prop, '', 'no-edit');

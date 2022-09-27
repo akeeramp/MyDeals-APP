@@ -37,7 +37,7 @@ export class contractDetailsComponent {
     BACK_DATE_RSN; CONTRACT_TYPE;
     public c_Id: number;
     public templateData;
-    public Customers: Array<any>;
+    public Customers: Array<any>=[];
     public Customer_Divs: Array<any>;
     public ContractDataForm: FormGroup;
     public contractData;
