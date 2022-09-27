@@ -55,7 +55,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         let accrualRule = accrualEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Billings");
         let drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Consumption");
 
-        if (accrualRule && drainingRule && accrualEntries.length > 0 && drainingEntries.length > 0) { $scope.restrictGroupFlexOverlap = true; }
+        if (accrualEntries.length> 0 && drainingRule && drainingEntries.length > 0) { $scope.restrictGroupFlexOverlap = true; }
 
         
     }

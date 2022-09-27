@@ -2624,6 +2624,11 @@
                 if (curPricingTableData.length > 0 && sData != undefined) {
 
                     $scope.OVLPFlexPdtPTRUSRPRDError = false;
+
+                    let drainEntries = sData.filter((val) => val.FLEX_ROW_TYPE == 'Draining')
+                    $scope.restrictGroupFlexOverlap = drainEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Consumption");
+
+
                     if (!$scope.restrictGroupFlexOverlap) {
                         sData = $scope.validateOVLPFlexProduct(sData);    //TWC3179-1217
                     }
@@ -2655,6 +2660,10 @@
                 if (gData !== undefined && gData !== null) {                    
                     //validate flex overlap products for DE
                     $scope.OVLPFlexPdtPTRUSRPRDError = false;
+
+                    let drainEntriesWip = gData.filter((val) => val.FLEX_ROW_TYPE == 'Draining')
+                    $scope.restrictGroupFlexOverlap = drainEntriesWip.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Consumption");
+
                     if (!$scope.restrictGroupFlexOverlap) {
                         gData = $scope.validateOVLPFlexProduct(gData);// TWC3179-1217
                     }
