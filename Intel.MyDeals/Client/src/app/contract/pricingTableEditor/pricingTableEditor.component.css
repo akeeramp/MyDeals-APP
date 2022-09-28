@@ -113,10 +113,10 @@ kendo-editor .k-editor-content {
     height: 220px;
 }
 
-kendo-toolbar-renderer {
+/*kendo-toolbar-renderer {
     border-color: inherit;
     margin-right: -945px;
-}
+}*/
 
 .k-i-indent-decrease::before {
     content: "\e616";
@@ -170,6 +170,7 @@ kendo-toolbar-renderer {
 
 .all-spread #spreadsheet {
     width: 100% !important;
+    z-index:1;
 }
 
 .mat-dialog-container {

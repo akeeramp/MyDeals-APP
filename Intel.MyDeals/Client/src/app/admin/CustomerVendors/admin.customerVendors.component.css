@@ -68,9 +68,9 @@ a {
     padding-top: 0px !important;
 }
 
-kendo-grid.grid-heightsize {
+/*kendo-grid.grid-heightsize {
     height: 652px;
-}
+}*/
 
 .space-remove-btw-two {
     margin-left: 0.16em !important;
@@ -80,4 +80,8 @@ kendo-grid.grid-heightsize {
 .delete-editorspaceremove {
     margin-left: 0.16em !important;
     margin-right: -1em !important;
+}
+
+.remove-canceloutline {
+    margin-left: -1.14em !important;
 }

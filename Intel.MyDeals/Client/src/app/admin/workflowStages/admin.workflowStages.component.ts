@@ -21,7 +21,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 @Component({
     selector: "adminWorkflowStages",
     templateUrl: "Client/src/app/admin/workflowStages/admin.workflowStages.component.html",
-    //styleUrls: ['Client/src/app/admin/workflowStages/admin.workflowStages.component.css']
+    styleUrls: ['Client/src/app/admin/workflowStages/admin.workflowStages.component.css']
 })
 export class adminWorkflowStagesComponent {
     constructor(private workflowStageSvc: workflowStagesService, private loggerSvc: logger) {

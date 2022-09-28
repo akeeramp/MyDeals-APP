@@ -1,0 +1,27 @@
+﻿.header-pos-fix {
+    padding-top: 45px !important;
+    padding-left: 15px !important;
+}
+
+.grid-lr-size {
+    padding-right: 0px !important;
+    padding-top: 10px !important;
+    padding-left: 15px !important;
+}
+
+.remove-spacedelete {
+    margin-left: 0.16em !important;
+    margin-right: -1em !important;
+}
+
+/*kendo-grid.grid_height {
+    height: 652px;
+}*/
+
+/*kendo-grid.boxsize {
+    height: 652px;
+}*/
+
+.removeoutline-space {
+    margin-left: -1.14em !important;
+}

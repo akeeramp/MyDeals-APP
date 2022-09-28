@@ -386,7 +386,8 @@ kendo-slider.before-ques .k-slider-wrap .k-slider-track-wrap ul li span.k-label:
 kendo-slider.before-ques .k-slider-wrap .k-slider-track-wrap ul li span.k-label {
     position: relative;
     display: inline-block;
-    padding-top: 10px;
+    padding-top: 12px;
+    font-size: 12px;
 }
 
 .ss-loading-overlay {
@@ -531,4 +532,309 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     background-color: #003c71 !important;
     border-radius: 3px;
     color: #fff !important;
+}
+
+.oppo-grids.space-table-all kendo-grid .k-grid-aria-root .k-grid-header table thead tr th {
+    background-color: #efefef;
+    vertical-align: middle;
+    border-color: #dee2e6;
+}
+
+.oppo-grids.space-table-all .k-grid .k-grid-header-locked,
+.oppo-grids.space-table-all .k-grid .k-grid-content-locked td,
+.oppo-grids.space-table-all .k-grid .k-grid-content-locked {
+    border-color: #dee2e6;
+}
+
+.dateclass.k-datepicker .k-picker-wrap.k-state-focused {
+    border-color: #e7e7e7 !important;
+    background-color: #fafafa !important;
+    box-shadow: none !important;
+}
+
+.dateclass.k-datepicker {
+    border-bottom: 2px solid #0071c5 !important;
+    background: #fafafa !important;
+}
+
+    .dateclass.k-datepicker .k-select {
+        background-color: transparent !important;
+        border: 0px !important;
+        color: #727578 !important;
+    }
+
+.dateclass.k-picker-wrap.k-state-default > .k-select {
+    border-color: #fafafa;
+}
+
+.dateclass.k-datepicker .k-picker-wrap, .k-timepicker .k-picker-wrap, .k-datetimepicker .k-picker-wrap, .k-dateinput .k-dateinput-wrap {
+    border-color: #ced4da4f;
+    color: #495057;
+    background-color: #f1ebeb00 !important;
+    font-family: 'Intel Clear';
+}
+
+    .dateclass.k-datepicker .k-picker-wrap:hover {
+        background-color: #ffffff !important;
+    }
+
+.dateclass.k-datepicker .k-input:hover {
+    background-color: #ffffff !important;
+}
+
+.dateclass .k-icon:hover {
+    color: #878383d9 !important;
+}
+
+.newbotborder.k-dropdown .k-dropdown-wrap, .newbotborder .k-dropdowntree .k-dropdown-wrap {
+    border-color: #ced4da38 !important;
+    background-color: #fafafa !important;
+    border-bottom: 2px solid #0071c5 !important;
+    box-shadow: none !important;
+    border-radius: 0px !important
+}
+
+    .newbotborder.k-dropdown .k-dropdown-wrap:hover {
+        background: #fff !important
+    }
+
+    .newbotborder.k-dropdown .k-dropdown-wrap .k-select {
+        color: #727578b0 !important
+    }
+
+.newbotborder .k-icon:hover {
+    color: #444 !important;
+}
+
+.noborderclass.k-combobox .k-dropdown-wrap.k-state-focused {
+    border-color: #ced4da6b !important;
+    background-color: #ffffff !important;
+    box-shadow: none !important;
+}
+
+.noborderclass.k-combobox .k-dropdown-wrap {
+    border-color: #ced4da6b !important;
+}
+
+    .noborderclass.k-combobox .k-dropdown-wrap:hover {
+        box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+        background-color: none !important
+    }
+
+.noborderclass.k-combobox .k-select {
+    border-color: #f0f0f087 !important;
+    color: #727578b0 !important;
+    border-width: 0px !important;
+    background-color: #dbdbdb2e !important;
+}
+
+    .noborderclass.k-combobox .k-select:hover {
+        background-color: transparent !important;
+        color: #727579 !important;
+    }
+
+.noborderclass.k-combobox .k-icon:hover {
+    color: #444 !important;
+}
+
+.noborderclass.k-combobox .k-dropdown-wrap .k-select {
+    width: 38px !important;
+}
+
+.borderless.k-textbox.k-state-focused {
+    border-color: #ced4da6b !important;
+    background-color: #ffffff !important;
+    box-shadow: none !important;
+}
+
+.borderless.k-textbox {
+    border-color: #ced4da6b !important;
+}
+
+    .borderless.k-textbox:hover, .borderless.k-textbox:focus {
+        box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+        background-color: none !important
+    }
+
+.dateboxborder.k-numerictextbox .k-numeric-wrap {
+    color: #495057 !important;
+    border-color: #f0f0f0 !important;
+    font-family: 'Intel Clear';
+    /* border-bottom: 2px solid #0071c5 !important;*/
+}
+
+    .dateboxborder.k-numerictextbox .k-numeric-wrap:hover {
+        background-color: none !important;
+        box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+        color: #444 !important;
+    }
+
+    .dateboxborder.k-numerictextbox .k-numeric-wrap.k-state-focused {
+        border-color: #e7e7e7 !important;
+        background-color: #ffffff !important;
+        box-shadow: none !important;
+    }
+
+.dateboxborder.k-numerictextbox .k-select {
+    border-color: none !important;
+    color: #727578ed !important;
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.dateboxborder.k-numerictextbox .k-link .k-icon:hover {
+    color: #444 !important;
+}
+
+.dateboxborder.k-numerictextbox .k-link:hover {
+    background: none !important
+}
+
+.dateboxborder.k-numerictextbox {
+    font-size: 12px !important;
+    width: 79% !important
+}
+
+.sliderwidth.k-slider .k-button {
+    border-radius: 50%;
+    background: none;
+    color: gray;
+    border: none;
+}
+
+    .sliderwidth.k-slider .k-button .k-icon:hover {
+        color: #444 !important;
+    }
+
+.sliderwidth.k-slider .k-draghandle {
+    color: #ffffff !important;
+    background-color: #0071c5 !important;
+    border-radius: 50% !important;
+}
+
+.sliderwidth.k-slider .k-slider-selection {
+    background-color: #0071c5 !important;
+    height: 3px !important
+}
+
+.sliderwidth.k-slider-horizontal {
+    height: 30px !important;
+    font-family: 'Intel Clear' !important;
+    width: 180px !important;
+}
+
+    .sliderwidth.k-slider-horizontal .k-slider-buttons .k-slider-track {
+        /*left: 36px;*/
+        height: 3px !important;
+    }
+
+.sliderwidth.k-slider .k-slider-track {
+    background-color: #c6c7c8;
+}
+
+.sliderwidth .k-draghandle {
+    width: 9px;
+    height: 9px;
+}
+
+.sliderwidth.k-slider-horizontal .k-tick {
+    background-image: none !important
+}
+
+.mybuttondialog .k-dialog .k-dialog-buttongroup .k-button {
+    height: 67px !important;
+    width: -51px !important;
+}
+
+.mybuttondialog .k-dialog-buttongroup .okbutton.k-button:hover {
+    background-color: #0071c5 !important;
+    color: #ffff !important;
+}
+
+.mybuttondialog .k-dialog .k-dialog-buttongroup, .k-dialog .k-dialog-buttongroup .k-button {
+    border-width: 0 !important;
+    border-radius: 0 !important;
+}
+
+.mybuttondialog .k-dialog-buttongroup {
+    border-color: #dee2e6;
+    padding: 0 !important;
+}
+
+.contentborder .k-window-content {
+    padding: 0px !important
+}
+
+.kuploadaction.k-upload .k-dropzone .k-dropzone-hint {
+    visibility: collapse !important;
+}
+
+.kuploadaction.k-upload .k-upload-button {
+    min-width: 7.41em !important;
+    border-color: #fafafa !important;
+    color: #444 !important;
+    font-family: 'Intel Clear';
+    background-color: #fafafa !important;
+    font-size: 15px !important;
+    border: none !important;
+    font-weight: 400 !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+}
+
+    .kuploadaction.k-upload .k-upload-button:hover {
+        background-color: #eee !important
+    }
+
+.kuploadaction.k-upload .k-dropzone {
+    background: transparent !important;
+    border-style: solid !important;
+    border-width: 0 !important;
+    padding: 10px !important;
+}
+
+.enddateblock .k-dropdown .k-dropdown-wrap {
+    border-color: #ced4da38 !important;
+    background-color: #fafafa !important;
+    box-shadow: none !important;
+    border-radius: 0px !important
+}
+
+    .enddateblock .k-dropdown .k-dropdown-wrap:hover {
+        background-color: transparent !important;
+        border-color: #ced4da57 !important
+    }
+
+.enddateblock kendo-dropdownlist {
+    background: #fafafa !important;
+    border-color: transparent;
+}
+
+.enddateblock .k-icon:hover {
+    color: #444 !important;
+}
+
+.enddateblock .k-dropdown .k-dropdown-wrap .k-select {
+    color: #727578b0 !important
+}
+
+.divisionblock.k-multiselect .k-multiselect-wrap {
+    box-shadow: none !important;
+}
+
+.divisionblock.k-multiselect.k-state-focused > .k-multiselect-wrap {
+    border-color: #eee !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+}
+
+.dateclass.k-datepicker kendo-dateinput {
+    background: transparent;
+}
+
+.dateboxborder input:focus-within, .dateboxborder:focus-within {
+    border-color: #ced4da6b !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+}
+
+.sliderwidth.k-slider .k-button:focus {
+    box-shadow: none;
 }

@@ -20,7 +20,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 @Component({
     selector: "workFlow",
     templateUrl: "Client/src/app/admin/workFlow/admin.workFlow.component.html",
-    //styleUrls: ['Client/src/app/admin/productAlias/admin.productAlias.component.css']
+    styleUrls: ['Client/src/app/admin/workFlow/admin.workFlow.component.css']
 })
 
 export class adminWorkFlowComponent {

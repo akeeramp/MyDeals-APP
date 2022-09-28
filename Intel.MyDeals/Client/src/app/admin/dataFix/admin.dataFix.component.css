@@ -217,11 +217,6 @@
     font-weight:bold;
 }
 
-.dataFix {
-    padding-left: 35px;
-    margin-top: 50px
-}
-
 .messageBox {
     color: #FC4C02;
     font-size: 15px
@@ -231,4 +226,34 @@
     font-weight: bold;
     color: red;
     padding-left: 33px;
+}
+
+.dataFix {
+    padding-left: 15px !important;
+    margin-top: 50px !important;
+}
+
+.text-alignfix {
+    margin-top: -5px;
+    margin-bottom: -1.2rem;
+    line-height: 1.2;
+    font-weight: 500;
+}
+
+.grid-table-lr {
+    padding-left: 20px !important;
+    padding-right: 5px !important;
+}
+
+/*kendo-grid.increase-gridsize {
+    height: 682px;
+}*/
+
+.set-bottom-left {
+    padding-left: 20px;
+    margin-bottom: -1rem;
+}
+
+.fixed-bottom-space {
+    margin-bottom: -1.3rem;
 }
