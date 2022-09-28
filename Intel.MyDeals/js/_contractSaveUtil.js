@@ -1205,7 +1205,7 @@ contractSaveUtil.validateDEdata = function (gData,contractData, curPricingStrate
                 //Calculating Accrual Line
                 if (Object.keys(dictGroupTypeAcr).length == 0) {
                     gData.map(function (data, index) {
-                        if (data.FLEX_ROW_TYPE.toLowerCase() == 'accrual') {
+                        if (data.FLEX_ROW_TYPE == 'Accrual') {
                             dictGroupTypeAcr[data["DEAL_COMB_TYPE"]] = index;
                         }                        
                     });
@@ -1213,7 +1213,7 @@ contractSaveUtil.validateDEdata = function (gData,contractData, curPricingStrate
                 //Calculating Draining Line
                 if (Object.keys(dictGroupTypeDrn).length == 0) {
                     gData.map(function (data, index) {
-                        if (data.FLEX_ROW_TYPE.toLowerCase() == 'draining') {
+                        if (data.FLEX_ROW_TYPE == 'Draining') {
                             dictGroupTypeDrn[data["DEAL_COMB_TYPE"]] = index;
                         }
                     });
