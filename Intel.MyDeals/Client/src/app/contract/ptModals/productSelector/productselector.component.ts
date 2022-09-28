@@ -1029,6 +1029,7 @@ export class ProductSelectorComponent {
     }
     // When user clicks on the breadcrumb
     selectPath(index: number, dontClearSearch?) {
+        this.hideSelection = false;
         this.showSuggestions = false;
         if (dontClearSearch !== undefined && !dontClearSearch) {
             this.userInput = "";
@@ -1046,6 +1047,7 @@ export class ProductSelectorComponent {
         if (this.drillDownPrd !== "Select") {
             this.drillDownPrd = "Select";
             this.showSuggestions = true;
+            this.hideSelection = true;
         }
     }
 

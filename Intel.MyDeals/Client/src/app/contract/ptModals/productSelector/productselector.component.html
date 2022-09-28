@@ -259,7 +259,7 @@
                 </kendo-grid>
             </div>
             <div *ngIf="!showTree && !showSuggestions">
-                <div>
+                <div *ngIf="!hideSelection">
                     <div class="row" style="margin:2px; margin-top: 40px">
                         <ng-container *ngFor="let p of items | orderBy:'name'; let last = last; let index=index">
                             <div class="clearfix" *ngIf="index % 4 == 0"></div>
@@ -273,6 +273,105 @@
                                 </div>
                             </div>
                         </ng-container>
+                    </div>
+                </div>
+                <div *ngIf="hideSelection">
+                    <div class="row" *ngIf="searchItems.length > 0" style="padding-left:10px;padding-right:10px;font-size:16px;">
+                        <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
+                            <div class="btn-group" *ngFor="let p of searchItems | orderBy:'name' " role="group">
+                                <button type="button" title="{{p.name}}" [ngClass]="{'noborder':$last}" (click)="selectsearchItem(p)" class="btn btn-default">{{p.name}}</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="showSearchResults">
+                        <kendo-grid [data]="gridData" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
+                                    [resizable]="true" (dataStateChange)="dataStateChange($event)">
+                            <kendo-grid-column width="65px" [columnMenu]="false">
+                                <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+                                    <div class='dealTools'>
+                                        <input type='checkbox' class='grid-link-checkbox with-font' (click)="toggleSelectAll($event)">
+                                    </div>
+                                </ng-template>
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <div class='dealTools'>
+                                        <input type='checkbox' class='grid-link-checkbox with-font' (click)="selectProduct(dataItem)" [(ngModel)]="dataItem.selected">
+                                    </div>
+                                </ng-template>
+                            </kendo-grid-column>
+                            <ng-template ngFor [ngForOf]="gridColumnsProduct" let-column>
+                                <kendo-grid-column [headerClass]="{ 'headerClass': true }" field="{{ column.field }}" title="{{ column.title }}" [hidden]="column.hidden" [width]="column.width">
+                                    <!-- Link for processor number -->
+                                    <div *ngIf="column.field == 'PCSR_NBR'">
+                                        <ng-template kendoGridCellTemplate let-dataItem>
+                                            <a *ngIf='dataItem.PRD_ATRB_SID == 7006' (click)='gridSelectItem(dataItem)'>{{dataItem.PCSR_NBR}}</a>
+                                            <div *ngIf='dataItem.PRD_ATRB_SID != 7006'>{{dataItem.PCSR_NBR}}</div>
+                                        </ng-template>
+                                    </div>
+                                    <!-- Link for deal product name -->
+                                    <div *ngIf="column.field == 'DEAL_PRD_NM'">
+                                        <ng-template kendoGridCellTemplate let-dataItem>
+                                            <a *ngIf='allowMMSelection(dataItem)' (click)='gridSelectItem(dataItem)'>{{dataItem.DEAL_PRD_NM}}</a>
+                                            <div *ngIf='!allowMMSelection(dataItem)'>{{dataItem.DEAL_PRD_NM}}</div>
+                                        </ng-template>
+                                    </div>
+                                    <div *ngIf="column.field == 'PCSR_NBR'">
+                                        <ng-template kendoGridCellTemplate let-dataItem>
+                                            <a *ngIf='dataItem.PRD_ATRB_SID == 7006' (click)='gridSelectItem(dataItem)'>{{dataItem.PCSR_NBR}}</a>
+                                            <div *ngIf='dataItem.PRD_ATRB_SID != 7006'>{{dataItem.PCSR_NBR}}</div>
+                                        </ng-template>
+                                    </div>
+                                    <!-- Template for `Cap Info` column -->
+                                    <div *ngIf="column.field == 'CAP'">
+                                        <ng-template kendoGridCellTemplate let-dataItem>
+                                            <!-- Popover Template -->
+                                            <ng-template #popoverContent>
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
+                                                    </div>
+                                                    <div class="row">
+                                                        <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
+                                                    </div>
+                                                </div>
+                                            </ng-template>
+
+                                            <!-- Cell Content -->
+                                            <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
+                                                <!-- WIP: Insert CAP Info cell design here -->
+                                                <div *ngIf="dataItem.CAP == 'No CAP'" class="uiControlDiv isSoftWarnCell">
+                                                    {{ dataItem.CAP }}
+                                                </div>
+                                                <div *ngIf="dataItem.CAP !== 'No CAP'" style="text-align: center;">{{ dataItem.CAP}}</div>
+                                            </div>
+                                        </ng-template>
+                                    </div>
+
+                                    <!-- Template for `YCS2 Info` column -->
+                                    <div *ngIf="column.field == 'YCS2'">
+                                        <ng-template kendoGridCellTemplate let-dataItem>
+                                            <!-- Popover Template -->
+                                            <ng-template #popoverContent>
+                                                <div class="container">
+                                                    <div class="row">
+                                                        <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
+                                                    </div>
+                                                    <div class="row">
+                                                        <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
+                                                    </div>
+                                                </div>
+                                            </ng-template>
+
+                                            <!-- Cell Content -->
+                                            <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent" style="text-align: center;">
+                                                <!-- WIP: Insert CAP Info cell design here -->
+                                                {{ dataItem.YCS2}}
+                                            </div>
+
+                                        </ng-template>
+                                    </div>
+                                </kendo-grid-column>
+                            </ng-template>
+                        </kendo-grid>
                     </div>
                 </div>
             </div>
