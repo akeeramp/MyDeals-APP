@@ -2,7 +2,7 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <div [ngClass]="{'targetGeoModal': isTgrRgn}">
     <div class="modal-header upper-model-header" *ngIf="!isTgrRgn">
-        <h3 class="modal-title" id="modal-title">Select Market Segment *</h3>
+        <h3 class="modal-title" id="modal-title">{{disTitle}}</h3>
     </div>
     <loading-panel-angular id="multiSelectModalLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>
     <div class="container-fluid overflow modal-body">

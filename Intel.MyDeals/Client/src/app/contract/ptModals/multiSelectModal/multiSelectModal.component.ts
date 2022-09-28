@@ -23,7 +23,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
     ) {
         dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG  
     }
-
+    private disTitle:string='Select Market Segment *';
     private checkedKeys: any[] = [];
     private key = "DROP_DOWN";
     private mrktSeg = "MRKT_SEG";
@@ -101,9 +101,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
                             this.checkedKeys.push(selecteddata[0][this.multiSelectPopUpModal.opLookupText]);
                         }
                     });
-
                 }
-                this.isLoading = false;
             }
             else {
                 if (this.colName == "DEAL_SOLD_TO_ID")
@@ -111,6 +109,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
                 else
                     this.isEmptyList = true;
             }
+            this.isLoading = false;
         }, error => {
             this.loggerSvc.error('dealEditorComponent::readMultiSelectModal::getDropDownResult:: service', error);
             this.isLoading = false;
@@ -194,6 +193,9 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
     }
 
     ngOnInit() {
+        if(this.modalData && this.modalData.items && this.modalData.items.label){
+            this.disTitle=`Select ${this.modalData.items.label}`;
+        }
         this.multiSelectPopUpModal = this.modalData.items;
         this.colName = this.modalData.colName;
         this.placeholderText = "Click to Select...";

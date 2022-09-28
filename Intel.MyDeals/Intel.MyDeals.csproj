@@ -942,7 +942,7 @@
     <Content Include="Client\src\app\admin\vistex\admin.vistexIntegrationLog.component.html" />
     <Content Include="Client\src\app\admin\workflowStages\admin.workflowStages.component.css" />
     <Content Include="Client\src\app\admin\workflowStages\admin.workflowStages.component.html" />
-    <Content Include="Client\src\app\admin\workFlow\admin.productAlias.component.css" />
+    <Content Include="Client\src\app\admin\workFlow\admin.workFlow.component.css" />
     <Content Include="Client\src\app\admin\workFlow\admin.workFlow.component.html" />
     <Content Include="Client\src\app\advanceSearch\globalSearch.directive.js" />
     <Content Include="Client\src\app\advanceSearch\globalSearch.html" />

@@ -80,8 +80,8 @@ export class contractDetailsComponent {
     private deleteAttachmentParams: any = {};
     private isLoading: boolean = false;
     private msgType: string = "";
-    private spinnerMessageHeader: string = "";
-    private spinnerMessageDescription: string = "";
+    private spinnerMessageHeader: string = "Contract Details";
+    private spinnerMessageDescription: string = "Contract Details Loading..";
     private isBusyShowFunFact: boolean = true;
     private state: State = {
         skip: 0,
@@ -755,6 +755,7 @@ export class contractDetailsComponent {
     }
     ngOnInit() {
         try {
+            this.isLoading=true;
             //loading customer data and dropdowns Data
             this.contractDetailsSvc.GetMyCustomerNames().subscribe((response: Array<any>) => {
                 forkJoin({
@@ -805,10 +806,15 @@ export class contractDetailsComponent {
                                     this.contractData.CUST_ACCNT_DIV_UI = !this.contractData["CUST_ACCNT_DIV"] ? "" : this.contractData["CUST_ACCNT_DIV"].split("/");
                                     this.updateCorpDivision(this.copyContractData.CUST_MBR_SID);
                                     this.pastDateConfirm(this.contractData.START_DT);  // Check for Backdate Reason
+                                    //loader disable
+                                    this.isLoading=false;
                                 },(err)=>{
+                                    this.isLoading=false;
                                     this.loggerSvc.error("Unable to fetch contract data","Error",err);
                                 });
                         },(err)=>{
+                              //loader disable
+                              this.isLoading=false;
                             this.loggerSvc.error("Unable to fetch template data","Error",err);
                         });
                     } else {
@@ -827,8 +833,12 @@ export class contractDetailsComponent {
                                     this.contractData = this.initContract();
                                     this.loadContractDetails();
                                     this.getCurrentQuarterDetails();
+                                     //loader disable
+                                     this.isLoading=false;
                                 },(err)=>{
                                     this.loggerSvc.error("Unable to fetch template data","Error",err);
+                                     //loader disable
+                                     this.isLoading=false;
                                 });
                         }
                         else { //condition for existing contract
@@ -841,8 +851,12 @@ export class contractDetailsComponent {
                                     this.loadContractDetailsData();
                                     this.getTimeLineDetails();
                                     this.getFileAttachmentDetails(this.c_Id);
+                                     //loader disable
+                                     this.isLoading=false;
                                 },(err)=>{
                                     this.loggerSvc.error("unable to fetch contract data","Error",err);
+                                     //loader disable
+                                     this.isLoading=false;
                                 });
                         }
                     }

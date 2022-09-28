@@ -13,6 +13,7 @@ import { ProductSelectorComponent } from '../ptModals/productSelector/productsel
 import { ProductCorrectorComponent } from '../ptModals/productCorrector/productcorrector.component';
 import { GeoSelectorComponent } from '../ptModals/geo/geo.component';
 import { multiSelectModalComponent } from '../ptModals/multiSelectModal/multiSelectModal.component';
+import { kendoCalendarComponent } from '../ptModals/kendoCalenderModal/kendoCalendar.component';
 import { SelectEditor } from './custSelectEditor.class';
 import { forkJoin } from 'rxjs';
 import { CellMeta, CellSettings, GridSettings } from 'handsontable/settings';
@@ -136,10 +137,17 @@ export class pricingTableEditorComponent implements OnChanges {
                     name = "Select Bid Geo";
                     data = { name: name, source: this.source, selVal: selVal };
                 }
-                else {
+                else if(this.field && this.field == 'MRKT_SEG'){
                     modalComponent = multiSelectModalComponent;
                     height = "500px"
                     width = "700px";
+                    name = this.field;
+                    data = { colName: name, items: { 'data': this.source }, cellCurrValues: selVal };
+                }
+                else{
+                    modalComponent = kendoCalendarComponent;
+                    height = "400px"
+                    width = "500px";
                     name = this.field;
                     data = { colName: name, items: { 'data': this.source }, cellCurrValues: selVal };
                 }
@@ -434,6 +442,9 @@ export class pricingTableEditorComponent implements OnChanges {
             //adding for cell management in cell this can move to seperate function later
             this.ColumnConfig.push(currentColumnConfig);
             if (item.field == 'PTR_USER_PRD' || item.field == 'GEO_COMBINED' || item.field == 'MRKT_SEG' || item.field == 'QLTR_BID_GEO' || item.field == 'CUST_ACCNT_DIV') {
+                currentColumnConfig.editor = this.custCellEditor;
+            }
+            if(currentColumnConfig && currentColumnConfig.type=='date'){
                 currentColumnConfig.editor = this.custCellEditor;
             }
             this.columns.push(currentColumnConfig);
