@@ -32,7 +32,11 @@
                         [decimals]="0" format="#" [(ngModel)]="massUpdateData['numericValue']"></kendo-numerictextbox>
                 </div>
                 <div class="row" *ngIf="showTextBox"><label style="width:170px">New Text Value: </label>
-                    <kendo-textbox [style.width.px]="488" [(ngModel)]="massUpdateData['textValue']"></kendo-textbox>
+                    <kendo-textbox [style.width.px]="488" [(ngModel)]="massUpdateData['textValue']"
+                                   [ngStyle]="{'border':isError['textValue']?'1px solid red':'','padding':0}"></kendo-textbox>
+                    <kendo-formerror style="padding-left:170px" *ngIf="isError['textValue']">
+                        {{errorMsg['textValue']}}
+                    </kendo-formerror>
                 </div>
                 <div class="row" *ngIf="showDropDown"><label style="width:170px">New Dropdown Value: </label>
                     <kendo-dropdownlist style="width:488px;height:fit-content" [data]="attrValues"

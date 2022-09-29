@@ -200,6 +200,21 @@ export class dealMassUpdateComponent {
             this.errorMsg["multiSelectValue"] = "Please Select Valid Values";
             this.isDataValid = false;
         }
+
+        if (this.massUpdateData.field.ATRB_LBL == "System Price Point") {
+            if (this.massUpdateData.textValue != undefined && this.massUpdateData.textValue != null && this.massUpdateData.textValue != "") {
+                if (!Number.isNaN(Number(this.massUpdateData.textValue))) {
+                    if (parseFloat(this.massUpdateData.textValue) <= 0.00) {
+                        this.massUpdateData.textValue = 0.01;
+                    }
+                }
+                else {
+                    this.isError["textValue"] = true;
+                    this.errorMsg["textValue"] = "Please Enter Valid Value. Valid Range: 0.01 - 1,000,000";
+                    this.isDataValid = false;
+                }
+            }
+        }
     }
 
     dataStateChange(state: DataStateChangeEvent): void {

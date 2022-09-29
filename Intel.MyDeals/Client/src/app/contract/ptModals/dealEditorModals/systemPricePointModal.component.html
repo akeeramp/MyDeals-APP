@@ -19,7 +19,7 @@
                 <kendo-numerictextbox [(ngModel)]="price"
                                       min="0.01" max="1000000"
                                       [format]="c2"
-                                      [autoCorrect]="autoCorrect"
+                                      autoCorrect="true"
                                       (keydown)="onKeyDown($event)"
                                       [value]="price">
                 </kendo-numerictextbox>

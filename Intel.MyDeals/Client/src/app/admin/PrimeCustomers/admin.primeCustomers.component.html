@@ -27,8 +27,7 @@
                 <ng-template kendoGridCellTemplate let-isNew="isNew">
                     <div class="text-center"><button id="command-icon" class="k-command-icon" kendoGridEditCommand><span
                                 class="k-icon k-i-edit k-icon-sm"></span></button></div>
-                    <div class="text-center"><button id="command-icon" class="k-command-icon" kendoGridSaveCommand
-                            [disabled]="formGroup?.invalid"><span
+                    <div class="text-center"><button id="command-icon" class="k-command-icon" kendoGridSaveCommand><span
                                 class="k-icon k-i-check k-icon-sm"></span></button><button id="command-icon"
                             class="k-command-icon" kendoGridCancelCommand><span
                                 class="k-icon k-i-cancel-outline k-icon-sm"></span></button></div>
@@ -125,7 +124,7 @@
             </kendo-grid-column>
         </kendo-grid>
         <kendo-dialog *ngIf="isDialogVisible" (close)="saveCancel()">
-            <p class="kendo-dialog-message">{{errorMsg}}</p>
+            <p class="kendo-dialog-message" style="white-space:pre-wrap;text-align:left">{{errorMessage}}</p>
             <kendo-dialog-actions><button class='k-button' (click)="saveConfirmation()">OK</button><button
                     class='k-button' *ngIf="cancelConfirm" (click)="saveCancel()">CANCEL</button></kendo-dialog-actions>
         </kendo-dialog>

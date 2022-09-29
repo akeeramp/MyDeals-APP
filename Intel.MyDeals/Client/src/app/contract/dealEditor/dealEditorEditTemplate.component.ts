@@ -29,6 +29,7 @@ export class dealEditorEditTemplateComponent {
     private kitEcapdim = "20_____1";
     private dim = "10___";
     private fields: any;
+    private autoCorrect: boolean = true;
     translateDimKey(key) {
         switch (key) {
             case "20_____1":

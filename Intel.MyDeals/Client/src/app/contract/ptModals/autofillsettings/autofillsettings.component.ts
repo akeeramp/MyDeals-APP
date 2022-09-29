@@ -225,6 +225,15 @@ export class AutoFillComponent {
             this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === 0) {
             this.opValidMsg = "Overarching Maximum Volume must be blank or > 0";
         } else {
+            if (this.autofillData.ISTENDER) {
+                // For Tenders, default to blank and let priceTable.controller.js handle setting it
+                if (this.autofillData.DEFAULT.AR_SETTLEMENT_LVL.value !== "") {
+                    this.autofillData.DEFAULT.AR_SETTLEMENT_LVL.value = "";
+                }
+                if (this.autofillData.DEFAULT.PERIOD_PROFILE.value !== "Yearly") {
+                    this.autofillData.DEFAULT.PERIOD_PROFILE.value = "Yearly";
+                }
+            }
             this.isLoading = true;
             this.setBusy("Saving...", "Saving your data...", "Info", false);
             if (this.currPricingTable == null) {
@@ -373,7 +382,15 @@ export class AutoFillComponent {
         if (this.contractData != null) {
             this.custID = this.contractData.CUST_MBR_SID;
         }
+        if (this.autofillData.ISTENDER) {
+            this.autofillData.DEFAULT['REBATE_TYPE'].isHidden = true;
+            this.autofillData.DEFAULT['AR_SETTLEMENT_LVL'].isHidden = true;
+            this.autofillData.DEFAULT['PERIOD_PROFILE'].isHidden = true;
+            this.autofillData.DEFAULT.PAYOUT_BASED_ON.opLookupUrl = "/api/Dropdown/GetConsumptionPayoutDropdowns/PAYOUT_BASED_ON";
+            this.autofillData.DEFAULT.PROGRAM_PAYMENT.opLookupUrl = "/api/Dropdown/GetProgPaymentDropdowns/PROGRAM_PAYMENT";
+        }
         this.dropdownResponses = await this.getAllDropdownValues();
+        
         let geoVals = this.autofillData.DEFAULT ? this.autofillData.DEFAULT['GEO_COMBINED'].value : '';
         this.autofillData.DEALTYPE_DISPLAY = this.dealType.replace("_", "").toUpperCase();
         this.isBlend = (geoVals?.indexOf("[") >= 0);

@@ -87,7 +87,7 @@ export class GridUtil {
         tmplt += '<div class="uiControlDiv isReadOnlyCell">';
         if (passedData['CUST_ACCNT_DIV'] === undefined || passedData['CUST_ACCNT_DIV'] === "")
             tmplt += '     <div class="ng-binding vert-center">' + passedData.Customer.CUST_NM + '</div>';
-        if (passedData['CUST_ACCNT_DIV'] !== "")
+        if (passedData['CUST_ACCNT_DIV'] !== undefined && passedData['CUST_ACCNT_DIV'] !== "")
             tmplt += '     <div class="ng-binding vert-center">' + passedData["CUST_ACCNT_DIV"] + '</div>';
         tmplt += '</div>';
         return tmplt;

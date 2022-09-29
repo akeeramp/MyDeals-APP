@@ -341,6 +341,9 @@ export class dealEditorComponent {
     }
 
     openSystemPriceModal(dataItem) {
+        if (dataItem["SYS_PRICE_POINT"] != undefined && dataItem["SYS_PRICE_POINT"] != null && dataItem["SYS_PRICE_POINT"] != "" && (Number.isNaN(Number(dataItem["SYS_PRICE_POINT"])) || dataItem["SYS_PRICE_POINT"] == "0")) {
+            dataItem["SYS_PRICE_POINT"] = "";
+        }
         const dialogRef = this.dialog.open(systemPricePointModalComponent, {
             width: "900px",
             data: {
