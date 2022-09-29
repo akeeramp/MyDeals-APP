@@ -394,3 +394,7 @@ body {
 .admin-table-header kendo-grid .k-grid-header table thead tr th span.k-cell-inner {
     align-items: flex-start;
 }
+
+.remove-space-border kendo-grid .k-grid-aria-root kendo-grid-list .k-grid-table-wrap table tr td {
+    border: none;
+}

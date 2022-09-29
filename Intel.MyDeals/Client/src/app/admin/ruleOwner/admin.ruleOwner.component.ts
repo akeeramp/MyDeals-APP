@@ -134,21 +134,25 @@ export class RuleOwnerComponent {
     }
 
     saveHandler({ sender, rowIndex, formGroup, dataItem }) {
-        this.isLoading = true;
         const priceRuleCriteria = {
             Id: dataItem.Id,
             OwnerId: formGroup.value.OwnerName.EMP_WWID
         }
-        this.ruleOwnerSvc.updatePriceRule(priceRuleCriteria, "UPDATE_OWNER")
+        //Update only if value is changed
+        if(dataItem.OwnerId !== priceRuleCriteria.OwnerId){
+            this.isLoading = true;
+            this.ruleOwnerSvc.updatePriceRule(priceRuleCriteria, "UPDATE_OWNER")
             .subscribe(result => {
                 this.gridResult[rowIndex] = result.OwnerName;
                 this.getConstant();
                 this.isLoading = false;
+                this.loggerSvc.success("Rule owner has been updated");
             },
             error => {
                 this.loggerSvc.error("Unable to update owner name.", error);
                 this.isLoading = false;
             });
+        }
         sender.closeRow(rowIndex);
     }
 
