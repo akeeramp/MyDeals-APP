@@ -72,7 +72,9 @@ export class lnavUtil {
     static updateNPTDefaultValues(pt, nptDefaults) {
         //note: copy pasted from the watch function far below, slight modifications, can probably be compressed to 1 function call for re-usability?
         if (!!nptDefaults["REBATE_TYPE"]) nptDefaults["REBATE_TYPE"].value = pt["REBATE_TYPE"];
-        if (!!nptDefaults["MRKT_SEG"]) nptDefaults["MRKT_SEG"].value = pt["MRKT_SEG"].split(',');
+        if (!!nptDefaults["MRKT_SEG"] && pt["MRKT_SEG"] != undefined && pt["MRKT_SEG"] != null && pt["MRKT_SEG"] != "") {
+            nptDefaults["MRKT_SEG"].value = pt["MRKT_SEG"].split(',').map(item => item.trim());
+        }
         if (!!nptDefaults["GEO_COMBINED"]) {
             if (pt["GEO_COMBINED"].indexOf('[') > -1) {
                 nptDefaults["GEO_COMBINED"].value = pt["GEO_COMBINED"];

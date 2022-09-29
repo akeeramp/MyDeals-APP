@@ -992,10 +992,7 @@ export class meetCompContractComponent implements OnInit {
                 this.loggerSvc.error("Meet comp data is missing for some product(s).Please enter the data and save the changes.", "Alert");
             }
             this.reBindGridData();
-        }
-        if (isValid && this.isTender == "1" && (this.gridData.data[0].MEET_COMP_STS == 'Pass' || this.gridData.data[0].MEET_COMP_STS == 'Fail') || this.gridData.data[0].CAP_MISSING_FLG == 1) {
-            this.tmDirec.emit('PD');
-        } 
+        }        
     }
 
     async forceRunMeetComp() {
@@ -1032,6 +1029,9 @@ export class meetCompContractComponent implements OnInit {
             this.isModelValid(this.meetCompMasterdata._elements);
         }
         this.reBindGridData();
+        if (this.isTender == "1" && ((this.gridData.data[0].MEET_COMP_STS == 'Pass' || this.gridData.data[0].MEET_COMP_STS == 'Fail') || this.gridData.data[0].CAP == 0)) {
+            this.tmDirec.emit('PD');
+        }
         this.isLoading = false;
         this.tempUpdatedList = [];
         this.meetCompUpdatedList = [];

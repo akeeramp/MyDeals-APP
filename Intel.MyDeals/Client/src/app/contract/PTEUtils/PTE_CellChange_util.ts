@@ -197,6 +197,14 @@ export class PTE_CellChange_Util {
                 currentstring = row + ',' + val.prop + ',' + '0' + ',' + 'no-edit';
                 updateRows.push(currentstring.split(','));
             }
+            else if (val.prop == 'MRKT_SEG') {
+                let cellVal = curPricingTable[`${val.prop}`] ? curPricingTable[`${val.prop}`] : '';
+                this.hotTable.setDataAtRowProp(row, val.prop, cellVal, 'no-edit');
+            }
+            else if (val.prop == 'GEO_COMBINED') {
+                let cellVal = curPricingTable[`${val.prop}`] ? curPricingTable[`${val.prop}`] : '';
+                this.hotTable.setDataAtRowProp(row, val.prop, cellVal, 'no-edit');
+            }
             else {
                 if (val.prop) {
                     //this will be autofill defaults value 

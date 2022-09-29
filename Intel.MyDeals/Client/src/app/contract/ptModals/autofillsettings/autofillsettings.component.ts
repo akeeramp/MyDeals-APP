@@ -189,6 +189,9 @@ export class AutoFillComponent {
                         this.mkgvalues = [this.mkgvalues[this.mkgvalues.length - 1]];
                     }
                 });
+                if (this.autofillData["DEFAULT"].hasOwnProperty("MRKT_SEG")) {
+                    this.autofillData["DEFAULT"]["MRKT_SEG"].value = this.mkgvalues;
+                }
             }
         }
     }
@@ -380,7 +383,7 @@ export class AutoFillComponent {
         else {
             this.geoValues = geoVals;
         }
-        this.isBlend = false;
+        this.geos = geoVals;
         this.marketSeglist = this.dropdownResponses['MRKT_SEG'];
         _.each(this.marketSeglist, (key) => {
             if (key.items != undefined && key.items != null && key.items.length > 0) {
