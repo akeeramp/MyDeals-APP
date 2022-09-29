@@ -196,7 +196,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 //Additional 'OR' check added to allow deals to get created even if there is Missing CAP for the PMem,SSD,Ethernet product types 
                 //In my deals (Tenders)deals are allowed to move upto submitted stage even selected product has missing CAP data .
-                if ((opt.Count == 1)|| (productType.ToLower()!="server" && opt.Count == 0))
+                if ((opt.Count == 1) || (productType.ToLower()!="server" && opt.Count == 0))
                 {
                     if (opt.Count == 1)
                     {
@@ -227,7 +227,7 @@ namespace Intel.MyDeals.BusinessLogic
                         HAS_L2 = row.HAS_L2,
                         HIER_NM_HASH = row.HIER_NM_HASH,
                         HIER_VAL_NM = row.HIER_VAL_NM,
-                        MM_MEDIA_CD = row.MM_MEDIA_CD == null? "All": row.MM_MEDIA_CD,
+                        MM_MEDIA_CD = row.DEAL_PRD_TYPE == "CPU" ? "Tray" : row.MM_MEDIA_CD == null ? "All" : row.MM_MEDIA_CD,
                         PRD_CAT_NM = row.PRD_CAT_NM,
                         PRD_END_DTM = row.PRD_END_DTM.ToString("MM/dd/yyyy"),
                         PRD_MBR_SID = row.PRD_MBR_SID.ToString(),
