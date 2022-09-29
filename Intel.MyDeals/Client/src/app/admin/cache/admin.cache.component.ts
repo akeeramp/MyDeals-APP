@@ -118,12 +118,13 @@ export class CacheComponent {
 
     // Clear all api cache
     clearAllApiCache() {
+        let vm=this;
         this.currentCacheDetails = "";
         this.cacheSvc.clearApiCache().subscribe(function () {
-            this.loggerSvc.success("Api cache cleared successfully", "Done");
-            this.loadApiCache();
+            vm.loggerSvc.success("Api cache cleared successfully", "Done");
+            vm.loadApiCache();
         }, function (e) {
-            this.loggerSvc.error("Unable to clear Cache Status.", e);
+            vm.loggerSvc.error("Unable to clear Cache Status.", e);
         });
     }
 

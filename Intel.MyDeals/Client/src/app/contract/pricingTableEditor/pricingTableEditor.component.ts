@@ -821,8 +821,7 @@ export class pricingTableEditorComponent implements OnChanges {
             //code to bind the cook result of success or failure
             let PTR_col_ind = _.findIndex(this.columns, { data: 'PTR_USER_PRD' });
             _.each(updatedPTRObj.rowData, (data, idx) => {
-                this.hotTable.setDataAtRowProp(idx, 'PTR_SYS_PRD', data.PTR_SYS_PRD, 'no-edit')
-                this.hotTable.setDataAtRowProp(idx, 'PTR_USER_PRD', data.PTR_USER_PRD, 'no-edit')
+                this.hotTable.setDataAtRowProp(idx, 'PTR_SYS_PRD', data.PTR_SYS_PRD, 'no-edit');
                 if (this.curPricingTable.OBJ_SET_TYPE_CD != 'KIT' && this.curPricingTable.OBJ_SET_TYPE_CD != 'ECAP') {
                     this.hotTable.setDataAtRowProp(idx, 'PRD_EXCLDS', data.PRD_EXCLDS, 'no-edit');
                 }

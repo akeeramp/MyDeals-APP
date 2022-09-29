@@ -96,6 +96,7 @@ export class ProductCorrectorComponent {
   private isDuplicate = false;
   private duplicateMsg = "";
   private duplicateData: any[] = [];
+  private hidden = {};
   private crossVertical = {
     'productCombination1': ["DT", "Mb", "SvrWS", "EIA CPU"],
     'productCombination2': ["CS", "EIA CS"],
@@ -152,6 +153,7 @@ export class ProductCorrectorComponent {
           }
       }
     this.totRows=_.keys(this.ProductCorrectorData.ProdctTransformResults).length;
+    this.showColumns();
     this.getcurPTERowData();
   }
   getSelRowTree(items:any[]){
@@ -203,7 +205,8 @@ export class ProductCorrectorComponent {
     this.selGridData = _.findWhere(this.gridData, { name: key, DCID: DCID}).data;
     this.selRowLvl = this.getSelRowTree(_.findWhere(this.curRowLvl, { name: key, DCID: DCID}).items);
     this.selRowCategories = this.getSelRowTree(_.findWhere(this.curRowCategories, { name: key, DCID: DCID}).items);
-    this.curSelProducts = _.findWhere(this.selectedProducts, { name: key, DCID: DCID});
+    this.curSelProducts = _.findWhere(this.selectedProducts, { name: key, DCID: DCID });
+    this.showColumns();
     this.getcurPTERowData();
   }
   dataStateChange(state: DataStateChangeEvent): void {
@@ -374,7 +377,52 @@ export class ProductCorrectorComponent {
     } else {
         return errorMessage == "" ? productJson.HIER_NM_HASH : errorMessage;
     }
-  }
+    }
+    showColumns() {
+        let columns = [
+            "EXCLUDE",
+            "USR_INPUT",
+            "IS_SEL",
+            "DISP_HIER_VAL_NM",
+            "PRD_CAT_NM",
+            "BRND_NM",
+            "FMLY_NM",
+            "PRD_STRT_DTM",
+            "CAP",
+            "HAS_L1",
+            "MM_MEDIA_CD",
+            "YCS2",
+            "GDM_FMLY_NM",
+            "HIER_NM_HASH",
+            "CPU_PROCESSOR_NUMBER",
+            "MM_CUST_CUSTOMER",
+            "FMLY_NM_MM",
+            "EPM_NM",
+            "SKU_NM",
+            "NAND_FAMILY",
+            "NAND_Density",
+            "CPU_CACHE",
+            "CPU_PACKAGE",
+            "CPU_WATTAGE",
+            "CPU_VOLTAGE_SEGMENT",
+            "PRICE_SEGMENT",
+            "SBS_NM"
+        ]
+        //always show these fields
+        let showAlways = ["EXCLUDE", "IS_SEL", "USR_INPUT", "CAP", "YCS2"]
+        if (this.selGridResult) {
+            columns.forEach((colVal) => {
+                let columnData = lodash.uniqBy(this.selGridResult, colVal)
+                //setting default hidden values to false
+                this.hidden[colVal] = false;
+                if (columnData.length == 1 && colVal !== undefined
+                    && !showAlways.includes(colVal)
+                    && (columnData[0][colVal] === "" || columnData[0][colVal] == null || columnData[0][colVal] == 'NA')) {
+                    this.hidden[colVal] = true;
+                }
+            })
+        }
+}
   distinctPrimitive(fieldName: string): any {
     return distinct(this.selGridResult, fieldName).map(item => item[fieldName]);
   }
