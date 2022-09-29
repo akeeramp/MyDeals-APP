@@ -5,6 +5,7 @@ import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/ke
 import { distinct, process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import * as _ from "underscore";
+import * as lodash from "lodash";
 import { ProductSelectorComponent } from "../productSelector/productselector.component";
 import { MatDialog } from '@angular/material/dialog';
 import { SelectableSettings } from '@progress/kendo-angular-treeview';
@@ -95,6 +96,11 @@ export class ProductCorrectorComponent {
   private isDuplicate = false;
   private duplicateMsg = "";
   private duplicateData: any[] = [];
+  private crossVertical = {
+    'productCombination1': ["DT", "Mb", "SvrWS", "EIA CPU"],
+    'productCombination2': ["CS", "EIA CS"],
+    'message': "The product combination is not valid. You can combine (DT, Mb, SvrWS, EIA CPU) or (CS, EIA CS) verticals. For NON IA, you can combine as many products within same verticals for PROGRAM, VOLTIER and REV TIER deals."
+  }
 
   prdLvlDecoder(indx:any) {
     if (indx === 7003) return "Product Vertical";
@@ -236,6 +242,22 @@ export class ProductCorrectorComponent {
   }
     prodSelect(item: any, evt: any) {
 
+        if (evt.target.checked == true && this.DEAL_TYPE !== "ECAP" && this.DEAL_TYPE !== "KIT") {
+            // Get unique product types
+            let existingProdTypes = lodash.uniqBy(this.curSelProducts['items'], 'prodObj.PRD_CAT_NM')
+            existingProdTypes = existingProdTypes.map(function (elem) {
+                return elem['prodObj']['PRD_CAT_NM'];
+            });
+
+            // Check if valid combination
+            let isCrossVerticalError = this.isValidProductCombination(existingProdTypes, item.PRD_CAT_NM)
+            if (!isCrossVerticalError) {
+                this.loggerSvc.error(this.crossVertical['message'], '', '');
+                evt.target.checked = false;
+                return false;
+            }
+        }
+
         if (evt.target.checked == true && this.checkForDuplicateProducts(item)) {
             evt.target.checked = false;
             return;
@@ -251,6 +273,29 @@ export class ProductCorrectorComponent {
             let idx = _.findIndex(this.selectedProducts, item.DERIVED_USR_INPUT);
             this.curSelProducts['items'].splice(idx, 1);
         }
+    }
+    isValidProductCombination(existingProdTypes, newProductType) {
+        let isValid = true;
+        if (this.DEAL_TYPE == 'FLEX') {
+            return true;
+        }
+        let selfCheck = newProductType == undefined;
+        for (let i = 0; i < existingProdTypes.length; i++) {
+            if (i == existingProdTypes.length - 1 && selfCheck) break;
+            newProductType = selfCheck ? existingProdTypes[i + 1] : newProductType;
+            if (ProdSel_Util.arrayContainsString(this.crossVertical.productCombination1, existingProdTypes[i])) {
+                isValid = ProdSel_Util.arrayContainsString(this.crossVertical.productCombination1, newProductType);
+                if (!isValid) break;
+            }
+            else if (ProdSel_Util.arrayContainsString(this.crossVertical.productCombination2, existingProdTypes[i])) {
+                isValid = ProdSel_Util.arrayContainsString(this.crossVertical.productCombination2, newProductType);
+                if (!isValid) break;
+            } else {
+                isValid = existingProdTypes[i] == newProductType;
+                if (!isValid) break;
+            }
+        };
+        return isValid
     }
     checkForDuplicateProducts(item) {
   
