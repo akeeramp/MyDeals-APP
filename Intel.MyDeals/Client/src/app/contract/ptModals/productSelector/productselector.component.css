@@ -667,3 +667,12 @@ input[type=checkbox].with-sm-font {
         text-decoration: none !important;
         cursor: pointer;
     }
+
+.btn-primary[disabled] {
+    background-color: #edeff0 !important;
+    color: #7e868b !important;
+    border-color: #b1babf !important;
+    cursor: not-allowed !important;
+    pointer-events: all !important;
+}
+
