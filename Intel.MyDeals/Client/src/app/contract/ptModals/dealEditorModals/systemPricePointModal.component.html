@@ -5,8 +5,8 @@
     <div class="row">
         <div class="col-md-12">
             <div class="col-sm-4">
-                <label class="control-label appro-label" for="inputControl"><b>Operator</b></label>
-                <kendo-dropdownlist [data]="operators"
+                <label class="control-label appro-label" for="inputControl"><b>Operator</b></label><br/>
+                <kendo-dropdownlist style="width:100%" [data]="operators"
                                     [(ngModel)]="operator"
                                     textField="name"
                                     valueField="id"
@@ -15,8 +15,8 @@
                 <!--<select id="inputControl" kendo-drop-down-list k-options="$ctrl.dropDownOptions" k-ng-model="$ctrl.operator"></select>-->
             </div>
             <div class="col-sm-8">
-                <label class="control-label appro-label" for="inputPrice"><b>Price Point</b></label>
-                <kendo-numerictextbox [(ngModel)]="price"
+                <label class="control-label appro-label" for="inputPrice"><b>Price Point</b></label><br/>
+                <kendo-numerictextbox style="width:100%" [(ngModel)]="price"
                                       min="0.01" max="1000000"
                                       [format]="c2"
                                       autoCorrect="true"

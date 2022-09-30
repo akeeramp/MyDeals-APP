@@ -57,10 +57,9 @@
 }
 
 .rowDetailHeight {
-    height: 36px !important;
     border-bottom: 0.01px solid rgba(0, 0, 0, .05);
     padding: 2px 0px 0px 1px !important;
-    line-height: 3;
+    line-height: 4;
 }
 
 .densityRow {
@@ -211,7 +210,8 @@ tr:last-child>td {
 .capLineStyle {
     font-family: arial;
     text-align: center;
-    font-weight: 600
+    font-weight: 600;
+    line-height: 4;
 }
 
 .msgClassStyles {
@@ -320,7 +320,6 @@ tr:last-child>td {
 
 .isReadOnlyCell {
     color: #000 !important;
-    background-color: #f9f9f9 !important;
     height: 100% !important;
 }
 

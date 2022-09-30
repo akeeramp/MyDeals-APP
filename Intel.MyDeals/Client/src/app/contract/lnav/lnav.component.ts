@@ -384,7 +384,11 @@ export class lnavComponent {
         this.PtDealTypes = null;
         this.clearNptTemplate();
         this.curPricingStrategy = ps;
-        this.ptTITLE = "";
+        if (this.newStrategy["TITLE"] && this.newStrategy["TITLE"] != "") {
+            this.ptTITLE = this.newStrategy["TITLE"];
+        }
+        else
+            this.ptTITLE = "";
         let isHybridDeal = (Number(this.curPricingStrategy.IS_HYBRID_PRC_STRAT) == 1 ? true : false);
         this.PtDealTypes = lnavUtil.filterDealTypes(this.UItemplate, isHybridDeal);
         if (!!this.curPricingStrategy && !this.curPricingStrategy.PRC_TBL) {

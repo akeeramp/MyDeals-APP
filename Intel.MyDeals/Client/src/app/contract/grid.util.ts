@@ -538,7 +538,7 @@ export class GridUtil {
 
         } else if (field === "YCS2_PRC_IRBT" && fieldVal === "No YCS2") {
             tmplt += '<div class="uiControlDiv isSoftWarnCell capInfoWrapper">';
-            tmplt += '<div style="capLineStyle">No YCS2</div>';
+            tmplt += '<div class="capLineStyle">No YCS2</div>';
             if (startVal !== "" && startVal !== '01/01/1900') {
                 tmplt += '<div>Availability:<span class="ng-binding">' + passedData[startDt][dimKey] + '</span><span></div>';
             }
