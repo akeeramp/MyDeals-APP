@@ -43,22 +43,22 @@ export class GlobalSearchComponent  {
       this.searchDialogVisible=false;
     }
     executeOnly(opType:string){
-      if (this.searchText != "") {
-         //opening kendo window
-        this.opType=opType;
-        this.setWindowWidth();
-        //this condition is required since this should work only id kendo window is open 
-        if(this.GlobalSearchResults){
-          this.GlobalSearchResults.onOpTypeChange(this.opType);
-          this.windowOpened=true;
+        if (this.searchText != "") {
+            //opening kendo window
+            this.opType=opType;
+            this.setWindowWidth();
+            //this condition is required since this should work only id kendo window is open 
+            if (this.GlobalSearchResults) {
+                this.GlobalSearchResults.onOpTypeChange(this.opType);
+                this.windowOpened = true;
+            }
+            else {
+                this.windowOpened = true;
+            }
         }
-        //this condition is for opening the search result without pressing enter directly selecting from dropdown
-        else{
-           //opening kendo window
-         this.setWindowWidth();
-         this.windowOpened=true;
+        else {
+            this.searchDialogVisible = true;
         }
-     }
     }
     windowClose() {
       this.windowOpened = false;
