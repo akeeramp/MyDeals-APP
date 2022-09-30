@@ -389,6 +389,10 @@ export class AutoFillComponent {
             this.autofillData.DEFAULT.PAYOUT_BASED_ON.opLookupUrl = "/api/Dropdown/GetConsumptionPayoutDropdowns/PAYOUT_BASED_ON";
             this.autofillData.DEFAULT.PROGRAM_PAYMENT.opLookupUrl = "/api/Dropdown/GetProgPaymentDropdowns/PROGRAM_PAYMENT";
         }
+        //for rev tier deals the deault AR_SETTLEMENT_LVL is Issue Credit to Default Sold To by Region
+        if(this.dealType && this.dealType=='REV_TIER'){
+            this.autofillData.DEFAULT['AR_SETTLEMENT_LVL'].value='Issue Credit to Default Sold To by Region';
+        }
         this.dropdownResponses = await this.getAllDropdownValues();
         
         let geoVals = this.autofillData.DEFAULT ? this.autofillData.DEFAULT['GEO_COMBINED'].value : '';

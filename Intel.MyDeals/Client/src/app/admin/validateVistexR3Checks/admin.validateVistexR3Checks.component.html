@@ -36,7 +36,7 @@
     </div>
     <div class="row">
         <div class="col-md-12 kendo-grid-buttons">
-            <kendo-grid [data]="gridData" *ngIf="ShowResults==true" style="height: 400px;" [pageSize]="state.take"
+            <kendo-grid class="gridContentScroll " [data]="gridData" *ngIf="ShowResults==true" style="height: 400px;" [pageSize]="state.take"
                 [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" filterable="menu"
                 [navigable]="true" [resizable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info}"
                 (dataStateChange)="dataStateChange($event)">

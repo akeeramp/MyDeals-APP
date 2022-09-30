@@ -37,3 +37,8 @@
      border-width: 0 !important;
      border-style: none !important
  }
+ .gridContentScroll .k-grid-content.k-virtual-content {
+    overflow-x: scroll !important;
+    overflow-y: auto !important;
+    height: 100% !important;
+}

@@ -52,6 +52,12 @@ export class GlobalSearchComponent  {
           this.GlobalSearchResults.onOpTypeChange(this.opType);
           this.windowOpened=true;
         }
+        //this condition is for opening the search result without pressing enter directly selecting from dropdown
+        else{
+           //opening kendo window
+         this.setWindowWidth();
+         this.windowOpened=true;
+        }
      }
     }
     windowClose() {
