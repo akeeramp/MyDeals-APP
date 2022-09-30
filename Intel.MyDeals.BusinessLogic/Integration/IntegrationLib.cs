@@ -21,6 +21,7 @@ namespace Intel.MyDeals.BusinessLogic
         private readonly IJmsDataLib _jmsDataLib; // change out later to IntegrationDataLib
         private readonly IOpDataCollectorLib _dataCollectorLib;
         private readonly IPrimeCustomersDataLib _primeCustomerLib;
+        private List<int> UserTokenErrorCodes = new List<int> { 704, 705 }; // Known abort messages for User Token Security
 
         public IntegrationLib(IJmsDataLib jmsDataLib, IOpDataCollectorLib dataCollectorLib, IPrimeCustomersDataLib primeCustomerLib)
         {
@@ -78,7 +79,7 @@ namespace Intel.MyDeals.BusinessLogic
             }
         }
 
-        private int ProcessSalesForceContractInformation(int contractId, string contractSfId, int custId, TenderTransferRootObject workRecordDataFields)
+        private int ProcessSalesForceContractInformation(int contractId, string contractSfId, int custId, TenderTransferRootObject workRecordDataFields, int currQuote)
         {
             int initId = -101;
 
@@ -136,7 +137,7 @@ namespace Intel.MyDeals.BusinessLogic
                     }
                 }
 
-                workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(713, "Folio Validation Error : Folio had validation errors: " + validErrors, "Folio had validation errors"));
+                workRecordDataFields.recordDetails.quote.quoteLine[currQuote].errorMessages.Add(AppendError(713, "Folio Validation Error : Folio had validation errors: " + validErrors, "Folio had validation errors"));
                 return initId; //Pre-emptive fail due to validation errors
             }
 
@@ -153,7 +154,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (myDealsData[OpDataElementType.CNTRCT].Actions.Any() && !saveResponse.Keys.Any())
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed DB Call, ProcessSalesForceContractInformation"));
+                workRecordDataFields.recordDetails.quote.quoteLine[currQuote].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed DB Call, ProcessSalesForceContractInformation"));
             }
 
             foreach (var objKey in saveResponse.Keys)
@@ -860,6 +861,56 @@ namespace Intel.MyDeals.BusinessLogic
             return wipDealId;
         }
 
+        private OpUserToken setUserToken(TenderTransferRootObject workRecordDataFields, int currentRecordId, string requestType)
+        {
+            // Generate Security Token for this set of records
+            string idsid = workRecordDataFields.recordDetails.quote.quoteLine[currentRecordId].Wwid; //11911244
+            OpUserToken opUserToken = new OpUserToken { Usr = { Idsid = idsid } };
+            UserSetting tempLookupSetting = new EmployeeDataLib().GetUserSettings(opUserToken);
+
+            if (opUserToken.Usr.Idsid != null && ((opUserToken.Usr.WWID == 0 || opUserToken.Usr.Idsid == "") && requestType == "UpdateStatus")) // User not in system, try generic
+            {
+                opUserToken = new OpUserToken { Usr = { Idsid = "90000054" } }; // Use the Dummy GA role in this case for approvals only
+                tempLookupSetting = new EmployeeDataLib().GetUserSettings(opUserToken);
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRecordId].errorMessages.Add(AppendError(800, "Warning: Using IQR Faceless Account for Approval because User [" + idsid + "] is not presently a user in My Deals", "Using IQR Faceless Account"));
+            }
+
+            if (opUserToken.Usr.Idsid != null) // Bad user lookup
+            {
+                if (opUserToken.Usr.WWID == 0 || opUserToken.Usr.Idsid == "") // Bad user lookup
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[currentRecordId].errorMessages.Add(AppendError(704, "User ID [" + idsid + "] is not presently a user in My Deals", "User account doesn't exist"));
+                }
+                if (opUserToken.Role.RoleTypeCd != "GA") // Wrong role for create/update, but allow normal roles to approvals
+                {
+                    if (requestType == "UpdateStatus" && (opUserToken.Role.RoleTypeCd == "FSE" || opUserToken.Role.RoleTypeCd == "GA" || opUserToken.Role.RoleTypeCd == "DA"))
+                    {
+                        // Skip since this is an update
+                    }
+                    else
+                    {
+                        workRecordDataFields.recordDetails.quote.quoteLine[currentRecordId].errorMessages.Add(AppendError(705, "User ID [" + idsid + "] is not a GA user role in My Deals", "User has wrong role"));
+                    }
+                }
+            }
+            else
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRecordId].errorMessages.Add(AppendError(704, "No User ID passed from IQR for this request", "IQR passed WWID was left empty"));
+            }
+
+            return opUserToken;
+        }
+
+        private bool containsError(IEnumerable<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages> errList, List<int> checkForValues)
+        {
+            bool hasPassedErrorId = false;
+            foreach (var errMsg in errList)
+            {
+                if (checkForValues.Contains(errMsg.Code)) hasPassedErrorId = true;
+            }
+            return hasPassedErrorId;
+        }
+
         private string dumpErrorMessages(IEnumerable<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages> errList, int folioId, int dealId)
         {
             string response = "";
@@ -872,13 +923,26 @@ namespace Intel.MyDeals.BusinessLogic
             return response;
         }
 
-        private string ProcessCreationRequest(TenderTransferRootObject workRecordDataFields, Guid batchId, string idsid, ref int dealId)
+        private string ProcessCreationRequest(TenderTransferRootObject workRecordDataFields, Guid batchId, ref int dealId)
         {
-            string executionResponse = "";
+            string fullPackageResponse = "";
 
-            // Walk through deal records now
+            // Walk through deal/quoteline records now
             for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
             {
+                string executionResponse = "";
+                // Get OpUserToken
+                OpUserToken opUserToken = setUserToken(workRecordDataFields, i, "Create");
+                if (!containsError(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, UserTokenErrorCodes))
+                {
+                    OpUserStack.TendersAutomatedUserToken(opUserToken); // Set the user token for this record
+                }
+                else
+                {
+                    continue; // Fail and skip this record due to User Token issues
+                }
+
+                // Start Create Request Action for the current quoteline item
                 string salesForceIdCntrct = workRecordDataFields.recordDetails.quote.Id;
                 string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[i].Id;
                 string custCimId = workRecordDataFields.recordDetails.quote.account.CIMId; // empty string still returns Dell ID
@@ -920,7 +984,7 @@ namespace Intel.MyDeals.BusinessLogic
                 dealId = sfToMydlIds[0].Wip_SID;
 
                 // Step 2 - Update the contract header if needed
-                folioId = ProcessSalesForceContractInformation(folioId, salesForceIdCntrct, custId, workRecordDataFields);
+                folioId = ProcessSalesForceContractInformation(folioId, salesForceIdCntrct, custId, workRecordDataFields, i);
                 workRecordDataFields.recordDetails.quote.FolioID = folioId.ToString();
 
                 if (folioId <= 0)  // Needed to create a new Folio for this request and failed, skip!
@@ -951,22 +1015,36 @@ namespace Intel.MyDeals.BusinessLogic
 
                 // Should have no bail outs, so post final messages here
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
+                fullPackageResponse += executionResponse + "<br><br>";
             } // End of quote lines loop
 
-            return executionResponse;
+            return fullPackageResponse;
         }
 
         private string ProcessDeleteRequestShell(TenderTransferRootObject workRecordDataFields, Guid batchId, ref int dealId)
         {
-            // This was shelled out to support updating single lines from a create path as per Mahesh request.
-            string executionResponse = "";
+            string fullPackageResponse = "";
 
             for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
             {
+                string executionResponse = "";
+                // Get OpUserToken
+                OpUserToken opUserToken = setUserToken(workRecordDataFields, i, "Delete");
+                if (!containsError(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, UserTokenErrorCodes))
+                {
+                    OpUserStack.TendersAutomatedUserToken(opUserToken); // Set the user token for this record
+                }
+                else
+                {
+                    continue; // Fail and skip this record due to User Token issues
+                }
+
+                // Start Delete Request Action for the current quoteline item
                 executionResponse += ProcessDeleteRequest(workRecordDataFields, batchId, i, ref dealId);
+                fullPackageResponse += executionResponse + "<br><br>";
             }
 
-            return executionResponse;
+            return fullPackageResponse;
         }
 
         private string ProcessDeleteRequest(TenderTransferRootObject workRecordDataFields, Guid batchId, int recordId, ref int dealId)
@@ -1466,23 +1544,47 @@ namespace Intel.MyDeals.BusinessLogic
 
         private string ProcessUpdateRequestShell(TenderTransferRootObject workRecordDataFields, Guid batchId, ref int dealId)
         {
-            // This was shelled out to support updating single lines from a create path as per Mahesh request.
-            string executionResponse = "";
+            string fullPackageResponse = "";
 
             for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
             {
-                executionResponse += ProcessUpdateRequest(workRecordDataFields, batchId, i, false, ref dealId);
+                // Get OpUserToken
+                OpUserToken opUserToken = setUserToken(workRecordDataFields, i, "Update");
+                if (!containsError(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, UserTokenErrorCodes))
+                {
+                    OpUserStack.TendersAutomatedUserToken(opUserToken); // Set the user token for this record
+                }
+                else
+                {
+                    continue; // Fail and skip this record due to User Token issues
+                }
+
+                // Start Update Request Action for the current quoteline item
+                fullPackageResponse += ProcessUpdateRequest(workRecordDataFields, batchId, i, false, ref dealId) + "<br><br>"; ;
             }
 
-            return executionResponse;
+            return fullPackageResponse;
         }
 
         private string ProcessStageUpdateRequest(TenderTransferRootObject workRecordDataFields, Guid batchId, ref int dealId)
         {
-            string executionResponse = "";
+            string fullPackageResponse = "";
 
             for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
             {
+                string executionResponse = "";
+                // Get OpUserToken
+                OpUserToken opUserToken = setUserToken(workRecordDataFields, i, "UpdateStatus");
+                if (!containsError(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, UserTokenErrorCodes))
+                {
+                    OpUserStack.TendersAutomatedUserToken(opUserToken); // Set the user token for this record
+                }
+                else
+                {
+                    continue; // Fail and skip this record due to User Token issues
+                }
+
+                // Start Update Stage Request Action for the current quoteline item
                 bool runSaveStage = true;
                 string salesForceIdCntrct = workRecordDataFields.recordDetails.quote.Id;
                 string salesForceIdDeal = workRecordDataFields.recordDetails.quote.quoteLine[i].Id;
@@ -1646,9 +1748,10 @@ namespace Intel.MyDeals.BusinessLogic
                 workRecordDataFields.recordDetails.quote.quoteLine[i].DealRFQStatus = destinationStage;
 
                 executionResponse += "Deal " + dealId + " - Stage Update completed<br>";
+                fullPackageResponse += executionResponse + "<br><br>";
             }
 
-            return executionResponse;
+            return fullPackageResponse;
         }
 
         public string ExecuteSalesForceTenderData(Guid workId)
@@ -1665,54 +1768,19 @@ namespace Intel.MyDeals.BusinessLogic
                 bool goodOperationFlag = true;
                 TenderTransferRootObject workRecordDataFields = JsonConvert.DeserializeObject<TenderTransferRootObject>(workRecord.RqstJsonData);
 
-                // Read Headers and tag in error blocks where needed
+                // Read Headers and create error blocks for each child
                 string requestType = workRecordDataFields.header.action;
                 for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
                 {
                     workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine.ErrorMessages>();
                 }
 
-                // Generate Security Token for this set of records
-                // TO DO: This will shift to the quotes block since only one user is sending the records...
-                string idsid = workRecordDataFields.recordDetails.quote.quoteLine[0].Wwid; //11911244
-                OpUserToken opUserToken = new OpUserToken { Usr = { Idsid = idsid } };
-                UserSetting tempLookupSetting = new EmployeeDataLib().GetUserSettings(opUserToken);
-
-                if (opUserToken.Usr.Idsid != null && ((opUserToken.Usr.WWID == 0 || opUserToken.Usr.Idsid == "") && requestType == "UpdateStatus")) // User not in system, try generic
+                if (!goodRequestTypes.Contains(requestType)) // Tag all records below as having a bad header and quit...
                 {
-                    opUserToken = new OpUserToken { Usr = { Idsid = "90000054" } }; // Use the Dummy GA role in this case for approvals only
-                    tempLookupSetting = new EmployeeDataLib().GetUserSettings(opUserToken);
-                    workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(800, "Warning: Using IQR Faceless Account for Approval because User [" + idsid + "] is not presently a user in My Deals", "Using IQR Faceless Account"));
-                }
-
-                if (opUserToken.Usr.Idsid != null) // Bad user lookup
-                {
-                    if (opUserToken.Usr.WWID == 0 || opUserToken.Usr.Idsid == "") // Bad user lookup
+                    for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
                     {
-                        workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(704, "User ID [" + idsid + "] is not presently a user in My Deals", "User account doesn't exist"));
-                        goodOperationFlag = false;
+                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Passed action code [" + requestType + "] is not valid"));
                     }
-                    if (opUserToken.Role.RoleTypeCd != "GA") // Wrong role for create/update, but allow normal roles to approvals
-                    {
-                        if (requestType == "UpdateStatus" && (opUserToken.Role.RoleTypeCd == "FSE" || opUserToken.Role.RoleTypeCd == "GA" || opUserToken.Role.RoleTypeCd == "DA"))
-                        {
-                            // Skip since this is an update
-                        }
-                        else
-                        {
-                            workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(705, "User ID [" + idsid + "] is not a GA user role in My Deals", "User has wrong role"));
-                            goodOperationFlag = false;
-                        }
-                    }
-                    if (!goodRequestTypes.Contains(requestType))
-                    {
-                        workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Passed action code [" + requestType + "] is not valid"));
-                        goodOperationFlag = false;
-                    }
-                }
-                else
-                {
-                    workRecordDataFields.recordDetails.quote.quoteLine[0].errorMessages.Add(AppendError(704, "No User ID passed from IQR for this request", "IQR passed WWID was left empty"));
                     goodOperationFlag = false;
                 }
 
@@ -1721,12 +1789,10 @@ namespace Intel.MyDeals.BusinessLogic
 
                 if (goodOperationFlag)
                 {
-                    OpUserStack.TendersAutomatedUserToken(opUserToken);
-
                     switch (requestType)
                     {
                         case "Create": // Tenders Create New Deals request
-                            executionResponse += ProcessCreationRequest(workRecordDataFields, batchId, idsid, ref dealId);
+                            executionResponse += ProcessCreationRequest(workRecordDataFields, batchId, ref dealId);
                             break;
                         case "Update":
                             executionResponse += ProcessUpdateRequestShell(workRecordDataFields, batchId, ref dealId);
