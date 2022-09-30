@@ -29,7 +29,7 @@
                                     <div class="col-md-11 display displayblock">
                                         <div class="fl opUiLabel"><span class="isReqField">* </span>Customer:</div>
                                         <kendo-combobox #CUST_MBR_SID_Combo [data]="Customers"
-                                                        class="kendoInput noborderclass" textField="CUST_NM" valueField="CUST_SID" [disabled]="disableCustomer"
+                                                        class="kendoInput noborderclass font-input" textField="CUST_NM" valueField="CUST_SID" [disabled]="disableCustomer"
                                                         name="Customer" #customer="ngModel" [(ngModel)]="Customer" (valueChange)="onCustomerChange($event)" required>
                                         </kendo-combobox>
                                         <kendo-formerror *ngIf="contractDetailsForm.controls.Customer?.errors?.required && contractDetailsForm.controls.Customer?.touched">
@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="col-md-11 display displayblock">
                                         <div class="fl opUiLabel"><span class="isReqField">* </span>Contract Name:</div>
-                                        <kendo-textbox triggers="manual" class="kendoInput borderless" [clearButton]="true" name="TITLE" [ngClass]="{'input-error': isTitleError}"
+                                        <kendo-textbox triggers="manual" class="kendoInput borderless font-input" [clearButton]="true" name="TITLE" [ngClass]="{'input-error': isTitleError}"
                                                        [(ngModel)]="TITLE" (keyup)="onKeySearch($event,'TITLE')" required></kendo-textbox>
 
                                         <kendo-formerror *ngIf="(contractDetailsForm.controls.TITLE?.errors?.required && contractDetailsForm.controls.TITLE?.touched);else otherMsg">
@@ -89,7 +89,7 @@
                                         <div class="col-md-4">
                                             <kendo-numerictextbox [min]="contractData?.MinYear"
                                                                   [max]="contractData?.MaxYear" [autoCorrect]="false" [format]="format"
-                                                                  [(ngModel)]="START_YR" name="START_YR" (valueChange)="onKeySearch($event,'START_YR')" class="dateboxborder" required>
+                                                                  [(ngModel)]="START_YR" name="START_YR" (valueChange)="onKeySearch($event,'START_YR')" class="dateboxborder font-input" required>
                                             </kendo-numerictextbox>
                                         </div>
                                     </div>
@@ -117,7 +117,7 @@
                                         <div class="col-md-4">
                                             <kendo-numerictextbox [min]="contractData?.MinYear"
                                                                   [max]="contractData?.MaxYear" [autoCorrect]="false" [format]="format"
-                                                                  [(ngModel)]="END_YR" [disabled]="NO_END_DT" name="END_YR" (valueChange)="onKeySearch($event,'END_YR')" class="dateboxborder" required></kendo-numerictextbox>
+                                                                  [(ngModel)]="END_YR" [disabled]="NO_END_DT" name="END_YR" (valueChange)="onKeySearch($event,'END_YR')" class="dateboxborder font-input" required></kendo-numerictextbox>
 
                                         </div>
                                     </div>
@@ -134,7 +134,7 @@
                                         </div>
                                         <div class="blockdisplay enddateblock">
                                             <kendo-dropdownlist [data]="dropDownsData?.NO_END_DT_RSN" textField="DROP_DOWN"
-                                                                name="NO_END_DT_RSN" valueField="DROP_DOWN" [(ngModel)]="NO_END_DT_RSN" class="inputWidth" #noEndDateRsn [required]="NO_END_DT">
+                                                                name="NO_END_DT_RSN" valueField="DROP_DOWN" [(ngModel)]="NO_END_DT_RSN" class="inputWidth font-input" #noEndDateRsn [required]="NO_END_DT">
                                             </kendo-dropdownlist>
                                             <kendo-formerror *ngIf="contractDetailsForm.controls.NO_END_DT_RSN?.errors?.required && isSubmitted">
                                                 {{isRequiredMsg}}
@@ -148,7 +148,7 @@
                                         </div>
                                         <div class="blockdisplay enddateblock">
                                             <kendo-dropdownlist [data]="dropDownsData?.BACK_DATE_RSN" textField="DROP_DOWN"
-                                                                name="BACK_DATE_RSN" #backDateRsn="ngModel" valueField="DROP_DOWN" [(ngModel)]="BACK_DATE_RSN" class="inputWidth" [required]="isBackDate">
+                                                                name="BACK_DATE_RSN" #backDateRsn="ngModel" valueField="DROP_DOWN" [(ngModel)]="BACK_DATE_RSN" class="inputWidth font-input" [required]="isBackDate">
                                             </kendo-dropdownlist>
                                             <kendo-formerror *ngIf="contractDetailsForm.controls.BACK_DATE_RSN?.errors?.required && isSubmitted">
                                                 {{isRequiredMsg}}
@@ -160,7 +160,7 @@
                                             <span class="isReqField">*</span>Contract Type:
                                         </div>
                                         <kendo-dropdownlist [data]="dropDownsData?.CONTRACT_TYPE" textField="DROP_DOWN"
-                                                            valueField="DROP_DOWN" [(ngModel)]="CONTRACT_TYPE" class="inputWidth newbotborder" name="CONTRACT_TYPE" required>
+                                                            valueField="DROP_DOWN" [(ngModel)]="CONTRACT_TYPE" class="inputWidth newbotborder font-input" name="CONTRACT_TYPE" required>
                                         </kendo-dropdownlist>
                                     </div>
                                 </div>
@@ -210,7 +210,7 @@
                                             <span *ngIf="contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID"
                                                   class="isReqField">* </span>C2A Contract #
                                         </div>
-                                        <kendo-textbox triggers="manual" class="inputWidth c2aborder" [clearButton]="true" name="C2A_DATA_C2A_ID"
+                                        <kendo-textbox triggers="manual" class="inputWidth c2aborder font-input" [clearButton]="true" name="C2A_DATA_C2A_ID"
                                                        [(ngModel)]="C2A_DATA_C2A_ID" (valueChange)="c2aIDchange($event)" [required]="this.contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID">
                                         </kendo-textbox>
                                         <kendo-formerror *ngIf="contractDetailsForm.controls.C2A_DATA_C2A_ID?.errors?.required && isSubmitted">

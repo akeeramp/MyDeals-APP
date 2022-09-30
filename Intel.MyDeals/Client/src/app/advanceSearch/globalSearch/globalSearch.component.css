@@ -58,6 +58,7 @@ kendo-window-titlebar.kendo-titlebar-custom .k-button-icon {
     display: flex;
     align-items: center;
     justify-content: center;
+    left: 0 !important;
 }
 
 kendo-window-titlebar.kendo-titlebar-custom .k-button-icon .k-i-close {

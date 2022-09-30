@@ -63,7 +63,7 @@
                     <div [hidden]="(autofillData.DEFAULT['MRKT_SEG'].value.type == 'EMBEDDEDMULTISELECT')" class="autofilltreeview">
                         <div class="row">
                             <div class="col">
-                                <h5 class="headstyle" style="margin-bottom:-25px !important">Marketing Segment</h5>
+                                <h5 class="headstyle" style="margin-bottom:-25px !important">Market Segment</h5>
                                 <div kendoTooltip class="helpset opElementHelpIcon intelicon-information-outlined" style="float: right; color: #f3d54e !important; font-size: 14px; " title="You cannot mix ALL & other market segments.Non Corp selects: Consumer retail pull,Education,Goverment,& SMB">
                                 </div>
                             </div>
@@ -128,11 +128,11 @@
                 <div class="col-md-8">
                     <!--empty space-->
                 </div>
-                <div class="col-md-2">
-                    <button mat-button (click)="onNoClick()" class="afBtn afClsBtn" style="margin-bottom: -50px !important">Cancel</button>
+                <div class="col-md-2" style="padding-right: 10px;">
+                    <button mat-button (click)="onNoClick()" class="afBtn afClsBtn auto-cs-btn" style="">Cancel</button>
                 </div>
                 <div class="col-md-2">
-                    <button mat-button (click)="onSave()" cdkFocusInitial class="afBtn afSaveBtn" style="margin-bottom: -50px !important; border: 1px solid;">Save & Close</button>
+                    <button mat-button (click)="onSave()" cdkFocusInitial class="afBtn afSaveBtn auto-cs-btn" style="border: 1px solid;">Save & Close</button>
                 </div>
             </div>
 

@@ -140,10 +140,10 @@
     text-align: right;
     font-size: 14px;
     background-color: #fafafa;
-    width: 100%;
+    width: 82%;
     position: fixed;
     right: 0;
-    bottom: 64.5px !important
+    bottom: 64.5px !important;
 }
 
 .new-bus-contract .fullHeight {

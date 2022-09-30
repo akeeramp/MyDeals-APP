@@ -325,7 +325,7 @@ tr:last-child>td {
 
 .k-grid table {
     height: 100% !important;
-    width: 100% !important;
+    /*width: 100% !important;*/
 }
 
 .width-fixes .col-md-12 {

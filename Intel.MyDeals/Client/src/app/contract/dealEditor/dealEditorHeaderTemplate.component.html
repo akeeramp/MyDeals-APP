@@ -7,4 +7,4 @@
     <label for='chkDealTools'><b>Exclude From Price Rules</b></label>
 </div>
 <div *ngIf="in_Field_Name !== 'tools' && in_Field_Name !== 'EXCLUDE_AUTOMATION' && in_Header_Template != null" [innerHTML]="in_Header_Template"></div>
-<div *ngIf="in_Header_Template == null" [innerHTML]="in_Title"></div>
+<div *ngIf="in_Header_Template == null" [innerHTML]="in_Title" [id]="in_Field_Name"></div>

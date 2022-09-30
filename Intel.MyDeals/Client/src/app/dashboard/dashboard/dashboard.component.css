@@ -274,6 +274,10 @@ kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li {
     margin-right: 1px !important;
 }
 
+kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li:hover {
+    background-color: #0071c5 !important;
+}
+
 kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li:first-child {
     margin-left: 0px !important;
 }
@@ -327,6 +331,7 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active span 
 .oppo-grids kendo-grid .k-grid-header table thead tr th {
     font-size: 12px !important;
     font-weight: 600;
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
 
 .oppo-grids kendo-grid .k-grid-header table thead tr th .k-link:hover {
@@ -471,7 +476,7 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     border-bottom-color: rgb(0, 113, 197) !important;
 }
 
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="TRKR_NBR"] {
+/*.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="TRKR_NBR"] {
     width: 100%;
     height: 100%;
     display: flex;
@@ -482,6 +487,41 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
 .one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="TRKR_NBR"] kendo-grid-filter-menu .k-grid-filter {
     top: 3px;
     right: 0;
+}*/
+
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #IS_PRIMED_CUST,
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #IS_RPL,
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #TRKR_NBR,
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #ECAP_PRICE,
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #CAP,
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #CAP_STRT_DT,
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #CAP_END_DT,
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #YCS2_PRC_IRBT,
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #YCS2_START_DT,
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #YCS2_END_DT {
+    width: 100%;
+    height: 100%;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+}
+
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=IS_PRIMED_CUST],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=IS_RPL],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=TRKR_NBR],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=ECAP_PRICE],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=CAP],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=CAP_STRT_DT],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=CAP_END_DT],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=YCS2_PRC_IRBT],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=YCS2_START_DT],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=YCS2_END_DT] {
+    top: 3px;
+    right: 0;
+}
+
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th .k-cell-inner:has(.k-link):has(deal-editor-header):has(#LAST_REDEAL_DT) {
+    width: 100%!important;
 }
 
 .htDatepickerHolder .pika-single .pika-table th,
@@ -538,6 +578,10 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     background-color: #efefef;
     vertical-align: middle;
     border-color: #dee2e6;
+}
+
+.oppo-grids.space-table-all kendo-grid .k-grid-aria-root .k-grid-header table {
+    height: 100%;
 }
 
 .oppo-grids.space-table-all .k-grid .k-grid-header-locked,
@@ -837,4 +881,16 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
 
 .sliderwidth.k-slider .k-button:focus {
     box-shadow: none;
+}
+
+.font-input input {
+    font-size: 14px;
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    width: 100%;
+    height: 100%;
+}
+
+kendo-dropdownlist.font-input .k-input {
+    font-size: 14px;
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
