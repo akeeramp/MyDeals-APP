@@ -38,11 +38,11 @@
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="MTRL_ID" title="Material ID">
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_STRT_DTM" title="Start Date">
-                <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.PRD_STRT_DTM | date: 'MM-dd-yyyy'}}
+                <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.PRD_STRT_DTM}}
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_END_DTM" title="End Date">
-                <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.PRD_END_DTM | date: 'MM-dd-yyyy'}}
+                <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.PRD_END_DTM}}
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTV_IND" title="Is Active" filter="boolean">
