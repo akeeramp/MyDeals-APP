@@ -42,6 +42,13 @@
                             <kendo-multiselect class="division-name" #cmbmulti [kendoDropDownFilter]="filterSettings" [data]="selectedData" textField="CUST_DIV_NM" valueField="CUST_DIV_NM" [(ngModel)]="CUST_NM_DIV" [ngModelOptions]="{standalone: true}" [autoClose]="false"></kendo-multiselect>
                             <div class="description">Blank means that ALL divisions are included</div>
                         </div>
+                        <kendo-dialog *ngIf="showCustDivAlert" (close)="closeCustDivsAlert()" [height]="155" [width]="590">
+                            <div class="kendoAlert">The division is blank. Do you intend for this contract to apply to all divisions?</div>
+                            <kendo-dialog-actions class="dialog-action">
+                                <div kendoButton (click)="saveWithoutCustDivs()" class="primary-btn">OK</div>
+                                <div kendoButton (click)="closeCustDivsAlert()" class="secondary-btn">CANCEL</div>
+                            </kendo-dialog-actions>
+                        </kendo-dialog>
                         <div class="col-md-11 row"><label class="rmv-padding rmv-mrgn-btm"><span class="red-color">*
                                 </span><span class="label-font">Tender Folio Name:</span></label><br /><input class="inputtext width-height" [ngClass]="{tenderFolioAlert:isTitleError}" [(ngModel)]="tenderName" (keyup)="onKeySearch($event)" type="text"
                                 kendoTextBox [ngModelOptions]="{standalone: true}" />

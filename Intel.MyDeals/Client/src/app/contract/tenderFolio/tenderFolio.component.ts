@@ -27,6 +27,7 @@ export class TenderFolioComponent {
     ) { }
 
     private isLoading = true;
+    private showCustDivAlert = false;
     public templateData;
     private tenderName;
     private contractType = "Tender Folio";
@@ -98,6 +99,7 @@ export class TenderFolioComponent {
     }
     // Contract name validation
     isDuplicateContractTitle(title: string) {
+        title = title.trim();
         if (title === "") return;
         //passing -100 in place of this.contractData.DC_ID
         this.dataService.isDuplicateContractTitle(-100, title).subscribe((response) => {
@@ -242,6 +244,7 @@ export class TenderFolioComponent {
         } else {
             this.isCustSelected = false;
         }
+        this.tenderName = this.tenderName.trim();
         if (this.tenderName === "" || !this.tenderName) {
             this.isTitleError = true;
             this.titleErrorMsg = "* field is required";
@@ -249,7 +252,26 @@ export class TenderFolioComponent {
         if (this.isCustSelected || this.isTitleError) {
             return;
         }
+        let selectedCustDivs = [];
+        if(this.CUST_NM_DIV){
+            selectedCustDivs = this.CUST_NM_DIV.map(data => data.CUST_DIV_NM);
+        }
+        const isCustDivsSelected = selectedCustDivs.length > 0 ? true : false;
+        if(isCustDivsSelected){
+            this.saveContractTender();
+        }else{
+            //opens confirmation dialog to check for saving tender folio without any customer division selected
+            this.showCustDivAlert = true;
+        }
+    }
+
+    saveWithoutCustDivs(){
+        this.showCustDivAlert = false;
         this.saveContractTender();
+    }
+
+    closeCustDivsAlert(){
+        this.showCustDivAlert = false;
     }
 
     // Set customer acceptance rules

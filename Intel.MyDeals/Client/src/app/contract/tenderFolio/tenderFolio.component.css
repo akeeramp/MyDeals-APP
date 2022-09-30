@@ -105,7 +105,8 @@ a.navbar-brand:hover {
 
 .kendoAlert {
     padding: 1.4em !important;
-    font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif !important
+    font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif !important;
+    color: #444444 !important;
 }
 
 li.k-button {
@@ -230,4 +231,39 @@ li.k-button:hover {
 
 .pdng-btm {
     margin: 0 0 5px 0 !important
+}
+
+.primary-btn {
+    color: #ffffff;
+    font-size: 15px !important;
+    font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif !important;
+    background-color: #00AEEF;
+    text-align: center;
+    cursor: pointer;
+    padding: 1.4em;
+}
+
+.primary-btn:hover {
+    background-color: #0071C5;
+}
+
+.secondary-btn {
+    color: #444444;
+    font-size: 15px !important;
+    font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif !important;
+    background-color: #fafafa;
+    text-align: center;
+    cursor: pointer;
+    padding: 1.4em;
+}
+
+.secondary-btn:hover {
+    background-color: #ebebeb;
+}
+
+.dialog-action {
+    padding: 0px !important;
+    height: 60px !important;
+    border: 0px !important;
+    gap: 0px !important;
 }
