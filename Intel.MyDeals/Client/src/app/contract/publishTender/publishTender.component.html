@@ -28,8 +28,7 @@
         <kendo-grid  [data]="gridData"  [loading]="isDataLoading" [pageSize]="state.take" [skip]="state.skip"
                             [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true"
                             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" 
-                            filterable="menu" (dataStateChange)="dataStateChange($event)" 
-                >
+                            filterable="menu" (cellClick)="cellClickHandler($event)" (dataStateChange)="dataStateChange($event)">
         <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of wipOptions.columns" field="{{column.field}}"
                             [hidden]="column.hidden" [width]="column.width" [style]="{'white-space': 'nowrap'}">
             <ng-template kendoGridHeaderTemplate>

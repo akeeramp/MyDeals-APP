@@ -203,14 +203,15 @@ export class dealMassUpdateComponent {
 
         if (this.massUpdateData.field.ATRB_LBL == "System Price Point") {
             if (this.massUpdateData.textValue != undefined && this.massUpdateData.textValue != null && this.massUpdateData.textValue != "") {
-                if (!Number.isNaN(Number(this.massUpdateData.textValue))) {
-                    if (parseFloat(this.massUpdateData.textValue) <= 0.00) {
-                        this.massUpdateData.textValue = 0.01;
+                let values = this.massUpdateData.textValue.split('$');
+                if (values && values.length == 2 && values[0] == '<=' && !Number.isNaN(Number(values[1]))) {
+                    if (parseFloat(values[1]) <= 0.00) {
+                        this.massUpdateData.textValue = values[0] + '$' + 0.01;
                     }
                 }
                 else {
                     this.isError["textValue"] = true;
-                    this.errorMsg["textValue"] = "Please Enter Valid Value. Valid Range: 0.01 - 1,000,000";
+                    this.errorMsg["textValue"] = "Please Enter Valid Value. Valid Range: <=$0.01 - <=$1,000,000";
                     this.isDataValid = false;
                 }
             }

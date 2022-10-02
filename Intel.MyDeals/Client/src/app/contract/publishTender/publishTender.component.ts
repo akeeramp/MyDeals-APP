@@ -6,8 +6,11 @@ import { pricingTableservice } from "../pricingTable/pricingTable.service";
 import { allDealsService } from "../allDeals/allDeals.service";
 import { templatesService } from "../../shared/services/templates.service";
 import { PTE_Config_Util } from "../PTEUtils/PTE_Config_util";
-import { DataStateChangeEvent, GridDataResult, PageSizeItem } from '@progress/kendo-angular-grid';
+import { DataStateChangeEvent, GridDataResult, PageSizeItem, CellClickEvent } from '@progress/kendo-angular-grid';
 import { process, State } from '@progress/kendo-data-query';
+import { MatDialog } from '@angular/material/dialog';
+import { dealProductsModalComponent } from '../ptModals/dealProductsModal/dealProductsModal.component';
+import { DE_Load_Util } from '../DEUtils/DE_Load_util';
 
 @Component({
     selector: "publish-tender",
@@ -17,7 +20,7 @@ import { process, State } from '@progress/kendo-data-query';
 
 export class publishTenderComponent {
     constructor(private pricingTableSvc: pricingTableservice, private publishtenderService: publishTenderService,
-        private allDealsSvc: allDealsService, private templatesSvc: templatesService, private loggerSvc: logger) {
+        private allDealsSvc: allDealsService, private templatesSvc: templatesService, private loggerSvc: logger, protected dialog: MatDialog) {
       
     }
     @Input() private pricingTableData:any;//using in html
@@ -92,6 +95,20 @@ export class publishTenderComponent {
         })
     }
 
+    cellClickHandler(args: CellClickEvent): void {
+        if (args.column.field == "PRD_BCKT" || args.column.field == "TITLE") {
+            this.openDealProductModal(args.dataItem);
+        }
+    }
+
+    openDealProductModal(dataItem) {
+        const dialogRef = this.dialog.open(dealProductsModalComponent, {
+            width: "1000px",
+            data: {
+                dataItem: dataItem
+            }
+        });
+    }
     async loadContractData() {
         this.contractData = await this.pricingTableSvc.readContract(this.c_Id).toPromise().catch(error => {
             this.loggerSvc.error('getContractDetails::readContract:: service', error);
@@ -132,11 +149,12 @@ export class publishTenderComponent {
 
             ];
             let show = [
-                "EXCLUDE_AUTOMATION", "DC_ID", "MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "MISSING_CAP_COST_INFO", "PASSED_VALIDATION", "CUST_MBR_SID", "END_CUSTOMER_RETAIL", "START_DT", "END_DT", "WF_STG_CD", "OBJ_SET_TYPE_CD",
-                "PTR_USER_PRD", "PRODUCT_CATEGORIES", "PROD_INCLDS", "TITLE", "SERVER_DEAL_TYPE", "DEAL_COMB_TYPE", "DEAL_DESC", "TIER_NBR", "ECAP_PRICE",
-                "KIT_ECAP", "CAP", "CAP_START_DT", "CAP_END_DT", "YCS2_PRC_IRBT", "YCS2_START_DT", "YCS2_END_DT", "VOLUME", "ON_ADD_DT", "MRKT_SEG", "GEO_COMBINED",
-                "TRGT_RGN", "QLTR_BID_GEO", "QLTR_PROJECT", "QUOTE_LN_ID", "PERIOD_PROFILE", "AR_SETTLEMENT_LVL", "PAYOUT_BASED_ON", "PROGRAM_PAYMENT", "TERMS", "REBATE_BILLING_START", "REBATE_BILLING_END", "CONSUMPTION_REASON", "CONSUMPTION_TYPE",
-                "CONSUMPTION_REASON_CMNT", "CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO", "CONSUMPTION_COUNTRY_REGION", "BACK_DATE_RSN", "REBATE_DEAL_ID", "CONTRACT_TYPE", "REBATE_OA_MAX_VOL", "REBATE_OA_MAX_AMT", "REBATE_TYPE", "TERMS", "TOTAL_DOLLAR_AMOUNT", "NOTES", "PRC_ST_OBJ_SID"
+                "EXCLUDE_AUTOMATION", "DC_ID", "PASSED_VALIDATION", "MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "MISSING_CAP_COST_INFO", "CUST_MBR_SID", "START_DT", "END_DT", "WF_STG_CD", "COMP_SKU", "COMPETITIVE_PRICE",
+                "LAST_REDEAL_DT", "PTR_USER_PRD", "PRODUCT_CATEGORIES", "DEAL_GRP_NM",  "PRD_BCKT", "PRIMARY_OR_SECONDARY", "KIT_ECAP", "PROD_INCLDS", "TITLE", "SERVER_DEAL_TYPE", "DEAL_COMB_TYPE", "DEAL_DESC", "ECAP_PRICE", "KIT_REBATE_BUNDLE_DISCOUNT", "BACKEND_REBATE",
+                "DSCNT_PER_LN", "QTY", "TOTAL_DSCNT_PR_LN", "KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE", "CAP_INFO", "CAP_KIT", "YCS2_INFO",
+                "VOLUME", "ON_ADD_DT", "DEAL_SOLD_TO_ID", "EXPIRE_YCS2", "REBATE_TYPE", "MRKT_SEG", "CONTRACT_TYPE", "GEO_COMBINED",
+                "TRGT_RGN", "END_CUSTOMER_RETAIL", "PRIMED_CUST_CNTRY", "QLTR_BID_GEO", "PAYOUT_BASED_ON", "PROGRAM_PAYMENT", "PERIOD_PROFILE", "RESET_VOLS_ON_PERIOD",
+                "AR_SETTLEMENT_LVL", "SETTLEMENT_PARTNER", "TERMS", "QUOTE_LN_ID", "GEO_APPROVED_BY", "DIV_APPROVED_BY"
             ];
             let usedCols = [];
             let excludeCols = ["details", "tools", "TRKR_NBR", "DC_PARENT_ID", "tender_actions", "CNTRCT_OBJ_SID"];
@@ -148,7 +166,6 @@ export class publishTenderComponent {
             this.wipOptions = {
                 "isLayoutConfigurable": false,
                 "isVisibleAdditionalDiscounts": false,
-
             };
             this.wipOptions['showMCPCT'] = true;
             this.wipOptions['isPinEnabled'] = false;
@@ -172,6 +189,7 @@ export class publishTenderComponent {
                 let dealType = dealTypes[d];
                 if (hasDeals.indexOf(dealType.dealType) >= 0) {
                     var wipTemplate = this.templates['ModelTemplates'].WIP_DEAL[dealType.dealType];
+                    DE_Load_Util.assignColSettings(wipTemplate, this.OBJ_SET_TYPE_CD);
                     if (wipTemplate.columns.findIndex(e => e.field === 'EXCLUDE_AUTOMATION') > 0) {
                         wipTemplate.columns.splice(wipTemplate.columns.findIndex(e => e.field === 'EXCLUDE_AUTOMATION'), 1);
                     }
@@ -214,12 +232,25 @@ export class publishTenderComponent {
                         col.hidden = show.indexOf(col.field) < 0;
                         col.locked = false;
 
-
-                        if (excludeCols.indexOf(col.field) < 0) {
-                            // add to column
-                            if (usedCols.indexOf(col.field) < 0) {
-                                usedCols.push(col.field);
-                                this.wipOptions['columns'].push(col);
+                        if (this.OBJ_SET_TYPE_CD == 'KIT') {
+                            if (excludeCols.indexOf(col.field) < 0) {
+                                // add to column
+                                if (usedCols.indexOf(col.field) < 0) {
+                                    usedCols.push(col.field);
+                                    this.wipOptions['columns'].push(col);
+                                    if (col.field == "QUOTE_LN_ID" || col.field == "GEO_APPROVED_BY" || col.field == "DIV_APPROVED_BY") {
+                                        this.wipOptions['columns'].pop();
+                                    }
+                                }
+                            }
+                        }
+                        else {
+                            if (excludeCols.indexOf(col.field) < 0) {
+                                // add to column
+                                if (usedCols.indexOf(col.field) < 0) {
+                                    usedCols.push(col.field);
+                                    this.wipOptions['columns'].push(col);
+                                }
                             }
                         }
                         if (col["field"] == "CUST_MBR_SID") {

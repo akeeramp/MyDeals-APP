@@ -341,14 +341,21 @@ export class dealEditorComponent {
     }
 
     openSystemPriceModal(dataItem) {
-        if (dataItem["SYS_PRICE_POINT"] != undefined && dataItem["SYS_PRICE_POINT"] != null && dataItem["SYS_PRICE_POINT"] != "" && (Number.isNaN(Number(dataItem["SYS_PRICE_POINT"])) || dataItem["SYS_PRICE_POINT"] == "0")) {
-            dataItem["SYS_PRICE_POINT"] = "";
+        let sysPricePoint = "";
+        if (dataItem["SYS_PRICE_POINT"] != undefined && dataItem["SYS_PRICE_POINT"] != null && dataItem["SYS_PRICE_POINT"] != "") {
+            let values = dataItem["SYS_PRICE_POINT"].split('$');
+            if (values && (values.length < 2 || (values.length == 2 && values[0] != "<=") || (values.length == 2 && (Number.isNaN(Number(values[1])) || values[1] <= "0")))) {
+                sysPricePoint = "";
+            }
+        }
+        else {
+            sysPricePoint = dataItem["SYS_PRICE_POINT"];
         }
         const dialogRef = this.dialog.open(systemPricePointModalComponent, {
             width: "900px",
             data: {
                 label: "System Price Point",
-                cellCurrValues: dataItem["SYS_PRICE_POINT"]
+                cellCurrValues: sysPricePoint
             }
         });
         dialogRef.afterClosed().subscribe((returnVal) => {
