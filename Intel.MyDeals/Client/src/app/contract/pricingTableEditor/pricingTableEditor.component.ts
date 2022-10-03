@@ -239,6 +239,7 @@ export class pricingTableEditorComponent implements OnChanges {
     @Output() refreshedContractData = new EventEmitter;
     private isDialogOpen: boolean = false;
     private isCustDivNull: boolean = false;
+    private validationMessage: boolean = false;
     /*For loading variable */
     private isLoading: boolean = false;
     private msgType: string = "";
@@ -869,6 +870,7 @@ export class pricingTableEditorComponent implements OnChanges {
                     return isPrdValid != null ? false : true;
                 }
                 else {
+                    this.validationMessage = true;
                     this.isLoading = false;
                 }
             }
@@ -877,9 +879,15 @@ export class pricingTableEditorComponent implements OnChanges {
 
             //this.loggerService.error("validateOnlyProducts:failed","Translate API failure");
             //this.isLoading = false;
+            if (action !== 'onSave') {
+                this.validationMessage = true;
+            }
             this.isLoading = false;
             return true;
         }
+    }
+    async resetValidationMessage() {
+        this.validationMessage = false;
     }
     async ValidateProducts(currentPricingTableRowData, publishWipDeals, saveOnContinue, currentRowNumber) {
         let hasProductDependencyErr = false;
