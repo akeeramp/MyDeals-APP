@@ -18,3 +18,21 @@
     border-right: 0 solid transparent;
     background-color: #ffffff !important;
 }
+
+.mybtnstyle.btn {
+    border-radius: 3px !important;
+    box-shadow: none !important;
+    background: none;
+    color: #0071C5;
+}
+
+    .mybtnstyle.btn:hover {
+        border: 1px solid #80808029 !important;
+        background-color: #e5e9ed !important;
+        color: #0071C5 !important
+    }
+
+.totalright {
+    margin-left: 31px !important;
+    margin-top: 14px !important
+}

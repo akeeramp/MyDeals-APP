@@ -109,13 +109,13 @@
                 </ng-template>
             </kendo-grid-column>
         </kendo-grid>
-        <kendo-dialog *ngIf="isDialogVisible" (close)="close()" [width]="600">
+        <kendo-dialog class="deleted-popups" *ngIf="isDialogVisible" (close)="close()" [width]="600">
             <h2>Delete Confirmation</h2>
-            <p style="padding: 20px">Entries currently used in a deal should be deactivated, not deleted. If the entry
+            <p style="padding-top: 15px;">Entries currently used in a deal should be deactivated, not deleted. If the entry
                 is currently on a deal it will deactivate instead of deleting. </p>
-            <kendo-dialog-actions><button class="k-button" kendoButton (click)="close()"
-                    style="width:100px; color:black; background-color:lightgray; border:none">Cancel </button><button
-                    class="k-button" kendoButton (click)="deleteRecord()" style="width:200px">Delete Dropdown</button>
+            <kendo-dialog-actions class="delete-actions">
+                <button class="k-button del-cancel" kendoButton (click)="close()">Cancel</button>
+                <button class="k-button del-ok" kendoButton (click)="deleteRecord()">Delete Dropdown</button>
             </kendo-dialog-actions>
         </kendo-dialog>
     </div>

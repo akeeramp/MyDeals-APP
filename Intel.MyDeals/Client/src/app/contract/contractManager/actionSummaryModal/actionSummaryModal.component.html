@@ -1,8 +1,8 @@
 
-    <div class="modal-header modalBlueBody">
+    <div class="modal-header modalBlueBody bottle-head">
         <h5 class="modal-title" id="modal-title">Submission Overview</h5>
     </div>
-    <div class="modal-body modalBlueBody" id="modal-body">
+    <div class="modal-body modalBlueBody bottle-body" id="modal-body">
         
         <div class="errMsg" *ngIf="showErrMsg">
             <i class="intelicon-information-solid"></i> Please make sure you review Meet Comp on the left navigation before proceeding.
@@ -21,12 +21,12 @@
         <div class="row">
             <div class="col-md-6">
                 <div>
-                    <button class="btn btn-default full-width" type="button" (click)="cancel()">Close</button>
+                    <button class="btn btn-default full-width fclosebtn" type="button" (click)="cancel()">Close</button>
                 </div>
             </div>
             <div class="col-md-6">
                 <div>
-                    <button class="btn btn-primary full-width" type="button" (click)="ok()">Submit</button>
+                    <button class="btn btn-primary full-width fsubmitbtn" type="button" (click)="ok()">Submit</button>
                 </div>
             </div>
         </div>

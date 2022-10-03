@@ -37,13 +37,13 @@
                 [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" [columnMenu]="true" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)">
                 <kendo-grid-column width="70px" [columnMenu]="false">
                     <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
-                        <div class='dealTools'><input type='checkbox' class='grid-link-checkbox with-font' id='lnkChk_header' (click)="selectProdIDS('all', $event)"><label for='lnkChk_header' style='margin: 5px 0 0 0;' title='Check to apply changes to all checked rows'></label>
+                        <div class='dealTools'><input type='checkbox' class='grid-link-checkbox with-font' id='lnkChk_header' (click)="selectProdIDS('all', $event)"><label class="all-labels" for='lnkChk_header' style='margin: 5px 0 0 0;' title='Check to apply changes to all checked rows'></label>
                         </div>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
                         <div *ngIf="(dataItem.MEET_COMP_UPD_FLG.toLowerCase()=='n');else chkbx_template"></div>
                         <ng-template #chkbx_template>
-                            <div class='dealTools'><input type='checkbox' [(ngModel)]="dataItem.IS_SELECTED" class='grid-link-checkbox with-font' id="lnkChk_{{dataItem.RW_NM}}" (click)="selectProdIDS(dataItem.RW_NM, $event)"><label for='lnkChk_{{dataItem.RW_NM}}' style='margin: 5px 0 0 0;'
+                            <div class='dealTools'><input type='checkbox' [(ngModel)]="dataItem.IS_SELECTED" class='grid-link-checkbox with-font' id="lnkChk_{{dataItem.RW_NM}}" (click)="selectProdIDS(dataItem.RW_NM, $event)"><label class="all-labels" for='lnkChk_{{dataItem.RW_NM}}' style='margin: 5px 0 0 0;'
                                     title='Check to apply changes to all checked rows'></label></div>
                         </ng-template>
                     </ng-template>

@@ -63,11 +63,16 @@
                 </ng-template>
             </kendo-grid-column>
         </kendo-grid>
-        <kendo-dialog *ngIf="isDialogVisible" (close)="saveCancel()">
-            <p class="kendo-dialog-message">{{errorMsg}}</p>
-            <kendo-dialog-actions><button class='k-button' *ngIf="isOk" (click)="saveCancel()">Ok</button><button
-                    class='k-button' *ngIf="isDelete" (click)="deleteConfirmation()">Delete Product
-                    Alias</button><button class='k-button' *ngIf="cancelConfirm" (click)="saveCancel()">Cancel</button>
+        <kendo-dialog class="deleted-popups" *ngIf="isDialogVisible" (close)="saveCancel()" [width]="600">
+            <h2>Delete Confirmation</h2>
+            <p style="padding-top: 15px;">{{errorMsg}}</p>
+            <kendo-dialog-actions class="delete-actions">
+                <button class='k-button del-cancel' *ngIf="cancelConfirm" (click)="saveCancel()">Cancel</button>
+                <button class='k-button del-ok' *ngIf="isOk" (click)="saveCancel()">Ok</button>
+                <button class='k-button del-ok' *ngIf="isDelete" (click)="deleteConfirmation()">
+                    Delete Product
+                    Alias
+                </button>
             </kendo-dialog-actions>
         </kendo-dialog>
     </div>

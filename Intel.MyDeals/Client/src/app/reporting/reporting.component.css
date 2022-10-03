@@ -53,3 +53,19 @@
      height: 100%;
      transform: perspective(100px)
  }
+
+.first-look {
+    margin-top: 20px !important;
+}
+
+.new-head h1 {
+    padding-top: 30px !important;
+}
+
+.reportLink a {
+    color: #0071c5 !important;
+}
+
+.new-row {
+    --bs-gutter-x: 1.5rem !important;
+}

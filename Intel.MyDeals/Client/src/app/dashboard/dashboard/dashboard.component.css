@@ -660,10 +660,9 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     border-color: #ced4da6b !important;
 }
 
-    .noborderclass.k-combobox .k-dropdown-wrap:hover {
-        box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
-        background-color: none !important
-    }
+.noborderclass.k-combobox:hover {
+    box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+}
 
 .noborderclass.k-combobox .k-select {
     border-color: #f0f0f087 !important;
@@ -893,4 +892,32 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
 kendo-dropdownlist.font-input .k-input {
     font-size: 14px;
     font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.dateboxborder.k-numerictextbox:focus-within {
+    border-color: #f0f0f0 !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+}
+
+.borderless.k-textbox:focus-within {
+    border-color: #f0f0f0 !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+}
+
+.noborderclass.k-combobox:focus-within {
+    border-color: #f0f0f0 !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+}
+
+.dateclass.k-datepicker .k-input:focus-within {
+    background-color: #ffffff !important;
+}
+
+.bottle-head {
+    padding: 15px !important;
+    border-bottom: 1px solid #fff !important;
+}
+
+.bottle-body {
+    padding: 15px !important;
 }

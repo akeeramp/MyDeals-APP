@@ -499,3 +499,8 @@ kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper .k-tabstrip-items li:hover {
     padding-left: calc(var(--bs-gutter-x) * .5);
     margin-top: var(--bs-gutter-y);
 }
+
+.k-icon.k-i-k-icon:hover {
+    background-color: #00AEEF !important;
+    color: #FFFFFF !important;
+}

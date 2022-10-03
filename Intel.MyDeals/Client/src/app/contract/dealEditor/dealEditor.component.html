@@ -43,8 +43,8 @@
                     </button>
                 </div>
 
-                <div class="fr clearfix dropdown-col-opt" style="margin-top: 2px; margin-left:8px;">
-                    <button class="btn btn-sm ssToolbarBtn dropbtn" title="Manage Columns">
+                <div class="fr clearfix dropdown-col-opt" style="margin-top: 2px; margin-left: 8px; position: relative;">
+                    <button class="btn btn-sm ssToolbarBtn dropbtn hover-effect" title="Manage Columns">
                         <table>
                             <tr>
                                 <td> <i class="intelicon-view-by-columns skyBlue" style="font-size: 30px"></i></td>
@@ -57,16 +57,16 @@
                             </tr>
                         </table>
                     </button>
-                    <div id="myDropdown" class="dropdown-content-col" style=" background-color: white;">
-                        <div style="width: 316.514px; margin-top: 10px; margin-left: 8px; height: 252.376px; z-index: 10002; top: 36px; left: 0px; box-sizing: content-box; ">
+                    <div id="myDropdown" class="dropdown-content-col" style=" background-color: white; font-family: 'Intel Clear'; font-size: 13px;">
+                        <div class="mycol-style">
                             <div>
-                                <span class="k-textbox" style="width: 95%;">
-                                    <i class="intelicon-search" style="font-size:20px; color:#00AEEF; margin-top:3px;"></i>
+                                <span class="k-textbox searchbox">
+                                    <i class="intelicon-search" style="font-size:18px; color:#00AEEF; margin-top:3px;"></i>
                                     <input type="search" style="font: icon; font-family: 'Intel Clear'; border: none; height: 30px; width: 95%; border-color: lightgrey; " [(ngModel)]="columnSearchFilter" />
                                 </span>
                             </div>
-                            <div style="max-height: 200px; overflow: auto; margin-top: 3px;">
-                                <div *ngFor="let item of wipTemplate.columns | filter:columnSearchFilter | orderBy: 'title'">
+                            <div style="max-height: 230px; overflow: auto; margin-top: 4px; margin-right: 10px; height: 190px;">
+                                <div class="backclass" *ngFor="let item of wipTemplate.columns | filter:columnSearchFilter | orderBy: 'title'">
                                     &nbsp;&nbsp;<input type='checkbox' [checked]="iscolumnchecked(item.field)" id="colChk{{item.field}}" (click)="onColumnChange(item)" />&nbsp;
                                     <label for="colChk{{item.field}}">
                                         <span [innerHTML]="item.title"></span>
@@ -78,7 +78,7 @@
                 </div>
 
                 <div class="fr dropdown" style="margin-top: 2px; margin-left:8px;">
-                    <button class="btn btn-sm ssToolbarBtn dropbtn" title="Manage Columns" style="color: #00AEEF;">
+                    <button class="btn btn-sm ssToolbarBtn dropbtn hover-effect" title="Manage Columns" style="color: #00AEEF;">
                         <table>
                             <tr>
                                 <td><i class="intelicon-settings-solid" style="font-size: 30px"></i></td>
@@ -91,25 +91,25 @@
                             </tr>
                         </table>
                     </button>
-                    <div class="dropdown-content">
+                    <div class="dropdown-content new-effect">
                         <ul>
                             <li (click)="addTab()">
-                                <i class="intelicon-plus-outlined" style="font-size: 18px; margin-left: -17px; cursor: pointer;"></i> ADD TAB
+                                <i class="intelicon-plus-outlined" style="font-size: 18px; cursor: pointer;"></i> ADD TAB
                             </li>
                             <li (click)="renameTab()">
-                                <i class="intelicon-plus-outlined" style="font-size: 18px; margin-left: -17px; cursor: pointer; "></i> RENAME TAB
+                                <i class="intelicon-plus-outlined" style="font-size: 18px; cursor: pointer; "></i> RENAME TAB
                             </li>
                             <li (click)="defaultLayout()">
-                                <i class="intelicon-dashboard-solid" style="font-size: 18px; margin-left: -17px; cursor: pointer; "></i> DEFAULT LAYOUT
+                                <i class="intelicon-dashboard-solid" style="font-size: 18px; cursor: pointer; "></i> DEFAULT LAYOUT
                             </li>
                             <li (click)="customLayout()" ng-class="{'li-disabled': opOptions.custom === undefined}">
-                                <i class="intelicon-dashboard-outlined" style="font-size: 18px; margin-left: -17px; cursor: pointer; "></i> CUSTOM LAYOUT
+                                <i class="intelicon-dashboard-outlined" style="font-size: 18px; cursor: pointer; "></i> CUSTOM LAYOUT
                             </li>
                             <li (click)="saveLayout()">
-                                <i class="intelicon-save-outlined" style="font-size: 18px; margin-left: -17px; cursor: pointer; "></i> SAVE LAYOUT
+                                <i class="intelicon-save-outlined" style="font-size: 18px; cursor: pointer; "></i> SAVE LAYOUT
                             </li>
                             <li (click)="clearCurrentLayout()">
-                                <i class="intelicon-settings-solid" style="font-size: 18px; margin-left: -17px; cursor: pointer; "></i> CLEAR CURRENT LAYOUT
+                                <i class="intelicon-settings-solid" style="font-size: 18px; cursor: pointer; "></i> CLEAR CURRENT LAYOUT
                             </li>
                         </ul>
                     </div>
@@ -154,7 +154,7 @@
                     </table>
                 </button>&nbsp;&nbsp;
 
-                <span class="k-textbox" style="width:248px !important;margin-top:4px">
+                <span class="k-textbox design" style="width:248px !important;margin-top:4px">
                     <i class="intelicon-search" style="font-size:20px; color:#00AEEF; margin-top:3px;"></i>
                     &nbsp;&nbsp;
                     <input style="width:270px;border:none" (keydown)="filterDealData($event)" [(ngModel)]="searchFilter" placeholder="search... (press enter to search)" />

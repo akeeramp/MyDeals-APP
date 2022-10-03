@@ -16,21 +16,21 @@
                         <div class="all-fixes-label">
                             <div style="font-size: 11px; line-height: 1em; margin-bottom: -5px;">All</div>
                             <input type="checkbox" name="allRadGrp" class="with-font" id="all_rad_approve" (click)="clkAllRow($event, 'Approve')" [(ngModel)]="approveCheckBox" />
-                            <label for="all_rad_approve"></label>
+                            <label class="all-labels" for="all_rad_approve"></label>
                         </div>
                     </td>
                     <td style="width: 50px; text-align: center;" *ngIf="canEdit">
                         <div class="all-fixes-label">
                             <div style="font-size: 11px; line-height: 1em; margin-bottom: -5px;">All</div>
                             <input type="checkbox" name="allRadGrp" class="with-font" id="all_rad_revise" (click)="clkAllRow($event, 'Revise')" [(ngModel)]="reviseCheckBox" />
-                            <label for="all_rad_revise"></label>
+                            <label class="all-labels" for="all_rad_revise"></label>
                         </div>
                     </td>
                     <td style="width: 50px; text-align: center;">
                         <div class="all-fixes-label">
                             <div style="font-size: 11px; line-height: 1em; margin-bottom: -5px;">All</div>
                             <input type="checkbox" name="allRadGrp" class="with-font" id="all_rad_email" (click)="clkAllRow($event, 'Email')" [(ngModel)]="emailCheckBox" />
-                            <label for="all_rad_email"></label>
+                            <label class="all-labels" for="all_rad_email"></label>
                         </div>
                     </td>
                     <td style="width: 100px; text-align: center;" nowrap>
@@ -38,7 +38,7 @@
                             <button class="btn btn-sm btn-skyblue view-complex-one" type="button" (click)="clearFilter()" title="Click to clear the filter" style="padding: 5px 10px 4px 10px; margin-right: 1px; margin-top: -2px; border-right: 1px solid #000 !important">
                                 <i class="fa fa-filter" aria-hidden="true" style="font-size: 18px;"></i>
                             </button>
-                            <button class="btn btn-sm btn-skyblue view-complex-two dropdown-toggle" aria-expanded="false" type="button" data-toggle="dropdown" style="margin-top: -2px;">
+                            <button class="btn btn-sm btn-skyblue view-complex-two dropdown-toggle dropdown-toggle-blue" aria-expanded="false" type="button" data-toggle="dropdown" style="margin-top: -2px;">
                                 <span class="caret throw-css"></span><span class="sr-only">Toggle Dropdown</span>
                             </button>
                             <div class="dropdown-menu" role="menu">
@@ -53,19 +53,19 @@
                     </td>
                     <td style="width: 50px; text-align: center;"></td>
                     <td>
-                        <span class="k-textbox" style="width: 300px; margin-top: -4px;">
+                        <span class="k-textbox design" style="width: 300px; margin-top: -4px;">
                             <i class="intelicon-search" style="font-size: 26px; color: #00AEEF; margin-top: 3px;"></i>
                             <input style="width: 290px;border:none" placeholder="Search for Pricing Strategy or Pricing Table" [(ngModel)]="titleFilter" />
                         </span>
                     </td>
                     <td style="width:500px;text-align:right;padding-right:2px;">
                         <div class="dropdown clearfix fr temp-btns" style="padding-top:5px;">
-                            <button kendoButton class="btn btn-skyblue dropdown-toggle" id="dropActionss" type="button" (click)="submitContract()" title="Submit Approval, Revision and Cancel requests or send an email"
+                            <button kendoButton class="btn btn-skyblue dropdown-toggle dropdown-toggle-blue" id="dropActionss" type="button" (click)="submitContract()" title="Submit Approval, Revision and Cancel requests or send an email"
                                     *ngIf="!submitModal">
                                 Submit
                             </button>
-                            <kendo-dialog *ngIf="submitModal" (close)="close('cancel')" [width]="350">
-                                <p style="margin:30px; text-align: center; font-size:17px">No Pricing Strategies were selected.</p>
+                            <kendo-dialog *ngIf="submitModal" (close)="close('cancel')" [width]="350" class="mybotdialog">
+                                <p class="hstyle">No Pricing Strategies were selected.</p>
                                 <kendo-dialog-actions><button kendoButton (click)="close('no')">OK</button></kendo-dialog-actions>
                             </kendo-dialog>
                             <kendo-dialog *ngIf="showMultipleDialog">
@@ -493,9 +493,9 @@
                 </div>
             </div>
         </div>
-        <kendo-window *ngIf="windowOpened" (close)="windowClose()" [minWidth]="windowMinWidth" [minHeight]="windowHeight" [width]="windowWidth" [top]="windowTop" [left]="windowLeft">
+        <kendo-window class="wistyle" *ngIf="windowOpened" (close)="windowClose()" [minWidth]="windowMinWidth" [minHeight]="windowHeight" [width]="windowWidth" [top]="windowTop" [left]="windowLeft">
             <kendo-window-titlebar>
-                <div class="k-window-title">Results</div><button kendoWindowCloseAction class="close-icon"></button>
+                <div class="k-window-title arrow-window-title">Results</div><button kendoWindowCloseAction class="close-icon"></button>
             </kendo-window-titlebar>
             <message-board-dialog [data]="messages" [contractData]="contractData"></message-board-dialog>
         </kendo-window> 

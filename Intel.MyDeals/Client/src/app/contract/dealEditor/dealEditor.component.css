@@ -210,6 +210,7 @@ tr:last-child>td {
     font-family: arial;
     text-align: center;
     color: white;
+    font-weight:600;
 }
 
 .capLineStyle {
@@ -592,7 +593,12 @@ kendo-grid-string-filter-menu .k-dropdowntree .k-dropdown-wrap {
 }
 
 #excelDropDownMenu.show {
-    transform: translate3d(1300px, 200px, 0px) !important;
+    transform: none !important;
+    font-size: 13px !important;
+    color: #777 !important;
+    border-color: #eee !important;
+    font-family: 'Intel Clear' !important;
+    top: 44px !important;
 }
 
 .k-filter-menu .k-multiselect-wrap,
@@ -689,9 +695,9 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
 }
 
 .dropdown:hover .dropbtn {
-    background-color: #0071c5;
+    background-color: #0071c5!important;
     color: none;
-    color: #fdfdfd;
+    color: #fdfdfd!important;
     cursor: pointer;
 }
 
@@ -744,7 +750,12 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
     display: block;
 }
 
-.dropdown-content-col div label:hover {
+/*.dropdown-content-col div label:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}*/
+
+.backclass:hover {
     background-color: #f1f1f1;
     cursor: pointer;
 }
@@ -795,4 +806,70 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
 
 .width-fixes.new-allDeals.fs-increase .k-tabstrip-items-wrapper .k-tabstrip-items li:last-child {
     border: none!important;
+}
+
+.new-effect {
+    font-size: 13px;
+    font-weight: 200;
+    font-family: 'Intel Clear';
+    height: 200px !important;
+}
+
+.new-effect ul li {
+    padding: .6em 1.8em .38em .9em !important;
+}
+
+.dropdown-content.new-effect ul {
+    margin-bottom: 0;
+    padding-left: 0;
+}
+
+.new-effect ul li:hover {
+    background-color: #1891ee;
+    color: #ffffff !important;
+    cursor: pointer;
+}
+
+.dropdown:hover .hover-effect {
+    background-color: #1891ee;
+    color: #ffffff !important;
+    cursor: pointer;
+}
+
+.hover-effect:hover {
+    background-color: #1891ee;
+    color: #ffffff !important;
+    cursor: pointer;
+}
+
+.k-textbox.design:hover {
+    background-color: #fff;
+    border-color: #f5f5f5;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%);
+}
+
+.mycol-style {
+    width: 311.514px !important;
+    overflow-y: hidden !important;
+    margin-top: 5px !important;
+    margin-left: 1px !important;
+    height: 236.376px !important;
+    z-index: 10002;
+    top: 36px;
+    left: 0px;
+    box-sizing: content-box;
+    padding-top: 6px !important
+}
+
+.searchbox {
+    width: 94% !important;
+    margin-left: 7px !important;
+    height: 32px !important;
+    box-shadow: none !important;
+    border-color: #ccc !important;
+}
+
+ngb-tooltip-window .tooltip-inner {
+    background-color: #ed1c24 !important;
+    border: 1px solid #00b2f4 !important;
 }

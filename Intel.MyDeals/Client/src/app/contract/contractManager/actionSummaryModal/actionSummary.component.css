@@ -81,3 +81,29 @@ input[type=checkbox].with-font:focus + label:before {
 .mat-dialog-container{
     padding: 0px !important;
 }
+
+.fclosebtn.btn-default {
+    background-color: #f4f4f4 !important;
+    color: #444 !important;
+    border-color: #ddd !important;
+    width: 95% !important
+}
+
+    .fclosebtn.btn-default:hover {
+        color: #0071c5 !important;
+        border-color: #b1babf !important;
+        background-color: #e7e7e7 !important;
+    }
+
+.fsubmitbtn.btn-primary {
+    background-color: #00AEEF !important;
+    color: #ffffff !important;
+    width: 96% !important;
+    margin-left: 9px !important
+}
+
+    .fsubmitbtn.btn-primary:hover {
+        color: #ffffff !important;
+        border-color: #00aeef !important;
+        background-color: #0071c5 !important;
+    }

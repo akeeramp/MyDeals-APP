@@ -378,6 +378,11 @@ kendo-datepicker.dateclass:focus-within {
     box-shadow: none;
 }
 
+.c2aborder.k-textbox:focus-within {
+    border-color: #f0f0f0 !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+}
+
 /*.k-calendar .k-month .k-link, .k-calendar .k-calendar-monthview .k-link {
     width: 40px !important;
     height: 40px !important;

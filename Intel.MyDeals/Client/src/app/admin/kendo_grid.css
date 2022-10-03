@@ -398,3 +398,57 @@ body {
 .remove-space-border kendo-grid .k-grid-aria-root kendo-grid-list .k-grid-table-wrap table tr td {
     border: none;
 }
+
+kendo-dialog.deleted-popups .k-dialog {
+    border-radius: 0;
+}
+
+kendo-dialog.deleted-popups .k-dialog .k-content {
+    padding: 15px;
+    padding-top: 30px;
+    border-bottom: 1px solid #f4f4f4;
+}
+
+kendo-dialog-actions.delete-actions {
+    padding: 15px;
+    justify-content: flex-end;
+}
+
+kendo-dialog-actions.delete-actions button.k-button.del-cancel {
+    background-color: #f0f0f0 !important;
+    color: #111;
+    width: auto !important;
+    max-width: 75px;
+    font-size: 16px;
+    border-radius: 3px !important;
+    padding: 8px !important;
+}
+
+kendo-dialog-actions.delete-actions button.k-button.del-ok {
+    background-color: #3c8dbc !important;
+    border-color: #367fa9 !important;
+    font-size: 16px;
+    border-radius: 3px !important;
+    padding: 8px !important;
+    width: auto !important;
+    max-width: 165px;
+    color: #fff;
+}
+
+kendo-dialog.deleted-popups .k-dialog .k-content h2, kendo-dialog.deleted-popups .k-dialog .k-content p {
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+kendo-dialog-actions.delete-actions button.k-button.del-ok:hover, kendo-dialog-actions.delete-actions button.k-button.del-ok:active {
+    background-color: #3c8dbc !important;
+    border-color: #367fa9 !important;
+    color: #fff !important;
+    box-shadow: none !important;
+}
+
+kendo-dialog-actions.delete-actions button.k-button.del-cancel:hover, kendo-dialog-actions.delete-actions button.k-button.del-cancel:active {
+    background-color: #f0f0f0 !important;
+    border-color: #f0f0f0 !important;
+    color: #111 !important;
+    box-shadow: none !important;
+}

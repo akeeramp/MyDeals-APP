@@ -5,18 +5,18 @@
             <i class="intelicon-alert-solid" style="font-size: 120px; color: #FC4C02;" [hidden]="warnCnt == 0"></i>
             <i class="intelicon-information-solid" style="font-size: 120px; color: #C4D600;" *ngIf="warnCnt == 0"></i>
         </div>
-        <div class="col-md-7">
+        <div class="col-md-7 totalright">
             <h4>{{title}}</h4>
             <div [hidden]="infoCnt == 0" style="color: #C4D600; font-size: 18px;"><i class="intelicon-information-solid" style="font-size: 18px; color: #C4D600;"></i> {{infoMsg}}</div>
             <div [hidden]="warnCnt == 0" style="color: #FC4C02; font-size: 18px;"><i class="intelicon-alert-solid" style="font-size: 18px; color: #FC4C02;"></i> {{warnMsg}}</div>
             <div style="margin-top: 15px;">
-                <button class="btn btn-secondary btn-sm" type="button" (click)="showHideTable(true)" [hidden]="showDetails">
+                <button class="btn btn-secondary btn-sm mybtnstyle" type="button" (click)="showHideTable(true)" [hidden]="showDetails">
                     <i class="intelicon-right-next" style="font-size: 20px;"></i> View details
                 </button>
-                <button class="btn btn-secondary btn-sm" type="button" (click)="showHideTable(false)" *ngIf="showDetails">
+                <button class="btn btn-secondary btn-sm mybtnstyle" type="button" (click)="showHideTable(false)" *ngIf="showDetails">
                     <i class="intelicon-down" style="font-size: 20px;"></i> Hide details
                 </button>
-                <button class="btn btn-secondary btn-sm" type="button" style="margin-left: 15px;" [hidden]="disableEmail()" (click)="openEmailMsg()">
+                <button class="btn btn-secondary btn-sm mybtnstyle" type="button" style="margin-left: 15px;" [hidden]="disableEmail()" (click)="openEmailMsg()">
                     <i class="intelicon-email-message-outlined" style="font-size: 20px;"></i> Email details
                 </button>
                 <div class="clearboth"></div>

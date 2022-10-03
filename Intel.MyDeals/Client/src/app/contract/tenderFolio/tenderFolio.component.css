@@ -89,18 +89,13 @@ a.navbar-brand:hover {
     border-radius: 0 !important
 }
 
-.k-combobox {
-    border-color: #f0f0f0 !important;
-    border-bottom: 2px solid #0071c5 !important;
-    border-radius: 0 !important
-}
 
 .inputtext {
     margin-left: 0 !important;
     max-width: none !important;
     border-radius: 0 !important;
     border-color: #f0f0f0 !important;
-    border-bottom: 2px solid #0071c5 !important
+    /*border-bottom: 2px solid #0071c5 !important*/
 }
 
 .kendoAlert {
@@ -266,4 +261,53 @@ li.k-button:hover {
     height: 60px !important;
     border: 0px !important;
     gap: 0px !important;
+}
+
+.mycombox.k-combobox {
+    /*border-bottom: none !important;*/
+    border-radius: 0 !important
+}
+
+/*.myalertprice {
+    margin-right: 83px !important;
+    padding: 25px !important
+}*/
+
+.mycombox.k-combobox .k-dropdown-wrap .k-select {
+    background: #d3d3d326 !important;
+    width: 38px !important;
+    border-color: #f0f0f0 !important;
+}
+
+.mycombox.k-combobox .k-dropdown-wrap {
+    border-color: #f0f0f0 !important;
+    color: #495057;
+    background-color: #ffffff;
+}
+
+.mycombox.k-combobox > .k-state-focused {
+    box-shadow: none !important
+}
+
+.mycombox .k-icon {
+    color: #727578 !important;
+}
+
+.mycombox.k-combobox:focus-within {
+    border-color: #f0f0f0 !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+}
+
+.mycombox .k-icon:hover {
+    color: #727578 !important
+}
+
+.tndr-btn.btn {
+    border-radius: 3px !important;
+    border: 1px solid #367fa9 !important;
+}
+
+.inputtext.k-textbox:focus-within {
+    border-color: #f0f0f0 !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
 }

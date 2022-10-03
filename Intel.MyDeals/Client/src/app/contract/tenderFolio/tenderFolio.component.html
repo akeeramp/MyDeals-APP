@@ -26,7 +26,7 @@
                         </div>
                         <div class="col-md-11 row"><label class="rmv-mrgn-btm"><span class="red-color">*
                                 </span><span class="label-font">Customer:</span></label><br />
-                            <kendo-combobox class="combobox width-height" [(ngModel)]="custSIDObj" [kendoDropDownFilter]="filterSettings" [data]="Customers" [ngClass]="{tenderFolioAlert:isCustSelected}" (valueChange)="valueChange($event)" textField="CUST_NM" valueField="CUST_SID"
+                            <kendo-combobox class="combobox width-height mycombox" [(ngModel)]="custSIDObj" [kendoDropDownFilter]="filterSettings" [data]="Customers" [ngClass]="{tenderFolioAlert:isCustSelected}" (valueChange)="valueChange($event)" textField="CUST_NM" valueField="CUST_SID"
                                 [ngModelOptions]="{standalone: true}">
                             </kendo-combobox>
                             <div *ngIf="isCustSelected" class="err-Control">Please select a valid customer
@@ -34,7 +34,7 @@
                             <kendo-dialog *ngIf="showKendoAlert" (close)="closeKendoAlert()" [height]="155" [width]="245">
                                 <div class="kendoAlert">Missing Price Group Code</div>
                                 <kendo-dialog-actions>
-                                    <div kendoButton (click)="closeKendoAlert()" class="kendo-alrt-btn">OK</div>
+                                    <div kendoButton (click)="closeKendoAlert()" class="kendo-alrt-btn myalertprice">OK</div>
                                 </kendo-dialog-actions>
                             </kendo-dialog>
                         </div>
@@ -51,7 +51,7 @@
                         </kendo-dialog>
                         <div class="col-md-11 row"><label class="rmv-padding rmv-mrgn-btm"><span class="red-color">*
                                 </span><span class="label-font">Tender Folio Name:</span></label><br /><input class="inputtext width-height" [ngClass]="{tenderFolioAlert:isTitleError}" [(ngModel)]="tenderName" (keyup)="onKeySearch($event)" type="text"
-                                kendoTextBox [ngModelOptions]="{standalone: true}" />
+                                kendoTextBox [ngModelOptions]="{standalone: true}" style="padding: 2px 10px !important;"/>
                             <div class="err-Control" *ngIf="isTitleError">{{titleErrorMsg}}</div>
                         </div>
                         <div *ngFor="let value of PtDealTypes" class="pdng-lft">
