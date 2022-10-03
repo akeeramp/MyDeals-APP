@@ -272,6 +272,7 @@ export class pricingTableEditorComponent implements OnChanges {
         comments: true,
         height: 540,
         width: 1402,
+        manualColumnResize: true,
         afterChange: (changes, source) => {
             //using => operator to-call-parent-function-from-callback-function
             this.afterCellChange(changes, source);

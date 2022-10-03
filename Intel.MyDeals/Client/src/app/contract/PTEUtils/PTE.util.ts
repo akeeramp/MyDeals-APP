@@ -40,9 +40,6 @@ export class PTEUtil {
         if (!_.isUndefined(templateColumnFields[item.field].type)) {
             const itemField = templateColumnFields[item.field].type;
 
-            //if (item.field == 'QLTR_PROJECT') {
-            //    currentColumnConfig.validator = this.projectValidator;
-            //}
             if (item.field == "END_VOL" || item.field == "END_PB" || item.field === 'STRT_VOL') {
                 currentColumnConfig.type = 'numeric';
                 currentColumnConfig.numericFormat = {
@@ -100,10 +97,10 @@ export class PTEUtil {
                 currentColumnConfig.type = 'text';
             }
         }
-        /* Is Required & Nullable */
-        if (item.isRequired || !templateColumnFields[item.field].nullable) {
-            currentColumnConfig.allowEmpty = false;
-        }
+        /* Is Required & Nullable -- this is behaviour of handsone but as part of our validate process we check this */
+        // if (item.isRequired || !templateColumnFields[item.field].nullable) {
+        //     currentColumnConfig.allowEmpty = false;
+        // }
         /* Sorting */
         if (item.sortable) {
             currentColumnConfig.columnSorting = {
