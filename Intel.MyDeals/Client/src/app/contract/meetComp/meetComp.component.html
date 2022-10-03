@@ -297,7 +297,9 @@
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                                    <div class='readOnlyCell'>{{dataItem.DEAL_OBJ_SID}}</div>
+                                    <div class='readOnlyCell'>
+                                       <a (click)="gotoDeal(dataItem.DEAL_OBJ_SID)" class="deallink"> {{dataItem.DEAL_OBJ_SID}}</a>
+                                    </div>
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="DEAL_DESC" title="Deal Description" width="150" [headerClass]="{'headerClass':true}">

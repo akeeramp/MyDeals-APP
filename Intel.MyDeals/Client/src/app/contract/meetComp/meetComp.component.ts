@@ -1080,6 +1080,21 @@ export class meetCompContractComponent implements OnInit {
             })
         );
 
+    gotoDeal(DealId:any):void{
+        this.isLoading = true;
+        this.meetCompSvc.getContractIDDetails(DealId).subscribe(res => {
+            this.isLoading = false;
+            if (res) {
+                window.location.href = "#/contractmanager/WIP/" + res['ContractId'] + "/" + res['PricingStrategyId'] + "/" +res['PricingTableId'] + "/" + DealId;
+            }
+         },
+            error => {
+                this.loggerSvc.error("MeetcompComponent::getContractIDDetails::Unable to get Contract Data", error);
+                this.isLoading = false;
+            }
+        );
+    }
+
     ngOnInit(): void {
         this.PAGE_NM = this.pageNm;
         if (!!this.objSid) {

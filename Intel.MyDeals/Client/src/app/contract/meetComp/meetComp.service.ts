@@ -25,5 +25,8 @@ export class meetCompContractService {
         const apiUrl = this.apiBaseContractUrl + "GetDealDetails/" + dealObjSid + "/" + grpPrdSid + "/" + dealPrdType;
         return this.httpClient.post(apiUrl,"");
     }
+    public getContractIDDetails(id:any) {
+        return this.httpClient.get("api/Search/GotoDeal/" + id);
+    }
 
 }
