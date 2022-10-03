@@ -36,6 +36,9 @@ export interface DialogData {
         result=`[${this.value.toString()}]`
        }
       }
+      else if (this.isCustDiv) {
+          result = this.value.join('/');
+      }
       else{
         result=this.value.toString();
       }
@@ -49,6 +52,9 @@ export interface DialogData {
         this.isBlend=(this.data.selVal?.indexOf("[") >= 0);
         if(this.isBlend){
           this.value=this.data.selVal? this.data.selVal.replace('[','').replace(']','').split(','):null;
+        }
+        else if (this.isCustDiv) {
+            this.value = this.data.selVal ? this.data.selVal.split('/') : null;
         }
         else{
           this.value=this.data.selVal? this.data.selVal.split(','):null;

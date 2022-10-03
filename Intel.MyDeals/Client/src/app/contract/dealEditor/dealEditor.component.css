@@ -116,6 +116,11 @@
     border-bottom: 2px solid #0071C5
 }
 
+
+.tier .err-bit {
+    margin: 1px 0px 0px -12px !important;
+}
+
 .err-bit {
     margin: 1px 0px 0px 1px !important;
 }
@@ -132,7 +137,7 @@ tr:last-child>td {
 }
 
 .one-check .k-grid-edit-row .k-textbox,
-.one-check .k-widgetGr {
+.one-check .k-widgetGr, .one-check .k-grid-edit-row .k-widget {
     width: 100% !important;
 }
 

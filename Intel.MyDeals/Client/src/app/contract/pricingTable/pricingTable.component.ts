@@ -132,12 +132,19 @@ export class pricingTableComponent {
         e.preventDefault();
         if (e.title == "Deal Editor") {
             if (this.pteComp.dirty) {
-                    await this.pteComp.validatePricingTableProducts();
+                await this.pteComp.validatePricingTableProducts();
                 let isAnyWarnings = this.pteComp.pricingTableDet.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
                 if (isAnyWarnings || this.pteComp.dirty) {
                     this.isDETab = false; this.isPTETab = true;
                     return;
-                } 
+                }
+            }
+            else if (this.pteComp.pricingTableDet && this.pteComp.pricingTableDet.length > 0) {
+                let isAnyWarnings = this.pteComp.pricingTableDet.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
+                if (isAnyWarnings) {
+                    this.isDETab = false; this.isPTETab = true;
+                    return;
+                }
             }
             this.isDETab = true; this.isPTETab = false;
         }
