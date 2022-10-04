@@ -336,11 +336,11 @@ a.prdAnchor {
     overflow-y: auto;
 }
 
-.prodSelector .prodSelector-grid .k-grid-content {
-    /* height: calc(85vh - 480px); */
+/* .prodSelector .prodSelector-grid .k-grid-content {
+    height: calc(85vh - 480px); 
     min-height: 270px;
     max-height: calc(85vh - 385px);
-}
+} */
 
 .prodSelector .productSuggestion .k-grid-content {
     height: calc(85vh - 500px);
@@ -676,3 +676,13 @@ input[type=checkbox].with-sm-font {
     pointer-events: all !important;
 }
 
+kendo-grid.raid-style {
+    height: 340px;
+}
+
+.th-check-box {
+    height: 13px !important;
+    width: 13px !important;
+    position: relative !important;
+    margin: 0 !important;
+}

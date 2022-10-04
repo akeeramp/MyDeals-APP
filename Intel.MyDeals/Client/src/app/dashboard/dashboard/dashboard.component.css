@@ -921,3 +921,72 @@ kendo-dropdownlist.font-input .k-input {
 .bottle-body {
     padding: 15px !important;
 }
+
+.publishToolTip ngb-tooltip-window.tooltip .tooltip-inner {
+    background-color: #fff !important;
+    border: 1px solid #0071c5 !important;
+    color: #0071c5 !important;
+    padding: 5px;
+    z-index: 1;
+}
+
+.artho-css-popup .k-window .k-content {
+    padding: 2.4em;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+    .artho-css-popup .k-window .k-content p {
+        margin-bottom: 0;
+    }
+
+.artho-css-popup .k-window kendo-dialog-actions {
+    padding: 0;
+    width: 100%;
+    border-radius: 0;
+}
+
+.artho-css-popup .k-window {
+    border: none;
+    border-radius: 0;
+    border-radius: 0 !important;
+}
+
+    .artho-css-popup .k-window kendo-dialog-actions button.k-button:first-child {
+        border-color: #00AEEF !important;
+        background-color: #00AEEF !important;
+        padding: 20px 0 !important;
+        border-radius: 0 !important;
+        color: #fff !important;
+        width: 50%;
+        font-size: 15px;
+        font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .artho-css-popup .k-window kendo-dialog-actions button.k-button:last-child {
+        border-color: #fafafa !important;
+        background-color: #fafafa !important;
+        padding: 20px 0 !important;
+        border-radius: 0 !important;
+        color: #212529 !important;
+        width: 50%;
+        margin-left: -7px;
+        font-size: 15px;
+        font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    }
+
+    .artho-css-popup .k-window kendo-dialog-actions button.k-button:first-child:hover {
+        color: #fff !important;
+        border-color: #0071c5 !important;
+        background-color: #0071c5 !important;
+    }
+
+    .artho-css-popup .k-window kendo-dialog-actions button.k-button:last-child:hover {
+        color: #444 !important;
+        border-color: #ebebeb !important;
+        background-color: #ebebeb !important;
+    }
+
+    .artho-css-popup .k-window {
+        border: none;
+        border-radius: 0;
+    }

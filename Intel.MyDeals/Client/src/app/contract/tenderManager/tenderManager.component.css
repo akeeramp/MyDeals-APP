@@ -83,3 +83,11 @@
 .step-into:hover {
     text-decoration: underline;
 }
+
+.publishToolTip ngb-tooltip-window.tooltip .tooltip-inner {
+    background-color: #fff !important;
+    border: 1px solid #0071c5 !important;
+    color: #0071c5 !important;
+    padding: 5px;
+    z-index: 1;
+}

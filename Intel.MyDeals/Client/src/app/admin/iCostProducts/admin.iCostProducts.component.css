@@ -83,3 +83,7 @@
     margin-left: 15px;
     margin-bottom: 0;
 }
+
+.k-grid.tt-grids {
+    height: calc(100vh - 205px) !important;
+}

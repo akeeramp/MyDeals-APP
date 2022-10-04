@@ -94,12 +94,12 @@
                                         <kendo-grid-column width="65px" [columnMenu]="false">
                                             <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                                                 <div class='dealTools'>
-                                                    <input type='checkbox' class='grid-link-checkbox with-font' (click)="toggleSelectAll($event)">
+                                                    <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="toggleSelectAll($event)">
                                                 </div>
                                             </ng-template>
                                             <ng-template kendoGridCellTemplate let-dataItem>
                                                 <div class='dealTools'>
-                                                    <input type='checkbox' class='grid-link-checkbox with-font' (click)="selectProduct(dataItem)" [(ngModel)]="dataItem.selected">
+                                                    <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="selectProduct(dataItem)" [(ngModel)]="dataItem.selected">
                                                 </div>
                                             </ng-template>
                                         </kendo-grid-column>
@@ -169,17 +169,17 @@
                 </div>
             </div>
             <div *ngIf="showTree && !showSuggestions" id="prodGrid" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight">
-                <kendo-grid [data]="gridData" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
+                <kendo-grid class="raid-style" [data]="gridData" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
                     [resizable]="true" (dataStateChange)="dataStateChange($event)">
                     <kendo-grid-column width="65px" [columnMenu]="false">
                         <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                             <div class='dealTools'>
-                                <input type='checkbox' class='grid-link-checkbox with-font' (click)="toggleSelectAll($event)">
+                                <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="toggleSelectAll($event)">
                             </div>
                         </ng-template>
                         <ng-template kendoGridCellTemplate let-dataItem>
                             <div class='dealTools'>
-                                <input type='checkbox' class='grid-link-checkbox with-font' (click)="selectProduct(dataItem)" [(ngModel)]="dataItem.selected">
+                                <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="selectProduct(dataItem)" [(ngModel)]="dataItem.selected">
                             </div>
                         </ng-template>
                     </kendo-grid-column>
@@ -289,12 +289,12 @@
                             <kendo-grid-column width="65px" [columnMenu]="false">
                                 <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                                     <div class='dealTools'>
-                                        <input type='checkbox' class='grid-link-checkbox with-font' (click)="toggleSelectAll($event)">
+                                        <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="toggleSelectAll($event)">
                                     </div>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <div class='dealTools'>
-                                        <input type='checkbox' class='grid-link-checkbox with-font' (click)="selectProduct(dataItem)" [(ngModel)]="dataItem.selected">
+                                        <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="selectProduct(dataItem)" [(ngModel)]="dataItem.selected">
                                     </div>
                                 </ng-template>
                             </kendo-grid-column>

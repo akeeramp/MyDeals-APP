@@ -865,6 +865,7 @@
     <Content Include="Client\Images\security.png" />
     <Content Include="Client\Images\Timeout.png" />
     <Content Include="Client\Images\wires.png" />
+    <Content Include="Client\src\app\admin\batchTiming\admin.batchTiming.component.css" />
     <Content Include="Client\src\app\admin\batchTiming\admin.batchTiming.component.html" />
     <TypeScriptCompile Include="Client\src\app\admin\batchTiming\admin.batchTiming.service.ts" />
     <Content Include="Client\src\app\admin\cache\admin.cache.component.css" />

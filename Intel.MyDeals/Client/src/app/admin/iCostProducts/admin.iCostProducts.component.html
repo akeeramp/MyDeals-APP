@@ -14,7 +14,7 @@
         <div class="col-md-12">
             <div class="row">
                 <div class="col-md-12 kendo-grid-buttons grid-box-margin">
-                    <kendo-grid class="grid-sizefix" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+                    <kendo-grid class="grid-sizefix tt-grids" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                                 [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                                 [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [reorderable]="true"
                                 [resizable]="true" [group]="state.group" filterable="menu" (cellClick)="editClick($event)"

@@ -195,6 +195,7 @@ export class AutoFillComponent {
                     this.autofillData["DEFAULT"]["MRKT_SEG"].value = this.mkgvalues;
                 }
             }
+            this.mkgvalues.sort();
         }
     }
 

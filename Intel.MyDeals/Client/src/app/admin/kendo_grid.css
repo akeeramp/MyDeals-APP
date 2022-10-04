@@ -452,3 +452,7 @@ kendo-dialog-actions.delete-actions button.k-button.del-cancel:hover, kendo-dial
     color: #111 !important;
     box-shadow: none !important;
 }
+
+.k-grid.k-indicator-container.text-colour-change {
+    color: #00AEEF;
+}

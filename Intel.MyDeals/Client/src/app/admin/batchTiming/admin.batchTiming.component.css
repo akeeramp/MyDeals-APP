@@ -1,0 +1,19 @@
+﻿.head-r-shift {
+    padding-top: 50px;
+    padding-left: 14px !important;
+    padding-bottom: 10px;
+}
+
+.head-bottom-reduce {
+    line-height: 1.1;
+}
+
+.batch-table-lf {
+    padding-left: 14px !important;
+    padding-right: 5px !important;
+    padding-top: 0px !important;
+}
+
+.k-grid.grid-height-h {
+    height: calc(100vh - 191px) !important;
+}

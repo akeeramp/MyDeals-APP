@@ -11,6 +11,7 @@ import { batchTimingService } from "./admin.batchTiming.service";
 @Component({
     selector: "batchTiming",
     templateUrl: "Client/src/app/admin/batchTiming/admin.batchTiming.component.html",
+    styleUrls: ['Client/src/app/admin/batchTiming/admin.batchTiming.component.css']
 })
 
 export class batchTimingComponent {

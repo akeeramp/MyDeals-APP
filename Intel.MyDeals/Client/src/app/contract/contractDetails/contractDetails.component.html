@@ -352,13 +352,13 @@
         </kendo-dialog-actions>
     </div>
 </kendo-dialog>
-<kendo-dialog *ngIf="isDivBlankPopupOpen" (close)="blankDivisionPopupClose('cancel')" [minWidth]="250" [width]="620">
+<kendo-dialog *ngIf="isDivBlankPopupOpen" (close)="blankDivisionPopupClose('cancel')" class="artho-css-popup" [minWidth]="250" [width]="600">
     <p class="dialogmsg">
         The division is blank. Do you intend for this contract to apply to all divisions?
     </p>
     <kendo-dialog-actions>
-        <button kendoButton (click)="blankDivisionPopupClose('yes')" themeColor="primary">Yes</button>
-        <button kendoButton (click)="blankDivisionPopupClose('no')">No</button>
+        <button kendoButton (click)="blankDivisionPopupClose('yes')" themeColor="primary">OK</button>
+        <button kendoButton (click)="blankDivisionPopupClose('no')">CANCEL</button>
     </kendo-dialog-actions>
 </kendo-dialog>
 <kendo-dialog class="mymissingbutton" *ngIf="isMissingGrpCode" [height]="188" [width]="280">
