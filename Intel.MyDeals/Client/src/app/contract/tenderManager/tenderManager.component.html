@@ -57,7 +57,7 @@
     <div class="col-xs-3 col-md-3">
         <div class="wizard-panel last" [ngClass]="{'complete':selectedTab == 'PD'}">
             <span id="tenderWidPD" class="badge wizard-step" [ngStyle]="selectedTab == 'PD'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabled': forMC() != true && forDE() != true}">4</span>
-            <span kendo-tooltip="" k-content="'Publishing will separate the deals entered in the table below so that they can be individually approved.'" k-position="'left'" class="opElementHelpIcon intelicon-information-outlined" data-role="tooltip"></span>
+            <span ngbTooltip="Publishing will separate the deals entered in the table below so that they can be individually approved." placement="left" tooltipClass="toolTipReq" class="opElementHelpIcon intelicon-information-outlined"></span>
         </div>
         <a (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabled': forMC() != true && forDE() != true}">
             <div class="wizard-step-text step-into">

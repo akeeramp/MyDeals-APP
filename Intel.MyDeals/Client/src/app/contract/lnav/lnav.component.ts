@@ -76,6 +76,7 @@ export class lnavComponent {
     public custId: any;
     public objTypeCdMessage;
     public uid: number = -100;
+    private ptDelId: number = 0;
 
     private isLoading: boolean = false;
     private msgType: string = "";
@@ -122,6 +123,16 @@ export class lnavComponent {
             C_ID: this.contractId,
             contractData: this.contractData
         };
+        let curPs = this.contractData?.PRC_ST?.filter(x => x.DC_ID == psId);
+        if (curPs && curPs.length == 1) {
+            this.curPricingStrategy = curPs[0];
+        }
+        let curPt = this.curPricingStrategy?.PRC_TBL?.filter(x => x.DC_ID == ptId);
+        if (curPt && curPt.length == 1) {
+            this.curPricingTable = curPt[0];
+        }
+        this.curPricingStrategyId = psId;
+        this.curPricingTableId = ptId;
         this.modelChange.emit(contractId_Map);
     }
     loadModel(model: string) {
@@ -202,7 +213,10 @@ export class lnavComponent {
         ps.DC_PARENT_ID = ct.DC_ID;
         ps.PRC_TBL = [];
         ps.TITLE = this.newStrategy.TITLE;
-        ps.IS_HYBRID_PRC_STRAT = (this.newStrategy.IS_HYBRID_PRC_STRAT === true ? "1" : "0");
+        if (this.newStrategy.IS_HYBRID_PRC_STRAT) 
+            ps.IS_HYBRID_PRC_STRAT = "1";
+        else
+            ps.IS_HYBRID_PRC_STRAT = "0";
 
         this.lnavSvc.createPricingStrategy(custId, contractId, ps).subscribe((response: any) => {
             if (this.contractData.PRC_ST === undefined) this.contractData.PRC_ST = [];
@@ -251,7 +265,7 @@ export class lnavComponent {
         const values = this.newPricingTable;
         isValid = this.isValidPt(values);
         if (isValid) {
-            this.addPricingTable();
+            this.openAutoFill(null, null);
         }
     }
     isValidPt(values) {
@@ -363,12 +377,17 @@ export class lnavComponent {
         if (this.curPricingStrategyId === id) {
             this.curPricingStrategy = {};
             this.curPricingStrategyId = 0;
+            this.openDealEntryTab();
         }
     }
     unmarkCurPricingTableIf = function (id) {
         if (this.curPricingTableId > 0 &&
             this.curPricingTable !== null &&
             this.curPricingStrategy.DC_ID === id) {
+            if (this.curPricingStrategyId != 0 && this.ptDelId && this.ptDelId > 0 && this.ptDelId === this.curPricingTableId) {
+                this.ptDelId = 0;
+                this.openDealEntryTab();
+            }
             this.curPricingTable = {
             };
             this.curPricingTableId = 0;
@@ -506,7 +525,7 @@ export class lnavComponent {
                 this.unmarkCurPricingStrategyIf(ps.DC_ID);
                 this.unmarkCurPricingTableIf(ps.DC_ID);
                 this.contractData.PRC_ST.splice(this.contractData.PRC_ST.indexOf(ps), 1);
-                this.loggerSvc.success("Delete Successful", "Deleted the Pricing Strategy");
+                this.loggerSvc.success("Delete Successful", "Deleted the Pricing Strategy");                
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             }, (err) => {
@@ -524,6 +543,7 @@ export class lnavComponent {
             const custId = this.contractData.CUST_MBR_SID;
             const contractId = this.contractData.DC_ID;
             this.lnavSvc.deletePricingTable(custId, contractId, pt).subscribe((response: any) => {
+                this.ptDelId = pt.DC_ID;
                 this.unmarkCurPricingTableIf(ps.DC_ID);
                 ps.PRC_TBL.splice(ps.PRC_TBL.indexOf(pt), 1);
                 this.loggerSvc.success("Delete Successful", "Deleted the Pricing Table");

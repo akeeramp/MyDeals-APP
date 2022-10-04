@@ -142,6 +142,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
                         }
                     });
                 }
+                this.checkedKeys.sort();
             }
         }
     }

@@ -44,7 +44,9 @@ export class AutoFillComponent {
         private loggerSvc: logger,
         public dialogRef: MatDialogRef<AutoFillComponent>,
         @Inject(MAT_DIALOG_DATA) public autofillData: any
-    ) { }
+    ) {
+        dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG  
+    }
 
     setBusy(msg, detail, msgType, showFunFact) {
         setTimeout(() => {
