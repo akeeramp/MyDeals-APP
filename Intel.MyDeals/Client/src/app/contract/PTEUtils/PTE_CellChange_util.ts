@@ -1081,4 +1081,9 @@ export class PTE_CellChange_Util {
         }
         return { finalPTR: PTR, validMisProds: validMisProd };
     }
+    static defaultVolVal(items: Array<any>, columns: any[], curPricingTable: any){
+        if(items[0].new=='' || items[0].new==null ){
+            this.hotTable.setDataAtRowProp(items[0].row, 'STRT_VOL', 0, 'no-edit');
+        }
+    }
 }

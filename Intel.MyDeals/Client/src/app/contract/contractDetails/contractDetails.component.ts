@@ -12,6 +12,7 @@ import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-gr
 import { process, State } from "@progress/kendo-data-query";
 import { GridUtil } from "../grid.util";
 import { DatePipe } from '@angular/common';
+import * as _ from "underscore";
 const moment = _moment;
 
 @Component({
@@ -38,7 +39,9 @@ export class contractDetailsComponent {
     public c_Id: number;
     public templateData;
     public Customers: Array<any>=[];
+    public CustomersFilterData: Array<any>=[];
     public Customer_Divs: Array<any>;
+    public CustomerFilter_Divs: Array<any>;
     public ContractDataForm: FormGroup;
     public contractData;
     private timeout = null;
@@ -234,12 +237,29 @@ export class contractDetailsComponent {
         this.contractDetailsSvc.getMyCustomerDivsByCustNmSid(custID).subscribe(
             (response: Array<any>) => {
                 this.Customer_Divs = response.filter(x => x.CUST_LVL_SID == 2003);
+                //for filtering purpose
+                this.CustomerFilter_Divs = response.filter(x => x.CUST_LVL_SID == 2003);
                 if (this.isCopyContract && this.contractData.CUST_ACCNT_DIV_UI.length > 0) {
                     this.contractData.CUST_ACCNT_DIV_UI.forEach((cust) => {
                         const selectedCustDiv = this.Customer_Divs.filter(x => x.CUST_DIV_NM == cust)
                         if (selectedCustDiv.length > 0) this.CUST_NM_DIV.push(selectedCustDiv[0]);
                     })
                 }
+                //code to bind selected customer division on contract details load for existing contract 
+                if(this.contractData && this.contractData.CUST_ACCNT_DIV && this.CustomerFilter_Divs && this.CustomerFilter_Divs.length>0){
+                    //setting the customer division dropdown value ngModel
+                    let selCustDiv= this.contractData.CUST_ACCNT_DIV.split('/');
+                    if(selCustDiv && selCustDiv.length>0){
+                        _.each(this.CustomerFilter_Divs,itm=>{
+                           _.each(selCustDiv,selDiv=>{
+                            if(itm.CUST_DIV_NM==selDiv){
+                                this.CUST_NM_DIV.push(itm)
+                            }
+                           })
+                        })
+                    }
+                }
+     
                 if ((this.Customer_Divs[0].PRC_GRP_CD == "")) {
                     this.isMissingGrpCode = true;
                 }
@@ -719,6 +739,7 @@ export class contractDetailsComponent {
         }
     }
     loadContractDetailsData() {
+        //setting the customer dropdown value ngModel
         this.Customer = this.contractData.Customer;
         if (this.Customer) {
             this.disableCustomer = true;
@@ -753,6 +774,94 @@ export class contractDetailsComponent {
             this.maxCount = 5;
         }
     }
+   
+
+    getFileAttachmentDetails(value) {
+        if (value <= 0) {
+            this.isNewContract = true;
+        }
+        else {
+            this.isNewContract = false;
+            this.contractDetailsSvc.getFileAttachments(this.contractData.CUST_MBR_SID, this.contractData.DC_ID).subscribe((response: any) => {
+                if (response != undefined && response != null) {
+                    this.attachmentsDataSource = response;
+                    this.gridData = process(this.attachmentsDataSource, this.state);
+                    this.contractData = this.contractData;
+                    this.attachmentCount = response.length;
+                    this.initComplete = true;
+                    this.setCustAcceptanceRules(this.contractData.CUST_ACCPT)
+                }
+            }, error => {
+                this.loggerSvc.error("Unable to get Files.", error);
+                this.initComplete = true;
+            });
+        }
+    }
+    deleteFileAttachment(data) {
+        this.deleteAttachmentParams = { custMbrSid: data.CUST_MBR_SID, objTypeSid: data.OBJ_TYPE_SID, objSid: data.OBJ_SID, fileDataSid: data.FILE_DATA_SID };
+        this.isDeleteAttachment = true;
+    }
+
+    deleteAttachmentActions(act: boolean) {
+        if (act == true) {
+            this.contractDetailsSvc.deleteAttachment(this.deleteAttachmentParams.custMbrSid, this.deleteAttachmentParams.objTypeSid, this.deleteAttachmentParams.objSid,
+                this.deleteAttachmentParams.fileDataSid).subscribe((response: any) => {
+                    this.isDeleteAttachment = false;
+                    this.loggerSvc.success("Successfully deleted attachment.", "Delete successful");
+                    this.getFileAttachmentDetails(this.deleteAttachmentParams.objSid);
+                }, error => {
+                    this.loggerSvc.error("Unable to delete attachment.", "Delete failed",error);
+                })
+        }
+        else {
+            this.isDeleteAttachment = false;
+        }
+    }
+    setBusy(msg, detail, msgType, showFunFact) {
+        setTimeout(() => {
+            const newState = msg != undefined && msg !== "";
+            
+            // if no change in state, simple update the text
+            if (this.isLoading === newState) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+                this.isBusyShowFunFact = showFunFact;
+                return;
+            }
+
+            // if no change in state, simple update the text
+            this.isLoading = newState;
+            if (this.isLoading) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+                this.isBusyShowFunFact = showFunFact;
+            } else {
+                setTimeout(() => {
+                    this.spinnerMessageHeader = msg;
+                    this.spinnerMessageDescription = !detail ? "" : detail;
+                    this.msgType = msgType;
+                    this.isBusyShowFunFact = showFunFact;
+                }, 100);
+            }
+        });
+    }
+    customerFilter(value) {
+        this.CustomersFilterData = this.Customers.filter(
+          (s) => s.CUST_NM.toLowerCase().indexOf(value.toLowerCase()) !== -1
+        );
+      }
+      customerDivFilter(value) {
+        this.CustomerFilter_Divs = this.Customer_Divs.filter(
+          (s) => s.CUST_DIV_NM.toLowerCase().indexOf(value.toLowerCase()) !== -1
+        );
+      }
+    ngOnDestroy() {
+        //The style removed are adding back
+        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
+        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
+    }
     ngOnInit() {
         try {
             this.isLoading=true;
@@ -765,6 +874,8 @@ export class contractDetailsComponent {
                     CUST_ACCPT: this.contractDetailsSvc.getVendorDropDown('CUST_ACCPT'),
                 }).subscribe(({ NO_END_DT_RSN, BACK_DATE_RSN, CONTRACT_TYPE, CUST_ACCPT }) => {
                     this.Customers = response;
+                    //setting for filtering purpose
+                    this.CustomersFilterData= this.Customers;
                     this.dropDownsData['NO_END_DT_RSN'] = NO_END_DT_RSN;
                     this.dropDownsData['BACK_DATE_RSN'] = BACK_DATE_RSN;
                     this.dropDownsData['CONTRACT_TYPE'] = CONTRACT_TYPE;
@@ -871,84 +982,6 @@ export class contractDetailsComponent {
         } catch (e) {
             console.error("Unable to load the data", e);
         }
-    }
-
-    getFileAttachmentDetails(value) {
-        if (value <= 0) {
-            this.isNewContract = true;
-        }
-        else {
-            this.isNewContract = false;
-            this.contractDetailsSvc.getFileAttachments(this.contractData.CUST_MBR_SID, this.contractData.DC_ID).subscribe((response: any) => {
-                if (response != undefined && response != null) {
-                    this.attachmentsDataSource = response;
-                    this.gridData = process(this.attachmentsDataSource, this.state);
-                    this.contractData = this.contractData;
-                    this.attachmentCount = response.length;
-                    this.initComplete = true;
-                    this.setCustAcceptanceRules(this.contractData.CUST_ACCPT)
-                }
-            }, error => {
-                this.loggerSvc.error("Unable to get Files.", error);
-                this.initComplete = true;
-            });
-        }
-    }
-    deleteFileAttachment(data) {
-        this.deleteAttachmentParams = { custMbrSid: data.CUST_MBR_SID, objTypeSid: data.OBJ_TYPE_SID, objSid: data.OBJ_SID, fileDataSid: data.FILE_DATA_SID };
-        this.isDeleteAttachment = true;
-    }
-
-    deleteAttachmentActions(act: boolean) {
-        if (act == true) {
-            this.contractDetailsSvc.deleteAttachment(this.deleteAttachmentParams.custMbrSid, this.deleteAttachmentParams.objTypeSid, this.deleteAttachmentParams.objSid,
-                this.deleteAttachmentParams.fileDataSid).subscribe((response: any) => {
-                    this.isDeleteAttachment = false;
-                    this.loggerSvc.success("Successfully deleted attachment.", "Delete successful");
-                    this.getFileAttachmentDetails(this.deleteAttachmentParams.objSid);
-                }, error => {
-                    this.loggerSvc.error("Unable to delete attachment.", "Delete failed",error);
-                })
-        }
-        else {
-            this.isDeleteAttachment = false;
-        }
-    }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
-
-    setBusy(msg, detail, msgType, showFunFact) {
-        setTimeout(() => {
-            const newState = msg != undefined && msg !== "";
-            
-            // if no change in state, simple update the text
-            if (this.isLoading === newState) {
-                this.spinnerMessageHeader = msg;
-                this.spinnerMessageDescription = !detail ? "" : detail;
-                this.msgType = msgType;
-                this.isBusyShowFunFact = showFunFact;
-                return;
-            }
-
-            // if no change in state, simple update the text
-            this.isLoading = newState;
-            if (this.isLoading) {
-                this.spinnerMessageHeader = msg;
-                this.spinnerMessageDescription = !detail ? "" : detail;
-                this.msgType = msgType;
-                this.isBusyShowFunFact = showFunFact;
-            } else {
-                setTimeout(() => {
-                    this.spinnerMessageHeader = msg;
-                    this.spinnerMessageDescription = !detail ? "" : detail;
-                    this.msgType = msgType;
-                    this.isBusyShowFunFact = showFunFact;
-                }, 100);
-            }
-        });
     }
 
 }

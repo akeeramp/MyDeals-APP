@@ -28,7 +28,7 @@
                                     </div>
                                     <div class="col-md-11 display displayblock">
                                         <div class="fl opUiLabel"><span class="isReqField">* </span>Customer:</div>
-                                        <kendo-combobox #CUST_MBR_SID_Combo [data]="Customers"
+                                        <kendo-combobox #CUST_MBR_SID_Combo [data]="CustomersFilterData"   [filterable]="true" (filterChange)="customerFilter($event)"
                                                         class="kendoInput noborderclass font-input" textField="CUST_NM" valueField="CUST_SID" [disabled]="disableCustomer"
                                                         name="Customer" #customer="ngModel" [(ngModel)]="Customer" (valueChange)="onCustomerChange($event)" required>
                                         </kendo-combobox>
@@ -39,8 +39,8 @@
                                     <div class="col-md-11 display displayblock">
                                         <div *ngIf="!isCustomerDivHidden" class="inputWidth">
                                             <div class="fl opUiLabel">Division:</div>
-                                            <kendo-multiselect #CUST_MBR_DIV_Multi class="kendoInput divisionblock" [data]="Customer_Divs"
-                                                               [(ngModel)]="CUST_NM_DIV" [autoClose]="false"
+                                            <kendo-multiselect #CUST_MBR_DIV_Multi class="kendoInput divisionblock" [data]="CustomerFilter_Divs" [filterable]="true" (filterChange)="customerDivFilter($event)"
+                                                               [(ngModel)]="CUST_NM_DIV" 
                                                                name="CUST_NM_DIV" textField="CUST_DIV_NM" valueField="CUST_DIV_NM"></kendo-multiselect>
                                             <div class="description">Blank means that ALL divisions are included</div>
                                         </div>

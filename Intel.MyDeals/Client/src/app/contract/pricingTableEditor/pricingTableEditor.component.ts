@@ -527,6 +527,7 @@ export class pricingTableEditorComponent implements OnChanges {
                 changes = this.identfyUniqChanges(changes, source);
                 let PTR = _.where(changes, { prop: 'PTR_USER_PRD' });
                 let AR = _.where(changes, { prop: 'AR_SETTLEMENT_LVL' });
+                let startVol = _.where(changes, { prop: 'STRT_VOL' });
                 //KIT On change events
                 let KIT_ECAP = _.filter(changes, item => { return item.prop == 'ECAP_PRICE_____20_____1' || item.prop == 'ECAP_PRICE' });
                 let KIT_DSCNT = _.filter(changes, item => { return item.prop == 'DSCNT_PER_LN' || item.prop == 'QTY' });
@@ -559,6 +560,10 @@ export class pricingTableEditorComponent implements OnChanges {
                 //for multi tier there can be more tiers to delete so moving the logic after all change 
                 if (this.multiRowDelete && this.multiRowDelete.length > 0 && this.isDeletePTR) {
                     this.deleteRow(this.multiRowDelete);
+                }
+                if(startVol && startVol.length>0){
+                    //making the start vol val to zero incase empty
+                    PTE_CellChange_Util.defaultVolVal(startVol, this.columns, this.curPricingTable);
                 }
                 this.isLoading = false;
                 this.enableDeTab.emit(true);
