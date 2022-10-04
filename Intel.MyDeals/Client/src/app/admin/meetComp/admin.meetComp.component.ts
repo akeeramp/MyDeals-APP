@@ -7,6 +7,7 @@ import { downgradeComponent } from "@angular/upgrade/static";
 import { meetCompService } from './admin.meetComp.service';
 import * as _ from "underscore";
 import { ThemePalette } from "@angular/material/core";
+import { DatePipe } from "@angular/common";
 
 @Component({
     selector: "admin-meetcomp",
@@ -16,7 +17,7 @@ import { ThemePalette } from "@angular/material/core";
 })
 
 export class meetCompComponent {
-    constructor(private meetCompSvc: meetCompService, private loggerSvc: logger) {
+    constructor(private meetCompSvc: meetCompService, public datepipe: DatePipe, private loggerSvc: logger) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
@@ -273,6 +274,12 @@ export class meetCompComponent {
             };
             this.meetCompSvc.getMeetCompData(meetCompSearch).subscribe((response: Array<any>) => {
                 this.isBusy = false;
+                _.each(response, item => {
+                    item['CHG_DTM'] = this.datepipe.transform(new Date(item['CHG_DTM']), 'M/d/yyyy');
+                    item['CRE_DTM'] = this.datepipe.transform(new Date(item['CRE_DTM']), 'M/d/yyyy');
+                    item['CHG_DTM'] = new Date(item['CHG_DTM']);
+                    item['CRE_DTM'] = new Date(item['CRE_DTM']);
+                })
                 this.gridResult = response;
                 this.gridData = process(this.gridResult, this.state);
             }, (error) => {

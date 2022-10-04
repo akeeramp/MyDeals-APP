@@ -15,6 +15,8 @@ import {
     distinct
 } from "@progress/kendo-data-query";
 import { notificationsService } from './admin.notifications.service';
+import * as _ from "underscore";
+import { DatePipe } from "@angular/common";
 
 @Component({
     selector: "adminNotifications",
@@ -23,7 +25,7 @@ import { notificationsService } from './admin.notifications.service';
 })
 
 export class adminNotificationsComponent {
-    constructor(private notificationsSvc: notificationsService, private loggerSvc: logger, public dialog: MatDialog) {
+    constructor(private notificationsSvc: notificationsService, private loggerSvc: logger, public datepipe: DatePipe, public dialog: MatDialog) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
@@ -82,11 +84,15 @@ export class adminNotificationsComponent {
         this.notificationsSvc.getNotification('SELECT ALL').subscribe(
             (response: Array<any>) => {
                 //as we get the CRE_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
-                const result = response.map(function (x) {
-                    x.CRE_DTM = new Date(x.CRE_DTM);
-                    return x;
-                });
-                this.gridResult = result;
+                _.each(response, item => {
+                    item['CRE_DTM'] = this.datepipe.transform(new Date(item['CRE_DTM']), 'M/d/yyyy  h:mm a');
+                    item['CRE_DTM'] = new Date(item['CRE_DTM']);
+                })
+                _.each(response, item => {
+                    item['CRE_UPDATED_DATE'] = this.datepipe.transform(new Date(item['CRE_DTM']), 'M/d/yyyy');
+                    item['CRE_UPDATED_DATE'] = new Date(item['CRE_UPDATED_DATE']);
+                })
+                this.gridResult = response;
                 this.gridData = process(this.gridResult, this.state);
                 this.isLoading = false;
                 // Below call is to update the notification count on the notification icon

@@ -17,6 +17,8 @@ import {
 } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Product_categories } from "./admin.productCategories.model";
+import * as _ from "underscore";
+import { DatePipe } from "@angular/common";
 
 @Component({
     selector: "adminProductCategories",
@@ -25,7 +27,7 @@ import { Product_categories } from "./admin.productCategories.model";
 })
 
 export class adminProductCategoriesComponent {
-    constructor(private productCategorySvc: productCategoryService, private loggerSvc: logger) {
+    constructor(private productCategorySvc: productCategoryService, public datepipe: DatePipe, private loggerSvc: logger) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
@@ -94,11 +96,12 @@ export class adminProductCategoriesComponent {
             this.productCategorySvc.getCategories()
                 .subscribe((response: Array<any>) => {
                     //as we get the CHG_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
-                    const data = response.map(function (x) {
-                        x.CHG_DTM = new Date(x.CHG_DTM);
-                        return x;
-                    });
-                    this.gridResult = data;
+                    _.each(response, item => {
+                        item['CHG_DTM'] = this.datepipe.transform(new Date(item['CHG_DTM']), 'M/d/yyyy');
+                        item['CHG_DTM'] = new Date(item['CHG_DTM']);
+                    })
+                    
+                    this.gridResult = response;
                     this.gridData = process(this.gridResult, this.state);
                     this.isLoading = false;
                 }, function (response) {

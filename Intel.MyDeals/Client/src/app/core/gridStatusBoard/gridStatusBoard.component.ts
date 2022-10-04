@@ -8,6 +8,7 @@ import { DatePipe } from "@angular/common";
 import { DashboardComponent } from "../../dashboard/dashboard/dashboard.component";
 import { contractStatusWidgetService } from '../../dashboard/contractStatusWidget.service';
 import { DynamicEnablementService } from "../../shared/services/dynamicEnablement.service";
+import * as _ from "underscore";
 
 @Component({
     providers: [GridStatusBoardService, DatePipe],
@@ -164,6 +165,11 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
 
                     this.toolTipOptions = "Created By : " + response[i].CRE_EMP_NM;
                 }
+                _.each(response, item => {
+                    item['STRT_DTM'] = new Date(item['STRT_DTM']);
+                    item['END_DTM'] = new Date(item['END_DTM']);
+                })
+
                 this.gridResult = response;
                 //Storing the filter response in variable to be used while filter
                 this.gridresultAlert = this.gridResult.filter(x => x.HAS_ALERT === true);

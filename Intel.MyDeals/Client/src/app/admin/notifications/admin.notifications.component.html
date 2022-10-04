@@ -41,7 +41,7 @@
                 <ng-template kendoGridCellTemplate let-dataItem><span [ngClass]="{'unread':!dataItem.IS_READ_IND}"
                         style="cursor:pointer">{{ dataItem.NOTIF_SHR_DSC}} </span></ng-template>
             </kendo-grid-column>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="CRE_DTM" width="100"
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="CRE_UPDATED_DATE" width="100"
                 title="Created Date Time" filter="date" format="{0:M/d/yyyy}" [editable]="false">
                 <ng-template kendoGridFilterMenuTemplate let-filter="filter" let-column="column"
                     let-filterService="filterService">

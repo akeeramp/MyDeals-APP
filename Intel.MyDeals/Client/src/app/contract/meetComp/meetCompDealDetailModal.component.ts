@@ -4,6 +4,8 @@ import {GridDataResult,DataStateChangeEvent,PageSizeItem} from "@progress/kendo-
 import {process, State} from "@progress/kendo-data-query";
 import {logger} from "../../shared/logger/logger";
 import { meetCompContractService } from "./meetComp.service";
+import * as _ from "underscore";
+import { DatePipe } from "@angular/common";
 
 @Component({
   selector: "end-customer-retail",
@@ -48,7 +50,7 @@ export class meetCompDealDetailModalComponent implements OnInit {
     constructor(
         private dialogRef: MatDialogRef<meetCompDealDetailModalComponent>,
         @Inject(MAT_DIALOG_DATA) public deal_properties,
-        private meetCompSvc: meetCompContractService,
+        private meetCompSvc: meetCompContractService, public datepipe: DatePipe,
         private loggerSvc: logger
     ){
         dialogRef.disableClose = true; // prevents pop up from closing when user clicks outside of the MATDIALOG
@@ -68,6 +70,12 @@ export class meetCompDealDetailModalComponent implements OnInit {
         this.meetCompSvc.getDealDetails(DEAL_OBJ_SID,GRP_PRD_SID,DEAL_PRD_TYPE).subscribe( (response:Array<any>)=> {
             this.isLoading = false;
             if (response && response.length > 0) {
+                _.each(response, item => {
+                    item['STRT_DT'] = this.datepipe.transform(new Date(item['STRT_DT']), 'M/d/yyyy');
+                    item['END_DT'] = this.datepipe.transform(new Date(item['END_DT']), 'M/d/yyyy');
+                    item['STRT_DT'] = new Date(item['STRT_DT']);
+                    item['END_DT'] = new Date(item['END_DT']);
+                })
                 this.gridResult = response;
                 this.gridData = process(this.gridResult, this.state);
             }
