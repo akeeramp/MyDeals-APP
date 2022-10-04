@@ -6,8 +6,8 @@ import { logger } from '../../shared/logger/logger'
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import * as _moment from 'moment';
 const moment = _moment;
-import * as angular from "angular";
 import * as _ from 'underscore';
+
 @Component({
     providers: [TenderFolioService],
     selector: "app-tender-folio",
@@ -17,7 +17,7 @@ import * as _ from 'underscore';
 })
 
 export class TenderFolioComponent {
-    
+
     constructor(
         public dialogRef: MatDialogRef<TenderFolioComponent>,
         @Inject(MAT_DIALOG_DATA) public data, private dataService: TenderFolioService,
@@ -36,7 +36,7 @@ export class TenderFolioComponent {
     private isCustDiv = false;
     private isCustSelected = false;
     private custSIDObj;
-    private CUST_NM_DIV:any;
+    private CUST_NM_DIV: any;
     private showKendoAlert = false;
     private isTitleError = false;
     private titleErrorMsg: string;
@@ -110,8 +110,8 @@ export class TenderFolioComponent {
             else {
                 this.isTitleError = false;
             }
-        },(err)=>{
-            this.loggerSvc.error("Unable to Validate duplicate contract title","Error",err);
+        }, (err) => {
+            this.loggerSvc.error("Unable to Validate duplicate contract title", "Error", err);
         });
     }
     valueChange(value) {
@@ -125,11 +125,20 @@ export class TenderFolioComponent {
                         if (res[0].PRC_GRP_CD == '') {
                             this.showKendoAlert = true;
                         }
+                        if (res.length <= 1) {
+                            this.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false;
+                            this.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;
+                            //US2444394: commented out below because we no longer want to save Customer Account Division names if there is only one possible option
+                            //if (this.contractData.CUST_ACCNT_DIV_UI !== undefined) this.contractData.CUST_ACCNT_DIV_UI = res[0].CUST_DIV_NM.toString();
+                        } else {
+                            this.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false; // never required... blank now mean ALL
+                            this.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = false;
+                        }
                         this.selectedData = res;
                         this.isCustDiv = this.selectedData.length <= 1 ? false : true;
                     }
-                }, function (response) {
-                    this.loggerSvc.error("Unable to get Customer Divisions.", response, response.statusText);
+                }, error => {
+                    this.loggerSvc.error("Unable to get Customer Divisions.", '', "tenderFolioComponent::valueChange:: " + JSON.stringify(error));
                 });
         }
     }
@@ -140,8 +149,8 @@ export class TenderFolioComponent {
                 this.isLoading = false;
                 this.isCustDiv = false;
             }
-        }, function (response) {
-            this.loggerSvc.error("Unable to get Customers.", response, response.statusText);
+        }, error => {
+            this.loggerSvc.error("Unable to get Customers.", '', "tenderFolioComponent::valueChange:: " + JSON.stringify(error));
         })
     }
     saveContractTender() {
@@ -150,7 +159,7 @@ export class TenderFolioComponent {
         this.contractData.TITLE = this.tenderName;
         this.contractData.displayTitle = this.tenderName;
         let selectedCustDivs = [];
-        if(this.CUST_NM_DIV){
+        if (this.CUST_NM_DIV) {
             selectedCustDivs = this.CUST_NM_DIV.map(data => data.CUST_DIV_NM);
         }
         this.contractData.CUST_ACCNT_DIV = selectedCustDivs.length > 0 ? selectedCustDivs.toString().replace(/,/g, '/') : "";
@@ -200,16 +209,16 @@ export class TenderFolioComponent {
             "EventSource": "",
             "Errors": {}
         }
-        this.isLoading=true;
+        this.isLoading = true;
         this.dataService.createTenderContract(ct["CUST_MBR_SID"], ct["DC_ID"], data).subscribe((response) => {
             if (response.CNTRCT && response.CNTRCT.length > 0) {
-                this.isLoading=false;
-                  //Redirecting to newContractWidget,handle & call saveContractTender() function of contractDetail page from there
+                this.isLoading = false;
+                //Redirecting to newContractWidget,handle & call saveContractTender() function of contractDetail page from there
                 this.dialogRef.close(response.CNTRCT[1]["DC_ID"]);
             }
-        },(error) => {
-            this.isLoading=false;
-            this.loggerSvc.error('createTenderContract', error);
+        }, (error) => {
+            this.isLoading = false;
+            this.loggerSvc.error('createTenderContract', '', "tenderFolioComponent::createTenderContract:: " + JSON.stringify(error));
         })
     }
 
@@ -253,24 +262,29 @@ export class TenderFolioComponent {
             return;
         }
         let selectedCustDivs = [];
-        if(this.CUST_NM_DIV){
+        if (this.CUST_NM_DIV) {
             selectedCustDivs = this.CUST_NM_DIV.map(data => data.CUST_DIV_NM);
         }
         const isCustDivsSelected = selectedCustDivs.length > 0 ? true : false;
-        if(isCustDivsSelected){
+        if (isCustDivsSelected) {
             this.saveContractTender();
-        }else{
+        } else {
             //opens confirmation dialog to check for saving tender folio without any customer division selected
-            this.showCustDivAlert = true;
+            if (this.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] == false && this.contractData.CUST_ACCNT_DIV == "") {
+                this.showCustDivAlert = true;
+            }
+            else {
+                this.saveContractTender();
+            }
         }
     }
 
-    saveWithoutCustDivs(){
+    saveWithoutCustDivs() {
         this.showCustDivAlert = false;
         this.saveContractTender();
     }
 
-    closeCustDivsAlert(){
+    closeCustDivsAlert() {
         this.showCustDivAlert = false;
     }
 
@@ -298,8 +312,8 @@ export class TenderFolioComponent {
             // By default we dont want a contract to be backdated
             this.contractData.START_DT = moment().format('l');
             this.contractData.END_DT = moment(response["QTR_END"]).format('l');
-        },(err)=>{
-            this.loggerSvc.error("Unable to get customer calender data","Error",err);
+        }, (err) => {
+            this.loggerSvc.error("Unable to get customer calender data", "Error", err);
         });
     }
 
@@ -338,8 +352,8 @@ export class TenderFolioComponent {
             this.filterDealTypes();
             this.initializeTenderData();
             this.isLoading = false;
-        },(err)=>{
-            this.loggerSvc.error("Unable to get Template Data","Error",err);
+        }, (err) => {
+            this.loggerSvc.error("Unable to get Template Data", "Error", err);
         })
     }
 }
