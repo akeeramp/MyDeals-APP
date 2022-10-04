@@ -103,7 +103,7 @@ export class DE_Validation_Util {
                 //Calculating Accrual Line
                 if (Object.keys(dictGroupTypeAcr).length == 0) {
                     data.map(function (data, index) {
-                        if (data.FLEX_ROW_TYPE.toLowerCase() == 'accrual') {
+                        if (data.FLEX_ROW_TYPE && data.FLEX_ROW_TYPE.toLowerCase() == 'accrual') {
                             dictGroupTypeAcr[data["DEAL_COMB_TYPE"]] = index;
                         }
                     });
@@ -111,7 +111,7 @@ export class DE_Validation_Util {
                 //Calculating Draining Line
                 if (Object.keys(dictGroupTypeDrn).length == 0) {
                     data.map(function (data, index) {
-                        if (data.FLEX_ROW_TYPE.toLowerCase() == 'draining') {
+                        if (data.FLEX_ROW_TYPE && data.FLEX_ROW_TYPE.toLowerCase() == 'draining') {
                             dictGroupTypeDrn[data["DEAL_COMB_TYPE"]] = index;
                         }
                     });
