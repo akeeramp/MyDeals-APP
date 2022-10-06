@@ -3,9 +3,10 @@
     (pageChange)="pageChange($event)" [navigable]="true" kendoGridFocusable>
     <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="150"></kendo-grid-column>
     <kendo-grid-column title="PCT Result" field="PRC_CST_TST_STS" [headerClass]="{'headerClass':true}" [width]="120">
-        <ng-template kendoGridCellTemplate let dataItem>
+        <ng-template *ngIf="CAN_VIEW_COST_TEST" kendoGridCellTemplate let-dataItem>
             <div>
-                <icon-mct-pct-angular [dataValue]='PRC_CST_TST_STS' [iconClass]="medIcon"></icon-mct-pct-angular>
+            <icon-mct-pct-angular [dataValue]='dataItem.PRC_CST_TST_STS' [iconClass]="medIcon" >
+            </icon-mct-pct-angular>
             </div>
         </ng-template>
     </kendo-grid-column>

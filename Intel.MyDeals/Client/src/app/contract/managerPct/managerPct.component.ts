@@ -35,7 +35,7 @@ export class managerPctComponent {
     @Input() contractData: any;
     @Input() UItemplate: any;
     @Input() tab: any;
-    @Output() refreshedContractData = new EventEmitter;
+    @Output() refreshedContractData = new EventEmitter<any>();
     private spinnerMessageHeader = "Complete"; 
     private spinnerMessageDescription = "Reloading the page now.";
     public isPctLoading = false;
@@ -230,7 +230,7 @@ export class managerPctComponent {
             this.loadPctDetails();
         }, (err) => {
             this.isRunning = false;
-            this.loggerSvc.error("Could not run price Cost Test for contract " + this.contractId, err);
+              this.loggerSvc.error("Could not run price Cost Test for contract " + this.contractId, err);
         });
         
     }
@@ -239,7 +239,6 @@ export class managerPctComponent {
         this.contractManagerSvc.readContract(this.contractId).subscribe((response: any) => {
             this.contractData = response[0];
             this.refreshedContractData.emit({ contractData: this.contractData });
-
             this.contractId= this.contractData.DC_ID;
             this.lastRun = this.contractData.LAST_COST_TEST_RUN;
             this.contractData?.PRC_ST.map((x, i) => {
@@ -327,12 +326,9 @@ export class managerPctComponent {
         }
         this.userRole = (<any>window).usrRole;
         this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
-        this.contractData?.PRC_ST.map((x, i) => {
-            //intially setting all the PS row arrow icons and PT data row arrow icons as collapses. this isPSExpanded,isPTExpanded is used to change the arrow icon css accordingly
-            this.isPSExpanded[i] = false;
-            if (x.PRC_TBL != undefined) x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
-        })
         this.lastRun = this.contractData.LAST_COST_TEST_RUN;
+        this.contractId= this.contractData.DC_ID;
+        this.loadPctDetails();
         setTimeout(() => {
             var isPCForceReq = this.contractData?.PRC_ST?.filter(x => x.COST_TEST_RESULT == 'Not Run Yet' || x.COST_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
             var isMCForceReq = this.contractData?.PRC_ST?.filter(x => x.MEETCOMP_TEST_RESULT == 'Not Run Yet' || x.MEETCOMP_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;

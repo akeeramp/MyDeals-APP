@@ -81,7 +81,7 @@ export class contractManagerComponent {
     OtherType = []; isECAP = []; isKIT = []
     @Input() public contractData:any;
     @Input() UItemplate:any;
-    @Output() refreshedContractData = new EventEmitter;
+    @Output() refreshedContractData = new EventEmitter<any>();
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
     private spinnerMessageHeader = "Complete"; 
     private spinnerMessageDescription = "Reloading the page now.";
@@ -747,10 +747,23 @@ export class contractManagerComponent {
         }
         return false;
     }
+    refreshCheckBoxData(){
+        //refresh screen data
+        this.approveCheckBox = false;
+        this.reviseCheckBox = false;
+        this.emailCheckBox = false;
+        this.emailCheck = {}; 
+        this.reviseCheck = {};
+        this.apprvCheck = {};
+        this.canEmailIcon = true;
+        this.canActionIcon = true;
+    }
     loadContractDetails(){
         this.contractData ={};
         this.contractManagerSvc.readContract(this.contractId).subscribe((response: any) => {
             this.contractData = response[0];
+            this.refreshedContractData.emit({ contractData: this.contractData });
+            this.refreshCheckBoxData();
             this.contractId= this.contractData.DC_ID;
             this.lastRun = this.contractData.LAST_COST_TEST_RUN;
             this.contractData?.PRC_ST.map((x, i) => {
@@ -895,13 +908,14 @@ export class contractManagerComponent {
         this.custAccptButton = this.contractData.CUST_ACCPT;
         this.contractManagerSvc.createContract(this.contractData["CUST_MBR_SID"],this.contractData["DC_ID"],ct).subscribe((response: Array<any>) => {
               this.isLoading = false;
+              if(action=== 'SaveAndLoad'){
+                this.windowOpened = true;
+                this.loadContractDetails();
+            }
         },  (error) => {
             this.loggerSvc.error('Save Contract service', error);
         });
-        if(action=== 'SaveAndLoad'){
-            this.windowOpened = true;
-            this.loadContractDetails();
-        }
+
     }
 
     continueAction(fromToggle, checkForRequirements) {
