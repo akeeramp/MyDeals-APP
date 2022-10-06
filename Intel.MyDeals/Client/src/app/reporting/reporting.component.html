@@ -102,7 +102,7 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <div class="progress-group" *ngFor="let x of ReportDashboardData | slice : 1:5 "><span class="progress-text">{{x.RPT_NM}}</span><span class="progress-number"><b>{{x.TOTAL_TIME}}/{{x.TOTAL_REPORT_TIME}}</b></span>
+                                                    <div class="progress-group" *ngFor="let x of ReportDashboardData | slice : 0:5 "><span class="progress-text">{{x.RPT_NM}}</span><span class="progress-number"><b>{{x.TOTAL_TIME}}/{{x.TOTAL_REPORT_TIME}}</b></span>
                                                         <div class="progress sm">
                                                             <div class="progress-bar progress-bar{{x.COLOR_CD}}" [ngStyle]="{'width':getWidthDB(x.TOTAL_TIME,x.TOTAL_REPORT_TIME)}">
                                                             </div>
@@ -158,7 +158,7 @@
                                     </div>
                                 </div>
                                 <div class="col-md-4">
-                                    <div class="info-box bg-{{x.COLOR}}" *ngFor="let x of ReportDealType | slice :1:5 ">
+                                    <div class="info-box bg-{{x.COLOR}}" *ngFor="let x of ReportDealType | slice :0:5 ">
                                         <span class="info-box-icon"><i class="fa fa-circle-o text-white"></i></span>
                                         <div class="info-box-content"><span class="info-box-text">{{x.DEAL_TYPE}}</span><span class="info-box-number">{{x.Deal_Count | number : fractionSize}}</span>
                                             <div class="progress">
@@ -194,7 +194,7 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr *ngFor="let x of ReportDashboardData | slice :1:numberOfRecrods ">
+                                                        <tr *ngFor="let x of ReportDashboardData | slice :0:numberOfRecrods ">
                                                             <td>{{x.RPT_NM}}</td>
                                                             <td>{{x.RPT_COUNT}}</td>
                                                             <td>{{x.TOTAL_TIME}}</td>
@@ -215,17 +215,17 @@
                                                         </tr>
                                                     </thead>
                                                     <tbody>
-                                                        <tr *ngFor="let x of ReportLogDeatils | slice :1:numberOfRecrods ">
+                                                        <tr *ngFor="let x of ReportLogDeatils | slice :0:numberOfRecrods ">
                                                             <td title="{{x.TOTAL_REPORT_TIME_TAKEN >60 ? 'Check Filter before running the Report' : ''}}">
                                                                 <i *ngIf="x.TOTAL_REPORT_TIME_TAKEN >60" class="intelicon-information-outlined red" [ngClass]="{success : x.TOTAL_REPORT_TIME_TAKEN < 60, warning : x.TOTAL_REPORT_TIME_TAKEN >=60}"></i>
                                                             </td>
-                                                            <td>Deal Management{{x.RPT_ALS_NM}}</td>
+                                                            <td>Deal Management {{x.RPT_ALS_NM}}</td>
                                                             <td>{{x.START_TIME}}</td>
                                                             <td>{{x.END_TIME}}</td>
                                                             <td>{{x.TOTAL_REPORT_TIME_TAKEN}}</td>
                                                         </tr>
                                                     </tbody>
-                                                </table><a (click)="showAll(numberOfRecrods)" class="showMore" title={{btnText}}>{{btnText}} <i *ngIf="btnText=='Show more '"
+                                                </table><a *ngIf="ReportLogDeatils.length > 10 && reportLogView == true" (click)="showAll(numberOfRecrods)" class="showMore" title={{btnText}}>{{btnText}} <i *ngIf="btnText=='Show more '"
                                                         class="intelicon-down"></i><i *ngIf="btnText=='Show less '"
                                                         class="intelicon-up"></i></a>
                                             </div>
