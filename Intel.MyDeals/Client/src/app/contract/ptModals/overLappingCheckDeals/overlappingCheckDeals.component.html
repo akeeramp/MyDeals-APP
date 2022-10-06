@@ -87,7 +87,7 @@
                                [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column [headerClass]="{'headerClass':true}" width="150" title="Contract">
+    <kendo-grid-column [headerClass]="{'headerClass':true}" width="150" title="Contract" field="CONTRACT_NBR">
         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
             <div class="text-center">
                 {{dataItem.CONTRACT_NM}}({{dataItem.CONTRACT_NBR}})
@@ -99,7 +99,7 @@
                                [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
         </ng-template>
     </kendo-grid-column>
-    <kendo-grid-column [headerClass]="{'headerClass':true}" width="150" title="Pricing Strategy">
+    <kendo-grid-column [headerClass]="{'headerClass':true}" width="150" title="Pricing Strategy" field="PRICE_STRATEGY">
         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
             <div class="text-center">
                 {{dataItem.PRICE_STRATEGY_NM}}({{dataItem.PRICE_STRATEGY}})

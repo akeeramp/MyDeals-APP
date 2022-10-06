@@ -13,11 +13,11 @@
     <div class="row">
         <div class="col-md-7">SELECT ALL</div>
         <div class="col-md-2 text-center">
-            <mat-slide-toggle [(ngModel)]="selectAllDefaults.EMAIL_IND" (change)="selectAll('EMAIL_IND')"
+            <mat-slide-toggle class="toggle-button-custom" [(ngModel)]="selectAllDefaults.EMAIL_IND" (change)="selectAll('EMAIL_IND')"
                 [color]="color"></mat-slide-toggle>
         </div>
         <div class="col-md-2 text-center">
-            <mat-slide-toggle [(ngModel)]="selectAllDefaults.IN_TOOL_IND" (change)="selectAll('IN_TOOL_IND')"
+            <mat-slide-toggle class="toggle-button-custom" [(ngModel)]="selectAllDefaults.IN_TOOL_IND" (change)="selectAll('IN_TOOL_IND')"
                 [color]="color"></mat-slide-toggle>
         </div>
     </div>
@@ -25,11 +25,11 @@
     <div class="row" *ngFor="let s of subScriptions; let i=index" id="matSlideToggle">
         <div class="col-md-7" title="{{s.NOTIF_DESC}}">{{s.NOTIF_NM}}</div>
         <div class="col-md-2 text-center">
-            <mat-slide-toggle [checked]="s.EMAIL_IND" (change)="setSubscription( i , $event,'EMAIL_IND' )"
+            <mat-slide-toggle class="toggle-button-custom" [checked]="s.EMAIL_IND" (change)="setSubscription( i , $event,'EMAIL_IND' )"
                 [color]="color"></mat-slide-toggle>
         </div>
         <div class="col-md-2 text-center">
-            <mat-slide-toggle [checked]="s.IN_TOOL_IND" (change)="setSubscription( i , $event,'IN_TOOL_IND' )"
+            <mat-slide-toggle class="toggle-button-custom" [checked]="s.IN_TOOL_IND" (change)="setSubscription( i , $event,'IN_TOOL_IND' )"
                 [color]="color"></mat-slide-toggle>
         </div>
     </div><br />

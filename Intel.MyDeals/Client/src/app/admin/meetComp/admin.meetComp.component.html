@@ -65,7 +65,7 @@
             </ng-template>
             <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                 <div class="text-center">
-                    <mat-slide-toggle (change)="gridSelectItem(dataItem,$event)" [color]="color" [(ngModel)]="dataItem.ACTV_IND"></mat-slide-toggle>
+                    <mat-slide-toggle class="toggle-button-custom" (change)="gridSelectItem(dataItem,$event)" [color]="color" [(ngModel)]="dataItem.ACTV_IND"></mat-slide-toggle>
                 </div>
             </ng-template>
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">

@@ -368,7 +368,7 @@ export class pricingTableEditorComponent implements OnChanges {
         this.isDeletePTR = false;
     }
     toggleShowHideDiscount() {
-        this.showDiscount = this.showDiscount == '0%' ? '30%' : '0%';
+        this.showDiscount = this.showDiscount == '0%' ? '45%' : '0%';
     }
     chgTerms() {
         //function must trigger only after stop typing

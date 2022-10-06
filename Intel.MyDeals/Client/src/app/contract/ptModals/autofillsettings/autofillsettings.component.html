@@ -19,7 +19,7 @@
                             <!-- Conditions to check the dropdown  attribute  match with buttongroup attribute and iterate over dropdown values-->
                             <div class="row">
                                 <div class="md intel titleclass">
-                                    <h5 class="headstyle">{{item.value.label}}</h5>
+                                    <h5 class="headstyle"><span *ngIf="item.value.label == 'Number of Tiers'" class="alter-star">*</span>{{item.value.label}}</h5>
                                     <span *ngIf="isMultipleGeosSelected && item.key == 'GEO_COMBINED'" class="geo-desc">** This will create a deal for each geo in the same line unless you select to blend. For Hybrid it is not allowed without BLEND. </span>
                                     <span *ngIf="(item.key == 'GEO_COMBINED')" style="float: right; margin-top: -21px; margin-right: 25px;">
                                         <input type="checkbox" [(ngModel)]="isBlend" (change)="updateBlend(item.key)" /> Blend Geos

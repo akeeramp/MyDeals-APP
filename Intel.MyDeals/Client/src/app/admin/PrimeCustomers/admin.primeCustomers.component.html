@@ -37,12 +37,12 @@
                 [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                     <div class="text-center">
-                        <mat-slide-toggle [color]="color" [checked]="dataItem.IS_ACTV" disabled></mat-slide-toggle>
+                        <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.IS_ACTV" disabled></mat-slide-toggle>
                     </div>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <div class="text-center">
-                        <mat-slide-toggle [color]="color" [checked]="dataItem.IS_ACTV"
+                        <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.IS_ACTV"
                             [formControl]="formGroup.get('IS_ACTV')"></mat-slide-toggle>
                     </div>
                 </ng-template>

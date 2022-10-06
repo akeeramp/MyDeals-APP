@@ -42,13 +42,13 @@
                 filter="boolean" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                     <div class="text-center">
-                        <mat-slide-toggle [color]="color" [checked]="dataItem.VISTEX_CUST_FLAG" disabled>
+                        <mat-slide-toggle  class="toggle-button-custom" [color]="color" [checked]="dataItem.VISTEX_CUST_FLAG" disabled>
                         </mat-slide-toggle>
                     </div>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <div class="text-center">
-                        <mat-slide-toggle [color]="color" [checked]="dataItem.VISTEX_CUST_FLAG"
+                        <mat-slide-toggle  class="toggle-button-custom" [color]="color" [checked]="dataItem.VISTEX_CUST_FLAG"
                             [formControl]="formGroup.get('VISTEX_CUST_FLAG')"></mat-slide-toggle>
                     </div>
                 </ng-template>
@@ -57,13 +57,13 @@
                 editor="boolean" filter="boolean" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                     <div class="text-center">
-                        <mat-slide-toggle [color]="color" [checked]="dataItem.DFLT_DOUBLE_CONSUMPTION" disabled>
+                        <mat-slide-toggle  class="toggle-button-custom" [color]="color" [checked]="dataItem.DFLT_DOUBLE_CONSUMPTION" disabled>
                         </mat-slide-toggle>
                     </div>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <div class="text-center">
-                        <mat-slide-toggle [color]="color" [checked]="dataItem.DFLT_DOUBLE_CONSUMPTION"
+                        <mat-slide-toggle  class="toggle-button-custom" [color]="color" [checked]="dataItem.DFLT_DOUBLE_CONSUMPTION"
                             [formControl]="formGroup.get('DFLT_DOUBLE_CONSUMPTION')"></mat-slide-toggle>
                     </div>
                 </ng-template>

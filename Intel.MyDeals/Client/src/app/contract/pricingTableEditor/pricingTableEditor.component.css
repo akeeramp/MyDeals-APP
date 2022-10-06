@@ -108,9 +108,13 @@ td:not(.error-cell).readonly-cell {
     background-color: transparent;
 }
 
-kendo-editor .k-editor-content {
+.ptekendo kendo-editor .k-editor-content {
     z-index: 1;
     height: 220px;
+}
+
+.ptekendo.k-editor {
+    height: 590px !important
 }
 
 /*kendo-toolbar-renderer {

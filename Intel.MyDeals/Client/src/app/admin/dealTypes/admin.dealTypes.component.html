@@ -41,7 +41,7 @@
                 [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                     <div class="text-center">
-                        <mat-slide-toggle [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
+                        <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
                     </div>
                 </ng-template>
             </kendo-grid-column>

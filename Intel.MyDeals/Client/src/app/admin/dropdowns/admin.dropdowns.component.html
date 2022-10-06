@@ -16,9 +16,9 @@
             (edit)="editHandler($event)" (cancel)="cancelHandler($event)" (save)="saveHandler($event)"
             (remove)="removeHandler($event)">
             <ng-template kendoGridToolbarTemplate><button kendoGridAddCommand class="k-button addButton"><span
-                        class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RECORD </button><button
+                        class="k-icon k-i-plus-outline k-icon-md" style="font-size:24px;"></span>ADD NEW RECORD </button><button
                     (click)="clearFilter()" class="k-button clearButton"><span
-                        class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS </button>
+                        class="k-icon intelicon-cancel-filter-solid k-icon-md k-family" style="font-size:24px;"></span>CLEAR FILTERS </button>
                 <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()"
                     class="k-button clearButton"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
             </ng-template>
@@ -35,10 +35,10 @@
             <kendo-grid-column field="ACTV_IND" title="Is Active" editor="boolean" width="100" filter="boolean"
                 [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <mat-slide-toggle [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
+                    <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <mat-slide-toggle [color]="color" [checked]="dataItem.ACTV_IND"
+                    <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.ACTV_IND"
                         [formControl]="formGroup.get('ACTV_IND')"></mat-slide-toggle>
                 </ng-template>
             </kendo-grid-column>

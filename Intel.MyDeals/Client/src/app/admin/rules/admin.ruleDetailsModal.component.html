@@ -30,7 +30,7 @@
                     </div>
                     <div class="col-md-1"></div>
                     <div class="col-md-2">
-                        <mat-slide-toggle [color]="color" class="fl toggle-accept" [disabled]="(!(isElligibleForApproval && rule.IsAutomationIncluded && rule.Id > 0))" [(ngModel)]="rule.RuleStage" on="Approved" off="Pending Approval" onstyle="btn-success" offstyle="btn-danger"
+                        <mat-slide-toggle [color]="color" class="fl toggle-accept toggle-button-custom" [disabled]="(!(isElligibleForApproval && rule.IsAutomationIncluded && rule.Id > 0))" [(ngModel)]="rule.RuleStage" on="Approved" off="Pending Approval" onstyle="btn-success" offstyle="btn-danger"
                             title="{{rule.RuleStage === true ? 'Click to Un-Approve' : 'Click to Approve'}}" (click)="UpdateRuleIndicator(rule.Id, rule.RuleStage,'UPDATE_STAGE_IND',((isElligibleForApproval == true && rule.IsAutomationIncluded == true) ? true : false))"></mat-slide-toggle>
                     </div>
                 </div>
@@ -41,7 +41,7 @@
                     </div>
                     <label class="control-label col-md-2" style="padding-right:20px;">Rule Status:</label>
                     <span class="col-md-2" style="float: left;">
-                        <mat-slide-toggle class="fl toggle-accept" [disabled]="rule.RuleStage == false"
+                        <mat-slide-toggle class="fl toggle-accept toggle-button-custom" [disabled]="rule.RuleStage == false"
                                           [(ngModel)]="rule.IsActive"
                                           on="Active"
                                           off="Inactive"
@@ -52,7 +52,7 @@
                     <label class="control-label col-md-1" style="float: left; padding-right:20px;">Rule Type:</label>
                     <span class="col-md-2" style="float: right;">
                         <span>
-                            <mat-slide-toggle class="fl toggle-accept"
+                            <mat-slide-toggle class="fl toggle-accept toggle-button-custom"
                                               [(ngModel)]="rule.IsAutomationIncluded"
                                               on="Auto Approval"
                                               (click)="toggleType(rule.IsAutomationIncluded, true)"
