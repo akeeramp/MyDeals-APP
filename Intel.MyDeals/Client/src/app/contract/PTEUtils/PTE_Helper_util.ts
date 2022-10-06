@@ -88,7 +88,7 @@ export class PTE_Helper_Util {
             for (var i = 0; i < data.length; i++) {
                 if (data[i].CUST_ACCNT_DIV == null || data[i].CUST_ACCNT_DIV == "") {
                     return true;
-                }
+                } else return false;
             }
             return false;
         }

@@ -188,6 +188,7 @@ export class PTE_Load_Util {
                                 else {
                                     cellComments.push({ row: rowInd, col: colInd, comment: { value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'error-border' });
                                 }
+                                msg += columns[colInd].title + ": " + item._behaviors.validMsg[`${key}`];
                             }
                         }
                     }
@@ -195,7 +196,7 @@ export class PTE_Load_Util {
                         //only if there is error
                         if (val) {
                             cellComments.push({ row: rowInd, col: colInd, comment: { value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'error-border' });
-                            msg += columns[colInd].title + ": " + val;
+                            msg += columns[colInd].title + ": " + item._behaviors.validMsg[`${key}`];
                         }
                     }
                 });

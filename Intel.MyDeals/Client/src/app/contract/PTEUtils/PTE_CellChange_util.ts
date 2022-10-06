@@ -8,6 +8,7 @@ import { PTE_Load_Util } from './PTE_Load_util';
 import { ptBR } from 'handsontable/i18n';
 import { PTE_Helper_Util } from './PTE_Helper_util';
 import { PTEUtil } from './PTE.util';
+import * as moment from 'moment';
 
 export class PTE_CellChange_Util {
     constructor(hotTable: Handsontable) {
@@ -937,6 +938,13 @@ export class PTE_CellChange_Util {
 
     }
     /* AR settlement change ends here */
+    static dateChange(items: Array<any>, colName: string, contractData) {
+        _.each(items, (item) => {
+            if (item.new == undefined || item.new == null || item.new == '' || !moment(item.new, "MM/DD/YYYY", true).isValid() || moment(item.new).toString() === "Invalid date" || moment(item.new).format("MM/DD/YYYY") === "12/30/1899") {
+                this.hotTable.setDataAtRowProp(item.row, colName, moment(contractData[colName]).format("MM/DD/YYYY"), 'no-edit');
+            }
+        });
+    }
     static rowDCID(): number {
         let ROWID = -100;
         let PTRCount = this.hotTable.countRows();

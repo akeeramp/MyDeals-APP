@@ -144,12 +144,16 @@ export class pricingTableEditorComponent implements OnChanges {
                     name = this.field;
                     data = { colName: name, items: { 'data': this.source }, cellCurrValues: selVal };
                 }
-                else{
+                else {
+                    var contractStartDate = VM.contractData["START_DT"];
+                    var contractEndDate = VM.contractData["END_DT"];
+                    var isConsumption = this.hot.getDataAtRowProp(this.selRow, "PAYOUT_BASED_ON") === "Consumption";
+                    var isOEM = this.field === "OEM_PLTFRM_LNCH_DT" || this.field === "OEM_PLTFRM_EOL_DT"; 
                     modalComponent = kendoCalendarComponent;
                     height = "400px"
                     width = "500px";
                     name = this.field;
-                    data = { colName: name, items: { 'data': this.source }, cellCurrValues: selVal };
+                    data = { colName: name, items: { 'data': this.source }, cellCurrValues: selVal, contractStartDate: contractStartDate, contractEndDate: contractEndDate, isConsumption: isConsumption, isOEM: isOEM, contractIsTender: VM.isTenderContract };
                 }
                 const dialogRef = dialog.open(modalComponent, {
                     height: height,
@@ -527,7 +531,7 @@ export class pricingTableEditorComponent implements OnChanges {
                 changes = this.identfyUniqChanges(changes, source);
                 let PTR = _.where(changes, { prop: 'PTR_USER_PRD' });
                 let AR = _.where(changes, { prop: 'AR_SETTLEMENT_LVL' });
-                let startVol = _.where(changes, { prop: 'STRT_VOL' });
+                let startVol = _.where(changes, { prop: 'STRT_VOL' });                
                 //KIT On change events
                 let KIT_ECAP = _.filter(changes, item => { return item.prop == 'ECAP_PRICE_____20_____1' || item.prop == 'ECAP_PRICE' });
                 let KIT_DSCNT = _.filter(changes, item => { return item.prop == 'DSCNT_PER_LN' || item.prop == 'QTY' });
@@ -564,6 +568,14 @@ export class pricingTableEditorComponent implements OnChanges {
                 if(startVol && startVol.length>0){
                     //making the start vol val to zero incase empty
                     PTE_CellChange_Util.defaultVolVal(startVol, this.columns, this.curPricingTable);
+                }
+                let startDt = _.where(changes, { prop: 'START_DT' });
+                if (startDt) {
+                    PTE_CellChange_Util.dateChange(startDt, 'START_DT', this.contractData);
+                }
+                let endDt = _.where(changes, { prop: 'END_DT' });
+                if (endDt) {
+                    PTE_CellChange_Util.dateChange(endDt, 'END_DT', this.contractData);
                 }
                 this.isLoading = false;
                 this.enableDeTab.emit(true);
@@ -791,8 +803,8 @@ export class pricingTableEditorComponent implements OnChanges {
         }
         this.isLoading = false;
 
-    }
-    async validatePricingTableProducts() {
+    }    
+    async validatePricingTableProducts() {        
         let isValidProd = await this.validateOnlyProducts('onSave');
         //Handsonetable loading taking some time so putting this logic for loader
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);

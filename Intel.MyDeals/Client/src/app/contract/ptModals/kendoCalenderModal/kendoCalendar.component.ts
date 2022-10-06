@@ -6,31 +6,44 @@ import * as _ from "underscore";
 
 @Component({
     selector: "kendo-calendar-angular",
-    template: `<div class="container-fluid overflow">
-    <div class="row">
-        <div class="col">
-            <h1 class="another-header-geo" mat-dialog-title>Please select a date</h1>
-        </div>
-    </div>
-    <div class="row">
-        <div class="col">
-            <div mat-dialog-content>
-                <kendo-datepicker
+	template: `<div class="modal-header">
+		<h3 class="modal-title" id="modal-title">Date picker</h3>
+	</div>
+	<div class="modal-body" id="modal-body">
+		<div class="row">
+			<div class="col-md-12">
+				<p>
+					Please click the box below to choose the date:
+				</p>
+				<kendo-datepicker
                   calendarType="classic"
-                  [(value)]="value"
+                  [(ngModel)]="value"
+				  (valueChange)="onChange(value)"
+				  format="MM/dd/yyyy"
+				  (keydown)="onKeyDown($event)"
+				  calendarType="classic"
+				  placeholder="Click to Select..."
               ></kendo-datepicker>
-            </div>
-        </div>
-    </div>
-    <div class="row justify-content-end">
-        <div class="col">
-            <div class="bottom-btns" mat-dialog-actions>
-                <button mat-button (click)="onNoClick()" class="btn btn-warning">Cancel</button>
-                <button mat-button (click)="onSave()" cdkFocusInitial class="btn btn-primary">Save & Close</button>
-            </div>
-        </div>
-    </div>
-</div>`,
+				<p *ngIf="!isValidDate || isDateOverlap" class="err-Control" style="font-size:large">
+					{{errorMsg }}
+				</p>
+				<p *ngIf="isConsumption" class="validation-Control" style="font-size:large">
+					{{validMsg }}
+				</p>
+			</div>
+		</div>
+		<br />
+
+		<div class="row">
+			<div class="col-md-12">
+				<div class="fr">
+					<button class="btn btn-warning" type="button" (click)="onNoClick()">Cancel</button>
+					<button class="btn btn-primary" type="button" (click)="onSave()" [disabled]="(!isValidDate)">Add to Grid</button>
+				</div>
+			</div>
+		</div>
+	</div>
+	<div class="modal-footer">	</div>`,
   
   })
 
@@ -40,18 +53,65 @@ import * as _ from "underscore";
     constructor(
       public dialogRef: MatDialogRef<kendoCalendarComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any,
-    ) {}
-    
+	) { }
+
+	private isValidDate: boolean;
+	private isDateOverlap: boolean;
+	private isConsumption: boolean;
+	private validMsg: string;
+	private errorMsg: string;
+
+	private isStartDate: boolean;
+
+	onChange(value) {
+		this.isValidDate = true;
+		this.isDateOverlap = false;
+		this.isConsumption = this.data.isConsumption;
+		this.validMsg = "";
+
+		//check following validations are only for Start Date and End Date
+		if (this.data.colName == "START_DT" || this.data.colName == "END_DT") {
+			this.isStartDate == (this.data.colName === "START_DT");
+			// date must overlapp contract range... not inside of the range - Tender contracts don't observe start/end date within contract.
+			if (this.errorMsg != undefined) { // Put in to clear out old error messages
+				this.errorMsg = undefined;
+			}
+			if (this.isStartDate && value > new Date(this.data.contractEndDate) && this.data.contractIsTender !== "1") {
+				this.errorMsg = "Dates must overlap contract's date range (" + this.data.contractStartDate.split(' ')[0] + " - " + this.data.contractEndDate.split(' ')[0] + ").";
+				this.isValidDate = false;
+			}
+			if (!this.isStartDate && value < new Date(this.data.contractStartDate) && this.data.contractIsTender !== "1") {
+				this.errorMsg = "Dates must overlap contract's date range (" + this.data.contractStartDate.split(' ')[0] + " - " + this.data.contractEndDate.split(' ')[0] + ").";
+				this.isValidDate = false;
+			}
+			if (((this.isStartDate && value < new Date(this.data.contractStartDate)) || (!this.isStartDate && value > new Date(this.data.contractEndDate))) && this.data.contractIsTender !== '1') {
+				this.errorMsg = "Extending Deal Dates will result in the extension of Contract Dates. Please click 'Add To Grid', if you want to proceed.";
+				this.isDateOverlap = true;
+			}
+			if (this.isConsumption) {
+				this.validMsg = "Changes to deal Start/End Dates for Consumption deals will change Billings Start/End Dates.  Validate Billings Start/End Dates with the Contract.";
+			}
+		}
+		if (this.data.isOEM) {
+			this.isValidDate = true;
+		}
+    }
+	onKeyDown(event) {
+		if (event.keyCode == 13) {
+			this.onSave();
+		}
+	}
     onSave(){
       let date=moment(this.value).format('MM/DD/YYYY');
       this.dialogRef.close(date);
-    }
+	}
+	onNoClick(): void {
+		this.dialogRef.close();
+	}
     ngOnInit() {
       if(this.data && this.data.cellCurrValues){
-        this.value = new Date(this.data.cellCurrValues);
+		  this.value = new Date(this.data.cellCurrValues);
+		  this.onChange(this.value);
       }
-    }
-    onNoClick(): void {
-      this.dialogRef.close();
     }
   }

@@ -3,6 +3,7 @@ import * as moment from 'moment';
 import { PTE_Common_Util } from './PTE_Common_util';
 import { PTE_Validation_Util } from './PTE_Validation_util';
 import { DE_Save_Util } from '../DEUtils/DE_Save_util';
+import { PTE_Config_Util } from './PTE_Config_util';
 
 export class PTE_Save_Util {
     static validatePTE(PTR: Array<any>, curPricingStrategy: any, curPricingTable: any, contractData: any, VendorDropDownResult: any, overlapFlexResult: any, validMisProd:any): any {
@@ -119,6 +120,15 @@ export class PTE_Save_Util {
         _.each(PTR, (item) => {
             //defaulting the behaviours object
             PTE_Common_Util.setBehaviors(item);
+            if (curPricingTable.OBJ_SET_TYPE_CD == 'KIT') {
+                if (item["PTR_USER_PRD"] && item["PTR_USER_PRD"] != null && item["PTR_USER_PRD"] != "") {
+                    let products = item["PTR_USER_PRD"].replace(/,,/g, ',').split(',');
+                    if (products.length > PTE_Config_Util.maxKITproducts) {
+                        item._behaviors.isError['PTR_USER_PRD'] = true;
+                        item._behaviors.validMsg['PTR_USER_PRD'] = "You have too many products! You may have up to 10 products";
+                    }
+                }
+            }
             if (moment(item["START_DT"]).isAfter(contractData.END_DT) && !isTenderContract) {
                 item._behaviors.isError['START_DT'] = true;
                 item._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(contractData.END_DT).format("MM/DD/YYYY") + ")";
