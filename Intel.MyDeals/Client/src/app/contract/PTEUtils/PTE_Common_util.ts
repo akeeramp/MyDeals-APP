@@ -210,10 +210,12 @@ export class PTE_Common_Util {
                 _.each(uniqDCID, itmsDC => {
                     let DCPTR = _.where(PTRResult, { DC_ID: itmsDC.DC_ID });
                     let selTier;
+                    let pivotDensity;
                     if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
-                        let NUM_OF_TIERS = parseInt(curPricingTable.NUM_OF_TIERS);
-                        let pivotDensity = parseInt(curPricingTable.NUM_OF_DENSITY);
-                        let numOfRows = NUM_OF_TIERS * pivotDensity;
+                        let rowData = _.max(DCPTR, (itm: any) => { return parseInt(itm.TIER_NBR) });
+                        pivotDensity = parseInt(rowData.NUM_OF_DENSITY);
+                        let maxTier = parseInt(rowData.TIER_NBR);
+                        let numOfRows = maxTier * pivotDensity;
                         selTier = numOfRows;
                     }
                     else {
@@ -223,6 +225,9 @@ export class PTE_Common_Util {
                     _.each(PTRResult, (item) => {
                         if (item.DC_ID == itmsDC.DC_ID) {
                             item.NUM_OF_TIERS = selTier;
+                            if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
+                                item.NUM_OF_DENSITY = pivotDensity;
+                            }
                         }
                     });
                 });
@@ -245,9 +250,6 @@ export class PTE_Common_Util {
     static addPTEAttributes(PTRResult, curPricingTable) {
         for (var j = 0; j < PTRResult.length; j++) {
             PTRResult[j]["IS_HYBRID_PRC_STRAT"] = curPricingTable["IS_HYBRID_PRC_STRAT"] != null ? curPricingTable["IS_HYBRID_PRC_STRAT"] : null;
-            if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
-                PTRResult[j]["NUM_OF_DENSITY"] = curPricingTable["NUM_OF_DENSITY"] != null ? curPricingTable["NUM_OF_DENSITY"] : null;
-            }
         }
         return PTRResult;
     }

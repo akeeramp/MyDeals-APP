@@ -279,8 +279,9 @@ export class PTE_Load_Util {
                     mergCells.push({ row: rowIndex, col: ind, rowspan: NUM_OF_TIERS, colspan: 1 });
                 }
                 if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY' && (colItem.field == 'TIER_NBR' || colItem.field == 'STRT_PB' || colItem.field == 'END_PB')) {
-                    let pivotDensity = parseInt(curPricingTable.NUM_OF_DENSITY);
-                    for (let i = 1; i <= NUM_OF_TIERS; i++) {
+                    let pivotDensity = parseInt(curPTR.NUM_OF_DENSITY);
+                    let densityTiers = NUM_OF_TIERS / pivotDensity;
+                    for (let i = 1; i <= densityTiers; i++) {
                         mergCells.push({ row: startOffset, col: ind, rowspan: pivotDensity, colspan: 1 });
                         startOffset = startOffset + pivotDensity;
                     }

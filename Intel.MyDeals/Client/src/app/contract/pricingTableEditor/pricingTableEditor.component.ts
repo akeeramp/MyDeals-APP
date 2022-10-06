@@ -181,7 +181,7 @@ export class pricingTableEditorComponent implements OnChanges {
                                         let PTR = [];
                                         PTR.push({ row: this.selRow, prop: 'PTR_USER_PRD', old: this.hot.getDataAtRowProp(this.selRow, 'PTR_USER_PRD'), new: cntrctPrdct.toString() });
                                         this.selRow = this.selRow + VM.curPricingTable.NUM_OF_TIERS;
-                                        let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct };
+                                        let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct.toString() };
                                         this.allOperations.push(operation);
                                         PTE_CellChange_Util.autoFillCellOnProd(PTR, VM.curPricingTable, VM.contractData, VM.pricingTableTemplates, VM.columns, operation);
                                     }
@@ -199,7 +199,7 @@ export class pricingTableEditorComponent implements OnChanges {
                                 });
                                 let PTR = [];
                                 PTR.push({ row: this.selRow, prop: 'PTR_USER_PRD', old: this.hot.getDataAtRowProp(this.selRow, 'PTR_USER_PRD'), new: cntrctPrdct.toString() });
-                                let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct };
+                                let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct.toString() };
                                 this.allOperations.push(operation);
                                 PTE_CellChange_Util.autoFillCellOnProd(PTR, VM.curPricingTable, VM.contractData, VM.pricingTableTemplates, VM.columns, operation);
                             }
@@ -818,7 +818,6 @@ export class pricingTableEditorComponent implements OnChanges {
     async validateOnlyProducts(action: string) {
         //loader
         let isPrdValid: any = null;
-        let isDenBandValidated: any = true;
         //generate PTE
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
         let translateResult = await this.ValidateProducts(PTR, false, true, null);
@@ -848,28 +847,30 @@ export class pricingTableEditorComponent implements OnChanges {
                 // Product corrector if invalid products
                 this.isLoading = false;
                 this.openProductCorrector(translateResult['Data'])
-                isDenBandValidated = false;
             }
             else if (_.contains(prdValResult, '2')) {
                 this.loggerService.warn('Please use product selector to choose a valid product', "Use Product Selector");
             }
             else {
+                if (this.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
+                    _.each(updatedPTRObj.rowData, (data, idx) => {
+                        this.hotTable.setDataAtRowProp(idx, 'PTR_USER_PRD', data.PTR_USER_PRD, 'no-edit')
+
+                    });
+                    let denBandData = PTE_CellChange_Util.validateDensityBand(0, this.columns, this.curPricingTable, '', translateResult['Data'], false);
+                    let error = PTE_Save_Util.isPTEError(denBandData.finalPTR, this.curPricingTable);
+                    this.validMisProd = denBandData.validMisProds;
+                    if (error) {
+                        this.generateHandsonTable(denBandData.finalPTR);
+                    }
+                }
                 if (action == 'onSave') {
-                    isDenBandValidated = false;
                     //since the errors are binding from cook products check for any error
                     isPrdValid = _.find(updatedPTRObj.rowData, (x) => {
                         if (x._behaviors && x._behaviors.isError) {
                             return _.contains(_.values(x._behaviors.isError), true)
                         }
                     });
-                    if (this.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY' && isDenBandValidated == false) {
-                        let denBandData = PTE_CellChange_Util.validateDensityBand(0, this.columns, this.curPricingTable, '', translateResult['Data'], false);
-                        let error = PTE_Save_Util.isPTEError(denBandData.finalPTR, this.curPricingTable);
-                        this.validMisProd = denBandData.validMisProds;
-                        if (error) {
-                            this.generateHandsonTable(denBandData.finalPTR);
-                        }
-                    }
                     this.isLoading = false;
                     //the result can have both valid and invalid so any failure it should fail to save
                     return isPrdValid != null ? false : true;
@@ -884,9 +885,6 @@ export class pricingTableEditorComponent implements OnChanges {
 
             //this.loggerService.error("validateOnlyProducts:failed","Translate API failure");
             //this.isLoading = false;
-            if (action !== 'onSave') {
-                this.validationMessage = true;
-            }
             this.isLoading = false;
             return true;
         }
@@ -970,7 +968,7 @@ export class pricingTableEditorComponent implements OnChanges {
                             }
                             let PTR = [];
                             PTR.push({ row: PTE_CellChange_Util.returnEmptyRow(), prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(result.validateSelectedProducts[idx].indx, 'PTR_USER_PRD'), new: cntrctPrdct.toString() });
-                            let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct };
+                            let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct.toString() };
                             PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, operation);
                         }
                     });
@@ -987,7 +985,7 @@ export class pricingTableEditorComponent implements OnChanges {
                     });
                     let PTR = [];
                     PTR.push({ row: PTE_CellChange_Util.returnEmptyRow(), prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(PTE_CellChange_Util.returnEmptyRow(), 'PTR_USER_PRD'), new: cntrctPrdct.toString() });
-                    let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct };
+                    let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct.toString() };
                     PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, operation);
                 }
 
@@ -1038,7 +1036,23 @@ export class pricingTableEditorComponent implements OnChanges {
                     if (idx == selProds.length - 1) {
                         //handonsontable takes time to bind the data to the so putting this logic.
                         setTimeout(() => {
-                            if (this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {                                   
+                           
+                                let response = JSON.parse(operation.PTR_SYS_PRD);
+                                let ValidProducts = PTE_Helper_Util.splitProductForDensity(response);
+                                let finalPTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
+                                _.each(ValidProducts, (val, DCID) => {
+                                    var userInput = PTEUtil.updateUserInput(ValidProducts[DCID]);
+                                    var contractProducts = userInput['contractProducts'].toString().replace(/(\r\n|\n|\r)/gm, "");
+                                    _.each(finalPTR, (data, idx) => {
+                                        if (data.DC_ID == DCID) {
+                                            data.PTR_USER_PRD = contractProducts;
+                                            data.PTR_SYS_PRD = JSON.stringify(val)
+                                            this.hotTable.setDataAtRowProp(idx, 'PTR_USER_PRD', data.PTR_USER_PRD, 'no-edit')
+                                        }
+                                    })
+                                });
+
+                            if (this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
                                 let denBandData = PTE_CellChange_Util.validateDensityBand(selRow, this.columns, this.curPricingTable, operation, '', false);
                                 let error = PTE_Save_Util.isPTEError(denBandData.finalPTR, this.curPricingTable);
                                 this.validMisProd = denBandData.validMisProds;

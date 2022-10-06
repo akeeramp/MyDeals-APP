@@ -643,14 +643,24 @@ export class PTE_CellChange_Util {
                 this.getMergeCellsOnEditDensity(empRow, NUM_OF_TIERS, pivotDensity, numOfRows, pricingTableTemplates);
             }
             else {
-                if (operation && operation.operation && operation.PRD_EXCLDS) {
-                    this.hotTable.setDataAtRowProp(selrow, 'PRD_EXCLDS', operation.PRD_EXCLDS, 'no-edit');
-                }
+                if (operation && operation.operation) {
+                    let PTR_col_ind = _.findIndex(columns, { data: 'PTR_USER_PRD' });
+                    this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'success-product');
+                }                
                 if (operation && operation.operation && operation.PTR_SYS_PRD) {
                     this.hotTable.setDataAtRowProp(selrow, 'PTR_USER_PRD', items[0].new, 'no-edit');
                     this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', operation.PTR_SYS_PRD, 'no-edit');
                 }
+                if (operation && operation.operation && operation.PRD_EXCLDS) {
+                    this.hotTable.setDataAtRowProp(selrow, 'PTR_USER_PRD', items[0].new, 'no-edit');
+                    this.hotTable.setDataAtRowProp(selrow, 'PRD_EXCLDS', operation.PRD_EXCLDS, 'no-edit');
+                }
                 else {
+                    //this will rever the produc color back to empty
+                    if (items[0].old != items[0].new && (operation == undefined || operation == null)) {
+                        let PTR_col_ind = _.findIndex(columns, { data: 'PTR_USER_PRD' });
+                        this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'normal-product');
+                    }
                     //This will make sure to hit translate API
                     this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', '', 'no-edit');
                 }
@@ -965,7 +975,8 @@ export class PTE_CellChange_Util {
     }
     static getOperationProdCorr(selProd: any) {
         let PTR_SYS_PRD = this.hotTable.getDataAtRowProp(selProd.indx, 'PTR_SYS_PRD');
-        //incase of any valid products already bind, append the prod corr 
+        let excludedPrdct = []
+        //incase of any valid products already bind, append the prod corr
         if (typeof PTR_SYS_PRD == 'string' && PTR_SYS_PRD != '') {
             PTR_SYS_PRD = JSON.parse(PTR_SYS_PRD);
         }
@@ -974,8 +985,11 @@ export class PTE_CellChange_Util {
         }
         _.each(selProd.items, selPrdItm => {
             PTR_SYS_PRD[`${selPrdItm.prod}`] = [selPrdItm.prodObj];
+            if (selPrdItm.prodObj.EXCLUDE) {
+                excludedPrdct.push(selPrdItm.prodObj.HIER_VAL_NM);
+            }
         });
-        let operation = { operation: 'prodcorr', PTR_SYS_PRD: JSON.stringify(PTR_SYS_PRD) };
+        let operation = { operation: 'prodcorr', PTR_SYS_PRD: JSON.stringify(PTR_SYS_PRD), PRD_EXCLDS: excludedPrdct.toString() };
         return operation;
     }
 

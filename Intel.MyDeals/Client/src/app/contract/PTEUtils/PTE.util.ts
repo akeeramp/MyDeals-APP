@@ -6,6 +6,7 @@ import { pricingTableEditorService } from '../pricingTableEditor/pricingTableEdi
 import Handsontable from 'handsontable';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util'
 import * as moment from 'moment';
+import { PTE_Helper_Util } from './PTE_Helper_util';
 
 export class PTEUtil {
 
@@ -289,6 +290,29 @@ export class PTEUtil {
                 SendToTranslation: (dealType == "KIT") || !(row.PTR_SYS_INVLD_PRD != null && row.PTR_SYS_INVLD_PRD != "")
             }
         });
+
+        if (currentPricingTableRowData && currentPricingTableRowData[0] && currentPricingTableRowData[0].PRD_EXCLDS != undefined) {
+            _.each(pricingTableRowData, obj => {
+                if (!!obj.PRD_EXCLDS && obj.PRD_EXCLDS.length > 0) {
+                    let object = {
+                        ROW_NUMBER: obj.DC_ID,
+                        USR_INPUT: obj.PRD_EXCLDS,
+                        EXCLUDE: true,
+                        FILTER: obj.PROD_INCLDS,
+                        START_DATE: moment(obj.START_DT).format("l"),
+                        END_DATE: moment(obj.END_DT).format("l"),
+                        GEO_COMBINED: PTE_Helper_Util.getFormatedGeos(obj.GEO_COMBINED),
+                        PROGRAM_PAYMENT: obj.PROGRAM_PAYMENT,
+                        PAYOUT_BASED_ON: obj.PAYOUT_BASED_ON,
+                        CUST_MBR_SID: contractData.CUST_MBR_SID,
+                        IS_HYBRID_PRC_STRAT: curPricingTable.IS_HYBRID_PRC_STRAT,
+                        SendToTranslation: (dealType == "DENSITY") || !(obj.PTR_SYS_INVLD_PRD != null && obj.PTR_SYS_INVLD_PRD != "")
+                        //"SendToTranslation": (dealType == "DENSITY" && (isExcludePrdChange)) || !(obj.PTR_SYS_INVLD_PRD != null && obj.PTR_SYS_INVLD_PRD != "")
+                    }
+                    translationInput.push(object);
+                }
+            })
+        }
 
         let translationInputToSend = translationInput.filter(function (x) {
             // If we already have the invalid JSON don't translate the products again
