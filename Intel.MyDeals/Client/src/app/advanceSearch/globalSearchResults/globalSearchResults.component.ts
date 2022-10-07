@@ -65,7 +65,7 @@ export class GlobalSearchResultsComponent  {
           this.objTypes[type].viewMore=true;
         }
       },err=>{
-        this.loggerSvc.error("GlobalSearchResultsComponent::getOBJonly",err);
+        this.loggerSvc.error("Unable to fetch global Search results","Error",err);
       })
     }
     getObjectTypeResult(opType:string){
@@ -110,7 +110,9 @@ export class GlobalSearchResultsComponent  {
         this.resultTake=5;
         this.windowResize();
         this.getObjectTypeResult(this.opType);
-     }
+      }else{
+        this.loggerSvc.error("Please Enter: (1) Contract/ Pricing Strategy / Pricing Table Name or Number OR (2) Deal Number.","Error");
+      }
     }
     gotoOBJ(item: any, opType: string) {
         let DCID = item.DC_ID

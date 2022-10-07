@@ -31,13 +31,12 @@
                 <div class="fr" style="margin: 5px 5px 0 15px; color: #aaaaaa; font-size: 14px;">Date Range:</div>
 
                 <div class="fr" style="width:254px">
-                    <kendo-multiselect  kendoMultiSelectSummaryTag [placeholder]="'Select Customers...'" class="fr opUiContainer md" style="width: 250px; margin-right: 7px;" #cmbmulti [data]="custData" textField="CUST_NM" valueField="CUST_SID"
-                                       [autoClose]="false" [(ngModel)]="selectedCustNames" (valueChange)="onCustomerChange($event)">
-                                       <ng-template kendoMultiSelectGroupTagTemplate let-dataItems>
-                                        <span class="k-icon k-i-caret-alt-down"></span>
-                                        {{ dataItems.length }} ITEMS(S) SELECTED
-                                      </ng-template>
-                                    </kendo-multiselect>
+                    <kendo-multiselect kendoMultiSelectSummaryTag [placeholder]="'Select Customers...'" class="fr opUiContainer md" style="width: 250px; margin-right: 7px;" #cmbmulti [data]="custData" textField="CUST_NM" valueField="CUST_SID" [autoClose]="false" [(ngModel)]="selectedCustNames"
+                        (valueChange)="onCustomerChange($event)">
+                        <ng-template kendoMultiSelectGroupTagTemplate let-dataItems>
+                            <span class="k-icon k-i-caret-alt-down"></span> {{ dataItems.length }} ITEMS(S) SELECTED
+                        </ng-template>
+                    </kendo-multiselect>
                 </div>
 
                 <div class="fr" style="margin: 5px 5px 0 15px; color: #aaaaaa; font-size: 14px; ">
@@ -80,7 +79,7 @@
     </div>
 </div>
 
-<kendo-window *ngIf="windowOpened" (close)="windowClose()" [minWidth]="windowMinWidth" [minHeight]="windowHeight" [width]="windowWidth" [top]="windowTop" [left]="windowLeft">
+<kendo-window *ngIf="windowOpened" (close)="windowClose()" [minWidth]="windowMinWidth" [minHeight]="windowHeight" [width]="windowWidth" [top]="windowTop" [left]="windowLeft" class="dashboard-kendo-window">
     <kendo-window-titlebar>
         <div class="k-window-title">Search Results </div><button kendoWindowCloseAction></button>
     </kendo-window-titlebar>

@@ -157,6 +157,7 @@ h5 {
     width: 100%;
 }
 
+
 /*.k-dialog .k-dialog-buttongroup {
     margin: 0;
     padding: 0;
@@ -312,17 +313,17 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li span {
     font-weight: 500;
 }
 
-    kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li span.badge.error {
-        color: #fff !important;
-    }
+kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li span.badge.error {
+    color: #fff !important;
+}
 
-    kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li span.badge {
-        border-radius: 10px !important;
-    }
+kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li span.badge {
+    border-radius: 10px !important;
+}
 
-    kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active {
-        background: #fff !important;
-    }
+kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active {
+    background: #fff !important;
+}
 
 kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active span {
     color: #00AEEF !important
@@ -331,7 +332,7 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active span 
 .oppo-grids kendo-grid .k-grid-header table thead tr th {
     font-size: 12px !important;
     font-weight: 600;
-    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .oppo-grids kendo-grid .k-grid-header table thead tr th .k-link:hover {
@@ -348,7 +349,10 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active span 
     text-overflow: ellipsis;
 }
 
-gridster-item.attr-li-6, gridster-item.attr-li-8, gridster-item.attr-li-9, gridster-item.attr-li-10 {
+gridster-item.attr-li-6,
+gridster-item.attr-li-8,
+gridster-item.attr-li-9,
+gridster-item.attr-li-10 {
     height: 312px !important;
 }
 
@@ -420,7 +424,7 @@ kendo-slider.before-ques .k-slider-wrap .k-slider-track-wrap ul li span.k-label 
     height: calc(85vh + 320px);
 }
 
-#parentID gridster-preview{
+#parentID gridster-preview {
     background-color: #fff!important;
 }
 
@@ -438,7 +442,7 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     color: #00aeef;
 }
 
-.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th{
+.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th {
     vertical-align: top!important;
 }
 
@@ -453,7 +457,8 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     position: relative;
 }
 
-.width-fixes .k-grid .k-grid-edit-row td deal-editor-edit .k-datepicker, .width-fixes .k-grid .k-grid-edit-row td deal-editor-edit .k-numerictextbox {
+.width-fixes .k-grid .k-grid-edit-row td deal-editor-edit .k-datepicker,
+.width-fixes .k-grid .k-grid-edit-row td deal-editor-edit .k-numerictextbox {
     width: 100%;
 }
 
@@ -475,6 +480,7 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     border-bottom: 3px solid rgb(0, 113, 197) !important;
     border-bottom-color: rgb(0, 113, 197) !important;
 }
+
 
 /*.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="TRKR_NBR"] {
     width: 100%;
@@ -539,13 +545,15 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     background: #fff;
 }
 
-.htDatepickerHolder .pika-button:hover, .htDatepickerHolder .pika-row.pick-whole-week:hover .pika-button {
+.htDatepickerHolder .pika-button:hover,
+.htDatepickerHolder .pika-row.pick-whole-week:hover .pika-button {
     color: #444;
     background: #eeeeee;
     border-radius: 50%;
 }
 
-.htDatepickerHolder .is-selected .pika-button, .htDatepickerHolder .has-event .pika-button {
+.htDatepickerHolder .is-selected .pika-button,
+.htDatepickerHolder .has-event .pika-button {
     width: 35px;
     height: 35px;
     text-align: center !important;
@@ -558,7 +566,8 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     color: #444;
 }
 
-.handsontable.listbox tr td.current, .handsontable.listbox tr:hover td {
+.handsontable.listbox tr td.current,
+.handsontable.listbox tr:hover td {
     background: #00aeef !important;
     color: #fff;
 }
@@ -601,26 +610,29 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     background: #fafafa !important;
 }
 
-    .dateclass.k-datepicker .k-select {
-        background-color: transparent !important;
-        border: 0px !important;
-        color: #727578 !important;
-    }
+.dateclass.k-datepicker .k-select {
+    background-color: transparent !important;
+    border: 0px !important;
+    color: #727578 !important;
+}
 
-.dateclass.k-picker-wrap.k-state-default > .k-select {
+.dateclass.k-picker-wrap.k-state-default>.k-select {
     border-color: #fafafa;
 }
 
-.dateclass.k-datepicker .k-picker-wrap, .k-timepicker .k-picker-wrap, .k-datetimepicker .k-picker-wrap, .k-dateinput .k-dateinput-wrap {
+.dateclass.k-datepicker .k-picker-wrap,
+.k-timepicker .k-picker-wrap,
+.k-datetimepicker .k-picker-wrap,
+.k-dateinput .k-dateinput-wrap {
     border-color: #ced4da4f;
     color: #495057;
     background-color: #f1ebeb00 !important;
     font-family: 'Intel Clear';
 }
 
-    .dateclass.k-datepicker .k-picker-wrap:hover {
-        background-color: #ffffff !important;
-    }
+.dateclass.k-datepicker .k-picker-wrap:hover {
+    background-color: #ffffff !important;
+}
 
 .dateclass.k-datepicker .k-input:hover {
     background-color: #ffffff !important;
@@ -630,7 +642,8 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     color: #878383d9 !important;
 }
 
-.newbotborder.k-dropdown .k-dropdown-wrap, .newbotborder .k-dropdowntree .k-dropdown-wrap {
+.newbotborder.k-dropdown .k-dropdown-wrap,
+.newbotborder .k-dropdowntree .k-dropdown-wrap {
     border-color: #ced4da38 !important;
     background-color: #fafafa !important;
     border-bottom: 2px solid #0071c5 !important;
@@ -638,13 +651,13 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     border-radius: 0px !important
 }
 
-    .newbotborder.k-dropdown .k-dropdown-wrap:hover {
-        background: #fff !important
-    }
+.newbotborder.k-dropdown .k-dropdown-wrap:hover {
+    background: #fff !important
+}
 
-    .newbotborder.k-dropdown .k-dropdown-wrap .k-select {
-        color: #727578b0 !important
-    }
+.newbotborder.k-dropdown .k-dropdown-wrap .k-select {
+    color: #727578b0 !important
+}
 
 .newbotborder .k-icon:hover {
     color: #444 !important;
@@ -671,10 +684,10 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     background-color: #dbdbdb2e !important;
 }
 
-    .noborderclass.k-combobox .k-select:hover {
-        background-color: transparent !important;
-        color: #727579 !important;
-    }
+.noborderclass.k-combobox .k-select:hover {
+    background-color: transparent !important;
+    color: #727579 !important;
+}
 
 .noborderclass.k-combobox .k-icon:hover {
     color: #444 !important;
@@ -694,10 +707,11 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     border-color: #ced4da6b !important;
 }
 
-    .borderless.k-textbox:hover, .borderless.k-textbox:focus {
-        box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
-        background-color: none !important
-    }
+.borderless.k-textbox:hover,
+.borderless.k-textbox:focus {
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+    background-color: none !important
+}
 
 .dateboxborder.k-numerictextbox .k-numeric-wrap {
     color: #495057 !important;
@@ -706,17 +720,17 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     /* border-bottom: 2px solid #0071c5 !important;*/
 }
 
-    .dateboxborder.k-numerictextbox .k-numeric-wrap:hover {
-        background-color: none !important;
-        box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
-        color: #444 !important;
-    }
+.dateboxborder.k-numerictextbox .k-numeric-wrap:hover {
+    background-color: none !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+    color: #444 !important;
+}
 
-    .dateboxborder.k-numerictextbox .k-numeric-wrap.k-state-focused {
-        border-color: #e7e7e7 !important;
-        background-color: #ffffff !important;
-        box-shadow: none !important;
-    }
+.dateboxborder.k-numerictextbox .k-numeric-wrap.k-state-focused {
+    border-color: #e7e7e7 !important;
+    background-color: #ffffff !important;
+    box-shadow: none !important;
+}
 
 .dateboxborder.k-numerictextbox .k-select {
     border-color: none !important;
@@ -745,9 +759,9 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     border: none;
 }
 
-    .sliderwidth.k-slider .k-button .k-icon:hover {
-        color: #444 !important;
-    }
+.sliderwidth.k-slider .k-button .k-icon:hover {
+    color: #444 !important;
+}
 
 .sliderwidth.k-slider .k-draghandle {
     color: #ffffff !important;
@@ -766,10 +780,10 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     width: 180px !important;
 }
 
-    .sliderwidth.k-slider-horizontal .k-slider-buttons .k-slider-track {
-        /*left: 36px;*/
-        height: 3px !important;
-    }
+.sliderwidth.k-slider-horizontal .k-slider-buttons .k-slider-track {
+    /*left: 36px;*/
+    height: 3px !important;
+}
 
 .sliderwidth.k-slider .k-slider-track {
     background-color: #c6c7c8;
@@ -794,7 +808,8 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     color: #ffff !important;
 }
 
-.mybuttondialog .k-dialog .k-dialog-buttongroup, .k-dialog .k-dialog-buttongroup .k-button {
+.mybuttondialog .k-dialog .k-dialog-buttongroup,
+.k-dialog .k-dialog-buttongroup .k-button {
     border-width: 0 !important;
     border-radius: 0 !important;
 }
@@ -824,9 +839,9 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
 }
 
-    .kuploadaction.k-upload .k-upload-button:hover {
-        background-color: #eee !important
-    }
+.kuploadaction.k-upload .k-upload-button:hover {
+    background-color: #eee !important
+}
 
 .kuploadaction.k-upload .k-dropzone {
     background: transparent !important;
@@ -842,10 +857,10 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     border-radius: 0px !important
 }
 
-    .enddateblock .k-dropdown .k-dropdown-wrap:hover {
-        background-color: transparent !important;
-        border-color: #ced4da57 !important
-    }
+.enddateblock .k-dropdown .k-dropdown-wrap:hover {
+    background-color: transparent !important;
+    border-color: #ced4da57 !important
+}
 
 .enddateblock kendo-dropdownlist {
     background: #fafafa !important;
@@ -864,7 +879,7 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     box-shadow: none !important;
 }
 
-.divisionblock.k-multiselect.k-state-focused > .k-multiselect-wrap {
+.divisionblock.k-multiselect.k-state-focused>.k-multiselect-wrap {
     border-color: #eee !important;
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
 }
@@ -873,7 +888,8 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     background: transparent;
 }
 
-.dateboxborder input:focus-within, .dateboxborder:focus-within {
+.dateboxborder input:focus-within,
+.dateboxborder:focus-within {
     border-color: #ced4da6b !important;
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
 }
@@ -884,14 +900,14 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
 
 .font-input input {
     font-size: 14px;
-    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
     width: 100%;
     height: 100%;
 }
 
 kendo-dropdownlist.font-input .k-input {
     font-size: 14px;
-    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .dateboxborder.k-numerictextbox:focus-within {
@@ -935,9 +951,9 @@ kendo-dropdownlist.font-input .k-input {
     font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-    .artho-css-popup .k-window .k-content p {
-        margin-bottom: 0;
-    }
+.artho-css-popup .k-window .k-content p {
+    margin-bottom: 0;
+}
 
 .artho-css-popup .k-window kendo-dialog-actions {
     padding: 0;
@@ -951,42 +967,46 @@ kendo-dropdownlist.font-input .k-input {
     border-radius: 0 !important;
 }
 
-    .artho-css-popup .k-window kendo-dialog-actions button.k-button:first-child {
-        border-color: #00AEEF !important;
-        background-color: #00AEEF !important;
-        padding: 20px 0 !important;
-        border-radius: 0 !important;
-        color: #fff !important;
-        width: 50%;
-        font-size: 15px;
-        font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    }
+.artho-css-popup .k-window kendo-dialog-actions button.k-button:first-child {
+    border-color: #00AEEF !important;
+    background-color: #00AEEF !important;
+    padding: 20px 0 !important;
+    border-radius: 0 !important;
+    color: #fff !important;
+    width: 50%;
+    font-size: 15px;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 
-    .artho-css-popup .k-window kendo-dialog-actions button.k-button:last-child {
-        border-color: #fafafa !important;
-        background-color: #fafafa !important;
-        padding: 20px 0 !important;
-        border-radius: 0 !important;
-        color: #212529 !important;
-        width: 50%;
-        margin-left: -7px;
-        font-size: 15px;
-        font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
-    }
+.artho-css-popup .k-window kendo-dialog-actions button.k-button:last-child {
+    border-color: #fafafa !important;
+    background-color: #fafafa !important;
+    padding: 20px 0 !important;
+    border-radius: 0 !important;
+    color: #212529 !important;
+    width: 50%;
+    margin-left: -7px;
+    font-size: 15px;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 
-    .artho-css-popup .k-window kendo-dialog-actions button.k-button:first-child:hover {
-        color: #fff !important;
-        border-color: #0071c5 !important;
-        background-color: #0071c5 !important;
-    }
+.artho-css-popup .k-window kendo-dialog-actions button.k-button:first-child:hover {
+    color: #fff !important;
+    border-color: #0071c5 !important;
+    background-color: #0071c5 !important;
+}
 
-    .artho-css-popup .k-window kendo-dialog-actions button.k-button:last-child:hover {
-        color: #444 !important;
-        border-color: #ebebeb !important;
-        background-color: #ebebeb !important;
-    }
+.artho-css-popup .k-window kendo-dialog-actions button.k-button:last-child:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important;
+}
 
-    .artho-css-popup .k-window {
-        border: none;
-        border-radius: 0;
-    }
+.artho-css-popup .k-window {
+    border: none;
+    border-radius: 0;
+}
+
+.dashboard-kendo-window {
+    z-index: 10001 !important;
+}

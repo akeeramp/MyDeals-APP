@@ -267,11 +267,15 @@ export class DashboardComponent implements OnInit {
             //opening kendo window
             this.opType = opType;
             this.setWindowWidth();
-            //this condition is required since this should work only id kendo window is open 
+            //this condition is required since this should work only if global search modal is already open 
             if (this.GlobalSearchResults) {
                 this.GlobalSearchResults.onOpTypeChange(this.opType);
                 this.windowOpened = true;
+            }else{
+                this.windowOpened = true;
             }
+        }else{
+            this.searchDialogVisible = true;
         }
     }
 
