@@ -303,7 +303,7 @@ export class GridUtil {
                                 tmplt += 'class="col-md-12' + this.getClassNm(passedData, fields[f].field) + '">'
                                 if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim + bands] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim + bands])
                                     tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[fields[f].field + '_' + dim + bands] + '"></div>';
-                                if (passedData[fields[f].field][dim + bands] != undefined && passedData[fields[f].field][dim + bands] != null)
+                                if (passedData[fields[f].field] && passedData[fields[f].field][dim + bands] != undefined && passedData[fields[f].field][dim + bands] != null)
                                     tmplt += '<span class="ng-binding dataPadding">' + passedData[fields[f].field][dim + bands] + '</span>';
                             }
                             else {

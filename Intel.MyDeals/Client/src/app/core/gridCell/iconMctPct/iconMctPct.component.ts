@@ -16,6 +16,7 @@ export class iconMctPctComponent implements OnInit {
     @Input() public iconStyle: string;
     @Input() public notRunMsg: string;
     @Input() public title: string;
+    @Input() public overrideFlgCmt: any;
 
     ngOnInit(): void {
         if (this.canEdit === undefined) this.canEdit = false;

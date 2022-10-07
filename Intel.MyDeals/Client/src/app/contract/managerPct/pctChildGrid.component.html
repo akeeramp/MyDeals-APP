@@ -4,10 +4,8 @@
     <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="150"></kendo-grid-column>
     <kendo-grid-column title="PCT Result" field="PRC_CST_TST_STS" [headerClass]="{'headerClass':true}" [width]="120">
         <ng-template *ngIf="CAN_VIEW_COST_TEST" kendoGridCellTemplate let-dataItem>
-            <div>
-            <icon-mct-pct-angular [dataValue]='dataItem.PRC_CST_TST_STS' [iconClass]="medIcon" >
+            <icon-mct-pct-angular [dataValue]='dataItem.PRC_CST_TST_STS' [overrideValue]="dataItem.COST_TEST_OVRRD_FLG" [overrideFlgCmt]="dataItem.COST_TEST_OVRRD_CMT" [iconClass]="medIcon" >
             </icon-mct-pct-angular>
-            </div>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column title="Deal Id" field="DEAL_ID" [headerClass]="{'headerClass':true}" [width]="100">

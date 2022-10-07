@@ -1,2 +1,5 @@
-<div style="text-align: center;" *ngIf="canView"><i class="{{getIconClass()}}{{iconClass}}" [ngStyle]="getColorStyle()"
-        title="{{showTitle() || 'Not Run Yet'}}"></i></div>
+<div style="text-align: center;" *ngIf="canView">
+        <i *ngIf="overrideValue == undefined || overrideValue == 'No'|| overrideValue == '' " class="{{getIconClass()}}{{iconClass}}" [ngStyle]="getColorStyle()"
+        title="{{showTitle() || 'Not Run Yet'}}"></i>
+        <i *ngIf="overrideValue && overrideFlgCmt != ''" class="intelicon-passed-completed-solid" style="font-size: 20px !important;" style="color: #0071C5;" title="Passed with Override Status"></i>
+</div>

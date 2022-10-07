@@ -1,5 +1,5 @@
 import * as angular from "angular";
-import { Component, Input } from "@angular/core";
+import { Component, Input, ViewEncapsulation } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent } from "@progress/kendo-angular-grid";
@@ -15,17 +15,20 @@ import { MatDialog } from "@angular/material/dialog";
 import { GridUtil } from "../grid.util";
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
 import { dealProductsModalComponent } from "../ptModals/dealProductsModal/dealProductsModal.component";
-
+import * as _ from 'underscore';
+import { PTE_Config_Util } from "../PTEUtils/PTE_Config_util"
+import { DecimalPipe, CurrencyPipe} from '@angular/common';
 
 @Component({
     selector: "all-deals",
     templateUrl :"Client/src/app/contract/allDeals/allDeals.component.html",
-    styleUrls: ["Client/src/app/contract/allDeals/allDeals.component.css"]
+    styleUrls: ["Client/src/app/contract/allDeals/allDeals.component.css"],
+    encapsulation: ViewEncapsulation.None
 })
 
 export class allDealsComponent {
     allColumns: any[];
-    constructor(private allDealsSvc: allDealsService, private loggerSvc: logger, private lnavSvc: lnavService, protected dialog: MatDialog) {
+    constructor(private allDealsSvc: allDealsService, private loggerSvc: logger, private lnavSvc: lnavService, protected dialog: MatDialog, private decimalPipe: DecimalPipe, private currencyPipe: CurrencyPipe) {
         this.allData = this.allData.bind(this);
         //pls dont remove this even it its not as part of the route this is to handle condtions when we traverse between contract details with in manage tab
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
@@ -53,6 +56,7 @@ export class allDealsComponent {
     private color: ThemePalette = 'primary';
     private curPricingTable: any = {};
     wrapEnabled = false;
+    private fields: any;
     public dealTypes: any = [
         { dealType: "ECAP", name: "ECAP" },
         { dealType: "FLEX", name: "FLEX" },
@@ -138,13 +142,17 @@ export class allDealsComponent {
         e.preventDefault();
         this.selectedTab = e.title;
         let group = this.groups.filter(x => x.name == this.selectedTab);
+        this.fields = (group[0].dealType === 'VOL_TIER' || group[0].dealType === 'FLEX') ? PTE_Config_Util.volTierFields : group[0].dealType === 'REV_TIER' ? PTE_Config_Util.revTierFields : group[0].dealType === 'DENSITY' ? PTE_Config_Util.densityFields : [];
         if (group[0].isTabHidden) {
             let tabs = this.groups.filter(x => x.isTabHidden === false);
             this.selectedTab = tabs[0].name;
             this.filterColumnbyGroup(this.selectedTab);
+            this.filterdealbyTab();
         }
-        else
+        else {
             this.filterColumnbyGroup(this.selectedTab);
+            this.filterdealbyTab();
+        }
     }
     getCustomerName(dataItem){
         let value =''
@@ -181,8 +189,8 @@ export class allDealsComponent {
             this.gridResult = result.WIP_DEAL;
             data = result.WIP_DEAL;
             this.displayDealTypes();
-            this.loadDealTypestab(data);
             this.gridData = process(this.gridResult, this.state);
+            this.loadDealTypestab(data);
         }, (error) => {
             this.isLoading = false;
             this.loggerSvc.error('All Deals service', error);
@@ -227,13 +235,13 @@ export class allDealsComponent {
         this.allColumns =[];
         if (group.length > 0) {
             this.wipTemplate = this.UItemplate.ModelTemplates.WIP_DEAL[group[0].dealType];
-                       for (let i = 0; i < this.wipTemplate.columns.length; i++) {
-                            if(this.wipTemplate.columns[i].hidden === false){
-                                if((this.wipTemplate.columns[i].field !='details') && (this.wipTemplate.columns[i].field != 'tools') && (this.wipTemplate.columns[i].field !="MISSING_CAP_COST_INFO") && (this.wipTemplate.columns[i].field !="LAST_REDEAL_DT")){
-                                    this.allColumns.push(this.wipTemplate.columns[i]);
-                                }
-                            }
-                        }
+            for (let i = 0; i < this.wipTemplate.columns.length; i++) {
+                if(this.wipTemplate.columns[i].hidden === false){
+                    if ((this.wipTemplate.columns[i].field != 'TOTAL_DOLLAR_AMOUNT') && (this.wipTemplate.columns[i].field != 'KIT_ECAP') && (this.wipTemplate.columns[i].field != 'TIER_NBR') && (this.wipTemplate.columns[i].field !='details') && (this.wipTemplate.columns[i].field != 'tools') && (this.wipTemplate.columns[i].field !="MISSING_CAP_COST_INFO") && (this.wipTemplate.columns[i].field !="LAST_REDEAL_DT")){
+                        this.allColumns.push(this.wipTemplate.columns[i]);
+                    }
+                }
+            }
         }
         if(group[0].name != 'All'){
             for (let i = 0; i < this.allColumns.length; i++) {
@@ -258,6 +266,40 @@ export class allDealsComponent {
             title:"Notes",
             width:150
         });
+        if (group[0].dealType != "ECAP" && this.selectedTab != "All") {
+            if (group[0].dealType == 'KIT') {
+                let col = this.wipTemplate?.columns.filter(x => x.field == 'KIT_ECAP' && x.hidden == false);
+                if (col && col.length == 1) {
+                    this.columns.push(col[0]);
+                }
+            }
+            else if (group[0].dealType == 'PROGRAM') {
+                let col = this.wipTemplate?.columns.filter(x => x.field == 'TOTAL_DOLLAR_AMOUNT' && x.hidden == false);
+                if (col && col.length == 1) {
+                    this.columns.push(col[0]);
+                }
+            }
+            else {
+                let col = this.wipTemplate?.columns.filter(x => x.field == 'TIER_NBR' && x.hidden == false);
+                if (col && col.length == 1) {
+                    this.columns.push(col[0]);
+                }
+            }
+        }
+    }
+    filterdealbyTab() {
+        let group = this.groups.filter(x => x.name == this.selectedTab);
+        let deals = [];
+        if (group[0].name.toLowerCase() == 'all') {
+            deals = this.gridResult;
+        }
+        else {
+            _.each(this.gridResult, (item) => {
+                if (item.OBJ_SET_TYPE_CD == group[0].dealType)
+                    deals.push(item);
+            });
+        }
+        this.gridData = process(deals, this.state);
     }
     cellClickHandler(args: CellClickEvent): void {
         if (args.column.field == "TITLE") {
@@ -311,8 +353,60 @@ export class allDealsComponent {
                   })
         }
         this.groups.push({ dealType:'ALL_TYPES', name: "All" })
-        this.selectedTab =this.groups[0].name;
+        this.selectedTab = this.groups[0].name;
+        this.fields = (this.groups[0].dealType === 'VOL_TIER' || this.groups[0].dealType === 'FLEX') ? PTE_Config_Util.volTierFields : this.groups[0].dealType === 'REV_TIER' ? PTE_Config_Util.revTierFields : this.groups[0].dealType === 'DENSITY' ? PTE_Config_Util.densityFields : [];
         this.filterColumnbyGroup(this.selectedTab);
+        this.filterdealbyTab();
+    }
+    uiDimTrkrControlWrapper(passedData) {
+        return GridUtil.uiDimTrkrControlWrapper(passedData);
+    }
+    uiControlScheduleWrapper(passedData) {
+        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+        var numTiers = 0;
+        var tiers = data.TIER_NBR;
+        for (var key in tiers) {
+            if (tiers.hasOwnProperty(key) && key.indexOf("___") >= 0) {
+                numTiers++;
+                var dim = "10___" + numTiers;
+                for (var f = 0; f < this.fields.length; f++) {
+                    if (!Number.isNaN(Number(data[this.fields[f].field][key]))) {
+                        if (this.fields[f].format == "number" && this.fields[f].field == "INCENTIVE_RATE")
+                            data[this.fields[f].field][dim] = this.decimalPipe.transform(data[this.fields[f].field][dim], "1.0-2");
+                        else if (this.fields[f].format == "number")
+                            data[this.fields[f].field][dim] = this.decimalPipe.transform(data[this.fields[f].field][dim], "1.0-0");
+                        else
+                            data[this.fields[f].field][dim] = this.currencyPipe.transform(data[this.fields[f].field][dim], 'USD', 'symbol', '1.2-2');
+                    }
+                }
+            }
+        }
+        return GridUtil.uiControlScheduleWrapper(data);
+    }
+    uiControlScheduleWrapperDensity(passedData) {
+        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+        var numTiers = 0;
+        var tiers = data.TIER_NBR;
+        for (var key in tiers) {
+            if (tiers.hasOwnProperty(key) && key.indexOf("___") >= 0) {
+                numTiers++;
+                for (var f = 0; f < this.fields.length; f++) {
+                    var dim = (this.fields[f].field == "DENSITY_BAND" || this.fields[f].field == "DENSITY_RATE") ? "8___" : "10___" + numTiers;
+                    if (this.fields[f].field == "DENSITY_RATE") {
+                        for (var bands = 1; bands <= passedData.NUM_OF_DENSITY; bands++) {
+                            data[this.fields[f].field][dim + bands + '____' + key] = this.currencyPipe.transform(data[this.fields[f].field][dim + bands + '____' + key], 'USD', 'symbol', '1.2-2');
+                        }
+                    }
+                    else if (this.fields[f].field == "STRT_PB" || this.fields[f].field == "END_PB") {
+                        if (!Number.isNaN(Number(data[this.fields[f].field][key]))) {
+                            if (this.fields[f].format == "number")
+                                data[this.fields[f].field][key] = this.decimalPipe.transform(data[this.fields[f].field][key], "1.0-3");
+                        }
+                    }
+                }
+            }
+        }
+        return GridUtil.uiControlScheduleWrapperDensity(data);
     }
     ngOnInit() {
         this.loadAllDealsData();

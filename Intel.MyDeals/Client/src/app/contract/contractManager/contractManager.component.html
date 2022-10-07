@@ -64,7 +64,7 @@
                                     *ngIf="!submitModal">
                                 Submit
                             </button>
-                            <kendo-dialog *ngIf="submitModal" (close)="close('cancel')" [width]="350" class="mybotdialog">
+                            <kendo-dialog id="caDialog" *ngIf="submitModal" (close)="close('cancel')" [width]="350" class="mybotdialog">
                                 <p class="hstyle">No Pricing Strategies were selected.</p>
                                 <kendo-dialog-actions><button kendoButton (click)="close('no')">OK</button></kendo-dialog-actions>
                             </kendo-dialog>
@@ -244,8 +244,8 @@
                             <td style="width: 30px; height: 30px;" id="PRC_ST_{{ps.DC_ID}}" (click)="isPSExpanded[psIndex]=!isPSExpanded[psIndex]">
                                 <i class="chevron linkable collapseALL" data-toggle="collapse" [attr.data-target]="'#PSData_'+ psIndex" [ngClass]="{'intelicon-down': isPSExpanded[psIndex], 'intelicon-right-next': !isPSExpanded[psIndex]}"></i>
                             </td>
-                            <td style="width: 60px; text-align: center;" *ngIf="canEdit">
-                                <div *ngIf="canAction('Approve', ps, true) && canActionIcon && hasVertical(ps)" [hidden]="!(ps.WF_STG_CD !=='Pending')">
+                            <td style="width: 60px; text-align: center;" *ngIf="canEdit" class="approveChkBox">
+                                <div *ngIf="canAction('Approve', ps, true) && canActionIcon && hasVertical(ps)" [ngbTooltip]="ps._actionReasons.Approve" placement="right" [hidden]="!(ps.WF_STG_CD !=='Pending')">
                                     <input type="checkbox" name="radGrp{{ps.DC_ID}}" [ngClass]="{'disabled': !canAction('Approve', ps, false)}" [(ngModel)]="apprvCheck[ps.DC_ID]" [disabled]="!canAction('Approve', ps, false)" class="with-font psCheck psCheck-Approve"
                                     id="rad_approve_{{ps.DC_ID}}" kendoCheckBox (click)="onCheckboxChange('approveCheckBox',$event,ps)" /><label for="rad_approve_{{ps.DC_ID}}"></label>
                                 </div>

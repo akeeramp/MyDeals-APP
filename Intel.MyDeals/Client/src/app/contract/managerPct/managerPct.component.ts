@@ -23,6 +23,7 @@ export class managerPctComponent {
     isRunning: boolean;
     contractId: string;
     lastRun: any;
+    refreshPage: boolean;
     constructor(private loggerSvc: logger, private contractManagerSvc:contractManagerservice,private managerPctSvc: managerPctservice, private lnavSvc: lnavService, private headerSvc: headerService, private formBuilder: FormBuilder) {
         //pls dont remove this even it its not as part of the route this is to handle condtions when we traverse between contract details with in manage tab
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
@@ -88,6 +89,7 @@ export class managerPctComponent {
     gridDataSet = {}; parentGridData = {};
     titleFilter = ""; public isAllCollapsed = true; canEdit = true;
     toggleSum() {
+        this.refreshPage= false;
         this.contractData?.PRC_ST.map((x, i) => {
             this.isPSExpanded[i] = !this.isPSExpanded[i]
         });
@@ -95,6 +97,7 @@ export class managerPctComponent {
     }
 
     togglePt(pt) {
+        this.refreshPage= false;
         if (!this.isPTExpanded[pt.DC_ID]) {
             return;
         }
@@ -234,11 +237,18 @@ export class managerPctComponent {
         });
         
     }
+    refreshGrid(){
+        this.refreshPage = true;
+        this.isAllCollapsed = true;
+        this.isPSExpanded = []; this.isPTExpanded = {};
+        this.gridDataSet = {}; this.parentGridData = {};
+    }
     loadPctDetails(){
         this.isPctLoading = true;
         this.contractManagerSvc.readContract(this.contractId).subscribe((response: any) => {
             this.contractData = response[0];
             this.refreshedContractData.emit({ contractData: this.contractData });
+            this.refreshGrid();
             this.contractId= this.contractData.DC_ID;
             this.lastRun = this.contractData.LAST_COST_TEST_RUN;
             this.contractData?.PRC_ST.map((x, i) => {

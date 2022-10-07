@@ -594,3 +594,13 @@ button.mydialogac.k-button {
     font-weight: 400;
     font-family: 'Intel Clear';
 }
+
+#caDialog .k-actions.k-actions-stretched .k-button,
+#caDialog.k-dialog .k-button:hover,
+#caDialog .k-dialog .k-button.k-state-hover,
+#caDialog .k-dialog .k-button:active:hover,
+#caDialog .k-dialog .k-button.k-state-active:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important;
+}

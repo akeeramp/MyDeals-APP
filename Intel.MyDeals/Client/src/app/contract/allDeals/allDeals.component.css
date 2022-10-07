@@ -207,3 +207,68 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper {
 .positon-deal-tag {
     top: 11px !important;
 }
+
+.rowHeight {
+    height: 36px !important;
+    padding: 2px 0px 0px 1px;
+    border-bottom: 0.01px solid rgba(0, 0, 0, .05);
+}
+
+.rowDetailHeight {
+    border-bottom: 0.01px solid rgba(0, 0, 0, .05);
+    padding: 2px 0px 0px 1px !important;
+    line-height: 4;
+}
+
+.densityRow {
+    border: 0.1px solid lightgrey;
+    padding: 2px 0px 0px 1px;
+    text-align: right;
+}
+
+.densityPadding {
+    padding: 0px 4px !important;
+}
+
+.densityRatePadding {
+    padding: 0px 15px !important;
+}
+
+.rowRightBorder {
+    border-right: 0.1px solid lightgrey;
+}
+
+.rowBorder {
+    border: 0.1px solid lightgrey;
+}
+
+.rowValueHeight {
+    height: 37px !important;
+    font-size: 12px !important;
+    text-align: left !important;
+    overflow: hidden;
+}
+
+
+.tierHeader {
+    padding: 0 4px;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 10px;
+    background: #eeeeee;
+    text-align: center;
+    height: 100%;
+    white-space: nowrap;
+    border-right: 0.1px solid lightgrey;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+#allDeals td:has(.breakoutColumn), #allDeals .breakoutColumn > div {
+    padding: 0px !important;
+}
+
+.tierBorder {
+    border-bottom: 2px solid #0071C5
+}
