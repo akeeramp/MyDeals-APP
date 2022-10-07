@@ -977,8 +977,21 @@ export class PTE_CellChange_Util {
     }
     static getPTRObjOnProdCorr(selProd: any, selProds: any[], idx: number) {
         let oldVal = this.hotTable.getDataAtRowProp(selProds[idx].indx, 'PTR_USER_PRD').toString();
-        let newVal = oldVal.replace(selProd.name, _.pluck(selProd.items, 'prod').toString());
-        let PTR = [{ row: selProds[idx].indx, prop: 'PTR_USER_PRD', old: oldVal, new: newVal }];
+        let userProds = oldVal.split(',');
+        let newVal = [];
+        if (userProds.length > 0) {
+            _.each(userProds, prod => {
+                _.each(selProd.items, selPrdItm => {
+                    if (selPrdItm.prodObj.USR_INPUT == prod) {
+                        newVal.push(selPrdItm.prodObj.HIER_VAL_NM);//oldVal.replace(selProd.name, _.pluck(selProd.items, 'prod').toString());
+                    }
+                })
+            })
+        }
+        if (newVal.length == 0) {
+            newVal[0] = oldVal
+        }
+        let PTR = [{ row: selProds[idx].indx, prop: 'PTR_USER_PRD', old: oldVal, new: newVal.toString() }];
         return PTR;
     }
     static getOperationProdCorr(selProd: any) {

@@ -1048,7 +1048,7 @@ export class pricingTableEditorComponent implements OnChanges {
                     if (idx == selProds.length - 1) {
                         //handonsontable takes time to bind the data to the so putting this logic.
                         setTimeout(() => {
-                           
+                            if (this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
                                 let response = JSON.parse(operation.PTR_SYS_PRD);
                                 let ValidProducts = PTE_Helper_Util.splitProductForDensity(response);
                                 let finalPTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
@@ -1062,9 +1062,7 @@ export class pricingTableEditorComponent implements OnChanges {
                                             this.hotTable.setDataAtRowProp(idx, 'PTR_USER_PRD', data.PTR_USER_PRD, 'no-edit')
                                         }
                                     })
-                                });
-
-                            if (this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
+                                });                            
                                 let denBandData = PTE_CellChange_Util.validateDensityBand(selRow, this.columns, this.curPricingTable, operation, '', false);
                                 let error = PTE_Save_Util.isPTEError(denBandData.finalPTR, this.curPricingTable);
                                 this.validMisProd = denBandData.validMisProds;
