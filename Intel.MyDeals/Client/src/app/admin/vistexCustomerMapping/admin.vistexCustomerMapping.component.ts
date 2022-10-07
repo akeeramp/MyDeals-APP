@@ -11,7 +11,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 @Component({
     selector: "adminVistexCustomerMapping",
     templateUrl: "Client/src/app/admin/vistexCustomerMapping/admin.vistexCustomerMapping.component.html",
-    //styleUrls: ['Client/src/app/admin/vistexcustomermapping/admin.vistexCustomerMapping.component.css']
+    styleUrls: ['Client/src/app/admin/vistexcustomermapping/admin.vistexCustomerMapping.component.css']
 })
 
 export class adminVistexCustomerMappingComponent {

@@ -1010,6 +1010,21 @@ kendo-dropdownlist.font-input .k-input {
 .dashboard-kendo-window {
     z-index: 10001 !important;
 }
+    .artho-css-popup .k-window {
+        border: none;
+        border-radius: 0;
+    }
+
+.oo-lapping-style mat-dialog-container kendo-grid kendo-grid-list table tbody tr.k-grid-norecords td {
+    height: 383px;
+    width: 792px;
+    max-width: 792px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff !important;
+}
+
 .approveChkBox ngb-tooltip-window.tooltip .tooltip-inner {
     background-color: #fdfdfd !important;
     border: 1px solid #000000 !important;

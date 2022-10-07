@@ -1198,4 +1198,12 @@ export class pricingTableEditorComponent implements OnChanges {
         new PTE_Common_Util(this.hotTable);
         new PTE_Load_Util(this.hotTable);
     }
+    public fontData = [
+        { text: "1 (8pt)", size: "8" },
+        { text: "2 (10pt)", size: "10" },
+        { text: "3 (12pt)", size: "12" },
+        { text: "4 (14pt)", size: "14" },
+        { text: "5 (18pt)", size: "18" },
+        { text: "6 (24pt)", size: "24" },
+    ];
 }

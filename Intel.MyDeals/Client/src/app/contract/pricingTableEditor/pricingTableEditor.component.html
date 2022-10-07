@@ -114,7 +114,7 @@
     <div class="row">
         <div class="col">
             <!-- <div id="spreadsheet"></div> -->
-            <kendo-splitter orientation="vertical" style="height:630px;">
+            <kendo-splitter orientation="vertical" style="height: calc(100vh - 270px);">
                 <kendo-splitter-pane><hot-table [hotId]="hotId" [settings]="hotSettings" class="all-spread"></hot-table></kendo-splitter-pane>
                 <kendo-splitter-pane [(size)]="showDiscount">
                     <div style="overflow: hidden;" class="wide noborder">
@@ -133,7 +133,7 @@
                                               (valueChange)="chgTerms($event)"
                                               style="width:initial" class="ptekendo">
                                     <kendo-toolbar>
-                                        <kendo-toolbar-dropdownlist kendoEditorFontSize></kendo-toolbar-dropdownlist>
+                                        <kendo-toolbar-dropdownlist kendoEditorFontSize [data]="fontData"></kendo-toolbar-dropdownlist>
                                         <kendo-toolbar-buttongroup>
                                             <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
                                             <kendo-toolbar-button kendoEditorItalicButton></kendo-toolbar-button>

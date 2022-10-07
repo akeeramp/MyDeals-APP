@@ -480,6 +480,10 @@ kendo-dialog-actions.delete-actions button.k-button.del-cancel:hover, kendo-dial
     position: absolute !important;
 }
 
+.toggle-button-custom.test-slider.mat-slide-toggle .mat-slide-toggle-bar {
+    left: 20px !important;
+}
+
 .toggle-button-custom.mat-slide-toggle.mat-primary.mat-checked .mat-slide-toggle-bar {
     background-color: #00aeef !important;
 }

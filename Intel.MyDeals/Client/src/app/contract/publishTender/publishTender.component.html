@@ -25,7 +25,7 @@
 </div>
 <div *ngIf="!loading" style="padding: 5px; height: 100%;">
     <div id="pubOpGrid" class="filter-alignment-fixes"  style="height: 100%;">
-        <kendo-grid  [data]="gridData"  [loading]="isDataLoading" [pageSize]="state.take" [skip]="state.skip"
+        <kendo-grid  [data]="gridData" class="mpublishgrid"  [loading]="isDataLoading" [pageSize]="state.take" [skip]="state.skip"
                             [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true"
                             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" 
                             filterable="menu" (cellClick)="cellClickHandler($event)" (dataStateChange)="dataStateChange($event)">

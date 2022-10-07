@@ -35,10 +35,10 @@
             <kendo-grid-column field="ACTV_IND" title="Is Active" editor="boolean" width="100" filter="boolean"
                 [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
+                    <mat-slide-toggle class="toggle-button-custom test-slider" [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.ACTV_IND"
+                    <mat-slide-toggle class="toggle-button-custom test-slider" [color]="color" [checked]="dataItem.ACTV_IND"
                         [formControl]="formGroup.get('ACTV_IND')"></mat-slide-toggle>
                 </ng-template>
             </kendo-grid-column>
