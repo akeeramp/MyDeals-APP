@@ -86,9 +86,9 @@ export class PTE_Helper_Util {
     static isCustDivisonNull(data, custAccntDiv) {
         if (custAccntDiv != "") {
             for (var i = 0; i < data.length; i++) {
-                if (data[i].CUST_ACCNT_DIV == null || data[i].CUST_ACCNT_DIV == "") {
+                if ((data[i].CUST_ACCNT_DIV == null || data[i].CUST_ACCNT_DIV == "") && (data[i].TIER_NBR == 1 || data[i].TIER_NBR == undefined)) {
                     return true;
-                } else return false;
+                }
             }
             return false;
         }

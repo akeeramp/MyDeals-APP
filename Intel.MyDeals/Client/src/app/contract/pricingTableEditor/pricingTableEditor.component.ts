@@ -477,7 +477,7 @@ export class pricingTableEditorComponent implements OnChanges {
             },
             mergeCells: mergCells,
             cells: (row: number, col: number, prop: string) => {
-                return PTE_Load_Util.disableCells(this.hotTable, row, col, prop, this.ColumnConfig, this.curPricingTable,this.isTenderContract)
+                return PTE_Load_Util.disableCells(this.hotTable, row, col, prop, this.ColumnConfig, this.curPricingTable, this.isTenderContract, this.curPricingStrategy.IS_HYBRID_PRC_STRAT);
             },
             cell: cellComments,
             readOnlyCellClassName: 'readonly-cell',
@@ -560,6 +560,9 @@ export class pricingTableEditorComponent implements OnChanges {
                 }
                 if (pgChg && pgChg.length > 0) {
                     PTE_CellChange_Util.pgChgfn(pgChg, this.columns, this.curPricingTable);
+                }
+                if (pgChg.length == 0) {
+                    PTE_CellChange_Util.checkfn(changes, this.curPricingTable);
                 }
                 //for multi tier there can be more tiers to delete so moving the logic after all change 
                 if (this.multiRowDelete && this.multiRowDelete.length > 0 && this.isDeletePTR) {

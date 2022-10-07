@@ -1211,8 +1211,8 @@
                 rtn += '<a  role="button" class="k-button k-button-icontext" ng-click="addLegalException()"><span class="k-icon k-i-plus"></span>Add new record</a>';
             }
 
-            rtn += '<a role="button" class="k-button k-button-icontext" href="\\#" onClick="gridUtils.clearAllFilters()"><span class="k-icon intelicon-cancel-filter-solid"></span>CLEAR FILTERS</a>';
-            rtn += '<a  role="button" class="k-button k-button-icontext" ng-click="openCompareLegalException()"><span class="k-icon intelicon-related" style="font-size:30px;color: white !important;height: 20px;"></span>Compare</a>';
+            rtn += '<a role="button" class="k-button k-button-icontext" href="\\#" onClick="gridUtils.clearAllFilters()"><span class="intelicon-cancel-filter-solid" style="font-size:25px;"></span>CLEAR FILTERS</a>';
+            rtn += '<a  role="button" class="k-button k-button-icontext" ng-click="openCompareLegalException()"><span class="intelicon-related" style="font-size:30px;color: white !important;height: 20px;"></span>Compare</a>';
 
             if (amendmentAllowed)
             {

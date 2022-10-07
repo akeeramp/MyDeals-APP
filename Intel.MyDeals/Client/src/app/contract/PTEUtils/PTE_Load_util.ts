@@ -643,8 +643,8 @@ export class PTE_Load_Util {
     static getLookBackPeriod(data) {
         return DE_Load_Util.getLookBackPeriod(data);
     }
-    static disableCells(hotTable: Handsontable, row: number, col: number, prop: any, columnConfig: Array<Handsontable.ColumnSettings>, curPricingTable: any, isTenderContract: boolean) {
-        //logic for making by defaul all the cell except PTR_USER_PRD readonly
+    static disableCells(hotTable: Handsontable, row: number, col: number, prop: any, columnConfig: Array<Handsontable.ColumnSettings>, curPricingTable: any, isTenderContract: boolean, hybridstat: any) {
+        //logic for making by default all the cell except PTR_USER_PRD readonly
         const cellProperties = {};
         if (((<any>window).usrRole != 'GA' && (<any>window).usrRole != 'FSE') || curPricingTable.PS_WF_STG_CD == 'Submitted' || ((<any>window).usrRole == 'FSE' && curPricingTable.PS_WF_STG_CD != 'Draft' && curPricingTable.PS_WF_STG_CD != '')) {
             if (hotTable.getDataAtRowProp(row, 'DC_ID') == null || hotTable.getDataAtRowProp(row, 'DC_ID') == '') {
@@ -672,7 +672,7 @@ export class PTE_Load_Util {
                 if (hotTable.getDataAtRowProp(row, 'DC_ID') != null) {
                     cellProperties['readOnly'] = false;
                 }
-                if (prop == 'STRT_VOL' && hotTable.getDataAtRowProp(row, 'TIER_NBR') && hotTable.getDataAtRowProp(row, 'TIER_NBR') != 1) {
+                if ((prop == 'STRT_VOL' || prop == 'STRT_REV' || prop == 'STRT_PB') && hotTable.getDataAtRowProp(row, 'TIER_NBR') && hotTable.getDataAtRowProp(row, 'TIER_NBR') != 1) {
                     cellProperties['readOnly'] = true;
                 }
 
@@ -713,9 +713,6 @@ export class PTE_Load_Util {
                     if (prop == "REBATE_TYPE" && isTenderContract) {
                         cellProperties['readOnly'] = true;
                     }
-                    if ((prop == 'REBATE_OA_MAX_AMT' || prop == 'REBATE_OA_MAX_VOL') && curPricingTable.IS_HYBRID_PRC_STRAT == "1" && (hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != undefined && hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != null)) {
-                        cellProperties['readOnly'] = false;
-                    }
                 }
                 //column config has readonly property for certain column persisting that assigning for other
                 if (_.findWhere(columnConfig, { data: prop }).readOnly) {
@@ -731,6 +728,12 @@ export class PTE_Load_Util {
                             cellProperties['readOnly'] = true;
                         }
                     }
+                }
+                if (curPricingTable.PS_WF_STG_CD == 'Approved' && curPricingTable.PASSED_VALIDATION == 'Dirty' && prop == 'SETTLEMENT_PARTNER' && hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == 'Cash') {
+                    cellProperties['readOnly'] = false;
+                }
+                if ((prop == 'REBATE_OA_MAX_AMT' || prop == 'REBATE_OA_MAX_VOL') && hybridstat == "1" && (hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != undefined && hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != null) && (curPricingTable.PS_WF_STG_CD == 'Requested' || curPricingTable.PS_WF_STG_CD == 'Draft' || curPricingTable.PS_WF_STG_CD == '')) {
+                    cellProperties['readOnly'] = false;
                 }
             }
         }
