@@ -30,6 +30,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
     private filterableFields = ["CONSUMPTION_CUST_PLATFORM", "CONSUMPTION_CUST_SEGMENT", "CONSUMPTION_CUST_RPT_GEO", "CONSUMPTION_COUNTRY_REGION", "CONSUMPTION_SYS_CONFIG", "DFLT_CUST_RPT_GEO", "DEAL_SOLD_TO_ID"];
     private selectedChildCount: number;
     private multiSelectPopUpModal: any;
+    private nonCorpMarketSeg: any;
     private colName: any;
     private placeholderText: any;
     private isTgrRgn: boolean;
@@ -116,6 +117,15 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
         });
     }
 
+    getNonCorpData() {
+        let opLookUpURL = "/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP";
+        this.pteService.getDropDownResult(opLookUpURL).subscribe((response: any) => {
+            if (response != null && response != undefined && response.length > 0) {
+                this.nonCorpMarketSeg = response;
+            }
+        })
+    }
+
     onSelectionChange() {
         if (this.checkedKeys != undefined && this.checkedKeys.length > 0) {
             if (this.ismrktSeg) {
@@ -126,8 +136,9 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
                 }
                 else {
                     //Selected other than 'All Direct Market Segments', then 'All Direct Market Segments' must be removed from checkedkeys
-                    if (_.indexOf(this.checkedKeys, 'All Direct Market Segments') == 0)
+                    if (_.indexOf(this.checkedKeys, 'All Direct Market Segments') == 0) {
                         this.checkedKeys.splice(0, 1);
+                    }                    
                     //Selected parent Node which has child (like 'Embedded'), checkedKey will be the first childNode of the parent
                     _.each(this.checkedKeys, (key) => {
                         const selectedData = this.multiSelectData.filter(x => x.DROP_DOWN == key);
@@ -141,6 +152,16 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
                             this.checkedKeys = [this.checkedKeys[this.checkedKeys.length - 1]];
                         }
                     });
+                    if (_.indexOf(this.checkedKeys, "NON Corp") >= 0) {
+                        let nonCorpIdx = _.indexOf(this.checkedKeys, "NON Corp");
+                        this.checkedKeys.splice(nonCorpIdx, 1);
+                        let corpMarkSeg = _.map(this.nonCorpMarketSeg, (x) => { return x.DROP_DOWN })
+                        _.each(corpMarkSeg, (val) => {
+                            if ((_.indexOf(this.checkedKeys, val) < 0)) {
+                                this.checkedKeys.push(val);
+                            }
+                        })
+                    }
                 }
                 this.checkedKeys.sort();
             }
@@ -221,6 +242,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
         this.spinnerMessageHeader = "Loading...";
         this.spinnerMessageDescription = "Loading the " + this.multiSelectPopUpModal.label + " information.";
         if (this.ismrktSeg) {
+            this.getNonCorpData();
             this.multiSelectData = this.multiSelectPopUpModal.data != undefined ? this.multiSelectPopUpModal.data : [];
             this.multiSelectPopUpModal.opLookupText = "DROP_DOWN";
             if (this.modalData.cellCurrValues != null && this.modalData.cellCurrValues != undefined) {
@@ -245,7 +267,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
             this.checkedKeys = (this.modalData.cellCurrValues !== null && this.modalData.cellCurrValues.length > 0) ? this.modalData.cellCurrValues : [];
             this.getModalData();
         }
-        this.key = this.multiSelectPopUpModal.opLookupText;
+        this.key = this.multiSelectPopUpModal.opLookupText;        
     }
   }
   

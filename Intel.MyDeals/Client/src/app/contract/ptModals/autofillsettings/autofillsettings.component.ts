@@ -26,7 +26,9 @@ export class AutoFillComponent {
     private geos: Array<string> = [];
     private isBlend: boolean = false;
     private marketSeglist: any = [];
+    private nonCorpMarketSeg: any = [];
     private mkgvalues: Array<string> = [];
+    private multSlctMkgValues: Array<string> = [];
     private parentKeys: any = [];
     private opValidMsg: string = "";
     private isMultipleGeosSelected: boolean = false;
@@ -114,11 +116,11 @@ export class AutoFillComponent {
             }
 
         });
+        dropObjs[`${'MRKT_SEG_NON_CORP'}`] = this.autoSvc.readDropdownEndpoint("/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP")
         let result = await forkJoin(dropObjs).toPromise().catch((err) => {
             this.loggerSvc.error('AutoFillComponent::getAllDrowdownValues::service', err);
         });
         return result;
-
     }
     OnGeoChange(elem: string, val: Array<string>) {
         this.geos = val;
@@ -175,11 +177,12 @@ export class AutoFillComponent {
             var selectedList = event.join(",");
             if (_.indexOf(event, 'All Direct Market Segments') > 0) {
                 this.mkgvalues = ['All Direct Market Segments'];
+                this.multSlctMkgValues = this.mkgvalues; 
             }
             else {
-                if (_.indexOf(event, 'All Direct Market Segments') == 0)
+                if (_.indexOf(event, 'All Direct Market Segments') == 0) {
                     this.mkgvalues.splice(0, 1);
-
+                }               
                 _.each(this.mkgvalues, (key) => {
                     var selectedData = this.marketSeglist.filter(x => x.DROP_DOWN == key);
                     if (selectedData != undefined && selectedData != null && selectedData.length > 0 && selectedData[0].items != undefined && selectedData[0].items != null && selectedData[0].items.length > 0) {
@@ -191,11 +194,25 @@ export class AutoFillComponent {
                         this.mkgvalues = [this.mkgvalues[this.mkgvalues.length - 1]];
                     }
                 });
-                if (this.autofillData["DEFAULT"].hasOwnProperty("MRKT_SEG")) {
-                    this.autofillData["DEFAULT"]["MRKT_SEG"].value = this.mkgvalues;
+                if (_.indexOf(this.mkgvalues, "NON Corp") >= 0) {
+
+                    let corpMarkSeg = _.map(this.nonCorpMarketSeg, (x) => { return x.DROP_DOWN })
+                    _.each(corpMarkSeg, (val) => {
+                        if ((_.indexOf(this.mkgvalues, val) < 0)) {
+                            this.mkgvalues.push(val);
+                        }
+                    })
                 }
+                this.multSlctMkgValues = _.clone(this.mkgvalues); 
+                let nonCorpIdx = _.indexOf(this.multSlctMkgValues, "NON Corp");
+                if (nonCorpIdx != -1) {
+                    this.multSlctMkgValues.splice(nonCorpIdx, 1);
+                }                
             }
-            this.mkgvalues.sort();
+            if (this.autofillData["DEFAULT"].hasOwnProperty("MRKT_SEG")) {
+                this.autofillData["DEFAULT"]["MRKT_SEG"].value = this.multSlctMkgValues;
+            }            
+            this.multSlctMkgValues.sort();
         }
     }
 
@@ -406,6 +423,7 @@ export class AutoFillComponent {
         }
         this.geos = geoVals;
         this.marketSeglist = this.dropdownResponses['MRKT_SEG'];
+        this.nonCorpMarketSeg = this.dropdownResponses['MRKT_SEG_NON_CORP'];        
         _.each(this.marketSeglist, (key) => {
             if (key.items != undefined && key.items != null && key.items.length > 0) {
                 this.parentKeys.push(key.DROP_DOWN);
@@ -418,6 +436,7 @@ export class AutoFillComponent {
         else {
             this.mkgvalues = mkgvalue;
         }        
+        this.multSlctMkgValues =  this.mkgvalues;
         this.isLoading = false;
         this.setBusy("", "", "", false);
     }

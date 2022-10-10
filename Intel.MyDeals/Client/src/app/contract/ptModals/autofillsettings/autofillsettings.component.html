@@ -69,7 +69,7 @@
                             </div>
 
                         </div>
-                        <kendo-multiselect [(ngModel)]="mkgvalues" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false"></kendo-multiselect>
+                        <kendo-multiselect [(ngModel)]="multSlctMkgValues" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false"></kendo-multiselect>
                         <kendo-treeview [nodes]="marketSeglist" textField="DROP_DOWN" [children]="fetchChildren" [hasChildren]="hasChildren" kendoTreeViewCheckable [(checkedKeys)]="mkgvalues" checkBy="DROP_DOWN" [isChecked]="isChecked" (checkedKeysChange)="onMktgValueChange($event)">
                         </kendo-treeview>
                     </div>
