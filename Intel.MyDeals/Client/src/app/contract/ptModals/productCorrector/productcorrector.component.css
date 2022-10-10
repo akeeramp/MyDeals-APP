@@ -31,7 +31,38 @@
     margin-left: 0px;
     margin-right: 0px;
 }
-
+.headerMsg {
+    margin-top: 6px !important;
+}
+.gridStatusMarker {
+    height: 33px;
+    width: 4px;
+    font-size: 14px;
+    font-weight: 600;
+    text-align: center;
+    margin-left: -11px;
+}
+.false {
+    background-color: #003C71 !important;
+    color: #ffffff !important;
+}
+.true {
+    background-color: #FC4C02 !important;
+    color: #ffffff !important;
+}
+.k-grid-header .k-header {
+    background-color: #e7e7e8;
+    border-left-color: #c4cfd4;
+}
+span.k-column-title {
+    overflow: hidden !important;
+    white-space: nowrap !important;
+}
+.k-grid td {
+    white-space: nowrap !important;
+    /*border-color: transparent;*/
+    text-overflow: ellipsis;
+}
 .rowNavigation {
     color: yellow;
     font-size: 28px;
@@ -39,13 +70,13 @@
 
 .prodText {
     color: white;
-    font-size: 32px
+    font-size: 32px;
 }
 
 .rowNavPanel {
     color: white;
     font-size: 28px;
-    padding-top: 12px;
+    padding-top: 0px;
     padding-left: 20px;
 }
 
@@ -230,7 +261,8 @@ a.prdAnchor {
 }
 
     .prdBtn.btn-primary {
-        background-color: #01AEEF;
+        background-color: #01AEEF !important;
+        border-color: #367fa9 !important;
     }
 
         .prdBtn.btn-primary:hover {
@@ -245,13 +277,19 @@ a.prdAnchor {
         }
 
 .prodCorrector.modal-body {
-    padding-top: 2px;
-    padding-bottom: 0px;
-    overflow: hidden !important;
+    padding-top: 2px !important;
+    padding-bottom: 0px !important;
+    min-height: calc(90vh - 160px);
+    max-height: calc(90vh - 160px);
+    overflow-y: auto !important;
+    position: relative;
+    padding: 15px;
 }
 
 .prodSelector.modal-footer {
     border-top: none;
+    padding-top: 0;
+    padding-bottom: 15px;
 }
 
 .prodSelector.modal-header {
@@ -382,6 +420,9 @@ a.prdAnchor {
 .mat-dialog-container {
     padding: 0px;
     height: fit-content;
+    overflow: hidden;
+    border-radius: 0px;
+    background: rgb(26, 62, 111) !important;
 }
 
 .miniNav {

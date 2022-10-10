@@ -1022,8 +1022,8 @@ export class pricingTableEditorComponent implements OnChanges {
         });
         let data = { ProductCorrectorData: products, contractData: this.contractData, curPricingTable: this.curPricingTable, selRows: selRows };
         const dialogRef = this.dialog.open(ProductCorrectorComponent, {
-            height: '850px',
-            width: '1650px',
+            height: '90vh',
+            maxWidth: '90vw',
             data: data,
         });
         dialogRef.afterClosed().subscribe((selProds: Array<ProdCorrectObj>) => {

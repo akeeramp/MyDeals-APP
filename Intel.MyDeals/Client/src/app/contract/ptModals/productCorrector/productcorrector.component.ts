@@ -89,7 +89,11 @@ export class ProductCorrectorComponent {
   private selPrdVerKeys: any[] = [];
   private selRowIssues: any[] = [];
   private selRowIssuesKeys: any[] = [];
-  private userEnteredProduct: any[] = [];
+    private userEnteredProduct: any[] = [];
+    private includeProd: any[] = [];
+    private curIncludeProd: any[] = [];
+    private excludeProd: any[] = [];
+    private curExcludeProd: any[] = [];
   private currentPTERow: any[] = [];
   private isGA = false;//window.usrRole == "GA"; Commeneted this stop showing L1/L2 columns till legal approves
   private DEAL_TYPE;
@@ -152,7 +156,9 @@ export class ProductCorrectorComponent {
               }
           }
       }
-    this.totRows=_.keys(this.ProductCorrectorData.ProdctTransformResults).length;
+      this.totRows = _.keys(this.ProductCorrectorData.ProdctTransformResults).length;
+      this.includeProd = this.ProductCorrectorData.ProdctTransformResults[this.rowDCId].I;
+      this.excludeProd = this.ProductCorrectorData.ProdctTransformResults[this.rowDCId].E;
     this.showColumns();
     this.getcurPTERowData();
   }
@@ -191,7 +197,9 @@ export class ProductCorrectorComponent {
     let selItem = _.findWhere(this.curRowIssues, { name: key, DCID: DCID});
     this.curProd=selItem.name;
     //this.selRowIssues=[selItem];
-    this.rowDCId=selItem.DCID; 
+      this.rowDCId = selItem.DCID;
+      this.includeProd = this.ProductCorrectorData.ProdctTransformResults[this.rowDCId].I;
+      this.excludeProd = this.ProductCorrectorData.ProdctTransformResults[this.rowDCId].E;
     this.selRowIssues = this.getselRowIssues(_.findWhere(this.curRowIssues, { name: key, DCID: DCID}).items);    
       for (let i = 0; i < this.selRowIssues.length; i++) {
           for (let j = 0; j < this.userEnteredProduct.length; j++) {
@@ -270,11 +278,22 @@ export class ProductCorrectorComponent {
         item['DERIVED_USR_INPUT'] = PTE_Common_Util.fullNameProdCorrector(item)
         if (evt.target.checked) {
             let prd = { prod: item.DERIVED_USR_INPUT, prodObj: item };
-            this.curSelProducts['items'].push(prd);
+            this.curSelProducts['items'].push(prd);         
+            if (item.EXCLUDE)
+                this.curExcludeProd.push(prd);
+            else
+                this.curIncludeProd.push(prd);
         }
         else {
-            let idx = _.findIndex(this.selectedProducts, item.DERIVED_USR_INPUT);
+           // let idx = _.findIndex(this.selectedProducts, item.DERIVED_USR_INPUT);
+            let indx = this.curExcludeProd.findIndex(i=> i.prod === item.DERIVED_USR_INPUT);
+            let index = this.curIncludeProd.findIndex(i => i.prod === item.DERIVED_USR_INPUT);
+            let idx = this.curSelProducts['items'].findIndex(i => i.prod === item.DERIVED_USR_INPUT);
             this.curSelProducts['items'].splice(idx, 1);
+            if (item.EXCLUDE)
+                this.curExcludeProd.splice(indx, 1);
+            else    
+                this.curIncludeProd.splice(index, 1);
         }
     }
     isValidProductCombination(existingProdTypes, newProductType) {
