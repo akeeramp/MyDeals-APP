@@ -41,6 +41,7 @@ export class PTE_Save_Util {
             let OVLPFlexPdtPTRUSRPRDError = false;
             PTE_Common_Util.validateOVLPFlexProduct(PTR, undefined, false, curPricingTable, restrictGroupFlexOverlap, overlapFlexResult, OVLPFlexPdtPTRUSRPRDError);
         }
+        let invalidFlexDate = PTE_Validation_Util.validateFlexDate(PTR, curPricingTable, undefined);
         // Check if the rows have duplicate products
         var isHybridPS = curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
         var duplicateProductRows = isHybridPS ? PTE_Validation_Util.hasDuplicateProduct(PTR) : {};
@@ -159,13 +160,21 @@ export class PTE_Save_Util {
                 item._behaviors.isError['GEO_COMBINED'] = true;
                 item._behaviors.validMsg['GEO_COMBINED'] = "Field is required";
             }
-            if (item["PAYOUT_BASED_ON"] == null || item["PAYOUT_BASED_ON"] == undefined) {
+            if (item["PAYOUT_BASED_ON"] == null || item["PAYOUT_BASED_ON"] == undefined || item["PAYOUT_BASED_ON"] == '') {
                 item._behaviors.isError['PAYOUT_BASED_ON'] = true;
                 item._behaviors.validMsg['PAYOUT_BASED_ON'] = "Field is required";
             }
-            if ((item["PAYMENT_PROGRAM"] == null || item["PAYMENT_PROGRAM"] == undefined) && curPricingStrategy.OBJ_SET_TYPE_CD == "ECAP") {
-                item._behaviors.isError['PAYMENT_PROGRAM'] = true;
-                item._behaviors.validMsg['PAYMENT_PROGRAM'] = "Field is required";
+            if ((item["PROGRAM_PAYMENT"] == null || item["PROGRAM_PAYMENT"] == undefined || item["PROGRAM_PAYMENT"] == '') && curPricingTable.OBJ_SET_TYPE_CD == "ECAP") {
+                item._behaviors.isError['PROGRAM_PAYMENT'] = true;
+                item._behaviors.validMsg['PROGRAM_PAYMENT'] = "Field is required";
+            }
+            if (item["OBJ_SET_TYPE_CD"] == "FLEX") {
+                //Delete if there is any previous Error  messages
+                if ((invalidFlexDate || invalidFlexDate != undefined)) {
+                    _.each(invalidFlexDate, (item) => {
+                        PTE_Validation_Util.setFlexBehaviors(item, 'START_DT', 'invalidDate', false);
+                    });
+                }
             }
         });
 

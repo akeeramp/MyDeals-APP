@@ -287,7 +287,7 @@ export class PTE_Validation_Util {
 
             var maxAccrualDate = new Date(Math.max.apply(null, filterData.map(function (x) { return new Date(x.START_DT); })));
 
-            var drainingInvalidDates = drainingEntries.filter((val) => moment(val.START_DT) < (moment(maxAccrualDate)));
+            var drainingInvalidDates = drainingEntries.filter((val) => moment(val.START_DT) < (moment(maxAccrualDate).add(1, 'days')));
         }
         return drainingInvalidDates;
     }
@@ -311,6 +311,9 @@ export class PTE_Validation_Util {
 
         else if (cond == 'notallowed' && elem == 'PAYOUT_BASED_ON') {
             item._behaviors.validMsg[elem] = "Consumption based accrual with billings based draining is not valid";
+        }
+        else if (cond == 'invalidDate' && elem == 'START_DT') {
+            item._behaviors.validMsg[elem] = "Draining products should have atleast 1 day delay from Accrual Start date";
         }
         return item;
     }

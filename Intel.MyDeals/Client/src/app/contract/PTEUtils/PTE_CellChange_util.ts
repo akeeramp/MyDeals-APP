@@ -206,6 +206,11 @@ export class PTE_CellChange_Util {
                 let cellVal = curPricingTable[`${val.prop}`] ? curPricingTable[`${val.prop}`] : '';
                 this.hotTable.setDataAtRowProp(row, val.prop, cellVal, 'no-edit');
             }
+            else if (val.prop == 'ECAP_PRICE') {
+                let ecapPrice = this.hotTable.getDataAtRowProp(row, 'ECAP_PRICE');
+                if (ecapPrice == null || ecapPrice == "")
+                    this.hotTable.setDataAtRowProp(row, val.prop, '0.00', 'no-edit');
+            }
             else {
                 if (val.prop) {
                     //this will be autofill defaults value 
@@ -471,7 +476,7 @@ export class PTE_CellChange_Util {
             else if (OBJ_SET_TYPE_CD == 'DENSITY') {
                 this.autoFillCellonProdDensity(items, curPricingTable, contractData, pricingTableTemplates, columns, operation);
             }
-            else {
+            else {                
                 let updateRows = [];
                 //the numbe of tiers has to take from autofill for now taken from PT
                 let NUM_OF_TIERS = curPricingTable.NUM_OF_TIERS;
@@ -749,7 +754,7 @@ export class PTE_CellChange_Util {
                 if (parseFloat(val) >= 0 || parseFloat(val) < 0) {
                         this.hotTable.setDataAtRowProp(item.row, item.prop, parseFloat(val), 'no-edit');
                 } else {
-                    this.hotTable.setDataAtRowProp(item.row, item.prop, '', 'no-edit');
+                    this.hotTable.setDataAtRowProp(item.row, item.prop, '0.00', 'no-edit');
                 }
             }
         });
@@ -769,7 +774,7 @@ export class PTE_CellChange_Util {
     static checkfn(items: Array<any>, curPricingTable: any) {
         _.each(items, item => {
             let val = this.hotTable.getDataAtRowProp(item.row, 'PROGRAM_PAYMENT');
-            if (val != undefined && val != null && val.toLowerCase() !== 'backend') {
+            if (val != undefined && val != null && val != '' && val.toLowerCase() !== 'backend') {
                 this.hotTable.setDataAtRowProp(item.row, 'PERIOD_PROFILE', '', 'no-edit');
                 this.hotTable.setDataAtRowProp(item.row, 'RESET_VOLS_ON_PERIOD', '', 'no-edit');
                 this.hotTable.setDataAtRowProp(item.row, 'AR_SETTLEMENT_LVL', '', 'no-edit');
@@ -953,6 +958,15 @@ export class PTE_CellChange_Util {
         _.each(items, (item) => {
             if (item.new == undefined || item.new == null || item.new == '' || !moment(item.new, "MM/DD/YYYY", true).isValid() || moment(item.new).toString() === "Invalid date" || moment(item.new).format("MM/DD/YYYY") === "12/30/1899") {
                 this.hotTable.setDataAtRowProp(item.row, colName, moment(contractData[colName]).format("MM/DD/YYYY"), 'no-edit');
+            }
+        });
+    }
+
+    static rebateTypeChange(items: Array<any>, curPricingTable) {
+        _.each(items, (item) => {
+            if (item.new != undefined && (item.new == "MDF ACCRUAL"
+                || item.new == "MDF ACTIVITY" || item.new == "NRE ACCRUAL")) {
+                this.hotTable.setDataAtRowProp(item.row, 'PERIOD_PROFILE', '', 'no-edit');
             }
         });
     }
