@@ -69,3 +69,10 @@
 .new-row {
     --bs-gutter-x: 1.5rem !important;
 }
+
+.vfkd-align-fix {
+    position: relative;
+    min-height: 1px;
+    padding-left: 15px;
+    padding-right: 15px;
+}

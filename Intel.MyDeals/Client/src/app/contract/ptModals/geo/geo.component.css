@@ -21,6 +21,8 @@
 
 .blend-checkbox input {
     margin-right: 5px;
+    opacity: 1;
+    width: 1rem;
 }
 
 .another-header-geo {

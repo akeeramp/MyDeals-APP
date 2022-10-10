@@ -192,12 +192,12 @@
                     </kendo-grid-column>
                 </kendo-grid>
             </div>
-            <kendo-dialog *ngIf="isWarning" id="warning" (close)="Close()">
+            <kendo-dialog *ngIf="isWarning" id="warning" (close)="Close()" class="the-comp-de">
                 <p class="kendo-dialog-message">{{message}}</p>
                 <kendo-dialog-actions>
-                    <button *ngIf="!isDatesOverlap" class='k-button' (click)="Close()">Ok</button>
-                    <button *ngIf="isDatesOverlap" class='k-button' (click)="SaveDealData()">Ok</button>
-                    <button *ngIf="isDatesOverlap" class='k-button' (click)="Close()">Cancel</button>
+                    <button *ngIf="!isDatesOverlap" class='k-button first-child-btn' (click)="Close()">Ok</button>
+                    <button *ngIf="isDatesOverlap" class='k-button first-child-btn' (click)="SaveDealData()">Ok</button>
+                    <button *ngIf="isDatesOverlap" class='k-button last-child-btn' (click)="Close()">Cancel</button>
                 </kendo-dialog-actions>
             </kendo-dialog>
         </ng-template>

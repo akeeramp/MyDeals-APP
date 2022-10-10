@@ -63,7 +63,7 @@
                         </div>
                     </ng-template>
                     <div class="col-md-12" #popOver="ngbPopover" [ngbPopover]="popoverContent">
-                        <div class="col-md-12 textRightAlign'" [ngClass]="{'isHiddenCell': isHiddenCell(in_DataItem, fieldModifier),'isRequiredCell' : isRequiredCell(in_DataItem, fieldModifier),'isReadOnlyCell': isReadonlyCell(in_DataItem, fieldModifier), 'isDirtyCell': isDirtyCell(in_DataItem, fieldModifier), 'isErrorCell': isErrorCell(in_DataItem, fieldModifier),'isSavedCell': isSavedCell(in_DataItem, fieldModifier)}">
+                        <div class="col-md-12 textRightAlign" [ngClass]="{'isHiddenCell': isHiddenCell(in_DataItem, fieldModifier),'isRequiredCell' : isRequiredCell(in_DataItem, fieldModifier),'isReadOnlyCell': isReadonlyCell(in_DataItem, fieldModifier), 'isDirtyCell': isDirtyCell(in_DataItem, fieldModifier), 'isErrorCell': isErrorCell(in_DataItem, fieldModifier),'isSavedCell': isSavedCell(in_DataItem, fieldModifier)}">
                             <div [innerHTML]="uiMoneyDatesControlWrapper(in_DataItem, fieldModifier + YCS2modifier, fieldText, fieldModifier + '_END_DT', key)"></div>
                         </div>
                     </div>

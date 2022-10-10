@@ -35,7 +35,7 @@
                 <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" [grid_Result]="wipData"></deal-editor-header>
             </ng-template>
             <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
-                <deal-editor-cell [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [contract_Data]="contractData" [grid_Data]="gridData.data"></deal-editor-cell>
+                <deal-editor-cell [id]="column.field" [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [contract_Data]="contractData" [grid_Data]="gridData.data"></deal-editor-cell>
             </ng-template>
     
         </kendo-grid-column>

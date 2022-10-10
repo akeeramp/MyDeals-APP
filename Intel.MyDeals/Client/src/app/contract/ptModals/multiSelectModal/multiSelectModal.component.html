@@ -5,7 +5,7 @@
         <h3 class="modal-title" id="modal-title">{{disTitle}}</h3>
     </div>
     <loading-panel-angular id="multiSelectModalLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>
-    <div class="container-fluid overflow modal-body">
+    <div class="container-fluid overflow modal-body all-wheat">
         <div *ngIf="!isTgrRgn">
             <div *ngIf="isEmptyList">
                 <span *ngIf="!msg" style="color:red;">
@@ -29,8 +29,8 @@
         <div class="row">
             <div class="col">
                 <div mat-dialog-content>
-                    <kendo-multiselect [(ngModel)]="checkedKeys" [placeholder]="placeholderText" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false"></kendo-multiselect>                    
-                        <kendo-treeview [nodes]="multiSelectData"
+                    <kendo-multiselect class="fiend-all" [(ngModel)]="checkedKeys" [placeholder]="placeholderText" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false"></kendo-multiselect>                    
+                        <kendo-treeview class="fiend-tree" [nodes]="multiSelectData"
                                         filterInputPlaceholder="Type here to filter the values.."
                                         kendoTreeViewHierarchyBinding
                                         childrenField="items"

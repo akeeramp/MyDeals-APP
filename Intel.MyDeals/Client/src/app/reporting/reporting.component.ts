@@ -46,7 +46,8 @@ export class ReportingComponent {
     },
     tooltip: {
         visible: true,
-        template: "#= category # : #= value #%"
+        template: "#= category # : #= value #%",
+        format: "{0}%"
     }
   }
   private chartPieObj: any = {
@@ -68,7 +69,8 @@ export class ReportingComponent {
     },
     tooltip: {
       visible: true,
-      template: '#= category # : #= value #%'
+        template: '#= category # : #= value #%',
+        format: "{0}%"
     }
   };
   private chartObj:any={
@@ -79,16 +81,16 @@ export class ReportingComponent {
     },
     title: {
         text: "Report Usage Time Log",
-        position: "bottom"
+        position: "top"
     },
     legend: {
         position: "bottom",
-        orientation:"vertical"
+        orientation:"horizontal"
     },
     chartArea: {
       background: "",
-      margin:10,
-      height:300
+      margin:1,
+      height:350
     },
     seriesDefaults: {
         type: "line",

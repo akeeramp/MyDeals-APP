@@ -1031,3 +1031,65 @@ kendo-dropdownlist.font-input .k-input {
     color: #000000 !important;
     width: max-content !important;
 }
+
+kendo-dialog.the-comp-de kendo-dialog-actions {
+    padding: 0;
+}
+
+kendo-dialog.the-comp-de kendo-dialog-actions button.first-child-btn {
+    color: #fff;
+    border-color: #00aeef;
+    background-color: #00aeef !important;
+}
+
+kendo-dialog.the-comp-de kendo-dialog-actions button:last-child.last-child-btn {
+    color: #444;
+    border-color: #fafafa;
+    background-color: #fafafa !important;
+    margin-left: -7px;
+}
+
+kendo-dialog.the-comp-de kendo-dialog-actions {
+    border-radius: 0 !important;
+}
+
+kendo-dialog.the-comp-de .k-window {
+    border: none;
+}
+
+kendo-dialog.the-comp-de kendo-dialog-actions button.first-child-btn:hover {
+    color: #fff !important;
+    border-color: #0071c5 !important;
+    background-color: #0071c5 !important;
+}
+
+kendo-dialog.the-comp-de kendo-dialog-actions button:last-child.last-child-btn:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important;
+    margin-left: -7px;
+}
+
+kendo-multiselect.fiend-all li {
+    border-radius: 0.25rem!important;
+}
+
+.fiend-all.k-multiselect .k-multiselect-wrap .k-button .k-select {
+    position:relative!important;
+}
+
+kendo-treeview.k-widget.k-treeview.fiend-tree ul li kendo-checkbox .k-checkbox {
+    opacity: 1;
+    width: 1rem;
+}
+
+.modal-body.all-wheat .mat-dialog-content {
+    max-height: initial;
+    margin: 0;
+    padding: 0;
+    padding-top: 10px;
+}
+
+.modal-body.all-wheat {
+    overflow: hidden;
+}
