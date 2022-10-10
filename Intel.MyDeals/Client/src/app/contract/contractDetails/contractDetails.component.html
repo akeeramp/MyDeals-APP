@@ -27,7 +27,7 @@
                                         <h6 style="width:100%">Contract Information</h6>
                                     </div>
                                     <div class="col-md-11 display displayblock">
-                                        <div class="fl opUiLabel"><span class="isReqField">* </span>Customer:</div>
+                                        <div class="fl opUiLabel"><span *ngIf="contractData?._behaviors?.isRequired?.CUST_MBR_SID" class="isReqField">* </span>Customer:</div>
                                         <kendo-combobox #CUST_MBR_SID_Combo [data]="CustomersFilterData"   [filterable]="true" (filterChange)="customerFilter($event)"
                                                         class="kendoInput noborderclass font-input" textField="CUST_NM" valueField="CUST_SID" [disabled]="disableCustomer"
                                                         name="Customer" #customer="ngModel" [(ngModel)]="Customer" (valueChange)="onCustomerChange($event)" required>
@@ -46,8 +46,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-11 display displayblock">
-                                        <div class="fl opUiLabel"><span class="isReqField">* </span>Contract Name:</div>
-                                        <kendo-textbox triggers="manual" class="kendoInput borderless font-input" [clearButton]="true" name="TITLE" [ngClass]="{'input-error': isTitleError}"
+                                        <div class="fl opUiLabel"><span *ngIf="contractData?._behaviors?.isRequired?.TITLE" class="isReqField">* </span>Contract Name:</div>
+                                        <kendo-textbox triggers="manual" class="kendoInput borderless font-input" [clearButton]="true" name="TITLE" [ngClass]="{'input-error': isTitleError}" [disabled]="contractData?._behaviors?.isReadOnly?.TITLE"
                                                        [(ngModel)]="TITLE" (keyup)="onKeySearch($event,'TITLE')" required></kendo-textbox>
 
                                         <kendo-formerror *ngIf="(contractDetailsForm.controls.TITLE?.errors?.required && contractDetailsForm.controls.TITLE?.touched);else otherMsg">
@@ -66,11 +66,11 @@
                                         </h6>
                                     </div>
                                     <div class="col-md-11 display">
-                                        <div class="fl opUiLabel"><span class="isReqField">* </span>Select Start Date:</div>
+                                        <div class="fl opUiLabel"><span *ngIf="contractData?._behaviors?.isRequired?.START_DT" class="isReqField">* </span>Select Start Date:</div>
                                         <div class="inlineDisplay">
                                             <div class="blockdisplay">
                                                 <kendo-datepicker #picker class="fl opUiElement dateclass" calendarType="classic"
-                                                                  [(ngModel)]="START_DT" name="START_DT" (valueChange)="getCurrentQuarterDetails('START_DT')" [ngClass]="{'input-error': contractData?._behaviors?.validMsg?.START_DT}"
+                                                                  [(ngModel)]="START_DT" name="START_DT" (valueChange)="getCurrentQuarterDetails('START_DT')" [ngClass]="{'input-error': contractData?._behaviors?.validMsg?.START_DT}" [disabled]="contractData?._behaviors?.isReadOnly?.START_DT"
                                                                   required></kendo-datepicker>
                                                 <kendo-formerror>
                                                     {{contractData?._behaviors?.validMsg?.START_DT}}
@@ -94,11 +94,11 @@
                                         </div>
                                     </div>
                                     <div class="col-md-11 display">
-                                        <div class="fl opUiLabel"><span class="isReqField">* </span>Select End Date:</div>
+                                        <div class="fl opUiLabel"><span *ngIf="contractData?._behaviors?.isRequired?.END_DT" class="isReqField">* </span>Select End Date:</div>
                                         <div class="inlineDisplay">
                                             <div class="blockdisplay">
                                                 <kendo-datepicker #picker class="fl opUiElement dateclass" calendarType="classic" [ngClass]="{'input-error': contractData?._behaviors?.validMsg?.END_DT}"
-                                                                  [(ngModel)]="END_DT" [disabled]="NO_END_DT" name="END_DT"
+                                                                  [(ngModel)]="END_DT" [disabled]="NO_END_DT || contractData?._behaviors?.isReadOnly['END_DT']" name="END_DT"
                                                                   (valueChange)="getCurrentQuarterDetails('END_DT')" required></kendo-datepicker>
                                                 <kendo-formerror>
                                                     {{contractData?._behaviors?.validMsg?.END_DT}}
@@ -106,8 +106,8 @@
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="clearboth orLabel" [hidden]="initialStartDateReadOnly">OR</div>
-                                    <div class="row" [hidden]="initialStartDateReadOnly">
+                                    <div class="clearboth orLabel" [hidden]="initialEndDateReadOnly">OR</div>
+                                    <div class="row" [hidden]="initialEndDateReadOnly">
                                         <div class="col-md-3 dateRangeLabel margindisplay">Select Quarter Range </div>
                                         <div class="col-md-4 slidermbottom">
                                             <kendo-slider [min]="1" [max]="4" [smallStep]="1" [largeStep]="1" [showButtons]="true"
@@ -121,13 +121,13 @@
 
                                         </div>
                                     </div>
-                                    <div class="col-md-11 display slidermbottom">
+                                    <div class="col-md-11 display slidermbottom" [hidden]="initialEndDateReadOnly">
                                         <label class="fl opUiLabel"
                                                style="font-weight:normal" for="noenddate">No end date:</label><input style="margin-top:-3px" type="checkbox" id="noenddate" name="noenddate"
                                                                                                                      [(ngModel)]="NO_END_DT" title="This will set the End Date to +20 years"
                                                                                                                      (change)="noEndDate()" />
                                     </div>
-                                    <div class="col-md-11 display top" *ngIf="NO_END_DT">
+                                    <div class="col-md-11 display top" *ngIf="NO_END_DT" [hidden]="initialEndDateReadOnly">
                                         <div class="fl opUiLabel" style="width:200px">
                                             <span class="isReqField">* </span>No
                                             end date reason:
@@ -157,7 +157,7 @@
                                     </div>
                                     <div class="col-md-11 display">
                                         <div class="fl opUiLabel" style="width: 160px">
-                                            <span class="isReqField">*</span>Contract Type:
+                                            <span *ngIf="contractData?._behaviors?.isRequired?.CONTRACT_TYPE" class="isReqField">*</span>Contract Type:
                                         </div>
                                         <kendo-dropdownlist [data]="dropDownsData?.CONTRACT_TYPE" textField="DROP_DOWN"
                                                             valueField="DROP_DOWN" [(ngModel)]="CONTRACT_TYPE" class="inputWidth newbotborder font-input" name="CONTRACT_TYPE" required>
@@ -210,13 +210,13 @@
                                             <span *ngIf="contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID"
                                                   class="isReqField">* </span>C2A Contract #
                                         </div>
-                                        <kendo-textbox triggers="manual" class="inputWidth c2aborder font-input" [clearButton]="true" name="C2A_DATA_C2A_ID"
+                                        <kendo-textbox triggers="manual" class="inputWidth c2aborder font-input" [clearButton]="true" name="C2A_DATA_C2A_ID" [disabled]="this.contractData?._behaviors?.isReadOnly?.C2A_DATA_C2A_ID"
                                                        [(ngModel)]="C2A_DATA_C2A_ID" (valueChange)="c2aIDchange($event)" [required]="this.contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID">
                                         </kendo-textbox>
                                         <kendo-formerror *ngIf="contractDetailsForm.controls.C2A_DATA_C2A_ID?.errors?.required && isSubmitted">
                                             {{isRequiredMsg}}
                                         </kendo-formerror>
-                                        <div class="description">
+                                        <div *ngIf="!contractData?._behaviors?.isHidden['C2A_DATA_C2A_ID']" class="description">
                                             Please enter the C2A Contract # associated with the
                                             contract. Please note, values longer than 18 characters will be truncated in
                                             Vistex. Characters (like semicolons) not supported by Vistex will also be

@@ -53,6 +53,7 @@ export class contractDetailsComponent {
     public curPricingTable = {};
     public isCustomerSelected: boolean;
     public initialEndDateReadOnly = false;
+    public initialStartDateReadOnly = false;
     public isTitleError = false; hasUnSavedFiles = false;
     public isCustomerDivHidden = true;
     public custAccptData; selectedFileCount = 0;
@@ -958,7 +959,13 @@ export class contractDetailsComponent {
                                 .subscribe((response: Array<any>) => {
                                     this.contractData = response[0];
                                     this.C_DELETE_ATTACHMENTS = this.contractDetailsSvc.chkDealRules("C_DELETE_ATTACHMENTS", (<any>window).usrRole, null, null, this.contractData.WF_STG_CD);
-                                    this.isTenderContract = this.contractData["IS_TENDER"];
+                                    if(this.contractData["IS_TENDER"] == '0'){
+                                        this.isTenderContract = false;
+                                    } else {
+                                        this.isTenderContract = this.contractData["IS_TENDER"];
+                                    }
+                                    this.initialEndDateReadOnly = this.contractData?._behaviors && this.contractData?._behaviors?.isReadOnly && this.contractData?._behaviors?.isReadOnly["END_DT"] && this.contractData?._behaviors?.isReadOnly["END_DT"];
+                                    this.initialStartDateReadOnly = this.contractData?._behaviors && this.contractData?._behaviors?.isReadOnly && this.contractData?._behaviors?.isReadOnly["START_DT"] && this.contractData?._behaviors?.isReadOnly["START_DT"];
                                     this.loadContractDetailsData();
                                     this.getTimeLineDetails();
                                     this.getFileAttachmentDetails(this.c_Id);
