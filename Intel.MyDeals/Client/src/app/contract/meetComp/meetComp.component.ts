@@ -439,10 +439,11 @@ export class meetCompContractComponent implements OnInit {
         let response: any = await this.meetCompSvc.getMeetCompProductDetails(this.objSid, this.MC_MODE, this.objTypeId).toPromise().catch((err) => {
             this.loggerSvc.error("Unable to get GetMeetCompProductDetails data", err, err.statusText);
             this.isLoading = false;
-        });;
-        if (response.length == 0 && this.isAdhoc == 1) {
+        });
+        //Commenting as "isadhoc" property might need to be revisited, in current angular code we are having it's value as 1
+        /*if (response.length == 0 && this.isAdhoc == 1) {
             this.loggerSvc.error("Meet comp is not applicable for the Products selected in the Tender Table editor", "Alert");
-        }
+        }*/
         if (response.length > 0) {
             response.forEach((obj) => {
                 obj.IS_SELECTED = false;
@@ -470,11 +471,12 @@ export class meetCompContractComponent implements OnInit {
             this.reBindGridData();
             this.isLoading = false;
         } else {
-            if (this.isAdhoc == 0) {
+            // if (this.isAdhoc == 0) {
+                this.isDataAvaialable = false;
                 this.loggerSvc.error("No Meet Comp data available for product(s) in this Contract", "Alert");
                 this.isLoading = false;
                 return;
-            }
+            // }
         }
     }
 
