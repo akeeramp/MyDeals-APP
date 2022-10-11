@@ -108,11 +108,11 @@ export class PTE_CellChange_Util {
                 updateRows.push(currentstring.split(','));
             }
             else {
-                this.addUpdateRowOnchangeCommon(row, val, updateRows, curPricingTable, contractData, null, operation);
+                this.addUpdateRowOnchangeCommon(row, val, updateRows, curPricingTable, contractData, null, operation, cellItem);
             }
         });
     }
-    static addUpdateRowOnchangeCommon(row: number, val: any, updateRows: Array<any>, curPricingTable: any, contractData: any, rowData?: any, operation?: any) {
+    static addUpdateRowOnchangeCommon(row: number, val: any, updateRows: Array<any>, curPricingTable: any, contractData: any, rowData?: any, operation?: any, cellItem?: any) {
         //make the selected row PTR_USER_PRD empty if its not the empty row
         let currentstring = '';
         //rowdata scenario is for KIT and except kit rebate we can assign all other values
@@ -211,6 +211,16 @@ export class PTE_CellChange_Util {
                 if (ecapPrice == null || ecapPrice == "")
                     this.hotTable.setDataAtRowProp(row, val.prop, '0.00', 'no-edit');
             }
+            else if (val.prop == 'CAP') {
+                let cellVal = (operation && operation.operation && operation.PTR_SYS_PRD) ? JSON.parse(operation['PTR_SYS_PRD'])[cellItem.new][0]['CAP'] : ''
+                currentstring = row + ',' + val.prop + ',' + cellVal + ',' + 'no-edit';
+                updateRows.push(currentstring.split(','));
+            }
+            else if (val.prop == 'YCS2') {
+                let cellVal = (operation && operation.operation && operation.PTR_SYS_PRD) ? JSON.parse(operation['PTR_SYS_PRD'])[cellItem.new][0]['YCS2'] : ''
+                currentstring = row + ',' + val.prop + ',' + cellVal + ',' + 'no-edit';
+                updateRows.push(currentstring.split(','));
+            }
             else {
                 if (val.prop) {
                     //this will be autofill defaults value 
@@ -265,7 +275,7 @@ export class PTE_CellChange_Util {
                 updateRows.push(currentstring.split(','));
             }
             else {
-                this.addUpdateRowOnchangeCommon(row, val, updateRows, curPricingTable, contractData, rowData, operation);
+                this.addUpdateRowOnchangeCommon(row, val, updateRows, curPricingTable, contractData, rowData, operation, cellItem);
             }
         });
 
@@ -595,7 +605,7 @@ export class PTE_CellChange_Util {
             }
             else {
                 if (val.prop != 'DENSITY_BAND') {
-                    this.addUpdateRowOnchangeCommon(row, val, updateRows, curPricingTable, contractData, null, operation);
+                    this.addUpdateRowOnchangeCommon(row, val, updateRows, curPricingTable, contractData, null, operation, cellItem);
                 }
             }
         });
