@@ -2,7 +2,7 @@
 import { Component, Input } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { GridDataResult, SelectAllCheckboxState, PageChangeEvent, CellClickEvent } from "@progress/kendo-angular-grid";
+import { GridDataResult, SelectAllCheckboxState, CellClickEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { managerPctservice } from "./managerPct.service";
 import { ThemePalette } from "@angular/material/core";
@@ -68,10 +68,6 @@ export class pctChildGridComponent {
             filters: [],
         }
     }
-    public pageChange({ skip, take }: PageChangeEvent): void {
-        this.skip = skip;
-        this.managerPctSvc.queryForCategory(this.parent.DEAL_ID, { skip, take });
-    }
     onOff(val) {
         return val ? "Yes" : "No";
     }
@@ -118,6 +114,50 @@ export class pctChildGridComponent {
         if (args.column.field == "GRP_DEALS") {
             // this.openExcludeDealGroupModal(args.dataItem);
         }
+    }
+
+    isErrorOrWarning(dataItem, field) {
+        if (dataItem.COST_TEST_OVRRD_FLG !== "Yes" && dataItem.PRC_CST_TST_STS !== "NA") {
+            if (field != "LOW_NET_PRC" && field != "RTL_CYC_NM") {
+                if (!dataItem[field] || dataItem[field] === "" || dataItem[field] < 0)
+                    return true;
+            }
+            else if (field == "RTL_CYC_NM" && (!dataItem.RTL_CYC_NM || dataItem.RTL_CYC_NM === "")) {
+                return true;
+            }
+            else {
+                let validNet = false;
+                if (!dataItem[field] || dataItem[field] === "" || dataItem[field] < dataItem.PRD_COST)
+                    return true;
+                else
+                    validNet = true;
+                if (!(!dataItem.PRD_COST || dataItem.PRD_COST === "" || dataItem.PRD_COST < 0) && validNet && dataItem.LOW_NET_PRC <= 0)
+                    return true;
+            }
+        }
+        return false;
+    }
+
+    isInformation(dataItem, field) {
+        if (!(dataItem.COST_TEST_OVRRD_FLG !== "Yes" && dataItem.PRC_CST_TST_STS !== "NA")) {
+            if (field != "LOW_NET_PRC" && field !== "RTL_CYC_NM") {
+                if (!dataItem[field] || dataItem[field] === "" || dataItem[field] < 0)
+                    return true;
+            }
+            else if (field == "RTL_CYC_NM" && (!dataItem.RTL_CYC_NM || dataItem.RTL_CYC_NM === "")) {
+                return true;
+            }
+            else {
+                let validNet = false;
+                if (!dataItem[field] || dataItem[field] === "" || dataItem[field] < dataItem.PRD_COST)
+                    return true;
+                else
+                    validNet = true;
+                if (!(!dataItem.PRD_COST || dataItem.PRD_COST === "" || dataItem.PRD_COST < 0) && validNet && dataItem.LOW_NET_PRC <= 0)
+                    return true;
+            }
+        }
+        return false;
     }
     ngOnInit() {
         this.userRole = (<any>window).usrRole;

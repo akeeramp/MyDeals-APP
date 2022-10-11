@@ -1,13 +1,19 @@
 ﻿<link href="/Client/src/app/contract/managerPct/managerPct.component.css" rel="stylesheet" />
-<kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="5" [skip]="skip" [pageable]="true" scrollable="none"
-    (pageChange)="pageChange($event)" [navigable]="true" kendoGridFocusable style="height:auto;" (cellClick)="cellClickHandler($event)">
-    <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="150"></kendo-grid-column>
+<kendo-grid [data]="gridData" [loading]="isLoading" [skip]="skip" scrollable="none" id="pctChild"
+    [navigable]="true" kendoGridFocusable style="height:auto;" (cellClick)="cellClickHandler($event)" [hideHeader]="true">
+    <kendo-grid-column title="Tools" field="NOTES" [headerClass]="{'headerClass':true}" [width]="155" [filterable]="false">
+        <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
+            <deal-tools-angular [dataItem]='dataItem' [isSplitEnabled]='false' [isFileAttachmentEnabled]='false'
+                                [isHistoryEnabled]='true' [isCommentEnabled]='false' [isEditable]='true'
+                                [isQuoteLetterEnabled]='false' [isDeleteEnabled]='false' [gridData]="gridData.data" [contractData]="contractData"></deal-tools-angular>
+        </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column title="PCT Result" field="PRC_CST_TST_STS" [headerClass]="{'headerClass':true}" [width]="120">
         <ng-template *ngIf="CAN_VIEW_COST_TEST" kendoGridCellTemplate let-dataItem>
             <icon-mct-pct-angular [dataValue]='dataItem.PRC_CST_TST_STS' [overrideValue]="dataItem.COST_TEST_OVRRD_FLG" [overrideFlgCmt]="dataItem.COST_TEST_OVRRD_CMT" [iconClass]="medIcon" >
             </icon-mct-pct-angular>
         </ng-template>
-    </kendo-grid-column>
+    </kendo-grid-column>    
     <kendo-grid-column title="Deal Id" field="DEAL_ID" [headerClass]="{'headerClass':true}" [width]="100">
     </kendo-grid-column>
     <kendo-grid-column title="My Deals Product" field="PRODUCT" [headerClass]="{'headerClass':true}" [width]="170">
@@ -26,29 +32,29 @@
             'M/d/yyyy'}}-{{dataItem?.DEAL_END_DT | date: 'M/d/yyyy'}} </ng-template>
     </kendo-grid-column>
     <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}" [width]="100"
-        [hidden]="!hasPermissionPrice"></kendo-grid-column>
+                       [hidden]="!hasPermissionPrice"></kendo-grid-column>
     <kendo-grid-column title="OEM Platform Launch Date" [width]="180" field="OEM_PLTFRM_LNCH_DT"
-        [headerClass]="{'headerClass':true}" [hidden]="true">
+                       [headerClass]="{'headerClass':true}" [hidden]="true">
         <ng-template kendoGridCellTemplate let-dataItem><span
-                *ngIf="dataItem.OEM_PLTFRM_LNCH_DT!='1/1/1900'">{{dataItem.OEM_PLTFRM_LNCH_DT| date: 'M/d/yyyy'}}</span>
+                                                              *ngIf="dataItem.OEM_PLTFRM_LNCH_DT!='1/1/1900'">{{dataItem.OEM_PLTFRM_LNCH_DT| date: 'M/d/yyyy'}}</span>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column title="OEM Platform EOL Date" [width]="180" field="OEM_PLTFRM_EOL_DT"
-        [headerClass]="{'headerClass':true}" [hidden]="true">
+                       [headerClass]="{'headerClass':true}" [hidden]="true">
         <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.OEM_PLTFRM_EOL_DT | date: 'M/d/yyyy'}} </ng-template>
     </kendo-grid-column>
     <kendo-grid-column title="Deal Stage" field="WF_STG_CD" [headerClass]="{'headerClass':true}" [width]="80"
-        [hidden]="true"></kendo-grid-column>
+                       [hidden]="true"></kendo-grid-column>
     <kendo-grid-column title="CAP" field="CAP" [headerClass]="{'headerClass':true}" [width]="100"
         [hidden]="!hasPermissionPrice">
         <ng-template kendoGridCellTemplate let-dataItem>
-             <span>
+             <span [ngClass]="{'cell-warning': isErrorOrWarning(dataItem, 'CAP'),'cell-information':isInformation(dataItem,'CAP')}">
                  {{dataItem.CAP | currency}}
              </span>
          </ng-template></kendo-grid-column>
     <kendo-grid-column title="ECAP Price" field="ECAP_PRC" [headerClass]="{'headerClass':true}" [width]="120">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <span>
+            <span [ngClass]="{'cell-warning': isErrorOrWarning(dataItem, 'ECAP_PRC'),'cell-information':isInformation(dataItem,'ECAP_PRC')}">
                 {{dataItem.ECAP_PRC | currency}}
             </span>
         </ng-template>
@@ -62,7 +68,7 @@
         </ng-template></kendo-grid-column>
     <kendo-grid-column title="Lowest Net Price" field="LOW_NET_PRC" format="{0:c}" [headerClass]="{'headerClass':true}" [width]="140">
         <ng-template kendoGridCellTemplate let-dataItem>
-           <div title="{{ dataItem?.LNP_FRMULA ? dataItem.LNP_FRMULA : ''}}">
+           <div title="{{ dataItem?.LNP_FRMULA ? dataItem.LNP_FRMULA : ''}}" [ngClass]="{'cell-error': isErrorOrWarning(dataItem, 'LOW_NET_PRC'),'cell-information':isInformation(dataItem,'LOW_NET_PRC')}">
             <span>
                 {{dataItem.LOW_NET_PRC | currency}}
             </span>
@@ -72,14 +78,14 @@
     <kendo-grid-column title="Cost" field="PRD_COST" [headerClass]="{'headerClass':true}" [width]="100"
         [hidden]="!hasPermissionPrice">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <span>
+            <span [ngClass]="{'cell-warning': isErrorOrWarning(dataItem, 'PRD_COST'),'cell-information':isInformation(dataItem,'PRD_COST')}">
                 {{dataItem.PRD_COST | currency}}
             </span>
         </ng-template></kendo-grid-column>
     <kendo-grid-column title="Cost Type" field="CST_TYPE" [headerClass]="{'headerClass':true}" [width]="120"
-        [hidden]="!hasPermissionPrice"></kendo-grid-column>
+                       [hidden]="!hasPermissionPrice"></kendo-grid-column>
     <kendo-grid-column title="Cost Test Analysis Override" field="COST_TEST_OVRRD_FLG"
-        [headerClass]="{'headerClass':true}" [width]="150" [hidden]="hasNoPermissionOvr">
+                       [headerClass]="{'headerClass':true}" [width]="150" [hidden]="hasNoPermissionOvr">
         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
             <div style="text-align: center;">
               <span *ngIf="dataItem.PRC_CST_TST_STS === 'Pass' ||  dataItem.PRC_CST_TST_STS === 'NA'|| forceReadOnly === true || hasNoPermission === true" (change)="onOff(dataItem.COST_TEST_OVRRD_FLG)" style="vertical-align: -webkit-baseline-middle;">{{dataItem.COST_TEST_OVRRD_FLG}}</span>
@@ -95,26 +101,31 @@
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column title="Cost Test Analysis Override Comments" field="COST_TEST_OVRRD_CMT"
-        [headerClass]="{'headerClass':true}" [width]="150" [hidden]="hasNoPermissionOvr">
+                       [headerClass]="{'headerClass':true}" [width]="150" [hidden]="hasNoPermissionOvr">
         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-        <button class="btn btn-sm btn-skyblue" *ngIf="dataItem.COST_TEST_OVRRD_FLG === 'Yes' || dataItem.COST_TEST_OVRRD_FLG === true" (click)="openReason(dataItem)" type="button" style="width: 120px;" title="Save and Validate"><span style="color:#FC4C02;">*</span> {{dataItem.COST_TEST_OVRRD_CMT === "" ? "Select" : "View Overrides"}}</button>
-    </ng-template>
+            <button class="btn btn-sm btn-skyblue" *ngIf="dataItem.COST_TEST_OVRRD_FLG === 'Yes' || dataItem.COST_TEST_OVRRD_FLG === true" (click)="openReason(dataItem)" type="button" style="width: 120px;" title="Save and Validate"><span style="color:#FC4C02;">*</span> {{dataItem.COST_TEST_OVRRD_CMT === "" ? "Select" : "View Overrides"}}</button>
+        </ng-template>
     </kendo-grid-column>
     <kendo-grid-column title="Retail Cycle" field="RTL_CYC_NM" [headerClass]="{'headerClass':true}" [width]="140"
-        [hidden]="hasNoPermission"></kendo-grid-column>
+                       [hidden]="hasNoPermission">
+        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+            <span *ngIf="dataItem.RTL_CYC_NM == undefined || dataItem.RTL_CYC_NM === ''" [ngClass]="{'cell-warning': isErrorOrWarning(dataItem, 'RTL_CYC_NM'),'cell-information':isInformation(dataItem,'RTL_CYC_NM')}"></span>
+            <span *ngIf="dataItem.RTL_CYC_NM !== undefined && dataItem.RTL_CYC_NM !== ''" [innerHTML]="dataItem.RTL_CYC_NM"></span>
+        </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column title="Retail Pull $" field="RTL_PULL_DLR" [headerClass]="{'headerClass':true}" [width]="100"
-        [hidden]="!hasSpecialPricePermission"></kendo-grid-column>
+                       [hidden]="!hasSpecialPricePermission"></kendo-grid-column>
     <kendo-grid-column title="Market Segment" field="MKT_SEG" [headerClass]="{'headerClass':true}" [width]="140">
     </kendo-grid-column>
     <kendo-grid-column title="GEO" field="GEO" [headerClass]="{'headerClass':true}" [width]="140"></kendo-grid-column>
     <kendo-grid-column title="Payout Based On" field="PYOUT_BASE_ON" [headerClass]="{'headerClass':true}" [width]="140">
     </kendo-grid-column>
     <kendo-grid-column title="Consumption Reason" field="CNSMPTN_RSN" [headerClass]="{'headerClass':true}"
-        [width]="160"></kendo-grid-column>
+                       [width]="160"></kendo-grid-column>
     <kendo-grid-column title="Program Payment" field="PROG_PMT" [headerClass]="{'headerClass':true}" [width]="150">
     </kendo-grid-column>
     <kendo-grid-column title="Deal Group Comments" field="DEAL_GRP_CMNT" [headerClass]="{'headerClass':true}"
-        [width]="160"></kendo-grid-column>
+                       [width]="160"></kendo-grid-column>
     <kendo-grid-column title="Time / Date Last Cost Ran" field="LAST_COST_TEST_RUN" [headerClass]="{'headerClass':true}"
-        [width]="180"></kendo-grid-column>
+                       [width]="180"></kendo-grid-column>
 </kendo-grid>

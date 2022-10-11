@@ -146,7 +146,9 @@ export class dealToolsComponent{
             this.isQuoteLetterEnabled = false;
         
         this.isDaUser = ((<any>window).usrRole === "DA");//SalesForce Checkbox Disabled icon except for DA users
-
+        if (this.dataItem && !this.dataItem._settings) {
+            this.dataItem._settings = {};
+        }
         this.dataItem._settings.C_HOLD_DEALS = ((<any>window).usrRole === "FSE" || (<any>window).usrRole === "GA" || (<any>window).usrRole === "DA");
         this.dataItem._settings.C_DEL_DEALS = (((<any>window).usrRole === "FSE" || (<any>window).usrRole === "GA") && (this.dataItem?.SALESFORCE_ID === undefined || this.dataItem?.SALESFORCE_ID === ""));
 

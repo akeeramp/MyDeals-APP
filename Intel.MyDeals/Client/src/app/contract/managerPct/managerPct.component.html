@@ -142,27 +142,29 @@
                                     <div class="opUiContainer md dashboard">
                                         <div id='detailGrid_{{pt.DC_ID}}'
                                              class='opUiContainer md dashboard sumGridOptionsExpand oppo-grids new-now-wrap either-pin'>
-                                            <kendo-grid [data]="gridDataSet[pt.DC_ID]" [resizable]="true"
-                                                        [sortable]="true" [sort]="state.sort" [skip]="state.skip"
-                                                        [group]="state.group" [navigable]="true" [loading]="isLoading"
+                                            <kendo-grid [data]="gridDataSet[pt.DC_ID]" [resizable]="true" id="managerPCTGrid"
+                                                        [sortable]="true" [sort]="state[pt.DC_ID].sort" [skip]="state[pt.DC_ID].skip"
+                                                        [group]="state[pt.DC_ID].group" [navigable]="true" [loading]="isLoading"
                                                         [groupable]="false" [reorderable]="true"
                                                         (cellClick)="cellClickHandler($event)"
                                                         (cellClose)="cellCloseHandler($event)"
                                                         [selectable]="{ enabled: true, checkboxOnly: true}" filterable="menu"
-                                                        (dataStateChange)="dataStateChange($event)" style="height:auto"
-                                                        [filter]="state.filter" kendoGridSelectBy=""
+                                                        (dataStateChange)="dataStateChange($event,pt.DC_ID)" style="height:auto"
+                                                        [filter]="state[pt.DC_ID].filter" kendoGridSelectBy=""
                                                         [(selectedKeys)]="mySelection"
                                                         (selectedKeysChange)="onSelectedKeysChange()">
-                                                <kendo-grid-checkbox-column field="TOOLS"
-                                                                            [headerClass]="{'headerClass':true}" [width]="150">
-                                                    <ng-template kendoGridHeaderTemplate>
-                                                        <input type="checkbox"
-                                                               kendoCheckBox id="selectAllCheckboxId"
-                                                               (selectAllChange)="onSelectAllChange($event)"
-                                                               kendoGridSelectAllCheckbox [state]="selectAllState" /><label class="k-checkbox-label"
-                                                                                                                            for="selectAllCheckboxId"></label><span style="overflow:visible;white-space:normal; margin:4px 5px 0px;padding:0.786em 0.6em;font-size:12px;">Tools</span>
+                                                <kendo-grid-column field="TOOLS"
+                                                                   [headerClass]="{'headerClass':true}" [width]="150">
+                                                    <ng-template kendoGridHeaderTemplate let-dataItem="dataItem">
+                                                        <input type='checkbox' (click)="selectAllIDs($event,pt.DC_ID)" class='grid-link-checkbox with-font' id='chkDealTools_{{pt.DC_ID}}' [(ngModel)]="is_Deal_Tools_Checked[pt.DC_ID]"/>&nbsp;
+                                                        <label for='chkDealTools_{{pt.DC_ID}}'><b>Tools</b></label>
                                                     </ng-template>
-                                                </kendo-grid-checkbox-column>
+                                                    <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
+                                                        <deal-tools-angular [dataItem]='dataItem' [isSplitEnabled]='false' [isFileAttachmentEnabled]='false'
+                                                                            [isHistoryEnabled]='true' [isCommentEnabled]='false' [isEditable]='true'
+                                                                            [isQuoteLetterEnabled]='false' [isDeleteEnabled]='false' [gridData]="gridData.data" [contractData]="contractData"></deal-tools-angular>
+                                                    </ng-template>
+                                                </kendo-grid-column>
                                                 <kendo-grid-column title="PCT Result" field="PRC_CST_TST_STS"
                                                                    [headerClass]="{'headerClass':true}" [width]="120">
                                                     <ng-template kendoGridCellTemplate let-dataItem>

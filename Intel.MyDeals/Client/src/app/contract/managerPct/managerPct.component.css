@@ -590,3 +590,24 @@
 kendo-tabstrip.art-kendo-bars {
     margin-top: 34px !important;
 }
+
+.cell-warning {
+    background-color: #f9e9a5;
+}
+
+.cell-error {
+    background-color: #f4949d;
+    color: #ffffff !important;
+}
+
+#pctChild td span{
+    line-height:3 !important;
+}
+
+.cell-information {
+    background-color: #e5e5e5;
+}
+
+#managerPCTGrid{
+    overflow-y:scroll !important;
+}

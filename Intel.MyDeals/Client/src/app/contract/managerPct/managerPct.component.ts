@@ -2,7 +2,7 @@
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { DataStateChangeEvent, SelectAllCheckboxState, CellClickEvent, CellCloseEvent } from "@progress/kendo-angular-grid";
+import { DataStateChangeEvent, CellClickEvent, CellCloseEvent } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
 import { managerPctservice } from "./managerPct.service";
 import { ThemePalette } from "@angular/material/core";
@@ -13,6 +13,7 @@ import { contractManagerservice } from "../contractManager/contractManager.servi
 import * as moment from "moment";
 import { excludeDealGroupModalDialog } from "../managerExcludeGroups/excludeDealGroupModal.component";
 import { MatDialog } from "@angular/material/dialog";
+import * as _ from 'underscore';
 
 @Component({
     selector: "manager-pct",
@@ -62,7 +63,6 @@ export class managerPctComponent {
     private dealPtIdDict = {};
     private CostTestGroupDetails = {};
     public mySelection = [];
-    public selectAllState: SelectAllCheckboxState = "unchecked";
     private gridResult;
     public pricingStrategyFilter;
     private isExcludeGroup = false;
@@ -77,16 +77,8 @@ export class managerPctComponent {
     runIfStaleByHours = 3;
     forceRunValue = true;
     enabledPCT = false;
-
-    private state: State = {
-        skip: 0,
-        take: 25,
-        group: [],
-        filter: {
-            logic: "and",
-            filters: [],
-        }
-    }
+    private is_Deal_Tools_Checked: any[] = [];
+    private state: State[] = [];
     public gridData: any;
     gridDataSet = {}; parentGridData = {};
     titleFilter = ""; public isAllCollapsed = true; canEdit = true;
@@ -111,7 +103,9 @@ export class managerPctComponent {
                     if (response !== undefined) {
                         this.CostTestGroupDetails[pt.DC_ID] = response["CostTestGroupDetailItems"];
                         this.gridData = response["CostTestDetailItems"];
-                        this.gridDataSet[pt.DC_ID] = distinct(this.gridData, "DEAL_ID");
+                        for (let i = 0; i < this.gridData.length; i++)
+                            Object.assign(this.gridData[i], { PS_WF_STG_CD: pt.PS_WF_STG_CD });
+                        this.gridDataSet[pt.DC_ID] = process(distinct(this.gridData, "DEAL_ID"),this.state[pt.DC_ID]);
                         this.parentGridData[pt.DC_ID] = this.gridData;
                     }
                 },
@@ -123,9 +117,10 @@ export class managerPctComponent {
 
     }
 
-    dataStateChange(state: DataStateChangeEvent): void {
-        this.state = state;
-        this.gridData = process(this.gridResult, this.state);
+    dataStateChange(state: DataStateChangeEvent,id): void {
+        this.state[id] = state;
+        this.gridResult = this.gridDataSet[id].data;
+        this.gridDataSet[id] = process(this.gridResult, this.state[id]);
     }
 
     public cellClickHandler(args: CellClickEvent): void {
@@ -156,28 +151,6 @@ export class managerPctComponent {
     }
     public cellCloseHandler(args: CellCloseEvent): void {
         const { formGroup, dataItem } = args;
-    }
-
-    public onSelectedKeysChange(): void {
-        const len = this.mySelection.length;
-        if (len === 0) {
-            this.selectAllState = "unchecked";
-        } else if (len > 0 && len < this.gridResult.length) {
-            this.selectAllState = "indeterminate";
-        } else {
-            this.selectAllState = "checked";
-        }
-
-    }
-
-    public onSelectAllChange(checkedState: SelectAllCheckboxState): void {
-        if (checkedState === "checked") {
-            this.selectAllState = "checked";
-            this.mySelection = this.gridResult.map((val, index) => index);
-        } else {
-            this.mySelection = [];
-            this.selectAllState = "unchecked";
-        }
     }
 
     distinctPrimitive(fieldName: string) {
@@ -349,6 +322,13 @@ export class managerPctComponent {
         }
     }
 
+    selectAllIDs(event, ptId) {
+        this.is_Deal_Tools_Checked[ptId] = event.target.checked;
+        for (let i = 0; i < this.gridDataSet[ptId].data.length; i++) {
+            this.gridDataSet[ptId].data[i].isLinked = event.target.checked;
+        }
+    }
+
     ngOnInit() {
         if(this.tab === 'groupExclusionDiv'){
             this.selectedTab = 5;
@@ -358,6 +338,20 @@ export class managerPctComponent {
         this.lastRun = this.contractData.LAST_COST_TEST_RUN;
         this.contractId= this.contractData.DC_ID;
         this.loadPctDetails();
+        _.each(this.contractData?.PRC_ST, (item) => {
+            _.each(item.PRC_TBL, (prcTbl) => {
+                this.state[prcTbl.DC_ID] = {
+                    skip: 0,
+                    take: 25,
+                    group: [],
+                    filter: {
+                        logic: "and",
+                        filters: [],
+                    }
+                }
+                this.is_Deal_Tools_Checked[prcTbl.DC_ID] = false;
+            })           
+        })
         setTimeout(() => {
             var isPCForceReq = this.contractData?.PRC_ST?.filter(x => x.COST_TEST_RESULT == 'Not Run Yet' || x.COST_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
             var isMCForceReq = this.contractData?.PRC_ST?.filter(x => x.MEETCOMP_TEST_RESULT == 'Not Run Yet' || x.MEETCOMP_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
