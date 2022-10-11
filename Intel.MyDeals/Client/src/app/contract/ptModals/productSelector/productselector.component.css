@@ -109,11 +109,11 @@ a.prdAnchor {
 }
 
 .drillDown.btn-group button {
-    background-color: #01AEEF;
-    border-left: none;
-    border-top: none;
-    border-bottom: none;
-    border-right: 1px solid white;
+    background-color: #01AEEF !important;
+    border-left: none !important;
+    border-top: none !important;
+    border-bottom: none !important;
+    border-right: 2px solid white !important;
     color: white;
     /* White text */
     cursor: pointer;
@@ -150,8 +150,8 @@ a.prdAnchor {
 
         /* Add a background color on hover */
         .drillDown.btn-group button:hover {
-            background-color: #01AEEF;
-            color: #1a3e6f;
+            background-color: #01AEEF !important;
+            color: #1a3e6f !important;
         }
 
         .drillDown.btn-group button:focus,
@@ -232,7 +232,6 @@ a.prdAnchor {
     color: #fff;
     background-color: #01AEEF;
 }
-
 .prodSelector .leftNavFilter {
     background-color: #e7e7e8;
     height: calc(85vh - 390px);

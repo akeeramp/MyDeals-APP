@@ -9,7 +9,7 @@
             <div class="col-md-4 col-sm-4 col-xs-4">
                 <p class="prodHeader cursorArea">
                     Product Selector
-                    <img *ngIf="isLoading" src="/Images/loadingSmall.gif" style="margin-left: 25px" />
+                    <img *ngIf="isLoadingSearchProducts" src="/Images/loadingSmall.gif" style="margin-left: 25px" />
                 </p>
             </div>
             <div class="col-md-2 col-sm-2 col-xs-2" style="padding-top:8px;"></div>
@@ -23,9 +23,9 @@
                 <button class="btn btn-primary prdBtn fr" (click)="searchProduct()" style="margin: 0 0 0 10px;">
                     Search
                 </button>
-                <kendo-autocomplete id="productSearch" class="prod-autocomplete fr form-control input-sm" [(ngModel)]="userInput" [suggest]="true" [data]="productOptions" (ngModelChange)="changeProductOption(userInput)" valueField="Name">
+                <kendo-autocomplete id="productSearch" class="prod-autocomplete fr form-control input-sm" [(ngModel)]="userInput" [suggest]="false" [data]="productOptions" [filterable]="true"
+        (filterChange)="changeProductOption($event)" (valueChange)="searchProduct()" valueField="Name" [virtual]="virtual">
                 </kendo-autocomplete>
-
             </div>
         </div>
 
@@ -261,7 +261,7 @@
             <div *ngIf="!showTree && !showSuggestions">
                 <div *ngIf="!hideSelection">
                     <div class="row" style="margin:2px; margin-top: 40px">
-                        <ng-container *ngFor="let p of items | orderBy:'name'; let last = last; let index=index">
+                        <ng-container *ngFor="let p of items | orderBy:'name'; let last=last; let index=index">
                             <div class="clearfix" *ngIf="index % 4 == 0"></div>
                             <div class="col-sm-3 prodDrillDownLarge" title="{{checkForBlank(p.name)}}" [ngClass]="{'noLeftBorder':index % 4 == 0}">
                                 <div [ngClass]="{'input-group':p.allowMultiple}" class="drillDown">
@@ -278,9 +278,9 @@
                 <div *ngIf="hideSelection">
                     <div class="row" *ngIf="searchItems.length > 0" style="padding-left:10px;padding-right:10px;font-size:16px;">
                         <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
-                            <div class="btn-group" *ngFor="let p of searchItems | orderBy:'name' " role="group">
-                                <button type="button" title="{{p.name}}" [ngClass]="{'noborder':$last}" (click)="selectsearchItem(p)" class="btn btn-default">{{p.name}}</button>
-                            </div>
+                            <ng-container class="btn-group" *ngFor="let p of searchItems | orderBy:'name'; let last=last " role="group">
+                                <button type="button" title="{{p.name}}" [ngClass]="{'noborder':last}" (click)="selectsearchItem(p)" class="btn btn-default">{{p.name}}</button>
+                            </ng-container>
                         </div>
                     </div>
                     <div *ngIf="showSearchResults">

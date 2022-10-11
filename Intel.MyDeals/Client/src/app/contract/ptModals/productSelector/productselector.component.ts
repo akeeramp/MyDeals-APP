@@ -17,6 +17,7 @@ import List from "linqts/dist/src/list";
 @Component({
     selector: 'product-selector',
     templateUrl: 'Client/src/app/contract/ptModals/productSelector/productselector.component.html',
+    styleUrls: ['Client/src/app/contract/ptModals/productSelector/productSelector.component.css'],
     encapsulation: ViewEncapsulation.None
 })
 export class ProductSelectorComponent {
@@ -36,6 +37,7 @@ export class ProductSelectorComponent {
     private productSelectionLevels: any = {};
     private pricingTableRow: any = {};
     private isLoading: boolean = false;
+    private isLoadingSearchProducts: boolean = false;
     private isGridLoading: boolean = false;
     private spinnerMessageHeader: string = "PTE Loading";
     private spinnerMessageDescription: string = "PTE loading please wait";
@@ -605,7 +607,7 @@ export class ProductSelectorComponent {
         }
     }
     async searchProduct(isSuggestProduct?) {
-        this.isLoading = true;
+        this.isLoadingSearchProducts = true;
         let columnType;
         if (this.userInput == "") return [];
         if (isSuggestProduct) {
@@ -642,6 +644,7 @@ export class ProductSelectorComponent {
                     this.suggestedProducts = response;
                     this.showSuggestions = true;
                     this.initSuggestionGrid();
+                    this.isLoadingSearchProducts = false;
                     return;
                 }
                 if (this.disableSelection) {
@@ -653,10 +656,10 @@ export class ProductSelectorComponent {
                     this.showSuggestions = false;
                     this.processProducts(response);
                 }
-                this.isLoading = false;
+                this.isLoadingSearchProducts = false;
             }, (error) => {
                 this.loggerSvc.error("Unable to get products.", error);
-                this.isLoading = false;
+                this.isLoadingSearchProducts = false;
             });
         return this.suggestedProducts;
     }
@@ -713,12 +716,14 @@ export class ProductSelectorComponent {
         return;
     }
     changeProductOption(userInput) {
+        this.isLoadingSearchProducts = true;
         if (userInput === "") {
+            this.isLoadingSearchProducts = false;
             return [];
         } else {
-            userInput = userInput.replace(/["]/g, "");
+            this.userInput = userInput.replace(/["]/g, "");
             var dto = {
-                filter: userInput,
+                filter: this.userInput,
                 mediaCode: this.pricingTableRow.PROD_INCLDS,
                 startDate: this.pricingTableRow.START_DT,
                 endDate: this.pricingTableRow.END_DT,
@@ -726,8 +731,10 @@ export class ProductSelectorComponent {
             };
             this.prodSelSVC.GetSearchString(dto).subscribe(response => {
                 this.productOptions = response;
+                this.isLoadingSearchProducts = false;
             }, error => {
                 this.loggerSvc.error("Unable to get product suggestions.", '', error);
+                this.isLoadingSearchProducts = false;
             });
         }
     }
