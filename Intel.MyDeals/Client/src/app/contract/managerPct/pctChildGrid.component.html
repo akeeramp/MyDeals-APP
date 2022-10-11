@@ -1,6 +1,6 @@
 ﻿<link href="/Client/src/app/contract/managerPct/managerPct.component.css" rel="stylesheet" />
 <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="5" [skip]="skip" [pageable]="true" scrollable="none"
-    (pageChange)="pageChange($event)" [navigable]="true" kendoGridFocusable style="height:auto;">
+    (pageChange)="pageChange($event)" [navigable]="true" kendoGridFocusable style="height:auto;" (cellClick)="cellClickHandler($event)">
     <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="150"></kendo-grid-column>
     <kendo-grid-column title="PCT Result" field="PRC_CST_TST_STS" [headerClass]="{'headerClass':true}" [width]="120">
         <ng-template *ngIf="CAN_VIEW_COST_TEST" kendoGridCellTemplate let-dataItem>
@@ -17,6 +17,9 @@
     <kendo-grid-column title="Deal Description" field="DEAL_DESC" [headerClass]="{'headerClass':true}" [width]="140">
     </kendo-grid-column>
     <kendo-grid-column title="Group Deals" field="GRP_DEALS" [headerClass]="{'headerClass':true}" [width]="140">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span style="color: rgb(0, 113, 197); cursor: pointer; text-align: center;">View</span>
+        </ng-template>
     </kendo-grid-column>
     <kendo-grid-column title="Deal Start/End" field="DEAL_STRT_DT" [headerClass]="{'headerClass':true}" [width]="180">
         <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.DEAL_STRT_DT | date:
@@ -37,23 +40,50 @@
     <kendo-grid-column title="Deal Stage" field="WF_STG_CD" [headerClass]="{'headerClass':true}" [width]="80"
         [hidden]="true"></kendo-grid-column>
     <kendo-grid-column title="CAP" field="CAP" [headerClass]="{'headerClass':true}" [width]="100"
-        [hidden]="!hasPermissionPrice"></kendo-grid-column>
+        [hidden]="!hasPermissionPrice">
+        <ng-template kendoGridCellTemplate let-dataItem>
+             <span>
+                 {{dataItem.CAP | currency}}
+             </span>
+         </ng-template></kendo-grid-column>
     <kendo-grid-column title="ECAP Price" field="ECAP_PRC" [headerClass]="{'headerClass':true}" [width]="120">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span>
+                {{dataItem.ECAP_PRC | currency}}
+            </span>
+        </ng-template>
     </kendo-grid-column>
     <kendo-grid-column title="ECAP Floor" field="ECAP_FLR" [headerClass]="{'headerClass':true}" [width]="120"
-        [hidden]="!hasPermissionPrice"></kendo-grid-column>
-    <kendo-grid-column title="Lowest Net Price" field="LOW_NET_PRC" [headerClass]="{'headerClass':true}" [width]="140">
+        [hidden]="!hasPermissionPrice">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span>
+                {{dataItem.ECAP_FLR | currency}}
+            </span>
+        </ng-template></kendo-grid-column>
+    <kendo-grid-column title="Lowest Net Price" field="LOW_NET_PRC" format="{0:c}" [headerClass]="{'headerClass':true}" [width]="140">
+        <ng-template kendoGridCellTemplate let-dataItem>
+           <div title="{{ dataItem?.LNP_FRMULA ? dataItem.LNP_FRMULA : ''}}">
+            <span>
+                {{dataItem.LOW_NET_PRC | currency}}
+            </span>
+           </div>
+        </ng-template>
     </kendo-grid-column>
     <kendo-grid-column title="Cost" field="PRD_COST" [headerClass]="{'headerClass':true}" [width]="100"
-        [hidden]="!hasPermissionPrice"></kendo-grid-column>
+        [hidden]="!hasPermissionPrice">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span>
+                {{dataItem.PRD_COST | currency}}
+            </span>
+        </ng-template></kendo-grid-column>
     <kendo-grid-column title="Cost Type" field="CST_TYPE" [headerClass]="{'headerClass':true}" [width]="120"
         [hidden]="!hasPermissionPrice"></kendo-grid-column>
     <kendo-grid-column title="Cost Test Analysis Override" field="COST_TEST_OVRRD_FLG"
         [headerClass]="{'headerClass':true}" [width]="150" [hidden]="hasNoPermissionOvr">
         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
             <div style="text-align: center;">
-              <span *ngIf="dataItem.PRC_CST_TST_STS === 'Pass' ||  dataItem.PRC_CST_TST_STS === 'NA' || hasNoPermission === true" (change)="onOff(dataItem.COST_TEST_OVRRD_FLG)" style="vertical-align: -webkit-baseline-middle;"></span>
-              <span *ngIf="dataItem.PRC_CST_TST_STS !=='Pass' && dataItem.PRC_CST_TST_STS !== 'NA' && hasNoPermission !== true">
+              <span *ngIf="dataItem.PRC_CST_TST_STS === 'Pass' ||  dataItem.PRC_CST_TST_STS === 'NA'|| forceReadOnly === true || hasNoPermission === true" (change)="onOff(dataItem.COST_TEST_OVRRD_FLG)" style="vertical-align: -webkit-baseline-middle;">{{dataItem.COST_TEST_OVRRD_FLG}}</span>
+              <span *ngIf="dataItem.PRC_CST_TST_STS !=='Pass' && dataItem.PRC_CST_TST_STS !== 'NA' && hasNoPermission !== true && forceReadOnly !== true">
                 <label class="switch">
                     <input class="switch-input" type="checkbox" (change)="changeReasonFlg(dataItem)" [(ngModel)]="dataItem.COST_TEST_OVRRD_FLG" />
                     <span class="switch-label" data-on="Yes" data-off="No"></span> 

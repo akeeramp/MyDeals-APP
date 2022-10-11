@@ -186,6 +186,9 @@
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Group Deals" field="GRP_DEALS"
                                                                    [headerClass]="{'headerClass':true}" [width]="140">
+                                                                   <ng-template kendoGridCellTemplate let-dataItem>
+                                                                    <span style="color: rgb(0, 113, 197); cursor: pointer; text-align: center;" *ngIf="dataItem?.PRC_CST_TST_STS !== 'NA'">View</span>
+                                                                </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Deal Start/End" field="DEAL_STRT_DT"
                                                                    [headerClass]="{'headerClass':true}" [width]="180">
@@ -270,7 +273,7 @@ dataItem.OEM_PLTFRM_LNCH_DT|
                                                                    [headerClass]="{'headerClass':true}" [width]="180">
                                                 </kendo-grid-column>
                                                 <div *kendoGridDetailTemplate="let dataItem">
-                                                    <pct-child-grid [parent]="parentGridData[pt.DC_ID]"
+                                                    <pct-child-grid [parent]="parentGridData[pt.DC_ID]" [contractData]="contractData"
                                                                     [child]="dataItem"></pct-child-grid>
                                                 </div>
                                             </kendo-grid>

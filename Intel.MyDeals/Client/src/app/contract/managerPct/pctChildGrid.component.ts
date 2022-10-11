@@ -2,7 +2,7 @@
 import { Component, Input } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { GridDataResult, SelectAllCheckboxState, PageChangeEvent } from "@progress/kendo-angular-grid";
+import { GridDataResult, SelectAllCheckboxState, PageChangeEvent, CellClickEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { managerPctservice } from "./managerPct.service";
 import { ThemePalette } from "@angular/material/core";
@@ -46,6 +46,7 @@ export class pctChildGridComponent {
     private gridResult;
     public childGridResult;
     public pctMasterdata = [];
+    forceReadOnly = false;
 
     private CAN_EDIT_COST_TEST = this.lnavSvc.chkDealRules('C_EDIT_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "SA" && (<any>window).isSuper); // Can go to cost test screen and make changes
     private hasNoPermission = !(this.CAN_EDIT_COST_TEST == undefined ? this.lnavSvc.chkDealRules('C_EDIT_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "SA" && (<any>window).isSuper) : this.CAN_EDIT_COST_TEST);
@@ -113,7 +114,11 @@ export class pctChildGridComponent {
             }
         });
     }
-
+    cellClickHandler(args: CellClickEvent): void {
+        if (args.column.field == "GRP_DEALS") {
+            // this.openExcludeDealGroupModal(args.dataItem);
+        }
+    }
     ngOnInit() {
         this.userRole = (<any>window).usrRole;
         this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
@@ -122,6 +127,9 @@ export class pctChildGridComponent {
             this.isPSExpanded[i] = false;
             if (x.PRC_TBL != undefined) x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
         })
+        if(this.contractData?._behaviors?.isReadOnly['COST_TEST_RESULT']){
+            this.forceReadOnly = this.contractData?._behaviors?.isReadOnly['COST_TEST_RESULT'];
+        }
         this.gridResult = this.parent.filter(x => x.DEAL_ID == this.child.DEAL_ID);
         this.gridData = process(this.gridResult, this.childState);
     }

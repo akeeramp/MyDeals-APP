@@ -20,6 +20,7 @@ import { RowClassArgs } from "@progress/kendo-angular-grid";
 })
 
 export class excludeDealGroupModalDialog {
+    pctGroupDealsView: boolean = false;
     constructor(public dialogRef: MatDialogRef<excludeDealGroupModalDialog>, @Inject(MAT_DIALOG_DATA) public dataItem: any, private managerExcludeGrpSvc: managerExcludeGroupsService, private loggerSvc: logger, private sanitized: DomSanitizer) {
     }
 
@@ -121,7 +122,10 @@ export class excludeDealGroupModalDialog {
     }
 
     loadExcludeDealGroupModel() {
-        this.dealId = this.dataItem.cellCurrValues.DC_ID;
+        if(this.dataItem.cellCurrValues?.DEAL_ID){
+            this.pctGroupDealsView = true;
+        }
+        this.dealId = this.dataItem.cellCurrValues?.DC_ID ? this.dataItem.cellCurrValues.DC_ID : this.dataItem.cellCurrValues.DEAL_ID;
         this.dealArray.push(this.dataItem.cellCurrValues);
         this.gridResult = this.dealArray;
         this.gridData = process(this.gridResult, this.state);

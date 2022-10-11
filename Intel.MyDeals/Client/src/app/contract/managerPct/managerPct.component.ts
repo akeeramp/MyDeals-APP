@@ -11,6 +11,8 @@ import { headerService } from "../../shared/header/header.service";
 import { FormBuilder } from "@angular/forms";
 import { contractManagerservice } from "../contractManager/contractManager.service";
 import * as moment from "moment";
+import { excludeDealGroupModalDialog } from "../managerExcludeGroups/excludeDealGroupModal.component";
+import { MatDialog } from "@angular/material/dialog";
 
 @Component({
     selector: "manager-pct",
@@ -24,7 +26,7 @@ export class managerPctComponent {
     contractId: string;
     lastRun: any;
     refreshPage: boolean;
-    constructor(private loggerSvc: logger, private contractManagerSvc:contractManagerservice,private managerPctSvc: managerPctservice, private lnavSvc: lnavService, private headerSvc: headerService, private formBuilder: FormBuilder) {
+    constructor(private loggerSvc: logger,protected dialog: MatDialog, private contractManagerSvc:contractManagerservice,private managerPctSvc: managerPctservice, private lnavSvc: lnavService, private headerSvc: headerService, private formBuilder: FormBuilder) {
         //pls dont remove this even it its not as part of the route this is to handle condtions when we traverse between contract details with in manage tab
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
@@ -133,8 +135,25 @@ export class managerPctComponent {
                 args.columnIndex,
             );
         }
+        if (args.column.field == "GRP_DEALS") {
+            this.openExcludeDealGroupModal(args.dataItem);
+        }
     }
-
+    openExcludeDealGroupModal(dataItem) {
+        const dialogRef = this.dialog.open(excludeDealGroupModalDialog, {
+            width: "1900px",
+            height: "600px",
+            data: {
+                cellCurrValues: dataItem
+            }
+        });
+        dialogRef.afterClosed().subscribe((returnVal) => {
+            if (returnVal != undefined && returnVal != null && returnVal.length > 0) {
+                // this.updateModalDataItem(dataItem, "DEAL_GRP_CMNT", returnVal[0].DEAL_GRP_CMNT);
+                // this.updateModalDataItem(dataItem, "DEAL_GRP_EXCLDS", returnVal[0].DEAL_GRP_EXCLDS);
+            }
+        });
+    }
     public cellCloseHandler(args: CellCloseEvent): void {
         const { formGroup, dataItem } = args;
     }
