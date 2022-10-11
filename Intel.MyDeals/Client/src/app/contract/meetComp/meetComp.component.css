@@ -505,3 +505,14 @@
 .all-labels {
     font-weight: bold !important;
 }
+
+.loaderMeet meet-comp-contract loading-panel-angular .ss-loading-overlay {
+    top: -118px !important;
+    display: flex;
+    justify-content: center;
+    height: 150% !important
+}
+
+.loaderMeet meet-comp-contract loading-panel-angular .ss-loading-panel.ss-Info {
+    margin-top: 150px !important;
+}

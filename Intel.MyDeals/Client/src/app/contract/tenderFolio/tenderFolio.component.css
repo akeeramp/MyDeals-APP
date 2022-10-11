@@ -311,3 +311,13 @@ li.k-button:hover {
     border-color: #f0f0f0 !important;
     box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
 }
+
+app-tender-folio .folioloader .ss-loading-overlay {
+    width: 100%;
+    margin-left: auto;
+    margin-right: auto;
+    height: 100%;
+    top: 93px;
+    left: 0;
+    background: rgb(255 255 255 / 42%);
+}

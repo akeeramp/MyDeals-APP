@@ -1093,3 +1093,14 @@ kendo-treeview.k-widget.k-treeview.fiend-tree ul li kendo-checkbox .k-checkbox {
 .modal-body.all-wheat {
     overflow: hidden;
 }
+
+.loadpublish publish-tender loading-panel-angular .ss-loading-overlay {
+    top: -118px !important;
+    display: flex;
+    justify-content: center;
+    height: 150% !important
+}
+
+.loadpublish publish-tender loading-panel-angular .ss-loading-panel {
+    margin-top: 150px !important;
+}

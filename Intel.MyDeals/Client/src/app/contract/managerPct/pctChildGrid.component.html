@@ -1,6 +1,6 @@
 ﻿<link href="/Client/src/app/contract/managerPct/managerPct.component.css" rel="stylesheet" />
 <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="5" [skip]="skip" [pageable]="true" scrollable="none"
-    (pageChange)="pageChange($event)" [navigable]="true" kendoGridFocusable>
+    (pageChange)="pageChange($event)" [navigable]="true" kendoGridFocusable style="height:auto;">
     <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="150"></kendo-grid-column>
     <kendo-grid-column title="PCT Result" field="PRC_CST_TST_STS" [headerClass]="{'headerClass':true}" [width]="120">
         <ng-template *ngIf="CAN_VIEW_COST_TEST" kendoGridCellTemplate let-dataItem>

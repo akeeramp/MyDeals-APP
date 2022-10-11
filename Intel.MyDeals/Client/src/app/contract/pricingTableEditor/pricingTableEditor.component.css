@@ -182,3 +182,14 @@ td:not(.error-cell).readonly-cell {
     background: #fff;
     color: rgba(0, 0, 0, .87);
 }
+
+.parent-one.loaderPTE pricing-table-editor loading-panel-angular .ss-loading-overlay {
+    top: -118px !important;
+    display: flex;
+    justify-content: center;
+    height: 150% !important
+}
+
+.parent-one.loaderPTE pricing-table-editor loading-panel-angular .ss-loading-panel.ss-Info {
+    margin-top: 150px !important;
+}
