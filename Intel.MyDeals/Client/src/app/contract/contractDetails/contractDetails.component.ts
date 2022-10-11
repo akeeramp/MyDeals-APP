@@ -543,7 +543,7 @@ export class contractDetailsComponent {
         }
     }
 
-    getCurrentQuarterDetails(changeEvent = "") {
+    getCurrentQuarterDetails(changeEvent = "", contract_START_DT = null) {
         let isValidDataPresent = true;
         let yearValue, qtrValue, isDate, customerMemberSid = null;
         customerMemberSid = this.contractData.CUST_MBR_SID == "" ? null : this.contractData.CUST_MBR_SID;
@@ -612,12 +612,16 @@ export class contractDetailsComponent {
                     if (this.END_DT != undefined && this.START_DT != undefined) {
                         this.validateDate(changeEvent);
                     }
-                },(err)=>{
-                    this.loggerSvc.error("Unable to get current quarter data","Error",err);
+                }, (err) => {
+                    this.loggerSvc.error("Unable to get current quarter data", "Error", err);
                     this.isLoading = false;
                 });
+            } else if (changeEvent == "START_DT" && contract_START_DT != null && contract_START_DT.status != 'INVALID') {
+                const strtDate = new Date(this.contractData.START_DT);
+                const selectedDate = this.START_DT;
+                this.backDateCheck(strtDate, selectedDate);
+            }
         }
-    }
 
     validateDate(dateChange) {
         this.contractData._behaviors.isError['START_DT'] = this.contractData._behaviors.isError['END_DT'] = false;

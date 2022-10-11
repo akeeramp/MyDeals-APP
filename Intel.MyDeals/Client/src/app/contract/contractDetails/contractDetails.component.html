@@ -69,8 +69,8 @@
                                         <div class="fl opUiLabel"><span *ngIf="contractData?._behaviors?.isRequired?.START_DT" class="isReqField">* </span>Select Start Date:</div>
                                         <div class="inlineDisplay">
                                             <div class="blockdisplay">
-                                                <kendo-datepicker #picker class="fl opUiElement dateclass" calendarType="classic"
-                                                                  [(ngModel)]="START_DT" name="START_DT" (valueChange)="getCurrentQuarterDetails('START_DT')" [ngClass]="{'input-error': contractData?._behaviors?.validMsg?.START_DT}" [disabled]="contractData?._behaviors?.isReadOnly?.START_DT"
+                                                <kendo-datepicker #picker class="fl opUiElement dateclass" calendarType="classic" [incompleteDateValidation]="true" #contract_START_DT="ngModel"
+                                                                  [(ngModel)]="START_DT" name="contract_START_DT" (valueChange)="getCurrentQuarterDetails('START_DT', contract_START_DT)" [ngClass]="{'input-error': contractData?._behaviors?.validMsg?.START_DT}" [disabled]="contractData?._behaviors?.isReadOnly?.START_DT"
                                                                   required></kendo-datepicker>
                                                 <kendo-formerror>
                                                     {{contractData?._behaviors?.validMsg?.START_DT}}
