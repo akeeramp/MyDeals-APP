@@ -18,6 +18,7 @@ import { dealProductsModalComponent } from "../ptModals/dealProductsModal/dealPr
 import * as _ from 'underscore';
 import { PTE_Config_Util } from "../PTEUtils/PTE_Config_util"
 import { DecimalPipe, CurrencyPipe} from '@angular/common';
+import { PTE_Common_Util } from "../PTEUtils/PTE_Common_util";
 
 @Component({
     selector: "all-deals",
@@ -55,8 +56,8 @@ export class allDealsComponent {
     public exportFileName: string;
     private color: ThemePalette = 'primary';
     private curPricingTable: any = {};
+    private dealType: string;
     wrapEnabled = false;
-    private fields: any;
     public dealTypes: any = [
         { dealType: "ECAP", name: "ECAP" },
         { dealType: "FLEX", name: "FLEX" },
@@ -66,6 +67,7 @@ export class allDealsComponent {
         { dealType: "KIT", name: "Kit" },
         { dealType: "PROGRAM", name: "Program" }
     ];
+    private allTabColumns: any[] = [];
     private state: State = {
         skip: 0,
         take: 25,
@@ -142,7 +144,7 @@ export class allDealsComponent {
         e.preventDefault();
         this.selectedTab = e.title;
         let group = this.groups.filter(x => x.name == this.selectedTab);
-        this.fields = (group[0].dealType === 'VOL_TIER' || group[0].dealType === 'FLEX') ? PTE_Config_Util.volTierFields : group[0].dealType === 'REV_TIER' ? PTE_Config_Util.revTierFields : group[0].dealType === 'DENSITY' ? PTE_Config_Util.densityFields : [];
+        this.dealType = group[0].dealType == "ALL_TYPES" ? 'VOL_TIER' : group[0].dealType;
         if (group[0].isTabHidden) {
             let tabs = this.groups.filter(x => x.isTabHidden === false);
             this.selectedTab = tabs[0].name;
@@ -254,18 +256,20 @@ export class allDealsComponent {
                 }
             }
         } else {
-            this.columns= this.allColumns;
+            this.columns = this.allTabColumns;
         }
-        this.columns.push({
-            bypassExport:false,
-            field:"NOTES",
-            hidden: false,
-            template:'',
-            filterable:true,
-            sortable:true,
-            title:"Notes",
-            width:150
-        });
+        if (this.columns.filter(x => x.field == "NOTES").length == 0) {
+            this.columns.push({
+                bypassExport: false,
+                field: "NOTES",
+                hidden: false,
+                template: '',
+                filterable: true,
+                sortable: true,
+                title: "Notes",
+                width: 150
+            });
+        }
         if (group[0].dealType != "ECAP" && this.selectedTab != "All") {
             if (group[0].dealType == 'KIT') {
                 let col = this.wipTemplate?.columns.filter(x => x.field == 'KIT_ECAP' && x.hidden == false);
@@ -352,61 +356,27 @@ export class allDealsComponent {
                     }
                   })
         }
-        this.groups.push({ dealType:'ALL_TYPES', name: "All" })
+        this.groups.push({ dealType: 'ALL_TYPES', name: "All" })
+        this.loadAllTabColumns();
         this.selectedTab = this.groups[0].name;
-        this.fields = (this.groups[0].dealType === 'VOL_TIER' || this.groups[0].dealType === 'FLEX') ? PTE_Config_Util.volTierFields : this.groups[0].dealType === 'REV_TIER' ? PTE_Config_Util.revTierFields : this.groups[0].dealType === 'DENSITY' ? PTE_Config_Util.densityFields : [];
+        this.dealType = this.groups[0].dealType;
         this.filterColumnbyGroup(this.selectedTab);
         this.filterdealbyTab();
     }
-    uiDimTrkrControlWrapper(passedData) {
-        return GridUtil.uiDimTrkrControlWrapper(passedData);
-    }
-    uiControlScheduleWrapper(passedData) {
-        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
-        var numTiers = 0;
-        var tiers = data.TIER_NBR;
-        for (var key in tiers) {
-            if (tiers.hasOwnProperty(key) && key.indexOf("___") >= 0) {
-                numTiers++;
-                var dim = "10___" + numTiers;
-                for (var f = 0; f < this.fields.length; f++) {
-                    if (!Number.isNaN(Number(data[this.fields[f].field][key]))) {
-                        if (this.fields[f].format == "number" && this.fields[f].field == "INCENTIVE_RATE")
-                            data[this.fields[f].field][dim] = this.decimalPipe.transform(data[this.fields[f].field][dim], "1.0-2");
-                        else if (this.fields[f].format == "number")
-                            data[this.fields[f].field][dim] = this.decimalPipe.transform(data[this.fields[f].field][dim], "1.0-0");
-                        else
-                            data[this.fields[f].field][dim] = this.currencyPipe.transform(data[this.fields[f].field][dim], 'USD', 'symbol', '1.2-2');
+    loadAllTabColumns() {
+        let uitemp = PTE_Common_Util.deepClone(this.UItemplate);
+        for (var i = 0; i < this.groups.length; i++) {
+            if (this.groups[i].name !== "All") {
+                let wipTempCol = uitemp.ModelTemplates.WIP_DEAL[this.groups[i].dealType];
+                for (var j = 0; j < wipTempCol.columns.length; j++) {
+                    if (wipTempCol.columns[j].field != 'details' && wipTempCol.columns[j].field != 'tools') {
+                        let col = wipTempCol.columns[j];
+                        if (this.allTabColumns.filter(x => x.field == col.field).length == 0)
+                            this.allTabColumns.push(col);
                     }
                 }
-            }
+            }            
         }
-        return GridUtil.uiControlScheduleWrapper(data);
-    }
-    uiControlScheduleWrapperDensity(passedData) {
-        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
-        var numTiers = 0;
-        var tiers = data.TIER_NBR;
-        for (var key in tiers) {
-            if (tiers.hasOwnProperty(key) && key.indexOf("___") >= 0) {
-                numTiers++;
-                for (var f = 0; f < this.fields.length; f++) {
-                    var dim = (this.fields[f].field == "DENSITY_BAND" || this.fields[f].field == "DENSITY_RATE") ? "8___" : "10___" + numTiers;
-                    if (this.fields[f].field == "DENSITY_RATE") {
-                        for (var bands = 1; bands <= passedData.NUM_OF_DENSITY; bands++) {
-                            data[this.fields[f].field][dim + bands + '____' + key] = this.currencyPipe.transform(data[this.fields[f].field][dim + bands + '____' + key], 'USD', 'symbol', '1.2-2');
-                        }
-                    }
-                    else if (this.fields[f].field == "STRT_PB" || this.fields[f].field == "END_PB") {
-                        if (!Number.isNaN(Number(data[this.fields[f].field][key]))) {
-                            if (this.fields[f].format == "number")
-                                data[this.fields[f].field][key] = this.decimalPipe.transform(data[this.fields[f].field][key], "1.0-3");
-                        }
-                    }
-                }
-            }
-        }
-        return GridUtil.uiControlScheduleWrapperDensity(data);
     }
     ngOnInit() {
         this.loadAllDealsData();

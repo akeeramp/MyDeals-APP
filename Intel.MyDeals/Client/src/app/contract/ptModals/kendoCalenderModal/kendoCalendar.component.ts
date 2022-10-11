@@ -38,7 +38,7 @@ import * as _ from "underscore";
 			<div class="col-md-12">
 				<div class="fr">
 					<button class="btn btn-warning" type="button" (click)="onNoClick()">Cancel</button>
-					<button class="btn btn-primary" type="button" (click)="onSave()" [disabled]="(!isValidDate)">Add to Grid</button>
+					<button class="btn btn-primary" type="button" (click)="onSave()" [disabled]="(!isValidDate)" [ngStyle]="{'opacity': isValidDate? 1 : .3}">Add to Grid</button>
 				</div>
 			</div>
 		</div>
@@ -71,20 +71,20 @@ import * as _ from "underscore";
 
 		//check following validations are only for Start Date and End Date
 		if (this.data.colName == "START_DT" || this.data.colName == "END_DT") {
-			this.isStartDate == (this.data.colName === "START_DT");
+			this.isStartDate = (this.data.colName === "START_DT");
 			// date must overlapp contract range... not inside of the range - Tender contracts don't observe start/end date within contract.
 			if (this.errorMsg != undefined) { // Put in to clear out old error messages
 				this.errorMsg = undefined;
 			}
-			if (this.isStartDate && value > new Date(this.data.contractEndDate) && this.data.contractIsTender !== "1") {
+			if (this.isStartDate && value > new Date(this.data.contractEndDate) && this.data.contractIsTender !== true) {
 				this.errorMsg = "Dates must overlap contract's date range (" + this.data.contractStartDate.split(' ')[0] + " - " + this.data.contractEndDate.split(' ')[0] + ").";
 				this.isValidDate = false;
 			}
-			if (!this.isStartDate && value < new Date(this.data.contractStartDate) && this.data.contractIsTender !== "1") {
+			if (!this.isStartDate && value < new Date(this.data.contractStartDate) && this.data.contractIsTender !== true) {
 				this.errorMsg = "Dates must overlap contract's date range (" + this.data.contractStartDate.split(' ')[0] + " - " + this.data.contractEndDate.split(' ')[0] + ").";
 				this.isValidDate = false;
 			}
-			if (((this.isStartDate && value < new Date(this.data.contractStartDate)) || (!this.isStartDate && value > new Date(this.data.contractEndDate))) && this.data.contractIsTender !== '1') {
+			if (((this.isStartDate && value < new Date(this.data.contractStartDate)) || (!this.isStartDate && value > new Date(this.data.contractEndDate))) && this.data.contractIsTender !== true) {
 				this.errorMsg = "Extending Deal Dates will result in the extension of Contract Dates. Please click 'Add To Grid', if you want to proceed.";
 				this.isDateOverlap = true;
 			}

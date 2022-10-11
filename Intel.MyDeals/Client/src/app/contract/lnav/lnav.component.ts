@@ -839,7 +839,12 @@ export class lnavComponent {
         this.newStrategy.IS_HYBRID_PRC_STRAT = false;
         this.contractData?.PRC_ST?.map((x, i) => {
             this.isPSExpanded[i] = false
-        });        
+        });
+        if (this.contractData && (this.contractData.PRC_ST == undefined || this.contractData.PRC_ST.length == 0)){
+            if (this.C_ADD_PRICING_STRATEGY) {
+                this.toggleAddStrategy();
+            }
+        }
         //code for autofill change to accordingly change values
         this.lnavSvc.autoFillData.subscribe(res => {
             this.autoFillData = res;

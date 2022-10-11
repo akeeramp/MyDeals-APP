@@ -146,6 +146,8 @@ export class GridUtil {
         return tmplt;
     }
     static uiControlScheduleWrapper(passedData) {
+        if (passedData.OBJ_SET_TYPE_CD !== 'VOL_TIER' && passedData.OBJ_SET_TYPE_CD !== 'FLEX' && passedData.OBJ_SET_TYPE_CD !== 'REV_TIER')
+            return "";
         var fields = (passedData.OBJ_SET_TYPE_CD === 'VOL_TIER' || passedData.OBJ_SET_TYPE_CD === 'FLEX') ? PTE_Config_Util.volTierFields : PTE_Config_Util.revTierFields;
         var tmplt = '<div class="col-md-12">';
         tmplt += '<div class="col-md-12 rowHeight">';
@@ -167,7 +169,7 @@ export class GridUtil {
                     tmplt += '<div class="col-md-3 rowValueHeight rowRightBorder textRightAlign' + this.getClassNm(passedData, fields[f].field) + '">';
                     if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[fields[f].field] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim])
                         tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[fields[f].field + '_' + dim] + '"></div>';
-                    if (passedData[fields[f].field][dim] != undefined && passedData[fields[f].field][dim] != null)
+                    if (passedData[fields[f].field] && passedData[fields[f].field][dim] != undefined && passedData[fields[f].field][dim] != null)
                         tmplt += '<span class="ng-binding dataPadding">' + passedData[fields[f].field][dim] + '</span>';
                     tmplt += '</div>';
                 }

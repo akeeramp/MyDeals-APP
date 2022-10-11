@@ -93,6 +93,12 @@
                                 <ng-template *ngIf="column.field == 'PASSED_VALIDATION'" kendoGridHeaderTemplate>
                                     <i class='intelicon-protection-solid' style='color: #00AEEF; font-size: 20px;'></i>
                                 </ng-template>
+                                <ng-template *ngIf="column.field == 'EXCLUDE_AUTOMATION'" kendoGridHeaderTemplate>
+                                    <div [innerHTML]="column.title"></div>
+                                </ng-template>
+                                <ng-template *ngIf="column.field !== 'PASSED_VALIDATION' && column.field !== 'EXCLUDE_AUTOMATION'" kendoGridHeaderTemplate>
+                                    <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" [grid_Result]="gridResult"></deal-editor-header>
+                                </ng-template>
                                 <ng-template *ngIf="column.field == 'ECAP_PRICE'" let-dataItem="dataItem" kendoGridCellTemplate>
                                     <span>{{getFormatedDim(dataItem, 'ECAP_PRICE','20___0','currency')}}</span>
                                 </ng-template>
@@ -115,12 +121,8 @@
                                     <i class="intelicon-protection-solid bigIcon validf_{{dataItem.PASSED_VALIDATION}}" *ngIf="dataItem.PASSED_VALIDATION !=='Valid' && dataItem.PASSED_VALIDATION !=='Dirty' && dataItem.PASSED_VALIDATION !=='Complete' && dataItem.PASSED_VALIDATION !=='Finalizing'" title="{{dataItem.PASSED_VALIDATION || 'Not validated yet'}}"></i>
 
                                 </ng-template>
-                                <ng-template *ngIf="column.field == 'TRKR_NBR'" let-dataItem="dataItem" kendoGridCellTemplate>
-                                    <span [innerHTML]="uiDimTrkrControlWrapper(dataItem)"></span>
-                                </ng-template>
-                                <ng-template *ngIf="column.field == 'TIER_NBR'" let-dataItem="dataItem" kendoGridCellTemplate>
-                                        <span class="breakoutColumn tier" *ngIf="dataItem.OBJ_SET_TYPE_CD == 'VOL_TIER' || dataItem.OBJ_SET_TYPE_CD == 'REV_TIER' || dataItem.OBJ_SET_TYPE_CD == 'FLEX'" [innerHTML]="uiControlScheduleWrapper(dataItem)"></span>
-                                        <span class="breakoutColumn tier" *ngIf="dataItem.OBJ_SET_TYPE_CD == 'DENSITY'" [innerHTML]="uiControlScheduleWrapperDensity(dataItem)"></span>
+                                <ng-template *ngIf="column.field !== 'TITLE' && column.field !== 'EXCLUDE_AUTOMATION' && column.field !== 'tender_actions' && column.field !== 'PASSED_VALIDATION' && column.field !== 'ECAP_PRICE' && column.field !== 'KIT_ECAP' && column.field !== 'WF_STG_CD' && column.field !== 'CUST_MBR_SID'" let-dataItem="dataItem" kendoGridCellTemplate>
+                                    <deal-editor-cell [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="dealType" [in_DataItem]="dataItem" [contract_Data]="contractData" [grid_Data]="gridData.data"></deal-editor-cell>
                                 </ng-template>
                             </kendo-grid-column>
                         </kendo-grid>
