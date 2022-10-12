@@ -773,6 +773,67 @@ export class PTE_CellChange_Util {
         }
 
     }
+    static kitNameExists(items: any[], columns: any[], curPricingTable: any):any {
+        try {
+            let OBJ_SET_TYPE_CD = curPricingTable.OBJ_SET_TYPE_CD;
+            if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'KIT') {
+              //check for the same KIT name exists
+              let PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
+              let uniqnames=_.uniq(_.pluck(items,'new'));
+              let PTR_exist=[];
+              //iterate throght the PTR and get consolidate result for all duplicate
+              _.each(uniqnames,uniqnm=>{
+                if(uniqnm && uniqnm !=''){
+                    let curPTR=[];
+                    _.each(PTR,(cr,row)=>{
+                        if(cr['DEAL_GRP_NM']==uniqnm){
+                         cr['row']=row;
+                         curPTR.push(cr);
+                       }
+                     });
+                    //If there is already same name the length will atleast 2
+                    if(curPTR.length>1){
+                        PTR_exist.push({PTR:curPTR,name:uniqnm})
+                    }
+                  }
+                });
+             
+              if(PTR_exist && PTR_exist.length>0){
+                return PTR_exist;
+              }
+              else{
+                return [];
+              }
+            }
+        }
+        catch (ex) {
+            console.error(ex);
+        }
+    }
+    static mergeKitDeal(items: any, columns: any[], curPricingTable: any,contractData:any,pricingTableTemplates:any){
+        //first delete all the rows except the min one
+        let PTR=PTE_Common_Util.getPTEGenerate(columns,curPricingTable);
+        let firstInd=_.findIndex(PTR,{DEAL_GRP_NM:items.name});
+        let prods='';
+        _.each(items.PTR,PTR=>{
+            prods=prods+PTR['PTR_USER_PRD']+',';
+        });
+         //modify the first cell with all uniq products
+        let uniqprod=_.uniq(prods.substring(0, prods.length - 1).split(','));
+        let Row=[{ row: firstInd, prop:'PTR_USER_PRD' , old: this.hotTable.getDataAtRowProp(firstInd,'PTR_USER_PRD'), new: uniqprod.toString()}];
+        PTE_CellChange_Util.autoFillCellonProdKit(Row,curPricingTable,contractData,pricingTableTemplates,columns);
+        // compare the rows and see any products are repeating and only add repeating product to first one.
+    }
+    static closeKitDialog(items: any, columns: any[], curPricingTable: any,){
+        let PTR=PTE_Common_Util.getPTEGenerate(columns,curPricingTable);
+        let firstInd=_.findIndex(PTR,{DEAL_GRP_NM:items.name});
+        _.each(PTR,(cr,ind)=>{
+            //this will make sure we are not clearing first row
+            if(firstInd !=ind && cr['DEAL_GRP_NM']==items.name){
+                this.hotTable.setDataAtRowProp(ind,'DEAL_GRP_NM','','no-edit');
+            }
+        });
+    }
     static RateChgfn(items: Array<any>, columns: any[], curPricingTable: any) {
         _.each(items, item => {
             if ((item.prop) && (item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'INCENTIVE_RATE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE' || item.prop == 'VOLUME' || item.prop == 'FRCST_VOL' || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT')) {

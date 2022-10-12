@@ -241,6 +241,14 @@ export class pricingTableEditorComponent implements OnChanges {
     @Output() tmDirec = new EventEmitter();
     @Output() enableDeTab = new EventEmitter();
     @Output() refreshedContractData = new EventEmitter;
+    public fontData:any[] = [
+        { text: "1 (8pt)", size: "8" },
+        { text: "2 (10pt)", size: "10" },
+        { text: "3 (12pt)", size: "12" },
+        { text: "4 (14pt)", size: "14" },
+        { text: "5 (18pt)", size: "18" },
+        { text: "6 (24pt)", size: "24" },
+    ];
     private isDialogOpen: boolean = false;
     private isCustDivNull: boolean = false;
     private validationMessage: boolean = false;
@@ -305,6 +313,9 @@ export class pricingTableEditorComponent implements OnChanges {
     public C_ADD_PRICING_TABLE: boolean = false;
     private productValidationDependencies = PTE_Config_Util.productValidationDependencies;
     private kitDimAtrbs: Array<string> = PTE_Config_Util.kitDimAtrbs;
+    private kitNameObj:any=null;
+    private kitNameObjArr:any[]=[];
+    private isKitDialog:boolean=false;
     private isTenderContract = false;
     private maxKITproducts: number = PTE_Config_Util.maxKITproducts;
 
@@ -353,7 +364,7 @@ export class pricingTableEditorComponent implements OnChanges {
             this.isDeletePTR = true;
         }
     }
-    async closeDialog(act: string) {
+     async closeDialog(act: string) {
         if (act == 'No') {
             //setting back the values back to handsonetables
             _.each(this.multiRowDelete, item => {
@@ -538,6 +549,7 @@ export class pricingTableEditorComponent implements OnChanges {
                 //KIT On change events
                 let KIT_ECAP = _.filter(changes, item => { return item.prop == 'ECAP_PRICE_____20_____1' || item.prop == 'ECAP_PRICE' });
                 let KIT_DSCNT = _.filter(changes, item => { return item.prop == 'DSCNT_PER_LN' || item.prop == 'QTY' });
+                let KIT_name = _.where(changes, { prop: 'DEAL_GRP_NM' })
                 //Voltier Changes
                 let tierChg = _.filter(changes, item => { return item.prop == 'END_PB' || item.prop == 'STRT_PB' || item.prop == 'END_REV' || item.prop == 'STRT_REV' || item.prop == 'END_VOL' || item.prop == 'STRT_VOL' });
                 let rateChg = _.filter(changes, item => { return item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE' || item.prop == 'VOLUME' || item.prop == 'FRCST_VOL' || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT' || item.prop == 'INCENTIVE_RATE' });
@@ -549,11 +561,21 @@ export class pricingTableEditorComponent implements OnChanges {
                 if (AR && AR.length > 0) {
                     PTE_CellChange_Util.autoFillARSet(AR, this.contractData);
                 }
+                //KIT on change events
                 if (KIT_ECAP && KIT_ECAP.length > 0) {
                     PTE_CellChange_Util.kitEcapPriceChange(KIT_ECAP, this.columns, this.curPricingTable);
                 }
                 if (KIT_DSCNT && KIT_DSCNT.length > 0) {
                     PTE_CellChange_Util.kitDSCNTChange(KIT_DSCNT, this.columns, this.curPricingTable);
+                }
+                if(KIT_name && KIT_name.length>0){
+                   this.kitNameObjArr= PTE_CellChange_Util.kitNameExists(KIT_name, this.columns, this.curPricingTable);
+                    //open KIT confirmation message if the same name exists
+                    if(this.kitNameObjArr && this.kitNameObjArr.length>0){
+                        //and the object will assign the first one
+                        this.kitNameObj=this.kitNameObjArr[0];
+                        this.isKitDialog=true;
+                    }
                 }
                 if (tierChg && tierChg.length > 0) {
                     PTE_CellChange_Util.tierChange(tierChg, this.columns, this.curPricingTable);
@@ -624,6 +646,42 @@ export class pricingTableEditorComponent implements OnChanges {
         else {
             this.loggerService.error("pricingTableEditorComponent::deletePTR::", 'error');
         }
+    }
+    closeKitDialog() {
+        //close kitdialog closes the kendo dialog and clear the kit name cell
+        PTE_CellChange_Util.closeKitDialog(this.kitNameObj,this.columns,this.curPricingTable);
+       this.isKitDialog=false;
+       //Once the first dialog is closed will splice the first record and see anyother result and will constinue till last one
+       this.kitNameObjArr.splice(0,1);
+       if(this.kitNameObjArr && this.kitNameObjArr.length>0){
+         this.kitNameObj=this.kitNameObjArr[0]
+         this.isKitDialog=true;
+       }
+    }
+    mergeKitDeal(){
+        let vm=this;
+        this.isKitDialog=false;
+        this.setBusy("PTE Reloading...", "PTE Reloading please wait", "Info", true);
+         setTimeout(() => {
+          //will delete the rows first this must be first step
+          _.each(vm.kitNameObj.PTR,(itm)=>{
+                let PTR=PTE_Common_Util.getPTEGenerate(vm.columns,vm.curPricingTable);
+                let PTRlen=_.where(PTR,{DEAL_GRP_NM:vm.kitNameObj.name}).length;
+                let lastRow=_.findLastIndex(PTR,{DEAL_GRP_NM:vm.kitNameObj.name});
+                if(PTRlen>1){
+                    let prdlen=this.hotTable.getDataAtRowProp(lastRow,'PTR_USER_PRD').split(',').length;
+                    vm.hotTable.alter('remove_row', lastRow, prdlen, 'no-edit');
+                }
+            });
+             //After delete will merge the rows
+             PTE_CellChange_Util.mergeKitDeal(this.kitNameObj,this.columns,this.curPricingTable,this.contractData, this.pricingTableTemplates);
+            vm.kitNameObjArr.splice(0,1);
+            if(vm.kitNameObjArr && vm.kitNameObjArr.length>0){
+                vm.kitNameObj=vm.kitNameObjArr[0]
+                vm.isKitDialog=true;
+            }
+            this.setBusy("", "", "", false);
+         },0);
     }
     deleteRow(rows: Array<any>): void {
         try {
@@ -1208,12 +1266,5 @@ export class pricingTableEditorComponent implements OnChanges {
         new PTE_Common_Util(this.hotTable);
         new PTE_Load_Util(this.hotTable);
     }
-    public fontData = [
-        { text: "1 (8pt)", size: "8" },
-        { text: "2 (10pt)", size: "10" },
-        { text: "3 (12pt)", size: "12" },
-        { text: "4 (14pt)", size: "14" },
-        { text: "5 (18pt)", size: "18" },
-        { text: "6 (24pt)", size: "24" },
-    ];
+    
 }

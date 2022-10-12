@@ -157,6 +157,22 @@
     </div>
 </div>
 
+<kendo-dialog title="Please confirm" *ngIf="isKitDialog" (close)="closeKitDialog()" [minWidth]="250" [width]="450">
+    <div>
+       <h3 style="margin: 30px; text-align: center;"> KIT name merge confirmation</h3>
+       <p style="margin: 30px; text-align: center;">
+        A Kit with the name <b>{{kitNameObj.name}}</b> already exists.  Would you like to merge rows containing this Kit Name?  Please note that any duplicate products will automatically be removed upon merging.
+      </p>
+    </div>
+    <kendo-dialog-actions>
+        <button kendoButton (click)="closeKitDialog()">No</button>
+        <button kendoButton (click)="mergeKitDeal()" themeColor="primary">
+            Yes
+        </button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+
+
 <kendo-dialog title="Please confirm" *ngIf="isDialogOpen" (close)="closeDialog('No')" [minWidth]="250" [width]="450">
     <p style="margin: 30px; text-align: center;">
         Are you sure you want to Delete?
