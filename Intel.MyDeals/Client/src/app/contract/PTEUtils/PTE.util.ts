@@ -259,7 +259,7 @@ export class PTEUtil {
             callBack(false);
         }
     }
-    static translationToSendObj(curPricingTable:any,currentPricingTableRowData:Array<any>,contractData:any):any{
+    static translationToSendObj(curPricingTable:any,currentPricingTableRowData:Array<any>,contractData: any, isExcludePrdChange:any):any{
         //Getting deal type
         let dealType = curPricingTable.OBJ_SET_TYPE_CD;
 
@@ -267,7 +267,7 @@ export class PTEUtil {
         let pricingTableRowData = currentPricingTableRowData.filter((x) => {
             return ((x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
                 ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
-                || (dealType == "KIT"); //|| ($scope.isExcludePrdChange);
+                || (dealType == "KIT") || (isExcludePrdChange);
         });
 
         //find uniq records incase of tier logic
@@ -306,8 +306,8 @@ export class PTEUtil {
                         PAYOUT_BASED_ON: obj.PAYOUT_BASED_ON,
                         CUST_MBR_SID: contractData.CUST_MBR_SID,
                         IS_HYBRID_PRC_STRAT: curPricingTable.IS_HYBRID_PRC_STRAT,
-                        SendToTranslation: (dealType == "DENSITY") || !(obj.PTR_SYS_INVLD_PRD != null && obj.PTR_SYS_INVLD_PRD != "")
-                        //"SendToTranslation": (dealType == "DENSITY" && (isExcludePrdChange)) || !(obj.PTR_SYS_INVLD_PRD != null && obj.PTR_SYS_INVLD_PRD != "")
+                        //SendToTranslation: (dealType == "DENSITY") || !(obj.PTR_SYS_INVLD_PRD != null && obj.PTR_SYS_INVLD_PRD != "")
+                        SendToTranslation: (dealType == "DENSITY" || isExcludePrdChange || !(obj.PTR_SYS_INVLD_PRD != null && obj.PTR_SYS_INVLD_PRD != ""))
                     }
                     translationInput.push(object);
                 }

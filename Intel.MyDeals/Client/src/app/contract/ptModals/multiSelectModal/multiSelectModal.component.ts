@@ -245,7 +245,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
             this.getNonCorpData();
             this.multiSelectData = this.multiSelectPopUpModal.data != undefined ? this.multiSelectPopUpModal.data : [];
             this.multiSelectPopUpModal.opLookupText = "DROP_DOWN";
-            if (this.modalData.cellCurrValues != null && this.modalData.cellCurrValues != undefined) {
+            if (this.modalData.cellCurrValues != null && this.modalData.cellCurrValues != undefined && this.modalData.cellCurrValues != "") {
                 if (typeof this.modalData.cellCurrValues == "string") {
                     this.checkedKeys = this.modalData.cellCurrValues.split(",").map(function (item) {
                         return item.trim();

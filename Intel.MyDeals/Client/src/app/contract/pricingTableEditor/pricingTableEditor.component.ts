@@ -315,6 +315,7 @@ export class pricingTableEditorComponent implements OnChanges {
     private newPTR: any;
     public warnings: boolean = false;
     public validMisProd: any;
+    public isExcludePrdChange: boolean = false;
 
 
     setBusy(msg, detail, msgType, showFunFact) {
@@ -530,6 +531,7 @@ export class pricingTableEditorComponent implements OnChanges {
             setTimeout(() => {
                 changes = this.identfyUniqChanges(changes, source);
                 let PTR = _.where(changes, { prop: 'PTR_USER_PRD' });
+                let PTR_EXLDS = _.where(changes, { prop: 'PRD_EXCLDS' });
                 let AR = _.where(changes, { prop: 'AR_SETTLEMENT_LVL' });
                 let startVol = _.where(changes, { prop: 'STRT_VOL' });
                 let rebateType = _.where(changes, { prop: 'REBATE_TYPE' });
@@ -584,6 +586,9 @@ export class pricingTableEditorComponent implements OnChanges {
                 if (endDt) {
                     PTE_CellChange_Util.dateChange(endDt, 'END_DT', this.contractData);
                 }
+                if ((PTR_EXLDS && PTR_EXLDS.length > 0)) {
+                    this.isExcludePrdChange = true;
+                }                
                 this.isLoading = false;
                 this.enableDeTab.emit(true);
                 this.setBusy("", "", "", false);
@@ -928,7 +933,8 @@ export class pricingTableEditorComponent implements OnChanges {
         }
 
 
-        let translationInputToSend = PTEUtil.translationToSendObj(this.curPricingTable, currentPricingTableRowData, this.contractData);
+        let translationInputToSend = PTEUtil.translationToSendObj(this.curPricingTable, currentPricingTableRowData, this.contractData, this.isExcludePrdChange);
+        this.isExcludePrdChange = false;
         let transformResults: any = null;
         // Products that needs server side attention
         if (translationInputToSend.length > 0) {
