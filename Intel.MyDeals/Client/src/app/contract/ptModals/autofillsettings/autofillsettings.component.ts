@@ -286,6 +286,14 @@ export class AutoFillComponent {
             this.isLoading = false;
             this.setBusy("", "", "", false);
             this.dialogRef.close(this.autofillData);
+            let dealType: any;
+            if (this.autofillData.ISTENDER) {
+                dealType = "Tender"
+            }
+            else {
+                dealType = "Pricing"
+            }
+            this.loggerSvc.success("Edited " + dealType + " Table", "Save Successfull",);
         },(err)=>{
             this.loggerSvc.error("Unable to update Pricing Table","Error",err);
         })
@@ -326,7 +334,15 @@ export class AutoFillComponent {
             this.autofillData.newPt = pt;
             this.isLoading = false;
             this.setBusy("", "", "", false);
-            this.dialogRef.close(this.autofillData);            
+            this.dialogRef.close(this.autofillData);
+            let dealType: any;
+            if (this.autofillData.ISTENDER) {
+                dealType = "Tender"
+            }
+            else {
+                dealType = "Pricing"
+            }
+            this.loggerSvc.success("Edited " + dealType + " Table", "Save Successfull",);
         },(err)=>{
             this.loggerSvc.error("Could Not create Pricing Table","Error",err);
             this.isLoading = false;
