@@ -30,7 +30,7 @@
                             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" 
                             filterable="menu" (cellClick)="cellClickHandler($event)" (dataStateChange)="dataStateChange($event)">
         <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of wipOptions.columns" field="{{column.field}}"
-                            [hidden]="column.hidden" [width]="column.width" [style]="{'white-space': 'nowrap'}" [filterable]="column.filterable">
+                            [hidden]="column.hidden" [width]="column.width+30" [style]="{'white-space': 'nowrap'}" [filterable]="column.filterable">
             <ng-template kendoGridHeaderTemplate>
                 <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" [grid_Result]="wipData"></deal-editor-header>
             </ng-template>

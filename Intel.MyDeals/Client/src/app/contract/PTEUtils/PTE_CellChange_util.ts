@@ -212,12 +212,28 @@ export class PTE_CellChange_Util {
                     this.hotTable.setDataAtRowProp(row, val.prop, '0.00', 'no-edit');
             }
             else if (val.prop == 'CAP') {
-                let cellVal = (operation && operation.operation && operation.PTR_SYS_PRD) ? JSON.parse(operation['PTR_SYS_PRD'])[cellItem.new][0]['CAP'] : ''
+                let newCellItem = cellItem.new.split(",");
+                let cellVal;
+                if (newCellItem.length > 1) {
+                    for (let i = 0; i < newCellItem.length; i++) {
+                        cellVal = (operation && operation.operation && operation.PTR_SYS_PRD) ? JSON.parse(operation['PTR_SYS_PRD'])[newCellItem[i]][0]['CAP'] : ''
+                    }
+                } else {
+                    cellVal = (operation && operation.operation && operation.PTR_SYS_PRD) ? JSON.parse(operation['PTR_SYS_PRD'])[cellItem.new][0]['CAP'] : ''
+                }
                 currentstring = row + ',' + val.prop + ',' + cellVal + ',' + 'no-edit';
                 updateRows.push(currentstring.split(','));
             }
             else if (val.prop == 'YCS2') {
-                let cellVal = (operation && operation.operation && operation.PTR_SYS_PRD) ? JSON.parse(operation['PTR_SYS_PRD'])[cellItem.new][0]['YCS2'] : ''
+                let newCellItem = cellItem.new.split(",");
+                let cellVal;
+                if (newCellItem.length > 1) {
+                    for (let i = 0; i < newCellItem.length; i++) {
+                        cellVal = (operation && operation.operation && operation.PTR_SYS_PRD) ? JSON.parse(operation['PTR_SYS_PRD'])[newCellItem[i]][0]['YCS2'] : ''
+                    }
+                } else {
+                    cellVal = (operation && operation.operation && operation.PTR_SYS_PRD) ? JSON.parse(operation['PTR_SYS_PRD'])[cellItem.new][0]['YCS2'] : ''
+                }
                 currentstring = row + ',' + val.prop + ',' + cellVal + ',' + 'no-edit';
                 updateRows.push(currentstring.split(','));
             }
