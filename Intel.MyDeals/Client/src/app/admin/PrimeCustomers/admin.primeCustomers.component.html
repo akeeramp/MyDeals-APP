@@ -110,7 +110,7 @@
                 </ng-template>
             </kendo-grid-column>
 
-            <kendo-grid-column Current field="RPL_STS_CD" title="RPL Status Code" width="100"
+            <kendo-grid-column Current field="RPL_STS_CD" title="RPL Status Code" width="80"
                 [headerClass]="{'headerClass':true}" [editable]="isRplStsDdEditable">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                     let-filterService="filterService">
@@ -119,7 +119,7 @@
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-multiselect #rplStsCdDropDown [data]="distinctRplCd"
-                        [formControl]="formGroup.get('RPL_STS_CD')" style="width: 250px;"></kendo-multiselect>
+                        [formControl]="formGroup.get('RPL_STS_CD')" style="width: 170px;"></kendo-multiselect>
                 </ng-template>
             </kendo-grid-column>
         </kendo-grid>

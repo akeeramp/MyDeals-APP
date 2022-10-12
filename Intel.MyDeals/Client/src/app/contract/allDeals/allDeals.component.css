@@ -272,3 +272,20 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper {
 .tierBorder {
     border-bottom: 2px solid #0071C5
 }
+
+#allDeals.k-grid .k-grid-container {
+    margin-right: -10px !important
+}
+
+.lastcolstyle {
+    font-size: 10px !important;
+    white-space: normal !important;
+}
+
+.kendo-grid-buttons.mgridsizefix {
+    position: relative !important;
+    padding-top: 20px !important;
+    width: 100% !important;
+    padding-left: 0px !important;
+    padding-right: 0px !important
+}

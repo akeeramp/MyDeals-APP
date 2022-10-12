@@ -1104,3 +1104,48 @@ kendo-treeview.k-widget.k-treeview.fiend-tree ul li kendo-checkbox .k-checkbox {
 .loadpublish publish-tender loading-panel-angular .ss-loading-panel {
     margin-top: 150px !important;
 }
+
+kendo-multiselect.divineo-one .k-multiselect-wrap kendo-taglist ul li span {
+    font-size: 14px;
+    color: #444;
+}
+
+kendo-multiselect.divineo-one .k-multiselect-wrap kendo-taglist ul li span.k-select {
+    display: none !important;
+}
+
+kendo-multiselect.divineo-one .k-multiselect-wrap kendo-taglist ul li {
+    padding-right: 20px !important;
+    border-radius: 25px;
+    border-color: #fafafa;
+    background-color: #fafafa;
+    color: #444;
+}
+
+kendo-multiselect.divineo-one .k-multiselect-wrap kendo-taglist ul li:hover {
+    border-color: #e4e7eb;
+    background-color: #e4e7eb;
+}
+
+kendo-multiselect.divineo-one .k-multiselect-wrap span.k-icon.k-clear-value.k-i-close {
+    display: none !important;
+}
+
+kendo-multiselect.divineo-one:hover .k-multiselect-wrap span.k-icon.k-clear-value.k-i-close {
+    display: flex !important;
+    border-radius: 50%;
+    background-color: #dbdbdb;
+    height: 15px;
+    width: 15px;
+    top: 9px;
+    right: 7px;
+    color: #444;
+    padding-top: 2px;
+    opacity: 1;
+}
+
+kendo-multiselect.divineo-one .k-multiselect-wrap kendo-taglist ul li span span.k-icon.k-i-caret-alt-down {
+    position: absolute;
+    right: 4px;
+    top: 7px;
+}

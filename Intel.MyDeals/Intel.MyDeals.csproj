@@ -891,6 +891,7 @@
     <Content Include="Client\src\app\admin\employee\admin.manageEmployee.component.css" />
     <Content Include="Client\src\app\admin\employee\admin.manageEmployee.component.html" />
     <Content Include="Client\src\app\admin\employee\admin.manageEmployeeModal.component.html" />
+    <Content Include="Client\src\app\admin\funFact\admin.funFact.component.css" />
     <Content Include="Client\src\app\admin\funFact\admin.funFact.component.html" />
     <Content Include="Client\src\app\admin\iCostProducts\admin.iCostProducts.component.css" />
     <Content Include="Client\src\app\admin\iCostProducts\admin.iCostProducts.component.html" />

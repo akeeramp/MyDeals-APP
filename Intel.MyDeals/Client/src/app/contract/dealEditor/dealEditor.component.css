@@ -941,3 +941,7 @@ ngb-tooltip-window .tooltip-inner {
 .loaderDE deal-editor loading-panel-angular .ss-loading-panel.ss-Info {
     margin-top: 150px !important;
 }
+
+.creditcolor {
+    background: #d3d3d30d !important
+}

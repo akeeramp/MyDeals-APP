@@ -17,6 +17,7 @@ import {
 @Component({
     selector: "adminFunFact",
     templateUrl: "Client/src/app/admin/funFact/admin.funFact.component.html",
+    styleUrls: ['Client/src/app/admin/funFact/admin.funFact.component.css']
 })
 
 export class adminFunFactComponent {

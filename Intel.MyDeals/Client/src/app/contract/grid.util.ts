@@ -53,7 +53,7 @@ export class GridUtil {
             var tmplt = '';
             if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
                 tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-            tmplt += '<div class="uiControlDiv' + this.getClassNm(passedData, field) + '"';
+            tmplt += '<div class="uiControlDiv creditcolor' + this.getClassNm(passedData, field) + '"';
             if (passedData['CREDIT_AMT'] != undefined && passedData['CREDIT_AMT'] != 0)
                 tmplt += '    <div class="ng-binding vert-center">(' + passedData[field] + ')"</div>';            
             tmplt += '</div>';
@@ -155,7 +155,7 @@ export class GridUtil {
             if (fields[t].title === "Tier")
                 tmplt += '<div class="col-md-3 tierHeader">' + fields[t].title + '</div>';
             else
-                tmplt += '<div class="col-md-3 tierHeader tierBorder">' + fields[t].title + '</div>';
+                tmplt += '<div class="col-md-3 tierHeader tierBorder lastcolstyle">' + fields[t].title + '</div>';
         }
         tmplt += '</div>';
         var numTiers = 0;

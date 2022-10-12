@@ -71,6 +71,7 @@ span.k-column-title {
 .prodText {
     color: white;
     font-size: 32px;
+    margin-bottom: 0;
 }
 
 .rowNavPanel {
@@ -279,11 +280,11 @@ a.prdAnchor {
 .prodCorrector.modal-body {
     padding-top: 2px !important;
     padding-bottom: 0px !important;
-    min-height: calc(90vh - 160px);
     max-height: calc(90vh - 160px);
-    overflow-y: auto !important;
     position: relative;
     padding: 15px;
+    overflow: hidden !important;
+    min-height: auto;
 }
 
 .prodSelector.modal-footer {
@@ -391,7 +392,7 @@ a.prdAnchor {
     padding: 4px;
     overflow: auto;
     font-family: 'Intel Clear', 'Arial';
-    height: 700px;
+    height: 100%;
 }
 
 .badge.upperBadge {

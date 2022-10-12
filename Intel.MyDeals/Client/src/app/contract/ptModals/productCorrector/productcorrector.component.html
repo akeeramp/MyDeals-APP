@@ -6,7 +6,7 @@
 <div class="modal-content" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle moveablemodal style="background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none;">
     <div style="padding-left:10px;padding-right:10px">
         <div class="prodSelector modal-header" style="margin-bottom:15px">
-            <div class="row prodCorrectorHeader">
+            <div class="row prodCorrectorHeader" style="align-items: center; padding-top: 10px; padding-bottom: 10px; ">
                 <div class="col-md-5  cursorArea" style="padding-left:0px">
                     <p class="prodText">Product Corrector</p>
                 </div>
@@ -57,7 +57,7 @@
                     </div>
                 </div>
             </div>
-            <div class="row" style="margin-top:10px;height: 570px;overflow: hidden;">
+            <div class="row" style="margin-top: 10px; height: 436px; overflow: hidden;">
                 <div class="col-md-3 lnavFilter">
                     <div class="row">
                         <div class="col">
@@ -87,7 +87,7 @@
                 </div>
                 <div class="col-md-9">
                     <kendo-grid [data]="selGridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="true" [group]="state.group"
-                        filterable="menu" (dataStateChange)="dataStateChange($event)" [resizable]="true" [height]="570">
+                        filterable="menu" (dataStateChange)="dataStateChange($event)" [resizable]="true" [height]="436" class="notation-flow">
                         <kendo-grid-column [headerClass]="{'headerClass':true}" field="EXCLUDE" title="EXCLUDE" [filterable]="none" [width]="5">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 <div class="fl gridStatusMarker {{dataItem.EXCLUDE}}" title="{{dataItem.EXCLUDE}}"></div>
@@ -340,7 +340,7 @@
                 <img *ngIf="isLoading" src="/Images/loadingSmall.gif" />
             </div>
             <div class="col-md-6" style="margin-left: 49%;margin-top: 10px;margin-bottom: 10px;">
-                <button class="btn btn-primary prdBtn" (click)="onSave()" style="float:right;margin-right: -35px;">Save and Close</button>
+                <button class="btn btn-primary prdBtn" (click)="onSave()" style="float: right; margin-right: -17px;">Save and Close</button>
                 <button class="btn btn-default prdBtn" (click)="onNoClick()" style="margin-right:2px;float:right">Cancel</button>
             </div>
         </div>
