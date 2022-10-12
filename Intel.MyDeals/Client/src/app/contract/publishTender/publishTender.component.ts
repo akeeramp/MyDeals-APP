@@ -7,7 +7,7 @@ import { allDealsService } from "../allDeals/allDeals.service";
 import { templatesService } from "../../shared/services/templates.service";
 import { PTE_Config_Util } from "../PTEUtils/PTE_Config_util";
 import { DataStateChangeEvent, GridDataResult, PageSizeItem, CellClickEvent } from '@progress/kendo-angular-grid';
-import { process, State } from '@progress/kendo-data-query';
+import { distinct, process, State } from '@progress/kendo-data-query';
 import { MatDialog } from '@angular/material/dialog';
 import { dealProductsModalComponent } from '../ptModals/dealProductsModal/dealProductsModal.component';
 import { DE_Load_Util } from '../DEUtils/DE_Load_util';
@@ -193,6 +193,9 @@ export class publishTenderComponent {
                     if (wipTemplate.columns.findIndex(e => e.field === 'EXCLUDE_AUTOMATION') > 0) {
                         wipTemplate.columns.splice(wipTemplate.columns.findIndex(e => e.field === 'EXCLUDE_AUTOMATION'), 1);
                     }
+                    if (wipTemplate.columns.findIndex(e => e.field === 'CUST_MBR_SID') > 0) {
+                        wipTemplate.columns[wipTemplate.columns.findIndex(e => e.field === 'CUST_MBR_SID')].filterable = true;
+                    }
 
                     if ((<any>window).usrRole === "GA") {
                         wipTemplate.columns.unshift({
@@ -253,19 +256,6 @@ export class publishTenderComponent {
                                 }
                             }
                         }
-                        if (col["field"] == "CUST_MBR_SID") {
-                            col.filterable = {
-                                multi: true,
-                                search: true,
-                                itemTemplate: function (e) {
-                                    if (e.field == "all") {
-                                        return '<li class="k-item"><label class="k-label"><input type="checkbox" class="k-check-all" value="Select All">Select All</label></li>';
-                                    } else {
-                                        return '<li class="k-item"><label class="k-label"><input type="checkbox" class="" value="#=data.CUST_MBR_SID#">#=Customer.CUST_NM#</label></li>'
-                                    }
-                                }
-                            };
-                        }
                     }
                     _.each(wipTemplate['model'], (key, index) => {
                         if (excludeCols.indexOf(key) < 0) {
@@ -311,7 +301,9 @@ export class publishTenderComponent {
             }
         });
     }
-
+    distinctPrimitive(fieldName: string): any {
+        return distinct(this.wipData, fieldName).map(item => item[fieldName]);
+    }
     ngOnInit() {
         const url = window.location.href.split('/');
         this.c_Id = Number(url[url.length - 1]);

@@ -154,7 +154,7 @@
                                                         [(selectedKeys)]="mySelection"
                                                         (selectedKeysChange)="onSelectedKeysChange()">
                                                 <kendo-grid-column field="TOOLS"
-                                                                   [headerClass]="{'headerClass':true}" [width]="150">
+                                                                   [headerClass]="{'headerClass':true}" [width]="150" [filterable]="false">
                                                     <ng-template kendoGridHeaderTemplate let-dataItem="dataItem">
                                                         <input type='checkbox' (click)="selectAllIDs($event,pt.DC_ID)" class='grid-link-checkbox with-font' id='chkDealTools_{{pt.DC_ID}}' [(ngModel)]="is_Deal_Tools_Checked[pt.DC_ID]"/>&nbsp;
                                                         <label for='chkDealTools_{{pt.DC_ID}}'><b>Tools</b></label>
@@ -162,11 +162,14 @@
                                                     <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
                                                         <deal-tools-angular [dataItem]='dataItem' [isSplitEnabled]='false' [isFileAttachmentEnabled]='false'
                                                                             [isHistoryEnabled]='true' [isCommentEnabled]='false' [isEditable]='true'
-                                                                            [isQuoteLetterEnabled]='false' [isDeleteEnabled]='false' [gridData]="gridData.data" [contractData]="contractData"></deal-tools-angular>
+                                                                            [isQuoteLetterEnabled]='false' [isDeleteEnabled]='false' [gridData]="gridDataSet[pt.DC_ID].data" [contractData]="contractData"></deal-tools-angular>
                                                     </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="PCT Result" field="PRC_CST_TST_STS"
+                                                <kendo-grid-column title="PCT Result" field="PRC_CST_TST_STS" [filterable]="true"
                                                                    [headerClass]="{'headerClass':true}" [width]="120">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID,column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                     <ng-template kendoGridCellTemplate let-dataItem>
                                                         <div>
                                                             <icon-mct-pct-angular [dataValue]='dataItem.PRC_CST_TST_STS'
@@ -174,26 +177,44 @@
                                                         </div>
                                                     </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="Deal Id" field="DEAL_ID"
+                                                <kendo-grid-column title="Deal Id" field="DEAL_ID" [filterable]="true"
                                                                    [headerClass]="{'headerClass':true}" [width]="100">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="My Deals Product"
+                                                <kendo-grid-column title="My Deals Product" [filterable]="true" field="PRODUCT"
                                                                    [headerClass]="{'headerClass':true}" [width]="170">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="Processor #"
+                                                <kendo-grid-column title="Processor #" [filterable]="true" field="PCSR_NBR"
                                                                    [headerClass]="{'headerClass':true}" [width]="170">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="Deal Description" field="DEAL_DESC"
+                                                <kendo-grid-column title="Deal Description" field="DEAL_DESC" [filterable]="true"
                                                                    [headerClass]="{'headerClass':true}" [width]="140">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="Group Deals" field="GRP_DEALS"
+                                                <kendo-grid-column title="Group Deals" field="GRP_DEALS" [filterable]="true"
                                                                    [headerClass]="{'headerClass':true}" [width]="140">
-                                                                   <ng-template kendoGridCellTemplate let-dataItem>
-                                                                    <span style="color: rgb(0, 113, 197); cursor: pointer; text-align: center;" *ngIf="dataItem?.PRC_CST_TST_STS !== 'NA'">View</span>
-                                                                </ng-template>
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        <span style="color: rgb(0, 113, 197); cursor: pointer; text-align: center;" *ngIf="dataItem?.PRC_CST_TST_STS !== 'NA'">View</span>
+                                                    </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="Deal Start/End" field="DEAL_STRT_DT"
+                                                <kendo-grid-column title="Deal Start/End" field="DEAL_STRT_DT" [filterable]="true"
                                                                    [headerClass]="{'headerClass':true}" [width]="180">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                     <ng-template kendoGridCellTemplate let-dataItem>
                                                         {{
 dataItem.DEAL_STRT_DT | date:
@@ -201,78 +222,147 @@ dataItem.DEAL_STRT_DT | date:
                                                         }}-{{dataItem?.DEAL_END_DT | date: 'M/d/yyyy'}}
                                                     </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="Max RPU" [headerClass]="{'headerClass':true}"
-                                                                   [width]="100" [hidden]="!hasPermissionPrice"></kendo-grid-column>
-                                                <kendo-grid-column title="OEM Platform Launch Date" [width]="180"
-                                                                   field="OEM_PLTFRM_LNCH_DT" [headerClass]="{'headerClass':true}"
-                                                                   [hidden]="true">
+                                                <kendo-grid-column title="Max RPU" [headerClass]="{'headerClass':true}" [filterable]="true" field="MAX_RPU"
+                                                                   [width]="100" [hidden]="!hasPermissionPrice" *ngIf="!isHidden(pt.DC_ID, 'MAX_RPU')">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="OEM Platform Launch Date" [width]="180" [filterable]="true"
+                                                                   field="OEM_PLTFRM_LNCH_DT" [headerClass]="{'headerClass':true}" *ngIf="!isHidden(pt.DC_ID, 'OEM_PLTFRM_LNCH_DT')">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                     <ng-template kendoGridCellTemplate let-dataItem>
                                                         <span *ngIf="dataItem.OEM_PLTFRM_LNCH_DT!='1/1/1900'">
-                                                            {{
-dataItem.OEM_PLTFRM_LNCH_DT|
-                                                            date: 'M/d/yyyy'
-                                                            }}
+                                                            {{dataItem.OEM_PLTFRM_LNCH_DT| date: 'M/d/yyyy'}}
                                                         </span>
                                                     </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="OEM Platform EOL Date" [width]="180"
-                                                                   field="OEM_PLTFRM_EOL_DT" [headerClass]="{'headerClass':true}"
-                                                                   [hidden]="true">
+                                                <kendo-grid-column title="OEM Platform EOL Date" [width]="180" [filterable]="true"
+                                                                   field="OEM_PLTFRM_EOL_DT" [headerClass]="{'headerClass':true}" *ngIf="!isHidden(pt.DC_ID, 'OEM_PLTFRM_EOL_DT')">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                     <ng-template kendoGridCellTemplate let-dataItem>
-                                                        {{dataItem.OEM_PLTFRM_EOL_DT | date: 'M/d/yyyy'}}
+                                                        <span *ngIf="dataItem.OEM_PLTFRM_EOL_DT!='1/1/1900'">
+                                                            {{dataItem.OEM_PLTFRM_EOL_DT | date: 'M/d/yyyy'}}
+                                                        </span>
                                                     </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="Deal Stage" field="WF_STG_CD"
+                                                <kendo-grid-column title="Deal Stage" field="WF_STG_CD" [filterable]="true"
                                                                    [headerClass]="{'headerClass':true}" [width]="80" [hidden]="true">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="CAP" [headerClass]="{'headerClass':true}"
-                                                                   [width]="100" [hidden]="!hasPermissionPrice"></kendo-grid-column>
-                                                <kendo-grid-column title="ECAP Price"
-                                                                   [headerClass]="{'headerClass':true}" [width]="120">
+                                                <kendo-grid-column title="CAP" [headerClass]="{'headerClass':true}" [filterable]="true" field="CAP"
+                                                                   [width]="100" [hidden]="!hasPermissionPrice" *ngIf="!isHidden(pt.DC_ID, 'CAP')">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="ECAP Floor"
+                                                <kendo-grid-column title="ECAP Price" [filterable]="true" field="ECAP_PRC"
+                                                                   [headerClass]="{'headerClass':true}" [width]="120" *ngIf="!isHidden(pt.DC_ID, 'ECAP_PRC')">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="ECAP Floor" [filterable]="true" field="ECAP_FLR"
                                                                    [headerClass]="{'headerClass':true}" [width]="120"
-                                                                   [hidden]="!hasPermissionPrice"></kendo-grid-column>
-                                                <kendo-grid-column title="Lowest Net Price"
+                                                                   [hidden]="!hasPermissionPrice" *ngIf="!isHidden(pt.DC_ID, 'ECAP_FLR')">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Lowest Net Price" [filterable]="true" field="LOW_NET_PRC"
                                                                    [headerClass]="{'headerClass':true}" [width]="140">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="Cost" [headerClass]="{'headerClass':true}"
-                                                                   [width]="100" [hidden]="!hasPermissionPrice"></kendo-grid-column>
-                                                <kendo-grid-column title="Cost Type"
+                                                <kendo-grid-column title="Cost" [headerClass]="{'headerClass':true}" [filterable]="true" field="PRD_COST"
+                                                                   [width]="100" [hidden]="!hasPermissionPrice">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Cost Type" [filterable]="true" field="CST_TYPE"
                                                                    [headerClass]="{'headerClass':true}" [width]="120"
-                                                                   [hidden]="!hasPermissionPrice"></kendo-grid-column>
-                                                <kendo-grid-column title="Cost Test Analysis Override"
+                                                                   [hidden]="!hasPermissionPrice">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Cost Test Analysis Override" [filterable]="true" field="COST_TEST_OVRRD_FLG"
                                                                    [headerClass]="{'headerClass':true}" [width]="150"
-                                                                   [hidden]="hasNoPermissionOvr"></kendo-grid-column>
-                                                <kendo-grid-column title="Cost Test Analysis Override Comments"
+                                                                   [hidden]="hasNoPermissionOvr">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Cost Test Analysis Override Comments" [filterable]="true" field="COST_TEST_OVRRD_CMT"
                                                                    [headerClass]="{'headerClass':true}" [width]="150"
-                                                                   [hidden]="hasNoPermissionOvr"></kendo-grid-column>
-                                                <kendo-grid-column title="Retail Cycle"
+                                                                   [hidden]="hasNoPermissionOvr">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Retail Cycle" [filterable]="true" field="RTL_CYC_NM"
                                                                    [headerClass]="{'headerClass':true}" [width]="140"
-                                                                   [hidden]="hasNoPermission"></kendo-grid-column>
-                                                <kendo-grid-column title="Retail Pull $"
+                                                                   [hidden]="hasNoPermission">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Retail Pull $" [filterable]="true" field="RTL_PULL_DLR"
                                                                    [headerClass]="{'headerClass':true}" [width]="100"
-                                                                   [hidden]="!hasSpecialPricePermission"></kendo-grid-column>
-                                                <kendo-grid-column title="Market Segment" field="MKT_SEG"
-                                                                   [headerClass]="{'headerClass':true}" [width]="140">
+                                                                   [hidden]="!hasSpecialPricePermission">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="GEO" field="GEO"
+                                                <kendo-grid-column title="Market Segment" field="MKT_SEG" [filterable]="true"
                                                                    [headerClass]="{'headerClass':true}" [width]="140">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="Payout Based On" field="PYOUT_BASE_ON"
+                                                <kendo-grid-column title="GEO" field="GEO" [filterable]="true"
                                                                    [headerClass]="{'headerClass':true}" [width]="140">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="Consumption Reason" field="CNSMPTN_RSN"
+                                                <kendo-grid-column title="Payout Based On" field="PYOUT_BASE_ON" [filterable]="true"
+                                                                   [headerClass]="{'headerClass':true}" [width]="140">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Consumption Reason" field="CNSMPTN_RSN" [filterable]="true"
                                                                    [headerClass]="{'headerClass':true}" [width]="160">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="Program Payment" field="PROG_PMT"
+                                                <kendo-grid-column title="Program Payment" field="PROG_PMT" [filterable]="true"
                                                                    [headerClass]="{'headerClass':true}" [width]="150">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="Deal Group Comments" field="DEAL_GRP_CMNT"
+                                                <kendo-grid-column title="Deal Group Comments" field="DEAL_GRP_CMNT" [filterable]="true"
                                                                    [headerClass]="{'headerClass':true}" [width]="160">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="Time / Date Last Cost Ran"
+                                                <kendo-grid-column title="Time / Date Last Cost Ran" [filterable]="true" field="LAST_COST_TEST_RUN"
                                                                    [headerClass]="{'headerClass':true}" [width]="180">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
                                                 </kendo-grid-column>
                                                 <div *kendoGridDetailTemplate="let dataItem">
                                                     <pct-child-grid [parent]="parentGridData[pt.DC_ID]" [contractData]="contractData"

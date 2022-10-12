@@ -9,6 +9,7 @@ import * as _ from 'underscore';
 import { MatDialog } from '@angular/material/dialog';
 import { dealTimelineComponent } from '../dealTimelineModal/dealTimelineModal.component';
 import { fileAttachmentComponent } from '../fileAttachmentModal/fileAttachmentModal.component';
+import { distinct } from "@progress/kendo-data-query";
 
 @Component({
     providers: [dealToolsService],
@@ -111,8 +112,9 @@ export class dealToolsComponent{
         }
     }
 
-    loadDealTools() {        
-        let childParent = _.countBy(this.gridData, 'DC_PARENT_ID');
+    loadDealTools() {
+        let distinctData = distinct(this.gridData, 'DEAL_ID');
+        let childParent = _.countBy(distinctData, 'DC_PARENT_ID');
         _.each(this.gridData, item => {
             item['_parentCnt'] = childParent[`${item.DC_PARENT_ID}`]
         });

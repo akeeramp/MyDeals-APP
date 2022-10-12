@@ -103,8 +103,16 @@ export class managerPctComponent {
                     if (response !== undefined) {
                         this.CostTestGroupDetails[pt.DC_ID] = response["CostTestGroupDetailItems"];
                         this.gridData = response["CostTestDetailItems"];
-                        for (let i = 0; i < this.gridData.length; i++)
+                        for (let i = 0; i < this.gridData.length; i++) {
                             Object.assign(this.gridData[i], { PS_WF_STG_CD: pt.PS_WF_STG_CD });
+                            //Deal id is not parent id here..Make deal tool directive work assigning this value
+                            Object.assign(this.gridData[i], { DC_PARENT_ID: this.gridData[i].DEAL_ID });
+                            if (this.gridData[i]["COST_TEST_OVRRD_FLG"]) {
+                                var isOverridden = this.gridData[i]["COST_TEST_OVRRD_FLG"] === "Yes";
+                                var pct = isOverridden ? "Pass" : this.gridData[i]["PRC_CST_TST_STS"];
+                                this.gridData[i]["PRC_CST_TST_STS"] = pct;
+                            }
+                        }
                         this.gridDataSet[pt.DC_ID] = process(distinct(this.gridData, "DEAL_ID"),this.state[pt.DC_ID]);
                         this.parentGridData[pt.DC_ID] = this.gridData;
                     }
@@ -153,8 +161,30 @@ export class managerPctComponent {
         const { formGroup, dataItem } = args;
     }
 
-    distinctPrimitive(fieldName: string) {
-        return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
+    distinctPrimitive(id, fieldName: string) {
+        return distinct(this.gridDataSet[id].data, fieldName).map(item => item[fieldName]);
+    }
+
+    isHidden(id, fieldName) {
+        if (this.gridDataSet[id] && this.gridDataSet[id].data && this.gridDataSet[id].data.length > 0) {
+            let parsedData = JSON.parse(this.gridDataSet[id].data[0].OBJ_PATH_HASH);
+            let psData = this.contractData?.PRC_ST.filter(x => x.DC_ID == parsedData['PS']);
+            if (psData) {
+                let ptData = psData[0].PRC_TBL.filter(x => x.DC_ID == id);
+                if (ptData) {
+                    if (ptData[0].OBJ_SET_TYPE_CD == 'ECAP' && fieldName == 'MAX_RPU') {
+                        return true;
+                    }
+                    else if (ptData[0].OBJ_SET_TYPE_CD !== 'ECAP' && (fieldName == 'CAP' || fieldName == 'ECAP_PRC' || fieldName == 'ECAP_FLR')) {
+                        return true;
+                    }
+                    else if (ptData[0].OBJ_SET_TYPE_CD !== 'PROGRAM' && (fieldName == 'OEM_PLTFRM_LNCH_DT' || fieldName == 'OEM_PLTFRM_EOL_DT')) {
+                        return true;
+                    }
+                }
+            }
+        }
+        return false;
     }
 
     lastMeetCompRunCalc(value) {
@@ -326,6 +356,9 @@ export class managerPctComponent {
         this.is_Deal_Tools_Checked[ptId] = event.target.checked;
         for (let i = 0; i < this.gridDataSet[ptId].data.length; i++) {
             this.gridDataSet[ptId].data[i].isLinked = event.target.checked;
+        }
+        for (let j = 0; j < this.parentGridData[ptId].length; j++) {
+            this.parentGridData[ptId][j].isLinked = event.target.checked;
         }
     }
 

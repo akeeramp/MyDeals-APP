@@ -30,14 +30,16 @@
                             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" 
                             filterable="menu" (cellClick)="cellClickHandler($event)" (dataStateChange)="dataStateChange($event)">
         <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of wipOptions.columns" field="{{column.field}}"
-                            [hidden]="column.hidden" [width]="column.width" [style]="{'white-space': 'nowrap'}">
+                            [hidden]="column.hidden" [width]="column.width" [style]="{'white-space': 'nowrap'}" [filterable]="column.filterable">
             <ng-template kendoGridHeaderTemplate>
                 <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" [grid_Result]="wipData"></deal-editor-header>
             </ng-template>
             <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
                 <deal-editor-cell [id]="column.field" [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [contract_Data]="contractData" [grid_Data]="gridData.data"></deal-editor-cell>
             </ng-template>
-    
+            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+            </ng-template>
         </kendo-grid-column>
     </kendo-grid>
 
