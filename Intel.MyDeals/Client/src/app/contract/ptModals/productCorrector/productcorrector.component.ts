@@ -165,7 +165,7 @@ export class ProductCorrectorComponent {
     this.rowDCId=this.curRowIssues[0].DCID;
     this.numIssueRows=this.curRowIssues.length;
     this.selGridResult=this.gridResult[0].data;
-    this.selGridData = process(this.gridData[0].data, this.state);
+    this.selGridData = this.gridData[0].data;
     this.selRowLvl=this.getSelRowTree(this.curRowLvl[0].items);
     this.selRowCategories=this.getSelRowTree(this.curRowCategories[0].items);
     //this.selRowIssues=[this.curRowIssues[0]];
@@ -232,7 +232,7 @@ export class ProductCorrectorComponent {
           }
       }
     this.selGridResult = _.findWhere(this.gridResult, { name: key, DCID: DCID}).data;
-    this.selGridData = process(_.findWhere(this.gridData, { name: key, DCID: DCID}).data, this.state);
+    this.selGridData = _.findWhere(this.gridData, { name: key, DCID: DCID}).data;
     this.selRowLvl = this.getSelRowTree(_.findWhere(this.curRowLvl, { name: key, DCID: DCID}).items);
     this.selRowCategories = this.getSelRowTree(_.findWhere(this.curRowCategories, { name: key, DCID: DCID}).items);
     this.curSelProducts = _.findWhere(this.selectedProducts, { name: key, DCID: DCID });

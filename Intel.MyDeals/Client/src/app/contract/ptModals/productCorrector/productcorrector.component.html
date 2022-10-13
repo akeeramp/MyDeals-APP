@@ -100,7 +100,10 @@
                                 Can't find what you are looking for? Use the Product Selector </strong>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="50">                            
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="50" field="IS_SEL" title=" ">
+                            <ng-template kendoGridFilterMenuTemplate let-filter let-column="column" let-filterService="filterService">
+                            <kendo-grid-boolean-filter-menu [column]="column" [filter]="filter" [filterService]="filterService"></kendo-grid-boolean-filter-menu>
+                            </ng-template>
                             <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                 <input type="checkbox" kendoCheckBox (click)="prodSelect(dataItem,$event)" [(ngModel)]="dataItem.IS_SEL" />
                             </ng-template>
