@@ -12,6 +12,7 @@ import { FormBuilder } from "@angular/forms";
 import { Observable } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { pctOverrideReasonModal } from "./pctOverrideReasonModal/pctOverrideReasonModal.component";
+import { pctGroupModal } from "./pctGroupModal/pctGroupModal.component";
 
 @Component({
     selector: "pct-child-grid",
@@ -112,8 +113,19 @@ export class pctChildGridComponent {
     }
     cellClickHandler(args: CellClickEvent): void {
         if (args.column.field == "GRP_DEALS") {
-            // this.openExcludeDealGroupModal(args.dataItem);
+            this.openPctGroupModal(args.dataItem);
         }
+    }
+    openPctGroupModal(dataItem) {
+        const dialogRef = this.dialog.open(pctGroupModal, {
+            width: "1900px",
+            height: "600px",
+            data: {
+                cellCurrValues: dataItem
+            }
+        });
+        dialogRef.afterClosed().subscribe((returnVal) => {
+        });
     }
 
     isErrorOrWarning(dataItem, field) {

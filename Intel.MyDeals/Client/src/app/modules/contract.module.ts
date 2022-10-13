@@ -40,6 +40,7 @@ import { messageBoardModal } from "../contract/contractManager/messageBoard/mess
 import { FlexOverlappingCheckComponent } from "../contract/ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.component";
 import { pctOverrideReasonModal } from "../contract/managerPct/pctOverrideReasonModal/pctOverrideReasonModal.component";
 import { kendoCalendarComponent } from "../contract/ptModals/kendoCalenderModal/kendoCalendar.component";
+import { pctGroupModal } from "../contract/managerPct/pctGroupModal/pctGroupModal.component";
 
 export let contractComponents = [
     contractDetailsComponent,
@@ -82,5 +83,6 @@ export let contractComponents = [
     emailModal,
     FlexOverlappingCheckComponent,
     pctOverrideReasonModal,
-    kendoCalendarComponent
+    kendoCalendarComponent,
+    pctGroupModal
 ]

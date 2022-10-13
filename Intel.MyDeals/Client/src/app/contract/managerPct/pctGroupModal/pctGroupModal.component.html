@@ -1,0 +1,51 @@
+    <div class="modal-header modalBlueBody" id="pctGroupModal">
+        <h5 class="modal-title" id="modal-title">Deal Number {{dealId}}</h5>
+    </div>
+    <div class="modal-body modalBlueBody" id="modal-body">
+
+        <kendo-grid [data]="gridData" [pageSize]="state.take" [skip]="state.skip" class="opUiContainer md dashboard orPanel"
+        [sort]="state.sort" [filter]="state.filter" [sortable]="true" [groupable]="false"
+        [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)">
+        <kendo-grid-column [headerClass]="{'headerClass':true}"  width="80px" title="Deal #" field="OVLP_DEAL_ID">
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}"  width="80px" title="Deal TypeAA" field="OVLP_DEAL_TYPE">
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}"  width="120px" title="Rebate Type" field="OVLP_REBT_TYPE">
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="160px" title="Contract" field="OVLP_CNTRCT_NM">
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="80px" title="Stage" field="OVLP_WF_STG_CD">
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}"  width="120px" title="Deal Description" field="OVLP_DEAL_DESC">
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="120px" title="ECAP" field="OVLP_ECAP_PRC" format="{0:c}">
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="120px" title="Max RPU" field="OVLP_MAX_RPU" format="{0:c}">
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="80px" title="Start Date" field="OVLP_DEAL_STRT_DT">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.OVLP_DEAL_STRT_DT | date: 'M/d/yyyy'}}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="80px" title="End Date" field="OVLP_DEAL_END_DT">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{dataItem.OVLP_DEAL_END_DT | date: 'M/d/yyyy'}}
+            </ng-template>
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="120px" title="Additive" field="OVLP_ADDITIVE">
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="120px" title="Consumption Reason" field="OVLP_CNSMPTN_RSN">
+        </kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="140px" title="Consumption Reason Comments" field="OVLP_CNSMPTN_RSN_CMNT">
+        </kendo-grid-column>
+        </kendo-grid>
+        <br/>
+        <div class="row">
+            <div class="col-md-12">
+                <div class="fr">
+                    <button class="btn btn-primary" type="button" (click)="ok()">Close</button>
+                </div>
+            </div>
+        </div>
+
+    </div>

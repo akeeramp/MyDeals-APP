@@ -988,6 +988,8 @@
     <Content Include="Client\src\app\contract\managerPct\managerPct.component.css" />
     <Content Include="Client\src\app\contract\managerPct\managerPct.component.html" />
     <Content Include="Client\src\app\contract\managerPct\pctChildGrid.component.html" />
+    <Content Include="Client\src\app\contract\managerPct\pctGroupModal\pctGroupModal.component.css" />
+    <Content Include="Client\src\app\contract\managerPct\pctGroupModal\pctGroupModal.component.html" />
     <Content Include="Client\src\app\contract\managerPct\pctOverrideReasonModal\pctOverrideReasonModal.component.css" />
     <Content Include="Client\src\app\contract\managerPct\pctOverrideReasonModal\pctOverrideReasonModal.component.html" />
     <Content Include="Client\src\app\contract\meetComp\meetComp.component.css" />
@@ -2466,6 +2468,7 @@
     <TypeScriptCompile Include="Client\src\app\contract\managerPct\managerPct.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\managerPct\managerPct.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\managerPct\pctChildGrid.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\managerPct\pctGroupModal\pctGroupModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\managerPct\pctOverrideReasonModal\pctOverrideReasonModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\meetComp\meetComp.component.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\meetComp\meetComp.component.ts" />
