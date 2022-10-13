@@ -839,6 +839,9 @@ export class PTE_Validation_Util {
                 else if (Number(item.TIER_NBR) == 1 && Number(item.NUM_OF_TIERS) == 1) {
                     rebateMaxAmt = item.REBATE_OA_MAX_AMT
                 }
+                else if(item.REBATE_OA_MAX_AMT != null && item.REBATE_OA_MAX_AMT !=undefined){
+                    rebateMaxAmt = item.REBATE_OA_MAX_AMT
+                }
                 // Check for all values equal (tiers undefined is an ECAP Hybrid, tiers = 1 is a flex or VT Hybrid)
                 //if (item.REBATE_OA_MAX_AMT !== null && (item.NUM_OF_TIERS === undefined || item.NUM_OF_TIERS.toString() === '1')) {
                 if (rebateMaxAmt !== null && (item.NUM_OF_TIERS === undefined || (item.NUM_OF_TIERS.toString() === '1') || item.FLEX_ROW_TYPE === 'Accrual')) {
@@ -851,6 +854,9 @@ export class PTE_Validation_Util {
                     rabateMaxVOL = item.REBATE_OA_MAX_VOL
                 }
                 else if (Number(item.TIER_NBR) == 1 && Number(item.NUM_OF_TIERS) == 1) {
+                    rabateMaxVOL = item.REBATE_OA_MAX_VOL
+                }
+                else if(item.REBATE_OA_MAX_VOL != null && item.REBATE_OA_MAX_VOL !=undefined){
                     rabateMaxVOL = item.REBATE_OA_MAX_VOL
                 }
                 if (rabateMaxVOL !== null && (item.NUM_OF_TIERS === undefined || item.NUM_OF_TIERS.toString() === '1')) {

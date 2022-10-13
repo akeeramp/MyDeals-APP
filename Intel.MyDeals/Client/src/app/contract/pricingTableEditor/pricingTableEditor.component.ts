@@ -385,8 +385,6 @@ export class pricingTableEditorComponent implements OnChanges {
         //function must trigger only after stop typing
         clearTimeout(this.timeout);
         this.timeout = setTimeout(function () {
-            this.isLoading = true;
-            this.setBusy("Saving...", "Saving your data", "Info", true);
             const dataItem = this.curPricingStrategy;
             const data = {
                 objSetType: "PRC_ST",
@@ -397,12 +395,7 @@ export class pricingTableEditorComponent implements OnChanges {
 
             this.pteService.updateAtrbValue(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data).toPromise().catch((err) => {
                 this.loggerService.error("Error", "Could not save the value.", err);
-                this.isLoading = false;
-                this.setBusy("", "", "", false);
             });
-            this.loggerService.success("Done", "Save Complete.");
-            this.isLoading = false;
-            this.setBusy("", "", "", false);
         }, 800);
     }
     getTemplateDetails() {
