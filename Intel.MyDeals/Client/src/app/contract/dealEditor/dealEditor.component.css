@@ -60,6 +60,7 @@
     border-bottom: 0.01px solid rgba(0, 0, 0, .05);
     padding: 2px 0px 0px 1px !important;
     line-height: 2;
+    height: 51px !important;
 }
 
 .densityRow {
@@ -321,11 +322,13 @@ tr:last-child>td {
 
 .op-grid.k-grid .uiControlDiv {
     line-height: 2 !important;
+    margin-bottom: 2px !important;
+    margin-top: 2px !important;
 }
 
 .op-grid .uiControlDiv {
     padding: 0px !important;
-    min-height: 20px;
+    min-height: 100%;
 }
 
 .isReadOnlyCell {
@@ -884,7 +887,7 @@ ngb-tooltip-window .tooltip-inner {
 
 .dealCell.isErrorCell {
     display: flex;
-    align-items: center;
+    align-items: baseline;
     justify-content: flex-start;
     position: relative;
 }

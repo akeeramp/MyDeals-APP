@@ -18,6 +18,10 @@
     color: #00AEEF;
 }
 
+.intelicon-protection-solid:before {
+    color: #00AEEF;
+}
+
 .dealTools input[type=radio].with-font,
 .dealTools input[type=checkbox].with-font {
     border: 0;

@@ -879,7 +879,7 @@ export class dealEditorComponent {
                 else {
                     this.setBusy("Save Successful", "Saved the contract", "Success", true);
                     if (this.isTenderContract) {
-                        this.tmDirec.emit('MC');
+                        this.tmDirec.emit('');
                     }
                 }
             }
