@@ -30,6 +30,7 @@ export class dealEditorEditTemplateComponent {
     private dim = "10___";
     private fields: any;
     private autoCorrect: boolean = true;
+    private decimals:number = 2;
     translateDimKey(key) {
         switch (key) {
             case "20_____1":

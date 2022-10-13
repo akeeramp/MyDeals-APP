@@ -45,9 +45,9 @@ export class DE_Common_Util {
 
     static parseCellValues(field, dataItem) {
         if (field == "ECAP_PRICE" && dataItem.OBJ_SET_TYPE_CD == "ECAP")
-            dataItem["ECAP_PRICE"]["20___0"] = parseInt(dataItem["ECAP_PRICE"]["20___0"] || 0);
+            dataItem["ECAP_PRICE"]["20___0"] = parseFloat(dataItem["ECAP_PRICE"]["20___0"] || 0);
         if (field == "KIT_ECAP")
-            dataItem["ECAP_PRICE"]["20_____1"] = parseInt(dataItem["ECAP_PRICE"]["20_____1"] || 0);
+            dataItem["ECAP_PRICE"]["20_____1"] = parseFloat(dataItem["ECAP_PRICE"]["20_____1"] || 0);
         if (field == "VOLUME" || field == "FRCST_VOL" || field == "CONSUMPTION_LOOKBACK_PERIOD" || field == "REBATE_OA_MAX_VOL") {
             if (dataItem[field] != undefined && dataItem[field] != null)
                 dataItem[field] = parseInt(dataItem[field] || 0);

@@ -232,7 +232,7 @@ export class ProductCorrectorComponent {
           }
       }
     this.selGridResult = _.findWhere(this.gridResult, { name: key, DCID: DCID}).data;
-    this.selGridData = _.findWhere(this.gridData, { name: key, DCID: DCID}).data;
+    this.selGridData =_.findWhere(this.gridData, { name: key, DCID: DCID}).data;
     this.selRowLvl = this.getSelRowTree(_.findWhere(this.curRowLvl, { name: key, DCID: DCID}).items);
     this.selRowCategories = this.getSelRowTree(_.findWhere(this.curRowCategories, { name: key, DCID: DCID}).items);
     this.curSelProducts = _.findWhere(this.selectedProducts, { name: key, DCID: DCID });
