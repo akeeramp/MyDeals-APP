@@ -285,9 +285,11 @@ export class PTE_Validation_Util {
             //For multi tiers last record will have latest date, skipping duplicate DC_ID
             var filterData = _.uniq(_.sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
 
-            var maxAccrualDate = new Date(Math.max.apply(null, filterData.map(function (x) { return new Date(x.START_DT); })));
+            var minAccrualDate = new Date(Math.min.apply(null, filterData.map(function (x) { return new Date(x.START_DT); })));
 
-            var drainingInvalidDates = drainingEntries.filter((val) => moment(val.START_DT) < (moment(maxAccrualDate).add(1, 'days')));
+            var drainingInvalidDates = drainingEntries.filter(
+                (val) => moment(val.START_DT) < (moment(minAccrualDate).add(0, 'days'))
+            );
         }
         return drainingInvalidDates;
     }
@@ -313,7 +315,7 @@ export class PTE_Validation_Util {
             item._behaviors.validMsg[elem] = "Consumption based accrual with billings based draining is not valid";
         }
         else if (cond == 'invalidDate' && elem == 'START_DT') {
-            item._behaviors.validMsg[elem] = "Draining products should have atleast 1 day delay from Accrual Start date";
+            item._behaviors.validMsg[elem] = "Accrual Date needs to start on or before the Draining dates";
         }
         return item;
     }
@@ -328,7 +330,7 @@ export class PTE_Validation_Util {
             var filterData = _.uniq(_.sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
             accrualRule = filterData.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == filterData[0].PAYOUT_BASED_ON);
             drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == drainingEntries[0].PAYOUT_BASED_ON);
-            if (accrualRule && drainingRule && accrualEntries.length > 0 && drainingEntries.length > 0) { restrictGroupFlexOverlap = true; }
+            if (accrualEntries.length > 0 && drainingRule && drainingEntries.length > 0) { restrictGroupFlexOverlap = true; }
             if (!accrualRule) {
                 _.each(filterData, (item) => {
                     item = this.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'nequalpayout', restrictGroupFlexOverlap);
@@ -895,6 +897,7 @@ export class PTE_Validation_Util {
             var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
             //var accrualSingleTierEntries = data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual' && val.NUM_OF_TIERS.toString() === '1');
             var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
+            restrictGroupFlexOverlap = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Consumption");
 
             if (drainingEntries.length > 0 && accrualEntries.length == 0) {
                 _.each(data, (item) => {
@@ -926,7 +929,7 @@ export class PTE_Validation_Util {
             data = this.clearValidation(data, 'AR_SETTLEMENT_LVL');
             data = this.clearValidation(data, 'CONSUMPTION_TYPE');
             this.itemValidationBlock(data, "REBATE_TYPE", ["notequal", "equalblank"], curPricingTable);
-            if (hybCond) {
+            if (hybCond = "1") {
                 this.itemValidationBlock(data, "PAYOUT_BASED_ON", ["notequal"], curPricingTable);
             }
             this.itemValidationBlock(data, "CUST_ACCNT_DIV", ["notequal"], curPricingTable);

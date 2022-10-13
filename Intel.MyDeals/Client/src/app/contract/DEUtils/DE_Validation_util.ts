@@ -123,10 +123,8 @@ export class DE_Validation_Util {
                     //Delete if there is any previous Error  messages
                     if ((invalidFlexDate || invalidFlexDate != undefined)) {
                         _.each(invalidFlexDate, (item) => {
-                            if (!restrictGroupFlexOverlap) {
                                 item = PTE_Validation_Util.setFlexBehaviors(item, 'START_DT', 'invalidDate', restrictGroupFlexOverlap);
                                 isShowStopperError = true;
-                            }
                         });
                     }
                 }

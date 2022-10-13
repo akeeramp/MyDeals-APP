@@ -280,7 +280,7 @@ export class PTE_Common_Util {
             var accrualRule = accrualEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Billings");
             var drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Consumption");
 
-            if (accrualRule && drainingRule && accrualEntries.length > 0 && drainingEntries.length) { restrictGroupFlexOverlap = true; }
+            if (accrualEntries.length > 0 && drainingRule && drainingEntries.length > 0) { restrictGroupFlexOverlap = true; }
             if (overlapFlexResult && overlapFlexResult.length && overlapFlexResult.length > 0) {
                 //Assigning  validation result to a variable and finally iterate between this result and bind the errors
                 var finalResult = this.checkOVLPDate(filterData, overlapFlexResult, objectId);
