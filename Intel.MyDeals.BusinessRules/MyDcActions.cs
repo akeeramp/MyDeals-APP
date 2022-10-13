@@ -3313,16 +3313,35 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deNumTiers = r.Dc.GetDataElement(AttributeCodes.NUM_OF_TIERS);
             IOpDataElement deStartDate = r.Dc.GetDataElement(AttributeCodes.START_DT);
             IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
+            IOpDataElement deBillingsStartDate = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_START);
+            IOpDataElement deBillingsEndDate = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
+            string payoutBasedOn = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON);
             string dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
 
             if (deNumTiers == null || deStartDate == null || deEndDate == null) return;
 
             if (!int.TryParse(deNumTiers.AtrbValue.ToString(), out int numTiers)) numTiers = 0;
 
+            // Skip PTR level check for consumption based VT deals since their start dates will change to billings someday soon...
+            if (dealType == "VOL_TIER" && payoutBasedOn == "Consumption" && r.Dc.DcType == OpDataElementType.PRC_TBL_ROW.ToString()) return;
+
             if ((dealType == "VOL_TIER" && numTiers > 1) || (dealType != "VOL_TIER")) // Because this rule only applies to multi-tiered VT deals
             {
-                DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
-                DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
+                DateTime startDate;
+                DateTime endDate;
+                IOpDataElement deTagMsgTo;
+                if (dealType == "VOL_TIER" && r.Dc.DcType == OpDataElementType.WIP_DEAL.ToString() && payoutBasedOn == "Consumption")
+                {
+                    startDate = DateTime.Parse(deBillingsStartDate.AtrbValue.ToString()).Date;
+                    endDate = DateTime.Parse(deBillingsEndDate.AtrbValue.ToString()).Date;
+                    deTagMsgTo = deBillingsEndDate;
+                }
+                else
+                {
+                    startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
+                    endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
+                    deTagMsgTo = deEndDate;
+                }
 
                 // START Intel WW offsetting code
                 //DateTime startDate = DateTime.Parse("12-29-2020"); // DateTime.Now;
@@ -3339,7 +3358,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 if (endDate > maxEndDt)
                     {
-                        deEndDate.AddMessage("End date is limited to 1 Intel Calendar Year from deal start date.  The latest end date you can use is " + maxEndDt.ToString("MM/dd/yyyy") + ".");
+                        deTagMsgTo.AddMessage("End date is limited to 1 Intel Calendar Year from deal start date.  The latest end date you can use is " + maxEndDt.ToString("MM/dd/yyyy") + ".");
                     }
             }
         }
