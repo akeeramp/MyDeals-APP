@@ -63,7 +63,7 @@ export class managerPctComponent {
     private dealPtIdDict = {};
     private CostTestGroupDetails = {};
     public mySelection = [];
-    private gridResult;
+    private gridResult = {};
     public pricingStrategyFilter;
     private isExcludeGroup = false;
 
@@ -80,7 +80,7 @@ export class managerPctComponent {
     private is_Deal_Tools_Checked: any[] = [];
     private state: State[] = [];
     public gridData: any;
-    gridDataSet = {}; parentGridData = {};
+    gridDataSet = {}; parentGridData = {}; parentGridResult = {};
     titleFilter = ""; public isAllCollapsed = true; canEdit = true;
     toggleSum() {
         this.refreshPage= false;
@@ -107,14 +107,17 @@ export class managerPctComponent {
                             Object.assign(this.gridData[i], { PS_WF_STG_CD: pt.PS_WF_STG_CD });
                             //Deal id is not parent id here..Make deal tool directive work assigning this value
                             Object.assign(this.gridData[i], { DC_PARENT_ID: this.gridData[i].DEAL_ID });
+                            this.gridData[i]["_readonly"] = pt.PS_WF_STG_CD !== "Submitted";
                             if (this.gridData[i]["COST_TEST_OVRRD_FLG"]) {
                                 var isOverridden = this.gridData[i]["COST_TEST_OVRRD_FLG"] === "Yes";
                                 var pct = isOverridden ? "Pass" : this.gridData[i]["PRC_CST_TST_STS"];
                                 this.gridData[i]["PRC_CST_TST_STS"] = pct;
                             }
                         }
-                        this.gridDataSet[pt.DC_ID] = process(distinct(this.gridData, "DEAL_ID"),this.state[pt.DC_ID]);
+                        this.gridDataSet[pt.DC_ID] = process(distinct(this.gridData, "DEAL_ID"), this.state[pt.DC_ID]);
+                        this.gridResult[pt.DC_ID] = JSON.parse(JSON.stringify(this.gridDataSet[pt.DC_ID]));
                         this.parentGridData[pt.DC_ID] = this.gridData;
+                        this.parentGridResult[pt.DC_ID] = JSON.parse(JSON.stringify(this.parentGridData[pt.DC_ID]));
                     }
                 },
                 function (response) {
@@ -127,8 +130,17 @@ export class managerPctComponent {
 
     dataStateChange(state: DataStateChangeEvent,id): void {
         this.state[id] = state;
-        this.gridResult = this.gridDataSet[id].data;
-        this.gridDataSet[id] = process(this.gridResult, this.state[id]);
+        let parentfilter = process(this.parentGridResult[id], this.state[id]);
+        this.parentGridData[id] = parentfilter.data;
+        this.gridDataSet[id] = process(this.gridResult[id].data, this.state[id]);
+        if (parentfilter.data.length > 0 && this.gridDataSet[id].data.length <= 0) {
+            _.each(parentfilter.data, (item) => {
+                let data = this.gridResult[id].data.filter(x => x.DEAL_ID == item.DEAL_ID);
+                if (data && data.length > 0) {
+                    this.gridDataSet[id].data.push(item);
+                }
+            })
+        }
     }
 
     public cellClickHandler(args: CellClickEvent): void {
@@ -162,7 +174,7 @@ export class managerPctComponent {
     }
 
     distinctPrimitive(id, fieldName: string) {
-        return distinct(this.gridDataSet[id].data, fieldName).map(item => item[fieldName]);
+        return distinct(this.parentGridResult[id], fieldName).map(item => item[fieldName]);
     }
 
     isHidden(id, fieldName) {
@@ -264,6 +276,7 @@ export class managerPctComponent {
         this.isAllCollapsed = true;
         this.isPSExpanded = []; this.isPTExpanded = {};
         this.gridDataSet = {}; this.parentGridData = {};
+        this.gridResult = {};
     }
     loadPctDetails(){
         this.isPctLoading = true;

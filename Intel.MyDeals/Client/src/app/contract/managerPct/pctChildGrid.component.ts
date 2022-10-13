@@ -32,6 +32,7 @@ export class pctChildGridComponent {
     @Input() parent: any;
     @Input() child: any;
     @Input() UItemplate: any;
+    @Input() dealType: any;
     userRole = ""; canEmailIcon = true;
     isPSExpanded = []; isPTExpanded = {};
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
@@ -46,7 +47,6 @@ export class pctChildGridComponent {
     private gridResult;
     public childGridResult;
     public pctMasterdata = [];
-    forceReadOnly = false;
 
     private CAN_EDIT_COST_TEST = this.lnavSvc.chkDealRules('C_EDIT_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "SA" && (<any>window).isSuper); // Can go to cost test screen and make changes
     private hasNoPermission = !(this.CAN_EDIT_COST_TEST == undefined ? this.lnavSvc.chkDealRules('C_EDIT_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "SA" && (<any>window).isSuper) : this.CAN_EDIT_COST_TEST);
@@ -159,7 +159,19 @@ export class pctChildGridComponent {
         }
         return false;
     }
-    ngOnInit() {
+    isHidden(fieldName) {
+        if (this.dealType == 'ECAP' && fieldName == 'MAX_RPU') {
+            return true;
+        }
+        else if (this.dealType !== 'ECAP' && (fieldName == 'CAP' || fieldName == 'ECAP_PRC' || fieldName == 'ECAP_FLR')) {
+            return true;
+        }
+        else if (this.dealType !== 'PROGRAM' && (fieldName == 'OEM_PLTFRM_LNCH_DT' || fieldName == 'OEM_PLTFRM_EOL_DT')) {
+            return true;
+        }
+        return false;
+    }
+    ngOnChanges() {
         this.userRole = (<any>window).usrRole;
         this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
         this.contractData?.PRC_ST.map((x, i) => {
@@ -167,9 +179,6 @@ export class pctChildGridComponent {
             this.isPSExpanded[i] = false;
             if (x.PRC_TBL != undefined) x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
         })
-        if(this.contractData?._behaviors?.isReadOnly['COST_TEST_RESULT']){
-            this.forceReadOnly = this.contractData?._behaviors?.isReadOnly['COST_TEST_RESULT'];
-        }
         this.gridResult = this.parent.filter(x => x.DEAL_ID == this.child.DEAL_ID);
         this.gridData = process(this.gridResult, this.childState);
     }

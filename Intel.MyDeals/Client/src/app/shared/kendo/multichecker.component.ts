@@ -110,6 +110,21 @@ export class MultiCheckFilterComponent implements AfterViewInit {
            else 
            this.value = this.currentData;
         }
+        if (this.value.includes('Select All') && item !== 'Select All') {
+            this.value = this.value.filter(x => x !== 'Select All');
+        }
+        else if (!this.value.includes('Select All') && item !== 'Select All') {
+            if (this.valueField != undefined && this.valueField != null && this.valueField != '') {
+                if (this.value.length == this.currentData.filter(x => x[this.valueField] != 'Select All').length) {
+                    this.value.push('Select All');
+                }
+            }
+            else if (this.valueField == undefined || this.valueField == null || this.valueField == '') {
+                if (this.value.length == this.currentData.filter(x => x != 'Select All').length) {
+                    this.value.push('Select All');
+                }
+            }
+        }
         _.each(this.value,itm=>{
          let operator='eq';
          if (itm == null) {

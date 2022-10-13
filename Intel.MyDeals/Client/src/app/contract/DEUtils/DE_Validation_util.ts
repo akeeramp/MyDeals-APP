@@ -99,6 +99,7 @@ export class DE_Validation_Util {
             if (curPricingStrategy.IS_HYBRID_PRC_STRAT == "1" || item["OBJ_SET_TYPE_CD"] == "FLEX") {
                 let dictGroupTypeAcr = {};
                 let dictGroupTypeDrn = {};
+                let dictGroupType = {};
 
                 //Calculating Accrual Line
                 if (Object.keys(dictGroupTypeAcr).length == 0) {
@@ -145,6 +146,16 @@ export class DE_Validation_Util {
                     }
                 }
 
+                if (curPricingStrategy.IS_HYBRID_PRC_STRAT == "1") {
+                    data.map(function (data, index) {
+                        dictGroupType[data["DEAL_COMB_TYPE"]] = index;
+                    });
+                    if (Object.keys(dictGroupType).length > 1) {
+                        item._behaviors.isError['DEAL_COMB_TYPE'] = true;
+                        item._behaviors.validMsg['DEAL_COMB_TYPE'] = "All deals within a PS should have the same 'Group Type' value";
+                        isShowStopperError = true;
+                    }
+                }
             }
 
             if (item["OBJ_SET_TYPE_CD"] == "FLEX") {
@@ -161,7 +172,11 @@ export class DE_Validation_Util {
             if (!isShowStopperError) {
                 if (item._behaviors.isError['MRKT_SEG'] || item._behaviors.isError['REBATE_OA_MAX_VOL'] ||
                     item._behaviors.isError['REBATE_OA_MAX_AMT'] || item._behaviors.isError['CONSUMPTION_TYPE'] ||
-                    item._behaviors.isError['FLEX_ROW_TYPE']) {
+                    item._behaviors.isError['FLEX_ROW_TYPE'] || item._behaviors.isError['RESET_VOLS_ON_PERIOD'] ||
+                    item._behaviors.isError['SETTLEMENT_PARTNER'] || item._behaviors.isError['AR_SETTLEMENT_LVL'] ||
+                    item._behaviors.isError['REBATE_TYPE'] || item._behaviors.isError['PAYOUT_BASED_ON'] ||
+                    item._behaviors.isError['CUST_ACCNT_DIV'] || item._behaviors.isError['GEO_COMBINED'] ||
+                    item._behaviors.isError['PERIOD_PROFILE'] || item._behaviors.isError['PROGRAM_PAYMENT']) {
                     isShowStopperError = true;
                 }
                 for (var e = 0; e < Object.keys(item._behaviors.validMsg).length; e++) {
