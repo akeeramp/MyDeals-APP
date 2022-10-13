@@ -7,11 +7,11 @@
     overflow: hidden;
 }
 
-    .prodSelectorSearch .prod-autocomplete {
-        padding-top: 0;
-        padding-bottom: 0;
-        width: 400px !important;
-    }
+.prodSelectorSearch .prod-autocomplete {
+    padding-top: 0;
+    padding-bottom: 0;
+    width: 400px !important;
+}
 
 @media (max-width: 1100px) {
     .prodSelectorSearch .prod-autocomplete {
@@ -71,7 +71,7 @@
     margin-top: -8px;
 }
 
-.productSelectorpath.breadcrumb > li + li:before {
+.productSelectorpath.breadcrumb>li+li:before {
     padding: 0 5px;
     color: white;
     content: ">";
@@ -90,11 +90,11 @@ a.prdAnchor {
     cursor: pointer;
 }
 
-    a.prdAnchor:hover {
-        color: #01AEEF;
-        text-decoration: none;
-        cursor: pointer
-    }
+a.prdAnchor:hover {
+    color: #01AEEF;
+    text-decoration: none;
+    cursor: pointer
+}
 
 .productSelector.Warning {
     color: #FFA300;
@@ -128,37 +128,37 @@ a.prdAnchor {
     background-color: #01AEEF;
 }
 
-    .drillDown.btn-group {
-        padding-top: 3px;
-        padding-bottom: 3px;
-    }
+.drillDown.btn-group {
+    padding-top: 3px;
+    padding-bottom: 3px;
+}
 
-        .drillDown.btn-group.btn {
-            white-space: normal !important;
-            word-wrap: break-word;
-        }
+.drillDown.btn-group.btn {
+    white-space: normal !important;
+    word-wrap: break-word;
+}
 
-        .drillDown.btn-group button:not(:last-child) {
-            border-right: none;
-            /* Prevent double borders */
-        }
+.drillDown.btn-group button:not(:last-child) {
+    border-right: none;
+    /* Prevent double borders */
+}
 
-        .drillDown.btn-group button.noborder {
-            border-right: none;
-        }
+.drillDown.btn-group button.noborder {
+    border-right: none;
+}
 
 
-        /* Add a background color on hover */
-        .drillDown.btn-group button:hover {
-            background-color: #01AEEF !important;
-            color: #1a3e6f !important;
-        }
+/* Add a background color on hover */
+.drillDown.btn-group button:hover {
+    background-color: #01AEEF !important;
+    color: #1a3e6f !important;
+}
 
-        .drillDown.btn-group button:focus,
-        .button:active {
-            outline: none !important;
-            background-color: #01AEEF;
-        }
+.drillDown.btn-group button:focus,
+.button:active {
+    outline: none !important;
+    background-color: #01AEEF;
+}
 
 .noLeftBorder {
     border-left: none !important;
@@ -173,20 +173,20 @@ a.prdAnchor {
     text-align: center;
 }
 
-    .prodDrillDownLarge p {
-        font-size: 13px;
-        margin-top: 11px;
-        margin-left: 25% !important;
-        margin-right: 25%;
-        color: #fff;
-        text-overflow: ellipsis;
-        overflow: hidden;
-        white-space: nowrap;
-    }
+.prodDrillDownLarge p {
+    font-size: 13px;
+    margin-top: 11px;
+    margin-left: 25% !important;
+    margin-right: 25%;
+    color: #fff;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    white-space: nowrap;
+}
 
-        .prodDrillDownLarge p:hover {
-            color: #1a3e6f;
-        }
+.prodDrillDownLarge p:hover {
+    color: #1a3e6f;
+}
 
 .prodSelected.ui-select-multiple.ui-select-bootstrap {
     min-height: 100px !important;
@@ -213,25 +213,26 @@ a.prdAnchor {
 }
 
 .prdBtn.btn-primary {
-    background-color: #01AEEF!important;
+    background-color: #01AEEF !important;
 }
 
-    .prdBtn.btn-primary:hover {
-        background-color: #01AEEF;
-        color: #1a3e6f;
-    }
+.prdBtn.btn-primary:hover {
+    background-color: #01AEEF;
+    color: #1a3e6f;
+}
 
-    .prdBtn.btn-primary:focus,
-    .btn-primary:active {
-        outline: none !important;
-        background-color: #01AEEF;
-    }
+.prdBtn.btn-primary:focus,
+.btn-primary:active {
+    outline: none !important;
+    background-color: #01AEEF;
+}
 
 .prodSelected .btn-primary:focus,
 .btn-primary:hover {
     color: #fff;
     background-color: #01AEEF;
 }
+
 .prodSelector .leftNavFilter {
     background-color: #e7e7e8;
     height: calc(85vh - 390px);
@@ -276,7 +277,7 @@ a.prdAnchor {
     background: none;
 }
 
-.lblFilterProd > span {
+.lblFilterProd>span {
     font-size: 12px !important;
     font-weight: 600 !important;
     color: #00AEEF !important;
@@ -294,32 +295,32 @@ a.prdAnchor {
     margin: 5px 5px 5px 10px;
 }
 
-    .prodSelector .filterGrp .filterContainer {
-        font-weight: 200;
-        margin-bottom: 20px;
-    }
+.prodSelector .filterGrp .filterContainer {
+    font-weight: 200;
+    margin-bottom: 20px;
+}
 
-        .prodSelector .filterGrp .filterContainer label {
-            font-weight: 200;
-            margin-left: 5px;
-            cursor: pointer;
-        }
+.prodSelector .filterGrp .filterContainer label {
+    font-weight: 200;
+    margin-left: 5px;
+    cursor: pointer;
+}
 
-    .prodSelector .filterGrp .srchContainer {
-        margin: 3px 0 0 15px;
-        cursor: pointer;
-        line-height: 1em;
-    }
+.prodSelector .filterGrp .srchContainer {
+    margin: 3px 0 0 15px;
+    cursor: pointer;
+    line-height: 1em;
+}
 
-        .prodSelector .filterGrp .srchContainer:hover i {
-            color: #003C71;
-        }
+.prodSelector .filterGrp .srchContainer:hover i {
+    color: #003C71;
+}
 
-        .prodSelector.filterGrp .srchContainer i {
-            color: #00AEEF;
-            font-size: 14px;
-            margin-right: 5px;
-        }
+.prodSelector.filterGrp .srchContainer i {
+    color: #00AEEF;
+    font-size: 14px;
+    margin-right: 5px;
+}
 
 .prodSelector.modal-header {
     border-bottom: none;
@@ -377,7 +378,7 @@ a.prdAnchor {
     position: relative;
 }
 
-.checkbox-custom + .checkbox-custom-label:before {
+.checkbox-custom+.checkbox-custom-label:before {
     content: '';
     background: #fff;
     border: 1.5px solid #eee;
@@ -390,24 +391,24 @@ a.prdAnchor {
     text-align: center;
 }
 
-.checkbox-custom:checked + .checkbox-custom-label:before {
+.checkbox-custom:checked+.checkbox-custom-label:before {
     background: #01AEEF;
 }
 
-.checkbox-custom:hover + .checkbox-custom-label:before {
+.checkbox-custom:hover+.checkbox-custom-label:before {
     border: 1.5px solid #01AEEF;
 }
 
-.drillDown .checkbox-custom:checked + .checkbox-custom-label:before {
+.drillDown .checkbox-custom:checked+.checkbox-custom-label:before {
     background: #01AEEF;
     border: 1.5px solid #797979;
 }
 
-.drillDown .checkbox-custom + .checkbox-custom-label:before {
+.drillDown .checkbox-custom+.checkbox-custom-label:before {
     border-radius: 2px;
 }
 
-.drillDown .checkbox-custom:checked + .checkbox-custom-label:before {
+.drillDown .checkbox-custom:checked+.checkbox-custom-label:before {
     background: #797979;
 }
 
@@ -415,7 +416,7 @@ a.prdAnchor {
     background: initial !important;
 }
 
-.checkbox-custom[disabled]:hover + .checkbox-custom-label[disabled]:before {
+.checkbox-custom[disabled]:hover+.checkbox-custom-label[disabled]:before {
     border: 1.5px solid red;
     cursor: no-drop;
 }
@@ -487,9 +488,9 @@ a.prdAnchor {
     color: white;
 }
 
-    .k-treeview .k-in.k-state-selected.k-state-focused {
-        background: #01AEEF;
-    }
+.k-treeview .k-in.k-state-selected.k-state-focused {
+    background: #01AEEF;
+}
 
 .k-treeview .k-state-focused {
     background: #01AEEF;
@@ -526,57 +527,57 @@ input[type=checkbox].with-sm-font {
     width: 1px;
 }
 
-    input[type=checkbox].with-sm-font + label:before {
-        font-family: FontAwesome;
-        display: inline-block;
-        content: "\f096";
-        font-size: 18px;
-        color: #39c600;
-        margin-left: 10px;
-        margin-top: 2px;
-        margin-bottom: 0px !important;
-        vertical-align: middle;
-        height: 13px;
-        width: 14px;
-        border-radius: 3px;
-        background: #fff;
-    }
+input[type=checkbox].with-sm-font+label:before {
+    font-family: FontAwesome;
+    display: inline-block;
+    content: "\f096";
+    font-size: 18px;
+    color: #39c600;
+    margin-left: 10px;
+    margin-top: 2px;
+    margin-bottom: 0px !important;
+    vertical-align: middle;
+    height: 13px;
+    width: 14px;
+    border-radius: 3px;
+    background: #fff;
+}
 
-    input[type=checkbox].with-sm-font:hover + label:before {
-        color: #9bc600;
-        cursor: pointer;
-    }
+input[type=checkbox].with-sm-font:hover+label:before {
+    color: #9bc600;
+    cursor: pointer;
+}
 
-    input[type=checkbox].with-sm-font.disabled + label:before {
-        color: #cccccc;
-        cursor: default;
-    }
+input[type=checkbox].with-sm-font.disabled+label:before {
+    color: #cccccc;
+    cursor: default;
+}
 
-    input[type=checkbox].with-sm-font:checked + label:before {
-        content: "\f046";
-        font-size: 18px;
-        margin-left: 10px;
-        margin-top: 2px;
-        vertical-align: middle;
-    }
+input[type=checkbox].with-sm-font:checked+label:before {
+    content: "\f046";
+    font-size: 18px;
+    margin-left: 10px;
+    margin-top: 2px;
+    vertical-align: middle;
+}
 
-    input[type=checkbox].with-sm-font.ckSm:checked + label:before {
-        font-size: 16px;
-    }
+input[type=checkbox].with-sm-font.ckSm:checked+label:before {
+    font-size: 16px;
+}
 
-    input[type=checkbox].with-sm-font:focus + label:before {
-        font-weight: bold;
-    }
+input[type=checkbox].with-sm-font:focus+label:before {
+    font-weight: bold;
+}
 
 .prodSelectorSearch .input-group-addon {
     background-color: #01AEEF;
     border: 1px solid #01AEEF;
 }
 
-    .prodSelectorSearch .input-group-addon input[type=checkbox] {
-        margin-top: 2px;
-        width: 20px;
-    }
+.prodSelectorSearch .input-group-addon input[type=checkbox] {
+    margin-top: 2px;
+    width: 20px;
+}
 
 .drillDown .input-group-addon {
     padding: 10px 0 0 10px;
@@ -591,7 +592,7 @@ input[type=checkbox].with-sm-font {
 
 .paddingLeftNone {
     padding-left: 0px !important;
-    padding-right:15px !important;
+    padding-right: 15px !important;
 }
 
 .paddingRightNone {
@@ -661,11 +662,12 @@ input[type=checkbox].with-sm-font {
     cursor: pointer;
 }
 
-    .k-grid a:hover, a:focus {
-        color: #004579;
-        text-decoration: none !important;
-        cursor: pointer;
-    }
+.k-grid a:hover,
+a:focus {
+    color: #004579;
+    text-decoration: none !important;
+    cursor: pointer;
+}
 
 .btn-primary[disabled] {
     background-color: #edeff0 !important;

@@ -44,7 +44,7 @@ export class PTE_CellChange_Util {
         //make the selected row PTR_USER_PRD empty if its not the empty row
         let cols = _.map(columns, col => { return { prop: col.data } });
         _.each(cols, (val, key) => {
-            let currentstring = '';
+            let currentString = '';
             if (val.prop == 'PTR_USER_PRD') {
                 //update PTR_USER_PRD with entered value
                 //this exclussivlt because for  products can be with comma seperate values
@@ -56,56 +56,56 @@ export class PTE_CellChange_Util {
             }
             else if (val.prop == 'TIER_NBR') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-                currentstring = row + ',' + val.prop + ',' + tier + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
+                currentString = row + ',' + val.prop + ',' + tier + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'STRT_VOL') {
                 if (tier == 1) {
-                    currentstring = row + ',' + val.prop + ',' + 1 + ',' + 'no-edit';
-                    updateRows.push(currentstring.split(','));
+                    currentString = row + ',' + val.prop + ',' + 1 + ',' + 'no-edit';
+                    updateRows.push(currentString.split(','));
                 }
                 else {
-                    currentstring = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
-                    updateRows.push(currentstring.split(','));
+                    currentString = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
+                    updateRows.push(currentString.split(','));
                 }
             }
             else if (val.prop == 'END_VOL') {
                 if (tier == numoftier) {
-                    currentstring = row + ',' + val.prop + ',' + 'Unlimited' + ',' + 'no-edit';
-                    updateRows.push(currentstring.split(','));
+                    currentString = row + ',' + val.prop + ',' + 'Unlimited' + ',' + 'no-edit';
+                    updateRows.push(currentString.split(','));
                 }
                 else {
-                    currentstring = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
-                    updateRows.push(currentstring.split(','));
+                    currentString = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
+                    updateRows.push(currentString.split(','));
                 }
             }
             else if (val.prop == 'RATE') {
-                currentstring = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
+                currentString = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'STRT_REV') {
                 if (tier == 1) {
-                    currentstring = row + ',' + val.prop + ',' + 0.01 + ',' + 'no-edit';
-                    updateRows.push(currentstring.split(','));
+                    currentString = row + ',' + val.prop + ',' + 0.01 + ',' + 'no-edit';
+                    updateRows.push(currentString.split(','));
                 }
                 else {
-                    currentstring = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
-                    updateRows.push(currentstring.split(','));
+                    currentString = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
+                    updateRows.push(currentString.split(','));
                 }
             }
             else if (val.prop == 'END_REV') {
                 if (tier == numoftier) {
-                    currentstring = row + ',' + val.prop + ',' + 9999999999.99 + ',' + 'no-edit';
-                    updateRows.push(currentstring.split(','));
+                    currentString = row + ',' + val.prop + ',' + 9999999999.99 + ',' + 'no-edit';
+                    updateRows.push(currentString.split(','));
                 }
                 else {
-                    currentstring = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
-                    updateRows.push(currentstring.split(','));
+                    currentString = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
+                    updateRows.push(currentString.split(','));
                 }
             }
             else if (val.prop == 'INCENTIVE_RATE') {
-                currentstring = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
+                currentString = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
             }
             else {
                 this.addUpdateRowOnchangeCommon(row, val, updateRows, curPricingTable, contractData, null, operation, cellItem);
@@ -114,7 +114,7 @@ export class PTE_CellChange_Util {
     }
     static addUpdateRowOnchangeCommon(row: number, val: any, updateRows: Array<any>, curPricingTable: any, contractData: any, rowData?: any, operation?: any, cellItem?: any) {
         //make the selected row PTR_USER_PRD empty if its not the empty row
-        let currentstring = '';
+        let currentString = '';
         //rowdata scenario is for KIT and except kit rebate we can assign all other values
         if (rowData) {
             //this logic is to add PTR_SYS_PRD in case of produc selector and corrector
@@ -156,47 +156,47 @@ export class PTE_CellChange_Util {
                 //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
                 if ((curPricingTable[`AR_SETTLEMENT_LVL`] && curPricingTable[`AR_SETTLEMENT_LVL`].toLowerCase() == 'cash')
                     || (contractData.IS_TENDER == "1" && contractData.Customer.DFLT_TNDR_AR_SETL_LVL.toLowerCase() == 'cash')) {
-                    currentstring = row + ',' + val.prop + ',' + contractData.Customer.DFLT_SETTLEMENT_PARTNER + ',' + 'no-edit';
+                    currentString = row + ',' + val.prop + ',' + contractData.Customer.DFLT_SETTLEMENT_PARTNER + ',' + 'no-edit';
                 }
                 else {
-                    currentstring = row + ',' + val.prop + ',' + '' + ',' + 'no-edit';
+                    currentString = row + ',' + val.prop + ',' + '' + ',' + 'no-edit';
                 }
-                updateRows.push(currentstring.split(','));
+                updateRows.push(currentString.split(','));
                 //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
             }
             else if (val.prop == 'START_DT') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-                currentstring = row + ',' + val.prop + ',' + contractData.START_DT + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
+                currentString = row + ',' + val.prop + ',' + contractData.START_DT + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
                 //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
             }
             else if (val.prop == 'END_DT') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-                currentstring = row + ',' + val.prop + ',' + contractData.END_DT + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
+                currentString = row + ',' + val.prop + ',' + contractData.END_DT + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
                 //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
             }
             else if (val.prop == 'RESET_VOLS_ON_PERIOD') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-                currentstring = row + ',' + val.prop + ',' + 'No' + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
+                currentString = row + ',' + val.prop + ',' + 'No' + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
                 //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
             }
             else if (val.prop == 'CUST_ACCNT_DIV') {
-                currentstring = row + ',' + val.prop + ',' + contractData.CUST_ACCNT_DIV + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
+                currentString = row + ',' + val.prop + ',' + contractData.CUST_ACCNT_DIV + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'AR_SETTLEMENT_LVL' && contractData.IS_TENDER == "1") {
-                currentstring = row + ',' + val.prop + ',' + contractData.Customer.DFLT_TNDR_AR_SETL_LVL + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
+                currentString = row + ',' + val.prop + ',' + contractData.Customer.DFLT_TNDR_AR_SETL_LVL + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'TOTAL_DOLLAR_AMOUNT' && curPricingTable.OBJ_SET_TYPE_CD == 'PROGRAM') {
-                currentstring = row + ',' + val.prop + ',' + '0.00' + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
+                currentString = row + ',' + val.prop + ',' + '0.00' + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'ADJ_ECAP_UNIT' && curPricingTable.OBJ_SET_TYPE_CD == 'PROGRAM') {
-                currentstring = row + ',' + val.prop + ',' + '0' + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
+                currentString = row + ',' + val.prop + ',' + '0' + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'MRKT_SEG') {
                 let cellVal = curPricingTable[`${val.prop}`] ? curPricingTable[`${val.prop}`] : '';
@@ -221,8 +221,8 @@ export class PTE_CellChange_Util {
                 } else {
                     cellVal = (operation && operation.operation && operation.PTR_SYS_PRD) ? JSON.parse(operation['PTR_SYS_PRD'])[cellItem.new][0]['CAP'] : ''
                 }
-                currentstring = row + ',' + val.prop + ',' + cellVal + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
+                currentString = row + ',' + val.prop + ',' + cellVal + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'YCS2') {
                 let newCellItem = cellItem.new.split(",");
@@ -234,15 +234,15 @@ export class PTE_CellChange_Util {
                 } else {
                     cellVal = (operation && operation.operation && operation.PTR_SYS_PRD) ? JSON.parse(operation['PTR_SYS_PRD'])[cellItem.new][0]['YCS2'] : ''
                 }
-                currentstring = row + ',' + val.prop + ',' + cellVal + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
+                currentString = row + ',' + val.prop + ',' + cellVal + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
             }
             else {
                 if (val.prop) {
                     //this will be autofill defaults value 
                     let cellVal = curPricingTable[`${val.prop}`] ? curPricingTable[`${val.prop}`] : '';
-                    currentstring = row + ',' + val.prop + ',' + cellVal + ',' + 'no-edit';
-                    updateRows.push(currentstring.split(','));
+                    currentString = row + ',' + val.prop + ',' + cellVal + ',' + 'no-edit';
+                    updateRows.push(currentString.split(','));
                 }
             }
         }
@@ -265,7 +265,7 @@ export class PTE_CellChange_Util {
         //make the selected row PTR_USER_PRD empty if its not the empty row
         let cols = _.map(columns, col => { return { prop: col.data } });
         _.each(cols, (val, key) => {
-            let currentstring = '';
+            let currentString = '';
             if (val.prop == 'PTR_USER_PRD') {
                 hotTable.setDataAtRowProp(row, 'PTR_USER_PRD', cellItem.new, 'no-edit');
             }
@@ -273,22 +273,18 @@ export class PTE_CellChange_Util {
                 hotTable.setDataAtRowProp(row, val.prop, ROW_ID, 'no-edit');
             }
             else if (val.prop == 'PRD_BCKT') {
-                currentstring = row + ',' + val.prop + ',' + product + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
-            }
-            else if (val.prop == 'PRD_BCKT') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-                currentstring = row + ',' + val.prop + ',' + product + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
+                currentString = row + ',' + val.prop + ',' + product + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'QTY' && rowData == null) {
                 //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-                currentstring = row + ',' + val.prop + ',' + '1' + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
+                currentString = row + ',' + val.prop + ',' + '1' + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
             }
             else if ((val.prop == 'ECAP_PRICE' || val.prop == 'ECAP_PRICE_____20_____1' || val.prop == 'TEMP_KIT_REBATE' || val.prop == 'DSCNT_PER_LN' || val.prop == 'TEMP_TOTAL_DSCNT_PER_LN') && rowData == null) {
-                currentstring = row + ',' + val.prop + ',' + '0' + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
+                currentString = row + ',' + val.prop + ',' + '0' + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
             }
             else {
                 this.addUpdateRowOnchangeCommon(row, val, updateRows, curPricingTable, contractData, rowData, operation, cellItem);
@@ -580,7 +576,7 @@ export class PTE_CellChange_Util {
     static addUpdateRowOnchangeDensity(hotTable: Handsontable, row: number, cellItem: any, ROW_ID: number, updateRows: Array<any>, curPricingTable: any, contractData: any, numoftier: number, tier?: number, operation?: any) {
         //make the selected row PTR_USER_PRD empty if its not the empty row
         _.each(hotTable.getCellMetaAtRow(0), (val, key) => {
-            let currentstring = '';
+            let currentString = '';
             if (val.prop == 'PTR_USER_PRD') {
                 //update PTR_USER_PRD with entered value
                 //this exclussivlt because for  products can be with comma seperate values
@@ -592,32 +588,32 @@ export class PTE_CellChange_Util {
             }
             else if (val.prop == 'TIER_NBR') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-                currentstring = row + ',' + val.prop + ',' + tier + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
+                currentString = row + ',' + val.prop + ',' + tier + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'STRT_PB') {
                 if (tier == 1) {
-                    currentstring = row + ',' + val.prop + ',' + 0.001 + ',' + 'no-edit';
-                    updateRows.push(currentstring.split(','));
+                    currentString = row + ',' + val.prop + ',' + 0.001 + ',' + 'no-edit';
+                    updateRows.push(currentString.split(','));
                 }
                 else {
-                    currentstring = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
-                    updateRows.push(currentstring.split(','));
+                    currentString = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
+                    updateRows.push(currentString.split(','));
                 }
             }
             else if (val.prop == 'END_PB') {
                 if (tier == numoftier) {
-                    currentstring = row + ',' + val.prop + ',' + 'Unlimited' + ',' + 'no-edit';
-                    updateRows.push(currentstring.split(','));
+                    currentString = row + ',' + val.prop + ',' + 'Unlimited' + ',' + 'no-edit';
+                    updateRows.push(currentString.split(','));
                 }
                 else {
-                    currentstring = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
-                    updateRows.push(currentstring.split(','));
+                    currentString = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
+                    updateRows.push(currentString.split(','));
                 }
             }
             else if (val.prop == 'DENSITY_RATE') {
-                currentstring = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
-                updateRows.push(currentstring.split(','));
+                currentString = row + ',' + val.prop + ',' + 0 + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
             }
             else {
                 if (val.prop != 'DENSITY_BAND') {

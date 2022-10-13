@@ -1,42 +1,46 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { logger } from "../../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import * as _ from "underscore";
 import * as lodash from "lodash";
-import { ProductSelectorComponent } from "../productSelector/productselector.component";
 import { MatDialog } from '@angular/material/dialog';
 import { SelectableSettings } from '@progress/kendo-angular-treeview';
 import { NgbPopoverConfig } from "@ng-bootstrap/ng-bootstrap";
+
+import { logger } from "../../../shared/logger/logger";
+
+import { ProductSelectorComponent } from "../productSelector/productselector.component";
 import { ProdSel_Util } from '../productSelector/prodSel_Util'
 import { PTE_Common_Util } from "../../PTEUtils/PTE_Common_util";
+import { ProductBreakoutComponent } from '../productSelector/productBreakout/productBreakout.component';
+
 @Component({
-  selector: "product-corrector",
-  templateUrl: "Client/src/app/contract/ptModals/productCorrector/productcorrector.component.html",
+  selector: 'product-corrector',
+  templateUrl: 'Client/src/app/contract/ptModals/productCorrector/productcorrector.component.html',
   styleUrls:['Client/src/app/contract/ptModals/productCorrector/productcorrector.component.css']
 })
-
 export class ProductCorrectorComponent {
-  constructor(
-    public dialogRef: MatDialogRef<ProductCorrectorComponent>,
+  constructor(public dialogRef: MatDialogRef<ProductCorrectorComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any,
-    private loggerSvc: logger,
-    private dialog:MatDialog,
-    popoverConfig: NgbPopoverConfig) {
-        popoverConfig.placement = 'auto';
-        popoverConfig.container = 'body';
-        popoverConfig.autoClose = 'outside';
-        popoverConfig.animation = false;    // Fixes issue with `.fade` css element setting improper opacity making the popover not show up
-      // popoverConfig.triggers = 'mouseenter:mouseenter';   // Disabled to use default click behaviour to prevent multiple popover windows from appearing
+      private loggerService: logger,
+      private dialogService: MatDialog,
+      popoverConfig: NgbPopoverConfig) {
+    popoverConfig.placement = 'auto';
+    popoverConfig.container = 'body';
+    popoverConfig.autoClose = 'outside';
+    popoverConfig.animation = false; // Fixes issue with `.fade` css element setting improper opacity making the popover not show up
+    popoverConfig.triggers = 'mouseenter:mouseleave';   // Disabled to use default click behaviour to prevent multiple popover windows from appearing
+    popoverConfig.openDelay = 50;   // milliseconds
+    popoverConfig.closeDelay = 500; // milliseconds
   }
   private pricingTableRow: any = {};
   private ProductCorrectorData:any=null;
   private contractData:any=null;
   private curPricingTable:any=null;
   private selRows:any=null;
-  private isLoading:boolean = false;
+  private isLoading: boolean = false;
   private type = "numeric";
   private info = true;
   private gridResult:any[] =[];
@@ -107,6 +111,24 @@ export class ProductCorrectorComponent {
     'message': "The product combination is not valid. You can combine (DT, Mb, SvrWS, EIA CPU) or (CS, EIA CS) verticals. For NON IA, you can combine as many products within same verticals for PROGRAM, VOLTIER and REV TIER deals."
   }
 
+  private openModal(columnTypes: string, currentPricingTableRow, productMemberSId, priceCondition) {
+    // Open Modal with data
+    this.dialogService.open(ProductBreakoutComponent, {
+        data: {
+            columnTypes: columnTypes,
+            productData: [{
+                'CUST_MBR_SID': currentPricingTableRow.CUST_MBR_SID,
+                'PRD_MBR_SID': productMemberSId,
+                'GEO_MBR_SID': currentPricingTableRow.GEO_COMBINED,
+                'DEAL_STRT_DT': currentPricingTableRow.START_DT,
+                'DEAL_END_DT': currentPricingTableRow.END_DT,
+                'getAvailable': 'N',
+                'priceCondition': priceCondition
+            }]
+        }
+    });
+  }
+
   prdLvlDecoder(indx:any) {
     if (indx === 7003) return "Product Vertical";
     if (indx === 7004) return "Brand";
@@ -143,7 +165,7 @@ export class ProductCorrectorComponent {
     this.rowDCId=this.curRowIssues[0].DCID;
     this.numIssueRows=this.curRowIssues.length;
     this.selGridResult=this.gridResult[0].data;
-    this.selGridData=this.gridData[0].data;
+    this.selGridData = process(this.gridData[0].data, this.state);
     this.selRowLvl=this.getSelRowTree(this.curRowLvl[0].items);
     this.selRowCategories=this.getSelRowTree(this.curRowCategories[0].items);
     //this.selRowIssues=[this.curRowIssues[0]];
@@ -210,7 +232,7 @@ export class ProductCorrectorComponent {
           }
       }
     this.selGridResult = _.findWhere(this.gridResult, { name: key, DCID: DCID}).data;
-    this.selGridData = _.findWhere(this.gridData, { name: key, DCID: DCID}).data;
+    this.selGridData = process(_.findWhere(this.gridData, { name: key, DCID: DCID}).data, this.state);
     this.selRowLvl = this.getSelRowTree(_.findWhere(this.curRowLvl, { name: key, DCID: DCID}).items);
     this.selRowCategories = this.getSelRowTree(_.findWhere(this.curRowCategories, { name: key, DCID: DCID}).items);
     this.curSelProducts = _.findWhere(this.selectedProducts, { name: key, DCID: DCID });
@@ -225,7 +247,7 @@ export class ProductCorrectorComponent {
   openProdSel(key:string){
     this.dialogRef.close();
     let data={ name: 'Product Selector', source: '', selVal: key,contractData:this.contractData,curPricingTable:this.curPricingTable,curRow:[_.findWhere(this.selRows,{name:key}).row]};
-    const dialogRefe = this.dialog.open(ProductSelectorComponent, {
+    const dialogRefe = this.dialogService.open(ProductSelectorComponent, {
       height: "80vh",
       width: "5500px",
       data: data,
@@ -263,7 +285,7 @@ export class ProductCorrectorComponent {
             // Check if valid combination
             let isCrossVerticalError = this.isValidProductCombination(existingProdTypes, item.PRD_CAT_NM)
             if (!isCrossVerticalError) {
-                this.loggerSvc.error(this.crossVertical['message'], '', '');
+                this.loggerService.error(this.crossVertical['message'], '', '');
                 evt.target.checked = false;
                 return false;
             }

@@ -1,27 +1,29 @@
-﻿/* eslint-disable prefer-const */
+﻿/* eslint-disable @typescript-eslint/no-inferrable-types */
+/* eslint-disable prefer-const */
 import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
-import { logger } from '../../shared/logger/logger';
-import { pricingTableEditorService } from './pricingTableEditor.service'
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
 import * as _ from 'underscore';
+import { MatDialog } from '@angular/material/dialog';
+import { forkJoin } from 'rxjs';
+
+import { logger } from '../../shared/logger/logger';
+import { pricingTableEditorService } from './pricingTableEditor.service'
 import { templatesService } from '../../shared/services/templates.service';
+import { lnavService } from '../lnav/lnav.service';
+import { productSelectorService } from '../../shared/services/productSelector.service';
+import { flexoverLappingcheckDealService } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.service'
+import { contractDetailsService } from "../contractDetails/contractDetails.service"
+
 import { PRC_TBL_Model_Attributes, PRC_TBL_Model_Column, PRC_TBL_Model_Field, sheetObj, ProdCorrectObj } from './handsontable.interface';
 import { PTEUtil } from '../PTEUtils/PTE.util';
-import { MatDialog } from '@angular/material/dialog';
 import { ProductSelectorComponent } from '../ptModals/productSelector/productselector.component';
 import { ProductCorrectorComponent } from '../ptModals/productCorrector/productcorrector.component';
 import { GeoSelectorComponent } from '../ptModals/geo/geo.component';
 import { multiSelectModalComponent } from '../ptModals/multiSelectModal/multiSelectModal.component';
 import { kendoCalendarComponent } from '../ptModals/kendoCalenderModal/kendoCalendar.component';
-import { SelectEditor } from './custSelectEditor.class';
-import { forkJoin } from 'rxjs';
-import { CellMeta, CellSettings, GridSettings } from 'handsontable/settings';
 import { PTE_CellChange_Util } from '../PTEUtils/PTE_CellChange_util';
 import { AutoFillComponent } from '../ptModals/autofillsettings/autofillsettings.component';
-import { lnavService } from '../lnav/lnav.service';
-import * as moment from 'moment';
-import { productSelectorService } from '../../shared/services/productSelector.service';
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 import { PTE_Load_Util } from '../PTEUtils/PTE_Load_util';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
@@ -32,8 +34,6 @@ import { Tender_Util } from '../PTEUtils/Tender_util';
 import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 import { FlexOverlappingCheckComponent } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.component';
-import { flexoverLappingcheckDealService } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.service'
-import { contractDetailsService } from "../contractDetails/contractDetails.service"
 @Component({
     selector: 'pricing-table-editor',
     templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html'
@@ -41,15 +41,15 @@ import { contractDetailsService } from "../contractDetails/contractDetails.servi
 export class pricingTableEditorComponent implements OnChanges {
 
     constructor(private pteService: pricingTableEditorService,
-        private templateService: templatesService,
-        private pricingTableSvc: pricingTableEditorService,
-        private productSelectorSvc: productSelectorService,
-        private loggerService: logger,
-        private lnavSVC: lnavService,
-        private flexoverLappingCheckDealsSvc: flexoverLappingcheckDealService,
-        protected dialog: MatDialog,
-        private contractDetailsSvc: contractDetailsService) {
-        /*  custom cell editot logic starts here*/
+            private templateService: templatesService,
+            private pricingTableService: pricingTableEditorService,
+            private productSelectorService: productSelectorService,
+            private loggerService: logger,
+            private lnavService: lnavService,
+            private flexoverLappingCheckDealsService: flexoverLappingcheckDealService,
+            private contractDetailsService: contractDetailsService,
+            protected dialog: MatDialog) {
+        /*  custom cell editor logic starts here*/
         let VM = this;
         this.custCellEditor = class custSelectEditor extends Handsontable.editors.TextEditor {
             public TEXTAREA: any;
@@ -145,10 +145,10 @@ export class pricingTableEditorComponent implements OnChanges {
                     data = { colName: name, items: { 'data': this.source }, cellCurrValues: selVal };
                 }
                 else {
-                    var contractStartDate = VM.contractData["START_DT"];
-                    var contractEndDate = VM.contractData["END_DT"];
-                    var isConsumption = this.hot.getDataAtRowProp(this.selRow, "PAYOUT_BASED_ON") === "Consumption";
-                    var isOEM = this.field === "OEM_PLTFRM_LNCH_DT" || this.field === "OEM_PLTFRM_EOL_DT"; 
+                    const contractStartDate = VM.contractData["START_DT"];
+                    const contractEndDate = VM.contractData["END_DT"];
+                    const isConsumption = this.hot.getDataAtRowProp(this.selRow, "PAYOUT_BASED_ON") === "Consumption";
+                    const isOEM = this.field === "OEM_PLTFRM_LNCH_DT" || this.field === "OEM_PLTFRM_EOL_DT"; 
                     modalComponent = kendoCalendarComponent;
                     height = "400px"
                     width = "500px";
@@ -192,7 +192,7 @@ export class pricingTableEditorComponent implements OnChanges {
                                 });
                             }
                             else {
-                                _.each(result.validateSelectedProducts, function (item) {
+                                _.each(result.validateSelectedProducts, (item) => {
                                     if (!item[0].EXCLUDE) {
                                         cntrctPrdct.push(item[0].HIER_VAL_NM)
                                     }
@@ -215,7 +215,7 @@ export class pricingTableEditorComponent implements OnChanges {
                             VM.isLoading = false;
                             if (VM.curPricingTable.OBJ_SET_TYPE_CD && VM.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
                                 if (this.allOperations.length > 0) {
-                                    for (var i = 0; i < this.allOperations.length; i++) {
+                                    for (let i = 0; i < this.allOperations.length; i++) {
                                         let denBandData = PTE_CellChange_Util.validateDensityBand(this.selRow, VM.columns, VM.curPricingTable, this.allOperations[i], '', false);
                                         let error = PTE_Save_Util.isPTEError(denBandData.finalPTR, VM.curPricingTable);
                                         VM.validMisProd = denBandData.validMisProds;
@@ -260,7 +260,7 @@ export class pricingTableEditorComponent implements OnChanges {
     private isBusyShowFunFact: boolean = true;
     private timeout:any = null;
     /*For loading variable */
-    public showDiscount:string = "0%";
+    public showDiscount: string = "0%";
     public dirty = false;
     private curPricingStrategy: any = {};
     private curPricingTable: any = {};
@@ -328,7 +328,6 @@ export class pricingTableEditorComponent implements OnChanges {
     public validMisProd: any;
     public isExcludePrdChange: boolean = false;
 
-
     setBusy(msg, detail, msgType, showFunFact) {
         setTimeout(() => {
             const newState = msg != undefined && msg !== "";
@@ -364,7 +363,7 @@ export class pricingTableEditorComponent implements OnChanges {
             this.isDeletePTR = true;
         }
     }
-     async closeDialog(act: string) {
+    async closeDialog(act: string) {
         if (act == 'No') {
             //setting back the values back to handsonetables
             _.each(this.multiRowDelete, item => {
@@ -384,28 +383,26 @@ export class pricingTableEditorComponent implements OnChanges {
     }
     chgTerms() {
         //function must trigger only after stop typing
-        let vm = this;
-        clearTimeout(vm.timeout);
-        vm.timeout = setTimeout(function () {
-            vm.isLoading = true;
-            vm.setBusy("Saving...", "Saving your data", "Info", true);
-            var dataItem = vm.curPricingStrategy;
-            var data = {
+        clearTimeout(this.timeout);
+        this.timeout = setTimeout(function () {
+            this.isLoading = true;
+            this.setBusy("Saving...", "Saving your data", "Info", true);
+            const dataItem = this.curPricingStrategy;
+            const data = {
                 objSetType: "PRC_ST",
                 ids: [dataItem["DC_ID"]],
                 attribute: "TERMS",
                 value: dataItem["TERMS"]
             };
 
-            vm.pteService.updateAtrbValue(vm.contractData.CUST_MBR_SID, vm.contractData.DC_ID, data).toPromise().catch((err) => {
-                vm.loggerService.error("Error", "Could not save the value.", err);
-                vm.isLoading = false;
-                vm.setBusy("", "", "", false);
+            this.pteService.updateAtrbValue(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data).toPromise().catch((err) => {
+                this.loggerService.error("Error", "Could not save the value.", err);
+                this.isLoading = false;
+                this.setBusy("", "", "", false);
             });
-            vm.loggerService.success("Done", "Save Complete.");
-            vm.isLoading = false;
-            vm.setBusy("", "", "", false);
-
+            this.loggerService.success("Done", "Save Complete.");
+            this.isLoading = false;
+            this.setBusy("", "", "", false);
         }, 800);
     }
     getTemplateDetails() {
@@ -421,8 +418,7 @@ export class pricingTableEditorComponent implements OnChanges {
         this.C_ADD_PRICING_TABLE = this.curPricingStrategy._settings.C_ADD_PRICING_TABLE != undefined ? this.curPricingStrategy._settings.C_ADD_PRICING_TABLE : false;
     }
     async getPTRDetails() {
-        let vm = this;
-        let response = await vm.pteService.readPricingTable(vm.in_Pt_Id).toPromise().catch((err) => {
+        let response = await this.pteService.readPricingTable(this.in_Pt_Id).toPromise().catch((err) => {
             this.loggerService.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
         });
 
@@ -431,7 +427,7 @@ export class pricingTableEditorComponent implements OnChanges {
             // Cleans out the PTR_SYS_PRD value forcing a product reconciliation because the customer might have changed.
             //  So... we need a check to see if the value on load is blank and if so... set the dirty flag
             Tender_Util.getTenderDetails(response.PRC_TBL_ROW, this.isTenderContract);
-            vm.pricingTableDet = response.PRC_TBL_ROW;
+            this.pricingTableDet = response.PRC_TBL_ROW;
             this.enableDeTab.emit(true);
             return response.PRC_TBL_ROW;
         } else {
@@ -445,7 +441,6 @@ export class pricingTableEditorComponent implements OnChanges {
         this.hotTable.updateSettings({ mergeCells: mergCells });
     }
     generateHandsonTable(PTR: any) {
-        let vm = this;
         //this is the code which is create columns according to Handson from API
         let nestedHeaders: [string[], string[]] = [[], []];
         let hiddenColumns: number[] = [];
@@ -529,7 +524,6 @@ export class pricingTableEditorComponent implements OnChanges {
         else {
             return [];
         }
-
     }
     afterCellChange(changes: Array<any>, source: any) { // Fired after one or more cells has been changed. The changes are triggered in any situation when the value is entered using an editor or changed using API (e.q setDataAtCell).so we are calling only if there is a change in cell
         if (source == 'edit' || source == 'CopyPaste.paste' || source == 'Autofill.fill') {
@@ -659,29 +653,28 @@ export class pricingTableEditorComponent implements OnChanges {
        }
     }
     mergeKitDeal(){
-        let vm=this;
         this.isKitDialog=false;
         this.setBusy("PTE Reloading...", "PTE Reloading please wait", "Info", true);
-         setTimeout(() => {
-          //will delete the rows first this must be first step
-          _.each(vm.kitNameObj.PTR,(itm)=>{
-                let PTR=PTE_Common_Util.getPTEGenerate(vm.columns,vm.curPricingTable);
-                let PTRlen=_.where(PTR,{DEAL_GRP_NM:vm.kitNameObj.name}).length;
-                let lastRow=_.findLastIndex(PTR,{DEAL_GRP_NM:vm.kitNameObj.name});
+        setTimeout(() => {
+            //will delete the rows first this must be first step
+            _.each(this.kitNameObj.PTR, (itm) => {
+                let PTR=PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
+                let PTRlen=_.where(PTR,{DEAL_GRP_NM: this.kitNameObj.name}).length;
+                let lastRow=_.findLastIndex(PTR,{DEAL_GRP_NM: this.kitNameObj.name});
                 if(PTRlen>1){
                     let prdlen=this.hotTable.getDataAtRowProp(lastRow,'PTR_USER_PRD').split(',').length;
-                    vm.hotTable.alter('remove_row', lastRow, prdlen, 'no-edit');
+                    this.hotTable.alter('remove_row', lastRow, prdlen, 'no-edit');
                 }
             });
-             //After delete will merge the rows
-             PTE_CellChange_Util.mergeKitDeal(this.kitNameObj,this.columns,this.curPricingTable,this.contractData, this.pricingTableTemplates);
-            vm.kitNameObjArr.splice(0,1);
-            if(vm.kitNameObjArr && vm.kitNameObjArr.length>0){
-                vm.kitNameObj=vm.kitNameObjArr[0]
-                vm.isKitDialog=true;
+            //After delete will merge the rows
+            PTE_CellChange_Util.mergeKitDeal(this.kitNameObj, this.columns, this.curPricingTable, this.contractData, this.pricingTableTemplates);
+            this.kitNameObjArr.splice(0,1);
+            if (this.kitNameObjArr && this.kitNameObjArr.length > 0) {
+                this.kitNameObj = this.kitNameObjArr[0];
+                this.isKitDialog = true;
             }
             this.setBusy("", "", "", false);
-         },0);
+        },0);
     }
     deleteRow(rows: Array<any>): void {
         try {
@@ -805,9 +798,9 @@ export class pricingTableEditorComponent implements OnChanges {
         if (isValidProd) {            
             //Handsonetable loading taking some time so putting this logic for loader
             let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
-            let flexReqData = PTE_Common_Util.getOverlapFLexProducts(this.curPricingTable, PTR);
+            let flexReqData = PTE_Common_Util.getOverlapFlexProducts(this.curPricingTable, PTR);
             if (flexReqData != undefined) {
-                this.overlapFlexResult = await this.flexoverLappingCheckDealsSvc.GetProductOVLPValidation(flexReqData).toPromise();
+                this.overlapFlexResult = await this.flexoverLappingCheckDealsService.GetProductOVLPValidation(flexReqData).toPromise();
             }
             //Checking for UI errors
             let finalPTR = PTE_Save_Util.validatePTE(PTR, this.curPricingStrategy, this.curPricingTable, this.contractData, this.VendorDropDownResult, this.overlapFlexResult, this.validMisProd);
@@ -878,7 +871,7 @@ export class pricingTableEditorComponent implements OnChanges {
         let isValidProd = await this.validateOnlyProducts('onSave');
         //Handsonetable loading taking some time so putting this logic for loader
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
-        var multiGeoWithoutBlend = PTE_Validation_Util.validateMultiGeoForHybrid(PTR, this.curPricingStrategy.IS_HYBRID_PRC_STRAT);
+        const multiGeoWithoutBlend = PTE_Validation_Util.validateMultiGeoForHybrid(PTR, this.curPricingStrategy.IS_HYBRID_PRC_STRAT);
         if (multiGeoWithoutBlend != "0") {
             if (multiGeoWithoutBlend == "1") {
                 this.loggerService.error('Multiple GEO Selection not allowed without BLEND', 'error');
@@ -1002,7 +995,7 @@ export class pricingTableEditorComponent implements OnChanges {
             // var pcMt = new perfCacheBlock("Translate Products (DB not logged)", "MT");
             this.isLoading = true;
             this.setBusy("Validating your data...", "Please wait while we validate your information!", "Info", true);
-            transformResults = await this.productSelectorSvc.TranslateProducts(translationInputToSend, this.contractData.CUST_MBR_SID, this.curPricingTable.OBJ_SET_TYPE_CD, this.contractData.DC_ID, this.contractData.IS_TENDER) //Once the database is fixed remove the hard coded geo_mbr_sid
+            transformResults = await this.productSelectorService.TranslateProducts(translationInputToSend, this.contractData.CUST_MBR_SID, this.curPricingTable.OBJ_SET_TYPE_CD, this.contractData.DC_ID, this.contractData.IS_TENDER) //Once the database is fixed remove the hard coded geo_mbr_sid
                 .toPromise()
                 .catch(error => {
                     this.loggerService.error("Product Translator failure::", error);
@@ -1057,7 +1050,7 @@ export class pricingTableEditorComponent implements OnChanges {
                     });
                 }
                 else {
-                    _.each(result.validateSelectedProducts, function (item) {
+                    _.each(result.validateSelectedProducts, (item) => {
                         if (!item[0].EXCLUDE) {
                             cntrctPrdct.push(item[0].HIER_VAL_NM)
                         }
@@ -1124,8 +1117,8 @@ export class pricingTableEditorComponent implements OnChanges {
                                 let ValidProducts = PTE_Helper_Util.splitProductForDensity(response);
                                 let finalPTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
                                 _.each(ValidProducts, (val, DCID) => {
-                                    var userInput = PTEUtil.updateUserInput(ValidProducts[DCID]);
-                                    var contractProducts = userInput['contractProducts'].toString().replace(/(\r\n|\n|\r)/gm, "");
+                                    const userInput = PTEUtil.updateUserInput(ValidProducts[DCID]);
+                                    const contractProducts = userInput['contractProducts'].toString().replace(/(\r\n|\n|\r)/gm, "");
                                     _.each(finalPTR, (data, idx) => {
                                         if (data.DC_ID == DCID) {
                                             data.PTR_USER_PRD = contractProducts;
@@ -1163,7 +1156,6 @@ export class pricingTableEditorComponent implements OnChanges {
         });
         dialogRef.afterClosed().subscribe(result => { });
     }
-
 
     flexOverlappingDealCheck() {
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
@@ -1225,12 +1217,12 @@ export class pricingTableEditorComponent implements OnChanges {
                 this.curPricingTable["_defaultAtrbs"] = this.autoFillData.newPt["_defaultAtrbs"];
                 //PTE_Load_Util.updateResults(this.newPricingTable, pt, this.curPricingTable) //Not Needed for now?
                 //Following is for pushing PTE autofillsettings changes  to Lnav pricing table level
-                this.lnavSVC.autoFillData.next(this.autoFillData);
+                this.lnavService.autoFillData.next(this.autoFillData);
             }
         });
     }
     async refreshContractData(id, ptId) {
-        let response: any = await this.contractDetailsSvc
+        let response: any = await this.contractDetailsService
             .readContract(this.contractData.DC_ID)
             .toPromise().catch((err) => {
                 this.loggerService.error('contract data read error.....', err);

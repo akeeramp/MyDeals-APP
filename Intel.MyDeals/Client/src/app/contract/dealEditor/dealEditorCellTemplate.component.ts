@@ -1,12 +1,18 @@
-﻿import * as angular from 'angular';
+﻿/* eslint-disable @typescript-eslint/no-inferrable-types */
+import * as angular from 'angular';
 import { Component, Input, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
-import { logger } from '../../shared/logger/logger';
 import { downgradeComponent } from '@angular/upgrade/static';
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
+import { NgbPopoverConfig } from "@ng-bootstrap/ng-bootstrap";
+import { MatDialog } from '@angular/material/dialog';
+
+import { logger } from '../../shared/logger/logger';
+
 import { GridUtil } from '../grid.util';
 import { PTE_Load_Util } from '../PTEUtils/PTE_Load_util';
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
-import { NgbPopoverConfig } from "@ng-bootstrap/ng-bootstrap";
+import { ProductBreakoutComponent } from '../ptModals/productSelector/productBreakout/productBreakout.component';
+
 @Component({
     selector: 'deal-editor-cell',
     templateUrl: 'Client/src/app/contract/dealEditor/dealEditorCellTemplate.component.html',
@@ -15,13 +21,21 @@ import { NgbPopoverConfig } from "@ng-bootstrap/ng-bootstrap";
 })
 export class dealEditorCellTemplateComponent {
 
-    constructor(private loggerService: logger, private decimalPipe: DecimalPipe, private currencyPipe: CurrencyPipe,
-        private datePipe: DatePipe, popoverConfig: NgbPopoverConfig) {
+    constructor(private loggerService: logger,
+            public dialogService: MatDialog,
+            private decimalPipe: DecimalPipe,
+            private currencyPipe: CurrencyPipe,
+            private datePipe: DatePipe,
+            popoverConfig: NgbPopoverConfig) {
         popoverConfig.placement = 'auto';
         popoverConfig.container = 'body';
         popoverConfig.autoClose = 'outside';
         popoverConfig.animation = false;
+        popoverConfig.triggers = 'mouseenter:mouseleave';   // Disabled to use default click behaviour to prevent multiple popover windows from appearing
+        popoverConfig.openDelay = 50;   // milliseconds
+        popoverConfig.closeDelay = 500; // milliseconds
     }
+
     @Input() in_Field_Name: string = '';
     @Input() in_Template: string = '';
     @Input() in_Deal_Type: string = '';
@@ -39,6 +53,24 @@ export class dealEditorCellTemplateComponent {
     private YCS2modifier:string = "";
     private fieldModifier: string = "";
     private fieldText: string = "";
+
+    private openModal(columnTypes: string, currentPricingTableRow, productMemberSId, priceCondition) {
+        // Open Modal with data
+        this.dialogService.open(ProductBreakoutComponent, {
+            data: {
+                columnTypes: columnTypes,
+                productData: [{
+                    'CUST_MBR_SID': currentPricingTableRow.CUST_MBR_SID,
+                    'PRD_MBR_SID': productMemberSId,
+                    'GEO_MBR_SID': currentPricingTableRow.GEO_COMBINED,
+                    'DEAL_STRT_DT': currentPricingTableRow.START_DT,
+                    'DEAL_END_DT': currentPricingTableRow.END_DT,
+                    'getAvailable': 'N',
+                    'priceCondition': priceCondition
+                }]
+            }
+        });
+    }
         
     updateIcon(eventData: boolean) {
         this.iconUpdate.emit(eventData);
@@ -49,7 +81,7 @@ export class dealEditorCellTemplateComponent {
     }
 
     uiControlWrapper(passedData, field, format) {
-        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+        let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
         if (field == "VOLUME" || field == "CONSUMPTION_LOOKBACK_PERIOD" || field == "FRCST_VOL" ||
             field == "CREDIT_VOLUME" || field == "DEBIT_VOLUME" || field == "REBATE_OA_MAX_VOL") {
             if (data[field] != undefined && data[field] != null && data[field] != "")
@@ -79,17 +111,17 @@ export class dealEditorCellTemplateComponent {
     }
 
     keyArray(data: any) {
-        var arr = new Array();
-        var keys = Object.keys(data).sort();
-        for (var i = 0; i < keys.length; i++) {
+        let arr = new Array();
+        let keys = Object.keys(data).sort();
+        for (let i = 0; i < keys.length; i++) {
             arr.push(keys[i]);
         }
         return arr;
     }
 
     uiDimControlWrapper(passedData, field) {
-        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
-        var dim = "";
+        let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+        let dim = "";
         if (field == "ECAP_PRICE" && data.OBJ_SET_TYPE_CD == "ECAP") {
             if (data.ECAP_PRICE && data.ECAP_PRICE[this.ecapDimKey] !== undefined && data.ECAP_PRICE[this.ecapDimKey] !== null && data.ECAP_PRICE[this.ecapDimKey] !== "")
                 data.ECAP_PRICE[this.ecapDimKey] = this.currencyPipe.transform(data.ECAP_PRICE[this.ecapDimKey], 'USD', 'symbol', '1.2-2');
@@ -121,12 +153,12 @@ export class dealEditorCellTemplateComponent {
 
     uiPositiveDimControlWrapper(passedData, field) {
         try {
-            var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
-            var value = data[field];
+            let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+            let value = data[field];
             if(value){
-                var sortedKeys = Object.keys(value).sort();
-                for (var index in sortedKeys) {
-                    var dimKey = sortedKeys[index];
+                const sortedKeys = Object.keys(value).sort();
+                for (const index in sortedKeys) {
+                    const dimKey = sortedKeys[index];
                     if (data[field][dimKey] !== undefined && data[field][dimKey] !== null && data[field][dimKey] !== "") {
                         if (field == "ECAP_PRICE" || field == "DSCNT_PER_LN" || (field == "CAP" && data[field][dimKey] != "No CAP") || (field == "YCS2_PRC_IRBT" && data[field][dimKey] != "No YCS2")) {
                             data[field][dimKey] = this.currencyPipe.transform(data[field][dimKey], 'USD', 'symbol', '1.2-2');
@@ -158,14 +190,14 @@ export class dealEditorCellTemplateComponent {
     }
 
     uiControlScheduleWrapper(passedData) {
-        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
-        var numTiers = 0;
-        var tiers = data.TIER_NBR;
-        for (var key in tiers) {
-            if (tiers.hasOwnProperty(key) && key.indexOf("___") >= 0) {
+        let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+        let numTiers = 0;
+        let tiers = data.TIER_NBR;
+        for (const key in tiers) {
+            if (Object.hasOwnProperty.call(tiers, key) && key.indexOf("___") >= 0) {
                 numTiers++;
-                var dim = "10___" + numTiers;
-                for (var f = 0; f < this.fields.length; f++) {
+                const dim = "10___" + numTiers;
+                for (let f = 0; f < this.fields.length; f++) {
                     if (data[this.fields[f].field] && data[this.fields[f].field][key] && !Number.isNaN(Number(data[this.fields[f].field][key]))) {
                         if (this.fields[f].format == "number" && this.fields[f].field == "INCENTIVE_RATE")
                             data[this.fields[f].field][dim] = this.decimalPipe.transform(data[this.fields[f].field][dim], "1.0-2");
@@ -180,16 +212,16 @@ export class dealEditorCellTemplateComponent {
         return GridUtil.uiControlScheduleWrapper(data);
     }
     uiControlScheduleWrapperDensity(passedData) {
-        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
-        var numTiers = 0;
-        var tiers = data.TIER_NBR;
-        for (var key in tiers) {
-            if (tiers.hasOwnProperty(key) && key.indexOf("___") >= 0) {
+        let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+        let numTiers = 0;
+        let tiers = data.TIER_NBR;
+        for (const key in tiers) {
+            if (Object.hasOwnProperty.call(tiers, key) && key.indexOf("___") >= 0) {
                 numTiers++;
-                for (var f = 0; f < this.fields.length; f++) {
-                    var dim = (this.fields[f].field == "DENSITY_BAND" || this.fields[f].field == "DENSITY_RATE") ? "8___" : "10___" + numTiers;
+                for (let f = 0; f < this.fields.length; f++) {
+                    let dim = (this.fields[f].field == "DENSITY_BAND" || this.fields[f].field == "DENSITY_RATE") ? "8___" : "10___" + numTiers;
                     if (this.fields[f].field == "DENSITY_RATE") {
-                        for (var bands = 1; bands <= passedData.NUM_OF_DENSITY; bands++) {
+                        for (let bands = 1; bands <= passedData.NUM_OF_DENSITY; bands++) {
                             data[this.fields[f].field][dim + bands + '____' + key] = this.currencyPipe.transform(data[this.fields[f].field][dim + bands + '____' + key], 'USD', 'symbol', '1.2-2');
                         }
                     }
@@ -212,7 +244,7 @@ export class dealEditorCellTemplateComponent {
         return GridUtil.uiDimTrkrControlWrapper(passedData);
     }
     uiStartDateWrapper(passedData, field) {
-        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+        let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
         if (field == "START_DT" || field == "LAST_REDEAL_DT") {
             if (data[field] == "Invalid date") data[field] = "";
             if (data[field] != undefined && data[field] != null && data[field] != "")
@@ -221,7 +253,7 @@ export class dealEditorCellTemplateComponent {
         return GridUtil.uiStartDateWrapper(data, field);
     }
     uiControlEndDateWrapper(passedData, field) {
-        var data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
+        let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
         if (field == "END_DT" || field == "OEM_PLTFRM_LNCH_DT" || field == "OEM_PLTFRM_EOL_DT") {
             if (data[field] == "Invalid date") data[field] = "";
             if (data[field] != undefined && data[field] != null && data[field] != "")
@@ -248,21 +280,21 @@ export class dealEditorCellTemplateComponent {
         return GridUtil.uiPrimarySecondaryDimControlWrapper(passedData);
     }
     uiKitCalculatedValuesControlWrapper(passedData, kitType, column) {
-        var value = this.currencyPipe.transform(PTE_Load_Util.kitCalculatedValues(passedData, kitType, column), 'USD', 'symbol', '1.2-2');
+        let value = this.currencyPipe.transform(PTE_Load_Util.kitCalculatedValues(passedData, kitType, column), 'USD', 'symbol', '1.2-2');
         return GridUtil.uiKitCalculatedValuesControlWrapper(passedData, kitType, value);
     }
     uiControlBackEndRebateWrapper(passedData) {
-        var dim = this.in_Deal_Type == "KIT" ? this.kitEcapdim : this.ecapDimKey;
-        var value = this.currencyPipe.transform(PTE_Load_Util.calcBackEndRebate(passedData, this.in_Deal_Type, "ECAP_PRICE", dim), 'USD', 'symbol', '1.2-2');
+        let dim = this.in_Deal_Type == "KIT" ? this.kitEcapdim : this.ecapDimKey;
+        let value = this.currencyPipe.transform(PTE_Load_Util.calcBackEndRebate(passedData, this.in_Deal_Type, "ECAP_PRICE", dim), 'USD', 'symbol', '1.2-2');
         return GridUtil.uiControlBackEndRebateWrapper(value);
     }
     uiTotalDiscountPerLineControlWrapper(passedData) {
         return GridUtil.uiTotalDiscountPerLineControlWrapper(passedData);
     }
     getResultSingleIcon(passedData, field) {
-        var parent = document.getElementById(field + "_" + passedData.DC_ID);
+        let parent = document.getElementById(field + "_" + passedData.DC_ID);
         parent.innerHTML = GridUtil.getResultSingleIcon(passedData, field);
-        var child = parent.getElementsByTagName('i');
+        let child = parent.getElementsByTagName('i');
         if (child != undefined && child.length == 1)
             child[0].style.color = this.getColorStyle(passedData[field]);
         return;
@@ -329,12 +361,11 @@ export class dealEditorCellTemplateComponent {
                 this.YCS2modifier = "_PRC_IRBT";
                 this.fieldText = this.fieldModifier + "_START_DT";
             }
-        }
-        catch(ex){
+        } catch(ex) {
             console.error(ex);
         }
-      
     }
+
 }
 
 angular.module("app").directive(

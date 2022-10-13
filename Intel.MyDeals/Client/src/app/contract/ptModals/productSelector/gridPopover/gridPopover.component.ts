@@ -9,7 +9,6 @@ import { ProductBreakoutComponent } from '../productBreakout/productBreakout.com
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
-    // selector: 'grid-popover [columnTypes] [currentPricingTableRow] [productMemberSId] [priceCondition]',
     selector: 'grid-popover [popOver] [columnTypes] [currentPricingTableRow] [productMemberSId] [priceCondition]',
     templateUrl: 'Client/src/app/contract/ptModals/productSelector/gridPopover/gridPopover.component.html',
     styleUrls: [

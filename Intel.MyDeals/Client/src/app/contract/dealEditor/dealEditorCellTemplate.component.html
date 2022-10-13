@@ -51,7 +51,8 @@
     <div *ngIf="in_DataItem['ECAP_PRICE'] != undefined && in_DataItem['ECAP_PRICE'] != null">
         <div class="col-md-12">
             <div *ngFor="let key Of keyArray(in_DataItem['ECAP_PRICE']); let i = index">
-                <div *ngIf="key.indexOf('___') >= 0 && key.indexOf('_____') < 0">
+                <div *ngIf="key.indexOf('___') >= 0 && key.indexOf('_____') < 0" (click)="openModal(fieldModifier, in_DataItem, getProductSid(in_DataItem.PRODUCT_FILTER, key), fieldModifier)">
+                    <!-- Popover Template -->
                     <ng-template #popoverContent>
                         <div class="container">
                             <div class="row">
@@ -62,7 +63,10 @@
                             </div>
                         </div>
                     </ng-template>
+
+                    <!-- Cell Content -->
                     <div class="col-md-12" #popOver="ngbPopover" [ngbPopover]="popoverContent">
+                        <!-- CAP/YCS2 Info cell design -->
                         <div class="col-md-12 textRightAlign" [ngClass]="{'isHiddenCell': isHiddenCell(in_DataItem, fieldModifier),'isRequiredCell' : isRequiredCell(in_DataItem, fieldModifier),'isReadOnlyCell': isReadonlyCell(in_DataItem, fieldModifier), 'isDirtyCell': isDirtyCell(in_DataItem, fieldModifier), 'isErrorCell': isErrorCell(in_DataItem, fieldModifier),'isSavedCell': isSavedCell(in_DataItem, fieldModifier)}">
                             <div [innerHTML]="uiMoneyDatesControlWrapper(in_DataItem, fieldModifier + YCS2modifier, fieldText, fieldModifier + '_END_DT', key)"></div>
                         </div>

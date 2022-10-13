@@ -363,19 +363,18 @@ export class PTE_Common_Util {
         return resp;
     }
 
-    static getOverlapFLexProducts(curPricingTable, pricingTableRowData) {
-
+    static getOverlapFlexProducts(curPricingTable, pricingTableRowData) {
         if (curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD == "FLEX") {
-            var data = pricingTableRowData;
-            var AcrObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'accrual');
-            var DrnObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'draining');
-            var AcrInc = [], AcrExc = [], DrnInc = [], DrnExc = [];
+            let data = pricingTableRowData;
+            let AcrObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'accrual');
+            let DrnObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'draining');
+            let AcrInc = [], AcrExc = [], DrnInc = [], DrnExc = [];
             _.each(AcrObjs, (item) => {
                 //to handle multi tier condition
                 if (item.PTR_SYS_PRD && (item.PTR_SYS_PRD != null || item.PTR_SYS_PRD != '')) {
-                    var objAcr = Object.values(JSON.parse(item.PTR_SYS_PRD));
+                    let objAcr = Object.values(JSON.parse(item.PTR_SYS_PRD));
                     _.each(objAcr, (itm) => {
-                        var objItm = {};
+                        let objItm = {};
                         if (itm[0].EXCLUDE) {
                             AcrExc.push(itm[0].PRD_MBR_SID);
                         }
@@ -390,9 +389,9 @@ export class PTE_Common_Util {
             });
             _.each(DrnObjs, (item) => {
                 if (item.PTR_SYS_PRD && (item.PTR_SYS_PRD != null || item.PTR_SYS_PRD != '')) {
-                    var objDrn = Object.values(JSON.parse(item.PTR_SYS_PRD));
+                    let objDrn = Object.values(JSON.parse(item.PTR_SYS_PRD));
                     _.each(objDrn, (itm) => {
-                        var objItm = {};
+                        let objItm = {};
                         if (itm[0].EXCLUDE) {
                             DrnExc.push(itm[0].PRD_MBR_SID);
                         }
@@ -405,15 +404,15 @@ export class PTE_Common_Util {
                 }
 
             });
-            var uniqAcrInc = AcrInc.filter(function (a) {
-                var key = a.RowId + '|' + a.PRDMemberSid;
+            const uniqAcrInc = AcrInc.filter(function (a) {
+                const key = a.RowId + '|' + a.PRDMemberSid;
                 if (!this[key]) {
                     this[key] = true;
                     return true;
                 }
             }, Object.create(null));
 
-            var reqBody = {
+            const reqBody = {
                 AcrInc: uniqAcrInc,
                 AcrExc: AcrExc,
                 DrnInc: DrnInc,
