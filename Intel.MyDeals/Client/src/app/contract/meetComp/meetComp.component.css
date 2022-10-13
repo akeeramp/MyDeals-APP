@@ -424,7 +424,8 @@
     font-size: 14.5px !important;
     color: #444444;
     background-color: #ffffff;
-    font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif !important
+    font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif !important;
+    word-break: break-word;
 }
 
 .meet-conduct .dialog-action {
@@ -515,4 +516,21 @@
 
 .loaderMeet meet-comp-contract loading-panel-angular .ss-loading-panel.ss-Info {
     margin-top: 150px !important;
+}
+
+.either-pin kendo-grid kendo-grid-list .k-icon.k-i-more-vertical {
+    font-size: 14px !important;
+}
+
+.meet-conduct .k-grid .k-detail-row .k-detail-cell {
+    padding: 0!important;
+}
+
+.meet-conduct .k-detail-row > .k-detail-cell > div:first-child {
+    margin-left: 2px !important;
+    margin-right: 13px !important;
+}
+
+.indicate-dialog .k-window-content {
+    padding-bottom: 1rem;
 }

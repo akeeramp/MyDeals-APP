@@ -35,6 +35,7 @@ import * as _ from 'underscore';
       overflow-y: scroll;
       padding-left: 0;
       padding-right: 12px;
+      position: relative;
     }
 
     ul>li {
