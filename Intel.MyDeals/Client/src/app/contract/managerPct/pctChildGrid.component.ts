@@ -114,16 +114,18 @@ export class pctChildGridComponent {
     }
     cellClickHandler(args: CellClickEvent): void {
         if (args.column.field == "GRP_DEALS") {
+            let dealId= args.dataItem.DEAL_ID;
             let data = this.CostTestGroupDetails.filter(x => x.DEAL_PRD_RNK == args.dataItem.DEAL_PRD_RNK)
-            this.openPctGroupModal(data);
+            this.openPctGroupModal(data, dealId);
         }
     }
-    openPctGroupModal(dataItem) {
+    openPctGroupModal(dataItem, dealId) {
         const dialogRef = this.dialog.open(pctGroupModal, {
             width: "1900px",
             height: "600px",
             data: {
-                cellCurrValues: dataItem
+                cellCurrValues: dataItem,
+                dealId: dealId
             }
         });
         dialogRef.afterClosed().subscribe((returnVal) => {

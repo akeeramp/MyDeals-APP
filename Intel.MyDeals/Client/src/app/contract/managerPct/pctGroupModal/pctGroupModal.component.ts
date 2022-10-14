@@ -60,7 +60,7 @@ export class pctGroupModal {
     ngOnInit() {
         if (this.data.cellCurrValues !== "" && this.data.cellCurrValues !== undefined) {
             this.dataItem = this.data.cellCurrValues;
-            this.dealId = this.dataItem.DEAL_ID;
+            this.dealId = this.data.dealId;
             this.gridResult = this.dataItem;
             this.gridData = process(this.gridResult, this.state);
         }
