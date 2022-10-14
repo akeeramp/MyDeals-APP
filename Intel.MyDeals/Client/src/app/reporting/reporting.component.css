@@ -35,11 +35,11 @@
      right: 0;
      overflow: scroll !important
  }
- div.overFlowDash {
-     width: auto;
-     height: 720px !important;
-     overflow: auto !important
- }
+div.overFlowDash {
+    width: auto;
+    height: auto !important;
+    /*overflow: auto !important*/
+}
  .k-chart-tooltip-wrapper .k-animation-container {
      position: absolute !important;
      top: 0 !important;
@@ -75,4 +75,8 @@
     min-height: 1px;
     padding-left: 15px;
     padding-right: 15px;
+}
+
+.mainBodyStyle:has(reporting-dashboard) {
+    overflow-y: auto !important;
 }

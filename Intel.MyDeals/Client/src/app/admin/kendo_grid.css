@@ -506,3 +506,7 @@ kendo-dialog-actions.delete-actions button.k-button.del-cancel:hover, kendo-dial
     top: -2px !important;
     color: #0071c5 !important;
 }
+
+.mainBodyStyle:has(reporting-dashboard) {
+    overflow-y: auto !important;
+}

@@ -331,10 +331,10 @@ a.prdAnchor:hover {
 .prodSelector.modal-body {
     padding: 20px;
     padding-bottom: 0px;
-    min-height: 365px;
-    max-height: calc(85vh - 365px);
-    height: auto;
+    min-height: 180px;
+    height: calc(85vh - 330px);
     overflow-y: auto;
+    max-height: 100%;
 }
 
 /* .prodSelector .prodSelector-grid .k-grid-content {

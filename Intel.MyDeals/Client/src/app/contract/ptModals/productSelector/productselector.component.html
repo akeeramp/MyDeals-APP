@@ -12,8 +12,7 @@
                     <img *ngIf="isLoadingSearchProducts" src="/Images/loadingSmall.gif" style="margin-left: 25px" />
                 </p>
             </div>
-            <div class="col-md-2 col-sm-2 col-xs-2" style="padding-top:8px;"></div>
-            <div class="col-md-6 col-sm-6 col-xs-6 prodSelectorSearch">
+            <div class="col-md-8 col-sm-8 col-xs-8 prodSelectorSearch">
                 <div class="modalCloseIcon fr">
                     <i role="button" title="Close" class="intelicon-close-max" style="position:relative" (click)="cancel()"></i>
                 </div>
@@ -267,8 +266,8 @@
             </div>
             <div *ngIf="!showTree && !showSuggestions">
                 <div *ngIf="!hideSelection">
-                    <div class="row" style="margin:2px; margin-top: 40px">
-                        <ng-container *ngFor="let p of items ; let last=last; let index=index">
+                    <div class="row" style="margin:2px;">
+                        <ng-container *ngFor="let p of items | orderBy:'name'; let last=last; let index=index">
                             <div class="clearfix" *ngIf="index % 4 == 0"></div>
                             <div class="col-sm-3 prodDrillDownLarge" title="{{checkForBlank(p.name)}}" [ngClass]="{'noLeftBorder':index % 4 == 0}">
                                 <div [ngClass]="{'input-group':p.allowMultiple}" class="drillDown">

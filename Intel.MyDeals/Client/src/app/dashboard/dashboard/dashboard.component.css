@@ -353,11 +353,11 @@ gridster-item.attr-li-6,
 gridster-item.attr-li-8,
 gridster-item.attr-li-9,
 gridster-item.attr-li-10 {
-    height: 312px !important;
+    height: calc(100vh - 69%) !important;
 }
 
 gridster-item.attr-li-7 {
-    height: 651px !important;
+    height: calc(100vh - 28%) !important;
 }
 
 gridster-item.attr-li-7 .k-grid-table-wrap {
@@ -365,7 +365,7 @@ gridster-item.attr-li-7 .k-grid-table-wrap {
 }
 
 gridster-item.attr-li-7 .container-fluid.widget-container {
-    height: auto !important;
+    height: calc( 100vh - 168px) !important;
 }
 
 .oppo-grids.physics-css kendo-grid.k-grid .k-grid-header-wrap table thead tr th {
@@ -1148,4 +1148,20 @@ kendo-multiselect.divineo-one .k-multiselect-wrap kendo-taglist ul li span span.
     position: absolute;
     right: 4px;
     top: 7px;
+}
+
+.mainBodyStyle:has(reporting-dashboard) {
+    overflow-y: auto !important;
+}
+
+@media only screen and (min-width: 1500px) {
+    gridster-item.attr-li-7 .container-fluid.widget-container {
+        height: calc( 100vh - 210px) !important;
+    }
+}
+
+@media only screen and (min-width: 1800px) {
+    gridster-item.attr-li-7 .container-fluid.widget-container {
+        height: calc( 100vh - 280px) !important;
+    }
 }

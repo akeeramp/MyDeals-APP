@@ -193,3 +193,14 @@ td:not(.error-cell).readonly-cell {
 .parent-one.loaderPTE pricing-table-editor loading-panel-angular .ss-loading-panel.ss-Info {
     margin-top: 150px !important;
 }
+
+kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li.k-state-disabled span {
+    background-color: #cccccc !important;
+    color: #5c5b5b;
+    cursor: not-allowed !important;
+}
+
+kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li.k-state-disabled {
+    border: 1px solid #0071C5 !important;
+    cursor: not-allowed !important;
+}

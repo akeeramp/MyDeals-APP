@@ -23,6 +23,7 @@ import * as _ from "underscore";
 				  (keydown)="onKeyDown($event)"
 				  calendarType="classic"
 				  placeholder="Click to Select..."
+				  class="inter-validate"
               ></kendo-datepicker>
 				<p *ngIf="!isValidDate || isDateOverlap" class="err-Control" style="font-size:large">
 					{{errorMsg }}
@@ -37,14 +38,22 @@ import * as _ from "underscore";
 		<div class="row">
 			<div class="col-md-12">
 				<div class="fr">
-					<button class="btn btn-warning" type="button" (click)="onNoClick()">Cancel</button>
+					<button class="btn btn-warning add-mar-five" type="button" (click)="onNoClick()">Cancel</button>
 					<button class="btn btn-primary" type="button" (click)="onSave()" [disabled]="(!isValidDate)" [ngStyle]="{'opacity': isValidDate? 1 : .3}">Add to Grid</button>
 				</div>
 			</div>
 		</div>
 	</div>
 	<div class="modal-footer">	</div>`,
-  
+	styles: [`
+		.inter-validate{
+			width: 100%;
+			margin-bottom: 10px;
+		}
+		.add-mar-five {
+			margin-right: 5px;
+		}
+	`]
   })
 
 

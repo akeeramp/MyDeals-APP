@@ -504,3 +504,14 @@ kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper .k-tabstrip-items li:hover {
     background-color: #00AEEF !important;
     color: #FFFFFF !important;
 }
+
+kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li.k-state-disabled span {
+    background-color: #cccccc !important;
+    color: #5c5b5b;
+    cursor: not-allowed !important;
+}
+
+kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li.k-state-disabled {
+    border: #ccc 1px solid !important;
+    cursor: not-allowed !important;
+}
