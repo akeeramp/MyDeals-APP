@@ -39,6 +39,7 @@ export class tenderManagerComponent {
     public mcForceRunReq: boolean;
     public inCompleteCapMissing: boolean = false;
     public result: any = null;
+    public passedValue: any = '';
 
     async loadAllContractDetails(): Promise<void> {
         let response = await this.pricingTableSvc.readContract(this.c_Id).toPromise().catch((err) => {
@@ -77,7 +78,7 @@ export class tenderManagerComponent {
     }
 
     forMC() {
-        if ((this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'InComplete' && this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'Not Run Yet' && !this.isMCForceRunReq()) || this.pricingTableData.PRC_ST[0].CAP_MISSING_FLG == 1) {
+        if (((this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'InComplete' && this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'Not Run Yet' && !this.isMCForceRunReq()) || this.pricingTableData.PRC_ST[0].CAP_MISSING_FLG == 1) || this.passedValue == 'NoMeetCompVal') {
             return true;
         } else return false;
     }
@@ -88,13 +89,19 @@ export class tenderManagerComponent {
         return true
     }
     async redirectingFn(tab) {
-        if (tab != '') {
+        if (tab != '' && tab != 'NoMeetCompVal' && tab != 'MeetCompVal') {
             this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
                 this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
             });
             this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
             this.selectedTab = tab;
             this.currentTAB = tab;
+        } else if (tab == "NoMeetCompVal") {
+            this.passedValue = tab;
+            this.forMC();
+        } else if (tab == 'MeetCompVal') {
+            this.passedValue = '';
+            this.forMC();
         } else {
             this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
                 this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
@@ -150,7 +157,7 @@ export class tenderManagerComponent {
             }
 
         else if (selectedTab == 'PD') {
-            if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && (this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Pass' || this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Fail') && !this.mcForceRunReq || this.pricingTableData.PRC_ST[0].CAP_MISSING_FLG == 1) {
+            if ((this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && (this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Pass' || this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Fail') && !this.mcForceRunReq || this.pricingTableData.PRC_ST[0].CAP_MISSING_FLG == 1) || this.passedValue == 'NoMeetCompVal') {
                 await this.redirectingFn(selectedTab);
             }
             else {

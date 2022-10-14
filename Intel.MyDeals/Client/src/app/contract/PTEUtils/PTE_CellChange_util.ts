@@ -875,23 +875,22 @@ export class PTE_CellChange_Util {
     }
 
     static checkfn(items: Array<any>, curPricingTable: any) {
-        _.each(items, item => {
-            let val = this.hotTable.getDataAtRowProp(item.row, 'PROGRAM_PAYMENT');
+        if (items.length > 0) {
+            let val = this.hotTable.getDataAtRowProp(items[0].row, 'PROGRAM_PAYMENT');
             if (val != undefined && val != null && val != '' && val.toLowerCase() !== 'backend') {
-                this.hotTable.setDataAtRowProp(item.row, 'PERIOD_PROFILE', '', 'no-edit');
-                this.hotTable.setDataAtRowProp(item.row, 'RESET_VOLS_ON_PERIOD', '', 'no-edit');
-                this.hotTable.setDataAtRowProp(item.row, 'AR_SETTLEMENT_LVL', '', 'no-edit');
-                this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', '', 'no-edit');
+                this.hotTable.setDataAtRowProp(items[0].row, 'PERIOD_PROFILE', '', 'no-edit');
+                this.hotTable.setDataAtRowProp(items[0].row, 'RESET_VOLS_ON_PERIOD', '', 'no-edit');
+                this.hotTable.setDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL', '', 'no-edit');
+                this.hotTable.setDataAtRowProp(items[0].row, 'SETTLEMENT_PARTNER', '', 'no-edit');
             } else {
-                if (this.hotTable.getDataAtRowProp(items[0].row, 'PERIOD_PROFILE') == '')
-                    this.hotTable.setDataAtRowProp(item.row, 'PERIOD_PROFILE', curPricingTable["PERIOD_PROFILE"], 'no-edit');
+                if (this.hotTable.getDataAtRowProp(items[0].row, 'PERIOD_PROFILE') == '' && curPricingTable["PERIOD_PROFILE"] != '')
+                    this.hotTable.setDataAtRowProp(items[0].row, 'PERIOD_PROFILE', curPricingTable["PERIOD_PROFILE"], 'no-edit');
                 if (this.hotTable.getDataAtRowProp(items[0].row, 'RESET_VOLS_ON_PERIOD') == '')
-                    this.hotTable.setDataAtRowProp(item.row, 'RESET_VOLS_ON_PERIOD', 'No', 'no-edit');
-                if (this.hotTable.getDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL') == '')
-                    this.hotTable.setDataAtRowProp(item.row, 'AR_SETTLEMENT_LVL', curPricingTable["AR_SETTLEMENT_LVL"], 'no-edit');
+                    this.hotTable.setDataAtRowProp(items[0].row, 'RESET_VOLS_ON_PERIOD', 'No', 'no-edit');
+                if (this.hotTable.getDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL') == '' && curPricingTable["AR_SETTLEMENT_LVL"] != undefined)
+                    this.hotTable.setDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL', curPricingTable["AR_SETTLEMENT_LVL"], 'no-edit');
             }
-
-        });
+        }
     }
 
 

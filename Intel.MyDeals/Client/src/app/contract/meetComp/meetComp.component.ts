@@ -470,12 +470,18 @@ export class meetCompContractComponent implements OnInit {
             }
             this.reBindGridData();
             this.isLoading = false;
+            if (this.isTender == "1") {
+                this.tmDirec.emit('MeetCompVal');
+            }
         } else {
             // if (this.isAdhoc == 0) {
-                this.isDataAvaialable = false;
-                this.loggerSvc.error("No Meet Comp data available for product(s) in this Contract", "Alert");
-                this.isLoading = false;
-                return;
+            this.isDataAvaialable = false;          
+            if (this.isTender == "1") {
+                this.tmDirec.emit('NoMeetCompVal');
+            }
+            this.loggerSvc.error("No Meet Comp data available for product(s) in this Contract", "Alert");
+            this.isLoading = false;
+            return;
             // }
         }
     }

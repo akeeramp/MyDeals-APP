@@ -112,7 +112,7 @@ export class GridUtil {
                     tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
             }
             if (passedData[field][dim] != undefined && passedData[field][dim] != null)
-                tmplt += '    <div class="ng-binding">' + passedData[field][dim] + '</div>';
+                tmplt += '    <div class="ng-binding vert-center">' + passedData[field][dim] + '</div>';
             tmplt += '</div></div>';
         }
         return tmplt;
@@ -248,12 +248,12 @@ export class GridUtil {
         var tmplt = '';
         if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined)
             tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-        tmplt += '<div class="uiControlDiv' + this.getClassNm(passedData, field) + '"';
+        tmplt += '<div class="uiControlDiv dealCell' + this.getClassNm(passedData, field) + '"';
         tmplt += '    <div class="ng-binding vert-center">';
         if (this.displayFrontEndDateMessage(passedData))
             tmplt += '<span> <i class="intelicon-information dateWrapper" title="If the deal start date is in the past, the deal start date will change to the date when the deal becomes active."></i> </span>'
         if (passedData[field] != undefined && passedData[field] != null)
-            tmplt += '    <span class="ng-binding">' + passedData[field] + '</span>';
+            tmplt += '    <span class="ng-binding vert-center">' + passedData[field] + '</span>';
         tmplt += '</div></div>';
         return tmplt;
     }
@@ -264,7 +264,7 @@ export class GridUtil {
         var tmplt = '';
         if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined)
             tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-        tmplt += '<div class="uiControlDiv' + this.getClassNm(passedData, field).replace(" isRequiredCell", "") + '"';
+        tmplt += '<div class="uiControlDiv dealCell' + this.getClassNm(passedData, field).replace(" isRequiredCell", "") + '"';
         if (passedData[field] != undefined && passedData[field] != null)
             tmplt += '    <div class="ng-binding vert-center ' + classNm + '">' + passedData[field] + '</div>';
         tmplt += '</div>';

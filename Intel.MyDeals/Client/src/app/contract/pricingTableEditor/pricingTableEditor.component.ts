@@ -576,7 +576,7 @@ export class pricingTableEditorComponent implements OnChanges {
                 if (pgChg && pgChg.length > 0) {
                     PTE_CellChange_Util.pgChgfn(pgChg, this.columns, this.curPricingTable);
                 }
-                if (pgChg.length == 0 && rebateType.length == 0) {
+                if (pgChg.length == 0) {
                     PTE_CellChange_Util.checkfn(changes, this.curPricingTable);
                 }
                 if (rebateType && rebateType.length > 0) {
