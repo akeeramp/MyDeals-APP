@@ -176,12 +176,13 @@ a.prdAnchor:hover {
 .prodDrillDownLarge p {
     font-size: 13px;
     margin-top: 11px;
-    margin-left: 25% !important;
+    margin-left: 30% !important;
     margin-right: 25%;
     color: #fff;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
+    text-align: justify;
 }
 
 .prodDrillDownLarge p:hover {

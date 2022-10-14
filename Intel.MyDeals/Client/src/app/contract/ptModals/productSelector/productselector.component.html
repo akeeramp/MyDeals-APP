@@ -24,7 +24,7 @@
                     Search
                 </button>
                 <kendo-autocomplete id="productSearch" class="prod-autocomplete fr form-control input-sm" [(ngModel)]="userInput" [suggest]="false" [data]="productOptions" [filterable]="true"
-        (filterChange)="changeProductOption($event)" (valueChange)="searchProduct()" valueField="Name" [virtual]="virtual">
+        (filterChange)="changeProductOption($event)" (valueChange)="searchProduct()" valueField="Name">
                 </kendo-autocomplete>
             </div>
         </div>
@@ -268,7 +268,7 @@
             <div *ngIf="!showTree && !showSuggestions">
                 <div *ngIf="!hideSelection">
                     <div class="row" style="margin:2px; margin-top: 40px">
-                        <ng-container *ngFor="let p of items | orderBy:'name'; let last=last; let index=index">
+                        <ng-container *ngFor="let p of items ; let last=last; let index=index">
                             <div class="clearfix" *ngIf="index % 4 == 0"></div>
                             <div class="col-sm-3 prodDrillDownLarge" title="{{checkForBlank(p.name)}}" [ngClass]="{'noLeftBorder':index % 4 == 0}">
                                 <div [ngClass]="{'input-group':p.allowMultiple}" class="drillDown">

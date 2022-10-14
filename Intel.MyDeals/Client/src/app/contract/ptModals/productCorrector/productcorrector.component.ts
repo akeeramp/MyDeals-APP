@@ -98,18 +98,18 @@ export class ProductCorrectorComponent {
     private curIncludeProd: any[] = [];
     private excludeProd: any[] = [];
     private curExcludeProd: any[] = [];
-  private currentPTERow: any[] = [];
-  private isGA = false;//window.usrRole == "GA"; Commeneted this stop showing L1/L2 columns till legal approves
-  private DEAL_TYPE;
-  private isDuplicate = false;
-  private duplicateMsg = "";
-  private duplicateData: any[] = [];
-  private hidden = {};
-  private crossVertical = {
-    'productCombination1': ["DT", "Mb", "SvrWS", "EIA CPU"],
-    'productCombination2': ["CS", "EIA CS"],
-    'message': "The product combination is not valid. You can combine (DT, Mb, SvrWS, EIA CPU) or (CS, EIA CS) verticals. For NON IA, you can combine as many products within same verticals for PROGRAM, VOLTIER and REV TIER deals."
-  }
+    private currentPTERow: any[] = [];
+    private isGA = false;//window.usrRole == "GA"; Commeneted this stop showing L1/L2 columns till legal approves
+    private DEAL_TYPE;
+    private isDuplicate = false;
+    private duplicateMsg = "";
+    private duplicateData: any[] = [];
+    private hidden = {};
+    private crossVertical = {
+        'productCombination1': ["DT", "Mb", "SvrWS", "EIA CPU"],
+        'productCombination2': ["CS", "EIA CS"],
+        'message': "The product combination is not valid. You can combine (DT, Mb, SvrWS, EIA CPU) or (CS, EIA CS) verticals. For NON IA, you can combine as many products within same verticals for PROGRAM, VOLTIER and REV TIER deals."
+    }
 
   private openModal(columnTypes: string, currentPricingTableRow, productMemberSId, priceCondition) {
     // Open Modal with data
@@ -282,7 +282,11 @@ export class ProductCorrectorComponent {
             existingProdTypes = existingProdTypes.map(function (elem) {
                 return elem['prodObj']['PRD_CAT_NM'];
             });
-
+            //Fix for TWC3179-1624: Error for invalid combination
+            let curRow = this.curSelProducts['DCID'];
+            _.each(this.ProductCorrectorData.ValidProducts[curRow], item => {
+                existingProdTypes.push(item[0].PRD_CAT_NM);
+            })
             // Check if valid combination
             let isCrossVerticalError = this.isValidProductCombination(existingProdTypes, item.PRD_CAT_NM)
             if (!isCrossVerticalError) {
@@ -301,21 +305,21 @@ export class ProductCorrectorComponent {
         item['DERIVED_USR_INPUT'] = PTE_Common_Util.fullNameProdCorrector(item)
         if (evt.target.checked) {
             let prd = { prod: item.DERIVED_USR_INPUT, prodObj: item };
-            this.curSelProducts['items'].push(prd);         
+            this.curSelProducts['items'].push(prd);
             if (item.EXCLUDE)
                 this.curExcludeProd.push(prd);
             else
                 this.curIncludeProd.push(prd);
         }
         else {
-           // let idx = _.findIndex(this.selectedProducts, item.DERIVED_USR_INPUT);
-            let indx = this.curExcludeProd.findIndex(i=> i.prod === item.DERIVED_USR_INPUT);
+            // let idx = _.findIndex(this.selectedProducts, item.DERIVED_USR_INPUT);
+            let indx = this.curExcludeProd.findIndex(i => i.prod === item.DERIVED_USR_INPUT);
             let index = this.curIncludeProd.findIndex(i => i.prod === item.DERIVED_USR_INPUT);
             let idx = this.curSelProducts['items'].findIndex(i => i.prod === item.DERIVED_USR_INPUT);
             this.curSelProducts['items'].splice(idx, 1);
             if (item.EXCLUDE)
                 this.curExcludeProd.splice(indx, 1);
-            else    
+            else
                 this.curIncludeProd.splice(index, 1);
         }
     }
@@ -343,7 +347,7 @@ export class ProductCorrectorComponent {
         return isValid
     }
     checkForDuplicateProducts(item) {
-  
+
         let duplicateProducts = (this.curSelProducts['items']).filter((items) => {
             return (items['prodObj']['PRD_MBR_SID'] == item['PRD_MBR_SID'])
         })
@@ -358,67 +362,67 @@ export class ProductCorrectorComponent {
     closeKendoDialog(optionSelected) {
         if (optionSelected == 'yes') {
 
-            let filteredResult= (this.selGridResult).filter(val => {
+            let filteredResult = (this.selGridResult).filter(val => {
                 return val['PRD_MBR_SID'] != this.duplicateData['PRD_MBR_SID'] || val['USR_INPUT'] != this.duplicateData['USR_INPUT'];
             });
             this.selGridResult = filteredResult;
             this.selGridData = process(this.selGridResult, this.state);
-            }
-            this.isDuplicate = false;
-            this.duplicateData = [];
+        }
+        this.isDuplicate = false;
+        this.duplicateData = [];
     }
-   getcurPTERowData() {
-    //curating object to send to grid-popover directive each time
-    this.currentPTERow = (this.data.selRows).filter(obj => {
-        return obj['row']['DC_ID'] === this.rowDCId;
-    });
+    getcurPTERowData() {
+        //curating object to send to grid-popover directive each time
+        this.currentPTERow = (this.data.selRows).filter(obj => {
+            return obj['row']['DC_ID'] === this.rowDCId;
+        });
 
-    this.pricingTableRow.START_DT = this.currentPTERow[0]['row'].START_DT;
-    this.pricingTableRow.END_DT = this.currentPTERow[0]['row'].END_DT;
-    this.pricingTableRow.CUST_MBR_SID = this.data.contractData.CUST_MBR_SID;
-    this.pricingTableRow.IS_HYBRID_PRC_STRAT = this.currentPTERow[0]['row'].IS_HYBRID_PRC_STRAT;
-    this.pricingTableRow.GEO_COMBINED = ProdSel_Util.getFormatedGeos(this.currentPTERow[0]['row'].GEO_COMBINED);
-    this.pricingTableRow.PTR_SYS_PRD = this.currentPTERow[0]['row'].PTR_SYS_PRD;
-    this.pricingTableRow.PROGRAM_PAYMENT = this.currentPTERow[0]['row'].PROGRAM_PAYMENT;
-    this.pricingTableRow.PROD_INCLDS = this.currentPTERow[0]['row'].PROD_INCLDS;
-    this.pricingTableRow.OBJ_SET_TYPE_CD = this.data.curPricingTable.OBJ_SET_TYPE_CD;
+        this.pricingTableRow.START_DT = this.currentPTERow[0]['row'].START_DT;
+        this.pricingTableRow.END_DT = this.currentPTERow[0]['row'].END_DT;
+        this.pricingTableRow.CUST_MBR_SID = this.data.contractData.CUST_MBR_SID;
+        this.pricingTableRow.IS_HYBRID_PRC_STRAT = this.currentPTERow[0]['row'].IS_HYBRID_PRC_STRAT;
+        this.pricingTableRow.GEO_COMBINED = ProdSel_Util.getFormatedGeos(this.currentPTERow[0]['row'].GEO_COMBINED);
+        this.pricingTableRow.PTR_SYS_PRD = this.currentPTERow[0]['row'].PTR_SYS_PRD;
+        this.pricingTableRow.PROGRAM_PAYMENT = this.currentPTERow[0]['row'].PROGRAM_PAYMENT;
+        this.pricingTableRow.PROD_INCLDS = this.currentPTERow[0]['row'].PROD_INCLDS;
+        this.pricingTableRow.OBJ_SET_TYPE_CD = this.data.curPricingTable.OBJ_SET_TYPE_CD;
     }
-  onNoClick(): void {
-    this.dialogRef.close();
-  }
-  onSave(): void {
-    this.dialogRef.close(this.selectedProducts);
-  }
-  onPrdChange(evt:any,field:string){
-    this.state.filter.filters=[];
-    if(evt && evt.length && evt.length >0 && field){
-      _.each(evt,itm=>{
-        this.state.filter.filters.push({
-          field: field,
-          operator: 'eq',
-          value: itm
-        })
-      });
+    onNoClick(): void {
+        this.dialogRef.close();
     }
-    this.selGridData = process(this.selGridResult, this.state);
-  }
-  isValidCapDetails(productJson, showErrorMesssage?) {
-    if (this.DEAL_TYPE !== 'ECAP' && this.DEAL_TYPE !== 'KIT') {
-        return !showErrorMesssage ? false : productJson.HIER_NM_HASH;
+    onSave(): void {
+        this.dialogRef.close(this.selectedProducts);
     }
-    let errorMessage = "";
-    const cap = productJson.CAP.toString();
-    if (cap.toUpperCase() == "NO CAP") {
-        errorMessage = "Product entered does not have CAP within the Deal's start date and end date.";
+    onPrdChange(evt: any, field: string) {
+        this.state.filter.filters = [];
+        if (evt && evt.length && evt.length > 0 && field) {
+            _.each(evt, itm => {
+                this.state.filter.filters.push({
+                    field: field,
+                    operator: 'eq',
+                    value: itm
+                })
+            });
+        }
+        this.selGridData = process(this.selGridResult, this.state);
     }
-    if (cap.indexOf('-') > -1) {
-        errorMessage = "CAP price " + cap + " cannot be a range.";
-    }
-    if (!showErrorMesssage) {
-        return errorMessage == "" ? false : true;
-    } else {
-        return errorMessage == "" ? productJson.HIER_NM_HASH : errorMessage;
-    }
+    isValidCapDetails(productJson, showErrorMesssage?) {
+        if (this.DEAL_TYPE !== 'ECAP' && this.DEAL_TYPE !== 'KIT') {
+            return !showErrorMesssage ? false : productJson.HIER_NM_HASH;
+        }
+        let errorMessage = "";
+        const cap = productJson.CAP.toString();
+        if (cap.toUpperCase() == "NO CAP") {
+            errorMessage = "Product entered does not have CAP within the Deal's start date and end date.";
+        }
+        if (cap.indexOf('-') > -1) {
+            errorMessage = "CAP price " + cap + " cannot be a range.";
+        }
+        if (!showErrorMesssage) {
+            return errorMessage == "" ? false : true;
+        } else {
+            return errorMessage == "" ? productJson.HIER_NM_HASH : errorMessage;
+        }
     }
     showColumns() {
         let columns = [
@@ -464,17 +468,17 @@ export class ProductCorrectorComponent {
                 }
             })
         }
-}
-  distinctPrimitive(fieldName: string): any {
-    return distinct(this.selGridResult, fieldName).map(item => item[fieldName]);
-  }
-  ngOnInit() {
-    this.ProductCorrectorData=this.data.ProductCorrectorData;
-    this.contractData=this.data.contractData;
-    this.curPricingTable=this.data.curPricingTable;
-    this.selRows=this.data.selRows;
-    this.DEAL_TYPE = this.data.curPricingTable['OBJ_SET_TYPE_CD'];
-    this.curSelProducts=null;
-    this.loadGrid()
-  }
+    }
+    distinctPrimitive(fieldName: string): any {
+        return distinct(this.selGridResult, fieldName).map(item => item[fieldName]);
+    }
+    ngOnInit() {
+        this.ProductCorrectorData = this.data.ProductCorrectorData;
+        this.contractData = this.data.contractData;
+        this.curPricingTable = this.data.curPricingTable;
+        this.selRows = this.data.selRows;
+        this.DEAL_TYPE = this.data.curPricingTable['OBJ_SET_TYPE_CD'];
+        this.curSelProducts = null;
+        this.loadGrid()
+    }
 }

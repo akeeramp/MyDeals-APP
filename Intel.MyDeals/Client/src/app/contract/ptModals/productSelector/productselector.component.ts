@@ -633,9 +633,9 @@ export class ProductSelectorComponent {
         }
     }
     async searchProduct(isSuggestProduct?) {
+        if (this.userInput == "") return [];
         this.isLoadingSearchProducts = true;
         let columnType;
-        if (this.userInput == "") return [];
         if (isSuggestProduct) {
             this.drillDownPrd = this.userInput;
             this.userInput = this.userInput;
