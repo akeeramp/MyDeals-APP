@@ -321,9 +321,9 @@ export class dealEditorComponent {
     }
 
     updateModalDataItem(dataItem, field, returnVal) {
-        if (dataItem.isLinked != undefined && dataItem.isLinked && this.gridResult.filter(x => x.isLinked).length > 0) {
+        if ((dataItem.isLinked != undefined && dataItem.isLinked && this.gridResult.filter(x => x.isLinked).length > 0 && field !== 'TRGT_RGN') || (dataItem._parentCnt > 1 && !dataItem.isLinked && field !== 'TRGT_RGN')) {
             _.each(this.gridResult, (item) => {
-                if (item.isLinked != undefined && item.isLinked)
+                if ((item.isLinked != undefined && item.isLinked && dataItem.isLinked) || (dataItem._parentCnt > 1 && dataItem.DC_PARENT_ID == item.DC_PARENT_ID && !dataItem.isLinked))
                     PTE_Save_Util.setDataItem(item, field, returnVal);
             })
         }
@@ -400,9 +400,9 @@ export class dealEditorComponent {
         dialogRef.afterClosed().subscribe((returnVal) => {
             if (returnVal != undefined) {
                 dataItem.END_CUST_OBJ = returnVal.END_CUST_OBJ;
-                if (dataItem.isLinked != undefined && dataItem.isLinked) {
+                if ((dataItem.isLinked != undefined && dataItem.isLinked) || (dataItem._parentCnt > 1 && !dataItem.isLinked)) {
                     _.each(this.gridResult, (item) => {
-                        if (item.isLinked != undefined && item.isLinked)
+                        if ((item.isLinked != undefined && item.isLinked && dataItem.isLinked) || (dataItem._parentCnt > 1 && dataItem.DC_PARENT_ID == item.DC_PARENT_ID && !dataItem.isLinked))
                             PTE_Save_Util.setDataItem(item, 'END_CUST_OBJ', returnVal.END_CUST_OBJ);
                     })
                 }

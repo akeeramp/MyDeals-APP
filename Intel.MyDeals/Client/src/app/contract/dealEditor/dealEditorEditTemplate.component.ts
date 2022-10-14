@@ -62,7 +62,7 @@ export class dealEditorEditTemplateComponent {
         }
     }
 
-    valueChange(dataItem: any, field: any, key?: any): void {
+    valueChange(dataItem: any, field: any, key?: any): void {        
         if (((field == 'ECAP_PRICE' || field == 'DSCNT_PER_LN') && this.in_Deal_Type == 'KIT') && key != undefined && key != null && key != "" && dataItem[field][key] == null) {
             dataItem[field][key] = 0;
         }
@@ -70,9 +70,9 @@ export class dealEditorEditTemplateComponent {
             field = "ECAP_PRICE";
             key = '20_____1';
         }
-        if (dataItem.isLinked != undefined && dataItem.isLinked) {// if modified dataItem is linked, then modifying corresponding columns of all other linked data 
+       if ((dataItem.isLinked != undefined && dataItem.isLinked) || (dataItem._parentCnt > 1 && !dataItem.isLinked)) {// if modified dataItem is linked, then modifying corresponding columns of all other linked data
             _.each(this.in_DataSet, (item) => {
-                if (item.isLinked != undefined && item.isLinked) {
+                if ((item.isLinked != undefined && item.isLinked && dataItem.isLinked) || (dataItem._parentCnt > 1 && dataItem.DC_PARENT_ID == item.DC_PARENT_ID && !dataItem.isLinked)) {
                     let value;
                     if (key != undefined && key != null && key != "" && item[field][key] != undefined && item[field][key] != null) {
                         if (((field == 'ECAP_PRICE' || field == 'DSCNT_PER_LN') && this.in_Deal_Type == 'KIT')) { // if modified value is KIT deal ECAP_PRICE and DSCNT_PER_LN then all dim keys values needs to be copied
@@ -144,9 +144,9 @@ export class dealEditorEditTemplateComponent {
     }
 
     saveLinkedDataItem(dataItem: any, field: string, value: any, key: string) { // to modify the linked/selected records if Tier column is modified 
-        if (dataItem.isLinked != undefined && dataItem.isLinked) {
+        if ((dataItem.isLinked != undefined && dataItem.isLinked) || (dataItem._parentCnt > 1 && !dataItem.isLinked)) {
             _.each(this.in_DataSet, (item) => {
-                if (item.isLinked != undefined && item.isLinked) {
+                if ((item.isLinked != undefined && item.isLinked && dataItem.isLinked) || (dataItem._parentCnt > 1 && dataItem.DC_PARENT_ID == item.DC_PARENT_ID && !dataItem.isLinked))  {
                     if (field == 'RATE' || field == 'INCENTIVE_RATE' || field == "DENSITY_RATE") {// if modified column is rate, then all dim key values needs to be copied to all other selected records
                         var keys = Object.keys(item[field])
                         for (var index in keys) {
