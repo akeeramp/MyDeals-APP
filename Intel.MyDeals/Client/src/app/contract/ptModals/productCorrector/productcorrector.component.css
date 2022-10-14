@@ -465,3 +465,8 @@ a.prdAnchor:hover {
 .k-grid .k-grid-container {
     overflow: auto !important;
 }
+
+.product-breakout-modal > mat-dialog-container {
+    background-color: #1a3e6f !important;
+    padding: 0px !important;
+}

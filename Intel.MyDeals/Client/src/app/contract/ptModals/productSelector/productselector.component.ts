@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 import * as angular from "angular";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
@@ -36,7 +37,7 @@ export class ProductSelectorComponent {
         popoverConfig.autoClose = 'outside';
         popoverConfig.animation = false;    // Fixes issue with `.fade` css element setting improper opacity making the popover not show up
         popoverConfig.triggers = 'mouseenter:mouseleave';   // Disabled to use default click behaviour to prevent multiple popover windows from appearing
-        popoverConfig.openDelay = 50;   // milliseconds
+        popoverConfig.openDelay = 500;   // milliseconds
         popoverConfig.closeDelay = 500; // milliseconds
     }
 
@@ -145,7 +146,8 @@ export class ProductSelectorComponent {
                     'getAvailable': 'N',
                     'priceCondition': priceCondition
                 }]
-            }
+            },
+            panelClass: 'product-breakout-modal'
         });
     }
 

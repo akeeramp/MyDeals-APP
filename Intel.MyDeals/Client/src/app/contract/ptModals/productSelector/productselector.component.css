@@ -687,3 +687,8 @@ kendo-grid.raid-style {
     position: relative !important;
     margin: 0 !important;
 }
+
+.product-breakout-modal > mat-dialog-container {
+    background-color: #1a3e6f !important;
+    padding: 0px !important;
+}

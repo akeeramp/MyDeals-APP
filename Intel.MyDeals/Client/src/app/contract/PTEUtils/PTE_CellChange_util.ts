@@ -153,49 +153,49 @@ export class PTE_CellChange_Util {
                 }
             }
             else if (val.prop == 'SETTLEMENT_PARTNER') {
-                //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
+                //update PTR_USER_PRD with random value if we use row index values while adding after delete can give duplicate index
                 if ((curPricingTable[`AR_SETTLEMENT_LVL`] && curPricingTable[`AR_SETTLEMENT_LVL`].toLowerCase() == 'cash')
-                    || (contractData.IS_TENDER == "1" && contractData.Customer.DFLT_TNDR_AR_SETL_LVL.toLowerCase() == 'cash')) {
-                    currentString = row + ',' + val.prop + ',' + contractData.Customer.DFLT_SETTLEMENT_PARTNER + ',' + 'no-edit';
+                        || (contractData.IS_TENDER == "1" && contractData.Customer.DFLT_TNDR_AR_SETL_LVL.toLowerCase() == 'cash')) {
+                    currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, contractData.Customer.DFLT_SETTLEMENT_PARTNER, 'no-edit');
                 }
                 else {
-                    currentString = row + ',' + val.prop + ',' + '' + ',' + 'no-edit';
+                    currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, '', 'no-edit');
                 }
                 updateRows.push(currentString.split(','));
                 //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
             }
             else if (val.prop == 'START_DT') {
-                //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-                currentString = row + ',' + val.prop + ',' + contractData.START_DT + ',' + 'no-edit';
+                //update PTR_USER_PRD with random value if we use row index values while adding after delete can give duplicate index
+                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, contractData.START_DT, 'no-edit');
                 updateRows.push(currentString.split(','));
                 //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
             }
             else if (val.prop == 'END_DT') {
-                //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-                currentString = row + ',' + val.prop + ',' + contractData.END_DT + ',' + 'no-edit';
+                //update PTR_USER_PRD with random value if we use row index values while adding after delete can give duplicate index
+                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, contractData.END_DT, 'no-edit');
                 updateRows.push(currentString.split(','));
                 //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
             }
             else if (val.prop == 'RESET_VOLS_ON_PERIOD') {
-                //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-                currentString = row + ',' + val.prop + ',' + 'No' + ',' + 'no-edit';
+                //update PTR_USER_PRD with random value if we use row index values while adding after delete can give duplicate index
+                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, 'No', 'no-edit');
                 updateRows.push(currentString.split(','));
                 //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
             }
             else if (val.prop == 'CUST_ACCNT_DIV') {
-                currentString = row + ',' + val.prop + ',' + contractData.CUST_ACCNT_DIV + ',' + 'no-edit';
+                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, contractData.CUST_ACCNT_DIV, 'no-edit');
                 updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'AR_SETTLEMENT_LVL' && contractData.IS_TENDER == "1") {
-                currentString = row + ',' + val.prop + ',' + contractData.Customer.DFLT_TNDR_AR_SETL_LVL + ',' + 'no-edit';
+                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, contractData.Customer.DFLT_TNDR_AR_SETL_LVL, 'no-edit');
                 updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'TOTAL_DOLLAR_AMOUNT' && curPricingTable.OBJ_SET_TYPE_CD == 'PROGRAM') {
-                currentString = row + ',' + val.prop + ',' + '0.00' + ',' + 'no-edit';
+                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, '0.00', 'no-edit');
                 updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'ADJ_ECAP_UNIT' && curPricingTable.OBJ_SET_TYPE_CD == 'PROGRAM') {
-                currentString = row + ',' + val.prop + ',' + '0' + ',' + 'no-edit';
+                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, '0', 'no-edit');
                 updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'MRKT_SEG') {
@@ -212,41 +212,52 @@ export class PTE_CellChange_Util {
                     this.hotTable.setDataAtRowProp(row, val.prop, '0.00', 'no-edit');
             }
             else if (val.prop == 'CAP') {
-                let newCellItem = cellItem.new.split(",");
-                let cellVal;
-                if (newCellItem.length > 1) {
-                    for (let i = 0; i < newCellItem.length; i++) {
-                        cellVal = (operation && operation.operation && operation.PTR_SYS_PRD) ? JSON.parse(operation['PTR_SYS_PRD'])[newCellItem[i]][0]['CAP'] : ''
-                    }
-                } else {
-                    cellVal = (operation && operation.operation && operation.PTR_SYS_PRD) ? JSON.parse(operation['PTR_SYS_PRD'])[cellItem.new][0]['CAP'] : ''
-                }
-                currentString = row + ',' + val.prop + ',' + cellVal + ',' + 'no-edit';
+                let cellVal = PTE_CellChange_Util.getValueForCurrentRow(updateRows, operation, row, val.prop);
+                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, cellVal, 'no-edit');
                 updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'YCS2') {
-                let newCellItem = cellItem.new.split(",");
-                let cellVal;
-                if (newCellItem.length > 1) {
-                    for (let i = 0; i < newCellItem.length; i++) {
-                        cellVal = (operation && operation.operation && operation.PTR_SYS_PRD) ? JSON.parse(operation['PTR_SYS_PRD'])[newCellItem[i]][0]['YCS2'] : ''
-                    }
-                } else {
-                    cellVal = (operation && operation.operation && operation.PTR_SYS_PRD) ? JSON.parse(operation['PTR_SYS_PRD'])[cellItem.new][0]['YCS2'] : ''
-                }
-                currentString = row + ',' + val.prop + ',' + cellVal + ',' + 'no-edit';
+                let cellVal = PTE_CellChange_Util.getValueForCurrentRow(updateRows, operation, row, val.prop);
+                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, cellVal, 'no-edit');
                 updateRows.push(currentString.split(','));
             }
             else {
                 if (val.prop) {
                     //this will be autofill defaults value 
                     let cellVal = curPricingTable[`${val.prop}`] ? curPricingTable[`${val.prop}`] : '';
-                    currentString = row + ',' + val.prop + ',' + cellVal + ',' + 'no-edit';
+                    currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, cellVal, 'no-edit');
                     updateRows.push(currentString.split(','));
                 }
             }
         }
     }
+    private static getValueForCurrentRow(updateRows: Array<any>, operation, row, key) {
+        // Since `addUpdateRowOnchangeKIT()` runs before `addUpdateRowOnchangeCommon()`, the variable `PRD_BCKT` in `updateRows` will always be avaliable
+        let cellVal = '';
+
+        if (operation && operation.operation && operation.PTR_SYS_PRD) {
+            // Only select data for current row
+            let currentRow_PRD_BCKT = '';
+
+            for (const key in updateRows) {
+                if (updateRows[key][0] == row) {
+                    if (updateRows[key][1] == 'PRD_BCKT') {
+                        currentRow_PRD_BCKT = updateRows[key][2];
+                    }
+                }
+            }
+
+            if (currentRow_PRD_BCKT.length > 1) {
+                cellVal = JSON.parse(operation['PTR_SYS_PRD'])[currentRow_PRD_BCKT][0][key];
+            }
+        }
+
+        return cellVal;
+    }
+    private static generateUpdateRowString(row, property, cellValue, editConfig): string {
+        return (row + ',' + property + ',' + cellValue + ',' + editConfig);
+    }
+
     static getMergeCellsOnEdit(empRow: number, NUM_OF_TIERS: number, pricingTableTemplates: any): void {
         let mergCells: any = null;
         //identify distinct DCID, bcz the merge will happen for each DCID and each DCID can have diff  NUM_OF_TIERS

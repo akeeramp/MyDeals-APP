@@ -948,3 +948,8 @@ ngb-tooltip-window .tooltip-inner {
 .creditcolor {
     background: #d3d3d30d !important
 }
+
+.product-breakout-modal > mat-dialog-container {
+    background-color: #1a3e6f !important;
+    padding: 0px !important;
+}

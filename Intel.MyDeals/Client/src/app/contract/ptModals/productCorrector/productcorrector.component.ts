@@ -32,7 +32,7 @@ export class ProductCorrectorComponent {
     popoverConfig.autoClose = 'outside';
     popoverConfig.animation = false; // Fixes issue with `.fade` css element setting improper opacity making the popover not show up
     popoverConfig.triggers = 'mouseenter:mouseleave';   // Disabled to use default click behaviour to prevent multiple popover windows from appearing
-    popoverConfig.openDelay = 50;   // milliseconds
+    popoverConfig.openDelay = 500;   // milliseconds
     popoverConfig.closeDelay = 500; // milliseconds
   }
   private pricingTableRow: any = {};
@@ -125,7 +125,8 @@ export class ProductCorrectorComponent {
                 'getAvailable': 'N',
                 'priceCondition': priceCondition
             }]
-        }
+        },
+        panelClass: 'product-breakout-modal'
     });
   }
 

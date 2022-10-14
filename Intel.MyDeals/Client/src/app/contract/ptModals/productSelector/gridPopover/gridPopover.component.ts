@@ -43,7 +43,8 @@ export class GridPopoverComponent implements OnInit {
             data: {
                 columnTypes: this.columnTypes,
                 productData: this.productData
-            }
+            },
+            panelClass: 'product-breakout-modal'
         });
     }
 

@@ -23,15 +23,15 @@
 <div *ngIf="in_Field_Name == 'CUST_MBR_SID'" [innerHTML]="uiCustomerControlWrapper(in_DataItem, in_Field_Name, '')" class="dealCell">
 </div>
 <div *ngIf="(in_Field_Name == 'ECAP_PRICE' && in_Deal_Type == 'ECAP') || in_Field_Name == 'KIT_ECAP' || in_Field_Name == 'SUBKIT_ECAP' || in_Field_Name == 'COMPETITIVE_PRICE' || in_Field_Name == 'CAP_KIT' || in_Field_Name == 'YCS2_KIT'" [innerHTML]="uiDimControlWrapper(in_DataItem, in_Field_Name)"
-     [ngClass]="{'isReadOnlyCell': isReadonlyCell(in_DataItem, in_Field_Name), 'isDirtyCell': isDirtyCell(in_DataItem,in_Field_Name), 'isErrorCell': isErrorCell(in_DataItem,in_Field_Name), 'uiControlDiv isReadOnlyCell' : (in_Field_Name == 'COMPETITIVE_PRICE' || in_Field_Name == 'CAP_KIT')}" class="dealCell">
+     [ngClass]="{'isReadOnlyCell': isReadonlyCell(in_DataItem, in_Field_Name), 'isDirtyCell': isDirtyCell(in_DataItem,in_Field_Name), 'isErrorCell': isErrorCell(in_DataItem,in_Field_Name), 'uiControlDiv isReadOnlyCell' : (in_Field_Name == 'COMPETITIVE_PRICE' || in_Field_Name == 'CAP_KIT')}">
 </div>
 <div *ngIf="in_Field_Name == 'PASSED_VALIDATION'" [innerHTML]="uiValidationErrorDetail(in_DataItem)" class="dealCell"></div>
 <div *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'VOL_TIER' || in_Deal_Type == 'REV_TIER' || in_Deal_Type == 'FLEX')" [innerHTML]="uiControlScheduleWrapper(in_DataItem)" class="breakoutColumn tier"></div>
 <div *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'DENSITY')" [innerHTML]="uiControlScheduleWrapperDensity(in_DataItem)" class="breakoutColumn dealCell tier"></div>
 <div *ngIf="in_Template.includes('gridUtils.uiReadonlyControlWrapper')" [innerHTML]="uiReadonlyControlWrapper(in_DataItem, in_Field_Name)" class="dealCell"></div>
 <div *ngIf="in_Field_Name == 'TRKR_NBR'" [innerHTML]="uiDimTrkrControlWrapper(in_DataItem)" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'START_DT' || in_Field_Name == 'LAST_REDEAL_DT'" style="height: 100% !important;" [innerHTML]="uiStartDateWrapper(in_DataItem, in_Field_Name)"></div>
-<div *ngIf="in_Field_Name == 'END_DT' || in_Field_Name == 'OEM_PLTFRM_LNCH_DT' || in_Field_Name == 'OEM_PLTFRM_EOL_DT'" class="dealCell" [innerHTML]="uiControlEndDateWrapper(in_DataItem, in_Field_Name)"></div>
+<div *ngIf="in_Field_Name == 'START_DT' || in_Field_Name == 'LAST_REDEAL_DT'" [innerHTML]="uiStartDateWrapper(in_DataItem, in_Field_Name)"></div>
+<div *ngIf="in_Field_Name == 'END_DT' || in_Field_Name == 'OEM_PLTFRM_LNCH_DT' || in_Field_Name == 'OEM_PLTFRM_EOL_DT'" [innerHTML]="uiControlEndDateWrapper(in_DataItem, in_Field_Name)"></div>
 <div *ngIf="in_Field_Name == 'COMP_SKU'" class="uiControlDiv isReadOnlyCell vert-center" [innerHTML]="getFormatedDim(in_DataItem)"></div>
 <div *ngIf="in_Field_Name == 'EXPIRE_FLG'" [innerHTML]="uiBoolControlWrapper(in_DataItem, in_Field_Name)" class="dealCell"></div>
 <div *ngIf="in_Field_Name == 'WF_STG_CD'" style="height: 100% !important;" [innerHTML]="uiParentControlWrapper(in_DataItem)"></div>
@@ -47,7 +47,7 @@
 <div *ngIf="in_Field_Name == 'KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE'" [innerHTML]="uiKitCalculatedValuesControlWrapper(in_DataItem, 'kit', 'sumTD')" class="dealCell"></div>
 <div *ngIf="in_Field_Name == 'SUBKIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE'" [innerHTML]="uiKitCalculatedValuesControlWrapper(in_DataItem, 'subkit', 'sumTD')" class="dealCell"></div>
 <div *ngIf="in_Field_Name == 'TOTAL_CR_DB_PERC'" [innerHTML]="uiCrDbPercWrapper(in_DataItem)" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'CAP_INFO' || in_Field_Name == 'YCS2_INFO'" class="dealCell">
+<div *ngIf="in_Field_Name == 'CAP_INFO' || in_Field_Name == 'YCS2_INFO'" class="dealCell vert-center">
     <div *ngIf="in_DataItem['ECAP_PRICE'] != undefined && in_DataItem['ECAP_PRICE'] != null">
         <div class="col-md-12">
             <div *ngFor="let key Of keyArray(in_DataItem['ECAP_PRICE']); let i = index">
@@ -91,8 +91,8 @@
      && in_Field_Name !== 'SUBKIT_REBATE_BUNDLE_DISCOUNT' && in_Field_Name !== 'BACKEND_REBATE' && in_Field_Name !== 'TOTAL_DSCNT_PR_LN'
      && in_Field_Name !== 'CAP_KIT' && in_Field_Name !== 'YCS2_KIT' && in_Field_Name !== 'KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE' && in_Field_Name !== 'SUBKIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE'
      && in_Field_Name !== 'TOTAL_CR_DB_PERC' && in_Field_Name !== 'MEETCOMP_TEST_RESULT' && in_Field_Name !== 'COST_TEST_RESULT' && in_Field_Name !== 'CAP_INFO'
-     && in_Field_Name !== 'YCS2_INFO' && in_Field_Name !== 'MISSING_CAP_COST_INFO'"
-     [innerHTML]="in_Template" class="uiControlDiv wrap readOnlyCell dealCell">
+     && in_Field_Name !== 'YCS2_INFO' && in_Field_Name !== 'MISSING_CAP_COST_INFO'" [innerHTML]="in_Template"
+    class="uiControlDiv wrap readOnlyCell dealCell">
 </div>
 <!--Code commented for twc3167-1939-->
 <!--<div *ngIf="in_Field_Name == 'CAP'" class="dealCell"></div>

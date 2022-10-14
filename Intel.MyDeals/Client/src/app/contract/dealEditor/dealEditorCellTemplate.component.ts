@@ -32,9 +32,9 @@ export class dealEditorCellTemplateComponent {
         popoverConfig.autoClose = 'outside';
         popoverConfig.animation = false;
         popoverConfig.triggers = 'mouseenter:mouseleave';   // Disabled to use default click behaviour to prevent multiple popover windows from appearing
-        popoverConfig.openDelay = 50;   // milliseconds
+        popoverConfig.openDelay = 500;   // milliseconds
         popoverConfig.closeDelay = 500; // milliseconds
-    }
+        }
 
     @Input() in_Field_Name: string = '';
     @Input() in_Template: string = '';
@@ -68,7 +68,8 @@ export class dealEditorCellTemplateComponent {
                     'getAvailable': 'N',
                     'priceCondition': priceCondition
                 }]
-            }
+            },
+            panelClass: 'product-breakout-modal'
         });
     }
         
