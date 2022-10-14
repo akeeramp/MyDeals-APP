@@ -34,6 +34,7 @@ export class pctChildGridComponent {
     @Input() child: any;
     @Input() UItemplate: any;
     @Input() dealType: any;
+    @Input() CostTestGroupDetails: any;
     userRole = ""; canEmailIcon = true;
     isPSExpanded = []; isPTExpanded = {};
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
@@ -113,7 +114,8 @@ export class pctChildGridComponent {
     }
     cellClickHandler(args: CellClickEvent): void {
         if (args.column.field == "GRP_DEALS") {
-            this.openPctGroupModal(args.dataItem);
+            let data = this.CostTestGroupDetails.filter(x => x.DEAL_PRD_RNK == args.dataItem.DEAL_PRD_RNK)
+            this.openPctGroupModal(data);
         }
     }
     openPctGroupModal(dataItem) {

@@ -771,13 +771,17 @@ export class dealEditorComponent {
             }
             else {
                 args.sender.cellClick.closed = false;
-                args.sender.cellClick.isStopped = false;
-                PTE_Common_Util.cellCloseValues(args.column.field, args.dataItem);
-                if (args.column.field == "REBATE_BILLING_START" || args.column.field == "REBATE_BILLING_END"
-                    || args.column.field == "START_DT" || args.column.field == "LAST_REDEAL_DT" || args.column.field == "END_DT"
-                    || args.column.field == "OEM_PLTFRM_LNCH_DT" || args.column.field == "OEM_PLTFRM_EOL_DT" || args.column.field == "ON_ADD_DT")
-                    if (args.dataItem[args.column.field] != undefined && args.dataItem[args.column.field] != null && args.dataItem[args.column.field] != "" && args.dataItem[args.column.field] != "Invalid date")
-                        args.dataItem[args.column.field] = this.datePipe.transform(args.dataItem[args.column.field], "MM/dd/yyyy");
+                args.sender.cellClick.isStopped = false;                
+                _.each(this.gridResult, (item) => {
+                    if (item._dirty) {
+                        PTE_Common_Util.cellCloseValues(args.column.field, item);
+                        if (args.column.field == "REBATE_BILLING_START" || args.column.field == "REBATE_BILLING_END"
+                            || args.column.field == "START_DT" || args.column.field == "LAST_REDEAL_DT" || args.column.field == "END_DT"
+                            || args.column.field == "OEM_PLTFRM_LNCH_DT" || args.column.field == "OEM_PLTFRM_EOL_DT" || args.column.field == "ON_ADD_DT")
+                            if (item[args.column.field] != undefined && item[args.column.field] != null && item[args.column.field] != "" && item[args.column.field] != "Invalid date")
+                                item[args.column.field] = this.datePipe.transform(item[args.column.field], "MM/dd/yyyy");                        
+                    }
+                })
                 if ((args.column.field == "START_DT" || args.column.field == "END_DT") && args.dataItem._behaviors != undefined && args.dataItem._behaviors != null
                     && args.dataItem._behaviors.isDirty != undefined && args.dataItem._behaviors.isDirty != null && args.dataItem._behaviors.isDirty[args.column.field] != undefined
                     && args.dataItem._behaviors.isDirty[args.column.field] != null && args.dataItem._behaviors.isDirty[args.column.field]) {

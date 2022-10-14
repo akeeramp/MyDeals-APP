@@ -66,6 +66,10 @@ export class dealEditorEditTemplateComponent {
         if (((field == 'ECAP_PRICE' || field == 'DSCNT_PER_LN') && this.in_Deal_Type == 'KIT') && key != undefined && key != null && key != "" && dataItem[field][key] == null) {
             dataItem[field][key] = 0;
         }
+        if (field == 'KIT_ECAP' && this.in_Deal_Type == 'KIT' && key == undefined) {
+            field = "ECAP_PRICE";
+            key = '20_____1';
+        }
         if (dataItem.isLinked != undefined && dataItem.isLinked) {// if modified dataItem is linked, then modifying corresponding columns of all other linked data 
             _.each(this.in_DataSet, (item) => {
                 if (item.isLinked != undefined && item.isLinked) {
