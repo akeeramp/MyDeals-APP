@@ -113,7 +113,13 @@ export class dealToolsComponent{
     }
 
     loadDealTools() {
-        let distinctData = distinct(this.gridData, 'DEAL_ID');
+        let distinctData;
+        if (this.dataItem.DC_ID != undefined) {
+            distinctData = distinct(this.gridData, 'DC_ID');
+        }
+        else {
+            distinctData = distinct(this.gridData, 'DEAL_ID');//contract manage tab
+        }
         let childParent = _.countBy(distinctData, 'DC_PARENT_ID');
         _.each(this.gridData, item => {
             item['_parentCnt'] = childParent[`${item.DC_PARENT_ID}`]

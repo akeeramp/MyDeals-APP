@@ -113,12 +113,16 @@ export class managerPctComponent {
                                 var pct = isOverridden ? "Pass" : this.gridData[i]["PRC_CST_TST_STS"];
                                 this.gridData[i]["PRC_CST_TST_STS"] = pct;
                             }
+                            let _actions = this.contractData?.PRC_ST.filter(x => x.DC_ID == pt.DC_PARENT_ID).map(y => y._actions);
+                            if (_actions)
+                                this.gridData[i]["_actionsPS"] = _actions[0];
                         }
                         this.gridDataSet[pt.DC_ID] = process(distinct(this.gridData, "DEAL_ID"), this.state[pt.DC_ID]);
                         this.gridResult[pt.DC_ID] = JSON.parse(JSON.stringify(this.gridDataSet[pt.DC_ID]));
                         this.parentGridData[pt.DC_ID] = this.gridData;
                         this.parentGridResult[pt.DC_ID] = JSON.parse(JSON.stringify(this.parentGridData[pt.DC_ID]));
                     }
+
                 },
                 function (response) {
                     this.loggerSvc.error("Could not load data.", response, response.statusText);
