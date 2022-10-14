@@ -416,8 +416,10 @@ export class PTE_CellChange_Util {
             });
         }
         if (updateRows && updateRows.length > 0) {
-            //appending everything together
-            this.hotTable.setDataAtRowProp(updateRows, 'no-edit');
+            //appending everything together batch function will improve the performace
+            this.hotTable.batch(() => {
+                this.hotTable.setDataAtRowProp(updateRows, 'no-edit');
+            });
         }
     }
     static autoFillCellonProdVol(items: Array<any>, curPricingTable: any, contractData: any, pricingTableTemplates: any, columns: any[], operation?: any) {
@@ -492,8 +494,11 @@ export class PTE_CellChange_Util {
             });
         }
         if (updateRows && updateRows.length > 0) {
-            //appending everything togather
-            this.hotTable.setDataAtRowProp(updateRows, 'no-edit');
+            //appending everything togather batch function will improve the performace
+            this.hotTable.batch(() => {
+                this.hotTable.setDataAtRowProp(updateRows, 'no-edit');
+            });
+           
         }
 
     }
@@ -574,8 +579,10 @@ export class PTE_CellChange_Util {
                     });
                 }
                 if (updateRows && updateRows.length > 0) {
-                    //appending everything togather
-                    this.hotTable.setDataAtRowProp(updateRows, 'no-edit');
+                    //appending everything togather batch function will improve the performace
+                    this.hotTable.batch(() => {
+                        this.hotTable.setDataAtRowProp(updateRows, 'no-edit');
+                    });
                 }
             }
         }
@@ -730,8 +737,10 @@ export class PTE_CellChange_Util {
             });
         }
         if (updateRows && updateRows.length > 0) {
-            //appending everything togather
-            this.hotTable.setDataAtRowProp(updateRows, 'no-edit');
+             //appending everything togather batch function will improve the performace
+             this.hotTable.batch(() => {
+                this.hotTable.setDataAtRowProp(updateRows, 'no-edit');
+            });
         }
     }
 

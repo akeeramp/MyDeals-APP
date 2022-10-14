@@ -288,7 +288,14 @@ export class pricingTableEditorComponent implements OnChanges {
         manualColumnResize: true,
         afterChange: (changes, source) => {
             //using => operator to-call-parent-function-from-callback-function
-            this.afterCellChange(changes, source);
+            //loading screen changes are moved to the top to  make better performance
+            this.spinnerMessageHeader = 'PTE Reloading...';
+            this.spinnerMessageDescription = 'PTE Reloading please wait';
+            this.isLoading=true;
+            setTimeout(()=>{
+                this.afterCellChange(changes, source);
+                this.isLoading=false;
+            },0)
         },
         afterDocumentKeyDown: (event) => {
             this.afterDocumentKeyDown(event);
@@ -522,11 +529,7 @@ export class pricingTableEditorComponent implements OnChanges {
         if (source == 'edit' || source == 'CopyPaste.paste' || source == 'Autofill.fill') {
             // Changes will track all the cells changing if we are doing copy paste of multiple cells
             this.dirty = true;
-            this.isLoading = true;
-            
-            this.setBusy("PTE Reloading...", "PTE Reloading please wait", "Info", true);
             // PTE loading in handsone takes more loading time than Kendo so putting a loader
-            setTimeout(() => {
                 changes = this.identfyUniqChanges(changes, source);
                 let PTR = _.where(changes, { prop: 'PTR_USER_PRD' });
                 let PTR_EXLDS = _.where(changes, { prop: 'PRD_EXCLDS' });
@@ -597,11 +600,8 @@ export class pricingTableEditorComponent implements OnChanges {
                 }
                 if ((PTR_EXLDS && PTR_EXLDS.length > 0)) {
                     this.isExcludePrdChange = true;
-                }                
-                this.isLoading = false;
-                this.enableDeTab.emit(true);
-                this.setBusy("", "", "", false);
-            }, 0);
+                }
+                this.enableDeTab.emit(true);                
         }
     }
     async deletePTR() {
