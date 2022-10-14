@@ -357,6 +357,8 @@ export class DashboardComponent implements OnInit {
     ngAfterViewInit() {
         //this functionality will enable when dashboard landing to this page
         document.getElementsByClassName('loading-screen')[0].setAttribute('style', 'display:none');
+        //this functionality will disable anything of .net ifloading to stop when dashboard landing to this page
+        document.getElementById('mainBody')?.setAttribute('style', 'display:none');
     }
 
     ngOnDestroy() {

@@ -25,6 +25,7 @@ export class contractDetailsComponent {
     contractType: string;
     disableCustomer: boolean = false;
     disableCustAccpt: boolean = false;
+    disableSave:boolean=false;
     constructor(private templatesSvc: templatesService,
         private contractDetailsSvc: contractDetailsService, private datePipe: DatePipe,
         private loggerSvc: logger) {
@@ -221,9 +222,11 @@ export class contractDetailsComponent {
         this.contractDetailsSvc.isDuplicateContractTitle(dcID, title)
             .subscribe((response: Array<any>) => {
                 if (response) {
+                    this.disableSave=true;
                     this.isTitleError = true;
                     this.titleErrorMsg = "This contract name already exists in another contract.";
                 } else {
+                    this.disableSave=false;
                     this.isTitleError = false;
                     this.titleErrorMsg = "";
                 }
@@ -382,6 +385,10 @@ export class contractDetailsComponent {
         });
         this.contractData._behaviors.isError["CUST_ACCNT_DIV_UI"] = this.contractData._behaviors.isError["CUST_ACCNT_DIV"];
         this.contractData._behaviors.validMsg["CUST_ACCNT_DIV_UI"] = this.contractData._behaviors.validMsg["CUST_ACCNT_DIV"];
+        //this code is to check for duplcate name exists no need to save
+        if(this.disableSave==true){
+            this.isValid=false;
+        }
         if (this.isValid && ctrctFormData.valid) {
             if (this.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] == false && this.contractData.CUST_ACCNT_DIV == "") {
                 this.isDivBlankPopupOpen = true;
