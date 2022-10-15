@@ -741,8 +741,8 @@ export class contractDetailsComponent {
                     else {
                         this.setBusy("Copy Successful", "Copied the contract", "Success",false);
                       // setting the DC ID received from response because to upload files/attachments valid DC_ID is required
-                      if (response.CNTRCT.length == 2) {
-                        this.contractData.DC_ID = response.CNTRCT[1].DC_ID;
+                      if (response.CNTRCT.length>0) {
+                          this.contractData.DC_ID = response.CNTRCT.length == 2 ? response.CNTRCT[1]?.DC_ID : response.CNTRCT[0]?.DC_ID;
                         if (this.hasUnSavedFiles) {
                             this.uploadFile();
                         } else {

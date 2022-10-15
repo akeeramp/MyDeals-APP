@@ -172,17 +172,21 @@ export class AutoFillComponent {
         }
     }
 
+    onMarkSegChange(event: any) {
+        this.mkgvalues = this.multSlctMkgValues;
+    }
+
     onMktgValueChange(event: any) {
-        if (event && event.length > 0) {
+        if (event && event.length > 1) {
             var selectedList = event.join(",");
             if (_.indexOf(event, 'All Direct Market Segments') > 0) {
                 this.mkgvalues = ['All Direct Market Segments'];
-                this.multSlctMkgValues = this.mkgvalues; 
+                this.multSlctMkgValues = this.mkgvalues;
             }
             else {
                 if (_.indexOf(event, 'All Direct Market Segments') == 0) {
                     this.mkgvalues.splice(0, 1);
-                }               
+                }
                 _.each(this.mkgvalues, (key) => {
                     var selectedData = this.marketSeglist.filter(x => x.DROP_DOWN == key);
                     if (selectedData != undefined && selectedData != null && selectedData.length > 0 && selectedData[0].items != undefined && selectedData[0].items != null && selectedData[0].items.length > 0) {
@@ -203,16 +207,19 @@ export class AutoFillComponent {
                         }
                     })
                 }
-                this.multSlctMkgValues = _.clone(this.mkgvalues); 
+                this.multSlctMkgValues = _.clone(this.mkgvalues);
                 let nonCorpIdx = _.indexOf(this.multSlctMkgValues, "NON Corp");
                 if (nonCorpIdx != -1) {
                     this.multSlctMkgValues.splice(nonCorpIdx, 1);
-                }                
+                }
             }
             if (this.autofillData["DEFAULT"].hasOwnProperty("MRKT_SEG")) {
                 this.autofillData["DEFAULT"]["MRKT_SEG"].value = this.multSlctMkgValues;
-            }            
+            }
             this.multSlctMkgValues.sort();
+        }
+        else {
+            this.multSlctMkgValues = this.mkgvalues;
         }
     }
 
