@@ -29,7 +29,7 @@ export class TenderFolioComponent {
     private isLoading = true;
     private showCustDivAlert = false;
     public templateData;
-    private tenderName;
+    private tenderName="";
     private contractType = "Tender Folio";
     private contractData;
     private selectedData = [];
