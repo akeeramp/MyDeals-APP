@@ -31,6 +31,9 @@ export class tenderManagerComponent {
     public selectedTab = "PTR";
     public UItemplate = null;
     public isLoading = true;
+    public isSpinnerLoading=false;
+    public spinnerMessageHeader="Loading";
+    public spinnerMessageDescription="Please wait.."
     public currentTAB = 'PTR';
     public pricingTableData: any;
     public dirty: boolean = false;
@@ -196,10 +199,12 @@ export class tenderManagerComponent {
     async deleteContract() {
         if (confirm("Are you sure that you want to delete this contract?")) {
             const custId = this.contractData.CUST_MBR_SID;
-            const contractId = this.contractData.DC_ID; this.isLoading = true;
+            const contractId = this.contractData.DC_ID; 
+            this.isSpinnerLoading=true;
             await this.contractDetailsSvc.deleteContract(custId, contractId).toPromise().catch((err) => {
                 this.loggerSvc.error('Unable to delete the contract.', 'error');
             });
+            this.isSpinnerLoading=false;
             this.loggerSvc.success("Successfully deleted Contract.", "Delete successful");
             window.location.href = '/Dashboard#/portal';
         }

@@ -51,10 +51,12 @@ export class CopyContractComponent {
     }
 
     onCopyCntrctSearchTextChanged(searchValue): void {
-        this.gridData['data'] = this.orgGridData['data'].filter(
-            item => ((item.TITLE.toLowerCase()).includes(searchValue.toLowerCase())
-                || (item.CNTRCT_OBJ_SID.toString()).includes(searchValue))
-        )
+        if(this.orgGridData && this.orgGridData['data'] && this.orgGridData['data'].length>0){
+            this.gridData['data'] = this.orgGridData['data'].filter(
+                item => ((item.TITLE.toLowerCase()).includes(searchValue.toLowerCase())
+                    || (item.CNTRCT_OBJ_SID.toString()).includes(searchValue))
+            )
+        }
     }
 
     rowSelectionChange(selection): void {

@@ -413,44 +413,65 @@ export class contractDetailsComponent {
     }
 
     saveContract() {
-        // Contract Data
-        this.isLoading = true;
-        this.setBusy("Saving Contract", "Saving the Contract Information", "info", true);
-        const ct = this.contractData;
-        //this.custId = this.contractData["CUST_SID"];
-        this.contractId = -100;
-        if (this.contractData["DC_ID"]) {
-            this.contractId = this.contractData["DC_ID"];
+        try{
+            // Contract Data
+            this.isLoading = true;
+            this.setBusy("Saving Contract", "Saving the Contract Information", "info", true);
+            const ct = this.contractData;
+            //this.custId = this.contractData["CUST_SID"];
+            this.contractId = -100;
+            if (this.contractData["DC_ID"]) {
+                this.contractId = this.contractData["DC_ID"];
+            }
+            if (ct["DC_ID"] <= 0) ct["DC_ID"] = this.uid;
+            this.contractDetailsSvc
+                .createContract(this.contractData["CUST_MBR_SID"], this.contractId, ct)
+                .subscribe((response: any) => {
+                    //this condition is to handle fresh cration
+                    if (response.CNTRCT && response.CNTRCT.length > 1) {
+                        if(response.CNTRCT[1] && response.CNTRCT[1].DC_ID) {
+                            // setting the DC ID received from response because to upload files/attachments valid DC_ID is required
+                            this.contractData["DC_ID"] = response.CNTRCT[1].DC_ID;
+                            if (this.hasUnSavedFiles) {
+                                this.uploadFile();
+                            }
+                            else {
+                                window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
+                            }
+                            this.isLoading = true;
+                            this.setBusy("Save Successful", "Saved the contract", "Success", true);
+                        }
+                        else{
+                            this.loggerSvc.error("Something went wrong",'Error');
+                            this.isLoading = false;
+                        }
+                        
+                    } 
+                    //this condition is to handle update
+                    else if(response.CNTRCT && response.CNTRCT.length==1) {
+                        if (this.hasUnSavedFiles) {
+                            this.uploadFile();
+                            //window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
+                        } else {
+                            window.location.href = '/Dashboard#/portal';
+                        }
+                    }
+                    else{
+                        this.loggerSvc.error("Something went wrong",'Error');
+                        this.isLoading = false;
+                    }
+                    this.isLoading = false;
+                    this.setBusy("", "", "", false);
+                },(err)=>{
+                    this.loggerSvc.error("Unable to create contract","Error",err);
+                    this.isLoading = false;
+                });
         }
-        if (ct["DC_ID"] <= 0) ct["DC_ID"] = this.uid;
-        this.contractDetailsSvc
-            .createContract(this.contractData["CUST_MBR_SID"], this.contractId, ct)
-            .subscribe((response: any) => {
-                if (response.CNTRCT && response.CNTRCT.length > 0) {
-                    // setting the DC ID received from response because to upload files/attachments valid DC_ID is required
-                    this.contractData["DC_ID"] = response.CNTRCT[1].DC_ID;
-                    if (this.hasUnSavedFiles) {
-                        this.uploadFile();
-                    }
-                    else {
-                        window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
-                    }
-                    this.isLoading = true;
-                    this.setBusy("Save Successful", "Saved the contract", "Success", true);
-                } else {
-                    if (this.hasUnSavedFiles) {
-                        this.uploadFile();
-                        //window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
-                    } else {
-                        window.location.href = '/Dashboard#/portal';
-                    }
-                }
-                this.isLoading = false;
-                this.setBusy("", "", "", false);
-            },(err)=>{
-                this.loggerSvc.error("Unable to create contract","Error",err);
-                this.isLoading = false;
-            });
+        catch(ex){
+            this.loggerSvc.error("Something went wrong",'Error');
+            this.isLoading = false;
+        }
+      
     }
 
     isValidDate(type, newDate) {
@@ -719,13 +740,15 @@ export class contractDetailsComponent {
                     }
                     else {
                         this.setBusy("Copy Successful", "Copied the contract", "Success",false);
-                        // setting the DC ID received from response because to upload files/attachments valid DC_ID is required
-                        this.contractData.DC_ID = response.CNTRCT[0].DC_ID;
+                      // setting the DC ID received from response because to upload files/attachments valid DC_ID is required
+                      if (response.CNTRCT.length == 2) {
+                        this.contractData.DC_ID = response.CNTRCT[1].DC_ID;
                         if (this.hasUnSavedFiles) {
                             this.uploadFile();
                         } else {
                             window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
                         }
+                    }
                     }
                 }
             }, error => {

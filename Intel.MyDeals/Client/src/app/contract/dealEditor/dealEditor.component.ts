@@ -203,41 +203,47 @@ export class dealEditorComponent {
     }
 
     async getWipDealData() {
-        let response: any = await this.pteService.readPricingTable(this.in_Pt_Id).toPromise().catch((err) => {
-            this.loggerService.error('dealEditorComponent::readPricingTable::readTemplates:: service', err);
-        });
-        if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
-            if (response.WIP_DEAL[0].IS_HYBRID_PRC_STRAT == '1') {
-                response.WIP_DEAL = PTE_Validation_Util.ValidateEndCustomer(response.WIP_DEAL, "OnLoad", this.curPricingStrategy, this.curPricingTable);
-                var isValidationNeeded = response.WIP_DEAL.filter(obj => obj.IS_HYBRID_PRC_STRAT == "1" && obj.HAS_TRACKER == "1");
-                if (isValidationNeeded && response.WIP_DEAL.length == isValidationNeeded.length && this.curPricingTable.PASSED_VALIDATION != undefined && this.curPricingTable.PASSED_VALIDATION !=null && this.curPricingTable.PASSED_VALIDATION.toLowerCase() == "dirty") {
-                    response.WIP_DEAL = PTE_Validation_Util.validateSettlementLevel(response.WIP_DEAL, this.curPricingStrategy);
-                    response.WIP_DEAL = PTE_Validation_Util.validateOverArching(response.WIP_DEAL, this.curPricingStrategy, this.curPricingTable);
+        try {
+            let response: any = await this.pteService.readPricingTable(this.in_Pt_Id).toPromise().catch((err) => {
+                this.loggerService.error('dealEditorComponent::readPricingTable::readTemplates:: service', err);
+            });
+            if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
+                if (response.WIP_DEAL[0].IS_HYBRID_PRC_STRAT == '1') {
+                    response.WIP_DEAL = PTE_Validation_Util.ValidateEndCustomer(response.WIP_DEAL, "OnLoad", this.curPricingStrategy, this.curPricingTable);
+                    var isValidationNeeded = response.WIP_DEAL.filter(obj => obj.IS_HYBRID_PRC_STRAT == "1" && obj.HAS_TRACKER == "1");
+                    if (isValidationNeeded && response.WIP_DEAL.length == isValidationNeeded.length && this.curPricingTable.PASSED_VALIDATION != undefined && this.curPricingTable.PASSED_VALIDATION !=null && this.curPricingTable.PASSED_VALIDATION.toLowerCase() == "dirty") {
+                        response.WIP_DEAL = PTE_Validation_Util.validateSettlementLevel(response.WIP_DEAL, this.curPricingStrategy);
+                        response.WIP_DEAL = PTE_Validation_Util.validateOverArching(response.WIP_DEAL, this.curPricingStrategy, this.curPricingTable);
+                    }
                 }
-            }
-            this.voltLength = response.WIP_DEAL.length;
-            if (this.gridResult) {
-                let linkedIds = this.gridResult.filter(y => y.isLinked).map(x => x.DC_ID);
-                if (linkedIds.length > 0) {
-                    _.each(linkedIds, id => {
-                        _.each(response.WIP_DEAL, item => {
-                            if (item.DC_ID == id)
-                                item.isLinked = true;
+                this.voltLength = response.WIP_DEAL.length;
+                if (this.gridResult) {
+                    let linkedIds = this.gridResult.filter(y => y.isLinked).map(x => x.DC_ID);
+                    if (linkedIds.length > 0) {
+                        _.each(linkedIds, id => {
+                            _.each(response.WIP_DEAL, item => {
+                                if (item.DC_ID == id)
+                                    item.isLinked = true;
+                            })
                         })
-                    })
+                    }
                 }
+                this.gridResult = response.WIP_DEAL;
+                this.setWarningDetails();
+                this.applyHideIfAllRules();
+                this.lookBackPeriod = PTE_Load_Util.getLookBackPeriod(this.gridResult);
+                this.gridData = process(this.gridResult, this.state);
+                this.distinctPrimitive();
+                this.isLoading = false;
+                this.isDataLoading = false;
+            } else {
+                this.gridResult = [];
             }
-            this.gridResult = response.WIP_DEAL;
-            this.setWarningDetails();
-            this.applyHideIfAllRules();
-            this.lookBackPeriod = PTE_Load_Util.getLookBackPeriod(this.gridResult);
-            this.gridData = process(this.gridResult, this.state);
-            this.distinctPrimitive();
-            this.isLoading = false;
-            this.isDataLoading = false;
-        } else {
-            this.gridResult = [];
         }
+        catch(ex){
+            this.loggerService.error('Something wen wrong', 'Error');
+        }
+       
     }
 
     onTabSelect(e: SelectEvent) {
