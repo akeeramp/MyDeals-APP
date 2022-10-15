@@ -541,7 +541,7 @@ tr:last-child>td {
 }
 
 #dealEditorTab>.k-tabstrip-items-wrapper>.k-tabstrip-items>li>.k-link:hover {
-    background: #f9f9f9 !important;
+    background: #eee !important;
 }
 
 #dealEditorTab .k-tabstrip-items .k-state-active .colorChg {
@@ -932,7 +932,9 @@ ngb-tooltip-window .tooltip-inner {
     border-bottom: 1px solid #e6e6e6 !important;
     font-size: 12px;
 }
-
+.ECAP_PRICE {
+    height: 100%;
+}
 .mpublishgrid.k-grid td deal-editor-cell .dealCell .col-md-12 {
     padding: 0;
 }

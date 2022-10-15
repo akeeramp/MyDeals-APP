@@ -2,7 +2,7 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<loading-panel-angular class="folioloader" style="margin:auto !important" [show]="isLoading" [header]="'Loading contracts'" [description]="'Please wait while we load your contracts.'" [msgType]="'Info'" [isShowFunFact]="true">
+<loading-panel-angular class="myLoader folioloader" style="margin:auto !important" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription" [msgType]="'Info'" [isShowFunFact]="false">
 </loading-panel-angular>
 <nav class="navbar navbar-default rmv-padding">
     <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
@@ -70,3 +70,9 @@
 </div>
 <div id="secFooter"><button class="tndr-btn btn" type="button" (click)="ValidateTender()"><span>Create
             Tender Folio</span></button></div>
+<style>
+    .myLoader {
+        
+        left: auto !important;
+    }
+</style>

@@ -303,7 +303,7 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul {
 }
 
 kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li {
-    background: #f9f9f9 !important;
+    background: #f3f3f3 !important;
     border-color: #dee2e6;
     border-bottom: none;
 }
@@ -354,6 +354,7 @@ gridster-item.attr-li-8,
 gridster-item.attr-li-9,
 gridster-item.attr-li-10 {
     height: calc(100vh - 69%) !important;
+    min-height: 200px;
 }
 
 gridster-item.attr-li-7 {

@@ -485,10 +485,6 @@ a.prdAnchor:hover {
     color: #fff;
 }
 
-.k-treeview .k-in {
-    color: white;
-}
-
 .k-treeview .k-in.k-state-selected.k-state-focused {
     background: #01AEEF;
 }

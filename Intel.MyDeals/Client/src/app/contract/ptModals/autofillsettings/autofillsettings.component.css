@@ -167,8 +167,12 @@
     font-size: 12px !important;
     font-family: 'Intel Clear' !important;
     height: 235px !important;
+    color: #000 !important;
 }
-
+    .autofilltreeview .k-treeview .k-mid span {
+        color: #000 !important;
+    }
+.mat-dialog-content .k-widget 
 .mattoggelbutton .mat-button-toggle-group {
     width: 97% !important;
 }

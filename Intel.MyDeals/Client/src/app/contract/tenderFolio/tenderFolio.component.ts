@@ -45,6 +45,8 @@ export class TenderFolioComponent {
     private uid = -100;
     private PtDealTypes;
     private newPricingTable;
+    public spinnerMessageHeader = "Tender Folio";
+    public spinnerMessageDescription = "Please wait while we load your Tender Folio.";
 
     dismissPopup(): void {
         this.dialogRef.close();
@@ -154,6 +156,8 @@ export class TenderFolioComponent {
         })
     }
     saveContractTender() {
+        this.spinnerMessageHeader = "Saving Tender Folio";
+        this.spinnerMessageDescription = "Saving the Tender Folio Information.";
         this.contractData.Customer = this.custSIDObj;
         this.contractData.CUST_MBR_SID = this.custSIDObj.CUST_SID;
         this.contractData.TITLE = this.tenderName;

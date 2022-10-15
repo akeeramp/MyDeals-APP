@@ -190,9 +190,6 @@ td:not(.error-cell).readonly-cell {
     height: 150% !important
 }
 
-.parent-one.loaderPTE pricing-table-editor loading-panel-angular .ss-loading-panel.ss-Info {
-    margin-top: 150px !important;
-}
 
 kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li.k-state-disabled span {
     background-color: #cccccc !important;

@@ -160,7 +160,6 @@
     float: right;
 }
 
-.ss-loading-panel {
-    margin-top: 15% !important;
-    margin-left: 15% !important;
+.ss-loading-overlay {
+    background: transparent !important;
 }
