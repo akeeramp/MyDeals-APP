@@ -79,7 +79,9 @@ a {
 .k-dialog .k-content {
     margin-top: 0 !important
 }
-
+.k-cell-inner > .k-link{
+    white-space:normal !important;
+}
 .k-grid th,
 .k-grid td {
     font-size: 12px !important;
