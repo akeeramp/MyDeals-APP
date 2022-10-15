@@ -41,7 +41,7 @@
                                             <div class="fl opUiLabel">Division:</div>
                                             <kendo-multiselect #CUST_MBR_DIV_Multi class="kendoInput divisionblock" [data]="CustomerFilter_Divs" [filterable]="true" (filterChange)="customerDivFilter($event)"
                                                                [(ngModel)]="CUST_NM_DIV" 
-                                                               name="CUST_NM_DIV" textField="CUST_DIV_NM" valueField="CUST_DIV_NM"></kendo-multiselect>
+                                                               name="CUST_NM_DIV" textField="CUST_DIV_NM" valueField="CUST_DIV_NM" [autoClose]="false"></kendo-multiselect>
                                             <div class="description">Blank means that ALL divisions are included</div>
                                         </div>
                                     </div>

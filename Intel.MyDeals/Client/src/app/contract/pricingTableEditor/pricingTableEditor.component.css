@@ -204,3 +204,11 @@ kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li.k-state-disabled {
     border: 1px solid #0071C5 !important;
     cursor: not-allowed !important;
 }
+
+#spreadsheet .wtHolder {
+    height: 100% !important;
+}
+
+#spreadsheet .ht_master.handsontable {
+    height: 100%;
+}

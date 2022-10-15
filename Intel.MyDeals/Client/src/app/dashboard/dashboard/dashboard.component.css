@@ -900,7 +900,7 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
 
 .font-input input {
     font-size: 14px;
-    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-family: "Intel Clear" !important;
     width: 100%;
     height: 100%;
 }
@@ -1154,6 +1154,39 @@ kendo-multiselect.divineo-one .k-multiselect-wrap kendo-taglist ul li span span.
     overflow-y: auto !important;
 }
 
+.cc-pop-up-footers {
+    margin-left: -24px;
+    margin-right: -24px;
+    padding: 0 24px !important;
+    border-color: transparent !important;
+}
+
+a:focus {
+    outline: thin dotted;
+    outline: 0px auto -webkit-focus-ring-color;
+    outline-offset: 0;
+}
+
+.dashcusstyle.k-multiselect .k-multiselect-wrap {
+    border-radius: 0 !important;
+    border-color: #f0f0f0 !important;
+    box-shadow: none !important;
+    border-bottom: none !important;
+    padding: 0 !important;
+}
+
+.dashcusstyle.k-multiselect .k-multiselect-wrap .k-button:last-child {
+    font-family: 'Intel Clear' !important;
+    font-size: 12px !important;
+    background: #fafafa !important;
+    border-color: #fafafa !important;
+    border-radius: 15px !important
+}
+
+.dashcusstyle.k-multiselect .k-multiselect-wrap .k-button:last-child:hover {
+    background: #ced4da6b !important
+}
+
 @media only screen and (min-width: 1500px) {
     gridster-item.attr-li-7 .container-fluid.widget-container {
         height: calc( 100vh - 210px) !important;
@@ -1164,4 +1197,60 @@ kendo-multiselect.divineo-one .k-multiselect-wrap kendo-taglist ul li span span.
     gridster-item.attr-li-7 .container-fluid.widget-container {
         height: calc( 100vh - 280px) !important;
     }
+}
+
+.divisionblock.k-list > .k-state-hover, .k-list > .k-state-selected.k-state-hover {
+    background-color: #ebebeb !important;
+    border-color: #ebebeb !important;
+}
+
+.divisionblock.k-multiselect .k-multiselect-wrap li.k-button, .k-dropdowntree .k-multiselect-wrap li.k-button {
+    float: left;
+    color: #444 !IMPORTANT;
+    font-size: 12px;
+    border: none;
+    border-radius: 1.071em !important;
+    margin: 3px 0 3px 3px !important;
+    padding: 0 1.6em 0 0.857em !important;
+    line-height: 1.86em !important;
+    background: #fafafa !important;
+    font-family: 'Intel Clear' !important;
+}
+
+    .divisionblock.k-multiselect .k-multiselect-wrap li.k-button:hover {
+        background: #ced4da6b !important;
+    }
+
+.k-list .k-item.k-state-selected {
+    color: #fff !important;
+    background-color: #00aeef !important;
+    font-size: 12px;
+    font-family: 'Intel Clear' !important
+}
+
+.k-list .k-item.k-state-selected:hover {
+    border: 1px solid #ebebeb !important
+}
+
+.k-list .k-item.k-state-focused.k-state-selected {
+    background-color: #00aeef !important;
+}
+
+.k-list .k-item.k-state-selected:hover {
+    background-color: #00aeef !important;
+}
+
+.k-list .k-item.k-state-focused {
+    box-shadow: none !important
+}
+
+.k-list .k-item {
+    font-size: 12px !important;
+    font-family: 'Intel Clear' !important;
+    padding: 10px 0.5rem 0 13px !important;
+    line-height: 2.14em !important
+}
+
+.k-list .k-item:hover {
+    background: #ebebeb !important
 }

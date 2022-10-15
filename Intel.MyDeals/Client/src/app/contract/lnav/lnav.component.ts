@@ -504,9 +504,10 @@ export class lnavComponent {
             "mode": title
         };
         const dialogRef = this.dialog.open(RenameTitleComponent, {
-            height: '250px',
+            height: 'auto',
             width: '600px',
             data: renameData,
+            panelClass: 'rename-pte-comp'
         });
         dialogRef.afterClosed().subscribe(result => {
             if (result) {

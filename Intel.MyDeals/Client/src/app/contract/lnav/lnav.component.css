@@ -515,3 +515,28 @@ kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li.k-state-disabled {
     border: #ccc 1px solid !important;
     cursor: not-allowed !important;
 }
+
+.rename-pte-comp mat-dialog-container {
+    padding: 0;
+    overflow: hidden;
+    background-color: #003C71;
+}
+
+.rename-pte-comp mat-dialog-container .modal-header.modalBlueBody {
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+    min-height: 16.5px;
+    height: 60px;
+}
+
+.rename-pte-comp mat-dialog-container .modal-body.modalBlueBody {
+    position: relative;
+    padding: 15px;
+}
+
+.rename-pte-comp mat-dialog-container .modal-header.modalBlueBody h5 {
+    font-size: 20px !important;
+    font-weight: 500 !important;
+    margin: 0 !important;
+    margin-top: 5px !important;
+}

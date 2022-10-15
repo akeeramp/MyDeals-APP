@@ -50,6 +50,10 @@ export class CopyContractComponent {
         this.dialogRef.close();
     }
 
+    dismissPopup(): void {
+        this.dialogRef.close();
+    }
+
     onCopyCntrctSearchTextChanged(searchValue): void {
         if(this.orgGridData && this.orgGridData['data'] && this.orgGridData['data'].length>0){
             this.gridData['data'] = this.orgGridData['data'].filter(

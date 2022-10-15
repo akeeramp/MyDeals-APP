@@ -430,6 +430,7 @@ export class dealEditorComponent {
             height: '530px',
             width: '800px',
             data: data,
+            panelClass: 'de-css-comp'
         });
         dialogRef.afterClosed().subscribe(result => { });
     }

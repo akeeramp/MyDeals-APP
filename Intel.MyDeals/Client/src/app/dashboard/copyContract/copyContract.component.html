@@ -3,6 +3,17 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div id="copyCntrctDlg">
+    <nav class="navbar navbar-default rmv-padding cc-pop-up">
+        <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
+            <div class="navbar-header">
+                <i class="intelicon-copy-solid navbar-logo" style="font-size: 25px; color: white; height: auto;"></i>
+                <a class="navbar-brand nv-brands" href="#" style=" height: auto !important; padding: 8px !important;">Copy a My Deals Contract</a>
+            </div>
+            <ul class="nav navbar-nav navbar-right" style="margin-right: -15px !important; margin-top: -8px !important;">
+                <li><a href="" (click)="dismissPopup()"><i class="intelicon-close-max"></i></a></li>
+            </ul>
+        </div>
+    </nav>
     <div class="container">
         <div class="row">
             <div class="col-sm-8 col-sm-offset-2">
@@ -32,7 +43,7 @@
                 </div>
              </ng-template>
             <kendo-grid-column field="CNTRCT_OBJ_SID" title="Contract ID" width="35"
-                [headerClass]="{'headerClass':true}"></kendo-grid-column>
+                               [headerClass]="{'headerClass':true}"></kendo-grid-column>
             <kendo-grid-column field="TITLE" title="Contract Title" width="140" [headerClass]="{'headerClass':true}">
             </kendo-grid-column>
             <kendo-grid-column field="STRT_DTM" title="Start Date" width="50" [headerClass]="{'headerClass':true}">
@@ -41,10 +52,15 @@
             </kendo-grid-column>
         </kendo-grid>
     </div>
-    <kendo-dialog-actions>
-        <div align="right" style="margin-top:15px"><button class="btn btn-secondary" type="button"
-                style="min-width:110px" (click)="onCopyCntrctCancelClick()">Cancel</button>&nbsp; <button
-                class="btn btn-primary" type="button" style="min-width:110px;"
-                [mat-dialog-close]="copyCntrctSelectedItem" [disabled]="isCreateDisabled">Create</button></div>
+    <kendo-dialog-actions class="cc-pop-up-footers">
+        <div align="right" style="margin-top:15px">
+            <button class="btn btn-secondary" type="button"
+                    style="min-width:110px" (click)="onCopyCntrctCancelClick()">
+                Cancel
+            </button>&nbsp; <button class="btn btn-primary" type="button" style="min-width:110px;"
+                                    [mat-dialog-close]="copyCntrctSelectedItem" [disabled]="isCreateDisabled">
+                Create
+            </button>
+        </div>
     </kendo-dialog-actions>
 </div>

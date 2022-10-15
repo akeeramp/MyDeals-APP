@@ -267,7 +267,7 @@
             <div *ngIf="!showTree && !showSuggestions">
                 <div *ngIf="!hideSelection">
                     <div class="row" style="margin:2px;">
-                        <ng-container *ngFor="let p of items | orderBy:'name'; let last=last; let index=index">
+                        <ng-container *ngFor="let p of items; let last=last; let index=index">
                             <div class="clearfix" *ngIf="index % 4 == 0"></div>
                             <div class="col-sm-3 prodDrillDownLarge" title="{{checkForBlank(p.name)}}" [ngClass]="{'noLeftBorder':index % 4 == 0}">
                                 <div [ngClass]="{'input-group':p.allowMultiple}" class="drillDown">

@@ -1,7 +1,7 @@
 ﻿#copyCntrctDlg {
     padding: 0 !important;
-    height: 566px;
-    overflow: hidden
+    height: 595px;
+    /*overflow: hidden*/
 }
 
 #copyCntrctGrid td {
@@ -97,4 +97,14 @@ label {
     width: 375px;
     margin-top: 10px;
     margin-left: 67px;
+}
+
+.cc-pop-up {
+    margin-top: -24px;
+    margin-left: -24px;
+    margin-right: -24px;
+}
+
+nav.navbar.navbar-default.rmv-padding.cc-pop-up {
+    height: 50px;
 }

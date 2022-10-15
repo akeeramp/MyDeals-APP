@@ -50,17 +50,42 @@
 }
 
 .rowHeight {
-    height: 51px !important;
+    height: 43px !important;
     padding: 2px 0px 0px 1px;
     border-bottom: 0.01px solid rgba(0, 0, 0, .05);
     /*line-height: 3;*/
+}
+
+.op-grid.k-grid .uiControlDiv.msgClassStyles {
+    height: 43px;
+    min-height: 43px;
+    margin: 0;
+    line-height: 1 !important;
+    margin-top: 1px !important;
+    margin-bottom: 1px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column;
+}
+
+.op-grid.k-grid .uiControlDiv.isSoftWarnCell.capInfoWrapper {
+    height: 43px;
+    min-height: 43px;
+    margin: 0;
+    line-height: 1 !important;
+    margin-top: 1px !important;
+    margin-bottom: 1px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
 .rowDetailHeight {
     border-bottom: 0.01px solid rgba(0, 0, 0, .05);
     padding: 2px 0px 0px 1px !important;
     line-height: 2;
-    height: 51px !important;
+    height: 43px !important;
 }
 
 .densityRow {
@@ -222,7 +247,7 @@ tr:last-child>td {
     font-family: arial;
     text-align: center;
     font-weight: 600;
-    line-height: 4;
+    line-height: 1;
 }
 
 .msgClassStyles {
@@ -952,4 +977,28 @@ ngb-tooltip-window .tooltip-inner {
 .product-breakout-modal > mat-dialog-container {
     background-color: #1a3e6f !important;
     padding: 0px !important;
+}
+
+.de-css-comp mat-dialog-container {
+    padding: 0;
+}
+
+.breakoutColumn.tier .rowHeight {
+    height: auto !important;
+}
+
+.tierHeader {
+    height: auto;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+.breakoutColumn.dealCell.tier .densityRow {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    border: none !important;
+}
+
+.uiControlDiv.msgClassStyles.isReadOnlyCell div:first-child {
+    line-height: 1;
 }
