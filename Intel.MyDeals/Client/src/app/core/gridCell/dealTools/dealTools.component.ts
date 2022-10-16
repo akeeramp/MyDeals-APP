@@ -304,28 +304,34 @@ export class dealToolsComponent{
             this.saveCell("NOTES");
             if (this.isManageTab) {
                 this.setBusy("Saving", "Please wait while your information is being saved.", "", "");
-                setTimeout(() => {
-                    const data = {
-                        objSetType: "WIP_DEAL",
-                        ids: [this.dataItem["DC_ID"]],
-                        attribute: "NOTES",
-                        value: this.dataItem["NOTES"]
-                    };
-                    this.setBusy("Done", "Save Complete.", "", "");
-                    this.pteService.updateAtrbValue(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data).toPromise().catch((err) => {
+
+                const data = {
+                    objSetType: "WIP_DEAL",
+                    ids: [this.dataItem["DC_ID"]],
+                    attribute: "NOTES",
+                    value: this.dataItem["NOTES"]
+                };                    
+                    this.pteService.updateAtrbValue(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data).toPromise()
+                        .then((output) => {
+                            this.setBusy("Done", "Save Complete.", "", "");
+                            setTimeout(() => {
+                                this.isBusy = false;
+                                }, 2000);
+                            
+                        })
+                        .catch((err) => {
                         this.setBusy("Error", "Could not save the value.", "Error", "");
                         this.loggerSvc.error("Error", "Could not save the Notes value.", err);
-                        this.isBusy = false;
-                    });
-                    this.isBusy = false;
-                }, 800);
-                this.isBusy = false;
+                        setTimeout(() => {
+                            this.isBusy = false;
+                        }, 2000);
+                        });              
             }
-            this.isManageTab = false;
             this.iconSaveUpdate.emit(this.dataItem._dirty);
         }
         this.closeDialogs();
     }
+
     //deal timeline
     clkHistoryIcon(dataItem) {
         const dialogRef = this.dialog.open(dealTimelineComponent, {
