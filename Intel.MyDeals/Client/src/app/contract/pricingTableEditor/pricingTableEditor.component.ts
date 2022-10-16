@@ -755,22 +755,29 @@ export class pricingTableEditorComponent implements OnChanges {
         return result;
     }
     async loadPTE() {
-        this.isLoading = true;
-        this.overlapFlexResult = [];
-        if (this.spinnerMessageHeader == "")
-            this.setBusy("Loading ...", "Loading the Pricing Table Editor", "Info", true);
-        let PTR = await this.getPTRDetails();
-        //this is to make sure the saved record prod color are success by default
-        PTR=PTE_Load_Util.setPrdColor(PTR);
-        this.getTemplateDetails();
-        this.dropdownResponses = await this.getAllDrowdownValues();
-        if (this.dropdownResponses["SETTLEMENT_PARTNER"] != undefined) {
-            this.VendorDropDownResult = this.dropdownResponses["SETTLEMENT_PARTNER"];
+        try {
+            this.isLoading = true;
+            this.overlapFlexResult = [];
+            if (this.spinnerMessageHeader == "")
+                this.setBusy("Loading ...", "Loading the Pricing Table Editor", "Info", true);
+            let PTR = await this.getPTRDetails();
+            //this is to make sure the saved record prod color are success by default
+            PTR=PTE_Load_Util.setPrdColor(PTR);
+            this.getTemplateDetails();
+            this.dropdownResponses = await this.getAllDrowdownValues();
+            if (this.dropdownResponses["SETTLEMENT_PARTNER"] != undefined) {
+                this.VendorDropDownResult = this.dropdownResponses["SETTLEMENT_PARTNER"];
+            }
+            //this is only while loading we need , need to modify as progress
+            PTR = PTE_Load_Util.pivotData(PTR, false, this.curPricingTable, this.kitDimAtrbs);
+            this.generateHandsonTable(PTR);
+            this.isLoading = false;
         }
-        //this is only while loading we need , need to modify as progress
-        PTR = PTE_Load_Util.pivotData(PTR, false, this.curPricingTable, this.kitDimAtrbs);
-        this.generateHandsonTable(PTR);
-        this.isLoading = false;
+        catch(ex){
+            this.loggerService.error('Something wnet wrong.','Error');
+            console.error('DEAL_EDITOR::ngOnInit::',ex);
+        }
+     
     }
     custdivnull(act: boolean) {
         if (act == true) {

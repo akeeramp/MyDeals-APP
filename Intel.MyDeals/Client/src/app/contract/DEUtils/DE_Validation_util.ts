@@ -89,11 +89,20 @@ export class DE_Validation_Util {
             }
 
             if (item["REBATE_BILLING_START"] !== undefined && item["REBATE_BILLING_END"] !== undefined) {
-                if (moment(item["REBATE_BILLING_START"]).isAfter(moment(item["REBATE_BILLING_END"]))) {
+                if(moment(item["REBATE_BILLING_START"], "MM/DD/YYYY").isValid() && moment(item["REBATE_BILLING_START"], "MM/DD/YYYY").isBefore(moment('1/1/1900',"MM/DD/YYYY"))){
+                    item["REBATE_BILLING_START"]=contractData.START_DT;
+                    isShowStopperError = true;
+                }
+                if(moment(item["REBATE_BILLING_END"], "MM/DD/YYYY").isValid() && moment(item["REBATE_BILLING_END"], "MM/DD/YYYY").isBefore(moment('1/1/1900',"MM/DD/YYYY"))){
+                    item["REBATE_BILLING_END"]=contractData.END_DT;
+                    isShowStopperError = true;
+                }
+                if (moment(item["REBATE_BILLING_START"], "MM/DD/YYYY").isValid() && moment(item["REBATE_BILLING_END"], "MM/DD/YYYY").isValid() && moment(item["REBATE_BILLING_START"]).isAfter(moment(item["REBATE_BILLING_END"]))) {
                     item._behaviors.isError['REBATE_BILLING_START'] = true;
                     item._behaviors.validMsg['REBATE_BILLING_START'] = "Billing Start date cannot be greater than the Billing End Date";
                     isShowStopperError = true;
                 }
+                
             }
 
             if (curPricingStrategy.IS_HYBRID_PRC_STRAT == "1" || item["OBJ_SET_TYPE_CD"] == "FLEX") {

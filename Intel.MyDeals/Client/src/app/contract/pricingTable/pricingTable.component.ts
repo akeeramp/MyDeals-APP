@@ -129,50 +129,63 @@ export class pricingTableComponent {
         //this.curPricingStrategy = ContractUtil.findInArray(this.contractData["PRC_ST"], this.ps_Id)
     }
     async onTabSelect(e: SelectEvent) {
-        e.preventDefault();
-        if (e.title == "Deal Editor") {
-            if (this.pteComp.dirty) {
-                await this.pteComp.validatePricingTableProducts();
-                let isAnyWarnings = this.pteComp.pricingTableDet.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
-                if (isAnyWarnings || this.pteComp.dirty) {
-                    this.isDETab = false; this.isPTETab = true;
-                    return;
+        try {
+            e.preventDefault();
+            if (e.title == "Deal Editor") {
+                if (this.pteComp.dirty) {
+                    await this.pteComp.validatePricingTableProducts();
+                    let isAnyWarnings = this.pteComp.pricingTableDet.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
+                    if (isAnyWarnings || this.pteComp.dirty) {
+                        this.isDETab = false; this.isPTETab = true;
+                        return;
+                    }
                 }
-            }
-            else if (this.pteComp.pricingTableDet && this.pteComp.pricingTableDet.length > 0) {
-                let isAnyWarnings = this.pteComp.pricingTableDet.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
-                if (isAnyWarnings) {
-                    this.isDETab = false; this.isPTETab = true;
-                    return;
+                else if (this.pteComp.pricingTableDet && this.pteComp.pricingTableDet.length > 0) {
+                    let isAnyWarnings = this.pteComp.pricingTableDet.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
+                    if (isAnyWarnings) {
+                        this.isDETab = false; this.isPTETab = true;
+                        return;
+                    }
                 }
+                this.isDETab = true; this.isPTETab = false;
             }
-            this.isDETab = true; this.isPTETab = false;
+            else {
+                if (this.deComp.gridResult != undefined && this.deComp.gridResult.length > 0) {
+                    let saveReqd = this.deComp.gridResult.filter(x => x._dirty).length > 0;
+                    if (saveReqd)
+                        await this.deComp.SaveDeal();
+                    let isAnyWarnings = this.deComp.gridResult.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
+                    if ((isAnyWarnings && saveReqd) || this.deComp.gridResult.filter(x => x._dirty).length > 0) {
+                        this.isDETab = true; this.isPTETab = false;
+                        return;
+                    }
+                }
+                this.isDETab = false; this.isPTETab = true;
+            }
         }
-        else {
-            if (this.deComp.gridResult != undefined && this.deComp.gridResult.length > 0) {
-                let saveReqd = this.deComp.gridResult.filter(x => x._dirty).length > 0;
-                if (saveReqd)
-                    await this.deComp.SaveDeal();
-                let isAnyWarnings = this.deComp.gridResult.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
-                if ((isAnyWarnings && saveReqd) || this.deComp.gridResult.filter(x => x._dirty).length > 0) {
-                    this.isDETab = true; this.isPTETab = false;
-                    return;
-                }
-            }
-            this.isDETab = false; this.isPTETab = true;
+        catch(ex){
+            this.loggerSvc.error('Something went wrong', 'Error');
+            console.error('PTComponent::Tabselect::',ex);
         }
+      
     }
 
     loadAllContractDetails(IDS=[]) {
         this.isLoading = true;
         this.setBusy("Loading...", "Loading data please wait", "Info", true);
         this.pricingTableSvc.readContract(this.c_Id).subscribe((response: Array<any>) => {
-            this.contractData = response[0];
-            //if it is Tender deal redirect to Tender manager
-            if (response[0].IS_TENDER && response[0].IS_TENDER == 1) window.location.href = "#/tendermanager/" + this.c_Id;
-            else {
-                this.loadTemplateDetails(IDS, this.contractData );
+            if(response && response.length>0){
+                this.contractData = response[0];
+                //if it is Tender deal redirect to Tender manager
+                if (response[0].IS_TENDER && response[0].IS_TENDER == 1) window.location.href = "#/tendermanager/" + this.c_Id;
+                else {
+                    this.loadTemplateDetails(IDS, this.contractData );
+                }
             }
+            else{
+                this.loggerSvc.error('No such Id present', 'Error');
+            }
+            
             this.isLoading = false;
         }, (error) => {
             this.isLoading = false;
@@ -244,11 +257,18 @@ export class pricingTableComponent {
     }
 
     ngOnInit() {
-        const url = window.location.href.split('/');
-        this.fetchDetailsfromURL(url)
-        this.lnavSvc.isLnavHidden.subscribe((isLnavHidden: any) => {
-            this.isLnavHidden = isLnavHidden?.isLnavHid;
-        });
+        try {
+            const url = window.location.href.split('/');
+            this.fetchDetailsfromURL(url)
+            this.lnavSvc.isLnavHidden.subscribe((isLnavHidden: any) => {
+                this.isLnavHidden = isLnavHidden?.isLnavHid;
+            });
+        }
+        catch(ex){
+            this.loggerSvc.error('Something went wrong', 'Error');
+            console.error('PYCOmponent::ngOnInit::',ex);
+        }
+      
     }
 
     ngOnDestroy() {

@@ -61,6 +61,9 @@ export class CopyContractComponent {
                     || (item.CNTRCT_OBJ_SID.toString()).includes(searchValue))
             )
         }
+        else{
+            this.loggerSvc.warn('No result found.','No Result');
+        }
     }
 
     rowSelectionChange(selection): void {

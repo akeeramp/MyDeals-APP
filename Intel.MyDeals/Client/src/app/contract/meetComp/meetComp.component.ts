@@ -1104,10 +1104,16 @@ export class meetCompContractComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.PAGE_NM = this.pageNm;
-        if (!!this.objSid) {
-            this.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
-            this.lastMeetCompRunCalc();
+        try{
+            this.PAGE_NM = this.pageNm;
+            if (!!this.objSid) {
+                this.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
+                this.lastMeetCompRunCalc();
+            }
+        }
+        catch(ex){
+            this.loggerSvc.error('Something went wrong', 'Error');
+            console.error('MeetComp::ngOnInit::',ex);
         }
     }
 }

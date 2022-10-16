@@ -379,7 +379,14 @@ export class allDealsComponent {
         }
     }
     ngOnInit() {
-        this.loadAllDealsData();
+        try {
+            this.loadAllDealsData();
+        }
+        catch(ex){
+            this.loggerSvc.error('Something went wrong', 'Error');
+            console.error('AllDeals::ngOnInit::',ex);
+        }
+       
     }
 
 }

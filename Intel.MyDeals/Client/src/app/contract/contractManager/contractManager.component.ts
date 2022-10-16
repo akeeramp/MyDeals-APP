@@ -701,11 +701,11 @@ export class contractManagerComponent {
             // Get local time in UTC
             var currentTime = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
             // currentTime.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
-            var localTime = moment(currentTime).format("MM/DD/YY HH:mm:ss");
+            var localTime = moment(currentTime).format("MM/DD/YYYY HH:mm:ss");
             // Get server time from a PST time string... manually convert it to UTC
             var lastruntime = moment(this.lastRun);
 
-            var serverPstTime = lastruntime.format("MM/DD/YY HH:mm:ss");
+            var serverPstTime = lastruntime.format("MM/DD/YYYY HH:mm:ss");
             //var serverPstTime = moment(this.lastRun).add(moment.duration("08:00:00")).format('YYYY-MM-DD HH:mm:ss');
 
             var timeDiff = moment.duration(moment(serverPstTime).diff(moment(localTime)));
@@ -761,24 +761,30 @@ export class contractManagerComponent {
     loadContractDetails(){
         this.contractData ={};
         this.contractManagerSvc.readContract(this.contractId).subscribe((response: any) => {
-            this.contractData = response[0];
-            this.refreshedContractData.emit({ contractData: this.contractData });
-            this.refreshCheckBoxData();
-            this.contractId= this.contractData.DC_ID;
-            this.lastRun = this.contractData.LAST_COST_TEST_RUN;
-            this.contractData?.PRC_ST.map((x, i) => {
-                //intially setting all the PS row arrow icons and PT data row arrow icons as collapses. this isPSExpanded,isPTExpanded is used to change the arrow icon css accordingly
-                this.isPSExpanded[i] = false;
-                if (x.PRC_TBL != undefined) x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
-            })
-            if(this.contractData.CUST_ACCPT === "Pending"){
-                this.isPending = true;
-            } else if(this.contractData.CUST_ACCPT === "Accepted"){
-                this.isPending = false;
+            if(response &&response.length>0){
+                this.contractData = response[0];
+                this.refreshedContractData.emit({ contractData: this.contractData });
+                this.refreshCheckBoxData();
+                this.contractId= this.contractData.DC_ID;
+                this.lastRun = this.contractData.LAST_COST_TEST_RUN;
+                this.contractData?.PRC_ST.map((x, i) => {
+                    //intially setting all the PS row arrow icons and PT data row arrow icons as collapses. this isPSExpanded,isPTExpanded is used to change the arrow icon css accordingly
+                    this.isPSExpanded[i] = false;
+                    if (x.PRC_TBL != undefined) x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
+                })
+                if(this.contractData.CUST_ACCPT === "Pending"){
+                    this.isPending = true;
+                } else if(this.contractData.CUST_ACCPT === "Accepted"){
+                    this.isPending = false;
+                }
+                this.filteredData = this.contractData?.PRC_ST; 
+                this.showData = true;
+                this.isCustAcptReadOnly = (this.contractData != undefined && this.contractData._behaviors != undefined && this.contractData._behaviors.isReadOnly != undefined && this.contractData._behaviors.isReadOnly.CUST_ACCPT == true) ? true : false;            
             }
-            this.filteredData = this.contractData?.PRC_ST; 
-            this.showData = true;
-            this.isCustAcptReadOnly = (this.contractData != undefined && this.contractData._behaviors != undefined && this.contractData._behaviors.isReadOnly != undefined && this.contractData._behaviors.isReadOnly.CUST_ACCPT == true) ? true : false;            
+            else{
+                this.loggerSvc.error('No records found','Error');
+            }
+           
         }, (error) => {
             this.loggerSvc.error('Get Upper Contract service', error);
         });
@@ -933,38 +939,44 @@ export class contractManagerComponent {
         this.refreshedContractData.emit({ contractData: this.contractData });
     }
     ngOnInit() {
-        this.contractId= this.contractData.DC_ID;
-        window.location.href = "#contractmanager/CNTRCT/" + this.contractId + "/0/0/0";
-        this.lastRun = this.contractData.LAST_COST_TEST_RUN;
-        this.custAccptButton = this.contractData.CUST_ACCPT;
-        _.each(this.contractData.PRC_ST, (prcSt) => {
-            _.each(prcSt.PRC_TBL, (prcTbl) => {
-                this.state[prcTbl.DC_ID] = {
-                    skip: 0,
-                    take: 25,
-                    group: [],
-                    // Initial filter descriptor
-                    filter: {
-                        logic: "and",
-                        filters: [],
-                    },
-                };
+        try {
+            this.contractId= this.contractData.DC_ID;
+            window.location.href = "#contractmanager/CNTRCT/" + this.contractId + "/0/0/0";
+            this.lastRun = this.contractData.LAST_COST_TEST_RUN;
+            this.custAccptButton = this.contractData.CUST_ACCPT;
+            _.each(this.contractData.PRC_ST, (prcSt) => {
+                _.each(prcSt.PRC_TBL, (prcTbl) => {
+                    this.state[prcTbl.DC_ID] = {
+                        skip: 0,
+                        take: 25,
+                        group: [],
+                        // Initial filter descriptor
+                        filter: {
+                            logic: "and",
+                            filters: [],
+                        },
+                    };
+                })
             })
-        })
-        this.loadContractDetails();
-        if(this.contractData.CUST_ACCPT === "Pending"){
-            this.isPending = true;
-        } else {
-            this.isPending = false;
+            this.loadContractDetails();
+            if(this.contractData.CUST_ACCPT === "Pending"){
+                this.isPending = true;
+            } else {
+                this.isPending = false;
+            }
+            this.userRole = (<any>window).usrRole;
+            this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
+            setTimeout(() => {
+                var isPCForceReq = this.contractData?.PRC_ST?.filter(x => x.COST_TEST_RESULT == 'Not Run Yet' || x.COST_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
+                var isMCForceReq = this.contractData?.PRC_ST?.filter(x => x.MEETCOMP_TEST_RESULT == 'Not Run Yet' || x.MEETCOMP_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
+                if (isMCForceReq || isPCForceReq)
+                    this.executePct();
+            }, 2000);
         }
-        this.userRole = (<any>window).usrRole;
-        this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
-        setTimeout(() => {
-            var isPCForceReq = this.contractData?.PRC_ST?.filter(x => x.COST_TEST_RESULT == 'Not Run Yet' || x.COST_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
-            var isMCForceReq = this.contractData?.PRC_ST?.filter(x => x.MEETCOMP_TEST_RESULT == 'Not Run Yet' || x.MEETCOMP_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
-            if (isMCForceReq || isPCForceReq)
-                this.executePct();
-        }, 2000);
+        catch(ex){
+            this.loggerSvc.error('Something went wrong', 'Error');
+            console.error('ContractManager::ngOnInit::',ex);
+        }
     }  
 
 

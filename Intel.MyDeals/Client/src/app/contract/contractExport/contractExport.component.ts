@@ -149,9 +149,15 @@ showHelpTopic() {
     }
 }
     ngOnInit() {
-        this.tableHeaderData = this.UItemplate.ModelTemplates;
-        this.loadContractExportData();
-        this.loadTimeLineData();
+        try{
+            this.tableHeaderData = this.UItemplate.ModelTemplates;
+            this.loadContractExportData();
+            this.loadTimeLineData();
+        }
+        catch(ex){
+            this.loggerSvc.error('Something went wrong', 'Error');
+            console.error('Contract_Export::ngOnInit::',ex);
+        }
     }
 
 

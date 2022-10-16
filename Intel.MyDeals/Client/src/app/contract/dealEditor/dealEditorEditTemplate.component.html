@@ -33,7 +33,6 @@
      || in_Field_Name == 'END_DT' || in_Field_Name == 'OEM_PLTFRM_LNCH_DT' || in_Field_Name == 'OEM_PLTFRM_EOL_DT' || in_Field_Name == 'ON_ADD_DT'">
     <kendo-datepicker [ngModel]="in_DataItem[in_Field_Name]" id="dealDatePicker"
                           (ngModelChange)="in_DataItem[in_Field_Name] = $event"
-                          [value]="in_DataItem[in_Field_Name]"
                           (valueChange)="valueChange(in_DataItem, in_Field_Name)"
                           [incompleteDateValidation]="true" 
                           format="MM/dd/yyyy"

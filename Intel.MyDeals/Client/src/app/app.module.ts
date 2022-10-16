@@ -56,6 +56,7 @@ import { UploadModule } from '@progress/kendo-angular-upload';
 import { NavigationModule } from "@progress/kendo-angular-navigation";
 import { TreeViewModule } from "@progress/kendo-angular-treeview";
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
+
 //*********************admin components *********************
 import { adminComponents } from './modules/admin.module';
 //*********************dashboard components *********************
@@ -64,6 +65,8 @@ import { dashboardComponents } from './modules/dashboard.module';
 import { advanceSearchComponents } from './modules/advanceSearch.module';
 //*********************Contract components *********************
 import { contractComponents } from './modules/contract.module';
+//pipe module
+import { MainPipe } from './modules/pipe.module';
 
 @NgModule({
     imports: [
@@ -104,7 +107,8 @@ import { contractComponents } from './modules/contract.module';
         UploadModule,
         NavigationModule,
         TreeViewModule,
-        DragDropModule
+        DragDropModule,
+        MainPipe
      ],
      providers: [
         {

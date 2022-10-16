@@ -476,8 +476,14 @@ export class AutoFillComponent {
         this.autofillData.DEFAULT[`${elem}`].value = val;
     }
     ngOnInit() {
-        this.rebateTypeTitle = this.autofillData.ISTENDER ? "Tender Table" : "Pricing Table";
-        this.loadAutoFill();
+        try {
+            this.rebateTypeTitle = this.autofillData.ISTENDER ? "Tender Table" : "Pricing Table";
+            this.loadAutoFill();
+        }
+        catch(ex){
+            this.loggerSvc.error('Something went wrong', 'Error');
+            console.error('Auo_Fill::ngOnInit::',ex);
+        }
     }
 
 }

@@ -1020,8 +1020,9 @@ export class contractDetailsComponent {
             }, error => {
                 this.loggerSvc.error("Unable to get Customers.", error);
             });
-        } catch (e) {
-            console.error("Unable to load the data", e);
+        } catch (ex) {
+            this.loggerSvc.error('Something went wrong', 'Error');
+            console.error('ContractDetails::ngOnInit::',ex);
         }
     }
 

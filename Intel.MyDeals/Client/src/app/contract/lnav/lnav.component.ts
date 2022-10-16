@@ -835,23 +835,30 @@ export class lnavComponent {
         return (lnavUtil.enableFlowBtn(this.contractData) == false) ? true : false;
     }
     ngOnInit() {
-        this.newStrategy = this.UItemplate["ObjectTemplates"]?.PRC_ST.ALL_TYPES;
-        this.newPricingTable = this.UItemplate.ObjectTemplates.PRC_TBL.ECAP;
-        this.newStrategy.IS_HYBRID_PRC_STRAT = false;
-        this.contractData?.PRC_ST?.map((x, i) => {
-            this.isPSExpanded[i] = false
-        });
-        if (this.contractData && (this.contractData.PRC_ST == undefined || this.contractData.PRC_ST.length == 0)){
-            if (this.C_ADD_PRICING_STRATEGY) {
-                this.toggleAddStrategy();
+        try{
+            this.newStrategy = this.UItemplate["ObjectTemplates"]?.PRC_ST.ALL_TYPES;
+            this.newPricingTable = this.UItemplate.ObjectTemplates.PRC_TBL.ECAP;
+            this.newStrategy.IS_HYBRID_PRC_STRAT = false;
+            this.contractData?.PRC_ST?.map((x, i) => {
+                this.isPSExpanded[i] = false
+            });
+            if (this.contractData && (this.contractData.PRC_ST == undefined || this.contractData.PRC_ST.length == 0)){
+                if (this.C_ADD_PRICING_STRATEGY) {
+                    this.toggleAddStrategy();
+                }
             }
+            //code for autofill change to accordingly change values
+            this.lnavSvc.autoFillData.subscribe(res => {
+                this.autoFillData = res;
+            }, err => {
+                this.loggerSvc.error("lnavSvc::isAutoFillChange**********", err);
+            });
         }
-        //code for autofill change to accordingly change values
-        this.lnavSvc.autoFillData.subscribe(res => {
-            this.autoFillData = res;
-        }, err => {
-            this.loggerSvc.error("lnavSvc::isAutoFillChange**********", err);
-        });
+        catch(ex){
+            this.loggerSvc.error('Something went wrong', 'Error');
+            console.error('LNAV::ngOnInit::',ex);
+        }
+
     }
     ngAfterViewInit() {
         //This will help to highlight the selectd PT incase of search result landing directly to PT. The logic can apply only once the page is rendered

@@ -221,9 +221,15 @@ export class tenderManagerComponent {
     }
 
     ngOnInit() {
-        const url = window.location.href.split('/');
-        this.c_Id = Number(url[url.length - 1]);
-        this.loadAllContractDetails();
+        try {
+            const url = window.location.href.split('/');
+            this.c_Id = Number(url[url.length - 1]);
+            this.loadAllContractDetails();
+        }
+        catch(ex){
+            this.loggerSvc.error('Something went wrong', 'Error');
+            console.error('TenderManager::ngOnInit::',ex);
+        }
     }
 
     ngOnDestroy() {
