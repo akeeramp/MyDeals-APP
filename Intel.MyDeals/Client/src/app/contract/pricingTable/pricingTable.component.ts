@@ -132,7 +132,7 @@ export class pricingTableComponent {
         try {
             e.preventDefault();
             if (e.title == "Deal Editor") {
-                if (this.pteComp.dirty) {
+                if (this.pteComp && this.pteComp.dirty) {
                     await this.pteComp.validatePricingTableProducts();
                     let isAnyWarnings = this.pteComp.pricingTableDet.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
                     if (isAnyWarnings || this.pteComp.dirty) {
@@ -140,7 +140,7 @@ export class pricingTableComponent {
                         return;
                     }
                 }
-                else if (this.pteComp.pricingTableDet && this.pteComp.pricingTableDet.length > 0) {
+                else if (this.pteComp && this.pteComp.pricingTableDet && this.pteComp.pricingTableDet.length > 0) {
                     let isAnyWarnings = this.pteComp.pricingTableDet.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
                     if (isAnyWarnings) {
                         this.isDETab = false; this.isPTETab = true;
@@ -150,7 +150,7 @@ export class pricingTableComponent {
                 this.isDETab = true; this.isPTETab = false;
             }
             else {
-                if (this.deComp.gridResult != undefined && this.deComp.gridResult.length > 0) {
+                if (this.deComp && this.deComp.gridResult != undefined && this.deComp.gridResult.length > 0) {
                     let saveReqd = this.deComp.gridResult.filter(x => x._dirty).length > 0;
                     if (saveReqd)
                         await this.deComp.SaveDeal();

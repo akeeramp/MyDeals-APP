@@ -445,3 +445,7 @@ tr.k-alt.grey {
     color: #00aeef;
     margin-top: -5px;
 }
+
+.excl-DG-modal mat-dialog-container {
+    background: #1a3e6f;
+}

@@ -540,3 +540,7 @@ kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li.k-state-disabled {
     margin: 0 !important;
     margin-top: 5px !important;
 }
+
+lnavview .navIconLnk-small-wrapper {
+    top: 10px;
+}

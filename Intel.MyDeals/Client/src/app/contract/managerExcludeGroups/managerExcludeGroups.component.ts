@@ -127,7 +127,8 @@ export class managerExcludeGroupsComponent {
     openExcludeDealGroupModal(dataItem) {
         const dialogRef = this.dialog.open(excludeDealGroupModalDialog, {
             width: "1900px",
-            height: "600px",
+            height: "615px",
+            panelClass: "excl-DG-modal",
             data: {
                 cellCurrValues: dataItem
             }

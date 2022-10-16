@@ -1255,3 +1255,7 @@ a:focus {
 .k-list .k-item:hover {
     background: #ebebeb !important
 }
+
+kendo-grid.contract-history-style.k-widget.k-grid table tr td {
+    font-size: 12px !important;
+}

@@ -253,7 +253,7 @@ export class GridUtil {
         if (this.displayFrontEndDateMessage(passedData))
             tmplt += '<span> <i class="intelicon-information dateWrapper" title="If the deal start date is in the past, the deal start date will change to the date when the deal becomes active."></i> </span>'
         if (passedData[field] != undefined && passedData[field] != null)
-            tmplt += '    <span class="ng-binding vert-center">' + passedData[field] + '</span>';
+            tmplt += '    <span class="ng-binding vert-center alert-divider">' + passedData[field] + '</span>';
         tmplt += '</div></div>';
         return tmplt;
     }
@@ -264,7 +264,7 @@ export class GridUtil {
         var tmplt = '';
         if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined)
             tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-        tmplt += '<div class="uiControlDiv dealCell' + this.getClassNm(passedData, field).replace(" isRequiredCell", "") + '"';
+        tmplt += '<div class="uiControlDiv dealCell defence-read-cell' + this.getClassNm(passedData, field).replace(" isRequiredCell", "") + '"';
         if (passedData[field] != undefined && passedData[field] != null)
             tmplt += '    <div class="ng-binding vert-center ' + classNm + '">' + passedData[field] + '</div>';
         tmplt += '</div>';

@@ -50,15 +50,15 @@
 }
 
 .rowHeight {
-    height: 43px !important;
+    height: 40px !important;
     padding: 2px 0px 0px 1px;
     border-bottom: 0.01px solid rgba(0, 0, 0, .05);
     /*line-height: 3;*/
 }
 
 .op-grid.k-grid .uiControlDiv.msgClassStyles {
-    height: 43px;
-    min-height: 43px;
+    height: 40px;
+    min-height: 40px;
     margin: 0;
     line-height: 1 !important;
     margin-top: 1px !important;
@@ -70,8 +70,8 @@
 }
 
 .op-grid.k-grid .uiControlDiv.isSoftWarnCell.capInfoWrapper {
-    height: 43px;
-    min-height: 43px;
+    height: 40px;
+    min-height: 40px;
     margin: 0;
     line-height: 1 !important;
     margin-top: 1px !important;
@@ -79,13 +79,14 @@
     display: flex;
     align-items: center;
     justify-content: center;
+    flex-direction: column;
 }
 
 .rowDetailHeight {
     border-bottom: 0.01px solid rgba(0, 0, 0, .05);
     padding: 2px 0px 0px 1px !important;
     line-height: 2;
-    height: 43px !important;
+    height: 40px !important;
 }
 
 .densityRow {
@@ -163,7 +164,7 @@ tr:last-child>td {
 }
 
 .one-check .k-grid .k-grid-content {
-    overflow-y: auto;
+    overflow-y: overlay;
 }
 
 .one-check .k-grid-edit-row .k-textbox,
@@ -283,8 +284,8 @@ tr:last-child>td {
     font-size: 18px !important;
 }
 
-.bigIcon {
-    font-size: 20px;
+.opUiContainer.md [class^="intelicon-"].bigIcon {
+    font-size: 20px!important;
 }
 
 .k-hstack {
@@ -347,8 +348,9 @@ tr:last-child>td {
 
 .op-grid.k-grid .uiControlDiv {
     line-height: 2 !important;
-    margin-bottom: 2px !important;
-    margin-top: 2px !important;
+    margin-bottom: 0px !important;
+    margin-top: 0px !important;
+    padding: 4px 8px !important;
 }
 
 .op-grid .uiControlDiv {
@@ -516,6 +518,8 @@ tr:last-child>td {
     background: #e7e7e8 !important;
     padding: 10px 3.5px !important;
     border-color: #ccc !important;
+    padding: .6em !important;
+    padding-left: 1.286em!important;
 }
 
 .k-grid .k-grid-header-locked, .k-grid .k-grid-content-locked, .k-grid .k-grid-header-locked .k-header, .k-grid .k-grid-content-locked td {
@@ -678,7 +682,13 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
 
 #dealEditor .k-grid-header .headerClass span.k-cell-inner {
     align-items: flex-start;
+    margin: 0;
+    align-items: flex-start;
 }
+
+    #dealEditor .k-grid-header .headerClass span.k-cell-inner span.k-link {
+        padding: 0;
+    }
 
 .one-check kendo-pager-page-sizes.k-label {
     display: flex;
@@ -686,7 +696,7 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
 }
 
 .valid-icon {
-    margin-left: 12px;
+    margin-left: 6px;
 }
 
 .dropdown {
@@ -825,10 +835,9 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
 }
 
 #dealEditor .k-grid-header .headerClass span.k-cell-inner .k-grid-filter {
-    padding-left: 0;
-    padding-right: 0;
-    width: 25px;
-    height: 29px;
+    width: auto;
+    height: auto;
+    padding: 0;
 }
 
 #dealEditor .k-grid-header .headerClass span.k-cell-inner .intelicon-protection-solid {
@@ -1003,4 +1012,8 @@ ngb-tooltip-window .tooltip-inner {
 
 .uiControlDiv.msgClassStyles.isReadOnlyCell div:first-child {
     line-height: 1;
+}
+
+kendo-tabstrip.tabs-coll {
+    width: 100%;
 }

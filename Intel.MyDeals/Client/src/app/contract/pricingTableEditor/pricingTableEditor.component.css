@@ -209,3 +209,7 @@ kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li.k-state-disabled {
 #spreadsheet .ht_master.handsontable {
     height: 100%;
 }
+
+kendo-tabstrip.tabs-coll {
+    width: 100%;
+}
