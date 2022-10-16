@@ -49,30 +49,35 @@ export class tenderManagerComponent {
         let response = await this.pricingTableSvc.readContract(this.c_Id).toPromise().catch((err) => {
             this.loggerSvc.error('loadAllContractDetails::readContract:: service', err);
         })
-        this.contractData = response[0];
-        if (this.contractData.TENDER_PUBLISHED == '1') {
-            var dealType = this.contractData.PRC_ST[0].PRC_TBL[0].OBJ_SET_TYPE_CD;
-            var dealID = this.contractData.DC_ID;
-            document.location.href = "/advancedSearch#/tenderDashboard?DealType=" + dealType + "&FolioId=" + dealID + "&search";
-        }
-        if (response[0].IS_TENDER && response[0].IS_TENDER == 0) window.location.href = "#/contractmanager/CNTRCT/" + this.c_Id + '/0/0/0';
-        else if(this.contractData && this.contractData.PRC_ST && this.contractData.PRC_ST.length>0){
-            this.ps_Id = this.contractData.PRC_ST[0].DC_ID;
-            this.pt_Id = this.contractData.PRC_ST[0].PRC_TBL[0].DC_ID;
-            let result = await this.templatesSvc.readTemplates().toPromise().catch((err) => {
-                this.loggerSvc.error('loadAllContractDetails::readContract:: service', err);
-            });
-            this.UItemplate = result;
-            this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
-                this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
-            });
-            this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
-            this.mcForceRunReq = this.isMCForceRunReq();
+        if(response && Array.isArray(response) && response.length>0){
+            this.contractData = response[0];
+            if (this.contractData.TENDER_PUBLISHED == '1') {
+                var dealType = this.contractData.PRC_ST[0].PRC_TBL[0].OBJ_SET_TYPE_CD;
+                var dealID = this.contractData.DC_ID;
+                document.location.href = "/advancedSearch#/tenderDashboard?DealType=" + dealType + "&FolioId=" + dealID + "&search";
+            }
+            if (response[0].IS_TENDER && response[0].IS_TENDER == 0) window.location.href = "#/contractmanager/CNTRCT/" + this.c_Id + '/0/0/0';
+            else if(this.contractData && this.contractData.PRC_ST && this.contractData.PRC_ST.length>0){
+                this.ps_Id = this.contractData.PRC_ST[0].DC_ID;
+                this.pt_Id = this.contractData.PRC_ST[0].PRC_TBL[0].DC_ID;
+                let result = await this.templatesSvc.readTemplates().toPromise().catch((err) => {
+                    this.loggerSvc.error('loadAllContractDetails::readContract:: service', err);
+                });
+                this.UItemplate = result;
+                this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
+                    this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
+                });
+                this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
+                this.mcForceRunReq = this.isMCForceRunReq();
+            }
+            else{
+                this.loggerSvc.error("Something went wrong. Please contact Admin","Error");
+            }
         }
         else{
-            this.loggerSvc.error("Something went wrong. Please contact Admin","Error");
+            this.loggerSvc.error("No result found","Error");
         }
-        this.isLoading = false;
+         this.isLoading = false;
     }
 
     forDE() {

@@ -348,7 +348,12 @@ export class DashboardComponent implements OnInit {
 
         this.cntrctWdgtSvc.getCustomerDropdowns()
             .subscribe((response: Array<any>) => {
-                this.custData = response;
+                if(response && response.length>0){
+                    this.custData = response;
+                }
+                else{
+                    this.loggerSvc.error("No result found.", 'Error');
+                }
             }, function (error) {
                 this.loggerSvc.error("Unable to get Dropdown Customers.", error, error.statusText);
             });

@@ -183,9 +183,8 @@ export class pricingTableComponent {
                 }
             }
             else{
-                this.loggerSvc.error('No such Id present', 'Error');
+                this.loggerSvc.error('No result found.', 'Error');
             }
-            
             this.isLoading = false;
         }, (error) => {
             this.isLoading = false;

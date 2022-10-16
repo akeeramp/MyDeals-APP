@@ -287,15 +287,22 @@ export class pricingTableEditorComponent implements OnChanges {
         width: 1402,
         manualColumnResize: true,
         afterChange: (changes, source) => {
-            //using => operator to-call-parent-function-from-callback-function
-            //loading screen changes are moved to the top to  make better performance
-            this.spinnerMessageHeader = 'PTE Reloading...';
-            this.spinnerMessageDescription = 'PTE Reloading please wait';
-            this.isLoading=true;
-            setTimeout(()=>{
-                this.afterCellChange(changes, source);
-                this.isLoading=false;
-            },0)
+            try{
+                //using => operator to-call-parent-function-from-callback-function
+                //loading screen changes are moved to the top to  make better performance
+                this.spinnerMessageHeader = 'PTE Reloading...';
+                this.spinnerMessageDescription = 'PTE Reloading please wait';
+                this.isLoading=true;
+                setTimeout(()=>{
+                    this.afterCellChange(changes, source);
+                    this.isLoading=false;
+                },0)
+            }
+            catch(ex){
+                this.loggerService.error('Something went wrong', 'Error');
+                console.error('PTE::afterChange::',ex);
+            }
+         
         },
         afterDocumentKeyDown: (event) => {
             this.afterDocumentKeyDown(event);
@@ -577,7 +584,7 @@ export class pricingTableEditorComponent implements OnChanges {
                     PTE_CellChange_Util.pgChgfn(pgChg, this.columns, this.curPricingTable);
                 }
                 if (pgChg.length == 0) {
-                    PTE_CellChange_Util.checkfn(changes, this.curPricingTable);
+                    PTE_CellChange_Util.checkfn(changes, this.curPricingTable,this.columns);
                 }
                 if (rebateType && rebateType.length > 0) {
                     PTE_CellChange_Util.rebateTypeChange(rebateType, this.curPricingTable);

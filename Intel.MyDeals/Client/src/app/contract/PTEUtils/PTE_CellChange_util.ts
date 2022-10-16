@@ -868,27 +868,44 @@ export class PTE_CellChange_Util {
         if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'ECAP') {
             _.each(items, item => {
                 if (item.prop && item.prop == 'PROGRAM_PAYMENT') {
-                    this.checkfn(items, curPricingTable); return;
+                    this.checkfn(items, curPricingTable,columns); return;
                 }
             });
         }
     }
 
-    static checkfn(items: Array<any>, curPricingTable: any) {
+    static checkfn(items: Array<any>, curPricingTable: any,columns:any[]) {
         if (items.length > 0) {
             let val = this.hotTable.getDataAtRowProp(items[0].row, 'PROGRAM_PAYMENT');
             if (val != undefined && val != null && val != '' && val.toLowerCase() !== 'backend') {
-                this.hotTable.setDataAtRowProp(items[0].row, 'PERIOD_PROFILE', '', 'no-edit');
-                this.hotTable.setDataAtRowProp(items[0].row, 'RESET_VOLS_ON_PERIOD', '', 'no-edit');
-                this.hotTable.setDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL', '', 'no-edit');
-                this.hotTable.setDataAtRowProp(items[0].row, 'SETTLEMENT_PARTNER', '', 'no-edit');
+                if(_.findWhere(columns,{data:'PERIOD_PROFILE'}) !=undefined && _.findWhere(columns,{data:'PERIOD_PROFILE'}) !=null){
+                    this.hotTable.setDataAtRowProp(items[0].row, 'PERIOD_PROFILE', '', 'no-edit');
+                }
+                if(_.findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=undefined && _.findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=null){
+                    this.hotTable.setDataAtRowProp(items[0].row, 'RESET_VOLS_ON_PERIOD', '', 'no-edit');
+                }
+                if(_.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=undefined && _.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=null){
+                    this.hotTable.setDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL', '', 'no-edit');
+                }
+                if(_.findWhere(columns,{data:'SETTLEMENT_PARTNER'}) !=undefined && _.findWhere(columns,{data:'SETTLEMENT_PARTNER'}) !=null){
+                    this.hotTable.setDataAtRowProp(items[0].row, 'SETTLEMENT_PARTNER', '', 'no-edit');
+                }
             } else {
-                if (this.hotTable.getDataAtRowProp(items[0].row, 'PERIOD_PROFILE') == '' && curPricingTable["PERIOD_PROFILE"] != '')
-                    this.hotTable.setDataAtRowProp(items[0].row, 'PERIOD_PROFILE', curPricingTable["PERIOD_PROFILE"], 'no-edit');
-                if (this.hotTable.getDataAtRowProp(items[0].row, 'RESET_VOLS_ON_PERIOD') == '')
-                    this.hotTable.setDataAtRowProp(items[0].row, 'RESET_VOLS_ON_PERIOD', 'No', 'no-edit');
-                if (this.hotTable.getDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL') == '' && curPricingTable["AR_SETTLEMENT_LVL"] != undefined)
-                    this.hotTable.setDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL', curPricingTable["AR_SETTLEMENT_LVL"], 'no-edit');
+                if (this.hotTable.getDataAtRowProp(items[0].row, 'PERIOD_PROFILE') == '' && curPricingTable["PERIOD_PROFILE"] != ''){
+                    if(_.findWhere(columns,{data:'PERIOD_PROFILE'}) !=undefined && _.findWhere(columns,{data:'PERIOD_PROFILE'})!=null){
+                        this.hotTable.setDataAtRowProp(items[0].row, 'PERIOD_PROFILE', curPricingTable["PERIOD_PROFILE"].toString(), 'no-edit');
+                    }
+                }
+                if (this.hotTable.getDataAtRowProp(items[0].row, 'RESET_VOLS_ON_PERIOD') == ''){
+                    if(_.findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=undefined && _.findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=null){
+                        this.hotTable.setDataAtRowProp(items[0].row, 'RESET_VOLS_ON_PERIOD', 'No', 'no-edit');
+                    }
+                }
+                if (this.hotTable.getDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL') == '' && curPricingTable["AR_SETTLEMENT_LVL"] != undefined){
+                    if(_.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=undefined && _.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=null){
+                        this.hotTable.setDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL', curPricingTable["AR_SETTLEMENT_LVL"], 'no-edit');
+                    }
+                }
             }
         }
     }
