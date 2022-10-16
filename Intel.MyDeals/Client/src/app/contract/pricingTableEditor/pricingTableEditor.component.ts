@@ -1144,8 +1144,6 @@ export class pricingTableEditorComponent implements OnChanges {
             "currPt": this.curPricingTable,
         }
         const dialogRef = this.dialog.open(OverlappingCheckComponent, {
-            height: '530px',
-            width: '800px',
             data: data,
             panelClass: 'oo-lapping-style'
         });

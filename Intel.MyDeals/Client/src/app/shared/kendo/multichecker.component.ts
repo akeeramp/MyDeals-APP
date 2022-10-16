@@ -31,7 +31,7 @@ import * as _ from 'underscore';
     styles: [`
     ul {
       list-style-type: none;
-      height: 200px;
+      height: 100%;
       overflow-y: scroll;
       padding-left: 0;
       padding-right: 12px;
