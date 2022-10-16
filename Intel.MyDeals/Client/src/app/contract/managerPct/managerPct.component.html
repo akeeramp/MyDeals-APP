@@ -153,7 +153,7 @@
                                                         [filter]="state[pt.DC_ID].filter" kendoGridSelectBy=""
                                                         [(selectedKeys)]="mySelection"
                                                         (selectedKeysChange)="onSelectedKeysChange()">
-                                                <kendo-grid-column field="TOOLS"
+                                                <kendo-grid-column field="TOOLS" [sortable]="false"
                                                                    [headerClass]="{'headerClass':true}" [width]="150" [filterable]="false">
                                                     <ng-template kendoGridHeaderTemplate let-dataItem="dataItem">
                                                         <input type='checkbox' (click)="selectAllIDs($event,pt.DC_ID)" class='grid-link-checkbox with-font' id='chkDealTools_{{pt.DC_ID}}' [(ngModel)]="is_Deal_Tools_Checked[pt.DC_ID]"/>&nbsp;
@@ -162,7 +162,8 @@
                                                     <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
                                                         <deal-tools-angular [dataItem]='dataItem' [isSplitEnabled]='false' [isFileAttachmentEnabled]='false'
                                                                             [isHistoryEnabled]='true' [isCommentEnabled]='false' [isEditable]='true'
-                                                                            [isQuoteLetterEnabled]='false' [isDeleteEnabled]='false' [gridData]="gridDataSet[pt.DC_ID].data" [contractData]="contractData"></deal-tools-angular>
+                                                                            [isQuoteLetterEnabled]='false' [isDeleteEnabled]='false' [gridData]="gridDataSet[pt.DC_ID].data" [contractData]="contractData"
+                                                                            (refreshContract)="refreshContractData($event)"></deal-tools-angular>
                                                     </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="PCT Result" field="PRC_CST_TST_STS" [filterable]="true"

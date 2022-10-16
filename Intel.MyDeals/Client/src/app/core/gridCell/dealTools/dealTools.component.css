@@ -436,3 +436,11 @@ kendo-dialog.artho-css .k-dialog-buttongroup {
 .new-custom-deal-tools .kendoBtn:last-child:hover {
     background-color: #ebebeb !important;
 }
+
+.dealToolsOverlay {
+    width: 100%;
+    z-index: 500;
+    position: fixed;
+    margin-top: -250px;
+    right: -5px;
+}

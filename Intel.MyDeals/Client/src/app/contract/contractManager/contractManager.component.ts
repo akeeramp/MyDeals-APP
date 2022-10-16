@@ -154,9 +154,10 @@ export class contractManagerComponent {
     updateSaveIcon(eventData: boolean) {
         this.dirty = eventData;
     }
-    gridReload(eventData: boolean) {
-        if (eventData){}
-            // this.ngOnInit();
+    async refreshContractData(eventData: boolean) {
+        if (eventData) {
+            await this.loadContractDetails();
+        }
     }
     windowClose() {
         this.windowOpened = false;

@@ -326,7 +326,7 @@
                                         <div id='detailGrid_{{pt.DC_ID}}' class='opUiContainer md dashboard sumGridOptionsExpand oppo-grids new-now-wrap space-table-all'>
                                             <kendo-grid [data]="gridDataSet[pt.DC_ID]" [loading]="isGridLoading" [resizable]="true" [filter]="state[pt.DC_ID].filter" [sortable]="true" [sort]="state[pt.DC_ID].sort"
                                              filterable="menu" (dataStateChange)="dataStateChange($event, pt.DC_ID)" style="height:auto" >
-                                                <kendo-grid-column title="Tools" field="NOTES" [headerClass]="{'headerClass':true}" [width]="200" [locked]="true" [filterable]="false">
+                                                <kendo-grid-column title="Tools" field="NOTES" [headerClass]="{'headerClass':true}" [width]="200" [locked]="true" [filterable]="false" [sortable]="false">
                                                     <ng-template kendoGridHeaderTemplate>
                                                         <div>
                                                             <input type='checkbox' (click)="selectAllIDs($event, pt.DC_ID)" class='grid-link-checkbox with-font' id='chkDealTools_{{pt.DC_ID}}' />&nbsp;
@@ -336,7 +336,8 @@
                                                     <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
                                                         <deal-tools-angular [dataItem]='dataItem' [isSplitEnabled]='false' [isFileAttachmentEnabled]='true' 
                                                         [isHistoryEnabled]='true' [isCommentEnabled]='true' [isEditable]='true' 
-                                                        [isQuoteLetterEnabled]='true' [isDeleteEnabled]='false' [gridData]="gridDataSet[pt.DC_ID]" [contractData]="contractData" ></deal-tools-angular>
+                                                        [isQuoteLetterEnabled]='true' [isDeleteEnabled]='false' [gridData]="gridDataSet[pt.DC_ID]" [contractData]="contractData" 
+                                                        (refreshContract)="refreshContractData($event)" [isManageTab]="true"></deal-tools-angular>
                                                     </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Deal Id" field="DC_ID" [headerClass]="{'headerClass':true}" [width]="120" [locked]="true">

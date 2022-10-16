@@ -10,6 +10,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { dealTimelineComponent } from '../dealTimelineModal/dealTimelineModal.component';
 import { fileAttachmentComponent } from '../fileAttachmentModal/fileAttachmentModal.component';
 import { distinct } from "@progress/kendo-data-query";
+import { pricingTableEditorService } from "../../../contract/pricingTableEditor/pricingTableEditor.service";
 
 @Component({
     providers: [dealToolsService],
@@ -20,7 +21,7 @@ import { distinct } from "@progress/kendo-data-query";
 })
 
 export class dealToolsComponent{
-    constructor(private dataService: dealToolsService, private loggerSvc: logger, protected dialog: MatDialog) {
+    constructor(private dataService: dealToolsService, private loggerSvc: logger, protected dialog: MatDialog, private pteService: pricingTableEditorService) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
@@ -35,6 +36,7 @@ export class dealToolsComponent{
     @Input() isEditable;
     @Input() isQuoteLetterEnabled;
     @Input() isDeleteEnabled;
+    @Input() isManageTab;
     @Output() iconSaveUpdate: EventEmitter<any> = new EventEmitter<any>();
     @Output() refreshContract: EventEmitter<any> = new EventEmitter<any>();
 
@@ -300,6 +302,26 @@ export class dealToolsComponent{
         if (this.dataItem?.NOTES !== this.notes) {
             this.dataItem.NOTES = this.notes;
             this.saveCell("NOTES");
+            if (this.isManageTab) {
+                this.setBusy("Saving", "Please wait while your information is being saved.", "", "");
+                setTimeout(() => {
+                    const data = {
+                        objSetType: "WIP_DEAL",
+                        ids: [this.dataItem["DC_ID"]],
+                        attribute: "NOTES",
+                        value: this.dataItem["NOTES"]
+                    };
+                    this.setBusy("Done", "Save Complete.", "", "");
+                    this.pteService.updateAtrbValue(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data).toPromise().catch((err) => {
+                        this.setBusy("Error", "Could not save the value.", "Error", "");
+                        this.loggerSvc.error("Error", "Could not save the Notes value.", err);
+                        this.isBusy = false;
+                    });
+                    this.isBusy = false;
+                }, 800);
+                this.isBusy = false;
+            }
+            this.isManageTab = false;
             this.iconSaveUpdate.emit(this.dataItem._dirty);
         }
         this.closeDialogs();
@@ -503,7 +525,10 @@ export class dealToolsComponent{
                 return true; // this.$parent.$parent.$parent.PS = 0 if isPSEnabled is undefined.
         }
         else { // Remove the else block, just using this in case we need to ID what objects are causing problems
-            console.log("Object hash that is breaking: " + dataItem.OBJ_PATH_HASH + ', DataItem: ' + dataItem.dc_type + '-' + dataItem.DC_ID);
+            if(dataItem.DC_ID != undefined)
+                console.log("Object hash that is breaking: " + dataItem.OBJ_PATH_HASH + ', DataItem: ' + dataItem.dc_type + '-' + dataItem.DC_ID);
+            else
+                console.log("Object hash that is breaking: " + dataItem.OBJ_PATH_HASH + ', DataItem: ' + dataItem.dc_type + '-' + dataItem.DEAL_ID);
         }
         return false;
     }
@@ -536,19 +561,35 @@ export class dealToolsComponent{
                     if (dataItem?._actionsPS === undefined)
                         dataItem._actionsPS = {};
                     if (dataItem?._actionsPS.Hold !== undefined && dataItem?._actionsPS.Hold === curHoldStatus && (dataItem.WF_STG_CD === model.WF_STG_CD)) {
-                        ids.push({
-                            DC_ID: dataItem["DC_ID"],
-                            WF_STG_CD: dataItem["WF_STG_CD"]
-                        });
+                        if (model["DC_ID"] != undefined) {
+                            ids.push({
+                                DC_ID: dataItem["DC_ID"],
+                                WF_STG_CD: dataItem["WF_STG_CD"]
+                            });
+                        }
+                        else {
+                            ids.push({
+                                DC_ID: model["DEAL_ID"],
+                                WF_STG_CD: model["WF_STG_CD"]
+                            });
+                        }
                     }
                 }
             }
         }
         else {
-            ids.push({
-                DC_ID: model["DC_ID"],
-                WF_STG_CD: model["WF_STG_CD"]
-            });
+            if (model["DC_ID"] != undefined) {
+                ids.push({
+                    DC_ID: model["DC_ID"],
+                    WF_STG_CD: model["WF_STG_CD"]
+                });
+            }
+            else {
+                ids.push({
+                    DC_ID: model["DEAL_ID"],
+                    WF_STG_CD: model["WF_STG_CD"]
+                });
+            }
         }
         return ids;
     }

@@ -378,6 +378,11 @@ export class managerPctComponent {
             this.parentGridData[ptId][j].isLinked = event.target.checked;
         }
     }
+    refreshContractData(eventData) {
+        if (eventData) {
+            this.loadPctDetails();
+        }
+    }
 
     ngOnInit() {
         if(this.tab === 'groupExclusionDiv'){
