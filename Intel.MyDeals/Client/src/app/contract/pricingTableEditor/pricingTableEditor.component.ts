@@ -950,7 +950,9 @@ export class pricingTableEditorComponent implements OnChanges {
             }
         }
         else {
-
+            if (action != 'onSave') {
+                this.validationMessage = true;
+            }
             //this.loggerService.error("validateOnlyProducts:failed","Translate API failure");
             //this.isLoading = false;
             this.isLoading = false;
