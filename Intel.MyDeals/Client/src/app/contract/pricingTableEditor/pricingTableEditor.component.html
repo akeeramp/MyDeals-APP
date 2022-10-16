@@ -2,7 +2,7 @@
 <link href="/Client/node_modules/handsontable-multi-select/dist/css/handsontable-multi-select.css" rel="stylesheet" />
 <link href="/Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.css" rel="stylesheet" />
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
-<loading-panel-angular id="PTRLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
+<loading-panel-angular id="PTRLoading" class="ptrLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
                        [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
 <div class="container-fluid overflow" style="border: 2px solid #dbdbdb; margin-top: 0px !important;">
     <div class="row">
@@ -198,7 +198,8 @@
     </kendo-dialog-actions>
 </kendo-dialog>
 <style>
-    #PTRLoading .ss-loading-overlay .ss-loading-panel {
+
+    .ptrLoading > .ss-loading-overlay > .myLoader {
         left: 32% !important;
     }
     

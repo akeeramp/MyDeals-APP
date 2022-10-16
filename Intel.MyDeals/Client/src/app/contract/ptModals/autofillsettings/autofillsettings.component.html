@@ -1,4 +1,5 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<loading-panel-angular id="autoLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription" [msgType]="msgType"></loading-panel-angular>
 <div class="container-fluid overflow">
     <div class="modal-content headingcontent totalcontent">
         <div class="autofill-settings modal-header autofillhead" style="border:0px !important">
@@ -59,7 +60,7 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4">
+                <div class="col-md-4 marketSegment">
                     <div [hidden]="(autofillData.DEFAULT['MRKT_SEG'].value.type == 'EMBEDDEDMULTISELECT')" class="autofilltreeview">
                         <div class="row">
                             <div class="col">
@@ -140,4 +141,3 @@
     </div>
 </div>
 
-<loading-panel-angular id="autoLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription" [msgType]="msgType"></loading-panel-angular>

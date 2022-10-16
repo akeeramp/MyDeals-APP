@@ -689,3 +689,11 @@ kendo-grid.raid-style {
     background-color: #1a3e6f !important;
     padding: 0px !important;
 }
+
+#PTRLoading .ss-loading-overlay .myLoader {
+    left: 32% !important;
+}
+
+#PTRLoading .ss-loading-overlay{
+    opacity: 0;
+}

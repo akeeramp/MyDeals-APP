@@ -470,3 +470,7 @@ a.prdAnchor:hover {
     background-color: #1a3e6f !important;
     padding: 0px !important;
 }
+
+.k-item  > .k-mid> span{
+    color: #000;
+}

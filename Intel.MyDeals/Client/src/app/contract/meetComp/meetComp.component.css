@@ -534,3 +534,8 @@
 .indicate-dialog .k-window-content {
     padding-bottom: 1rem;
 }
+
+.meetCompLoader .ss-loading-overlay .myLoader{
+    left: 38% !important;
+    top: 10% !important;
+}

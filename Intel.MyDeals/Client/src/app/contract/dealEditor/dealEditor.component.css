@@ -1014,6 +1014,12 @@ ngb-tooltip-window .tooltip-inner {
     line-height: 1;
 }
 
+
+#DELoading .ss-loading-overlay .myLoader{
+    left: 32% !important;
+    top: 10% !important;
+}
+
 kendo-tabstrip.tabs-coll {
     width: 100%;
 }
