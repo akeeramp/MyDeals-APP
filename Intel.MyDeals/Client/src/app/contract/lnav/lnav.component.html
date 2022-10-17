@@ -3,7 +3,7 @@
         <div>
             <div class="contract-status-bar"></div>
             <div class="contract-title-container" title="View Contract Details">
-                    <button class="contractIdBtn" (click)="loadContractDetails()">
+                <button class="contractIdBtn" (click)="loadContractDetails('ViewContractDetails')">
                     <small class="contractHeaderId">#{{contractData.DC_ID}} </small>
                     <small>{{contractData.Customer.CUST_NM}}:</small>
                     <small>{{contractData.TITLE}}</small>
@@ -97,7 +97,7 @@
                             <div>
                                 <div style="margin-top: 10px;">
                                     <div *ngFor="let ps of contractData.PRC_ST | filter:query; let psIndex = index;" class="lnavStrategyContainer">
-                                        <div class="psNav row" id="lnavPs_{{ ps.DC_ID}}" [ngClass]="{active: (curPricingStrategy.DC_ID==ps.DC_ID)}">
+                                        <div class="psNav row" id="lnavPs_{{ ps.DC_ID}}" >
                                             <div class="fl col-md-1" (click)="isPSExpanded[psIndex] = !isPSExpanded[psIndex]">
                                                 <i class="glyphicon chevron linkable" data-toggle="collapse" [attr.data-target]="'#sumPSdata_'+ ps.DC_ID" style="margin-right: 5px; margin-top: 3px;" [ngClass]="{'intelicon-down': isPSExpanded[psIndex], 'intelicon-right-next': !isPSExpanded[psIndex]}"></i>
                                                 <!--<i class="chevron linkable" data-toggle="collapse" [attr.data-target]="'#sumWipGrid_'+ pt.DC_ID"-->
@@ -302,5 +302,19 @@
         <i class="fa fa-line-chart nav-icn" aria-hidden="true"></i>
     </div>
 </div>
+<kendo-dialog *ngIf="isDeletePT" (close)="isDeletePricingTable(false)" class="artho-css-popup" >
+    <p class="dialogmsg">Are you sure that you want to delete this Pricing Table?</p>
+    <kendo-dialog-actions>
+        <button class='k-button' (click)="isDeletePricingTable(true)" themeColor="primary">OK</button>
+        <button class='k-button' (click)="isDeletePricingTable(false)">CANCEL</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+<kendo-dialog *ngIf="isDeletePs" (close)="isDeletePricingStrategy(false)" class="artho-css-popup" >
+    <p class="dialogmsg">Are you sure that you want to delete this Pricing Strategy?</p>
+    <kendo-dialog-actions>
+        <button class='k-button' (click)="isDeletePricingStrategy(true)" themeColor="primary">OK</button>
+        <button class='k-button' (click)="isDeletePricingStrategy(false)">CANCEL</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
 <loading-panel-angular [show]="isLoading" [header]="spinnerMessageHeader" [isShowFunFact]="isBusyShowFunFact"
                        [description]="spinnerMessageDescription" [msgType]="msgType"></loading-panel-angular>

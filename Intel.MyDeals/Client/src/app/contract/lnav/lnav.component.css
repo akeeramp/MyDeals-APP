@@ -544,3 +544,9 @@ kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li.k-state-disabled {
 lnavview .navIconLnk-small-wrapper {
     top: 10px;
 }
+
+.dialogmsg {    
+    text-align: center;
+    font-family: 'Intel Clear' !important;
+    font-size: 15px !important
+}

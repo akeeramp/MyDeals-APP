@@ -177,9 +177,9 @@ export class AutoFillComponent {
     }
 
     onMktgValueChange(event: any) {
-        if (event && event.length > 1) {
+        if (event && event.length > 0) {
             var selectedList = event.join(",");
-            if (_.indexOf(event, 'All Direct Market Segments') > 0) {
+            if (_.indexOf(event, 'All Direct Market Segments') > 0 || (event.length == 1 && _.indexOf(event, 'All Direct Market Segments') == 0)) {
                 this.mkgvalues = ['All Direct Market Segments'];
                 this.multSlctMkgValues = this.mkgvalues;
             }
@@ -199,7 +199,6 @@ export class AutoFillComponent {
                     }
                 });
                 if (_.indexOf(this.mkgvalues, "NON Corp") >= 0) {
-
                     let corpMarkSeg = _.map(this.nonCorpMarketSeg, (x) => { return x.DROP_DOWN })
                     _.each(corpMarkSeg, (val) => {
                         if ((_.indexOf(this.mkgvalues, val) < 0)) {

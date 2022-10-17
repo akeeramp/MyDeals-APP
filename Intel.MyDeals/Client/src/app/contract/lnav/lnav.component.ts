@@ -83,6 +83,10 @@ export class lnavComponent {
     private spinnerMessageHeader: string = "";
     private spinnerMessageDescription: string = "";
     private isBusyShowFunFact: boolean = true;
+    private lnavSelectedPT: any = {};
+    private lnavSelectedPS: any = {};
+    private isDeletePT: boolean = false;
+    private isDeletePs: boolean = false;
 
     setBusy(msg, detail, msgType, showFunFact) {
         setTimeout(() => {
@@ -377,7 +381,7 @@ export class lnavComponent {
         if (this.curPricingStrategyId === id) {
             this.curPricingStrategy = {};
             this.curPricingStrategyId = 0;
-            this.openDealEntryTab();
+            this.openDealEntryTab("PTE");
         }
     }
     unmarkCurPricingTableIf = function (id) {
@@ -386,7 +390,7 @@ export class lnavComponent {
             this.curPricingStrategy.DC_ID === id) {
             if (this.curPricingStrategyId != 0 && this.ptDelId && this.ptDelId > 0 && this.ptDelId === this.curPricingTableId) {
                 this.ptDelId = 0;
-                this.openDealEntryTab();
+                this.openDealEntryTab("PTE");
             }
             this.curPricingTable = {
             };
@@ -517,46 +521,68 @@ export class lnavComponent {
     }
     
     deletePricingStrategy(ps) {
-        if (confirm("Are you sure that you want to delete this Pricing Strategy ?")) {
+        this.lnavSelectedPS = ps;
+        this.isDeletePs = true;
+    }
+    isDeletePricingStrategy(isDelPS: boolean) {
+        if (isDelPS) {
+            this.isDeletePs = false;
             this.isLoading = true;
             this.setBusy("Deleting...", "Deleting the Pricing Strategy", "Info", false);
             const custId = this.contractData.CUST_MBR_SID;
             const contractId = this.contractData.DC_ID
-            this.lnavSvc.deletePricingStrategy(custId, contractId, ps).subscribe((response: any) => {
-                this.unmarkCurPricingStrategyIf(ps.DC_ID);
-                this.unmarkCurPricingTableIf(ps.DC_ID);
-                this.contractData.PRC_ST.splice(this.contractData.PRC_ST.indexOf(ps), 1);
-                this.loggerSvc.success("Delete Successful", "Deleted the Pricing Strategy");                
+            this.lnavSvc.deletePricingStrategy(custId, contractId, this.lnavSelectedPS).subscribe((response: any) => {
+                this.unmarkCurPricingStrategyIf(this.lnavSelectedPS.DC_ID);
+                this.unmarkCurPricingTableIf(this.lnavSelectedPS.DC_ID);
+                this.contractData.PRC_ST.splice(this.contractData.PRC_ST.indexOf(this.lnavSelectedPS), 1);
+                this.loggerSvc.success("Delete Successful", "Deleted the Pricing Strategy");
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
+                this.lnavSelectedPS = {};
             }, (err) => {
-                this.loggerSvc.error("Could not delete Pricing Strategy" + ps.DC_ID, err, err.statusText);
+                this.loggerSvc.error("Could not delete Pricing Strategy" + this.lnavSelectedPS.DC_ID, err, err.statusText);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             });
         }
+        else {
+            this.isDeletePs = false;
+        }
     }
 
-    deletePricingTable(ps, pt) {
-        if (confirm("Are you sure that you want to delete this Pricing Table ?")) {
+    isDeletePricingTable(isDelPT: boolean) {
+        if (isDelPT) {
+            this.isDeletePT = false;
             this.isLoading = true;
             this.setBusy("Deleting...", "Deleting the Pricing Table", "Info", false);
             const custId = this.contractData.CUST_MBR_SID;
             const contractId = this.contractData.DC_ID;
-            this.lnavSvc.deletePricingTable(custId, contractId, pt).subscribe((response: any) => {
-                this.ptDelId = pt.DC_ID;
-                this.unmarkCurPricingTableIf(ps.DC_ID);
-                ps.PRC_TBL.splice(ps.PRC_TBL.indexOf(pt), 1);
+            this.lnavSvc.deletePricingTable(custId, contractId, this.lnavSelectedPT).subscribe((response: any) => {
+                this.ptDelId = this.lnavSelectedPT.DC_ID;
+                this.unmarkCurPricingTableIf(this.lnavSelectedPS.DC_ID);
+                this.lnavSelectedPS.PRC_TBL.splice(this.lnavSelectedPS.PRC_TBL.indexOf(this.lnavSelectedPT), 1);
                 this.loggerSvc.success("Delete Successful", "Deleted the Pricing Table");
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
+                this.lnavSelectedPS = {};
+                this.lnavSelectedPT = {};
             }), err => {
-                this.loggerSvc.error("Could not delete Pricing Table" + pt.DC_ID, err, err.statusText);
+                this.loggerSvc.error("Could not delete Pricing Table" + this.lnavSelectedPT.DC_ID, err, err.statusText);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
                 };
         }
+        else {
+            this.isDeletePT = false;
+        }
+
     }
+
+    deletePricingTable(ps, pt) {
+        this.lnavSelectedPS = ps;
+        this.lnavSelectedPT = pt;
+        this.isDeletePT = true;
+    }    
     onSelectPtMenu(event: any, ps: any, pt: any): void {
         //Number eventIndex = parseInt(event.index);
         switch (event.item?.text) {
@@ -755,9 +781,9 @@ export class lnavComponent {
             this.loadModel('Manage');
         }
     }
-    openDealEntryTab(){
+    openDealEntryTab(model: string) {
         this.selectedTab = 0;
-        this.loadContractDetails();   
+        this.loadContractDetails(model);
     }
     openMeetCompTab() {
         this.selectedTab = 1;
@@ -819,9 +845,9 @@ export class lnavComponent {
     removeBlanks(val) {
         return val.replace(/_/g, '');
     }
-    loadContractDetails(){
+    loadContractDetails(model: string) {
         const contractDetails_Map: contractIds = {
-            Model: 'ViewContractDetails',
+            Model: model,
             ps_id: 0,
             pt_id: 0,
             ps_index:0,

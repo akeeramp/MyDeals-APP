@@ -1,4 +1,5 @@
 ﻿import * as angular from "angular";
+import * as _ from 'underscore';
 import { Component, ViewChild } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
@@ -106,14 +107,20 @@ export class pricingTableComponent {
                 this.pt_Id = contractModel.pt_id;
                 this.c_Id = contractModel.C_ID;
                 this.contractData = contractModel.contractData;
-                this.ps_title = this.contractData.PRC_ST[contractModel.ps_index].TITLE;
-                this.pt_title = this.contractData.PRC_ST[contractModel.ps_index].PRC_TBL[contractModel.pt_index].TITLE;
-                this.pt_type = this.contractData.PRC_ST[contractModel.ps_index].PRC_TBL[contractModel.pt_index].OBJ_SET_TYPE_CD;
-                this.wf_Stage = this.contractData.PRC_ST[contractModel.ps_index].WF_STG_CD;
-                this.ps_passed_validation = this.contractData.PRC_ST[contractModel.ps_index].PASSED_VALIDATION;
-                this.is_hybrid_ps = this.contractData.PRC_ST[contractModel.ps_index].IS_HYBRID_PRC_STRAT;
-                this.pt_passed_validation = this.contractData?.PRC_ST[contractModel.ps_index]?.PRC_TBL[contractModel.pt_index].PASSED_VALIDATION
-                this.enableDealEditorTab(isRedirect);
+                let PRC_ST = _.filter(this.contractData.PRC_ST, item => { return item.DC_ID == this.ps_Id });
+                if (PRC_ST != undefined && PRC_ST != null) {
+                    let PRC_TBL = _.filter(PRC_ST[0].PRC_TBL, item => { return item.DC_ID == this.pt_Id });
+                    if (PRC_TBL != undefined && PRC_TBL != null) {
+                        this.ps_title = PRC_ST[0].TITLE;
+                        this.pt_title = PRC_TBL[0].TITLE;
+                        this.pt_type = PRC_TBL[0].OBJ_SET_TYPE_CD;
+                        this.wf_Stage = PRC_ST[0].WF_STG_CD;
+                        this.ps_passed_validation = PRC_ST[0].PASSED_VALIDATION;
+                        this.is_hybrid_ps = PRC_ST[0].IS_HYBRID_PRC_STRAT;
+                        this.pt_passed_validation = PRC_ST[0].PASSED_VALIDATION
+                        this.enableDealEditorTab(isRedirect);
+                    }
+                }
             }
             //defaulting the PTE page to load the images
             else {
