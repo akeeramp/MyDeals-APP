@@ -213,3 +213,6 @@ kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li.k-state-disabled {
 kendo-tabstrip.tabs-coll {
     width: 100%;
 }
+.ptrLoading > .ss-loading-overlay > .myLoader {
+    left: 32% !important;
+}

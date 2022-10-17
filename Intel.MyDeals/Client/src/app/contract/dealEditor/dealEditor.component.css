@@ -1023,3 +1023,7 @@ ngb-tooltip-window .tooltip-inner {
 kendo-tabstrip.tabs-coll {
     width: 100%;
 }
+
+product-breakout-modal{
+    width: 70%;
+}

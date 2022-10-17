@@ -276,3 +276,9 @@
 .marketSegment{
     padding-left: 30px !important;
 }
+.autoFillSetting.totalcontent.modal-content {
+    padding: 20px;
+}
+.cdk-overlay-pane{
+    height: auto !important;
+}
