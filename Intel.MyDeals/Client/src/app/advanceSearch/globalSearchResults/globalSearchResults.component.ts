@@ -150,7 +150,6 @@ export class GlobalSearchResultsComponent  {
             this.isLoading = false;
             if (res) {
                 this.response = res;
-                console.log(this.response.ContractId)
                 if (opType == "WIP_DEAL")
                 window.location.href = "#/contractmanager/WIP/" + this.response.ContractId + "/" + this.response.PricingStrategyId + "/" + this.response.PricingTableId + "/" + dcId;
                 else if (opType == "PRC_ST")

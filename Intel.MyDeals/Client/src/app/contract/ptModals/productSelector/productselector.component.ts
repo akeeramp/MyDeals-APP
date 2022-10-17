@@ -163,7 +163,6 @@ export class ProductSelectorComponent {
             mediaCode: this.pricingTableRow.PROD_INCLDS, dealType: this.pricingTableRow.OBJ_SET_TYPE_CD
         };
         this.prodSelService.GetProductSelectorWrapper(dtoDateRange).subscribe((result: any) => {
-            this.isLoading = false;
             if (this.pricingTableRow.OBJ_SET_TYPE_CD == "DENSITY") {
                 let res = [];
                 for (let i = 0; i < result.ProductSelectionLevels.length; i++) {
@@ -176,7 +175,9 @@ export class ProductSelectorComponent {
             this.productSelectionLevels = result.ProductSelectionLevels;
             this.productSelectionLevelsAttributes = result.ProductSelectionLevelsAttributes;
             this.getItems(null);
+            this.isLoading = false;
         }, (error) => {
+            this.isLoading = false;
             this.loggerService.error('ProductSelectorComponent::getProductSelection::', error);
         });
     }

@@ -130,7 +130,7 @@ a.prdAnchor:hover {
     border-top: none !important;
     border-bottom: none !important;
     border-right: 2px solid white !important;
-    color: white;
+    color: white !important;
     /* White text */
     cursor: pointer;
     /* Pointer/hand icon */
@@ -147,6 +147,16 @@ a.prdAnchor:hover {
 .drillDown.btn-group {
     padding-top: 3px;
     padding-bottom: 3px;
+    height: 100% !important;
+}
+
+.drillDown btn-group btn-group-justified prod-sel-btn {
+    float: none;
+    width: 100%;
+    vertical-align: middle;
+    border-collapse: separate;
+    height: 100% !important;
+    padding: 6px 12px;
 }
 
 .drillDown.btn-group.btn {
@@ -160,11 +170,12 @@ a.prdAnchor:hover {
 }
 
 .drillDown.btn-group button.noborder {
-    border-right: none;
+    border-right: none !important;
 }
 
 
 /* Add a background color on hover */
+
 .drillDown.btn-group button:hover {
     background-color: #01AEEF !important;
     color: #1a3e6f !important;
@@ -354,6 +365,7 @@ a.prdAnchor:hover {
     padding-top: 0;
 }
 
+
 /* .prodSelector .prodSelector-grid .k-grid-content {
     height: calc(85vh - 480px); 
     min-height: 270px;
@@ -396,7 +408,7 @@ a.prdAnchor:hover {
     position: relative;
 }
 
-.checkbox-custom + .checkbox-custom-label:before {
+.checkbox-custom+.checkbox-custom-label:before {
     content: '';
     background: #fff;
     border: 1.5px solid #eee;
@@ -623,6 +635,7 @@ input[type=checkbox].with-sm-font:focus+label:before {
     padding-right: 15px !important;
 }
 
+
 /*.paddingLeft15 {
     padding-left: 15px !important;
 }*/
@@ -707,7 +720,7 @@ kendo-grid.raid-style {
     margin: 0 !important;
 }
 
-.product-breakout-modal > mat-dialog-container {
+.product-breakout-modal>mat-dialog-container {
     background-color: #1a3e6f !important;
     padding: 0px !important;
 }
@@ -716,8 +729,8 @@ kendo-grid.raid-style {
     left: 32% !important;
 }
 
-#PTRLoading .ss-loading-overlay{
-    opacity: 0;
+#PTRLoading .ss-loading-overlay {
+    opacity: 1;
 }
 
 .header-PS {
@@ -738,7 +751,7 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner .k-link .k-c
     text-transform: capitalize;
     color: #1a3e6f;
     font-size: 12px !important;
-    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
     font-weight: 600;
     white-space: nowrap !important;
     overflow: hidden !important;

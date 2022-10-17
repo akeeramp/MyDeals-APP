@@ -400,7 +400,7 @@
 .meet-conduct .k-grid-header th.k-header {
     padding: 0 !important;
     vertical-align: middle !important;
-    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .meet-conduct .k-grid .k-detail-row .k-detail-cell {
@@ -460,6 +460,7 @@
     text-align: center;
     cursor: pointer;
 }
+
 .deallink:hover {
     text-decoration: underline !important;
     cursor: pointer !important;
@@ -526,7 +527,7 @@
     padding: 0!important;
 }
 
-.meet-conduct .k-detail-row > .k-detail-cell > div:first-child {
+.meet-conduct .k-detail-row>.k-detail-cell>div:first-child {
     margin-left: 2px !important;
     margin-right: 13px !important;
 }
@@ -535,7 +536,11 @@
     padding-bottom: 1rem;
 }
 
-.meetCompLoader .ss-loading-overlay .myLoader{
+.meetCompLoader .ss-loading-overlay .myLoader {
     left: 38% !important;
     top: 10% !important;
+}
+
+.meet-comp-filter ul {
+    max-height: 300px;
 }

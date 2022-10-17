@@ -33,8 +33,8 @@
             <div class="clearboth"></div>
         </div>
         <div id="grid" class="opUiContainer md dashboard either-pin" [ngClass]="{'op-grid': isAdhoc !=1}">
-            <kendo-grid style="height: calc(100vh - 280px); " [data]="gridData" [skip]="state.skip" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}" [groupable]="false"
-                [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" [columnMenu]="true" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)">
+            <kendo-grid style="height: calc(100vh - 280px); " [data]="gridData" [skip]="state.skip" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}"
+                [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)">
                 <kendo-grid-column width="70px" [columnMenu]="false">
                     <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                         <div class='dealTools'><input type='checkbox' class='grid-link-checkbox with-font' id='lnkChk_header' (click)="selectProdIDS('all', $event)"><label class="all-labels" for='lnkChk_header' style='margin: 5px 0 0 0;' title='Check to apply changes to all checked rows'></label>
@@ -43,14 +43,14 @@
                     <ng-template kendoGridCellTemplate let-dataItem>
                         <div *ngIf="(dataItem.MEET_COMP_UPD_FLG.toLowerCase()=='n');else chkbx_template"></div>
                         <ng-template #chkbx_template>
-                            <div class='dealTools'><input type='checkbox' [(ngModel)]="dataItem.IS_SELECTED" class='grid-link-checkbox with-font' id="lnkChk_{{dataItem.RW_NM}}" (click)="selectProdIDS(dataItem.RW_NM, $event)"><label class="all-labels" for='lnkChk_{{dataItem.RW_NM}}' style='margin: 5px 0 0 0;'
-                                    title='Check to apply changes to all checked rows'></label></div>
+                            <div class='dealTools'><input type='checkbox' [(ngModel)]="dataItem.IS_SELECTED" class='grid-link-checkbox with-font' id="lnkChk_{{dataItem.RW_NM}}" (click)="selectProdIDS(dataItem.RW_NM, $event)"><label class="all-labels" for='lnkChk_{{dataItem.RW_NM}}'
+                                    style='margin: 5px 0 0 0;' title='Check to apply changes to all checked rows'></label></div>
                         </ng-template>
                     </ng-template>
                 </kendo-grid-column>
                 <kendo-grid-column field="PRD_CAT_NM" title="Vertical" width="100" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                        <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem="dataItem">
@@ -59,7 +59,7 @@
                 </kendo-grid-column>
                 <kendo-grid-column field="GRP_PRD_NM" title="Product" width="130" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                        <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem="dataItem">
@@ -68,7 +68,7 @@
                 </kendo-grid-column>
                 <kendo-grid-column field="DEAL_OBJ_SID" title="Deals" width=150 [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                        <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem="dataItem">
@@ -77,7 +77,7 @@
                 </kendo-grid-column>
                 <kendo-grid-column field="END_CUST_RETAIL" title="End Customer/Retail" width="190" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                        <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
@@ -86,7 +86,7 @@
                 </kendo-grid-column>
                 <kendo-grid-column field="COMP_SKU" title="Meet Comp SKU" width="170" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                        <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
@@ -100,7 +100,7 @@
                 </kendo-grid-column>
                 <kendo-grid-column field="COMP_PRC" title="Meet Comp Price" width="170" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                        <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
@@ -118,7 +118,7 @@
                 </kendo-grid-column>
                 <kendo-grid-column field="CAP" title="CAP" width="120" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                        <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
@@ -130,7 +130,7 @@
                 </kendo-grid-column>
                 <kendo-grid-column field="IA_BNCH" title="IA Bench" width="120" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                        <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
@@ -147,7 +147,7 @@
                 </kendo-grid-column>
                 <kendo-grid-column field="COMP_BNCH" title="Comp Bench" width="140" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                        <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
@@ -164,7 +164,7 @@
                 </kendo-grid-column>
                 <kendo-grid-column [hidden]="hideViewMeetCompResult" field="MEET_COMP_STS" title="Test Results" width="130" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                        <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
@@ -203,7 +203,7 @@
                 </kendo-grid-column>
                 <kendo-grid-column field="MC_AVG_RPU" title="Avg. Net Price" width="150" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                        <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
@@ -212,7 +212,7 @@
                 </kendo-grid-column>
                 <kendo-grid-column [hidden]="hideViewMeetCompOverride" field="COMP_OVRRD_FLG" title="Analysis Override" width="150" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                        <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
@@ -229,7 +229,7 @@
                 </kendo-grid-column>
                 <kendo-grid-column [hidden]="hideViewMeetCompOverride" field="COMP_OVRRD_RSN" title="Analysis Override Comments" width="220" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                        <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem>
@@ -246,7 +246,7 @@
                 </kendo-grid-column>
                 <kendo-grid-column field="BRND_FMLY" title="Brand / Family" width="140" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                        <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem="dataItem">
@@ -260,7 +260,7 @@
                 </kendo-grid-column>
                 <kendo-grid-column field="MEET_COMP_ANALYSIS" title="Meet Comp Analysis" width="170" [headerClass]="{'headerClass':true}">
                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                        <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                         </multicheck-filter>
                     </ng-template>
                     <ng-template kendoGridCellTemplate let-dataItem="dataItem">
@@ -281,10 +281,10 @@
                     <div id="childGrid" class="opUiContainer md dashboard">
                         <!-- CHILD GRID BEGINS -->
                         <kendo-grid [data]="convertToChildGridArray(dataItem)" [skip]="childState.skip" [sortable]="true" scrollable="boolean" [sort]="childState.sort" [pageSize]="childState.take" [group]="childState.group" [navigable]="true" [resizable]="true" [groupable]="false"
-                            (dataStateChange)="childDataStateChange($event)" [filter]="childState.filter" filterable="menu" [columnMenu]="true" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)" style="height:fit-content !important">
+                            (dataStateChange)="childDataStateChange($event)" [filter]="childState.filter" filterable="menu" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)" style="height:fit-content !important">
                             <kendo-grid-column field="OBJ_SET_TYPE" title="Deal Type" width="155" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
@@ -293,18 +293,18 @@
                             </kendo-grid-column>
                             <kendo-grid-column field="DEAL_OBJ_SID" title="Deal ID" width="120" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                     <div class='readOnlyCell'>
-                                       <a (click)="gotoDeal(dataItem.DEAL_OBJ_SID)" class="deallink"> {{dataItem.DEAL_OBJ_SID}}</a>
+                                        <a (click)="gotoDeal(dataItem.DEAL_OBJ_SID)" class="deallink"> {{dataItem.DEAL_OBJ_SID}}</a>
                                     </div>
                                 </ng-template>
                             </kendo-grid-column>
                             <kendo-grid-column field="DEAL_DESC" title="Deal Description" width="140" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
@@ -313,7 +313,7 @@
                             </kendo-grid-column>
                             <kendo-grid-column field="END_CUST_RETAIL" title="End Customer/Retail" width="177" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
@@ -322,7 +322,7 @@
                             </kendo-grid-column>
                             <kendo-grid-column field="COMP_SKU" title="Meet Comp SKU" width="155" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
@@ -335,7 +335,7 @@
                             </kendo-grid-column>
                             <kendo-grid-column field="COMP_PRC" title="Meet Comp Price" width="155" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
@@ -353,7 +353,7 @@
                             </kendo-grid-column>
                             <kendo-grid-column field="CAP" title="CAP" width="112" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
@@ -366,7 +366,7 @@
                             </kendo-grid-column>
                             <kendo-grid-column field="IA_BNCH" title="IA Bench" width="112" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
@@ -384,7 +384,7 @@
                             </kendo-grid-column>
                             <kendo-grid-column field="COMP_BNCH" title="Comp Bench" width="130" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
@@ -402,7 +402,7 @@
                             </kendo-grid-column>
                             <kendo-grid-column [hidden]="hideViewMeetCompResult" [headerClass]="{'headerClass':true}" field="MEET_COMP_STS" title="Test Results" width="120">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
@@ -441,7 +441,7 @@
                             </kendo-grid-column>
                             <kendo-grid-column field="MC_AVG_RPU" title="Avg. Net Price" width="138" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
@@ -450,7 +450,7 @@
                             </kendo-grid-column>
                             <kendo-grid-column [hidden]="hideViewMeetCompOverride" field="COMP_OVRRD_FLG" title="Analysis Override" width="150" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
@@ -467,7 +467,7 @@
                             </kendo-grid-column>
                             <kendo-grid-column [hidden]="hideViewMeetCompOverride" field="COMP_OVRRD_RSN" title="Analysis Override Comments" width="220" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
@@ -484,7 +484,7 @@
                             </kendo-grid-column>
                             <kendo-grid-column field="BRND_FMLY" title="Brand / Family" width="130" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
@@ -500,7 +500,7 @@
                             </kendo-grid-column>
                             <kendo-grid-column field="MEET_COMP_ANALYSIS" title="Meet Comp Analysis" width="150" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
@@ -509,7 +509,7 @@
                             </kendo-grid-column>
                             <kendo-grid-column field="ECAP_PRC" title="ECAP Price" width="120" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
@@ -523,7 +523,7 @@
                             </kendo-grid-column>
                             <kendo-grid-column field="YCS2" title="YCS2 Price" width="120" [headerClass]="{'headerClass':true}">
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
+                                    <multicheck-filter class="meet-comp-filter" [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field)">
                                     </multicheck-filter>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>

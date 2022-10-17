@@ -22,8 +22,8 @@
                 <button class="btn btn-primary prdBtn fr" (click)="searchProduct()" style="margin: 0 0 0 10px;">
                     Search
                 </button>
-                <kendo-autocomplete id="productSearch" class="prod-autocomplete fr form-control input-sm" [(ngModel)]="userInput" [suggest]="false" [data]="productOptions" [filterable]="true"
-        (filterChange)="changeProductOption($event)" (valueChange)="searchProduct()" valueField="Name">
+                <kendo-autocomplete id="productSearch" class="prod-autocomplete fr form-control input-sm" [(ngModel)]="userInput" [suggest]="false" [data]="productOptions" [filterable]="true" (filterChange)="changeProductOption($event)" (valueChange)="searchProduct()"
+                    valueField="Name">
                 </kendo-autocomplete>
             </div>
         </div>
@@ -125,8 +125,7 @@
                                                             <div [class.isSoftWarnCell]="dataItem.CAP.includes('No')" style="text-align: center;">
                                                                 <strong>{{ dataItem.CAP }}</strong>
                                                                 <div *ngIf="!dataItem.CAP.includes('No')">
-                                                                    <br />
-                                                                    {{ dataItem.CAP_START }} - {{ dataItem.CAP_END }}
+                                                                    <br /> {{ dataItem.CAP_START }} - {{ dataItem.CAP_END }}
                                                                 </div>
                                                             </div>
                                                         </div>
@@ -172,8 +171,8 @@
                 </div>
             </div>
             <div *ngIf="showTree && !showSuggestions" id="prodGrid" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight">
-                <kendo-grid class="raid-style" [data]="gridData" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
-                    [resizable]="true" (dataStateChange)="dataStateChange($event)">
+                <kendo-grid class="raid-style" [data]="gridData" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
+                    [groupable]="false" [resizable]="true" (dataStateChange)="dataStateChange($event)">
                     <kendo-grid-column width="65px" [columnMenu]="false">
                         <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                             <div class='dealTools'>
@@ -282,7 +281,7 @@
                 </div>
                 <div *ngIf="hideSelection">
                     <div class="row" *ngIf="searchItems.length > 0" style="padding-left:10px;padding-right:10px;font-size:16px;">
-                        <div class="drillDown btn-group btn-group-justified" role="group" aria-label="...">
+                        <div class="drillDown btn-group btn-group-justified prod-sel-btn" role="group" aria-label="...">
                             <ng-container class="btn-group" *ngFor="let p of searchItems | orderBy:'name'; let last=last " role="group">
                                 <button type="button" title="{{p.name}}" [ngClass]="{'noborder':last}" (click)="selectsearchItem(p)" class="btn btn-default">{{p.name}}</button>
                             </ng-container>
@@ -290,7 +289,7 @@
                     </div>
                     <div *ngIf="showSearchResults">
                         <kendo-grid [data]="gridData" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
-                                    [resizable]="true" (dataStateChange)="dataStateChange($event)">
+                            [resizable]="true" (dataStateChange)="dataStateChange($event)">
                             <kendo-grid-column width="65px" [columnMenu]="false">
                                 <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                                     <div class='dealTools'>
@@ -346,8 +345,7 @@
                                                 <div [class.isSoftWarnCell]="dataItem.CAP.includes('No')" style="text-align: center;">
                                                     <strong>{{ dataItem.CAP }}</strong>
                                                     <div *ngIf="!dataItem.CAP.includes('No')">
-                                                        <br />
-                                                        {{ dataItem.CAP_START }} - {{ dataItem.CAP_END }}
+                                                        <br /> {{ dataItem.CAP_START }} - {{ dataItem.CAP_END }}
                                                     </div>
                                                 </div>
                                             </div>
