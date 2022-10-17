@@ -23,6 +23,7 @@ export class messageBoardModal {
     }
     @Input() data:any;
     @Input() contractData:any;
+    @Input() isDealTools;
 
     public gridData: GridDataResult;        
 
@@ -82,11 +83,14 @@ export class messageBoardModal {
                 }
             }
     
-            if (items.length === 0) {
+            if (items.length === 0 && !this.isDealTools) {
                 alert("No items were selected to email.");
                 return;
             }
-    
+            if (items.length === 0 && this.isDealTools) {
+                alert("No items were approved.");
+                return;
+            }
             let custNames = [];
             for (var x = 0; x < items.length; x++) {
                 if (custNames.indexOf(items[x].CUST_NM) < 0)

@@ -396,7 +396,7 @@ dataItem.DEAL_STRT_DT | date:
                                                 </kendo-grid-column>
                                                 <div *kendoGridDetailTemplate="let dataItem">
                                                     <pct-child-grid [parent]="parentGridData[pt.DC_ID]" [contractData]="contractData" [dealType]="pt.OBJ_SET_TYPE_CD"
-                                                                    [child]="dataItem" [CostTestGroupDetails]="CostTestGroupDetails[pt.DC_ID]"></pct-child-grid>
+                                                                    [child]="dataItem" [CostTestGroupDetails]="CostTestGroupDetails[pt.DC_ID]" (refreshParent)="refreshContractData($event)"></pct-child-grid>
                                                 </div>
                                             </kendo-grid>
                                         </div>

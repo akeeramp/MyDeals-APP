@@ -1,5 +1,5 @@
 ﻿import * as angular from "angular";
-import { Component, Input } from "@angular/core";
+import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { GridDataResult, SelectAllCheckboxState, CellClickEvent } from "@progress/kendo-angular-grid";
@@ -35,6 +35,7 @@ export class pctChildGridComponent {
     @Input() UItemplate: any;
     @Input() dealType: any;
     @Input() CostTestGroupDetails: any;
+    @Output() refreshParent: EventEmitter<any> = new EventEmitter<any>();
     userRole = ""; canEmailIcon = true;
     isPSExpanded = []; isPTExpanded = {};
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
@@ -186,6 +187,11 @@ export class pctChildGridComponent {
             return true;
         }
         return false;
+    }
+    refreshContractData(eventData) {
+        if (eventData) {
+            this.refreshParent.emit(eventData);
+        }
     }
     ngOnChanges() {
         this.userRole = (<any>window).usrRole;

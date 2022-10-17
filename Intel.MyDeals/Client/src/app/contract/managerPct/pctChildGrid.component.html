@@ -5,7 +5,8 @@
         <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
             <deal-tools-angular [dataItem]='dataItem' [isSplitEnabled]='false' [isFileAttachmentEnabled]='false'
                                 [isHistoryEnabled]='true' [isCommentEnabled]='false' [isEditable]='true'
-                                [isQuoteLetterEnabled]='false' [isDeleteEnabled]='false' [gridData]="gridData.data" [contractData]="contractData"></deal-tools-angular>
+                                [isQuoteLetterEnabled]='false' [isDeleteEnabled]='false' [gridData]="gridData.data" [contractData]="contractData"
+                                (refreshContract)="refreshContractData($event)"></deal-tools-angular>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column title="PCT Result" field="PRC_CST_TST_STS" [headerClass]="{'headerClass':true}" [width]="120">

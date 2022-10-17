@@ -198,4 +198,10 @@
         </div>
     </div>
 </div>
+<kendo-window class="wistyle" *ngIf="windowOpened" (close)="windowClose()" [minWidth]="windowMinWidth" [minHeight]="windowHeight" [width]="windowWidth" [top]="windowTop" [left]="windowLeft" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
+    <kendo-window-titlebar>
+        <div class="k-window-title arrow-window-title">Results</div><button kendoWindowCloseAction class="close-icon"></button>
+    </kendo-window-titlebar>
+    <message-board-dialog [data]="messages" [contractData]="contractData" [isDealTools]="true"></message-board-dialog>
+</kendo-window>
 <loading-panel-angular [show]="isBusy" [header]="isBusyMsgTitle" [description]="isBusyMsgDetail" [msgType]="isBusyType" [isShowFunFact]="isBusyShowFunFact" class="dealToolsOverlay"></loading-panel-angular>

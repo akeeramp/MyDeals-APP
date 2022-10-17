@@ -64,6 +64,9 @@ export class dealToolsComponent{
     public dealTxt;
     public notes;
     private objTypeSid;
+    private windowOpened = false;
+    private windowTop = 200; windowLeft = 350; windowWidth = 620; windowHeight = 500; windowMinWidth = 100;
+    messages: any;
     private fileItems = {
         "NoPerm": {
             "icon": "intelicon-attach",
@@ -461,11 +464,11 @@ export class dealToolsComponent{
         this.dataService.actionWipDeal(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, this.dataItem, 'Cancel')
             .subscribe((response: any) => {
                 setTimeout(() => {
-                    //yet to migrate message board 
-                    this.refreshContract.emit(true);
+                    //After migrating tender dashboard, one condition needs to be added to not show message board for tender deals
+                    this.windowOpened = true;
+                    this.messages = response.Messages;
                     this.setBusy("", "", "", "");
                 }, 50);
-
             }, (response)=> {
                 this.loggerSvc.error("Unable to update Wip Deal","Error",response);
                 this.setBusy("", "","","");
@@ -575,8 +578,8 @@ export class dealToolsComponent{
                         }
                         else {
                             ids.push({
-                                DC_ID: model["DEAL_ID"],
-                                WF_STG_CD: model["WF_STG_CD"]
+                                DC_ID: dataItem["DEAL_ID"],
+                                WF_STG_CD: dataItem["WF_STG_CD"]
                             });
                         }
                     }
@@ -617,17 +620,20 @@ export class dealToolsComponent{
         this.setBusy("Updating Deals", "Updating hold status of Deals.", "", "");
         this.dataService.actionWipDeals(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, dealIdsObj)
             .subscribe((response: any) => {
-                setTimeout(() => {
-                    //yet to migrate message board 
-                    this.refreshContract.emit(true);
-                }, 50);
-                this.setBusy("", "", "", "");
+                if (response) {
+                    this.windowOpened = true;
+                    this.messages = response.Messages;
+                }
+                this.setBusy("", "", "", "");                
             }, (response)=> {
                 this.loggerSvc.error("Unable to update hold status of deals","Error",response);
                 this.setBusy("", "", "", "");
             });
     }
-
+    windowClose() {
+        this.windowOpened = false;
+        this.refreshContract.emit(true);
+    }
     ngOnChanges() {
         this.loadDealTools();
     }
