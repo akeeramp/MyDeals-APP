@@ -113,9 +113,9 @@ export class pricingTableComponent {
                 this.c_Id = contractModel.C_ID;
                 this.contractData = contractModel.contractData;
                 let PRC_ST = _.filter(this.contractData.PRC_ST, item => { return item.DC_ID == this.ps_Id });
-                if (PRC_ST != undefined && PRC_ST != null) {
+                if (PRC_ST != undefined && PRC_ST != null && PRC_ST.length>0) {
                     let PRC_TBL = _.filter(PRC_ST[0].PRC_TBL, item => { return item.DC_ID == this.pt_Id });
-                    if (PRC_TBL != undefined && PRC_TBL != null) {
+                    if (PRC_TBL != undefined && PRC_TBL != null && PRC_TBL.length>0) {
                         this.ps_title = PRC_ST[0].TITLE;
                         this.pt_title = PRC_TBL[0].TITLE;
                         this.pt_type = PRC_TBL[0].OBJ_SET_TYPE_CD;

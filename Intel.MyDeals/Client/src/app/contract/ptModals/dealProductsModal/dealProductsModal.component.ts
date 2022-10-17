@@ -87,34 +87,41 @@ export class dealProductsModalComponent {
         this.dialogRef.close();
     }
     ngOnInit() {
-        this.isLoading = true;
-        this.showDealProducts = this.data.dataItem.OBJ_SET_TYPE_CD == 'VOL_TIER' || this.data.dataItem.OBJ_SET_TYPE_CD == 'PROGRAM' || this.data.dataItem.OBJ_SET_TYPE_CD == 'FLEX' ||
-            this.data.dataItem.OBJ_SET_TYPE_CD == 'REV_TIER' || this.data.dataItem.OBJ_SET_TYPE_CD == 'DENSITY';
-        if (this.data.dataItem._contractPublished !== undefined && this.data.dataItem._contractPublished == 1) {
-            this.prods = this.data.dataItem.products;
-            _.each(this.prods, (value) => {
-                this.prdIds.push(parseInt(value.PRD_MBR_SID));
-            });
-        } else {
-            _.each(this.prods, (value) => {
-                this.prdIds.push(parseInt(value));
-            });
+        try{
+            this.isLoading = true;
+            this.showDealProducts = this.data.dataItem.OBJ_SET_TYPE_CD == 'VOL_TIER' || this.data.dataItem.OBJ_SET_TYPE_CD == 'PROGRAM' || this.data.dataItem.OBJ_SET_TYPE_CD == 'FLEX' ||
+                this.data.dataItem.OBJ_SET_TYPE_CD == 'REV_TIER' || this.data.dataItem.OBJ_SET_TYPE_CD == 'DENSITY';
+            if (this.data.dataItem._contractPublished !== undefined && this.data.dataItem._contractPublished == 1) {
+                this.prods = this.data.dataItem.products;
+                _.each(this.prods, (value) => {
+                    this.prdIds.push(parseInt(value.PRD_MBR_SID));
+                });
+            } else {
+                _.each(this.prods, (value) => {
+                    this.prdIds.push(parseInt(value));
+                });
+            }
+            if(this.data.dataItem.OBJ_SET_TYPE_CD == 'ECAP' && !this.showDealProducts){
+                this.prods = this.data.dataItem.products;
+                this.prdIds =[];
+                for(let i=0;i< this.prods.length; i++){
+                    this.prdIds.push(this.prods[i].PCSR_NBR);
+                }            
+            }
+            this.prdData = {
+                "PrdIds": this.prdIds
+            }
+            this.excelFileName = "Deal " + this.data.dataItem.DC_ID + " Product Export.xlsx";
+            if (this.showDealProducts) {
+                this.getProductDetailsFromDealId();
+            } else {
+                this.getProductDetailsFromProductId();
+            }
         }
-        if(this.data.dataItem.OBJ_SET_TYPE_CD == 'ECAP' && !this.showDealProducts){
-            this.prods = this.data.dataItem.products;
-            this.prdIds =[];
-            for(let i=0;i< this.prods.length; i++){
-                this.prdIds.push(this.prods[i].PCSR_NBR);
-            }            
+        catch(ex){
+            this.loggerSvc.error('Something went wrong', 'Error');
+            console.error('DealProductsModal::ngOnInit::',ex);
         }
-        this.prdData = {
-            "PrdIds": this.prdIds
-        }
-        this.excelFileName = "Deal " + this.data.dataItem.DC_ID + " Product Export.xlsx";
-        if (this.showDealProducts) {
-            this.getProductDetailsFromDealId();
-        } else {
-            this.getProductDetailsFromProductId();
-        }
+     
     }
 }

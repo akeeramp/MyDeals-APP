@@ -56,7 +56,7 @@ import * as _ from 'underscore';
 export class MultiCheckFilterComponent implements AfterViewInit {
     @Input() public isPrimitive: boolean;
     @Input() public currentFilter: any;
-    @Input() public data;
+    @Input() public data:any[];
     @Input() public textField;
     @Input() public valueField;
     @Input() public filterService: FilterService;
@@ -64,7 +64,7 @@ export class MultiCheckFilterComponent implements AfterViewInit {
     @Input() public operator: string;
     @Output() public valueChange = new EventEmitter<number[]>();
 
-    public currentData: any;
+    public currentData: any[]=[];
     public showFilter = true;
     private value: any[] = [];
 
@@ -74,7 +74,7 @@ export class MultiCheckFilterComponent implements AfterViewInit {
     public ngAfterViewInit() {
         this.currentData = this.data;
         if (this.textField != undefined && this.textField != null && this.textField != '' && this.valueField != undefined && this.valueField != null && this.valueField != null) {
-          if (this.data.filter(x => x[this.textField] == 'Select All').length == 0) {
+          if (this.data && this.data.length>0 &&this.data.filter(x => x[this.textField] == 'Select All').length == 0) {
               let selectAlldata: any = {};
               selectAlldata[this.textField] = 'Select All';
               selectAlldata[this.valueField] = 'Select All';

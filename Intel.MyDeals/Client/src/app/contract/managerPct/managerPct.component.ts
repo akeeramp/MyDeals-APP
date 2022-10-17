@@ -296,18 +296,19 @@ export class managerPctComponent {
     loadPctDetails(){
         this.isPctLoading = true;
         this.contractManagerSvc.readContract(this.contractId).subscribe((response: any) => {
-            this.contractData = response[0];
-            this.refreshedContractData.emit({ contractData: this.contractData });
-            this.refreshGrid();
-            this.contractId= this.contractData.DC_ID;
-            this.lastRun = this.contractData.LAST_COST_TEST_RUN;
-            this.contractData?.PRC_ST.map((x, i) => {
-                //intially setting all the PS row arrow icons and PT data row arrow icons as collapses. this isPSExpanded,isPTExpanded is used to change the arrow icon css accordingly
-                this.isPSExpanded[i] = false;
-                if (x.PRC_TBL != undefined) x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
-            })
+            if(response && response.length>0){
+                this.contractData = response[0];
+                this.refreshedContractData.emit({ contractData: this.contractData });
+                this.refreshGrid();
+                this.contractId= this.contractData.DC_ID;
+                this.lastRun = this.contractData.LAST_COST_TEST_RUN;
+                this.contractData?.PRC_ST.map((x, i) => {
+                    //intially setting all the PS row arrow icons and PT data row arrow icons as collapses. this isPSExpanded,isPTExpanded is used to change the arrow icon css accordingly
+                    this.isPSExpanded[i] = false;
+                    if (x.PRC_TBL != undefined) x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
+                })
+            }
             this.isPctLoading = false;
-
         }, (error) => {
             this.isPctLoading = false;
             this.loggerSvc.error('Get Upper Contract service', error);

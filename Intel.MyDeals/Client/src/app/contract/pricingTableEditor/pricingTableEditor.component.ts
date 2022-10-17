@@ -481,24 +481,27 @@ export class pricingTableEditorComponent implements OnChanges {
         PTR = PTR.length > 0 ? PTR : Handsontable.helper.createEmptySpreadsheetData(5, this.columns.length);
         // Loading new data
         this.newPTR = PTR;
-        this.hotTable.loadData(PTR);
-        // Update settings  with new commented cells and erge cells
-        this.hotTable.updateSettings({
-            columns: this.columns,
-            hiddenColumns: {
-                columns: hiddenColumns,
-                indicators: true
-            },
-            mergeCells: mergCells,
-            cells: (row: number, col: number, prop: string) => {
-                return PTE_Load_Util.disableCells(this.hotTable, row, col, prop, this.ColumnConfig, this.curPricingTable, this.isTenderContract, this.curPricingStrategy.IS_HYBRID_PRC_STRAT);
-            },
-            cell: cellComments,
-            readOnlyCellClassName: 'readonly-cell',
-            nestedHeaders: nestedHeaders
-        });
+        //In some redirection scenario the code is showing error so must make sure the binding is happening only if there is and instance
+        let instance= this.hotRegisterer.getInstance(this.hotId);
+        if (instance){
+            this.hotTable.loadData(PTR);
+            // Update settings  with new commented cells and erge cells
+            this.hotTable.updateSettings({
+                columns: this.columns,
+                hiddenColumns: {
+                    columns: hiddenColumns,
+                    indicators: true
+                },
+                mergeCells: mergCells,
+                cells: (row: number, col: number, prop: string) => {
+                    return PTE_Load_Util.disableCells(this.hotTable, row, col, prop, this.ColumnConfig, this.curPricingTable, this.isTenderContract, this.curPricingStrategy.IS_HYBRID_PRC_STRAT);
+                },
+                cell: cellComments,
+                readOnlyCellClassName: 'readonly-cell',
+                nestedHeaders: nestedHeaders
+            });
+        }
     }
-
     //functions to identify cell change
     identfyUniqChanges(changes: Array<any>, source: any): Array<any> {
         //for tier when drag/paste PTR_USER_PRD changes are based on num of tier and those many rows will come as changes but we need that as uniq change

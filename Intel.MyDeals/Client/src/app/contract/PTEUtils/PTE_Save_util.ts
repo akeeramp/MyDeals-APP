@@ -99,7 +99,7 @@ export class PTE_Save_Util {
         if (errDeals.length > 0) {
             for (var t = 0; t < errDeals.length; t++) {
                 var el = PTR[errDeals[t]];
-                if (!el._behaviors) el._behaviors = {};
+                if (el && !el._behaviors) el._behaviors = {};
                 if (!el._behaviors.isError) el._behaviors.isError = {};
                 if (!el._behaviors.validMsg) el._behaviors.validMsg = {};
                 if (hasTender && hasNonTender) {
