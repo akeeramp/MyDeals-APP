@@ -82,7 +82,23 @@
     color: white;
     background-color: #1a3e6f;
     padding-left: 10px;
-    margin-bottom: 25px;
+    margin-bottom: 0;
+}
+
+.prodDrillDownLarge .drillDown.input-group span.input-group-addon {
+    width: 20%;
+    height: 24px;
+    position: absolute;
+    padding: 0;
+    padding-top: 2px;
+    left: 0;
+    top: 10px;
+}
+
+.prodDrillDownLarge .drillDown.input-group p {
+    margin-left: 10px !important;
+    margin-right: 10px !important;
+    width: 100%;
 }
 
 a.prdAnchor {
@@ -176,13 +192,13 @@ a.prdAnchor:hover {
 .prodDrillDownLarge p {
     font-size: 13px;
     margin-top: 11px;
-    margin-left: 30% !important;
-    margin-right: 25%;
+    margin-left: 15px !important;
+    margin-right: 15px;
     color: #fff;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
-    text-align: justify;
+    text-align: center;
 }
 
 .prodDrillDownLarge p:hover {
@@ -332,9 +348,10 @@ a.prdAnchor:hover {
     padding: 20px;
     padding-bottom: 0px;
     min-height: 180px;
-    height: calc(85vh - 330px);
+    height: 280px;
     overflow-y: auto;
     max-height: 100%;
+    padding-top: 0;
 }
 
 /* .prodSelector .prodSelector-grid .k-grid-content {
@@ -379,7 +396,7 @@ a.prdAnchor:hover {
     position: relative;
 }
 
-.checkbox-custom+.checkbox-custom-label:before {
+.checkbox-custom + .checkbox-custom-label:before {
     content: '';
     background: #fff;
     border: 1.5px solid #eee;
@@ -387,7 +404,7 @@ a.prdAnchor:hover {
     display: inline-block;
     vertical-align: middle;
     width: 16px;
-    height: 14px;
+    height: 16px;
     padding: 2px;
     text-align: center;
 }
@@ -415,6 +432,11 @@ a.prdAnchor:hover {
 
 .prodDrillDownLarge .drillDown {
     background: initial !important;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    flex-wrap: nowrap;
+    position: relative;
 }
 
 .checkbox-custom[disabled]:hover+.checkbox-custom-label[disabled]:before {
@@ -553,7 +575,7 @@ input[type=checkbox].with-sm-font.disabled+label:before {
 input[type=checkbox].with-sm-font:checked+label:before {
     content: "\f046";
     font-size: 18px;
-    margin-left: 10px;
+    margin-left: 0px;
     margin-top: 2px;
     vertical-align: middle;
 }
@@ -666,16 +688,16 @@ a:focus {
     cursor: pointer;
 }
 
-.btn-primary[disabled] {
-    background-color: #edeff0 !important;
-    color: #7e868b !important;
+.btn-primary.disabled-save[disabled] {
+    background-color: #01AEEF !important;
+    color: #b1babf !important;
     border-color: #b1babf !important;
     cursor: not-allowed !important;
     pointer-events: all !important;
 }
 
 kendo-grid.raid-style {
-    height: 340px;
+    height: 278px;
 }
 
 .th-check-box {
@@ -696,4 +718,55 @@ kendo-grid.raid-style {
 
 #PTRLoading .ss-loading-overlay{
     opacity: 0;
+}
+
+.header-PS {
+    padding-left: 15px;
+    padding-right: 15px;
+    padding-top: 15px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+}
+
+.bg-yellow-remove .isSoftWarnCell {
+    background-color: transparent !important;
+}
+
+kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner .k-link .k-column-title {
+    text-transform: capitalize;
+    color: #1a3e6f;
+    font-size: 12px !important;
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight: 600;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+}
+
+kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner .k-link:hover {
+    background: transparent !important;
+}
+
+kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-filter-menu .k-grid-filter span.k-icon.k-i-filter {
+    color: #808080;
+}
+
+kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-filter-menu .k-grid-filter span.k-icon.k-i-filter:hover {
+    color: #00aeef !important
+}
+
+.CAPYCS2CellContent.accurate-height {
+    height: 25px;
+}
+
+.another-possible {
+    line-height: 1;
+}
+
+.label-allowers:before {
+    padding: 0 !important;
+    font-size: 10px !important;
+    position: relative !important;
+    top: -1px !important;
 }

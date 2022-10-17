@@ -4,7 +4,7 @@
 <link href="/Client/src/app/contract/ptModals/productSelector/productselector.component.css" rel="stylesheet" />
 <loading-panel-angular id="PTRLoading" style="z-index: 500" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>
 <div class="product-selector modal-content">
-    <div class="prodSelector modal-header" style="padding-left: 15px; padding-right: 15px;padding-top:15px;">
+    <div class="prodSelector modal-header header-PS">
         <div class="row" style="width:100%">
             <div class="col-md-4 col-sm-4 col-xs-4">
                 <p class="prodHeader cursorArea">
@@ -29,7 +29,7 @@
         </div>
 
         <!-- kendo breadcrumb implementation this is not exact breadcrumb but making in the similar way -->
-        <div class="row breadCrumbWrapper" style="position: absolute; margin-top: 100px; width: 1255px">
+        <div class="row breadCrumbWrapper">
             <ul class="productSelectorpath breadcrumb">
                 <li><a class="prdAnchor" (click)="selectPath(0)">{{drillDownPrd}}</a></li>
                 <ng-container *ngFor="let p of selectedPathParts | unique:'name'; let index=index">
@@ -224,12 +224,11 @@
                                     </ng-template>
 
                                     <!-- Cell Content -->
-                                    <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openModal(column.field, pricingTableRow, dataItem.PRD_MBR_SID, column.field)">
+                                    <div class="CAPYCS2CellContent accurate-height" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openModal(column.field, pricingTableRow, dataItem.PRD_MBR_SID, column.field)">
                                         <!-- CAP Info cell design -->
                                         <div [class.isSoftWarnCell]="dataItem.CAP.includes('No')" [class.uiControlDiv]="dataItem.CAP.includes('No')" style="text-align: center;">
                                             <strong>{{ dataItem.CAP }}</strong>
-                                            <div *ngIf="!dataItem.CAP.includes('No')">
-                                                <br />
+                                            <div class="another-possible" *ngIf="!dataItem.CAP.includes('No')">
                                                 {{ dataItem.CAP_START }} - {{ dataItem.CAP_END }}
                                             </div>
                                         </div>
@@ -252,7 +251,7 @@
                                     </ng-template>
 
                                     <!-- Cell Content -->
-                                    <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openModal(column.field, pricingTableRow, dataItem.PRD_MBR_SID, column.field)">
+                                    <div class="CAPYCS2CellContent bg-yellow-remove" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openModal(column.field, pricingTableRow, dataItem.PRD_MBR_SID, column.field)">
                                         <!-- YCS2 Info cell design -->
                                         <div [class.isSoftWarnCell]="dataItem.YCS2.includes('No')" [class.uiControlDiv]="dataItem.YCS2.includes('No')" style="text-align: center;">
                                             {{ dataItem.YCS2 }}
@@ -459,9 +458,9 @@
             <div class="form-inline insertAtRowsText" style="margin-top:-30px">
                 <span *ngIf="enableSplitProducts">
                     <input id="separateProduct" class="checkbox-custom" [(ngModel)]="splitProducts" name="separateroducts" type="checkbox">
-                    <label for="separateProduct" class="checkbox-custom-label" style="padding-bottom:5px;margin-top:0px;">&nbsp;Separate product in rows</label>
+                    <label for="separateProduct" class="checkbox-custom-label label-allowers" style="padding-bottom:5px;margin-top:0px;">&nbsp;Separate product in rows</label>
                 </span>
-                <button class="btn btn-primary fr prdBtn" [disabled]="!excludeMode && addedProducts.length == 0" (click)="save()">Save</button>
+                <button class="btn btn-primary fr prdBtn disabled-save" [disabled]="!excludeMode && addedProducts.length == 0" (click)="save()">Save</button>
                 <button class="btn btn-default fr prdBtn" (click)="cancel()" style="margin-right:4px;">Cancel</button>
             </div>
         </div>

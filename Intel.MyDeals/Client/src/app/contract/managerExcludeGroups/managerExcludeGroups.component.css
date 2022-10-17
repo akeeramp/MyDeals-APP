@@ -437,8 +437,8 @@ tr.k-alt.grey {
 
 .excl-DG-modal mat-dialog-container {
     background: #1a3e6f;
+    padding: 24px !important;
 }
-
 #GroupExclusionTab {
     margin-top: 20px;
 }
