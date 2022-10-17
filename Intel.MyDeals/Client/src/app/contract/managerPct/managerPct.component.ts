@@ -15,6 +15,16 @@ import { excludeDealGroupModalDialog } from "../managerExcludeGroups/excludeDeal
 import { MatDialog } from "@angular/material/dialog";
 import * as _ from 'underscore';
 
+export interface contractIds {
+    Model: string;
+    C_ID: number;
+    ps_id: number;
+    pt_id: number;
+    ps_index: number;
+    pt_index: number;
+    contractData: any;
+}
+
 @Component({
     selector: "manager-pct",
     templateUrl: "Client/src/app/contract/managerPct/managerPct.component.html",
@@ -40,6 +50,7 @@ export class managerPctComponent {
     @Input() UItemplate: any;
     @Input() tab: any;
     @Output() refreshedContractData = new EventEmitter<any>();
+    @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
     private spinnerMessageHeader = "Complete"; 
     private spinnerMessageDescription = "Reloading the page now.";
     public isPctLoading = false;
@@ -332,6 +343,10 @@ export class managerPctComponent {
         },(err)=>{
             this.loggerSvc.error("Unable to get user role details","Error",err);
         });
+        if (this.selectedTab == 5) {
+            event.preventDefault();
+            this.loadModel('groupExclusionDiv');
+        }
         this.selTab(event.title);
         if (this.pctFilter != "") {
             this.pricingStrategyFilter = this.contractData?.PRC_ST.filter(x => x.COST_TEST_RESULT == this.pctFilter);
@@ -377,6 +392,18 @@ export class managerPctComponent {
         for (let j = 0; j < this.parentGridData[ptId].length; j++) {
             this.parentGridData[ptId][j].isLinked = event.target.checked;
         }
+    }
+    loadModel(model: string) {
+        const contractId_Map: contractIds = {
+            Model: model,
+            ps_id: 0,
+            pt_id: 0,
+            ps_index: 0,
+            pt_index: 0,
+            C_ID: this.contractData.DC_ID,
+            contractData: this.contractData
+        };
+        this.modelChange.emit(contractId_Map);
     }
     refreshContractData(eventData) {
         if (eventData) {

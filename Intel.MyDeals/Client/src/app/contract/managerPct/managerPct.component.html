@@ -5,9 +5,6 @@
     <kendo-tabstrip-tab title="InCompletes"*ngIf="tab === 'pctDiv'"  [selected]="selectedTab==3"></kendo-tabstrip-tab>
     <kendo-tabstrip-tab title="NA" *ngIf="tab === 'pctDiv'"  [selected]="selectedTab==4"></kendo-tabstrip-tab>
     <kendo-tabstrip-tab title="Grouping Exclusions" [selected]="selectedTab==5">
-        <ng-template kendoTabContent>
-            <manager-exclude-groups [contractData]="contractData" [UItemplate]="UItemplate" [groupTab]="tab"></manager-exclude-groups>
-        </ng-template>
     </kendo-tabstrip-tab>
 </kendo-tabstrip>
 <div id="sum-wrapper" class="new-view" *ngIf="!isExcludeGroup">

@@ -1,8 +1,8 @@
 ﻿import * as angular from "angular";
-import { Component, Input, ViewEncapsulation } from "@angular/core";
+import { Component, Input, ViewEncapsulation, Output, EventEmitter } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { DataStateChangeEvent, SelectAllCheckboxState, CellClickEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { DataStateChangeEvent, SelectAllCheckboxState, CellClickEvent, PageSizeItem, GridComponent} from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { managerExcludeGroupsService } from "./managerExcludeGroups.service";
 import { ThemePalette } from "@angular/material/core";
@@ -13,6 +13,17 @@ import { MatDialog } from '@angular/material/dialog';
 import { excludeDealGroupModalDialog } from "./excludeDealGroupModal.component"
 import { GridUtil } from "../grid.util"
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
+
+export interface contractIds {
+    Model: string;
+    C_ID: number;
+    ps_id: number;
+    pt_id: number;
+    ps_index: number;
+    pt_index: number;
+    contractData: any;
+}
+
 @Component({
     selector: "manager-exclude-groups",
     templateUrl: "Client/src/app/contract/managerExcludeGroups/managerExcludeGroups.component.html",
@@ -21,7 +32,7 @@ import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/ove
 })
 
 export class managerExcludeGroupsComponent {
-    showPCT: boolean = true;
+    
     constructor(private loggerSvc: logger, private managerExcludeGrpSvc: managerExcludeGroupsService, private lnavSvc: lnavService, private headerSvc: headerService, private formBuilder: FormBuilder, protected dialog: MatDialog) {
 
     }
@@ -31,6 +42,8 @@ export class managerExcludeGroupsComponent {
     @Input() contractData: any;
     @Input() UItemplate: any;
     @Input() groupTab: any;
+    @Input() showPCT: boolean;
+    @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
     userRole = ""; canEmailIcon = true;
     dealCnt = 0;
     elGrid = null;
@@ -180,12 +193,28 @@ export class managerExcludeGroupsComponent {
     togglePctFilter() {
         //kujoih
     }
-    exportToExcel() {
-        //kujoih
+    exportToExcel(grid: GridComponent) {
+        grid.columns.forEach(item => {
+            if (item.hidden)
+                item.hidden = false;
+        })
+        let data = JSON.parse(JSON.stringify(grid.data));
+        grid.data = this.gridResult;
+        grid.saveAsExcel();
+        grid.columns.forEach(item => {
+            if (item.title == "Rebate Type" || item.title == "Additive" || item.title == "Notes")
+                item.hidden = true;
+        })
+        grid.data = data;
     }
-    exportToExcelCustomColumns() {
-        //kujoih
+    exportToExcelCustomColumns(grid: GridComponent) {
+        grid.columns.forEach(item => {
+            if (item.hidden && item.title == "Notes")
+                item.hidden = false;
+        })
+        grid.saveAsExcel();
     }
+    
     openOverlappingDealCheck() {
         let data = {
             "contractData": this.contractData,
@@ -214,11 +243,24 @@ export class managerExcludeGroupsComponent {
         this.dealCnt = modDealTypes.length;
         return modDealTypes.length > 0 ? this.dealCnt + " " + dealsTypesArray.join() + (this.dealCnt === 1 ? " Deal" : " Deals") : "";
     }
-
+    onTabSelect(e) {
+        e.preventDefault();
+        if (e.title == 'Price Cost Test')
+            this.loadModel('pctDiv')
+    }
+    loadModel(model: string) {
+        const contractId_Map: contractIds = {
+            Model: model,
+            ps_id: 0,
+            pt_id: 0,
+            ps_index: 0,
+            pt_index: 0,
+            C_ID: this.contractData.DC_ID,
+            contractData: this.contractData
+        };
+        this.modelChange.emit(contractId_Map);
+    }
     ngOnInit() {
-        if(this.groupTab  === 'groupExclusionDiv'){
-            this.showPCT = false;
-        }
         this.userRole = (<any>window).usrRole;
         this.loadExcludeGroups();
     }

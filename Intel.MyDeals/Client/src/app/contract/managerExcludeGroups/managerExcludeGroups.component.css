@@ -3,9 +3,8 @@
 }
 
 .dealTag {
-    top: 43px !important;
-    right: 10px !important;
-    background: linear-gradient(to bottom, transparent 0%, transparent 100%) !important
+    width:100%;
+    text-align:right;
 }
 
 .ssToolbarBtn.btn-save,
@@ -365,16 +364,6 @@ tr.k-alt.grey {
     font-size: 18px
 }
 
-.dt-opp {
-    position: absolute;
-    top: 8px !important;
-    right: 0;
-    z-index: 100;
-    font-size: 16px;
-    color: #003C71 !important;
-    font-weight: 600;
-}
-
 .cola-pick {
     position: relative;
     width: 100%;
@@ -448,4 +437,57 @@ tr.k-alt.grey {
 
 .excl-DG-modal mat-dialog-container {
     background: #1a3e6f;
+}
+
+#GroupExclusionTab {
+    margin-top: 20px;
+}
+
+#GroupExclusionTab .k-tabstrip-items .k-item {
+    background: #fdfdfd;
+    background: -moz-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
+    background: -webkit-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
+    background: linear-gradient(to bottom, #fdfdfd 0%, #d9d9d9 100%);
+    color: #003C71 !important;
+    padding: 0 !important;
+    text-transform: none !important;
+    background-color: #fff;
+    border-bottom-width: 0
+}
+
+#GroupExclusionTab .k-tabstrip-items .k-state-active {
+    background: -moz-linear-gradient(top, #fdfdfd 0%, #fff 100%);
+    background: -webkit-linear-gradient(top, #fdfdfd 0%, #fff 100%);
+    background: linear-gradient(to bottom, #fdfdfd 0%, #fff 100%);
+    border-color: #b1babf;
+    border-width: 1px;
+    border-left-width: 1px;
+    border-top-width: 1px;
+    border-right-width: 1px;
+    border-bottom-width: 0;
+    border-radius: 4px 4px 0 0
+}
+
+#GroupExclusionTab .k-tabstrip-items .k-item .k-link:hover {
+    color: #00AEEF !important;
+}
+
+#GroupExclusionTab .k-tabstrip-items .k-state-disabled {
+    position:absolute !important;
+    width: auto !important;
+    right: 15px !important;
+}
+
+    #GroupExclusionTab > .k-tabstrip-items-wrapper > .k-tabstrip-items > li > .k-link, #GroupExclusionTab .k-tabstrip-items-wrapper ul {
+        position: relative;
+        background: #f9f9f9 !important;
+    }
+
+#excelDropDownMenu.show {
+    transform: none !important;
+    font-size: 13px !important;
+    color: #777 !important;
+    border-color: #eee !important;
+    font-family: 'Intel Clear' !important;
+    top: 44px !important;
 }

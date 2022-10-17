@@ -60,6 +60,7 @@ export class pricingTableComponent {
     private spinnerMessageHeader: string = "";
     private spinnerMessageDescription: string = "";
     private isBusyShowFunFact: boolean = true;
+    private isShowPCT: boolean = false;
 
     public searchedContractData = {
         Model: "",
@@ -94,7 +95,11 @@ export class pricingTableComponent {
         });
     }
 
-    loadModel(contractModel: contractIds, isRedirect:boolean=false) {
+    loadModel(contractModel: contractIds, isRedirect: boolean = false) {
+        if (this.selLnav == 'pctDiv' && contractModel.Model == 'groupExclusionDiv')
+            this.isShowPCT = true;
+        else if (this.selLnav !== 'pctDiv' && contractModel.Model == 'groupExclusionDiv')
+            this.isShowPCT = false;
         this.selLnav = contractModel.Model
         if (this.selLnav == 'PTE') {
               //highligh the selected lnav PT in case request coming fom search result for PTE.

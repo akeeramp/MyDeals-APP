@@ -126,7 +126,7 @@
                     <overlapping-deals [contractData]="contractData" [UItemplate]="UItemplate"></overlapping-deals>
                 </div>
                 <div *ngIf="selLnav=='groupExclusionDiv'" class="few-oracle-css">
-                    <manager-pct [contractData]="contractData" [UItemplate]="UItemplate" [tab]="selLnav"></manager-pct>
+                    <manager-exclude-groups (modelChange)="loadModel($event)" [contractData]="contractData" [UItemplate]="UItemplate" [groupTab]="selLnav" [showPCT]="isShowPCT"></manager-exclude-groups>
                 </div>
                 <div *ngIf="selLnav=='contractDetailsDiv'" class="few-oracle-css">
                     <contract-details [C_ID]="contractData?.DC_ID"></contract-details>
@@ -144,7 +144,7 @@
                     <missing-cap [contractData]="contractData" [UItemplate]="UItemplate"></missing-cap>
                 </div>
                 <div *ngIf="selLnav=='pctDiv'" class="few-oracle-css">
-                    <manager-pct [contractData]="contractData" [UItemplate]="UItemplate" [tab]="selLnav" (refreshedContractData)="refreshContractData($event)"></manager-pct>
+                    <manager-pct [contractData]="contractData" [UItemplate]="UItemplate" [tab]="selLnav" (refreshedContractData)="refreshContractData($event)" (modelChange)="loadModel($event)"></manager-pct>
                 </div>
                 <div *ngIf="selLnav=='ViewContractDetails'" class="few-oracle-css">
                     <contract-details [C_ID]="contractData?.DC_ID"></contract-details>
