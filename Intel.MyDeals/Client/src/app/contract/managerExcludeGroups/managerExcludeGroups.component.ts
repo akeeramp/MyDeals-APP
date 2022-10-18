@@ -3,7 +3,7 @@ import { Component, Input, ViewEncapsulation, Output, EventEmitter } from "@angu
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { DataStateChangeEvent, SelectAllCheckboxState, CellClickEvent, PageSizeItem, GridComponent} from "@progress/kendo-angular-grid";
-import { process, State } from "@progress/kendo-data-query";
+import { distinct, process, State } from "@progress/kendo-data-query";
 import { managerExcludeGroupsService } from "./managerExcludeGroups.service";
 import { ThemePalette } from "@angular/material/core";
 import { lnavService } from "../lnav/lnav.service";
@@ -192,6 +192,9 @@ export class managerExcludeGroupsComponent {
     }
     togglePctFilter() {
         //kujoih
+    }
+    distinctPrimitive(fieldName: string) {
+        return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }
     exportToExcel(grid: GridComponent) {
         grid.columns.forEach(item => {

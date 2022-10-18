@@ -197,6 +197,15 @@ export class pctChildGridComponent {
             this.refreshParent.emit(eventData);
         }
     }
+    getTitle(dataItem){
+        let title ="";
+        if(dataItem.PRC_CST_TST_STS == 'InComplete'){
+            title = dataItem.PRC_CST_TST_STS + ':'+ dataItem.INCMPL_COST_TEST_RSN;
+        } else {
+            title = dataItem.PRC_CST_TST_STS;
+        }
+        return title;
+    }
     ngOnChanges() {
         this.userRole = (<any>window).usrRole;
         this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);

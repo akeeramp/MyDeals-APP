@@ -72,12 +72,19 @@
                                 <span>{{getFormatedDim(dataItem,'ECAP_PRICE', '20___0','currency')}}</span>
                             </ng-template>
                         </kendo-grid-column>
+                        <kendo-grid-column title="ECAP" field="ECAP_PRC" [headerClass]="{'headerClass':true}"
+                                           [width]="100" [hidden]="!pctGroupDealsView">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <span>{{dataItem.ECAP_PRC |currency}}</span>
+                            </ng-template>
+                        </kendo-grid-column>
                         <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}"
                                            [width]="120">
                             <ng-template kendoGridCellTemplate let-dataItem>
-                                <span>{{getFormatedDim(dataItem,'MAX_RPU', '20___0','currency')}}</span>
+                                <span *ngIf="!pctGroupDealsView">{{getFormatedDim(dataItem,'MAX_RPU', '20___0','currency')}}</span>
+                                <span *ngIf="pctGroupDealsView">{{dataItem.MAX_RPU | currency}}</span>
                             </ng-template>
-                        </kendo-grid-column>
+                            </kendo-grid-column>
                         <kendo-grid-column title="Market Segment" field="MRKT_SEG" [headerClass]="{'headerClass':true}"
                                            [width]="140"></kendo-grid-column>
                         <kendo-grid-column title="Consumption Reason" field="CONSUMPTION_REASON"
@@ -120,13 +127,15 @@
                                     <kendo-grid-column title="ECAP" field="OVLP_ECAP_PRC"
                                                        [headerClass]="{'headerClass':true}" [width]="100">
                                         <ng-template kendoGridCellTemplate let-dataItem>
-                                            <span>{{getFormatedDim(dataItem, 'OVLP_ECAP_PRC', '20___0','currency')}}</span>
+                                            <span *ngIf="!pctGroupDealsView">{{getFormatedDim(dataItem, 'OVLP_ECAP_PRC', '20___0','currency')}}</span>
+                                            <span *ngIf="pctGroupDealsView">{{dataItem.OVLP_ECAP_PRC | currency}}</span>
                                         </ng-template>
                                     </kendo-grid-column>
                                     <kendo-grid-column title="Max RPU" field="OVLP_MAX_RPU"
                                                        [headerClass]="{'headerClass':true}" [width]="120">
                                         <ng-template kendoGridCellTemplate let-dataItem>
-                                            <span>{{getFormatedDim(dataItem,'OVLP_MAX_RPU', '20___0','currency')}}</span>
+                                            <span *ngIf="!pctGroupDealsView">{{getFormatedDim(dataItem,'OVLP_MAX_RPU', '20___0','currency')}}</span>
+                                            <span *ngIf="pctGroupDealsView">{{dataItem.OVLP_MAX_RPU | currency}}</span>
                                         </ng-template>
                                     </kendo-grid-column>
                                     <kendo-grid-column title="Market Segment" field="OVLP_MKT_SEG"
@@ -159,6 +168,14 @@
                     Save and Close
                 </button>
             </div>
+        </div>
+        <div class="k-widget k-dialog k-window k-alert" *ngIf="showKendoAlert">
+            <kendo-dialog (close)="closeKendoAlert()">
+                <div style='margin-top: 15px;'>When excluding deals, a reason must be provided.</div>
+                <kendo-dialog-actions>
+                    <div kendoButton (click)="closeKendoAlert()" class="kendo-alrt-btn">OK</div>
+                </kendo-dialog-actions>
+            </kendo-dialog>
         </div>
     </div>
 </div>

@@ -153,7 +153,16 @@
                                 <kendo-grid-column title="My Deals Product" field="TITLE" [headerClass]="{'headerClass':true}"
                                                    [width]="120"></kendo-grid-column>
                                 <kendo-grid-column title="Cost Test Results" field="COST_TEST_RESULT" [headerClass]="{'headerClass':true}"
-                                                   [width]="120"></kendo-grid-column>
+                                                   [width]="120">
+                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                                    let-filterService="filterService">
+                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                        [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                                </ng-template>
+                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                        <icon-mct-pct-angular [dataValue]='dataItem.COST_TEST_RESULT' [iconClass]="medIcon"></icon-mct-pct-angular>
+                                    </ng-template>
+                                </kendo-grid-column>
                                 <kendo-grid-column title="Deal Type" field="OBJ_SET_TYPE_CD" [headerClass]="{'headerClass':true}"
                                                    [width]="120"></kendo-grid-column>
                                 <kendo-grid-column title="Stage" field="DSPL_WF_STG_CD" [headerClass]="{'headerClass':true}" [width]="120">

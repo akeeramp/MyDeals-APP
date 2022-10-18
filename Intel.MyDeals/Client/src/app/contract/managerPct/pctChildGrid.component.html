@@ -11,7 +11,7 @@
     </kendo-grid-column>
     <kendo-grid-column title="PCT Result" field="PRC_CST_TST_STS" [headerClass]="{'headerClass':true}" [width]="120" *ngIf="!isHidden('PRC_CST_TST_STS')">
         <ng-template *ngIf="CAN_VIEW_COST_TEST" kendoGridCellTemplate let-dataItem>
-            <icon-mct-pct-angular [dataValue]='dataItem.PRC_CST_TST_STS' [overrideValue]="dataItem.COST_TEST_OVRRD_FLG" [overrideFlgCmt]="dataItem.COST_TEST_OVRRD_CMT" [iconClass]="medIcon" >
+            <icon-mct-pct-angular [dataValue]='dataItem.PRC_CST_TST_STS' [overrideValue]="dataItem.COST_TEST_OVRRD_FLG" [overrideFlgCmt]="dataItem.COST_TEST_OVRRD_CMT" [iconClass]="medIcon" [title]="getTitle(dataItem)">
             </icon-mct-pct-angular>
         </ng-template>
     </kendo-grid-column>    
@@ -25,7 +25,7 @@
     </kendo-grid-column>
     <kendo-grid-column title="Group Deals" field="GRP_DEALS" [headerClass]="{'headerClass':true}" [width]="140" *ngIf="!isHidden('GRP_DEALS')">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <span style="color: rgb(0, 113, 197); cursor: pointer; text-align: center;">View</span>
+            <span style="color: rgb(0, 113, 197); cursor: pointer; text-align: center;"  *ngIf="dataItem?.PRC_CST_TST_STS !== 'NA'">View</span>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column title="Deal Start/End" field="DEAL_STRT_DT" [headerClass]="{'headerClass':true}" [width]="180" *ngIf="!isHidden('DEAL_STRT_DT')">

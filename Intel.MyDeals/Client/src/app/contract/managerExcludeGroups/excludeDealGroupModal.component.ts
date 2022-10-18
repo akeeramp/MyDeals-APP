@@ -21,6 +21,7 @@ import { RowClassArgs } from "@progress/kendo-angular-grid";
 
 export class excludeDealGroupModalDialog {
     pctGroupDealsView: boolean = false;
+    showKendoAlert: boolean;
     constructor(public dialogRef: MatDialogRef<excludeDealGroupModalDialog>, @Inject(MAT_DIALOG_DATA) public dataItem: any, private managerExcludeGrpSvc: managerExcludeGroupsService, private loggerSvc: logger, private sanitized: DomSanitizer) {
     }
 
@@ -36,7 +37,7 @@ export class excludeDealGroupModalDialog {
     private color: ThemePalette = 'primary';
     private GRP_BY = 0;
     private enabledList = ["Pending", "Approved"];
-    private hasCheckbox: boolean;
+    private hasCheckbox: boolean = false;
     private enableCheckbox;
     private hasComment = false;
     private isDealToolsChecked = false;
@@ -112,11 +113,18 @@ export class excludeDealGroupModalDialog {
         value.DEAL_GRP_CMNT = this.DEAL_GRP_CMNT;
         value.DEAL_GRP_EXCLDS = this.OVLP_DEAL_ID;
         returnVal.push(value);
-        this.dialogRef.close(returnVal);
+        if (value.DEAL_GRP_EXCLDS !== null && value.DEAL_GRP_EXCLDS !== "" && value.DEAL_GRP_CMNT === "") {
+            this.showKendoAlert = true;
+        } else {
+            this.dialogRef.close(returnVal);
+        }
     }
     cancel(): void {
         this.dialogRef.close();
     }
+    closeKendoAlert() {
+        this.showKendoAlert = false;
+    }   
     filterData(IS_SELECTED) {
         //dfsgddg;
     }
