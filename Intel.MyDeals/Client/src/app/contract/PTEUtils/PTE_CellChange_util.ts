@@ -1130,15 +1130,21 @@ export class PTE_CellChange_Util {
             return ROWID;
         }
     }
-    static getPTRObjOnProdCorr(selProd: any, selProds: any[], idx: number) {
-        let oldVal = this.hotTable.getDataAtRowProp(selProds[idx].indx, 'PTR_USER_PRD').toString();
+    static getPTRObjOnProdCorr(selProd: any, selProds: any[], idx: number, trncOldVal: any) {
+        let oldVal: any = "";
+        if (trncOldVal == "") {
+            oldVal = this.hotTable.getDataAtRowProp(selProds[idx].indx, 'PTR_USER_PRD').toString();
+        }
+        else {
+            oldVal = trncOldVal;
+        }
         let userProds = oldVal.split(',');
         let newVal = [];
         if (userProds.length > 0) {
             _.each(userProds, prod => {
                 _.each(selProd.items, selPrdItm => {
                     if (selPrdItm.prodObj.USR_INPUT == prod) {
-                        newVal.push(selPrdItm.prodObj.HIER_VAL_NM);//oldVal.replace(selProd.name, _.pluck(selProd.items, 'prod').toString());
+                        newVal.push(selPrdItm.prodObj.DERIVED_USR_INPUT);//oldVal.replace(selProd.name, _.pluck(selProd.items, 'prod').toString());
                     }
                 })
             })

@@ -341,6 +341,7 @@ export class pricingTableEditorComponent implements OnChanges {
     public warnings: boolean = false;
     public validMisProd: any;
     public isExcludePrdChange: boolean = false;
+    public trackTranslationprod: any = [];
 
     setBusy(msg, detail, msgType, showFunFact) {
         setTimeout(() => {
@@ -1011,6 +1012,17 @@ export class pricingTableEditorComponent implements OnChanges {
                 .catch(error => {
                     this.loggerService.error("Product Translator failure::", error);
                 })
+            this.trackTranslationprod = [];
+            for (let i = 0; i < translationInputToSend.length; i++) {
+                let oldvalue = translationInputToSend[i].USR_INPUT;
+                let ROW_NUMBER = translationInputToSend[i].ROW_NUMBER;
+                if (transformResults.Data.ProdctTransformResults != null && transformResults.Data.ProdctTransformResults != undefined) {
+                    if (transformResults.Data.ProdctTransformResults[ROW_NUMBER] != undefined) {
+                        let transProd = transformResults.Data.ProdctTransformResults[ROW_NUMBER];
+                        this.trackTranslationprod.push({ old: oldvalue, new: transProd.I[0] })
+                    }
+                }
+            }  
         }
         this.isLoading = false;
         return transformResults;
@@ -1114,8 +1126,18 @@ export class pricingTableEditorComponent implements OnChanges {
                                 selProds[idx].indx = selProds[idx - 1].indx + this.hotTable.getDataAtRowProp(selProds[idx - 1].indx, 'PTR_USER_PRD').split(',').length;
                             }
                         }
+                        let userInputVal = _.where(this.trackTranslationprod, { new: selProd.name });
+                        let trncoldVal = "";
+                        if (userInputVal.length > 0) {
+                            if (selProd.name == userInputVal[0].old) {
+                                trncoldVal = "";
+                            }
+                            else {
+                                trncoldVal = userInputVal[0].new;
+                            }
+                        }
                         //there can be valid invalid prod so we need to bind prod corrector result to the success
-                        let Curr_PTR = PTE_CellChange_Util.getPTRObjOnProdCorr(selProd, selProds, idx);
+                        let Curr_PTR = PTE_CellChange_Util.getPTRObjOnProdCorr(selProd, selProds, idx, trncoldVal);
                         selRow = Curr_PTR[0].row;
                         operation = PTE_CellChange_Util.getOperationProdCorr(selProd);
                         PTE_CellChange_Util.autoFillCellOnProd(Curr_PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, operation);
