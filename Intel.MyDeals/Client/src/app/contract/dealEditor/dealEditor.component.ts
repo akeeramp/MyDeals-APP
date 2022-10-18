@@ -621,8 +621,8 @@ export class dealEditorComponent {
         if (this.templates.details.Groups === undefined) this.templates.details.Groups = [];
         this.templates.details.Groups.push(data);
 
-        if (this.templates.DC_PARENT_ID.Groups === undefined) this.templates.DC_PARENT_ID.Groups = [];
-        this.templates.DC_PARENT_ID.Groups.push(data);
+        if (this.templates.END_CUSTOMER_RETAIL.Groups === undefined) this.templates.END_CUSTOMER_RETAIL.Groups = [];
+        this.templates.END_CUSTOMER_RETAIL.Groups.push(data);
         this.selectedTab = data;
         this.filterColumnbyGroup(this.selectedTab);
     }
@@ -709,10 +709,10 @@ export class dealEditorComponent {
         }
 
         for (var i = 0; i < this.groups.length; i++) {
-            if (this.templates.DC_PARENT_ID.Groups != undefined) {
-                if (this.templates.DC_PARENT_ID.Groups.includes(this.groups[i].name) && this.groups[i].name != "Deal Info") {
-                    if (this.templates.DC_PARENT_ID.Groups === undefined) this.templates.DC_PARENT_ID.Groups = [];
-                    this.templates.DC_PARENT_ID.Groups.push(this.groups[i].name);
+            if (this.templates.END_CUSTOMER_RETAIL.Groups != undefined) {
+                if (this.templates.END_CUSTOMER_RETAIL.Groups.includes(this.groups[i].name) && this.groups[i].name != "Deal Info") {
+                    if (this.templates.END_CUSTOMER_RETAIL.Groups === undefined) this.templates.END_CUSTOMER_RETAIL.Groups = [];
+                    this.templates.END_CUSTOMER_RETAIL.Groups.push(this.groups[i].name);
                 }
             }
         }
