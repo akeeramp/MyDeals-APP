@@ -8,7 +8,9 @@ import * as _ from 'underscore';
     template: `
     <ul>
       <li *ngIf="showFilter">
-        <input class="k-textbox" (input)="onInput($event)" />
+        <div>
+        <input id="multiCheckFilter" class="k-textbox" (input)="onInput($event)" placeholder="Search" />
+        <span id="searchIcon" class="k-icon k-i-zoom"></span></div>
       </li>
       <li #itemElement
         *ngFor="let item of currentData; let i = index;"
@@ -29,6 +31,18 @@ import * as _ from 'underscore';
     </ul>
   `,
     styles: [`
+    #searchIcon{
+        display:inline-block;
+        bottom:30px;
+        left:155px;
+        text-align:center;
+        vertical-align:middle;
+        overflow:hidden;
+    }
+    #multiCheckFilter.k-textbox {
+        font-size:14px;
+        font-weight:bold;
+    }
     ul {
       list-style-type: none;
       height: 100%;

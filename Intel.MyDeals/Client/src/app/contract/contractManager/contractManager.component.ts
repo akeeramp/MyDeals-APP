@@ -271,7 +271,18 @@ export class contractManagerComponent {
             } else if (checkBoxType == "emailCheckBox" && this.canEmailIcon) {
             this.emailCheck[data.DC_ID] = isItemChecked ? anyActionChecked = true : '';
             }
-            if (event.target.checked || anyActionChecked) {
+            let anyReviseChecked = false;
+            this.contractData.PRC_ST?.map(x => {
+                if (this.reviseCheck[x.DC_ID])
+                    anyReviseChecked = true;
+            })
+            if (!anyActionChecked) {
+                this.contractData.PRC_ST?.map(x => {
+                    if (this.apprvCheck[x.DC_ID])
+                        anyActionChecked = true;
+                })
+            }
+            if (event.target.checked || anyActionChecked || anyReviseChecked) {
                 this.canActionIcon = true;
                 this.canEmailIcon = false;
             } else {

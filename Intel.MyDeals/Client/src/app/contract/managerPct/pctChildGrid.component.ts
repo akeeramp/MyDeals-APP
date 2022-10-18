@@ -62,6 +62,10 @@ export class pctChildGridComponent {
     gridDataSet = {}; childGridDataSet = new Observable<GridDataResult>();
     titleFilter = ""; public isAllCollapsed = true; canEdit = true;
 
+    private ECAP_KIT_Col = ['TOOLS', 'PRC_CST_TST_STS', 'DEAL_ID', 'PRODUCT', 'PCSR_NBR', 'DEAL_DESC', 'GRP_DEALS', 'DEAL_STRT_DT', 'CAP', 'ECAP_PRC', 'ECAP_FLR', 'LOW_NET_PRC', 'PRD_COST', 'CST_TYPE', 'COST_TEST_OVRRD_FLG', 'COST_TEST_OVRRD_CMT', 'RTL_CYC_NM', 'RTL_PULL_DLR', 'MKT_SEG', 'GEO', 'PYOUT_BASE_ON', 'CNSMPTN_RSN', 'PROG_PMT', 'DEAL_GRP_CMNT', 'LAST_COST_TEST_RUN']
+    private VOL_REV_FLEX_DNSTY_Col = ['TOOLS', 'PRC_CST_TST_STS', 'DEAL_ID', 'PRODUCT', 'PCSR_NBR', 'DEAL_DESC', 'GRP_DEALS', 'DEAL_STRT_DT', 'MAX_RPU', 'LOW_NET_PRC', 'PRD_COST', 'CST_TYPE', 'COST_TEST_OVRRD_FLG', 'COST_TEST_OVRRD_CMT', 'RTL_CYC_NM', 'RTL_PULL_DLR', 'MKT_SEG', 'GEO', 'PYOUT_BASE_ON', 'CNSMPTN_RSN', 'PROG_PMT', 'DEAL_GRP_CMNT', 'LAST_COST_TEST_RUN']
+    private PGM_Col = ['TOOLS', 'PRC_CST_TST_STS', 'DEAL_ID', 'PRODUCT', 'PCSR_NBR', 'DEAL_DESC', 'GRP_DEALS', 'DEAL_STRT_DT', 'OEM_PLTFRM_LNCH_DT', 'OEM_PLTFRM_EOL_DT', 'MAX_RPU', 'LOW_NET_PRC', 'PRD_COST', 'CST_TYPE', 'COST_TEST_OVRRD_FLG', 'COST_TEST_OVRRD_CMT', 'RTL_CYC_NM', 'RTL_PULL_DLR', 'MKT_SEG', 'GEO', 'PYOUT_BASE_ON', 'CNSMPTN_RSN', 'PROG_PMT', 'DEAL_GRP_CMNT', 'LAST_COST_TEST_RUN']
+
     private childState: State = {
         skip: 0,
         take: 25,
@@ -177,13 +181,13 @@ export class pctChildGridComponent {
         return false;
     }
     isHidden(fieldName) {
-        if (this.dealType == 'ECAP' && fieldName == 'MAX_RPU') {
+        if ((this.dealType == 'ECAP' || this.dealType == 'KIT') && !this.ECAP_KIT_Col.includes(fieldName)) {
             return true;
         }
-        else if (this.dealType !== 'ECAP' && (fieldName == 'CAP' || fieldName == 'ECAP_PRC' || fieldName == 'ECAP_FLR')) {
+        else if ((this.dealType == 'VOL_TIER' || this.dealType == 'REV_TIER' || this.dealType == 'DENSITY' || this.dealType == 'FLEX') && !this.VOL_REV_FLEX_DNSTY_Col.includes(fieldName)) {
             return true;
         }
-        else if (this.dealType !== 'PROGRAM' && (fieldName == 'OEM_PLTFRM_LNCH_DT' || fieldName == 'OEM_PLTFRM_EOL_DT')) {
+        else if (this.dealType == 'PROGRAM' && !this.PGM_Col.includes(fieldName)) {
             return true;
         }
         return false;

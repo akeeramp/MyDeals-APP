@@ -93,6 +93,9 @@ export class managerPctComponent {
     public gridData: any;
     gridDataSet = {}; parentGridData = {}; parentGridResult = {};
     titleFilter = ""; public isAllCollapsed = true; canEdit = true;
+    private ECAP_KIT_Col = ['TOOLS', 'PRC_CST_TST_STS', 'DEAL_ID', 'PRODUCT', 'PCSR_NBR', 'DEAL_DESC', 'GRP_DEALS', 'DEAL_STRT_DT', 'CAP', 'ECAP_PRC', 'ECAP_FLR', 'LOW_NET_PRC', 'PRD_COST', 'CST_TYPE', 'COST_TEST_OVRRD_FLG', 'COST_TEST_OVRRD_CMT', 'RTL_CYC_NM', 'RTL_PULL_DLR', 'MKT_SEG', 'GEO', 'PYOUT_BASE_ON', 'CNSMPTN_RSN', 'PROG_PMT', 'DEAL_GRP_CMNT', 'LAST_COST_TEST_RUN']
+    private VOL_REV_FLEX_DNSTY_Col = ['TOOLS', 'PRC_CST_TST_STS', 'DEAL_ID', 'PRODUCT', 'PCSR_NBR', 'DEAL_DESC', 'GRP_DEALS', 'DEAL_STRT_DT', 'MAX_RPU', 'LOW_NET_PRC', 'PRD_COST', 'CST_TYPE', 'COST_TEST_OVRRD_FLG', 'COST_TEST_OVRRD_CMT', 'RTL_CYC_NM', 'RTL_PULL_DLR', 'MKT_SEG', 'GEO', 'PYOUT_BASE_ON', 'CNSMPTN_RSN', 'PROG_PMT', 'DEAL_GRP_CMNT', 'LAST_COST_TEST_RUN']
+    private PGM_Col = ['TOOLS', 'PRC_CST_TST_STS', 'DEAL_ID', 'PRODUCT', 'PCSR_NBR', 'DEAL_DESC', 'GRP_DEALS', 'DEAL_STRT_DT', 'OEM_PLTFRM_LNCH_DT', 'OEM_PLTFRM_EOL_DT', 'MAX_RPU', 'LOW_NET_PRC', 'PRD_COST', 'CST_TYPE', 'COST_TEST_OVRRD_FLG', 'COST_TEST_OVRRD_CMT', 'RTL_CYC_NM', 'RTL_PULL_DLR', 'MKT_SEG', 'GEO', 'PYOUT_BASE_ON', 'CNSMPTN_RSN', 'PROG_PMT', 'DEAL_GRP_CMNT', 'LAST_COST_TEST_RUN']
     toggleSum() {
         this.refreshPage= false;
         this.contractData?.PRC_ST.map((x, i) => {
@@ -199,13 +202,13 @@ export class managerPctComponent {
             if (psData) {
                 let ptData = psData[0].PRC_TBL.filter(x => x.DC_ID == id);
                 if (ptData) {
-                    if (ptData[0].OBJ_SET_TYPE_CD == 'ECAP' && fieldName == 'MAX_RPU') {
+                    if ((ptData[0].OBJ_SET_TYPE_CD == 'ECAP' || ptData[0].OBJ_SET_TYPE_CD == 'KIT') && !this.ECAP_KIT_Col.includes(fieldName)) {
                         return true;
                     }
-                    else if (ptData[0].OBJ_SET_TYPE_CD !== 'ECAP' && (fieldName == 'CAP' || fieldName == 'ECAP_PRC' || fieldName == 'ECAP_FLR')) {
+                    else if ((ptData[0].OBJ_SET_TYPE_CD == 'VOL_TIER' || ptData[0].OBJ_SET_TYPE_CD == 'REV_TIER' || ptData[0].OBJ_SET_TYPE_CD == 'DENSITY' || ptData[0].OBJ_SET_TYPE_CD == 'FLEX') && !this.VOL_REV_FLEX_DNSTY_Col.includes(fieldName)) {
                         return true;
                     }
-                    else if (ptData[0].OBJ_SET_TYPE_CD !== 'PROGRAM' && (fieldName == 'OEM_PLTFRM_LNCH_DT' || fieldName == 'OEM_PLTFRM_EOL_DT')) {
+                    else if (ptData[0].OBJ_SET_TYPE_CD == 'PROGRAM' && !this.PGM_Col.includes(fieldName)) {
                         return true;
                     }
                 }
@@ -309,6 +312,12 @@ export class managerPctComponent {
                 })
             }
             this.isPctLoading = false;
+            if (this.pctFilter != "") {
+                this.pricingStrategyFilter = this.contractData?.PRC_ST.filter(x => x.COST_TEST_RESULT == this.pctFilter);
+            }
+            else {
+                this.pricingStrategyFilter = this.contractData?.PRC_ST;
+            }
         }, (error) => {
             this.isPctLoading = false;
             this.loggerSvc.error('Get Upper Contract service', error);
