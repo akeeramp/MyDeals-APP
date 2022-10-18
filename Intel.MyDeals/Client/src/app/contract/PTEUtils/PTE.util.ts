@@ -207,7 +207,7 @@ export class PTEUtil {
                 }
             });
             _.each(transformResults.InValidProducts,(val,key)=>{
-                if(val.I && val.I.length>0){
+                if ((val.I && val.I.length > 0) || (val.E && val.E.length > 0) ){
                     isError.push('2');
                 }
             });
