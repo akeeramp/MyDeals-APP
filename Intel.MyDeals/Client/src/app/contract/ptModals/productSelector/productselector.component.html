@@ -383,33 +383,11 @@
                 </div>
             </div>
         </div>
-        <div style="padding:15px;">
-            <div *ngIf="excludeMode">
-                <span>
-                    <span class="text-left textProdSelector">
-                        Excluded Products
-                        <span class="arcAnimate">
-                            <small role="button">&nbsp;({{excludedProducts.length}})</small>
-                        </span>
-                </span>
-                </span>
-                <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')"></trashcan>
-            </div>
-            <div *ngIf="!excludeMode" class="row">
-                <div [ngClass]="{'col-md-6':enableMultipleSelection, 'paddingRight15': !enableMultipleSelection}">
-                    <span [ngClass]="{'paddingLeft15': !enableMultipleSelection}">
-                        <span [ngClass]="{'paddingLeftNone':enableMultipleSelection}" class="text-left textProdSelector">
-                            Selected Products
-                            <span [ngClass]="{'animate':animateInclude}" class="arcAnimate">
-                                <small role="button">&nbsp;({{addedProducts.length}})</small>
-                            </span>
-                    </span>
-                    </span>
-                    <trashcan title="Clear products" class="fr" (click)="clearProducts()"></trashcan>
-                </div>
-                <div *ngIf="enableMultipleSelection" class="col-md-6">
+        <div class="prodSelector modal-footer" style="padding: 15px; bottom: 0px; position: absolute; border-top: 0px; width: 100%; display:inline">
+            <div class="footerInline" style="padding:15px;">
+                <div *ngIf="excludeMode">
                     <span>
-                        <span class="paddingRightNone text-left textProdSelector">
+                        <span class="text-left textProdSelector">
                             Excluded Products
                             <span class="arcAnimate">
                                 <small role="button">&nbsp;({{excludedProducts.length}})</small>
@@ -418,48 +396,72 @@
                     </span>
                     <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')"></trashcan>
                 </div>
-            </div>
-            <div *ngIf="!excludeMode" class="row">
-                <div [ngClass]="{'col-md-6':enableMultipleSelection,'paddingLeftNone':enableMultipleSelection}">
-                    <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:100px; width:100%; overflow:hidden auto;">
-                        <span *ngFor="let item of addedProducts">
-                            <span (click)="showSingleProductHierarchy(item)" class="product-list"
-                                  [ngClass]="{'text-danger': isValidCapDetails(item)}" title="{{isValidCapDetails(item, true)}}">
-                                {{item.HIER_VAL_NM}} &nbsp;
-                                <button (click)="removeProduct(item, 'add')" style="border:none;padding:0;height:0"> ×</button>
-                            </span>
+                <div *ngIf="!excludeMode" class="row">
+                    <div [ngClass]="{'col-md-6':enableMultipleSelection, 'paddingRight15': !enableMultipleSelection}" style=" text-align: left;">
+                        <span [ngClass]="{'paddingLeft15': !enableMultipleSelection}">
+                            <span [ngClass]="{'paddingLeftNone':enableMultipleSelection}" class="text-left textProdSelector">
+                                Selected Products
+                                <span [ngClass]="{'animate':animateInclude}" class="arcAnimate">
+                                    <small role="button">&nbsp;({{addedProducts.length}})</small>
+                                </span>
                         </span>
+                        </span>
+                        <trashcan title="Clear products" class="fr" (click)="clearProducts()"></trashcan>
+                    </div>
+                    <div *ngIf="enableMultipleSelection" class="col-md-6">
+                        <span>
+                            <span class="paddingRightNone text-left textProdSelector">
+                                Excluded Products
+                                <span class="arcAnimate">
+                                    <small role="button">&nbsp;({{excludedProducts.length}})</small>
+                                </span>
+                        </span>
+                        </span>
+                        <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')"></trashcan>
                     </div>
                 </div>
-                <div *ngIf="enableMultipleSelection" class="col-md-6 paddingRightNone">
-                    <div contenteditable="false" class="prodSelected text-left" style="background-color: white; height: 100px; width: 100%; overflow: hidden auto;">
+                <div *ngIf="!excludeMode" class="row">
+                    <div [ngClass]="{'col-md-6':enableMultipleSelection,'paddingLeftNone':enableMultipleSelection}">
+                        <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:100px; width:100%; overflow:hidden auto;">
+                            <span *ngFor="let item of addedProducts">
+                                <span (click)="showSingleProductHierarchy(item)" class="product-list"
+                                      [ngClass]="{'text-danger': isValidCapDetails(item)}" title="{{isValidCapDetails(item, true)}}">
+                                    {{item.HIER_VAL_NM}} &nbsp;
+                                    <button (click)="removeProduct(item, 'add')" style="border:none;padding:0;height:0"> ×</button>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                    <div *ngIf="enableMultipleSelection" class="col-md-6 paddingRightNone">
+                        <div contenteditable="false" class="prodSelected text-left" style="background-color: white; height: 100px; width: 100%; overflow: hidden auto;">
+                            <span *ngFor="let item of excludedProducts">
+                                <span class="product-list" [ngClass]="{'text-danger': isValidCapDetails(item)}" title="{{isValidCapDetails(item, true)}}">
+                                    {{item.HIER_VAL_NM}}  &nbsp;
+                                    <button (click)="removeProduct(item, 'exclude')" style="border:none;padding:0;height:0"> ×</button>
+                                </span>
+                            </span>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="excludeMode" class="row" style="padding-left:15px;padding-right:15px;">
+                    <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:100px; width:95%; overflow:scroll">
                         <span *ngFor="let item of excludedProducts">
                             <span class="product-list" [ngClass]="{'text-danger': isValidCapDetails(item)}" title="{{isValidCapDetails(item, true)}}">
-                                {{item.HIER_VAL_NM}}  &nbsp;
+                                {{item.HIER_VAL_NM}} &nbsp;
                                 <button (click)="removeProduct(item, 'exclude')" style="border:none;padding:0;height:0"> ×</button>
                             </span>
                         </span>
                     </div>
                 </div>
-            </div>
-            <div *ngIf="excludeMode" class="row" style="padding-left:15px;padding-right:15px;">
-                <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:100px; width:95%; overflow:scroll">
-                    <span *ngFor="let item of excludedProducts">
-                        <span class="product-list" [ngClass]="{'text-danger': isValidCapDetails(item)}" title="{{isValidCapDetails(item, true)}}">
-                            {{item.HIER_VAL_NM}} &nbsp;
-                            <button (click)="removeProduct(item, 'exclude')" style="border:none;padding:0;height:0"> ×</button>
-                        </span>
+                <br />
+                <div class="form-inline insertAtRowsText" style="margin-top:-30px">
+                    <span *ngIf="enableSplitProducts">
+                        <input id="separateProduct" class="checkbox-custom" [(ngModel)]="splitProducts" name="separateroducts" type="checkbox">
+                        <label for="separateProduct" class="checkbox-custom-label label-allowers" style="padding-bottom:5px;margin-top:0px;">&nbsp;Separate product in rows</label>
                     </span>
+                    <button class="btn btn-primary fr prdBtn disabled-save" [disabled]="!excludeMode && addedProducts.length == 0" (click)="save()">Save</button>
+                    <button class="btn btn-default fr prdBtn" (click)="cancel()" style="margin-right:4px;">Cancel</button>
                 </div>
-            </div>
-            <br />
-            <div class="form-inline insertAtRowsText" style="margin-top:-30px">
-                <span *ngIf="enableSplitProducts">
-                    <input id="separateProduct" class="checkbox-custom" [(ngModel)]="splitProducts" name="separateroducts" type="checkbox">
-                    <label for="separateProduct" class="checkbox-custom-label label-allowers" style="padding-bottom:5px;margin-top:0px;">&nbsp;Separate product in rows</label>
-                </span>
-                <button class="btn btn-primary fr prdBtn disabled-save" [disabled]="!excludeMode && addedProducts.length == 0" (click)="save()">Save</button>
-                <button class="btn btn-default fr prdBtn" (click)="cancel()" style="margin-right:4px;">Cancel</button>
             </div>
         </div>
     </div>
