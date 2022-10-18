@@ -86,7 +86,9 @@ export class MultiCheckFilterComponent implements AfterViewInit {
     protected valueAccessor = (dataItem: any) => this.isPrimitive ? dataItem : dataItem[this.valueField];
 
     public ngAfterViewInit() {
-        this.currentData = this.data;
+        //this code is to remove all falsy values
+        this.currentData =_.compact(this.data);
+        this.data=_.compact(this.data);
         if (this.textField != undefined && this.textField != null && this.textField != '' && this.valueField != undefined && this.valueField != null && this.valueField != null) {
           if (this.data && this.data.length>0 &&this.data.filter(x => x[this.textField] == 'Select All').length == 0) {
               let selectAlldata: any = {};
@@ -100,8 +102,10 @@ export class MultiCheckFilterComponent implements AfterViewInit {
           this.currentData.unshift('Select All')
       }
         this.value = this.currentFilter.filters.map((f: FilterDescriptor) => f.value);
-
-        this.showFilter = typeof this.textAccessor(this.currentData[0]) === 'string';
+        if(this.currentData && this.currentData.length>0){
+          this.showFilter = typeof this.textAccessor(this.currentData[0]) === 'string';
+        }
+       
     }
 
     public isItemSelected(item) {

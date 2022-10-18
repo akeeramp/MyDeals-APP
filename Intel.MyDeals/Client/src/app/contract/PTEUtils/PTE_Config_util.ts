@@ -1,6 +1,8 @@
 
 export class PTE_Config_Util {
-
+    static girdMaxRows:number=200;
+    static gridMinRows:number=150;
+    static maxKITproducts: number = 10;
     static productValidationDependencies = [
         "GEO_COMBINED", "PROGRAM_PAYMENT", "PROD_INCLDS", "REBATE_TYPE", "MRKT_SEG"
     ];
@@ -30,7 +32,7 @@ export class PTE_Config_Util {
         { "title": "End PB", "field": "END_PB", "format": "number", "align": "right" }, //TODO: inject angular $filter with new textOrNumber filter and use it as format, then we can avoid the double ng-if duplicate in the tmplt below, removing the ng-if all together
         { "title": "Rate", "field": "DENSITY_RATE", "format": "currency", "align": "right" }
     ];
-    static maxKITproducts: number = 10;
+   
     static tenderDropDownAtrbs = ["DEAL_COMB_TYPE", "CONTRACT_TYPE", "PERIOD_PROFILE", "RESET_VOLS_ON_PERIOD", "BACK_DATE_RSN", "CONSUMPTION_REASON", "MRKT_SEG", "QLTR_BID_GEO", "SETTLEMENT_PARTNER", "EXPIRE_FLG","SERVER_DEAL_TYPE"];
     static contractDropDownAtrbs = ["DEAL_COMB_TYPE", "CONTRACT_TYPE", "PERIOD_PROFILE", "RESET_VOLS_ON_PERIOD", "BACK_DATE_RSN", "CONSUMPTION_REASON", "MRKT_SEG", "SEND_TO_VISTEX", "SERVER_DEAL_TYPE", "SETTLEMENT_PARTNER", "EXPIRE_FLG"];
     static dimPrdBktFields = ["TRKR_NBR", "ECAP_PRICE", "CAP", "CAP_STRT_DT", "CAP_END_DT", "YCS2_PRC_IRBT", "YCS2_START_DT", "YCS2_END_DT"];

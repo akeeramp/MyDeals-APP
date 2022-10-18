@@ -323,13 +323,6 @@ export class managerPctComponent {
             this.loggerSvc.error('Get Upper Contract service', error);
         });
     }
-    saveAndRunMeetComp() {
-        //kujoih
-    }
-
-    forceRunMeetComp() {
-        //sjcvacv
-    }
 
     showHelpTopicCostTest() {
         const helpTopic = "Cost+Test";

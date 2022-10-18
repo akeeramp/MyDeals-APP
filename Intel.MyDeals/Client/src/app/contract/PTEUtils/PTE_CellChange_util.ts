@@ -9,6 +9,7 @@ import { ptBR } from 'handsontable/i18n';
 import { PTE_Helper_Util } from './PTE_Helper_util';
 import { PTEUtil } from './PTE.util';
 import * as moment from 'moment';
+import { PTE_Config_Util } from './PTE_Config_util';
 
 export class PTE_CellChange_Util {
     constructor(hotTable: Handsontable) {
@@ -338,7 +339,9 @@ export class PTE_CellChange_Util {
         let updateRows = [];
         if (items && items.length == 1) {
             const selrow = items[0].row;
-            let prods = items[0].new.split(',');
+            //to identify the uniq records
+            let prods =_.uniq(items[0].new.split(','));
+            items[0].new=prods.toString();
             if (!this.isAlreadyChange(selrow)) {
                 //identify the empty row and add it there
                 let empRow = this.returnEmptyRow();
@@ -351,12 +354,14 @@ export class PTE_CellChange_Util {
                 }
                 //based on the number of products listed we have to iterate the 
                 let prodIndex = 0;
-                for (let i = empRow; i < parseInt(prods.length) + empRow; i++) {
+                //KIT Deal will not allow more than 10 rows
+                let prdlen=prods.length>10?PTE_Config_Util.maxKITproducts:prods.length;
+                for (let i = empRow; i < prdlen + empRow; i++) {
                     this.addUpdateRowOnchangeKIT(this.hotTable, columns, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex], null, operation);
                     prodIndex++;
                 }
                 //calling the merge cells option based of number of products
-                this.getMergeCellsOnEditKit(false, empRow, prods.length, pricingTableTemplates);
+                this.getMergeCellsOnEditKit(false, empRow, prdlen, pricingTableTemplates);
             }
             else {
                 if (items[0].old != items[0].new) {
@@ -379,7 +384,9 @@ export class PTE_CellChange_Util {
                         this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'normal-product');
                     }
                     let prodIndex = 0;
-                    for (let i = selrow; i < parseInt(prods.length) + selrow; i++) {
+                    //KIT Deal will not allow more than 10 rows
+                    let prdlen=prods.length>10?PTE_Config_Util.maxKITproducts:prods.length;
+                    for (let i = selrow; i < prdlen + selrow; i++) {
                         this.addUpdateRowOnchangeKIT(this.hotTable, columns, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex], DataOfRow[prodIndex], operation);
                         prodIndex++;
                     }
@@ -398,21 +405,25 @@ export class PTE_CellChange_Util {
         //in case of copy paste or autofill
         else {
             //for length greater than 1 it will either copy or autofill so first cleaning those records since its prod the length can be predicted so deleting full
-            this.hotTable.alter('remove_row', items[0].row, 150, 'no-edit');
+            this.hotTable.alter('remove_row', items[0].row, PTE_Config_Util.girdMaxRows, 'no-edit');
             //identify the empty row and the next empty row will be the consecutive one
             let empRow = this.returnEmptyRow();
             _.each(items, (cellItem) => {
                 let ROW_ID = this.rowDCID();//_.random(250); // will be replace with some other logic
                 //add num of tier rows the logic will be based on autofill value
-                let prods = cellItem.new.split(','), prodIndex = 0;
-                for (let i = empRow; i < parseInt(prods.length) + empRow; i++) {
+                let prods = _.uniq(cellItem.new.split(',')), prodIndex = 0;
+                 //to identify the uniq records
+                cellItem.new=prods.toString();
+                //KIT Deal will not allow more than 10 rows
+                let prdlen=prods.length>10?PTE_Config_Util.maxKITproducts:prods.length;
+                for (let i = empRow; i < prdlen + empRow; i++) {
                     this.addUpdateRowOnchangeKIT(this.hotTable, columns, i, cellItem, ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex], null, operation);
                     prodIndex++;
                 }
                 //calling the merge cells optionfor tier 
-                this.getMergeCellsOnEdit(empRow, parseInt(prods.length), pricingTableTemplates);
+                this.getMergeCellsOnEdit(empRow,prdlen,pricingTableTemplates);
                 //the next empty row will be previus empty row + num of tiers;
-                empRow = empRow + parseInt(prods.length);
+                empRow = empRow + prdlen;
             });
         }
         if (updateRows && updateRows.length > 0) {

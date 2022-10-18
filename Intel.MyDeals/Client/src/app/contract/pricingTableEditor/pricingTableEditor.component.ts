@@ -274,8 +274,8 @@ export class pricingTableEditorComponent implements OnChanges {
     // Handsontable Variables basic hottable structure
     private hotSettings: Handsontable.GridSettings = {
         wordWrap: false,
-        minRows: 100,
-        maxRows: 150,
+        minRows: PTE_Config_Util.gridMinRows,
+        maxRows: PTE_Config_Util.girdMaxRows,
         colHeaders: false,
         rowHeaders: true,
         rowHeaderWidth: 0,
@@ -482,8 +482,7 @@ export class pricingTableEditorComponent implements OnChanges {
         // Loading new data
         this.newPTR = PTR;
         //In some redirection scenario the code is showing error so must make sure the binding is happening only if there is and instance
-        let instance= this.hotRegisterer.getInstance(this.hotId);
-        if (instance){
+        if (this.hotRegisterer && this.hotRegisterer.getInstance(this.hotId)){
             this.hotTable.loadData(PTR);
             // Update settings  with new commented cells and erge cells
             this.hotTable.updateSettings({
