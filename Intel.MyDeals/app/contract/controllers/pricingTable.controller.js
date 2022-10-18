@@ -3839,7 +3839,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
         else {
             var iscustdivnull = pricingtableutil.isCustDivisonNull(data, $scope.contractData.CUST_ACCNT_DIV);
             if (iscustdivnull) {
-                kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
+                kendo.confirm("The division is blank.  Do you intend for this deal to apply to all divisions?").then(function () {
                     ValidateProducts(data, false, true);
                 }, function () {
                     return;
@@ -3856,7 +3856,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
 
         var iscustdivnull = pricingtableutil.isCustDivisonNull(data, $scope.contractData.CUST_ACCNT_DIV);
         if (iscustdivnull) {
-            kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
+            kendo.confirm("The division is blank.  Do you intend for this deal to apply to all divisions?").then(function () {
                 ValidateProducts(data, true, true);
             }, function () {
                 $scope.setBusy("", "");
@@ -4022,7 +4022,7 @@ function PricingTableController($scope, $state, $stateParams, $filter, confirmat
                     root._dirty = true;
                 }
                 if (colName === "CUST_ACCNT_DIV" && $scope.contractData.CUST_ACCNT_DIV != "" && selectedItem == "") {
-                    kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
+                    kendo.confirm("The division is blank.  Do you intend for this deal to apply to all divisions?").then(function () {
                         context.callback(selectedItem);
                     }, function () {
                         context.callback(cellCurrVal);

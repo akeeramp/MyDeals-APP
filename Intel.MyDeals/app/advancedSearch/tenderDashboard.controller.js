@@ -1959,7 +1959,7 @@
                 else { // If it passes, do this
                     if ($scope.isValid) {
                         if (ct._behaviors.isHidden["CUST_ACCNT_DIV_UI"] == false && ct.CUST_ACCNT_DIV == "") {
-                            kendo.confirm("The division is blank. Do you intend for this deal to apply to all divisions ?").then(function () {
+                            kendo.confirm("The division is blank.  Do you intend for this deal to apply to all divisions?").then(function () {
                                 $scope.copyTenderFolioContract();
                             },
                                 function () {
