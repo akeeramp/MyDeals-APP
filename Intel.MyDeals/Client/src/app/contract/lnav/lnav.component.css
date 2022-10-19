@@ -553,3 +553,10 @@ lnavview .navIconLnk-small-wrapper {
 .deleteptstyle .k-window-content {
     padding: 35px !important
 }
+button.btn.btn-sm.btn-primary.lnavaddbtnstyle {
+    font-size: 12px !important;
+    margin-left: 6px !important;
+    background: #00AEEF !important;
+    padding: 7px 10px !important;
+    border-color: #367fa9 !important;
+}

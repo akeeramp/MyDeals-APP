@@ -4,7 +4,7 @@ import { downgradeComponent } from "@angular/upgrade/static";
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, SelectAllCheckboxState } from "@progress/kendo-angular-grid";
-import { process, State } from "@progress/kendo-data-query";
+import { distinct, process, State } from "@progress/kendo-data-query";
 import * as _ from "underscore";
 import * as moment from 'moment';
 import * as lodash from "lodash";
@@ -149,6 +149,10 @@ export class ProductSelectorComponent {
             },
             panelClass: 'product-breakout-modal'
         });
+    }
+
+    distinctPrimitive(fieldName: string): any {
+        return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }
 
     cancel(): void {
