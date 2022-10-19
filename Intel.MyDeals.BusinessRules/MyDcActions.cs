@@ -1615,7 +1615,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 if (endDate > maxEndDt)
                 {
-                    deEndDate.AddMessage("For Accrual products, the end date is limited to 1 Intel Calendar Year from deal start date.  The latest end date you can use is " + maxEndDt.ToString("MM/dd/yyyy") + ".");
+                    deEndDate.AddMessage("For Accrual products, the End Date is limited to 1 Intel Calendar Year from Start Date.  The latest End Date you can use is " + maxEndDt.ToString("MM/dd/yyyy") + ".");
                 }
             }
             else if (deRowType == "Draining")
@@ -3317,6 +3317,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deBillingsEndDate = r.Dc.GetDataElement(AttributeCodes.REBATE_BILLING_END);
             string payoutBasedOn = r.Dc.GetDataElementValue(AttributeCodes.PAYOUT_BASED_ON);
             string dealType = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
+            string fieldTagMsg = "";
 
             if (deNumTiers == null || deStartDate == null || deEndDate == null) return;
 
@@ -3335,6 +3336,7 @@ namespace Intel.MyDeals.BusinessRules
                     startDate = DateTime.Parse(deBillingsStartDate.AtrbValue.ToString()).Date;
                     endDate = DateTime.Parse(deBillingsEndDate.AtrbValue.ToString()).Date;
                     deTagMsgTo = deBillingsEndDate;
+                    fieldTagMsg = "Billing ";
                 }
                 else
                 {
@@ -3358,7 +3360,7 @@ namespace Intel.MyDeals.BusinessRules
 
                 if (endDate > maxEndDt)
                     {
-                        deTagMsgTo.AddMessage("End date is limited to 1 Intel Calendar Year from deal start date.  The latest end date you can use is " + maxEndDt.ToString("MM/dd/yyyy") + ".");
+                        deTagMsgTo.AddMessage(fieldTagMsg + "End Date is limited to 1 Intel Calendar Year from " + fieldTagMsg + "Start Date.  The latest " + fieldTagMsg + "End Date you can use is " + maxEndDt.ToString("MM/dd/yyyy") + ".");
                     }
             }
         }
