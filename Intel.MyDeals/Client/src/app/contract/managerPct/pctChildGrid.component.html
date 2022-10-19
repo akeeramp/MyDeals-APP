@@ -47,7 +47,7 @@
     <kendo-grid-column title="Deal Stage" field="WF_STG_CD" [headerClass]="{'headerClass':true}" [width]="80"
                        [hidden]="true"></kendo-grid-column>
     <kendo-grid-column title="CAP" field="CAP" [headerClass]="{'headerClass':true}" [width]="100"
-        [hidden]="!hasPermissionPrice" *ngIf="!isHidden('CAP')">
+        [hidden]="!hasSpecialPricePermission" *ngIf="!isHidden('CAP')">
         <ng-template kendoGridCellTemplate let-dataItem>
              <span [ngClass]="{'cell-warning': isErrorOrWarning(dataItem, 'CAP'),'cell-information':isInformation(dataItem,'CAP')}">
                  {{dataItem.CAP | currency}}
@@ -115,7 +115,13 @@
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column title="Retail Pull $" field="RTL_PULL_DLR" [headerClass]="{'headerClass':true}" [width]="100"
-                       [hidden]="!hasSpecialPricePermission" *ngIf="!isHidden('RTL_PULL_DLR')"></kendo-grid-column>
+                       [hidden]="!hasSpecialPricePermission" *ngIf="!isHidden('RTL_PULL_DLR')">
+                       <ng-template kendoGridCellTemplate let-dataItem>
+                         <span>
+                             {{dataItem.RTL_PULL_DLR | currency}}
+                         </span>
+                     </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column title="Market Segment" field="MKT_SEG" [headerClass]="{'headerClass':true}" [width]="140" *ngIf="!isHidden('MKT_SEG')">
     </kendo-grid-column>
     <kendo-grid-column title="GEO" field="GEO" [headerClass]="{'headerClass':true}" [width]="140" *ngIf="!isHidden('GEO')"></kendo-grid-column>

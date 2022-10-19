@@ -62,7 +62,7 @@ export class managerExcludeGroupsComponent {
     private gridResult;
     public pricingStrategyFilter;
     private loading = true;
-
+    dirty: boolean;
     private state: State = {
         skip: 0,
         take: 25,
@@ -109,6 +109,7 @@ export class managerExcludeGroupsComponent {
         this.isLoading = true;
         this.managerExcludeGrpSvc.readWipExclusionFromContract(this.contractData.DC_ID).subscribe((result: any) => {
             this.isLoading = false;
+            this.dirty = false;
             this.gridResult = result.WIP_DEAL;
             for (let d = 0; d < this.gridResult.length; d++) {
                 const item = this.gridResult[d];
@@ -161,6 +162,7 @@ export class managerExcludeGroupsComponent {
                 dataItem._behaviors.isDirty = {};
             dataItem._behaviors.isDirty[field] = true;
             dataItem["_dirty"] = true;
+            this.dirty = true;
         }
     }
 
@@ -175,6 +177,7 @@ export class managerExcludeGroupsComponent {
 
     saveAndRunPct() {
         const dirtyRecords = this.gridResult.filter(x => x._dirty == true);
+        if(dirtyRecords.length != 0){
         this.isLoading = true;
         this.managerExcludeGrpSvc.updateWipDeals(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, dirtyRecords).subscribe((result: any) => {
             this.gridResult = result;
@@ -189,6 +192,7 @@ export class managerExcludeGroupsComponent {
             this.loggerSvc.error('Could not update exclude deals', error);
             this.isLoading = false;
         });
+        }
     }
     togglePctFilter() {
         //kujoih

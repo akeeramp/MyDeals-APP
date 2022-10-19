@@ -11,7 +11,7 @@
                     <div class="toolbar luna-css">
                         <div class="comp-calls">
                             <div class="fl">
-                                <button class="btn btn-sm btn-save ssToolbarBtn"
+                                <button class="btn btn-sm btn-save ssToolbarBtn" [ngClass]="{'notdirty': !dirty}" 
                                         (click)="saveAndRunPct()" title="Save and Run Price Cost Test">
                                     <loading-panel-angular id="ExcludeDealLoading" style="z-index:500;" [show]="isLoading"
                                                            [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>
