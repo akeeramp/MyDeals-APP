@@ -20,8 +20,8 @@ img {
     z-index: 200;
 }
 
-.mat-dialog-container {
-    padding: 0px !important;
+mat-dialog-container:has(notificationssettingsdialog) {
+    padding: 0 !important;
 }
 
 hr {

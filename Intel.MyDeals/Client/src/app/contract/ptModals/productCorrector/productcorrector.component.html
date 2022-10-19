@@ -58,7 +58,7 @@
                 </div>
             </div>
             <div class="row" style="margin-top: 10px; height: 436px; overflow: hidden;">
-                <div class="col-md-3 lnavFilter">
+                <div class="col-md-3 lnavFilter blue-lnav">
                     <div class="row">
                         <div class="col">
                             <p class='filterTitleUnderline' *ngIf="selRowIssues.length > 0">Filter by product</p>
@@ -168,8 +168,7 @@
                                     <!-- CAP Info cell design -->
                                     <div [class.isSoftWarnCell]="dataItem.CAP.includes('No')" style="text-align: center;">
                                         <strong>{{ dataItem.CAP }}</strong>
-                                        <div *ngIf="!dataItem.CAP.includes('No')">
-                                            <br />
+                                        <div *ngIf="!dataItem.CAP.includes('No')" style="line-height:1;">
                                             {{ dataItem.CAP_START }} - {{ dataItem.CAP_END }}
                                         </div>
                                     </div>

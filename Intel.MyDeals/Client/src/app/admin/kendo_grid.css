@@ -510,3 +510,13 @@ kendo-dialog-actions.delete-actions button.k-button.del-cancel:hover, kendo-dial
 .mainBodyStyle:has(reporting-dashboard) {
     overflow-y: auto !important;
 }
+
+.ns-Header {
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+.ns-body {
+    position: relative;
+    padding: 15px;
+}

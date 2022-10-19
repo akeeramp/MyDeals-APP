@@ -426,7 +426,7 @@ a.prdAnchor:hover {
     width: 100%;
 }
 
-.mat-dialog-container {
+.product-corrector-dialog .mat-dialog-container {
     padding: 0px;
     height: fit-content;
     overflow: hidden;
@@ -462,15 +462,28 @@ a.prdAnchor:hover {
     color: #444;
 }
 
-.k-grid .k-grid-container {
+.product-corrector-dialog .k-grid .k-grid-container {
     overflow: auto !important;
 }
 
 .product-breakout-modal > mat-dialog-container {
     background-color: #1a3e6f !important;
-    padding: 0px !important;
+    padding: 15px !important;
 }
 
-.k-item  > .k-mid> span{
+.product-corrector-dialog .k-item > .k-mid > span {
     color: #000;
+}
+
+.lnavFilter.blue-lnav kendo-treeview ul li span {
+    background-color: transparent !important;
+    color: #00AEEF !important;
+}
+
+.lnavFilter.blue-lnav kendo-treeview ul li span span.badge.upperBadge {
+    background-color: #fff !important;
+}
+
+.product-breakout-modal mat-dialog-container product-breakout .modal-content {
+    box-shadow: none;
 }

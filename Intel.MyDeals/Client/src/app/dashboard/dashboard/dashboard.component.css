@@ -1259,3 +1259,11 @@ a:focus {
 kendo-grid.contract-history-style.k-widget.k-grid table tr td {
     font-size: 12px !important;
 }
+
+kendo-window.dashboard-kendo-window.process-search.k-window kendo-window-titlebar {
+    padding: 3px 15px;
+}
+
+kendo-window.dashboard-kendo-window.process-search.k-window kendo-window-titlebar .k-window-title {
+    padding: 0 !important;
+}

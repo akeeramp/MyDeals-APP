@@ -1109,6 +1109,7 @@ export class pricingTableEditorComponent implements OnChanges {
             height: '90vh',
             maxWidth: '90vw',
             data: data,
+            panelClass: "product-corrector-dialog",
         });
         dialogRef.afterClosed().subscribe((selProds: Array<ProdCorrectObj>) => {
             if (selProds) {
