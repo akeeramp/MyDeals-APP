@@ -998,7 +998,6 @@ export class pricingTableEditorComponent implements OnChanges {
 
 
         let translationInputToSend = PTEUtil.translationToSendObj(this.curPricingTable, currentPricingTableRowData, this.contractData, this.isExcludePrdChange);
-        this.isExcludePrdChange = false;
         let transformResults: any = null;
         // Products that needs server side attention
         if (translationInputToSend.length > 0) {
