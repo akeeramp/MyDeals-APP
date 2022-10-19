@@ -93,20 +93,26 @@ export class dealProductsModalComponent {
                 this.data.dataItem.OBJ_SET_TYPE_CD == 'REV_TIER' || this.data.dataItem.OBJ_SET_TYPE_CD == 'DENSITY';
             if (this.data.dataItem._contractPublished !== undefined && this.data.dataItem._contractPublished == 1) {
                 this.prods = this.data.dataItem.products;
-                _.each(this.prods, (value) => {
-                    this.prdIds.push(parseInt(value.PRD_MBR_SID));
-                });
+                if(this.prods && this.prods.length>0){
+                    _.each(this.prods, (value) => {
+                        this.prdIds.push(parseInt(value.PRD_MBR_SID));
+                    });
+                }
             } else {
-                _.each(this.prods, (value) => {
-                    this.prdIds.push(parseInt(value));
-                });
+                if(this.prods && this.prods.length>0){
+                    _.each(this.prods, (value) => {
+                        this.prdIds.push(parseInt(value));
+                    });
+                }
             }
             if(this.data.dataItem.OBJ_SET_TYPE_CD == 'ECAP' && !this.showDealProducts){
                 this.prods = this.data.dataItem.products;
                 this.prdIds =[];
-                for(let i=0;i< this.prods.length; i++){
-                    this.prdIds.push(this.prods[i].PCSR_NBR);
-                }            
+                if(this.prods && this.prods.length>0){ 
+                    for(let i=0;i< this.prods.length; i++){
+                        this.prdIds.push(this.prods[i].PCSR_NBR);
+                    }     
+                }
             }
             this.prdData = {
                 "PrdIds": this.prdIds

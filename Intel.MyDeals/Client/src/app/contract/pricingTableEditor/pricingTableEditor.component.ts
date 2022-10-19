@@ -242,6 +242,7 @@ export class pricingTableEditorComponent implements OnChanges {
     @Output() enableDeTab = new EventEmitter();
     @Output() refreshedContractData = new EventEmitter;
     public fontData:any[] = [
+        { text: "(inherited size)", size: "inherit" },
         { text: "1 (8pt)", size: "8" },
         { text: "2 (10pt)", size: "10" },
         { text: "3 (12pt)", size: "12" },
@@ -784,7 +785,7 @@ export class pricingTableEditorComponent implements OnChanges {
             this.isLoading = false;
         }
         catch(ex){
-            this.loggerService.error('Something wnet wrong.','Error');
+            this.loggerService.error('Something went wrong.','Error');
             console.error('DEAL_EDITOR::ngOnInit::',ex);
         }
      
