@@ -44,7 +44,7 @@
                 <div *ngIf="!(errorMessage.length > 0)">
                     <div *ngIf="!disableSelection">{{suggestionText}}</div>
                     <div class="productSelector Issue" *ngIf="disableSelection">Product(s) does not match the global filter criteria (Media Code in Autofill defaults for instance) or is not active within the deal date range.</div>
-                    <div style="padding-top:5px;">
+                    <div style="padding-top:5px;" id="prodGrid">
                         <table *ngIf="suggestedProducts.length !== 0" style="width: 100%; height: 100%;table-layout:fixed">
                             <tr>
                                 <td style="width:20%;min-width:20px;max-width:200px">
@@ -93,7 +93,7 @@
                                         <kendo-grid-column width="65px" [columnMenu]="false">
                                             <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                                                 <div class='dealTools'>
-                                                    <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="toggleSelectAll($event)">
+                                                    <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="toggleSelectAll($event, suggestedProducts)">
                                                 </div>
                                             </ng-template>
                                             <ng-template kendoGridCellTemplate let-dataItem>
@@ -116,9 +116,9 @@
                                                     <ng-template kendoGridCellTemplate let-dataItem>
                                                         <!-- Popover Template -->
                                                         <ng-template #popoverContent>
-                                                            <div class="container">
+                                                            <div class="popover-content">
                                                                 <div class="row">
-                                                                    <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
+                                                                    <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                                                                 </div>
                                                                 <div class="row">
                                                                     <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
@@ -143,9 +143,9 @@
                                                     <ng-template kendoGridCellTemplate let-dataItem>
                                                         <!-- Popover Template -->
                                                         <ng-template #popoverContent>
-                                                            <div class="container">
+                                                            <div class="popover-content">
                                                                 <div class="row">
-                                                                    <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
+                                                                    <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                                                                 </div>
                                                                 <div class="row">
                                                                     <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
@@ -183,7 +183,7 @@
                     <kendo-grid-column width="65px" [columnMenu]="false">
                         <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                             <div class='dealTools'>
-                                <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="toggleSelectAll($event)">
+                                <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="toggleSelectAll($event, gridData)">
                             </div>
                         </ng-template>
                         <ng-template kendoGridCellTemplate let-dataItem>
@@ -226,9 +226,9 @@
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <!-- Popover Template -->
                                     <ng-template #popoverContent>
-                                        <div class="container">
+                                        <div class="popover-content">
                                             <div class="row">
-                                                <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
+                                                <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                                             </div>
                                             <div class="row">
                                                 <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
@@ -253,9 +253,9 @@
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <!-- Popover Template -->
                                     <ng-template #popoverContent>
-                                        <div class="container">
+                                        <div class="popover-content">
                                             <div class="row">
-                                                <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
+                                                <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                                             </div>
                                             <div class="row">
                                                 <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
@@ -301,7 +301,7 @@
                             </ng-container>
                         </div>
                     </div>
-                    <div *ngIf="showSearchResults">
+                    <div *ngIf="showSearchResults" id="prodGrid">
                         <kendo-grid [data]="gridData" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
                             [resizable]="true" (dataStateChange)="dataStateChange($event)">
                             <kendo-grid-column width="65px" [columnMenu]="false">
@@ -350,9 +350,9 @@
                                         <ng-template kendoGridCellTemplate let-dataItem>
                                             <!-- Popover Template -->
                                             <ng-template #popoverContent>
-                                                <div class="container">
+                                                <div class="popover-content">
                                                     <div class="row">
-                                                        <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
+                                                        <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                                                     </div>
                                                     <div class="row">
                                                         <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
@@ -377,9 +377,9 @@
                                         <ng-template kendoGridCellTemplate let-dataItem>
                                             <!-- Popover Template -->
                                             <ng-template #popoverContent>
-                                                <div class="container">
+                                                <div class="popover-content">
                                                     <div class="row">
-                                                        <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
+                                                        <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                                                     </div>
                                                     <div class="row">
                                                         <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>

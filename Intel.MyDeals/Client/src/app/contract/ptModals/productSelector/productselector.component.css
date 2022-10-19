@@ -769,6 +769,15 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
     color: #00aeef !important
 }
 
+.CAPYCS2CellContent {
+    padding: 2px 4px;
+    border: 1px solid transparent;
+    min-height: 16px;
+    line-height: 1em;
+    font-family: arial;
+    text-align: center;
+}
+
 .CAPYCS2CellContent.accurate-height {
     height: 25px;
 }
@@ -786,4 +795,17 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
 
 .product-breakout-modal mat-dialog-container product-breakout .modal-content {
     box-shadow: none;
+}
+
+#prodGrid .k-grid td {
+    border-width: 0px !important;
+    padding: 0;
+    height: 50px;
+    color: #1a3e6f;
+    font-family: 'Intel Clear','Arial';
+    font-weight: 500;
+}
+
+#closePopover {
+    margin-left: 97% !important;
 }

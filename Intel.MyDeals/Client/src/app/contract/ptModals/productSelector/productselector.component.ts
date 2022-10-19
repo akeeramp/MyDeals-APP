@@ -1069,6 +1069,7 @@ export class ProductSelectorComponent {
     selectPath(index: number, dontClearSearch?) {
         this.hideSelection = false;
         this.showSuggestions = false;
+        this.disableSelection = false;
         if (dontClearSearch !== undefined && !dontClearSearch) {
             this.userInput = "";
         }
@@ -1317,11 +1318,13 @@ export class ProductSelectorComponent {
         this.gridData = process(this.gridResult, this.state);
     }
 
-    toggleSelectAll($event) {
-        this.gridData.data.forEach(dataItem => {
-            dataItem.selected = $event.target.checked;
-            this.selectProduct(dataItem);
-        })
+    toggleSelectAll($event, searchGrid) {
+        if (!this.disableSelection) {
+            searchGrid.forEach(dataItem => {
+                dataItem.selected = $event.target.checked;
+                this.selectProduct(dataItem);
+            })
+        }
     }
     ngOnInit() {
         this.loadPTSelctor();
