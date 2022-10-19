@@ -78,13 +78,13 @@
         border-color: #b1babf !important
     }
 
-label {
+/*label {
     display: inline-block !important;
     max-width: 100% !important;
     margin-bottom: 5px !important;
     font-weight: bold !important;
 }
-
+*/
 .dis-approve {
     margin-left: 67px;
 }
@@ -107,4 +107,10 @@ label {
 
 nav.navbar.navbar-default.rmv-padding.cc-pop-up {
     height: 50px;
+}
+.title_style {
+    display: inline-block !important;
+    max-width: 100% !important;
+    margin-bottom: 5px !important;
+    font-weight: bold !important;
 }

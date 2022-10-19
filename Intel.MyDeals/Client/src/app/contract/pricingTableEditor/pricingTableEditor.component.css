@@ -217,7 +217,8 @@ kendo-tabstrip.tabs-coll {
     left: 32% !important;
 }
 kendo-dialog-actions.pteokbtnstyle {
-    padding: 0px !important
+    padding: 0px !important;
+    gap: 0px;
 }
 button.k-button.mykbtnstyles {
     height: 55px !IMPORTANT;
@@ -234,5 +235,24 @@ button.k-button.mykbtnstyles:hover {
    color: #444 !important;
    background: #ebebeb !important;
    border-color: #fafafa !important
-
+}
+.k-button.new-k-button {
+    background: #00aeef !important;
+    color: #ffffff !important;
+    padding: 20px 10px;
+}
+.k-button.new-k-button:hover {
+    background: #0071c5 !important;
+    color: #ffffff !important;
+}
+.k-button.new-c-button {
+    background: #ffffff !important;
+    padding: 20px 10px;
+}
+.k-button.new-c-button:hover {
+    background: #ebebeb !important;
+    color: #444 !important;
+}
+.ptevalidopoup .k-window {
+    border-radius: 0;
 }

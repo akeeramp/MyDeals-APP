@@ -491,3 +491,17 @@ tr.k-alt.grey {
     font-family: 'Intel Clear' !important;
     top: 44px !important;
 }
+kendo-dialog-actions.popup-dialog {
+    padding: 1.3em 0;
+    width: 100%;
+    background: #dededd;
+}
+kendo-dialog-actions.popup-dialog:hover {
+    background: #ebebeb;
+}
+.kendo-alrt-btn.popup-button {
+    margin-right: 188px;
+}
+.popup-box .k-content {
+    padding: 10px !important;
+}

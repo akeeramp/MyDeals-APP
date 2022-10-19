@@ -64,16 +64,16 @@ kendo-toolbar-renderer {
     border-radius: 0px !important;
 }
 #emailbtnstyle.k-toolbar .k-button-group .k-button {
-    align-self: center;
-    background: transparent;
-    border: none;
-    color: #00aeef;
+    align-self: center !important;
+    background: #d3d3d300 !important;
+    border: none !important;
+    color: #00aeef !important;
 }
 #emailbtnstyle.k-toolbar .k-button-group .k-button:hover {
-    background: #ebebeb;
-    color: #444
+    background: #ebebeb !important;
+    color: #444 !important;
 }
-#emailbtnstyle .k-button.k-state-selected {
+#emailbtnstyle.k-toolbar .k-button-group .k-button.k-state-selected {
     box-shadow: none !important;
     background-color: #dbdbdb !important;
     border-color: #dbdbdb !important;
@@ -90,4 +90,14 @@ kendo-toolbar-renderer {
 }
 .btn-group.btn-group-sm.rolebtnstyle {
     height: 34px !important
+}
+.emaiPopUpstyle {
+    background-color: #003C71 !important;
+    color: #ffffff !important;
+    padding: 14px !important;
+    overflow-x: hidden !important;
+    border-bottom-color: #f4f4f4 !important;
+}
+.modal-header.modalBlueBody.emaiPopUpstyle {
+    border-bottom: 0.5px solid #f4f4f4 !important;
 }

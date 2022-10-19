@@ -170,10 +170,10 @@
             </div>
         </div>
         <div class="k-widget k-dialog k-window k-alert" *ngIf="showKendoAlert">
-            <kendo-dialog (close)="closeKendoAlert()">
-                <div style='margin-top: 15px;'>When excluding deals, a reason must be provided.</div>
-                <kendo-dialog-actions>
-                    <div kendoButton (click)="closeKendoAlert()" class="kendo-alrt-btn">OK</div>
+            <kendo-dialog (close)="closeKendoAlert()" class="popup-box">
+                <div style='margin: 30px;'>When excluding deals, a reason must be provided.</div>
+                <kendo-dialog-actions class="popup-dialog">
+                    <div kendoButton (click)="closeKendoAlert()" class="kendo-alrt-btn popup-button">OK</div>
                 </kendo-dialog-actions>
             </kendo-dialog>
         </div>
