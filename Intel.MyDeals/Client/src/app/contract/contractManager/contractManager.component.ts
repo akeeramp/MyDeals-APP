@@ -468,7 +468,7 @@ export class contractManagerComponent {
         <p><span style='font-size:20px; color:#00AEEF; font-weight: 600'>My Deals Action Required!</span></p>
         <p><span style='font-size:18px;'>Pricing Strategies</span></p>
         <p><span style='font-size: 12px;'>The following list of Pricing Strategies have changed.  Click <strong style='color:#00AEEF;'>View Pricing Strategy</strong> in order to view details in My Deals.</span></p>
-        <table>
+        <table style='width:auto; border-collapse: collapse;table-layout: fixed;overflow: auto;'>
             <thead>
                 <tr>
                     <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Contract</strong></th>
@@ -483,7 +483,7 @@ export class contractManagerComponent {
             <tbody>`+itemListRowString+`
             </tbody>
         </table>
-        <br />
+  
         <p><span style='font-size: 11px; color: black; font-weight: bold;'>*Links are optimized for Google Chrome</span></p>
         <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:${data.from}'>`+data.from+`</a>.</span></p>
         <br />
@@ -498,6 +498,7 @@ export class contractManagerComponent {
         };
         const dialogRef = this.dialog.open(emailModal, {
             width: "900px",
+            panelClass: 'emailmat-dialog-box',
             data: {
                 cellCurrValues: dataItem
             }

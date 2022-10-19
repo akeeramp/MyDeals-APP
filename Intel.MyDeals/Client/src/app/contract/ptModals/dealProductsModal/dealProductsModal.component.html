@@ -2,7 +2,7 @@
     <div class="col-md-12">
         <div class="arrow-parent">
             <div class="arrow-fs">
-                <h5 class="modal-title" id="modal-title">Products for deal {{data.dataItem.DC_ID}} <img *ngIf="loading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" /></h5>
+                <h5 class="modal-title dealpopupstyle" id="modal-title">Products for deal {{data.dataItem.DC_ID}} <img *ngIf="loading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" /></h5>
             </div>
             <div class="arrow-ss">
                 <div *ngIf="showDealProducts" class="dropdown dropdown-all-custom">
@@ -27,10 +27,10 @@
     <kendo-grid id="dealProduct" [data]="gridData" [navigable]="true" [loading]="isLoading" [skip]="state.skip"
                 [sort]="state.sort" [sortable]="true" [resizable]="true"                
                 (dataStateChange)="dataStateChange($event)"
-                class="opUiContainer dashboard op-grid k-grid k-widget k-reorderable k-editable k-grid-lockedcolumns md"
+                class="opUiContainer dashboard op-grid k-grid k-widget k-reorderable k-editable k-grid-lockedcolumns md dealproductgrid"
                 data-role="grid">
-        <ng-template kendoGridToolbarTemplate>
-            <button type="button" kendoGridExcelCommand icon="file-excel" class="excelText differ-artho-excel">Export to Excel</button>
+        <ng-template kendoGridToolbarTemplate class="excelborderstyle">
+            <button type="button" kendoGridExcelCommand icon="file-excel" class="excelText differ-artho-excel">EXCEL<br>EXPORT</button>
         </ng-template>
 
         <kendo-grid-column [headerClass]="{'headerClass': true}" field="HIER_VAL_NM" title="Product" width="160px"></kendo-grid-column>

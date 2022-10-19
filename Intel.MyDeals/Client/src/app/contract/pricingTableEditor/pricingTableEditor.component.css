@@ -216,3 +216,23 @@ kendo-tabstrip.tabs-coll {
 .ptrLoading > .ss-loading-overlay > .myLoader {
     left: 32% !important;
 }
+kendo-dialog-actions.pteokbtnstyle {
+    padding: 0px !important
+}
+button.k-button.mykbtnstyles {
+    height: 55px !IMPORTANT;
+}
+.ptevalidopoup .k-window-content {
+    padding: 0px !important
+}
+button.k-button.mykbtnstyles {
+    color: #444 !important;
+    border-color: #fafafa !important;
+    background: #dededd !important;
+}
+button.k-button.mykbtnstyles:hover {
+   color: #444 !important;
+   background: #ebebeb !important;
+   border-color: #fafafa !important
+
+}

@@ -550,3 +550,6 @@ lnavview .navIconLnk-small-wrapper {
     font-family: 'Intel Clear' !important;
     font-size: 15px !important
 }
+.deleteptstyle .k-window-content {
+    padding: 35px !important
+}

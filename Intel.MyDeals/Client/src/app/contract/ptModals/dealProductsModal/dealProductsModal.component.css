@@ -1,6 +1,6 @@
 ﻿.there-modal-body, .there-modal-header {
-    background-color: #003C71 !important;
-    color: #ffffff !important;
+    background-color: #ffffff !important;
+    color: #000000 !important;
 }
 
 .differ-artho-excel {
@@ -25,7 +25,7 @@
     padding: 0 !important;
 }
 
-.there-modal-body {
+/*.there-modal-body {
     padding: 20px !important;
 }
 
@@ -33,7 +33,7 @@
     border-bottom: 1px solid #fff !important;
     padding-bottom: 10px !important;
     padding-top: 10px !important;
-}
+}*/
 
 .arrow-parent {
     display: flex !important;
@@ -41,4 +41,47 @@
     justify-content: space-between !important;
     width: 100% !important;
     position: relative !important;
+}
+.dealpopupstyle {
+    font-size: 20px !important;
+    font-family: 'Intel Clear';
+    margin-left: -20px !important;
+    line-height: 1.5 !important;
+    font-family: 'Intel Clear' !important;
+    font-weight: 500 !important;
+    color: #111111 !important
+}
+.there-modal-header {
+    padding: 20px !important;
+    border-bottom: 1px solid #e5e5e59c !important;
+    min-height: 16.5px !important;
+}
+.deals-popup-style mat-dialog-container {
+    box-shadow: 0px 11px 15px -7px rgb(0 0 0 / 20%), 0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%) !important;
+    background: #fff !important;
+    padding: 0px !important;
+    border-radius: 0px !important;
+}
+.dealproductgrid.op-grid.k-grid {
+    width: 100% !important;
+    border-left: 0 solid transparent !important;
+    border-right: 0 solid transparent !important;
+    border-bottom: 0 solid transparent !important;
+    border-right: 1px solid #e6e6e6 !important;
+    border-left: 1px solid #e6e6e6 !important;
+    height: 300px !important;
+    border-bottom: #3343a4 !important;
+    margin-bottom: 0px !important;
+}
+button.excelText.differ-artho-excel.iconsize.k-button-icontext.k-button.k-grid-excel {
+    font-size: 12px !important;
+    font-family: 'Intel Clear' !important;
+    border: transparent !important;
+    box-shadow: none !important
+}
+.dropdown-all-custom .dropdown-menu > li > a:hover {
+    background: #a39e9e42 !important
+}
+.dealproductgrid.opUiContainer.md .k-icon {
+    font-size: 24px !important;
 }
