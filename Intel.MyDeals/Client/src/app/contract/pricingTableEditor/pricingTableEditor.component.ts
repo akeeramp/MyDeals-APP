@@ -660,14 +660,15 @@ export class pricingTableEditorComponent implements OnChanges {
        }
     }
     mergeKitDeal(){
-        this.isKitDialog=false;
         this.setBusy("PTE Reloading...", "PTE Reloading please wait", "Info", true);
+        this.isKitDialog=false;
         setTimeout(() => {
             //will delete the rows first this must be first step
             _.each(this.kitNameObj.PTR, (itm) => {
                 let PTR=PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
-                let PTRlen=_.where(PTR,{DEAL_GRP_NM: this.kitNameObj.name}).length;
-                let lastRow=_.findLastIndex(PTR,{DEAL_GRP_NM: this.kitNameObj.name});
+                PTR=_.map(PTR,(x)=>{ return {DEAL_GRP_NM:x['DEAL_GRP_NM'].toUpperCase()}});
+                let PTRlen=_.filter(PTR,(x)=>{return x.DEAL_GRP_NM.toUpperCase()==this.kitNameObj.name.toUpperCase()}).length;
+                let lastRow=_.findLastIndex(PTR,{DEAL_GRP_NM: this.kitNameObj.name.toUpperCase()});
                 if(PTRlen>1){
                     let prdlen=this.hotTable.getDataAtRowProp(lastRow,'PTR_USER_PRD').split(',').length;
                     this.hotTable.alter('remove_row', lastRow, prdlen, 'no-edit');

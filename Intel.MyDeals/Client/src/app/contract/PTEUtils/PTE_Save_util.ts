@@ -33,6 +33,11 @@ export class PTE_Save_Util {
         PTR = PTE_Validation_Util.validateOverArching(PTR, curPricingStrategy, curPricingTable);
         PTR = PTE_Validation_Util.validateMarketSegment(PTR, undefined, undefined);
         PTR = PTE_Validation_Util.validateHybridFields(PTR, curPricingStrategy, curPricingTable);
+        //*********these conditions are added recently by comparing the JS code will revist this**********
+        PTR=PTE_Validation_Util.validateFlexRowType(PTR, curPricingStrategy, curPricingTable, null, undefined, false);
+        PTR=PTE_Validation_Util.validateMarketSegment(PTR, null, undefined);
+        PTR=PTE_Validation_Util.validateFlexRules(PTR, curPricingTable, null, false);
+       //*********these conditions are added recently by comparing the JS code will revist this**********
         if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY' && validMisProd && validMisProd.length > 0) {
             PTR = this.ValidateDensityPTR(PTR, validMisProd)
         }

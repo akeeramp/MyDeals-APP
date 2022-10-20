@@ -929,7 +929,7 @@ export class PTE_Validation_Util {
             data = this.clearValidation(data, 'AR_SETTLEMENT_LVL');
             data = this.clearValidation(data, 'CONSUMPTION_TYPE');
             this.itemValidationBlock(data, "REBATE_TYPE", ["notequal", "equalblank"], curPricingTable);
-            if (hybCond = "1") {
+            if (hybCond == "1") {
                 this.itemValidationBlock(data, "PAYOUT_BASED_ON", ["notequal"], curPricingTable);
             }
             this.itemValidationBlock(data, "CUST_ACCNT_DIV", ["notequal"], curPricingTable);

@@ -813,7 +813,7 @@ export class PTE_CellChange_Util {
                 if(uniqnm && uniqnm !=''){
                     let curPTR=[];
                     _.each(PTR,(cr,row)=>{
-                        if(cr['DEAL_GRP_NM']==uniqnm){
+                        if(cr['DEAL_GRP_NM'].toUpperCase()==uniqnm.toUpperCase()){
                          cr['row']=row;
                          curPTR.push(cr);
                        }
@@ -840,23 +840,27 @@ export class PTE_CellChange_Util {
     static mergeKitDeal(items: any, columns: any[], curPricingTable: any,contractData:any,pricingTableTemplates:any){
         //first delete all the rows except the min one
         let PTR=PTE_Common_Util.getPTEGenerate(columns,curPricingTable);
-        let firstInd=_.findIndex(PTR,{DEAL_GRP_NM:items.name});
+        PTR=_.map(PTR,(x)=>{ return {DEAL_GRP_NM:x['DEAL_GRP_NM'].toUpperCase()}});
+        let firstInd=_.findIndex(PTR,{DEAL_GRP_NM:items.name.toUpperCase()});
         let prods='';
         _.each(items.PTR,PTR=>{
             prods=prods+PTR['PTR_USER_PRD']+',';
         });
          //modify the first cell with all uniq products
         let uniqprod=_.uniq(prods.substring(0, prods.length - 1).split(','));
+        //making sure not more than max KIT prod is available.
+        uniqprod=uniqprod.length>PTE_Config_Util.maxKITproducts?uniqprod.slice(0,PTE_Config_Util.maxKITproducts):uniqprod;
         let Row=[{ row: firstInd, prop:'PTR_USER_PRD' , old: this.hotTable.getDataAtRowProp(firstInd,'PTR_USER_PRD'), new: uniqprod.toString()}];
         PTE_CellChange_Util.autoFillCellonProdKit(Row,curPricingTable,contractData,pricingTableTemplates,columns);
         // compare the rows and see any products are repeating and only add repeating product to first one.
     }
     static closeKitDialog(items: any, columns: any[], curPricingTable: any,){
         let PTR=PTE_Common_Util.getPTEGenerate(columns,curPricingTable);
-        let firstInd=_.findIndex(PTR,{DEAL_GRP_NM:items.name});
+        PTR=_.map(PTR,(x)=>{ return {DEAL_GRP_NM:x['DEAL_GRP_NM'].toUpperCase()}});
+        let firstInd=_.findIndex(PTR,{DEAL_GRP_NM:items.name.toUpperCase()});
         _.each(PTR,(cr,ind)=>{
             //this will make sure we are not clearing first row
-            if(firstInd !=ind && cr['DEAL_GRP_NM']==items.name){
+            if(firstInd !=ind && cr['DEAL_GRP_NM'].toUpperCase()==items.name.toUpperCase()){
                 this.hotTable.setDataAtRowProp(ind,'DEAL_GRP_NM','','no-edit');
             }
         });
