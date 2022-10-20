@@ -63,6 +63,7 @@ export class managerExcludeGroupsComponent {
     public pricingStrategyFilter;
     private loading = true;
     dirty: boolean;
+    pctFilterEnabled:boolean = false;
     private state: State = {
         skip: 0,
         take: 25,
@@ -120,6 +121,10 @@ export class managerExcludeGroupsComponent {
             }
             this.displayDealTypes();
             this.gridData = process(this.gridResult, this.state);
+            if(this.showPCT){
+                this.pctFilterEnabled= true;
+                this.togglePctFilter();
+            }
         }, (error) => {
             this.loggerSvc.error('Customer service', error);
             this.isLoading = false;
@@ -195,7 +200,24 @@ export class managerExcludeGroupsComponent {
         }
     }
     togglePctFilter() {
-        //kujoih
+        let pctFilteredInCompleteList = this.gridResult.filter(x => x.COST_TEST_RESULT == "InComplete");
+        let pctFilteredFailList = this.gridResult.filter(x => x.COST_TEST_RESULT == "Fail");
+        if(this.pctFilterEnabled){
+            if(pctFilteredFailList.length != 0 || pctFilteredInCompleteList.length != 0){
+                this.state.filter = {
+                    logic: "or",
+                    filters: [{ field: "COST_TEST_RESULT", operator: "eq", value: "Fail" },
+                    {field: "COST_TEST_RESULT",operator: "eq", value: "InComplete"}]
+                };
+            }
+        } else {
+            this.state.filter = {
+                logic: "and",
+                filters: [],
+            };
+        }
+        this.pctFilterEnabled= !this.pctFilterEnabled;
+        this.gridData = process(this.gridResult, this.state);
     }
     distinctPrimitive(fieldName: string) {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);

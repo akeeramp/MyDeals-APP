@@ -27,7 +27,7 @@
                             </div>
                             <div *ngIf="CAN_VIEW_COST_TEST && showPCT" class="fl" style="margin-left: 8px;">
                                 <button class="btn btn-sm ssToolbarBtn dd-out"
-                                        (click)="togglePctFilter()" [ngClass]="{'toggleSelect': pctFilterEnabled}"
+                                        (click)="togglePctFilter()" [ngClass]="{'toggleSelect': !pctFilterEnabled}"
                                         title="Show/Hide Only Price Cost Test Failures.">
                                     <table>
                                         <tr>

@@ -505,3 +505,6 @@ kendo-dialog-actions.popup-dialog:hover {
 .popup-box .k-content {
     padding: 10px !important;
 }
+.toggleSelect {
+    background-color: #eeeeee !important;
+}

@@ -127,14 +127,14 @@
                                     <kendo-grid-column title="ECAP" field="OVLP_ECAP_PRC"
                                                        [headerClass]="{'headerClass':true}" [width]="100">
                                         <ng-template kendoGridCellTemplate let-dataItem>
-                                            <span *ngIf="!pctGroupDealsView">{{getFormatedDim(dataItem, 'OVLP_ECAP_PRC', '20___0','currency')}}</span>
+                                            <span *ngIf="!pctGroupDealsView">{{dataItem.OVLP_ECAP_PRC | currency}}</span>
                                             <span *ngIf="pctGroupDealsView">{{dataItem.OVLP_ECAP_PRC | currency}}</span>
                                         </ng-template>
                                     </kendo-grid-column>
                                     <kendo-grid-column title="Max RPU" field="OVLP_MAX_RPU"
                                                        [headerClass]="{'headerClass':true}" [width]="120">
                                         <ng-template kendoGridCellTemplate let-dataItem>
-                                            <span *ngIf="!pctGroupDealsView">{{getFormatedDim(dataItem,'OVLP_MAX_RPU', '20___0','currency')}}</span>
+                                            <span *ngIf="!pctGroupDealsView">{{dataItem.OVLP_MAX_RPU | currency}}</span>
                                             <span *ngIf="pctGroupDealsView">{{dataItem.OVLP_MAX_RPU | currency}}</span>
                                         </ng-template>
                                     </kendo-grid-column>
