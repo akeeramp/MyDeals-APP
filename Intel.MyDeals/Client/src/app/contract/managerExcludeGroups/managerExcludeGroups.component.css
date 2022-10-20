@@ -495,12 +495,13 @@ kendo-dialog-actions.popup-dialog {
     padding: 1.3em 0;
     width: 100%;
     background: #dededd;
+    cursor: pointer;
 }
 kendo-dialog-actions.popup-dialog:hover {
     background: #ebebeb;
 }
 .kendo-alrt-btn.popup-button {
-    margin-right: 188px;
+    text-align: center !important;
 }
 .popup-box .k-content {
     padding: 10px !important;

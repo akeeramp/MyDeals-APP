@@ -141,6 +141,15 @@
     max-height: 600px;
     max-width: 1400px;
     overflow: auto;
-
+}
+.pxPage {
+    margin-top: 30px;
+}
+.contract-top-fixes {
+    margin-top: 70px;
+    height: calc(100vh - 177px);
+}
+.newDesc div.content {
+    margin-right: 30px;
 }
 

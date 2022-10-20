@@ -1,4 +1,4 @@
-<div *ngIf="!isLoading" style="padding: 0 20px;" class="contract-export addScrollbar">
+<div *ngIf="!isLoading" style="padding: 0 20px;" class="contract-export addScrollbar contract-top-fixes">
     <div class="fr">
         <i class="intelicon-pdf exportBtn" style="font-size:30px !important" (click)="exportToPDF()" title="Export to PDF"></i>
         <i class="intelicon-help helpBtn" style="font-size:30px !important" (click)="showHelpTopic()" title="Help"></i>
@@ -21,12 +21,12 @@
         <div class="amendmentsPage">
             <h1>Amendments</h1>
             <div class="row" *ngFor="let tl of timelineData">
-                <div class="col-md-3 timeDesc">
+                <div class="col-md-3 timeDesc newDesc">
                     <div class="content">
                         <span style="color: #FFA300;">#{{tl.OBJ_SID}}</span> {{tl.OBJ_DESC}}
                     </div>
                 </div>
-                <div class="col-md-6 timeDesc">
+                <div class="col-md-6 timeDesc newDesc">
                     <div class="content">
                         <span style="color: #0071C5;">{{tl.ATRB_VAL}}</span>
                     </div>
@@ -45,7 +45,7 @@
             <h1>{{ps.TITLE}}</h1>
             <div class="subText">#{{ps.DC_ID}}</div>
 
-            <div class="ptPage" *ngFor="let pt of ps.PRC_TBL">
+            <div class="ptPage pxPage" *ngFor="let pt of ps.PRC_TBL">
                 <h2>{{pt.TITLE}}</h2>
                 <div class="fl subText">#{{pt.DC_ID}}</div>
                 <div class="fl subObj">{{showObjType(pt.OBJ_SET_TYPE_CD)}}</div>
