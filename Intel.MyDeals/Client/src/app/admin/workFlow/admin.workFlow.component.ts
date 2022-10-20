@@ -56,6 +56,7 @@ export class adminWorkFlowComponent {
     public isDialogVisible = false;
     private isDataValid: any;
     public Work_Flow_Map: any;
+    public isObjSetTypeDropdownEnabled = true;
     public state: State = {
         skip: 0,
         take: 25,
@@ -124,12 +125,12 @@ export class adminWorkFlowComponent {
     loadDDLValues() {
         this.workflowSvc.GetDropDownValues()
             .subscribe((response: Array<any>) => {
-                this.distinctRoleTierNm = response.filter(x => x.COL_NM == "ROLE_TIER_NM").map(item => item.Value);
-                this.distinctObjType = response.filter(x => x.COL_NM == "OBJ_TYPE").map(item => item.Value);
-                this.distinctObjSetTypeCd = response.filter(x => x.COL_NM == "OBJ_SET_TYPE_CD").map(item => item.Value);
-                this.distinctWFSTGActnNm = response.filter(x => x.COL_NM == "WFSTG_ACTN_NM").map(item => item.Value);
-                this.distinctWFSTGCdSrc = response.filter(x => x.COL_NM == "WFSTG_CD_SRC_DEST").map(item => item.Value);
-                this.distinctWFSTGCdDest = response.filter(x => x.COL_NM == "WFSTG_CD_SRC_DEST").map(item => item.Value);
+                this.distinctRoleTierNm = response.filter(x => x.COL_NM == "ROLE_TIER_NM");
+                this.distinctObjType = response.filter(x => x.COL_NM == "OBJ_TYPE");
+                this.distinctObjSetTypeCd = response.filter(x => x.COL_NM == "OBJ_SET_TYPE_CD");
+                this.distinctWFSTGActnNm = response.filter(x => x.COL_NM == "WFSTG_ACTN_NM");
+                this.distinctWFSTGCdSrc = response.filter(x => x.COL_NM == "WFSTG_CD_SRC_DEST");
+                this.distinctWFSTGCdDest = response.filter(x => x.COL_NM == "WFSTG_CD_SRC_DEST");
             }, function (response) {
                 this.loggerSvc.error("Unable to get Work Flow.", response, response.statusText);
             });
@@ -149,20 +150,20 @@ export class adminWorkFlowComponent {
     addHandler({ sender }) {
         this.closeEditor(sender);
         this.formGroup = new FormGroup({
-            //WF_SID: new FormControl(),
-            //OBJ_TYPE_SID: new FormControl(),
-            //OBJ_SET_TYPE_SID: new FormControl(),
-            //WFSTG_ACTN_SID: new FormControl(),
-            //WFSTG_MBR_SID: new FormControl(),
-            //WFSTG_DEST_MBR_SID: new FormControl(),
+            WF_SID: new FormControl(),
+            OBJ_TYPE_SID: new FormControl("", Validators.required),
+            OBJ_SET_TYPE_SID: new FormControl(""),
+            WFSTG_ACTN_SID: new FormControl("", Validators.required),
+            WFSTG_MBR_SID: new FormControl("", Validators.required),
+            WFSTG_DEST_MBR_SID: new FormControl("", Validators.required),
             WF_NM: new FormControl("", Validators.required),
-            ROLE_TIER_NM: new FormControl("", Validators.required),            
-            OBJ_TYPE: new FormControl("", Validators.required),           
-            OBJ_SET_TYPE_CD: new FormControl(),
-            WFSTG_ACTN_NM: new FormControl("", Validators.required),
-            WFSTG_CD_SRC: new FormControl("", Validators.required),
-            WFSTG_CD_DEST: new FormControl("", Validators.required),
-            TRKR_NBR_UPD: new FormControl()
+            ROLE_TIER_NM: new FormControl("", Validators.required),
+            OBJ_TYPE: new FormControl(""),
+            OBJ_SET_TYPE_CD: new FormControl(""),
+            WFSTG_ACTN_NM: new FormControl(""),
+            WFSTG_CD_SRC: new FormControl(""),
+            WFSTG_CD_DEST: new FormControl(""),
+            TRKR_NBR_UPD: new FormControl(false)
         });
         this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
@@ -176,13 +177,19 @@ export class adminWorkFlowComponent {
         this.closeEditor(sender);
         this.isFormChange = false;
         this.formGroup = new FormGroup({
+            WF_SID: new FormControl(dataItem.WF_SID),
+            OBJ_TYPE_SID: new FormControl(dataItem.OBJ_TYPE_SID.toString(), Validators.required),
+            OBJ_SET_TYPE_SID: new FormControl(dataItem.OBJ_SET_TYPE_SID.toString()),
+            WFSTG_ACTN_SID: new FormControl(dataItem.WFSTG_ACTN_SID.toString(), Validators.required),
+            WFSTG_MBR_SID: new FormControl(dataItem.WFSTG_MBR_SID.toString(), Validators.required),
+            WFSTG_DEST_MBR_SID: new FormControl(dataItem.WFSTG_DEST_MBR_SID.toString(), Validators.required),
             WF_NM: new FormControl(dataItem.WF_NM, Validators.required),
             ROLE_TIER_NM: new FormControl(dataItem.ROLE_TIER_NM, Validators.required),
-            OBJ_TYPE: new FormControl(dataItem.OBJ_TYPE, Validators.required),
+            OBJ_TYPE: new FormControl(dataItem.OBJ_TYPE),
             OBJ_SET_TYPE_CD: new FormControl(dataItem.OBJ_SET_TYPE_CD),
-            WFSTG_ACTN_NM: new FormControl(dataItem.WFSTG_ACTN_NM, Validators.required),
-            WFSTG_CD_SRC: new FormControl(dataItem.WFSTG_CD_SRC, Validators.required),
-            WFSTG_CD_DEST: new FormControl(dataItem.WFSTG_CD_DEST, Validators.required),
+            WFSTG_ACTN_NM: new FormControl(dataItem.WFSTG_ACTN_NM),
+            WFSTG_CD_SRC: new FormControl(dataItem.WFSTG_CD_SRC),
+            WFSTG_CD_DEST: new FormControl(dataItem.WFSTG_CD_DEST),
             TRKR_NBR_UPD: new FormControl(dataItem.TRKR_NBR_UPD)
         });
         this.formGroup.valueChanges.subscribe(() => {
@@ -191,6 +198,10 @@ export class adminWorkFlowComponent {
         });
         this.editedRowIndex = rowIndex;
         sender.editRow(rowIndex, this.formGroup);
+    }
+
+    validateSetObjTypeDropdown(val) {
+        this.formGroup.value.OBJ_TYPE_SID = (val == null ? "" : val);
     }
 
     removeHandler({ dataItem }) {
@@ -226,6 +237,9 @@ export class adminWorkFlowComponent {
     }
 
     saveHandler({ sender, rowIndex, formGroup, isNew }) {
+        if (formGroup.value.OBJ_TYPE_SID.toString() == "1" || formGroup.value.OBJ_TYPE_SID.toString() == "2") {
+            formGroup.value.OBJ_SET_TYPE_SID = "";
+        }
         const Work_Flow_Map: Work_Flow_Map = formGroup.value;
         this.errorMsg = "";
         this.isDialogVisible = false;
@@ -284,12 +298,12 @@ export class adminWorkFlowComponent {
 
     toolTipvalidationMsgs(data) {
         this.formGroup.markAllAsTouched();
-        (data.WF_NM.value == "") ? this.WF_NMTooltip.open() : this.WF_NMTooltip.close();
-        (data.ROLE_TIER_NM.value == "") ? this.ROLE_TIER_NM_DdlTooltip.open() : this.ROLE_TIER_NM_DdlTooltip.close();
-        (data.OBJ_TYPE.value == "") ? this.OBJ_TYPE_DdlTooltip.open() : this.OBJ_TYPE_DdlTooltip.close();
-        (data.WFSTG_ACTN_NM.value == "") ? this.WFSTG_ACTN_NM_DdlTooltip.open() : this.WFSTG_ACTN_NM_DdlTooltip.close();
-        (data.WFSTG_CD_SRC.value == "") ? this.WFSTG_CD_SRC_DdlTooltip.open() : this.WFSTG_CD_SRC_DdlTooltip.close();
-        (data.WFSTG_CD_DEST.value == "") ? this.WFSTG_CD_DEST_DdlTooltip.open() : this.WFSTG_CD_DEST_DdlTooltip.close();
+        (data.WF_NM.value == "" || data.WF_NM.value == null) ? this.WF_NMTooltip.open() : this.WF_NMTooltip.close();
+        (data.ROLE_TIER_NM.value == "" || data.ROLE_TIER_NM.value == null) ? this.ROLE_TIER_NM_DdlTooltip.open() : this.ROLE_TIER_NM_DdlTooltip.close();
+        (data.OBJ_TYPE_SID.value == "" || data.OBJ_TYPE_SID.value == null) ? this.OBJ_TYPE_DdlTooltip.open() : this.OBJ_TYPE_DdlTooltip.close();
+        (data.WFSTG_ACTN_SID.value == "" || data.WFSTG_ACTN_SID.value == null) ? this.WFSTG_ACTN_NM_DdlTooltip.open() : this.WFSTG_ACTN_NM_DdlTooltip.close();
+        (data.WFSTG_MBR_SID.value == "" || data.WFSTG_MBR_SID.value == null) ? this.WFSTG_CD_SRC_DdlTooltip.open() : this.WFSTG_CD_SRC_DdlTooltip.close();
+        (data.WFSTG_DEST_MBR_SID.value == "" || data.WFSTG_DEST_MBR_SID.value == null) ? this.WFSTG_CD_DEST_DdlTooltip.open() : this.WFSTG_CD_DEST_DdlTooltip.close();
     }
 
     ngOnInit() {

@@ -19,10 +19,33 @@
     margin-right: -1em !important;
 }
 
+
 /*kendo-grid.box-heightinc {
     height: 652px;
 }*/
 
 .remove-spaceoutline {
     margin-left: -1.14em !important;
+}
+
+.disabledObjSetTypeDropdown {
+    pointer-events: none;
+    opacity: 0.7;
+}
+
+.confirmationTitle {
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+    border-bottom-color: #f4f4f4;
+    font-size: 28px;
+    text-align: left;
+}
+.cancelBtn{
+    color: black;
+}
+.deleteBtn {
+    background-color: #3c8dbc !important;
+}
+.kendoDialogBtn {
+    border-radius: 3px !important;
 }
