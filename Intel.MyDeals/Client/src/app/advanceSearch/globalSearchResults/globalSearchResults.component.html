@@ -12,7 +12,7 @@
         </div>
     </div>
     <div class="row no-gutters justify-content-start">
-        <div class="col" *ngIf="opType=='CNTRCT' || opType=='ALL'">
+        <div class="col" style="min-width:25% !important" *ngIf="opType=='CNTRCT' || opType=='ALL'">
             <h5>Contracts / Folio</h5>
             <div class="boderClass">
                 <div class="waiting no-items" [hidden]="!objTypes['CNTRCT'].loading">
@@ -43,7 +43,7 @@
                 <p style="text-align:right; margin-right:6px;" class="search-result-item" (click)="viewMore('CNTRCT')">view more</p>
             </div>
         </div>
-        <div class="col" *ngIf="opType=='PRC_ST' || opType=='ALL' ">
+        <div class="col" style="min-width:25% !important" *ngIf="opType=='PRC_ST' || opType=='ALL' ">
             <h5>Pricing Strategy</h5>
             <div class="boderClass">
                 <div class="waiting no-items" [hidden]="!objTypes['PRC_ST'].loading">
@@ -73,7 +73,7 @@
                 <p style="text-align:right; margin-right:6px;" class="search-result-item" (click)="viewMore('PRC_ST')">view more</p>
             </div>
         </div>
-        <div class="col" *ngIf="opType=='PRC_TBL' || opType=='ALL' ">
+        <div class="col" style="min-width:25% !important" *ngIf="opType=='PRC_TBL' || opType=='ALL' ">
             <h5>Pricing Table</h5>
             <div class="boderClass">
                 <div class="waiting no-items" [hidden]="!objTypes['PRC_TBL'].loading">
@@ -103,7 +103,7 @@
                 <p style="text-align:right; margin-right:6px;" class="search-result-item" (click)="viewMore('PRC_TBL')">view more</p>
             </div>
         </div>
-        <div class="col" *ngIf="opType=='WIP_DEAL' || opType=='ALL' ">
+        <div class="col" style="min-width:25% !important" *ngIf="opType=='WIP_DEAL' || opType=='ALL' ">
             <h5>Deal</h5>
             <div class="boderClass">
                 <div class="waiting no-items" [hidden]="!objTypes['WIP_DEAL'].loading">

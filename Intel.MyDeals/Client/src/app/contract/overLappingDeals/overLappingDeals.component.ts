@@ -126,8 +126,6 @@ export class overLappingDealsComponent {
             "currPt": this.contractData,
         }
         const dialogRef = this.dialog.open(OverlappingCheckComponent, {
-            height: '530px',
-            width: '800px',
             data: data,
         });
         dialogRef.afterClosed().subscribe(result => { });

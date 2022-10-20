@@ -282,3 +282,13 @@
 .cdk-overlay-pane{
     height: auto !important;
 }
+
+#autoLoading .ss-loading-overlay .myLoader {
+    left: 40% !important;
+}
+
+#autoLoading .ss-loading-overlay {
+    opacity: 1;
+    top: 0px;
+    left: 0px;
+}

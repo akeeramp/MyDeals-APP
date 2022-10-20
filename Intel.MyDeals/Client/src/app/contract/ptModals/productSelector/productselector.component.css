@@ -726,11 +726,13 @@ kendo-grid.raid-style {
 }
 
 #PTRLoading .ss-loading-overlay .myLoader {
-    left: 32% !important;
+    left: 40% !important;
 }
 
 #PTRLoading .ss-loading-overlay {
     opacity: 1;
+    top:0px;
+    left:0px;
 }
 
 .header-PS {

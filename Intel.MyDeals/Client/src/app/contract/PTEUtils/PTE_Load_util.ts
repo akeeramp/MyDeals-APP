@@ -669,17 +669,6 @@ export class PTE_Load_Util {
                 cellProperties['readOnly'] = true;
             }
             else {
-                if (hotTable.getDataAtRowProp(row, '_behaviors') != undefined && hotTable.getDataAtRowProp(row, '_behaviors') != null) {
-                    var behaviors = hotTable.getDataAtRowProp(row, '_behaviors');
-                    if (behaviors.isReadOnly != undefined && behaviors.isReadOnly != null) {
-                        if (behaviors.isReadOnly["ECAP_PRICE"] != undefined && behaviors.isReadOnly["ECAP_PRICE"] != null && prop == "ECAP_PRICE_____20_____1" && behaviors.isReadOnly["ECAP_PRICE"] == true) {
-                            cellProperties['readOnly'] = true;
-                        }
-                        if (behaviors.isReadOnly[prop] != undefined && behaviors.isReadOnly[prop] != null && behaviors.isReadOnly[prop] == true) {
-                            cellProperties['readOnly'] = true;
-                        }
-                    }
-                }
                 if (hotTable.getDataAtRowProp(row, 'DC_ID') != null) {
                     cellProperties['readOnly'] = false;
                 }
@@ -728,6 +717,17 @@ export class PTE_Load_Util {
                 //column config has readonly property for certain column persisting that assigning for other
                 if (_.findWhere(columnConfig, { data: prop }).readOnly) {
                     cellProperties['readOnly'] = true;
+                }
+                if (hotTable.getDataAtRowProp(row, '_behaviors') != undefined && hotTable.getDataAtRowProp(row, '_behaviors') != null) {
+                    var behaviors = hotTable.getDataAtRowProp(row, '_behaviors');
+                    if (behaviors.isReadOnly != undefined && behaviors.isReadOnly != null) {
+                        if (behaviors.isReadOnly["ECAP_PRICE"] != undefined && behaviors.isReadOnly["ECAP_PRICE"] != null && prop == "ECAP_PRICE_____20_____1" && behaviors.isReadOnly["ECAP_PRICE"] == true) {
+                            cellProperties['readOnly'] = true;
+                        }
+                        if (behaviors.isReadOnly[prop] != undefined && behaviors.isReadOnly[prop] != null && behaviors.isReadOnly[prop] == true) {
+                            cellProperties['readOnly'] = true;
+                        }
+                    }
                 }
                 if (curPricingTable.PS_WF_STG_CD == 'Approved' && curPricingTable.PASSED_VALIDATION == 'Dirty' && prop == 'SETTLEMENT_PARTNER' && hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == 'Cash') {
                     cellProperties['readOnly'] = false;
