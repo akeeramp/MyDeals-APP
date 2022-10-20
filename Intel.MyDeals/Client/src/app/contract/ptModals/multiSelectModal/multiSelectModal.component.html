@@ -28,23 +28,28 @@
         </div>
         <div class="row">
             <div class="col">
-                <div mat-dialog-content>
-                    <kendo-multiselect class="fiend-all" [(ngModel)]="checkedKeys" [placeholder]="placeholderText" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false"></kendo-multiselect>                    
-                        <kendo-treeview class="fiend-tree" [nodes]="multiSelectData"
-                                        filterInputPlaceholder="Type here to filter the values.."
-                                        kendoTreeViewHierarchyBinding
-                                        childrenField="items"
-                                        [textField]="multiSelectPopUpModal.opLookupText"
-                                        [children]="fetchChildren"
-                                        [hasChildren]="hasChildren"
-                                        [kendoTreeViewCheckable]="checkableSettings"
-                                        [(checkedKeys)]="checkedKeys"
-                                        [checkBy]="key"
-                                        [isChecked]="isChecked"
-                                        [filterable]="isFilterEnabled"
-                                        (checkedKeysChange)="onSelectionChange($event)">
-                        </kendo-treeview>
-                </div>                
+                <div mat-dialog-content *ngIf="!ismrktSeg">
+                    <kendo-multiselect class="fiend-all" [(ngModel)]="checkedKeys" [placeholder]="placeholderText" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false"></kendo-multiselect>
+                    <kendo-treeview class="fiend-tree" [nodes]="multiSelectData"
+                                    filterInputPlaceholder="Type here to filter the values.."
+                                    kendoTreeViewHierarchyBinding
+                                    childrenField="items"
+                                    [textField]="multiSelectPopUpModal.opLookupText"
+                                    [children]="fetchChildren"
+                                    [hasChildren]="hasChildren"
+                                    [kendoTreeViewCheckable]="checkableSettings"
+                                    [(checkedKeys)]="checkedKeys"
+                                    [checkBy]="key"
+                                    [isChecked]="isChecked"
+                                    [filterable]="isFilterEnabled"
+                                    (checkedKeysChange)="onSelectionChange($event)">
+                    </kendo-treeview>
+                </div>
+                <div mat-dialog-content *ngIf="ismrktSeg">
+                    <kendo-multiselect [(ngModel)]="multSlctMkgValues" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false" (valueChange)="onMarkSegChange($event)"></kendo-multiselect>
+                    <kendo-treeview [nodes]="marketSeglist" textField="DROP_DOWN" [children]="fetchChildren" [hasChildren]="hasChildren" kendoTreeViewCheckable [(checkedKeys)]="mkgvalues" checkBy="DROP_DOWN" [isChecked]="isMkgChecked" (checkedKeysChange)="onMktgValueChange($event)">
+                    </kendo-treeview>
+                </div>
             </div>
         </div>
         <br />

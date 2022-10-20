@@ -610,6 +610,9 @@ export class pricingTableEditorComponent implements OnChanges {
                     PTE_CellChange_Util.dateChange(endDt, 'END_DT', this.contractData);
                 }
                 if ((PTR_EXLDS && PTR_EXLDS.length > 0)) {
+                    let selrow = PTR_EXLDS[0].row;
+                    let PTR_Exccol_ind = _.findIndex(this.columns, { data: 'PRD_EXCLDS' });
+                    this.hotTable.setCellMeta(selrow, PTR_Exccol_ind, 'className', 'normal-product');
                     this.isExcludePrdChange = true;
                 }
                 this.enableDeTab.emit(true);                
@@ -914,7 +917,9 @@ export class pricingTableEditorComponent implements OnChanges {
             let PTR_col_ind = _.findIndex(this.columns, { data: 'PTR_USER_PRD' });
             _.each(updatedPTRObj.rowData, (data, idx) => {
                 this.hotTable.setDataAtRowProp(idx, 'PTR_SYS_PRD', data.PTR_SYS_PRD, 'no-edit');
-                if (this.curPricingTable.OBJ_SET_TYPE_CD != 'KIT' && this.curPricingTable.OBJ_SET_TYPE_CD != 'ECAP') {
+                // Do not update the cell value if exclude product is invalid/NULL
+                if (this.curPricingTable.OBJ_SET_TYPE_CD != 'KIT' && this.curPricingTable.OBJ_SET_TYPE_CD != 'ECAP'
+                    && data.PRD_EXCLDS != null && data.PRD_EXCLDS != "") {
                     this.hotTable.setDataAtRowProp(idx, 'PRD_EXCLDS', data.PRD_EXCLDS, 'no-edit');
                 }
                 if (data && data._behaviors && data._behaviors.isError) {
@@ -1013,13 +1018,14 @@ export class pricingTableEditorComponent implements OnChanges {
                     this.loggerService.error("Product Translator failure::", error);
                 })
             this.trackTranslationprod = [];
+            //map the user input value with product transion data for updating in the handson table
             for (let i = 0; i < translationInputToSend.length; i++) {
-                let oldvalue = translationInputToSend[i].USR_INPUT;
+                let oldvalue = _.sortBy(translationInputToSend[i].USR_INPUT.split(',')).toString();
                 let ROW_NUMBER = translationInputToSend[i].ROW_NUMBER;
                 if (transformResults.Data.ProdctTransformResults != null && transformResults.Data.ProdctTransformResults != undefined) {
                     if (transformResults.Data.ProdctTransformResults[ROW_NUMBER] != undefined) {
-                        let transProd = transformResults.Data.ProdctTransformResults[ROW_NUMBER];
-                        this.trackTranslationprod.push({ old: oldvalue, new: transProd.I[0] })
+                        let transProd = _.sortBy(transformResults.Data.ProdctTransformResults[ROW_NUMBER].I).toString();
+                        this.trackTranslationprod.push({ old: oldvalue, new: transProd })
                     }
                 }
             }  
@@ -1140,8 +1146,11 @@ export class pricingTableEditorComponent implements OnChanges {
                         //there can be valid invalid prod so we need to bind prod corrector result to the success
                         let Curr_PTR = PTE_CellChange_Util.getPTRObjOnProdCorr(selProd, selProds, idx, trncoldVal);
                         selRow = Curr_PTR[0].row;
-                        operation = PTE_CellChange_Util.getOperationProdCorr(selProd);
-                        PTE_CellChange_Util.autoFillCellOnProd(Curr_PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, operation);
+                        //Until all the invalid products are selected from product corrector , don’t update the handson table
+                        if (selProd.name.split(',').length == selProd.items.length) {
+                            operation = PTE_CellChange_Util.getOperationProdCorr(selProd);
+                            PTE_CellChange_Util.autoFillCellOnProd(Curr_PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, operation);
+                        }
                     }
                     if (idx == selProds.length - 1) {
                         //handonsontable takes time to bind the data to the so putting this logic.

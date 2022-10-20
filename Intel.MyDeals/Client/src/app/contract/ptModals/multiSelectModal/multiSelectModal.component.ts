@@ -46,6 +46,10 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
     private checkChildren: boolean;
     private checkParents: boolean;
     private mode: any;
+    private multiCheckedKeys: any[] = [];
+    private mkgvalues: Array<string> = [];
+    private multSlctMkgValues: Array<string> = [];
+    private marketSeglist: any = [];
 
     fetchChildren(node: any): Observable<any[]> {
         // returns the items collection of the parent node as children
@@ -115,16 +119,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
             this.loggerSvc.error('dealEditorComponent::readMultiSelectModal::getDropDownResult:: service', error);
             this.isLoading = false;
         });
-    }
-
-    getNonCorpData() {
-        let opLookUpURL = "/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP";
-        this.pteService.getDropDownResult(opLookUpURL).subscribe((response: any) => {
-            if (response != null && response != undefined && response.length > 0) {
-                this.nonCorpMarketSeg = response;
-            }
-        })
-    }
+    }   
 
     onSelectionChange() {
         if (this.checkedKeys != undefined && this.checkedKeys.length > 0) {
@@ -167,6 +162,81 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
             }
         }
     }
+    getNonCorpData() {
+        let opLookUpURL = "/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP";
+        this.pteService.getDropDownResult(opLookUpURL).subscribe((response: any) => {
+            if (response != null && response != undefined && response.length > 0) {
+                this.nonCorpMarketSeg = response;
+            }
+        })
+    }
+
+    private isMkgChecked = (dataItem: any, index: string): CheckedState => {
+        if (this.MkgcontainsItem(dataItem)) { return 'checked'; }
+        if (!this.isTgrRgn && dataItem.items != undefined && dataItem.items != null && dataItem.items.length > 0 && this.isIndeterminate(dataItem.items)) {
+            if (this.selectedChildCount === dataItem.items.length)
+                return 'checked';
+            else
+                return 'indeterminate';
+        }
+        return 'none';
+    };
+
+    private MkgcontainsItem(item: any): boolean {
+        if (this.mkgvalues != undefined && this.mkgvalues != null && this.mkgvalues.length > 0) {
+            return this.mkgvalues.indexOf(item[this.modalData.items.opLookupText]) > -1;
+        }
+        else
+            return false;
+    }
+
+    onMarkSegChange(event: any) {
+        this.mkgvalues = this.multSlctMkgValues;
+    }
+
+    onMktgValueChange(event: any) {
+        if (event && event.length > 0) {
+            var selectedList = event.join(",");
+            if (_.indexOf(event, 'All Direct Market Segments') > 0 || (event.length == 1 && _.indexOf(event, 'All Direct Market Segments') == 0)) {
+                this.mkgvalues = ['All Direct Market Segments'];
+                this.multSlctMkgValues = this.mkgvalues;
+            }
+            else {
+                if (_.indexOf(event, 'All Direct Market Segments') == 0) {
+                    this.mkgvalues.splice(0, 1);
+                }
+                _.each(this.mkgvalues, (key) => {
+                    var selectedData = this.marketSeglist.filter(x => x.DROP_DOWN == key);
+                    if (selectedData != undefined && selectedData != null && selectedData.length > 0 && selectedData[0].items != undefined && selectedData[0].items != null && selectedData[0].items.length > 0) {
+                        this.mkgvalues = [selectedData[0].items[0].DROP_DOWN];
+                    }
+                });
+                _.each(this.parentKeys, (key) => {
+                    if (selectedList.includes(key)) {
+                        this.mkgvalues = [this.mkgvalues[this.mkgvalues.length - 1]];
+                    }
+                });
+                if (_.indexOf(this.mkgvalues, "NON Corp") >= 0) {
+                    let corpMarkSeg = _.map(this.nonCorpMarketSeg, (x) => { return x.DROP_DOWN })
+                    _.each(corpMarkSeg, (val) => {
+                        if ((_.indexOf(this.mkgvalues, val) < 0)) {
+                            this.mkgvalues.push(val);
+                        }
+                    })
+                }
+                this.multSlctMkgValues = _.clone(this.mkgvalues);
+                let nonCorpIdx = _.indexOf(this.multSlctMkgValues, "NON Corp");
+                if (nonCorpIdx != -1) {
+                    this.multSlctMkgValues.splice(nonCorpIdx, 1);
+                }
+            }
+            this.multSlctMkgValues.sort();
+        }
+        else {
+            this.multSlctMkgValues = this.mkgvalues;
+        }
+    }
+
     hasChildren(node: any): boolean {
       return node.items && node.items.length > 0;
     }
@@ -210,6 +280,9 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
             });
             this.dialogRef.close(selectedValue.toString());
         }
+        else if (this.colName == "MRKT_SEG") {
+            this.dialogRef.close(this.multSlctMkgValues.toString());
+        }
         else
             this.dialogRef.close(this.checkedKeys.toString());
     }
@@ -243,20 +316,20 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
         this.spinnerMessageDescription = "Loading the " + this.multiSelectPopUpModal.label + " information.";
         if (this.ismrktSeg) {
             this.getNonCorpData();
-            this.multiSelectData = this.multiSelectPopUpModal.data != undefined ? this.multiSelectPopUpModal.data : [];
+            this.marketSeglist  = this.multiSelectPopUpModal.data != undefined ? this.multiSelectPopUpModal.data : [];
             this.multiSelectPopUpModal.opLookupText = "DROP_DOWN";
             if (this.modalData.cellCurrValues != null && this.modalData.cellCurrValues != undefined && this.modalData.cellCurrValues != "") {
                 if (typeof this.modalData.cellCurrValues == "string") {
-                    this.checkedKeys = this.modalData.cellCurrValues.split(",").map(function (item) {
+                    this.mkgvalues  = this.modalData.cellCurrValues.split(",").map(function (item) {
                         return item.trim();
                     });
                 } else {
-                    this.checkedKeys = this.modalData.cellCurrValues.map(function (item) {
+                    this.mkgvalues  = this.modalData.cellCurrValues.map(function (item) {
                         return item.trim();
                     });
                 }
             }
-            _.each(this.multiSelectData, (key) => {
+            _.each(this.marketSeglist, (key) => {
                 if (key.items != undefined && key.items != null && key.items.length > 0) {
                     this.parentKeys.push(key.DROP_DOWN);
                 }

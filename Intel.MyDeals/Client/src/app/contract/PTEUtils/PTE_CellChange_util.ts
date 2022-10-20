@@ -1140,13 +1140,17 @@ export class PTE_CellChange_Util {
         }
         let userProds = oldVal.split(',');
         let newVal = [];
+        //Update the user entered prod text with product transition data
         if (userProds.length > 0) {
             _.each(userProds, prod => {
-                _.each(selProd.items, selPrdItm => {
-                    if (selPrdItm.prodObj.USR_INPUT == prod) {
-                        newVal.push(selPrdItm.prodObj.DERIVED_USR_INPUT);//oldVal.replace(selProd.name, _.pluck(selProd.items, 'prod').toString());
-                    }
-                })
+                let prodObjs = _.pluck(selProd.items, 'prodObj')
+                let userInputVal = _.where(prodObjs, { USR_INPUT: prod });
+                if (userInputVal.length > 0) {
+                    newVal.push(userInputVal[0]["DERIVED_USR_INPUT"]);
+                }
+                else {
+                    newVal.push(prod)
+                }     
             })
         }
         if (newVal.length == 0) {
@@ -1168,7 +1172,7 @@ export class PTE_CellChange_Util {
         _.each(selProd.items, selPrdItm => {
             PTR_SYS_PRD[`${selPrdItm.prod}`] = [selPrdItm.prodObj];
             if (selPrdItm.prodObj.EXCLUDE) {
-                excludedPrdct.push(selPrdItm.prodObj.HIER_VAL_NM);
+                excludedPrdct.push(selPrdItm.prodObj.DERIVED_USR_INPUT);
             }
         });
         let operation = { operation: 'prodcorr', PTR_SYS_PRD: JSON.stringify(PTR_SYS_PRD), PRD_EXCLDS: excludedPrdct.toString() };
