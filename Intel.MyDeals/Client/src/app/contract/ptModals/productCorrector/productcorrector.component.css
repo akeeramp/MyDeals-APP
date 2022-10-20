@@ -487,3 +487,12 @@ a.prdAnchor:hover {
 .product-breakout-modal mat-dialog-container product-breakout .modal-content {
     box-shadow: none;
 }
+
+.lnavFilter.blue-lnav kendo-treeview ul li span.k-in.k-state-selected {
+    background-color: rgba(2, 173, 255, 1) !important;
+    color: #fff !important;
+}
+
+.lnavFilter.blue-lnav kendo-treeview ul li span.k-in.k-state-focused {
+    box-shadow: none !important;
+}

@@ -662,6 +662,7 @@ kendo-grid-string-filter-menu .k-dropdowntree .k-dropdown-wrap {
 
 kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper {
     height: 40px;
+    z-index: 1;
 }
 
 kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul {

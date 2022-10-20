@@ -78,7 +78,7 @@ input[type=checkbox].with-font:focus + label:before {
 #gridActionSummary.k-grid td{
     padding-left: 6px;
 }
-.mat-dialog-container{
+.summary-pop-up .mat-dialog-container {
     padding: 0px !important;
 }
 
@@ -107,3 +107,12 @@ input[type=checkbox].with-font:focus + label:before {
         border-color: #00aeef !important;
         background-color: #0071c5 !important;
     }
+
+.summary-pop-up .summary-action-body {
+    padding: 15px !important;
+}
+
+.summary-pop-up .summary-action-head {
+    padding: 15px !important;
+    border-bottom: 1px solid #fff !important;
+}

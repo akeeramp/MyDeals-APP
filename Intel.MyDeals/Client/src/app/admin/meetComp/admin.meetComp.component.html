@@ -29,7 +29,7 @@
 </div>
 <div class="col-md-12 kendo-grid-buttons" style="padding-top: 20px !important;">
     <kendo-grid [data]="gridData" filterable="menu" [scrollable]="true" [sortable]="true" [navigable]="true" [columnMenu]="{sort:true}" [resizable]="true" [reorderable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter"
-        [group]="state.group" [groupable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [height]="400" (dataStateChange)="dataStateChange($event)">
+        [group]="state.group" [groupable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" class="pro-meetComp" [height]="400" (dataStateChange)="dataStateChange($event)">
         <ng-template kendoGridToolbarTemplate><button (click)="clearFilter()" class="k-button clearButton"><span
                     class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS </button>
             <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()" class="k-button clearButton"><span

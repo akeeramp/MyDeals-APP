@@ -256,3 +256,36 @@ button.k-button.mykbtnstyles:hover {
 .ptevalidopoup .k-window {
     border-radius: 0;
 }
+
+kendo-dialog.ptevalidopoup.valid-out-pop-ups .k-window.k-dialog {
+    border: none;
+    border-radius: 0;
+}
+
+.text-para-color {
+    padding: 2.5em;
+    text-align: center;
+    margin-bottom: 0px;
+    color: #444;
+}
+
+kendo-dialog-actions.pteokbtnstyle.alter-btns-ok {
+    border-radius: 0 !important;
+}
+
+kendo-dialog-actions.pteokbtnstyle.alter-btns-ok button.mykbtnstyles {
+    color: #444 !important;
+    border-color: #fafafa !important;
+    background-color: #fafafa !important;
+    padding: 1.5em 0;
+    border-radius: 0 !important;
+    border-bottom: 0;
+    box-shadow: none;
+    height: auto !important;
+}
+
+kendo-dialog-actions.pteokbtnstyle.alter-btns-ok button.mykbtnstyles:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important;
+}

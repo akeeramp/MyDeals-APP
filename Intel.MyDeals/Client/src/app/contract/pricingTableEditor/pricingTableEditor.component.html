@@ -191,9 +191,9 @@
         <button class='k-button' (click)="custdivnull(false)">CANCEL</button>
     </kendo-dialog-actions>
 </kendo-dialog>
-<kendo-dialog *ngIf="validationMessage" class="ptevalidopoup">
-    <p style="margin: 30px; text-align: center;">All the products have been validated.</p>
-    <kendo-dialog-actions class="pteokbtnstyle">
+<kendo-dialog *ngIf="validationMessage" class="ptevalidopoup valid-out-pop-ups">
+    <p class="text-para-color">All the products have been validated.</p>
+    <kendo-dialog-actions class="pteokbtnstyle alter-btns-ok">
         <button class='k-button mykbtnstyles' (click)="resetValidationMessage()">OK</button>
     </kendo-dialog-actions>
 </kendo-dialog>

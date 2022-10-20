@@ -873,6 +873,7 @@ export class contractManagerComponent {
     if(this.curDataItems.length > 0){
         const dialogRef = this.dialog.open(actionSummaryModal, {
             width: "600px",
+            panelClass: "summary-pop-up",
             data: {
                 cellCurrValues: dataItems,
                 showErrMsg: this.needMct()

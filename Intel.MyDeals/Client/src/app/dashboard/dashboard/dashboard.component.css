@@ -433,6 +433,7 @@ kendo-slider.before-ques .k-slider-wrap .k-slider-track-wrap ul li span.k-label 
     padding: 0 !important;
     line-height: 21px !important;
     font-size: 14px;
+    color: #fff;
 }
 
 kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {

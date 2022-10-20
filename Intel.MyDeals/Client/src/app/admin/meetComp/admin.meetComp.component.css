@@ -45,3 +45,16 @@ span.k-dropdown-wrap {
 span.k-column-title {
     white-space: nowrap !important;
 }
+
+kendo-grid.pro-meetComp.k-widget.k-grid table tr th span.k-cell-inner .k-link {
+    width: 100%;
+    display: block;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: #1a3e6f;
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
