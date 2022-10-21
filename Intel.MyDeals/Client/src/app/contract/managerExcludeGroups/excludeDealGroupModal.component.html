@@ -81,8 +81,7 @@
                         <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}"
                                            [width]="120">
                             <ng-template kendoGridCellTemplate let-dataItem>
-                                <span *ngIf="!pctGroupDealsView">{{getFormatedDim(dataItem,'MAX_RPU', '20___0','currency')}}</span>
-                                <span *ngIf="pctGroupDealsView">{{dataItem.MAX_RPU | currency}}</span>
+                                <span>{{dataItem.MAX_RPU | currency}}</span>
                             </ng-template>
                             </kendo-grid-column>
                         <kendo-grid-column title="Market Segment" field="MRKT_SEG" [headerClass]="{'headerClass':true}"
