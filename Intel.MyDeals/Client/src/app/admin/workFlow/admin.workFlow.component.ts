@@ -10,6 +10,7 @@ import {
     GridDataResult,
     DataStateChangeEvent,
     PageSizeItem,
+    GridComponent
 } from "@progress/kendo-angular-grid";
 import {
     process,
@@ -38,7 +39,7 @@ export class adminWorkFlowComponent {
     @ViewChild('WFSTG_ACTN_NM_DdlTooltip', { static: false }) WFSTG_ACTN_NM_DdlTooltip: NgbTooltip;
     @ViewChild('WFSTG_CD_SRC_DdlTooltip', { static: false }) WFSTG_CD_SRC_DdlTooltip: NgbTooltip;
     @ViewChild('WFSTG_CD_DEST_DdlTooltip', { static: false }) WFSTG_CD_DEST_DdlTooltip: NgbTooltip;
-
+    @ViewChild('workflow_grid') grid: GridComponent;
 
     private isLoading = true;
     private errorMsg = ""
@@ -56,7 +57,6 @@ export class adminWorkFlowComponent {
     public isDialogVisible = false;
     private isDataValid: any;
     public Work_Flow_Map: any;
-    public isObjSetTypeDropdownEnabled = true;
     public state: State = {
         skip: 0,
         take: 25,
@@ -237,7 +237,7 @@ export class adminWorkFlowComponent {
     }
 
     saveHandler({ sender, rowIndex, formGroup, isNew }) {
-        if (formGroup.value.OBJ_TYPE_SID.toString() == "1" || formGroup.value.OBJ_TYPE_SID.toString() == "2") {
+        if (formGroup.value.OBJ_TYPE_SID.toString() == "1" || formGroup.value.OBJ_TYPE_SID.toString() == "2" || formGroup.value.OBJ_TYPE_SID.toString() == "3") {
             formGroup.value.OBJ_SET_TYPE_SID = "";
         }
         const Work_Flow_Map: Work_Flow_Map = formGroup.value;
@@ -288,6 +288,11 @@ export class adminWorkFlowComponent {
 
 
     refreshGrid() {
+        this.grid.closeRow();
+        if (this.editedRowIndex != undefined)
+            this.grid.closeRow(this.editedRowIndex);
+        this.editedRowIndex = undefined;
+        this.formGroup = undefined;
         this.isLoading = true;
         this.state.filter = {
             logic: "and",

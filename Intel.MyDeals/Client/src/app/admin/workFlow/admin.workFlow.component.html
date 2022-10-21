@@ -14,7 +14,7 @@
                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
                     filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)"
                     (edit)="editHandler($event)" (remove)="removeHandler($event)" (cancel)="cancelHandler($event)"
-                    (save)="saveHandler($event)" [columnMenu]="true">
+                    (save)="saveHandler($event)" [columnMenu]="true" #workflow_grid>
             <ng-template kendoGridToolbarTemplate>
                 <button kendoGridAddCommand class="k-button addButton">
                     <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RECORD
@@ -118,14 +118,14 @@
                                        [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <div *ngIf="!(formGroup.value.OBJ_TYPE_SID == '1' || formGroup.value.OBJ_TYPE_SID == '2')">
+                    <div *ngIf="!(formGroup.value.OBJ_TYPE_SID == '1' || formGroup.value.OBJ_TYPE_SID == '2' || formGroup.value.OBJ_TYPE_SID == '3')">
                         <kendo-combobox #ObjSetTypeCdDropDown [placeholder]="'Select Deal Type'"
                                         [data]="distinctObjSetTypeCd" [formControl]="formGroup.get('OBJ_SET_TYPE_SID')"
                                         [clearButton]="false" textField="Value" valueField="Key" [valuePrimitive]="true">
                         </kendo-combobox>
                     </div>
-                    <div *ngIf="(formGroup.value.OBJ_TYPE_SID == '1' || formGroup.value.OBJ_TYPE_SID == '2')" 
-                         [ngClass]="{'disabledObjSetTypeDropdown': formGroup.value.OBJ_TYPE_SID.toString() == '1' || formGroup.value.OBJ_TYPE_SID.toString() == '2' }">
+                    <div *ngIf="(formGroup.value.OBJ_TYPE_SID == '1' || formGroup.value.OBJ_TYPE_SID == '2' || formGroup.value.OBJ_TYPE_SID == '3')" 
+                         [ngClass]="{'disabledObjSetTypeDropdown': formGroup.value.OBJ_TYPE_SID.toString() == '1' || formGroup.value.OBJ_TYPE_SID.toString() == '2' || formGroup.value.OBJ_TYPE_SID.toString() == '3'}">
                         <kendo-combobox [placeholder]="'All_Deals'"
                                         [data]="distinctObjSetTypeCd" 
                                         [clearButton]="false" textField="Value" valueField="Key" [valuePrimitive]="true">

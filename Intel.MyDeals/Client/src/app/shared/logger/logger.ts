@@ -11,7 +11,7 @@ export class logger {
     info(message: string, title: string): void {
 
         this.toastr.info(message, title, {
-            closeButton: false,
+            closeButton: true,
             extendedTimeOut: 4000,
             timeOut: 4000,
             positionClass: 'toast-bottom-right'
@@ -20,7 +20,7 @@ export class logger {
     error(message: string, title: string, error?: any): void {
         console.error(message, title, error);
         this.toastr.error(message, title, {
-            closeButton: false,
+            closeButton: true,
             extendedTimeOut: 4000,
             timeOut: 4000,
             positionClass: 'toast-bottom-right'
@@ -28,7 +28,7 @@ export class logger {
     }
     success(message: string, title?: string): void {
         this.toastr.success(message, title, {
-            closeButton: false,
+            closeButton: true,
             extendedTimeOut: 4000,
             timeOut: 4000,
             positionClass: 'toast-bottom-right'
@@ -36,7 +36,7 @@ export class logger {
     }
     warn(message: string, title: string): void {
         this.toastr.warning(message, title, {
-            closeButton: false,
+            closeButton: true,
             extendedTimeOut: 4000,
             timeOut: 4000,
             positionClass: 'toast-bottom-right'
