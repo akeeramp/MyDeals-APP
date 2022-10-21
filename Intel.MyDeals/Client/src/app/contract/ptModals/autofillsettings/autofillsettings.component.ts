@@ -299,7 +299,7 @@ export class AutoFillComponent {
             else {
                 dealType = "Pricing"
             }
-            this.loggerSvc.success("Edited " + dealType + " Table", "Save Successfull",);
+            this.loggerSvc.success("Edited " + dealType + " Table", "Save Successful",);
         },(err)=>{
             this.loggerSvc.error("Unable to update Pricing Table","Error",err);
         })
@@ -348,7 +348,7 @@ export class AutoFillComponent {
             else {
                 dealType = "Pricing"
             }
-            this.loggerSvc.success("Edited " + dealType + " Table", "Save Successfull",);
+            this.loggerSvc.success("Created " + dealType + " Table", "Save Successful",);
         },(err)=>{
             this.loggerSvc.error("Could Not create Pricing Table","Error",err);
             this.isLoading = false;

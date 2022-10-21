@@ -44,6 +44,7 @@ export class tenderManagerComponent {
     public result: any = null;
     public passedValue: any = '';
     public isDialogVisible = false;
+    public dirtyItems;
 
     async loadAllContractDetails(): Promise<void> {
         let response = await this.pricingTableSvc.readContract(this.c_Id).toPromise().catch((err) => {
@@ -127,25 +128,30 @@ export class tenderManagerComponent {
         }
 
         if (selectedTab == 'PTR') {
-            if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
+            if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && !this.deComp.dirty) {
                 await this.redirectingFn(selectedTab);
             }
-            else if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION != 'Complete') {
+            else if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION != 'Complete' && this.deComp.dirty) {
                 await this.deComp.SaveDeal();
                 this.selectedTab = selectedTab;
                 this.currentTAB = selectedTab;
+            } else if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION != 'Complete' && !this.deComp.dirty) {
+                await this.redirectingFn(selectedTab);
             } else if (this.currentTAB != 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
                 await this.redirectingFn(selectedTab);
             }
         }
 
         else if (selectedTab == 'DE') {
-            if (this.currentTAB == 'PTR') {
+            if (this.currentTAB == 'PTR' && this.pteComp.dirty) {
                 await this.pteComp.validatePricingTableProducts();
+            } else if (this.currentTAB == 'PTR' && this.dirtyItems.length == 0) {
+                await this.redirectingFn(selectedTab);
             } else {
                 if ((this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && this.isPartiallyValid == true) && this.enableDealEditorTab() === true) {
                     await this.redirectingFn(selectedTab);
                 }
+                else if (this.currentTAB == 'DE') { }
                 else {
                     this.loggerSvc.error('Validate all your product(s) to open Deal Editor.', 'error');
                 }
@@ -188,8 +194,8 @@ export class tenderManagerComponent {
         let isPtrDirty = false;
         let rootScopeDirty = this.dirty;
         if (this.pricingTableData !== undefined && this.pricingTableData.PRC_TBL_ROW !== undefined && this.pricingTableData.PRC_TBL_ROW.length > 0) {
-            let dirtyItems = this.pricingTableData.PRC_TBL_ROW.filter(x => x.DC_ID <= 0, x => x.warningMessages.length > 0);
-            if (dirtyItems.length > 0) isPtrDirty = true;
+            this.dirtyItems = this.pricingTableData.PRC_TBL_ROW.filter(x => x.DC_ID <= 0, x => x.warningMessages.length > 0);
+            if (this.dirtyItems.length > 0) isPtrDirty = true;
         }
         else {
             isPtrDirty = true;

@@ -102,8 +102,9 @@ export class pricingTableComponent {
             this.isShowPCT = false;
         this.selLnav = contractModel.Model
         if (this.selLnav == 'PTE') {
-              //highligh the selected lnav PT in case request coming fom search result for PTE.
-              this.lnavSvc.lnavHieight.next(contractModel);
+            this.isDETab = false; this.isPTETab = false;
+            //highligh the selected lnav PT in case request coming fom search result for PTE.
+            this.lnavSvc.lnavHieight.next(contractModel);
             if (!isRedirect) this.isPTETab = true;
             if (contractModel.ps_id != 0 && contractModel.pt_id != 0) {
                 this.isPTEEnable = true;
@@ -113,9 +114,9 @@ export class pricingTableComponent {
                 this.c_Id = contractModel.C_ID;
                 this.contractData = contractModel.contractData;
                 let PRC_ST = _.filter(this.contractData.PRC_ST, item => { return item.DC_ID == this.ps_Id });
-                if (PRC_ST != undefined && PRC_ST != null && PRC_ST.length>0) {
+                if (PRC_ST != undefined && PRC_ST != null && PRC_ST.length > 0) {
                     let PRC_TBL = _.filter(PRC_ST[0].PRC_TBL, item => { return item.DC_ID == this.pt_Id });
-                    if (PRC_TBL != undefined && PRC_TBL != null && PRC_TBL.length>0) {
+                    if (PRC_TBL != undefined && PRC_TBL != null && PRC_TBL.length > 0) {
                         this.ps_title = PRC_ST[0].TITLE;
                         this.pt_title = PRC_TBL[0].TITLE;
                         this.pt_type = PRC_TBL[0].OBJ_SET_TYPE_CD;

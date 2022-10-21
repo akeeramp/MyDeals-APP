@@ -28,7 +28,7 @@
                                     <i class="intelicon-search"></i>
                                 </div>
                                 <div class="fl navIconLnk" (click)="toggleStrategyTree()" title="{{ strategyTreeCollapseAll ? 'Collapse All' : 'Expand All'}}" *ngIf="isExistingContract()">
-                                    <div [ngClass]="{'rotate-90': strategyTreeCollapseAll}">
+                                    <div [ngClass]="{'rotate-90': !strategyTreeCollapseAll}">
                                         <!--<i class="intelicon-fast-forward"></i>#collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed"-->
                                         <i class="chevron linkable intelicon-fast-forward" data-toggle="collapse" data-target=".multi-collapse"></i>
                                     </div>

@@ -52,7 +52,7 @@ export class dealEditorComponent {
     @Output() tmDirec = new EventEmitter();
     private isWarning: boolean = false;
     private message: string = "";
-    private dirty = false;
+    public dirty = false;
     private isAddDialog: boolean = false;
     private isrenameDialog: boolean = false;
     public DeAddtab = "";

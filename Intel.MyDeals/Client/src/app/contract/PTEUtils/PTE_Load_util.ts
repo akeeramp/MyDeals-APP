@@ -672,8 +672,13 @@ export class PTE_Load_Util {
                 if (hotTable.getDataAtRowProp(row, 'DC_ID') != null) {
                     cellProperties['readOnly'] = false;
                 }
-                if ((prop == 'STRT_VOL' || prop == 'STRT_REV' || prop == 'STRT_PB') && hotTable.getDataAtRowProp(row, 'TIER_NBR') && hotTable.getDataAtRowProp(row, 'TIER_NBR') != 1) {
+                //column config has readonly property for certain column persisting that assigning for other
+                if (_.findWhere(columnConfig, { data: prop }).readOnly) {
                     cellProperties['readOnly'] = true;
+                }
+                if ((prop == 'STRT_VOL' || prop == 'STRT_REV' || prop == 'STRT_PB') && hotTable.getDataAtRowProp(row, 'TIER_NBR') && hotTable.getDataAtRowProp(row, 'TIER_NBR') != 1) {
+                    cellProperties
+                    ['readOnly'] = true;
                 }
 
                 //for tender contract PERIOD_PROFILE and AR_SETTLEMENT_LVL are disable by default 
@@ -714,10 +719,13 @@ export class PTE_Load_Util {
                         cellProperties['readOnly'] = true;
                     }
                 }
-                //column config has readonly property for certain column persisting that assigning for other
-                if (_.findWhere(columnConfig, { data: prop }).readOnly) {
-                    cellProperties['readOnly'] = true;
+                if (curPricingTable.PS_WF_STG_CD == 'Approved' && curPricingTable.PASSED_VALIDATION == 'Dirty' && prop == 'SETTLEMENT_PARTNER' && hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == 'Cash') {
+                    cellProperties['readOnly'] = false;
                 }
+                if ((prop == 'REBATE_OA_MAX_AMT' || prop == 'REBATE_OA_MAX_VOL') && hybridstat == "1" && (hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != undefined && hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != null) && (curPricingTable.PS_WF_STG_CD == 'Requested' || curPricingTable.PS_WF_STG_CD == 'Draft' || curPricingTable.PS_WF_STG_CD == '')) {
+                    cellProperties['readOnly'] = false;
+                }
+                //cell behaviors
                 if (hotTable.getDataAtRowProp(row, '_behaviors') != undefined && hotTable.getDataAtRowProp(row, '_behaviors') != null) {
                     var behaviors = hotTable.getDataAtRowProp(row, '_behaviors');
                     if (behaviors.isReadOnly != undefined && behaviors.isReadOnly != null) {
@@ -728,12 +736,6 @@ export class PTE_Load_Util {
                             cellProperties['readOnly'] = true;
                         }
                     }
-                }
-                if (curPricingTable.PS_WF_STG_CD == 'Approved' && curPricingTable.PASSED_VALIDATION == 'Dirty' && prop == 'SETTLEMENT_PARTNER' && hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == 'Cash') {
-                    cellProperties['readOnly'] = false;
-                }
-                if ((prop == 'REBATE_OA_MAX_AMT' || prop == 'REBATE_OA_MAX_VOL') && hybridstat == "1" && (hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != undefined && hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != null) && (curPricingTable.PS_WF_STG_CD == 'Requested' || curPricingTable.PS_WF_STG_CD == 'Draft' || curPricingTable.PS_WF_STG_CD == '')) {
-                    cellProperties['readOnly'] = false;
                 }
             }
         }
