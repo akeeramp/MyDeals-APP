@@ -157,16 +157,16 @@
     </div>
 </div>
 
-<kendo-dialog title="Please confirm" *ngIf="isKitDialog" (close)="closeKitDialog()" [minWidth]="250" [width]="450">
-    <div>
-       <h3 style="margin: 30px; text-align: center;"> KIT name merge confirmation</h3>
-       <p style="margin: 30px; text-align: center;">
-        A Kit with the name <b>{{kitNameObj.name}}</b> already exists.  Would you like to merge rows containing this Kit Name?  Please note that any duplicate products will automatically be removed upon merging.
-      </p>
+<kendo-dialog *ngIf="isKitDialog" (close)="closeKitDialog()" class="kit-name-popup">
+    <div class="all-merge-confirmation">
+        <h3> KIT name merge confirmation</h3>
+        <p>
+            A Kit with the name <b>{{kitNameObj.name}}</b> already exists.  Would you like to merge rows containing this Kit Name?  Please note that any duplicate products will automatically be removed upon merging.
+        </p>
     </div>
-    <kendo-dialog-actions>
-        <button kendoButton (click)="closeKitDialog()">Cancel</button>
-        <button kendoButton (click)="mergeKitDeal()" themeColor="primary">
+    <kendo-dialog-actions class="kit-merge-btns">
+        <button kendoButton (click)="closeKitDialog()" class="cancel-btns">Cancel</button>
+        <button kendoButton (click)="mergeKitDeal()" themeColor="primary" class="merge-btns">
             Merge Rows
         </button>
     </kendo-dialog-actions>

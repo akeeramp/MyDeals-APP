@@ -3,9 +3,9 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/contract/ptModals/productCorrector/productcorrector.component.css" rel="stylesheet" />
 
-<div class="modal-content" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle moveablemodal style="background-color:#1a3e6f;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none;">
-    <div style="padding-left:10px;padding-right:10px">
-        <div class="prodSelector modal-header" style="margin-bottom:15px">
+<div class="modal-content" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle moveablemodal style="background-color: #1a3e6f; overflow-y: auto; overflow-x: hidden; border-left: none; border-right: none; box-shadow: none; height: 100%;">
+    <div style="padding-left: 10px; padding-right: 10px; height: 100%;">
+        <div class="prodSelector-corrector modal-header" style="margin-bottom:15px">
             <div class="row prodCorrectorHeader" style="align-items: center; padding-top: 10px; padding-bottom: 10px; ">
                 <div class="col-md-5  cursorArea" style="padding-left:0px">
                     <p class="prodText">Product Corrector</p>
@@ -57,8 +57,8 @@
                     </div>
                 </div>
             </div>
-            <div class="row" style="margin-top: 10px; height: 436px; overflow: hidden;">
-                <div class="col-md-3 lnavFilter blue-lnav">
+            <div class="row" style="margin-top: 10px;">
+                <div class="col-md-3 lnavFilter blue-lnav corrector-one-details">
                     <div class="row">
                         <div class="col">
                             <p class='filterTitleUnderline' *ngIf="selRowIssues.length > 0">Filter by product</p>
@@ -87,7 +87,7 @@
                 </div>
                 <div class="col-md-9">
                     <kendo-grid [data]="selGridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="true" [group]="state.group"
-                        filterable="menu" (dataStateChange)="dataStateChange($event)" [resizable]="true" [height]="436" class="notation-flow">
+                        filterable="menu" (dataStateChange)="dataStateChange($event)" [resizable]="true" class="notation-flow corrector-two-details">
                         <kendo-grid-column [headerClass]="{'headerClass':true}" field="EXCLUDE" title="EXCLUDE" [filterable]="none" [width]="5">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 <div class="fl gridStatusMarker {{dataItem.EXCLUDE}}" title="{{dataItem.EXCLUDE}}"></div>
@@ -341,7 +341,7 @@
                 </div>
             </div>
         </div>
-        <div class="prodSelector modal-footer">
+        <div class="prodSelector-corrector modal-footer">
             <div class="col-md-1 col-md-offset-5">
                 <img *ngIf="isLoading" src="/Images/loadingSmall.gif" />
             </div>

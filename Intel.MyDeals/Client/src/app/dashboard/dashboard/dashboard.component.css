@@ -1268,6 +1268,79 @@ kendo-window.dashboard-kendo-window.process-search.k-window kendo-window-titleba
 kendo-window.dashboard-kendo-window.process-search.k-window kendo-window-titlebar .k-window-title {
     padding: 0 !important;
 }
+
+kendo-dialog.kit-name-popup .k-window {
+    width: 600px;
+    border-radius: 0;
+}
+
+kendo-dialog.kit-name-popup .k-window .k-content {
+    padding: 0;
+    border-bottom: 1px solid #f4f4f4 !important;
+}
+
+    kendo-dialog.kit-name-popup .k-window .k-content .all-merge-confirmation h3 {
+        padding: 15px;
+        border-bottom: 1px solid #f4f4f4;
+        min-height: 16.5px;
+        margin-top: 20px !important;
+        margin: 0;
+        font-weight: 500;
+        line-height: 1.1;
+        color: inherit;
+        font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
+
+    kendo-dialog.kit-name-popup .k-window .k-content .all-merge-confirmation p {
+        position: relative;
+        padding: 15px;
+        margin: 0;
+        text-align: left;
+    }
+
+kendo-dialog-actions.kit-merge-btns {
+    padding: 15px;
+    text-align: right;
+    display: block;
+}
+
+kendo-dialog.kit-name-popup kendo-dialog-actions.kit-merge-btns button.cancel-btns {
+    border-radius: 3px !important;
+    box-shadow: none;
+    border: 1px solid transparent;
+    width: auto;
+    height: auto;
+    display: inline-block;
+    padding: 6px 12px;
+    font-size: 15px;
+    line-height: 1.5 !important;
+    background: #f0f0f0 !important;
+    color: #444;
+    margin-right: 5px;
+}
+
+kendo-dialog.kit-name-popup kendo-dialog-actions.kit-merge-btns button.merge-btns {
+    border-radius: 3px !important;
+    box-shadow: none;
+    border: 1px solid transparent;
+    width: auto;
+    height: auto;
+    display: inline-block;
+    min-width: auto;
+    max-width: initial;
+    padding: 6px 12px;
+    font-size: 15px;
+    line-height: 1.5 !important;
+    background-color: #3c8dbc !important;
+    border-color: #367fa9;
+    color: #fff;
+}
+
+    kendo-dialog.kit-name-popup kendo-dialog-actions.kit-merge-btns button.merge-btns:hover {
+        background-color: #367fa9 !important;
+        color: #fff;
+    }
+
 button.dash-popup-okbtn.k-button {
     height: 60px !important;
     background-color: #dcd8d880 !important;

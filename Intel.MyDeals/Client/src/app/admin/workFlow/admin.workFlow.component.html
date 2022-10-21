@@ -211,10 +211,10 @@
                 </ng-template>
             </kendo-grid-column>
         </kendo-grid>
-        <kendo-dialog *ngIf="isDialogVisible">
+        <kendo-dialog *ngIf="isDialogVisible" class="workflow-delete-popup">
             <h3 class="kendo-dialog-message confirmationTitle">Delete confirmation</h3>
             <p class="kendo-dialog-message">{{errorMsg}}</p>
-            <kendo-dialog-actions>
+            <kendo-dialog-actions class="btns-workflow-valuer">
                 <button class='k-button cancelBtn kendoDialogBtn' (click)="saveCancel()">Cancel</button>
                 <button class='k-button deleteBtn kendoDialogBtn' (click)="deleteConfirmation()">Delete WorkFlow</button>
             </kendo-dialog-actions>
