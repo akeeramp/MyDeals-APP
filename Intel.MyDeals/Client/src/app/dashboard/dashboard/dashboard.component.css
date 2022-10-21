@@ -1268,3 +1268,21 @@ kendo-window.dashboard-kendo-window.process-search.k-window kendo-window-titleba
 kendo-window.dashboard-kendo-window.process-search.k-window kendo-window-titlebar .k-window-title {
     padding: 0 !important;
 }
+button.dash-popup-okbtn.k-button {
+    height: 60px !important;
+    background-color: #dcd8d880 !important;
+    color: #444 !important
+}
+
+kendo-dialog-actions.dash-style.k-dialog-buttongroup {
+    padding: 0px !important;
+}
+
+button.dash-popup-okbtn.k-button:hover {
+    background-color: #bbb6b614 !important
+}
+.dashboard-title-style {
+    margin-bottom: 5px !important;
+    margin-top: 5px !important;
+    padding:5px !important
+}

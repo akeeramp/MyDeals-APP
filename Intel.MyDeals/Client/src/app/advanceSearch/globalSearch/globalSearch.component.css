@@ -67,3 +67,49 @@ kendo-window-titlebar.kendo-titlebar-custom .k-button-icon .k-i-close {
 .kendoWindow {
     z-index: 10001 !important;
 }
+button.global-popup-okbtn.k-button {
+    height: 60px !important;
+    background-color: #dcd8d880 !important;
+    color: #444 !important
+}
+
+    button.global-popup-okbtn.k-button:hover {
+        background-color: #bbb6b614 !important
+    }
+
+kendo-dialog-actions.global-style.k-dialog-buttongroup {
+    padding: 0px !important;
+}
+
+.global-titles-style {
+    font-family: 'Intel Clear' !important;
+    margin: 10px 0px 0px 4px !important;
+}
+
+.k-content.k-window-content.k-dialog-content .global-titles-style {
+    padding: 15px !important;
+    margin-bottom: 5px !important;
+}
+
+ul.global-dropdown-style {
+    background-color: #fff !important;
+    color: #0071c5 !important;
+    font-size: 15px !important;
+    top: 0px !important;
+    border: 1px solid #d3d3d357 !important;
+    min-width: 200px !important
+}
+
+.global-dropdown-style > li > a:hover {
+    background: #003C71 !important;
+    color: #fff !important;
+}
+
+.global-dropdown-style.dropdown-menu > li > a {
+    display: block;
+    padding: 2px 12px !important;
+    clear: both !important;
+    font-weight: normal !important;
+    line-height: 1.5 !important;
+    white-space: nowrap !important;
+}

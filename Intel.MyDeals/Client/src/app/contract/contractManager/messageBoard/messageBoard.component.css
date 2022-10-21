@@ -36,3 +36,10 @@
     margin-left: 31px !important;
     margin-top: 14px !important
 }
+.viewhide-details-style.k-grid {
+    border-color: rgba(33, 37, 41, 0.125) !important;
+    color: #212529 !important;
+    background-color: #ffffff !important;
+    height: auto !important;
+    overflow: auto !important
+}

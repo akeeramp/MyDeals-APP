@@ -1028,3 +1028,10 @@ kendo-tabstrip.tabs-coll {
 product-breakout-modal{
     width: 70%;
 }
+.global-popup-style .k-window-content {
+    padding: 15px !important
+}
+
+.mybotdialog .k-content.k-window-content.k-dialog-content {
+    padding: 15px !important;
+}

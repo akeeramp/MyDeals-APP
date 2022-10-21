@@ -108,9 +108,6 @@
 nav.navbar.navbar-default.rmv-padding.cc-pop-up {
     height: 50px;
 }
-.title_style {
-    display: inline-block !important;
-    max-width: 100% !important;
-    margin-bottom: 5px !important;
+.title_style label {
     font-weight: bold !important;
 }

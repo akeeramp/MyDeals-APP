@@ -44,7 +44,6 @@
 }
 .dealpopupstyle {
     font-size: 20px !important;
-    font-family: 'Intel Clear';
     margin-left: -30px !important;
     line-height: 1.5 !important;
     font-family: 'Intel Clear' !important;
@@ -94,3 +93,7 @@ button.excelText.differ-artho-excel.iconsize.k-button-icontext.k-button.k-grid-e
     font-size: 12px !important;
     font-family: 'Intel Clear' !important
 }
+.style-icon-btn.k-button:hover {
+    background-color: #37a4cd7a !important 
+}
+

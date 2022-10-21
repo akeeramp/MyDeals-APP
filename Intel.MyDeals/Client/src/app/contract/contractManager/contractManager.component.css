@@ -604,3 +604,12 @@ button.mydialogac.k-button {
     border-color: #ebebeb !important;
     background-color: #ebebeb !important;
 }
+#caDialog .k-actions.k-actions-stretched .k-button:hover {
+     background-color: #bbb6b614 !important
+}
+
+button.contract-popup-okbtn.k-button {
+    height: 60px !important;
+    background-color: #dcd8d880 !important;
+    color: #444 !important
+}

@@ -28,7 +28,7 @@
 
 
 <div id="msgGrid" class="msgGrid" *ngIf="showDetails" style="margin-top: 20px;">
-    <kendo-grid [data]="gridData">
+    <kendo-grid class="viewhide-details-style"  [data]="gridData">
     <kendo-grid-column [headerClass]="{'headerClass':true}" field="MsgType" title="&nbsp;" width="50px">
         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
             <span *ngIf="dataItem.MsgType === 1"><i class='intelicon-information-solid' style='font-size: 16px; color: #C4D600;'></i></span>
