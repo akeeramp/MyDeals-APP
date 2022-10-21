@@ -669,7 +669,7 @@ export class PTE_Load_Util {
                 cellProperties['readOnly'] = true;
             }
             else {
-                if (hotTable.getDataAtRowProp(row, 'DC_ID') != null) {
+                if(hotTable.getDataAtRowProp(row, 'DC_ID') != null) {
                     cellProperties['readOnly'] = false;
                 }
                 //column config has readonly property for certain column persisting that assigning for other
@@ -741,6 +741,7 @@ export class PTE_Load_Util {
         }
         return cellProperties;
     }
+
     static setPrdColor(PTR: any[]): any[] {
         _.each(PTR, data => {
             PTE_Common_Util.setBehaviors(data);

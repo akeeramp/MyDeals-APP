@@ -1319,7 +1319,7 @@ export class ProductSelectorComponent {
     }
 
     toggleSelectAll($event, searchGrid) {
-        if (!this.disableSelection) {
+        if (!this.disableSelection && searchGrid && searchGrid.length>0) {
             searchGrid.forEach(dataItem => {
                 dataItem.selected = $event.target.checked;
                 this.selectProduct(dataItem);

@@ -1047,38 +1047,19 @@ export class PTE_CellChange_Util {
         try {
             _.each(items, (item) => {
                 let colSPIdx = _.findWhere(this.hotTable.getCellMetaAtRow(item.row), { prop: 'SETTLEMENT_PARTNER' }).col;
-                let selCell: CellSettings = { row: item.row, col: colSPIdx, editor: 'dropdown', className: '', comment: { value: '', readOnly: true } };
-                let cells = this.hotTable.getSettings().cell;
+                //MOdiying the logic from from full table update to cell update for better performance
                 if (item.new && item.new != '' && item.new.toLowerCase() != 'cash') {
                     this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', '', 'no-edit');
-                    //check object present 
-                    let obj = _.findWhere(cells, { row: item.row, col: colSPIdx })
-                    if (obj) {
-                        obj.editor = false;
-                        obj.className = 'readonly-cell';
-                        obj.comment.value = 'Only for AR_SETTLEMENT Cash SETTLEMENT_PARTNER will be enabled';
-                    }
-                    else {
-                        selCell.editor = false;
-                        selCell.className = 'readonly-cell';
-                        selCell.comment.value = 'Only for AR_SETTLEMENT Cash SETTLEMENT_PARTNER will be enabled';
-                        cells.push(selCell);
-                    }
-                    this.hotTable.updateSettings({ cell: cells });
+                    this.hotTable.setCellMeta(item.row, colSPIdx, 'editor', false);
+                    this.hotTable.setCellMeta(item.row, colSPIdx, 'className', 'readonly-cell');
+                    this.hotTable.render();
                 }
                 else {
                     this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', contractData.Customer.DFLT_SETTLEMENT_PARTNER, 'no-edit');
                     //check object present 
-                    let obj = _.findWhere(cells, { row: item.row, col: colSPIdx })
-                    if (obj) {
-                        obj.editor = 'dropdown';
-                        obj.className = '';
-                        obj.comment.value = '';
-                    }
-                    else {
-                        cells.push(selCell);
-                    }
-                    this.hotTable.updateSettings({ cell: cells });
+                    this.hotTable.setCellMeta(item.row, colSPIdx, 'editor', 'dropdown');
+                    this.hotTable.setCellMeta(item.row, colSPIdx, 'className', '');
+                    this.hotTable.render();
                 }
             });
         }

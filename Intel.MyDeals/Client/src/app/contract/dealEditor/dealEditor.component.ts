@@ -131,25 +131,27 @@ export class dealEditorComponent {
     filterChange(filter: any): void {
         this.state.filter = filter;
         this.gridData = process(this.gridResult, this.state);
-        if(filter &&  filter.filters && filter.filters.length>0){
+        if(filter && filter.filters && filter.filters.length>0){
             filter.filters.forEach((item: CompositeFilterDescriptor) => {
                 let arrayData = [];
-                item.filters.forEach((fltrItem: FilterDescriptor) => {
-                    let column = fltrItem.field.toString();
-                    if (this.dropdownFilterColumns.includes(column)) {
-                        _.each(this.gridData.data, (eachData) => {
-                            let keys = Object.keys(eachData[column]);
-                            let isexists = false;
-                            for (var key in keys) {
-                                if (eachData[column][keys[key]] == fltrItem.value.toString())
-                                    isexists = true;
-                            }
-                            if (isexists)
-                                arrayData.push(eachData);
-                        })
-                        this.gridData = process(arrayData, this.state);
-                    }
-                })
+                if(item && item.filters && item.filters.length>0){
+                    item.filters.forEach((fltrItem: FilterDescriptor) => {
+                        let column = fltrItem.field.toString();
+                        if (this.dropdownFilterColumns.includes(column)) {
+                            _.each(this.gridData.data, (eachData) => {
+                                let keys = Object.keys(eachData[column]);
+                                let isexists = false;
+                                for (var key in keys) {
+                                    if (eachData[column][keys[key]] == fltrItem.value.toString())
+                                        isexists = true;
+                                }
+                                if (isexists)
+                                    arrayData.push(eachData);
+                            })
+                            this.gridData = process(arrayData, this.state);
+                        }
+                    })
+                }
             });
         }
     }

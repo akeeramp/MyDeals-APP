@@ -39,9 +39,14 @@ export class dealProductsModalComponent {
     private excelFileName: string;
     getProductDetailsFromDealId() {
         this.dpService.getProductDetailsFromDealId(this.data.dataItem.DC_ID, this.data.dataItem.CUST_MBR_SID).subscribe((response: any) => {
-            this.copyOfData = response;
-            this.gridResult = response;
-            this.gridData = process(this.gridResult, this.state);
+            if(response && response.length>0){
+                this.copyOfData = response;
+                this.gridResult = response;
+                this.gridData = process(this.gridResult, this.state);
+            }
+            else{
+                this.loggerSvc.warn('No result found','Warning')
+            }
             this.isLoading = false;
         }, error => {
             this.loggerSvc.error('dealProductsModalComponent::getProductDetailsFromDealId:: service', error);
@@ -50,8 +55,13 @@ export class dealProductsModalComponent {
     }
     getProductDetailsFromProductId() {
         this.dpService.getProductDetailsFromProductId(this.prdData).subscribe((response: any) => {
-            this.gridResult = response;
-            this.gridData = process(this.gridResult, this.state);
+            if(response && response.length>0){ 
+                this.gridResult = response;
+                this.gridData = process(this.gridResult, this.state);
+            }
+            else{
+                this.loggerSvc.warn('No result found','Warning')
+            }
             this.isLoading = false;
         }, error => {
             this.loggerSvc.error('dealProductsModalComponent::getProductDetailsFromProductId:: service', error);

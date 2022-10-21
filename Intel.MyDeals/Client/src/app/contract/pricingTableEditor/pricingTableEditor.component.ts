@@ -428,7 +428,8 @@ export class pricingTableEditorComponent implements OnChanges {
     }
     async getPTRDetails() {
         let response = await this.pteService.readPricingTable(this.in_Pt_Id).toPromise().catch((err) => {
-            this.loggerService.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
+            this.loggerService.error('Something went wrong.', 'error');
+            console.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service::',err);
         });
 
         if (response && response.PRC_TBL_ROW && response.PRC_TBL_ROW.length > 0) {
@@ -637,7 +638,9 @@ export class pricingTableEditorComponent implements OnChanges {
             "PtrDelIds": delDCIDs
         }
         let result = await this.pteService.updateContractAndCurPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, true).toPromise().catch((error) => {
-            this.loggerService.error("pricingTableEditorComponent::saveUpdatePTEAPI::deletePTR", error);
+            this.loggerService.error("Something went wrong", 'Error');
+            console.error("pricingTableEditorComponent::saveUpdatePTEAPI::deletePTR", error);
+
         });
         if (result) {
             await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
@@ -645,7 +648,8 @@ export class pricingTableEditorComponent implements OnChanges {
             this.loadPTE();
         }
         else {
-            this.loggerService.error("pricingTableEditorComponent::deletePTR::", 'error');
+            this.loggerService.error("Something went wrong", 'Error');
+            console.error("pricingTableEditorComponent::deletePTR::", 'Error');
         }
     }
     closeKitDialog() {
@@ -765,7 +769,8 @@ export class pricingTableEditorComponent implements OnChanges {
         })
 
         let result = await forkJoin(dropObjs).toPromise().catch((err) => {
-            this.loggerService.error('pricingTableEditorComponent::getAllDrowdownValues::service', err);
+            this.loggerService.error('Something went wrong', 'Error');
+            console.error('pricingTableEditorComponent::getAllDrowdownValues::service', err)
         });
         return result;
     }
@@ -858,7 +863,8 @@ export class pricingTableEditorComponent implements OnChanges {
         this.isLoading = true;
         this.setBusy("Saving your Data...", "Please wait as we save your information", "Info", true);
         let result = await this.pteService.updateContractAndCurPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).toPromise().catch((error) => {
-            this.loggerService.error("pricingTableEditorComponent::saveUpdatePTEAPI::", error);
+            this.loggerService.error("Something went wrong", 'Error');
+            console.error("pricingTableEditorComponent::saveUpdatePTEAPI::", error);
         });
         if (result) {
             await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
@@ -877,7 +883,8 @@ export class pricingTableEditorComponent implements OnChanges {
             this.warnings = false;
         }
         else {
-            this.loggerService.error("pricingTableEditorComponent::saveUpdatePTEAPI::", 'error');
+            this.loggerService.error("Something went wrong", 'Error');
+            console.error("pricingTableEditorComponent::saveUpdatePTEAPI::", 'error');
         }
         this.isLoading = false;
 

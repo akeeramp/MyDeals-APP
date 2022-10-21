@@ -48,6 +48,8 @@ td:not(.error-cell).readonly-cell {
 
 .htCustTxt {
     float: left !important;
+    max-width: 150px !important;
+    overflow: auto;
 }
 
 .htCustCellEditor {
@@ -60,6 +62,7 @@ td:not(.error-cell).readonly-cell {
     font-size: 0.8em;
     opacity: 1 !important;
     padding: 0 !important;
+   
 }
 
 
