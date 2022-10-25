@@ -99,6 +99,9 @@
                                 <ng-template *ngIf="column.field !== 'PASSED_VALIDATION' && column.field !== 'EXCLUDE_AUTOMATION'" kendoGridHeaderTemplate>
                                     <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" [grid_Result]="gridResult"></deal-editor-header>
                                 </ng-template>
+                                <ng-template *ngIf="column.field == 'END_DT'" let-dataItem="dataItem" kendoGridCellTemplate>
+                                    <span [ngClass]="{'redfont': dataItem?.EXPIRE_FLG == 1}">{{dataItem.END_DT | date:'MM/dd/yyyy'}}</span>
+                                </ng-template>
                                 <ng-template *ngIf="column.field == 'ECAP_PRICE'" let-dataItem="dataItem" kendoGridCellTemplate>
                                     <span>{{getFormatedDim(dataItem, 'ECAP_PRICE','20___0','currency')}}</span>
                                 </ng-template>

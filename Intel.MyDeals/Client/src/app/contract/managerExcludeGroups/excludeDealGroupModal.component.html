@@ -44,7 +44,8 @@
                         <kendo-grid-column title="Contract" field="TITLE" [headerClass]="{'headerClass':true}"
                                            [width]="120">
                             <ng-template kendoGridCellTemplate let-dataItem>
-                                <span>Product:{{dataItem.TITLE}}</span>
+                                <span *ngIf="!pctGroupDealsView">Product:{{dataItem.TITLE}}</span>
+                                <span *ngIf="pctGroupDealsView">Product:{{dataItem.PRODUCT}}</span>
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column title="Stage" field="DSPL_WF_STG_CD" [headerClass]="{'headerClass':true}"

@@ -157,6 +157,9 @@ export class excludeDealGroupModalDialog {
         if (this.enableCheckbox < 0 && ((<any>window).usrRole !== "DA")) {
             this.hasCheckbox = true;
         }
+        if(this.dataItem?.enableCheckbox == false){
+            this.hasCheckbox = this.dataItem.enableCheckbox; 
+        }
         this.DEAL_GRP_CMNT = (this.dataItem.cellCurrValues.DEAL_GRP_CMNT === null || this.dataItem.cellCurrValues.DEAL_GRP_CMNT == undefined) ? "" : this.dataItem.cellCurrValues.DEAL_GRP_CMNT;
     }
 

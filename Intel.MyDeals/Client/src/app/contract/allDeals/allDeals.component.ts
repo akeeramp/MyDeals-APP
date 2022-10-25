@@ -296,12 +296,20 @@ export class allDealsComponent {
         let deals = [];
         if (group[0].name.toLowerCase() == 'all') {
             deals = this.gridResult;
+            this.state.filter = {
+                logic: "and",
+                filters: [],
+            };
         }
         else {
             _.each(this.gridResult, (item) => {
                 if (item.OBJ_SET_TYPE_CD == group[0].dealType)
                     deals.push(item);
             });
+            this.state.filter = {
+                logic: "and",
+                filters: [{ field: "OBJ_SET_TYPE_CD", operator: "eq", value: this.dealType }]
+            };
         }
         this.gridData = process(deals, this.state);
     }

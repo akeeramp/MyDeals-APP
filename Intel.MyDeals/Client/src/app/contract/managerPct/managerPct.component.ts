@@ -177,7 +177,9 @@ export class managerPctComponent {
             width: "1900px",
             height: "600px",
             data: {
-                cellCurrValues: dataItem
+                cellCurrValues: dataItem,
+                enableCheckbox: false,
+                excludeOutliers: true
             }
         });
         dialogRef.afterClosed().subscribe((returnVal) => {
