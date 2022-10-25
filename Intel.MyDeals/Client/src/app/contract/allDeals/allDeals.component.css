@@ -291,3 +291,8 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper {
     padding-left: 0px !important;
     padding-right: 0px !important
 }
+
+.all_deal_grid_cell deal-editor-cell .isReadOnlyCell {
+    background: none !important;
+}
+
