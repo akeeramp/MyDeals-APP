@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit } from "@angular/core";
+import { Component, Inject, Input, OnInit, ViewEncapsulation } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { process, State } from "@progress/kendo-data-query";
 
@@ -9,8 +9,12 @@ import { productSelectorService } from '../productselector.service';
     selector: 'product-breakout',
     templateUrl: 'Client/src/app/contract/ptModals/productSelector/productBreakout/productBreakout.component.html',
     styleUrls: [
-        'Client/src/app/contract/ptModals/productSelector/productBreakout/productBreakout.component.css',
-    ]
+        'Client/node_modules/bootstrap/dist/css/bootstrap.min.css',
+        'Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css',
+        'Client/src/app/admin/kendo_grid.css',
+        'Client/src/app/contract/ptModals/productSelector/productBreakout/productBreakout.component.css'
+    ],
+    encapsulation: ViewEncapsulation.Emulated
 })
 export class ProductBreakoutComponent implements OnInit {
 
@@ -20,9 +24,9 @@ export class ProductBreakoutComponent implements OnInit {
             private loggerService: logger) {
         // Dialog Input Data
         if (!data.columnTypes) {
-            this.loggerService.error('ProductSelectorComponent::GridPopoverComponent:: ', 'Input Variable', new TypeError("Input variable `columnTypes` is required"));
+            this.loggerService.error('ProductBreakoutComponent:: ', 'Input Variable', new TypeError("Input variable `columnTypes` is required"));
         } else if (!data.productData) {
-            this.loggerService.error('ProductSelectorComponent::GridPopoverComponent:: ', 'Input Variable', new TypeError("Input variable `productData` is required"));
+            this.loggerService.error('ProductBreakoutComponent:: ', 'Input Variable', new TypeError("Input variable `productData` is required"));
         } else {
             this.columnTypes = data.columnTypes;
             this.productData = data.productData;    
@@ -95,7 +99,7 @@ export class ProductBreakoutComponent implements OnInit {
                 this.isLoading = false;
                 return this.responseData;
             }, (error) => {
-                this.loggerService.error('ProductSelectorComponent::GridPopoverComponent::ProductBreakoutComponent::getData:: Unable to get CAP Breakout data', error);
+                this.loggerService.error('ProductBreakoutComponent::getData:: Unable to get CAP Breakout data', error);
             });
         }
     }

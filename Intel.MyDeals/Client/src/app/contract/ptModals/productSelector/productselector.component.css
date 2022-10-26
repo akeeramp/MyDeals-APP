@@ -720,9 +720,17 @@ kendo-grid.raid-style {
     margin: 0 !important;
 }
 
+.product-breakout-modal {
+    width: 70vw !important;
+}
+
 .product-breakout-modal>mat-dialog-container {
     background-color: #1a3e6f !important;
-    padding: 15px !important;
+    padding: 0px !important;
+}
+
+.product-breakout-modal mat-dialog-container product-breakout .modal-content {
+    box-shadow: none;
 }
 
 #PTRLoading .ss-loading-overlay .myLoader {
@@ -793,10 +801,6 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
     font-size: 10px !important;
     position: relative !important;
     top: -1px !important;
-}
-
-.product-breakout-modal mat-dialog-container product-breakout .modal-content {
-    box-shadow: none;
 }
 
 #prodGrid .k-grid td {

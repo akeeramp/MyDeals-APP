@@ -17,7 +17,7 @@ label {
 }
 
 .k-grid tbody tr:hover {
-    background-color: #ecf8fb!important;
+    background-color: #ecf8fb !important;
 }
 
 .k-button-primary,
@@ -28,7 +28,7 @@ label {
 
 .k-button-primary:hover,
 .k-button.k-primary:hover {
-    background-color: #1187cd!important;
+    background-color: #1187cd !important;
 }
 
 
@@ -223,12 +223,12 @@ a {
 }
 
 .k-grid-toolbar {
-    background-color: #0071c5;
+    /* background-color: #0071c5; */
+    background-color: #0071c5 !important;
 }
 
 
 /*Kendo-header changes*/
-
 .navbar-brand {
     float: left !important;
     padding: 14px 15px !important;
@@ -435,18 +435,21 @@ kendo-dialog-actions.delete-actions button.k-button.del-ok {
     color: #fff;
 }
 
-kendo-dialog.deleted-popups .k-dialog .k-content h2, kendo-dialog.deleted-popups .k-dialog .k-content p {
-    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+kendo-dialog.deleted-popups .k-dialog .k-content h2,
+kendo-dialog.deleted-popups .k-dialog .k-content p {
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-kendo-dialog-actions.delete-actions button.k-button.del-ok:hover, kendo-dialog-actions.delete-actions button.k-button.del-ok:active {
+kendo-dialog-actions.delete-actions button.k-button.del-ok:hover,
+kendo-dialog-actions.delete-actions button.k-button.del-ok:active {
     background-color: #3c8dbc !important;
     border-color: #367fa9 !important;
     color: #fff !important;
     box-shadow: none !important;
 }
 
-kendo-dialog-actions.delete-actions button.k-button.del-cancel:hover, kendo-dialog-actions.delete-actions button.k-button.del-cancel:active {
+kendo-dialog-actions.delete-actions button.k-button.del-cancel:hover,
+kendo-dialog-actions.delete-actions button.k-button.del-cancel:active {
     background-color: #f0f0f0 !important;
     border-color: #f0f0f0 !important;
     color: #111 !important;
@@ -532,24 +535,24 @@ kendo-dialog.workflow-delete-popup .k-content {
     border-bottom: 1px solid #f4f4f4 !important;
 }
 
-    kendo-dialog.workflow-delete-popup .k-content h3.kendo-dialog-message.confirmationTitle {
-        padding: 15px;
-        border-bottom: 1px solid #f4f4f4;
-        min-height: 16.5px;
-        margin-top: 20px !important;
-        margin: 0;
-        font-weight: 500;
-        line-height: 1.1;
-        color: inherit;
-        font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
-    }
+kendo-dialog.workflow-delete-popup .k-content h3.kendo-dialog-message.confirmationTitle {
+    padding: 15px;
+    border-bottom: 1px solid #f4f4f4;
+    min-height: 16.5px;
+    margin-top: 20px !important;
+    margin: 0;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
 
-    kendo-dialog.workflow-delete-popup .k-content p.kendo-dialog-message {
-        position: relative;
-        padding: 15px;
-        margin: 0;
-        text-align: left;
-    }
+kendo-dialog.workflow-delete-popup .k-content p.kendo-dialog-message {
+    position: relative;
+    padding: 15px;
+    margin: 0;
+    text-align: left;
+}
 
 kendo-dialog-actions.btns-workflow-valuer {
     padding: 15px;
@@ -586,7 +589,7 @@ kendo-dialog-actions.btns-workflow-valuer button.k-button.deleteBtn {
     line-height: 1.5 !important;
 }
 
-    kendo-dialog-actions.btns-workflow-valuer button.k-button.deleteBtn:hover {
-        background-color: #367fa9 !important;
-        color: #fff;
-    }
+kendo-dialog-actions.btns-workflow-valuer button.k-button.deleteBtn:hover {
+    background-color: #367fa9 !important;
+    color: #fff;
+}

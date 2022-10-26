@@ -50,15 +50,15 @@ export class GridPopoverComponent implements OnInit {
 
     private initializeGridOptions() {
         if (!this.popOver) {
-            this.loggerService.error('ProductSelectorComponent::GridPopoverComponent:: ', 'Input Variable', new TypeError("Input variable `popOver` is required"));
+            this.loggerService.error('GridPopoverComponent:: ', 'Input Variable', new TypeError("Input variable `popOver` is required"));
         } else if (!this.columnTypes) {
-            this.loggerService.error('ProductSelectorComponent::GridPopoverComponent:: ', 'Input Variable', new TypeError("Input variable `columnTypes` is required"));
+            this.loggerService.error('GridPopoverComponent:: ', 'Input Variable', new TypeError("Input variable `columnTypes` is required"));
         } else if (!this.currentPricingTableRow) {
-            this.loggerService.error('ProductSelectorComponent::GridPopoverComponent:: ', 'Input Variable', new TypeError("Input variable `currentPricingTableRow` is required"));
+            this.loggerService.error('GridPopoverComponent:: ', 'Input Variable', new TypeError("Input variable `currentPricingTableRow` is required"));
         } else if (!this.productMemberSId) {
-            this.loggerService.error('ProductSelectorComponent::GridPopoverComponent:: ', 'Input Variable', new TypeError("Input variable `productMemberSId` is required"));
+            this.loggerService.error('GridPopoverComponent:: ', 'Input Variable', new TypeError("Input variable `productMemberSId` is required"));
         } else if (!this.priceCondition) {
-            this.loggerService.error('ProductSelectorComponent::GridPopoverComponent:: ', 'Input Variable', new TypeError("Input variable `priceCondition` is required"));
+            this.loggerService.error('GridPopoverComponent:: ', 'Input Variable', new TypeError("Input variable `priceCondition` is required"));
         } else {
             this.gridOptions = {
                 dataSource: this.dataSource,
@@ -122,7 +122,7 @@ export class GridPopoverComponent implements OnInit {
                 this.isLoading = false;
                 return this.responseData;
             }, (error) => {
-                this.loggerService.error('ProductSelectorComponent::GridPopoverComponent::getData::', error);
+                this.loggerService.error('GridPopoverComponent::getData::', error);
             });
         }
     }

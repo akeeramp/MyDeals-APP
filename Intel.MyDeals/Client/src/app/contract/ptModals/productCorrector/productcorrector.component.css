@@ -466,9 +466,17 @@ a.prdAnchor:hover {
     overflow: auto !important;
 }
 
+.product-breakout-modal {
+    width: 70vw !important;
+}
+
 .product-breakout-modal > mat-dialog-container {
     background-color: #1a3e6f !important;
-    padding: 15px !important;
+    padding: 0px !important;
+}
+
+.product-breakout-modal mat-dialog-container product-breakout .modal-content {
+    box-shadow: none;
 }
 
 .product-corrector-dialog .k-item > .k-mid > span {
@@ -482,10 +490,6 @@ a.prdAnchor:hover {
 
 .lnavFilter.blue-lnav kendo-treeview ul li span span.badge.upperBadge {
     background-color: #fff !important;
-}
-
-.product-breakout-modal mat-dialog-container product-breakout .modal-content {
-    box-shadow: none;
 }
 
 .lnavFilter.blue-lnav kendo-treeview ul li span.k-in.k-state-selected {
@@ -517,4 +521,9 @@ a.prdAnchor:hover {
     .corrector-one-details, .corrector-two-details {
         height: calc(100vh - 335px);
     }
+}
+
+.product-selector-dialog > mat-dialog-container {
+    background-color: #1a3e6f !important;
+    padding: 0px !important;
 }

@@ -292,3 +292,8 @@ kendo-dialog-actions.pteokbtnstyle.alter-btns-ok button.mykbtnstyles:hover {
     border-color: #ebebeb !important;
     background-color: #ebebeb !important;
 }
+
+.product-selector-dialog > mat-dialog-container {
+    background-color: #1a3e6f !important;
+    padding: 0px !important;
+}

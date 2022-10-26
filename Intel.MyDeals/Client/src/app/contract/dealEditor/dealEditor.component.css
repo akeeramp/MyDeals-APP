@@ -986,9 +986,17 @@ ngb-tooltip-window .tooltip-inner {
     background: #d3d3d30d !important
 }
 
+.product-breakout-modal {
+    width: 70vw !important;
+}
+
 .product-breakout-modal > mat-dialog-container {
     background-color: #1a3e6f !important;
     padding: 0px !important;
+}
+
+.product-breakout-modal mat-dialog-container product-breakout .modal-content {
+    box-shadow: none;
 }
 
 .de-css-comp mat-dialog-container {
@@ -1025,9 +1033,6 @@ kendo-tabstrip.tabs-coll {
     width: 100%;
 }
 
-product-breakout-modal{
-    width: 70%;
-}
 .global-popup-style .k-window-content {
     padding: 15px !important
 }

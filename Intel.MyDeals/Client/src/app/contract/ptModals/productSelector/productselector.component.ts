@@ -22,7 +22,7 @@ import { ProductBreakoutComponent } from "./productBreakout/productBreakout.comp
     selector: 'product-selector',
     templateUrl: 'Client/src/app/contract/ptModals/productSelector/productselector.component.html',
     styleUrls: ['Client/src/app/contract/ptModals/productSelector/productSelector.component.css'],
-    encapsulation: ViewEncapsulation.None
+    encapsulation: ViewEncapsulation.Emulated
 })
 export class ProductSelectorComponent {
 
