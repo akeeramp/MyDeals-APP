@@ -61,6 +61,7 @@ export class pricingTableComponent {
     private spinnerMessageDescription: string = "";
     private isBusyShowFunFact: boolean = true;
     private isShowPCT: boolean = false;
+    private isInformationIconReqd: boolean = false;
 
     public searchedContractData = {
         Model: "",
@@ -287,6 +288,10 @@ export class pricingTableComponent {
             if (data.PT_Passed_validation != undefined && data.PT_Passed_validation != null)
                 this.pt_passed_validation = data.PT_Passed_validation;
         }
+    }
+
+    isDeTabInfmIconUpdate(value: any) {
+        this.isInformationIconReqd = value;
     }
 
     ngOnInit() {

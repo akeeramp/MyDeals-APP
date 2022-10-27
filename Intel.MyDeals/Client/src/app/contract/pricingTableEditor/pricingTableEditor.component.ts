@@ -241,6 +241,7 @@ export class pricingTableEditorComponent implements OnChanges {
     @Output() tmDirec = new EventEmitter();
     @Output() enableDeTab = new EventEmitter();
     @Output() refreshedContractData = new EventEmitter;
+    @Output() deTabInfmIconUpdate = new EventEmitter;
     public fontData:any[] = [
         { text: "(inherited size)", size: "inherit" },
         { text: "1 (8pt)", size: "8" },
@@ -442,6 +443,7 @@ export class pricingTableEditorComponent implements OnChanges {
             Tender_Util.getTenderDetails(response.PRC_TBL_ROW, this.isTenderContract);
             this.pricingTableDet = response.PRC_TBL_ROW;
             this.enableDeTab.emit(true);
+            this.deTabInfmIconUpdate.emit(PTE_Common_Util.dealEditorTabValidationIssue(response, false));
             return response.PRC_TBL_ROW;
         } else {
             this.enableDeTab.emit(false);

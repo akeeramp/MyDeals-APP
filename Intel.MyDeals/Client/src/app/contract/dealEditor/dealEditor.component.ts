@@ -50,6 +50,7 @@ export class dealEditorComponent {
     @ViewChild(GridComponent) private grid: GridComponent;
     @Output() refreshedContractData = new EventEmitter;
     @Output() tmDirec = new EventEmitter();
+    @Output() deTabInfmIconUpdate = new EventEmitter();
     private isWarning: boolean = false;
     private message: string = "";
     public dirty = false;
@@ -211,6 +212,7 @@ export class dealEditorComponent {
             this.loggerService.error('dealEditorComponent::readPricingTable::readTemplates:: service', err);
         });
         if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
+            this.deTabInfmIconUpdate.emit(PTE_Common_Util.dealEditorTabValidationIssue(response, true));
             if (response.WIP_DEAL[0].IS_HYBRID_PRC_STRAT == '1') {
                 response.WIP_DEAL = PTE_Validation_Util.ValidateEndCustomer(response.WIP_DEAL, "OnLoad", this.curPricingStrategy, this.curPricingTable);
                 var isValidationNeeded = response.WIP_DEAL.filter(obj => obj.IS_HYBRID_PRC_STRAT == "1" && obj.HAS_TRACKER == "1");

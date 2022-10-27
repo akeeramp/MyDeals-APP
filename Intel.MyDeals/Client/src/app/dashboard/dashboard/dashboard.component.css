@@ -1363,3 +1363,33 @@ button.dash-popup-okbtn.k-button:hover {
 input[type="text"]:focus-visible {
     outline: none;
 }
+
+.k-filter-menu .k-button + .k-button {
+    margin-right: 0;
+}
+
+.k-filter-menu .k-button, .k-filter-menu .k-button.k-primary:hover, .k-filter-menu .k-button:hover {
+    font-size: 14px;
+    font-weight: 500;
+    text-transform: uppercase;
+    background: transparent !important;
+    border-color: transparent !important;
+    line-height: 1.143em;
+    padding: 9px 14px;
+    display: inline-block;
+    vertical-align: middle;
+    box-shadow: none;
+    margin: 0;
+    width: 50%;
+    border-radius: 0;
+    text-align: center;
+    cursor: pointer;
+    color: #444 !important;
+    text-decoration: none;
+}
+
+.k-filter-menu .k-button.k-primary, .k-filter-menu .k-button.k-primary:hover {
+    border-left-color: #f0f0f0 !important;
+    float: right;
+    color: #00aeef !important;
+}

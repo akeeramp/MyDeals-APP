@@ -422,4 +422,36 @@ export class PTE_Common_Util {
         }
         return;
     }
+
+    static dealEditorTabValidationIssue(data : any, isWip: boolean) {
+        if (data === undefined || data === null || data.PRC_TBL_ROW === undefined || data.WIP_DEAL === undefined) return false;
+        if (data.PRC_TBL_ROW.length > 0 && data.WIP_DEAL.length === 0) return true;
+
+        var aryWipIds = [];
+        _.each(data.WIP_DEAL, function (item) {
+            if (aryWipIds.indexOf(item.DC_PARENT_ID) < 1) aryWipIds.push(item.DC_PARENT_ID);
+        });
+
+        var aryPtrIds = [];
+        _.each(data.PRC_TBL_ROW, function (item) {
+            if (aryPtrIds.indexOf(item.DC_ID) < 1) aryPtrIds.push(item.DC_ID);
+        });
+
+        var unpairedPtrs = this.arrBiDirectionalDifference(aryPtrIds, aryWipIds);
+
+        var myRet = false;
+        _.each(data.WIP_DEAL, function (item) {
+            if (item.warningMessages.length > 0 && !isWip) myRet = true;
+        });
+
+        if (unpairedPtrs.length > 0) myRet = true; // If any bi-directional changes are noted, trigger
+        return myRet;
+    }
+
+    static arrBiDirectionalDifference(arr1: any, arr2: any) {
+        let difference1 = arr1.filter(x => arr2.indexOf(x) === -1);
+        let difference2 = arr2.filter(x => arr1.indexOf(x) === -1);
+        let difference = difference1.concat(difference2).sort((x, y) => x - y);
+        return difference;
+    }
 }

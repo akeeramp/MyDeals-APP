@@ -6,12 +6,11 @@ import * as _ from 'underscore';
 @Component({
     selector: 'multicheck-filter',
     template: `
-    <ul>
-      <li *ngIf="showFilter">
-        <div>
+    <div *ngIf="showFilter">
         <input id="multiCheckFilter" class="k-textbox" (input)="onInput($event)" placeholder="Search" />
-        <span id="searchIcon" class="k-icon k-i-zoom"></span></div>
-      </li>
+        <span id="searchIcon" class="k-icon k-i-zoom"></span>
+    </div>
+    <ul>      
       <li #itemElement
         *ngFor="let item of currentData; let i = index;"
         (click)="onSelectionChange(valueAccessor(item), itemElement)"
@@ -29,12 +28,12 @@ import * as _ from 'underscore';
         </label>
       </li>
     </ul>
+    <div id="selectedCount">{{selectedCount}} items selected</div>
   `,
     styles: [`
     #searchIcon{
         display:inline-block;
-        bottom:30px;
-        left:155px;
+        right:20px;
         text-align:center;
         vertical-align:middle;
         overflow:hidden;
@@ -45,25 +44,24 @@ import * as _ from 'underscore';
     }
     ul {
       list-style-type: none;
-      height: 100%;
-      overflow-y: scroll;
       padding-left: 0;
       padding-right: 12px;
       position: relative;
+      overflow: auto;
+      overflow-x: hidden;
+      white-space: nowrap;
+      max-height: 300px;
     }
 
     ul>li {
       padding: 8px 12px;
-      border: 1px solid rgba(0,0,0,.08);
-      border-bottom: none;
-    }
-
-    ul>li:last-of-type {
-      border-bottom: 1px solid rgba(0,0,0,.08);
-    }
+    }    
 
     .k-multiselect-checkbox {
       pointer-events: none;
+    }
+    #selectedCount{
+        padding: 8px 12px;
     }
   `]
 })
@@ -81,6 +79,7 @@ export class MultiCheckFilterComponent implements AfterViewInit {
     public currentData: any[]=[];
     public showFilter = true;
     private value: any[] = [];
+    private selectedCount: number = 0;
 
     protected textAccessor = (dataItem: any) => this.isPrimitive ? dataItem : dataItem[this.textField];
     protected valueAccessor = (dataItem: any) => this.isPrimitive ? dataItem : dataItem[this.valueField];
@@ -105,7 +104,9 @@ export class MultiCheckFilterComponent implements AfterViewInit {
         if(this.currentData && this.currentData.length>0){
           this.showFilter = typeof this.textAccessor(this.currentData[0]) === 'string';
         }
-       
+        this.selectedCount = this.value && this.value.length > 0 ? this.value.length : 0;
+        if (this.value.includes('Select All'))
+            this.selectedCount--;
     }
 
     public isItemSelected(item) {
@@ -162,11 +163,13 @@ export class MultiCheckFilterComponent implements AfterViewInit {
             logic: 'or'
         });
         this.onFocus(li);
+        this.selectedCount = this.value && this.value.length > 0 ? this.value.length : 0;
+        if (this.value.includes('Select All'))
+            this.selectedCount--;
     }
 
     public onInput(e: any) {
         this.currentData = distinct([
-            ...this.currentData.filter(dataItem => this.value.some(val => val === this.valueAccessor(dataItem))),
             ...filterBy(this.data, {
                 operator: 'contains',
                 field: this.textField,
@@ -174,6 +177,20 @@ export class MultiCheckFilterComponent implements AfterViewInit {
             })],
             this.textField
         );
+        if (e.target.value.length == 0) {
+            if (this.textField != undefined && this.textField != null && this.textField != '' && this.valueField != undefined && this.valueField != null && this.valueField != null) {
+                if (this.currentData && this.currentData.length > 0 && this.currentData.filter(x => x[this.textField] == 'Select All').length == 0) {
+                    let selectAlldata: any = {};
+                    selectAlldata[this.textField] = 'Select All';
+                    selectAlldata[this.valueField] = 'Select All';
+                    this.currentData.unshift(selectAlldata);
+                }
+            }
+            else {
+                if (!this.currentData.includes('Select All'))
+                    this.currentData.unshift('Select All')
+            }
+        }
     }
 
     public onFocus(li: any): void {
