@@ -289,15 +289,18 @@ export class pricingTableEditorComponent implements OnChanges {
         manualColumnResize: true,
         afterChange: (changes, source) => {
             try{
-                //using => operator to-call-parent-function-from-callback-function
-                //loading screen changes are moved to the top to  make better performance
-                this.spinnerMessageHeader = 'PTE Reloading...';
-                this.spinnerMessageDescription = 'PTE Reloading please wait';
-                this.isLoading=true;
-                setTimeout(()=>{
-                    this.afterCellChange(changes, source);
-                    this.isLoading=false;
-                },0)
+                //the data is coing as null in case of source is loadData 
+                if(changes){
+                    //using => operator to-call-parent-function-from-callback-function
+                    //loading screen changes are moved to the top to  make better performance
+                    this.spinnerMessageHeader = 'PTE loading';
+                    this.spinnerMessageDescription = 'PTE loading please wait....';
+                    this.isLoading=true;
+                    setTimeout(()=>{
+                        this.afterCellChange(changes, source);
+                        this.isLoading=false;
+                    },0)
+                }
             }
             catch(ex){
                 this.loggerService.error('Something went wrong', 'Error');
@@ -778,8 +781,7 @@ export class pricingTableEditorComponent implements OnChanges {
         try {
             this.isLoading = true;
             this.overlapFlexResult = [];
-            if (this.spinnerMessageHeader == "")
-                this.setBusy("Loading ...", "Loading the Pricing Table Editor", "Info", true);
+            this.setBusy("PTE loading", "PTE loading please wait.....", "Info", true);
             let PTR = await this.getPTRDetails();
             //this is to make sure the saved record prod color are success by default
             PTR=PTE_Load_Util.setPrdColor(PTR);
@@ -1300,14 +1302,12 @@ export class pricingTableEditorComponent implements OnChanges {
         this.loadPTE();
     }
     ngAfterViewInit() {
-        this.setBusy('PTE Loading', 'PTE Loading please wait.....', 'Info', true);
         //loading after the View init from there onwards we can reuse the hotTable instance
         this.hotTable = this.hotRegisterer.getInstance(this.hotId);
         // loading PTE cell util  with hotTable instance for direct use of hotTable within the class
         new PTE_CellChange_Util(this.hotTable);
         new PTE_Common_Util(this.hotTable);
         new PTE_Load_Util(this.hotTable);
-        this.isLoading = false;
     }
     
 }
