@@ -1216,10 +1216,9 @@ export class pricingTableEditorComponent implements OnChanges {
             "overlapFlexResult": this.overlapFlexResult
         }
         const dialogRef = this.dialog.open(FlexOverlappingCheckComponent, {
-            height: '300px',
             width: '800px',
             data: data,
-
+            panelClass: 'flex-overlapping-deals',
         });
         dialogRef.afterClosed().subscribe(result => { });
     }

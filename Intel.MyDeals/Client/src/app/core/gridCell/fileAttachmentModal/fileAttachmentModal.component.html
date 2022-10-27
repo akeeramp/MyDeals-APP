@@ -18,7 +18,7 @@
                             <div class="clearboth"></div>
                         </div>
                         <div class="panel-body">
-                            <kendo-upload class="fino-css" [saveUrl]="uploadSaveUrl" [batch]="true" [restrictions]="myRestrictions" (success)="successEventHandler()" (select)="onFileSelect()" (remove)="onFileRemove()" (error)="errorEventHandler()" (complete)="onFileUploadComplete()"
+                            <kendo-upload class="fino-css throw-fa-css" [saveUrl]="uploadSaveUrl" [batch]="true" [restrictions]="myRestrictions" (success)="successEventHandler()" (select)="onFileSelect()" (remove)="onFileRemove()" (error)="errorEventHandler()" (complete)="onFileUploadComplete()"
                                 (upload)="uploadEventHandler($event)" [autoUpload]="false">
                             </kendo-upload>
                         </div>

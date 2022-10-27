@@ -216,3 +216,29 @@ kendo-grid.approve-table .k-grid-container .k-grid-content tr td {
 .new-custom-deal-tools button:last-child:hover {
     background-color: #ebebeb !important;
 }
+
+kendo-upload.fino-css.throw-fa-css kendo-upload-action-buttons {
+    position: relative;
+    height: 55px;
+    border-bottom: none;
+}
+
+kendo-upload.fino-css.throw-fa-css kendo-upload-action-buttons .k-upload-selected {
+    margin-top: 0 !important;
+    display: block;
+    position: absolute;
+    border-radius: 0 0 4px 0;
+    box-shadow: 0 2px 6px #00000033, 0 2px 3px #0000000d;
+    height: 54px;
+    -webkit-box-shadow: 0 2px 6px #00000033, 0 2px 3px #0000000d;
+    -moz-box-shadow: 0 2px 6px #00000033, 0 2px 3px #0000000d;
+    font-size: 15px;
+    border: none !important;
+    z-index: 9;
+    line-height: 1;
+}
+
+kendo-upload.fino-css.throw-fa-css kendo-upload-action-buttons .k-upload-selected:hover {
+    border: 1px solid #025ce2 !important;
+    height: 55px;
+}

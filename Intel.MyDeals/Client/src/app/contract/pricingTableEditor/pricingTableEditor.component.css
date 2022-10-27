@@ -305,3 +305,7 @@ kendo-dialog-actions.pteokbtnstyle.alter-btns-ok button.mykbtnstyles:hover {
     background-color: #1a3e6f !important;
     padding: 0px !important;
 }
+
+.flex-overlapping-deals mat-dialog-container {
+    padding: 0;
+}

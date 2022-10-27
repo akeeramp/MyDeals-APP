@@ -815,3 +815,7 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
 #closePopover {
     margin-left: 97% !important;
 }
+
+.all-checkbox-center {
+    text-align: center;
+}
