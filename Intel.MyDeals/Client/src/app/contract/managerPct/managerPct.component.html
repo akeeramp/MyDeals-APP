@@ -9,7 +9,7 @@
 </kendo-tabstrip>
 <div id="sum-wrapper" class="new-view" *ngIf="!isExcludeGroup">
     <div id="sum-header" class="another-sh-class" style="min-width: 800px;">
-        <div class="sum-filter-bar pp-style">
+        <div class="sum-filter-bar pp-style help-search-backgrd">
             <table style="width: 100%;">
                 <tr>
                     <td style="width: 30px; height: 40px;" (click)="toggleSum()"
@@ -26,7 +26,7 @@
                         </div>
                     </td>
                     <td>
-                        <span class="k-textbox k-space-right" style="width: 350px; margin-top: -4px; margin-left: 12px;">
+                        <span class="k-textbox k-space-right k-style-box" style="width: 350px !important; margin-top: -4px; margin-left: 12px;">
                             <i class="intelicon-search"
                                style="font-size: 26px; color: #00AEEF; margin-top: 3px;"></i><input style="width: 345px;border:none;" placeholder="Search for Pricing Strategy, Pricing Table or name"
                                                                                                     [(ngModel)]="titleFilter" />
@@ -40,7 +40,7 @@
             <table style="width: 100%;" class="tbl-header">
                 <tr>
                     <td style="width: 30px;">
-                        <button class="btn btn-sm btn-skyblue-sm fl"
+                        <button class="btn btn-sm btn-skyblue-sm fl btn-rounded-sty"
                                 (click)="executePctViaBtn()"
                                 title="Execute Price Cost Test and Meet Comp Test"
                                 style="padding-left:100px">

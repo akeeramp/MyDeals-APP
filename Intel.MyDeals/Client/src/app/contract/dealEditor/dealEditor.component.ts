@@ -487,6 +487,7 @@ export class dealEditorComponent {
             source = this.dropdownResponses.__zone_symbol__value["MRKT_SEG"]
         }
         const dialogRef = this.dialog.open(multiSelectModalComponent, {
+            panelClass: 'multiselect-scroll-style',
             width: "800px",
             data: {
                 cellCurrValues: value,

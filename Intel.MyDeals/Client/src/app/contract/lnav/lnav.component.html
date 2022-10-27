@@ -101,7 +101,7 @@
                                                 <i class="glyphicon chevron linkable" data-toggle="collapse" [attr.data-target]="'#sumPSdata_'+ ps.DC_ID" style="margin-right: 5px; margin-top: 3px;" [ngClass]="{'intelicon-down': isPSExpanded[psIndex], 'intelicon-right-next': !isPSExpanded[psIndex]}"></i>
                                                 <!--<i class="chevron linkable" data-toggle="collapse" [attr.data-target]="'#sumWipGrid_'+ pt.DC_ID"-->
                                             </div>
-                                            <div class="fl col-md-10" style="font-size: 12px;">
+                                            <div class="fl col-md-10" style="font-size: 12px; width: 225px;">
                                                 <div class="fl" title="{{ ps.PASSED_VALIDATION || 'Not validated yet'}}" style="margin: 0 4px 2px 0px; line-height: 1em; font-size: 20px;">
                                                     <i class="intelicon-protection-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION==='Complete'" title="{{ps.PASSED_VALIDATION}}"></i>
                                                     <i class="intelicon-protection-outlined bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION==='Finalizing'" title="{{ps.PASSED_VALIDATION}}"></i>
