@@ -1359,3 +1359,7 @@ button.dash-popup-okbtn.k-button:hover {
     margin-top: 5px !important;
     padding:5px !important
 }
+
+input[type="text"]:focus-visible {
+    outline: none;
+}

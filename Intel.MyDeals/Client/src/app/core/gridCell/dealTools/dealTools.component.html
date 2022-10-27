@@ -161,7 +161,7 @@
         <!-- Hold icon -->
         <div class='fl md-icon' *ngIf="(dataItem._parentCnt === undefined || dataItem._parentCnt <= 1) && getHoldValue(dataItem) !== 'NoShowHold' && isTenderContract == false && getHoldVisibility(dataItem) == false">
             <i [ngClass]='getHoldIcon(dataItem)' [ngStyle]="getHoldStyle(dataItem)" title="{{getHoldTitle(dataItem)}}" style="font-size: 20px !important;" (click)="clkHoldIcon(dataItem)" *ngIf="!openHoldDialog && !openUnHoldDialog"></i>
-            <kendo-dialog *ngIf="openHoldDialog" (close)="closeDialogs()" [maxWidth]="572">
+            <kendo-dialog class="dt-on-hold" *ngIf="openHoldDialog" (close)="closeDialogs()" [maxWidth]="572">
                 <div class="kendoAlert" style="padding: 2.4em; font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif;">
                     <h4 style="margin-top: 22px !important; font-size: 24px !important; margin-bottom: 11px !important;">Would you like to place the {{dealTxt}} on hold?</h4>
                     <p>This will keep the {{dealTxt}} in the Pricing Table, but it will not get promoted to active or get a tracker number for payment.</p>
@@ -171,7 +171,7 @@
                     <div kendoButton class="k-button cancelDelete" style="width: 50% !important;" (click)="closeDialogs()">CANCEL</div>
                 </kendo-dialog-actions>
             </kendo-dialog>
-            <kendo-dialog *ngIf="openUnHoldDialog" (close)="closeDialogs()" [maxWidth]="572">
+            <kendo-dialog class="dt-on-hold" *ngIf="openUnHoldDialog" (close)="closeDialogs()" [maxWidth]="572">
                 <div class="kendoAlert" style="padding: 2.4em; font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif;">
                     <h4 style="margin-top: 22px !important; font-size: 24px !important; margin-bottom: 11px !important;">Would you like to take the {{dealTxt}} off hold?</h4>
                     <p>This will enable the {{dealTxt}} in the Pricing Table and will enable it to get approved.</p>

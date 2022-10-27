@@ -440,7 +440,8 @@ tr.k-alt.grey {
     padding: 24px !important;
 }
 #GroupExclusionTab {
-    margin-top: 20px;
+    margin-top: 28px;
+    margin-left: 10px;
 }
 
 #GroupExclusionTab .k-tabstrip-items .k-item {
@@ -512,6 +513,25 @@ kendo-dialog-actions.popup-dialog:hover {
 .popup-box .k-window {
     border-radius: 0
 }
+
+kendo-grid.group-Excl-grid table tr th .k-cell-inner .k-column-title {
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    line-height: 16px;
+    text-transform: capitalize;
+    color: #1a3e6f;
+}
+
+kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu .k-grid-filter .k-i-filter {
+    color: #00AEEF;
+    opacity: 1;
+    font-size: 14px !important;
+}
+
+kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-grid-filter.k-state-active {
+    background: white;
+}
+
 .exclude-filter-style .k-filterable > .k-cell-inner {
     margin-right: -40px !important
 }

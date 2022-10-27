@@ -480,3 +480,11 @@ kendo-dialog.artho-css .k-dialog-buttongroup {
         color: #ffffff !important;
         background: none !important
     }
+
+kendo-dialog.dt-on-hold .k-window {
+    border: none !important;
+}
+
+    kendo-dialog.dt-on-hold .k-window kendo-dialog-actions {
+        border-radius: 0;
+    }

@@ -58,3 +58,8 @@ kendo-grid.pro-meetComp.k-widget.k-grid table tr th span.k-cell-inner .k-link {
     color: #1a3e6f;
     font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
+
+kendo-grid.pro-meetComp.k-widget.k-grid kendo-grid-group-panel .k-indicator-container {
+    background-color: #fff;
+    color: #00aeef;
+}
