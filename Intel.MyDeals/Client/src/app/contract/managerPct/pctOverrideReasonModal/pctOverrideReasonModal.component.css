@@ -128,3 +128,12 @@ input[type=checkbox].with-font {
 .pct_overridestyle.k-grid .k-grid-content-locked tr:hover td {
     background-color: #ecf8fb !important;
 }
+.pctstyle-override-head.modal-header {
+    padding: 1rem 1rem !important;
+    border-bottom: 1px solid #e5e5e5 !important;
+}
+
+.pct-override-body.modal-body {
+    padding: 20px !important;
+    position: relative !important
+}
