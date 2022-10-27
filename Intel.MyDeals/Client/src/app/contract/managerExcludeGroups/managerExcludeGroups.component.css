@@ -512,3 +512,6 @@ kendo-dialog-actions.popup-dialog:hover {
 .popup-box .k-window {
     border-radius: 0
 }
+.exclude-filter-style .k-filterable > .k-cell-inner {
+    margin-right: -40px !important
+}

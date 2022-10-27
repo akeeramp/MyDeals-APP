@@ -28,7 +28,7 @@
                     </div>
                 </div>
                 <div class="row" style="margin: 0px;width:100%">
-                    <kendo-grid [data]="gridData" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+                    <kendo-grid class="exclude-filter-style" [data]="gridData" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                                 [groupable]="false" [group]="state.group" filterable="menu" [navigable]="true"
                                 (dataStateChange)="dataStateChange($event)" style="height: 330px;">
                         <kendo-grid-column title="Deal Id" field="DC_ID" [headerClass]="{'headerClass':true}"

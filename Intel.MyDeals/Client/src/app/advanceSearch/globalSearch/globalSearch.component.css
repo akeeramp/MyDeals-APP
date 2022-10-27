@@ -83,7 +83,7 @@ kendo-dialog-actions.global-style.k-dialog-buttongroup {
 
 .global-titles-style {
     font-family: 'Intel Clear' !important;
-    margin: 10px 0px 0px 4px !important;
+    margin: 10px 0px 0px 0px !important;
 }
 
 .k-content.k-window-content.k-dialog-content .global-titles-style {
