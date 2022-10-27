@@ -1025,7 +1025,7 @@ ngb-tooltip-window .tooltip-inner {
 
 
 #DELoading .ss-loading-overlay .myLoader{
-    left: 32% !important;
+    left: 50% !important;
     top: 10% !important;
 }
 
@@ -1039,4 +1039,13 @@ kendo-tabstrip.tabs-coll {
 
 .mybotdialog .k-content.k-window-content.k-dialog-content {
     padding: 15px !important;
+}
+
+#DELoading .ss-loading-panel.ss-Info {
+    height: auto !important;
+    margin-top: 200px !important;
+    margin-left: 0% !important; 
+}
+#DELoading .ss-loading-overlay {
+    left: 0 !important;
 }

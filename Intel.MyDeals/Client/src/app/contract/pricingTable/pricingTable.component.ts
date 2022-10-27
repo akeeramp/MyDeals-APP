@@ -95,17 +95,16 @@ export class pricingTableComponent {
         });
     }
 
-    loadModel(contractModel: contractIds, isRedirect: boolean = false) {
+    async loadModel(contractModel: contractIds, isRedirect: boolean = false) {
         if (this.selLnav == 'pctDiv' && contractModel.Model == 'groupExclusionDiv')
             this.isShowPCT = true;
         else if (this.selLnav !== 'pctDiv' && contractModel.Model == 'groupExclusionDiv')
             this.isShowPCT = false;
-        this.selLnav = contractModel.Model
+        this.selLnav = contractModel.Model;
+        this.isDETab = false; this.isPTETab = false;
         if (this.selLnav == 'PTE') {
-            this.isDETab = false; this.isPTETab = false;
             //highligh the selected lnav PT in case request coming fom search result for PTE.
             this.lnavSvc.lnavHieight.next(contractModel);
-            if (!isRedirect) this.isPTETab = true;
             if (contractModel.ps_id != 0 && contractModel.pt_id != 0) {
                 this.isPTEEnable = true;
                 this.isDETab = false;
@@ -123,8 +122,34 @@ export class pricingTableComponent {
                         this.wf_Stage = PRC_ST[0].WF_STG_CD;
                         this.ps_passed_validation = PRC_ST[0].PASSED_VALIDATION;
                         this.is_hybrid_ps = PRC_ST[0].IS_HYBRID_PRC_STRAT;
-                        this.pt_passed_validation = PRC_ST[0].PASSED_VALIDATION
-                        this.enableDealEditorTab(isRedirect);
+                        this.pt_passed_validation = PRC_TBL[0].PASSED_VALIDATION
+                        await this.enableDealEditorTab();
+                        //if isRedirect is true which means user navigating to the deal through the global search results then for PS and Deal ID search, DE tab should be shown and for PT ->PTE tab should be shown
+                        if (isRedirect) {
+                            if (this.type != "PT" && this.isDETabEnabled) {
+                                setTimeout(() => {
+                                    this.isDETab = true; this.isPTETab = false
+                                }, 0)
+                            }
+                            else {
+                                setTimeout(() => {
+                                    this.isDETab = false; this.isPTETab = true;
+                                }, 0)
+                            }
+                        }
+                        else {
+                            if (this.pt_passed_validation == 'Complete') {
+                                //for the page to redirect
+                                setTimeout(() => {
+                                    this.isDETab = true; this.isPTETab = false;
+                                }, 0);
+                            } else {
+                                //for the page to redirect
+                                setTimeout(() => {
+                                    this.isDETab = false; this.isPTETab = true;
+                                }, 0);
+                            }
+                        }
                     }
                 }
             }
@@ -141,6 +166,7 @@ export class pricingTableComponent {
         }
         //this.curPricingStrategy = ContractUtil.findInArray(this.contractData["PRC_ST"], this.ps_Id)
     }
+
     async onTabSelect(e: SelectEvent) {
         try {
             e.preventDefault();
@@ -244,12 +270,7 @@ export class pricingTableComponent {
         });
         if (response && response.PRC_TBL_ROW && response.PRC_TBL_ROW.length > 0) {
             this.isDETabEnabled = true;
-            //if isRedirect is true which means user navigating to the deal through the global search results then for PS and Deal ID search, DE tab should be shown and for PT ->PTE tab should be shown
-            if (isRedirect) {
-                if (this.type != "PT") { this.isDETab = true; this.isPTETab = false}
-                else { this.isDETab = false; this.isPTETab = true }
-            }
-        } else { this.isDETabEnabled = false;  }
+        } else this.isDETabEnabled = false; 
     }
 
     enableDETab(isEnabled) {

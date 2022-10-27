@@ -1300,12 +1300,14 @@ export class pricingTableEditorComponent implements OnChanges {
         this.loadPTE();
     }
     ngAfterViewInit() {
+        this.setBusy('PTE Loading', 'PTE Loading please wait.....', 'Info', true);
         //loading after the View init from there onwards we can reuse the hotTable instance
         this.hotTable = this.hotRegisterer.getInstance(this.hotId);
         // loading PTE cell util  with hotTable instance for direct use of hotTable within the class
         new PTE_CellChange_Util(this.hotTable);
         new PTE_Common_Util(this.hotTable);
         new PTE_Load_Util(this.hotTable);
+        this.isLoading = false;
     }
     
 }

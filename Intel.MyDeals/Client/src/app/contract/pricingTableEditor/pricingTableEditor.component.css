@@ -217,7 +217,15 @@ kendo-tabstrip.tabs-coll {
     width: 100%;
 }
 .ptrLoading > .ss-loading-overlay > .myLoader {
-    left: 32% !important;
+    left: 50% !important;
+}
+.ptrLoading .ss-loading-overlay{
+    left: 0 !important;
+}
+.ptrLoading .ss-loading-panel.ss-Info {
+    height: auto !important;
+    margin-top: 200px !important;
+    margin-left: 0% !important;
 }
 kendo-dialog-actions.pteokbtnstyle {
     padding: 0px !important;
