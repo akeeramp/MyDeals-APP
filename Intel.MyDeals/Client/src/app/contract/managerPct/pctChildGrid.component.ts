@@ -104,6 +104,7 @@ export class pctChildGridComponent {
 
     openReason(dataItem) {
         const dialogRef = this.dialog.open(pctOverrideReasonModal, {
+            panelClass: 'pct-override-style',
             data: {
                 cellCurrValues: dataItem
             }

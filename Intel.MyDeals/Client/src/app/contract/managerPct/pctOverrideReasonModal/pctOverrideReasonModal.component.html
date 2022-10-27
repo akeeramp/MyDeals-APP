@@ -1,12 +1,12 @@
     <div class="modal-header modalBlueBody">
-        <h5 class="modal-title" id="modal-title">Select Cost Test Exception</h5>
+        <h5 class="modal-title cost-exception-headstyle" id="modal-title">Select Cost Test Exception</h5>
     </div>
     <div class="modal-body modalBlueBody" id="modal-body">
 
         <table style="width: 100%;">
             <tr>
                 <td style="width: 95%;">
-                    <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+                    <kendo-grid class="pct_overridestyle" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                     [sort]="state.sort" [filter]="state.filter" [sortable]="true" [groupable]="false"
                     [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)">
                     <kendo-grid-column [headerClass]="{'headerClass':true}" [locked]="true" [filterable]="false" width="50px" title=" " field="isSelected">

@@ -1357,7 +1357,7 @@ button.dash-popup-okbtn.k-button:hover {
 .dashboard-title-style {
     margin-bottom: 5px !important;
     margin-top: 5px !important;
-    padding:5px !important
+    padding:4px !important
 }
 
 input[type="text"]:focus-visible {

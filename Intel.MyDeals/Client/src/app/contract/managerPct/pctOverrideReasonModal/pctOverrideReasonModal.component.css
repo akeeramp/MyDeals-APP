@@ -84,3 +84,47 @@ input[type=checkbox].with-font {
     margin-left: auto;
     margin-right: auto;
 }
+.pct-override-style mat-dialog-container {
+    box-shadow: 0px 11px 15px -7px rgb(0 0 0 / 20%), 0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%) !important;
+    background: #fff !important;
+    padding: 0px !important;
+    border-radius: 0px !important;
+}
+.pct_overridestyle.k-grid td {
+    font-family: 'Intel Clear' !important;
+    font-size: 12px !important;
+}
+.pct_overridestyle .k-grid-header {
+    font-family: 'Intel Clear' !important
+}
+.pct_overridestyle .k-grid-filter {
+    color: #00aeef !important;
+}
+.pct_overridestyle .k-filterable .k-cell-inner {
+    margin-right: -40px !important
+}
+.pct_overridestyle.k-grid .k-grid-filter .k-icon.k-i-filter:hover {
+    color: #0071C5 !important;
+}
+.pct_overridestyle.k-grid .k-grid-header-locked,
+.pct_overridestyle.k-grid .k-grid-content-locked,
+.pct_overridestyle.k-grid .k-grid-header-locked .k-header,
+.pct_overridestyle.k-grid .k-grid-content-locked td {
+    border-color: rgba(33, 37, 41, 0.125) !important;
+}
+.cost-exception-headstyle {
+    font-size: 20px !important;
+    line-height: 1.5 !important;
+    color: #ffffff !important;
+    font-weight: 400 !important
+}
+.pct_overridestyle .k-column-title {
+    color: #000000 !important;
+    font-weight: 400 !important;
+}
+.pct_overridestyle .k-filterable > .k-cell-inner .k-link:hover {
+    background: transparent !important
+}
+.pct_overridestyle.k-grid .k-grid-content-locked tr:hover td {
+    background-color: #ecf8fb !important;
+}

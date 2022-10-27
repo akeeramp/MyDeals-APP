@@ -135,8 +135,8 @@ export class messageBoardModal {
             <div style='font-family:sans-serif;'>
             <p><span style='font-size:20px; color:#00AEEF; font-weight: 600'>My Deals Action Required!</span></p>
             <p><span style='font-size:18px;'>Pricing Strategies</span></p>
-            <p><span style='font-size: 12px;'>The following list of Pricing Strategies have changed.  Click <strong style='color:#00AEEF;'>View Pricing Strategy</strong> in order to view details in My Deals.</span></p>
-            <table>
+            <p><span style='font-size: 12px;'>The following list of Pricing Strategies have changed.  Click <strong><span style='color:#00AEEF;font-size: 12px;'>View Pricing Strategy</span></strong> <span style='font-size:12px'>in order to view details in My Deals.</span></span></p>
+            <table style='width:auto; border-collapse: collapse;table-layout: fixed;overflow: auto;'>
                 <thead>
                     <tr>
                         <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Contract</strong></th>
@@ -151,10 +151,10 @@ export class messageBoardModal {
                 <tbody>`+itemListRowString+`
                 </tbody>
             </table>
-            <br />
+           
             <p><span style='font-size: 11px; color: black; font-weight: bold;'>*Links are optimized for Google Chrome</span></p>
             <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:${data.from}'>`+data.from+`</a>.</span></p>
-            <br />
+         
             <p><span style='font-size: 14px; color: red;'><i>**This email was sent from a notification-only address that cannot accept incoming email.  Please do not reply to this message.</i></span></p>
             </div>
         `;
@@ -165,6 +165,7 @@ export class messageBoardModal {
                 body: valuemsg
             };
             const dialogRef = this.dialog.open(emailModal, {
+                panelClass: 'messageboard-email-dialog',
                 width: "900px",
                 height: "611px",
                 data: {
