@@ -189,7 +189,13 @@ export class allDealsComponent {
         this.allDealsSvc.readWipFromContract(cId).subscribe((result: any) => {
             this.isLoading = false;
             this.gridResult = result.WIP_DEAL;
+            this.gridResult?.map((x, i) => {
+                x.CUST_NM = x.Customer?.CUST_NM;
+            });
             data = result.WIP_DEAL;
+            data?.map((x, i) => {
+                x.CUST_NM = x.Customer?.CUST_NM;
+            });
             this.displayDealTypes();
             this.gridData = process(this.gridResult, this.state);
             this.loadDealTypestab(data);
@@ -228,7 +234,7 @@ export class allDealsComponent {
     filterColumnbyGroup(groupName: string) {
         let group = this.groups.filter(x => x.name == groupName);
         let show = [
-            "DC_ID", "PASSED_VALIDATION", "CUST_MBR_SID", "TRKR_NBR", "START_DT", "END_DT", "OBJ_SET_TYPE_CD",
+            "DC_ID", "PASSED_VALIDATION", "CUST_MBR_SID", 'CUST_NM', "TRKR_NBR", "START_DT", "END_DT", "OBJ_SET_TYPE_CD",
             "WF_STG_CD", "PRODUCT_CATEGORIES", "TITLE", "DEAL_COMB_TYPE", "DEAL_DESC", "TIER_NBR", "ECAP_PRICE",
             "KIT_ECAP", "VOLUME", "CONSUMPTION_REASON", "PAYOUT_BASED_ON", "PROGRAM_PAYMENT", "MRKT_SEG", "GEO_COMBINED",
             "REBATE_TYPE", "TERMS", "TOTAL_DOLLAR_AMOUNT", "NOTES"
@@ -239,6 +245,10 @@ export class allDealsComponent {
             this.wipTemplate = this.UItemplate.ModelTemplates.WIP_DEAL[group[0].dealType];
             for (let i = 0; i < this.wipTemplate.columns.length; i++) {
                 if(this.wipTemplate.columns[i].hidden === false){
+                    if (this.wipTemplate.columns[i].field == "CUST_MBR_SID"){
+                        this.wipTemplate.columns[i].field = 'CUST_NM';
+                        this.wipTemplate.columns[i].template= "#=CUST_NM#";
+                    }
                     if ((this.wipTemplate.columns[i].field != 'TOTAL_DOLLAR_AMOUNT') && (this.wipTemplate.columns[i].field != 'KIT_ECAP') && (this.wipTemplate.columns[i].field != 'TIER_NBR') && (this.wipTemplate.columns[i].field !='details') && (this.wipTemplate.columns[i].field != 'tools') && (this.wipTemplate.columns[i].field !="MISSING_CAP_COST_INFO") && (this.wipTemplate.columns[i].field !="LAST_REDEAL_DT")){
                         this.allColumns.push(this.wipTemplate.columns[i]);
                     }
@@ -256,6 +266,12 @@ export class allDealsComponent {
                 }
             }
         } else {
+            for (let i = 0; i < this.allTabColumns.length; i++) {
+                    if (this.allTabColumns[i].field == "CUST_MBR_SID"){
+                        this.allTabColumns[i].field = 'CUST_NM';
+                        this.allTabColumns[i].template= "#=CUST_NM#";
+                    }
+            }
             this.columns = this.allTabColumns;
         }
         if (this.columns.filter(x => x.field == "NOTES").length == 0) {

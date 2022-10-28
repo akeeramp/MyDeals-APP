@@ -108,8 +108,8 @@
                                 <ng-template *ngIf="column.field == 'KIT_ECAP'" let-dataItem="dataItem" kendoGridCellTemplate>
                                     <span>{{getFormatedDim(dataItem, 'ECAP_PRICE', '20_____1', 'currency')}}</span>
                                 </ng-template>
-                                <ng-template *ngIf="column.field == 'CUST_MBR_SID'" let-dataItem="dataItem" kendoGridCellTemplate>
-                                    <span>{{getCustomerName(dataItem)}}</span>
+                                <ng-template *ngIf="column.field == 'CUST_NM'" let-dataItem="dataItem" kendoGridCellTemplate>
+                                    <span>{{dataItem.CUST_NM}}</span>
                                 </ng-template>
                                 <ng-template *ngIf="column.field == 'WF_STG_CD'" let-dataItem="dataItem" kendoGridCellTemplate>
                                     <span>{{getStageValue(dataItem)}}</span>
