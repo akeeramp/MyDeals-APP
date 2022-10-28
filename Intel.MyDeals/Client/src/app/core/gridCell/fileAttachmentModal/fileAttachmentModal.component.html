@@ -46,9 +46,9 @@
                                             <a class="fileCell" download [href]="'/api/FileAttachments/Open/'+ dataItem.FILE_DATA_SID + '/'">{{dataItem.FILE_NM}}</a>
                                         </ng-template>
                                     </kendo-grid-column>
-                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CHG_EMP_WWID" title="Added By" [width]="100" [class]="'cellCustomClass'">
+                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CHG_EMP_WWID" title="Added By" [width]="95" [class]="'cellCustomClass'">
                                     </kendo-grid-column>
-                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CHG_DTM" title="Date Added" [width]="100" [class]="'cellCustomClass'">
+                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CHG_DTM" title="Date Added" [width]="95" [class]="'cellCustomClass'">
                                         <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
                                             <div [innerHtml]="stripMilliseconds(dataItem.CHG_DTM)"></div>
                                         </ng-template>
