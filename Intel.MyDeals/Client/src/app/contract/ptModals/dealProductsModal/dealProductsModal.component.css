@@ -44,18 +44,18 @@
 }
 .dealpopupstyle {
     font-size: 20px !important;
-    margin-left: -30px !important;
+    margin-left: -20px !important;
     line-height: 1.5 !important;
     font-family: 'Intel Clear' !important;
     font-weight: 500 !important;
     color: #111111 !important;
-    margin-top: -10px !important
+    margin-top: 0px !important
 }
-.there-modal-header {
+/*.there-modal-header {
     padding: 20px !important;
     border-bottom: 1px solid #e5e5e59c !important;
     min-height: 16.5px !important;
-}
+}*/
 .deals-popup-style mat-dialog-container {
     box-shadow: 0px 11px 15px -7px rgb(0 0 0 / 20%), 0px 24px 38px 3px rgb(0 0 0 / 14%), 0px 9px 46px 8px rgb(0 0 0 / 12%) !important;
     background: #fff !important;
@@ -96,4 +96,13 @@ button.excelText.differ-artho-excel.iconsize.k-button-icontext.k-button.k-grid-e
 .style-icon-btn.k-button:hover {
     background-color: #37a4cd7a !important 
 }
+.deal-excel-style.modal-header {
+    padding: 1rem 1rem !important;
+    border-bottom: 1px solid #dee2e6 !important;
+}
+.deal-excel-body-style.modal-body {
+    position: relative !important;
+    padding: 10px !important;
+}
+
 

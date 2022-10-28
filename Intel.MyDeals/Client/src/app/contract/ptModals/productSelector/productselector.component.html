@@ -443,7 +443,7 @@
                 </div>
                 <div *ngIf="!excludeMode" class="row">
                     <div [ngClass]="{'col-md-6':enableMultipleSelection,'paddingLeftNone':enableMultipleSelection}">
-                        <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:100px; width:100%; overflow:hidden auto;">
+                        <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:100px; width:100%; overflow:hidden auto;padding:5px;">
                             <span *ngFor="let item of addedProducts">
                                 <span (click)="showSingleProductHierarchy(item)" class="product-list"
                                       [ngClass]="{'text-danger': isValidCapDetails(item)}" title="{{isValidCapDetails(item, true)}}">
@@ -454,7 +454,7 @@
                         </div>
                     </div>
                     <div *ngIf="enableMultipleSelection" class="col-md-6 paddingRightNone">
-                        <div contenteditable="false" class="prodSelected text-left" style="background-color: white; height: 100px; width: 100%; overflow: hidden auto;">
+                        <div contenteditable="false" class="prodSelected text-left" style="background-color: white; height: 100px; width: 100%; overflow: hidden auto;padding:5px;">
                             <span *ngFor="let item of excludedProducts">
                                 <span class="product-list" [ngClass]="{'text-danger': isValidCapDetails(item)}" title="{{isValidCapDetails(item, true)}}">
                                     {{item.HIER_VAL_NM}}  &nbsp;

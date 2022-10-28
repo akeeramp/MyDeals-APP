@@ -687,6 +687,7 @@ input[type=checkbox].with-sm-font:focus+label:before {
     font-size: 13px;
     cursor: pointer;
     box-sizing: border-box;
+    float: left !important;
 }
 
 .k-grid a {
