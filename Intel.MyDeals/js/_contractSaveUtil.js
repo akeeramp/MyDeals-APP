@@ -592,13 +592,13 @@ contractSaveUtil.validateMarketingKIT = function (data, wipData, curPricingTable
     return returnData;
 }    
 
-contractSaveUtil.validatePTEdata = function (sData, curPricingStrategy, getVendorDropDownResult, curPricingTable, wipData, spreadDs,
+contractSaveUtil.validatePTEdata = function (sData, curPricingStrategy, curPricingTable, wipData, spreadDs,
     restrictGroupFlexOverlap, templates, curPricingTableData, ptTitle, hybridSaveBlockingColumns, OVLPFlexPdtPTRUSRPRDError, uid, contractData, forceValidation, editableArSettlementLevelAfterApproval) {
     var errs = {};
     var rData = {};
     var MarksegValidate = {};
     //validate settlement partner for PTE
-    sData = contractutil.validateSettlementPartner(sData, curPricingStrategy, getVendorDropDownResult);
+    sData = contractutil.validateSettlementPartner(sData, curPricingStrategy);
     //validate OAV&OAD partner for PTE
     sData = contractSaveUtil.validateOverArching(sData, curPricingStrategy, curPricingTable);
     sData = contractSaveUtil.validateHybridFields(sData, curPricingStrategy, curPricingTable, wipData, spreadDs);
@@ -999,7 +999,7 @@ contractSaveUtil.validatePTEdata = function (sData, curPricingStrategy, getVendo
     return rData
 }
 
-contractSaveUtil.validateDEdata = function (gData,contractData, curPricingStrategy, curPricingTable, getVendorDropDownResult, wipData, spreadDs, restrictGroupFlexOverlap,
+contractSaveUtil.validateDEdata = function (gData,contractData, curPricingStrategy, curPricingTable, wipData, spreadDs, restrictGroupFlexOverlap,
     hybridSaveBlockingColumns, OVLPFlexPdtPTRUSRPRDError, uid, templates, uData, editableArSettlementLevelAfterApproval) {
     var isTenderFlag = "0";
     var errs = {};
@@ -1011,7 +1011,7 @@ contractSaveUtil.validateDEdata = function (gData,contractData, curPricingStrate
     if (gData !== undefined && gData !== null) {
         gData = contractutil.ValidateEndCustomer(gData, "SaveAndValidate", curPricingStrategy, curPricingTable);
         //validate settlement parter for DE
-        gData = contractutil.validateSettlementPartner(gData, curPricingStrategy, getVendorDropDownResult);
+        gData = contractutil.validateSettlementPartner(gData, curPricingStrategy);
         //validate OAV & OAD parter for DE
         gData = contractSaveUtil.validateOverArching(gData, curPricingStrategy, curPricingTable);
         gData = contractSaveUtil.validateHybridFields(gData, curPricingStrategy, curPricingTable, wipData, spreadDs);

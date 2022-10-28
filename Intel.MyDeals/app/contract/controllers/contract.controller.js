@@ -2637,7 +2637,7 @@
                     //validate density bands
                     sData = $scope.validateDensityBand(sData);
 
-                    rData = contractSaveUtil.validatePTEdata(sData, $scope.curPricingStrategy, $scope.getVendorDropDownResult, $scope.curPricingTable, $scope.wipData, spreadDs,
+                    rData = contractSaveUtil.validatePTEdata(sData, $scope.curPricingStrategy, $scope.curPricingTable, $scope.wipData, spreadDs,
                         $scope.restrictGroupFlexOverlap, $scope.templates, curPricingTableData, $scope.ptTitle, $scope.hybridSaveBlockingColumns, $scope.OVLPFlexPdtPTRUSRPRDError, $scope.uid, $scope.contractData, forceValidation, editableArSettlementLevelAfterApproval);                    
                     sData = rData.sData;
                     errs = rData.errs;                    
@@ -2667,7 +2667,7 @@
                     if (!$scope.restrictGroupFlexOverlap) {
                         gData = $scope.validateOVLPFlexProduct(gData);// TWC3179-1217
                     }
-                    rData = contractSaveUtil.validateDEdata(gData, $scope.contractData, $scope.curPricingStrategy, $scope.curPricingTable, $scope.getVendorDropDownResult,
+                    rData = contractSaveUtil.validateDEdata(gData, $scope.contractData, $scope.curPricingStrategy, $scope.curPricingTable,
                         $scope.wipData, spreadDs, $scope.restrictGroupFlexOverlap, $scope.hybridSaveBlockingColumns, $scope.OVLPFlexPdtPTRUSRPRDError, $scope.uid, $scope.templates, uData, editableArSettlementLevelAfterApproval)
 
                     gData = rData.gData;
@@ -2815,6 +2815,28 @@
                     $scope.$broadcast('saveWithWarnings', data.PricingTableRow);
                 }
                 return;
+            }
+            if ($scope.getVendorDropDownResult != null && $scope.getVendorDropDownResult != undefined
+                && $scope.getVendorDropDownResult.length > 0) {
+                var customerVendor = $scope.getVendorDropDownResult;
+                var cashObj = data.PricingTableRow.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
+                if (cashObj && cashObj.length > 0) {
+                    angular.forEach(data.PricingTableRow, (item) => {
+                        var partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
+                        if (partnerID && partnerID.length == 1) {
+                            item.SETTLEMENT_PARTNER = partnerID[0].DROP_DOWN;
+                        }
+                    });
+                }
+                cashObj = data.WipDeals.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
+                if (cashObj && cashObj.length > 0) {
+                    angular.forEach(data.WipDeals, (item) => {
+                        var partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
+                        if (partnerID && partnerID.length == 1) {
+                            item.SETTLEMENT_PARTNER = partnerID[0].DROP_DOWN;
+                        }
+                    });
+                }
             }
 
             var copyData = util.deepClone(data);
