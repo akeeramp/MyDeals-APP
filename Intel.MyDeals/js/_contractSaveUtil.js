@@ -167,10 +167,10 @@ contractSaveUtil.itemValidationBlock = function (data, key, mode, wipData, sprea
     //Added if condition as this function gets called both on saveandvalidate of WIP and PTR.As spreadDS is undefined in WIP object added this condition
     var spreadData;
     if (spreadDs != undefined) {
-        spreadData = spreadDs.filter((item) => item.IS_CANCELLED == "0");
+        spreadData = spreadDs.filter((item) => item.IS_CANCELLED == undefined || item.IS_CANCELLED == "0");
     }
     else {
-        spreadData = data.filter((item) => item.IS_CANCELLED == "0");
+        spreadData = data.filter((item) => item.IS_CANCELLED == undefined || item.IS_CANCELLED == "0");
     }
 
     //For multi tiers last record will have latest date, skipping duplicate DC_ID
