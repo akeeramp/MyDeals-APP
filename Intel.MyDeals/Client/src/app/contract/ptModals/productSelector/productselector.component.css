@@ -409,7 +409,6 @@ a.prdAnchor:hover {
 }
 
 .checkbox-custom+.checkbox-custom-label:before {
-    content: '';
     background: #fff;
     border: 1.5px solid #eee;
     border-radius: 4px;
@@ -819,4 +818,17 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
 
 .all-checkbox-center {
     text-align: center;
+}
+
+#productSearch span.k-icon.k-clear-value.k-i-close {
+    height: 18px;
+    width: 18px;
+    color: rgb(1 174 239);
+    background: rgb(219 219 219);
+    border-radius: 50%;
+    margin-top: 8px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    opacity: 1;
 }

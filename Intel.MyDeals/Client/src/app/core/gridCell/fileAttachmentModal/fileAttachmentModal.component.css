@@ -73,6 +73,20 @@
     padding-right: 10px !important;
 }
 
+.cellCustomClass.text-left-custom {
+    text-align: left !important;
+}
+
+kendo-grid.approve-table kendo-grid-list table tr td.k-touch-action-auto {
+    box-shadow: none !important;
+    border: none;
+    background: transparent;
+}
+
+kendo-grid.approve-table kendo-grid-list table tr:hover {
+    background-color: transparent !important;
+}
+
 .fileCell {
     color: #0071c5 !important;
     white-space: normal !important;
@@ -221,6 +235,7 @@ kendo-upload.fino-css.throw-fa-css kendo-upload-action-buttons {
     position: relative;
     height: 55px;
     border-bottom: none;
+    z-index:0;
 }
 
 kendo-upload.fino-css.throw-fa-css kendo-upload-action-buttons .k-upload-selected {
@@ -242,3 +257,15 @@ kendo-upload.fino-css.throw-fa-css kendo-upload-action-buttons .k-upload-selecte
     border: 1px solid #025ce2 !important;
     height: 55px;
 }
+
+    /*kendo-upload.fino-css.throw-fa-css kendo-upload-action-buttons .k-upload-selected:before {
+        content: '';
+        position: absolute;
+        left: 0;
+        right: 0;
+        width: 163px;
+        height: 55px;
+        box-shadow: 0px 0px 0px 2px #ccc;
+        -webkit-box-shadow: 0px 0px 0px 2px #ccc;
+        -moz-box-shadow: 0px 0px 0px 2px #ccc;
+    }*/

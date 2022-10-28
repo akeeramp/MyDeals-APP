@@ -34,21 +34,21 @@
                                     class="approve-table">
                                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="ATTCH_SID" title="ID" [hidden]=true>
                                     </kendo-grid-column>
-                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="FILE_DATA_SID" title="&nbsp;" width="10%" [class]="'deleteIcon'">
+                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="FILE_DATA_SID" title="&nbsp;" [width]="40" [class]="'deleteIcon'">
                                         <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
                                             <a class="delete-attach-icon deleteCell" *ngIf="C_DELETE_ATTACHMENTS" (click)='deleteFileAttachment(dataItem)'>
                                                 <i class='intelicon-trash-outlined' title='Click to delete this attachment'></i>
                                             </a>
                                         </ng-template>
                                     </kendo-grid-column>
-                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="FILE_NM" title="File Name" width="40%" [class]="'cellCustomClass'">
+                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="FILE_NM" title="File Name" [width]="150" [class]="'cellCustomClass text-left-custom'">
                                         <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
                                             <a class="fileCell" download [href]="'/api/FileAttachments/Open/'+ dataItem.FILE_DATA_SID + '/'">{{dataItem.FILE_NM}}</a>
                                         </ng-template>
                                     </kendo-grid-column>
-                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CHG_EMP_WWID" title="Added By" width="25%" [class]="'cellCustomClass'">
+                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CHG_EMP_WWID" title="Added By" [width]="100" [class]="'cellCustomClass'">
                                     </kendo-grid-column>
-                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CHG_DTM" title="Date Added" width="25%" [class]="'cellCustomClass'">
+                                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CHG_DTM" title="Date Added" [width]="100" [class]="'cellCustomClass'">
                                         <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
                                             <div [innerHtml]="stripMilliseconds(dataItem.CHG_DTM)"></div>
                                         </ng-template>
