@@ -97,3 +97,15 @@
     color: #111 !important;
     font-weight: 400 !important;
 }
+button.fix_ok.k-button {
+    color: #444 !important;
+    background-color: #dbdbdb !important;
+    height: 60px !important;
+}
+button.fix_ok.k-button:hover {
+    background-color: #dcd8d880 !important;
+}
+.padding_ok.k-dialog-buttongroup {
+   border-color: #dee2e6 !important;
+   padding: 0px !important;
+}
