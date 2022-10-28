@@ -560,3 +560,7 @@ button.btn.btn-sm.btn-primary.lnavaddbtnstyle {
     padding: 7px 10px !important;
     border-color: #367fa9 !important;
 }
+.isMandatory:before {
+    content: "* ";
+    color: #f3d54e;
+}

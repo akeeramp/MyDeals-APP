@@ -51,6 +51,7 @@ export class dealEditorComponent {
     @Output() refreshedContractData = new EventEmitter;
     @Output() tmDirec = new EventEmitter();
     @Output() deTabInfmIconUpdate = new EventEmitter();
+    @Output() pteRedir = new EventEmitter();
     private isWarning: boolean = false;
     private message: string = "";
     public dirty = false;
@@ -844,6 +845,13 @@ export class dealEditorComponent {
      
     }
 
+    reloadFn(eventData) {
+        if (this.isTenderContract) {
+            this.tmDirec.emit('PTR');
+        } else {
+            this.pteRedir.emit('')
+        }
+    }
     async SaveDealData() {
         this.isWarning = false;
         this.isDatesOverlap = false;

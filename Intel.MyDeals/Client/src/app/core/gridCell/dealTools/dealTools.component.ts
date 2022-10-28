@@ -39,6 +39,7 @@ export class dealToolsComponent{
     @Input() isManageTab;
     @Output() iconSaveUpdate: EventEmitter<any> = new EventEmitter<any>();
     @Output() refreshContract: EventEmitter<any> = new EventEmitter<any>();
+    @Output() reloadFn = new EventEmitter<any>();
 
     public isSalesForceDeal;
     public isPublishable;
@@ -418,38 +419,35 @@ export class dealToolsComponent{
         }
         this.confirmDelete = true;
     }
-    deletePricingTableRow() {
+    async deletePricingTableRow() {
         this.closeDialogs();
         this.setBusy("Deleting...", "Deleting the Pricing Table Row and Deal", "","");
         this.dataItem._dirty = false;
         let ptrId = this.dataItem.DC_PARENT_ID;
         // Remove from DB first... then remove from screen
-        this.dataService.deletePricingTableRow(this.dataItem.CUST_MBR_SID, this.contractData.DC_ID, ptrId)
-            .subscribe((response: any) => {
-                if (response.MsgType !== 1) {
-                    this.setBusy("Delete Failed", "Unable to Delete the Pricing Table", "Error","");
-                    setTimeout(() => {
-                        this.setBusy("", "", "","");
-                    }, 4000);
-                    return;
-                }
-                let row = null;
-                for (var d = 0; d < this.gridData.length; d++) {
-                    if (this.gridData[d].DC_PARENT_ID === ptrId)
-                        row = this.gridData.splice(d, 1);
-                }
-                if (this.gridData.length == 0) {
-                    //return to pte screen...call loadPTE() from pte component
-                }
-                this.refreshContract.emit(true);
-                this.setBusy("Delete Successful", "Deleted the Pricing Table Row and Deal", "Success","");
-                setTimeout(() => {
-                    this.setBusy("", "", "","");
-                }, 4000);
-            }, (response)=> {
-                this.loggerSvc.error("Could not delete the Pricing Table " + ptrId , response, response.statusText);
-                this.setBusy("", "", "","");
-            });
+        let response = await this.dataService.deletePricingTableRow(this.dataItem.CUST_MBR_SID, this.contractData.DC_ID, ptrId).toPromise().catch((response) => {
+            this.loggerSvc.error("Could not delete the Pricing Table " + ptrId, response, response.statusText);
+            this.setBusy("", "", "", "");
+        })
+        if (response.MsgType !== 1) {
+            this.setBusy("Delete Failed", "Unable to Delete the Pricing Table", "Error", "");
+            setTimeout(() => {
+                this.setBusy("", "", "", "");
+            }, 4000);
+            return;
+        }
+        let row = null;
+        for (var d = 0; d < this.gridData.length; d++) {
+            if (this.gridData[d].DC_PARENT_ID === ptrId)
+                row = this.gridData.splice(d, 1);
+        }
+        this.refreshContract.emit(true);
+        this.isBusy = false
+        this.loggerSvc.success("Delete Successful", "Deleted the Pricing Table Row and Deal");
+        //return to pte screen...call loadPTE() from pte component
+        if (this.gridData.length == 0) {
+            this.reloadFn.emit('');
+        }
     }
     openCancelDialog() {
         if (this.getLinkedIds().length > 1) {

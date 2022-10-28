@@ -677,8 +677,7 @@ export class PTE_Load_Util {
                     cellProperties['readOnly'] = true;
                 }
                 if ((prop == 'STRT_VOL' || prop == 'STRT_REV' || prop == 'STRT_PB') && hotTable.getDataAtRowProp(row, 'TIER_NBR') && hotTable.getDataAtRowProp(row, 'TIER_NBR') != 1) {
-                    cellProperties
-                    ['readOnly'] = true;
+                    cellProperties['readOnly'] = true;
                 }
 
                 //for tender contract PERIOD_PROFILE and AR_SETTLEMENT_LVL are disable by default 

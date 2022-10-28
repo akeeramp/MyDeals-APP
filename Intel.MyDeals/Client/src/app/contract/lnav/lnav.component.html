@@ -45,7 +45,7 @@
                         <div id="lnavMenuContainer">
                             <div>
                                 <div class="scaleTopAnim lnavMenuOption" style="padding: 10px;" [hidden]="isAddStrategyHidden">
-                                    <div class="fl ptLnavTitle">Enter Pricing Strategy Name</div>
+                                    <div class="fl ptLnavTitle ">Enter Pricing Strategy Name</div>
                                     <div class="clearboth"></div>
                                     <div class="bgBlueContainer" [ngClass]="{isErrorWrapper: newStrategy._behaviors.isError.TITLE}">
                                         <input type="text" class="k-textbox fl" placeholder="" style="width: 224px; color: black;" maxlength="250" id="inptPrcTitle" [(ngModel)]="newStrategy.TITLE" [ngClass]="{isError: newStrategy._behaviors.isError.TITLE}" />
@@ -61,7 +61,7 @@
                             </div>
                             <div>
                                 <div class="scaleTopAnim lnavMenuOption" [hidden]="isAddPricingTableHidden">
-                                    <div class="fl ptLnavTitle">Enter Pricing Table Name</div>
+                                    <div class="fl ptLnavTitle isMandatory">Enter Pricing Table Name</div>
                                     <div class="clearboth"></div>
                                     <input type="text" class="k-textbox fl" placeholder="" style="width: 276px;
                                            color: black;" maxlength="250" id="inptPtTitle" [(ngModel)]="ptTITLE" />

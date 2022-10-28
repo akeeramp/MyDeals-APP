@@ -44,6 +44,7 @@ export class dealEditorCellTemplateComponent {
     @Input() grid_Data: any = '';
     @Output() iconUpdate: EventEmitter<any> = new EventEmitter<any>();
     @Output() refresh_Contract_Data: EventEmitter<any> = new EventEmitter<any>();
+    @Output() reLoad: EventEmitter<any> = new EventEmitter<any>();
 
     private ecapDimKey = "20___0";
     private kitEcapdim = "20_____1";
@@ -77,6 +78,9 @@ export class dealEditorCellTemplateComponent {
         this.iconUpdate.emit(eventData);
     }
 
+    reload(eventData) {
+        this.reLoad.emit('');
+    }
     refreshContractData(eventData: boolean) {
         this.refresh_Contract_Data.emit(eventData);
     }

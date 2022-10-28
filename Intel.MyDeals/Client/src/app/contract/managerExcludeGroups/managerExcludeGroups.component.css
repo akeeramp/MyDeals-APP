@@ -535,3 +535,8 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-
 .exclude-filter-style .k-filterable > .k-cell-inner {
     margin-right: -40px !important
 }
+.ss-loading-panel.ss-Info {
+    height:auto;
+    margin-top: 20px !important;
+    margin-left: 0% !important;
+}

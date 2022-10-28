@@ -62,6 +62,7 @@ export class pricingTableComponent {
     private isBusyShowFunFact: boolean = true;
     private isShowPCT: boolean = false;
     private isInformationIconReqd: boolean = false;
+    private rowlength: any;
 
     public searchedContractData = {
         Model: "",
@@ -139,7 +140,7 @@ export class pricingTableComponent {
                             }
                         }
                         else {
-                            if (this.pt_passed_validation == 'Complete') {
+                            if (this.pt_passed_validation == 'Complete' && this.rowlength !=0) {
                                 //for the page to redirect
                                 setTimeout(() => {
                                     this.isDETab = true; this.isPTETab = false;
@@ -232,6 +233,9 @@ export class pricingTableComponent {
         })
      
     }
+    async RedirectFn(eventData: boolean) {
+        this.isPTETab = true; this.isDETab = false; this.isDETabEnabled = false;
+    }
 
     loadTemplateDetails(IDS, contractData) {
         this.isLoading = true;
@@ -271,7 +275,11 @@ export class pricingTableComponent {
         });
         if (response && response.PRC_TBL_ROW && response.PRC_TBL_ROW.length > 0) {
             this.isDETabEnabled = true;
-        } else this.isDETabEnabled = false; 
+            this.rowlength = response.PRC_TBL_ROW.length;
+        } else {
+            this.isDETabEnabled = false;
+            this.rowlength = response.PRC_TBL_ROW.length;
+        }
     }
 
     enableDETab(deTabInfo: any) {
