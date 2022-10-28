@@ -109,18 +109,18 @@ export class dealProductsModalComponent {
                     });
                 }
             } else {
-                if(this.prods && this.prods.length>0){
+                if(this.prods){
                     _.each(this.prods, (value) => {
-                        this.prdIds.push(parseInt(value));
+                        this.prdIds.push(value);
                     });
                 }
             }
-            if(this.data.dataItem.OBJ_SET_TYPE_CD == 'ECAP' && !this.showDealProducts){
+            if ((this.data.dataItem.OBJ_SET_TYPE_CD == 'ECAP' || this.data.dataItem.OBJ_SET_TYPE_CD == 'KIT') && !this.showDealProducts && this.data.dataItem.products) {
                 this.prods = this.data.dataItem.products;
                 this.prdIds =[];
                 if(this.prods && this.prods.length>0){ 
                     for(let i=0;i< this.prods.length; i++){
-                        this.prdIds.push(this.prods[i].PCSR_NBR);
+                        this.prdIds.push(this.prods[i].PRD_MBR_SID);
                     }     
                 }
             }

@@ -241,7 +241,7 @@ export class pricingTableEditorComponent implements OnChanges {
     @Output() tmDirec = new EventEmitter();
     @Output() enableDeTab = new EventEmitter();
     @Output() refreshedContractData = new EventEmitter;
-    @Output() deTabInfmIconUpdate = new EventEmitter;
+    private isDeTabInfmIconReqd: boolean = false;
     public fontData:any[] = [
         { text: "(inherited size)", size: "inherit" },
         { text: "1 (8pt)", size: "8" },
@@ -442,11 +442,11 @@ export class pricingTableEditorComponent implements OnChanges {
             //  So... we need a check to see if the value on load is blank and if so... set the dirty flag
             Tender_Util.getTenderDetails(response.PRC_TBL_ROW, this.isTenderContract);
             this.pricingTableDet = response.PRC_TBL_ROW;
-            this.enableDeTab.emit(true);
-            this.deTabInfmIconUpdate.emit(PTE_Common_Util.dealEditorTabValidationIssue(response, false));
+            this.isDeTabInfmIconReqd = PTE_Common_Util.dealEditorTabValidationIssue(response, false);
+            this.enableDeTab.emit({ isEnableDeTab: true, enableDeTabInfmIcon: this.isDeTabInfmIconReqd});
             return response.PRC_TBL_ROW;
         } else {
-            this.enableDeTab.emit(false);
+            this.enableDeTab.emit({ isEnableDeTab: false, enableDeTabInfmIcon: false });
             return [];
         }
     }
@@ -621,7 +621,7 @@ export class pricingTableEditorComponent implements OnChanges {
                     this.hotTable.setCellMeta(selrow, PTR_Exccol_ind, 'className', 'normal-product');
                     this.isExcludePrdChange = true;
                 }
-                this.enableDeTab.emit(true);                
+            this.enableDeTab.emit({ isEnableDeTab: true, enableDeTabInfmIcon: this.isDeTabInfmIconReqd });
         }
     }
     async deletePTR() {
@@ -827,7 +827,7 @@ export class pricingTableEditorComponent implements OnChanges {
                 this.overlapFlexResult = await this.flexoverLappingCheckDealsService.GetProductOVLPValidation(flexReqData).toPromise();
             }
             //Checking for UI errors
-            let finalPTR = PTE_Save_Util.validatePTE(PTR, this.curPricingStrategy, this.curPricingTable, this.contractData, this.VendorDropDownResult, this.overlapFlexResult, this.validMisProd);
+            let finalPTR = PTE_Save_Util.validatePTE(PTR, this.curPricingStrategy, this.curPricingTable, this.contractData, this.overlapFlexResult, this.validMisProd);
             //if there is any error bind the result to handsone table
             let error = PTE_Save_Util.isPTEError(finalPTR, this.curPricingTable);
             if (error) {
@@ -836,6 +836,18 @@ export class pricingTableEditorComponent implements OnChanges {
             }
             else {
                 //this.generateHandsonTable(finalPTR);
+                var cashObj = finalPTR.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
+                if (cashObj && cashObj.length > 0) {
+                    if (this.VendorDropDownResult != null && this.VendorDropDownResult != undefined && this.VendorDropDownResult.length > 0) {
+                        var customerVendor = this.VendorDropDownResult;
+                        _.each(finalPTR, (item) => {
+                            var partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
+                            if (partnerID && partnerID.length == 1) {
+                                item.SETTLEMENT_PARTNER = partnerID[0].DROP_DOWN;
+                            }
+                        });
+                    }
+                }
                 this.dirty = false;
                 await this.saveEntireContractRoot(finalPTR);
             }

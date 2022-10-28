@@ -274,8 +274,11 @@ export class pricingTableComponent {
         } else this.isDETabEnabled = false; 
     }
 
-    enableDETab(isEnabled) {
-        this.isDETabEnabled = isEnabled;
+    enableDETab(deTabInfo: any) {
+        if (deTabInfo) {
+            this.isDETabEnabled = deTabInfo.isEnableDeTab;
+            this.isInformationIconReqd = deTabInfo.enableDeTabInfmIcon ? deTabInfo.enableDeTabInfmIcon : false;
+        }
     }
 
     refreshContractData(data: any) {

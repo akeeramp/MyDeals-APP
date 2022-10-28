@@ -44,14 +44,14 @@
                             <kendo-tabstrip-tab title="Pricing Table Editor" [selected]="isPTETab==true">
                                 <ng-template kendoTabContent>
                                     <div *ngIf="isPTETab">
-                                        <pricing-table-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate" (enableDeTab)="enableDETab($event)" (refreshedContractData)="refreshContractData($event)" (deTabInfmIconUpdate)="isDeTabInfmIconUpdate($event)">
+                                        <pricing-table-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate" (enableDeTab)="enableDETab($event)" (refreshedContractData)="refreshContractData($event)">
                                         </pricing-table-editor>
                                     </div>
                                 </ng-template>
                             </kendo-tabstrip-tab>
                             <kendo-tabstrip-tab title="Deal Editor" [selected]="isDETab==true" [disabled]="isDETabEnabled == false">
                                 <ng-template kendoTabTitle>
-                                    <i *ngIf="isInformationIconReqd" class="intelicon-information-outlined font-med ng-scope" style="margin-left: -6px; color: yellow;" title="Deal Editor needs to be reviewed"></i>
+                                    <i *ngIf="isInformationIconReqd" class="intelicon-information-outlined font-med ng-scope" style="margin-left: -6px; color: yellow;" title="Deal Editor needs to be reviewed">&nbsp;</i>
                                     <span title="Save, validate, and finalize your deals in the Deal Editor. *Additional deal information may be required">Deal Editor</span>
                                 </ng-template>
                                 <ng-template kendoTabContent>

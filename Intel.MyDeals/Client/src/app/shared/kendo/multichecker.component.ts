@@ -6,7 +6,7 @@ import * as _ from 'underscore';
 @Component({
     selector: 'multicheck-filter',
     template: `
-    <div *ngIf="showFilter">
+    <div *ngIf="showFilter" id="filterBar">
         <input id="multiCheckFilter" class="k-textbox" (input)="onInput($event)" placeholder="Search" />
         <span id="searchIcon" class="k-icon k-i-zoom"></span>
     </div>
@@ -33,10 +33,14 @@ import * as _ from 'underscore';
     styles: [`
     #searchIcon{
         display:inline-block;
-        right:20px;
+        left:175px;
+        bottom:30px;
         text-align:center;
         vertical-align:middle;
         overflow:hidden;
+    }
+    #filterBar input{
+        width:95%;
     }
     #multiCheckFilter.k-textbox {
         font-size:14px;
@@ -53,15 +57,12 @@ import * as _ from 'underscore';
       max-height: 300px;
     }
 
-    ul>li {
+    ul>li, #filterBar, #selectedCount {
       padding: 8px 12px;
     }    
 
     .k-multiselect-checkbox {
       pointer-events: none;
-    }
-    #selectedCount{
-        padding: 8px 12px;
     }
   `]
 })

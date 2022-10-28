@@ -6,10 +6,10 @@ import { DE_Save_Util } from '../DEUtils/DE_Save_util';
 import { PTE_Config_Util } from './PTE_Config_util';
 
 export class PTE_Save_Util {
-    static validatePTE(PTR: Array<any>, curPricingStrategy: any, curPricingTable: any, contractData: any, VendorDropDownResult: any, overlapFlexResult: any, validMisProd:any): any {
+    static validatePTE(PTR: Array<any>, curPricingStrategy: any, curPricingTable: any, contractData: any, overlapFlexResult: any, validMisProd:any): any {
         //this will make sure the neccessary proprty except _behaviours for Save are added
         this.setPTRBasicPropertyForSave(PTR, curPricingStrategy, curPricingTable, contractData);
-        return this.validatePTEDeal(PTR, curPricingStrategy, VendorDropDownResult, curPricingTable, contractData, overlapFlexResult, validMisProd);
+        return this.validatePTEDeal(PTR, curPricingStrategy, curPricingTable, contractData, overlapFlexResult, validMisProd);
     }
     static setPTRBasicPropertyForSave(PTR: Array<any>, curPricingStrategy: any, curPricingTable: any, contractData: any) {
         _.each(PTR, item => {
@@ -24,12 +24,12 @@ export class PTE_Save_Util {
             item["IS_HYBRID_PRC_STRAT"] = curPricingStrategy.IS_HYBRID_PRC_STRAT;
         });
     }
-    static validatePTEDeal(PTR: Array<any>, curPricingStrategy: any, VendorDropDownResult: any, curPricingTable: any, contractData: any, overlapFlexResult: any, validMisProd: any): any {
+    static validatePTEDeal(PTR: Array<any>, curPricingStrategy: any, curPricingTable: any, contractData: any, overlapFlexResult: any, validMisProd: any): any {
         _.each(PTR, (item) => {
             //defaulting the behaviours object
             PTE_Common_Util.setBehaviors(item);
         });
-        PTR = PTE_Validation_Util.validateSettlementPartner(PTR, curPricingStrategy, VendorDropDownResult);
+        PTR = PTE_Validation_Util.validateSettlementPartner(PTR, curPricingStrategy);
         PTR = PTE_Validation_Util.validateOverArching(PTR, curPricingStrategy, curPricingTable);
         PTR = PTE_Validation_Util.validateMarketSegment(PTR, undefined, undefined);
         PTR = PTE_Validation_Util.validateHybridFields(PTR, curPricingStrategy, curPricingTable);

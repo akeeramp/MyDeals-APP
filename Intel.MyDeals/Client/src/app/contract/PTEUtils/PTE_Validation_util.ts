@@ -228,8 +228,8 @@ export class PTE_Validation_Util {
         }
         return modalOptions;
     }    
-    static validateDeal(data: Array<any>, contractData, curPricingTable, curPricingStrategy, isTenderContract, lookBackPeriod, templates, groups, vendorDropDownResut): any {
-        let isShowStopperError = DE_Validation_Util.validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates, vendorDropDownResut);
+    static validateDeal(data: Array<any>, contractData, curPricingTable, curPricingStrategy, isTenderContract, lookBackPeriod, templates, groups): any {
+        let isShowStopperError = DE_Validation_Util.validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates);
         PTE_Common_Util.setWarningFields(data, curPricingTable);
         if (data != null) {
             for (var i = 0; i < data.length; i++) {
@@ -662,21 +662,12 @@ export class PTE_Validation_Util {
         return item;
     }
 
-    static validateSettlementPartner = function (data, curPricingStrategy, getVendorDropDownResult) {
+    static validateSettlementPartner = function (data, curPricingStrategy) {
         var hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond = true;
         //check if settlement is cash and pgm type is backend
         var cashObj = data.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
         if (cashObj && cashObj.length > 0) {
-            if (getVendorDropDownResult != null && getVendorDropDownResult != undefined && getVendorDropDownResult.length > 0) {
-                var customerVendor = getVendorDropDownResult;
-                _.each(data, (item) => {
-                    var partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
-                    if (partnerID && partnerID.length == 1) {
-                        item.SETTLEMENT_PARTNER = partnerID[0].DROP_DOWN;
-                    }
-                });
-            }
-            else if (hybCond == '1') {
+            if (hybCond == '1') {
                 retCond = data.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '' && val.SETTLEMENT_PARTNER == data[0].SETTLEMENT_PARTNER);
                 if (!retCond) {
                     _.each(data, (item) => {

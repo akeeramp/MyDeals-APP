@@ -222,7 +222,7 @@ export class dealEditorComponent {
                 }
             }
             this.voltLength = response.WIP_DEAL.length;
-            if (this.gridResult) {
+            if (this.gridResult && (this.gridResult.filter(x => x.WF_STG_CD == 'Hold').length <= response.WIP_DEAL.filter(x => x.WF_STG_CD == 'Hold').length)) {
                 let linkedIds = this.gridResult.filter(y => y.isLinked).map(x => x.DC_ID);
                 if (linkedIds.length > 0) {
                     _.each(linkedIds, id => {
@@ -849,7 +849,7 @@ export class dealEditorComponent {
         this.isDatesOverlap = false;
         this.isDataLoading = true;
         this.setBusy("Saving...", "Saving Deal Information", "Info", true);
-        let isShowStopError = PTE_Validation_Util.validateDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.lookBackPeriod, this.templates, this.groups, this.VendorDropDownResult);
+        let isShowStopError = PTE_Validation_Util.validateDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.lookBackPeriod, this.templates, this.groups);
         if (isShowStopError) {
             this.loggerService.warn("Please fix validation errors before proceeding", "");
             this.gridData = process(this.gridResult, this.state);
@@ -857,6 +857,18 @@ export class dealEditorComponent {
             this.setBusy("", "", "", false);
         }
         else {
+            var cashObj = this.gridResult.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
+            if (cashObj && cashObj.length > 0) {
+                if (this.VendorDropDownResult != null && this.VendorDropDownResult != undefined && this.VendorDropDownResult.length > 0) {
+                    var customerVendor = this.VendorDropDownResult;
+                    _.each(this.gridResult, (item) => {
+                        var partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
+                        if (partnerID && partnerID.length == 1) {
+                            item.SETTLEMENT_PARTNER = partnerID[0].DROP_DOWN;
+                        }
+                    });
+                }
+            }
             let data = {
                 "Contract": [],
                 "PricingStrategy": [],
@@ -1083,11 +1095,13 @@ export class dealEditorComponent {
 
     async refreshContract(eventData: boolean) {
         if (eventData) {
+            this.isDataLoading = true;
+            this.setBusy("Loading Deal Editor", "Loading...", "Info", true);
             await this.getWipDealData();
             await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
         }
     }
-
+    
     ngOnInit() {
         try {
             this.isDataLoading = true;

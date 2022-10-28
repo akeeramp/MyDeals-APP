@@ -43,10 +43,16 @@
 
 .badge {
     vertical-align: top !important;
+    font-size:13px !important;
 }
 
 .badge.warning {
     background-color: #f3D54E;
+}
+
+#tabErrorCnt{
+    font-weight:bold !important;
+    padding: 3px 7px !important;
 }
 
 .rowHeight {
@@ -802,15 +808,16 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
     cursor: pointer;
 }*/
 
+.dropdown-col-opt:hover .dropdown-content-col {
+    display: block;
+    cursor: pointer;
+}
+
 .backclass:hover {
     background-color: #f1f1f1;
     cursor: pointer;
 }
 
-.dropdown-col-opt:hover .dropdown-content-col {
-    display: block;
-    cursor: pointer;
-}
 
 .chkColItem {
     cursor: pointer;
@@ -1051,4 +1058,13 @@ kendo-tabstrip.tabs-coll {
 }
 .multiselect-scroll-style.cdk-overlay-pane {
     overflow-y: auto !important
+}
+
+#colOpt:hover, #colOpt ~ td:hover {
+    background-color: #00AEEF !important;
+    color: white !important;
+}
+
+#colOpt {
+    color: #00AEEF;
 }

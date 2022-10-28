@@ -5,7 +5,7 @@ import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 
 export class DE_Validation_Util {
-    static validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates, vendorDropDownResult) {
+    static validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates) {
         let restrictGroupFlexOverlap = false;
         _.each(data, (item) => {
             PTE_Common_Util.setBehaviors(item);
@@ -13,7 +13,7 @@ export class DE_Validation_Util {
         this.dataConversion(data, templates);
         PTE_Validation_Util.validateFlexRules(data, curPricingTable, data, restrictGroupFlexOverlap);
         PTE_Validation_Util.ValidateEndCustomer(data, 'OnValidate', curPricingStrategy, curPricingTable);
-        PTE_Validation_Util.validateSettlementPartner(data, curPricingStrategy, vendorDropDownResult);
+        PTE_Validation_Util.validateSettlementPartner(data, curPricingStrategy);
         PTE_Validation_Util.validateOverArching(data, curPricingStrategy, curPricingTable);
         data = PTE_Validation_Util.validateHybridFields(data, curPricingStrategy, curPricingTable);
         PTE_Validation_Util.validateSettlementLevel(data, curPricingStrategy);
