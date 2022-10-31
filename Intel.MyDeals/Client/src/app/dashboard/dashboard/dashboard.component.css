@@ -1393,3 +1393,7 @@ input[type="text"]:focus-visible {
     float: right;
     color: #00aeef !important;
 }
+
+kendo-grid.k-widget.k-grid kendo-grid-list table tbody tr.k-grid-norecords {
+    visibility: hidden;
+}

@@ -818,6 +818,12 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
 
 .all-checkbox-center {
     text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100%;
+    position: relative;
 }
 
 #productSearch span.k-icon.k-clear-value.k-i-close {

@@ -14,7 +14,7 @@
         <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
             [sort]="state.sort" [filter]="state.filter" [sortable]="true"
             [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false"
-            [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)">
+            [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)" class="miss-cap-cost">
         <ng-template kendoGridToolbarTemplate>
             <button class="k-button k-button-icontext k-grid-excel" kendoGridExcelCommand>
                 <span class="k-icon k-i-file-excel pp-excel-css"></span><div class="excelText"><span>Excel<br>Export</span></div>
