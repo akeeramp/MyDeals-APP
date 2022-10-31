@@ -30,7 +30,7 @@
             <div class="col">
                 <div mat-dialog-content *ngIf="!ismrktSeg">
                     <kendo-multiselect class="fiend-all" [(ngModel)]="checkedKeys" [placeholder]="placeholderText" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false"></kendo-multiselect>
-                    <kendo-treeview class="fiend-tree" [nodes]="multiSelectData"
+                    <kendo-treeview class="fiend-tree k-search-hiddensty" [nodes]="multiSelectData"
                                     filterInputPlaceholder="Type here to filter the values.."
                                     kendoTreeViewHierarchyBinding
                                     childrenField="items"

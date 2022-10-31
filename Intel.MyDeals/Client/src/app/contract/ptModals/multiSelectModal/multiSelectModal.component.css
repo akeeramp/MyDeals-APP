@@ -23,3 +23,7 @@
     font-size: 28px;
     font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
 }
+.k-search-hiddensty .k-input-prefix {
+    visibility: hidden !important;
+    margin-left: -31px !important;
+}

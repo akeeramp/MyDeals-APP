@@ -1065,9 +1065,9 @@ kendo-tabstrip.tabs-coll {
     color: white !important;
 }
 
-/*#colOpt {
+#colOpt {
     color: #00AEEF;
-}*/
+}
 kendo-dialog-actions.add-tab-style.k-dialog-buttongroup {
     padding: 0px !important;
     border-width: 0px !important;
@@ -1080,8 +1080,7 @@ button.k-button.add-tab-okbtn {
     font-family: 'Intel Clear' !important;
     font-size: 15px !important;
     background: #00aeef !important;
-    padding-bottom:24px !important
-
+    padding: 1.375rem 0.75rem !important
 }
 button.k-button.add-tab-okbtn:hover {
     color: #fff !important;
@@ -1092,7 +1091,7 @@ button.k-button.add-tab-cancelbtn {
     font-family: 'Intel Clear' !important;
     font-size: 15px !important;
     background: #fafafa !important;
-    padding-bottom: 24px !important;
+    padding: 1.375rem 0.75rem !important;
     color:#444444 !important
 }
 button.k-button.add-tab-cancelbtn:hover {
