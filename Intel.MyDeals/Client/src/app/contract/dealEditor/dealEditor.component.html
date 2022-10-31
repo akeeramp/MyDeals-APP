@@ -118,20 +118,20 @@
                 </div>
 
                 <kendo-dialog *ngIf="isAddDialog" id="Adddialog">
-                    <p style="padding-left: 23px; padding-top: 5px; font-size: 18px; ">Tab name:</p>
-                    <input type="text" [(ngModel)]="DeAddtab" style=" margin: 22px;" class="k-textbox" />
-                    <kendo-dialog-actions style="width: 262px;">
-                        <button class='k-button' (click)="Addtabdata()">Ok</button>
-                        <button class='k-button' (click)="CloseAdd()">Cancel</button>
+                    <p class="tab-name-style">Tab name:</p>
+                    <input type="text" [(ngModel)]="DeAddtab" class="k-textbox add-tab-textbox-style" />
+                    <kendo-dialog-actions class="add-tab-style">
+                        <button class='k-button add-tab-okbtn' (click)="Addtabdata()">OK</button>
+                        <button class='k-button add-tab-cancelbtn' (click)="CloseAdd()">CANCEL</button>
                     </kendo-dialog-actions>
                 </kendo-dialog>
 
                 <kendo-dialog *ngIf="isrenameDialog" id="renamedialog">
-                    <p style="padding-left: 23px; padding-top: 5px; font-size: 18px; ">Tab name:</p>
-                    <input type="text" [(ngModel)]="Derenametab" style=" margin: 22px;" class="k-textbox" />
-                    <kendo-dialog-actions style="width: 262px;">
-                        <button class='k-button' (click)="renametabdata()">Ok</button>
-                        <button class='k-button' (click)="Closerename()">Cancel</button>
+                    <p class="tab-name-style">Tab name:</p>
+                    <input type="text" [(ngModel)]="Derenametab" class="k-textbox add-tab-textbox-style" />
+                    <kendo-dialog-actions class="add-tab-style">
+                        <button class='k-button add-tab-okbtn' (click)="renametabdata()">OK</button>
+                        <button class='k-button add-tab-cancelbtn' (click)="Closerename()">CANCEL</button>
                     </kendo-dialog-actions>
                 </kendo-dialog>
 

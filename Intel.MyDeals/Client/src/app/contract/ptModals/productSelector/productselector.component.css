@@ -832,3 +832,9 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
     justify-content: center;
     opacity: 1;
 }
+.clear-shift-style {
+    margin-right: 16px !important
+}
+.text-shift-left {
+    margin-right: 83px !important
+}

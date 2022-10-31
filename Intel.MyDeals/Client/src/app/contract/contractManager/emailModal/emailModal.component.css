@@ -101,3 +101,10 @@ kendo-toolbar-renderer {
 .modal-header.modalBlueBody.emaiPopUpstyle {
     border-bottom: 0.5px solid #f4f4f4 !important;
 }
+button.btn.disable-submit-style.btn-default[disabled] {
+    cursor: not-allowed !important;
+    pointer-events: all !important;
+    background-color: #edeff0 !important;
+    color: #b1babf !important;
+    border-color: #b1babf !important;
+}

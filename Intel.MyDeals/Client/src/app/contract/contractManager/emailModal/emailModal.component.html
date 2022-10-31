@@ -78,7 +78,7 @@
             <button class="btn btn-default" type="button" style="width: 98%; color: #000000;" (click)="close()">Close</button>
         </div>
         <div class="col-md-6">
-            <button class="btn" [ngClass]="disableEmailButton() ? 'btn-default' : 'btn-primary' " type="button" style="width: 100%;" (click)="ok()" [disabled]="disableEmailButton()">Send Email</button>
+            <button class="btn disable-submit-style" [ngClass]="disableEmailButton() ? 'btn-default' : 'btn-primary' " type="button" style="width: 100%;" (click)="ok()" [disabled]="disableEmailButton()">Send Email</button>
         </div>
     </div>
 

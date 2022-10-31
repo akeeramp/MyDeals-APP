@@ -1065,6 +1065,59 @@ kendo-tabstrip.tabs-coll {
     color: white !important;
 }
 
-#colOpt {
+/*#colOpt {
     color: #00AEEF;
+}*/
+kendo-dialog-actions.add-tab-style.k-dialog-buttongroup {
+    padding: 0px !important;
+    border-width: 0px !important;
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+    gap: 0px !important;
+    width: 230px !important;
+}
+button.k-button.add-tab-okbtn {
+    font-family: 'Intel Clear' !important;
+    font-size: 15px !important;
+    background: #00aeef !important;
+    padding-bottom:24px !important
+
+}
+button.k-button.add-tab-okbtn:hover {
+    color: #fff !important;
+    border-color: #0071c5 !important;
+    background-color: #0071c5 !important;
+}
+button.k-button.add-tab-cancelbtn {
+    font-family: 'Intel Clear' !important;
+    font-size: 15px !important;
+    background: #fafafa !important;
+    padding-bottom: 24px !important;
+    color:#444444 !important
+}
+button.k-button.add-tab-cancelbtn:hover {
+     color: #444 !important;
+     border-color: #ebebeb !important;
+     background-color: #ebebeb !important;
+}
+.tab-name-style{
+    padding-left: 11px !important;
+    padding-top: 10px !important;
+    font-size: 15px !important;
+    font-family: 'Intel Clear' !important;
+}
+.add-tab-textbox-style.k-textbox {
+    margin-left: 12px !important;
+    margin-bottom: 20px !important;
+    box-shadow: none !important;
+    width: 205px !important;
+    border-color: #e6e6e6 !important;
+}
+.add-tab-textbox-style.k-textbox:focus-within {
+     border: #f0f0f0 !important;
+     box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+}
+.add-tab-textbox-style.k-textbox:hover {
+     box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+     border-color: #f0f0f0 !important;
 }
