@@ -76,7 +76,7 @@ export class GridUtil {
         tmplt += '  <div class="ng-binding vert-center">';
         tmplt += '  <span class="cn-deal-popup-icon "  title="Click to view a Quick Look at deal #' + passedData[field] + '">';
         tmplt += '  <span class="fa-stack" style="height: 16px; line-height: 18px; margin-bottom: 3px;"> <i class="fa fa-circle-o-notch fa-rotate-90" style=" margin-top: 1px; margin-left: -4px;"></i> <i class="fa fa-bars fa-stack-1x" style="padding-top: 1px; font-size: 9px; color: #FFA300;margin-left: -2px;"></i> </span> </span> ';
-        tmplt += ' <span style="padding-left: 7px;"> '
+        tmplt += ' <span style="padding-left: 0px;"> '
         if (passedData[field] != undefined && passedData[field] != null)
             tmplt += passedData[field];
         tmplt += '  </span>  </div>';
