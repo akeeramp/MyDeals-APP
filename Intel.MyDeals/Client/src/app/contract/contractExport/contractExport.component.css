@@ -138,8 +138,6 @@
     }
 
 .addScrollbar {
-    max-height: 600px;
-    max-width: 1400px;
     overflow: auto;
 }
 .pxPage {
