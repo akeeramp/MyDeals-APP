@@ -137,7 +137,7 @@ kendo-grid.approve-table kendo-grid-list table tr:hover {
     font-weight: 400;
     background-color: #00aeef !important;
     line-height: 1.143em !important;
-    font-size: 16px !important;
+    font-size: 15px !important;
 }
 
 .new-k-btn:hover {
@@ -158,9 +158,11 @@ kendo-upload.fino-css kendo-upload-action-buttons {
 }
 
 kendo-upload.fino-css kendo-upload-action-buttons .k-button {
-    font-size: 16px;
-    font-weight: 400 !important;
-    color: #0071c5 !important;
+     font-size: 15px;
+     font-weight: 400 !important;
+     color: #0071c5 !important;
+     font-family: 'Intel Clear' !important;
+
 }
 
 kendo-upload.fino-css kendo-upload-file-list-item-action-button .k-upload-status .k-button {
@@ -269,3 +271,15 @@ kendo-upload.fino-css.throw-fa-css kendo-upload-action-buttons .k-upload-selecte
         -webkit-box-shadow: 0px 0px 0px 2px #ccc;
         -moz-box-shadow: 0px 0px 0px 2px #ccc;
     }*/
+.upload-text-style .k-text-success.k-file-information {
+    color: #00aeef !important;
+}
+
+.upload-text-style.k-upload .k-upload-files .k-upload-pct {
+    color: #00aeef !important;
+}
+
+.upload-text-style.k-upload .k-file-progress .k-file-name {
+    color: #00aeef !important;
+    font-family: 'Intel Clear' !important
+}
