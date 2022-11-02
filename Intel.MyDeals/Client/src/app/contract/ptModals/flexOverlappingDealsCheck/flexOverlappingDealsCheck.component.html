@@ -3,37 +3,10 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 
-<div id="overcheck" class="flex-container" style="display: flex; background-color: #0071C5;">
-    <p class="container" style="font-size:18px;color:#ffffff;margin:0px !important;padding:10px">Flex Product Overlapping Details</p>
-    <button class="btn btn-sm ssToolbarBtn">
-        <table>
-            <tr>
-                <td><i class="fa fa-window-minimize" style="font-size:13px;"></i></td>
-            </tr>
-        </table>
-    </button>
-    <button class="btn btn-sm ssToolbarBtn">
-        <table>
-            <tr>
-                <td><i class="fa fa-window-maximize" style="font-size:13px;"></i></td>
+<kendo-window id="OvrLp" title="Overlapping Deals" [keepContent]="true" [width]="800" (close)="closeWindow()">
 
-            </tr>
-        </table>
-    </button>
-    <button class="btn btn-sm ssToolbarBtn" (click)="closeWindow()">
-        <table>
-            <tr>
-                <td><i class="intelicon-close" style="font-size: 17px;"></i></td>
-            </tr>
-        </table>
-    </button>
-</div>
-
-
-<div>
-    <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [sort]="state.sort" [sortable]="true" [filter]="state.filter" filterable="menu"
-                [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false" [group]="state.group" (dataStateChange)="dataStateChange($event)">
-        <kendo-grid-column field="OVLP_ROW_ID" width="120" title="Row ID" [hidden] ="true">
+    <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [sort]="state.sort" [sortable]="true" [filter]="state.filter" filterable="menu" style="height: calc(100vh - 310px);" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false" [group]="state.group" (dataStateChange)="dataStateChange($event)">
+        <kendo-grid-column field="OVLP_ROW_ID" width="120" title="Row ID" [hidden]="true">
             <ng-template kendoGridGroupHeaderTemplate let-group let-field="field" let-value="value">
                 <span style='font-weight:bold;font-size:13px; color: red;letter-spacing:0.07em '>Overlap Row(s): ({{value}})</span>
             </ng-template>
@@ -95,4 +68,4 @@
         </kendo-grid-column>
     </kendo-grid>
 
-</div>
+    </kendo-window>

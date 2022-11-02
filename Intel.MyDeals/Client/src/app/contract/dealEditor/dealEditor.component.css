@@ -958,9 +958,11 @@ ngb-tooltip-window .tooltip-inner {
 
 .mpublishgrid.k-grid td deal-editor-cell div {
     width: 100%;
-    height: 100%;
 }
-
+.mpublishgrid.k-grid td deal-editor-cell .dealCell .col-md-12.textRightAlign .uiControlDiv .capLineStyle {
+    height: 40px !important;
+    margin-top: 1px;
+}
 .mpublishgrid.k-grid td deal-editor-cell .dealCell .col-md-12.textRightAlign .uiControlDiv {
     display: flex;
     align-items: center;

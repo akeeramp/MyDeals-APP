@@ -1,3 +1,5 @@
+<div *ngIf="isLoading" style="height:100vh"></div>
+
 <div *ngIf="!isLoading" style="padding: 0 20px;" class="contract-export addScrollbar contract-top-fixes">
     <div class="fr">
         <i class="intelicon-pdf exportBtn" style="font-size:30px !important" (click)="exportToPDF()" title="Export to PDF"></i>

@@ -1011,6 +1011,9 @@ export class PTE_CellChange_Util {
                     let DCID = this.hotTable.getDataAtRowProp(item.row, 'DC_ID');
                     let Tier = this.hotTable.getDataAtRowProp(item.row, 'TIER_NBR');
                     let numOfTiers = _.where(PTR, { DC_ID: DCID }).length;
+                    if (val > 0) {
+                        val = Math.trunc(this.hotTable.getDataAtRowProp(item.row, 'END_VOL'));
+                    }
                     if (Tier < numOfTiers) {
                         if (val > 0 || val === 0) {
                             this.hotTable.setDataAtRowProp(item.row, 'END_VOL', val, 'no-edit');
@@ -1032,7 +1035,7 @@ export class PTE_CellChange_Util {
                     }
                 }
                 else if (item.prop && item.prop == 'STRT_VOL') {
-                    let val = this.hotTable.getDataAtRowProp(item.row, 'STRT_VOL');
+                    let val = Math.trunc(this.hotTable.getDataAtRowProp(item.row, 'STRT_VOL'));
                     if (val >= 0 || val < 0) {
                         this.hotTable.setDataAtRowProp(item.row, 'STRT_VOL', val, 'no-edit');
                     }
