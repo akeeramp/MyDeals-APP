@@ -19,7 +19,8 @@
     <div class="col-md">
         <div class="gridster-item-content comp-parent">
             <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-                <mat-button-toggle class="btn btn-primary comp-customize-btn" *ngFor="let toggle of opTypes" [checked]="opType==toggle.value" value="{{toggle.value}}" (change)="onOpChange(toggle.value)">{{toggle.label}} </mat-button-toggle>
+                <!-- By Default All tab is highlighted -->
+                <mat-button-toggle class="btn btn-primary comp-customize-btn" *ngFor="let toggle of opTypes" [checked]="toggle.value=='ALL' ? 'true':'false'" value="{{toggle.value}}" (change)="onOpChange(toggle.value)">{{toggle.label}} </mat-button-toggle>
             </mat-button-toggle-group>
         </div>
     </div>
