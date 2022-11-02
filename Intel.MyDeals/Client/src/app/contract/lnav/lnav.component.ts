@@ -798,11 +798,11 @@ export class lnavComponent {
     toggleStrategyTree() {
         if (this.strategyTreeCollapseAll == true) {
             this.contractData?.PRC_ST.map((x, i) => {
-                this.isPSExpanded[i] = true;
+                this.isPSExpanded[i] = false;
             });
         } else {
             this.contractData?.PRC_ST.map((x, i) => {
-                this.isPSExpanded[i] = false;
+                this.isPSExpanded[i] = true;
             });
         }
         this.strategyTreeCollapseAll = !this.strategyTreeCollapseAll;
@@ -859,14 +859,14 @@ export class lnavComponent {
     }
     enableFlowBtn() {
         return (lnavUtil.enableFlowBtn(this.contractData) == false) ? true : false;
-    }
+    }    
     ngOnInit() {
         try{
             this.newStrategy = this.UItemplate["ObjectTemplates"]?.PRC_ST.ALL_TYPES;
             this.newPricingTable = this.UItemplate.ObjectTemplates.PRC_TBL.ECAP;
             this.newStrategy.IS_HYBRID_PRC_STRAT = false;
             this.contractData?.PRC_ST?.map((x, i) => {
-                this.isPSExpanded[i] = false
+                this.isPSExpanded[i] = true
             });
             if (this.contractData && (this.contractData.PRC_ST == undefined || this.contractData.PRC_ST.length == 0)){
                 if (this.C_ADD_PRICING_STRATEGY) {

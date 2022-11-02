@@ -338,9 +338,9 @@ export class dealEditorComponent {
             if (dataItem != undefined && dataItem._behaviors != undefined) {
                 PTE_Save_Util.setDataItem(dataItem, field, returnVal);
                 dataItem["_dirty"] = true;
-                this.dirty = true;
             }
         }
+        this.dirty = true;
     }
 
     updateSaveIcon(eventData: boolean) {

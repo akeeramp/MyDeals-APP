@@ -253,9 +253,9 @@ export class GridUtil {
         tmplt += '<div class="uiControlDiv dealCell' + this.getClassNm(passedData, field) + '"';
         tmplt += '    <div class="ng-binding vert-center">';
         if (this.displayFrontEndDateMessage(passedData))
-            tmplt += '<span> <i class="intelicon-information dateWrapper" title="If the deal start date is in the past, the deal start date will change to the date when the deal becomes active."></i> </span>'
+            tmplt += '<span class="vert-center" style="top: 20% !important"> <i class="intelicon-information dateWrapper" title="If the deal start date is in the past, the deal start date will change to the date when the deal becomes active."></i> </span>'
         if (passedData[field] != undefined && passedData[field] != null)
-            tmplt += '    <span class="ng-binding vert-center alert-divider">' + passedData[field] + '</span>';
+            tmplt += '    <span class="ng-binding vert-center alert-divider" style="top: 20% !important">' + passedData[field] + '</span>';
         tmplt += '</div></div>';
         return tmplt;
     }

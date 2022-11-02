@@ -497,7 +497,7 @@ export class pricingTableEditorComponent implements OnChanges {
                 columns: this.columns,
                 hiddenColumns: {
                     columns: hiddenColumns,
-                    indicators: true
+                    indicators: false
                 },
                 mergeCells: mergCells,
                 cells: (row: number, col: number, prop: string) => {
@@ -656,6 +656,9 @@ export class pricingTableEditorComponent implements OnChanges {
             this.loggerService.error("Something went wrong", 'Error');
             console.error("pricingTableEditorComponent::deletePTR::", 'Error');
         }
+    }
+    showHelpTopic() {
+        window.open('https://wiki.ith.intel.com/display/Handbook/Pricing+Table+Editor+Features', '_blank');        
     }
     closeKitDialog() {
         //close kitdialog closes the kendo dialog and clear the kit name cell
