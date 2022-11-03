@@ -75,15 +75,16 @@ export class overLappingDealsComponent {
     getOverlapDetails() {
         this.contractId = this.contractData.DC_ID;
         this.overLappingDealsSvc.getOverLappingDealsDetails(this.contractId).subscribe((result: any) => {
-            console.log(result.Data);
-            this.isLoading = false;
+            this.loadMessage = "Done";
             this.gridResult = result.Data;
             let groups = [{ field: "PROGRAM_PAYMENT" },
                 {field: "WIP_DEAL_OBJ_SID" }];
             // this.filterOverLapData(this.gridResult);
             this.state.group = groups;
-            console.log(this.state);
             this.gridData = process(this.gridResult, this.state);
+            setTimeout(()=>{
+                this.isLoading = false;
+            }, 500);
         }, (error) => {
             this.isLoading = false;
             this.loggerSvc.error('OverLapDeals service', error);

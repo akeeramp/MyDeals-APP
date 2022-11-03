@@ -27,7 +27,20 @@
             </div>
         </div>
     </div>
-    <div class="col-md-12 kendo-grid-buttons oppo-grids">
+    <div *ngIf="isLoading" style="padding-top: 200px; width: 100%; text-align: center;">
+        <div class="spinner">
+            <div class="rect1"></div>
+            <div class="rect2"></div>
+            <div class="rect3"></div>
+            <div class="rect4"></div>
+            <div class="rect5"></div>
+        </div>
+        <div style="font-size: 30px;">{{loadMessage}}</div>
+        <div class="ss-icon-lg" *ngIf="loadMessage == 'Done'">
+            <i class="intelicon-passed-completed-solid sky-blue"></i>
+        </div>
+    </div>
+    <div *ngIf="!isLoading" class="col-md-12 kendo-grid-buttons oppo-grids">
         <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
             [sort]="state.sort" [filter]="state.filter" [sortable]="true"
             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
@@ -141,5 +154,3 @@
         </kendo-grid>
     </div>
 </div>
-<loading-panel-angular id="OverlappingDataLoading" style="z-index: 500" [show]="isLoading" [header]="loadMessage"
-    ></loading-panel-angular>

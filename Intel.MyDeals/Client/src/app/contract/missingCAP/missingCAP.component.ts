@@ -28,9 +28,7 @@ export class missingCAPComponent {
     @Input() contractData: any;
     @Input() UItemplate: any;
     private isLoading = true;
-    private spinnerMessageHeader: string = "Loading Missing CAP/Cost Deal Products";
-
-    private loadMessage = "Loading Contract History";
+    private loadMessage = "Loading Missing CAP/Cost Deal Products";
     private type = "numeric";
     private info = true;
     private gridResult = [];
@@ -101,9 +99,12 @@ export class missingCAPComponent {
         const sId = this.contractData.CUST_MBR_SID;
         const cId = this.contractData.DC_ID;
         this.missingCapSvc.getDealProducts(cId,sId).subscribe((result: Array<any>) => {
-            this.isLoading = false;
+            this.loadMessage = "Done";
             this.gridResult = result;
             this.gridData = process(this.gridResult, this.state);
+            setTimeout(()=>{
+                this.isLoading = false;
+            }, 500);
         }, (error) => {
             this.isLoading = false;
             this.loggerSvc.error('Missing CAP/Cost service', error);

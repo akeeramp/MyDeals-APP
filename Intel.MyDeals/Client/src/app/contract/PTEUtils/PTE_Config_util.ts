@@ -19,6 +19,12 @@ export class PTE_Config_Util {
         { "title": "End Vol", "field": "END_VOL", "format": "number", "align": "right" }, //TODO: inject angular $filter with new textOrNumber filter and use it as format, then we can avoid the double ng-if duplicate in the tmplt below, removing the ng-if all together
         { "title": "Rate", "field": "RATE", "format": "currency", "align": "right" }
     ];
+    static nonvolTierFields= [
+        { "title": "Tier", "field": "TIER_NBR", "format": "number", "align": "right" },
+        { "title": "Start Vol", "field": "STRT_VOL", "format": "number", "align": "right" },
+        { "title": "End Vol", "field": "END_VOL", "format": "number", "align": "right" }, //TODO: inject angular $filter with new textOrNumber filter and use it as format, then we can avoid the double ng-if duplicate in the tmplt below, removing the ng-if all together
+        { "title": "Rate", "field": "RATE", "format": "currency", "align": "right" }
+    ];
     static revTierFields = [
         { "title": "Tier", "field": "TIER_NBR", "format": "number", "align": "right" },
         { "title": "Start Rev", "field": "STRT_REV", "format": "currency", "align": "right" },

@@ -1,4 +1,16 @@
-<div *ngIf="isLoading" style="height:100vh"></div>
+<div *ngIf="isLoading" style="height:100vh;padding-top: 200px; width: 100%; text-align: center;">
+    <div class="spinner">
+        <div class="rect1"></div>
+        <div class="rect2"></div>
+        <div class="rect3"></div>
+        <div class="rect4"></div>
+        <div class="rect5"></div>
+    </div>
+    <div style="font-size: 30px;">{{loadMessage}}</div>
+    <div class="ss-icon-lg" *ngIf="loadMessage == 'Done'">
+        <i class="intelicon-passed-completed-solid sky-blue"></i>
+    </div>
+</div>
 
 <div *ngIf="!isLoading">
     <div *ngIf="dealCnt">
@@ -139,4 +151,3 @@
 </kendo-tabstrip>
 </div>
 </div>
-<loading-panel-angular id="AllDealsLoading" style="z-index: 500" [show]="isLoading" [header]="spinnerMessageHeader"></loading-panel-angular>

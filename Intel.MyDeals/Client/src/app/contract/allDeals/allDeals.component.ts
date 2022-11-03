@@ -41,7 +41,7 @@ export class allDealsComponent {
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
 
     private isLoading = true;
-    private spinnerMessageHeader: string = "Loading Deals";
+    private loadMessage: string = "Loading Deals";
     private isTenderContract = false;
     public groups: any =[];
     public selectedTab: any;
@@ -187,7 +187,7 @@ export class allDealsComponent {
         let data: any;
         const cId = this.contractData.DC_ID;
         this.allDealsSvc.readWipFromContract(cId).subscribe((result: any) => {
-            this.isLoading = false;
+            this.loadMessage = "Drawing Grid";
             this.gridResult = result.WIP_DEAL;
             this.gridResult?.map((x, i) => {
                 x.CUST_NM = x.Customer?.CUST_NM;
@@ -199,6 +199,10 @@ export class allDealsComponent {
             this.displayDealTypes();
             this.gridData = process(this.gridResult, this.state);
             this.loadDealTypestab(data);
+            setTimeout(()=>{
+                this.loadMessage = "Done";
+                this.isLoading = false;
+            }, 2000);
         }, (error) => {
             this.isLoading = false;
             this.loggerSvc.error('All Deals service', error);

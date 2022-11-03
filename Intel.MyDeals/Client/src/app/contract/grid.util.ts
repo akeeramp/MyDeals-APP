@@ -148,9 +148,12 @@ export class GridUtil {
         return tmplt;
     }
     static uiControlScheduleWrapper(passedData) {
-        if (passedData.OBJ_SET_TYPE_CD !== 'VOL_TIER' && passedData.OBJ_SET_TYPE_CD !== 'FLEX' && passedData.OBJ_SET_TYPE_CD !== 'REV_TIER')
-            return "";
+        // if (passedData.OBJ_SET_TYPE_CD !== 'VOL_TIER' && passedData.OBJ_SET_TYPE_CD !== 'FLEX' && passedData.OBJ_SET_TYPE_CD !== 'REV_TIER')
+        //     return "";
         var fields = (passedData.OBJ_SET_TYPE_CD === 'VOL_TIER' || passedData.OBJ_SET_TYPE_CD === 'FLEX') ? PTE_Config_Util.volTierFields : PTE_Config_Util.revTierFields;
+        if(passedData.OBJ_SET_TYPE_CD !== 'VOL_TIER' && passedData.OBJ_SET_TYPE_CD !== 'FLEX' && passedData.OBJ_SET_TYPE_CD !== 'REV_TIER'){
+            fields = PTE_Config_Util.nonvolTierFields;
+        }
         var tmplt = '<div class="col-md-12">';
         tmplt += '<div class="col-md-12 rowHeight">';
         for (var t = 0; t < fields.length; t++) {

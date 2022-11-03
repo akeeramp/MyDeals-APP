@@ -26,7 +26,7 @@ export class contractExportComponent {
     private CAN_VIEW_MEET_COMP: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
 
     private isLoading = true;
-    private loadMessage = "Loading Contract History";
+    private loadMessage = "Loading Contract Data";
     private type = "numeric";
     private info = true;
     public exportData : any;
@@ -64,8 +64,11 @@ export class contractExportComponent {
         const cId = this.contractData.DC_ID;
 
         this.contractExportSvc.getExportContractData(cId).subscribe((result: Array<any>) => {
-            this.isLoading = false;
+            this.loadMessage = "Done";
             this.exportData = result[0];
+            setTimeout(()=>{
+                this.isLoading = false;
+            }, 500);
         }, (error) => {
             this.isLoading = false;
             this.loggerSvc.error('Contract Export service', error);
