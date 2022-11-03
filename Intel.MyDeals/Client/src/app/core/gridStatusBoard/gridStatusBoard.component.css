@@ -283,3 +283,17 @@
 .k-link {
     font-size: 13px!important
 }
+.highlightsty-title .k-column-title {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    color: rgb(26, 62, 111) !important;
+}
+.highlightsty-title .k-icon.k-i-filter {
+    font-size: 20px !important;
+    color: #000 !important;
+    opacity: 0.45 !important;
+}
+.highlightsty-title .k-icon.k-i-filter:hover {
+    color: #00aeef !important;
+    opacity: 1 !important
+}

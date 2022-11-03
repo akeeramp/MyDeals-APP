@@ -147,11 +147,12 @@ kendo-grid.approve-table kendo-grid-list table tr:hover {
 .fino-css .k-button {
     border: none!important;
 }
-
 .fino-css .k-button span {
-    line-height: 1.143em;
-    font-size: 17px;
-}
+    line-height: 1.143em !important;
+    font-size: 15px !important;
+    font-family: 'Intel Clear' !important;
+    font-weight: 500 !important;
+ }
 
 kendo-upload.fino-css kendo-upload-action-buttons {
     padding: 0 !important;
@@ -282,4 +283,7 @@ kendo-upload.fino-css.throw-fa-css kendo-upload-action-buttons .k-upload-selecte
 .upload-text-style.k-upload .k-file-progress .k-file-name {
     color: #00aeef !important;
     font-family: 'Intel Clear' !important
+}
+.upload-text-style.k-upload .k-upload-button:hover {
+    background-color: #eee !important
 }
