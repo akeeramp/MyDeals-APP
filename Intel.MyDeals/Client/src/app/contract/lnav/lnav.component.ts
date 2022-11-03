@@ -162,6 +162,7 @@ export class lnavComponent {
     customAddPsValidate() {
         let isvalid = true;
         this.isAddStrategyBtnHidden = true;
+        this.isPSExpanded[this.contractData.PRC_ST.length] = true;
         const values = this.newStrategy;
 
         // Clear all values

@@ -7,6 +7,7 @@ import { forkJoin, Observable, of } from 'rxjs';
 import { autoFillService } from "../autofillsettings/autofillsetting.service";
 import { logger } from '../../../shared/logger/logger';
 import { CheckedState } from "@progress/kendo-angular-treeview";
+import { templatesService } from "../../../shared/services/templates.service";
 
 @Component({
     selector: "autofill-selector",
@@ -39,11 +40,12 @@ export class AutoFillComponent {
     private dealType: string = "";
     private custID;
     private ptTemplate;
-
+    //UItemplate is to get lnav data
+    public UItemplate: any;
 
     constructor(
         private autoSvc: autoFillService,
-        private loggerSvc: logger,
+        private loggerSvc: logger, private templatesSvc: templatesService,
         public dialogRef: MatDialogRef<AutoFillComponent>,
         @Inject(MAT_DIALOG_DATA) public autofillData: any
     ) {
@@ -239,13 +241,13 @@ export class AutoFillComponent {
             this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value !== "") {
             this.opValidMsg =
                 "Both Overarching Maximum Volume and Overarching Maximum Dollars cannot be filled out.  Pick only one.";
-        }else if (this.autofillData.isVistexHybrid != null &&
+        } else if (this.autofillData.isVistexHybrid != null &&
             this.autofillData.isVistexHybrid === true &&
             ((this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "" || this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === null)
-            && (this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === "" || this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === null))) {
+                && (this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === "" || this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === null))) {
             this.opValidMsg =
                 "Hybrid Deals require either Overarching Maximum Dollars or Overarching Maximum Volume be filled out.  Pick one.";
-        }else if (this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "0" || this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === 0) {
+        } else if (this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "0" || this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === 0) {
             this.opValidMsg = "Overarching Maximum Dollars must be blank or > 0";
         } else if (this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === "0" ||
             this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === 0) {
@@ -264,7 +266,7 @@ export class AutoFillComponent {
             this.setBusy("Saving...", "Saving your data...", "Info", false);
             if (this.currPricingTable == null) {
                 this.addPricingTable();
-            } else {                
+            } else {
                 this.editPricingTable();
             }
         }
@@ -300,8 +302,8 @@ export class AutoFillComponent {
                 dealType = "Pricing"
             }
             this.loggerSvc.success("Edited " + dealType + " Table", "Save Successful",);
-        },(err)=>{
-            this.loggerSvc.error("Unable to update Pricing Table","Error",err);
+        }, (err) => {
+            this.loggerSvc.error("Unable to update Pricing Table", "Error", err);
         })
         this.isLoading = false;
         this.setBusy("", "", "", false);
@@ -309,7 +311,7 @@ export class AutoFillComponent {
 
     addPricingTable() {
 
-        let pt = this.ptTemplate;
+        let pt = this.UItemplate["ObjectTemplates"].PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];
         if (!pt) {
             this.loggerSvc.error("Could not create the Pricing Table.", "Error");
             this.isLoading = false;
@@ -349,8 +351,8 @@ export class AutoFillComponent {
                 dealType = "Pricing"
             }
             this.loggerSvc.success("Created " + dealType + " Table", "Save Successful",);
-        },(err)=>{
-            this.loggerSvc.error("Could Not create Pricing Table","Error",err);
+        }, (err) => {
+            this.loggerSvc.error("Could Not create Pricing Table", "Error", err);
             this.isLoading = false;
         })
     }
@@ -401,8 +403,6 @@ export class AutoFillComponent {
         else {
             return false;
         }
-        
-        
     }
     hasChildren(node: any): boolean {
         return node.items && node.items.length > 0;
@@ -410,6 +410,17 @@ export class AutoFillComponent {
     fetchChildren(node: any): Observable<any[]> {
         // returns the items collection of the parent node as children
         return of(node.items);
+    }
+
+    loadTemplateDetails() {
+        this.isLoading = true;
+        this.setBusy("Loading...", "Loading data, please wait..", "Info", true);
+        this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
+            this.UItemplate = response;
+        }, (error) => {
+            this.isLoading = false;
+            this.loggerSvc.error('loadAllContractDetails::readTemplates:: service', error);
+        })
     }
 
     async loadAutoFill() {
@@ -431,9 +442,9 @@ export class AutoFillComponent {
             this.autofillData.DEFAULT.PAYOUT_BASED_ON.opLookupUrl = "/api/Dropdown/GetConsumptionPayoutDropdowns/PAYOUT_BASED_ON";
             this.autofillData.DEFAULT.PROGRAM_PAYMENT.opLookupUrl = "/api/Dropdown/GetProgPaymentDropdowns/PROGRAM_PAYMENT";
         }
-      
+
         this.dropdownResponses = await this.getAllDropdownValues();
-        
+
         let geoVals = this.autofillData.DEFAULT ? this.autofillData.DEFAULT['GEO_COMBINED'].value : '';
         this.autofillData.DEALTYPE_DISPLAY = this.dealType.replace("_", "").toUpperCase();
         this.isBlend = (geoVals?.indexOf("[") >= 0);
@@ -445,7 +456,7 @@ export class AutoFillComponent {
         }
         this.geos = geoVals;
         this.marketSeglist = this.dropdownResponses['MRKT_SEG'];
-        this.nonCorpMarketSeg = this.dropdownResponses['MRKT_SEG_NON_CORP'];        
+        this.nonCorpMarketSeg = this.dropdownResponses['MRKT_SEG_NON_CORP'];
         _.each(this.marketSeglist, (key) => {
             if (key.items != undefined && key.items != null && key.items.length > 0) {
                 this.parentKeys.push(key.DROP_DOWN);
@@ -457,8 +468,8 @@ export class AutoFillComponent {
         }
         else {
             this.mkgvalues = mkgvalue;
-        }        
-        this.multSlctMkgValues =  this.mkgvalues;
+        }
+        this.multSlctMkgValues = this.mkgvalues;
         this.isLoading = false;
         this.setBusy("", "", "", false);
     }
@@ -477,11 +488,12 @@ export class AutoFillComponent {
     ngOnInit() {
         try {
             this.rebateTypeTitle = this.autofillData.ISTENDER ? "Tender Table" : "Pricing Table";
+            this.loadTemplateDetails();
             this.loadAutoFill();
         }
-        catch(ex){
+        catch (ex) {
             this.loggerSvc.error('Something went wrong', 'Error');
-            console.error('Auo_Fill::ngOnInit::',ex);
+            console.error('Auo_Fill::ngOnInit::', ex);
         }
     }
 

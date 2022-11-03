@@ -324,7 +324,9 @@
     font: 10px Arial, sans-serif;
     font-weight: bold;
 }
-
+.blueBg {
+    color: #fff !important;
+}
 .textCircle_NeedsWork {
     border-radius: 50%;
     width: 15px;
