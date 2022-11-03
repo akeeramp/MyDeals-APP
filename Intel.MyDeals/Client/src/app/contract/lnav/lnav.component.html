@@ -158,7 +158,11 @@
                     </div>
                 </ng-template>
             </kendo-tabstrip-tab>
-            <kendo-tabstrip-tab title="Meet Comp" [selected]="selectedTab == 1" [disabled]="enableFlowBtn()">
+            <kendo-tabstrip-tab [selected]="selectedTab == 1" [disabled]="enableFlowBtn()">
+                <ng-template kendoTabTitle>
+                    <i *ngIf="needMct()" id="meetCompIcon" class="intelicon-information-outlined font-med" title="Meet Comp needs to be reviewed" style="color: yellow;">&nbsp;</i>
+                    Meet Comp
+                </ng-template>
                 <ng-template kendoTabContent>
                     <div class="lnavContainer">
                         <div>

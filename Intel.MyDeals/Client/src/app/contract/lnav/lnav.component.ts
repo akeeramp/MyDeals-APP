@@ -860,7 +860,17 @@ export class lnavComponent {
     }
     enableFlowBtn() {
         return (lnavUtil.enableFlowBtn(this.contractData) == false) ? true : false;
-    }    
+    }
+    needMct = function () {
+        if (!this.contractData.PRC_ST || this.contractData.PRC_ST.length === 0) return false;
+        let isNeedMCT = false;
+        _.each(this.contractData.PRC_ST, (item) => {
+            if (item.COMP_MISSING_FLG !== "" && (item.COMP_MISSING_FLG === "1" || item.COMP_MISSING_FLG === 1)) {
+                isNeedMCT = true;
+            }
+        });
+        return isNeedMCT;
+    }
     ngOnInit() {
         try{
             this.newStrategy = this.UItemplate["ObjectTemplates"]?.PRC_ST.ALL_TYPES;

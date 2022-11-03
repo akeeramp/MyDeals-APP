@@ -566,3 +566,7 @@ button.btn.btn-sm.btn-primary.lnavaddbtnstyle {
     content: "* ";
     color: #f3d54e;
 }
+
+#meetCompIcon{
+    margin-left:-1rem;
+}
