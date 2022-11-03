@@ -544,3 +544,8 @@
 .meet-comp-filter ul {
     max-height: 300px;
 }
+
+.meet-comp-blank_space {
+    border-bottom: 2px solid;
+    color: #c1c1c1;
+}

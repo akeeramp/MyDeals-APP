@@ -844,3 +844,8 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
 .text-shift-left {
     margin-right: 83px !important
 }
+
+.product-selector-font-align {
+    text-align: center;
+    font-weight: normal;
+}

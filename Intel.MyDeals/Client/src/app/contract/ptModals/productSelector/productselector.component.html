@@ -266,7 +266,7 @@
                                     <!-- Cell Content -->
                                     <div class="CAPYCS2CellContent bg-yellow-remove" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openModal(column.field, pricingTableRow, dataItem.PRD_MBR_SID, column.field)">
                                         <!-- YCS2 Info cell design -->
-                                        <div [class.isSoftWarnCell]="dataItem.YCS2.includes('No')" [class.uiControlDiv]="dataItem.YCS2.includes('No')" style="text-align: center;">
+                                        <div [class.isSoftWarnCell]="dataItem.YCS2.includes('No')" [class.uiControlDiv]="dataItem.YCS2.includes('No')" class="product-selector-font-align">
                                             {{ dataItem.YCS2 }}
                                         </div>
                                     </div>
