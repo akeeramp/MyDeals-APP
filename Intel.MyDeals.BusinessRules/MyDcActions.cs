@@ -1401,12 +1401,16 @@ namespace Intel.MyDeals.BusinessRules
                     string matchedValue = string.Empty;
                     if (de.AtrbCd == AttributeCodes.SETTLEMENT_PARTNER)
                     {
-                        dropDowns = DataCollections.GetCustomerVendors().Select(d => d.BUSNS_ORG_NM).ToList();
-                        matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
-                        if (string.IsNullOrEmpty(matchedValue))
+                        int custId = 0;
+                        if (int.TryParse(r.Dc.GetDataElementValue(AttributeCodes.CUST_MBR_SID), out custId))
                         {
-                            dropDowns = DataCollections.GetCustomerVendors().Select(d => d.DROP_DOWN).ToList();
+                            dropDowns = DataCollections.GetCustomerVendors().Where(x => x.CUST_MBR_SID == custId).Select(d => d.BUSNS_ORG_NM).ToList();
                             matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
+                            if (string.IsNullOrEmpty(matchedValue))
+                            {
+                                dropDowns = DataCollections.GetCustomerVendors().Where(x => x.CUST_MBR_SID == custId).Select(d => d.DROP_DOWN).ToList();
+                                matchedValue = dropDowns.Where(d => d.ToUpper() == de.AtrbValue.ToString().ToUpper()).Select(d => d).FirstOrDefault();
+                            }
                         }
                     }
                     else if (de.AtrbCd == AttributeCodes.PAYOUT_BASED_ON) // Restrict Billings out of true Tender Deals
