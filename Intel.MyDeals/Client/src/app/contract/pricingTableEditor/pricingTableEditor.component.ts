@@ -95,6 +95,7 @@ export class pricingTableEditorComponent implements OnChanges {
                 });
             }
             async openPopUp() {
+                VM.curRow = [];
                 const selVal = this.hot.getDataAtCell(this.selRow, this.selCol);
                 // let modalComponent: any = null, name: string = '', height: string = "250px", width: string = '650px', data = {}, panelClass: string = "";
                 let modalComponent: any = null,
@@ -109,18 +110,28 @@ export class pricingTableEditorComponent implements OnChanges {
                     // height = "80vh"; // ISSUE: Adds a blank block at the bottom of the grid taking 20% of the view
                     width = "5500px";
                     panelClass = "product-selector-dialog";
-                    let obj = {}, curRow = [];
+                    let obj = {};
                     _.each(this.hot.getCellMetaAtRow(this.selRow), (val) => {
                         if (val.prop) {
                             obj[val.prop] = this.hot.getDataAtRowProp(this.selRow, val.prop.toString()) != null ? this.hot.getDataAtRowProp(this.selRow, val.prop.toString()) : null;
                         }
                     });
-                    curRow.push(obj);
-                    if (curRow[0]['PTR_SYS_PRD'] == "") {
-                        await VM.validateOnlyProducts('onLoad');
-                        return;
+                    VM.curRow.push(obj);
+
+                     if (VM.curRow[0]['PTR_SYS_PRD'] == "") {
+                        await VM.validateOnlyProducts('onOpenSelector', VM.curRow);
+                        if (VM.curRow[0].isOpenCorrector) {
+                            delete VM.curRow[0].isOpenCorrector;
+
+                            if (VM.curRow[0].delPTR_SYS_PRD) {
+                                VM.curRow[0]['PTR_SYS_PRD'] = ""
+                                this.hot.setDataAtRowProp(this.selRow, 'PTR_SYS_PRD', '', 'no-edit');
+                                delete VM.curRow[0].delPTR_SYS_PRD;
+                            }
+                            return;
+                        }
                     }
-                    data = { name: name, source: this.source, selVal: selVal, contractData: VM.contractData, curPricingTable: VM.curPricingTable, curRow: curRow };
+                    data = { name: name, source: this.source, selVal: selVal, contractData: VM.contractData, curPricingTable: VM.curPricingTable, curRow: VM.curRow };
                 }
                 else if (this.field && this.field == 'GEO_COMBINED') {
                     modalComponent = GeoSelectorComponent
@@ -161,7 +172,7 @@ export class pricingTableEditorComponent implements OnChanges {
                     data: data,
                     panelClass: panelClass
                 });
-                dialogRef.afterClosed().subscribe(result => {
+                await dialogRef.afterClosed().toPromise().then(result => {
                     if (result) {
                         if (this.field && this.field == 'PTR_USER_PRD') {//here there is no handonstable source specify bcz we need to do autofill
                             VM.isLoading = true;
@@ -226,8 +237,18 @@ export class pricingTableEditorComponent implements OnChanges {
                                 }
                             }
                         }, 2000);
+
+                        if (VM.curRow[0].delPTR_SYS_PRD) {
+                            delete VM.curRow[0].delPTR_SYS_PRD
+                        }
                     }
                 });
+
+                if (VM.curRow[0].delPTR_SYS_PRD) {
+                    VM.curRow[0]['PTR_SYS_PRD'] = ""
+                    this.hot.setDataAtRowProp(this.selRow, 'PTR_SYS_PRD', '', 'no-edit');
+                    delete VM.curRow[0].delPTR_SYS_PRD;
+                }
             }
         }
         /*  custom cell editor logic ends here*/
@@ -254,6 +275,7 @@ export class pricingTableEditorComponent implements OnChanges {
     private isDialogOpen: boolean = false;
     private isCustDivNull: boolean = false;
     private validationMessage: boolean = false;
+    private curRow = [];
     /*For loading variable */
     private isLoading: boolean = false;
     private msgType: string = "";
@@ -931,7 +953,7 @@ export class pricingTableEditorComponent implements OnChanges {
         }
 
     }
-    async validateOnlyProducts(action: string) {
+    async validateOnlyProducts(action: string, curRow?) {
         //loader
         let isPrdValid: any = null;
         //generate PTE
@@ -943,7 +965,17 @@ export class pricingTableEditorComponent implements OnChanges {
             //code to bind the cook result of success or failure
             let PTR_col_ind = _.findIndex(this.columns, { data: 'PTR_USER_PRD' });
             _.each(updatedPTRObj.rowData, (data, idx) => {
+
                 this.hotTable.setDataAtRowProp(idx, 'PTR_SYS_PRD', data.PTR_SYS_PRD, 'no-edit');
+                if (curRow && data.DC_ID == curRow[0]['DC_ID']) {
+                    curRow[0]['PTR_SYS_PRD'] = data.PTR_SYS_PRD;
+
+                    if (curRow && (!this.isEqual(data['PTR_USER_PRD'], curRow[0]['PTR_USER_PRD']) ||
+                        !this.isEqual(data['PRD_EXCLDS'], curRow[0]['PRD_EXCLDS']))) {
+                        curRow[0].delPTR_SYS_PRD = true;
+                    }
+                }
+
                 // Do not update the cell value if exclude product is invalid/NULL
                 if (this.curPricingTable.OBJ_SET_TYPE_CD != 'KIT' && this.curPricingTable.OBJ_SET_TYPE_CD != 'ECAP'
                     && data.PRD_EXCLDS != null && data.PRD_EXCLDS != "") {
@@ -964,9 +996,12 @@ export class pricingTableEditorComponent implements OnChanges {
             if (_.contains(prdValResult, '1')) {
                 // Product corrector if invalid products
                 this.isLoading = false;
-                this.openProductCorrector(translateResult['Data'])
+                if ((action == 'onOpenSelector' && translateResult['Data'].DuplicateProducts[curRow[0].DC_ID]) || action != 'onOpenSelector') {
+                    await this.openProductCorrector(translateResult['Data'])
+                    curRow[0].isOpenCorrector = true;
+                }
             }
-            else if (_.contains(prdValResult, '2')) {
+            else if (_.contains(prdValResult, '2') && action != 'onOpenSelector') {
                 this.loggerService.warn('Please use product selector to choose a valid product', "Use Product Selector");
             }
             else {
@@ -994,7 +1029,9 @@ export class pricingTableEditorComponent implements OnChanges {
                     return isPrdValid != null ? false : true;
                 }
                 else {
-                    this.validationMessage = true;
+                    if (action != 'onOpenSelector') {
+                        this.validationMessage = true;
+                    }
                     this.isLoading = false;
                 }
             }
@@ -1008,6 +1045,13 @@ export class pricingTableEditorComponent implements OnChanges {
             this.isLoading = false;
             return true;
         }
+    }
+    isEqual(data1, data2) {
+        data1 = data1.split(',').map((item) => item.trim());
+        data2 = data2.split(',').map((item) => item.trim());
+
+        let equal = data1.every(item => data2.includes(item)) && data2.every(item => data1.includes(item));
+        return equal;
     }
     async resetValidationMessage() {
         this.validationMessage = false;
@@ -1127,7 +1171,7 @@ export class pricingTableEditorComponent implements OnChanges {
             }
         });
     }
-    openProductCorrector(products: any) {
+    async openProductCorrector(products: any) {
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
         let selRow: any;
         let operation: any;
@@ -1144,13 +1188,17 @@ export class pricingTableEditorComponent implements OnChanges {
             data: data,
             panelClass: "product-corrector-dialog",
         });
-        dialogRef.afterClosed().subscribe((selProds: Array<ProdCorrectObj>) => {
+        await dialogRef.afterClosed().toPromise().then((selProds: Array<ProdCorrectObj>) => {
+            let curRowIndx;
             if (selProds) {
                 this.isLoading = true;
                 this.setBusy("PTE Reloading", "PTE Reloading please wait", "Info", true);
                 //logic to bind the selected product and PTR_SYS_PRD to PTR
                 //For some reason when KIT is binding for more than 2 records its breaking so for now calling the function directly. 
                 _.each(selProds, (selProd, idx) => {
+                    if (this.curRow[0]) {
+                        curRowIndx = selProd.DCID == this.curRow[0]['DC_ID'] ? selProd.indx : null;
+                    }
                     // sometime not all prod corrector rows are slected and user click save in that case we dont need to do any action
                     if (selProd.items && selProd.items.length > 0) {
                         //logic to bind the selected product and PTR_SYS_PRD to PTR
@@ -1196,7 +1244,7 @@ export class pricingTableEditorComponent implements OnChanges {
                                             this.hotTable.setDataAtRowProp(idx, 'PTR_USER_PRD', data.PTR_USER_PRD, 'no-edit')
                                         }
                                     })
-                                });                            
+                                });
                                 let denBandData = PTE_CellChange_Util.validateDensityBand(selRow, this.columns, this.curPricingTable, operation, '', false);
                                 let error = PTE_Save_Util.isPTEError(denBandData.finalPTR, this.curPricingTable);
                                 this.validMisProd = denBandData.validMisProds;
@@ -1209,6 +1257,14 @@ export class pricingTableEditorComponent implements OnChanges {
                         }, 2000);
                     }
                 });
+                
+                let includeIndx = _.findIndex(this.columns, { data: 'PTR_USER_PRD' });
+                let excludeIndx = _.findIndex(this.columns, { data: 'PRD_EXCLDS' });
+                if (this.curRow[0].delPTR_SYS_PRD &&
+                    (this.hotTable.getCellMetaAtRow(curRowIndx)[includeIndx]['className'] != 'error-product'
+                    && this.hotTable.getCellMetaAtRow(curRowIndx)[excludeIndx]['className'] != 'error-product')) {
+                    delete this.curRow[0].delPTR_SYS_PRD
+                }
             }
         });
     }

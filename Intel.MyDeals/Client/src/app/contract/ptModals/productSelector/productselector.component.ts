@@ -215,7 +215,7 @@ export class ProductSelectorComponent {
             this.pricingTableRow.PROGRAM_PAYMENT = this.data.curRow[0].PROGRAM_PAYMENT;
             this.pricingTableRow.PROD_INCLDS = this.data.curRow[0].PROD_INCLDS;
             this.pricingTableRow.OBJ_SET_TYPE_CD = this.data.curPricingTable.OBJ_SET_TYPE_CD;
-            let productArray = JSON.parse(this.data.curRow[0].PTR_SYS_PRD);
+            let productArray = (this.data.curRow[0].PTR_SYS_PRD).length > 0 ? JSON.parse(this.data.curRow[0].PTR_SYS_PRD) : this.data.curRow[0].PTR_SYS_PRD;
             _.each(productArray, pdt => {
                 if (!pdt[0].EXCLUDE) {
                     this.addedProducts.push(pdt[0]);
