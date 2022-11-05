@@ -161,8 +161,7 @@ export class lnavComponent {
     }
     customAddPsValidate() {
         let isvalid = true;
-        this.isAddStrategyBtnHidden = true;
-        this.isPSExpanded[this.contractData.PRC_ST.length] = true;
+        this.isAddStrategyBtnHidden = true;       
         const values = this.newStrategy;
 
         // Clear all values
@@ -247,7 +246,12 @@ export class lnavComponent {
             this.loggerSvc.error("Unable to create pricing strategy","Error",err);
             this.isLoading = false;
         })
+        //expand pricing strategy after creation.
+        if (this.contractData?.PRC_ST) {
+            this.isPSExpanded[this.contractData.PRC_ST.length] = true;
+        }
     }
+
     refreshContractData(cId) {
         this.contractDetailsSvc
             .readContract(cId)
