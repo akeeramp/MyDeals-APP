@@ -8,6 +8,7 @@ import {nestedLoaderComponent} from '../shared/kendo_controls/kendonested.compon
 import {nestedGridComponent} from '../shared/kendo_controls/kendonestedgrid.component';
 import { HeaderComponent } from '../shared/header/header.component';
 import { CustomDropDownFilterComponent } from '../shared/kendo/customDropDownFilter.component';
+import { globalRouteComponent } from '../shared/globalroute/globalroute.component';
 
 export let sharedComponents =[
     HeaderComponent,
@@ -19,5 +20,6 @@ export let sharedComponents =[
     LoadingSpinnerComponent,
     nestedLoaderComponent,
     nestedGridComponent,
-    CustomDropDownFilterComponent
+    CustomDropDownFilterComponent,
+    globalRouteComponent
 ]

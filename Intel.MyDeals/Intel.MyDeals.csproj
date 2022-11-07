@@ -2584,6 +2584,7 @@
     <TypeScriptCompile Include="Client\src\app\shared\services\templates.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\services\userPreferences.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\util\util.ts" />
+	  <TypeScriptCompile Include="Client\src\app\shared\globalroute\globalroute.component.ts" />
     <TypeScriptCompile Include="Client\src\load-libs.ts" />
     <TypeScriptCompile Include="Client\src\main.ts" />
     <TypeScriptCompile Include="Client\src\polyfills.ts" />
