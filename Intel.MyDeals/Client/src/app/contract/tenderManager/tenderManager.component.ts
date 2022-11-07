@@ -38,7 +38,7 @@ export class tenderManagerComponent {
     public pricingTableData: any;
     public dirty: boolean = false;
     public isPTREmpty: boolean;
-    public isPartiallyValid: boolean = true;
+    public isPartiallyValid: boolean = false;
     public mcForceRunReq: boolean;
     public inCompleteCapMissing: boolean = false;
     public result: any = null;
@@ -81,13 +81,27 @@ export class tenderManagerComponent {
          this.isLoading = false;
     }
 
-    forDE() {
+    isValidateTTE() {
+        if (this.isPTRPartiallyComplete()) {
+            if (this.deComp != undefined) {
+                if (this.deComp.dirty == false) return true;
+                else if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
+                    return true;
+                }
+                else return false;
+            } else return true;
+        } else if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
+            return true;
+        }
+    }
+
+    isValidateDE() {
         if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && this.isPTRPartiallyComplete() == true) {
             return true;
         } else return false;
     }
 
-    forMC() {
+    isValidateMC() {
         if (((this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'InComplete' && this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'Not Run Yet' && !this.isMCForceRunReq()) || this.pricingTableData.PRC_ST[0].CAP_MISSING_FLG == 1) || this.passedValue == 'NoMeetCompVal') {
             return true;
         } else return false;
@@ -108,10 +122,10 @@ export class tenderManagerComponent {
             this.currentTAB = tab;
         } else if (tab == "NoMeetCompVal") {
             this.passedValue = tab;
-            this.forMC();
+            this.isValidateMC();
         } else if (tab == 'MeetCompVal') {
             this.passedValue = '';
-            this.forMC();
+            this.isValidateMC();
         } else {
             this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
                 this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
@@ -159,23 +173,35 @@ export class tenderManagerComponent {
         }
 
         else if (selectedTab == 'MC') {
-            if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
+            if (this.currentTAB == 'PTR' && this.pteComp.dirty && this.dirtyItems.length == 0) {
+                await this.pteComp.validatePricingTableProducts();
+            } else if (this.currentTAB == 'PTR' && this.dirtyItems.length == 0 && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty') {
+                await this.redirectingFn('DE');
+            } else if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
                 await this.redirectingFn(selectedTab);
-            } else if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION != 'Complete') {
+            } else if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION != 'Complete' && this.deComp.dirty) {
                 await this.deComp.SaveDeal();
             } else if (this.currentTAB != 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
                 await this.redirectingFn(selectedTab);
+            } else {
+                this.loggerSvc.error('Validate all your product(s) to open Meet Comp.', 'error');
             }
-                else {
-                    this.loggerSvc.error('Validate all your product(s) to open Meet Comp.', 'error');
-                }
-            }
+        }
 
         else if (selectedTab == 'PD') {
-            if ((this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && (this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Pass' || this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Fail') && !this.mcForceRunReq || this.pricingTableData.PRC_ST[0].CAP_MISSING_FLG == 1) || this.passedValue == 'NoMeetCompVal') {
+            if (this.currentTAB == 'PTR' && this.pteComp.dirty && this.dirtyItems.length == 0) {
+                await this.pteComp.validatePricingTableProducts();
+            } else if (this.currentTAB == 'PTR' && this.dirtyItems.length == 0 && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION != 'Complete') {
+                await this.redirectingFn('DE');
+            } else if (this.currentTAB == 'PTR' && this.dirtyItems.length == 0 && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
+                await this.redirectingFn('MC');
+            } else if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 1) {
+                await this.redirectingFn('MC');
+            } else if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION != 'Complete' && this.deComp.dirty) {
+                await this.deComp.SaveDeal();
+            } else if ((this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && (this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Pass' || this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Fail') && !this.mcForceRunReq || this.pricingTableData.PRC_ST[0].CAP_MISSING_FLG == 1) || this.passedValue == 'NoMeetCompVal') {
                 await this.redirectingFn(selectedTab);
-            }
-            else {
+            } else {
                 this.loggerSvc.error("Meet Comp is not passed. You can not Publish this deal yet.", 'error');
             }
         }
@@ -194,7 +220,7 @@ export class tenderManagerComponent {
         let isPtrDirty = false;
         let rootScopeDirty = this.dirty;
         if (this.pricingTableData !== undefined && this.pricingTableData.PRC_TBL_ROW !== undefined && this.pricingTableData.PRC_TBL_ROW.length > 0) {
-            this.dirtyItems = this.pricingTableData.PRC_TBL_ROW.filter(x => x.DC_ID <= 0, x => x.warningMessages.length > 0);
+            this.dirtyItems = this.pricingTableData.PRC_TBL_ROW.filter(x => x.warningMessages.length > 0);
             if (this.dirtyItems.length > 0) isPtrDirty = true;
         }
         else {

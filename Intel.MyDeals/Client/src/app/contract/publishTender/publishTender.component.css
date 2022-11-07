@@ -140,7 +140,7 @@
 }
 
 .prdBtn.btn-primary {
-    background-color: #01AEEF;
+    background-color: #01AEEF !important;
 }
 
 .prdBtn.btn-primary:hover {
@@ -169,5 +169,13 @@
     width: 100%;
     padding: 25px 0;
 }
-
-
+.secHeader {
+    font-size: 14px;
+    padding: 0 16px 3px 0;
+    font-family: "Intel Clear";
+    font-weight: 200;
+    font-style: normal;
+    border-bottom: 2px solid #bcbcbc;
+    background-color: #fff;
+    color: #c1c1c1;
+}

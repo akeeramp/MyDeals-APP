@@ -206,10 +206,16 @@
     </kendo-tabstrip-tab>
     <kendo-tabstrip-tab [disabled]="true">
         <ng-template kendoTabTitle>
-            <div ngClass="fl volView contractView minimal-fixes" *ngIf="!isTenderContract">
+            <div ngClass="fl volView contractView minimal-fixes" *ngIf="!isTenderContract && voltLength==1">
+                <a style="color:#003c71">{{voltLength}}&nbsp;&nbsp;{{curPricingTable.OBJ_SET_TYPE_CD}} Deal</a>
+            </div>
+            <div ngClass="fl volView contractView minimal-fixes" *ngIf="!isTenderContract && voltLength>1">
                 <a style="color:#003c71">{{voltLength}}&nbsp;&nbsp;{{curPricingTable.OBJ_SET_TYPE_CD}} Deals</a>
             </div>
-            <div class="fl volView" *ngIf="isTenderContract">
+            <div class="fl volView" *ngIf="isTenderContract && voltLength==1">
+                <a style="color:#003c71">{{voltLength}}&nbsp;&nbsp;{{curPricingTable.OBJ_SET_TYPE_CD}} Deal</a>
+            </div>
+            <div class="fl volView" *ngIf="isTenderContract && voltLength>1">
                 <a style="color:#003c71">{{voltLength}}&nbsp;&nbsp;{{curPricingTable.OBJ_SET_TYPE_CD}} Deals</a>
             </div>
         </ng-template>

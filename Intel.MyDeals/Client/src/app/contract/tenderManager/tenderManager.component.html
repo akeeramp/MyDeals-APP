@@ -12,7 +12,7 @@
         <span>{{contractData.Customer.CUST_NM}}: </span>
         <span>{{contractData.TITLE}}</span>	&nbsp;&nbsp;
     </div>
-    <button class="ng-scope btn btn-primary deleteContract" (click)="deleteContract()" title='Delete Contract'>
+    <button class="ng-scope btn btn-primary deleteContract delcontracticon" (click)="deleteContract()" title='Delete Contract'>
         <i class="intelicon-trash-outlined deleteIcon" style="margin-left: 4px;font-size: 16px;" title='Delete Contract'></i>&nbsp;
     </button>
 </div>
@@ -23,7 +23,7 @@
 
 <div class="row wizard" style="padding-top: 50px;" *ngIf="pricingTableData != undefined">
     <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel first" [ngClass]="{'complete': isPTRPartiallyComplete() == true }">
+        <div class="wizard-panel first" [ngClass]="{'complete': isValidateTTE() == true }">
             <a id="tenderWidPTR" (click)="tenderWidgetPathManager('backToPricingTable', 'PTR')">
                 <span class="badge wizard-step" [ngStyle]="selectedTab == 'PTR'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': '#00AEEF', 'color': '#ffffff'}">1</span>
             </a>
@@ -36,10 +36,10 @@
         </a>
     </div>
     <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel second" [ngClass]="{'complete': forDE() == true}">
-            <span id="tenderWidDE" class="badge wizard-step" [ngStyle]="selectedTab == 'DE'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': isPTREmpty == true}">2</span>
+        <div class="wizard-panel second" [ngClass]="{'complete': isValidateTTE() == true}">
+            <span id="tenderWidDE" class="badge wizard-step" [ngStyle]="selectedTab == 'DE'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty'}">2</span>
         </div>
-        <a (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': isPTREmpty == true}">
+        <a (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty'}">
             <div class="wizard-step-text step-into">
                 <h4><i [hidden]="selectedTAB == 'DE'" class="intelicon-arrow-forward-right "></i> &nbsp; Deal Editor</h4>
                 <p>Adhoc Tender Deal Editor Manager</p>
@@ -47,10 +47,10 @@
         </a>
     </div>
     <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel third" [ngClass]="{'complete': forMC() == true && forDE() == true}">
-            <span id="tenderWidMC" class="badge wizard-step" (click)="tenderWidgetPathManager('', 'MC')" [ngStyle]="selectedTab == 'MC'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" [ngClass]="{'isDisabled': isPTREmpty == true}">3</span>
+        <div class="wizard-panel third" [ngClass]="{'complete': isValidateMC() == true && isValidateTTE() == true}">
+            <span id="tenderWidMC" class="badge wizard-step" (click)="tenderWidgetPathManager('', 'MC')" [ngStyle]="selectedTab == 'MC'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" [ngClass]="{'isDisabledDE': pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty'}">3</span>
         </div>
-        <a (click)="tenderWidgetPathManager('', 'MC')" [ngClass]="{'isDisabled': isPTREmpty == true}">
+        <a (click)="tenderWidgetPathManager('', 'MC')" [ngClass]="{'isDisabledDE': pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty'}">
             <div class="wizard-step-text step-into">
                 <h4><i [hidden]="selectedTAB == 'MC'" class="intelicon-arrow-forward-right "></i> &nbsp; Meet Comp</h4>
                 <p>Tender Meet Comp Manager</p>
@@ -59,10 +59,10 @@
     </div>
     <div class="col-xs-3 col-md-3">
         <div class="wizard-panel last publishToolTip" [ngClass]="{'complete':selectedTab == 'PD'}">
-            <span id="tenderWidPD" class="badge wizard-step" [ngStyle]="selectedTab == 'PD'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabled': forMC() != true && forDE() != true}">4</span>
-            <span ngbTooltip="Publishing will separate the deals entered in the table below so that they can be individually approved." placement="left" tooltipClass="toolTipReq" class="opElementHelpIcon intelicon-information-outlined"></span>
+            <span id="tenderWidPD" class="badge wizard-step" [ngStyle]="selectedTab == 'PD'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabled': isValidateMC() != true && isValidateTTE() != true}">4</span>
+            <span kendoTooltip class="left helpset opElementHelpIcon intelicon-information-outlined" style="margin-left: 4px;" title="Publishing will separate the deals entered in the table below so that they can be individually approved." position="left" [tooltipWidth]="300"></span>
         </div>
-        <a (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabled': forMC() != true && forDE() != true}">
+        <a (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabledDE': isValidateMC() != true && isValidateTTE() != true}">
             <div class="wizard-step-text step-into">
                 <h4><i [hidden]="selectedTAB == 'PD'" class="intelicon-arrow-forward-right"></i> &nbsp; Publish Adhoc Deal</h4>
                 <p>Converting into individual deals.</p>
@@ -86,11 +86,9 @@
     <publish-tender [pricingTableData]="pricingTableData"></publish-tender>
 </div>
 <kendo-dialog *ngIf="isDialogVisible" (close)="close()" [width]="440">
-    <p style="padding: 20px">Are you sure you would like to Delete this Contract ? </p>
-    <kendo-dialog-actions style="padding:0px;">
-        <button class="k-button k-primary" kendoButton (click)="deleteRecord()" style="width: 200px; color: #fff; border-color: #0071c5; background-color: #00aeef !important; height: 70px;">
-            OK
-        </button>
-        <button class="k-button" kendoButton (click)="close()" style="width: 100px; color: black; background-color: lightgray !important; border: none; height: 70px;"> CANCEL </button>
+    <p class="tender-del-head-style">Are you sure you would like to Delete this Contract ? </p>
+    <kendo-dialog-actions class="tender-del-style">
+        <button class="k-button k-primary tender-okbtn" kendoButton (click)="deleteRecord()">OK</button>
+        <button class="k-button tender-cancelbtn" kendoButton (click)="close()"> CANCEL </button>
     </kendo-dialog-actions>
 </kendo-dialog>
