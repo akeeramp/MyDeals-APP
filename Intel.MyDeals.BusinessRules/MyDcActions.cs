@@ -11,6 +11,7 @@ using Newtonsoft.Json;
 using AttributeCollection = Intel.MyDeals.Entities.AttributeCollection;
 using Newtonsoft.Json.Linq;
 using Dejavu.Calendar;
+using System.Diagnostics.Eventing.Reader;
 
 namespace Intel.MyDeals.BusinessRules
 {
@@ -1125,31 +1126,36 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-        public static void ReadOnlyEndDateIfIsTooOldAndHasTracker(params object[] args)
+        public static void ForceDealReadOnlyDueToBeingTooOld (params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            //var charsetResult = _constantsLookupsLib.GetConstantsByName("PROD_REPLACE_CHARSET"); // NULL Check
-            int numDaysInPastLimit = 90; // Set to 90 days, by constant if we can
+            string deRebateTypeValue = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+            string deDealTypeValue = r.Dc.GetDataElementValue(AttributeCodes.OBJ_SET_TYPE_CD);
 
-            foreach (var s in r.Rule.OpRuleActions[0].Target)
+            var isTenderDeal = (deDealTypeValue == "ECAP" || deDealTypeValue == "ECAP") && deRebateTypeValue == "TENDER";
+            var hasTracker = r.Dc.GetDataElementValue(AttributeCodes.HAS_TRACKER) == "1";
+            if (isTenderDeal && !hasTracker) return;
+
+            string getContValue = DataCollections.GetToolConstants().Where(c => c.CNST_NM == "HARD_EXPIRE_DEALS_AFTER_X_DAYS").Select(c => c.CNST_VAL_TXT).FirstOrDefault();
+            bool converted = int.TryParse(getContValue, out int numDaysInPastLimit);
+            if (!converted) numDaysInPastLimit = 90; // Safety set to 90 days if the constant didn't set correctly
+
+            IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
+
+            if (deEndDate != null) // Seem to be cases where rule is triggered, but DC doesn't have the element, so bring this forward prior to pulling the vaule.
             {
-                OpDataElement de = r.Dc.DataElements.FirstOrDefault(d => d.AtrbCd == s);
+                DateTime chkDate = OpConvertSafe.ToDateTime(deEndDate.AtrbValue.ToString());
+                // Have to get a safe version of datatime(now) minus our buffer to force check to be 12AM time based like Start/End Dates
+                bool isDealTooOld = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0; 
 
-                if (de != null) // Seem to be cases where rule is triggered, but DC doesn't have the element, so bring this forward prior to pulling the vaule.
+                if (deEndDate.AtrbValue.ToString() != "" && isDealTooOld) // Safety and Too Old check
                 {
-                    DateTime chkDate = OpConvertSafe.ToDateTime(de.AtrbValue.ToString());
-                    // Have to get a safe version of datatime(now) minus our buffer to force check to be 12AM time based like Start/End Dates
-                    bool isPnr = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0; // Point of No Return
-
-                    if (de.AtrbValue.ToString() != "" && isPnr && r.Dc.HasTracker())
+                    // Lock down the entire deal, it is 90 days old!!
+                    foreach (OpDataElement dx in r.Dc.DataElements) 
                     {
-                        de.IsReadOnly = true;
-                        foreach (OpDataElement dx in r.Dc.DataElements) // Lock down the entire cell, it is 90 days old!!
-                        {
-                            dx.IsReadOnly = true;
-                        }
+                        dx.IsReadOnly = true;
                     }
                 }
             }

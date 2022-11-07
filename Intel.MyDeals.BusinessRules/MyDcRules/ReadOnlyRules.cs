@@ -181,23 +181,12 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
-                new MyOpRule // Set to read only if you have a TRACKER NUMBER and Start Date is in the past
+                new MyOpRule // Set to read only if the deal is far in the past, any deal with a tracker or non-tender deals without
                 {
-                    Title="Readonly End Date if Tracker Exists and Is In Past X Days",
-                    ActionRule = MyDcActions.ReadOnlyEndDateIfIsTooOldAndHasTracker,
-                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    Title="Force full deal to be read only if END DATE is too far in the past and has no tracker (No Tenders)",
+                    ActionRule = MyDcActions.ForceDealReadOnlyDueToBeingTooOld,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
-                    AtrbCondIf = dc => dc.GetDataElementsWhere(de => de.AtrbCdIs(AttributeCodes.HAS_TRACKER) && de.HasValue("1")).Any(),
-                    OpRuleActions = new List<OpRuleAction<IOpDataElement>>
-                    {
-                        new OpRuleAction<IOpDataElement>
-                        {
-                            Action = BusinessLogicDeActions.SetReadOnly,
-                            Target = new[] {
-                                AttributeCodes.END_DT
-                            }
-                        }
-                    }
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL }
                 },
 
                 new MyOpRule
@@ -205,7 +194,7 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Settlement Partner is Readonly if Deal is Front End or Settlement Level is Cash",
                     ActionRule = MyDcActions.MakeSettlementPartnerReadonly,
                     Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnReadonly },
-                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL, OpDataElementType.PRC_TBL_ROW }
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL }
                 },
                 
                 new MyOpRule // Allow edits only in re-deal cases
