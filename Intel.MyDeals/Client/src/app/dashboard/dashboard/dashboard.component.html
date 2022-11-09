@@ -2,7 +2,8 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-
+<loading-panel-angular style="margin:auto !important" [show]="isLoading" [header]="'Loading Default Layout'" [description]="'Please wait...'" [msgType]="'Info'" [isShowFunFact]="false">
+</loading-panel-angular>
 <div class="container-fluid ">
 
     <div class="row dashboard-header">
@@ -10,29 +11,29 @@
             <div class="fr helpBtn" style="margin-left: 15px">
                 <i (click)="showHelpTopic();" class="intelicon-help" style="font-size: 30px !important;" title="Help"></i>
             </div>
-            <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;">
-                <i (click)="defaultLayout()" class="intelicon-dashboard-solid" style="font-size: 18px" title="Default Layout"></i>
+            <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;" (click)="defaultLayout()">
+                <i class="intelicon-dashboard-solid" style="font-size: 18px" title="Default Layout"></i>
             </a>
-            <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;">
-                <i (click)="openPopUp()" class="intelicon-plus-max" style="font-size: 18px" title="Add Widget"></i>
+            <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;" (click)="openPopUp()">
+                <i class="intelicon-plus-max" style="font-size: 18px" title="Add Widget"></i>
             </a>
-            <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;">
-                <i (click)="refreshAllWidgets()" class="intelicon-refresh" style="font-size:18px" title="Refresh Dashboard"></i>
+            <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;" (click)="refreshAllWidgets()">
+                <i class="intelicon-refresh" style="font-size:18px" title="Refresh Dashboard"></i>
             </a>
 
             <div class="fr">
                 <div class="fr">
-                    <kendo-datepicker #picker  [(value)]="startDateValue" calendarType="classic" [(ngModel)]="startDateValue" (valueChange)="onDateChange($event,'startDateChange')" style="width:110px; font-weight:500;">
+                    <kendo-datepicker #picker [(value)]="startDateValue" calendarType="classic" [(ngModel)]="startDateValue" (valueChange)="onDateChange($event,'startDateChange')" style="width:110px; font-weight:500;">
                     </kendo-datepicker>
                     -
-                    <kendo-datepicker #picker  [(value)]="endDateValue" calendarType="classic" [(ngModel)]="endDateValue" (valueChange)="onDateChange($event,'endDateChange')" style="width: 110px; font-weight: 500;">
+                    <kendo-datepicker #picker [(value)]="endDateValue" calendarType="classic" [(ngModel)]="endDateValue" (valueChange)="onDateChange($event,'endDateChange')" style="width: 110px; font-weight: 500;">
                     </kendo-datepicker>
                 </div>
                 <div class="fr" style="margin: 5px 5px 0 15px; color: #aaaaaa; font-size: 14px;">Date Range:</div>
 
                 <div class="fr" style="width:254px">
-                    <kendo-multiselect kendoMultiSelectSummaryTag [placeholder]="'Select Customers...'" class="fr opUiContainer md divineo-one dashcusstyle" style="width: 250px; margin-right: 7px; font-weight: 500;" #cmbmulti [data]="custData" textField="CUST_NM" valueField="CUST_SID" [autoClose]="false" [(ngModel)]="selectedCustNames"
-                        (valueChange)="onCustomerChange($event)">
+                    <kendo-multiselect kendoMultiSelectSummaryTag [placeholder]="'Select Customers...'" class="fr opUiContainer md divineo-one dashcusstyle" style="width: 250px; margin-right: 7px; font-weight: 500;" #cmbmulti [data]="custData" textField="CUST_NM" valueField="CUST_SID"
+                        [autoClose]="false" [(ngModel)]="selectedCustNames" (valueChange)="onCustomerChange($event)">
                         <ng-template kendoMultiSelectGroupTagTemplate let-dataItems>
                             <span class="k-icon k-i-caret-alt-down"></span> {{ dataItems.length }} ITEMS(S) SELECTED
                         </ng-template>

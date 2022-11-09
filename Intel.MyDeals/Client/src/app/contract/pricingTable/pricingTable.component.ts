@@ -307,6 +307,7 @@ export class pricingTableComponent {
 
     ngOnInit() {
         try {
+            document.title = "Contract - My Deals";
             const url = window.location.href.split('/');
             this.fetchDetailsfromURL(url)
             this.lnavSvc.isLnavHidden.subscribe((isLnavHidden: any) => {

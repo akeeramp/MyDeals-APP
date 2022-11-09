@@ -259,6 +259,7 @@ export class tenderManagerComponent {
 
     ngOnInit() {
         try {
+            document.title = "Contract - My Deals";
             const url = window.location.href.split('/');
             this.c_Id = Number(url[url.length - 1]);
             this.loadAllContractDetails();

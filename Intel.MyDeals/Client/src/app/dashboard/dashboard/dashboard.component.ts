@@ -45,6 +45,7 @@ export class DashboardComponent implements OnInit {
     private windowTop = 220; windowLeft = 370; windowWidth = 950; windowHeight = 500; windowMinWidth = 100;
     private searchDialogVisible = false;
     private selectedDashboardId;
+    private isLoading = false;
 
     public custData: any;
     public selectedCustNames: Item[];
@@ -138,24 +139,22 @@ export class DashboardComponent implements OnInit {
         window.localStorage.selectedDashboardId = this.selectedDashboardId;
     }
 
-    getSavedWidgetSettings(key, useSavedWidgetSettings) {
-        this.usrPrfrncssvc.getActions("Dashboard", "Widgets").subscribe((response: any) => {
-            if (response && response.length > 0) {
-                const savedWidgetSettingsForSpecifiedRole = _.findWhere(response, { PRFR_KEY: "1" });
-                if (savedWidgetSettingsForSpecifiedRole) {
-                    this.savedWidgetSettings = JSON.parse(savedWidgetSettingsForSpecifiedRole.PRFR_VAL);
-                }
-                this.initDashboard(key, useSavedWidgetSettings);
-            }
-        },(err)=>{
+    async getSavedWidgetSettings(key, useSavedWidgetSettings) {
+        let response:any = await this.usrPrfrncssvc.getActions("Dashboard", "Widgets").toPromise().catch((err) => {
             this.loggerSvc.error("Unable to get Widget Data","Error",err);
         });
+        if (response && response.length > 0) {
+            const savedWidgetSettingsForSpecifiedRole = _.findWhere(response, { PRFR_KEY: "1" });
+            if (savedWidgetSettingsForSpecifiedRole) {
+                this.savedWidgetSettings = JSON.parse(savedWidgetSettingsForSpecifiedRole.PRFR_VAL);
+            }
+            this.initDashboard(key, useSavedWidgetSettings);
+        }
     }
 
-    saveLayout() {
-        this.usrPrfrncssvc.updateActions("Dashboard", "Widgets", this.selectedDashboardId,
-            this.dashboard).subscribe((response: any) => { },
-                (error) => {
+    async saveLayout() {
+        await this.usrPrfrncssvc.updateActions("Dashboard", "Widgets", this.selectedDashboardId,
+            this.dashboard).toPromise().catch((error) => {
                     this.loggerSvc.error("Unable to update User Preferences.", error, error.statusText);
                 });
     }
@@ -214,9 +213,11 @@ export class DashboardComponent implements OnInit {
         }
     }
 
-    defaultLayout() {
-        this.addWidgetByKey('1', false);
-        this.saveLayout();
+    async defaultLayout() {
+        this.isLoading = true;
+        await this.addWidgetByKey('1', false);
+        await this.saveLayout();
+        this.isLoading = false;
     }
 
     showHelpTopic() {
@@ -279,9 +280,9 @@ export class DashboardComponent implements OnInit {
         }
     }
 
-    addWidgetByKey(key, useSavedWidgetSettings) {
+    async addWidgetByKey(key, useSavedWidgetSettings) {
         this.dashboard = [];
-        this.getSavedWidgetSettings(key, useSavedWidgetSettings);
+        await this.getSavedWidgetSettings(key, useSavedWidgetSettings);
     }
 
     saveWidgetPositions(ui, field) {
@@ -308,6 +309,7 @@ export class DashboardComponent implements OnInit {
 
     //********************* search widget functions*************************
     ngOnInit(): void {
+        document.title = "Dashboard - My Deals";
         this.selectedCustNames = window.localStorage.selectedCustNames ? JSON.parse(window.localStorage.selectedCustNames) : [];
         this.startDateValue = window.localStorage.startDateValue ? new Date(window.localStorage.startDateValue) : this.startDateValue;
         this.endDateValue = window.localStorage.endDateValue ? new Date(window.localStorage.endDateValue) : this.endDateValue;

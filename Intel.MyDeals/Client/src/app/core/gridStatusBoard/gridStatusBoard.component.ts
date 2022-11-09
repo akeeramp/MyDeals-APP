@@ -124,6 +124,7 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
 
     loadContractData() {
         this.isGridLoading.emit(true);
+        this.custIds = this.custIds == undefined ? "[]" : this.custIds;
         this.dataforfilter = {
             CustomerIds: JSON.parse(this.custIds),/*[]*/
             StartDate: this.datepipe.transform(new Date(this.startDt), 'MM/dd/yyyy'),
@@ -236,7 +237,7 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
     }
 
     distinctPrimitive(fieldName: string): any {
-        return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
+        return _.uniq(_.pluck(this.gridResult,fieldName));
     }
 
     //Changes to fav contract id will broadcast a change to dashboardController to SaveLayout changes
