@@ -1,8 +1,8 @@
-﻿<div>
+﻿<loading-panel-angular id="EndCustomerLoading" style="z-index:500;" isShowFunFact="true" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>
+<div [ngStyle]="{'opacity': (isLoading)? '0.5':'1'}">
     <div class="modal-header">
         <h3 class="modal-title" id="modal-title">Select End Customer/Retail and Country/Region</h3>
     </div>
-    <loading-panel-angular id="EndCustomerLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>
     <div class="modal-body" id="modal-body">
         <div *ngIf="isError || changeErrorFlag">
             <p>

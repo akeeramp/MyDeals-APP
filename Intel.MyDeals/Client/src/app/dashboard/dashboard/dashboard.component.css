@@ -445,7 +445,12 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
 }
 
 .filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th {
-    vertical-align: top!important;
+    vertical-align: top !important;
+    font-family: 'Intel Clear' !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    white-space: normal !important;
+    color: #1A3E6F !important;
 }
 
 .filter-alignment-fixes kendo-grid .k-grid-aria-root kendo-grid-list table tbody tr td .isReadOnlyCell {
@@ -1399,4 +1404,27 @@ input[type="text"]:focus-visible {
 
 kendo-grid.k-widget.k-grid kendo-grid-list table tbody tr.k-grid-norecords {
     visibility: hidden;
+}
+#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="START_DT"],
+#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="END_DT"],
+#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="TITLE"],
+#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="ECAP_PRICE"],
+#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="VOLUME"],
+#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="TERMS"],
+#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="GEO_APPROVED_BY"],
+#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="DIV_APPROVED_BY"] {
+    border-bottom: 3px solid rgb(0, 113, 197) !important;
+}
+
+#pubOpGrid .k-cell-inner .k-grid-filter {
+    text-align: center !important;
+    display: inline-block !important;
+    position: relative !important;
+    padding: 0px !important;
+    vertical-align: middle !important;
+    align-content: center !important;
+    width: 0px !important;
+    height: 0px !important;
+    top: -10px !important;
+    margin-right: 10px !important
 }

@@ -13,19 +13,18 @@
     <div class="row">
         <div class="col">
             <!-- <div id="spreadsheet"></div> -->
-            <button class="btn btn-sm btn-save ssToolbarBtn btn-disable-style" ssToolbarBtn (click)="validatePricingTableProducts()" [disabled]="!dirty">
-                <i class="fa fa-floppy-o skyBlue" aria-hidden="true" style="font-size: 30px" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}"></i>
-                <span class="text" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}"
-                      style="font-family: 'Intel Clear'; padding-left: 5px; text-align: left; color: #00AEEF; font-size: 14px; font-weight: 600;">
+            <button class="btn btn-sm btn-save ssToolbarBtn btn-disable-style" ssToolbarBtn (click)="validatePricingTableProducts()" [disabled]="!dirty" title="{{ isTenderContract ? 'Save your Tender Table, validate the products, and stay in your Tender Table Editor' : 'Save your Pricing Table, validate the products, and stay in your Pricing Table Editor'}}">
+                <i class="fa fa-floppy-o skyBlue floppy-icon-style" aria-hidden="true" style="font-size: 30px" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}"></i>
+                <span class="text save-validate-txtstyle" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}">
                     Save & Validate
                 </span>
             </button>
             <button class="btn btn-sm ssToolbarBtn btn-disable-style" title="Undo" (click)="undoPTE()" [disabled]="!dirty">
-                <i class="fa fa-reply skyBlue" aria-hidden="true" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}"
+                <i class="fa fa-reply skyBlue undo-redo-style" aria-hidden="true" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}"
                    style="font-size: 23px; margin-top: 2px;"></i>
             </button>
             <button class="btn btn-sm ssToolbarBtn btn-disable-style" title="Redo" (click)="redoPTE()" [disabled]="!dirty">
-                <i class="fa fa-share skyBlue" aria-hidden="true" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}"
+                <i class="fa fa-share skyBlue undo-redo-style" aria-hidden="true" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}"
                    style="font-size: 23px; margin-top: 2px;"></i>
             </button>
             <!-- Product Validator Button -->

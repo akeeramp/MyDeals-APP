@@ -11,6 +11,7 @@ import { distinct, process, State } from '@progress/kendo-data-query';
 import { MatDialog } from '@angular/material/dialog';
 import { dealProductsModalComponent } from '../ptModals/dealProductsModal/dealProductsModal.component';
 import { DE_Load_Util } from '../DEUtils/DE_Load_util';
+import * as moment from "moment";
 
 @Component({
     selector: "publish-tender",
@@ -302,8 +303,22 @@ export class publishTenderComponent {
         });
     }
     distinctPrimitive(fieldName: string): any {
-        return distinct(this.wipData, fieldName).map(item => item[fieldName]);
+        return distinct(this.wipData, fieldName).map(item => {
+            if (fieldName == 'WF_STG_CD') {
+                let StgVal = item.WF_STG_CD === "Draft" ? item.PS_WF_STG_CD : item.WF_STG_CD;
+                return { Text: StgVal, Value: item[fieldName] };
+            }
+            if (fieldName == 'CUST_MBR_SID') {
+                return { Text: item.Customer.CUST_NM, Value: item[fieldName] };
+            }
+            if (moment(item[fieldName], "MM/DD/YYYY", true).isValid()) {
+                return { Text: new Date(item[fieldName]).toUTCString(), Value: item[fieldName] };
+            }
+            else if (item[fieldName] != undefined && item[fieldName] != null)
+                return { Text: item[fieldName].toString(), Value: item[fieldName] }
+        });
     }
+
     ngOnInit() {
         const url = window.location.href.split('/');
         this.c_Id = Number(url[url.length - 1]);

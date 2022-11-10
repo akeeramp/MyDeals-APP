@@ -337,3 +337,48 @@ textarea.htCustTxt {
     font-weight: lighter !important;
     border: none !important;
 }
+i.fa.fa-floppy-o.skyBlue.floppy-icon-style.notDirty {
+    font-weight: lighter !important;
+    color: #7f7878 !important;
+    cursor: not-allowed !important;
+    font-size: 30px !important
+}
+
+.save-validate-txtstyle.text.notDirty {
+    font-size: 11px !important;
+    color: #7f7878 !important;
+    font-family: 'Intel Clear' !important;
+    font-weight: 400 !important;
+    top: -7px !important;
+    position: relative !important;
+    padding-left: 5px !important;
+    text-align: left !important;
+}
+
+i.fa.undo-redo-style.notDirty {
+    font-size: 23px !important;
+    margin-top: 2px !important;
+    color: #939598 !important;
+}
+
+i.fa.fa-floppy-o.floppy-icon-style.dirty {
+    color: #00aeef !important;
+    font-weight: normal !important;
+}
+
+span.text.save-validate-txtstyle.dirty {
+    color: #00aeef !important;
+    position: relative !important;
+    top: -7px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    font-family: 'Intel Clear' !important;
+    padding-left: 5px !important;
+    text-align: left !important;
+}
+
+i.fa.undo-redo-style.dirty {
+    font-size: 23px !important;
+    margin-top: 2px !important;
+    color: #00aeef !important;
+}

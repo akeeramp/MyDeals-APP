@@ -18,7 +18,7 @@
                 </div>
 
                 <div>
-                    <button class="btn btn-primary prdBtn" (click)="publishTenderDeal()" style="font-size: 16px;">YES, Please Publish Tender Deals</button>
+                    <button class="btn btn-primary prdBtn pbl-tnder-btn" (click)="publishTenderDeal()" style="font-size: 16px;">YES, Please Publish Tender Deals</button>
                 </div>
                 <div class="showMCTag" *ngIf="showMCTag">Meet Comp Status: <div class='textRunIcon readOnlyCell' style="padding-left: 5px;float:right"><i class='intelicon-information-solid notApplicableIcon' title='Meet comp is not applicable for the Products selected in the Tender Table editor' style='font-size:20px !important'></i></div></div>
             </td>
@@ -40,7 +40,7 @@
                 <deal-editor-cell [id]="column.field" [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [contract_Data]="contractData" [grid_Data]="gridData.data"></deal-editor-cell>
             </ng-template>
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                    <multicheck-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" textField="Text" valueField="Value" [data]="distinctPrimitive(column.field)"></multicheck-filter>
             </ng-template>
         </kendo-grid-column>
     </kendo-grid>
