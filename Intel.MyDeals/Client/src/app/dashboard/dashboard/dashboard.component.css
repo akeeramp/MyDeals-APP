@@ -478,7 +478,10 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
 .one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="END_DT"],
 .one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="ECAP_PRICE"],
 .one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="VOLUME"],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="TERMS"] {
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="TERMS"],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="TITLE"],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_BILLING_START"],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_BILLING_END"] {
     border-bottom: 3px solid rgb(0, 113, 197) !important;
     border-bottom-color: rgb(0, 113, 197) !important;
 }

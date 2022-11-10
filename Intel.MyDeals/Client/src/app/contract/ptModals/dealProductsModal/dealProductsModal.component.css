@@ -94,7 +94,8 @@ button.excelText.differ-artho-excel.iconsize.k-button-icontext.k-button.k-grid-e
     font-family: 'Intel Clear' !important
 }
 .style-icon-btn.k-button:hover {
-    background-color: #37a4cd7a !important 
+    background-color: #37a4cd7a !important ;
+    border:0 !important;
 }
 .deal-excel-style.modal-header {
     padding: 1rem 1rem !important;

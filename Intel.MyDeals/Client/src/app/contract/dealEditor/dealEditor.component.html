@@ -10,15 +10,15 @@
             <i id="btnClose" *ngIf="data.name !== 'CAP Info' && data.name !== 'All'" style="color:#00aeef; border-radius:15px" class="intelicon-close" (click)="onClose(data.name)" title="Close tab"></i>
         </ng-template>
         <ng-template kendoTabContent>
-            <div class="flex-container" style="display:flex">
-                <button id="SaveDeBtn" class="btn btn-sm btn-save" style="font-size:25px" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}" ssToolbarBtn (click)="SaveDeal()" [disabled]="!dirty">
+            <div id="ToolDeBtn" class="flex-container" style="display:flex">
+                <button id="SaveDeBtn" class="btn btn-sm btn-save tool-hover" style="font-size:25px" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}" ssToolbarBtn (click)="SaveDeal()" [disabled]="!dirty">
                     <i class="fa fa-floppy-o" aria-hidden="true"></i>
                     <span class="text hidden-sm hidden-xs" style="padding-left: 5px; text-align: left;">
                         Save & Validate
                     </span>
                 </button>
                 <div class="fr" style="margin-top: 2px;">
-                    <button class="btn btn-sm ssToolbarBtn" (click)="toggleWrap()" title="Toggle Word Wrap" [ngClass]="{'toggleSelect': wrapEnabled}">
+                    <button class="btn btn-sm ssToolbarBtn tool-hover" (click)="toggleWrap()" title="Toggle Word Wrap" [ngClass]="{'toggleSelect': wrapEnabled}">
                         <table>
                             <tr>
                                 <td><i class="intelicon-align-left skyBlue" style="font-size: 30px"></i></td>
@@ -31,7 +31,7 @@
                 </div>
 
                 <div class="fr" style="margin-top: 2px; margin-left:8px">
-                    <button class="btn btn-sm ssToolbarBtn" title="Check for Overlapping Deals" (click)="openOverLappingDealCheck()">
+                    <button class="btn btn-sm ssToolbarBtn tool-hover" title="Check for Overlapping Deals" (click)="openOverLappingDealCheck()">
                         <table>
                             <tr>
                                 <td><i class="intelicon-copy-outlined skyBlue" style="font-size: 30px"></i></td>
@@ -136,7 +136,7 @@
                 </kendo-dialog>
 
                 <div class="fr clearfix" style="margin-top: 2px; margin-left:8px;position: relative;">
-                    <button class="btn btn-sm ssToolbarBtn dropdown-toggle" type="button" data-toggle="dropdown">
+                    <button class="btn btn-sm ssToolbarBtn dropdown-toggle tool-hover" type="button" data-toggle="dropdown">
                         <table>
                             <tr>
                                 <td><i class="intelicon-ms-excel-outlined skyBlue" style="font-size: 30px"></i></td>
@@ -150,13 +150,13 @@
                         <li (click)="exportToExcelCustomColumns()" style="cursor: pointer;"><a>Export Current View</a></li>
                     </ul>
                 </div>&nbsp;&nbsp;
-                <button class="btn ssToolbarBtn" title="Help">
+                <button class="btn ssToolbarBtn tool-hover" title="Help">
                     <table>
                         <tr><td><i class="intelicon-help skyBlue" aria-hidden="true" style="font-size: 30px"></i></td></tr>
                     </table>
                 </button>&nbsp;&nbsp;
 
-                <span class="k-textbox design" style="width:248px !important;margin-top:4px">
+                <span class="k-textbox design" style="width: 255px !important; margin-top: 4px; font-size: 16px;">
                     <i class="intelicon-search" style="font-size:20px; color:#00AEEF; margin-top:3px;"></i>
                     &nbsp;&nbsp;
                     <input type="text" style="width:270px;border:none" (keydown)="filterDealData($event)" [(ngModel)]="searchFilter" placeholder="search... (press enter to search)" />
