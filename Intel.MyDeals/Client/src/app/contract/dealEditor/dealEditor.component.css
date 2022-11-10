@@ -504,6 +504,7 @@ k-state-focused .k-touch-action-auto .k-grid-edit-cell {
 }
 
 .intelicon-pin-outlined:hover {
+    font-size: 19px;
     background-color: #00aeef;
     color: #fff !important;
 }
@@ -748,9 +749,9 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
 }
 
 .dropdown:hover .dropbtn {
-    background-color: #0071c5!important;
+    background-color: #1891ee !important;
     color: none;
-    color: #fdfdfd!important;
+    color: #fdfdfd !important;
     cursor: pointer;
 }
 
@@ -776,41 +777,6 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
 
 #myInput:focus {
     outline: 3px solid #ddd;
-}
-
-.dropdown-col-opt {
-    position: relative;
-    display: inline-block;
-    cursor: pointer;
-}
-
-.dropdown-content-col {
-    display: none;
-    position: absolute;
-    background-color: #f9f9f9;
-    min-width: 284px;
-    overflow: auto;
-    border: 1px solid #ddd;
-    z-index: 1;
-    box-shadow: 0px 8px 16px 0px rgba(0, 0, 0, 0.2);
-    z-index: 10002;
-}
-
-.dropdown-content-col a {
-    color: black;
-    padding: 12px 16px;
-    text-decoration: none;
-    display: block;
-}
-
-/*.dropdown-content-col div label:hover {
-    background-color: #f1f1f1;
-    cursor: pointer;
-}*/
-
-.dropdown-col-opt:hover .dropdown-content-col {
-    display: block;
-    cursor: pointer;
 }
 
 .backclass:hover {
@@ -1063,7 +1029,7 @@ kendo-tabstrip.tabs-coll {
 }
 
 #colOpt:hover, #colOpt ~ td:hover {
-    background-color: #00AEEF !important;
+    background-color: #1891ee !important;
     color: white !important;
 }
 
@@ -1128,4 +1094,12 @@ button.k-button.add-tab-cancelbtn:hover {
 }
 #ToolDeBtn.flex-container {
     padding: 2px 10px 3px 10px;
+}
+#columnoptionclick.show {
+    transform: none !important;
+    font-size: 13px !important;
+    color: #777 !important;
+    border-color: #eee !important;
+    font-family: 'Intel Clear' !important;
+    top: 44px !important;
 }

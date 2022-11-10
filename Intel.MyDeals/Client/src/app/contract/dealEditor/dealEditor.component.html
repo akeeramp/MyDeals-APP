@@ -11,11 +11,17 @@
         </ng-template>
         <ng-template kendoTabContent>
             <div id="ToolDeBtn" class="flex-container" style="display:flex">
-                <button id="SaveDeBtn" class="btn btn-sm btn-save tool-hover" style="font-size:25px" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}" ssToolbarBtn (click)="SaveDeal()" [disabled]="!dirty">
-                    <i class="fa fa-floppy-o" aria-hidden="true"></i>
-                    <span class="text hidden-sm hidden-xs" style="padding-left: 5px; text-align: left;">
-                        Save & Validate
-                    </span>
+                <button id="SaveDeBtn" class="btn btn-sm btn-save tool-hover" style="padding-left: 25px;" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}" ssToolbarBtn (click)="SaveDeal()" [disabled]="!dirty">
+                    <table>
+                        <tr>
+                            <td>
+                                <i class="fa fa-floppy-o" aria-hidden="true" style="font-size: 30px; font-weight: 500; "></i>
+                            </td>
+                            <td class="text hidden-sm hidden-xs" style="padding-left: 5px; text-align: left;">
+                                    Save & Validate                               
+                            </td>
+                        </tr>
+                    </table>
                 </button>
                 <div class="fr" style="margin-top: 2px;">
                     <button class="btn btn-sm ssToolbarBtn tool-hover" (click)="toggleWrap()" title="Toggle Word Wrap" [ngClass]="{'toggleSelect': wrapEnabled}">
@@ -43,8 +49,8 @@
                     </button>
                 </div>
 
-                <div class="fr clearfix dropdown-col-opt" style="margin-top: 2px; margin-left: 8px; position: relative;">
-                    <button class="btn btn-sm ssToolbarBtn dropbtn hover-effect" title="Manage Columns" id="colOpt">
+                <div class="fr clearfix" style="margin-top: 2px; margin-left: 8px; position: relative;">
+                    <button class="btn btn-sm ssToolbarBtn dropbtn hover-effect dropdown-toggle" id="colOpt" data-toggle="dropdown">
                         <table>
                             <tr id="colOpt">
                                 <td> 
@@ -59,7 +65,7 @@
                             </tr>
                         </table>
                     </button>
-                    <div id="myDropdown" class="dropdown-content-col" style=" background-color: white; font-family: 'Intel Clear'; font-size: 13px;">
+                    <div id="columnoptionclick" class="dropdown-menu" style=" background-color: white; font-family: 'Intel Clear'; font-size: 13px;">
                         <div class="mycol-style">
                             <div>
                                 <span class="k-textbox searchbox">
@@ -80,7 +86,7 @@
                 </div>
 
                 <div class="fr dropdown" style="margin-top: 2px; margin-left:8px;">
-                    <button class="btn btn-sm ssToolbarBtn dropbtn hover-effect" title="Manage Columns" style="color: #00AEEF;">
+                    <button class="btn btn-sm ssToolbarBtn dropbtn hover-effect" style="color: #00AEEF;">
                         <table>
                             <tr>
                                 <td><i class="intelicon-settings-solid" style="font-size: 30px"></i></td>
