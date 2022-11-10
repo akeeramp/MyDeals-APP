@@ -978,11 +978,6 @@ export class pricingTableEditorComponent implements OnChanges {
                     }
                 }
 
-                // Do not update the cell value if exclude product is invalid/NULL
-                if (this.curPricingTable.OBJ_SET_TYPE_CD != 'KIT' && this.curPricingTable.OBJ_SET_TYPE_CD != 'ECAP'
-                    && data.PRD_EXCLDS != null && data.PRD_EXCLDS != "") {
-                    this.hotTable.setDataAtRowProp(idx, 'PRD_EXCLDS', data.PRD_EXCLDS, 'no-edit');
-                }
                 if (data && data._behaviors && data._behaviors.isError) {
                     if (data._behaviors.isError['PTR_USER_PRD'] == false) {
                         this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'success-product');
@@ -990,14 +985,23 @@ export class pricingTableEditorComponent implements OnChanges {
                     else {
                         this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'error-product');
                     }
-                    if (data._behaviors.isError['PRD_EXCLDS'] == false) {
-                        this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'success-product');
-                    }
-                    else {
-                        this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'error-product');
-                    }
-                    //setcellmeta will not render the color by default either you should make some proprty change of render
                     this.hotTable.render();
+                }
+
+                // Do not update the cell value if exclude product is invalid/NULL
+                if (this.curPricingTable.OBJ_SET_TYPE_CD != 'KIT' && this.curPricingTable.OBJ_SET_TYPE_CD != 'ECAP'
+                    && data.PRD_EXCLDS != null && data.PRD_EXCLDS != "") {
+                    this.hotTable.setDataAtRowProp(idx, 'PRD_EXCLDS', data.PRD_EXCLDS, 'no-edit');
+                    if (data && data._behaviors && data._behaviors.isError) {
+                        if (data._behaviors.isError['PRD_EXCLDS'] == false) {
+                            this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'success-product');
+                        }
+                        else {
+                            this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'error-product');
+                        }
+                        //setcellmeta will not render the color by default either you should make some proprty change of render
+                        this.hotTable.render();
+                    }
                 }
             })
             let prdValResult = PTEUtil.isValidForProdCorrector(translateResult['Data']);
