@@ -26,3 +26,7 @@
     white-space: nowrap;
     text-overflow: ellipsis
 }
+
+#dealDtl{
+    padding-left:5px;
+}

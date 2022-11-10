@@ -2,14 +2,16 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<div class="dealDetail" [ngStyle]="colorStyle()">
-    <div class="dealDetailContainer">
-        <div class="fl"><i class="intelicon-protection-solid validf_{{ dealDetail.PASSED_VALIDATION}}"
-                title="Validation:{{ (dealDetail.PASSED_VALIDATION==='Dirty' ? 'Validation Errors' : dealDetail.PASSED_VALIDATION) || 'Not validated yet'}}"></i>
+<div [ngStyle]="colorStyle()" id="dealDtl">
+    <div class="dealDetail">
+        <div class="dealDetailContainer">
+            <div class="fl"><i class="intelicon-protection-solid validf_{{ dealDetail.PASSED_VALIDATION}}"
+                   title="Validation:{{ (dealDetail.PASSED_VALIDATION==='Dirty' ? 'Validation Errors' : dealDetail.PASSED_VALIDATION) || 'Not validated yet'}}"></i>
+            </div>
+            <div class="fl id dealLink"><a>Deal #{{dealDetail.DC_ID}}</a></div>
+            <div class="fr dates">{{dealDetail.START_DT}} -{{dealDetail.END_DT}}</div>
+            <div class="clearboth"></div>
+            <div class="prd">{{dealDetail.TITLE}}</div>
         </div>
-        <div class="fl id dealLink"><a>Deal #{{dealDetail.DC_ID}}</a></div>
-        <div class="fr dates">{{dealDetail.START_DT}} -{{dealDetail.END_DT}}</div>
-        <div class="clearboth"></div>
-        <div class="prd">{{dealDetail.TITLE}}</div>
     </div>
 </div>

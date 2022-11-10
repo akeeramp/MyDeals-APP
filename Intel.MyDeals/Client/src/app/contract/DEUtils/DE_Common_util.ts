@@ -76,6 +76,8 @@ export class DE_Common_Util {
                         dataItem["STRT_VOL"][key] = parseInt(dataItem["STRT_VOL"][key] || 0);
                     if (!Number.isNaN(Number(dataItem["END_VOL"][key])))
                         dataItem["END_VOL"][key] = parseInt(dataItem["END_VOL"][key] || 0);
+                    else if (dataItem["END_VOL"][key] == 'Unlimited')
+                        dataItem["END_VOL"][key] = dataItem["END_VOL"][key].toString();
                     dataItem["RATE"][key] = parseFloat(dataItem["RATE"][key] || 0);
                 }
                 else if (dataItem.OBJ_SET_TYPE_CD === 'REV_TIER') {

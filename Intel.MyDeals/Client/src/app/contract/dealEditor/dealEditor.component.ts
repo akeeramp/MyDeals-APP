@@ -184,6 +184,10 @@ export class dealEditorComponent {
                 }
                 else {
                     distinctData = distinct(this.gridResult, col.field).map(item => {
+                        if (col.field == 'WF_STG_CD') {
+                            let val = item.WF_STG_CD === "Draft" ? item.PS_WF_STG_CD : item.WF_STG_CD;
+                            return { Text: val, Value: item[col.field] };
+                        }
                         if (moment(item[col.field], "MM/DD/YYYY", true).isValid()) {
                             return { Text: new Date(item[col.field]).toUTCString(), Value: item[col.field] };
                         }
@@ -743,8 +747,11 @@ export class dealEditorComponent {
         if (col == undefined || col == null || col.length == 0) return;
 
         var colGrp = this.templates[val.field];
-        if (colGrp && colGrp.Groups && !colGrp.Groups.includes(this.selectedTab)) {
-
+        if (colGrp == undefined || colGrp.Groups == undefined) {
+            colGrp = { Groups: [] };
+            this.templates[val.field] = colGrp;
+        }
+        if (!colGrp.Groups.includes(this.selectedTab)) {
             if (colGrp !== undefined && colGrp !== null) {
                 if (colGrp.Groups === undefined) colGrp.Groups = [];
                 colGrp.Groups.push(this.selectedTab);
