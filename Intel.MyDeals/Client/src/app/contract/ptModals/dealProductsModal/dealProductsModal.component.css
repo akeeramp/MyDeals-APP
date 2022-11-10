@@ -91,11 +91,12 @@ button.excelText.differ-artho-excel.iconsize.k-button-icontext.k-button.k-grid-e
     border-color: #0071c5 !important;
     box-shadow: none !important;
     font-size: 12px !important;
-    font-family: 'Intel Clear' !important
+    font-family: 'Intel Clear' !important;
+    border: 0 !important;
+    border-radius: 0 !important;
 }
 .style-icon-btn.k-button:hover {
     background-color: #37a4cd7a !important ;
-    border:0 !important;
 }
 .deal-excel-style.modal-header {
     padding: 1rem 1rem !important;
