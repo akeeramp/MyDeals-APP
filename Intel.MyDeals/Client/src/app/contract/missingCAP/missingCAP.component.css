@@ -62,3 +62,23 @@
 .sky-blue {
     color: #00AEEF !important;
 }
+.Missing_h_align {
+    padding-left: 20px !important;
+    padding-top: 32px !important;
+}
+.Missing_h_text {
+    font-size: 24px !important;
+    padding-bottom: 5px !important;
+}
+.header_bottom_line {
+    width: 99% !important;
+    border-top: 1px solid #555 !important;
+}
+.missingcost_grid {
+    padding-left: 20px !important;
+    padding-right: 3px !important;
+    padding-top: 8px !important;
+}
+.k-grid.missing_grid_h {
+    height: calc(100vh - 250px) !important;
+}

@@ -342,3 +342,6 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper {
 .sky-blue {
     color: #00AEEF;
 }
+.k-grid.deals_grid_h {
+    height: calc(100vh - 250px) !important;
+}
