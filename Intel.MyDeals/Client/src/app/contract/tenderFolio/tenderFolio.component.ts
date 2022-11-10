@@ -148,7 +148,6 @@ export class TenderFolioComponent {
         this.dataService.getCustomerDropdowns().subscribe(res => {
             if (res) {
                 this.Customers = res;
-                this.isLoading = false;
                 this.isCustDiv = false;
             }
         }, error => {
@@ -346,8 +345,8 @@ export class TenderFolioComponent {
         operator: "startsWith",
     };
     ngOnInit() {
-        this.getAllCustomers();
         this.isLoading = true;
+        this.getAllCustomers();
         this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
             this.templateData = response;
             this.contractData = this.templateData["ObjectTemplates"].CNTRCT.ALL_TYPES;
@@ -357,6 +356,7 @@ export class TenderFolioComponent {
             this.initializeTenderData();
             this.isLoading = false;
         }, (err) => {
+            this.isLoading = false;
             this.loggerSvc.error("Unable to get Template Data", "Error", err);
         })
     }

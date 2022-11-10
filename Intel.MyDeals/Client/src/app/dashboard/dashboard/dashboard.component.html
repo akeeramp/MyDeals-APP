@@ -11,15 +11,17 @@
             <div class="fr helpBtn" style="margin-left: 15px">
                 <i (click)="showHelpTopic();" class="intelicon-help" style="font-size: 30px !important;" title="Help"></i>
             </div>
-            <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;" (click)="defaultLayout()">
-                <i class="intelicon-dashboard-solid" style="font-size: 18px" title="Default Layout"></i>
-            </a>
-            <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;" (click)="openPopUp()">
-                <i class="intelicon-plus-max" style="font-size: 18px" title="Add Widget"></i>
-            </a>
-            <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;" (click)="refreshAllWidgets()">
-                <i class="intelicon-refresh" style="font-size:18px" title="Refresh Dashboard"></i>
-            </a>
+            <div kendoTooltip position="bottom">
+                <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;" (click)="defaultLayout()" title="Default Layout">
+                    <i class="intelicon-dashboard-solid" style="font-size: 18px"></i>
+                </a>
+                <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;" (click)="openPopUp()" title="Add Widget">
+                    <i class="intelicon-plus-max" style="font-size: 18px"></i>
+                </a>
+                <a class="fr btn btn-default btn-sm" style="padding: 4px 6px;" (click)="refreshAllWidgets()" title="Refresh Dashboard">
+                    <i class="intelicon-refresh" style="font-size:18px"></i>
+                </a>
+            </div>
 
             <div class="fr">
                 <div class="fr">
@@ -59,9 +61,9 @@
                                     <span>{{item.name}}</span>
                                 </div>
                                 <div class="col-md-2 widgetHeaderBtns">
-                                    <a [hidden]="!item.canRefresh" class="btn-icons" (click)="refreshWidget(item)"><i class="intelicon-refresh"></i></a>
-                                    <a [hidden]="!item.canSetting" (click)="openWidgetSettings(indx)" class="btn-icons"><i class="intelicon-settings-solid"></i></a>
-                                    <a (click)="removeItem($event, item)" (touchstart)="removeItem($event, item)" class="btn-icons">
+                                    <a [hidden]="!item.canRefresh" class="btn-icons" (click)="refreshWidget(item)" title="Refresh Widget"><i class="intelicon-refresh"></i></a>
+                                    <a [hidden]="!item.canSetting" (click)="openWidgetSettings(indx)" class="btn-icons" title="Widget Settings"><i class="intelicon-settings-solid"></i></a>
+                                    <a (click)="removeItem($event, item)" (touchstart)="removeItem($event, item)" class="btn-icons" title="Remove widget">
                                         <i class="intelicon-trash-outlined"></i>
                                     </a>
 
