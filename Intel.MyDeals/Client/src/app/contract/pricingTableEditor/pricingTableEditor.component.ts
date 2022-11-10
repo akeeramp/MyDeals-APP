@@ -123,7 +123,7 @@ export class pricingTableEditorComponent implements OnChanges {
                         if (VM.curRow[0].isOpenCorrector) {
                             delete VM.curRow[0].isOpenCorrector;
 
-                            if (VM.curRow[0].delPTR_SYS_PRD) {
+                            if (VM.curRow[0] && VM.curRow[0].delPTR_SYS_PRD) {
                                 VM.curRow[0]['PTR_SYS_PRD'] = ""
                                 this.hot.setDataAtRowProp(this.selRow, 'PTR_SYS_PRD', '', 'no-edit');
                                 delete VM.curRow[0].delPTR_SYS_PRD;
@@ -238,13 +238,13 @@ export class pricingTableEditorComponent implements OnChanges {
                             }
                         }, 2000);
 
-                        if (VM.curRow[0].delPTR_SYS_PRD) {
+                        if (VM.curRow[0] && VM.curRow[0].delPTR_SYS_PRD) {
                             delete VM.curRow[0].delPTR_SYS_PRD
                         }
                     }
                 });
 
-                if (VM.curRow[0].delPTR_SYS_PRD) {
+                if (VM.curRow[0] && VM.curRow[0].delPTR_SYS_PRD) {
                     VM.curRow[0]['PTR_SYS_PRD'] = ""
                     this.hot.setDataAtRowProp(this.selRow, 'PTR_SYS_PRD', '', 'no-edit');
                     delete VM.curRow[0].delPTR_SYS_PRD;
@@ -972,8 +972,8 @@ export class pricingTableEditorComponent implements OnChanges {
                 if (curRow && data.DC_ID == curRow[0]['DC_ID']) {
                     curRow[0]['PTR_SYS_PRD'] = data.PTR_SYS_PRD;
 
-                    if (curRow && (!this.isEqual(data['PTR_USER_PRD'], curRow[0]['PTR_USER_PRD']) ||
-                        !this.isEqual(data['PRD_EXCLDS'], curRow[0]['PRD_EXCLDS']))) {
+                    if (curRow && (data['PTR_USER_PRD'] && curRow[0]['PTR_USER_PRD'] && !this.isEqual(data['PTR_USER_PRD'], curRow[0]['PTR_USER_PRD']) ||
+                        (data['PRD_EXCLDS'] && curRow[0]['PRD_EXCLDS'] && !this.isEqual(data['PRD_EXCLDS'], curRow[0]['PRD_EXCLDS'])))) {
                         curRow[0].delPTR_SYS_PRD = true;
                     }
                 }

@@ -439,21 +439,29 @@ background-color: #ebebeb !important;
 }
 
 .dealToolsOverlay {
-width: 100%;
-z-index: 500;
-position: fixed;
-margin-top: -250px;
-right: -5px;
+    width: 100%;
+    z-index: 500;
+    position: fixed;
+    margin-top: -250px;
+    right: -5px;
+    white-space: normal;
 }
+    .dealToolsOverlay .ss-loading-overlay {
+        position: fixed;
+    }
+    .dealToolsOverlay .ss-loading-panel {
+        min-height: auto !important;
+        top: 30%;
+    }
 
-.wistyle.k-window {
-border-color: rgba(0,0,0,.2);
-box-shadow: 1px 1px 7px 1px rgba(128,128,128,.2);
-background-color: #fff;
-left: 375px !important;
-top: 178px !important;
-position: fixed !important;
-}
+    .wistyle.k-window {
+        border-color: rgba(0,0,0,.2);
+        box-shadow: 1px 1px 7px 1px rgba(128,128,128,.2);
+        background-color: #fff;
+        left: 375px !important;
+        top: 178px !important;
+        position: fixed !important;
+    }
 
 .k-dialog .k-dialog-title,
 .k-dialog .k-window-title {
