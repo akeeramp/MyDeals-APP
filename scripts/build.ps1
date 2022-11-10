@@ -4,10 +4,21 @@ try {
     if ($Operation -eq 'nuget'){
       & $PATH restore;
     }
-    elseif ($Operation -eq 'NPMBuild' ){
+    elseif ($Operation -eq 'NPMInstall' ){
         Set-Location -Path Intel.MyDeals/Client/ -PassThru;
         npm install;
+        Set-Location -Path .. -PassThru ; 
+        Set-Location -Path ..  -PassThru;
+    }
+      elseif ($Operation -eq 'NPMBuild' ){
+        Set-Location -Path Intel.MyDeals/Client/ -PassThru;
         npm run build_env;
+        Set-Location -Path .. -PassThru ; 
+        Set-Location -Path ..  -PassThru;
+    }
+         elseif ($Operation -eq 'LICENSE_Activate' ){
+        Set-Location -Path Intel.MyDeals/Client/ -PassThru;
+        npx kendo-ui-license activate;
         Set-Location -Path .. -PassThru ; 
         Set-Location -Path ..  -PassThru;
     }

@@ -26,9 +26,17 @@ jobs:
     runs-on: [self-hosted, mydeals-runner01]
     needs: Restore-packages
     steps:
-       - name: NPM Install Build
+       - name: NPM Install 
+         run: |
+           ./scripts/build.ps1 'NPMInstall' 'path' '${{github.workspace}}'
+       - name: NPM Build
          run: |
            ./scripts/build.ps1 'NPMBuild' 'path' '${{github.workspace}}'
+      #  - name: Activate Kendo UI License
+      #    run: |
+      #       ./scripts/build.ps1 'LICENSE_Activate' 'path' '${{github.workspace}}'
+         env:
+           KENDO_UI_LICENSE: ${{ secrets.KENDO_UI_LICENSE }}
        - name: MS build publish
          run: |
             ./scripts/build.ps1 'MSBuild' '${{env.MSBUILD_PATH}}' '${{github.workspace}}'
