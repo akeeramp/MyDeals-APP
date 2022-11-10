@@ -112,12 +112,12 @@
                 </div>
                 <div *ngIf="fieldDet.field == 'STRT_PB' || fieldDet.field == 'END_PB'">
                     <div class="col-md-2 topPadding">
-                        <div *ngIf="(fieldDet.field == 'STRT_PB' && (i>0 || in_DataItem['HAS_TRACKER'] == '1')) || (fieldDet.field =='END_PB' && in_DataItem['HAS_TRACKER'] == '1' && i != (in_DataItem['NUM_OF_TIERS']-1))">
+                        <div *ngIf="(fieldDet.field == 'STRT_PB' && (i>0 || in_DataItem['HAS_TRACKER'] == '1')) || (fieldDet.field =='END_PB' && in_DataItem['HAS_TRACKER'] == '1' && i != ((in_DataItem['NUM_OF_TIERS']/in_DataItem['NUM_OF_DENSITY'])-1))">
                             <span class="displayBlock densityPadding" [style.height.px]="30">
                                 {{in_DataItem[fieldDet.field][key]}}
                             </span>
                         </div>
-                        <div *ngIf="(fieldDet.field == 'STRT_PB' && i==0 && in_DataItem['HAS_TRACKER'] == '0') || (fieldDet.field =='END_PB' && (in_DataItem['HAS_TRACKER'] == 0 || (in_DataItem['HAS_TRACKER'] == 1 && i==(in_DataItem['NUM_OF_TIERS']-1))))">
+                        <div *ngIf="(fieldDet.field == 'STRT_PB' && i==0 && in_DataItem['HAS_TRACKER'] == '0') || (fieldDet.field =='END_PB' && (in_DataItem['HAS_TRACKER'] == '0' || (in_DataItem['HAS_TRACKER'] == '1' && i==((in_DataItem['NUM_OF_TIERS']/in_DataItem['NUM_OF_DENSITY'])-1))))">
                             <span>
                                 <kendo-numerictextbox [ngModel]="convertToLowerCase(in_DataItem[fieldDet.field][key]) == 'unlimited' ? '' : in_DataItem[fieldDet.field][key]"
                                                       (ngModelChange)="in_DataItem[fieldDet.field][key] = $event"

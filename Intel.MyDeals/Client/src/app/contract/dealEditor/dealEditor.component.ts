@@ -414,7 +414,7 @@ export class dealEditorComponent {
                     })
                 }
                 this.updateModalDataItem(dataItem, "END_CUSTOMER_RETAIL", returnVal.END_CUSTOMER_RETAIL);
-                this.updateModalDataItem(dataItem, "IS_PRIME", returnVal.IS_PRIME);
+                this.updateModalDataItem(dataItem, "IS_PRIMED_CUST", returnVal.IS_PRIME);
                 this.updateModalDataItem(dataItem, "PRIMED_CUST_CNTRY", returnVal.PRIMED_CUST_CNTRY);
                 this.updateModalDataItem(dataItem, "PRIMED_CUST_NM", returnVal.PRIMED_CUST_NM);
                 this.updateModalDataItem(dataItem, "PRIMED_CUST_ID", returnVal.PRIMED_CUST_ID);
@@ -1109,7 +1109,12 @@ export class dealEditorComponent {
             await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
         }
     }
-    
+    showHelpTopic() {
+        window.open('https://wiki.ith.intel.com/display/Handbook/Deal+Editor+Features', '_blank');
+    }
+    displaydealType() {
+        return this.curPricingTable.OBJ_SET_TYPE_CD.replace(/_/g, ' ');
+    }
     ngOnInit() {
         try {
             this.isDataLoading = true;

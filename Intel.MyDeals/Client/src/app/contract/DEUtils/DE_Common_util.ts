@@ -48,12 +48,15 @@ export class DE_Common_Util {
             dataItem["ECAP_PRICE"]["20___0"] = parseFloat(dataItem["ECAP_PRICE"]["20___0"] || 0);
         if (field == "KIT_ECAP")
             dataItem["ECAP_PRICE"]["20_____1"] = parseFloat(dataItem["ECAP_PRICE"]["20_____1"] || 0);
-        if (field == "VOLUME" || field == "FRCST_VOL" || field == "CONSUMPTION_LOOKBACK_PERIOD" || field == "REBATE_OA_MAX_VOL") {
-            if (dataItem[field] != undefined && dataItem[field] != null)
-                dataItem[field] = parseInt(dataItem[field] || 0);
-        }
-        if (field == "USER_MAX_RPU" || field == "USER_AVG_RPU" || field == "TOTAL_DOLLAR_AMOUNT" || field == "ADJ_ECAP_UNIT"
+        if (field == "VOLUME" || field == "FRCST_VOL" || field == "CONSUMPTION_LOOKBACK_PERIOD" || field == "REBATE_OA_MAX_VOL" ||
+            field == "USER_MAX_RPU" || field == "USER_AVG_RPU" || field == "ADJ_ECAP_UNIT"
             || field == "MAX_PAYOUT" || field == "REBATE_OA_MAX_AMT") {
+            if (dataItem[field] != undefined && dataItem[field] != null && !Number.isNaN(Number(dataItem[field])) && dataItem[field] != "")
+                dataItem[field] = parseInt(dataItem[field]);
+            else
+                dataItem[field] = "";
+        }
+        if (field == "TOTAL_DOLLAR_AMOUNT") {
             if (dataItem[field] != undefined && dataItem[field] != null)
                 dataItem[field] = parseFloat(dataItem[field] || 0);
         }
@@ -122,9 +125,9 @@ export class DE_Common_Util {
         if (field == "VOLUME" || field == "FRCST_VOL" || field == "CONSUMPTION_LOOKBACK_PERIOD" || field == "REBATE_OA_MAX_VOL" ||
             field == "USER_MAX_RPU" || field == "USER_AVG_RPU" || field == "TOTAL_DOLLAR_AMOUNT" || field == "ADJ_ECAP_UNIT"
             || field == "MAX_PAYOUT" || field == "REBATE_OA_MAX_AMT") {
-            if (dataItem[field] != undefined && dataItem[field] != null && dataItem[field] != "")
+            if (dataItem[field] != undefined && dataItem[field] != null && dataItem[field] != "" && !Number.isNaN(Number(dataItem[field])))
                 dataItem[field] = dataItem[field].toString();
-            else if (dataItem[field] == 0)
+            else if (dataItem[field] === 0)
                 dataItem[field] = "0";
             else
                 dataItem[field] = "";
