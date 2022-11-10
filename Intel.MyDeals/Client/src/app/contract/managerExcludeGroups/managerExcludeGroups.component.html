@@ -128,7 +128,7 @@
                                         [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                                         [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
                                         filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)"
-                                        (cellClick)="cellClickHandler($event)" class="group-Excl-grid" style="height: calc(100vh - 310px);" >
+                                        (cellClick)="cellClickHandler($event)" class="group-Excl-grid grouping_grid_h">
                                 <kendo-grid-column title="Deal #" field="DC_ID" [headerClass]="{'headerClass':true}" [width]="120">
                                 </kendo-grid-column>
                                 <kendo-grid-column title="Rebate Type" field="REBT_TYPE" [headerClass]="{'headerClass':true}" hidden="hidden">
@@ -232,7 +232,7 @@
         <kendo-tabstrip-tab [disabled]="true" width="76%">
             <ng-template kendoTabTitle>
                 <div *ngIf="dealCnt" class="dealTag">
-                    <div>
+                    <div class="text_font_fix">
                         {{displayDealTypes()}}
                     </div>
                 </div>

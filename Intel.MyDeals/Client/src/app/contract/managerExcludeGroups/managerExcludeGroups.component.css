@@ -26,11 +26,11 @@
         cursor: not-allowed
     }
 
-        .ssToolbarBtn.btn-save.notdirty table tr td span.text {
+    .ssToolbarBtn.btn-save.notdirty table tr td span.text {
             font-size: 11px !important;
-            font-weight: 200;
-            line-height: 1em
-        }
+            font-weight: 400 !important ;
+            line-height: 1.25em !important
+    }
 
         .ssToolbarBtn.btn-save.notdirty table tr td,
         .ssToolbarBtn.notdirty table tr td i {
@@ -456,18 +456,19 @@ tr.k-alt.grey {
     border-bottom-width: 0
 }
 
-#GroupExclusionTab .k-tabstrip-items .k-state-active {
-    background: -moz-linear-gradient(top, #fdfdfd 0%, #fff 100%);
-    background: -webkit-linear-gradient(top, #fdfdfd 0%, #fff 100%);
-    background: linear-gradient(to bottom, #fdfdfd 0%, #fff 100%);
-    border-color: #b1babf;
-    border-width: 1px;
-    border-left-width: 1px;
-    border-top-width: 1px;
-    border-right-width: 1px;
-    border-bottom-width: 0;
-    border-radius: 4px 4px 0 0
-}
+    #GroupExclusionTab .k-tabstrip-items .k-state-active {
+        background: -moz-linear-gradient(top, #fdfdfd 0%, #fff 100%);
+        background: -webkit-linear-gradient(top, #fdfdfd 0%, #fff 100%);
+        background: linear-gradient(to bottom, #fdfdfd 0%, #fff 100%);
+        border-color: #b1babf;
+        border-width: 1px;
+        border-left-width: 1px;
+        border-top-width: 1px;
+        border-right-width: 1px;
+        border-bottom-width: 0;
+        border-radius: 4px 4px 0 0;
+        color: #00aeef !important;
+    }
 
 #GroupExclusionTab .k-tabstrip-items .k-item .k-link:hover {
     color: #00AEEF !important;
@@ -539,4 +540,11 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-
     height:auto;
     margin-top: 20px !important;
     margin-left: 0% !important;
+}
+.grouping_grid_h {
+    height: calc(100vh - 233px) !important;
+}
+.text_font_fix {
+    color: #003c71 !important;
+    font-weight: bold !important;
 }

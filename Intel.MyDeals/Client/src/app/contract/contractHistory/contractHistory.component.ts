@@ -10,7 +10,8 @@ import { contractHistoryService } from "./contractHistory.service";
 
 @Component({
     selector: "contract-history",
-    templateUrl :"Client/src/app/contract/contractHistory/contractHistory.component.html",
+    templateUrl: "Client/src/app/contract/contractHistory/contractHistory.component.html",
+    styleUrls: ['Client/src/app/contract/contractHistory/contractHistory.component.css']
 })
 
 export class contractHistoryComponent {
