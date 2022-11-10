@@ -213,7 +213,12 @@ export class PTE_Common_Util {
                     let pivotDensity;
                     if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
                         let rowData = _.max(DCPTR, (itm: any) => { return parseInt(itm.TIER_NBR) });
-                        pivotDensity = parseInt(rowData.NUM_OF_DENSITY);
+                        if (rowData.NUM_OF_DENSITY == "" || rowData.NUM_OF_DENSITY == null) {
+                            pivotDensity = parseInt(curPricingTable.NUM_OF_DENSITY);
+                        }
+                        else {
+                            pivotDensity = parseInt(rowData.NUM_OF_DENSITY);
+                        }
                         let maxTier = parseInt(rowData.TIER_NBR);
                         let numOfRows = maxTier * pivotDensity;
                         selTier = numOfRows;

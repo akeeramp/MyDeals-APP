@@ -17,7 +17,7 @@
                         <div id="secContainer" class="contract-detail-form">
                             <div class="row">
                                 <h4 class="col-md-3 ">Contract Details</h4><span class="col-md-2 infospan">
-                                    <span>*</span>Indicates Required fields
+                                    <span>* </span>Indicates Required fields
                                 </span>
                             </div>
 
@@ -177,7 +177,7 @@
                                             </a>
                                         </div>
                                     </div>
-                                    <div class="col-md-11" style="margin-bottom:20px;margin-top:30px">
+                                    <div class="col-md-11" style="margin-bottom:20px;margin-top:30px" [ngClass]="{'disabled-section': disableCustAccpt}">
                                         <div *ngFor="let data of dropDownsData?.CUST_ACCPT; let idx=index">
                                             <div class="row">
                                                 <div class="col-md-12"
@@ -204,13 +204,12 @@
                                     <div class="col-md-12 display">
                                         <h6 class="inputWidth myinfoclass">Information</h6>
                                     </div>
-                                    <div class="col-md-11 blockdisplay" style="margin-top: 15px"
-                                         [hidden]="isTenderContract">
+                                    <div class="col-md-11 blockdisplay" [hidden]="isTenderContract">
                                         <div class="fl opUiLabel">
                                             <span *ngIf="contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID"
                                                   class="isReqField">* </span>C2A Contract #
                                         </div>
-                                        <kendo-textbox triggers="manual" class="inputWidth c2aborder font-input" [clearButton]="true" name="C2A_DATA_C2A_ID" [disabled]="this.contractData?._behaviors?.isReadOnly?.C2A_DATA_C2A_ID"
+                                        <kendo-textbox triggers="manual" class="c2aborder font-input" [clearButton]="true" name="C2A_DATA_C2A_ID" [disabled]="this.contractData?._behaviors?.isReadOnly?.C2A_DATA_C2A_ID"
                                                        [(ngModel)]="C2A_DATA_C2A_ID" (valueChange)="c2aIDchange($event)" [required]="this.contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID">
                                         </kendo-textbox>
                                         <kendo-formerror *ngIf="contractDetailsForm.controls.C2A_DATA_C2A_ID?.errors?.required && isSubmitted">
@@ -230,14 +229,14 @@
                                                     *
                                                 </span>Attachments:
                                             </span><span kendoTooltip>
-                                                <a title="Attach multiple files.<br/>Allowed File Types: doc, xls, txt, bmp, jpg, pdf, ppt, zip, xlsx, docx, pptx, odt, ods, ott, sxw, sxc, png, 7z, xps."
+                                                <a title="Attach multiple files.Allowed File Types: doc, xls, txt, bmp, jpg, pdf, ppt, zip, xlsx, docx, pptx, odt, ods, ott, sxw, sxc, png, 7z, xps."
                                                    class="icon-color opElementHelpIcon intelicon-information-outlined"></a>
                                             </span><span class="description">
                                                 Your attachments will upload after clicking the Save
                                                 Contract button.
                                             </span>
                                         </div>
-                                        <div style="padding-left:0px">
+                                        <div class="col-md-11 blockdisplay" style="padding-left:0px">
                                             <kendo-upload [saveUrl]="uploadSaveUrl" [batch]="true"
                                                           [restrictions]="myRestrictions" (success)="successEventHandler()" (select)="onFileSelect()" (remove)="onFileRemove()" (error)="onFileUploadError()" (complete)="onFileUploadComplete()"
                                                           (upload)="uploadEventHandler($event)" [autoUpload]="false" [(ngModel)]="files" name="files" class="kuploadaction" [required]="contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID && isSubmitted && (C2A_DATA_C2A_ID==undefined || C2A_DATA_C2A_ID=='')"></kendo-upload>
@@ -249,7 +248,7 @@
                                                 {{isRequiredMsg}}
                                             </kendo-formerror>
                                         </div>
-                                        <div class="col-md-11 row" *ngIf="!isNewContract">
+                                        <div class="col-md-11 blockdisplay" *ngIf="!isNewContract">
                                             <div class="panel panel-default" *ngIf="attachmentCount && attachmentCount>0">
                                                 <div class="panel-heading" style="font-size:14px; font-weight:bold">File Attachment Details <span *ngIf="attachmentCount > 0 && initComplete" class="badge">{{attachmentCount}}</span></div>
                                                 <div class="panel-body">
@@ -365,12 +364,21 @@
     <p class="dialogmsg codesize">Missing Price Group Code </p>
     <kendo-dialog-actions><button kendoButton (click)="closeMissingGrpCodeAlert()" class="okmissingcode">OK</button></kendo-dialog-actions>
 </kendo-dialog>
-<kendo-dialog *ngIf="isDeleteAttachment" (close)="deleteAttachmentActions(false)" [minWidth]="250" [width]="620">
+<kendo-dialog *ngIf="isDeleteAttachment" (close)="deleteAttachmentActions(false)"  class="artho-css-popup" [minWidth]="250" [width]="620">
     <p class="dialogmsg">
         Are you sure that you want to Delete this file attachment?
     </p>
     <kendo-dialog-actions>
         <button kendoButton (click)="deleteAttachmentActions(true)" themeColor="primary">Yes</button>
         <button kendoButton (click)="deleteAttachmentActions(false)">No</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+<kendo-dialog *ngIf="isDeleteContract" (close)="deleteContractActions(false)"  class="artho-css-popup" [minWidth]="250" [width]="620">
+    <p class="dialogmsg">
+        Are you sure that you want to delete this contract?
+    </p>
+    <kendo-dialog-actions>
+        <button kendoButton (click)="deleteContractActions(true)" themeColor="primary">Yes</button>
+        <button kendoButton (click)="deleteContractActions(false)">No</button>
     </kendo-dialog-actions>
 </kendo-dialog>

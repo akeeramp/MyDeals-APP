@@ -290,9 +290,7 @@ export class AutoFillComponent {
         }
 
         this.autoSvc.updatePricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, pt).subscribe((response: any) => {
-            var res = response;
-            this.isLoading = false;
-            this.setBusy("", "", "", false);
+            var res = response;            
             this.dialogRef.close(this.autofillData);
             let dealType: any;
             if (this.autofillData.ISTENDER) {
@@ -301,12 +299,14 @@ export class AutoFillComponent {
             else {
                 dealType = "Pricing"
             }
+            this.isLoading = false;
+            this.setBusy("", "", "", false);
             this.loggerSvc.success("Edited " + dealType + " Table", "Save Successful",);
         }, (err) => {
-            this.loggerSvc.error("Unable to update Pricing Table", "Error", err);
-        })
-        this.isLoading = false;
-        this.setBusy("", "", "", false);
+                this.loggerSvc.error("Unable to update Pricing Table", "Error", err);
+                this.isLoading = false;
+                this.setBusy("", "", "", false);
+        })        
     }
 
     addPricingTable() {
@@ -339,9 +339,7 @@ export class AutoFillComponent {
         }
         this.autoSvc.createPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, pt).subscribe((response: any) => {
             pt = response.PRC_TBL[1];
-            this.autofillData.newPt = pt;
-            this.isLoading = false;
-            this.setBusy("", "", "", false);
+            this.autofillData.newPt = pt;            
             this.dialogRef.close(this.autofillData);
             let dealType: any;
             if (this.autofillData.ISTENDER) {
@@ -350,10 +348,13 @@ export class AutoFillComponent {
             else {
                 dealType = "Pricing"
             }
+            this.isLoading = false;
+            this.setBusy("", "", "", false);
             this.loggerSvc.success("Created " + dealType + " Table", "Save Successful",);
         }, (err) => {
             this.loggerSvc.error("Could Not create Pricing Table", "Error", err);
-            this.isLoading = false;
+                this.isLoading = false;
+                this.setBusy("", "", "", false);
         })
     }
 

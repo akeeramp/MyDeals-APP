@@ -74,6 +74,7 @@ export class contractDetailsComponent {
     public showDeleteButton = false;
     public C_DELETE_ATTACHMENTS: boolean = false;
     public isDeleteAttachment: boolean = false;
+    public isDeleteContract: boolean = false;
     private isNewContract = false;
     private attachmentCount = 0;
     private initComplete = false;
@@ -432,12 +433,6 @@ export class contractDetailsComponent {
                         if(response.CNTRCT[1] && response.CNTRCT[1].DC_ID) {
                             // setting the DC ID received from response because to upload files/attachments valid DC_ID is required
                             this.contractData["DC_ID"] = response.CNTRCT[1].DC_ID;
-                            if (this.hasUnSavedFiles) {
-                                this.uploadFile();
-                            }
-                            else {
-                                window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
-                            }
                             this.isLoading = true;
                             this.setBusy("Save Successful", "Saved the contract", "Success", true);
                         }
@@ -445,23 +440,18 @@ export class contractDetailsComponent {
                             this.loggerSvc.error("Something went wrong",'Error');
                             this.isLoading = false;
                         }
-                        
-                    } 
-                    //this condition is to handle update
-                    else if(response.CNTRCT && response.CNTRCT.length==1) {
-                        if (this.hasUnSavedFiles) {
-                            this.uploadFile();
-                            //window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
-                        } else {
-                            window.location.href = '/Dashboard#/portal';
-                        }
                     }
-                    else{
-                        this.loggerSvc.error("Something went wrong",'Error');
-                        this.isLoading = false;
+                    //this condition is to handle update
+                    else if (response.CNTRCT && response.CNTRCT.length == 1) {
+                        this.contractData["DC_ID"] = response.CNTRCT[0].DC_ID;                        
+                        
+                    }
+                    if (this.hasUnSavedFiles) {
+                        this.uploadFile(); 
                     }
                     this.isLoading = false;
                     this.setBusy("", "", "", false);
+                    window.location.href = "/Contract#/manager/" + this.contractData["DC_ID"];                   
                 },(err)=>{
                     this.loggerSvc.error("Unable to create contract","Error",err);
                     this.isLoading = false;
@@ -531,7 +521,6 @@ export class contractDetailsComponent {
     }
     getContractQuaterDetails(changeEvent) {
         let isValidDataPresent = false;
-
         let isDate, customerMemberSid = null;
         let yearValue = null;
         let qtrValue = null;
@@ -758,7 +747,12 @@ export class contractDetailsComponent {
             });
     }
     deleteContract() {
-        if (confirm("Are you sure that you want to delete this contract?")) {
+        this.isDeleteContract = true;
+    }
+
+    deleteContractActions(act: boolean) {
+        if (act == true) {
+            this.isDeleteContract = false;
             const custId = this.contractData.CUST_MBR_SID;
             const contractId = this.contractData.DC_ID;
             this.isLoading = true;
@@ -772,6 +766,9 @@ export class contractDetailsComponent {
                 this.setBusy("", "", "", false);
             };
         }
+        else {
+            this.isDeleteContract = false;
+        }
     }
     loadContractDetailsData() {
         //setting the customer dropdown value ngModel
@@ -783,7 +780,7 @@ export class contractDetailsComponent {
         this.contractType = ' Contract';
         this.TITLE = this.contractData.TITLE;
         this.START_DT = new Date(moment(this.contractData.START_DT).format("l"));
-        this.END_DT = new Date(moment(this.contractData.END_DT).format("l"));
+        this.END_DT = this.existingMinEndDate = new Date(moment(this.contractData.END_DT).format("l"));
         this.selectedCUST_ACCPT = this.contractData.CUST_ACCPT;
         if (this.contractData.CUST_ACCPT) {
             this.disableCustAccpt = true;
@@ -998,6 +995,10 @@ export class contractDetailsComponent {
                                     } else {
                                         this.isTenderContract = this.contractData["IS_TENDER"];
                                     }
+                                    this.contractData.MinDate = this.MinDate = moment().subtract(6, "years").format("l");
+                                    this.contractData.MaxDate = this.MaxDate = moment("2099").format("l");
+                                    this.contractData.MinYear = this.MinYear = parseInt(moment().format("YYYY")) - 6;
+                                    this.contractData.MaxYear = this.MaxYear = parseInt(moment("2099").format("YYYY"));
                                     this.initialEndDateReadOnly = this.contractData?._behaviors && this.contractData?._behaviors?.isReadOnly && this.contractData?._behaviors?.isReadOnly["END_DT"] && this.contractData?._behaviors?.isReadOnly["END_DT"];
                                     this.initialStartDateReadOnly = this.contractData?._behaviors && this.contractData?._behaviors?.isReadOnly && this.contractData?._behaviors?.isReadOnly["START_DT"] && this.contractData?._behaviors?.isReadOnly["START_DT"];
                                     this.loadContractDetailsData();

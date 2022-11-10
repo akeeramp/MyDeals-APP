@@ -168,12 +168,16 @@ export class PTEUtil {
                     var userInput = PTEUtil.updateUserInput(foramttedTranslatedResult.ValidProducts[DCID]);
                     var contractProducts = userInput['contractProducts'].toString().replace(/(\r\n|\n|\r)/gm, "");
                     data.PTR_USER_PRD = contractProducts;
-                    var excludeProducts = userInput['excludeProducts'];
-                    data.PRD_EXCLDS = excludeProducts;
+                    var excludeProducts = userInput['excludeProducts'];                   
                     data.PTR_SYS_PRD = JSON.stringify(val)
                     PTE_Common_Util.setBehaviors(data);
                     data._behaviors.isError['PTR_USER_PRD']=false;
-                    data._behaviors.validMsg['PTR_USER_PRD']='Valid Product';
+                    data._behaviors.validMsg['PTR_USER_PRD'] = 'Valid Product';
+                    if (excludeProducts != "" && excludeProducts != null) {
+                        data.PRD_EXCLDS = excludeProducts;
+                        data._behaviors.isError['PRD_EXCLDS'] = false;
+                        data._behaviors.validMsg['PRD_EXCLDS'] = 'Valid Product';
+                    }
                 }
             });
                //setting PTR_SYS_PRD for InValidProducts
@@ -181,8 +185,14 @@ export class PTEUtil {
               if(val.I && val.I.length>0){
                     if(data && data.DC_ID==DCID){
                         PTE_Common_Util.setBehaviors(data);
-                        data._behaviors.isError['PTR_USER_PRD'] = true;
-                        data._behaviors.validMsg['PTR_USER_PRD'] = 'Invalid product';
+                        if (_.has(val, data.PTR_USER_PRD)) {
+                            data._behaviors.isError['PTR_USER_PRD'] = true;
+                            data._behaviors.validMsg['PTR_USER_PRD'] = 'Invalid product';
+                        }
+                        if (_.has(val, data.PRD_EXCLDS)) {
+                            data._behaviors.isError['PRD_EXCLDS'] = true;
+                            data._behaviors.validMsg['PRD_EXCLDS'] = 'Invalid product';
+                        }
                     }
                 }
             });
@@ -190,8 +200,14 @@ export class PTEUtil {
             _.each(transformResults.DuplicateProducts, (val, DCID) =>{
                 if (data && data.DC_ID == DCID) {
                     PTE_Common_Util.setBehaviors(data);
-                    data._behaviors.isError['PTR_USER_PRD']=true;
-                    data._behaviors.validMsg['PTR_USER_PRD']='Invalid product';
+                    if (_.has(val, data.PTR_USER_PRD)) {
+                        data._behaviors.isError['PTR_USER_PRD'] = true;
+                        data._behaviors.validMsg['PTR_USER_PRD'] = 'Invalid product';
+                    }
+                    if (_.has(val, data.PRD_EXCLDS)) {
+                        data._behaviors.isError['PRD_EXCLDS'] = true;
+                        data._behaviors.validMsg['PRD_EXCLDS'] = 'Invalid product';
+                    }
                 }
             });
         });
