@@ -69,7 +69,7 @@ export class tenderManagerComponent {
                     this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
                 });
                 this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
-                this.mcForceRunReq = this.isMCForceRunReq();
+                //this.mcForceRunReq = this.isMCForceRunReq();
             }
             else{
                 this.loggerSvc.error("Something went wrong. Please contact Admin","Error");
@@ -102,7 +102,10 @@ export class tenderManagerComponent {
     }
 
     isValidateMC() {
-        if (((this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'InComplete' && this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'Not Run Yet' && !this.isMCForceRunReq()) || this.pricingTableData.PRC_ST[0].CAP_MISSING_FLG == 1) || this.passedValue == 'NoMeetCompVal') {
+        //if (((this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'InComplete' && this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'Not Run Yet' && !this.isMCForceRunReq()) || this.pricingTableData.PRC_ST[0].CAP_MISSING_FLG == 1) || this.passedValue == 'NoMeetCompVal') {
+        //    return true;
+        //} else return false;
+        if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && (this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 0 || this.passedValue == 'NoMeetCompVal')) {
             return true;
         } else return false;
     }
@@ -136,85 +139,146 @@ export class tenderManagerComponent {
     }
 
     async tenderWidgetPathManager(_actionName, selectedTab) {
-        this.mcForceRunReq = this.isMCForceRunReq();
+        //this.mcForceRunReq = this.isMCForceRunReq();
         if (this.currentTAB == 'PTR' && selectedTab != 'PTR') {
             this.isPartiallyValid = this.isPTRPartiallyComplete();
         }
 
         if (selectedTab == 'PTR') {
-            if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && !this.deComp.dirty) {
+            if (this.currentTAB == 'PTR') { }
+            else if (this.currentTAB == 'DE') {
+                if (this.deComp.dirty) {
+                    await this.deComp.SaveDeal();
+                    await this.redirectingFn(selectedTab);
+                } else {
+                    await this.redirectingFn(selectedTab);
+                }
+            } else if (this.currentTAB == 'MC'){
                 await this.redirectingFn(selectedTab);
-            }
-            else if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION != 'Complete' && this.deComp.dirty) {
-                await this.deComp.SaveDeal();
-                this.selectedTab = selectedTab;
-                this.currentTAB = selectedTab;
-            } else if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION != 'Complete' && !this.deComp.dirty) {
-                await this.redirectingFn(selectedTab);
-            } else if (this.currentTAB != 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
+            } else if (this.currentTAB == 'PD') {
                 await this.redirectingFn(selectedTab);
             }
         }
 
         else if (selectedTab == 'DE') {
-            if (this.currentTAB == 'PTR' && this.pteComp.dirty) {
-                await this.pteComp.validatePricingTableProducts();
-            } else if (this.currentTAB == 'PTR' && this.dirtyItems.length == 0) {
+            if (this.currentTAB == 'PTR') {
+                if (this.pteComp.dirty) {
+                    await this.pteComp.validatePricingTableProducts();
+                } else {
+                    if (this.dirtyItems.length == 0) {
+                        await this.redirectingFn(selectedTab);
+                    }
+                }
+            } else if (this.currentTAB == 'DE') {
+            }else if (this.currentTAB == 'MC') {
+                await this.redirectingFn(selectedTab);
+            }else if (this.currentTAB == 'PD'){
                 await this.redirectingFn(selectedTab);
             } else {
-                if ((this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && this.isPartiallyValid == true) && this.enableDealEditorTab() === true) {
-                    await this.redirectingFn(selectedTab);
-                }
-                else if (this.currentTAB == 'DE') { }
-                else {
-                    this.loggerSvc.error('Validate all your product(s) to open Deal Editor.', 'error');
-                }
+                this.loggerSvc.error('Validate all your product(s) to open Deal Editor.', 'error');
             }
         }
 
         else if (selectedTab == 'MC') {
-            if (this.currentTAB == 'PTR' && this.pteComp.dirty && this.dirtyItems.length == 0) {
-                await this.pteComp.validatePricingTableProducts();
-            } else if (this.currentTAB == 'PTR' && this.dirtyItems.length == 0 && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty') {
-                await this.redirectingFn('DE');
-            } else if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
+            if (this.currentTAB == 'PTR') {
+                if (this.pteComp.dirty) {
+                    await this.pteComp.validatePricingTableProducts();
+                    if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
+                        await this.redirectingFn('PTR')
+                    } 
+                } else {
+                    if (this.dirtyItems.length == 0) {
+                        if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty') {
+                            await this.redirectingFn('DE');
+                        } else {
+                            await this.redirectingFn(selectedTab);
+                        }
+                    }
+                }
+            } else if (this.currentTAB == 'DE') {
+                if (this.deComp.dirty) {
+                    await this.deComp.SaveDeal();
+                    if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
+                        await this.redirectingFn(selectedTab);
+                    }
+                } else {
+                    if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
+                        await this.redirectingFn(selectedTab);
+                    }
+                }
+            } else if (this.currentTAB == 'MC') {
+            }else if (this.currentTAB =='PD') {
                 await this.redirectingFn(selectedTab);
-            } else if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION != 'Complete' && this.deComp.dirty) {
-                await this.deComp.SaveDeal();
-            } else if (this.currentTAB != 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
-                await this.redirectingFn(selectedTab);
-            } else {
+            }else{
                 this.loggerSvc.error('Validate all your product(s) to open Meet Comp.', 'error');
             }
         }
 
         else if (selectedTab == 'PD') {
-            if (this.currentTAB == 'PTR' && this.pteComp.dirty && this.dirtyItems.length == 0) {
-                await this.pteComp.validatePricingTableProducts();
-            } else if (this.currentTAB == 'PTR' && this.dirtyItems.length == 0 && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION != 'Complete') {
-                await this.redirectingFn('DE');
-            } else if (this.currentTAB == 'PTR' && this.dirtyItems.length == 0 && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
-                await this.redirectingFn('MC');
-            } else if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 1) {
-                await this.redirectingFn('MC');
-            } else if (this.currentTAB == 'DE' && this.pricingTableData.PRC_ST[0].PASSED_VALIDATION != 'Complete' && this.deComp.dirty) {
-                await this.deComp.SaveDeal();
-            } else if ((this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && (this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Pass' || this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Fail') && !this.mcForceRunReq || this.pricingTableData.PRC_ST[0].CAP_MISSING_FLG == 1) || this.passedValue == 'NoMeetCompVal') {
-                await this.redirectingFn(selectedTab);
-            } else {
+            if (this.currentTAB == 'PTR') {
+                if (this.pteComp.dirty) {
+                    await this.pteComp.validatePricingTableProducts();
+                    if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
+                        await this.redirectingFn('PTR')
+                    }
+                } else {
+                    if (this.dirtyItems.length == 0) {
+                        if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty') {
+                            await this.redirectingFn('DE');
+                        } else {
+                            if (this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 1 && this.passedValue == '')
+                                await this.redirectingFn('MC');
+                            else {
+                                if (this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 1 || this.passedValue == 'NoMeetCompVal')
+                                    await this.redirectingFn(selectedTab);
+                            }
+                        }
+                    }
+                }
+            } else if (this.currentTAB == 'DE') {
+                if (this.deComp.dirty) {
+                    await this.deComp.SaveDeal();
+                    if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == "Complete") {
+                        if (this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 1 && this.passedValue == '')
+                            await this.redirectingFn('MC');
+                        else {
+                            if (this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 0 || this.passedValue == 'NoMeetCompVal')
+                                await this.redirectingFn(selectedTab);
+                        }
+                    }
+                    
+                }else {
+                    if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
+                        if (this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 1 && this.passedValue == '') {
+                            await this.redirectingFn('MC');
+                        } else {
+                            if (this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 0 || this.passedValue == 'NoMeetCompVal')
+                                await this.redirectingFn(selectedTab);
+                        }
+                    }
+                }
+            } else if (this.currentTAB == 'MC') {
+                if (this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 0 || this.passedValue == 'NoMeetCompVal') {
+                    await this.redirectingFn(selectedTab);
+                }
+            } else if (this.currentTAB == 'PD') {}
+            //else if ((this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && (this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Pass' || this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Fail') && !this.mcForceRunReq || this.pricingTableData.PRC_ST[0].CAP_MISSING_FLG == 1) || this.passedValue == 'NoMeetCompVal') {
+            //    await this.redirectingFn(selectedTab);
+            //}
+            else {
                 this.loggerSvc.error("Meet Comp is not passed. You can not Publish this deal yet.", 'error');
             }
         }
     }
 
-    isMCForceRunReq() {
-        let mcForceRun = false;
-        if (this.pricingTableData !== undefined && this.pricingTableData.PRC_TBL_ROW !== undefined && this.pricingTableData.PRC_TBL_ROW.length > 0) {
-            let dirtyItems = this.pricingTableData.PRC_TBL_ROW.filter(x => x.MEETCOMP_TEST_RESULT === 'Not Run Yet' || x.MEETCOMP_TEST_RESULT === 'InComplete' || x.DC_ID <= 0);
-            if (dirtyItems.length > 0) mcForceRun = true;
-            return mcForceRun;
-        }
-    }
+    //isMCForceRunReq() {
+    //    let mcForceRun = false;
+    //    if (this.pricingTableData !== undefined && this.pricingTableData.PRC_TBL_ROW !== undefined && this.pricingTableData.PRC_TBL_ROW.length > 0) {
+    //        let dirtyItems = this.pricingTableData.PRC_TBL_ROW.filter(x => x.MEETCOMP_TEST_RESULT === 'Not Run Yet' || x.MEETCOMP_TEST_RESULT === 'InComplete' || x.DC_ID <= 0);
+    //        if (dirtyItems.length > 0) mcForceRun = true;
+    //        return mcForceRun;
+    //    }
+    //}
 
     isPTRPartiallyComplete() {
         let isPtrDirty = false;

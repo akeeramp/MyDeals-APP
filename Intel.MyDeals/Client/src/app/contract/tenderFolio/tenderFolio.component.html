@@ -39,7 +39,7 @@
                             </kendo-dialog>
                         </div>
                         <div *ngIf="isCustDiv" class="col-md-11 row"><label class="rmv-mrgn-btm"><span>Division:</span></label><br />
-                            <kendo-multiselect class="division-name" #cmbmulti [kendoDropDownFilter]="filterSettings" [data]="selectedData" textField="CUST_DIV_NM" valueField="CUST_DIV_NM" [(ngModel)]="CUST_NM_DIV" [ngModelOptions]="{standalone: true}" [autoClose]="false"></kendo-multiselect>
+                            <kendo-multiselect class="division-name style-both-clas" #cmbmulti [kendoDropDownFilter]="filterSettings" [data]="selectedData" textField="CUST_DIV_NM" valueField="CUST_DIV_NM" [(ngModel)]="CUST_NM_DIV" [ngModelOptions]="{standalone: true}" [autoClose]="false"></kendo-multiselect>
                             <div class="description">Blank means that ALL divisions are included</div>
                         </div>
                         <kendo-dialog *ngIf="showCustDivAlert" (close)="closeCustDivsAlert()" [height]="155" [width]="590">
@@ -50,7 +50,7 @@
                             </kendo-dialog-actions>
                         </kendo-dialog>
                         <div class="col-md-11 row"><label class="rmv-padding rmv-mrgn-btm"><span class="red-color">*
-                                </span><span class="label-font">Tender Folio Name:</span></label><br /><input class="inputtext width-height" [ngClass]="{tenderFolioAlert:isTitleError}" [(ngModel)]="tenderName" (keyup)="onKeySearch($event)" type="text"
+                                </span><span class="label-font">Tender Folio Name:</span></label><br /><input class="inputtext width-height style-both-clas" [ngClass]="{tenderFolioAlert:isTitleError}" [(ngModel)]="tenderName" (keyup)="onKeySearch($event)" type="text"
                                 kendoTextBox [ngModelOptions]="{standalone: true}" style="padding: 2px 10px !important;"/>
                             <div class="err-Control" *ngIf="isTitleError">{{titleErrorMsg}}</div>
                         </div>

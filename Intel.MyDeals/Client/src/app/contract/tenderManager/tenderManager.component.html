@@ -36,7 +36,7 @@
         </a>
     </div>
     <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel second" [ngClass]="{'complete': isValidateTTE() == true}">
+        <div class="wizard-panel second" [ngClass]="{'complete': isValidateDE() == true}">
             <span id="tenderWidDE" class="badge wizard-step" [ngStyle]="selectedTab == 'DE'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty'}">2</span>
         </div>
         <a (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty'}">
@@ -47,7 +47,7 @@
         </a>
     </div>
     <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel third" [ngClass]="{'complete': isValidateMC() == true && isValidateTTE() == true}">
+        <div class="wizard-panel third" [ngClass]="{'complete': isValidateMC() == true}">
             <span id="tenderWidMC" class="badge wizard-step" (click)="tenderWidgetPathManager('', 'MC')" [ngStyle]="selectedTab == 'MC'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" [ngClass]="{'isDisabledDE': pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty'}">3</span>
         </div>
         <a (click)="tenderWidgetPathManager('', 'MC')" [ngClass]="{'isDisabledDE': pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty'}">
@@ -59,10 +59,10 @@
     </div>
     <div class="col-xs-3 col-md-3">
         <div class="wizard-panel last publishToolTip" [ngClass]="{'complete':selectedTab == 'PD'}">
-            <span id="tenderWidPD" class="badge wizard-step" [ngStyle]="selectedTab == 'PD'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabled': isValidateMC() != true && isValidateTTE() != true}">4</span>
+            <span id="tenderWidPD" class="badge wizard-step" [ngStyle]="selectedTab == 'PD'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabled': isValidateMC() == false}">4</span>
             <span kendoTooltip class="left helpset opElementHelpIcon intelicon-information-outlined" style="margin-left: 4px;" title="Publishing will separate the deals entered in the table below so that they can be individually approved." position="left" [tooltipWidth]="300"></span>
         </div>
-        <a (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabledDE': isValidateMC() != true && isValidateTTE() != true}">
+        <a (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabledDE':isValidateMC() == false}">
             <div class="wizard-step-text step-into">
                 <h4><i [hidden]="selectedTAB == 'PD'" class="intelicon-arrow-forward-right"></i> &nbsp; Publish Adhoc Deal</h4>
                 <p>Converting into individual deals.</p>

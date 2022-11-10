@@ -309,3 +309,31 @@ kendo-dialog-actions.pteokbtnstyle.alter-btns-ok button.mykbtnstyles:hover {
 .flex-overlapping-deals mat-dialog-container {
     padding: 0;
 }
+
+button#btnCustSelctor {
+    background-color: #00aeef !important;
+    font-size: 12px !important;
+    border-radius: 0px !important;
+}
+
+textarea.htCustTxt {
+    min-width: 215px !important;
+    height: 20px !important;
+    resize: none !important;
+    overflow-y: hidden !important;
+    overflow-y: hidden !important;
+    font-family: 'Intel Clear' !important;
+    max-width: 1849px !important;
+    font-size: 12px !important;
+    width: 210px !important;
+}
+
+.btn-disable-style[disabled] {
+    cursor: not-allowed !important;
+    pointer-events: all !important;
+    background-color: transparent;
+    color: #ababab !important;
+    border-color: #b1babf !important;
+    font-weight: lighter !important;
+    border: none !important;
+}

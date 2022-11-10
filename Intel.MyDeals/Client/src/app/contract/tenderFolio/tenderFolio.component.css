@@ -275,7 +275,7 @@ li.k-button:hover {
 }
 
 .mycombox.k-combobox .k-dropdown-wrap {
-    border-color: #f0f0f0 !important;
+    border-color: #e6e6e6 !important;
     color: #495057;
     background-color: #ffffff;
 }
@@ -315,4 +315,47 @@ app-tender-folio .folioloader .ss-loading-overlay {
     top: 93px;
     left: 0;
     background: rgb(255 255 255 / 42%);
+}
+kendo-combobox.combobox.mycombox.k-combobox.k-combobox.ng-dirty {
+    border-bottom: 2px solid #0071c5 !important;
+}
+
+input.inputtext.k-textbox.ng-dirty.ng-touched.style-both-clas {
+    border-bottom: 2px solid #0071c5 !important;
+}
+
+input.inputtext.style-both-clas {
+    border-color: #e6e6e6 !important;
+}
+
+.mycombox.k-combobox .k-clear-value {
+    visibility: visible !important;
+    background: #dbdbdb !important;
+    border-radius: 18px !important;
+    height: 15px !important;
+    margin-top: 10px !important;
+    position: relative !important;
+    width: 15px !important;
+    color: #00aeef !important;
+    right: 7px !important;
+    font-size: 15px !important;
+    opacity: 1 !important;
+}
+
+kendo-multiselect.division-name.style-both-clas.k-widget.k-multiselect.ng-valid.ng-touched.ng-dirty {
+    border-bottom: 2px solid #0071c5 !important;
+}
+
+.style-both-clas .k-multiselect-wrap {
+    border-color: #e6e6e6 !important;
+    box-shadow: none !important
+}
+
+.style-both-clas.k-multiselect .k-multiselect-wrap li.k-button {
+    float: left !important;
+    font-size: 13px !important;
+    border-radius: 1.071em !important;
+    margin: 3px 0 3px 3px !important;
+    padding: 0 1.6em 0 0.857em !important;
+    line-height: 1.86em !important;
 }
