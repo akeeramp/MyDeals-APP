@@ -310,55 +310,54 @@ export class AutoFillComponent {
     }
 
     addPricingTable() {
-
-        let pt = this.UItemplate["ObjectTemplates"].PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];
-        if (!pt) {
-            this.loggerSvc.error("Could not create the Pricing Table.", "Error");
-            this.isLoading = false;
-            this.setBusy("", "", "", false);
-            return;
-        }
-        pt.DC_ID = -100;
-        pt.DC_PARENT_ID = this.CurrPricingStrategy.DC_ID;
-        pt.OBJ_SET_TYPE_CD = this.newPricingTable.OBJ_SET_TYPE_CD;
-        pt.TITLE = this.newPricingTable.TITLE;
-        pt.IS_HYBRID_PRC_STRAT = pt.IS_HYBRID_PRC_STRAT !== undefined ? this.CurrPricingStrategy.IS_HYBRID_PRC_STRAT : "";
-
-        for (const atrb in this.newPricingTable._defaultAtrbs) {
-            if (this.newPricingTable._defaultAtrbs['atrb'] === undefined &&
-                pt['atrb'] === undefined) {
-                //note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.
-                if (Array.isArray(this.newPricingTable._defaultAtrbs[atrb].value)) {
-                    //Array, Middle Tier expects a comma separated string
-                    pt[atrb] = this.newPricingTable._defaultAtrbs[atrb].value.join();
-                } else {
-                    //String
-                    pt[atrb] = this.newPricingTable._defaultAtrbs[atrb].value;
-                }
-            }
-        }
-        this.autoSvc.createPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, pt).subscribe((response: any) => {
-            pt = response.PRC_TBL[1];
-            this.autofillData.newPt = pt;            
-            this.dialogRef.close(this.autofillData);
-            let dealType: any;
-            if (this.autofillData.ISTENDER) {
-                dealType = "Tender"
-            }
-            else {
-                dealType = "Pricing"
-            }
-            this.isLoading = false;
-            this.setBusy("", "", "", false);
-            this.loggerSvc.success("Created " + dealType + " Table", "Save Successful",);
-        }, (err) => {
-            this.loggerSvc.error("Could Not create Pricing Table", "Error", err);
+        if(this.UItemplate && this.UItemplate.ObjectTemplates){
+            let pt = this.UItemplate["ObjectTemplates"].PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];
+            if (!pt) {
+                this.loggerSvc.error("Could not create the Pricing Table.", "Error");
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
-        })
+                return;
+            }
+            pt.DC_ID = -100;
+            pt.DC_PARENT_ID = this.CurrPricingStrategy.DC_ID;
+            pt.OBJ_SET_TYPE_CD = this.newPricingTable.OBJ_SET_TYPE_CD;
+            pt.TITLE = this.newPricingTable.TITLE;
+            pt.IS_HYBRID_PRC_STRAT = pt.IS_HYBRID_PRC_STRAT !== undefined ? this.CurrPricingStrategy.IS_HYBRID_PRC_STRAT : "";
+    
+            for (const atrb in this.newPricingTable._defaultAtrbs) {
+                if (this.newPricingTable._defaultAtrbs['atrb'] === undefined &&
+                    pt['atrb'] === undefined) {
+                    //note: if in future we give these two objects overlapping properties, then we may get unwanted overwriting here.
+                    if (Array.isArray(this.newPricingTable._defaultAtrbs[atrb].value)) {
+                        //Array, Middle Tier expects a comma separated string
+                        pt[atrb] = this.newPricingTable._defaultAtrbs[atrb].value.join();
+                    } else {
+                        //String
+                        pt[atrb] = this.newPricingTable._defaultAtrbs[atrb].value;
+                    }
+                }
+            }
+            this.autoSvc.createPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, pt).subscribe((response: any) => {
+                pt = response.PRC_TBL[1];
+                this.autofillData.newPt = pt;            
+                this.dialogRef.close(this.autofillData);
+                let dealType: any;
+                if (this.autofillData.ISTENDER) {
+                    dealType = "Tender"
+                }
+                else {
+                    dealType = "Pricing"
+                }
+                this.isLoading = false;
+                this.setBusy("", "", "", false);
+                this.loggerSvc.success("Created " + dealType + " Table", "Save Successful",);
+            }, (err) => {
+                this.loggerSvc.error("Could Not create Pricing Table", "Error", err);
+                    this.isLoading = false;
+                    this.setBusy("", "", "", false);
+            })
+        }
     }
-
-
     isUIDisable(elem: string, val: string) {
         var dealType = this.dealType;
         var rowType = dealType == 'FLEX' ? this.autofillData.DEFAULT.FLEX_ROW_TYPE.value : true;
@@ -413,15 +412,14 @@ export class AutoFillComponent {
         return of(node.items);
     }
 
-    loadTemplateDetails() {
+   async loadTemplateDetails() {
         this.isLoading = true;
         this.setBusy("Loading...", "Loading data, please wait..", "Info", true);
-        this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
-            this.UItemplate = response;
-        }, (error) => {
-            this.isLoading = false;
+        let response = await  this.templatesSvc.readTemplates().toPromise().catch(error => {
             this.loggerSvc.error('loadAllContractDetails::readTemplates:: service', error);
-        })
+        });
+        this.UItemplate=response;
+        this.isLoading=false;
     }
 
     async loadAutoFill() {
