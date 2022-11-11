@@ -546,9 +546,13 @@
 }
 
 .meet-comp-blank_space {
-    border-bottom: 2px solid;
     color: #c1c1c1;
 }
 .helpBtn {
     margin-top: 4px;
+}
+
+.row-cooperate {
+    margin-top: 38px !important;
+    padding: 10px 20px;
 }

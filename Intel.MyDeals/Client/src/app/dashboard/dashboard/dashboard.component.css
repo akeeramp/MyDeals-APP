@@ -1,6 +1,6 @@
 div.overFlowWidget {
     width: auto;
-    height: 692px !important;
+    height: calc(100vh - 12vh) !important;
     overflow: auto !important;
 }
 
@@ -35,6 +35,7 @@ div.overFlowWidget {
 
 .widgetFull {
     height: 100% !important;
+    border-radius: 3px;
 }
 
 .widgetFull:hover {
@@ -353,12 +354,12 @@ gridster-item.attr-li-6,
 gridster-item.attr-li-8,
 gridster-item.attr-li-9,
 gridster-item.attr-li-10 {
-    height: calc(100vh - 69%) !important;
+    height: calc(100vh - 70%) !important;
     min-height: 200px;
 }
 
 gridster-item.attr-li-7 {
-    height: calc(100vh - 28%) !important;
+    height: calc(100vh - 21%) !important;
 }
 
 gridster-item.attr-li-7 .k-grid-table-wrap {
@@ -366,7 +367,7 @@ gridster-item.attr-li-7 .k-grid-table-wrap {
 }
 
 gridster-item.attr-li-7 .container-fluid.widget-container {
-    height: calc( 100vh - 168px) !important;
+    height: calc( 100vh - 220px) !important;
 }
 
 .oppo-grids.physics-css kendo-grid.k-grid .k-grid-header-wrap table thead tr th {
@@ -417,16 +418,21 @@ kendo-slider.before-ques .k-slider-wrap .k-slider-track-wrap ul li span.k-label 
 
 .sum-fixes {
     width: 100vw;
-    height: 85vh;
+    height: 87vh;
 }
 
 .sum-fixes-plus {
     width: 100vw;
-    height: calc(85vh + 320px);
+    height: 87vh;
+    overflow-y: auto;
+}
+
+.sum-fixes-plus gridster.fit {
+    overflow-y: auto;
 }
 
 #parentID gridster-preview {
-    background-color: #fff!important;
+    background-color: #fff !important;
 }
 
 .copper-btns mat-button-toggle button .mat-button-toggle-label-content {
@@ -1197,7 +1203,7 @@ a:focus {
     background: #ced4da6b !important
 }
 
-@media only screen and (min-width: 1500px) {
+/*@media only screen and (min-width: 1500px) {
     gridster-item.attr-li-7 .container-fluid.widget-container {
         height: calc( 100vh - 210px) !important;
     }
@@ -1207,7 +1213,7 @@ a:focus {
     gridster-item.attr-li-7 .container-fluid.widget-container {
         height: calc( 100vh - 280px) !important;
     }
-}
+}*/
 
 .divisionblock.k-list > .k-state-hover, .k-list > .k-state-selected.k-state-hover {
     background-color: #ebebeb !important;
@@ -1402,9 +1408,147 @@ input[type="text"]:focus-visible {
     color: #00aeef !important;
 }
 
-kendo-grid.k-widget.k-grid kendo-grid-list table tbody tr.k-grid-norecords {
+.missing-cap-cost kendo-grid.k-widget.k-grid kendo-grid-list table tbody tr.k-grid-norecords {
     visibility: hidden;
 }
+
+kendo-dialog.widget-settings-proper .k-dialog {
+    border-radius: 0;
+}
+
+kendo-dialog.widget-settings-proper .k-dialog .k-window-content {
+    border-radius: 0;
+    padding: 0;
+}
+
+kendo-dialog.widget-settings-proper .k-dialog .k-window-content .modal-header {
+    padding: 15px !important;
+    border-bottom: 1px solid #f4f4f4;
+    min-height: 16.5px;
+}
+
+kendo-dialog.widget-settings-proper .k-dialog .k-window-content .modal-body {
+    position: relative;
+    padding: 15px;
+}
+
+kendo-dialog.widget-settings-proper .k-dialog .k-window-content .modal-footer {
+    padding: 15px;
+    text-align: right;
+    border-top: 1px solid #f4f4f4;
+}
+
+.widget-heading {
+    font-size: 20px !important;
+    font-weight: 500 !important;
+}
+
+@media screen and (max-height: 1050px) {
+    gridster-item.attr-li-7 .container-fluid.widget-container {
+        height: calc( 100vh - 200px) !important;
+    }
+}
+
+@media screen and (max-height: 950px) {
+    gridster-item.attr-li-7 .container-fluid.widget-container {
+        height: calc( 100vh - 180px) !important;
+    }
+}
+
+@media screen and (max-height: 850px) {
+    div.overFlowWidget {
+        height: calc(100vh - 18vh) !important;
+    }
+    .sum-fixes {
+        height: 82vh;
+    }
+    gridster-item.attr-li-6, gridster-item.attr-li-8, gridster-item.attr-li-9, gridster-item.attr-li-10 {
+        height: calc(100vh - 73%) !important;
+        min-height: 200px;
+    }
+    gridster-item.attr-li-7 {
+        height: calc(100vh - 23%) !important;
+    }
+    gridster-item.attr-li-7 .container-fluid.widget-container {
+        height: calc( 100vh - 163px) !important;
+    }
+}
+
+@media screen and (max-height: 750px) {
+    div.overFlowWidget {
+        height: calc(100vh - 20vh) !important;
+    }
+
+    .sum-fixes {
+        height: 80vh;
+    }
+    gridster-item.attr-li-6, gridster-item.attr-li-8, gridster-item.attr-li-9, gridster-item.attr-li-10 {
+        height: calc(100vh - 77%) !important;
+        min-height: 200px;
+    }
+
+    gridster-item.attr-li-7 {
+        height: calc(100vh - 27%) !important;
+    }
+
+    gridster-item.attr-li-7 .container-fluid.widget-container {
+        height: calc( 100vh - 175px) !important;
+    }
+
+    gridster-item.attr-li-7 .left-pane-widget .inner {
+        height: 100%;
+        overflow-y: auto;
+    }
+}
+
+@media screen and (max-height: 650px) {
+    .btn-ttl{
+        font-size: 15px!important;
+    }
+    div.overFlowWidget {
+        height: calc(100vh - 22vh) !important;
+    }
+    .sum-fixes {
+        height: 77vh;
+    }
+    gridster-item.attr-li-6, gridster-item.attr-li-8, gridster-item.attr-li-9, gridster-item.attr-li-10 {
+        height: calc(100vh - 83%) !important;
+        min-height: 200px;
+    }
+    gridster-item.attr-li-7 {
+        height: calc(100vh - 31%) !important;
+    }
+    gridster-item.attr-li-7 .left-pane-widget .stgLnk {
+        font-size: 14px;
+    }
+    gridster-item.attr-li-7 .left-pane-widget .stgLnk .badge {
+        font-size: 11px !important;
+    }
+    gridster-item.attr-li-6 .first-component .fl.icon-parent i {
+        font-size: 30px !important;
+        width: 31px;
+    }
+    gridster-item.attr-li-6 .text-detail {
+        margin-left: 40px;
+    }
+    gridster-item.attr-li-6 .custom-padding {
+        padding: 15px 0 0 10px;
+    }
+    gridster-item.attr-li-7 .left-pane-widget .stgLnkBox {
+        margin-top: 10px;
+    }
+}
+
+@media screen and (max-height: 550px) {
+    gridster-item.attr-li-6, gridster-item.attr-li-8, gridster-item.attr-li-9, gridster-item.attr-li-10 {
+        height: calc(100vh - 84%) !important;
+        min-height: 200px;
+    }
+    gridster-item.attr-li-7 {
+        height: calc(100vh - 35%) !important;
+    }
+}
+
 #pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="START_DT"],
 #pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="END_DT"],
 #pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="TITLE"],
@@ -1427,4 +1571,21 @@ kendo-grid.k-widget.k-grid kendo-grid-list table tbody tr.k-grid-norecords {
     height: 0px !important;
     top: -10px !important;
     margin-right: 10px !important
+}
+
+.second-load-style .ss-loading-overlay {
+    top: 0px!important;
+}
+
+.k-animation-container-shown .k-list-container .k-list-scroller {
+    overflow-x: hidden;
+}
+
+kendo-datepicker.date-dashboard:hover, kendo-datepicker.date-dashboard:focus, kendo-datepicker.date-dashboard:focus-within {
+    border-color: #b1babf;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%);
+}
+
+.nav-tabs-intel-blocks.nav li a:focus {
+    background-color: transparent!important
 }

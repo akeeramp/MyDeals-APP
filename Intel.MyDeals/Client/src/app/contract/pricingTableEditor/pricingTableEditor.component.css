@@ -310,7 +310,7 @@ kendo-dialog-actions.pteokbtnstyle.alter-btns-ok button.mykbtnstyles:hover {
     padding: 0;
 }
 
-button#btnCustSelctor {
+/*button#btnCustSelctor {
     background-color: #00aeef !important;
     font-size: 12px !important;
     border-radius: 0px !important;
@@ -326,7 +326,7 @@ textarea.htCustTxt {
     max-width: 1849px !important;
     font-size: 12px !important;
     width: 210px !important;
-}
+}*/
 
 .btn-disable-style[disabled] {
     cursor: not-allowed !important;

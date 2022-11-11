@@ -202,14 +202,14 @@ a.prdAnchor:hover {
 
 .prodDrillDownLarge p {
     font-size: 13px;
-    margin-top: 11px;
-    margin-left: 15px !important;
-    margin-right: 15px;
     color: #fff;
     text-overflow: ellipsis;
     overflow: hidden;
     white-space: nowrap;
     text-align: center;
+    margin: 0 !important;
+    width: 100%;
+    padding: 11px 15px 1rem 15px;
 }
 
 .prodDrillDownLarge p:hover {
@@ -448,6 +448,8 @@ a.prdAnchor:hover {
     width: 100%;
     flex-wrap: nowrap;
     position: relative;
+    height: 100%;
+    display: flex;
 }
 
 .checkbox-custom[disabled]:hover+.checkbox-custom-label[disabled]:before {

@@ -82,3 +82,8 @@
 .k-grid.missing_grid_h {
     height: calc(100vh - 250px) !important;
 }
+
+.miss-cap {
+    padding-left: 35px;
+    padding-top: 27px;
+}

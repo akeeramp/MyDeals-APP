@@ -74,7 +74,7 @@
                             <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                         </ng-template>
                     </kendo-grid-column>
-                    <kendo-grid-column class="gridCell" title="Start Date" field="STRT_DTM" format="{0: MM/dd/yyyy}" width="110px" [headerClass]="{'headerClass':true}" [filterable]="true">
+                    <kendo-grid-column class="gridCell" title="Start Date" [width]="120" field="STRT_DTM" format="{0: MM/dd/yyyy}" width="110px" [headerClass]="{'headerClass':true}" [filterable]="true">
                         <ng-template kendoGridFilterMenuTemplate let-filter="filter" let-column="column" let-filterService="filterService">
                             <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService">
                             </date-range-filter>

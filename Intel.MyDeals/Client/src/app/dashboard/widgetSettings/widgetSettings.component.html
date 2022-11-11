@@ -2,11 +2,10 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<kendo-dialog (close)="cancelWidgetSetting()" [width]="600">
-    <div class="modal-header" style="height:55px;padding:0px">
-        <h5 class="fl" style="font-size: 23px !important; font-weight: 500 !important">Widget Settings</h5><button type="button" class="close fr"
-            (click)="cancelWidgetSetting()" aria-hidden="true" style="font-weight:900">×</button>
-        <div class="clearboth"></div>
+<kendo-dialog class="widget-settings-proper" (close)="cancelWidgetSetting()" [width]="600">
+    <div class="modal-header">
+        <h5 class="fl widget-heading">Widget Settings</h5>
+        <button type="button" class="close fr" (click)="cancelWidgetSetting()" aria-hidden="true" style="font-weight:900">×</button>
     </div>
     <div class="modal-body" style="height:80px">
         <div><label class="control-label col-lg-3 col-md-3" style="text-align:right; padding-left:15px; font-size:17px; font-weight:bold; margin-top:12px">Name</label>
@@ -14,10 +13,11 @@
             <div class="clearboth"></div>
         </div>
     </div>
-    <div class="modal-footer" style="height:55px;padding:0px">
-        <kendo-dialog-actions style="border: hidden; padding: 13px 0px"><button class='btn btn-default' (click)="cancelWidgetSetting()"><i
+    <div class="modal-footer">
+        <kendo-dialog-actions style="border: hidden; padding: 0px"><button class='btn btn-default' (click)="cancelWidgetSetting()"><i
                     class="glyphicon glyphicon-remove" style="padding-right:5px"></i>Cancel</button><button
                 [disabled]="data.renameItem.trim().length==0" class='btn btn-primary'
                 [mat-dialog-close]="data.renameItem"><i class="glyphicon glyphicon-ok" style="padding-right:5px"></i>Save </button>
         </kendo-dialog-actions>
     </div>
+</kendo-dialog>
