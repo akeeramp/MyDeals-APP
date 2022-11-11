@@ -210,6 +210,7 @@ export class dealEditorComponent {
         PTE_Load_Util.wipTemplateColumnSettings(this.wipTemplate, this.isTenderContract, this.curPricingTable.OBJ_SET_TYPE_CD);
         this.templates = opGridTemplate.templates[`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
         await this.getWipDealData();
+        this.customLayout(false);
     }
 
     async getWipDealData() {
