@@ -340,7 +340,7 @@ export class allDealsComponent {
     }
     openDealProductModal(dataItem) {
         const dialogRef = this.dialog.open(dealProductsModalComponent, {
-            width: "1000px",
+            width: "878px",
             panelClass: 'deals-popup-style',
             data: {
                 dataItem: dataItem

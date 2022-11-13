@@ -548,3 +548,6 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-
     color: #003c71 !important;
     font-weight: bold !important;
 }
+.k-grid.view_popup_height {
+    height: calc(100vh - 591px);
+}
