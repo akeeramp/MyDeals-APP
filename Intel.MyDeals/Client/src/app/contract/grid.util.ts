@@ -196,7 +196,7 @@ export class GridUtil {
             if (typeof (dimkey) != ('function') && data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
                 tmplt += '<div class="col-md-12 rowDetailHeight">';
                 tmplt += '<div';
-                tmplt += ' class="kitRowValue' + this.getClassNm(passedData, field) + '">';
+                tmplt += ' class="kitRowValue kitSideLine' + this.getClassNm(passedData, field) + '">';
                 if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined && passedData._behaviors.isError[field + '_' + dimkey] != undefined && passedData._behaviors.isError[field + '_' + dimkey])
                     tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field + '_' + dimkey] + '"></div>';
                 if (passedData[field][dimkey] != undefined && passedData[field][dimkey] != null && passedData[field][dimkey] != 'No YCS2' && passedData[field][dimkey] != 'No CAP')
