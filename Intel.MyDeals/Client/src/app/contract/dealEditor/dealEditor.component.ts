@@ -568,6 +568,7 @@ export class dealEditorComponent {
     //Default Layout
     defaultLayout() {
         this.groups = JSON.parse(JSON.stringify(this.groupsdefault));
+        this.applyHideIfAllRules();
         this.selectedTab = "Deal Info";
         var group = this.groups.filter(x => x.name == this.selectedTab);
 

@@ -56,7 +56,7 @@
 }
 
 .rowHeight {
-    height: 40px !important;
+    height: 43px !important;
     padding: 2px 0px 0px 1px;
     border-bottom: 0.01px solid rgba(0, 0, 0, .05);
     /*line-height: 3;*/
@@ -92,7 +92,7 @@
     border-bottom: 0.01px solid rgba(0, 0, 0, .05);
     padding: 2px 0px 0px 1px !important;
     line-height: 2;
-    height: 40px !important;
+    height: 42px !important;
 }
 
 .densityRow {
@@ -1149,4 +1149,52 @@ button.k-button.add-tab-cancelbtn:hover {
 }
 .deHeaderFilt-hover .op-grid.k-grid .k-grid-filter .k-icon.k-i-filter:hover {
     color: #0071c5 !important
+}
+.k-list .k-item.k-state-focused.k-state-selected {
+    background-color: #ebebeb !important;
+    color: #0071c5 !important;
+}
+
+.btn-disable-style-DE[disabled] {
+    cursor: not-allowed !important;
+    pointer-events: all !important;
+    background-color: transparent;
+    color: #ababab !important;
+    border-color: #b1babf !important;
+    font-weight: lighter !important;
+    border: none !important;
+}
+
+i.fa.fa-floppy-o.skyBlue.floppy-icon-style-DE.notDirty {
+    font-weight: lighter !important;
+    color: #7f7878 !important;
+    cursor: not-allowed !important;
+    font-size: 30px !important
+}
+
+.save-validate-txtstyle-DE.text.notDirty {
+    font-size: 11px !important;
+    color: #7f7878 !important;
+    font-family: 'Intel Clear' !important;
+    font-weight: 400 !important;
+    top: -7px !important;
+    position: relative !important;
+    padding-left: 5px !important;
+    text-align: left !important;
+}
+
+i.fa.fa-floppy-o.floppy-icon-style-DE.dirty {
+    color: #00aeef !important;
+    font-weight: normal !important;
+}
+
+span.text.save-validate-txtstyle-DE.dirty {
+    color: #00aeef !important;
+    position: relative !important;
+    top: -7px !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    font-family: 'Intel Clear' !important;
+    padding-left: 5px !important;
+    text-align: left !important;
 }
