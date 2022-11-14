@@ -121,25 +121,21 @@ export class tenderManagerComponent {
     async redirectingFn(tab) {
         if (tab != '' && tab != 'Delete') {
             //Redirects to selected tab
-            let response = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
+            this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
                 this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
             });
-            if (response) {
-                this.pricingTableData = response;
-                this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
-                let passed = this.pricingTableData.PRC_TBL_ROW.filter(x => x.PASSED_VALIDATION == "Complete");
-                let compFlag = this.pricingTableData.PRC_TBL_ROW.filter(x => x.COMP_MISSING_FLG == "0");
-                this.pt_passed_validation = !(this.isPTREmpty) && (passed.length == this.pricingTableData.PRC_TBL_ROW.length) && !(this.pricingTableData.WIP_DEAL.find(x => x.warningMessages.length > 0) ? true : false) ? true : false;
-                this.compMissingFlag = !(this.isPTREmpty) && compFlag.length == this.pricingTableData.PRC_TBL_ROW.length ? true : false;
-                this.selectedTab = tab;
-                this.currentTAB = tab;
-            }
+            this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
+            let passed = this.pricingTableData.PRC_TBL_ROW.filter(x => x.PASSED_VALIDATION == "Complete");
+            let compFlag = this.pricingTableData.PRC_TBL_ROW.filter(x => x.COMP_MISSING_FLG == "0");
+            this.pt_passed_validation = !(this.isPTREmpty) && (passed.length == this.pricingTableData.PRC_TBL_ROW.length) && !(this.pricingTableData.WIP_DEAL.find(x => x.warningMessages.length > 0) ? true : false) ? true : false;
+            this.compMissingFlag = !(this.isPTREmpty) && compFlag.length == this.pricingTableData.PRC_TBL_ROW.length ? true : false;
+            this.selectedTab = tab;
+            this.currentTAB = tab;
         } else if (tab == 'Delete') {
             //Redirect to DE when TTE has passed validations
-            let response = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
+            this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
                 this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
             });
-            this.pricingTableData = response;
             this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
             let passed = this.pricingTableData.PRC_TBL_ROW.filter(x => x.PASSED_VALIDATION == "Complete");
             this.pt_passed_validation = !(this.isPTREmpty) && (passed.length == this.pricingTableData.PRC_TBL_ROW.length) && !(this.pricingTableData.WIP_DEAL.find(x => x.warningMessages.length > 0) ? true : false) ? true : false;
@@ -162,6 +158,9 @@ export class tenderManagerComponent {
             this.compMissingFlag = !(this.isPTREmpty) && compFlag.length == this.pricingTableData.PRC_TBL_ROW.length ? true : false;
             //checking for dirty items inside TTE
             this.isPTRPartiallyComplete();
+            //if clicked on PD and comp is complete redirect to PD
+            if (this.gotoPD == 'PD' && this.compMissingFlag) await this.redirectingFn('PD');
+            this.gotoPD = '';
         }
     }
 
@@ -261,6 +260,8 @@ export class tenderManagerComponent {
                             await this.redirectingFn('DE');// if pass validation is not complete redirects to DE
                         } else {
                             if (!this.compMissingFlag) {
+                                //clicked on PD when compMissingFlag is true
+                                this.gotoPD = 'PD';
                                 await this.redirectingFn('MC');// if pass validation is complete & meetcomp data is available & meet comp is not run redirects to MC
                             }else {
                                 if (this.compMissingFlag) {
@@ -275,6 +276,8 @@ export class tenderManagerComponent {
                     await this.deComp.SaveDeal();
                     if (this.pt_passed_validation) {
                         if (!this.compMissingFlag) {
+                            //clicked on PD when compMissingFlag is true
+                            this.gotoPD = 'PD';
                             await this.redirectingFn('MC');// if pass validation is complete & meetcomp data is available & meet comp is not run redirects to MC
                         }else {
                             if (this.compMissingFlag) {
@@ -286,6 +289,8 @@ export class tenderManagerComponent {
                 }else {
                     if (this.pt_passed_validation) {
                         if (!this.compMissingFlag) {
+                            //clicked on PD when compMissingFlag is true
+                            this.gotoPD = 'PD';
                             await this.redirectingFn('MC');// if meetcomp is not run then redirect to MC
                         } else {
                             if (this.compMissingFlag){

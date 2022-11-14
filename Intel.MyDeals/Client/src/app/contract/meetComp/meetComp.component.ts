@@ -473,6 +473,8 @@ export class meetCompContractComponent implements OnInit {
                 this.isModelValid(this.meetCompMasterdata._elements);
             }
             this.reBindGridData();
+            //Refreshing data in tender
+            if (this.isTender == "1") await this.tmDirec.emit('');
             this.isLoading = false;
         } else {
             this.isDataAvaialable = false;
@@ -1103,17 +1105,23 @@ export class meetCompContractComponent implements OnInit {
 
     gotoDeal(DealId: any): void {
         this.isLoading = true;
-        this.meetCompSvc.getContractIDDetails(DealId).subscribe(res => {
-            this.isLoading = false;
-            if (res) {
-                window.location.href = "#/contractmanager/WIP/" + res['ContractId'] + "/" + res['PricingStrategyId'] + "/" + res['PricingTableId'] + "/" + DealId;
-            }
-        },
-            error => {
-                this.loggerSvc.error("MeetcompComponent::getContractIDDetails::Unable to get Contract Data", error);
+        //Tender redirect to DE when clicked on Deal_id in Step MC
+        if (this.isTender == "1") {
+            this.tmDirec.emit('DE');
+        } else {
+            //Contract redirect to DE when clicked on Deal_id in Meetcomp
+            this.meetCompSvc.getContractIDDetails(DealId).subscribe(res => {
                 this.isLoading = false;
-            }
-        );
+                if (res) {
+                    window.location.href = "#/contractmanager/WIP/" + res['ContractId'] + "/" + res['PricingStrategyId'] + "/" + res['PricingTableId'] + "/" + DealId;
+                }
+            },
+                error => {
+                    this.loggerSvc.error("MeetcompComponent::getContractIDDetails::Unable to get Contract Data", error);
+                    this.isLoading = false;
+                }
+            );
+        }
     }
 
     ngOnInit(): void {

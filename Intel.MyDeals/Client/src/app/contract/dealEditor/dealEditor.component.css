@@ -1,4 +1,8 @@
-﻿.hidden {
+﻿#ExcludeAuto {
+    display: flex;
+    justify-content: center;
+}
+.hidden {
     visibility: hidden;
 }
 

@@ -83,6 +83,7 @@ export class publishTenderComponent {
         this.exlusionList=_.pluck(_.where(this.gridData.data,{isExclSel:true}),'DC_ID');
         this.publishtenderService.publishTenderDeals(this.contractData[0].DC_ID, this.exlusionList).subscribe((response) => {
             if (response) {
+                this.setBusy("Published deals Successfully", "Redirecting to Tender Dashboard", "Success");
                 this.isDataLoading = false;
                 window.location.href = "/advancedSearch#/tenderDashboard?DealType=" + this.contractData[0].PRC_ST[0].PRC_TBL[0].OBJ_SET_TYPE_CD + "&FolioId=" + this.contractData[0].DC_ID + "&search";
             }
