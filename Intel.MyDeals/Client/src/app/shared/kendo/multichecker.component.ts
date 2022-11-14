@@ -33,14 +33,17 @@ import * as _ from 'underscore';
     styles: [`
     #searchIcon{
         display:inline-block;
-        left:175px;
-        bottom:30px;
+        left:200px;
+        bottom:25px;
         text-align:center;
         vertical-align:middle;
         overflow:hidden;
     }
+    #filterBar{
+        margin-bottom: -15px;
+    }
     #filterBar input{
-        width:95%;
+        width:100%;
     }
     #multiCheckFilter.k-textbox {
         font-size:14px;
@@ -57,8 +60,12 @@ import * as _ from 'underscore';
       max-height: 300px;
     }
 
-    ul>li, #filterBar, #selectedCount {
-      padding: 8px 12px;
+    ul>li{
+        padding: 0px 12px;
+    }
+
+    #filterBar, #selectedCount {
+      padding: 0px 5px;
     }    
 
     .k-multiselect-checkbox {

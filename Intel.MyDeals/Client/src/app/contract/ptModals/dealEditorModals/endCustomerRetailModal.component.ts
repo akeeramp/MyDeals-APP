@@ -131,8 +131,10 @@ export class endCustomerRetailModalComponent {
         }
         for (var i = 0; i < ecValues.length; i++) {
             var rowError = false;
-            var endCustField = document.getElementById("ComboBoxSelect_" + i).children[0] as HTMLElement;
-            var ctryField = document.getElementById("DropdownSelections_" + i).children[0] as HTMLElement;
+            var endCustFieldParent = document.getElementById("ComboBoxSelect_" + i) as HTMLElement;
+            var endCustField = endCustFieldParent.children[0] as HTMLElement;
+            var ctryFieldParent = document.getElementById("DropdownSelections_" + i) as HTMLElement;
+            var ctryField = ctryFieldParent.children[0] as HTMLElement;
             if (i > 0) {
                 this.END_CUST_OBJ[i].IS_EXCLUDE = isExclude;
             }
@@ -144,18 +146,20 @@ export class endCustomerRetailModalComponent {
                 this.isError = true;
                 rowError = true;
                 if (endCustField != undefined && endCustField != null) {
-                    endCustField.style.backgroundColor = "red";
+                    endCustFieldParent.style.borderBottomColor = "red";
+                    endCustField.style.borderBottomColor = "red";
                     endCustField.setAttribute("title", "Please select End Customer/Retail and End Customer Country/Region");
-                    let child = endCustField.children[1] as HTMLElement;
+                    let child = endCustField.children[endCustField.children.length-1] as HTMLElement;
                     if (child != undefined && child != null) {
                         child.style.backgroundColor = "red";
                         child.setAttribute("title", "Please select End Customer/Retail and End Customer Country/Region");
                     }
                 }
                 if (ctryField != undefined && ctryField != null) {
-                    ctryField.style.backgroundColor = "red";
+                    ctryField.style.borderBottomColor = "red";
+                    ctryFieldParent.style.borderBottomColor = "red";
                     ctryField.setAttribute("title", "Please select End Customer/Retail and End Customer Country/Region");
-                    let child = ctryField.children[1] as HTMLElement;
+                    let child = ctryField.children[ctryField.children.length - 1] as HTMLElement;
                     if (child != undefined && child != null) {
                         child.style.backgroundColor = "red";
                         child.setAttribute("title", "Please select End Customer/Retail and End Customer Country/Region");
@@ -166,9 +170,10 @@ export class endCustomerRetailModalComponent {
                 rowError = true;
                 this.isError = true;
                 if (endCustField != undefined && endCustField != null) {
-                    endCustField.style.backgroundColor = "red";
+                    endCustFieldParent.style.borderBottomColor = "red";
+                    endCustField.style.borderBottomColor = "red";
                     endCustField.setAttribute("title", "Please select End customer/Retail");
-                    let child = endCustField.children[1] as HTMLElement;
+                    let child = endCustField.children[endCustField.children.length - 1] as HTMLElement;
                     if (child != undefined && child != null) {
                         child.style.backgroundColor = "red";
                         child.setAttribute("title", "Please select End customer/Retail");
@@ -180,9 +185,10 @@ export class endCustomerRetailModalComponent {
                 this.isError = true;
                 rowError = true;
                 if (ctryField != undefined && ctryField != null) {
-                    ctryField.style.backgroundColor = "red";
+                    ctryField.style.borderBottomColor = "red";
+                    ctryFieldParent.style.borderBottomColor = "red";
                     ctryField.setAttribute("title", "Please Select End Customer Country/Region from the dropdown");
-                    let child = ctryField.children[1] as HTMLElement;
+                    let child = ctryField.children[ctryField.children.length - 1] as HTMLElement;
                     if (child != undefined && child != null) {
                         child.style.backgroundColor = "red";
                         child.setAttribute("title", "Please Select End Customer Country/Region from the dropdown");
@@ -203,9 +209,10 @@ export class endCustomerRetailModalComponent {
                 this.isError = true;
                 rowError = true;
                 if (endCustField != undefined && endCustField != null) {
-                    endCustField.style.backgroundColor = "red";
+                    endCustFieldParent.style.borderBottomColor = "red";
+                    endCustField.style.borderBottomColor = "red";
                     endCustField.setAttribute("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.");
-                    let child = endCustField.children[1] as HTMLElement;
+                    let child = endCustField.children[endCustField.children.length - 1] as HTMLElement;
                     if (child != undefined && child != null) {
                         child.style.backgroundColor = "red";
                         child.setAttribute("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.");
@@ -222,9 +229,10 @@ export class endCustomerRetailModalComponent {
             else if (ecValues[i].toUpperCase() == "ANY") {
                 if (i > 0) {
                     if (endCustField != undefined && endCustField != null) {
-                        endCustField.style.backgroundColor = "red";
+                        endCustFieldParent.style.borderBottomColor = "red";
+                        endCustField.style.borderBottomColor = "red";
                         endCustField.setAttribute("title", "Any can be selected only in the First combination");
-                        let child = endCustField.children[1] as HTMLElement;
+                        let child = endCustField.children[endCustField.children.length - 1] as HTMLElement;
                         if (child != undefined && child != null) {
                             child.style.backgroundColor = "red";
                             child.setAttribute("title", "Any can be selected only in the First combination");
@@ -236,18 +244,20 @@ export class endCustomerRetailModalComponent {
             }
             if (!rowError) {
                 if (endCustField != undefined && endCustField != null) {
-                    endCustField.style.backgroundColor = "white";
+                    endCustFieldParent.style.borderBottomColor = "#ced4da";
+                    endCustField.style.borderBottomColor = "#ced4da";
                     endCustField.removeAttribute("title");
-                    let child = endCustField.children[1] as HTMLElement;
+                    let child = endCustField.children[endCustField.children.length - 1] as HTMLElement;
                     if (child != undefined && child != null) {
                         child.style.backgroundColor = "white";
                         child.removeAttribute("title");
                     }
                 }
                 if (ctryField != undefined && ctryField != null) {
-                    ctryField.style.backgroundColor = "white";
+                    ctryField.style.borderBottomColor = "#ced4da";
+                    ctryFieldParent.style.borderBottomColor = "#ced4da";
                     ctryField.removeAttribute("title");
-                    let child = ctryField.children[1] as HTMLElement;
+                    let child = ctryField.children[ctryField.children.length - 1] as HTMLElement;
                     if (child != undefined && child != null) {
                         child.style.backgroundColor = "white";
                         child.removeAttribute("title");
@@ -263,9 +273,10 @@ export class endCustomerRetailModalComponent {
                 this.isError = true;
                 rowError = true;
                 if (ctryField != undefined && ctryField != null) {
-                    ctryField.style.backgroundColor = "red";
+                    ctryField.style.borderBottomColor = "red";
+                    ctryFieldParent.style.borderBottomColor = "red";
                     ctryField.setAttribute("title", this.embValidationMsg);
-                    let child = ctryField.children[1] as HTMLElement;
+                    let child = ctryField.children[ctryField.children.length - 1] as HTMLElement;
                     if (child != undefined && child != null) {
                         child.style.backgroundColor = "red";
                         child.setAttribute("title", this.embValidationMsg);
@@ -283,21 +294,25 @@ export class endCustomerRetailModalComponent {
                     var responsedata = this.END_CUST_OBJ.filter(x => x.PRIMED_CUST_ID != null && x.PRIMED_CUST_ID != "" && x.PRIMED_CUST_ID == item.PRIMED_CUST_ID && x.PRIMED_CUST_CNTRY == item.PRIMED_CUST_CNTRY);
                     if (responsedata.length > 1) {
                         this.validateFlag = true;
-                        var endCustField = document.getElementById("ComboBoxSelect_" + i).children[0] as HTMLElement;
+                        var endCustFieldParent = document.getElementById("ComboBoxSelect_" + i) as HTMLElement;
+                        var endCustField = endCustFieldParent.children[0] as HTMLElement;
                         if (endCustField != undefined && endCustField != null) {
-                            endCustField.style.backgroundColor = "red";
+                            endCustFieldParent.style.borderBottomColor = "red";
+                            endCustField.style.borderBottomColor = "red";
                             endCustField.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique");
-                            let child = endCustField.children[1] as HTMLElement;
+                            let child = endCustField.children[endCustField.children.length - 1] as HTMLElement;
                             if (child != undefined && child != null) {
                                 child.style.backgroundColor = "red";
                                 child.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique");
                             }
                         }
-                        var ctryField = document.getElementById("DropdownSelections_" + i).children[0] as HTMLElement;
+                        var ctryFieldParent = document.getElementById("DropdownSelections_" + i).children[0] as HTMLElement;
+                        var ctryField = ctryFieldParent.children[0] as HTMLElement;
                         if (ctryField != undefined && ctryField != null) {
-                            ctryField.style.backgroundColor = "red";
+                            ctryField.style.borderBottomColor = "red";
+                            ctryFieldParent.style.borderBottomColor = "red";
                             ctryField.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique.");
-                            let child = ctryField.children[1] as HTMLElement;
+                            let child = ctryField.children[ctryField.children.length - 1] as HTMLElement;
                             if (child != undefined && child != null) {
                                 child.style.backgroundColor = "red";
                                 child.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique.");
@@ -324,41 +339,49 @@ export class endCustomerRetailModalComponent {
                 this.isError = true;
                 this.validateFlag = true;
                 rowError = true;
-                var endCustField = document.getElementById("ComboBoxSelect_" + duplicateIndex).children[0] as HTMLElement;
+                var endCustFieldParent = document.getElementById("ComboBoxSelect_" + duplicateIndex) as HTMLElement;
+                var endCustField = endCustFieldParent.children[0] as HTMLElement;
                 if (endCustField != undefined && endCustField != null) {
-                    endCustField.style.backgroundColor = "red";
+                    endCustFieldParent.style.borderBottomColor = "red";
+                    endCustField.style.borderBottomColor = "red";
                     endCustField.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique");
-                    let child = endCustField.children[1] as HTMLElement;
+                    let child = endCustField.children[endCustField.children.length - 1] as HTMLElement;
                     if (child != undefined && child != null) {
                         child.style.backgroundColor = "red";
                         child.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique");
                     }
                 }
-                var ctryField = document.getElementById("DropdownSelections_" + duplicateIndex).children[0] as HTMLElement;
+                var ctryFieldParent = document.getElementById("DropdownSelections_" + duplicateIndex) as HTMLElement;
+                var ctryField = ctryFieldParent.children[0] as HTMLElement;
                 if (ctryField != undefined && ctryField != null) {
-                    ctryField.style.backgroundColor = "red";
+                    ctryField.style.borderBottomColor = "red";
+                    ctryFieldParent.style.borderBottomColor = "red";
                     ctryField.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique.");
-                    let child = ctryField.children[1] as HTMLElement;
+                    let child = ctryField.children[ctryField.children.length - 1] as HTMLElement;
                     if (child != undefined && child != null) {
                         child.style.backgroundColor = "red";
                         child.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique.");
                     }
                 }
-                endCustField = document.getElementById("ComboBoxSelect_" + i).children[0] as HTMLElement;
+                endCustFieldParent = document.getElementById("ComboBoxSelect_" + i) as HTMLElement;
+                endCustField = endCustFieldParent.children[0] as HTMLElement;
                 if (endCustField != undefined && endCustField != null) {
-                    endCustField.style.backgroundColor = "red";
+                    endCustFieldParent.style.borderBottomColor = "red";
+                    endCustField.style.borderBottomColor = "red";
                     endCustField.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique");
-                    let child = endCustField.children[1] as HTMLElement;
+                    let child = endCustField.children[endCustField.children.length - 1] as HTMLElement;
                     if (child != undefined && child != null) {
                         child.style.backgroundColor = "red";
                         child.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique");
                     }
                 }
-                ctryField = document.getElementById("DropdownSelections_" + i).children[0] as HTMLElement;
+                ctryFieldParent = document.getElementById("DropdownSelections_" + duplicateIndex) as HTMLElement;
+                ctryField = ctryFieldParent.children[0] as HTMLElement;
                 if (ctryField != undefined && ctryField != null) {
-                    ctryField.style.backgroundColor = "red";
+                    ctryField.style.borderBottomColor = "red";
+                    ctryFieldParent.style.borderBottomColor = "red";
                     ctryField.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique.");
-                    let child = ctryField.children[1] as HTMLElement;
+                    let child = ctryField.children[ctryField.children.length - 1] as HTMLElement;
                     if (child != undefined && child != null) {
                         child.style.backgroundColor = "red";
                         child.setAttribute("title", "End Customer/Retail and End Customer Country/Region Combination must be unique.");
@@ -397,12 +420,14 @@ export class endCustomerRetailModalComponent {
         dataElement.PRIMED_CUST_NM = "";
         dataElement.RPL_STS_CD = "";
         var embCountry = this.showEmbAlert(this.embValidationMsg, dataItem[0].CTRY_NM, 'ok');
-        var field = document.getElementById("DropdownSelections_" + index).children[0] as HTMLElement;
+        var fieldParent = document.getElementById("DropdownSelections_" + index) as HTMLElement;
+        var field = fieldParent.children[0] as HTMLElement;
         if (dataItem === undefined || dataItem === null || dataItem.length <= 0) {
             if (field != undefined && field != null) {
-                field.style.backgroundColor = "red";
+                fieldParent.style.borderBottomColor = "red";
+                field.style.borderBottomColor = "red";
                 field.setAttribute("title", "Please Select End Customer Country/Region from the dropdown");
-                let child = field.children[1] as HTMLElement;
+                let child = field.children[field.children.length - 1] as HTMLElement;
                 if (child != undefined && child != null) {
                     child.style.backgroundColor = "red";
                     child.setAttribute("title", "Please Select End Customer Country/Region from the dropdown");
@@ -411,9 +436,10 @@ export class endCustomerRetailModalComponent {
         }
         else if (embCountry) {
             if (field != undefined && field != null) {
-                field.style.backgroundColor = "red";
+                fieldParent.style.borderBottomColor = "red";
+                field.style.borderBottomColor = "red";
                 field.setAttribute("title", this.embValidationMsg);
-                let child = field.children[1] as HTMLElement;
+                let child = field.children[field.children.length - 1] as HTMLElement;
                 if (child != undefined && child != null) {
                     child.style.backgroundColor = "red";
                     child.setAttribute("title", this.embValidationMsg);
@@ -422,9 +448,10 @@ export class endCustomerRetailModalComponent {
         }
         else {
             if (field != undefined && field != null) {
-                field.style.backgroundColor = "white";
+                fieldParent.style.borderBottomColor = "#ced4da";
+                field.style.borderBottomColor = "#ced4da";
                 field.removeAttribute("title");
-                let child = field.children[1] as HTMLElement;
+                let child = field.children[field.children.length - 1] as HTMLElement;
                 if (child != undefined && child != null) {
                     child.style.backgroundColor = "white";
                     child.removeAttribute("title");
@@ -435,7 +462,8 @@ export class endCustomerRetailModalComponent {
 
     changeField = function (index, endCust) {
         this.isAny = this.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && this.END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && this.END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY';
-        var field = document.getElementById("ComboBoxSelect_" + index).children[0] as HTMLElement;
+        var fieldParent = document.getElementById("ComboBoxSelect_" + index) as HTMLElement;
+        var field = fieldParent as HTMLElement;
         this.validateFlag = true;
         var dataElement = endCust;
         var dataItem = this.endCustOptions.filter(x => x.Value == dataElement.END_CUSTOMER_RETAIL);
@@ -465,9 +493,10 @@ export class endCustomerRetailModalComponent {
             var isEndCustomerValid = patt.test(endCustomer);
             if (isEndCustomerValid) {
                 if (field != undefined && field != null) {
-                    field.style.backgroundColor = "white";
+                    fieldParent.style.borderBottomColor = "#ced4da";
+                    field.style.borderBottomColor = "#ced4da";
                     field.removeAttribute("title");
-                    let child = field.children[1] as HTMLElement;
+                    let child = field.children[field.children.length - 1] as HTMLElement;
                     if (child != undefined && child != null) {
                         child.style.backgroundColor = "white";
                         child.removeAttribute("title");
@@ -479,9 +508,10 @@ export class endCustomerRetailModalComponent {
                 this.ChangeErrorFlag = true;
                 this.validateFlag = true;
                 if (field != undefined && field != null) {
-                    field.style.backgroundColor = "red";
+                    fieldParent.style.borderBottomColor = "red";
+                    field.style.borderBottomColor = "red";
                     field.setAttribute("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.");
-                    let child = field.children[1] as HTMLElement;
+                    let child = field.children[field.children.length - 1] as HTMLElement;
                     if (child != undefined && child != null) {
                         child.style.backgroundColor = "red";
                         child.setAttribute("title", "Invalid Character identified in End customer/Retail. Please remove it and Save.");
@@ -499,9 +529,10 @@ export class endCustomerRetailModalComponent {
                 if (parseInt(index) > 0) {
                     dataElement.PRIMED_CUST_CNTRY = "";
                     if (field != undefined && field != null) {
-                        field.style.backgroundColor = "red";
+                        fieldParent.style.borderBottomColor = "red";
+                        field.style.borderBottomColor = "red";
                         field.setAttribute("title", "Any can be selected only in the First combination");
-                        let child = field.children[1] as HTMLElement;
+                        let child = field.children[field.children.length - 1] as HTMLElement;
                         if (child != undefined && child != null) {
                             child.style.backgroundColor = "red";
                             child.setAttribute("title", "Any can be selected only in the First combination");
@@ -512,9 +543,10 @@ export class endCustomerRetailModalComponent {
                 }
                 else {
                     if (field != undefined && field != null) {
-                        field.style.backgroundColor = "white";
+                        fieldParent.style.borderBottomColor = "#ced4da";
+                        field.style.borderBottomColor = "#ced4da";
                         field.removeAttribute("title");
-                        let child = field.children[1] as HTMLElement;
+                        let child = field.children[field.children.length - 1] as HTMLElement;
                         if (child != undefined && child != null) {
                             child.style.backgroundColor = "white";
                             child.removeAttribute("title");
@@ -526,9 +558,10 @@ export class endCustomerRetailModalComponent {
         }
         else if (endCustomer !== null && !this.ChangeErrorFlag) {
             if (field != undefined && field != null) {
-                field.style.backgroundColor = "white";
+                fieldParent.style.borderBottomColor = "#ced4da";
+                field.style.borderBottomColor = "#ced4da";
                 field.removeAttribute("title");
-                let child = field.children[1] as HTMLElement;
+                let child = field.children[field.children.length - 1] as HTMLElement;
                 if (child != undefined && child != null) {
                     child.style.backgroundColor = "white";
                     child.removeAttribute("title");
@@ -537,12 +570,14 @@ export class endCustomerRetailModalComponent {
             var primeCustCountryValue = this.END_CUST_OBJ[0].PRIMED_CUST_CNTRY == null ? "" : this.END_CUST_OBJ[0].PRIMED_CUST_CNTRY;
             if (parseInt(index) == 0 && primeCustCountryValue.toUpperCase() == "ANY") {
                 dataElement.PRIMED_CUST_CNTRY = "";
-                var ctryfield = document.getElementById("DropdownSelections_" + index).children[0] as HTMLElement;
+                var ctryfieldParent = document.getElementById("DropdownSelections_" + index) as HTMLElement;
+                var ctryfield = ctryfieldParent.children[0] as HTMLElement;
 
                 if (ctryfield != undefined && ctryfield != null) {
-                    ctryfield.style.backgroundColor = "white";
+                    ctryfield.style.borderBottomColor = "#ced4da";
+                    ctryfieldParent.style.borderBottomColor = "#ced4da";
                     ctryfield.removeAttribute("title");
-                    let child = ctryfield.children[1] as HTMLElement;
+                    let child = ctryfield.children[field.children.length - 1] as HTMLElement;
                     if (child != undefined && child != null) {
                         child.style.backgroundColor = "white";
                         child.removeAttribute("title");

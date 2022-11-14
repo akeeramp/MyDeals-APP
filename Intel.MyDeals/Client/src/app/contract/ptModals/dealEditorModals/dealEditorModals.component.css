@@ -163,3 +163,30 @@
 .ss-loading-overlay {
     background: transparent !important;
 }
+
+#endCustomerWarning .k-button, #endCustomerWarning .k-button:hover {
+    color: #444 !important;
+    border-color: #fafafa;
+    background-color: #cccccc !important;
+}
+
+#endCustomerWarning .k-button:hover {
+    color: #444 !important;
+    border-color: #fafafa;
+    background-color: #FAFAFA !important;
+}
+
+#endCustomermodalBody{
+    padding-top: 1rem !important;
+}
+
+#endCustomerModalHeader {    
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+    min-height: 16.5px;    
+    line-height:1.5;
+}
+
+#modal-title {
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+}

@@ -390,6 +390,7 @@ export class dealEditorComponent {
     openEndCustomerModal(dataItem, column) {
         const dialogRef = this.dialog.open(endCustomerRetailModalComponent, {
             width: "1000px",
+            autoFocus:false,
             data: {
                 item: {
                     retailLookUpUrl: column.lookupUrl,
@@ -832,6 +833,8 @@ export class dealEditorComponent {
     }
 
     async SaveDeal() {
+        this.isDataLoading = true;
+        this.setBusy("Saving your data..", "Please wait while saving data.","Info", true);
         try {
             _.each(this.gridResult, (item) => {
                 if ((moment(item["START_DT"]).isBefore(this.contractData.START_DT) || moment(item["END_DT"]).isAfter(this.contractData.END_DT)) && this.isDatesOverlap == false) {
@@ -864,7 +867,7 @@ export class dealEditorComponent {
         this.isWarning = false;
         this.isDatesOverlap = false;
         this.isDataLoading = true;
-        this.setBusy("Saving...", "Saving Deal Information", "Info", true);
+        this.setBusy("Saving your data...", "Please wait as we save your information!", "Info", true);
         let isShowStopError = PTE_Validation_Util.validateDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.lookBackPeriod, this.templates, this.groups);
         if (isShowStopError) {
             this.loggerService.warn("Please fix validation errors before proceeding", "");
@@ -900,6 +903,7 @@ export class dealEditorComponent {
             });
             if (response != undefined && response != null && response.Data != undefined && response.Data != null
                 && response.Data.WIP_DEAL != undefined && response.Data.WIP_DEAL != null && response.Data.WIP_DEAL.length > 0) {
+                this.setBusy("Saving your data...Done", "Processing results now!", "Info", true);
                 await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
                 let isanyWarnings = false;
                 if (this.gridResult.length != response.Data.WIP_DEAL) {
@@ -1018,6 +1022,7 @@ export class dealEditorComponent {
     Close() {
         this.isWarning = false;
         this.isDatesOverlap = false;
+        this.setBusy("", "", "", false);
     }
 
     async refreshContractData(id, ptId) {
@@ -1112,7 +1117,7 @@ export class dealEditorComponent {
     async refreshContract(eventData: boolean) {
         if (eventData) {
             this.isDataLoading = true;
-            this.setBusy("Loading Deal Editor", "Loading...", "Info", true);
+            this.setBusy("Loading Deals", "Gathering deals and security settings.", "Info", true);
             await this.getWipDealData();
             await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
         }
@@ -1126,7 +1131,7 @@ export class dealEditorComponent {
     ngOnInit() {
         try {
             this.isDataLoading = true;
-            this.setBusy("Loading Deal Editor", "Loading...", "Info", true);
+            this.setBusy("Loading Deals", "Gathering deals and security settings.", "Info", true);
             this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
             this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
             this.isTenderContract = Tender_Util.tenderTableLoad(this.contractData);

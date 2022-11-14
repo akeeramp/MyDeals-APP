@@ -1122,7 +1122,10 @@ button.k-button.add-tab-cancelbtn:hover {
 .extraSpace-colFix .uiControlDiv.wrap.dealCell {
     padding: 0 !important
 }
-.product-breakout-modal .headerClass {
+
+#incentiveRate{
+    justify-content:start;
+}.product-breakout-modal .headerClass {
     padding-left: 1.286em !important;
     border-left-color: #c4cfd4 !important;
     padding: 0.786em 0.6em;

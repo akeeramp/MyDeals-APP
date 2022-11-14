@@ -95,7 +95,7 @@ export class contractManagerComponent {
     grid = { isECAPGrid: false, KITGrid: false, OtherGrid:false}
     public gridData: GridDataResult[]= [];
     gridDataSet = {}; approveCheckBox = false; emailCheckBox = false; reviseCheckBox = false;
-    titleFilter = ""; canActionIcon = true; public isAllCollapsed = false; canEdit = true;
+    titleFilter = ""; canActionIcon = true; public isAllCollapsed = true; canEdit = true;
     title='';
     category='';
     type="block";

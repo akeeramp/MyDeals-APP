@@ -9,8 +9,8 @@
         <div class="sum-filter-bar add-sub-sum" style="padding: 1px 10px;">
             <table style="width: 100%;">
                 <tr>
-                    <td style="width: 30px; height: 40px;" (click)="toggleSum()" title="{{ isAllCollapsed ? 'Collapse All' : 'Expand All'}}" [ngClass]="{'rotate-90': !isAllCollapsed}">
-                        <i class="chevron linkable intelicon-fast-forward ivon-css" data-toggle="collapse" data-target=".multi-collapse"></i>
+                    <td style="width: 30px; height: 40px;" (click)="toggleSum()" title="{{ !isAllCollapsed ? 'Collapse All' : 'Expand All'}}" [ngClass]="{'rotate-90': !isAllCollapsed}">
+                        <i class="chevron linkable intelicon-fast-forward ivon-css"></i>
                     </td>
                     <td style="width: 55px; text-align: center;" *ngIf="canEdit">
                         <div class="all-fixes-label">
@@ -242,7 +242,7 @@
                     <table style="width: 100%;">
                         <tr>
                             <td style="width: 30px; height: 30px;" id="PRC_ST_{{ps.DC_ID}}" (click)="isPSExpanded[psIndex]=!isPSExpanded[psIndex]">
-                                <i class="chevron linkable collapseALL" data-toggle="collapse" [attr.data-target]="'#PSData_'+ psIndex" [ngClass]="{'intelicon-down': isPSExpanded[psIndex], 'intelicon-right-next': !isPSExpanded[psIndex]}"></i>
+                                <i class="chevron linkable collapseALL" [ngClass]="{'intelicon-down': isPSExpanded[psIndex], 'intelicon-right-next': !isPSExpanded[psIndex]}"></i>
                             </td>
                             <td style="width: 60px; text-align: center;" *ngIf="canEdit" class="approveChkBox">
                                 <div *ngIf="canAction('Approve', ps, true) && canActionIcon && hasVertical(ps)" [ngbTooltip]="ps._actionReasons.Approve" placement="right" [hidden]="!(ps.WF_STG_CD !=='Pending')">
@@ -286,7 +286,7 @@
                         </tr>
                     </table>
                     <div *ngFor="let pt of ps.PRC_TBL;let i=index">
-                        <div class="collapse multi-collapse" id="PSData_{{psIndex}}" [ngClass]="{show : isAllCollapsed}">
+                        <div class="collapse multi-collapse" id="PSData_{{psIndex}}" [ngClass]="{show : isPSExpanded[psIndex]}">
                             <table style="width: 100%; ">
                                 <tr id="detail_{{pt.DC_ID}}">
                                     <td style="width: 20px;" *ngIf="canEdit"></td>

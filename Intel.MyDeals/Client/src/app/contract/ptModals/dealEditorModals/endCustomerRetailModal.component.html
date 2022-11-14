@@ -1,9 +1,9 @@
 ﻿<loading-panel-angular id="EndCustomerLoading" style="z-index:500;" isShowFunFact="true" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>
 <div [ngStyle]="{'opacity': (isLoading)? '0.5':'1'}">
-    <div class="modal-header">
+    <div class="modal-header" id="endCustomerModalHeader">
         <h3 class="modal-title" id="modal-title">Select End Customer/Retail and Country/Region</h3>
     </div>
-    <div class="modal-body" id="modal-body">
+    <div class="modal-body" id="endCustomermodalBody">
         <div *ngIf="isError || changeErrorFlag">
             <p>
                 <span style="color:red;">
@@ -122,7 +122,7 @@
     </div>
     <br />
 </div>
-<kendo-dialog title="Warning" *ngIf="isWarning" (close)="cancelWarning()">
+<kendo-dialog *ngIf="isWarning" id="endCustomerWarning">
     <p style="margin: 30px; text-align: center;">{{message}}</p>
     <kendo-dialog-actions>
         <button class='k-button' (click)="cancelWarning()">OK</button>

@@ -247,7 +247,7 @@ export class lnavComponent {
             this.isLoading = false;
         })
         //expand pricing strategy after creation.
-        if (this.contractData?.PRC_ST) {
+        if (this.contractData && this.contractData.PRC_ST && this.contractData.PRC_ST.length > 0) {
             this.isPSExpanded[this.contractData.PRC_ST.length] = true;
         }
     }
@@ -435,6 +435,9 @@ export class lnavComponent {
     }
     copyPricingStrategy(ps) {
         this.copyObj("Pricing Strategy", this.contractData.PRC_ST, ps.DC_ID, true);
+        if (this.contractData && this.contractData.PRC_ST && this.contractData.PRC_ST.length > 0) {
+            this.isPSExpanded[this.contractData.PRC_ST.length] = true;
+        }
     }
     copyPricingTable = function (ps, pt) {
         this.copyObj("Pricing Table", ps.PRC_TBL, pt.DC_ID, false);
@@ -475,7 +478,7 @@ export class lnavComponent {
         if (isPs == true) {
             this.lnavSvc.copyPricingStrategy(custId, contractId, id, item).subscribe((response: any) => {
                 this.loggerSvc.success("Copied the " + objType + ".", "Copy Successful");
-                this.refreshContractData(contractId);
+                this.refreshContractData(contractId);                
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             }, (err) => {
