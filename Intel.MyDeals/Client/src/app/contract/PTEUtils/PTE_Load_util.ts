@@ -717,6 +717,12 @@ export class PTE_Load_Util {
                     if (prop == "REBATE_TYPE" && isTenderContract) {
                         cellProperties['readOnly'] = true;
                     }
+                    if (prop == "AR_SETTLEMENT_LVL" && isTenderContract) {
+                        cellProperties['readOnly'] = true;
+                    }
+                    if (prop == "PERIOD_PROFILE" && isTenderContract) {
+                        cellProperties['readOnly'] = true;
+                    }
                 }
                 if (curPricingTable.PS_WF_STG_CD == 'Approved' && curPricingTable.PASSED_VALIDATION == 'Dirty' && prop == 'SETTLEMENT_PARTNER' && hotTable.getDataAtRowProp(row, 'AR_SETTLEMENT_LVL') == 'Cash') {
                     cellProperties['readOnly'] = false;

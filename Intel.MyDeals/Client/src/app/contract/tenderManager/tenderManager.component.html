@@ -5,7 +5,67 @@
 
 <loading-panel-angular [show]="isSpinnerLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription">
 </loading-panel-angular>
-
+<div *ngIf="pricingTableData == undefined">
+    <div class="container-fluid editor101">
+        <div class="col-md-11" style="text-align: center;padding-top: 60px;">
+            <h4>Tender Folio Editor 101</h4>
+        </div>
+        <div class="col-md-5">
+            <div class="pnl">
+                <div class="head">Contract Navigator Menu Actions</div>
+                <div class="body">
+                    <div class="fl icon">
+                        <div><i class="intelicon-save-outlined"></i></div>
+                        <div>
+                            <p>Save</p>
+                        </div>
+                    </div>
+                    <div class="fl icon" *ngIf="C_ADD_PRICING_STRATEGY">
+                        <div><i class="intelicon-plus-max"></i></div>
+                        <div>
+                            <p>Add test</p>
+                        </div>
+                    </div>
+                    <div class="fl icon">
+                        <div><i class="intelicon-plus-max"></i></div>
+                        <div>
+                            <p>Add Pricing Strategy</p>
+                        </div>
+                    </div>
+                    <div class="fl icon">
+                        <div><i class="intelicon-search"></i></div>
+                        <div>
+                            <p>Search Contract</p>
+                        </div>
+                    </div>
+                    <div class="fl icon">
+                        <div><i class="intelicon-fast-forward"></i></div>
+                        <div>
+                            <p>Expand/ Minimize</p>
+                        </div>
+                    </div>
+                    <div class="fl icon">
+                        <div><i class="intelicon-shrink flip-horizontal"></i></div>
+                        <div>
+                            <p>Show/Hide Panel</p>
+                        </div>
+                    </div>
+                    <div class="clearboth"></div>
+                </div>
+            </div>
+            <div class="pnl">
+                <div class="head">Navigator Menus</div>
+                <div class="body">
+                    <div style="padding-left: 20px; padding-top: 5px;">
+                        <p>Click for access to the menus for both test & test management</p><img src="/images/learning101menu_v2.png" style="margin-bottom: 5px;height: 100%; width: 100%" />
+                        <p><span style="color: #FC4C02;">**</span>Please note menus will display actions based off of role type &/or rules </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6"><img src="/images/instructions.png" style="margin-top: 10px;height: 100%; width: 100%" /></div>
+    </div>
+</div>
 <div *ngIf="pricingTableData != undefined" class="pricing-strategy-status-bar fl" style="margin-top: 20px; position: absolute; margin-left: -5px; left: 0px;">
     <div class="valid_{{pricingTableData.PRC_ST[0].PASSED_VALIDATION}}" style="padding: 5px 8px;float:left">
         <span class="contractHeaderId">#{{ contractData.DC_ID }} </span>
@@ -30,41 +90,41 @@
         </div>
         <a (click)="tenderWidgetPathManager('backToPricingTable', 'PTR')">
             <div class="wizard-step-text step-into">
-                <h4><i [hidden]="selectedTAB == 'PTR'" class="intelicon-arrow-forward-right "></i> &nbsp;Tender Table Editor</h4>
+                <h4><i [hidden]="currentTAB != 'PTR'" class="intelicon-arrow-forward-right "></i> &nbsp;Tender Table Editor</h4>
                 <p>Adhoc Tender Table Editor Manager</p>
             </div>
         </a>
     </div>
     <div class="col-xs-3 col-md-3">
         <div class="wizard-panel second" [ngClass]="{'complete': isValidateDE() == true}">
-            <span id="tenderWidDE" class="badge wizard-step" [ngStyle]="selectedTab == 'DE'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty'}">2</span>
+            <span id="tenderWidDE" class="badge wizard-step" [ngStyle]="selectedTab == 'DE'?{'background-color': '#0071c5', 'color':'#FBD737'} : {}" (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': !pt_passed_validation}">2</span>
         </div>
-        <a (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty'}">
+        <a (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': !pt_passed_validation}">
             <div class="wizard-step-text step-into">
-                <h4><i [hidden]="selectedTAB == 'DE'" class="intelicon-arrow-forward-right "></i> &nbsp; Deal Editor</h4>
+                <h4><i [hidden]="currentTAB != 'DE'" class="intelicon-arrow-forward-right "></i> &nbsp; Deal Editor</h4>
                 <p>Adhoc Tender Deal Editor Manager</p>
             </div>
         </a>
     </div>
     <div class="col-xs-3 col-md-3">
         <div class="wizard-panel third" [ngClass]="{'complete': isValidateMC() == true}">
-            <span id="tenderWidMC" class="badge wizard-step" (click)="tenderWidgetPathManager('', 'MC')" [ngStyle]="selectedTab == 'MC'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" [ngClass]="{'isDisabledDE': pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty'}">3</span>
+            <span id="tenderWidMC" class="badge wizard-step" (click)="tenderWidgetPathManager('', 'MC')" [ngStyle]="selectedTab == 'MC'?{'background-color': '#0071c5', 'color':'#FBD737'} : {}" [ngClass]="{'isDisabledDE': !pt_passed_validation}">3</span>
         </div>
-        <a (click)="tenderWidgetPathManager('', 'MC')" [ngClass]="{'isDisabledDE': pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty'}">
+        <a (click)="tenderWidgetPathManager('', 'MC')" [ngClass]="{'isDisabledDE':!pt_passed_validation}">
             <div class="wizard-step-text step-into">
-                <h4><i [hidden]="selectedTAB == 'MC'" class="intelicon-arrow-forward-right "></i> &nbsp; Meet Comp</h4>
+                <h4><i [hidden]="currentTAB != 'MC'" class="intelicon-arrow-forward-right "></i> &nbsp; Meet Comp</h4>
                 <p>Tender Meet Comp Manager</p>
             </div>
         </a>
     </div>
     <div class="col-xs-3 col-md-3">
         <div class="wizard-panel last publishToolTip" [ngClass]="{'complete':selectedTab == 'PD'}">
-            <span id="tenderWidPD" class="badge wizard-step" [ngStyle]="selectedTab == 'PD'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': 'edeff0'}" (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabled': isValidateMC() == false}">4</span>
+            <span id="tenderWidPD" class="badge wizard-step" [ngStyle]="selectedTab == 'PD'?{'background-color': '#0071c5', 'color':'#FBD737'} : {}" (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabledDE': isValidateMC() == false}">4</span>
             <span kendoTooltip class="left helpset opElementHelpIcon intelicon-information-outlined" style="margin-left: 4px;" title="Publishing will separate the deals entered in the table below so that they can be individually approved." position="left" [tooltipWidth]="300"></span>
         </div>
         <a (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabledDE':isValidateMC() == false}">
             <div class="wizard-step-text step-into">
-                <h4><i [hidden]="selectedTAB == 'PD'" class="intelicon-arrow-forward-right"></i> &nbsp; Publish Adhoc Deal</h4>
+                <h4><i [hidden]="currentTAB != 'PD'" class="intelicon-arrow-forward-right"></i> &nbsp; Publish Adhoc Deal</h4>
                 <p>Converting into individual deals.</p>
             </div>
         </a>

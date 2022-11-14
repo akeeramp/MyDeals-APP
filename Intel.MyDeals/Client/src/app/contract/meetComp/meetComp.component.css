@@ -556,3 +556,25 @@
     margin-top: 38px !important;
     padding: 10px 20px;
 }
+.noMCAlert {
+    padding: 15px !important;
+    margin-bottom: 5px !important;
+    font-family: 'Intel Clear' !important;
+    margin: 10px 0px 0px 0px !important;
+    text-align: center;
+}
+
+.noMCAction {
+    padding: 0px !important;
+}
+
+.noMCok {
+    height: 60px !important;
+    color: #444 !important;
+    background-color: #fafafa !important;
+}
+
+    .noMCok:hover {
+        color: #444 !important;
+        background-color: #ebebeb !important;
+    }

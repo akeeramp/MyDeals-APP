@@ -190,13 +190,13 @@
     </div>
 
     <!-- Below code is just for the reference. This checkbox for 'exclude from price rules' column is being implemented in Tender Publish Screen Component. -->
-    <div *ngIf="isPublishable == true">
+    <!--<div *ngIf="isPublishable == true">-->
         <!--Checkbox-->
-        <div class='fl'>
+        <!--<div class='fl'>
             <input type="checkbox" [(ngModel)]="dataItem.EXCLUDE_AUTOMATION" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" /><label for="lnkChk_{{dataItem.DC_PARENT_ID}}" style="margin: 5px 0 0 0;"
                 title="Check to apply changes to all checked rows"></label>
         </div>
-    </div>
+    </div>-->
 </div>
 <kendo-window class="wistyle" *ngIf="windowOpened" (close)="windowClose()" [minWidth]="windowMinWidth" [minHeight]="windowHeight" [width]="windowWidth" [top]="windowTop" [left]="windowLeft" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
     <kendo-window-titlebar>

@@ -424,7 +424,7 @@ export class dealToolsComponent{
         this.setBusy("Deleting...", "Deleting the Pricing Table Row and Deal", "","");
         this.dataItem._dirty = false;
         let ptrId = this.dataItem.DC_PARENT_ID;
-        // Remove from DB first... then remove from screen
+        // Remove from DB first... then remove from UI
         let response = await this.dataService.deletePricingTableRow(this.dataItem.CUST_MBR_SID, this.contractData.DC_ID, ptrId).toPromise().catch((response) => {
             this.loggerSvc.error("Could not delete the Pricing Table " + ptrId, response, response.statusText);
             this.setBusy("", "", "", "");

@@ -1,4 +1,59 @@
-﻿#tenderWidPD, #tenderWidDE, #tenderWidMC, #tenderWidPTR {
+﻿.editor101 {
+    height: 100%;
+    overflow: auto !important
+}
+
+.editor101 h4 {
+    margin-top: 0;
+    color: #0071C5
+}
+
+.editor101 .pnl {
+    margin: 10px 10px;
+    border: 1px solid #e7e7e8
+}
+
+.editor101 .head {
+    border-bottom: 1px solid #e7e7e8;
+    background-color: #e7e7e8;
+    padding: 6px;
+    font-size: 16px;
+    color: #0071C5;
+    font-weight: 600
+}
+
+.editor101 .body {
+    padding: 5px
+}
+
+.editor101 .icon {
+    text-align: center;
+    margin: 5px 7px;
+    width: 70px
+}
+
+.editor101 .icon i {
+    color: #00AEEF;
+    font-size: 30px
+}
+
+.editor101 .icon i.inverse {
+    color: #ffffff;
+    font-size: 30px;
+    background-color: #00AEEF;
+    border-radius: 4px;
+    padding: 4px
+}
+
+.editor101 .icon div {
+    font-weight: 600
+}
+
+.editor101 .icon p {
+    margin: 6px 0
+}
+
+#tenderWidPD, #tenderWidDE, #tenderWidMC, #tenderWidPTR {
     cursor: pointer !important;
 }
 

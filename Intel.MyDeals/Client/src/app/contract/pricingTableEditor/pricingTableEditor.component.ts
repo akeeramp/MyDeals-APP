@@ -316,8 +316,8 @@ export class pricingTableEditorComponent implements OnChanges {
                 if(changes){
                     //using => operator to-call-parent-function-from-callback-function
                     //loading screen changes are moved to the top to  make better performance
-                    this.spinnerMessageHeader = 'PTE loading';
-                    this.spinnerMessageDescription = 'PTE loading please wait....';
+                    this.spinnerMessageHeader = 'Loading...';
+                    this.spinnerMessageDescription = 'Loading the Table Editor';
                     this.isLoading=true;
                     setTimeout(()=>{
                         this.afterCellChange(changes, source);
@@ -365,10 +365,15 @@ export class pricingTableEditorComponent implements OnChanges {
     private VendorDropDownResult: any = {};
     private isDeletePTR: boolean = false;
     private newPTR: any;
+    public dirtyItems: boolean;
     public warnings: boolean = false;
     public validMisProd: any;
     public isExcludePrdChange: boolean = false;
     public trackTranslationprod: any = [];
+    public undoEnable: boolean = false;
+    public undoCount = 0;
+    public redoEnable: boolean = false;
+    public redoCount = 0;
 
     setBusy(msg, detail, msgType, showFunFact) {
         setTimeout(() => {
@@ -462,6 +467,7 @@ export class pricingTableEditorComponent implements OnChanges {
             // The thing about Tender contract, they can be created from a copy which will NOT create WIP deals and
             // Cleans out the PTR_SYS_PRD value forcing a product reconciliation because the customer might have changed.
             //  So... we need a check to see if the value on load is blank and if so... set the dirty flag
+            this.dirtyItems = response.PRC_TBL_ROW.find(x => x.warningMessages.length > 0) ? true : false;
             Tender_Util.getTenderDetails(response.PRC_TBL_ROW, this.isTenderContract);
             this.pricingTableDet = response.PRC_TBL_ROW;
             this.isDeTabInfmIconReqd = PTE_Common_Util.dealEditorTabValidationIssue(response, false);
@@ -564,92 +570,102 @@ export class pricingTableEditorComponent implements OnChanges {
             return [];
         }
     }
+    isSaveEnabled() {
+        if (this.dirty == true || this.dirtyItems == true) return true;
+        else return false;
+    }
     afterCellChange(changes: Array<any>, source: any) { // Fired after one or more cells has been changed. The changes are triggered in any situation when the value is entered using an editor or changed using API (e.q setDataAtCell).so we are calling only if there is a change in cell
         if (source == 'edit' || source == 'CopyPaste.paste' || source == 'Autofill.fill') {
             // Changes will track all the cells changing if we are doing copy paste of multiple cells
-            this.dirty = true;
             // PTE loading in handsone takes more loading time than Kendo so putting a loader
-                changes = this.identfyUniqChanges(changes, source);
-                let PTR = _.where(changes, { prop: 'PTR_USER_PRD' });
-                let PTR_EXLDS = _.where(changes, { prop: 'PRD_EXCLDS' });
-                let AR = _.where(changes, { prop: 'AR_SETTLEMENT_LVL' });
-                let startVol = _.where(changes, { prop: 'STRT_VOL' });
-                let rebateType = _.where(changes, { prop: 'REBATE_TYPE' });
-                //KIT On change events
-                let KIT_ECAP = _.filter(changes, item => { return item.prop == 'ECAP_PRICE_____20_____1' || item.prop == 'ECAP_PRICE' });
-                let KIT_DSCNT = _.filter(changes, item => { return item.prop == 'DSCNT_PER_LN' || item.prop == 'QTY' });
-                let KIT_name = _.where(changes, { prop: 'DEAL_GRP_NM' })
-                //Voltier Changes
-                let tierChg = _.filter(changes, item => { return item.prop == 'END_PB' || item.prop == 'STRT_PB' || item.prop == 'END_REV' || item.prop == 'STRT_REV' || item.prop == 'END_VOL' || item.prop == 'STRT_VOL' });
-                let rateChg = _.filter(changes, item => { return item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE' || item.prop == 'VOLUME' || item.prop == 'FRCST_VOL' || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT' || item.prop == 'INCENTIVE_RATE' });
-                let pgChg = _.filter(changes, item => { return item.prop == 'PROGRAM_PAYMENT' });
-                //here we are using if conditions because at a time multiple changes can happen
-                if (PTR && PTR.length > 0) {
-                    PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns);
+            changes = this.identfyUniqChanges(changes, source);
+            if (changes.length > 0 && changes[0].old != changes[0].new) {
+                this.dirty = true;
+                this.undoEnable = true;
+                this.undoCount += 1;
+            }
+            let PTR = _.where(changes, { prop: 'PTR_USER_PRD' });
+            let PTR_EXLDS = _.where(changes, { prop: 'PRD_EXCLDS' });
+            let AR = _.where(changes, { prop: 'AR_SETTLEMENT_LVL' });
+            let startVol = _.where(changes, { prop: 'STRT_VOL' });
+            let rebateType = _.where(changes, { prop: 'REBATE_TYPE' });
+            //KIT On change events
+            let KIT_ECAP = _.filter(changes, item => { return item.prop == 'ECAP_PRICE_____20_____1' || item.prop == 'ECAP_PRICE' });
+            let KIT_DSCNT = _.filter(changes, item => { return item.prop == 'DSCNT_PER_LN' || item.prop == 'QTY' });
+            let KIT_name = _.where(changes, { prop: 'DEAL_GRP_NM' })
+            //Voltier Changes
+            let tierChg = _.filter(changes, item => { return item.prop == 'END_PB' || item.prop == 'STRT_PB' || item.prop == 'END_REV' || item.prop == 'STRT_REV' || item.prop == 'END_VOL' || item.prop == 'STRT_VOL' });
+            let rateChg = _.filter(changes, item => { return item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE' || item.prop == 'VOLUME' || item.prop == 'FRCST_VOL' || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT' || item.prop == 'INCENTIVE_RATE' });
+            let pgChg = _.filter(changes, item => { return item.prop == 'PROGRAM_PAYMENT' });
+            //here we are using if conditions because at a time multiple changes can happen
+            if (PTR && PTR.length > 0) {
+                this.undoEnable = false;
+                this.undoCount -= 1;
+                PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns);
+            }
+            if (AR && AR.length > 0) {
+                PTE_CellChange_Util.autoFillARSet(AR, this.contractData);
+            }
+            //KIT on change events
+            if (KIT_ECAP && KIT_ECAP.length > 0) {
+                PTE_CellChange_Util.kitEcapPriceChange(KIT_ECAP, this.columns, this.curPricingTable);
+            }
+            if (KIT_DSCNT && KIT_DSCNT.length > 0) {
+                PTE_CellChange_Util.kitDSCNTChange(KIT_DSCNT, this.columns, this.curPricingTable);
+            }
+            if(KIT_name && KIT_name.length>0){
+                this.kitNameObjArr= PTE_CellChange_Util.kitNameExists(KIT_name, this.columns, this.curPricingTable);
+                //open KIT confirmation message if the same name exists
+                if(this.kitNameObjArr && this.kitNameObjArr.length>0){
+                    //and the object will assign the first one
+                    this.kitNameObj=this.kitNameObjArr[0];
+                    this.isKitDialog=true;
                 }
-                if (AR && AR.length > 0) {
-                    PTE_CellChange_Util.autoFillARSet(AR, this.contractData);
-                }
-                //KIT on change events
-                if (KIT_ECAP && KIT_ECAP.length > 0) {
-                    PTE_CellChange_Util.kitEcapPriceChange(KIT_ECAP, this.columns, this.curPricingTable);
-                }
-                if (KIT_DSCNT && KIT_DSCNT.length > 0) {
-                    PTE_CellChange_Util.kitDSCNTChange(KIT_DSCNT, this.columns, this.curPricingTable);
-                }
-                if(KIT_name && KIT_name.length>0){
-                   this.kitNameObjArr= PTE_CellChange_Util.kitNameExists(KIT_name, this.columns, this.curPricingTable);
-                    //open KIT confirmation message if the same name exists
-                    if(this.kitNameObjArr && this.kitNameObjArr.length>0){
-                        //and the object will assign the first one
-                        this.kitNameObj=this.kitNameObjArr[0];
-                        this.isKitDialog=true;
-                    }
-                }
-                if (tierChg && tierChg.length > 0) {
-                    PTE_CellChange_Util.tierChange(tierChg, this.columns, this.curPricingTable);
-                }
-                if (rateChg && rateChg.length > 0) {
-                    PTE_CellChange_Util.RateChgfn(rateChg, this.columns, this.curPricingTable);
-                }
-                if (pgChg && pgChg.length > 0) {
-                    PTE_CellChange_Util.pgChgfn(pgChg, this.columns, this.curPricingTable);
-                }
-                if (pgChg.length == 0) {
-                    PTE_CellChange_Util.checkfn(changes, this.curPricingTable,this.columns);
-                }
-                if (rebateType && rebateType.length > 0) {
-                    PTE_CellChange_Util.rebateTypeChange(rebateType, this.curPricingTable);
-                }
-                //for multi tier there can be more tiers to delete so moving the logic after all change 
-                if (this.multiRowDelete && this.multiRowDelete.length > 0 && this.isDeletePTR) {
-                    this.deleteRow(this.multiRowDelete);
-                }
-                if(startVol && startVol.length>0){
-                    //making the start vol val to zero incase empty
-                    PTE_CellChange_Util.defaultVolVal(startVol, this.columns, this.curPricingTable);
-                }
-                let startDt = _.where(changes, { prop: 'START_DT' });
-                if (startDt) {
-                    PTE_CellChange_Util.dateChange(startDt, 'START_DT', this.contractData);
-                }
-                let endDt = _.where(changes, { prop: 'END_DT' });
-                if (endDt) {
-                    PTE_CellChange_Util.dateChange(endDt, 'END_DT', this.contractData);
-                }
-                if ((PTR_EXLDS && PTR_EXLDS.length > 0)) {
-                    let selrow = PTR_EXLDS[0].row;
-                    let PTR_Exccol_ind = _.findIndex(this.columns, { data: 'PRD_EXCLDS' });
-                    this.hotTable.setCellMeta(selrow, PTR_Exccol_ind, 'className', 'normal-product');
-                    this.hotTable.render();
-                    this.isExcludePrdChange = true;
-                }
+            }
+            if (tierChg && tierChg.length > 0) {
+                PTE_CellChange_Util.tierChange(tierChg, this.columns, this.curPricingTable);
+            }
+            if (rateChg && rateChg.length > 0) {
+                PTE_CellChange_Util.RateChgfn(rateChg, this.columns, this.curPricingTable);
+            }
+            if (pgChg && pgChg.length > 0) {
+                PTE_CellChange_Util.pgChgfn(pgChg, this.columns, this.curPricingTable);
+            }
+            if (pgChg.length == 0) {
+                PTE_CellChange_Util.checkfn(changes, this.curPricingTable,this.columns);
+            }
+            if (rebateType && rebateType.length > 0) {
+                PTE_CellChange_Util.rebateTypeChange(rebateType, this.curPricingTable);
+            }
+            //for multi tier there can be more tiers to delete so moving the logic after all change 
+            if (this.multiRowDelete && this.multiRowDelete.length > 0 && this.isDeletePTR) {
+                this.deleteRow(this.multiRowDelete);
+            }
+            if(startVol && startVol.length>0){
+                //making the start vol val to zero incase empty
+                PTE_CellChange_Util.defaultVolVal(startVol, this.columns, this.curPricingTable);
+            }
+            let startDt = _.where(changes, { prop: 'START_DT' });
+            if (startDt) {
+                PTE_CellChange_Util.dateChange(startDt, 'START_DT', this.contractData);
+            }
+            let endDt = _.where(changes, { prop: 'END_DT' });
+            if (endDt) {
+                PTE_CellChange_Util.dateChange(endDt, 'END_DT', this.contractData);
+            }
+            if ((PTR_EXLDS && PTR_EXLDS.length > 0)) {
+                let selrow = PTR_EXLDS[0].row;
+                let PTR_Exccol_ind = _.findIndex(this.columns, { data: 'PRD_EXCLDS' });
+                this.hotTable.setCellMeta(selrow, PTR_Exccol_ind, 'className', 'normal-product');
+                this.hotTable.render();
+                this.isExcludePrdChange = true;
+            }
             this.enableDeTab.emit({ isEnableDeTab: true, enableDeTabInfmIcon: this.isDeTabInfmIconReqd });
         }
     }
     async deletePTR() {
         this.isLoading = true;
-        this.setBusy("Deleting...", "Deleting the Pricing table row", "Info", true);
+        this.setBusy("Deleting...", "Deleting the Table row", "Info", true);
 
         let delDCIDs = [];
         _.each(this.multiRowDelete, item => {
@@ -672,6 +688,10 @@ export class pricingTableEditorComponent implements OnChanges {
         });
         if (result) {
             await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
+            if (this.isTenderContract) {
+                //Refresh TTE data after Delete
+                this.tmDirec.emit('Delete');
+            }
             this.isLoading = false;
             this.loadPTE();
         }
@@ -695,7 +715,7 @@ export class pricingTableEditorComponent implements OnChanges {
        }
     }
     mergeKitDeal(){
-        this.setBusy("PTE Reloading...", "PTE Reloading please wait", "Info", true);
+        this.setBusy("Reloading...", "Table Editor Reloading please wait", "Info", true);
         this.isKitDialog=false;
         setTimeout(() => {
             //will delete the rows first this must be first step
@@ -809,7 +829,7 @@ export class pricingTableEditorComponent implements OnChanges {
         try {
             this.isLoading = true;
             this.overlapFlexResult = [];
-            this.setBusy("PTE loading", "PTE loading please wait.....", "Info", true);
+            this.setBusy("Loading...", "Loading the Table Editor", "Info", true);
             let PTR = await this.getPTRDetails();
             //this is to make sure the saved record prod color are success by default
             PTR=PTE_Load_Util.setPrdColor(PTR);
@@ -840,9 +860,17 @@ export class pricingTableEditorComponent implements OnChanges {
     }
     undoPTE() {
         this.hotTable.undo();
+        this.redoEnable = true;
+        this.undoCount -=1
+        this.redoCount += 1;
+        if (this.undoCount == 0) this.undoEnable = false;
     }
     redoPTE() {
         this.hotTable.redo();
+        this.redoCount -= 1;
+        this.undoCount += 1;
+        if (this.redoCount == 0) this.redoEnable = false;
+        if (this.undoCount > 0) this.undoEnable = true;
     }
     async ValidateAndSavePTE(isValidProd) {
         if (isValidProd) {            
@@ -1204,7 +1232,7 @@ export class pricingTableEditorComponent implements OnChanges {
             let curRowIndx;
             if (selProds) {
                 this.isLoading = true;
-                this.setBusy("PTE Reloading", "PTE Reloading please wait", "Info", true);
+                this.setBusy("Reloading", "Table Editor reloading please wait", "Info", true);
                 //logic to bind the selected product and PTR_SYS_PRD to PTR
                 //For some reason when KIT is binding for more than 2 records its breaking so for now calling the function directly. 
                 _.each(selProds, (selProd, idx) => {

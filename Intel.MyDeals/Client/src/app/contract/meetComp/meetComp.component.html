@@ -35,7 +35,7 @@
             </div>
             <div id="grid" class="opUiContainer md dashboard either-pin" [ngClass]="{'op-grid': isAdhoc !=1}">
                 <kendo-grid style="height: calc(100vh - 280px); " [data]="gridData" [skip]="state.skip" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}"
-                            [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)">
+                            [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)" [kendoGridExpandDetailsBy]="expandDetailsBy" [(expandedDetailKeys)]="expandedDetailKeys" [initiallyExpanded]="isTender">
                     <kendo-grid-column width="70px" [columnMenu]="false">
                         <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                             <div class='dealTools'>
@@ -559,3 +559,9 @@
         </kendo-dialog-actions>
     </kendo-dialog>
 </div>
+<kendo-dialog *ngIf="showEmptyDataAlert" (close)="closeEmptyDataPopup()" [width]="700" class="noMCPopup">
+    <div class="noMCAlert">{{emptyDataAlertMsg}}</div>
+    <kendo-dialog-actions class="noMCAction">
+        <button (click)="closeEmptyDataPopup()" class="noMCok" kendoButton>OK</button>
+    </kendo-dialog-actions>
+</kendo-dialog>

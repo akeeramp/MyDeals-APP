@@ -105,6 +105,7 @@ export class publishTenderComponent {
     openDealProductModal(dataItem) {
         const dialogRef = this.dialog.open(dealProductsModalComponent, {
             width: "1000px",
+            panelClass: 'Publishten-grp-deal',
             data: {
                 dataItem: dataItem
             }
@@ -203,7 +204,7 @@ export class publishTenderComponent {
                             field: "EXCLUDE_AUTOMATION",
                             title: "Exclude from Price Rules",
                             width: 150,
-                            template: "<div class='dealTools'><div class='fl' ><input type='checkbox' [(ngModel)]='dataItem.EXCLUDE_AUTOMATION' class= 'grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}' id = 'lnkChk_{{dataItem.DC_PARENT_ID}}' /> <label for='lnkChk_{{dataItem.DC_PARENT_ID}}' style='margin: 10px 0 0 10px;' title='Exclude from Price Approval Rules' (click)='addExclusionList(dataItem)'></label></div ></div>",
+                            template: "",
                             bypassExport: true,
                             hidden: false,
                             uiType: "CheckBox",
@@ -211,7 +212,7 @@ export class publishTenderComponent {
                             isRequired: false,
                             sortable: false,
                             filterable: false,
-                            headerTemplate: "<input type='checkbox' (click)='excludeAllItems()' class='with-font' id='chkDealTools' title='Exclude from Price Approval Rules' /><label id='lblExclAutoHeader' for='chkDealTools' style='margin-left: 20px;margin-top: -70px; ' title='Exclude from Price Approval Rules'>Exclude from Price Rules</label>",
+                            headerTemplate: "",
                             mjrMnrChg: "MINOR",
                             lookupUrl: "",
                             lookupText: "",

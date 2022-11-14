@@ -89,13 +89,17 @@ export class meetCompContractComponent implements OnInit {
     public showPopup = false;
     public lastMeetCompRunValue = "";
     public popUpMessage = "";
-
+    public showEmptyDataAlert = false;
+    public emptyDataAlertMsg = "";
     public selectedCust = '';
     public selectedCustomerText = '';
     public curentRow;
-
     private gridData: GridDataResult;
     private childGridData: GridDataResult;
+    public expandedDetailKeys: number[] = [];
+    public expandDetailsBy = (dataItem: any): number => {
+        return dataItem;
+    };
     private gridResult;
     public childGridResult;
     private state: State = {
@@ -470,22 +474,31 @@ export class meetCompContractComponent implements OnInit {
             }
             this.reBindGridData();
             this.isLoading = false;
-            if (this.isTender == "1") {
-                this.tmDirec.emit('MeetCompVal');
-            }
         } else {
-            // if (this.isAdhoc == 0) {
-            this.isDataAvaialable = false;          
-            if (this.isTender == "1") {
-                this.tmDirec.emit('NoMeetCompVal');
-            }
-            this.loggerSvc.error("No Meet Comp data available for product(s) in this Contract", "Alert");
+            this.isDataAvaialable = false;
             this.isLoading = false;
+            if (this.isTender == "1") {
+                //to change compMissingFlag status to complete (COMP_MISSING_FLG == "1" to COMP_MISSING_FLG == "0")
+                await this.meetCompSvc.updateMeetCompProductDetails(this.objSid, this.objTypeId, this.tempUpdatedList).toPromise().catch((err) => {
+                    this.loggerSvc.error("Unable to save UpdateMeetCompProductDetails data", err, err.statusText);
+                    this.isLoading = false;
+                });
+                //alert for tender with No MeetComp
+                this.emptyDataAlertMsg = "Meet comp is not applicable for the Products selected in the Tender Table editor";
+                this.showEmptyDataAlert = true;
+            } else {
+                //alert for contract with No MeetComp
+                this.emptyDataAlertMsg = "No Meet Comp data available for product(s) in this Contract";
+                this.showEmptyDataAlert = true;
+            }
             return;
-            // }
         }
     }
-
+    closeEmptyDataPopup() {
+        this.showEmptyDataAlert = false;
+        //to refresh Pricing Table data
+        this.tmDirec.emit('')
+    }
     onCompSkuChange(val: any, dataItem: any) {
         const selectedIndx = val.RW_NM;
         this.selectedCustomerText = (val.COMP_SKU).trim();
@@ -1000,7 +1013,7 @@ export class meetCompContractComponent implements OnInit {
                 this.loggerSvc.error("Meet comp data is missing for some product(s).Please enter the data and save the changes.", "Alert");
             }
             this.reBindGridData();
-        }        
+        }
     }
 
     async forceRunMeetComp() {
@@ -1028,7 +1041,7 @@ export class meetCompContractComponent implements OnInit {
         let response: any = await this.meetCompSvc.updateMeetCompProductDetails(this.objSid, this.objTypeId, this.tempUpdatedList).toPromise().catch((err) => {
             this.loggerSvc.error("Unable to save UpdateMeetCompProductDetails data", err, err.statusText);
             this.isLoading = false;
-        });;
+        });
         this.meetCompMasterResult = response;
         this.meetCompMasterdata = new List<any>(this.meetCompMasterResult);
         const tempCopy = JSON.parse(JSON.stringify(this.meetCompMasterResult));
@@ -1088,14 +1101,14 @@ export class meetCompContractComponent implements OnInit {
             })
         );
 
-    gotoDeal(DealId:any):void{
+    gotoDeal(DealId: any): void {
         this.isLoading = true;
         this.meetCompSvc.getContractIDDetails(DealId).subscribe(res => {
             this.isLoading = false;
             if (res) {
-                window.location.href = "#/contractmanager/WIP/" + res['ContractId'] + "/" + res['PricingStrategyId'] + "/" +res['PricingTableId'] + "/" + DealId;
+                window.location.href = "#/contractmanager/WIP/" + res['ContractId'] + "/" + res['PricingStrategyId'] + "/" + res['PricingTableId'] + "/" + DealId;
             }
-         },
+        },
             error => {
                 this.loggerSvc.error("MeetcompComponent::getContractIDDetails::Unable to get Contract Data", error);
                 this.isLoading = false;
@@ -1104,16 +1117,16 @@ export class meetCompContractComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        try{
+        try {
             this.PAGE_NM = this.pageNm;
             if (!!this.objSid) {
                 this.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
                 this.lastMeetCompRunCalc();
             }
         }
-        catch(ex){
+        catch (ex) {
             this.loggerSvc.error('Something went wrong', 'Error');
-            console.error('MeetComp::ngOnInit::',ex);
+            console.error('MeetComp::ngOnInit::', ex);
         }
     }
 }

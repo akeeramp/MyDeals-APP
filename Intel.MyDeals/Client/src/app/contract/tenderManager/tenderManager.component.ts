@@ -42,9 +42,11 @@ export class tenderManagerComponent {
     public mcForceRunReq: boolean;
     public inCompleteCapMissing: boolean = false;
     public result: any = null;
-    public passedValue: any = '';
     public isDialogVisible = false;
     public dirtyItems;
+    public gotoPD = "";
+    public pt_passed_validation: boolean;
+    public compMissingFlag: any;
 
     async loadAllContractDetails(): Promise<void> {
         let response = await this.pricingTableSvc.readContract(this.c_Id).toPromise().catch((err) => {
@@ -68,8 +70,12 @@ export class tenderManagerComponent {
                 this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
                     this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
                 });
+
                 this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
-                //this.mcForceRunReq = this.isMCForceRunReq();
+                let passed = this.pricingTableData.PRC_TBL_ROW.filter(x => x.PASSED_VALIDATION == "Complete");
+                let compFlag = this.pricingTableData.PRC_TBL_ROW.filter(x => x.COMP_MISSING_FLG == "0");
+                this.pt_passed_validation = !(this.isPTREmpty) && (passed.length == this.pricingTableData.PRC_TBL_ROW.length) && !(this.pricingTableData.WIP_DEAL.find(x => x.warningMessages.length > 0) ? true : false) ? true : false;
+                this.compMissingFlag = !(this.isPTREmpty) && compFlag.length == this.pricingTableData.PRC_TBL_ROW.length ? true : false;
             }
             else{
                 this.loggerSvc.error("Something went wrong. Please contact Admin","Error");
@@ -85,27 +91,24 @@ export class tenderManagerComponent {
         if (this.isPTRPartiallyComplete()) {
             if (this.deComp != undefined) {
                 if (this.deComp.dirty == false) return true;
-                else if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
+                else if (this.pt_passed_validation) {
                     return true;
                 }
                 else return false;
             } else return true;
-        } else if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
+        } else if (this.pt_passed_validation) {
             return true;
         }
     }
 
     isValidateDE() {
-        if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && this.isPTRPartiallyComplete() == true) {
+        if (this.pt_passed_validation && this.isPTRPartiallyComplete() == true) {
             return true;
         } else return false;
     }
 
     isValidateMC() {
-        //if (((this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'InComplete' && this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT != 'Not Run Yet' && !this.isMCForceRunReq()) || this.pricingTableData.PRC_ST[0].CAP_MISSING_FLG == 1) || this.passedValue == 'NoMeetCompVal') {
-        //    return true;
-        //} else return false;
-        if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && (this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 0 || this.passedValue == 'NoMeetCompVal')) {
+        if (this.pt_passed_validation && this.compMissingFlag) {
             return true;
         } else return false;
     }
@@ -116,63 +119,88 @@ export class tenderManagerComponent {
         return true
     }
     async redirectingFn(tab) {
-        if (tab != '' && tab != 'NoMeetCompVal' && tab != 'MeetCompVal') {
+        if (tab != '' && tab != 'Delete') {
+            //Redirects to selected tab
+            let response = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
+                this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
+            });
+            if (response) {
+                this.pricingTableData = response;
+                this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
+                let passed = this.pricingTableData.PRC_TBL_ROW.filter(x => x.PASSED_VALIDATION == "Complete");
+                let compFlag = this.pricingTableData.PRC_TBL_ROW.filter(x => x.COMP_MISSING_FLG == "0");
+                this.pt_passed_validation = !(this.isPTREmpty) && (passed.length == this.pricingTableData.PRC_TBL_ROW.length) && !(this.pricingTableData.WIP_DEAL.find(x => x.warningMessages.length > 0) ? true : false) ? true : false;
+                this.compMissingFlag = !(this.isPTREmpty) && compFlag.length == this.pricingTableData.PRC_TBL_ROW.length ? true : false;
+                this.selectedTab = tab;
+                this.currentTAB = tab;
+            }
+        } else if (tab == 'Delete') {
+            //Redirect to DE when TTE has passed validations
+            let response = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
+                this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
+            });
+            this.pricingTableData = response;
+            this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
+            let passed = this.pricingTableData.PRC_TBL_ROW.filter(x => x.PASSED_VALIDATION == "Complete");
+            this.pt_passed_validation = !(this.isPTREmpty) && (passed.length == this.pricingTableData.PRC_TBL_ROW.length) && !(this.pricingTableData.WIP_DEAL.find(x => x.warningMessages.length > 0) ? true : false) ? true : false;
+            if (this.pt_passed_validation) {
+                await this.redirectingFn('DE')
+            }
+        }
+        else {
+            //Refresh the data
             this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
                 this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
             });
-            this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
-            this.selectedTab = tab;
-            this.currentTAB = tab;
-        } else if (tab == "NoMeetCompVal") {
-            this.passedValue = tab;
-            this.isValidateMC();
-        } else if (tab == 'MeetCompVal') {
-            this.passedValue = '';
-            this.isValidateMC();
-        } else {
-            this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
-                this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
-            });
-            this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
+            //checking passed validation
+            let passed = this.pricingTableData.PRC_TBL_ROW.filter(x => x.PASSED_VALIDATION == "Complete");
+            //checking COMP_MISSING_FLG
+            let compFlag = this.pricingTableData.PRC_TBL_ROW.filter(x => x.COMP_MISSING_FLG == "0");
+            //checking passed validations, TTE empty, WIP deals
+            this.pt_passed_validation = !(this.isPTREmpty) && (passed.length == this.pricingTableData.PRC_TBL_ROW.length) && !(this.pricingTableData.WIP_DEAL.find(x => x.warningMessages.length > 0) ? true : false) ? true : false;
+            //checking TTE empty and COMP_MISSING_FLG value
+            this.compMissingFlag = !(this.isPTREmpty) && compFlag.length == this.pricingTableData.PRC_TBL_ROW.length ? true : false;
+            //checking for dirty items inside TTE
             this.isPTRPartiallyComplete();
         }
     }
 
     async tenderWidgetPathManager(_actionName, selectedTab) {
-        //this.mcForceRunReq = this.isMCForceRunReq();
         if (this.currentTAB == 'PTR' && selectedTab != 'PTR') {
+            //checking for dirty items inside TTE
             this.isPartiallyValid = this.isPTRPartiallyComplete();
         }
 
         if (selectedTab == 'PTR') {
-            if (this.currentTAB == 'PTR') { }
+            if (this.currentTAB == 'PTR') { }//if selected tab and current tab are same no change
             else if (this.currentTAB == 'DE') {
                 if (this.deComp.dirty) {
+                    //if we are editing in DE then we will save data and proceed to PTE
                     await this.deComp.SaveDeal();
                     await this.redirectingFn(selectedTab);
                 } else {
                     await this.redirectingFn(selectedTab);
                 }
-            } else if (this.currentTAB == 'MC'){
+            } else if (this.currentTAB == 'MC') {// from MC simple redirection to PTE
                 await this.redirectingFn(selectedTab);
-            } else if (this.currentTAB == 'PD') {
+            } else if (this.currentTAB == 'PD') {// from PD simple redirection to PTE
                 await this.redirectingFn(selectedTab);
             }
         }
 
         else if (selectedTab == 'DE') {
             if (this.currentTAB == 'PTR') {
-                if (this.pteComp.dirty) {
+                if (this.pteComp.dirty || this.dirtyItems.length > 0) {//if we are editing in TTE then we will save data and proceed to DE
                     await this.pteComp.validatePricingTableProducts();
                 } else {
-                    if (this.dirtyItems.length == 0) {
+                    if (this.dirtyItems.length == 0 && this.isPTREmpty == false) { // if no changes/warnings are there and if TTE is not empty then redirect to DE
                         await this.redirectingFn(selectedTab);
                     }
                 }
-            } else if (this.currentTAB == 'DE') {
-            }else if (this.currentTAB == 'MC') {
+            } else if (this.currentTAB == 'DE') {//if selected tab and current tab are same no change
+            } else if (this.currentTAB == 'MC') {// from MC simple redirection to DE
                 await this.redirectingFn(selectedTab);
-            }else if (this.currentTAB == 'PD'){
+            } else if (this.currentTAB == 'PD') {// from PD simple redirection to DE
                 await this.redirectingFn(selectedTab);
             } else {
                 this.loggerSvc.error('Validate all your product(s) to open Deal Editor.', 'error');
@@ -181,34 +209,38 @@ export class tenderManagerComponent {
 
         else if (selectedTab == 'MC') {
             if (this.currentTAB == 'PTR') {
-                if (this.pteComp.dirty) {
+                if (this.pteComp.dirty || this.dirtyItems.length > 0) {//if we are editing in TTE or there is error in TTE then we will save data and proceed to DE
                     await this.pteComp.validatePricingTableProducts();
-                    if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
-                        await this.redirectingFn('PTR')
+                    if (this.pt_passed_validation) {
+                        setTimeout(() => {//waiting for the api call to complete in redirectingFn()
+                            if (this.pt_passed_validation) {
+                                this.redirectingFn('PTR');//even after editing if pass validation is complete then after save it will remain in PTE
+                            }
+                        }, 3000);
                     } 
                 } else {
-                    if (this.dirtyItems.length == 0) {
-                        if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty') {
-                            await this.redirectingFn('DE');
+                    if (this.dirtyItems.length == 0 && this.isPTREmpty == false) {
+                        if (!this.pt_passed_validation) {
+                            await this.redirectingFn('DE');// if selected tab is MC and pass validation not complete then redirect to DE
                         } else {
-                            await this.redirectingFn(selectedTab);
+                            await this.redirectingFn(selectedTab);// if selected tab is MC and pass validation is complete then redirect to MC
                         }
                     }
                 }
             } else if (this.currentTAB == 'DE') {
                 if (this.deComp.dirty) {
                     await this.deComp.SaveDeal();
-                    if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
-                        await this.redirectingFn(selectedTab);
+                    if (this.pt_passed_validation) {
+                        await this.redirectingFn(selectedTab);// if DE is edited and on save if pass validation is complete redirect to MC
                     }
                 } else {
-                    if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
-                        await this.redirectingFn(selectedTab);
+                    if (this.pt_passed_validation) {
+                        await this.redirectingFn(selectedTab);//if DE has no change and pass validation is complete redirect to MC
                     }
                 }
-            } else if (this.currentTAB == 'MC') {
-            }else if (this.currentTAB =='PD') {
-                await this.redirectingFn(selectedTab);
+            } else if (this.currentTAB == 'MC') {//no change
+            } else if (this.currentTAB == 'PD') {
+                await this.redirectingFn(selectedTab);// redirects to MC
             }else{
                 this.loggerSvc.error('Validate all your product(s) to open Meet Comp.', 'error');
             }
@@ -216,21 +248,24 @@ export class tenderManagerComponent {
 
         else if (selectedTab == 'PD') {
             if (this.currentTAB == 'PTR') {
-                if (this.pteComp.dirty) {
+                if (this.pteComp.dirty || this.dirtyItems.length > 0) {
                     await this.pteComp.validatePricingTableProducts();
-                    if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
-                        await this.redirectingFn('PTR')
-                    }
+                    setTimeout(() => {//waiting for the api call to complete in redirectingFn()
+                        if (this.pt_passed_validation) {
+                            this.redirectingFn('PTR');//even after editing if pass validation is complete then after save it will remain in PTE
+                        }
+                    },3000);
                 } else {
-                    if (this.dirtyItems.length == 0) {
-                        if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Dirty') {
-                            await this.redirectingFn('DE');
+                    if (this.dirtyItems.length == 0 && this.isPTREmpty == false) {
+                        if (!this.pt_passed_validation) {
+                            await this.redirectingFn('DE');// if pass validation is not complete redirects to DE
                         } else {
-                            if (this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 1 && this.passedValue == '')
-                                await this.redirectingFn('MC');
-                            else {
-                                if (this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 1 || this.passedValue == 'NoMeetCompVal')
-                                    await this.redirectingFn(selectedTab);
+                            if (!this.compMissingFlag) {
+                                await this.redirectingFn('MC');// if pass validation is complete & meetcomp data is available & meet comp is not run redirects to MC
+                            }else {
+                                if (this.compMissingFlag) {
+                                    await this.redirectingFn(selectedTab);  // if pass validation is complete & meetcomp data is not available or meet comp run redirects to PD
+                                }
                             }
                         }
                     }
@@ -238,47 +273,37 @@ export class tenderManagerComponent {
             } else if (this.currentTAB == 'DE') {
                 if (this.deComp.dirty) {
                     await this.deComp.SaveDeal();
-                    if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == "Complete") {
-                        if (this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 1 && this.passedValue == '')
-                            await this.redirectingFn('MC');
-                        else {
-                            if (this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 0 || this.passedValue == 'NoMeetCompVal')
-                                await this.redirectingFn(selectedTab);
+                    if (this.pt_passed_validation) {
+                        if (!this.compMissingFlag) {
+                            await this.redirectingFn('MC');// if pass validation is complete & meetcomp data is available & meet comp is not run redirects to MC
+                        }else {
+                            if (this.compMissingFlag) {
+                                await this.redirectingFn(selectedTab);// if pass validation is complete & meetcomp data is not available or meet comp run redirects to PD
+                            }
                         }
                     }
                     
                 }else {
-                    if (this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete') {
-                        if (this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 1 && this.passedValue == '') {
-                            await this.redirectingFn('MC');
+                    if (this.pt_passed_validation) {
+                        if (!this.compMissingFlag) {
+                            await this.redirectingFn('MC');// if meetcomp is not run then redirect to MC
                         } else {
-                            if (this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 0 || this.passedValue == 'NoMeetCompVal')
-                                await this.redirectingFn(selectedTab);
+                            if (this.compMissingFlag){
+                                await this.redirectingFn(selectedTab);//if meetcomp is run atleast once redirects to PD
+                            }
                         }
                     }
                 }
             } else if (this.currentTAB == 'MC') {
-                if (this.pricingTableData.PRC_ST[0].COMP_MISSING_FLG == 0 || this.passedValue == 'NoMeetCompVal') {
-                    await this.redirectingFn(selectedTab);
+                if (this.compMissingFlag) {
+                    await this.redirectingFn(selectedTab);//if meetcomp is run atleast once redirects to PD
                 }
-            } else if (this.currentTAB == 'PD') {}
-            //else if ((this.pricingTableData.PRC_ST[0].PASSED_VALIDATION == 'Complete' && (this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Pass' || this.pricingTableData.PRC_ST[0].MEETCOMP_TEST_RESULT == 'Fail') && !this.mcForceRunReq || this.pricingTableData.PRC_ST[0].CAP_MISSING_FLG == 1) || this.passedValue == 'NoMeetCompVal') {
-            //    await this.redirectingFn(selectedTab);
-            //}
+            } else if (this.currentTAB == 'PD') {}//no change
             else {
                 this.loggerSvc.error("Meet Comp is not passed. You can not Publish this deal yet.", 'error');
             }
         }
     }
-
-    //isMCForceRunReq() {
-    //    let mcForceRun = false;
-    //    if (this.pricingTableData !== undefined && this.pricingTableData.PRC_TBL_ROW !== undefined && this.pricingTableData.PRC_TBL_ROW.length > 0) {
-    //        let dirtyItems = this.pricingTableData.PRC_TBL_ROW.filter(x => x.MEETCOMP_TEST_RESULT === 'Not Run Yet' || x.MEETCOMP_TEST_RESULT === 'InComplete' || x.DC_ID <= 0);
-    //        if (dirtyItems.length > 0) mcForceRun = true;
-    //        return mcForceRun;
-    //    }
-    //}
 
     isPTRPartiallyComplete() {
         let isPtrDirty = false;
