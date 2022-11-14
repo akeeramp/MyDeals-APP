@@ -19,6 +19,7 @@ import * as _ from 'underscore';
 import { PTE_Config_Util } from "../PTEUtils/PTE_Config_util"
 import { DecimalPipe, CurrencyPipe} from '@angular/common';
 import { PTE_Common_Util } from "../PTEUtils/PTE_Common_util";
+import * as moment from "moment";
 
 @Component({
     selector: "all-deals",
@@ -233,7 +234,18 @@ export class allDealsComponent {
         return result;
     }
     distinctPrimitive(fieldName: string) {
-        return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
+        return distinct(this.gridResult, fieldName).map(item => {
+            if (fieldName == 'WF_STG_CD') {
+                let val = item.WF_STG_CD === "Draft" ? item.PS_WF_STG_CD : item.WF_STG_CD;
+                return { Text: val, Value: item[fieldName] };
+            }
+            if (moment(item[fieldName], "MM/DD/YYYY", true).isValid()) {
+                return { Text: new Date(item[fieldName]).toString(), Value: item[fieldName] };
+            }
+            else if (item[fieldName] != undefined && item[fieldName] != null)
+                return { Text: item[fieldName].toString(), Value: item[fieldName] }
+        });
+
     }
     filterColumnbyGroup(groupName: string) {
         let group = this.groups.filter(x => x.name == groupName);

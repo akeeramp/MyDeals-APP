@@ -541,7 +541,11 @@ export class contractManagerComponent {
     }
 
     distinctPrimitive(fieldName: string, id) {
-        this.filteringData[id][fieldName] = distinct(this.gridDataSet[id], fieldName).map(item =>{ if(item[fieldName] != undefined && item[fieldName] != null ) return item[fieldName].toString()});
+        this.filteringData[id][fieldName] = distinct(this.gridDataSet[id], fieldName).map(item =>{ 
+            if (moment(item[fieldName], "MM/DD/YYYY", true).isValid()) {
+                return { Text: new Date(item[fieldName]).toString(), Value: item[fieldName] };
+            } else if(item[fieldName] != undefined && item[fieldName] != null ) {
+                return item[fieldName].toString()}});
     }
     clkAllRow(e, checkBoxType) {
         const isItemChecked = e.currentTarget.checked;

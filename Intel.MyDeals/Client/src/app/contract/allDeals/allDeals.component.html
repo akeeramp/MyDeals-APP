@@ -101,7 +101,7 @@
                                                width="{{column.width}}" [filterable]="column.filterable"  >
                                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                                              let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                    <multicheck-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value"
                                                        [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                                 </ng-template>
                                 <ng-template *ngIf="column.field == 'PASSED_VALIDATION'" kendoGridHeaderTemplate>

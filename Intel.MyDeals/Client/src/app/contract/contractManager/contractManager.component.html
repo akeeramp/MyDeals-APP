@@ -368,7 +368,7 @@
                                                 <kendo-grid-column title="Deal Start/End" field="START_DT" [headerClass]="{'headerClass':true}" [width]="175">
                                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                                                     let-filterService="filterService">
-                                                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                                    <multicheck-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value"
                                                         [filterService]="filterService" [data]="filteringData[pt.DC_ID][column.field]"></multicheck-filter>
                                                 </ng-template>
                                                     <ng-template kendoGridCellTemplate let-dataItem>
