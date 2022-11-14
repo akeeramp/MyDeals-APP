@@ -45,6 +45,7 @@ export class dealEditorComponent {
     @Input() in_Cid: any = '';
     @Input() in_Ps_Id: any = '';
     @Input() in_Pt_Id: any = '';
+    @Input() in_Search_Text: any = '';
     @Input() contractData: any = {};
     @Input() UItemplate: any = {};
     @ViewChild(GridComponent) private grid: GridComponent;
@@ -1140,6 +1141,20 @@ export class dealEditorComponent {
             this.dropdownResponses = this.getAllDrowdownValues();
             this.selectedTab = "Deal Info";
             this.filterColumnbyGroup(this.selectedTab);
+            if (this.in_Search_Text && this.in_Search_Text != null && this.in_Search_Text != '') {
+                this.searchFilter = this.in_Search_Text;
+                this.state.filter = {
+                    logic: "or",
+                    filters: [
+                        {
+                            field: "DC_ID",
+                            operator: "eq",
+                            value: this.searchFilter
+                        }
+                    ],
+                }
+                this.gridData = process(this.gridResult, this.state);
+            }
         }
         catch(ex){
             this.loggerService.error('Something went wrong', 'Error');

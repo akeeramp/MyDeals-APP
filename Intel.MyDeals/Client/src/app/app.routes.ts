@@ -390,7 +390,15 @@ angular
                     }
                 }
             })
-
+            .state("searchManager", {
+                url: "/manager/:type/:cid/:PSID/:PTID/:DealID",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<global-route></global-route>',
+                    }
+                }
+            })
             .state("contractmanager", {
                 url: "/contractmanager/:type/:cid/:PSID/:PTID/:DealID",
                 abstract: false,

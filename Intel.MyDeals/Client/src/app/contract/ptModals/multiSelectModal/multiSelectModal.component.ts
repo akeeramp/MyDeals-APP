@@ -329,6 +329,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
                     });
                 }
             }
+            this.multSlctMkgValues = this.mkgvalues;
             _.each(this.marketSeglist, (key) => {
                 if (key.items != undefined && key.items != null && key.items.length > 0) {
                     this.parentKeys.push(key.DROP_DOWN);

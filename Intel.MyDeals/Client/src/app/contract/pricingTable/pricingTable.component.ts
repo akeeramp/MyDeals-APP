@@ -63,6 +63,7 @@ export class pricingTableComponent {
     private isShowPCT: boolean = false;
     private isInformationIconReqd: boolean = false;
     private rowlength: any;
+    private searchText: any;
 
     public searchedContractData = {
         Model: "",
@@ -166,6 +167,9 @@ export class pricingTableComponent {
         else {
             this.isDETab = false; this.isPTETab = false;
         }
+        if (!isRedirect) {
+            this.searchText = "";
+        }
         //this.curPricingStrategy = ContractUtil.findInArray(this.contractData["PRC_ST"], this.ps_Id)
     }
 
@@ -251,6 +255,11 @@ export class pricingTableComponent {
                     this.searchedContractData.pt_id = this.pt_Id = Number(IDS[2])
                     this.searchedContractData.Model = "PTE";
                     this.searchedContractData.contractData = contractData;
+                    if (this.type == 'WIP' && IDS[3].indexOf("?searchTxt=") > 0)
+                        this.searchText = Number(IDS[3].substring(IDS[3].indexOf("?") + ("?searchTxt=").length, IDS[3].length));
+                    else {
+                        this.searchText = "";
+                    }
                     this.loadModel(this.searchedContractData, true);
                 }
                 this.isLoading = false;

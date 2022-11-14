@@ -35,11 +35,51 @@ export class globalRouteComponent {
         let index = url.indexOf('manager');
         if(index && index>0){
             let cid = url[index + 1];
-            if(this.angularEnabled){
-                window.location.href = "#/contractmanager/CNTRCT/" + cid + "/0/0/0";
+            if (!Number.isNaN(Number(cid))) {//if user entered angular js url - contract url
+                if (this.angularEnabled) {
+                    window.location.href = "#/contractmanager/CNTRCT/" + cid + "/0/0/0";
+                }
+                else {
+                    window.location.href = "#/manager/" + cid;
+                }
             }
-            else{
-                window.location.href = "#/managers/" + cid;
+            else { // Global Search Scenarios redirection
+                if (cid == "CNTRCT") {// if user searched contract
+                    let index = url.indexOf('CNTRCT');
+                    if (this.angularEnabled) {
+                        window.location.href = "#/contractmanager/CNTRCT/" + url[index + 1] + "/0/0/0";
+                    }
+                    else {
+                        window.location.href = "#/manager/" + url[index + 1];
+                    }
+                }
+                else if (cid == "PS") {// if user searched Pricing Strategy
+                    let index = url.indexOf('PS');
+                    if (this.angularEnabled) {
+                        window.location.href = "#/contractmanager/PT/" + url[index + 1] + "/" + url[index + 2] + "/0/0";
+                    }
+                    else {
+                        window.location.href = "#/manager/" + url[index + 1] + "/" + url[index + 2];
+                    }
+                }
+                else if (cid == "PT") {// if user searched Pricing Table
+                    let index = url.indexOf('PT');
+                    if (this.angularEnabled) {
+                        window.location.href = "#/contractmanager/PT/" + url[index + 1] + "/" + url[index + 2] + "/" + url[index + 3] +"/0";
+                    }
+                    else {
+                        window.location.href = "#/manager/" + url[index + 1] + "/" + url[index + 2] + "/" + url[index + 3];
+                    }
+                }
+                else if (cid == "WIP") {// if user searched Deal Id
+                    let index = url.indexOf('WIP');
+                    if (this.angularEnabled) {
+                        window.location.href = "#/contractmanager/WIP/" + url[index + 1] + "/" + url[index + 2] + "/" + url[index + 3] + "/" + url[index + 4];
+                    }
+                    else {
+                        window.location.href = "#/manager/" + url[index + 1] + "/" + url[index + 2] + "/" + url[index + 3] + "/" + url[index + 4];
+                    }
+                }
             }
         }
         else{

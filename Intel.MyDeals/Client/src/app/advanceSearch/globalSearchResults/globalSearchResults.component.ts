@@ -122,7 +122,7 @@ export class GlobalSearchResultsComponent  {
             return;
         }
       if (opType == 'CNTRCT' ) {
-          if (this.angularEnabled) window.location.href = "#/contractmanager/CNTRCT/" + DCID + "/0/0/0";
+          if (this.angularEnabled) window.location.href = "#/manager/CNTRCT/" + DCID + "/0/0/0";
           else   window.location.href = "/Contract#/manager/" + DCID;
      }
       else if (opType == 'PRC_ST' || opType == 'PRC_TBL' || opType == 'WIP_DEAL') {
@@ -151,10 +151,10 @@ export class GlobalSearchResultsComponent  {
             if (res) {
                 this.response = res;
                 if (opType == "WIP_DEAL")
-                window.location.href = "#/contractmanager/WIP/" + this.response.ContractId + "/" + this.response.PricingStrategyId + "/" + this.response.PricingTableId + "/" + dcId;
+                    window.location.href = "#/manager/WIP/" + this.response.ContractId + "/" + this.response.PricingStrategyId + "/" + this.response.PricingTableId + "/" + dcId + "?searchTxt=" + dcId;
                 else if (opType == "PRC_ST")
-                    window.location.href = "#/contractmanager/PS/" + this.response.ContractId + "/" + this.response.PricingStrategyId + "/" + this.response.PricingTableId + "/0";
-                else window.location.href = "#/contractmanager/PT/" + this.response.ContractId + "/" + parentdcID + "/" + dcId + "/0";
+                    window.location.href = "#/manager/PS/" + this.response.ContractId + "/" + this.response.PricingStrategyId + "/" + this.response.PricingTableId + "/0";
+                else window.location.href = "#/manager/PT/" + this.response.ContractId + "/" + parentdcID + "/" + dcId + "/0";
             }
         },
             error => {

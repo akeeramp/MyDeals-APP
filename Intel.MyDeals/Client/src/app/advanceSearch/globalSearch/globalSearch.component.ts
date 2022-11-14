@@ -68,7 +68,8 @@ export class GlobalSearchComponent  {
       this.windowWidth=$event;
     }
     isWindowOpen($event:boolean){
-      this.windowOpened=$event;
+        this.windowOpened = $event;
+        this.searchText = "";
     }
 }
 

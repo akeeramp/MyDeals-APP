@@ -56,7 +56,7 @@
                                 </ng-template>
                                 <ng-template kendoTabContent>
                                     <div *ngIf="isDETab">
-                                        <deal-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate" (refreshedContractData)="refreshContractData($event)" (deTabInfmIconUpdate)="isDeTabInfmIconUpdate($event)" (pteRedir)="RedirectFn($event)">
+                                        <deal-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [in_Search_Text]="searchText" [contractData]="contractData" [UItemplate]="UItemplate" (refreshedContractData)="refreshContractData($event)" (deTabInfmIconUpdate)="isDeTabInfmIconUpdate($event)" (pteRedir)="RedirectFn($event)">
                                         </deal-editor>
                                     </div>
                                 </ng-template>
