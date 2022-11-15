@@ -1589,3 +1589,6 @@ kendo-datepicker.date-dashboard:hover, kendo-datepicker.date-dashboard:focus, ke
 .nav-tabs-intel-blocks.nav li a:focus {
     background-color: transparent!important
 }
+kendo-dialog.cm-pop-up .k-window-content {
+    padding: 0;
+}

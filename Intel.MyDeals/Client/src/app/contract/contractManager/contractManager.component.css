@@ -613,3 +613,15 @@ button.contract-popup-okbtn.k-button {
     background-color: #dcd8d880 !important;
     color: #444 !important
 }
+.btn_color_fix.btn-primary {
+    background-color: #00AEEF !important;
+}
+.btn_color_fix.btn-primary:hover {
+        background-color: #3c8dbc !important;
+}
+.cancel_color_fix.btn-warning {
+    background-color: rgb(243, 156, 18) !important;
+}
+.cancel_color_fix.btn-warning:hover {
+        background-color: rgb(224, 142, 11) !important;
+}

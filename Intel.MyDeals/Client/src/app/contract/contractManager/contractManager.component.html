@@ -68,30 +68,30 @@
                                 <p class="hstyle">No Pricing Strategies were selected.</p>
                                 <kendo-dialog-actions><button class="contract-popup-okbtn" kendoButton (click)="close('no')">OK</button></kendo-dialog-actions>
                             </kendo-dialog>
-                            <kendo-dialog *ngIf="showMultipleDialog">
+                            <kendo-dialog class="cm-pop-up" *ngIf="showMultipleDialog">
                                     <div class="modal-header modalBlueBody">
                                         <h5 class="modal-title" id="modal-title">Multiple Pricing Tables</h5>
                                     </div>
                                     <div class="modal-body modalBlueBody" id="modal-body">
-                                
-                                        <div>
-                                            This Pricing Strategy contains multiple Pricing Tables.  Please select which Pricing Table you would like to view:
-                                        </div>
-                                        
+
+                                        <div>This Pricing Strategy contains multiple Pricing Tables.Please select which Pricing</div>
+                                        <p style=" margin-right: 319px;"> Table you would like to view:</p>
+
+
                                         <div style="margin: 20px 0; max-height: 190px; overflow: auto; padding: 5px;">
                                             <div *ngFor="let pte of pteTableData">
-                                                <button class="btn btn-primary btn-full" type="button" (click)="pickPt(pte)">{{pte.DC_ID}} - {{pte.TITLE}}</button>
+                                                <button class="btn btn-primary btn-full btn_color_fix" type="button" (click)="pickPt(pte)">{{pte.DC_ID}} - {{pte.TITLE}}</button>
                                             </div>
                                         </div>
-                                        
+
                                         <div class="row">
                                             <div class="col-md-12">
                                                 <div class="fr">
-                                                    <button class="btn btn-warning" type="button" style="margin-right: 8px;" (click)="closeMultiple()">Cancel</button>
+                                                    <button class="btn btn-warning cancel_color_fix" type="button" style="margin-right: 8px;" (click)="closeMultiple()">Cancel</button>
                                                 </div>
                                             </div>
                                         </div>
-                                
+
                                     </div>
                                 <!-- <kendo-dialog-actions><button kendoButton (click)="close('no')">OK</button></kendo-dialog-actions> -->
                             </kendo-dialog>
