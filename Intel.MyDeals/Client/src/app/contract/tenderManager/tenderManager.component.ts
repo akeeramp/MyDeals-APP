@@ -28,13 +28,13 @@ export class tenderManagerComponent {
     public ps_Id: any = '';
     public pt_Id: any = '';
     public contractData = null;
-    public selectedTab = "PTR";
+    public selectedTab = "";
     public UItemplate = null;
     public isLoading = true;
     public isSpinnerLoading=false;
     public spinnerMessageHeader="Loading Contract";
     public spinnerMessageDescription="Please wait.. Loading Contract"
-    public currentTAB = 'PTR';
+    public currentTAB = '';
     public pricingTableData: any;
     public dirty: boolean = false;
     public isPTREmpty: boolean;
@@ -47,6 +47,7 @@ export class tenderManagerComponent {
     public gotoPD = "";
     public pt_passed_validation: boolean;
     public compMissingFlag: any;
+    private searchText: any = "";
 
     async loadAllContractDetails(): Promise<void> {
         let response = await this.pricingTableSvc.readContract(this.c_Id).toPromise().catch((err) => {
@@ -76,6 +77,15 @@ export class tenderManagerComponent {
                 let compFlag = this.pricingTableData.PRC_TBL_ROW.filter(x => x.COMP_MISSING_FLG == "0");
                 this.pt_passed_validation = !(this.isPTREmpty) && (passed.length == this.pricingTableData.PRC_TBL_ROW.length) && !(this.pricingTableData.WIP_DEAL.find(x => x.warningMessages.length > 0) ? true : false) ? true : false;
                 this.compMissingFlag = !(this.isPTREmpty) && compFlag.length == this.pricingTableData.PRC_TBL_ROW.length ? true : false;
+                const url = window.location.href.split('/');
+                if (url[url.length - 1].indexOf('?') > 0 && this.isPTRPartiallyComplete()) {//if deal searched through global search
+                    this.selectedTab = 'DE';
+                    this.currentTAB = 'DE';
+                }
+                else {
+                    this.selectedTab = 'PTR';
+                    this.currentTAB = 'PTR';
+                }
             }
             else{
                 this.loggerSvc.error("Something went wrong. Please contact Admin","Error");
@@ -355,7 +365,14 @@ export class tenderManagerComponent {
         try {
             document.title = "Contract - My Deals";
             const url = window.location.href.split('/');
-            this.c_Id = Number(url[url.length - 1]);
+            if (url[url.length - 1].indexOf('?') > 0) {//If Global search happens for tender deal ID
+                this.c_Id = Number(url[url.length - 1].substring(0, url[url.length - 1].indexOf('?')));
+                this.searchText = Number(url[url.length - 1].substring(url[url.length - 1].indexOf("?") + ("?searchTxt=").length, url[url.length - 1].length));
+            }
+            else {
+                this.c_Id = Number(url[url.length - 1]);
+                this.searchText = "";
+            }
             this.loadAllContractDetails();
         }
         catch(ex){

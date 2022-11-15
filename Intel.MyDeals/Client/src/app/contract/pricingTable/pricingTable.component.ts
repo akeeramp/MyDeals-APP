@@ -222,7 +222,12 @@ export class pricingTableComponent {
             if(response && response.length>0){
                 this.contractData = response[0];
                 //if it is Tender deal redirect to Tender manager
-                if (response[0].IS_TENDER && response[0].IS_TENDER == 1) window.location.href = "#/tendermanager/" + this.c_Id;
+                if (response[0].IS_TENDER && response[0].IS_TENDER == 1) {
+                    if (this.type && this.type == 'WIP' && IDS && IDS.length > 1 && IDS[3].indexOf("?") > 0)
+                        window.location.href = "#/tendermanager/" + this.c_Id + IDS[3].substring(IDS[3].indexOf("?"),IDS[3].length);
+                    else
+                        window.location.href = "#/tendermanager/" + this.c_Id;
+                }
                 else {
                     this.loadTemplateDetails(IDS, this.contractData );
                 }
@@ -282,7 +287,7 @@ export class pricingTableComponent {
         let response = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
             this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
         });
-        if (response && response.PRC_TBL_ROW && response.PRC_TBL_ROW.length > 0) {
+        if (response && response.PRC_TBL_ROW && response.PRC_TBL_ROW.length > 0 && response.PRC_TBL_ROW.filter(x => x.warningMessages.length > 0).length == 0) {
             this.isDETabEnabled = true;
             this.rowlength = response.PRC_TBL_ROW.length;
         } else {
