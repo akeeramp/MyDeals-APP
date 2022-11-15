@@ -217,12 +217,14 @@ export class ProductSelectorComponent {
             this.pricingTableRow.OBJ_SET_TYPE_CD = this.data.curPricingTable.OBJ_SET_TYPE_CD;
             let productArray = (this.data.curRow[0].PTR_SYS_PRD).length > 0 ? JSON.parse(this.data.curRow[0].PTR_SYS_PRD) : this.data.curRow[0].PTR_SYS_PRD;
             _.each(productArray, pdt => {
-                if (!pdt[0].EXCLUDE) {
-                    this.addedProducts.push(pdt[0]);
-                }
-                else {
-                    this.excludedProducts.push(pdt[0]);
-                }
+                _.each(pdt, item => {
+                    if (!item.EXCLUDE) {
+                        this.addedProducts.push(item);
+                    }
+                    else {
+                        this.excludedProducts.push(item);
+                    }
+                })
             })
         }
         this.enableMultipleSelection = this.dealType == 'VOL_TIER' || this.dealType == 'FLEX' || this.dealType == 'PROGRAM' || this.dealType == 'REV_TIER' || this.dealType == 'DENSITY';

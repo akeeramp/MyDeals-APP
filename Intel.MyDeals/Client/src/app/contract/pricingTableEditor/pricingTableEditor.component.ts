@@ -120,7 +120,6 @@ export class pricingTableEditorComponent implements OnChanges {
 
                     if (VM.curRow[0]['PTR_SYS_PRD'] == "" || VM.isExcludePrdChange) {
                         await VM.validateOnlyProducts('onOpenSelector', VM.curRow);
-                        VM.isExcludePrdChange = VM.isExcludePrdChange == true ? false : VM.isExcludePrdChange;
                         if (VM.curRow[0].isOpenCorrector) {
                             delete VM.curRow[0].isOpenCorrector;
 
@@ -1039,7 +1038,9 @@ export class pricingTableEditorComponent implements OnChanges {
                 this.isLoading = false;
                 if ((action == 'onOpenSelector' && translateResult['Data'].DuplicateProducts[curRow[0].DC_ID]) || action != 'onOpenSelector') {
                     await this.openProductCorrector(translateResult['Data'])
-                    curRow[0].isOpenCorrector = true;
+                    if (curRow) {
+                        curRow[0].isOpenCorrector = true;
+                    }
                 }
             }
             else if (_.contains(prdValResult, '2') && action != 'onOpenSelector') {
@@ -1300,12 +1301,26 @@ export class pricingTableEditorComponent implements OnChanges {
                     
                 });
                 
-                let includeIndx = _.findIndex(this.columns, { data: 'PTR_USER_PRD' });
-                let excludeIndx = _.findIndex(this.columns, { data: 'PRD_EXCLDS' });
-                if (this.curRow[0].delPTR_SYS_PRD &&
-                    (this.hotTable.getCellMetaAtRow(curRowIndx)[includeIndx]['className'] != 'error-product'
-                    && this.hotTable.getCellMetaAtRow(curRowIndx)[excludeIndx]['className'] != 'error-product')) {
-                    delete this.curRow[0].delPTR_SYS_PRD
+                if (this.curRow[0]) {
+                    let includeIndx = _.findIndex(this.columns, { data: 'PTR_USER_PRD' });
+                    let excludeIndx = _.findIndex(this.columns, { data: 'PRD_EXCLDS' });
+                    let includeClass = this.hotTable.getCellMetaAtRow(curRowIndx).filter((col) => {
+                        return (col['col'] == includeIndx)
+                    }).map((obj) => {
+                        return obj['className'];
+                    });
+
+                    let excludeClass = this.hotTable.getCellMetaAtRow(curRowIndx).filter((col) => {
+                        return (col['col'] == excludeIndx)
+                    }).map((obj) => {
+                        return obj['className'];
+                    });
+
+
+                    if (this.curRow[0].delPTR_SYS_PRD &&
+                        (includeClass[0] != 'error-product' && excludeClass[0] != 'error-product')) {
+                        delete this.curRow[0].delPTR_SYS_PRD
+                    }
                 }
             }
         });
