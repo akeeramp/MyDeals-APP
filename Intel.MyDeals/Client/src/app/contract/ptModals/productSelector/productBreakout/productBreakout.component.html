@@ -24,7 +24,7 @@
         <kendo-grid class="md capbreakout kendoGridHeight" [data]="dataSource" [loading]="isLoading"
                     [skip]="state.skip" [sortable]="false" [sort]="state.sort" [groupable]="false">
             <ng-template kendoGridToolbarTemplate>
-                <button type="button" kendoGridExcelCommand icon="file-excel" class="excelText">Export to Excel</button>
+                <button type="button" kendoGridExcelCommand icon="file-excel" class="excelText">EXCEL<br /> EXPORT</button>
             </ng-template>
 
             <ng-template ngFor [ngForOf]="gridOptions.columns" let-column>

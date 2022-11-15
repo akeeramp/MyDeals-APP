@@ -971,8 +971,14 @@ ngb-tooltip-window .tooltip-inner {
 }
 
 .product-breakout-modal > mat-dialog-container {
-    background-color: #1a3e6f !important;
-    padding: 0px !important;
+        background-color: #1a3e6f !important;
+        padding: 0px !important;
+        background-color: #1a3e6f !important;
+        padding: 0px !important;
+        margin-left: auto !important;
+        margin-right: auto !important;
+        border-radius: 0 !important;
+        width: 70% !important
 }
 
 .product-breakout-modal mat-dialog-container product-breakout .modal-content {
@@ -1122,6 +1128,7 @@ button.k-button.add-tab-cancelbtn:hover {
     border-left-color: #c4cfd4 !important;
     padding-left: 1.286em !important;
     padding: 0.786em 0.6em;
+    font-weight: bold !important
 }
 .extraSpace-colFix .uiControlDiv.wrap.dealCell {
     padding: 0 !important
@@ -1129,10 +1136,12 @@ button.k-button.add-tab-cancelbtn:hover {
 
 #incentiveRate{
     justify-content:start;
-}.product-breakout-modal .headerClass {
+}
+.product-breakout-modal .headerClass {
     padding-left: 1.286em !important;
     border-left-color: #c4cfd4 !important;
     padding: 0.786em 0.6em;
+    font-weight: bold !important
 }
 
 .product-breakout-modal .k-touch-action-auto {
@@ -1211,4 +1220,56 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn 
 
 kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:hover {
     background-color: #dbdbdb !important;
+}
+.product-breakout-modal .capModalCloseIcon {
+    font-size: 26px !important;
+    margin-top: 0 !important;
+}
+.product-breakout-modal .k-grid-toolbar {
+    padding: 20px 20px !important;
+}
+.product-breakout-modal .excelText {
+    font-size: 12px !important;
+    box-shadow: none !important;
+    margin-left: -16px;
+    margin-top: -13px;
+    font-family: 'Intel Clear' !important;
+    border: 0 !important;
+    border-radius: 0 !important
+}
+.product-breakout-modal .excelText:hover {
+    background-color: #37a4cd7a !important;
+ }
+.product-breakout-modal .k-i-file-excel {
+    font-size: 25px !important;
+}
+.product-breakout-modal .capbreakout.modal-header {
+    padding: 15px !important;
+    padding-bottom: 0 !important;
+}
+.product-breakout-modal .capbreakout.modal-body {
+    padding: 15px !important;
+    padding-top: 2px !important;
+    padding-bottom: 0px !important;
+}
+.de-css-comp th.k-group-cell.k-header {
+    background-color: #e7e7e8 !important;
+    border-right: 1px solid #e6e6e6;
+}
+.de-css-comp .k-grid-filter .k-icon.k-i-filter {
+    color: #00AEEF !important;
+    opacity: 1;
+    font-size: 14px;
+}
+.de-css-comp .k-grid-filter .k-icon.k-i-filter:hover {
+    color: #0071c5 !important;
+}
+.de-css-comp mat-dialog-container kendo-grid kendo-grid-list table tbody tr.k-grid-norecords td {
+    height: 383px;
+    width: 792px;
+    max-width: 792px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff !important;
 }
