@@ -43,7 +43,7 @@
                             </button>
                             <div class="dropdown-menu" role="menu">
                                 <div *ngFor="let ps of contractData?.PRC_ST | unique:'WF_STG_CD' | orderBy:'WF_STG_CD'">
-                                    <input type="checkbox" class="with-font" id="item{{ps.DC_ID}}" (change)="hasFilter()" [(ngModel)]="ps.filtered" /><label for="item{{ps.DC_ID}}">{{ps.WF_STG_CD}}</label>
+                                    <input type="checkbox" class="stgChkBox" id="item{{ps.DC_ID}}" (change)="hasFilter()" [(ngModel)]="ps.filtered" /><label for="item{{ps.DC_ID}}" id="stage-fontLabel">{{ps.WF_STG_CD}}</label>
                                 </div>
                             </div>
                         </div>
@@ -55,7 +55,7 @@
                     <td>
                         <span class="k-textbox design" style="width: 300px; margin-top: -4px;">
                             <i class="intelicon-search" style="font-size: 26px; color: #00AEEF; margin-top: 3px;"></i>
-                            <input style="width: 290px; border: none; outline: none;" placeholder="Search for Pricing Strategy or Pricing Table" [(ngModel)]="titleFilter" />
+                            <input style="width: 290px; border: none; outline: none;" placeholder="Search for Pricing Strategy or Pricing Table" [value]="titleFilter" (keyup)="updateTitleFilter()" [(ngModel)]="titleFilter" />
                         </span>
                     </td>
                     <td style="width:500px;text-align:right;padding-right:2px;">
@@ -236,7 +236,7 @@
     <div id="sum-container" style="min-width: 800px;">
         <div class="sum-main-body">
             <div class="sum-main-container"  style="line-height: 1 !important;">
-                <div *ngFor="let ps of filteredData | filter:titleFilter ;let psIndex=index" class="sumPsContainer">
+                <div *ngFor="let ps of filteredData ;let psIndex=index" class="sumPsContainer">
                     <table style="width: 100%;">
                         <tr>
                             <td style="width: 30px; height: 30px;" id="PRC_ST_{{ps.DC_ID}}" (click)="isPSExpanded[psIndex]=!isPSExpanded[psIndex]">

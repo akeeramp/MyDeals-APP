@@ -571,13 +571,15 @@
     padding: 0px !important;
 }
 
-.noMCok {
+.noMCok.k-button {
+    padding: 1.375rem 0.75rem;
+    line-height: 1.143em !important;
     height: 60px !important;
     color: #444 !important;
     background-color: #fafafa !important;
 }
 
-    .noMCok:hover {
-        color: #444 !important;
-        background-color: #ebebeb !important;
-    }
+.noMCok.k-button:hover {
+    color: #444 !important;
+    background-color: #ebebeb !important;
+}

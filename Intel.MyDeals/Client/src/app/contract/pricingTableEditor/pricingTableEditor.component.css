@@ -82,7 +82,7 @@ td:not(.error-cell).readonly-cell {
 }
 
 .ssToolbarBtn {
-    background-color: #ffffff;
+    background-color: #ffffff !important;
     border-radius: 0px;
     color: #1A3E6F;
     font-size: 11px;
@@ -381,4 +381,9 @@ i.fa.undo-redo-style.dirty {
     font-size: 23px !important;
     margin-top: 2px !important;
     color: #00aeef !important;
+}
+
+.intelicon-help:hover {
+    color: #0071c5;
+    background: none !important;
 }

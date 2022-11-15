@@ -897,7 +897,20 @@ export class contractManagerComponent {
 
 
 
-      }
+    }
+    updateTitleFilter() {
+        if (this.titleFilter != "") {
+            this.filteredData = [];
+            _.each(this.contractData.PRC_ST, (item) => {
+                if (item.TITLE.toLowerCase().contains(this.titleFilter.toLowerCase()) || (item.PRC_TBL && item.PRC_TBL.length > 0 && item.PRC_TBL.filter(x => x.TITLE.toLowerCase().contains(this.titleFilter.toLowerCase())).length > 0)) {
+                    this.filteredData.push(item)
+                }
+            })
+        }
+        else {
+            this.filteredData = this.contractData.PRC_ST;
+        }
+    }
     hasFilter() {
         let tempData = this.contractData.PRC_ST.filter(x=>x.filtered == true).map(item=>item.WF_STG_CD).join(',');
         if(tempData.length > 0){
