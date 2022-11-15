@@ -38,7 +38,7 @@ import { FlexOverlappingCheckComponent } from '../ptModals/flexOverlappingDealsC
     selector: 'pricing-table-editor',
     templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html'
 })
-export class pricingTableEditorComponent implements OnChanges {
+export class pricingTableEditorComponent {
 
     constructor(private pteService: pricingTableEditorService,
             private templateService: templatesService,
@@ -1425,8 +1425,6 @@ export class pricingTableEditorComponent implements OnChanges {
             this.loggerService.error('pteService::isAutoFillChange**********', err);
         });
         this.autoFillData = res;
-    }
-    ngOnChanges(): void {
         this.loadPTE();
     }
     ngAfterViewInit() {
