@@ -1142,6 +1142,8 @@ namespace Intel.MyDeals.BusinessRules
             bool converted = int.TryParse(getContValue, out int numDaysInPastLimit);
             if (!converted) numDaysInPastLimit = 90; // Safety set to 90 days if the constant didn't set correctly
 
+            numDaysInPastLimit = numDaysInPastLimit - 1; // Since forced kill message goes out on day of hard expire, make it read only a day prior. (Jyoti bug)
+
             IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
 
             if (deEndDate != null) // Seem to be cases where rule is triggered, but DC doesn't have the element, so bring this forward prior to pulling the vaule.
