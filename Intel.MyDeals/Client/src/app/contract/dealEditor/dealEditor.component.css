@@ -1202,3 +1202,13 @@ span.text.save-validate-txtstyle-DE.dirty {
     padding-left: 5px !important;
     text-align: left !important;
 }
+
+kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn {
+    color: #444 !important;
+    border-color: #fafafa !important;
+    background-color: #fafafa !important;
+}
+
+kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:hover {
+    background-color: #dbdbdb !important;
+}

@@ -8,7 +8,7 @@
                         (iconSaveUpdate)="updateIcon($event)" (refreshContract)="refreshContractData($event)" (reloadFn)="reload($event)">
     </deal-tools-angular>
 </div>
-<div *ngIf="in_Field_Name === 'details'" style="height:100% !important">
+<div *ngIf="in_Field_Name === 'details'">
     <deal-details-angular style="height:100% !important" [dealDetail]='in_DataItem'></deal-details-angular>
 </div>
 <div *ngIf="in_Template.includes('gridUtils.uiControlWrapper')" [innerHTML]="uiControlWrapper(in_DataItem, in_Field_Name, '')|sanitizeHtml"
