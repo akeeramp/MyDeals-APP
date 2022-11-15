@@ -295,7 +295,7 @@ table td {
 }
 
 .linkable:hover {
-    color: #003C71
+    color: #003C71 !important;
 }
 
 .sum-main-body label {
