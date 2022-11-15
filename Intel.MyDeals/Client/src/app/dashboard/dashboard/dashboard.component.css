@@ -1592,3 +1592,6 @@ kendo-datepicker.date-dashboard:hover, kendo-datepicker.date-dashboard:focus, ke
 kendo-dialog.cm-pop-up .k-window-content {
     padding: 0;
 }
+kendo-window#OvrLp .k-window-content {
+    padding: 0px !important;
+}

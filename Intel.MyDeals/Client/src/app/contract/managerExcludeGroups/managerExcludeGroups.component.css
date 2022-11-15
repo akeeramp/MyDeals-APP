@@ -448,7 +448,7 @@ tr.k-alt.grey {
     background: #fdfdfd;
     background: -moz-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
     background: -webkit-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
-    background: linear-gradient(to bottom, #fdfdfd 0%, #d9d9d9 100%);
+    background: linear-gradient(to bottom, #fdfdfd 0%, #fff 100%);
     color: #003C71 !important;
     padding: 0 !important;
     text-transform: none !important;
@@ -550,4 +550,7 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-
 }
 .k-grid.view_popup_height {
     height: calc(100vh - 591px);
+}
+.extra_box_padding mat-dialog-container {
+    padding: 0 !important;
 }

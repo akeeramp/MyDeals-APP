@@ -250,13 +250,11 @@ export class managerExcludeGroupsComponent {
             "currPt": this.contractData,
         }
         const dialogRef = this.dialog.open(OverlappingCheckComponent, {
-            height: '530px',
-            width: '800px',
             data: data,
+            panelClass: 'extra_box_padding'
         });
         dialogRef.afterClosed().subscribe(result => { });
     }
-
     toggleWrap() {
     }
     displayDealTypes() {

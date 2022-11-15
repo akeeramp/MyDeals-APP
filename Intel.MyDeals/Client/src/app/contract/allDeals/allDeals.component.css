@@ -345,3 +345,6 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper {
 .k-grid.deals_grid_h {
     height: calc(100vh - 250px) !important;
 }
+.extra_box mat-dialog-container {
+    padding: 0 !important;
+}
