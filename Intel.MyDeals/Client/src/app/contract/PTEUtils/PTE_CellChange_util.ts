@@ -481,9 +481,11 @@ export class PTE_CellChange_Util {
                     if (items[0].old != items[0].new && (operation == undefined || operation == null)) {
                         let PTR_col_ind = _.findIndex(columns, { data: 'PTR_USER_PRD' });
                         this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'normal-product');
+
+                        //This will make sure to hit translate API
+                        this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', '', 'no-edit');
                     }
-                    //This will make sure to hit translate API
-                    this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', '', 'no-edit');
+                    
                 }
             }
         }
@@ -568,9 +570,11 @@ export class PTE_CellChange_Util {
                             if (items[0].old != items[0].new && (operation == undefined || operation == null)) {
                                 let PTR_col_ind = _.findIndex(columns, { data: 'PTR_USER_PRD' });
                                 this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'normal-product');
+
+                                //This will make sure to hit translate API
+                                this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', '', 'no-edit');
                             }
-                            //This will make sure to hit translate API
-                            this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', '', 'no-edit');
+                            
                         }
                     }
                 }
@@ -719,9 +723,11 @@ export class PTE_CellChange_Util {
                     if (items[0].old != items[0].new && (operation == undefined || operation == null)) {
                         let PTR_col_ind = _.findIndex(columns, { data: 'PTR_USER_PRD' });
                         this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'normal-product');
+
+                        //This will make sure to hit translate API
+                        this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', '', 'no-edit');
                     }
-                    //This will make sure to hit translate API
-                    this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', '', 'no-edit');
+                    
                 }
 
             }

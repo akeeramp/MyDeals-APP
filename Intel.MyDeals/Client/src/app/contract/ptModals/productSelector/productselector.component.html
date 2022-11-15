@@ -110,8 +110,8 @@
                                                         <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
                                                                            [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                                                     </ng-template>
-                                                </div> 
-                                             <!-- Template for `Cap Info` column -->
+                                                </div>
+                                                <!-- Template for `Cap Info` column -->
                                                 <div *ngIf="column.field == 'CAP'">
                                                     <ng-template kendoGridCellTemplate let-dataItem>
                                                         <!-- Popover Template -->
@@ -162,6 +162,13 @@
                                                         </div>
                                                     </ng-template>
                                                 </div>
+                                                <div *ngIf="column.field == 'EPM_NM' || column.field == 'SKU_NM'">
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        <div kendoTooltip position="bottom">
+                                                            <span title="{{dataItem.EPM_NM}}">{{dataItem.EPM_NM}}</span>
+                                                        </div>
+                                                    </ng-template>
+                                                </div>
                                             </kendo-grid-column>
                                         </ng-template>
                                     </kendo-grid>
@@ -200,8 +207,8 @@
                                     <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
                                                        [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                                 </ng-template>
-                            </div>  
-                          <!-- Link for processor number -->
+                            </div>
+                            <!-- Link for processor number -->
                             <div *ngIf="column.field == 'PCSR_NBR'">
                                 <ng-template kendoGridCellTemplate let-dataItem>
                                     <a *ngIf='dataItem.PRD_ATRB_SID == 7006' (click)='gridSelectItem(dataItem)'>{{dataItem.PCSR_NBR}}</a>
@@ -272,6 +279,13 @@
                                     </div>
                                 </ng-template>
                             </div>
+                            <div *ngIf="column.field == 'EPM_NM' || column.field == 'SKU_NM'">
+                                <ng-template kendoGridCellTemplate let-dataItem>
+                                    <div kendoTooltip position="bottom">
+                                        <span title="{{dataItem.EPM_NM}}">{{dataItem.EPM_NM}}</span>
+                                    </div>
+                                </ng-template>
+                            </div>
                         </kendo-grid-column>
                     </ng-template>
                 </kendo-grid>
@@ -324,8 +338,8 @@
                                             <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
                                                                [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                                         </ng-template>
-                                    </div>  
-                             <!-- Link for processor number -->
+                                    </div>
+                                    <!-- Link for processor number -->
                                     <div *ngIf="column.field == 'PCSR_NBR'">
                                         <ng-template kendoGridCellTemplate let-dataItem>
                                             <a *ngIf='dataItem.PRD_ATRB_SID == 7006' (click)='gridSelectItem(dataItem)'>{{dataItem.PCSR_NBR}}</a>
@@ -395,6 +409,13 @@
                                                 </div>
                                             </div>
 
+                                        </ng-template>
+                                    </div>
+                                    <div *ngIf="column.field == 'EPM_NM' || column.field == 'SKU_NM'">
+                                        <ng-template kendoGridCellTemplate let-dataItem>
+                                            <div kendoTooltip position="bottom">
+                                                <span title="{{dataItem.EPM_NM}}">{{dataItem.EPM_NM}}</span>
+                                            </div>
                                         </ng-template>
                                     </div>
                                 </kendo-grid-column>

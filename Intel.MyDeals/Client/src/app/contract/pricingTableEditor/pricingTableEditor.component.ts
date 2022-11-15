@@ -118,8 +118,9 @@ export class pricingTableEditorComponent implements OnChanges {
                     });
                     VM.curRow.push(obj);
 
-                     if (VM.curRow[0]['PTR_SYS_PRD'] == "") {
+                    if (VM.curRow[0]['PTR_SYS_PRD'] == "" || VM.isExcludePrdChange) {
                         await VM.validateOnlyProducts('onOpenSelector', VM.curRow);
+                        VM.isExcludePrdChange = VM.isExcludePrdChange == true ? false : VM.isExcludePrdChange;
                         if (VM.curRow[0].isOpenCorrector) {
                             delete VM.curRow[0].isOpenCorrector;
 
