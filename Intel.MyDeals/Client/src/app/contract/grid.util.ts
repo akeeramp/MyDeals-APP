@@ -103,7 +103,7 @@ export class GridUtil {
             tmplt += '<div class="vert-center">No Sub KIT</div>';
             tmplt += '</div>';
         } else {
-            tmplt += '<div class="uiControlDiv dealCell ' + this.getClassNm(passedData, field) + '">';
+            tmplt += '<div class="dealCell ' + this.getClassNm(passedData, field) + '">';
             if ((dim == "20_____2" || dim == "20_____1") && field == "ECAP_PRICE") {
                 if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field + '_____' + dim])
                     tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field + '_____' + dim] + '"></div>';
@@ -169,7 +169,7 @@ export class GridUtil {
             if (tiers.hasOwnProperty(key) && key.indexOf("___") >= 0) {
                 numTiers++;
                 var dim = "10___" + numTiers;
-                tmplt += '<div class="col-md-12 rowDetailHeight">';
+                tmplt += '<div class="col-md-12 rowHeight">';
                 for (var f = 0; f < fields.length; f++) {
                     tmplt += '<div class="col-md-3 rowValueHeight rowRightBorder textRightAlign' + this.getClassNm(passedData, fields[f].field) + '">';
                     if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[fields[f].field] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim])
@@ -196,7 +196,7 @@ export class GridUtil {
         for (var index in sortedKeys) { //only looking for positive dim keys
             var dimkey = sortedKeys[index];
             if (typeof (dimkey) != ('function') && data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
-                tmplt += '<div class="col-md-12 rowDetailHeight">';
+                tmplt += '<div class="col-md-12 rowHeight">';
                 tmplt += '<div';
                 tmplt += ' class="kitRowValue kitSideLine' + this.getClassNm(passedData, field) + '">';
                 if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined && passedData._behaviors.isError[field + '_' + dimkey] != undefined && passedData._behaviors.isError[field + '_' + dimkey])

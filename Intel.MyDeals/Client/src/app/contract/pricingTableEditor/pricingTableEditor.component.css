@@ -18,9 +18,9 @@ td.error-border {
 }
 
 td.error-cell {
-    background-color: red;
+    background-color: #fc4c02;
     color: white !important;
-    border: solid lightgrey 1px !important;
+    border: solid #e34402 1px !important;
 }
 
 td:not(.error-cell).readonly-cell {

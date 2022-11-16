@@ -3,7 +3,7 @@
 <kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="dealEditorTab" class="width-fixes new-allDeals fs-increase">
     <kendo-tabstrip-tab *ngFor="let data of groups" title="{{data.name}}" [selected]="selectedTab === data.name" [cssClass]="data.isTabHidden? 'hidden' : 'visible'">
         <ng-template kendoTabTitle>
-            <span><i class="intelicon-pin-outlined" style="color:#00aeef; border-radius:15px" title="Pin tab so it always shows in the grid"></i></span>&nbsp;
+            <span><i *ngIf="data.name !== 'CAP Info' && data.name !== 'All'" class="intelicon-pin-outlined" style="color:#00aeef; border-radius:15px" title="Pin tab so it always shows in the grid"></i></span>&nbsp;
             <span class="colorChg">{{data.name}} &nbsp;</span>
             <span class="badge error ng-binding" id="tabErrorCnt" *ngIf="data.numErrors > 0">{{data.numErrors}}</span>&nbsp;
             <span class="badge warning" id="tabErrorCnt" *ngIf="data.name == 'CAP Info' && numSoftWarn > 0">{{numSoftWarn}}</span>&nbsp;

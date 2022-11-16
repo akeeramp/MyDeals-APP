@@ -24,6 +24,10 @@
     color: #1a3e6f;
 }
 
+.meet-conduct .k-icon {
+    color: #00AEEF;
+}
+
 .meet-conduct .k-grid td.k-state-focused,
 .meet-conduct .k-grid th.k-state-focused,
 .meet-conduct .k-grid th:focus,

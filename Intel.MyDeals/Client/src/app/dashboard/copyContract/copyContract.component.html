@@ -2,7 +2,7 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<div id="copyCntrctDlg">
+<div id="copyCntrctDlg" class="cc-popup-load">
     <nav class="navbar navbar-default rmv-padding cc-pop-up">
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-6">
             <div class="navbar-header">
@@ -10,7 +10,7 @@
                 <div class="navbar-brand nv-brands" style=" height: auto !important; padding: 8px !important;">Copy a My Deals Contract</div>
             </div>
             <ul class="nav navbar-nav navbar-right" style="margin-right: -15px !important; margin-top: -8px !important;">
-                <li><a href="" (click)="dismissPopup()"><i class="intelicon-close-max"></i></a></li>
+                <li class="close-icons"><a href="" (click)="dismissPopup()"><i class="intelicon-close-max"></i></a></li>
             </ul>
         </div>
     </nav>
@@ -27,7 +27,7 @@
             <div class="col-sm-8 col-sm-offset-2">
                 <div class="inner-addon right-addon app-layers">
                     <i class="glyphicon glyphicon-search"></i>
-                    <input type="text" class="form-control" style="height:30px" maxlength="40" (input)="onCopyCntrctSearchTextChanged($event.target.value)" />
+                    <input type="text" class="form-control" style="height:38px" maxlength="40" (input)="onCopyCntrctSearchTextChanged($event.target.value)" />
                 </div>
             </div>
         </div>

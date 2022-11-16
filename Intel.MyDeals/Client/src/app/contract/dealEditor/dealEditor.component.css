@@ -1154,9 +1154,9 @@ button.k-button.add-tab-cancelbtn:hover {
     font-weight: 500 !important;
     font-size: 12px !important;
 }
-.kitSideLine {
+/*.kitSideLine {
     height: 45px !important;
-}
+}*/
 .extraSpace-colFix .KIT_ECAP {
     height: 85px;
 }
@@ -1272,4 +1272,15 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:
     align-items: center;
     justify-content: center;
     background-color: #fff !important;
+}
+
+#dealEditor .k-grid-header .k-grid-filter.k-state-active {
+    background-color: inherit !important;
+}
+
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="PRD_BCKT"], 
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_OA_MAX_VOL"], 
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_OA_MAX_AMT"] {
+    border-bottom: 3px solid rgb(0, 113, 197) !important;
+    border-bottom-color: rgb(0, 113, 197) !important;
 }

@@ -12,11 +12,11 @@
     <deal-details-angular style="height:100% !important" [dealDetail]='in_DataItem'></deal-details-angular>
 </div>
 <div *ngIf="in_Template.includes('gridUtils.uiControlWrapper')" [innerHTML]="uiControlWrapper(in_DataItem, in_Field_Name, '')|sanitizeHtml"
-     class="uiControlDiv wrap dealCell" [ngClass]="{'isReadOnlyCell': isReadonlyCell(in_DataItem, in_Field_Name), 'isDirtyCell': isDirtyCell(in_DataItem,in_Field_Name), 'isErrorCell': isErrorCell(in_DataItem,in_Field_Name)}">
+     class="dealCell" [ngClass]="{'isReadOnlyCell': isReadonlyCell(in_DataItem, in_Field_Name), 'isDirtyCell': isDirtyCell(in_DataItem,in_Field_Name), 'isErrorCell': isErrorCell(in_DataItem,in_Field_Name)}">
 </div>
-<div *ngIf="in_Template.includes('gridUtils.uiPositiveDimControlWrapper')" [innerHTML]="uiPositiveDimControlWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" class="uiControlDiv wrap dealCell">
+<div *ngIf="in_Template.includes('gridUtils.uiPositiveDimControlWrapper')" [innerHTML]="uiPositiveDimControlWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" class="dealCell">
 </div>
-<div *ngIf="in_Field_Name == 'DC_ID'" [innerHTML]="uiControlDealWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" class="uiControlDiv wrap"
+<div *ngIf="in_Field_Name == 'DC_ID'" [innerHTML]="uiControlDealWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" class="dealCell"
      [ngClass]="{'isReadOnlyCell': isReadonlyCell(in_DataItem, in_Field_Name), 'isDirtyCell': isDirtyCell(in_DataItem,in_Field_Name), 'isErrorCell': isErrorCell(in_DataItem,in_Field_Name)}">
     <!--<deal-popup-angular></deal-popup-angular>-->
 </div>
@@ -65,7 +65,7 @@
                     </ng-template>
 
                     <!-- Cell Content -->
-                    <div class="col-md-12" #popOver="ngbPopover" [ngbPopover]="popoverContent">
+                    <div class="col-md-12 rowHeight" #popOver="ngbPopover" [ngbPopover]="popoverContent">
                         <!-- CAP/YCS2 Info cell design -->
                         <div class="col-md-12 textRightAlign" [ngClass]="{'isHiddenCell': isHiddenCell(in_DataItem, fieldModifier),'isRequiredCell' : isRequiredCell(in_DataItem, fieldModifier),'isReadOnlyCell': isReadonlyCell(in_DataItem, fieldModifier), 'isDirtyCell': isDirtyCell(in_DataItem, fieldModifier), 'isErrorCell': isErrorCell(in_DataItem, fieldModifier),'isSavedCell': isSavedCell(in_DataItem, fieldModifier)}">
                             <div [innerHTML]="uiMoneyDatesControlWrapper(in_DataItem, fieldModifier + YCS2modifier, fieldText, fieldModifier + '_END_DT', key)"></div>
@@ -82,7 +82,7 @@
             <div *ngFor="let key Of keyArray(in_DataItem['ECAP_PRICE']); let i = index">
                 <div *ngIf="key.indexOf('___') >= 0 && key.indexOf('_____') < 0" (click)="openModal(fieldModifier, in_DataItem, getProductSid(in_DataItem.PRODUCT_FILTER, key), fieldModifier)">
                     <!-- Cell Content -->
-                    <div class="col-md-12">
+                    <div class="col-md-12 rowHeight">
                         <!-- YCS2 Info cell design -->
                         <div class="col-md-12 textRightAlign" [ngClass]="{'isHiddenCell': isHiddenCell(in_DataItem, fieldModifier),'isRequiredCell' : isRequiredCell(in_DataItem, fieldModifier),'isReadOnlyCell': isReadonlyCell(in_DataItem, fieldModifier), 'isDirtyCell': isDirtyCell(in_DataItem, fieldModifier), 'isErrorCell': isErrorCell(in_DataItem, fieldModifier),'isSavedCell': isSavedCell(in_DataItem, fieldModifier)}">
                             <div [innerHTML]="uiMoneyDatesControlWrapper(in_DataItem, fieldModifier + YCS2modifier, fieldText, fieldModifier + '_END_DT', key)"></div>

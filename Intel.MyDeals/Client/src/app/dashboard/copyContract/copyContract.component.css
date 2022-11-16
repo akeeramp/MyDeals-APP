@@ -4,61 +4,64 @@
     /*overflow: hidden*/
 }
 
-#copyCntrctGrid td {
+.cc-popup-load #copyCntrctGrid td {
     cursor: pointer !important
 }
 
-.k-grid td.k-state-selected, .k-grid tr.k-state-selected > td {
+.cc-popup-load .k-grid td.k-state-selected,
+.cc-popup-load .k-grid tr.k-state-selected > td {
     border: none;
     background-color: #00AEEF !important;
     color: white !important
 }
 
-.k-grid > td {
+.cc-popup-load .k-grid > td {
     padding: 0
 }
 
-.k-grid td {
+.cc-popup-load .k-grid td {
     cursor: pointer
 }
 
-.inner-addon {
+.cc-popup-load .inner-addon {
     position: relative
 }
 
-    .inner-addon .glyphicon {
+    .cc-popup-load .inner-addon .glyphicon {
         position: absolute;
-        padding: 7px;
+        padding: 9px;
         pointer-events: none
     }
 
-.left-addon .glyphicon {
+.cc-popup-load .left-addon .glyphicon {
     left: 0
 }
 
-.right-addon .glyphicon {
-    right: 5px
+.cc-popup-load .right-addon .glyphicon {
+    right: 5px;
+    top: 3px;
 }
 
-.ss-loading-panel {
+/*.ss-loading-panel {
     margin-top: 5% !important;
     margin-left: 50% !important
-}
+}*/
 
-.form-control {
+.cc-popup-load .form-control {
     border-radius: 0 !important;
     box-shadow: none !important;
     border-color: #d2d6de !important
 }
 
-.btn {
+.cc-popup-load .btn {
     border-radius: 3px;
     -webkit-box-shadow: none;
     box-shadow: none;
     border: 1px solid transparent
 }
 
-.btn-primary[disabled], .btn-primary[disabled]:hover {
+.cc-popup-load .btn-primary[disabled],
+.cc-popup-load .btn-primary[disabled]:hover {
     background-color: #edeff0 !important;
     color: #b1babf !important;
     border-color: #b1babf !important;
@@ -66,13 +69,15 @@
     pointer-events: all !important
 }
 
-.btn-secondary {
+.cc-popup-load .btn-secondary {
     color: #0071c5 !important;
     background: #fff !important;
     border-color: #b1babf !important
 }
 
-    .btn-secondary:hover, .btn-secondary:focus, .btn-secondary.focus {
+    .cc-popup-load .btn-secondary:hover,
+    .cc-popup-load .btn-secondary:focus,
+    .cc-popup-load .btn-secondary.focus {
         color: #0071c5 !important;
         background-color: #edeff0 !important;
         border-color: #b1babf !important
@@ -85,29 +90,55 @@
     font-weight: bold !important;
 }
 */
-.dis-approve {
+.cc-popup-load .dis-approve {
     margin-left: 67px;
 }
 
-.k-grid.append-grid-changes td {
+.cc-popup-load .k-grid.append-grid-changes td {
     border: 0px !important;
 }
 
-.app-layers {
-    width: 375px;
-    margin-top: 10px;
-    margin-left: 67px;
+.cc-popup-load .k-grid.append-grid-changes table tbody tr {
+    background-color: transparent !important;
 }
 
-.cc-pop-up {
+.cc-popup-load .k-grid.append-grid-changes table tbody tr td {
+    border-bottom: 1px solid #e6e6e6 !important;
+}
+
+    .cc-popup-load .app-layers {
+        width: 375px;
+        margin-top: 10px;
+        margin-left: 67px;
+    }
+
+.cc-popup-load .cc-pop-up {
     margin-top: -24px;
     margin-left: -24px;
     margin-right: -24px;
 }
 
-nav.navbar.navbar-default.rmv-padding.cc-pop-up {
+.cc-popup-load nav.navbar.navbar-default.rmv-padding.cc-pop-up {
     height: 50px;
 }
-.title_style label {
+
+.cc-popup-load .title_style label {
     font-weight: bold !important;
+}
+
+.navbar-default .navbar-nav > li.close-icons > a:hover,
+.navbar-default .navbar-nav > li.close-icons > a:focus {
+    background-color: transparent;
+}
+
+.cc-popup-load .k-grid.append-grid-changes table thead tr th .k-link span.k-column-title {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: #1a3e6f;
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.cc-popup-load .k-grid.append-grid-changes table thead tr th {
+    border-color: #c1c1c1;
 }
