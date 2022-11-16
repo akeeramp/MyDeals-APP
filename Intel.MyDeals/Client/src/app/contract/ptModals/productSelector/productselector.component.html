@@ -425,8 +425,8 @@
                 </div>
             </div>
         </div>
-        <div class="prodSelector modal-footer" style="padding: 15px; bottom: 0px; position: absolute; border-top: 0px; width: 100%; display:inline">
-            <div class="footerInline" style="padding:15px;">
+        <div class="prodSelector modal-footer ps-v-modal-footer">
+            <div class="footerInline cus-them-padding">
                 <div *ngIf="excludeMode">
                     <span>
                         <span class="text-left textProdSelector">
@@ -439,25 +439,25 @@
                     <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')"></trashcan>
                 </div>
                 <div *ngIf="!excludeMode" class="row">
-                    <div [ngClass]="{'col-md-6':enableMultipleSelection, 'paddingRight15': !enableMultipleSelection}" style=" text-align: left;">
+                    <div [ngClass]="{'col-md-6':enableMultipleSelection, 'paddingRight15 pad-right-remove': !enableMultipleSelection}" style="text-align: left;\">
                         <span [ngClass]="{'paddingLeft15': !enableMultipleSelection}">
                             <span [ngClass]="{'paddingLeftNone':enableMultipleSelection}" class="text-left textProdSelector">
                                 Selected Products
-                                <span [ngClass]="{'animate':animateInclude}" class="arcAnimate">
+                                <span [ngClass]="{'animate':animateInclude}" class="arcAnimate ani-mate">
                                     <small role="button">&nbsp;({{addedProducts.length}})</small>
                                 </span>
                         </span>
                         </span>
-                        <trashcan title="Clear products" class="fr clear-shift-style" (click)="clearProducts()"></trashcan>
+                        <trashcan title="Clear products" class="fr clear-shift-style" (click)="clearProducts()" [ngClass]="{'trash-margin': !enableMultipleSelection }"></trashcan>
                     </div>
-                    <div *ngIf="enableMultipleSelection" class="col-md-6">
+                    <div *ngIf="enableMultipleSelection" class="col-md-6 multiple-selector">
                         <span>
                             <span class="paddingRightNone text-left textProdSelector">
                                 Excluded Products
-                                <span class="arcAnimate text-shift-left">
+                                <span class="arcAnimate text-shift-left ani-mate" style="margin-right: 0 !important;">
                                     <small role="button">&nbsp;({{excludedProducts.length}})</small>
                                 </span>
-                        </span>
+                            </span>
                         </span>
                         <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')"></trashcan>
                     </div>

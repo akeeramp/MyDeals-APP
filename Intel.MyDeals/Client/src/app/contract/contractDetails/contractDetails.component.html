@@ -29,7 +29,7 @@
                                     <div class="col-md-11 display displayblock">
                                         <div class="fl opUiLabel"><span *ngIf="contractData?._behaviors?.isRequired?.CUST_MBR_SID" class="isReqField">* </span>Customer:</div>
                                         <kendo-combobox #CUST_MBR_SID_Combo [data]="CustomersFilterData"   [filterable]="true" (filterChange)="customerFilter($event)"
-                                                        class="kendoInput noborderclass font-input" textField="CUST_NM" valueField="CUST_SID" [disabled]="disableCustomer"
+                                                        class="kendoInput noborderclass font-input contract-details-customer cd-input-bottom" textField="CUST_NM" valueField="CUST_SID" [disabled]="disableCustomer"
                                                         name="Customer" #customer="ngModel" [(ngModel)]="Customer" (valueChange)="onCustomerChange($event)" required>
                                         </kendo-combobox>
                                         <kendo-formerror *ngIf="contractDetailsForm.controls.Customer?.errors?.required && contractDetailsForm.controls.Customer?.touched">
@@ -39,7 +39,7 @@
                                     <div class="col-md-11 display displayblock">
                                         <div *ngIf="!isCustomerDivHidden" class="inputWidth">
                                             <div class="fl opUiLabel">Division:</div>
-                                            <kendo-multiselect #CUST_MBR_DIV_Multi class="kendoInput divisionblock" [data]="CustomerFilter_Divs" [filterable]="true" (filterChange)="customerDivFilter($event)"
+                                            <kendo-multiselect #CUST_MBR_DIV_Multi class="kendoInput divisionblock cd-input-bottom cd-division-level" [data]="CustomerFilter_Divs" [filterable]="true" (filterChange)="customerDivFilter($event)"
                                                                [(ngModel)]="CUST_NM_DIV" 
                                                                name="CUST_NM_DIV" textField="CUST_DIV_NM" valueField="CUST_DIV_NM" [autoClose]="false"></kendo-multiselect>
                                             <div class="description">Blank means that ALL divisions are included</div>
@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="col-md-11 display displayblock">
                                         <div class="fl opUiLabel"><span *ngIf="contractData?._behaviors?.isRequired?.TITLE" class="isReqField">* </span>Contract Name:</div>
-                                        <kendo-textbox triggers="manual" class="kendoInput borderless font-input" [clearButton]="true" name="TITLE" [ngClass]="{'input-error': isTitleError}" [disabled]="contractData?._behaviors?.isReadOnly?.TITLE"
+                                        <kendo-textbox triggers="manual" class="kendoInput borderless font-input cd-input-bottom" [clearButton]="true" name="TITLE" [ngClass]="{'input-error': isTitleError}" [disabled]="contractData?._behaviors?.isReadOnly?.TITLE"
                                                        [(ngModel)]="TITLE" (keyup)="onKeySearch($event,'TITLE')" required></kendo-textbox>
 
                                         <kendo-formerror *ngIf="(contractDetailsForm.controls.TITLE?.errors?.required && contractDetailsForm.controls.TITLE?.touched);else otherMsg">
@@ -69,7 +69,7 @@
                                         <div class="fl opUiLabel"><span *ngIf="contractData?._behaviors?.isRequired?.START_DT" class="isReqField">* </span>Select Start Date:</div>
                                         <div class="inlineDisplay">
                                             <div class="blockdisplay">
-                                                <kendo-datepicker #picker class="fl opUiElement dateclass" calendarType="classic" [incompleteDateValidation]="true" #contract_START_DT="ngModel"
+                                                <kendo-datepicker #picker class="fl opUiElement dateclass cd-input-bottom" calendarType="classic" [incompleteDateValidation]="true" #contract_START_DT="ngModel"
                                                                   [(ngModel)]="START_DT" name="contract_START_DT" (valueChange)="getCurrentQuarterDetails('START_DT', contract_START_DT)" [ngClass]="{'input-error': contractData?._behaviors?.validMsg?.START_DT}" [disabled]="contractData?._behaviors?.isReadOnly?.START_DT"
                                                                   required></kendo-datepicker>
                                                 <kendo-formerror>
@@ -97,7 +97,7 @@
                                         <div class="fl opUiLabel"><span *ngIf="contractData?._behaviors?.isRequired?.END_DT" class="isReqField">* </span>Select End Date:</div>
                                         <div class="inlineDisplay">
                                             <div class="blockdisplay">
-                                                <kendo-datepicker #picker class="fl opUiElement dateclass" calendarType="classic" [ngClass]="{'input-error': contractData?._behaviors?.validMsg?.END_DT}"
+                                                <kendo-datepicker #picker class="fl opUiElement dateclass cd-input-bottom" calendarType="classic" [ngClass]="{'input-error': contractData?._behaviors?.validMsg?.END_DT}"
                                                                   [(ngModel)]="END_DT" [disabled]="NO_END_DT || contractData?._behaviors?.isReadOnly['END_DT']" name="END_DT"
                                                                   (valueChange)="getCurrentQuarterDetails('END_DT')" required></kendo-datepicker>
                                                 <kendo-formerror>
@@ -160,7 +160,7 @@
                                             <span *ngIf="contractData?._behaviors?.isRequired?.CONTRACT_TYPE" class="isReqField">*</span>Contract Type:
                                         </div>
                                         <kendo-dropdownlist [data]="dropDownsData?.CONTRACT_TYPE" textField="DROP_DOWN"
-                                                            valueField="DROP_DOWN" [(ngModel)]="CONTRACT_TYPE" class="inputWidth newbotborder font-input" name="CONTRACT_TYPE" required>
+                                                            valueField="DROP_DOWN" [(ngModel)]="CONTRACT_TYPE" class="inputWidth newbotborder font-input cd-input-bottom" name="CONTRACT_TYPE" required>
                                         </kendo-dropdownlist>
                                     </div>
                                 </div>

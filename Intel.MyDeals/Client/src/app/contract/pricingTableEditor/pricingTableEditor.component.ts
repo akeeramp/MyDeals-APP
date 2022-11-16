@@ -87,7 +87,7 @@ export class pricingTableEditorComponent {
                 this.BUTTON.id = "btnCustSelctor";
                 this.buttonStyle = this.BUTTON.style;
                 this.BUTTON.className = 'btn btn-sm btn-primary py-0 htCustCellEditor';
-                this.BUTTON.innerHTML = '🔍';
+                this.BUTTON.innerHTML = '<i class="intelicon-search fs-search"></i>';
                 this.BUTTON.addEventListener('mousedown', (event: any) => {
                     event.stopImmediatePropagation();
                     event.preventDefault();

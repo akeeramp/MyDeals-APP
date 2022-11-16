@@ -2,7 +2,7 @@
 <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="addWidget.component.css" rel="stylesheet" />
-<h1 mat-dialog-title class="modalheader">{{data.name}} <button type="button" class="close fr" (click)="onNoClick()" aria-hidden="true">&times;</button></h1>
+<h1 mat-dialog-title class="modalheader">{{data.name}} <button type="button" class="close fr close-widget" (click)="onNoClick()" aria-hidden="true">&times;</button></h1>
 <div mat-dialog-content class="modalbody">
     <div class="container add-widget-container" style="height: 100%; overflow: auto; ">
         <div class="widget-wrapper row" *ngFor="let widget of finalItems" [ngClass]="widget.isAdded==true ? 'widget-enabled' : 'widget-disabled'" (click)="add(widget)">

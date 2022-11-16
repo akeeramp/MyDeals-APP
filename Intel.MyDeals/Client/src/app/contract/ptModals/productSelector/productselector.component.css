@@ -641,6 +641,10 @@ input[type=checkbox].with-sm-font:focus+label:before {
     padding-left: 15px !important;
 }*/
 
+.arcAnimate.ani-mate {
+    width: auto;
+}
+
 .arcAnimate {
     width: 60%;
     display: inline-block;
@@ -850,4 +854,44 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
 .product-selector-font-align {
     text-align: center;
     font-weight: normal;
+}
+
+.ps-v-modal-footer {
+    padding: 0;
+    bottom: 0px;
+    position: absolute;
+    border-top: 0px;
+    width: 100%;
+    display: inline;
+}
+
+.cus-them-padding {
+    padding: 15px;
+}
+
+.pad-right-remove {
+    padding-right: 0 !important;
+}
+
+.trash-margin {
+    margin-right: 2px !important;
+}
+
+.multiple-selector {
+    display: flex;
+}
+
+.cus-them-padding {
+    padding: 20px;
+}
+
+@media screen and (max-height: 715px) {
+    .ps-v-modal-footer {
+        padding: 0;
+        bottom: 0px;
+        position: relative;
+        border-top: 0px;
+        width: 100%;
+        display: block;
+    }
 }

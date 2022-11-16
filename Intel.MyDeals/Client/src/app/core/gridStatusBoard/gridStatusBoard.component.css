@@ -74,17 +74,17 @@
     margin-top: 7px!important;
     border: 0 solid transparent;
     margin-left: 180px;
-    height: 100%;
+    /*height: 100%;*/
     font-size: 12px
 }
 
 .left-pane-widget {
-    height: inherit;
+    height: 526px;
     float: left;
     overflow-y: auto;
     width: 180px;
     margin-left: -180px;
-    padding: 0 0 25px 5px
+    padding: 0 0 5px 5px
 }
 
 .left-pane-widget .inner {
@@ -133,7 +133,7 @@
 }
 
 .center-pane-widget {
-    height: 97%;
+    height: 96%;
     overflow: auto;
     width: 100%
 }
@@ -296,4 +296,32 @@
 .highlightsty-title .k-icon.k-i-filter:hover {
     color: #00aeef !important;
     opacity: 1 !important
+}
+
+@media screen and (max-height: 680px) {
+    .left-pane-widget {
+        height: 433px;
+    }
+
+    .center-pane-widget {
+        height: 433px;
+    }
+}
+
+@media screen and (max-height: 600px) {
+    .left-pane-widget {
+        height: 406px;
+    }
+    .center-pane-widget {
+        height: 406px;
+    }
+}
+
+@media screen and (max-height: 550px) {
+    .left-pane-widget {
+        height: 386px;
+    }
+    .center-pane-widget {
+        height: 386px;
+    }
 }

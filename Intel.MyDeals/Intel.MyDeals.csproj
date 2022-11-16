@@ -1065,6 +1065,7 @@
     <Content Include="Client\src\app\dashboard\dealDeskWidget\dealDeskWidget.component.html" />
     <Content Include="Client\src\app\dashboard\newContractWidget\newContractWidget.component.css" />
     <Content Include="Client\src\app\dashboard\newContractWidget\newContractWidget.component.html" />
+    <Content Include="Client\src\app\dashboard\opencontract\openContractWidget.component.css" />
     <Content Include="Client\src\app\dashboard\opencontract\openContractWidget.component.html" />
     <Content Include="Client\src\app\dashboard\recentURL\recentsUrlWidget.component.css" />
     <Content Include="Client\src\app\dashboard\recentURL\recentsUrlWidget.component.html" />
@@ -2584,7 +2585,7 @@
     <TypeScriptCompile Include="Client\src\app\shared\services\templates.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\services\userPreferences.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\util\util.ts" />
-	  <TypeScriptCompile Include="Client\src\app\shared\globalroute\globalroute.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\globalroute\globalroute.component.ts" />
     <TypeScriptCompile Include="Client\src\load-libs.ts" />
     <TypeScriptCompile Include="Client\src\main.ts" />
     <TypeScriptCompile Include="Client\src\polyfills.ts" />

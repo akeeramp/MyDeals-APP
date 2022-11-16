@@ -6,7 +6,8 @@ import {NgbTooltip} from '@ng-bootstrap/ng-bootstrap';
 
 @Component({
   selector: 'app-widget-opencontract',
-  templateUrl:'Client/src/app/dashboard/opencontract/openContractWidget.component.html',
+  templateUrl: 'Client/src/app/dashboard/opencontract/openContractWidget.component.html',
+  styleUrls: ['Client/src/app/dashboard/opencontract/openContractWidget.component.css'],
   changeDetection: ChangeDetectionStrategy.OnPush,
   encapsulation: ViewEncapsulation.None
 })

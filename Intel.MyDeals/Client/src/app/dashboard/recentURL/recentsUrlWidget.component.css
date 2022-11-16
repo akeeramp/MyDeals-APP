@@ -6,6 +6,11 @@
 .all-permit-recents {
     overflow-y: auto;
     width: 100%;
-    height: 300px !important;
-    max-height: 300px !important;
+    height: 100% !important;
+    max-height: 100% !important;
+}
+
+.overFlowWidRecent {
+    height: 212px;
+    overflow-y: auto;
 }

@@ -101,6 +101,7 @@ export class DashboardComponent implements OnInit {
         const dialogRef = this.dialog.open(addWidgetComponent, {
             width: '600px',
             data: { name: "Add a Widget", widgets: widgets },
+            panelClass: 'add-widget-box',
         });
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
