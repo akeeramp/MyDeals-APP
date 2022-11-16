@@ -110,8 +110,9 @@ export class GlobalSearchResultsComponent  {
         this.resultTake=5;
         this.windowResize();
         this.getObjectTypeResult(this.opType);
-      }else{
-        this.loggerSvc.error("Please Enter: (1) Contract/ Pricing Strategy / Pricing Table Name or Number OR (2) Deal Number.","Error");
+      }
+      else{
+          this.loggerSvc.warn("Please Enter: (1) Contract/ Pricing Strategy / Pricing Table Name or Number OR (2) Deal Number.","");
       }
     }
     gotoOBJ(item: any, opType: string) {
@@ -166,6 +167,7 @@ export class GlobalSearchResultsComponent  {
 
     //yet to migrate Advance Search Screen
     gotoAdvanced() {
+        this.isWindowOpen.emit(false);
         //$("#winGlobalSearchResults").data("kendoWindow").close();
         //let force = (window.location.href.indexOf("advancedSearch#") >= 0);
         window.location.href = "/advancedSearch#/attributeSearch";

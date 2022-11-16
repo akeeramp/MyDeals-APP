@@ -9,6 +9,7 @@ import { DashboardComponent } from "../../dashboard/dashboard/dashboard.componen
 import { contractStatusWidgetService } from '../../dashboard/contractStatusWidget.service';
 import { DynamicEnablementService } from "../../shared/services/dynamicEnablement.service";
 import * as _ from "underscore";
+import * as moment from 'moment';
 
 @Component({
     providers: [GridStatusBoardService, DatePipe],
@@ -42,7 +43,7 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
         });
     }
 
-    private DontIncludeTenders: boolean = false;
+    private DontIncludeTenders = false;
     private isLoaded: boolean = false;
     private dataforfilter: any; //holds filters for data fetch -during API call
     private gridResult: Array<any>;
@@ -76,8 +77,7 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
     private activekey: string = "";
 
     private activeFilter: string = "";
-    private toolTipOptions: string = "";
-
+    
     //DA - allowing to access contract/Tender manager screen
     //private jumptoSummary = (<any>window).usrRole === "DA" ? "/summary" : "";
 
@@ -125,8 +125,14 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
     loadContractData() {
         this.isGridLoading.emit(true);
         this.custIds = this.custIds == undefined ? "[]" : this.custIds;
+        if (this.startDt === undefined) {
+            this.startDt = window.localStorage.startDateValue ? window.localStorage.startDateValue : new Date(moment().subtract(6, 'months').format("MM/DD/YYYY"));
+        }
+        if (this.endDt === undefined) {
+            this.endDt = window.localStorage.endDateValue ? window.localStorage.endDateValue : new Date(moment().add(6, 'months').format("MM/DD/YYYY"));
+        }
         this.dataforfilter = {
-            CustomerIds: JSON.parse(this.custIds),/*[]*/
+            CustomerIds: JSON.parse(this.custIds),
             StartDate: this.datepipe.transform(new Date(this.startDt), 'MM/dd/yyyy'),
             EndDate: this.datepipe.transform(new Date(this.endDt), 'MM/dd/yyyy'),
             DontIncludeTenders: this.DontIncludeTenders
@@ -164,7 +170,12 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
                         response[i].HAS_ALERT = false;
                     }
 
-                    this.toolTipOptions = "Created By : " + response[i].CRE_EMP_NM;
+                    //Adding a tooltip column for displaying "created by {{CRE_EMP_NM}}" as tooltip on UI
+                    if (response[i].CRE_EMP_NM === undefined || response[i].CRE_EMP_NM === "") {
+                        response[i]["TOOLTIP_CONTENT"] = "";
+                    } else {
+                        response[i]["TOOLTIP_CONTENT"] = "Created By : " + response[i].CRE_EMP_NM;
+                    }
                 }
                 _.each(response, item => {
                     item['STRT_DTM'] = new Date(item['STRT_DTM']);

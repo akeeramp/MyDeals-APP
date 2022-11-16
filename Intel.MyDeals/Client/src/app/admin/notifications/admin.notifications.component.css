@@ -85,4 +85,8 @@ hr {
     top: -2px !important;
     color: #fff !important;
 }
-
+.searchNotif {
+    color: black;
+    padding-top: 0px !important;
+    padding-bottom: 0px !important;
+}

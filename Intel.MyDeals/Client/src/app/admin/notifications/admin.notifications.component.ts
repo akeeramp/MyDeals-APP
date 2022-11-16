@@ -35,6 +35,7 @@ export class adminNotificationsComponent {
     //variable to hold the selected ID's (rows which are selected using check box)
     public mySelection: number[] = [];
     private isLoading = true;
+    private searchFilter: any;
     public gridResult: Array<any>;
     public state: State = {
         skip: 0,
@@ -85,7 +86,7 @@ export class adminNotificationsComponent {
             (response: Array<any>) => {
                 //as we get the CRE_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
                 _.each(response, item => {
-                    item['CRE_DTM'] = this.datepipe.transform(new Date(item['CRE_DTM']), 'M/d/yyyy  h:mm a');
+                    item['CRE_DTM'] = this.datepipe.transform(new Date(item['CRE_DTM']), 'M/d/yyyy HH:mm:ss.SSS');
                     item['CRE_DTM'] = new Date(item['CRE_DTM']);
                 })
                 _.each(response, item => {
@@ -103,6 +104,24 @@ export class adminNotificationsComponent {
             }
         );
 
+    }
+    filterMessages(event) {
+        if (this.searchFilter != undefined && this.searchFilter != null && this.searchFilter != "") {
+            this.state.filter = {
+                logic: "and",
+                filters: [
+                    {
+                        field: "NOTIF_SHR_DSC",
+                        operator: "contains",
+                        value: this.searchFilter
+                    }
+                ],
+            }
+            this.gridData = process(this.gridResult, this.state);
+        }
+        else {
+            this.clearFilter();
+        }
     }
 
     markAsRead() {

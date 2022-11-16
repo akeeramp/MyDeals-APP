@@ -23,7 +23,8 @@ export class GlobalSearchComponent  {
     enterPressed(event:any) {
       //KeyCode 13 is 'Enter'
       if (event.keyCode === 13 && this.searchText != "") {
-        //opening kendo window
+         //opening kendo window
+         this.executeOnly('ALL');
          this.setWindowWidth();
          this.windowOpened=true;
       }
@@ -47,7 +48,7 @@ export class GlobalSearchComponent  {
             //opening kendo window
             this.opType=opType;
             this.setWindowWidth();
-            //this condition is required since this should work only id kendo window is open 
+            //this condition is required since this should work only if kendo window is open 
             if (this.GlobalSearchResults) {
                 this.GlobalSearchResults.onOpTypeChange(this.opType);
                 this.windowOpened = true;

@@ -9,14 +9,14 @@
     </div>
     <div class="modal-body" style="height:80px">
         <div><label class="control-label col-lg-3 col-md-3" style="text-align:right; padding-left:15px; font-size:17px; font-weight:bold; margin-top:12px">Name</label>
-            <div class="col-lg-9 col-md-9"><input name="name" type="text" [(ngModel)]="data.renameItem" class="form-control" style="box-shadow:none; width:400px; margin-top:6px"/></div>
+            <div class="col-lg-9 col-md-9"><input name="name" type="text" (keydown)="onKeyDown($event)" [(ngModel)]="data.renameItem" class="form-control" style="box-shadow:none; width:400px; margin-top:6px"/></div>
             <div class="clearboth"></div>
         </div>
     </div>
     <div class="modal-footer">
         <kendo-dialog-actions style="border: hidden; padding: 0px"><button class='btn btn-default' (click)="cancelWidgetSetting()"><i
                     class="glyphicon glyphicon-remove" style="padding-right:5px"></i>Cancel</button><button
-                [disabled]="data.renameItem.trim().length==0" class='btn btn-primary'
+                [disabled]="data.renameItem.trim().length==0" class='btn btn-primary' type="submit"
                 [mat-dialog-close]="data.renameItem"><i class="glyphicon glyphicon-ok" style="padding-right:5px"></i>Save </button>
         </kendo-dialog-actions>
     </div>

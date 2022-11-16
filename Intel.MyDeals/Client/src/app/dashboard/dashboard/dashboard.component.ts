@@ -12,6 +12,7 @@ import { contractStatusWidgetService } from '../contractStatusWidget.service';
 import { GlobalSearchResultsComponent } from "../../advanceSearch/globalSearchResults/globalSearchResults.component";
 import { userPreferencesService } from "../../shared/services/userPreferences.service";
 import { logger } from "../../shared/logger/logger";
+import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 
 interface Item {
     text: string;
@@ -30,7 +31,6 @@ export class DashboardComponent implements OnInit {
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
-    options: GridsterConfig;
     dashboard: GridsterItem[];
     resizeEvent: EventEmitter<GridsterItem> = new EventEmitter<GridsterItem>();
     @ViewChild(GlobalSearchResultsComponent) GlobalSearchResults: GlobalSearchResultsComponent;
@@ -52,7 +52,41 @@ export class DashboardComponent implements OnInit {
     public selectedCustomerIds = [];
     public includeTenders = true;
     public savedWidgetSettings;
+    options: GridsterConfig = {
+        gridType: GridType.Fit,
+        allowMultiLayer: true,
+        compactType: CompactType.CompactLeftAndUp,
+        displayGrid: DisplayGrid.Always,
+        pushItems: false,
+        swap: true,
+        margin: 5,
+        maxCols: 20,
+        swapWhileDragging: false,
+        draggable: {
+            enabled: true,
+            stop: (e, ui, $widget) => {
+                this.saveWidgetPositions(ui, 'size');
+            }
 
+        },
+        resizable: {
+            enabled: true,
+            stop: (e, ui, $widget) => {
+                this.saveWidgetPositions(ui, 'position');
+            }
+
+        },
+        itemResizeCallback: (item) => {
+            // update DB with new size
+            // send the update to widgets
+            this.resizeEvent.emit(item);
+        }
+    }
+
+    public filterSettings: DropDownFilterSettings = {
+        caseSensitive: false,
+        operator: "startsWith",
+    };
 
     addItem(): void {
         this.dashboard.push({ x: 0, y: 0, cols: 1, rows: 1 });
@@ -208,7 +242,12 @@ export class DashboardComponent implements OnInit {
             const defWidget = defLayout.widgets;
             for (let i = 0; i < defWidget.length; i++) {
                 const widget = _.findWhere(configWidgets, { id: defWidget[i].id });
-                this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: { cols: widget.position.cols, rows: widget.position.cols }, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
+                if (widget.position == null) {
+                    this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: null, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: null, rows: null, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
+                }
+                else {
+                    this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: { cols: widget.position.cols, rows: widget.position.cols }, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
+                }
                 this.options.api.optionsChanged();
             }
         }
@@ -235,6 +274,7 @@ export class DashboardComponent implements OnInit {
         //KeyCode 13 is 'Enter'
         if (event.keyCode === 13 && this.searchText != "") {
             //opening kendo window
+            this.onOpChange('ALL', searchText);
             this.setWindowWidth();
             this.windowOpened = true;
         }
@@ -318,36 +358,6 @@ export class DashboardComponent implements OnInit {
         window.localStorage.selectedDashboardId = "1";
         this.selectedDashboardId = window.localStorage.selectedDashboardId ? window.localStorage.selectedDashboardId : "1";
 
-        this.options = {
-            gridType: GridType.Fit,
-            allowMultiLayer: true,
-            compactType: CompactType.CompactLeftAndUp,
-            displayGrid: DisplayGrid.Always,
-            pushItems: false,
-            swap: true,
-            margin: 5,
-            maxCols: 20,
-            swapWhileDragging: false,
-            draggable: {
-                enabled: true,
-                stop: (e, ui, $widget) => {
-                    this.saveWidgetPositions(ui, 'size');
-                }
-
-            },
-            resizable: {
-                enabled: true,
-                stop: (e, ui, $widget) => {
-                    this.saveWidgetPositions(ui, 'position');
-                }
-
-            },
-            itemResizeCallback: (item) => {
-                // update DB with new size
-                // send the update to widgets
-                this.resizeEvent.emit(item);
-            }
-        };
 
         this.cntrctWdgtSvc.getCustomerDropdowns()
             .subscribe((response: Array<any>) => {

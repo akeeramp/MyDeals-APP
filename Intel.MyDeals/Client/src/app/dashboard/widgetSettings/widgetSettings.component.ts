@@ -15,4 +15,10 @@ export class widgetSettingsComponent {
     cancelWidgetSetting(): void {
         this.dialogRef.close();
     }
+    onKeyDown(pressedKey) {
+        if (pressedKey.key === "Enter" && this.data.renameItem.trim().length != 0) {
+            this.data.renameItem;
+            this.dialogRef.close(this.data.renameItem);
+        }
+    }
 }

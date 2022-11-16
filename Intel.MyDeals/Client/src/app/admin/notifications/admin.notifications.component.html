@@ -22,8 +22,9 @@
                             class="fa fa-eye-slash"></span>&nbsp;MARK AS UNREAD </span></button><button
                     (click)="delete()" class="k-button k-button-icontext"><span style="display:inline;"><span
                             class="fa fa-trash-o"></span>&nbsp;DELETE</span></button>
+                    <input class="input-sm searchNotif" placeholder="SEARCH" style="width:400px;" [(ngModel)]="searchFilter" (keyup)="filterMessages($event)" />
                 <kendo-grid-spacer></kendo-grid-spacer><button (click)="clearFilter()"
-                    class="k-button clearButton"><span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS
+                    class="k-button clearButton"><span class="intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS
                 </button><button (click)="refreshGrid()" class="k-button clearButton"><span
                         class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
             </ng-template>
@@ -38,8 +39,12 @@
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="NOTIF_SHR_DSC" title="Message" width="300" [headerClass]="{'headerClass':true}">
-                <ng-template kendoGridCellTemplate let-dataItem><span [ngClass]="{'unread':!dataItem.IS_READ_IND}"
-                        style="cursor:pointer">{{ dataItem.NOTIF_SHR_DSC}} </span></ng-template>
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <div kendoTooltip position="bottom">
+                        <span [ngClass]="{'unread':!dataItem.IS_READ_IND}" title='Click here to read.'
+                              style="cursor:pointer">{{ dataItem.NOTIF_SHR_DSC}} </span>
+                    </div>
+                </ng-template>
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="CRE_UPDATED_DATE" width="100"
                 title="Created Date Time" filter="date" format="{0:M/d/yyyy}" [editable]="false">
@@ -48,7 +53,7 @@
                     <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService">
                     </date-range-filter>
                 </ng-template>
-                <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.CRE_DTM | date: 'M/d/yyyy h:mm a'}}
+                <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.CRE_DTM | date: 'M/d/yyyy HH:mm:ss.SSS'}}
                 </ng-template>
             </kendo-grid-column>
         </kendo-grid>

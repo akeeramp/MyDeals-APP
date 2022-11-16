@@ -11,17 +11,17 @@
                     <i class="intelicon-workflow-process-outlined"></i> All
                     <span class="badge">{{allStageCnt}}</span>
                 </div>
-                <div id="fltr_Favorites" class="stgLnkBox stgLnk" [ngClass]="{'active': activekey==='fav'===true}" (click)="clkFilter('fltr_Favorites')"><i class="intelicon-favorite-rating-solid"></i> Favorites<span class="badge">{{favCount}}</span></div>
-                <div *ngIf="alertCount > 0" title="Contracts that contain deals with a start date within 48 hours and are not yet approved" id="fltr_HasAlert" class="stgLnkBox stgLnk" [ngClass]="{'active': activekey==='alert'===true}" (click)="clkFilter('fltr_HasAlert')"><i class="intelicon-alert-outlined"></i> Alerts<span class="badge">{{alertCount}}</span></div>
+                <div id="fltr_Favorites" class="stgLnkBox stgLnk" [ngClass]="{'active': activekey==='fav'===true}" (click)="clkFilter('fltr_Favorites')"><i class="intelicon-favorite-rating-solid"></i> Favorites <span class="badge">{{favCount}}</span></div>
+                <div *ngIf="alertCount > 0" title="Contracts that contain deals with a start date within 48 hours and are not yet approved" id="fltr_HasAlert" class="stgLnkBox stgLnk" [ngClass]="{'active': activekey==='alert'===true}" (click)="clkFilter('fltr_HasAlert')"><i class="intelicon-alert-outlined"></i> Alerts <span class="badge">{{alertCount}}</span></div>
                 <h6>Contracts</h6>
                 <div class="stgLnkBox">
-                    <div class="stgLnk" [ngClass]="{'active': activekey==='allC'===true}" id="fltr_All_Contract" (click)="clkFilter('fltr_All_Contract')"><i class="intelicon-workflow-process-outlined"></i> All<span class="badge">{{contractStageCnt}}</span></div>
-                    <div class="stgLnk" [ngClass]="{'active': activekey==='CC'===true}" id="fltr_Complete_Contract" (click)="clkFilter('fltr_Completed_Contract')"><i class="intelicon-workflow-process-outlined"></i>Complete<span class="badge">{{contractComplete}}</span></div>
-                    <div class="stgLnk" [ngClass]="{'active': activekey==='ICC'===true}" id="fltr_InComplete_Contract" (click)="clkFilter('fltr_InCompleted_Contract')"><i class="intelicon-workflow-process-outlined"></i>InComplete<span class="badge">{{contractIncomplete}}</span></div>
+                    <div class="stgLnk" [ngClass]="{'active': activekey==='allC'===true}" id="fltr_All_Contract" (click)="clkFilter('fltr_All_Contract')"><i class="intelicon-workflow-process-outlined"></i> All <span class="badge">{{contractStageCnt}}</span></div>
+                    <div class="stgLnk" [ngClass]="{'active': activekey==='CC'===true}" id="fltr_Complete_Contract" (click)="clkFilter('fltr_Completed_Contract')"><i class="intelicon-workflow-process-outlined"></i> Complete <span class="badge">{{contractComplete}}</span></div>
+                    <div class="stgLnk" [ngClass]="{'active': activekey==='ICC'===true}" id="fltr_InComplete_Contract" (click)="clkFilter('fltr_InCompleted_Contract')"><i class="intelicon-workflow-process-outlined"></i> InComplete <span class="badge">{{contractIncomplete}}</span></div>
                 </div>
                 <h6 style="margin-top: 30px;"><a href="/advancedSearch#/tenderDashboard" style="color: #000000;" title="Click to search for Tender Deals">Tenders</a></h6>
                 <div class="stgLnkBox">
-                    <div class="stgLnk" [ngClass]="{'active': activekey==='allT'===true}" id="fltr_All_Tender" (click)="clkFilter('fltr_All_Tender')"><i class="intelicon-workflow-process-outlined"></i> All<span class="badge">{{tenderStageCnt}}</span></div>
+                    <div class="stgLnk" [ngClass]="{'active': activekey==='allT'===true}" id="fltr_All_Tender" (click)="clkFilter('fltr_All_Tender')"><i class="intelicon-workflow-process-outlined"></i> All <span class="badge">{{tenderStageCnt}}</span></div>
                     <div class="stgLnk" [ngClass]="{'active': activekey==='CT'===true}" id="fltr_Complete_Tender" (click)="clkFilter('fltr_Complete_Tender')"><i class="intelicon-workflow-process-outlined"></i> Complete <span class="badge">{{tenderComplete}}</span></div>
                     <div class="stgLnk" [ngClass]="{'active': activekey==='ICT'===true}" id="fltr_InComplete_Tender" (click)="clkFilter('fltr_InComplete_Tender')"><i class="intelicon-workflow-process-outlined"></i> InComplete <span class="badge">{{tenderIncomplete}}</span></div>
                     <div class="stgLnk" [ngClass]="{'active': activekey==='CA'===true}" id="fltr_Cancelled_Tender" (click)="clkFilter('fltr_Cancelled_Tender')"><i class="intelicon-workflow-process-outlined"></i> Cancelled <span class="badge">{{tenderCancelled}}</span></div>
@@ -29,7 +29,7 @@
             </div>
         </div>
         <div class="center-pane-widget">
-            <div class="inner container-fluid overflow" kendo-tooltip k-options="toolTipOptions">
+            <div class="inner container-fluid overflow">
                 <kendo-grid [data]="contractDs" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,buttonCount:5}" [groupable]="false" [group]="state.group" filterable="menu"
                     [navigable]="true" (dataStateChange)="dataStateChange($event)" class="opUiContainer dashboard dashboard-grid highlightsty-title " style="height: 100%;">
                     <kendo-grid-column field="WF_STG_CD" title="&nbsp;" width="20px" [headerClass]="{'headerClass':true}" filterable="none">
@@ -61,11 +61,13 @@
                     </kendo-grid-column>
                     <kendo-grid-column class="gridCell" title="Contract Title" field="TITLE" width="200px" [headerClass]="{'headerClass':true}" [filterable]="true">
                         <ng-template kendoGridCellTemplate let-dataItem>
-                            <div class="textDecoratorWrap" title="{{toolTipOptions}}">
-                                <a (click)="goToSelType(dataItem.CNTRCT_OBJ_SID)" title="Click to open the Contract in the Contract Editor" style="cursor:pointer">
-                                    <span style="color: #FFA300;">[{{dataItem.CNTRCT_OBJ_SID}}]</span>
-                                    <span style="color: #0071c5;"> {{dataItem.TITLE}}</span>
-                                </a>
+                            <div kendoTooltip filter="div">
+                                <div class="textDecoratorWrap" title="{{dataItem.TOOLTIP_CONTENT}}">
+                                    <a (click)="goToSelType(dataItem.CNTRCT_OBJ_SID)" title="Click to open the Contract in the Contract Editor" style="cursor:pointer">
+                                        <span style="color: #FFA300;">[{{dataItem.CNTRCT_OBJ_SID}}]</span>
+                                        <span style="color: #0071c5;"> {{dataItem.TITLE}}</span>
+                                    </a>
+                                </div>
                             </div>
                         </ng-template>
                     </kendo-grid-column>
