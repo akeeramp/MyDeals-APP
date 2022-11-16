@@ -597,14 +597,19 @@ export class pricingTableEditorComponent {
             let tierChg = _.filter(changes, item => { return item.prop == 'END_PB' || item.prop == 'STRT_PB' || item.prop == 'END_REV' || item.prop == 'STRT_REV' || item.prop == 'END_VOL' || item.prop == 'STRT_VOL' });
             let rateChg = _.filter(changes, item => { return item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE' || item.prop == 'VOLUME' || item.prop == 'FRCST_VOL' || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT' || item.prop == 'INCENTIVE_RATE' });
             let pgChg = _.filter(changes, item => { return item.prop == 'PROGRAM_PAYMENT' });
+            // settlement level and period profile set to default value on delete
+            let perPro = _.where(changes, { prop: 'PERIOD_PROFILE' });
             //here we are using if conditions because at a time multiple changes can happen
             if (PTR && PTR.length > 0) {
                 this.undoEnable = false;
                 this.undoCount -= 1;
                 PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns);
             }
+            if (perPro && perPro.length > 0) {
+                PTE_CellChange_Util.perProfDefault(perPro, this.contractData,this.curPricingTable);
+            }
             if (AR && AR.length > 0) {
-                PTE_CellChange_Util.autoFillARSet(AR, this.contractData);
+                PTE_CellChange_Util.autoFillARSet(AR, this.contractData,this.curPricingTable);
             }
             //KIT on change events
             if (KIT_ECAP && KIT_ECAP.length > 0) {
@@ -931,7 +936,7 @@ export class pricingTableEditorComponent {
             "Errors": {}
         }
         this.isLoading = true;
-        this.setBusy("Saving your Data...", "Please wait as we save your information", "Info", true);
+        this.setBusy("Saving your data...", "Please wait as we save your information", "Info", true);
         let result = await this.pteService.updateContractAndCurPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).toPromise().catch((error) => {
             this.loggerService.error("Something went wrong", 'Error');
             console.error("pricingTableEditorComponent::saveUpdatePTEAPI::", error);

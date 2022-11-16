@@ -158,16 +158,30 @@
 
 <kendo-dialog *ngIf="isKitDialog" (close)="closeKitDialog()" class="kit-name-popup">
     <div class="all-merge-confirmation">
-        <h3> KIT name merge confirmation</h3>
-        <p>
+        <div *ngIf="kitNameObj.issueType=='dup'">
+            <h3> KIT name merge confirmation</h3>
+        </div>
+        <p *ngIf="kitNameObj.issueType=='dup'">
             A Kit with the name <b>{{kitNameObj.name}}</b> already exists.  Would you like to merge rows containing this Kit Name?  Please note that any duplicate products will automatically be removed upon merging.
+        </p>
+        <div *ngIf="kitNameObj.issueType=='dupMoreLeng'">
+            <h3> Cannot merge KIT name</h3>
+        </div>
+        <p *ngIf="kitNameObj.issueType=='dupMoreLeng'">
+            A Kit with the name <b>{{kitNameObj.name}}</b> already exists. You cannot merge thses rows since merge them excced the max limit of products you can have (which is 10). Please specify different KIT name or remove the products from this row and try again.
         </p>
     </div>
     <kendo-dialog-actions class="kit-merge-btns">
-        <button kendoButton (click)="closeKitDialog()" class="cancel-btns">Cancel</button>
-        <button kendoButton (click)="mergeKitDeal()" themeColor="primary" class="merge-btns">
-            Merge Rows
-        </button>
+        <div *ngIf="kitNameObj.issueType=='dupMoreLeng'">
+            <button kendoButton (click)="closeKitDialog()" class="cancel-btns">Okay</button>
+        </div>
+        <div *ngIf="kitNameObj.issueType=='dup'">
+            <button kendoButton (click)="closeKitDialog()" class="cancel-btns">Cancel</button>
+            <button kendoButton (click)="mergeKitDeal()" themeColor="primary" class="merge-btns">
+                Merge Rows
+            </button>
+        </div>
+     
     </kendo-dialog-actions>
 </kendo-dialog>
 

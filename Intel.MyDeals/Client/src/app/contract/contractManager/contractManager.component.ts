@@ -972,7 +972,6 @@ export class contractManagerComponent {
     ngOnInit() {
         try {
             this.contractId= this.contractData.DC_ID;
-            window.location.href = "#contractmanager/CNTRCT/" + this.contractId + "/0/0/0";
             this.lastRun = this.contractData.LAST_COST_TEST_RUN;
             this.custAccptButton = this.contractData.CUST_ACCPT;
             _.each(this.contractData.PRC_ST, (prcSt) => {

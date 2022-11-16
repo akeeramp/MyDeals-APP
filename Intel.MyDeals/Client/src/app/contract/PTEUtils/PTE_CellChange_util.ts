@@ -828,7 +828,14 @@ export class PTE_CellChange_Util {
                      });
                     //If there is already same name the length will atleast 2
                     if(curPTR.length>1){
-                        PTR_exist.push({PTR:curPTR,name:uniqnm})
+                        //identify the uniq product count of the duplicate KIT
+                        let unqcount=_.uniq(_.compact(_.pluck(curPTR,'PTR_USER_PRD').toString().split(','))).length 
+                        if(unqcount && unqcount>PTE_Config_Util.maxKITproducts){
+                            PTR_exist.push({PTR:curPTR,name:uniqnm,issueType:'dupMoreLeng'})
+                        }
+                        else{
+                            PTR_exist.push({PTR:curPTR,name:uniqnm,issueType:'dup'})
+                        }
                     }
                   }
                 });
@@ -875,7 +882,7 @@ export class PTE_CellChange_Util {
     }
     static RateChgfn(items: Array<any>, columns: any[], curPricingTable: any) {
         _.each(items, item => {
-            if ((item.prop) && (item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'INCENTIVE_RATE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE' || item.prop == 'VOLUME' || item.prop == 'FRCST_VOL' || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT')) {
+            if ((item.prop) && (item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'INCENTIVE_RATE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE'  || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT')) {
                 let val = this.hotTable.getDataAtRowProp(item.row, item.prop);
                 if (parseFloat(val) >= 0 || parseFloat(val) < 0) {
                         this.hotTable.setDataAtRowProp(item.row, item.prop, parseFloat(val), 'no-edit');
@@ -1053,25 +1060,52 @@ export class PTE_CellChange_Util {
             });
         }
     }
+    
+    static perProfDefault(items: Array<any>, contractData: any,curPricingTable:any) {
+        _.each(items, (item) => {
+            if ((item.new && item.new == '') || item.new==null){
+                this.hotTable.setDataAtRowProp(item.row, item.prop,curPricingTable[`${item.prop}`] , 'no-edit');
+            }
+        })
+    }
     /* AR settlement change where functions starts here */
-    static autoFillARSet(items: Array<any>, contractData: any) {
+    static autoFillARSet(items: Array<any>, contractData: any,curPricingTable:any) {
         try {
             _.each(items, (item) => {
                 let colSPIdx = _.findWhere(this.hotTable.getCellMetaAtRow(item.row), { prop: 'SETTLEMENT_PARTNER' }).col;
-                //MOdiying the logic from from full table update to cell update for better performance
-                if (item.new && item.new != '' && item.new.toLowerCase() != 'cash') {
-                    this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', '', 'no-edit');
-                    this.hotTable.setCellMeta(item.row, colSPIdx, 'editor', false);
-                    this.hotTable.setCellMeta(item.row, colSPIdx, 'className', 'readonly-cell');
-                    this.hotTable.render();
+                if ((item.new && item.new == '') || item.new==null){
+                    if(curPricingTable && curPricingTable[`${item.prop}`] && curPricingTable[`${item.prop}`].toLowerCase()=='cash'){
+                        this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', contractData.Customer.DFLT_SETTLEMENT_PARTNER, 'no-edit');
+                        //check object present 
+                        this.hotTable.setCellMeta(item.row, colSPIdx, 'editor', 'dropdown');
+                        this.hotTable.setCellMeta(item.row, colSPIdx, 'className', '');
+                        this.hotTable.render();
+                    }
+                    else{
+                        this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', '', 'no-edit');
+                        this.hotTable.setCellMeta(item.row, colSPIdx, 'editor', false);
+                        this.hotTable.setCellMeta(item.row, colSPIdx, 'className', 'readonly-cell');
+                        this.hotTable.render();
+                    }
+                    this.hotTable.setDataAtRowProp(item.row, item.prop,curPricingTable[`${item.prop}`] , 'no-edit');
                 }
-                else {
-                    this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', contractData.Customer.DFLT_SETTLEMENT_PARTNER, 'no-edit');
-                    //check object present 
-                    this.hotTable.setCellMeta(item.row, colSPIdx, 'editor', 'dropdown');
-                    this.hotTable.setCellMeta(item.row, colSPIdx, 'className', '');
-                    this.hotTable.render();
+                else{
+                    //Modiying the logic from from full table update to cell update for better performance
+                    if (item.new && item.new != '' && item.new.toLowerCase() != 'cash') {
+                        this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', '', 'no-edit');
+                        this.hotTable.setCellMeta(item.row, colSPIdx, 'editor', false);
+                        this.hotTable.setCellMeta(item.row, colSPIdx, 'className', 'readonly-cell');
+                        this.hotTable.render();
+                    }
+                    else {
+                        this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', contractData.Customer.DFLT_SETTLEMENT_PARTNER, 'no-edit');
+                        //check object present 
+                        this.hotTable.setCellMeta(item.row, colSPIdx, 'editor', 'dropdown');
+                        this.hotTable.setCellMeta(item.row, colSPIdx, 'className', '');
+                        this.hotTable.render();
+                    }
                 }
+             
             });
         }
         catch (ex) {
