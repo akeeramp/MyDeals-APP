@@ -141,8 +141,8 @@ table td {
 
 kendo-tabstrip.new-allDeals {
     margin-top: 32px;
-    padding-left: 10px;
-    padding-right: 10px;
+    padding-left: 20px;
+    padding-right: 20px;
 }
 
 kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper {
@@ -276,7 +276,7 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper {
 }
 
 #allDeals.k-grid .k-grid-container {
-    margin-right: -10px !important
+    margin-right: 0px !important
 }
 
 .lastcolstyle {

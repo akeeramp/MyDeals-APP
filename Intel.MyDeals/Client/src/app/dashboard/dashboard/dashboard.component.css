@@ -485,9 +485,13 @@ gridster-item.attr-li-7 .k-grid-table-wrap {
         align-items: flex-start;
     }
 
-    .oppo-grids kendo-grid .k-grid-aria-root .k-grid-header table thead tr th span.k-cell-inner {
-        align-items: flex-start;
-    }
+.oppo-grids kendo-grid .k-grid-aria-root .k-grid-header table thead tr th span.k-cell-inner {
+    align-items: flex-start;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    text-transform: capitalize !important;
+    color: #1a3e6f !important;
+}
 
     .oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal Start Date"],
     .oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal End Date"],
@@ -1752,4 +1756,8 @@ kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level:hov
 }
 kendo-window#OvrLp .k-window-content {
     padding: 0px !important;
+}
+kendo-grid.contract-history-style span.k-icon.k-i-filter {
+    font-size: 20px !important;
+    color: #777777 !important;
 }
