@@ -47,7 +47,7 @@
     <kendo-grid-column title="Deal Stage" field="WF_STG_CD" [headerClass]="{'headerClass':true}" [width]="80"
                        [hidden]="true"></kendo-grid-column>
     <kendo-grid-column title="CAP" field="CAP" [headerClass]="{'headerClass':true}" [width]="100"
-        [hidden]="!hasSpecialPricePermission" *ngIf="!isHidden('CAP')">
+        [hidden]="(dealType == 'KIT' && !hasPermissionPrice) || (dealType == 'ECAP' && !hasSpecialPricePermission)" *ngIf="!isHidden('CAP')">
         <ng-template kendoGridCellTemplate let-dataItem>
              <span [ngClass]="{'cell-warning': isErrorOrWarning(dataItem, 'CAP'),'cell-information':isInformation(dataItem,'CAP')}">
                  {{dataItem.CAP | currency}}

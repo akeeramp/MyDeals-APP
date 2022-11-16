@@ -152,7 +152,7 @@
                                                    [width]="120"></kendo-grid-column>
                                 <kendo-grid-column title="My Deals Product" field="TITLE" [headerClass]="{'headerClass':true}"
                                                    [width]="120"></kendo-grid-column>
-                                <kendo-grid-column title="Cost Test Results" field="COST_TEST_RESULT" [headerClass]="{'headerClass':true}"
+                                <kendo-grid-column *ngIf="CAN_VIEW_COST_TEST"  title="Cost Test Results" field="COST_TEST_RESULT" [headerClass]="{'headerClass':true}"
                                                    [width]="120">
                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                                                  let-filterService="filterService">
