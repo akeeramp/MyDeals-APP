@@ -48,7 +48,7 @@
                                     <div class="fl ptLnavTitle ">Enter Pricing Strategy Name</div>
                                     <div class="clearboth"></div>
                                     <div class="bgBlueContainer" [ngClass]="{isErrorWrapper: newStrategy._behaviors.isError.TITLE}">
-                                        <input type="text" class="k-textbox fl" placeholder="" style="width: 224px !important; color: black;" maxlength="250" id="inptPrcTitle" [(ngModel)]="newStrategy.TITLE" [ngClass]="{isError: newStrategy._behaviors.isError.TITLE}" />
+                                        <input type="text" class="k-textbox fl" placeholder="" style="width: 224px !important; color: black;" maxlength="250" id="inptPrcTitle" [(ngModel)]="newStrategy.TITLE" [ngClass]="{isError: newStrategy._behaviors.isError.TITLE}" (keydown.enter)="customAddPsValidate()"/>
                                         <button class="btn btn-sm btn-primary lnavaddbtnstyle" type="submit" [disabled]="isAddStrategyBtnHidden" (click)="customAddPsValidate()">
                                             Add
                                         </button>

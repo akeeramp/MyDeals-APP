@@ -29,9 +29,9 @@
                                        [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="ATRB_VAL" title="Comment Detail" width="250px">
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="ATRB_VAL" title="Comment Detail" >
             </kendo-grid-column>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="FRST_NM" title="Changed By" width="180px">
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="FRST_NM" title="Changed By" width="240px">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
                     <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
@@ -43,7 +43,7 @@
                     </div>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" field="HIST_EFF_FR_DTM" title="Date Changed" width="160px">
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="HIST_EFF_FR_DTM" title="Date Changed" width="240px">
             </kendo-grid-column>
         </kendo-grid>
     </div>

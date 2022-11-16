@@ -128,6 +128,13 @@
     padding: 0 12px !important;
 }
 
+.mat-button-toggle.mat-button-toggle-disabled {
+    cursor: not-allowed !important;
+    pointer-events: none !important;
+    background-color: #cccccc !important;
+    color: #999999;
+}
+
 .autofillrow {
     display: flex;
     flex-wrap: nowrap;

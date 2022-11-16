@@ -66,8 +66,8 @@
                                         </h6>
                                     </div>
                                     <div class="col-md-11 display">
-                                        <div class="fl opUiLabel"><span *ngIf="contractData?._behaviors?.isRequired?.START_DT" class="isReqField">* </span>Select Start Date:</div>
-                                        <div class="inlineDisplay">
+                                        <div class="col-md-3 fl opUiLabel"><span *ngIf="contractData?._behaviors?.isRequired?.START_DT" class="isReqField">* </span>Select Start Date:</div>
+                                        <div class="col-md-9 inlineDisplay">
                                             <div class="blockdisplay">
                                                 <kendo-datepicker #picker class="fl opUiElement dateclass cd-input-bottom" calendarType="classic" [incompleteDateValidation]="true" #contract_START_DT="ngModel"
                                                                   [(ngModel)]="START_DT" name="contract_START_DT" (valueChange)="getCurrentQuarterDetails('START_DT', contract_START_DT)" [ngClass]="{'input-error': contractData?._behaviors?.validMsg?.START_DT}" [disabled]="contractData?._behaviors?.isReadOnly?.START_DT"
@@ -94,8 +94,8 @@
                                         </div>
                                     </div>
                                     <div class="col-md-11 display">
-                                        <div class="fl opUiLabel"><span *ngIf="contractData?._behaviors?.isRequired?.END_DT" class="isReqField">* </span>Select End Date:</div>
-                                        <div class="inlineDisplay">
+                                        <div class="col-md-3 fl opUiLabel"><span *ngIf="contractData?._behaviors?.isRequired?.END_DT" class="isReqField">* </span>Select End Date:</div>
+                                        <div class="col-md-9 inlineDisplay">
                                             <div class="blockdisplay">
                                                 <kendo-datepicker #picker class="fl opUiElement dateclass cd-input-bottom" calendarType="classic" [ngClass]="{'input-error': contractData?._behaviors?.validMsg?.END_DT}"
                                                                   [(ngModel)]="END_DT" [disabled]="NO_END_DT || contractData?._behaviors?.isReadOnly['END_DT']" name="END_DT"

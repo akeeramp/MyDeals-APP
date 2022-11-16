@@ -639,3 +639,13 @@ kendo-tabstrip.art-kendo-bars {
 .new-view .help-search-backgrd {
     background: linear-gradient(to bottom, #fdfdfd 0%,#d9d9d9 100%) !important;
 }
+
+.post-dialog-container .mat-dialog-container {
+    background-color: none;
+    box-shadow: none;
+    padding: 0px !important;
+    overflow: hidden !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    width: 1900px !important;
+}

@@ -146,7 +146,7 @@
     <publish-tender [pricingTableData]="pricingTableData"></publish-tender>
 </div>
 <kendo-dialog *ngIf="isDialogVisible" (close)="close()" [width]="440">
-    <p class="tender-del-head-style">Are you sure you would like to Delete this Contract ? </p>
+    <p style="margin: 30px; text-align: center;">Are you sure you would like to Delete this Contract ? </p>
     <kendo-dialog-actions class="tender-del-style">
         <button class="k-button k-primary tender-okbtn" kendoButton (click)="deleteRecord()">OK</button>
         <button class="k-button tender-cancelbtn" kendoButton (click)="close()"> CANCEL </button>

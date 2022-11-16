@@ -359,6 +359,12 @@ export class contractDetailsComponent {
         this.contractData["NO_END_DT_RSN"] = this.NO_END_DT_RSN?.DROP_DOWN;
         this.isValid = true;
         const ct = this.contractData;
+        if (ct.TITLE && ct.TITLE.length > 250) {
+            this.isTitleError = true;
+            this.titleErrorMsg = "Title must be no more than 250 characters.";
+            this.contractData._behaviors.isError["TITLE"] = true;
+            this.isValid = false;
+        }
         const maximumDate = moment(ct.START_DT).add(20, 'years').format('l');
         if (!this.contractData._behaviors) this.contractData._behaviors = {};
         if (moment(ct.END_DT) > moment('2099/12/31').add(0, 'years')) {
@@ -662,7 +668,7 @@ export class contractDetailsComponent {
             if (this.existingMinEndDate !== null && this.contractData.PRC_ST != null && this.contractData.PRC_ST.length != 0) {
                 if (moment(endDate).isBefore(this.existingMinEndDate)) {
                     this.contractData._behaviors.isError['END_DT'] = true;
-                    this.contractData._behaviors.validMsg['END_DT'] = "Contract end date cannot be less than current Contract end date - " + this.existingMinEndDate + " - if you have already created pricing strategies. ";
+                    this.contractData._behaviors.validMsg['END_DT'] = "Contract end date cannot be less than current Contract end date - " + this.existingMinEndDate?.toLocaleDateString() + " - if you have already created pricing strategies. ";
                 }
             }
         }

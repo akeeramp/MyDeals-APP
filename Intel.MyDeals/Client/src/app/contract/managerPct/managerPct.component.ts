@@ -174,8 +174,9 @@ export class managerPctComponent {
     }
     openExcludeDealGroupModal(dataItem) {
         const dialogRef = this.dialog.open(excludeDealGroupModalDialog, {
-            width: "1900px",
-            height: "600px",
+            width: "90%",
+            panelClass: 'post-dialog-container',
+            maxWidth: "auto",
             data: {
                 cellCurrValues: dataItem,
                 enableCheckbox: false,
