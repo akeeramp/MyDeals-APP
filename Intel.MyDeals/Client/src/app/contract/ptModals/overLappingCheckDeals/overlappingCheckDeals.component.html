@@ -11,7 +11,7 @@
                 [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
                 [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" style="min-height: 383px;">
         <ng-template kendoGridNoRecordsTemplate>
-            <div *ngIf="gridData.data?.length==0" style="padding: 100px;">
+            <div *ngIf="gridData.data?.length==0" style="padding: 100px; font-size: 10px; font-family: 'Intel Clear';">
                 No Overlapping deals were found
             </div>
         </ng-template>
