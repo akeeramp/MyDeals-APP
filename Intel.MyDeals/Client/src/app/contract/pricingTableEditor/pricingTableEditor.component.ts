@@ -361,6 +361,7 @@ export class pricingTableEditorComponent {
     private isKitDialog:boolean=false;
     private isTenderContract = false;
     private maxKITproducts: number = PTE_Config_Util.maxKITproducts;
+    private showErrorMsg;
 
     //this will help to have a custom cell validation which allow only alphabets
     private newPricingTable: any = {};
@@ -914,7 +915,9 @@ export class pricingTableEditorComponent {
             }
         }
         else {
-            this.loggerService.error('All products are not valid', 'Products are not valid');
+            if (this.showErrorMsg != false) {
+                this.loggerService.error('All products are not valid', 'Products are not valid');
+            }
         }
     }
     async saveEntireContractRoot(finalPTR: Array<any>) {
@@ -1048,6 +1051,9 @@ export class pricingTableEditorComponent {
                     if (curRow) {
                         curRow[0].isOpenCorrector = true;
                     }
+                }
+                if (action == 'onSave') {
+                    this.showErrorMsg = false;
                 }
             }
             else if (_.contains(prdValResult, '2') && action != 'onOpenSelector') {
