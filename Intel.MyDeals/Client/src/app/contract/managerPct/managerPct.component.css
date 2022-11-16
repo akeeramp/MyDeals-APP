@@ -639,7 +639,29 @@ kendo-tabstrip.art-kendo-bars {
 .new-view .help-search-backgrd {
     background: linear-gradient(to bottom, #fdfdfd 0%,#d9d9d9 100%) !important;
 }
+.btn_color_fix.btn-primary {
+    background-color: #00AEEF !important;
+}
 
+.btn_color_fix.btn-primary:hover {
+    background-color: #3c8dbc !important;
+}
+
+.cancel_color_fix.btn-warning {
+    background-color: rgb(243, 156, 18) !important;
+}
+
+.cancel_color_fix.btn-warning:hover {
+    background-color: rgb(224, 142, 11) !important;
+}
+.modalBlueBody {
+    background-color: #003C71 !important;
+    color: #ffffff !important;
+}
+.btn-full {
+    margin: 5px 0 !important;
+    width: 100% !important;
+}
 .post-dialog-container .mat-dialog-container {
     background-color: none;
     box-shadow: none;

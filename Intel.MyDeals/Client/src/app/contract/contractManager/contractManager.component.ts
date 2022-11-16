@@ -109,7 +109,9 @@ export class contractManagerComponent {
     public filteredData: any;
     uploadSuccess = false;
     private isGridLoading = false;
-    private filteringData : any[][]= [];
+    private filteringData: any[][] = [];
+    public pctClicked: boolean = false;
+    public mctClicked: boolean = false;
     // Allowed extensions for the attachments field
     myRestrictions: FileRestrictions = {
         allowedExtensions: ["doc", "xls", "txt", "bmp", "jpg", "pdf", "ppt", "zip", "xlsx", "docx", "pptx", "odt", "ods", "ott", "sxw", "sxc", "png", "7z", "xps"],
@@ -454,13 +456,13 @@ export class contractManagerComponent {
         var itemListRowString=``;
         for(let i=0; i<data.items.length; i++){
                 itemListRowString =itemListRowString+ `<tr>
-                <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:#1f4e79;'><a href='${data.items[i].contractUrl}'>` + data.items[i].CNTRCT +`</a>*</span> </td>
-                <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span>`+ data.items[i].C2A_ID+`</span> </td>
-                <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:#1f4e79;'><a href='${data.items[i].url}'>`+ data.items[i].DC_ID+`</a>*</span> </td>
-                <td style='width:160px; font-size: 12px; font-family: sans-serif;'><span>`+ data.items[i].TITLE+`</span> </td>
-                <td style='width:100px; font-size: 12px; font-family: sans-serif;'><span style='color:#1f4e79;'>`+ data.items[i].VERTICAL_ROLLUP+`</span> </td>
-                <td style='width:200px; font-size: 12px; font-family: sans-serif;'><span style='color:#767171;'>Moved to the `+ data.items[i].NEW_STG+` </span> </td>
-                <td style='width:200px; font-size: 12px; font-family: sans-serif;'><span style='color:#1f4e79;'><a href='${data.items[i].url}'>View Pricing Strategy</a>*</span> </td>
+                <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span style='color:#00a;'><a href='${data.items[i].contractUrl}'>` + data.items[i].CNTRCT + `</a>*</span> </td>
+                <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span>`+ data.items[i].C2A_ID + `</span> </td>
+                <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span style='color:#00a;'><a href='${data.items[i].url}'>` + data.items[i].DC_ID + `</a>*</span> </td>
+                <td style='width:160px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span>`+ data.items[i].TITLE + `</span> </td>
+                <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span style='color:#1f4e79;'>`+ data.items[i].VERTICAL_ROLLUP + `</span> </td>
+                <td style='width:200px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span style='color:#767171;'>Moved to the `+ data.items[i].NEW_STG + ` </span> </td>
+                <td style='width:200px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span style='color:#00a;'><a href='${data.items[i].url}'>View Pricing Strategy</a>*</span> </td>
             </tr>`
         }
         let valuemsg = `
@@ -485,7 +487,7 @@ export class contractManagerComponent {
         </table>
   
         <p><span style='font-size: 11px; color: black; font-weight: bold;'>*Links are optimized for Google Chrome</span></p>
-        <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:${data.from}'>`+data.from+`</a>.</span></p>
+        <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:${data.from}' style="color: #00a">` + data.from +`</a>.</span></p>
        
         <p><span style='font-size: 14px; color: red;'><i>**This email was sent from a notification-only address that cannot accept incoming email.  Please do not reply to this message.</i></span></p>
         </div>
@@ -689,8 +691,16 @@ export class contractManagerComponent {
     submitContract(): void {
         this.actionItems(null, null);
     }
-    executePctViaBtn() {
+    executePctViaBtn(text : string) {
         this.isLoading = true;
+        if (text === "pct") {
+            this.pctClicked = true;
+            this.mctClicked = false;
+        }
+        if (text === "mct") {
+            this.pctClicked = false;
+            this.mctClicked = true;
+        }
         this.executePct();
     }
     executePct() {
@@ -699,10 +709,13 @@ export class contractManagerComponent {
             this.isRunning = false;
             this.loadContractDetails();
             this.isLoading = false;
-
+            this.pctClicked = false;
+            this.mctClicked = false;
         }, (err) => {
             this.isRunning = false;
             this.isLoading = false;
+            this.pctClicked = false;
+            this.mctClicked = false;
             this.loggerSvc.error("Could not run Cost Test for contract " + this.contractId, err);
         });
         
@@ -825,6 +838,12 @@ export class contractManagerComponent {
         this.ptId = pte.DC_ID;
         window.location.href = "#/contractmanager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
     }
+    openPTE(dcId, psId, ptId) {
+        this.parent_dcId = dcId
+        this.psId = psId;
+        this.ptId = ptId;
+        window.location.href = "#/contractmanager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
+    }
     closeMultiple(){
         this.showMultipleDialog = false;
     }
@@ -901,8 +920,8 @@ export class contractManagerComponent {
     updateTitleFilter() {
         if (this.titleFilter != "") {
             this.filteredData = [];
-            _.each(this.contractData.PRC_ST, (item) => {
-                if (item.TITLE.toLowerCase().contains(this.titleFilter.toLowerCase()) || (item.PRC_TBL && item.PRC_TBL.length > 0 && item.PRC_TBL.filter(x => x.TITLE.toLowerCase().contains(this.titleFilter.toLowerCase())).length > 0)) {
+            _.each(this.contractData.PRC_ST, (item) => {                
+                if (item.TITLE.search(new RegExp(this.titleFilter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')) >= 0 || (item.PRC_TBL && item.PRC_TBL.length > 0 && item.PRC_TBL.filter(x => x.TITLE.search(new RegExp(this.titleFilter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')) >= 0).length > 0)) {
                     this.filteredData.push(item)
                 }
             })

@@ -62,7 +62,7 @@
                 <div class="col-md-3 rowDetailHeight">
                     <span class="tierColumn rowValueHeight" *ngIf="fieldDet.title == 'Tier' || (fieldDet.title.includes('Start') && (i != 0 || in_DataItem['HAS_TRACKER'] == 1)) || (fieldDet.title.includes('End') && in_DataItem['HAS_TRACKER'] == 1 && i != (in_DataItem['NUM_OF_TIERS']-1))">{{in_DataItem[fieldDet.field][key]}}</span>
                     <span class="rowValueHeight" *ngIf="(fieldDet.title.includes('Start') && (i == 0 && in_DataItem['HAS_TRACKER'] == 0)) || ((fieldDet.title.includes('End') && (in_DataItem['HAS_TRACKER'] == 0 || (in_DataItem['HAS_TRACKER'] == 1 && i==(in_DataItem['NUM_OF_TIERS']-1)))) || fieldDet.title.includes('Rate'))">
-                        <kendo-numerictextbox class="rowValueHeight"
+                        <kendo-numerictextbox class="rowValueHeight" style="top:45% !important"
                                               [ngModel]="convertToLowerCase(in_DataItem[fieldDet.field][key]) == 'unlimited' ? '' : in_DataItem[fieldDet.field][key]"
                                               (ngModelChange)="in_DataItem[fieldDet.field][key] = $event"
                                               [value]="convertToLowerCase(in_DataItem[fieldDet.field][key]) == 'unlimited' ? '' : in_DataItem[fieldDet.field][key]"

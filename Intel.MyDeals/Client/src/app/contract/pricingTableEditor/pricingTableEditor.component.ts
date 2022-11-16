@@ -194,6 +194,7 @@ export class pricingTableEditorComponent {
                                             }
                                         }
                                         let PTR = [];
+                                        VM.dirty = true;//for enabling save&Validate button when a product is added from productSelector
                                         PTR.push({ row: this.selRow, prop: 'PTR_USER_PRD', old: this.hot.getDataAtRowProp(this.selRow, 'PTR_USER_PRD'), new: cntrctPrdct.toString() });
                                         this.selRow = this.selRow + VM.curPricingTable.NUM_OF_TIERS;
                                         let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct.toString() };
@@ -213,6 +214,7 @@ export class pricingTableEditorComponent {
                                     sysPrd[item[0].DERIVED_USR_INPUT] = item;
                                 });
                                 let PTR = [];
+                                VM.dirty = true;//for enabling save&Validate button when a product is added from productSelector
                                 PTR.push({ row: this.selRow, prop: 'PTR_USER_PRD', old: this.hot.getDataAtRowProp(this.selRow, 'PTR_USER_PRD'), new: cntrctPrdct.toString() });
                                 let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct.toString() };
                                 this.allOperations.push(operation);
@@ -1190,6 +1192,7 @@ export class pricingTableEditorComponent {
                                 }
                             }
                             let PTR = [];
+                            this.dirty = true;//for enabling save&Validate button when a product is added from productSelector
                             PTR.push({ row: PTE_CellChange_Util.returnEmptyRow(), prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(result.validateSelectedProducts[idx].indx, 'PTR_USER_PRD'), new: cntrctPrdct.toString() });
                             let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct.toString() };
                             PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, operation);
@@ -1207,6 +1210,7 @@ export class pricingTableEditorComponent {
                         sysPrd[item[0].DERIVED_USR_INPUT] = item;
                     });
                     let PTR = [];
+                    this.dirty = true;//for enabling save&Validate button when a product is added from productSelector
                     PTR.push({ row: PTE_CellChange_Util.returnEmptyRow(), prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(PTE_CellChange_Util.returnEmptyRow(), 'PTR_USER_PRD'), new: cntrctPrdct.toString() });
                     let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct.toString() };
                     PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, operation);

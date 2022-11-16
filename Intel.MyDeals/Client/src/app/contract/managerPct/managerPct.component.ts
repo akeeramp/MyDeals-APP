@@ -77,6 +77,11 @@ export class managerPctComponent {
     private gridResult = {};
     public pricingStrategyFilter;
     private isExcludeGroup = false;
+    private parent_dcId: any;
+    private psId: any;
+    private ptId: any;
+    private showMultipleDialog: boolean = false;
+    private pteTableData: any
 
     private CAN_EDIT_COST_TEST = this.lnavSvc.chkDealRules('C_EDIT_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "SA" && (<any>window).isSuper); // Can go to cost test screen and make changes
     private hasNoPermission = !(this.CAN_EDIT_COST_TEST == undefined ? this.lnavSvc.chkDealRules('C_EDIT_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "SA" && (<any>window).isSuper) : this.CAN_EDIT_COST_TEST);
@@ -117,24 +122,42 @@ export class managerPctComponent {
                     if (response !== undefined) {
                         this.CostTestGroupDetails[pt.DC_ID] = response["CostTestGroupDetailItems"];
                         this.gridData = response["CostTestDetailItems"];
+                        let rollupPCTStatus = [];
                         for (let i = 0; i < this.gridData.length; i++) {
                             Object.assign(this.gridData[i], { PS_WF_STG_CD: pt.PS_WF_STG_CD });
                             //Deal id is not parent id here..Make deal tool directive work assigning this value
                             Object.assign(this.gridData[i], { DC_PARENT_ID: this.gridData[i].DEAL_ID });
                             this.gridData[i]["_readonly"] = pt.PS_WF_STG_CD !== "Submitted";
+                            var pct = this.gridData[i]["PRC_CST_TST_STS"];
                             if (this.gridData[i]["COST_TEST_OVRRD_FLG"]) {
                                 var isOverridden = this.gridData[i]["COST_TEST_OVRRD_FLG"] === "Yes";
-                                var pct = isOverridden ? "Pass" : this.gridData[i]["PRC_CST_TST_STS"];
+                                pct = isOverridden ? "Pass" : this.gridData[i]["PRC_CST_TST_STS"];
                                 this.gridData[i]["PRC_CST_TST_STS"] = pct;
+                            }
+                            if (!rollupPCTStatus[this.gridData[i].DEAL_ID]) {
+                                rollupPCTStatus[this.gridData[i].DEAL_ID] = this.gridData[i]["PRC_CST_TST_STS"];
+                            }
+                            else {
+                                if (pct === "Fail") {
+                                    rollupPCTStatus[this.gridData[i].DEAL_ID] = "Fail";
+                                } else if (pct === "InComplete" && rollupPCTStatus[this.gridData[i].DEAL_ID] !== "Fail") {
+                                    rollupPCTStatus[this.gridData[i].DEAL_ID] = "InComplete";
+                                } else if (pct === "Pass" && rollupPCTStatus[this.gridData[i].DEAL_ID] === "NA") {
+                                    rollupPCTStatus[this.gridData[i].DEAL_ID] = "Pass";
+                                }
                             }
                             let _actions = this.contractData?.PRC_ST.filter(x => x.DC_ID == pt.DC_PARENT_ID).map(y => y._actions);
                             if (_actions)
                                 this.gridData[i]["_actionsPS"] = _actions[0];
                         }
-                        this.gridDataSet[pt.DC_ID] = process(distinct(this.gridData, "DEAL_ID"), this.state[pt.DC_ID]);
-                        this.gridResult[pt.DC_ID] = JSON.parse(JSON.stringify(this.gridDataSet[pt.DC_ID]));
-                        this.parentGridData[pt.DC_ID] = this.gridData;
+                        this.parentGridData[pt.DC_ID] = JSON.parse(JSON.stringify(this.gridData));
                         this.parentGridResult[pt.DC_ID] = JSON.parse(JSON.stringify(this.parentGridData[pt.DC_ID]));
+                        let parentData = distinct(this.gridData, "DEAL_ID");
+                        _.each(parentData, (item) => {
+                            item["PRC_CST_TST_STS"] = rollupPCTStatus[item["DEAL_ID"]];
+                        })
+                        this.gridDataSet[pt.DC_ID] = process(parentData, this.state[pt.DC_ID]);
+                        this.gridResult[pt.DC_ID] = JSON.parse(JSON.stringify(this.gridDataSet[pt.DC_ID]));
                     }
 
                 },
@@ -416,7 +439,46 @@ export class managerPctComponent {
             this.loadPctDetails();
         }
     }
+    updateTitleFilter() {
+        if (this.titleFilter != "") {
+            this.pricingStrategyFilter = [];
+            _.each(this.contractData.PRC_ST, (item) => {
+                if (item.TITLE.search(new RegExp(this.titleFilter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')) >= 0 || (item.PRC_TBL && item.PRC_TBL.length > 0 && item.PRC_TBL.filter(x => x.TITLE.search(new RegExp(this.titleFilter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')) >= 0).length > 0)) {
+                    this.pricingStrategyFilter.push(item)
+                }
+            })
+        }
+        else {
+            this.pricingStrategyFilter = this.contractData.PRC_ST;
+        }
+    }
+    openPTEeditor(value) {
+        this.parent_dcId = value.DC_PARENT_ID
+        this.psId = value.DC_ID;
+        let prc_tbl = value?.PRC_TBL;
+        if (prc_tbl.length > 1) {
+            this.showMultipleDialog = true;
+            this.pteTableData = prc_tbl;
+        } else {
+            this.showMultipleDialog = false;
+            this.ptId = prc_tbl[0].DC_ID;
+            window.location.href = "#/contractmanager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
 
+        }
+    }
+    pickPt(pte) {
+        this.ptId = pte.DC_ID;
+        window.location.href = "#/contractmanager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
+    }
+    openPTE(dcId, psId, ptId) {
+        this.parent_dcId = dcId
+        this.psId = psId;
+        this.ptId = ptId;
+        window.location.href = "#/contractmanager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
+    }
+    closeMultiple() {
+        this.showMultipleDialog = false;
+    }
     ngOnInit() {
         if(this.tab === 'groupExclusionDiv'){
             this.selectedTab = 5;

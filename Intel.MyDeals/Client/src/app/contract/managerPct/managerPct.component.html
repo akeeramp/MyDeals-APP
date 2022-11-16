@@ -29,7 +29,7 @@
                         <span class="k-textbox k-space-right k-style-box" style="width: 350px !important; margin-top: -4px; margin-left: 12px;">
                             <i class="intelicon-search"
                                style="font-size: 26px; color: #00AEEF; margin-top: 3px;"></i><input style="width: 345px;border:none;" placeholder="Search for Pricing Strategy, Pricing Table or name"
-                                                                                                    [(ngModel)]="titleFilter" />
+                                                                                                    (keyup)="updateTitleFilter()" [(ngModel)]="titleFilter" />
                         </span>
                     </td>
                     <td style="text-align: right;"></td>
@@ -45,13 +45,13 @@
                                 title="Execute Price Cost Test and Meet Comp Test"
                                 style="padding-left:100px">
                             <i class="fa fa-refresh fa-fw iconRunPct" [ngClass]="isRunning ? 'fa-spin grn' : '' " aria-hidden="true" style="font-size: 20px"></i>
-                        </button>                        
+                        </button>
                     </td>
                     <td style="width: 120px; text-align: center;">
                         Price Cost Test <div class="btnLastRun"
                                              style="font-size: 9px; color: #00AEEF; line-height: 1.1em;" title="{{lastMetCompRunLocalTime}}">{{lastMeetCompRunCalc('Price Cost Test')}}</div>
                     </td>
-                    <td style="line-height: 1.1em;">Pricing Strategy / Pricing Table</td>
+                    <td style="line-height: 1.1em; padding-left: 10px">Pricing Strategy / Pricing Table</td>
                     <td style="width: 120px; text-align: center; line-height: 1em;">Stage/Deal type</td>
                 </tr>
             </table>
@@ -59,9 +59,9 @@
         </div>
     </div>
     <div id="sum-container" style="min-width: 800px;margin-top:10px;line-height: 0.5 !important;">
-        <div class="sum-main-body">
+        <div class="sum-main-body" style="margin-left:0px; padding-left: 5px !important">
             <div class="sum-main-container">
-                <div *ngFor="let ps of pricingStrategyFilter | filter:titleFilter ;let psIndex=index"
+                <div *ngFor="let ps of pricingStrategyFilter;let psIndex=index"
                      class="sumPsContainer">
                     <table style="width: 100%">
                         <tr>
@@ -79,7 +79,7 @@
                             </td>
                             <td>
                                 <div [textContent]="ps.TITLE" class="bolder linkable"
-                                     title="Click to open the Pricing Strategy in the Contract Editor"></div>
+                                     title="Click to open the Pricing Strategy in the Contract Editor" (click)="openPTEeditor(ps)"></div>
                             </td>
                             <td style="width: 120px; text-align: center;">
                                 <div class="bolder org">
@@ -116,7 +116,7 @@
                                     <td style="width: 30px;"></td>
                                     <td>
                                         <div [textContent]="pt.TITLE" class="bold linkable"
-                                             title="Click to open the Pricing Table in the Contract Editor"></div>
+                                             title="Click to open the Pricing Table in the Contract Editor" (click)="openPTE(ps.DC_PARENT_ID, ps.DC_ID, pt.DC_ID)"></div>
                                     </td>
                                     <td style="width: 120px; text-align: center;">
                                         <div class="bolder org">
@@ -177,7 +177,7 @@
                                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                                         <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
                                                     </ng-template>
-                                                    <ng-template kendoGridCellTemplate let-dataItem hidden="hidden">                                                       
+                                                    <ng-template kendoGridCellTemplate let-dataItem hidden="hidden">
                                                     </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Processor #" [filterable]="true" field="PCSR_NBR"
@@ -400,6 +400,33 @@ dataItem.DEAL_STRT_DT | date:
             </div>
         </div>
     </div>
+    <kendo-dialog class="cm-pop-up" *ngIf="showMultipleDialog">
+        <div class="modal-header modalBlueBody">
+            <h5 class="modal-title" id="modal-title">Multiple Pricing Tables</h5>
+        </div>
+        <div class="modal-body modalBlueBody" id="modal-body">
+
+            <div>This Pricing Strategy contains multiple Pricing Tables.Please select which Pricing</div>
+            <p style=" margin-right: 319px;"> Table you would like to view:</p>
+
+
+            <div style="margin: 20px 0; max-height: 190px; overflow: auto; padding: 5px;">
+                <div *ngFor="let pte of pteTableData">
+                    <button class="btn btn-primary btn-full btn_color_fix" type="button" (click)="pickPt(pte)">{{pte.DC_ID}} - {{pte.TITLE}}</button>
+                </div>
+            </div>
+
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="fr">
+                        <button class="btn btn-warning cancel_color_fix" type="button" style="margin-right: 8px;" (click)="closeMultiple()">Cancel</button>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+        <!-- <kendo-dialog-actions><button kendoButton (click)="close('no')">OK</button></kendo-dialog-actions> -->
+    </kendo-dialog>
     <loading-panel-angular [show]="isPctLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription">
     </loading-panel-angular>
 </div>

@@ -14,7 +14,7 @@ export class GridUtil {
             var tmplt = '';
             if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
                 tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-            tmplt += '<div class="uiControlDiv">';
+            tmplt += '<div class="uiControlDiv vert-center">';
             tmplt += '</div>';
             return tmplt
         }
@@ -44,9 +44,9 @@ export class GridUtil {
             var tmplt = '';
             if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
                 tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-            tmplt += '<div class="uiControlDiv"';
-            tmplt += '    <div class="ng-binding vert-center" ' + ' ' + ')">' + (passedData['NUM_OF_TIERS'] / passedData['NUM_OF_DENSITY']) + '</div>';
-            tmplt += '</div>';
+            //tmplt += '<div class="uiControlDiv"';
+            tmplt += '    <div class="ng-binding vert-center" ' + ' ' + '>' + (passedData['NUM_OF_TIERS'] / passedData['NUM_OF_DENSITY']) + '</div>';
+            //tmplt += '</div>';
             return tmplt;
         }
         else if (field == 'CREDIT_AMT') {
@@ -258,7 +258,7 @@ export class GridUtil {
         if (this.displayFrontEndDateMessage(passedData))
             tmplt += '<span class="vert-center" style="top: 20% !important"> <i class="intelicon-information dateWrapper" title="If the deal start date is in the past, the deal start date will change to the date when the deal becomes active."></i> </span>'
         if (passedData[field] != undefined && passedData[field] != null)
-            tmplt += '    <span class="ng-binding vert-center alert-divider" style="top: 20% !important">' + passedData[field] + '</span>';
+            tmplt += '    <span class="ng-binding vert-center alert-divider" style="top: 45% !important">' + passedData[field] + '</span>';
         tmplt += '</div></div>';
         return tmplt;
     }

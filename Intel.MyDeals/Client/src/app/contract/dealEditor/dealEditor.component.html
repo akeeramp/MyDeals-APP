@@ -18,7 +18,7 @@
                     </span>
                 </button>
                 <div class="fr" style="margin-top: 2px;">
-                    <button class="btn btn-sm ssToolbarBtn tool-hover" (click)="toggleWrap()" title="Toggle Word Wrap" [ngClass]="{'toggleSelect': wrapEnabled}">
+                    <button class="btn btn-sm ssToolbarBtn tool-hover" (click)="toggleWrap()" title="Toggle Word Wrap" [ngClass]="{'toggleSelect': wrapEnabled}" [ngStyle]="{'background-color' : wrapEnabled? '#f2f2f2': ''}">
                         <table>
                             <tr>
                                 <td><i class="intelicon-align-left skyBlue" style="font-size: 30px"></i></td>

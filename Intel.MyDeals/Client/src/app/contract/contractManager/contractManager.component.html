@@ -204,10 +204,10 @@
                     </td>
                     <td *ngIf="CAN_VIEW_COST_TEST" style="width: 160px; text-align: center; ">
                                          <button class="btn btn-sm btn-skyblue-sm fl"
-                                                (click)="executePctViaBtn()"
+                                                (click)="executePctViaBtn('pct')"
                                                 title="Execute Price Cost Test and Meet Comp Test"
                                                 style="padding-left:100px" >
-                                            <i class="fa fa-refresh fa-fw iconRunPct" [ngClass]="isRunning ? 'fa-spin grn' : '' "  aria-hidden="true" style="font-size: 20px"></i>
+                                            <i class="fa fa-refresh fa-fw iconRunPct" [ngClass]="isRunning ? 'fa-spin grn' : '' " [ngStyle]="{'color' : (pctClicked) ? 'black' : '' }" aria-hidden="true" style="font-size: 20px"></i>
                                         </button>
                         Price Cost Test
                         <div class="btnLastRu" style="font-size: 9px; color: #00AEEF; line-height: 0.01em; margin-left: 35px">
@@ -217,10 +217,10 @@
 
                     <td *ngIf="CAN_VIEW_MEET_COMP" style="width: 160px; text-align: center;">
                         <button class="btn btn-sm btn-skyblue-sm fl"
-                        (click)="executePctViaBtn()"
+                        (click)="executePctViaBtn('mct')"
                         title="Execute Price Cost Test and Meet Comp Test"
                         style="padding-left:100px" >
-                    <i class="fa fa-refresh fa-fw iconRunPct" [ngClass]="isRunning ? 'fa-spin grn' : '' " aria-hidden="true" style="font-size: 20px"></i>
+                    <i class="fa fa-refresh fa-fw iconRunPct" [ngClass]="isRunning ? 'fa-spin grn' : '' " [ngStyle]="{'color' : (mctClicked) ? 'black' : '' }" aria-hidden="true" style="font-size: 20px"></i>
                         </button>
                         Meet Comp Test
                         <div class="btnLastRu" style="font-size: 9px; color: #00AEEF; line-height:0.01em;margin-left:30px;">
@@ -300,7 +300,7 @@
                                         </div>
                                     </td>
                                     <td>
-                                        <div [textContent]="pt.TITLE" class="bold linkable" title="Click to open the Pricing Table in the Contract Editor"></div>
+                                        <div [textContent]="pt.TITLE" class="bold linkable" title="Click to open the Pricing Table in the Contract Editor" (click)="openPTE(ps.DC_PARENT_ID, ps.DC_ID, pt.DC_ID)"></div>
                                     </td>
                                     <td style="width: 160px; text-align: center;" *ngIf="userRole=='GA'">
                                         <i *ngIf="pt.CAP_MISSING_FLG !=='0' && pt.COST_MISSING_FLG !=='0'" style="color:#c4d600" class="intelicon-passed-completed-solid medIcon"></i><i *ngIf="pt.CAP_MISSING_FLG==='1' || pt.COST_MISSING_FLG==='1'" style="color:#f3d54e"
