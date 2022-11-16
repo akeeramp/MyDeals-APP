@@ -139,7 +139,7 @@
                 function getDuplicate(x) {
                     var x_Prim_Cust_Nm = (x.PRIM_CUST_NM ? x.PRIM_CUST_NM.toLowerCase() : '');
                     var model_Cust_Nm = (model.PRIM_CUST_NM ? model.PRIM_CUST_NM.toLowerCase() : '');
-                    var patt = new RegExp("^[\\w .,:'\&+-]*$");
+                    var patt = new RegExp("^[\\w .,:'\&+-/]*$");
                     var res = patt.test(model_Cust_Nm);
                     if (!res) {
                         validationMessages.push("Invalid Character identified in Unified Customer Name. Please remove it and Save.");

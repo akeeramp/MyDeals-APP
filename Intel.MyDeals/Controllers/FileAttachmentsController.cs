@@ -252,7 +252,7 @@ namespace Intel.MyDeals.Controllers
                 .Where(grp => grp.Count() > 1).Select(y => y.Key.DEAL_ID).ToList();
             unifyDealValidation.DuplicateDealEntryCombination = validRows.Where(x => x.DEAL_END_CUSTOMER_RETAIL != "" && x.DEAL_END_CUSTOMER_COUNTRY != "").ToList().
                 GroupBy(x => new { x.DEAL_ID, x.DEAL_END_CUSTOMER_COUNTRY, x.DEAL_END_CUSTOMER_RETAIL }).Where(grp => grp.Count() > 1).Select(y => y.Key.DEAL_ID).ToList();
-            var patt = @"^[\w\s.,'&:+-]*$";
+            var patt = @"^[\w\s.,'&:+-/]*$";
             var RPLStsPattern = @"^[A-Za-z\s,]*$";
             var validUcdRow = lstUnifyDeals.Where(x => x.UCD_GLOBAL_ID != 0 && x.UCD_GLOBAL_NAME != "").ToList();
             foreach (var unify in validUcdRow)
@@ -473,7 +473,7 @@ namespace Intel.MyDeals.Controllers
             validationSummary.duplicateToBeCtryNms = new List<CustomerCountryDetail>();
             validationSummary.invalidRplStatusCodes = new List<string>();
             var rplStatcusCodeList = _primeCustomersLib.GetRplStatusCodes().Select(y =>y.RPL_STS_CD).ToList();
-            var patt = @"^[\w\s.,'&:+-]*$";
+            var patt = @"^[\w\s.,'&:+-/]*$";
             var RPLStsPattern = @"^[A-Za-z\s,]*$";
             validationSummary.invalidCountries = lstDealRecons.Where(x => x.Unified_Country_Region.Trim() != string.Empty).Select(x => x.Unified_Country_Region.Trim().ToLower()).Except(DataCollections.GetCountries().Select(x => x.CTRY_NM.ToLower())).Where(x => x != string.Empty).ToList();
             validationSummary.toBeInvalidCountries = lstDealRecons.Where(x => x.To_be_Unified_Country_Region.Trim() != string.Empty).Select(x => x.To_be_Unified_Country_Region.Trim().ToLower()).Except(DataCollections.GetCountries().Select(x => x.CTRY_NM.ToLower())).Where(x => x != string.Empty).ToList();

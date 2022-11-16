@@ -356,7 +356,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                             rowMsg = rowMsg + "NULL cannot be used as Unified Customer Name|";
                             sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
                         }
-                        var patt = new RegExp("^[\\w\\s.,:'\&+-]*$");
+                        var patt = new RegExp("^[\\w\\s.,:'\&+-/]*$");
                         var res = patt.test(vm.inValidUnifyDeals[i].UCD_GLOBAL_NAME);
                         if (!res) {
                             isInvalidGlobalName = true;
@@ -918,7 +918,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                                 rowMsg = rowMsg + "NULL cannot be used as Unified Customer Name|";
                                 sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
                             }
-                            var patt = new RegExp("^[\\w\\s.,:'\&+-]*$");
+                            var patt = new RegExp("^[\\w\\s.,:'\&+-/]*$");
                             var res = patt.test(vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name);
                             if (!res) {
                                 isInvalidGlobalName = true;
@@ -937,7 +937,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                                 rowMsg = rowMsg + "NULL cannot be used as 'To Be Unified Customer Name'|";
                                 sheet.range("G" + row + ":G" + row).validation($scope.UnifiedDealValidation(true, '', false));
                             }
-                            var patt = new RegExp("^[\\w\\s.,:'\&+-]*$");
+                            var patt = new RegExp("^[\\w\\s.,:'\&+-/]*$");
                             var res = patt.test(vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name);
                             if (!res) {
                                 isInvalidToBeGlobalName = true;
