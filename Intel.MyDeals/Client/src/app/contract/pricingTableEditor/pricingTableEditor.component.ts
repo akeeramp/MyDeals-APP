@@ -162,9 +162,10 @@ export class pricingTableEditorComponent {
                     const isOEM = this.field === "OEM_PLTFRM_LNCH_DT" || this.field === "OEM_PLTFRM_EOL_DT"; 
                     modalComponent = kendoCalendarComponent;
                     height = "auto"
-                    width = "500px";
+                    width = "600px";
                     name = this.field;
                     data = { colName: name, items: { 'data': this.source }, cellCurrValues: selVal, contractStartDate: contractStartDate, contractEndDate: contractEndDate, isConsumption: isConsumption, isOEM: isOEM, contractIsTender: VM.isTenderContract };
+                    panelClass = "date-calendar-pop-up";
                 }
                 const dialogRef = dialog.open(modalComponent, {
                     height: height,

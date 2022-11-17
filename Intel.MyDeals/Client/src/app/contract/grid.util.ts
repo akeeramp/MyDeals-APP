@@ -253,12 +253,12 @@ export class GridUtil {
         var tmplt = '';
         if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined)
             tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-        tmplt += '<div class="uiControlDiv dealCell' + this.getClassNm(passedData, field) + '"';
+        tmplt += '<div class="uiControlDiv dealCell' + this.getClassNm(passedData, field) + '">';
         tmplt += '    <div class="ng-binding vert-center">';
         if (this.displayFrontEndDateMessage(passedData))
             tmplt += '<span class="vert-center" style="top: 20% !important"> <i class="intelicon-information dateWrapper" title="If the deal start date is in the past, the deal start date will change to the date when the deal becomes active."></i> </span>'
         if (passedData[field] != undefined && passedData[field] != null)
-            tmplt += '    <span class="ng-binding vert-center alert-divider" style="top: 45% !important">' + passedData[field] + '</span>';
+            tmplt += '    <span class="ng-binding vert-center alert-divider" style="">' + passedData[field] + '</span>';
         tmplt += '</div></div>';
         return tmplt;
     }

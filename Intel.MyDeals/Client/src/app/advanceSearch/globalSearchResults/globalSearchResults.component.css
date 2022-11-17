@@ -82,6 +82,14 @@ mat-list-item:hover {
     justify-content: center;
     position: relative;
     width: 100%;
+    max-width: 750px;
+    margin-left: auto;
+    margin-right: auto;
+    flex-wrap: wrap;
+}
+
+.margin-btn-15 {
+    margin-bottom: 15px !important;
 }
 
 .copper-btns mat-button-toggle {

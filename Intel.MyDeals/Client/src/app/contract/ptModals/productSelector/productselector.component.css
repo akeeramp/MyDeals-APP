@@ -363,6 +363,23 @@ a.prdAnchor:hover {
     overflow-y: auto;
     max-height: 100%;
     padding-top: 0;
+    overflow-x: hidden;
+}
+
+.dealTools.check-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 100%;
+    width: 100%;
+}
+
+kendo-grid.select-suggest-pop-up {
+    height: 250px;
+}
+
+.height-100 {
+    height: 100%!important;
 }
 
 

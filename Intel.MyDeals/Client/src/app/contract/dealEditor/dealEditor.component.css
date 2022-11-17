@@ -935,10 +935,10 @@ ngb-tooltip-window .tooltip-inner {
     padding: 0;
 }
 
-.mpublishgrid.k-grid td deal-editor-cell div {
+/*.mpublishgrid.k-grid td deal-editor-cell div {
     width: 100% !important;
     height: 100% !important
-}
+}*/
 .mpublishgrid.k-grid td deal-editor-cell .dealCell .col-md-12.textRightAlign .uiControlDiv .capLineStyle {
     height: 40px !important;
     margin-top: 1px;

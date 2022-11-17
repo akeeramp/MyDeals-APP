@@ -38,8 +38,8 @@ import * as _ from "underscore";
 		<div class="row">
 			<div class="col-md-12">
 				<div class="fr">
-					<button class="btn btn-warning add-mar-five" type="button" (click)="onNoClick()">Cancel</button>
-					<button class="btn btn-primary" type="button" (click)="onSave()" [disabled]="(!isValidDate)" [ngStyle]="{'opacity': isValidDate? 1 : .3}">Add to Grid</button>
+					<button class="btn btn-warning add-mar-five warn-custom" type="button" (click)="onNoClick()">Cancel</button>
+					<button class="btn btn-primary prim-custom" type="button" (click)="onSave()" [disabled]="(!isValidDate)" [ngStyle]="{'opacity': isValidDate? 1 : .3}">Add to Grid</button>
 				</div>
 			</div>
 		</div>

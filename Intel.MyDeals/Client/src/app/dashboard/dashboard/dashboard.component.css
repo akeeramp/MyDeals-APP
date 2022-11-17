@@ -1804,3 +1804,43 @@ kendo-window#OvrLp .k-window-content {
 .overlapping_css .k-grid-filter .k-icon.k-i-filter:hover {
         color: #0071c5 !important;
 }
+kendo-grid.contract-history-style span.k-icon.k-i-filter {
+    font-size: 20px !important;
+    color: #777777 !important;
+}
+
+.date-calendar-pop-up .mat-dialog-container {
+    padding: 0;
+    border-radius: 0;
+}
+
+    .date-calendar-pop-up .mat-dialog-container .modal-header {
+        padding: 15px;
+        border-bottom: 1px solid #f4f4f4;
+    }
+
+    .date-calendar-pop-up .mat-dialog-container .modal-body {
+        position: relative;
+        padding: 15px;
+    }
+
+    .date-calendar-pop-up .mat-dialog-container .modal-footer {
+        padding: 15px;
+        border-top: 1px solid #f4f4f4;
+    }
+
+button.warn-custom {
+    background-color: #f39c12;
+    border-color: #e08e0b;
+    color: #0071c5;
+}
+
+    button.warn-custom:hover {
+        background-color: #e08e0b;
+        color: #0071c5;
+        border-color: #b1babf !important;
+    }
+
+.k-calendar-header .k-calendar-title:hover {
+    color: #424242!important;
+}

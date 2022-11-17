@@ -48,7 +48,7 @@
                         <table *ngIf="suggestedProducts.length !== 0" style="width: 100%; height: 100%;table-layout:fixed">
                             <tr>
                                 <td style="width:20%;min-width:20px;max-width:200px">
-                                    <div class="leftNavFilter">
+                                    <div class="leftNavFilter height-100">
                                         <div class="filterTitleUnderline" *ngIf="curRowIssues.length > 0">Products Found</div>
                                         <div class="filterGrp">
                                             <div class="filterContainer" uib-collapse="isPrdCollapsed">
@@ -87,17 +87,17 @@
                                         </div>
                                     </div>
                                 </td>
-                                <td>
-                                    <kendo-grid [data]="filteredGridData" [loading]="isfilteredGridLoading" [pageSize]="filteredState.take" [skip]="filteredState.skip" [filter]="filteredState.filter" filterable="menu" [sortable]="true" [sort]="filteredState.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
+                                <td class="new-now-wrap oppo-grids">
+                                    <kendo-grid class="select-suggest-pop-up" [data]="filteredGridData" [loading]="isfilteredGridLoading" [pageSize]="filteredState.take" [skip]="filteredState.skip" [filter]="filteredState.filter" filterable="menu" [sortable]="true" [sort]="filteredState.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
                                         [groupable]="false" [group]="filteredState.group" [resizable]="true" (dataStateChange)="(dataStateChange)($event,'filter')">
                                         <kendo-grid-column width="65px" [columnMenu]="false">
                                             <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
-                                                <div class='dealTools'>
+                                                <div class='dealTools check-center'>
                                                     <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="toggleSelectAll($event, suggestedProducts)">
                                                 </div>
                                             </ng-template>
                                             <ng-template kendoGridCellTemplate let-dataItem>
-                                                <div class='dealTools'>
+                                                <div class='dealTools check-center'>
                                                     <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="selectProduct(dataItem)" [(ngModel)]="dataItem.selected">
                                                 </div>
                                             </ng-template>
@@ -454,7 +454,7 @@
                     <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')"></trashcan>
                 </div>
                 <div *ngIf="!excludeMode" class="row">
-                    <div [ngClass]="{'col-md-6':enableMultipleSelection, 'paddingRight15 pad-right-remove': !enableMultipleSelection}" style="text-align: left;\">
+                    <div [ngClass]="{'col-md-6':enableMultipleSelection, 'paddingRight15 pad-right-remove': !enableMultipleSelection}" style="text-align: left;">
                         <span [ngClass]="{'paddingLeft15': !enableMultipleSelection}">
                             <span [ngClass]="{'paddingLeftNone':enableMultipleSelection}" class="text-left textProdSelector">
                                 Selected Products
