@@ -167,7 +167,12 @@
                                 <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openModal('CAP', pricingTableRow, dataItem.PRD_MBR_SID, 'CAP')">
                                     <!-- CAP Info cell design -->
                                     <div [class.isSoftWarnCell]="dataItem.CAP.includes('No')" style="text-align: center;">
-                                        <strong>{{ dataItem.CAP }}</strong>
+                                        <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP !='' && dataItem.CAP !='No CAP'">
+                                            <strong>{{dataItem.CAP | currency}}</strong>
+                                        </span>
+                                        <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP ==='No CAP'">
+                                            {{dataItem.CAP}}
+                                        </span>
                                         <div *ngIf="!dataItem.CAP.includes('No')" style="line-height:1;">
                                             {{ dataItem.CAP_START }} - {{ dataItem.CAP_END }}
                                         </div>
@@ -210,7 +215,7 @@
                                 <!-- Cell Content -->
                                 <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
                                     <!-- YCS2 Info cell design -->
-                                    <div [class.isSoftWarnCell]="dataItem.YCS2.includes('No')" style="text-align: center;"  (click)="openModal('YCS2', pricingTableRow, dataItem.PRD_MBR_SID, 'YCS2')">
+                                    <div [class.isSoftWarnCell]="dataItem.YCS2.includes('No')" style="text-align: center;" (click)="openModal('YCS2', pricingTableRow, dataItem.PRD_MBR_SID, 'YCS2')">
                                         {{ dataItem.YCS2 }}
                                     </div>
                                 </div>

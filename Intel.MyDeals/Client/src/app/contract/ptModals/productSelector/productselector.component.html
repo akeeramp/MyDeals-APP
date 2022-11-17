@@ -88,8 +88,8 @@
                                     </div>
                                 </td>
                                 <td>
-                                    <kendo-grid [data]="suggestedProducts" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
-                                        [groupable]="false" [resizable]="true" (dataStateChange)="dataStateChange($event)">
+                                    <kendo-grid [data]="filteredGridData" [loading]="isfilteredGridLoading" [pageSize]="filteredState.take" [skip]="filteredState.skip" [filter]="filteredState.filter" filterable="menu" [sortable]="true" [sort]="filteredState.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
+                                        [groupable]="false" [group]="filteredState.group" [resizable]="true" (dataStateChange)="(dataStateChange)($event,'filter')">
                                         <kendo-grid-column width="65px" [columnMenu]="false">
                                             <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                                                 <div class='dealTools'>
@@ -108,7 +108,7 @@
                                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                                                                  let-filterService="filterService">
                                                         <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                                                           [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                                                                           [filterService]="filterService" [data]="distinctPrimitive(column.field,'filter')"></multicheck-filter>
                                                     </ng-template>
                                                 </div>
                                                 <!-- Template for `Cap Info` column -->
@@ -130,7 +130,12 @@
                                                         <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openModal(column.field, pricingTableRow, dataItem.PRD_MBR_SID, column.field)">
                                                             <!-- CAP Info cell design -->
                                                             <div [class.isSoftWarnCell]="dataItem.CAP.includes('No')" style="text-align: center;">
-                                                                <strong>{{ dataItem.CAP }}</strong>
+                                                                <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP !='' && dataItem.CAP !='No CAP'">
+                                                                    <strong>{{dataItem.CAP | currency}}</strong>
+                                                                </span>
+                                                                <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP ==='No CAP'">
+                                                                    {{dataItem.CAP}}
+                                                                </span>
                                                                 <div *ngIf="!dataItem.CAP.includes('No')">
                                                                     <br /> {{ dataItem.CAP_START }} - {{ dataItem.CAP_END }}
                                                                 </div>
@@ -247,7 +252,12 @@
                                     <div class="CAPYCS2CellContent accurate-height" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openModal(column.field, pricingTableRow, dataItem.PRD_MBR_SID, column.field)">
                                         <!-- CAP Info cell design -->
                                         <div [class.isSoftWarnCell]="dataItem.CAP.includes('No')" [class.uiControlDiv]="dataItem.CAP.includes('No')" style="text-align: center;">
-                                            <strong>{{ dataItem.CAP }}</strong>
+                                            <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP !='' && dataItem.CAP !='No CAP'">
+                                                <strong>{{dataItem.CAP | currency}}</strong>
+                                            </span>
+                                            <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP ==='No CAP'">
+                                                {{dataItem.CAP}}
+                                            </span>
                                             <div class="another-possible" *ngIf="!dataItem.CAP.includes('No')">
                                                 {{ dataItem.CAP_START }} - {{ dataItem.CAP_END }}
                                             </div>
@@ -378,7 +388,12 @@
                                             <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openModal(column.field, pricingTableRow, dataItem.PRD_MBR_SID, column.field)">
                                                 <!-- CAP Info cell design -->
                                                 <div [class.isSoftWarnCell]="dataItem.CAP.includes('No')" style="text-align: center;">
-                                                    <strong>{{ dataItem.CAP }}</strong>
+                                                    <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP !='' && dataItem.CAP !='No CAP'">
+                                                        <strong>{{dataItem.CAP | currency}}</strong>
+                                                    </span>
+                                                    <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP ==='No CAP'">
+                                                        {{dataItem.CAP}}
+                                                    </span>
                                                     <div *ngIf="!dataItem.CAP.includes('No')">
                                                         <br /> {{ dataItem.CAP_START }} - {{ dataItem.CAP_END }}
                                                     </div>

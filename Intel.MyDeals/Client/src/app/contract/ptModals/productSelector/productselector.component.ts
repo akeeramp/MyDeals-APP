@@ -45,6 +45,7 @@ export class ProductSelectorComponent {
     private pricingTableRow: any = {};
     private isLoading: boolean = false;
     private isLoadingSearchProducts: boolean = false;
+    private isfilteredGridLoading: boolean = false;
     private isGridLoading: boolean = false;
     private spinnerMessageHeader: string = "PTE Loading";
     private spinnerMessageDescription: string = "PTE loading please wait";
@@ -90,6 +91,16 @@ export class ProductSelectorComponent {
             filters: [],
         },
     };
+    private filteredState: State = {
+        skip: 0,
+        take: 25,
+        group: [{field:'USR_INPUT'}],
+        // Initial filter descriptor
+        filter: {
+            logic: "and",
+            filters: [],
+        },
+    };
     private pageSizes: PageSizeItem[] = [
         {
             text: "10",
@@ -126,7 +137,8 @@ export class ProductSelectorComponent {
     private userInput: string = "";
     private showSuggestions = false;
     private suggestionText = "";
-    private suggestedProducts = [];
+    private suggestedProducts: Array<any> = [];
+    private filteredGridData: GridDataResult;
     private productOptions;
     private curRowIssues = [];
     private curRowCategories = [];
@@ -151,8 +163,13 @@ export class ProductSelectorComponent {
         });
     }
 
-    distinctPrimitive(fieldName: string): any {
-        return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
+    distinctPrimitive(fieldName: string, operation?): any {
+        if (operation == 'filter') {
+            return distinct(this.suggestedProducts, fieldName).map(item => item[fieldName]);
+        }
+        else {
+            return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
+        }
     }
 
     cancel(): void {
@@ -642,6 +659,7 @@ export class ProductSelectorComponent {
     async searchProduct(isSuggestProduct?) {
         if (this.userInput == "") return [];
         this.isLoadingSearchProducts = true;
+        this.isfilteredGridLoading = true;
         let columnType;
         if (isSuggestProduct) {
             this.drillDownPrd = this.userInput;
@@ -675,14 +693,17 @@ export class ProductSelectorComponent {
                     && (this.dealType == 'ECAP' || this.dealType == 'KIT'))) {
                     this.suggestionText = response.length === 0 ? "No products found." : "Product(s) found for \"" + this.userInput + "\"";
                     this.suggestedProducts = response;
+                    this.filteredGridData = process(this.suggestedProducts, this.filteredState);
                     this.showSuggestions = true;
                     this.initSuggestionGrid();
                     this.isLoadingSearchProducts = false;
+                    this.isfilteredGridLoading = false;
                     return;
                 }
                 if (this.disableSelection) {
                     this.suggestionText = "No product found for \"" + this.userInput + "\". Search resulted following products:"
                     this.suggestedProducts = response;
+                    this.filteredGridData = process(this.suggestedProducts, this.filteredState);
                     this.showSuggestions = true;
                     this.initSuggestionGrid();
                 } else {
@@ -690,11 +711,12 @@ export class ProductSelectorComponent {
                     this.processProducts(response);
                 }
                 this.isLoadingSearchProducts = false;
+                this.isfilteredGridLoading = false;
             }, (error) => {
                 this.loggerService.error("Unable to get products.", error);
                 this.isLoadingSearchProducts = false;
             });
-        return this.suggestedProducts;
+        return this.filteredGridData;
     }
     showSingleProductHierarchy(product) {
         let data = {
@@ -886,7 +908,8 @@ export class ProductSelectorComponent {
 
             products[0]['selected'] = ProdSel_Util.productExists(this.selectedPathParts[this.selectedPathParts.length - 1], products[0].PRD_MBR_SID, this.excludeMode, this.excludedProducts, this.addedProducts, this.enableMultipleSelection);
 
-            this.gridData = process(products, this.state);
+            this.gridResult = products;
+            this.gridData = process(this.gridResult, this.state);
             this.searchProcessed = true;
             this.searchItems = [];
             this.showSearchResults = true;
@@ -1315,9 +1338,15 @@ export class ProductSelectorComponent {
         }
     }
 
-    dataStateChange(state: DataStateChangeEvent): void {
-        this.state = state;
-        this.gridData = process(this.gridResult, this.state);
+    dataStateChange(state: DataStateChangeEvent,operation?): void {
+        if (operation == 'filter') {
+            this.filteredState = state;
+            this.filteredGridData = process(this.suggestedProducts, this.filteredState);
+        }
+        else {
+            this.state = state;
+            this.gridData = process(this.gridResult, this.state);
+        }
     }
 
     toggleSelectAll($event, searchGrid) {
