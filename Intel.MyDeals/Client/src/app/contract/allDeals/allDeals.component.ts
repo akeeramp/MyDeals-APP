@@ -367,10 +367,10 @@ export class allDealsComponent {
         }
     }
     exportToExcel() {
-        GridUtil.dsToExcel(this.wipTemplate.columns, this.gridResult, "All Deals Export");
+        GridUtil.dsToExcel(this.wipTemplate.columns, this.gridResult, "Deal Editor Export");
     }
     exportToExcelCustomColumns() {
-        GridUtil.dsToExcel(this.columns, this.gridResult, "All Deals Export");
+        GridUtil.dsToExcel(this.columns, this.gridResult, "Deal Editor Export");
     }
     openOverlappingDealCheck() {
         let data = {

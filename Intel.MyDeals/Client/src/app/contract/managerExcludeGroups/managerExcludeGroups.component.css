@@ -554,3 +554,24 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-
 .extra_box_padding mat-dialog-container {
     padding: 0 !important;
 }
+.extra_box_padding th.k-group-cell.k-header {
+    background-color: #e7e7e8 !important;
+    border-right: 1px solid #e6e6e6;
+}
+.extra_box_padding .k-grid-filter .k-icon.k-i-filter {
+    color: #00AEEF !important;
+    opacity: 1;
+    font-size: 14px;
+}
+.extra_box_padding .k-grid-filter .k-icon.k-i-filter:hover {
+        color: #0071c5 !important;
+}
+.extra_box_padding mat-dialog-container kendo-grid kendo-grid-list table tbody tr.k-grid-norecords td {
+    height: 383px;
+    width: 792px;
+    max-width: 792px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff !important;
+}

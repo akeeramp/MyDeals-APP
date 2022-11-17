@@ -376,11 +376,12 @@ gridster-item.attr-li-7 .k-grid-table-wrap {
     }
 }*/
 
-    .oppo-grids.physics-css kendo-grid.k-grid .k-grid-header-wrap table thead tr th {
-        padding-right: 1.5rem;
-        vertical-align: top;
-        border-color: #ccc;
-    }
+.oppo-grids.physics-css kendo-grid.k-grid .k-grid-header-wrap table thead tr th {
+    padding-right: 1.5rem;
+    vertical-align: top;
+    border-color: #ccc;
+    background: linear-gradient(to bottom, #fdfdfd 0%,#d9d9d9 100%) !important;
+}
 
         .oppo-grids.physics-css kendo-grid.k-grid .k-grid-header-wrap table thead tr th .k-cell-inner span.k-icon.k-i-filter {
             font-size: 12px;
@@ -1764,4 +1765,42 @@ kendo-window#OvrLp .k-window-content {
 }
 #manageFilterStyle .k-icon.k-i-filter:hover {
     color: #0071c5 !important;
+}
+.overlapping_fix mat-dialog-container {
+    padding: 0px !important;
+}
+.overlapping_fix th.k-group-cell.k-header {
+    background-color: #e7e7e8 !important;
+    border-right: 1px solid #e6e6e6;
+}
+
+.overlapping_fix .k-grid-filter .k-icon.k-i-filter {
+    color: #00AEEF !important;
+    opacity: 1;
+    font-size: 14px;
+}
+
+.overlapping_fix .k-grid-filter .k-icon.k-i-filter:hover {
+        color: #0071c5 !important;
+}
+
+.overlapping_fix mat-dialog-container kendo-grid kendo-grid-list table tbody tr.k-grid-norecords td {
+    height: 383px;
+    width: 792px;
+    max-width: 792px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff !important;
+}
+.overlapping_css th.k-group-cell.k-header {
+    background-color: #e7e7e8 !important;
+    border-right: 1px solid #e6e6e6;
+}
+.overlapping_css .k-grid-filter .k-icon.k-i-filter {
+    opacity: 1;
+    font-size: 14px;
+}
+.overlapping_css .k-grid-filter .k-icon.k-i-filter:hover {
+        color: #0071c5 !important;
 }

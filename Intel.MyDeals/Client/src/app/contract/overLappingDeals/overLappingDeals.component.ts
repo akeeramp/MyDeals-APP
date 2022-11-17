@@ -128,6 +128,8 @@ export class overLappingDealsComponent {
         }
         const dialogRef = this.dialog.open(OverlappingCheckComponent, {
             data: data,
+            panelClass: 'overlapping_fix'
+
         });
         dialogRef.afterClosed().subscribe(result => { });
     }

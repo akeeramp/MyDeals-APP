@@ -348,3 +348,11 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper {
 .extra_box mat-dialog-container {
     padding: 0 !important;
 }
+#excel_DropDown.show {
+    transform: none !important;
+    font-size: 13px !important;
+    color: #777 !important;
+    border-color: #eee !important;
+    font-family: 'Intel Clear' !important;
+    top: 44px !important;
+}
