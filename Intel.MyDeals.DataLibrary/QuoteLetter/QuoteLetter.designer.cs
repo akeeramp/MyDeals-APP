@@ -64,10 +64,10 @@ namespace Intel.MyDeals.DataLibrary
             this.lblTerms = new Telerik.Reporting.HtmlTextBox();
             this.txtTerms = new Telerik.Reporting.HtmlTextBox();
             this.ttlConsumption = new Telerik.Reporting.HtmlTextBox();
-            this.lblConsBllgStart = new Telerik.Reporting.HtmlTextBox();
-            this.txtConsumptionBillingStart = new Telerik.Reporting.HtmlTextBox();
-            this.lblConsBllgEnd = new Telerik.Reporting.HtmlTextBox();
-            this.txtConsumptionBillingEnd = new Telerik.Reporting.HtmlTextBox();
+            this.lblConsumptionStartDate = new Telerik.Reporting.HtmlTextBox();
+            this.txtConsumptionStartDate = new Telerik.Reporting.HtmlTextBox();
+            this.lblConsumptionEndDate = new Telerik.Reporting.HtmlTextBox();
+            this.txtConsumptionEndDate = new Telerik.Reporting.HtmlTextBox();
             this.lblConsEmpty = new Telerik.Reporting.HtmlTextBox();
             this.txtConsEmpty = new Telerik.Reporting.HtmlTextBox();
             this.htmlTextBox10 = new Telerik.Reporting.HtmlTextBox();
@@ -235,10 +235,10 @@ namespace Intel.MyDeals.DataLibrary
             this.lblTerms,
             this.txtTerms,
             this.ttlConsumption,
-            this.lblConsBllgStart,
-            this.txtConsumptionBillingStart,
-            this.lblConsBllgEnd,
-            this.txtConsumptionBillingEnd,
+            this.lblConsumptionStartDate,
+            this.txtConsumptionStartDate,
+            this.lblConsumptionEndDate,
+            this.txtConsumptionEndDate,
             this.lblConsEmpty,
             this.txtConsEmpty,
             this.htmlTextBox10,
@@ -583,7 +583,7 @@ namespace Intel.MyDeals.DataLibrary
             this.htmlTextBox6.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
             this.htmlTextBox6.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
             this.htmlTextBox6.StyleName = "BlueLine";
-            this.htmlTextBox6.Value = "<span style=\"font-family: neo sans intel; font-size: 10px\"><strong>Start Date</strong></span>";
+            this.htmlTextBox6.Value = "<span style=\"font-family: neo sans intel; font-size: 10px\"><strong>Billings Start Date</strong></span>";
             // 
             // Start Date Value
             // 
@@ -642,7 +642,7 @@ namespace Intel.MyDeals.DataLibrary
             this.htmlTextBox7.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.htmlTextBox7.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
             this.htmlTextBox7.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox7.Value = "<span style=\"font-family: neo sans intel; font-size: 10px\"><strong>End Date</strong></span>";
+            this.htmlTextBox7.Value = "<span style=\"font-family: neo sans intel; font-size: 10px\"><strong>Billings End Date</strong></span>";
             // 
             // End Date Value
             // 
@@ -3130,121 +3130,121 @@ namespace Intel.MyDeals.DataLibrary
             // 
             // Consumption Billing Start 
             // 
-            this.lblConsBllgStart.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.00D), Telerik.Reporting.Drawing.Unit.Inch(3.70D));
-            this.lblConsBllgStart.Name = "lblConsBllgStart";
-            this.lblConsBllgStart.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.50D),Telerik.Reporting.Drawing.Unit.Inch(0.20D));
-            this.lblConsBllgStart.Style.BackgroundColor = System.Drawing.Color.Transparent;
-            this.lblConsBllgStart.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.lblConsBllgStart.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.lblConsBllgStart.Style.BorderColor.Left = System.Drawing.Color.Transparent;
-            this.lblConsBllgStart.Style.BorderColor.Right = System.Drawing.Color.Transparent;
-            this.lblConsBllgStart.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.lblConsBllgStart.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.lblConsBllgStart.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
-            this.lblConsBllgStart.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
-            this.lblConsBllgStart.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
-            this.lblConsBllgStart.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.lblConsBllgStart.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(1D);
-            this.lblConsBllgStart.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.lblConsBllgStart.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.lblConsBllgStart.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.lblConsBllgStart.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.lblConsBllgStart.Style.Font.Bold = true;
-            this.lblConsBllgStart.Style.Font.Name = "Intel Clear";
-            this.lblConsBllgStart.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(11D);
-            this.lblConsBllgStart.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
-            this.lblConsBllgStart.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
-            this.lblConsBllgStart.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.lblConsBllgStart.Value = "<span style=\"font-size: 10px; font-family: neo sans intel\"><span style=\"color: #000000\"><strong>Billings Start Date</strong></span></span>";
+            this.lblConsumptionStartDate.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.00D), Telerik.Reporting.Drawing.Unit.Inch(3.70D));
+            this.lblConsumptionStartDate.Name = "lblConsumptionStartDate";
+            this.lblConsumptionStartDate.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.50D),Telerik.Reporting.Drawing.Unit.Inch(0.20D));
+            this.lblConsumptionStartDate.Style.BackgroundColor = System.Drawing.Color.Transparent;
+            this.lblConsumptionStartDate.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblConsumptionStartDate.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblConsumptionStartDate.Style.BorderColor.Left = System.Drawing.Color.Transparent;
+            this.lblConsumptionStartDate.Style.BorderColor.Right = System.Drawing.Color.Transparent;
+            this.lblConsumptionStartDate.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblConsumptionStartDate.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblConsumptionStartDate.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblConsumptionStartDate.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblConsumptionStartDate.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblConsumptionStartDate.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblConsumptionStartDate.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(1D);
+            this.lblConsumptionStartDate.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblConsumptionStartDate.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblConsumptionStartDate.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblConsumptionStartDate.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblConsumptionStartDate.Style.Font.Bold = true;
+            this.lblConsumptionStartDate.Style.Font.Name = "Intel Clear";
+            this.lblConsumptionStartDate.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(11D);
+            this.lblConsumptionStartDate.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
+            this.lblConsumptionStartDate.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.lblConsumptionStartDate.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.lblConsumptionStartDate.Value = "<span style=\"font-size: 10px; font-family: neo sans intel\"><span style=\"color: #000000\"><strong>Consumption Start Date</strong></span></span>";
             // 
             // Consumption Billing Start Value
             // 
-            this.txtConsumptionBillingStart.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.00D), Telerik.Reporting.Drawing.Unit.Inch(3.90D));
-            this.txtConsumptionBillingStart.Name = "txtConsumptionBillingStart";
-            this.txtConsumptionBillingStart.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.50D), Telerik.Reporting.Drawing.Unit.Inch(0.20D));
-            this.txtConsumptionBillingStart.Style.BackgroundColor = System.Drawing.Color.Transparent;
-            this.txtConsumptionBillingStart.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.txtConsumptionBillingStart.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.txtConsumptionBillingStart.Style.BorderColor.Left = System.Drawing.Color.Transparent;
-            this.txtConsumptionBillingStart.Style.BorderColor.Right = System.Drawing.Color.Transparent;
-            this.txtConsumptionBillingStart.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.txtConsumptionBillingStart.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.txtConsumptionBillingStart.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
-            this.txtConsumptionBillingStart.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
-            this.txtConsumptionBillingStart.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
-            this.txtConsumptionBillingStart.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.txtConsumptionBillingStart.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(1D);
-            this.txtConsumptionBillingStart.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.txtConsumptionBillingStart.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.txtConsumptionBillingStart.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.txtConsumptionBillingStart.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.txtConsumptionBillingStart.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.txtConsumptionBillingStart.Style.Font.Name = "Intel Clear";
-            this.txtConsumptionBillingStart.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
-            this.txtConsumptionBillingStart.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
-            this.txtConsumptionBillingStart.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
-            this.txtConsumptionBillingStart.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Left;
-            this.txtConsumptionBillingStart.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.txtConsumptionBillingStart.Value = "";
+            this.txtConsumptionStartDate.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.00D), Telerik.Reporting.Drawing.Unit.Inch(3.90D));
+            this.txtConsumptionStartDate.Name = "txtConsumptionStartDate";
+            this.txtConsumptionStartDate.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.50D), Telerik.Reporting.Drawing.Unit.Inch(0.20D));
+            this.txtConsumptionStartDate.Style.BackgroundColor = System.Drawing.Color.Transparent;
+            this.txtConsumptionStartDate.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.txtConsumptionStartDate.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.txtConsumptionStartDate.Style.BorderColor.Left = System.Drawing.Color.Transparent;
+            this.txtConsumptionStartDate.Style.BorderColor.Right = System.Drawing.Color.Transparent;
+            this.txtConsumptionStartDate.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.txtConsumptionStartDate.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.txtConsumptionStartDate.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.txtConsumptionStartDate.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.txtConsumptionStartDate.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.txtConsumptionStartDate.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.txtConsumptionStartDate.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(1D);
+            this.txtConsumptionStartDate.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtConsumptionStartDate.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtConsumptionStartDate.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtConsumptionStartDate.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtConsumptionStartDate.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.txtConsumptionStartDate.Style.Font.Name = "Intel Clear";
+            this.txtConsumptionStartDate.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.txtConsumptionStartDate.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
+            this.txtConsumptionStartDate.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.txtConsumptionStartDate.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Left;
+            this.txtConsumptionStartDate.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.txtConsumptionStartDate.Value = "";
             // 
             // Consumption Billing End (End Customer Block)
             // 
-            this.lblConsBllgEnd.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.50D), Telerik.Reporting.Drawing.Unit.Inch(3.70D));
-            this.lblConsBllgEnd.Name = "lblConsBllgEnd";
-            this.lblConsBllgEnd.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.50D), Telerik.Reporting.Drawing.Unit.Inch(0.20D));
-            this.lblConsBllgEnd.Style.BackgroundColor = System.Drawing.Color.Transparent;
-            this.lblConsBllgEnd.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.lblConsBllgEnd.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.lblConsBllgEnd.Style.BorderColor.Left = System.Drawing.Color.Transparent;
-            this.lblConsBllgEnd.Style.BorderColor.Right = System.Drawing.Color.Transparent;
-            this.lblConsBllgEnd.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.lblConsBllgEnd.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.lblConsBllgEnd.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
-            this.lblConsBllgEnd.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
-            this.lblConsBllgEnd.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
-            this.lblConsBllgEnd.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.lblConsBllgEnd.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(1D);
-            this.lblConsBllgEnd.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.lblConsBllgEnd.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.lblConsBllgEnd.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.lblConsBllgEnd.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.lblConsBllgEnd.Style.Font.Bold = true;
-            this.lblConsBllgEnd.Style.Font.Name = "Intel Clear";
-            this.lblConsBllgEnd.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(11D);
-            this.lblConsBllgEnd.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
-            this.lblConsBllgEnd.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
-            this.lblConsBllgEnd.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.lblConsBllgEnd.Value = "<span style=\"font-size: 10px; font-family: neo sans intel\"><span style=\"color: #000000\"><strong>Billings End Date</strong></span></span>";
+            this.lblConsumptionEndDate.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.50D), Telerik.Reporting.Drawing.Unit.Inch(3.70D));
+            this.lblConsumptionEndDate.Name = "lblConsumptionEndDate";
+            this.lblConsumptionEndDate.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.50D), Telerik.Reporting.Drawing.Unit.Inch(0.20D));
+            this.lblConsumptionEndDate.Style.BackgroundColor = System.Drawing.Color.Transparent;
+            this.lblConsumptionEndDate.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblConsumptionEndDate.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblConsumptionEndDate.Style.BorderColor.Left = System.Drawing.Color.Transparent;
+            this.lblConsumptionEndDate.Style.BorderColor.Right = System.Drawing.Color.Transparent;
+            this.lblConsumptionEndDate.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.lblConsumptionEndDate.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblConsumptionEndDate.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblConsumptionEndDate.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblConsumptionEndDate.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.lblConsumptionEndDate.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.lblConsumptionEndDate.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(1D);
+            this.lblConsumptionEndDate.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblConsumptionEndDate.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblConsumptionEndDate.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblConsumptionEndDate.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.lblConsumptionEndDate.Style.Font.Bold = true;
+            this.lblConsumptionEndDate.Style.Font.Name = "Intel Clear";
+            this.lblConsumptionEndDate.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Point(11D);
+            this.lblConsumptionEndDate.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
+            this.lblConsumptionEndDate.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.lblConsumptionEndDate.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.lblConsumptionEndDate.Value = "<span style=\"font-size: 10px; font-family: neo sans intel\"><span style=\"color: #000000\"><strong>Consumption End Date</strong></span></span>";
             // 
             // Consumption Billing End Value
             // 
-            this.txtConsumptionBillingEnd.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.50D), Telerik.Reporting.Drawing.Unit.Inch(3.90D));
-            this.txtConsumptionBillingEnd.Name = "txtConsumptionBillingEnd";
-            this.txtConsumptionBillingEnd.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.50D), Telerik.Reporting.Drawing.Unit.Inch(0.20D));
-            this.txtConsumptionBillingEnd.Style.BackgroundColor = System.Drawing.Color.Transparent;
-            this.txtConsumptionBillingEnd.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.txtConsumptionBillingEnd.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.txtConsumptionBillingEnd.Style.BorderColor.Left = System.Drawing.Color.Transparent;
-            this.txtConsumptionBillingEnd.Style.BorderColor.Right = System.Drawing.Color.Transparent;
-            this.txtConsumptionBillingEnd.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
-            this.txtConsumptionBillingEnd.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.txtConsumptionBillingEnd.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
-            this.txtConsumptionBillingEnd.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
-            this.txtConsumptionBillingEnd.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
-            this.txtConsumptionBillingEnd.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
-            this.txtConsumptionBillingEnd.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(1D);
-            this.txtConsumptionBillingEnd.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.txtConsumptionBillingEnd.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.txtConsumptionBillingEnd.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.txtConsumptionBillingEnd.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
-            this.txtConsumptionBillingEnd.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
-            this.txtConsumptionBillingEnd.Style.Font.Name = "Intel Clear";
-            this.txtConsumptionBillingEnd.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
-            this.txtConsumptionBillingEnd.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
-            this.txtConsumptionBillingEnd.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
-            this.txtConsumptionBillingEnd.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Left;
-            this.txtConsumptionBillingEnd.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.txtConsumptionBillingEnd.Value = "";
+            this.txtConsumptionEndDate.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(1.50D), Telerik.Reporting.Drawing.Unit.Inch(3.90D));
+            this.txtConsumptionEndDate.Name = "txtConsumptionEndDate";
+            this.txtConsumptionEndDate.Size = new Telerik.Reporting.Drawing.SizeU(Telerik.Reporting.Drawing.Unit.Inch(1.50D), Telerik.Reporting.Drawing.Unit.Inch(0.20D));
+            this.txtConsumptionEndDate.Style.BackgroundColor = System.Drawing.Color.Transparent;
+            this.txtConsumptionEndDate.Style.BorderColor.Bottom = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.txtConsumptionEndDate.Style.BorderColor.Default = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.txtConsumptionEndDate.Style.BorderColor.Left = System.Drawing.Color.Transparent;
+            this.txtConsumptionEndDate.Style.BorderColor.Right = System.Drawing.Color.Transparent;
+            this.txtConsumptionEndDate.Style.BorderColor.Top = System.Drawing.Color.FromArgb(((int)(((byte)(0)))), ((int)(((byte)(130)))), ((int)(((byte)(206)))));
+            this.txtConsumptionEndDate.Style.BorderStyle.Bottom = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.txtConsumptionEndDate.Style.BorderStyle.Default = Telerik.Reporting.Drawing.BorderType.None;
+            this.txtConsumptionEndDate.Style.BorderStyle.Left = Telerik.Reporting.Drawing.BorderType.None;
+            this.txtConsumptionEndDate.Style.BorderStyle.Right = Telerik.Reporting.Drawing.BorderType.None;
+            this.txtConsumptionEndDate.Style.BorderStyle.Top = Telerik.Reporting.Drawing.BorderType.Solid;
+            this.txtConsumptionEndDate.Style.BorderWidth.Bottom = Telerik.Reporting.Drawing.Unit.Pixel(1D);
+            this.txtConsumptionEndDate.Style.BorderWidth.Default = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtConsumptionEndDate.Style.BorderWidth.Left = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtConsumptionEndDate.Style.BorderWidth.Right = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtConsumptionEndDate.Style.BorderWidth.Top = Telerik.Reporting.Drawing.Unit.Pixel(0D);
+            this.txtConsumptionEndDate.Style.Color = System.Drawing.Color.FromArgb(((int)(((byte)(64)))), ((int)(((byte)(64)))), ((int)(((byte)(64)))));
+            this.txtConsumptionEndDate.Style.Font.Name = "Intel Clear";
+            this.txtConsumptionEndDate.Style.Font.Size = Telerik.Reporting.Drawing.Unit.Pixel(10D);
+            this.txtConsumptionEndDate.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
+            this.txtConsumptionEndDate.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
+            this.txtConsumptionEndDate.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Left;
+            this.txtConsumptionEndDate.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
+            this.txtConsumptionEndDate.Value = "";
 
             // 
             // Last Consumption Empty Placeholder Label Box
@@ -3607,10 +3607,10 @@ namespace Intel.MyDeals.DataLibrary
         private HtmlTextBox lblTerms;
         private HtmlTextBox txtTerms;
         private HtmlTextBox ttlConsumption;
-        private HtmlTextBox lblConsBllgStart;
-        private HtmlTextBox txtConsumptionBillingStart;
-        private HtmlTextBox lblConsBllgEnd;
-        private HtmlTextBox txtConsumptionBillingEnd;
+        private HtmlTextBox lblConsumptionStartDate;
+        private HtmlTextBox txtConsumptionStartDate;
+        private HtmlTextBox lblConsumptionEndDate;
+        private HtmlTextBox txtConsumptionEndDate;
         private HtmlTextBox lblConsEmpty;
         private HtmlTextBox txtConsEmpty;
         private HtmlTextBox htmlTextBox18;

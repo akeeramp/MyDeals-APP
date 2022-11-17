@@ -116,7 +116,7 @@ namespace Intel.MyDeals.DataLibrary
 
         void ProcessData(string xml, string content0, string content1, int dealId)
         {
-            //xml = "<PARAMETERS><Customer>Hyve Solutions Corp</Customer><EndCustomer></EndCustomer><StartDate>01/01/2021</StartDate><CBllgStart>12/12/8888</CBllgStart><CBllgEnd>12/12/9999</CBllgEnd><EndDate>12/31/2021</EndDate><OnAddDate>01/01/2021</OnAddDate><Quantity>999999999</Quantity><ProgramPayment>FRONTEND</ProgramPayment><RebateType>MCP</RebateType><PProdDesc>CD8067303694600</PProdDesc><PProdCat>SvrWS</PProdCat><PECAPPrice>7628</PECAPPrice><KitCheck>N</KitCheck><QltrProject>BlahA</QltrProject><Terms>This Agreement constitutes the entire understanding between Intel and Customer with regard to the topics covered in this Agreement and supersedes all prior agreements, communications, representation and discussions between Intel and Customer (whether written or oral).  Any contrary or conflicting term is rejected.  Any modification or amendment to this Agreement must be in writing and accepted through Intels Click-to-Accept web interface or signed by authorized representatives of both Intel and Customer</Terms><WfStgCd>Pending</WfStgCd><PsWfStgCd>Pending</PsWfStgCd><PayoutBasedOn>Billings</PayoutBasedOn></PARAMETERS>";
+            //xml = "<PARAMETERS><Customer>Hyve Solutions Corp</Customer><EndCustomer></EndCustomer><StartDate>01/01/2021</StartDate><ConsStartDt>12/12/8888</ConsStartDt><ConsEndDt>12/12/9999</ConsEndDt><EndDate>12/31/2021</EndDate><OnAddDate>01/01/2021</OnAddDate><Quantity>999999999</Quantity><ProgramPayment>FRONTEND</ProgramPayment><RebateType>MCP</RebateType><PProdDesc>CD8067303694600</PProdDesc><PProdCat>SvrWS</PProdCat><PECAPPrice>7628</PECAPPrice><KitCheck>N</KitCheck><QltrProject>BlahA</QltrProject><Terms>This Agreement constitutes the entire understanding between Intel and Customer with regard to the topics covered in this Agreement and supersedes all prior agreements, communications, representation and discussions between Intel and Customer (whether written or oral).  Any contrary or conflicting term is rejected.  Any modification or amendment to this Agreement must be in writing and accepted through Intels Click-to-Accept web interface or signed by authorized representatives of both Intel and Customer</Terms><WfStgCd>Pending</WfStgCd><PsWfStgCd>Pending</PsWfStgCd><PayoutBasedOn>Billings</PayoutBasedOn></PARAMETERS>";
             source = XDocument.Parse(xml);
 
             MainContent.Value = content0.Replace("CUSTOMERNAMEGOESHERE", EscapeSpecialChars(GetValue("Customer")));
@@ -140,8 +140,8 @@ namespace Intel.MyDeals.DataLibrary
 
             txtK1Ecap.Value = GetMoneyValue("KECAPPrice");
 
-            txtConsumptionBillingStart.Value = GetValue("CBllgStart");
-            txtConsumptionBillingEnd.Value = GetValue("CBllgEnd");
+            txtConsumptionStartDate.Value = GetValue("ConsStartDt");
+            txtConsumptionEndDate.Value = GetValue("ConsEndDt");
 
             //txtK2Ecap.Value = GetMoneyValue("SKECAPPrice");
 
@@ -270,10 +270,10 @@ namespace Intel.MyDeals.DataLibrary
             if (txtBasedOn.Value != "Consumption")
             {
                 ttlConsumption.Visible = false;
-                lblConsBllgStart.Visible = false;
-                txtConsumptionBillingStart.Visible = false;
-                lblConsBllgEnd.Visible = false;
-                txtConsumptionBillingEnd.Visible = false;
+                lblConsumptionStartDate.Visible = false;
+                txtConsumptionStartDate.Visible = false;
+                lblConsumptionEndDate.Visible = false;
+                txtConsumptionEndDate.Visible = false;
                 lblConsEmpty.Visible = false;
                 txtConsEmpty.Visible = false;
             }
@@ -419,8 +419,8 @@ namespace Intel.MyDeals.DataLibrary
             txtBasedOn.Value = GetStringValue(parameters["PayoutBasedOn"].Value);
             txtProject.Value = EscapeSpecialChars(GetStringValue(parameters["Project"].Value));
             txtTerms.Value = EscapeSpecialChars(GetStringValue(parameters["Terms"].Value));
-            txtConsumptionBillingStart.Value = GetStringValue(parameters["CBllgStart"].Value);
-            txtConsumptionBillingEnd.Value = GetStringValue(parameters["CBllgEnd"].Value);
+            txtConsumptionStartDate.Value = GetStringValue(parameters["ConsStartDt"].Value);
+            txtConsumptionEndDate.Value = GetStringValue(parameters["ConsEndDt"].Value);
 
             if (string.IsNullOrEmpty(txtProject.Value) && string.IsNullOrEmpty(txtTerms.Value))
             {
@@ -431,12 +431,12 @@ namespace Intel.MyDeals.DataLibrary
                 txtTerms.Visible = false;
             }
 
-            //if (string.IsNullOrEmpty(txtConsumptionBillingStart.Value) && string.IsNullOrEmpty(txtConsumptionBillingEnd.Value))
+            //if (string.IsNullOrEmpty(txtConsumptionStartDate.Value) && string.IsNullOrEmpty(txtConsumptionEndDate.Value))
             //{
             //    lblConsumptionBillingStart.Visible = false;
-            //    txtConsumptionBillingStart.Visible = false;
+            //    txtConsumptionStartDate.Visible = false;
             //    lblConsumptionBillingEnd.Visible = false;
-            //    txtConsumptionBillingEnd.Visible = false;
+            //    txtConsumptionEndDate.Visible = false;
             //}
 
         }
