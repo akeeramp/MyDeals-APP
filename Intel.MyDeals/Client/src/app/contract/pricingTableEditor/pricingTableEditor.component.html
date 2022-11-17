@@ -131,7 +131,7 @@
                                 <kendo-editor [(ngModel)]="curPricingStrategy.TERMS"
                                               (valueChange)="chgTerms($event)"
                                               style="width:initial" class="ptekendo">
-                                    <kendo-toolbar>
+                                    <kendo-toolbar id="show-hide-editor-style">
                                         <kendo-toolbar-dropdownlist kendoEditorFontSize [data]="fontData"></kendo-toolbar-dropdownlist>
                                         <kendo-toolbar-buttongroup>
                                             <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>

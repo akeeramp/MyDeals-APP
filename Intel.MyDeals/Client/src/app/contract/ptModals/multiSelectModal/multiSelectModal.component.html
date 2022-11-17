@@ -5,7 +5,7 @@
         <h3 class="modal-title" id="modal-title">{{disTitle}}</h3>
     </div>
     <loading-panel-angular id="multiSelectModalLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>
-    <div class="container-fluid overflow modal-body all-wheat">
+    <div class="container-fluid overflow modal-body all-wheat markt-segmet-style">
         <div *ngIf="!isTgrRgn">
             <div *ngIf="isEmptyList">
                 <span *ngIf="!msg" style="color:red;">
@@ -26,7 +26,7 @@
                 </span>
             </div>
         </div>
-        <div class="row">
+        <div class="row treevi-mrkt-segt">
             <div class="col">
                 <div mat-dialog-content *ngIf="!ismrktSeg">
                     <kendo-multiselect class="fiend-all" [(ngModel)]="checkedKeys" [placeholder]="placeholderText" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false"></kendo-multiselect>
@@ -46,7 +46,7 @@
                     </kendo-treeview>
                 </div>
                 <div mat-dialog-content *ngIf="ismrktSeg">
-                    <kendo-multiselect [(ngModel)]="multSlctMkgValues" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false" (valueChange)="onMarkSegChange($event)"></kendo-multiselect>
+                    <kendo-multiselect class="mrkt-seg-multi" [(ngModel)]="multSlctMkgValues" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false" (valueChange)="onMarkSegChange($event)"></kendo-multiselect>
                     <kendo-treeview [nodes]="marketSeglist" textField="DROP_DOWN" [children]="fetchChildren" [hasChildren]="hasChildren" kendoTreeViewCheckable [(checkedKeys)]="mkgvalues" checkBy="DROP_DOWN" [isChecked]="isMkgChecked" (checkedKeysChange)="onMktgValueChange($event)">
                     </kendo-treeview>
                 </div>
@@ -59,8 +59,8 @@
                     <button style="width:35%" *ngIf="multiSelectPopUpModal.enableSelectAll" (click)="selectAllCustomerReportedGeos()" class="btn btn-primary">Select All</button>&nbsp;
                     <button style="width:40%" *ngIf="multiSelectPopUpModal.enableDeselectAll" (click)="deSelectAllCustomerReportedGeos()" class="btn btn-primary">Deselect All</button>
                 </div>
-                <div mat-dialog-actions class="fr">
-                    <button mat-button (click)="onNoClick()" class="btn btn-warning">Cancel</button> &nbsp;
+                <div mat-dialog-actions class="fr saveclose-mrk">
+                    <button mat-button (click)="onNoClick()" class="btn btn-warning cancel-mrkt-seg">Cancel</button> &nbsp;
                     <button mat-button (click)="onSave()" cdkFocusInitial class="btn btn-primary">Save And Close</button>
                 </div>
             </div>

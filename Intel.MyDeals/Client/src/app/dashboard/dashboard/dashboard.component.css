@@ -1844,3 +1844,6 @@ button.warn-custom {
 .k-calendar-header .k-calendar-title:hover {
     color: #424242!important;
 }
+#pubOpGrid .k-grid .k-grid-content {
+    overflow: overlay;
+}

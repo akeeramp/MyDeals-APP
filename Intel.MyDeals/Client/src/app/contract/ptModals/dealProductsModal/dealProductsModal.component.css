@@ -48,7 +48,7 @@
     line-height: 1.5 !important;
     font-family: 'Intel Clear' !important;
     font-weight: 500 !important;
-    color: #111 !important;
+    color: #ffffff !important;
     margin-top: 0px !important
 }
 /*.there-modal-header {
@@ -102,12 +102,12 @@ button.excelText.differ-artho-excel.iconsize.k-button-icontext.k-button.k-grid-e
     border-radius: 0px !important;
     padding: 1rem 1rem !important;
     border-bottom: 1px solid #e5e5e5 !important;
-    background-color: #fff !important;
+    background-color: #003C71 !important;
 }
 .deal-excel-body-style.modal-body {
     position: relative !important;
     padding: 10px !important;
-    background-color: #fff !important;
+    background-color: #003C71 !important;
 }
 .Publishten-grp-deal mat-dialog-container {
     padding: 0px !important;

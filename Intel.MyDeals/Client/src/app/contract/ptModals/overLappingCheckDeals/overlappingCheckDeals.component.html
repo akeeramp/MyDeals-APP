@@ -6,7 +6,7 @@
 
 
 <kendo-window id="OvrLp" title="Overlapping Deals" [keepContent]="true" [width]="800" (close)="closeWindow()">
-    <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+    <kendo-grid [data]="gridData" [loading]="isLoading"  [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
                 [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                 [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
                 [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" style="min-height: 383px;">
@@ -15,7 +15,7 @@
                 No Overlapping deals were found
             </div>
         </ng-template>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" field="WF_STG_CD" width="21px" title=" ">
+        <kendo-grid-column [headerClass]="{'headerClass':true}" field="WF_STG_CD" [filterable]="false" width="21px" title=" ">
         </kendo-grid-column>
         <kendo-grid-column field="PROGRAM_PAYMENT" width="120px" title="Type" [hidden]="true">
             <ng-template kendoGridGroupHeaderTemplate let-group let-field="field" let-value="value">
