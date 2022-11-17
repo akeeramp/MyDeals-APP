@@ -7,7 +7,7 @@
     <div style="padding-left: 10px; padding-right: 10px; height: 100%;">
         <div class="prodSelector-corrector modal-header" style="margin-bottom:15px">
             <div class="row prodCorrectorHeader" style="align-items: center; padding-top: 10px; padding-bottom: 10px; ">
-                <div class="col-md-5  cursorArea" style="padding-left:0px">
+                <div class="col-md-5  cursorArea" style="padding-left:0px; cursor:move">
                     <p class="prodText">Product Corrector</p>
                 </div>
                 <div class="col-md-6  text-center headerMsg">
@@ -110,7 +110,7 @@
                             <kendo-grid-boolean-filter-menu [column]="column" [filter]="filter" [filterService]="filterService"></kendo-grid-boolean-filter-menu>
                             </ng-template>
                             <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                                <input type="checkbox" kendoCheckBox (click)="prodSelect(dataItem,$event)" [(ngModel)]="dataItem.IS_SEL" />
+                                <input class="prd-crctor-chkbox" type="checkbox" kendoCheckBox (click)="prodSelect(dataItem,$event)" [(ngModel)]="dataItem.IS_SEL" />
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column [hidden]="hidden['HIER_VAL_NM']" [headerClass]="{'headerClass':true}" field="HIER_VAL_NM" title="Product" [width]="150">
@@ -155,7 +155,7 @@
                                 <ng-template #popoverContent>
                                     <div class="container">
                                         <div class="row">
-                                            <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
+                                            <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                                         </div>
                                         <div class="row">
                                             <grid-popover [popOver]="popOver" [columnTypes]="'CAP'" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="'CAP'"></grid-popover>
@@ -204,7 +204,7 @@
                                 <ng-template #popoverContent>
                                     <div class="container">
                                         <div class="row">
-                                            <button style="float: right;" class="btn btn-light btn-sm" (click)="popOver.close()">❌</button>
+                                            <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                                         </div>
                                         <div class="row">
                                             <grid-popover [popOver]="popOver" [columnTypes]="'YCS2'" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="'YCS2'"></grid-popover>

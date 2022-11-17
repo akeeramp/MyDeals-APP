@@ -527,3 +527,16 @@ a.prdAnchor:hover {
     background-color: #1a3e6f !important;
     padding: 0px !important;
 }
+#closePopover {
+    margin-left: 97% !important;
+}
+
+.CAPYCS2CellContent {
+    cursor: pointer;
+}
+
+
+
+.prd-crctor-chkbox {
+    border: 2px solid #00AEEF;
+}

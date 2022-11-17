@@ -792,6 +792,7 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
     line-height: 1em;
     font-family: arial;
     text-align: center;
+    cursor: pointer;
 }
 
 .CAPYCS2CellContent.accurate-height {
