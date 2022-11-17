@@ -6,7 +6,7 @@
                 <button type="button" class="btn  bts-btns" style="width:140px;line-height: 1em !important;height: 26px !important;" [ngClass]="custAccptButton === 'Pending' ? 'btn-primary' : 'btn-success' " (click)="pendingChange()" [disabled]="(isCustAcptReadOnly == true && custAccptButton !== 'Pending')">{{custAccptButton}}</button>            
             </span>
         </div>
-        <div class="sum-filter-bar add-sub-sum" style="padding: 1px 10px;">
+        <div id="manageHeaderbakground" class="sum-filter-bar add-sub-sum" style="padding: 1px 10px;">
             <table style="width: 100%;">
                 <tr>
                     <td style="width: 30px; height: 40px;" (click)="toggleSum()" title="{{ !isAllCollapsed ? 'Collapse All' : 'Expand All'}}" [ngClass]="{'rotate-90': !isAllCollapsed}">
@@ -322,7 +322,7 @@
                                 <div style="margin-left: 0">
                                     <div class="opUiContainer md dashboard">
                                         <div id='detailGrid_{{pt.DC_ID}}' class='opUiContainer md dashboard sumGridOptionsExpand oppo-grids new-now-wrap space-table-all'>
-                                            <kendo-grid [data]="gridDataSet[pt.DC_ID]" [loading]="isGridLoading" [resizable]="true" [filter]="state[pt.DC_ID].filter" [sortable]="true" [sort]="state[pt.DC_ID].sort"
+                                            <kendo-grid id="manageFilterStyle" [data]="gridDataSet[pt.DC_ID]" [loading]="isGridLoading" [resizable]="true" [filter]="state[pt.DC_ID].filter" [sortable]="true" [sort]="state[pt.DC_ID].sort"
                                                         filterable="menu" (dataStateChange)="dataStateChange($event, pt.DC_ID)" style="height:auto" >
                                                 <kendo-grid-column title="Tools" field="NOTES" [headerClass]="{'headerClass':true}" [width]="200" [locked]="true" [filterable]="false" [sortable]="false">
                                                     <ng-template kendoGridHeaderTemplate>

@@ -1757,7 +1757,11 @@ kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level:hov
 kendo-window#OvrLp .k-window-content {
     padding: 0px !important;
 }
-kendo-grid.contract-history-style span.k-icon.k-i-filter {
-    font-size: 20px !important;
-    color: #777777 !important;
+#manageFilterStyle .k-icon.k-i-filter {
+    color: #00aeef !important;
+    opacity: 1;
+    margin-top: 9px;
+}
+#manageFilterStyle .k-icon.k-i-filter:hover {
+    color: #0071c5 !important;
 }

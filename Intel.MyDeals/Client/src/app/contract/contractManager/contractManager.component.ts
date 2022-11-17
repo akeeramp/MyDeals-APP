@@ -487,7 +487,7 @@ export class contractManagerComponent {
         </table>
   
         <p><span style='font-size: 11px; color: black; font-weight: bold;'>*Links are optimized for Google Chrome</span></p>
-        <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:${data.from}' style="color: #00a">` + data.from +`</a>.</span></p>
+        <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:${data.from}' style="color: #00a; font-size:14px;">` + data.from +`</a>.</span></p>
        
         <p><span style='font-size: 14px; color: red;'><i>**This email was sent from a notification-only address that cannot accept incoming email.  Please do not reply to this message.</i></span></p>
         </div>
