@@ -64,6 +64,7 @@ export class pricingTableComponent {
     private isInformationIconReqd: boolean = false;
     private rowlength: any;
     private searchText: any;
+    private selectedTab: any;
 
     public searchedContractData = {
         Model: "",
@@ -99,6 +100,7 @@ export class pricingTableComponent {
     }
 
     async loadModel(contractModel: contractIds, isRedirect: boolean = false) {
+        this.selectedTab = 0;
         if (this.selLnav == 'pctDiv' && contractModel.Model == 'groupExclusionDiv')
             this.isShowPCT = true;
         else if (this.selLnav !== 'pctDiv' && contractModel.Model == 'groupExclusionDiv')
@@ -163,6 +165,7 @@ export class pricingTableComponent {
         }
         else if (this.selLnav == 'MeetComp') {
             this.isDETab = false; this.isPTETab = false;
+            this.selectedTab =2;
         }
         else {
             this.isDETab = false; this.isPTETab = false;

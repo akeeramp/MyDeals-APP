@@ -163,6 +163,6 @@
         </div>
     </div>
     <div id="left-pane" *ngIf="isLNavEnable">
-        <lnavView [contractId]="c_Id" (modelChange)="loadModel($event)" [contractData]="contractData" [UItemplate]="UItemplate"></lnavView>
+        <lnavView [contractId]="c_Id" (modelChange)="loadModel($event)" [changedTab]="selectedTab" [contractData]="contractData" [UItemplate]="UItemplate"></lnavView>
     </div>
 </div>

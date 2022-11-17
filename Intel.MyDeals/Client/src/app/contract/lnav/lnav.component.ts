@@ -38,6 +38,7 @@ export class lnavComponent {
     @Input() contractId: number;
     @Input() contractData;
     @Input() UItemplate;
+    @Input() changedTab: number = 0;
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
 
     public query = "";
@@ -903,6 +904,11 @@ export class lnavComponent {
             console.error('LNAV::ngOnInit::',ex);
         }
 
+    }
+    ngOnChanges() {
+        if (this.changedTab == 2) {
+            this.openMeetCompTab();
+        }
     }
     ngAfterViewInit() {
         //This will help to highlight the selectd PT incase of search result landing directly to PT. The logic can apply only once the page is rendered

@@ -260,9 +260,7 @@ export class OverlappingCheckComponent {
         });
         this.S_ID = this.contractData.CUST_MBR_SID;
         this.overLappingCheckDealsSvc.getCustomerVendors(this.S_ID).subscribe(
-            (result: Array<any>) => {
-                console.log(result);
-            },
+            (result: Array<any>) => {},
             function (response) {
                 this.loggerSvc.error(
                     "Unable to get Customer Vendors.",

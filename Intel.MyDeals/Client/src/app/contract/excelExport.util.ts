@@ -151,6 +151,7 @@ export class ExcelExport {
             if (passedData[field] !== undefined) {
                 var val = passedData[field][dim];
                 val = ExcelExport.getFormattedData(val, format);
+                tmplt += val + '\n';
             }
         }
         return tmplt;
