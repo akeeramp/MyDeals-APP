@@ -213,12 +213,12 @@ export class PTE_CellChange_Util {
                     this.hotTable.setDataAtRowProp(row, val.prop, '0.00', 'no-edit');
             }
             else if (val.prop == 'CAP') {
-                let cellVal = PTE_CellChange_Util.getValueForCurrentRow(updateRows, operation, row, val.prop);
+                let cellVal = PTE_CellChange_Util.getValueForCurrentRow(updateRows, operation, row, val.prop, cellItem);
                 currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, cellVal, 'no-edit');
                 updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'YCS2') {
-                let cellVal = PTE_CellChange_Util.getValueForCurrentRow(updateRows, operation, row, val.prop);
+                let cellVal = PTE_CellChange_Util.getValueForCurrentRow(updateRows, operation, row, val.prop, cellItem);
                 currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, cellVal, 'no-edit');
                 updateRows.push(currentString.split(','));
             }
@@ -232,7 +232,7 @@ export class PTE_CellChange_Util {
             }
         }
     }
-    private static getValueForCurrentRow(updateRows: Array<any>, operation, row, key) {
+    private static getValueForCurrentRow(updateRows: Array<any>, operation, row, key, cellItem) {
         // Since `addUpdateRowOnchangeKIT()` runs before `addUpdateRowOnchangeCommon()`, the variable `PRD_BCKT` in `updateRows` will always be avaliable
         let cellVal = '';
 
@@ -250,6 +250,8 @@ export class PTE_CellChange_Util {
 
             if (currentRow_PRD_BCKT.length > 1) {
                 cellVal = JSON.parse(operation['PTR_SYS_PRD'])[currentRow_PRD_BCKT][0][key];
+            } else {
+                cellVal = JSON.parse(operation['PTR_SYS_PRD'])[cellItem.new][0][key];
             }
         }
 

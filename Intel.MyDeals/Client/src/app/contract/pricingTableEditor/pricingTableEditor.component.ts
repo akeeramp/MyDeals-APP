@@ -847,7 +847,7 @@ export class pricingTableEditorComponent {
                 this.VendorDropDownResult = this.dropdownResponses["SETTLEMENT_PARTNER"];
             }
             //this is only while loading we need , need to modify as progress
-            PTR = PTE_Load_Util.pivotData(PTR, false, this.curPricingTable, this.kitDimAtrbs);
+            PTR = PTE_Load_Util.pivotData(PTR, this.isTenderContract, this.curPricingTable, this.kitDimAtrbs);
             this.generateHandsonTable(PTR);
             this.isLoading = false;
         }

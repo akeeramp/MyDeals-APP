@@ -517,3 +517,11 @@ i.fa.undo-redo-style.dirty {
      color: #00aeef !important;
      opacity: 1 !important
 }
+
+.oo-lapping-style .k-dropdown .k-select {
+    padding: 0px !important
+}
+
+.oo-lapping-style .k-input {
+    padding: 10px !important
+}

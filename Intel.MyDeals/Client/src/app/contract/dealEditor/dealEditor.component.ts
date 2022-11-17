@@ -847,6 +847,8 @@ export class dealEditorComponent {
                 await this.SaveDealData();
             }
             else {
+                this.isDataLoading = false;
+                this.setBusy('', '', '', false);
                 this.isWarning = true;
                 this.message = "Extending Deal Dates will result in the extension of Contract Dates. Please click 'OK', if you want to proceed.";
             }

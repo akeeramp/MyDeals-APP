@@ -13,7 +13,7 @@
     <div class="row">
         <div class="col">
             <!-- <div id="spreadsheet"></div> -->
-            <button class="btn btn-sm btn-save ssToolbarBtn btn-disable-style" ssToolbarBtn (click)="validatePricingTableProducts()" [disabled]="!isSaveEnabled()">
+            <button class="btn btn-sm btn-save ssToolbarBtn btn-disable-style" ssToolbarBtn (click)="validatePricingTableProducts()" title="{{ isTenderContract ? 'Save your Tender Table, validate the products, and stay in your Tender Table Editor' : 'Save your Pricing Table, validate the products, and stay in your Pricing Table Editor'}}" [disabled]="!isSaveEnabled()">
                 <i class="fa fa-floppy-o skyBlue floppy-icon-style" aria-hidden="true" style="font-size: 30px" [ngClass]="{'dirty' : isSaveEnabled(),'notDirty' : !isSaveEnabled()}"></i>
                 <span class="text save-validate-txtstyle" [ngClass]="{'dirty' : isSaveEnabled(),'notDirty' : !isSaveEnabled()}">
                       Save & Validate
@@ -113,7 +113,7 @@
     <div class="row">
         <div class="col">
             <!-- <div id="spreadsheet"></div> -->
-            <kendo-splitter class=spliter-btom-style orientation="vertical" style="height: calc(100vh - 270px);">
+            <kendo-splitter class="spliter-btom-style" orientation="vertical" style="height: calc(100vh - 270px);">
                 <kendo-splitter-pane><hot-table [hotId]="hotId" [settings]="hotSettings" class="all-spread"></hot-table></kendo-splitter-pane>
                 <kendo-splitter-pane [(size)]="showDiscount">
                     <div style="overflow: hidden;" class="wide noborder">
