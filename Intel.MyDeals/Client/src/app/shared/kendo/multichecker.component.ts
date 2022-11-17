@@ -34,7 +34,7 @@ import * as _ from 'underscore';
     #searchIcon{
         display:inline-block;
         left:200px;
-        bottom:25px;
+        bottom:30px;
         text-align:center;
         vertical-align:middle;
         overflow:hidden;
@@ -58,10 +58,11 @@ import * as _ from 'underscore';
       overflow-x: hidden;
       white-space: nowrap;
       max-height: 300px;
+      margin-bottom: 5px;
     }
 
     ul>li{
-        padding: 0px 12px;
+        padding: 1px 12px;
     }
 
     #filterBar, #selectedCount {
@@ -70,6 +71,9 @@ import * as _ from 'underscore';
 
     .k-multiselect-checkbox {
       pointer-events: none;
+    }
+   #selectedCount{
+        font-weight:bold;
     }
   `]
 })

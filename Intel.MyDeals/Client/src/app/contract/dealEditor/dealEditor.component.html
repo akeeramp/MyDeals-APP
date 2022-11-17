@@ -3,11 +3,11 @@
 <kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="dealEditorTab" class="width-fixes new-allDeals fs-increase">
     <kendo-tabstrip-tab *ngFor="let data of groups" title="{{data.name}}" [selected]="selectedTab === data.name" [cssClass]="data.isTabHidden? 'hidden' : 'visible'">
         <ng-template kendoTabTitle>
-            <span><i *ngIf="data.name !== 'CAP Info' && data.name !== 'All'" class="intelicon-pin-outlined" style="color:#00aeef; border-radius:15px" title="Pin tab so it always shows in the grid"></i></span>&nbsp;
+            <span><i *ngIf="data.name !== 'CAP Info' && data.name !== 'All'" class="intelicon-pin-outlined" style="color: #00aeef; border-radius: 15px; font-size:16px; padding: 3px;" title="Pin tab so it always shows in the grid"></i></span>&nbsp;
             <span class="colorChg">{{data.name}} &nbsp;</span>
             <span class="badge error ng-binding" id="tabErrorCnt" *ngIf="data.numErrors > 0">{{data.numErrors}}</span>&nbsp;
             <span class="badge warning" id="tabErrorCnt" *ngIf="data.name == 'CAP Info' && numSoftWarn > 0">{{numSoftWarn}}</span>&nbsp;
-            <i id="btnClose" *ngIf="data.name !== 'CAP Info' && data.name !== 'All'" style="color:#00aeef; border-radius:15px" class="intelicon-close" (click)="onClose(data.name)" title="Close tab"></i>
+            <i id="btnClose" *ngIf="data.name !== 'CAP Info' && data.name !== 'All'" style="color: #00aeef; border-radius: 15px; font-size: 16px;" class="intelicon-close" (click)="onClose(data.name)" title="Close tab"></i>
         </ng-template>
         <ng-template kendoTabContent>
             <div id="ToolDeBtn" class="flex-container" style="display:flex">
@@ -48,7 +48,7 @@
                         <table>
                             <tr id="colOpt">
                                 <td>
-                                    <i class="intelicon-view-by-columns" style="font-size: 30px"></i>
+                                    <i class="intelicon-view-by-columns" style="font-size: 30px" title="Manage Columns"></i>
                                 </td>
                                 <td class="hidden-sm hidden-xs" style="font-family: 'Intel Clear'; font-size: 11px; padding-left: 5px; text-align: left;">
                                     Column<br /> Options
@@ -83,7 +83,7 @@
                     <button class="btn btn-sm ssToolbarBtn dropbtn hover-effect" style="color: #00AEEF;">
                         <table>
                             <tr>
-                                <td><i class="intelicon-settings-solid" style="font-size: 30px"></i></td>
+                                <td><i class="intelicon-settings-solid" style="font-size: 30px" title="Manage Columns"></i></td>
                                 <td class="fl hidden-md hidden-sm hidden-xs" style="font-family: 'Intel Clear'; font-size: 12px; line-height: 1.5em; padding-left: 4px; text-align: left">
                                     Grid<br /> Settings
                                 </td>

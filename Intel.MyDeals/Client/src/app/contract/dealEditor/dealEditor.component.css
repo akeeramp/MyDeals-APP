@@ -1317,3 +1317,96 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:
     border-top-color: lightgray !important;
     margin-top: .5rem !important;
 }
+.de-css-comp th.k-header.headerClass.k-filterable {
+    background-color: #e7e7e8 !important;
+    color: #1a3e6f !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    border-right-color: #c4cfd4 !important;
+    border-left-color: #c4cfd4 !important;
+    font-family: 'Intel Clear' !important
+}
+.de-css-comp .k-grid-header .k-header:first-child,
+.de-css-comp th.k-group-cell.k-header {
+    background-color: #e7e7e8 !important;
+    border-right-color: #c4cfd4 !important;
+    border-left-color: #c4cfd4 !important;
+}
+.de-css-comp .k-window-titlebar {
+    border-radius: 0px !important;
+    padding: 7.5px !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    font-family: 'Intel Clear' !important;
+}
+.de-css-comp span.k-icon.k-i-window-minimize,
+.de-css-comp span.k-icon.k-i-window-maximize {
+    color: #428bca !important;
+}
+.de-css-comp .k-window-titlebar .k-state-hover {
+    background-color: #008bd1 !important;
+    border-color: #008bd1 !important;
+}
+.de-css-comp .k-button.k-bare {
+    font-size: 5px !important;
+}
+.de-css-comp span.k-icon.k-i-close {
+    opacity: 0.7 !important
+}
+.de-css-comp .k-button.k-bare:hover {
+    font-size: 5px !important
+}
+.de-css-comp span.k-icon.k-i-window-maximize:hover,
+.de-css-comp span.k-icon.k-i-window-minimize:hover {
+    color: #000 !important
+}
+.de-css-comp .k-link:hover {
+    background-color: transparent !important;
+    color: #1a3e6f !important;
+}
+.de-css-comp .k-window-actions {
+    gap: 0px !important;
+    padding-top: 10px !important;
+    padding-right: 6px !important
+}
+.de-css-comp .k-grid-pager {
+    border-color: #dee2e6;
+    color: #212529 !important;
+    font-size: 10px !important;
+    background-color: #e7e7e8 !important;
+}
+.de-css-comp .k-pager-nav.k-link {
+    color: #0071c5 !important;
+    background: #e7e7e8 !important;
+    border: none !important;
+    opacity: 0.25 !important
+}
+.de-css-comp .k-pager-wrap .k-dropdown .k-dropdown-wrap {
+    background-color: #fafafa !important;
+    border-color: #fafafa !important;
+    color: #444 !important;
+}
+.de-css-comp .k-pager-wrap .k-link.k-state-disabled .k-icon:hover {
+    color: #00aeef !important;
+    opacity: 1 !important
+}
+.de-css-comp span.k-icon.k-i-arrow-s {
+    color: #000 !important;
+    opacity: 0.25 !important
+}
+
+.de-css-comp span.k-icon.k-i-arrow-s:hover {
+     color: #00aeef !important;
+     opacity: 1 !important
+}
+.de-css-comp span .k-dropdown .k-select {
+    padding: 0px !important
+}
+.de-css-comp span .k-input {
+    padding: 10px !important
+}
+.end-customer-popupSty mat-dialog-container {
+    padding: 15px;
+    border-radius: 0;
+    border: 0;
+}

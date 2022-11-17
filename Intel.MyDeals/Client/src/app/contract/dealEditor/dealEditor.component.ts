@@ -406,6 +406,7 @@ export class dealEditorComponent {
 
     openEndCustomerModal(dataItem, column) {
         const dialogRef = this.dialog.open(endCustomerRetailModalComponent, {
+            panelClass: "end-customer-popupSty",
             width: "1000px",
             autoFocus:false,
             data: {

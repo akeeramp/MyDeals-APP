@@ -59,7 +59,7 @@
                                             kendoDropDownFilter="contains"
                                             allowCustom="true"
                                             placeholder="Select End Customer"
-                                            class="fl opUiElement"
+                                            class="fl opUiElement endCustomerBoxStyle"
                                             [ngClass]="{'comboBoxStyleIfAny': isAny, 'comboBoxStyleIfNotAny': !isAny}"
                                             (valueChange)="changeField(i, endCust)">
                             </kendo-combobox>
@@ -73,7 +73,7 @@
                                             allowCustom="true"
                                             kendoDropDownFilter="contains"
                                             placeholder="Select End Customer"
-                                            class="fl opUiElement"
+                                            class="fl opUiElement endCustomerBoxStyle"
                                             [ngClass]="{'comboBoxStyleIfAny': isAny, 'comboBoxStyleIfNotAny': !isAny}"
                                             (valueChange)="changeField(i, endCust)">
                             </kendo-combobox>
@@ -89,7 +89,7 @@
                                             kendoDropDownFilter="contains"
                                             [valuePrimitive]="true"
                                             placeholder="Select Country/Region"
-                                            class="fl opUiElement"
+                                            class="fl opUiElement endCustomerBoxStyle"
                                             [disabled]="(isAny && i == 0) || isAdmin? true:false"
                                             [ngClass]="{'ctryComboBoxStyleIfAny': isAny, 'comboBoxStyleIfNotAny': !isAny}"
                                             (valueChange)="changeCountryField(i, endCust)">
@@ -112,11 +112,11 @@
         <div class="col-md-12">
             <div class="col-md-7">
                 <button class="btn btn-primary" id="ClearEndCustomer" [disabled]="endCustomerRetailPopUpModal.clearEndCustomerDisabled == true" (click)="remove()">Clear End Customer</button>&nbsp;
-                <button class="btn btn-warning" type="button" (click)="cancel()">Cancel</button>
+                <button class="btn btn-warning btn-styCancel" type="button" (click)="cancel()">Cancel</button>
             </div>
             <div class="col-md-5" [ngClass]="{'buttonMaxPadding' : isAny, 'buttonMinPadding': !isAny}">
                 <button class="btn btn-primary" type="button" [disabled]="ecOptionsFlag == true" (click)="ok()">Validate</button>&nbsp;
-                <button id="saveandclose" class="btn btn-primary" type="button" [disabled]="validateFlag == true" (click)="saveAndClose()">Save And Close</button>
+                <button id="saveandclose" class="btn btn-primary endCusbtn-style" type="button" [disabled]="validateFlag == true" (click)="saveAndClose()">Save And Close</button>
             </div>
         </div>
     </div>
@@ -125,7 +125,7 @@
 <kendo-dialog *ngIf="isWarning" id="endCustomerWarning">
     <p style="margin: 30px; text-align: center;">{{message}}</p>
     <kendo-dialog-actions>
-        <button class='k-button' (click)="cancelWarning()">OK</button>
+        <button class='k-button noRemoveWarning' (click)="cancelWarning()">OK</button>
     </kendo-dialog-actions>
 </kendo-dialog>
 <style>
