@@ -97,6 +97,10 @@ export class tenderManagerComponent {
          this.isLoading = false;
     }
 
+    refreshContract(data: any) {
+        this.contractData = data;
+    }
+
     isValidateTTE() {
         if (this.isPTRPartiallyComplete()) {
             if (this.deComp != undefined) {

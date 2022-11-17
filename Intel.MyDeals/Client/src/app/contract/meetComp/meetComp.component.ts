@@ -14,6 +14,7 @@ import { MeetCompContractUtil } from "./meetComp_util"
 import * as moment from "moment";
 import { MatDialog } from "@angular/material/dialog";
 import { meetCompDealDetailModalComponent } from "./meetCompDealDetailModal.component"
+import { pricingTableservice } from "../pricingTable/pricingTable.service";
 
 @Component({
     selector: "meet-comp-contract",
@@ -26,16 +27,17 @@ export class meetCompContractComponent implements OnInit {
     @Input() private objSid;
     @Input() private isAdhoc;
     @Input() private objTypeId;
-    @Input() private lastMeetCompRun;
+    @Input() private cId;;
     @Input() private pageNm;
     @Output() tmDirec = new EventEmitter();
+    @Output() contractRefresh = new EventEmitter();
 
     constructor(
         private loggerSvc: logger,
         private meetCompSvc: meetCompContractService,
         private formBuilder: FormBuilder,
-        private dialog: MatDialog
-    ) {
+        private dialog: MatDialog,
+        private pricingTableSvc: pricingTableservice) {
         //pls dont remove this even it its not as part of the route this is to handle condtions when we traverse between contract details with in manage tab
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
@@ -94,6 +96,7 @@ export class meetCompContractComponent implements OnInit {
     public selectedCust = '';
     public selectedCustomerText = '';
     public curentRow;
+    private contractData;
     private gridData: GridDataResult;
     private childGridData: GridDataResult;
     public expandedDetailKeys: number[] = [];
@@ -887,7 +890,14 @@ export class meetCompContractComponent implements OnInit {
     }
 
     async lastMeetCompRunCalc(forceRun?: boolean) {
-        const LAST_MEET_COMP_RUN = this.lastMeetCompRun;
+        let response = await this.pricingTableSvc.readContract(this.cId).toPromise().catch((err) => {
+            this.loggerSvc.error('loadAllContractDetails::readContract:: service', err);
+        })
+        if (response && Array.isArray(response) && response.length > 0) {
+            this.contractData = response[0];
+        }
+        this.contractRefresh.emit(this.contractData);
+        const LAST_MEET_COMP_RUN = this.contractData.LAST_COST_TEST_RUN;
         let dsplNum;
         let dsplMsg;
         if (!!LAST_MEET_COMP_RUN) {
@@ -930,7 +940,6 @@ export class meetCompContractComponent implements OnInit {
         else {
             this.lastMeetCompRunValue = "";
         }
-        await this.loadMeetCompData();
     }
 
     getMeetCompPopupMessage() {
@@ -1052,6 +1061,7 @@ export class meetCompContractComponent implements OnInit {
             this.isModelValid(this.meetCompMasterdata._elements);
         }
         this.reBindGridData();
+        await this.lastMeetCompRunCalc();
         if (this.isTender == "1" && ((this.gridData.data[0].MEET_COMP_STS == 'Pass' || this.gridData.data[0].MEET_COMP_STS == 'Fail') || this.gridData.data[0].CAP == 0)) {
             this.tmDirec.emit('PD');
         }
@@ -1124,12 +1134,13 @@ export class meetCompContractComponent implements OnInit {
         }
     }
 
-    ngOnInit(): void {
+    async ngOnInit() {
         try {
             this.PAGE_NM = this.pageNm;
             if (!!this.objSid) {
                 this.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
-                this.lastMeetCompRunCalc();
+                await this.lastMeetCompRunCalc();
+                await this.loadMeetCompData();
             }
         }
         catch (ex) {

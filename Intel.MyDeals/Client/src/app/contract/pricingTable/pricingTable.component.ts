@@ -173,6 +173,10 @@ export class pricingTableComponent {
         //this.curPricingStrategy = ContractUtil.findInArray(this.contractData["PRC_ST"], this.ps_Id)
     }
 
+    refreshContract(data: any) {
+        this.contractData = data;
+    }
+
     async onTabSelect(e: SelectEvent) {
         try {
             e.preventDefault();

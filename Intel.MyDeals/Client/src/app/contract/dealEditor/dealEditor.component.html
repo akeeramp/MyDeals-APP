@@ -14,7 +14,7 @@
                 <button id="SaveDeBtn" class="btn btn-sm btn-save tool-hover btn-disable-style-DE" ssToolbarBtn (click)="SaveDeal()" [disabled]="!dirty">
                     <i class="fa fa-floppy-o skyBlue floppy-icon-style-DE" aria-hidden="true" style="font-size: 30px;" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}"></i>
                     <span class="text save-validate-txtstyle-DE" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}">
-                      Save & Validate                               
+                        Save & Validate
                     </span>
                 </button>
                 <div class="fr" style="margin-top: 2px;">
@@ -47,7 +47,7 @@
                     <button class="btn btn-sm ssToolbarBtn dropbtn hover-effect dropdown-toggle" id="colOpt" data-toggle="dropdown">
                         <table>
                             <tr id="colOpt">
-                                <td> 
+                                <td>
                                     <i class="intelicon-view-by-columns" style="font-size: 30px"></i>
                                 </td>
                                 <td class="hidden-sm hidden-xs" style="font-family: 'Intel Clear'; font-size: 11px; padding-left: 5px; text-align: left;">
@@ -218,6 +218,11 @@
             <div class="fl volView" *ngIf="isTenderContract && voltLength>1">
                 <a style="color:#003c71">{{voltLength}}&nbsp;&nbsp;{{curPricingTable.OBJ_SET_TYPE_CD}} Deals</a>
             </div>
+        </ng-template>
+    </kendo-tabstrip-tab>
+    <kendo-tabstrip-tab>
+        <ng-template kendoTabTitle>
+            <span kendoTooltip title="Refresh" position="top" class="k-icon k-i-reload k-icon-xl"></span>
         </ng-template>
     </kendo-tabstrip-tab>
 </kendo-tabstrip>

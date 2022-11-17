@@ -255,15 +255,31 @@ export class dealEditorComponent {
 
     onTabSelect(e: SelectEvent) {
         e.preventDefault();
-        this.selectedTab = e.title;
-        var group = this.groups.filter(x => x.name == this.selectedTab);
-        if (group[0].isTabHidden) {
-            var tabs = this.groups.filter(x => x.isTabHidden === false);
-            this.selectedTab = tabs[0].name;
-            this.filterColumnbyGroup(this.selectedTab);
+        if (e.title != undefined) {
+            this.selectedTab = e.title;
+            var group = this.groups.filter(x => x.name == this.selectedTab);
+            if (group[0].isTabHidden) {
+                var tabs = this.groups.filter(x => x.isTabHidden === false);
+                this.selectedTab = tabs[0].name;
+                this.filterColumnbyGroup(this.selectedTab);
+            }
+            else
+                this.filterColumnbyGroup(this.selectedTab);
+        } else {
+            this.refreshGrid();
         }
-        else
-            this.filterColumnbyGroup(this.selectedTab);
+    }
+
+    refreshGrid() {
+        this.isDataLoading = true;
+        this.setBusy("Loading Deals", "Gathering deals and security settings.", "Info", true);
+        this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
+        this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
+        this.isTenderContract = Tender_Util.tenderTableLoad(this.contractData);
+        this.getGroupsAndTemplates();
+        this.dropdownResponses = this.getAllDrowdownValues();
+        this.selectedTab = "Deal Info";
+        this.filterColumnbyGroup(this.selectedTab);
     }
 
     onClose(name: string) {

@@ -10,7 +10,7 @@
         <div class="col">
             <div mat-dialog-content class="geoHead">
                 <p *ngIf="!isBidGeo && !isCustDiv" style="padding-top: 1em;">If blending, Worldwide will not be blended with any geos.</p>
-                <kendo-multiselect class="fiend-all" [data]="listItems" [(ngModel)]="value" [autoClose]="false" placeholder="Click to select..."></kendo-multiselect>
+                <kendo-multiselect class="fiend-all" [data]="listItems" [(ngModel)]="value" [autoClose]="false" placeholder="Click to select..." style="padding-top: 1em;"></kendo-multiselect>
                 <span *ngIf="!isBidGeo && !isCustDiv" class="blend-checkbox"><input type="checkbox" kendoCheckBox [(ngModel)]="isBlend" /> Blend</span>
             </div>
         </div>

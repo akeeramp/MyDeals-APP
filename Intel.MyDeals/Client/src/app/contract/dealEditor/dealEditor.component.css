@@ -607,6 +607,9 @@ tr:last-child>td {
 #dealEditorTab .k-tabstrip-items .k-item:last-child {
     border-top: 1px solid #ffffff !important;
 }
+#dealEditorTab .k-tabstrip-items .k-item:nth-last-child(2) {
+    border-top: 1px solid #ffffff !important;
+}
 
 .volView {
     font-weight: bold;
@@ -691,16 +694,22 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
     position: absolute;
     right: 15px;
 }
-
+kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:nth-last-child(2) {
+    position: absolute;
+    right: 60px;
+    border: none !important;
+    border-bottom-width: 1px !important;
+    border-top: 1px solid #ffffff !important;
+}
 #dealEditor .k-grid-header .headerClass span.k-cell-inner {
     align-items: flex-start;
     margin: 0;
     align-items: flex-start;
 }
 
-    #dealEditor .k-grid-header .headerClass span.k-cell-inner span.k-link {
-        padding: 0;
-    }
+#dealEditor .k-grid-header .headerClass span.k-cell-inner span.k-link {
+    padding: 0;
+}
 
 .one-check kendo-pager-page-sizes.k-label {
     display: flex;
@@ -1287,4 +1296,24 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:
 
 #dealEditorTab .k-tabstrip-items .k-item:hover {
     background: #eee !important;
+}
+.k-dropdown, .k-dropdowntree {
+    width: 17.5em !important;
+}
+.k-select {
+    background: white !important;
+    width: 2.571em !important;
+    border-width: 0 0 0 1px !important;
+    border-color: lightgray !important;
+}
+.k-input {
+    background: white !important;
+}
+.k-filter-menu .k-widget {
+    margin: 0.5rem .4rem 0 !important;
+}
+.k-action-buttons, k-button-group {
+    border-top: 1px solid !important;
+    border-top-color: lightgray !important;
+    margin-top: .5rem !important;
 }
