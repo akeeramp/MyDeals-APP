@@ -16,7 +16,6 @@ import { logger } from "../../../shared/logger/logger";
 
 import { gridCol, ProdSel_Util } from './prodSel_Util';
 import { PTE_Common_Util } from "../../PTEUtils/PTE_Common_util";
-import { ProductBreakoutComponent } from "./productBreakout/productBreakout.component";
 
 @Component({
     selector: 'product-selector',
@@ -36,7 +35,6 @@ export class ProductSelectorComponent {
         popoverConfig.container = 'body';
         popoverConfig.autoClose = 'outside';
         popoverConfig.animation = false;    // Fixes issue with `.fade` css element setting improper opacity making the popover not show up
-        popoverConfig.triggers = 'mouseenter:mouseleave';   // Disabled to use default click behaviour to prevent multiple popover windows from appearing
         popoverConfig.openDelay = 500;   // milliseconds
         popoverConfig.closeDelay = 500; // milliseconds
     }
@@ -144,24 +142,6 @@ export class ProductSelectorComponent {
     private curRowCategories = [];
     private curRowLvl = [];
 
-    private openModal(columnTypes: string, currentPricingTableRow, productMemberSId, priceCondition) {
-        // Open Modal with data
-        this.dialogService.open(ProductBreakoutComponent, {
-            data: {
-                columnTypes: columnTypes,
-                productData: [{
-                    'CUST_MBR_SID': currentPricingTableRow.CUST_MBR_SID,
-                    'PRD_MBR_SID': productMemberSId,
-                    'GEO_MBR_SID': currentPricingTableRow.GEO_COMBINED,
-                    'DEAL_STRT_DT': currentPricingTableRow.START_DT,
-                    'DEAL_END_DT': currentPricingTableRow.END_DT,
-                    'getAvailable': 'N',
-                    'priceCondition': priceCondition
-                }]
-            },
-            panelClass: 'product-breakout-modal'
-        });
-    }
 
     distinctPrimitive(fieldName: string, operation?): any {
         if (operation == 'filter') {

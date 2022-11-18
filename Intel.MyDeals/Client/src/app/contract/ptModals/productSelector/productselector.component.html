@@ -127,7 +127,7 @@
                                                         </ng-template>
 
                                                         <!-- Cell Content -->
-                                                        <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openModal(column.field, pricingTableRow, dataItem.PRD_MBR_SID, column.field)">
+                                                        <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
                                                             <!-- CAP Info cell design -->
                                                             <div [class.isSoftWarnCell]="dataItem.CAP.includes('No')" style="text-align: center;">
                                                                 <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP !='' && dataItem.CAP !='No CAP'">
@@ -159,7 +159,7 @@
                                                         </ng-template>
 
                                                         <!-- Cell Content -->
-                                                        <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openModal(column.field, pricingTableRow, dataItem.PRD_MBR_SID, column.field)">
+                                                        <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
                                                             <!-- YCS2 Info cell design -->
                                                             <div [class.isSoftWarnCell]="dataItem.YCS2.includes('No')" style="text-align: center;">
                                                                 {{ dataItem.YCS2 }}
@@ -249,7 +249,7 @@
                                     </ng-template>
 
                                     <!-- Cell Content -->
-                                    <div class="CAPYCS2CellContent accurate-height" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openModal(column.field, pricingTableRow, dataItem.PRD_MBR_SID, column.field)">
+                                    <div class="CAPYCS2CellContent accurate-height" #popOver="ngbPopover" [ngbPopover]="popoverContent">
                                         <!-- CAP Info cell design -->
                                         <div [class.isSoftWarnCell]="dataItem.CAP.includes('No')" [class.uiControlDiv]="dataItem.CAP.includes('No')" style="text-align: center;">
                                             <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP !='' && dataItem.CAP !='No CAP'">
@@ -281,7 +281,7 @@
                                     </ng-template>
 
                                     <!-- Cell Content -->
-                                    <div class="CAPYCS2CellContent bg-yellow-remove" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openModal(column.field, pricingTableRow, dataItem.PRD_MBR_SID, column.field)">
+                                    <div class="CAPYCS2CellContent bg-yellow-remove" #popOver="ngbPopover" [ngbPopover]="popoverContent">
                                         <!-- YCS2 Info cell design -->
                                         <div [class.isSoftWarnCell]="dataItem.YCS2.includes('No')" [class.uiControlDiv]="dataItem.YCS2.includes('No')" class="product-selector-font-align">
                                             {{ dataItem.YCS2 }}
@@ -385,7 +385,7 @@
                                             </ng-template>
 
                                             <!-- Cell Content -->
-                                            <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openModal(column.field, pricingTableRow, dataItem.PRD_MBR_SID, column.field)">
+                                            <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
                                                 <!-- CAP Info cell design -->
                                                 <div [class.isSoftWarnCell]="dataItem.CAP.includes('No')" style="text-align: center;">
                                                     <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP !='' && dataItem.CAP !='No CAP'">
@@ -417,7 +417,7 @@
                                             </ng-template>
 
                                             <!-- Cell Content -->
-                                            <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openModal(column.field, pricingTableRow, dataItem.PRD_MBR_SID, column.field)">
+                                            <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
                                                 <!-- YCS2 Info cell design -->
                                                 <div [class.isSoftWarnCell]="dataItem.YCS2.includes('No')" [class.uiControlDiv]="dataItem.YCS2.includes('No')" style="text-align: center;">
                                                     {{ dataItem.YCS2 }}

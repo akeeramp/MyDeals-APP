@@ -14,7 +14,6 @@ import { logger } from "../../../shared/logger/logger";
 import { ProductSelectorComponent } from "../productSelector/productselector.component";
 import { ProdSel_Util } from '../productSelector/prodSel_Util'
 import { PTE_Common_Util } from "../../PTEUtils/PTE_Common_util";
-import { ProductBreakoutComponent } from '../productSelector/productBreakout/productBreakout.component';
 
 @Component({
   selector: 'product-corrector',
@@ -31,7 +30,6 @@ export class ProductCorrectorComponent {
     popoverConfig.container = 'body';
     popoverConfig.autoClose = 'outside';
     popoverConfig.animation = false; // Fixes issue with `.fade` css element setting improper opacity making the popover not show up
-    popoverConfig.triggers = 'mouseenter:mouseleave';   // Disabled to use default click behaviour to prevent multiple popover windows from appearing
     popoverConfig.openDelay = 500;   // milliseconds
     popoverConfig.closeDelay = 500; // milliseconds
   }
@@ -111,24 +109,6 @@ export class ProductCorrectorComponent {
         'message': "The product combination is not valid. You can combine (DT, Mb, SvrWS, EIA CPU) or (CS, EIA CS) verticals. For NON IA, you can combine as many products within same verticals for PROGRAM, VOLTIER and REV TIER deals."
     }
 
-  private openModal(columnTypes: string, currentPricingTableRow, productMemberSId, priceCondition) {
-    // Open Modal with data
-    this.dialogService.open(ProductBreakoutComponent, {
-        data: {
-            columnTypes: columnTypes,
-            productData: [{
-                'CUST_MBR_SID': currentPricingTableRow.CUST_MBR_SID,
-                'PRD_MBR_SID': productMemberSId,
-                'GEO_MBR_SID': currentPricingTableRow.GEO_COMBINED,
-                'DEAL_STRT_DT': currentPricingTableRow.START_DT,
-                'DEAL_END_DT': currentPricingTableRow.END_DT,
-                'getAvailable': 'N',
-                'priceCondition': priceCondition
-            }]
-        },
-        panelClass: 'product-breakout-modal'
-    });
-  }
 
   prdLvlDecoder(indx:any) {
     if (indx === 7003) return "Product Vertical";

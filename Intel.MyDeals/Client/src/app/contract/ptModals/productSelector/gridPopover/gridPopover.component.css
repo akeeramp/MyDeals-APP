@@ -1,5 +1,6 @@
 .gridPopover {
     height: 100%;
+    cursor: pointer;
 }
 
 .product-breakout-modal {
