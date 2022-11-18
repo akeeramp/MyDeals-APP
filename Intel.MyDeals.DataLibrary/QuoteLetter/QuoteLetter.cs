@@ -124,8 +124,6 @@ namespace Intel.MyDeals.DataLibrary
 
             htmlTextBox4.Value = "Deal #" + dealId;
             txtEndCustomer.Value = EscapeSpecialChars(GetValue("EndCustomer"));
-            txtStartDate.Value = GetValue("StartDate");
-            txtEndDate.Value = GetValue("EndDate");
             txtECAPType.Value = GetValue("RebateType");
             txtQuantity.Value = GetValue("Quantity"); 
             txtProgramPayment.Value = GetValue("ProgramPayment");
@@ -140,8 +138,20 @@ namespace Intel.MyDeals.DataLibrary
 
             txtK1Ecap.Value = GetMoneyValue("KECAPPrice");
 
-            txtConsumptionStartDate.Value = GetValue("ConsStartDt");
-            txtConsumptionEndDate.Value = GetValue("ConsEndDt");
+            if (txtBasedOn.Value == "Consumption") // Remove this block and expise else after Masound's release
+            {
+                txtStartDate.Value = GetValue("ConsStartDt");
+                txtEndDate.Value = GetValue("ConsEndDt");
+                txtConsumptionStartDate.Value = GetValue("StartDate");
+                txtConsumptionEndDate.Value = GetValue("EndDate");
+            }
+            else
+            {
+                txtStartDate.Value = GetValue("StartDate");
+                txtEndDate.Value = GetValue("EndDate");
+                txtConsumptionStartDate.Value = GetValue("ConsStartDt");
+                txtConsumptionEndDate.Value = GetValue("ConsEndDt");
+            }
 
             //txtK2Ecap.Value = GetMoneyValue("SKECAPPrice");
 
