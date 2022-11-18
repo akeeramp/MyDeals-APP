@@ -5,6 +5,7 @@ import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';
 import * as _ from 'underscore';
+import { TooltipDirective } from "@progress/kendo-angular-tooltip";
 
 @Component({
     selector: 'deal-editor-edit',
@@ -23,6 +24,8 @@ export class dealEditorEditTemplateComponent {
     @Input() in_DataSet: any
     @Output() invalidDate = new EventEmitter<any>();
     @ViewChild("dealDateToolTip", { static: false }) dealDateToolTip: NgbTooltip;
+    @ViewChild(TooltipDirective)
+    public toolTipDir: TooltipDirective;
     private message = "";
     private dropDowResponse: any = {};
     private ecapDimKey = "20___0";
@@ -114,6 +117,13 @@ export class dealEditorEditTemplateComponent {
         else {
             this.invalidDate.emit(false);
             this.dealDateToolTip.close();
+        }
+    }
+    showToolTip(dataItem, field, eventTarget: Element) {
+        if (field == 'CONTRACT_TYPE') {
+            if (dataItem.CONTRACT_TYPE == undefined || dataItem.CONTRACT_TYPE == null || dataItem.CONTRACT_TYPE == '') {
+                this.toolTipDir.toggle(eventTarget);
+            }
         }
     }
 

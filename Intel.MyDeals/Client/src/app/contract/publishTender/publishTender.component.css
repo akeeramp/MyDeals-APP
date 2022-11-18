@@ -182,3 +182,14 @@
     width: 104% !important;
     margin-left: -45px !important
 }
+.publishTender.k-grid th.k-state-focused {
+    box-shadow: inset 0 0 0 1px #00AEEF !important;
+}
+.publishTender .k-grid th.k-state-focused:hover {
+    box-shadow: inset 0 0 0 1px #003C71 !important;
+}
+.publishTender.k-icon:hover, .publishTender.k-icon:focus {
+    color: #000000 !important
+}
+
+

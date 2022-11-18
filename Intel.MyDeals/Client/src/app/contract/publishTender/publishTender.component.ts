@@ -321,6 +321,17 @@ export class publishTenderComponent {
         });
     }
 
+    refreshGrid() {
+        this.OBJ_SET_TYPE_CD = this.pricingTableData.PRC_TBL_ROW[0].OBJ_SET_TYPE_CD;
+        //set templates data        
+        this.templatesSvc.readTemplates().subscribe(response => {
+            this.templates = response; this.initTender();
+        }, err => {
+            this.loggerSvc.error("Error", "Publishing deals Loading failed. Contact Administrator.", err);
+        });
+    }
+
+
     ngOnInit() {
         const url = window.location.href.split('/');
         this.c_Id = Number(url[url.length - 1]);

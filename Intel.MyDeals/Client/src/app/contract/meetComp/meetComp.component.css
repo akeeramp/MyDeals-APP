@@ -40,7 +40,6 @@
 }
 
 .meet-conduct .k-grid td.k-state-focused,
-.meet-conduct .k-grid th.k-state-focused,
 .meet-conduct .k-grid th:focus:hover,
 .meet-conduct .k-grid .k-master-row>td:focus:hover,
 .meet-conduct .k-grid .k-grouping-row>td:focus:hover,
@@ -587,3 +586,11 @@
     color: #444 !important;
     background-color: #ebebeb !important;
 }
+.k-combobox .k-clear-value {
+    width: calc(13px + 0.75rem) !important;
+    height: 1.5rem !important;
+}
+.meet-conduct .k-grid th.k-state-focused {
+    box-shadow: inset 0 0 0 1px #00AEEF !important;
+}
+

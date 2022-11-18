@@ -133,14 +133,17 @@
         </div>
     </div>
 </div>
-<div *ngIf="in_Field_Name == 'DEAL_COMB_TYPE' || in_Field_Name == 'CONTRACT_TYPE' || in_Field_Name == 'PERIOD_PROFILE' 
-     || in_Field_Name == 'RESET_VOLS_ON_PERIOD' || in_Field_Name == 'BACK_DATE_RSN' || in_Field_Name == 'CONSUMPTION_REASON' 
+<div *ngIf="in_Field_Name == 'DEAL_COMB_TYPE' || in_Field_Name == 'CONTRACT_TYPE' || in_Field_Name == 'PERIOD_PROFILE'
+     || in_Field_Name == 'RESET_VOLS_ON_PERIOD' || in_Field_Name == 'BACK_DATE_RSN' || in_Field_Name == 'CONSUMPTION_REASON'
      || in_Field_Name == 'SEND_TO_VISTEX' || in_Field_Name == 'SERVER_DEAL_TYPE'">
     <kendo-dropdownlist [data]="dropDowResponse[in_Field_Name]"
-                        [ngModel]="in_DataItem[in_Field_Name]"
+                        [ngModel]="in_DataItem[in_Field_Name]" (blur)='showToolTip(in_DataItem, in_Field_Name, contractType)'
                         (ngModelChange)="in_DataItem[in_Field_Name] = $event"
                         (valueChange)="valueChange(in_DataItem, in_Field_Name)">
     </kendo-dropdownlist>
+    <div kendoTooltip showOn="none" position="bottom" style="margin-left:110px" tooltipClass="ctrct_typ">
+        <span #contractType [title]="in_DataItem[in_Field_Name] == '' ? 'CONTRACT_TYPE is required' : ''"></span>
+    </div>
 </div>
 <div *ngIf="in_Field_Name == 'EXPIRE_FLG'">
     <kendo-dropdownlist [data]="dropDowResponse[in_Field_Name]"
