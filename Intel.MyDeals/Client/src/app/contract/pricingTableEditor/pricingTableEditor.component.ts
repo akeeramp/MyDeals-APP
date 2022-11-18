@@ -128,6 +128,7 @@ export class pricingTableEditorComponent {
                                 this.hot.setDataAtRowProp(this.selRow, 'PTR_SYS_PRD', '', 'no-edit');
                                 delete VM.curRow[0].delPTR_SYS_PRD;
                             }
+                            VM.curRow = [];
                             return;
                         }
                     }
@@ -253,6 +254,7 @@ export class pricingTableEditorComponent {
                     this.hot.setDataAtRowProp(this.selRow, 'PTR_SYS_PRD', '', 'no-edit');
                     delete VM.curRow[0].delPTR_SYS_PRD;
                 }
+                VM.curRow = [];
             }
         }
         /*  custom cell editor logic ends here*/
@@ -1012,8 +1014,8 @@ export class pricingTableEditorComponent {
                 if (curRow && data.DC_ID == curRow[0]['DC_ID']) {
                     curRow[0]['PTR_SYS_PRD'] = data.PTR_SYS_PRD;
 
-                    if (curRow && (data['PTR_USER_PRD'] && curRow[0]['PTR_USER_PRD'] && !this.isEqual(data['PTR_USER_PRD'], curRow[0]['PTR_USER_PRD']) ||
-                        (data['PRD_EXCLDS'] && curRow[0]['PRD_EXCLDS'] && !this.isEqual(data['PRD_EXCLDS'], curRow[0]['PRD_EXCLDS'])))) {
+                    if (curRow && (data['PTR_USER_PRD'] && curRow[0]['PTR_USER_PRD'] && !PTEUtil.isEqual(data['PTR_USER_PRD'], curRow[0]['PTR_USER_PRD']) ||
+                        (data['PRD_EXCLDS'] && curRow[0]['PRD_EXCLDS'] && !PTEUtil.isEqual(data['PRD_EXCLDS'], curRow[0]['PRD_EXCLDS'])))) {
                         curRow[0].delPTR_SYS_PRD = true;
                     }
                 }
@@ -1103,13 +1105,7 @@ export class pricingTableEditorComponent {
             return true;
         }
     }
-    isEqual(data1, data2) {
-        data1 = data1.split(',').map((item) => item.trim());
-        data2 = data2.split(',').map((item) => item.trim());
-
-        let equal = data1.every(item => data2.includes(item)) && data2.every(item => data1.includes(item));
-        return equal;
-    }
+    
     async resetValidationMessage() {
         this.validationMessage = false;
     }

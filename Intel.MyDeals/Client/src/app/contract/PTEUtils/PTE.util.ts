@@ -275,14 +275,16 @@ export class PTEUtil {
             callBack(false);
         }
     }
-    static translationToSendObj(curPricingTable:any,currentPricingTableRowData:Array<any>,contractData: any, isExcludePrdChange:any):any{
+    static translationToSendObj(curPricingTable: any, currentPricingTableRowData: Array<any>, contractData: any, isExcludePrdChange: any): any {
         //Getting deal type
         let dealType = curPricingTable.OBJ_SET_TYPE_CD;
 
         // Pricing table rows products to be translated
         let pricingTableRowData = currentPricingTableRowData.filter((x) => {
+            let ptr_sys_prd_keys = x['PTR_SYS_PRD'].length >0 ? Object.keys(JSON.parse(x['PTR_SYS_PRD'])).join() : '';
+
             return ((x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
-                ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
+                (((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) && this.isEqual(ptr_sys_prd_keys, x.PTR_USER_PRD)) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
                 || (dealType == "KIT") || (isExcludePrdChange);
         });
 
@@ -490,5 +492,13 @@ export class PTEUtil {
             userInput = this.updateUserInput(item);
         }
         return userInput == '' ? userInput : userInput.contractProducts.split(',');
+    }
+
+    static isEqual(data1, data2) {
+        data1 = data1.split(',').map((item) => item.trim());
+        data2 = data2.split(',').map((item) => item.trim());
+
+        let equal = data1.every(item => data2.includes(item)) && data2.every(item => data1.includes(item));
+        return equal;
     }
 }
