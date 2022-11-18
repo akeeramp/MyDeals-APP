@@ -177,7 +177,7 @@
                                                    [filterService]="filterService" [data]="filteringData[column.field]"></multicheck-filter>
                             </div>
                             <div *ngIf="dropdownFilterColumns.includes(column.field)">
-                                <dropDown-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value" operator="isnotnull"
+                                <dropDown-filter class="de-dropdwn-styl" [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value" operator="isnotnull"
                                                  [filterService]="filterService" [data]="filteringData[column.field]"></dropDown-filter>
                             </div>
                         </ng-template>

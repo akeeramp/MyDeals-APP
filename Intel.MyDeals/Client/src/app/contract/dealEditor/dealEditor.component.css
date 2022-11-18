@@ -1297,26 +1297,7 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:
 #dealEditorTab .k-tabstrip-items .k-item:hover {
     background: #eee !important;
 }
-.k-dropdown, .k-dropdowntree {
-    width: 17.5em !important;
-}
-.k-select {
-    background: white !important;
-    width: 2.571em !important;
-    border-width: 0 0 0 1px !important;
-    border-color: lightgray !important;
-}
-.k-input {
-    background: white !important;
-}
-.k-filter-menu .k-widget {
-    margin: 0.5rem .4rem 0 !important;
-}
-.k-action-buttons, k-button-group {
-    border-top: 1px solid !important;
-    border-top-color: lightgray !important;
-    margin-top: .5rem !important;
-}
+
 .de-css-comp th.k-header.headerClass.k-filterable {
     background-color: #e7e7e8 !important;
     color: #1a3e6f !important;
@@ -1409,4 +1390,7 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:
     padding: 15px;
     border-radius: 0;
     border: 0;
+}
+dropdown-filter.de-dropdwn-styl kendo-dropdownlist.drop-cus-filtersty.k-widget.k-dropdown {
+    width: 225px !important
 }
