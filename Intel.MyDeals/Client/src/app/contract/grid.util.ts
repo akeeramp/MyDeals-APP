@@ -34,9 +34,9 @@ export class GridUtil {
             var tmplt = '';
             if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
                 tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-            tmplt += '<div class="uiControlDiv ' + msgClass + '" style="line-height: 1em;" ' + msg;
+            tmplt += '<div class="uiControlDiv vert-center ' + msgClass + '" style="line-height: 1em;" ' + msg +'>';
             if (passedData[field] != undefined && passedData[field] != null)
-                tmplt += '    <div class="ng-binding vert-center">' + passedData[field] + '</div>';
+                tmplt += '    <div class="ng-binding">' + passedData[field] + '</div>';
             tmplt += '</div>';
             return tmplt;
         }
@@ -202,7 +202,7 @@ export class GridUtil {
                 if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined && passedData._behaviors.isError[field + '_' + dimkey] != undefined && passedData._behaviors.isError[field + '_' + dimkey])
                     tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field + '_' + dimkey] + '"></div>';
                 if (passedData[field][dimkey] != undefined && passedData[field][dimkey] != null && passedData[field][dimkey] != 'No YCS2' && passedData[field][dimkey] != 'No CAP')
-                    tmplt += '<span class="ng-binding dataPadding">' + passedData[field][dimkey] + '</span>';
+                    tmplt += '<span class="ng-binding dataPadding" id="capYcs2Col">' + passedData[field][dimkey] + '</span>';
                 tmplt += '</div>';
                 tmplt += '</div>';
             }

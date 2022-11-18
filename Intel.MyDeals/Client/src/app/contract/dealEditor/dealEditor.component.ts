@@ -381,7 +381,7 @@ export class dealEditorComponent {
             sysPricePoint = dataItem["SYS_PRICE_POINT"];
         }
         const dialogRef = this.dialog.open(systemPricePointModalComponent, {
-            width: "900px",
+            width: "700px",
             data: {
                 label: "System Price Point",
                 cellCurrValues: sysPricePoint

@@ -1402,3 +1402,8 @@ dropdown-filter.de-dropdwn-styl kendo-dropdownlist.drop-cus-filtersty.k-widget.k
     border: none !important;
     background-color: #ed1c24 !important;
 }
+
+#capYcs2Col{
+    position:relative;
+    top:25%;
+}

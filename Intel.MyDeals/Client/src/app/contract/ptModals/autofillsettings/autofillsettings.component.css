@@ -37,7 +37,8 @@
     font-size: 13px !important;
     font-weight: 600;
     margin-top: -8px;
-    margin-left: -2px
+    margin-left: -2px;
+    max-height:2em;
 }
 
 /*.autofill-settings.modal-header.autofillhead {
@@ -135,11 +136,11 @@
     color: #999999;
 }
 
-.af-setting-fixes .autofillrow {
+.af-setting-fixes .autofillrow, .af-setting-fixes .firstrow {
     display: flex;
     flex-wrap: nowrap;
     justify-content: left;
-    margin-top: -103px
+    margin-left: -4px;
 }
 
     .af-setting-fixes .autofillrow > div {
@@ -163,7 +164,7 @@
     width: 100% !important;
     font-size: 12px !important;
     font-family: 'Intel Clear' !important;
-    height: 235px !important;
+    height: 200px !important;
     color: #000 !important;
 }
 

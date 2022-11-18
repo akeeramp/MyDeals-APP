@@ -54,7 +54,8 @@
 <div *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'VOL_TIER' || in_Deal_Type == 'REV_TIER' || in_Deal_Type == 'FLEX')">
     <div *ngFor="let fieldDet of fields">
         <div *ngIf="fieldDet.title === 'Tier'" class="col-md-3 tierHeader">{{fieldDet.title}}</div>
-        <div *ngIf="fieldDet.title !== 'Tier'" class="col-md-3 tierHeader tierBorder">{{fieldDet.title}}</div>
+        <div *ngIf="fieldDet.title !== 'Tier' && fieldDet.field !== 'INCENTIVE_RATE'" class="col-md-3 tierHeader tierBorder" id="incentiveRate">{{fieldDet.title}}</div>
+        <div *ngIf="fieldDet.title !== 'Tier' && fieldDet.field === 'INCENTIVE_RATE'" class="col-md-3 tierHeader tierBorder" id="incentiveRate">{{fieldDet.title}}</div>
     </div>
     <div *ngFor="let key Of tierArray(in_DataItem.TIER_NBR); let i = index">
         <div class="col-md-12 rowDetailHeight">
@@ -62,7 +63,7 @@
                 <div class="col-md-3 rowDetailHeight">
                     <span class="tierColumn rowValueHeight" *ngIf="fieldDet.title == 'Tier' || (fieldDet.title.includes('Start') && (i != 0 || in_DataItem['HAS_TRACKER'] == 1)) || (fieldDet.title.includes('End') && in_DataItem['HAS_TRACKER'] == 1 && i != (in_DataItem['NUM_OF_TIERS']-1))">{{in_DataItem[fieldDet.field][key]}}</span>
                     <span class="rowValueHeight" *ngIf="(fieldDet.title.includes('Start') && (i == 0 && in_DataItem['HAS_TRACKER'] == 0)) || ((fieldDet.title.includes('End') && (in_DataItem['HAS_TRACKER'] == 0 || (in_DataItem['HAS_TRACKER'] == 1 && i==(in_DataItem['NUM_OF_TIERS']-1)))) || fieldDet.title.includes('Rate'))">
-                        <kendo-numerictextbox class="rowValueHeight" style="top:45% !important"
+                        <kendo-numerictextbox class="rowValueHeight"
                                               [ngModel]="convertToLowerCase(in_DataItem[fieldDet.field][key]) == 'unlimited' ? '' : in_DataItem[fieldDet.field][key]"
                                               (ngModelChange)="in_DataItem[fieldDet.field][key] = $event"
                                               [value]="convertToLowerCase(in_DataItem[fieldDet.field][key]) == 'unlimited' ? '' : in_DataItem[fieldDet.field][key]"

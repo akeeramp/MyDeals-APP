@@ -13,6 +13,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { excludeDealGroupModalDialog } from "./excludeDealGroupModal.component"
 import { GridUtil } from "../grid.util"
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
+import * as _ from 'underscore';
 
 export interface contractIds {
     Model: string;
@@ -228,7 +229,11 @@ export class managerExcludeGroupsComponent {
                 item.hidden = false;
         })
         let data = JSON.parse(JSON.stringify(grid.data));
-        grid.data = this.gridResult;
+        grid.data = JSON.parse(JSON.stringify(this.gridResult));
+        _.each(grid.data, (dataItem) => {
+            dataItem['ECAP_PRICE'] = this.getFormatedDim(dataItem, 'ECAP_PRICE', '20___0', 'currency');
+            dataItem['MAX_RPU'] = this.getFormatedDim(dataItem, 'MAX_RPU', '20___0', 'currency');
+        })
         grid.saveAsExcel();
         grid.columns.forEach(item => {
             if (item.title == "Rebate Type" || item.title == "Additive" || item.title == "Notes")
@@ -240,6 +245,11 @@ export class managerExcludeGroupsComponent {
         grid.columns.forEach(item => {
             if (item.hidden && item.title == "Notes")
                 item.hidden = false;
+        })
+        grid.data = JSON.parse(JSON.stringify(this.gridData.data));
+        _.each(grid.data, (dataItem) => {
+            dataItem['ECAP_PRICE'] = this.getFormatedDim(dataItem, 'ECAP_PRICE', '20___0', 'currency');
+            dataItem['MAX_RPU'] = this.getFormatedDim(dataItem, 'MAX_RPU', '20___0', 'currency');
         })
         grid.saveAsExcel();
     }
