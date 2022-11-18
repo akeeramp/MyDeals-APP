@@ -87,7 +87,7 @@
                     </div>
                     <div class="fr" style="margin-top: 2px; margin-left: 22px;">
                         <span class="k-textbox k-space-left aligner-inputs">
-                            <i class="intelicon-search"></i><input placeholder="  search...(press enter to search)" [(ngModel)]="titleFilter" />
+                            <i class="intelicon-search"></i><input (keydown)="filterDealData($event)" placeholder="  search...(press enter to search)" [(ngModel)]="searchFilter" />
                         </span>
                     </div>
                 </div>

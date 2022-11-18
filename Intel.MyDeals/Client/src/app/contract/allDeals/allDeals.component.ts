@@ -69,6 +69,7 @@ export class allDealsComponent {
         { dealType: "PROGRAM", name: "Program" }
     ];
     private allTabColumns: any[] = [];
+    private searchFilter: any;
     private state: State = {
         skip: 0,
         take: 25,
@@ -130,7 +131,45 @@ export class allDealsComponent {
         wrap: true
     };
 
-
+    filterDealData(event) {
+        if (event.keyCode == 13) {
+            if (this.searchFilter != undefined && this.searchFilter != null && this.searchFilter != "") {
+                if (this.searchFilter.length < 3) {
+                    // This breaks the tab filtering
+                    return;
+                }
+                else {
+                    this.state.filter = {
+                        logic: "or",
+                        filters: [
+                            {
+                                field: "DC_ID",
+                                operator: "contains",
+                                value: this.searchFilter
+                            }, {
+                                field: "WF_STG_CD",
+                                operator: "contains",
+                                value: this.searchFilter
+                            }, {
+                                field: "PTR_USER_PRD",
+                                operator: "contains",
+                                value: this.searchFilter
+                            }, {
+                                field: "TITLE",
+                                operator: "contains",
+                                value: this.searchFilter
+                            }, {
+                                field: "NOTES",
+                                operator: "contains",
+                                value: this.searchFilter
+                            }
+                        ],
+                    }
+                    this.gridData = process(this.gridResult, this.state);
+                }
+            }
+        }
+    }
     getFormatedDim(dataItem, field, dim, format) {
         const item = dataItem[field];
         if (item === undefined || item[dim] === undefined) return ""; //return item; // Used to return "undefined" which would show on the UI.
@@ -385,8 +424,18 @@ export class allDealsComponent {
         dialogRef.afterClosed().subscribe(result => { });
     }
     
-    toggleWrap() {
-
+    toggleWrap = function () {
+        const elements = Array.from(
+            document.getElementsByClassName('ng-binding') as HTMLCollectionOf<HTMLElement>
+        );
+        this.wrapEnabled = !this.wrapEnabled;
+        var newVal = this.wrapEnabled ? "normal" : "nowrap";
+        var newH = this.wrapEnabled ? "100%" : "auto";
+        elements.forEach((item) => {
+            item.style.setProperty('white-space', newVal);
+            item.style.setProperty("height", newH);
+        });
+        this.grid.autoFitColumn(2);
     }
     loadDealTypestab(data){
         for (let i = 0; i < data.length; i++) {
