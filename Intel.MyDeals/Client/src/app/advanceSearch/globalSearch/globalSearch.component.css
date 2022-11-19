@@ -28,6 +28,13 @@
     left: 1.143em !important;
     padding: 7px !important;
     font-size: 1.2em !important;
+    font-weight: 500;
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.closeBtn {
+    padding-top: 0.45em !important;
+    opacity: .7;
 }
 
 .k-button-icon {
@@ -46,6 +53,8 @@
 
 kendo-window-titlebar.kendo-titlebar-custom {
     padding: 3px 15px;
+    border-top-right-radius: 0.125rem !important;
+    border-top-left-radius: 0.125rem !important;
 }
 
 kendo-window-titlebar.kendo-titlebar-custom .k-button-icon {

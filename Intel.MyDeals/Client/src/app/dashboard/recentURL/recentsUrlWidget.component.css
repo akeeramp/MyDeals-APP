@@ -14,3 +14,13 @@
     height: 212px;
     overflow-y: auto;
 }
+
+.recent-widget-link {
+    color: #0071c5;
+    text-decoration: none;
+}
+
+    .recent-widget-link:hover {
+        color: #004579;
+        text-decoration: underline !important;
+    }

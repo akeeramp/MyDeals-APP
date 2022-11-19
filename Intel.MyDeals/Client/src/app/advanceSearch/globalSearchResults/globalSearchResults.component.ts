@@ -27,7 +27,7 @@ export class GlobalSearchResultsComponent  {
     private opTypes:Array<any> = [
       {
           value: "ALL",
-          label: "ALL"
+          label: "All"
       },
       {
           value: "CNTRCT",
@@ -65,7 +65,7 @@ export class GlobalSearchResultsComponent  {
           this.objTypes[type].viewMore=true;
         }
       },err=>{
-        this.loggerSvc.error("Unable to fetch global Search results","Error",err);
+          this.loggerSvc.error("Something went wrong.","Error",err);
       })
     }
     getObjectTypeResult(opType:string){

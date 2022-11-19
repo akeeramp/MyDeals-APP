@@ -234,6 +234,21 @@ h5 {
     border-radius: 0 !important;
 }
 
+.kendoTitleBar {
+    border-top-right-radius: 0.125rem !important;
+    border-top-left-radius: 0.125rem !important;
+}
+
+.windowTitle {
+    font-weight: 500;
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.closeBtn.k-button-icon {
+    padding-top: 0.45em !important;
+    opacity: .7;
+} 
+
 .k-widget.k-window {
     border: none !important;
     border-radius: 0 !important;

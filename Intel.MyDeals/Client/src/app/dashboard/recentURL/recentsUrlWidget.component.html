@@ -2,7 +2,7 @@
     <div class="gridster-item-content">
         <div class="container widget-container all-permit-recents">
             <div class="row" *ngFor="let url of recentURLs">
-                <div class="col-md-12" style="margin:2px;font-size:14px"><a title="{{url}}" href="{{url}}">{{url | shorten:
+                <div class="col-md-12" style="margin:2px;font-size:14px"><a class="recent-widget-link" title="{{url}}" href="{{url}}">{{url | shorten:
                         50: '...'}}</a></div>
             </div>
         </div>

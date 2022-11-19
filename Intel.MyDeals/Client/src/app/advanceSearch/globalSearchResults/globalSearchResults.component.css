@@ -10,11 +10,13 @@
     border-bottom: 0 !important;
     color: #00AEEF;
     font-size: 12px;
+    cursor: pointer;
+    font-weight: 200;
 }
 
-.search-result-item:hover {
-    background-color: transparent !important;
-}
+    .search-result-item:hover {
+        background-color: transparent !important;
+    }
 
 .mat-list-base .mat-list-item {
     font-size: 12px !important;
@@ -45,11 +47,23 @@ mat-list-item:hover {
     background-color: #3c8dbc !important;
     border-color: #367fa9 !important
 }
-
+.comp-customize-btn {
+    border-right-color: #fff !important;
+}
 .mat-button-toggle-checked.mat-button-toggle-appearance-standard {
     color: #fff!important;
     background-color: #004280!important;
-    border-color: #004280!important
+}
+    .mat-button-toggle-checked.mat-button-toggle-appearance-standard:hover {
+        background-color: #004280 !important;
+        border-right-color: #fff !important;
+        border-bottom-color: #004280 !important;
+        border-top-color: #004280 !important;
+        border-left-color: #004280 !important
+    }
+
+.customBtn {
+    border: none;
 }
 
 .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
@@ -119,4 +133,6 @@ mat-list-item:hover {
     padding-left: 5px;
     margin-right: 6px;
     width: 325px;
+    border-radius: 0px;
+    box-shadow: none;
 }

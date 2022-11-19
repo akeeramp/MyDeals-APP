@@ -24,7 +24,7 @@ constructor(private DashboardComp:DashboardComponent){
   private opTypes:Array<any> = [
     {
         value: "ALL",
-        label: "ALL"
+        label: "All"
     },
     {
         value: "CNTRCT",

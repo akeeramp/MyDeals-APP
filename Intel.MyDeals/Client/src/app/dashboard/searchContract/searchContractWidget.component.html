@@ -3,10 +3,11 @@
 
     </div>
 </div>
+<br />
 <div class="row text-center">
     <div class="col-md">
         <div class="gridster-item-content">
-            <kendo-textbox [clearButton]="true" [style.width.px]="350" placeholder="Search for deal #, contract, or pricing strategy" [(ngModel)]="searchText" (keypress)="enterPressed($event)"></kendo-textbox>
+            <kendo-textbox class="contractSearchBox" [clearButton]="true" [style.width.px]="350" placeholder="Search for deal #, contract, or pricing strategy" [(ngModel)]="searchText" (keypress)="enterPressed($event)"></kendo-textbox>
         </div>
     </div>
 </div>

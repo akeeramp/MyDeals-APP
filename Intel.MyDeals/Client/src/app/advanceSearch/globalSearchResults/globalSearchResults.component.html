@@ -2,11 +2,11 @@
 <div class="container">
     <div class="row justify-content-start" style="margin-bottom: 15px;">
         <div class="applied-products">
-            <span class="search intelicon-search margin-btn-15" style=" margin-right: 8px; font-size: 28px; color: #0071C5; vertical-align: sub;"></span>
+            <span class="search intelicon-search margin-btn-15" style=" margin-right: 8px; font-size: 28px; color: #0071C5; vertical-align: sub; cursor: default;"></span>
             <kendo-textbox class="searchResultInpt margin-btn-15" [clearButton]="true" [(ngModel)]="searchText" (keypress)="txtEnterPressed($event)"></kendo-textbox>
             <div class="copper-btns margin-btn-15">
-                <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-                    <mat-button-toggle class="btn btn-primary" *ngFor="let toggle of opTypes" [checked]="opType==toggle.value" value="{{toggle.value}}" (change)="onOpTypeChange(toggle.value)">{{toggle.label}} </mat-button-toggle>
+                <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="customBtn">
+                    <mat-button-toggle class="btn btn-primary comp-customize-btn" *ngFor="let toggle of opTypes" [checked]="opType==toggle.value" value="{{toggle.value}}" (change)="onOpTypeChange(toggle.value)">{{toggle.label}} </mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
         </div>
@@ -59,7 +59,7 @@
                             <div *ngFor="let item of objTypes['PRC_ST'].result">
                                 <mat-list-item>
                                     <div (click)="gotoOBJ(item,'PRC_ST')">
-                                        <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}: <span style="font-weight: normal; color: #666666;">{{item.CUST_ACCNT_DIV}}</span></div>
+                                        <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}<span style="font-weight: normal; color: #666666;">{{item.CUST_ACCNT_DIV}}</span></div>
                                         <div class="search-result-item">{{item.TITLE}}</div>
                                     </div>
                                 </mat-list-item>
@@ -89,7 +89,7 @@
                             <div *ngFor="let item of objTypes['PRC_TBL'].result">
                                 <mat-list-item>
                                     <div (click)="gotoOBJ(item,'PRC_TBL')">
-                                        <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}: <span style="font-weight: normal; color: #666666;">{{item.CUST_ACCNT_DIV}}</span></div>
+                                        <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}<span style="font-weight: normal; color: #666666;">{{item.CUST_ACCNT_DIV}}</span></div>
                                         <div class="search-result-item">{{item.TITLE}}</div>
                                     </div>
                                 </mat-list-item>
@@ -119,7 +119,7 @@
                             <div *ngFor="let item of objTypes['WIP_DEAL'].result">
                                 <mat-list-item>
                                     <div (click)="gotoOBJ(item,'WIP_DEAL')">
-                                        <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}: <span style="font-weight: normal; color: #666666;">{{item.CUST_ACCNT_DIV}}</span></div>
+                                        <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}</div>
                                         <div class="search-result-item">{{item.TITLE}}</div>
                                     </div>
                                 </mat-list-item>
