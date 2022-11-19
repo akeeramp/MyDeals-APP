@@ -85,7 +85,9 @@ export class GridUtil {
         if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
             tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
         tmplt += '<div class="uiControlDiv isReadOnlyCell">';
-        if (passedData['CUST_ACCNT_DIV'] === undefined || passedData['CUST_ACCNT_DIV'] === "")
+        if ((passedData['CUST_ACCNT_DIV'] === undefined || passedData['CUST_ACCNT_DIV'] === "") &&
+            (passedData.Customer != undefined && passedData.Customer != null && passedData.Customer != "") &&
+            (passedData.Customer.CUST_NM != undefined && passedData.Customer.CUST_NM != null && passedData.Customer.CUST_NM != ""))
             tmplt += '     <div class="ng-binding vert-center">' + passedData.Customer.CUST_NM + '</div>';
         if (passedData['CUST_ACCNT_DIV'] !== undefined && passedData['CUST_ACCNT_DIV'] !== "")
             tmplt += '     <div class="ng-binding vert-center">' + passedData["CUST_ACCNT_DIV"] + '</div>';

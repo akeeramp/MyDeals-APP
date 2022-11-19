@@ -47,6 +47,7 @@ export class OverlappingCheckComponent {
     private isSelectAll: boolean = true;
     private showKendoAlert: boolean = false;
     private is_selected: boolean = false;
+    private isNoDealsFound: boolean = false;
     private state: State = {
         skip: 0,
         take: 50,
@@ -245,6 +246,12 @@ export class OverlappingCheckComponent {
             this.ovlpData = this.prepareGridData(result.Data);
             this.ovlpErrorCount = distinct(result.Data, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
             this.gridResult = this.ovlpData;
+            if (this.gridResult.length == 0) {
+                this.isNoDealsFound = true;
+            }
+            else {
+                this.isNoDealsFound = false;
+            }
             let groups = [{ field: "PROGRAM_PAYMENT" },
             { field: "WIP_DEAL_OBJ_SID" }];
             this.state.group = groups;
