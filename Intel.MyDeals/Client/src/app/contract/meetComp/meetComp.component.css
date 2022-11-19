@@ -4,6 +4,7 @@
 
 .meet-conduct .k-icon:hover {
     color: #00AEEF !important;
+    opacity: unset !important;
 }
 
 .meet-conduct .k-label {
@@ -25,7 +26,8 @@
 }
 
 .meet-conduct .k-icon {
-    color: #00AEEF;
+    color: #000000;
+    opacity: .45;
 }
 
 .meet-conduct .k-grid td.k-state-focused,

@@ -1286,9 +1286,10 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:
     background-color: inherit !important;
 }
 
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="PRD_BCKT"], 
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_OA_MAX_VOL"], 
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_OA_MAX_AMT"] {
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="PRD_BCKT"],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_OA_MAX_VOL"],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_OA_MAX_AMT"],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="PRD_EXCLDS"] {
     border-bottom: 3px solid rgb(0, 113, 197) !important;
     border-bottom-color: rgb(0, 113, 197) !important;
 }
