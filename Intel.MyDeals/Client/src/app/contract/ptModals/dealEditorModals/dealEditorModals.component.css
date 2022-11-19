@@ -203,7 +203,7 @@
     color: #727578 !important;
 }
 .endCustomerBoxStyle .k-dropdown-wrap:hover {
-    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%);
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
 }
 
 button.btn.btn-warning.btn-styCancel {

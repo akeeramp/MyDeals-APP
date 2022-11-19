@@ -54,7 +54,7 @@
 <div *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'VOL_TIER' || in_Deal_Type == 'REV_TIER' || in_Deal_Type == 'FLEX')">
     <div *ngFor="let fieldDet of fields">
         <div *ngIf="fieldDet.title === 'Tier'" class="col-md-3 tierHeader">{{fieldDet.title}}</div>
-        <div *ngIf="fieldDet.title !== 'Tier' && fieldDet.field !== 'INCENTIVE_RATE'" class="col-md-3 tierHeader tierBorder" id="incentiveRate">{{fieldDet.title}}</div>
+        <div *ngIf="fieldDet.title !== 'Tier' && fieldDet.field !== 'INCENTIVE_RATE'" class="col-md-3 tierHeader tierBorder">{{fieldDet.title}}</div>
         <div *ngIf="fieldDet.title !== 'Tier' && fieldDet.field === 'INCENTIVE_RATE'" class="col-md-3 tierHeader tierBorder" id="incentiveRate">{{fieldDet.title}}</div>
     </div>
     <div *ngFor="let key Of tierArray(in_DataItem.TIER_NBR); let i = index">

@@ -1125,7 +1125,6 @@ button.k-button.add-tab-cancelbtn:hover {
 }
 .deal-pmc-custom .opUiContainer.md.k-grid td {
     border-right: 0 !important;
-    border-bottom: 0 !important;
     border: 0;
     padding-right: 10px !important;
     padding-left: 5px !important;
@@ -1163,9 +1162,9 @@ button.k-button.add-tab-cancelbtn:hover {
     font-weight: 500 !important;
     font-size: 12px !important;
 }
-/*.kitSideLine {
+.kitRowValue.kitSideLine {
     height: 45px !important;
-}*/
+}
 .extraSpace-colFix .KIT_ECAP {
     height: 85px;
 }
@@ -1406,4 +1405,10 @@ dropdown-filter.de-dropdwn-styl kendo-dropdownlist.drop-cus-filtersty.k-widget.k
 #capYcs2Col{
     position:relative;
     top:25%;
+}
+.deal-pmc-custom .k-grid tr:last-child > td {
+    border-bottom: 0px !important;
+}
+#dealEditor kendo-window-titlebar.k-window-titlebar.k-dialog-titlebar {
+    padding: 0 !important;
 }
