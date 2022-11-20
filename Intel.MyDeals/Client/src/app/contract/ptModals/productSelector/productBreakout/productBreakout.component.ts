@@ -52,13 +52,13 @@ export class ProductBreakoutComponent implements OnInit {
     public isLoading = true;
 
     private readonly capColumns = [
-        { field: "HIER_VAL_NM", title: "Product" },
+        { field: "HIER_VAL_NM", title: "Product", width: '11%' },
         { field: "Level4", title: "Deal Product Name", width: '20%', template: " #= kendo.toString(Level4) #" },
         { field: "CAP_START", title: "Date Range", width: '24%', template: "#= kendo.toString(new Date(CAP_START), 'M/d/yyyy') # - #= kendo.toString(new Date(CAP_END), 'M/d/yyyy') #" },
-        { field: "GEO_MBR_SID", title: "GEO" },
-        { field: "CUST_MBR_SID1", title: "SOLD TO"},
-        { field: "CAP", title: "CAP" },
-        { field: "CAP_PRC_COND", template: '<input type="checkbox" style="margin-top:2px;" disabled ng-checked="dataItem.CAP_PRC_COND == \'YCP1\'" />', title: 'YCP1' },
+        { field: "GEO_MBR_SID", title: "GEO", width: '11%' },
+        { field: "CUST_MBR_SID1", title: "SOLD TO", width: '11%'},
+        { field: "CAP", title: "CAP", width: '11%' },
+        { field: "CAP_PRC_COND", template: '<input type="checkbox" style="margin-top:2px;" disabled ng-checked="dataItem.CAP_PRC_COND == \'YCP1\'" />', title: 'YCP1', width: '11%' },
   ];
 
     private readonly ycs2Columns = [

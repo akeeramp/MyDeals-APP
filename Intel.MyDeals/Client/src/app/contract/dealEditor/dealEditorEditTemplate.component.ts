@@ -250,9 +250,18 @@ export class dealEditorEditTemplateComponent {
         this.saveLinkedDataItem(dataItem, field, dataItem[field]["10___" + row], "10___" + row)
     }
     convertToLowerCase(value) {
-        if(typeof value == "string")
+        if (typeof value !== 'number')
             return value.toLowerCase();
         return value;
+    }
+    //Min conditions for Numeric TextBox added here
+    getMinValue(field: string) {
+        if (field.includes('RATE'))
+            return '0.00';
+        else if (field.includes('_REV'))
+            return '0.01';
+        else
+            return '1';
     }
     ngOnInit() {
         this.fields = (this.in_Deal_Type === 'VOL_TIER' || this.in_Deal_Type === 'FLEX') ? PTE_Config_Util.volTierFields : this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : PTE_Config_Util.densityFields;

@@ -409,7 +409,7 @@ export class allDealsComponent {
         GridUtil.dsToExcel(this.wipTemplate.columns, this.gridResult, "Deal Editor Export");
     }
     exportToExcelCustomColumns() {
-        GridUtil.dsToExcel(this.columns, this.gridResult, "Deal Editor Export");
+        GridUtil.dsToExcel(this.columns, this.gridData.data, "Deal Editor Export");
     }
     openOverlappingDealCheck() {
         let data = {

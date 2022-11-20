@@ -34,9 +34,9 @@ export class GridUtil {
             var tmplt = '';
             if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
                 tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-            tmplt += '<div class="uiControlDiv vert-center ' + msgClass + '" style="line-height: 1em;" ' + msg +'>';
+            tmplt += '<div class="ng-binding vert-center ' + msgClass + '" style="line-height: 1em;" ' + msg +'>';
             if (passedData[field] != undefined && passedData[field] != null)
-                tmplt += '    <div class="ng-binding">' + passedData[field] + '</div>';
+                tmplt += '    <span style="display:contents;">' + passedData[field] + '</span>';
             tmplt += '</div>';
             return tmplt;
         }
@@ -173,7 +173,7 @@ export class GridUtil {
                 var dim = "10___" + numTiers;
                 tmplt += '<div class="col-md-12 rowHeight">';
                 for (var f = 0; f < fields.length; f++) {
-                    tmplt += '<div class="col-md-3 rowValueHeight rowRightBorder textRightAlign' + this.getClassNm(passedData, fields[f].field) + '">';
+                    tmplt += '<div style="height:35px !important" class="col-md-3 rowValueHeight rowRightBorder textRightAlign' + this.getClassNm(passedData, fields[f].field) + '">';
                     if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[fields[f].field] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim])
                         tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[fields[f].field + '_' + dim] + '"></div>';
                     if (passedData[fields[f].field] && passedData[fields[f].field][dim] != undefined && passedData[fields[f].field][dim] != null)
@@ -200,7 +200,10 @@ export class GridUtil {
             if (typeof (dimkey) != ('function') && data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
                 tmplt += '<div class="col-md-12 rowHeight">';
                 tmplt += '<div';
-                tmplt += ' class="kitRowValue kitSideLine' + this.getClassNm(passedData, field) + '">';
+                if (field != 'ECAP_PRICE' && field !='DSCNT_PER_LN')
+                    tmplt += ' class="kitRowValue kitSideLine' + this.getClassNm(passedData, field) + '"  style="border-bottom: 0.01px solid rgba(0, 0, 0, .05);">';
+                else
+                    tmplt += ' class="kitRowValue kitSideLine' + this.getClassNm(passedData, field) + '">';
                 if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined && passedData._behaviors.isError[field + '_' + dimkey] != undefined && passedData._behaviors.isError[field + '_' + dimkey])
                     tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field + '_' + dimkey] + '"></div>';
                 if (passedData[field][dimkey] != undefined && passedData[field][dimkey] != null && passedData[field][dimkey] != 'No YCS2' && passedData[field][dimkey] != 'No CAP')
@@ -260,7 +263,7 @@ export class GridUtil {
         if (this.displayFrontEndDateMessage(passedData))
             tmplt += '<span class="vert-center" style="top: 20% !important"> <i class="intelicon-information dateWrapper" title="If the deal start date is in the past, the deal start date will change to the date when the deal becomes active."></i> </span>'
         if (passedData[field] != undefined && passedData[field] != null)
-            tmplt += '    <span class="ng-binding vert-center alert-divider" style="">' + passedData[field] + '</span>';
+            tmplt += '    <span class="ng-binding vert-center alert-divider" style="display:contents;">' + passedData[field] + '</span>';
         tmplt += '</div></div>';
         return tmplt;
     }
@@ -405,8 +408,8 @@ export class GridUtil {
             tmplt += '<div class="col-md-12">';
             for (var i = 0; i < data.length; i++) {
                 tmplt += '<div class="col-md-12 rowHeight">';
-                tmplt += '<div class="textRightAlign isReadOnlyCell">';
-                tmplt += '<span class="ng-binding dataPadding gridCellSpan">' + data[i] + '</span>';
+                tmplt += '<div class="textRightAlign isReadOnlyCell" style="border-bottom: 0.01px solid rgba(0, 0, 0, .05);">';
+                tmplt += '<span class="ng-binding dataPadding gridCellSpan" id="tdsCol">' + data[i] + '</span>';
                 tmplt += '</div>';
                 tmplt += '</div>';
             }
@@ -417,7 +420,7 @@ export class GridUtil {
                 if (i <= 1) {   //primary or secondary1
                     tmplt += '<div class="col-md-12 rowHeight">';
                     tmplt += '<div class="textRightAlign isReadOnlyCell">';
-                    tmplt += '<span class="ng-binding dataPadding gridCellSpan">' + data[i] + '</span>';
+                    tmplt += '<span class="ng-binding dataPadding gridCellSpan" id="tdsCol">' + data[i] + '</span>';
                     tmplt += '</div>';
                     tmplt += '</div>';
                 } else {
@@ -466,12 +469,12 @@ export class GridUtil {
             var dimkey = sortedKeys[index];
             if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
                 tmplt += '<div class="col-md-12 rowHeight">';
-                tmplt += '<div class="textRightAlign isReadOnlyCell">';
+                tmplt += '<div class="textRightAlign isReadOnlyCell" style="border-bottom: 0.01px solid rgba(0, 0, 0, .05);">';
                 if (setPrimary) {
-                    tmplt += '<span class="ng-binding dataPadding">P</span>';
+                    tmplt += '<span class="ng-binding dataPadding" id="tdsCol">P</span>';
                     setPrimary = false;
                 } else {
-                    tmplt += '<span class="ng-binding dataPadding">S</span>';
+                    tmplt += '<span class="ng-binding dataPadding" id="tdsCol">S</span>';
                 }
                 tmplt += '</div>';
                 tmplt += '</div>';
@@ -511,8 +514,8 @@ export class GridUtil {
             if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
                 var value = new CurrencyPipe('en-us').transform(passedData["QTY"][dimkey] * passedData["DSCNT_PER_LN"][dimkey], 'USD', 'symbol', '1.2-2');
                 tmplt += '<div class="col-md-12 rowHeight">';
-                tmplt += '<div class="textRightAlign isReadOnlyCell">';
-                tmplt += '<span class="ng-binding dataPadding">' + value + '</span>';
+                tmplt += '<div class="textRightAlign isReadOnlyCell" style="border-bottom: 0.01px solid rgba(0, 0, 0, .05);">';
+                tmplt += '<span class="ng-binding dataPadding" id="tdsCol">' + value + '</span>';
                 tmplt += '</div>';
                 tmplt += '</div>';
             }
@@ -538,7 +541,7 @@ export class GridUtil {
             : !!passedData[startDt] && !!passedData[startDt] ? passedData[startDt] : "";
 
         if (field === "CAP" && fieldVal === "No CAP") {
-            tmplt += '<div class="uiControlDiv isSoftWarnCell capInfoWrapper">';
+            tmplt += '<div class="uiControlDiv isSoftWarnCell capInfoWrapper fullHeight">';
             tmplt += '<div class="capLineStyle">No CAP</div>';
             if (startVal !== "" && startVal !== '01/01/1900') {
                 tmplt += '<div>Availability:<span class="ng-binding">' + passedData[startDt][dimKey] + '</span><span></div>';
@@ -546,7 +549,7 @@ export class GridUtil {
             tmplt += '</div>';
 
         } else if (field === "YCS2_PRC_IRBT" && fieldVal === "No YCS2") {
-            tmplt += '<div class="uiControlDiv isSoftWarnCell capInfoWrapper">';
+            tmplt += '<div class="uiControlDiv isSoftWarnCell capInfoWrapper fullHeight">';
             tmplt += '<div class="capLineStyle">No YCS2</div>';
             if (startVal !== "" && startVal !== '01/01/1900') {
                 tmplt += '<div>Availability:<span class="ng-binding">' + passedData[startDt][dimKey] + '</span><span></div>';
@@ -575,7 +578,7 @@ export class GridUtil {
             if (fieldVal !== "" && fieldVal.indexOf("-") > -1) {
                 msg = "CAP price " + fieldVal + " cannot be a range.";
                 msgClass = "isSoftWarnCell";
-                capText = '<span class="ng-binding boldFont">' + passedData[field][dimKey] + '</span>';
+                capText = '<span class="ng-binding boldFont" id="tdsCol">' + passedData[field][dimKey] + '</span>';
             }
             if (passedData != undefined && passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
                 tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
@@ -589,9 +592,9 @@ export class GridUtil {
             else
                 tmplt += '>';
             tmplt += '<div>' +capText + '</div>';
-            tmplt += '    <div>';
-            tmplt += '    <span class="ng-binding">' + passedData[startDt][dimKey] + '</span> - ';
-            tmplt += '    <span class="ng-binding">' + passedData[endDt][dimKey] + '</span>';
+            tmplt += '    <div class="fullHeight">';
+            tmplt += '    <span class="ng-binding" id="tdsCol">' + passedData[startDt][dimKey] + '</span> - ';
+            tmplt += '    <span class="ng-binding" id="tdsCol">' + passedData[endDt][dimKey] + '</span>';
             tmplt += '    </div>';
             tmplt += '</div>';
         }

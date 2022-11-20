@@ -21,14 +21,14 @@
     </div>
 
     <div class="capbreakout modal-body">
-        <kendo-grid class="md capbreakout kendoGridHeight" [data]="dataSource" [loading]="isLoading"
+        <kendo-grid class="md capbreakout kendoGridHeight" id="breakOutGrid" [data]="dataSource" [loading]="isLoading"
                     [skip]="state.skip" [sortable]="false" [sort]="state.sort" [groupable]="false">
             <ng-template kendoGridToolbarTemplate>
-                <button type="button" kendoGridExcelCommand icon="file-excel" class="excelText">EXCEL<br /> EXPORT</button>
+                <button type="button" kendoGridExcelCommand icon="file-excel" class="excelText"><span class="excelbtn-style">EXCEL<br /> EXPORT</span></button>
             </ng-template>
 
             <ng-template ngFor [ngForOf]="gridOptions.columns" let-column>
-                <kendo-grid-column [headerClass]="{'headerClass': true}" field="{{ column.field }}" title="{{ column.title }}">
+                <kendo-grid-column [headerClass]="{'headerClass': true}" field="{{ column.field }}" title="{{ column.title }}" width="{{column.width}}">
                     <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
                         <div *ngIf="column.field == 'CAP_PRC_COND'">
                             <input type="checkbox" style="margin-top:2px;" disabled [checked]="dataItem.CAP_PRC_COND == 'YCP1'" />

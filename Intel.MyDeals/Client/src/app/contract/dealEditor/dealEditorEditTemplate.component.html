@@ -67,7 +67,7 @@
                                               [ngModel]="convertToLowerCase(in_DataItem[fieldDet.field][key]) == 'unlimited' ? '' : in_DataItem[fieldDet.field][key]"
                                               (ngModelChange)="in_DataItem[fieldDet.field][key] = $event"
                                               [value]="convertToLowerCase(in_DataItem[fieldDet.field][key]) == 'unlimited' ? '' : in_DataItem[fieldDet.field][key]"
-                                              [min]="fieldDet.field.includes('RATE')? '0' : '1'" (valueChange)="updateTierAttributes(in_DataItem, fieldDet.field,(i+1))"
+                                              [min]="getMinValue(fieldDet.field)" (valueChange)="updateTierAttributes(in_DataItem, fieldDet.field,(i+1))"
                                               [autoCorrect]="autoCorrect" [format]="(fieldDet.field.includes('RATE') || in_Deal_Type == 'REV_TIER' )? 'n2' : 'n0'">
                         </kendo-numerictextbox>
                     </span>
