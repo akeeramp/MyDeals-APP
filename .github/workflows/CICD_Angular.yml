@@ -9,8 +9,7 @@ env:
   CINR_DEPLOY_PATH: \\HF2CINMYDLW01.amr.corp.intel.com\MyDeals
   CINR_DEPLOY_SERVER: HF2CINMYDLW01.amr.corp.intel.com
 
-jobs:
-
+jobs:     
   Restore-packages:
      if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
      runs-on: [self-hosted, mydeals-runner01]
@@ -63,3 +62,5 @@ jobs:
        - name:  Deploy Client App
          run: |
            ./scripts/deploy.ps1 'Deploy' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.CINR_DEPLOY_SERVER}}'
+  
+ 

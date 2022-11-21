@@ -38,13 +38,16 @@ try {
      & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/UTT $PATH Web.Config /MT /copyall /secfix;
      if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
     }
-
-
     elseif ($Operation -eq 'ClientZip' ){
      if (Test-Path "C:\ClientZip\Client.zip") {Remove-Item -Path "C:\ClientZip\Client.zip"};
      Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::CreateFromDirectory((Get-Location).path+"\Intel.MyDeals\Client\", "C:\ClientZip\Client.zip");
     }
-  
+    elseif($Operation -eq 'SendStartNotification'){
+         node C:\automation_newman\buildmailer.js Start
+    }
+        elseif($Operation -eq 'SendEndNotification'){
+         node C:\automation_newman\buildmailer.js Stop
+    }
     else {
         Write-Host "Please provide correct values" -BackgroundColor DarkRed
         EXIT 1
