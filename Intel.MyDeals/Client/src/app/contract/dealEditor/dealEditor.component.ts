@@ -616,8 +616,10 @@ export class dealEditorComponent {
             this.selectedTab = tabs[0].name;
             this.filterColumnbyGroup(this.selectedTab);
         }
-        else
+        else {
             this.filterColumnbyGroup(this.selectedTab);
+        }
+        this.setWarningDetails();
     }
 
     //Default Layout
@@ -656,6 +658,7 @@ export class dealEditorComponent {
         this.templates.END_CUSTOMER_RETAIL.Groups.push(data);
         this.selectedTab = data;
         this.filterColumnbyGroup(this.selectedTab);
+        this.setWarningDetails();
     }
     //<To Add Tab Data>
 
@@ -719,6 +722,7 @@ export class dealEditorComponent {
         this.selectedTab = "Deal Info";
         this.isDataLoading = false;
         this.setBusy("", "", "", false);
+        this.setWarningDetails();
     }
 
 
