@@ -305,7 +305,7 @@
                     <div class="row" style="margin:2px;">
                         <ng-container *ngFor="let p of items; let last=last; let index=index">
                             <div class="clearfix" *ngIf="index % 4 == 0"></div>
-                            <div class="col-sm-3 prodDrillDownLarge" title="{{checkForBlank(p.name)}}" [ngClass]="{'noLeftBorder':index % 4 == 0}">
+                            <div kendoTooltip position="bottom" class="col-sm-3 prodDrillDownLarge" title="{{checkTitle(p.name)}}" [ngClass]="{'noLeftBorder':index % 4 == 0}">
                                 <div [ngClass]="{'input-group':p.allowMultiple}" class="drillDown">
                                     <span *ngIf="p.allowMultiple" [ngClass]="{'input-group-addon':p.allowMultiple}">
                                         <input id="{{p.name}}" class="check with-sm-font" (click)="selectProduct(p)" [(ngModel)]="p.selected" type="checkbox">

@@ -515,7 +515,7 @@ export class ProductSelectorComponent {
         return false;
     }
     getDisplayTemplate() {
-        let displayTemplateType = this.items.length == 0 ? "prodGrid" : (this.items.length < 8 ? "btnGroup" : "btnGrid");
+        let displayTemplateType = this.items.length < 8 ? "btnGroup" : "btnGrid";
         return displayTemplateType;
     }
     //For NAND (SSD)
@@ -951,6 +951,32 @@ export class ProductSelectorComponent {
             return "Blank";
         }
         return val;
+    }
+    checkTitle(val: string) {
+        let category = this.getDisplayTemplate();
+        if (category =='btnGroup' && this.selectedPathParts.length < 2) {
+            return (this.getVerticalsUnderMarkLevel(val))
+        }
+        else {
+            return this.checkForBlank(val)
+        }
+    }
+    getVerticalsUnderMarkLevel(markLevelName) {
+        var markLevel = this.selectedPathParts.length == 0 ? 'MRK_LVL1' : 'MRK_LVL2';
+        var verticals = this.productSelectionLevels.filter(function (x) {
+            return x[markLevel] == markLevelName && x['PRD_CAT_NM'] != null && x['PRD_CAT_NM'] != ""
+        });
+
+        //finding unique in verticals based on property :PRD_CAT_NM
+        verticals = verticals.filter(function (item, pos) {
+            return verticals.findIndex((val) => val['PRD_CAT_NM'] === item['PRD_CAT_NM']) == pos
+        })
+
+        verticals = verticals.map(function (elem) {
+            return elem.PRD_CAT_NM;
+        }).join(" | ");
+
+        return verticals;
     }
     clearProducts(type?) {
         if (type != 'E') {

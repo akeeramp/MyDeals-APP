@@ -10,6 +10,7 @@ env:
   CINR_DEPLOY_SERVER: HF2CINMYDLW01.amr.corp.intel.com
 
 jobs:
+
   Restore-packages:
      if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
      runs-on: [self-hosted, mydeals-runner01]
