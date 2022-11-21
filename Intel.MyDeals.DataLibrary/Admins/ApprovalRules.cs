@@ -254,7 +254,7 @@ namespace Intel.MyDeals.DataLibrary
             RuleConfig ruleConfig = new RuleConfig();
             ruleConfig.CurrentUserWWID = OpUserStack.MyOpUserToken.Usr.WWID;
             ruleConfig.CurrentUserName = string.Concat(OpUserStack.MyOpUserToken.Usr.LastName, ", ", OpUserStack.MyOpUserToken.Usr.FirstName);
-            ruleConfig.DefaultEndDate = DateTime.Now.AddYears(10);
+            ruleConfig.DefaultEndDate = DateTime.Now.AddYears(1);
             return ruleConfig;
         }
 
