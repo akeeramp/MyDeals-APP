@@ -22,7 +22,7 @@ import * as _ from 'underscore';
           class="k-checkbox"
           [checked]="isItemSelected(item)" />
         <label
-          class="k-multiselect-checkbox k-checkbox-label"
+          class="k-multiselect-checkbox k-checkbox-label" style="white-space:break-spaces;"
           for="chk-{{valueAccessor(item)}}">
             {{ textAccessor(item) }}
         </label>

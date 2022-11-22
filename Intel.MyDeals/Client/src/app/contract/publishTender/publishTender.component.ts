@@ -314,7 +314,7 @@ export class publishTenderComponent {
                 return { Text: item.Customer.CUST_NM, Value: item[fieldName] };
             }
             if (moment(item[fieldName], "MM/DD/YYYY", true).isValid()) {
-                return { Text: new Date(item[fieldName]).toUTCString(), Value: item[fieldName] };
+                return { Text: new Date(new Date(item[fieldName]).getTime() + (new Date(item[fieldName]).getTimezoneOffset() * 60000)), Value: item[fieldName] };
             }
             else if (item[fieldName] != undefined && item[fieldName] != null)
                 return { Text: item[fieldName].toString(), Value: item[fieldName] }
