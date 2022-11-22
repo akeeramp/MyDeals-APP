@@ -116,32 +116,35 @@ export class TenderFolioComponent {
             this.loggerSvc.error("Unable to Validate duplicate contract title", "Error", err);
         });
     }
+    getCustomerDivisions(){
+        this.dataService.getCustDivBySID(this.custSIDObj.CUST_SID)
+        .subscribe(res => {
+            if (res) {
+                res = res.filter(data => data.CUST_LVL_SID === 2003);
+                if (res[0].PRC_GRP_CD == '') {
+                    this.showKendoAlert = true;
+                }
+                if (res.length <= 1) {
+                    this.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false;
+                    this.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;
+                    //US2444394: commented out below because we no longer want to save Customer Account Division names if there is only one possible option
+                    //if (this.contractData.CUST_ACCNT_DIV_UI !== undefined) this.contractData.CUST_ACCNT_DIV_UI = res[0].CUST_DIV_NM.toString();
+                } else {
+                    this.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false; // never required... blank now mean ALL
+                    this.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = false;
+                }
+                this.selectedData = res;
+                this.isCustDiv = this.selectedData.length <= 1 ? false : true;
+            }
+        }, error => {
+            this.loggerSvc.error("Unable to get Customer Divisions.", '', "tenderFolioComponent::valueChange:: " + JSON.stringify(error));
+        });
+    }
     valueChange(value) {
         this.isCustDiv = false;
         if (value) {
             this.custSIDObj = value;
-            this.dataService.getCustDivBySID(this.custSIDObj.CUST_SID)
-                .subscribe(res => {
-                    if (res) {
-                        res = res.filter(data => data.CUST_LVL_SID === 2003);
-                        if (res[0].PRC_GRP_CD == '') {
-                            this.showKendoAlert = true;
-                        }
-                        if (res.length <= 1) {
-                            this.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false;
-                            this.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;
-                            //US2444394: commented out below because we no longer want to save Customer Account Division names if there is only one possible option
-                            //if (this.contractData.CUST_ACCNT_DIV_UI !== undefined) this.contractData.CUST_ACCNT_DIV_UI = res[0].CUST_DIV_NM.toString();
-                        } else {
-                            this.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false; // never required... blank now mean ALL
-                            this.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = false;
-                        }
-                        this.selectedData = res;
-                        this.isCustDiv = this.selectedData.length <= 1 ? false : true;
-                    }
-                }, error => {
-                    this.loggerSvc.error("Unable to get Customer Divisions.", '', "tenderFolioComponent::valueChange:: " + JSON.stringify(error));
-                });
+            this.getCustomerDivisions();
         }
     }
     getAllCustomers() {
@@ -354,6 +357,10 @@ export class TenderFolioComponent {
             this.newPricingTable.OBJ_SET_TYPE_CD = ""; //reset new PT deal type so it does not inherit from clone
             this.filterDealTypes();
             this.initializeTenderData();
+            if(this.data.selectedCustomers && this.data.selectedCustomers.length > 0){
+                this.custSIDObj = this.data.selectedCustomers[0];
+                this.getCustomerDivisions();
+            }
             this.isLoading = false;
         }, (err) => {
             this.isLoading = false;

@@ -43,7 +43,10 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
             width: '600px',
             height: '400px',
             disableClose: true,
-            data: { name: "Tender Folio Details" },
+            data: {
+                 name: "Tender Folio Details",
+                 selectedCustomers: this.custIds
+                }
         });
         dialogRef.afterClosed().subscribe(result => {
             if (result) {

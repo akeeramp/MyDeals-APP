@@ -140,7 +140,7 @@
 
 .center-pane-widget .inner {
     height: 100%;
-    padding: 5px 0
+    /* padding: 5px 0 */
 }
 
 .opUiContainer.dashboard .k-grid-header,
@@ -244,7 +244,8 @@
     cursor: pointer!important
 }
 
-.k-i-plus, .k-i-minus {
+.k-i-plus,
+.k-i-minus {
     opacity: .45;
     font-size: 20px !important;
     color: #000 !important;
@@ -252,7 +253,12 @@
     border-radius: 50%;
 }
 
-.k-i-plus:focus, .k-i-minus:focus, .k-i-plus:active, .k-i-minus:active, .k-i-plus:focus-visible, .k-i-minus:focus-visible {
+.k-i-plus:focus,
+.k-i-minus:focus,
+.k-i-plus:active,
+.k-i-minus:active,
+.k-i-plus:focus-visible,
+.k-i-minus:focus-visible {
     outline: 5px auto -webkit-focus-ring-color !important;
     outline-offset: -10px;
 }
@@ -283,16 +289,19 @@
 .k-link {
     font-size: 13px!important
 }
+
 .highlightsty-title .k-column-title {
     font-size: 14px !important;
     font-weight: 600 !important;
     color: rgb(26, 62, 111) !important;
 }
+
 .highlightsty-title .k-icon.k-i-filter {
     font-size: 20px !important;
     color: #000 !important;
     opacity: 0.45 !important;
 }
+
 .highlightsty-title .k-icon.k-i-filter:hover {
     color: #00aeef !important;
     opacity: 1 !important
@@ -302,7 +311,6 @@
     .left-pane-widget {
         height: 433px;
     }
-
     .center-pane-widget {
         height: 433px;
     }
