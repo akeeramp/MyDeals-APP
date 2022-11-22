@@ -50,6 +50,9 @@ div.overFlowWidget {
 .widgetFull:hover .btn-icons {
     color: white !important;
 }
+.widgetFull:hover a:hover {
+    color: #00aeef !important;
+}
 
 .btn-icons {
     color: white;
@@ -1878,3 +1881,11 @@ button.warn-custom:hover {
 #pubOpGrid .k-grid .k-grid-content {
     overflow: overlay;
 }
+.add-widget-link {
+    color: #0071c5;
+    text-decoration: none;
+}
+    .add-widget-link:hover {
+        color: #004579;
+        text-decoration: underline !important;
+    }

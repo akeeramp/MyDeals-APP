@@ -52,12 +52,15 @@
     box-shadow: none !important;
     border-color: #d2d6de !important
 }
+    .cc-popup-load .form-control:focus {
+        border-color: #3c8dbc !important;
+    }
 
 .cc-popup-load .btn {
-    border-radius: 3px;
-    -webkit-box-shadow: none;
-    box-shadow: none;
-    border: 1px solid transparent
+border-radius: 3px;
+-webkit-box-shadow: none;
+box-shadow: none;
+border: 1px solid transparent
 }
 
 .cc-popup-load .btn-primary[disabled],

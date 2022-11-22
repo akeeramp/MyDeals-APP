@@ -42,7 +42,7 @@ export class DashboardComponent implements OnInit {
     private searchText = "";
     private opType = "ALL";
     private windowOpened = false;
-    private windowTop = 220; windowLeft = 370; windowWidth = 950; windowHeight = 500; windowMinWidth = 100;
+    private windowTop = 130; windowLeft = 300; windowWidth = 950; windowHeight = 500; windowMinWidth = 100;
     private searchDialogVisible = false;
     private selectedDashboardId;
     private isLoading = false;
