@@ -219,6 +219,7 @@ export class contractDetailsComponent {
     // Contract name validation
     isDuplicateContractTitle(title: string) {
         if (title === "") return;
+        this.disableSave = true;
         const dcID = this.contractData["DC_ID"] == -100 ? 0 : this.contractData["DC_ID"]
         this.contractDetailsSvc.isDuplicateContractTitle(dcID, title)
             .subscribe((response: Array<any>) => {
@@ -320,6 +321,7 @@ export class contractDetailsComponent {
     applyTodayDate() { //apply today's date on cancel click event of back date reason popup
         const today = moment().format("l");
         this.START_DT = new Date(moment(this.contractData.START_DT).isBefore(today) ? today : this.contractData.START_DT);
+        this.START_YR = new Date().getFullYear();
         this.isBackdatepopupopend = false;
         this.isBackDate = false;
         this.contractData._behaviors.isHidden["BACK_DATE_RSN"] = true;

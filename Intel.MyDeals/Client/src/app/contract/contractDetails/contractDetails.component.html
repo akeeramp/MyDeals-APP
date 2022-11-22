@@ -326,7 +326,7 @@
                             <button class="btn btn-primary mleft" type="button"
                                     (click)="deleteContract()" *ngIf="showDeleteButton">
                                 <span>Delete{{contractType}}</span>
-                            </button ><button class="btn btn-primary mleft" type="button"
+                            </button ><button class="btn btn-primary mleft" type="button" [disabled]="disableSave"
                                              (click)="customContractValidate(contractDetailsForm)">
                                 <span>{{saveBtnName}} </span>
                             </button>

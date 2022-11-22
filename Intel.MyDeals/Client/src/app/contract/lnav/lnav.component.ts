@@ -218,10 +218,13 @@ export class lnavComponent {
         ps.DC_PARENT_ID = ct.DC_ID;
         ps.PRC_TBL = [];
         ps.TITLE = this.newStrategy.TITLE;
-        if (this.newStrategy.IS_HYBRID_PRC_STRAT) 
+        if (this.newStrategy.IS_HYBRID_PRC_STRAT) {
             ps.IS_HYBRID_PRC_STRAT = "1";
-        else
+        }
+        else {
             ps.IS_HYBRID_PRC_STRAT = "0";
+            this.newStrategy.IS_HYBRID_PRC_STRAT = ps.IS_HYBRID_PRC_STRAT == "1" ? true : false;
+        }
 
         this.lnavSvc.createPricingStrategy(custId, contractId, ps).subscribe((response: any) => {
             if (this.contractData.PRC_ST === undefined) this.contractData.PRC_ST = [];
@@ -413,8 +416,8 @@ export class lnavComponent {
         this.PtDealTypes = null;
         this.clearNptTemplate();
         this.curPricingStrategy = ps;
-        if (this.newStrategy["TITLE"] && this.newStrategy["TITLE"] != "") {
-            this.ptTITLE = this.newStrategy["TITLE"];
+        if (this.curPricingStrategy["TITLE"] && this.curPricingStrategy["TITLE"] != "" && !this.curPricingStrategy['PRC_TBL'] || this.curPricingStrategy['PRC_TBL'].length == 0) {
+            this.ptTITLE = this.curPricingStrategy["TITLE"];
         }
         else
             this.ptTITLE = "";

@@ -708,9 +708,7 @@ export class contractManagerComponent {
         this.contractManagerSvc.runPctContract(this.contractData.DC_ID).subscribe((res) => {
             this.isRunning = false;
             this.loadContractDetails();
-            this.isLoading = false;
-            this.pctClicked = false;
-            this.mctClicked = false;
+            this.isLoading = false;            
         }, (err) => {
             this.isRunning = false;
             this.isLoading = false;

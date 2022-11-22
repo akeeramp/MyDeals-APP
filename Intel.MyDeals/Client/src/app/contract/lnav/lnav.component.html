@@ -21,7 +21,7 @@
                                 <div class="fr navIconLnk no-hint-collapse" title="Hide Panel" (click)="toggleLnav('PT')" style="border-left: 1px solid #e8eaec !important;">
                                     <i class="intelicon-shrink flip-horizontal"></i>
                                 </div>
-                                <div class="fl navIconLnk" *ngIf="C_ADD_PRICING_STRATEGY" id="navIconAddPs" (click)="toggleAddStrategy()" title="Add Pricing Strategy" >
+                                <div class="fl navIconLnk" *ngIf="C_ADD_PRICING_STRATEGY" id="navIconAddPs" (click)="toggleAddStrategy()" [ngClass]="{'active': !isAddStrategyHidden}" title="Add Pricing Strategy" >
                                     <i class="intelicon-plus-max"></i>
                                 </div>
                                 <div class="fl navIconLnk" title="Filter contract" (click)="toggleSearch()" [ngClass]="{'active': isSearchHidden}" *ngIf="isExistingContract()">
@@ -64,7 +64,7 @@
                                     <div class="fl ptLnavTitle isMandatory">Enter Pricing Table Name</div>
                                     <div class="clearboth"></div>
                                     <input type="text" class="k-textbox fl" placeholder="" style="width: 276px;
-                                           color: black;" maxlength="250" id="inptPtTitle" [(ngModel)]="ptTITLE" />
+                                           color: black; border-bottom: 3px solid #f3d54e;" maxlength="250" id="inptPtTitle" [(ngModel)]="ptTITLE" />
                                     <div class="clearboth"></div>
                                     <div style="color: #F3D54E;">{{ newPricingTable._behaviors.validMsg.TITLE }}</div>
                                     <div class="ptLnavTitle">Select Pricing Table Deal Type </div>
