@@ -45,6 +45,11 @@
             [sort]="state.sort" [filter]="state.filter" [sortable]="true"
             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
             [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" style="height: calc(100vh - 200px);">
+            <ng-template kendoGridNoRecordsTemplate>
+                <div *ngIf="isNoDealsFound" style="padding: 100px; font-size: 10px; font-family: 'Intel Clear';">
+                    No Overlapping deals were found
+                </div>
+            </ng-template>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="WF_STG_CD" width="21px" title=" ">
             </kendo-grid-column>
             <kendo-grid-column field="PROGRAM_PAYMENT"  width="120px" title="Type" [hidden]="true">

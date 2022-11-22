@@ -32,6 +32,7 @@ export class overLappingDealsComponent {
     private gridResult = [];
     private gridData: GridDataResult;
     private color: ThemePalette = 'primary';
+    private isNoDealsFound: boolean = false;
     private state: State = {
         skip: 0,
         take: 50,
@@ -77,6 +78,12 @@ export class overLappingDealsComponent {
         this.overLappingDealsSvc.getOverLappingDealsDetails(this.contractId).subscribe((result: any) => {
             this.loadMessage = "Done";
             this.gridResult = result.Data;
+            if (this.gridResult.length == 0) {
+                this.isNoDealsFound = true;
+            }
+            else {
+                this.isNoDealsFound = false;
+            }
             let groups = [{ field: "PROGRAM_PAYMENT" },
                 {field: "WIP_DEAL_OBJ_SID" }];
             // this.filterOverLapData(this.gridResult);
