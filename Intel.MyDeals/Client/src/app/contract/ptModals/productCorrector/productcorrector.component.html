@@ -3,11 +3,11 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/contract/ptModals/productCorrector/productcorrector.component.css" rel="stylesheet" />
 
-<div class="modal-content" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle moveablemodal style="background-color: #1a3e6f; overflow-y: auto; overflow-x: hidden; border-left: none; border-right: none; box-shadow: none; height: 100%;">
+<div class="modal-content" style="background-color: #1a3e6f; overflow-y: auto; overflow-x: hidden; border-left: none; border-right: none; box-shadow: none; height: 100%;">
     <div style="padding-left: 10px; padding-right: 10px; height: 100%;">
         <div class="prodSelector-corrector modal-header" style="margin-bottom:15px">
             <div class="row prodCorrectorHeader" style="align-items: center; padding-top: 10px; padding-bottom: 10px; ">
-                <div class="col-md-5  cursorArea" style="padding-left:0px; cursor:move">
+                <div cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle moveablemodal class="col-md-5  cursorArea" style="padding-left:0px; cursor:move">
                     <p class="prodText">Product Corrector</p>
                 </div>
                 <div class="col-md-6  text-center headerMsg">
@@ -145,7 +145,7 @@
                                 <div>{{dataItem.PRD_STRT_DTM | date: 'M/d/yyyy'}} - {{dataItem.PRD_END_DTM | date: 'M/d/yyyy'}}</div>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="CAP" title="CAP Info" [width]="150">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="CAP" title="CAP Info" [width]="185">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>

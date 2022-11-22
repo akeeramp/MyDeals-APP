@@ -65,10 +65,12 @@ span.k-column-title {
     white-space: nowrap !important;
 }
 
-.k-grid td {
+.corrector-two-details.k-grid td, .corrector-two-details.k-grid td div, .corrector-two-details.k-grid td span {
     white-space: nowrap !important;
-    /*border-color: transparent;*/
     text-overflow: ellipsis;
+    width: 100%;
+    overflow: hidden;
+    position: relative;
 }
 
 .rowNavigation {

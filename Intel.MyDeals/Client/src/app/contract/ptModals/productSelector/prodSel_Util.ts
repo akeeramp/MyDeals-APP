@@ -41,7 +41,7 @@ export class ProdSel_Util {
         }, {
             field: 'CAP',
             title: 'CAP Info',
-            width: "150px",
+            width: "185px",
             filterable: { multi: true, search: true },
         }, {
             field: 'YCS2',
@@ -161,7 +161,7 @@ export class ProdSel_Util {
                 field: "CAP",
                 title: "CAP Info",
                 template: "<op-popover (click)='openCAPBreakOut(dataItem, \"CAP\")' op-options='CAP' op-label='' op-data='getPrductDetails(dataItem, \"CAP\")'>#=gridUtils.uiMoneyDatesControlWrapper(data, 'CAP', 'CAP_START', 'CAP_END')#</op-popover>",
-                width: "150px",
+                width: "185px",
                 filterable: { multi: true, search: true }
             },
             {

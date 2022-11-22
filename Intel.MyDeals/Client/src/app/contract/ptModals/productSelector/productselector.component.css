@@ -25,6 +25,10 @@
     }
 }
 
+.k-pager-info {
+    display: block !important;
+}
+
 .textProdSelector {
     font-size: 21px;
     color: white;
@@ -758,6 +762,7 @@ kendo-grid.raid-style {
 
 #PTRLoading .ss-loading-overlay .myLoader {
     left: 40% !important;
+    top: 35% !important;
 }
 
 #PTRLoading .ss-loading-overlay {
@@ -827,13 +832,16 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
     top: -1px !important;
 }
 
-#prodGrid .k-grid td {
+#prodGrid .k-grid td, #prodGrid .k-grid td div, #prodGrid .k-grid td span {
     border-width: 0px !important;
     padding: 0;
     height: 50px;
     color: #1a3e6f;
     font-family: 'Intel Clear','Arial';
     font-weight: 500;
+    white-space: nowrap !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
 }
 
 #closePopover {
@@ -911,5 +919,8 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
         border-top: 0px;
         width: 100%;
         display: block;
+    }
+    .productSelector.Issue {
+        font-size: 14px;
     }
 }
