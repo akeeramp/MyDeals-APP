@@ -130,7 +130,7 @@
                                     <div class="opUiContainer md dashboard">
                                         <div id='detailGrid_{{pt.DC_ID}}'
                                              class='opUiContainer md dashboard sumGridOptionsExpand oppo-grids new-now-wrap either-pin'>
-                                            <kendo-grid [data]="gridDataSet[pt.DC_ID]" [resizable]="true" id="managerPCTGrid"
+                                            <kendo-grid [data]="gridDataSet[pt.DC_ID]" [resizable]="true" class="manage-tables" id="managerPCTGrid"
                                                         [sortable]="true" [sort]="state[pt.DC_ID].sort" [skip]="state[pt.DC_ID].skip"
                                                         [group]="state[pt.DC_ID].group" [navigable]="true" [loading]="isLoading"
                                                         [groupable]="false" [reorderable]="true"
@@ -385,7 +385,7 @@ dataItem.DEAL_STRT_DT | date:
                                                     <ng-template kendoGridCellTemplate let-dataItem hidden="hidden">
                                                     </ng-template>
                                                 </kendo-grid-column>
-                                                <div *kendoGridDetailTemplate="let dataItem">
+                                                <div class="margin-reduces" *kendoGridDetailTemplate="let dataItem">
                                                     <pct-child-grid [parent]="parentGridData[pt.DC_ID]" [contractData]="contractData" [dealType]="pt.OBJ_SET_TYPE_CD"
                                                                     [child]="dataItem" [CostTestGroupDetails]="CostTestGroupDetails[pt.DC_ID]" (refreshParent)="refreshContractData($event)"></pct-child-grid>
                                                 </div>

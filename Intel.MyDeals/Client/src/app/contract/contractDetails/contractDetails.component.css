@@ -105,7 +105,7 @@
 }
 
 .new-bus-contract a {
-    color: #00aeef !important
+    color: var(--light-blue) !important
 }
 
 .new-bus-contract .hint-collapse {
@@ -230,7 +230,7 @@
     width: 105px;
     text-align: center;
     padding: 3px 6px;
-    background: #00AEEF;
+    background: var(--light-blue);
     color: #ffffff !important;
     margin-top: 5px;
 }
@@ -326,7 +326,7 @@ p.boxsize {
 }
 
 button.okbutton.k-button {
-    background-color: #00aeef !important;
+    background-color: var(--light-blue) !important;
     color: #f9f9f9 !important;
     font-family: 'Intel Clear' !important;
     font-size: 15px !important

@@ -28,7 +28,7 @@
                                     </div>
                                     <div class="col-md-11 display displayblock">
                                         <div class="fl opUiLabel"><span *ngIf="contractData?._behaviors?.isRequired?.CUST_MBR_SID" class="isReqField">* </span>Customer:</div>
-                                        <kendo-combobox #CUST_MBR_SID_Combo [data]="CustomersFilterData"   [filterable]="true" (filterChange)="customerFilter($event)"
+                                        <kendo-combobox #CUST_MBR_SID_Combo [data]="CustomersFilterData" [filterable]="true" (filterChange)="customerFilter($event)"
                                                         class="kendoInput noborderclass font-input contract-details-customer cd-input-bottom" textField="CUST_NM" valueField="CUST_SID" [disabled]="disableCustomer"
                                                         name="Customer" #customer="ngModel" [(ngModel)]="Customer" (valueChange)="onCustomerChange($event)" required>
                                         </kendo-combobox>
@@ -40,7 +40,7 @@
                                         <div *ngIf="!isCustomerDivHidden" class="inputWidth">
                                             <div>Division:</div>
                                             <kendo-multiselect #CUST_MBR_DIV_Multi class="kendoInput divisionblock cd-input-bottom cd-division-level" [data]="CustomerFilter_Divs" [filterable]="true" (filterChange)="customerDivFilter($event)"
-                                                               [(ngModel)]="CUST_NM_DIV" 
+                                                               [(ngModel)]="CUST_NM_DIV"
                                                                name="CUST_NM_DIV" textField="CUST_DIV_NM" valueField="CUST_DIV_NM" [autoClose]="false"></kendo-multiselect>
                                             <div class="description">Blank means that ALL divisions are included</div>
                                         </div>
@@ -297,8 +297,8 @@
                                             <h6>Timeline</h6>
                                             <div *ngFor="let data of TimeLineDetails;let i = index">
                                                 <div *ngIf="i<=maxCount" class="details">
-                                                 <p><span style="color: #003C71;font-size: 14px;float:left">{{data.ATRB_DESC}}</span> <span style="float: right;" class="updateBy">updated by {{data.FRST_NM}}{{data.LST_NM}}({{data.USR_ROLES}})({{data.CHG_EMP_WWID}})</span></p>
-                                                <p><span class="atbrDetails" style="float:left;" >"{{data.ATRB_VAL}}"</span><span style="float: right;" class="atbrDate">{{data.HIST_EFF_FR_DTM}}</span></p>
+                                                    <p><span style="color: #003C71;font-size: 14px;float:left">{{data.ATRB_DESC}}</span> <span style="float: right;" class="updateBy">updated by {{data.FRST_NM}}{{data.LST_NM}}({{data.USR_ROLES}})({{data.CHG_EMP_WWID}})</span></p>
+                                                    <p><span class="atbrDetails" style="float:left;">"{{data.ATRB_VAL}}"</span><span style="float: right;" class="atbrDate">{{data.HIST_EFF_FR_DTM}}</span></p>
                                                 </div>
                                             </div>
                                             <div *ngIf="isShowBtn">
@@ -323,8 +323,7 @@
 
                         </div>
                         <div id="secFooter">
-                            <button class="btn btn-primary mleft" type="button"
-                                    (click)="deleteContract()" *ngIf="showDeleteButton">
+                            <button class="btn btn-primary mleft" type="button" (click)="deleteContract()" *ngIf="showDeleteButton">
                                 <span>Delete{{contractType}}</span>
                             </button ><button class="btn btn-primary mleft" type="button" [disabled]="disableSave"
                                              (click)="customContractValidate(contractDetailsForm)">
@@ -351,34 +350,34 @@
         </kendo-dialog-actions>
     </div>
 </kendo-dialog>
-<kendo-dialog *ngIf="isDivBlankPopupOpen" (close)="blankDivisionPopupClose('cancel')" class="artho-css-popup" [minWidth]="250" [width]="600">
+<kendo-dialog *ngIf="isDivBlankPopupOpen" (close)="blankDivisionPopupClose('cancel')" class="k-dialog-popup-design" [minWidth]="250" [width]="600">
     <p class="dialogmsg">
         The division is blank. Do you intend for this contract to apply to all divisions?
     </p>
     <kendo-dialog-actions>
-        <button kendoButton (click)="blankDivisionPopupClose('yes')" themeColor="primary">OK</button>
-        <button kendoButton (click)="blankDivisionPopupClose('no')">CANCEL</button>
+        <button kendoButton (click)="blankDivisionPopupClose('yes')" themeColor="primary" class="ok-btn-pop-up">OK</button>
+        <button kendoButton (click)="blankDivisionPopupClose('no')" class="cancel-btn-pop-up">CANCEL</button>
     </kendo-dialog-actions>
 </kendo-dialog>
 <kendo-dialog class="mymissingbutton" *ngIf="isMissingGrpCode" [height]="188" [width]="280">
     <p class="dialogmsg codesize">Missing Price Group Code </p>
     <kendo-dialog-actions><button kendoButton (click)="closeMissingGrpCodeAlert()" class="okmissingcode">OK</button></kendo-dialog-actions>
 </kendo-dialog>
-<kendo-dialog *ngIf="isDeleteAttachment" (close)="deleteAttachmentActions(false)"  class="artho-css-popup" [minWidth]="250" [width]="620">
+<kendo-dialog *ngIf="isDeleteAttachment" (close)="deleteAttachmentActions(false)" class="k-dialog-popup-design" [minWidth]="250" [width]="620">
     <p class="dialogmsg">
         Are you sure that you want to Delete this file attachment?
     </p>
     <kendo-dialog-actions>
-        <button kendoButton (click)="deleteAttachmentActions(true)" themeColor="primary">Yes</button>
-        <button kendoButton (click)="deleteAttachmentActions(false)">No</button>
+        <button kendoButton (click)="deleteAttachmentActions(true)" themeColor="primary" class="ok-btn-pop-up">Yes</button>
+        <button kendoButton (click)="deleteAttachmentActions(false)" class="cancel-btn-pop-up">No</button>
     </kendo-dialog-actions>
 </kendo-dialog>
-<kendo-dialog *ngIf="isDeleteContract" (close)="deleteContractActions(false)"  class="artho-css-popup" [minWidth]="250" [width]="620">
+<kendo-dialog *ngIf="isDeleteContract" (close)="deleteContractActions(false)" class="k-dialog-popup-design" [minWidth]="250" [width]="620">
     <p class="dialogmsg">
         Are you sure that you want to delete this contract?
     </p>
     <kendo-dialog-actions>
-        <button kendoButton (click)="deleteContractActions(true)" themeColor="primary">Yes</button>
-        <button kendoButton (click)="deleteContractActions(false)">No</button>
+        <button kendoButton (click)="deleteContractActions(true)" themeColor="primary" class="ok-btn-pop-up">Yes</button>
+        <button kendoButton (click)="deleteContractActions(false)" class="cancel-btn-pop-up">No</button>
     </kendo-dialog-actions>
 </kendo-dialog>

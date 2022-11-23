@@ -266,11 +266,6 @@ h5 {
     right: 15px;
 }
 
-.k-family {
-    font-family: 'intelicon' !important;
-    font-size: 25px;
-}
-
 .header-fixes li.dropdown ul.dropdown-menu {
     border-radius: 0;
 }
@@ -311,63 +306,6 @@ kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li span {
     font-weight: 600;
 }
 
-kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper {
-    background: #f9f9f9;
-    position: relative;
-    width: 100%;
-}
-
-kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul {
-    background: #f9f9f9 !important;
-}
-
-kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li {
-    background: #f3f3f3 !important;
-    border-color: #dee2e6;
-    border-bottom: none;
-}
-
-kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li span {
-    color: #003C71!important;
-    font-weight: 500;
-}
-
-kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li span.badge.error {
-    color: #fff !important;
-}
-
-kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li span.badge {
-    border-radius: 10px !important;
-}
-
-kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active {
-    background: #fff !important;
-}
-
-kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active span {
-    color: #00AEEF !important
-}
-
-.oppo-grids kendo-grid .k-grid-header table thead tr th {
-    font-size: 12px !important;
-    font-weight: 600;
-    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-.oppo-grids kendo-grid .k-grid-header table thead tr th .k-link:hover {
-    color: #1a3e6f !important;
-    background-color: transparent !important;
-}
-
-.new-now-wrap.oppo-grids kendo-grid .k-grid-header table thead tr th span.k-cell-inner .k-link,
-.new-now-wrap.oppo-grids kendo-grid .k-grid-header table thead tr th span.k-cell-inner .k-link .k-column-title {
-    display: block;
-    width: 100%;
-    white-space: nowrap !important;
-    overflow: hidden !important;
-    text-overflow: ellipsis;
-}
-
 gridster-item.attr-li-6,
 gridster-item.attr-li-8,
 gridster-item.attr-li-9,
@@ -384,54 +322,11 @@ gridster-item.attr-li-7 .k-grid-table-wrap {
     height: 435px;
 }
 
-
-/*gridster-item.attr-li-7 .container-fluid.widget-container {
-    height: calc( 100vh - 184px) !important
-}
-
-@media screen and (min-height: 799px) {
-    gridster-item.attr-li-7 .container-fluid.widget-container {
-        height: calc( 100vh - 267px) !important;
+    .ss-loading-overlay {
+        top: 20px;
+        display: flex;
+        justify-content: center;
     }
-}*/
-
-.oppo-grids.physics-css kendo-grid.k-grid .k-grid-header-wrap table thead tr th {
-    padding-right: 1.5rem;
-    vertical-align: top;
-    border-color: #ccc;
-    background: linear-gradient(to bottom, #fdfdfd 0%, #d9d9d9 100%) !important;
-}
-
-.oppo-grids.physics-css kendo-grid.k-grid .k-grid-header-wrap table thead tr th .k-cell-inner span.k-icon.k-i-filter {
-    font-size: 12px;
-}
-
-.oppo-grids.physics-css kendo-grid.k-grid .k-grid-header-wrap table thead tr th .k-cell-inner .k-grid-filter {
-    position: relative;
-    top: 2px;
-}
-
-.oppo-grids.physics-css kendo-grid.k-grid .k-grid-header-wrap table thead tr th span.k-cell-inner .intelicon-protection-solid {
-    font-size: 14px !important;
-    padding-top: 0.275rem;
-}
-
-kendo-slider.before-ques .k-slider-wrap .k-slider-track-wrap ul li span.k-label:before {
-    content: 'Q';
-}
-
-kendo-slider.before-ques .k-slider-wrap .k-slider-track-wrap ul li span.k-label {
-    position: relative;
-    display: inline-block;
-    padding-top: 12px;
-    font-size: 12px;
-}
-
-.ss-loading-overlay {
-    top: 20px;
-    display: flex;
-    justify-content: center;
-}
 
 .few-oracle-css {
     position: relative;
@@ -453,14 +348,9 @@ kendo-slider.before-ques .k-slider-wrap .k-slider-track-wrap ul li span.k-label 
     overflow-y: auto;
 }
 
-
-/*.sum-fixes-plus gridster.fit {
-    overflow-y: auto;
-}*/
-
-#parentID gridster-preview {
-    background-color: #fff !important;
-}
+    #parentID gridster-preview {
+        background-color: #fff !important;
+    }
 
 .copper-btns mat-button-toggle button .mat-button-toggle-label-content {
     padding: 0 !important;
@@ -473,9 +363,9 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     left: 0 !important;
 }
 
-.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th .k-cell-inner kendo-grid-filter-menu a .k-i-filter {
-    color: #00aeef;
-}
+    .filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th .k-cell-inner kendo-grid-filter-menu a .k-i-filter {
+        color: var(--light-blue);
+    }
 
 .filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th {
     vertical-align: top !important;
@@ -502,80 +392,9 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     width: 100%;
 }
 
-.kendo-grid-buttons.oppo-grids.physics-css.there-grid kendo-grid .k-grid-aria-root .k-grid-header table thead tr th span.k-cell-inner {
-    align-items: flex-start;
-}
-
-.oppo-grids kendo-grid .k-grid-aria-root .k-grid-header table thead tr th span.k-cell-inner {
-    align-items: flex-start;
-    font-size: 14px !important;
-    font-weight: 600 !important;
-    text-transform: capitalize !important;
-    color: #1a3e6f !important;
-}
-
-.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal Start Date"],
-.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal End Date"],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="START_DT"],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="END_DT"],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="ECAP_PRICE"],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="VOLUME"],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="TERMS"],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="TITLE"],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_BILLING_START"],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_BILLING_END"] {
-    border-bottom: 3px solid rgb(0, 113, 197) !important;
-    border-bottom-color: rgb(0, 113, 197) !important;
-}
-
-
-/*.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="TRKR_NBR"] {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-}
-
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="TRKR_NBR"] kendo-grid-filter-menu .k-grid-filter {
-    top: 3px;
-    right: 0;
-}*/
-
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #IS_PRIMED_CUST,
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #IS_RPL,
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #TRKR_NBR,
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #ECAP_PRICE,
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #CAP,
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #CAP_STRT_DT,
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #CAP_END_DT,
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #YCS2_PRC_IRBT,
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #YCS2_START_DT,
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th #YCS2_END_DT {
-    width: 100%;
-    height: 100%;
-    display: flex;
-    align-items: flex-start;
-    justify-content: flex-start;
-}
-
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=IS_PRIMED_CUST],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=IS_RPL],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=TRKR_NBR],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=ECAP_PRICE],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=CAP],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=CAP_STRT_DT],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=CAP_END_DT],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=YCS2_PRC_IRBT],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=YCS2_START_DT],
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th kendo-grid-filter-menu [title~=YCS2_END_DT] {
-    top: 3px;
-    right: 0;
-}
-
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th .k-cell-inner:has(.k-link):has(deal-editor-header):has(#LAST_REDEAL_DT) {
-    width: 100% !important;
-}
+    .one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th .k-cell-inner:has(.k-link):has(deal-editor-header):has(#LAST_REDEAL_DT) {
+        width: 100% !important;
+    }
 
 .htDatepickerHolder .pika-single .pika-table th,
 .htDatepickerHolder .pika-single .pika-table td {
@@ -599,25 +418,25 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     border-radius: 50%;
 }
 
-.htDatepickerHolder .is-selected .pika-button,
-.htDatepickerHolder .has-event .pika-button {
-    width: 35px;
-    height: 35px;
-    text-align: center !important;
-    border-radius: 50% !important;
-    background: #00aeef !important;
-    color: #fff !important;
-}
+    .htDatepickerHolder .is-selected .pika-button,
+    .htDatepickerHolder .has-event .pika-button {
+        width: 35px;
+        height: 35px;
+        text-align: center !important;
+        border-radius: 50% !important;
+        background: var(--light-blue) !important;
+        color: #fff !important;
+    }
 
 .htDatepickerHolder .pika-table abbr {
     color: #444;
 }
 
-.handsontable.listbox tr td.current,
-.handsontable.listbox tr:hover td {
-    background: #00aeef !important;
-    color: #fff;
-}
+    .handsontable.listbox tr td.current,
+    .handsontable.listbox tr:hover td {
+        background: var(--light-blue) !important;
+        color: #fff;
+    }
 
 .oo-lapping-style mat-dialog-container {
     padding: 0 !important;
@@ -630,27 +449,11 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     color: #fff !important;
 }
 
-.oppo-grids.space-table-all kendo-grid .k-grid-aria-root .k-grid-header table thead tr th {
-    background-color: #efefef;
-    vertical-align: middle;
-    border-color: #dee2e6;
-}
-
-.oppo-grids.space-table-all kendo-grid .k-grid-aria-root .k-grid-header table {
-    height: 100%;
-}
-
-.oppo-grids.space-table-all .k-grid .k-grid-header-locked,
-.oppo-grids.space-table-all .k-grid .k-grid-content-locked td,
-.oppo-grids.space-table-all .k-grid .k-grid-content-locked {
-    border-color: #dee2e6;
-}
-
-.dateclass.k-datepicker .k-picker-wrap.k-state-focused {
-    border-color: #e7e7e7 !important;
-    background-color: #fafafa !important;
-    box-shadow: none !important;
-}
+    .dateclass.k-datepicker .k-picker-wrap.k-state-focused {
+        border-color: #e7e7e7 !important;
+        background-color: #fafafa !important;
+        box-shadow: none !important;
+    }
 
 .dateclass.k-datepicker {
     border-bottom: 2px solid #0071c5 !important;
@@ -922,18 +725,9 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     color: #727578b0 !important
 }
 
-.divisionblock.k-multiselect .k-multiselect-wrap {
-    box-shadow: none !important;
-}
-
-.divisionblock.k-multiselect.k-state-focused>.k-multiselect-wrap {
-    border-color: #eee !important;
-    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
-}
-
-.dateclass.k-datepicker kendo-dateinput {
-    background: transparent;
-}
+    .dateclass.k-datepicker kendo-dateinput {
+        background: transparent;
+    }
 
 .dateboxborder input:focus-within,
 .dateboxborder:focus-within {
@@ -993,85 +787,20 @@ kendo-dropdownlist.font-input .k-input {
     z-index: 1;
 }
 
-.artho-css-popup .k-window .k-content {
-    padding: 2.4em;
-    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
+    .dashboard-kendo-window {
+        z-index: 10001 !important;
+    }
 
-.artho-css-popup .k-window .k-content p {
-    margin-bottom: 0;
-}
-
-.artho-css-popup .k-window kendo-dialog-actions {
-    padding: 0;
-    width: 100%;
-    border-radius: 0;
-}
-
-.artho-css-popup .k-window {
-    border: none;
-    border-radius: 0;
-    border-radius: 0 !important;
-}
-
-.artho-css-popup .k-window kendo-dialog-actions button.k-button:first-child {
-    border-color: #00AEEF !important;
-    background-color: #00AEEF !important;
-    padding: 20px 0 !important;
-    border-radius: 0 !important;
-    color: #fff !important;
-    width: 50%;
-    font-size: 15px;
-    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-.artho-css-popup .k-window kendo-dialog-actions button.k-button:last-child {
-    border-color: #fafafa !important;
-    background-color: #fafafa !important;
-    padding: 20px 0 !important;
-    border-radius: 0 !important;
-    color: #212529 !important;
-    width: 50%;
-    margin-left: -7px;
-    font-size: 15px;
-    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
-
-.artho-css-popup .k-window kendo-dialog-actions button.k-button:first-child:hover {
-    color: #fff !important;
-    border-color: #0071c5 !important;
-    background-color: #0071c5 !important;
-}
-
-.artho-css-popup .k-window kendo-dialog-actions button.k-button:last-child:hover {
-    color: #444 !important;
-    border-color: #ebebeb !important;
-    background-color: #ebebeb !important;
-}
-
-.artho-css-popup .k-window {
-    border: none;
-    border-radius: 0;
-}
-
-.dashboard-kendo-window {
-    z-index: 10001 !important;
-}
-
-.artho-css-popup .k-window {
-    border: none;
-    border-radius: 0;
-}
-
-.oo-lapping-style mat-dialog-container kendo-grid kendo-grid-list table tbody tr.k-grid-norecords td {
-    height: 383px;
-    width: 792px;
-    max-width: 792px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #fff !important;
-}
+    
+    .oo-lapping-style mat-dialog-container kendo-grid kendo-grid-list table tbody tr.k-grid-norecords td {
+        height: 383px;
+        width: 792px;
+        max-width: 792px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: #fff !important;
+    }
 
 .approveChkBox ngb-tooltip-window.tooltip .tooltip-inner {
     background-color: #fdfdfd !important;
@@ -1084,11 +813,11 @@ kendo-dialog.the-comp-de kendo-dialog-actions {
     padding: 0;
 }
 
-kendo-dialog.the-comp-de kendo-dialog-actions button.first-child-btn {
-    color: #fff;
-    border-color: #00aeef;
-    background-color: #00aeef !important;
-}
+        kendo-dialog.the-comp-de kendo-dialog-actions button.first-child-btn {
+            color: #fff;
+            border-color: var(--light-blue);
+            background-color: var(--light-blue) !important;
+        }
 
 kendo-dialog.the-comp-de kendo-dialog-actions button:last-child.last-child-btn {
     color: #444;
@@ -1154,54 +883,9 @@ kendo-treeview.k-widget.k-treeview.fiend-tree ul li kendo-checkbox .k-checkbox {
     margin-top: 150px !important;
 }
 
-kendo-multiselect.divineo-one .k-multiselect-wrap kendo-taglist ul li span {
-    font-size: 12px;
-    color: #444;
-}
-
-kendo-multiselect.divineo-one .k-multiselect-wrap kendo-taglist ul li span.k-select {
-    display: none !important;
-}
-
-kendo-multiselect.divineo-one .k-multiselect-wrap kendo-taglist ul li {
-    padding-right: 20px !important;
-    border-radius: 25px;
-    border-color: #fafafa;
-    background-color: #fafafa;
-    color: #444;
-}
-
-kendo-multiselect.divineo-one .k-multiselect-wrap kendo-taglist ul li:hover {
-    border-color: #e4e7eb;
-    background-color: #e4e7eb;
-}
-
-kendo-multiselect.divineo-one .k-multiselect-wrap span.k-icon.k-clear-value.k-i-close {
-    display: none !important;
-}
-
-kendo-multiselect.divineo-one:hover .k-multiselect-wrap span.k-icon.k-clear-value.k-i-close {
-    display: flex !important;
-    border-radius: 50%;
-    background-color: #dbdbdb;
-    height: 15px;
-    width: 15px;
-    top: 9px;
-    right: 7px;
-    color: #444;
-    padding-top: 2px;
-    opacity: 1;
-}
-
-kendo-multiselect.divineo-one .k-multiselect-wrap kendo-taglist ul li span span.k-icon.k-i-caret-alt-down {
-    position: absolute;
-    right: 4px;
-    top: 5px;
-}
-
-.mainBodyStyle:has(reporting-dashboard) {
-    overflow-y: auto !important;
-}
+    .mainBodyStyle:has(reporting-dashboard) {
+        overflow-y: auto !important;
+    }
 
 .cc-pop-up-footers {
     margin-left: -24px;
@@ -1216,100 +900,9 @@ a:focus {
     outline-offset: 0;
 }
 
-.dashcusstyle.k-multiselect .k-multiselect-wrap {
-    border-radius: 0 !important;
-    border-color: #f0f0f0 !important;
-    box-shadow: none !important;
-    border-bottom: none !important;
-    padding: 0 !important;
-}
-
-.dashcusstyle.k-multiselect .k-multiselect-wrap .k-button:last-child {
-    font-family: 'Intel Clear' !important;
-    font-size: 12px !important;
-    background: #fafafa !important;
-    border-color: #fafafa !important;
-    border-radius: 15px !important
-}
-
-.dashcusstyle.k-multiselect .k-multiselect-wrap .k-button:last-child:hover {
-    background: #ced4da6b !important
-}
-
-
-/*@media only screen and (min-width: 1500px) {
-    gridster-item.attr-li-7 .container-fluid.widget-container {
-        height: calc( 100vh - 210px) !important;
+    kendo-grid.contract-history-style.k-widget.k-grid table tr td {
+        font-size: 12px !important;
     }
-}
-
-@media only screen and (min-width: 1800px) {
-    gridster-item.attr-li-7 .container-fluid.widget-container {
-        height: calc( 100vh - 280px) !important;
-    }
-}*/
-
-.divisionblock.k-list>.k-state-hover,
-.k-list>.k-state-selected.k-state-hover {
-    background-color: #ebebeb !important;
-    border-color: #ebebeb !important;
-}
-
-.divisionblock.k-multiselect .k-multiselect-wrap li.k-button,
-.k-dropdowntree .k-multiselect-wrap li.k-button {
-    float: left;
-    color: #444 !IMPORTANT;
-    font-size: 12px;
-    border: none;
-    border-radius: 1.071em !important;
-    margin: 3px 0 3px 3px !important;
-    padding: 0 1.6em 0 0.857em !important;
-    line-height: 1.86em !important;
-    background: #fafafa !important;
-    font-family: 'Intel Clear' !important;
-}
-
-.divisionblock.k-multiselect .k-multiselect-wrap li.k-button:hover {
-    background: #ced4da6b !important;
-}
-
-.k-list .k-item.k-state-selected {
-    color: #fff !important;
-    background-color: #00aeef !important;
-    font-size: 12px;
-    font-family: 'Intel Clear' !important
-}
-
-.k-list .k-item.k-state-selected:hover {
-    border: 1px solid #ebebeb !important
-}
-
-.k-list .k-item.k-state-focused.k-state-selected {
-    background-color: #00aeef !important;
-}
-
-.k-list .k-item.k-state-selected:hover {
-    background-color: #00aeef !important;
-}
-
-.k-list .k-item.k-state-focused {
-    box-shadow: none !important
-}
-
-.k-list .k-item {
-    font-size: 12px !important;
-    font-family: 'Intel Clear' !important;
-    padding: 10px 0.5rem 0 13px !important;
-    line-height: 2.14em !important
-}
-
-.k-list .k-item:hover {
-    background: #ebebeb !important
-}
-
-kendo-grid.contract-history-style.k-widget.k-grid table tr td {
-    font-size: 12px !important;
-}
 
 kendo-window.dashboard-kendo-window.process-search.k-window kendo-window-titlebar {
     padding: 3px 15px;
@@ -1324,29 +917,29 @@ kendo-dialog.kit-name-popup .k-window {
     border-radius: 0;
 }
 
-kendo-dialog.kit-name-popup .k-window .k-content {
-    padding: 0;
-    border-bottom: 1px solid #f4f4f4 !important;
-}
+    kendo-dialog.kit-name-popup .k-window .k-content {
+        padding: 0;
+        border-bottom: 1px solid #f4f4f4 !important;
+    }
 
-kendo-dialog.kit-name-popup .k-window .k-content .all-merge-confirmation h3 {
-    padding: 15px;
-    border-bottom: 1px solid #f4f4f4;
-    min-height: 16.5px;
-    margin-top: 20px !important;
-    margin: 0;
-    font-weight: 500;
-    line-height: 1.1;
-    color: inherit;
-    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
-}
+    kendo-dialog.kit-name-popup .k-window .k-content .all-merge-confirmation h3 {
+        padding: 15px;
+        border-bottom: 1px solid #f4f4f4;
+        min-height: 16.5px;
+        margin-top: 20px !important;
+        margin: 0;
+        font-weight: 500;
+        line-height: 1.1;
+        color: inherit;
+        font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
 
-kendo-dialog.kit-name-popup .k-window .k-content .all-merge-confirmation p {
-    position: relative;
-    padding: 15px;
-    margin: 0;
-    text-align: left;
-}
+    kendo-dialog.kit-name-popup .k-window .k-content .all-merge-confirmation p {
+        position: relative;
+        padding: 15px;
+        margin: 0;
+        text-align: left;
+    }
 
 kendo-dialog-actions.kit-merge-btns {
     padding: 15px;
@@ -1386,10 +979,10 @@ kendo-dialog.kit-name-popup kendo-dialog-actions.kit-merge-btns button.merge-btn
     color: #fff;
 }
 
-kendo-dialog.kit-name-popup kendo-dialog-actions.kit-merge-btns button.merge-btns:hover {
-    background-color: #367fa9 !important;
-    color: #fff;
-}
+    kendo-dialog.kit-name-popup kendo-dialog-actions.kit-merge-btns button.merge-btns:hover {
+        background-color: #367fa9 !important;
+        color: #fff;
+    }
 
 button.dash-popup-okbtn.k-button {
     height: 60px !important;
@@ -1411,176 +1004,44 @@ button.dash-popup-okbtn.k-button:hover {
     padding: 4px !important
 }
 
-input[type="text"]:focus-visible {
-    outline: none;
-}
-
-.k-filter-menu .k-button+.k-button {
-    margin-right: 0;
-}
-
-.k-filter-menu .k-button,
-.k-filter-menu .k-button.k-primary:hover,
-.k-filter-menu .k-button:hover {
-    font-size: 14px;
-    font-weight: 500;
-    text-transform: uppercase;
-    background: transparent !important;
-    border-color: transparent !important;
-    line-height: 1.143em;
-    padding: 9px 14px;
-    display: inline-block;
-    vertical-align: middle;
-    box-shadow: none;
-    margin: 0;
-    width: 50%;
-    border-radius: 0;
-    text-align: center;
-    cursor: pointer;
-    color: #444 !important;
-    text-decoration: none;
-}
-
-.k-filter-menu .k-button.k-primary,
-.k-filter-menu .k-button.k-primary:hover {
-    border-left-color: #f0f0f0 !important;
-    float: right;
-    color: #00aeef !important;
-}
-
-.missing-cap-cost kendo-grid.k-widget.k-grid kendo-grid-list table tbody tr.k-grid-norecords {
-    visibility: hidden;
-}
+    .missing-cap-cost kendo-grid.k-widget.k-grid kendo-grid-list table tbody tr.k-grid-norecords {
+        visibility: hidden;
+    }
 
 kendo-dialog.widget-settings-proper .k-dialog {
     border-radius: 0;
 }
 
-kendo-dialog.widget-settings-proper .k-dialog .k-window-content {
-    border-radius: 0;
-    padding: 0;
-}
-
-kendo-dialog.widget-settings-proper .k-dialog .k-window-content .modal-header {
-    padding: 15px !important;
-    border-bottom: 1px solid #f4f4f4;
-    min-height: 16.5px;
-}
-
-kendo-dialog.widget-settings-proper .k-dialog .k-window-content .modal-body {
-    position: relative;
-    padding: 15px;
-}
-
-kendo-dialog.widget-settings-proper .k-dialog .k-window-content .modal-footer {
-    padding: 15px;
-    text-align: right;
-    border-top: 1px solid #f4f4f4;
-}
-
-.widget-heading {
-    font-size: 20px !important;
-    font-weight: 500 !important;
-}
-
-
-/*@media screen and (max-height: 1050px) {
-    gridster-item.attr-li-7 .container-fluid.widget-container {
-        height: calc( 100vh - 200px) !important;
-    }
-}
-
-@media screen and (max-height: 950px) {
-    gridster-item.attr-li-7 .container-fluid.widget-container {
-        height: calc( 100vh - 180px) !important;
-    }
-}
-
-@media screen and (max-height: 850px) {
-    div.overFlowWidget {
-        height: calc(100vh - 18vh) !important;
-    }
-    .sum-fixes {
-        height: 82vh;
-    }
-    gridster-item.attr-li-6, gridster-item.attr-li-8, gridster-item.attr-li-9, gridster-item.attr-li-10 {
-        height: calc(100vh - 73%) !important;
-        min-height: 200px;
-    }
-    gridster-item.attr-li-7 {
-        height: calc(100vh - 23%) !important;
-    }
-    gridster-item.attr-li-7 .container-fluid.widget-container {
-        height: calc( 100vh - 163px) !important;
-    }
-}
-
-@media screen and (max-height: 750px) {
-    div.overFlowWidget {
-        height: calc(100vh - 20vh) !important;
+    kendo-dialog.widget-settings-proper .k-dialog .k-window-content {
+        border-radius: 0;
+        padding: 0;
     }
 
-    .sum-fixes {
-        height: 80vh;
-    }
-    gridster-item.attr-li-6, gridster-item.attr-li-8, gridster-item.attr-li-9, gridster-item.attr-li-10 {
-        height: calc(100vh - 77%) !important;
-        min-height: 200px;
+    kendo-dialog.widget-settings-proper .k-dialog .k-window-content .modal-header {
+        padding: 15px !important;
+        border-bottom: 1px solid #f4f4f4;
+        min-height: 16.5px;
     }
 
-    gridster-item.attr-li-7 {
-        height: calc(100vh - 27%) !important;
+    kendo-dialog.widget-settings-proper .k-dialog .k-window-content .modal-body {
+        position: relative;
+        padding: 15px;
     }
 
-    gridster-item.attr-li-7 .container-fluid.widget-container {
-        height: calc( 100vh - 175px) !important;
+    kendo-dialog.widget-settings-proper .k-dialog .k-window-content .modal-footer {
+        padding: 15px;
+        text-align: right;
+        border-top: 1px solid #f4f4f4;
     }
 
-    gridster-item.attr-li-7 .left-pane-widget .inner {
-        height: 100%;
-        overflow-y: auto;
+    .widget-heading {
+        font-size: 20px !important;
+        font-weight: 500 !important;
     }
-}
 
-
-
-@media screen and (max-height: 550px) {
-    gridster-item.attr-li-6, gridster-item.attr-li-8, gridster-item.attr-li-9, gridster-item.attr-li-10 {
-        height: calc(100vh - 84%) !important;
-        min-height: 200px;
+    .second-load-style .ss-loading-overlay {
+        top: 0px !important;
     }
-    gridster-item.attr-li-7 {
-        height: calc(100vh - 35%) !important;
-    }
-}*/
-
-#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="START_DT"],
-#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="END_DT"],
-#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="TITLE"],
-#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="ECAP_PRICE"],
-#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="VOLUME"],
-#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="TERMS"],
-#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="GEO_APPROVED_BY"],
-#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="DIV_APPROVED_BY"] {
-    border-bottom: 3px solid rgb(0, 113, 197) !important;
-}
-
-#pubOpGrid .k-cell-inner .k-grid-filter {
-    text-align: center !important;
-    display: inline-block !important;
-    position: relative !important;
-    padding: 0px !important;
-    vertical-align: middle !important;
-    align-content: center !important;
-    width: 0px !important;
-    height: 0px !important;
-    top: -10px !important;
-    margin-right: 10px !important
-}
-
-.second-load-style .ss-loading-overlay {
-    top: 0px !important;
-}
 
 .k-animation-container-shown .k-list-container .k-list-scroller {
     overflow-x: hidden;
@@ -1597,65 +1058,14 @@ kendo-datepicker.date-dashboard:focus-within {
     background-color: transparent !important
 }
 
-kendo-multiselect.divineo-one.k-state-focused .k-multiselect-wrap span.k-icon.k-clear-value.k-i-close {
-    display: inline-flex !important;
-    background: #dbdbdb;
-    width: 15px;
-    height: 15px;
-    top: 10px;
-    right: 7px;
-    border-radius: 50%;
-    color: #00aeef;
-    opacity: 1;
-}
-
-kendo-multiselect.divineo-one.k-state-focused .k-multiselect-wrap kendo-taglist ul li span span.k-icon.k-i-caret-alt-down {
-    color: #00aeef;
-}
-
-.another-parent .gridster-item-resizable-handler.handle-se {
-    right: 0px;
-    bottom: 1px;
-    z-index: -1;
-}
+    .another-parent .gridster-item-resizable-handler.handle-se {
+        right: 0px;
+        bottom: 1px;
+        z-index: -1;
+    }
 
 gridster-item.attr-li-7 kendo-grid.k-widget.k-grid table thead tr th .k-link:hover {
     background: transparent !important;
-}
-
-kendo-combobox.contract-details-customer .k-dropdown-wrap.k-state-focused .k-clear-value {
-    display: inline-flex !important;
-    background: #dbdbdb;
-    width: 15px;
-    height: 15px;
-    top: 9px;
-    right: 7px;
-    border-radius: 50%;
-    color: #00aeef;
-    opacity: 1;
-}
-
-kendo-combobox.contract-details-customer .k-dropdown-wrap.k-state-focused .k-select .k-i-arrow-s {
-    color: #00aeef;
-}
-
-kendo-combobox.contract-details-customer .k-dropdown-wrap kendo-searchbar .k-input {
-    height: 34px;
-}
-
-kendo-combobox.contract-details-customer:hover .k-dropdown-wrap .k-clear-value {
-    border-radius: 50%;
-    background-color: #dbdbdb;
-    width: 15px;
-    height: 15px;
-    top: 9px;
-    right: 7px;
-    opacity: 1;
-    display: inline-flex !important;
-}
-
-kendo-combobox.contract-details-customer .k-dropdown-wrap .k-clear-value {
-    display: none;
 }
 
 kendo-combobox.cd-input-bottom {
@@ -1683,31 +1093,6 @@ kendo-combobox.cd-input-bottom:focus-within {
 
 .add-widget-box mat-dialog-container .modalbody.mat-dialog-content .container.add-widget-container {
     padding: 0 !important;
-}
-
-kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.k-state-focused .k-multiselect-wrap kendo-taglist ul li span.k-select {
-    color: #00aeef;
-    opacity: 1;
-}
-
-kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level .k-multiselect-wrap .k-icon.k-clear-value.k-i-close {
-    display: none;
-}
-
-kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.k-state-focused .k-multiselect-wrap .k-icon.k-clear-value.k-i-close {
-    color: #00aeef;
-    opacity: 1;
-}
-
-kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level:hover .k-multiselect-wrap .k-icon.k-clear-value.k-i-close {
-    border-radius: 50%;
-    background-color: #dbdbdb;
-    width: 15px;
-    height: 15px;
-    top: 9px;
-    right: 7px;
-    opacity: 1;
-    display: inline-flex !important;
 }
 
 @media screen and (max-height: 650px) {
@@ -1785,7 +1170,7 @@ kendo-window#OvrLp .k-window-content {
 }
 
 #manageFilterStyle .k-icon.k-i-filter {
-    color: #00aeef !important;
+    color: var(--light-blue) !important;
     opacity: 1;
     margin-top: 2px;
 }
@@ -1804,7 +1189,7 @@ kendo-window#OvrLp .k-window-content {
 }
 
 .overlapping_fix .k-grid-filter .k-icon.k-i-filter {
-    color: #00AEEF !important;
+    color: var(--light-blue) !important;
     opacity: 1;
     font-size: 14px;
 }
@@ -1840,26 +1225,6 @@ kendo-window#OvrLp .k-window-content {
 kendo-grid.contract-history-style span.k-icon.k-i-filter {
     font-size: 20px !important;
     color: #777777 !important;
-}
-
-.date-calendar-pop-up .mat-dialog-container {
-    padding: 0;
-    border-radius: 0;
-}
-
-.date-calendar-pop-up .mat-dialog-container .modal-header {
-    padding: 15px;
-    border-bottom: 1px solid #f4f4f4;
-}
-
-.date-calendar-pop-up .mat-dialog-container .modal-body {
-    position: relative;
-    padding: 15px;
-}
-
-.date-calendar-pop-up .mat-dialog-container .modal-footer {
-    padding: 15px;
-    border-top: 1px solid #f4f4f4;
 }
 
 button.warn-custom {

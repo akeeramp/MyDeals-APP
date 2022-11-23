@@ -31,7 +31,7 @@
 }
 
     .dropdown-content ul li {
-        color: #00AEEF;
+        color: var(--light-blue);
         padding: 8px 0px;
         text-decoration: none;
         display: block;
@@ -47,7 +47,7 @@
 
 .dropdown:hover .dropdown-content {
     display: block;
-    color: #00AEEF;
+    color: var(--light-blue);
     cursor: pointer;
 }
 
@@ -134,22 +134,22 @@ table td {
     border-radius: 4px 4px 0 0
 }
 
-#allDealsTab .k-tabstrip-items .k-item .k-link:hover {
-    background: linear-gradient(rgb(217, 217, 217) 0%, rgb(253, 253, 253) 100%) !important;
-    color: #00AEEF !important;
-}
+    #allDealsTab .k-tabstrip-items .k-item .k-link:hover {
+        background: linear-gradient(rgb(217, 217, 217) 0%, rgb(253, 253, 253) 100%) !important;
+        color: var(--light-blue) !important;
+    }
 
-kendo-tabstrip.new-allDeals {
+kendo-tabstrip.diff-all-deals {
     margin-top: 32px;
     padding-left: 20px;
     padding-right: 20px;
 }
 
-kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper {
-    background: #efefef;
-    position: relative;
-    width: 100%;
-}
+    kendo-tabstrip.diff-all-deals .k-tabstrip-items-wrapper {
+        background: #efefef;
+        position: relative;
+        width: 100%;
+    }
 
 .app-filler {
     position: relative;
@@ -182,16 +182,16 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper {
     border: none;
 }
 
-.aligner-inputs i {
-    height: 100%;
-    font-size: 18px;
-    color: #00AEEF;
-    width: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #f9f9f9;
-}
+    .aligner-inputs i {
+        height: 100%;
+        font-size: 18px;
+        color: var(--light-blue);
+        width: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f9f9f9;
+    }
 
 .new-rows {
     padding-top: 15px;
@@ -340,7 +340,7 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper {
   animation: sk-zoom 0.3s 1 ease-in;
 }
 .sky-blue {
-    color: #00AEEF;
+    color: var(--light-blue);
 }
 .k-grid.deals_grid_h {
     height: calc(100vh - 250px) !important;

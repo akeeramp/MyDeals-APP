@@ -1347,8 +1347,8 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:
 }
 .de-css-comp .k-window-actions {
     gap: 0px !important;
-    padding-top: 10px !important;
-    padding-right: 6px !important
+/*    padding-top: 10px !important;
+    padding-right: 6px !important*/
 }
 .de-css-comp .k-grid-pager {
     border-color: #dee2e6;

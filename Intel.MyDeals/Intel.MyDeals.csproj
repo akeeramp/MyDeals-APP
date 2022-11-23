@@ -1083,6 +1083,11 @@
     <Content Include="Client\src\app\shared\header\header.component.css" />
     <Content Include="Client\src\app\shared\header\header.component.html" />
     <Content Include="Client\src\app\shared\loadingSpinner\loadingspinner.component.html" />
+    <Content Include="Client\src\app\style\common.css" />
+    <Content Include="Client\src\app\style\dealEditor.css" />
+    <Content Include="Client\src\app\style\kendo-custom.css" />
+    <Content Include="Client\src\app\style\publishTender.css" />
+    <Content Include="Client\src\app\style\style.css" />
     <Content Include="Client\src\dist\bundle.js" />
     <Content Include="Client\webpack.config.js" />
     <Content Include="Content\bootstrap-grid.css" />

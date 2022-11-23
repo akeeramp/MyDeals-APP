@@ -1,5 +1,5 @@
 ﻿<link href="/Client/src/app/contract/managerPct/managerPct.component.css" rel="stylesheet" />
-<kendo-grid [data]="gridData" [loading]="isLoading" [skip]="skip" scrollable="none" id="pctChild"
+<kendo-grid [data]="gridData" [loading]="isLoading" [skip]="skip" scrollable="none" class="reduce-child-table" id="pctChild"
     [navigable]="true" kendoGridFocusable style="height:auto;" (cellClick)="cellClickHandler($event)" [hideHeader]="true">
     <kendo-grid-column title="Tools" field="TOOLS" [headerClass]="{'headerClass':true}" [width]="155" [filterable]="false" *ngIf="!isHidden('TOOLS')">
         <ng-template let-dataItem="dataItem" kendoGridCellTemplate>

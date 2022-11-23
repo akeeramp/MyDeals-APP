@@ -480,8 +480,8 @@ i.fa.undo-redo-style.dirty {
 
 .oo-lapping-style .k-window-actions {
     gap: 0px !important;
-    padding-top: 10px !important;
-    padding-right: 6px !important
+/*    padding-top: 10px !important;
+    padding-right: 6px !important*/
 }
 
 .oo-lapping-style .k-grid-pager {

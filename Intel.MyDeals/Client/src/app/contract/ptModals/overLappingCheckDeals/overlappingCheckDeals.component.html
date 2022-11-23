@@ -5,7 +5,7 @@
 
 
 
-<kendo-window id="OvrLp" title="Overlapping Deals" [keepContent]="true" [width]="800" (close)="closeWindow()">
+<kendo-window id="OvrLp" title="Overlapping Deals" [keepContent]="true" [width]="800" (close)="closeWindow()" class="k-wind-design">
     <kendo-grid [data]="gridData" [loading]="isLoading"  [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
                 [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                 [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"

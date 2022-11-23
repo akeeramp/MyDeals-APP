@@ -18,136 +18,136 @@
             {{displayDealTypes()}}
         </div>
     </div>
- <div>
-    <kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="allDealsTab" class="new-allDeals">
-        <kendo-tabstrip-tab *ngFor="let data of groups" title="{{data.name}}" [selected]="selectedTab === data.name" [cssClass]="data.isTabHidden? 'hidden' : 'visible'">
-            <ng-template kendoTabContent>
-            <div class="content app-filler">
-                <div class="toolbar new-fixes-poly" style="z-index: 100">
-                    <div class="fr" style="margin-top: 2px; margin-left: 8px;">
-                        <button class="btn btn-sm ssToolbarBtn"
-                                (click)="toggleWrap()" [ngClass]="{'toggleSelect': wrapEnabled}" title="Toggle Word Wrap">
-                            <table>
-                                <tr>
-                                    <td><i class="intelicon-align-left skyBlue" aria-hidden="true" style="font-size: 30px"></i></td>
-                                    <td class="hidden-md hidden-sm hidden-xs"
-                                        style="padding-left: 5px; text-align: left; color: #00AEEF; font-size: 11px;">
-                                        Word<br />Wrap
-                                    </td>
-                                </tr>
-                            </table>
-                        </button>
-                    </div>
+    <div>
+        <kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="allDealsTab" class="new-allDeals diff-all-deals">
+            <kendo-tabstrip-tab *ngFor="let data of groups" title="{{data.name}}" [selected]="selectedTab === data.name" [cssClass]="data.isTabHidden? 'hidden' : 'visible'">
+                <ng-template kendoTabContent>
+                    <div class="content app-filler">
+                        <div class="toolbar new-fixes-poly" style="z-index: 100">
+                            <div class="fr" style="margin-top: 2px; margin-left: 8px;">
+                                <button class="btn btn-sm ssToolbarBtn"
+                                        (click)="toggleWrap()" [ngClass]="{'toggleSelect': wrapEnabled}" title="Toggle Word Wrap">
+                                    <table>
+                                        <tr>
+                                            <td><i class="intelicon-align-left skyBlue" aria-hidden="true" style="font-size: 30px"></i></td>
+                                            <td class="hidden-md hidden-sm hidden-xs"
+                                                style="padding-left: 5px; text-align: left; color: #00AEEF; font-size: 11px;">
+                                                Word<br />Wrap
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </button>
+                            </div>
 
-                    <div class="fr" style="margin-top: 2px; margin-left: 8px;" *ngIf="!opIsTender">
-                        <button class="btn btn-sm ssToolbarBtn btnOverlappingDealCheck" (click)="openOverlappingDealCheck()"
-                                title="check for overlapping Deals.">
-                            <table>
-                                <tr>
-                                    <td><i class="intelicon-copy-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i></td>
-                                    <td class="hidden-md hidden-sm hidden-xs"
-                                        style="padding-left: 5px; text-align: left; color: #00AEEF; font-size: 11px;">
-                                        Overlapping<br />Deals Check
-                                    </td>
-                                </tr>
-                            </table>
-                        </button>
-                    </div>
+                            <div class="fr" style="margin-top: 2px; margin-left: 8px;" *ngIf="!opIsTender">
+                                <button class="btn btn-sm ssToolbarBtn btnOverlappingDealCheck" (click)="openOverlappingDealCheck()"
+                                        title="check for overlapping Deals.">
+                                    <table>
+                                        <tr>
+                                            <td><i class="intelicon-copy-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i></td>
+                                            <td class="hidden-md hidden-sm hidden-xs"
+                                                style="padding-left: 5px; text-align: left; color: #00AEEF; font-size: 11px;">
+                                                Overlapping<br />Deals Check
+                                            </td>
+                                        </tr>
+                                    </table>
+                                </button>
+                            </div>
 
-                    <div class="fr dropdown clearfix" style="margin-top: 2px; margin-left: 8px;">
-                        <button class="btn btn-sm ssToolbarBtn dropdown-toggle"
-                                id="dropdownMenuOpGrid" aria-expanded="true" type="button" data-toggle="dropdown">
-                            <table>
-                                <tbody>
-                                    <tr>
-                                        <td style="border: 0 solid transparent;">
-                                            <i class="intelicon-ms-excel-outlined skyBlue"
-                                               aria-hidden="true" style="font-size: 30px !important"></i>
-                                        </td>
-                                        <td class="hidden-md hidden-sm hidden-xs"
-                                            style="padding-left: 2px; text-align: left; color: #00AEEF; line-height: 1.2em; border: 0 solid transparent; font-size: 11px;">
-                                            Excel<br>Export
-                                        </td>
-                                        <td><span class="caret" style="margin-left: 6px;"></span></td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </button>
-                        <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuOpGrid" style="font-size: 13px;"id="excel_DropDown">
-                            <li (click)="exportToExcel()" style="cursor: pointer;"><a>Export All Columns, All Data</a></li>
-                            <li (click)="exportToExcelCustomColumns()" style="cursor: pointer;"><a>Export Current View</a></li>
-                        </ul>
-                    </div>
+                            <div class="fr dropdown clearfix" style="margin-top: 2px; margin-left: 8px;">
+                                <button class="btn btn-sm ssToolbarBtn dropdown-toggle"
+                                        id="dropdownMenuOpGrid" aria-expanded="true" type="button" data-toggle="dropdown">
+                                    <table>
+                                        <tbody>
+                                            <tr>
+                                                <td style="border: 0 solid transparent;">
+                                                    <i class="intelicon-ms-excel-outlined skyBlue"
+                                                       aria-hidden="true" style="font-size: 30px !important"></i>
+                                                </td>
+                                                <td class="hidden-md hidden-sm hidden-xs"
+                                                    style="padding-left: 2px; text-align: left; color: #00AEEF; line-height: 1.2em; border: 0 solid transparent; font-size: 11px;">
+                                                    Excel<br>Export
+                                                </td>
+                                                <td><span class="caret" style="margin-left: 6px;"></span></td>
+                                            </tr>
+                                        </tbody>
+                                    </table>
+                                </button>
+                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuOpGrid" style="font-size: 13px;" id="excel_DropDown">
+                                    <li (click)="exportToExcel()" style="cursor: pointer;"><a>Export All Columns, All Data</a></li>
+                                    <li (click)="exportToExcelCustomColumns()" style="cursor: pointer;"><a>Export Current View</a></li>
+                                </ul>
+                            </div>
 
-                    <div class="fr" style="margin-top: 2px; margin-left: 8px;">
-                        <div class="fr helpBtn" title="Help" (click)="showHelpTopicGroup('Contract+and+Deals+Views')">
-                            <i class="intelicon-help"
-                               style="font-size:30px !important"></i>
+                            <div class="fr" style="margin-top: 2px; margin-left: 8px;">
+                                <div class="fr helpBtn" title="Help" (click)="showHelpTopicGroup('Contract+and+Deals+Views')">
+                                    <i class="intelicon-help"
+                                       style="font-size:30px !important"></i>
+                                </div>
+                            </div>
+                            <div class="fr" style="margin-top: 2px; margin-left: 22px;">
+                                <span class="k-textbox k-space-left aligner-inputs">
+                                    <i class="intelicon-search"></i><input (keydown)="filterDealData($event)" placeholder="  search...(press enter to search)" [(ngModel)]="searchFilter" />
+                                </span>
+                            </div>
+                        </div>
+                        <div class="row new-rows">
+                            <div class="col-md-12 kendo-grid-buttons oppo-grids physics-css mgridsizefix">
+                                <kendo-grid id="allDeals" class="all_deal_grid_cell deals_grid_h" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+                                            [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+                                            [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
+                                            filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)">
+                                    <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" field="{{column.field}}" title="{{column.title}}"
+                                                       width="{{column.width}}" [filterable]="column.filterable">
+                                        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                                                     let-filterService="filterService">
+                                            <multicheck-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value"
+                                                               [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                                        </ng-template>
+                                        <ng-template *ngIf="column.field == 'PASSED_VALIDATION'" kendoGridHeaderTemplate>
+                                            <i class='intelicon-protection-solid' style='color: #00AEEF; font-size: 20px;'></i>
+                                        </ng-template>
+                                        <ng-template *ngIf="column.field == 'EXCLUDE_AUTOMATION'" kendoGridHeaderTemplate>
+                                            <div [innerHTML]="column.title"></div>
+                                        </ng-template>
+                                        <ng-template *ngIf="column.field !== 'PASSED_VALIDATION' && column.field !== 'EXCLUDE_AUTOMATION'" kendoGridHeaderTemplate>
+                                            <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" [grid_Result]="gridResult"></deal-editor-header>
+                                        </ng-template>
+                                        <ng-template *ngIf="column.field == 'END_DT'" let-dataItem="dataItem" kendoGridCellTemplate>
+                                            <span [ngClass]="{'redfont': dataItem?.EXPIRE_FLG == 1}">{{dataItem.END_DT | date:'MM/dd/yyyy'}}</span>
+                                        </ng-template>
+                                        <ng-template *ngIf="column.field == 'ECAP_PRICE'" let-dataItem="dataItem" kendoGridCellTemplate>
+                                            <span>{{getFormatedDim(dataItem, 'ECAP_PRICE','20___0','currency')}}</span>
+                                        </ng-template>
+                                        <ng-template *ngIf="column.field == 'KIT_ECAP'" let-dataItem="dataItem" kendoGridCellTemplate>
+                                            <span>{{getFormatedDim(dataItem, 'ECAP_PRICE', '20_____1', 'currency')}}</span>
+                                        </ng-template>
+                                        <ng-template *ngIf="column.field == 'CUST_NM'" let-dataItem="dataItem" kendoGridCellTemplate>
+                                            <span>{{dataItem.CUST_NM}}</span>
+                                        </ng-template>
+                                        <ng-template *ngIf="column.field == 'WF_STG_CD'" let-dataItem="dataItem" kendoGridCellTemplate>
+                                            <span>{{getStageValue(dataItem)}}</span>
+                                        </ng-template>
+                                        <ng-template *ngIf="column.field == 'TITLE'" let-dataItem="dataItem" kendoGridCellTemplate>
+                                            <span style="color: rgb(0, 113, 197); cursor: pointer; text-align: center;">{{dataItem.TITLE}}</span>
+                                        </ng-template>
+                                        <ng-template *ngIf="column.field == 'PASSED_VALIDATION'" let-dataItem="dataItem" kendoGridCellTemplate>
+                                            <i class="intelicon-protection-checked-verified-solid bigIcon validf_{{dataItem.PASSED_VALIDATION}}" *ngIf="dataItem.PASSED_VALIDATION==='Complete'" title="{{dataItem.PASSED_VALIDATION}}"></i><i class="intelicon-protection-checked-verified-solid bigIcon validf_{{dataItem.PASSED_VALIDATION}}"
+                                                                                                                                                                                                                                               *ngIf="dataItem.PASSED_VALIDATION==='Finalizing'" title="{{dataItem.PASSED_VALIDATION}}"></i><i class="intelicon-protection-checked-verified-solid bigIcon validf_{{dataItem.PASSED_VALIDATION}}" *ngIf="dataItem.PASSED_VALIDATION==='Valid'" title="{{dataItem.PASSED_VALIDATION}}"></i>
+                                            <i class="intelicon-alert-solid bigIcon validf_{{dataItem.PASSED_VALIDATION}}" *ngIf="dataItem.PASSED_VALIDATION==='Dirty'" title="{{ (dataItem.PASSED_VALIDATION==='Dirty' ? 'Validation Errors: Fix in Deal Editor' : dataItem.PASSED_VALIDATION) || 'Not validated yet'}}"></i>
+                                            <i class="intelicon-protection-solid bigIcon validf_{{dataItem.PASSED_VALIDATION}}" *ngIf="dataItem.PASSED_VALIDATION !=='Valid' && dataItem.PASSED_VALIDATION !=='Dirty' && dataItem.PASSED_VALIDATION !=='Complete' && dataItem.PASSED_VALIDATION !=='Finalizing'" title="{{dataItem.PASSED_VALIDATION || 'Not validated yet'}}"></i>
+
+                                        </ng-template>
+                                        <ng-template *ngIf="column.field !== 'TITLE' && column.field !== 'EXCLUDE_AUTOMATION' && column.field !== 'tender_actions' && column.field !== 'PASSED_VALIDATION' && column.field !== 'ECAP_PRICE' && column.field !== 'KIT_ECAP' && column.field !== 'WF_STG_CD' && column.field !== 'CUST_MBR_SID'" let-dataItem="dataItem" kendoGridCellTemplate>
+                                            <deal-editor-cell [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="dealType" [in_DataItem]="dataItem" [contract_Data]="contractData" [grid_Data]="gridData.data"></deal-editor-cell>
+                                        </ng-template>
+                                    </kendo-grid-column>
+                                </kendo-grid>
+                            </div>
                         </div>
                     </div>
-                    <div class="fr" style="margin-top: 2px; margin-left: 22px;">
-                        <span class="k-textbox k-space-left aligner-inputs">
-                            <i class="intelicon-search"></i><input (keydown)="filterDealData($event)" placeholder="  search...(press enter to search)" [(ngModel)]="searchFilter" />
-                        </span>
-                    </div>
-                </div>
-               <div class="row new-rows">
-                    <div class="col-md-12 kendo-grid-buttons oppo-grids physics-css mgridsizefix">
-                        <kendo-grid id="allDeals" class="all_deal_grid_cell deals_grid_h" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
-                                    [sort]="state.sort" [filter]="state.filter" [sortable]="true"
-                                    [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
-                                    filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)">
-                            <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" field="{{column.field}}" title="{{column.title}}"
-                                               width="{{column.width}}" [filterable]="column.filterable"  >
-                                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                             let-filterService="filterService">
-                                    <multicheck-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value"
-                                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                                </ng-template>
-                                <ng-template *ngIf="column.field == 'PASSED_VALIDATION'" kendoGridHeaderTemplate>
-                                    <i class='intelicon-protection-solid' style='color: #00AEEF; font-size: 20px;'></i>
-                                </ng-template>
-                                <ng-template *ngIf="column.field == 'EXCLUDE_AUTOMATION'" kendoGridHeaderTemplate>
-                                    <div [innerHTML]="column.title"></div>
-                                </ng-template>
-                                <ng-template *ngIf="column.field !== 'PASSED_VALIDATION' && column.field !== 'EXCLUDE_AUTOMATION'" kendoGridHeaderTemplate>
-                                    <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" [grid_Result]="gridResult"></deal-editor-header>
-                                </ng-template>
-                                <ng-template *ngIf="column.field == 'END_DT'" let-dataItem="dataItem" kendoGridCellTemplate>
-                                    <span [ngClass]="{'redfont': dataItem?.EXPIRE_FLG == 1}">{{dataItem.END_DT | date:'MM/dd/yyyy'}}</span>
-                                </ng-template>
-                                <ng-template *ngIf="column.field == 'ECAP_PRICE'" let-dataItem="dataItem" kendoGridCellTemplate>
-                                    <span>{{getFormatedDim(dataItem, 'ECAP_PRICE','20___0','currency')}}</span>
-                                </ng-template>
-                                <ng-template *ngIf="column.field == 'KIT_ECAP'" let-dataItem="dataItem" kendoGridCellTemplate>
-                                    <span>{{getFormatedDim(dataItem, 'ECAP_PRICE', '20_____1', 'currency')}}</span>
-                                </ng-template>
-                                <ng-template *ngIf="column.field == 'CUST_NM'" let-dataItem="dataItem" kendoGridCellTemplate>
-                                    <span>{{dataItem.CUST_NM}}</span>
-                                </ng-template>
-                                <ng-template *ngIf="column.field == 'WF_STG_CD'" let-dataItem="dataItem" kendoGridCellTemplate>
-                                    <span>{{getStageValue(dataItem)}}</span>
-                                </ng-template>
-                                <ng-template *ngIf="column.field == 'TITLE'" let-dataItem="dataItem" kendoGridCellTemplate>
-                                    <span style="color: rgb(0, 113, 197); cursor: pointer; text-align: center;">{{dataItem.TITLE}}</span>
-                                </ng-template>
-                                <ng-template  *ngIf="column.field == 'PASSED_VALIDATION'" let-dataItem="dataItem" kendoGridCellTemplate>
-                                    <i class="intelicon-protection-checked-verified-solid bigIcon validf_{{dataItem.PASSED_VALIDATION}}" *ngIf="dataItem.PASSED_VALIDATION==='Complete'" title="{{dataItem.PASSED_VALIDATION}}"></i><i class="intelicon-protection-checked-verified-solid bigIcon validf_{{dataItem.PASSED_VALIDATION}}"
-                                                                                                                                                                                                                                       *ngIf="dataItem.PASSED_VALIDATION==='Finalizing'" title="{{dataItem.PASSED_VALIDATION}}"></i><i class="intelicon-protection-checked-verified-solid bigIcon validf_{{dataItem.PASSED_VALIDATION}}" *ngIf="dataItem.PASSED_VALIDATION==='Valid'" title="{{dataItem.PASSED_VALIDATION}}"></i>
-                                    <i class="intelicon-alert-solid bigIcon validf_{{dataItem.PASSED_VALIDATION}}" *ngIf="dataItem.PASSED_VALIDATION==='Dirty'" title="{{ (dataItem.PASSED_VALIDATION==='Dirty' ? 'Validation Errors: Fix in Deal Editor' : dataItem.PASSED_VALIDATION) || 'Not validated yet'}}"></i>
-                                    <i class="intelicon-protection-solid bigIcon validf_{{dataItem.PASSED_VALIDATION}}" *ngIf="dataItem.PASSED_VALIDATION !=='Valid' && dataItem.PASSED_VALIDATION !=='Dirty' && dataItem.PASSED_VALIDATION !=='Complete' && dataItem.PASSED_VALIDATION !=='Finalizing'" title="{{dataItem.PASSED_VALIDATION || 'Not validated yet'}}"></i>
-
-                                </ng-template>
-                                <ng-template *ngIf="column.field !== 'TITLE' && column.field !== 'EXCLUDE_AUTOMATION' && column.field !== 'tender_actions' && column.field !== 'PASSED_VALIDATION' && column.field !== 'ECAP_PRICE' && column.field !== 'KIT_ECAP' && column.field !== 'WF_STG_CD' && column.field !== 'CUST_MBR_SID'" let-dataItem="dataItem" kendoGridCellTemplate>
-                                    <deal-editor-cell [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="dealType" [in_DataItem]="dataItem" [contract_Data]="contractData" [grid_Data]="gridData.data"></deal-editor-cell>
-                                </ng-template>
-                            </kendo-grid-column>
-                        </kendo-grid>
-                    </div>
-                </div>
-            </div>
-        </ng-template>
-    </kendo-tabstrip-tab>
-</kendo-tabstrip>
-</div>
+                </ng-template>
+            </kendo-tabstrip-tab>
+        </kendo-tabstrip>
+    </div>
 </div>
