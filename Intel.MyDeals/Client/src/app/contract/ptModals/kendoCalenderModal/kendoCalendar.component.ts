@@ -58,7 +58,7 @@ import * as _ from "underscore";
 
 
   export class kendoCalendarComponent {
-   public value: Date = new Date(2000, 2, 10);
+   public value: Date;
     constructor(
       public dialogRef: MatDialogRef<kendoCalendarComponent>,
       @Inject(MAT_DIALOG_DATA) public data: any,

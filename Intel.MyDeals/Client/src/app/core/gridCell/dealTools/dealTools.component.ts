@@ -338,18 +338,34 @@ export class dealToolsComponent{
 
     //deal timeline
     clkHistoryIcon(dataItem) {
-        const dialogRef = this.dialog.open(dealTimelineComponent, {
-            data: {
-                dataItem: dataItem,
-                item: {
-                    objSid: this.dataItem.DC_ID,
-                    objTypeSid: 5,
-                    objTypeIds: [5]
-                }
-            },
-            minWidth: '750px',
-            panelClass:'historyModal'
-        });
+        if (this.dataItem.DC_ID != undefined) {
+            const dialogRef = this.dialog.open(dealTimelineComponent, {
+                data: {
+                    dataItem: dataItem,
+                    item: {
+                        objSid: this.dataItem.DC_ID,
+                        objTypeSid: 5,
+                        objTypeIds: [5]
+                    }
+                },
+                minWidth: '750px',
+                panelClass: 'historyModal'
+            });
+        }
+        else {
+            const dialogRef = this.dialog.open(dealTimelineComponent, {
+                data: {
+                    dataItem: dataItem,
+                    item: {
+                        objSid: this.dataItem.DEAL_ID,
+                        objTypeSid: 5,
+                        objTypeIds: [5]
+                    }
+                },
+                minWidth: '750px',
+                panelClass: 'historyModal'
+            });
+        }
     }
     // FILES Items
     getFileValue(dataItem) {

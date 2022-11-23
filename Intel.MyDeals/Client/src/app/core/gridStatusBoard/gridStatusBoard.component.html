@@ -31,7 +31,7 @@
         <div class="center-pane-widget">
             <div class="inner container-fluid overflow">
                 <kendo-grid [data]="contractDs" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,buttonCount:5}" [groupable]="false" [group]="state.group" filterable="menu"
-                    [navigable]="true" (dataStateChange)="dataStateChange($event)" class="opUiContainer dashboard dashboard-grid highlightsty-title " style="height: 100%;">
+                    [navigable]="true" (dataStateChange)="dataStateChange($event)" class="opUiContainer dashboard dashboard-grid highlightsty-title" [resizable]="true" style="height: 100%;">
                     <kendo-grid-column field="WF_STG_CD" title="&nbsp;" width="20px" [headerClass]="{'headerClass':true}" filterable="none">
                         <ng-template kendoGridCellTemplate let-dataItem>
                             <div class="status Complete" title="Complete" *ngIf="dataItem.WF_STG_CD==='Complete'">

@@ -179,7 +179,17 @@ export class AutoFillComponent {
     }
 
     onMktgValueChange(event: any) {
-        if (event && event.length > 0) {
+        var index;
+        _.each(this.marketSeglist, (key) => {
+            if (key.items != null) {
+                index = _.indexOf(this.marketSeglist, key);
+            }
+        })
+        if (_.indexOf(event, this.marketSeglist[index].DROP_DOWN) > 0 && event.length - 1 == this.marketSeglist[index].items.length) {
+            this.mkgvalues = null;
+            this.multSlctMkgValues = this.mkgvalues;
+        }
+        else if (event && event.length > 0) {
             var selectedList = event.join(",");
             if (_.indexOf(event, 'All Direct Market Segments') > 0 || (event.length == 1 && _.indexOf(event, 'All Direct Market Segments') == 0)) {
                 this.mkgvalues = ['All Direct Market Segments'];

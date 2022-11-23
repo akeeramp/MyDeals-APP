@@ -26,14 +26,14 @@
                                         <i class="intelicon-protection-outlined bigIcon validf_{{ps_passed_validation}}" *ngIf="ps_passed_validation !== 'Valid' && ps_passed_validation !== 'Dirty' && ps_passed_validation !== 'Complete' && ps_passed_validation !== 'Finalizing'" title="{{ps_passed_validation || 'Not validated yet'}}"></i>
                                         <div *ngIf="is_hybrid_ps === '1'" class="isHybridIdentHeader_{{ps_passed_validation}}">H</div>
                                     </div>
-                                    <div class="fntLg" style="color: #000000; margin: 2px 6px 2px 0; font-size: 20px;">
+                                    <div class="fntLg" style="color: #000000; margin: 2px 6px 2px 35px; font-size: 20px;">
                                         <b style="color:#123b70">#{{ ps_Id }}</b> {{ ps_title }}
                                     </div>
                                 </div>
 
                                 <div class="col-md-10" style="padding-left: 0px;">
                                     <div class="fl textCircleMd valid_{{pt_passed_validation}}">{{ pt_type | slice:0:1 }}</div>
-                                    <div class="fntLg" style="color: #000000;">
+                                    <div class="fntLg" style="color: #000000; margin: 0 6px 0px 35px;">
                                         <b style="color:#123b70">#{{ pt_Id }}</b> {{ pt_title }}
                                     </div>
                                 </div>

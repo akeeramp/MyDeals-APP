@@ -38,9 +38,12 @@
                                 </kendo-dialog-actions>
                             </kendo-dialog>
                         </div>
-                        <div *ngIf="isCustDiv" class="col-md-11 row"><label class="rmv-mrgn-btm"><span>Division:</span></label><br />
-                            <kendo-multiselect class="division-name style-both-clas" #cmbmulti [kendoDropDownFilter]="filterSettings" [data]="selectedData" textField="CUST_DIV_NM" valueField="CUST_DIV_NM" [(ngModel)]="CUST_NM_DIV" [ngModelOptions]="{standalone: true}" [autoClose]="false"></kendo-multiselect>
-                            <div class="description">Blank means that ALL divisions are included</div>
+                        <div *ngIf="isCustDiv" class="col-md-11 row">
+                            <div *ngIf="isCustDiv">
+                                <label class="rmv-mrgn-btm"><span>Division:</span></label><br />
+                                <kendo-multiselect class="division-name style-both-clas" #cmbmulti [kendoDropDownFilter]="filterSettings" [data]="selectedData" textField="CUST_DIV_NM" valueField="CUST_DIV_NM" [(ngModel)]="CUST_NM_DIV" [ngModelOptions]="{standalone: true}" [autoClose]="false"></kendo-multiselect>
+                                <div class="description">Blank means that ALL divisions are included</div>
+                            </div>
                         </div>
                         <kendo-dialog *ngIf="showCustDivAlert" (close)="closeCustDivsAlert()" [height]="155" [width]="590">
                             <div class="kendoAlert">The division is blank. Do you intend for this contract to apply to all divisions?</div>

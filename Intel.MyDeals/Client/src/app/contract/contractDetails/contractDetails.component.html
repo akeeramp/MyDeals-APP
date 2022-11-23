@@ -38,7 +38,7 @@
                                     </div>
                                     <div class="col-md-11 display displayblock">
                                         <div *ngIf="!isCustomerDivHidden" class="inputWidth">
-                                            <div class="fl opUiLabel">Division:</div>
+                                            <div>Division:</div>
                                             <kendo-multiselect #CUST_MBR_DIV_Multi class="kendoInput divisionblock cd-input-bottom cd-division-level" [data]="CustomerFilter_Divs" [filterable]="true" (filterChange)="customerDivFilter($event)"
                                                                [(ngModel)]="CUST_NM_DIV" 
                                                                name="CUST_NM_DIV" textField="CUST_DIV_NM" valueField="CUST_DIV_NM" [autoClose]="false"></kendo-multiselect>

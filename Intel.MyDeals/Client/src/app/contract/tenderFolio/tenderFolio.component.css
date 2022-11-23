@@ -11,6 +11,13 @@ a.navbar-brand:hover {
     margin-top: -55px
 }
 
+.cdk-overlay-pane, .tender-folio-dialog {
+    height: auto !important;
+}
+
+#secFooter {
+    margin: 0 !important;
+}
 
 .modal-content {
     border-top: none
@@ -188,7 +195,7 @@ li.k-button:hover {
 }
 
 .secBasicContainerWrapper {
-    height: 280px
+    height: auto !important;
 }
 
 .rmv-mrgn-btm {
@@ -212,11 +219,12 @@ li.k-button:hover {
 }
 
 .kendo-alrt-btn {
-    padding: 1.4em
+    margin: auto;
+    padding-bottom: 20px;
 }
 
 .mdl-cntnt-height {
-    height: 280px
+    height: auto !important;
 }
 
 .pdng-btm {

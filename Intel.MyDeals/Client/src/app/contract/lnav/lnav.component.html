@@ -5,7 +5,7 @@
             <div class="contract-title-container" title="View Contract Details">
                 <button class="contractIdBtn" (click)="loadContractDetails('ViewContractDetails')">
                     <small class="contractHeaderId">#{{contractData.DC_ID}} </small>
-                    <small>{{contractData.Customer.CUST_NM}}:</small>
+                    <small>{{contractData.Customer.CUST_NM}}: </small>
                     <small>{{contractData.TITLE}}</small>
                 </button>
             </div>
@@ -136,7 +136,7 @@
                                                                 {{ pt.TITLE }}
                                                             </div>
                                                         </div>
-                                                        <div class="fr" *ngIf="C_ADD_PRICING_STRATEGY || ps._settings.C_ADD_PRICING_TABLE || ps._settings.C_DEL_PRICING_TABLE || usrRole === 'SA'">
+                                                        <div class="fr" *ngIf="C_ADD_PRICING_STRATEGY || ps._settings.C_ADD_PRICING_TABLE || ps._settings.C_DEL_PRICING_TABLE || usrRole === 'SA'" style="margin-left:-3px;">
                                                             <span #targetPS class="hasMenuPt{{ pt.DC_ID }} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
                                                             <kendo-contextmenu [target]="targetPS" showOn="click" (select)="onSelectPtMenu($event,ps,pt)">
                                                                 <kendo-menu-item *ngIf="C_ADD_PRICING_STRATEGY" icon="k-icon k-i-add" text="Add Pricing Strategy" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>

@@ -411,7 +411,6 @@
     position: absolute;
     margin-left: 1px;
     overflow: auto;
-    overflow-x: hidden;
     height: 73vh;
 }
 
