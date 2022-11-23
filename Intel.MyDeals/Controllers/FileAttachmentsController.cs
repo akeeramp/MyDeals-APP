@@ -220,7 +220,7 @@ namespace Intel.MyDeals.Controllers
                 lstDealRecons[i].Country_Region_Customer_ID = dbPrimLvlId;
                 lstDealRecons[i].To_be_Unified_Customer_ID = dbToBePrimCustId;
                 lstDealRecons[i].To_be_Country_Region_Customer_ID = dbToBePrimLvlId;
-                lstDealRecons[i].Unified_Customer_Name = lstDealRecons[i].Unified_Customer_Name != null ? lstDealRecons[i].Unified_Customer_Name.TrimEnd() : string.Empty;
+                lstDealRecons[i].Unified_Customer_Name = lstDealRecons[i].Unified_Customer_Name != null ? lstDealRecons[i].Unified_Customer_Name : string.Empty;
                 lstDealRecons[i].Unified_Country_Region = lstDealRecons[i].Unified_Country_Region != null ? lstDealRecons[i].Unified_Country_Region.TrimEnd() : string.Empty;
                 lstDealRecons[i].To_be_Unified_Customer_Name = lstDealRecons[i].To_be_Unified_Customer_Name != null ? lstDealRecons[i].To_be_Unified_Customer_Name.TrimEnd() : string.Empty;
                 lstDealRecons[i].To_be_Unified_Country_Region = lstDealRecons[i].To_be_Unified_Country_Region != null ? lstDealRecons[i].To_be_Unified_Country_Region.TrimEnd() : string.Empty;
@@ -590,8 +590,7 @@ namespace Intel.MyDeals.Controllers
                     {
                         validationSummary.inValidRecords.Add(row);
                     }
-                    else if (!Regex.IsMatch(row.Unified_Customer_Name, patt) 
-                        || !Regex.IsMatch(row.To_be_Unified_Customer_Name, patt))
+                    else if (!Regex.IsMatch(row.To_be_Unified_Customer_Name, patt))
                     {
                         validationSummary.inValidRecords.Add(row);
                     }

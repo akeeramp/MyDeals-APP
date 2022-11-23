@@ -660,7 +660,7 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                 var newDealReconRecord = {};
                 newDealReconRecord.Deal_ID = tempRange[i][0] != null ? ($.isNumeric(tempRange[i][0]) && parseInt(tempRange[i][0]) > 0 ? tempRange[i][0] : 0) : 0;
                 newDealReconRecord.Unified_Customer_ID = tempRange[i][1] != null ? ($.isNumeric(tempRange[i][1]) && parseInt(tempRange[i][1]) > 0 ? tempRange[i][1] : 0) : 0;
-                newDealReconRecord.Unified_Customer_Name = tempRange[i][2] != null ? tempRange[i][2].trimEnd() : "";
+                newDealReconRecord.Unified_Customer_Name = tempRange[i][2] != null ? tempRange[i][2] : "";
                 newDealReconRecord.Country_Region_Customer_ID = tempRange[i][3] != null ? ($.isNumeric(tempRange[i][3]) && parseInt(tempRange[i][3]) > 0 ? tempRange[i][3] : 0) : 0;
                 newDealReconRecord.Unified_Country_Region = tempRange[i][4] != null ? tempRange[i][4].trimEnd() : "";
                 newDealReconRecord.To_be_Unified_Customer_ID = tempRange[i][5] != null ? ($.isNumeric(tempRange[i][5]) && parseInt(tempRange[i][5]) > 0 ? tempRange[i][5] : 0) : 0;
@@ -918,13 +918,13 @@ function BulkUnifyModelController($rootScope, $location, PrimeCustomersService, 
                                 rowMsg = rowMsg + "NULL cannot be used as Unified Customer Name|";
                                 sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
                             }
-                            var patt = new RegExp("^[\\w\\s.,:'\&+-/]*$");
-                            var res = patt.test(vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name);
-                            if (!res) {
-                                isInvalidGlobalName = true;
-                                rowMsg = rowMsg + "Unified Customer Name contains invalid characters|";
-                                sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
-                            }
+                            //var patt = new RegExp("^[\\w\\s.,:'\&+-/]*$");
+                            //var res = patt.test(vm.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name);
+                            //if (!res) {
+                            //    isInvalidGlobalName = true;
+                            //    rowMsg = rowMsg + "Unified Customer Name contains invalid characters|";
+                            //    sheet.range("C" + row + ":C" + row).validation($scope.UnifiedDealValidation(true, '', false));
+                            //}
                         }
                         if (vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name != null && vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name != "") {
                             if (vm.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name.toLowerCase() == "any") {
