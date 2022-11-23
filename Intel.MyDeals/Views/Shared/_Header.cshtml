@@ -364,7 +364,8 @@
                                 @if (isDeveloper)
                                 {
                                     <li><a href="Admin#/AdminTools">Support Scripts</a></li>
-                                    <li><a href="Admin#/testtenders">Test Tenders Data</a></li>
+                                    @*<li><a href="Admin#/testtenders">Test Tenders Data</a></li>*@
+                                    <li ui-sref-active="active"><a ui-sref="testTenders">Test Tenders Data</a></li>
                                     @*<li><a href="Admin#/dealmassupdate">Deal Mass Update</a></li>*@
                                     <li ui-sref-active="active"><a ui-sref="dealmassupdate">Deal Mass Update</a></li>
                                     @*<li><a href="Admin#/validateVistexR3Checks">Validate Deals for Vistex Push</a></li>*@

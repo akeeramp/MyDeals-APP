@@ -369,6 +369,15 @@ angular
                     }
                 }
             })
+            .state("testTenders", {
+                url: '/testTenders',
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-test-tenders></admin-test-tenders>'
+                    }
+                }
+            })
             //********************* Admin route  ends here **************
 
             // ********************* Contract route  starts here ************** 

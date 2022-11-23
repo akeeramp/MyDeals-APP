@@ -36,7 +36,8 @@ import { meetCompComponent } from "../admin/meetComp/admin.meetComp.component";
 import { adminRulesComponent } from '../admin/rules/admin.rules.component';
 import { RulesSimulationModalComponent } from '../admin/rules/admin.rulesSimulationModal.component';
 import { RuleDetailsModalComponent } from '../admin/rules/admin.ruleDetailsModal.component';
-import {adminVistexIntegrationLogComponent} from '../admin/vistex/admin.vistexIntegrationLog.component'
+import { adminVistexIntegrationLogComponent } from '../admin/vistex/admin.vistexIntegrationLog.component';
+import { adminTestTendersComponent } from '../admin/testTenders/admin.testTenders.component';
 
 export let adminComponents =[
     EmployeeComponent,
@@ -78,5 +79,6 @@ export let adminComponents =[
     adminRulesComponent,
     RulesSimulationModalComponent,
     RuleDetailsModalComponent,
-    adminVistexIntegrationLogComponent
+    adminVistexIntegrationLogComponent,
+    adminTestTendersComponent
 ]

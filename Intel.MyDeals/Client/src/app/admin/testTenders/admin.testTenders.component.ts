@@ -1,0 +1,139 @@
+﻿import * as angular from "angular";
+import { logger } from "../../shared/logger/logger";
+import { admintestTendersService } from "./admin.testTenders.service";
+import { Component, ViewEncapsulation } from "@angular/core";
+import { downgradeComponent } from "@angular/upgrade/static";
+
+import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms";
+
+
+@Component({
+    selector: "admin-test-tenders",
+    templateUrl: "Client/src/app/admin/testTenders/admin.testTenders.component.html",
+    styleUrls: ['Client/src/app/admin/testTenders/admin.testTenders.component.css'],
+    encapsulation: ViewEncapsulation.None
+})
+export class adminTestTendersComponent {
+    constructor(private loggerSvc: logger, private admintestTendersService: admintestTendersService, private formBuilder: FormBuilder,) {
+        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
+        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
+        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+    }
+
+
+    private admintestTendersForm: FormGroup;
+    private dateValue: Date;
+
+    //get method for easy access to the form fields.
+    get formData() { return this.admintestTendersForm.controls; }
+
+    excutetestTendersData() {
+        var JsonObj = {
+            'header': {
+                'source_system': 'pricing_tenders',
+                'target_system': 'mydeals',
+                'action': 'create',
+                'xid': '152547827hdhdh'
+            },
+            'recordDetails': {
+                'SBQQ__Quote__c': {
+                    'Id': this.admintestTendersForm.value.CNTRCT_SF_ID,
+                    'Name': 'Q-02446',
+                    'Pricing_Folio_ID_Nm__c': '',
+                    'SBQQ__Account__c': {
+                        'Id': this.admintestTendersForm.value.CNTRCT_SF_ID,
+                        'Name': this.admintestTendersForm.value.CNTRCT_CUST,
+                        'Core_CIM_ID__c': ''
+                    },
+                    'Pricing_Deal_Type_Nm__c': 'ECAP',
+                    'Pricing_Customer_Nm__c': this.admintestTendersForm.value.END_CUST,
+                    'Pricing_Project_Name_Nm__c': 'FMH',
+                    'Pricing_ShipmentStDate_Dt__c': this.admintestTendersForm.value.START_DT,
+                    'Pricing_ShipmentEndDate_Dt__c': this.admintestTendersForm.value.END_DT,
+                    'Pricing_Server_Deal_Type_Nm__c': 'HPC',
+                    'Pricing_Region_Nm__c': this.admintestTendersForm.value.GEO,
+                    'SBQQ__QuoteLine__c': [
+                        {
+                            'Id': this.admintestTendersForm.value.DEAL_SF_ID,
+                            'Name': 'QL-0200061',
+                            'Pricing_Deal_RFQ_Status_Nm__c': '',
+                            'Pricing_ECAP_Price__c': this.admintestTendersForm.value.ECAP,
+                            'Pricing_Meet_Comp_Price_Amt__c': '90',
+                            'Pricing_Unit_Qty__c': this.admintestTendersForm.value.VOLUME,
+                            'Pricing_Deal_RFQ_Id__c': this.admintestTendersForm.value.DEAL_ID,
+                            'Pricing_Status_Nm__c': '',
+                            'SBQQ__Product__c': {
+                                'Id': this.admintestTendersForm.value.DEAL_SF_ID,
+                                'Name': this.admintestTendersForm.value.PROD_IDs,
+                                'Core_Product_Name_EPM_ID__c': '192283'
+                            },
+                            'Pricing_Competetor_Product__c': {
+                                'Id': '',
+                                'Name': ''
+                            },
+                            'Pricing_Performance_Metric__c': [
+                                {
+                                    'Id': this.admintestTendersForm.value.DEAL_SF_ID,
+                                    'Name': 'PM-000010',
+                                    'Pricing_Performance_Metric_Nm__c': 'SpecInt',
+                                    'Pricing_Intel_SKU_Performance_Nbr__c': '10',
+                                    'Pricing_Comp_SKU_Performance_Nbr__c': '9',
+                                    'Pricing_Weighting_Pct__c': '100'
+                                }
+                            ]
+                        }
+                    ],
+                    'Pricing_Comments__c': [
+                        {
+                            'Id': '',
+                            'Name': '',
+                            'Pricing_Question__c': '',
+                            'Pricing_Answer__c': ''
+                        }
+                    ]
+                }
+            }
+        }
+        //  var jsonDataPacket = angular.toJson(JsonObj);
+        var jsonDataPacket = JSON.stringify(JsonObj);
+        this.admintestTendersService.ExecutePostTest(jsonDataPacket).subscribe(res => {
+
+            if (res) {
+                this.loggerSvc.success("Post Test executed succesfully");
+            }
+        },);
+
+    }
+
+    ngOnInit() {
+        this.admintestTendersForm = new FormGroup({
+            CNTRCT_SF_ID: new FormControl('50130000000X1', Validators.required),
+            CNTRCT_CUST: new FormControl('Dell', Validators.required),
+            END_CUST: new FormControl('Facebook', Validators.required),
+            START_DT: new FormControl((new Date()), Validators.required),
+            END_DT: new FormControl((new Date()), Validators.required),
+            GEO: new FormControl('EMEA', Validators.required),
+            DEAL_SF_ID: new FormControl('001i000001AWbWu', Validators.required),
+            ECAP: new FormControl('100', Validators.required),
+            VOLUME: new FormControl('300', Validators.required),
+            DEAL_ID: new FormControl('543212', Validators.required),
+            PROD_IDs: new FormControl('Intel® Xeon® Processor E7 - 8870 v4', Validators.required),
+           
+
+        });
+       
+    }
+
+    ngOnDestroy() {
+        //The style removed are adding back
+        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
+        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
+    }
+}
+
+angular.module("app").directive(
+    "adminTestTenders",
+    downgradeComponent({
+        component: adminTestTendersComponent,
+    })
+);
