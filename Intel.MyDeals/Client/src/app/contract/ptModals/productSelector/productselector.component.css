@@ -832,16 +832,21 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
     top: -1px !important;
 }
 
-#prodGrid .k-grid td, #prodGrid .k-grid td div, #prodGrid .k-grid td span {
+#prodGrid .k-grid td {
     border-width: 0px !important;
     padding: 0;
     height: 50px;
     color: #1a3e6f;
     font-family: 'Intel Clear','Arial';
     font-weight: 500;
+}
+
+#prodGrid .k-grid td, #prodGrid .k-grid td div, #prodGrid .k-grid td span {
     white-space: nowrap !important;
     text-overflow: ellipsis;
     overflow: hidden;
+    position: relative;
+    width: 100%;
 }
 
 #closePopover {

@@ -477,21 +477,28 @@ export class ProductSelectorComponent {
         });
     }
     toggleColumnsWhenEmpty(data: any, prodGrid: any) {
-        _.each(this.gridColumnsProduct, (item, key) => {
-            let columnValue = _.uniq(data, item.field);
-            if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != 'MM_MEDIA_CD'
-                && item.field != 'CAP' && item.field != 'YCS2' && (columnValue[0][item.field] === "" || columnValue[0][item.field] == null
-                    || columnValue[0][item.field] == 'NA')) {
-                item.hidden = true;
-            }
-            else if (item.field !== 'HAS_L1') {
-                item.hidden = false;
-            }
-        });
-        //setting the prdSelectionkey based on which column is visible
-        if (_.findWhere(this.gridColumnsProduct, { field: 'DEAL_PRD_NM', hidden: true })) {
-            this.prdSelectionkey = 'PCSR_NBR';
+        let columns;
+        if (prodGrid == 'prodSuggestions') {
+            columns = this.gridColumnsSuggestion;
         }
+        else {
+            columns = this.gridColumnsProduct;
+        }
+            _.each(columns, (item, key) => {
+                let columnValue = _.uniq(data, item.field);
+                if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != 'MM_MEDIA_CD'
+                    && item.field != 'CAP' && item.field != 'YCS2' && (columnValue[0][item.field] === "" || columnValue[0][item.field] == null
+                        || columnValue[0][item.field] == 'NA')) {
+                    item.hidden = true;
+                }
+                else if (item.field !== 'HAS_L1') {
+                    item.hidden = false;
+                }
+            });
+            //setting the prdSelectionkey based on which column is visible
+            if (_.findWhere(this.gridColumnsProduct, { field: 'DEAL_PRD_NM', hidden: true })) {
+                this.prdSelectionkey = 'PCSR_NBR';
+            }
 
     }
     gridSelectItem(dataItem: any) {
@@ -894,7 +901,7 @@ export class ProductSelectorComponent {
             this.searchItems = [];
             this.showSearchResults = true;
             setTimeout(() => {
-                this.toggleColumnsWhenEmpty(this.gridData, 'prodGrid');
+                this.toggleColumnsWhenEmpty(this.gridData['data'], 'prodGrid');
             });
         }
     }

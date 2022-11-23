@@ -331,7 +331,7 @@
                         </div>
                     </div>
                     <div *ngIf="showSearchResults" id="prodGrid">
-                        <kendo-grid [data]="gridData" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
+                        <kendo-grid class="raid-style" [data]="gridData" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
                             [resizable]="true" (dataStateChange)="dataStateChange($event)">
                             <kendo-grid-column width="65px" [columnMenu]="false">
                                 <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
