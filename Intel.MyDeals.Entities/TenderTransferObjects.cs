@@ -254,6 +254,7 @@ namespace Intel.MyDeals.Entities
                 public string UnifiedEndCustomerId { get; set; }
                 public string UnifiedCountryEndCustomerId { get; set; }
                 public bool IsUnifiedEndCustomer { get; set; }
+                public string ComplianceWatchList { get; set; }
                 [JsonProperty("Account")]
                 public Account account { get; set; }
                 public string ShipmentStartDate { get; set; }

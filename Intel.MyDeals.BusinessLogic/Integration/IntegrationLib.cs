@@ -1613,6 +1613,13 @@ namespace Intel.MyDeals.BusinessLogic
                 var currentPsWfStg = myDealsData[OpDataElementType.PRC_ST].Data[strategyId].GetDataElementValue(AttributeCodes.WF_STG_CD);
                 var currentWipWfStg = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.WF_STG_CD);
                 bool isPrimedCust = workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer;
+                string endCustomer = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.END_CUSTOMER_RETAIL);
+                string endCustomerCountry = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_CNTRY);
+                string isMyDealsUnified = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.IS_PRIMED_CUST);
+                string unifiedEndCustomer = workRecordDataFields.recordDetails.quote.UnifiedEndCustomer;
+                string IQRprimedCustomerL1Id = workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId;
+                string IQRRPLStatusCode = workRecordDataFields.recordDetails.quote.ComplianceWatchList;                
+                string endCustomerObject = null;
                 switch (destinationStage)
                 {
                     case "Requested":
@@ -1642,6 +1649,28 @@ namespace Intel.MyDeals.BusinessLogic
                         {
                             myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.WF_STG_CD,
                                 destinationStage == WorkFlowStages.Won ? WorkFlowStages.Won : WorkFlowStages.Lost);
+                            if(destinationStage == WorkFlowStages.Won && isPrimedCust && isMyDealsUnified != "1")
+                            {
+                                List<EndCustomer> endCustData = new List<EndCustomer>();
+                                endCustData.Add(new EndCustomer
+                                {
+                                    END_CUSTOMER_RETAIL = endCustomer,
+                                    PRIMED_CUST_CNTRY = endCustomerCountry,
+                                    IS_EXCLUDE = "0",
+                                    IS_PRIMED_CUST = "1",
+                                    PRIMED_CUST_ID = IQRprimedCustomerL1Id,
+                                    RPL_STS_CD = IQRRPLStatusCode,
+                                    IS_RPL = "0",
+                                    PRIMED_CUST_NM = unifiedEndCustomer
+                                });
+                                endCustomerObject = JsonConvert.SerializeObject(endCustData);
+
+                                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.IS_PRIMED_CUST, "1");
+                                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.PRIMED_CUST_ID, IQRprimedCustomerL1Id);
+                                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.PRIMED_CUST_NM, unifiedEndCustomer);
+                                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.IS_RPL, "0");
+                                myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.END_CUST_OBJ, endCustomerObject);
+                            }
                         }
                         else if (currentWipWfStg == WorkFlowStages.Won && destinationStage == WorkFlowStages.Won)
                         {
