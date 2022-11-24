@@ -47,19 +47,29 @@
 <loading-panel-angular [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription" [msgType]="'Info'" [isShowFunFact]="true">
 </loading-panel-angular>
 <div class="col-md-12" style="margin-top: 20px;">
-    <kendo-grid [data]="gridData" [skip]="state.skip" [height]="450" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}"
-        [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" [columnMenu]="{sort:true}" (edit)="editHandler($event)" (cancel)="cancelHandler($event)" (save)="saveHandler($event)">
-        <ng-template kendoGridToolbarTemplate><button (click)="clearFilter()" class="k-button clearButton"><span
-                    class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS </button>
-            <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()" class="k-button clearButton"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
+    <kendo-grid class="adminalias" [data]="gridData" [skip]="state.skip" [height]="450" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}"
+                [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" [columnMenu]="{sort:true}" (edit)="editHandler($event)" (cancel)="cancelHandler($event)" (save)="saveHandler($event)">
+        <ng-template kendoGridToolbarTemplate>
+            <button (click)="clearFilter()" class="k-button clearButton">
+                <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS
+            </button>
+            <kendo-grid-spacer></kendo-grid-spacer>
+            <!--<button (click)="refreshGrid()" class="k-button clearButton"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>-->
         </ng-template>
         <kendo-grid-command-column title=" " width="100" [headerClass]="{'headerClass':true}" [columnMenu]="false">
             <ng-template kendoGridCellTemplate let-isNew="isNew">
-                <div class="text-center"><button id="command-icon" class="k-command-icon" kendoGridEditCommand><span
-                            class="k-icon k-i-edit k-icon-sm"></span></button></div>
-                <div class="text-center"><button id="command-icon" class="k-command-icon" kendoGridSaveCommand [disabled]="formGroup?.invalid"><span
-                            class="k-icon k-i-check k-icon-sm"></span></button><button id="command-icon" class="k-command-icon" kendoGridCancelCommand><span
-                            class="k-icon k-i-cancel-outline k-icon-sm"></span></button></div>
+                <div class="text-center">
+                    <button id="command-icon" class="k-command-icon" kendoGridEditCommand>
+                        <span class="k-icon k-i-edit k-icon-sm"></span>
+                    </button>
+                </div>
+                <div class="text-center">
+                    <button id="command-icon" class="k-command-icon" kendoGridSaveCommand [disabled]="formGroup?.invalid">
+                        <span class="k-icon k-i-check k-icon-sm"></span>
+                    </button><button id="command-icon" class="k-command-icon" kendoGridCancelCommand>
+                        <span class="k-icon k-i-cancel-outline k-icon-sm"></span>
+                    </button>
+                </div>
             </ng-template>
         </kendo-grid-command-column>
         <kendo-grid-column field="RQST_SID" title="Request ID" width="130" [headerClass]="{'headerClass':true}" [editable]="false">
@@ -135,4 +145,7 @@
             </ng-template>
         </kendo-grid-column>
     </kendo-grid>
+    <button (click)="refreshGrid()" class="k-button clearButton mrefresh11">
+        <span class="k-icon k-i-reload k-icon-md iconrefresh12"></span>
+    </button>
 </div>

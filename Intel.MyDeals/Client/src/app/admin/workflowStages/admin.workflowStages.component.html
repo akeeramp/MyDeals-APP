@@ -14,15 +14,15 @@
             [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
             filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)"
             (edit)="editHandler($event)" (remove)="removeHandler($event)" (cancel)="cancelHandler($event)"
-            (save)="saveHandler($event)" [columnMenu]="true" class="boxsize">
+            (save)="saveHandler($event)" [columnMenu]="true" class="boxsize adminalias">
             <ng-template kendoGridToolbarTemplate>
                 <!--Hiding DD functionality as its not working as expected, issues in DB-->
                 <button kendoGridAddCommand class="k-button addButton"
                     [hidden]="true"><span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RECORD
                 </button><button (click)="clearFilter()" class="k-button clearButton"><span
                         class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS </button>
-                <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()"
-                    class="k-button clearButton"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
+                <kendo-grid-spacer></kendo-grid-spacer>
+                <!--<button (click)="refreshGrid()" class="k-button clearButton"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>-->
             </ng-template>
             <kendo-grid-command-column title="Commands" width="150" [headerClass]="{'headerClass':true}"
                 [columnMenu]="false">
@@ -146,5 +146,8 @@
                     WorkFlow</button><button class='k-button' (click)="saveCancel()">Cancel</button>
             </kendo-dialog-actions>
         </kendo-dialog>
+        <button (click)="refreshGrid()" class="k-button clearButton mrefresh11">
+            <span class="k-icon k-i-reload k-icon-md iconrefresh12"></span>
+        </button>
     </div>
 </div>

@@ -1,5 +1,5 @@
-a.navbar-brand,
-a.navbar-brand:hover {
+.tender-modals a.navbar-brand,
+.tender-modals a.navbar-brand:hover {
     outline-color: #0071C5 !important;
     outline: #0071C5 !important;
 }
@@ -15,36 +15,34 @@ a.navbar-brand:hover {
     height: auto !important;
 }
 
-#secFooter {
+.tender-modals #secFooter {
     margin: 0 !important;
 }
 
-.modal-content {
+/*.modal-content {
     border-top: none
 }
 
 .tenderFolio-modal-window .modal-dialog {
     width: 600px;
     margin: auto
-}
+}*/
 
-
-
-.rmv-padding {
+.tender-modals .rmv-padding {
     padding: 0 !important
 }
 
-.navbar-logo {
+.tender-modals .navbar-logo {
     padding: 10px 5px !important;
     font-size: 25px;
     color: white
 }
 
-#secContainer {
+.tender-modals #secContainer {
     overflow: auto !important
 }
 
-.infospan {
+.tender-modals .infospan {
     margin-top: -135px !important;
     margin-left: 200px !important;
     width: 220px !important;
@@ -58,41 +56,41 @@ a.navbar-brand:hover {
     opacity: .86
 }
 
-.contract-detail-form {
+.tender-modals .contract-detail-form {
     padding: 2px 20px 0 20px !important
 }
 
-.red-color {
+.tender-modals .red-color {
     color: #e32
 }
 
-.label-font {
+.tender-modals .label-font {
     font-weight: bold !important;
     font-size: 14px !important
 }
 
-.width-height {
+.tender-modals .width-height {
     width: 470px !important;
     max-width: none !important;
     height: 39px !important
 }
 
-.width-style {
+/*.width-style {
     width: 515px !important;
     max-width: none !important
-}
+}*/
 
-.combobox,
-.inputtext {
+.tender-modals .combobox,
+.tender-modals .inputtext {
     padding: 0 !important
 }
 
-.combobox {
+.tender-modals .combobox {
     border-radius: 0 !important
 }
 
 
-.inputtext {
+.tender-modals .inputtext {
     margin-left: 0 !important;
     max-width: none !important;
     border-radius: 0 !important;
@@ -100,13 +98,13 @@ a.navbar-brand:hover {
     /*border-bottom: 2px solid #0071c5 !important*/
 }
 
-.kendoAlert {
+.tender-modals .kendoAlert {
     padding: 1.4em !important;
     font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif !important;
     color: #444444 !important;
 }
 
-li.k-button {
+/*li.k-button {
     border-radius: 1.071em;
     position: relative;
     color: #444444;
@@ -114,32 +112,32 @@ li.k-button {
     background-color: #fafafa;
     font-weight: normal !important;
     font-size: 16px
-}
+}*/
 
-li.k-button:hover {
-    border-color: #ebebeb;
-    background-color: #ebebeb
-}
+    /*li.k-button:hover {
+        border-color: #ebebeb;
+        background-color: #ebebeb
+    }*/
 
-.combobox:hover,
-.inputtext:hover,
-.division-name:hover {
+.tender-modals .combobox:hover,
+.tender-modals .inputtext:hover,
+.tender-modals .division-name:hover {
     background-color: #ffffff;
     border-color: #f5f5f5;
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%)
 }
 
-.k-window {
+.tender-modals .k-window {
     border-radius: 0 !important;
     text-align: center !important
 }
 
-.k-window-content {
+.tender-modals .k-window-content {
     width: max-content !important;
     overflow: hidden !important
 }
 
-.k-dialog-buttongroup {
+.tender-modals .k-dialog-buttongroup {
     padding: 0 !important;
     height: 63px;
     background-color: #fafafa;
@@ -147,91 +145,91 @@ li.k-button:hover {
     cursor: pointer
 }
 
-.k-dialog-buttongroup:hover {
-    background-color: #e8eaec
-}
+    .tender-modals .k-dialog-buttongroup:hover {
+        background-color: #e8eaec
+    }
 
-.tenderFolioAlert {
+.tender-modals .tenderFolioAlert {
     border: .5px solid #ed1c24 !important
 }
 
-.k-multiselect-wrap {
+.tender-modals .k-multiselect-wrap {
     border-radius: 0 !important;
     border-color: #f0f0f0 !important;
     border-bottom: 2px solid #0071c5 !important
 }
 
-.circleWithText:hover {
+.tender-modals .circleWithText:hover {
     color: #FFA300
 }
 
-.circleWithText:hover .textCircle {
+    .tender-modals .circleWithText:hover .textCircle {
+        background-color: #FFA300
+    }
+
+.tender-modals .activeCircle {
     background-color: #FFA300
 }
 
-.activeCircle {
-    background-color: #FFA300
-}
-
-.activeText {
+.tender-modals .activeText {
     color: #FFA300 !important
 }
 
-.blueBg {
+.tender-modals .blueBg {
     margin-top: 3px
 }
 
-.circleWithText {
+.tender-modals .circleWithText {
     height: 28px !important;
     padding-left: 10px
 }
 
-.circleWithText:hover {
-    color: #FFA300
-}
+    .tender-modals .circleWithText:hover {
+        color: #FFA300
+    }
 
-.textName {
+.tender-modals .textName {
     color: #00AEEF
 }
 
-.secBasicContainerWrapper {
+.tender-modals .secBasicContainerWrapper {
     height: auto !important;
 }
 
-.rmv-mrgn-btm {
+.tender-modals .rmv-mrgn-btm {
     margin-bottom: 0 !important
 }
 
-.tndr-btn {
+.tender-modals .tndr-btn {
     margin-left: 30px;
-    background-color: #00AEFF!important;
-    border-color: #367fa9!important;
+    background-color: #00AEFF !important;
+    border-color: #367fa9 !important;
     color: #fff !important;
 }
 
-.tndr-btn:hover {
-    background-color: #367fa9 !important;
-    border-color: #00aeef !important;
-}
+    .tender-modals .tndr-btn:hover {
+        background-color: #367fa9 !important;
+        border-color: #00aeef !important;
+    }
 
-.pdng-lft {
+.tender-modals .pdng-lft {
     padding-left: 15px !important
 }
 
-.kendo-alrt-btn {
+.tender-modals .kendo-alrt-btn {
     margin: auto;
     padding-bottom: 20px;
 }
 
-.mdl-cntnt-height {
+.tender-modals .mdl-cntnt-height {
     height: auto !important;
 }
 
-.pdng-btm {
+.tender-modals .pdng-btm {
     margin: 0 0 5px 0 !important
 }
 
-.primary-btn {
+.tender-modals .primary-btn {
     color: #ffffff;
     font-size: 15px !important;
     font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif !important;
@@ -241,11 +239,11 @@ li.k-button:hover {
     padding: 1.4em;
 }
 
-.primary-btn:hover {
-    background-color: #0071C5;
-}
+    .tender-modals .primary-btn:hover {
+        background-color: #0071C5;
+    }
 
-.secondary-btn {
+.tender-modals .secondary-btn {
     color: #444444;
     font-size: 15px !important;
     font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif !important;
@@ -255,18 +253,18 @@ li.k-button:hover {
     padding: 1.4em;
 }
 
-.secondary-btn:hover {
-    background-color: #ebebeb;
-}
+    .tender-modals .secondary-btn:hover {
+        background-color: #ebebeb;
+    }
 
-.dialog-action {
+.tender-modals .dialog-action {
     padding: 0px !important;
     height: 60px !important;
     border: 0px !important;
     gap: 0px !important;
 }
 
-.mycombox.k-combobox {
+.tender-modals .mycombox.k-combobox {
     /*border-bottom: none !important;*/
     border-radius: 0 !important
 }
@@ -276,46 +274,46 @@ li.k-button:hover {
     padding: 25px !important
 }*/
 
-.mycombox.k-combobox .k-dropdown-wrap .k-select {
-    background: #d3d3d326 !important;
-    width: 38px !important;
-    border-color: #f0f0f0 !important;
-}
+    .tender-modals .mycombox.k-combobox .k-dropdown-wrap .k-select {
+        background: #d3d3d326 !important;
+        width: 38px !important;
+        border-color: #f0f0f0 !important;
+    }
 
-.mycombox.k-combobox .k-dropdown-wrap {
-    border-color: #e6e6e6 !important;
-    color: #495057;
-    background-color: #ffffff;
-}
+    .tender-modals .mycombox.k-combobox .k-dropdown-wrap {
+        border-color: #e6e6e6 !important;
+        color: #495057;
+        background-color: #ffffff;
+    }
 
-.mycombox.k-combobox > .k-state-focused {
-    box-shadow: none !important
-}
+    .tender-modals .mycombox.k-combobox > .k-state-focused {
+        box-shadow: none !important
+    }
 
-.mycombox .k-icon {
+.tender-modals .mycombox .k-icon {
     color: #727578 !important;
 }
 
-.mycombox.k-combobox:focus-within {
+.tender-modals .mycombox.k-combobox:focus-within {
     border-color: #f0f0f0 !important;
     box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
 }
 
-.mycombox .k-icon:hover {
+.tender-modals .mycombox .k-icon:hover {
     color: #727578 !important
 }
 
-.tndr-btn.btn {
+.tender-modals .tndr-btn.btn {
     border-radius: 3px !important;
     border: 1px solid #367fa9 !important;
 }
 
-.inputtext.k-textbox:focus-within {
+.tender-modals .inputtext.k-textbox:focus-within {
     border-color: #f0f0f0 !important;
     box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
 }
 
-app-tender-folio .folioloader .ss-loading-overlay {
+.folioloader .ss-loading-overlay {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -324,19 +322,19 @@ app-tender-folio .folioloader .ss-loading-overlay {
     left: 0;
     background: rgb(255 255 255 / 42%);
 }
-kendo-combobox.combobox.mycombox.k-combobox.k-combobox.ng-dirty {
+.tender-modals kendo-combobox.combobox.mycombox.k-combobox.k-combobox.ng-dirty {
     border-bottom: 2px solid #0071c5 !important;
 }
 
-input.inputtext.k-textbox.ng-dirty.ng-touched.style-both-clas {
+.tender-modals input.inputtext.k-textbox.ng-dirty.ng-touched.style-both-clas {
     border-bottom: 2px solid #0071c5 !important;
 }
 
-input.inputtext.style-both-clas {
+.tender-modals input.inputtext.style-both-clas {
     border-color: #e6e6e6 !important;
 }
 
-.mycombox.k-combobox .k-clear-value {
+.tender-modals .mycombox.k-combobox .k-clear-value {
     visibility: visible !important;
     background: #dbdbdb !important;
     border-radius: 18px !important;
@@ -350,16 +348,16 @@ input.inputtext.style-both-clas {
     opacity: 1 !important;
 }
 
-kendo-multiselect.division-name.style-both-clas.k-widget.k-multiselect.ng-valid.ng-touched.ng-dirty {
+.tender-modals kendo-multiselect.division-name.style-both-clas.k-widget.k-multiselect.ng-valid.ng-touched.ng-dirty {
     border-bottom: 2px solid #0071c5 !important;
 }
 
-.style-both-clas .k-multiselect-wrap {
+.tender-modals .style-both-clas .k-multiselect-wrap {
     border-color: #e6e6e6 !important;
     box-shadow: none !important
 }
 
-.style-both-clas.k-multiselect .k-multiselect-wrap li.k-button {
+..tender-modals style-both-clas.k-multiselect .k-multiselect-wrap li.k-button {
     float: left !important;
     font-size: 13px !important;
     border-radius: 1.071em !important;

@@ -912,6 +912,11 @@ kendo-window.dashboard-kendo-window.process-search.k-window kendo-window-titleba
     padding: 0 !important;
 }
 
+.mainBodyStyle:has(.process-search) {
+    position: fixed !important;
+    height: 100%;
+}
+
 kendo-dialog.kit-name-popup .k-window {
     width: 600px;
     border-radius: 0;

@@ -14,17 +14,17 @@
                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
                     filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)"
                     (edit)="editHandler($event)" (remove)="removeHandler($event)" (cancel)="cancelHandler($event)"
-                    (save)="saveHandler($event)" [columnMenu]="true" #workflow_grid>
+                    (save)="saveHandler($event)" [columnMenu]="true" #workflow_grid class="adminalias">
             <ng-template kendoGridToolbarTemplate>
                 <button kendoGridAddCommand class="k-button addButton">
                     <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RECORD
                 </button><button (click)="clearFilter()" class="k-button clearButton">
                     <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS
                 </button>
-                <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()"
-                                                               class="k-button clearButton">
+                <kendo-grid-spacer></kendo-grid-spacer>
+                <!--<button (click)="refreshGrid()" class="k-button clearButton">
                     <span class="k-icon k-i-reload k-icon-md"></span>Refresh
-                </button>
+                </button>-->
             </ng-template>
             <kendo-grid-command-column title="Commands" width="150" [headerClass]="{'headerClass':true}"
                                        [columnMenu]="false">
@@ -104,7 +104,7 @@
                     </ng-template>
                     <kendo-combobox [placeholder]="'Select Obj Type'" #OBJ_TYPE_DdlTooltip="ngbTooltip"
                                     [data]="distinctObjType" [formControl]="formGroup.get('OBJ_TYPE_SID')"
-                                    [ngbTooltip]="tipOBJ_TYPE" 
+                                    [ngbTooltip]="tipOBJ_TYPE"
                                     tooltipClass="toolTipReq" placement="top" container="body" triggers="manual" [autoClose]="false"
                                     [clearButton]="false" textField="Value" valueField="Key" [valuePrimitive]="true">
                     </kendo-combobox>
@@ -124,10 +124,10 @@
                                         [clearButton]="false" textField="Value" valueField="Key" [valuePrimitive]="true">
                         </kendo-combobox>
                     </div>
-                    <div *ngIf="(formGroup.value.OBJ_TYPE_SID == '1' || formGroup.value.OBJ_TYPE_SID == '2' || formGroup.value.OBJ_TYPE_SID == '3')" 
+                    <div *ngIf="(formGroup.value.OBJ_TYPE_SID == '1' || formGroup.value.OBJ_TYPE_SID == '2' || formGroup.value.OBJ_TYPE_SID == '3')"
                          [ngClass]="{'disabledObjSetTypeDropdown': formGroup.value.OBJ_TYPE_SID.toString() == '1' || formGroup.value.OBJ_TYPE_SID.toString() == '2' || formGroup.value.OBJ_TYPE_SID.toString() == '3'}">
                         <kendo-combobox [placeholder]="'All_Deals'"
-                                        [data]="distinctObjSetTypeCd" 
+                                        [data]="distinctObjSetTypeCd"
                                         [clearButton]="false" textField="Value" valueField="Key" [valuePrimitive]="true">
                         </kendo-combobox>
                     </div>
@@ -211,6 +211,9 @@
                 </ng-template>
             </kendo-grid-column>
         </kendo-grid>
+        <button (click)="refreshGrid()" class="k-button clearButton mrefresh11">
+            <span class="k-icon k-i-reload k-icon-md iconrefresh12"></span>
+        </button>
         <kendo-dialog *ngIf="isDialogVisible" class="workflow-delete-popup">
             <h3 class="kendo-dialog-message confirmationTitle">Delete confirmation</h3>
             <p class="kendo-dialog-message">{{errorMsg}}</p>
