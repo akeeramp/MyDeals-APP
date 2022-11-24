@@ -127,6 +127,7 @@ export class AutoFillComponent {
     OnGeoChange(elem: string, val: Array<string>) {
         this.geos = val;
         this.geoValues = val;
+        this.isMultipleGeosSelected = (this.geos.length > 1);
         if (val.length > 1) {
             this.isMultipleGeosSelected = true;
         }

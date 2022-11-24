@@ -256,6 +256,8 @@ export class dealEditorComponent {
     onTabSelect(e: SelectEvent) {
         e.preventDefault();
         if (e.title != undefined) {
+            this.searchFilter = "";
+            this.clearSearchGrid();
             this.selectedTab = e.title;
             var group = this.groups.filter(x => x.name == this.selectedTab);
             if (group[0].isTabHidden) {

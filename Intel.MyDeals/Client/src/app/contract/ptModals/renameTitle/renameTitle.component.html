@@ -4,7 +4,7 @@
     </div>
     <div class="modal-body modalBlueBody" id="modal-body">
         <label class="pp-name-rename">{{mode}} Name:</label>
-        <input type="text" [(ngModel)]="TITLE" class="fntLg k-textbox ttlMod" />
+        <input type="text" [(ngModel)]="TITLE" class="fntLg k-textbox ttlMod"  (keydown.enter)="onSave()"/>
         <br />
 
         <div class="errContainer" [hidden]="hideErrMsg">
