@@ -5,6 +5,7 @@ import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, SelectAllCheckboxState } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
+import { SelectableSettings } from '@progress/kendo-angular-treeview';
 import * as _ from "underscore";
 import * as moment from 'moment';
 import * as lodash from "lodash";
@@ -38,7 +39,7 @@ export class ProductSelectorComponent {
         popoverConfig.openDelay = 500;   // milliseconds
         popoverConfig.closeDelay = 500; // milliseconds
     }
-
+    private selection: SelectableSettings = { mode: "multiple" };
     private productSelectionLevels: any = {};
     private pricingTableRow: any = {};
     private isLoading: boolean = false;
@@ -77,6 +78,9 @@ export class ProductSelectorComponent {
     private productSearchValues = [];
     private showSearchResults: boolean = false;
     private searchItems = [];
+    private selPrdLvlKeys: any[] = [];
+    private selPrdVerKeys: any[] = [];
+    private selRowIssuesKeys: any[] = [];
     private searchProcessed = false;
     private excludeProductMessage = "";
     private state: State = {
@@ -95,7 +99,7 @@ export class ProductSelectorComponent {
         group: [{field:'USR_INPUT'}],
         // Initial filter descriptor
         filter: {
-            logic: "and",
+            logic: "or",
             filters: [],
         },
     };
@@ -644,6 +648,9 @@ export class ProductSelectorComponent {
         }
     }
     async searchProduct(isSuggestProduct?) {
+        this.selPrdLvlKeys = [];
+        this.selRowIssuesKeys = [];
+        this.selPrdVerKeys = [];
         if (this.userInput == "") return [];
         this.isLoadingSearchProducts = true;
         this.isfilteredGridLoading = true;
@@ -985,6 +992,21 @@ export class ProductSelectorComponent {
 
         return verticals;
     }
+
+    onPrdChange(evt: any, field: string) {
+        this.filteredState.filter.filters = [];
+        if (evt && evt.length && evt.length > 0 && field) {
+            _.each(evt, itm => {
+                this.filteredState.filter.filters.push({
+                    field: field,
+                    operator: 'eq',
+                    value: itm
+                })
+            });
+        }
+        this.filteredGridData = process(this.suggestedProducts, this.filteredState);
+    }
+
     clearProducts(type?) {
         if (type != 'E') {
             if (this.addedProducts.length == 0) return;
@@ -1097,9 +1119,7 @@ export class ProductSelectorComponent {
             filters: filters
         });
     }
-    clickFilter() {
-        this.applyFilterAndGrouping();
-    }
+
     clearSearch() {
         this.selectPath(0, false);
     }

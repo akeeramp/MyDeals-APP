@@ -264,7 +264,6 @@ a.prdAnchor:hover {
     color: #fff;
     background-color: #01AEEF;
 }
-
 .prodSelector .leftNavFilter {
     background-color: #e7e7e8;
     height: calc(85vh - 390px);
@@ -273,13 +272,26 @@ a.prdAnchor:hover {
     font-family: 'Intel Clear', 'Arial';
 }
 
-.prodSelector .badge.upperBadge {
+.leftNavFilter kendo-treeview ul li span {
+    background-color: transparent !important;
+    color: #00AEEF !important;
+}
+
+.leftNavFilter kendo-treeview ul li span.k-in.k-state-selected {
+    background-color: rgba(2, 173, 255, 1) !important;
+    color: #fff !important;
+}
+.leftNavFilter kendo-treeview ul li span.k-in.k-state-focused {
+    box-shadow: none !important;
+}
+
+.leftNavFilter kendo-treeview ul li span span.badge.upperBadge {
     font-size: 10px;
     padding: 2px 4px;
-    background-color: #fff;
-    color: #666;
+    background-color: #fff !important;
+    color: #00AEEF !important;
     vertical-align: text-top;
-    font-weight: 200;
+    font-weight: 600;
     margin-left: 6px;
 }
 
@@ -307,17 +319,6 @@ a.prdAnchor:hover {
 
 .lblNotSelected {
     background: none;
-}
-
-.lblFilterProd>span {
-    font-size: 12px !important;
-    font-weight: 600 !important;
-    color: #00AEEF !important;
-}
-
-.lblFilterProd:before {
-    color: transparent !important;
-    width: 0px !important;
 }
 
 .prodSelector .filterGrp {
@@ -511,44 +512,6 @@ kendo-grid.select-suggest-pop-up {
 .selector.popover {
     font-size: 12px;
 }
-
-.k-treelist.product {
-    color: #fff;
-    font-size: 14px;
-    font-weight: 400;
-    font-family: 'Intel Clear';
-}
-
-.k-treelist .k-template {
-    color: #fff;
-    font-size: 14px;
-    font-weight: 400;
-    font-family: 'Intel Clear';
-}
-
-.k-treeview .k-icon.k-i-collapse {
-    color: #fff;
-    font-size: 14px;
-}
-
-.k-treeview .k-icon.k-i-expand {
-    color: #fff;
-    font-size: 14px;
-}
-
-.k-treeview .k-in.k-state-hover {
-    background: #01AEEF;
-    color: #fff;
-}
-
-.k-treeview .k-in.k-state-selected.k-state-focused {
-    background: #01AEEF;
-}
-
-.k-treeview .k-state-focused {
-    background: #01AEEF;
-}
-
 span.productSelector.prdAnchor.Good {
     color: #9bc600;
 }
@@ -914,6 +877,18 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
 
 .cus-them-padding {
     padding: 20px;
+}
+
+.lblFilterProd {
+    font-weight: 600 !important;
+    color: #00AEEF !important;
+    cursor: pointer;
+}
+
+.k-treeview .k-in {
+    cursor: pointer;
+    font-weight: 700 !important;
+    width: 100%;
 }
 
 @media screen and (max-height: 715px) {

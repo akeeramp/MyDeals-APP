@@ -49,40 +49,29 @@
                             <tr>
                                 <td style="width:20%;min-width:20px;max-width:200px">
                                     <div class="leftNavFilter height-100">
-                                        <div class="filterTitleUnderline" *ngIf="curRowIssues.length > 0">Products Found</div>
-                                        <div class="filterGrp">
-                                            <div class="filterContainer" uib-collapse="isPrdCollapsed">
-                                                <div *ngFor="let item of curRowIssues | orderBy: 'name'" style="max-height: 23px;" [ngClass]="{'lblSelected': item.selected, 'lblNotSelected': !item.selected}">
-                                                    <div *ngIf="item.cnt > 0">
-                                                        <input type='checkbox' (click)="clickFilter()" [(ngModel)]="item.selected" class='check ckSm with-sm-font' id="fltrPrdChk{{item.id}}" />
-                                                        <label for="fltrPrdChk{{item.id}}" class="lblFilterProd">
-                                                            <span ng-bind-html="item.name">{{item.name}}</span>
-                                                            <span class="badge upperBadge" *ngIf="item.status == 'Issue'">{{ item.cnt == 0 ? "?" : item.cnt }}</span>
-                                                        </label>
-                                                    </div>
-                                                </div>
+                                        <div class="row">
+                                            <div class="col">
+                                                <p class='filterTitleUnderline' *ngIf="curRowIssues.length > 0">Products Found</p>
+                                                <kendo-treeview class="lblFilterProd" [nodes]="curRowIssues" [(selectedKeys)]="selRowIssuesKeys" textField="name" [hasChildren]="false" selectBy="value" [kendoTreeViewSelectable]="selection" (selectedKeysChange)="onPrdChange($event,'USR_INPUT')">
+                                                    <ng-template kendoTreeViewNodeTemplate let-dataItem>
+                                                        {{dataItem.name }}
+                                                        <span class="badge upperBadge"> {{dataItem.cnt == 0 ? "?" : dataItem.cnt }}</span>
+                                                    </ng-template>
+                                                </kendo-treeview>
                                             </div>
                                         </div>
-                                        <div class="filterTitleUnderline" *ngIf="curRowLvl.length > 1">Product Level</div>
-                                        <div class="filterGrp" *ngIf="curRowLvl.length > 1">
-                                            <div class="filterContainer" uib-collapse="isLvlCollapsed">
-                                                <div *ngFor="let item of curRowLvl | orderBy: 'name'" style="max-height: 23px;" [ngClass]="{'lblSelected': item.selected, 'lblNotSelected': !item.selected}">
-                                                    <input type='checkbox' (click)="clickFilter()" [(ngModel)]="item.selected" class='check ckSm with-sm-font' id="fltrLvlChk{{item.id}}" />
-                                                    <label for="fltrLvlChk{{item.id}}" class="lblFilterProd">
-                                                        <span ng-bind-html="item.name"></span>
-                                                    </label>
-                                                </div>
+                                        <div class="row" *ngIf="curRowLvl.length>1">
+                                            <div class="col">
+                                                <p class="filterTitleUnderline">Product Level</p>
+                                                <kendo-treeview class="lblFilterProd" [nodes]="curRowLvl" [(selectedKeys)]="selPrdLvlKeys" textField="name" [hasChildren]="false" selectBy="value" [kendoTreeViewSelectable]="selection" (selectedKeysChange)="onPrdChange($event,'PRD_ATRB_SID')">
+                                                </kendo-treeview>
                                             </div>
                                         </div>
-                                        <div class="filterTitleUnderline" *ngIf="curRowCategories.length > 1">Product Vertical</div>
-                                        <div class="filterGrp" *ngIf="curRowCategories.length > 1">
-                                            <div class="filterContainer" uib-collapse="isCatCollapsed">
-                                                <div *ngFor="let item of curRowCategories | orderBy: 'name'" style="max-height: 23px;" [ngClass]="{'lblSelected': item.selected, 'lblNotSelected': !item.selected}">
-                                                    <input type='checkbox' (click)="clickFilter()" [(ngModel)]="item.selected" class='check ckSm with-sm-font' id="fltrCatChk{{item.id}}" />
-                                                    <label for="fltrCatChk{{item.id}}" class="lblFilterProd">
-                                                        <span ng-bind-html="item.name"></span>
-                                                    </label>
-                                                </div>
+                                        <div class="row" *ngIf="curRowCategories.length>1">
+                                            <div class="col">
+                                                <p class="filterTitleUnderline">Product Vertical</p>
+                                                <kendo-treeview class="lblFilterProd" [nodes]="curRowCategories" [(selectedKeys)]="selPrdVerKeys" textField="name" [hasChildren]="false" selectBy="value" [kendoTreeViewSelectable]="selection" (selectedKeysChange)="onPrdChange($event,'PRD_CAT_NM')">
+                                                </kendo-treeview>
                                             </div>
                                         </div>
                                     </div>
@@ -335,12 +324,12 @@
                             [resizable]="true" (dataStateChange)="dataStateChange($event)">
                             <kendo-grid-column width="65px" [columnMenu]="false">
                                 <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
-                                    <div class='dealTools'>
+                                    <div class='dealTools check-center'>
                                         <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="toggleSelectAll($event)">
                                     </div>
                                 </ng-template>
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                    <div class='dealTools'>
+                                    <div class='dealTools check-center'>
                                         <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="selectProduct(dataItem)" [(ngModel)]="dataItem.selected">
                                     </div>
                                 </ng-template>
