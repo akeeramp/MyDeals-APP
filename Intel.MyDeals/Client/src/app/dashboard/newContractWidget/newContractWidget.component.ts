@@ -80,6 +80,11 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
     }
     goToCreateContract(){
         if (this.angularEnabled){
+            const selectedCustomerValue  = (this.custIds && this.custIds.length > 0) ? this.custIds[0] : undefined;
+            /*=> Emitting "value/undefined" both since the behavioursubject's getvalue() method holds the last emitted value.
+                 So even when no customer is selected in dashboard , we're emitting "undefined". Thus at time of checking/listening
+                 it doesn't get last customer's value and instead get "undefined" which signifies no customer was selected. */   
+            this.newContractWidgetService.selectedCustomer.next(selectedCustomerValue);
             window.location.href = "#/contractdetails/0";
         } 
         else {

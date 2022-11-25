@@ -12,6 +12,7 @@ import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-gr
 import { process, State } from "@progress/kendo-data-query";
 import { GridUtil } from "../grid.util";
 import { DatePipe } from '@angular/common';
+import {NewContractWidgetService} from "../../dashboard/newContractWidget/newContractWidget.service"
 import * as _ from "underscore";
 const moment = _moment;
 
@@ -28,7 +29,7 @@ export class contractDetailsComponent {
     disableSave:boolean=false;
     constructor(private templatesSvc: templatesService,
         private contractDetailsSvc: contractDetailsService, private datePipe: DatePipe,
-        private loggerSvc: logger) {
+        private loggerSvc: logger,private newContractWidgetSvc :NewContractWidgetService ) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
@@ -157,19 +158,22 @@ export class contractDetailsComponent {
     successEventHandler() {
         this.uploadSuccess = true;
     }
+    updateDataOnCustomerChange(custObj){
+        this.contractData["Customer"] = custObj;
+        this.contractData["CUST_MBR_SID"] = custObj?.CUST_SID;
+        this.contractData["CUST_ACCNT_DIV_UI"] = this.contractData["CUST_ACCNT_DIV"] = "";
+        this.CUST_NM_DIV = [];
+        this.NO_END_DT = this.contractData.NO_END_DT = false;
+        this.noEndDate();//this.isCustomerSelected = custObj != undefined ? true : false;
+        this.updateCorpDivision(custObj.CUST_SID);
+        this.getCurrentQuarterDetails();
+        this.applyTodayDate();
+        this.BACK_DATE_RSN = this.NO_END_DT_RSN = undefined;// on change of the contract customer clear the backdate/end date reason values present if any
+    }
 
     onCustomerChange(evt: any) {
         if (evt != undefined) {
-            this.contractData["Customer"] = evt;
-            this.contractData["CUST_MBR_SID"] = evt?.CUST_SID;
-            this.contractData["CUST_ACCNT_DIV_UI"] = this.contractData["CUST_ACCNT_DIV"] = "";
-            this.CUST_NM_DIV = [];
-            this.NO_END_DT = this.contractData.NO_END_DT = false;
-            this.noEndDate();//this.isCustomerSelected = evt != undefined ? true : false;
-            this.updateCorpDivision(evt.CUST_SID);
-            this.getCurrentQuarterDetails();
-            this.applyTodayDate();
-            this.BACK_DATE_RSN = this.NO_END_DT_RSN = undefined;// on change of the contract customer clear the backdate/end date reason values present if any
+            this.updateDataOnCustomerChange(evt);
         }
     }
 
@@ -984,12 +988,17 @@ export class contractDetailsComponent {
                                     this.contractData = this.initContract();
                                     this.loadContractDetails();
                                     this.getCurrentQuarterDetails();
-                                     //loader disable
-                                     this.isLoading=false;
+                                    const selectedDashboardCustomer = this.newContractWidgetSvc.selectedCustomer.getValue();
+                                    if(selectedDashboardCustomer){
+                                        this.Customer = selectedDashboardCustomer;
+                                        this.updateDataOnCustomerChange(this.Customer);
+                                    }
+                                    //loader disable
+                                    this.isLoading=false;
                                 },(err)=>{
                                     this.loggerSvc.error("Unable to fetch template data","Error",err);
-                                     //loader disable
-                                     this.isLoading=false;
+                                    //loader disable
+                                    this.isLoading=false;
                                 });
                         }
                         else { //condition for existing contract
