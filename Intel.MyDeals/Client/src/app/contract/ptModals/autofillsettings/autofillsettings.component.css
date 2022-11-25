@@ -204,7 +204,14 @@
     border-color: #ced4da;
     color: #495057;
     background-color: #ffffff;
-    width: 185px !important
+    width: 146px !important;
+    height: 33px !important;
+    border-bottom: 2px solid #0071c5 !important;
+}
+
+.k-numerictextbox .k-numeric-wrap {
+    width: 146px !important;
+    height: 33px !important;
 }
 
 .af-setting-fixes #mat-button-toggle-98-button .mattoggelbutton .mat-button-toggle-button {
@@ -264,8 +271,7 @@
 .af-setting-fixes .auto-cs-btn {
     position: relative;
     width: 100%;
-    margin: 0;
-    margin-top: 15px;
+    margin: 1em !important;    
 }
 
 .af-setting-fixes .alter-star {
@@ -280,8 +286,10 @@
     padding: 20px;
 }
 
-.cdk-overlay-pane{
+.cdk-overlay-pane {
     height: auto !important;
+    max-width: 90vw !important;
+    width: 1700px !important;
 }
 
 #autoLoading .ss-loading-overlay .myLoader {
@@ -337,4 +345,15 @@
     color: #495057 !important;
     box-shadow: none !important;
     background-color: #ffffff !important;
+}
+
+.mat-dialog-container {
+    padding: 10px !important;
+    overflow: hidden !important;
+}
+
+.modalheader {
+    padding-top: 5px !important;
+    padding-bottom: 5px !important;
+    border-bottom: 1px solid #f4f4f4 !important;
 }

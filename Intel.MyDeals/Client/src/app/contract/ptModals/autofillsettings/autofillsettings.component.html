@@ -1,8 +1,8 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <loading-panel-angular id="autoLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription" [msgType]="msgType"></loading-panel-angular>
 <div class="container-fluid overflow autoFillSetting af-setting-fixes">
-    <div class="modal-content headingcontent totalcontent">
-        <div class="autofill-settings modal-header autofillhead" style="border:0px !important">
+    <div class="modal-content headingcontent totalcontent" cdkDrag cdkDragRootElement=".cdk-overlay-pane">
+        <div class="autofill-settings modal-header autofillhead">
             <div class="row" style="width:100%">
                 <div class="col">
                     <div class="cursorArea autofillHeader">
@@ -87,37 +87,37 @@
                             </div>
                             <br />
                         </div>
-                        <div class="col-md-12 firstrow" *ngIf="autofillData.isVistexHybrid == true">
+                        <div class="col-md-12 autofillrow" *ngIf="autofillData.isVistexHybrid == true">
                             <div class="row">
-                                <div class="col-md-6" style="margin-top:-5px;">
-                                    <div>
+                                <div class="col-md-6" style="margin-top:-5px;width: 225px!important">
+                                    <div style="padding-left:3px">
                                         <p class="fl label ng-binding" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;white-space:pre-line;text-align:left">Overarching Maximum Volume:</p>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
+                                <div class="col-md-6" style="margin-top:-5px;width: 168px!important">
                                     <div>
                                         <kendo-numerictextbox [(ngModel)]="autofillData.DEFAULT.REBATE_OA_MAX_VOL.value" [min]="0" [max]="2147483647" [autoCorrect]="true">
                                             <a style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;"></a>
                                         </kendo-numerictextbox>
-                                        <kendo-formerror><a style="color: #ff6e77; font-family:'Intel Clear'; font-size: 11px !important; font-weight:bold !important">{{opValidMsg}}</a></kendo-formerror>
+                                        <kendo-formerror><a style="color: #ff6e77; font-family:'Intel Clear'; font-size: 11px !important; font-weight:bold !important;width:168px !important">{{opValidMsg}}</a></kendo-formerror>
                                     </div>
                                 </div>
                             </div>
-
                         </div>
                         <div class="col-md-12 autofillrow">
                             <div class="row">
-                                <div class="col-md-6" style="margin-top:-5px;">
+                                <div class="col-md-6" style="margin-top:-5px;width: 225px!important">
                                     <div>
                                         <p class="fl opUiLabel autofillabel ng-binding" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;">Overarching Maximum Dollar($):</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
-                                    <div>
+                                    <div style="margin-top:-5px;width: 168px!important">
                                         <kendo-numerictextbox [(ngModel)]="autofillData.DEFAULT.REBATE_OA_MAX_AMT.value" [min]="0" [autoCorrect]="true" format="n2">
                                             <a style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;"></a>
                                         </kendo-numerictextbox>
                                     </div>
+                                    <kendo-formerror><a style="color: #ff6e77; font-family:'Intel Clear'; font-size: 11px !important; font-weight:bold !important;width: 168px!important">{{opValidMsgDollar}}</a></kendo-formerror>
                                 </div>
                             </div>
 

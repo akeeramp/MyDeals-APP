@@ -31,7 +31,8 @@ export class AutoFillComponent {
     private mkgvalues: Array<string> = [];
     private multSlctMkgValues: Array<string> = [];
     private parentKeys: any = [];
-    private opValidMsg: string = "";
+    private opValidMsg: string = "";  
+    private opValidMsgDollar: string = "";
     private isMultipleGeosSelected: boolean = false;
     private CurrPricingStrategy: any = {};
     private currPricingTable: any = {};
@@ -126,8 +127,7 @@ export class AutoFillComponent {
     }
     OnGeoChange(elem: string, val: Array<string>) {
         this.geos = val;
-        this.geoValues = val;
-        this.isMultipleGeosSelected = (this.geos.length > 1);
+        this.geoValues = val;        
         if (val.length > 1) {
             this.isMultipleGeosSelected = true;
         }
@@ -246,6 +246,7 @@ export class AutoFillComponent {
         this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.validMsg = this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.validMsg = "";
         this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.isError = this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.isError = false;
         this.opValidMsg = "";
+        this.opValidMsgDollar = "";
         if (this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value != null && // Can't fill in both values
             this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value !== "" &&
             this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value != null &&
@@ -259,7 +260,7 @@ export class AutoFillComponent {
             this.opValidMsg =
                 "Hybrid Deals require either Overarching Maximum Dollars or Overarching Maximum Volume be filled out.  Pick one.";
         } else if (this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === "0" || this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value === 0) {
-            this.opValidMsg = "Overarching Maximum Dollars must be blank or > 0";
+            this.opValidMsgDollar = "Overarching Maximum Dollars must be blank or > 0";
         } else if (this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === "0" ||
             this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value === 0) {
             this.opValidMsg = "Overarching Maximum Volume must be blank or > 0";
@@ -465,6 +466,7 @@ export class AutoFillComponent {
             this.geoValues = geoVals;
         }
         this.geos = geoVals;
+        this.isMultipleGeosSelected = (this.geos?.length > 1);
         this.marketSeglist = this.dropdownResponses['MRKT_SEG'];
         this.nonCorpMarketSeg = this.dropdownResponses['MRKT_SEG_NON_CORP'];
         _.each(this.marketSeglist, (key) => {

@@ -435,7 +435,7 @@ export class allDealsComponent {
             item.style.setProperty('white-space', newVal);
             item.style.setProperty("height", newH);
         });
-        this.grid.autoFitColumn(2);
+        this.grid?.autoFitColumn(2);
     }
     loadDealTypestab(data){
         for (let i = 0; i < data.length; i++) {

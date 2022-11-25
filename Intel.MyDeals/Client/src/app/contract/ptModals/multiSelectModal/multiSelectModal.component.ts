@@ -173,21 +173,31 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
 
     private isMkgChecked = (dataItem: any, index: string): CheckedState => {
         if (this.MkgcontainsItem(dataItem)) { return 'checked'; }
-        if (!this.isTgrRgn && dataItem.items != undefined && dataItem.items != null && dataItem.items.length > 0 && this.isIndeterminate(dataItem.items)) {
-            if (this.selectedChildCount === dataItem.items.length)
-                return 'checked';
-            else
-                return 'indeterminate';
-        }
-        return 'none';
+        else if (this.MkgisIndeterminate(dataItem.items)) { return 'indeterminate'; }
+        else { return 'none'; }
+
     };
 
     private MkgcontainsItem(item: any): boolean {
         if (this.mkgvalues != undefined && this.mkgvalues != null && this.mkgvalues.length > 0) {
-            return this.mkgvalues.indexOf(item[this.modalData.items.opLookupText]) > -1;
+            return this.mkgvalues.indexOf(item['DROP_DOWN']) > -1;
         }
         else
             return false;
+    }
+
+    private MkgisIndeterminate(items: any[] = []): boolean {
+        if (items != undefined && items != null) {
+            let idx = 0;
+            let item;
+            while (item = items[idx]) {
+                if (this.MkgisIndeterminate(item.items) || this.MkgcontainsItem(item)) {
+                    return true;
+                }
+                idx += 1;
+            }
+        }
+        return false;
     }
 
     onMarkSegChange(event: any) {
@@ -195,7 +205,17 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
     }
 
     onMktgValueChange(event: any) {
-        if (event && event.length > 0) {
+        var index;
+        _.each(this.marketSeglist, (key) => {
+            if (key.items != null) {
+                index = _.indexOf(this.marketSeglist, key);
+            }
+        })
+        if (_.indexOf(event, this.marketSeglist[index].DROP_DOWN) > 0 && event.length - 1 == this.marketSeglist[index].items.length) {
+            this.mkgvalues = null;
+            this.multSlctMkgValues = this.mkgvalues;
+        }
+        else if (event && event.length > 0) {
             var selectedList = event.join(",");
             if (_.indexOf(event, 'All Direct Market Segments') > 0 || (event.length == 1 && _.indexOf(event, 'All Direct Market Segments') == 0)) {
                 this.mkgvalues = ['All Direct Market Segments'];

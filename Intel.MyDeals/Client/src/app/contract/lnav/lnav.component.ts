@@ -858,6 +858,7 @@ export class lnavComponent {
         return val.replace(/_/g, '');
     }
     loadContractDetails(model: string) {
+        this.selectedTab = 0;
         const contractDetails_Map: contractIds = {
             Model: model,
             ps_id: 0,

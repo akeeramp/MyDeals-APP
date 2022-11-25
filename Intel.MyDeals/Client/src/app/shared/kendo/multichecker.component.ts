@@ -44,6 +44,7 @@ import * as _ from 'underscore';
     }
     #filterBar input{
         width:100%;
+        margin-left:1px !important;
     }
     #multiCheckFilter.k-textbox {
         font-size:14px;
@@ -132,15 +133,15 @@ export class MultiCheckFilterComponent implements AfterViewInit {
                 this.value = [];
             }
             else
-            this.value = this.value.filter(x => x !== item);
+                this.value = this.value.filter(x => x !== item);
         } else {
             this.value.push(item);
         }
-        if (this.value.includes('Select All') && item=='Select All') {
-           if(this.valueField != undefined && this.valueField != null && this.valueField != '') 
-           this.value = this.currentData.map(x => x[this.valueField]);
-           else 
-           this.value = this.currentData;
+        if (this.value.includes('Select All') && item == 'Select All') {
+            if (this.valueField != undefined && this.valueField != null && this.valueField != '')
+                this.value = this.currentData.map(x => x[this.valueField]);
+            else
+                this.value = this.currentData;
         }
         if (this.value.includes('Select All') && item !== 'Select All') {
             this.value = this.value.filter(x => x !== 'Select All');
@@ -157,18 +158,18 @@ export class MultiCheckFilterComponent implements AfterViewInit {
                 }
             }
         }
-        _.each(this.value,itm=>{
-         let operator='eq';
-         if (itm == null) {
-           operator = "isnull";
-         } else if (itm != undefined && itm.length == 0) {
-           operator = "isempty";
-         } 
-          filter.push({
-            field: this.field,
-            operator: operator,
-            value: itm
-          })
+        _.each(this.value, itm => {
+            let operator = 'eq';
+            if (itm == null) {
+                operator = "isnull";
+            } else if (itm != undefined && itm.length == 0) {
+                operator = "isempty";
+            }
+            filter.push({
+                field: this.field,
+                operator: operator,
+                value: itm
+            })
         });
         this.filterService.filter({
             filters: filter,
@@ -179,6 +180,7 @@ export class MultiCheckFilterComponent implements AfterViewInit {
         if (this.value.includes('Select All'))
             this.selectedCount--;
     }
+
 
     public onInput(e: any) {
         this.currentData = distinct([
