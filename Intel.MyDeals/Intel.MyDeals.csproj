@@ -898,7 +898,6 @@
     <Content Include="Client\src\app\admin\iCostProducts\directive\pct.queryBuilder.directive.html" />
     <Content Include="Client\src\app\admin\kendo_grid.css" />
     <Content Include="Client\src\app\admin\kendo_nongrid.css" />
-    <Content Include="Client\src\app\admin\meetComp\admin.bulkUploadMeetCompModal.component.css" />
     <Content Include="Client\src\app\admin\meetComp\admin.bulkUploadMeetCompModal.component.html" />
     <Content Include="Client\src\app\admin\meetComp\admin.meetComp.component.css" />
     <Content Include="Client\src\app\admin\meetComp\admin.meetComp.component.html" />
