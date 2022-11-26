@@ -1,0 +1,89 @@
+
+
+<link href="/Client/node_modules/handsontable/dist/handsontable.full.css" rel="stylesheet" />
+<link href="/Client/node_modules/handsontable-multi-select/dist/css/handsontable-multi-select.css" rel="stylesheet" />
+
+<form style="margin-top: 0;" class="form-horizontal" autocomplete="off">
+    <loading-panel-angular id="bulkuploadMeetComp" [show]="isBusy" [header]="spinnerMessageHeader" [isShowFunFact]="false"
+        [description]="spinnerMessageDescription" [msgType]="'Info'"></loading-panel-angular>
+
+    <div class="modal-content" id="meetCompModal"
+        style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none">
+        <div class="modal-header modalBlueBody">
+            <h3 id="modalTitle">Bulk Upload - Meet Comp</h3>
+            <i id="btnClose" class="intelicon-close" (click)="closeWindow()" title="Close this window"></i>
+        </div>
+        <div id="modalBodyDiv" class="modal-body" *ngIf="HasBulkUploadAccess">
+            <div id="extractMeetComp" *ngIf="meetComps.length <= 0">
+                <div class="row">
+                    <div class="col-md-11 notes">
+                        <span class="redbold">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Duplicate
+                            entries will be ignored. Your attachment will upload after clicking the "Upload Meet Comp"
+                            button.</span><br /><br />
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-11">
+                        <kendo-upload id="meetCompFileUpd" [restrictions]="fileUploadOptions.validation" [(ngModel)]="files" name="files"
+                            class="kuploadaction" (success)="successEventHandler($event)" (select)="onFileSelect()"
+                            (remove)="onFileRemove()" (error)="onFileUploadError()" (complete)="onFileUploadComplete()"
+                            [saveUrl]="uploadMeetCompUrl" [batch]="false" [autoUpload]="false"></kendo-upload>
+
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-8">
+                        <a download target="_blank" href="/api/FileAttachments/GetMeetCompTemplateFile">Click here to
+                            download the template</a>
+                    </div>
+                    <div class="col-md-3">
+                        <button (click)="uploadFile()" class="btn btn-primary" style="margin-left: 25px">Upload Meet
+                            Comp</button>
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="meetComps.length > 0">
+            <kendo-splitter orientation="vertical" style="height:230px"> 
+                 <kendo-splitter-pane>
+                    <hot-table id="meetCompExcel" [hotId]="hotId" [settings]="hotSettings" [data]= "meetComps" class="all-spread"></hot-table>
+                </kendo-splitter-pane>
+            </kendo-splitter>
+            </div>
+        </div>
+        <div class="modal-footer" *ngIf="meetComps.length > 0 && HasBulkUploadAccess">
+            <div class="form-group row action_btns">
+                <div class="col-md-12" style="right:10px">
+                    <button (click)="validateMeetComps()" class="btn btn-primary" style="margin-left: 15px">Validate
+                        Imported Meet Comp Data</button>
+                    <button class="btn" (click)="saveMeetComps()"
+                        [disabled]="IsSpreadSheetEdited" id="saveImportBtn"
+                        style="margin-left: 15px">Save Imported Data</button>
+                    <button (click)="closeWindow()" class="btn btn-primary" style="margin-left: 15px">Cancel /
+                        Close</button>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6" *ngIf="!HasBulkUploadAccess">
+            <div class="alert alert-danger">
+                <span>You don't have access to this page. Only DA user is allowed.</span>
+            </div>
+        </div>
+    </div>
+</form>
+
+<kendo-dialog (close)="closeAlert()" *ngIf="isAlert" id="meetCompAlert">
+    <p [innerHTML]='alertMsg'></p>
+    <kendo-dialog-actions>
+        <button kendoButton (click)="closeAlert()" themeColor="primary">OK</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+<kendo-dialog (close)="closeConfirmation()" *ngIf="isConfirmationReqd" id="confirmationMsg">
+    <p [innerHTML]='confirmationMsg'></p>
+    <kendo-dialog-actions>
+        <button kendoButton (click)="UploadMeetComps()" themeColor="primary">OK</button>
+        <button kendoButton (click)="closeConfirmation()" themeColor="primary">CANCEL</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+
+
+

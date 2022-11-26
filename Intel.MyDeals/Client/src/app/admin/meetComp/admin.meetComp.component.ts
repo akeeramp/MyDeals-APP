@@ -8,6 +8,8 @@ import { meetCompService } from './admin.meetComp.service';
 import * as _ from "underscore";
 import { ThemePalette } from "@angular/material/core";
 import { DatePipe } from "@angular/common";
+import { BulkUploadMeetCompModalComponent } from './admin.bulkUploadMeetCompModal.component';
+import { MatDialog } from '@angular/material/dialog';
 
 @Component({
     selector: "admin-meetcomp",
@@ -17,10 +19,11 @@ import { DatePipe } from "@angular/common";
 })
 
 export class meetCompComponent {
-    constructor(private meetCompSvc: meetCompService, public datepipe: DatePipe, private loggerSvc: logger) {
+    constructor(private meetCompSvc: meetCompService, public datepipe: DatePipe, private loggerSvc: logger, protected dialog: MatDialog) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+        
     }
     private HasBulkUploadAccess = (<any>window).usrRole == "DA";
     private isAccess = true;
@@ -43,6 +46,7 @@ export class meetCompComponent {
     private gridData: GridDataResult;
     private gridResult: Array<any> = [];
     private color: ThemePalette = "primary";
+    private bulkUploadModal: boolean = false;
     private state: State = {
         skip: 0,
         take: 10,
@@ -106,7 +110,12 @@ export class meetCompComponent {
         }
     }
     OpenBulkUploadMeetCompModal() {
-        console.log("This modal is yet to be implemented."); //Open Bulk Upload Meet Comp Modal is yet to be implemented.
+        this.dialog.open(BulkUploadMeetCompModalComponent, {
+            width: '750px',
+            disableClose: false,
+            panelClass: 'meetcomp-custom',
+    
+        });
     }
     custDropdowns() {
         this.meetCompSvc.getCustomerDropdowns().subscribe(res => {
