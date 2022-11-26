@@ -646,9 +646,6 @@ export class pricingTableEditorComponent {
             if (pgChg.length == 0) {
                 PTE_CellChange_Util.checkfn(changes, this.curPricingTable,this.columns);
             }
-            if (rebateType && rebateType.length > 0) {
-                PTE_CellChange_Util.rebateTypeChange(rebateType, this.curPricingTable);
-            }
             //for multi tier there can be more tiers to delete so moving the logic after all change 
             if (this.multiRowDelete && this.multiRowDelete.length > 0 && this.isDeletePTR) {
                 this.deleteRow(this.multiRowDelete);
@@ -952,19 +949,34 @@ export class pricingTableEditorComponent {
         });
         if (result) {
             await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
-            //this will help to reload the page with errors when we update
-            await this.loadPTE();
-            _.each(this.newPTR, (item) => {
+            this.warnings = false;
+            _.each(result["Data"]["PRC_TBL_ROW"], (item) => {
                 if (item.warningMessages !== undefined && item.warningMessages.length > 0) {
                     this.warnings = true;
                 }
             })
+            if (!this.warnings) {
+                //this will help to reload the page with errors when we update
+                await this.loadPTE();
+                _.each(this.newPTR, (item) => {
+                    if (item.warningMessages !== undefined && item.warningMessages.length > 0) {
+                        this.warnings = true;
+                    }
+                })
+            }
+            else {
+                let PTR = PTE_Load_Util.setPrdColor(result["Data"]["PRC_TBL_ROW"]);
+                this.getTemplateDetails();
+                //this is only while loading we need , need to modify as progress
+                PTR = PTE_Load_Util.pivotData(PTR, this.isTenderContract, this.curPricingTable, this.kitDimAtrbs);
+                this.generateHandsonTable(PTR);
+                this.dirty = true;
+            }
             if ((!this.warnings) && this.isTenderContract) {
                 this.tmDirec.emit('DE');
             } else if (this.warnings && this.isTenderContract) {
                 this.tmDirec.emit('');
             }
-            this.warnings = false;
         }
         else {
             this.loggerService.error("Something went wrong", 'Error');

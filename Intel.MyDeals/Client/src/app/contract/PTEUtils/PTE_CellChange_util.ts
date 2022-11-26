@@ -1123,15 +1123,6 @@ export class PTE_CellChange_Util {
             }
         });
     }
-
-    static rebateTypeChange(items: Array<any>, curPricingTable) {
-        _.each(items, (item) => {
-            if (item.new != undefined && (item.new == "MDF ACCRUAL"
-                || item.new == "MDF ACTIVITY" || item.new == "NRE ACCRUAL")) {
-                this.hotTable.setDataAtRowProp(item.row, 'PERIOD_PROFILE', '', 'no-edit');
-            }
-        });
-    }
     static rowDCID(): number {
         let ROWID = -100;
         let PTRCount = this.hotTable.countRows();
