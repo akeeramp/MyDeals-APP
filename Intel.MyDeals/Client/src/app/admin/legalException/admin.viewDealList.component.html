@@ -1,0 +1,60 @@
+﻿
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+
+<div class="panel-heading" style="background-color: #003C71;color:white">{{dialogTitle}} <i id="btnClose" class="intelicon-close float" (click)="close()" title="Close this window"></i> </div>
+<form style="margin-top: 0;" class="form-horizontal" autocomplete="off">
+
+    <div class="row" *ngIf="type=='dealList'">
+
+        <div *ngIf="dealList!=undefined" class="exceptionDetailsForm">
+            <div id="navigation">
+                <p class="panel panel-default">
+                <p style="padding-left: 50px; font-weight: 600;">
+                    The following deals have been assigned to PCT Exception Number {{ pctException}}:
+                </p>
+
+                <div class="panel-body">
+                    <div class="panel-body">
+                        <kendo-textarea [(ngModel)]="dealList" class="dealist-align" name="dealList" type="textarea" [rows]="55"  [readonly]="true"></kendo-textarea>
+                    </div>
+
+
+                </div>
+
+               
+                <div class="row footer">
+                    <div class="form-group row action_btns mat-footer">
+                        <div class="col-md-7">
+                            <div class="col-md-1">
+                                <button type="submit" class="btn btn-primary deal-btn" (click)="close()">Cancel/Close</button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            </div>
+    </div>
+        <div class="row" *ngIf="type!='dealList'">
+
+            <div>
+                <div id="navigation">
+                    <p class="panel panel-default">
+                    <p style="padding-left: 50px; font-weight:600;">
+                        Are you sure you would like to Delete this Legal Exception ?
+                    </p>
+                    
+                    <div class="row mt-5">
+                        <div class="col-md-2">
+                            <button type="button" class="btn btn-primary delete-btn" (click)="close()">Cancel</button>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="button" class="btn btn-primary delete-btn" (click)="delete()">Delete Legal Exception</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+   
+</form>
+

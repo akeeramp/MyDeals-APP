@@ -899,6 +899,14 @@
     <Content Include="Client\src\app\admin\kendo_grid.css" />
     <Content Include="Client\src\app\admin\kendo_nongrid.css" />
     <Content Include="Client\src\app\admin\meetComp\admin.bulkUploadMeetCompModal.component.html" />
+    <Content Include="Client\src\app\admin\legalException\admin.amendmentException.component.html" />
+    <Content Include="Client\src\app\admin\legalException\admin.compareExceptions.component.html" />
+    <Content Include="Client\src\app\admin\legalException\admin.downloadExceptions.component.html" />
+    <Content Include="Client\src\app\admin\legalException\admin.exceptionDetails.component.html" />
+    <Content Include="Client\src\app\admin\legalException\admin.legalException.component.css" />
+    <Content Include="Client\src\app\admin\legalException\admin.legalException.component.html" />
+    <Content Include="Client\src\app\admin\legalException\admin.viewDealList.component.html" />
+    <Content Include="Client\src\app\admin\legalException\admin.viewExceptions.component.html" />
     <Content Include="Client\src\app\admin\meetComp\admin.meetComp.component.css" />
     <Content Include="Client\src\app\admin\meetComp\admin.meetComp.component.html" />
     <Content Include="Client\src\app\admin\notifications\admin.notifications.component.css" />
@@ -923,6 +931,7 @@
     <Content Include="Client\src\app\admin\rules\admin.rulesSimulationModal.component.html" />
     <Content Include="Client\src\app\admin\testTenders\admin.testTenders.component.css" />
     <Content Include="Client\src\app\admin\testTenders\admin.testTenders.component.html" />
+    <Content Include="Client\src\app\admin\supportScript\admin.supportScript.component.html" />
     <Content Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.component.css" />
     <TypeScriptCompile Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.component.ts" />
@@ -934,6 +943,14 @@
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.manageEmployeeModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\ExcelColumnsconfig.util.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\meetComp\admin.bulkUploadMeetCompModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\legalException\admin.amendmentException.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\legalException\admin.compareExceptions.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\legalException\admin.downloadExceptions.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\legalException\admin.exceptionDetails.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\legalException\admin.legalException.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\legalException\admin.legalException.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\legalException\admin.viewDealList.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\legalException\admin.viewExceptions.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\meetComp\admin.meetComp.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\meetComp\admin.meetComp.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.ruleDetailsModal.component.ts" />
@@ -942,6 +959,8 @@
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.rulesSimulationModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\testTenders\admin.testTenders.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\testTenders\admin.testTenders.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\supportScript\admin.supportScript.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\supportScript\admin.supportScript.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.component.ts" />
     <Content Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.component.html" />
     <Content Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.component.css" />

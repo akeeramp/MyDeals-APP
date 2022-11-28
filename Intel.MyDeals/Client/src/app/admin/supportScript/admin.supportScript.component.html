@@ -1,0 +1,132 @@
+﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<div  [formGroup]="supportScriptDataForm">
+    <div style="margin-top:75px;">
+        <h2 class="col-md-12">Missing COST filler</h2>
+        <p style="margin-left: 15px;">Use the tool below to fill or extend COST gaps in the tool</p>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-2 dateRangeLabel">
+                Select Start Year Quarter:
+            </div>
+            <div class="col-md-2">
+               
+                <kendo-slider [min]="1" [max]="4" [largeStep]="1" [showButtons]="true"
+                              [vertical]="false" name="START_QTR" formControlName="START_QTR"
+                               class="before-ques sliderwidth"></kendo-slider>
+            </div>
+            <div class="col-md-2">
+
+                <kendo-numerictextbox [min]="supportScriptDataForm.get('MinYear').value" 
+                                      [max]="supportScriptDataForm.get('MaxYear').value" [autoCorrect]="false" format="#" formControlName="START_YR"
+                                      name="START_YR" (change)="startYearChange()" class="dateboxborder font-input" required>
+                </kendo-numerictextbox>
+                
+                <kendo-formerror class="col-md-10 p-0">
+                    {{ titleErrorMsg}}
+                </kendo-formerror>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-2 dateRangeLabel">
+                Select END Year Quarter:
+            </div>
+            <div class="col-md-2">
+               
+                <kendo-slider [min]="1" [max]="4" [smallStep]="1" [largeStep]="1" [showButtons]="true"
+                              [vertical]="false" [disabled]="NO_END_DT" name="END_QTR" formControlName="END_QTR"
+                               class="before-ques sliderwidth"></kendo-slider>
+            </div>
+            <div class="col-md-2">
+              
+                <kendo-numerictextbox [min]="supportScriptDataForm.get('MinYear').value"
+                                       [max]="supportScriptDataForm.get('MaxYear').value" [autoCorrect]="false" format="#" formControlName="END_YR"
+                                      (change) ="endYearChange()" name="END_YR"  class="dateboxborder font-input" required></kendo-numerictextbox>
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-2 font-weight-bold dateRangeLabel">
+                Enter Level4 Product Id(s):
+            </div>
+            <div class="col-md-5">
+                <kendo-textarea style="width: 100%; padding-right: 0px; box-shadow: none; border-color: #e7e7e7;" resizable="vertical"
+                                [rows]="4" name="NOTES" formControlName="NOTES"></kendo-textarea>
+
+                <kendo-formerror class="col-md-10 p-0">
+                    {{ errorNotes}}
+                </kendo-formerror>
+
+            </div>
+        </div>
+    </div>
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-2 font-weight-bold dateRangeLabel">
+                Fill NULL Cost ? :
+            </div>
+            <div class="col-md-9" style="height: 50px;">
+                <input style="height: 50px; width: 20px" type="checkbox" id="nullChk"  formControlName="isFillNullSelected">
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-2 font-weight-bold dateRangeLabel">
+            </div>
+            <div class="col-md-2 btnExec">
+                <div>
+                    <!--<button ng-click="executeCostFiller()" class="btn btn-primary">Execute COST Gap filler</button>-->
+                    <button class="btn btn-primary" type="button"
+                            (click)="executeCostFiller()">
+                        Execute COST Gap filler
+                    </button>
+                        
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <br />
+    <div class="row">
+        <div class="col-md-12">
+            <div class="col-md-2 font-weight-bold dateRangeLabel">
+            </div>
+            <div class="col-md-2 btnExec">
+                <div>
+                    <!--<button ng-click="executePostTest()" class="btn btn-primary">Execute Post Test</button>-->
+                    <button class="btn btn-primary" type="button"
+                            (click)="executePostTest()">
+                        Execute Post Test
+                    </button>
+
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+<style>
+    .opUiElement {
+        width: 95%
+    }
+
+    .dateRangeLabel {
+        font-weight: bold;
+    }
+
+    .btnExec {
+        padding-left: 25px;
+    }
+    .input-error {
+        border: red 1px solid;
+    }
+</style>

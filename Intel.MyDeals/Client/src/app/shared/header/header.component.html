@@ -177,7 +177,8 @@
                         <a tabindex="-1">Legal Configurations</a>
                         <ul class="dropdown-menu" style="width: 250px;">
                             <li ui-sref-active="active"><a href="#icostproducts">Legal Classification</a></li>
-                            <li><a href="Admin#/legalexceptions">Legal Exceptions</a></li>
+                            <!--<li><a href="Admin#/legalexceptions">Legal Exceptions</a></li>-->
+                            <li ui-sref-active="active"><a href="#legalException">Legal Exceptions</a></li>
                             <li ui-sref-active="active"><a href="#quoteLetter">Quote Letter</a></li>
                         </ul>
                     </li>
@@ -207,13 +208,14 @@
                         <a tabindex="-1">Admin Tools</a>
                         <ul class="dropdown-menu" style="width: 250px;">
                             <li *ngIf="(isDeveloper)">
-                            <li><a href="Admin#/AdminTools">Support Scripts</a></li>
+                                <!--<li><a href="Admin#/AdminTools">Support Scripts</a></li>-->
+                            <li ui-sref-active="active"><a ui-sref="supportScript">Support Scripts</a></li>  
                             <li ui-sref-active="active"><a ui-sref="testTenders">Test Tenders Data</a></li>
-                            <!--<li><a href="Admin#/testtenders">Test Tenders Data</a></li>-->
-                            <!--<li><a href="Admin#/dealmassupdate">Deal Mass Update</a></li>-->
-                            <li ui-sref-active="active"><a ui-sref="dealmassupdate">Deal Mass Update</a></li>
-                            <li><a href="Admin#/validateVistexR3Checks">Validate Deals for Vistex Push</a></li>
-                            <li ui-sref-active="active"><a href="#pushDealstoVistex">Push Deals to Vistex</a></li>
+                               <!-- <li><a href="Admin#/testtenders">Test Tenders Data</a></li>-->
+                                <!--<li><a href="Admin#/dealmassupdate">Deal Mass Update</a></li>-->
+                                <li ui-sref-active="active"><a ui-sref="dealmassupdate">Deal Mass Update</a></li>
+                                <li><a href="Admin#/validateVistexR3Checks">Validate Deals for Vistex Push</a></li>
+                                <li ui-sref-active="active"><a href="#pushDealstoVistex">Push Deals to Vistex</a></li>
                         </ul>
                     </li>
 

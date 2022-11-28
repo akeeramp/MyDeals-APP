@@ -37,7 +37,15 @@ import { adminRulesComponent } from '../admin/rules/admin.rules.component';
 import { RulesSimulationModalComponent } from '../admin/rules/admin.rulesSimulationModal.component';
 import { RuleDetailsModalComponent } from '../admin/rules/admin.ruleDetailsModal.component';
 import { adminVistexIntegrationLogComponent } from '../admin/vistex/admin.vistexIntegrationLog.component';
+import { adminsupportScriptComponent } from '../admin/supportScript/admin.supportScript.component';
+import { adminlegalExceptionComponent } from '../admin/legalException/admin.legalException.component'; 
+import { adminexceptionDetailsComponent } from '../admin/legalException/admin.exceptionDetails.component';
+import { adminamendmentExceptioncomponent } from '../admin/legalException/admin.amendmentException.component';
+import { admincompareExceptionscomponent } from '../admin/legalException/admin.compareExceptions.component';
+import { adminviewExceptionsComponent } from '../admin/legalException/admin.viewExceptions.component';
+import { adminviewDealListcomponent } from '../admin/legalException/admin.viewDealList.component';
 import { adminTestTendersComponent } from '../admin/testTenders/admin.testTenders.component';
+import { adminDownloadExceptionscomponent } from '../admin/legalException/admin.downloadExceptions.component'
 import { BulkUploadMeetCompModalComponent } from '../admin/meetComp/admin.bulkUploadMeetCompModal.component';
 
 export let adminComponents =[
@@ -82,5 +90,13 @@ export let adminComponents =[
     RuleDetailsModalComponent,
     adminVistexIntegrationLogComponent,
     adminTestTendersComponent,
-    BulkUploadMeetCompModalComponent
+    BulkUploadMeetCompModalComponent,
+    adminsupportScriptComponent,
+    adminlegalExceptionComponent,
+    adminexceptionDetailsComponent,
+    adminamendmentExceptioncomponent,
+    admincompareExceptionscomponent,
+    adminviewExceptionsComponent,
+    adminviewDealListcomponent,
+    adminDownloadExceptionscomponent
 ]

@@ -1,0 +1,26 @@
+﻿<div class="modal-content" id="ruleModal" style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none">
+    <div class="modal-header modalBlueBody">
+        <h3 id="modalTitle">Download Exceptions</h3>
+        <i id="btnClose" class="intelicon-close" (click)="ok()" title="Close this window"></i>
+    </div>
+
+    <div id="RulesDetailsBodyDiv" class="modal-body">
+        <div id="navigation">
+            <div><p class="divheader"></p></div>
+            <div class="col-md-6">
+                <p class="divHeader" style="margin-top: 10px;margin-left:0px"><input type="checkbox" [(ngModel)]="chkData['PreviousVersion']">&nbsp; Include Previous Versions</p>
+            </div>
+            <div div class="col-md-6">
+                <p class="divHeader" style="margin-top: 10px; margin-right:45px; float:right"><input type="checkbox" [(ngModel)]="chkData['DealList']">&nbsp; Include Deal List</p>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="form-group row action_btns">
+            <div class="col-md-12">
+                <button type="button" class="btn btn-primary" style="margin-left: 15px" (click)="ok()">Cancel</button>
+                <button type="submit" class="btn btn-primary" style="margin-left: 15px" (click)="download()">Download Selected Items</button>
+            </div>
+        </div>
+    </div>
+</div>

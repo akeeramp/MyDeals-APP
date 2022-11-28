@@ -378,7 +378,28 @@ angular
                     }
                 }
             })
+            .state("supportScript", {
+                url: '/supportScript',
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-support-script></admin-support-script>'
+                    }
+                }
+            })
+
+             .state("legalException", {
+                url: '/legalException',
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-legal-exception></admin-legal-exception>'
+                    }
+                }
+            })
+
             //********************* Admin route  ends here **************
+
 
             // ********************* Contract route  starts here ************** 
             .state("contractdetails", {

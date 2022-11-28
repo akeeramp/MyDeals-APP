@@ -1,0 +1,388 @@
+﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<div class="col-md-12 panel-heading">
+    <h2 class="header-css">Cost Test Legal Exceptions</h2>
+</div>
+<div class="col-md-{{colexpand}}">
+    <div class="kendo-grid-buttons admin-table-header align-padding">
+        <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" id="legalGrid"
+                    [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+                    [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
+                    [resizable]="true"
+                    [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)"
+                    [kendoGridExpandDetailsBy]="expandDetailsBy" [(expandedDetailKeys)]="expandedDetailKeys" (detailExpand)="detailExpand($event)">
+
+            <ng-template kendoGridToolbarTemplate>
+                <button  *ngIf="editAccess" kendoButton (click)="openCreateExceptionDialog()" class="k-button k-button-icontext">
+                    <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RECORD
+                </button>
+                <button (click)="clearFilter()" class="k-button k-button-icontext">
+                    <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTER
+                </button>
+                <button (click)="openCompareExceptionDialog()" class="k-button k-button-icontext">
+                    <span class="k-icon intelicon-related k-icon-md k-family"></span>COMPARE
+                </button>
+                <button *ngIf="editAccess" (click)="openCreateAmendmentExceptionDialog()" class="k-button k-button-icontext">
+                    <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD AMENDMENT
+                </button>
+                <button *ngIf="editAccess" (click)="download(legalGrid)" class="k-button k-button-icontext">
+                    <span class="intelicon-ms-excel-outlined k-icon-md k-family"></span>DOWNLOAD
+                </button>
+                <button (click)="Hideshow()" class="k-button k-button-icontext" style="font-size:30px;float:right">
+                    <span class="intelicon-show-results-outlined"></span>
+                </button>
+            </ng-template>
+            <kendo-grid-column *ngIf="editAccess" [headerClass]="{ 'text-center': true }" field="IS_SELECTED" title="selectAll" width="80" >
+                <ng-template kendoGridHeaderTemplate let-dataItem>
+                    <div class='leagalgridheader'>
+                        Select All<br />
+                        <input style="zoom: 1.2;"
+                               type="checkbox"
+                               title="selectAll" width="100"
+                               (change)="selectAllExceptionsChange($event)"
+                               [checked]="allStudentsSelected" />
+                    </div>
+                </ng-template>
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <input style="zoom: 1.2; margin-left: 7px;"
+                           type="checkbox" (click)="checkeditems(dataItem)"
+                           [checked]="dataItem.IS_SELECTED" />
+                </ng-template>
+            </kendo-grid-column>
+            <!--<kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="IS_SELECTED"  (change)="selectAllRows($event)"
+    [checked]="allRowsSelected" title="Select All">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <input type="checkbox" [checked]="dataItem.IS_SELECTED" />
+        </ng-template>
+    </kendo-grid-column>-->
+            <kendo-grid-column *ngIf="editAccess" [width]="200" [headerClass]="{ 'text-center': true }" [resizable]="false" [columnMenu]="false">
+               
+                <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
+                    <div class="row">
+                        <div class="col">
+                            <button type="button" class="legaliexgridbuttons" title='View' (click)="viewExceptionDetails(dataItem)">
+                                <span class="intelicon-search"></span>
+                            </button>
+                        </div>
+                        <div class="col" *ngIf="dataItem.DEALS_USED_IN_EXCPT == ''">
+                            <button type="button" class="legaliexgridbuttons intelicon-edit" title='Edit' (click)="openEditExceptionDialog(dataItem)">
+                            </button>
+                        </div>
+                        <div class="col" *ngIf="dataItem.DEALS_USED_IN_EXCPT != ''">
+                            <button type="button" class="legaliexgridbuttons intelicon-no-access noaccessex" title='Edit' (click)="openEditExceptionDialog(dataItem)">
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button type="button" [ngClass]="{'applyopacity': dataItem.DEALS_USED_IN_EXCPT == ''}" class="legaliexgridbuttons intelicon-reports-outlined" title='List of deals applied to this Exception' (click)="openDealListExceptionDialog(dataItem)">
+                            </button>
+                        </div>
+                        <div class="col">
+                            <button type="button" [ngClass]="{'applyopacity': dataItem.DEALS_USED_IN_EXCPT != ''}" class="legaliexgridbuttons intelicon-trash-solid dealTools" title='Only exception not applied to a deal can be Deleted' (click)="DeleteException(dataItem,rowIndex)">
+                            </button>
+                        </div>
+                    </div>
+                </ng-template>
+
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="120" field="ACTV_IND">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
+                </ng-template>
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Active </div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="110" field="IS_DSBL">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.IS_DSBL" disabled></mat-slide-toggle>
+                </ng-template>
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Hidden </div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="150" field="MYDL_PCT_LGL_EXCPT_SID" title="PCT Legal Exception Sid" filter="boolean" hidden="hidden">
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="150" field="PCT_EXCPT_NBR">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>PCT Exception No. </div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="150" field="VER_NBR">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Version No. </div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="250" field="INTEL_PRD">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Intel Product</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="SCPE" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Scope</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="PRC_RQST" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Price Request</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="COST" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Cost</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+           
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="150" field="PCT_LGL_EXCPT_STRT_DT" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Exception Start Date</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-filter let-column="column" let-filterService="filterService">
+                    <kendo-grid-date-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false" operator="eq"></kendo-grid-date-filter-menu>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="150" field="PCT_LGL_EXCPT_END_DT" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Exception End Date</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-filter let-column="column" let-filterService="filterService">
+                    <kendo-grid-date-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false" operator="eq"></kendo-grid-date-filter-menu>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="150" field="FRCST_VOL_BYQTR" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Forecasted Volume By Quarter</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="CUST_PRD" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Customer Product</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="MEET_COMP_PRD" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Comp Product</div>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="MEET_COMP_PRC" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Comp Price</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="150" field="DEALS_USED_IN_EXCPT" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Deal List</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="BUSNS_OBJ" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Business Object</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="PTNTL_MKT_IMPCT" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Potential Market Impact</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="OTHER" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Other</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="JSTFN_PCT_EXCPT" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Justification for PCT Expiry</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="EXCPT_RSTRIC_DURN" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Exceptions, Restrictions & Durations</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="RQST_CLNT" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Requesting Client</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="RQST_ATRNY" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Requesting Attorney</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="APRV_ATRNY" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Approving Attorney</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="DT_APRV" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Date Approved</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-filter let-column="column" let-filterService="filterService">
+                    <kendo-grid-date-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false" operator="eq"></kendo-grid-date-filter-menu>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="CHG_EMP_NAME" *ngIf="isHidden==true">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Entered By</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                       [filterService]="filterService" [data]="parentdistinctPrimitive(column.field)"></multicheck-filter>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="CHG_DTM" hidden="hidden">
+                <ng-template kendoGridHeaderTemplate>
+                    <div class='isRequired leagalgridheader'>Entered Date</div>
+                </ng-template>
+                <ng-template kendoGridFilterMenuTemplate let-filter let-column="column" let-filterService="filterService">
+                    <kendo-grid-date-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false" operator="eq"></kendo-grid-date-filter-menu>
+                </ng-template>
+            </kendo-grid-column>
+            <ng-template kendoGridDetailTemplate let-dataItem="dataItem">
+                <kendo-grid [data]="childgridData" [pageSize]="childState.take" [skip]="childState.skip" id="legalDetailGrid"
+                            [sort]="childState.sort" [filter]="childState.filter" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
+                            [resizable]="true" [group]="childState.group" filterable="menu" [sortable]="true"
+                            (dataStateChange)="childDataStateChange($event)">
+                    <kendo-grid-command-column width="50" [headerClass]="{'headerClass':true}" [columnMenu]="false">
+                        <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
+                            <div class='dealTools' style="text-align: center;"><input type='checkbox' class='grid-link-checkbox with-font' id='lnkChk' [(ngModel)]='dataItem.IS_SELECTED' style='height: 17px;width: 17px; border: 2px solid;' (click)='selectItemChildGrid($event, dataItem)' /> </div>
+                        </ng-template>
+                    </kendo-grid-command-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="VER_NBR" title="Version No" width="100">
+                        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                            <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                               [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                        </ng-template>
+                        <ng-template kendoGridHeaderTemplate>
+                            <div class='isRequired leagalgridheader'> Version No. </div>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CHG_EMP_NAME" title="Version Created By" width="200">
+                        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                            <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                               [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                        </ng-template>
+                        <ng-template kendoGridHeaderTemplate>
+                            <div class='isRequired leagalgridheader'> Version Created By </div>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="MYDL_PCT_LGL_EXCPT_SID" width="200" hidden="hidden">
+                        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                            <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                               [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="VER_CRE_DTM" title="Version Created Date" width="300">
+                        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                            <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService">
+                            </date-range-filter>
+                        </ng-template>
+                        <ng-template kendoGridHeaderTemplate>
+                            <div class='isRequired leagalgridheader'>Version Created Date </div>
+                        </ng-template>
+                        <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
+                            <div [innerHTML]="stripMilliseconds(dataItem.CHG_DTM)"></div>
+                        </ng-template>
+                    </kendo-grid-column>
+                </kendo-grid>
+            </ng-template>
+        </kendo-grid>
+    </div>
+
+
+    <div kendoDialogContainer></div>
+
+
+</div>
+ 
+<div class="col-md-6">
+
+    <div class="panel-heading" style="background-color: #057bd5; margin-top: 7px; color: white">
+        View Exception Details
+        <i id="btnClose" class="intelicon-close float" (click)="closeViewException()" title="Close this window"></i>
+    </div>
+    <admin-view-exceptions [exdetails]="initExdetails" [childhidden]="childhidden"></admin-view-exceptions>
+</div>

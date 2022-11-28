@@ -1,0 +1,179 @@
+﻿
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+
+<form style="margin-top: 0;" class="form-horizontal" autocomplete="off">
+
+    <div class="row">
+
+        <div id="RulesDetailsBodyDiv" class="exceptionDetailsForm" *ngIf="exdetails!=undefined && childhidden==false">
+            <div id="navigation">
+                <div class="panel panel-default">
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;"><b>PCT Exception No</b></p>
+                                <div>
+                                    <kendo-textbox [readonly]="true"
+                                                   [(ngModel)]="exdetails.PCT_EXCPT_NBR" name="PCT_EXCPT_NBR" maxlength="10"></kendo-textbox>
+
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                &nbsp;
+                            </div>
+                            <div div class="col-md-4">
+                                <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;"><b>Version</b></p>
+                                <div>
+                                    <kendo-textbox [(ngModel)]="exdetails.VER_NBR" name="VER_NBR" [readonly]="true"></kendo-textbox>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div><p class="divHeader"><b>Intel Product</b></p></div>
+                    <div class="panel-body">
+                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.INTEL_PRD" name="INTEL_PRD" [readonly]="true"></kendo-textarea>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p class="divHeader" style="margin-top: 10px;margin-left:0px"><b>Active</b><input type="checkbox" class="checkbox-align" name="ACTV_IND" checked="checked" [(ngModel)]="exdetails.ACTV_IND"></p>
+                            </div>
+                            <div div class="col-md-4">
+                            </div>
+                            <div div class="col-md-4">
+                                <p class="divHeader" style="margin-top: 10px; float:right"><b>Hidden</b> <input type="checkbox" class="checkbox-align" name="IS_DSBL" [(ngModel)]="exdetails.IS_DSBL"></p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div><p class="divHeader"><b>Scope</b></p></div>
+                    <div class="panel-body">
+                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.SCPE" name="SCPE" [readonly]="true"></kendo-textarea>
+                    </div>
+
+                    <div><p class="divHeader"><b>Price Request</b></p></div>
+                    <div class="panel-body">
+                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.PRC_RQST" name="PRC_RQST" [readonly]="true"></kendo-textarea>
+                    </div>
+
+                    <div><p class="divHeader"><b>Cost</b></p></div>
+                    <div class="panel-body">
+                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.COST" name="COST" [readonly]="true"></kendo-textarea>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;"><b>Exception Start Date</b></p>
+                                <kendo-datepicker #picker [(ngModel)]="exdetails.PCT_LGL_EXCPT_STRT_DT" name="PCT_LGL_EXCPT_STRT_DT" style="width: 100%;" placeholder="To date" format="MM/dd/yyyy" calendarType="classic" class="datePickerWidth k-width" [readonly]="true">
+                                </kendo-datepicker>
+
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                            <div div class="col-md-4">
+                                <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;"><b>Exception End Date</b></p>
+                                <kendo-datepicker #picker [(ngModel)]="exdetails.PCT_LGL_EXCPT_END_DT" name="PCT_LGL_EXCPT_END_DT" style="width: 100%;" placeholder="To date" format="MM/dd/yyyy" calendarType="classic" class="datePickerWidth k-width" [readonly]="true">
+                                </kendo-datepicker>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div><p class="divHeader"><b>Forecasted Volume By Quarter</b></p></div>
+                    <div class="panel-body">
+                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.FRCST_VOL_BYQTR" name="FRCST_VOL_BYQTR" [readonly]="true"></kendo-textarea>
+                    </div>
+
+                    <div><p class="divHeader"><b>Customer Product</b></p></div>
+                    <div class="panel-body">
+                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.CUST_PRD" name="CUST_PRD" [readonly]="true"></kendo-textarea>
+                    </div>
+
+                    <div><p class="divHeader"><b>Comp Product</b></p></div>
+                    <div class="panel-body">
+                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.MEET_COMP_PRD" name="MEET_COMP_PRD" [readonly]="true"></kendo-textarea>
+                    </div>
+
+                    <div><p class="divHeader"><b>Comp Price</b></p></div>
+                    <div class="panel-body">
+                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.MEET_COMP_PRC" name="MEET_COMP_PRC" [readonly]="true"></kendo-textarea>
+                    </div>
+
+                    <div><p class="divHeader"><b>Business Object</b></p></div>
+                    <div class="panel-body">
+                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.BUSNS_OBJ" name="BUSNS_OBJ" [readonly]="true"></kendo-textarea>
+                    </div>
+
+                    <div><p class="divHeader"><b>Potential Market Impact</b></p></div>
+                    <div class="panel-body">
+                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.PTNTL_MKT_IMPCT" name="PTNTL_MKT_IMPCT" [readonly]="true"></kendo-textarea>
+                    </div>
+
+                    <div><p class="divHeader"><b>OTHER</b></p></div>
+                    <div class="panel-body">
+                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.OTHER" name="OTHER" [readonly]="true"></kendo-textarea>
+                    </div>
+
+                    <div><p class="divHeader"><b>Justification for PCT Expiry</b></p></div>
+                    <div class="panel-body">
+                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.JSTFN_PCT_EXCPT" name="JSTFN_PCT_EXCPT" [readonly]="true"></kendo-textarea>
+                    </div>
+
+                    <div><p class="divHeader"><b>Exceptions, Restrictions & Durations</b></p></div>
+                    <div class="panel-body">
+                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.EXCPT_RSTRIC_DURN" name="EXCPT_RSTRIC_DURN" [readonly]="true"></kendo-textarea>
+                    </div>
+
+                    <div><p class="divHeader"><b>Requesting Client</b></p></div>
+                    <div class="panel-body">
+                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.RQST_CLNT" name="RQST_CLNT" [readonly]="true"></kendo-textarea>
+                    </div>
+
+                    <div><p class="divHeader"><b>Requesting Attorney</b></p></div>
+                    <div class="panel-body">
+                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.RQST_ATRNY" name="RQST_ATRNY" [readonly]="true">`</kendo-textarea>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;"><b>Approving Attorney</b></p>
+                                <div><kendo-textarea type="textarea" rows="3" style="width:100%;margin-bottom: 0px; margin-left: 0px;" [(ngModel)]="exdetails.APRV_ATRNY" name="APRV_ATRNY" [readonly]="true"></kendo-textarea></div>
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                            <div div class="col-md-4">
+                                <p class="divHeader" required style="margin-bottom: 0px; margin-left: 0px;"><b>Date Approved</b></p>
+                                <kendo-datepicker #picker [(ngModel)]="exdetails.DT_APRV" style="width: 100%;" placeholder="To date" format="MM/dd/yyyy" name="DT_APRV" calendarType="classic" [readonly]="true" class="datePickerWidth k-width">
+                                </kendo-datepicker>
+
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel-body">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;"><b>Entered By</b></p>
+                                <div><kendo-textarea type="textarea" rows="3" readonly style="width:100%;margin-bottom: 0px; margin-left: 0px;" [(ngModel)]="exdetails.CHG_EMP_NAME" name="CHG_EMP_NAME" [readonly]="true"></kendo-textarea></div>
+                            </div>
+                            <div class="col-md-4">
+                            </div>
+                            <div div class="col-md-4">
+                                <p class="divHeader" style="margin-bottom: 0px; margin-left: 0px;"><b>Entered Date</b></p>
+                                <kendo-datepicker #picker [(ngModel)]="exdetails.CHG_DTM" style="width: 100%;" placeholder="To date" format="MM/dd/yyyy" calendarType="classic" class="datePickerWidth k-width" name="CHG_DTM" [readonly]="true">
+                                </kendo-datepicker>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</form>
+
