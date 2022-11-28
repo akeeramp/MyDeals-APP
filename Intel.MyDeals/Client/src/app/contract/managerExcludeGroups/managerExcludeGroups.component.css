@@ -3,8 +3,8 @@
 }
 
 .dealTag {
-    width:100%;
-    text-align:right;
+    width: 100%;
+    text-align: right;
 }
 
 .ssToolbarBtn.btn-save,
@@ -26,11 +26,11 @@
         cursor: not-allowed
     }
 
-    .ssToolbarBtn.btn-save.notdirty table tr td span.text {
+        .ssToolbarBtn.btn-save.notdirty table tr td span.text {
             font-size: 11px !important;
-            font-weight: 400 !important ;
+            font-weight: 400 !important;
             line-height: 1.25em !important
-    }
+        }
 
         .ssToolbarBtn.btn-save.notdirty table tr td,
         .ssToolbarBtn.notdirty table tr td i {
@@ -407,22 +407,22 @@ tr.k-alt.grey {
     margin-right: 8px !important;
 }
 
-.aligner-inputs i {
-    height: 100%;
-    font-size: 18px;
-    color: #00AEEF;
-    width: 30px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: #f9f9f9;
-}
+    .aligner-inputs i {
+        height: 100%;
+        font-size: 18px;
+        color: #00AEEF;
+        width: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f9f9f9;
+    }
 
-.aligner-inputs input {
-    width: 100%;
-    margin: 0;
-    border: none;
-}
+    .aligner-inputs input {
+        width: 100%;
+        margin: 0;
+        border: none;
+    }
 
 .kendo-grid-buttons.there-grid {
     width: 100% !important;
@@ -437,24 +437,25 @@ tr.k-alt.grey {
 
 .excl-DG-modal mat-dialog-container {
     background: #1a3e6f;
-    padding: 50px !important;
+    padding: 24px !important;
 }
+
 #GroupExclusionTab {
     margin-top: 28px;
     margin-left: 10px;
 }
 
-#GroupExclusionTab .k-tabstrip-items .k-item {
-    background: #fdfdfd;
-    background: -moz-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
-    background: -webkit-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
-    background: linear-gradient(to bottom, #fdfdfd 0%, #fff 100%);
-    color: #003C71 !important;
-    padding: 0 !important;
-    text-transform: none !important;
-    background-color: #fff;
-    border-bottom-width: 0
-}
+    #GroupExclusionTab .k-tabstrip-items .k-item {
+        background: #fdfdfd;
+        background: -moz-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
+        background: -webkit-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
+        background: linear-gradient(to bottom, #fdfdfd 0%, #fff 100%);
+        color: #003C71 !important;
+        padding: 0 !important;
+        text-transform: none !important;
+        background-color: #fff;
+        border-bottom-width: 0
+    }
 
     #GroupExclusionTab .k-tabstrip-items .k-state-active {
         background: -moz-linear-gradient(top, #fdfdfd 0%, #fff 100%);
@@ -470,15 +471,15 @@ tr.k-alt.grey {
         color: #00aeef !important;
     }
 
-#GroupExclusionTab .k-tabstrip-items .k-item .k-link:hover {
-    color: #00AEEF !important;
-}
+    #GroupExclusionTab .k-tabstrip-items .k-item .k-link:hover {
+        color: #00AEEF !important;
+    }
 
-#GroupExclusionTab .k-tabstrip-items .k-state-disabled {
-    position:absolute !important;
-    width: auto !important;
-    right: 15px !important;
-}
+    #GroupExclusionTab .k-tabstrip-items .k-state-disabled {
+        position: absolute !important;
+        width: auto !important;
+        right: 15px !important;
+    }
 
     #GroupExclusionTab > .k-tabstrip-items-wrapper > .k-tabstrip-items > li > .k-link, #GroupExclusionTab .k-tabstrip-items-wrapper ul {
         position: relative;
@@ -493,24 +494,30 @@ tr.k-alt.grey {
     font-family: 'Intel Clear' !important;
     top: 44px !important;
 }
+
 kendo-dialog-actions.popup-dialog {
     padding: 1.3em 0;
     width: 100%;
     background: #dededd;
     cursor: pointer;
 }
-kendo-dialog-actions.popup-dialog:hover {
-    background: #ebebeb;
-}
+
+    kendo-dialog-actions.popup-dialog:hover {
+        background: #ebebeb;
+    }
+
 .kendo-alrt-btn.popup-button {
     text-align: center !important;
 }
+
 .popup-box .k-content {
     padding: 10px !important;
 }
+
 .toggleSelect {
     background-color: #eeeeee !important;
 }
+
 .popup-box .k-window {
     border-radius: 0
 }
@@ -536,36 +543,45 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-
 .exclude-filter-style .k-filterable > .k-cell-inner {
     margin-right: -40px !important
 }
+
 .ss-loading-panel.ss-Info {
-    height:auto;
+    height: auto;
     margin-top: 20px !important;
     margin-left: 0% !important;
 }
+
 .grouping_grid_h {
     height: calc(100vh - 233px) !important;
 }
+
 .text_font_fix {
     color: #003c71 !important;
     font-weight: bold !important;
 }
+
 .k-grid.view_popup_height {
-   overflow:hidden;
+    height: calc(100vh - 591px);
 }
+
 .extra_box_padding mat-dialog-container {
     padding: 0 !important;
 }
+
 .extra_box_padding th.k-group-cell.k-header {
     background-color: #e7e7e8 !important;
     border-right: 1px solid #e6e6e6;
 }
+
 .extra_box_padding .k-grid-filter .k-icon.k-i-filter {
     color: #00AEEF !important;
     opacity: 1;
     font-size: 14px;
 }
-.extra_box_padding .k-grid-filter .k-icon.k-i-filter:hover {
+
+    .extra_box_padding .k-grid-filter .k-icon.k-i-filter:hover {
         color: #0071c5 !important;
-}
+    }
+
 .extra_box_padding mat-dialog-container kendo-grid kendo-grid-list table tbody tr.k-grid-norecords td {
     height: 383px;
     width: 792px;
@@ -576,26 +592,13 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-
     background-color: #fff !important;
 }
 
-.cdk-overlay-pane {
-    height: auto !important;
+.excl-DG-modal.cdk-overlay-pane {
     max-width: 95vw !important;
-    width: 1800px !important;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto !important;
 }
 
-.modal-body {
-    padding: 0 !important;
+.height-auto-child {
+    height: auto !important;
 }
-
-#childGrid .k-grid-content {
-    overflow: hidden !important;
-}
-
-.btn-warning {
-    color: #0071c5 !important;
-    background-color: #f39c12 !important;
-}
-
-.btn-primary:hover, .btn-primary:focus {
-        color: #1a3e6f !important;
-}
-
