@@ -271,8 +271,8 @@
 
 .af-setting-fixes .auto-cs-btn {
     position: relative;
-    width: 250px !important;
-    margin: 1em !important;    
+    width: 100%;
+    margin: 1em !important;
 }
 
 .af-setting-fixes .alter-star {
@@ -288,9 +288,7 @@
 }
 
 .cdk-overlay-pane {
-    height: auto !important;
-    max-width: 90vw !important;
-    width: 1700px !important;
+    height: auto !important;   
 }
 
 #autoLoading .ss-loading-overlay .myLoader {
@@ -353,15 +351,3 @@
     top: 60px !important;
     left: 34px;
 }
-
-/* removing because it's used as common css */
-/*.mat-dialog-container {
-    padding: 10px !important;
-    overflow: hidden !important;
-}
-
-.modal-header {
-    padding-top: 5px !important;
-    padding-bottom: 1px !important;
-    border-bottom: 1px solid #f4f4f4 !important;
-}*/
