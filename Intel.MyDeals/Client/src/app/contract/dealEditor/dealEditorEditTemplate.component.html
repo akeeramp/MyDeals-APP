@@ -76,7 +76,7 @@
         </div>
     </div>
 </div>
-<div *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'DENSITY')">
+<div class="tier-breakout" *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'DENSITY')">
     <div *ngFor="let fieldDet of fields">
         <div *ngIf="fieldDet.title === 'Tier'" class="col-md-2 tierHeader">{{fieldDet.title}}</div>
         <div *ngIf="fieldDet.title === 'Band' || fieldDet.title === 'Rate'" class="col-md-3 tierHeader">{{fieldDet.title}}</div>
@@ -84,13 +84,13 @@
     </div>
     <div *ngFor="let key Of tierArray(in_DataItem.TIER_NBR); let i = index">
         <div class="col-md-12 rowBorder">
-            <div *ngFor="let fieldDet of fields">
-                <div *ngIf="fieldDet.field == 'TIER_NBR'">
+            <div class="parent-tier-child" *ngFor="let fieldDet of fields">
+                <div class="tier-child-one" *ngIf="fieldDet.field == 'TIER_NBR'">
                     <div class="col-md-2 topPadding">
                         <span>{{in_DataItem[fieldDet.field][key]}}</span>
                     </div>
                 </div>
-                <div *ngIf="fieldDet.field == 'DENSITY_BAND' || fieldDet.field == 'DENSITY_RATE'">
+                <div class="tier-child-two" *ngIf="fieldDet.field == 'DENSITY_BAND' || fieldDet.field == 'DENSITY_RATE'">
                     <div class="col-md-3 topPadding">
                         <div *ngFor="let keyBand Of tierArray(in_DataItem.NUM_OF_DENSITY); let band = index">
                             <div *ngIf="fieldDet.field == 'DENSITY_RATE'">
@@ -104,17 +104,17 @@
                                 </span>
                             </div>
                             <div *ngIf="fieldDet.field == 'DENSITY_BAND'">
-                                <span class="displayBlock rowBorder" [style.height.px]="30">
+                                <span class="displayBlock rowBorder" [style.height.px]="47">
                                     {{in_DataItem[fieldDet.field]['8___' + (band+1)]}}
                                 </span>
                             </div>
                         </div>
                     </div>
                 </div>
-                <div *ngIf="fieldDet.field == 'STRT_PB' || fieldDet.field == 'END_PB'">
+                <div  class="tier-child-three" *ngIf="fieldDet.field == 'STRT_PB' || fieldDet.field == 'END_PB'">
                     <div class="col-md-2 topPadding">
                         <div *ngIf="(fieldDet.field == 'STRT_PB' && (i>0 || in_DataItem['HAS_TRACKER'] == '1')) || (fieldDet.field =='END_PB' && in_DataItem['HAS_TRACKER'] == '1' && i != ((in_DataItem['NUM_OF_TIERS']/in_DataItem['NUM_OF_DENSITY'])-1))">
-                            <span class="displayBlock densityPadding" [style.height.px]="30">
+                            <span class="displayBlock densityPadding" [style.height.px]="47">
                                 {{in_DataItem[fieldDet.field][key]}}
                             </span>
                         </div>

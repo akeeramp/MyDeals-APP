@@ -578,3 +578,11 @@ i.fa.undo-redo-style.dirty {
     position: relative !important;
     padding: 4px !important
 }
+
+.htCommentsContainer .htComments {
+    left: 354px !important;
+}
+
+.added-tender .htCommentsContainer .htComments {
+    left: 54px !important;
+}

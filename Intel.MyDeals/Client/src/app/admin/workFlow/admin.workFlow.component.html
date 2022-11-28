@@ -14,7 +14,7 @@
                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
                     filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)"
                     (edit)="editHandler($event)" (remove)="removeHandler($event)" (cancel)="cancelHandler($event)"
-                    (save)="saveHandler($event)" [columnMenu]="true" #workflow_grid class="adminalias">
+                    (save)="saveHandler($event)" [columnMenu]="true" #workflow_grid>
             <ng-template kendoGridToolbarTemplate>
                 <button kendoGridAddCommand class="k-button addButton">
                     <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RECORD
@@ -22,9 +22,9 @@
                     <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS
                 </button>
                 <kendo-grid-spacer></kendo-grid-spacer>
-                <!--<button (click)="refreshGrid()" class="k-button clearButton">
+                <button (click)="refreshGrid()" class="k-button clearButton">
                     <span class="k-icon k-i-reload k-icon-md"></span>Refresh
-                </button>-->
+                </button>
             </ng-template>
             <kendo-grid-command-column title="Commands" width="150" [headerClass]="{'headerClass':true}"
                                        [columnMenu]="false">
@@ -211,9 +211,9 @@
                 </ng-template>
             </kendo-grid-column>
         </kendo-grid>
-        <button (click)="refreshGrid()" class="k-button clearButton mrefresh11">
+        <!--<button (click)="refreshGrid()" class="k-button clearButton mrefresh11">
             <span class="k-icon k-i-reload k-icon-md iconrefresh12"></span>
-        </button>
+        </button>-->
         <kendo-dialog *ngIf="isDialogVisible" class="workflow-delete-popup">
             <h3 class="kendo-dialog-message confirmationTitle">Delete confirmation</h3>
             <p class="kendo-dialog-message">{{errorMsg}}</p>

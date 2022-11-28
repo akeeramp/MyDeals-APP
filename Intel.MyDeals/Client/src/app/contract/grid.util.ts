@@ -281,7 +281,7 @@ export class GridUtil {
         return tmplt;
     }
     static uiControlScheduleWrapperDensity = function (passedData) {
-        var tmplt = '<div class="col-md-12">';
+        var tmplt = '<div class="row">';
         var fields = PTE_Config_Util.densityFields;
 
         tmplt += '<div class="col-md-12 rowHeight">';

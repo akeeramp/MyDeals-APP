@@ -575,3 +575,14 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-
     justify-content: center;
     background-color: #fff !important;
 }
+
+.excl-DG-modal.cdk-overlay-pane {
+    max-width: 95vw !important;
+    margin-left: auto;
+    margin-right: auto;
+    height: auto!important;
+}
+
+.height-auto-child {
+    height: auto!important;
+}

@@ -169,7 +169,7 @@
                             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" (cellClose)="cellCloseHandler($event)"
                             filterable="menu" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)" (filterChange)="filterChange($event)"
                             class="opUiContainer dashboard op-grid k-grid k-widgetGr k-reorderable k-editable k-grid-lockedcolumns md"
-                            style="width: 320px; height: calc(100vh - 350px);" data-role="grid">
+                            style="width: 320px; height: calc(100vh - 315px);" data-role="grid">
                     <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" field="{{column.field}}"
                                        [locked]="column.locked == true" width="{{ (column.field == 'CAP_STRT_DT' || column.field == 'CAP_END_DT' || column.field == 'YCS2_START_DT' || column.field == 'YCS2_END_DT') ? column.width + 30 : column.width }}" [filterable]="column.filterable" [sortable]="column.sortable">
                         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">

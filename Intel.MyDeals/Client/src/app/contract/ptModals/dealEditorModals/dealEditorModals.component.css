@@ -160,7 +160,7 @@
     float: right;
 }
 
-.ss-loading-overlay {
+#EndCustomerLoading .ss-loading-overlay {
     background: transparent !important;
 }
 

@@ -347,7 +347,14 @@
     background-color: #ffffff !important;
 }
 
-.mat-dialog-container {
+.geo-desc {
+    position: absolute;
+    top: 60px !important;
+    left: 34px;
+}
+
+/* removing because it's used as common css */
+/*.mat-dialog-container {
     padding: 10px !important;
     overflow: hidden !important;
 }
@@ -356,4 +363,4 @@
     padding-top: 5px !important;
     padding-bottom: 5px !important;
     border-bottom: 1px solid #f4f4f4 !important;
-}
+}*/

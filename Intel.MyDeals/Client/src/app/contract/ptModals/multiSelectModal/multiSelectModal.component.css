@@ -17,7 +17,7 @@
     width:100% !important;
 }
 
-.ss-loading-panel {
+#multiSelectModalLoading .ss-loading-panel {
     margin-top: 15% !important;
     margin-left: 15% !important;
 }

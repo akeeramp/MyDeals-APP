@@ -420,3 +420,7 @@ kendo-datepicker.dateclass:focus-within {
     box-shadow: inset 0 0 0 3px rgb(194 196 199 / 71%) !important;
 }
 */
+
+.division-text {
+    font-size: 14px;
+}
