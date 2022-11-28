@@ -7,7 +7,7 @@
 </div>
 <div class="col-md-{{colexpand}}">
     <div class="kendo-grid-buttons admin-table-header align-padding">
-        <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" id="legalGrid"
+        <kendo-grid #legalGrid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" id="legalGrid"
                     [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                     [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
                     [resizable]="true"
@@ -15,22 +15,22 @@
                     [kendoGridExpandDetailsBy]="expandDetailsBy" [(expandedDetailKeys)]="expandedDetailKeys" (detailExpand)="detailExpand($event)">
 
             <ng-template kendoGridToolbarTemplate>
-                <button  *ngIf="editAccess" kendoButton (click)="openCreateExceptionDialog()" class="k-button k-button-icontext">
+                <button  *ngIf="editAccess" kendoButton (click)="openCreateExceptionDialog()" class="k-button k-button-icontext legalheader-align">
                     <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RECORD
                 </button>
-                <button (click)="clearFilter()" class="k-button k-button-icontext">
+                <button (click)="clearFilter()" class="k-button k-button-icontext legalheader-align">
                     <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTER
                 </button>
-                <button (click)="openCompareExceptionDialog()" class="k-button k-button-icontext">
+                <button (click)="openCompareExceptionDialog()" class="k-button k-button-icontext legalheader-align">
                     <span class="k-icon intelicon-related k-icon-md k-family"></span>COMPARE
                 </button>
-                <button *ngIf="editAccess" (click)="openCreateAmendmentExceptionDialog()" class="k-button k-button-icontext">
+                <button *ngIf="editAccess" (click)="openCreateAmendmentExceptionDialog()" class="k-button k-button-icontext legalheader-align">
                     <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD AMENDMENT
                 </button>
-                <button *ngIf="editAccess" (click)="download(legalGrid)" class="k-button k-button-icontext">
+                <button *ngIf="editAccess" (click)="download(legalGrid)" class="k-button k-button-icontext legalheader-align">
                     <span class="intelicon-ms-excel-outlined k-icon-md k-family"></span>DOWNLOAD
                 </button>
-                <button (click)="Hideshow()" class="k-button k-button-icontext" style="font-size:30px;float:right">
+                <button (click)="Hideshow()" class="k-button k-button-icontext legalheader-align" style="font-size:30px;float:right">
                     <span class="intelicon-show-results-outlined"></span>
                 </button>
             </ng-template>
