@@ -788,7 +788,12 @@ export class contractDetailsComponent {
         if (this.Customer) {
             this.disableCustomer = true;
         }
-        this.showDeleteButton = true;
+        if (this.contractData.HAS_TRACKER === "1") {
+            this.showDeleteButton = false;
+        }
+        else {
+            this.showDeleteButton = true;
+        }
         this.contractType = ' Contract';
         this.TITLE = this.contractData.TITLE;
         this.START_DT = new Date(moment(this.contractData.START_DT).format("l"));

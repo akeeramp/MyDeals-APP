@@ -1182,9 +1182,9 @@ export class PTE_CellChange_Util {
         let PTR = [{ row: selProds[idx].indx, prop: 'PTR_USER_PRD', old: oldVal, new: newVal.toString() }];
         return PTR;
     }
-    static getOperationProdCorr(selProd: any) {
+    static getOperationProdCorr(selProd: any, products: any) {
+        let rowProdCorrectordat = [];
         let PTR_SYS_PRD = this.hotTable.getDataAtRowProp(selProd.indx, 'PTR_SYS_PRD');
-        let excludedPrdct = []
         //incase of any valid products already bind, append the prod corr
         if (typeof PTR_SYS_PRD == 'string' && PTR_SYS_PRD != '') {
             PTR_SYS_PRD = JSON.parse(PTR_SYS_PRD);
@@ -1192,14 +1192,29 @@ export class PTE_CellChange_Util {
         else {
             PTR_SYS_PRD = {};
         }
+        let res = products.ProdctTransformResults[selProd.DCID];
+        let exclude = _.sortBy(res.E);
+        let Include = _.sortBy(res.I);
         _.each(selProd.items, selPrdItm => {
-            PTR_SYS_PRD[`${selPrdItm.prod}`] = [selPrdItm.prodObj];
             if (selPrdItm.prodObj.EXCLUDE) {
-                excludedPrdct.push(selPrdItm.prodObj.DERIVED_USR_INPUT);
+                let eindex = _.indexOf(exclude, selPrdItm.prodObj.USR_INPUT)
+                if (eindex != -1) {
+                    exclude.splice(eindex, 1)
+                }
+                exclude.push(selPrdItm.prodObj.DERIVED_USR_INPUT);
             }
-        });
-        let operation = { operation: 'prodcorr', PTR_SYS_PRD: JSON.stringify(PTR_SYS_PRD), PRD_EXCLDS: excludedPrdct.toString() };
-        return operation;
+            else {
+                let iIndex = _.indexOf(Include, selPrdItm.prodObj.USR_INPUT)
+                if (iIndex != -1) {
+                    Include.splice(iIndex, 1)
+                }
+                Include.push(selPrdItm.prodObj.DERIVED_USR_INPUT);
+            }
+            PTR_SYS_PRD[`${selPrdItm.prod}`] = [selPrdItm.prodObj];
+        })
+        rowProdCorrectordat.push([{ row: selProd.indx, prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(this.returnEmptyRow(), 'PTR_USER_PRD'), new: Include.toString() }]);
+        rowProdCorrectordat.push({ operation: 'prodcorr', PTR_SYS_PRD: JSON.stringify(PTR_SYS_PRD), PRD_EXCLDS: exclude.toString() });
+        return rowProdCorrectordat;
     }
 
     static validateDensityBand(rowIndex, columns, curPricingTable, operation, translateResult, prdSrc) {

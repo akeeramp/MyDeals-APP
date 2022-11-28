@@ -135,6 +135,7 @@ export class allDealsComponent {
         if (event.keyCode == 13) {
             if (this.searchFilter != undefined && this.searchFilter != null && this.searchFilter != "") {
                 if (this.searchFilter.length < 3) {
+                    this.clearFilter();
                     // This breaks the tab filtering
                     return;
                 }
@@ -144,7 +145,7 @@ export class allDealsComponent {
                         filters: [
                             {
                                 field: "DC_ID",
-                                operator: "contains",
+                                operator: "eq",
                                 value: this.searchFilter
                             }, {
                                 field: "WF_STG_CD",
@@ -165,8 +166,23 @@ export class allDealsComponent {
                             }
                         ],
                     }
-                    this.gridData = process(this.gridResult, this.state);
+
+                    let group = this.groups.filter(x => x.name == this.selectedTab);
+                    let deals = [];
+                    if (group[0].name.toLowerCase() == 'all') {
+                        deals = this.gridResult;
+                    }
+                    else {
+                        _.each(this.gridResult, (item) => {
+                            if (item.OBJ_SET_TYPE_CD == group[0].dealType)
+                                deals.push(item);
+                        });
+                    }
+                    this.gridData = process(deals, this.state);
+
                 }
+            } else {
+                this.clearFilter();
             }
         }
     }
@@ -183,6 +199,7 @@ export class allDealsComponent {
     onTabSelect(e: SelectEvent) {
         e.preventDefault();
         this.selectedTab = e.title;
+        this.searchFilter = "";
         let group = this.groups.filter(x => x.name == this.selectedTab);
         this.dealType = group[0].dealType == "ALL_TYPES" ? 'VOL_TIER' : group[0].dealType;
         if (group[0].isTabHidden) {
@@ -259,6 +276,18 @@ export class allDealsComponent {
             filters: [],
         };
         this.gridData = process(this.gridResult, this.state);
+        let group = this.groups.filter(x => x.name == this.selectedTab);
+        this.dealType = group[0].dealType == "ALL_TYPES" ? 'VOL_TIER' : group[0].dealType;
+        if (group[0].isTabHidden) {
+            let tabs = this.groups.filter(x => x.isTabHidden === false);
+            this.selectedTab = tabs[0].name;
+            this.filterColumnbyGroup(this.selectedTab);
+            this.filterdealbyTab();
+        }
+        else {
+            this.filterColumnbyGroup(this.selectedTab);
+            this.filterdealbyTab();
+        }
     }
     public onExcelExport(e: ExcelExportEvent): void {
         e.workbook.sheets[0].title = "Sheet 1";

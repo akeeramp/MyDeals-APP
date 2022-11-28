@@ -1016,12 +1016,12 @@ export class pricingTableEditorComponent {
         let translateResult = await this.ValidateProducts(PTR, false, true, null);
         let updatedPTRObj: any = null;
         if (translateResult) {
+            let prdValResult = PTEUtil.isValidForProdCorrector(translateResult['Data']);
             updatedPTRObj = PTEUtil.cookProducts(translateResult['Data'], PTR);
             //code to bind the cook result of success or failure
             let PTR_col_ind = _.findIndex(this.columns, { data: 'PTR_USER_PRD' });
             let PTR_EXCL_col_ind = _.findIndex(this.columns, { data: 'PRD_EXCLDS' });
             _.each(updatedPTRObj.rowData, (data, idx) => {
-
                 this.hotTable.setDataAtRowProp(idx, 'PTR_SYS_PRD', data.PTR_SYS_PRD, 'no-edit');
                 if (curRow && data.DC_ID == curRow[0]['DC_ID']) {
                     curRow[0]['PTR_SYS_PRD'] = data.PTR_SYS_PRD;
@@ -1045,7 +1045,7 @@ export class pricingTableEditorComponent {
                 // Do not update the cell value if exclude product is invalid/NULL
                 if (this.curPricingTable.OBJ_SET_TYPE_CD != 'KIT' && this.curPricingTable.OBJ_SET_TYPE_CD != 'ECAP'
                     && data.PRD_EXCLDS != null && data.PRD_EXCLDS != "") {
-                    this.hotTable.setDataAtRowProp(idx, 'PRD_EXCLDS', data.PRD_EXCLDS, 'no-edit');
+                    //this.hotTable.setDataAtRowProp(idx, 'PRD_EXCLDS', data.PRD_EXCLDS, 'no-edit');
                     if (data && data._behaviors && data._behaviors.isError) {
                         if (data._behaviors.isError['PRD_EXCLDS'] == false) {
                             this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'success-product');
@@ -1058,7 +1058,7 @@ export class pricingTableEditorComponent {
                     }
                 }
             })
-            let prdValResult = PTEUtil.isValidForProdCorrector(translateResult['Data']);
+            
             if (_.contains(prdValResult, '1')) {
                 // Product corrector if invalid products
                 this.isLoading = false;
@@ -1153,18 +1153,6 @@ export class pricingTableEditorComponent {
                 .catch(error => {
                     this.loggerService.error("Product Translator failure::", error);
                 })
-            this.trackTranslationprod = [];
-            //map the user input value with product transion data for updating in the handson table
-            for (let i = 0; i < translationInputToSend.length; i++) {
-                let oldvalue = _.sortBy(translationInputToSend[i].USR_INPUT.split(',')).toString();
-                let ROW_NUMBER = translationInputToSend[i].ROW_NUMBER;
-                if (transformResults.Data.ProdctTransformResults != null && transformResults.Data.ProdctTransformResults != undefined) {
-                    if (transformResults.Data.ProdctTransformResults[ROW_NUMBER] != undefined) {
-                        let transProd = _.sortBy(transformResults.Data.ProdctTransformResults[ROW_NUMBER].I).toString();
-                        this.trackTranslationprod.push({ rowNumber: ROW_NUMBER, old: oldvalue, new: transProd })
-                    }
-                }
-            }  
         }
         this.isLoading = false;
         return transformResults;
@@ -1241,7 +1229,7 @@ export class pricingTableEditorComponent {
     async openProductCorrector(products: any) {
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
         let selRow: any;
-        let operation: any;
+        let rowProdCorrectordat: any;
         let selRows = []
         _.each(products.DuplicateProducts, (val, key) => {
             let res = _.findWhere(PTR, { DC_ID: parseInt(key) });
@@ -1275,26 +1263,15 @@ export class pricingTableEditorComponent {
                                 selProds[idx].indx = selProds[idx - 1].indx + this.hotTable.getDataAtRowProp(selProds[idx - 1].indx, 'PTR_USER_PRD').split(',').length;
                             }
                         }
-                        let userInputVal = _.where(this.trackTranslationprod, { rowNumber: selProd.DCID });
-                        let trncoldVal = "";
-                        if (userInputVal.length > 0) {
-                            if (selProd.name == userInputVal[0].old) {
-                                trncoldVal = "";
-                            }
-                            else {
-                                trncoldVal = userInputVal[0].new;
-                            }
-                        }
-                        //there can be valid invalid prod so we need to bind prod corrector result to the success
-                        let Curr_PTR = PTE_CellChange_Util.getPTRObjOnProdCorr(selProd, selProds, idx, trncoldVal);
-                        selRow = Curr_PTR[0].row;
+                        selRow = selProd.indx;
                         //Until all the invalid products are selected from product corrector , don’t update the handson table
-                        if (selProd.name.split(',').length == selProd.items.length) {
-                            operation = PTE_CellChange_Util.getOperationProdCorr(selProd);
-                            PTE_CellChange_Util.autoFillCellOnProd(Curr_PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, operation);
-                        }
+                        //if (selProd.name.split(',').length == selProd.items.length) {
+                        rowProdCorrectordat = PTE_CellChange_Util.getOperationProdCorr(selProd, products);
+                        PTE_CellChange_Util.autoFillCellOnProd(rowProdCorrectordat[0], this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, rowProdCorrectordat[1]);
+                        //}
                     }
                     if (this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
+                        let operation = rowProdCorrectordat[1];
                         let response = JSON.parse(operation.PTR_SYS_PRD);
                         let ValidProducts = PTE_Helper_Util.splitProductForDensity(response);
                         let finalPTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);

@@ -437,7 +437,7 @@ tr.k-alt.grey {
 
 .excl-DG-modal mat-dialog-container {
     background: #1a3e6f;
-    padding: 24px !important;
+    padding: 50px !important;
 }
 #GroupExclusionTab {
     margin-top: 28px;
@@ -549,7 +549,7 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-
     font-weight: bold !important;
 }
 .k-grid.view_popup_height {
-    height: calc(100vh - 591px);
+   overflow:hidden;
 }
 .extra_box_padding mat-dialog-container {
     padding: 0 !important;
@@ -576,13 +576,26 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-
     background-color: #fff !important;
 }
 
-.excl-DG-modal.cdk-overlay-pane {
+.cdk-overlay-pane {
+    height: auto !important;
     max-width: 95vw !important;
-    margin-left: auto;
-    margin-right: auto;
-    height: auto!important;
+    width: 1800px !important;
 }
 
-.height-auto-child {
-    height: auto!important;
+.modal-body {
+    padding: 0 !important;
 }
+
+#childGrid .k-grid-content {
+    overflow: hidden !important;
+}
+
+.btn-warning {
+    color: #0071c5 !important;
+    background-color: #f39c12 !important;
+}
+
+.btn-primary:hover, .btn-primary:focus {
+        color: #1a3e6f !important;
+}
+

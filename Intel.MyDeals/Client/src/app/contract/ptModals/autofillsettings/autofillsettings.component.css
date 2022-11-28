@@ -49,6 +49,7 @@
     /*padding: 15px;*/
     position: relative;
     width: 100%;
+    padding-top :15px !important;
 }
 
 
@@ -270,7 +271,7 @@
 
 .af-setting-fixes .auto-cs-btn {
     position: relative;
-    width: 100%;
+    width: 250px !important;
     margin: 1em !important;    
 }
 
@@ -359,8 +360,8 @@
     overflow: hidden !important;
 }
 
-.modalheader {
+.modal-header {
     padding-top: 5px !important;
-    padding-bottom: 5px !important;
+    padding-bottom: 1px !important;
     border-bottom: 1px solid #f4f4f4 !important;
 }*/
