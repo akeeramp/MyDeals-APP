@@ -463,7 +463,9 @@ export class contractDetailsComponent {
                     }
                     this.isLoading = false;
                     this.setBusy("", "", "", false);
-                    window.location.href = "/Contract#/manager/" + this.contractData["DC_ID"];                   
+                    //this will redirect incase of newly added/edited
+                    window.location.href ="#/manager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";   
+                                   
                 },(err)=>{
                     this.loggerSvc.error("Unable to create contract","Error",err);
                     this.isLoading = false;
