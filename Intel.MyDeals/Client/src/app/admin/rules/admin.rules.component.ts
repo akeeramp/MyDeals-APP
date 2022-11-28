@@ -21,6 +21,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { RulesSimulationModalComponent } from '../../admin/rules/admin.rulesSimulationModal.component';
 import { RuleDetailsModalComponent } from '../../admin/rules/admin.ruleDetailsModal.component';
+import { List } from "linqts";
 
 @Component({
     selector: "adminRules",
@@ -29,6 +30,9 @@ import { RuleDetailsModalComponent } from '../../admin/rules/admin.ruleDetailsMo
     encapsulation: ViewEncapsulation.None
 })
 export class adminRulesComponent {
+    childGridResult: any;
+    childGridData: any;
+    RuleConfig: any;
     constructor(private adminRulesSvc: adminRulesService, private loggerSvc: logger, private constantSvc: constantsService, public dialog: MatDialog) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
         $(
@@ -43,7 +47,7 @@ export class adminRulesComponent {
     //public rid = rid;
     public toolKitHidden = false;
     private isLoading = true;
-    private dataSource: any;
+    //private dataSource: any;
     private gridOptions: any;
     private allowCustom = true;
     private color: ThemePalette = "primary";
@@ -87,6 +91,15 @@ export class adminRulesComponent {
             logic: "and",
             filters: [],
         },
+    };
+    private childState: State = {
+        skip: 0,
+        take: 10,
+        group: [],
+        filter: {
+            logic: "and",
+            filters: [],
+        }
     };
     public pageSizes: PageSizeItem[] = [
         {
@@ -140,7 +153,7 @@ export class adminRulesComponent {
     saveHandler({ sender, rowIndex, formGroup, isNew }) {
         sender.closeRow(rowIndex);
     }
-    loadRules() {
+    async loadRules() {
         if ((<any>window).usrRole != 'GA' && (<any>window).usrRole != 'DA' && (<any>window).usrRole != 'SA' && !(<any>window).isDeveloper) {
             document.location.href = "/Dashboard#/portal";
         }
@@ -151,13 +164,7 @@ export class adminRulesComponent {
                 this.toolKitHidden = true;
             }
             this.isLoading = true;
-            this.adminRulesSvc.getPriceRules(0, "GET_RULES").subscribe(
-                (result: Array<any>) => {
-                    this.gridResult = result;
-                    this.gridData = process(this.gridResult, this.state);
-                    this.isLoading = false;
-                },
-                (error) => {
+            this.gridResult = await this.adminRulesSvc.getPriceRules(0, "GET_RULES").toPromise().catch((error) => {
                     this.loggerSvc.error(
                         "Unable to get Price Rules.",
                         error,
@@ -165,7 +172,22 @@ export class adminRulesComponent {
                     );
                 }
             );
+            this.gridData = process(this.gridResult, this.state);
+            this.isLoading = false;
         }
+    }
+
+    convertToChildGridArray(parentDataItem) {
+        const priceRuleObj = new List<any>(this.gridResult);
+        this.childGridResult = priceRuleObj
+            .Where(function (x) {
+                return (
+                    x.Id == parentDataItem.Id &&
+                    x.ChangedBy == parentDataItem.ChangedBy
+                );
+            }).ToArray();
+        this.childGridData = process(this.childGridResult, this.childState);
+        return this.childGridData;
     }
 
     refreshGrid() {
@@ -177,7 +199,7 @@ export class adminRulesComponent {
         this.loadRules();
     }
 
-    ngOnInit() {
+    async ngOnInit() {
         var webUrl = window.location.href;
         var lastLoc = webUrl.lastIndexOf('/');
         if (webUrl.length > lastLoc + 1) {
@@ -188,7 +210,14 @@ export class adminRulesComponent {
                 this.state.filter.filters = [{ field: "Id", operator: "eq", value: this.rid }];
             }
         }
-        this.loadRules();
+        await this.loadRules();
+        await this.getConstant();
+        if ((<any>window).usrRole == 'DA' || (<any>window).usrRole == 'SA') {
+            this.RuleConfig = await this.adminRulesSvc.getPriceRulesConfig().toPromise().catch((err) => {
+                this.loggerSvc.error("Operation failed",'');
+            });
+            await this.GetRules(0, "GET_RULES");
+        }
     }
 
     ngOnDestroy() {
@@ -222,14 +251,17 @@ export class adminRulesComponent {
     }
 
     deleteConfirmation() {
+        this.isDeletion = false;
         this.isLoading = true;
         this.adminRulesSvc.deletePriceRule(this.deletionId).subscribe(
             (result: number) => {
                 this.gridResult = this.gridResult.filter(x => x.Id != result);
                 this.gridData = process(this.gridResult, this.state);
                 this.isLoading = false;
+                this.loggerSvc.success("Rule has been deleted");
             },
             (error) => {
+                this.isLoading = false;
                 this.loggerSvc.error(
                     "Unable to delete Price Rule.",
                     error,
@@ -239,17 +271,15 @@ export class adminRulesComponent {
         );
     }
 
-    getConstant() {
+    async getConstant() {
         // If user has closed the banner message he wont see it for the current session again.
-        this.constantSvc.getConstantsByName("PRC_RULE_EMAIL").subscribe(
-            (result: any) => {
-                if (!!result.data) {
-                    this.adminEmailIDs = result.data.CNST_VAL_TXT === "NA" ? "" : result.data.CNST_VAL_TXT;
-                    this.isElligibleForApproval = this.adminEmailIDs.indexOf((<any>window).usrEmail) > -1;
-                }
-            },(err)=>{
+        let result: any = await this.constantSvc.getConstantsByName("PRC_RULE_EMAIL").toPromise().catch((err)=>{
                 this.loggerSvc.error("Unable To Get Constant by Name","Error",err);
-            });
+        });
+        if (!!result) {
+            this.adminEmailIDs = result.CNST_VAL_TXT === "NA" ? "" : result.CNST_VAL_TXT;
+            this.isElligibleForApproval = this.adminEmailIDs.indexOf((<any>window).usrEmail) > -1;
+        }
         if ((<any>window).usrRole != 'DA' && (<any>window).usrRole != 'SA') {
             this.constantSvc.getConstantsByName("PRC_RULE_READ_ACCESS").subscribe(
                 (result: any) => {
@@ -396,6 +426,7 @@ export class adminRulesComponent {
     openMessage({ dataItem }) {
         const dialogRef = this.dialog.open(RulesSimulationModalComponent, {
             width: "900px",
+            panelClass: 'admin-simulate-style',
             data: dataItem
         });
         dialogRef.afterClosed().subscribe(() => {
@@ -410,23 +441,23 @@ export class adminRulesComponent {
 
     editRule(dataItem, isCopy) {
         this.spinnerMessageDescription = "Please wait while we loading the rule..";
-        //vm.GetRules(id, "GET_BY_RULE_ID"); 
-        if (dataItem.id) {
-            dataItem.isCopy = isCopy;
-            this.openRuleDetailsModal(dataItem);
-        } else {
+        //this.GetRules(dataItem.id, "GET_BY_RULE_ID"); 
+        if (isCopy) {
             let tempDataItem = {
-                "id": dataItem, "isCopy": isCopy
+                "Id": dataItem, "isCopy": isCopy
             };
             this.openRuleDetailsModal(tempDataItem);
+        } else {
+            dataItem.isCopy = isCopy;
+            this.openRuleDetailsModal(dataItem);
         }
     }
 
     copyRule(id) {
         this.adminRulesSvc.copyPriceRule(id).subscribe(
             (response: any) => {
-            if (response.data > 0) {
-                this.editRule(response.data, true);
+            if (response > 0) {
+                this.editRule(response, true);
                 this.loggerSvc.success("Rule has been copied");
 
             } else {
@@ -443,32 +474,28 @@ export class adminRulesComponent {
 
     openRuleDetailsModal(dataItem) {
         const dialogRef = this.dialog.open(RuleDetailsModalComponent, {
-                width: "1800px",
-                data: dataItem
+            width: "1800px",
+            panelClass: 'rule-details-model-style',
+            data: dataItem
             });
-            dialogRef.afterClosed().subscribe(() => {
-            });
+        dialogRef.afterClosed().subscribe(() => {
+            this.refreshGrid();
+        });
     }
 
-    GetRules(id, actionName) {
+    async GetRules(id, actionName) {
         this.spinnerMessageDescription = "Please wait while we loading the " + (actionName == "GET_BY_RULE_ID" ? "rule" : "rules") + "..";
-        this.adminRulesSvc.getPriceRules(id, actionName).subscribe(
-            (response: Array<any>) => {
-            //this.Rules = response.data;
-            this.dataSource.read();
-            //adding filter
-            if (this.rid != 0) {
-                this.dataSource.filter({ field: "Id", value: this.rid });
-                this.editRule(this.rid, false);
-            }
-        }, (error) => {
+        this.Rules = await this.adminRulesSvc.getPriceRules(id, actionName).toPromise().catch((error) => {
             this.loggerSvc.error(
                 "Operation Failed.",
                 error,
                 error.statusText
             );
+        });
+        //adding filter
+        if (id != 0) {
+            this.editRule(id, false);
         }
-    );
     };
 
     removeFilter() {
@@ -486,6 +513,7 @@ export class adminRulesComponent {
         this.gridData = process(this.gridResult, this.state);
     }
 }
+
 angular
     .module("app")
     .directive(

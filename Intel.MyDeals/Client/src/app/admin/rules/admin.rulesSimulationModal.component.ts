@@ -131,9 +131,3 @@ export class RulesSimulationModalComponent {
         return distinct(this.dataCollection, fieldName).map(item => item[fieldName]);
     }
 }
-angular.module("app").directive(
-    "rulesSimulationModal",
-    downgradeComponent({
-        component: RulesSimulationModalComponent,
-    })
-);

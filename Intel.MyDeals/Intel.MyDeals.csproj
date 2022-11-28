@@ -953,6 +953,7 @@
     <TypeScriptCompile Include="Client\src\app\admin\legalException\admin.viewExceptions.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\meetComp\admin.meetComp.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\meetComp\admin.meetComp.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\rules\admin.ruleDetailsModal_Config.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.ruleDetailsModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.rules.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.rules.service.ts" />

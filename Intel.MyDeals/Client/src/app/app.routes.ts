@@ -333,15 +333,15 @@ angular
                 }
             })
             //removed as part of partial completeness will move back once fully migrated
-            // .state("rules", {
-            //     url: "/rules/:rid",
-            //     abstract: false,
-            //     views: {
-            //         mainView: {
-            //             template: '<admin-rules></admin-rules>'
-            //         }
-            //     }
-            // })
+             .state("rules", {
+                 url: "/rules/:rid",
+                 abstract: false,
+                 views: {
+                     mainView: {
+                         template: '<admin-rules></admin-rules>'
+                     }
+                 }
+             })
             .state("dataFix", {
                 url: "/dataFix",
                 abstract: false,

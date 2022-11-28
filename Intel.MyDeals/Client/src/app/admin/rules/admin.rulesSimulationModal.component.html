@@ -1,8 +1,8 @@
-﻿<div class="modal-header modalBlueBody">
+﻿<div class="modal-header modalBlueBody price-run-header">
     <h3 class="modal-title" id="modalTitle">Simulate Approval Rules Execution</h3>
     <i id="btnClose" class="intelicon-close" (click)="close()" title="Close this window"></i>
 </div>
-<div class="modal-body modalBlueBody" id="modal-body">
+<div class="modal-body modalBlueBody price-run-body" id="modal-body">
     <div class="row">
         <div class="headerNotes">
             <b>Note: </b>Under simulation, if you select any specific rules, they will be executed regardless of their Approval Status or Rules Status.
@@ -19,7 +19,7 @@
     <div class="row">
         <label class="myLabel col-md-2">Rules List:</label>
         <div class="col-md-9">
-            <kendo-multiselect #cmbmulti placeholder="Select rules to test..." [data]="Rules"
+            <kendo-multiselect class="rule-list-style" #cmbmulti placeholder="Select rules to test..." [data]="Rules"
                                textField="Name" valueField="Id" [valuePrimitive]="true"
                                id="multiselect" [(ngModel)]="selectedIds"></kendo-multiselect>
             <span class="description">All selected rules will be run regardless of thier Approval Status or Rules Status</span>
@@ -27,7 +27,7 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+            <kendo-grid [data]="gridData" [loading]="isLoading" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
                         [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                         [groupable]="false"
                         [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)"
@@ -51,10 +51,10 @@
     </div>
     <div class="row buttonBar">
         <div class="col-md-4 simulationBtnTxt">
-            <button class="btn btn-default simulationBtn" type="button" (click)="close()">Close Window</button>
+            <button class="btn btn-default simulationBtn simbtnstyle" type="button" (click)="close()">Close Window</button>
         </div>
         <div class="col-md-4 simulationBtnTxt">
-            <button class="btn btn-default simulationBtn" type="button" (click)="resetForm()">Reset Form</button>
+            <button class="btn btn-default simulationBtn simbtnstyle" type="button" (click)="resetForm()">Reset Form</button>
         </div>
         <div class="col-md-4 simulationBtnTxt">
             <button class="btn btn-success simulationBtn" type="button" (click)="runSimulation()">Run Simulation Now</button>

@@ -1,4 +1,5 @@
-﻿<div style="margin-top: 0;" class="form-horizontal" autocomplete="off">
+﻿<link href="/Client/node_modules/handsontable/dist/handsontable.full.css" rel="stylesheet" />
+<div *ngIf="Rules != undefined" style="margin-top: 0;" class="form-horizontal" autocomplete="off">
     <div class="modal-content" id="ruleModal" style="overflow-y:auto;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none">
         <div class="modal-header modalBlueBody">
             <h3 id="modalTitle">Rule Details</h3>
@@ -18,91 +19,158 @@
                     <span class="redbold">hourly BATCH process</span>. Each hour (HH:00) all 'Active' Price Rules will be run against all 'Submitted' ECAP tender deals. It is important to note that Price Rules do not run as deals are created but through
                     the <span class="redbold">hourly BATCH process.</span><br /><br />
                 </div>
-                <div class="col-md-9" style="font-size: 12px; margin: 0; padding: 0; text-align: right;" *ngIf="rule.Id > 0">
-                    Last modified by <span style="color:#00AEEF">{{rule.ChangedBy}}</span> on <span style="color:#00AEEF">{{rule.ChangeDateTimeFormat}} PST</span>
+                <div class="col-md-9" style="font-size: 12px; margin: 0; padding: 0; text-align: right;" *ngIf="Rules.Id > 0">
+                    Last modified by <span style="color:#00AEEF">{{Rules.ChangedBy}}</span> on <span style="color:#00AEEF">{{Rules.ChangeDateTimeFormat}} PST</span>
                 </div>
                 <div class="col-md-2" style="font-size: 12px; margin: 0; padding: 0; text-align: right; width:100%">
                 </div>
                 <div class="form-group row col-md-12">
                     <label class="control-label isRequired col-md-2" autocomplete="off" style="padding-right:20px;">Name:</label>
                     <div class="col-md-7">
-                        <input class="form-control md" type="text" [(ngModel)]="rule.Name" style="width:100%">
+                        <input class="form-control md ruledet-boxes-style" type="text" [(ngModel)]="Rules.Name" style="width:100%">
                     </div>
                     <div class="col-md-1"></div>
                     <div class="col-md-2">
-                        <mat-slide-toggle [color]="color" class="fl toggle-accept toggle-button-custom" [disabled]="(!(isElligibleForApproval && rule.IsAutomationIncluded && rule.Id > 0))" [(ngModel)]="rule.RuleStage" on="Approved" off="Pending Approval" onstyle="btn-success" offstyle="btn-danger"
-                            title="{{rule.RuleStage === true ? 'Click to Un-Approve' : 'Click to Approve'}}" (click)="UpdateRuleIndicator(rule.Id, rule.RuleStage,'UPDATE_STAGE_IND',((isElligibleForApproval == true && rule.IsAutomationIncluded == true) ? true : false))"></mat-slide-toggle>
+                        <mat-slide-toggle [color]="color" class="fl tgl-style toggle-accept toggle-button-custom mtoggle-approve-sty"
+                                          [disabled]="(!(isElligibleForApproval && Rules.IsAutomationIncluded && Rules.Id > 0))"
+                                          [(ngModel)]="Rules.RuleStage" on="Approved" off="Pending Approval"
+                                          onstyle="btn-success" offstyle="btn-danger"
+                                          title="{{Rules.RuleStage === true ? 'Click to Un-Approve' : 'Click to Approve'}}"
+                                          (change)="UpdateRuleIndicator(Rules.Id, Rules.RuleStage,'UPDATE_STAGE_IND',((isElligibleForApproval == true && Rules.IsAutomationIncluded == true) ? true : false))">
+
+                        </mat-slide-toggle>
                     </div>
                 </div>
                 <div class="form-group row col-md-12">
                     <label class="control-label isRequired col-md-2" style="padding-right:20px;">Owner:</label>
                     <div class="col-md-2">
-                        <span style="line-height:35px;" title="{{rule.OwnerId}}">{{rule.OwnerName}}</span>
+                        <span style="line-height:35px;" title="{{Rules.OwnerId}}">{{Rules.OwnerName}}</span>
                     </div>
-                    <label class="control-label col-md-2" style="padding-right:20px;">Rule Status:</label>
+                    <label class="control-label col-md-2 rule-status-style">Rule Status:</label>
                     <span class="col-md-2" style="float: left;">
-                        <mat-slide-toggle class="fl toggle-accept toggle-button-custom" [disabled]="rule.RuleStage == false"
-                                          [(ngModel)]="rule.IsActive"
+                        <mat-slide-toggle class="fl tgl-style toggle-accept toggle-button-custom toggle-ruletype-btn" [disabled]="Rules.RuleStage == false"
+                                          [(ngModel)]="Rules.IsActive"
                                           on="Active"
                                           off="Inactive"
                                           onstyle="btn-success"
                                           offstyle="btn-danger"
-                                          title="{{rule.IsActive === true ? 'Active' : 'Inactivate'}}" (click)="UpdateRuleIndicator(rule.Id, rule.IsActive,'UPDATE_ACTV_IND',true)"></mat-slide-toggle>
+                                          title="{{Rules.IsActive === true ? 'Active' : 'Inactivate'}}"
+                                          (change)="UpdateRuleIndicator(Rules.Id, Rules.IsActive,'UPDATE_ACTV_IND',true)">
+
+                        </mat-slide-toggle>
                     </span>
-                    <label class="control-label col-md-1" style="float: left; padding-right:20px;">Rule Type:</label>
+                    <label class="control-label col-md-1" style="float: left; padding-right:20px; font-weight: bold;">Rule Type:</label>
                     <span class="col-md-2" style="float: right;">
                         <span>
-                            <mat-slide-toggle class="fl toggle-accept toggle-button-custom"
-                                              [(ngModel)]="rule.IsAutomationIncluded"
-                                              on="Auto Approval"
-                                              (click)="toggleType(rule.IsAutomationIncluded, true)"
+                            <mat-slide-toggle class="fl tgl-style toggle-accept toggle-button-custom mrule-type-styl"
+                                              [(ngModel)]="Rules.IsAutomationIncluded"
+                                              on="AutoApproval"
+                                              (change)="toggleType(Rules.IsAutomationIncluded, true)"
                                               off="Exclusion Rule"
                                               onstyle="btn-success"
                                               offstyle="btn-danger"
-                                              title="{{rule.IsAutomationIncluded === true ? 'Auto Approval' : 'Exclusion from Automation'}}"></mat-slide-toggle>
+                                              title="{{Rules.IsAutomationIncluded === true ? 'Auto Approval' : 'Exclusion from Automation'}}">
+
+                            </mat-slide-toggle>
                         </span>
                     </span>
                 </div>
                 <div class="form-group row col-md-12">
                     <label class="control-label isRequired col-md-2" style="padding-right:20px;">Start Date:</label>
                     <div class="col-md-2">
-                        <kendo-datepicker #picker [(value)]="rule.StartDate" calendarType="classic"></kendo-datepicker>
+                        <kendo-datepicker #picker [(ngModel)]="strtDate" calendarType="classic"></kendo-datepicker>
                     </div>
                     <label class="control-label isRequired col-md-2" style="padding-right:20px;">End Date:</label>
                     <div class="col-md-2">
-                        <kendo-datepicker #picker [(value)]="rule.EndDate" calendarType="classic"></kendo-datepicker>
+                        <kendo-datepicker #picker [(ngModel)]="endDt" calendarType="classic"></kendo-datepicker>
                     </div>
                 </div>
                 <div class="form-group row col-md-12">
                     <label class="control-label col-md-2" style="padding-right:20px; font-weight:bold;">Notes:</label>
                     <div class="col-md-9">
-                        <kendo-textarea [rows]="10" [(ngModel)]="rule.Notes" style="width: 100%; border: 1px solid rgb(133, 133, 133); "></kendo-textarea>
+                        <kendo-textarea [rows]="10" [(ngModel)]="Rules.Notes" class="admin-notes-style" style="width: 100%; border: 1px solid rgb(133, 133, 133); "></kendo-textarea>
                     </div>
                 </div>
-                <div class="form-group row col-md-12">
+                <div class="form-group row col-md-12" style="min-height:59px; max-height:250px; overflow-y:auto;">
                     <label class="control-label col-md-2" style=" font-weight: bold;">Criteria:</label>
                     <div class="col-md-9">
-                        <div rule-attribute-builder grid-id="'attributeGrid'" operator-settings="operatorSettings" attribute-settings="attributeSettings" criteria="rule.Criteria" custom-settings="">
+                        <div *ngFor="let dataItem of Rules.Criteria;let i=index trackBy i"
+                             class="divTableRow" style="margin-bottom: 10px;">
+                            <div class="divTableCell" style="width:75px">
+                                <span class="icnBtn icnSkyBtn"
+                                      (click)="addRow(i)">
+                                    <i class="intelicon-plus-max mplusminus-style col-md-6"></i>
+                                </span><span class="icnBtn icnGryBtn"
+                                             (click)="removeRow(i)" *ngIf="i!=0">
+                                    <i class="intelicon-minus-max mplusminus-style col-md-6"></i>
+                                </span>
+                            </div>
+                            <div class="divTableCell kdropdownlist">
+                                <kendo-dropdownlist [data]="availableAttrs"
+                                                    class="dealtype-dropdwn-style"
+                                                    [disabled]="i==0"
+                                                    [(ngModel)]="dataItem.title"
+                                                    (valueChange)="valueChange($event, i)"></kendo-dropdownlist>
+                            </div>
+                            <div class="divTableCell kdropdownlist" *ngIf="dataItem.title != ''">
+                                <kendo-dropdownlist [data]="opvalues"
+                                                    class="equalto-dropdwn-style"
+                                                    [disabled]="i==0"
+                                                    [(ngModel)]="dataItem.operatorName"></kendo-dropdownlist>
+                            </div>
+                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'number' || dataItem.type == 'money' || dataItem.type == 'numericOrPercentage'">
+                                <kendo-numerictextbox [(ngModel)]="dataItem.value"
+                                                      class="numerictextbox-style"
+                                                      [disabled]="i==0"></kendo-numerictextbox>
+                                <kendo-dropdownlist *ngIf="dataItem.title == 'Ceiling Volume Increase'" class="box_style_dropdwn" [data]="['%', 'unit']"></kendo-dropdownlist>
+                                <button *ngIf="dataItem.title == 'End Date Push'" class="days-style"><span>Days</span></button>
+                            </div>
+                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'string' || dataItem.type == 'string_with_in' || dataItem.type == 'string_limited' || dataItem.type == 'autocomplete'">
+                                <kendo-textbox [(ngModel)]="dataItem.value"
+                                               class="extra-box-style"
+                                               [disabled]="i==0"></kendo-textbox>
+                                <span class="span-style">Use <i style="margin-right: 3px; color: #FFA300;">*</i> for wildcard searches. <i style="color:#FFA300;">example: Sam sun*</i></span>
+                            </div>
+                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'date'">
+                                <kendo-datepicker [(ngModel)]="dataItem.value" class="calender-row-style" calendarType="classic" [disabled]="i==0"></kendo-datepicker>
+                            </div>
+                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list'">
+                                <kendo-multiselect [disabled]="i==0"
+                                                   class="multi_kedo-_style"
+                                                   [data]="dataItem.values"
+                                                   [(ngModel)]="dataItem.value"
+                                                   (valueChange)="valueChange($event, i, 'combobox')">
+                                </kendo-multiselect>
+                            </div>
+                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'singleselect' || dataItem.type == 'singleselect_ext' || dataItem.type == 'singleselect_read_only'">
+                                <kendo-combobox [disabled]="i==0"
+                                                class="ecap-combo-style"
+                                                [data]="dataItem.values"
+                                                [(ngModel)]="dataItem.value"
+                                                (valueChange)="valueChange($event, i, 'combobox')">
+                                </kendo-combobox>
+                            </div>
+
                         </div>
                     </div>
                 </div>
-                <div class="form-group row col-md-12">
+                <div *ngIf="Rules.IsAutomationIncluded" class="form-group row col-md-12">
                     <label class="control-label col-md-2" style="padding-right: 20px; font-weight: bold;">Blanket Discount:</label>
                     <div class="col-md-8" id="blanket_section" style="margin-top: 4px;">
                         <span>Requested ECAP must be no less than</span>&nbsp;
-                        <input kendo-numeric-text-box [(ngModel)]="BlanketDiscountPercentage" (change)="EditBlanketDiscountPercentage()" decimals="0" format="'#'" [min]="0" [max]="70" style="width: 100px; font-size:11px;" />&nbsp;
+                        <kendo-numerictextbox [(ngModel)]="BlanketDiscountPercentage" (change)="EditBlanketDiscountPercentage()" decimals="0" format="'#'" [min]="0" [max]="70" style="width: 100px; font-size:11px;"></kendo-numerictextbox>&nbsp;
                         <span>%&nbsp;Or&nbsp;$</span>&nbsp;
-                        <input kendo-numeric-text-box [(ngModel)]="BlanketDiscountDollor" (change)="EditBlanketDiscountDollor()" format="'n2'" [min]="0" style="width: 130px;font-size:11px;" />&nbsp;
+                        <kendo-numerictextbox [(ngModel)]="BlanketDiscountDollor" (change)="EditBlanketDiscountDollor()" format="'n2'" [min]="0" style="width: 130px;font-size:11px;"></kendo-numerictextbox>&nbsp;
                         <span>off of CAP</span>
                     </div>
                 </div>
 
                 <div style="display:none;">Dummy button to prevent events while press enter key in textbox<button></button></div>
-                <div class="form-group row col-md-12" id="productCriteria" style="padding-bottom: 10px;">
+                <div [hidden]="!Rules.IsAutomationIncluded" class="form-group row col-md-12" id="productCriteria" style="padding-bottom: 10px;">
                     <label class="control-label col-md-2" style="padding-right: 20px; font-weight: bold;">Product Criteria:</label>
                     <div class="col-md-9">
-                        Kendo-spreadsheet yet to implement
-                        <button (click)="validateProduct(true,false,false)" class="btn btn-primary" style="float: left;">Validate Products</button>
+                        <hot-table [hotId]="hotId" [data]="ProductCriteria" [settings]="hotSettings" class="all-spread"></hot-table>
+                        <button (click)="validateProduct(true,false,'Validate')" class="btn btn-primary validate-price-rule-style">Validate Products</button>
                     </div>
                 </div>
             </div>
@@ -113,113 +181,21 @@
                     <button (click)="saveRule('SAVE_AS_DRAFT',false)" class="btn btn-primary" style="margin-left: 15px">Save as Draft</button>
                     <button (click)="saveRule('SUBMIT',true)" class="btn btn-primary" style="margin-left: 15px">Submit</button>
                     <button (click)="close()" class="btn btn-primary" style="margin-left: 15px;">Cancel / Close</button>
-                    <button (click)="simulate()" class="btn btn-success" style="margin-left: 15px;" title="Rule must be Saved as Draft to run simulation" [disabled]="rule.Id == 0">Simulate</button>
+                    <button (click)="runSimulation()" class="btn btn-success" style="margin-left: 15px;" title="Rule must be Saved as Draft to run simulation" [disabled]="Rules.Id == 0">Simulate</button>
                 </div>
             </div>
         </div>
-
+        <kendo-dialog *ngIf="isAlertVal" class="price-rule-popup">
+            <p class="text-price-style" [innerHtml]="isAlertText"></p>
+            <kendo-dialog-actions *ngIf="isOk" class="price-rule-dialog-sty">
+                <button class="price-admin-ok" (click)="closeAlertVal()">OK</button>
+            </kendo-dialog-actions>
+            <kendo-dialog-actions *ngIf="retryAction" class="retry-style">
+                <button class="price-rule-retry" (click)="closeAlertVal()">RETRY</button>
+                <button class="price-rule-retry" (click)="closeAlertVal()">CANCEL</button>
+            </kendo-dialog-actions>
+        </kendo-dialog>
     </div>
 </div>
-<style>
-    #ruleModal .modal-footer {
-        position: fixed;
-        bottom: 72px;
-        width: 81%;
-        background: #efefef;
-        height: 60px;
-        border: 1px solid #003c71;
-        margin-left: -28px;
-    }
-    
-    .k-selectbox {
-        height: 10px;
-        margin-bottom: 10px;
-    }
-    
-    .btn-success {
-        color: #000000;
-        background-color: #C4D600 !important;
-        border-color: #adbd00 !important;
-    }
-    
-    .btn-success[disabled] {
-        color: #b1babf;
-        background-color: #edeff0 !important;
-        border-color: #b1babf !important;
-    }
-    
-    .notes {
-        font-size: 14px;
-        margin-left: 40px;
-        padding: 0;
-    }
-    
-    .bluebold {
-        color: #0071c5;
-        font-weight: bold;
-    }
-    
-    .redbold {
-        color: red;
-        font-weight: bold;
-    }
-    
-    .modal-dialog {
-        width: 90%;
-        margin-top: 100px;
-        /* Put in because top bar was being hidden */
-    }
-    
-    .fontSmall {
-        font-size: 12px !important;
-    }
-    
-    .bigSmall {
-        font-size: 15px !important;
-    }
-    
-    #modalTitle {
-        float: left;
-        margin-top: -15px;
-    }
-    
-    #ruleModal .modal-body {
-        overflow: auto;
-        width: 100%;
-        height: 450px;
-        border-bottom: none;
-    }
-    
-    .modalBlueBody {
-        background-color: #003C71;
-        color: #ffffff;
-    }
-    
-    #ruleModal .modal-header {
-        padding: 25px;
-        border-bottom: 1px solid #e5e5e5;
-        min-height: 16.5px;
-    }
-    
-    div[index="0"] {
-        z-index: 3 !important;
-    }
-    
-    .modal-backdrop {
-        display: none !important;
-    }
-    
-    div[index="1"] .modal-dialog {
-        width: 500px;
-        margin-top: 15%;
-    }
-    
-    #btnClose {
-        float: right;
-        margin-top: -15px;
-        background: transparent;
-        padding: 3px;
-        font-size: 22px;
-        cursor: pointer;
-    }
-</style>
+<loading-panel-angular id="PriceRulesLoading"  style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
+                           [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>

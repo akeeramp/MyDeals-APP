@@ -3,7 +3,7 @@
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="row">
-    <div class="col-md-10 k-header-alignment">
+    <div class="col-md-10 k-header-alignment price-rules-style">
         <h3>Auto-Approval Rules Administration Screen</h3>
     </div>
     <div *ngIf="toolKitHidden == false" class="col-md-2 ng-scope help">
@@ -15,24 +15,24 @@
         <p>This screen allows DA users to create automated approval rules to streamline their work</p>
     </div>
 </div>
-<div class="col-md-12 kendo-grid-buttons">
-    <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+<div class="col-md-12 kendo-grid-buttons grid-size-style">
+    <kendo-grid class="runprice-grid-style" [data]="gridData" [loading]="isLoading" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
                 [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                 [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
                 [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)"
                 [ngClass]="isTextIncrease? 'opUiContainer md k-grid k-widget' : 'opUiContainer sm k-grid k-widget'">
         <ng-template kendoGridToolbarTemplate>
             <button *ngIf="toolKitHidden == false" [disabled]="isLoading" kendoGridAddCommand class="k-button addButton" (click)="addNewRule()">
-                <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RULE
+                <span class="k-icon k-i-plus-outline k-icon-md"></span><span class="simulate-title-sty">ADD NEW RULE</span>
             </button>
             <button *ngIf="toolKitHidden == false && rid != 0" [disabled]="isLoading" class="k-button addButton" (click)="removeFilter()">
                 <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>REMOVE FILTER
             </button>
             <button *ngIf="toolKitHidden == false" [disabled]="isLoading" class="k-button" kendoGridExcelCommand icon="file-excel">
-                EXPORT TO EXCEL
+                <span class="simulate-title-sty">EXPORT TO EXCEL</span>
             </button>
             <button class="k-button" [disabled]="isLoading" (click)="openMessage('test')">
-                <span class="intelicon-lab"></span>SIMULATE RUNNING RULES
+                <span class="intelicon-lab" style="margin:1px"></span><span class="simulate-title-sty">SIMULATE RUNNING RULES</span>
             </button>
             <kendo-grid-spacer></kendo-grid-spacer>
             <button [disabled]="isLoading" class="k-button button btnMargin">
@@ -50,8 +50,8 @@
                 <div class='fl gridStatusMarker centerText {{dataItem.RuleStage}}' [title]="dataItem.RuleStage? 'Approved' : 'Pending Approval'">{{ stageOneChar(dataItem.RuleStage) }}</div>
                 <div class="rule">
                     <i [title]="dataItem.IsAutomationIncluded ? 'Auto Approval' : 'Exclusion from Automation'" class='rulesGidIcon {{ stageOneCharStatus(dataItem.IsAutomationIncluded) }} dealTools'></i>
-                    <i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' (Click)="editRule(dataItem,false)"></i>
-                    <i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' (click)="copyRule(id)"></i>
+                    <i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' (click)="editRule(dataItem,false)"></i>
+                    <i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' (click)="copyRule(dataItem.Id)"></i>
                     <i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' (click)="deleteRule(dataItem.Id)"></i>
                     <i *ngIf="dataItem.isElligibleForApproval && !dataItem.IsActive && dataItem.IsAutomationIncluded && !dataItem.RuleStage" role='button' title='Approve' class='rulesGidIcon intelicon-user-approved-selected-solid dealTools' (click)="UpdateRuleIndicator(dataItem.Id, true,'UPDATE_STAGE_IND',true)"></i>
                 </div>
@@ -70,7 +70,7 @@
             </ng-template>
             <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
                 <div *ngIf="toolKitHidden == true">{{dataItem.Name}}</div>
-                <div *ngIf="toolKitHidden == false"><a class='ruleName' title='Click to Edit'><span>#{{dataItem.Id}}</span>:&nbsp;<span>{{dataItem.Name}}</span></a></div>
+                <div *ngIf="toolKitHidden == false"><a class='ruleName admin-name' (click)="editRule(dataItem,false)"  title='Click to Edit'><span>#{{dataItem.Id}}</span>:&nbsp;<span>{{dataItem.Name}}</span></a></div>
             </ng-template>
         </kendo-grid-column>
         <kendo-grid-column width="140" [headerClass]="{'headerClass':true}" field="RuleStatusLabel" title="Rule Status">
@@ -138,7 +138,7 @@
             </kendo-excelexport-column>
         </kendo-grid-excel>
         <ng-template kendoGridDetailTemplate let-dataItem>
-            <kendo-grid [data]="gridData">
+            <kendo-grid [data]="convertToChildGridArray(dataItem)" style="height:fit-content">
                 <kendo-grid-column *ngIf="dataItem.RuleDescription.length > 0" width="200" [headerClass]="{'headerClass':true}" field="RuleDescription" title="Rule Description">
                     <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
                         <div [innerHTML]="dataItem.RuleDescription"></div>
@@ -152,11 +152,11 @@
             </kendo-grid>
         </ng-template>
     </kendo-grid>
-    <kendo-dialog title="Confirmation" *ngIf="isDeletion" (close)="cancelDeletion()">
-        <p style="margin: 30px; text-align: center;">Are you sure want to delete this rule?</p>
-        <kendo-dialog-actions>
-            <button class='k-button' (click)="deleteConfirmation()">OK</button>
-            <button class='k-button' (click)="cancelDeletion()">CANCEL</button>
+    <kendo-dialog class="admin-delete-style" *ngIf="isDeletion">
+        <p style="margin: 20px; text-align: center;">Are you sure want to delete this rule?</p>
+        <kendo-dialog-actions class="del-admin">
+            <button class='k-button admin-okbtn-style' (click)="deleteConfirmation()">OK</button>
+            <button class='k-button admin-cancelbtn-style' (click)="cancelDeletion()">CANCEL</button>
         </kendo-dialog-actions>
     </kendo-dialog>
 </div>
