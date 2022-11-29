@@ -137,6 +137,15 @@ angular
                     }
                 }
             })
+            .state("UnifiedDealRecon", {
+                url: '/UnifiedDealRecon',
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-unified-dealrecon></admin-unified-dealrecon>'
+                    }
+                }
+            })
             .state("adminGeo", {
                 url: "/adminGeo",
                 abstract: false,

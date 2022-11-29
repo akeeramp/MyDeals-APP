@@ -932,6 +932,8 @@
     <Content Include="Client\src\app\admin\testTenders\admin.testTenders.component.css" />
     <Content Include="Client\src\app\admin\testTenders\admin.testTenders.component.html" />
     <Content Include="Client\src\app\admin\supportScript\admin.supportScript.component.html" />
+    <Content Include="Client\src\app\admin\unifiedDealRecon\admin.bulkUnifyModal.component.html" />
+    <Content Include="Client\src\app\admin\unifiedDealRecon\admin.unifiedDealRecon.component.css" />
     <Content Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.component.css" />
     <TypeScriptCompile Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.component.ts" />
@@ -962,6 +964,10 @@
     <TypeScriptCompile Include="Client\src\app\admin\testTenders\admin.testTenders.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\supportScript\admin.supportScript.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\supportScript\admin.supportScript.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\unifiedDealRecon\admin.bulkUnifyModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\unifiedDealRecon\admin.unifiedDealRecon.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\unifiedDealRecon\admin.unifiedDealRecon.model.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\unifiedDealRecon\admin.unifiedDealRecon.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.component.ts" />
     <Content Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.component.html" />
     <Content Include="Client\src\app\admin\vistexCustomerMapping\admin.vistexCustomerMapping.component.css" />
@@ -2213,6 +2219,7 @@
     <Content Include="Client\Images\docs\MyDeal UI MT Architecture 50.pdf" />
     <Content Include="Client\Images\docs\MyDeals Error Handling Design Doc.pdf" />
     <Content Include="Client\Images\helpicons.psd" />
+    <Content Include="Client\src\app\admin\unifiedDealRecon\admin.unifiedDealRecon.component.html" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
     <Content Include="Scripts\intcAnalytics.js" />

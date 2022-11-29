@@ -519,7 +519,7 @@ export class endCustomerRetailModalComponent {
                 }
             }
         }
-        if (endCustomer.toUpperCase() == "ANY") {
+        if ((endCustomer && endCustomer.toUpperCase()) == "ANY") {
             if (this.isAdmin == true) {
                 this.ChangeErrorFlag = false;
                 this.isWarning = true;
@@ -597,7 +597,7 @@ export class endCustomerRetailModalComponent {
 
     saveEndcustomerData() {
         if (this.isError == false && this.END_CUST_OBJ.length !== 0) {
-            this.endCustData.PRIMED_CUST_NM = this.END_CUST_OBJ.map(this.getPrimeCustNames)
+            this.endCustData.PRIMED_CUST_NM = this.END_CUST_OBJ.map(this.getPrimeCustNames).join();
 
             this.endCustData.IS_PRIME = this.END_CUST_OBJ.filter(x => x.IS_PRIMED_CUST == 0).length > 0 ? 0 : 1;
             //RPL status of Excluded End Customer should not be Considered in determining the deal level IS_RPL attribute
@@ -610,9 +610,14 @@ export class endCustomerRetailModalComponent {
             this.endCustData.PRIMED_CUST_ID = ecIdList.join();
             this.endCustData.PRIMED_CUST_CNTRY = this.countryValues.join();
             this.endCustData.END_CUSTOMER_RETAIL = this.endCustomerValues.join();
-            this.endCustData.END_CUST_OBJ = angular.toJson(this.END_CUST_OBJ);
+            this.endCustData.END_CUST_OBJ = JSON.stringify(this.END_CUST_OBJ);
             this.dialogRef.close(this.endCustData);
         }
+        /*if (this.isAdmin == true && this.endCustData.IS_PRIME) {
+            this.message = "Deal End Customer Unified successfully";
+        } else {
+            this.message = "Selected Customer is not a Unified Customer";
+        }*/
     }
 
     getPrimeCustNames(item) {
@@ -631,36 +636,35 @@ export class endCustomerRetailModalComponent {
             return [item.PRIMED_CUST_ID].join(",");
     }
 
-    saveAndClose() {
-        if (this.isError == false && this.END_CUST_OBJ.length !== 0) {
+    async saveAndClose() {
+        this.isLoading = true;
+        this.spinnerMessageHeader = "Saving.."
+        this.spinnerMessageDescription = "Saving the End Customer/Retail information."
+        let response = await this.pteService.UnPrimeDealsLogs(this.data.item.dealId, JSON.stringify(this.END_CUST_OBJ.filter(x => x.PRIMED_CUST_NM.toUpperCase() != "ANY"))).toPromise().catch((error) => {
+            this.loggerSvc.error('Unable to process UCD request.', error);
             this.saveEndcustomerData();
-            this.pteService.UnPrimeDealsLogs(this.data.item.dealId, JSON.stringify(this.END_CUST_OBJ.filter(x => x.PRIMED_CUST_NM.toUpperCase() != "ANY"))).subscribe((response: any) => {
-                if (response == "true") {
-                    this.loggerSvc.success("Request successfully sent to UCD.");
-                }
-                else if (response == "false") {
-                    this.loggerSvc.error("Unable to sent UCD request.", response, "Error");
-                }
-                else if (response.data == "Yes") {
-                    //"Yes" indicates one of the end customer which is not present in our master table gone through the UCD approval flow and got Unified
-                    //AS new record got unified in our table we need to re validate the selected End customer and save the End customer atrbs
-                    this.pteService.validateEndCustomer(JSON.stringify(this.END_CUST_OBJ)).subscribe((res: any) => {
-                        this.END_CUST_OBJ = res;
-                        this.saveEndcustomerData();
-                        this.loggerSvc.success("Request successfully sent to UCD.");
-                    }, error => {
-                        this.loggerSvc.error('dealEditorComponent::ValidateEndCustomerRetail::validateEndCustomer:: service', error);
-
-                    });
-                }
-                if (response !== "Yes") {
-                    this.saveEndcustomerData();
-                }
-            }, error => {
-                this.loggerSvc.error('Unable to process UCD request.', error);
+        });
+        if (response == "true") {
+            this.loggerSvc.success("Request successfully sent to UCD.");
+        } else if (response == "false") {
+            this.loggerSvc.error("Unable to sent UCD request.", response, "Error");
+        } else {
+            if (response == "Yes") {
+                //"Yes" indicates one of the end customer which is not present in our master table gone through the UCD approval flow and got Unified
+                //AS new record got unified in our table we need to re validate the selected End customer and save the End customer atrbs
+                let result = await this.pteService.validateEndCustomer(JSON.stringify(this.END_CUST_OBJ)).toPromise().catch((error) => {
+                    this.loggerSvc.error('dealEditorComponent::ValidateEndCustomerRetail::validateEndCustomer:: service', error);
+                });
+                this.END_CUST_OBJ = result;
                 this.saveEndcustomerData();
-            });
+                this.loggerSvc.success("Request successfully sent to UCD.");
+            }
         }
+        if (response !== "Yes") {
+            this.saveEndcustomerData();
+        }
+        this.isLoading = false;
+
     }
 
     primeddata(action) {
