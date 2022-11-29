@@ -949,34 +949,19 @@ export class pricingTableEditorComponent {
         });
         if (result) {
             await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
-            this.warnings = false;
-            _.each(result["Data"]["PRC_TBL_ROW"], (item) => {
+            //this will help to reload the page with errors when we update
+            await this.loadPTE();
+            _.each(this.newPTR, (item) => {
                 if (item.warningMessages !== undefined && item.warningMessages.length > 0) {
                     this.warnings = true;
                 }
             })
-            if (!this.warnings) {
-                //this will help to reload the page with errors when we update
-                await this.loadPTE();
-                _.each(this.newPTR, (item) => {
-                    if (item.warningMessages !== undefined && item.warningMessages.length > 0) {
-                        this.warnings = true;
-                    }
-                })
-            }
-            else {
-                let PTR = PTE_Load_Util.setPrdColor(result["Data"]["PRC_TBL_ROW"]);
-                this.getTemplateDetails();
-                //this is only while loading we need , need to modify as progress
-                PTR = PTE_Load_Util.pivotData(PTR, this.isTenderContract, this.curPricingTable, this.kitDimAtrbs);
-                this.generateHandsonTable(PTR);
-                this.dirty = true;
-            }
             if ((!this.warnings) && this.isTenderContract) {
                 this.tmDirec.emit('DE');
             } else if (this.warnings && this.isTenderContract) {
                 this.tmDirec.emit('');
             }
+            this.warnings = false;
         }
         else {
             this.loggerService.error("Something went wrong", 'Error');
