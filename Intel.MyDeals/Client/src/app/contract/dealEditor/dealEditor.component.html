@@ -118,21 +118,21 @@
                     </div>
                 </div>
 
-                <kendo-dialog *ngIf="isAddDialog" id="Adddialog">
+                <kendo-dialog *ngIf="isAddDialog" id="Adddialog" class="k-dialog-popup-design">
                     <p class="tab-name-style">Tab name:</p>
                     <input type="text" [(ngModel)]="DeAddtab" class="k-textbox add-tab-textbox-style" />
                     <kendo-dialog-actions class="add-tab-style">
-                        <button class='k-button add-tab-okbtn' (click)="Addtabdata()">OK</button>
-                        <button class='k-button add-tab-cancelbtn' (click)="CloseAdd()">CANCEL</button>
+                        <button class='k-button add-tab-okbtn ok-btn-pop-up' (click)="Addtabdata()">OK</button>
+                        <button class='k-button add-tab-cancelbtn cancel-btn-pop-up' (click)="CloseAdd()">CANCEL</button>
                     </kendo-dialog-actions>
                 </kendo-dialog>
 
-                <kendo-dialog *ngIf="isrenameDialog" id="renamedialog">
+                <kendo-dialog *ngIf="isrenameDialog" id="renamedialog" class="k-dialog-popup-design">
                     <p class="tab-name-style">Tab name:</p>
                     <input type="text" [(ngModel)]="Derenametab" class="k-textbox add-tab-textbox-style" />
                     <kendo-dialog-actions class="add-tab-style">
-                        <button class='k-button add-tab-okbtn' (click)="renametabdata()">OK</button>
-                        <button class='k-button add-tab-cancelbtn' (click)="Closerename()">CANCEL</button>
+                        <button class='k-button add-tab-okbtn ok-btn-pop-up' (click)="renametabdata()">OK</button>
+                        <button class='k-button add-tab-cancelbtn cancel-btn-pop-up' (click)="Closerename()">CANCEL</button>
                     </kendo-dialog-actions>
                 </kendo-dialog>
 

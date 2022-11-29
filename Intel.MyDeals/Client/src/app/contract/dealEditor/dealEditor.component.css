@@ -1087,9 +1087,8 @@ button.k-button.add-tab-cancelbtn:hover {
      border-color: #ebebeb !important;
      background-color: #ebebeb !important;
 }
-.tab-name-style{
-    padding-left: 11px !important;
-    padding-top: 10px !important;
+.tab-name-style {
+    padding: 1.2em 1.2em .6em 1.2em;
     font-size: 15px !important;
     font-family: 'Intel Clear' !important;
 }

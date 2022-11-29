@@ -325,24 +325,6 @@ p.boxsize {
     margin-bottom: 0rem !important
 }
 
-button.okbutton.k-button {
-    background-color: var(--light-blue) !important;
-    color: #f9f9f9 !important;
-    font-family: 'Intel Clear' !important;
-    font-size: 15px !important
-}
-
-.cancelbutton {
-    background-color: #fafafa !important;
-    font-size: 15px !important;
-    color: #000000 !important;
-    font-family: 'Intel Clear' !important
-}
-
-    .cancelbutton:hover {
-        background-color: #999999 !important
-    }
-
 .c2aborder.k-textbox {
     border-color: #ced4da8c !important;
     background-color: #ffffff !important;

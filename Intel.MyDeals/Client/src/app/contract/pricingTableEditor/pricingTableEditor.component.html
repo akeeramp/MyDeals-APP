@@ -186,25 +186,25 @@
 </kendo-dialog>
 
 
-<kendo-dialog *ngIf="isDialogOpen" (close)="closeDialog('No')" [minWidth]="250" [width]="584" class="ptevalidopoup">
+<kendo-dialog *ngIf="isDialogOpen" (close)="closeDialog('No')" [minWidth]="250" [width]="584" class="ptevalidopoup k-dialog-popup-design">
     <p style="margin: 20px; text-align: center; padding:12px;">
         Are you sure that you want to delete this product and the matching deal(s)?
     </p>
     <kendo-dialog-actions class="pteokbtnstyle">
-        <button kendoButton class="new-k-button" (click)="closeDialog('Delete')" themeColor="primary">
+        <button kendoButton class="new-k-button ok-btn-pop-up" (click)="closeDialog('Delete')" themeColor="primary">
             OK
         </button>
-        <button kendoButton class="new-c-button" (click)="closeDialog('No')">CANCEL</button>
+        <button kendoButton class="new-c-button cancel-btn-pop-up" (click)="closeDialog('No')">CANCEL</button>
     </kendo-dialog-actions>
 </kendo-dialog>
-<kendo-dialog title="Confirmation" *ngIf="isCustDivNull" (close)="custdivnull(false)">
-    <p style="margin: 30px; text-align: center;">The division is blank. Do you intend for this deal to apply to all divisions ?</p>
+<kendo-dialog *ngIf="isCustDivNull" (close)="custdivnull(false)" class="k-dialog-popup-design">
+    <p style="text-align: center;">The division is blank. Do you intend for this deal to apply to all divisions ?</p>
     <kendo-dialog-actions>
-        <button class='k-button' (click)="custdivnull(true)">OK</button>
-        <button class='k-button' (click)="custdivnull(false)">CANCEL</button>
+        <button class='k-button ok-btn-pop-up' (click)="custdivnull(true)">OK</button>
+        <button class='k-button cancel-btn-pop-up' (click)="custdivnull(false)">CANCEL</button>
     </kendo-dialog-actions>
 </kendo-dialog>
-<kendo-dialog *ngIf="validationMessage" class="ptevalidopoup valid-out-pop-ups">
+<kendo-dialog *ngIf="validationMessage" class="ptevalidopoup valid-out-pop-ups k-dialog-popup-design">
     <p class="text-para-color">All the products have been validated.</p>
     <kendo-dialog-actions class="pteokbtnstyle alter-btns-ok">
         <button class='k-button mykbtnstyles' (click)="resetValidationMessage()">OK</button>

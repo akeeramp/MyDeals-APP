@@ -336,17 +336,17 @@
         </div>
     </div>
 </div>
-<kendo-dialog class="contentborder mybuttondialog" *ngIf="isBackdatepopupopend">
+<kendo-dialog class="contentborder mybuttondialog k-dialog-popup-design" *ngIf="isBackdatepopupopend">
     <p class="dialogmsg boxsize">
         You have Selected a date in the past which means the dates you will enter will be considered
         backdated
     </p>
     <div style="display:flex">
         <kendo-dialog-actions style="flex-grow:1;">
-            <button kendoButton (click)="pastDateFieldsenable()" class="okbutton">OK</button>
+            <button kendoButton (click)="pastDateFieldsenable()" class="ok-btn-pop-up">OK</button>
         </kendo-dialog-actions>
         <kendo-dialog-actions style="flex-grow:1">
-            <button kendoButton (click)="applyTodayDate()" class="cancelbutton">CANCEL</button>
+            <button kendoButton (click)="applyTodayDate()" class="cancel-btn-pop-up">CANCEL</button>
         </kendo-dialog-actions>
     </div>
 </kendo-dialog>
