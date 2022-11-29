@@ -25,9 +25,9 @@
                 <div class="form-group row">
                     <div class="col-md-11">
                         <kendo-upload id="meetCompFileUpd" [restrictions]="fileUploadOptions.validation" [(ngModel)]="files" name="files"
-                            class="kuploadaction" (success)="successEventHandler($event)" (select)="onFileSelect()"
-                            (remove)="onFileRemove()" (error)="onFileUploadError()" (complete)="onFileUploadComplete()"
-                            [saveUrl]="uploadMeetCompUrl" [batch]="false" [autoUpload]="false"></kendo-upload>
+                            class="kuploadaction" (success)="successEventHandler($event)"
+                             (error)="onFileUploadError()" (complete)="onFileUploadComplete()"
+                            [saveUrl]="fileUploadOptions.async.saveUrl" [batch]="false" [autoUpload]="false"></kendo-upload>
 
                     </div>
                 </div>
@@ -82,6 +82,13 @@
     <kendo-dialog-actions>
         <button kendoButton (click)="UploadMeetComps()" themeColor="primary">OK</button>
         <button kendoButton (click)="closeConfirmation()" themeColor="primary">CANCEL</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+<kendo-dialog (close)="closePriceAlert('close')" *ngIf="isInvalidPrice" title="Invalid Price" >
+    <p [innerHTML]='priceMsg'></p>
+    <kendo-dialog-actions >
+        <button kendoButton (click)="closePriceAlert('')" id="invalidPrcMsg">RETRY</button>
+        <button kendoButton (click)="closePriceAlert('close')" id="invalidPrcMsg">CANCEL</button>
     </kendo-dialog-actions>
 </kendo-dialog>
 
