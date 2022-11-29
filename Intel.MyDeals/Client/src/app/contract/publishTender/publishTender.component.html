@@ -28,7 +28,7 @@
     </table>
 </div>
 <div *ngIf="!loading" class="publishTender" style="padding: 5px; height: 100%;">
-    <div id="pubOpGrid" class="filter-alignment-fixes" style="height: 100%;">
+    <div id="pubOpGrid" class="filter-alignment-fixes oppo-grids" style="height: 100%;">
         <kendo-grid [navigable]="true" [data]="gridData" class="mpublishgrid" [loading]="isDataLoading" [pageSize]="state.take" [skip]="state.skip"
                     [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true"
                     [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" style="height: calc(100vh - 350px);"

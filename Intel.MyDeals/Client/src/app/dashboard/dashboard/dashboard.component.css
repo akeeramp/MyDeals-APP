@@ -363,30 +363,6 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     left: 0 !important;
 }
 
-    .filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th .k-cell-inner kendo-grid-filter-menu a .k-i-filter {
-        color: var(--light-blue);
-    }
-
-.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th {
-    vertical-align: top !important;
-    font-family: 'Intel Clear' !important;
-    font-size: 12px !important;
-    font-weight: 600 !important;
-    white-space: normal !important;
-    color: #1A3E6F !important;
-}
-
-.filter-alignment-fixes kendo-grid .k-grid-aria-root kendo-grid-list table tbody tr td .isReadOnlyCell {
-    background: transparent !important;
-}
-
-.filter-alignment-fixes kendo-grid .k-grid-aria-root kendo-grid-list table tbody tr td:first-child deal-editor-cell {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: relative;
-}
-
 .width-fixes .k-grid .k-grid-edit-row td deal-editor-edit .k-datepicker,
 .width-fixes .k-grid .k-grid-edit-row td deal-editor-edit .k-numerictextbox {
     width: 100%;
@@ -1248,9 +1224,6 @@ button.warn-custom:hover {
     color: #424242!important;
 }
 
-#pubOpGrid .k-grid .k-grid-content {
-    overflow: overlay;
-}
 .add-widget-link {
     color: #0071c5;
     text-decoration: none;

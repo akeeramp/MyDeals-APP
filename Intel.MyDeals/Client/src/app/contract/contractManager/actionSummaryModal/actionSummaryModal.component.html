@@ -10,13 +10,14 @@
         <div class="draftMsg">
             Below is an overview of what will be submitted.
         </div>
-        <kendo-grid id="gridActionSummary" style="height: 200px !important; overflow: scroll !important; color: #1a3e6f !important; " [data]="gridData">
-        <kendo-grid-column [headerClass]="{'headerClass':true}" field="TITLE" title="Strategy Name" width="100px">
-        </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTN" title="Approve or Revise" width="200px">
-        </kendo-grid-column>
-        </kendo-grid>
-
+        <div class="oppo-grids physics-css">
+            <kendo-grid id="gridActionSummary" style="height: 200px !important; overflow: scroll !important; color: #1a3e6f !important; " [data]="gridData">
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="TITLE" title="Strategy Name" width="100px">
+                </kendo-grid-column>
+                <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTN" title="Approve or Revise" width="200px">
+                </kendo-grid-column>
+            </kendo-grid>
+        </div>
         <br/>
         <div class="row">
             <div class="col-md-6">

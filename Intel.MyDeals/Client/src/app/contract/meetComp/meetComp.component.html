@@ -33,7 +33,7 @@
                 <div class="fr helpBtn" title="Help" (click)="showHelpTopic();"><i class="intelicon-help" style="font-size:30px !important"></i></div>
                 <div class="clearboth"></div>
             </div>
-            <div id="grid" class="opUiContainer md dashboard either-pin" [ngClass]="{'op-grid': isAdhoc !=1}">
+            <div id="grid" class="opUiContainer md dashboard either-pin oppo-grids" [ngClass]="{'op-grid': isAdhoc !=1}">
                 <kendo-grid style="height: calc(100vh - 350px);" [data]="gridData" [skip]="state.skip" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}"
                             [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)" [kendoGridExpandDetailsBy]="expandDetailsBy" [(expandedDetailKeys)]="expandedDetailKeys" [initiallyExpanded]="isTender">
                     <kendo-grid-column width="70px" [columnMenu]="false">
