@@ -117,42 +117,45 @@ export class pricingTableComponent {
                 this.pt_Id = contractModel.pt_id;
                 this.c_Id = contractModel.C_ID;
                 this.contractData = contractModel.contractData;
-                let PRC_ST = _.filter(this.contractData.PRC_ST, item => { return item.DC_ID == this.ps_Id });
-                if (PRC_ST != undefined && PRC_ST != null && PRC_ST.length > 0) {
-                    let PRC_TBL = _.filter(PRC_ST[0].PRC_TBL, item => { return item.DC_ID == this.pt_Id });
-                    if (PRC_TBL != undefined && PRC_TBL != null && PRC_TBL.length > 0) {
-                        this.ps_title = PRC_ST[0].TITLE;
-                        this.pt_title = PRC_TBL[0].TITLE;
-                        this.pt_type = PRC_TBL[0].OBJ_SET_TYPE_CD;
-                        this.wf_Stage = PRC_ST[0].WF_STG_CD;
-                        this.ps_passed_validation = PRC_ST[0].PASSED_VALIDATION;
-                        this.is_hybrid_ps = PRC_ST[0].IS_HYBRID_PRC_STRAT;
-                        this.pt_passed_validation = PRC_TBL[0].PASSED_VALIDATION
-                        await this.enableDealEditorTab();
-                        //if isRedirect is true which means user navigating to the deal through the global search results then for PS and Deal ID search, DE tab should be shown and for PT ->PTE tab should be shown
-                        if (isRedirect) {
-                            if (this.type != "PT" && this.isDETabEnabled) {
-                                setTimeout(() => {
-                                    this.isDETab = true; this.isPTETab = false
-                                }, 0)
+                if (this.contractData != undefined && this.contractData != null && this.contractData! == ""
+                    && this.contractData.PRC_ST != undefined && this.contractData.PRC_ST != null && this.contractData.PRC_ST != "") {
+                    let PRC_ST = _.filter(this.contractData.PRC_ST, item => { return item.DC_ID == this.ps_Id });
+                    if (PRC_ST != undefined && PRC_ST != null && PRC_ST.length > 0) {
+                        let PRC_TBL = _.filter(PRC_ST[0].PRC_TBL, item => { return item.DC_ID == this.pt_Id });
+                        if (PRC_TBL != undefined && PRC_TBL != null && PRC_TBL.length > 0) {
+                            this.ps_title = PRC_ST[0].TITLE;
+                            this.pt_title = PRC_TBL[0].TITLE;
+                            this.pt_type = PRC_TBL[0].OBJ_SET_TYPE_CD;
+                            this.wf_Stage = PRC_ST[0].WF_STG_CD;
+                            this.ps_passed_validation = PRC_ST[0].PASSED_VALIDATION;
+                            this.is_hybrid_ps = PRC_ST[0].IS_HYBRID_PRC_STRAT;
+                            this.pt_passed_validation = PRC_TBL[0].PASSED_VALIDATION
+                            await this.enableDealEditorTab();
+                            //if isRedirect is true which means user navigating to the deal through the global search results then for PS and Deal ID search, DE tab should be shown and for PT ->PTE tab should be shown
+                            if (isRedirect) {
+                                if (this.type != "PT" && this.isDETabEnabled) {
+                                    setTimeout(() => {
+                                        this.isDETab = true; this.isPTETab = false
+                                    }, 0)
+                                }
+                                else {
+                                    setTimeout(() => {
+                                        this.isDETab = false; this.isPTETab = true;
+                                    }, 0)
+                                }
                             }
                             else {
-                                setTimeout(() => {
-                                    this.isDETab = false; this.isPTETab = true;
-                                }, 0)
-                            }
-                        }
-                        else {
-                            if (this.pt_passed_validation == 'Complete' && this.rowlength !=0) {
-                                //for the page to redirect
-                                setTimeout(() => {
-                                    this.isDETab = true; this.isPTETab = false;
-                                }, 0);
-                            } else {
-                                //for the page to redirect
-                                setTimeout(() => {
-                                    this.isDETab = false; this.isPTETab = true;
-                                }, 0);
+                                if (this.pt_passed_validation == 'Complete' && this.rowlength != 0) {
+                                    //for the page to redirect
+                                    setTimeout(() => {
+                                        this.isDETab = true; this.isPTETab = false;
+                                    }, 0);
+                                } else {
+                                    //for the page to redirect
+                                    setTimeout(() => {
+                                        this.isDETab = false; this.isPTETab = true;
+                                    }, 0);
+                                }
                             }
                         }
                     }
