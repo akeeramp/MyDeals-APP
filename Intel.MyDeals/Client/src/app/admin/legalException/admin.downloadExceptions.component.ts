@@ -3,6 +3,7 @@ import { Component, Inject, ViewEncapsulation } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { adminlegalExceptionService } from "./admin.legalException.service";
 import { GridUtil } from "../../contract/grid.util";
+import { ExcelColumnsConfig } from "../ExcelColumnsconfig.util";
 
 @Component({
     selector: "admin-download-exceptions",
@@ -18,7 +19,8 @@ export class adminDownloadExceptionscomponent {
         @Inject(MAT_DIALOG_DATA) public data) {        
     }
 
-    private legalExceptionData : any;
+    private legalExceptionData: any;
+    private legalExceptionColumns = ExcelColumnsConfig.legalExceptionExcelColumns;
     private chkData = {};
 
     download() {
@@ -32,7 +34,7 @@ export class adminDownloadExceptionscomponent {
         if (pctExceptionList != "") {
             this.adminlegalExceptionSvc.getDownloadLegalException(pctExceptionList, chkPreviousVersion, chkDealList).subscribe((response: any) => {
                 if (response && response.length > 0) {
-                    GridUtil.dsToExcelLegalException(this.data.grid, response, "Legal Exception Export.xlsx", false, chkDealList);
+                    GridUtil.dsToExcelLegalException(this.legalExceptionColumns, response, "Legal Exception Export.xlsx", false, chkDealList);
                     this.dialogRef.close();
                 }
                 else

@@ -899,10 +899,9 @@ export class GridUtil {
             saveAs(dataUrl, 'MyDealsSearchResults.xlsx');
         });
     }
-    static dsToExcelLegalException = function (grid, ds, title, onlyVisible, dealListChk) {
+    static dsToExcelLegalException = function (gridColumns, ds, title, onlyVisible, dealListChk) {
 
         var rows = [{ cells: [] }];
-        var gridColumns = grid.columns._results;
         var colWidths = [];
         var colHidden = false;
         if (onlyVisible === undefined || onlyVisible === null) onlyVisible = false;
@@ -911,7 +910,7 @@ export class GridUtil {
         var elem = document.createElement('div');
 
         var colList = [];
-        for (var i = 2; i < gridColumns.length; i++) {
+        for (var i = 0; i < gridColumns.length; i++) {
             colHidden = onlyVisible && gridColumns[i].hidden !== undefined && gridColumns[i].hidden === true;
             if (forceHide.indexOf(gridColumns[i].field) >= 0) colHidden = true;
             if (!colHidden && (gridColumns[i].bypassExport === undefined || gridColumns[i].bypassExport === false)) {

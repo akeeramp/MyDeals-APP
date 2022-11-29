@@ -4,7 +4,7 @@ import { logger } from "../../shared/logger/logger";
  import * as _moment from "moment";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { FormBuilder } from "@angular/forms";
-import { DataStateChangeEvent, GridDataResult,  GridComponent } from "@progress/kendo-angular-grid";
+import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
 import { State } from "@progress/kendo-data-query";
 import { process, distinct } from "@progress/kendo-data-query";
 import { adminlegalExceptionService } from "./admin.legalException.service";
@@ -115,9 +115,6 @@ export class adminlegalExceptionComponent {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }
 
-   
-    
-
     Hideshow() {
         if (this.isHidden == true) {
             this.isHidden = false;
@@ -158,9 +155,10 @@ export class adminlegalExceptionComponent {
 
             if (returnVal != undefined && returnVal != "close") {
                  this.savedateformate(returnVal);
-                this.adminlegalExceptionSrv.createLegalException(returnVal).subscribe((result: Array<any>) => {
-
-                    this.loggersvc.success('Legal Exception added.');
+                this.adminlegalExceptionSrv.createLegalException(returnVal).subscribe((result: any) => { 
+                    this.gridResult.push(result);
+                    this.gridData = process(this.gridResult, this.state);
+                    this.loggersvc.success('Legal Exception added.' + result);
                 }, (error) => {
                     this.loggersvc.error('Unable to add new Legal exceptions', error);
                 });
@@ -371,8 +369,9 @@ export class adminlegalExceptionComponent {
             dialogRef.afterClosed().subscribe((returnVal) => {
                 if (returnVal == "delete") {
                     this.savedateformate(item);
-                    this.adminlegalExceptionSrv.deleteLegalException(item).subscribe((result: Array<any>) => {
-                        this.gridData.data.splice(index, 1);
+                    this.adminlegalExceptionSrv.deleteLegalException(item).subscribe((result: Array<any>) => { 
+                        this.gridResult.splice(index, 1);
+                        this.gridData =   process(this.gridResult, this.state);
                         this.loggersvc.success("Legal Exception Deleted.");
                     }, (error) => {
                         this.loggersvc.error('Unable to delete Legal Exception.', error);
@@ -428,8 +427,6 @@ export class adminlegalExceptionComponent {
         }
     }
 
-
-
     detailExpand(e) {
         var dataItem = e.dataItem;
         this.childGrid(dataItem);
@@ -482,13 +479,12 @@ export class adminlegalExceptionComponent {
         }
     }
 
-    download(grid: GridComponent) {
+    download() {
         let selectedlist = this.gridData.data.filter(element => {
             return element.IS_SELECTED == true;
         });
         if (selectedlist && selectedlist.length > 0) {
             let data = {
-                "grid": grid,
                 "dataItem": selectedlist,
             }
             const dialogRef = this.dialog.open(adminDownloadExceptionscomponent, {
@@ -508,7 +504,8 @@ export class adminlegalExceptionComponent {
             ACTV_IND: true,
             IS_DSBL: '',
             VER_NBR: 1,
-            VER_CRE_DTM: new Date(), 
+            VER_CRE_DTM: new Date(),
+            CRE_DTM: new Date(), 
             PCT_EXCPT_NBR: '',
             INTEL_PRD: '',
             SCPE: '',
