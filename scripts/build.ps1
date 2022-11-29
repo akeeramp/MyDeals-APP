@@ -38,6 +38,12 @@ try {
      & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/UTT $PATH Web.Config /MT /copyall /secfix;
      if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
     }
+    elseif ($Operation -eq 'MovePublishCONS' ){
+     & robocopy output/_PublishedWebsites/Intel.MyDeals $PATH /e /MT /copyall /secfix ;
+     if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
+     & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/CONS $PATH Web.Config /MT /copyall /secfix;
+     if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
+    }
     elseif ($Operation -eq 'ClientZip' ){
      if (Test-Path "C:\ClientZip\Client.zip") {Remove-Item -Path "C:\ClientZip\Client.zip"};
      Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::CreateFromDirectory((Get-Location).path+"\Intel.MyDeals\Client\", "C:\ClientZip\Client.zip");
