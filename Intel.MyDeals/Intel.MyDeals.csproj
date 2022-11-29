@@ -1109,8 +1109,6 @@
     <Content Include="Client\src\app\reporting\reporting.component.css" />
     <Content Include="Client\src\app\shared\footer\footer.component.css" />
     <Content Include="Client\src\app\shared\footer\footer.component.html" />
-    <Content Include="Client\src\app\shared\header\header.component.css" />
-    <Content Include="Client\src\app\shared\header\header.component.html" />
     <Content Include="Client\src\app\shared\loadingSpinner\loadingspinner.component.html" />
     <Content Include="Client\src\app\style\common.css" />
     <Content Include="Client\src\app\style\dealEditor.css" />
@@ -2609,7 +2607,6 @@
     <TypeScriptCompile Include="Client\src\app\shared\authorization\auth.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\footer\footer.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\footer\footer.service.ts" />
-    <TypeScriptCompile Include="Client\src\app\shared\header\header.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\header\header.service.ts" />
     <!-- <TypeScriptCompile Include="Client\src\app\shared\index.ts" /> -->
     <TypeScriptCompile Include="Client\src\app\shared\kendo\customDateFilter.component.ts" />

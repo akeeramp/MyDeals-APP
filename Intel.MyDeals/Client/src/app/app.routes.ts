@@ -21,15 +21,16 @@ angular
 
             })
             //*****************poc items starts here*****************
-            .state("mykendocontrol", {
-                url: "/mykendocontrol",
-                abstract: false,
-                views: {
-                    mainView: {
-                        template: '<my-kendo-control></my-kendo-control>'
-                    }
-                }
-            })
+            // this is no longer needed as all component we have now in screens
+            // .state("mykendocontrol", {
+            //     url: "/mykendocontrol",
+            //     abstract: false,
+            //     views: {
+            //         mainView: {
+            //             template: '<my-kendo-control></my-kendo-control>'
+            //         }
+            //     }
+            // })
             .state("mydashboard", {
                 url: "/mydashboard",
                 abstract: false,
