@@ -357,11 +357,39 @@
     box-shadow: none !important
 }
 
-..tender-modals style-both-clas.k-multiselect .k-multiselect-wrap li.k-button {
+.tender-modals style-both-clas.k-multiselect .k-multiselect-wrap li.k-button {
     float: left !important;
     font-size: 13px !important;
     border-radius: 1.071em !important;
     margin: 3px 0 3px 3px !important;
     padding: 0 1.6em 0 0.857em !important;
     line-height: 1.86em !important;
+}
+
+kendo-multiselect.style-both-clas.divineo-one .k-multiselect-wrap kendo-taglist ul li span.k-select {
+    display: flex !important;
+    position: absolute;
+    right: 5px;
+    top: 10px;
+}
+
+kendo-multiselect.style-both-clas.divineo-one:hover .k-multiselect-wrap span.k-icon.k-clear-value.k-i-close {
+    top: 13px;
+    padding-top: 0px;
+}
+
+kendo-multiselect.style-both-clas.divineo-one.k-state-focused .k-multiselect-wrap span.k-icon.k-clear-value.k-i-close {
+    top: 13px;
+}
+
+kendo-multiselect.style-both-clas.divineo-one.k-state-focused .k-multiselect-wrap kendo-taglist ul li span.k-select .k-i-close {
+    color: var(--light-blue)
+}
+
+kendo-multiselect.style-both-clas.divineo-one .k-multiselect-wrap kendo-taglist ul li {
+    padding-right: 25px !important;
+}
+
+kendo-multiselect.style-both-clas.divineo-one .k-multiselect-wrap kendo-taglist ul li span {
+    font-size: 14px;
 }

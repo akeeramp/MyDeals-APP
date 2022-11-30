@@ -272,7 +272,7 @@
 .af-setting-fixes .auto-cs-btn {
     position: relative;
     width: 100%;
-    margin: 1em !important;
+    margin: 0 !important;
 }
 
 .af-setting-fixes .alter-star {
@@ -350,4 +350,13 @@
     position: absolute;
     top: 60px !important;
     left: 34px;
+}
+
+.autofiller-pop-ups {
+    max-width: 85vw !important;
+}
+
+.autofiller-pop-ups mat-dialog-container {
+    padding-top: 30px;
+    padding-bottom: 30px;
 }

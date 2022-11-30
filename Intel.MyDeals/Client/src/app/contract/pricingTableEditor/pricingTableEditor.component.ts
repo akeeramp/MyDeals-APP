@@ -1374,6 +1374,7 @@ export class pricingTableEditorComponent {
             height: 'auto',
             width: '1500px',
             data: autofillData,
+            panelClass: "autofiller-pop-ups"
         });
 
         dialogRef.afterClosed().subscribe(result => {

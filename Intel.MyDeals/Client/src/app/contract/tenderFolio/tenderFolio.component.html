@@ -49,7 +49,7 @@
                             <div *ngIf="isCustDiv" class="col-md-11 row">
                                 <div *ngIf="isCustDiv">
                                     <label class="rmv-mrgn-btm"><span>Division:</span></label><br />
-                                    <kendo-multiselect class="division-name style-both-clas" #cmbmulti [kendoDropDownFilter]="filterSettings" [data]="selectedData" textField="CUST_DIV_NM" valueField="CUST_DIV_NM" [(ngModel)]="CUST_NM_DIV" [ngModelOptions]="{standalone: true}" [autoClose]="false"></kendo-multiselect>
+                                    <kendo-multiselect class="division-name style-both-clas divineo-one" #cmbmulti [kendoDropDownFilter]="filterSettings" [data]="selectedData" textField="CUST_DIV_NM" valueField="CUST_DIV_NM" [(ngModel)]="CUST_NM_DIV" [ngModelOptions]="{standalone: true}" [autoClose]="false"></kendo-multiselect>
                                     <div class="description">Blank means that ALL divisions are included</div>
                                 </div>
                             </div>
