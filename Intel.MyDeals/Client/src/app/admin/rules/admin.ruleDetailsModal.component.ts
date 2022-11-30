@@ -199,7 +199,7 @@ export class RuleDetailsModalComponent {
                     })
                 }
             } else {
-                if (row.values != null && row.values != '' && row.values != []) {
+                if (row.values != null && row.values != '') {
                     if (selectedField.field == 'QLTR_BID_GEO')
                         row.values.forEach((item) => {
                             selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.dropdownName === item)[0])
@@ -791,7 +791,7 @@ export class RuleDetailsModalComponent {
                     requiredFields.push("Rule end date");
                 if ((this.Rules.Criteria.filter(x => x.value === "").length > 0)) {
                     let newset = this.Rules.Criteria.filter(x => x.value === "");
-                    if (newset.filter(x => x.values === [] || x.values === '').length > 0)
+                    if (newset.filter(x => x.values === '').length > 0)
                         requiredFields.push("Rule criteria is empty");
                 }
                 if (this.Rules.IsAutomationIncluded && this.ProductCriteria.filter(x => x.Price !== "" && x.Price > 0 && x.ProductName === "").length > 0)
