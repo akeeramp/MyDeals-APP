@@ -18,6 +18,9 @@ try {
        if(Get-IISAppPool "cinmydeals.intel.com"){ 
            Restart-WebAppPool -Name "cinmydeals.intel.com";
         }
+        elseif(Get-IISAppPool "conmydeals.intel.com"){ 
+           Restart-WebAppPool -Name "conmydeals.intel.com";
+        }
         else{ 
           Restart-WebAppPool -Name "uttmydeals.intel.com";
         }
