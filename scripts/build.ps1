@@ -49,10 +49,10 @@ try {
      Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::CreateFromDirectory((Get-Location).path+"\Intel.MyDeals\Client\", "C:\ClientZip\Client.zip");
     }
     elseif($Operation -eq 'SendStartNotification'){
-         node C:\automation_newman\buildmailer.js Start
+         node C:\automation_newman\buildmailer.js Start $PATH
     }
         elseif($Operation -eq 'SendEndNotification'){
-         node C:\automation_newman\buildmailer.js Stop
+         node C:\automation_newman\buildmailer.js Stop $PATH
     }
     else {
         Write-Host "Please provide correct values" -BackgroundColor DarkRed
