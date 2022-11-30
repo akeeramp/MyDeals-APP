@@ -50,7 +50,7 @@
                 <div class='fl gridStatusMarker centerText {{dataItem.RuleStage}}' [title]="dataItem.RuleStage? 'Approved' : 'Pending Approval'">{{ stageOneChar(dataItem.RuleStage) }}</div>
                 <div class="rule">
                     <i [title]="dataItem.IsAutomationIncluded ? 'Auto Approval' : 'Exclusion from Automation'" class='rulesGidIcon {{ stageOneCharStatus(dataItem.IsAutomationIncluded) }} dealTools'></i>
-                    <i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' (click)="editRule(dataItem,false)"></i>
+                    <i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' (click)="editRule(dataItem.Id,false)"></i>
                     <i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' (click)="copyRule(dataItem.Id)"></i>
                     <i role='button' title='Delete' class='rulesGidIcon intelicon-trash-solid dealTools' (click)="deleteRule(dataItem.Id)"></i>
                     <i *ngIf="dataItem.isElligibleForApproval && !dataItem.IsActive && dataItem.IsAutomationIncluded && !dataItem.RuleStage" role='button' title='Approve' class='rulesGidIcon intelicon-user-approved-selected-solid dealTools' (click)="UpdateRuleIndicator(dataItem.Id, true,'UPDATE_STAGE_IND',true)"></i>
@@ -70,7 +70,7 @@
             </ng-template>
             <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
                 <div *ngIf="toolKitHidden == true">{{dataItem.Name}}</div>
-                <div *ngIf="toolKitHidden == false"><a class='ruleName admin-name' (click)="editRule(dataItem,false)"  title='Click to Edit'><span>#{{dataItem.Id}}</span>:&nbsp;<span>{{dataItem.Name}}</span></a></div>
+                <div *ngIf="toolKitHidden == false"><a class='ruleName admin-name' (click)="editRule(dataItem.Id,false)"  title='Click to Edit'><span>#{{dataItem.Id}}</span>:&nbsp;<span>{{dataItem.Name}}</span></a></div>
             </ng-template>
         </kendo-grid-column>
         <kendo-grid-column width="140" [headerClass]="{'headerClass':true}" field="RuleStatusLabel" title="Rule Status">

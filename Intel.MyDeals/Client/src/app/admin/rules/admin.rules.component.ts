@@ -279,6 +279,7 @@ export class adminRulesComponent {
         if (!!result) {
             this.adminEmailIDs = result.CNST_VAL_TXT === "NA" ? "" : result.CNST_VAL_TXT;
             this.isElligibleForApproval = this.adminEmailIDs.indexOf((<any>window).usrEmail) > -1;
+            if (this.rid != 0) this.editRule(this.rid, false);
         }
         if ((<any>window).usrRole != 'DA' && (<any>window).usrRole != 'SA') {
             this.constantSvc.getConstantsByName("PRC_RULE_READ_ACCESS").subscribe(
@@ -439,18 +440,12 @@ export class adminRulesComponent {
         this.editRule(0, false);
     }
 
-    editRule(dataItem, isCopy) {
+    editRule(dataItem: number, isCopy: boolean) {
         this.spinnerMessageDescription = "Please wait while we loading the rule..";
-        //this.GetRules(dataItem.id, "GET_BY_RULE_ID"); 
-        if (isCopy) {
-            let tempDataItem = {
-                "Id": dataItem, "isCopy": isCopy
+        let tempDataItem = {
+            "Id": dataItem, "isCopy": isCopy, "isEligible": this.isElligibleForApproval
             };
             this.openRuleDetailsModal(tempDataItem);
-        } else {
-            dataItem.isCopy = isCopy;
-            this.openRuleDetailsModal(dataItem);
-        }
     }
 
     copyRule(id) {

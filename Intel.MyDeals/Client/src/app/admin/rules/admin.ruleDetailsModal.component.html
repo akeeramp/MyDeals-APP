@@ -108,46 +108,95 @@
                             <div class="divTableCell kdropdownlist">
                                 <kendo-dropdownlist [data]="availableAttrs"
                                                     class="dealtype-dropdwn-style"
+                                                    textField="title"
+                                                    valueField="field"
                                                     [disabled]="i==0"
-                                                    [(ngModel)]="dataItem.title"
+                                                    [(ngModel)]="dataItem.selectedField"
                                                     (valueChange)="valueChange($event, i)"></kendo-dropdownlist>
                             </div>
-                            <div class="divTableCell kdropdownlist" *ngIf="dataItem.title != ''">
-                                <kendo-dropdownlist [data]="opvalues"
+                            <div class="divTableCell kdropdownlist" *ngIf="dataItem.field != ''">
+                                <kendo-dropdownlist [data]="dataItem.opvalues"
                                                     class="equalto-dropdwn-style"
+                                                    textField="label"
+                                                    valueField="operator"
                                                     [disabled]="i==0"
-                                                    [(ngModel)]="dataItem.operatorName"></kendo-dropdownlist>
+                                                    [(ngModel)]="dataItem.selectedOperator"
+                                                    (valueChange)="dataChange(i, dataItem, 'operator', $event)"></kendo-dropdownlist>
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'number' || dataItem.type == 'money' || dataItem.type == 'numericOrPercentage'">
                                 <kendo-numerictextbox [(ngModel)]="dataItem.value"
                                                       class="numerictextbox-style"
-                                                      [disabled]="i==0"></kendo-numerictextbox>
-                                <kendo-dropdownlist *ngIf="dataItem.title == 'Ceiling Volume Increase'" class="box_style_dropdwn" [data]="['%', 'unit']"></kendo-dropdownlist>
-                                <button *ngIf="dataItem.title == 'End Date Push'" class="days-style"><span>Days</span></button>
+                                                      [disabled]="i==0"
+                                                      (blur)="dataChange(i, dataItem, 'numerictextbox')"></kendo-numerictextbox>
+                                <kendo-dropdownlist *ngIf="dataItem.field == 'VOL_INCR'" class="box_style_dropdwn" [data]="['%', 'unit']"></kendo-dropdownlist>
+                                <button *ngIf="dataItem.field == 'END_DT_PUSH'" class="days-style"><span>Days</span></button>
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'string' || dataItem.type == 'string_with_in' || dataItem.type == 'string_limited' || dataItem.type == 'autocomplete'">
                                 <kendo-textbox [(ngModel)]="dataItem.value"
                                                class="extra-box-style"
-                                               [disabled]="i==0"></kendo-textbox>
+                                               [disabled]="i==0"
+                                               (blur)="dataChange(i, dataItem, 'textbox')"></kendo-textbox>
                                 <span class="span-style">Use <i style="margin-right: 3px; color: #FFA300;">*</i> for wildcard searches. <i style="color:#FFA300;">example: Sam sun*</i></span>
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'date'">
-                                <kendo-datepicker [(ngModel)]="dataItem.value" class="calender-row-style" calendarType="classic" [disabled]="i==0"></kendo-datepicker>
+                                <kendo-datepicker [(ngModel)]="dataItem.value" class="calender-row-style" calendarType="classic" [disabled]="i==0"
+                                                  (blur)="dataChange( i, dataItem, 'datePicker')"></kendo-datepicker>
                             </div>
-                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list'">
+                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && dataItem.field == 'QLTR_BID_GEO'">
                                 <kendo-multiselect [disabled]="i==0"
                                                    class="multi_kedo-_style"
-                                                   [data]="dataItem.values"
-                                                   [(ngModel)]="dataItem.value"
-                                                   (valueChange)="valueChange($event, i, 'combobox')">
+                                                   [data]="dataItem.dropDown"
+                                                   textField="dropdownName"
+                                                   valueField="dropdownName"
+                                                   [(ngModel)]="dataItem.selectedValues"
+                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'dropdownName')">
+                                </kendo-multiselect>
+                            </div>
+                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && dataItem.field == 'CRE_EMP_NAME'">
+                                <kendo-multiselect [disabled]="i==0"
+                                                   class="multi_kedo-_style"
+                                                   [data]="dataItem.dropDown"
+                                                   textField="NAME"
+                                                   valueField="EMP_WWID"
+                                                   [(ngModel)]="dataItem.selectedValues"
+                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'name')">
+                                </kendo-multiselect>
+                            </div>
+                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && (dataItem.field == 'PCSR_NBR' || dataItem.field == 'OP_CD' || dataItem.field == 'DIV_NM' || dataItem.field == 'FMLY_NM' || dataItem.field == 'PRD_CAT_NM' || dataItem.field == 'HOST_GEO' || dataItem.field == 'GEO_COMBINED')">
+                                <kendo-multiselect [disabled]="i==0"
+                                                   class="multi_kedo-_style"
+                                                   [data]="dataItem.dropDown"
+                                                   textField="value"
+                                                   valueField="value"
+                                                   [(ngModel)]="dataItem.selectedValues"
+                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'value')">
+                                </kendo-multiselect>
+                            </div>
+                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && (dataItem.field == 'PAYOUT_BASED_ON' || dataItem.field == 'MRKT_SEG' || dataItem.field == 'SERVER_DEAL_TYPE')">
+                                <kendo-multiselect [disabled]="i==0"
+                                                   class="multi_kedo-_style"
+                                                   [data]="dataItem.dropDown"
+                                                   textField="DROP_DOWN"
+                                                   valueField="DROP_DOWN"
+                                                   [(ngModel)]="dataItem.selectedValues"
+                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'dropdown')">
+                                </kendo-multiselect>
+                            </div>
+                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && dataItem.field == 'CUST_NM'">
+                                <kendo-multiselect [disabled]="i==0"
+                                                   class="multi_kedo-_style"
+                                                   [data]="dataItem.dropDown"
+                                                   textField="CUST_NM"
+                                                   valueField ="CUST_SID"
+                                                   [(ngModel)]="dataItem.selectedValues"
+                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'custName')">
                                 </kendo-multiselect>
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'singleselect' || dataItem.type == 'singleselect_ext' || dataItem.type == 'singleselect_read_only'">
-                                <kendo-combobox [disabled]="i==0"
-                                                class="ecap-combo-style"
-                                                [data]="dataItem.values"
-                                                [(ngModel)]="dataItem.value"
-                                                (valueChange)="valueChange($event, i, 'combobox')">
+                                <kendo-combobox class="ecap-combo-style"
+                                                [data]="dataItem.dropDown"
+                                                [(ngModel)] = "dataItem.selectedValues"
+                                                (valueChange)="dataChange(i, dataItem, 'combobox', $event)">
                                 </kendo-combobox>
                             </div>
 
@@ -186,6 +235,7 @@
             </div>
         </div>
         <kendo-dialog *ngIf="isAlertVal" class="price-rule-popup">
+            <h2 *ngIf="submitRule">Saving confirmation</h2>
             <p class="text-price-style" [innerHtml]="isAlertText"></p>
             <kendo-dialog-actions *ngIf="isOk" class="price-rule-dialog-sty">
                 <button class="price-admin-ok" (click)="closeAlertVal()">OK</button>
@@ -193,6 +243,10 @@
             <kendo-dialog-actions *ngIf="retryAction" class="retry-style">
                 <button class="price-rule-retry" (click)="closeAlertVal()">RETRY</button>
                 <button class="price-rule-retry" (click)="closeAlertVal()">CANCEL</button>
+            </kendo-dialog-actions>
+            <kendo-dialog-actions *ngIf="submitRule" class="retry-style">
+                <button class="price-rule-retry" (click)="closeAlertVal()">CANCEL</button>
+                <button class="price-rule-retry" (click)="closeAlertVal('yes')">YES</button>
             </kendo-dialog-actions>
         </kendo-dialog>
     </div>
