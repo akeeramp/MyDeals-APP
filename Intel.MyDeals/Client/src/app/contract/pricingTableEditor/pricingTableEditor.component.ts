@@ -437,20 +437,26 @@ export class pricingTableEditorComponent {
     }
     chgTerms() {
         //function must trigger only after stop typing
+        let objThis = this;
         clearTimeout(this.timeout);
         this.timeout = setTimeout(function () {
-            const dataItem = this.curPricingStrategy;
+            objThis.saveTerms();
+        }, 800);
+    }
+
+    saveTerms() {
+        const dataItem = this.curPricingStrategy;
+        if (this.curPricingStrategy != undefined) {
             const data = {
                 objSetType: "PRC_ST",
                 ids: [dataItem["DC_ID"]],
                 attribute: "TERMS",
                 value: dataItem["TERMS"]
             };
-
             this.pteService.updateAtrbValue(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data).toPromise().catch((err) => {
                 this.loggerService.error("Error", "Could not save the value.", err);
             });
-        }, 800);
+        }
     }
     getTemplateDetails() {
         // Get the Contract and Current Pricing Strategy Data
