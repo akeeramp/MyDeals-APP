@@ -284,7 +284,7 @@
                     <ng-template kendoGridDetailTemplate let-dataItem>
                         <div id="childGrid" class="opUiContainer md dashboard">
                             <!-- CHILD GRID BEGINS -->
-                            <kendo-grid [data]="convertToChildGridArray(dataItem)" [skip]="childState.skip" [sortable]="true" scrollable="boolean" [sort]="childState.sort" [pageSize]="childState.take" [group]="childState.group" [navigable]="true" [resizable]="true" [groupable]="false"
+                            <kendo-grid class="meet-child-grid" [data]="convertToChildGridArray(dataItem)" [skip]="childState.skip" [sortable]="true" scrollable="boolean" [sort]="childState.sort" [pageSize]="childState.take" [group]="childState.group" [navigable]="true" [resizable]="true" [groupable]="false"
                                         (dataStateChange)="childDataStateChange($event)" [filter]="childState.filter" filterable="menu" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)" style="height:fit-content !important">
                                 <kendo-grid-column field="OBJ_SET_TYPE" title="Deal Type" width="155" [headerClass]="{'headerClass':true}">
                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">

@@ -243,7 +243,7 @@
                                     </ng-template>
 
                                     <!-- Cell Content -->
-                                    <div class="CAPYCS2CellContent accurate-height" #popOver="ngbPopover" [ngbPopover]="popoverContent">
+                                    <div class="CAPYCS2CellContent accurate-height" #popOver="ngbPopover" [ngbPopover]="popoverContent" style="padding:0 !important">
                                         <!-- CAP Info cell design -->
                                         <div [class.isSoftWarnCell]="dataItem.CAP.includes('No')" [class.uiControlDiv]="dataItem.CAP.includes('No')" style="text-align: center;">
                                             <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP !='' && dataItem.CAP !='No CAP'">
@@ -296,7 +296,147 @@
             </div>
             <div *ngIf="!showTree && !showSuggestions">
                 <div *ngIf="!hideSelection">
-                    <div class="row" style="margin:2px;">
+                    <div *ngIf="displayTemplateType == 'btnGroup' && items.length == 1" class="row" style="padding-left: 10px; padding-right: 10px; font-size: 16px;">
+                        <div class="drillDown btn-group btn-group-justified">
+                            <ng-container class="btn-group" *ngFor="let p of items; let last=last; let index=index">
+                                <div [ngClass]="{'input-group_1':p.allowMultiple}" class="col-md-12">
+                                    <span *ngIf="p.allowMultiple" [ngClass]="{'input-group-addon':p.allowMultiple}" class="col-md-1">
+                                        <input id="{{p.name}}" class="check with-sm-font" (click)="selectProduct(p,$event)" [(ngModel)]="p.selected" type="checkbox">
+                                        <label style="margin-bottom:0px;" for="{{p.name}}"></label>
+                                    </span>
+                                    <button *ngIf="!(selectedPathParts.length < 2)" title="{{p.name}}"
+                                            type="button" [ngClass]="{'col-md-12': !(p.allowMultiple)}" (click)="selectItem(p, true)" class="btn btn-default noborder col-md-11">
+                                        {{checkForBlank(p.name)}}
+                                    </button>
+                                    <button *ngIf="(selectedPathParts.length < 2)" kendo-tooltip k-content="getVerticalsUnderMarkLevel(p.name)"
+                                            type="button" [ngClass]="{'col-md-12': !(p.allowMultiple)}" (click)="selectItem(p, true)" class="btn btn-default noborder col-md-11">
+                                        {{checkForBlank(p.name)}}
+                                    </button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div *ngIf="displayTemplateType == 'btnGroup' && items.length == 2" class="row" style="padding-left: 10px; padding-right: 10px; font-size: 16px;">
+                        <div class="drillDown btn-group btn-group-justified col-md-12">
+                            <ng-container class="btn-group" *ngFor="let p of items; let last=last; let index=index">
+                                <div class="col-md-6">
+                                    <span *ngIf="p.allowMultiple" [ngClass]="{'input-group-addon':p.allowMultiple}" class="col-md-1">
+                                        <input id="{{p.name}}" class="check with-sm-font" (click)="selectProduct(p,$event)" [(ngModel)]="p.selected" type="checkbox">
+                                        <label style="margin-bottom:0px;" for="{{p.name}}"></label>
+                                    </span>
+                                    <button *ngIf="!(selectedPathParts.length < 2)" title="{{p.name}}"
+                                            type="button" [ngClass]="{'noborder':(index == 1), 'col-md-12': !(p.allowMultiple)}" (click)="selectItem(p, true)" class="btn btn-default col-md-11">
+                                        {{checkForBlank(p.name)}}
+                                    </button>
+                                    <button *ngIf="(selectedPathParts.length < 2)" kendo-tooltip k-content="getVerticalsUnderMarkLevel(p.name)"
+                                            type="button" [ngClass]="{'noborder':(index == 1), 'col-md-12': !(p.allowMultiple)}" (click)="selectItem(p, true)" class="btn btn-default col-md-11">
+                                        {{checkForBlank(p.name)}}
+                                    </button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div *ngIf="displayTemplateType == 'btnGroup' && items.length == 3" class="row" style="padding-left: 10px; padding-right: 10px; font-size: 16px;">
+                        <div class="drillDown btn-group btn-group-justified col-md-12">
+                            <ng-container class="btn-group" *ngFor="let p of items; let last=last; let index=index">
+                                <div class="col-md-4">
+                                    <span *ngIf="p.allowMultiple" [ngClass]="{'input-group-addon':p.allowMultiple}" class="col-md-1" style="z-index:1">
+                                        <input id="{{p.name}}" class="check with-sm-font" (click)="selectProduct(p,$event)" [(ngModel)]="p.selected" type="checkbox">
+                                        <label style="margin-bottom:0px;" for="{{p.name}}"></label>
+                                    </span>
+                                    <button *ngIf="!(selectedPathParts.length < 2)" title="{{p.name}}"
+                                            type="button" [ngClass]="{'noborder':(index == 2), 'col-md-12': !(p.allowMultiple)}" (click)="selectItem(p, true)" class="btn btn-default col-md-11">
+                                        {{checkForBlank(p.name)}}
+                                    </button>
+                                    <button *ngIf="(selectedPathParts.length < 2)" kendo-tooltip k-content="getVerticalsUnderMarkLevel(p.name)"
+                                            type="button" [ngClass]="{'noborder':(index == 2), 'col-md-12': !(p.allowMultiple)}" (click)="selectItem(p, true)" class="btn btn-default col-md-11">
+                                        {{checkForBlank(p.name)}}
+                                    </button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div *ngIf="displayTemplateType == 'btnGroup' && items.length == 4" class="row" style="padding-left: 10px; padding-right: 10px; font-size: 16px;">
+                        <div class="drillDown btn-group btn-group-justified col-md-12">
+                            <ng-container class="btn-group" *ngFor="let p of items; let last=last; let index=index">
+                                <div class="col-md-3">
+                                    <span *ngIf="p.allowMultiple" [ngClass]="{'input-group-addon':p.allowMultiple}" class="col-md-1" style="z-index:2">
+                                        <input id="{{p.name}}" class="check with-sm-font" (click)="selectProduct(p,$event)" [(ngModel)]="p.selected" type="checkbox">
+                                        <label style="margin-bottom:0px;" for="{{p.name}}"></label>
+                                    </span>
+                                    <button *ngIf="!(selectedPathParts.length < 2)" title="{{p.name}}"
+                                            type="button" [ngClass]="{'noborder':(index == 3), 'col-md-12': !(p.allowMultiple)}" (click)="selectItem(p, true)" class="btn btn-default col-md-11">
+                                        {{checkForBlank(p.name)}}
+                                    </button>
+                                    <button *ngIf="(selectedPathParts.length < 2)" kendo-tooltip k-content="getVerticalsUnderMarkLevel(p.name)"
+                                            type="button" [ngClass]="{'noborder':(index == 3), 'col-md-12': !(p.allowMultiple)}" (click)="selectItem(p, true)" class="btn btn-default col-md-11">
+                                        {{checkForBlank(p.name)}}
+                                    </button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div *ngIf="displayTemplateType == 'btnGroup' && items.length == 5" class="row" style="padding-left: 10px; padding-right: 10px; font-size: 16px;">
+                        <div class="drillDown btn-group btn-group-justified col-md-12">
+                            <ng-container class="btn-group" *ngFor="let p of items; let last=last; let index=index">
+                                <div style="width:20%">
+                                    <span *ngIf="p.allowMultiple" [ngClass]="{'input-group-addon':p.allowMultiple}" class="col-md-1" style="z-index:5">
+                                        <input id="{{p.name}}" class="check with-sm-font" (click)="selectProduct(p,$event)" [(ngModel)]="p.selected" type="checkbox">
+                                        <label style="margin-bottom:0px;" for="{{p.name}}"></label>
+                                    </span>
+                                    <button *ngIf="!(selectedPathParts.length < 2)" title="{{p.name}}"
+                                            type="button" [ngClass]="{'noborder':(index == 4), 'col-md-12': !(p.allowMultiple)}" (click)="selectItem(p, true)" class="btn btn-default col-md-11">
+                                        {{checkForBlank(p.name)}}
+                                    </button>
+                                    <button *ngIf="(selectedPathParts.length < 2)" kendo-tooltip k-content="getVerticalsUnderMarkLevel(p.name)"
+                                            type="button" [ngClass]="{'noborder':(index == 4), 'col-md-12': !(p.allowMultiple)}" (click)="selectItem(p, true)" class="btn btn-default col-md-11">
+                                        {{checkForBlank(p.name)}}
+                                    </button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div *ngIf="displayTemplateType == 'btnGroup' && items.length == 6" class="row" style="padding-left: 10px; padding-right: 10px; font-size: 16px;">
+                        <div class="drillDown btn-group btn-group-justified col-md-12">
+                            <ng-container class="btn-group" *ngFor="let p of items; let last=last; let index=index">
+                                <div class="col-md-2">
+                                    <span *ngIf="p.allowMultiple" [ngClass]="{'input-group-addon':p.allowMultiple}" class="col-md-1" style="z-index:5">
+                                        <input id="{{p.name}}" class="check with-sm-font" (click)="selectProduct(p,$event)" [(ngModel)]="p.selected" type="checkbox">
+                                        <label style="margin-bottom:0px;" for="{{p.name}}"></label>
+                                    </span>
+                                    <button *ngIf="!(selectedPathParts.length < 2)" title="{{p.name}}"
+                                            type="button" [ngClass]="{'noborder':(index == 5), 'col-md-12': !(p.allowMultiple)}" (click)="selectItem(p, true)" class="btn btn-default col-md-11">
+                                        {{checkForBlank(p.name)}}
+                                    </button>
+                                    <button *ngIf="(selectedPathParts.length < 2)" kendo-tooltip k-content="getVerticalsUnderMarkLevel(p.name)"
+                                            type="button" [ngClass]="{'noborder':(index == 5), 'col-md-12': !(p.allowMultiple)}" (click)="selectItem(p, true)" class="btn btn-default col-md-11">
+                                        {{checkForBlank(p.name)}}
+                                    </button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div *ngIf="displayTemplateType == 'btnGroup' && items.length == 7" class="row" style="padding-left: 10px; padding-right: 10px; font-size: 16px;">
+                        <div class="drillDown btn-group btn-group-justified col-md-12">
+                            <ng-container class="btn-group" *ngFor="let p of items; let last=last; let index=index">
+                                <div style="width:14.29%">
+                                    <span *ngIf="p.allowMultiple" [ngClass]="{'input-group-addon':p.allowMultiple}" class="col-md-1" style="z-index:5">
+                                        <input id="{{p.name}}" class="check with-sm-font" (click)="selectProduct(p,$event)" [(ngModel)]="p.selected" type="checkbox">
+                                        <label style="margin-bottom:0px;" for="{{p.name}}"></label>
+                                    </span>
+                                    <button *ngIf="!(selectedPathParts.length < 2)" title="{{p.name}}"
+                                            type="button" [ngClass]="{'noborder':(index == 6), 'col-md-12': !(p.allowMultiple)}" (click)="selectItem(p, true)" class="btn btn-default col-md-11">
+                                        {{checkForBlank(p.name)}}
+                                    </button>
+                                    <button *ngIf="(selectedPathParts.length < 2)" kendo-tooltip k-content="getVerticalsUnderMarkLevel(p.name)"
+                                            type="button" [ngClass]="{'noborder':(index == 6), 'col-md-12': !(p.allowMultiple)}" (click)="selectItem(p, true)" class="btn btn-default col-md-11">
+                                        {{checkForBlank(p.name)}}
+                                    </button>
+                                </div>
+                            </ng-container>
+                        </div>
+                    </div>
+                    <div *ngIf="displayTemplateType == 'btnGrid'" class="row" style="margin:2px;">
                         <ng-container *ngFor="let p of items; let last=last; let index=index">
                             <div class="clearfix" *ngIf="index % 4 == 0"></div>
                             <div kendoTooltip position="bottom" class="col-sm-3 prodDrillDownLarge" title="{{checkTitle(p.name)}}" [ngClass]="{'noLeftBorder':index % 4 == 0}">

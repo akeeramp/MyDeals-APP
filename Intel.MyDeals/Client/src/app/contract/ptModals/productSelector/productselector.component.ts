@@ -145,6 +145,7 @@ export class ProductSelectorComponent {
     private curRowIssues = [];
     private curRowCategories = [];
     private curRowLvl = [];
+    private displayTemplateType: string = '';
 
 
     distinctPrimitive(fieldName: string, operation?): any {
@@ -180,6 +181,7 @@ export class ProductSelectorComponent {
             this.productSelectionLevels = result.ProductSelectionLevels;
             this.productSelectionLevelsAttributes = result.ProductSelectionLevelsAttributes;
             this.getItems(null);
+            this.displayTemplateType = this.getDisplayTemplate();
             this.isLoading = false;
         }, (error) => {
             this.isLoading = false;
@@ -518,6 +520,7 @@ export class ProductSelectorComponent {
             this.selectedPathParts.push(item);
 
         this.getItems(item);
+        this.displayTemplateType = this.getDisplayTemplate();
     }
     allowMMSelection(dataItem) {
         if (dataItem.PRD_ATRB_SID == 7007) {
@@ -1042,6 +1045,7 @@ export class ProductSelectorComponent {
             this.showLevel4(product);
         } else {
             this.getItems(item);
+            this.displayTemplateType = this.getDisplayTemplate();
         }
     }
     initSuggestionGrid() {
@@ -1139,6 +1143,7 @@ export class ProductSelectorComponent {
         let itm = this.selectedPathParts.length > 0 ? this.selectedPathParts[this.selectedPathParts.length - 1]
             : ProdSel_Util.newItem();
         this.getItems(itm);
+        this.displayTemplateType = this.getDisplayTemplate();
     }
     updateDrillDownPrd() {
         if (this.drillDownPrd !== "Select") {

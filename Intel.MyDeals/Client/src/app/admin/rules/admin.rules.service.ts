@@ -40,7 +40,7 @@ export class adminRulesService {
     }
 
     public getRuleSimulationResults(data): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'GetRuleSimulationResults/';
+        const apiUrl: string = this.apiBaseUrl + 'GetRuleSimulationResults';
         return this.httpClient.post(apiUrl, data);//data will be 2 lists, ruleIDs and dealIDs
     }
 
