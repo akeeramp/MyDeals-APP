@@ -185,10 +185,12 @@ export class RuleDetailsModalComponent {
             let selectedValues = [];
             if (selectedField.lookups != undefined) {
                 if (selectedField.field == "GEO_COMBINED" || selectedField.field == "HOST_GEO") {
+                    let vals = [];
                     row.values.forEach((item) => {
-                        selectedValues.push(selectedField.lookups.filter(x => x.value === item)[0])
+                        selectedValues.push(item)
                     })
-                    Object.assign(row, { selectedValues: selectedValues, dropDown: selectedField.lookups })
+                    selectedField.lookups.forEach((item) => vals.push(item.Value));
+                    Object.assign(row, { selectedValues: selectedValues, dropDown: vals })
                 } else {
                     let vals = [];
                     let selectedVal = row.value;
@@ -199,33 +201,32 @@ export class RuleDetailsModalComponent {
                     })
                 }
             } else {
-                if (row.values != null && row.values != '') {
-                    if (selectedField.field == 'QLTR_BID_GEO')
+                if (selectedField.field == 'QLTR_BID_GEO')
+                    row.values.forEach((item) => {
+                        selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.dropdownName === item)[0])
+                    })
+                else if (selectedField.field == "PCSR_NBR" || selectedField.field == "OP_CD" || selectedField.field == "DIV_NM" || selectedField.field == "FMLY_NM" || selectedField.field == "PRD_CAT_NM")
+                    row.values.forEach((item) => {
+                        selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.value === item)[0])
+                    })
+                else if (selectedField.field == "PAYOUT_BASED_ON" || selectedField.field == "MRKT_SEG" || selectedField.field == "SERVER_DEAL_TYPE")
+                    row.values.forEach((item) => {
+                        selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.DROP_DOWN === item)[0])
+                    })
+                else if (selectedField.field == 'CRE_EMP_NAME')
+                    row.values.forEach((item) => {
+                        selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.EMP_WWID === parseInt(item))[0])
+                    })
+                else
+                    if (selectedField.field == 'CUST_NM')
                         row.values.forEach((item) => {
-                            selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.dropdownName === item)[0])
+                            selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.CUST_SID === parseInt(item))[0])
                         })
-                    else if (selectedField.field == "PCSR_NBR" || selectedField.field == "OP_CD" || selectedField.field == "DIV_NM" || selectedField.field == "FMLY_NM" || selectedField.field == "PRD_CAT_NM")
-                        row.values.forEach((item) => {
-                            selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.value === item)[0])
-                        })
-                    else if (selectedField.field == "PAYOUT_BASED_ON" || selectedField.field == "MRKT_SEG" || selectedField.field == "SERVER_DEAL_TYPE")
-                        row.values.forEach((item) => {
-                            selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.DROP_DOWN === item)[0])
-                        })
-                    else if (selectedField.field == 'CRE_EMP_NAME')
-                        row.values.forEach((item) => {
-                            selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.EMP_WWID === parseInt(item))[0])
-                        })
-                    else
-                        if (selectedField.field == 'CUST_NM')
-                            row.values.forEach((item) => {
-                                selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.CUST_SID === parseInt(item))[0])
-                            })
-                    Object.assign(row, {
-                        dropDown: this.dropdownresponses[selectedField.field],
-                        selectedValues: selectedValues
-                    });
-                }
+                Object.assign(row, {
+                    dropDown: this.dropdownresponses[selectedField.field],
+                    selectedValues: selectedValues
+                });
+                
             }
         });
         Object.assign(this.Rules, { Criteria: this.criteria });
@@ -276,9 +277,15 @@ export class RuleDetailsModalComponent {
             })
         } else if (selector == 'value') {
             this.Rules.Criteria[i].values = [];
-            data.forEach((item) => {
-                this.Rules.Criteria[i].values.push(item.value);
-            })
+            if (dataItem.field == 'HOST_GEO' || dataItem.field == 'GEO_COMBINED') {
+                data.forEach((item) => {
+                    this.Rules.Criteria[i].value = "";
+                    this.Rules.Criteria[i].values.push(item);
+                })
+            }else 
+                data.forEach((item) => {
+                    this.Rules.Criteria[i].values.push(item.value);
+                })
         } else if (selector == 'dropdown') {
             this.Rules.Criteria[i].values = [];
             data.forEach((item) => {
@@ -474,7 +481,9 @@ export class RuleDetailsModalComponent {
         })
         if (dataItem.lookups != undefined) {
             if (dataItem.field == "GEO_COMBINED" || dataItem.field == "HOST_GEO") {
-                Object.assign(this.Rules.Criteria[index], { dropDown: dataItem.lookups })
+                let vals = [];
+                dataItem.lookups.forEach((item) => vals.push(item.Value));
+                Object.assign(this.Rules.Criteria[index], { dropDown: vals })
             } else {
                 let vals = [];
                 dataItem.lookups.forEach((item) => vals.push(item.Value));
@@ -491,7 +500,7 @@ export class RuleDetailsModalComponent {
         this.Rules.Criteria[index].operator = opvalues[0].operator;
         this.Rules.Criteria[index].subType = null;
         this.Rules.Criteria[index].type = dataItem.type;
-        this.Rules.Criteria[index].value = '';
+        this.Rules.Criteria[index].value = "";
         this.Rules.Criteria[index].valueType = null;
         this.Rules.Criteria[index].values = [];
         Object.assign(this.Rules.Criteria[index], {
@@ -791,7 +800,7 @@ export class RuleDetailsModalComponent {
                     requiredFields.push("Rule end date");
                 if ((this.Rules.Criteria.filter(x => x.value === "").length > 0)) {
                     let newset = this.Rules.Criteria.filter(x => x.value === "");
-                    if (newset.filter(x => x.values === '').length > 0)
+                    if (newset.filter(x => x.values.length == 0 || x.values === '').length > 0)
                         requiredFields.push("Rule criteria is empty");
                 }
                 if (this.Rules.IsAutomationIncluded && this.ProductCriteria.filter(x => x.Price !== "" && x.Price > 0 && x.ProductName === "").length > 0)

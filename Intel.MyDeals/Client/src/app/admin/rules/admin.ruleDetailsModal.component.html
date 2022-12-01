@@ -162,12 +162,20 @@
                                                    (valueChange)="dataChangeMulti($event, i, dataItem, 'name')">
                                 </kendo-multiselect>
                             </div>
-                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && (dataItem.field == 'PCSR_NBR' || dataItem.field == 'OP_CD' || dataItem.field == 'DIV_NM' || dataItem.field == 'FMLY_NM' || dataItem.field == 'PRD_CAT_NM' || dataItem.field == 'HOST_GEO' || dataItem.field == 'GEO_COMBINED')">
+                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && (dataItem.field == 'PCSR_NBR' || dataItem.field == 'OP_CD' || dataItem.field == 'DIV_NM' || dataItem.field == 'FMLY_NM' || dataItem.field == 'PRD_CAT_NM')">
                                 <kendo-multiselect [disabled]="i==0"
                                                    class="multi_kedo-_style"
                                                    [data]="dataItem.dropDown"
                                                    textField="value"
                                                    valueField="value"
+                                                   [(ngModel)]="dataItem.selectedValues"
+                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'value')">
+                                </kendo-multiselect>
+                            </div>
+                            <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && (dataItem.field == 'HOST_GEO' || dataItem.field == 'GEO_COMBINED')">
+                                <kendo-multiselect [disabled]="i==0"
+                                                   class="multi_kedo-_style"
+                                                   [data]="dataItem.dropDown"
                                                    [(ngModel)]="dataItem.selectedValues"
                                                    (valueChange)="dataChangeMulti($event, i, dataItem, 'value')">
                                 </kendo-multiselect>
@@ -187,7 +195,7 @@
                                                    class="multi_kedo-_style"
                                                    [data]="dataItem.dropDown"
                                                    textField="CUST_NM"
-                                                   valueField ="CUST_SID"
+                                                   valueField="CUST_SID"
                                                    [(ngModel)]="dataItem.selectedValues"
                                                    (valueChange)="dataChangeMulti($event, i, dataItem, 'custName')">
                                 </kendo-multiselect>
@@ -195,7 +203,7 @@
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'singleselect' || dataItem.type == 'singleselect_ext' || dataItem.type == 'singleselect_read_only'">
                                 <kendo-combobox class="ecap-combo-style"
                                                 [data]="dataItem.dropDown"
-                                                [(ngModel)] = "dataItem.selectedValues"
+                                                [(ngModel)]="dataItem.selectedValues"
                                                 (valueChange)="dataChange(i, dataItem, 'combobox', $event)">
                                 </kendo-combobox>
                             </div>
