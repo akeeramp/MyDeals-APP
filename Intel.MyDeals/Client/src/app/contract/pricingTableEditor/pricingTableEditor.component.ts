@@ -686,34 +686,8 @@ export class pricingTableEditorComponent {
         _.each(this.multiRowDelete, item => {
             delDCIDs.push(this.hotTable.getDataAtRowProp(item.row, 'DC_ID'));
         });
-        let data = {
-            "Contract": [],
-            "PricingStrategy": [],
-            "PricingTable": [this.curPricingTable],
-            "PricingTableRow": [],
-            "WipDeals": [],
-            "EventSource": 'PRC_TBL',
-            "Errors": {},
-            "PtrDelIds": delDCIDs
-        }
-        let result = await this.pteService.updateContractAndCurPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, true).toPromise().catch((error) => {
-            this.loggerService.error("Something went wrong", 'Error');
-            console.error("pricingTableEditorComponent::saveUpdatePTEAPI::deletePTR", error);
-
-        });
-        if (result) {
-            await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
-            if (this.isTenderContract) {
-                //Refresh TTE data after Delete
-                this.tmDirec.emit('Delete');
-            }
-            this.isLoading = false;
-            this.loadPTE();
-        }
-        else {
-            this.loggerService.error("Something went wrong", 'Error');
-            console.error("pricingTableEditorComponent::deletePTR::", 'Error');
-        }
+        //calling the below method to validate the non-deleted records and if no client side validations then it will proceed for deletion
+        this.validatePricingTableProducts(delDCIDs);       
     }
     showHelpTopic() {
         window.open('https://wiki.ith.intel.com/display/Handbook/Pricing+Table+Editor+Features', '_blank');        
@@ -887,38 +861,54 @@ export class pricingTableEditorComponent {
         if (this.redoCount == 0) this.redoEnable = false;
         if (this.undoCount > 0) this.undoEnable = true;
     }
-    async ValidateAndSavePTE(isValidProd) {
+    async ValidateAndSavePTE(isValidProd, deleteDCIDs?) {
         if (isValidProd) {            
             //Handsonetable loading taking some time so putting this logic for loader
             let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
-            let flexReqData = PTE_Common_Util.getOverlapFlexProducts(this.curPricingTable, PTR);
-            if (flexReqData != undefined) {
-                this.overlapFlexResult = await this.flexoverLappingCheckDealsService.GetProductOVLPValidation(flexReqData).toPromise();
+            //removing the deleted records from PTR
+            if (deleteDCIDs && deleteDCIDs.length > 0) {
+                _.each(deleteDCIDs, (delId) => {
+                    PTR = PTR.filter(x => x.DC_ID != delId);
+                })
             }
-            //Checking for UI errors
-            let finalPTR = PTE_Save_Util.validatePTE(PTR, this.curPricingStrategy, this.curPricingTable, this.contractData, this.overlapFlexResult, this.validMisProd);
-            //if there is any error bind the result to handsone table
-            let error = PTE_Save_Util.isPTEError(finalPTR, this.curPricingTable);
+            let error = false;
+            let finalPTR: any;
+            //if not all the records got deleted, it will do validation for non-deleted records
+            if (PTR && PTR.length > 0) {
+                let flexReqData = PTE_Common_Util.getOverlapFlexProducts(this.curPricingTable, PTR);
+                if (flexReqData != undefined) {
+                    this.overlapFlexResult = await this.flexoverLappingCheckDealsService.GetProductOVLPValidation(flexReqData).toPromise();
+                }
+                //Checking for UI errors
+                finalPTR = PTE_Save_Util.validatePTE(PTR, this.curPricingStrategy, this.curPricingTable, this.contractData, this.overlapFlexResult, this.validMisProd);
+                //if there is any error bind the result to handsone table
+                error = PTE_Save_Util.isPTEError(finalPTR, this.curPricingTable);
+            }
+            //if non-deleted records having any validation error, it will stop deletion action as well
             if (error) {
                 this.generateHandsonTable(finalPTR);
                 this.loggerService.error('Mandatory validations failure.', 'error');
+                this.setBusy("", "", "", false);
             }
             else {
                 //this.generateHandsonTable(finalPTR);
-                var cashObj = finalPTR.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
-                if (cashObj && cashObj.length > 0) {
-                    if (this.VendorDropDownResult != null && this.VendorDropDownResult != undefined && this.VendorDropDownResult.length > 0) {
-                        var customerVendor = this.VendorDropDownResult;
-                        _.each(finalPTR, (item) => {
-                            var partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
-                            if (partnerID && partnerID.length == 1) {
-                                item.SETTLEMENT_PARTNER = partnerID[0].DROP_DOWN;
-                            }
-                        });
+                //it will update cashObj for non-deleted records
+                if (finalPTR && finalPTR.length > 0) {
+                    var cashObj = finalPTR.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
+                    if (cashObj && cashObj.length > 0) {
+                        if (this.VendorDropDownResult != null && this.VendorDropDownResult != undefined && this.VendorDropDownResult.length > 0) {
+                            var customerVendor = this.VendorDropDownResult;
+                            _.each(finalPTR, (item) => {
+                                var partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
+                                if (partnerID && partnerID.length == 1) {
+                                    item.SETTLEMENT_PARTNER = partnerID[0].DROP_DOWN;
+                                }
+                            });
+                        }
                     }
                 }
                 this.dirty = false;
-                await this.saveEntireContractRoot(finalPTR);
+                await this.saveEntireContractRoot(finalPTR, deleteDCIDs);
             }
         }
         else {
@@ -927,47 +917,73 @@ export class pricingTableEditorComponent {
             }
         }
     }
-    async saveEntireContractRoot(finalPTR: Array<any>) {
-        //this logic is mainly for tier dealtypes to convert the PTR to savbale JSON
-        finalPTR = PTE_Helper_Util.deNormalizeData(finalPTR, this.curPricingTable);
-        //This method will remove all the unwanted property since there are keys with undefined values
-        finalPTR = PTE_Common_Util.deepClone(finalPTR);
-        //settment partner change for taking only the ID the API will send back us the both
-        finalPTR = PTE_Save_Util.settlementPartnerValUpdate(finalPTR);
-        //sanitize Data before save this will make sure all neccessary attributes are avaialbel
-        finalPTR = PTE_Save_Util.sanitizePTR(finalPTR, this.contractData);
-        //Adding missed fields in SaveAPI payload
-        PTE_Save_Util.fillingPayLoad(finalPTR, this.curPricingTable);
-        let data = {
-            "Contract": [],
-            "PricingStrategy": [],
-            "PricingTable": [this.curPricingTable],
-            "PricingTableRow": finalPTR,
-            "WipDeals": [],
-            "EventSource": 'PRC_TBL',
-            "Errors": {}
+    async saveEntireContractRoot(finalPTR: Array<any>, deleteDCIDs?) {
+        if (finalPTR && finalPTR.length > 0) {//to check is there any records exists in PTE(not all records got deleted) 
+            //this logic is mainly for tier dealtypes to convert the PTR to savbale JSON
+            finalPTR = PTE_Helper_Util.deNormalizeData(finalPTR, this.curPricingTable);
+            //This method will remove all the unwanted property since there are keys with undefined values
+            finalPTR = PTE_Common_Util.deepClone(finalPTR);
+            //settment partner change for taking only the ID the API will send back us the both
+            finalPTR = PTE_Save_Util.settlementPartnerValUpdate(finalPTR);
+            //sanitize Data before save this will make sure all neccessary attributes are avaialbel
+            finalPTR = PTE_Save_Util.sanitizePTR(finalPTR, this.contractData);
+            //Adding missed fields in SaveAPI payload
+            PTE_Save_Util.fillingPayLoad(finalPTR, this.curPricingTable);
+        }
+        let data;
+        if (deleteDCIDs && deleteDCIDs.length > 0) {//If records got deleted, need to send deleted DCID's to the save API call
+            data = {
+                "Contract": [],
+                "PricingStrategy": [],
+                "PricingTable": [this.curPricingTable],
+                "PricingTableRow": finalPTR && finalPTR.length > 0 ? finalPTR : [],
+                "WipDeals": [],
+                "EventSource": 'PRC_TBL',
+                "Errors": {},
+                "PtrDelIds": deleteDCIDs
+            }
+        }
+        else {//If action is only save not deletion
+            data = {
+                "Contract": [],
+                "PricingStrategy": [],
+                "PricingTable": [this.curPricingTable],
+                "PricingTableRow": finalPTR,
+                "WipDeals": [],
+                "EventSource": 'PRC_TBL',
+                "Errors": {}
+            }
         }
         this.isLoading = true;
-        this.setBusy("Saving your data...", "Please wait as we save your information", "Info", true);
+        if (deleteDCIDs && deleteDCIDs.length > 0)
+            this.setBusy("Deleting...", "Deleting the Table row", "Info", true);
+        else
+            this.setBusy("Saving your data...", "Please wait as we save your information", "Info", true);
         let result = await this.pteService.updateContractAndCurPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).toPromise().catch((error) => {
             this.loggerService.error("Something went wrong", 'Error');
             console.error("pricingTableEditorComponent::saveUpdatePTEAPI::", error);
         });
         if (result) {
             await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
+            if (this.isTenderContract && deleteDCIDs && deleteDCIDs.length > 0) {
+                //Refresh TTE data after Delete
+                this.tmDirec.emit('Delete');
+            }
             //this will help to reload the page with errors when we update
             await this.loadPTE();
-            _.each(this.newPTR, (item) => {
-                if (item.warningMessages !== undefined && item.warningMessages.length > 0) {
-                    this.warnings = true;
+            if (deleteDCIDs == undefined) {
+                _.each(this.newPTR, (item) => {
+                    if (item.warningMessages !== undefined && item.warningMessages.length > 0) {
+                        this.warnings = true;
+                    }
+                })
+                if ((!this.warnings) && this.isTenderContract) {
+                    this.tmDirec.emit('DE');
+                } else if (this.warnings && this.isTenderContract) {
+                    this.tmDirec.emit('');
                 }
-            })
-            if ((!this.warnings) && this.isTenderContract) {
-                this.tmDirec.emit('DE');
-            } else if (this.warnings && this.isTenderContract) {
-                this.tmDirec.emit('');
+                this.warnings = false;
             }
-            this.warnings = false;
         }
         else {
             this.loggerService.error("Something went wrong", 'Error');
@@ -976,10 +992,17 @@ export class pricingTableEditorComponent {
         this.isLoading = false;
 
     }    
-    async validatePricingTableProducts() {        
-        let isValidProd = await this.validateOnlyProducts('onSave');
+    async validatePricingTableProducts(deleteDCIDs?) {
+        //validate Products for non-deleted records, if any product is invalid it will stop deletion as well
+        let isValidProd = await this.validateOnlyProducts('onSave', undefined, deleteDCIDs);
         //Handsonetable loading taking some time so putting this logic for loader
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
+        //removing the deleted record from PTR
+        if (deleteDCIDs && deleteDCIDs.length > 0) {
+            _.each(deleteDCIDs, (delId) => {
+                PTR = PTR.filter(x => x.DC_ID != delId);
+            })
+        }
         const multiGeoWithoutBlend = PTE_Validation_Util.validateMultiGeoForHybrid(PTR, this.curPricingStrategy.IS_HYBRID_PRC_STRAT);
         if (multiGeoWithoutBlend != "0") {
             if (multiGeoWithoutBlend == "1") {
@@ -994,16 +1017,22 @@ export class pricingTableEditorComponent {
         else {
             this.isCustDivNull = PTE_Helper_Util.isCustDivisonNull(PTR, this.contractData.CUST_ACCNT_DIV);
             if (!this.isCustDivNull) {
-                await this.ValidateAndSavePTE(isValidProd);
+                await this.ValidateAndSavePTE(isValidProd, deleteDCIDs);
             }
         }
 
     }
-    async validateOnlyProducts(action: string, curRow?) {
+    async validateOnlyProducts(action: string, curRow?, deleteDCIDs?) {
         //loader
         let isPrdValid: any = null;
         //generate PTE
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
+        //removing the deleted record from PTR
+        if (deleteDCIDs && deleteDCIDs.length > 0) {
+            _.each(deleteDCIDs, (delId) => {
+                PTR = PTR.filter(x => x.DC_ID != delId);
+            })
+        }
         let translateResult = await this.ValidateProducts(PTR, false, true, null);
         let updatedPTRObj: any = null;
         if (translateResult) {
