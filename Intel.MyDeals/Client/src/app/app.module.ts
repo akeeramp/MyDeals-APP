@@ -67,6 +67,7 @@ import { advanceSearchComponents } from './modules/advanceSearch.module';
 import { contractComponents } from './modules/contract.module';
 //pipe module
 import { MainPipe } from './modules/pipe.module';
+import { broadCastService } from './core/dealPopup/broadcast.service';
 
 @NgModule({
     imports: [
@@ -108,7 +109,7 @@ import { MainPipe } from './modules/pipe.module';
         NavigationModule,
         TreeViewModule,
         DragDropModule,
-        MainPipe
+        MainPipe,
      ],
      providers: [
         {
@@ -125,7 +126,8 @@ import { MainPipe } from './modules/pipe.module';
          },
          DecimalPipe,
          CurrencyPipe,
-         DatePipe
+         DatePipe,
+         broadCastService
     ],
     declarations: [
         ReportingComponent,
@@ -134,7 +136,7 @@ import { MainPipe } from './modules/pipe.module';
         coreComponents,
         dashboardComponents,
         advanceSearchComponents,
-        contractComponents
+        contractComponents,
     ],
     entryComponents: [
         ReportingComponent,
@@ -143,7 +145,7 @@ import { MainPipe } from './modules/pipe.module';
         coreComponents,
         dashboardComponents,
         advanceSearchComponents,
-        contractComponents
+        contractComponents,
     ]
 })
 

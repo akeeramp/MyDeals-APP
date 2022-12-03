@@ -1,1 +1,1 @@
-import './dealpopupdock/dealPopupDock.directive.js';
+//import './dealpopupdock/dealPopupDock.directive.js';

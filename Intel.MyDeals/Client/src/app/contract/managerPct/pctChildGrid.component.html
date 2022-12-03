@@ -16,6 +16,12 @@
         </ng-template>
     </kendo-grid-column>    
     <kendo-grid-column title="Deal Id" field="DEAL_ID" [headerClass]="{'headerClass':true}" [width]="100" *ngIf="!isHidden('DEAL_ID')">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <div class='dealLnk' style="display:flex">
+                <deal-popup-icon [dealId]="dataItem.DEAL_ID"></deal-popup-icon>
+                <span style="margin-top:5px;">  {{dataItem.DEAL_ID}}</span>
+            </div>
+        </ng-template>
     </kendo-grid-column>
     <kendo-grid-column title="My Deals Product" field="PRODUCT" [headerClass]="{'headerClass':true}" [width]="170" *ngIf="!isHidden('PRODUCT')">
     </kendo-grid-column>

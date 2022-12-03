@@ -16,9 +16,11 @@
 </div>
 <div *ngIf="in_Template.includes('gridUtils.uiPositiveDimControlWrapper')" [innerHTML]="uiPositiveDimControlWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" class="dealCell">
 </div>
-<div *ngIf="in_Field_Name == 'DC_ID'" [innerHTML]="uiControlDealWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" class="dealCell"
+<div *ngIf="in_Field_Name == 'DC_ID'"  class="dealCell"  style="align-items: center; display: flex; "
      [ngClass]="{'isReadOnlyCell': isReadonlyCell(in_DataItem, in_Field_Name), 'isDirtyCell': isDirtyCell(in_DataItem,in_Field_Name), 'isErrorCell': isErrorCell(in_DataItem,in_Field_Name)}">
-    <!--<deal-popup-angular></deal-popup-angular>-->
+      <deal-popup-icon [dealId]="in_DataItem.DC_ID"></deal-popup-icon>
+    <div style="margin-top: 20px;" [innerHTML]="uiControlDealWrapper(in_DataItem, in_Field_Name)|sanitizeHtml">
+    </div>
 </div>
 <div *ngIf="in_Field_Name == 'CUST_MBR_SID'" [innerHTML]="uiCustomerControlWrapper(in_DataItem, in_Field_Name, '')|sanitizeHtml" class="dealCell">
 </div>

@@ -345,9 +345,11 @@
                                                                            [filterService]="filterService" [data]="filteringData[pt.DC_ID][column.field]"></multicheck-filter>
                                                     </ng-template>
                                                     <ng-template kendoGridCellTemplate let-dataItem>
-                                                        <div class='dealLnk'>
-                                                            <i class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation:{{ (dataItem.PASSED_VALIDATION==="Dirty" ? "Validation Errors" : dataItem.PASSED_VALIDATION) || "Not validated yet"}}'
-                                                               [ngClass]='{ "intelicon-protection-solid": (dataItem.PASSED_VALIDATION===undefined || dataItem.PASSED_VALIDATION===""), "intelicon-protection-checked-verified-solid": (dataItem.PASSED_VALIDATION==="Complete"), "intelicon-protection-solid intelicon-alert-solid": (dataItem.PASSED_VALIDATION==="Dirty")}'></i>{{dataItem.DC_ID}}
+                                                        <div class='dealLnk' style="display:flex">
+                                                            <deal-popup-icon [dealId]="dataItem.DC_ID"></deal-popup-icon>
+                                                            <i style="margin-top:5px" class='intelicon-protection-solid valid-icon validf_{{dataItem.PASSED_VALIDATION}}' title='Validation:{{ (dataItem.PASSED_VALIDATION==="Dirty" ? "Validation Errors" : dataItem.PASSED_VALIDATION) || "Not validated yet"}}'
+                                                               [ngClass]='{ "intelicon-protection-solid": (dataItem.PASSED_VALIDATION===undefined || dataItem.PASSED_VALIDATION===""), "intelicon-protection-checked-verified-solid": (dataItem.PASSED_VALIDATION==="Complete"), "intelicon-protection-solid intelicon-alert-solid": (dataItem.PASSED_VALIDATION==="Dirty")}'></i>
+                                                            <span style="margin-top:7px">{{dataItem.DC_ID}}</span>
                                                         </div>
                                                     </ng-template>
                                                 </kendo-grid-column>

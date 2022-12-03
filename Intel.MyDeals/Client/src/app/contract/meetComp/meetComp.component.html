@@ -301,8 +301,9 @@
                                         </multicheck-filter>
                                     </ng-template>
                                     <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                                        <div class='readOnlyCell'>
-                                            <a (click)="gotoDeal(dataItem.DEAL_OBJ_SID)" class="deallink"> {{dataItem.DEAL_OBJ_SID}}</a>
+                                        <div class='readOnlyCell' style="display: flex; flex-wrap: nowrap;">
+                                            <deal-popup-icon [dealId]="dataItem.DEAL_OBJ_SID"></deal-popup-icon>
+                                            <a  style="margin-top: 5px;" (click)="gotoDeal(dataItem.DEAL_OBJ_SID)" class="deallink"> {{dataItem.DEAL_OBJ_SID}}</a>
                                         </div>
                                     </ng-template>
                                 </kendo-grid-column>

@@ -171,6 +171,13 @@
                                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                                         <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
                                                     </ng-template>
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        <div class='dealLnk' style="display:flex">
+                                                            <deal-popup-icon [dealId]="dataItem.DEAL_ID"></deal-popup-icon>
+                                                            <span style="margin-top:5px;">{{dataItem.DEAL_ID}}</span>
+                                                        </div>
+                                                    </ng-template>
+
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="My Deals Product" [filterable]="true" field="PRODUCT"
                                                                    [headerClass]="{'headerClass':true}" [width]="170" *ngIf="!isHidden(pt.DC_ID, 'PRODUCT')">

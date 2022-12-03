@@ -10,6 +10,9 @@ import { dealDetailsComponent } from '../core/gridCell/dealDetail/dealDetail.com
 import { dealToolsComponent } from '../core/gridCell/dealTools/dealTools.component';
 import { dealTimelineComponent } from '../core/gridCell/dealTimelineModal/dealTimelineModal.component';
 import { fileAttachmentComponent } from '../core/gridCell/fileAttachmentModal/fileAttachmentModal.component';
+import { dealPopupComponent } from '../core/dealPopup/dealPopup.component';
+import { dealPopupDockComponent } from '../core/dealPopup/dealPopupDock.component';
+import { dealPopupIconComponent } from '../core/dealPopup/dealPopupIcon.component';
 
 export let coreComponents = [
     PingComponent,
@@ -23,5 +26,8 @@ export let coreComponents = [
     dealDetailsComponent,
     dealToolsComponent,
     dealTimelineComponent,
-    fileAttachmentComponent
+    fileAttachmentComponent,
+    dealPopupComponent,
+    dealPopupDockComponent,
+    dealPopupIconComponent
 ]

@@ -1638,3 +1638,9 @@ export const opGridTemplate = {
     "hideForNonTender": ["EXCLUDE_AUTOMATION", "MEETCOMP_TEST_RESULT", "COST_TEST_RESULT", "QUOTE_LN_ID"],
     "hideForStandardDealEditor": ["EXCLUDE_AUTOMATION", "tender_actions", "GEO_APPROVED_BY", "DIV_APPROVED_BY", "CNTRCT_OBJ_SID"],
 }
+
+export const quickDealConstants = {
+    "enabled": true,
+    "maxQuickDeals": 6,
+    "maxRecent": 10
+    }

@@ -1070,6 +1070,10 @@
     <Content Include="Client\src\app\core\dealpopupdock\dealPopupDock.directive.css" />
     <Content Include="Client\src\app\core\dealpopupdock\dealPopupDock.directive.html" />
     <Content Include="Client\src\app\core\dealpopupdock\dealPopupDock.directive.js" />
+    <Content Include="Client\src\app\core\dealPopup\dealPopup.component.css" />
+    <Content Include="Client\src\app\core\dealPopup\dealPopup.component.html" />
+    <Content Include="Client\src\app\core\dealPopup\dealPopupDock.component.html" />
+    <Content Include="Client\src\app\core\dealPopup\dealPopupIcon.component.html" />
     <Content Include="Client\src\app\core\gridCell\dealDetail\dealDetail.component.css" />
     <Content Include="Client\src\app\core\gridCell\dealDetail\dealDetail.component.html" />
     <Content Include="Client\src\app\core\gridCell\dealTimelineModal\dealTimelineModal.component.css" />
@@ -2561,6 +2565,11 @@
     <TypeScriptCompile Include="Client\src\app\core\adminBanner\adminBanner.service.ts" />
     <TypeScriptCompile Include="Client\src\app\core\angular.constants.ts" />
     <TypeScriptCompile Include="Client\src\app\core\core.shared.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\dealPopup\broadcast.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\dealPopup\dealPopup.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\dealPopup\dealPopup.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\dealPopup\dealPopupDock.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\dealPopup\dealPopupIcon.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\gridCell\dealDetail\dealDetail.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\gridCell\dealTimelineModal\dealTimelineModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\gridCell\dealTools\dealTools.component.ts" />

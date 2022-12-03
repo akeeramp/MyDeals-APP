@@ -116,6 +116,12 @@
                                         <ng-template *ngIf="column.field == 'END_DT'" let-dataItem="dataItem" kendoGridCellTemplate>
                                             <span [ngClass]="{'redfont': dataItem?.EXPIRE_FLG == 1}">{{dataItem.END_DT | date:'MM/dd/yyyy'}}</span>
                                         </ng-template>
+                                        <ng-template *ngIf="column.field == 'OBJ_SID'" let-dataItem="dataItem" kendoGridCellTemplate>
+                                            <div style="display:flex;">
+                                                <deal-popup-icon [dealId]="dataItem.OBJ_SID"></deal-popup-icon>
+                                                <span style="margin-top:5px"> {{dataItem.OBJ_SID}} </span>
+                                            </div>
+                                        </ng-template>
                                         <ng-template *ngIf="column.field == 'ECAP_PRICE'" let-dataItem="dataItem" kendoGridCellTemplate>
                                             <span>{{getFormatedDim(dataItem, 'ECAP_PRICE','20___0','currency')}}</span>
                                         </ng-template>
