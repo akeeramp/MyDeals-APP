@@ -201,7 +201,8 @@
                                 </kendo-multiselect>
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'singleselect' || dataItem.type == 'singleselect_ext' || dataItem.type == 'singleselect_read_only'">
-                                <kendo-combobox class="ecap-combo-style"
+                                <kendo-combobox [disabled]="i==0"
+                                                class="ecap-combo-style"
                                                 [data]="dataItem.dropDown"
                                                 [(ngModel)]="dataItem.selectedValues"
                                                 (valueChange)="dataChange(i, dataItem, 'combobox', $event)">

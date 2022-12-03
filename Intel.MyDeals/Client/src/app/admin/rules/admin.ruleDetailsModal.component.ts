@@ -126,15 +126,13 @@ export class RuleDetailsModalComponent {
                 }
             }
         }
-        if (this.cellMessages.length > 0) {
+        if (changes != null && changes.length > 0 && this.cellMessages.length > 0) {
             this.cellMessages.map((cell) => {
                 let colInd = (changes[0][1] == "ProductName") ? 0 : 1;
                 if (cell.row === changes[0][0] && cell.col === colInd) {
                     if (this.hotRegisterer && this.hotRegisterer.getInstance(this.hotId)) {
-                        this.hotTable.setCellMeta(cell.row, colInd, 'className', 'normal-product');
-
+                        this.hotTable.setCellMetaObject(cell.row, colInd, { 'className': 'normal-product', comment: { value: '' } });
                     }
-
                 }
             });
             this.hotTable.render();
@@ -263,37 +261,33 @@ export class RuleDetailsModalComponent {
     }
 
     dataChangeMulti(data, i, dataItem, selector) {
+        this.Rules.Criteria[i].values = [];
         if (selector == 'dropdownName') {
-            this.Rules.Criteria[i].values = [];
-            data.forEach((item) => {
+            dataItem.selectedValues.forEach((item) => {
                 if (item.dropdownName != undefined)
                     this.Rules.Criteria[i].values.push(item.dropdownName);
             })
         } else if (selector == 'name') {
-            this.Rules.Criteria[i].values = [];
-            data.forEach((item) => {
-                if(item.EMP_WWID != undefined)
+            dataItem.selectedValues.forEach((item) => {
+                if (item.EMP_WWID != undefined)
                     this.Rules.Criteria[i].values.push(item.EMP_WWID);
             })
         } else if (selector == 'value') {
-            this.Rules.Criteria[i].values = [];
             if (dataItem.field == 'HOST_GEO' || dataItem.field == 'GEO_COMBINED') {
-                data.forEach((item) => {
+                dataItem.selectedValues.forEach((item) => {
                     this.Rules.Criteria[i].value = "";
                     this.Rules.Criteria[i].values.push(item);
                 })
-            }else 
-                data.forEach((item) => {
+            } else
+                dataItem.selectedValues.forEach((item) => {
                     this.Rules.Criteria[i].values.push(item.value);
                 })
         } else if (selector == 'dropdown') {
-            this.Rules.Criteria[i].values = [];
-            data.forEach((item) => {
+            dataItem.selectedValues.forEach((item) => {
                 this.Rules.Criteria[i].values.push(item.DROP_DOWN);
             })
         } else {
-            this.Rules.Criteria[i].values = [];
-            data.forEach((item) => {
+            dataItem.selectedValues.forEach((item) => {
                 this.Rules.Criteria[i].values.push(item.CUST_SID);
             })
         }
@@ -303,7 +297,6 @@ export class RuleDetailsModalComponent {
         if (selector == 'operator') {
             this.Rules.Criteria[idx].operator = data.operator;
         } else if (selector == 'numerictextbox') {
-            //dataItem.value = data;
             this.Rules.Criteria[idx].value = dataItem.value
         } else if (selector == 'textbox') {
             this.Rules.Criteria[idx].value = dataItem.value
@@ -347,7 +340,8 @@ export class RuleDetailsModalComponent {
         dataRuleIds.push(parseInt(this.Rules.Id, 10))//10 is base 10 number system
         let dataDealsIds = [];
 
-        data.push(dataRuleIds, dataDealsIds);
+        data.push(dataRuleIds);
+        data.push(dataDealsIds);
         this.adminRulesSvc.getRuleSimulationResults(data).subscribe((response) => {
             this.isLoading = false;
             if (response.length > 0) {
@@ -503,9 +497,11 @@ export class RuleDetailsModalComponent {
         this.Rules.Criteria[index].value = "";
         this.Rules.Criteria[index].valueType = null;
         this.Rules.Criteria[index].values = [];
+        if (this.Rules.Criteria[index].selectedValues)
+            this.Rules.Criteria[index].selectedValues = [];
         Object.assign(this.Rules.Criteria[index], {
             selectedField: dataItem,
-            seletedOperator: selectedOperator
+            selectedOperator: selectedOperator
         });
     }
 
@@ -853,7 +849,11 @@ export class RuleDetailsModalComponent {
                     delete item.selectedField;
                     delete item.selectedOperator;
                     delete item.selectedValues;
+                    if (item.values.length > 0) {
+                        item.value = '';
+                    }
                 });
+                this.criteria[0].value= "ECAP"
                 this.Rules.IsActive = false;
                 this.Rules.RuleStage = false;
                 this.priceRuleCriteriaData = {
