@@ -9,15 +9,15 @@
                 </span>
             </div>
             <div *ngIf="!isLoading">
-                <div style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;float:left"
+                <div style="color: #ffffff; font-weight: bold; margin-bottom: 15px; margin-top: 20px; float: left"
                      *ngIf="hasCheckbox">Select which deals you would like to exclude: </div>
-                <div style="color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;float:left"
+                <div style="color: #ffffff; font-weight: bold; margin-bottom: 15px; margin-top: 20px; float: left"
                      *ngIf="!hasCheckbox">Deals marked with "✓" are excluded: </div>
-                <div style='color:#ffffff; font-weight:bold; margin-bottom:5px;margin-top:20px;float:left;padding-left:20px'>
+                <div style='color: #ffffff; font-weight: bold; margin-bottom: 15px; margin-top: 20px; float: left; padding-left: 20px'>
                     <mat-slide-toggle [color]="color" [checked]="checked"
                                       title='Click to see Excluded/Included by USER'></mat-slide-toggle>
                 </div>
-                <div style="float:right;margin-right:20px">
+                <!--<div style="float:right;margin-right:20px">
                     <div style="color:#ffffff;">
                         Deals shown in <i class="k-icon k-i-stop" style="color: #B9D6E5 !important; width: 22px; font-size: 16px;"></i>
                         are included as part of the Cost Test
@@ -26,7 +26,7 @@
                         Deals shown in <i class="k-icon k-i-stop" style="color: #AEAEAE !important; width: 22px; font-size: 16px; "></i>
                         overlap but are NOT included as part of the Cost Test
                     </div>
-                </div>
+                </div>-->
                 <div class="row" style="margin: 0px;width:100%">
                     <kendo-grid class="exclude-filter-style view_popup_height" [data]="gridData" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                                 [groupable]="false" [group]="state.group" filterable="menu" [navigable]="true"
@@ -159,8 +159,8 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-12" style="padding-bottom: 20px;">
-            <div class="fr">
+        <div class="col-md-12 pad-fixes-btm">
+            <div class="fr ok-cancel-btns-deals">
                 <button class="btn btn-warning prdBtn" type="button" (click)="cancel()" *ngIf="hasCheckbox">
                     Cancel
                 </button>
