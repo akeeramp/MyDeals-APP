@@ -111,7 +111,7 @@
                             <div [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False'),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.COMP_PRC)}">
                                 <div *ngIf="(dataItem.COMP_PRC==0 || dataItem.COMP_PRC==null);else comp_prc"></div>
                                 <ng-template #comp_prc>
-                                    <div style="padding-left: 5px;">${{dataItem.COMP_PRC}} </div>
+                                    <div style="padding-left: 5px;" *ngIf="showPrice">${{dataItem.COMP_PRC}} </div>
                                 </ng-template>
                             </div>
                         </ng-template>
@@ -564,5 +564,11 @@
     <div class="noMCAlert">{{emptyDataAlertMsg}}</div>
     <kendo-dialog-actions class="noMCAction">
         <button (click)="closeEmptyDataPopup()" class="noMCok" kendoButton>OK</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+<kendo-dialog *ngIf="showAlert" (close)="closeShowAlert()" [width]="685">
+    <div class="noMCAlert" style="margin:15px !important">{{dispMsg}}</div>
+    <kendo-dialog-actions class="noMCAction">
+        <button (click)="closeShowAlert()" class="noMCok" kendoButton>OK</button>
     </kendo-dialog-actions>
 </kendo-dialog>

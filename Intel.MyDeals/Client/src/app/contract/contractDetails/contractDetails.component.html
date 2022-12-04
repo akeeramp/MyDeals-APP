@@ -47,7 +47,7 @@
                                     </div>
                                     <div class="col-md-11 display displayblock">
                                         <div class="fl opUiLabel"><span *ngIf="contractData?._behaviors?.isRequired?.TITLE" class="isReqField">* </span>Contract Name:</div>
-                                        <kendo-textbox triggers="manual" class="kendoInput borderless font-input cd-input-bottom" [clearButton]="true" name="TITLE" [ngClass]="{'input-error': isTitleError}" [disabled]="contractData?._behaviors?.isReadOnly?.TITLE"
+                                        <kendo-textbox triggers="manual" class="kendoInput font-input cd-input-bottom" [clearButton]="true" name="TITLE" [ngClass]="{'input-error': isTitleError}" [disabled]="contractData?._behaviors?.isReadOnly?.TITLE"
                                                        [(ngModel)]="TITLE" (keyup)="onKeySearch($event,'TITLE')" required></kendo-textbox>
 
                                         <kendo-formerror *ngIf="(contractDetailsForm.controls.TITLE?.errors?.required && contractDetailsForm.controls.TITLE?.touched);else otherMsg">
@@ -209,7 +209,7 @@
                                             <span *ngIf="contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID"
                                                   class="isReqField">* </span>C2A Contract #
                                         </div>
-                                        <kendo-textbox triggers="manual" class="c2aborder font-input" [clearButton]="true" name="C2A_DATA_C2A_ID" [disabled]="this.contractData?._behaviors?.isReadOnly?.C2A_DATA_C2A_ID"
+                                        <kendo-textbox triggers="manual" class="kendoInput font-input cd-input-bottom" [clearButton]="true" name="C2A_DATA_C2A_ID" [disabled]="this.contractData?._behaviors?.isReadOnly?.C2A_DATA_C2A_ID"
                                                        [(ngModel)]="C2A_DATA_C2A_ID" (valueChange)="c2aIDchange($event)" [required]="this.contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID">
                                         </kendo-textbox>
                                         <kendo-formerror *ngIf="contractDetailsForm.controls.C2A_DATA_C2A_ID?.errors?.required && isSubmitted">
