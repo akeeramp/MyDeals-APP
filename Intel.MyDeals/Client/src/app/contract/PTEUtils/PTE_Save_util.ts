@@ -38,7 +38,7 @@ export class PTE_Save_Util {
         PTR=PTE_Validation_Util.validateMarketSegment(PTR, null, undefined);
         PTR=PTE_Validation_Util.validateFlexRules(PTR, curPricingTable, null, false);
        //*********these conditions are added recently by comparing the JS code will revist this**********
-        if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY' && validMisProd && validMisProd.length > 0) {
+        if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY' && validMisProd != undefined) {
             PTR = this.ValidateDensityPTR(PTR, validMisProd)
         }
         if (overlapFlexResult != undefined) {
@@ -263,23 +263,22 @@ export class PTE_Save_Util {
     }
 
     static ValidateDensityPTR(PTR: Array<any>, validMisProd) {
-        if (validMisProd.length > 0) {
+        if (validMisProd != undefined) {
             _.each(PTR, (itm, indx) => {
-                _.each(validMisProd, (Prod) => {
-                    if (itm.DC_ID == Prod.DCID) {
-                        PTE_Common_Util.setBehaviors(itm);
-                        itm._dirty = true;
-                        if (Prod.cond.contains('nullDensity')) {
-                            itm._behaviors.isError['DENSITY_BAND'] = true;
-                            itm._behaviors.validMsg['DENSITY_BAND'] = "One or more of the products do not have density band value associated with it";
-                            //PTE_Load_Util.setBehaviors(itm, 'DENSITY_BAND', 'One or more of the products do not have density band value associated with it', curPricingTable)
-                        }
-                        else if (Prod.cond == 'insufficientDensity')
-                            itm._behaviors.isError['DENSITY_BAND'] = true;
-                        itm._behaviors.validMsg['DENSITY_BAND'] = "The no. of densities selected for the product was " + Prod.selDen + "but the actual no. of densities for the product is" + Prod.actDen;
+                if (validMisProd[itm.DC_ID] != undefined && validMisProd[itm.DC_ID].cond) {
+                    PTE_Common_Util.setBehaviors(itm);
+                    itm._dirty = true;
+                    if (validMisProd[itm.DC_ID].cond.contains('nullDensity')) {
+                        itm._behaviors.isError['DENSITY_BAND'] = true;
+                        itm._behaviors.validMsg['DENSITY_BAND'] = "One or more of the products do not have density band value associated with it";
+                        //PTE_Load_Util.setBehaviors(itm, 'DENSITY_BAND', 'One or more of the products do not have density band value associated with it', curPricingTable)
+                    }
+                    else if (validMisProd[itm.DC_ID].cond == 'insufficientDensity') {
+                        itm._behaviors.isError['DENSITY_BAND'] = true;
+                        itm._behaviors.validMsg['DENSITY_BAND'] = "The no. of densities selected for the product was " + validMisProd[itm.DC_ID].selDen + "but the actual no. of densities for the product is" + validMisProd[itm.DC_ID].actDen;
                         //PTE_Load_Util.setBehaviors(itm, 'DENSITY_BAND', 'The no. of densities selected for the product was ' + item.selDen + 'but the actual no. of densities for the product is' + item.actDen, curPricingTable);
                     }
-                })
+                }
             });
         }
         return PTR;

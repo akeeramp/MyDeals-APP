@@ -82,7 +82,7 @@
                     <br />
                     <div *ngIf="autofillData.isVistexHybrid == true || dealType == 'FLEX'" class="autoFillOverarching row">
                         <div class="col-md-12">
-                            <div *ngIf="autofillData.isVistexHybrid == true" class="autoFillOverarchingTitle" style="font-family: 'Intel Clear'; font-weight: 600 !important; font-size: 14px !important; color: darkslategray ">
+                            <div *ngIf="autofillData.isVistexHybrid == true" class="autoFillOverarchingTitle" style="font-family: 'Intel Clear'; font-weight: 600 !important; font-size: 14px !important; color: darkslategray; margin-left:0; ">
                                 Please fill out either Max Volume or Amount, but not both.
                             </div>
                             <br />
@@ -90,14 +90,14 @@
                         <div class="col-md-12 autofillrow" *ngIf="autofillData.isVistexHybrid == true">
                             <div class="row">
                                 <div class="col-md-6" style="margin-top:-5px;width: 225px!important">
-                                    <div style="padding-left:3px">
-                                        <p class="fl label ng-binding" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;white-space:pre-line;text-align:left">Overarching Maximum Volume:</p>
+                                    <div style="padding-left:6px">
+                                        <p class="fl label ng-binding" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 13px !important; color: #1a3e6f;white-space:pre-line;text-align:left">Overarching Maximum Volume:</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6" style="margin-top:-5px;width: 168px!important">
                                     <div>
                                         <kendo-numerictextbox [(ngModel)]="autofillData.DEFAULT.REBATE_OA_MAX_VOL.value" [min]="0" [max]="2147483647" [autoCorrect]="true">
-                                            <a style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;"></a>
+                                            <a style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 13px !important; color: #1a3e6f;"></a>
                                         </kendo-numerictextbox>
                                         <kendo-formerror><a style="color: #ff6e77; font-family:'Intel Clear'; font-size: 11px !important; font-weight:bold !important;width:168px !important">{{opValidMsg}}</a></kendo-formerror>
                                     </div>
@@ -108,13 +108,13 @@
                             <div class="row">
                                 <div class="col-md-6" style="margin-top:-5px;width: 225px!important">
                                     <div>
-                                        <p class="fl opUiLabel autofillabel ng-binding" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;">Overarching Maximum Dollar($):</p>
+                                        <p class="fl opUiLabel autofillabel ng-binding" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 13px !important; color: #1a3e6f;">Overarching Maximum Dollar($):</p>
                                     </div>
                                 </div>
-                                <div class="col-md-6">
-                                    <div style="margin-top:-5px;width: 168px!important">
+                                <div class="col-md-6" style="margin-top:-5px;width: 168px!important">
+                                    <div>
                                         <kendo-numerictextbox [(ngModel)]="autofillData.DEFAULT.REBATE_OA_MAX_AMT.value" [min]="0" [autoCorrect]="true" format="n2">
-                                            <a style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 14px !important; color: #1a3e6f;"></a>
+                                            <a style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 13px !important; color: #1a3e6f;"></a>
                                         </kendo-numerictextbox>
                                     </div>
                                     <kendo-formerror><a style="color: #ff6e77; font-family:'Intel Clear'; font-size: 11px !important; font-weight:bold !important;width: 168px!important">{{opValidMsgDollar}}</a></kendo-formerror>
@@ -134,7 +134,7 @@
                 <div class="col-md-8">
                     <!--empty space-->
                 </div>
-                <div class="col-md-2" style="padding-right: 10px;">
+                <div class="col-md-2" style="padding-right: 10px;padding-left:10px">
                     <button mat-button (click)="onNoClick()" class="afBtn afClsBtn auto-cs-btn" style="">Cancel</button>
                 </div>
                 <div class="col-md-2">

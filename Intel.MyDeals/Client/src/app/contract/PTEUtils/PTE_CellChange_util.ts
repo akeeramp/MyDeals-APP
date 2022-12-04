@@ -1217,10 +1217,9 @@ export class PTE_CellChange_Util {
         return rowProdCorrectordat;
     }
 
-    static validateDensityBand(rowIndex, columns, curPricingTable, operation, translateResult, prdSrc) {
+    static validateDensityBand(rowIndex, columns, curPricingTable, operation, translateResult, prdSrc, DensityMissingProd) {
         let response: any;
         let ValidProducts: any;
-        let validMisProd = [];
         let PTR: any;
         if (operation != '') {
             response = JSON.parse(operation.PTR_SYS_PRD);
@@ -1250,6 +1249,9 @@ export class PTE_CellChange_Util {
                     let distinctDC_IDs = _.uniq(_.pluck(selProds, 'DC_ID'));
                     _.each(distinctDC_IDs, dcid => {
                         let selProd = _.findWhere(selProds, { DC_ID: dcid });
+                        if (DensityMissingProd[dcid] != undefined) {
+                            delete DensityMissingProd[dcid];
+                        }
                         let Nand_Den = [];
                         _.each(item, (prdDet) => {
                             // Handle single product with multiple density_band
@@ -1264,11 +1266,11 @@ export class PTE_CellChange_Util {
                             }
                         });
                         if (Nand_Den.indexOf("null") > -1) {
-                            validMisProd.push({ DCID: selProd.DC_ID, selDen: selProd.NUM_OF_DENSITY, actDen: Nand_Den.length, cond: 'nullDensity' });
+                            DensityMissingProd[(selProd.DC_ID).toString()] = ({ DCID: selProd.DC_ID, selDen: selProd.NUM_OF_DENSITY, actDen: Nand_Den.length, cond: 'nullDensity' });
                             return;
                         }
                         if (selProd && pivotDensity != Nand_Den.length) {
-                            validMisProd.push({ DCID: selProd.DC_ID, selDen: selProd.NUM_OF_DENSITY, actDen: Nand_Den.length, cond: 'insufficientDensity' });
+                            DensityMissingProd[(selProd.DC_ID).toString()] = ({ DCID: selProd.DC_ID, selDen: selProd.NUM_OF_DENSITY, actDen: Nand_Den.length, cond: 'insufficientDensity' });
                         }
                         else {                            
                             let tierNumber = selProd.NUM_OF_TIERS / selProd.NUM_OF_DENSITY;
@@ -1285,6 +1287,7 @@ export class PTE_CellChange_Util {
                                     let ptrPRD = item.PTR_USER_PRD ? item.PTR_USER_PRD.toUpperCase().split(',') : [];
                                     if (_.isEqual(_.sortBy(ptrPRD), _.sortBy(prod.map(v => v.toUpperCase()))) && item.TIER_NBR == tier && item.DC_ID == selProd.DC_ID) {
                                         this.hotTable.setDataAtRowProp(ind, 'DENSITY_BAND', Nand_Den[prodInd], 'no-edit');
+                                        item.DENSITY_BAND = Nand_Den[prodInd];
                                         prodInd++;
                                     }
                                     ind++;
@@ -1296,28 +1299,27 @@ export class PTE_CellChange_Util {
 
                 }
             })
-            if (validMisProd.length > 0) {
+            if (DensityMissingProd != undefined) {
                 _.each(PTR, (itm, indx) => {
-                    _.each(validMisProd, (item) => {
-                        if (itm.DC_ID == item.DCID) {
-                            PTE_Common_Util.setBehaviors(itm);
-                            itm._dirty = true;
-                            if (item.cond.contains('nullDensity')) {
-                                itm._behaviors.isError['DENSITY_BAND'] = true;
-                                itm._behaviors.validMsg['DENSITY_BAND'] = "One or more of the products do not have density band value associated with it";
-                                //PTE_Load_Util.setBehaviors(itm, 'DENSITY_BAND', 'One or more of the products do not have density band value associated with it', curPricingTable)
-                            }
-                            else if (item.cond == 'insufficientDensity')
-                                itm._behaviors.isError['DENSITY_BAND'] = true;
-                            itm._behaviors.validMsg['DENSITY_BAND'] = "The no. of densities selected for the product was " + item.selDen + "but the actual no. of densities for the product is" + item.actDen;
+                    if (DensityMissingProd[itm.DC_ID] != undefined && DensityMissingProd[itm.DC_ID].cond) {
+                        PTE_Common_Util.setBehaviors(itm);
+                        itm._dirty = true;
+                        if (DensityMissingProd[itm.DC_ID].cond.contains('nullDensity')) {
+                            itm._behaviors.isError['DENSITY_BAND'] = true;
+                            itm._behaviors.validMsg['DENSITY_BAND'] = "One or more of the products do not have density band value associated with it";
+                            //PTE_Load_Util.setBehaviors(itm, 'DENSITY_BAND', 'One or more of the products do not have density band value associated with it', curPricingTable)
+                        }
+                        else if (DensityMissingProd[itm.DC_ID].cond == 'insufficientDensity') {
+                            itm._behaviors.isError['DENSITY_BAND'] = true;
+                            itm._behaviors.validMsg['DENSITY_BAND'] = "The no. of densities selected for the product was " + DensityMissingProd[itm.DC_ID].selDen + "but the actual no. of densities for the product is" + DensityMissingProd[itm.DC_ID].actDen;
                             //PTE_Load_Util.setBehaviors(itm, 'DENSITY_BAND', 'The no. of densities selected for the product was ' + item.selDen + 'but the actual no. of densities for the product is' + item.actDen, curPricingTable);
                         }
-                    })
+                    }
                 });
             }
 
         }
-        return { finalPTR: PTR, validMisProds: validMisProd };
+        return { finalPTR: PTR, validMisProds: DensityMissingProd };
     }
     static defaultVolVal(items: Array<any>, columns: any[], curPricingTable: any){
         if(items[0].new=='' || items[0].new==null ){

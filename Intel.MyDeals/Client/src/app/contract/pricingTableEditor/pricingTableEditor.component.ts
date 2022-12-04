@@ -236,12 +236,9 @@ export class pricingTableEditorComponent {
                             if (VM.curPricingTable.OBJ_SET_TYPE_CD && VM.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
                                 if (this.allOperations.length > 0) {
                                     for (let i = 0; i < this.allOperations.length; i++) {
-                                        let denBandData = PTE_CellChange_Util.validateDensityBand(this.selRow, VM.columns, VM.curPricingTable, this.allOperations[i], '', false);
-                                        let error = PTE_Save_Util.isPTEError(denBandData.finalPTR, VM.curPricingTable);
+                                        let denBandData = PTE_CellChange_Util.validateDensityBand(this.selRow, VM.columns, VM.curPricingTable, this.allOperations[i], '', false, VM.validMisProd);
                                         VM.validMisProd = denBandData.validMisProds;
-                                        if (error) {
-                                            VM.generateHandsonTable(denBandData.finalPTR);
-                                        }
+                                        VM.generateHandsonTable(denBandData.finalPTR);
                                     }
                                 }
                             }
@@ -378,7 +375,7 @@ export class pricingTableEditorComponent {
     private newPTR: any;
     public dirtyItems: boolean;
     public warnings: boolean = false;
-    public validMisProd: any;
+    public validMisProd: any = [];
     public isExcludePrdChange: boolean = false;
     public trackTranslationprod: any = [];
     public undoEnable: boolean = false;
@@ -1105,12 +1102,9 @@ export class pricingTableEditorComponent {
                         this.hotTable.setDataAtRowProp(idx, 'PTR_USER_PRD', data.PTR_USER_PRD, 'no-edit')
 
                     });
-                    let denBandData = PTE_CellChange_Util.validateDensityBand(0, this.columns, this.curPricingTable, '', translateResult['Data'], false);
-                    let error = PTE_Save_Util.isPTEError(denBandData.finalPTR, this.curPricingTable);
-                    this.validMisProd = denBandData.validMisProds;
-                    if (error) {
-                        this.generateHandsonTable(denBandData.finalPTR);
-                    }
+                    let denBandData = PTE_CellChange_Util.validateDensityBand(0, this.columns, this.curPricingTable, '', translateResult['Data'], false, this.validMisProd);
+                    this.validMisProd = denBandData.validMisProds;                    
+                    this.generateHandsonTable(denBandData.finalPTR);
                 }
                 if (action == 'onSave') {
                     //since the errors are binding from cook products check for any error
@@ -1193,6 +1187,9 @@ export class pricingTableEditorComponent {
         // height = "80vh"; // ISSUE: Adds a blank block at the bottom of the grid taking 20% of the view
         width = "5500px";
         panelClass = "product-selector-dialog";
+        let VM = this;
+        let allOperations = [];
+        let emptyRow;
         data = { name: name, source: '', selVal: '', contractData: this.contractData, curPricingTable: this.curPricingTable, curRow: '' };
         const dialogRef = this.dialog.open(modalComponent, {
             height: height,
@@ -1238,13 +1235,26 @@ export class pricingTableEditorComponent {
                         sysPrd[item[0].DERIVED_USR_INPUT] = item;
                     });
                     let PTR = [];
+                    emptyRow = PTE_CellChange_Util.returnEmptyRow();
                     this.dirty = true;//for enabling save&Validate button when a product is added from productSelector
                     PTR.push({ row: PTE_CellChange_Util.returnEmptyRow(), prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(PTE_CellChange_Util.returnEmptyRow(), 'PTR_USER_PRD'), new: cntrctPrdct.toString() });
+                    emptyRow = emptyRow + VM.curPricingTable.NUM_OF_TIERS;
                     let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct.toString() };
+                    allOperations.push(operation);
                     PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, operation);
                 }
 
                 setTimeout(() => {
+                    VM.isLoading = false;
+                    if (VM.curPricingTable.OBJ_SET_TYPE_CD && VM.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
+                        if (allOperations.length > 0) {
+                            for (let i = 0; i < allOperations.length; i++) {
+                                let denBandData = PTE_CellChange_Util.validateDensityBand(emptyRow, VM.columns, VM.curPricingTable, allOperations[i], '', false, VM.validMisProd);
+                                VM.validMisProd = denBandData.validMisProds;
+                                VM.generateHandsonTable(denBandData.finalPTR);
+                            }
+                        }
+                    }
                     this.isLoading = false;
                 }, 2000);
             }
@@ -1312,12 +1322,9 @@ export class pricingTableEditorComponent {
                                 }
                             })
                         });
-                        let denBandData = PTE_CellChange_Util.validateDensityBand(selRow, this.columns, this.curPricingTable, operation, '', false);
-                        let error = PTE_Save_Util.isPTEError(denBandData.finalPTR, this.curPricingTable);
+                        let denBandData = PTE_CellChange_Util.validateDensityBand(selRow, this.columns, this.curPricingTable, operation, '', false, this.validMisProd);
                         this.validMisProd = denBandData.validMisProds;
-                        if (error) {
-                            this.generateHandsonTable(denBandData.finalPTR);
-                        }
+                        this.generateHandsonTable(denBandData.finalPTR);
                     }
                         //handonsontable takes time to bind the data to the so putting this logic.
                     setTimeout(() => {
