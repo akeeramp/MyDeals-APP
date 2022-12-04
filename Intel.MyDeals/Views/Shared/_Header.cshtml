@@ -341,7 +341,8 @@
                         <li class="dropdown-submenu">
                             <a tabindex="-1">Security Attributes</a>
                             <ul class="dropdown-menu" style="width: 250px;">
-                                <li><a href="Admin#/SecurityEngine">Security Engine</a></li>
+                                @*<li><a href="Admin#/SecurityEngine">Security Engine</a></li>*@
+                                <li ui-sref-active="active"><a ui-sref="securityengine">Security Engine</a></li>
                                 @*<li><a href="Admin#/SecurityAttributes/DealTypes">Deal Types</a></li>*@
                                 <li ui-sref-active="active"><a ui-sref="dealTypes">Deal Types</a></li>
                             </ul>

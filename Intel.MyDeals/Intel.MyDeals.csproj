@@ -30,7 +30,7 @@
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
     <Use64BitIISExpress />
-    <TypeScriptToolsVersion>4.3</TypeScriptToolsVersion>
+	<TypeScriptToolsVersion>4.3</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -929,6 +929,8 @@
     <Content Include="Client\src\app\admin\rules\admin.rules.component.css" />
     <Content Include="Client\src\app\admin\rules\admin.rules.component.html" />
     <Content Include="Client\src\app\admin\rules\admin.rulesSimulationModal.component.html" />
+    <Content Include="Client\src\app\admin\securityEngine\admin.securityEngine.component.css" />
+    <Content Include="Client\src\app\admin\securityEngine\admin.securityEngine.component.html" />
     <Content Include="Client\src\app\admin\testTenders\admin.testTenders.component.css" />
     <Content Include="Client\src\app\admin\testTenders\admin.testTenders.component.html" />
     <Content Include="Client\src\app\admin\supportScript\admin.supportScript.component.html" />
@@ -960,6 +962,8 @@
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.rules.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.rules.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.rulesSimulationModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\securityEngine\admin.securityEngine.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\securityEngine\admin.securityEngine.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\testTenders\admin.testTenders.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\testTenders\admin.testTenders.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\supportScript\admin.supportScript.component.ts" />

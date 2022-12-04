@@ -49,6 +49,7 @@ import { adminDownloadExceptionscomponent } from '../admin/legalException/admin.
 import { BulkUploadMeetCompModalComponent } from '../admin/meetComp/admin.bulkUploadMeetCompModal.component';
 import { adminUnifiedDealReconComponent } from '../admin/unifiedDealRecon/admin.UnifiedDealRecon.component';
 import { bulkUnifyModalComponent } from '../admin/unifiedDealRecon/admin.bulkUnifyModal.component';
+import { adminsecurityEngineComponent } from '../admin/securityEngine/admin.securityEngine.component';
 
 export let adminComponents =[
     EmployeeComponent,
@@ -99,7 +100,8 @@ export let adminComponents =[
     adminamendmentExceptioncomponent,
     admincompareExceptionscomponent,
     adminviewExceptionsComponent,
-    adminviewDealListcomponent,
+    adminviewDealListcomponent, 
+    adminsecurityEngineComponent,
     adminDownloadExceptionscomponent,
     adminUnifiedDealReconComponent,
     bulkUnifyModalComponent

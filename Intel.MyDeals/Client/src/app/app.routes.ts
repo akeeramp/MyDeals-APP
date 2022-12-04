@@ -207,6 +207,15 @@ angular
                     }
                 }
             })
+            .state("securityengine", {
+                url: "/securityengine",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-security-engine></admin-security-engine>'
+                    }
+                }
+            })
             .state("dealTypes", {
                 url: "/dealTypes",
                 abstract: false,
