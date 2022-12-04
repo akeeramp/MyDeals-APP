@@ -29,7 +29,7 @@
 </div>
 <div class="col-md-12 kendo-grid-buttons" style="padding-top: 20px !important;">
     <kendo-grid [data]="gridData" filterable="menu" [scrollable]="true" [sortable]="true" [navigable]="true" [columnMenu]="{sort:true}" [resizable]="true" [reorderable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter"
-        [group]="state.group" [groupable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" class="pro-meetComp" [height]="400" (dataStateChange)="dataStateChange($event)">
+        [group]="state.group" [groupable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" class="pro-meetComp" [height]="520" (dataStateChange)="dataStateChange($event)">
         <ng-template kendoGridToolbarTemplate><button (click)="clearFilter()" class="k-button clearButton"><span
                     class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS </button>
             <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()" class="k-button clearButton"><span
@@ -59,18 +59,18 @@
                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTV_IND" title="Activate/Deactivate" [groupable]="false">
-            <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
+        <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTV_IND" title="Activate/Deactivate" [groupable]="false" editor="boolean" filter="boolean">
+            <!--<ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                 <span title={{column.title}}>{{column.title}}</span>
-            </ng-template>
+            </ng-template>-->
             <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                 <div class="text-center">
                     <mat-slide-toggle class="toggle-button-custom" (change)="gridSelectItem(dataItem,$event)" [color]="color" [(ngModel)]="dataItem.ACTV_IND"></mat-slide-toggle>
                 </div>
             </ng-template>
-            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+            <!--<ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-            </ng-template>
+            </ng-template>-->
         </kendo-grid-column>
         <kendo-grid-column [headerClass]="{'headerClass':true}" field="MEET_COMP_PRD" title="Meet Comp SKU" [groupable]="false">
             <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
