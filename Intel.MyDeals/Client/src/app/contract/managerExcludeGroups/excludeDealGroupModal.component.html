@@ -92,9 +92,9 @@
                         <kendo-grid-column title="Consumption Reason" field="CNSMPTN_RSN"
                                            [headerClass]="{'headerClass':true}" [width]="180" [hidden]="!pctGroupDealsView"></kendo-grid-column>
                         <ng-template kendoGridDetailTemplate let-dataItem>
-                            <div id="childGrid" class="opUiContainer md dashboard">
+                            <div id="childGrid" class="opUiContainer md dashboard group-exclude-child">
                                 <kendo-grid [data]="childGridData" (dataStateChange)="dataStateChange($event)"
-                                            [rowClass]="rowCallback" class="height-auto-child">
+                                            [rowClass]="rowCallback" class="height-auto-child child-EDGM">
                                     <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="50">
                                         <ng-template kendoGridHeaderTemplate>
                                             <input type="checkbox"

@@ -31,7 +31,8 @@ export class notificationDockComponent {
     openMessage(dataItem) {
         const dialogRef = this.dialog.open(notificationsModalDialog, {
             width: "900px",
-            data: dataItem
+            data: dataItem,
+            panelClass: "mat-remove-space"
         }
         );
         dialogRef.afterClosed().subscribe(() => {
