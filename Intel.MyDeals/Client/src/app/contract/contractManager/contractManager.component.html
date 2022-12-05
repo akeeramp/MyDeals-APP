@@ -64,35 +64,35 @@
                                     *ngIf="!submitModal">
                                 Submit
                             </button>
-                            <kendo-dialog id="caDialog" *ngIf="submitModal" (close)="close('cancel')" [width]="350" class="mybotdialog">
+                            <kendo-dialog id="caDialog" *ngIf="submitModal" (close)="close('cancel')" [width]="350" class="k-dialog-popup-design">
                                 <p class="hstyle">No Pricing Strategies were selected.</p>
-                                <kendo-dialog-actions><button class="contract-popup-okbtn" kendoButton (click)="close('no')">OK</button></kendo-dialog-actions>
+                                <kendo-dialog-actions><button class="cancel-btn-pop-up" kendoButton (click)="close('no')">OK</button></kendo-dialog-actions>
                             </kendo-dialog>
-                            <kendo-dialog class="cm-pop-up" *ngIf="showMultipleDialog">
-                                    <div class="modal-header modalBlueBody">
-                                        <h5 class="modal-title" id="modal-title">Multiple Pricing Tables</h5>
+                            <kendo-dialog class="cm-pop-up blue-popup-design" *ngIf="showMultipleDialog">
+                                <div class="modal-header modalBlueBody">
+                                    <h5 class="modal-title" id="modal-title">Multiple Pricing Tables</h5>
+                                </div>
+                                <div class="modal-body modalBlueBody" id="modal-body">
+
+                                    <div>This Pricing Strategy contains multiple Pricing Tables.Please select which Pricing</div>
+                                    <p style=" margin-right: 319px;"> Table you would like to view:</p>
+
+
+                                    <div style="margin: 20px 0; max-height: 190px; overflow: auto; padding: 5px;">
+                                        <div *ngFor="let pte of pteTableData">
+                                            <button class="btn btn-primary btn-full btn_color_fix" type="button" (click)="pickPt(pte)">{{pte.DC_ID}} - {{pte.TITLE}}</button>
+                                        </div>
                                     </div>
-                                    <div class="modal-body modalBlueBody" id="modal-body">
 
-                                        <div>This Pricing Strategy contains multiple Pricing Tables.Please select which Pricing</div>
-                                        <p style=" margin-right: 319px;"> Table you would like to view:</p>
-
-
-                                        <div style="margin: 20px 0; max-height: 190px; overflow: auto; padding: 5px;">
-                                            <div *ngFor="let pte of pteTableData">
-                                                <button class="btn btn-primary btn-full btn_color_fix" type="button" (click)="pickPt(pte)">{{pte.DC_ID}} - {{pte.TITLE}}</button>
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <div class="fr">
+                                                <button class="btn btn-warning cancel_color_fix cancel-yellow" type="button" style="margin-right: 8px;" (click)="closeMultiple()">Cancel</button>
                                             </div>
                                         </div>
-
-                                        <div class="row">
-                                            <div class="col-md-12">
-                                                <div class="fr">
-                                                    <button class="btn btn-warning cancel_color_fix" type="button" style="margin-right: 8px;" (click)="closeMultiple()">Cancel</button>
-                                                </div>
-                                            </div>
-                                        </div>
-
                                     </div>
+
+                                </div>
                                 <!-- <kendo-dialog-actions><button kendoButton (click)="close('no')">OK</button></kendo-dialog-actions> -->
                             </kendo-dialog>
 
@@ -100,33 +100,30 @@
                                 <div class="wrn-red" style="text-align: left;"><i class="intelicon-information-solid"></i> Correction Required</div>
                                 <div *ngIf="showPendingInfo">
                                     <div style="padding: 15px 25px; height: 250px;">
-                                        <p style="text-align: left">
-                                            C2A Contract # or attaching the contract associated with this deal is required in order to change your contract from Pending to Accepted.</p>
-                                            <div style="text-align: center; margin-top: 34px;">
-                                                <button class="btn btn-sm btn-skyblue" type="button" (click)="showPending('showPendingFile')"
-                                                        style="margin: 0 20px -30px 20px; width: 130px; height: 120px;">
-                                                    <div style="text-align: center;">
-                                                        <div><i class="intelicon-attach-document-outlined" style="font-size: 60px;"></i></div>
-                                                        Attach Contract
-                                                    </div>
-                                                </button>
-                                                <button class="btn btn-sm btn-skyblue" type="button" (click)="showPending('showPendingC2A')"
-                                                        style="margin: 0 20px -30px 20px; width: 130px; height: 120px;">
-                                                    <div style="text-align: center;">
-                                                        <div><i class="intelicon-user-approved-selected-outlined" style="font-size: 60px;"></i></div>
-                                                         Add C2A Contract #
-                                                    </div>
-                                                </button>
-                                            </div>
-                        </div>
-                                    
-                        <div style="text-align: center;">
-                            <button class="btn btn-sm btn-grey" type="button" (click)="closeDialog()" style="margin: 0 10px -30px 10px; width: 110px;">
-                                Cancel
-                            </button>
-                        </div>
-                                        
-                                    
+                                        <p style="text-align: left">C2A Contract # or attaching the contract associated with this deal is required in order to change your contract from Pending to Accepted.</p>
+                                        <div style="text-align: center; margin-top: 34px;">
+                                            <button class="btn btn-sm btn-skyblue" type="button" (click)="showPending('showPendingFile')"
+                                                    style="margin: 0 20px -30px 20px; width: 130px; height: 120px;">
+                                                <div style="text-align: center;">
+                                                    <div><i class="intelicon-attach-document-outlined" style="font-size: 60px;"></i></div>
+                                                    Attach Contract
+                                                </div>
+                                            </button>
+                                            <button class="btn btn-sm btn-skyblue" type="button" (click)="showPending('showPendingC2A')"
+                                                    style="margin: 0 20px -30px 20px; width: 130px; height: 120px;">
+                                                <div style="text-align: center;">
+                                                    <div><i class="intelicon-user-approved-selected-outlined" style="font-size: 60px;"></i></div>
+                                                        Add C2A Contract #
+                                                </div>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <div style="text-align: center;">
+                                        <button class="btn btn-sm btn-grey" type="button" (click)="closeDialog()" style="margin: 0 10px -30px 10px; width: 110px;">
+                                            Cancel
+                                        </button>
+                                    </div>
+                                      
                                 </div>
                                 <div *ngIf="showPendingFile">
                                     <div style="padding: 15px 25px; height: 190px;">

@@ -359,9 +359,9 @@
         <button kendoButton (click)="blankDivisionPopupClose('no')" class="cancel-btn-pop-up">CANCEL</button>
     </kendo-dialog-actions>
 </kendo-dialog>
-<kendo-dialog class="mymissingbutton" *ngIf="isMissingGrpCode" [height]="188" [width]="280">
+<kendo-dialog class="mymissingbutton k-dialog-popup-design" *ngIf="isMissingGrpCode" [height]="188" [width]="280">
     <p class="dialogmsg codesize">Missing Price Group Code </p>
-    <kendo-dialog-actions><button kendoButton (click)="closeMissingGrpCodeAlert()" class="okmissingcode">OK</button></kendo-dialog-actions>
+    <kendo-dialog-actions><button kendoButton (click)="closeMissingGrpCodeAlert()" class="cancel-btn-pop-up">OK</button></kendo-dialog-actions>
 </kendo-dialog>
 <kendo-dialog *ngIf="isDeleteAttachment" (close)="deleteAttachmentActions(false)" class="k-dialog-popup-design" [minWidth]="250" [width]="620">
     <p class="dialogmsg">
