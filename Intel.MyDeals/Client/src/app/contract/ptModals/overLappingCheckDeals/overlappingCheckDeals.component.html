@@ -22,9 +22,9 @@
                 <div *ngIf="value !== 'Frontend YCS2'"><span style='font-weight:bold;font-size:13px; color: red;letter-spacing:0.07em '>Billings Overlap</span></div>
                 <div *ngIf="value == 'Frontend YCS2'">
                     <span style='font-weight:bold;font-size:13px; color: red;letter-spacing:0.07em '>Front End Overlap</span>&nbsp;
-                    <button class='btn btn-sm btn-primary lnk btnSelect' *ngIf="isSelectAll" (click)="selectAllOvlp(true)">Select All</button>&nbsp;
-                    <button class='btn btn-sm btn-primary lnk btnSelect' *ngIf="!isSelectAll" (click)="selectAllOvlp(false)">Clear All</button>&nbsp;
-                    <button class='btn btn-sm  btn-primary lnk btnYes btnselectAccept' (click)="acceptSelectAll(false)"><i class='intelicon-check' style='font-size: 12px !important;'></i> Accept </button>
+                    <button class='btn btn-sm btn-primary lnk btnSelect overlapBtnSelect' *ngIf="isSelectAll" (click)="selectAllOvlp(true)">Select All</button>&nbsp;
+                    <button class='btn btn-sm btn-primary lnk btnSelect overlapBtnSelect' *ngIf="!isSelectAll" (click)="selectAllOvlp(false)">Clear All</button>&nbsp;
+                    <button class='btn btn-sm  btn-primary lnk btnYes btnselectAccept overlapBtnSelect' (click)="acceptSelectAll(false)"><i class='intelicon-check' style='font-size: 12px !important;'></i> Accept </button>
                 </div>
             </ng-template>
         </kendo-grid-column>
@@ -35,15 +35,15 @@
                         <input type='checkbox' (click)="selectCheckBox(value)" [checked]="is_selected" class='check with-font' id='chkGrp" +value+ "' />
                         <span class="grpTitle" style='font-weight:bold'>{{value}}</span><i class='intelicon-arrow-back-left skyblue pl10'></i>
                         <span class='grpDesc' style='font-weight:bold;'>An overlap was located matching an Active or Draft deal.  In order to be able to create this new deal, the System will need to change the End date of the deal.  Is that ok?</span>&nbsp;
-                        <button class='btn btn-sm btn-primary' (click)="acceptOvlp(value,'Y')">Yes</button>
+                        <button class='btn btn-sm btn-primary overlapBtnSelect btnYNeedClr' (click)="acceptOvlp(value,'Y')"><i class='intelicon-check' style='font-size: 12px !important;'></i>Yes</button>
                         <span class='or'>&nbsp;OR&nbsp;</span>
-                        <button class='btn btn-sm btn-primary' (click)="rejectOvlp(value)">No</button>
+                        <button class='btn btn-sm btn-primary overlapBtnSelect btnNoIssue' (click)="rejectOvlp(value)"><i class='intelicon-close-max' style='font-size: 10px !important; padding-right: 3px;'></i> No</button>
                     </div>
                     <div *ngIf="isRevalidate">
                         <span class="grpTitle" style='font-weight:bold'>{{value}}</span>
                         <i class='intelicon-arrow-back-left skyblue pl10'></i>
                         <span class='grpDesc' style='font-weight:bold;'>An overlap was located matching another Draft deal.  Please correct and revalidate.</span>&nbsp;
-                        <button class='btn btn-sm btn-primary' (click)="rejectOvlp(value)">Yes</button>
+                        <button class='btn btn-sm btn-primary overlapBtnSelect btnYNeedClr' (click)="rejectOvlp(value)"><i class='intelicon-check' style='font-size: 12px !important;'></i>Yes</button>
                     </div>
                     <div *ngIf="isDealEndDateChange">
                         <span class="grpTitle" style='font-weight:bold'>{{value}} </span>
