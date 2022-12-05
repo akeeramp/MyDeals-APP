@@ -61,6 +61,7 @@ export class managerExcludeGroupsComponent {
     public mySelection = [];
     public selectAllState: SelectAllCheckboxState = "unchecked";
     private gridResult;
+    private gridResultMaster = [];
     public pricingStrategyFilter;
     private loading = true;
     dirty: boolean;
@@ -120,6 +121,7 @@ export class managerExcludeGroupsComponent {
                 item["DSPL_WF_STG_CD"] = GridUtil.stgFullTitleChar(item);
                 item["TITLE"] = item["TITLE"].replace(/,/g, ", ");
             }
+            this.gridResultMaster = this.gridResult;
             this.displayDealTypes();
             this.gridData = process(this.gridResult, this.state);
             if(this.showPCT){
@@ -296,6 +298,17 @@ export class managerExcludeGroupsComponent {
             contractData: this.contractData
         };
         this.modelChange.emit(contractId_Map);
+    }
+    GridSearch() {
+        if (this.titleFilter.length > 2) {
+            this.gridResult = this.gridResultMaster.filter(s => s.DC_ID == this.titleFilter);
+            this.gridData = process(this.gridResult, this.state);
+        }
+        else {
+
+            this.gridResult = this.gridResultMaster;
+            this.gridData = process(this.gridResult, this.state);
+        }
     }
     ngOnInit() {
         this.userRole = (<any>window).usrRole;
