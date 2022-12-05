@@ -145,7 +145,8 @@ export class pricingTableEditorComponent {
                     data = { name: name, source: this.source, selVal: selVal };
                 }
                 else if (this.field && this.field == 'QLTR_BID_GEO') {
-                    modalComponent = GeoSelectorComponent
+                    modalComponent = GeoSelectorComponent;
+                    panelClass = 'geo_multi_style',
                     name = "Select Bid Geo";
                     data = { name: name, source: this.source, selVal: selVal };
                 }
