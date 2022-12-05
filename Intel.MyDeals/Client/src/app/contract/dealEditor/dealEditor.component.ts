@@ -190,7 +190,7 @@ export class dealEditorComponent {
                             return { Text: val, Value: item[col.field] };
                         }
                         if (moment(item[col.field], "MM/DD/YYYY", true).isValid()) {
-                            return { Text: new Date(new Date(item[col.field]).getTime() + (new Date(item[col.field]).getTimezoneOffset() * 60000)), Value: item[col.field] };
+                            return { Text: (new Date(new Date(item[col.field]).getTime() + (new Date(item[col.field]).getTimezoneOffset() * 60000))).toString(), Value: item[col.field] };
                         }
                         else if (item[col.field] != undefined && item[col.field] != null)
                             return { Text: item[col.field].toString(), Value: item[col.field] }
