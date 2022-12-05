@@ -1539,7 +1539,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsReadOnly = true,
                 Locked = true,
                 Lockable = false,
-                Template = "#=gridUtils.uiReadonlyControlWrapper(data, 'CNTRCT_OBJ_SID')#",
+                Template = "#=gridUtils.uiReadonlyFolioWrapper(data, 'CNTRCT_OBJ_SID')#",
                 ExcelTemplate = "#=CNTRCT_OBJ_SID#",
             });
 
