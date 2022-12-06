@@ -140,7 +140,7 @@
     <kendo-dropdownlist [data]="dropDowResponse[in_Field_Name]"
                         [ngModel]="in_DataItem[in_Field_Name]" (blur)='showToolTip(in_DataItem, in_Field_Name, contractType)'
                         (ngModelChange)="in_DataItem[in_Field_Name] = $event"
-                        (valueChange)="valueChange(in_DataItem, in_Field_Name)">
+                        (valueChange)="valueChange(in_DataItem, in_Field_Name)" class="k-dropdown-design">
     </kendo-dropdownlist>
     <div kendoTooltip showOn="none" position="bottom" style="margin-left:110px" tooltipClass="ctrct_typ">
         <span #contractType [title]="in_DataItem[in_Field_Name] == '' ? 'CONTRACT_TYPE is required' : ''"></span>
@@ -151,12 +151,12 @@
                         [(ngModel)]="in_DataItem[in_Field_Name]"
                         (valueChange)="valueChange(in_DataItem, in_Field_Name)"
                         textField="text"
-                        valueField="value">
+                        valueField="value" class="k-dropdown-design">
     </kendo-dropdownlist>
 </div>
 <div *ngIf="in_Field_Name == 'QLTR_BID_GEO'">
     <kendo-multiselect [data]="dropDowResponse[in_Field_Name]"
                        [(ngModel)]="in_DataItem[in_Field_Name]"
-                       (valueChange)="valueChange(in_DataItem, in_Field_Name)">
+                       (valueChange)="valueChange(in_DataItem, in_Field_Name)" class="divineo-one">
     </kendo-multiselect>
 </div>

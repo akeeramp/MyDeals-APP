@@ -8,7 +8,7 @@
             <label class="col-sm-2 control-label" for="inputTo">To <b>*</b></label>
 
             <div class="col-sm-7">
-                <kendo-multiselect placeholder="Select email address..." [data]="selectOptions" 
+                <kendo-multiselect class="divineo-one" placeholder="Select email address..." [data]="selectOptions" 
                 textField="FRST_NM" valueField="EMAIL_ADDR" [(ngModel)]="dataItem.to"
                 [kendoDropDownFilter]="filterSettings" [ngModelOptions]="{standalone: true}" 
                 style="max-height: 110px; overflow: auto;">
