@@ -1,1 +1,10 @@
  .modalBlueBody{background-color:#003C71;color:#ffffff}.orPanel input[type=radio].with-font,.orPanel input[type=checkbox].with-font{border:0;clip:rect(0 0 0 0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px;cursor:default!important}.orPanel input[type=radio].with-font + label:before,.orPanel input[type=checkbox].with-font + label:before{font-family:FontAwesome;display:inline-block;content:"\f096";font-size:20px;letter-spacing:10px;color:#00AEEF;margin-left:10px;cursor:default!important}.orPanel input[type=radio].with-font:hover + label:before,.orPanel input[type=checkbox].with-font:hover + label:before{color:#00AEEF;cursor:default!important}.orPanel input[type=radio].with-font.disabled + label:before,.orPanel input[type=checkbox].with-font.disabled + label:before{color:#cccccc;cursor:default!important}.orPanel input[type=radio].with-font:checked + label:before,.orPanel input[type=checkbox].with-font:checked + label:before{content:"\f046";font-size:20px;letter-spacing:5px;color:#C4D600;margin-left:10px;cursor:default!important}.orPanel input[type=radio].with-font:focus + label:before,.orPanel input[type=checkbox].with-font:focus + label:before{font-weight:bold;color:#C4D600;cursor:default!important}#gridOverrideReason .k-grid-content{height:550px}
+.post-dialog-container .mat-dialog-container pct-group-dialog .modal-header {
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+    min-height: 16.5px;
+}
+.post-dialog-container .mat-dialog-container pct-group-dialog .modal-body {
+    position: relative;
+    padding: 15px;
+}

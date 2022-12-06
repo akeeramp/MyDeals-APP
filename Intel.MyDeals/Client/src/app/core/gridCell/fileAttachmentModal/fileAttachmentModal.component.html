@@ -29,7 +29,7 @@
                     <div class="panel panel-default">
                         <div class="panel-heading">Attachments <span *ngIf="attachmentCount > 0 && initComplete" class="badge custom-badge-design">{{attachmentCount}}</span></div>
                         <div class="panel-body">
-                            <div *ngIf="!(attachmentCount <= 0 || !initComplete)" style="height:375px;">
+                            <div *ngIf="!(attachmentCount <= 0 || !initComplete)" style="height:375px;" class="oppo-grids physics-css new-now-wrap">
                                 <kendo-grid [data]="gridData" [navigable]="true" [loading]="isLoading" [skip]="state.skip" [sort]="state.sort" [sortable]="true" [selectable]="true" [resizable]="true" [filterable]="false" (dataStateChange)="dataStateChange($event)" [columnMenu]="false"
                                     class="approve-table">
                                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="ATTCH_SID" title="ID" [hidden]=true>

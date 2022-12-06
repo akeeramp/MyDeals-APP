@@ -282,7 +282,7 @@
                         </ng-template>
                     </kendo-grid-column>
                     <ng-template kendoGridDetailTemplate let-dataItem>
-                        <div id="childGrid" class="opUiContainer md dashboard">
+                        <div id="childGrid" class="opUiContainer md dashboard oppo-grids physics-css">
                             <!-- CHILD GRID BEGINS -->
                             <kendo-grid class="meet-child-grid" [data]="convertToChildGridArray(dataItem)" [skip]="childState.skip" [sortable]="true" scrollable="boolean" [sort]="childState.sort" [pageSize]="childState.take" [group]="childState.group" [navigable]="true" [resizable]="true" [groupable]="false"
                                         (dataStateChange)="childDataStateChange($event)" [filter]="childState.filter" filterable="menu" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)" style="height:fit-content !important">
