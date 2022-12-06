@@ -145,10 +145,10 @@
 <div *ngIf="selectedTab == 'PD'" class="col-md-12 loadpublish">
     <publish-tender [pricingTableData]="pricingTableData"></publish-tender>
 </div>
-<kendo-dialog *ngIf="isDialogVisible" (close)="close()" [width]="440">
-    <p style="margin: 30px; text-align: center;">Are you sure you would like to Delete this Contract ? </p>
+<kendo-dialog *ngIf="isDialogVisible" class="k-dialog-popup-design" (close)="close()" [width]="440">
+    <p style="text-align: center;">Are you sure you would like to Delete this Contract ? </p>
     <kendo-dialog-actions class="tender-del-style">
-        <button class="k-button k-primary tender-okbtn" kendoButton (click)="deleteRecord()">OK</button>
-        <button class="k-button tender-cancelbtn" kendoButton (click)="close()"> CANCEL </button>
+        <button class="ok-btn-pop-up" kendoButton (click)="deleteRecord()">OK</button>
+        <button class="cancel-btn-pop-up" kendoButton (click)="close()"> CANCEL </button>
     </kendo-dialog-actions>
 </kendo-dialog>

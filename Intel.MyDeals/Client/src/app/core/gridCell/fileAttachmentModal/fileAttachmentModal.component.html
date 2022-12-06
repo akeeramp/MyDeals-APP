@@ -71,13 +71,13 @@
         </tbody>
     </table>
 </div>
-<kendo-dialog *ngIf="isDeleteAttachment" (close)="deleteAttachmentActions(false)" [minWidth]="250" [maxWidth]="485" class="artho-css">
+<kendo-dialog *ngIf="isDeleteAttachment" (close)="deleteAttachmentActions(false)" [minWidth]="250" [maxWidth]="485" class="artho-css k-dialog-popup-design">
     <p class="dialogmsg">
         Are you sure that you want to Delete this file attachment?
     </p>
     <kendo-dialog-actions class="kendoActn new-custom-deal-tools">
-        <button kendoButton (click)="deleteAttachmentActions(true)">OK</button>
-        <button kendoButton (click)="deleteAttachmentActions(false)" class="cancelCell">CANCEL</button>
+        <button kendoButton (click)="deleteAttachmentActions(true)" class="ok-btn-pop-up">OK</button>
+        <button kendoButton (click)="deleteAttachmentActions(false)" class="cancelCell cancel-btn-pop-up">CANCEL</button>
     </kendo-dialog-actions>
 </kendo-dialog>
 <button kendoButton class="k-button new-k-btn" (click)="close()">CLOSE</button>

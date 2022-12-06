@@ -552,23 +552,23 @@
             <div id="isGridEditable" value=false></div>
         </div>
     </div>
-    <kendo-dialog *ngIf="showPopup" (close)="closePopup()" [width]="1150" class="indicate-dialog">
-        <div class="kendoAlert">{{popUpMessage}}</div>
+    <kendo-dialog *ngIf="showPopup" (close)="closePopup()" [width]="1150" class="k-dialog-popup-design">
+        <p class="kendoAlert">{{popUpMessage}}</p>
         <kendo-dialog-actions class="dialog-action">
-            <div (click)="savePopupAction()" class="primary-btn">OK</div>
-            <div (click)="closePopup()" class="secondary-btn">CANCEL</div>
+            <button (click)="savePopupAction()" class="ok-btn-pop-up line-height-unset" kendoButton>OK</button>
+            <button (click)="closePopup()" class="cancel-btn-pop-up line-height-unset" kendoButton>CANCEL</button>
         </kendo-dialog-actions>
     </kendo-dialog>
 </div>
-<kendo-dialog *ngIf="showEmptyDataAlert" (close)="closeEmptyDataPopup()" [width]="700" class="noMCPopup">
-    <div class="noMCAlert">{{emptyDataAlertMsg}}</div>
+<kendo-dialog *ngIf="showEmptyDataAlert" (close)="closeEmptyDataPopup()" [width]="700" class="k-dialog-popup-design">
+    <p class="noMCAlert">{{emptyDataAlertMsg}}</p>
     <kendo-dialog-actions class="noMCAction">
-        <button (click)="closeEmptyDataPopup()" class="noMCok" kendoButton>OK</button>
+        <button (click)="closeEmptyDataPopup()" class="cancel-btn-pop-up" kendoButton>OK</button>
     </kendo-dialog-actions>
 </kendo-dialog>
-<kendo-dialog *ngIf="showAlert" (close)="closeShowAlert()" [width]="685">
-    <div class="noMCAlert" style="margin:15px !important">{{dispMsg}}</div>
+<kendo-dialog *ngIf="showAlert" (close)="closeShowAlert()" [width]="685" class="k-dialog-popup-design">
+    <p class="noMCAlert">{{dispMsg}}</p>
     <kendo-dialog-actions class="noMCAction">
-        <button (click)="closeShowAlert()" class="noMCok" kendoButton>OK</button>
+        <button (click)="closeShowAlert()" class="cancel-btn-pop-up" kendoButton>OK</button>
     </kendo-dialog-actions>
 </kendo-dialog>

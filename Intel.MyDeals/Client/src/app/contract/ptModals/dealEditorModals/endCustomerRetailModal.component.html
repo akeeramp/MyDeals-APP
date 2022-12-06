@@ -59,7 +59,7 @@
                                             kendoDropDownFilter="contains"
                                             allowCustom="true"
                                             placeholder="Select End Customer"
-                                            class="fl opUiElement endCustomerBoxStyle"
+                                            class="fl opUiElement endCustomerBoxStyle contract-details-customer"
                                             [ngClass]="{'comboBoxStyleIfAny': isAny, 'comboBoxStyleIfNotAny': !isAny}"
                                             (valueChange)="changeField(i, endCust)">
                             </kendo-combobox>
@@ -73,7 +73,7 @@
                                             allowCustom="true"
                                             kendoDropDownFilter="contains"
                                             placeholder="Select End Customer"
-                                            class="fl opUiElement endCustomerBoxStyle"
+                                            class="fl opUiElement endCustomerBoxStyle contract-details-customer"
                                             [ngClass]="{'comboBoxStyleIfAny': isAny, 'comboBoxStyleIfNotAny': !isAny}"
                                             (valueChange)="changeField(i, endCust)">
                             </kendo-combobox>
@@ -89,7 +89,7 @@
                                             kendoDropDownFilter="contains"
                                             [valuePrimitive]="true"
                                             placeholder="Select Country/Region"
-                                            class="fl opUiElement endCustomerBoxStyle"
+                                            class="fl opUiElement endCustomerBoxStyle contract-details-customer"
                                             [disabled]="(isAny && i == 0) || isAdmin? true:false"
                                             [ngClass]="{'ctryComboBoxStyleIfAny': isAny, 'comboBoxStyleIfNotAny': !isAny}"
                                             (valueChange)="changeCountryField(i, endCust)">

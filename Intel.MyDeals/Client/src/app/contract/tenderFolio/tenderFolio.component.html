@@ -39,10 +39,10 @@
                                 <div *ngIf="isCustSelected" class="err-Control">
                                     Please select a valid customer
                                 </div>
-                                <kendo-dialog *ngIf="showKendoAlert" (close)="closeKendoAlert()" [height]="155" [width]="245">
-                                    <div class="kendoAlert">Missing Price Group Code</div>
+                                <kendo-dialog *ngIf="showKendoAlert" (close)="closeKendoAlert()" [height]="155" [width]="245" class="k-dialog-popup-design">
+                                    <p>Missing Price Group Code</p>
                                     <kendo-dialog-actions>
-                                        <div kendoButton (click)="closeKendoAlert()" class="kendo-alrt-btn myalertprice">OK</div>
+                                        <button kendoButton (click)="closeKendoAlert()" class="kendo-alrt-btn myalertprice cancel-btn-pop-up">OK</button>
                                     </kendo-dialog-actions>
                                 </kendo-dialog>
                             </div>
@@ -53,11 +53,11 @@
                                     <div class="description">Blank means that ALL divisions are included</div>
                                 </div>
                             </div>
-                            <kendo-dialog *ngIf="showCustDivAlert" (close)="closeCustDivsAlert()" [height]="155" [width]="590">
-                                <div class="kendoAlert">The division is blank. Do you intend for this contract to apply to all divisions?</div>
+                            <kendo-dialog *ngIf="showCustDivAlert" (close)="closeCustDivsAlert()" [height]="155" [width]="590" class="k-dialog-popup-design">
+                                <div>The division is blank. Do you intend for this contract to apply to all divisions?</div>
                                 <kendo-dialog-actions class="dialog-action">
-                                    <div kendoButton (click)="saveWithoutCustDivs()" class="primary-btn">OK</div>
-                                    <div kendoButton (click)="closeCustDivsAlert()" class="secondary-btn">CANCEL</div>
+                                    <button kendoButton (click)="saveWithoutCustDivs()" class="ok-btn-pop-up line-height-unset">OK</button>
+                                    <button kendoButton (click)="closeCustDivsAlert()" class="cancel-btn-pop-up line-height-unset">CANCEL</button>
                                 </kendo-dialog-actions>
                             </kendo-dialog>
                             <div class="col-md-11 row">
