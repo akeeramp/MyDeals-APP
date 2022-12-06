@@ -50,6 +50,8 @@ import { BulkUploadMeetCompModalComponent } from '../admin/meetComp/admin.bulkUp
 import { adminUnifiedDealReconComponent } from '../admin/unifiedDealRecon/admin.UnifiedDealRecon.component';
 import { bulkUnifyModalComponent } from '../admin/unifiedDealRecon/admin.bulkUnifyModal.component';
 import { adminsecurityEngineComponent } from '../admin/securityEngine/admin.securityEngine.component';
+import { BulkPricingUpdatesComponent } from '../admin/bulkPricingUpdates/admin.bulkPricingUpdates.component';
+import { BulkPricingUpdateModalComponent } from '../admin/bulkPricingUpdates/admin.bulkPricingUpdateModal.component';
 
 export let adminComponents =[
     EmployeeComponent,
@@ -104,5 +106,7 @@ export let adminComponents =[
     adminsecurityEngineComponent,
     adminDownloadExceptionscomponent,
     adminUnifiedDealReconComponent,
-    bulkUnifyModalComponent
+    bulkUnifyModalComponent,
+    BulkPricingUpdatesComponent,
+    BulkPricingUpdateModalComponent
 ]

@@ -868,8 +868,14 @@
     <Content Include="Client\src\app\admin\batchTiming\admin.batchTiming.component.css" />
     <Content Include="Client\src\app\admin\batchTiming\admin.batchTiming.component.html" />
     <TypeScriptCompile Include="Client\src\app\admin\batchTiming\admin.batchTiming.service.ts" />
+    <Content Include="Client\src\app\admin\bulkPricingUpdates\admin.bulkPricingUpdateModal.component.html" />
+    <Content Include="Client\src\app\admin\bulkPricingUpdates\admin.bulkPricingUpdates.component.css" />
+    <Content Include="Client\src\app\admin\bulkPricingUpdates\admin.bulkPricingUpdates.component.html" />
     <Content Include="Client\src\app\admin\cache\admin.cache.component.css" />
     <Content Include="Client\src\app\admin\cache\admin.cache.component.html" />
+    <TypeScriptCompile Include="Client\src\app\admin\bulkPricingUpdates\admin.bulkPricingUpdateModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\bulkPricingUpdates\admin.bulkPricingUpdates.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\bulkPricingUpdates\admin.bulkPricingUpdates.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\constants\admin.constants.component.ts" />
     <Content Include="Client\src\app\admin\constants\admin.constants.component.html" />
     <TypeScriptCompile Include="Client\src\app\admin\constants\admin.constants.service.ts" />

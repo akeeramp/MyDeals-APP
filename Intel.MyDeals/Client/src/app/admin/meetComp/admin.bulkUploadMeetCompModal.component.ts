@@ -76,7 +76,7 @@ export class BulkUploadMeetCompModalComponent {
     afterTableEdited(changes,source) {
     if (changes && changes.length > 0){
         let colInd = ExcelColumnsConfig.meetCompExcel.findIndex((col) => col.data === changes[0][1])
-         if (changes[0][1] == "CUST_NM" && changes[0][3] == null) {
+         if ((changes[0][1] == "CUST_NM" || changes[0][1] == "HIER_VAL_NM") &&  changes[0][3] == null) {
             this.meetComps[changes[0][0]][changes[0][1]] = "";
         }
     
@@ -107,21 +107,21 @@ export class BulkUploadMeetCompModalComponent {
             }
         }
     }
-    if ((changes [0][1] == "IA_BNCH" || changes [0][1] == "COMP_BNCH") && ((isNaN(changes[0][3]) && (!(parseInt(changes[0][3]) > 0))) || changes[0][3] === 0) && this.MeetCompValidation ){
+    if ((changes [0][1] == "IA_BNCH" || changes [0][1] == "COMP_BNCH") && ((isNaN(changes[0][3]) && (!(parseInt(changes[0][3]) > 0))) || changes[0][3] === 0 || changes[0][3] === '') && this.MeetCompValidation ){
         let msg = changes [0][1] == "IA_BNCH" ? 'IA Bench should be greater than zero for server product!' : 'Comp Bench should be greater than zero for server product!'
         this.checkIsitServerProd(changes [0][0],colInd,msg,changes [0][1],this.cellMessages);
         this.hotTable.updateSettings({cell: this.cellMessages})   
         this.hotTable.render();
     }
         this.IsSpreadSheetEdited = true;
-       
+                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       
     }
     }
 
     checkIsitServerProd(row,col,msg,colName,cmnts){
         if (this.MeetCompValidation){
         this.MeetCompValidation.ProductsRequiredBench.filter(prod => {
-                    if (prod === (this.meetComps[row]['HIER_VAL_NM']).toLowerCase() && (isNaN (this.meetComps[row][colName])  || this.meetComps[row][colName] === 0)){
+                    if (prod === (this.meetComps[row]['HIER_VAL_NM']).toLowerCase() && (isNaN (this.meetComps[row][colName])  || this.meetComps[row][colName] === 0 || this.meetComps[row][colName] === null)){
                         cmnts.push ({ row: (row), col: col, comment: { value: msg, readOnly: true }, className: 'error-product' })
                     } 
                 });

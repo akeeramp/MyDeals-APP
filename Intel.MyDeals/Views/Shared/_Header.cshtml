@@ -380,7 +380,8 @@
                                 }
                                 @if (isBulkPriceAdmin || isDeveloper)
                                 {
-                                    <li><a href="Admin#/bulkPriceUpdate">Bulk Pricing Updates</a></li>
+                                    <li ui-sref-active="active"><a ui-sref="bulkPricingUpdate">Bulk Pricing Updates</a></li>
+                                    @*<!-- <li><a href="Admin#/bulkPriceUpdate">Bulk Pricing Updates</a></li> -->*@
                                 }
                                 @if (isRealSA || isDeveloper)
                                 {

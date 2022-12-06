@@ -417,6 +417,15 @@ angular
                 }
             })
 
+            .state("bulkPricingUpdate", {
+                url: '/bulkPricingUpdate',
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<admin-bulk-pricing-updates></admin-bulk-pricing-updates>'
+                    }
+                }
+            })
             //********************* Admin route  ends here **************
 
 

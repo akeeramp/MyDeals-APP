@@ -327,4 +327,92 @@
             width: 150
         }
     ]
+
+    
+static bulkPriceUpdatesColHeaders = [
+    "Deal ID","Deal Description","ECAP Price","Ceiling Volume","Deal Start Date","Deal End Date","Billings Start Date","Billings End Date","Project Name","Tracker Effective Date","Additional Terms","Deal stage","Update Status","Error Messages"
+]
+
+static bulkPriceUpdateColumnData =  [
+    {
+        data: 'DealId',
+        type: 'numeric',
+        readOnly: false,
+        width: 80
+    },
+    {
+        data: 'DealDesc',
+        type: 'text',
+        readOnly: false,
+        width: 150
+    },
+    
+    {
+        data: 'EcapPrice',
+        type: 'numeric',
+        readOnly: false,
+        width: 90
+    },
+    {
+        data: 'Volume',
+        type: 'numeric',
+        readOnly: false,
+        width: 100
+    },
+    {
+        data: 'DealStartDate',
+        type: 'text',
+        readOnly: false,
+        width: 100
+    },
+    
+    {
+        data: 'DealEndDate',
+        type: 'text',
+        readOnly: false,
+        width: 100
+    },
+    {
+        data: 'BillingsStartDate',
+        type: 'text',
+        readOnly: false,
+        width: 100
+    },{
+        data: 'BillingsEndDate',
+        type: 'text',
+        readOnly: false,
+        width: 153
+    },{
+        data: 'ProjectName',
+        type: 'text',
+        readOnly: false,
+        width: 150
+    },{
+        data: 'TrackerEffectiveStartDate',
+        type: 'text',
+        readOnly: false,
+        width: 130
+    },{
+        data: 'AdditionalTermsAndConditions',
+        type: 'text',
+        readOnly: false,
+        width: 150
+    },{
+        data: 'DealStage',
+        type: 'text',
+        readOnly: true,
+        width: 100
+    },{
+        data: 'UpdateStatus',
+        type: 'text',
+        readOnly: true,
+        width: 100,
+    },{
+        data: 'ValidationMessages',
+        type: 'text',
+        readOnly: true,
+        width: 250,
+    }
+]
+
 }
