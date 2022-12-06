@@ -252,10 +252,10 @@
                                             <div class="panel panel-default" *ngIf="attachmentCount && attachmentCount>0">
                                                 <div class="panel-heading" style="font-size:14px; font-weight:bold">File Attachment Details <span *ngIf="attachmentCount > 0 && initComplete" class="badge">{{attachmentCount}}</span></div>
                                                 <div class="panel-body">
-                                                    <div *ngIf="!(attachmentCount <= 0 || !initComplete)">
+                                                    <div *ngIf="!(attachmentCount <= 0 || !initComplete)" class="oppo-grids physics-css">
                                                         <kendo-grid id="fileAttachmentGrid" [data]="gridData" [navigable]="true" [loading]="isLoading" [skip]="state.skip"
                                                                     [sort]="state.sort" [sortable]="true" [reorderable]="true" [resizable]="true"
-                                                                    (dataStateChange)="dataStateChange($event)">
+                                                                    (dataStateChange)="dataStateChange($event)" class="file-attachment-contract">
                                                             <kendo-grid-column [headerClass]="{'headerClass':true}" field="ATTCH_SID" title="ID" [hidden]=true>
                                                             </kendo-grid-column>
                                                             <kendo-grid-column [headerClass]="{'headerClass':true}" field="FILE_DATA_SID" title="" width="10%">
