@@ -514,11 +514,8 @@ export class meetCompContractComponent implements OnInit {
         this.tmDirec.emit('')
     }
     onCompSkuChange(val: any, dataItem: any) {
-
-        const valObj = this.meetCompSkuDropdownData.filter(s => s.COMP_SKU == val)[0];
-        const selectedIndx = valObj.RW_NM;
-
-        this.selectedCustomerText = (valObj.COMP_SKU).trim();
+        const selectedIndx = val.RW_NM;
+        this.selectedCustomerText = (val.COMP_SKU).trim();
         this.selectedCust = dataItem.CUST_NM_SID;
         this.curentRow = dataItem.RW_NM;
         if (selectedIndx == -1 && this.selectedCustomerText.trim().length > 0) {
@@ -526,7 +523,7 @@ export class meetCompContractComponent implements OnInit {
             dataItem.COMP_SKU = this.selectedCustomerText.trim();
         }
         else if (selectedIndx > -1 && this.selectedCustomerText.trim().length > 0) {
-            const selectedValue = valObj.RW_NM;
+            const selectedValue = val.RW_NM;
             dataItem.COMP_SKU = this.selectedCustomerText.trim();
             let tempprcData = [];
             dataItem.COMP_PRC = parseFloat(this.meetCompMasterdata._elements[selectedValue - 1].COMP_PRC).toFixed(2);
@@ -573,7 +570,7 @@ export class meetCompContractComponent implements OnInit {
                     }
                 }
             }
-            this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_SKU = (valObj.COMP_SKU).trim();
+            this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_SKU = (val.COMP_SKU).trim();
             // Setting COMP PRC based on Comp SKU if available
             this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_PRC = parseFloat(this.meetCompMasterdata._elements[selectedValue - 1].COMP_PRC).toFixed(2);
             this.addToUpdateList(this.meetCompMasterdata._elements[dataItem.RW_NM - 1]);
