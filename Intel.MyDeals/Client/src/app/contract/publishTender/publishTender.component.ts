@@ -126,16 +126,11 @@ export class publishTenderComponent {
     async loadPublishGrid() {
         // Generates options that kendo's html directives will use
         this.wipData = [];
-        this.isDataLoading = true;
-        this.spinnerMessageHeader = "Loading Deals...", "Please wait we are fetching WIP Deals...";
-        this.spinnerMessageDescription = "Loading Deals";
-
         // Get all WIP
         if (this.contractData && this.contractData[0] && this.contractData[0].DC_ID) {
             let response = await this.allDealsSvc.readWipFromContract(this.contractData[0].DC_ID).toPromise().catch(error => {this.loggerSvc.error("Could not get deals.", error);});
             if (response && response.WIP_DEAL) {
                 this.initGrid(response.WIP_DEAL);
-                this.spinnerMessageDescription = "Drawing Grid";
             }
             else{
                 this.loggerSvc.error("Error", "Publishing deals failed. Contact Administrator.");
@@ -335,7 +330,10 @@ export class publishTenderComponent {
     ngOnInit() {
         const url = window.location.href.split('/');
         this.c_Id = Number(url[url.length - 1]);
-        this.OBJ_SET_TYPE_CD= this.pricingTableData.PRC_TBL_ROW[0].OBJ_SET_TYPE_CD;
+        this.OBJ_SET_TYPE_CD = this.pricingTableData.PRC_TBL_ROW[0].OBJ_SET_TYPE_CD;
+        this.isDataLoading = true;
+        this.setBusy("Loading Deals...", "Please wait we are fetching WIP Deals...", "");
+        this.spinnerMessageDescription = "Loading Deals";
         //set templates data
         this.templatesSvc.readTemplates()
             .subscribe(response => {

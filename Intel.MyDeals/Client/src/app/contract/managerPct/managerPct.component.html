@@ -89,6 +89,7 @@
                         </tr>
                     </table>
                     <div *ngFor="let pt of ps.PRC_TBL;let i=index">
+                        
                         <div class="collapse multi-collapse" id="PSData_{{psIndex}}">
                             <table style="width: 100%; ">
                                 <tr id="detail_{{pt.DC_ID}}">
@@ -125,14 +126,19 @@
                                     </td>
                                 </tr>
                             </table>
+                           
                             <div class="collapse" id="sumWipGrid_{{pt.DC_ID}}" [hidden]="refreshPage">
+
                                 <div style="margin-left: 0">
                                     <div class="opUiContainer md dashboard">
                                         <div id='detailGrid_{{pt.DC_ID}}'
                                              class='opUiContainer md dashboard sumGridOptionsExpand oppo-grids new-now-wrap physics-css either-pin'>
-                                            <kendo-grid [data]="gridDataSet[pt.DC_ID]" [resizable]="true" class="manage-tables" id="managerPCTGrid"
+                                            <span *ngIf="gridDataSet[pt.DC_ID]==undefined" class="k-i-loading loading-design-custom">
+                                                <span style="margin-left: 6em; font-size:10px;">Loading.....</span>
+                                            </span>
+                                            <kendo-grid *ngIf="gridDataSet[pt.DC_ID]!=undefined" [data]="gridDataSet[pt.DC_ID]" [resizable]="true" class="manage-tables" id="managerPCTGrid"
                                                         [sortable]="true" [sort]="state[pt.DC_ID].sort" [skip]="state[pt.DC_ID].skip"
-                                                        [group]="state[pt.DC_ID].group" [navigable]="true" [loading]="isLoading"
+                                                        [group]="state[pt.DC_ID].group" [navigable]="true"
                                                         [groupable]="false" [reorderable]="true"
                                                         (cellClick)="cellClickHandler($event)"
                                                         (cellClose)="cellCloseHandler($event)"
@@ -144,7 +150,7 @@
                                                 <kendo-grid-column field="TOOLS" [sortable]="false"
                                                                    [headerClass]="{'headerClass':true}" [width]="150" [filterable]="false" *ngIf="!isHidden(pt.DC_ID, 'TOOLS')">
                                                     <ng-template kendoGridHeaderTemplate let-dataItem="dataItem">
-                                                        <input type='checkbox' (click)="selectAllIDs($event,pt.DC_ID)" class='grid-link-checkbox with-font' id='chkDealTools_{{pt.DC_ID}}' [(ngModel)]="is_Deal_Tools_Checked[pt.DC_ID]"/>&nbsp;
+                                                        <input type='checkbox' (click)="selectAllIDs($event,pt.DC_ID)" class='grid-link-checkbox with-font' id='chkDealTools_{{pt.DC_ID}}' [(ngModel)]="is_Deal_Tools_Checked[pt.DC_ID]" />&nbsp;
                                                         <label for='chkDealTools_{{pt.DC_ID}}'><b>Tools</b></label>
                                                     </ng-template>
                                                     <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
@@ -397,6 +403,7 @@ dataItem.DEAL_STRT_DT | date:
                                                                     [child]="dataItem" [CostTestGroupDetails]="CostTestGroupDetails[pt.DC_ID]" (refreshParent)="refreshContractData($event)"></pct-child-grid>
                                                 </div>
                                             </kendo-grid>
+
                                         </div>
                                     </div>
                                 </div>

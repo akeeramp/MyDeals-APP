@@ -319,8 +319,11 @@
                                 <div style="margin-left: 0">
                                     <div class="opUiContainer md dashboard">
                                         <div id='detailGrid_{{pt.DC_ID}}' class='opUiContainer md dashboard sumGridOptionsExpand oppo-grids new-now-wrap space-table-all'>
-                                            <kendo-grid id="manageFilterStyle" *ngIf="state[pt.DC_ID].filter != undefined" [data]="gridDataSet[pt.DC_ID]" [loading]="isGridLoading" [resizable]="true" [filter]="state[pt.DC_ID].filter" [sortable]="true" 
-                                                        filterable="menu" (dataStateChange)="dataStateChange($event, pt.DC_ID)" style="height:auto" >
+                                            <span *ngIf="gridDataSet[pt.DC_ID]==undefined" class="k-i-loading loading-design-custom">
+                                                <span style="margin-left: 6em; font-size:10px;">Loading.....</span>
+                                            </span>
+                                            <kendo-grid id="manageFilterStyle" *ngIf="state[pt.DC_ID].filter != undefined && gridDataSet[pt.DC_ID]!=undefined" [data]="gridDataSet[pt.DC_ID]"  [resizable]="true" [filter]="state[pt.DC_ID].filter" [sortable]="true"
+                                                        filterable="menu" (dataStateChange)="dataStateChange($event, pt.DC_ID)" style="height:auto">
                                                 <kendo-grid-column title="Tools" field="NOTES" [headerClass]="{'headerClass':true}" [width]="200" [locked]="true" [filterable]="false" [sortable]="false">
                                                     <ng-template kendoGridHeaderTemplate>
                                                         <div>
@@ -364,10 +367,10 @@
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Deal Start/End" field="START_DT" [headerClass]="{'headerClass':true}" [width]="175">
                                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                                    let-filterService="filterService">
-                                                    <multicheck-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value"
-                                                        [filterService]="filterService" [data]="filteringData[pt.DC_ID][column.field]"></multicheck-filter>
-                                                </ng-template>
+                                                                 let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value"
+                                                                           [filterService]="filterService" [data]="filteringData[pt.DC_ID][column.field]"></multicheck-filter>
+                                                    </ng-template>
                                                     <ng-template kendoGridCellTemplate let-dataItem>
                                                         {{dataItem.START_DT | date: 'M/d/yyyy'}}-{{dataItem?.END_DT | date: 'M/d/yyyy'}}
                                                     </ng-template>
@@ -443,7 +446,7 @@
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}" [width]="120" [hidden]="!OtherType[pt.DC_ID]"></kendo-grid-column>
                                                 <!-- <kendo-grid-column title="Rebate Type" field="REBATE_TYPE" [headerClass]="{'headerClass':true}" [width]="100">
-    </kendo-grid-column> -->
+        </kendo-grid-column> -->
                                                 <kendo-grid-column title="Ceiling Volume" field="VOLUME" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="OtherType[pt.DC_ID]">
                                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                                                                  let-filterService="filterService">
