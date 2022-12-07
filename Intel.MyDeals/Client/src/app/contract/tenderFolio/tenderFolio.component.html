@@ -33,7 +33,7 @@
                                         *
                                     </span><span class="label-font">Customer:</span>
                                 </label><br />
-                                <kendo-combobox class="combobox width-height mycombox" [(ngModel)]="custSIDObj" [kendoDropDownFilter]="filterSettings" [data]="Customers" [ngClass]="{tenderFolioAlert:isCustSelected}" (valueChange)="valueChange($event)" textField="CUST_NM" valueField="CUST_SID"
+                                <kendo-combobox class="combobox width-height mycombox contract-details-customer align-text-combo-box focus-align-combo-box closed-alignment-fixes" [(ngModel)]="custSIDObj" [kendoDropDownFilter]="filterSettings" [data]="Customers" [ngClass]="{tenderFolioAlert:isCustSelected}" (valueChange)="valueChange($event)" textField="CUST_NM" valueField="CUST_SID"
                                                 [ngModelOptions]="{standalone: true}">
                                 </kendo-combobox>
                                 <div *ngIf="isCustSelected" class="err-Control">
