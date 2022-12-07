@@ -1,1 +1,513 @@
-﻿.k-window{border-radius:0!important}h4{font-size:24px;font-family:'Intel Clear'}.k-content.k-window-content.k-dialog-content{overflow:hidden}.kendoAction{height:60px;padding:0!important;margin:0;justify-content:normal;gap:0!important}.kendoBtn{padding:1.5em 0;text-align:center;cursor:pointer}.kendoAlert{white-space:normal!important}.okBtn{color:#ffffff!important;width:50%!important;background-color:#00AEEF!important}.cancelBtn{width:50%!important;color:#444444!important;border-color:#fafafa!important;background-color:#fafafa!important}.k-content.k-window-content.k-dialog-content{padding:0}.notesContent{margin-top:20px;margin-left:10px;padding:0 20px}.notesText{font-weight:600;margin-bottom:5px}textarea{resize:both!important;width:440px;height:200px}.custom-deal-tools .k-button{padding:1.3em 0!important;border-radius:0!important;border-bottom:0!important;font-weight:500!important;border-color:#00AEEF!important;background-color:#00AEEF!important;font-family:inherit!important;font-size:100%!important}.custom-deal-tools .k-button:first-child{background:#00AEEF!important}.custom-deal-tools .k-button:first-child:hover{background:#0071c5!important}.custom-deal-tools .k-button:last-child{background-color:#fafafa!important}.custom-deal-tools .k-button:last-child:hover{background-color:#ebebeb!important}.k-button:active{color:#444444!important;background-color:#dbdbdb!important;border-color:#ebebeb!important}.k-button:hover{color:#ffffff!important;border-color:#0071C5!important;background-color:#0071C5!important}.cancelDelete{color:#444444!important;border-color:#fafafa!important;background-color:#fafafa!important}.cancelDelete:hover{color:#444444!important;border-color:#ebebeb!important;background-color:#ebebeb!important}.historyModal mat-dialog-container,.attach-style mat-dialog-container{padding:0!important;overflow:hidden!important}.historyModal>mat-dialog-container{border-radius:0!important;resize:horizontal;min-width:750px}.dealTools .md-icon{padding:4px 0 0 5px}.dealTools .md-icon i{color:#00AEEF}.dealTools .md-icon i:hover{color:#003C71!important}.dealTools .md-icon-disabled{padding:4px 2px 0 1px}.dealTools .md-icon-disabled i{color:#00AEEF}.dealTools input[type=radio].with-font,.dealTools input[type=checkbox].with-font{border:0;clip:rect(0 0 0 0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}.dealTools input[type=radio].with-font + label:before,.dealTools input[type=checkbox].with-font + label:before{font-family:FontAwesome;display:inline-block;content:"\f096";font-size:20px;letter-spacing:10px;color:#00AEEF;margin-left:10px}.dealTools input[type=radio].with-font:hover + label:before,.dealTools input[type=checkbox].with-font:hover + label:before{color:#003C71;cursor:pointer}.dealTools input[type=radio].with-font.disabled + label:before,.dealTools input[type=checkbox].with-font.disabled + label:before{color:#cccccc;cursor:default}.dealTools input[type=radio].with-font:checked + label:before,.dealTools input[type=checkbox].with-font:checked + label:before{content:"\f046";font-size:20px;letter-spacing:5px;color:#C4D600;margin-left:10px}.dealTools input[type=radio].with-font:focus + label:before,.dealTools input[type=checkbox].with-font:focus + label:before{font-weight:bold;color:#00AEEF}.dealTools input[type=radio].with-font:checked:focus + label:before,.dealTools input[type=checkbox].with-font:checked:focus + label:before{font-weight:bold;color:#C4D600}#notesDialog{width:100%;height:100%;padding:0}#notesDialog div{padding:0 8px}#notesDialog div textarea{width:440px;height:200px}.k-dialog .notesDialog.k-content textarea{width:450px;height:250px}.k-dialog .notesDialog.k-content .opUiContainer{margin-top:-30px}.k-dialog .promptUserDialog{text-align:center;padding:10px 0 0 0}.k-dialog .promptUserDialog h4{color:#003C71;font-size:18px;font-weight:600;margin-top:0}.k-dialog .promptUserDialog p{font-size:12px;padding:10px 20px}.rotate90{-ms-transform:rotate(90deg);-webkit-transform:rotate(90deg);transform:rotate(90deg)}.dirtyTip{position:absolute;left:0;border-style:solid;border-color:#0071C5 transparent transparent #0071C5;border-width:3px;margin-top:-23px}.dealTools{line-height:1.8em;height:100%!important;width:100%}.dealTools .gridStatusMarker{font-family:arial}.dealTools a{text-decoration:none}.dealTools i:hover{color:#003C71}.gridStatusMarker{height:100%!important;width:20px!important;color:#000000;background-color:#cccccc;font-size:14px;font-weight:600;padding:6px 2px 6px 7px!important;text-align:center}.gridStatusMarker.Working{color:#000000;background-color:#FFA300}.gridStatusMarker.Active{color:#000000;background-color:#C4D600}.gridStatusMarker.Cancelled{color:#000000;background-color:#cccccc}.dealTools .md-icon{padding:4px 0 0 5px}.dealTools .md-icon i{color:#00AEEF}.dealTools .md-icon i:hover{color:#003C71!important}.dealTools .md-icon-disabled{padding:4px 2px 0 1px}.dealTools .md-icon-disabled i{color:#00AEEF}.dealTools input[type=radio].with-font,.dealTools input[type=checkbox].with-font{border:0;clip:rect(0 0 0 0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}.dealTools input[type=radio].with-font + label:before,.dealTools input[type=checkbox].with-font + label:before{font-family:FontAwesome;display:inline-block;content:"\f096";font-size:20px;letter-spacing:10px;color:#00AEEF;margin-left:10px}.dealTools input[type=radio].with-font:hover + label:before,.dealTools input[type=checkbox].with-font:hover + label:before{color:#003C71;cursor:pointer}.dealTools input[type=radio].with-font.disabled + label:before,.dealTools input[type=checkbox].with-font.disabled + label:before{color:#cccccc;cursor:default}.dealTools input[type=radio].with-font:checked + label:before,.dealTools input[type=checkbox].with-font:checked + label:before{content:"\f046";font-size:20px;letter-spacing:5px;color:#C4D600;margin-left:10px}.dealTools input[type=radio].with-font:focus + label:before,.dealTools input[type=checkbox].with-font:focus + label:before{font-weight:bold;color:#00AEEF}.dealTools input[type=radio].with-font:checked:focus + label:before,.dealTools input[type=checkbox].with-font:checked:focus + label:before{font-weight:bold;color:#C4D600}.delete-attach-icon{font-size:16px;cursor:pointer}.delete-attach-icon:hover{text-decoration:none}.tools-parent{display:flex;align-items:center;justify-content:flex-start;width:100%;height:100%}.check-parent label{position:relative;left:6px;margin-bottom:0}.grid-status.fl.gridStatusMarker{padding:0!important;min-width:24px;height:32px!important;display:flex;align-items:center;justify-content:center;margin-top:2px!important;margin-bottom:5px}.custom-deal-tools .k-button.supplier-changes{background:#00AEEF!important}.custom-deal-tools .k-button.supplier-changes:hover{background:#0071c5!important}kendo-dialog.artho-css .k-window{border:none}kendo-dialog.artho-css .k-dialog-buttongroup{border-radius:0!important}.new-custom-deal-tools .kendoBtn{padding:1.3em 0!important;border-radius:0!important;border-bottom:0!important;font-weight:500!important;border-color:#00AEEF!important;font-family:inherit!important;font-size:100%!important;text-transform:uppercase}.new-custom-deal-tools .kendoBtn:first-child{background:#00AEEF!important}.new-custom-deal-tools .kendoBtn:first-child:hover{background-color:#0071c5!important}.new-custom-deal-tools .kendoBtn:last-child{background-color:#fafafa!important}.new-custom-deal-tools .kendoBtn:last-child:hover{background-color:#ebebeb!important}.dealToolsOverlay{width:100%;z-index:500;position:fixed;margin-top:-250px;right:-5px;white-space:normal}.dealToolsOverlay .ss-loading-overlay{position:fixed}.dealToolsOverlay .ss-loading-panel{min-height:auto!important;top:30%}.wistyle.k-window{border-color:rgba(0,0,0,.2);box-shadow:1px 1px 7px 1px rgba(128,128,128,.2);background-color:#fff;left:375px!important;top:178px!important;position:fixed!important}.k-dialog .k-dialog-title,.k-dialog .k-window-title{display:none!important}.k-window-title.arrow-window-title{position:relative!important;padding:5px 15px!important;left:0!important}.close-icon{color:#e5e5e5db!important;left:0!important;padding-top:5px!important}.close-icon .k-icon:hover{color:#ffffff!important}.close-icon:hover{color:#ffffff!important;background:none!important}kendo-dialog.dt-on-hold .k-window{border:none!important}kendo-dialog.dt-on-hold .k-window kendo-dialog-actions{border-radius:0}.myLoader[_ngcontent-prg-c14]{min-height:200px;width:320px;position:absolute;left:45%;top:200px}
+﻿.custom-deal-tools .k-window {
+    border-radius: 0 !important
+}
+
+h4 {
+    font-size: 24px;
+    font-family: 'Intel Clear'
+}
+
+.custom-deal-tools .k-content.k-window-content.k-dialog-content {
+    overflow: hidden
+}
+
+.kendoAction {
+    height: 60px;
+    padding: 0 !important;
+    margin: 0;
+    justify-content: normal;
+    gap: 0 !important
+}
+
+.kendoBtn {
+    padding: 1.5em 0;
+    text-align: center;
+    cursor: pointer
+}
+
+.kendoAlert {
+    white-space: normal !important
+}
+
+.okBtn {
+    color: #ffffff !important;
+    width: 50% !important;
+    background-color: #00AEEF !important
+}
+
+.cancelBtn {
+    width: 50% !important;
+    color: #444444 !important;
+    border-color: #fafafa !important;
+    background-color: #fafafa !important
+}
+
+.custom-deal-tools .k-content.k-window-content.k-dialog-content {
+    padding: 0
+}
+
+.notesContent {
+    margin-top: 20px;
+    margin-left: 10px;
+    padding: 0 20px
+}
+
+.notesText {
+    font-weight: 600;
+    margin-bottom: 5px
+}
+
+textarea {
+    resize: both !important;
+    width: 440px;
+    height: 200px
+}
+
+.custom-deal-tools .k-button {
+    padding: 1.3em 0 !important;
+    border-radius: 0 !important;
+    border-bottom: 0 !important;
+    font-weight: 500 !important;
+    border-color: #00AEEF !important;
+    background-color: #00AEEF !important;
+    font-family: inherit !important;
+    font-size: 100% !important
+}
+
+    .custom-deal-tools .k-button:first-child {
+        background: #00AEEF !important
+    }
+
+        .custom-deal-tools .k-button:first-child:hover {
+            background: #0071c5 !important
+        }
+
+    .custom-deal-tools .k-button:last-child {
+        background-color: #fafafa !important
+    }
+
+        .custom-deal-tools .k-button:last-child:hover {
+            background-color: #ebebeb !important
+        }
+
+    .custom-deal-tools .k-button:active {
+        color: #444444 !important;
+        background-color: #dbdbdb !important;
+        border-color: #ebebeb !important
+    }
+
+    .custom-deal-tools .k-button:hover {
+        color: #ffffff !important;
+        border-color: #0071C5 !important;
+        background-color: #0071C5 !important
+    }
+
+.cancelDelete {
+    color: #444444 !important;
+    border-color: #fafafa !important;
+    background-color: #fafafa !important
+}
+
+    .cancelDelete:hover {
+        color: #444444 !important;
+        border-color: #ebebeb !important;
+        background-color: #ebebeb !important
+    }
+
+.historyModal mat-dialog-container, .attach-style mat-dialog-container {
+    padding: 0 !important;
+    overflow: hidden !important
+}
+
+.historyModal > mat-dialog-container {
+    border-radius: 0 !important;
+    resize: horizontal;
+    min-width: 750px
+}
+
+.dealTools .md-icon {
+    padding: 4px 0 0 5px
+}
+
+    .dealTools .md-icon i {
+        color: #00AEEF
+    }
+
+        .dealTools .md-icon i:hover {
+            color: #003C71 !important
+        }
+
+.dealTools .md-icon-disabled {
+    padding: 4px 2px 0 1px
+}
+
+    .dealTools .md-icon-disabled i {
+        color: #00AEEF
+    }
+
+.dealTools input[type=radio].with-font, .dealTools input[type=checkbox].with-font {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px
+}
+
+    .dealTools input[type=radio].with-font + label:before, .dealTools input[type=checkbox].with-font + label:before {
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f096";
+        font-size: 20px;
+        letter-spacing: 10px;
+        color: #00AEEF;
+        margin-left: 10px
+    }
+
+    .dealTools input[type=radio].with-font:hover + label:before, .dealTools input[type=checkbox].with-font:hover + label:before {
+        color: #003C71;
+        cursor: pointer
+    }
+
+    .dealTools input[type=radio].with-font.disabled + label:before, .dealTools input[type=checkbox].with-font.disabled + label:before {
+        color: #cccccc;
+        cursor: default
+    }
+
+    .dealTools input[type=radio].with-font:checked + label:before, .dealTools input[type=checkbox].with-font:checked + label:before {
+        content: "\f046";
+        font-size: 20px;
+        letter-spacing: 5px;
+        color: #C4D600;
+        margin-left: 10px
+    }
+
+    .dealTools input[type=radio].with-font:focus + label:before, .dealTools input[type=checkbox].with-font:focus + label:before {
+        font-weight: bold;
+        color: #00AEEF
+    }
+
+    .dealTools input[type=radio].with-font:checked:focus + label:before, .dealTools input[type=checkbox].with-font:checked:focus + label:before {
+        font-weight: bold;
+        color: #C4D600
+    }
+
+#notesDialog {
+    width: 100%;
+    height: 100%;
+    padding: 0
+}
+
+    #notesDialog div {
+        padding: 0 8px
+    }
+
+        #notesDialog div textarea {
+            width: 440px;
+            height: 200px
+        }
+
+.custom-deal-tools .k-dialog .notesDialog.k-content textarea {
+    width: 450px;
+    height: 250px
+}
+
+.custom-deal-tools .k-dialog .notesDialog.k-content .opUiContainer {
+    margin-top: -30px
+}
+
+.k-dialog .promptUserDialog {
+    text-align: center;
+    padding: 10px 0 0 0
+}
+
+    .k-dialog .promptUserDialog h4 {
+        color: #003C71;
+        font-size: 18px;
+        font-weight: 600;
+        margin-top: 0
+    }
+
+    .k-dialog .promptUserDialog p {
+        font-size: 12px;
+        padding: 10px 20px
+    }
+
+.custom-deal-tools .rotate90 {
+    -ms-transform: rotate(90deg);
+    -webkit-transform: rotate(90deg);
+    transform: rotate(90deg)
+}
+
+.dirtyTip {
+    position: absolute;
+    left: 0;
+    border-style: solid;
+    border-color: #0071C5 transparent transparent #0071C5;
+    border-width: 3px;
+    margin-top: -23px
+}
+
+.dealTools {
+    line-height: 1.8em;
+    height: 100% !important;
+    width: 100%
+}
+
+    .dealTools .gridStatusMarker {
+        font-family: arial
+    }
+
+    .dealTools a {
+        text-decoration: none
+    }
+
+    .dealTools i:hover {
+        color: #003C71
+    }
+
+.gridStatusMarker {
+    height: 100% !important;
+    width: 20px !important;
+    color: #000000;
+    background-color: #cccccc;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 6px 2px 6px 7px !important;
+    text-align: center
+}
+
+    .gridStatusMarker.Working {
+        color: #000000;
+        background-color: #FFA300
+    }
+
+    .gridStatusMarker.Active {
+        color: #000000;
+        background-color: #C4D600
+    }
+
+    .gridStatusMarker.Cancelled {
+        color: #000000;
+        background-color: #cccccc
+    }
+
+.dealTools .md-icon {
+    padding: 4px 0 0 5px
+}
+
+    .dealTools .md-icon i {
+        color: #00AEEF
+    }
+
+        .dealTools .md-icon i:hover {
+            color: #003C71 !important
+        }
+
+.dealTools .md-icon-disabled {
+    padding: 4px 2px 0 1px
+}
+
+    .dealTools .md-icon-disabled i {
+        color: #00AEEF
+    }
+
+.dealTools input[type=radio].with-font, .dealTools input[type=checkbox].with-font {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px
+}
+
+    .dealTools input[type=radio].with-font + label:before, .dealTools input[type=checkbox].with-font + label:before {
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f096";
+        font-size: 20px;
+        letter-spacing: 10px;
+        color: #00AEEF;
+        margin-left: 10px
+    }
+
+    .dealTools input[type=radio].with-font:hover + label:before, .dealTools input[type=checkbox].with-font:hover + label:before {
+        color: #003C71;
+        cursor: pointer
+    }
+
+    .dealTools input[type=radio].with-font.disabled + label:before, .dealTools input[type=checkbox].with-font.disabled + label:before {
+        color: #cccccc;
+        cursor: default
+    }
+
+    .dealTools input[type=radio].with-font:checked + label:before, .dealTools input[type=checkbox].with-font:checked + label:before {
+        content: "\f046";
+        font-size: 20px;
+        letter-spacing: 5px;
+        color: #C4D600;
+        margin-left: 10px
+    }
+
+    .dealTools input[type=radio].with-font:focus + label:before, .dealTools input[type=checkbox].with-font:focus + label:before {
+        font-weight: bold;
+        color: #00AEEF
+    }
+
+    .dealTools input[type=radio].with-font:checked:focus + label:before, .dealTools input[type=checkbox].with-font:checked:focus + label:before {
+        font-weight: bold;
+        color: #C4D600
+    }
+
+.delete-attach-icon {
+    font-size: 16px;
+    cursor: pointer
+}
+
+    .delete-attach-icon:hover {
+        text-decoration: none
+    }
+
+.tools-parent {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    height: 100%
+}
+
+.check-parent label {
+    position: relative;
+    left: 6px;
+    margin-bottom: 0
+}
+
+.grid-status.fl.gridStatusMarker {
+    padding: 0 !important;
+    min-width: 24px;
+    height: 32px !important;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-top: 2px !important;
+    margin-bottom: 5px
+}
+
+.custom-deal-tools .k-button.supplier-changes {
+    background: #00AEEF !important
+}
+
+    .custom-deal-tools .k-button.supplier-changes:hover {
+        background: #0071c5 !important
+    }
+
+kendo-dialog.artho-css .k-window {
+    border: none
+}
+
+kendo-dialog.artho-css .k-dialog-buttongroup {
+    border-radius: 0 !important
+}
+
+.new-custom-deal-tools .kendoBtn {
+    padding: 1.3em 0 !important;
+    border-radius: 0 !important;
+    border-bottom: 0 !important;
+    font-weight: 500 !important;
+    border-color: #00AEEF !important;
+    font-family: inherit !important;
+    font-size: 100% !important;
+    text-transform: uppercase
+}
+
+    .new-custom-deal-tools .kendoBtn:first-child {
+        background: #00AEEF !important
+    }
+
+        .new-custom-deal-tools .kendoBtn:first-child:hover {
+            background-color: #0071c5 !important
+        }
+
+    .new-custom-deal-tools .kendoBtn:last-child {
+        background-color: #fafafa !important
+    }
+
+        .new-custom-deal-tools .kendoBtn:last-child:hover {
+            background-color: #ebebeb !important
+        }
+
+.dealToolsOverlay {
+    width: 100%;
+    z-index: 500;
+    position: fixed;
+    margin-top: -250px;
+    right: -5px;
+    white-space: normal
+}
+
+    .dealToolsOverlay .ss-loading-overlay {
+        position: fixed
+    }
+
+    .dealToolsOverlay .ss-loading-panel {
+        min-height: auto !important;
+        top: 30%
+    }
+
+.wistyle.k-window {
+    border-color: rgba(0,0,0,.2);
+    box-shadow: 1px 1px 7px 1px rgba(128,128,128,.2);
+    background-color: #fff;
+    left: 375px !important;
+    top: 178px !important;
+    position: fixed !important
+}
+
+/*.k-dialog .k-dialog-title, .k-dialog .k-window-title {
+    display: none !important
+}*/
+
+.k-window-title.arrow-window-title {
+    position: relative !important;
+    padding: 5px 15px !important;
+    left: 0 !important
+}
+
+.close-icon {
+    color: #e5e5e5db !important;
+    left: 0 !important;
+    padding-top: 5px !important
+}
+
+    .close-icon .k-icon:hover {
+        color: #ffffff !important
+    }
+
+    .close-icon:hover {
+        color: #ffffff !important;
+        background: none !important
+    }
+
+kendo-dialog.dt-on-hold .k-window {
+    border: none !important
+}
+
+    kendo-dialog.dt-on-hold .k-window kendo-dialog-actions {
+        border-radius: 0
+    }
+
+.myLoader[_ngcontent-prg-c14] {
+    min-height: 200px;
+    width: 320px;
+    position: absolute;
+    left: 45%;
+    top: 200px
+}
+
+.custom-deal-tools .k-dialog-popup-design .k-window kendo-dialog-actions .cancel-btn-pop-up {
+    margin-left: 0px;
+}
