@@ -25,3 +25,82 @@ kendo-dropdownlist.k-dropdown-design:hover span.k-select .k-icon {
 kendo-dropdownlist.k-dropdown-design:hover span.k-select .k-icon:hover {
     color: var(--light-blue)
 }
+
+kendo-textbox.k-textbox-design {
+    border-color: #e6e6e6;
+}
+
+kendo-textbox.k-textbox-design .k-input:hover {
+    border-color: #f5f5f5;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%);
+    background-color: #fff;
+    border-radius: 0.25rem;
+}
+
+kendo-textbox.k-textbox-design:focus,
+kendo-textbox.k-textbox-design:focus-within,
+k-textbox.k-textbox-design.ng-invalid.ng-touched:focus,
+k-textbox.k-textbox-design.ng-invalid.ng-touched:focus-within {
+    box-shadow: none !important;
+}
+
+kendo-textbox.k-textbox-design:focus,
+kendo-textbox.k-textbox-design:focus-within {
+    border-color: #e6e6e6;
+}
+
+.k-numberbox-design.k-numerictextbox .k-numeric-wrap {
+    color: #495057 !important;
+    border-color: #f0f0f0 !important;
+    font-family: 'Intel Clear'
+}
+
+.k-numberbox-design.k-numerictextbox .k-numeric-wrap:hover {
+    background-color: none !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important;
+    color: #444 !important
+}
+
+.k-numberbox-design.k-numerictextbox .k-numeric-wrap.k-state-focused {
+    border-color: #e7e7e7 !important;
+    background-color: #ffffff !important;
+    box-shadow: none !important
+}
+
+.k-numberbox-design.k-numerictextbox .k-select {
+    color: #727578ed !important;
+    background-color: transparent !important;
+    border: none !important;
+}
+
+.k-numberbox-design.k-numerictextbox .k-link .k-icon:hover {
+    color: #444 !important
+}
+
+.k-numberbox-design.k-numerictextbox .k-link:hover {
+    background: none !important
+}
+
+.k-numberbox-design input:focus-within, .dateboxborder:focus-within {
+    border-color: #ced4da6b !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important
+}
+
+.k-numberbox-design.k-numerictextbox:focus-within {
+    border-color: #f0f0f0 !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 /20%),0 2px 3px rgb(0 0 0 / 5%) !important
+}
+
+.k-numberbox-design.k-numberbox-design input.k-input {
+    height: 100%;
+}
+
+.k-numberbox-design.k-numerictextbox .k-numeric-wrap.k-state-focused .k-select .k-icon {
+    color: var(--light-blue);
+}
+
+.k-numberbox-design.k-numerictextbox .k-numeric-wrap.k-state-focused .k-select {
+    color: #727578ed !important;
+    background-color: #ececec !important;
+    border: none !important;
+}

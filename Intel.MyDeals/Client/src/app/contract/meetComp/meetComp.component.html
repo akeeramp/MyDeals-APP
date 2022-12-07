@@ -146,7 +146,7 @@
                             </div>
                         </ng-template>
                         <ng-template let-dataItem="dataItem" kendoGridEditTemplate let-formGroup="formGroup" let-column="column">
-                            <kendo-numerictextbox *ngIf="(canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG === 'Y' && dataItem.COMP_SKU.length !== 0 && dataItem.PRD_CAT_NM.toLowerCase() === 'svrws')" [decimals]="2" [value]="dataItem.IA_BNCH" [min]="0" (valueChange)="onIaBnchChange($event,dataItem)"></kendo-numerictextbox>
+                            <kendo-numerictextbox *ngIf="(canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG === 'Y' && dataItem.COMP_SKU.length !== 0 && dataItem.PRD_CAT_NM.toLowerCase() === 'svrws')" [decimals]="2" [value]="dataItem.IA_BNCH" [min]="0" (valueChange)="onIaBnchChange($event,dataItem)" class="k-numberbox-design"></kendo-numerictextbox>
                         </ng-template>
                     </kendo-grid-column>
                     <kendo-grid-column field="COMP_BNCH" title="Comp Bench" width="140" [headerClass]="{'headerClass':true}">
@@ -163,7 +163,7 @@
                             </div>
                         </ng-template>
                         <ng-template let-dataItem="dataItem" kendoGridEditTemplate let-formGroup="formGroup" let-column="column">
-                            <kendo-numerictextbox *ngIf="(canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG === 'Y' && dataItem.COMP_SKU.length !== 0 && dataItem.PRD_CAT_NM.toLowerCase() === 'svrws')" [decimals]="2" [value]="dataItem.COMP_BNCH" [min]="0" (valueChange)="onCompBnchChange($event,dataItem)"></kendo-numerictextbox>
+                            <kendo-numerictextbox *ngIf="(canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG === 'Y' && dataItem.COMP_SKU.length !== 0 && dataItem.PRD_CAT_NM.toLowerCase() === 'svrws')" [decimals]="2" [value]="dataItem.COMP_BNCH" [min]="0" (valueChange)="onCompBnchChange($event,dataItem)" class="k-numberbox-design"></kendo-numerictextbox>
                         </ng-template>
                     </kendo-grid-column>
                     <kendo-grid-column [hidden]="hideViewMeetCompResult" field="MEET_COMP_STS" title="Test Results" width="130" [headerClass]="{'headerClass':true}">
@@ -226,7 +226,7 @@
                         </ng-template>
                         <ng-template let-dataItem="dataItem" kendoGridEditTemplate let-formGroup="formGroup" let-column="column">
                             <div *ngIf=" !(dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || (dataItem.MEET_COMP_STS.toLowerCase() == 'overridden' && dataItem.COMP_OVRRD_FLG.toLowerCase() == 'yes')) && ((usrRole == 'DA') && dataItem.MEET_COMP_OVERRIDE_UPD_FLG.toLowerCase() === 'y')">
-                                <kendo-dropdownlist [data]="compOverrideDropdownData" textField="COMP_OVRRD_FLG" valueField="COMP_OVRRD_FLG" [valuePrimitive]="true" [value]="dataItem.COMP_OVRRD_FLG" [defaultItem]="defaultCompOverrideItem" (valueChange)="onCompOverrideFlagChange($event,dataItem)">
+                                <kendo-dropdownlist class="k-dropdown-design" [data]="compOverrideDropdownData" textField="COMP_OVRRD_FLG" valueField="COMP_OVRRD_FLG" [valuePrimitive]="true" [value]="dataItem.COMP_OVRRD_FLG" [defaultItem]="defaultCompOverrideItem" (valueChange)="onCompOverrideFlagChange($event,dataItem)">
                                 </kendo-dropdownlist>
                             </div>
                         </ng-template>
@@ -243,7 +243,7 @@
                         </ng-template>
                         <ng-template let-dataItem="dataItem" kendoGridEditTemplate let-formGroup="formGroup" let-column="column">
                             <div *ngIf="!((usrRole == 'DA' && dataItem.MEET_COMP_UPD_FLG == 'Y' && (dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || dataItem.MEET_COMP_STS.toLowerCase() == 'overridden')) || (dataItem.MEET_COMP_UPD_FLG == 'N')) && dataItem.COMP_OVRRD_FLG !=='Select Override'">
-                                <kendo-textbox placeholder="Enter Override Comments..." [clearButton]="true" [value]="dataItem.COMP_OVRRD_RSN" (valueChange)="onCompOverrideCommentChange($event,dataItem)">
+                                <kendo-textbox class="k-textbox-design" style="width:100%;font-size:12px;" placeholder="Enter Override Comments..." [clearButton]="true" [value]="dataItem.COMP_OVRRD_RSN" (valueChange)="onCompOverrideCommentChange($event,dataItem)">
                                 </kendo-textbox>
                             </div>
                         </ng-template>
@@ -385,7 +385,7 @@
                                         </div>
                                     </ng-template>
                                     <ng-template let-dataItem="dataItem" kendoGridEditTemplate let-formGroup="formGroup" let-column="column">
-                                        <kendo-numerictextbox *ngIf="(canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG === 'Y' && dataItem.COMP_SKU.length !== 0 && dataItem.PRD_CAT_NM.toLowerCase() === 'svrws')" [decimals]="2" [value]="dataItem.IA_BNCH" [min]="0" (valueChange)="onIaBnchChange($event,dataItem)"></kendo-numerictextbox>
+                                        <kendo-numerictextbox *ngIf="(canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG === 'Y' && dataItem.COMP_SKU.length !== 0 && dataItem.PRD_CAT_NM.toLowerCase() === 'svrws')" [decimals]="2" [value]="dataItem.IA_BNCH" [min]="0" (valueChange)="onIaBnchChange($event,dataItem)" class="k-numberbox-design"></kendo-numerictextbox>
                                     </ng-template>
                                 </kendo-grid-column>
                                 <kendo-grid-column field="COMP_BNCH" title="Comp Bench" width="130" [headerClass]="{'headerClass':true}">
@@ -403,7 +403,7 @@
                                         </div>
                                     </ng-template>
                                     <ng-template let-dataItem="dataItem" kendoGridEditTemplate let-formGroup="formGroup" let-column="column">
-                                        <kendo-numerictextbox *ngIf="(canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG === 'Y' && dataItem.COMP_SKU.length !== 0 && dataItem.PRD_CAT_NM.toLowerCase() === 'svrws')" [decimals]="2" [value]="dataItem.COMP_BNCH" [min]="0" (valueChange)="onCompBnchChange($event,dataItem)"></kendo-numerictextbox>
+                                        <kendo-numerictextbox *ngIf="(canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG === 'Y' && dataItem.COMP_SKU.length !== 0 && dataItem.PRD_CAT_NM.toLowerCase() === 'svrws')" [decimals]="2" [value]="dataItem.COMP_BNCH" [min]="0" (valueChange)="onCompBnchChange($event,dataItem)" class="k-numberbox-design"></kendo-numerictextbox>
                                     </ng-template>
                                 </kendo-grid-column>
                                 <kendo-grid-column [hidden]="hideViewMeetCompResult" [headerClass]="{'headerClass':true}" field="MEET_COMP_STS" title="Test Results" width="120">
@@ -466,7 +466,7 @@
                                     </ng-template>
                                     <ng-template let-dataItem="dataItem" kendoGridEditTemplate let-formGroup="formGroup" let-column="column">
                                         <div *ngIf=" !(dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || (dataItem.MEET_COMP_STS.toLowerCase() == 'overridden' && dataItem.COMP_OVRRD_FLG.toLowerCase() == 'yes')) && ((usrRole == 'DA') && dataItem.MEET_COMP_OVERRIDE_UPD_FLG.toLowerCase() === 'y')">
-                                            <kendo-dropdownlist [data]="compOverrideDropdownData" textField="COMP_OVRRD_FLG" valueField="COMP_OVRRD_FLG" [valuePrimitive]="true" [value]="dataItem.COMP_OVRRD_FLG" [defaultItem]="defaultCompOverrideItem" (valueChange)="onCompOverrideFlagChange($event,dataItem)">
+                                            <kendo-dropdownlist class="k-dropdown-design" [data]="compOverrideDropdownData" textField="COMP_OVRRD_FLG" valueField="COMP_OVRRD_FLG" [valuePrimitive]="true" [value]="dataItem.COMP_OVRRD_FLG" [defaultItem]="defaultCompOverrideItem" (valueChange)="onCompOverrideFlagChange($event,dataItem)">
                                             </kendo-dropdownlist>
                                         </div>
                                     </ng-template>
@@ -483,7 +483,7 @@
                                     </ng-template>
                                     <ng-template let-dataItem="dataItem" kendoGridEditTemplate let-formGroup="formGroup" let-column="column">
                                         <div *ngIf="!(usrRole == 'DA' && dataItem.MEET_COMP_UPD_FLG == 'Y' && (dataItem.MEET_COMP_STS.toLowerCase() == 'pass' || dataItem.MEET_COMP_STS.toLowerCase() == 'overridden')) && dataItem.COMP_OVRRD_FLG !=='Select Override'">
-                                            <kendo-textbox placeholder="Enter Override Comments..." [clearButton]="true" [value]="dataItem.COMP_OVRRD_RSN" (valueChange)="onCompOverrideCommentChange($event,dataItem)">
+                                            <kendo-textbox class="k-textbox-design" style="width:100%;font-size:12px;" placeholder="Enter Override Comments..." [clearButton]="true" [value]="dataItem.COMP_OVRRD_RSN" (valueChange)="onCompOverrideCommentChange($event,dataItem)">
                                             </kendo-textbox>
                                         </div>
                                     </ng-template>

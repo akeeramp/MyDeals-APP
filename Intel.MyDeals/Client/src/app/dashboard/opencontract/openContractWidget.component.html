@@ -3,7 +3,7 @@
         <h2 class="offer-solids" aria-hidden="true"><i class="text-primary intelicon-search-stack-solid"></i></h2>
         <div style="width: 100%; text-align: center;">
             <div class="gridster-item-content">
-                <kendo-textbox [style.width.px]="150" [(ngModel)]="contractId" placeholder="Name or Number" [clearButton]="true" [autoClose]="true" triggers="manual" ngbTooltip="Please enter a contract number" #txtToolTip="ngbTooltip">
+                <kendo-textbox class="k-textbox-design" [style.width.px]="150" [(ngModel)]="contractId" placeholder="Name or Number" [clearButton]="true" [autoClose]="true" triggers="manual" ngbTooltip="Please enter a contract number" #txtToolTip="ngbTooltip">
                 </kendo-textbox>
                 <button class="btn btn-default" (click)="openContract()" style="margin-left:3px">Open</button>
             </div>

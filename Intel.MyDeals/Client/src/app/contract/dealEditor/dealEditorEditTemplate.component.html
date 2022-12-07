@@ -1,6 +1,6 @@
 ﻿<div *ngIf="in_Field_Name == 'DEAL_DESC' || in_Field_Name == 'TERMS' || in_Field_Name == 'QLTR_PROJECT' || in_Field_Name == 'RPU_OVERRIDE_CMNT' || in_Field_Name == 'CONSUMPTION_REASON_CMNT' || in_Field_Name == 'QUOTE_LN_ID'">
     <kendo-textbox (valueChange)="valueChange(in_DataItem, in_Field_Name)" [ngModel]="in_DataItem[in_Field_Name]"
-                   (ngModelChange)="in_DataItem[in_Field_Name] = $event">
+                   (ngModelChange)="in_DataItem[in_Field_Name] = $event" class="k-textbox-design">
     </kendo-textbox>
 </div>
 <div *ngIf="(in_Field_Name == 'ECAP_PRICE' && in_Deal_Type == 'ECAP') || in_Field_Name == 'VOLUME' || in_Field_Name == 'FRCST_VOL' || in_Field_Name == 'KIT_ECAP' || in_Field_Name == 'CONSUMPTION_LOOKBACK_PERIOD'
@@ -13,7 +13,7 @@
                           [min]="0" (valueChange)="valueChange(in_DataItem, in_Field_Name)"
                           [value]="in_Field_Name == 'ECAP_PRICE' ? in_DataItem.ECAP_PRICE[ecapDimKey] : (in_Field_Name =='KIT_ECAP') ? in_DataItem.ECAP_PRICE[kitEcapdim] : in_DataItem[in_Field_Name]"
                           [format]="(in_Field_Name == 'VOLUME' || in_Field_Name == 'FRCST_VOL' || in_Field_Name == 'CONSUMPTION_LOOKBACK_PERIOD' || in_Field_Name == 'REBATE_OA_MAX_VOL') ? 'n0' : 'n2'"
-                          [autoCorrect]="autoCorrect"  [decimals]="decimals">
+                          [autoCorrect]="autoCorrect"  [decimals]="decimals" class="k-numberbox-design">
     </kendo-numerictextbox>
 </div>
 <div *ngIf="((in_Field_Name == 'ECAP_PRICE' || in_Field_Name == 'DSCNT_PER_LN') && in_Deal_Type == 'KIT')">
@@ -24,7 +24,7 @@
                                   (ngModelChange)="in_DataItem[in_Field_Name][key] = $event"
                                   [min]="0" (valueChange)="valueChange(in_DataItem, in_Field_Name, key)"
                                   [value]="in_DataItem[in_Field_Name][key]"
-                                  autoCorrect="true" [decimals]="decimals">
+                                  autoCorrect="true" [decimals]="decimals" class="k-numberbox-design">
             </kendo-numerictextbox>
         </div>
     </div>
@@ -63,7 +63,7 @@
                 <div class="col-md-3 rowDetailHeight">
                     <span class="tierColumn rowValueHeight" *ngIf="fieldDet.title == 'Tier' || (fieldDet.title.includes('Start') && (i != 0 || in_DataItem['HAS_TRACKER'] == 1)) || (fieldDet.title.includes('End') && in_DataItem['HAS_TRACKER'] == 1 && i != (in_DataItem['NUM_OF_TIERS']-1))">{{in_DataItem[fieldDet.field][key]}}</span>
                     <span class="rowValueHeight" *ngIf="(fieldDet.title.includes('Start') && (i == 0 && in_DataItem['HAS_TRACKER'] == 0)) || ((fieldDet.title.includes('End') && (in_DataItem['HAS_TRACKER'] == 0 || (in_DataItem['HAS_TRACKER'] == 1 && i==(in_DataItem['NUM_OF_TIERS']-1)))) || fieldDet.title.includes('Rate'))">
-                        <kendo-numerictextbox class="rowValueHeight"
+                        <kendo-numerictextbox class="rowValueHeight k-numberbox-design"
                                               [ngModel]="convertToLowerCase(in_DataItem[fieldDet.field][key]) == 'unlimited' ? '' : in_DataItem[fieldDet.field][key]"
                                               (ngModelChange)="in_DataItem[fieldDet.field][key] = $event"
                                               [value]="convertToLowerCase(in_DataItem[fieldDet.field][key]) == 'unlimited' ? '' : in_DataItem[fieldDet.field][key]"
@@ -99,7 +99,7 @@
                                                           (ngModelChange)="in_DataItem[fieldDet.field]['8___' + (band+1) + '____' + key] = $event"
                                                           [min]="0" (valueChange)="updateTierAttributes(in_DataItem, fieldDet.field,(i+1))"
                                                           [value]="in_DataItem[fieldDet.field]['8___' + (band+1) + '____' + key]"
-                                                          [autoCorrect]="autoCorrect" format="n2">
+                                                          [autoCorrect]="autoCorrect" format="n2" class="k-numberbox-design">
                                     </kendo-numerictextbox>
                                 </span>
                             </div>
@@ -124,7 +124,7 @@
                                                       (ngModelChange)="in_DataItem[fieldDet.field][key] = $event"
                                                       [min]="0" (valueChange)="updateTierAttributes(in_DataItem, fieldDet.field,(i+1))"
                                                       [value]="convertToLowerCase(in_DataItem[fieldDet.field][key]) == 'unlimited' ? '' : in_DataItem[fieldDet.field][key]"
-                                                      [autoCorrect]="autoCorrect" format="n3">
+                                                      [autoCorrect]="autoCorrect" format="n3" class="k-numberbox-design">
                                 </kendo-numerictextbox>
                             </span>
                         </div>
