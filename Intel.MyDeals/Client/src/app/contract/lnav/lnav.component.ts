@@ -158,7 +158,9 @@ export class lnavComponent {
         this.isAddStrategyHidden = !this.isAddStrategyHidden;
         this.isAddStrategyBtnHidden = !this.isAddStrategyBtnHidden;
         this.isSearchHidden = false;
-        this.isAddPricingTableHidden = true;
+        if (this.isAddStrategyHidden == false) {
+            this.isAddPricingTableHidden = true;
+        }
     }
     customAddPsValidate() {
         let isvalid = true;
@@ -712,6 +714,7 @@ export class lnavComponent {
                     });
                     this.hideAddPricingTable();
                 }
+                this.newStrategy.IS_HYBRID_PRC_STRAT = false;
             }
         });
     }

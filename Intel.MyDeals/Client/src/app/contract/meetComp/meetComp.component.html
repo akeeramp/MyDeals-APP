@@ -97,7 +97,7 @@
                             <div style="padding-left: 5px;" [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False'),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.COMP_SKU) }">{{dataItem.COMP_SKU}}</div>
                         </ng-template>
                         <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup" let-column="column">
-                            <kendo-combobox #custDropDown class="compDdl contract-details-customer align-text-combo-box" *ngIf="canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG == 'Y'" [data]="meetCompSkuDropdownData" [kendoDropDownFilter]="filterSettings" textField="COMP_SKU" valueField="COMP_SKU" placeholder="Select Comp SKU"
+                            <kendo-combobox #custDropDown class="compDdl contract-details-customer align-text-combo-box" *ngIf="canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG == 'Y'" [(ngModel)]="selectedMeetCompSku" [data]="meetCompSkuDropdownData" [kendoDropDownFilter]="filterSettings" textField="COMP_SKU" valueField="COMP_SKU" placeholder="Select Comp SKU"
                                             [allowCustom]="true" [valueNormalizer]="valueNormalizerCompSku" (valueChange)="onCompSkuChange($event,dataItem)">
                             </kendo-combobox>
                         </ng-template>
@@ -116,7 +116,7 @@
                             </div>
                         </ng-template>
                         <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup" let-column="column">
-                            <kendo-combobox class="contract-details-customer align-text-combo-box" #custDropDown *ngIf="canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG == 'Y' && dataItem.COMP_SKU.length !== 0" [data]="meetCompPrcDropdownData" [kendoDropDownFilter]="filterSettings" textField="COMP_PRC" valueField="COMP_PRC"
+                            <kendo-combobox class="contract-details-customer align-text-combo-box" #custDropDown *ngIf="canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG == 'Y' && dataItem.COMP_SKU.length !== 0" [(ngModel)]="selectedMeetCompPrc" [data]="meetCompPrcDropdownData" [kendoDropDownFilter]="filterSettings" textField="COMP_PRC" valueField="COMP_PRC"
                                             placeholder="Select Comp PRC" [allowCustom]="true" [valueNormalizer]="valueNormalizerCompPrc" (valueChange)="onCompPriceChange($event,dataItem)"></kendo-combobox>
                         </ng-template>
                     </kendo-grid-column>

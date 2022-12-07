@@ -362,7 +362,7 @@
     }
 
     .new-view .org {
-        color: #FFA300 !important
+        color: #00AEEF !important
     }
 
     .new-view .bigIcon {
@@ -696,4 +696,8 @@ kendo-tabstrip.art-kendo-bars {
     font-size: 10px;
     background-color: white;
     color: black;
+}
+
+.submenu_datafix {
+    color: #FFA300 !important;
 }

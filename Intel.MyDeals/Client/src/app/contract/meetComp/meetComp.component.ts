@@ -99,7 +99,7 @@ export class meetCompContractComponent implements OnInit {
     private contractData;
     private gridData: GridDataResult;
     private childGridData: GridDataResult;
-    public showPrice: boolean = false;
+    public showPrice: boolean = true;
     public showAlert: boolean = false;
     public dispMsg: string = ""
     public expandedDetailKeys: number[] = [];
@@ -108,6 +108,8 @@ export class meetCompContractComponent implements OnInit {
     };
     private gridResult;
     public childGridResult;
+    public selectedMeetCompPrc: any;
+    public selectedMeetCompSku: any;
     private state: State = {
         skip: 0,
         take: 10,
@@ -270,6 +272,7 @@ export class meetCompContractComponent implements OnInit {
                 resultMeetCompSkuArray.push(newEntry);
             }
             this.meetCompSkuDropdownData = resultMeetCompSkuArray;
+            this.selectedMeetCompSku = this.meetCompSkuDropdownData[0];
         }
     }
 
@@ -311,6 +314,8 @@ export class meetCompContractComponent implements OnInit {
                 resultMeetCompPrcArray.push(newEntry);
             }
             this.meetCompPrcDropdownData = resultMeetCompPrcArray;
+            var prc_ind = this.meetCompPrcDropdownData.findIndex(ind => ind['COMP_PRC'] == dataItem.COMP_PRC);
+            this.selectedMeetCompPrc = this.meetCompPrcDropdownData[prc_ind];
         }
     }
 
@@ -475,6 +480,8 @@ export class meetCompContractComponent implements OnInit {
                 if (obj.COMP_BNCH == 0) {
                     obj.COMP_BNCH = null;
                 }
+                this.generateMeetCompSkuDropdownData(obj);
+                this.generateMeetCompPrcDropdownData(obj);
             });
             this.meetCompMasterResult = response;
             this.totalApiEntries = this.meetCompMasterResult.length;
@@ -574,6 +581,11 @@ export class meetCompContractComponent implements OnInit {
             // Setting COMP PRC based on Comp SKU if available
             this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_PRC = parseFloat(this.meetCompMasterdata._elements[selectedValue - 1].COMP_PRC).toFixed(2);
             this.addToUpdateList(this.meetCompMasterdata._elements[dataItem.RW_NM - 1]);
+            var sku_ind = this.meetCompSkuDropdownData.findIndex(ind => ind['COMP_SKU'] == dataItem.COMP_SKU)
+            this.selectedMeetCompSku = this.meetCompSkuDropdownData[sku_ind];
+            var prc_ind = this.meetCompPrcDropdownData.findIndex(ind => ind['COMP_PRC'] == dataItem.COMP_PRC)
+            this.selectedMeetCompPrc = this.meetCompPrcDropdownData[prc_ind];
+
         }
     }
 
@@ -650,6 +662,9 @@ export class meetCompContractComponent implements OnInit {
                     }
                     this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_PRC = dataItem.COMP_PRC;
                     this.addToUpdateList(dataItem);
+                    var prc_ind = this.meetCompPrcDropdownData.findIndex(ind => ind['COMP_PRC'] == dataItem.COMP_PRC)
+                    this.selectedMeetCompPrc = this.meetCompPrcDropdownData[prc_ind];
+
                 } else {
                     return false;
                 }

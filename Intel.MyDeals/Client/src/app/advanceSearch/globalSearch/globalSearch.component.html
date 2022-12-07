@@ -1,4 +1,4 @@
-<div class="global-search-ang" style="background-color:#f2f2f2; border-radius: 3px;">
+<div class="global-search-ang global-search-inputBox" style="background-color:#f2f2f2; border-radius: 3px;">
     <a class="search intelicon-search" style="margin-right: 5px; float: left; font-size: 14px;"></a><input type="text" placeholder="Search for deal #, contract, or pricing strategy" class="globalSearchInpt" [(ngModel)]="searchText" (keypress)="enterPressed($event)">
     <div class="btn-group">
         <button class="btn btn-xs btn-default" type="button" (click)="executeOnly('ALL')" style=" padding: 0 10px;">in <b>All</b></button>
@@ -23,7 +23,7 @@
     </kendo-window-titlebar>
     <global-search-results-angular [searchText]="searchText" [opType]="opType" (getWindowWidth)="getWindowWidth($event)" (isWindowOpen)="isWindowOpen($event)"></global-search-results-angular>
 </kendo-window>
-<kendo-dialog class="global-popup-style" *ngIf="searchDialogVisible" (close)="closeDialog()" [minWidth]="250" [width]="450">
+<kendo-dialog class="global-popup-style" *ngIf="searchDialogVisible" (close)="closeDialog()" [minWidth]="250" [width]="488">
     <p class="global-titles-style" >Please enter one of the following:<br/><br/>1) Contract / Pricing Strategy / Pricing Table Name or Number <br/>2) Deal Number. </p>
     <kendo-dialog-actions class="global-style"><button class="global-popup-okbtn" kendoButton (click)="closeDialog()">OK</button></kendo-dialog-actions>
 </kendo-dialog>

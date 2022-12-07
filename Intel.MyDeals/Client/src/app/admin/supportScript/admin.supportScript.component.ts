@@ -52,9 +52,9 @@ export class adminsupportScriptComponent {
     }
 
     startYearChange() {
-        if (this.supportScriptDataForm.get("START_YR").value < this.supportScriptDataForm.get("MinYear").value) {
-            this.supportScriptDataForm.get("START_YR").setValue(this.supportScriptDataForm.get("MinYear").value);
-         }
+        if (this.supportScriptDataForm.get("START_YR").value > this.supportScriptDataForm.get("MaxYear").value) {
+            this.supportScriptDataForm.get("START_YR").setValue(this.supportScriptDataForm.get("MaxYear").value);
+        }
     }
 
     endYearChange() {

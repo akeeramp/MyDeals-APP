@@ -889,7 +889,7 @@ export class pricingTableEditorComponent {
             //if non-deleted records having any validation error, it will stop deletion action as well
             if (error) {
                 this.generateHandsonTable(finalPTR);
-                this.loggerService.error('Mandatory validations failure.', 'error');
+                this.loggerService.warn('Mandatory validations failure.', 'Warning');
                 this.setBusy("", "", "", false);
             }
             else {

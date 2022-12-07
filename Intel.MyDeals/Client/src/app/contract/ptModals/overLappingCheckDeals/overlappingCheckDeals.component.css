@@ -1,1 +1,59 @@
-﻿.kendo-grid-buttons{position:relative!important;padding-left:0!important;padding-right:0!important;padding-top:0!important;width:100%!important;height:200px!important}.oo-lapping-style mat-dialog-container{padding:0!important;overflow:hidden!important}#OvrLp .k-grid{height:100%}button.btn.btn-sm.btn-primary.overlapBtnSelect{font-size:12px!important;font-weight:500!important;padding-left:5px!important;padding-right:5px!important;padding-top:2px!important;padding-bottom:4px!important}button.btn.btn-sm.btn-primary.lnk.btnSelect.overlapBtnSelect{background:#003C71!important}button.btn.btn-sm.btn-primary.lnk.btnSelect.overlapBtnSelect:hover{color:black!important;background:#00B1F1!important;text-decoration:none!important}button.btn.btn-sm.btn-primary.lnk.btnYes.btnselectAccept.overlapBtnSelect{background:#a49d00!important;border:#a49d00!important}button.btnYNeedClr{background:#a49d00!important;border:#a49d00!important}button.btnYNeedClr:hover{color:#004579!important}.btnNoIssue{background:#FC4C02!important}.btnNoIssue:hover{color:#004579!important}
+﻿﻿.kendo-grid-buttons {
+    position: relative !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important;
+    padding-top: 0 !important;
+    width: 100% !important;
+    height: 200px !important
+}
+
+.oo-lapping-style mat-dialog-container {
+    padding: 0 !important;
+    overflow: hidden !important
+}
+
+#OvrLp .k-grid {
+    height: 100%
+}
+
+button.btn.btn-sm.btn-primary.overlapBtnSelect {
+    font-size: 12px !important;
+    font-weight: 500 !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+    padding-top: 2px !important;
+    padding-bottom: 4px !important
+}
+
+button.btn.btn-sm.btn-primary.lnk.btnSelect.overlapBtnSelect {
+    background: #003C71 !important
+}
+
+    button.btn.btn-sm.btn-primary.lnk.btnSelect.overlapBtnSelect:hover {
+        color: black !important;
+        background: #00B1F1 !important;
+        text-decoration: none !important
+    }
+
+button.btn.btn-sm.btn-primary.lnk.btnYes.btnselectAccept.overlapBtnSelect {
+    background: #a49d00 !important;
+    border: #a49d00 !important
+}
+
+button.btnYNeedClr {
+    background: #a49d00 !important;
+    border: #a49d00 !important
+}
+
+    button.btnYNeedClr:hover {
+        color: #004579 !important
+    }
+
+.btnNoIssue {
+    background: #FC4C02 !important
+}
+
+    .btnNoIssue:hover {
+        color: #004579 !important;
+        background: #FC4C02 !important
+    }
