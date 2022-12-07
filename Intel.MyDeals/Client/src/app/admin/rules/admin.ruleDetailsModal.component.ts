@@ -672,8 +672,13 @@ export class RuleDetailsModalComponent {
             if (isSave) {
                 this.saveRule(strActionName, false);
             }
-            if (showPopup)
-                this.loggerSvc.error("<b>There are no Products to Validate</b></br>",'');
+            if (showPopup) {
+                this.isAlertVal = true;
+                this.isOk = true;
+                this.submitRule = false;
+                this.retryAction = false;
+                this.isAlertText = "<b>There are no Products to Validate</b></br>";
+           }
         }
         this.isLoading = false;
         this.setBusy('', '', '', false);
