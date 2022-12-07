@@ -288,7 +288,7 @@ namespace Intel.MyDeals.DataLibrary
             else // (fileType == "BulkPriceUpdate")
             {
                 fileAttachmentData.FILE_NM = "BulkPriceUpdate.xlsx";
-                strTemplateContent = string.Join("\n", string.Join("\t", "Deal ID", "Deal Description", "ECAP Price", "Ceiling Volume", "Deal Start Date", "Deal End Date", "Billings Start Date", "Billings End Date", "Project Name", "Tracker Effective Date", "Additional Terms"));
+                strTemplateContent = string.Join("\n", string.Join("\t", "Deal ID", "Deal Description", "ECAP Price", "Ceiling Volume", "Billing Start Date", "Billings End Date", "Consumption Start Date", "Consumption End Date", "Project Name", "Tracker Effective Date", "Additional Terms"));
                 arrTemplate = strTemplateContent.Split('\n').Select(x => x.Split('\t')).ToArray();
             }
             using (ExcelPackage excelPackage = new ExcelPackage())

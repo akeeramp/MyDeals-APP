@@ -39,10 +39,10 @@ namespace Intel.MyDeals.DataLibrary
 					int IDX_Customer_Division = DB.GetReaderOrdinal(rdr, "Customer Division");
 					int IDX_Customer_Name = DB.GetReaderOrdinal(rdr, "Customer Name");
 					int IDX_Deal_Description = DB.GetReaderOrdinal(rdr, "Deal Description");
-					int IDX_Deal_End_Date = DB.GetReaderOrdinal(rdr, "Deal End Date");
-					int IDX_Deal_Id = DB.GetReaderOrdinal(rdr, "Deal Id");
+					int IDX_Deal_End_Date = DB.GetReaderOrdinal(rdr, "Deal End Date");  // Column Name should change to 'Billing End Date' once DB is updated
+                    int IDX_Deal_Id = DB.GetReaderOrdinal(rdr, "Deal Id");
 					int IDX_Deal_Stage = DB.GetReaderOrdinal(rdr, "Deal Stage");
-					int IDX_Deal_Start_Date = DB.GetReaderOrdinal(rdr, "Deal Start Date");
+					int IDX_Deal_Start_Date = DB.GetReaderOrdinal(rdr, "Deal Start Date");	// Column Name should change to 'Billing Start Date' once DB is updated
 					int IDX_Deal_Type = DB.GetReaderOrdinal(rdr, "Deal Type");
 					int IDX_Division_Approved_Date = DB.GetReaderOrdinal(rdr, "Division Approved Date");
 					int IDX_Division_Approver = DB.GetReaderOrdinal(rdr, "Division Approver");

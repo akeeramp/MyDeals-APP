@@ -94,7 +94,7 @@ contractSaveUtil.setBehaviors = function (item, elem, cond, curPricingTable) {
         item._behaviors.validMsg[elem] = "Overlapping products have been identified, please change the overlapping Accrual and Draining dates.";
     }
     else if (cond == 'dateissue' && elem == 'PTR_USER_PRD') {
-        item._behaviors.validMsg[elem] = "Deal End Date must be greater than Start Date, please correct.";
+        item._behaviors.validMsg[elem] = "Billing End Date must be greater than Billing Start Date, please correct.";
     }
     else if (cond != '' && elem == 'DENSITY_BAND') {
         item._behaviors.validMsg[elem] = cond;
@@ -868,9 +868,9 @@ contractSaveUtil.validatePTEdata = function (sData, curPricingStrategy, curPrici
                         if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                         if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
                         sData[s]._behaviors.isError['START_DT'] = true;
-                        sData[s]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
+                        sData[s]._behaviors.validMsg['START_DT'] = "Billing Start Date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                        errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
+                        errs.PRC_TBL_ROW.push("Billing Start Date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
                     }
 
                     //Validating Votier deal Dates
@@ -885,13 +885,13 @@ contractSaveUtil.validatePTEdata = function (sData, curPricingStrategy, curPrici
                             if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                             if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
                             sData[FirstTire]._behaviors.isError['START_DT'] = true;
-                            sData[FirstTire]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
+                            sData[FirstTire]._behaviors.validMsg['START_DT'] = "Billing Start Date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")";
                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                            errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
+                            errs.PRC_TBL_ROW.push("Billing Start Date cannot be greater than the Contract End Date (" + moment(endDate).format("MM/DD/YYYY") + ")");
                         }
                     }
 
-                    //Validating Flex Accrual Start Dates
+                    //Validating Flex Accrual Billings Start Dates
                     if (sData[s]["OBJ_SET_TYPE_CD"] == "FLEX") {
                         //Delete if there is any previous Error  messages
                         if ((invalidFlexDate || invalidFlexDate != undefined)) {
@@ -922,9 +922,9 @@ contractSaveUtil.validatePTEdata = function (sData, curPricingStrategy, curPrici
                         if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                         if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
                         sData[s]._behaviors.isError['END_DT'] = true;
-                        sData[s]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
+                        sData[s]._behaviors.validMsg['END_DT'] = "Billing End Date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
                         if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                        errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
+                        errs.PRC_TBL_ROW.push("Billing End Date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
                     }
 
                     if (sData[s]["OBJ_SET_TYPE_CD"] == "VOL_TIER" && sData[s]["NUM_OF_TIERS"] == sData[s]["TIER_NBR"]) {
@@ -941,9 +941,9 @@ contractSaveUtil.validatePTEdata = function (sData, curPricingStrategy, curPrici
                             if (!sData[s]._behaviors.isError) sData[s]._behaviors.isError = {};
                             if (!sData[s]._behaviors.validMsg) sData[s]._behaviors.validMsg = {};
                             sData[FirstTire]._behaviors.isError['END_DT'] = true;
-                            sData[FirstTire]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
+                            sData[FirstTire]._behaviors.validMsg['END_DT'] = "Billing End Date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")";
                             if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                            errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
+                            errs.PRC_TBL_ROW.push("Billing End Date cannot be earlier than the Contract Start Date (" + moment(startDate).format("MM/DD/YYYY") + ")");
                         }
 
                     }
@@ -1121,9 +1121,9 @@ contractSaveUtil.validateDEdata = function (gData,contractData, curPricingStrate
                 if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                 if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
                 gData[i]._behaviors.isError['START_DT'] = true;
-                gData[i]._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(contractData.END_DT).format("MM/DD/YYYY") + ")";
+                gData[i]._behaviors.validMsg['START_DT'] = "Billing Start Date cannot be greater than the Contract End Date (" + moment(contractData.END_DT).format("MM/DD/YYYY") + ")";
                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                errs.PRC_TBL_ROW.push("Start date cannot be greater than the Contract End Date (" + moment(contractData.END_DT).format("MM/DD/YYYY") + ")");
+                errs.PRC_TBL_ROW.push("Billing Start Date cannot be greater than the Contract End Date (" + moment(contractData.END_DT).format("MM/DD/YYYY") + ")");
             }
 
             // check dates against contract - Tender contracts don't observe start/end date within contract.
@@ -1132,9 +1132,9 @@ contractSaveUtil.validateDEdata = function (gData,contractData, curPricingStrate
                     if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                     if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
                     gData[i]._behaviors.isError['END_DT'] = true;
-                    gData[i]._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(contractData.START_DT).format("MM/DD/YYYY") + ")";
+                    gData[i]._behaviors.validMsg['END_DT'] = "Billing End Date cannot be earlier than the Contract Start Date (" + moment(contractData.START_DT).format("MM/DD/YYYY") + ")";
                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                    errs.PRC_TBL_ROW.push("End date cannot be earlier than the Contract Start Date (" + moment(contractData.START_DT).format("MM/DD/YYYY") + ")");
+                    errs.PRC_TBL_ROW.push("Billing End Date cannot be earlier than the Contract Start Date (" + moment(contractData.START_DT).format("MM/DD/YYYY") + ")");
                 }
             }
 
@@ -1143,9 +1143,9 @@ contractSaveUtil.validateDEdata = function (gData,contractData, curPricingStrate
                 if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                 if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
                 gData[i]._behaviors.isError['START_DT'] = true;
-                gData[i]._behaviors.validMsg['START_DT'] = "Deal Start date cannot be greater than the Deal End Date";
+                gData[i]._behaviors.validMsg['START_DT'] = "Billing Start Date cannot be greater than the Billing End Date";
                 if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                errs.PRC_TBL_ROW.push("Start date cannot be greater than the Deal End Date");
+                errs.PRC_TBL_ROW.push("Billing Start Date cannot be greater than the Billing End Date");
             }
 
             if (gData[i]["OBJ_SET_TYPE_CD"] == "FLEX") {
@@ -1194,9 +1194,9 @@ contractSaveUtil.validateDEdata = function (gData,contractData, curPricingStrate
                     if (!gData[i]._behaviors.isError) gData[i]._behaviors.isError = {};
                     if (!gData[i]._behaviors.validMsg) gData[i]._behaviors.validMsg = {};
                     gData[i]._behaviors.isError['REBATE_BILLING_START'] = true;
-                    gData[i]._behaviors.validMsg['REBATE_BILLING_START'] = "Billing Start date cannot be greater than the Billing End Date";
+                    gData[i]._behaviors.validMsg['REBATE_BILLING_START'] = "Consumption Start Date cannot be greater than the Consumption End Date";
                     if (!errs.PRC_TBL_ROW) errs.PRC_TBL_ROW = [];
-                    errs.PRC_TBL_ROW.push("Billing Start date cannot be greater than the Billing End Date");
+                    errs.PRC_TBL_ROW.push("Consumption Start Date cannot be greater than the Consumption End Date");
                 }
             }
 
@@ -1277,7 +1277,7 @@ function hasDuplicateProduct(pricingTableRows) {
         previous.END_DT = previous.END_DT instanceof Date ? previous.END_DT : new Date(previous.END_DT);
         current.START_DT = current.START_DT instanceof Date ? current.START_DT : new Date(current.START_DT);
 
-        // get the start date from previous and current
+        // get the Billing start date from previous and current
         var previousTime = previous.START_DT.getTime();
         var currentTime = current.END_DT.getTime();
 

@@ -446,14 +446,14 @@
                         },
                         {
                             field: "START_DT",
-                            title: "Deal Start Date",
+                            title: "Billing Start Date",
                             width: "120px",
                             template: "<div class='ovlpCell'> #= kendo.toString(START_DT) # </div>",
                             groupable: false
                         },
                         {
                             field: "END_DT",
-                            title: "Deal End Date",
+                            title: "Billing End Date",
                             width: "120px",
                             template: "<div class='ovlpCell'> #= kendo.toString(END_DT) # </div>",
                             groupable: false

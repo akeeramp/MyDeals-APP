@@ -31,7 +31,7 @@
 				<label>Backdate reason:</label>
 				<i class="fa fa-info-circle skyBlue"
 				   aria-hidden="true"
-				   uib-tooltip="Backdate reasons are only required when deal start date is before today's date."
+				   uib-tooltip="Backdate reasons are only required when billing start date is before today's date."
 				   tooltip-placement="right">
 				</i>
 
@@ -42,7 +42,7 @@
 						  ng-disabled="!$ctrl.isBackDateReasonRequired"
 						  style="width: 100%;"></textarea>
 				<p ng-show="($ctrl.isBackDateReasonRequired && $ctrl.backDateReason == '')" class="err-Control">
-					Please enter a backdate reason. Backdate reasons are required when deal start date is before today's date.
+					Please enter a backdate reason. Backdate reasons are required when billing start date is before today's date.
 				</p>
 			</div>
 		</div>-->

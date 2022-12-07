@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 3/28/2022 4:00:44 PM
-On: MHTIPPIN-MOBL
+File Updated: 11/16/2022 4:12:10 PM
+On: JLOPEZRE-MOBL1
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
 
@@ -1805,8 +1805,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute END_DT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "END_DT",
-			ATRB_DESC = "Deal end date",
-			ATRB_LBL = "End Date",
+			ATRB_DESC = "Deal billings end date",
+			ATRB_LBL = "Billings End Date",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3320,
 			DATA_TYPE_CD = "DATE",
@@ -1937,14 +1937,14 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Deal expiration flag",
 			ATRB_MAX_LEN = 1,
 			ATRB_SID = 3676,
-			DATA_TYPE_CD = "INT",
+			DATA_TYPE_CD = "BIT",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.Int32",
-			FRMT_MSK = "{0:d}",
+			DOT_NET_DATA_TYPE = "System.Boolean",
+			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
-			UI_TYPE_CD = "CheckBox"
+			UI_TYPE_CD = "DataGrid"
 		};
 		public static MyDealsAttribute EXPIRE_YCS2 = new MyDealsAttribute()
 		{
@@ -4120,14 +4120,14 @@ namespace Intel.MyDeals.Entities {
 			FRMT_MSK = "{0}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "VARCHAR",
-			UI_TYPE_CD = "MultiGeoSelector"
+			UI_TYPE_CD = "TextBox"
 		};
 		public static MyDealsAttribute QLTR_PROJECT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "QLTR_PROJECT",
-			ATRB_DESC = "Project Name",
-			ATRB_LBL = "Project Name",
-			ATRB_MAX_LEN = 65,
+			ATRB_DESC = "Tender Project",
+			ATRB_LBL = "Project",
+			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3568,
 			DATA_TYPE_CD = "VARCHAR",
 			DIM_CD = "DEAL",
@@ -4205,8 +4205,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute REBATE_BILLING_END = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "REBATE_BILLING_END",
-			ATRB_DESC = "Billing END Date (for Consumption)",
-			ATRB_LBL = "Billing END Date (for Consumption)",
+			ATRB_DESC = "Consumption end date",
+			ATRB_LBL = "Consumption End Date",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3571,
 			DATA_TYPE_CD = "DATE",
@@ -4221,8 +4221,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute REBATE_BILLING_START = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "REBATE_BILLING_START",
-			ATRB_DESC = "Billing START Date (for Consumption)",
-			ATRB_LBL = "Billing START Date (for Consumption)",
+			ATRB_DESC = "Consumption start date",
+			ATRB_LBL = "Consumption Start Date",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3570,
 			DATA_TYPE_CD = "DATE",
@@ -4637,8 +4637,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute START_DT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "START_DT",
-			ATRB_DESC = "Deal start date",
-			ATRB_LBL = "Start Date",
+			ATRB_DESC = "Deal billings start date",
+			ATRB_LBL = "Billings Start Date",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3319,
 			DATA_TYPE_CD = "DATE",

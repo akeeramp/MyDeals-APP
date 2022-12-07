@@ -94,19 +94,19 @@
                         data += '"Volume": "' + vm.inValidBulkPriceUpdate[i].Volume.toString() + '",'
                     }
                     if (vm.inValidBulkPriceUpdate[i].DealStartDate !== "") {
-                        data += '"DealStartDate": "' + moment(vm.inValidBulkPriceUpdate[i].DealStartDate.toString()).format("MM/DD/YYYY") + '",'
+                        data += '"BillingStartDate": "' + moment(vm.inValidBulkPriceUpdate[i].DealStartDate.toString()).format("MM/DD/YYYY") + '",'
                     }
                     if (vm.inValidBulkPriceUpdate[i].DealEndDate !== "") {
-                        data += '"DealEndDate": "' + moment(vm.inValidBulkPriceUpdate[i].DealEndDate.toString()).format("MM/DD/YYYY") + '",'
+                        data += '"BillingEndDate": "' + moment(vm.inValidBulkPriceUpdate[i].DealEndDate.toString()).format("MM/DD/YYYY") + '",'
                     }
                     if (vm.inValidBulkPriceUpdate[i].ProjectName !== "") {
                         data += '"ProjectName": "' + vm.inValidBulkPriceUpdate[i].ProjectName.toString() + '",'
                     }
                     if (vm.inValidBulkPriceUpdate[i].BillingsStartDate !== "") {
-                        data += '"BillingsStartDate": "' + moment(vm.inValidBulkPriceUpdate[i].BillingsStartDate.toString()).format("MM/DD/YYYY") + '",'
+                        data += '"ConsumptionStartDate": "' + moment(vm.inValidBulkPriceUpdate[i].BillingsStartDate.toString()).format("MM/DD/YYYY") + '",'
                     }
                     if (vm.inValidBulkPriceUpdate[i].BillingsEndDate !== "") {
-                        data += '"BillingsEndDate": "' + moment(vm.inValidBulkPriceUpdate[i].BillingsEndDate.toString()).format("MM/DD/YYYY") + '",'
+                        data += '"ConsumptionEndDate": "' + moment(vm.inValidBulkPriceUpdate[i].BillingsEndDate.toString()).format("MM/DD/YYYY") + '",'
                     }
                     if (vm.inValidBulkPriceUpdate[i].TrackerEffectiveStartDate !== "") {
                         data += '"TrackerEffectiveStartDate": "' + moment(vm.inValidBulkPriceUpdate[i].TrackerEffectiveStartDate.toString()).format("MM/DD/YYYY") + '",'
@@ -300,10 +300,10 @@
                     , { field: "DealDesc", title: "Deal Description" }
                     , { field: "EcapPrice", title: "ECAP Price" }
                     , { field: "Volume", title: "Ceiling Volume" }
-                    , { field: "DealStartDate", title: "Deal Start Date" }
-                    , { field: "DealEndDate", title: "Deal End Date" }
-                    , { field: "BillingsStartDate", title: "Billings Start Date" }
-                    , { field: "BillingsEndDate", title: "Billings End Date" }
+                    , { field: "DealStartDate", title: "Billing Start Date" }
+                    , { field: "DealEndDate", title: "Billing End Date" }
+                    , { field: "BillingsStartDate", title: "Consumption Start Date" }
+                    , { field: "BillingsEndDate", title: "Consumption End Date" }
                     , { field: "ProjectName", title: "Project Name" }
                     , { field: "TrackerEffectiveStartDate", title: "Tracker Effective Date" }
                     , { field: "AdditionalTermsAndConditions", title: "Additional Terms" }
@@ -420,7 +420,7 @@
                     if (vm.inValidBulkPriceUpdate[i].DealStartDate !== '') {
                         var DealStartDate = moment(vm.inValidBulkPriceUpdate[i].DealStartDate).format("MM/DD/YYYY");
                         if (!moment(DealStartDate, "MM/DD/YYYY", true).isValid()) {
-                            rowMsg = rowMsg + "Deal Start Date must be in ''MM/DD/YYYY'' format|";
+                            rowMsg = rowMsg + "Billing Start Date must be in ''MM/DD/YYYY'' format|";
                             sheet.range("E" + row + ":E" + row).validation($scope.UnifiedDealValidation(true, '', false));
                         }
                     }
@@ -428,19 +428,19 @@
                     if (vm.inValidBulkPriceUpdate[i].DealEndDate !== '') {
                         var DealEndDate = moment(vm.inValidBulkPriceUpdate[i].DealEndDate).format("MM/DD/YYYY");
                         if (!moment(DealEndDate, "MM/DD/YYYY", true).isValid()) {
-                            rowMsg = rowMsg + "Deal End Date must be in ''MM/DD/YYYY'' format|";
+                            rowMsg = rowMsg + "Billing End Date must be in ''MM/DD/YYYY'' format|";
                             sheet.range("F" + row + ":F" + row).validation($scope.UnifiedDealValidation(true, '', false));
                         }
                     }
 
 
                     if (vm.inValidBulkPriceUpdate[i].BillingsStartDate !== '' && !moment(vm.inValidBulkPriceUpdate[i].BillingsStartDate, "MM/DD/YYYY", true).isValid()) {
-                        rowMsg = rowMsg + "Billing StartDate must be in ''MM/DD/YYYY'' format|";
+                        rowMsg = rowMsg + "Consumption Start Date must be in ''MM/DD/YYYY'' format|";
                         sheet.range("G" + row + ":G" + row).validation($scope.UnifiedDealValidation(true, '', false));
                     }
 
                     if (vm.inValidBulkPriceUpdate[i].BillingsEndDate !== '' && !moment(vm.inValidBulkPriceUpdate[i].BillingsEndDate, "MM/DD/YYYY", true).isValid()) {
-                        rowMsg = rowMsg + "Billing End Date must be in ''MM/DD/YYYY'' format|";
+                        rowMsg = rowMsg + "Consumption End Date must be in ''MM/DD/YYYY'' format|";
                         sheet.range("H" + row + ":H" + row).validation($scope.UnifiedDealValidation(true, '', false));
                     }
 
