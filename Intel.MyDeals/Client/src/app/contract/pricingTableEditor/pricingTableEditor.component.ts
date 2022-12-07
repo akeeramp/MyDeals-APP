@@ -910,6 +910,7 @@ export class pricingTableEditorComponent {
                     }
                 }
                 this.dirty = false;
+                this.undoEnable = false;
                 await this.saveEntireContractRoot(finalPTR, deleteDCIDs);
             }
         }

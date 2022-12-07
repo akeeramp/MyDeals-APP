@@ -171,7 +171,7 @@
                             class="opUiContainer dashboard op-grid k-grid k-widgetGr k-reorderable k-editable k-grid-lockedcolumns md"
                             style="width: 320px; height: calc(100vh - 350px);" data-role="grid">
                     <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" field="{{column.field}}"
-                                       [locked]="column.locked == true" width="{{ (column.field == 'CAP_STRT_DT' || column.field == 'CAP_END_DT' || column.field == 'YCS2_START_DT' || column.field == 'YCS2_END_DT') ? column.width + 30 : column.width }}" [filterable]="column.filterable" [sortable]="column.sortable">
+                                       [locked]="column.locked == true" width="{{ (column.field == 'CAP_STRT_DT' || column.field == 'CAP_END_DT' || column.field == 'YCS2_START_DT' || column.field == 'YCS2_END_DT' ) ? column.width + 30 : (column.field == 'START_DT' || column.field == 'END_DT') ? column.width + 15 : column.width }}" [filterable]="column.filterable" [sortable]="column.sortable">
                         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                             <div *ngIf="!dropdownFilterColumns.includes(column.field)">
                                 <multicheck-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value"

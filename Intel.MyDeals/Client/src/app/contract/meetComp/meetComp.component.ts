@@ -1069,21 +1069,23 @@ export class meetCompContractComponent implements OnInit {
             this.loggerSvc.error("Unable to save UpdateMeetCompProductDetails data", err, err.statusText);
             this.isLoading = false;
         });
-        this.meetCompMasterResult = response;
-        this.meetCompMasterdata = new List<any>(this.meetCompMasterResult);
-        const tempCopy = JSON.parse(JSON.stringify(this.meetCompMasterResult));
-        this.meetCompUnchangedData = new List<any>(tempCopy);
-        if (this.usrRole == "GA" || (this.usrRole == "FSE" && this.isAdhoc == 1)) {
-            this.isModelValid(this.meetCompMasterdata._elements);
+        if (response && response.length > 0) {
+            this.meetCompMasterResult = response;
+            this.meetCompMasterdata = new List<any>(this.meetCompMasterResult);
+            const tempCopy = JSON.parse(JSON.stringify(this.meetCompMasterResult));
+            this.meetCompUnchangedData = new List<any>(tempCopy);
+            if (this.usrRole == "GA" || (this.usrRole == "FSE" && this.isAdhoc == 1)) {
+                this.isModelValid(this.meetCompMasterdata._elements);
+            }
+            this.reBindGridData();
+            await this.lastMeetCompRunCalc();
+            if (this.isTender == "1" && ((this.gridData.data[0].MEET_COMP_STS == 'Pass' || this.gridData.data[0].MEET_COMP_STS == 'Fail') || this.gridData.data[0].CAP == 0)) {
+                this.tmDirec.emit('PD');
+            }
+            this.isLoading = false;
+            this.tempUpdatedList = [];
+            this.meetCompUpdatedList = [];
         }
-        this.reBindGridData();
-        await this.lastMeetCompRunCalc();
-        if (this.isTender == "1" && ((this.gridData.data[0].MEET_COMP_STS == 'Pass' || this.gridData.data[0].MEET_COMP_STS == 'Fail') || this.gridData.data[0].CAP == 0)) {
-            this.tmDirec.emit('PD');
-        }
-        this.isLoading = false;
-        this.tempUpdatedList = [];
-        this.meetCompUpdatedList = [];
     }
 
     showHelpTopic() {
