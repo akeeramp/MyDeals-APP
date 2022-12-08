@@ -521,39 +521,54 @@ export class meetCompContractComponent implements OnInit {
         this.tmDirec.emit('')
     }
     onCompSkuChange(val: any, dataItem: any) {
-        const selectedIndx = val.RW_NM;
-        this.selectedCustomerText = (val.COMP_SKU).trim();
-        this.selectedCust = dataItem.CUST_NM_SID;
-        this.curentRow = dataItem.RW_NM;
-        if (selectedIndx == -1 && this.selectedCustomerText.trim().length > 0) {
-            this.addSKUForCustomer("0", dataItem.IS_SELECTED);
-            dataItem.COMP_SKU = this.selectedCustomerText.trim();
-        }
-        else if (selectedIndx > -1 && this.selectedCustomerText.trim().length > 0) {
-            const selectedValue = val.RW_NM;
-            dataItem.COMP_SKU = this.selectedCustomerText.trim();
-            let tempprcData = [];
-            dataItem.COMP_PRC = parseFloat(this.meetCompMasterdata._elements[selectedValue - 1].COMP_PRC).toFixed(2);
-            if (dataItem.GRP == "PRD") {
-                let selData = [];
-                if (dataItem.IS_SELECTED) {
-                    selData = this.getProductLineData();
-                }
+        if (val != undefined && val.RW_NM != undefined) {
+            const selectedIndx = val.RW_NM;
+            this.selectedCustomerText = (val.COMP_SKU).trim();
+            this.selectedCust = dataItem.CUST_NM_SID;
+            this.curentRow = dataItem.RW_NM;
+            if (selectedIndx == -1 && this.selectedCustomerText.trim().length > 0) {
                 this.addSKUForCustomer("0", dataItem.IS_SELECTED);
-                if (selData.length > 0) {
-                    for (let cntData = 0; selData.length > cntData; cntData++) {
-                        const temp_grp_prd = selData[cntData].GRP_PRD_SID;
-                        //Updating Product Line
-                        if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
-                            this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1].COMP_PRC = dataItem.COMP_PRC;
-                            this.addToUpdateList(this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1]);
+                dataItem.COMP_SKU = this.selectedCustomerText.trim();
+            }
+            else if (selectedIndx > -1 && this.selectedCustomerText.trim().length > 0) {
+                const selectedValue = val.RW_NM;
+                dataItem.COMP_SKU = this.selectedCustomerText.trim();
+                let tempprcData = [];
+                dataItem.COMP_PRC = parseFloat(this.meetCompMasterdata._elements[selectedValue - 1].COMP_PRC).toFixed(2);
+                if (dataItem.GRP == "PRD") {
+                    let selData = [];
+                    if (dataItem.IS_SELECTED) {
+                        selData = this.getProductLineData();
+                    }
+                    this.addSKUForCustomer("0", dataItem.IS_SELECTED);
+                    if (selData.length > 0) {
+                        for (let cntData = 0; selData.length > cntData; cntData++) {
+                            const temp_grp_prd = selData[cntData].GRP_PRD_SID;
+                            //Updating Product Line
+                            if (selData[cntData].MEET_COMP_UPD_FLG.toLowerCase() == "y") {
+                                this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1].COMP_PRC = dataItem.COMP_PRC;
+                                this.addToUpdateList(this.meetCompMasterdata._elements[selData[cntData].RW_NM - 1]);
+                            }
+                            //Updating Deal line
+                            tempprcData = this.meetCompUnchangedData
+                                .Where(function (x) {
+                                    return (x.GRP_PRD_SID == temp_grp_prd && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
+                                })
+                                .ToArray();
+
+                            for (let i = 0; i < tempprcData.length; i++) {
+                                if (dataItem.COMP_PRC) {
+                                    this.meetCompMasterdata._elements[tempprcData[i].RW_NM - 1].COMP_PRC = dataItem.COMP_PRC;
+                                }
+                                this.addToUpdateList(this.meetCompMasterdata._elements[tempprcData[i].RW_NM - 1]);
+                            }
                         }
-                        //Updating Deal line
+                    }
+                    else {
                         tempprcData = this.meetCompUnchangedData
                             .Where(function (x) {
-                                return (x.GRP_PRD_SID == temp_grp_prd && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
-                            })
-                            .ToArray();
+                                return (x.GRP_PRD_SID == dataItem.GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
+                            }).ToArray();
 
                         for (let i = 0; i < tempprcData.length; i++) {
                             if (dataItem.COMP_PRC) {
@@ -563,29 +578,16 @@ export class meetCompContractComponent implements OnInit {
                         }
                     }
                 }
-                else {
-                    tempprcData = this.meetCompUnchangedData
-                        .Where(function (x) {
-                            return (x.GRP_PRD_SID == dataItem.GRP_PRD_SID && x.GRP == "DEAL" && x.MC_NULL == true && x.MEET_COMP_UPD_FLG == "Y");
-                        }).ToArray();
+                this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_SKU = (val.COMP_SKU).trim();
+                // Setting COMP PRC based on Comp SKU if available
+                this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_PRC = parseFloat(this.meetCompMasterdata._elements[selectedValue - 1].COMP_PRC).toFixed(2);
+                this.addToUpdateList(this.meetCompMasterdata._elements[dataItem.RW_NM - 1]);
+                var sku_ind = this.meetCompSkuDropdownData.findIndex(ind => ind['COMP_SKU'] == dataItem.COMP_SKU)
+                this.selectedMeetCompSku = this.meetCompSkuDropdownData[sku_ind];
+                var prc_ind = this.meetCompPrcDropdownData.findIndex(ind => ind['COMP_PRC'] == dataItem.COMP_PRC)
+                this.selectedMeetCompPrc = this.meetCompPrcDropdownData[prc_ind];
 
-                    for (let i = 0; i < tempprcData.length; i++) {
-                        if (dataItem.COMP_PRC) {
-                            this.meetCompMasterdata._elements[tempprcData[i].RW_NM - 1].COMP_PRC = dataItem.COMP_PRC;
-                        }
-                        this.addToUpdateList(this.meetCompMasterdata._elements[tempprcData[i].RW_NM - 1]);
-                    }
-                }
             }
-            this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_SKU = (val.COMP_SKU).trim();
-            // Setting COMP PRC based on Comp SKU if available
-            this.meetCompMasterdata._elements[dataItem.RW_NM - 1].COMP_PRC = parseFloat(this.meetCompMasterdata._elements[selectedValue - 1].COMP_PRC).toFixed(2);
-            this.addToUpdateList(this.meetCompMasterdata._elements[dataItem.RW_NM - 1]);
-            var sku_ind = this.meetCompSkuDropdownData.findIndex(ind => ind['COMP_SKU'] == dataItem.COMP_SKU)
-            this.selectedMeetCompSku = this.meetCompSkuDropdownData[sku_ind];
-            var prc_ind = this.meetCompPrcDropdownData.findIndex(ind => ind['COMP_PRC'] == dataItem.COMP_PRC)
-            this.selectedMeetCompPrc = this.meetCompPrcDropdownData[prc_ind];
-
         }
     }
 
