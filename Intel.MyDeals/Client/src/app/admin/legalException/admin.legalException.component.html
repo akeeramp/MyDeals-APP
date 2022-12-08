@@ -30,11 +30,11 @@
                 <button *ngIf="editAccess" (click)="download()" class="k-button k-button-icontext legalheader-align">
                     <span class="intelicon-ms-excel-outlined k-icon-md k-family"></span>DOWNLOAD
                 </button>
-                <button (click)="Hideshow()" class="k-button k-button-icontext legalheader-align" style="font-size:30px;float:right">
-                    <span class="intelicon-show-results-outlined"></span>
-                </button>
+                    <button (click)="Hideshow()" class="k-button k-button-icontext legalheader-align show-float-icon">
+                        <span class="intelicon-show-results-outlined" title="Show Additional Column"></span>
+                    </button>
             </ng-template>
-            <kendo-grid-column *ngIf="editAccess" [headerClass]="{ 'text-center': true }" field="IS_SELECTED" title="selectAll" width="80">
+            <kendo-grid-column *ngIf="editAccess" [headerClass]="{ 'text-center remove-filter': true }" field="IS_SELECTED" title="selectAll" width="80">
                 <ng-template kendoGridHeaderTemplate let-dataItem>
                     <div class='leagalgridheader'>
                         Select All<br />
@@ -82,7 +82,7 @@
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="120" field="ACTV_IND" filter="boolean">
                 <ng-template kendoGridCellTemplate let-dataItem>
-                    <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
+                    <mat-slide-toggle class="toggle-button-custom toggle-align-grid" [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
                 </ng-template>
                 <ng-template kendoGridHeaderTemplate>
                     <div class='isRequired leagalgridheader'>Active </div>
@@ -92,7 +92,7 @@
           
             <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="110" field="IS_DSBL" filter="boolean">
                 <ng-template kendoGridCellTemplate let-dataItem>
-                    <mat-slide-toggle class="toggle-button-custom" [color]="color" [checked]="dataItem.IS_DSBL" disabled></mat-slide-toggle>
+                    <mat-slide-toggle class="toggle-button-custom toggle-align-grid" [color]="color" [checked]="dataItem.IS_DSBL" disabled></mat-slide-toggle>
                 </ng-template>
                 <ng-template kendoGridHeaderTemplate>
                     <div class='isRequired leagalgridheader'>Hidden </div>
