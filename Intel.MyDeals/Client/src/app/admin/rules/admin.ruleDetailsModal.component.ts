@@ -227,6 +227,7 @@ export class RuleDetailsModalComponent {
                 
             }
         });
+        this.criteria[0].selectedValues = "ECAP";
         Object.assign(this.Rules, { Criteria: this.criteria });
         this.strtDate = new Date(this.Rules.StartDate);
         this.endDt = new Date(this.Rules.EndDate);
