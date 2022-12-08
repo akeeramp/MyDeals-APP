@@ -10,7 +10,7 @@
             </div>
             <!-- SIDE BAR -->
             <div class="secEngine_sidebar" style="margin-top: 9px; width: 101%;">
-                <div id="secEngine_filters" class="row" style="padding-bottom: 114px; height: calc(100vh - 169px) ">
+                <div id="secEngine_filters" class="row" style="padding-bottom: 251px; height: calc(100vh - 169px) ">
                     <div class="lbl" style="margin-top: 9px;">
                         <h5 style="font-weight: 400 !important; font-size: 17px !important;">
                             Security Attributes Properties
@@ -39,26 +39,26 @@
                     </div>
                     <div class="lbl">
                         <div>Roles: </div>
-                        <kendo-multiselect [placeholder]="'All Roles'" style="width: 11em !important;" [data]="dropDownDatasource.AdminRoleTypes" textField="dropdownName" valueField="dropdownID"
+                        <kendo-multiselect class="sec-eng-multi-list" [placeholder]="'All Roles'" style="width: 11em !important;" [data]="dropDownDatasource.AdminRoleTypes" textField="dropdownName" valueField="dropdownID"
                            [(ngModel)]="selectedRoles" [autoClose]="true" [kendoDropDownFilter]="filterSettings">
                         </kendo-multiselect>
                     </div>
                     <div class="lbl">
                         <div>Stages: </div>
-                        <kendo-multiselect [placeholder]="'All Stages'" style="width: 11em !important;" [data]="drilledDownstages" textField="Second" valueField="Second"
+                        <kendo-multiselect class="sec-eng-multi-list" [placeholder]="'All Stages'" style="width: 11em !important;" [data]="drilledDownstages" textField="Second" valueField="Second"
                              [(ngModel)]="selectedStages" [autoClose]="true">
                         </kendo-multiselect>
                     </div>
                     <div class="lbl">
                         <div>ObjSet Types: </div>
-                        <kendo-multiselect [placeholder]="'All Deal Types'" style="width: 11em !important;" [data]="drilledDowndealtype" textField="Alias" valueField="Id"
+                        <kendo-multiselect class="sec-eng-multi-list" [placeholder]="'All Deal Types'" style="width: 11em !important;" [data]="drilledDowndealtype" textField="Alias" valueField="Id"
                                  [(ngModel)]="selectedDealTypes" [autoClose]="true">
                         </kendo-multiselect>
                     </div>
 
                     <!-- Tabs -->
                     <div class="col-md-12 secEngine_tabs" style=" padding-left: 7px;">
-                        <kendo-tabstrip active="" style="margin: 6px;" (tabSelect)="onTabSelect($event)">
+                        <kendo-tabstrip class="tab-sec-add" active="" style="margin: 6px;" (tabSelect)="onTabSelect($event)">
                             <kendo-tabstrip-tab index="0" title="Attribute Security" [selected]="isASTab">
                                 <ng-template kendoTabContent>
                                     <div class="col-md-12">
@@ -77,7 +77,7 @@
                                                 </span>
                                             </div>
                                             <div class="col-md-12">
-                                                <kendo-multiselect [placeholder]="'All Attributes'" [data]="drilledDownAtrb" textField="ATRB_COL_NM" valueField="ATRB_SID"
+                                                <kendo-multiselect class="sec-eng-multi-list" [placeholder]="'All Attributes'" [data]="drilledDownAtrb" textField="ATRB_COL_NM" valueField="ATRB_SID"
                                                                    [autoClose]="true" [kendoDropDownFilter]="filterSettings" [(ngModel)]="selectedIds">
                                                 </kendo-multiselect>
                                             </div>
@@ -90,7 +90,7 @@
                                     <div class="col-md-12">
                                         <div class="row" style="margin-bottom:80px;">
                                             <div style="font-size: 11px; font-weight: 500;">Deal Action:</div>
-                                            <kendo-multiselect [data]="drilledDownAction" [placeholder]="'All Deal Actions'" textField="dropdownName" valueField="dropdownID"
+                                            <kendo-multiselect class="sec-eng-multi-list" [data]="drilledDownAction" [placeholder]="'All Deal Actions'" textField="dropdownName" valueField="dropdownID"
                                                                [(ngModel)]="selectedDealactions" [autoClose]="true" [kendoDropDownFilter]="filterSettings">
                                             </kendo-multiselect>
                                         </div>
@@ -170,7 +170,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="col-md-12 kendo-grid-buttons">
-                                <kendo-grid [data]="gridResult" [groupable]="false" style="overflow: scroll; height: 600px;">
+                                <kendo-grid [data]="gridResult" [groupable]="false" style="overflow: scroll; height: calc(100vh - 200px);">
                                     <ng-template kendoGridToolbarTemplate>
                                         <button (click)="save()" class="btn btn-primary ">
                                             Save

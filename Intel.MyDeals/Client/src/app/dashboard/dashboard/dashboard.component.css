@@ -16,3 +16,29 @@ kendo-grid.admin-deal-grid.k-widget.k-grid {
     width: calc(100% - -50px) !important;
     left: -24px !important
 }
+.sec-eng-multi-list .k-multiselect-wrap kendo-taglist ul li {
+    float: left !important;
+    font-size: 12px !important;
+    border-radius: 1.071em !important;
+    margin: 3px 0 3px 3px !important;
+    padding: 0 1.6em 0 0.857em !important;
+    line-height: 1.86em !important;
+    background-color: #fff !important;
+    color: #444 !important;
+    border-color: #fff !important;
+    cursor: pointer !important;
+}
+
+    .sec-eng-multi-list .k-multiselect-wrap kendo-taglist ul li:hover {
+        background-color: #ebebeb !important;
+        color: #444 !important;
+        border-color: #ebebeb !important;
+    }
+
+.tab-sec-add .k-tabstrip-items .k-item.k-state-active, .k-tabstrip-items .k-item.k-state-selected {
+    color: #fff;
+    background-color: #00aeef;
+    border: 1px solid #00aeef;
+    border-bottom-color: transparent;
+    cursor: default;
+}
