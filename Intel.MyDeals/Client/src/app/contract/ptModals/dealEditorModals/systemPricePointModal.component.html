@@ -6,7 +6,7 @@
         <div class="col-md-12">
             <div class="col-sm-4">
                 <label class="control-label appro-label" for="inputControl"><b>Operator</b></label><br/>
-                <kendo-dropdownlist style="width:100%" [data]="operators"
+                <kendo-dropdownlist style="width:100%;" [data]="operators"
                                     [(ngModel)]="operator"
                                     textField="name"
                                     valueField="id"
@@ -18,7 +18,7 @@
                 <label class="control-label appro-label" for="inputPrice"><b>Price Point</b></label><br/>
                 <kendo-numerictextbox style="width:100%" [(ngModel)]="price"
                                       min="0.01" max="1000000"
-                                      [format]="c2"
+                                      [format]="'c2'"
                                       autoCorrect="true"
                                       (keydown)="onKeyDown($event)"
                                       [value]="price" class="k-numberbox-design">

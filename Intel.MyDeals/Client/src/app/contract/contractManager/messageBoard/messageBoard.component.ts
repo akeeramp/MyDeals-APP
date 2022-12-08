@@ -1,6 +1,6 @@
 import * as angular from "angular";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { Component, Input, ViewEncapsulation } from '@angular/core';
+import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 
 import { DomSanitizer } from '@angular/platform-browser';
@@ -24,6 +24,7 @@ export class messageBoardModal {
     @Input() data:any;
     @Input() contractData:any;
     @Input() isDealTools;
+    @Output() isWindowOpened = new EventEmitter;
 
     public gridData: GridDataResult;        
 
@@ -44,7 +45,8 @@ export class messageBoardModal {
         disableEmail() {
             return false;
         }
-        openEmailMsg() {
+    openEmailMsg() {
+        this.isWindowOpened.emit(false);
             let rootUrl = window.location.protocol + "//" + window.location.host;
             let items = [];
     

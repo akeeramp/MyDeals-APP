@@ -105,7 +105,7 @@ export class contractManagerComponent {
     timeFormat="MM/DD/YYYY HH:mm:ss:SSS";
     lapse=0;
     private windowOpened= false;
-    private windowTop = 200;windowLeft = 350;windowWidth = 620;windowHeight = 500;windowMinWidth = 100;
+    private windowTop = 170; windowLeft = 50; windowWidth = 620; windowHeight = 238; windowMinWidth = 90; windowMinHeight = 50;
     public filteredData: any;
     uploadSuccess = false;
     private isGridLoading = false;
@@ -382,6 +382,11 @@ export class contractManagerComponent {
             this.actionItemsBase(null, true);
         };
     }
+
+    isWindowOpened(event: boolean) {
+        this.windowOpened = event;
+    }
+
     openEmailMsg(ids) {
         let rootUrl = window.location.protocol + "//" + window.location.host;
         let items = [];

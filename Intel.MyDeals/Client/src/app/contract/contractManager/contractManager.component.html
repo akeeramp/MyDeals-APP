@@ -494,11 +494,11 @@
                 </div>
             </div>
         </div>
-        <kendo-window class="wistyle" *ngIf="windowOpened" (close)="windowClose()" [minWidth]="windowMinWidth" [minHeight]="windowHeight" [width]="windowWidth" [top]="windowTop" [left]="windowLeft">
+        <kendo-window class="wistyle" *ngIf="windowOpened" (close)="windowClose()" [minWidth]="windowMinWidth" [minHeight]="windowMinHeight" [height]="windowHeight" [width]="windowWidth" [top]="windowTop" [left]="windowLeft">
             <kendo-window-titlebar>
                 <div class="k-window-title arrow-window-title">Results</div><button kendoWindowCloseAction class="close-icon"></button>
             </kendo-window-titlebar>
-            <message-board-dialog [data]="messages" [contractData]="contractData"></message-board-dialog>
+            <message-board-dialog [data]="messages" [contractData]="contractData" (isWindowOpened)="isWindowOpened($event)" ></message-board-dialog>
         </kendo-window> 
     </div>
 </div>

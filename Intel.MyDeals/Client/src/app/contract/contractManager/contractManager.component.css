@@ -583,9 +583,19 @@ button.btn.btn-sm.btn-skyblue.view-complex-two {
     border-color: rgba(0,0,0,.2);
     box-shadow: 1px 1px 7px 1px rgba(128,128,128,.2);
     background-color: #fff;
-    left: 375px !important;
-    top: 178px !important
+    left: 50px ;
+    top: 170px ;
+    z-index: 10007 !important;
 }
+    .wistyle.k-window.k-window-maximized {
+        border-color: rgba(0,0,0,.2);
+        box-shadow: 1px 1px 7px 1px rgba(128,128,128,.2);
+        background-color: #fff;
+        width: 1920px !important;
+        top: 40px !important;
+        left: 0;
+        z-index: 10007 !important;
+    }
 
 .mybotdialog .k-dialog-buttongroup {
     border-color: #dee2e6;
