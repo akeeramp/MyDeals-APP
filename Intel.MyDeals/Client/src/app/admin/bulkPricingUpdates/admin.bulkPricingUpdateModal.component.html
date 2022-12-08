@@ -16,7 +16,7 @@
                 <div class="form-group row">
                     <div class="col-md-11">
                         <kendo-upload id="bulkPrcUpdateFileUpd" [restrictions]="fileUploadOptions.validation" [(ngModel)]="files" name="files"
-                                      class="kuploadaction" (success)="successEventHandler($event)"
+                                      class="kuploadaction" (success)="successEventHandler($event)" [multiple]="false"
                                       (error)="onFileUploadError()" (complete)="onFileUploadComplete()"
                                       [saveUrl]="fileUploadOptions.async.saveUrl" [batch]="false" [autoUpload]="false"></kendo-upload>
                     </div>

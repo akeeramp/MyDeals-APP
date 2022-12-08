@@ -1,10 +1,10 @@
-<link href="/Client/node_modules/handsontable/dist/handsontable.full.css" rel="stylesheet" />
-<link href="/Client/node_modules/handsontable-multi-select/dist/css/handsontable-multi-select.css" rel="stylesheet" />
+<link href="/Client/node_modules/handsontable/dist/handsontable.full.min.css" rel="stylesheet" />
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <loading-panel-angular id="bulkPriceUpload" class="priceUpdateLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
                        [description]="spinnerMessageDescription" [isShowFunFact]="showFunFact" [msgType]="'Info'"></loading-panel-angular>
-<div id="bulkPricingUpdateModal" style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none">
-    <div class="col-md-12 " style="padding-bottom: 15px;margin-top: 20px;">
+<div id="bulkPricingUpdateModal" style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none;margin-top: -2px;">
+    <div class="col-md-12 " style="padding-bottom: 15px;">
         <h2>Bulk Price Updates Admin</h2>
     </div>
     <div class="col-md-12" style="padding-bottom: 27px;">
@@ -15,8 +15,7 @@
         <span class="redbold">NOTE:</span><span>&nbsp;Please upload maximum of 100 records. Deal Dates are in the format of MM/DD/YYYY (e.g. 12/31/2022) </span><br /><br />
     </div>
     <div class="col-md-12">
-        
-        <kendo-splitter class="spliter-btom-style" orientation="vertical" style="height: 500px;" id="tableSpliter">
+        <kendo-splitter orientation="vertical" style="height: 500px;" id="tableSpliter">
             <kendo-splitter-pane><hot-table id="bulkPriceUpdateTable" [hotId]="hotId" [settings]="hotSettings" class="all-spread"></hot-table></kendo-splitter-pane>
         </kendo-splitter>
      </div>

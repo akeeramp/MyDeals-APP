@@ -1,7 +1,7 @@
 import * as angular from 'angular';
 import { Component, ViewEncapsulation } from "@angular/core"
 import { logger } from "../../shared/logger/logger";
-import Handsontable from 'handsontable';
+import  Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
 import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
 import { downgradeComponent } from '@angular/upgrade/static';
@@ -27,7 +27,7 @@ export class BulkPricingUpdatesComponent  {
 
    private hotRegisterer = new HotTableRegisterer();
    private hotTable: Handsontable;
-   private hotId = "spreadsheet";
+   private hotId = "prcSpreadsheet";
    showFunFact = true;
    spinnerMessageHeader = "";
    spinnerMessageDescription = "";
@@ -68,7 +68,7 @@ validBulkPriceUpdates: any = [];
     bindRowsWithHeaders: true,
     width: '100%',
     height: 430,
-};
+   };
 
 openBulkPriceUpdateModal(){
   const dialogRef = this.dialog.open(BulkPricingUpdateModalComponent, {
@@ -134,7 +134,8 @@ processData(){
       this.cellComments = this.validateTableData(dataArr);
       if (this.cellComments.length > 0){
         this.hotTable.updateSettings({
-            cell: this.cellComments
+            cell: this.cellComments,
+            data: dataArr
         });
         this.hotTable.render();
         this.isLoading = false;
@@ -206,16 +207,22 @@ processData(){
       this.isLoading = false;
       this.isAlert = true;
       this.alertMsg = "There is no data to Process";
+      this.hotTable.loadData([]);
   }
 }
 
 getDataFromTable(){
-    let tempData = [];
-    this.validBulkPriceUpdates.forEach((prcUpdate,rowInd) => {
-        if (!this.hotTable.isEmptyRow(rowInd)){
-            tempData.push(prcUpdate);
-        }
-    } );
+    let tempData =this.validBulkPriceUpdates.filter(row =>  !(( row.DealId == null || row.DealId == "") &&
+        (row.DealDesc == null || row.DealDesc == "") &&
+     (row.EcapPrice == null || row.EcapPrice == "") &&
+     (row.Volume == null || row.Volume == "") &&
+     (row.ProjectName == null || row.ProjectName == "") &&
+     (row.DealStartDate == null || row.DealStartDate == "") &&
+     (row.DealEndDate == null || row.DealEndDate == "") &&
+     (row.BillingsStartDate == null || row.BillingsStartDate == "") &&
+     (row.BillingsEndDate == null || row.BillingsEndDate == "") &&
+     (row.TrackerEffectiveStartDate == null || row.TrackerEffectiveStartDate == "") &&
+     (row.AdditionalTermsAndConditions == null || row.AdditionalTermsAndConditions == "")));
     return tempData;
 }
 
@@ -228,7 +235,7 @@ validateTableData(dataArr){
         messages = [];
         if (row.DealId == "0") {
             messages.push("Deal ID");
-            validationMessages.push({ row: i, col: 0, comment: { value: 'Deal ID must be a valid number' } ,className:'error-product'})
+            validationMessages.push({ row: i, col: 0, comment: { value: 'Deal ID must be a valid number', readOnly: true } ,className:'error-product'})
         }
         if ((row.DealDesc == null || row.DealDesc == "") &&
             (row.EcapPrice == null || row.EcapPrice == "") &&
@@ -242,7 +249,7 @@ validateTableData(dataArr){
             (row.AdditionalTermsAndConditions == null || row.AdditionalTermsAndConditions == "")) {
             messages.push("One of the Deal");
             for( let ind = 1; ind<11; ind++){
-                validationMessages.push({ row: i, col: ind, comment: { value: " " } ,className:'error-product'})
+                validationMessages.push({ row: i, col: ind, comment: { value: " ", readOnly: true } ,className:'error-product'})
             }
         }
         if (messages.length > 0) {
@@ -251,48 +258,48 @@ validateTableData(dataArr){
         if (row.DealId !== "0" || row.DealId !== "" || row.DealId !== null ) {
             if (Number(row.DealId).toString() == 'NaN') {
                 errMsg = errMsg + "Deal ID must be a valid number|";
-                validationMessages.push({ row: i, col: 0, comment: { value: 'Deal ID must be a valid number' } ,className:'error-product'})
+                validationMessages.push({ row: i, col: 0, comment: { value: 'Deal ID must be a valid number', readOnly: true } ,className:'error-product'})
             }
             else if (!Number.isInteger(Number(row.DealId))) {
                 errMsg = errMsg + "Deal ID must be a valid number|";
-                validationMessages.push({ row: i, col: 0, comment: { value: 'Deal ID must be a valid number' } ,className:'error-product'})
+                validationMessages.push({ row: i, col: 0, comment: { value: 'Deal ID must be a valid number', readOnly: true } ,className:'error-product'})
                 }
               }
         if (row.EcapPrice && row.EcapPrice !== "0" && row.EcapPrice !== '' && row.EcapPrice !== null ) {
             if (Number(row.EcapPrice).toString() == 'NaN') {
                 errMsg = errMsg + "ECAP Price must be valid number|";
-                validationMessages.push({ row: i, col: 2, comment: { value: 'ECAP Price must be valid number' } ,className:'error-product'})
+                validationMessages.push({ row: i, col: 2, comment: { value: 'ECAP Price must be valid number', readOnly: true } ,className:'error-product'})
             }
         }
         if (row.Volume &&row.Volume !== "0" && row.Volume !== '' && row.Volume !== null) {
             if (Number(row.Volume).toString() == 'NaN') {
                 errMsg = errMsg + "Ceiling Volume must be a valid non-decimal number. |";
-                validationMessages.push({ row: i, col: 3, comment: { value: 'Ceiling Volume must be a valid non-decimal number.' } ,className:'error-product'})
+                validationMessages.push({ row: i, col: 3, comment: { value: 'Ceiling Volume must be a valid non-decimal number.', readOnly: true } ,className:'error-product'})
             }
             else if (!Number.isInteger(Number(row.Volume))) {
                 errMsg = errMsg + "Ceiling Volume must be a valid non-decimal number. |";
-                validationMessages.push({ row: i, col: 3, comment: { value: 'Ceiling Volume must be a valid non-decimal number.' } ,className:'error-product'})
+                validationMessages.push({ row: i, col: 3, comment: { value: 'Ceiling Volume must be a valid non-decimal number.', readOnly: true } ,className:'error-product'})
             }
                }
         if (row.DealStartDate && row.DealStartDate !== '' && row.DealStartDate !== null && !moment(row.DealStartDate, "MM/DD/YYYY", true).isValid()) {
                 errMsg = errMsg + "Deal Start Date must be in ''MM/DD/YYYY'' format|";
-                validationMessages.push({ row: i, col: 4, comment: { value: 'Deal Start Date must be in "MM/DD/YYYY" format' } ,className:'error-product'})
+                validationMessages.push({ row: i, col: 4, comment: { value: 'Deal Start Date must be in "MM/DD/YYYY" format', readOnly: true } ,className:'error-product'})
         }
         if ( row.DealEndDate && row.DealEndDate !== '' && row.DealEndDate !== null && !moment(row.DealEndDate, "MM/DD/YYYY", true).isValid()) {
                 errMsg = errMsg + "Deal End Date must be in ''MM/DD/YYYY'' format|";
-                validationMessages.push({ row: i, col: 5, comment: { value: 'Deal End Date must be in "MM/DD/YYYY" format' } ,className:'error-product'})
+                validationMessages.push({ row: i, col: 5, comment: { value: 'Deal End Date must be in "MM/DD/YYYY" format', readOnly: true } ,className:'error-product'})
         }
         if (row.BillingsStartDate && row.BillingsStartDate !== '' && row.BillingsStartDate !== null && !moment(row.BillingsStartDate, "MM/DD/YYYY", true).isValid()) {
             errMsg = errMsg + "Billing StartDate must be in ''MM/DD/YYYY'' format|";
-            validationMessages.push({ row: i, col: 6, comment: { value: 'Billing StartDate must be in "MM/DD/YYYY" format' } ,className:'error-product'})
+            validationMessages.push({ row: i, col: 6, comment: { value: 'Billing StartDate must be in "MM/DD/YYYY" format', readOnly: true } ,className:'error-product'})
         }
         if (row.BillingsEndDate && row.BillingsEndDate !== '' && row.BillingsEndDate !== null && !moment(row.BillingsEndDate, "MM/DD/YYYY", true).isValid()) {
             errMsg = errMsg + "Billing End Date must be in ''MM/DD/YYYY'' format|";
-            validationMessages.push({ row: i, col: 7, comment: { value: 'Billing End Date must be in "MM/DD/YYYY" format' } ,className:'error-product'})
+            validationMessages.push({ row: i, col: 7, comment: { value: 'Billing End Date must be in "MM/DD/YYYY" format', readOnly: true } ,className:'error-product'})
         }
         if (row.TrackerEffectiveStartDate && row.TrackerEffectiveStartDate !== '' && row.TrackerEffectiveStartDate !== '' && !moment(row.TrackerEffectiveStartDate, "MM/DD/YYYY", true).isValid()) {
             errMsg = errMsg + "Tracker Effective Start Date must be in ''MM/DD/YYYY'' format|";
-            validationMessages.push({ row: i, col: 9, comment: { value: 'Tracker Effective Start Date must be in "MM/DD/YYYY" format' } ,className:'error-product'})
+            validationMessages.push({ row: i, col: 9, comment: { value: 'Tracker Effective Start Date must be in "MM/DD/YYYY" format', readOnly: true } ,className:'error-product'})
         }
         
         if (errMsg != '') {
@@ -317,7 +324,6 @@ ngAfterViewInit() {
     setTimeout (()=>{
     this.hotTable.render();
     },1000)
-    
   }
 
 ngOnDestroy() {
