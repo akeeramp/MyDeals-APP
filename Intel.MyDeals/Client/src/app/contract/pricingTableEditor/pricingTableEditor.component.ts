@@ -966,6 +966,7 @@ export class pricingTableEditorComponent {
             this.loggerService.error("Something went wrong", 'Error');
             console.error("pricingTableEditorComponent::saveUpdatePTEAPI::", error);
         });
+        this.undoEnable = false;
         if (result) {
             await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
             if (this.isTenderContract && deleteDCIDs && deleteDCIDs.length > 0) {
