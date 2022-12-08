@@ -1,1 +1,667 @@
-﻿﻿.k-grid.cm-height-table{height:calc(100vh - 205px)!important;width:calc(100% - -50px)!important;left:-24px!important}.cancel-space-r{margin-left:-1.14em!important}#spreadsheetUnifyDeals{border:none}#spreadsheetUnifyDeals .k-dirty-cell{border:none!important;color:red!important}#spreadsheetUnifyDeals .k-spreadsheet-formula-bar,#spreadsheetUnifyDeals .k-spreadsheet-name-editor{display:none!important}.clrGreen{color:#2196f3!important}.clrRed{color:#ff5722!important}.btnYellow{color:#F3D54E!important}.dealTools{line-height:1.8em;height:100%!important;width:100%}.dealTools .gridStatusMarker{font-family:arial}.dealTools a{text-decoration:none}.dealTools i:hover{color:#003C71}.gridStatusMarker{width:16px;color:#000000;background-color:#cccccc;font-size:14px;font-weight:600;padding:4px 2px 4px 7px;margin-left:-10px;margin-right:5px}.gridStatusMarker.Working{color:#000000;background-color:#FFA300}.gridStatusMarker.Active{color:#000000;background-color:#C4D600}.gridStatusMarker.Cancelled{color:#000000;background-color:#cccccc}.dealTools .md-icon{padding:4px 0 0 5px}.k-tabstrip-wrapper,.k-tabstrip-bottom,.k-spreadsheet-sheets-bar-add{display:none}.k-button{color:#fff;background-color:#0071c5;border-color:#0071c5;box-shadow:none}.k-button:hover{background-color:#00aeef;border-color:#00aeef;color:#fff;box-shadow:none}.tmpltItem{width:100%}.tmpltIcn{width:35px}.tmpltIcn i{font-size:26px}.tmpltContract{}.tmpltRole{font-size:12px}.tmpltPrimary{font-size:14px;line-height:1.1em}.tmpltSecondary{font-size:12px;line-height:1.1em;opacity:.6}.action_btns{margin-bottom:20px}#endCustomerUnifyModal .modal-footer{position:fixed;bottom:-59px;width:100%;background:#efefef;height:60px;border:1px solid #003c71;margin-left:-2px}kendo-upload-action-buttons{display:none}#modalBodyDiv .row{margin-left:20px}.k-selectbox{height:10px;margin-bottom:10px}.btn-success{color:#000000;background-color:#C4D600!important;border-color:#adbd00!important}.btn-success[disabled]{color:#b1babf;background-color:#edeff0!important;border-color:#b1babf!important}.notes{font-size:14px;margin-left:40px;padding:0}.bluebold{color:#0071c5;font-weight:bold}.redbold{color:red;font-weight:bold}.modal-dialog{width:750px;margin-top:100px}.fontSmall{font-size:12px!important}.bigSmall{font-size:15px!important}#modalTitle{float:left;margin-top:-15px}#endCustomerUnifyModal .modal-body{overflow:auto;width:100%;max-height:500px;border-bottom:none}.modalBlueBody{background-color:#003C71;color:#ffffff}#endCustomerUnifyModal .modal-header{border-bottom:1px solid #e5e5e5!important;min-height:16.5px!important;padding:7px!important;background-color:#003C71!important;color:#ffffff!important}div[index="0"]{z-index:3!important}.modal-backdrop{display:none!important}#btnClose{float:right;margin-top:-15px;background:transparent;padding:3px;font-size:22px;cursor:pointer}.btn-default.active:hover{color:#fff!important;background-color:#367fa9!important;border-color:#00aeef!important}.btn-default.active{color:#fff!important;background-color:#00AEEF!important;border-color:#367fa9!important}.floatRight{float:right}.ss-loading-overlay{background:transparent!important}#endCustomerWarning .k-button,#endCustomerWarning .k-button:hover{color:#444!important;border-color:#fafafa;background-color:#cccccc!important}#endCustomerWarning .k-button:hover{color:#444!important;border-color:#fafafa;background-color:#FAFAFA!important}#endCustomermodalBody{padding-top:1rem!important}#endCustomerModalHeader{padding:15px;border-bottom:1px solid #e5e5e5;min-height:16.5px;line-height:1.5}#modal-title{font-family:"Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif}.bluebold{color:#0071c5;font-weight:bold}.redbold{color:red;font-weight:bold}.modal-dialog{width:750px;margin-top:100px}#modalBodyDiv .row{margin-left:20px}.mat-slide-toggle.big-toggle-custom-class .mat-slide-toggle-thumb{width:12px!important;border-radius:3px!important;margin:0 auto!important;border-color:#b1babf!important;background-color:#eee!important;height:25px!important;padding:0!important}.k-upload .k-actions{display:none}.unified-upload-style.kuploadaction.k-upload .k-upload-button{min-width:7.41em!important;border-color:#fafafa!important;color:#fff!important;font-family:'Intel Clear';background-color:#0071c5!important;border-color:#0071c5!important;font-size:15px!important;border:none!important;font-weight:400!important;box-shadow:0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%)!important;text-transform:uppercase!important;border-radius:0!important}.big-toggle-custom-class.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container{transform:translate3d(-4px,0,0)!important}.big-toggle-custom-class.mat-slide-toggle.toggle-button-custom .mat-slide-toggle-thumb{width:10px!important;border-radius:1px!important;margin:0 auto!important;border-color:#737577d9!important;background-color:#eee!important;height:23px!important;margin-top:2.5px!important;padding:1px!important;margin-left:88.5px!important;box-shadow:none!important}.k-button:hover{background-color:#00aeef!important;border-color:#00aeef!important}.big-toggle-custom-class.toggle-button-custom.mat-slide-toggle:not(.mat-checked) .mat-slide-toggle-bar::after{content:'Bulk Unify'!important;font-size:10px!important;color:#fff!important;position:absolute!important;left:22px!important;top:-1px!important;font-weight:normal!important}.big-toggle-custom-class.mat-slide-toggle.mat-checked .mat-slide-toggle-bar::after{content:'Deal Recon'!important;font-size:10px!important;color:#ffffff!important;padding-left:20px!important;font-weight:normal!important}.big-toggle-custom-class.mat-slide-toggle.toggle-button-custom .mat-slide-toggle-bar{height:24px!important;border-radius:3px!important;margin:0 auto!important;border:1px solid transparent!important;border-color:#b1babf!important;width:100px!important;position:absolute!important;background-color:#00aeef!important}.big-toggle-custom-class.toggle-button-custom.mat-slide-toggle.mat-primary .mat-slide-toggle-bar{background-color:#00AEEF!important;border-color:#367fa9!important}.unified-bulk-popup .mat-dialog-container{padding:0!important;border-radius:0!important;padding-top:25px!important;height:fit-content!important;overflow:hidden!important;width:748px!important}.big-toggle-custom-class.toggle-button-custom.mat-slide-toggle.mat-primary .mat-slide-toggle-bar:hover{background-color:#367fa9!important;color:#fff!important;border-color:#00aeef!important}.big-toggle-custom-class.mat-slide-toggle.toggle-button-custom .mat-slide-toggle-thumb:hover{background-color:#e7e7e7!important}.unifi-popup-full-style{overflow-y:hidden!important;overflow-x:hidden!important;border:0 solid #1a3e6f!important;border-bottom:none!important;box-shadow:none!important;max-height:500px!important;border-radius:0!important}.unifi-title{margin-left:15px!important;font-family:'Intel Clear'!important}.file-upload-position{margin-left:20px!important}.intelicon-close.unify-close-btn{float:right!important;margin-top:0!important;background:transparent!important;padding:3px 15px!important;font-size:22px!important;cursor:pointer!important}kendo-upload.unified-upload-style{margin-left:40px!important}.text-dwnlod-style{color:#0071c5!important;text-decoration:none!important;margin-left:20px!important}.text-dwnlod-style:hover{color:#004579!important;text-decoration:underline!important}.unified-upload-style.kuploadaction.k-upload .k-upload-button:hover{background-color:#00AEEF!important}.unified-upload-style.k-upload .k-upload-files .k-upload-action{font-size:15px!important;color:#00AEEF!important}.unified-upload-style button.k-button.k-icon-button.k-button-md.k-rounded-md.k-button-flat.k-button-flat-base.k-upload-action{height:16px!important;width:15px!important;border-radius:10px!important}.unified-upload-style.k-upload .k-upload-files .k-upload-status .k-icon{color:#ffffff!important}#endCustomerUnifyModal .modal-header{border-top-left-radius:0!important;border-top-right-radius:0!important;display:flex!important;flex-shrink:0!important;align-items:center!important;justify-content:space-between!important}.unified-upload-style.k-upload .k-dropzone .k-dropzone-hint{visibility:hidden!important}.unified-upload-style.k-upload .k-dropzone{background-color:#ffffff!important;padding:10px!important}.unified-upload-style.k-upload .k-progressbar{height:2px!important;position:absolute!important;bottom:.5rem!important;width:calc(100% - 0)!important;opacity:1!important;margin-left:-15px!important}.k-i-file-data::before{content:"\e90a"!important}button#command-icon.unifie-edit-style{color:#000000!important;opacity:.45!important}button#command-icon.unifie-edit-style:hover,button#command-icon.unifie-cancel-style:hover,.unifie-cancel-style span.k-icon.k-i-cancel-outline.k-icon-sm.cancel-space-r:hover{background-color:transparent!important;color:#00aeef!important}.unifie-cancel-style span.k-icon.k-i-cancel-outline.k-icon-sm.cancel-space-r{font-weight:bold!important;color:#000!important}button.k-button.unifie-recon-ok{color:#444!important;font-family:'Intel Clear'!important;background-color:#dcdbdb!important;height:60px!important}kendo-dialog-actions.unifie-recon-action.k-dialog-buttongroup{border-width:0!important;padding:0!important;border-radius:0!important}button.k-button.unifie-recon-ok:hover{color:#444!important;border-color:#ebebeb!important;background-color:#ebebeb!important}.unifie-clear-filter{font-size:25px!important;color:#fff!important}.filter-clear-text:hover{background-color:#008bd1!important;border-color:#008bd1!important;border-radius:0!important}.unifie-clear-text{font-size:17px!important;font-family:'Intel Clear'!important;color:#fff!important;font-weight:500!important}.refresh-clear-filter{font-size:15px!important;color:#fff!important;top:-1px!important}#bulkUnifyDealReconExcel td.error-product{color:rgb(252,76,2)!important;font-weight:bold!important}#bulkUnifyDealReconExcel th{white-space:normal!important;font-family:'Intel Clear';font-weight:400;font-size:11px;color:#0071c5;padding-left:2px;padding-right:2px;line-height:1em}
+﻿td.error-product {
+    color: red !important;
+    font-weight: bold !important;
+}
+
+td.success-product {
+    color: green !important;
+    font-weight: bold !important;
+}
+
+td.normal-product {
+    color: black !important;
+    font-weight: normal !important;
+}
+
+td.error-border {
+    border: 1px solid red !important;
+}
+
+td.error-cell {
+    background-color: #fc4c02;
+    border: solid red 1px !important;
+}
+
+td.warning-product {
+    color: orange !important;
+    font-weight: bold !important;
+}
+
+td:not(.error-cell).readonly-cell {
+    background-color: rgb(238, 238, 238) !important;
+}
+
+﻿
+.k-grid.cm-height-table {
+    height: calc(100vh - 205px) !important;
+    width: calc(100% - -50px) !important;
+    left: -24px !important
+}
+
+
+.cancel-space-r {
+    margin-left: -1.14em !important
+}
+
+#spreadsheetUnifyDeals {
+    border: none
+}
+
+    #spreadsheetUnifyDeals .k-dirty-cell {
+        border: none !important;
+        color: red !important
+    }
+
+    #spreadsheetUnifyDeals .k-spreadsheet-formula-bar, #spreadsheetUnifyDeals .k-spreadsheet-name-editor {
+        display: none !important
+    }
+
+.clrGreen {
+    color: #2196f3 !important
+}
+
+.clrRed {
+    color: #ff5722 !important
+}
+
+.btnYellow {
+    color: #F3D54E !important
+}
+
+.dealTools {
+    line-height: 1.8em;
+    height: 100% !important;
+    width: 100%
+}
+
+    .dealTools .gridStatusMarker {
+        font-family: arial
+    }
+
+    .dealTools a {
+        text-decoration: none
+    }
+
+    .dealTools i:hover {
+        color: #003C71
+    }
+
+.gridStatusMarker {
+    width: 16px;
+    color: #000000;
+    background-color: #cccccc;
+    font-size: 14px;
+    font-weight: 600;
+    padding: 4px 2px 4px 7px;
+    margin-left: -10px;
+    margin-right: 5px
+}
+
+    .gridStatusMarker.Working {
+        color: #000000;
+        background-color: #FFA300
+    }
+
+    .gridStatusMarker.Active {
+        color: #000000;
+        background-color: #C4D600
+    }
+
+    .gridStatusMarker.Cancelled {
+        color: #000000;
+        background-color: #cccccc
+    }
+
+.dealTools .md-icon {
+    padding: 4px 0 0 5px
+}
+
+.k-tabstrip-wrapper, .k-tabstrip-bottom, .k-spreadsheet-sheets-bar-add {
+    display: none
+}
+
+.k-button {
+    color: #fff;
+    background-color: #0071c5;
+    border-color: #0071c5;
+    box-shadow: none
+}
+
+    .k-button:hover {
+        background-color: #00aeef;
+        border-color: #00aeef;
+        color: #fff;
+        box-shadow: none
+    }
+
+.tmpltItem {
+    width: 100%
+}
+
+.tmpltIcn {
+    width: 35px
+}
+
+    .tmpltIcn i {
+        font-size: 26px
+    }
+
+.tmpltContract {
+}
+
+.tmpltRole {
+    font-size: 12px
+}
+
+.tmpltPrimary {
+    font-size: 14px;
+    line-height: 1.1em
+}
+
+.tmpltSecondary {
+    font-size: 12px;
+    line-height: 1.1em;
+    opacity: .6
+}
+
+.action_btns {
+    margin-bottom: 20px
+}
+
+#endCustomerUnifyModal .modal-footer {
+    position: relative;
+    bottom: -24px;
+    width: 100%;
+    background: #efefef;
+    height: 60px;
+    border: 1px solid #003c71;
+    margin-left: -2px
+}
+
+kendo-upload-action-buttons {
+    display: none
+}
+
+#modalBodyDiv .row {
+    margin-left: 20px
+}
+
+.k-selectbox {
+    height: 10px;
+    margin-bottom: 10px
+}
+
+.btn-success {
+    color: #000000;
+    background-color: #C4D600 !important;
+    border-color: #adbd00 !important
+}
+
+    .btn-success[disabled] {
+        color: #b1babf;
+        background-color: #edeff0 !important;
+        border-color: #b1babf !important
+    }
+
+/*.notes {
+    font-size: 14px;
+    margin-left: 40px;
+    padding: 0
+}*/
+
+.bluebold {
+    color: #0071c5;
+    font-weight: bold
+}
+
+.redbold {
+    color: red;
+    font-weight: bold
+}
+
+.modal-dialog {
+    width: 750px;
+    margin-top: 100px
+}
+
+.fontSmall {
+    font-size: 12px !important
+}
+
+.bigSmall {
+    font-size: 15px !important
+}
+
+#modalTitle {
+    float: left;
+    margin-top: -15px
+}
+
+#endCustomerUnifyModal .modal-body {
+    overflow: auto;
+    width: 100%;
+    max-height: 500px;
+    border-bottom: none
+}
+
+.modalBlueBody {
+    background-color: #003C71;
+    color: #ffffff
+}
+
+#endCustomerUnifyModal .modal-header {
+    border-bottom: 1px solid #e5e5e5 !important;
+    min-height: 16.5px !important;
+    padding: 7px !important;
+    background-color: #003C71 !important;
+    color: #ffffff !important
+}
+
+div[index="0"] {
+    z-index: 3 !important
+}
+
+.modal-backdrop {
+    display: none !important
+}
+
+#btnClose {
+    float: right;
+    margin-top: -15px;
+    background: transparent;
+    padding: 3px;
+    font-size: 22px;
+    cursor: pointer
+}
+
+.btn-default.active:hover {
+    color: #fff !important;
+    background-color: #367fa9 !important;
+    border-color: #00aeef !important
+}
+
+.btn-default.active {
+    color: #fff !important;
+    background-color: #00AEEF !important;
+    border-color: #367fa9 !important
+}
+
+.floatRight {
+    float: right
+}
+
+.ss-loading-overlay {
+    background: transparent !important
+}
+
+#endCustomerWarning .k-button, #endCustomerWarning .k-button:hover {
+    color: #444 !important;
+    border-color: #fafafa;
+    background-color: #cccccc !important
+}
+
+    #endCustomerWarning .k-button:hover {
+        color: #444 !important;
+        border-color: #fafafa;
+        background-color: #FAFAFA !important
+    }
+
+#endCustomermodalBody {
+    padding-top: 1rem !important
+}
+
+#endCustomerModalHeader {
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+    min-height: 16.5px;
+    line-height: 1.5
+}
+
+#modal-title {
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif
+}
+
+.bluebold {
+    color: #0071c5;
+    font-weight: bold
+}
+
+.redbold {
+    color: red;
+    font-weight: bold
+}
+
+.modal-dialog {
+    width: 750px;
+    margin-top: 100px
+}
+
+#modalBodyDiv .row {
+    margin-left: 20px
+}
+
+.mat-slide-toggle.big-toggle-custom-class .mat-slide-toggle-thumb {
+    width: 12px !important;
+    border-radius: 3px !important;
+    margin: 0 auto !important;
+    border-color: #b1babf !important;
+    background-color: #eee !important;
+    height: 25px !important;
+    padding: 0 !important
+}
+
+.k-upload .k-actions {
+    display: none
+}
+
+.unified-upload-style.kuploadaction.k-upload .k-upload-button {
+    min-width: 7.41em !important;
+    border-color: #fafafa !important;
+    color: #fff !important;
+    font-family: 'Intel Clear';
+    background-color: #0071c5 !important;
+    border-color: #0071c5 !important;
+    font-size: 15px !important;
+    border: none !important;
+    font-weight: 400 !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important;
+    text-transform: uppercase !important;
+    border-radius: 0 !important
+}
+
+.big-toggle-custom-class.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb-container {
+    transform: translate3d(-4px,0,0) !important
+}
+
+.big-toggle-custom-class.mat-slide-toggle.toggle-button-custom .mat-slide-toggle-thumb {
+    width: 10px !important;
+    border-radius: 1px !important;
+    margin: 0 auto !important;
+    border-color: #737577d9 !important;
+    background-color: #eee !important;
+    height: 23px !important;
+    margin-top: 2.5px !important;
+    padding: 1px !important;
+    margin-left: 88.5px !important;
+    box-shadow: none !important
+}
+
+.k-button:hover {
+    background-color: #00aeef !important;
+    border-color: #00aeef !important
+}
+
+.big-toggle-custom-class.toggle-button-custom.mat-slide-toggle:not(.mat-checked) .mat-slide-toggle-bar::after {
+    content: 'Bulk Unify' !important;
+    font-size: 10px !important;
+    color: #fff !important;
+    position: absolute !important;
+    left: 22px !important;
+    top: -1px !important;
+    font-weight: normal !important
+}
+
+.big-toggle-custom-class.mat-slide-toggle.mat-checked .mat-slide-toggle-bar::after {
+    content: 'Deal Recon' !important;
+    font-size: 10px !important;
+    color: #ffffff !important;
+    padding-left: 20px !important;
+    font-weight: normal !important
+}
+
+.big-toggle-custom-class.mat-slide-toggle.toggle-button-custom .mat-slide-toggle-bar {
+    height: 24px !important;
+    border-radius: 3px !important;
+    margin: 0 auto !important;
+    border: 1px solid transparent !important;
+    border-color: #b1babf !important;
+    width: 100px !important;
+    position: absolute !important;
+    background-color: #00aeef !important
+}
+
+.big-toggle-custom-class.toggle-button-custom.mat-slide-toggle.mat-primary .mat-slide-toggle-bar {
+    background-color: #00AEEF !important;
+    border-color: #367fa9 !important
+}
+
+.unified-bulk-popup .mat-dialog-container {
+    padding: 0 !important;
+    border-radius: 0 !important;
+    padding-top: 25px !important;
+    height: fit-content !important;
+    overflow: hidden !important;
+    width: fit-content !important;
+    height: fit-content !important;
+    min-width: 776px !important;
+    max-width: min-content !important;
+}
+
+.big-toggle-custom-class.toggle-button-custom.mat-slide-toggle.mat-primary .mat-slide-toggle-bar:hover {
+    background-color: #367fa9 !important;
+    color: #fff !important;
+    border-color: #00aeef !important
+}
+
+.big-toggle-custom-class.mat-slide-toggle.toggle-button-custom .mat-slide-toggle-thumb:hover {
+    background-color: #e7e7e7 !important
+}
+
+.unifi-popup-full-style {
+    overflow-y: hidden !important;
+    overflow-x: hidden !important;
+    border: 0 solid #1a3e6f !important;
+    border-bottom: none !important;
+    box-shadow: none !important;
+    max-height: 500px !important;
+    border-radius: 0 !important
+}
+
+.unifi-title {
+    margin-left: 15px !important;
+    font-family: 'Intel Clear' !important
+}
+
+.file-upload-position {
+    margin-left: 20px !important
+}
+
+.intelicon-close.unify-close-btn {
+    float: right !important;
+    margin-top: 0 !important;
+    background: transparent !important;
+    padding: 3px 15px !important;
+    font-size: 22px !important;
+    cursor: pointer !important
+}
+
+kendo-upload.unified-upload-style {
+    margin-left: 40px !important
+}
+
+.text-dwnlod-style {
+    color: #0071c5 !important;
+    text-decoration: none !important;
+    margin-left: 20px !important
+}
+
+    .text-dwnlod-style:hover {
+        color: #004579 !important;
+        text-decoration: underline !important
+    }
+
+.unified-upload-style.kuploadaction.k-upload .k-upload-button:hover {
+    background-color: #00AEEF !important
+}
+
+.unified-upload-style.k-upload .k-upload-files .k-upload-action {
+    font-size: 15px !important;
+    color: #00AEEF !important
+}
+
+.unified-upload-style button.k-button.k-icon-button.k-button-md.k-rounded-md.k-button-flat.k-button-flat-base.k-upload-action {
+    height: 16px !important;
+    width: 15px !important;
+    border-radius: 10px !important
+}
+
+.unified-upload-style.k-upload .k-upload-files .k-upload-status .k-icon {
+    color: #ffffff !important
+}
+
+#endCustomerUnifyModal .modal-header {
+    border-top-left-radius: 0 !important;
+    border-top-right-radius: 0 !important;
+    display: flex !important;
+    flex-shrink: 0 !important;
+    align-items: center !important;
+    justify-content: space-between !important
+}
+
+.unified-upload-style.k-upload .k-dropzone .k-dropzone-hint {
+    visibility: hidden !important
+}
+
+.unified-upload-style.k-upload .k-dropzone {
+    background-color: #ffffff !important;
+    padding: 10px !important
+}
+
+.unified-upload-style.k-upload .k-progressbar {
+    height: 1.4px !important;
+    position: absolute !important;
+    bottom: .5rem !important;
+    width: 639px !important;
+    opacity: 1 !important;
+    margin-left: -15px !important;
+}
+
+.k-i-file-data::before {
+    content: "\e90a" !important
+}
+
+button#command-icon.unifie-edit-style {
+    color: #000000 !important;
+    opacity: .45 !important
+}
+
+    button#command-icon.unifie-edit-style:hover, button#command-icon.unifie-cancel-style:hover, .unifie-cancel-style span.k-icon.k-i-cancel-outline.k-icon-sm.cancel-space-r:hover {
+        background-color: transparent !important;
+        color: #00aeef !important
+    }
+
+.unifie-cancel-style span.k-icon.k-i-cancel-outline.k-icon-sm.cancel-space-r {
+    font-weight: bold !important;
+    color: #000 !important
+}
+
+button.k-button.unifie-recon-ok {
+    color: #444 !important;
+    font-family: 'Intel Clear' !important;
+    background-color: #dcdbdb !important;
+    height: 60px !important
+}
+
+kendo-dialog-actions.unifie-recon-action.k-dialog-buttongroup {
+    border-width: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important
+}
+
+button.k-button.unifie-recon-ok:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important
+}
+
+.unifie-clear-filter {
+    font-size: 20px !important;
+    color: #fff !important
+}
+
+.filter-clear-text:hover {
+    background-color: #008bd1 !important;
+    border-color: #008bd1 !important;
+    border-radius: 0 !important
+}
+
+.unifie-clear-text {
+    font-size: 17px !important;
+    font-family: 'Intel Clear' !important;
+    color: #fff !important;
+    font-weight: 500 !important
+}
+
+.refresh-clear-filter {
+    font-size: 15px !important;
+    color: #fff !important;
+    top: -1px !important
+}
+
+#bulkUnifyDealReconExcel td.error-product {
+    color: rgb(252,76,2) !important;
+    font-weight: bold !important
+}
+
+#bulkUnifyDealReconExcel th {
+    white-space: normal !important;
+    font-family: 'Intel Clear';
+    font-weight: 400;
+    font-size: 11px;
+    color: #0071c5;
+    padding-left: 2px;
+    padding-right: 2px;
+    line-height: 1em
+}
+.bulk-uplod-full-popup .k-window.k-dialog {
+    overflow: hidden !important;
+    width: fit-content !important;
+    max-width: 1070px !important;
+    color: #444 !important;
+    height: fit-content !important;
+    /*max-height: 230px !important;*/
+    font-family: 'Intel Clear' !important;
+}
+
+button.k-button.bulk-ok-modal {
+    color: #fff !important;
+    font-family: 'Intel Clear' !important;
+    background-color: #0071c5 !important;
+    height: 60px !important
+}
+
+button.k-button.bulk-ok-modal:hover {
+    color: #fff !important;
+    border-color: #00aeef !important;
+    background-color: #00aeef !important
+}
+
+kendo-dialog-actions.bulk-action-style.k-dialog-buttongroup {
+    border-width: 0 !important;
+    padding: 0 !important;
+    border-radius: 0 !important
+}
+
+.bulk-uplod-full-popup .k-content.k-window-content.k-dialog-content {
+    padding: 25px !important
+}
+
+#bulkUnifyDealReconExcel .wtHolder {
+    position: relative !important;
+    height: auto !important;
+    width: auto !important;
+}
+
+.bulk-top-text {
+    height: 300px !important;
+    margin-top: 80px !important;
+    position: relative !important;
+}
+.notes_admin {
+    font-size: 14px !important;
+    margin-left: 40px !important;
+    padding: 0 !important;
+    top: -379px !important;
+    position: relative !important;
+    width: 1374px !important;
+}

@@ -8,6 +8,7 @@ import 'rxjs/add/operator/toPromise';
 })
 export class unifiedDealReconService {
     public apiBaseUrl = "api/PrimeCustomers/";
+    public apiUnifyFileUrl = "/FileAttachments/";
 
     constructor(private httpClient: HttpClient) {
 
@@ -63,7 +64,7 @@ export class unifiedDealReconService {
     }
 
     public ValidateUnifyDeals(lstUnifyDeals): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'ValidateBulkUnifyDeals';
+        const apiUrl: string = this.apiUnifyFileUrl + 'ValidateBulkUnifyDeals';
         return this.httpClient.post(apiUrl, lstUnifyDeals);
     }
 
@@ -80,6 +81,16 @@ export class unifiedDealReconService {
     public getRplStatusCodes(): Observable<any> {
         const apiUrl: string = this.apiBaseUrl + 'GetRplStatusCodes';
         return this.httpClient.get(apiUrl);
+    }
+    public ValidateDealReconRecords(lstDealRecon): Observable<any> {
+        const apiUrl: string = this.apiUnifyFileUrl + 'ValidateDealReconRecords';
+        return this.httpClient.post(apiUrl, lstDealRecon);
+
+    }
+    public updateDealRecon(lstDealRecon): Observable<any> {
+        const apiUrl: string = this.apiBaseUrl + 'updateDealRecon';
+        return this.httpClient.post(apiUrl, lstDealRecon);
+
     }
 
 }

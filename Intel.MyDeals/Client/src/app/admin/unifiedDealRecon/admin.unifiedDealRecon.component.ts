@@ -26,8 +26,8 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
     styleUrls: ['Client/src/app/admin/unifiedDealRecon/admin.unifiedDealRecon.component.css']
 })
 export class adminUnifiedDealReconComponent {
-    
-    constructor(private unifiedDealReconSvc: unifiedDealReconService, private loggerSvc: logger, protected dialog: MatDialog ) {
+
+    constructor(private unifiedDealReconSvc: unifiedDealReconService, private loggerSvc: logger, protected dialog: MatDialog) {
         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
@@ -131,12 +131,6 @@ export class adminUnifiedDealReconComponent {
     }
 
     openEndCustomerModal(dataItem, sender, rowIndex) {
-        /*this.dataItems = {
-            "IS_PRIMED_CUST": dataItem.IS_PRIME, "IS_RPL": dataItem.IS_RPL,
-            "PRIMED_CUST_NM": dataItem.PRIMED_CUST_NM, "PRIMED_CUST_ID": dataItem.PRIMED_CUST_ID,
-            "PRIMED_CUST_CNTRY": dataItem.PRIMED_CUST_CNTRY, "END_CUST_OBJ": dataItem.END_CUST_OBJ,
-            "END_CUSTOMER_RETAIL": dataItem.END_CUSTOMER_RETAIL
-        }*/
         const dialogRef = this.dialog.open(endCustomerRetailModalComponent, {
             width: "1000px",
             autoFocus: false,
@@ -174,8 +168,6 @@ export class adminUnifiedDealReconComponent {
                 }
                 if (endCustomerData.IS_PRIME) {
                     sender.closeRow(rowIndex);
-                    //dataItem.END_CUSTOMER_RETAIL = endCustomerData.END_CUSTOMER_RETAIL
-                    //dataItem.END_CUSTOMER_COUNTRY = endCustomerData.PRIMED_CUST_CNTRY;
                     const cust_map: Unified_Deal_Recon = this.formGroup.getRawValue();
                     this.unifiedDealReconSvc.UpdateUnPrimeDeals(dataItem.OBJ_SID, this.dataItems).subscribe((response) => {
                         if (response) {
@@ -187,9 +179,6 @@ export class adminUnifiedDealReconComponent {
                         }
                         this.isLoading = false;
                         this.isWarning = true;
-                        //this.gridResult[this.editedRowIndex] = this.dataItems;
-                        //this.gridResult.push(this.dataItems);
-                        //this.loadDealReconciliation();
                         this.refreshGrid();
                         this.loggerSvc.success("Unified Deal Recon updated.");
                     }, (error) => {
@@ -233,9 +222,6 @@ export class adminUnifiedDealReconComponent {
             this.unifiedDealReconSvc.UpdateUnPrimeDeals(dataItem.OBJ_SID, this.dataItems).subscribe(
                 (response) => {
                     sender.closeRow(rowIndex);
-                    //this.gridResult[rowIndex] = cust_map;
-                    //this.gridResult.push(cust_map);
-                    //this.loadDealReconciliation();
                     this.refreshGrid();
                     this.loggerSvc.success("Unified Deal Recon updated.");
                 },
@@ -250,13 +236,11 @@ export class adminUnifiedDealReconComponent {
 
     endCustSave(encustData, OBJ_SID) {
         const cust_map: Unified_Deal_Recon = this.formGroup.getRawValue();
-    //if (this.isFormChange) {
         this.unifiedDealReconSvc.UpdateUnPrimeDeals(OBJ_SID, encustData).subscribe(
             (response) => {
                 if (response) {
                     this.message = "Deal End Customer Unified successfully";
                 } else {
-                    //alert("Selected Customer is not a Unified Customer");
                     this.message = "Selected Customer is not a Unified Customer";
                 }
                 this.isWarning = true;
@@ -270,13 +254,12 @@ export class adminUnifiedDealReconComponent {
                 this.isLoading = false;
             }
         );
-    //}
-}
+    }
 
     OpenBulkUploadUnifyModal() {
         const dialogRef = this.dialog.open(bulkUnifyModalComponent, {
             height: 'auto',
-            /*width: '600px',*/
+            /*   width: '1500px',*/
             //  data: renameData,
             panelClass: 'unified-bulk-popup'
 

@@ -11,3 +11,8 @@ kendo-grid.contract-history-style span.k-icon.k-i-filter:hover {
 .globalSearch-popupbox .k-window.k-dialog {
     border-radius: 0 !important;
 }
+kendo-grid.admin-deal-grid.k-widget.k-grid {
+    height: calc(100vh - 205px) !important;
+    width: calc(100% - -50px) !important;
+    left: -24px !important
+}

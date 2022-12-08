@@ -38,132 +38,131 @@
             width: 75
         }
     ]
-    static bulkUnifyColHeaders = ["Deal ID", "Unified Customer ID", "Unified Customer Name", "Country/Region Customer ID", "Unified Country/Region", "End Customer Retail", "End Customer Country/Region", "RPL Status Code","Error Messages"]
+    static bulkUnifyColHeaders = ["Deal ID", "Unified Customer ID", "Unified Customer Name", "Country/Region Customer ID", "Unified Country/Region", "End Customer Retail", "End Customer Country/Region", "RPL Status Code", "Error Messages"]
     static bulkUnifyColumns = [
         {
-            data: 'DEAL_ID',
+            data: 'DEAL_ID',//0 deal id
             type: 'numeric',
             readOnly: false,
             width: 75
         },
         {
-            data: 'UCD_GLOBAL_ID',
+            data: 'UCD_GLOBAL_ID',//1 Unified Customer ID
             type: 'numeric',
             readOnly: false,
-            width: 100
+            width: 130
         },
         {
-            data: 'UCD_GLOBAL_NAME',
+            data: 'UCD_GLOBAL_NAME',//2 Unified Customer Name
             type: 'text',
             readOnly: false,
-            width: 150
+            width: 180
         },
         {
-            data: 'UCD_COUNTRY_CUST_ID',
+            data: 'UCD_COUNTRY_CUST_ID',//3 Country/Region Customer ID
             type: 'numeric',
             readOnly: false,
-            width: 100
+            width: 130
         },
         {
-            data: 'UCD_COUNTRY',
+            data: 'UCD_COUNTRY',//4 Unified Country/Region
+            type: 'text',
+            readOnly: false,
+            width: 180
+        },
+        {
+            data: 'DEAL_END_CUSTOMER_RETAIL',//5 End Customer Retail
             type: 'text',
             readOnly: false,
             width: 150
         },
         {
-            data: 'DEAL_END_CUSTOMER_RETAIL',
+            data: 'DEAL_END_CUSTOMER_COUNTRY',//6 End Customer Country/Region
             type: 'text',
             readOnly: false,
-            width: 150
+            width: 180
         },
         {
-            data: 'DEAL_END_CUSTOMER_COUNTRY',
+            data: 'RPL_STS_CODE',//7 RPL Status code
             type: 'text',
             readOnly: false,
-            width: 150
+            width: 180
         },
         {
-            data: 'RPL_STS_CODE',
-            type: 'text',
-            readOnly: false,
-            width: 150
-        },
-        {
-            type: 'text',
+            type: 'text',//8 Error Msges
             readOnly: true,
-            width: 200
+            width: 260
         },
     ]
-    static bulkUnifyDealReconColHeaders = ["Deal ID", "Unified Customer ID", "Unified Customer Name", "Country/Region Customer ID", "Unified Country/Region", "To Be Unified Customer ID", "To Be Unified Customer Name", "To Be Country/Region Customer ID", "To Be Unified Country/Region", "RPL Status Code","Error Messages"]
-    static bulkUnifyDealReconColumns = [
+    static DealReconColHeaders = ["Deal ID", "Unified Customer ID", "Unified Customer Name", "Country/Region Customer ID", "Unified Country/Region", "To Be Unified Customer ID", "To Be Unified Customer Name", "To Be Country/Region Customer ID", "To Be Unified Country/Region", "RPL Status Code", "Error Messages"]
+    static DealReconColumns = [
         {
-            data: 'DEAL_ID',
+            data: 'Deal_ID',// 0 Deal ID A
             type: 'numeric',
             readOnly: false,
             width: 75
         },
         {
-            data: 'EXISTING_UCD_GLOBAL_ID',
+            data: 'Unified_Customer_ID',//1 Unified Customer ID B
             type: 'numeric',
             readOnly: false,
             width: 100
         },
         {
-            data: 'EXISTING_UCD_GLOBAL_NAME',
+            data: 'Unified_Customer_Name',//2 Unified Customer Name c
             type: 'text',
             readOnly: false,
             width: 150
         },
         {
-            data: 'EXISTING_UCD_COUNTRY_CUST_ID',
+            data: 'Country_Region_Customer_ID',//3 d Country Region Customer ID
             type: 'numeric',
             readOnly: false,
             width: 100
         },
         {
-            data: 'EXISTING_UCD_COUNTRY',
+            data: 'Unified_Country_Region',//4 e Unified Country Region
             type: 'text',
             readOnly: false,
             width: 150
         },
         {
-            data: 'NEW_UCD_GLOBAL_ID',
-            type: 'text',
-            readOnly: false,
-            width: 100
-        },
-        {
-            data: 'NEW_UCD_GLOBAL_NAME',
+            data: 'To_be_Unified_Customer_ID',//5 f To be Unified Customer ID
             type: 'text',
             readOnly: false,
             width: 150
         },
         {
-            data: 'NEW_UCD_COUNTRY_CUST_ID',
+            data: 'To_be_Unified_Customer_Name',//6 g To be Unified Customer Name
+            type: 'text',
+            readOnly: false,
+            width: 120
+        },
+        {
+            data: 'To_be_Country_Region_Customer_ID',//7 h To be Country Region Customer ID
             type: 'numeric',
             readOnly: false,
+            width: 150
+        },
+        {
+            data: 'To_be_Unified_Country_Region',//8 i To be Unified Country Region
+            type: 'text',
+            readOnly: false,
             width: 100
         },
         {
-            data: 'NEW_UCD_COUNTRY',
+            data: 'Rpl_Status_Code', // 9 j 
             type: 'text',
             readOnly: false,
-            width: 150
-        },
-        {
-            data: 'RPL_STS_CD',
-            type: 'text',
-            readOnly: false,
-            width: 150
+            width: 120
         },
         {
             data: 'ERR_MSG',
             type: 'text',
             readOnly: false,
-            width: 200
+            width: 260
         }
     ]
-
     static legalExceptionExcelColumns = [
         {
             title: "Active",

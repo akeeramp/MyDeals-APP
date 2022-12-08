@@ -5,11 +5,11 @@
     <div class="modal-content unifi-popup-full-style" id="endCustomerUnifyModal">
         <div class="modal-header modalBlueBody">
             <h3 class="modal-title unifi-title" id="modal-title">{{screenTitle}}</h3>
-            <i id="btnClose" class="intelicon-close unify-close-btn" (click)="CloseWindow()" title="Close this window"></i>
+            <i id="btnClose" class="intelicon-close unify-close-btn" (click)="closeWindow()" title="Close this window"></i>
         </div>
         <!--ng-if="vm.HasBulkUploadAccess"-->
-        <div id="modalBodyDiv" *ngIf="inValidUnifyDeals.length==0" class="modal-body">
-            <div>
+        <div id="modalBodyDiv" class="modal-body">
+            <div *ngIf="tableData.length==0">
                 <div class="col-md-6 file-upload-position"></div>
                 <div class="col-md-2"
                      style="left:40px;font-size:medium">
@@ -18,11 +18,7 @@
                     </b>
                 </div>
                 <div class="col-md-3" style="left:8px;">
-                    <!--<toggle size="btn-sm" ng-model="vm.isBulkUnify"
-                    off="Deal Recon"
-                    on="Bulk Unify"
-                    ng-click="vm.toggleType(vm.isBulkUnify)">
-            </toggle>-->
+
                     <mat-slide-toggle class="fl toggle-accept toggle-button-custom big-toggle-custom-class"
                                       size="btn-mid"
                                       off="Deal Recon"
@@ -32,49 +28,51 @@
                                       title="{{true == true ? 'Active' : 'Inactivate'}}">
 
                     </mat-slide-toggle>
-                    <!--<mat-slide-toggle class="fl toggle-accept toggle-button-custom"
-              [(ngModel)]="IsActive"
-              on="Active"
-              off="Inactive"
-              onstyle="btn-success"
-              offstyle="btn-danger"
-            ></mat-slide-toggle>-->
+                </div>
+
+                <div class="col-md-11">&nbsp;</div>
+                <div class="col-md-11 notes">
+                    <span class="redbold">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Your attachment will upload after clicking the "Upload" button.</span><br /><br />
+                </div>
+                <div class="form-group">
+                    <div class="col-md-11">
+                        <kendo-upload [saveUrl]="uploadSaveUrl" [batch]="true" [multiple]="false"
+                                      [restrictions]="myRestrictions" (success)="successEventHandler($event)" (error)="onFileUploadError()" (complete)="onFileUploadComplete()"
+                                      [autoUpload]="false" [(ngModel)]="files" name="files" class="kuploadaction unified-upload-style"></kendo-upload>
+                    </div>
+                </div>
+                <div class="form-group row">
+                    <div class="col-md-8">
+                        <a class="text-dwnlod-style" download target="_blank" href={{fileURL}}>Click here to download the template</a>
+                    </div>
+                    <div class="col-md-3" style="padding-left:2px;">
+                        <button (click)="uploadFile()" class="btn btn-primary">Upload Unified Data</button>
+                    </div>
                 </div>
             </div>
-            <div class="col-md-11">&nbsp;</div>
-            <div class="col-md-11 notes">
-                <span class="redbold">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Your attachment will upload after clicking the "Upload" button.</span><br /><br />
+            <div *ngIf="tableData.length != 0">
+                <kendo-splitter orientation="vertical" class="bulk-top-text">
+                    <kendo-splitter-pane>
+                        <hot-table id="bulkUnifyDealReconExcel" [hotId]="hotId" [settings]="hotSettings" [data]="tableData" class="all-spread"></hot-table>
+                    </kendo-splitter-pane>
+                </kendo-splitter>
             </div>
-            <div class="form-group">
-                <div class="col-md-11">
-                    <kendo-upload [saveUrl]="uploadSaveUrl" [batch]="true" [multiple]="false"
-                                  [restrictions]="myRestrictions" (success)="successEventHandler($event)" (error)="onFileUploadError()" (complete)="onFileUploadComplete()"
-                                  [autoUpload]="false" [(ngModel)]="files" name="files" class="kuploadaction unified-upload-style"></kendo-upload>
-                </div>
-            </div>
-            <div class="form-group row">
-                <div class="col-md-8">
-                    <a class="text-dwnlod-style" download target="_blank" href={{fileURL}}>Click here to download the template</a>
-                </div>
-                <div class="col-md-3" style="padding-left:2px;">
-                    <button (click)="uploadFile()" class="btn btn-primary">Upload Unified Data</button>
+            <div *ngIf="tableData.length != 0">
+                <div class="col-md-11 notes_admin">
+                    <span class="redbold">NOTE:</span>
+                    <span *ngIf="(isBulkUnify)">Deal ID ,Unified Customer ID and Country/Region Customer ID should be numeric. And its value range is 0 - 2,147,483,647. If excel contains value more than this range, it will be automatically reset to '0'. Fix the validation errors.<br /></span>
+                    <span *ngIf="(!isBulkUnify)">Deal ID ,Unified Customer ID, Country/Region Customer ID, 'To Be Unified Customer ID' and 'To Be Unified Country/Region' should be numeric. And its value range is 0 - 2,147,483,647. If excel contains value more than this this range, it will automatically reset to '0'. Fix the validation errors.<br /></span>
+                    <span>The Possible Values for RPL Status code are EC,ECB,NOPAYIN,NOPAYOUT,NOSNCTN,NOTRDIN,NOTRDOUT,PAYCOND,REVIEWWIP,TRDCOND. Multiple RPL Status codes can be given seperated by comma</span><br /><br />
                 </div>
             </div>
         </div>
-            <div *ngIf="inValidUnifyDeals.length > 0">
-                <kendo-splitter orientation="vertical" style="height:230px">
-                    <kendo-splitter-pane>
-                        <hot-table id="bulkUnifyDealReconExcel" [hotId]="hotId" [settings]="hotSettings" [data]="inValidUnifyDeals" class="all-spread"></hot-table>
-                    </kendo-splitter-pane>
-                </kendo-splitter>
-            </div>  
-        <div class="modal-footer" *ngIf="inValidUnifyDeals.length > 0">
+        <div class="modal-footer" *ngIf="tableData.length != 0">
             <div class="form-group row action_btns">
                 <div class="col-md-12" style="right:10px">
-                    <button class="btn btn-primary" style="margin-left: 15px">
+                    <button (click)="ValidateUnifyDeals()" class="btn btn-primary" style="margin-left: 15px">
                         Save and Validate
                     </button>
-                 
+
                     <button (click)="closeWindow()" class="btn btn-primary" style="margin-left: 15px">
                         Cancel /
                         Close
@@ -85,9 +83,9 @@
         <br />
     </div>
 </form>
-<kendo-dialog (close)="closeAlert()" *ngIf="isAlert" id="bulkUnifyAlert">
-    <p [innerHTML]='alertMsg'></p>
-    <kendo-dialog-actions>
-        <button kendoButton (click)="closeAlert()" themeColor="primary">OK</button>
+<kendo-dialog (close)="closeAlert()" class="bulk-uplod-full-popup" *ngIf="isAlert" id="bulkUnifyAlert">
+    <p [innerHtml]='alertMsg'></p>
+    <kendo-dialog-actions class="bulk-action-style">
+        <button kendoButton class="bulk-ok-modal" (click)="closeAlert()" themeColor="primary">OK</button>
     </kendo-dialog-actions>
 </kendo-dialog>
