@@ -65,6 +65,7 @@ export class pricingTableComponent {
     private rowlength: any;
     private searchText: any;
     private selectedTab: any;
+    public error: boolean = false;
 
     public searchedContractData = {
         Model: "",
@@ -227,7 +228,7 @@ export class pricingTableComponent {
         this.isLoading = true;
         this.setBusy("Loading...", "Loading data please wait", "Info", true);
         this.pricingTableSvc.readContract(this.c_Id).subscribe((response: Array<any>) => {
-            if(response && response.length>0){
+            if (response && response.length > 0) {
                 this.contractData = response[0];
                 //if it is Tender deal redirect to Tender manager
                 if (response[0].IS_TENDER && response[0].IS_TENDER == 1) {
@@ -240,13 +241,13 @@ export class pricingTableComponent {
                     this.loadTemplateDetails(IDS, this.contractData );
                 }
             }
-            else{
-                this.loggerSvc.error('No result found.', 'Error');
+            else {
+                this.error = true;   
             }
             this.isLoading = false;
         }, (error) => {
             this.isLoading = false;
-            this.loggerSvc.error('loadAllContractDetails::readContract:: service', error);
+            this.error = true;  
         })
      
     }
@@ -327,6 +328,10 @@ export class pricingTableComponent {
         this.isInformationIconReqd = value;
     }
 
+    redirect() {
+        this.error = false;
+        document.location.href = "/Dashboard#/portal";
+    }
     ngOnInit() {
         try {
             document.title = "Contract - My Deals";

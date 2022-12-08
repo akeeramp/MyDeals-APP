@@ -166,3 +166,11 @@
         <lnavView [contractId]="c_Id" (modelChange)="loadModel($event)" [changedTab]="selectedTab" [contractData]="contractData" [UItemplate]="UItemplate"></lnavView>
     </div>
 </div>
+
+
+    <kendo-dialog (close)="closeAlert()" *ngIf="error" id="noData" [width]="500" [height]="150">
+        <h3 style="text-align:center">No result found</h3>
+        <kendo-dialog-actions>
+            <button  class="btn btn-primary" kendoButton (click)="redirect()">OK</button>
+        </kendo-dialog-actions>
+    </kendo-dialog>
