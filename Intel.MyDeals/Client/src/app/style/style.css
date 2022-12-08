@@ -68,3 +68,37 @@ kendo-combobox.contract-details-customer.align-text-combo-box .k-icon.k-clear-va
 kendo-combobox.contract-details-customer.align-text-combo-box.closed-alignment-fixes .k-icon.k-clear-value {
     top: 0;
 }
+
+kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li span.k-link {
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    padding: 0.6em !important;
+}
+
+kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper .k-tabstrip-items .k-state-default .k-link:hover {
+    color: #003C71 !important;
+    background-color: #fff !important;
+}
+
+kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li {
+    font-size: 14px !important;
+}
+
+kendo-grid.exclude-filter-style table thead tr th kendo-grid-filter-menu .k-grid-filter.k-state-active {
+    background-color: var(--white);
+    color: var(--light-blue)!important;
+}
+
+kendo-grid.exclude-filter-style table thead tr th kendo-grid-filter-menu .k-grid-filter.k-state-active span.k-icon.k-i-filter,
+kendo-grid.exclude-filter-style table thead tr th kendo-grid-filter-menu span.k-icon.k-i-filter:hover {
+    color: var(--light-blue) !important;
+}
+
+kendo-grid.exclude-filter-style table thead tr th kendo-grid-filter-menu span.k-icon.k-i-filter {
+    font-size: 18px !important;
+    color: #777777 !important;
+    margin-top: 2px !important;
+}
+
+.new-now-wrap.oppo-grids kendo-grid.exclude-filter-style .k-grid-header table thead tr th span.k-cell-inner .k-link {
+    display: flex;
+}

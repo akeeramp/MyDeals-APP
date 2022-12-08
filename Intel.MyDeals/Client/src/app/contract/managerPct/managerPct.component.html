@@ -1,4 +1,4 @@
-﻿<kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="pctTab" style="margin-left: 10px" class="new-allDeals art-kendo-bars">
+﻿<kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="pctTab" style="margin-left: 10px" class="new-allDeals art-kendo-bars manage-pct-tabstrip">
     <kendo-tabstrip-tab title="All" *ngIf="tab === 'pctDiv'" [selected]="selectedTab==0"></kendo-tabstrip-tab>
     <kendo-tabstrip-tab title="Failures" *ngIf="tab === 'pctDiv'"  [selected]="selectedTab==1"></kendo-tabstrip-tab>
     <kendo-tabstrip-tab title="Passes" *ngIf="tab === 'pctDiv'"  [selected]="selectedTab==2"></kendo-tabstrip-tab>

@@ -241,7 +241,8 @@ kendo-upload-action-buttons {
     overflow: auto;
     width: 100%;
     max-height: 500px;
-    border-bottom: none
+    border-bottom: none;
+    padding: 15px !important;
 }
 
 .modalBlueBody {
