@@ -256,7 +256,7 @@ export class contractDetailsComponent {
                     })
                 }
                 //code to bind selected customer division on contract details load for existing contract 
-                if(this.contractData && this.contractData.CUST_ACCNT_DIV && this.CustomerFilter_Divs && this.CustomerFilter_Divs.length>0){
+                if (!this.isCopyContract && this.contractData && this.contractData.CUST_ACCNT_DIV && this.CustomerFilter_Divs && this.CustomerFilter_Divs.length>0){
                     //setting the customer division dropdown value ngModel
                     let selCustDiv= this.contractData.CUST_ACCNT_DIV.split('/');
                     if(selCustDiv && selCustDiv.length>0){
