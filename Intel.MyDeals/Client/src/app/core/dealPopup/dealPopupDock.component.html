@@ -73,8 +73,8 @@
             </ul>
         </div>
     </div>
-    <div *ngFor="let item of ids" style="position: absolute; top: 0; z-index: 1000; left: 0px;">
+    <div  cdkDrag *ngFor="let item of ids"   [cdkDragFreeDragPosition]="item.position" style="position: absolute; top: 0; z-index: 1000; left: 0px;">
 
-        <deal-popup [dealId]="item.id"  [initLeft]="item.left" [initTop]="item.top" [isOpen]="true"></deal-popup>
+        <deal-popup   [dealId]="item.id"  [initLeft]="item.left" [initTop]="item.top" [isOpen]="true"></deal-popup>
     </div>
 </div>

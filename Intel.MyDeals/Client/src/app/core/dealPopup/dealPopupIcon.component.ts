@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { Component,  Input } from "@angular/core";
+﻿import { Component,  Input } from "@angular/core";
 import { AppEvent, broadCastService } from "./broadcast.service";
-import { quickDealConstants } from "../angular.constants";
-import { downgradeComponent } from "@angular/upgrade/static";
+import { quickDealConstants } from "../angular.constants"; 
 
 @Component({
     selector: "deal-popup-icon",
@@ -21,10 +19,10 @@ export class dealPopupIconComponent {
     @Input() dealId; 
 
     menuClick($event) { 
-        let x = $event.clientX + 12;
-        let y = $event.clientY + 2;
+        const x = $event.clientX + 12;
+        const y = $event.clientY + 2;
 
-       let dealdata = {
+       const dealdata = {
            x: x,
            y: y,
            id: this.dealId,

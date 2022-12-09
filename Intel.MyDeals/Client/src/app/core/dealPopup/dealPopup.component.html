@@ -1,32 +1,33 @@
 ﻿
-<div style="position: absolute; top: 150px;  left: 150px;">
-    <div cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle >
-        <div *ngIf="data!=undefined" class="draggable" id="cn-draggable-{{data.DC_ID}}" style="left: {{initLeft || 0}}px; top: {{initTop || 0}}px;">
+<div  style="position: absolute; top: 150px;  left: 150px;">
+    <div id={{data.DC_ID}}>
+        <div  *ngIf="data!=undefined" class="draggable" id="cn-draggable-{{data.DC_ID}}"  [style.top.px]="initTop"
+        [style.left.px]="initLeft" >
 
-            <div class="cn-wrapper" id="cn_wrapper_{{data.DC_ID}}" (click)="wrapperClick()" [ngClass]="{ 'rot1': sel == 1, 'rot2': sel == 2, 'rot3': sel == 3, 'rot4': sel == 4, 'rot5': sel == 5, 'rot6': sel == 6, 'rot7': sel == 7, 'rot8': sel == 8 }">
+            <div class="cn-wrapper" id="cn_wrapper_{{data.DC_ID}}"  [ngClass]="{ 'rot1': sel == 1, 'rot2': sel == 2, 'rot3': sel == 3, 'rot4': sel == 4, 'rot5': sel == 5, 'rot6': sel == 6, 'rot7': sel == 7, 'rot8': sel == 8 }">
                 <ul>
-                    <li (click)="focusMenu($event, 1)" (mouseover)="helpTip=1" (mouseout)="helpTip=0" class="active">
+                    <li (click)="focusMenu($event, 1)" (mouseover)="helpTip=1" (mouseout)="helpTip=0"  [ngClass]="{'active': sel == 1}">
                         <div><a href=""><i class="fa fa-list"></i></a></div>
                     </li>
-                    <li (click)="focusMenu($event, 2)" (mouseover)="helpTip=2" (mouseout)="helpTip=0">
+                    <li (click)="focusMenu($event, 2)" (mouseover)="helpTip=2" (mouseout)="helpTip=0" [ngClass]="{'disabled': disableShedule,'active': sel == 2}">
                         <div><a href=""><i class="fa fa-th"></i></a></div>
                     </li>
-                    <li (click)="focusMenu($event, 3)" (mouseover)="helpTip=3" (mouseout)="helpTip=0">
+                    <li (click)="focusMenu($event, 3)" (mouseover)="helpTip=3" (mouseout)="helpTip=0" [ngClass]="{'active': sel == 3}">
                         <div><a href=""><i class="fa fa-search"></i></a></div>
                     </li>
-                    <li (click)="focusMenu($event, 4)" (mouseover)="helpTip=4" (mouseout)="helpTip=0">
+                    <li (click)="focusMenu($event, 4)" (mouseover)="helpTip=4" (mouseout)="helpTip=0" [ngClass]="{'active': sel == 4}">
                         <div><a href=""><i class="fa fa-microchip"></i></a></div>
                     </li>
-                    <li (click)="focusMenu($event, 5)" (mouseover)="helpTip=5" (mouseout)="helpTip=0">
+                    <li (click)="focusMenu($event, 5)" (mouseover)="helpTip=5" (mouseout)="helpTip=0" [ngClass]="{'active': sel == 5}">
                         <div><a href=""><i class="fa fa-comment-o"></i></a></div>
                     </li>
-                    <li (click)="focusMenu($event, 6)" (mouseover)="helpTip=6" (mouseout)="helpTip=0">
+                    <li (click)="focusMenu($event, 6)" (mouseover)="helpTip=6" (mouseout)="helpTip=0" [ngClass]="{'active': sel == 6}">
                         <div><a href=""><i class="fa fa-clock-o"></i></a></div>
                     </li>
-                    <li (click)="focusMenu($event, 7)" (mouseover)="helpTip=7" (mouseout)="helpTip=0">
+                    <li (click)="focusMenu($event, 7)" (mouseover)="helpTip=7" (mouseout)="helpTip=0" [ngClass]="{'disabled': disableQoute,'active': sel == 7}">
                         <div><a href=""><i class="fa fa-quote-right"></i></a></div>
                     </li>
-                    <li (click)="focusMenu($event, 8)" (mouseover)="helpTip=8" (mouseout)="helpTip=0">
+                    <li (click)="focusMenu($event, 8)" (mouseover)="helpTip=8" (mouseout)="helpTip=0" [ngClass]="{'active': sel == 8}">
                         <div><a href=""><i class="fa fa-usd"></i></a></div>
                     </li>
                 </ul>
@@ -53,7 +54,7 @@
                             <div class="textCircle valid_{{ data.PASSED_VALIDATION }}" title="{{data.OBJ_SET_TYPE_CD}}">
                                 {{ data.OBJ_SET_TYPE_CD  }}
                             </div>
-                            <div class="textCircle" *ngIf="CAN_VIEW_MEET_COMP" style="background-color: {{getColorMct(data.MEETCOMP_TEST_RESULT)}};" title="Meet Comp Test: {{ data.MEETCOMP_TEST_RESULT || 'Not Run Yet' }}">
+                            <div class="textCircle" *ngIf="CAN_VIEW_MEET_COMP"  style="background-color: {{getColorMct(data.MEETCOMP_TEST_RESULT)}};" title="Meet Comp Test: {{ data.MEETCOMP_TEST_RESULT || 'Not Run Yet' }}">
                                 <i class="fa fa-tablet"></i>
                             </div>
                             <div class="textCircle" *ngIf="CAN_VIEW_COST_TEST" style="background-color: {{getColorPct(data.COST_TEST_RESULT)}};" title="Price Cost Test: {{ data.COST_TEST_RESULT || 'Not Run Yet' }}">
@@ -195,7 +196,32 @@
                     </div>
                 </div>
                 <div class="body-no-pad">
-                    <!--<kendo-grid id="grid_sched_ data.DC_ID" options="scheduleGridOptions" class="micro-grid" style="height: 120px; border: 0 solid transparent;"></kendo-grid>-->
+                    <kendo-grid [data]="schedulegridData" [resizable]="true" [group]="group"
+                                [sort]="schedulestate.sort" [sortable]="true" class="micro-grid" (dataStateChange)="dataScheduleStateChange($event)" style="height: 140px">
+
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="40" field="TIER_NBR" title="Tier"  *ngIf="showSedulecolums">
+                        </kendo-grid-column>
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="40" field="STRT_VOL" title="Start"  *ngIf="showSedulecolums">
+                        </kendo-grid-column>
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="40" field="END_VOL" title="End"  *ngIf="showSedulecolums">
+                        </kendo-grid-column>
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="40" field="RATE" title="Rate"  *ngIf="showSedulecolums">
+                        </kendo-grid-column>
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="PRODUCT" title="Product" *ngIf="showProductscolums">
+                        </kendo-grid-column>
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="60" field="PRD_TYPE" title="Component" *ngIf="showProductscolums">
+                        </kendo-grid-column>
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="40" field="ECAP_PRICE" title="ECAP"  format= "{0:c}" *ngIf="showProductscolums">
+                        </kendo-grid-column>
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="60" field="CAP" title="CAP" *ngIf="showProductscolums">
+                        </kendo-grid-column>
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="60" field="YCS2_PRC_IRBT" title="YCS2" *ngIf="showProductscolums">
+                        </kendo-grid-column>
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="40" field="QTY" title="Qty" *ngIf="showProductscolums">
+                        </kendo-grid-column>
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="70" field="DSCNT_PER_LN" title="Discount per Line"  format= "{0:c}" *ngIf="showProductscolums">
+                        </kendo-grid-column>
+                    </kendo-grid>
                 </div>
             </div>
 
@@ -221,9 +247,9 @@
                     <kendo-grid [data]="searchgridData" [resizable]="true" [group]="group"
                                 [sort]="searchstate.sort" [sortable]="true" class="micro-grid" (dataStateChange)="dataSearchStateChange($event)">
 
-                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="170" field="key" title="Property">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="key" title="Property">
                         </kendo-grid-column>
-                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="35" field="value" title="Value">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="75" field="value" title="Value">
                             <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                 <span> {{uiPropertyWrapper(dataItem)}}</span>
                             </ng-template>
@@ -425,8 +451,18 @@
                             </div>
                         </div>
 
-                        <div class="fr cn-info-container">
-                            <div id="chart_{{dealId}}" style="height: 125px;" *ngIf="data.VOLUME"></div>
+                        <div class="fr cn-info-container" *ngIf="data.VOLUME">
+                             <kendo-chart   [style.height.px]="120">
+                                <kendo-chart-legend position="bottom"></kendo-chart-legend>
+                                <kendo-chart-series>
+                                    <kendo-chart-series-item type="pie"
+                                                             [data]="pieData"
+                                                             field="percentage"
+                                                             categoryField="type"
+                                                             >                                        
+                                    </kendo-chart-series-item>
+                                </kendo-chart-series>
+                            </kendo-chart>
                         </div>
                         <div class="clearboth"></div>
                     </div>

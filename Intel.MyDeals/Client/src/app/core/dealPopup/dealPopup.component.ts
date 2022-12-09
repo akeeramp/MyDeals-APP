@@ -1,7 +1,6 @@
 ﻿import * as angular from "angular";
 import { ChangeDetectorRef, Component, Input } from "@angular/core";
-import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
+import { logger } from "../../shared/logger/logger"; 
 import { dealPopupService } from "./dealPopup.service";
 import { colorDictionary, opGridTemplate } from "../angular.constants";
 import { AppEvent, broadCastService } from "./broadcast.service";
@@ -9,32 +8,33 @@ import * as moment from "moment";
 import { DE_Load_Util } from "../../contract/DEUtils/DE_Load_util";
 import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
-import { lnavService } from "../../contract/lnav/lnav.service";
-
+import { lnavService } from "../../contract/lnav/lnav.service"; 
 @Component({
     selector: "deal-popup",
     templateUrl: "Client/src/app/core/dealPopup/dealPopup.component.html", 
 })
 
 export class dealPopupComponent {
-
-
-
     @Input() dealId: any;
     @Input() initLeft: any;
     @Input() initTop: any;
     @Input() isOpen: any;
 
-    isLoading = true;
     propSearchFilter: any;
     showPanel: any;
     path: any;
     limitTo: any;
     openWithData: any;
-    CAN_VIEW_MEET_COMP: any;
-    CAN_VIEW_COST_TEST: any;
-    productsLoaded: any;
-    timelineLoaded= false;
+    CAN_VIEW_MEET_COMP: boolean;
+    CAN_VIEW_COST_TEST: boolean;
+    isLoading = true;
+    disableQoute=false;
+    disableShedule=false
+    productsLoaded= false;
+    timelineLoaded = false;
+    showSedulecolums = false;
+    showProductscolums = false;
+    toggleserachgrid = false;
     helpTip :any;
     sel: any;
     percData: any;
@@ -46,17 +46,17 @@ export class dealPopupComponent {
     properties: any = [];
     scheduleData: any = [];
     timelinegridResult: any;
-    toggleserachgrid= false;
+    data: any; 
+
     private timelinegridData: GridDataResult;
     private productsgridData: GridDataResult;
     private propertiesgridData: GridDataResult;
     private searchgridData: GridDataResult;
-
-
-
-
+    private schedulegridData: GridDataResult;
+   
     propertiesInclude = ["RATE", "DENSITY_RATE", "STRT_VOL", "END_VOL", "STRT_REV", "END_REV", "STRT_PB", "END_PB"];
     propertiesExclude = ["PASSED_VALIDATION", "DC_PARENT_ID", "TIER_NBR"];
+
     private state: State = {
         skip: 0,
         take: 25,        
@@ -64,72 +64,68 @@ export class dealPopupComponent {
 
     private searchstate: State = {
         skip: 0,
-        take: 25,
         group: [{ field: "group" }],
 
     };
 
     private newsearchstate: State = {
         skip: 0,
-        take: 25,
         group: [],
 
     };
 
-    data: any; 
-    generatedNumber: number = 0;
+    private schedulestate: State = {
+        skip: 0,
+        group: [],
+
+    };
+
 
     constructor(private loggersvc: logger, private dealPopupsvc: dealPopupService, private brdcstservice: broadCastService,
-        private ref: ChangeDetectorRef ,   private lnavSvc: lnavService,) {
-        $('link[rel=stylesheet][href="/content/kendo/2017.r1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-
-         
+        private ref: ChangeDetectorRef, private lnavSvc: lnavService) {        
      }
 
 
     loadPopupdata(sel) {
-         
-        this.data = this.intializedata();
+        this.data = this.intializedata(); 
         this.isOpen = true;
         this.openWithData = false;
         this.percData = null;
         this.CAN_VIEW_COST_TEST = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
-        this.CAN_VIEW_MEET_COMP = this.lnavSvc.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null)
+        this.CAN_VIEW_MEET_COMP = this.lnavSvc.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null);
+            
         this.dealPopupsvc.getWipDealById(this.dealId).subscribe((result: any) => {
             if (result.Data === null) {
                 this.loggersvc.warn("Unable to locate Deal # '" + this.dealId + "'", "No Deal");
                 this.closeNav();
                 return;
-            }
+            } 
             let numTiers, t;
             this.isLoading = false;
             this.data = result.Data;
             this.path = result.Path;
             this.atrbMap = result.AtrbMap;
             this.openWithData = true;
-
             this.sel = this.sel === undefined ? 1 : sel;
             this.showPanel = true;
-
-
             this.data.START_DT = moment(this.data.START_DT).format("l");
             this.data.END_DT = moment(this.data.END_DT).format("l");
             this.data.NOTES = this.data.NOTES.replace(/\n/g, '<br/>');
-
-
             this.groups = opGridTemplate.groups[this.data.OBJ_SET_TYPE_CD];
             this.groupColumns = opGridTemplate.templates[this.data.OBJ_SET_TYPE_CD];
 
             if (this.data.OBJ_SET_TYPE_CD !== "ECAP" && this.data.OBJ_SET_TYPE_CD !== "KIT") {
-                //$("#cn-draggable-" + this.dealId + " .cn-wrapper li:nth-child(7)").addClass("disabled");
-               // $("#cn-draggable-" + this.dealId + " .cn-wrapper li:nth-child(8)").addClass("disabled");
+                this.disableQoute = true; 
                 this.ref.detectChanges();
             }
 
             if (this.data.OBJ_SET_TYPE_CD === "PROGRAM" || this.data.OBJ_SET_TYPE_CD === "ECAP") {
-               // $("#cn-draggable-" + this.dealId + " .cn-wrapper li:nth-child(2)").addClass("disabled");
+                this.disableShedule = true;
                 this.ref.detectChanges();
+            }
+
+            if (!(this.data.WF_STG_CD !== 'Cancelled' && (this.data.WF_STG_CD === 'Active' || this.data.WF_STG_CD === 'Won' || this.data.WF_STG_CD === 'Offer' || this.data.WF_STG_CD === 'Pending' || this.data.HAS_TRACKER === '1'))) {
+                this.disableQoute = true;
             }
 
             if (this.data.CREDIT_VOLUME === "") this.data.CREDIT_VOLUME = 0;
@@ -156,8 +152,12 @@ export class dealPopupComponent {
                 }
 
                 for (t = 1; t <= numTiers; t++) {
-                    let r = this.data[rateKey]["10___" + t];
-                    let rate = Number.isNaN(r) ? "" : "$" + parseFloat(r).toFixed(fixedPoints);
+                    const r = this.data[rateKey]["10___" + t];
+                    let rate;
+                    if (r == undefined) {
+                        rate = '';
+                    }else
+                     rate = Number.isNaN(r) ? "" : "$" + parseFloat(r).toFixed(fixedPoints);
                     this.scheduleData.push({
                         STRT_VOL: this.data[strtKey]["10___" + t],
                         END_VOL: this.data[endKey]["10___" + t],
@@ -167,9 +167,9 @@ export class dealPopupComponent {
                 }
 
             } else if (this.data.OBJ_SET_TYPE_CD === "KIT") {
-                let prd = this.data.PRODUCT_NAME;
+                const prd = this.data.PRODUCT_NAME;
                 prd["20_____1"] = ""; // add KIT
-                for (let k in prd) {
+                for (const k in prd) {
                     if (prd.hasOwnProperty(k)) {
                         if (typeof prd[k] !== 'function') {
                             const dimIndx = k.split("20___")[1];
@@ -192,7 +192,8 @@ export class dealPopupComponent {
                 }
             } 
 
-            for (let k in this.data) {
+            for (const k in this.data) {
+                
                 if (this.data.hasOwnProperty(k)) {
                    
                     if (typeof this.data[k] !== 'function') {
@@ -222,12 +223,9 @@ export class dealPopupComponent {
 
                 }
             }
-
-            this.CAN_VIEW_MEET_COMP = false;
-            this.CAN_VIEW_COST_TEST = false;
-            this.productsLoaded = false;
+            
             this.helpTip = 0;
-        }, (error) => { 
+        }, () => { 
             this.loggersvc.warn("Unable to locate Deal # '" + this.dealId + "'", "No Deal");
             this.closeNav();
         });
@@ -239,10 +237,7 @@ export class dealPopupComponent {
         this.openWithData = false;
         this.isLoading = true;
         this.timelineLoaded = false;
-        if (this.data !== null) {
-            this.setPropGrdSizeSmall(true, this.data.DC_ID);
-        } 
-        let dealdata = {
+        const dealdata = {
             id: this.dealId,
             key: "QuickDealWidgetClosed"
         }
@@ -251,7 +246,7 @@ export class dealPopupComponent {
     }
 
       refresh  () {
-        let sel = this.sel;
+        const sel = this.sel;
         this.isOpen = false;
         this.openWithData = false;
         this.isLoading = true;
@@ -270,16 +265,9 @@ export class dealPopupComponent {
         this.productsLoaded = false;
         this.pieData = [];
         this.scheduleData = [];
-        if (this.data !== null) {
-            this.setPropGrdSizeSmall(true, this.data.DC_ID);
-        }
-
-          this.loadPopupdata(sel);
+        this.loadPopupdata(sel);
     }
 
-    wrapperClick() {
-
-    }
 
     uiPropertyWrapper(data) {
 
@@ -288,7 +276,7 @@ export class dealPopupComponent {
             if (data.value === undefined || data.value === null) return "";
             const sortedKeys = Object.keys(data.value).sort();
             let tmplt = '';
-            for (let index in sortedKeys) { //only looking for positive dim keys
+            for (const index in sortedKeys) { //only looking for positive dim keys
                 dimkey = sortedKeys[index];
                 if (data.value.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
                     const val = data.value[dimkey];
@@ -299,49 +287,30 @@ export class dealPopupComponent {
         } else return data.value;
     }  
        
-    setPropGrdSizeSmall(toSmall, id) {
-        if (toSmall) {
-            $("#cn_prop_panel_" + id).removeClass("cn-panel-large");
-            $("#cn_prop_grid_" + id).removeClass("prop-grid-large");
-        } else {
-            $("#cn_prop_panel_" + id).addClass("cn-panel-large");
-            $("#cn_prop_grid_" + id).addClass("prop-grid-large");
-        }
-        let grid = $("#cn_prop_grid_" + id).data("kendoGrid");
-        if (grid !== undefined && grid !== null) grid.resize();
-    }
-
+      
     focusMenu(event, id) {
          this.sel = id;
         if (this.sel === 6) this.openTimeline();
         if (this.sel === 4) this.openProducts();
-        if (this.sel === 8) {
-          //kendo chart 
-        }
+         
         if (this.sel === 3) this.openSearch();
 
-        if (this.sel === 2) {
-            let grid = $("#grid_sched_" + this.dealId).data("kendoGrid");
-            if (grid !== undefined && grid !== null) {
-                let cols = [];
+        if (this.sel === 2) { 
+               
                 // NEED TO CHANGE THIS FOR REV_TIER/DENSITY
                 if ((this.data.OBJ_SET_TYPE_CD === "VOL_TIER" || this.data.OBJ_SET_TYPE_CD === "FLEX"
                     || this.data.OBJ_SET_TYPE_CD === "REV_TIER" || this.data.OBJ_SET_TYPE_CD === "DENSITY"))
-                    cols = ["STRT_VOL", "END_VOL", "RATE", "TIER_NBR"];
-                if ((this.data.OBJ_SET_TYPE_CD === "KIT"))
-                    cols = ["PRODUCT", "PRD_TYPE", "ECAP_PRICE", "CAP", "YCS2_PRC_IRBT", "TRKR_NBR", "QTY", "DSCNT_PER_LN"];
-                for (let c = 0; c < cols.length; c++) {
-                    grid.showColumn(cols[c]);
-                }
-            }
+                 this.showSedulecolums = true;
+            if ((this.data.OBJ_SET_TYPE_CD === "KIT"))
+                this.showProductscolums = true;
+                    
+            this.openSchedulegrid();
         }
 
         this.showPanel = true;
-        
-        if (event !== undefined && event !== null) $(event.currentTarget).addClass("active");
-
     }
 
+    
     openTimeline = function () { 
         const pstdata = {
             objSid: this.dealId,
@@ -368,7 +337,7 @@ export class dealPopupComponent {
      
 
     openProducts() {
-            let prdIds = [];
+            const prdIds = [];
             const prods = this.data.PRODUCT_FILTER;
             angular.forEach(prods, function (value, key) {
                 prdIds.push(value);
@@ -376,25 +345,25 @@ export class dealPopupComponent {
         const productdata = {
             PrdIds: prdIds
         }
-        this.productsLoaded = true;
-
-        //this.dealPopupsvc.getProductsByIds(productdata).subscribe((result: any) => {
-        //    this.productsLoaded = true;
+        
+        this.dealPopupsvc.getProductsByIds(productdata).subscribe((result: any) => {
+            this.productsLoaded = true;
             
-        //    this.timelinegridData = process(result, this.state);
-        //}, (error) => {
-        //    this.loggersvc.error('error in loading product details', error);
-        //});
+            this.productsgridData = process(result, this.state);
+        }, (error) => {
+            this.loggersvc.error('error in loading product details', error);
+        });
     }
 
     public group = [{ field: "group" }];
 
     openSearch() {
-        this.searchgridData = process(this.properties, this.newsearchstate);
+       this.group = [];
+        this.searchgridData = process(this.properties, this.newsearchstate); 
     }
 
     dataSearchStateChange(state: DataStateChangeEvent): void {
-        this.state = state;
+        this.searchstate = state;
         this.searchgridData = process(this.properties, this.searchstate);
     }
 
@@ -402,7 +371,7 @@ export class dealPopupComponent {
     public onFilter(event): void {
         const inputValue = event.target.value;
         if (inputValue != "") {
-            const newdata = this.properties.filter(x => x.key.includes(inputValue));
+            const newdata = this.properties.filter(x => x.key.toLowerCase().includes(inputValue.toLowerCase()));
             this.searchgridData = process(newdata, this.searchstate);
         } else {
             this.searchgridData = process(this.properties, this.searchstate);
@@ -410,6 +379,25 @@ export class dealPopupComponent {
     }
 
 
+    openSchedulegrid() {
+        this.schedulegridData = process(this.scheduleData, this.schedulestate); 
+    }
+
+    dataScheduleStateChange(state: DataStateChangeEvent): void {
+        this.schedulestate = state;
+        this.schedulegridData = process(this.properties, this.schedulestate);
+    }
+
+    QuickDealOpenPanel() {
+        this.brdcstservice.on("QuickDealClosePanel").subscribe(() => {
+            this.closePanel();
+        });
+
+        this.brdcstservice.on("QuickDealShowPanel").subscribe(() => {
+            this.displayPanel();
+        });
+    }
+     
     closeControl() {
         this.closeNav();
     }
@@ -420,6 +408,10 @@ export class dealPopupComponent {
 
     closePanel() {
         this.showPanel = false;
+    }
+
+    displayPanel() {
+        this.showPanel = true;
     }
 
     tglGroup(data) {
@@ -531,7 +523,6 @@ export class dealPopupComponent {
         if (key.indexOf("10___7") >= 0) dim = "Tier 7";
         if (key.indexOf("10___8") >= 0) dim = "Tier 8";
         if (key.indexOf("10___9") >= 0) dim = "Tier 9";
-
         return dim;
     }
 
@@ -547,12 +538,8 @@ export class dealPopupComponent {
 
     ngOnInit() {
         this.loadPopupdata(this.sel);
+       this. QuickDealOpenPanel();
     }
-     
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-       $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
+    
 }
  
