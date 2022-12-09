@@ -30,9 +30,12 @@
                 <button *ngIf="editAccess" (click)="download()" class="k-button k-button-icontext legalheader-align">
                     <span class="intelicon-ms-excel-outlined k-icon-md k-family"></span>DOWNLOAD
                 </button>
-                    <button (click)="Hideshow()" class="k-button k-button-icontext legalheader-align show-float-icon">
-                        <span class="intelicon-show-results-outlined" title="Show Additional Column"></span>
-                    </button>
+                <button (click)="refreshGrid()" class="k-button k-button-icontext legalheader-align">
+                    <span class="k-icon k-i-reload k-icon-md"></span>REFRESH
+                </button>
+                <button (click)="Hideshow()" class="k-button k-button-icontext legalheader-align show-float-icon">
+                    <span class="intelicon-show-results-outlined" title="Show Additional Column"></span>
+                </button>
             </ng-template>
             <kendo-grid-column *ngIf="editAccess" [headerClass]="{ 'text-center remove-filter': true }" field="IS_SELECTED" title="selectAll" width="80">
                 <ng-template kendoGridHeaderTemplate let-dataItem>
@@ -60,16 +63,16 @@
                                 <span class="intelicon-search"></span>
                             </button>
                         </div>
-                        <div class="col" *ngIf="dataItem.DEALS_USED_IN_EXCPT == ''">
+                        <div class="col" *ngIf="dataItem.DEALS_USED_IN_EXCPT == '' || dataItem.DEALS_USED_IN_EXCPT == null">
                             <button type="button" class="legaliexgridbuttons intelicon-edit" title='Edit' (click)="openEditExceptionDialog(dataItem)">
                             </button>
                         </div>
-                        <div class="col" *ngIf="dataItem.DEALS_USED_IN_EXCPT != ''">
+                        <div class="col" *ngIf="dataItem.DEALS_USED_IN_EXCPT != '' && dataItem.DEALS_USED_IN_EXCPT != null">
                             <button type="button" class="legaliexgridbuttons intelicon-no-access noaccessex" title='Edit' (click)="openEditExceptionDialog(dataItem)">
                             </button>
                         </div>
                         <div class="col">
-                            <button type="button" [ngClass]="{'applyopacity': dataItem.DEALS_USED_IN_EXCPT == ''}" class="legaliexgridbuttons intelicon-reports-outlined" title='List of deals applied to this Exception' (click)="openDealListExceptionDialog(dataItem)">
+                            <button type="button" [ngClass]="{'applyopacity': dataItem.DEALS_USED_IN_EXCPT == '' || dataItem.DEALS_USED_IN_EXCPT == null}" class="legaliexgridbuttons intelicon-reports-outlined" title='List of deals applied to this Exception' (click)="openDealListExceptionDialog(dataItem)">
                             </button>
                         </div>
                         <div class="col">
