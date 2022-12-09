@@ -67,7 +67,7 @@ validBulkPriceUpdates: any = [];
     readOnlyCellClassName: 'readonly-cell',
     bindRowsWithHeaders: true,
     width: '100%',
-    height: 430,
+    height: 470,
    };
 
 openBulkPriceUpdateModal(){

@@ -1,13 +1,14 @@
 <link href="/Client/node_modules/handsontable/dist/handsontable.full.min.css" rel="stylesheet" />
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
 <loading-panel-angular id="bulkPriceUpload" class="priceUpdateLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
                        [description]="spinnerMessageDescription" [isShowFunFact]="showFunFact" [msgType]="'Info'"></loading-panel-angular>
-<div id="bulkPricingUpdateModal" style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none;margin-top: -2px;">
-    <div class="col-md-12 " style="padding-bottom: 15px;">
+<div id="bulkPricingUpdateModal" style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none;">
+    <div class="col-md-12 " style="padding-bottom: 15px; margin-top: 25px;">
         <h2>Bulk Price Updates Admin</h2>
     </div>
-    <div class="col-md-12" style="padding-bottom: 27px;">
+    <div class="col-md-12" style="padding-bottom: 27px; ">
         <button (click)="openBulkPriceUpdateModal()" class="btn btn-primary" style="margin-left: 1px;">Upload Bulk Pricing Data</button>&nbsp;&nbsp;
         <button (click)="processData()" class="btn btn-primary" style="float: right;">Process Deal Updates</button>
     </div>

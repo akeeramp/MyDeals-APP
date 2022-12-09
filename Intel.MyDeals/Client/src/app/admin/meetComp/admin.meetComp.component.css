@@ -1,1 +1,255 @@
-﻿.ss-loading-panel.ss-Info{height:auto!important}h2{font-size:26px!important;margin-top:42px!important}.alert.alert-danger{border-top-width:3px;border-color:#d73925;padding:15px!important}.errorCode{border:1px solid red!important}span.k-dropdown-wrap{font-size:12px!important;border-radius:unset!important}.k-multiselect-wrap.k-floatwrap{border-top-color:#0071c5!important;border-bottom-color:#0071c5!important;border-radius:unset!important;height:fit-content}.k-multiselect .k-multiselect-wrap li.k-button{border-radius:1.071em;margin:3px 0 3px 3px;color:#444;border-color:#fafafa;background-color:#fafafa;font-size:small}.k-switch-off .k-switch-container{border-color:#b1babf!important;background-color:#b1babf!important}.k-switch-off .k-switch-handle{background-color:white!important}.k-switch-on .k-switch-container{border-color:#0071c5!important;background-color:#0071c5!important}span.k-column-title{white-space:nowrap!important}kendo-grid.pro-meetComp.k-widget.k-grid table tr th span.k-cell-inner .k-link{width:100%;display:block;overflow:hidden;white-space:nowrap;text-overflow:ellipsis;font-size:14px;font-weight:600;text-transform:capitalize;color:#1a3e6f;font-family:"Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif}kendo-grid.pro-meetComp.k-widget.k-grid kendo-grid-group-panel .k-indicator-container{background-color:#fff;color:#00aeef}#bulkuploadMeetComp .ss-loading-panel{margin-top:6%;margin-left:37%}#meetCompFileUpd .k-button:hover{background-color:#00aeef!important;border-color:#00aeef!important;color:#fff;box-shadow:none}#meetCompFileUpd .k-file-name{font-weight:bold}#saveImportBtn.btn[disabled]{background-color:#edeff0;color:#b1babf;border-color:#b1babf!important}#saveImportBtn:hover{background-color:#0b5ed7}#saveImportBtn{color:#fff;background-color:#367fa9;border-color:#0a58ca}#meetCompModal .modal-footer{bottom:-59px;width:100%;background:#efefef;height:60px;float:left;border:.5px solid #003c71}#modalBodyDiv .row{margin-left:20px}.notes{font-size:14px;padding:0}.redbold{color:red;font-weight:bold}#modalTitle{float:left}#meetCompModal .modal-body{overflow:auto;width:100%;max-height:450px;border-bottom:none}.modalBlueBody{background-color:#003c71;color:#ffffff}#meetCompModal .modalHeader{padding:25px;border-bottom:1px solid #e5e5e5;min-height:16.5px;height:51px}#meetCompFileUpd .kuploadaction.k-upload .k-dropzone .k-dropzone-hint{visibility:collapse!important}#meetCompFileUpd .kuploadaction.k-upload .k-upload-button{min-width:7.41em!important;color:#fafafa!important;font-family:"Intel Clear";background-color:#0071c5!important;font-size:15px!important;border:none!important;font-weight:400!important;text-transform:uppercase;box-shadow:0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%)!important}#meetCompFileUpd .kuploadaction.k-upload .k-dropzone{background:transparent!important;border-style:solid!important;border-width:0!important;padding:10px!important}#meetCompFileUpd .k-upload-action,#meetCompFileUpd .k-clear-selected,#meetCompFileUpd .k-upload-selected{visibility:hidden}#meetCompFileUpd kendo-upload-action-buttons.k-actions.k-actions-end.ng-star-inserted{height:0}#meetCompFileUpd .k-button{color:#fff!important;background-color:#0071c5!important;border-color:#0071c5!important;box-shadow:none!important;font-weight:500!important;line-height:2em;padding:9px 14px;border-radius:0;text-transform:uppercase}.modal-backdrop{display:none!important}#btnClose{float:right;margin-top:-15px;background:transparent;padding:3px;font-size:22px;cursor:pointer}.kendo-alrt-btn{padding:10px;font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif!important;font-size:15px;text-align:center}.meetcomp-custom .mat-dialog-container{padding:0!important;position:relative;margin-top:-150px}#meetCompAlert .k-dialog .k-button{color:black;background-color:#edeff0!important;line-height:2em!important}#meetCompAlert .k-dialog .k-button:hover{color:#fff;background-color:#0071c5!important}#meetCompAlert .k-dialog .k-dialog-buttongroup{padding:0}#invalidPrcMsg{color:#fff;background-color:#0071c5!important}#meetCompExcel td.error-product{color:rgb(252,76,2)!important;font-weight:bold!important}#invalidPrcMsg:hover{color:#fff;background-color:#00aeef!important}#confirmationMsg{width:400px;white-space:normal;align-items:center;left:600px}#meetCompExcel th{white-space:normal!important;font-family:"Intel Clear";font-weight:400;font-size:11px;color:#0071c5;padding-left:2px;padding-right:2px;line-height:1em}#meetCompFileUpd .k-i-file-data::before{content:"\e90a"}#meetCompExcel .handsontable .htCommentCell:after{border-top-color:#d73925!important}kendo-popup kendo-grid-columnmenu-container kendo-grid-columnmenu-sort kendo-grid-columnmenu-item .k-columnmenu-item.k-state-selected{background-color:#0071c5!important;color:#fff!important;border-color:#0071c5!important}
+﻿.ss-loading-panel.ss-Info {
+  height: auto !important;
+}
+h2 {
+  font-size: 26px !important;
+  margin-top: 42px !important;
+}
+.alert.alert-danger {
+  border-top-width: 3px;
+  border-color: #d73925;
+  padding: 15px !important;
+}
+.errorCode {
+  border: 1px solid red !important;
+}
+span.k-dropdown-wrap {
+  font-size: 12px !important;
+  border-radius: unset !important;
+}
+.k-multiselect-wrap.k-floatwrap {
+  border-top-color: #0071c5 !important;
+  border-bottom-color: #0071c5 !important;
+  border-radius: unset !important;
+  height: fit-content;
+}
+.k-multiselect .k-multiselect-wrap li.k-button {
+  border-radius: 1.071em;
+  margin: 3px 0 3px 3px;
+  color: #444;
+  border-color: #fafafa;
+  background-color: #fafafa;
+  font-size: small;
+}
+.k-switch-off .k-switch-container {
+  border-color: #b1babf !important;
+  background-color: #b1babf !important;
+}
+.k-switch-off .k-switch-handle {
+  background-color: white !important;
+}
+.k-switch-on .k-switch-container {
+  border-color: #0071c5 !important;
+  background-color: #0071c5 !important;
+}
+span.k-column-title {
+  white-space: nowrap !important;
+}
+kendo-grid.pro-meetComp.k-widget.k-grid table tr th span.k-cell-inner .k-link {
+  width: 100%;
+  display: block;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  font-size: 14px;
+  font-weight: 600;
+  text-transform: capitalize;
+  color: #1a3e6f;
+  font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+kendo-grid.pro-meetComp.k-widget.k-grid
+  kendo-grid-group-panel
+  .k-indicator-container {
+  background-color: #fff;
+  color: #00aeef;
+}
+#bulkuploadMeetComp .ss-loading-panel {
+  margin-top: 6%;
+  margin-left: 37%;
+}
+#meetCompFileUpd .k-button:hover {
+  background-color: #00aeef !important;
+  border-color: #00aeef !important;
+  color: #fff;
+  box-shadow: none;
+}
+#meetCompFileUpd .k-file-name {
+  font-weight: bold;
+}
+#saveImportBtn.btn[disabled] {
+  background-color: #edeff0;
+  color: #b1babf;
+  border-color: #b1babf !important;
+}
+#saveImportBtn:hover {
+  background-color: #0b5ed7;
+}
+#saveImportBtn {
+  color: #fff;
+  background-color: #367fa9;
+  border-color: #0a58ca;
+}
+#meetCompModal .modal-footer {
+  bottom: -59px;
+  width: 100%;
+  background: #efefef;
+  height: 60px;
+  float: left;
+  border: 0.5px solid #003c71;
+}
+#modalBodyDiv .row {
+  margin-left: 20px;
+}
+.notes {
+  font-size: 14px;
+  padding: 0;
+  
+}
+.redbold {
+  color: red;
+  font-weight: bold;
+}
+#modalTitle {
+  float: left;
+}
+#meetCompModal .modal-body {
+  overflow: auto;
+  width: 100%;
+  max-height: 450px;
+  border-bottom: none;
+}
+.modalBlueBody {
+  background-color: #003c71;
+  color: #ffffff;
+}
+#meetCompModal .modalHeader {
+  padding: 25px;
+  border-bottom: 1px solid #e5e5e5;
+  min-height: 16.5px;
+  height: 51px;
+}
+#meetCompFileUpd .kuploadaction.k-upload .k-dropzone .k-dropzone-hint {
+  visibility: collapse !important;
+}
+#meetCompFileUpd .kuploadaction.k-upload .k-upload-button {
+  min-width: 7.41em !important;
+  color: #fafafa !important;
+  font-family: "Intel Clear";
+  background-color: #0071c5 !important;
+  font-size: 15px !important;
+  border: none !important;
+  font-weight: 400 !important;
+  text-transform: uppercase;
+  box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+}
+#meetCompFileUpd .kuploadaction.k-upload .k-dropzone {
+  background: transparent !important;
+  border-style: solid !important;
+  border-width: 0 !important;
+  padding: 10px !important;
+}
+#meetCompFileUpd .k-upload-action,
+#meetCompFileUpd .k-clear-selected,
+#meetCompFileUpd .k-upload-selected {
+  visibility: hidden;
+}
+#meetCompFileUpd
+  kendo-upload-action-buttons.k-actions.k-actions-end.ng-star-inserted {
+  height: 0;
+}
+#meetCompFileUpd .k-button {
+  color: #fff !important;
+  background-color: #0071c5 !important;
+  border-color: #0071c5 !important;
+  box-shadow: none !important;
+  font-weight: 500 !important;
+  line-height: 2em;
+  padding: 9px 14px;
+  border-radius: 0;
+  text-transform: uppercase;
+}
+.modal-backdrop {
+  display: none !important;
+}
+#btnClose {
+  float: right;
+  margin-top: -15px;
+  background: transparent;
+  padding: 3px;
+  font-size: 22px;
+  cursor: pointer;
+}
+.kendo-alrt-btn {
+  padding: 10px;
+  font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif !important;
+  font-size: 15px;
+  text-align: center;
+}
+.meetcomp-custom .mat-dialog-container {
+  padding: 0 !important;
+  position: relative;
+  margin-top: -150px;
+}
+#meetCompAlert .k-dialog .k-button {
+  color: black;
+  background-color: #edeff0 !important;
+  line-height: 2em !important;
+}
+#meetCompAlert .k-dialog .k-button:hover {
+  color: #fff;
+  background-color: #0071c5 !important;
+}
+#meetCompAlert .k-dialog .k-dialog-buttongroup {
+  padding: 0;
+}
+#invalidPrcMsg {
+  color: #fff;
+  background-color: #0071c5 !important;
+}
+#meetCompExcel td.error-product {
+  color: rgb(252, 76, 2) !important;
+  font-weight: bold !important;
+}
+#invalidPrcMsg:hover {
+  color: #fff;
+  background-color: #00aeef !important;
+}
+#confirmationMsg {
+  width: 400px;
+  white-space: normal;
+  align-items: center;
+  left: 600px;
+}
+#meetCompExcel th {
+  white-space: normal !important;
+  font-family: "Intel Clear";
+  font-weight: 400;
+  font-size: 11px;
+  color: #0071c5;
+  padding-left: 2px;
+  padding-right: 2px;
+  line-height: 1em;
+}
+#meetCompFileUpd .k-i-file-data::before {
+  content: "\e90a";
+}
+#meetCompExcel .handsontable .htCommentCell:after {
+  border-top-color: #d73925 !important;
+}
+kendo-popup
+  kendo-grid-columnmenu-container
+  kendo-grid-columnmenu-sort
+  kendo-grid-columnmenu-item
+  .k-columnmenu-item.k-state-selected {
+  background-color: #0071c5 !important;
+  color: #fff !important;
+  border-color: #0071c5 !important;
+}
+
+ #meetCompModal .custom-header{ 
+    display: flex;
+    flex-shrink: 0;
+    align-items: center;
+    justify-content: space-between;
+    padding: 10px;
+}

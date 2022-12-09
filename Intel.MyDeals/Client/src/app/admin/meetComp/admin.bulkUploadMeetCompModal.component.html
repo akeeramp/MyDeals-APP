@@ -1,5 +1,4 @@
 
-
 <link href="/Client/node_modules/handsontable/dist/handsontable.full.css" rel="stylesheet" />
 <link href="/Client/node_modules/handsontable-multi-select/dist/css/handsontable-multi-select.css" rel="stylesheet" />
 
@@ -9,13 +8,13 @@
 
     <div class="modal-content" id="meetCompModal"
         style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none">
-        <div class="modal-header modalBlueBody">
+        <div class="custom-header modalBlueBody">
             <h3 id="modalTitle">Bulk Upload - Meet Comp</h3>
             <i id="btnClose" class="intelicon-close" (click)="closeWindow()" title="Close this window"></i>
         </div>
         <div id="modalBodyDiv" class="modal-body" *ngIf="HasBulkUploadAccess">
             <div id="extractMeetComp" *ngIf="meetComps.length <= 0">
-                <div class="row">
+                <div class="row" style="margin-top: 10px;">
                     <div class="col-md-11 notes">
                         <span class="redbold">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Duplicate
                             entries will be ignored. Your attachment will upload after clicking the "Upload Meet Comp"
@@ -27,7 +26,7 @@
                         <kendo-upload id="meetCompFileUpd" [restrictions]="fileUploadOptions.validation" [(ngModel)]="files" name="files"
                             class="kuploadaction" (success)="successEventHandler($event)"
                              (error)="onFileUploadError()" (complete)="onFileUploadComplete()"
-                            [saveUrl]="fileUploadOptions.async.saveUrl" [batch]="false" [autoUpload]="false"></kendo-upload>
+                            [saveUrl]="fileUploadOptions.async.saveUrl" [batch]="false" [autoUpload]="false" [multiple]="false"></kendo-upload>
 
                     </div>
                 </div>
@@ -43,7 +42,7 @@
                 </div>
             </div>
             <div *ngIf="meetComps.length > 0">
-            <kendo-splitter orientation="vertical" style="height:500px"> 
+            <kendo-splitter orientation="vertical" style="height:300px"> 
                  <kendo-splitter-pane>
                     <hot-table id="meetCompExcel" [hotId]="hotId" [settings]="hotSettings" [data]= "meetComps" class="all-spread"></hot-table>
                 </kendo-splitter-pane>
