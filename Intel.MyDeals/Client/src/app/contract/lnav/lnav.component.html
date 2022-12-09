@@ -287,6 +287,35 @@
         <div class="navIconLnk" title="Show Panel" (click)="toggleLnav('MC')">
             <i class="intelicon-expand"></i>
         </div>
+        <div class="navIconLnk" title="Deal Entry" (click)="toggleLnav();gotoDealEntry()">
+            <i class="fa fa-pencil-square-o nav-icn" aria-hidden="true"></i>
+        </div>
+        <div class="navIconLnk" title="Meet Comp" (click)="gotoCompliance()">
+            <i class="fa fa-line-chart nav-icn" aria-hidden="true"></i>
+        </div>
+        <div class="navIconLnk dropdown" title="Contract Manager">
+            <a class="dropdown-toggle anarchy-anchor-two" role="button" aria-expanded="false" aria-haspopup="true" data-toggle="dropdown">
+                <i class="fa fa-list-alt nav-icn" aria-hidden="true"></i>
+                <i class="fa fa-angle-right nav-extra" aria-hidden="true"></i>
+            </a>
+            <ul class="dropdown-menu" role="menu" style="margin: -40px 0 0 40px;">
+                <li role="presentation">
+                    <a ui-sref="contract.summary" ui-sref-opts="{reload: true}"><div>Approval View</div></a>
+                </li>
+                <li role="presentation">
+                    <a ui-sref="contract.details" ui-sref-opts="{reload: true}"><div>Contract Details</div></a>
+                </li>
+                <li role="presentation" *ngIf="CAN_VIEW_COST_TEST">
+                    <a ui-sref="contract.pct" ui-sref-opts="{reload: true}">Price Cost Test</a>
+                </li>
+                <li role="presentation" *ngIf="CAN_VIEW_EXPORT">
+                    <a ui-sref="contract.export" ui-sref-opts="{reload: true}"><div>Contract Review</div></a>
+                </li>
+                <li role="presentation" *ngIf="CAN_VIEW_ALL_DEALS">
+                    <a ui-sref="contract.deals" ui-sref-opts="{reload: true}"><div>Deals Review</div></a>
+                </li>
+            </ul>
+        </div>
     </div>
 
     <div class="navIconLnk-small-wrapper" *ngIf="isLnavHidden.source == 'MN'">
@@ -294,6 +323,35 @@
 
         <div class="navIconLnk" title="Show Panel" (click)="toggleLnav()">
             <i class="intelicon-expand"></i>
+        </div>
+        <div class="navIconLnk" title="Deal Entry" (click)="toggleLnav();gotoDealEntry()">
+            <i class="fa fa-pencil-square-o nav-icn" aria-hidden="true"></i>
+        </div>
+        <div class="navIconLnk" title="Meet Comp" (click)="gotoCompliance()">
+            <i class="fa fa-line-chart nav-icn" aria-hidden="true"></i>
+        </div>
+        <div class="navIconLnk dropdown" title="Contract Manager">
+            <a class="dropdown-toggle anarchy-anchor-two" role="button" aria-expanded="false" aria-haspopup="true" data-toggle="dropdown">
+                <i class="fa fa-list-alt nav-icn" aria-hidden="true"></i>
+                <i class="fa fa-angle-right nav-extra" aria-hidden="true"></i>
+            </a>
+            <ul class="dropdown-menu" role="menu" style="margin: -40px 0 0 40px;">
+                <li role="presentation">
+                    <a ui-sref="contract.summary" ui-sref-opts="{reload: true}"><div>Approval View</div></a>
+                </li>
+                <li role="presentation">
+                    <a ui-sref="contract.details" ui-sref-opts="{reload: true}"><div>Contract Details</div></a>
+                </li>
+                <li role="presentation" *ngIf="CAN_VIEW_COST_TEST">
+                    <a ui-sref="contract.pct" ui-sref-opts="{reload: true}">Price Cost Test</a>
+                </li>
+                <li role="presentation" *ngIf="CAN_VIEW_EXPORT">
+                    <a ui-sref="contract.export" ui-sref-opts="{reload: true}"><div>Contract Review</div></a>
+                </li>
+                <li role="presentation" *ngIf="CAN_VIEW_ALL_DEALS">
+                    <a ui-sref="contract.deals" ui-sref-opts="{reload: true}"><div>Deals Review</div></a>
+                </li>
+            </ul>
         </div>
     </div>
 

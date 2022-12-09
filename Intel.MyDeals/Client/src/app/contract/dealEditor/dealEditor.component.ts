@@ -629,7 +629,7 @@ export class dealEditorComponent {
     //<To Add Tab Data?
     addTab = function () {
         this.DeAddtab = "";
-        this.isAddDialog = true
+        this.isAddDialog = true;
     }
 
     Addtabdata() {
@@ -646,6 +646,7 @@ export class dealEditorComponent {
     }
 
     addToTab(data) {
+        
         this.groups.push({ "name": data, "order": 50, "numErrors": 0, "isTabHidden": false });
         this.groups = this.groups.sort((a, b) => (a.order > b.order) ? 1 : -1);
         // Add Tools
@@ -656,8 +657,8 @@ export class dealEditorComponent {
         if (this.templates.details.Groups === undefined) this.templates.details.Groups = [];
         this.templates.details.Groups.push(data);
 
-        if (this.templates.END_CUSTOMER_RETAIL.Groups === undefined) this.templates.END_CUSTOMER_RETAIL.Groups = [];
-        this.templates.END_CUSTOMER_RETAIL.Groups.push(data);
+        if (this.templates.DC_PARENT_ID.Groups === undefined) this.templates.DC_PARENT_ID.Groups = [];
+        this.templates.DC_PARENT_ID.Groups.push(data);
         this.selectedTab = data;
         this.filterColumnbyGroup(this.selectedTab);
         this.setWarningDetails();

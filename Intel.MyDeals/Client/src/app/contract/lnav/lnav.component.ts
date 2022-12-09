@@ -840,11 +840,13 @@ export class lnavComponent {
         this.curPricingTableId = 0;
         this.isPtr = false;
         this.isWip = false;
-        this.goto('Deal Entry', 'contract.manager');
+        this.selectedTab = 0;
+        this.goto('Deal Entry', 'PTE');
     }
     gotoCompliance() {
         if (!lnavUtil.enableFlowBtn(this.contractData)) return;
-        this.goto('Compliance', 'contract.compliance');
+        this.selectedTab = 1;
+        this.goto('Compliance', 'MeetComp');
     }
     gotoManage() {
         if (!lnavUtil.enableFlowBtn(this.contractData)) return;
@@ -854,8 +856,9 @@ export class lnavComponent {
         this.isSearchHidden = false;
         this.goto('Manage', 'contract.summary');
     }
-    goto(mode, state) {
+    goto(mode, val) {
         this.flowMode = mode;
+        this.loadModel(val);
     }
     removeBlanks(val) {
         return val.replace(/_/g, '');
