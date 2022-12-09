@@ -4,3 +4,7 @@
     overflow: hidden !important;
     white-space: nowrap !important;
 }
+.highlightsty-title .k-grid-header .k-grid-filter.k-state-active {
+    background-color: #fff !important;
+    color: #ffffff !important;
+}
