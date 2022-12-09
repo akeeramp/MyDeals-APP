@@ -15,12 +15,13 @@ export class AdminBannerComponent {
     private adminBannerMessage = "";
     private adminMessage = "ADMIN_MESSAGE";
     private bannerValue;
-    private userDismissed = false;
+    private userDismissed;
     private dontAddTheseInRecents = 'portal';
     private recents = [];
     private distinctURL = [];
 
     GetAdminMessage() {
+        this.userDismissed = localStorage.getItem('userDismissed') == undefined ? 1 : localStorage.getItem('userDismissed');
         this.adminSvc.getConstantsByName(this.adminMessage).subscribe((result) => {
             if (result) {
                 this.adminBannerMessage = result.CNST_VAL_TXT === 'NA'
@@ -33,8 +34,9 @@ export class AdminBannerComponent {
 
 
     }
-    close(value) {
-        this.userDismissed = value;
+    close() {
+        if (this.userDismissed == 1) this.userDismissed = 0; else this.userDismissed = 1;
+        localStorage.setItem('userDismissed', this.userDismissed);
     }
 
     //----------------------------Recent Widget code-------------------------------------------------------------------

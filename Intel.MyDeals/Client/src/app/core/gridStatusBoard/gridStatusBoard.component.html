@@ -16,14 +16,14 @@
                 <h6>Contracts</h6>
                 <div class="stgLnkBox">
                     <div class="stgLnk" [ngClass]="{'active': activekey==='allC'===true}" id="fltr_All_Contract" (click)="clkFilter('fltr_All_Contract')"><i class="intelicon-workflow-process-outlined"></i> All <span class="badge">{{contractStageCnt}}</span></div>
-                    <div class="stgLnk" [ngClass]="{'active': activekey==='CC'===true}" id="fltr_Complete_Contract" (click)="clkFilter('fltr_Completed_Contract')"><i class="intelicon-workflow-process-outlined"></i> Complete <span class="badge">{{contractComplete}}</span></div>
                     <div class="stgLnk" [ngClass]="{'active': activekey==='ICC'===true}" id="fltr_InComplete_Contract" (click)="clkFilter('fltr_InCompleted_Contract')"><i class="intelicon-workflow-process-outlined"></i> InComplete <span class="badge">{{contractIncomplete}}</span></div>
+                    <div class="stgLnk" [ngClass]="{'active': activekey==='CC'===true}" id="fltr_Complete_Contract" (click)="clkFilter('fltr_Completed_Contract')"><i class="intelicon-workflow-process-outlined"></i> Complete <span class="badge">{{contractComplete}}</span></div>
                 </div>
                 <h6 style="margin-top: 30px;"><a href="/advancedSearch#/tenderDashboard" style="color: #000000;" title="Click to search for Tender Deals">Tenders</a></h6>
                 <div class="stgLnkBox">
                     <div class="stgLnk" [ngClass]="{'active': activekey==='allT'===true}" id="fltr_All_Tender" (click)="clkFilter('fltr_All_Tender')"><i class="intelicon-workflow-process-outlined"></i> All <span class="badge">{{tenderStageCnt}}</span></div>
-                    <div class="stgLnk" [ngClass]="{'active': activekey==='CT'===true}" id="fltr_Complete_Tender" (click)="clkFilter('fltr_Complete_Tender')"><i class="intelicon-workflow-process-outlined"></i> Complete <span class="badge">{{tenderComplete}}</span></div>
                     <div class="stgLnk" [ngClass]="{'active': activekey==='ICT'===true}" id="fltr_InComplete_Tender" (click)="clkFilter('fltr_InComplete_Tender')"><i class="intelicon-workflow-process-outlined"></i> InComplete <span class="badge">{{tenderIncomplete}}</span></div>
+                    <div class="stgLnk" [ngClass]="{'active': activekey==='CT'===true}" id="fltr_Complete_Tender" (click)="clkFilter('fltr_Complete_Tender')"><i class="intelicon-workflow-process-outlined"></i> Complete <span class="badge">{{tenderComplete}}</span></div>
                     <div class="stgLnk" [ngClass]="{'active': activekey==='CA'===true}" id="fltr_Cancelled_Tender" (click)="clkFilter('fltr_Cancelled_Tender')"><i class="intelicon-workflow-process-outlined"></i> Cancelled <span class="badge">{{tenderCancelled}}</span></div>
                 </div>
             </div>
