@@ -372,6 +372,20 @@ export class DashboardComponent implements OnInit {
             });
     }
 
+    navAddClass() {
+        var zIndexZero = $("body");
+        var textIndex = zIndexZero.hasClass("z-index-zero")
+        if (textIndex) {
+            zIndexZero.removeClass("z-index-zero");
+        } else {
+            zIndexZero.addClass("z-index-zero");
+        } 
+    }
+
+    navRemoveClass() {
+        $("body").removeClass("z-index-zero");
+    }
+
     ngAfterViewInit() {
         //this functionality will enable when dashboard landing to this page
         document.getElementsByClassName('loading-screen')[0]?.setAttribute('style', 'display:none');

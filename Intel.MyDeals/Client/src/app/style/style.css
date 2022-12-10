@@ -102,3 +102,25 @@ kendo-grid.exclude-filter-style table thead tr th kendo-grid-filter-menu span.k-
 .new-now-wrap.oppo-grids kendo-grid.exclude-filter-style .k-grid-header table thead tr th span.k-cell-inner .k-link {
     display: flex;
 }
+
+kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li span {
+    font-size: 14px !important;
+    font-family: "Intel Clear";
+    font-weight: 200 !important;
+}
+
+kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li {
+    margin-right: 5px !important;
+}
+
+.all-spread #spreadsheet table.htCore tr:nth-child(2) th {
+    background-color: #fff;
+}
+
+.all-spread #spreadsheet table.htCore tr:nth-child(2) th:nth-child(2) {
+    background-color: rgb(245 245 245);
+}
+
+.z-index-zero .navbar-fixed-top {
+    z-index: 0 !important;
+}

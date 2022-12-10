@@ -87,8 +87,9 @@
 </div>
 
 <kendo-window *ngIf="windowOpened" (close)="windowClose()" [minWidth]="windowMinWidth" [minHeight]="windowHeight" [width]="windowWidth" [top]="windowTop" [left]="windowLeft" class="dashboard-kendo-window process-search">
-    <kendo-window-titlebar class="kendoTitleBar">
-        <div class="k-window-title windowTitle">Search Results </div><button kendoWindowCloseAction class="closeBtn"></button>
+    <kendo-window-titlebar class="kendoTitleBar" (dblclick)="navAddClass()">
+        <div class="k-window-title windowTitle">Search Results </div>
+        <button kendoWindowCloseAction class="closeBtn" (click)="navRemoveClass()"></button>
     </kendo-window-titlebar>
     <global-search-results-angular [searchText]="searchText" [opType]="opType" (getWindowWidth)="getWindowWidth($event)" (isWindowOpen)="isWindowOpen($event)"></global-search-results-angular>
 </kendo-window>

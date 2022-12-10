@@ -609,8 +609,31 @@ kendo-tabstrip.art-kendo-bars {
     color: #ffffff !important
 }
 
-#pctChild td span {
+/*#pctChild td span {
     line-height: 3 !important
+}*/
+
+kendo-grid#managerPCTGrid table tr td {
+    padding-top: 2px;
+    padding-bottom: 2px;
+}
+
+kendo-grid#pctChild table tr td {
+    border-right: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+kendo-grid#managerPCTGrid table tr td deal-tools-angular .dealTools .tools-parent .grid-status.fl.gridStatusMarker {
+    margin-bottom: 2px;
+}
+
+kendo-grid#pctChild table tr td:has(.cell-information) {
+    padding: 0 !important;
+}
+
+kendo-grid#pctChild table tr td .cell-information {
+    margin: 0;
+    height: 40px;
 }
 
 .cell-information {

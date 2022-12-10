@@ -116,6 +116,7 @@ export class GlobalSearchResultsComponent  {
       }
     }
     gotoOBJ(item: any, opType: string) {
+        $("body").removeClass("z-index-zero");
         let DCID = item.DC_ID
         this.isWindowOpen.emit(false);
         if (DCID <= 0) {
