@@ -46,8 +46,8 @@
                     </kendo-treeview>
                 </div>
                 <div mat-dialog-content *ngIf="ismrktSeg">
-                    <kendo-multiselect class="mrkt-seg-multi" [(ngModel)]="multSlctMkgValues" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false" (valueChange)="onMarkSegChange($event)"></kendo-multiselect>
-                    <kendo-treeview [nodes]="marketSeglist" textField="DROP_DOWN" [children]="fetchChildren" [hasChildren]="hasChildren" kendoTreeViewCheckable [(checkedKeys)]="mkgvalues" checkBy="DROP_DOWN" [isChecked]="isMkgChecked" (checkedKeysChange)="onMktgValueChange($event)">
+                    <kendo-multiselect class="mrkt-seg-multi border_bottom_c" [(ngModel)]="multSlctMkgValues" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false" (valueChange)="onMarkSegChange($event)" placeholder="Click to select..."></kendo-multiselect>
+                    <kendo-treeview class="check_box_colour" [nodes]="marketSeglist" textField="DROP_DOWN" [children]="fetchChildren" [hasChildren]="hasChildren" kendoTreeViewCheckable [(checkedKeys)]="mkgvalues" checkBy="DROP_DOWN" [isChecked]="isMkgChecked" (checkedKeysChange)="onMktgValueChange($event)">
                     </kendo-treeview>
                 </div>
             </div>
