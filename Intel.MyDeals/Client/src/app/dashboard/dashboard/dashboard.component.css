@@ -42,3 +42,26 @@ kendo-grid.admin-deal-grid.k-widget.k-grid {
     border-bottom-color: transparent;
     cursor: default;
 }
+.k-calendar .k-state-selected .k-link {
+    border-color: #005dc2 !important;
+    color: #ffffff !important;
+    background-color: #00aeef !important;
+}
+
+.k-calendar .k-state-focused .k-link {
+    box-shadow: inset 0 0 0 2.5px rgb(194 196 199 / 71%) !important;
+}
+
+.k-calendar .k-month .k-link, .k-calendar .k-calendar-monthview .k-link {
+   width: 40px !important;
+   height: 40px !important;
+   border-radius: 50px !important;
+}
+
+.k-calendar .k-content .k-today.k-state-focused .k-link,
+.k-calendar .k-calendar-content .k-today.k-state-focused .k-link,
+.k-calendar .k-content .k-today .k-link,
+.k-calendar .k-calendar-content .k-today .k-link {
+    box-shadow: none !important
+}
+
