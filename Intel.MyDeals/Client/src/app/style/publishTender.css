@@ -14,3 +14,6 @@
     display: block !important;
     left: 0 !important
 }
+.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th .k-cell-inner kendo-grid-filter-menu a .k-i-filter:hover {
+    color: #0071c5 !important;
+}
