@@ -148,7 +148,7 @@
                                         </div>
                                         <div class="blockdisplay enddateblock">
                                             <kendo-dropdownlist [data]="dropDownsData?.BACK_DATE_RSN" textField="DROP_DOWN"
-                                                                name="BACK_DATE_RSN" #backDateRsn="ngModel" valueField="DROP_DOWN" [(ngModel)]="BACK_DATE_RSN" class="inputWidth font-input" [required]="isBackDate">
+                                                                name="BACK_DATE_RSN" #backDateRsn="ngModel" valueField="DROP_DOWN" [(ngModel)]="BACK_DATE_RSN" class="inputWidth font-input backdate_contract_style" [required]="isBackDate">
                                             </kendo-dropdownlist>
                                             <kendo-formerror *ngIf="contractDetailsForm.controls.BACK_DATE_RSN?.errors?.required && isSubmitted">
                                                 {{isRequiredMsg}}

@@ -85,6 +85,7 @@ export class adminVistexComponent {
             result["START_TIME"] = startTime;
             result["END_TIME"] = endTime;
             this.responseData.unshift(result);
+            this.loggerSvc.success('Transaction was successful...');
         }, (error) => {
             this.loggerSvc.error('Unable to run API', error);
         });

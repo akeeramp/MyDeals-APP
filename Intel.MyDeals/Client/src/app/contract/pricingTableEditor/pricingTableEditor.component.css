@@ -632,3 +632,7 @@ i.fa.undo-redo-style.dirty {
 kendo-multiselect.fiend-all.k-widget.k-multiselect.ng-dirty {
     border-bottom: 2px solid #0071c5
 }
+.pricing_table_celltext .handsontable td.htNoWrap {
+    white-space: nowrap;
+    text-align: left !important;
+}
