@@ -605,3 +605,38 @@ th.remove-filter kendo-grid-filter-menu {
 .toggle-align-grid.toggle-button-custom.mat-slide-toggle.mat-checked .mat-slide-toggle-thumb {
     margin-left: 4px !important
 }
+
+kendo-slider.kendo-custom-admin-design .k-slider-wrap .k-slider-track-wrap .k-slider-track {
+    left: 28px;
+}
+
+kendo-slider.sliderwidth.kendo-custom-admin-design {
+    position: relative;
+    width: 100px !important;
+}
+
+kendo-slider.sliderwidth.kendo-custom-admin-design .k-slider-track-wrap {
+    position: relative;
+}
+
+kendo-slider.sliderwidth.kendo-custom-admin-design .k-slider-track-wrap ul.k-slider-items {
+    position: relative;
+    top: -6px;
+    left: 27px;
+}
+
+kendo-slider.sliderwidth.kendo-custom-admin-design .k-slider-wrap.k-slider-buttons button.k-button-increase {
+    right: -60px;
+}
+
+    kendo-slider.sliderwidth.kendo-custom-admin-design .k-slider-track-wrap ul.k-slider-items li:first-child {
+        margin-left: 5px;
+    }
+
+    kendo-slider.sliderwidth.kendo-custom-admin-design .k-slider-track-wrap ul.k-slider-items li:nth-child(2) {
+        margin-left: 4px;
+    }
+
+    kendo-slider.sliderwidth.kendo-custom-admin-design .k-slider-track-wrap ul.k-slider-items li:nth-child(3) {
+        margin-left: 9px;
+    }

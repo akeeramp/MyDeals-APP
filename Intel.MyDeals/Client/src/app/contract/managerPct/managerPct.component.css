@@ -724,3 +724,21 @@ kendo-grid#pctChild table tr td .cell-information {
 .submenu_datafix {
     color: #FFA300 !important;
 }
+
+kendo-grid#managerPCTGrid table tr th {
+    vertical-align: bottom;
+}
+
+kendo-grid#managerPCTGrid table tr th span.k-column-title {
+    color: #000;
+    font-weight: 400;
+    font-size: 12px;
+}
+
+kendo-grid#managerPCTGrid table tr th kendo-grid-filter-menu .k-grid-filter .k-i-filter {
+    font-size: 14px;
+}
+
+kendo-grid#managerPCTGrid table tr th label b {
+    color: #000;
+}
