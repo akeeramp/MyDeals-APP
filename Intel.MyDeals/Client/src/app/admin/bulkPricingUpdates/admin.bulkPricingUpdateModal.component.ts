@@ -53,6 +53,11 @@ export class BulkPricingUpdateModalComponent {
     }
 
     successEventHandler(e){
+        if (e.response.body == undefined || e.response.body == null || e.response.body == "") {
+            this.showAlert = true;
+            this.alertMsg ="Uploaded file not having any data";
+            return;
+        }
         this.uploadSuccess = true;
         this.bulkProceUploadValidationSummary = e.response.body;
         if (this.bulkProceUploadValidationSummary.length == 0)

@@ -129,6 +129,7 @@ processData(){
   let dataArr = this.cellComments  = [];
   this.spinnerMessageDescription = "Processing deal Updates... ";
   this.spinnerMessageHeader = 'Processing...';
+  this.validBulkPriceUpdates = this.hotTable.getData();
   dataArr =  this.getDataFromTable() ;
   if (dataArr.length > 0) {
       this.cellComments = this.validateTableData(dataArr);
@@ -207,23 +208,68 @@ processData(){
       this.isLoading = false;
       this.isAlert = true;
       this.alertMsg = "There is no data to Process";
+      this.validBulkPriceUpdates = [];
       this.hotTable.loadData([]);
   }
 }
 
 getDataFromTable(){
-    let tempData =this.validBulkPriceUpdates.filter(row =>  !(( row.DealId == null || row.DealId == "") &&
-        (row.DealDesc == null || row.DealDesc == "") &&
-     (row.EcapPrice == null || row.EcapPrice == "") &&
-     (row.Volume == null || row.Volume == "") &&
-     (row.ProjectName == null || row.ProjectName == "") &&
-     (row.DealStartDate == null || row.DealStartDate == "") &&
-     (row.DealEndDate == null || row.DealEndDate == "") &&
-     (row.BillingsStartDate == null || row.BillingsStartDate == "") &&
-     (row.BillingsEndDate == null || row.BillingsEndDate == "") &&
-     (row.TrackerEffectiveStartDate == null || row.TrackerEffectiveStartDate == "") &&
-     (row.AdditionalTermsAndConditions == null || row.AdditionalTermsAndConditions == "")));
-    return tempData;
+    let newArr = [];
+    let tempData = this.validBulkPriceUpdates.filter(row =>  !(( row[0] == null || row[0] == "") &&
+        (row[1] == null || row[1] == "") &&
+     (row[2] == null || row[2] == "") &&
+     (row[3] == null || row[3] == "") &&
+     (row[4] == null || row[4] == "") &&
+     (row[5] == null || row[5] == "") &&
+     (row[6] == null || row[6] == "") &&
+     (row[7] == null || row[7] == "") &&
+     (row[8] == null || row[8] == "") &&
+     (row[9] == null || row[9] == "") &&
+     (row[10] == null || row[10] == "")));
+     if (tempData.length > 0) {
+
+        for (var i = 0; i < tempData.length; i++) {
+            var newDeals = {};
+            newDeals['DealId'] =  ((!(isNaN(tempData[i][0]))) ? tempData[i][0] : 0);
+            newDeals['DealDesc'] = tempData[i][1] != null ? tempData[i][1] : "";
+            newDeals['EcapPrice'] = tempData[i][2] != null ? tempData[i][2] : "";
+            newDeals['Volume'] = tempData[i][3] != null ? tempData[i][3] : "";
+            if (tempData[i][4] != null && tempData[i][4] != "") {
+                newDeals['DealStartDate'] = Number(tempData[i][4]).toString() == 'NaN' ? tempData[i][4] : moment(this.basedate).add(parseInt(tempData[i][4]), 'days').format("MM/DD/YYYY");
+            } else {
+                newDeals['DealStartDate'] = "";
+            }
+
+            if (tempData[i][5] != null && tempData[i][5] != "") {
+                newDeals['DealEndDate'] = Number(tempData[i][5]).toString() == 'NaN' ? tempData[i][5] : moment(this.basedate).add(parseInt(tempData[i][5]), 'days').format("MM/DD/YYYY");
+            } else {
+                newDeals['DealEndDate'] = "";
+            }
+
+            if (tempData[i][6] != null && tempData[i][6] != "") {
+                newDeals['BillingsStartDate'] = Number(tempData[i][6]).toString() == 'NaN' ? tempData[i][6] : moment(this.basedate).add(parseInt(tempData[i][6]), 'days').format("MM/DD/YYYY");
+            } else {
+                newDeals['BillingsStartDate'] = "";
+            }
+
+
+            if (tempData[i][7] != null && tempData[i][7] != "") {
+                newDeals['BillingsEndDate'] = Number(tempData[i][7]).toString() == 'NaN' ? tempData[i][7] : moment(this.basedate).add(parseInt(tempData[i][7]), 'days').format("MM/DD/YYYY");
+            } else {
+                newDeals['BillingsEndDate'] = "";
+            }
+            newDeals['ProjectName'] = tempData[i][8] != null ? tempData[i][8].trimEnd() : "";
+
+            if (tempData[i][9] != null && tempData[i][9] != "") {
+                newDeals['TrackerEffectiveStartDate'] = Number(tempData[i][9]).toString() == 'NaN' ? tempData[i][9] : moment(this.basedate).add(parseInt(tempData[i][9]), 'days').format("MM/DD/YYYY");
+            } else {
+                newDeals['TrackerEffectiveStartDate'] = "";
+            }
+            newDeals['AdditionalTermsAndConditions'] = tempData[i][10] != null ? tempData[i][10].trimEnd() : "";
+            newArr.push(newDeals);
+        }
+    }
+    return newArr;
 }
 
 validateTableData(dataArr){
@@ -233,20 +279,20 @@ validateTableData(dataArr){
     dataArr.forEach((row,i) => {
         errMsg = '',
         messages = [];
-        if (row.DealId == "0") {
+        if (row.DealId == "0" || row.DealId == "" || row.DealId == null || row.DealId == undefined) {
             messages.push("Deal ID");
             validationMessages.push({ row: i, col: 0, comment: { value: 'Deal ID must be a valid number', readOnly: true } ,className:'error-product'})
         }
-        if ((row.DealDesc == null || row.DealDesc == "") &&
-            (row.EcapPrice == null || row.EcapPrice == "") &&
-            (row.Volume == null || row.Volume == "") &&
-            (row.ProjectName == null || row.ProjectName == "") &&
-            (row.DealStartDate == null || row.DealStartDate == "") &&
-            (row.DealEndDate == null || row.DealEndDate == "") &&
-            (row.BillingsStartDate == null || row.BillingsStartDate == "") &&
-            (row.BillingsEndDate == null || row.BillingsEndDate == "") &&
-            (row.TrackerEffectiveStartDate == null || row.TrackerEffectiveStartDate == "") &&
-            (row.AdditionalTermsAndConditions == null || row.AdditionalTermsAndConditions == "")) {
+        if ((row.DealDesc == null || row.DealDesc == ""  || row.DealDesc == undefined) &&
+            (row.EcapPrice == null || row.EcapPrice == ""  || row.EcapPrice == undefined) &&
+            (row.Volume == null || row.Volume == ""  || row.Volume == undefined) &&
+            (row.ProjectName == null || row.ProjectName == ""  || row.ProjectName == undefined) &&
+            (row.DealStartDate == null || row.DealStartDate == ""  || row.DealStartDate == undefined) &&
+            (row.DealEndDate == null || row.DealEndDate == ""  || row.DealEndDate == undefined) &&
+            (row.BillingsStartDate == null || row.BillingsStartDate == ""  || row.BillingsStartDate == undefined) &&
+            (row.BillingsEndDate == null || row.BillingsEndDate == ""  || row.BillingsEndDate == undefined) &&
+            (row.TrackerEffectiveStartDate == null || row.TrackerEffectiveStartDate == ""  || row.TrackerEffectiveStartDate == undefined) &&
+            (row.AdditionalTermsAndConditions == null || row.AdditionalTermsAndConditions == ""  || row.AdditionalTermsAndConditions == undefined)) {
             messages.push("One of the Deal");
             for( let ind = 1; ind<11; ind++){
                 validationMessages.push({ row: i, col: ind, comment: { value: " ", readOnly: true } ,className:'error-product'})
