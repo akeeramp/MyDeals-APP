@@ -11,7 +11,8 @@ export class pricingTableEditorService {
     public autoFillData = new BehaviorSubject({});
     private apiBasePricingTableUrl = "/api/PricingTables/v1/";
     private apiBaseContractUrl = "/api/Contracts/v1/";
-    private apiBasePrimeCustomerUrl = "api/PrimeCustomers/";    
+    private apiBasePrimeCustomerUrl = "api/PrimeCustomers/";  
+    private apiBaseDealProductsUrl = "api/Products/GetDealProducts/";
     public readPricingTable(id): Observable<any> {
         const apiUrl: string = this.apiBasePricingTableUrl + 'GetFullNestedPricingTable/' + id;
         return this.httpClient.get(apiUrl);
@@ -42,4 +43,9 @@ export class pricingTableEditorService {
         const apiUrl: string = this.apiBaseContractUrl + 'UpdateAtrbValue/' + custId + '/' + contractId;
         return this.httpClient.post(apiUrl, data);
     }
+    public GetDealProducts(DC_ID: number, CUST_MBR_SID: string) {
+        const apiUrl: string = this.apiBaseDealProductsUrl + DC_ID + '/5/' + CUST_MBR_SID ;
+        return this.httpClient.get(apiUrl);
+    }
+
 }

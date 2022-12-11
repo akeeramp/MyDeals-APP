@@ -30,7 +30,7 @@
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
     <Use64BitIISExpress />
-	<TypeScriptToolsVersion>4.3</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>4.3</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -1049,6 +1049,7 @@
     <Content Include="Client\src\app\contract\pricingTable\pricingTable.component.html" />
     <Content Include="Client\src\app\contract\ptModals\dealEditorModals\dealEditorModals.component.css" />
     <Content Include="Client\src\app\contract\ptModals\dealEditorModals\endCustomerRetailModal.component.html" />
+    <Content Include="Client\src\app\contract\ptModals\dealEditorModals\missingCapCostInfoModal.component.html" />
     <Content Include="Client\src\app\contract\ptModals\dealEditorModals\systemPricePointModal.component.html" />
     <Content Include="Client\src\app\contract\ptModals\dealProductsModal\dealProductsModal.component.css" />
     <Content Include="Client\src\app\contract\ptModals\dealProductsModal\dealProductsModal.component.html" />
@@ -2547,6 +2548,7 @@
     <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\PTE_Validation_util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\PTEUtils\Tender_util.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\dealEditorModals\endCustomerRetailModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\ptModals\dealEditorModals\missingCapCostInfoModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\dealEditorModals\systemPricePointModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\dealProductsModal\dealProductsModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\dealProductsModal\dealProductsModal.service.ts" />

@@ -21,6 +21,7 @@ import { multiSelectModalComponent } from "../ptModals/multiSelectModal/multiSel
 import { contractDetailsService } from "../contractDetails/contractDetails.service"
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 import { dealProductsModalComponent } from "../ptModals/dealProductsModal/dealProductsModal.component";
+import { missingCapCostInfoModalComponent } from '../ptModals/dealEditorModals/missingCapCostInfoModal.component';
 import { GridUtil } from '../grid.util';
 import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';
 import { dealEditorService } from "../dealEditor/dealEditor.service";
@@ -344,10 +345,13 @@ export class dealEditorComponent {
                 || args.column.field == "DEAL_SOLD_TO_ID" || args.column.field == "TRGT_RGN") {
                 var column = this.wipTemplate.columns.filter(x => x.field == args.column.field);
                 this.openMultiSelectModal(args.dataItem, column[0]);
-            }
+            } 
         }
         else if ((args.column.field == "PRD_BCKT" && this.curPricingTable.OBJ_SET_TYPE_CD == "KIT") || (args.column.field == "TITLE" && this.curPricingTable.OBJ_SET_TYPE_CD !== "KIT")) {
             this.openDealProductModal(args.dataItem);
+        }
+        else if (args.column.field == 'MISSING_CAP_COST_INFO') {
+            this.openMissingCapCostInfo(args.dataItem);
         }
     }
 
@@ -448,6 +452,19 @@ export class dealEditorComponent {
             }
         });
     }
+
+    openMissingCapCostInfo(dataItem) {
+        const dialogRef = this.dialog.open(missingCapCostInfoModalComponent, {
+            panelClass: "mat-remove-space",
+            width: "900px",
+            autoFocus: false,
+            data: {
+                    DC_ID: dataItem.DC_ID,
+                    CUST_MBR_SID: dataItem.CUST_MBR_SID
+            }
+        });
+    }
+
     openOverLappingDealCheck() {
         let data = {
             "contractData": this.contractData,
