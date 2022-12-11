@@ -64,9 +64,6 @@ kendo-grid.admin-deal-grid.k-widget.k-grid {
 .k-calendar .k-calendar-content .k-today .k-link {
     box-shadow: none !important
 }
-.cons-delete-ppup .k-widget.k-window.k-dialog {
-    border-radius: 0 !important;
-}
 kendo-combobox.kendoInput.noborderclass.contract-details-customer.k-widget.k-combobox.k-combobox-clearable.ng-untouched.ng-pristine.ng-invalid {
     border: 1px solid #e6e6e6 !important;
 }
@@ -84,5 +81,12 @@ kendo-dropdownlist.inputWidth.font-input.backdate_contract_style.k-dropdown:hove
 kendo-combobox.kendoInput.noborderclass.font-input.contract-details-customer.cd-input-bottom.k-combobox.k-combobox-clearable.ng-touched.ng-dirty.ng-valid,
 kendo-dropdownlist.inputWidth.font-input.backdate_contract_style.k-dropdown.ng-dirty.ng-valid.ng-touched {
     border-bottom: 2px solid #0071c5 !important;
+}
+.cons-delete-ppup.k-dialog.k-window {
+    border-radius: 0 !important;
+}
+
+kendo-dialog-actions.cons-button-cancel.cons-button-style.k-actions.k-actions-stretched.k-dialog-buttongroup {
+    padding-left: 90px !important;
 }
 
