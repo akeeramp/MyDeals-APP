@@ -8,7 +8,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from "@angular/material/core";
-import { RowClassArgs } from "@progress/kendo-angular-grid";
+import { RowClassArgs, RowArgs } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: "exclude-deal-group-modal-dialog",
@@ -22,9 +22,12 @@ import { RowClassArgs } from "@progress/kendo-angular-grid";
 export class excludeDealGroupModalDialog {
     pctGroupDealsView: boolean = false;
     showKendoAlert: boolean;
+    titleText: string;
+    isData: boolean;
+    isLoading: boolean;
     constructor(public dialogRef: MatDialogRef<excludeDealGroupModalDialog>, @Inject(MAT_DIALOG_DATA) public dataItem: any, private managerExcludeGrpSvc: managerExcludeGroupsService, private loggerSvc: logger, private sanitized: DomSanitizer) {
     }
-
+    private isSelected: boolean = true;
     private role = (<any>window).usrRole;
     private wwid = (<any>window).usrWwid;
     public loading = true;
@@ -33,6 +36,9 @@ export class excludeDealGroupModalDialog {
     private dealArray = [];
     private dealId;
     private childGridData;
+    private childGridData1;
+    private childGridData2;
+    private childgridColumns;
     private childGridResult;
     private color: ThemePalette = 'primary';
     private GRP_BY = 0;
@@ -76,12 +82,26 @@ export class excludeDealGroupModalDialog {
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
-        this.gridData = process(this.gridResult, this.state);
+        this.gridData = process(this.gridResult, this.state); 
     }
+
+    public expandInStockProducts({ dataItem }: RowArgs): boolean {
+        return true;
+    }
+    public expandInStockProducts1({ dataItem }: RowArgs): boolean {
+        return dataItem.data!='';
+    }
+
     clkAllItems(): void {
         for (let i = 0; i < this.childGridResult.length; i++) {
-            this.childGridResult[i].selected = !this.isDealToolsChecked;
+            if (this.childGridResult[i].CST_MCP_DEAL_FLAG === 1) {
+                this.childGridResult[i].selected = !this.isDealToolsChecked;
+            }  
         }
+        let childgridresult1 = this.childGridResult.filter(x => x.CST_MCP_DEAL_FLAG === 1);
+        let childgridresult2 = this.childGridResult.filter(x => x.CST_MCP_DEAL_FLAG === 0);
+        this.childGridData1 = process(childgridresult1, this.state);
+        this.childGridData2 = process(childgridresult2, this.state);
         this.childGridData = process(this.childGridResult, this.state);
     }
 
@@ -106,6 +126,8 @@ export class excludeDealGroupModalDialog {
     close(): void {
         this.dialogRef.close();
     }
+
+   
     ok() {
         this.OVLP_DEAL_ID = this.childGridResult.filter(x => x.selected == true).map(y => y.OVLP_DEAL_ID).join();
         const returnVal: any = [];
@@ -125,11 +147,9 @@ export class excludeDealGroupModalDialog {
     closeKendoAlert() {
         this.showKendoAlert = false;
     }   
-    filterData(IS_SELECTED) {
-        //dfsgddg;
-    }
-
+  
     loadExcludeDealGroupModel() {
+        this.isLoading = true;
         if(this.dataItem.cellCurrValues?.DEAL_ID){
             this.pctGroupDealsView = true;
         }
@@ -138,6 +158,7 @@ export class excludeDealGroupModalDialog {
         this.gridResult = this.dealArray;
         this.gridData = process(this.gridResult, this.state);
         this.managerExcludeGrpSvc.getExcludeGroupDetails(this.dealId).subscribe((result: any) => {
+            this.isLoading = false;;
             this.childGridResult = result;
             if (this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != undefined && this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != null && this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != '') {
                 const selectedDealIds = this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS.split(',');
@@ -148,9 +169,28 @@ export class excludeDealGroupModalDialog {
 
                 }
             }
-
+            let childgridresult1 = this.childGridResult.filter(x => x.CST_MCP_DEAL_FLAG === 1);
+            let childgridresult2 = this.childGridResult.filter(x => x.CST_MCP_DEAL_FLAG === 0);
+            this.childGridData1 = process(childgridresult1, this.state);
+            this.childGridData2 = process(childgridresult2, this.state);
+            if (this.childGridData1.data.length > 0 && this.childGridData2.data.length > 0) {
+                this.isData = true;
+                this.childgridColumns = [{ data: 'Deals below are included as part of the Cost Test' }, { data: 'Deals shown in grey overlap but are NOT included as part of the Cost Test' }];
+            }
+            else if (this.childGridData1.data.length > 0 && this.childGridData2.data.length == 0) {
+                this.isData = true;
+                this.childgridColumns = [{ data: 'Deals below are included as part of the Cost Test' }];
+            }
+            else if (this.childGridData2.data.length > 0 && this.childGridData1.data.length == 0) {
+                this.isData = true;
+                this.childgridColumns = [{ data: 'Deals shown in grey overlap but are NOT included as part of the Cost Test' }];
+            }
+            else {
+                this.isData = false;
+            }
             this.childGridData = process(this.childGridResult, this.state);
         }, (error) => {
+            this.isLoading = false;
             this.loggerSvc.error('Customer service subgrid', error);
         })
         this.enableCheckbox = this.enabledList.indexOf(this.dataItem.cellCurrValues.PS_WF_STG_CD);
@@ -161,6 +201,23 @@ export class excludeDealGroupModalDialog {
             this.hasCheckbox = this.dataItem.enableCheckbox; 
         }
         this.DEAL_GRP_CMNT = (this.dataItem.cellCurrValues.DEAL_GRP_CMNT === null || this.dataItem.cellCurrValues.DEAL_GRP_CMNT == undefined) ? "" : this.dataItem.cellCurrValues.DEAL_GRP_CMNT;
+    }
+
+    convertToChildData(dataItem) {
+        if (dataItem.data == 'Deals below are included as part of the Cost Test') {
+            if (!this.hasCheckbox) {
+                this.titleText = "Cannot edit when deal is in Sumbitted, Pending, Active, Offer or Won stages."
+            }
+            else{
+                this.titleText = null;
+            }
+            return this.childGridData1;
+        }
+        else {
+            this.titleText = "This deal does not belong in any Cost Test Group and will be ignored in the Cost Test calculations."
+            return this.childGridData2;
+            
+        }
     }
 
     ngOnInit() {

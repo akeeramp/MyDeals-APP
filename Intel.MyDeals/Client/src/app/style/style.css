@@ -124,3 +124,11 @@ kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li {
 .z-index-zero .navbar-fixed-top {
     z-index: 0 !important;
 }
+
+kendo-grid.icon-changes table tr td a.k-plus:before {
+    content: "\e005" !important;
+}
+
+kendo-grid.icon-changes table tr td a.k-minus:before {
+    content: "\e001" !important;
+}
