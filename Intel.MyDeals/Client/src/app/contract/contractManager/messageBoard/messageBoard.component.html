@@ -23,22 +23,22 @@
             </div>
         </div>
     </div>
-
+    <div id="msgGrid" class="msgGrid oppo-grids physics-css" *ngIf="showDetails" style="margin-top: 20px;">
+        <kendo-grid class="viewhide-details-style file-attachment-contract" [data]="gridData">
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="MsgType" title="&nbsp;" width="50px">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <span *ngIf="dataItem.MsgType === 1"><i class='intelicon-information-solid' style='font-size: 16px; color: #C4D600;'></i></span>
+                    <span *ngIf="dataItem.MsgType === 2"><i class='intelicon-alert-solid' style='font-size: 16px; color: #FC4C02;'></i></span>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="KeyIdentifiers" title="Pricing Strategy" width="130px;">
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="Message" title="Message" width="200px">
+            </kendo-grid-column>
+        </kendo-grid>
+    </div>
 </div>
 
 
-<div id="msgGrid" class="msgGrid oppo-grids physics-css" *ngIf="showDetails" style="margin-bottom: 40px;">
-    <kendo-grid class="viewhide-details-style file-attachment-contract"  [data]="gridData">
-        <kendo-grid-column [headerClass]="{'headerClass':true}" field="MsgType" title="&nbsp;" width="50px">
-            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                <span *ngIf="dataItem.MsgType === 1"><i class='intelicon-information-solid' style='font-size: 16px; color: #C4D600;'></i></span>
-                <span *ngIf="dataItem.MsgType === 2"><i class='intelicon-alert-solid' style='font-size: 16px; color: #FC4C02;'></i></span>
-            </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" field="KeyIdentifiers" title="Pricing Strategy" width="130px;">
-        </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" field="Message" title="Message" width="200px">
-        </kendo-grid-column>
-    </kendo-grid>
-</div>
+
 

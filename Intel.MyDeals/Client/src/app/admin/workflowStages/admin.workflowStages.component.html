@@ -17,8 +17,8 @@
             (save)="saveHandler($event)" [columnMenu]="true" class="boxsize">
             <ng-template kendoGridToolbarTemplate>
                 <!--Hiding DD functionality as its not working as expected, issues in DB-->
-                <button kendoGridAddCommand class="k-button addButton"
-                    [hidden]="true"><span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RECORD
+                <button kendoGridAddCommand class="k-button addButton">
+                <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RECORD
                 </button><button (click)="clearFilter()" class="k-button clearButton"><span
                         class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS </button>
                 <kendo-grid-spacer></kendo-grid-spacer>
@@ -33,7 +33,7 @@
                         id="command-icon" class="k-command-icon" kendoGridCancelCommand><span
                             class="k-icon k-i-cancel-outline k-icon-sm"></span></button>
                             <!--Hiding DELETE functionality as its not working as expected, issues in DB-->
-                            <button id="command-icon"[hidden]="true" class="k-command-icon" kendoGridRemoveCommand><span
+                            <button id="command-icon" class="k-command-icon" kendoGridRemoveCommand><span
                             class="k-icon k-i-delete k-icon-sm"></span></button></ng-template>
             </kendo-grid-command-column>
             <kendo-grid-column field="WFSTG_MBR_SID" title="ID" width="100" [headerClass]="{'headerClass':true}"

@@ -178,7 +178,7 @@ export class adminWorkflowStagesComponent {
             ROLE_TIER_NM: new FormControl("", Validators.required),
             WFSTG_LOC: new FormControl("", Validators.required),
             WFSTG_ORD: new FormControl("", Validators.required),
-            ALLW_REDEAL: new FormControl()
+            ALLW_REDEAL: new FormControl(false)
         });
         //this.InitiateDropDowns(this.formGroup);
         this.formGroup.valueChanges.subscribe(() => {

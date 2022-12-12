@@ -950,6 +950,13 @@ export class contractDetailsComponent {
                                     this.contractData.CUST_MBR_SID = this.Customer = Number(this.copyContractData.CUST_MBR_SID);
                                     this.contractData.START_DT = this.START_DT = this.stDate = new Date(moment(this.copyContractData.START_DT).format("l"));
                                     this.contractData.END_DT = this.END_DT = this.existingMinEndDate = new Date(moment(this.copyContractData.END_DT).format("l"));
+                                    if (this.isCopyContract) {
+                                        if (moment(this.contractData.END_DT) > moment('2099/12/31').add(0, 'years')) {
+                                            this.contractData.END_DT = moment('2099/12/31').format("MM/DD/YYYY");
+                                            this.END_DT = moment('2099/12/31').format("MM/DD/YYYY");
+                                            this.END_DT = new Date(this.END_DT);
+                                        }
+                                    }
                                     this.Customer = this.copyContractData.Customer;
                                     this.contractData.MinDate = this.MinDate = moment().subtract(6, "years").format("l");
                                     this.contractData.MaxDate = this.MaxDate = moment("2099").format("l");

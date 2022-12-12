@@ -584,11 +584,3 @@
     window.env = "@env";
 </script>
 
-@if (env == "PROD")
-{
-    <script src="https://appusage.intel.com/Service/api/loguser/114464" async></script>
-}
-else
-{
-    <script src="https://appusage.intel.com/Service/api/loguser/114464?environment=@env" async></script>
-}
