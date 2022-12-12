@@ -461,13 +461,13 @@ export class contractManagerComponent {
         var itemListRowString=``;
         for(let i=0; i<data.items.length; i++){
                 itemListRowString =itemListRowString+ `<tr>
-                <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span style='color:#00a;'><a href='${data.items[i].contractUrl}'>` + data.items[i].CNTRCT + `</a>*</span> </td>
+                <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><p style='color:#00a;'><a href='${data.items[i].contractUrl}'>` + data.items[i].CNTRCT + `</a>*</p> </td>
                 <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span>`+ data.items[i].C2A_ID + `</span> </td>
-                <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span style='color:#00a;'><a href='${data.items[i].url}'>` + data.items[i].DC_ID + `</a>*</span> </td>
+                <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><p style='color:#00a;'><a href='${data.items[i].url}'>` + data.items[i].DC_ID + `</a>*</p> </td>
                 <td style='width:160px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span>`+ data.items[i].TITLE + `</span> </td>
                 <td style='width:100px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span style='color:#1f4e79;'>`+ data.items[i].VERTICAL_ROLLUP + `</span> </td>
                 <td style='width:200px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span style='color:#767171;'>Moved to the `+ data.items[i].NEW_STG + ` </span> </td>
-                <td style='width:200px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><span style='color:#00a;'><a href='${data.items[i].url}'>View Pricing Strategy</a>*</span> </td>
+                <td style='width:200px; font-size: 12px; font-family: sans-serif; vertical-align:inherit;'><p style='color:#00a;'><a href='${data.items[i].url}'>View Pricing Strategy</a>*</p> </td>
             </tr>`
         }
         let valuemsg = `

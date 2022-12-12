@@ -4,7 +4,7 @@
 <link href="addWidget.component.css" rel="stylesheet" />
 <h1 mat-dialog-title class="modalheader">{{data.name}} <button type="button" class="close fr close-widget" (click)="onNoClick()" aria-hidden="true">&times;</button></h1>
 <div mat-dialog-content class="modalbody">
-    <div class="container add-widget-container" style="height: 100%; overflow: auto; ">
+    <div class="container add-widget-container" style="width: 100%; overflow: auto; height:300px ">
         <div class="widget-wrapper row" *ngFor="let widget of finalItems" [ngClass]="widget.isAdded==true ? 'widget-enabled' : 'widget-disabled'" (click)="add(widget)">
             <div class="f1 col-sm-1 " width="30px"><i class="{{widget.icon}}"></i></div>
             <div class="f1 col-sm ">
