@@ -4,7 +4,7 @@ import { logger } from "../../shared/logger/logger";
  import * as _moment from "moment";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { FormBuilder } from "@angular/forms";
-import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
+import { DataStateChangeEvent, GridDataResult, PageSizeItem } from "@progress/kendo-angular-grid";
 import { State } from "@progress/kendo-data-query";
 import { process, distinct } from "@progress/kendo-data-query";
 import { adminlegalExceptionService } from "./admin.legalException.service";
@@ -13,7 +13,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { adminamendmentExceptioncomponent } from "./admin.amendmentException.component";
 import { admincompareExceptionscomponent } from "./admin.compareExceptions.component";
 import { GridUtil } from "../../contract/grid.util";
-import { DatePipe } from '@angular/common';
+import { DatePipe, formatDate } from '@angular/common';
 import { adminDownloadExceptionscomponent } from "./admin.downloadExceptions.component"
 import { adminviewDealListcomponent } from "./admin.viewDealList.component";
 
@@ -57,6 +57,24 @@ export class adminlegalExceptionComponent {
         take: 5,
         sort: [],
     };
+     
+    private pageSizes: PageSizeItem[] = [
+        
+        {
+            text: "25",
+            value: 25
+        },
+        {
+            text: "50",
+            value: 50
+        },
+        {
+            text: "100",
+            value: 100
+        }
+    ];
+
+
 
     constructor(private loggersvc: logger, private adminlegalExceptionSrv: adminlegalExceptionService,
         private formBuilder: FormBuilder,  protected dialog: MatDialog,
@@ -74,7 +92,7 @@ export class adminlegalExceptionComponent {
             this.adminlegalExceptionSrv.getLegalExceptions().subscribe((result: Array<any>) => {
                 this.isLoading = false;
                 if (result.length > 0) {
-                    for (var i = 0; i < result.length; i++) {
+                    for (let i = 0; i < result.length; i++) {
                         result[i]["IS_SELECTED"] = false;
                     }
                      
@@ -139,7 +157,7 @@ export class adminlegalExceptionComponent {
     }
   
     public openCreateExceptionDialog(): void {
-       let creacteExceptionobj= this.intializeformdata();
+        const creacteExceptionobj = this.intializeformdata();
         const dialogRef = this.dialog.open(adminexceptionDetailsComponent, {
             width: "1800px",
             maxWidth:"100vw",
@@ -158,7 +176,7 @@ export class adminlegalExceptionComponent {
                 this.adminlegalExceptionSrv.createLegalException(returnVal).subscribe((result: any) => { 
                     this.gridResult.push(result);
                     this.gridData = process(this.gridResult, this.state);
-                    this.loggersvc.success('Legal Exception added.' + result);
+                    this.loggersvc.success('Legal Exception added.');
                 }, (error) => {
                     this.loggersvc.error('Unable to add new Legal exceptions', error);
                 });
@@ -240,7 +258,7 @@ export class adminlegalExceptionComponent {
 
                         dialogRef.afterClosed().subscribe((returnVal) => {
                             if (returnVal != undefined && returnVal != "close") {
-                                let today = new Date();
+                                const today = new Date();
                                 //this.savedateformate(returnVal);
                                 returnVal.VER_NBR = returnVal.VER_NBR + 1;
                                 returnVal.VER_CRE_DTM = moment(today).format("l");
@@ -278,7 +296,7 @@ export class adminlegalExceptionComponent {
         });
 
         let selectedchildlist = [];
-        var flag = "";
+        let flag = "";
         if (this.childgridData != undefined) {
             selectedchildlist = this.childgridData.data.filter(element => {
                 return element.IS_SELECTED == true;
@@ -338,7 +356,7 @@ export class adminlegalExceptionComponent {
          
         if (item.DEALS_USED_IN_EXCPT != "") {
             const dialogRef = this.dialog.open(adminviewDealListcomponent, {
-                width: "800px",
+                width: "700px",
                 data: {
                     dialogTitle: "Deal List",
                     dealList: item.DEALS_USED_IN_EXCPT,
@@ -411,12 +429,14 @@ export class adminlegalExceptionComponent {
 
     changedateformat(item: any) {
         if (item != undefined) {
-            item.DT_APRV = new Date(item.DT_APRV);
-            item.CHG_DTM = new Date(item.CHG_DTM)
+            item.DT_APRV = item.DT_APRVDT_APRV !=undefined ? new Date(item.DT_APRVDT_APRV) : new Date();
+            item.CHG_DTM = new Date(item.CHG_DTM);
             item.PCT_LGL_EXCPT_STRT_DT = new Date(item.PCT_LGL_EXCPT_STRT_DT);
             item.PCT_LGL_EXCPT_END_DT = new Date(item.PCT_LGL_EXCPT_END_DT);
+            item.VER_CRE_DTM = new Date(item.VER_CRE_DTM);
         }
     }
+
     savedateformate(item: any) {
         if (item != undefined) {
             item.DT_APRV = moment(item.DT_APRV).format("l");
@@ -428,7 +448,7 @@ export class adminlegalExceptionComponent {
     }
 
     detailExpand(e) {
-        var dataItem = e.dataItem;
+        const dataItem = e.dataItem;
         this.childGrid(dataItem);
     }
 
@@ -458,7 +478,7 @@ export class adminlegalExceptionComponent {
 
     selectItemChildGrid(event, dataItem) {
         if (event.target.checked) {
-            for (var i = 0; i < this.filterDataChildGrid.length; i++) {
+            for (let i = 0; i < this.filterDataChildGrid.length; i++) {
                 if (this.filterDataChildGrid[i].VER_NBR == dataItem.VER_NBR) {
                     this.filterDataChildGrid[i].IS_SELECTED = true;
                     this.filterDataChildGrid[i].IS_ChildGrid = true;
@@ -470,7 +490,7 @@ export class adminlegalExceptionComponent {
             }
         }
         else {
-            for (var i = 0; i < this.filterDataChildGrid.length; i++) {
+            for (let i = 0; i < this.filterDataChildGrid.length; i++) {
                 if (this.filterDataChildGrid[i].VER_NBR == dataItem.VER_NBR) {
                     this.filterDataChildGrid[i].IS_SELECTED = false;
                     this.filterDataChildGrid[i].IS_ChildGrid = false;
@@ -480,11 +500,11 @@ export class adminlegalExceptionComponent {
     }
 
     download() {
-        let selectedlist = this.gridData.data.filter(element => {
+        const selectedlist = this.gridData.data.filter(element => {
             return element.IS_SELECTED == true;
         });
         if (selectedlist && selectedlist.length > 0) {
-            let data = {
+            const data = {
                 "dataItem": selectedlist,
             }
             const dialogRef = this.dialog.open(adminDownloadExceptionscomponent, {

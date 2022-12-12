@@ -6,7 +6,7 @@
     <h2 class="header-css">Cost Test Legal Exceptions</h2>
 </div>
 <div class="col-md-{{colexpand}}">
-    <div class="kendo-grid-buttons admin-table-header align-padding">
+    <div>
         <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" id="legalGrid"
                     [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                     [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
@@ -37,7 +37,7 @@
                     <span class="intelicon-show-results-outlined" title="Show Additional Column"></span>
                 </button>
             </ng-template>
-            <kendo-grid-column *ngIf="editAccess" [headerClass]="{ 'text-center remove-filter': true }" field="IS_SELECTED" title="selectAll" width="80">
+            <kendo-grid-column *ngIf="editAccess" [headerClass]="{ 'text-center remove-filter': true }" field="IS_SELECTED" title="selectAll" width="60">
                 <ng-template kendoGridHeaderTemplate let-dataItem>
                     <div class='leagalgridheader'>
                         Select All<br />
@@ -49,7 +49,7 @@
                     </div>
                 </ng-template>
                 <ng-template kendoGridCellTemplate let-dataItem>
-                    <input style="zoom: 1.2; margin-left: 7px;"
+                    <input style="zoom: 1.2; margin-left: 10px;"
                            type="checkbox" (click)="checkeditems(dataItem)"
                            [checked]="dataItem.IS_SELECTED" />
                 </ng-template>
@@ -76,7 +76,7 @@
                             </button>
                         </div>
                         <div class="col">
-                            <button type="button" [ngClass]="{'applyopacity': dataItem.DEALS_USED_IN_EXCPT != ''}" class="legaliexgridbuttons intelicon-trash-solid dealTools" title='Only exception not applied to a deal can be Deleted' (click)="DeleteException(dataItem,rowIndex)">
+                            <button type="button" [ngClass]="{'applyopacity': dataItem.DEALS_USED_IN_EXCPT != '' && dataItem.DEALS_USED_IN_EXCPT != null}" class="legaliexgridbuttons intelicon-trash-solid dealTools" title='Only exception not applied to a deal can be Deleted' (click)="DeleteException(dataItem,rowIndex)">
                             </button>
                         </div>
                     </div>
@@ -85,7 +85,7 @@
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="120" field="ACTV_IND" filter="boolean">
                 <ng-template kendoGridCellTemplate let-dataItem>
-                    <mat-slide-toggle class="toggle-button-custom toggle-align-grid" [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
+                    <mat-slide-toggle class="toggle-button-custom toggle-align-grid gridCheckboxAlign" [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
                 </ng-template>
                 <ng-template kendoGridHeaderTemplate>
                     <div class='isRequired leagalgridheader'>Active </div>
@@ -94,8 +94,8 @@
             </kendo-grid-column>
           
             <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="110" field="IS_DSBL" filter="boolean">
-                <ng-template kendoGridCellTemplate let-dataItem>
-                    <mat-slide-toggle class="toggle-button-custom toggle-align-grid" [color]="color" [checked]="dataItem.IS_DSBL" disabled></mat-slide-toggle>
+                <ng-template kendoGridCellTemplate let-dataItem >
+                    <mat-slide-toggle class="toggle-button-custom toggle-align-grid gridCheckboxAlign" [color]="color" [checked]="dataItem.IS_DSBL" disabled></mat-slide-toggle>
                 </ng-template>
                 <ng-template kendoGridHeaderTemplate>
                     <div class='isRequired leagalgridheader'>Hidden </div>
@@ -370,9 +370,9 @@
 
 </div>
  
-<div class="col-md-6 legalpage-margin">
+<div class="col-md-6">
 
-    <div class="panel-heading" style="background-color: #057bd5; margin-top: 7px; color: white">
+    <div class="viewExceptionheader">
         View Exception Details
         <i id="btnClose" class="intelicon-close float" (click)="closeViewException()" title="Close this window"></i>
     </div>
