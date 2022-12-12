@@ -96,7 +96,7 @@
                             <div>
                                 <div style="margin-top: 10px;">
                                     <div *ngFor="let ps of contractData.PRC_ST | filter:query; let psIndex = index;" class="lnavStrategyContainer">
-                                        <div class="psNav row" id="lnavPs_{{ ps.DC_ID}}" >
+                                        <div class="psNav row icon_p_fix " id="lnavPs_{{ ps.DC_ID}}" >
                                             <div class="fl col-md-1" (click)="isPSExpanded[psIndex] = !isPSExpanded[psIndex]">
                                                 <i class="glyphicon chevron linkable" style="margin-right: 5px; margin-top: 3px;" [ngClass]="{'intelicon-down': isPSExpanded[psIndex], 'intelicon-right-next': !isPSExpanded[psIndex]}"></i>
                                                 <!--<i class="chevron linkable" data-toggle="collapse" [attr.data-target]="'#sumWipGrid_'+ pt.DC_ID"-->
@@ -123,7 +123,7 @@
                                                 </kendo-contextmenu>
                                             </div>
                                         </div>
-                                        <div class="fl" style="width: 290px; font-size: 12px;" ng-init="isEditable=false" title="Stage:{{ ps.WF_STG_CD}}">
+                                        <div class="fl" style="width: 300px; font-size: 12px;" ng-init="isEditable=false" title="Stage:{{ ps.WF_STG_CD}}">
                                             <div id="sumPSdata_{{ps.DC_ID}}" [ngClass]="{'multi-collapse in collapse show': isPSExpanded[psIndex], 'multi-collapse in collapse': !isPSExpanded[psIndex]}" style="margin-bottom: 10px;">
                                                 <div *ngFor="let pt of ps.PRC_TBL | filter:query; let ptIndex = index;" class="lnavPricingTableContainer">
                                                     <div id="lnavPt_{{ pt.DC_ID}}" class="ptNav" [ngClass]="{active: contractId_Map.pt_id == pt.DC_ID}">
@@ -137,7 +137,7 @@
                                                             </div>
                                                         </div>
                                                         <div class="fr" *ngIf="C_ADD_PRICING_STRATEGY || ps._settings.C_ADD_PRICING_TABLE || ps._settings.C_DEL_PRICING_TABLE || usrRole === 'SA'" style="margin-left:-3px;">
-                                                            <span #targetPS class="hasMenuPt{{ pt.DC_ID }} ptBtn" title="View more options"><i class="intelicon-vertical-menu"></i></span>
+                                                            <span #targetPS class="hasMenuPt{{ pt.DC_ID }} ptBtn" title="View more options"><i class="intelicon-vertical-menu blue_b_fix"></i></span>
                                                             <kendo-contextmenu [target]="targetPS" showOn="click" (select)="onSelectPtMenu($event,ps,pt)">
                                                                 <kendo-menu-item *ngIf="C_ADD_PRICING_STRATEGY" icon="k-icon k-i-add" text="Add Pricing Strategy" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>
                                                                 <kendo-menu-item *ngIf="ps._settings && ps._settings.C_ADD_PRICING_TABLE && ps.IS_HYBRID_PRC_STRAT !== '1'" icon="k-icon k-i-add" text="Add Pricing Table" [cssStyle]="{ color: '#0071c5' }"></kendo-menu-item>

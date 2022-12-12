@@ -138,7 +138,7 @@
     <deal-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [in_Search_Text]="searchText" [contractData]="contractData" [UItemplate]="UItemplate" (tmDirec)="redirectingFn($event)">
     </deal-editor>
 </div>
-<div *ngIf="selectedTab == 'MC'" class="col-md-12 loaderMeet border_line_fix">
+<div *ngIf="selectedTab == 'MC'" class="col-md-12 loaderMeet " style="border: 2px solid #bcbcbc;">
     <meet-comp-contract [objSid]="contractData.DC_ID" [isTender]="contractData.IS_TENDER" [isAdhoc]="'1'" [objTypeId]="'1'" [cId]="c_Id" [pageNm]="'WIDGET'" (tmDirec)="redirectingFn($event)" (contractRefresh)="refreshContract($event)">
     </meet-comp-contract>
 </div>
