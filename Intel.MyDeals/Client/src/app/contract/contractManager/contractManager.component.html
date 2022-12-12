@@ -157,9 +157,9 @@
                                             <span >
                                             <input type="text" placeholder="Enter C2A Number" 
                                                    [(ngModel)]="contractData.C2A_DATA_C2A_ID" style="width: 260px; padding: 4px;">
-                                            <button class="btn btn-skyblue" style="width:130px !important" type="button"
+                                            <button class="btn btn-skyblue" style="width: 130px !important; margin: -2px 10px 0 10px; width: 110px;" type="button"
                                                     [ngClass]="{'disabled': (contractData.C2A_DATA_C2A_ID.trim() === '' )}" [disabled]="contractData.C2A_DATA_C2A_ID.trim() === ''"
-                                                    (click)="(contractData.C2A_DATA_C2A_ID.trim() === '' ) || continueAction(true,null)" style="margin: -2px 10px 0 10px; width: 110px;">
+                                                    (click)="(contractData.C2A_DATA_C2A_ID.trim() === '' ) || continueAction(true,null)">
                                                 Use C2A Number
                                             </button>
                                         </span>
@@ -322,7 +322,7 @@
                                             <span *ngIf="gridDataSet[pt.DC_ID]==undefined" class="k-i-loading loading-design-custom">
                                                 <span style="margin-left: 6em; font-size:10px;">Loading.....</span>
                                             </span>
-                                            <kendo-grid id="manageFilterStyle" *ngIf="state[pt.DC_ID].filter != undefined && gridDataSet[pt.DC_ID]!=undefined" [data]="gridDataSet[pt.DC_ID]"  [resizable]="true" [filter]="state[pt.DC_ID].filter" [sortable]="true"
+                                            <kendo-grid id="manageFilterStyle" class="approval-tables" *ngIf="state[pt.DC_ID].filter != undefined && gridDataSet[pt.DC_ID]!=undefined" [data]="gridDataSet[pt.DC_ID]"  [resizable]="true" [filter]="state[pt.DC_ID].filter" [sortable]="true"
                                                         filterable="menu" (dataStateChange)="dataStateChange($event, pt.DC_ID)" style="height:auto">
                                                 <kendo-grid-column title="Tools" field="NOTES" [headerClass]="{'headerClass':true}" [width]="200" [locked]="true" [filterable]="false" [sortable]="false">
                                                     <ng-template kendoGridHeaderTemplate>

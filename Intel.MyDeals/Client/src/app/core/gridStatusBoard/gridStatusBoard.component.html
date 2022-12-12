@@ -59,7 +59,7 @@
                         </ng-template>
                         {{dataItem}}
                     </kendo-grid-column>
-                    <kendo-grid-column class="gridCell" title="Contract Title" field="TITLE" width="200px" [headerClass]="{'headerClass':true}" [filterable]="true">
+                    <kendo-grid-column class="gridCell" title="Contract Title" field="TITLE" width="190" [headerClass]="{'headerClass':true}" [filterable]="true">
                         <ng-template kendoGridCellTemplate let-dataItem>
                             <div kendoTooltip filter="div">
                                 <div class="textDecoratorWrap" title="{{dataItem.TOOLTIP_CONTENT}}">
@@ -88,7 +88,7 @@
                             </date-range-filter>
                         </ng-template>
                     </kendo-grid-column>
-                    <kendo-grid-column class="gridCell" title="Notes" field="NOTES" width="170px" [headerClass]="{'headerClass':true}" [filterable]="true">
+                    <kendo-grid-column class="gridCell" title="Notes" field="NOTES" width="150" [headerClass]="{'headerClass':true}" [filterable]="true">
                     </kendo-grid-column>
                     <div *kendoGridDetailTemplate="let dataItem">
                         <div *ngIf="!isLoaded">

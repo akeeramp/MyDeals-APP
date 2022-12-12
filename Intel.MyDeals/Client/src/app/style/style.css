@@ -132,3 +132,57 @@ kendo-grid.icon-changes table tr td a.k-plus:before {
 kendo-grid.icon-changes table tr td a.k-minus:before {
     content: "\e001" !important;
 }
+
+
+kendo-grid.approval-tables table tr td {
+    padding: 0 5px !important;
+    font-size: 12px;
+    border-right: 1px solid #e5e5e5;
+    border-bottom: 1px solid #e5e5e5;
+}
+
+kendo-grid#manageFilterStyle kendo-grid-list .k-grid-content-locked table tr td:first-child .dealTools.custom-deal-tools .tools-parent .grid-status.fl.gridStatusMarker {
+    margin-bottom: 2px;
+}
+
+kendo-grid.approval-tables table tr th span.k-cell-inner .k-link span.k-column-title {
+    color: #000;
+    font-size: 12px;
+    font-weight: 400;
+}
+
+kendo-grid.approval-tables table tr th {
+    vertical-align: bottom !important;
+    padding-top: 5px;
+    padding-bottom: 5px;
+}
+
+kendo-grid.approval-tables table tr th label b {
+    color: #000;
+}
+
+kendo-grid.approval-tables .k-grid-content-locked table tr td:first-child {
+    padding-left: 0 !important;
+}
+
+kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li.k-state-active {
+    border-color: #b1babf;
+}
+
+kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li {
+    background: #eeeeee !important;
+    border-color: #dfdfdf;
+}
+
+    kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li.k-state-active span.k-link {
+        font-size: 15px;
+    }
+
+kendo-grid.highlightsty-title table tr td.k-detail-cell > div:first-child {
+    padding: 0 !important;
+    margin: 5px 5px 5px 0;
+}
+
+kendo-grid.child-dealer-desk .k-grid-aria-root kendo-grid-list .k-grid-content {
+    overflow: overlay;
+}
