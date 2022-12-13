@@ -1,0 +1,22 @@
+﻿button.btn.btn-primary.save_btn_dis:disabled {
+    background-color: rgb(237, 239, 240) !important;
+    color: rgb(177, 186, 191) !important;
+    border-color: rgb(177, 186, 191) !important;
+}
+.Name_text {
+    text-align: right;
+    padding-left: 15px;
+    font-size: 15px;
+    font-weight: bold;
+    margin-top: 12px;
+}
+.close_btn_fix {
+    padding-bottom: 14px!important;
+    font-size: 22px !important;
+    font-weight: bold !important;
+    line-height: 1;
+    color: rgb(17, 17, 17) !important;
+  }
+.remove_btw_s {
+    margin-right: -4px !important;
+}

@@ -7,6 +7,7 @@ export interface DialogData {
 @Component({
     selector: "widget-settings",
     templateUrl: "Client/src/app/dashboard/widgetSettings/widgetSettings.component.html",
+    styleUrls: ["Client/src/app/dashboard/widgetSettings/widgetSettings.component.css"]
 })
 export class widgetSettingsComponent {
     constructor(public dialogRef: MatDialogRef<widgetSettingsComponent>,
