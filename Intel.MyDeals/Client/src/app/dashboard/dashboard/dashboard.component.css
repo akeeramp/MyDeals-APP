@@ -105,3 +105,7 @@ kendo-textbox.kendoInput.font-input.cd-input-bottom.k-textbox-design.k-textbox.n
 kendo-textbox.kendoInput.font-input.cd-input-bottom.k-textbox-design.k-textbox.ng-touched.ng-dirty.ng-valid {
     border-bottom: 2px solid #0071c5 !important;
 }
+kendo-window#OvrLp.k-wind-design {
+    width: 800px !important;
+    padding-top: 0 !important;
+}
