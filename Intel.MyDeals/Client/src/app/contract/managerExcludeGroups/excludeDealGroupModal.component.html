@@ -100,10 +100,10 @@
                                            [headerClass]="{'headerClass':true}" [width]="140" [hidden]="!pctGroupDealsView"></kendo-grid-column>
                         <ng-template *ngIf="isSelected && isData" kendoGridDetailTemplate let-dataItem>
                             <div id="childGrid" class="opUiContainer md dashboard group-exclude-child">
-                                <kendo-grid [data]="childgridColumns" (dataStateChange)="dataStateChange($event)" [isDetailExpanded]="expandInStockProducts1"
-                                            class="height-auto-child child-head icon-changes" [hideHeader]="true">
+                                <kendo-grid [data]="childgridColumns" (dataStateChange)="dataStateChange($event)" [kendoGridExpandDetailsBy]="expandDetailsBy"
+                                            [(expandedDetailKeys)]="expandedDetailKeys" class="height-auto-child child-head icon-changes" [hideHeader]="true">
                                     <kendo-grid-column field="data" title=""
-                                                       [headerClass]="{'headerClass':false}" [width]="1500" ></kendo-grid-column>
+                                                       [headerClass]="{'headerClass':false}" [width]="1500"></kendo-grid-column>
                                     <ng-template kendoGridDetailTemplate let-dataItem>
                                         <kendo-grid [data]="convertToChildData(dataItem)" (dataStateChange)="dataStateChange($event)"
                                                     [rowClass]="rowCallback" [ngClass]="{'childColor': hasCheckbox && dataItem.data == 'Deals below are included as part of the Cost Test'}" class="height-auto-child child-EDGM " [hideHeader]="true" style="padding:0">

@@ -88,9 +88,11 @@ export class excludeDealGroupModalDialog {
     public expandInStockProducts({ dataItem }: RowArgs): boolean {
         return true;
     }
-    public expandInStockProducts1({ dataItem }: RowArgs): boolean {
-        return dataItem.data!='';
-    }
+    public expandedDetailKeys: any[] = ['Deals below are included as part of the Cost Test', 'Deals shown in grey overlap but are NOT included as part of the Cost Test'];
+
+    public expandDetailsBy = (dataItem: any): number => {
+        return dataItem.data;
+    };
 
     clkAllItems(): void {
         for (let i = 0; i < this.childGridResult.length; i++) {

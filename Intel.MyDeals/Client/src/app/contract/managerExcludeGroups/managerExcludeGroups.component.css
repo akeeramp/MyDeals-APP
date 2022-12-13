@@ -655,12 +655,12 @@ kendo-grid.exclude-filter-style kendo-grid-list table tr td {
         
     }
     kendo-grid.exclude-filter-style kendo-grid-list table tr td .childColor table tr td {
-        color: navy !important;
+        color: rgb(0,0,128) !important;
         background-color: white !important;
     }
 
     kendo-grid.exclude-filter-style kendo-grid-list table tr td .child-head table tr td {
-        color: navy;
+        color: rgb(0,0,128);
         background-color: #f4f4f4;
         border-bottom: 1px solid rgba(33, 37, 41, 0.125) !important;
         border-left: none !important;

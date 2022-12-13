@@ -186,3 +186,19 @@ kendo-grid.highlightsty-title table tr td.k-detail-cell > div:first-child {
 kendo-grid.child-dealer-desk .k-grid-aria-root kendo-grid-list .k-grid-content {
     overflow: overlay;
 }
+
+kendo-grid.icon-changes table tr td a.k-icon:hover {
+    color: var(--light-blue) !important;
+}
+
+kendo-grid.icon-changes table tr td a.k-icon:focus {
+    color: rgb(128,128,128) !important;
+}
+
+kendo-grid.icon-changes table tr td.k-detail-cell table tr td a.k-minus:focus:before {
+    border: 2px solid rgb(0 0 0 / 20%);
+}
+
+kendo-grid.icon-changes table tr td.k-detail-cell table tr td a.k-plus:focus:before {
+    border: 2px solid rgb(0 0 0 / 20%);
+}
