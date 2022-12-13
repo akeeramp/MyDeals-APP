@@ -165,13 +165,16 @@ export class adminRulesComponent {
             }
             this.isLoading = true;
             this.gridResult = await this.adminRulesSvc.getPriceRules(0, "GET_RULES").toPromise().catch((error) => {
-                    this.loggerSvc.error(
-                        "Unable to get Price Rules.",
-                        error,
-                        error.statusText
-                    );
-                }
+                this.loggerSvc.error(
+                    "Unable to get Price Rules.",
+                    error,
+                    error.statusText
+                );
+            }
             );
+            this.gridResult.forEach((row) => {
+                Object.assign(row, { isElligibleForApproval: this.isElligibleForApproval })
+            })
             this.gridData = process(this.gridResult, this.state);
             this.isLoading = false;
         }
@@ -210,11 +213,11 @@ export class adminRulesComponent {
                 this.state.filter.filters = [{ field: "Id", operator: "eq", value: this.rid }];
             }
         }
-        await this.loadRules();
         await this.getConstant();
+        await this.loadRules();
         if ((<any>window).usrRole == 'DA' || (<any>window).usrRole == 'SA') {
             this.RuleConfig = await this.adminRulesSvc.getPriceRulesConfig().toPromise().catch((err) => {
-                this.loggerSvc.error("Operation failed",'');
+                this.loggerSvc.error("Operation failed", '');
             });
             await this.GetRules(0, "GET_RULES");
         }
@@ -273,8 +276,8 @@ export class adminRulesComponent {
 
     async getConstant() {
         // If user has closed the banner message he wont see it for the current session again.
-        let result: any = await this.constantSvc.getConstantsByName("PRC_RULE_EMAIL").toPromise().catch((err)=>{
-                this.loggerSvc.error("Unable To Get Constant by Name","Error",err);
+        let result: any = await this.constantSvc.getConstantsByName("PRC_RULE_EMAIL").toPromise().catch((err) => {
+            this.loggerSvc.error("Unable To Get Constant by Name", "Error", err);
         });
         if (!!result) {
             this.adminEmailIDs = result.CNST_VAL_TXT === "NA" ? "" : result.CNST_VAL_TXT;
@@ -318,21 +321,21 @@ export class adminRulesComponent {
             }
             this.isLoading = true;
             this.adminRulesSvc.updatePriceRule(priceRuleCriteria, strActionName).subscribe((response) => {
-                if (response.data.Id > 0) {
-                    this.gridResult.filter(x => x.Id == response.data.Id)[0].ChangedBy = response.data.ChangedBy;
-                    this.gridResult.filter(x => x.Id == response.data.Id)[0].ChangeDateTime = response.data.ChangeDateTime;
-                    this.gridResult.filter(x => x.Id == response.data.Id)[0].ChangeDateTimeFormat = response.data.ChangeDateTimeFormat;
+                if (response.Id > 0) {
+                    this.gridResult.filter(x => x.Id == response.Id)[0].ChangedBy = response.ChangedBy;
+                    this.gridResult.filter(x => x.Id == response.Id)[0].ChangeDateTime = response.ChangeDateTime;
+                    this.gridResult.filter(x => x.Id == response.Id)[0].ChangeDateTimeFormat = response.ChangeDateTimeFormat;
                     switch (strActionName) {
                         case "UPDATE_ACTV_IND": {
-                            this.gridResult.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
-                            this.gridResult.filter(x => x.Id == response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
+                            this.gridResult.filter(x => x.Id == response.Id)[0].IsActive = isTrue;
+                            this.gridResult.filter(x => x.Id == response.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
                             this.loggerSvc.success("Rule has been updated successfully with the status '" + (isTrue ? "Active" : "Inactive") + "'");
                         } break;
                         case "UPDATE_STAGE_IND": {
-                            this.gridResult.filter(x => x.Id == response.data.Id)[0].RuleStage = isTrue;
-                            this.gridResult.filter(x => x.Id == response.data.Id)[0].RuleStageLabel = isTrue ? "Approved" : "Pending Approval";
-                            this.gridResult.filter(x => x.Id == response.data.Id)[0].IsActive = isTrue;
-                            this.gridResult.filter(x => x.Id == response.data.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
+                            this.gridResult.filter(x => x.Id == response.Id)[0].RuleStage = isTrue;
+                            this.gridResult.filter(x => x.Id == response.Id)[0].RuleStageLabel = isTrue ? "Approved" : "Pending Approval";
+                            this.gridResult.filter(x => x.Id == response.Id)[0].IsActive = isTrue;
+                            this.gridResult.filter(x => x.Id == response.Id)[0].RuleStatusLabel = isTrue ? "Active" : "Inactive";
                             this.loggerSvc.success("Rule has been updated successfully with the stage '" + (isTrue ? "Approved" : "Pending") + "'");
                         } break;
                     }
@@ -444,35 +447,35 @@ export class adminRulesComponent {
         this.spinnerMessageDescription = "Please wait while we loading the rule..";
         let tempDataItem = {
             "Id": dataItem, "isCopy": isCopy, "isEligible": this.isElligibleForApproval
-            };
-            this.openRuleDetailsModal(tempDataItem);
+        };
+        this.openRuleDetailsModal(tempDataItem);
     }
 
     copyRule(id) {
         this.adminRulesSvc.copyPriceRule(id).subscribe(
             (response: any) => {
-            if (response > 0) {
-                this.editRule(response, true);
-                this.loggerSvc.success("Rule has been copied");
+                if (response > 0) {
+                    this.editRule(response, true);
+                    this.loggerSvc.success("Rule has been copied");
 
-            } else {
-                this.loggerSvc.error("Unable to copy the rule", "");
-            }
-        }, (error) => {
+                } else {
+                    this.loggerSvc.error("Unable to copy the rule", "");
+                }
+            }, (error) => {
                 this.loggerSvc.error(
                     "Unable to copy the rule.",
                     error,
                     error.statusText
                 );
             },
-    )}
+        )}
 
     openRuleDetailsModal(dataItem) {
         const dialogRef = this.dialog.open(RuleDetailsModalComponent, {
             width: "1800px",
             panelClass: 'rule-details-model-style',
             data: dataItem
-            });
+        });
         dialogRef.afterClosed().subscribe(() => {
             this.refreshGrid();
         });
@@ -480,19 +483,19 @@ export class adminRulesComponent {
 
     async GetRules(id, actionName) {
         this.spinnerMessageDescription = "Please wait while we loading the " + (actionName == "GET_BY_RULE_ID" ? "rule" : "rules") + "..";
-        this.Rules = await this.adminRulesSvc.getPriceRules(id, actionName).toPromise().catch((error) => {
-            this.loggerSvc.error(
-                "Operation Failed.",
-                error,
-                error.statusText
-            );
-        });
+        this.Rules = this.gridResult;
         //adding filter
         if (id != 0) {
             this.editRule(id, false);
         }
     };
 
+
+    isApprove(dataItem) {
+        if (dataItem.isElligibleForApproval && !dataItem.IsActive && dataItem.IsAutomationIncluded && !dataItem.RuleStage)
+            return true;
+        else return false;
+    }
     removeFilter() {
         this.state.filter = {
             logic: "and",

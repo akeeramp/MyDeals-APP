@@ -37,20 +37,20 @@ export class RuleDetailsModalComponent {
     public ProductCriteria: any;
     public ValidProducts: any;
     public invalidPrice: any = [];
-    public duplicateProducts: any=[];
-    public invalidProducts: any=[];
+    public duplicateProducts: any = [];
+    public invalidProducts: any = [];
     public ProductCriteriaData: any[];
     public tempProductCriteria: any[];
     public isAlertVal: boolean;
     public isAlertText: string;
     public strmsg: string;
-    public cellMessages: any =[];
+    public cellMessages: any = [];
     public spinnerMessageHeader: any;
     public spinnerMessageDescription: any;
     public msgType: any;
     public isBusyShowFunFact: any;
     public isElligibleForApproval: any = false;
-    public dropdownresponses:any;
+    public dropdownresponses: any;
     public criteria: any;
     public submitRule: any;
 
@@ -63,8 +63,8 @@ export class RuleDetailsModalComponent {
     public dealsList = "";
     public selectedIds = [];
     public availAtrField = [];
-    public Rules :any;
-    public RuleConfig :any;
+    public Rules: any;
+    public RuleConfig: any;
     public dataCollection = [];
     public isLoading = true;
     public gridData: GridDataResult;
@@ -98,7 +98,7 @@ export class RuleDetailsModalComponent {
         colWidths: [350, 160],
         manualColumnResize: true,
         licenseKey: "8cab5-12f1d-9a900-04238-a4819",
-        
+
     };
     public state: State = {
         skip: 0,
@@ -146,7 +146,7 @@ export class RuleDetailsModalComponent {
                 values[`${row.field}`] = this.pteService.readDropdownEndpoint(row.lookupUrl);
             }
         });
-        let result =await forkJoin(values).toPromise().catch((err) => {
+        let result = await forkJoin(values).toPromise().catch((err) => {
             this.loggerSvc.error('pricingTableEditorComponent::getAllDrowdownValues::service', err);
         });
         if (result != undefined) this.dropdownresponses = result
@@ -224,7 +224,7 @@ export class RuleDetailsModalComponent {
                     dropDown: this.dropdownresponses[selectedField.field],
                     selectedValues: selectedValues
                 });
-                
+
             }
         });
         this.criteria[0].selectedValues = "ECAP";
@@ -236,11 +236,11 @@ export class RuleDetailsModalComponent {
         this.generateProductCriteriaData();
         this.validateProduct(false, false, '');
         this.BlanketDiscountPercentage = this.Rules.Criterias.BlanketDiscount.filter(x => x.valueType.value === "%").length > 0 ? this.Rules.Criterias.BlanketDiscount.filter(x => x.valueType.value === "%")[0].value : '';
-        if (this.BlanketDiscountPercentage != '') {
+        if (this.BlanketDiscountPercentage != '' && this.BlanketDiscountPercentage != null) {
             this.BlanketDiscountPercentage = parseInt(this.BlanketDiscountPercentage);
         }
         this.BlanketDiscountDollor = this.Rules.Criterias.BlanketDiscount.filter(x => x.valueType.value === "$").length > 0 ? this.Rules.Criterias.BlanketDiscount.filter(x => x.valueType.value === "$")[0].value : '';
-        if (this.BlanketDiscountDollor != '') {
+        if (this.BlanketDiscountDollor != '' && this.BlanketDiscountDollor != null) {
             this.BlanketDiscountDollor = parseInt(this.BlanketDiscountDollor);
         }
         this.isLoading = false;
@@ -349,15 +349,15 @@ export class RuleDetailsModalComponent {
                 let maxSize = 100;
                 let matchedDealsList = response.slice(0, maxSize).map(function (data) { return " " + data["WIP_DEAL_SID"] });
                 let ruleType = this.Rules.IsAutomationIncluded === true ? "Approve Deals Rule" : "Exclude Deals Rule";
-                let postMessage = '<br/><br/><span class="alertHeader">'+ response.length + " deals currently match this rule"+ '</span>';
-                if (response.length > maxSize) postMessage += '<span class="alertHeader">'+", only the first " + maxSize + " are displayed</span>";
+                let postMessage = '<br/><br/><span class="alertHeader">' + response.length + " deals currently match this rule" + '</span>';
+                if (response.length > maxSize) postMessage += '<span class="alertHeader">' + ", only the first " + maxSize + " are displayed</span>";
                 this.isLoading = false;
                 this.setBusy('', '', '', false);
                 this.isAlertVal = true;
                 this.isOk = true;
                 this.submitRule = false;
                 this.retryAction = false;
-                this.isAlertText = '<span class="alertHeader">' + "Rule <b>" + this.Rules.Name +"</b> (" + ruleType + ") matches these deals: </span><br/><br/>"+ matchedDealsList + "                " + postMessage ;
+                this.isAlertText = '<span class="alertHeader">' + "Rule <b>" + this.Rules.Name + "</b> (" + ruleType + ") matches these deals: </span><br/><br/>" + matchedDealsList + "                " + postMessage;
             } else {
                 this.isLoading = false;
                 this.setBusy('', '', '', false);
@@ -365,7 +365,7 @@ export class RuleDetailsModalComponent {
                 this.submitRule = false;
                 this.isOk = true;
                 this.retryAction = false;
-                this.isAlertText = '<b class="alertNoMatch">'+"There are no deals that currently match this rule</b>";
+                this.isAlertText = '<b class="alertNoMatch">' + "There are no deals that currently match this rule</b>";
             }
         }, (error) => {
             this.isLoading = false;
@@ -405,7 +405,7 @@ export class RuleDetailsModalComponent {
                 } break;
             }
 
-            this.adminRulesSvc.updatePriceRule(priceRuleCriteria, strActionName).subscribe( (response)=> {
+            this.adminRulesSvc.updatePriceRule(priceRuleCriteria, strActionName).subscribe((response) => {
                 if (response.Id > 0) {
                     this.Rules.ChangedBy = response.ChangedBy;
                     this.Rules.ChangeDateTime = response.ChangeDateTime;
@@ -435,7 +435,7 @@ export class RuleDetailsModalComponent {
                             this.Rules.IsActive = !isTrue;
                         } break;
                     }
-                    this.loggerSvc.error("Unable to update rule's indicator",'');
+                    this.loggerSvc.error("Unable to update rule's indicator", '');
                 }
             }, function (response) {
                 switch (strActionName) {
@@ -474,22 +474,24 @@ export class RuleDetailsModalComponent {
             opvalues: opvalues,
             selectedOperator: selectedOperator
         })
-        if (dataItem.lookups != undefined) {
-            if (dataItem.field == "GEO_COMBINED" || dataItem.field == "HOST_GEO") {
-                let vals = [];
-                dataItem.lookups.forEach((item) => vals.push(item.Value));
-                Object.assign(this.Rules.Criteria[index], { dropDown: vals })
+        if (dataItem.type == 'list') {
+            if (dataItem.lookups != undefined) {
+                if (dataItem.field == "GEO_COMBINED" || dataItem.field == "HOST_GEO") {
+                    let vals = [];
+                    dataItem.lookups.forEach((item) => vals.push(item.Value));
+                    Object.assign(this.Rules.Criteria[index], { dropDown: vals })
+                } else {
+                    let vals = [];
+                    dataItem.lookups.forEach((item) => vals.push(item.Value));
+                    Object.assign(this.Rules.Criteria[index], {
+                        dropDown: vals
+                    })
+                }
             } else {
-                let vals = [];
-                dataItem.lookups.forEach((item) => vals.push(item.Value));
                 Object.assign(this.Rules.Criteria[index], {
-                    dropDown: vals
-                })
+                    dropDown: this.dropdownresponses[dataItem.field]
+                });
             }
-        } else {
-            Object.assign(this.Rules.Criteria[index], {
-                dropDown: this.dropdownresponses[dataItem.field]
-            });
         }
         this.Rules.Criteria[index].field = dataItem.field;
         this.Rules.Criteria[index].operator = opvalues[0].operator;
@@ -522,7 +524,7 @@ export class RuleDetailsModalComponent {
         this.setBusy('Price Rules', 'Please wait while we update the rule....', 'Info', true);
         let initialRuleId = priceRuleCriteria.Id;
         let response: any = await this.adminRulesSvc.updatePriceRule(priceRuleCriteria, strActionName).toPromise().catch((err) => {
-            this.loggerSvc.error(("Unable to  " + (initialRuleId === 0 ? "add" : "update") + " the rule"),'');
+            this.loggerSvc.error(("Unable to  " + (initialRuleId === 0 ? "add" : "update") + " the rule"), '');
         });
         if (response.Id > 0) {
             this.Rules = response;
@@ -551,23 +553,23 @@ export class RuleDetailsModalComponent {
         if (tempRange.length > 0) {
             for (let i = 0; i < tempRange.length; i++) {
                 let newProduct = {
-                    ProductName:null,
+                    ProductName: null,
                     Price: null
                 };
                 newProduct.ProductName = tempRange[i].ProductName != null ? tempRange[i].ProductName : null;
-                newProduct.Price = tempRange[i].Price != null ? tempRange[i].Price: null;
+                newProduct.Price = tempRange[i].Price != null ? tempRange[i].Price : null;
                 this.ProductCriteriaData.push(newProduct);
             }
         }
     }
 
-  
+
     async validateProduct(showPopup, isSave, strActionName) {
         this.isLoading = true;
         this.setBusy('Price Rules', 'Please wait while we validating the products..', 'Info', true);
-        if (strActionName != "") 
+        if (strActionName != "")
             this.hotTable = this.hotRegisterer.getInstance(this.hotId);
-        let cellComments=[];
+        let cellComments = [];
         this.generateProductCriteriaData();
         this.strmsg = ''
         if (this.ProductCriteriaData.length > 0) {
@@ -589,7 +591,7 @@ export class RuleDetailsModalComponent {
                 LastValidatedProducts.push(this.ProductCriteriaData[i].ProductName.toLowerCase());
             }
             let response = await this.adminRulesSvc.validateProducts(LastValidatedProducts).toPromise().catch((err) => {
-                this.loggerSvc.error("Operation failed",'',err);
+                this.loggerSvc.error("Operation failed", '', err);
             });
             if (response) {
                 this.ValidProducts = response;
@@ -602,7 +604,7 @@ export class RuleDetailsModalComponent {
             }
             if (this.duplicateProducts.length > 0) {
                 this.strmsg += '<br/><b>Duplicate product entries found and highlighted in orange.Please remove duplicates before publishing.</b><br/>';
-                
+
                 for (let i = 0; i < this.duplicateProducts.length; i++) {
                     this.strmsg += this.duplicateProducts[i] + '<br/>';
                     this.invalidValuesCellComments('ProductName', 'Duplicate product entries found and highlighted in orange.Please remove duplicates before publishing.', cellComments, 0, this.duplicateProducts[i]);
@@ -626,7 +628,7 @@ export class RuleDetailsModalComponent {
             };
             if (this.invalidProducts.length > 0) {
                 this.strmsg += '<br/><br/><b class="alertNoMatch">Invalid products exist, please fix:</b><br/>';
-                
+
                 for (let i = 0; i < this.invalidProducts.length; i++) {
                     this.strmsg += this.invalidProducts[i] + '<br/>';
                     this.invalidValuesCellComments('ProductName', 'Invalid products exist, please fix', cellComments, 0, this.invalidProducts[i]);
@@ -644,7 +646,7 @@ export class RuleDetailsModalComponent {
                         cell: this.cellMessages
                     })
                 }
-                if (strActionName != '') {
+                if (!(strActionName == '' || strActionName == 'Submit')) {
                     this.isLoading = false;
                     this.setBusy('', '', '', false);
                     this.isAlertVal = true;
@@ -667,7 +669,7 @@ export class RuleDetailsModalComponent {
                     this.isAlertText = this.strmsg;
                 }
             }
-           
+
         }
         else {
             if (isSave) {
@@ -679,7 +681,7 @@ export class RuleDetailsModalComponent {
                 this.submitRule = false;
                 this.retryAction = false;
                 this.isAlertText = "<b>There are no Products to Validate</b></br>";
-           }
+            }
         }
         this.isLoading = false;
         this.setBusy('', '', '', false);
@@ -723,7 +725,7 @@ export class RuleDetailsModalComponent {
                             className: 'warning-product'
                         });
                     }
-                    
+
                 }
             } else {
                 if (row[colName] != '' && row[colName] != null && row[colName].toLowerCase() == value)
@@ -733,7 +735,7 @@ export class RuleDetailsModalComponent {
                         comment: { value: '', readOnly: false },
                         className: 'success-product'
                     });
-                    
+
             }
         });
         return comments;
@@ -793,27 +795,27 @@ export class RuleDetailsModalComponent {
             this.setBusy('Price Rules', 'Please wait while we Save the rule..', 'Info', true);
             if (strActionName === "SAVE_AS_DRAFT" && this.Rules.IsAutomationIncluded)
                 this.generateProductCriteriaData();
-                let requiredFields = [];
-                if (this.Rules.Name == null || this.Rules.Name === "")
-                    requiredFields.push("Rule name");
-                if (this.Rules.StartDate == null)
-                    requiredFields.push("Rule start date");
-                if (this.Rules.EndDate == null)
-                    requiredFields.push("Rule end date");
-                if ((this.Rules.Criteria.filter(x => x.value === "").length > 0)) {
-                    let newset = this.Rules.Criteria.filter(x => x.value === "");
-                    if (newset.filter(x => x.values.length == 0 || x.values === '').length > 0)
-                        requiredFields.push("Rule criteria is empty");
-                }
-                if (this.Rules.IsAutomationIncluded && this.ProductCriteria.filter(x => x.Price !== "" && x.Price > 0 && x.ProductName === "").length > 0)
-                    requiredFields.push("A price in product criteria needs a product added");
+            let requiredFields = [];
+            if (this.Rules.Name == null || this.Rules.Name === "")
+                requiredFields.push("Rule name");
+            if (this.Rules.StartDate == null)
+                requiredFields.push("Rule start date");
+            if (this.Rules.EndDate == null)
+                requiredFields.push("Rule end date");
+            if ((this.Rules.Criteria.filter(x => x.value === "").length > 0)) {
+                let newset = this.Rules.Criteria.filter(x => x.value === "");
+                if (newset.filter(x => x.values.length == 0 || x.values === '').length > 0)
+                    requiredFields.push("Rule criteria is empty");
+            }
+            if (this.Rules.IsAutomationIncluded && this.ProductCriteria.filter(x => x.Price !== "" && x.Price > 0 && x.ProductName === "").length > 0)
+                requiredFields.push("A price in product criteria needs a product added");
 
-                let validationFields = [];
-                if (this.Rules.StartDate != null && this.Rules.EndDate != null) {
-                    let dtEffFrom = new Date(this.Rules.StartDate);
-                    let dtEffTo = new Date(this.Rules.EndDate);
-                    if (dtEffFrom >= dtEffTo)
-                        validationFields.push("Rule start date cannot be greater than Rule end date");
+            let validationFields = [];
+            if (this.Rules.StartDate != null && this.Rules.EndDate != null) {
+                let dtEffFrom = new Date(this.Rules.StartDate);
+                let dtEffTo = new Date(this.Rules.EndDate);
+                if (dtEffFrom >= dtEffTo)
+                    validationFields.push("Rule start date cannot be greater than Rule end date");
             }
 
             if (requiredFields.length > 0 || validationFields.length > 0 || (this.Rules.IsAutomationIncluded && ((strActionName === "SUBMIT" || (this.Rules.IsActive && this.Rules.RuleStage))) && (this.invalidPrice.length > 0 || this.duplicateProducts.length > 0 || this.invalidProducts.length > 0))) {
@@ -829,7 +831,7 @@ export class RuleDetailsModalComponent {
                 if (requiredFields.length > 0) {
                     if (strAlertMessage !== "")
                         strAlertMessage += " ";
-                    strAlertMessage += "<b>Please fill the following required fields!</b><br/>" ;
+                    strAlertMessage += "<b>Please fill the following required fields!</b><br/>";
                     for (let i = 0; i < requiredFields.length; i++) {
                         strAlertMessage += requiredFields[i] + '<br/>';
                     }
@@ -846,7 +848,7 @@ export class RuleDetailsModalComponent {
                 this.isOk = true;
                 this.retryAction = false;
                 this.isAlertText = strAlertMessage
-                
+
             } else {
                 this.criteria = this.Rules.Criteria
                 this.criteria.forEach((item) => {
@@ -859,9 +861,12 @@ export class RuleDetailsModalComponent {
                         item.value = '';
                     }
                 });
-                this.criteria[0].value= "ECAP"
+                this.criteria[0].value = "ECAP"
                 this.Rules.IsActive = false;
                 this.Rules.RuleStage = false;
+                this.generateProductCriteriaData();
+                if (this.BlanketDiscountDollor == null) this.BlanketDiscountDollor = '';
+                if (this.BlanketDiscountPercentage == null) this.BlanketDiscountPercentage = '';
                 this.priceRuleCriteriaData = {
                     Id: this.Rules.Id,
                     Name: this.Rules.Name,
@@ -872,7 +877,7 @@ export class RuleDetailsModalComponent {
                     RuleStage: this.Rules.RuleStage == true ? false : true,
                     Notes: this.Rules.Notes,
                     Criterias: { Rules: this.criteria, BlanketDiscount: [{ value: this.Rules.IsAutomationIncluded ? this.BlanketDiscountPercentage : "", valueType: { value: "%" } }, { value: this.Rules.IsAutomationIncluded ? this.BlanketDiscountDollor : "", valueType: { value: "$" } }] },
-                    ProductCriteria: this.Rules.IsAutomationIncluded && this.ProductCriteria.length > 0 ? this.ProductCriteria.filter(x => x.ProductName !== "" && x.Price !== "") : [],
+                    ProductCriteria: this.Rules.IsAutomationIncluded && this.ProductCriteria.length > 0 ? this.ProductCriteriaData : [],
                     OwnerId: this.Rules.OwnerId
                 }
 

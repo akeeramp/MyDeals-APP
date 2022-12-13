@@ -12,7 +12,7 @@ export class ruleDetailsModalConfig {
             // set the `numericFormat` option for every `numeric` cell of this column
             numericFormat: {
                 // set the number format
-                pattern: '0,00',
+                pattern: '$0,0.00',
                 // set the currency format
                 culture: 'en-US'
             }
