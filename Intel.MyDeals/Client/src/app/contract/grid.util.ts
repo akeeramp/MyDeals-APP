@@ -71,8 +71,6 @@ export class GridUtil {
     }
     static uiControlDealWrapper(passedData, field) {
         var tmplt = '';
-        if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
-            tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
         tmplt += '  <div class="ng-binding vert-center">';
         tmplt += ' <span style="padding-left: 0px;"> '
         if (passedData[field] != undefined && passedData[field] != null)

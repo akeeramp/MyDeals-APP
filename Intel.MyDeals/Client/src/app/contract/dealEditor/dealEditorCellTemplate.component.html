@@ -16,9 +16,10 @@
 </div>
 <div *ngIf="in_Template.includes('gridUtils.uiPositiveDimControlWrapper')" [innerHTML]="uiPositiveDimControlWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" class="dealCell">
 </div>
-<div *ngIf="in_Field_Name == 'DC_ID'"  class="dealCell"  style="align-items: center; display: flex; "
+<div *ngIf="in_Field_Name == 'DC_ID'" id="DC_ID" class="dealCell" style="align-items: center; display: flex; "
      [ngClass]="{'isReadOnlyCell': isReadonlyCell(in_DataItem, in_Field_Name), 'isDirtyCell': isDirtyCell(in_DataItem,in_Field_Name), 'isErrorCell': isErrorCell(in_DataItem,in_Field_Name)}">
-      <deal-popup-icon [dealId]="in_DataItem.DC_ID"></deal-popup-icon>
+    <div class="err-bit" *ngIf="in_DataItem._behaviors && in_DataItem._behaviors.isError && in_DataItem._behaviors.isError[in_Field_Name]" kendoTooltip title={{in_DataItem._behaviors.validMsg[in_Field_Name]}}></div>
+    <deal-popup-icon [dealId]="in_DataItem.DC_ID"></deal-popup-icon>
     <div style="margin-top: 20px;" [innerHTML]="uiControlDealWrapper(in_DataItem, in_Field_Name)|sanitizeHtml">
     </div>
 </div>
