@@ -7,6 +7,7 @@ import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { SecurityEngineService } from "./admin.securityEngine.service";
 import { SelectEvent } from "@progress/kendo-angular-layout";
+import * as _ from 'underscore';
 
 @Component({
     selector: "admin-security-engine",
@@ -108,6 +109,7 @@ export class adminsecurityEngineComponent {
             this.drilledDownstages = [];
             this.drilledDowndealtype = [];
             this.drilledDownAtrb = [];
+            this.selectedIds = [];
 
             this.GetSelectedDDlist = response;
             this.drilledDownstages = this.filterObjTypeForStages(value.Alias);
@@ -119,14 +121,7 @@ export class adminsecurityEngineComponent {
             } else {
                 this.drilledDownAtrb = this.dropDownDatasource['AttributesByObjType']['CNTRCT'];
             }
-
-            this.drilledDownAtrb = this.drilledDownAtrb.sort(function (a, b) {
-                if (a.ATRB_COL_NM < b.ATRB_COL_NM)
-                    return -1;
-                if (a.ATRB_COL_NM > b.ATRB_COL_NM)
-                    return 1;
-                return 0;
-            });
+            this.drilledDownAtrb = _.sortBy(this.drilledDownAtrb,'ATRB_COL_NM')
 
         }, function (error) {
             this.loggerSvc.error("Unable to get Deal Type Attributes.", error, error.statusText);
@@ -262,19 +257,14 @@ export class adminsecurityEngineComponent {
             //To filter Attributes Tab data
             if (this.selectedIds.length > 0) {
                 this.GridDataattributes = [];
-                for (var g = 0; g < this.selectedIds.length; g++) {
+                for (var x = 0; x < this.selectedIds.length; x++) {
                     if (this.selectedObjType.length != 0) {
-                        if (this.drilledDownAtrb[g].ATRB_COL_NM = this.selectedIds[g]['ATRB_COL_NM']) {
-                            this.GridDataattributes.push({ "ATRB_SID": this.drilledDownAtrb[g].ATRB_SID, "ATRB_COL_NM": this.drilledDownAtrb[g].ATRB_COL_NM });
-                        }
-                    } else {
-                        if (this.drilledDownAtrb[g].ATRB_COL_NM = this.selectedIds[g]['ATRB_COL_NM']) {
-                            this.GridDataattributes.push({ "ATRB_SID": this.drilledDownAtrb[g].ATRB_SID, "ATRB_COL_NM": this.drilledDownAtrb[g].ATRB_COL_NM });
-                        }
+                        this.GridDataattributes.push({ "ATRB_SID": this.selectedIds[x].ATRB_SID, "ATRB_COL_NM": this.selectedIds[x].ATRB_COL_NM });
                     }
                 }
+                
             }
-
+            
             //Display Action
             if (this.selectedAtrbAction.length != 0) {
                 this.currentDisplayAction = this.selectedAtrbAction['dropdownName'];
