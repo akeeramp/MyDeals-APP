@@ -742,3 +742,17 @@ kendo-grid#managerPCTGrid table tr th kendo-grid-filter-menu .k-grid-filter .k-i
 kendo-grid#managerPCTGrid table tr th label b {
     color: #000;
 }
+    kendo-grid#managerPCTGrid table tr th kendo-grid-filter-menu .k-grid-filter .k-i-filter:hover {
+        color: #0071c5 !important;
+    }
+
+kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li {
+    border-left: 0 !important;
+    border-right: 0 !important;
+}
+
+kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active {
+    border: 1px solid transparent !important;
+    border-bottom: 0 !important;
+    border-color: #b1babf !important;
+}
