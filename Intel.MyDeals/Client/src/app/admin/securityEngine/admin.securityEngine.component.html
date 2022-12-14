@@ -40,7 +40,7 @@
                     <div class="lbl">
                         <div>Roles: </div>
                         <kendo-multiselect class="sec-eng-multi-list" [placeholder]="'All Roles'" style="width: 11em !important;" [data]="dropDownDatasource.AdminRoleTypes" textField="dropdownName" valueField="dropdownID"
-                           [(ngModel)]="selectedRoles" [autoClose]="true" [kendoDropDownFilter]="filterSettings">
+                           [(ngModel)]="selectedRoles" [autoClose]="true" (valueChange)="objtypeRoleChange($event)" [kendoDropDownFilter]="filterSettings">
                         </kendo-multiselect>
                     </div>
                     <div class="lbl">
@@ -139,7 +139,7 @@
                             <div class="col-md-6">
                                 <h5><span style="padding-left: 20px; font-weight: 700;">Action:</span><span style="padding-left: 20px; font-weight: 600;">{{currentDisplayAction}}</span> </h5>
                             </div>
-                            <div class="fr col-md-6" style="font-size: 9px; line-height: 1em; margin-right: -50px;">
+                            <div class="fr col-md-6" style="font-size: 9px; line-height: 1em; margin-right: -160px;">
                                 <div class="atrbbasecolorECAP fl atrbContainer secEngine_key">&nbsp;</div>
                                 <div class="fl secEngine_keyBlock"> = ECAP</div>
 
@@ -185,7 +185,7 @@
                                     </kendo-grid-column>
                                     <kendo-grid-column [headerClass]="{'headerClass':true}" width="63" title="Role">
                                         <ng-template kendoGridCellTemplate>
-                                            <span [innerHTML]="drawRoles()"></span>
+                                            <span [innerHTML]="drawRoles(true)"></span>
                                         </ng-template>
                                     </kendo-grid-column>
                                     <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" width="168" field="{{column.title}}"  title="{{column.title}}">

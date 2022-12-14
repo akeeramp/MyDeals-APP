@@ -54,6 +54,7 @@ export class adminsecurityEngineComponent {
     public secAtrbUtil_securityMappings = [];
     public pendingSaveArray = []
     public eventValue: any;
+    public isshowdetails = false;
     private state: State = {
         skip: 0,
         take: 25,
@@ -104,6 +105,7 @@ export class adminsecurityEngineComponent {
     }
 
     objtypeChange(value) {
+        this.isshowdetails = false
         this.SecurityEnginesvc.getObjAtrbs().subscribe((response: Array<any>) => {
             this.GetSelectedDDlist = [];
             this.drilledDownstages = [];
@@ -126,6 +128,10 @@ export class adminsecurityEngineComponent {
         }, function (error) {
             this.loggerSvc.error("Unable to get Deal Type Attributes.", error, error.statusText);
         });
+    }
+
+    objtypeRoleChange(value) {
+        this.isshowdetails = false
     }
 
     filterObjTypefordealtype(objTypeName) {
@@ -240,6 +246,8 @@ export class adminsecurityEngineComponent {
     getGridData() {
         this.isShowMainContent = true;
         this.isGridLoading = true;
+        this.isshowdetails = true;
+        this.pendingSaveArray = [];
         if (this.isASTab == true) {
             this.GridDataattributes = [];
 
@@ -292,7 +300,10 @@ export class adminsecurityEngineComponent {
             this.currentDisplayAction = this.attrActionNameDS;
         }
         this.generateGrid()
+
+        setTimeout(() => {
         this.isGridLoading = false;
+        }, 150);
     }
     generateGrid() {
         let stageColWidth
@@ -335,76 +346,85 @@ export class adminsecurityEngineComponent {
         this.gridData = process(this.GridDataattributes, this.state);
     }
 
-    drawRoles() {
-        var div = "<div class='atrbSubTitle'>";
-        if (this.selectedRoles.length != 0) {
-            return div + this.selectedRoles.map(function (role) {
-                return role.dropdownName;
-            }).join("</div>" + div) + "</div>";
+    drawRoles(value) {
+        if (this.isshowdetails == true) {
+            var div = "<div class='atrbSubTitle'>";
+            if (this.selectedRoles.length != 0) {
+                return div + this.selectedRoles.map(function (role) {
+                    return role.dropdownName;
+                }).join("</div>" + div) + "</div>";
+            } else {
+                return div + this.dropDownDatasource['AdminRoleTypes'].map(function (role) {
+                    return role.dropdownName;
+                }).join("</div>" + div) + "</div>";
+            }
         } else {
-            return div + this.dropDownDatasource['AdminRoleTypes'].map(function (role) {
-                return role.dropdownName;
-            }).join("</div>" + div) + "</div>";
+            var div = "<div class='atrbSubTitle'>";
+                return div + this.dropDownDatasource['AdminRoleTypes'].map(function (role) {
+                    return role.dropdownName;
+                }).join("</div>" + div) + "</div>";
         }
     };
 
     /*Html of multiple deal boxes for each attribute, dealtype, role, and stage */
     securityEngineDrawDeals(atrbId, atrbCd, stgId, stgName) {
-        var dummyAttrName = "ACTIVE";
-        var buf = "";
-        var divStart = "<div style='margin: 1px;'>";
-        var divEnd = "<div class='clearboth'></div></div>";
+        if (this.isshowdetails == true) {
+            var dummyAttrName = "ACTIVE";
+            var buf = "";
+            var divStart = "<div style='margin: 1px;'>";
+            var divEnd = "<div class='clearboth'></div></div>";
 
-        var clickableHtml = "";
-        var mappingKey = "";
-        var actionId = "";
-        var actnCd = "";
-        var newAtrbId;
-        var newAtrbCd = "";
+            var clickableHtml = "";
+            var mappingKey = "";
+            var actionId = "";
+            var actnCd = "";
+            var newAtrbId;
+            var newAtrbCd = "";
 
-        if (this.selectedRoles.length != 0) {
-            this.CheckedselectedRoles = this.selectedRoles;
-        } else {
-            this.CheckedselectedRoles = this.dropDownDatasource['AdminRoleTypes'];
-        }
-
-        if (this.selectedDealTypes.length != 0) {
-            this.CheckedselectedDealTypes = this.selectedDealTypes
-        } else {
-            this.CheckedselectedDealTypes = this.drilledDowndealtype
-        }
-
-        for (var r = 0; r < this.CheckedselectedRoles.length; r++) {
-            buf += divStart;
-            for (var d = 0; d < this.CheckedselectedDealTypes.length; d++) {
-                if (this.isASTab == true) { // Attribute Security
-                    if (this.selectedAtrbAction.length != 0) {
-                        actionId = this.selectedAtrbAction['dropdownID'];
-                        actnCd = this.selectedAtrbAction['dropdownName'];
-                        mappingKey = this.selectedAtrbAction['dropdownName'];
-                    } else {
-                        actionId = "167";
-                        actnCd = "ATRB_REQUIRED";
-                        mappingKey = "ATRB_REQUIRED";
-                    }
-                    newAtrbId = atrbId;
-                    newAtrbCd = atrbCd;
-                    clickableHtml = "<div class='fl'>";
-                } else { // Deal Security
-                    actionId = atrbId;
-                    var myActnCd = this.drilledDownAction.filter(x => x.dropdownID == parseInt(atrbId));
-                    actnCd = (myActnCd ? myActnCd['dropdownName'] : -1);
-                    mappingKey = atrbCd;
-                    newAtrbId = 1;
-                    newAtrbCd = dummyAttrName;
-                    clickableHtml = "<div class='fl'>";
-                }
-
-                buf += this.drawDealType(mappingKey, newAtrbCd, this.CheckedselectedDealTypes[d].Alias, this.CheckedselectedRoles[r].dropdownName, stgName, clickableHtml);
+            if (this.selectedRoles.length != 0) {
+                this.CheckedselectedRoles = this.selectedRoles;
+            } else {
+                this.CheckedselectedRoles = this.dropDownDatasource['AdminRoleTypes'];
             }
-            buf += divEnd;
+
+            if (this.selectedDealTypes.length != 0) {
+                this.CheckedselectedDealTypes = this.selectedDealTypes
+            } else {
+                this.CheckedselectedDealTypes = this.drilledDowndealtype
+            }
+
+            for (var r = 0; r < this.CheckedselectedRoles.length; r++) {
+                buf += divStart;
+                for (var d = 0; d < this.CheckedselectedDealTypes.length; d++) {
+                    if (this.isASTab == true) { // Attribute Security
+                        if (this.selectedAtrbAction.length != 0) {
+                            actionId = this.selectedAtrbAction['dropdownID'];
+                            actnCd = this.selectedAtrbAction['dropdownName'];
+                            mappingKey = this.selectedAtrbAction['dropdownName'];
+                        } else {
+                            actionId = "167";
+                            actnCd = "ATRB_REQUIRED";
+                            mappingKey = "ATRB_REQUIRED";
+                        }
+                        newAtrbId = atrbId;
+                        newAtrbCd = atrbCd;
+                        clickableHtml = "<div class='fl'>";
+                    } else { // Deal Security
+                        actionId = atrbId;
+                        var myActnCd = this.drilledDownAction.filter(x => x.dropdownID == parseInt(atrbId));
+                        actnCd = (myActnCd ? myActnCd['dropdownName'] : -1);
+                        mappingKey = atrbCd;
+                        newAtrbId = 1;
+                        newAtrbCd = dummyAttrName;
+                        clickableHtml = "<div class='fl'>";
+                    }
+
+                    buf += this.drawDealType(mappingKey, newAtrbCd, this.CheckedselectedDealTypes[d].Alias, this.CheckedselectedRoles[r].dropdownName, stgName, clickableHtml);
+                }
+                buf += divEnd;
+            }
+            return buf;
         }
-        return buf;
     }
 
     /*Html of individual deal boxes */
