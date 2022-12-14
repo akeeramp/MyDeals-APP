@@ -394,7 +394,7 @@ namespace Intel.MyDeals.DataLibrary
             this.htmlTextBox8.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.htmlTextBox8.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
             this.htmlTextBox8.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox8.Value = "<span style=\"font-size: 10px; font-family: neo sans intel\"><strong>ECAP Type</strong></span>";
+            this.htmlTextBox8.Value = "<span style=\"font-size: 10px; font-family: neo sans intel\"><strong>ECAP Type<br>&nbsp;</strong></span>";
             // 
             // ECAP Type Value
             // 
@@ -453,7 +453,7 @@ namespace Intel.MyDeals.DataLibrary
             this.htmlTextBox15.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.htmlTextBox15.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
             this.htmlTextBox15.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox15.Value = "<span style=\"font-size: 10px; font-family: neo sans intel\"><strong>End Customer</strong></span>";
+            this.htmlTextBox15.Value = "<span style=\"font-size: 10px; font-family: neo sans intel\"><strong>End Customer<br>&nbsp;</strong></span>";
             // 
             // End Customer Value
             // 
@@ -523,7 +523,7 @@ namespace Intel.MyDeals.DataLibrary
             this.htmlTextBox5.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.htmlTextBox5.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
             this.htmlTextBox5.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox5.Value = "<span style=\"font-family: neo sans intel; font-size: 10px\"><strong>Deal Status</strong></span>";
+            this.htmlTextBox5.Value = "<span style=\"font-family: neo sans intel; font-size: 10px\"><strong>Deal Status<br>&nbsp;</strong></span>";
             // 
             // Deal Status Value
             // 
@@ -583,7 +583,7 @@ namespace Intel.MyDeals.DataLibrary
             this.htmlTextBox6.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
             this.htmlTextBox6.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
             this.htmlTextBox6.StyleName = "BlueLine";
-            this.htmlTextBox6.Value = "<span style=\"font-family: neo sans intel; font-size: 10px\"><strong>Billings Start Date</strong></span>";
+            this.htmlTextBox6.Value = "<span style=\"font-family: neo sans intel; font-size: 10px\"><strong>Billings Effective Start Date</strong></span>";
             // 
             // Start Date Value
             // 
@@ -642,7 +642,7 @@ namespace Intel.MyDeals.DataLibrary
             this.htmlTextBox7.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.htmlTextBox7.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
             this.htmlTextBox7.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox7.Value = "<span style=\"font-family: neo sans intel; font-size: 10px\"><strong>Billings End Date</strong></span>";
+            this.htmlTextBox7.Value = "<span style=\"font-family: neo sans intel; font-size: 10px\"><strong>Billings Effective End Date</strong></span>";
             // 
             // End Date Value
             // 
@@ -701,7 +701,7 @@ namespace Intel.MyDeals.DataLibrary
             this.htmlTextBox12.Style.LineWidth = Telerik.Reporting.Drawing.Unit.Pixel(1D);
             this.htmlTextBox12.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
             this.htmlTextBox12.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox12.Value = "<span style=\"font-size: 10px; font-family: neo sans intel\"><strong>Program Payment</strong></span>";
+            this.htmlTextBox12.Value = "<span style=\"font-size: 10px; font-family: neo sans intel\"><strong>Program Payment<br>&nbsp;</strong></span>";
             // 
             // Program Payment Value
             // 
@@ -761,7 +761,7 @@ namespace Intel.MyDeals.DataLibrary
             this.htmlTextBox9.Style.Padding.Left = Telerik.Reporting.Drawing.Unit.Pixel(5D);
             this.htmlTextBox9.Style.TextAlign = Telerik.Reporting.Drawing.HorizontalAlign.Left;
             this.htmlTextBox9.Style.VerticalAlign = Telerik.Reporting.Drawing.VerticalAlign.Middle;
-            this.htmlTextBox9.Value = "<span style=\"font-size: 10px; font-family: neo sans intel\"><strong>Based On</strong></span>";
+            this.htmlTextBox9.Value = "<span style=\"font-size: 10px; font-family: neo sans intel\"><strong>Based On<br>&nbsp;</strong></span>";
             // 
             // Based On Value
             // 
