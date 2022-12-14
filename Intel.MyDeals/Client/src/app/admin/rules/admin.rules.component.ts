@@ -118,6 +118,10 @@ export class adminRulesComponent {
             text: "100",
             value: 100,
         },
+        {
+            text: "All",
+            value: "all",
+        }
     ];
     public gridData: GridDataResult;
 
