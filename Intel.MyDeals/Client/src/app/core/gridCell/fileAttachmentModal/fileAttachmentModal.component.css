@@ -281,3 +281,6 @@
 .attach-style .fino-css .k-button span.k-icon.k-button-icon.k-delete.k-i-x {
     font-family: "WebComponentsIcons" !important;
 }
+.attach-style.cdk-overlay-pane {
+    height: 620px !important;
+}

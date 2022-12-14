@@ -636,3 +636,11 @@ kendo-multiselect.fiend-all.k-widget.k-multiselect.ng-dirty {
     white-space: nowrap;
     text-align: left !important;
 }
+.pricing_table_celltext .handsontable td.listbox.htDimmed.current.highlight:hover {
+    background: #00aeef !important;
+    color: #ffffff !important
+}
+.pricing_table_celltext .handsontable td.listbox.htDimmed:hover {
+    background: #ebebeb !important;
+    color: #444444 !important;
+}
