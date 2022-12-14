@@ -26,4 +26,14 @@
             <button kendoButton (click)="closeAlert()" themeColor="primary">OK</button>
         </kendo-dialog-actions>
     </kendo-dialog>
+<!-- Error Message on pasting data to readonly cells -->
+    <kendo-dialog *ngIf="isDisAlert" (close)="closeDisAlert()" id="disabledCellsError">
+        <kendo-dialog-titlebar>
+            <div>Error</div>
+        </kendo-dialog-titlebar>
+        <p [innerHTML]='alertMsg'></p>
+        <kendo-dialog-actions [layout]="'normal'">
+            <button kendoButton (click)="closeDisAlert()">OK</button>
+        </kendo-dialog-actions>
+    </kendo-dialog>
 </div>

@@ -27,6 +27,7 @@
 }
 #modalBodyDiv .row {
   margin-left: 10px;
+  width: 700px;
 }
 .modal-dialog {
   width: 750px;
@@ -114,7 +115,6 @@
   border-color: #0071c5 !important;
   box-shadow: none !important;
   font-weight: 500 !important;
-  line-height: 2em;
   padding: 9px 14px;
   border-radius: 0;
   text-transform: uppercase;
@@ -183,11 +183,34 @@
   color: red !important;
 }
 
-#bulkPriceUpdateTable .handsontable td.area {
-    background-color: rgba(0,174,239,.2);
-    border-color: #00aeef;
-    box-shadow: inset 0 0 0 1px #fff, 0 0 0 1px #00aeef;
-    border-style: solid;
-    box-sizing: border-box;
+#bulkPriceUpdateTable .handsontable td.area.highlight {
+  background-color: rgba(0,174,239,.2) !important;
+  box-shadow: inset 0 0 0 1px #fff, 0 0 0 1px #00aeef;
+  border-style: solid  !important;
+  box-sizing: border-box;
 }
 
+#bulkPriceUpdateTable .handsontable td.area:before {
+  background: rgba(0,174,239,.2) !important;
+}
+
+#disabledCellsError .k-dialog .k-button {
+  background-color: #0071c5 !important;
+}
+
+#disabledCellsError .k-dialog .k-button:hover{
+  background-color: #00aeef !important;
+  color: #fff !important;
+}
+
+#disabledCellsError .k-dialog .k-content{
+  padding: 1em;
+}
+
+#disabledCellsError .k-dialog .k-dialog-buttongroup{
+  border-width: 1px !important;
+  border-style: solid;
+}
+#disabledCellsError .k-widget.k-window.k-dialog{
+width: 320px;
+}

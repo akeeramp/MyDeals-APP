@@ -380,17 +380,17 @@ static bulkPriceUpdateColumnData =  [
         data: 'BillingsEndDate',
         type: 'text',
         readOnly: false,
-        width: 153
+        width: 120
     },{
         data: 'ProjectName',
         type: 'text',
         readOnly: false,
-        width: 150
+        width: 120
     },{
         data: 'TrackerEffectiveStartDate',
         type: 'text',
         readOnly: false,
-        width: 130
+        width: 120
     },{
         data: 'AdditionalTermsAndConditions',
         type: 'text',

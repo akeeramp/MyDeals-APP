@@ -18,7 +18,7 @@ import * as moment from 'moment';
   encapsulation: ViewEncapsulation.None
 })
 export class BulkPricingUpdatesComponent  {
-  
+   
   constructor(private loggerSvc: logger, protected dialog: MatDialog,private bulkPrcSvc: bulkPricingUpdatesService) {
     //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
     $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
@@ -35,21 +35,22 @@ export class BulkPricingUpdatesComponent  {
    isLoading = false;
    isAlert: boolean = false;
    alertMsg: string = '';
-priceObj = {DealId : '',
-DealDesc: '',
-EcapPrice: '',
-Volume: '',
-DealStartDate : '',
-DealEndDate : '',
-BillingsStartDate : '',
-BillingsEndDate : '',
-ProjectName : '',
-TrackerEffectiveStartDate : '',
-AdditionalTermsAndConditions : '',
-DealStage : '',
-UpdateStatus : '',
-ValidationMessages : ''}
-validBulkPriceUpdates: any = [];
+   isDisAlert = false;
+    priceObj = {DealId : '',
+    DealDesc: '',
+    EcapPrice: '',
+    Volume: '',
+    DealStartDate : '',
+    DealEndDate : '',
+    BillingsStartDate : '',
+    BillingsEndDate : '',
+    ProjectName : '',
+    TrackerEffectiveStartDate : '',
+    AdditionalTermsAndConditions : '',
+    DealStage : '',
+    UpdateStatus : '',
+    ValidationMessages : ''}
+    validBulkPriceUpdates: any = [];
    basedate = moment("12/30/1899").format("MM/DD/YYYY");
    cellComments = [];
    private hotSettings: Handsontable.GridSettings = {
@@ -68,7 +69,31 @@ validBulkPriceUpdates: any = [];
     bindRowsWithHeaders: true,
     width: '100%',
     height: 470,
+    contextMenu: true,
+    afterPaste: (data, coords) => {
+        this.errOnDsbRowPst(data,coords);
+      },
    };
+
+   errOnDsbRowPst(data,coords){
+        let readOnlyCols = [];
+        ExcelColumnsConfig.bulkPriceUpdateColumnData.forEach( (col, ind) => {
+            if (col.readOnly == true) {
+                readOnlyCols.push(ind);
+            }}
+       );
+        let selSrtCol = coords[0].startCol;
+        let selEndCol = coords[0].endCol;
+        if ( readOnlyCols.includes(selSrtCol) || readOnlyCols.includes(selSrtCol)){
+            this.isDisAlert = true;
+            this.alertMsg = 'Cannot modify disabled cells.';
+        }
+
+   }
+
+   closeDisAlert(){
+    this.isDisAlert = false;
+   }
 
 openBulkPriceUpdateModal(){
   const dialogRef = this.dialog.open(BulkPricingUpdateModalComponent, {
@@ -281,7 +306,7 @@ validateTableData(dataArr){
         messages = [];
         if (row.DealId == "0" || row.DealId == "" || row.DealId == null || row.DealId == undefined) {
             messages.push("Deal ID");
-            validationMessages.push({ row: i, col: 0, comment: { value: 'Deal ID must be a valid number', readOnly: true } ,className:'error-product'})
+            validationMessages.push({ row: i, col: 0, comment: { value: 'Deal ID is a mandatory field', readOnly: true } ,className:'error-product'})
         }
         if ((row.DealDesc == null || row.DealDesc == ""  || row.DealDesc == undefined) &&
             (row.EcapPrice == null || row.EcapPrice == ""  || row.EcapPrice == undefined) &&
