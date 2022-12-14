@@ -91,8 +91,8 @@
                         <kendo-textarea [rows]="10" [(ngModel)]="Rules.Notes" class="admin-notes-style" style="width: 100%; border: 1px solid rgb(133, 133, 133); "></kendo-textarea>
                     </div>
                 </div>
-                <div class="form-group row col-md-12" style="min-height:59px; max-height:250px; overflow-y:auto;">
-                    <label class="control-label col-md-2" style=" font-weight: bold;">Criteria:</label>
+                <div class="form-group row col-md-12" style="">
+                    <label class="control-label col-md-2" style="padding-right: 20px; font-weight: bold;">Criteria:</label>
                     <div class="col-md-9">
                         <div *ngFor="let dataItem of Rules.Criteria;let i=index trackBy i"
                              class="divTableRow" style="margin-bottom: 10px;">
@@ -261,4 +261,4 @@
     </div>
 </div>
 <loading-panel-angular id="PriceRulesLoading"  style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
-                           [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
+                           [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType" class="loader-fixes"></loading-panel-angular>

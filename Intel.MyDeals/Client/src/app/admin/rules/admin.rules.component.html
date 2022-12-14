@@ -5,16 +5,15 @@
 <div class="row">
     <div class="col-md-10 k-header-alignment price-rules-style">
         <h3>Auto-Approval Rules Administration Screen</h3>
+        <div class="componentLabel" style="padding-left: 0;">
+            <p>This screen allows DA users to create automated approval rules to streamline their work</p>
+        </div>
     </div>
     <div *ngIf="toolKitHidden == false" class="col-md-2 ng-scope help">
         <h3><a target="_blank" href="https://wiki.ith.intel.com/display/Handbook/Tender+Price+Rules" title="Intel wiki link for help"><i class="intelicon-help-solid"></i></a></h3>
     </div>
 </div>
-<div class="row componentLabel">
-    <div class="col-md-6">
-        <p>This screen allows DA users to create automated approval rules to streamline their work</p>
-    </div>
-</div>
+
 <div class="col-md-12 kendo-grid-buttons grid-size-style">
     <kendo-grid class="runprice-grid-style" [data]="gridData" [loading]="isLoading" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
                 [sort]="state.sort" [filter]="state.filter" [sortable]="true"

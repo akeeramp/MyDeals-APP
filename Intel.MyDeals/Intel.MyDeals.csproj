@@ -888,6 +888,7 @@
     <TypeScriptCompile Include="Client\src\app\admin\dataFix\admin.dataFix.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\dataFix\admin.dataFix.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.component.ts" />
+    <Content Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.component.css" />
     <Content Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.component.html" />
     <TypeScriptCompile Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.service.ts" />
     <Content Include="Client\src\app\admin\dealTypes\admin.dealTypes.component.html" />

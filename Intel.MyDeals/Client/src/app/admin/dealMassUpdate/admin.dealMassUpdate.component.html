@@ -2,98 +2,127 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<div class="contract-detail-form">
-    <div class="col-md-12 k-header-alignment">
-        <h2>Deal Mass Update</h2>
-        <p style="color: #FC4C02">Use the tool below to update a value on existing deals</p>
+<div class="deal-mass-update">
+    <div class="row">
+        <div class="col-md-12 dealer-mass-heading">
+            <h2>Deal Mass Update</h2>
+            <p style="color: #FC4C02">Use the tool below to update a value on existing deals</p>
+        </div>
     </div>
-    <div class="row" style="color:#db704d; padding-left:10px" [ngClass]="{'mb-warning': true}">
-        <p><b><i class="intelicon-alert-solid icon-lg"></i>Warning:</b>Use caution running this screen. Deals listed
-            below will be updated regardless of deal status. Cancelled deals are not updated. </p>
+    <div class="row" style="color:#db704d;" [ngClass]="{'mb-warning': true}">
+        <div class="col-md-12">
+            <p class="all-para-warn"><b><i class="intelicon-alert-solid icon-lg"></i>Warning:</b> Use caution running this screen. Deals listed below will be updated regardless of deal status. Cancelled deals are not updated. </p>
+        </div>
     </div>
-    <div class="col-md-6">
-        <div class="row">
-            <div class="col-md-11 row"><label style="width:170px">Deal Id(s):</label>
-                <kendo-textarea [rows]="4" [cols]="65" placeholder="Multiple deal IDs can be separated with comma."
-                    resizable="both" [(ngModel)]="massUpdateData['DealIds']"
-                    [ngStyle]="{'border-color':isError['Deal_Ids']?'red':''}"></kendo-textarea>
-                <kendo-formerror style="padding-left:170px" *ngIf="isError['Deal_Ids']">{{errorMsg['Deal_Ids']}}
-                </kendo-formerror>
-                <div style="padding:10px" class="col-md-12 row"><label style="width:170px">Field to Update:</label>
-                    <kendo-dropdownlist [data]="attr" textField="ATRB_LBL" valueField="ATRB_SID"
-                        (valueChange)="atrbChange($event)" [(ngModel)]="massUpdateData['field']"
-                        [ngStyle]="{'border':isError['field']?'1px solid red':'','width': '490px','padding':0}">
-                    </kendo-dropdownlist>
-                    <kendo-formerror style="padding-left:170px" *ngIf="isError['field']">{{errorMsg['field']}}
+    <div class="row">
+        <div class="col-md-6">
+            <div class="row">
+                <div class="col-md-12 margin-btn-15">
+                    <label style="width: 180px; vertical-align: top;">Deal Id(s):</label>
+                    <kendo-textarea [rows]="4" [cols]="65" placeholder="Multiple deal IDs can be separated with comma."
+                                    resizable="both" [(ngModel)]="massUpdateData['DealIds']"
+                                    [ngStyle]="{'border-color':isError['Deal_Ids']?'red':''}" class="kendo-textarea-custom"></kendo-textarea>
+                    <kendo-formerror style="padding-left: 180px" *ngIf="isError['Deal_Ids']">
+                        {{errorMsg['Deal_Ids']}}
                     </kendo-formerror>
                 </div>
-                <div class="row" *ngIf="showNumeric"><label style="width:170px">New Value:</label>
-                    <kendo-numerictextbox [style.width.px]="488" [min]="0" [max]="MaxNumericValue" [autoCorrect]="true"
-                        [decimals]="0" format="#" [(ngModel)]="massUpdateData['numericValue']"></kendo-numerictextbox>
+
+
+                <div style="padding:10px 0;" class="col-md-12  margin-btn-15">
+                    <label style="width: 180px">Field to Update:</label>
+                    <kendo-dropdownlist class="k-dropdown-design" [data]="attr" textField="ATRB_LBL" valueField="ATRB_SID"
+                                        (valueChange)="atrbChange($event)" [(ngModel)]="massUpdateData['field']"
+                                        [ngStyle]="{'border':isError['field']?'1px solid red':'','width': '490px','padding':0}">
+                    </kendo-dropdownlist>
+                    <kendo-formerror style="padding-left: 180px" *ngIf="isError['field']">
+                        {{errorMsg['field']}}
+                    </kendo-formerror>
                 </div>
-                <div class="row" *ngIf="showTextBox"><label style="width:170px">New Text Value: </label>
+
+                <div class="col-md-12 margin-btn-15" *ngIf="showNumeric">
+                    <label style="width: 180px">New Value:</label>
+                    <kendo-numerictextbox [style.width.px]="488" [min]="0" [max]="MaxNumericValue" [autoCorrect]="true"
+                                            [decimals]="0" format="#" [(ngModel)]="massUpdateData['numericValue']"  class="k-numberbox-design"></kendo-numerictextbox>
+                </div>
+
+                <div class="col-md-12 margin-btn-15" *ngIf="showTextBox">
+                    <label style="width: 180px">New Text Value: </label>
                     <kendo-textbox [style.width.px]="488" [(ngModel)]="massUpdateData['textValue']"
-                                   [ngStyle]="{'border':isError['textValue']?'1px solid red':'','padding':0}"></kendo-textbox>
-                    <kendo-formerror style="padding-left:170px" *ngIf="isError['textValue']">
+                                    [ngStyle]="{'border':isError['textValue']?'1px solid red':'','padding':0}" class="k-textbox-design"></kendo-textbox>
+                    <kendo-formerror style="padding-left: 180px" *ngIf="isError['textValue']">
                         {{errorMsg['textValue']}}
                     </kendo-formerror>
                 </div>
-                <div class="row" *ngIf="showDropDown"><label style="width:170px">New Dropdown Value: </label>
+
+                <div class="col-md-12 margin-btn-15" *ngIf="showDropDown">
+                    <label style="width: 180px">New Dropdown Value: </label>
                     <kendo-dropdownlist style="width:488px;height:fit-content" [data]="attrValues"
-                        textField="ATRB_VAL_TXT" valueField="ATRB_VAL_TXT" [valuePrimitive]="true"
-                        [(ngModel)]="massUpdateData['dropdownValue']"
-                        [ngStyle]="{'border':isError['dropdownValue']?'1px solid red':'','padding':0}">
+                                        textField="ATRB_VAL_TXT" valueField="ATRB_VAL_TXT" [valuePrimitive]="true"
+                                        [(ngModel)]="massUpdateData['dropdownValue']"
+                                        [ngStyle]="{'border':isError['dropdownValue']?'1px solid red':'','padding':0}" class="k-dropdown-design">
                     </kendo-dropdownlist>
-                    <kendo-formerror style="padding-left:170px" *ngIf="isError['dropdownValue']">
-                        {{errorMsg['dropdownValue']}}</kendo-formerror>
+                    <kendo-formerror style="padding-left: 180px" *ngIf="isError['dropdownValue']">
+                        {{errorMsg['dropdownValue']}}
+                    </kendo-formerror>
                 </div>
-                <div class="row" *ngIf="showMultiSelect"><label style="width:170px">New Multiselect Value: </label>
+
+                <div class="col-md-12 margin-btn-15" *ngIf="showMultiSelect">
+                    <label style="width: 180px">New Multiselect Value: </label>
                     <kendo-multiselect style="width: 488px;height:fit-content; padding:0" [data]="attrValues"
-                        textField="ATRB_VAL_TXT" valueField="ATRB_VAL_TXT" [valuePrimitive]="true"
-                        [(ngModel)]="massUpdateData['multiSelectValue']"
-                        [ngStyle]="{'border':isError['multiSelectValue']?'1px solid red':''}"></kendo-multiselect>
-                    <kendo-formerror style="padding-left:170px" *ngIf="isError['multiSelectValue']">
-                        {{errorMsg['multiSelectValue']}}</kendo-formerror>
+                                        textField="ATRB_VAL_TXT" valueField="ATRB_VAL_TXT" [valuePrimitive]="true"
+                                        [(ngModel)]="massUpdateData['multiSelectValue']"
+                                        [ngStyle]="{'border':isError['multiSelectValue']?'1px solid red':''}" class="divineo-one x-btn-visible"></kendo-multiselect>
+                    <kendo-formerror style="padding-left: 180px" *ngIf="isError['multiSelectValue']">
+                        {{errorMsg['multiSelectValue']}}
+                    </kendo-formerror>
                 </div>
-                <div class="row">
-                    <div class="col-md-3 row dateRangeLabel" style="width:200px;"><b>Update Vistex Staging Table.*</b>
+
+                <div class="col-md-12">
+                    <div class="parent-update-vistex">
+                        <div class="dateRangeLabel" style="width: 180px;">
+                            <b>Update Vistex Staging Table.*</b>
+                        </div>
+                        <div class="update-vistex">
+                            <mat-slide-toggle class="toggle-button-custom" [color]="color" [(ngModel)]="massUpdateData['sendVistexFlag']">
+                            </mat-slide-toggle>
+                        </div>
                     </div>
-                    <div class="col-md-2 row" style="padding-left:20px;">
-                        <mat-slide-toggle class="toggle-button-custom" [color]="color" [(ngModel)]="massUpdateData['sendVistexFlag']">
-                        </mat-slide-toggle>
-                    </div>
-                    <div>
-                        <p style=" position:absolute;">* When set to “Off”, updates will not be added to the Vistex
-                            staging table. Use the "Push Deal to Vistex" screen once all updates are completed.</p>
+                    <div class="content-vistex-update">
+                        <p>
+                            * When set to “Off”, updates will not be added to the Vistex
+                            staging table. Use the "Push Deal to Vistex" screen once all updates are completed.
+                        </p>
                     </div>
                 </div>
+                    
+
             </div>
-            <div class="row mt-md-2"></div>
+            <div class="col-md-12 mt-md-2"></div>
             <div class="col-md-12">
                 <div class="col-md-2 font-weight-bold "></div>
                 <div class="col-md-2">
-                    <div><button class="btn btn-primary" (click)="updateValues()">Update Values</button></div>
+                    <div style="padding-left: 15px;"><button class="btn btn-primary" (click)="updateValues()">Update Values</button></div>
                 </div>
             </div>
         </div>
-    </div>
-    <div class="col-md-6" *ngIf="showResults">
-        <div class="row"><a
-                style="text-decoration:underline !important; width:70px; padding:inherit; color: #0071c5;"><b>Results:</b></a>Deals
-            Processed:{{resultCount['all']}},<i
-                style="color:red;font-weight:bold; width:auto">Errors:{{resultCount['error']}}</i>,Successful
-            Updated:{{resultCount['success']}} </div>
-        <div class="row">
-            <div id="grid">
-                <kendo-grid style="height: 923.164px" [data]="gridResult" [sortable]="true" [sort]="state.sort"
-                    (dataStateChange)="dataStateChange($event)">
-                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="DEAL_ID" title="Deal Id"
-                        width="75px"></kendo-grid-column>
-                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="ATRB_DESC" title="Field"
-                        width="200px"></kendo-grid-column>
-                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="UPD_MSG" title="Results">
-                    </kendo-grid-column>
-                </kendo-grid>
+        <div class="col-md-6" *ngIf="showResults">
+            <div class="row">
+                <a style="text-decoration:underline !important; width:70px; padding:inherit; color: #0071c5;"><b>Results:</b></a>Deals
+                Processed:{{resultCount['all']}},<i style="color:red;font-weight:bold; width:auto">Errors:{{resultCount['error']}}</i>,Successful
+                Updated:{{resultCount['success']}}
+            </div>
+            <div class="row">
+                <div id="grid">
+                    <kendo-grid style="height: 923.164px" [data]="gridResult" [sortable]="true" [sort]="state.sort"
+                                (dataStateChange)="dataStateChange($event)">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="DEAL_ID" title="Deal Id"
+                                           width="75px"></kendo-grid-column>
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="ATRB_DESC" title="Field"
+                                           width="200px"></kendo-grid-column>
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="UPD_MSG" title="Results">
+                        </kendo-grid-column>
+                    </kendo-grid>
+                </div>
             </div>
         </div>
     </div>

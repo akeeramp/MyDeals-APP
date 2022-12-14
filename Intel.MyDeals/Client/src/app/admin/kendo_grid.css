@@ -640,3 +640,19 @@ kendo-slider.sliderwidth.kendo-custom-admin-design .k-slider-wrap.k-slider-butto
     kendo-slider.sliderwidth.kendo-custom-admin-design .k-slider-track-wrap ul.k-slider-items li:nth-child(3) {
         margin-left: 9px;
     }
+
+kendo-multiselect.divineo-one.x-btn-visible .k-multiselect-wrap kendo-taglist ul li span {
+    font-size: 16px;
+}
+
+    kendo-multiselect.divineo-one.x-btn-visible .k-multiselect-wrap kendo-taglist ul li span.k-select {
+        display: flex !important;
+    }
+
+        kendo-multiselect.divineo-one.x-btn-visible .k-multiselect-wrap kendo-taglist ul li span.k-select span.k-icon.k-i-close {
+            opacity: 1;
+        }
+
+kendo-multiselect.divineo-one.x-btn-visible .k-multiselect-wrap kendo-taglist ul li {
+    padding-right: 0.375rem !important;
+}

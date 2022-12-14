@@ -1,0 +1,48 @@
+﻿.deal-mass-update {
+    padding: 50px 20px 90px 20px;
+}
+
+.dealer-mass-heading h2 {
+    font-size: 30px;
+    font-family: inherit;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
+    margin-bottom: 0;
+}
+
+.dealer-mass-heading p {
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+p.all-para-warn {
+    margin-bottom: 20px;
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 18px;
+    line-height: 1.5;
+}
+
+.parent-update-vistex {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    width: 100%;
+    padding-top: 40px;
+}
+
+.content-vistex-update {
+    width: calc(100% - 180px);
+    margin-left: auto;
+    padding-top: 15px;
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 16px;
+    line-height: 1.5;
+    color: #111;
+}
+
+.margin-btn-15 {
+    margin-bottom: 15px!important;
+}

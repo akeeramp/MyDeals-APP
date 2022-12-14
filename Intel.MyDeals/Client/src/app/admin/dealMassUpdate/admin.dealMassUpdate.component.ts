@@ -9,7 +9,8 @@ import { dealMassUpdateService } from "./admin.dealMassUpdate.service";
 
 @Component({
     selector: "dealMassUpdate",
-    templateUrl: "Client/src/app/admin/dealMassUpdate/admin.dealMassUpdate.component.html"
+    templateUrl: "Client/src/app/admin/dealMassUpdate/admin.dealMassUpdate.component.html",
+    styleUrls: ['Client/src/app/admin/dealMassUpdate/admin.dealMassUpdate.component.css'],
 })
 
 export class dealMassUpdateComponent {
