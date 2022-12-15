@@ -164,7 +164,7 @@
                                 </ng-template>
 
                                 <!-- Cell Content -->
-                                <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
+                                <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openCAPBreakOut(dataItem, 'CAP')">
                                     <!-- CAP Info cell design -->
                                     <div [class.isSoftWarnCell]="dataItem.CAP.includes('No')" style="text-align: center;">
                                         <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP !='' && dataItem.CAP !='No CAP'">
@@ -200,20 +200,8 @@
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                             </ng-template>
                             <ng-template kendoGridCellTemplate let-dataItem>
-                                <!-- Popover Template -->
-                                <ng-template #popoverContent>
-                                    <div class="container">
-                                        <div class="row">
-                                            <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
-                                        </div>
-                                        <div class="row">
-                                            <grid-popover [popOver]="popOver" [columnTypes]="'YCS2'" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="'YCS2'"></grid-popover>
-                                        </div>
-                                    </div>
-                                </ng-template>
-
                                 <!-- Cell Content -->
-                                <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
+                                <div class="CAPYCS2CellContent" (click)="openCAPBreakOut(dataItem, 'YCS2')" >
                                     <!-- YCS2 Info cell design -->
                                     <div [class.isSoftWarnCell]="dataItem.YCS2.includes('No')" style="text-align: center;">
                                         {{ dataItem.YCS2 }}

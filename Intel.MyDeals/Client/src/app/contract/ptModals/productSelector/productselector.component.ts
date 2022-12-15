@@ -17,6 +17,7 @@ import { logger } from "../../../shared/logger/logger";
 
 import { gridCol, ProdSel_Util } from './prodSel_Util';
 import { PTE_Common_Util } from "../../PTEUtils/PTE_Common_util";
+import { ProductBreakoutComponent } from "./productBreakout/productBreakout.component";
 
 @Component({
     selector: 'product-selector',
@@ -36,6 +37,7 @@ export class ProductSelectorComponent {
         popoverConfig.container = 'body';
         popoverConfig.autoClose = 'outside';
         popoverConfig.animation = false;    // Fixes issue with `.fade` css element setting improper opacity making the popover not show up
+        popoverConfig.triggers = 'mouseenter:mouseleave';
         popoverConfig.openDelay = 500;   // milliseconds
         popoverConfig.closeDelay = 500; // milliseconds
     }
@@ -157,6 +159,24 @@ export class ProductSelectorComponent {
         }
     }
 
+    openCAPBreakOut(dataItem, priceCondition) {
+        this.dialogService.open(ProductBreakoutComponent, {
+            data: {
+                columnTypes: priceCondition,
+                productData: [{
+                    'CUST_MBR_SID': this.pricingTableRow.CUST_MBR_SID,
+                    'PRD_MBR_SID': dataItem.PRD_MBR_SID,
+                    'GEO_MBR_SID': this.pricingTableRow.GEO_COMBINED,
+                    'DEAL_STRT_DT': moment(this.pricingTableRow.START_DT).format("l"),
+                    'DEAL_END_DT': moment(this.pricingTableRow.END_DT).format("l"),
+                    'getAvailable': 'N',
+                    'priceCondition': priceCondition
+
+                }]
+            },
+            panelClass: 'product-breakout-modal'
+        });
+    }
     cancel(): void {
         this.dialogRef.close();
     }

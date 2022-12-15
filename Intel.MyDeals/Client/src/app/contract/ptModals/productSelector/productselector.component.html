@@ -102,10 +102,10 @@
                                                 </div>
                                                 <!-- Template for `Cap Info` column -->
                                                 <div *ngIf="column.field == 'CAP'">
-                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                    <ng-template kendoGridCellTemplate let-dataItem >
                                                         <!-- Popover Template -->
                                                         <ng-template #popoverContent>
-                                                            <div class="popover-content">
+                                                            <div class="popover-content " >
                                                                 <div class="row">
                                                                     <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                                                                 </div>
@@ -116,7 +116,7 @@
                                                         </ng-template>
 
                                                         <!-- Cell Content -->
-                                                        <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
+                                                        <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent"  (click)="openCAPBreakOut(dataItem, 'CAP')">
                                                             <!-- CAP Info cell design -->
                                                             <div [class.isSoftWarnCell]="dataItem.CAP.includes('No')" style="text-align: center;">
                                                                 <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP !='' && dataItem.CAP !='No CAP'">
@@ -135,21 +135,9 @@
                                                 <!-- Template for `YCS2 Info` column -->
                                                 <div *ngIf="column.field == 'YCS2'">
                                                     <ng-template kendoGridCellTemplate let-dataItem>
-                                                        <!-- Popover Template -->
-                                                        <ng-template #popoverContent>
-                                                            <div class="popover-content">
-                                                                <div class="row">
-                                                                    <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
-                                                                </div>
-                                                                <div class="row">
-                                                                    <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
-                                                                </div>
-                                                            </div>
-                                                        </ng-template>
-
-                                                        <!-- Cell Content -->
-                                                        <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
-                                                            <!-- YCS2 Info cell design -->
+                                                        <!--Cell Content-->
+                                                        <div class="CAPYCS2CellContent" (click)="openCAPBreakOut(dataItem, 'YCS2')">
+                                                            <!--YCS2 Info cell design-->
                                                             <div [class.isSoftWarnCell]="dataItem.YCS2.includes('No')" style="text-align: center;">
                                                                 {{ dataItem.YCS2 }}
                                                             </div>
@@ -228,8 +216,8 @@
                                 </ng-template>
                             </div>
                             <!-- Template for `Cap Info` column -->
-                            <div *ngIf="column.field == 'CAP'">
-                                <ng-template kendoGridCellTemplate let-dataItem>
+                            <div *ngIf="column.field == 'CAP'" >
+                                <ng-template kendoGridCellTemplate let-dataItem >
                                     <!-- Popover Template -->
                                     <ng-template #popoverContent>
                                         <div class="popover-content">
@@ -243,7 +231,7 @@
                                     </ng-template>
 
                                     <!-- Cell Content -->
-                                    <div class="CAPYCS2CellContent accurate-height" #popOver="ngbPopover" [ngbPopover]="popoverContent" style="padding:0 !important">
+                                    <div class="CAPYCS2CellContent accurate-height" #popOver="ngbPopover" [ngbPopover]="popoverContent" style="padding:0 !important"  (click)="openCAPBreakOut(dataItem, 'CAP')">
                                         <!-- CAP Info cell design -->
                                         <div [class.isSoftWarnCell]="dataItem.CAP.includes('No')" [class.uiControlDiv]="dataItem.CAP.includes('No')" style="text-align: center;">
                                             <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP !='' && dataItem.CAP !='No CAP'">
@@ -262,20 +250,8 @@
                             <!-- Template for `YCS2 Info` column -->
                             <div *ngIf="column.field == 'YCS2'">
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                    <!-- Popover Template -->
-                                    <ng-template #popoverContent>
-                                        <div class="popover-content">
-                                            <div class="row">
-                                                <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
-                                            </div>
-                                            <div class="row">
-                                                <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
-                                            </div>
-                                        </div>
-                                    </ng-template>
-
                                     <!-- Cell Content -->
-                                    <div class="CAPYCS2CellContent bg-yellow-remove" #popOver="ngbPopover" [ngbPopover]="popoverContent">
+                                    <div class="CAPYCS2CellContent bg-yellow-remove" (click)="openCAPBreakOut(dataItem, 'YCS2')">
                                         <!-- YCS2 Info cell design -->
                                         <div [class.isSoftWarnCell]="dataItem.YCS2.includes('No')" [class.uiControlDiv]="dataItem.YCS2.includes('No')" class="product-selector-font-align">
                                             {{ dataItem.YCS2 }}
@@ -504,7 +480,7 @@
                                         </ng-template>
                                     </div>
                                     <!-- Template for `Cap Info` column -->
-                                    <div *ngIf="column.field == 'CAP'">
+                                    <div *ngIf="column.field == 'CAP'" >
                                         <ng-template kendoGridCellTemplate let-dataItem>
                                             <!-- Popover Template -->
                                             <ng-template #popoverContent>
@@ -519,7 +495,7 @@
                                             </ng-template>
 
                                             <!-- Cell Content -->
-                                            <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
+                                            <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openCAPBreakOut(dataItem, 'CAP')">
                                                 <!-- CAP Info cell design -->
                                                 <div [class.isSoftWarnCell]="dataItem.CAP.includes('No')" style="text-align: center;">
                                                     <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP !='' && dataItem.CAP !='No CAP'">
@@ -538,20 +514,8 @@
                                     <!-- Template for `YCS2 Info` column -->
                                     <div *ngIf="column.field == 'YCS2'">
                                         <ng-template kendoGridCellTemplate let-dataItem>
-                                            <!-- Popover Template -->
-                                            <ng-template #popoverContent>
-                                                <div class="popover-content">
-                                                    <div class="row">
-                                                        <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
-                                                    </div>
-                                                    <div class="row">
-                                                        <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
-                                                    </div>
-                                                </div>
-                                            </ng-template>
-
                                             <!-- Cell Content -->
-                                            <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent">
+                                            <div class="CAPYCS2CellContent" (click)="openCAPBreakOut(dataItem, 'YCS2')">
                                                 <!-- YCS2 Info cell design -->
                                                 <div [class.isSoftWarnCell]="dataItem.YCS2.includes('No')" [class.uiControlDiv]="dataItem.YCS2.includes('No')" style="text-align: center;">
                                                     {{ dataItem.YCS2 }}
