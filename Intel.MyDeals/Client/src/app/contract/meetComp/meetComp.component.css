@@ -586,3 +586,17 @@
     margin-top: 0px;  
     border-bottom: 2px solid #bcbcbc;
 }
+
+.meet-comp-tenders .row-cooperate {
+    margin: 0 !important;
+    padding-left: 0;
+    padding-right: 0;
+}
+
+.meet-comp-tenders .meet-comp-blank_space {
+    border-bottom: none;
+}
+
+.meet-comp-tenders {
+    border-bottom: none !important;
+}

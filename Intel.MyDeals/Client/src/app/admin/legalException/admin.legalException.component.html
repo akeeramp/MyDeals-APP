@@ -12,7 +12,7 @@
                     [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
                     [resizable]="true"
                     [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)"
-                    [kendoGridExpandDetailsBy]="expandDetailsBy" [(expandedDetailKeys)]="expandedDetailKeys" (detailExpand)="detailExpand($event)">
+                    [kendoGridExpandDetailsBy]="expandDetailsBy" [(expandedDetailKeys)]="expandedDetailKeys" (detailExpand)="detailExpand($event)" class="legal-exception-design">
 
             <ng-template kendoGridToolbarTemplate>
                 <button *ngIf="editAccess" kendoButton (click)="openCreateExceptionDialog()" class="k-button k-button-icontext legalheader-align">
@@ -37,7 +37,7 @@
                     <span class="intelicon-show-results-outlined" title="Show Additional Column"></span>
                 </button>
             </ng-template>
-            <kendo-grid-column *ngIf="editAccess" [headerClass]="{ 'text-center remove-filter': true }" field="IS_SELECTED" title="selectAll" width="60">
+            <kendo-grid-column *ngIf="editAccess" [headerClass]="{ 'text-center remove-filter': true }" field="IS_SELECTED" title="selectAll" width="80">
                 <ng-template kendoGridHeaderTemplate let-dataItem>
                     <div class='leagalgridheader'>
                         Select All<br />
@@ -103,7 +103,7 @@
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="150" field="MYDL_PCT_LGL_EXCPT_SID" title="PCT Legal Exception Sid" filter="boolean" hidden="hidden">
             </kendo-grid-column>
-            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="150" field="PCT_EXCPT_NBR">
+            <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="170" field="PCT_EXCPT_NBR">
                 <ng-template kendoGridHeaderTemplate>
                     <div class='isRequired leagalgridheader'>PCT Exception No. </div>
                 </ng-template>

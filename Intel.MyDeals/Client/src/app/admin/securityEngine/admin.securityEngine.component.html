@@ -9,8 +9,8 @@
                 Loading dropdown data...
             </div>
             <!-- SIDE BAR -->
-            <div class="secEngine_sidebar" style="margin-top: 9px; width: 101%;">
-                <div id="secEngine_filters" class="row" style="padding-bottom: 251px; height: calc(100vh - 169px) ">
+            <div class="secEngine_sidebar" style="margin-top: 9px; width: 100%;">
+                <div id="secEngine_filters" class="row" style="height: calc(100vh - 175px) ">
                     <div class="lbl" style="margin-top: 9px;">
                         <h5 style="font-weight: 400 !important; font-size: 17px !important;">
                             Security Attributes Properties
@@ -34,24 +34,24 @@
                     <div class="lbl">
                         <div>ObjType: </div>
                         <kendo-dropdownlist [data]="dropDownDatasource.ObjTypes" textField="Alias" style="width: 11em !important;"
-                                            [(ngModel)]="selectedObjType" (valueChange)="objtypeChange($event)" valueField="Id" class="inputWidth newbotborder font-input cd-input-bottom" name="Alias">
+                                            [(ngModel)]="selectedObjType" (valueChange)="objtypeChange($event)" valueField="Id" class="inputWidth newbotborder font-input cd-input-bottom k-dropdown-design" name="Alias">
                         </kendo-dropdownlist>
                     </div>
                     <div class="lbl">
                         <div>Roles: </div>
-                        <kendo-multiselect class="sec-eng-multi-list" [placeholder]="'All Roles'" style="width: 11em !important;" [data]="dropDownDatasource.AdminRoleTypes" textField="dropdownName" valueField="dropdownID"
+                        <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level fs-changes" [placeholder]="'All Roles'" style="width: 11em !important;" [data]="dropDownDatasource.AdminRoleTypes" textField="dropdownName" valueField="dropdownID"
                            [(ngModel)]="selectedRoles" [autoClose]="true" (valueChange)="objtypeRoleChange($event)" [kendoDropDownFilter]="filterSettings">
                         </kendo-multiselect>
                     </div>
                     <div class="lbl">
                         <div>Stages: </div>
-                        <kendo-multiselect class="sec-eng-multi-list" [placeholder]="'All Stages'" style="width: 11em !important;" [data]="drilledDownstages" textField="Second" valueField="Second"
+                        <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level fs-changes" [placeholder]="'All Stages'" style="width: 11em !important;" [data]="drilledDownstages" textField="Second" valueField="Second"
                              [(ngModel)]="selectedStages" [autoClose]="true">
                         </kendo-multiselect>
                     </div>
                     <div class="lbl">
                         <div>ObjSet Types: </div>
-                        <kendo-multiselect class="sec-eng-multi-list" [placeholder]="'All Deal Types'" style="width: 11em !important;" [data]="drilledDowndealtype" textField="Alias" valueField="Id"
+                        <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level fs-changes" [placeholder]="'All Deal Types'" style="width: 11em !important;" [data]="drilledDowndealtype" textField="Alias" valueField="Id"
                                  [(ngModel)]="selectedDealTypes" [autoClose]="true">
                         </kendo-multiselect>
                     </div>
@@ -65,7 +65,7 @@
                                         <div class="row">
                                             <div>Attribute Action:</div>
                                             <kendo-dropdownlist [data]="drilledDownActionAtrb" textField="dropdownName" style="width: 14em !important;"
-                                                                [(ngModel)]="selectedAtrbAction" valueField="dropdownID" class="inputWidth newbotborder font-input cd-input-bottom" name="dropdownName">
+                                                                [(ngModel)]="selectedAtrbAction" valueField="dropdownID" class="inputWidth newbotborder font-input cd-input-bottom k-dropdown-design" name="dropdownName">
                                             </kendo-dropdownlist>
                                         </div>
                                         <div class="row" style="padding-top:20px;">
@@ -77,7 +77,7 @@
                                                 </span>
                                             </div>
                                             <div class="col-md-12">
-                                                <kendo-multiselect class="sec-eng-multi-list" [placeholder]="'All Attributes'" [data]="drilledDownAtrb" textField="ATRB_COL_NM" valueField="ATRB_SID"
+                                                <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level fs-changes" [placeholder]="'All Attributes'" [data]="drilledDownAtrb" textField="ATRB_COL_NM" valueField="ATRB_SID"
                                                                    [autoClose]="true" [kendoDropDownFilter]="filterSettings" [(ngModel)]="selectedIds">
                                                 </kendo-multiselect>
                                             </div>
@@ -90,7 +90,7 @@
                                     <div class="col-md-12">
                                         <div class="row" style="margin-bottom:80px;">
                                             <div style="font-size: 11px; font-weight: 500;">Deal Action:</div>
-                                            <kendo-multiselect class="sec-eng-multi-list" [data]="drilledDownAction" [placeholder]="'All Deal Actions'" textField="dropdownName" valueField="dropdownID"
+                                            <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level fs-changes" [data]="drilledDownAction" [placeholder]="'All Deal Actions'" textField="dropdownName" valueField="dropdownID"
                                                                [(ngModel)]="selectedDealactions" [autoClose]="true" [kendoDropDownFilter]="filterSettings">
                                             </kendo-multiselect>
                                         </div>
