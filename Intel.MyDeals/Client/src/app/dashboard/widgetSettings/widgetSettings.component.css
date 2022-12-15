@@ -2,6 +2,8 @@
     background-color: rgb(237, 239, 240) !important;
     color: rgb(177, 186, 191) !important;
     border-color: rgb(177, 186, 191) !important;
+    cursor: not-allowed;
+    pointer-events: all;
 }
 .Name_text {
     text-align: right;
@@ -20,3 +22,7 @@
 .remove_btw_s {
     margin-right: -4px !important;
 }
+.inp_border_fix:focus {
+    border-color: #3c8dbc !important;
+    box-shadow: none !important;
+} 

@@ -1533,3 +1533,32 @@ grid-popover .k-grid-content {
     max-width: 400px;
     min-width: 400px;
 }
+.input-checkbox-rel input[type=radio].with-font + label:before, .input-checkbox-rel input[type=checkbox].with-font + label:before {
+    font-family: FontAwesome !important;
+    display: inline-block !important;
+    content: "\f096" !important;
+    font-size: 20px !important;
+    letter-spacing: 10px !important;
+    color: #00AEEF !important;
+    margin-left: 10px !important;
+}
+
+.input-checkbox-rel input[type=radio].with-font:hover + label:before, .input-checkbox-rel input[type=checkbox].with-font:hover + label:before {
+    color: #003C71 !important;
+    cursor: pointer !important;
+}
+
+.input-checkbox-rel input[type=radio].with-font:checked:focus + label:before, .input-checkbox-rel input[type=checkbox].with-font:checked:focus + label:before {
+    content: "\f046" !important;
+    font-size: 20px !important;
+    letter-spacing: 5px !important;
+    color: #C4D600 !important;
+    margin-left: 10px !important;
+}
+
+.box_position_fix {
+    left: 12px !important;
+    position: absolute !important;
+    top: 7px !important;
+    opacity: 0 !important;
+}

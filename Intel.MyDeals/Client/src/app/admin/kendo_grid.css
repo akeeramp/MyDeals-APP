@@ -854,3 +854,28 @@ kendo-dialog#disabledCellsError .k-dialog {
         padding-bottom: 10px;
         border-radius: 3px !important;
     }
+.grid_fix .k-icon.k-i-filter {
+    font-size: 20px !important;
+    color: #000 !important;
+    opacity: .45 !important;
+}
+
+    .grid_fix .k-icon.k-i-filter:hover {
+        color: #00aeef !important;
+        opacity: 1 !important;
+    }
+
+.grid_fix .k-column-title {
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    text-transform: capitalize;
+    color: #1a3e6f !important;
+}
+
+.grid_fix th.k-header.headerClass.k-filterable {
+    border-color: #c4cfd4;
+}
+
+kendo-grid.grid_fix {
+    height: calc(100vh - 260px) !important;
+}

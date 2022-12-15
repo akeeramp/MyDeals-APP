@@ -1,6 +1,9 @@
 ﻿<div *ngIf="in_Field_Name === 'EXCLUDE_AUTOMATION'" id="ExcludeAuto">
-    <input type='checkbox' class='grid-link-checkbox with-font' [(ngModel)]="in_DataItem.isExclSel"/>
-</div>
+    <div class="input-checkbox-rel">
+        <input type='checkbox' class='grid-link-checkbox with-font box_position_fix' [(ngModel)]="in_DataItem.isExclSel" />
+        <label title="Exclude from Price Approval Rules"></label>
+        </div>
+    </div>
 <div *ngIf="in_Field_Name === 'tools'" class="dealCell">
     <deal-tools-angular [dataItem]='in_DataItem' [isSplitEnabled]='true' [isFileAttachmentEnabled]='true' 
                         [isHistoryEnabled]='true' [isCommentEnabled]='true' [isEditable]='true' 
