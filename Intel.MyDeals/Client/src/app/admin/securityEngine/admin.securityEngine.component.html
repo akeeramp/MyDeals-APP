@@ -10,20 +10,24 @@
             </div>
             <!-- SIDE BAR -->
             <div class="secEngine_sidebar" style="margin-top: 9px; width: 100%;">
-                <div id="secEngine_filters" class="row" style="height: calc(100vh - 175px) ">
+                <div id="secEngine_filters" style="height: calc(100vh - 175px)">
                     <div class="lbl" style="margin-top: 9px;">
                         <h5 style="font-weight: 400 !important; font-size: 17px !important;">
                             Security Attributes Properties
                             <!-- Help button -->
                             <i class="intelicon-help-outlined" (click)="clickHelpButton()" style="cursor: pointer; color: #0071C5;"></i>
                         </h5>
-                        <kendo-dialog *ngIf="isHelpButton" id="HelpButton" [height]="221" [width]="593" style=" margin-bottom: 317px; ">
-                            <h3 style="font-size:25px;">Help Text</h3>
-                            <div>
-                                Start by selecting the ObjType, Roles, Stages and ObjSet types you want to view.
-                                Note that leaving the select blank will default to ALL.
-                                Then, select either Attribute Security or Deal Security tab and enter remaining details.
-                                When done, click the View Security Attributes button on the bottom.
+                        <kendo-dialog *ngIf="isHelpButton" id="HelpButton" [width]="600" class="help-dialoger">
+                            <div class="modal-header">
+                                <h3>Help Text</h3>
+                            </div>
+                            <div class="modal-body">
+                                <p class="paras-secure-engine">
+                                    Start by selecting the ObjType, Roles, Stages and ObjSet types you want to view.
+                                    Note that leaving the select blank will default to ALL.
+                                    Then, select either Attribute Security or Deal Security tab and enter remaining details.
+                                    When done, click the View Security Attributes button on the bottom.
+                                </p>
                             </div>
                             <kendo-dialog-actions>
                                 <button (click)="Close()" class="btn btn-default">Close</button>
@@ -34,38 +38,38 @@
                     <div class="lbl">
                         <div>ObjType: </div>
                         <kendo-dropdownlist [data]="dropDownDatasource.ObjTypes" textField="Alias" style="width: 11em !important;"
-                                            [(ngModel)]="selectedObjType" (valueChange)="objtypeChange($event)" valueField="Id" class="inputWidth newbotborder font-input cd-input-bottom k-dropdown-design" name="Alias">
+                                            [(ngModel)]="selectedObjType" (valueChange)="objtypeChange($event)" valueField="Id" class="inputWidth font-input cd-input-bottom k-dropdown-design font-comp-red" name="Alias">
                         </kendo-dropdownlist>
                     </div>
                     <div class="lbl">
                         <div>Roles: </div>
-                        <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level fs-changes" [placeholder]="'All Roles'" style="width: 11em !important;" [data]="dropDownDatasource.AdminRoleTypes" textField="dropdownName" valueField="dropdownID"
-                           [(ngModel)]="selectedRoles" [autoClose]="true" (valueChange)="objtypeRoleChange($event)" [kendoDropDownFilter]="filterSettings">
+                        <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level fs-changes disk-fs-changes" [placeholder]="'All Roles'" style="width: 11em !important;" [data]="dropDownDatasource.AdminRoleTypes" textField="dropdownName" valueField="dropdownID"
+                                           [(ngModel)]="selectedRoles" [autoClose]="true" (valueChange)="objtypeRoleChange($event)" [kendoDropDownFilter]="filterSettings">
                         </kendo-multiselect>
                     </div>
                     <div class="lbl">
                         <div>Stages: </div>
-                        <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level fs-changes" [placeholder]="'All Stages'" style="width: 11em !important;" [data]="drilledDownstages" textField="Second" valueField="Second"
-                             [(ngModel)]="selectedStages" [autoClose]="true">
+                        <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level fs-changes disk-fs-changes" [placeholder]="'All Stages'" style="width: 11em !important;" [data]="drilledDownstages" textField="Second" valueField="Second"
+                                           [(ngModel)]="selectedStages" [autoClose]="true">
                         </kendo-multiselect>
                     </div>
                     <div class="lbl">
                         <div>ObjSet Types: </div>
-                        <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level fs-changes" [placeholder]="'All Deal Types'" style="width: 11em !important;" [data]="drilledDowndealtype" textField="Alias" valueField="Id"
-                                 [(ngModel)]="selectedDealTypes" [autoClose]="true">
+                        <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level fs-changes disk-fs-changes" [placeholder]="'All Deal Types'" style="width: 11em !important;" [data]="drilledDowndealtype" textField="Alias" valueField="Id"
+                                           [(ngModel)]="selectedDealTypes" [autoClose]="true">
                         </kendo-multiselect>
                     </div>
 
                     <!-- Tabs -->
-                    <div class="col-md-12 secEngine_tabs" style=" padding-left: 7px;">
-                        <kendo-tabstrip class="tab-sec-add" active="" style="margin: 6px;" (tabSelect)="onTabSelect($event)">
+                    <div class="col-md-12 secEngine_tabs" style=" padding-left: 20px;">
+                        <kendo-tabstrip class="tab-sec-add tab-security-engine" active="" style="margin: 6px;" (tabSelect)="onTabSelect($event)">
                             <kendo-tabstrip-tab index="0" title="Attribute Security" [selected]="isASTab">
                                 <ng-template kendoTabContent>
                                     <div class="col-md-12">
                                         <div class="row">
                                             <div>Attribute Action:</div>
                                             <kendo-dropdownlist [data]="drilledDownActionAtrb" textField="dropdownName" style="width: 14em !important;"
-                                                                [(ngModel)]="selectedAtrbAction" valueField="dropdownID" class="inputWidth newbotborder font-input cd-input-bottom k-dropdown-design" name="dropdownName">
+                                                                [(ngModel)]="selectedAtrbAction" valueField="dropdownID" class="inputWidth font-input cd-input-bottom k-dropdown-design font-comp-red" name="dropdownName">
                                             </kendo-dropdownlist>
                                         </div>
                                         <div class="row" style="padding-top:20px;">
@@ -77,7 +81,7 @@
                                                 </span>
                                             </div>
                                             <div class="col-md-12">
-                                                <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level fs-changes" [placeholder]="'All Attributes'" [data]="drilledDownAtrb" textField="ATRB_COL_NM" valueField="ATRB_SID"
+                                                <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level fs-changes disk-fs-changes" [placeholder]="'All Attributes'" [data]="drilledDownAtrb" textField="ATRB_COL_NM" valueField="ATRB_SID"
                                                                    [autoClose]="true" [kendoDropDownFilter]="filterSettings" [(ngModel)]="selectedIds">
                                                 </kendo-multiselect>
                                             </div>
@@ -90,7 +94,7 @@
                                     <div class="col-md-12">
                                         <div class="row" style="margin-bottom:80px;">
                                             <div style="font-size: 11px; font-weight: 500;">Deal Action:</div>
-                                            <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level fs-changes" [data]="drilledDownAction" [placeholder]="'All Deal Actions'" textField="dropdownName" valueField="dropdownID"
+                                            <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level fs-changes disk-fs-changes" [data]="drilledDownAction" [placeholder]="'All Deal Actions'" textField="dropdownName" valueField="dropdownID"
                                                                [(ngModel)]="selectedDealactions" [autoClose]="true" [kendoDropDownFilter]="filterSettings">
                                             </kendo-multiselect>
                                         </div>
@@ -135,34 +139,43 @@
 
                 <div *ngIf="isShowMainContent && !isGridLoading">
                     <div class="row">
-                        <div class="col-md-12">
-                            <div class="col-md-6">
-                                <h5><span style="padding-left: 20px; font-weight: 700;">Action:</span><span style="padding-left: 20px; font-weight: 600;">{{currentDisplayAction}}</span> </h5>
-                            </div>
-                            <div class="fr col-md-6" style="font-size: 9px; line-height: 1em; margin-right: -160px;">
-                                <div class="atrbbasecolorECAP fl atrbContainer secEngine_key">&nbsp;</div>
-                                <div class="fl secEngine_keyBlock"> = ECAP</div>
-
-                                <div class="atrbbasecolorPROGRAM fl atrbContainer secEngine_key">&nbsp;</div>
-                                <div class="fl secEngine_keyBlock"> = PROGRAM</div>
-
-                                <div class="atrbbasecolorVOL_TIER fl atrbContainer secEngine_key">&nbsp;</div>
-                                <div class="fl secEngine_keyBlock"> = VOL TIER</div>
-
-                                <div class="atrbbasecolorREV_TIER fl atrbContainer secEngine_key">&nbsp;</div>
-                                <div class="fl secEngine_keyBlock"> = REV TIER</div>
-
-                                <div class="atrbbasecolorFLEX fl atrbContainer secEngine_key">&nbsp;</div>
-                                <div class="fl secEngine_keyBlock"> = FLEX</div>
-
-                                <div class="atrbbasecolorDENSITY fl atrbContainer secEngine_key">&nbsp;</div>
-                                <div class="fl secEngine_keyBlock"> = DENSITY</div>
-
-                                <div class="atrbbasecolorKIT fl atrbContainer secEngine_key">&nbsp;</div>
-                                <div class="fl secEngine_keyBlock"> = KIT</div>
-
-                                <div class="atrbbasecolor fl atrbContainer secEngine_key" style="border-color: red;">&nbsp;</div>
-                                <div class="fl secEngine_keyBlock"> = Other (hover on box to see)</div>
+                        <div class="col-md-6">
+                            <h5><span style="padding-left: 20px; font-weight: 700;">Action:</span><span style="padding-left: 10px; font-weight: 400;">{{currentDisplayAction}}</span> </h5>
+                        </div>
+                        <div class="fr col-md-6" style="font-size: 10px; padding-left: 136px;">
+                            <div class="liner-secure-engine">
+                                <div class="designing-purposes">
+                                    <div class="atrbbasecolorECAP fl atrbContainer secEngine_key">&nbsp;</div>
+                                    <div class="fl secEngine_keyBlock"> = ECAP</div>
+                                </div>
+                                <div class="designing-purposes">
+                                    <div class="atrbbasecolorPROGRAM fl atrbContainer secEngine_key">&nbsp;</div>
+                                    <div class="fl secEngine_keyBlock"> = PROGRAM</div>
+                                </div>
+                                <div class="designing-purposes">
+                                    <div class="atrbbasecolorVOL_TIER fl atrbContainer secEngine_key">&nbsp;</div>
+                                    <div class="fl secEngine_keyBlock"> = VOL TIER</div>
+                                </div>
+                                <div class="designing-purposes">
+                                    <div class="atrbbasecolorREV_TIER fl atrbContainer secEngine_key">&nbsp;</div>
+                                    <div class="fl secEngine_keyBlock"> = REV TIER</div>
+                                </div>
+                                <div class="designing-purposes">
+                                    <div class="atrbbasecolorFLEX fl atrbContainer secEngine_key">&nbsp;</div>
+                                    <div class="fl secEngine_keyBlock"> = FLEX</div>
+                                </div>
+                                <div class="designing-purposes">
+                                    <div class="atrbbasecolorDENSITY fl atrbContainer secEngine_key">&nbsp;</div>
+                                    <div class="fl secEngine_keyBlock"> = DENSITY</div>
+                                </div>
+                                <div class="designing-purposes">
+                                    <div class="atrbbasecolorKIT fl atrbContainer secEngine_key">&nbsp;</div>
+                                    <div class="fl secEngine_keyBlock"> = KIT</div>
+                                </div>
+                                <div class="designing-purposes">
+                                    <div class="atrbbasecolor fl atrbContainer secEngine_key" style="border-color: red;">&nbsp;</div>
+                                    <div class="fl secEngine_keyBlock"> = Other (hover on box to see)</div>
+                                </div>
                             </div>
                         </div>
                     </div>
@@ -170,7 +183,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="col-md-12 kendo-grid-buttons">
-                                <kendo-grid [data]="gridResult" [groupable]="false" style="overflow: scroll; height: calc(100vh - 200px);">
+                                <kendo-grid [data]="gridResult" [groupable]="false" style="height: calc(100vh - 200px);" class="security-engine-tables">
                                     <ng-template kendoGridToolbarTemplate>
                                         <button (click)="save()" class="btn btn-primary ">
                                             Save
@@ -188,8 +201,8 @@
                                             <span [innerHTML]="drawRoles(true)"></span>
                                         </ng-template>
                                     </kendo-grid-column>
-                                    <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" width="168" field="{{column.title}}"  title="{{column.title}}">
-                                        <ng-template kendoGridCellTemplate  let-dataItem="dataItem" >
+                                    <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" width="168" field="{{column.title}}" title="{{column.title}}">
+                                        <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                             <span [innerHTML]="securityEngineDrawDeals(dataItem.ATRB_SID,dataItem.ATRB_COL_NM,column.stgId,column.title)" (click)="clickBox($event,dataItem.ATRB_SID,dataItem.ATRB_COL_NM,column.stgId,column.title)"></span>
                                         </ng-template>
                                     </kendo-grid-column>

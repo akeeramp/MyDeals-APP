@@ -736,3 +736,121 @@ kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.fs-
     background-color: var(--light-blue);
     border: none;
 }
+
+
+kendo-tabstrip.tab-sec-add.tab-security-engine .k-tabstrip-items-wrapper .k-tabstrip-items li .k-link {
+    padding: 1px 5px;
+    font-size: 14px;
+    color: rgb(0, 113, 197);
+}
+
+kendo-tabstrip.tab-sec-add.tab-security-engine .k-content {
+    padding-left: 0;
+    padding-right: 0;
+}
+
+kendo-tabstrip.tab-sec-add.tab-security-engine .k-tabstrip-items-wrapper .k-tabstrip-items li.k-state-active .k-link {
+    color: var(--white);
+}
+
+kendo-dialog.help-dialoger .k-dialog {
+    border-radius: 0;
+}
+
+    kendo-dialog.help-dialoger .k-dialog .k-dialog-content {
+        padding: 0;
+    }
+
+        kendo-dialog.help-dialoger .k-dialog .k-dialog-content .modal-header {
+            min-height: 16.5px;
+            padding: 15px;
+            border-bottom: 1px solid rgb(244, 244, 244);
+        }
+
+            kendo-dialog.help-dialoger .k-dialog .k-dialog-content .modal-header h3 {
+                margin-top: 30px;
+                margin-bottom: 0px;
+                font-size: 28px;
+            }
+
+kendo-dialog.help-dialoger .modal-body {
+    position: relative;
+    padding: 15px;
+    border-bottom: 1px solid rgb(244, 244, 244);
+}
+
+.paras-secure-engine {
+    margin-bottom: 0;
+}
+
+kendo-dialog.help-dialoger kendo-dialog-actions .btn-default {
+    max-width: 60px;
+    margin-left: auto;
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+kendo-dialog.help-dialoger kendo-dialog-actions {
+    padding: 15px;
+}
+
+kendo-grid.security-engine-tables table tr th {
+    font-weight: 400 !important;
+    padding-left: 20px;
+}
+
+    kendo-grid.security-engine-tables table tr th:first-child, kendo-grid.security-engine-tables table tr th:nth-child(2) {
+        font-weight: 600 !important;
+        font-size: 14px !important;
+        font-family: 'Intel Clear';
+    }
+
+kendo-dropdownlist.inputWidth.font-input.cd-input-bottom.k-dropdown-design.font-comp-red .k-input {
+    font-size: 12px;
+}
+
+kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.fs-changes.disk-fs-changes .k-multiselect-wrap .k-searchbar .k-input {
+    font-size: 12px;
+}
+
+kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.fs-changes.disk-fs-changes .k-multiselect-wrap .k-searchbar {
+    padding-top: 2px;
+}
+
+kendo-tabstrip.tab-sec-add.tab-security-engine .k-tabstrip-items-wrapper .k-tabstrip-items li {
+    border: 1px solid #c4cfd4;
+}
+
+.liner-secure-engine {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-wrap: wrap;
+    width: 100%;
+    position: relative;
+}
+
+kendo-dialog#disabledCellsError .k-dialog {
+    border: none;
+}
+
+.body-disabledCellsError {
+    margin-bottom: 0;
+    color: #444;
+    font-size: 16px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+    font-family: 'Intel Clear';
+}
+
+#disabledCellsError .k-dialog .k-dialog-buttongroup {
+    padding: 15px;
+    justify-content: flex-end;
+}
+
+    #disabledCellsError .k-dialog .k-dialog-buttongroup button.k-button {
+        min-width: 75px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        border-radius: 3px !important;
+    }

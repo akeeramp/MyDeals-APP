@@ -27,11 +27,11 @@
         </kendo-dialog-actions>
     </kendo-dialog>
 <!-- Error Message on pasting data to readonly cells -->
-    <kendo-dialog *ngIf="isDisAlert" (close)="closeDisAlert()" id="disabledCellsError">
+    <kendo-dialog *ngIf="isDisAlert" (close)="closeDisAlert()" id="disabledCellsError" [width]="320">
         <kendo-dialog-titlebar>
             <div>Error</div>
         </kendo-dialog-titlebar>
-        <p [innerHTML]='alertMsg'></p>
+        <p class="body-disabledCellsError" [innerHTML]='alertMsg'></p>
         <kendo-dialog-actions [layout]="'normal'">
             <button kendoButton (click)="closeDisAlert()">OK</button>
         </kendo-dialog-actions>
