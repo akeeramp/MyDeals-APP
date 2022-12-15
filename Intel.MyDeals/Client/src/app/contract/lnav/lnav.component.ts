@@ -698,6 +698,7 @@ export class lnavComponent {
             height: '750px',
             width: '1500px',
             data: autofillData,
+            panelClass: "autofiller-pop-ups"
         });
 
         dialogRef.afterClosed().subscribe(result => {

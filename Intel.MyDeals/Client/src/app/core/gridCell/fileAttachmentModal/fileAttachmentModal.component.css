@@ -141,7 +141,7 @@
 }
 
     .attach-style .new-k-btn:hover {
-        background-color: #0071c5
+        background-color: #0071c5 !important
     }
 
 .attach-style .fino-css .k-button {

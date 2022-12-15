@@ -23,7 +23,8 @@ export class notificationDockComponent {
     //to open notification settings pop up
     gotoNotificationSettings() {
         this.dialog.open(notificationsSettingsDialog, {
-            width: "800px"
+            width: "800px",
+            panelClass: "notificationSetting-popup"
         });
     }
 
