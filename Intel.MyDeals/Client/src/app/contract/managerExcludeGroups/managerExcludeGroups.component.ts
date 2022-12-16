@@ -235,6 +235,8 @@ export class managerExcludeGroupsComponent {
         _.each(grid.data, (dataItem) => {
             dataItem['ECAP_PRICE'] = this.getFormatedDim(dataItem, 'ECAP_PRICE', '20___0', 'currency');
             dataItem['MAX_RPU'] = this.getFormatedDim(dataItem, 'MAX_RPU', '20___0', 'currency');
+            dataItem['START_DT'] = new Date(dataItem['START_DT']).toString();
+            dataItem['END_DT'] = new Date(dataItem['END_DT']).toString();
         })
         grid.saveAsExcel();
         grid.columns.forEach(item => {
