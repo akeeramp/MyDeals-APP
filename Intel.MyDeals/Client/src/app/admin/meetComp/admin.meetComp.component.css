@@ -99,6 +99,7 @@ kendo-grid.pro-meetComp.k-widget.k-grid
 }
 #modalBodyDiv .row {
   margin-left: 20px;
+  width: 733px;
 }
 .notes {
   font-size: 14px;
@@ -163,7 +164,7 @@ kendo-grid.pro-meetComp.k-widget.k-grid
   border-color: #0071c5 !important;
   box-shadow: none !important;
   font-weight: 500 !important;
-  line-height: 2em;
+  line-height: 1em;
   padding: 9px 14px;
   border-radius: 0;
   text-transform: uppercase;
@@ -252,4 +253,8 @@ kendo-popup
     align-items: center;
     justify-content: space-between;
     padding: 10px;
+}
+
+#meetCompurlLink a{
+  color: #0071c5;
 }

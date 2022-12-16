@@ -174,6 +174,7 @@ export class BulkUploadMeetCompModalComponent {
 
     validateMeetComps() {
         this.hotTable = this.hotRegisterer.getInstance(this.hotId);
+        this.generateMeetComps();
         this.priceVal = [];
         if (this.meetComps.length > 0) {
             this.isBusy = true;
@@ -208,6 +209,24 @@ export class BulkUploadMeetCompModalComponent {
             });
         }
     };
+
+    generateMeetComps () {
+        this.meetComps = [];
+        var tempRange = this.hotTable.getData().filter(x => !(x[0] == null && x[1] == null && x[2] == null && x[3] == null && x[4] == null && x[5] == null));
+        if (tempRange.length > 0) {
+            this.spinnerMessageDescription = "Please wait while reading meet comp data..";
+            for (var i = 0; i < tempRange.length; i++) {
+                var newMeetComp = {};
+                newMeetComp['CUST_NM'] = tempRange[i][0] != null ? ((tempRange[i][0]).trim()) : "";
+                newMeetComp['HIER_VAL_NM'] = tempRange[i][1] != null ? ((tempRange[i][1]).trim()) : "";
+                newMeetComp['MEET_COMP_PRD'] = tempRange[i][2] != null ? ((tempRange[i][2]).trim()) : "";
+                newMeetComp['MEET_COMP_PRC'] = tempRange[i][3] != null ? tempRange[i][3] : 0;
+                newMeetComp['IA_BNCH'] = tempRange[i][4] != null ? (!isNaN(tempRange[i][4]) && parseInt(tempRange[i][4]) > 0 ? tempRange[i][4] : 0) : 0;
+                newMeetComp['COMP_BNCH'] = tempRange[i][5] != null ? (!isNaN(tempRange[i][5]) && parseInt(tempRange[i][5]) > 0 ? tempRange[i][5] : 0) : 0;
+                this.meetComps.push(newMeetComp);
+            }
+        }
+    }
 
     setInvalidBenchValsZero(){
         this.meetComps.forEach((row,rowInd) => {
