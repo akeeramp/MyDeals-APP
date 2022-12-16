@@ -51,8 +51,10 @@ export class BulkPricingUpdatesComponent  {
     UpdateStatus : '',
     ValidationMessages : ''}
     validBulkPriceUpdates: any = [];
-   basedate = moment("12/30/1899").format("MM/DD/YYYY");
-   cellComments = [];
+    basedate = moment("12/30/1899").format("MM/DD/YYYY");
+    cellComments = [];
+    nestedHeaders: [string[], string[]] = [[], []];
+
    private hotSettings: Handsontable.GridSettings = {
     wordWrap: true,
     minRows:100,
@@ -64,12 +66,11 @@ export class BulkPricingUpdatesComponent  {
     manualColumnResize: true,
     licenseKey: "8cab5-12f1d-9a900-04238-a4819",
     columns: ExcelColumnsConfig.bulkPriceUpdateColumnData,
-    nestedHeaders: [(Object.values(sheetObj)),ExcelColumnsConfig.bulkPriceUpdatesColHeaders],
+    nestedHeaders: this.nestedHeaders,
     readOnlyCellClassName: 'readonly-cell',
     bindRowsWithHeaders: true,
-    width: '100%',
-    height: 470,
-    contextMenu: true,
+    height: '430',
+    width: '100%', 
     afterPaste: (data, coords) => {
         this.errOnDsbRowPst(data,coords);
       },
@@ -396,6 +397,21 @@ ngAfterViewInit() {
     this.hotTable.render();
     },1000)
   }
+
+ngOnInit(){
+    ExcelColumnsConfig.bulkPriceUpdatesColHeaders.forEach ( (header,ind) => {
+        this.nestedHeaders[0].push(`<span style="font-family: 'Intel Clear';
+        font-weight: 400;
+        font-size: 11px;
+        color: #0071c5;
+        ;">${sheetObj[ind]}</span>`);
+        this.nestedHeaders[1].push(`<span style="font-size: 13px;
+        color: rgb(0, 16, 113);
+        font-weight: bold;
+        font-family: 'Intel Clear'; opacity: .7">${header}</span>`);
+   
+    })
+}
 
 ngOnDestroy() {
     //The style removed are adding back

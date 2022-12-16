@@ -131,14 +131,24 @@
 #bulkPrcUpdateFileUpd .k-i-file-data::before {
   content: "\e90a";
 }
-#bulkPriceUpdateTable .handsontable span.colHeader {
-  color: rgb(0, 16, 113);
-  font-size: 13px;
-  font-weight: bold;
-  font-family: "Intel Clear";
+
+#bulkPriceUpdateTable .wtBorder.current {
+  background-color: #00aeef !important
 }
+
+.spliter-btom-style.k-splitter-flex .k-splitbar {
+  position: relative !important;
+  margin-bottom: -8px !important
+}
+
 #bulkPriceUpdateTable td.error-product {
   color: rgb(252, 76, 2) !important;
+}
+
+#bulkPriceUpdateTable .handsontable td {
+  line-height: 19px;
+  height: 19px;
+  font-family: 'Intel Clear'
 }
 #bulkPriceUpdateTable .handsontable .htCommentCell:after {
   border-top-color: #d73925 !important;
@@ -194,8 +204,8 @@
   background: rgba(0,174,239,.2) !important;
 }
 
-#disabledCellsError .k-dialog .k-button {
-  background-color: #0071c5 !important;
+#disabledCellsError .ok-btn {
+  background-color: #00aeef !important;
 }
 
 #disabledCellsError .k-dialog .k-button:hover{
@@ -214,3 +224,10 @@
 #disabledCellsError .k-widget.k-window.k-dialog{
 width: 320px;
 }
+
+#urlLink a{
+  color: #0071c5;
+}
+
+
+
