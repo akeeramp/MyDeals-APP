@@ -576,8 +576,11 @@ button.k-button.unifie-recon-ok:hover {
 }
 
 .unifie-clear-filter {
-    font-size: 20px !important;
+    font-size: 25px !important;
     color: #fff !important
+}
+.unifie-clear-filter:hover {
+   color: #00aeef !important
 }
 
 .filter-clear-text:hover {

@@ -879,3 +879,19 @@ kendo-dialog#disabledCellsError .k-dialog {
 kendo-grid.grid_fix {
     height: calc(100vh - 260px) !important;
 }
+.grid_fix.k-grid td.k-touch-action-auto {
+    border-color: #fff !important;
+}
+.k-grid-filter-popup.k-popup .k-filter-menu-container {
+    width: auto !important
+}
+.k-grid-filter-popup.k-popup .k-filter-menu-container ul li label.k-multiselect-checkbox.k-checkbox-label {
+        white-space: nowrap !important
+    }
+#searchIcon {
+    bottom: 25px !important;
+    margin-left: auto;
+    margin-right: 10px;
+    display: block !important;
+    left: 0 !important
+}

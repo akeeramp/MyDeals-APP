@@ -8,7 +8,7 @@
 </div>
 <div class="modal-body" style="padding:0">
     <div *ngIf="!isLoading">
-        <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+        <kendo-grid class="grid_text_filter" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                     [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                     [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
                     filterable="menu" (dataStateChange)="dataStateChange($event)">
