@@ -679,4 +679,9 @@ kendo-grid.exclude-filter-style kendo-grid-list table tr td {
 kendo-grid.exclude-filter-style kendo-grid-list table tr td.k-detail-cell table tbody tr td:nth-child(2) {
     padding: 0!important;
 }
-
+.grping-exclusion-borderstyle kendo-grid.k-grid .k-grid-header-wrap table thead tr th {
+    border-bottom: 3px solid rgb(0, 113, 197) !important;
+}
+.grping-exclusion-borderstyle .k-grid .k-grid-content {
+    overflow: overlay !important
+}

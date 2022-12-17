@@ -3,46 +3,46 @@
      <loading-panel-angular id="bulkPriceUpload" class="priceUpdateLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
                            [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="'Info'"></loading-panel-angular>
 
-    <div class="modal-content" id="bulkPriceUpdateModalWindow" style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none">
-        <div class="modalBlueBody prc-custom-header">
-            <div class="prcMdlTitle">
-                <h3 id="modalTitle">{{screenTitle}}</h3>
-            </div>
-            <div class="prcMdlClose">
-            <i id="btnClose" class="intelicon-close" (click)="closeWindow()" title="Close this window"></i>
-        </div>
-        </div>
-        <div id="modalBodyDiv" class="modal-body" *ngIf="HasBulkUpdateAccess">
-            <div id="extractUnify" class="row" *ngIf="(bulkProceUploadValidationSummary.inValidRecords == undefined  || bulkProceUploadValidationSummary.inValidRecords.length <=0)">
-                <div class="col-md-11 notes ">
-                    <span class="redbold">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Your attachment will upload after clicking the "Upload" button.</span><br /><br />
-                </div>
-                <div class="form-group row">
-                    <div class="col-md-11">
-                        <kendo-upload id="bulkPrcUpdateFileUpd" [restrictions]="fileUploadOptions.validation" [(ngModel)]="files" name="files"
-                                      class="kuploadaction" (success)="successEventHandler($event)" [multiple]="false"
-                                      (error)="onFileUploadError()" (complete)="onFileUploadComplete()"
-                                      [saveUrl]="fileUploadOptions.async.saveUrl" [batch]="false" [autoUpload]="false"></kendo-upload>
-                    </div>
-                </div>
-                <div class="form-group row">
-                    <div class="col-md-8" id="urlLink">
-                        <a download target="_blank" href={{fileURL}}>Click here to download the template</a>
-                    </div>
-                    <div class="col-md-3" style="padding-left:2px;">
-                        <button (click)="uploadFile()" class="btn btn-primary">Upload Price Update Data</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="col-md-12" *ngIf="!HasBulkUpdateAccess">
-            <div class="alert alert-danger">
-                <span>You don't have access to this page.  Only SA user is allowed.</span>
-            </div>
-        </div>
-    </div>
+     <div class="modal-content" id="bulkPriceUpdateModalWindow" style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none;border-radius:0px">
+         <div class="modalBlueBody prc-custom-header">
+             <div class="prcMdlTitle">
+                 <h3 id="modalTitle" class="modal-title-admin-bulk">{{screenTitle}}</h3>
+             </div>
+             <div class="prcMdlClose">
+                 <i id="btnClose" class="intelicon-close admin-bulk-btnclose" (click)="closeWindow()" title="Close this window"></i>
+             </div>
+         </div>
+         <div id="modalBodyDiv" class="modal-body admin-bulk-modalbody" *ngIf="HasBulkUpdateAccess">
+             <div id="extractUnify" class="row" *ngIf="(bulkProceUploadValidationSummary.inValidRecords == undefined  || bulkProceUploadValidationSummary.inValidRecords.length <=0)">
+                 <div class="col-md-11 notes ">
+                     <span class="redbold">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Your attachment will upload after clicking the "Upload" button.</span><br /><br />
+                 </div>
+                 <div class="form-group row">
+                     <div class="col-md-11">
+                         <kendo-upload id="bulkPrcUpdateFileUpd" [restrictions]="fileUploadOptions.validation" [(ngModel)]="files" name="files"
+                                       class="kuploadaction" (success)="successEventHandler($event)" [multiple]="false"
+                                       (error)="onFileUploadError()" (complete)="onFileUploadComplete()"
+                                       [saveUrl]="fileUploadOptions.async.saveUrl" [batch]="false" [autoUpload]="false"></kendo-upload>
+                     </div>
+                 </div>
+                 <div class="form-group row">
+                     <div class="col-md-8" id="urlLink">
+                         <a class="text-dwnlod-style-admin" download target="_blank" href={{fileURL}}>Click here to download the template</a>
+                     </div>
+                     <div class="col-md-3" style="padding-left:2px;">
+                         <button (click)="uploadFile()" class="btn btn-primary">Upload Price Update Data</button>
+                     </div>
+                 </div>
+             </div>
+         </div>
+         <div class="col-md-12" *ngIf="!HasBulkUpdateAccess">
+             <div class="alert alert-danger">
+                 <span>You don't have access to this page.  Only SA user is allowed.</span>
+             </div>
+         </div>
+     </div>
     <kendo-dialog (close)="closeAlert()" *ngIf="showAlert" id="prcUpdateAlert">
-        <p [innerHTML]='alertMsg'></p>
+        <p class="no-data-ok" [innerHTML]='alertMsg'></p>
         <kendo-dialog-actions>
             <button kendoButton (click)="closeAlert()" themeColor="primary">OK</button>
         </kendo-dialog-actions>
