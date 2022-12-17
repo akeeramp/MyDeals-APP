@@ -896,12 +896,16 @@ export class PTE_CellChange_Util {
     }
     static RateChgfn(items: Array<any>, columns: any[], curPricingTable: any) {
         _.each(items, item => {
-            if ((item.prop) && (item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'INCENTIVE_RATE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE'  || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT')) {
+            if ((item.prop) && (item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'INCENTIVE_RATE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE' || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT' || item.prop == 'FRCST_VOL')) {
                 let val = this.hotTable.getDataAtRowProp(item.row, item.prop);
                 if (parseFloat(val) >= 0 || parseFloat(val) < 0) {
-                        this.hotTable.setDataAtRowProp(item.row, item.prop, parseFloat(val), 'no-edit');
+                    this.hotTable.setDataAtRowProp(item.row, item.prop, parseFloat(val), 'no-edit');
                 } else {
-                    this.hotTable.setDataAtRowProp(item.row, item.prop, '0.00', 'no-edit');
+                    if (item.prop == 'FRCST_VOL') {
+                        this.hotTable.setDataAtRowProp(item.row, item.prop, '', 'no-edit');
+                    } else {
+                        this.hotTable.setDataAtRowProp(item.row, item.prop, '0.00', 'no-edit');
+                    }
                 }
             }
         });
@@ -1131,7 +1135,11 @@ export class PTE_CellChange_Util {
     static dateChange(items: Array<any>, colName: string, contractData) {
         _.each(items, (item) => {
             if (item.new == undefined || item.new == null || item.new == '' || !moment(item.new, "MM/DD/YYYY", true).isValid() || moment(item.new).toString() === "Invalid date" || moment(item.new).format("MM/DD/YYYY") === "12/30/1899") {
-                this.hotTable.setDataAtRowProp(item.row, colName, moment(contractData[colName]).format("MM/DD/YYYY"), 'no-edit');
+                if (colName == 'OEM_PLTFRM_LNCH_DT' || colName == 'OEM_PLTFRM_EOL_DT') {
+                    this.hotTable.setDataAtRowProp(item.row, colName, '', 'no-edit');
+                } else {
+                    this.hotTable.setDataAtRowProp(item.row, colName, moment(contractData[colName]).format("MM/DD/YYYY"), 'no-edit');
+                }
             }
         });
     }

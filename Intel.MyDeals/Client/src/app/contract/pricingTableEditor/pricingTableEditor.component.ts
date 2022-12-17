@@ -670,6 +670,14 @@ export class pricingTableEditorComponent {
             if (endDt) {
                 PTE_CellChange_Util.dateChange(endDt, 'END_DT', this.contractData);
             }
+            let OEMlunchDt = _.where(changes, { prop: 'OEM_PLTFRM_LNCH_DT' });
+            if (OEMlunchDt) {
+                PTE_CellChange_Util.dateChange(OEMlunchDt, 'OEM_PLTFRM_LNCH_DT', this.contractData);
+            }
+            let OEMEOLDt = _.where(changes, { prop: 'OEM_PLTFRM_EOL_DT' });
+            if (OEMEOLDt) {
+                PTE_CellChange_Util.dateChange(OEMEOLDt, 'OEM_PLTFRM_EOL_DT', this.contractData);
+            }
             if ((PTR_EXLDS && PTR_EXLDS.length > 0)) {
                 let selrow = PTR_EXLDS[0].row;
                 let PTR_Exccol_ind = _.findIndex(this.columns, { data: 'PRD_EXCLDS' });
