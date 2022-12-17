@@ -158,21 +158,27 @@
 
 <kendo-dialog *ngIf="isKitDialog" (close)="closeKitDialog()" class="kit-name-popup">
     <div class="all-merge-confirmation">
+        <div *ngIf="kitNameObj.issueType=='notEditable'">
+            <h3>Cannot merge KIT name</h3>
+        </div>
+        <p *ngIf="kitNameObj.issueType=='notEditable'">
+            A Kit with the name <b>{{kitNameObj.name}}</b> already exists and its products cannot be edited. Please choose a different KIT name.
+        </p>
         <div *ngIf="kitNameObj.issueType=='dup'">
-            <h3> KIT name merge confirmation</h3>
+            <h3>KIT name merge confirmation</h3>
         </div>
         <p *ngIf="kitNameObj.issueType=='dup'">
-            A Kit with the name <b>{{kitNameObj.name}}</b> already exists.  Would you like to merge rows containing this Kit Name?  Please note that any duplicate products will automatically be removed upon merging.
+            A Kit with the name <b>{{kitNameObj.name}}</b> already exists. Would you like to merge rows containing this Kit Name? Please note that any duplicate products will automatically be removed upon merging.
         </p>
         <div *ngIf="kitNameObj.issueType=='dupMoreLeng'">
-            <h3> Cannot merge KIT name</h3>
+            <h3>Cannot merge KIT name</h3>
         </div>
         <p *ngIf="kitNameObj.issueType=='dupMoreLeng'">
-            A Kit with the name <b>{{kitNameObj.name}}</b> already exists. You cannot merge thses rows since merge them excced the max limit of products you can have (which is 10). Please specify different KIT name or remove the products from this row and try again.
+            A Kit with the name <b>{{kitNameObj.name}}</b> already exists. Unfortunately, you cannot merge these rows since merging them will exceed the max limit of products you can have (which is 10). Please specify a different Kit Name or remove products from this row and try again.
         </p>
     </div>
     <kendo-dialog-actions class="kit-merge-btns">
-        <div *ngIf="kitNameObj.issueType=='dupMoreLeng'">
+        <div *ngIf="kitNameObj.issueType=='dupMoreLeng' || kitNameObj.issueType=='notEditable'">
             <button kendoButton (click)="closeKitDialog()" class="cancel-btns">Okay</button>
         </div>
         <div *ngIf="kitNameObj.issueType=='dup'">

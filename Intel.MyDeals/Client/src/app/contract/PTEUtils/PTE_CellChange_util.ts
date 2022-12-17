@@ -814,8 +814,12 @@ export class PTE_CellChange_Util {
         try {
             let OBJ_SET_TYPE_CD = curPricingTable.OBJ_SET_TYPE_CD;
             if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'KIT') {
+                //add HAS_TRACKER column and _behaviors to check existing row are editable or not
+                let columnList = PTE_Common_Util.deepClone(columns);
+                columnList.push({ data: 'HAS_TRACKER' });
+                columnList.push({ data: '_behaviors' });
               //check for the same KIT name exists
-              let PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
+                let PTR = PTE_Common_Util.getPTEGenerate(columnList, curPricingTable);
               let uniqnames=_.uniq(_.pluck(items,'new'));
               let PTR_exist=[];
               //iterate throght the PTR and get consolidate result for all duplicate
@@ -829,14 +833,22 @@ export class PTE_CellChange_Util {
                        }
                      });
                     //If there is already same name the length will atleast 2
-                    if(curPTR.length>1){
-                        //identify the uniq product count of the duplicate KIT
-                        let unqcount=_.uniq(_.compact(_.pluck(curPTR,'PTR_USER_PRD').toString().split(','))).length 
-                        if(unqcount && unqcount>PTE_Config_Util.maxKITproducts){
-                            PTR_exist.push({PTR:curPTR,name:uniqnm,issueType:'dupMoreLeng'})
-                        }
-                        else{
-                            PTR_exist.push({PTR:curPTR,name:uniqnm,issueType:'dup'})
+                    if (curPTR.length > 1) {
+                        //existing Row editable or not
+                        let existingRow = curPTR.filter(x => x.DC_ID > 0);
+                        let isNotEditable = curPTR.filter(x => (x.HAS_TRACKER && x.HAS_TRACKER == '1') ||
+                            (x._behaviors && x._behaviors.isReadOnly && x._behaviors.isReadOnly["PTR_USER_PRD"])).length > 0 ? true : false;
+                        if (isNotEditable)
+                            PTR_exist.push({ PTR: curPTR, name: uniqnm, issueType: 'notEditable' })
+                        else {
+                            //identify the uniq product count of the duplicate KIT
+                            let unqcount = _.uniq(_.compact(_.pluck(curPTR, 'PTR_USER_PRD').toString().split(','))).length
+                            if (unqcount && unqcount > PTE_Config_Util.maxKITproducts) {
+                                PTR_exist.push({ PTR: curPTR, name: uniqnm, issueType: 'dupMoreLeng' })
+                            }
+                            else {
+                                PTR_exist.push({ PTR: curPTR, name: uniqnm, issueType: 'dup' })
+                            }
                         }
                     }
                   }
