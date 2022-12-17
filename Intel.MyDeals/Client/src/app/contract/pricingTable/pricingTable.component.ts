@@ -186,7 +186,7 @@ export class pricingTableComponent {
         try {
             e.preventDefault();
             if (e.title == "Deal Editor") {
-                if (this.pteComp && this.pteComp.dirty) {
+                if ((this.pteComp && this.pteComp.dirty) || this.curPricingStrategy['PASSED_VALIDATION'] != "Complete") {
                     await this.pteComp.validatePricingTableProducts();
                     let isAnyWarnings = this.pteComp.pricingTableDet.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
                     if (isAnyWarnings || this.pteComp.dirty) {

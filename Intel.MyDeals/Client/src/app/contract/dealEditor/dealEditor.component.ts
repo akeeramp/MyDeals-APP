@@ -100,6 +100,7 @@ export class dealEditorComponent {
     private wrapEnabled: boolean = false;
     private isExportable: boolean = true;
     private dropdownFilterColumns = PTE_Config_Util.dropdownFilterColumns
+    private savedResponseWarning: any[] = [];
     private state: State = {
         skip: 0,
         take: 25,
@@ -220,6 +221,9 @@ export class dealEditorComponent {
             this.loggerService.error('dealEditorComponent::readPricingTable::readTemplates:: service', err);
         });
         if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
+            //to avoid losing warning details which comes only during save action
+            if (this.savedResponseWarning && this.savedResponseWarning.length > 0)
+                PTE_Load_Util.bindWarningDetails(response.WIP_DEAL, this.savedResponseWarning);
             this.deTabInfmIconUpdate.emit(PTE_Common_Util.dealEditorTabValidationIssue(response, true));
             if (response.WIP_DEAL[0].IS_HYBRID_PRC_STRAT == '1') {
                 response.WIP_DEAL = PTE_Validation_Util.ValidateEndCustomer(response.WIP_DEAL, "OnLoad", this.curPricingStrategy, this.curPricingTable);
@@ -949,6 +953,7 @@ export class dealEditorComponent {
             if (response != undefined && response != null && response.Data != undefined && response.Data != null
                 && response.Data.WIP_DEAL != undefined && response.Data.WIP_DEAL != null && response.Data.WIP_DEAL.length > 0) {
                 this.setBusy("Saving your data...Done", "Processing results now!", "Info", true);
+                this.savedResponseWarning = [];
                 await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
                 let isanyWarnings = false;
                 if (this.gridResult.length != response.Data.WIP_DEAL) {
@@ -965,6 +970,8 @@ export class dealEditorComponent {
                 }
                 isanyWarnings = response.Data.WIP_DEAL.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
                 if (isanyWarnings) {
+                    //to avoid losing warning details which comes only during save action
+                    PTE_Save_Util.saveWarningDetails(response.Data.WIP_DEAL, this.savedResponseWarning);                    
                     this.setBusy("Saved with warnings", "Didn't pass Validation", "Warning", true);
                     if (this.isTenderContract) {
                         this.tmDirec.emit('');

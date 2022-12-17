@@ -757,4 +757,22 @@ export class PTE_Load_Util {
         })
         return PTR;
     }
+
+    static bindWarningDetails(data, savedWarningDetails) {
+        _.each(savedWarningDetails, (warning) => {
+            _.each(data, (dataItem) => {
+                if (dataItem.DC_ID == warning.DC_ID) {
+                    if (!dataItem.warningMessages)
+                        dataItem.warningMessages = {};
+                    dataItem.warningMessages = warning.warningMessages;
+                    if (!dataItem._behaviors['validMsg'])
+                        dataItem._behaviors['validMsg'] = {};
+                    dataItem._behaviors['validMsg'] = warning.validMsg;
+                    if (!dataItem._behaviors['isError'])
+                        dataItem._behaviors['isError'] = {};
+                    dataItem._behaviors['isError'] = warning.errors;
+                }
+            })
+        })
+    }
 }

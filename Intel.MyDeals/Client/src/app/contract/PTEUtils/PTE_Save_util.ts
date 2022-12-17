@@ -317,4 +317,19 @@ export class PTE_Save_Util {
             }
         });
     }
+
+    static saveWarningDetails(data, savedResponseWarning) {
+        let index = 0;
+        _.each(data, (dataItem) => {
+            if (dataItem.warningMessages && dataItem.warningMessages.length > 0
+                && dataItem._behaviors['isError'] && dataItem._behaviors['validMsg']) {
+                savedResponseWarning[index++] = {
+                    DC_ID: dataItem.DC_ID,
+                    warningMessages: dataItem.warningMessages,
+                    errors: dataItem._behaviors['isError'],
+                    validMsg: dataItem._behaviors['validMsg']
+                };
+            }
+        })
+    }
 }

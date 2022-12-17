@@ -271,6 +271,7 @@ export class pricingTableEditorComponent {
     @Output() enableDeTab = new EventEmitter();
     @Output() refreshedContractData = new EventEmitter;
     private isDeTabInfmIconReqd: boolean = false;
+    private savedResponseWarning: any[] = [];
     public fontData:any[] = [
         { text: "(inherited size)", size: "inherit" },
         { text: "1 (8pt)", size: "8" },
@@ -830,6 +831,9 @@ export class pricingTableEditorComponent {
             this.overlapFlexResult = [];
             this.setBusy("Loading...", "Loading the Table Editor", "Info", true);
             let PTR = await this.getPTRDetails();
+            //to avoid losing warning details which comes only during save action
+            if (this.savedResponseWarning && this.savedResponseWarning.length > 0)
+                PTE_Load_Util.bindWarningDetails(PTR, this.savedResponseWarning);
             //this is to make sure the saved record prod color are success by default
             PTR=PTE_Load_Util.setPrdColor(PTR);
             this.getTemplateDetails();
@@ -976,10 +980,17 @@ export class pricingTableEditorComponent {
         });
         this.undoEnable = false;
         if (result) {
+            this.savedResponseWarning = [];
             await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
             if (this.isTenderContract && deleteDCIDs && deleteDCIDs.length > 0) {
                 //Refresh TTE data after Delete
                 this.tmDirec.emit('Delete');
+            }
+            //to avoid losing warning details which comes only during save action
+            if (result["Data"]["PRC_TBL_ROW"] && result["Data"]["PRC_TBL_ROW"].length > 0) {
+                let data = result["Data"]["PRC_TBL_ROW"];
+                if (data.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0)
+                    PTE_Save_Util.saveWarningDetails(data, this.savedResponseWarning);
             }
             //this will help to reload the page with errors when we update
             await this.loadPTE();
