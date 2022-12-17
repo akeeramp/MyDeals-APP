@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 11/16/2022 4:12:10 PM
-On: JLOPEZRE-MOBL1
+File Updated: 12/16/2022 8:34:31 PM
+On: MHTIPPIN-MOBL1
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
 
@@ -1805,8 +1805,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute END_DT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "END_DT",
-			ATRB_DESC = "Deal billings end date",
-			ATRB_LBL = "Billings End Date",
+			ATRB_DESC = "Deal End Date",
+			ATRB_LBL = "Deal End Date",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3320,
 			DATA_TYPE_CD = "DATE",
@@ -4205,8 +4205,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute REBATE_BILLING_END = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "REBATE_BILLING_END",
-			ATRB_DESC = "Consumption end date",
-			ATRB_LBL = "Consumption End Date",
+			ATRB_DESC = "Billing END Date (for Consumption)",
+			ATRB_LBL = "Billings END Date (for Consumption)",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3571,
 			DATA_TYPE_CD = "DATE",
@@ -4214,15 +4214,15 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy}",
-			MJR_MNR_CHG = "MAJOR_QUOTEONLY",
+			MJR_MNR_CHG = "MAJOR_INCREASE",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
 		public static MyDealsAttribute REBATE_BILLING_START = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "REBATE_BILLING_START",
-			ATRB_DESC = "Consumption start date",
-			ATRB_LBL = "Consumption Start Date",
+			ATRB_DESC = "Billing START Date (for Consumption)",
+			ATRB_LBL = "Billings START Date (for Consumption)",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3570,
 			DATA_TYPE_CD = "DATE",
@@ -4230,7 +4230,7 @@ namespace Intel.MyDeals.Entities {
 			DIM_SID = 3,
 			DOT_NET_DATA_TYPE = "System.DateTime",
 			FRMT_MSK = "{0:MM/dd/yyyy}",
-			MJR_MNR_CHG = "MAJOR_QUOTEONLY",
+			MJR_MNR_CHG = "MAJOR_DECREASE",
 			TGT_COL_TYPE = "DATETIME",
 			UI_TYPE_CD = "DatePicker"
 		};
@@ -4637,8 +4637,8 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute START_DT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "START_DT",
-			ATRB_DESC = "Deal billings start date",
-			ATRB_LBL = "Billings Start Date",
+			ATRB_DESC = "Deal Start Date",
+			ATRB_LBL = "Deal Start Date",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3319,
 			DATA_TYPE_CD = "DATE",
