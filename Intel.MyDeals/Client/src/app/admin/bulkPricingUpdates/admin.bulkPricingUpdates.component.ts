@@ -10,6 +10,7 @@ import { BulkPricingUpdateModalComponent } from './admin.bulkPricingUpdateModal.
 import {sheetObj} from '../../contract/pricingTableEditor/handsontable.interface'
 import { bulkPricingUpdatesService } from './admin.bulkPricingUpdates.service';
 import * as moment from 'moment';
+import { ContextMenu } from 'handsontable/plugins';
 
 @Component({
   selector: 'admin-bulk-pricing-updates',
@@ -18,7 +19,7 @@ import * as moment from 'moment';
   encapsulation: ViewEncapsulation.None
 })
 export class BulkPricingUpdatesComponent  {
-   
+    
   constructor(private loggerSvc: logger, protected dialog: MatDialog,private bulkPrcSvc: bulkPricingUpdatesService) {
     //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
     $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
@@ -54,6 +55,7 @@ export class BulkPricingUpdatesComponent  {
     basedate = moment("12/30/1899").format("MM/DD/YYYY");
     cellComments = [];
     nestedHeaders: [string[], string[]] = [[], []];
+    cxtPaste: boolean = false;
 
    private hotSettings: Handsontable.GridSettings = {
     wordWrap: true,
@@ -68,27 +70,96 @@ export class BulkPricingUpdatesComponent  {
     columns: ExcelColumnsConfig.bulkPriceUpdateColumnData,
     nestedHeaders: this.nestedHeaders,
     readOnlyCellClassName: 'readonly-cell',
+    hiddenColumns: {
+        indicators: true
+    },
+    hiddenRows: {
+        indicators: true
+    },
     bindRowsWithHeaders: true,
+    contextMenu: {
+        items: {
+          'cut': {
+            callback: ()=> {
+                let cols = {sCol: this.hotTable.getSelectedRange()[0].from.col,
+                    eCol: this.hotTable.getSelectedRange()[0].to.col}
+                this.errOnDsbRowPst(cols,true)
+                this.hotTable.render()
+            }
+          },
+          'copy': {},
+          'paste': {
+            name: 'Paste',
+            callback: () => {
+                this.cxtPaste = true;
+                let cols = {sCol: this.hotTable.getSelectedRange()[0].from.col,
+                    eCol: this.hotTable.getSelectedRange()[0].to.col}
+                this.errOnDsbRowPst(cols,false);
+                this.hotTable.render();
+            },
+
+          },
+          'separator': ContextMenu.SEPARATOR,
+          'delete': {
+            name: 'Delete',
+            hidden: () => {
+                return ((this.hotTable.getSelectedLast()[0] > 0 && this.hotTable.getSelectedLast()[1] > 0) );
+            }
+            
+          },
+          'hide': {
+            name: 'Hide',
+            callback: () => {
+                if (this.hotTable.getSelectedRange()[0].from.col < 0) {
+                    this.hotTable.getPlugin('hiddenRows').hideRow(this.hotTable.getSelectedLast()[0])
+                }
+                if (this.hotTable.getSelectedRange()[0].from.row < 0) {
+                    this.hotTable.getPlugin('hiddenColumns').hideColumn(this.hotTable.getSelectedLast()[1])
+                }
+            this.hotTable.render();
+            },
+            hidden: () => {
+                return ((this.hotTable.getSelectedLast()[0] > 0 && this.hotTable.getSelectedLast()[1] > 0) );
+            }
+           },
+          
+        }
+        
+      },
     height: '430',
     width: '100%', 
     afterPaste: (data, coords) => {
-        this.errOnDsbRowPst(data,coords);
+        let cols = { sCol: coords[0].startCol, eCol: coords[0].endCol }
+        this.errOnDsbRowPst(cols,false);
       },
+      afterContextMenuHide: (context) => {
+      }
    };
 
-   errOnDsbRowPst(data,coords){
+   errOnDsbRowPst(cols,isCut){
+    if (this.cxtPaste) {
+        this.isDisAlert = true;
+        this.alertMsg = 'These actions cannot be invoked through the menu. Please use the keyboard shortcuts instead: </br> Ctrl+C for copy </br> Ctrl+X for cut </br> Ctrl+V for paste';
+        this.cxtPaste = false;
+    } else{
         let readOnlyCols = [];
         ExcelColumnsConfig.bulkPriceUpdateColumnData.forEach( (col, ind) => {
             if (col.readOnly == true) {
                 readOnlyCols.push(ind);
             }}
        );
-        let selSrtCol = coords[0].startCol;
-        let selEndCol = coords[0].endCol;
-        if ( readOnlyCols.includes(selSrtCol) || readOnlyCols.includes(selSrtCol)){
-            this.isDisAlert = true;
-            this.alertMsg = 'Cannot modify disabled cells.';
-        }
+       
+            if ( readOnlyCols.includes(cols.sCol) || readOnlyCols.includes(cols.eCol)){
+                this.isDisAlert = true;
+                this.alertMsg = 'Cannot modify disabled cells.';
+            } else if (isCut) {
+                this.hotTable.getPlugin('copyPaste').cut();
+            }
+        this.hotTable.render();
+        
+    }
+        
+       
 
    }
 
