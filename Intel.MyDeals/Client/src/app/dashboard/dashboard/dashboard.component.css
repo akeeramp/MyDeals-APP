@@ -151,7 +151,7 @@ kendo-window#OvrLp.k-wind-design {
     text-overflow: ellipsis;
 }
 .grid_text_filter .k-grid-header table thead tr th span.k-cell-inner {
-    margin: -0.75rem calc(-4.5em + -0.75rem + 19px) -0.75rem -1.45rem;
+    margin: -0.75rem calc(-4.5em + -0.75rem + 19px) -0.75rem -0.65rem;
 }
 .grid_text_filter .k-icon.k-i-filter {
     font-size: 20px !important;
