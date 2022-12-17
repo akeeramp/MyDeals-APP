@@ -10,3 +10,41 @@
     border-radius: 3px !important;
     border-color: #00aeef !important;
 }
+.cn-panel .search-no-pad {
+    box-shadow: 0 4px 8px 0 rgb(0 0 0 / 20%), 0 6px 20px 0 rgb(0 0 0 / 19%);
+    border-radius: 8px;
+    overflow: hidden !important;
+}
+.micro-grid .k-grid-header th.k-header {
+    text-transform: uppercase;
+    border-right-width: 1px !important;
+    border-right-color: #8080803d;
+}
+.micro-grid .k-grid-content table tr td {
+    border-left-width: 0 !important;
+    border-bottom-width: 1px !important;
+    color: #1a3e6f !important;
+    font-weight: 500;
+}
+.textCircle.textCircle-appear {
+    visibility: hidden;
+}
+.textCircle {
+    margin-right: 2px !important;
+}
+.textCircle.textCircle-appear:first-letter {
+    visibility: visible !important;
+    background: #e8eaec !important;
+    border-radius: 50% !important;
+    padding: 3px !important
+}
+.cn-info .deal-date-fit {
+    left: 4px !important;
+    font-size: 8px !important;
+}
+.micro-grid .k-grid-content.k-virtual-content {
+    height: 105px;
+}
+.deal-popup-docking .draggable-fix {
+    top: 246px !important;
+}

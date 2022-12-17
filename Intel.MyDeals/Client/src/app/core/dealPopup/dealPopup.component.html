@@ -1,7 +1,7 @@
 ﻿
 <div  style="position: absolute; top: 150px;  left: 150px;">
     <div id={{data.DC_ID}}>
-        <div  *ngIf="data!=undefined" class="draggable" id="cn-draggable-{{data.DC_ID}}"  [style.top.px]="initTop"
+        <div  *ngIf="data!=undefined" class="draggable draggable-fix" id="cn-draggable-{{data.DC_ID}}"  [style.top.px]="initTop"
         [style.left.px]="initLeft" >
 
             <div class="cn-wrapper" id="cn_wrapper_{{data.DC_ID}}"  [ngClass]="{ 'rot1': sel == 1, 'rot2': sel == 2, 'rot3': sel == 3, 'rot4': sel == 4, 'rot5': sel == 5, 'rot6': sel == 6, 'rot7': sel == 7, 'rot8': sel == 8 }">
@@ -51,7 +51,7 @@
                             <a href="">#{{data.DC_ID}}</a>
                         </div>
                         <div class="deal deal-icons">
-                            <div class="textCircle valid_{{ data.PASSED_VALIDATION }}" title="{{data.OBJ_SET_TYPE_CD}}">
+                            <div class="textCircle textCircle-appear valid_{{ data.PASSED_VALIDATION }}" title="{{data.OBJ_SET_TYPE_CD}}">
                                 {{ data.OBJ_SET_TYPE_CD  }}
                             </div>
                             <div class="textCircle" *ngIf="CAN_VIEW_MEET_COMP"  style="background-color: {{getColorMct(data.MEETCOMP_TEST_RESULT)}};" title="Meet Comp Test: {{ data.MEETCOMP_TEST_RESULT || 'Not Run Yet' }}">
@@ -67,7 +67,7 @@
                                 <i class="fa fa-paw"></i>
                             </div>
                         </div>
-                        <div class="deal deal-dates">{{data.START_DT}} - {{data.END_DT}}</div>
+                        <div class="deal deal-dates deal-date-fit">{{data.START_DT}} - {{data.END_DT}}</div>
                     </div>
 
                     <div *ngIf="helpTip == 1" class="help-tip">
@@ -232,7 +232,7 @@
                         <i class="fa fa-angle-double-left cn-close-panel" (click)="closePanel()" title="Close"></i>
                     </div>
                 </div>
-                <div class="body-no-pad" [ngClass]="{'searchDivgrid': toggleserachgrid}" *ngIf="sel==3">
+                <div class="body-no-pad search-no-pad" [ngClass]="{'searchDivgrid': toggleserachgrid}" *ngIf="sel==3">
                     <!--[ngClass]="'searchDivgrid': toggleserachgrid == true"-->   
                     <div style="display: flex; flex-wrap: nowrap; height: 30px;">
                         <button class="btn btn-xs btn-default no-border" aria-pressed="false" (click)="tglGroup(group)" type="button" data-toggle="button" autocomplete="off">
@@ -247,7 +247,7 @@
                     <kendo-grid [data]="searchgridData" [resizable]="true" [group]="group"
                                 [sort]="searchstate.sort" [sortable]="true" class="micro-grid" (dataStateChange)="dataSearchStateChange($event)">
 
-                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="100" field="key" title="Property">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="75" field="key" title="Property">
                         </kendo-grid-column>
                         <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="75" field="value" title="Value">
                             <ng-template kendoGridCellTemplate let-dataItem="dataItem">
