@@ -246,8 +246,8 @@
         <kendo-dialog *ngIf="isAlertVal" class="price-rule-popup">
             <h2 *ngIf="submitRule">Saving confirmation</h2>
             <p class="text-price-style" [innerHtml]="isAlertText"></p>
-            <kendo-dialog-actions *ngIf="isOk" class="price-rule-dialog-sty">
-                <button class="price-admin-ok" (click)="closeAlertVal()">OK</button>
+            <kendo-dialog-actions *ngIf="isOk" (click)="closeAlertVal()" class="price-rule-dialog-sty">
+                <button class="price-admin-ok">OK</button>
             </kendo-dialog-actions>
             <kendo-dialog-actions *ngIf="retryAction" class="retry-style">
                 <button class="price-rule-retry" (click)="closeAlertVal()">RETRY</button>

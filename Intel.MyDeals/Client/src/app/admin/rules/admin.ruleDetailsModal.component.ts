@@ -114,14 +114,26 @@ export class RuleDetailsModalComponent {
             this.ProductCriteria[changes[0][0]][changes[0][1]] = "";
         } else {
             if (changes != null && changes[0][1] == "Price") {
-                if (!(changes[0][3] >= 1 || changes[0][3] == null)) {
-                    this.isAlertVal = true;
-                    this.submitRule = false;
-                    this.isOk = false;
-                    this.retryAction = true;
-                    this.isAlertText = 'Format of the price is invalid. This should be greater than zero.'
-                    if (this.hotRegisterer && this.hotRegisterer.getInstance(this.hotId)) {
-                        this.hotTable.setDataAtCell(changes[0][0], 1, null);
+                if (typeof changes[0][3] != 'number') {
+                    if (changes[0][3] != null) {
+                        let newVal = parseInt(changes[0][3]);
+                        if (isNaN(newVal)) {
+                            this.isAlertVal = true;
+                            this.submitRule = false;
+                            this.isOk = false;
+                            this.retryAction = true;
+                            this.isAlertText = 'Format of the price is invalid. This should be greater than zero.'
+                        } else this.ProductCriteria[changes[0][0]].Price = newVal;
+                    }
+                }
+                else {
+                    if (changes[0][3] == 0) {
+                        this.ProductCriteria[changes[0][0]].Price = changes[0][2];
+                        this.isAlertVal = true;
+                        this.submitRule = false;
+                        this.isOk = false;
+                        this.retryAction = true;
+                        this.isAlertText = 'Format of the price is invalid. This should be greater than zero.'
                     }
                 }
             }
@@ -541,6 +553,7 @@ export class RuleDetailsModalComponent {
             this.setBusy('', '', '', false);
             this.loggerSvc.success("Rule has been " + (initialRuleId === 0 ? "added" : "updated"));
         } else {
+            this.loadData();
             this.isLoading = false;
             this.setBusy('', '', '', false);
             this.loggerSvc.error("This rule name already exists in another rule.", '');
@@ -646,7 +659,7 @@ export class RuleDetailsModalComponent {
                         cell: this.cellMessages
                     })
                 }
-                if (!(strActionName == '' || strActionName == 'Submit')) {
+                if (!(strActionName == '' || strActionName == 'SUBMIT')) {
                     this.isLoading = false;
                     this.setBusy('', '', '', false);
                     this.isAlertVal = true;
@@ -711,7 +724,7 @@ export class RuleDetailsModalComponent {
                         });
 
                 } else {
-                    if (row[colName] != '' && row[colName] != null && (row[colName] == value || row[colName] == 0)) {
+                    if (row[colName] != undefined && (row[colName] == value || row[colName] == 0)) {
                         comments.push({
                             row: (rowInd),
                             col: colNo,
@@ -727,6 +740,20 @@ export class RuleDetailsModalComponent {
                     }
 
                 }
+            } else if (this.invalidPrice.length > 0 && row.ProductName != undefined && row.ProductName != '' && (row[colName] == undefined || row[colName] == null || row[colName] == 0)) {
+                comments.push({
+                    row: (rowInd),
+                    col: 0,
+                    comment: { value: '', readOnly: false },
+                    className: 'warning-product'
+                });
+                comments.push({
+                    row: (rowInd),
+                    col: colNo,
+                    comment: { value: celMsg, readOnly: false },
+                    className: 'error-product error-cell'
+                });
+                Object.assign(this.ProductCriteria[rowInd], { 'Price': 0 });
             } else {
                 if (row[colName] != '' && row[colName] != null && row[colName].toLowerCase() == value)
                     comments.push({
@@ -798,9 +825,9 @@ export class RuleDetailsModalComponent {
             let requiredFields = [];
             if (this.Rules.Name == null || this.Rules.Name === "")
                 requiredFields.push("Rule name");
-            if (this.Rules.StartDate == null)
+            if (this.strtDate == null)
                 requiredFields.push("Rule start date");
-            if (this.Rules.EndDate == null)
+            if (this.endDt == null)
                 requiredFields.push("Rule end date");
             if ((this.Rules.Criteria.filter(x => x.value === "").length > 0)) {
                 let newset = this.Rules.Criteria.filter(x => x.value === "");
@@ -811,9 +838,9 @@ export class RuleDetailsModalComponent {
                 requiredFields.push("A price in product criteria needs a product added");
 
             let validationFields = [];
-            if (this.Rules.StartDate != null && this.Rules.EndDate != null) {
-                let dtEffFrom = new Date(this.Rules.StartDate);
-                let dtEffTo = new Date(this.Rules.EndDate);
+            if (this.strtDate != null && this.endDt != null) {
+                let dtEffFrom = this.strtDate;
+                let dtEffTo = this.endDt;
                 if (dtEffFrom >= dtEffTo)
                     validationFields.push("Rule start date cannot be greater than Rule end date");
             }
@@ -872,8 +899,8 @@ export class RuleDetailsModalComponent {
                     Name: this.Rules.Name,
                     IsActive: this.Rules.IsActive == true ? false : true,
                     IsAutomationIncluded: this.Rules.IsAutomationIncluded,
-                    StartDate: this.Rules.StartDate,
-                    EndDate: this.Rules.EndDate,
+                    StartDate: this.strtDate,
+                    EndDate: this.endDt,
                     RuleStage: this.Rules.RuleStage == true ? false : true,
                     Notes: this.Rules.Notes,
                     Criterias: { Rules: this.criteria, BlanketDiscount: [{ value: this.Rules.IsAutomationIncluded ? this.BlanketDiscountPercentage : "", valueType: { value: "%" } }, { value: this.Rules.IsAutomationIncluded ? this.BlanketDiscountDollor : "", valueType: { value: "$" } }] },
