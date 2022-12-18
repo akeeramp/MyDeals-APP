@@ -139,14 +139,17 @@ export class DashboardComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                const widget = _.findWhere(configWidgets, { type: result });
-                if (widget.canAdd) {
-                    // Don't set a position, so that the widget will be added "smartly" wherever space is available.
-                    this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: null, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: null, rows: null, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
-                    this.saveLayout();
-                    this.gridValsPlus();
+                let widgetdet = _.findWhere(configWidgets, { type: result });
+                if (widgetdet) {
+                    const widget = JSON.parse(JSON.stringify(widgetdet))
+                    if (widget.canAdd) {
+                        // Don't set a position, so that the widget will be added "smartly" wherever space is available.
+                        this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: null, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: null, rows: null, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
+                        this.saveLayout();
+                        this.gridValsPlus();
+                    }
+                    this.options.api.optionsChanged();
                 }
-                this.options.api.optionsChanged();
             }
         });
     }
@@ -216,8 +219,9 @@ export class DashboardComponent implements OnInit {
 
         if (useSavedWidgetSettings && this.savedWidgetSettings.length > 0) {
             for (let i = 0; i < this.savedWidgetSettings.length; i++) {
-                const widget = _.findWhere(configWidgets, { id: this.savedWidgetSettings[i].id });
-                if (widget) {
+                let widgetdet = _.findWhere(configWidgets, { id: this.savedWidgetSettings[i].id });
+                if (widgetdet) {
+                    const widget = JSON.parse(JSON.stringify(widgetdet))
                     widget.name = this.savedWidgetSettings[i].name;
                     widget.size = this.savedWidgetSettings[i].size;
                     widget.position = this.savedWidgetSettings[i].position;
@@ -227,28 +231,34 @@ export class DashboardComponent implements OnInit {
                     if (widget.widgetConfig) {
                         widget.widgetConfig = this.savedWidgetSettings[i].widgetConfig;
                     }
+                    if (widget.position == null) {
+                        this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: null, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: null, rows: null, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
+                    }
+                    else {
+                        this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: { cols: widget.position.cols, rows: widget.position.cols }, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
+                    }
+                    this.options.api.optionsChanged();
                 }
-                if (widget.position == null) {
-                    this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: null, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: null, rows: null, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
-                }
-                else {
-                    this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: { cols: widget.position.cols, rows: widget.position.cols }, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
-                }
-                this.options.api.optionsChanged();
             }
         }
         else {
-            const defLayout = _.findWhere(configLayouts, { id: key });
-            const defWidget = defLayout.widgets;
-            for (let i = 0; i < defWidget.length; i++) {
-                const widget = _.findWhere(configWidgets, { id: defWidget[i].id });
-                if (widget.position == null) {
-                    this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: null, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: null, rows: null, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
+            let defaultLayout = _.findWhere(configLayouts, { id: key });
+            if (defaultLayout) {
+                const defLayout = JSON.parse(JSON.stringify(defaultLayout));
+                const defWidget = defLayout.widgets;
+                for (let i = 0; i < defWidget.length; i++) {
+                    let widgetdet = _.findWhere(configWidgets, { id: defWidget[i].id });
+                    if (widgetdet) {
+                        const widget = JSON.parse(JSON.stringify(widgetdet))
+                        if (widget.position == null) {
+                            this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: null, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: null, rows: null, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
+                        }
+                        else {
+                            this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: { cols: widget.position.cols, rows: widget.position.cols }, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
+                        }
+                        this.options.api.optionsChanged();
+                    }
                 }
-                else {
-                    this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: { cols: widget.position.cols, rows: widget.position.cols }, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
-                }
-                this.options.api.optionsChanged();
             }
         }
     }
