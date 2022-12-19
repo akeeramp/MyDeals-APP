@@ -39,8 +39,7 @@
     padding: 3px !important
 }
 .cn-info .deal-date-fit {
-    left: 4px !important;
-    font-size: 8px !important;
+    text-overflow: clip !important;
 }
 .micro-grid .k-grid-content.k-virtual-content {
     height: 105px;

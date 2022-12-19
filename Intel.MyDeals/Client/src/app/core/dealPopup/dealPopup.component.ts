@@ -9,6 +9,7 @@ import { DE_Load_Util } from "../../contract/DEUtils/DE_Load_util";
 import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { lnavService } from "../../contract/lnav/lnav.service"; 
+import * as _ from "underscore";
 @Component({
     selector: "deal-popup",
     templateUrl: "Client/src/app/core/dealPopup/dealPopup.component.html", 
@@ -108,8 +109,8 @@ export class dealPopupComponent {
             this.openWithData = true;
             this.sel = this.sel === undefined ? 1 : sel;
             this.showPanel = true;
-            this.data.START_DT = moment(this.data.START_DT).format("l");
-            this.data.END_DT = moment(this.data.END_DT).format("l");
+            this.data.START_DT = moment(this.data.START_DT).format("MM/DD/YY");
+            this.data.END_DT = moment(this.data.END_DT).format("MM/DD/YY");
             this.data.NOTES = this.data.NOTES.replace(/\n/g, '<br/>');
             this.groups = opGridTemplate.groups[this.data.OBJ_SET_TYPE_CD];
             this.groupColumns = opGridTemplate.templates[this.data.OBJ_SET_TYPE_CD];
@@ -358,7 +359,8 @@ export class dealPopupComponent {
     public group = [{ field: "group" }];
 
     openSearch() {
-       this.group = [];
+        this.group = [];
+        this.properties = _.sortBy(this.properties, 'key');
         this.searchgridData = process(this.properties, this.newsearchstate); 
     }
 

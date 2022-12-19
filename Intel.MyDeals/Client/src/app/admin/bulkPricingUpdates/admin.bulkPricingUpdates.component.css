@@ -272,4 +272,6 @@ width: 320px;
 p.no-data-ok {
     margin: 10px !important;
 }
-
+#extractUnify .col-md-11.notes {
+    margin-left: 20px !important;
+}
