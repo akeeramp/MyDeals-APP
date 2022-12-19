@@ -1,0 +1,51 @@
+﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<!-- PERFORMANCE BARS 2 -->
+<div id="perfMs"></div>
+<div id="perfLegend"></div>
+<div id="perfDetails"></div>
+<div style="position: absolute; bottom: -6px; right: 145px; z-index: 10;">
+    <div id="perfChart" style="height: 40px; padding: 0;"></div>
+</div>
+<!-- END PERFORMANCE BARS 2 -->
+
+
+<div id="horizontal-search" class="horizo-fixes">
+    <div id="search-info-container" ng-if="showSearchFilters">
+        <div class="row search-container">
+            <div class="col-md-12 left-inner-container">
+                <h4 class="search_style_tender">{{ title }}</h4>
+                <p class="bttom_header_style">
+                    <i>{{ titleText }}</i>
+                </p>
+                <div class="first-parent-tender">
+                    <div class="cus_tender_style">
+                        Customers: <i class="intelicon-find-a-person-solid" style="font-size:20px;"></i>
+                    </div>
+                    <div class="time-multi" style="width:254px">
+                        <kendo-multiselect kendoMultiSelectSummaryTag [placeholder]="'Select Customers...'" class="fl opUiContainer md divineo-one dashcusstyle ktender_custstyle" #cmbmulti [data]="custData" textField="CUST_NM" valueField="CUST_SID"
+                                           [autoClose]="false" [(ngModel)]="selectedCustNames" (valueChange)="onCustomerChange($event)" [kendoDropDownFilter]="filterSettings">
+                            <ng-template kendoMultiSelectGroupTagTemplate let-dataItems>
+                                <span class="k-icon k-i-caret-alt-down"></span> {{ dataItems.length }} ITEMS(S) SELECTED
+                            </ng-template>
+                        </kendo-multiselect>
+                    </div>
+                </div>
+                <div class="second-parent-tender">
+                    <div class="date-range-label tender_date_range">Date Range:</div>
+                    <div class="date-range-from-to">
+                        <kendo-datepicker class="date-dashboard date_tender_style k-custom-dater" #picker [(value)]="startDateValue" calendarType="classic" [(ngModel)]="startDateValue" (valueChange)="onDateChange($event,'startDateChange')">
+                        </kendo-datepicker>
+                        <span class="to-design-style">to</span>
+                        <!--<p class="fl" style="margin: 50px 10px 0 -150px">to</p>-->
+                        <kendo-datepicker class="date-dashboard datepick_style k-custom-dater" #picker [(value)]="endDateValue" calendarType="classic" [(ngModel)]="endDateValue" (valueChange)="onDateChange($event,'endDateChange')">
+                        </kendo-datepicker>
+                    </div>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

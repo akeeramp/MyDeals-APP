@@ -13,12 +13,23 @@ export class userPreferencesService {
         const apiUrl: string = this.apiBaseUrl + 'GetAngularUserPreferences/' + category + '/' + subCategory;
         return this.httpClient.get(apiUrl);
     }
+    getAction(category, subCategory) {
+        const apiUrl: string = this.apiBaseUrl + 'Get/' + category + '/' + subCategory;
+        return this.httpClient.get(apiUrl);
+    }
 
     updateActions(category, subCategory, key, value) {
         const dto = {
             'value': JSON.stringify(value)
         }
         const apiUrl: string = this.apiBaseUrl + 'UpdateAngularUserPreferences/' + category + '/' + subCategory + '/' + key;
+        return this.httpClient.post(apiUrl, dto);
+    }
+    updateAction(category, subCategory, key, value) {
+        const dto = {
+            'value': JSON.stringify(value)
+        }
+        const apiUrl: string = this.apiBaseUrl + 'Update/' + category + '/' + subCategory + '/' + key;
         return this.httpClient.post(apiUrl, dto);
     }
 }

@@ -5,227 +5,9 @@
     <div op-grid id="grdExcludeGroups" style="height: 100%;" op-data="wipData" op-options="wipOptions" op-name="GROUP"
          op-help="helpTopicGroupingExclusions"></div>
 </div>
-<div>    
-    <kendo-tabstrip #tabstrip id="GroupExclusionTab" (tabSelect)="onTabSelect($event)">
-        <kendo-tabstrip-tab title="Grouping Exclusions" [selected]="this.groupTab  === 'groupExclusionDiv'" width="12%">
-            <ng-template kendoTabContent>
-                <div class="content cola-pick">
-                    <div class="toolbar luna-css">
-                        <div class="comp-calls">
-                            <div class="fl">
-                                <button class="btn btn-sm btn-save ssToolbarBtn" [ngClass]="{'notdirty': !dirty}" 
-                                        (click)="saveAndRunPct()" title="Save and Run Price Cost Test">
-                                    <table>
-                                        <tr>
-                                            <td><i class="fa fa-floppy-o" style="font-size: 30px"></i></td>
-                                            <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
-                                                <span class="text">Save & Run<br />Price Cost Test </span>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </button>
-                            </div>
-                            <div *ngIf="CAN_VIEW_COST_TEST && showPCT" class="fl" style="margin-left: 8px; margin-top: 5px;">
-                                <button class="btn btn-sm ssToolbarBtn dd-out"
-                                        (click)="togglePctFilter()" [ngClass]="{'toggleSelect': !pctFilterEnabled}"
-                                        title="Show/Hide Only Price Cost Test Failures.">
-                                    <table>
-                                        <tr>
-                                            <td>
-                                                <div style="width: 50px;">
-                                                    <div style="position: absolute; top: 7px; margin-left: 20px;">
-                                                        <i class="intelicon-help-solid" aria-hidden="true"
-                                                           style="font-size: 30px; color: #f3D54E;"></i>
-                                                    </div>
-                                                    <div style="position: absolute; top: 7px;">
-                                                        <i class="intelicon-alert-solid"
-                                                           aria-hidden="true" style="font-size: 30px; color: #FC4C02;"></i>
-                                                    </div>
-                                                </div>
-                                            </td>
-                                            <td class="hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
-                                                <span class="text-out">
-                                                    View Only Issues
-                                                    <br />
-                                                    (Cost Test Results)
-                                                </span>
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </button>
-                            </div>
-                        </div>
-                        <div class="dis-comp">
-                            <div class="fr" style="margin-top: 2px; margin-left: 8px;">
-                                <button class="btn btn-sm ssToolbarBtn"
-                                        (click)="toggleWrap()" [ngClass]="{'toggleSelect': wrapEnabled}" title="Toggle Word Wrap.">
-                                    <table>
-                                        <tr>
-                                            <td><i class="intelicon-align-left skyBlue" aria-hidden="true" style="font-size: 30px"></i></td>
-                                            <td class="hidden-md hidden-sm hidden-xs"
-                                                style="padding-left: 5px; text-align: left; color: #00AEEF; font-size: 11px;">
-                                                Word<br />Wrap
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </button>
-                            </div>
-                            <div class="fr" style="margin-top: 2px; margin-left: -2px;" *ngIf="!opIsTender">
-                                <button class="btn btn-sm ssToolbarBtn btnOverlappingDealCheck" (click)="openOverlappingDealCheck()"
-                                        title="check for overlapping Deals.">
-                                    <table>
-                                        <tr>
-                                            <td><i class="intelicon-copy-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i></td>
-                                            <td class="hidden-md hidden-sm hidden-xs"
-                                                style="padding-left: 5px; text-align: left; color: #00AEEF; font-size: 11px;">
-                                                Overlapping<br />Deals Check
-                                            </td>
-                                        </tr>
-                                    </table>
-                                </button>
-                            </div>
-                            <div class="fr dropdown clearfix" style="margin-right: 2px;">
-                                <button class="btn btn-sm ssToolbarBtn dropdown-toggle"
-                                        id="dropdownMenuOpGrid" aria-expanded="true" type="button" data-toggle="dropdown">
-                                    <table>
-                                        <tbody>
-                                            <tr>
-                                                <td style="border: 0 solid transparent;">
-                                                    <i class="intelicon-ms-excel-outlined skyBlue"
-                                                       aria-hidden="true" style="font-size: 30px !important"></i>
-                                                </td>
-                                                <td class="hidden-md hidden-sm hidden-xs"
-                                                    style="padding-left: 2px; text-align: left; color: #00AEEF; line-height: 1.2em; border: 0 solid transparent; font-size: 11px;">
-                                                    Excel<br>Export
-                                                </td>
-                                                <td><span class="caret throw-span"></span></td>
-                                            </tr>
-                                        </tbody>
-                                    </table>
-                                </button>
-                                <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuOpGrid" style="font-size: 13px;" id="excelDropDownMenu">
-                                    <li (click)="exportToExcel(groupingGrid)" style="cursor: pointer;"><a>Export All Columns, All Data</a></li>
-                                    <li (click)="exportToExcelCustomColumns(groupingGrid)" style="cursor: pointer;"><a>Export Current View</a></li>
-                                </ul>
-                            </div>
-                            <div class="fr" style="margin-top: 2px;">
-                                <div class="fr helpBtn" title="Help" (click)="showHelpTopicGroup()">
-                                    <i class="intelicon-help"
-                                       style="font-size:30px !important"></i>
-                                </div>
-                            </div>
-                            <div class="fr" style="margin-top: 2px; margin-left: 10px;">
-                                <span class="k-textbox k-space-left aligner-inputs">
-                                    <i class="intelicon-search"></i>
-                                    <input (keyup.enter)="GridSearch()" placeholder="  search...(press enter to search)" [(ngModel)]="titleFilter" />
-                                </span>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row" style="margin-left: -30px;">
-                        <div class="col-md-12 kendo-grid-buttons oppo-grids physics-css there-grid grping-exclusion-borderstyle" style="padding-top: 4px!important;">
-                            <kendo-grid #groupingGrid="kendoGrid" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
-                                        [sort]="state.sort" [filter]="state.filter" [sortable]="true"
-                                        [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
-                                        filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)"
-                                        (cellClick)="cellClickHandler($event)" class="group-Excl-grid grouping_grid_h">
-                                <kendo-grid-column title="Deal #" field="DC_ID" [headerClass]="{'headerClass':true}" [width]="120">
-                                </kendo-grid-column>
-                                <kendo-grid-column title="Rebate Type" field="REBT_TYPE" [headerClass]="{'headerClass':true}" hidden="hidden">
-                                </kendo-grid-column>
-                                <kendo-grid-column title="Additive" field="ADDITIVE" [headerClass]="{'headerClass':true}" hidden="hidden">
-                                </kendo-grid-column>
-                                <kendo-grid-column title="Deal Description" field="DEAL_DESC" [headerClass]="{'headerClass':true}"
-                                                   [width]="140"></kendo-grid-column>
-                                <kendo-grid-column title="Exclude Deal Group" field="DEAL_GRP_EXCLDS" [headerClass]="{'headerClass':true}"
-                                                   [width]="120">
-                                    <ng-template kendoGridCellTemplate let-dataItem>
-                                        <span *ngIf="dataItem.DEAL_GRP_EXCLDS==''"
-                                              style="color: rgb(0, 113, 197); cursor: pointer; text-align: center;">View</span>
-                                        <span *ngIf="dataItem.DEAL_GRP_EXCLDS!=''"
-                                              style="color: rgb(0, 113, 197); cursor: pointer; text-align: center;">{{dataItem.DEAL_GRP_EXCLDS}}</span>
-                                    </ng-template>
-                                </kendo-grid-column>
-                                <kendo-grid-column title="Exclusion Reason" field="DEAL_GRP_CMNT" [headerClass]="{'headerClass':true}"
-                                                   [width]="120"></kendo-grid-column>
-                                <kendo-grid-column title="Contract product" field="PTR_USER_PRD" [headerClass]="{'headerClass':true}"
-                                                   [width]="120"></kendo-grid-column>
-                                <kendo-grid-column title="My Deals Product" field="TITLE" [headerClass]="{'headerClass':true}"
-                                                   [width]="120"></kendo-grid-column>
-                                <kendo-grid-column *ngIf="CAN_VIEW_COST_TEST"  title="Cost Test Results" field="COST_TEST_RESULT" [headerClass]="{'headerClass':true}"
-                                                   [width]="120">
-                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                                 let-filterService="filterService">
-                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                                           [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                                    </ng-template>
-                                    <ng-template kendoGridCellTemplate let-dataItem>
-                                        <icon-mct-pct-angular [dataValue]='dataItem.COST_TEST_RESULT' [iconClass]="medIcon"></icon-mct-pct-angular>
-                                    </ng-template>
-                                </kendo-grid-column>
-                                <kendo-grid-column title="Deal Type" field="OBJ_SET_TYPE_CD" [headerClass]="{'headerClass':true}"
-                                                   [width]="120">
-                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                                 let-filterService="filterService">
-                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                                           [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                                    </ng-template>
-                                </kendo-grid-column>
-                                <kendo-grid-column title="Stage" field="DSPL_WF_STG_CD" [headerClass]="{'headerClass':true}" [width]="120">
-                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                                 let-filterService="filterService">
-                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                                           [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                                    </ng-template>
-                                </kendo-grid-column>
-                                <kendo-grid-column title="Deal Start" field="START_DT" [headerClass]="{'headerClass':true}" [width]="120">
-                                </kendo-grid-column>
-                                <kendo-grid-column title="Deal End" field="END_DT" [headerClass]="{'headerClass':true}" [width]="120">
-                                </kendo-grid-column>
-                                <kendo-grid-column title="OEM Platform Launch Date" field="OEM_PLTFRM_LNCH_DT"
-                                                   [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
-                                <kendo-grid-column title="OEM Platform EOL Date" field="OEM_PLTFRM_EOL_DT"
-                                                   [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
-                                <kendo-grid-column title="Additive" field="DEAL_COMB_TYPE" [headerClass]="{'headerClass':true}"
-                                                   [width]="120">
-                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                                 let-filterService="filterService">
-                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                                           [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                                    </ng-template>
-                                </kendo-grid-column>
-                                <kendo-grid-column title="Market Segment" field="MRKT_SEG" [headerClass]="{'headerClass':true}"
-                                                   [width]="160"></kendo-grid-column>
-                                <kendo-grid-column title="ECAP Price" field="ECAP_PRICE" [headerClass]="{'headerClass':true}" [width]="120">
-                                    <ng-template kendoGridCellTemplate let-dataItem>
-                                        <span>
-                                            {{getFormatedDim(dataItem, 'ECAP_PRICE','20___0','currency')}}
-                                        </span>
-                                    </ng-template>
-                                </kendo-grid-column>
-                                <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}" [width]="120">
-                                    <ng-template kendoGridCellTemplate let-dataItem>
-                                        <span>{{getFormatedDim(dataItem,'MAX_RPU','20___0','currency')}}</span>
-                                    </ng-template>
-                                </kendo-grid-column>
-                                <kendo-grid-column title="Consumption Reason" field="CONSUMPTION_REASON"
-                                                   [headerClass]="{'headerClass':true}" [width]="160">
-                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                                 let-filterService="filterService">
-                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                                           [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
-                                    </ng-template>
-                                </kendo-grid-column>
-                                <kendo-grid-column title="Consumption Reason Comment" field="CONSUMPTION_REASON_CMNT"
-                                                   [headerClass]="{'headerClass':true}" [width]="160"></kendo-grid-column>
-                                <kendo-grid-column title="Notes" field="NOTES" [headerClass]="{'headerClass':true}" hidden="hidden">
-                                </kendo-grid-column>
-                                <kendo-grid-excel fileName="MyDealsSearchResults.xlsx"></kendo-grid-excel>
-                            </kendo-grid>
-                        </div>
-                    </div>
-                </div>
-            </ng-template>
+<div>
+    <kendo-tabstrip #tabstrip id="GroupExclusionTab" *ngIf="!isTenderDashboard" (tabSelect)="onTabSelect($event)">
+        <kendo-tabstrip-tab title="Grouping Exclusions" [selected]="this.groupTab  === 'groupExclusionDiv'" width="12%">            
         </kendo-tabstrip-tab>
         <kendo-tabstrip-tab title="Price Cost Test" *ngIf="this.showPCT == true" width="12%">
         </kendo-tabstrip-tab>
@@ -238,5 +20,222 @@
                 </div>
             </ng-template>
         </kendo-tabstrip-tab>
-    </kendo-tabstrip>    
+    </kendo-tabstrip>
+    <div class="content cola-pick" *ngIf="this.groupTab  === 'groupExclusionDiv'">
+        <div class="toolbar luna-css">
+            <div class="comp-calls">
+                <div class="fl">
+                    <button class="btn btn-sm btn-save ssToolbarBtn" [ngClass]="{'notdirty': !dirty}"
+                            (click)="saveAndRunPct()" title="Save and Run Price Cost Test">
+                        <table>
+                            <tr>
+                                <td><i class="fa fa-floppy-o" style="font-size: 30px"></i></td>
+                                <td style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                                    <span class="text">Save & Run<br />Price Cost Test </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </button>
+                </div>
+                <div *ngIf="CAN_VIEW_COST_TEST && (showPCT || isTenderDashboard)" class="fl" style="margin-left: 8px; margin-top: 5px;">
+                    <button class="btn btn-sm ssToolbarBtn dd-out"
+                            (click)="togglePctFilter()" [ngClass]="{'toggleSelect': !pctFilterEnabled}"
+                            title="Show/Hide Only Price Cost Test Failures.">
+                        <table>
+                            <tr>
+                                <td>
+                                    <div style="width: 50px;">
+                                        <div style="position: absolute; top: 7px; margin-left: 20px;">
+                                            <i class="intelicon-help-solid" aria-hidden="true"
+                                               style="font-size: 30px; color: #f3D54E;"></i>
+                                        </div>
+                                        <div style="position: absolute; top: 7px;">
+                                            <i class="intelicon-alert-solid"
+                                               aria-hidden="true" style="font-size: 30px; color: #FC4C02;"></i>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                                    <span class="text-out">
+                                        View Only Issues
+                                        <br />
+                                        (Cost Test Results)
+                                    </span>
+                                </td>
+                            </tr>
+                        </table>
+                    </button>
+                </div>
+            </div>
+            <div class="dis-comp">
+                <div class="fr" style="margin-top: 2px; margin-left: 8px;">
+                    <button class="btn btn-sm ssToolbarBtn"
+                            (click)="toggleWrap()" [ngClass]="{'toggleSelect': wrapEnabled}" title="Toggle Word Wrap.">
+                        <table>
+                            <tr>
+                                <td><i class="intelicon-align-left skyBlue" aria-hidden="true" style="font-size: 30px"></i></td>
+                                <td class="hidden-md hidden-sm hidden-xs"
+                                    style="padding-left: 5px; text-align: left; color: #00AEEF; font-size: 11px;">
+                                    Word<br />Wrap
+                                </td>
+                            </tr>
+                        </table>
+                    </button>
+                </div>
+                <div class="fr" style="margin-top: 2px; margin-left: -2px;" *ngIf="!opIsTender">
+                    <button class="btn btn-sm ssToolbarBtn btnOverlappingDealCheck" (click)="openOverlappingDealCheck()"
+                            title="check for overlapping Deals.">
+                        <table>
+                            <tr>
+                                <td><i class="intelicon-copy-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i></td>
+                                <td class="hidden-md hidden-sm hidden-xs"
+                                    style="padding-left: 5px; text-align: left; color: #00AEEF; font-size: 11px;">
+                                    Overlapping<br />Deals Check
+                                </td>
+                            </tr>
+                        </table>
+                    </button>
+                </div>
+                <div class="fr dropdown clearfix" style="margin-right: 2px;">
+                    <button class="btn btn-sm ssToolbarBtn dropdown-toggle"
+                            id="dropdownMenuOpGrid" aria-expanded="true" type="button" data-toggle="dropdown">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td style="border: 0 solid transparent;">
+                                        <i class="intelicon-ms-excel-outlined skyBlue"
+                                           aria-hidden="true" style="font-size: 30px !important"></i>
+                                    </td>
+                                    <td class="hidden-md hidden-sm hidden-xs"
+                                        style="padding-left: 2px; text-align: left; color: #00AEEF; line-height: 1.2em; border: 0 solid transparent; font-size: 11px;">
+                                        Excel<br>Export
+                                    </td>
+                                    <td><span class="caret throw-span"></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuOpGrid" style="font-size: 13px;" id="excelDropDownMenu">
+                        <li (click)="exportToExcel(groupingGrid)" style="cursor: pointer;"><a>Export All Columns, All Data</a></li>
+                        <li (click)="exportToExcelCustomColumns(groupingGrid)" style="cursor: pointer;"><a>Export Current View</a></li>
+                    </ul>
+                </div>
+                <div class="fr" style="margin-top: 2px;">
+                    <div class="fr helpBtn" title="Help" (click)="showHelpTopicGroup()">
+                        <i class="intelicon-help"
+                           style="font-size:30px !important"></i>
+                    </div>
+                </div>
+                <div class="fr" style="margin-top: 2px; margin-left: 10px;">
+                    <span class="k-textbox k-space-left aligner-inputs">
+                        <i class="intelicon-search"></i>
+                        <input (keyup.enter)="GridSearch()" placeholder="  search...(press enter to search)" [(ngModel)]="titleFilter" />
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="row" style="margin-left: -30px;">
+            <div class="col-md-12 kendo-grid-buttons oppo-grids physics-css there-grid grping-exclusion-borderstyle" style="padding-top: 4px!important;">
+                <kendo-grid #groupingGrid="kendoGrid" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+                            [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+                            [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
+                            filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)"
+                            (cellClick)="cellClickHandler($event)" class="group-Excl-grid grouping_grid_h">
+                    <kendo-grid-column title="Deal #" field="DC_ID" [headerClass]="{'headerClass':true}" [width]="120">
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Rebate Type" field="REBT_TYPE" [headerClass]="{'headerClass':true}" hidden="hidden">
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Additive" field="ADDITIVE" [headerClass]="{'headerClass':true}" hidden="hidden">
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Deal Description" field="DEAL_DESC" [headerClass]="{'headerClass':true}"
+                                       [width]="140"></kendo-grid-column>
+                    <kendo-grid-column title="Exclude Deal Group" field="DEAL_GRP_EXCLDS" [headerClass]="{'headerClass':true}"
+                                       [width]="120">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <span *ngIf="dataItem.DEAL_GRP_EXCLDS==''"
+                                  style="color: rgb(0, 113, 197); cursor: pointer; text-align: center;">View</span>
+                            <span *ngIf="dataItem.DEAL_GRP_EXCLDS!=''"
+                                  style="color: rgb(0, 113, 197); cursor: pointer; text-align: center;">{{dataItem.DEAL_GRP_EXCLDS}}</span>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Exclusion Reason" field="DEAL_GRP_CMNT" [headerClass]="{'headerClass':true}"
+                                       [width]="120"></kendo-grid-column>
+                    <kendo-grid-column title="Contract product" field="PTR_USER_PRD" [headerClass]="{'headerClass':true}"
+                                       [width]="120"></kendo-grid-column>
+                    <kendo-grid-column title="My Deals Product" field="TITLE" [headerClass]="{'headerClass':true}"
+                                       [width]="120"></kendo-grid-column>
+                    <kendo-grid-column *ngIf="CAN_VIEW_COST_TEST" title="Cost Test Results" field="COST_TEST_RESULT" [headerClass]="{'headerClass':true}"
+                                       [width]="120">
+                        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                                     let-filterService="filterService">
+                            <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                               [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                        </ng-template>
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <icon-mct-pct-angular [dataValue]='dataItem.COST_TEST_RESULT' [iconClass]="medIcon"></icon-mct-pct-angular>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Deal Type" field="OBJ_SET_TYPE_CD" [headerClass]="{'headerClass':true}"
+                                       [width]="120">
+                        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                                     let-filterService="filterService">
+                            <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                               [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Stage" field="DSPL_WF_STG_CD" [headerClass]="{'headerClass':true}" [width]="120">
+                        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                                     let-filterService="filterService">
+                            <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                               [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Deal Start" field="START_DT" [headerClass]="{'headerClass':true}" [width]="120">
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Deal End" field="END_DT" [headerClass]="{'headerClass':true}" [width]="120">
+                    </kendo-grid-column>
+                    <kendo-grid-column title="OEM Platform Launch Date" field="OEM_PLTFRM_LNCH_DT"
+                                       [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
+                    <kendo-grid-column title="OEM Platform EOL Date" field="OEM_PLTFRM_EOL_DT"
+                                       [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
+                    <kendo-grid-column title="Additive" field="DEAL_COMB_TYPE" [headerClass]="{'headerClass':true}"
+                                       [width]="120">
+                        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                                     let-filterService="filterService">
+                            <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                               [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Market Segment" field="MRKT_SEG" [headerClass]="{'headerClass':true}"
+                                       [width]="160"></kendo-grid-column>
+                    <kendo-grid-column title="ECAP Price" field="ECAP_PRICE" [headerClass]="{'headerClass':true}" [width]="120">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <span>
+                                {{getFormatedDim(dataItem, 'ECAP_PRICE','20___0','currency')}}
+                            </span>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}" [width]="120">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <span>{{getFormatedDim(dataItem,'MAX_RPU','20___0','currency')}}</span>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Consumption Reason" field="CONSUMPTION_REASON"
+                                       [headerClass]="{'headerClass':true}" [width]="160">
+                        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                                     let-filterService="filterService">
+                            <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                               [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                        </ng-template>
+                    </kendo-grid-column>
+                    <kendo-grid-column title="Consumption Reason Comment" field="CONSUMPTION_REASON_CMNT"
+                                       [headerClass]="{'headerClass':true}" [width]="160"></kendo-grid-column>
+                    <kendo-grid-column title="Notes" field="NOTES" [headerClass]="{'headerClass':true}" hidden="hidden">
+                    </kendo-grid-column>
+                    <kendo-grid-excel fileName="MyDealsSearchResults.xlsx"></kendo-grid-excel>
+                </kendo-grid>
+            </div>
+        </div>
+    </div>
+
 </div>

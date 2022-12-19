@@ -25,8 +25,8 @@ import { missingCapCostInfoModalComponent } from '../ptModals/dealEditorModals/m
 import { GridUtil } from '../grid.util';
 import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';
 import { dealEditorService } from "../dealEditor/dealEditor.service";
-import * as exp from 'constants';
-import { exit } from 'process';
+import { tenderMCTPCTModalComponent } from '../ptModals/tenderDashboardModals/tenderMCTPCTModal.component';
+import { SecurityService } from "../../shared/services/security.service"
 
 @Component({
     selector: 'deal-editor',
@@ -40,7 +40,7 @@ export class dealEditorComponent {
         private contractDetailsSvc: contractDetailsService,
         private loggerService: logger, private datePipe: DatePipe,
         protected dialog: MatDialog,
-        private DESvc: dealEditorService) {
+        private DESvc: dealEditorService, private securityService: SecurityService) {
     }
 
     @Input() in_Cid: any = '';
@@ -49,11 +49,22 @@ export class dealEditorComponent {
     @Input() in_Search_Text: any = '';
     @Input() contractData: any = {};
     @Input() UItemplate: any = {};
+    @Input() in_Is_Tender_Dashboard: boolean = false;// it will recieve true when DE used in TenderDashboard Screen
+    @Input() in_Search_Results: any = [];
+    @Input() in_Deal_Type: string = "";
     @ViewChild(GridComponent) private grid: GridComponent;
     @Output() refreshedContractData = new EventEmitter;
     @Output() tmDirec = new EventEmitter();
     @Output() deTabInfmIconUpdate = new EventEmitter();
     @Output() pteRedir = new EventEmitter();
+    @Output() invokeSearchDatasource = new EventEmitter();
+    @Output() bidActionsUpdated = new EventEmitter();
+    @Output() floatActionsUpdated = new EventEmitter();
+    @Output() tenderCopyDeals = new EventEmitter();
+    @Output() runPCTMCT = new EventEmitter();
+    @Output() emailData = new EventEmitter();
+    @Output() refreshGridData = new EventEmitter();
+    @Output() removeDeletedRow = new EventEmitter();
     private isWarning: boolean = false;
     private message: string = "";
     public dirty = false;
@@ -94,13 +105,18 @@ export class dealEditorComponent {
     private spinnerMessageHeader: any = "";
     private lookBackPeriod: any = [];
     private msgType: string = "";
-    private invalidDate: boolean = false;
+    private invalidField: boolean = false;
     private VendorDropDownResult: any = {};
     private searchFilter: any;
     private wrapEnabled: boolean = false;
     private isExportable: boolean = true;
     private dropdownFilterColumns = PTE_Config_Util.dropdownFilterColumns
     private savedResponseWarning: any[] = [];
+    private roleCanCopyDeals = (<any>window).usrRole == 'FSE' || (<any>window).usrRole == 'GA';
+    public isRunning: boolean = false;
+    private CAN_VIEW_COST_TEST = this.securityService.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper);
+    private CAN_VIEW_MEET_COMP = this.securityService.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "FSE" && this.in_Is_Tender_Dashboard);
+
     private state: State = {
         skip: 0,
         take: 25,
@@ -187,7 +203,10 @@ export class dealEditorComponent {
                 }
                 else {
                     distinctData = distinct(this.gridResult, col.field).map(item => {
-                        if (col.field == 'WF_STG_CD') {
+                        if (col.field == "CUST_MBR_SID") {
+                            return { Text: item.Customer.CUST_NM, Value: item[col.field] };
+                        }
+                        else if (col.field == 'WF_STG_CD') {
                             let val = item.WF_STG_CD === "Draft" ? item.PS_WF_STG_CD : item.WF_STG_CD;
                             return { Text: val, Value: item[col.field] };
                         }
@@ -210,9 +229,18 @@ export class dealEditorComponent {
         // Get template for the selected WIP_DEAL
         this.wipTemplate = this.UItemplate["ModelTemplates"]["WIP_DEAL"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
 
-        PTE_Load_Util.wipTemplateColumnSettings(this.wipTemplate, this.isTenderContract, this.curPricingTable.OBJ_SET_TYPE_CD);
+        PTE_Load_Util.wipTemplateColumnSettings(this.wipTemplate, this.isTenderContract, this.curPricingTable.OBJ_SET_TYPE_CD, this.in_Is_Tender_Dashboard);
         this.templates = opGridTemplate.templates[`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
-        await this.getWipDealData();
+        if (!this.in_Is_Tender_Dashboard)//if DE not called from Tender Dashboard then we need call the service call to get WIP_DEAL data
+            await this.getWipDealData();
+        else {// TenderDashboard will share the search results to display in a grid , no service call required
+            this.gridResult = this.in_Search_Results;
+            this.setWarningDetails();
+            this.applyHideIfAllRules();
+            this.lookBackPeriod = PTE_Load_Util.getLookBackPeriod(this.gridResult);
+            this.gridData = process(this.gridResult, this.state);
+            this.distinctPrimitive();
+        }
         this.customLayout(false);
     }
 
@@ -278,15 +306,7 @@ export class dealEditorComponent {
     }
 
     refreshGrid() {
-        this.isDataLoading = true;
-        this.setBusy("Loading Deals", "Gathering deals and security settings.", "Info", true);
-        this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
-        this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
-        this.isTenderContract = Tender_Util.tenderTableLoad(this.contractData);
-        this.getGroupsAndTemplates();
-        this.dropdownResponses = this.getAllDrowdownValues();
-        this.selectedTab = "Deal Info";
-        this.filterColumnbyGroup(this.selectedTab);
+        this.ngOnInit();
     }
 
     onClose(name: string) {
@@ -324,7 +344,7 @@ export class dealEditorComponent {
     }
 
     cellClickHandler(args: CellClickEvent): void {
-        this.invalidDate = false;
+        this.invalidField = false;
         if (args.dataItem != undefined) {
             PTE_Common_Util.parseCellValues(args.column.field, args.dataItem);
         }
@@ -354,9 +374,17 @@ export class dealEditorComponent {
         else if ((args.column.field == "PRD_BCKT" && this.curPricingTable.OBJ_SET_TYPE_CD == "KIT") || (args.column.field == "TITLE" && this.curPricingTable.OBJ_SET_TYPE_CD !== "KIT")) {
             this.openDealProductModal(args.dataItem);
         }
+        else if (this.in_Is_Tender_Dashboard && args.column.field == "MEETCOMP_TEST_RESULT") {// functionality required only for Grid in TenderDashboard Screen
+            this.openMCTPCTModal(args.dataItem, true)
+        }
+        else if (this.in_Is_Tender_Dashboard && args.column.field == "COST_TEST_RESULT") {// functionality required only for Grid in TenderDashboard Screen
+            this.openMCTPCTModal(args.dataItem, false)
+        }
         else if (args.column.field == 'MISSING_CAP_COST_INFO') {
             this.openMissingCapCostInfo(args.dataItem);
         }
+        else if (args.column.field == "CNTRCT_OBJ_SID" && this.in_Is_Tender_Dashboard)
+            (<any>window).location.href = '#/tendermanager/' + args.dataItem.CNTRCT_OBJ_SID;
     }
 
     updateModalDataItem(dataItem, field, returnVal) {
@@ -379,6 +407,12 @@ export class dealEditorComponent {
         this.dirty = eventData;
     }
 
+
+    actionClick(actionName) {
+        this.floatActionsUpdated.emit({ newValue: actionName, gridDS: this.gridResult });
+    }
+
+
     openSystemPriceModal(dataItem) {
         let sysPricePoint = "";
         if (dataItem["SYS_PRICE_POINT"] != undefined && dataItem["SYS_PRICE_POINT"] != null && dataItem["SYS_PRICE_POINT"] != "") {
@@ -400,6 +434,31 @@ export class dealEditorComponent {
         dialogRef.afterClosed().subscribe((returnVal) => {
             if (returnVal != undefined && returnVal != null) {
                 this.updateModalDataItem(dataItem, "SYS_PRICE_POINT", returnVal);
+            }
+        });
+    }
+
+    openMCTPCTModal(dataItem, isMeetComp) {
+        const dialogRef = this.dialog.open(tenderMCTPCTModalComponent, {
+            width: "1420px",
+            panelClass:'admin_deal_mctpct',
+            data: {
+                CNTRCT_OBJ_SID: dataItem.CNTRCT_OBJ_SID,
+                PRC_ST_OBJ_SID: dataItem.PRC_ST_OBJ_SID,
+                WIP_ID: dataItem.DC_ID,
+                isMeetComp: isMeetComp,
+                UItemplate: this.UItemplate
+            }
+        });
+        dialogRef.afterClosed().subscribe((returnVal) => {
+            if (!isMeetComp) {
+                this.loggerService.success("Please wait for the result to be updated...");
+            }
+            if (!isMeetComp || (isMeetComp && returnVal && returnVal.length > 0)) {
+                let ids = [];
+                ids.push(dataItem.DC_ID);
+                let args = { wipIds: ids };
+                this.refreshGridData.emit(args);
             }
         });
     }
@@ -558,8 +617,8 @@ export class dealEditorComponent {
         });
     }
 
-    setInvalidDate(value) {
-        this.invalidDate = value;
+    setInvalidField(value) {
+        this.invalidField = value;
     }
 
     renameTab = function () {
@@ -827,7 +886,7 @@ export class dealEditorComponent {
 
     cellCloseHandler(args: CellCloseEvent): void {
         if (args.dataItem != undefined) {
-            if (this.invalidDate) {
+            if (this.invalidField) {
                 args.sender.cellClick.closed = true;
                 args.sender.cellClick.isStopped = true;
                 args.preventDefault();
@@ -881,28 +940,64 @@ export class dealEditorComponent {
 
     async SaveDeal() {
         this.isDataLoading = true;
-        this.setBusy("Saving your data..", "Please wait while saving data.","Info", true);
-        try {
-            _.each(this.gridResult, (item) => {
-                if ((moment(item["START_DT"]).isBefore(this.contractData.START_DT) || moment(item["END_DT"]).isAfter(this.contractData.END_DT)) && this.isDatesOverlap == false) {
-                    this.isDatesOverlap = true;
+        this.setBusy("Saving your data..", "Please wait while saving data.", "Info", true);
+        if (!this.in_Is_Tender_Dashboard) {//Save and Validation functionality for Contract DE screen as well as Tender Manager DE Screen
+            try {
+                _.each(this.gridResult, (item) => {
+                    if ((moment(item["START_DT"]).isBefore(this.contractData.START_DT) || moment(item["END_DT"]).isAfter(this.contractData.END_DT)) && this.isDatesOverlap == false) {
+                        this.isDatesOverlap = true;
+                    }
+                });
+                if (!this.isDatesOverlap) {
+                    await this.SaveDealData();
                 }
-            });
-            if (!this.isDatesOverlap) {
-                await this.SaveDealData();
+                else {
+                    this.isDataLoading = false;
+                    this.setBusy('', '', '', false);
+                    this.isWarning = true;
+                    this.message = "Extending Deal Dates will result in the extension of Contract Dates. Please click 'OK', if you want to proceed.";
+                }
+            }
+            catch (ex) {
+                this.loggerService.error('Something went wrong', 'Error');
+                console.error('AllDeals::ngOnInit::', ex);
+            }
+        }
+        else {//Save and Validation functionality for Tender Dashboard DE screen
+            let isShowStopError = PTE_Validation_Util.validateTenderDashboardDeal(this.gridResult, this.curPricingTable, this.groups, this.templates);
+            if (isShowStopError) {
+                this.loggerService.warn("Please fix validation errors before proceeding", "");
+                this.gridData = process(this.gridResult, this.state);
+                this.isDataLoading = false;
+                this.setBusy("", "", "", false);
             }
             else {
-                this.isDataLoading = false;
-                this.setBusy('', '', '', false);
-                this.isWarning = true;
-                this.message = "Extending Deal Dates will result in the extension of Contract Dates. Please click 'OK', if you want to proceed.";
+                var cashObj = this.gridResult.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
+                if (cashObj && cashObj.length > 0) {
+                    if (this.VendorDropDownResult != null && this.VendorDropDownResult != undefined && this.VendorDropDownResult.length > 0) {
+                        var customerVendor = this.VendorDropDownResult;
+                        _.each(this.gridResult, (item) => {
+                            var partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
+                            if (partnerID && partnerID.length == 1) {
+                                item.SETTLEMENT_PARTNER = partnerID[0].DROP_DOWN;
+                            }
+                        });
+                    }
+                }
+                let data = {
+                    "Contract": [],
+                    "PricingStrategy": [],
+                    "PricingTable": [this.curPricingTable],
+                    "PricingTableRow": [],
+                    "WipDeals": this.gridResult != undefined ? this.gridResult.filter(x => x._dirty == true) : [],
+                    "EventSource": 'WIP_DEAL',
+                    "Errors": {}
+                }                
+                this.invokeSearchDatasource.emit(data);// invoke Tender Dashboard save api call
+                this.dirty = false;
+                this.setBusy("", "", "", false);
             }
         }
-        catch(ex){
-            this.loggerService.error('Something went wrong', 'Error');
-            console.error('AllDeals::ngOnInit::',ex);
-        }
-     
     }
 
     reloadFn(eventData) {
@@ -1039,20 +1134,21 @@ export class dealEditorComponent {
     async getAllDrowdownValues() {
         let dropObjs = {};
         let atrbs = this.isTenderContract ? PTE_Config_Util.tenderDropDownAtrbs : PTE_Config_Util.contractDropDownAtrbs;
-
+        if (this.in_Is_Tender_Dashboard)//EXCLUDE_AUTOMATION column will have dropdown which is used only in Tender Dashboard
+            atrbs.push('EXCLUDE_AUTOMATION');
         _.each(atrbs, (item) => {
             let column = this.wipTemplate.columns.filter(x => x.field == item);
             if (column && column.length > 0 && column[0].lookupUrl && column[0].lookupUrl != '') {
                 let url = "";
                 if (item == "COUNTRY")
                     url = "/api/PrimeCustomers/GetCountries";
-                else if (item == "PERIOD_PROFILE")
+                else if (item == "PERIOD_PROFILE" && !this.in_Is_Tender_Dashboard)// always not editable in TenderDashboard
                     url = column[0].lookupUrl + this.contractData.CUST_MBR_SID;
-                else if (item == "SETTLEMENT_PARTNER")
+                else if (item == "SETTLEMENT_PARTNER" && !this.in_Is_Tender_Dashboard)// always not editable in TenderDashboard
                     url = column[0].lookupUrl + "/" + this.contractData.CUST_MBR_SID;
                 else
                     url = column[0].lookupUrl;
-
+                if (!(this.in_Is_Tender_Dashboard && (item == "PERIOD_PROFILE" || item == "SETTLEMENT_PARTNER")))
                 dropObjs[`${item}`] = this.pteService.readDropdownEndpoint(url);
             }
             else if (item == 'EXPIRE_FLG')
@@ -1166,12 +1262,24 @@ export class dealEditorComponent {
         GridUtil.dsToExcel(this.columns, this.gridData.data, "Deal Editor Export");
     }
 
+    removeDeletedRowData(deletedPsId) {
+        this.removeDeletedRow.emit(deletedPsId);
+    }
+
     async refreshContract(eventData: boolean) {
         if (eventData) {
             this.isDataLoading = true;
             this.setBusy("Loading Deals", "Gathering deals and security settings.", "Info", true);
-            await this.getWipDealData();
-            await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
+            if (!this.in_Is_Tender_Dashboard) {//Grid requires data from below service for Contract Manager and Tender Manager DE Screens
+                await this.getWipDealData();
+                await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
+            }
+            else {// Data will be passed from Tender Dashboard
+                this.setBusy("", "", "", false);
+                let ids = this.gridResult.map(x => x.DC_ID);
+                let args = { wipIds: ids };
+                this.refreshGridData.emit(args);
+            }
         }
     }
     showHelpTopic() {
@@ -1180,13 +1288,21 @@ export class dealEditorComponent {
     displaydealType() {
         return this.curPricingTable.OBJ_SET_TYPE_CD.replace(/_/g, ' ');
     }
-    ngOnInit() {
+    initialization() {
         try {
+            
             this.isDataLoading = true;
             this.setBusy("Loading Deals", "Gathering deals and security settings.", "Info", true);
-            this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
-            this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
-            this.isTenderContract = Tender_Util.tenderTableLoad(this.contractData);
+            if (!this.in_Is_Tender_Dashboard) {// Contract Manage and Tender Manage have data of specific PS and PT
+                this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
+                this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
+                this.isTenderContract = Tender_Util.tenderTableLoad(this.contractData);
+            }
+            else {//Tender Dashboard have all PS and PT deals, so added only common properties
+                this.isTenderContract = true;
+                this.curPricingStrategy = { IS_HYBRID_PRC_STRAT: 0 }
+                this.curPricingTable = { OBJ_SET_TYPE_CD: this.in_Deal_Type }
+            }
             this.getGroupsAndTemplates();
             this.dropdownResponses = this.getAllDrowdownValues();
             this.selectedTab = "Deal Info";
@@ -1206,10 +1322,35 @@ export class dealEditorComponent {
                 this.gridData = process(this.gridResult, this.state);
             }
         }
-        catch(ex){
+        catch (ex) {
             this.loggerService.error('Something went wrong', 'Error');
-            console.error('DEAL_EDITOR::ngOnInit::',ex);
+            console.error('DEAL_EDITOR::ngOnInit::', ex);
         }
+    }
+    bidActionUpdated(event) {
+        event['gridDS'] = this.gridResult;
+        this.bidActionsUpdated.emit(event);
+    }
+    copyDeals() {
+        this.tenderCopyDeals.emit(this.gridData.data);
+    }
+    executePctViaBtn() {
+        this.isRunning = true;
+        if (this.gridData.data.filter(x => x.isLinked == true).length > 0)
+            this.runPCTMCT.emit(this.gridData.data.filter(x => x.isLinked == true));
+        else
+            this.isRunning = false;
+    }
+    sendEmail(){
+       
+        this.emailData.emit(this.gridData.data.filter(x => x.isLinked == true));
         
+    }
+    
+    ngOnInit() {
+        this.initialization();
+    }
+    ngOnChanges() {
+        this.initialization();
     }
 }

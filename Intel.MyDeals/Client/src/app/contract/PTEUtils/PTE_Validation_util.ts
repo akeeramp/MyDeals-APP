@@ -238,6 +238,16 @@ export class PTE_Validation_Util {
         }
         return isShowStopperError;
     }
+    static validateTenderDashboardDeal(data, curPricingTable, groups, templates) {
+        let isShowStopperError = DE_Validation_Util.validateTenderDahsboardDeals(data, templates);
+        PTE_Common_Util.setWarningFields(data, curPricingTable);
+        if (data != null) {
+            for (var i = 0; i < data.length; i++) {
+                DE_Save_Util.savedWithWarning(data[i], groups, templates);
+            }
+        }
+        return isShowStopperError;
+    }
     static setToSame(data, elem) {
         _.each(data, (item) => {
             if (item[elem] != undefined && (item[elem] == null || item[elem] == '')) {

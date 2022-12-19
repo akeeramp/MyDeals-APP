@@ -10,7 +10,6 @@ export class dealEditorService {
     constructor(private httpClient: HttpClient) { }
 
     public apiBaseUrl = '/api/UserPreferences/';
-
     public getActions(category, subCategory) {
         const apiUrl: string = this.apiBaseUrl + 'Get/' + category + '/' + subCategory;
         return this.httpClient.get(apiUrl);

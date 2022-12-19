@@ -20,6 +20,29 @@ angular
                 }
 
             })
+
+            .state("tenderDashboard", {
+                url: "/tenderDashboard",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<app-tender-dashboard></app-tender-dashboard>'
+                    }
+                }
+            })
+
+            .state("advanceSearch", {
+                url: "/advanceSearch",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<app-advanced-search></app-advanced-search>'
+                    }
+                }
+            })
+
+
+
             //*****************poc items starts here*****************
             // this is no longer needed as all component we have now in screens
             // .state("mykendocontrol", {
@@ -428,6 +451,28 @@ angular
             })
             //********************* Admin route  ends here **************
 
+            // ********************* Advanced Search route  starts here ************** 
+            .state("gotoPS", {
+                url: "/gotoPS/:cid",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<goto-route></goto-route>',
+                    }
+                }
+            })
+
+            .state("gotoDeal", {
+                url: "/gotoDeal/:cid",
+                abstract: false,
+                views: {
+                    mainView: {
+                        template: '<goto-route></goto-route>',
+                    }
+                }
+            })
+            // ********************* Advanced Search route  ends here ************** 
+
 
             // ********************* Contract route  starts here ************** 
             .state("contractdetails", {
@@ -466,6 +511,8 @@ angular
                     }
                 }
             })
+
+            
 
             .state("tendermanager", {
                 url: "/tendermanager/:cid",

@@ -47,7 +47,8 @@ export class TenderFolioComponent {
     private newPricingTable;
     public spinnerMessageHeader = "Tender Folio";
     public spinnerMessageDescription = "Please wait while we load your Tender Folio.";
-
+    private isCopyTender: boolean = false;
+    private showCopyAlert: boolean = false;
     dismissPopup(): void {
         this.dialogRef.close();
     }
@@ -273,23 +274,76 @@ export class TenderFolioComponent {
         }
         const isCustDivsSelected = selectedCustDivs.length > 0 ? true : false;
         if (isCustDivsSelected) {
-            this.saveContractTender();
+            if (!this.isCopyTender)
+                this.saveContractTender();
+            else
+                this.copyTender()
         } else {
             //opens confirmation dialog to check for saving tender folio without any customer division selected
             if (this.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] == false && this.contractData.CUST_ACCNT_DIV == "") {
                 this.showCustDivAlert = true;
             }
             else {
-                this.saveContractTender();
+                if (!this.isCopyTender)
+                    this.saveContractTender();
+                else
+                    this.copyTender()
             }
         }
     }
 
     saveWithoutCustDivs() {
         this.showCustDivAlert = false;
-        this.saveContractTender();
+        if (!this.isCopyTender)
+            this.saveContractTender();
+        else
+            this.copyTender()
     }
 
+    copyTender() {
+        //this.setBusy("Copy Tender Folio", "Copying the Contract Information");
+        this.data.contractData.Customer = this.custSIDObj;
+        this.data.contractData.CUST_MBR_SID = this.custSIDObj.CUST_SID;
+        this.data.contractData.TITLE = this.tenderName;
+        this.data.contractData.displayTitle = this.tenderName;
+        let selectedCustDivs = [];
+        if (this.CUST_NM_DIV) {
+            selectedCustDivs = this.CUST_NM_DIV.map(data => data.CUST_DIV_NM);
+        }
+        this.data.contractData.CUST_ACCNT_DIV = selectedCustDivs.length > 0 ? selectedCustDivs.toString().replace(/,/g, '/') : "";
+        this.data.contractData.CUST_ACCNT_DIV_UI = selectedCustDivs.length > 0 ? selectedCustDivs : "";
+
+        var ct = [];
+        ct.push(this.data.contractData);
+        var objSetTypeCd = "";
+        _.each(this.templateData.ModelTemplates.PRC_TBL,
+            function (value, key) {
+                if (value._custom._active === true) {
+                    objSetTypeCd = key;
+                }
+            });
+
+        this.data.contractData["OBJ_SET_TYPE_CD_target"] = objSetTypeCd;
+        if (ct[0].DC_ID <= 0) ct[0].DC_ID = this.uid--;
+        this.dataService.copyTenderFolioContract(ct, this.data.copyItems.join()).subscribe((data) => {
+            if (data === undefined || data['CNTRCT'].length < 2) {
+                this.showCopyAlert = true;
+                    //this.setBusy("", "");
+                    return;
+                }
+            var id = data['CNTRCT'][1].DC_ID;
+            this.dialogRef.close(id);
+                //this.setBusy("", "");
+            },
+            (error) => {
+                this.loggerSvc.error("Could not create the contract.", error);
+                //this.setBusy("", "");
+            }
+        );
+    }
+    closeCopyAlert() {
+        this.showCopyAlert = false;
+    }
     closeCustDivsAlert() {
         this.showCustDivAlert = false;
     }
@@ -347,9 +401,18 @@ export class TenderFolioComponent {
         caseSensitive: false,
         operator: "startsWith",
     };
+    addCustomToTemplates() {
+        _.each(this.templateData['ModelTemplates']['PRC_TBL'], (value, key) => {
+            value._custom = {
+                "ltr": value.name[0],
+                "_active": false
+            };
+        })
+    }
     ngOnInit() {
         this.isLoading = true;
         this.getAllCustomers();
+        this.isCopyTender = this.data.copyItems && this.data.copyItems.length > 0 ? true : false;
         this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
             this.templateData = response;
             this.contractData = this.templateData["ObjectTemplates"].CNTRCT.ALL_TYPES;
@@ -361,6 +424,8 @@ export class TenderFolioComponent {
                 this.custSIDObj = this.data.selectedCustomers[0];
                 this.getCustomerDivisions();
             }
+            if (this.isCopyTender)
+                this.addCustomToTemplates();
             this.isLoading = false;
         }, (err) => {
             this.isLoading = false;

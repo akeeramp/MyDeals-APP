@@ -146,6 +146,19 @@
         <span #contractType [title]="in_DataItem[in_Field_Name] == '' ? 'CONTRACT_TYPE is required' : ''"></span>
     </div>
 </div>
+<div *ngIf="(in_Field_Name =='EXCLUDE_AUTOMATION' && in_Is_Tender_Dashboard)">
+    <kendo-dropdownlist [data]="dropDowResponse[in_Field_Name]"
+                        [(ngModel)]="in_DataItem[in_Field_Name]" 
+                        (focusout)='onExcludeBlur(in_DataItem[in_Field_Name])'
+                        (valueChange)="valueChange(in_DataItem, in_Field_Name)" class="k-dropdown-design"
+                        ngbTooltip="EXCLUDE_AUTOMATION is required" 
+                          #excludeAutoToolTip="ngbTooltip" 
+                          tooltipClass="toolTipReq" 
+                          triggers="manual" 
+                          placement="bottom"
+                          container="body">
+    </kendo-dropdownlist>
+</div>
 <div *ngIf="in_Field_Name == 'EXPIRE_FLG'">
     <kendo-dropdownlist [data]="dropDowResponse[in_Field_Name]"
                         [(ngModel)]="in_DataItem[in_Field_Name]"
@@ -153,6 +166,17 @@
                         textField="text"
                         valueField="value" class="k-dropdown-design">
     </kendo-dropdownlist>
+</div>
+<div *ngIf="in_Field_Name == 'tender_actions' && bidActnsDropdownData.length > 0">
+    <kendo-dropdownlist [data]="bidActnsDropdownData"
+                        [(ngModel)]="selectedValue"
+                        (valueChange)="actionChange(in_DataItem)"
+                        [textField]="bidActnsDropDownText"
+                        [valueField]="bidActnsDropDownValue">
+    </kendo-dropdownlist>
+</div>
+<div *ngIf="in_Field_Name == 'tender_actions' && bidActnsDropdownData.length == 0">
+    <div id='cb_actn_{{in_DataItem.DC_ID}}' [innerHTML]="getBidActions(in_DataItem)"></div>
 </div>
 <div *ngIf="in_Field_Name == 'QLTR_BID_GEO'">
     <kendo-multiselect [data]="dropDowResponse[in_Field_Name]"

@@ -2,7 +2,7 @@
 import { colorDictionary } from "../../core/angular.constants";
 import { PTE_Config_Util } from "../PTEUtils/PTE_Config_util";
 export class DE_Load_Util {
-    static assignColSettings(wipTemplate, objSetTypeCd) {
+    static assignColSettings(wipTemplate, objSetTypeCd, isTenderDashboard = false) {//will recieve true when DE Grid Used in Tender Dashboard Screen
         var cnt = 0;
         var indxs = [];
         var columnKeys = Object.keys(opGridTemplate.templates[`${objSetTypeCd}`]);
@@ -11,7 +11,7 @@ export class DE_Load_Util {
         }
         for (var i = 0; i < wipTemplate.columns.length; i++) {
             let col = wipTemplate.columns[i];
-            if (col.field === "CUST_MBR_SID") {
+            if (col.field === "CUST_MBR_SID" && !isTenderDashboard) {// Customer column needs to be filterable in Tender Dashboard screen
                 col.filterable = false;
             } else if (PTE_Config_Util.dimPrdBktFields.indexOf(col.field) >= 0) {
                 col.sortable = false;
@@ -34,7 +34,7 @@ export class DE_Load_Util {
         wipTemplate.columns = wipTemplate.columns.sort((a, b) => (a.indx > b.indx) ? 1 : -1);
     }
 
-    static removeWipColumns(wipTemplate, isTenderContract) {
+    static removeWipColumns(wipTemplate, isTenderContract, isTenderDashboard) {
         for (var i = wipTemplate.columns.length - 1; i >= 0; i--) {
             // For tender deals hide these columns
             if (typeof wipTemplate.columns[i] !== "undefined" &&
@@ -46,7 +46,7 @@ export class DE_Load_Util {
                 wipTemplate.columns.splice(i, 1);
             }
             // For standard deal editor hide these columns
-            if (typeof wipTemplate.columns[i] !== "undefined" && opGridTemplate.hideForStandardDealEditor.indexOf(wipTemplate.columns[i].field) !== -1) {
+            if (typeof wipTemplate.columns[i] !== "undefined" && opGridTemplate.hideForStandardDealEditor.indexOf(wipTemplate.columns[i].field) !== -1 && !isTenderDashboard) {// should not remove standard DE columns when DE Grid used in Tender Dashboard
                 wipTemplate.columns.splice(i, 1);
             }
         }
@@ -60,9 +60,10 @@ export class DE_Load_Util {
                 delete wipTemplate.model.fields[opGridTemplate.hideForNonTender[i]];
             }
         }
-
-        for (var i = 0; i < opGridTemplate.hideForStandardDealEditor.length; i++) {
-            delete wipTemplate.model.fields[opGridTemplate.hideForNonTender[i]];
+        if (!isTenderDashboard) {// should not remove standard DE columns when DE Grid used in Tender Dashboard
+            for (var i = 0; i < opGridTemplate.hideForStandardDealEditor.length; i++) {
+                delete wipTemplate.model.fields[opGridTemplate.hideForStandardDealEditor[i]];
+            }
         }
     }
 

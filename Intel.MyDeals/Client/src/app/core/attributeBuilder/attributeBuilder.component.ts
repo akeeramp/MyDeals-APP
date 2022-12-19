@@ -1,0 +1,587 @@
+﻿import { Component, ViewEncapsulation, Input, AfterViewInit, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
+import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
+import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service';
+import { logger } from "../../shared/logger/logger";
+import { userPreferencesService } from "../../shared/services/userPreferences.service";
+import { List } from 'linqts';
+import { forkJoin, from } from 'rxjs';
+import * as _ from 'underscore';
+import { isArray } from 'underscore';
+
+@Component({
+    selector: "attribute-builder-angular",
+    templateUrl: "Client/src/app/core/attributeBuilder/attributeBuilder.component.html",
+    styleUrls: ['Client/src/app/core/attributeBuilder/attributeBuilder.component.css'],
+    encapsulation: ViewEncapsulation.None
+
+})
+
+export class AttributeBuilder implements OnInit {
+    @Input() attributeSource: any;
+    @Input() operatorSource: any;
+    @Input() types2operatorSource: any;
+    @Input() private cat: any;
+    @Input() private subcat: any;
+    @Input() customSettings: any[];
+    @Input() runSearch: boolean = false;
+    @Output() invokeSearchDatasource = new EventEmitter();
+    @Output() removeLoadingPanel = new EventEmitter();
+    @Output() rulesemit = new EventEmitter();
+    public availableAttrs = [];
+    public availAtrField = [];
+    public attributes: any = [];
+    public availableOperator = [];
+    public availableType2Operator = [];
+    public dropdownresponses: any;
+    public currentRule = '';
+    public myRules: any = [];
+    private selectedDashboardId;
+    private isDialogVisible = false;
+    private isKitDialog = false;
+    private isDialogPopup = false;
+    public title = '';
+    public isDuplicateTitle = false;
+    public resetRuleInitiated = false;
+    private currentRuleColumns: any;
+    public rules: any;
+    private selectedRuleItem: any
+    private attributeSettings: any;
+    private defaultSelection: boolean = true;
+    disabledropdowns: boolean;
+    public ruleToRun: any;
+    private isDefaultSelected: boolean = false;
+    private isDefaultChange: boolean = false;
+    private isDeleteRule: boolean = false;
+    private runRuleReqd:boolean = false;
+    @ViewChild("list") list;
+    
+    constructor(private pteService: pricingTableEditorService, private loggerSvc: logger, protected usrPrfrncssvc: userPreferencesService,) {
+        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
+        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+
+    }
+    loadMyRules() {
+        this.usrPrfrncssvc.getAction(this.cat, this.subcat).subscribe((data: any) => {
+            this.myRules = [];
+            if (data.length > 0) {
+                for (var r = 0; r < data.length; r++) {
+                    if (data[r].PRFR_KEY === "Rules") {
+                        this.myRules = JSON.parse(data[r].PRFR_VAL);
+                        this.rules = this.myRules;
+                    }
+                }
+                if (this.cat == 'TenderDealSearch') {//This checking req for Tender dashboard only
+                    var isValuePresent = false;
+                    if (!this.attributes) { this.loadDefaultAttributes(); }
+                    for (var i = 0; i < this.attributes.length; i++) {
+                        if (this.attributes[i].value.toString().length > 0) {
+                            isValuePresent = true;
+                        }
+                        else {
+                            isValuePresent = false;
+                            break;
+                        }
+                    }
+
+                    if (isValuePresent == false) {
+                        if (this.rules && this.rules.length > 0) {
+                            //Attribute Builder
+                            var flag = false;
+                            if (this.resetRuleInitiated == false && this.defaultSelection) {
+                                for (var rulesCounter = 0; rulesCounter < this.rules.length; rulesCounter++) {
+                                    //Calling RuleEngine Setter
+                                    if (this.rules[rulesCounter].default == true) {
+                                        this.sleepAndResetDDL(this.rules[rulesCounter].title);
+                                        this.selectedRuleItem = this.rules[rulesCounter].title;
+                                        flag = true;
+                                        this.isDefaultSelected = true;
+                                        this.updateRules(this.rules[rulesCounter].rule);
+                                        this.ruleToRun = this.rules[rulesCounter];
+                                        break;
+                                    }
+                                }
+                            }                           
+                        }
+                        else {
+                            this.resetRuleInitiated = false;
+                        }
+                        if (flag == false && this.defaultSelection) {
+                            this.resetRuleInitiated = false;
+                            this.sleepAndResetDDL();
+                        }
+                    } else {
+                        this.sleepAndResetDDL();
+                    }
+                }
+            }
+            if (this.cat != "TenderDealSearch")
+            this.rulesemit.emit(this.rules);
+            this.removeLoadingPanel.emit();
+        });
+    }
+    async onRuleSelect(dataItem) {
+        if (dataItem && !this.isDefaultChange && !this.isDeleteRule) {
+            await this.updateRules(dataItem.rule);
+            this.runRule();
+            this.currentRule = dataItem.title;
+            this.currentRuleColumns = dataItem.columns;
+        }
+        else {
+            this.currentRule = "";
+            this.currentRuleColumns = "";
+        }
+        if (this.isDefaultChange || this.isDeleteRule) {
+            if (this.currentRule == "")//if its default change or delete tule event we should not trigger rule selection
+                this.ruleToRun = undefined;
+            else {
+                this.ruleToRun = this.rules.filter(x => x.title === this.currentRule)[0];
+            }
+            this.isDeleteRule = false;
+            this.isDefaultChange = false;
+        }
+        if (this.cat == 'DealSearch') this.ruleToRun = this.rules.filter(x => x.title === this.currentRule)[0];
+    }
+    sleepAndResetDDL(title?) {
+        if (title) {
+            this.ruleToRun = this.rules.filter(x => x.title === title)[0];
+            this.currentRule = title;
+            this.currentRuleColumns = this.ruleToRun.columns;
+        }
+        else {
+            this.ruleToRun = undefined;
+            this.currentRule = '';
+            this.currentRuleColumns = '';
+        }
+    }
+    updateRules(rulesData) {
+        //if (this.cat == "TenderDealSearch") {
+            this.attributes=[];
+            _.each(rulesData, (customRule) => {
+                let field = this.availableAttrs.filter(x => x.field == customRule.field)[0];
+                let operators = this.getOperator(field);
+                let selectedop = operators.filter(x => x.operator == customRule.operator)[0];
+                let lookupval = [];
+                let selectelookupval;
+                if (field.lookups != undefined && field.lookups != null && field.lookups.length > 0) {
+                    lookupval = this.getlookupvalues(field);
+                    selectelookupval = customRule.value
+                } else
+                    if (field.lookupUrl != undefined && field.lookupUrl != null && field.lookupUrl.length > 0) {
+                        lookupval = this.dropdownresponses[field.field];
+                    if (field.feild == "Customer.CUST_NM") selectelookupval = lookupval.filter(x => x.CUST_SID == selectelookupval);
+                    }
+
+                this.attributes.push({
+                    dropDown: lookupval.length == 0 ? [] : lookupval,
+                    field: customRule.field,
+                    operator: selectedop ? selectedop.operator : this.availableOperator[0].operator,
+                    opvalues: operators,
+                    selectedField: field,
+                    selectedOperator: selectedop ? selectedop : this.availableOperator[0],
+                    selectedValues: selectelookupval != undefined ? selectelookupval : field.type == "number" ? parseInt(customRule.value) : (field.type == "money" || field.type == "numericOrPercentage") ? parseFloat(customRule.value) : customRule.value,
+                    subType: "",
+                    type: field.type,
+                    value: selectelookupval != undefined ? selectelookupval : field.type == "number" ? parseInt(customRule.value) : (field.type == "money" || field.type == "numericOrPercentage") ? parseFloat(customRule.value) : customRule.value,
+                    valueType: "",
+                    values: field.type == "number" ? parseInt(customRule.value) : (field.type == "money" || field.type == "numericOrPercentage") ? parseFloat(customRule.value) : customRule.value
+                })
+            })
+        //}
+    }
+    async loadDefaultAttributes() {
+        if (this.availableAttrs.length === 0) {
+            this.availableAttrs = this.attributeSource.sort((a,b)=>a.title>b.title? 1:-1);
+            this.availableOperator = this.operatorSource;
+            this.availableType2Operator = this.types2operatorSource;
+            for (let i = 0; i < this.attributeSource.length; i++) {
+                this.availAtrField.push(this.attributeSource[i].field);
+            }
+        }
+        if (this.cat == "DealSearch") {
+            this.disabledropdowns = false;
+            this.attributes = [{
+                dropDown: [],
+                field: '',
+                operator: this.availableOperator[0].operator,
+                opvalues: [],
+                selectedField: {},
+                selectedOperator: {},
+                selectedValues: [],
+                subType: "",
+                type: this.availableAttrs[0].type,
+                value: "",
+                valueType:"",
+                values: []
+            }]
+        }
+        else
+        {
+            this.disabledropdowns = true;
+            this.updateRules(this.customSettings);
+        }
+
+    }
+
+    getOperator(dataItem) {
+        const ops = this.availableType2Operator.filter(x => x.type === dataItem.type).length > 0 ? this.availableType2Operator.filter(x => x.type === dataItem.type)[0].operator : ''
+        const opvalues = [];
+        for (let i = 0; i < ops.length; i++) {
+            const val = this.availableOperator.filter(x => x.operator === ops[i])
+            opvalues.push(val[0]);
+        }
+        
+        return opvalues;
+    }
+
+    getlookupvalues(dataItem) {
+        const vals = [];
+        dataItem.lookups.forEach((item) => {
+            vals.push(item)
+        });
+        return vals;
+    }
+
+    async getLookupVals() {
+        let values: any = {};
+        this.availableAttrs.forEach((row) => {
+            if ((row.type == 'list' || row.type == 'singleselect') && row.lookupUrl != undefined) {
+                values[`${row.field}`] = this.pteService.readDropdownEndpoint(row.lookupUrl);
+            }
+        });
+        let result = await forkJoin(values).toPromise().catch((err) => {
+            this.loggerSvc.error('pricingTableEditorComponent::getAllDrowdownValues::service', err);
+        });
+
+        if (result != undefined) {
+            this.dropdownresponses = result;
+        }
+
+    }
+
+    addRow(index) {
+        this.attributes.splice(index + 1, 0, {
+            field: '',
+            operator: "",
+            subType: null,
+            type: "",
+            value: "",
+            valueType: []
+        });
+    }
+    removeRow(dataItem, index) {
+        if (index > 0) {
+            this.attributes.splice(index, 1);
+        }
+        if (index == 0) {
+            dataItem.selectedField = [];
+            dataItem.field = '';
+            dataItem.type = '';
+            dataItem.selectedValues = [];
+            dataItem.value = ''
+            this.valueChange(dataItem, index);
+        }
+    }
+
+    enableSaveRules() {
+        if (this.cat == 'TenderDealSearch') return true;
+        else if (this.attributes[0].selectedValues != undefined && (this.attributes[0].selectedValues.length > 0 || this.attributes[0].value != ''))
+            return true;
+        else return false;
+    }
+    async valueChange(dataItem, index, action?: any) {
+        let ops = this.availableType2Operator.filter(x => x.type === dataItem.type).length > 0 ? this.availableType2Operator.filter(x => x.type === dataItem.type)[0].operator : ''
+        let opvalues = [];
+        for (let i = 0; i < ops.length; i++) {
+            let val = this.availableOperator.filter(x => x.operator === ops[i])
+            opvalues.push(val[0]);
+        }
+        let selectedOperator = opvalues.filter(x => x.operator === "=")[0];
+        Object.assign(this.attributes[index], {
+            opvalues: opvalues,
+            selectedOperator: selectedOperator
+        })
+        if (dataItem.type == 'list') {
+            if (dataItem.lookups != undefined) {
+                if (dataItem.field == "GEO_COMBINED" || dataItem.field == "HOST_GEO") {
+                    Object.assign(this.attributes[index], { dropDown: dataItem.lookups })
+                }
+                else {
+                    let vals = [];
+                    dataItem.lookups.forEach((item) => {
+                        vals.push(item)
+                    });
+                    Object.assign(this.attributes[index], {
+                        dropDown: vals
+                    })
+                }
+            } else {
+                Object.assign(this.attributes[index], {
+                    dropDown: this.dropdownresponses[dataItem.field]
+                });
+            }
+        }
+        this.attributes[index].field = dataItem.field;
+        this.attributes[index].operator = opvalues[0].operator;
+        this.attributes[index].subType = null;
+        this.attributes[index].type = dataItem.type;
+        this.attributes[index].value = '';
+        this.attributes[index].valueType = null;
+        this.attributes[index].values = [];
+        this.attributes[index].selectedValues = [];
+        Object.assign(this.attributes[index], {
+            selectedField: dataItem,
+            seletedOperator: selectedOperator
+        });
+    }
+
+    dataChange(idx, dataItem, selector, data?) {
+       
+        this.attributes[idx].values = [];
+        if (selector == 'operator') {
+            this.attributes[idx].operator = dataItem.selectedOperator.operator;
+        } else if (selector == 'numerictextbox') {
+            data = dataItem.value;
+        } else if (selector == 'textbox') {
+            data = dataItem.value;
+        } else if (selector == 'datePicker') {
+            data = new Date(dataItem.value).toISOString();
+            
+        } else {
+            this.attributes[idx].value = data
+        }
+        this.attributes[idx].values.push(data);
+     }
+
+    dataChangeMulti(data, i, dataItem, selector) {        
+        this.attributes[i].values = [];
+        data.forEach((item) => {
+            this.attributes[i].values.push(item);
+            this.attributes[i].value = this.attributes[i].values;
+        })
+    }
+    public filterSettings: DropDownFilterSettings = {
+        caseSensitive: false,
+        operator: "contains",
+    };
+    saveRule() {
+        let rulesData = this.generateCurrentRule();
+        if (!this.validateRules()) return;
+
+        if (this.currentRule === "") {
+            this.runRuleReqd = true;
+            this.saveAsRule();
+            return;
+        }
+        else {
+            this.runRuleReqd = false;
+            this.myRules.map(x => {
+                if (x.title == this.currentRule) {
+                    x.rule = rulesData;
+                    x.columns = this.cat == 'TenderDealSearch' ? '' : '';
+                    x.default = false;
+                }
+            })
+        }
+        window.localStorage.selectedDashboardId = this.selectedDashboardId;
+        this.usrPrfrncssvc.updateAction(this.cat, this.subcat, "Rules", this.myRules).subscribe((response: any) => {
+            this.loggerSvc.success("The search rule saved.");
+            this.rules = this.myRules;
+            this.rulesemit.emit(this.rules);
+            this.sleepAndResetDDL(this.title);
+            if (this.runRuleReqd)
+                this.runRule();
+            this.title = '';
+        }, (error) => {
+            this.loggerSvc.error("Unable to save Search Rule.", error);
+        });
+
+    }
+    validateRules() {
+        // global search check is allowed
+        if (this.isGlobal()) return true;
+
+        var invalidRows = this.attributes.filter(x => x.field === "" || x.operator === "" || x.value === undefined || x.value === "" || x.value === null || x.value === [] || x.value.length == 0)
+        if (invalidRows.length > 0) {
+            this.isDialogVisible = true;
+            return false;
+        }
+
+        return true;
+    }
+    isGlobal() {
+        return (this.attributes.length === 1 &&
+            this.attributes.field === undefined &&
+            this.attributes.operator === undefined &&
+            this.attributes.value === undefined);
+    }
+    saveAsRule() {
+        if (!this.validateRules()) return;
+        this.isKitDialog = true;     
+    }
+    closeKendoAlert() {
+        this.isDialogVisible = false
+    }
+    saveAsRuleOkay() {
+        if (this.title === "") {
+            this.isDialogPopup = true;
+            this.isKitDialog = false;
+
+        } else {
+            const duplicateTitle = this.myRules.filter(x => x.title.toUpperCase() === this.title.toUpperCase());
+            if (duplicateTitle.length > 0) {
+                this.isDuplicateTitle = true;
+                this.isKitDialog = false;
+            } else {
+                this.myRules.push({
+                    title: this.title,
+                    rule: this.generateCurrentRule(),
+                    columns: this.cat == 'TenderDealSearch' ? '' : '',
+                    default: false
+                });
+                this.currentRule = this.title;
+                this.saveRule();
+                this.isKitDialog = false;
+            }
+        }
+
+    }
+    runRule() {
+        let ruleslist = this.generateCurrentRule();
+        if (!this.validateRules()) return;
+        this.usrPrfrncssvc.updateAction(this.cat, this.subcat, "CustomSearch", ruleslist).subscribe((response: any) => {
+            if (response) {
+                var runRule = {
+                    rule: this.attributes
+                }
+                this.invokeSearchDatasource.emit(runRule)
+            }
+        }, (error) => {
+            this.loggerSvc.error("Unable to save Custom Search Options.", error);
+        });
+
+    }
+    setDefaultRule(dataItem) {
+        var selectionType;
+        this.isDefaultChange = true;
+        for (var itmCnt = 0; itmCnt < this.rules.length; itmCnt++) {
+            if (this.rules[itmCnt].title == dataItem.title) {
+                this.rules[itmCnt]["default"] = !this.rules[itmCnt]["default"];
+                selectionType = !this.rules[itmCnt]["default"];
+            }
+            else {
+                this.rules[itmCnt]["default"] = false;
+            }
+        }       
+        this.usrPrfrncssvc.updateAction(this.cat, this.subcat, "Rules", this.rules)
+            .subscribe((response) =>{
+                if (selectionType == false) {
+                    this.loggerSvc.success("The rule saved as Default", "Saved");
+                }
+                else if (selectionType == true) {
+                    this.loggerSvc.success("Default selection was removed", "Saved");
+                }
+
+            },
+            (error) => {
+                this.loggerSvc.error("Unable to make Default Rule.", error);
+            });
+    }
+
+    deleteSaveRule(dataItem?) {
+        this.isDeleteRule = true;
+        for (var itmCnt = 0; itmCnt < this.rules.length; itmCnt++) {
+            if (dataItem != undefined && this.rules[itmCnt].title == dataItem.title) {
+                this.rules.splice(itmCnt, 1);
+                if (this.ruleToRun.title && this.ruleToRun.title == dataItem.title) {
+                    this.sleepAndResetDDL();
+                    this.clearRule();
+                }
+            } else
+                if (dataItem == undefined && this.rules[itmCnt].title == this.currentRule) {
+                    this.rules.splice(itmCnt, 1);
+                    if (this.ruleToRun.title && this.ruleToRun.title == this.currentRule) {
+                        this.sleepAndResetDDL();
+                        this.clearRule();
+                    }
+                    this.rulesemit.emit(this.rules);
+                }
+        }
+
+        this.usrPrfrncssvc.updateAction(this.cat, this.subcat, "Rules", this.rules)
+            .subscribe((response) => {
+                this.loggerSvc.success("Rule was removed", "Saved");
+            },
+                (error) => {
+                    this.loggerSvc.error("Unable to make Delete Rule.", error);
+                });
+    }
+    generateCurrentRule() {
+        
+        return new List<any>(this.attributes)
+            .Select(x => {
+                return {
+                    type: x.type,
+                    field: x.field,
+                    operator: x.operator,
+                    value: x.type !== "list" && isArray(x.values) ? x.values.join().toString() : x.values
+                };
+            }).ToArray();
+    }
+    saveAsRuleClose() {
+        this.isKitDialog = false;
+        this.title = "";
+    }
+    submitDialog() {
+        this.isDialogPopup = false;
+        this.isKitDialog = true;
+    }
+    closePopup() {
+        this.isDialogPopup = false;
+        this.isKitDialog = false
+    }
+    duplicateDataDialog() {
+        this.isKitDialog = true;
+        this.isDuplicateTitle = false;
+    }
+    duplicateDataDialogClose() {
+        this.isDuplicateTitle = false;
+    }
+    async clearRule() {
+        if (this.cat == 'TenderDealSearch') {
+            this.attributes = [];
+            await this.loadDefaultAttributes();
+            this.resetRuleInitiated = true;
+            this.sleepAndResetDDL();
+        }
+        else {
+            this.attributes = [];
+            this.attributes[0] = {
+                dropDown: [],
+                field: "",
+                operator: "",
+                opvalues: [],
+                selectedField: {},
+                selectedOperator: {},
+                selectedValues: [],
+                subType: "",
+                type: "",
+                value: "",
+                valueType: "",
+                values: []
+            };
+            this.currentRule = "";
+            this.currentRuleColumns = [];
+        }
+
+    }
+
+    async ngOnInit() {
+        if (this.runSearch)
+            this.defaultSelection = false;
+        await this.loadDefaultAttributes();
+        await this.getLookupVals();
+        await this.loadMyRules();
+        if (this.runSearch)
+            this.runRule();
+    }
+}

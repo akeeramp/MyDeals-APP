@@ -37,10 +37,11 @@ export class dealToolsComponent{
     @Input() isQuoteLetterEnabled;
     @Input() isDeleteEnabled;
     @Input() isManageTab;
+    @Input() in_Is_Tender_Dashboard: boolean = false;//this will passed as true if its used in Tender Dashboard Screen
     @Output() iconSaveUpdate: EventEmitter<any> = new EventEmitter<any>();
     @Output() refreshContract: EventEmitter<any> = new EventEmitter<any>();
     @Output() reloadFn = new EventEmitter<any>();
-
+    @Output() removeDeletedRow = new EventEmitter<any>();
     public isSalesForceDeal;
     public isPublishable;
     public isDaUser;  
@@ -132,8 +133,10 @@ export class dealToolsComponent{
         });
 
         this.objTypeSid = 5; //WIP deals
-        
-        this.isTenderContract = this.contractData["IS_TENDER"] == "1" ? true : false;
+        if (!this.in_Is_Tender_Dashboard)// If not Tender Dashboard Screen, check deal is tende ror not from contract data 
+            this.isTenderContract = this.contractData["IS_TENDER"] == "1" ? true : false;
+        else// Tender Dashboard always have tender deals only
+            this.isTenderContract = true;
         if(typeof this.isTenderContract !== 'undefined') {
             this.isTenderContract = (this.isTenderContract == true);
         }        
@@ -314,8 +317,17 @@ export class dealToolsComponent{
                     ids: [this.dataItem["DC_ID"]],
                     attribute: "NOTES",
                     value: this.dataItem["NOTES"]
-                };                    
-                    this.pteService.updateAtrbValue(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data).toPromise()
+                };
+                let custId, dcId;
+                if (!this.in_Is_Tender_Dashboard) {// If not Tender Dashboard Screen, take cust ID and contract ID from contract data 
+                    custId = this.contractData.CUST_MBR_SID;
+                    dcId = this.contractData.DC_ID;
+                }
+                else {//If Tender Dashboard, take cust ID and contract ID from dataItem
+                    custId = this.dataItem.CUST_MBR_SID;
+                    dcId = this.dataItem._contractId;
+                }
+                this.pteService.updateAtrbValue(custId, dcId, data).toPromise()
                         .then((output) => {
                             this.setBusy("Done", "Save Complete.", "", "");
                             setTimeout(() => {
@@ -436,33 +448,64 @@ export class dealToolsComponent{
         this.confirmDelete = true;
     }
     async deletePricingTableRow() {
-        this.closeDialogs();
-        this.setBusy("Deleting...", "Deleting the Pricing Table Row and Deal", "","");
-        this.dataItem._dirty = false;
-        let ptrId = this.dataItem.DC_PARENT_ID;
-        // Remove from DB first... then remove from UI
-        let response = await this.dataService.deletePricingTableRow(this.dataItem.CUST_MBR_SID, this.contractData.DC_ID, ptrId).toPromise().catch((response) => {
-            this.loggerSvc.error("Could not delete the Pricing Table " + ptrId, response, response.statusText);
-            this.setBusy("", "", "", "");
-        })
-        if (response.MsgType !== 1) {
-            this.setBusy("Delete Failed", "Unable to Delete the Pricing Table", "Error", "");
-            setTimeout(() => {
+        if (!this.in_Is_Tender_Dashboard) {// If not Tender Dashboard Screen, delete Pricing table row
+            this.closeDialogs();
+            this.setBusy("Deleting...", "Deleting the Pricing Table Row and Deal", "", "");
+            this.dataItem._dirty = false;
+            let ptrId = this.dataItem.DC_PARENT_ID;
+            // Remove from DB first... then remove from UI
+            let response = await this.dataService.deletePricingTableRow(this.dataItem.CUST_MBR_SID, this.contractData.DC_ID, ptrId).toPromise().catch((response) => {
+                this.loggerSvc.error("Could not delete the Pricing Table " + ptrId, response, response.statusText);
                 this.setBusy("", "", "", "");
-            }, 4000);
-            return;
+            })
+            if (response.MsgType !== 1) {
+                this.setBusy("Delete Failed", "Unable to Delete the Pricing Table", "Error", "");
+                setTimeout(() => {
+                    this.setBusy("", "", "", "");
+                }, 4000);
+                return;
+            }
+            let row = null;
+            for (var d = 0; d < this.gridData.length; d++) {
+                if (this.gridData[d].DC_PARENT_ID === ptrId)
+                    row = this.gridData.splice(d, 1);
+            }
+            this.refreshContract.emit(true);
+            this.isBusy = false
+            this.loggerSvc.success("Delete Successful", "Deleted the Pricing Table Row and Deal");
+            //return to pte screen...call loadPTE() from pte component
+            if (this.gridData.length == 0) {
+                this.reloadFn.emit('');
+            }
         }
-        let row = null;
-        for (var d = 0; d < this.gridData.length; d++) {
-            if (this.gridData[d].DC_PARENT_ID === ptrId)
-                row = this.gridData.splice(d, 1);
-        }
-        this.refreshContract.emit(true);
-        this.isBusy = false
-        this.loggerSvc.success("Delete Successful", "Deleted the Pricing Table Row and Deal");
-        //return to pte screen...call loadPTE() from pte component
-        if (this.gridData.length == 0) {
-            this.reloadFn.emit('');
+        else {// If Tender Dashboard Screen, delete Pricing Strategy Id
+            this.closeDialogs();
+            this.setBusy("Deleting...", "Deleting Tender Deal " + this.dataItem.DC_ID + " information", "", "");
+            this.dataItem._dirty = false;
+            let psId = this.dataItem._parentIdPS;
+            let response = await this.dataService.deletePricingStrategyById(this.dataItem.CUST_MBR_SID, this.dataItem._contractId, psId).toPromise().catch((response) => {
+                this.loggerSvc.error("Could not delete the Tender Deal " + psId, response, response.statusText);
+                this.setBusy("", "", "", "");
+            })
+            if (response) {
+                if (response.MsgType !== 1) {
+                    this.setBusy("Delete Failed", "Unable to Delete the Pricing Table", "Error", "");
+                    setTimeout(() => {
+                        this.setBusy("", "", "", "");
+                    }, 4000);
+                    return;
+                }
+            }
+            for (var d = 0; d < this.gridData.length; d++) {
+                if (this.gridData[d]._parentIdPS === psId)
+                    this.gridData.splice(d, 1);
+            }
+            this.removeDeletedRow.emit(psId);
+            this.isBusy = false
+            this.loggerSvc.success("Delete Successful", "Deleted the tender Deal");
+            if (this.gridData.length == 0) {
+                this.reloadFn.emit('');
+            }
         }
     }
     openCancelDialog() {
@@ -474,17 +517,32 @@ export class dealToolsComponent{
     }
     actionWipDeal() {
         this.closeDialogs();
-        this.setBusy("Updating Wip Deal...", "Please wait as we update the Wip Deal!", "Info", true);
-        this.dataService.actionWipDeal(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, this.dataItem, 'Cancel')
+        this.setBusy("Cancelling Wip Deal...", "Please wait as we cancel the Wip Deal!", "Info", true);
+        let custId, dcId;
+        if (!this.in_Is_Tender_Dashboard) {// If not Tender Dashboard Screen, take cust ID and contract ID from contract data 
+            custId = this.contractData.CUST_MBR_SID;
+            dcId = this.contractData.DC_ID;
+        }
+        else {// If Tender Dashboard Screen, take cust ID and contract ID from dataItem
+            custId = this.dataItem.CUST_MBR_SID;
+            dcId = this.dataItem._contractId;
+        }
+        this.dataService.actionWipDeal(custId, dcId, this.dataItem, 'Cancel')
             .subscribe((response: any) => {
                 setTimeout(() => {
+                    this.setBusy("Cancel Successful", "Reloading the Deal", "Success",true);
                     //After migrating tender dashboard, one condition needs to be added to not show message board for tender deals
-                    this.windowOpened = true;
-                    this.messages = response.Messages;
+                    if (!this.in_Is_Tender_Dashboard) {
+                        this.windowOpened = true;
+                        this.messages = response.Messages;
+                    }
+                    else {
+                        this.refreshContract.emit(true);
+                    }
                     this.setBusy("", "", "", "");
                 }, 50);
             }, (response)=> {
-                this.loggerSvc.error("Unable to update Wip Deal","Error",response);
+                this.loggerSvc.error("Unable to cancel Wip Deal","Error",response);
                 this.setBusy("", "","","");
             });
     }
@@ -499,8 +557,15 @@ export class dealToolsComponent{
         this.closeDialogs();
         this.setBusy("Rolling Back...", "Rolling Back the Pricing Table Row and Deal", "","");
         this.dataItem._dirty = false;
+        let dcId;
+        if (!this.in_Is_Tender_Dashboard) {// If not Tender Dashboard Screen, take contract ID from contract data 
+            dcId = this.contractData.DC_ID;
+        }
+        else {// If Tender Dashboard Screen, take contract ID from dataItem
+            dcId = this.dataItem._contractId
+        }
         // Remove from DB first... then remove from screen
-        this.dataService.rollbackPricingTableRow(this.dataItem.CUST_MBR_SID, this.contractData.DC_ID, this.dataItem.DC_PARENT_ID)
+        this.dataService.rollbackPricingTableRow(this.dataItem.CUST_MBR_SID, dcId, this.dataItem.DC_PARENT_ID)
             .subscribe((response: any) => {
                 if (response.MsgType !== 1) {
                     this.setBusy("Rollback Failed", "Unable to Rollback the Pricing Table", "Error","");
@@ -515,7 +580,7 @@ export class dealToolsComponent{
                 }, 4000);
                 this.refreshContract.emit(true);
             }, (response)=> {
-                this.loggerSvc.error("Could not Rollback the Pricing Table " + this.contractData.DC_ID, response, response.statusText);
+                this.loggerSvc.error("Could not Rollback the Pricing Table " + dcId, response, response.statusText);
                 this.setBusy("", "", "","");
             });                
     }

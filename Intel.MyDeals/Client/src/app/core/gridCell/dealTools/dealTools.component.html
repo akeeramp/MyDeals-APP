@@ -83,11 +83,12 @@
 
         <!-- Cancel/Rollback/Delete icon -->
         <div class='fl md-icon' *ngIf="isDeleteEnabled && editable === true && (dataItem._parentCnt === undefined || dataItem._parentCnt <= 1)">
-            <i *ngIf="(!dataItem._actionsPS || !dataItem._actionsPS.Cancel) && dataItem.WF_STG_CD !== 'Cancelled'" class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;" title="Unable to delete this deal at this stage"></i>
-            <span *ngIf="dataItem?.TRKR_NBR">
-                <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && !dataItem.TRKR_NBR.hasOwnProperty('20___0') && !alertDelete && !confirmDelete" class='intelicon-trash-solid' style="font-size: 20px !important; cursor: pointer;"
+            <i *ngIf="(!dataItem._actionsPS || !dataItem._actionsPS.Cancel) && dataItem.WF_STG_CD !== 'Cancelled'" class='intelicon-trash-solid' style="font-size: 20px !important; color: #e7e7e8;"
+               title="Unable to delete this deal at this stage"></i>
+            <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && !dataItem.TRKR_NBR.hasOwnProperty('20___0')" class='intelicon-trash-solid' style="font-size: 20px !important; cursor: pointer;"
                title="Click to delete this deal" (click)="openDeleteDialog()"></i>
-            </span>
+            <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && dataItem.TRKR_NBR.hasOwnProperty('20___0') && dataItem.IN_REDEAL !== '1' && dataItem.PROGRAM_PAYMENT === 'Backend'" class='intelicon-no-access' style="font-size: 20px !important; cursor: pointer;"
+               title="Click to Cancel this deal" (click)="openCancelDialog()"></i>
             <kendo-dialog *ngIf="alertDelete" (close)="closeDialogs()" [maxWidth]="440" [height]="245">
                 <div class="kendoAlert" style="padding: 2.4em;">
                     <h4 style="margin-top: 22px !important; font-size: 24px !important;">Unable to Delete</h4>
@@ -107,11 +108,7 @@
                     <button kendoButton class="k-button cancelDelete cancel-btn-pop-up line-height-unset" style="width: 50% !important;" (click)="closeDialogs()">CANCEL</button>
                 </kendo-dialog-actions>
             </kendo-dialog>
-            <span *ngIf="dataItem?.TRKR_NBR">
-            <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && dataItem.TRKR_NBR.hasOwnProperty('20___0') && dataItem.IN_REDEAL !== '1' && dataItem.PROGRAM_PAYMENT === 'Backend' && !alertCancel && !confirmCancel" class='intelicon-no-access' style="font-size: 20px !important; cursor: pointer;"
-               title="Click to Cancel this deal" (click)="openCancelDialog()"></i>
-            </span>
-            <kendo-dialog *ngIf="alertCancel" (close)="closeDialogs()" [maxWidth]="440" [height]="245">
+           <kendo-dialog *ngIf="alertCancel" (close)="closeDialogs()" [maxWidth]="440" [height]="245">
                 <div class="kendoAlert" style="padding: 2.4em;">
                     <h4 style="margin-top: 22px !important; font-size: 24px !important;">Unable to Cancel</h4>
                     <p>You cannot cancel multiple deals as a single operation.<br>Please uncheck all deals before trying to cancel deals.</p>
@@ -131,9 +128,9 @@
                 </kendo-dialog-actions>
             </kendo-dialog>
             <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD === 'Hold' && dataItem.HAS_TRACKER === '1' && dataItem.IN_REDEAL === '1'" class='fa fa-undo' style="font-size: 20px !important; color: #e7e7e8;"
-                title="Remove deal from Hold before Rollback is allowed"></i>
+               title="Remove deal from Hold before Rollback is allowed"></i>
             <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && (dataItem.WF_STG_CD !== 'Cancelled' && dataItem.WF_STG_CD !== 'Hold') && dataItem.HAS_TRACKER === '1' && dataItem.IN_REDEAL === '1' && !confirmRollback && !alertRollback"
-                class='fa fa-undo' style="font-size: 20px !important; cursor: pointer;" title="Click to Rollback this deal" (click)="openRollBackDialog()"></i>
+               class='fa fa-undo' style="font-size: 20px !important; cursor: pointer;" title="Click to Rollback this deal" (click)="openRollBackDialog()"></i>
             <kendo-dialog *ngIf="alertRollback" (close)="closeDialogs()" [maxWidth]="440" [height]="245">
                 <div style="padding: 2.4em;">
                     <h4 style="margin-top: 22px !important; font-size: 24px !important;">Unable to Rollback</h4>

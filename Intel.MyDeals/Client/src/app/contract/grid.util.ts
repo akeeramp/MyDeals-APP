@@ -130,6 +130,8 @@ export class GridUtil {
         if ((values == null || values == undefined || values.length == 0) && formattedMessage == '') {
             passedData.PASSED_VALIDATION = "Complete";
         }
+        else if (values.length > 0)
+            passedData.PASSED_VALIDATION = "Dirty";
         var classNm = "";
         if (passedData.PASSED_VALIDATION === undefined && passedData.PASSED_VALIDATION === "")
             classNm = "intelicon-protection-solid";
@@ -218,8 +220,9 @@ export class GridUtil {
     }
     static uiReadonlyControlWrapper = function (passedData, field) {
         var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
-        if (passedData[field] != undefined && passedData[field] != null)
+        if (passedData[field] != undefined && passedData[field] != null && passedData[field] != 'CNTRCT_OBJ_SID')
             tmplt += '    <div class="ng-binding vert-center">' + passedData[field] + '</div>';
+        else if (passedData[field] == 'CNTRCT_OBJ_SID') tmplt += '    <div class="ng-binding vert-center gridCellSpan" title="FolioID">' + passedData[field] + '</div>';
         tmplt += '</div>';
         return tmplt;
     }
@@ -805,6 +808,14 @@ export class GridUtil {
                             else if (templateHtml.includes("Customer.")) {
                                 templateHtml = templateHtml.replace("#=Customer.", "").replace("#", "");
                                 newHtmlVal = dataItem["Customer"][templateHtml];
+                            }
+                            else if (templateHtml.includes("CAP.")) {
+                                templateHtml = templateHtml.replace("#=CAP.", "").replace("#", "");
+                                newHtmlVal = dataItem["CAP"][templateHtml];
+                            }
+                            else if (templateHtml.includes("ECAP_PRICE.")) {
+                                templateHtml = templateHtml.replace("#=ECAP_PRICE.", "").replace("#", "");
+                                newHtmlVal = dataItem["ECAP_PRICE"][templateHtml];
                             }
                             else {
                                 templateHtml = templateHtml.replace("#=", "").replace("#", "");

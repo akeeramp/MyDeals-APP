@@ -1,0 +1,56 @@
+﻿import { logger } from "../../../shared/logger/logger";
+import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+import { Component, ViewEncapsulation, Inject } from "@angular/core";
+import { pricingTableservice } from "../../pricingTable/pricingTable.service";
+
+@Component({
+    selector: "tender-mct-pct-modal",
+    templateUrl: "Client/src/app/contract/ptModals/tenderDashboardModals/tenderMCTPCTModal.component.html",
+    encapsulation: ViewEncapsulation.None
+})
+export class tenderMCTPCTModalComponent {
+    constructor(private loggerSvc: logger, public dialogRef: MatDialogRef<tenderMCTPCTModalComponent>,
+        @Inject(MAT_DIALOG_DATA) public data, private pricingTableSvc: pricingTableservice) {
+        dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG
+    }
+    private c_Id: any;
+    private isMeetComp: boolean = false;
+    private selLnav: string = "pctDiv";
+    private contractData: any;
+    private UItemplate: any;
+    private selectedTab: number = 0;
+    private modifieddata: any;
+    loadAllContractDetails() {
+        //this.isLoading = true;
+        //this.setBusy("Loading...", "Loading data please wait", "Info", true);
+        this.pricingTableSvc.readContract(this.c_Id).subscribe((response: Array<any>) => {
+            if (response && response.length > 0) {
+                this.contractData = response[0];
+                this.contractData.PRC_ST = response[0].PRC_ST.filter(x => x.DC_ID == this.data.PRC_ST_OBJ_SID);
+            }
+            else {
+                this.loggerSvc.error('No result found.', 'Error');
+            }
+            //this.isLoading = false;
+        }, (error) => {
+           // this.isLoading = false;
+            this.loggerSvc.error('loadAllContractDetails::readContract:: service', error);
+        })
+
+    }
+    refreshMCTData(data) {
+        if (data.length > 0)
+            this.modifieddata = data;
+    }
+    closeWindow() {
+        this.dialogRef.close(this.modifieddata);
+    }
+    ngOnInit() {
+        this.c_Id = this.data.CNTRCT_OBJ_SID;
+        this.isMeetComp = this.data.isMeetComp;
+        if (!this.isMeetComp) {
+            this.loadAllContractDetails();
+            this.UItemplate = this.data.UItemplate;
+        }
+    }
+}

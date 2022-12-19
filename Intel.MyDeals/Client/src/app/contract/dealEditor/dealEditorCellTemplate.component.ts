@@ -12,6 +12,7 @@ import { GridUtil } from '../grid.util';
 import { PTE_Load_Util } from '../PTEUtils/PTE_Load_util';
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 import { ProductBreakoutComponent } from '../ptModals/productSelector/productBreakout/productBreakout.component';
+import { TenderDashboardGridUtil } from '../tenderDashboardGrid.util';
 
 @Component({
     selector: 'deal-editor-cell',
@@ -42,10 +43,11 @@ export class dealEditorCellTemplateComponent {
     @Input() in_DataItem: any = '';
     @Input() contract_Data: any = '';
     @Input() grid_Data: any = '';
+    @Input() in_Is_Tender_Dashboard: boolean = false;//will recieve true when DE Grid Used in Tender Dashboard Screen
     @Output() iconUpdate: EventEmitter<any> = new EventEmitter<any>();
     @Output() refresh_Contract_Data: EventEmitter<any> = new EventEmitter<any>();
     @Output() reLoad: EventEmitter<any> = new EventEmitter<any>();
-
+    @Output() removeDeletedRow = new EventEmitter<any>();
     private ecapDimKey = "20___0";
     private kitEcapdim = "20_____1";
     private subKitEcapDim = "20_____2";
@@ -353,9 +355,16 @@ export class dealEditorCellTemplateComponent {
     getProductSid(dimProduct, dimKey) {
         return GridUtil.getProductMbrSid(dimProduct, dimKey);
     }
+    getBidActions(data) {
+        return TenderDashboardGridUtil.getBidActions(data);
+    }
+    removeDeletedRowData(event) {
+        this.removeDeletedRow.emit(event);
+    }
     ngOnChanges() {
-        try{
-            this.in_DataItem.SALESFORCE_ID = this.contract_Data.SALESFORCE_ID;
+        try {
+            if (!this.in_Is_Tender_Dashboard)//if not Tender Dashboard Screen, take salesforce Id from contract data
+                this.in_DataItem.SALESFORCE_ID = this.contract_Data.SALESFORCE_ID;
             this.fields = (this.in_Deal_Type === 'VOL_TIER' || this.in_Deal_Type === 'FLEX') ? PTE_Config_Util.volTierFields : this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : PTE_Config_Util.densityFields;
             if (this.in_Field_Name === "CAP_INFO") {
                 this.fieldModifier = "CAP";
@@ -372,10 +381,3 @@ export class dealEditorCellTemplateComponent {
     }
 
 }
-
-angular.module("app").directive(
-    "dealEditorCell",
-    downgradeComponent({
-        component: dealEditorCellTemplateComponent,
-    })
-);

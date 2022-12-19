@@ -58,7 +58,7 @@ export class tenderManagerComponent {
             if (this.contractData.TENDER_PUBLISHED == '1') {
                 var dealType = this.contractData.PRC_ST[0].PRC_TBL[0].OBJ_SET_TYPE_CD;
                 var dealID = this.contractData.DC_ID;
-                document.location.href = "/advancedSearch#/tenderDashboard?DealType=" + dealType + "&FolioId=" + dealID + "&search";
+                document.location.href = "#/tenderDashboard?DealType=" + dealType + "&FolioId=" + dealID + "&search";
             }
             if (response[0].IS_TENDER && response[0].IS_TENDER == 0) window.location.href = "#/contractmanager/CNTRCT/" + this.c_Id + '/0/0/0';
             else if(this.contractData && this.contractData.PRC_ST && this.contractData.PRC_ST.length>0){

@@ -1,0 +1,328 @@
+﻿.Advance_secHeader {
+    border-bottom: 1px solid #e5e5e5 !important;
+    color: #c1c1c1 !important;
+    position: relative !important;
+}
+span.add_text_italic {
+    font-size: 12px !important;
+    color: #444444 !important;
+    font-weight: 200 !important;
+    font-style: italic !important;
+    position: relative !important;
+    margin-left: 10px !important;
+}
+span.search_res_text {
+    font-size: 20px !important;
+    color: #003C71 !important;
+    font-weight: 600 !important;
+    position: relative !important;
+    font-family:'Intel Clear' !important
+}
+.search-toolbar.advance_toolbar {
+    position: relative !important;
+}
+.search-toolbar {
+    height: 30px;
+    padding: 0 15px;
+}
+#horizontal-search {
+    border: 0 solid transparent !important;
+    height: 100% !important;
+    font-size: 12px !important;
+    margin-top: 5px !important;
+}
+
+#search-info-container {
+    width: 100%;
+    margin: auto;
+}
+
+.search-toolbar {
+    padding: 0 15px;
+}
+
+.search-toolbar h5, #search-info-container h5 {
+    margin-top: 0;
+    color: #003C71;
+    font-weight: 600;
+}
+
+#search-info-container label {
+    font-weight: normal;
+    font-size: 16px;
+    margin-right: 10px;
+    width: 110px;
+}
+
+#search-info-container .left-container {
+    width: 420px;
+    float: left;
+}
+
+#search-info-container .left-inner-container {
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 0 10px 20px 10px;
+}
+
+#search-info-container .right-container {
+    padding: 20px 10px 20px 900px;
+    margin-left: -460px;
+}
+
+#search-info-container .right-inner-container {
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 6px !important;
+    padding: 10px !important;
+    height: fit-content !important;
+}
+.search-container {
+    padding: 0 !important;
+}
+.search_style_tender {
+    color: #003C71 !important;
+    font-weight: 600 !important;
+    font-size: 20px !important;
+    font-family: 'Intel Clear' !important;
+}
+kendo-combobox#ruleDropDownList.advance_combo-select-saverule {
+    height: 30px !important;
+    position: relative !important;
+    font-size: 11px !important;
+    font-family: 'Intel Clear' !important;
+    width:100%;
+}
+kendo-combobox#ruleDropDownList.advance_combo-select-saverule:hover,
+kendo-combobox#ruleDropDownList.advance_combo-select-saverule:focus-within {
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+}
+.advance_combo-select-saverule span.k-dropdown-wrap {
+    border-color: #f0f0f0 !important;
+    color: #212529 !important;
+    background-color: #ffff !important;
+    border-radius: 0px !important;
+    box-shadow: none !important;
+}
+.advance_combo-select-saverule.k-combobox .k-dropdown-wrap .k-select {
+    border-left: 1px solid #f0f0f0 !important;
+    background-color: #cecece1f !important;
+    color: #727578 !important;
+}
+#admin-advance-grid.oppo-grids kendo-grid .k-grid-header table thead tr th {
+    font-size: 12px !important;
+    background-color: #fafafa !important;
+    white-space: normal !important;
+    border-right-color: #c4cfd4 !important;
+    border-left-color: #c4cfd4 !important;
+    vertical-align: bottom !important;
+    font-weight: 200 !important;
+    line-height: 1.1em !important;
+    font-family: 'Intel Clear', 'Arial' !important;
+    color: #1a3e6f !important;
+}
+#admin-advance-grid.oppo-grids .k-grid-header {
+    border-top: 1px solid #3343a4 !important;
+}
+.advance_icons_style{
+    position:relative !important;
+}
+i.intelicon-help.advance_helpicon {
+    font-size: 30px !important;
+    position: relative !important;
+}
+button.btn.btn-sm.ssToolbarBtn.advance_cleargrid {
+    position: relative !important;
+    color: #00AEEF !important;
+    line-height: 1.2em !important;
+    border: 0px solid transparent !important;
+}
+i.intelicon-cancel-filter-outlined.skyBlue.addd_cleargridbtn,
+i.intelicon-align-left.skyBlue.addd_cleargridbtn,
+i.intelicon-view-by-columns.addd_cleargridbtn,
+i.intelicon-ms-excel-outlined.skyBlue.add_iconstyle {
+    font-size: 30px !important;
+    border: 0px solid transparent;
+    color: #00aeef !important
+}
+td.hidden-sm.hidden-xs.text_grid_style {
+    left: 5px !important;
+    position: relative !important;
+    font-size:12px !important;
+    color:#00aeef !important;
+    text-align:left !important;
+}
+button.btn.btn-sm.ssToolbarBtn.advance_word_wrap {
+    position: relative !important;
+    line-height: 1.2em !important;
+    color:#00AEEF !important
+}
+span.k-icon.k-i-arrow-60-down.arrow_down_advance {
+    color: #000 !important;
+    position: relative !important;
+    left: 9px !important;
+    top: 2px !important;
+
+}
+span.k-icon.k-i-arrow-60-down.arrow_down_advance:hover {
+    color: #00AEEF !important;
+}
+button.btn.btn-sm.ssToolbarBtn.advance_col_option {
+    position: relative !important;
+    line-height: 1.2em !important;
+    color: #00AEEF !important
+}
+button.btn.btn-sm.ssToolbarBtn.advance_excelbtn {
+    position: relative !important;
+    line-height: 1.2em !important;
+    color: #00AEEF !important;
+    text-align: left !important
+}
+span.caret.down_add_style {
+    position: relative !important;
+    color: #000 !important;
+    font-size: 12px !important;
+    left: 10px !important;
+    top: 1px !important
+}
+.advance-show-hide-options {
+    color: #00AEEF !important;
+    cursor: pointer;
+    right: 20px !important;
+    font-size: 12px !important;
+    margin-top: 23px !important;
+    text-align: right;
+    padding: 0 10px 0;
+    position: absolute;
+    z-index: 9;
+}
+.advance-show-hide-options:hover {
+    color: #32589c !important
+}
+
+#admin-advance-grid a.k-grid-filter {
+    position: relative !important;
+    top: 0px !important;
+    right: -10px !important;
+    color: #010101 !important;
+    opacity: 0.45 !important;
+}
+
+#admin-advance-grid a.k-grid-filter:hover {
+    color: #00AEEF !important;
+    opacity: 1 !important
+}
+
+#admin-advance-grid span.k-column-title {
+    color: #1a3e6f !important;
+    font-weight: 200 !important;
+}
+
+span.advance_grid_class.diff-font-style.k-column-title {
+    font-weight: 500
+}
+kendo-numerictextbox.advance-numerictextbox-style.k-widget.k-numerictextbox {
+    position: relative !important;
+    height: 27px !important;
+    opacity: .7 !important;
+    background: #fafafa !important;
+    width: 183px !important;
+    box-shadow: none !important;
+}
+.advance-numerictextbox-style.k-numerictextbox .k-input {
+    padding: 9px 7px 12px !important;
+    font-size: 11px !important
+}
+span.advance-numerictextbox-style.k-numeric-wrap.k-numerictextbox {
+    border-color: #e7e5e5 !important;
+    background-color:#fff !important
+}
+.advance-numerictextbox-style.k-numerictextbox .k-numeric-wrap.k-state-focused {
+    box-shadow: none !important;
+    border-color: #e7e5e5 !important
+}
+.advance-numerictextbox-style.k-numerictextbox .k-select {
+    background-color: #fff !important;
+    border-left: transparent !important;
+    color: #585050bd !important;
+}
+kendo-numerictextbox.advance-numerictextbox-style.k-widget.k-numerictextbox:hover,
+kendo-numerictextbox.advance-numerictextbox-style.k-widget.k-numerictextbox:focus-within{
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+}
+#admin-advance-grid .k-grid td {
+    border-width: 0px 0px 0px 0px !important;
+    font-size: 12px !important;
+}
+
+.padding-design-horizontal {
+    padding-top: 45px;
+}
+
+.advance-poly {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    width: 100%;
+    position: relative;
+    padding: 0 15px 10px;
+}
+
+.dropper-combox {
+    width: 250px;
+    position: relative;
+}
+
+.icons-dropper-btn {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+}
+
+.advanced-search-btns-four .helpBtn {
+    position: relative;
+    top: 5px;
+    padding-left: 10px;
+}
+
+#admin-advance-grid.oppo-grids kendo-grid .k-grid-header table thead tr th[aria-label="Net Credited Volume"] span.k-column-title,
+#admin-advance-grid.oppo-grids kendo-grid .k-grid-header table thead tr th[aria-label="Total Qty Paid"] span.k-column-title {
+    font-weight: 400 !important;
+}
+
+.advance-margin-style {
+    margin-top: 15px;
+}
+
+.dealer-tender-comp {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+}
+
+.comp-anchor-dealer {
+    width: 100%;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    margin-top: 2px;
+}
+
+.click-adv.advSearch:hover {
+    color: #abadaf !important
+}
+
+.click-adv.advSearch {
+    cursor: pointer !important;
+    color: #0071c5 !important
+}
+
+.alignDeal {
+    position: relative;
+    bottom: 13px;
+    left: 28px;
+}
+
+.alignDealPopup {
+    position: relative;
+    top: 8px;
+}

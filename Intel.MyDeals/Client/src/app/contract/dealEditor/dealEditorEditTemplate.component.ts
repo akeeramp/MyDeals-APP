@@ -6,6 +6,8 @@ import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';
 import * as _ from 'underscore';
 import { TooltipDirective } from "@progress/kendo-angular-tooltip";
+import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
+import { TenderDashboardGridUtil } from '../tenderDashboardGrid.util';
 
 @Component({
     selector: 'deal-editor-edit',
@@ -21,9 +23,12 @@ export class dealEditorEditTemplateComponent {
     @Input() in_Deal_Type: string = '';
     @Input() in_DataItem: any = '';
     @Input() in_DropDownResponses: any;
-    @Input() in_DataSet: any
-    @Output() invalidDate = new EventEmitter<any>();
+    @Input() in_DataSet: any;
+    @Input() in_Is_Tender_Dashboard: boolean = false;//will recieve true when DE Grid Used in Tender Dashboard Screen
+    @Output() invalidField = new EventEmitter<any>();
+    @Output() bidActionsUpdated = new EventEmitter<any>();
     @ViewChild("dealDateToolTip", { static: false }) dealDateToolTip: NgbTooltip;
+    @ViewChild("excludeAutoToolTip", { static: false }) excludeAutoToolTip: NgbTooltip;
     @ViewChild(TooltipDirective)
     public toolTipDir: TooltipDirective;
     private message = "";
@@ -33,7 +38,11 @@ export class dealEditorEditTemplateComponent {
     private dim = "10___";
     private fields: any;
     private autoCorrect: boolean = true;
-    private decimals:number = 2;
+    private decimals: number = 2;
+    private bidActnsDropdownData: any = [];
+    private bidActnsDropDownText: string ="text";
+    private bidActnsDropDownValue: string = "value";
+    private selectedValue: any;
     translateDimKey(key) {
         switch (key) {
             case "20_____1":
@@ -111,11 +120,11 @@ export class dealEditorEditTemplateComponent {
     }
     onBlur(dealDate) {
         if (dealDate.status == "INVALID") {
-            this.invalidDate.emit(true);
+            this.invalidField.emit(true);
             this.dealDateToolTip.open();
         }
         else {
-            this.invalidDate.emit(false);
+            this.invalidField.emit(false);
             this.dealDateToolTip.close();
         }
     }
@@ -263,6 +272,26 @@ export class dealEditorEditTemplateComponent {
         else
             return '1';
     }
+    getBidActions(data) {
+        return TenderDashboardGridUtil.getBidActions(data);
+    }
+    actionChange(dataItem) {
+        let event = {
+            newValue: this.selectedValue[this.bidActnsDropDownValue],
+            dataItem: dataItem
+        }
+        this.bidActionsUpdated.emit(event);
+    }
+    onExcludeBlur(value) {
+        if (value == undefined || value == null || value == "") {
+            this.invalidField.emit(true);
+            this.excludeAutoToolTip.open();
+        }
+        else {
+            this.invalidField.emit(false);
+            this.excludeAutoToolTip.close();
+        }
+    }
     ngOnInit() {
         this.fields = (this.in_Deal_Type === 'VOL_TIER' || this.in_Deal_Type === 'FLEX') ? PTE_Config_Util.volTierFields : this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : PTE_Config_Util.densityFields;
         var keys = Object.keys(this.in_DropDownResponses.__zone_symbol__value);
@@ -275,12 +304,31 @@ export class dealEditorEditTemplateComponent {
                 this.dropDowResponse[`${keys[key]}`] = this.in_DropDownResponses.__zone_symbol__value[keys[key]].map(a => a.dropdownName);
         }
         this.message = this.in_Field_Name + " is not a valid date."
+        if (this.in_Field_Name == "tender_actions") {//dropdown values added for the field tender_actions(tender Dashboard)
+            let approveActions = [];
+            approveActions.push({ text: "Action", value: "Action" })  //placeholder dummy for a user non-selection
+            for (var actn in this.in_DataItem["_actionsPS"]) {
+                if (this.in_DataItem["_actionsPS"].hasOwnProperty(actn)) {
+                    if (this.in_DataItem["_actionsPS"][actn] == true && actn != "Cancel" && actn != "Hold") {   //the manage screen does not display checkboxes for Cancel or Hold so we will avoid that here as well
+                        approveActions.push({ text: actn, value: actn })
+                    }
+                }
+            }
+            if (approveActions.length > 1) {
+                this.bidActnsDropdownData = approveActions;
+                this.bidActnsDropDownText = "text";
+                this.bidActnsDropDownValue = "value";
+                this.selectedValue = { text: "Action", value: "Action" };
+            }
+            else if (this.in_DataItem["BID_ACTNS"].length > 1) {
+                var ind = this.in_DataItem["BID_ACTNS"].map(function (e) { return e.BidActnName; }).indexOf(this.in_DataItem["WF_STG_CD"]);
+                let bidActions = PTE_Common_Util.deepClone(this.in_DataItem["BID_ACTNS"]);  //we create a copy because we do not want what the dropdown to fully databind and potentially allow the user selection to have an effect on their possible bid actions
+                if (ind == -1) ind = 0;
+                this.bidActnsDropdownData = bidActions;
+                this.bidActnsDropDownText = "BidActnName";
+                this.bidActnsDropDownValue = "BidActnValue";
+                this.selectedValue = { BidActnName: this.in_DataItem["BID_ACTNS"][ind].BidActnName, BidActnValue: this.in_DataItem["BID_ACTNS"][ind].BidActnValue };
+            }
+        }
     }
 }
-
-angular.module("app").directive(
-    "dealEditorEdit",
-    downgradeComponent({
-        component: dealEditorEditTemplateComponent,
-    })
-);

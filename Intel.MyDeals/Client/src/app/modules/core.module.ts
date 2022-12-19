@@ -13,6 +13,8 @@ import { fileAttachmentComponent } from '../core/gridCell/fileAttachmentModal/fi
 import { dealPopupComponent } from '../core/dealPopup/dealPopup.component';
 import { dealPopupDockComponent } from '../core/dealPopup/dealPopupDock.component';
 import { dealPopupIconComponent } from '../core/dealPopup/dealPopupIcon.component';
+import { AttributeBuilder } from '../core/attributeBuilder/attributeBuilder.component'; 
+import { floatingActioncomponent } from '../core/floatingAction/floatingAction.component';
 
 export let coreComponents = [
     PingComponent,
@@ -29,5 +31,7 @@ export let coreComponents = [
     fileAttachmentComponent,
     dealPopupComponent,
     dealPopupDockComponent,
-    dealPopupIconComponent
+    dealPopupIconComponent,
+    AttributeBuilder,
+    floatingActioncomponent
 ]

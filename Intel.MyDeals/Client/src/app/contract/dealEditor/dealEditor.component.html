@@ -18,6 +18,69 @@
                         Save & Validate
                     </span>
                 </button>
+                <div class="fr" style="width:100%" *ngIf="in_Is_Tender_Dashboard">
+                    <floating-action (onAction)="actionClick($event)"></floating-action>
+                </div>
+                <div class="fr" style="margin-top:2px;margin-left: 0px; padding-left: 150px;">
+                    <button class="btn btn-sm ssToolbarBtn tender-grey-hover" *ngIf="in_Is_Tender_Dashboard && roleCanCopyDeals" (click)="copyDeals()" title="Copy selected deals.">
+                        <table>
+                            <tr>
+                                <td>
+                                    <i class="intelicon-copy-solid skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                                </td>
+                                <td class="hidden-md hidden-sm hidden-xs" style="font-family: 'Intel Clear'; font-size:11px; padding-left:5px; text-align:left; color:#00AEEF;">
+                                    Copy<br />Deals
+                                </td>
+                            </tr>
+                        </table>
+                    </button>
+                </div>
+                <div class="fr" style="margin-top: 2px; margin-left: 8px;">
+                    <button class="btn btn-sm ssToolbarBtn tender-grey-hover" *ngIf="in_Is_Tender_Dashboard" (click)="sendEmail()" title="Send email notification.">
+                        <table>
+                            <tr>
+                                <td>
+                                    <i class="intelicon-email-message-outlined skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                                </td>
+                                <td class="hidden-md hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                                    Email
+                                </td>
+                            </tr>
+                        </table>
+                    </button>
+                </div>
+                <div class="fr" style="margin-top: 2px;margin-left: 0px;" *ngIf="CAN_VIEW_COST_TEST && in_Is_Tender_Dashboard">
+                    <button class="btn btn-sm btn-skyblue-sm fl tender-grey-hover"
+                            (click)="executePctViaBtn()"
+                            title="Execute Price Cost Test and Meet Comp Test">
+                        <table>
+                            <tr>
+                                <td>
+                                    <i class="fa fa-refresh fa-fw iconRunPct" [ngClass]="isRunning ? 'fa-spin grn' : '' " aria-hidden="true" style="font-size: 30px; color: #00AEEF;"></i>
+                                </td>
+                                <td class="hidden-md hidden-sm hidden-xs" style="font-family: 'Intel Clear'; font-size:11px; padding-left:5px; text-align:left; color:#00AEEF;">
+                                    Run<br />Price Cost Test
+                                </td>
+                            </tr>
+                        </table>
+                    </button>
+                </div>
+                <div class="fr" style="margin-top: 2px; margin-left: 0px;" *ngIf="CAN_VIEW_MEET_COMP && in_Is_Tender_Dashboard">
+                    <button class="btn btn-sm btn-skyblue-sm fl tender-grey-hover"
+                            (click)="executePctViaBtn()"
+                            title="Execute Price Cost Test and Meet Comp Test">
+                        <table>
+                            <tr>
+                                <td>
+                                    <i class="fa fa-refresh fa-fw iconRunPct" [ngClass]="isRunning ? 'fa-spin grn' : '' " aria-hidden="true" style="font-size: 30px; color: #00AEEF;"></i>
+                                </td>
+                                <td class="hidden-md hidden-sm hidden-xs" style="font-family: 'Intel Clear'; font-size:11px; padding-left:5px; text-align:left; color:#00AEEF;">
+                                    Run<br />Meet Comp
+                                </td>
+                            </tr>
+                        </table>
+                    </button>
+                </div>
                 <div class="fr" style="margin-top: 2px;">
                     <button class="btn btn-sm ssToolbarBtn tool-hover" (click)="toggleWrap()" title="Toggle Word Wrap" [ngClass]="{'toggleSelect': wrapEnabled}" [ngStyle]="{'background-color' : wrapEnabled? '#f2f2f2': ''}">
                         <table>
@@ -31,7 +94,7 @@
                     </button>
                 </div>
 
-                <div class="fr" style="margin-top: 2px; margin-left:8px">
+                <div class="fr" style="margin-top: 2px; margin-left:8px" *ngIf="!in_Is_Tender_Dashboard">
                     <button class="btn btn-sm ssToolbarBtn tool-hover" title="Check for Overlapping Deals" (click)="openOverLappingDealCheck()">
                         <table>
                             <tr>
@@ -183,14 +246,15 @@
                             </div>
                         </ng-template>
                         <ng-template kendoGridHeaderTemplate>
-                            <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" [grid_Result]="gridResult"></deal-editor-header>
+                            <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [in_Title]="column.title" [in_Is_Tender_Dashboard]="in_Is_Tender_Dashboard" [grid_Result]="gridResult"></deal-editor-header>
                         </ng-template>
                         <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
-                            <deal-editor-cell class="extraSpace-colFix" [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [contract_Data]="contractData" [grid_Data]="gridData.data"
-                                              (iconUpdate)="updateSaveIcon($event)" (refresh_Contract_Data)="refreshContract($event)" (reLoad)="reloadFn($event)"></deal-editor-cell>
+                            <deal-editor-cell class="extraSpace-colFix" [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [contract_Data]="contractData" [grid_Data]="gridData.data" [in_Is_Tender_Dashboard]="in_Is_Tender_Dashboard"
+                                              (iconUpdate)="updateSaveIcon($event)" (refresh_Contract_Data)="refreshContract($event)" (reLoad)="reloadFn($event)" (removeDeletedRow)="removeDeletedRowData($event)"></deal-editor-cell>
                         </ng-template>
                         <ng-template kendoGridEditTemplate let-dataItem="dataItem">
-                            <deal-editor-edit [in_Field_Name]="column.field" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [in_DropDownResponses]="dropdownResponses" [in_DataSet]="gridData.data" (invalidDate)="setInvalidDate($event)"></deal-editor-edit>
+                            <deal-editor-edit [in_Field_Name]="column.field" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [in_DropDownResponses]="dropdownResponses" [in_DataSet]="gridData.data" [in_Is_Tender_Dashboard]="in_Is_Tender_Dashboard" (invalidField)="setInvalidField($event)"
+                                              (bidActionsUpdated)="bidActionUpdated($event)" ></deal-editor-edit>
                         </ng-template>
                     </kendo-grid-column>
                 </kendo-grid>

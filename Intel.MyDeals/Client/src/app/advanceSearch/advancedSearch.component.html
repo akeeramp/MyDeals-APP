@@ -1,0 +1,187 @@
+﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+
+<div class="advance-show-hide-options">
+    <span *ngIf="showSearchFilters" (click)="toggleFilters()">
+        <i class="intelicon-up"></i> Hide Search Options
+    </span>
+    <span *ngIf="!showSearchFilters" (click)="toggleFilters()">
+        <i class="intelicon-down"></i> Show Search Options
+    </span>
+</div>
+<div id="horizontal-search" class="padding-design-horizontal">
+    <div id="search-info-container" *ngIf="showSearchFilters">
+        <div class="row search-container">
+            <div class="col-md-5 left-inner-container">
+                <app-search [title]="title" [titleText]="searchTitle"></app-search>
+            </div>
+            <div class="col-md-7 right-inner-container">
+                <attribute-builder-angular (rulesemit)="onSaveRule($event)" [attributeSource]="attributeList" [operatorSource]="operatorList" [types2operatorSource]="type2OperatorList" [cat]="cat" [subcat]="subcat" (invokeSearchDatasource)="invokeSearchDatasource($event)" (removeLoadingPanel)="removeLoadingPanel()"></attribute-builder-angular>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div *ngIf="showSearchFilters" class="Advance_secHeader advance-margin-style"></div>
+
+<div [style.margin-top]="isListExpanded ? '0' : 'auto'">
+    <div class="search-toolbar advance_toolbar">
+        <span class="search_res_text">Search Results</span>
+        <span class="add_text_italic">Filter your search options in the grid for further detail</span>
+    </div>
+
+    <div class="app-filler">
+        <div class="toolbar new-fixes-poly advance-poly">
+            <div class="dropper-combox">
+                <kendo-combobox id="ruleDropDownList" [data]="rules"
+                                placeholder="Select saved rules"
+                                class="advance_combo-select-saverule"
+                                textField="title"
+                                valueField="title"
+                                [kendoDropDownFilter]="filterSettings"
+                                [(ngModel)]="ruleToRun"
+                                (valueChange)="onRuleSelect($event)">
+                </kendo-combobox>
+            </div>
+            <div class="advance_icons_style icons-dropper-btn">
+                <button class="advanced-search-btns-one btn btn-sm ssToolbarBtn advance_word_wrap" (click)="toggleWrap()" title="Toggle Word Wrap">
+                    <table>
+                        <tr>
+                            <td><i class="intelicon-align-left skyBlue addd_cleargridbtn" aria-hidden="true"></i></td>
+                            <td class="hidden-md hidden-sm hidden-xs text_grid_style">Word<br />Wrap</td>
+                        </tr>
+                    </table>
+                </button>
+                <div class="advanced-search-btns-two clearfix">
+                    <button class="btn btn-sm ssToolbarBtn dropbtn hover-effect dropdown-toggle advance_col_option" id="colOpt" data-toggle="dropdown">
+                        <table>
+                            <tr id="colOpt">
+                                <td>
+                                    <i class="intelicon-view-by-columns addd_cleargridbtn" title="Manage Columns"></i>
+                                </td>
+                                <td class="hidden-sm hidden-xs text_grid_style">Column<br /> Options</td>
+                                <td><span class="k-icon k-i-arrow-60-down arrow_down_advance"></span></td>
+                            </tr>
+                        </table>
+                    </button>
+                    <div id="columnoptionclick" class="dropdown-menu" style=" background-color: white; font-family: 'Intel Clear'; font-size: 13px;">
+                        <div class="mycol-style">
+                            <div>
+                                <span class="k-textbox searchbox">
+                                    <i class="intelicon-search" style="font-size:18px; color:#00AEEF; margin-top:3px;"></i>
+                                    <input type="search" style="font: icon; font-family: 'Intel Clear'; border: none; height: 30px; width: 95%; border-color: lightgrey; " [(ngModel)]="columnSearchFilter" />
+                                </span>
+                            </div>
+                            <div style="max-height: 230px; overflow: auto; margin-top: 4px; margin-right: 10px; height: 190px;">
+                                <div class="backclass" *ngFor="let item of columns | orderBy: 'title'">
+                                    &nbsp;&nbsp;<input type='checkbox' [checked]="iscolumnchecked(item.field)" id="colChk{{item.field}}" (click)="onColumnChange(item)" />&nbsp;
+                                    <label for="colChk{{item.field}}">
+                                        <span [innerHTML]="item.title"></span>
+                                    </label>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <button class="advanced-search-btns-three btn btn-sm ssToolbarBtn advance_cleargrid" (click)="clearSortingFiltering()" title="Clear all sorting and filtering.">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td><i class="intelicon-cancel-filter-outlined skyBlue addd_cleargridbtn" aria-hidden="true"></i></td>
+                                <td class="hidden-sm hidden-xs text_grid_style">Clear Grid's<br>Sorting/Filtering</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </button>
+                <div class="advanced-search-btns-four dropdown clearfix">
+                    <button class="btn btn-sm ssToolbarBtn dropdown-toggle advance_excelbtn" id="dropdownMenuOpGrid" aria-expanded="true" type="button" data-toggle="dropdown">
+                        <table>
+                            <tbody>
+                                <tr>
+                                    <td><i class="intelicon-ms-excel-outlined skyBlue add_iconstyle" aria-hidden="true"></i></td>
+                                    <td class="hidden-md hidden-sm hidden-xs text_grid_style"> Excel<br>Export</td>
+                                    <td><span class="caret down_add_style"></span></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </button>
+                    <ul class="dropdown-menu" role="menu" aria-labelledby="dropdownMenuOpGrid" style="font-size: 13px;" id="excel_DropDown">
+                        <li (click)="exportToExcel()" style="cursor: pointer;"><a>Export All Columns, All Data</a></li>
+                        <li (click)="exportToExcelCustomColumns()" style="cursor: pointer;"><a>Export Current View</a></li>
+                    </ul>
+                    <span class="helpBtn" title="Help" (click)="showHelpTopicGroup('Advanced+Search')"><i class="intelicon-help advance_helpicon"></i></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="admin-advance-grid" *ngIf="!isLoading" class="opUiContainer md dashboard either-pin oppo-grids">
+    <kendo-grid class="advance_grid_class" (filterChange)="filterChange($event)" [style.height]="isListExpanded ? 'calc(100vh - 225px)' : 'calc(100vh - 29rem)'" style="overflow: auto;" [data]="gridData" [skip]="state.skip" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}"
+                [groupable]="false" (dataStateChange)="dataStateChange($event)" [reorderable]="true" [filter]="state.filter" filterable="menu">
+        <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columnsDisp" field="{{column.field}}" title="{{column.title}}" width="{{column.width}}">
+            <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                <div *ngIf="column.field == 'Customer_NM'">
+                    <kendo-multiselect style="width:220px"
+                                       kendoMultiSelectSummaryTag
+                                       [data]="advancedSearchDropdownFilter[column.field]"
+                                       textField="CUST_NM"
+                                       valueField="CUST_SID"
+                                       [(ngModel)]="custFilter"
+                                       (valueChange)="custChange($event, filterService)"
+                                       [valuePrimitive]="false">
+                    </kendo-multiselect>
+                </div>
+                <div *ngIf="column.field == 'WF_STG_CD' || column.field == 'OBJ_SET_TYPE_CD'">
+                    <dropDown-filter class="de-dropdwn-styl" [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Value" valueField="Value" operator="eq"
+                                     [filterService]="filterService" [data]="this.advancedSearchDropdownFilter[column.field]"></dropDown-filter>
+                </div>
+                <div *ngIf="this.advancedSearchDropdownFilter[column.field] != undefined && !(column.field == 'WF_STG_CD' || column.field == 'OBJ_SET_TYPE_CD' || column.field == 'Customer_NM')">
+                    <dropDown-filter class="de-dropdwn-styl" [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="DROP_DOWN" valueField="DROP_DOWN" operator="eq"
+                                     [filterService]="filterService" [data]="advancedSearchDropdownFilter[column.field]"></dropDown-filter>
+                </div>
+                <div *ngIf="(column.field == 'START_DT' || column.field == 'END_DT' || column.field == 'OEM_PLTFRM_LNCH_DT' || column.field == 'OEM_PLTFRM_EOL_DT')">
+                    <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService">
+                    </date-range-filter>
+                </div>
+                <div *ngIf="this.advancedSearchDropdownFilter[column.field] == undefined && column.field != 'Customer_NM' && !(column.field == 'START_DT' || column.field == 'END_DT' || column.field == 'OEM_PLTFRM_LNCH_DT' || column.field == 'OEM_PLTFRM_EOL_DT' || column.field == 'DC_ID' || column.field == 'CAP_VAL' || column.field == 'ECAP_PRICE_VAL' || column.field == 'VOLUME' || column.field == 'STRT_VOL_VAL' || column.field == 'END_VOL_VAL' || column.field == 'RATE_VAL' || column.field == 'TOTAL_DOLLAR_AMOUNT' || column.field == 'CREDIT_VOLUME' || column.field == 'DEBIT_VOLUME' || column.field == 'CREDIT_AMT' || column.field == 'DEBIT_AMT' || column.field == 'CONSUMPTION_LOOKBACK_PERIOD' )">
+                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService">
+                    </kendo-grid-string-filter-menu>
+                </div>
+                <div *ngIf="column.field == 'DC_ID' || column.field == 'CAP_VAL' || column.field == 'ECAP_PRICE_VAL' || column.field == 'VOLUME' || column.field == 'STRT_VOL_VAL' || column.field == 'END_VOL_VAL' || column.field == 'RATE_VAL' || column.field == 'TOTAL_DOLLAR_AMOUNT' || column.field == 'CREDIT_VOLUME' || column.field == 'DEBIT_VOLUME' || column.field == 'CREDIT_AMT' || column.field == 'DEBIT_AMT' || column.field == 'CONSUMPTION_LOOKBACK_PERIOD' ">
+                    <kendo-grid-numeric-filter-menu [column]="column" [filter]="filter" [filterService]="filterService"></kendo-grid-numeric-filter-menu>
+                </div>
+
+            </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <div *ngIf="column.field == 'DC_ID'" class="dealer-tender-comp">
+                    <deal-popup-icon [dealId]="dataItem.DC_ID"></deal-popup-icon>
+                    <a (click)="goto(dataItem.DC_ID, 'gotoDeal')" title='Click to Edit' class="comp-anchor-dealer advSearch click-adv"><span>{{dataItem.DC_ID}}</span></a>
+                </div>
+                <div *ngIf="column.field == 'CNTRCT_TITLE'">
+                    <a class='advSearch click-adv' (click)="goto(dataItem.CNTRCT_OBJ_SID, 'gotoContract')" title='Click to Edit'><span>{{dataItem.CNTRCT_TITLE}}</span></a>
+                </div>
+                <div *ngIf="column.field == 'CNTRCT_OBJ_SID'">
+                    <a class='advSearch click-adv' (click)="goto(dataItem.CNTRCT_OBJ_SID, 'gotoContract')" title='Click to Edit'><span>{{dataItem.CNTRCT_OBJ_SID}}</span></a>
+                </div>
+                <div *ngIf="column.field == 'PRC_ST_TITLE'">
+                    <a  class='advSearch click-adv' (click)="goto(dataItem.DC_ID, 'gotoPS')" title='Click to Edit'><span>{{dataItem.PRC_ST_TITLE}}</span></a>
+                </div>
+                <div *ngIf="column.field == 'Customer'">
+                    <span>{{dataItem[column.field].CUST_NM}}</span>
+                </div>
+                <div *ngIf="column.field != 'CNTRCT_OBJ_SID' && column.field != 'Customer' && column.field != 'DC_ID' && column.field != 'CNTRCT_TITLE' && column.field != 'PRC_ST_TITLE'">
+                    <span>{{dataItem[column.field]}}</span>
+                </div>
+
+            </ng-template>
+        </kendo-grid-column>
+    </kendo-grid>
+</div>
+
+
+<loading-panel-angular id="advancedSearchLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
+                       [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
+

@@ -422,11 +422,14 @@
                 </ul>
             </li>
 
-            <li>
-                <a class="mainMenu" href="/advancedSearch#/tenderDashboard" title="Tender Dashboard"><i class="intelicon-copy-solid"></i><span class="hidden-xs"> Tender Dashboard</span></a>
+           @*<li>
+            <a class="mainMenu" href="/advancedSearch#/tenderDashboard" title="Tender Dashboard"><i class="intelicon-copy-solid"></i><span class="hidden-xs"> Tender Dashboard</span></a>
+        </li>*@
+            <li ui-sref-active="active">
+            <a class="mainMenu" ui-sref="tenderDashboard" title="Tender Dashboard"><i class="intelicon-copy-solid"></i><span class="hidden-xs"> Tender Dashboard</span></a>
             </li>
-            <li>
-                <a class="mainMenu" href="/advancedSearch#/attributeSearch" title="Advanced Search Tools"><i class="intelicon-search"></i><span class="hidden-xs"> Advanced Search</span></a>
+            <li ui-sref-active="active">
+                <a class="mainMenu" ui-sref="advanceSearch" title="Advanced Search Tools"><i class="intelicon-search"></i><span class="hidden-xs"> Advanced Search</span></a>
             </li>
             <li>
                 <a class="mainMenu" href="https://wiki.ith.intel.com/display/Handbook" target="_blank"><i class="intelicon-help"></i><span class="hidden-xs"> Help</span></a>

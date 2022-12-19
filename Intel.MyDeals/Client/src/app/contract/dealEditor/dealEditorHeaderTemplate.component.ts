@@ -16,6 +16,7 @@ export class dealEditorHeaderTemplateComponent implements OnInit{
     @Input() in_Header_Template: string = '';
     @Input() in_Title: string = '';
     @Input() grid_Result;
+    @Input() in_Is_Tender_Dashboard: boolean = false;//will recieve true when DE Grid Used in Tender Dashboard Screen
     public is_Deal_Tools_Checked: boolean;
     
     selectAllIDs(event) {
@@ -46,9 +47,3 @@ export class dealEditorHeaderTemplateComponent implements OnInit{
         this.is_Deal_Tools_Checked = this.checkAllSelected();
     }
 }
-angular.module("app").directive(
-    "dealEditorHeader",
-    downgradeComponent({
-        component: dealEditorHeaderTemplateComponent,
-    })
-);

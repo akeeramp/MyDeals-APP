@@ -13,9 +13,9 @@ export class PTE_Load_Util {
     static getRulesForDE(objSetTypeCd) {
         return DE_Load_Util.getRules(objSetTypeCd);
     }
-    static wipTemplateColumnSettings(template, isTenderContract, objSetTypeCd) {
-        DE_Load_Util.removeWipColumns(template, isTenderContract);
-        DE_Load_Util.assignColSettings(template, objSetTypeCd);
+    static wipTemplateColumnSettings(template, isTenderContract, objSetTypeCd, isTenderDashboard) {
+        DE_Load_Util.removeWipColumns(template, isTenderContract, isTenderDashboard);
+        DE_Load_Util.assignColSettings(template, objSetTypeCd, isTenderDashboard);
     }
     static getHideIfAllrules(groups) {
         return DE_Load_Util.getHideIfAllrules(groups);

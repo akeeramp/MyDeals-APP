@@ -125,6 +125,10 @@ export class excludeDealGroupModalDialog {
         else if (cstChk === 2) { return { blue: true } }
         else { return { grey: true } }
     };
+
+    public rowCallbackParent = (context: RowClassArgs) => {
+        return { navyblue: true } 
+    };
     close(): void {
         this.dialogRef.close();
     }

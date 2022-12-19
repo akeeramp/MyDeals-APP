@@ -486,6 +486,8 @@ export class pricingTableEditorComponent {
             this.dirtyItems = response.PRC_TBL_ROW.find(x => x.warningMessages.length > 0) ? true : false;
             Tender_Util.getTenderDetails(response.PRC_TBL_ROW, this.isTenderContract);
             this.pricingTableDet = response.PRC_TBL_ROW;
+            if (response.PRC_TBL_ROW.length > 0 && response.WIP_DEAL.length == 0)
+                this.dirty = true;
             this.isDeTabInfmIconReqd = PTE_Common_Util.dealEditorTabValidationIssue(response, false);
             this.enableDeTab.emit({ isEnableDeTab: true, enableDeTabInfmIcon: this.isDeTabInfmIconReqd});
             return response.PRC_TBL_ROW;

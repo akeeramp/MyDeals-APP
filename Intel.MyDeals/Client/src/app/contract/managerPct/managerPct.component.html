@@ -1,15 +1,15 @@
 ﻿<kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="pctTab" style="margin-left: 10px" class="new-allDeals art-kendo-bars manage-pct-tabstrip">
     <kendo-tabstrip-tab title="All" *ngIf="tab === 'pctDiv'" [selected]="selectedTab==0"></kendo-tabstrip-tab>
-    <kendo-tabstrip-tab title="Failures" *ngIf="tab === 'pctDiv'"  [selected]="selectedTab==1"></kendo-tabstrip-tab>
-    <kendo-tabstrip-tab title="Passes" *ngIf="tab === 'pctDiv'"  [selected]="selectedTab==2"></kendo-tabstrip-tab>
-    <kendo-tabstrip-tab title="InCompletes"*ngIf="tab === 'pctDiv'"  [selected]="selectedTab==3"></kendo-tabstrip-tab>
-    <kendo-tabstrip-tab title="NA" *ngIf="tab === 'pctDiv'"  [selected]="selectedTab==4"></kendo-tabstrip-tab>
+    <kendo-tabstrip-tab title="Failures" *ngIf="tab === 'pctDiv' && !isTenderDashboard"  [selected]="selectedTab==1"></kendo-tabstrip-tab>
+    <kendo-tabstrip-tab title="Passes" *ngIf="tab === 'pctDiv' && !isTenderDashboard"  [selected]="selectedTab==2"></kendo-tabstrip-tab>
+    <kendo-tabstrip-tab title="InCompletes"*ngIf="tab === 'pctDiv' && !isTenderDashboard"  [selected]="selectedTab==3"></kendo-tabstrip-tab>
+    <kendo-tabstrip-tab title="NA" *ngIf="tab === 'pctDiv' && !isTenderDashboard"  [selected]="selectedTab==4"></kendo-tabstrip-tab>
     <kendo-tabstrip-tab title="Grouping Exclusions" [selected]="selectedTab==5">
     </kendo-tabstrip-tab>
 </kendo-tabstrip>
 <div id="sum-wrapper" class="new-view" *ngIf="!isExcludeGroup">
     <div id="sum-header" class="another-sh-class" style="min-width: 800px;">
-        <div class="sum-filter-bar pp-style help-search-backgrd">
+        <div class="sum-filter-bar pp-style help-search-backgrd" *ngIf="!isTenderDashboard">
             <table style="width: 100%;">
                 <tr>
                     <td style="width: 30px; height: 40px;" (click)="toggleSum()"
@@ -44,15 +44,14 @@
                                 (click)="executePctViaBtn()"
                                 title="Execute Price Cost Test and Meet Comp Test"
                                 style="padding-left:100px">
-                            <i class="fa fa-refresh fa-fw iconRunPct" [ngClass]="isRunning ? 'fa-spin grn' : '' " aria-hidden="true" style="font-size: 20px"></i>
-                        </button>
+                            <i class="fa fa-refresh fa-fw iconRunPct" [ngClass]="isRunning ? 'fa-spin grn' : '' " aria-hidden="true" style="font-size: 20px"></i>                            
+                        </button>&nbsp;<span *ngIf="isTenderDashboard" class="tender_mctpct">Price Cost Test</span>
                     </td>
-                    <td style="width: 120px; text-align: center;">
-                        Price Cost Test <div class="btnLastRun"
-                                             style="font-size: 9px; color: #00AEEF; line-height: 1.1em;" title="{{lastMetCompRunLocalTime}}">{{lastMeetCompRunCalc('Price Cost Test')}}</div>
+                    <td style="width: 120px; text-align: center;" *ngIf="!isTenderDashboard">
+                        Price Cost Test <div class="btnLastRun" style="font-size: 9px; color: #00AEEF; line-height: 1.1em;" title="{{lastMetCompRunLocalTime}}">{{lastMeetCompRunCalc('Price Cost Test')}}</div>
                     </td>
-                    <td style="line-height: 1.1em; padding-left: 10px">Pricing Strategy / Pricing Table</td>
-                    <td style="width: 120px; text-align: center; line-height: 1em;">Stage/Deal type</td>
+                    <td style="line-height: 1.1em; padding-left: 10px" *ngIf="!isTenderDashboard">Pricing Strategy / Pricing Table</td>
+                    <td style="width: 120px; text-align: center; line-height: 1em;" *ngIf="!isTenderDashboard">Stage/Deal type</td>
                 </tr>
             </table>
             <hr />
@@ -63,7 +62,7 @@
             <div class="sum-main-container">
                 <div *ngFor="let ps of pricingStrategyFilter;let psIndex=index"
                      class="sumPsContainer">
-                    <table style="width: 100%">
+                    <table style="width: 100%" *ngIf="!isTenderDashboard">
                         <tr>
                             <td style="width: 30px; height: 30px;" id="PRC_ST_{{ps.DC_ID}}"
                                 (click)="isPSExpanded[psIndex]=!isPSExpanded[psIndex]">
@@ -89,9 +88,8 @@
                         </tr>
                     </table>
                     <div *ngFor="let pt of ps.PRC_TBL;let i=index">
-                        
-                        <div class="collapse multi-collapse" id="PSData_{{psIndex}}">
-                            <table style="width: 100%; ">
+                        <div id="PSData_{{psIndex}}" [ngClass]="{'show': isTenderDashboard, 'collapse multi-collapse': !isTenderDashboard}">
+                            <table style="width: 100%; " *ngIf="!isTenderDashboard">
                                 <tr id="detail_{{pt.DC_ID}}">
                                     <td style="width: 30px; height: 30px; text-align: right;" *ngIf="canEdit">
                                         <i class="chevron linkable" style="font-size: 20px; padding-left: 6px;"
@@ -126,9 +124,7 @@
                                     </td>
                                 </tr>
                             </table>
-                           
-                            <div class="collapse" id="sumWipGrid_{{pt.DC_ID}}" [hidden]="refreshPage">
-
+                            <div [ngClass]="{'show': isTenderDashboard, 'collapse': !isTenderDashboard}" id="sumWipGrid_{{pt.DC_ID}}" [hidden]="refreshPage && !isTenderDashboard">
                                 <div style="margin-left: 0">
                                     <div class="opUiContainer md dashboard">
                                         <div id='detailGrid_{{pt.DC_ID}}'
@@ -146,7 +142,8 @@
                                                         (dataStateChange)="dataStateChange($event,pt.DC_ID)" style="height:auto"
                                                         [filter]="state[pt.DC_ID].filter" kendoGridSelectBy=""
                                                         [(selectedKeys)]="mySelection"
-                                                        (selectedKeysChange)="onSelectedKeysChange()">
+                                                        (selectedKeysChange)="onSelectedKeysChange()"
+                                                        [kendoGridExpandDetailsBy]="expandDetailsBy" [initiallyExpanded]="isTenderDashboard">
                                                 <kendo-grid-column field="TOOLS" [sortable]="false"
                                                                    [headerClass]="{'headerClass':true}" [width]="150" [filterable]="false" *ngIf="!isHidden(pt.DC_ID, 'TOOLS')">
                                                     <ng-template kendoGridHeaderTemplate let-dataItem="dataItem">

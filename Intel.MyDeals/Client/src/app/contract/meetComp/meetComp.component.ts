@@ -31,7 +31,7 @@ export class meetCompContractComponent implements OnInit {
     @Input() private pageNm;
     @Output() tmDirec = new EventEmitter();
     @Output() contractRefresh = new EventEmitter();
-
+    @Output() refreshMCTData = new EventEmitter();
     constructor(
         private loggerSvc: logger,
         private meetCompSvc: meetCompContractService,
@@ -498,7 +498,7 @@ export class meetCompContractComponent implements OnInit {
         } else {
             this.isDataAvaialable = false;
             this.isLoading = false;
-            if (this.isTender == "1") {
+            if (this.isTender == "1" || this.PAGE_NM == 'MCTPOPUP') {
                 //to change compMissingFlag status to complete (COMP_MISSING_FLG == "1" to COMP_MISSING_FLG == "0")
                 await this.meetCompSvc.updateMeetCompProductDetails(this.objSid, this.objTypeId, this.tempUpdatedList).toPromise().catch((err) => {
                     this.loggerSvc.error("Unable to save UpdateMeetCompProductDetails data", err, err.statusText);
@@ -1077,7 +1077,10 @@ export class meetCompContractComponent implements OnInit {
         this.isLoading = false;
         this.tempUpdatedList = [];
         this.meetCompUpdatedList = [];
-
+        if (this.isAdhoc == 1 && this.PAGE_NM == 'MCTPOPUP') {
+            let data = this.meetCompMasterdata.filter(x => x.GRP == 'PRD' && x.DEFAULT_FLAG == "Y").OrderBy(x => x.MEET_COMP_STS).ToArray();
+            this.refreshMCTData.emit(data)
+        }
     }
 
     async updateMeetComp() {
@@ -1099,6 +1102,10 @@ export class meetCompContractComponent implements OnInit {
             if (this.isTender == "1" && ((this.gridData.data[0].MEET_COMP_STS == 'Pass' || this.gridData.data[0].MEET_COMP_STS == 'Fail') || this.gridData.data[0].CAP == 0)) {
                 this.tmDirec.emit('PD');
             }
+            if (this.isAdhoc == 1 && this.PAGE_NM == 'MCTPOPUP') {
+                let data = this.meetCompMasterdata.filter(x => x.GRP == 'PRD' && x.DEFAULT_FLAG == "Y").OrderBy(x => x.MEET_COMP_STS).ToArray();
+                this.refreshMCTData.emit(data)
+            }            
             this.isLoading = false;
             this.tempUpdatedList = [];
             this.meetCompUpdatedList = [];

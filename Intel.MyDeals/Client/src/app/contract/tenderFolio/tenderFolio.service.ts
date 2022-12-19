@@ -36,4 +36,9 @@ export class TenderFolioService {
         const apiUrl: string = this.apiBaseContractUrl + 'SaveTenderContract/' + custId + '/' + contractId;
         return this.httpClient.post(apiUrl, upperContractData);
     }
+    public copyTenderFolioContract(ct, dealIds) {
+        ct[0].dealIds = dealIds;
+        const apiUrl: string = this.apiBaseContractUrl + 'CopyTenderFolioContract';
+        return this.httpClient.post(apiUrl, ct);
+    }
 }

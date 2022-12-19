@@ -14,10 +14,10 @@
                                 <td>
                                     <div class="btn btn-skyblue-sm">
                                         <i class="fa fa-refresh fa-fw iconRunPct"
-                                           style="color:#fff; font-size: 25px"></i>
+                                           [ngStyle]="{'font-size':(PAGE_NM == 'MCTPOPUP')?'20px':'25px','color':'#fff'}"></i>
                                     </div>
                                 </td>
-                                <td class="skyblue-text" style="padding-left: 5px; text-align: left; font-size: 15px;">
+                                <td class="skyblue-text" [ngStyle]="{'font-size':(PAGE_NM == 'MCTPOPUP')?'12px':'15px','padding-left':'5px','text-align':'left'}">
                                     Save
                                     &amp; Validate<br>Meet Comp
                                 </td>
@@ -34,8 +34,8 @@
                 <div class="clearboth"></div>
             </div>
             <div id="grid" class="opUiContainer md dashboard either-pin oppo-grids" [ngClass]="{'op-grid': isAdhoc !=1}">
-                <kendo-grid style="height: calc(100vh - 350px);" [data]="gridData" [skip]="state.skip" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}"
-                            [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)" [kendoGridExpandDetailsBy]="expandDetailsBy" [(expandedDetailKeys)]="expandedDetailKeys" [initiallyExpanded]="isTender">
+                <kendo-grid id="meetcomp-contract" style="height: calc(100vh - 350px);" [data]="gridData" [skip]="state.skip" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}"
+                            [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" (cellClick)="cellClickHandler($event)" (cellClose)="cellCloseHandler($event)" [kendoGridExpandDetailsBy]="expandDetailsBy" [(expandedDetailKeys)]="expandedDetailKeys" [initiallyExpanded]="isTender || PAGE_NM == 'MCTPOPUP'">
                     <kendo-grid-column width="70px" [columnMenu]="false">
                         <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                             <div class='dealTools'>

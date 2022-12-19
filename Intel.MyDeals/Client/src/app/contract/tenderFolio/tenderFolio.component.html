@@ -69,15 +69,17 @@
                                                      kendoTextBox [ngModelOptions]="{standalone: true}" style="padding: 2px 10px !important;" />
                                 <div class="err-Control" *ngIf="isTitleError">{{titleErrorMsg}}</div>
                             </div>
-                            <div *ngFor="let value of PtDealTypes" class="pdng-lft">
-                                <div id="btnSel{{value.name}}" class="fl circleWithText" (click)="selectPtTemplateIcon(value)" [ngClass]="{active: value._custom._active}">
-                                    <div class="fl textCircle blueBg" [ngClass]="{activeCircle: value._custom._active}">{{ value._custom.ltr}} </div>
-                                    <div class="fl textName" [ngClass]="{activeText: value._custom._active}">
-                                        {{value.name}}
+                            <span *ngIf="!isCopyTender">
+                                <div *ngFor="let value of PtDealTypes" class="pdng-lft">
+                                    <div id="btnSel{{value.name}}" class="fl circleWithText" (click)="selectPtTemplateIcon(value)" [ngClass]="{active: value._custom._active}">
+                                        <div class="fl textCircle blueBg" [ngClass]="{activeCircle: value._custom._active}">{{ value._custom.ltr}} </div>
+                                        <div class="fl textName" [ngClass]="{activeText: value._custom._active}">
+                                            {{value.name}}
+                                        </div>
+                                        <div class="clearboth"></div>
                                     </div>
-                                    <div class="clearboth"></div>
                                 </div>
-                            </div>
+                            </span>
                         </div>
                     </div>
                 </div>
@@ -85,9 +87,14 @@
         </div>
     </div>
     <div id="secFooter">
-        <button class="tndr-btn btn" type="button" (click)="ValidateTender()"><span>Create Tender Folio</span></button>
+        <button class="tndr-btn btn" type="button" (click)="ValidateTender()"><span *ngIf="!isCopyTender">Create Tender Folio</span><span *ngIf="isCopyTender">Copy</span></button>
     </div>
-
+    <kendo-dialog *ngIf="showCopyAlert" (close)="closeCopyAlert()" [height]="155" [width]="245">
+        <div class="kendoAlert">Unable to successfully create the Tender Copies.</div>
+        <kendo-dialog-actions>
+            <div kendoButton (click)="closeCopyAlert()" class="kendo-alrt-btn myalertprice">OK</div>
+        </kendo-dialog-actions>
+    </kendo-dialog>
     <style>
         .myLoader {
             left: auto !important;

@@ -1,0 +1,637 @@
+﻿#ruleDropDownList_listbox li {
+    float: left
+}
+
+.textTitle {
+    float: left;
+    width: 100px;
+    white-space: nowrap;
+    overflow: hidden;
+    padding-top: 1px;
+    text-overflow: ellipsis;
+}
+
+.rule-icon {
+    font-size: 14px;
+    padding: 5px;
+    float: left
+}
+
+.delete-rule-icon {
+    font-size: 12px;
+    padding: 5px;
+    float: right
+}
+
+.rule-icon:hover {
+    cursor: pointer
+}
+
+.delete-rule-icon:hover {
+    cursor: pointer;
+    color: red !important
+}
+
+.rule-icon-selected {
+    color: #0071C5 !important
+}
+
+#ruleDropDownList_listbox {
+    min-width: 165px !important
+}
+
+.k-animation-container UL {
+    min-width: 165px !important
+}
+
+.filterContainer {
+    height: 120px;
+    overflow: auto;
+}
+
+.filterRow {
+    margin-bottom: 7px;
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    position: relative;
+}
+
+    .filterRow .k-dropdown {
+        border: 1px solid #e5e5e5;
+        border-radius: 3px;
+    }
+.btn-def {
+    margin: 0 0 0 15px;
+}
+
+.curRule {
+    color: #0071C5;
+    margin-left: 10px;
+}
+
+.icnSky {
+    cursor: pointer;
+    color: #00AEEF;
+    margin-left: 8px;
+}
+
+.menu-container li a {
+    cursor: pointer;
+}
+
+.sm-help {
+    font-size: 11px;
+    color: #666666;
+    line-height: 1.1em;
+}
+
+    .sm-help I {
+        color: #FFA300;
+    }
+.ok_saverule-btn-align {
+    width: 100% !important;
+    position: relative !important;
+    height: 60px !important;
+    text-align: center !important;
+    font-family: 'Intel Clear' !important;
+    background-color: #d3d3d3cc !important;
+    color: #444 !important;
+    border: none !important;
+}
+
+.ok_saverule-btn-align:hover {
+    cursor: pointer;
+    background-color: #ebebeb !important;
+    color: #444 !important;
+}
+
+.savepopup-align {
+    font-size: 15px !important;
+    color: #444 !important;
+    padding: 12px !important;
+    font-family: 'Intel Clear' !important;
+}
+
+.save-popup-height {
+    height: 617px;
+}
+
+.txt-width {
+    width: 100%;
+}
+
+.txt-margin {
+    margin-left: 5px;
+    margin-top: 20px;
+}
+
+.popup-header {
+    margin-left: 5px;
+    margin-top: 5px;
+    font-family: 'Intel Clear' !important;
+    font-size: 15px !important;
+    color: #444 !important;
+    font-weight: normal !important;
+    position: relative !important
+}
+
+.popup-note {
+    font-size: 11px;
+    margin-left: 5px;
+    position: relative !important;
+    top: -8px !important;
+    color: #444 !important;
+}
+
+.popup-textbox {
+    font-size: 9px !important;
+    margin-left: 5px !important;
+    color: #444 !important
+}
+
+.btnalign.cancelDelete-btn-style {
+    width: 50% !important;
+    height: 60px !important;
+    text-align: center !important;
+    font-family: 'Intel Clear' !important;
+    position: relative !important;
+    background-color: #fafafa !important;
+    border: none !important
+}
+
+.btnalign.btn-primary {
+    width: 50% !important;
+    position: relative !important;
+    height: 60px !important;
+    text-align: center !important;
+    font-family: 'Intel Clear' !important;
+    background-color: #00aeef !important;
+    color: #ffff !important;
+    border: none !important
+}
+
+.btnalign.btn-primary:hover {
+    color: #fff !important;
+    border-color: #0071c5 !important;
+    background-color: #0071c5 !important;
+}
+
+.btnalign.cancelDelete-btn-style:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important;
+}
+
+kendo-dialog-actions.tender-action-popup {
+    gap: 0px !important;
+    padding: 0px !important;
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
+
+kendo-textbox.txt-width.k-textbox {
+    border-radius: 0px !important;
+    border-color: #e6e6e6 !important;
+    width:360px !important
+}
+
+    kendo-textbox.txt-width.k-textbox:focus-within,
+    kendo-textbox.txt-width.k-textbox:hover {
+        border-color: #f5f5f5 !important;
+        box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+    }
+
+h4.search-heading {
+    margin-top: 0 !important;
+    color: #003C71 !important;
+    font-weight: 600 !important;
+    font-size: 20px !important
+}
+
+.h5-small {
+    font-size: 11.5px !important;
+    color: #444444 !important;
+    font-weight: 200 !important;
+    font-style: italic !important;
+    /* position: relative !important; */
+    /* top: 5px !important; */
+    margin-bottom: 0;
+    margin-left: 10px;
+}
+
+.fr.btn-group.rule-dropdown-actions.save-rule-btn-style {
+    height: 25px !important;
+    position: relative !important;
+    top: 0px !important;
+    left: 40px !important;
+    font-size: 13px !important;
+    flex:0 0 0 !important
+}
+
+button.btn.btn-sm.btn-default.msave-btn-sty {
+    border-radius: 0px !important;
+    background-color: #f4f4f4 !important;
+    color: #444 !important;
+    border-color: #ddd !important;
+}
+
+button.btn.btn-sm.btn-default.msave-btn-sty:hover,
+button.btn.btn-sm.btn-default.dropdown-toggle.msave-dropdwn:hover {
+    color: #0071c5 !important;
+    border-color: #b1babf !important;
+    background-color: #e7e7e7 !important;
+}
+
+button.btn.btn-sm.btn-default.dropdown-toggle.msave-dropdwn {
+    padding-right: 16px !important;
+    border-top-left-radius: 0px !important;
+    border-bottom-left-radius: 0px !important;
+    background-color: #f4f4f4 !important;
+    border-color: #ddd !important
+}
+
+ul.dropdown-menu.menu-container.tender-li-dropdwn.show {
+    position: absolute !important;
+    will-change: transform !important;
+    top: 3px !important;
+    left: -9px !important;
+    transform: translate3d(66px, 29px, 0px) !important;
+    font-size: 13px !important;
+    border-color: #eee !important;
+    color: #777 !important;
+    border: 1px solid rgba(0,0,0,.15) !important;
+}
+
+button.fr.btn.btn-sm.btn-skyblue.btn-primary.run-rule-btnsty {
+    border-radius: 3px !important;
+    box-shadow: none !important;
+    border: 1px solid transparent !important;
+    background-color: #00aeef !important;
+    border-color: #00aeef !important;
+    font-size: 13px !important;
+    height: 32px !important;
+    width:6rem !important;
+    margin-left:auto !important
+}
+
+button.fr.btn.btn-sm.btn-skyblue.btn-primary.run-rule-btnsty:hover {
+    background-color: #0071C5 !important;
+    color: #ffffff !important;
+    border-color: #00aeef !important;
+}
+
+
+.kendo-dropdownlist.tender-droplist-style.k-dropdown {
+    float: right !important;
+    top: -50px !important;
+    right: 30px !important;
+    height: 32px !important;
+    position: relative !important;
+    width: 12.4em !important
+}
+
+.kendo-dropdownlist.tender-droplist-style.k-dropdown:hover,
+kendo-dropdownlist.tender-droplist-style.k-dropdown:focus-within {
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+}
+
+.tender-droplist-style.k-dropdown .k-dropdown-wrap {
+    border-color: #e4e7eb !important;
+    color: #212529 !important;
+    background-color: #ffff !important;
+    border-radius: 0px !important;
+    box-shadow: none !important;
+}
+
+.tender-droplist-style span.k-select {
+    border-left: 1px solid #f0f0f0 !important;
+    background-color: #cecece1f !important;
+    color: #727578 !important;
+    opacity: 0.7 !important;
+}
+.search_cust_heading {
+    margin-left: 70px;
+    font-size: 14px;
+    margin-top: -20px;
+}
+
+kendo-dropdownlist.dealtype-tender-style {
+    border: none !important;
+    background: none !important;
+    position: relative !important;
+    box-shadow: none !important;
+    width: 200px !important
+}
+
+.dealtype-tender-style.k-dropdown .k-dropdown-wrap {
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 3px !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    opacity: .7 !important;
+    background: #fafafa !important;
+    width: 100% !important;
+    color: #212529 !important;
+    top: 0 !important;
+    left: 0 !important;
+    box-shadow:none !important
+}
+
+kendo-dropdownlist.tender-equalto-style {
+    border: none !important;
+    background: none !important;
+    position: relative !important;
+    box-shadow: none !important;
+    width: 140px !important
+}
+
+.tender-equalto-style.k-dropdown .k-dropdown-wrap {
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 3px !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    opacity: .7 !important;
+    background: #fafafa !important;
+    width: 100% !important;
+    color: #212529 !important;
+    top: 0 !important;
+    left: 0 !important
+}
+
+kendo-combobox.tender_ecap_combo_style.k-combobox.k-combobox-clearable {
+    border-radius: 3px !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    opacity: .7 !important;
+    background: #fafafa !important;
+    width: 200px !important;
+    color: #212529 !important;
+    margin-left: 36px !important;
+    margin-top: 3px !important;
+    box-shadow: none !important;
+    border-color: #e5e5e5 !important;
+    position:relative !important
+}
+
+.tender_ecap_combo_style.k-combobox .k-dropdown-wrap .k-select {
+    background-color: transparent !important;
+    border-left: none !important
+}
+
+.tender_ecap_combo_style span.k-icon.k-clear-value {
+    width: calc(0px + .75rem) !important;
+    height: 28px !important;
+    flex-shrink: 0 !important;
+    display: inline-flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+    outline: 0 !important;
+    cursor: pointer !important;
+    opacity: .5 !important;
+    font-size: 13px !important
+}
+
+kendo-textbox.tender-extra-box-style {
+    border: 1px solid #d6d6d6 !important;
+    border-radius: 3px !important;
+    width: 181px !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    opacity: .7 !important;
+    box-shadow: none !important;
+}
+
+kendo-textbox.tender-extra-box-style.k-textbox:hover,
+.dealtype-tender-style.k-dropdown .k-dropdown-wrap:hover,
+.tender-equalto-style.k-dropdown .k-dropdown-wrap:hover {
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important;
+    border: 1px solid #e5e5e5 !important;
+}
+
+.span-style-tender {
+    position: relative !important;
+    font-size: 10px !important;
+}
+.tender_ecap_combo_style.k-combobox .k-state-focused {
+    box-shadow: none !important;
+    border-color: #e5e5e5 !important
+}
+kendo-combobox.tender_ecap_combo_style.k-combobox.k-combobox-clearable:hover,
+kendo-combobox.tender_ecap_combo_style.k-combobox.k-combobox-clearable:focus-within{
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important;
+}
+.intelicon-plus-max.mplusminus-style {
+    background: #00aeef !important;
+    color: #ffffff !important;
+    border-radius: 4px !important;
+    width: 26px !important;
+    padding: 4px 5px;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    margin-right: 10px !important;
+    position: relative !important;
+    top: 8px !important;
+}
+
+.intelicon-plus-max.mplusminus-style:hover {
+    background-color: #0071c5 !important
+}
+
+.intelicon-minus-max.mplusminus-style {
+    background-color: #bbbbbb !important;
+    color: #ffffff !important;
+    border-radius: 4px !important;
+    width: 26px !important;
+    padding: 4px 5px;
+    cursor: pointer !important;
+    font-size: 16px !important;
+    height: 25px !important;
+    margin-right: 3px !important;
+    top: 8px !important;
+    position: relative;
+}
+
+.intelicon-minus-max.mplusminus-style:hover {
+    background-color: #cccccc !important
+}
+kendo-dropdownlist.opUiContainer.sm.tender_ecap_multi_style.k-dropdown {
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 3px !important;
+    width: 195px !important;
+    font-size: 10px !important;
+    font-weight: 500 !important;
+    color: #212529 !important;
+    box-shadow: none !important;
+    height: 28px !important;
+}
+
+.tender_ecap_multi_style.k-dropdown .k-dropdown-wrap {
+    background: transparent !important;
+    border-radius: 0 !important;
+    border-radius: 0 !important;
+    border: none !important;
+    position: relative !important;
+}
+
+kendo-dropdownlist.opUiContainer.sm.tender_ecap_multi_style.k-dropdown:hover {
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+    background: transparent !important;
+}
+
+kendo-dropdownlist.abField.dealtype-tender-style.disabled-dropdown.k-dropdown.k-widget.ng-pristine.ng-untouched.opUiContainer.sm {
+    cursor: not-allowed !important;
+}
+
+.tender_ecap_multi_style.k-dropdown .k-dropdown-wrap.k-state-focused {
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+}
+
+.search-opt-headers {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    position: relative;
+}
+
+.attr-search-options {
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    position: relative;
+}
+
+.btns-spacing-rules {
+    margin-left: 10px;
+    margin-right: 10px;
+}
+
+.combiner-search-two {
+    min-width: 140px;
+    max-width: 150px;
+    position: relative;
+}
+
+.combiner-search-one {
+    width: 190px;
+}
+
+.combiner-search-one kendo-combobox {
+    width: 100%;
+}
+
+.combiner-search-three {
+    width: auto;
+}
+
+.combiner-search-one kendo-combobox.cd-input-bottom, 
+.combiner-search-one kendo-combobox.kendoInput.noborderclass.font-input.contract-details-customer.cd-input-bottom.k-combobox.k-combobox-clearable.ng-touched.ng-dirty.ng-valid {
+    border-bottom: 1px solid rgb(230, 230, 230) !important;
+    font-size: 12px;
+    border-color: rgb(230, 230, 230);
+    border-radius: 0;
+}
+
+.combiner-search-one kendo-combobox.contract-details-customer .k-dropdown-wrap kendo-searchbar .k-input {
+    height: 25px;
+    font-size: 12px;
+}
+
+.combiner-search-one .noborderclass.k-combobox .k-dropdown-wrap .k-select {
+    width: 25px !important;
+}
+
+.combiner-search-three .btn-primary {
+    background-color: var(--light-blue) !important;
+    border-color: var(--light-blue) !important;
+}
+
+.combiner-search-three .btn-primary:hover {
+    background-color: #0071C5 !important;
+    border-color: #0071C5 !important;
+}
+
+button.btn.btn-sm.btn-default.dropdown-toggle.msave-dropdwn span.caret {
+    margin-top: -1px;
+    margin-left: -4px;
+}
+
+span.second-search-opt-section {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+span.inner-third-span {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    flex-direction: column;
+    position: relative;
+}
+
+span.inner-third-span kendo-textbox.tender-extra-box-style.k-textbox-design.k-textbox {
+    width: 250px !important;
+}
+
+span.inner-third-span .k-multiselect {
+    width: 350px;
+    height: 28px;
+}
+
+span.inner-third-span .k-multiselect .k-multiselect-wrap .k-searchbar .k-input {
+    height: 28px;
+    font-size: 12px;
+}
+
+span.inner-third-span .k-multiselect .k-multiselect-wrap {
+    border: 1px solid #e4e4e4 !important;
+    border-bottom-color: #0071C5 !important;
+}
+
+span.inner-third-span .k-multiselect:hover .k-multiselect-wrap {
+    border-bottom-color: #e4e4e4 !important;
+}
+
+span.second-icon-search-opt-section {
+    margin-right: 10px;
+    text-align: center;
+}
+
+span.second-icon-search-opt-section i.intelicon-minus-max {
+    margin-right: 0 !important;
+}
+
+span.inner-third-span .k-numerictextbox {
+    width: 200px;
+    height: 28px;
+}
+
+span.inner-third-span kendo-datepicker {
+    width: 200px;
+    height: 28px;
+}
+
+kendo-datepicker.k-custom-dater {
+    background-image: none;
+    background-color: rgb(250, 250, 250) !important;
+    border-color: rgb(240, 240, 240);
+    border-radius:0;
+}
+
+    kendo-datepicker.k-custom-dater:focus-within {
+        background-color: rgb(250, 250, 250) !important;
+        border-color: rgb(240, 240, 240);
+        box-shadow: none;
+    }
+
+    kendo-datepicker.k-custom-dater .k-input {
+        height: 100%;
+    }
+
+    kendo-datepicker.k-custom-dater span.k-picker-wrap.k-state-focused .k-select {
+        color: var(--light-blue);
+        background-color: #e4e7eb;
+    }

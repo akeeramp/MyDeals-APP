@@ -11,6 +11,7 @@ import { SecurityService } from "../../../shared/services/security.service";
 export class dealToolsService {
     public apiBasePricingTableUrl = "/api/PricingTables/v1/";
     public apiBaseAttachmentsUrl = "/api/FileAttachments/Get/";
+    public apiBasePricingStartegyUrl = "/api/PricingStrategies/v1/";
     private fileApiUrl = "/api/FileAttachments/";
     constructor(private httpClient: HttpClient, private securityService: SecurityService) { }
 
@@ -45,5 +46,9 @@ export class dealToolsService {
     public deleteAttachment(custMbrSid, objTypeSid, objSid, fileDataSid): Observable<any> {
         const url = this.fileApiUrl + "Delete/" + custMbrSid + "/" + objTypeSid + "/" + objSid + "/" + fileDataSid + "/WIP_DEAL";
         return this.httpClient.post(url, objTypeSid);
+    }
+    public deletePricingStrategyById(custId, contractId, dcId): Observable<any> {
+        const apiUrl: string = this.apiBasePricingStartegyUrl + 'DeletePricingStrategyById/' + custId + '/' + contractId + '/' + dcId;
+        return this.httpClient.get(apiUrl);
     }
 }

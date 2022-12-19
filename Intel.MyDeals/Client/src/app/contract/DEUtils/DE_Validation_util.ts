@@ -216,5 +216,32 @@ export class DE_Validation_Util {
             if (item["REBATE_BILLING_END"] !== undefined) item["REBATE_BILLING_END"] = moment(item["REBATE_BILLING_END"]).format("MM/DD/YYYY");
             if (item["LAST_REDEAL_DT"] !== undefined) item["LAST_REDEAL_DT"] = moment(item["LAST_REDEAL_DT"]).format("MM/DD/YYYY");
         });
-    }    
+    }
+    static validateTenderDahsboardDeals(data, templates) {
+        let isShowStopperError = false;
+        for (var i = 0; i < data.length; i++) {
+            if (data[i]._dirty) {
+                this.dataConversion(data, templates);
+                if (data[i]["END_CUSTOMER_RETAIL"] != undefined && data[i]["END_CUSTOMER_RETAIL"] != null) {// && isTenderFlag == "1"
+                    if (data[i]["END_CUSTOMER_RETAIL"].length > 60) {
+                        if (data[i]._behaviors !== null && data[i]._behaviors !== undefined) {
+                            if (!data[i]._behaviors.isError) data[i]._behaviors.isError = {};
+                            if (!data[i]._behaviors.validMsg) data[i]._behaviors.validMsg = {};
+                            data[i]._behaviors.isError['END_CUSTOMER_RETAIL'] = true;
+                            data[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'] = "End Customer text can not be longer than 60 Characters";
+                            isShowStopperError = true;
+                        }
+                    }
+                    else {
+                        if (data[i]._behaviors.isError['END_CUSTOMER_RETAIL']) {
+                            delete data[i]._behaviors.isError['END_CUSTOMER_RETAIL'];
+                            delete data[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'];
+                        }
+                        data[i]["END_CUSTOMER_RETAIL"] = data[i]["END_CUSTOMER_RETAIL"].toString();
+                    }
+                }
+            }
+        }
+        return isShowStopperError;
+    }
 }

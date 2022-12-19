@@ -44,6 +44,8 @@ export class managerExcludeGroupsComponent {
     @Input() UItemplate: any;
     @Input() groupTab: any;
     @Input() showPCT: boolean;
+    @Input() WIP_ID: any;
+    @Input() isTenderDashboard: boolean = false;//will recieve true when Group Exclusion Used in Tender Dashboard Screen
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
     userRole = ""; canEmailIcon = true;
     dealCnt = 0;
@@ -113,7 +115,10 @@ export class managerExcludeGroupsComponent {
         this.managerExcludeGrpSvc.readWipExclusionFromContract(this.contractData.DC_ID).subscribe((result: any) => {
             this.isLoading = false;
             this.dirty = false;
-            this.gridResult = result.WIP_DEAL;
+            if (this.isTenderDashboard)//Tender Dashboard Group Exclusion needs to display data of correponding deal ID not all
+                this.gridResult = result.WIP_DEAL.filter(x => x.DC_ID == this.WIP_ID);
+            else
+                this.gridResult = result.WIP_DEAL
             for (let d = 0; d < this.gridResult.length; d++) {
                 const item = this.gridResult[d];
                 if (item["DEAL_GRP_EXCLDS"] === undefined || item["DEAL_GRP_EXCLDS"] === null) item["DEAL_GRP_EXCLDS"] = "";

@@ -1,0 +1,8 @@
+﻿<div class="modal-header admin_mctpct_header" style="border-bottom-color: #f4f4f4 !important; border-bottom: 1px solid;">
+    <i class="intelicon-dashboard-solid navbar-logo" style="font-size: 25px; color: white;"></i>
+    <h3 class="navbar-brand admin_price_cost_header" id="modal-title">Group Exclusion</h3>
+    <i id="btnClose" class="intelicon-close-max tender-cross-close" (click)="closeWindow()" title="Close this window"></i>
+</div>
+<div class="modal-body" id="modal-body">
+    <manager-exclude-groups class="tender_exclude_grouping" [contractData]="contractData" [UItemplate]="UItemplate" [groupTab]="selLnav" [showPCT]="isShowPCT" [isTenderDashboard]="data.isTenderDashboard" [WIP_ID]="data.WIP_ID"></manager-exclude-groups>
+</div>

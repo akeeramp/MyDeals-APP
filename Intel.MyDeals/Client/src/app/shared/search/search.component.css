@@ -1,0 +1,174 @@
+﻿.disabled-dropdown .k-dropdown .k-state-disabled .k-input,
+.disabled-dropdown .k-dropdown .k-state-disabled .k-select,
+.disabled-dropdown .k-dropdown .k-state-disabled .k-select .k-icon {
+    cursor: not-allowed;
+}
+
+#horizontal-search {
+    border: 0 solid transparent;
+    height: 100%;
+    font-size: 12px;
+    margin-left: -6px;
+    margin-right: -8px;
+    margin-top: 15px;
+}
+
+#search-info-container {
+    width: 100%;
+    margin: auto;
+}
+
+#search-info-container label {
+    font-weight: normal;
+    font-size: 16px;
+    margin-right: 10px;
+    width: 110px;
+}
+
+#search-info-container .left-container {
+    width: 420px;
+    float: left;
+}
+
+#search-info-container .left-inner-container {
+    border: 1px solid transparent;
+    border-radius: 6px;
+    padding: 0 10px 20px 10px;
+}
+
+#search-info-container .right-container {
+    padding: 20px 10px 20px 900px;
+    margin-left: -460px;
+}
+
+#search-info-container .right-inner-container {
+    border: 1px solid #e5e5e5 !important;
+    border-radius: 6px !important;
+    padding: 10px !important;
+    height: fit-content !important;
+}
+.search-container {
+    padding: 0px;
+}
+
+.search_style_tender {
+    color: #003C71 !important;
+    font-weight: 600 !important;
+    /*position: fixed !important;
+    margin-top: -41px !important;
+    margin-left: -42px !important;*/
+    font-size: 20px !important;
+    font-family: 'Intel Clear' !important;
+}
+
+.bttom_header_style {
+    font-style: italic !important;
+    font-size: 12px !important;
+    color: #111 !important;
+    position: relative !important;
+    margin-bottom: 0px;
+    /*margin-top: -8px !important;
+    margin-left: -40px !important;
+    width: calc(100% - -422px) !important*/
+}
+
+.cus_tender_style {
+    color: #000 !important;
+    font-size: 16px !important;
+    position: relative !important;
+    margin-top: 10px !important;
+    width: 125px;
+    /*margin-left: -40px !important;*/
+}
+
+.ktender_custstyle {
+    width: 250px !important;
+    font-weight: 500 !important;
+    margin-top: 7px !important;
+    margin-left: 12px !important;
+    border-bottom: 1px solid #f0f0f0 !important;
+}
+
+.tender_date_range {
+    color: #000 !important;
+    font-size: 16px !important;
+    position: relative !important;
+    width: 125px;
+}
+
+kendo-datepicker.date-dashboard.date_tender_style {
+    width: 110px !important;
+    font-weight: 500 !important;
+    position: relative !important;
+/*    margin-left: 30px !important;
+    margin-top: 29px !important;*/
+}
+
+kendo-datepicker.date-dashboard.datepick_style.k-datepicker {
+    position: relative !important;
+    width: 110px !important;
+    font-weight: 500 !important;
+}
+.ktender_custstyle.k-multiselect .k-multiselect-wrap {
+    border-radius: 0 !important;
+    border-color: #f0f0f0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+}
+
+.date_tender_style.k-datepicker .k-picker-wrap,
+.datepick_style.k-datepicker .k-picker-wrap {
+    background-color: #fafafa !important;
+    border-radius: 0px !important;
+    border-color: #e6e6e6 !important;
+}
+
+.date_tender_style.k-datepicker .k-select,
+.datepick_style.k-datepicker .k-select {
+    background-color: #fafafa !important;
+    border-radius: 0px !important;
+    border-color: #e6e6e6 !important;
+    border-left: transparent !important;
+}
+.horizo-fixes {
+    border: 0 solid transparent;
+    height: 100% !important;
+    font-size: 12px !important;
+    /* margin-left: -6px !important; */
+    /* margin-right: -8px !important; */
+    margin-top: 0px !important;
+}
+
+.first-parent-tender {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    width: 100%;
+    position: relative;
+}
+
+.second-parent-tender {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    margin-top: 15px;
+    position: relative;
+}
+
+.date-range-from-to {
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    position: relative;
+    margin-left: 12px !important;
+}
+
+span.to-design-style {
+    width: 50px;
+    text-align: center;
+}
+
+kendo-datepicker.k-custom-dater:hover {
+    border-color: rgb(240, 240, 240)!important;
+}

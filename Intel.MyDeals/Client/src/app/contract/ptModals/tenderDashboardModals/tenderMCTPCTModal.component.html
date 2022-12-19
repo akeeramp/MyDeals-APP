@@ -1,0 +1,16 @@
+﻿<div id="tendermctpct" class="modal-header admin_mctpct_header" style="border-bottom-color: #f4f4f4 !important; border-bottom: 1px solid;">
+    <i class="intelicon-dashboard-solid navbar-logo" style="font-size: 25px; color: white;"></i>
+    <span *ngIf="isMeetComp"><span class="navbar-brand admin_price_cost_header">Meet Comp </span></span>
+    <span *ngIf="!isMeetComp"><span class="navbar-brand admin_price_cost_header">Price Cost Test </span></span>
+    <i id="btnClose" class="intelicon-close-max tender-cross-close" (click)="closeWindow()" title="Close this window"></i>
+</div>
+<div class="modal-body" id="modal-body">
+    <div *ngIf="isMeetComp">
+        <meet-comp-contract class="admin_tender_meetcomp" [objSid]="data.PRC_ST_OBJ_SID" [isAdhoc]="'1'" [objTypeId]="'2'" [cId]="c_Id" [pageNm]="'MCTPOPUP'" (refreshMCTData)="refreshMCTData($event)"></meet-comp-contract>
+    </div>
+    <div *ngIf="!isMeetComp && contractData">
+        <div *ngIf="selLnav=='pctDiv'" class="few-oracle-css">
+            <manager-pct class="admin-tender-pricecosttest" [contractData]="contractData" [UItemplate]="UItemplate" [tab]="selLnav" [isTenderDashboard]="true" [PS_ID]="data.PRC_ST_OBJ_SID" [WIP_ID]="data.WIP_ID"></manager-pct>
+        </div>
+    </div>
+</div>

@@ -1,0 +1,229 @@
+﻿<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/style/attributeBuilder.css" rel="stylesheet" />
+
+<div class="row">
+    <div class="col-md-6">
+        <div class="search-opt-headers">
+            <h4 class="search-heading">Search Options</h4>
+            <h6 class="h5-small">To start a search select your search options</h6>
+        </div>
+    </div>
+    <div class="col-md-6">
+        <div class="attr-search-options">
+            <div class="rule-dropdown-actions combiner-search-one" *ngIf="cat == 'TenderDealSearch' && rules && rules.length > 0">
+                <kendo-combobox id="ruleDropDownList" [data]="rules"
+                                placeholder="Select saved rules"
+                                class="opUiContainer sm abField dealtype-tender-style kendoInput noborderclass font-input contract-details-customer cd-input-bottom"
+                                textField="title"
+                                valueField="title"
+                                [kendoDropDownFilter]="filterSettings"
+                                [(ngModel)]="ruleToRun"
+                                (valueChange)="onRuleSelect($event)">
+                    <ng-template kendoComboBoxItemTemplate let-dataItem>
+                        <span class="template" *ngIf="dataItem.default">
+                            <i class="intelicon-favorite-rating-solid rule-icon rule-icon-selected" (click)="setDefaultRule(dataItem)"></i>
+                        </span>
+                        <span *ngIf="!dataItem.default">
+                            <i class="intelicon-favorite-rating-outlined rule-icon" (click)="setDefaultRule(dataItem)" title="Click me to make it Default Rule"></i>
+                        </span>
+                        <span class='textTitle' title={{dataItem.title}}>{{ dataItem.title }}</span><span><i class="intelicon-trash-solid delete-rule-icon rule-icon-selected" (click)="deleteSaveRule(dataItem)" title="Click me to Delete the Rule"></i></span>
+                    </ng-template>
+                </kendo-combobox>
+            </div>
+            <div class="btns-spacing-rules rule-dropdown-actions save-rule-btn-style combiner-search-two" *ngIf="enableSaveRules()">
+                <button class="btn btn-sm btn-default msave-btn-sty" type="button" (click)="saveAsRule()" *ngIf="currentRule === ''">Save Rule(s) As...</button>
+                <button class="btn btn-sm btn-default msave-btn-sty" type="button" (click)="saveRule()" *ngIf="currentRule !== ''">Save Rule(s)</button>
+                <button class="btn btn-sm btn-default dropdown-toggle msave-dropdwn" aria-expanded="false" type="button" data-toggle="dropdown">
+                    <span class="caret"></span>
+                    <span class="sr-only">Toggle Dropdown</span>
+                </button>
+                <ul class="dropdown-menu menu-container tender-li-dropdwn" role="menu">
+                    <li (click)="saveRule()"><a>Save Rule(s)</a></li>
+                    <li (click)="saveAsRule()"><a>Save Rule(s) As...</a></li>
+                    <li (click)="clearRule()"><a>Clear Rule(s)</a></li>
+                </ul>
+            </div>
+            <div class="combiner-search-three">
+                <button class="btn btn-sm btn-skyblue btn-primary run-rule-btnsty" type="button" (click)="runRule()">Run Rule(s)</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row">
+    <div class="search_cust_heading" *ngIf="currentRule===''">Create new custom search</div>
+</div>
+<div class="row" *ngIf="currentRule !== ''">
+    <div style="margin-left: 70px; font-size: 14px;">
+        Current Rule: <span class="curRule">{{currentRule}}</span>
+        <i class="icnSky intelicon-trash-outlined" (click)="deleteSaveRule()" title="Click to delete this rule"></i>
+    </div>
+</div>
+
+<div class="filterContainer" style="width:100%">
+    <div *ngFor="let dataItem of attributes;let i=index trackBy i" class="filterRow">
+
+        <span class="first-icon-search-opt-section icnBtn icnSkyBtn" (click)="addRow(i)"><i class="intelicon-plus-max  mplusminus-style"></i></span>
+
+        <span class="second-icon-search-opt-section icnBtn icnGryBtn" (click)="removeRow(dataItem, i)" *ngIf="cat=='TenderDealSearch' ? i!=0 : (cat!='TenderDealSearch')"><i class="intelicon-minus-max mplusminus-style"></i></span>
+
+        <span class="first-search-opt-section">
+            <kendo-dropdownlist [data]="availableAttrs"
+                                class="opUiContainer sm abField dealtype-tender-style k-dropdown-design"
+                                textField="title"
+                                valueField="field"
+                                [kendoDropDownFilter]="filterSettings"
+                                [disabled]="i==0 && disabledropdowns"
+                                [(ngModel)]="dataItem.selectedField"
+                                (valueChange)="valueChange($event, i)"></kendo-dropdownlist>
+        </span>
+
+        <span class="second-search-opt-section abOperator" *ngIf="dataItem.field !== ''">
+            <kendo-dropdownlist [data]="dataItem.opvalues"
+                                class="opUiContainer sm tender-equalto-style k-dropdown-design"
+                                textField="label"
+                                valueField="operator"
+                                [disabled]="i==0 && disabledropdowns"
+                                [(ngModel)]="dataItem.selectedOperator"
+                                (valueChange)="dataChange(i, dataItem, 'operator', $event)"></kendo-dropdownlist>
+        </span>
+
+        <span class="third-search-opt-section abValue" *ngIf="dataItem.field !== ''">
+            <span class="inner-third-span" *ngIf="dataItem.type == 'number' || dataItem.type == 'money' || dataItem.type == 'numericOrPercentage'">
+                <kendo-numerictextbox [(ngModel)]="dataItem.value"
+                                      class="advance-numerictextbox-style k-numberbox-design"
+                                      [format]="dataItem.type == 'money'? 'c2' : dataItem.type == 'numericOrPercentage' ? '0:n2':'0:n0'"
+                                      (blur)="dataChange(i, dataItem, 'numerictextbox')"></kendo-numerictextbox>
+                <kendo-dropdownlist *ngIf="dataItem.field == 'VOL_INCR'" class="box_style_dropdwn k-dropdown-design" [data]="['%', 'unit']"></kendo-dropdownlist>
+                <button *ngIf="dataItem.field == 'END_DT_PUSH'" class="days-style"><span>Days</span></button>
+            </span>
+            <span class="inner-third-span" *ngIf="dataItem.type == 'string' || dataItem.type == 'string_with_in' || dataItem.type == 'string_limited' || dataItem.type == 'autocomplete'">
+                <kendo-textbox [(ngModel)]="dataItem.value"
+                               class="tender-extra-box-style k-textbox-design"
+                               (blur)="dataChange(i, dataItem, 'textbox')"></kendo-textbox>
+                <span class="span-style-tender">Use <i style="margin-right: 3px; color: #FFA300;">*</i> for wildcard searches. <i style="color:#FFA300;">example: Sam sun*</i></span>
+            </span>
+            <span class="inner-third-span" *ngIf="dataItem.type == 'date'">
+                <kendo-datepicker [(ngModel)]="dataItem.value" class="calender-row-style k-custom-dater" calendarType="classic"
+                                  (blur)="dataChange( i, dataItem, 'datePicker')"></kendo-datepicker>
+            </span>
+            <span class="inner-third-span" *ngIf="dataItem.type == 'list' && dataItem.field != 'Customer.CUST_NM' && dataItem.field != 'PRODUCT_CATEGORIES' && dataItem.field != 'MRKT_SEG'
+          && dataItem.field != 'REBATE_TYPE' && dataItem.field != 'PROGRAM_PAYMENT' && dataItem.field != 'PAYOUT_BASED_ON'  && dataItem.field != 'SERVER_DEAL_TYPE'  ">
+                <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level"
+                                   [data]="dataItem.dropDown"
+                                   textField="Value"
+                                   valueField="Value"
+                                   kendoMultiSelectSummaryTag
+                                   [valuePrimitive]="true"
+                                   [(ngModel)]="dataItem.selectedValues"
+                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'Value')">
+                </kendo-multiselect>
+            </span>
+
+            <span class="inner-third-span" *ngIf="dataItem.type == 'list' && dataItem.field == 'PRODUCT_CATEGORIES'">
+                <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level"
+                                   [data]="dataItem.dropDown"
+                                   textField="PRD_CAT_NM"
+                                   valueField="PRD_CAT_NM"
+                                   [valuePrimitive]="true"
+                                   kendoMultiSelectSummaryTag
+                                   [(ngModel)]="dataItem.selectedValues"
+                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'PRD_CAT_NM')">
+                </kendo-multiselect>
+            </span>
+
+            <span class="inner-third-span" *ngIf="dataItem.type == 'list' && dataItem.field == 'Customer.CUST_NM'">
+                <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level"
+                                   kendoMultiSelectSummaryTag
+                                   [data]="dataItem.dropDown"
+                                   textField="CUST_NM"
+                                   valueField="CUST_SID"
+                                   [valuePrimitive]="true"
+                                   [(ngModel)]="dataItem.selectedValues"
+                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'CUST_NM')">
+                </kendo-multiselect>
+            </span>
+
+
+
+            <span class="inner-third-span" *ngIf="dataItem.type == 'list' && (dataItem.field == 'MRKT_SEG' || dataItem.field == 'REBATE_TYPE' || dataItem.field == 'PROGRAM_PAYMENT'
+          || dataItem.field == 'PAYOUT_BASED_ON' || dataItem.field == 'SERVER_DEAL_TYPE') ">
+
+                <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level"
+                                   [data]="dataItem.dropDown"
+                                   kendoMultiSelectSummaryTag
+                                   textField="DROP_DOWN"
+                                   valueField="DROP_DOWN"
+                                   [valuePrimitive]="true"
+                                   [(ngModel)]="dataItem.selectedValues"
+                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'DROP_DOWN')">
+                </kendo-multiselect>
+            </span>
+
+
+            <span class="inner-third-span" *ngIf="(dataItem.type == 'singleselect')&& dataItem.field == 'OBJ_SET_TYPE_CD'">
+                <kendo-dropdownlist class="opUiContainer sm tender_ecap_multi_style k-dropdown-design"
+                                    [data]="dataItem.dropDown"
+                                    textField="Value"
+                                    valueField="Value"
+                                    [(ngModel)]="dataItem.value"
+                                    [valuePrimitive]="true"
+                                    [kendoDropDownFilter]="filterSettings"
+                                    (valueChange)="dataChange(i, dataItem, 'combobox', $event)">
+                </kendo-dropdownlist>
+            </span>
+            <span class="inner-third-span" *ngIf="(dataItem.type == 'singleselect' || dataItem.type == 'singleselect_ext' || dataItem.type == 'singleselect_read_only') && dataItem.field !== 'OBJ_SET_TYPE_CD'">
+                <kendo-dropdownlist class="opUiContainer sm tender_ecap_multi_style k-dropdown-design"
+                                    [data]="dataItem.dropDown"
+                                    textField="DROP_DOWN"
+                                    valueField="DROP_DOWN"
+                                    [valuePrimitive]="true"
+                                    [kendoDropDownFilter]="filterSettings"
+                                    [(ngModel)]="dataItem.value"
+                                    (valueChange)="dataChange(i, dataItem, 'combobox', $event)">
+                </kendo-dropdownlist>
+            </span>
+        </span>
+
+        <div class="clearboth"></div>
+    </div>
+
+</div>
+
+
+<kendo-dialog *ngIf="isDialogVisible" (close)="close()">
+    <div class="savepopup-align">This rule is not complete. Please fix the rule before proceeding.</div>
+    <kendo-dialog-actions class="tender-action-popup">
+        <button (click)="closeKendoAlert()" class="ok_saverule-btn-align">OK</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+<kendo-dialog *ngIf="isKitDialog" (close)="closeKitDialog()" class="save-popup-height">
+    <h4 class="popup-header"> Please, enter a name for the rule:</h4>
+    <div class="popup-note">   <b>Note:</b> The rule name must be unique.</div>
+    <div class="popup-textbox">
+        Only those filters selected under the '<b>Search Options</b>' (right hand side of the screen)<br>
+        will be included in the creation of the user defined 'search rule'.  The '<b>Customers</b>' and '<b>
+            Date<br> Range
+        </b>' filters (left hand side of the screen) will not be considered as 'search rule' filters.
+    </div>
+    <div class="txt-margin"><kendo-textbox class="txt-width k-textbox-design" placeholder="" [(ngModel)]="title" name="title"></kendo-textbox></div>
+    <kendo-dialog-actions class="tender-action-popup">
+        <button class="btnalign btn-primary" (click)="saveAsRuleOkay()">OK</button>
+        <button class="btnalign cancelDelete-btn-style" (click)="saveAsRuleClose()">CANCEL</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+<kendo-dialog *ngIf="isDialogPopup">
+    <div class="savepopup-align">Please enter a name for the rule. Would you like to try again?</div>
+    <kendo-dialog-actions class="tender-action-popup">
+        <button class="btnalign btn-primary" (click)="submitDialog()">OK</button>
+        <button class="btnalign cancelDelete-btn-style" (click)="closePopup()">CANCEL</button>
+    </kendo-dialog-actions>
+</kendo-dialog>
+<kendo-dialog *ngIf="isDuplicateTitle">
+    <div class="savepopup-align">The title was already used. Would you like to enter a different name?</div>
+    <kendo-dialog-actions class="tender-action-popup">
+        <button class="btnalign btn-primary" (click)="duplicateDataDialog()">OK</button>
+        <button class="btnalign cancelDelete-btn-style" (click)="duplicateDataDialogClose()">CANCEL</button>
+    </kendo-dialog-actions>
+</kendo-dialog>

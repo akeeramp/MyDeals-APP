@@ -14,6 +14,7 @@ import * as moment from "moment";
 import { excludeDealGroupModalDialog } from "../managerExcludeGroups/excludeDealGroupModal.component";
 import { MatDialog } from "@angular/material/dialog";
 import * as _ from 'underscore';
+import { tenderGroupExclusionModalComponent } from "../ptModals/tenderDashboardModals/tenderGroupExclusionModal.component";
 
 export interface contractIds {
     Model: string;
@@ -49,6 +50,9 @@ export class managerPctComponent {
     @Input() contractData: any;
     @Input() UItemplate: any;
     @Input() tab: any;
+    @Input() isTenderDashboard: boolean = false;//will recieve true when PCT Used in Tender Dashboard Screen
+    @Input() PS_ID: any;
+    @Input() WIP_ID: any;
     @Output() refreshedContractData = new EventEmitter<any>();
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
     private spinnerMessageHeader = "Complete"; 
@@ -101,6 +105,9 @@ export class managerPctComponent {
     private ECAP_KIT_Col = ['TOOLS', 'PRC_CST_TST_STS', 'DEAL_ID', 'PRODUCT', 'PCSR_NBR', 'DEAL_DESC', 'GRP_DEALS', 'DEAL_STRT_DT', 'CAP', 'ECAP_PRC', 'ECAP_FLR', 'LOW_NET_PRC', 'PRD_COST', 'CST_TYPE', 'COST_TEST_OVRRD_FLG', 'COST_TEST_OVRRD_CMT', 'RTL_CYC_NM', 'RTL_PULL_DLR', 'MKT_SEG', 'GEO', 'PYOUT_BASE_ON', 'CNSMPTN_RSN', 'PROG_PMT', 'DEAL_GRP_CMNT', 'LAST_COST_TEST_RUN']
     private VOL_REV_FLEX_DNSTY_Col = ['TOOLS', 'PRC_CST_TST_STS', 'DEAL_ID', 'PRODUCT', 'PCSR_NBR', 'DEAL_DESC', 'GRP_DEALS', 'DEAL_STRT_DT', 'MAX_RPU', 'LOW_NET_PRC', 'PRD_COST', 'CST_TYPE', 'COST_TEST_OVRRD_FLG', 'COST_TEST_OVRRD_CMT', 'RTL_CYC_NM', 'RTL_PULL_DLR', 'MKT_SEG', 'GEO', 'PYOUT_BASE_ON', 'CNSMPTN_RSN', 'PROG_PMT', 'DEAL_GRP_CMNT', 'LAST_COST_TEST_RUN']
     private PGM_Col = ['TOOLS', 'PRC_CST_TST_STS', 'DEAL_ID', 'PRODUCT', 'PCSR_NBR', 'DEAL_DESC', 'GRP_DEALS', 'DEAL_STRT_DT', 'OEM_PLTFRM_LNCH_DT', 'OEM_PLTFRM_EOL_DT', 'MAX_RPU', 'LOW_NET_PRC', 'PRD_COST', 'CST_TYPE', 'COST_TEST_OVRRD_FLG', 'COST_TEST_OVRRD_CMT', 'RTL_CYC_NM', 'RTL_PULL_DLR', 'MKT_SEG', 'GEO', 'PYOUT_BASE_ON', 'CNSMPTN_RSN', 'PROG_PMT', 'DEAL_GRP_CMNT', 'LAST_COST_TEST_RUN']
+    public expandDetailsBy = (dataItem: any): number => {
+        return dataItem;
+    };
     toggleSum() {
         this.refreshPage= false;
         this.contractData?.PRC_ST.map((x, i) => {
@@ -327,6 +334,8 @@ export class managerPctComponent {
         this.contractManagerSvc.readContract(this.contractId).subscribe((response: any) => {
             if(response && response.length>0){
                 this.contractData = response[0];
+                if (this.isTenderDashboard && this.contractData.PRC_ST && this.PS_ID)//PCT screen of Tender Dashboard displays only particular PS not all
+                    this.contractData.PRC_ST = this.contractData.PRC_ST.filter(x => x.DC_ID == this.PS_ID);
                 this.refreshedContractData.emit({ contractData: this.contractData });
                 this.refreshGrid();
                 this.contractId= this.contractData.DC_ID;
@@ -334,7 +343,14 @@ export class managerPctComponent {
                 this.contractData?.PRC_ST.map((x, i) => {
                     //intially setting all the PS row arrow icons and PT data row arrow icons as collapses. this isPSExpanded,isPTExpanded is used to change the arrow icon css accordingly
                     this.isPSExpanded[i] = false;
-                    if (x.PRC_TBL != undefined) x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
+                    if (this.isTenderDashboard)//PCT screen of Tender Dashboard data needs to be expanded on load
+                        this.isPSExpanded[i] = true;
+                    if (x.PRC_TBL != undefined) {
+                        x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
+                        if (this.isTenderDashboard) {//PCT screen of Tender Dashboard data needs to be expanded on load
+                            x.PRC_TBL.forEach((y) => { this.isPTExpanded[y.DC_ID] = true; this.togglePt(y); });
+                        }
+                    }
                 })
             }
             this.isPctLoading = false;
@@ -361,6 +377,8 @@ export class managerPctComponent {
 
     onTabSelect(event: any) {
         this.selectedTab = event.index;
+        if (this.isTenderDashboard && event.index == 1)//PCT screen of Tender Dashboard have only two tabs (All, Grouping Exclusions)
+            this.selectedTab = 5;
         this.headerSvc.getUserDetails().subscribe(res => {
             this.usrRole = res.UserToken.Role.RoleTypeCd;
             (<any>window).usrRole = this.usrRole;
@@ -374,7 +392,14 @@ export class managerPctComponent {
         });
         if (this.selectedTab == 5) {
             event.preventDefault();
-            this.loadModel('groupExclusionDiv');
+            if (!this.isTenderDashboard)
+                this.loadModel('groupExclusionDiv');
+            else {//PCT screen of Tender Dashboard requires Grouping Exclusion Tab as a popup modal
+                this.selectedTab = 0;
+                this.openGroupExclusionModal();
+                event.index = 0;
+                event.title = "All";
+            }
         }
         this.selTab(event.title);
         if (this.pctFilter != "") {
@@ -383,6 +408,22 @@ export class managerPctComponent {
         else {
             this.pricingStrategyFilter = this.contractData?.PRC_ST;
         }
+    }
+    openGroupExclusionModal() {
+        const dialogRef = this.dialog.open(tenderGroupExclusionModalComponent, {
+            width: "1420px",
+            panelClass:'tender-grouping-exclusion',
+            data: {
+                contractData: this.contractData,
+                WIP_ID: this.WIP_ID,
+                isTenderDashboard: this.isTenderDashboard,
+                selLnav: 'groupExclusionDiv',
+                UItemplate: this.UItemplate
+            }
+        });
+        dialogRef.afterClosed().subscribe((returnVal) => {
+
+        });
     }
     swapUnderscore(str) {
         return str.replace(/_/g, ' ');
@@ -509,6 +550,9 @@ export class managerPctComponent {
                 this.executePct();
         }, 2000);
         this.pricingStrategyFilter = this.contractData?.PRC_ST;
+        if (this.isTenderDashboard) {//If PCT screen triggered from Tender Dashboard, all datas needs to be expanded
+            this.isAllCollapsed = false;
+        }
     }
 
 
