@@ -756,3 +756,7 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active {
     border-bottom: 0 !important;
     border-color: #b1babf !important;
 }
+.hyperunderline:hover {
+    text-decoration: underline;
+    color: #0071c5;
+}
