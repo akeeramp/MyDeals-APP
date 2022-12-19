@@ -49,11 +49,13 @@
 }
 
 #bulkPriceUpdateModalWindow .prc-custom-header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  width: 100%;
-  padding: 15px;
+    display: flex !important;
+    align-items: center !important;
+    justify-content: space-between !important;
+    width: 100% !important;
+    padding: 15px !important;
+    background-color: #003C71 !important;
+    color: #fff !important;
 }
 .notes {
     font-size: 14px;
@@ -274,4 +276,7 @@ p.no-data-ok {
 }
 #extractUnify .col-md-11.notes {
     margin-left: 20px !important;
+}
+#btnClose.admin-bulk-btnclose:hover {
+    color: #fff !important;
 }

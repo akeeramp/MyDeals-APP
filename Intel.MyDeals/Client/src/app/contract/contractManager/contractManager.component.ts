@@ -67,6 +67,7 @@ export class contractManagerComponent {
     ptId = 0;
     parent_dcId: any;
     allPTEData: any =[];
+    isToggle: boolean;
     constructor(protected dialog: MatDialog,private loggerSvc: logger, private contractManagerSvc:contractManagerservice, private lnavSvc: lnavService) {
         //pls dont remove this even it its not as part of the route this is to handle condtions when we traverse between contract details with in manage tab
         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
@@ -301,10 +302,12 @@ export class contractManagerComponent {
     togglePending(runActions) {
         if (!this.isPending) {
             this.isPending = true;
+            this.isToggle = true;
             this.contractData.CUST_ACCPT = "Pending";
             if (runActions) this.actionItems(true, false);
         } else {
             this.isPending = false;
+            this.isToggle = false;
             this.contractData.CUST_ACCPT = "Accepted";
             if (runActions) this.actionItems(true, true);
         }
@@ -313,6 +316,7 @@ export class contractManagerComponent {
         this.showPendingWarning = false;
         if(this.pendingWarningActions == true){
             this.isPending = !this.isPending;
+            this.isToggle = this.isPending;
             if(this.isPending){
                 this.contractData.CUST_ACCPT = "Pending";
             } else {
@@ -807,8 +811,10 @@ export class contractManagerComponent {
                 })
                 if(this.contractData.CUST_ACCPT === "Pending"){
                     this.isPending = true;
+                    this.isToggle = true;
                 } else if(this.contractData.CUST_ACCPT === "Accepted"){
                     this.isPending = false;
+                    this.isToggle = false;
                 }
                 this.filteredData = this.contractData?.PRC_ST; 
                 this.showData = true;
@@ -1011,11 +1017,11 @@ export class contractManagerComponent {
                 })
             })
             this.loadContractDetails();
-            if(this.contractData.CUST_ACCPT === "Pending"){
-                this.isPending = true;
-            } else {
-                this.isPending = false;
-            }
+            //if(this.contractData.CUST_ACCPT === "Pending"){
+            //    this.isPending = true;
+            //} else {
+            //    this.isPending = false;
+            //}
             this.userRole = (<any>window).usrRole;
             this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
             setTimeout(() => {

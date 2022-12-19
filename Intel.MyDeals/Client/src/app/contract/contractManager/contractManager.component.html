@@ -1,9 +1,15 @@
 <div id="sum-wrapper" *ngIf="showData">
     <div id="sum-header" style="min-width: 800px;height:106px">
         <div class="divine-pro" style="margin-bottom: 10px; font-size: 14px; line-height: 2.9em; text-align: center; position: absolute; top: -4px; right: 10px !important; ">            
-            <span style="color: #0071C5; padding-right:22px">Customer Acceptance</span>
+            <span class="cust_title_style">Customer Acceptance</span>
             <span id="toggle-container" [title]="(isCustAcptReadOnly == true && custAccptButton !== 'Pending')? '' :'Click to Change Contract Acceptance Criteria'">
-                <button type="button" class="btn  bts-btns" style="width:140px;line-height: 1em !important;height: 26px !important;" [ngClass]="custAccptButton === 'Pending' ? 'btn-primary' : 'btn-success' " (click)="pendingChange()" [disabled]="(isCustAcptReadOnly == true && custAccptButton !== 'Pending')">{{custAccptButton}}</button>            
+                <!--<button type="button" class="btn  bts-btns" style="width:140px;line-height: 1em !important;height: 26px !important;" [ngClass]="custAccptButton === 'Pending' ? 'btn-primary' : 'btn-success' " (click)="pendingChange()" [disabled]="(isCustAcptReadOnly == true && custAccptButton !== 'Pending')">{{custAccptButton}}</button>-->   
+                <kendo-switch class="contract-toggle"
+                              offLabel="Accepted" onLabel="Pending"
+                              [disabled]="(isCustAcptReadOnly == true && custAccptButton !== 'Pending')"
+                              (valueChange)="pendingChange()"
+                              [(ngModel)]="isToggle">
+                </kendo-switch>
             </span>
         </div>
         <div id="manageHeaderbakground" class="sum-filter-bar add-sub-sum" style="padding: 1px 10px;">
@@ -96,21 +102,19 @@
                                 <!-- <kendo-dialog-actions><button kendoButton (click)="close('no')">OK</button></kendo-dialog-actions> -->
                             </kendo-dialog>
 
-                            <kendo-dialog *ngIf="showPendingWarning" class="dialogPending" [width]="500" [height]="350">
-                                <div class="wrn-red" style="text-align: left;"><i class="intelicon-information-solid"></i> Correction Required</div>
+                            <kendo-dialog *ngIf="showPendingWarning" class="dialogPending contract_manager_dialog" [width]="500" [height]="350">
+                                <div class="wrn-red corrrection-text" style="text-align: left;"><i class="intelicon-information-solid"></i> Correction Required</div>
                                 <div *ngIf="showPendingInfo">
-                                    <div style="padding: 15px 25px; height: 250px;">
+                                    <div class="contract_manage_correction">
                                         <p style="text-align: left">C2A Contract # or attaching the contract associated with this deal is required in order to change your contract from Pending to Accepted.</p>
                                         <div style="text-align: center; margin-top: 34px;">
-                                            <button class="btn btn-sm btn-skyblue" type="button" (click)="showPending('showPendingFile')"
-                                                    style="margin: 0 20px -30px 20px; width: 130px; height: 120px;">
+                                            <button class="btn btn-sm btn-skyblue contract_manager_file" type="button" (click)="showPending('showPendingFile')">
                                                 <div style="text-align: center;">
                                                     <div><i class="intelicon-attach-document-outlined" style="font-size: 60px;"></i></div>
                                                     Attach Contract
                                                 </div>
                                             </button>
-                                            <button class="btn btn-sm btn-skyblue" type="button" (click)="showPending('showPendingC2A')"
-                                                    style="margin: 0 20px -30px 20px; width: 130px; height: 120px;">
+                                            <button class="btn btn-sm btn-skyblue contract_manager_file" type="button" (click)="showPending('showPendingC2A')">
                                                 <div style="text-align: center;">
                                                     <div><i class="intelicon-user-approved-selected-outlined" style="font-size: 60px;"></i></div>
                                                         Add C2A Contract #
@@ -119,29 +123,45 @@
                                         </div>
                                     </div>
                                     <div style="text-align: center;">
-                                        <button class="btn btn-sm btn-grey" type="button" (click)="closeDialog()" style="margin: 0 10px -30px 10px; width: 110px;">
+                                        <button class="btn btn-sm btn-grey contract_correction_cancel" type="button" (click)="closeDialog()" style="margin: 0 10px -30px 10px; width: 110px;">
                                             Cancel
                                         </button>
                                     </div>
                                       
                                 </div>
                                 <div *ngIf="showPendingFile">
-                                    <div style="padding: 15px 25px; height: 190px;">
+                                    <div class="contract_manage_uploadscreen">
                                         <p style="text-align: left">
                                             Attach the contract associated with this deal to change your My Deals contract from Pending to Accepted.
                                         </p>
-                                        <div class="f1 opUiLabel opUiLableWidth" style="text-align: left" [ngClass]="{isRequired: contractData.IsAttachmentRequired}">&nbsp;&nbsp;&nbsp;&nbsp;Attachment(s):&nbsp;
-                                            <span kendo-tooltip k-content="constants.helptipMsgAttachment" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span></div>
-                                            <kendo-upload [saveUrl]="uploadSaveUrl" [restrictions]="myRestrictions" (success)="successEventHandler()" (error)="onFileUploadError()"
-                                            (upload)="uploadEventHandler($event)" [autoUpload]="false" [(ngModel)]="files" name="files" ></kendo-upload>
-                                          </div>
+                                        <div class="f1 opUiLabel opUiLableWidth" style="text-align: left" [ngClass]="{isRequired: contractData.IsAttachmentRequired}"> &nbsp;&nbsp;&nbsp;&nbsp;Attachment(s):&nbsp;
+                                            <!--<span kendo-tooltip k-content="constants.helptipMsgAttachment" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span>-->
+                                            <span kendoTooltip class="opElementHelpIcon contract-tooltip-style intelicon-information-outlined" k-content="constants.helptipMsgAttachment"
+                                                  title="Attach multiple files.&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Allowed File Types: doc, xls, txt, bmp, jpg, pdf, ppt, zip, xlsx, docx, pptx, odt, ods, ott, sxw, sxc, png, 7z, xps."
+                                                  position="top" [tooltipWidth]="300">
+                                            </span>
+                                        </div>
+                                        <!--<kendo-upload [saveUrl]="uploadSaveUrl" [restrictions]="myRestrictions" (success)="successEventHandler()" (error)="onFileUploadError()"
+                                                      (upload)="uploadEventHandler($event)" [autoUpload]="false" [(ngModel)]="files" name="files"></kendo-upload>-->
+                                        <kendo-upload class="contract-correction-upload"
+                                                      [saveUrl]="uploadSaveUrl"
+                                                      [removeUrl]="uploadRemoveUrl"
+                                                      [concurrent]="false"
+                                                      [multiple]="true"
+                                                      [restrictions]="myRestrictions"
+                                                      (upload)="uploadEventHandler($event)"
+                                                      (success)="successEventHandler()"
+                                                      [(ngModel)]="files"
+                                                      (error)="onFileUploadError()">
+                                        </kendo-upload>
+                                    </div>
                                     <div style="text-align: center;">
-                                        <button class="btn btn-sm btn-grey" type="button" 
+                                        <button class="btn btn-sm btn-grey contract_correction_backbtn" type="button" 
                                                 [ngClass]="{'disabled': contractData.HAS_ATTACHED_FILES === '1'}"
                                                 (click)="showPending('showPendingInfo')" style="margin: 0 10px -30px 10px; width: 110px;">
                                             << Back
                                         </button>
-                                        <button class="btn btn-sm btn-skyblue" type="button" 
+                                        <button class="btn btn-sm btn-skyblue contract_done_btn" type="button" 
                                                 [ngClass]="{'disabled': !contractData.HAS_ATTACHED_FILES}"
                                                 (click)="continueAction(true,null)" style="margin: 0 10px -30px 10px; width: 110px;">
                                             Done
@@ -149,25 +169,25 @@
                                     </div>
                                 </div>
                                 <div *ngIf="showPendingC2A">
-                                    <div style="padding: 15px 25px; height: 190px;">
+                                    <div class="c2a-popup-style">
                                         <p style="text-align: left;">
                                             Enter C2A Contract # for this deal to change your My Deals contract from Pending to Accepted.
-                                        <p style="margin-top: 20px;text-align: left;">                    
+                                        <p style="margin-top: 20px;text-align: left;">
                                             C2A Contract #:<br />
-                                            <span >
-                                            <input type="text" placeholder="Enter C2A Number" 
-                                                   [(ngModel)]="contractData.C2A_DATA_C2A_ID" style="width: 260px; padding: 4px;">
-                                            <button class="btn btn-skyblue" style="width: 130px !important; margin: -2px 10px 0 10px; width: 110px;" type="button"
-                                                    [ngClass]="{'disabled': (contractData.C2A_DATA_C2A_ID.trim() === '' )}" [disabled]="contractData.C2A_DATA_C2A_ID.trim() === ''"
-                                                    (click)="(contractData.C2A_DATA_C2A_ID.trim() === '' ) || continueAction(true,null)">
-                                                Use C2A Number
-                                            </button>
-                                        </span>
+                                            <span>
+                                                <input type="text" placeholder="Enter C2A Number"
+                                                       [(ngModel)]="contractData.C2A_DATA_C2A_ID" style="width: 260px; padding: 4px;color:#444 !important">
+                                                <button class="btn btn-skyblue" style="width: 130px !important; margin: -2px 10px 0 10px; width: 110px;" type="button"
+                                                        [ngClass]="{'disabled': (contractData.C2A_DATA_C2A_ID.trim() === '' )}" [disabled]="contractData.C2A_DATA_C2A_ID.trim() === ''"
+                                                        (click)="(contractData.C2A_DATA_C2A_ID.trim() === '' ) || continueAction(true,null)">
+                                                    Use C2A Number
+                                                </button>
+                                            </span>
                                         </p>
                                         <p style="color: yellow; font-size: 14px;text-align: left; ">Please note, values longer than 18 characters will be truncated in Vistex.  Characters (like semicolons) not supported by Vistex will also be removed.</p>
-                                    </div>
+</div>
                                     <div style="text-align: center;">
-                                        <button class="btn btn-sm btn-grey" type="button" (click)="showPending('showPendingInfo')" style="margin: 0 10px -30px 10px; width: 110px;">
+                                        <button class="btn btn-sm btn-grey c2a-back-btnstyle" type="button" (click)="showPending('showPendingInfo')" style="margin: 0 10px -30px 10px; width: 110px;">
                                             << Back
                                         </button>
                                     </div>
