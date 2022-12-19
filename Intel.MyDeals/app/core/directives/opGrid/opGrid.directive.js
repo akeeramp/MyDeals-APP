@@ -2276,7 +2276,7 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
 
                 if (col == "START_DT" || col == "END_DT") {
                     if (model.PAYOUT_BASED_ON != null && model.PAYOUT_BASED_ON != undefined && model.PAYOUT_BASED_ON === "Consumption") {
-                        kendo.alert("Changes to Billing Start/End Dates for Consumption deals will change Consumption Start/End Dates.<br>Validate Consumption Start/End Dates with the Contract.");
+                        kendo.alert("Changes to deal Start/End Dates for Consumption deals will change Billings Start/End Dates.<br>Validate Billings Start/End Dates with the Contract.");
                     }
                 }
 
@@ -3166,14 +3166,14 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
                     },
                     {
                         field: "START_DT",
-                        title: "Billing Start Date",
+                        title: "Deal Start Date",
                         width: "120px",
                         template: "<div class='ovlpCell'> #= kendo.toString(START_DT) # </div>",
                         groupable: false
                     },
                     {
                         field: "END_DT",
-                        title: "Billing End Date",
+                        title: "Deal End Date",
                         width: "120px",
                         template: "<div class='ovlpCell'> #= kendo.toString(END_DT) # </div>",
                         groupable: false
@@ -3985,4 +3985,3 @@ function opGrid($compile, objsetService, $timeout, colorDictionary, $uibModal, $
         }
     };
 }
-

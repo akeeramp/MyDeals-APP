@@ -26,7 +26,7 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
 
     var msg = "";
     var msgClass = "";
-    // When payout is based on billings, show blank for Billing start date and end date fields, as these are readonly fields
+    // When payout is based on billings, show blank for Billing startdate and end date fields, as these are readonly fields
     if (passedData['PAYOUT_BASED_ON'] != undefined && passedData['PAYOUT_BASED_ON'] == 'Billings' && (field == 'REBATE_BILLING_START' || field == 'REBATE_BILLING_END')) {
         var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
         tmplt += '<div class="uiControlDiv"';
@@ -35,14 +35,14 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
         return tmplt
     }
 
-    //If Consumption start date is more than 6 months in the past from Billing Start date then make Consumption Starty Date cell softwarning as per US759049
+    //If Billing start date is more than 6 months in the past from Deal Start date then make billing start date cell softwarning as per US759049
     if (field == 'REBATE_BILLING_START' && passedData['REBATE_TYPE'] != 'TENDER' && passedData['PAYOUT_BASED_ON'] == 'Consumption')
     {       
         var dt1 = moment(passedData['START_DT']).format("MM/DD/YYYY");        
         var dt2 = moment(passedData['REBATE_BILLING_START']).format("MM/DD/YYYY");
         if (moment(dt1).isAfter(moment(dt2).add(6, 'months')))
         {
-            msg = "title = 'The Consumption Start Date is more than six months before the Billing Start Date.'";
+            msg = "title = 'The Billing Start Date is more than six months before the Deal Start Date.'";
             msgClass = "isSoftWarnCell";
         }
 
@@ -266,7 +266,7 @@ gridUtils.uiStartDateWrapper = function (passedData, field, format) {
     var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
     tmplt += '<div class="uiControlDiv"';
     tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';
-    tmplt += '    <div class="ng-binding vert-center"><span ng-if="displayFrontEndDateMessage(dataItem)"> <i class="intelicon-information style="font- size: 12px; color: #00AEEF;" title="If the Billing Start Date is in the past, the Billing Start Date will change to the date when the deal becomes active."></i> </span>';
+    tmplt += '    <div class="ng-binding vert-center"><span ng-if="displayFrontEndDateMessage(dataItem)"> <i class="intelicon-information style="font- size: 12px; color: #00AEEF;" title="If the deal start date is in the past, the deal start date will change to the date when the deal becomes active."></i> </span>';
     tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></span></div>';
     tmplt += '</div>';
     return tmplt;
@@ -820,7 +820,7 @@ gridUtils.uiDimInfoControlWrapper = function (passedData, field) {
             }
             tmplt += "op-options='" + field + "' op-label='' op-data='getPrductDetails(dataItem, \"" + field + "\", \"" + dimkey + "\")'>";
             var fieldText = field + '_STRT_DT';
-            // Special handling for YCS2, naming convention is not followed in defining Billing Start Date attribute..
+            // Special handling for YCS2, naming convention is not followed in defining start date attribute..
             if (field === "YCS2") {
                 fieldText = field + '_START_DT';
             }
@@ -3482,5 +3482,4 @@ perfCacheBlock.prototype.addPerfTimes = function (performanceTimes) {
         lapse += item.ExecutionTime;
     }
 }
-
 

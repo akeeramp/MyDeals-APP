@@ -127,14 +127,14 @@
                         
                         {
                             field: "START_DT",
-                            title: "Billing Start Date",
+                            title: "Deal Start Date",
                             width: "80px",                            
                             template: "#= kendo.toString(new Date(START_DT), 'M/d/yyyy') #",
                             filterable: { multi: true, search: true }
                         },
                         {
                             field: "END_DT",
-                            title: "Billing End Date",
+                            title: "Deal End Date",
                             width: "80px",
                             template: "#= kendo.toString(new Date(END_DT), 'M/d/yyyy') #",
                             filterable: { multi: true, search: true }
