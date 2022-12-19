@@ -899,3 +899,7 @@ kendo-grid.grid_fix {
 kendo-grid.security-engine-tables .k-grid-content {
     overflow: overlay;
 }
+
+.width-changing-dialog .k-dialog {
+    width: 480px !important
+}

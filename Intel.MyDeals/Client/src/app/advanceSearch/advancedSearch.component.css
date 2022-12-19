@@ -308,7 +308,8 @@ kendo-numerictextbox.advance-numerictextbox-style.k-widget.k-numerictextbox:focu
 }
 
 .click-adv.advSearch:hover {
-    color: #abadaf !important
+    color: #003C71 !important;
+    text-decoration: underline !important;
 }
 
 .click-adv.advSearch {

@@ -60,10 +60,10 @@
             <button class="btn btn-success simulationBtn" type="button" (click)="runSimulation()">Run Simulation Now</button>
         </div>
     </div>
-    <kendo-dialog title="Message" *ngIf="isAlert" (close)="cancelAlert()">
-        <p style="margin: 30px; text-align: center;">{{message}}</p>
+    <kendo-dialog *ngIf="isAlert" (close)="cancelAlert()" class="k-dialog-popup-design width-changing-dialog" [width]="480" [height]="155">
+        <p style="text-align: center;font-weight:600">{{message}}</p>
         <kendo-dialog-actions>
-            <button class='k-button' (click)="cancelAlert()">OK</button>
+            <button class='k-button cancel-btn-pop-up' (click)="cancelAlert()">OK</button>
         </kendo-dialog-actions>
     </kendo-dialog>
 </div>
