@@ -248,6 +248,13 @@ export class pricingTableEditorComponent {
                         if (VM.curRow[0] && VM.curRow[0].delPTR_SYS_PRD) {
                             delete VM.curRow[0].delPTR_SYS_PRD
                         }
+                    } else {
+                        let curRow = PTE_CellChange_Util.returnEmptyRow();
+                        let prd = this.hot.getDataAtRowProp(this.selRow, 'PTR_USER_PRD')
+                        if (this.field && this.field == 'PTR_USER_PRD' && (curRow == 0 || this.selRow == 0) && (prd == null || prd == '' || prd == undefined) ) {
+                            VM.enableDeTab.emit({ isEnableDeTab: false, enableDeTabInfmIcon: false });
+                            return [];
+                        }
                     }
                 });
 
