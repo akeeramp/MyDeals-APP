@@ -6,9 +6,9 @@ import * as _ from 'underscore';
 @Component({
     selector: 'dropDown-filter',
     template: `
-    <kendo-dropdownlist class="drop-cus-filtersty" [textField]="textField"
+    <kendo-combobox class="drop-cus-filtersty" [textField]="textField"
         [valueField]="valueField" [data]="data" [value]="selectedValue" (valueChange)="onSelectionChange(valueAccessor($event))">
-    </kendo-dropdownlist>
+    </kendo-combobox>
   `,
     styles: []
 })
