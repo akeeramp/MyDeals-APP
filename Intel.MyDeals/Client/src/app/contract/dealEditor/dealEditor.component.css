@@ -46,7 +46,7 @@
     background-color: #FC4C02
 }
 
-.badge {
+.badge.badges-font-changes {
     vertical-align: top !important;
     font-size: 13px !important
 }

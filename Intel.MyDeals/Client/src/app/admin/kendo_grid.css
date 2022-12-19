@@ -895,3 +895,7 @@ kendo-grid.grid_fix {
     display: block !important;
     left: 0 !important
 }
+
+kendo-grid.security-engine-tables .k-grid-content {
+    overflow: overlay;
+}

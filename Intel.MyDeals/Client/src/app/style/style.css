@@ -206,3 +206,8 @@ kendo-grid.icon-changes table tr td.k-detail-cell table tr td a.k-plus:focus:bef
 .tender-db-styles .tender_de_admin kendo-grid#dealEditor {
     height: calc(100vh - 280px) !important;
 }
+
+.grids-manager-table td {
+    font-size: 12px !important;
+    white-space: nowrap;
+}
