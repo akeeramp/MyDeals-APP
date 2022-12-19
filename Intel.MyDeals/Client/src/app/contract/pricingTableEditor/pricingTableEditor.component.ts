@@ -686,7 +686,8 @@ export class pricingTableEditorComponent {
                 this.hotTable.render();
                 this.isExcludePrdChange = true;
             }
-            this.enableDeTab.emit({ isEnableDeTab: true, enableDeTabInfmIcon: this.isDeTabInfmIconReqd });
+            let isEnable = this.hotTable.isEmptyRow(0);
+            this.enableDeTab.emit({ isEnableDeTab: !isEnable, enableDeTabInfmIcon: this.isDeTabInfmIconReqd });
         }
     }
     async deletePTR() {
