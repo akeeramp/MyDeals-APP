@@ -712,7 +712,7 @@ button.btn.btn-sm.btn-grey.contract_correction_backbtn {
     border: 1px solid #e4e9ea !important;
     color: #70706e !important;
     border-radius: 4px !important;
-    top: 6px !important;
+    top: 11px !important;
     position: relative !important;
     left: 23px !important;
 }
@@ -730,7 +730,7 @@ button.btn.btn-sm.btn-grey.contract_correction_cancel:hover {
 }
 
 button.btn.btn-sm.btn-skyblue.contract_done_btn {
-    top: -55px !important;
+    top: -50px !important;
     position: relative !important;
     left: 65px !important;
     width: 135px !important;

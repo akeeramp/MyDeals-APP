@@ -160,7 +160,7 @@ kendo-window#OvrLp.k-wind-design {
 }
 .contract-toggle.k-switch-on .k-switch-handle {
     background-color: #eeeeee !important;
-    top: -3.1px !important;
+    top: 0px !important;
     width: 10px !important;
     height: 20px !important;
     left: calc(100% - 7px) !important;
@@ -169,7 +169,7 @@ kendo-window#OvrLp.k-wind-design {
 
 .contract-toggle.k-switch-off .k-switch-handle {
     background-color: #eeeeee !important;
-    top: -3.1px !important;
+    top: 0px !important;
     width: 10px !important;
     height: 20px !important;
     left: -2.2px !important;
@@ -303,4 +303,10 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
     border: none !important;
     background-color: transparent !important;
     padding: 0px !important;
+}
+.contract_manager_dialog.k-dialog.k-window {
+    border-radius: 0px !important;
+    border-top: 0px !important;
+    border-right: 0px !important;
+    border-left: 0px !important;
 }
