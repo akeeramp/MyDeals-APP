@@ -85,7 +85,7 @@
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="120" field="ACTV_IND" filter="boolean">
                 <ng-template kendoGridCellTemplate let-dataItem>
-                    <mat-slide-toggle class="toggle-button-custom toggle-align-grid gridCheckboxAlign" [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
+                    <mat-slide-toggle class="toggle-button-custom toggle-align-grid gridCheckboxAlign mat-slideDisable-Custom" [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
                 </ng-template>
                 <ng-template kendoGridHeaderTemplate>
                     <div class='isRequired leagalgridheader'>Active </div>
@@ -95,7 +95,7 @@
           
             <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="110" field="IS_DSBL" filter="boolean">
                 <ng-template kendoGridCellTemplate let-dataItem >
-                    <mat-slide-toggle class="toggle-button-custom toggle-align-grid gridCheckboxAlign" [color]="color" [checked]="dataItem.IS_DSBL" disabled></mat-slide-toggle>
+                    <mat-slide-toggle class="toggle-button-custom toggle-align-grid gridCheckboxAlign mat-slideDisable-Custom" [color]="color" [checked]="dataItem.IS_DSBL" disabled></mat-slide-toggle>
                 </ng-template>
                 <ng-template kendoGridHeaderTemplate>
                     <div class='isRequired leagalgridheader'>Hidden </div>

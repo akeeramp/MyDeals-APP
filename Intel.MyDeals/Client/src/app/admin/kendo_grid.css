@@ -903,3 +903,6 @@ kendo-grid.security-engine-tables .k-grid-content {
 .width-changing-dialog .k-dialog {
     width: 480px !important
 }
+.mat-slideDisable-Custom {
+    opacity: 0.7 !important;
+}

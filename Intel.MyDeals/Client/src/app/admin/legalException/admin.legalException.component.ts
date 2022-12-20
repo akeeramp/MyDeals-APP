@@ -206,7 +206,7 @@ export class adminlegalExceptionComponent {
 
                 if (returnVal != undefined && returnVal != "close") {
                     this.adminlegalExceptionSrv.updateLegalException(returnVal).subscribe((result: Array<any>) => {
-                        this.loggersvc.success("Customer Vendor Updated.");
+                        this.loggersvc.success("Legal Exception was successfully updated.");
                     }, (error) => {
                         this.loggersvc.error('Unable to update Legal exception.', error);
                     });
