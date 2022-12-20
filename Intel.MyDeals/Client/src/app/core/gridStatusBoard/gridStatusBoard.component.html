@@ -63,7 +63,7 @@
                         <ng-template kendoGridCellTemplate let-dataItem>
                             <div kendoTooltip filter="div">
                                 <div class="textDecoratorWrap" title="{{dataItem.TOOLTIP_CONTENT}}">
-                                    <a href="/Contract#/manager/{{dataItem.CNTRCT_OBJ_SID}}" target="_blank" title="Click to open the Contract in the Contract Editor" style="cursor:pointer">
+                                    <a (click)="goToSelType(dataItem.CNTRCT_OBJ_SID)" title="Click to open the Contract in the Contract Editor" style="cursor:pointer">
                                         <span style="color: #FFA300;">[{{dataItem.CNTRCT_OBJ_SID}}]</span>
                                         <span style="color: #0071c5;"> {{dataItem.TITLE}}</span>
                                     </a>
