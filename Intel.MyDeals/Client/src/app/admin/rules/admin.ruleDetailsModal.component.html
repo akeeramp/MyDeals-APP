@@ -227,7 +227,7 @@
                 <div [hidden]="!Rules.IsAutomationIncluded" class="form-group row col-md-12" id="productCriteria" style="padding-bottom: 10px;">
                     <label class="control-label col-md-2" style="padding-right: 20px; font-weight: bold;">Product Criteria:</label>
                     <div class="col-md-9">
-                        <hot-table [hotId]="hotId" [data]="ProductCriteria" [settings]="hotSettings" class="all-spread"></hot-table>
+                        <hot-table [hotId]="hotId" [data]="ProductCriteria" [settings]="hotSettings" class="all-spread price-rule-spread"></hot-table>
                         <button (click)="validateProduct(true,false,'Validate')" class="btn btn-primary validate-price-rule-style">Validate Products</button>
                     </div>
                 </div>

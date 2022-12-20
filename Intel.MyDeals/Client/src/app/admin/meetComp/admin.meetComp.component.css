@@ -216,10 +216,11 @@ kendo-grid.pro-meetComp.k-widget.k-grid
   background-color: #00aeef !important;
 }
 #confirmationMsg {
-  width: 400px;
-  white-space: normal;
-  align-items: center;
-  left: 600px;
+    width: 400px;
+    white-space: normal;
+    align-items: center;
+    left: 776px;
+    top: 85px;
 }
 #meetCompExcel th {
   white-space: normal !important;
@@ -257,4 +258,50 @@ kendo-popup
 
 #meetCompurlLink a{
   color: #0071c5;
+}
+kendo-dialog-actions.bulky-btn-style.k-dialog-buttongroup.k-actions.k-actions-stretched {
+    gap: 0;
+    padding: 0;
+    border-radius: 0;
+}
+
+kendo-dialog-actions.bulky-btn-style.k-dialog-buttongroup.k-actions.k-actions-stretched .k-button {
+    color: #ffffff;
+    padding: 1.5em 0;
+    font-size: 15px;
+    font-weight: 500;
+    font-family: 'Intel Clear';
+}
+
+button.bulky-ok-btn.k-button {
+    background-color: #00aeef !important;
+}
+
+button.bulky-ok-btn.k-button:hover {
+    background: #00aeef !important;
+}
+
+button.bulky-cancel-btn.k-button {
+    background: #0071c5 !important;
+}
+
+button.bulky-cancel-btn.k-button:hover {
+    background: #00aeef !important;
+}
+
+#confirmationMsg .k-content.k-window-content.k-dialog-content {
+    padding: 2.4em !important;
+}
+
+#confirmationMsg .bulky-paragraph {
+    font-size: 15px;
+    font-family: 'Intel Clear';
+    color: #444444;
+    margin-bottom: 0 !important;
+    min-width: 350px;
+}
+
+#meetCompAlert .k-widget.k-window.k-dialog,
+#confirmationMsg .k-widget.k-window.k-dialog {
+    width: auto !important;
 }

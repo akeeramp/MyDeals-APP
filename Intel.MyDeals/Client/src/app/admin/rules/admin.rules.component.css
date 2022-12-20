@@ -12,3 +12,6 @@
     top: 0;
     left: 0;
 }
+.price-rule-spread #spreadsheet table.htCore tr th {
+    background: #f0f0f4 !important;
+}

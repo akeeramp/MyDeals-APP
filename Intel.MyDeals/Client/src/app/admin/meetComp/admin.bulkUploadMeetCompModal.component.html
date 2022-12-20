@@ -77,10 +77,10 @@
     </kendo-dialog-actions>
 </kendo-dialog>
 <kendo-dialog (close)="closeConfirmation()" *ngIf="isConfirmationReqd" id="confirmationMsg">
-    <p [innerHTML]='confirmationMsg'></p>
-    <kendo-dialog-actions>
-        <button kendoButton (click)="UploadMeetComps()" themeColor="primary">OK</button>
-        <button kendoButton (click)="closeConfirmation()" themeColor="primary">CANCEL</button>
+    <p [innerHTML]='confirmationMsg' class="bulky-paragraph"></p>
+    <kendo-dialog-actions class="bulky-btn-style">
+        <button kendoButton (click)="UploadMeetComps()" themeColor="primary" class="bulky-ok-btn">OK</button>
+        <button kendoButton (click)="closeConfirmation()" themeColor="primary" class="bulky-cancel-btn">CANCEL</button>
     </kendo-dialog-actions>
 </kendo-dialog>
 <kendo-dialog (close)="closePriceAlert('close')" *ngIf="isInvalidPrice" title="Invalid Price" >
