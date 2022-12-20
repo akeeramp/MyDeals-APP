@@ -273,7 +273,13 @@ export class AutoFillComponent {
                 if (this.autofillData.DEFAULT.PERIOD_PROFILE.value !== "Yearly") {
                     this.autofillData.DEFAULT.PERIOD_PROFILE.value = "Yearly";
                 }
-            }
+            } 
+            if (((this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value != null && this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value !== "") ||
+            (this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value != null && this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value !== "")) && 
+                this.dealType == 'VOL_TIER' && this.autofillData.isVistexHybrid == false) {
+                    this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.value = "";
+                    this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.value = "";
+                }
             this.isLoading = true;
             this.setBusy("Saving...", "Saving your data...", "Info", false);
             if (this.currPricingTable == null) {
