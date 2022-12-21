@@ -7,15 +7,15 @@
         [description]="spinnerMessageDescription" [msgType]="'Info'"></loading-panel-angular>
 
     <div class="modal-content" id="meetCompModal"
-        style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none">
+        style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none;border-top-left-radius: 0px !important;border-top-right-radius: 0px !important;">
         <div class="custom-header modalBlueBody">
-            <h3 id="modalTitle">Bulk Upload - Meet Comp</h3>
+            <h3 id="modalTitle" style="margin-left:15px">Bulk Upload - Meet Comp</h3>
             <i id="btnClose" class="intelicon-close" (click)="closeWindow()" title="Close this window"></i>
         </div>
         <div id="modalBodyDiv" class="modal-body" *ngIf="HasBulkUploadAccess">
             <div id="extractMeetComp" *ngIf="meetComps.length <= 0">
                 <div class="row" style="margin-top: 10px;">
-                    <div class="col-md-11 notes">
+                    <div class="col-md-11 notes-meetcomp">
                         <span class="redbold">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Duplicate
                             entries will be ignored. Your attachment will upload after clicking the "Upload Meet Comp"
                             button.</span><br /><br />
@@ -24,7 +24,7 @@
                 <div class="form-group row">
                     <div class="col-md-11">
                         <kendo-upload id="meetCompFileUpd" [restrictions]="fileUploadOptions.validation" [(ngModel)]="files" name="files"
-                            class="kuploadaction" (success)="successEventHandler($event)"
+                            class="kuploadaction meetcomp-upload" (success)="successEventHandler($event)"
                              (error)="onFileUploadError()" (complete)="onFileUploadComplete()"
                             [saveUrl]="fileUploadOptions.async.saveUrl" [batch]="false" [autoUpload]="false" [multiple]="false"></kendo-upload>
 
@@ -32,7 +32,7 @@
                 </div>
                 <div class="form-group row">
                     <div class="col-md-8" id="meetCompurlLink">
-                        <a download target="_blank"  href="/api/FileAttachments/GetMeetCompTemplateFile">Click here to
+                        <a class="text-dwnlod-style-bulkupload" download target="_blank"  href="/api/FileAttachments/GetMeetCompTemplateFile">Click here to
                             download the template</a>
                     </div>
                     <div class="col-md-3">
@@ -51,10 +51,10 @@
         </div>
         <div class="modal-footer" *ngIf="meetComps.length > 0 && HasBulkUploadAccess">
             <div class="form-group row action_btns">
-                <div class="col-md-12" style="right:10px">
+                <div class="col-md-12" style="right:30px">
                     <button (click)="validateMeetComps()" class="btn btn-primary" style="margin-left: 15px">Validate
                         Imported Meet Comp Data</button>
-                    <button class="btn" (click)="saveMeetComps()"
+                    <button class="btn saveimported-databtn" (click)="saveMeetComps()"
                         [disabled]="IsSpreadSheetEdited" id="saveImportBtn"
                         style="margin-left: 15px">Save Imported Data</button>
                     <button (click)="closeWindow()" class="btn btn-primary" style="margin-left: 15px">Cancel /

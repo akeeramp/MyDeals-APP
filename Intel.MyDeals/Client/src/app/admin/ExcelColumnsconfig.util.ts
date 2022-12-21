@@ -23,13 +23,13 @@
             data: 'MEET_COMP_PRC',
             type: 'numeric',
             readOnly: false,
-            width: 75
+            width: 80
         },
         {
             data: 'IA_BNCH',
             type: 'numeric',
             readOnly: false,
-            width: 75
+            width: 80
         },
         {
             data: 'COMP_BNCH',

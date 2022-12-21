@@ -74,16 +74,30 @@ kendo-grid.pro-meetComp.k-widget.k-grid
   box-shadow: none;
 }
 #meetCompFileUpd .k-file-name {
-  font-weight: bold;
+    font-weight: normal !important;
+    font-size: 15px !important;
+    font-family: 'Intel Clear' !important;
+    color: #444 !important;
 }
 #saveImportBtn.btn[disabled] {
-  background-color: #edeff0;
-  color: #b1babf;
-  border-color: #b1babf !important;
+    background-color: #edeff0 !important;
+    color: #b1babf !important;
+    border-color: #b1babf !important;
+    cursor: not-allowed !important;
+    pointer-events: all !important;
 }
-#saveImportBtn:hover {
-  background-color: #0b5ed7;
+#saveImportBtn.btn[disabled]:hover {
+    background-color: #edeff0 !important;
+    color: #b1babf !important;
+    border-color: #b1babf !important;
+    cursor: not-allowed !important;
+    pointer-events: all !important;
 }
+button#saveImportBtn.saveimported-databtn:hover {
+    background-color: #367fa9 !important;
+    border-color: #00aeef !important;
+}
+
 #saveImportBtn {
   color: #fff;
   background-color: #367fa9;
@@ -190,6 +204,8 @@ kendo-grid.pro-meetComp.k-widget.k-grid
   padding: 0 !important;
   position: relative;
   margin-top: -150px;
+  border-radius:0px !important;
+  overflow:hidden !important
 }
 #meetCompAlert .k-dialog .k-button {
   color: black;
@@ -304,4 +320,42 @@ button.bulky-cancel-btn.k-button:hover {
 #meetCompAlert .k-widget.k-window.k-dialog,
 #confirmationMsg .k-widget.k-window.k-dialog {
     width: auto !important;
+}
+.text-dwnlod-style-bulkupload {
+    color: #0071c5 !important;
+    text-decoration: none !important;
+    margin-left: 0px !important;
+    margin-left:5px !important
+}
+.text-dwnlod-style-bulkupload:hover {
+    color: #004579 !important;
+    text-decoration: underline !important
+}
+#meetCompAlert.k-dialog-wrapper .k-dialog {
+    position: relative !important;
+    border-bottom: 0px !important;
+    border-left: 0px !important;
+    border-right: 0px !important;
+    border-radius: 0px !important;
+    min-width: 265px !important;
+    text-align: center !important;
+}
+.notes-meetcomp{
+    margin-left: 5px !important
+}
+.meetcomp-upload.k-upload .k-progressbar {
+    position: absolute !important;
+    bottom: 0.5rem !important;
+    width: calc(100% - 0rem) !important;
+    margin-left: -16px !important;
+}
+kendo-upload#meetCompFileUpd.meetcomp-upload {
+    overflow: hidden !important;
+    margin-left:5px !important
+}
+#confirmationMsg.k-dialog-wrapper .k-dialog {
+    border-bottom: 0px !important;
+    border-left: 0px !important;
+    border-right: 0px !important;
+    text-align:left !important
 }
