@@ -439,7 +439,7 @@
                                 </tr>
                                 <tr *ngIf="percData!= null">
                                     <th style="text-align: right;">Total</th>
-                                    <td>1000</td>
+                                  
                                     <td *ngIf="percData.vol != 0" colspan="2" style="text-align: right;"> {{ percData.numerator | number }} out of  {{percData.vol | number}} </td>
                                 <td *ngIf="percData.vol == 0" colspan="2" style="text-align: right;"> {{ percData.numerator | number }}  out of Unlimited</td>
                                 </tr>
@@ -452,7 +452,7 @@
                         </div>
 
                         <div class="fr cn-info-container" *ngIf="data.VOLUME">
-                             <kendo-chart   [style.height.px]="120">
+                             <kendo-chart  class="accural_remove_1" kendoTooltip title="Accruable - 100%" style="position: relative; height: 160px; top: -11px;">
                                 <kendo-chart-legend position="bottom"></kendo-chart-legend>
                                 <kendo-chart-series>
                                     <kendo-chart-series-item type="pie"
