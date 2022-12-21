@@ -45,7 +45,7 @@
                                 title="Execute Price Cost Test and Meet Comp Test"
                                 style="padding-left:100px">
                             <i class="fa fa-refresh fa-fw iconRunPct" [ngClass]="isRunning ? 'fa-spin grn' : '' " aria-hidden="true" style="font-size: 20px"></i>                            
-                        </button>&nbsp;<span *ngIf="isTenderDashboard" class="tender_mctpct">Price Cost Test</span>
+                        </button><span *ngIf="isTenderDashboard" class="tender_mctpct">&nbsp;Price Cost Test</span>
                     </td>
                     <td style="width: 120px; text-align: center;" *ngIf="!isTenderDashboard">
                         Price Cost Test <div class="btnLastRun" style="font-size: 9px; color: #00AEEF; line-height: 1.1em;" title="{{lastMetCompRunLocalTime}}">{{lastMeetCompRunCalc('Price Cost Test')}}</div>

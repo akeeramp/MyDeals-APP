@@ -151,11 +151,11 @@
             </kendo-grid>
         </ng-template>
     </kendo-grid>
-    <kendo-dialog class="admin-delete-style" *ngIf="isDeletion">
-        <p style="margin: 20px; text-align: center;">Are you sure want to delete this rule?</p>
+    <kendo-dialog class="admin-delete-style k-dialog-popup-design" *ngIf="isDeletion" [width]="350">
+        <p style="text-align: center;">Are you sure want to delete this rule?</p>
         <kendo-dialog-actions class="del-admin">
-            <button class='k-button admin-okbtn-style' (click)="deleteConfirmation()">OK</button>
-            <button class='k-button admin-cancelbtn-style' (click)="cancelDeletion()">CANCEL</button>
+            <button class='k-button ok-btn-pop-up line-height-unset' (click)="deleteConfirmation()">OK</button>
+            <button class='k-button cancel-btn-pop-up line-height-unset' (click)="cancelDeletion()">CANCEL</button>
         </kendo-dialog-actions>
     </kendo-dialog>
 </div>

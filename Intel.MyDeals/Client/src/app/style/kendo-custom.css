@@ -103,3 +103,15 @@ kendo-textbox.k-textbox-design:focus-within {
     background-color: #ececec !important;
     border: none !important;
 }
+
+kendo-combobox.cd-input-bottom {
+    border-bottom: 2px solid #0071c5
+}
+
+    kendo-combobox.cd-input-bottom:focus-within {
+        border-bottom: 2px solid #0071c5 !important
+    }
+
+.k-calendar-header .k-calendar-title:hover {
+    color: #424242 !important
+}
