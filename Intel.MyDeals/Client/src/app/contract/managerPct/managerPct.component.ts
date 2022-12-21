@@ -554,9 +554,11 @@ export class managerPctComponent {
             this.isAllCollapsed = false;
         }
     }
+    goToNavManagePCT(DC_PARENT_ID, DC_ID, ptDC_ID, DEAL_ID) {
+        window.open(`/Contract#/manager/WIP/${DC_PARENT_ID}/${DC_ID}/${ptDC_ID}/${DEAL_ID}`, '_blank')
 
-
-}
+    }
+   }
 angular.module("app").directive(
     "managerPct",
     downgradeComponent({
