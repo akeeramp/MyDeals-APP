@@ -189,12 +189,12 @@ export class bulkUnifyModalComponent {
                         alertMsg = alertMsg + '•' + "NULL cannot be used as Unified Customer Name" + '\n';
                         this.setErrorCell(i, 2);
                     }
-                    var patt = new RegExp("^[\\w\\s.,:'\&+-]*$");
-                    var res = patt.test(this.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name);
-                    if (!res) {
-                        alertMsg = alertMsg + '•' + "Unified Customer Name contains invalid characters" + '\n';
-                        this.setErrorCell(i, 2);
-                    }
+                    //var patt = new RegExp("^[\\w\\s.,:'\&+-/]*$");
+                    //var res = patt.test(this.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name);
+                    //if (!res) {
+                    //    alertMsg = alertMsg + '•' + "Unified Customer Name contains invalid characters" + '\n';
+                    //    this.setErrorCell(i, 2);
+                    //}
                 }
                 if (this.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name != null && this.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name != "") {
                     if (this.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name.toLowerCase() == "any") {
@@ -205,7 +205,7 @@ export class bulkUnifyModalComponent {
                         alertMsg = alertMsg + '•' + "NULL cannot be used as 'To Be Unified Customer Name'" + '\n';
                         this.setErrorCell(i, 6);
                     }
-                    var patt = new RegExp("^[\\w\\s.,:'\&+-]*$");
+                    var patt = new RegExp("^[\\w\\s.,:'\&+-/]*$");
                     var res = patt.test(this.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name);
                     if (!res) {
                         alertMsg = alertMsg + '•' + "'To Be Unified Customer Name' contains invalid characters" + '\n';
@@ -522,7 +522,7 @@ export class bulkUnifyModalComponent {
                         alertMsg += '•' + "NULL cannot be used as Unified Customer Name" + '\n';
                         this.setErrorCell(i, 2);
                     }
-                    let patt = new RegExp("^[\\w\\s.,:'\&+-]*$");
+                    let patt = new RegExp("^[\\w\\s.,:'\&+-/]*$");
                     let res = patt.test(this.inValidUnifyDeals[i].UCD_GLOBAL_NAME);
                     if (!res) {
                         alertMsg += '•' + "Unified Customer Name contains invalid characters" + '\n';

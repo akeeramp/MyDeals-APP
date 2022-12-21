@@ -51,6 +51,17 @@ export class adminlegalExceptionComponent {
         skip: 0,
         take: 25,
         sort: [],
+        filter: {
+            logic: "and",
+            filters: [{
+                logic: "and",
+                filters: [{
+                    field: "ACTV_IND",
+                    operator: "eq",
+                    value: true
+                }],
+            }],
+        }
     };
     public childState: State = {
         skip: 0,
