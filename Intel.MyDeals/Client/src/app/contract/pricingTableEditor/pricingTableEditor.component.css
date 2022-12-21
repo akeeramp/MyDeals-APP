@@ -191,12 +191,14 @@ td:not(.error-cell).readonly-cell {
 kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li.k-state-disabled span {
     background-color: #cccccc !important;
     color: #5c5b5b;
-    cursor: not-allowed !important
+    cursor: not-allowed !important;
+    pointer-events:auto !important;
 }
 
 kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li.k-state-disabled {
     border: 1px solid #0071C5 !important;
-    cursor: not-allowed !important
+    cursor: not-allowed !important;
+    pointer-events:auto !important;
 }
 
 #spreadsheet .wtHolder {

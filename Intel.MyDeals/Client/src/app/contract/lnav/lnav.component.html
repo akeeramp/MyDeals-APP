@@ -158,10 +158,11 @@
                     </div>
                 </ng-template>
             </kendo-tabstrip-tab>
-            <kendo-tabstrip-tab [selected]="selectedTab == 1" [disabled]="enableFlowBtn()" title="Meet Comp">
+            <kendo-tabstrip-tab [selected]="selectedTab == 1" [disabled]="enableFlowBtn()">
                 <ng-template kendoTabTitle>
                     <i *ngIf="needMct()" id="meetCompIcon" class="intelicon-information-outlined font-med" title="Meet Comp needs to be reviewed" style="color: yellow;">&nbsp;</i>
-                    Meet Comp
+                    <p style="margin:0px;" title="{{showMeetCompTitle()}}">Meet Comp</p>
+
                 </ng-template>
                 <ng-template kendoTabContent>
                     <div class="lnavContainer">
@@ -190,7 +191,10 @@
                     </div>
                 </ng-template>
             </kendo-tabstrip-tab>
-            <kendo-tabstrip-tab title="Manage" [selected]="selectedTab == 2" [disabled]="enableFlowBtn()">
+            <kendo-tabstrip-tab  [selected]="selectedTab == 2" [disabled]="enableFlowBtn()">
+                <ng-template kendoTabTitle>
+                    <p style="margin:0px;" title="{{showManageTitle()}}">Manage</p>
+                </ng-template>
                 <ng-template kendoTabContent>
                     <div class="lnavContainer">
                         <div>

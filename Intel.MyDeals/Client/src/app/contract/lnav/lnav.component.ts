@@ -164,7 +164,7 @@ export class lnavComponent {
     }
     customAddPsValidate() {
         let isvalid = true;
-        this.isAddStrategyBtnHidden = true;       
+        this.isAddStrategyBtnHidden = true;
         const values = this.newStrategy;
 
         // Clear all values
@@ -209,7 +209,7 @@ export class lnavComponent {
             this.isAddStrategyBtnHidden = false;
         }
     }
-    addPricingStrategy() {        
+    addPricingStrategy() {
         this.isLoading = true;
         this.setBusy("Saving...", "Saving the Pricing Strategy", "Info", true);
         const ct = this.contractData;
@@ -236,20 +236,20 @@ export class lnavComponent {
             this.loggerSvc.success("Save Successful", "Added Pricing Strategy");
             this.newStrategy.TITLE = "";
             //this condition need to revisit will check later
-            this.newStrategy.IS_HYBRID_PRC_STRAT = ps.IS_HYBRID_PRC_STRAT=="1"?true:false;
+            this.newStrategy.IS_HYBRID_PRC_STRAT = ps.IS_HYBRID_PRC_STRAT == "1" ? true : false;
             this.curPricingStrategy = ps;
             this.curPricingStrategyId = ps.DC_ID;
             this.contractDetailsSvc.readContract(contractId).subscribe((response: Array<any>) => {
                 this.contractData = response[0];
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
-            },(err)=>{
-                this.loggerSvc.error("Unable to get contract data","Error",err);
+            }, (err) => {
+                this.loggerSvc.error("Unable to get contract data", "Error", err);
             });
             this.isLoading = false;
             this.setBusy("", "", "", false);
-        },(err)=>{
-            this.loggerSvc.error("Unable to create pricing strategy","Error",err);
+        }, (err) => {
+            this.loggerSvc.error("Unable to create pricing strategy", "Error", err);
             this.isLoading = false;
         })
         //expand pricing strategy after creation.
@@ -263,8 +263,8 @@ export class lnavComponent {
             .readContract(cId)
             .subscribe((response: Array<any>) => {
                 this.contractData = response[0];
-            },(err)=>{
-                this.loggerSvc.error("Unable to get contract data","Error",err);
+            }, (err) => {
+                this.loggerSvc.error("Unable to get contract data", "Error", err);
             });
     }
     // **** PRICING TABLE Methods ****
@@ -373,13 +373,13 @@ export class lnavComponent {
                 this.loadPTE(pt.DC_PARENT_ID, pt.DC_ID, 0, 0);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
-            },(err)=>{
-                this.loggerSvc.error("Unable to get contract data","Error",err);
+            }, (err) => {
+                this.loggerSvc.error("Unable to get contract data", "Error", err);
             });
             this.isLoading = false;
             this.setBusy("", "", "", false);
-        },(err)=>{
-            this.loggerSvc.error("Unable to create pricing table","Error",err);
+        }, (err) => {
+            this.loggerSvc.error("Unable to create pricing table", "Error", err);
             this.isLoading = false;
         })
     }
@@ -450,7 +450,7 @@ export class lnavComponent {
     }
 
     copyObj(objType, objTypes, id, isPs) {
-        
+
         this.isLoading = true;
         this.setBusy("Copying...", "Copying the " + objType, "Info", true);
 
@@ -484,7 +484,7 @@ export class lnavComponent {
         if (isPs == true) {
             this.lnavSvc.copyPricingStrategy(custId, contractId, id, item).subscribe((response: any) => {
                 this.loggerSvc.success("Copied the " + objType + ".", "Copy Successful");
-                this.refreshContractData(contractId);                
+                this.refreshContractData(contractId);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             }, (err) => {
@@ -533,7 +533,7 @@ export class lnavComponent {
             }
         });
     }
-    
+
     deletePricingStrategy(ps) {
         this.lnavSelectedPS = ps;
         this.isDeletePs = true;
@@ -584,7 +584,7 @@ export class lnavComponent {
                 this.loggerSvc.error("Could not delete Pricing Table" + this.lnavSelectedPT.DC_ID, err, err.statusText);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
-                };
+            };
         }
         else {
             this.isDeletePT = false;
@@ -596,7 +596,7 @@ export class lnavComponent {
         this.lnavSelectedPS = ps;
         this.lnavSelectedPT = pt;
         this.isDeletePT = true;
-    }    
+    }
     onSelectPtMenu(event: any, ps: any, pt: any): void {
         //Number eventIndex = parseInt(event.index);
         switch (event.item?.text) {
@@ -637,7 +637,7 @@ export class lnavComponent {
                 break;
             case "Edit Pricing Strategy Name":
                 this.editPricingStrategyName(ps);
-                break;            
+                break;
             case "Delete Pricing Strategy":
                 this.deletePricingStrategy(ps);
                 break;
@@ -710,8 +710,8 @@ export class lnavComponent {
                     this.contractDetailsSvc.readContract(this.contractData.DC_ID).subscribe((response: Array<any>) => {
                         this.contractData = response[0];
                         this.loadPTE(this.newPricingTable.DC_PARENT_ID, this.newPricingTable.DC_ID, 0, 0);
-                    },(err)=>{
-                        this.loggerSvc.error("Unable to get contract data","Error",err);
+                    }, (err) => {
+                        this.loggerSvc.error("Unable to get contract data", "Error", err);
                     });
                     this.hideAddPricingTable();
                 }
@@ -784,8 +784,8 @@ export class lnavComponent {
                 this.superPrefix = "Super";
                 this.extraUserPrivsDetail.push("Super User");
             }
-        },(err)=>{
-            this.loggerSvc.error("Unable to get user role data","Error",err);
+        }, (err) => {
+            this.loggerSvc.error("Unable to get user role data", "Error", err);
         });
         if (event.title == "Deal Entry") {
             this.loadModel('PTE');
@@ -870,10 +870,10 @@ export class lnavComponent {
             Model: model,
             ps_id: 0,
             pt_id: 0,
-            ps_index:0,
-            pt_index:0,
+            ps_index: 0,
+            pt_index: 0,
             C_ID: this.contractId,
-            contractData: this.contractData           
+            contractData: this.contractData
         };
         this.modelChange.emit(contractDetails_Map);
     }
@@ -891,14 +891,14 @@ export class lnavComponent {
         return isNeedMCT;
     }
     ngOnInit() {
-        try{
+        try {
             this.newStrategy = this.UItemplate["ObjectTemplates"]?.PRC_ST.ALL_TYPES;
             this.newPricingTable = this.UItemplate.ObjectTemplates.PRC_TBL.ECAP;
             this.newStrategy.IS_HYBRID_PRC_STRAT = false;
             this.contractData?.PRC_ST?.map((x, i) => {
                 this.isPSExpanded[i] = true
             });
-            if (this.contractData && (this.contractData.PRC_ST == undefined || this.contractData.PRC_ST.length == 0)){
+            if (this.contractData && (this.contractData.PRC_ST == undefined || this.contractData.PRC_ST.length == 0)) {
                 if (this.C_ADD_PRICING_STRATEGY) {
                     this.toggleAddStrategy();
                 }
@@ -910,11 +910,18 @@ export class lnavComponent {
                 this.loggerSvc.error("lnavSvc::isAutoFillChange**********", err);
             });
         }
-        catch(ex){
+        catch (ex) {
             this.loggerSvc.error('Something went wrong', 'Error');
-            console.error('LNAV::ngOnInit::',ex);
+            console.error('LNAV::ngOnInit::', ex);
         }
 
+    }
+    showManageTitle() {
+        return this.enableFlowBtn() ? "Please click the Deal Editor in order to validate your deals." : "";
+
+    }
+    showMeetCompTitle() {
+        return this.enableFlowBtn() ? "Please click the Deal Editor in order to validate your deals before entering Meet Comp Data." : "";
     }
     ngOnChanges() {
         if (this.changedTab == 2) {
