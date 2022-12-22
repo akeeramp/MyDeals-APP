@@ -352,7 +352,7 @@ export class contractDetailsComponent {
         this.contractData["TITLE"] = this.TITLE;
         this.contractData["displayTitle"] = this.TITLE;
         this.contractData["START_DT"] = moment(this.START_DT).format("l");
-        this.contractData["START_QTR"] = 1;
+        this.contractData["START_QTR"] = this.START_QTR;
         this.contractData["START_YR"] = this.START_YR;
         this.contractData["C2A_DATA_C2A_ID"] = this.C2A_DATA_C2A_ID;
         this.contractData["BACK_DATE_RSN"] = (this.BACK_DATE_RSN?.DROP_DOWN != "" && this.BACK_DATE_RSN != undefined) ? this.BACK_DATE_RSN?.DROP_DOWN : "";
@@ -629,6 +629,8 @@ export class contractDetailsComponent {
                         if (changeEvent == "START_QTR" || changeEvent == "START_YR" || changeEvent == "START_DT") {
                             this.START_QTR = response?.QTR_NBR;
                             this.START_YR = response?.YR_NBR;
+                            this.contractData.MinDate = moment(response["MIN_STRT"]).format("l");
+                            this.contractData.MaxDate = moment(response["MIN_END"]).format("l");
                             this.START_DT = (changeEvent == "START_DT") ? this.START_DT : new Date(moment(response["QTR_STRT"]).format("l"));
                             const strtDate = new Date(this.contractData.START_DT);
                             const selectedDate = this.START_DT;
@@ -950,16 +952,7 @@ export class contractDetailsComponent {
                                     this.contractData.CUST_MBR_SID = this.Customer = Number(this.copyContractData.CUST_MBR_SID);
                                     this.contractData.START_DT = this.START_DT = this.stDate = new Date(moment(this.copyContractData.START_DT).format("l"));
                                     this.contractData.END_DT = this.END_DT = this.existingMinEndDate = new Date(moment(this.copyContractData.END_DT).format("l"));
-                                    if (this.isCopyContract) {
-                                        if (moment(this.contractData.END_DT) > moment('2099/12/31').add(0, 'years')) {
-                                            this.contractData.END_DT = moment('2099/12/31').format("MM/DD/YYYY");
-                                            this.END_DT = moment('2099/12/31').format("MM/DD/YYYY");
-                                            this.END_DT = new Date(this.END_DT);
-                                        }
-                                    }
                                     this.Customer = this.copyContractData.Customer;
-                                    this.contractData.MinDate = this.MinDate = moment().subtract(6, "years").format("l");
-                                    this.contractData.MaxDate = this.MaxDate = moment("2099").format("l");
                                     this.contractData.MinYear = this.MinYear = parseInt(moment().format("YYYY")) - 6;
                                     this.contractData.MaxYear = this.MaxYear = parseInt(moment("2099").format("YYYY"));
                                     // NOTE: START_QTR,START_YR,END_YR,END_QTR are not present in copyContractData,, as they are undefined calling getCurrentQuarterDetails to get the data--Check

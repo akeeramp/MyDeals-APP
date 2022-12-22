@@ -54,3 +54,6 @@
 .accural_remove_1 .k-chart-surface svg g g g text {
     font-size: 12px !important;
 }
+.micro-grid col.k-group-col {
+    width: 0px !important;
+}

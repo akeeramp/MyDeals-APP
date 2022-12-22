@@ -916,13 +916,6 @@ export class lnavComponent {
         }
 
     }
-    showManageTitle() {
-        return this.enableFlowBtn() ? "Please click the Deal Editor in order to validate your deals." : "";
-
-    }
-    showMeetCompTitle() {
-        return this.enableFlowBtn() ? "Please click the Deal Editor in order to validate your deals before entering Meet Comp Data." : "";
-    }
     ngOnChanges() {
         if (this.changedTab == 2) {
             this.openMeetCompTab();
