@@ -739,8 +739,8 @@ export class dealEditorComponent {
         if (this.templates.details.Groups === undefined) this.templates.details.Groups = [];
         this.templates.details.Groups.push(data);
 
-        if (this.templates.DC_PARENT_ID.Groups === undefined) this.templates.DC_PARENT_ID.Groups = [];
-        this.templates.DC_PARENT_ID.Groups.push(data);
+        if (this.templates.END_CUSTOMER_RETAIL.Groups === undefined) this.templates.END_CUSTOMER_RETAIL.Groups = [];
+        this.templates.END_CUSTOMER_RETAIL.Groups.push(data);
         this.selectedTab = data;
         this.filterColumnbyGroup(this.selectedTab);
         this.setWarningDetails();

@@ -373,9 +373,7 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
             }
         }
     }
-    goToSelType(CNTRCT_OBJ_SID:any){
-        window.open(`/Contract#/manager/${CNTRCT_OBJ_SID}`, '_blank') 
-    }
+
     async getAngularStatus(){
         this.angularEnabled=await this.dynamicEnablementService.isAngularEnabled();
      }

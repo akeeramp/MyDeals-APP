@@ -60,13 +60,13 @@
                         <kendo-grid-column title="Stage" field="WF_STG_CD" [headerClass]="{'headerClass':true}"
                                            [width]="100" [hidden]="!pctGroupDealsView"></kendo-grid-column>
 
-                        <kendo-grid-column title="Deal Start" field="START_DT" [headerClass]="{'headerClass':true}"
+                        <kendo-grid-column title="Deal Start" field="START_DT" [headerClass]="{'headerClass':true}" filter="date"
                                            [width]="120" [hidden]="pctGroupDealsView"></kendo-grid-column>
-                        <kendo-grid-column title="Deal End" field="END_DT" [headerClass]="{'headerClass':true}"
+                        <kendo-grid-column title="Deal End" field="END_DT" [headerClass]="{'headerClass':true}" filter="date"
                                            [width]="120" [hidden]="pctGroupDealsView"></kendo-grid-column>
-                        <kendo-grid-column title="Deal Start" field="DEAL_STRT_DT" [headerClass]="{'headerClass':true}"
+                        <kendo-grid-column title="Deal Start" field="DEAL_STRT_DT" [headerClass]="{'headerClass':true}" filter="date"
                                            [width]="120" [hidden]="!pctGroupDealsView"></kendo-grid-column>
-                        <kendo-grid-column title="Deal End" field="DEAL_END_DT" [headerClass]="{'headerClass':true}"
+                        <kendo-grid-column title="Deal End" field="DEAL_END_DT" [headerClass]="{'headerClass':true}" filter="date"
                                            [width]="120" [hidden]="!pctGroupDealsView"></kendo-grid-column>
                         <kendo-grid-column title="Additive" field="DEAL_COMB_TYPE" [headerClass]="{'headerClass':true}"
                                            [width]="120" [hidden]="pctGroupDealsView"></kendo-grid-column>
@@ -74,19 +74,19 @@
                                            [width]="120" [hidden]="!pctGroupDealsView"></kendo-grid-column>
                         <kendo-grid-column title="Deal Description" field="DEAL_DESC"
                                            [headerClass]="{'headerClass':true}" [width]="140"></kendo-grid-column>
-                        <kendo-grid-column title="ECAP" field="ECAP_PRICE" [headerClass]="{'headerClass':true}"
+                        <kendo-grid-column title="ECAP" field="ECAP_PRICE" [headerClass]="{'headerClass':true}" filter="numeric"
                                            [width]="100" [hidden]="pctGroupDealsView">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 <span>{{getFormatedDim(dataItem,'ECAP_PRICE', '20___0','currency')}}</span>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column title="ECAP" field="ECAP_PRC" [headerClass]="{'headerClass':true}"
+                        <kendo-grid-column title="ECAP" field="ECAP_PRC" [headerClass]="{'headerClass':true}" filter="numeric"
                                            [width]="100" [hidden]="!pctGroupDealsView">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 <span>{{dataItem.ECAP_PRC |currency}}</span>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}"
+                        <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}" filter="numeric"
                                            [width]="120">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 <span>{{dataItem.MAX_RPU | currency}}</span>
