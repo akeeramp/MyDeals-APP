@@ -19,15 +19,15 @@
         <kendo-splitter orientation="vertical" class="spliter-btom-style" style="height: 450px; overflow: auto; " id="tableSpliter">
             <kendo-splitter-pane><hot-table id="bulkPriceUpdateTable" [hotId]="hotId" [settings]="hotSettings" class="all-spread"></hot-table></kendo-splitter-pane>
         </kendo-splitter>
-     </div>
+    </div>
     <kendo-dialog (close)="closeAlert()" *ngIf="isAlert" id="prcUpdateAlert">
         <p [innerHTML]='alertMsg'></p>
         <kendo-dialog-actions>
             <button kendoButton (click)="closeAlert()" themeColor="primary">OK</button>
         </kendo-dialog-actions>
     </kendo-dialog>
-<!-- Error Message on pasting data to readonly cells -->
-    <kendo-dialog *ngIf="isDisAlert" (close)="closeDisAlert()" id="disabledCellsError" [width]="320">
+    <!-- Error Message on pasting data to readonly cells -->
+    <!--<kendo-dialog *ngIf="isDisAlert" (close)="closeDisAlert()" id="disabledCellsError" [width]="320">
         <kendo-dialog-titlebar>
             <div>Error</div>
         </kendo-dialog-titlebar>
@@ -35,5 +35,16 @@
         <kendo-dialog-actions [layout]="'normal'">
             <button kendoButton (click)="closeDisAlert()">OK</button>
         </kendo-dialog-actions>
-    </kendo-dialog>
+    </kendo-dialog>-->
+    <kendo-window class="bulk-meet-comp-window"
+                  *ngIf="isDisAlert"
+                  (close)="closeDisAlert()">
+        <kendo-window-titlebar class="meet-comp-header-admin">
+        <div class="k-window-title arrow-window-title">Copying and pasting</div><button kendoWindowCloseAction class="close-icon"></button>
+        </kendo-window-titlebar>
+        <p [innerHTML]='alertMsg'></p>
+        <div style="border: 1px solid #e6e6e6; margin-right: -15px; margin-left: -12px;">
+        <button class="fr ok-btn_fix" kendoButton (click)="closeDisAlert()">OK</button>
+        </div>
+    </kendo-window>
 </div>

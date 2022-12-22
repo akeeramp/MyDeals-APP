@@ -280,3 +280,41 @@ p.no-data-ok {
 #btnClose.admin-bulk-btnclose:hover {
     color: #fff !important;
 }
+kendo-window.bulk-meet-comp-window.k-widget.k-window {
+    width: 320px !important;
+    height: 270px !important;
+}
+
+.bulk-meet-comp-window p {
+    text-align: left !important;
+    font-size: 15px !IMPORTANT;
+    font-family: 'Intel Clear' !important;
+    color: #444 !important;
+}
+
+kendo-window-titlebar.meet-comp-header-admin.k-window-titlebar.k-dialog-titlebar {
+   height: 45px !important;
+  border-radius: 0px !important;
+}
+button.fr.ok-btn_fix.k-button {
+   display: inline-block;
+   margin: 9px 9px 0 6px;
+   min-width: 75px;
+}
+button.fr.ok-btn_fix.k-button {
+    color: #fff;
+    background-color: #0071c5;
+    border-color: #0071c5;
+    box-shadow: none;
+}
+button.fr.ok-btn_fix.k-button:hover {
+    background-color: #00aeef;
+    border-color: #00aeef;
+    color: #fff;
+    box-shadow: none;
+}
+button.fr.ok-btn_fix.k-button:focus {
+   color: #444;
+   background-color: #dbdbdb;
+   border-color: #dbdbdb;
+}
