@@ -9,8 +9,8 @@
     <div class="modal-content" id="meetCompModal"
         style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none;border-top-left-radius: 0px !important;border-top-right-radius: 0px !important;">
         <div class="custom-header modalBlueBody">
-            <h3 id="modalTitle" style="margin-left:15px">Bulk Upload - Meet Comp</h3>
-            <i id="btnClose" class="intelicon-close" (click)="closeWindow()" title="Close this window"></i>
+            <h3 id="modalTitle" style="margin-left:15px;margin-bottom: 0">Bulk Upload - Meet Comp</h3>
+            <i id="btnClose" class="intelicon-close bulk-close-icon" (click)="closeWindow()" title="Close this window"></i>
         </div>
         <div id="modalBodyDiv" class="modal-body" *ngIf="HasBulkUploadAccess">
             <div id="extractMeetComp" *ngIf="meetComps.length <= 0">
@@ -42,7 +42,7 @@
                 </div>
             </div>
             <div *ngIf="meetComps.length > 0">
-            <kendo-splitter orientation="vertical" style="height:300px"> 
+            <kendo-splitter class="admin-meetcomp-splitter" orientation="vertical" style="height:300px"> 
                  <kendo-splitter-pane>
                     <hot-table id="meetCompExcel" [hotId]="hotId" [settings]="hotSettings" [data]= "meetComps" class="all-spread"></hot-table>
                 </kendo-splitter-pane>

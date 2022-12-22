@@ -162,7 +162,7 @@ deal-editor.tender_de_admin{
 }
 meet-comp-contract.admin_tender_meetcomp {
     position: relative;
-    top: -65px !important;
+    bottom: 50px !important;
 }
 manager-pct.admin-tender-pricecosttest {
     top: -45px !important;
@@ -172,9 +172,8 @@ i#btnClose.intelicon-close-max.tender-cross-close {
     color: #ffff !important;
     position: relative !important;
     float: right !important;
-    right: -15px !important;
-    top: -15px !important;
-    padding: 19px 18px 21px 20px !important
+    padding: 12.5px !important;
+   
 }
 i#btnClose.intelicon-close-max.tender-cross-close:hover {
     background: #00aeef !important;
@@ -184,11 +183,11 @@ i#btnClose.intelicon-close-max.tender-cross-close:hover {
     position: relative !important;
 }
 .admin_tender_meetcomp kendo-grid#meetcomp-contract {
-    height: calc(100vh - 440px) !important;
+    height: calc(100vh - 529px) !important;
 }
 .admin_tender_meetcomp .meetComp-show-hide.meet-conduct.meet-comp-blank_space {
     top: 15px !important;
-    margin-left:-20px !important;
+    margin-left:0px !important;
     position:relative !important
 }
 .admin-tender-pricecosttest div#sum-header {
