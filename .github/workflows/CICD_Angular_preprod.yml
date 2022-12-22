@@ -1,0 +1,110 @@
+name: MyDeals Angular pre-prod manual 
+on:
+  workflow_dispatch:
+    inputs:
+      ENV:
+        description: 'ENV'
+        required: true
+        default: 'CIN'
+        type: choice
+        options:
+          - 'CIN'
+          - 'DEV'
+          - 'ITT'
+          - 'DAY1'
+          - 'UTT1'
+          - 'UTT2'
+          - 'CONS1'
+          - 'CONS2'
+      Move_Latest:
+        description: 'Move latest code deployed'
+        required: true
+        type: choice
+        default: 'no'
+        options:
+          - 'yes'
+          - 'no'
+env:
+  NUGET_PATH: C:\NuGet\nuget.exe
+  MSBUILD_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\msbuild.exe
+jobs:
+  Verify-environement:
+     if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
+     runs-on: [self-hosted,mydeals-runner01]
+     steps:
+       - name: Checkout Directory
+         uses: actions/checkout@master
+       - name: Verify environement 
+         run: |
+            echo "RUN Verify command for ${{github.event.inputs.ENV}}"
+             ./scripts/deploy_env.ps1 'verifyENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+
+  Restore-packages:
+     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no') 
+     runs-on: [self-hosted,mydeals-runner01]
+     needs:  Verify-environement
+     steps:
+       - name: Checkout Directory
+         uses: actions/checkout@master
+       - name: Restore NUGET Packages 
+         run: |
+            echo "RUN NUGET Packages script at ${{env.NUGET_PATH}}"
+            ./scripts/build_env.ps1 'nuget' '${{env.NUGET_PATH}}' '${{github.workspace}}'
+
+  Build-Angular:
+    if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
+    runs-on: [self-hosted, mydeals-runner01]
+    needs: Restore-packages
+    steps:
+       - name: NPM Install 
+         run: |
+           ./scripts/build_env.ps1 'NPMInstall' 'path' '${{github.workspace}}'
+       - name: NPM Build
+         run: |
+           ./scripts/build_env.ps1 'NPMBuild' 'path' '${{github.workspace}}'
+       - name: MS build publish
+         run: |
+            ./scripts/build_env.ps1 'MSBuild' '${{env.MSBUILD_PATH}}' '${{github.workspace}}'
+
+  Deploy-Angular:
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no')
+    runs-on: [self-hosted, mydeals-runner01]
+    needs: Build-Angular
+    environment:
+      name: ${{ github.event.inputs.ENV }}
+    steps:
+       - name:  Generate Client Zip Module  
+         run: |
+           ./scripts/build_env.ps1 'ClientZip' '${{github.event.inputs.ENV}}' '${{github.workspace}}'
+       - name:  Move Publish Site 
+         run: |
+           ./scripts/deploy_env.ps1 'MovePublishENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+       - name:  Remove Client Zip 
+         run: |
+           ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+       - name:  Copy Client Zip 
+         run: |
+           ./scripts/deploy_env.ps1 'CopyZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+       - name:  Deploy Client App 
+         run: |
+           ./scripts/deploy_env.ps1 'DeployENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+       - name:  Copy Publish Site to latest folder
+         run: |
+           ./scripts/deploy_env.ps1 'copy_latestENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{ github.event.inputs.ENV }}'  
+
+  Deploy_Latest:
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'yes')
+    runs-on: [self-hosted, mydeals-runner01]
+    needs: Verify-environement
+    environment:
+      name: ${{ github.event.inputs.ENV }}
+    steps:
+       - name:  Remove Client Zip 
+         run: |
+           ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+       - name:  Move Publish Site 
+         run: |
+           ./scripts/deploy_env.ps1 'MovePublish_latest' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+       - name:  Deploy Client App 
+         run: |
+           ./scripts/deploy_env.ps1 'DeployENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
