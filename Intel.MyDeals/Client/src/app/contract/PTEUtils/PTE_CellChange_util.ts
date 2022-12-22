@@ -486,6 +486,7 @@ export class PTE_CellChange_Util {
 
                         //This will make sure to hit translate API
                         this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', '', 'no-edit');
+                        this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_INVLD_PRD', '', 'no-edit');
                     }
                     
                 }
@@ -575,6 +576,7 @@ export class PTE_CellChange_Util {
 
                                 //This will make sure to hit translate API
                                 this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', '', 'no-edit');
+                                this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_INVLD_PRD', '', 'no-edit');
                             }
                             
                         }
@@ -728,6 +730,7 @@ export class PTE_CellChange_Util {
 
                         //This will make sure to hit translate API
                         this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', '', 'no-edit');
+                        this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_INVLD_PRD', '', 'no-edit');
                     }
                     
                 }
@@ -1202,9 +1205,21 @@ export class PTE_CellChange_Util {
         let PTR = [{ row: selProds[idx].indx, prop: 'PTR_USER_PRD', old: oldVal, new: newVal.toString() }];
         return PTR;
     }
-    static getOperationProdCorr(selProd: any, products: any) {
+    static updatePrdColumns(rowIndex: number, columnName: string, value: any) {
+        this.hotTable.setDataAtRowProp(rowIndex, columnName, value, 'no-edit');
+    }
+    static getOperationProdCorr(selProd: any, deletedProd: any, products: any) {
         let rowProdCorrectordat = [];
-        let PTR_SYS_PRD = this.hotTable.getDataAtRowProp(selProd.indx, 'PTR_SYS_PRD');
+        let PTR_SYS_PRD;
+        let rowIndex;
+        if (selProd) {
+            PTR_SYS_PRD = this.hotTable.getDataAtRowProp(selProd.indx, 'PTR_SYS_PRD');
+            rowIndex = selProd.indx;
+        }
+        else {
+            PTR_SYS_PRD = this.hotTable.getDataAtRowProp(deletedProd[0].indx, 'PTR_SYS_PRD');
+            rowIndex = deletedProd[0].indx;
+        }
         //incase of any valid products already bind, append the prod corr
         if (typeof PTR_SYS_PRD == 'string' && PTR_SYS_PRD != '') {
             PTR_SYS_PRD = JSON.parse(PTR_SYS_PRD);
@@ -1212,27 +1227,49 @@ export class PTE_CellChange_Util {
         else {
             PTR_SYS_PRD = {};
         }
-        let res = products.ProdctTransformResults[selProd.DCID];
+        let res;
+        if(selProd)
+            res = products.ProdctTransformResults[selProd.DCID];
+        else
+            res = products.ProdctTransformResults[deletedProd[0].DC_ID];
         let exclude = _.sortBy(res.E);
         let Include = _.sortBy(res.I);
-        _.each(selProd.items, selPrdItm => {
-            if (selPrdItm.prodObj.EXCLUDE) {
-                let eindex = _.indexOf(exclude, selPrdItm.prodObj.USR_INPUT)
-                if (eindex != -1) {
-                    exclude.splice(eindex, 1)
+        if (deletedProd) {
+            _.each(deletedProd, (deletedItm) => {
+                if (deletedItm.exclude) {
+                    let eindex = _.indexOf(exclude, deletedItm.deletedUserInput)
+                    if (eindex != -1) {
+                        exclude.splice(eindex, 1)
+                    }
                 }
-                exclude.push(selPrdItm.prodObj.DERIVED_USR_INPUT);
-            }
-            else {
-                let iIndex = _.indexOf(Include, selPrdItm.prodObj.USR_INPUT)
-                if (iIndex != -1) {
-                    Include.splice(iIndex, 1)
+                else {
+                    let eindex = _.indexOf(Include, deletedItm.deletedUserInput)
+                    if (eindex != -1) {
+                        Include.splice(eindex, 1)
+                    }
                 }
-                Include.push(selPrdItm.prodObj.DERIVED_USR_INPUT);
-            }
-            PTR_SYS_PRD[`${selPrdItm.prod}`] = [selPrdItm.prodObj];
-        })
-        rowProdCorrectordat.push([{ row: selProd.indx, prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(selProd.indx, 'PTR_USER_PRD'), new: Include.toString() }]);
+            })
+        }
+        if (selProd) {
+            _.each(selProd.items, selPrdItm => {
+                if (selPrdItm.prodObj.EXCLUDE) {
+                    let eindex = _.indexOf(exclude, selPrdItm.prodObj.USR_INPUT)
+                    if (eindex != -1) {
+                        exclude.splice(eindex, 1)
+                    }
+                    exclude.push(selPrdItm.prodObj.DERIVED_USR_INPUT);
+                }
+                else {
+                    let iIndex = _.indexOf(Include, selPrdItm.prodObj.USR_INPUT)
+                    if (iIndex != -1) {
+                        Include.splice(iIndex, 1)
+                    }
+                    Include.push(selPrdItm.prodObj.DERIVED_USR_INPUT);
+                }
+                PTR_SYS_PRD[`${selPrdItm.prod}`] = [selPrdItm.prodObj];
+            })
+        }
+        rowProdCorrectordat.push([{ row: rowIndex, prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(selProd.indx, 'PTR_USER_PRD'), new: Include.toString() }]);
         rowProdCorrectordat.push({ operation: 'prodcorr', PTR_SYS_PRD: JSON.stringify(PTR_SYS_PRD), PRD_EXCLDS: exclude.toString() });
         return rowProdCorrectordat;
     }

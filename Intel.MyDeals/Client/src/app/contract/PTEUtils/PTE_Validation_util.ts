@@ -47,6 +47,19 @@ export class PTE_Validation_Util {
         return data;
     }
 
+      static buildTranslatorOutputObjectproductCorroctor(invalidProductJSONRows, data) {
+        invalidProductJSONRows.forEach(item => {
+            var inValidJSON = JSON.parse(item.PTR_SYS_INVLD_PRD);
+            var validJSON = (item.PTR_SYS_PRD != null && item.PTR_SYS_PRD != "") ? JSON.parse(item.PTR_SYS_PRD) : "";
+            data.ValidProducts[item.DC_ID] = validJSON;
+            data.ProdctTransformResults[item.DC_ID] = inValidJSON.ProdctTransformResults;
+            data.DuplicateProducts[item.DC_ID] = inValidJSON.DuplicateProducts;
+            data.InValidProducts[item.DC_ID] = inValidJSON.InValidProducts;
+        });
+        return data;
+    }
+
+
     static validateMultiGeoForHybrid(data: any, isHybrid: any) {
         let returnval = "0";
         if (isHybrid == 1 || isHybrid == '1') {

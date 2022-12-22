@@ -1145,6 +1145,7 @@
     <Content Include="Client\src\app\style\common.css" />
     <Content Include="Client\src\app\style\dealEditor.css" />
     <Content Include="Client\src\app\style\kendo-custom.css" />
+    <Content Include="Client\src\app\style\productCorrector.css" />
     <Content Include="Client\src\app\style\publishTender.css" />
     <Content Include="Client\src\app\style\style.css" />
     <Content Include="Client\src\dist\bundle.js" />

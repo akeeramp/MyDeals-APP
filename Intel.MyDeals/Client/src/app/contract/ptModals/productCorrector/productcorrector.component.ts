@@ -1,10 +1,8 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem, GridComponent } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
-import { ThemePalette } from '@angular/material/core';
 import * as _ from "underscore";
-import * as lodash from "lodash";
 import { MatDialog } from '@angular/material/dialog';
 import { SelectableSettings } from '@progress/kendo-angular-treeview';
 import { NgbPopoverConfig } from "@ng-bootstrap/ng-bootstrap";
@@ -12,410 +10,129 @@ import { NgbPopoverConfig } from "@ng-bootstrap/ng-bootstrap";
 import { logger } from "../../../shared/logger/logger";
 
 import { ProductSelectorComponent } from "../productSelector/productselector.component";
-import { ProdSel_Util } from '../productSelector/prodSel_Util'
 import { PTE_Common_Util } from "../../PTEUtils/PTE_Common_util";
-import { ProductBreakoutComponent } from '../productSelector/productBreakout/productBreakout.component';
+import { List } from 'linqts';
+import { PTEUtil } from '../../PTEUtils/PTE.util';
 import * as moment from 'moment';
+import { ProductBreakoutComponent } from '../productSelector/productBreakout/productBreakout.component';
 
 @Component({
-  selector: 'product-corrector',
-  templateUrl: 'Client/src/app/contract/ptModals/productCorrector/productcorrector.component.html',
-  styleUrls:['Client/src/app/contract/ptModals/productCorrector/productcorrector.component.css']
+    selector: 'product-corrector',
+    templateUrl: 'Client/src/app/contract/ptModals/productCorrector/productcorrector.component.html',
+    styleUrls: ['Client/src/app/contract/ptModals/productCorrector/productcorrector.component.css']
 })
 export class ProductCorrectorComponent {
-  constructor(public dialogRef: MatDialogRef<ProductCorrectorComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: any,
-      private loggerService: logger,
-      private dialogService: MatDialog,
-      popoverConfig: NgbPopoverConfig) {
-    popoverConfig.placement = 'auto';
-    popoverConfig.container = 'body';
-    popoverConfig.autoClose = 'outside';
-    popoverConfig.animation = false; // Fixes issue with `.fade` css element setting improper opacity making the popover not show up
-    popoverConfig.triggers = 'mouseenter:mouseleave';
-    popoverConfig.openDelay = 500;   // milliseconds
-    popoverConfig.closeDelay = 500; // milliseconds
-  }
-  private pricingTableRow: any = {};
-  private ProductCorrectorData:any=null;
-  private contractData:any=null;
-  private curPricingTable:any=null;
-  private selRows:any=null;
-  private isLoading: boolean = false;
-  private type = "numeric";
-  private info = true;
-  private gridResult:any[] =[];
-  private gridData: any[] = [];
-  private selGridResult:any[] =[];
-  private selGridData:GridDataResult=null;
-  private color: ThemePalette = 'primary';
-  private state: State = {
-      skip: 0,
-      take: 25,
-      group: [{ field: "USR_INPUT" }],
-      // Initial filter descriptor
-      filter: {
-          logic: "or",
-          filters: [],
-      },
-  };
-  private pageSizes: PageSizeItem[] = [
-      {
-          text: "10",
-          value: 10
-      },
-      {
-          text: "25",
-          value: 25
-      },
-      {
-          text: "50",
-          value: 50
-      },
-      {
-          text: "100",
-          value: 100
-      }
-  ];
-  private rowDCId:string='';
-  private curRowIndx:number=0;
-  private numIssueRows:number=0;
-  private totRows:number=0;
-  private curRowIssues:any[]=[];
-  private curRowLvl:any[]=[];
-  private curRowCategories:any[]=[];
-  private selRowLvl:any[]=[];
-  private selRowCategories:any[]=[];
-  private curProd:string='';
-  private selectedProducts:any[]=[];
-  private curSelProducts:any[]=[];
-  private selection: SelectableSettings = { mode: "multiple" };
-  private selPrdLvlKeys:any[]=[];
-  private selPrdVerKeys: any[] = [];
-  private selRowIssues: any[] = [];
-  private selRowIssuesKeys: any[] = [];
-    private userEnteredProduct: any[] = [];
-    private includeProd: any[] = [];
-    private curIncludeProd: any[] = [];
-    private excludeProd: any[] = [];
-    private curExcludeProd: any[] = [];
-    private currentPTERow: any[] = [];
-    private isGA = false;//window.usrRole == "GA"; Commeneted this stop showing L1/L2 columns till legal approves
-    private DEAL_TYPE;
-    private isDuplicate = false;
-    private duplicateMsg = "";
-    private duplicateData: any[] = [];
-    private hidden = {};
+    constructor(public dialogRef: MatDialogRef<ProductCorrectorComponent>,
+        @Inject(MAT_DIALOG_DATA) public data: any,
+        private loggerService: logger,
+        private dialogService: MatDialog,
+        popoverConfig: NgbPopoverConfig) {
+        popoverConfig.placement = 'auto';
+        popoverConfig.container = 'body';
+        popoverConfig.autoClose = 'outside';
+        popoverConfig.animation = false;
+        popoverConfig.triggers = 'mouseenter:mouseleave';   // Disabled to use default click behaviour to prevent multiple popover windows from appearing
+        popoverConfig.openDelay = 500;   // milliseconds
+        popoverConfig.closeDelay = 500;
+    }
+    @ViewChild('pdtCrtGrid') grid: GridComponent;
+    private totRows = 0;
+    public curRowIndx = 0;
+    public numIssueRows = 0;
+    private curRow = {};
+    private issueRowKeys = [];
+    private rowDCId = "";
+    private curRowProds = [];
+    private curRowData = [];
+    private curRowIssues = [];
+    private isPrdCollapsed = false;
+    private isExcludePrdCollapsed = false;
+    private isCalCollapsed = false;
+    private isLvlCollapsed = false;
+    private invalidProdName = '';
+    private ProductCorrectorData: any;
+    private allDone = false;
+    private curRowDone = false;
+    private isIncludeProd = false;
+    private isExcludeProd = false;
+    private DEAL_TYPE: string="";
+    private showIncludeExcludeLabel = false;
+    private selectedItms = [];
+    private curRowCategories = [];
+    private curRowLvl = [];
+    private curRowPrdCnt = 0;
+    private  isGA = false;//window.usrRole == "GA"; Commeneted this stop showing L1/L2 columns till legal approves
+    private isTender = "";
+    private curRowId: any;
+    private lookUp: any;
+    private prodType: any = 'I';
+    private isLoading = true;
+    private prdNm = "";
+    private prodRemoveConfirm = false;
+    private removeExclude: any;
+    private selGridResult: any[] = [];
+    private selGridData: GridDataResult;
+    private dataFilter = [];
+    private curRowIncProd: any[];
+    private curRowExcludeProd: any[];
+    private deletedProductDetails: any[] = [];
+    public selection: SelectableSettings = { mode: "multiple" };
+    public rowCallback = (args) => ({
+        'hide-row': (args.dataItem.PRD_MBR_SID == 0)
+    });
     private crossVertical = {
         'productCombination1': ["DT", "Mb", "SvrWS", "EIA CPU"],
         'productCombination2': ["CS", "EIA CS"],
         'message': "The product combination is not valid. You can combine (DT, Mb, SvrWS, EIA CPU) or (CS, EIA CS) verticals. For NON IA, you can combine as many products within same verticals for PROGRAM, VOLTIER and REV TIER deals."
     }
+    private duplicateMsg: string = "";
+    private duplicateData: any;
+    private isDuplicate = false;
+    selectedProducts: any = [];
 
-
-  prdLvlDecoder(indx:any) {
-    if (indx === 7003) return "Product Vertical";
-    if (indx === 7004) return "Brand";
-    if (indx === 7005) return "Family";
-    if (indx === 7006) return "Processor #";
-    if (indx === 7007) return "L4";
-    if (indx === 7008) return "Material Id";
-    return indx;
-    }
-
-    openCAPBreakOut(dataItem, priceCondition) {
-
-        this.dialogService.open(ProductBreakoutComponent, {
-            data: {
-                columnTypes: priceCondition,
-                productData: [{
-                    'CUST_MBR_SID': this.pricingTableRow.CUST_MBR_SID,
-                    'PRD_MBR_SID': dataItem.PRD_MBR_SID,
-                    'GEO_MBR_SID': this.pricingTableRow.GEO_COMBINED,
-                    'DEAL_STRT_DT': moment(this.pricingTableRow.START_DT).format("l"),
-                    'DEAL_END_DT': moment(this.pricingTableRow.END_DT).format("l"),
-                    'getAvailable': 'N',
-                    'priceCondition': priceCondition
-
-                }]
-            },
-            panelClass: 'product-breakout-modal'
-        });
-    }
-
-  loadGrid(){
-    if(this.ProductCorrectorData.DuplicateProducts)
-    _.each(this.ProductCorrectorData.DuplicateProducts,(val,key)=>{
-      this.curRowIssues.push({ DCID: parseInt(key), name: _.keys(val).toString(), len: _.flatten(_.values(val)).length, items: _.uniq(_.pluck(_.flatten(_.values(val)), 'USR_INPUT'))});
-      this.curRowLvl.push({DCID:parseInt(key),name:_.keys(val).toString(),items:_.uniq(_.pluck(_.flatten(_.values(val)),'PRD_ATRB_SID'))});
-      this.curRowCategories.push({DCID:parseInt(key),name:_.keys(val).toString(),items:_.uniq(_.pluck(_.flatten(_.values(val)),'PRD_CAT_NM'))});
-      this.gridResult.push({DCID:parseInt(key),name:_.keys(val).toString(),data:_.flatten(_.values(val))});
-      this.gridData.push({DCID:parseInt(key),name:_.keys(val).toString(),data:process(_.flatten(_.values(val)), this.state)});
-      this.selectedProducts.push({ DCID: parseInt(key), name: _.keys(val).toString(), items: [], indx: _.findWhere(this.selRows, { name: _.keys(val).toString(), DC_ID: parseInt(key) }).indx });
-    _.each(val, (arr, product) => {
-        this.userEnteredProduct.push({ name: product, length: arr.length, DCID: arr[0].ROW_NM });
-    });      
-    });
-    //sorting the data based on DCID, since its negative we need to reverse
-    this.selectedProducts = _.sortBy(this.selectedProducts, 'DCID').reverse();
-    this.curRowIssues = _.sortBy(this.curRowIssues, 'DCID').reverse();
-    this.curRowLvl = _.sortBy(this.curRowLvl, 'DCID').reverse();
-    this.curRowCategories = _.sortBy(this.curRowCategories, 'DCID').reverse();
-    this.gridResult = _.sortBy(this.gridResult, 'DCID').reverse();
-    this.gridData = _.sortBy(this.gridData, 'DCID').reverse();
-    //this.userEnteredProduct = _.sortBy(this.userEnteredProduct, 'DCID').reverse();
-    //default selecting to first row
-    this.curSelProducts=this.selectedProducts[0];
-    this.curProd=this.curRowIssues[0].name;
-    this.rowDCId=this.curRowIssues[0].DCID;
-    this.numIssueRows=this.curRowIssues.length;
-    this.selGridResult=this.gridResult[0].data;
-    this.selGridData = this.gridData[0].data;
-    this.selRowLvl=this.getSelRowTree(this.curRowLvl[0].items);
-    this.selRowCategories=this.getSelRowTree(this.curRowCategories[0].items);
-    //this.selRowIssues=[this.curRowIssues[0]];
-      this.selRowIssues = this.getselRowIssues(this.curRowIssues[0].items);
-      for (let i = 0; i < this.selRowIssues.length; i++) {
-          for (let j = 0; j < this.userEnteredProduct.length; j++) {
-              if (this.userEnteredProduct[j].name == this.selRowIssues[i].name) {
-                  this.selRowIssues[i].len = this.userEnteredProduct[j].length;
-                  this.selRowIssues[i].name = this.selRowIssues[i].name;
-              }
-          }
-      }
-      this.totRows = _.keys(this.ProductCorrectorData.ProdctTransformResults).length;
-      this.includeProd = this.ProductCorrectorData.ProdctTransformResults[this.rowDCId].I;
-      this.excludeProd = this.ProductCorrectorData.ProdctTransformResults[this.rowDCId].E;
-    this.showColumns();
-    this.getcurPTERowData();
-  }
-  getSelRowTree(items:any[]){
-    let curLvl=[];
-    _.each(items,(val,key)=>{
-      curLvl.push({
-        id:key,
-        name:this.prdLvlDecoder(val),
-        value:val,
-        selected:false
-      })
-    })
-    return curLvl;
-    }
-    getselRowIssues(items: any[]) {
-        let curIssue = [];
-        _.each(items, (val, key) => {
-            curIssue.push({
-                id: key,
-                name: val,
-                value: val,
-                selected: false,
-            })
-        })
-        return curIssue;
-    }
-
-  selectRow(key:string,DCID){
-    //clearing the gid and prod filter incase if we searched any
-    this.state.filter.filters=[];
-    this.selPrdLvlKeys=[];
-    this.selPrdVerKeys = [];
-    this.selRowIssuesKeys = [];    
-    this.curRowIndx = _.findIndex(this.curRowIssues, { name: key, DCID:DCID });
-    let selItem = _.findWhere(this.curRowIssues, { name: key, DCID: DCID});
-    this.curProd=selItem.name;
-    //this.selRowIssues=[selItem];
-      this.rowDCId = selItem.DCID;
-      this.includeProd = this.ProductCorrectorData.ProdctTransformResults[this.rowDCId].I;
-      this.excludeProd = this.ProductCorrectorData.ProdctTransformResults[this.rowDCId].E;
-    this.selRowIssues = this.getselRowIssues(_.findWhere(this.curRowIssues, { name: key, DCID: DCID}).items);    
-      for (let i = 0; i < this.selRowIssues.length; i++) {
-          for (let j = 0; j < this.userEnteredProduct.length; j++) {
-              if (this.userEnteredProduct[j].name == this.selRowIssues[i].name) {
-                  this.selRowIssues[i].len = this.userEnteredProduct[j].length;
-                  this.selRowIssues[i].name = this.selRowIssues[i].name;
-              }
-          }
-      }
-    this.selGridResult = _.findWhere(this.gridResult, { name: key, DCID: DCID}).data;
-    this.selGridData =_.findWhere(this.gridData, { name: key, DCID: DCID}).data;
-    this.selRowLvl = this.getSelRowTree(_.findWhere(this.curRowLvl, { name: key, DCID: DCID}).items);
-    this.selRowCategories = this.getSelRowTree(_.findWhere(this.curRowCategories, { name: key, DCID: DCID}).items);
-    this.curSelProducts = _.findWhere(this.selectedProducts, { name: key, DCID: DCID });
-    this.showColumns();
-    this.getcurPTERowData();
-  }
-  dataStateChange(state: DataStateChangeEvent): void {
-    this.state = state;
-    this.selGridData = process(this.selGridResult, this.state);
-  }
-  //ignore openProdSel functiion will revist later
-  openProdSel(key:string){
-    this.dialogRef.close();
-    let data={ name: 'Product Selector', source: '', selVal: key,contractData:this.contractData,curPricingTable:this.curPricingTable,curRow:[_.findWhere(this.selRows,{name:key}).row]};
-    const dialogRefe = this.dialogService.open(ProductSelectorComponent, {
-      height: "80vh",
-      width: "5500px",
-      data: data,
-      panelClass: 'product-selector-dialog'
-    })
-    dialogRefe.afterClosed().subscribe(result => {
-        if (result) {
-           console.log(result);
+    private state: State = {
+        skip: 0,
+        take: 25,
+        group: [{ field: "USR_INPUT" }],
+        // Initial filter descriptor
+        filter: {
+            logic: "or",
+            filters: [],
+        },
+    };
+    private pageSizes: PageSizeItem[] = [
+        {
+            text: "10",
+            value: 10
+        },
+        {
+            text: "25",
+            value: 25
+        },
+        {
+            text: "50",
+            value: 50
+        },
+        {
+            text: "100",
+            value: 100
         }
-    });
-  }
-  nextRow() {
-      let index = this.curRowIndx + 1;
-      if (index > this.numIssueRows)
-          return false;
-      this.selectRow(this.curRowIssues[index].name, this.curRowIssues[index].DCID);
-      return true;
-  }
-  prevRow() {
-      let index = this.curRowIndx - 1;
-      if (index < 0)
-          return false;
-      this.selectRow(this.curRowIssues[index].name, this.curRowIssues[index].DCID);
-      return true;
-  }
-    prodSelect(item: any, evt: any) {
-
-        if (evt.target.checked == true && this.DEAL_TYPE !== "ECAP" && this.DEAL_TYPE !== "KIT") {
-            // Get unique product types
-            let existingProdTypes = lodash.uniqBy(this.curSelProducts['items'], 'prodObj.PRD_CAT_NM')
-            existingProdTypes = existingProdTypes.map(function (elem) {
-                return elem['prodObj']['PRD_CAT_NM'];
-            });
-            //Fix for TWC3179-1624: Error for invalid combination
-            let curRow = this.curSelProducts['DCID'];
-            _.each(this.ProductCorrectorData.ValidProducts[curRow], item => {
-                existingProdTypes.push(item[0].PRD_CAT_NM);
-            })
-            // Check if valid combination
-            let isCrossVerticalError = this.isValidProductCombination(existingProdTypes, item.PRD_CAT_NM)
-            if (!isCrossVerticalError) {
-                this.loggerService.error(this.crossVertical['message'], '', '');
-                evt.target.checked = false;
-                return false;
-            }
-        }
-
-        if (evt.target.checked == true && this.checkForDuplicateProducts(item)) {
-            evt.target.checked = false;
-            return;
-        }
-
-        item['IS_SEL'] = evt.target.checked;
-        item['DERIVED_USR_INPUT'] = PTE_Common_Util.fullNameProdCorrector(item)
-        if (evt.target.checked) {
-            let prd = { prod: item.DERIVED_USR_INPUT, prodObj: item };
-            this.curSelProducts['items'].push(prd);
-            if (item.EXCLUDE)
-                this.curExcludeProd.push(prd);
-            else
-                this.curIncludeProd.push(prd);
-        }
-        else {
-            // let idx = _.findIndex(this.selectedProducts, item.DERIVED_USR_INPUT);
-            let indx = this.curExcludeProd.findIndex(i => i.prod === item.DERIVED_USR_INPUT);
-            let index = this.curIncludeProd.findIndex(i => i.prod === item.DERIVED_USR_INPUT);
-            let idx = this.curSelProducts['items'].findIndex(i => i.prod === item.DERIVED_USR_INPUT);
-            this.curSelProducts['items'].splice(idx, 1);
-            if (item.EXCLUDE)
-                this.curExcludeProd.splice(indx, 1);
-            else
-                this.curIncludeProd.splice(index, 1);
-        }
+    ];
+    
+   
+    distinctPrimitive(fieldName: string): any {
+        return distinct(this.selGridResult, fieldName).map(item => item[fieldName]);
     }
-    isValidProductCombination(existingProdTypes, newProductType) {
-        let isValid = true;
-        if (this.DEAL_TYPE == 'FLEX') {
-            return true;
-        }
-        let selfCheck = newProductType == undefined;
-        for (let i = 0; i < existingProdTypes.length; i++) {
-            if (i == existingProdTypes.length - 1 && selfCheck) break;
-            newProductType = selfCheck ? existingProdTypes[i + 1] : newProductType;
-            if (ProdSel_Util.arrayContainsString(this.crossVertical.productCombination1, existingProdTypes[i])) {
-                isValid = ProdSel_Util.arrayContainsString(this.crossVertical.productCombination1, newProductType);
-                if (!isValid) break;
-            }
-            else if (ProdSel_Util.arrayContainsString(this.crossVertical.productCombination2, existingProdTypes[i])) {
-                isValid = ProdSel_Util.arrayContainsString(this.crossVertical.productCombination2, newProductType);
-                if (!isValid) break;
-            } else {
-                isValid = existingProdTypes[i] == newProductType;
-                if (!isValid) break;
-            }
-        };
-        return isValid
-    }
-    checkForDuplicateProducts(item) {
-
-        let duplicateProducts = (this.curSelProducts['items']).filter((items) => {
-            return (items['prodObj']['PRD_MBR_SID'] == item['PRD_MBR_SID'])
-        })
-
-        this.isDuplicate = Boolean(duplicateProducts.length);
-        if (this.isDuplicate) {
-            this.duplicateMsg = 'Found duplicate product for ' + item.HIER_VAL_NM + ', would you like to remove one ?';
-            this.duplicateData = item;
-        }
-        return this.isDuplicate;
-    }
-    closeKendoDialog(optionSelected) {
-        if (optionSelected == 'yes') {
-
-            let filteredResult = (this.selGridResult).filter(val => {
-                return val['PRD_MBR_SID'] != this.duplicateData['PRD_MBR_SID'] || val['USR_INPUT'] != this.duplicateData['USR_INPUT'];
-            });
-            this.selGridResult = filteredResult;
-            this.selGridData = process(this.selGridResult, this.state);
-        }
-        this.isDuplicate = false;
-        this.duplicateData = [];
-    }
-    getcurPTERowData() {
-        //curating object to send to grid-popover directive each time
-        this.currentPTERow = (this.data.selRows).filter(obj => {
-            return obj['row']['DC_ID'] === this.rowDCId;
-        });
-
-        this.pricingTableRow.START_DT = this.currentPTERow[0]['row'].START_DT;
-        this.pricingTableRow.END_DT = this.currentPTERow[0]['row'].END_DT;
-        this.pricingTableRow.CUST_MBR_SID = this.data.contractData.CUST_MBR_SID;
-        this.pricingTableRow.IS_HYBRID_PRC_STRAT = this.currentPTERow[0]['row'].IS_HYBRID_PRC_STRAT;
-        this.pricingTableRow.GEO_COMBINED = ProdSel_Util.getFormatedGeos(this.currentPTERow[0]['row'].GEO_COMBINED);
-        this.pricingTableRow.PTR_SYS_PRD = this.currentPTERow[0]['row'].PTR_SYS_PRD;
-        this.pricingTableRow.PROGRAM_PAYMENT = this.currentPTERow[0]['row'].PROGRAM_PAYMENT;
-        this.pricingTableRow.PROD_INCLDS = this.currentPTERow[0]['row'].PROD_INCLDS;
-        this.pricingTableRow.OBJ_SET_TYPE_CD = this.data.curPricingTable.OBJ_SET_TYPE_CD;
-    }
-    onNoClick(): void {
-        this.dialogRef.close();
-    }
-    onSave(): void {
-        this.dialogRef.close(this.selectedProducts);
-    }
-    onPrdChange(evt: any, field: string) {
-        this.state.filter.filters = [];
-        if (evt && evt.length && evt.length > 0 && field) {
-            _.each(evt, itm => {
-                this.state.filter.filters.push({
-                    field: field,
-                    operator: 'eq',
-                    value: itm
-                })
-            });
-        }
+    dataStateChange(state: DataStateChangeEvent): void {
+        this.state = state;
         this.selGridData = process(this.selGridResult, this.state);
     }
-    isValidCapDetails(productJson, showErrorMesssage?) {
+    isValidCapDetails(productJson, showErrorMesssage) {
         if (this.DEAL_TYPE !== 'ECAP' && this.DEAL_TYPE !== 'KIT') {
             return !showErrorMesssage ? false : productJson.HIER_NM_HASH;
         }
-        let errorMessage = "";
-        const cap = productJson.CAP.toString();
+        var errorMessage = "";
+        var cap = productJson.CAP.toString();
         if (cap.toUpperCase() == "NO CAP") {
             errorMessage = "Product entered does not have CAP within the Deal's start date and end date.";
         }
@@ -428,61 +145,1008 @@ export class ProductCorrectorComponent {
             return errorMessage == "" ? productJson.HIER_NM_HASH : errorMessage;
         }
     }
-    showColumns() {
-        let columns = [
-            "EXCLUDE",
-            "USR_INPUT",
-            "IS_SEL",
-            "DISP_HIER_VAL_NM",
-            "PRD_CAT_NM",
-            "BRND_NM",
-            "FMLY_NM",
-            "PRD_STRT_DTM",
-            "CAP",
-            "HAS_L1",
-            "MM_MEDIA_CD",
-            "YCS2",
-            "GDM_FMLY_NM",
-            "HIER_NM_HASH",
-            "CPU_PROCESSOR_NUMBER",
-            "MM_CUST_CUSTOMER",
-            "FMLY_NM_MM",
-            "EPM_NM",
-            "SKU_NM",
-            "NAND_FAMILY",
-            "NAND_Density",
-            "CPU_CACHE",
-            "CPU_PACKAGE",
-            "CPU_WATTAGE",
-            "CPU_VOLTAGE_SEGMENT",
-            "PRICE_SEGMENT",
-            "SBS_NM"
-        ]
-        //always show these fields
-        let showAlways = ["EXCLUDE", "IS_SEL", "USR_INPUT", "CAP", "YCS2"]
-        if (this.selGridResult) {
-            columns.forEach((colVal) => {
-                let columnData = lodash.uniqBy(this.selGridResult, colVal)
-                //setting default hidden values to false
-                this.hidden[colVal] = false;
-                if (columnData.length == 1 && colVal !== undefined
-                    && !showAlways.includes(colVal)
-                    && (columnData[0][colVal] === "" || columnData[0][colVal] == null || columnData[0][colVal] == 'NA')) {
-                    this.hidden[colVal] = true;
+    replaceString(item) {
+        return "prdChk" + item.PRD_MBR_SID + item.USR_INPUT.toLowerCase().replace(/\s/g, "_").trim();
+    }
+    prdLvlDecoder(indx) {
+        if (indx === 7003) return "Product Vertical";
+        if (indx === 7004) return "Brand";
+        if (indx === 7005) return "Family";
+        if (indx === 7006) return "Processor #";
+        if (indx === 7007) return "L4";
+        if (indx === 7008) return "Material Id";
+        return "";
+    }
+
+    updateRowDcId() {
+        setTimeout(() => {
+            if (this.data.selRows.length > 1) {
+                this.rowDCId = this.data.selRows.filter(x => x.DC_ID == this.issueRowKeys[this.curRowIndx - 1])[0].DC_ID;               
+            } else {
+                this.rowDCId = this.data.selRows[0].DC_ID;
+            }
+        });
+    }
+    initProducts(){
+        this.totRows = 0;
+        this.numIssueRows = 0;
+        this.issueRowKeys = [];
+        this.curRow = {};
+        this.curRowIndx = 0;
+        this.curRowProds = [];
+        this.curRowData = [];
+        this.curRowIssues = [];
+        var key;
+        let correctorData = this.data.ProductCorrectorData;
+        var issueRowIds = [];
+
+        if (!!correctorData.DuplicateProducts) {
+            for (key in correctorData.DuplicateProducts) {
+                if (correctorData.DuplicateProducts.hasOwnProperty(key)) {
+                    if (issueRowIds.indexOf(key) < 0) issueRowIds.push(key);
+                    if (this.issueRowKeys.indexOf(key) < 0) this.issueRowKeys.push(key);
+                }
+            }
+        }
+
+        if (!!correctorData.InValidProducts) {
+            for (key in correctorData.InValidProducts) {
+                if (correctorData.InValidProducts.hasOwnProperty(key) && (correctorData.InValidProducts[key]["E"].length > 0
+                    || correctorData.InValidProducts[key]["I"].length > 0)) {
+                    if (issueRowIds.indexOf(key) < 0) issueRowIds.push(key);
+                    if (this.issueRowKeys.indexOf(key) < 0) this.issueRowKeys.push(key);
+                }
+            }
+        }
+
+        this.numIssueRows = issueRowIds.length;
+        this.totRows = Object.keys(correctorData.ProdctTransformResults).length;
+    }
+    getFullNameOfProduct(item) {
+        // When a product belongs to two different family, get the full path
+        if (item.PRD_ATRB_SID == 7006) {
+            return (item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM)
+                + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM) + " " + (item.PCSR_NBR === 'NA' ? "" : item.PCSR_NBR)).trim();
+        }
+        if (item.PRD_ATRB_SID == 7007) {
+            return (item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM)
+                + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM) + " " + (item.PCSR_NBR === 'NA' ? "" : item.PCSR_NBR) + " " + item.DEAL_PRD_NM).trim();
+        }
+        if (item.PRD_ATRB_SID == 7008) {
+            return (item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM)
+                + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM) + " " + (item.PCSR_NBR === 'NA' ? "" : item.PCSR_NBR) + " " + item.DEAL_PRD_NM
+                + " " + item.MTRL_ID).trim();
+        }
+        if (item.PRD_ATRB_SID > 7005) return item.HIER_VAL_NM;
+        return (item.PRD_CAT_NM + " " + (item.BRND_NM === 'NA' ? "" : item.BRND_NM) + " " + (item.FMLY_NM === 'NA' ? "" : item.FMLY_NM)).trim();
+    }
+
+    validCrossVerticals(item) {
+        if (this.DEAL_TYPE === 'ECAP' || this.DEAL_TYPE === 'KIT') return true;
+        const existingProductTypes = [];
+        for (const key in this.ProductCorrectorData.ValidProducts[this.curRowId]) {
+            _.each(this.ProductCorrectorData.ValidProducts[this.curRowId][key], (product) =>{
+                existingProductTypes.push(product.PRD_CAT_NM);
+            });
+        }
+
+        const existingProdTypes = _.uniq(existingProductTypes, 'PRD_CAT_NM');
+
+        const isValid = this.isValidProductCombination(existingProdTypes, item.PRD_CAT_NM);
+        // Check if valid combination
+        if (!isValid) {
+            this.loggerService.error(this.crossVertical.message,"")
+         }
+        return isValid;
+    }
+    isValidProductCombination(existingProdTypes, newProductType) {
+        var isValid = true;
+        if (this.DEAL_TYPE == 'FLEX') {
+            return true;
+        }
+        var selfCheck = newProductType == undefined;
+        for (var i = 0; i < existingProdTypes.length; i++) {
+            if (i == existingProdTypes.length - 1 && selfCheck) break;
+            newProductType = selfCheck ? existingProdTypes[i + 1] : newProductType;
+            if (this.crossVertical.productCombination1.includes(existingProdTypes[i])) {
+                isValid = this.crossVertical.productCombination1.includes(newProductType);
+                if (!isValid) break;
+            }
+            else if (this.crossVertical.productCombination2.includes(existingProdTypes[i])) {
+                isValid = this.crossVertical.productCombination2.includes(newProductType);
+                if (!isValid) break;
+            } else {
+                isValid = existingProdTypes[i] == newProductType;
+                if (!isValid) break;
+            }
+        };
+        return isValid
+    }
+    validateNoOfKITProducts() {
+        var noOfValidItem = (this.isTender == '1' && this.DEAL_TYPE.toLowerCase() == 'ecap') ? 1 : 10; //Added Tender ECAP Rules
+        var validProducts = this.curRowProds.filter(x => x.status === 'Good').length;
+
+        var resolvedProducts = this.curRowProds.reduce((accumulator, current) => {
+            if (current.status === 'Issue')
+                return accumulator + current.matchName.length;
+        },0);
+        if (parseInt(resolvedProducts) + validProducts >= noOfValidItem) {
+            this.loggerService.error("You have too many products! You may have up to " + noOfValidItem + " product(s).","");
+            return false;
+        }
+        return true;
+    }
+    selectRow(indx, bypassFilter?) {
+        let x;
+        let isDirty = false;
+
+        this.curRowDone = false;
+        this.curRowIndx = indx;
+        this.curRowId = this.issueRowKeys[this.curRowIndx - 1];
+        this.updateRowDcId();
+        this.curRow = !!this.ProductCorrectorData.DuplicateProducts[this.curRowId]
+            ? this.ProductCorrectorData.DuplicateProducts[this.curRowId]
+            : this.ProductCorrectorData.InValidProducts[this.curRowId];
+        this.curRowProds = [];
+
+        // Manage all products entered for the row's cell
+        for (const ptr in this.ProductCorrectorData.ProdctTransformResults[this.curRowId]) {
+            if (this.ProductCorrectorData.ProdctTransformResults[this.curRowId].hasOwnProperty(ptr)) {
+                for (let p = 0; p < this.ProductCorrectorData.ProdctTransformResults[this.curRowId][ptr].length; p++) {
+                    const item = this.ProductCorrectorData.ProdctTransformResults[this.curRowId][ptr][p];
+                    let reason = "Found the Product";
+                    let status = "Good";
+                    let exclude = "";
+                    const matchName = [];
+                    let cnt = 0;
+
+                    if (!!this.ProductCorrectorData.DuplicateProducts[this.curRowId] && !!this.ProductCorrectorData.DuplicateProducts[this.curRowId][item]) {
+                        reason = "Found multiple matches";
+                        status = "Issue";
+                        if (this.ProductCorrectorData.DuplicateProducts[this.curRowId][item].length > 0) {
+                            cnt += new List<any>(this.ProductCorrectorData.DuplicateProducts[this.curRowId][item])
+                                .Where((x) => {
+                                    return (x.EXCLUDE == (ptr == "E"));
+                                }).ToArray().length;
+                        }
+                    }
+                    if (!!this.ProductCorrectorData.InValidProducts[this.curRowId][ptr] && this.ProductCorrectorData.InValidProducts[this.curRowId][ptr].indexOf(item) >= 0) {
+                        reason = "Unable to locate the product";
+                        status = "Issue";
+                        exclude = ptr;
+                    }
+
+                    // Look for valid products with soft warnings
+                    if (!!this.ProductCorrectorData.ValidProducts[this.curRowId] && !!this.ProductCorrectorData.ValidProducts[this.curRowId][item] && !!this.ProductCorrectorData.ValidProducts[this.curRowId][item][0]) {
+                        // recently fixed item
+                        if (status === "Issue") {
+                            const name = [];
+                            const pItem = this.ProductCorrectorData.ValidProducts[this.curRowId][item];
+                            for (let n = 0; n < pItem.length; n++) {
+                                name.push(pItem[n].HIER_VAL_NM);
+                            }
+                            for (let ii = 0; ii < name.length; ii++) {
+                                matchName.push(name[ii]);
+                            }
+
+                        }
+                    }
+
+                    this.curRowProds.push({
+                        "id": p,
+                        "name": item,
+                        "anchorName": item,
+                        "status": status,
+                        "reason": reason,
+                        "cnt": cnt,
+                        "matchName": matchName,
+                        "exclude": ptr
+                    });
+
+                    if (matchName.length === 0 && status === "Issue") isDirty = true;
+                }
+            }
+        }
+
+        //Build Datasource
+        this.curRowData = [];
+        this.curRowCategories = [];
+        this.curRowLvl = [];
+        this.curRowIssues = [];
+        const curRowCategories1 = [];
+        const curRowLvl = [];
+        this.curRowPrdCnt = 0;
+        if (!!this.ProductCorrectorData.DuplicateProducts[this.curRowId]) {
+            let flag = false;
+            let dataitem = this.ProductCorrectorData.DuplicateProducts[this.curRowId];
+            let validDataItem = this.ProductCorrectorData.ValidProducts[this.curRowId];
+            for (let k in dataitem) {
+                if (dataitem.hasOwnProperty(k)) {
+                    this.curRowPrdCnt++;
+                    if (!!dataitem[k]) {
+                        for (let r = 0; r < dataitem[k].length; r++) {
+                            if (dataitem[k][r]['DISP_HIER_VAL_NM'] == undefined) {
+                                dataitem[k][r]['DISP_HIER_VAL_NM'] = dataitem[k][r]["HIER_VAL_NM"];
+                            }
+                            if (!!this.ProductCorrectorData.ValidProducts[this.curRowId]) {
+
+                                if (!!this.ProductCorrectorData.ValidProducts[this.curRowId][k] && this.ProductCorrectorData.ValidProducts[this.curRowId][k].length > 0) {
+                                    let result = [];
+                                    result = validDataItem[k].filter((value) =>{
+                                        return value.PRD_MBR_SID == dataitem[k][r].PRD_MBR_SID && value.USR_INPUT == dataitem[k][r].USR_INPUT;
+                                    });
+                                    if (result.length > 0) {
+                                        let flag = true;
+                                        dataitem[k][r]["IS_SEL"] = true;
+                                    }
+                                }
+                            }
+                            if (flag == false) {
+                                dataitem[k][r]["IS_SEL"] = false;
+                            }
+                            this.curRowData.push(dataitem[k][r]);
+                            flag = false;
+                            if (curRowCategories1.indexOf(dataitem[k][r].PRD_CAT_NM) < 0)
+                                curRowCategories1.push(dataitem[k][r].PRD_CAT_NM);
+                            if (curRowLvl.indexOf(dataitem[k][r].PRD_ATRB_SID) < 0)
+                                curRowLvl.push(dataitem[k][r].PRD_ATRB_SID);
+                        }
+                    }
+                }
+            }
+        }
+
+        //Remove Search Header
+        this.isIncludeProd = new List<any>(this.curRowProds)
+            .Where((x) =>{
+                return (x.exclude == "I");
+            }).ToArray().length > 0;
+
+        this.isExcludeProd = new List<any>(this.curRowProds)
+            .Where((x)=> {
+                return (x.exclude == "E");
+            }).ToArray().length > 0;
+
+        // Build filters
+        for (x = 0; x < this.curRowProds.length; x++) {
+            if (this.curRowProds[x].status === "Issue") {
+                this.curRowIssues.push({
+                    "id": x,
+                    "name": this.curRowProds[x].name,
+                    "anchorName": this.curRowProds[x].anchorName,
+                    "value": this.curRowProds[x].name,
+                    "selected": false,
+                    "status": this.curRowProds[x].status,
+                    "cnt": this.curRowProds[x].cnt,
+                    "exclude": this.curRowProds[x].exclude
+                });
+            }
+        }
+        for (x = 0; x < curRowCategories1.length; x++) {
+            this.curRowCategories.push({
+                "id": x,
+                "name": curRowCategories1[x],
+                "value": curRowCategories1[x],
+                "selected": false
+            });
+        }
+        for (x = 0; x < curRowLvl.length; x++) {
+            this.curRowLvl.push({
+                "id": x,
+                "name": this.prdLvlDecoder(curRowLvl[x]),
+                "value": curRowLvl[x],
+                "selected": false
+            });
+        }
+
+        this.curRowDone = !isDirty;
+
+        for (const key in this.curRowIssues) {
+            if (this.curRowIssues.hasOwnProperty(key) && this.curRowIssues[key].cnt == 0) {
+                const emptyData = {
+                    BRND_NM: "",
+                    CAP: "",
+                    CAP_END: "01/01/1900",
+                    CAP_START: "01/01/1900",
+                    DEAL_PRD_NM: "",
+                    DEAL_PRD_TYPE: "",
+                    FMLY_NM: "",
+                    HAS_L1: "",
+                    HAS_L2: "",
+                    HIER_NM_HASH: "",
+                    DISP_HIER_VAL_NM: "",
+                    HIER_VAL_NM: "",
+                    MM_MEDIA_CD: "",
+                    MTRL_ID: "",
+                    PCSR_NBR: "",
+                    PRD_ATRB_SID: "",
+                    PRD_CAT_NM: "",
+                    PRD_END_DTM: "01/01/1900",
+                    PRD_MBR_SID: 0,
+                    PRD_STRT_DTM: "01/01/1900",
+                    USR_INPUT: this.curRowIssues[key].name,
+                    YCS2: "",
+                    YCS2_END: "",
+                    YCS2_START: "",
+                    EXCLUDE: false
+                }
+                this.curRowData.push(emptyData);
+            }
+        }
+
+        _.each(this.selectedItms, (selectItem) => {
+            _.each(this.curRowData, (rowDataItem) => {
+                if (rowDataItem.PRD_MBR_SID != 0 && rowDataItem.PRD_MBR_SID == selectItem.PRD_MBR_SID)
+                    rowDataItem.IS_SEL = true;
+            })
+        })
+        if (this.curRowProds && this.curRowProds.length > 0) {
+            this.curRowIncProd = this.curRowProds.filter(x => x.exclude == 'I');
+            this.curRowExcludeProd = this.curRowProds.filter(x => x.exclude == 'E');
+        }
+        else {
+            this.curRowIncProd = [];
+            this.curRowExcludeProd = [];
+        }
+        this.selGridResult = this.curRowData;
+        this.selGridData = process(this.curRowData, this.state);
+        if (!bypassFilter) this.applyFilterAndGrouping();
+        setTimeout(() => {
+            this.toggleColumnsWhenEmptyConflictGrid(this.curRowData);
+        }, 1000);
+    }
+    toggleColumnsWhenEmptyConflictGrid(data) {
+        if (!!this.grid) {
+            this.grid.columns.forEach(item => {
+                let columnValue = _.uniq(data, item['field']);
+                if (columnValue.length == 1 && item['field'] !== undefined && item['field'] != "CheckBox" && item['field'] != "IS_SEL" && item['field'] != "USR_INPUT" && item['field'] != 'CAP' && item['field'] != 'YCS2' &&
+                    (columnValue[0][item['field']] === "" || columnValue[0][item['field']] == null || columnValue[0][item['field']] == 'NA')) {
+                    item.hidden = true;
+                } else if (item['field'] !== 'HAS_L1') {
+                    item.hidden = false;
                 }
             })
         }
     }
-    distinctPrimitive(fieldName: string): any {
-        return distinct(this.selGridResult, fieldName).map(item => item[fieldName]);
+    checkForDuplicateProducts(item, lookup) {
+        let validProducts = [];
+        for (var key in this.data.ProductCorrectorData.ValidProducts[this.curRowId]) {
+            if (this.data.ProductCorrectorData.ValidProducts[this.curRowId].hasOwnProperty(key)) {
+                _.each(this.data.ProductCorrectorData.ValidProducts[this.curRowId][key], (item)=> {
+                    validProducts.push(item);
+                });
+            }
+        }
+
+        let duplicateProducts = validProducts.filter(x => x.PRD_MBR_SID == item.PRD_MBR_SID && x.EXCLUDE == item.EXCLUDE);
+        this.isDuplicate = duplicateProducts.length > 0;
+        if (this.isDuplicate) {
+            this.prodType = item.EXCLUDE ? 'E' : 'I';
+            this.duplicateMsg = 'Found duplicate product for ' + item.HIER_VAL_NM + ', would you like to remove one ?';
+            this.duplicateData = item;
+            this.lookUp = lookup;
+        }
+        return this.isDuplicate;
+    }
+    closeKendoDialog(optionSelected) {
+        if (optionSelected == 'yes') {
+
+            this.ProductCorrectorData.DuplicateProducts[this.curRowId][this.lookUp] = this.ProductCorrectorData.DuplicateProducts[this.curRowId][this.lookUp].filter((prod) => prod.PRD_MBR_SID !== this.duplicateData.PRD_MBR_SID);
+            this.curRowData = this.curRowData.filter((prod) => !(prod.PRD_MBR_SID == this.duplicateData.PRD_MBR_SID && prod.USR_INPUT == this.duplicateData.USR_INPUT));
+            for (var aa = 0; aa < this.curRowIssues.length; aa++) {
+                if (this.curRowIssues[aa].anchorName === this.duplicateData.USR_INPUT) {
+                    this.curRowIssues[aa].cnt = this.curRowData.filter(x => x.USR_INPUT == this.duplicateData.USR_INPUT).length;
+                }
+            }
+                   
+            var delProduct = false;
+            if (!!this.ProductCorrectorData.DuplicateProducts[this.curRowId]) {
+                if (!!this.ProductCorrectorData.DuplicateProducts[this.curRowId][this.lookUp]) {
+                    if (this.ProductCorrectorData.DuplicateProducts[this.curRowId][this.lookUp].length == 0) {
+                        var transItem = this.ProductCorrectorData.ProdctTransformResults[this.curRowId][this.prodType];
+                        for (var t = 0; t < transItem.length; t++) {
+                            if (transItem[t] === this.lookUp) {
+                                transItem.splice(t, 1);
+                                delProduct = true;
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+
+            if (delProduct) {
+                // Delete from Issue Key
+                for (var r = 0; r < this.curRowProds.length; r++) {
+                    if (!!this.curRowProds[r] && this.curRowProds[r].name === this.lookUp && (this.curRowProds[r].exclude === this.prodType)) {
+                        this.curRowProds.splice(r, 1);
+                        break;
+                    }
+                }
+            }
+        }
+        if (this.curRowProds && this.curRowProds.length > 0) {
+            this.curRowIncProd = this.curRowProds.filter(x => x.exclude == 'I');
+            this.curRowExcludeProd = this.curRowProds.filter(x => x.exclude == 'E');
+        }
+        else {
+            this.curRowIncProd = [];
+            this.curRowExcludeProd = [];
+        }
+        this.isDuplicate = false;
+        this.duplicateData = [];
+    }
+    clickProd (id, lookup, name, event) {
+        let item = PTEUtil.findInArrayWhere(this.curRowProds, "name", lookup);
+        if (!item) return;
+        const allMatched = true;
+        const isChecked = event.target.checked;
+        if (isChecked) {
+            let foundItem = PTEUtil.findInArrayWhere(this.ProductCorrectorData.DuplicateProducts[this.curRowId][item.name], "PRD_MBR_SID", id);
+            if (!this.validCrossVerticals(foundItem)) {
+                event.target.checked = false;
+                return;
+            }
+            if (((this.DEAL_TYPE === "KIT" || (this.isTender == '1' && this.DEAL_TYPE.toLowerCase() == 'ecap')) && !this.validateNoOfKITProducts())) { //Added Tender ECAP Rules
+                event.target.checked = false;
+                return;
+            }
+
+            if (!this.ProductCorrectorData.DuplicateProducts[this.curRowId]) return;
+            if (!this.ProductCorrectorData.DuplicateProducts[this.curRowId][item.name]) return;
+
+            foundItem = PTEUtil.findInArrayWhere(this.ProductCorrectorData.DuplicateProducts[this.curRowId][item.name], "PRD_MBR_SID", id);
+            if (!foundItem) return;
+
+            if (this.checkForDuplicateProducts(foundItem, lookup)) {
+                event.target.checked = false;
+                return;
+            }
+
+            //Item added from the selected List
+            item.matchName.push(this.getFullNameOfProduct(foundItem));
+            //Added to check Uncheck Checkbox
+            let addSelIndex = -1;
+            this.selectedItms.some((e, i)=> {
+                if (e.PRD_MBR_SID == id && e.ROW_NM == this.curRowId) {
+                    addSelIndex = i;
+                    return true;
+                }
+            });
+            if (addSelIndex == -1) {
+                this.selectedItms.push({
+                    "PRD_MBR_SID": foundItem.PRD_MBR_SID,
+                    "ROW_NM": foundItem.ROW_NM,
+                    "HIER_NM_HASH": foundItem.HIER_NM_HASH,
+                    'USR_INPUT': foundItem.USR_INPUT
+                });
+            }
+
+            if (!this.ProductCorrectorData.ValidProducts[this.curRowId]) this.ProductCorrectorData.ValidProducts[this.curRowId] = {};
+            if (!this.ProductCorrectorData.ValidProducts[this.curRowId][item.name]) this.ProductCorrectorData.ValidProducts[this.curRowId][item.name] = [];
+            foundItem.HIER_VAL_NM = this.getFullNameOfProduct(foundItem);
+            foundItem.DERIVED_USR_INPUT = this.getFullNameOfProduct(foundItem);
+            this.ProductCorrectorData.ValidProducts[this.curRowId][item.name].push(foundItem);
+
+            this.curRowData.forEach((item) =>{
+                if (item.PRD_MBR_SID == foundItem.PRD_MBR_SID) {
+                    item.IS_SEL = true;
+                }
+            });
+
+            if (!!this.ProductCorrectorData.DuplicateProducts[this.curRowId]) {
+                if (!!this.ProductCorrectorData.DuplicateProducts[this.curRowId][lookup]) {
+                    if (this.ProductCorrectorData.DuplicateProducts[this.curRowId][lookup].length == 1) {
+                        this.removeAndFilter(item.name);
+                    }
+                }
+            }
+        }
+        else {
+            //Item deleted from the selected List
+            let foundItem = PTEUtil.findInArrayWhere(this.ProductCorrectorData.DuplicateProducts[this.curRowId][item.name], "PRD_MBR_SID", id);
+            let delIndex = -1;
+            item.matchName.some((e, i)=> {
+                if (e == this.getFullNameOfProduct(foundItem)) {
+                    delIndex = i;
+                    return true;
+                }
+            });
+            if (delIndex > -1) {
+                item.matchName.splice(delIndex, 1);
+            }
+
+            let delSelIndex = -1;
+            this.selectedItms.some((e, i) =>{
+                if (e.PRD_MBR_SID == id && e.ROW_NM == this.curRowId) {
+                    delSelIndex = i;
+                    return true;
+                }
+            });
+            if (delSelIndex > -1) {
+                this.selectedItms.splice(delSelIndex, 1);
+            }
+
+            if (!this.ProductCorrectorData.DuplicateProducts[this.curRowId]) return;
+            if (!this.ProductCorrectorData.DuplicateProducts[this.curRowId][item.name]) return;
+
+            foundItem = PTEUtil.findInArrayWhere(this.ProductCorrectorData.DuplicateProducts[this.curRowId][item.name], "PRD_MBR_SID", id);
+            if (!foundItem) return;
+
+            if (!this.ProductCorrectorData.ValidProducts[this.curRowId]) this.ProductCorrectorData.ValidProducts[this.curRowId] = {};
+            if (!this.ProductCorrectorData.ValidProducts[this.curRowId][item.name]) this.ProductCorrectorData.ValidProducts[this.curRowId][item.name] = [];
+
+            this.ProductCorrectorData.ValidProducts[this.curRowId][item.name] = this.ProductCorrectorData.ValidProducts[this.curRowId][item.name].filter( (obj)=> {
+                return obj.PRD_MBR_SID != foundItem.PRD_MBR_SID;
+            });
+            if (this.ProductCorrectorData.ValidProducts[this.curRowId][item.name].length === 0) delete this.ProductCorrectorData.ValidProducts[this.curRowId][item.name];
+            this.curRowData.forEach((item)=> {
+                if (item.PRD_MBR_SID == foundItem.PRD_MBR_SID) {
+                    item.IS_SEL = false;
+                }
+            });
+        }
+    }
+    removeAndFilter(prdName) {
+        // remove
+        if (!!this.ProductCorrectorData.DuplicateProducts[this.curRowId]) {
+            delete this.ProductCorrectorData.DuplicateProducts[this.curRowId][prdName];
+            this.ProductCorrectorData.DuplicateProducts[this.curRowId][prdName] = {};
+        }
+
+        let isEmpty = true;
+        for (let r = 0; r < this.curRowIssues.length; r++) {
+            if (this.curRowIssues[r].name === prdName) this.curRowIssues[r].cnt = NaN;
+            if (!isNaN(this.curRowIssues[r].cnt) && this.curRowIssues[r].cnt > 0) isEmpty = false;
+        }
+
+        // let's purge the local storage if all products are matched
+        if (isEmpty) {
+            this.curRowData = [];
+        }
+
+        this.applyFilterAndGrouping();
+
+        this.selectRow(this.curRowIndx);
+
+        let allMatched = true;
+        for (let m = 0; m < this.curRowProds.length; m++) {
+            if (this.curRowProds[m].matchName.length == 0 && this.curRowProds[m].status === "Issue") allMatched = false;
+        }
+
+        if (allMatched && this.curRowIndx <= this.numIssueRows) {
+            if (!this.nextAvailRow()) {
+                // no more work to do
+                this.allDone = true;
+            }
+        }
+    }
+    clkPrdUsrNm(dataItem) {
+        if (dataItem.status === "Good") return;
+        if (dataItem.matchName.length == 0) {
+            if (!!dataItem && dataItem.cnt <= 0) {
+                this.openProdSelector(dataItem.name);
+                return;
+            }
+            this.dataFilter = [];
+            // clear filters
+            _.each(this.curRowIssues, (value, key)=> {
+                value.selected = false;
+                if (dataItem.name == value.name && value.cnt > 0) {
+                    value.selected = true;
+                    if (this.dataFilter.filter(x => x.field == 'USR_INPUT').length == 0)
+                        this.dataFilter.push({
+                            field: 'USR_INPUT',
+                            operator: "eq",
+                            value: dataItem.name
+                        })
+                    else
+                        _.each(this.dataFilter, (x) => {
+                            if (x.field == 'USR_INPUT')
+                                x.value = dataItem.name;
+                        });
+                }
+            });
+
+            // perform filter
+            this.applyFilterAndGrouping();
+
+        } else {
+            // remove matched settings
+            dataItem.matchName = [];
+
+            this.allDone = false;
+
+            this.ProductCorrectorData.ValidProducts[this.curRowId][dataItem.name] = [];
+            delete this.ProductCorrectorData.ValidProducts[this.curRowId][dataItem.name]
+
+            if (!!this.ProductCorrectorData.DuplicateProducts[this.curRowId])
+                this.ProductCorrectorData.DuplicateProducts[this.curRowId][dataItem.name] = this.data.ProductCorrectorData.DuplicateProducts[this.curRowId][dataItem.name];
+
+            this.selectRow(this.curRowIndx);
+        }
+    }
+
+    getFormatedDate(datVal) {
+        var date = moment(new Date(datVal)).format('M/d/yyyy');
+        if (date === '1/1/1900') {
+            return '';
+        }
+        return date;
+    }
+
+    openProdSelector(dataItem) {
+        let currentPricingTableRow = new List<any>();
+        if (this.data.selRows.length > 1) {
+            currentPricingTableRow = new List<any>(this.data.selRows)
+                .Where((x)=> {
+                    return (x.DC_ID == this.rowDCId);
+                }).ToArray()[0];
+        }
+        else {
+            currentPricingTableRow = this.data.selRows[0];
+        }
+
+        const pricingTableRow = {
+            'START_DT': currentPricingTableRow['row']['START_DT'],
+            'END_DT': currentPricingTableRow['row']['END_DT'],
+            'CUST_MBR_SID': this.data.contractData.CUST_MBR_SID,
+            'GEO_COMBINED': currentPricingTableRow['row']['GEO_COMBINED'],
+            'PTR_SYS_PRD': "",
+            'PTR_SYS_INVLD_PRD': "",
+            'PROGRAM_PAYMENT': currentPricingTableRow['row']['PROGRAM_PAYMENT'],
+            'PROD_INCLDS': currentPricingTableRow['row']['PROD_INCLDS']
+        };
+
+        if (!dataItem) {
+            this.invalidProdName = "";
+        }
+        else {
+            this.invalidProdName = dataItem;
+        }
+
+        // If the product name has mbr_sid as 0, it is invalid product
+        const isProductExists = this.curRowData.filter((x) => {
+            return x.USR_INPUT === dataItem && x.PRD_MBR_SID == 0
+        }).length === 0;
+
+        // findIndex() is not supported in IE11 and hence replacing with 'some()' that is supported in all browsers - VN
+        let indx = -1;
+        this.curRowProds.some((e, i) => {
+            if (e.name == dataItem) {
+                indx = i;
+                return true;
+            }
+        });
+        const isExcludeProduct = this.curRowProds[indx].exclude == "I" ? false : true;
+
+        const suggestedProduct = {
+            'mode': 'auto',
+            'prodname': dataItem,
+            'productExists': isProductExists,
+            'isExcludeProduct': isExcludeProduct
+        };
+        const data = { name: 'Product Selector', source: '', selVal: dataItem, contractData: this.data.contractData, curPricingTable: this.data.curPricingTable, curRow: [pricingTableRow] };
+        const dialogRefe = this.dialogService.open(ProductSelectorComponent, {
+            height: "85vh",
+            maxWidth: "90vw",
+            width: "6000px",
+            data: data,
+            panelClass: 'product-selector-dialog'
+        })
+
+        dialogRefe.afterOpened().subscribe(a => { this.isLoading = false; })
+        dialogRefe.afterClosed().subscribe(result => {
+            if (!!result)
+            {
+              const validateSelectedProducts = result.validateSelectedProducts;
+                for (let key in validateSelectedProducts) {
+                    if (!this.ProductCorrectorData.ValidProducts[this.curRowId])
+                        this.ProductCorrectorData.ValidProducts[this.curRowId] = {};
+                    if (!this.ProductCorrectorData.ValidProducts[this.curRowId][this.invalidProdName])
+                        this.ProductCorrectorData.ValidProducts[this.curRowId][this.invalidProdName] = [];
+                    _.each(validateSelectedProducts[key], (product) => {
+                        const isValid = this.validCrossVerticals(product);
+                        if (isValid) {
+                            let isExclude = this.ProductCorrectorData.ProdctTransformResults[this.curRowId].E && this.ProductCorrectorData.ProdctTransformResults[this.curRowId].E.length > 0
+                                && this.ProductCorrectorData.ProdctTransformResults[this.curRowId].E.includes(this.invalidProdName) ? true : false;
+                            product.EXCLUDE = isExclude;
+                            this.ProductCorrectorData.ValidProducts[this.curRowId][this.invalidProdName].push(product);
+                        }
+                    });
+                }
+                this.removeAndFilter(this.invalidProdName);
+                this.invalidProdName = '';
+            }
+        })
+    }
+    removeProd(prdNm, exclude?) {
+        if (exclude == 'E')
+            this.removeExclude = true;
+        else
+            this.removeExclude = false;
+        this.prdNm = prdNm.toString();
+        this.prodRemoveConfirm = true;        
+    }
+    closePrdRemoveDialogs(){
+        this.prodRemoveConfirm = false;
+    }
+    OKremoveProd() {
+        if (!!this.ProductCorrectorData.DuplicateProducts[this.curRowId]
+            && !!this.ProductCorrectorData.DuplicateProducts[this.curRowId][this.prdNm]) {
+            delete this.ProductCorrectorData.DuplicateProducts[this.curRowId][this.prdNm];
+        }
+
+        // delete from valid if exists
+        if (!!this.ProductCorrectorData.ValidProducts[this.curRowId] && !!this.ProductCorrectorData.ValidProducts[this.curRowId][this.prdNm]) {
+            delete this.ProductCorrectorData.ValidProducts[this.curRowId][this.prdNm];
+        }
+
+        // delete from invalid if exists
+        // For exclude product repeat the loop to fetch exclude product also
+        var cnt = 0;
+        if (!exclude) {
+            cnt = 1;
+        }
+        for (var m = 0; m <= cnt; m++) {
+            var exclude = m == 0 ? "I" : "E";
+            let isExclude = exclude == "I" ? false : true;
+            this.deletedProductDetails.push({
+                DC_ID: this.curRowId,
+                deletedUserInput: this.prdNm,
+                exclude: isExclude,
+                indx: _.findWhere(this.data.selRows,
+                    {
+                        DC_ID: parseInt(this.curRowId)
+                    }).indx
+            });
+            var delItem = this.ProductCorrectorData.InValidProducts[this.curRowId][exclude];
+            if (!!delItem) {
+                for (var i = 0; i < delItem.length; i++) {
+                    if (delItem[i] === this.prdNm) {
+                        delItem.splice(i, 1);
+                    }
+                }
+            }
+
+            //Delete fromProdctTransformResults
+            if (!!this.ProductCorrectorData.ProdctTransformResults[this.curRowId][exclude]
+                && !!this.ProductCorrectorData.ProdctTransformResults[this.curRowId][exclude][this.prdNm]) {
+                delete this.ProductCorrectorData.ProdctTransformResults[this.curRowId][exclude][this.prdNm];
+            }
+            var transItem = this.ProductCorrectorData.ProdctTransformResults[this.curRowId][exclude];
+            for (var t = 0; t < transItem.length; t++) {
+                if (transItem[t] === this.prdNm) {
+                    transItem.splice(t, 1);
+                }
+            }
+
+            // Delete from Issue Key
+            for (var r = 0; r < this.curRowProds.length; r++) {
+                if (!!this.curRowProds[r] && this.curRowProds[r].name === this.prdNm && this.curRowProds[r].exclude === exclude) {
+                    this.curRowProds.splice(r, 1);
+                }
+            }
+        }
+        if (this.curRowProds && this.curRowProds.length > 0) {
+            this.curRowIncProd = this.curRowProds.filter(x => x.exclude == 'I');
+            this.curRowExcludeProd = this.curRowProds.filter(x => x.exclude == 'E');
+        }
+        else {
+            this.curRowIncProd = [];
+            this.curRowExcludeProd = [];
+        }
+        //Remove Search Header
+        this.isIncludeProd = this.curRowProds.filter(x => x.exclude == "I").length > 0;
+
+        this.isExcludeProd = this.curRowProds.filter(x => x.exclude == "E").length > 0;
+        this.selectRow(this.curRowIndx);
+        this.closePrdRemoveDialogs();
+    }
+
+    nextAvailRow() {
+        for (var r = 0; r < this.issueRowKeys.length; r++) {
+            this.selectRow(r + 1);
+            if (!this.curRowDone) {
+                return true;
+            }
+        }
+        return false;
+    }
+
+    nextRow() {
+        const indx = this.curRowIndx + 1;
+        if (indx > this.numIssueRows) return false;
+        this.selectRow(indx);
+        return true;
+    }
+
+    prevRow() {
+        const indx = this.curRowIndx - 1;
+        if (indx < 1) return false;
+        this.selectRow(indx);
+        return true;
+    }
+    cancel() {
+        this.curRowData = [];
+        this.curRowProds = [];
+        this.data.ProductCorrectorData.AutoValidatedProducts = PTE_Common_Util.deepClone(this.data.ProductCorrectorData.ValidProducts);
+        this.data.ProductCorrectorData['AbortProgration'] = true;
+
+        this.dialogRef.close(this.data.ProductCorrectorData);
+    }
+    saveProducts() {
+        for (let r = 0; r < this.numIssueRows; r++) {
+            const key = this.issueRowKeys[r];
+            let invalidCopy = [];
+            if (!!this.ProductCorrectorData.InValidProducts[key] && this.ProductCorrectorData.InValidProducts[key].length === 0) {
+                delete this.ProductCorrectorData.InValidProducts[key];
+            }
+
+            if (!!this.ProductCorrectorData.DuplicateProducts[key]) {
+                if (Object.keys(this.ProductCorrectorData.DuplicateProducts[key]).length === 0) {
+                    delete this.ProductCorrectorData.DuplicateProducts[key];
+                } else {
+                    let foundItems = false;
+                    for (const k in this.ProductCorrectorData.DuplicateProducts[key]) {
+                        //If any Item present in Valid List Delete from Duplicate
+                        if (!!this.ProductCorrectorData.ValidProducts[key]) {
+                            if (!!this.ProductCorrectorData.ValidProducts[key][k]) {
+                                if (this.ProductCorrectorData.ValidProducts[key][k].length > 0) {
+                                    delete this.ProductCorrectorData.DuplicateProducts[key][k];
+                                }
+                            }
+                        }
+                        const item = this.ProductCorrectorData.DuplicateProducts[key][k];
+                        if (Array.isArray(item) && item.length > 0) foundItems = true;
+                    }
+                    if (!foundItems)
+                        delete this.ProductCorrectorData.DuplicateProducts[key];
+                }
+            }
+            if (!!this.ProductCorrectorData.InValidProducts[key]) {
+                let exclude = "";
+                for (let m = 0; m <= 1; m++) {
+                    exclude = (m == 0) ? "I" : "E";
+                    if (this.ProductCorrectorData.InValidProducts[key][exclude]) {
+                        invalidCopy = PTE_Common_Util.deepClone(this.ProductCorrectorData.InValidProducts[key][exclude]);
+                        for (let j = 0; j < this.ProductCorrectorData.InValidProducts[key][exclude].length; j++) {
+                            let foundItems = false;
+                            let prodName = this.ProductCorrectorData.InValidProducts[key][exclude][j];
+                            if (!!this.ProductCorrectorData.ValidProducts[key]) {
+                                let item = this.ProductCorrectorData.ValidProducts[key][prodName];
+                                if (Array.isArray(item) && item.length > 0) foundItems = true;
+                                if (foundItems) {
+                                    // delete from invalid if exists
+                                    const delItem = invalidCopy;
+                                    for (let i = 0; i < delItem.length; i++) {
+                                        if (delItem[i] === prodName) {
+                                            invalidCopy.splice(i, 1);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+                    }
+                    this.ProductCorrectorData.InValidProducts[key][exclude] = invalidCopy;
+                }
+            }
+        }
+
+         _.each(this.ProductCorrectorData.ValidProducts, (product, key) => {
+            _.each(product, (selprod, keyq) => {
+                if (!!this.selectedProducts && this.selectedProducts.length == 0) {
+                    this.selectedProducts.push({
+                        DCID: parseInt(key),
+                        name: keyq.toString()
+                        , items: [],
+                        indx: _.findWhere(this.data.selRows,
+                            {
+                                DC_ID: parseInt(key)
+                            }).indx
+                    });
+                } else {
+                    if (this.selectedProducts.filter(x => x.DCID == key).length==0) {
+                        this.selectedProducts.push({
+                            DCID: parseInt(key),
+                            name: keyq.toString()
+                            , items: [],
+                            indx: _.findWhere(this.data.selRows,
+                                {
+                                    DC_ID: parseInt(key)
+                                }).indx
+                        });
+                    }
+                }
+
+
+
+                _.each(selprod, celprod => {
+                    const prd = { prod: celprod['DERIVED_USR_INPUT'], prodObj: celprod };
+                    prd.prodObj['USR_INPUT'] = keyq;
+                    prd.prodObj['IS_SEL'] = true;
+                    _.each(this.selectedProducts, (selproditem) => {
+                        if (selproditem.DCID == key)
+                            selproditem.items.push(prd);
+                    })
+                })
+            })
+         });
+
+        let savedDetails = {
+            selectedProducts: this.selectedProducts,
+            deletedProducts: this.deletedProductDetails,
+            ProductCorrectorData: this.ProductCorrectorData
+        }
+
+        this.dialogRef.close(savedDetails);
+    }
+
+    
+    
+    openCAPBreakOut (dataItem, priceCondition) {
+        let currentPricingTableRow = [];
+        if (this.data.selRows.length > 1) {
+            currentPricingTableRow = this.data.selRows.filter((x)=> (x.DC_ID == this.issueRowKeys[this.curRowIndx - 1]))[0];
+        }
+        else {
+            currentPricingTableRow = this.data.selRows[0];
+        }
+
+        let productData = [{
+            'CUST_MBR_SID': this.data.contractData.CUST_MBR_SID,
+            'PRD_MBR_SID': dataItem.PRD_MBR_SID,
+            'GEO_MBR_SID': currentPricingTableRow['row']['GEO_COMBINED'],
+            'DEAL_STRT_DT': currentPricingTableRow['row']['START_DT'],
+            'DEAL_END_DT': currentPricingTableRow['row']['END_DT'],
+            'getAvailable': 'N',
+            'priceCondition': priceCondition
+        }]
+
+        this.dialogService.open(ProductBreakoutComponent, {
+            data: {
+                columnTypes: priceCondition,
+                productData: productData
+            },
+            panelClass: 'product-breakout-modal'
+        });
+    }
+
+    onNoClick() {
+        this.dialogRef.close();
+    }
+    applyFilterAndGrouping() {
+        this.state.filter.filters = this.dataFilter;
+        this.state.group = [];
+        this.state.group.push({ field: "USR_INPUT", dir: "asc" });
+        this.selGridData = process(this.selGridResult, this.state);
+    }
+    clickFilter(event, field) {
+        this.dataFilter = [];
+            this.dataFilter.push({
+                field: field,
+                operator: "eq",
+                value: event.dataItem.value
+            })
+        this.state.filter.filters = this.dataFilter;
+        this.applyFilterAndGrouping();        
     }
     ngOnInit() {
-        this.ProductCorrectorData = this.data.ProductCorrectorData;
-        this.contractData = this.data.contractData;
-        this.curPricingTable = this.data.curPricingTable;
-        this.selRows = this.data.selRows;
-        this.DEAL_TYPE = this.data.curPricingTable['OBJ_SET_TYPE_CD'];
-        this.curSelProducts = null;
-        this.loadGrid()
+        this.isLoading = true;
+        if (this.data.contractData.IS_TENDER) {
+            this.isTender = this.data.contractData.IS_TENDER;
+        }
+        this.ProductCorrectorData = PTE_Common_Util.deepClone(this.data.ProductCorrectorData);
+        this.ProductCorrectorData['AutoValidatedProducts'] = PTE_Common_Util.deepClone(this.data.ProductCorrectorData.ValidProducts);
+        this.DEAL_TYPE = this.data.curPricingTable.OBJ_SET_TYPE_CD;
+        //Deal type checking: make it false if you don't want to show the label in Product(s) not found area.
+        if (this.DEAL_TYPE == "VOL_TIER" || this.DEAL_TYPE == "FLEX" || this.DEAL_TYPE == "PROGRAM" || this.DEAL_TYPE == "REV_TIER" || this.DEAL_TYPE == "DENSITY") {
+            this.showIncludeExcludeLabel = true;
+        }
+        this.initProducts();
+        this.selectRow(1);
+        this.isLoading = false;
+
     }
 }

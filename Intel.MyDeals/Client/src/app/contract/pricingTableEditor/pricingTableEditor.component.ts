@@ -34,6 +34,7 @@ import { Tender_Util } from '../PTEUtils/Tender_util';
 import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 import { FlexOverlappingCheckComponent } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.component';
+import { distinct } from '@progress/kendo-data-query';
 @Component({
     selector: 'pricing-table-editor',
     templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html'
@@ -309,6 +310,7 @@ export class pricingTableEditorComponent {
     private autoFillData: any = null;
     private ColumnConfig: Array<Handsontable.ColumnSettings> = [];
     private overlapFlexResult: any;
+    private transformResults: any = [];
     // To get the selected row and col for product selector
     private multiRowDelete: Array<any> = [];
     // Handsontable Variables basic hottable structure
@@ -694,6 +696,7 @@ export class pricingTableEditorComponent {
                 this.hotTable.setCellMeta(selrow, PTR_Exccol_ind, 'className', 'normal-product');
                 this.hotTable.render();
                 this.isExcludePrdChange = true;
+                this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_INVLD_PRD', '', 'no-edit');
             }
             let isEnable = this.hotTable.isEmptyRow(0);
             this.enableDeTab.emit({ isEnableDeTab: !isEnable, enableDeTabInfmIcon: this.isDeTabInfmIconReqd });
@@ -749,7 +752,7 @@ export class pricingTableEditorComponent {
             this.setBusy("", "", "", false);
         },0);
     }
-    deleteRow(rows: Array<any>): void {
+    deleteRow(rows: Array<any>, isProdCorrectorDeletion?): void {
         try {
             let delRows = [];
             let PTR=PTE_Common_Util.getPTEGenerate(this.columns,this.curPricingTable);
@@ -762,6 +765,31 @@ export class pricingTableEditorComponent {
                     }
                 })
             });
+            //delete the row data from transformResults Object if any
+            if (this.transformResults && this.transformResults['Data'] && Object.keys(this.transformResults['Data']).length == 0) {
+                _.each(delRows, (delRow) => {
+                    if (this.transformResults['Data'].DuplicateProducts && this.transformResults['Data'].DuplicateProducts[delRow.DC_ID]) {
+                        delete this.transformResults['Data'].DuplicateProducts[delRow.DC_ID];
+                        if (Object.keys(this.transformResults['Data'].DuplicateProducts).length == 0)
+                            delete this.transformResults['Data'].DuplicateProducts;
+                    }
+                    if (this.transformResults['Data'].InValidProducts && this.transformResults['Data'].InValidProducts[delRow.DC_ID]) {
+                        delete this.transformResults['Data'].InValidProducts[delRow.DC_ID];
+                        if (Object.keys(this.transformResults['Data'].InValidProducts).length == 0)
+                            delete this.transformResults['Data'].InValidProducts;
+                    }
+                    if (this.transformResults['Data'].ProdctTransformResults && this.transformResults['Data'].ProdctTransformResults[delRow.DC_ID]) {
+                        delete this.transformResults['Data'].ProdctTransformResults[delRow.DC_ID];
+                        if (Object.keys(this.transformResults['Data'].ProdctTransformResults).length == 0)
+                            delete this.transformResults['Data'].ProdctTransformResults;
+                    }
+                    if (this.transformResults['Data'].ValidProducts && this.transformResults['Data'].ValidProducts[delRow.DC_ID]) {
+                        delete this.transformResults['Data'].ValidProducts[delRow.DC_ID];
+                        if (Object.keys(this.transformResults['Data'].ValidProducts).length == 0)
+                            delete this.transformResults['Data'].ValidProducts;
+                    }
+                })
+            }
             let savedRows = _.filter(delRows, row => { return row.DC_ID > 0 });
             let nonSavedRows = _.filter(delRows, row => { return row.DC_ID < 0 });
             //this condition means all rows are non DC_ID rows so that no need to hit API
@@ -774,17 +802,33 @@ export class pricingTableEditorComponent {
                 //setting the value to empty to avoid extra delete
             }
             //this condition for all rows are saved DC_ID rows so hit API
-            if (savedRows.length > 0 && delRows.length == savedRows.length) {
+            if (savedRows.length > 0 && delRows.length == savedRows.length && !isProdCorrectorDeletion) {//if product deleted through product corrector, no need of api call
                 //this will openup dialog box and call closeDialog function
                 this.isDialogOpen = true;
-            }
+            }            
             //this condition for both case
-            if (nonSavedRows.length > 0 && savedRows.length > 0) {
+            if (nonSavedRows.length > 0 && savedRows.length > 0 && !isProdCorrectorDeletion) {//if product deleted through product corrector, no need of api call
                 this.hotTable.alter('remove_row', nonSavedRows[0].row, nonSavedRows.length, 'no-edit');
                 this.getMergeCellsOnDelete();
                 //this step will move all the deleted records which matched nonSavedRows records
                 this.multiRowDelete = _.reject(this.multiRowDelete, itm => { return _.contains(_.pluck(nonSavedRows, 'row'), itm.row) });
                 this.isDialogOpen = true;
+            }
+            if (savedRows.length > 0 && nonSavedRows.length > 0 && isProdCorrectorDeletion) {//if product deleted through product corrector, delete from UI before save action
+                _.each(nonSavedRows, (nonSavedRow) => {
+                    this.hotTable.alter('remove_row', nonSavedRow.row, 1, 'no-edit');
+                    this.getMergeCellsOnDelete();
+                    //this step will move all the deleted records which matched nonSavedRows records
+                    this.multiRowDelete = _.reject(this.multiRowDelete, itm => { return _.contains(_.pluck(nonSavedRow, 'row'), itm.row) });
+                })
+            }
+            if (savedRows.length > 0 && isProdCorrectorDeletion) {//if product deleted through product corrector, delete from UI before save action
+                _.each(savedRows, (savedRow) => {
+                    this.hotTable.alter('remove_row', savedRow.row, 1, 'no-edit');
+                    this.getMergeCellsOnDelete();
+                    //this step will move all the deleted records which matched nonSavedRows records
+                    this.multiRowDelete = _.reject(this.multiRowDelete, itm => { return _.contains(_.pluck(savedRow, 'row'), itm.row) });
+                })
             }
         }
         catch (ex) {
@@ -1028,6 +1072,10 @@ export class pricingTableEditorComponent {
     async validatePricingTableProducts(deleteDCIDs?) {
         //validate Products for non-deleted records, if any product is invalid it will stop deletion as well
         let isValidProd = await this.validateOnlyProducts('onSave', undefined, deleteDCIDs);
+        if(isValidProd != undefined)
+            await this.saveandValidate(isValidProd, deleteDCIDs);
+    }
+    async saveandValidate(isValidProd, deleteDCIDs?) {
         //Handsonetable loading taking some time so putting this logic for loader
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
         //removing the deleted record from PTR
@@ -1053,7 +1101,6 @@ export class pricingTableEditorComponent {
                 await this.ValidateAndSavePTE(isValidProd, deleteDCIDs);
             }
         }
-
     }
     async validateOnlyProducts(action: string, curRow?, deleteDCIDs?) {
         //loader
@@ -1068,7 +1115,7 @@ export class pricingTableEditorComponent {
         }
         let translateResult = await this.ValidateProducts(PTR, false, true, null);
         let updatedPTRObj: any = null;
-        if (translateResult) {
+        if (translateResult && translateResult['Data']) {
             let prdValResult = PTEUtil.isValidForProdCorrector(translateResult['Data']);
             updatedPTRObj = PTEUtil.cookProducts(translateResult['Data'], PTR);
             //code to bind the cook result of success or failure
@@ -1085,8 +1132,8 @@ export class pricingTableEditorComponent {
                     }
                 }
 
-                if (data && data._behaviors && data._behaviors.isError) {
-                    if (data._behaviors.isError['PTR_USER_PRD'] == false) {
+                if (data && data._behaviors && data._behaviors.isError && data.PTR_SYS_INVLD_PRD == "") {
+                    if (!!data._behaviors.isError['PTR_USER_PRD'] || data._behaviors.isError['PTR_USER_PRD'] == false) {
                         this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'success-product');
                     }
                     else {
@@ -1099,11 +1146,12 @@ export class pricingTableEditorComponent {
                 if (this.curPricingTable.OBJ_SET_TYPE_CD != 'KIT' && this.curPricingTable.OBJ_SET_TYPE_CD != 'ECAP'
                     && data.PRD_EXCLDS != null && data.PRD_EXCLDS != "") {
                     //this.hotTable.setDataAtRowProp(idx, 'PRD_EXCLDS', data.PRD_EXCLDS, 'no-edit');
-                    if (data && data._behaviors && data._behaviors.isError) {
+                    if (data && data._behaviors && data._behaviors.isError && data.PTR_SYS_INVLD_PRD == "") {
                         if (data._behaviors.isError['PRD_EXCLDS'] == false) {
                             this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'success-product');
                         }
                         else {
+                            this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'error-product');
                             this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'error-product');
                         }
                         //setcellmeta will not render the color by default either you should make some proprty change of render
@@ -1115,8 +1163,8 @@ export class pricingTableEditorComponent {
             if (_.contains(prdValResult, '1')) {
                 // Product corrector if invalid products
                 this.isLoading = false;
-                if ((action == 'onOpenSelector' && translateResult['Data'].DuplicateProducts[curRow[0].DC_ID]) || action != 'onOpenSelector') {
-                    await this.openProductCorrector(translateResult['Data'])
+                if ((action == 'onOpenSelector' && translateResult['Data'] && translateResult['Data'].DuplicateProducts && translateResult['Data'].DuplicateProducts[curRow[0].DC_ID]) || action != 'onOpenSelector') {
+                    await this.openProductCorrector(translateResult['Data'], action, deleteDCIDs)
                     if (curRow) {
                         curRow[0].isOpenCorrector = true;
                     }
@@ -1126,7 +1174,12 @@ export class pricingTableEditorComponent {
                 }
             }
             else if (_.contains(prdValResult, '2') && action != 'onOpenSelector') {
-                this.loggerService.warn('Please use product selector to choose a valid product', "Use Product Selector");
+                console.log("_.contains(prdValResult, '2') and not onOpenSelector");
+                await this.openProductCorrector(translateResult['Data'], action, deleteDCIDs);
+                if (curRow) {
+                    curRow[0].isOpenCorrector = true;
+                }
+               // this.loggerService.warn('Please use product selector to choose a valid product', "Use Product Selector");
             }
             else {
                 if (this.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
@@ -1188,8 +1241,26 @@ export class pricingTableEditorComponent {
         }
 
 
-        let translationInputToSend = PTEUtil.translationToSendObj(this.curPricingTable, currentPricingTableRowData, this.contractData, this.isExcludePrdChange);
-        let transformResults: any = null;
+        let translationInput = PTEUtil.translationToSendObj(this.curPricingTable, currentPricingTableRowData, this.contractData, this.isExcludePrdChange);
+        let translationInputToSend = translationInput.filter(function (x) {
+            // If we already have the invalid JSON don't translate the products again
+            return x.SendToTranslation == true;
+        });
+
+        let pricingTableRowData = currentPricingTableRowData.filter((x) => {
+            
+            return ((x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
+                ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
+                || (this.curPricingTable.OBJ_SET_TYPE_CD == "KIT") || (this.isExcludePrdChange) ;
+        });
+
+        // Products invalid JSON data present in the row
+        let invalidProductJSONRows = pricingTableRowData.filter(function (x) {
+
+            return (x.PTR_SYS_INVLD_PRD != null && x.PTR_SYS_INVLD_PRD != "");
+        });
+
+        
         // Products that needs server side attention
         if (translationInputToSend.length > 0) {
             // Validate products
@@ -1198,14 +1269,17 @@ export class pricingTableEditorComponent {
             // var pcMt = new perfCacheBlock("Translate Products (DB not logged)", "MT");
             this.isLoading = true;
             this.setBusy("Validating your data...", "Please wait while we validate your information!", "Info", true);
-            transformResults = await this.productSelectorService.TranslateProducts(translationInputToSend, this.contractData.CUST_MBR_SID, this.curPricingTable.OBJ_SET_TYPE_CD, this.contractData.DC_ID, this.contractData.IS_TENDER) //Once the database is fixed remove the hard coded geo_mbr_sid
+            let resultdata = await this.productSelectorService.TranslateProducts(translationInputToSend, this.contractData.CUST_MBR_SID, this.curPricingTable.OBJ_SET_TYPE_CD, this.contractData.DC_ID, this.contractData.IS_TENDER) //Once the database is fixed remove the hard coded geo_mbr_sid
                 .toPromise()
                 .catch(error => {
                     this.loggerService.error("Product Translator failure::", error);
                 })
+            if (resultdata) {
+                this.transformResults['Data'] = PTE_Validation_Util.buildTranslatorOutputObjectproductCorroctor(invalidProductJSONRows, resultdata['Data']);
+            }
         }
         this.isLoading = false;
-        return transformResults;
+        return this.transformResults;
     }
     openProductSelector() {
         let modalComponent: any = null,
@@ -1292,7 +1366,7 @@ export class pricingTableEditorComponent {
             }
         });
     }
-    async openProductCorrector(products: any) {
+    async openProductCorrector(products: any, action : string, deletedDCID?) {
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
         let selRow: any;
         let rowProdCorrectordat: any;
@@ -1302,90 +1376,170 @@ export class pricingTableEditorComponent {
             let idx = _.findIndex(PTR, { DC_ID: parseInt(key) });
             selRows.push({ DC_ID: res.DC_ID, name: _.keys(val).toString(), row: res, indx: idx });
         });
+        _.each(products.InValidProducts,(val, key) => {
+            let res = _.findWhere(PTR, { DC_ID: parseInt(key) });
+            let idx = _.findIndex(PTR, { DC_ID: parseInt(key) });
+            if ((selRows.find(a => a.DC_ID == parseInt(key)) != undefined)
+                && (selRows.find(a => a.DC_ID == parseInt(key))?.DC_ID != 0))
+                return;
+            if (_.values(val) != undefined && _.values(val) != null)
+                selRows.push({ DC_ID: res.DC_ID, name: _.uniq(_.values(val)[1]).toString(), row: res, indx: idx });
+        });
         let data = { ProductCorrectorData: products, contractData: this.contractData, curPricingTable: this.curPricingTable, selRows: selRows };
         const dialogRef = this.dialog.open(ProductCorrectorComponent, {
             height: '90vh',
-            maxWidth: '90vw',
+            maxWidth: "90vw",
+            width: '6500px',
             data: data,
             panelClass: "product-corrector-dialog",
         });
-        await dialogRef.afterClosed().toPromise().then((selProds: Array<ProdCorrectObj>) => {
-            let curRowIndx;
-            if (selProds) {
-                this.isLoading = true;
-                this.setBusy("Reloading", "Table Editor reloading please wait", "Info", true);
-                //logic to bind the selected product and PTR_SYS_PRD to PTR
-                //For some reason when KIT is binding for more than 2 records its breaking so for now calling the function directly. 
-                _.each(selProds, (selProd, idx) => {
-                    if (this.curRow[0]) {
-                        curRowIndx = selProd.DCID == this.curRow[0]['DC_ID'] ? selProd.indx : null;
-                    }
-                    // sometime not all prod corrector rows are slected and user click save in that case we dont need to do any action
-                    if (selProd.items && selProd.items.length > 0) {
-                        //logic to bind the selected product and PTR_SYS_PRD to PTR
-                        if (this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD == 'KIT') {
-                            if (idx != 0) {
-                                //this is to map the current index of prod from last selected prod length
-                                selProds[idx].indx = selProds[idx - 1].indx + this.hotTable.getDataAtRowProp(selProds[idx - 1].indx, 'PTR_USER_PRD').split(',').length;
-                            }
+        await dialogRef.afterClosed().toPromise().then((savedResult: any) => {
+            if (savedResult) {
+                let transformResult = savedResult.ProductCorrectorData;
+                this.transformResults["Data"] = transformResult
+                let curRowIndx;
+                let publishWipDeals = false;
+                if (Object.keys(transformResult.DuplicateProducts).length > 0 || Object.keys(transformResult.InValidProducts).length > 0) {
+                    publishWipDeals = false;
+                }
+
+                if (!!transformResult && !!transformResult.ProdctTransformResults) {
+                    for (var key in transformResult.ProdctTransformResults) {
+                        let r = parseInt(key);
+                        let allIssuesDone = false;
+
+                        //Trimming unwanted Property to make JSON light
+                        if (!!transformResult.ValidProducts[key]) {
+                            transformResult = PTEUtil.massagingObjectsForJSON(key, transformResult);
                         }
-                        selRow = selProd.indx;
-                        //Until all the invalid products are selected from product corrector , don’t update the handson table
-                        //if (selProd.name.split(',').length == selProd.items.length) {
-                        rowProdCorrectordat = PTE_CellChange_Util.getOperationProdCorr(selProd, products);
-                        PTE_CellChange_Util.autoFillCellOnProd(rowProdCorrectordat[0], this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, rowProdCorrectordat[1]);
-                        //}
-                    }
-                    if (this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
-                        let operation = rowProdCorrectordat[1];
-                        let response = JSON.parse(operation.PTR_SYS_PRD);
-                        let ValidProducts = PTE_Helper_Util.splitProductForDensity(response);
-                        let finalPTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
-                        _.each(ValidProducts, (val, DCID) => {
-                            const userInput = PTEUtil.updateUserInput(ValidProducts[DCID]);
-                            const contractProducts = userInput['contractProducts'].toString().replace(/(\r\n|\n|\r)/gm, "");
-                            _.each(finalPTR, (data, idx) => {
-                                if (selProd.DCID == data.DC_ID) {
-                                    if (data.TIER_NBR == 1) {
-                                        data.PTR_USER_PRD = contractProducts;
-                                        data.PTR_SYS_PRD = JSON.stringify(val)
-                                        this.hotTable.setDataAtRowProp(idx, 'PTR_USER_PRD', data.PTR_USER_PRD, 'no-edit')
+                        let index = _.findWhere(selRows,
+                            {
+                                DC_ID: r
+                            }).indx
+                        // Save Valid and InValid JSO into spreadsheet hidden columns
+                        if (transformResult.InValidProducts[key]["I"].length !== 0 || transformResult.InValidProducts[key]["E"].length !== 0 || !!transformResult.DuplicateProducts[key]) {
+                            let invalidJSON = {
+                                'ProdctTransformResults': transformResult.ProdctTransformResults[key],
+                                'InValidProducts': transformResult.InValidProducts[key], 'DuplicateProducts': transformResult.DuplicateProducts[key]
+                            }
+                            PTE_CellChange_Util.updatePrdColumns(index, 'PTR_SYS_INVLD_PRD', JSON.stringify(invalidJSON));
+                        } else {
+                            PTE_CellChange_Util.updatePrdColumns(index, 'PTR_SYS_INVLD_PRD', '');
+                            allIssuesDone = true;
+                        }
+                        let prdData = !!transformResult.ValidProducts[key] ? JSON.stringify(transformResult.ValidProducts[key]) : "";
+                        PTE_CellChange_Util.updatePrdColumns(index, 'PTR_SYS_PRD', prdData);
+                        if (allIssuesDone) {
+                            if (transformResult.ProdctTransformResults[key]['I'].length == 0) {
+                                this.multiRowDelete.push({ row: index, old: this.hotTable.getDataAtRowProp(index, 'PTR_USER_PRD') });
+                                if (r > 0) {
+                                    if (!deletedDCID)
+                                        deletedDCID = [];
+                                    deletedDCID.push(r)
+                                }
+                            }
+                            else {
+                                let selProd = savedResult.selectedProducts.filter(x => x.DCID == key)[0];
+                                let idx = selProd.indx;
+                                let deletedProds = savedResult.deletedProducts;
+                                if (selProd) {
+                                    if (this.curRow[0]) {
+                                        curRowIndx = selProd.DCID == this.curRow[0]['DC_ID'] ? selProd.indx : null;
+                                    }
+                                    // sometime not all prod corrector rows are slected and user click save in that case we dont need to do any action
+                                    if (selProd.items && selProd.items.length > 0) {
+                                        //logic to bind the selected product and PTR_SYS_PRD to PTR
+                                        if (this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD == 'KIT') {
+                                            if (idx != 0) {
+                                                //this is to map the current index of prod from last selected prod length
+                                                savedResult.selectedProducts[idx].indx = savedResult.selectedProducts[idx - 1].indx + this.hotTable.getDataAtRowProp(savedResult.selectedProducts[idx - 1].indx, 'PTR_USER_PRD').split(',').length;
+                                            }
+                                        }
+                                        selRow = selProd.indx;
+                                        let deletedProd = undefined;
+                                        if (deletedProds && deletedProds.length > 0) {
+                                            deletedProd = deletedProds.filter(x => x.DC_ID == selProd.DCID);
+                                        }
+
+                                        //Until all the invalid products are selected from product corrector , don’t update the handson table
+                                        rowProdCorrectordat = PTE_CellChange_Util.getOperationProdCorr(selProd, deletedProd, products);
+                                        PTE_CellChange_Util.autoFillCellOnProd(rowProdCorrectordat[0], this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, rowProdCorrectordat[1]);
+                                    }
+                                    if (this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
+                                        let operation = rowProdCorrectordat[1];
+                                        let response = JSON.parse(operation.PTR_SYS_PRD);
+                                        let ValidProducts = PTE_Helper_Util.splitProductForDensity(response);
+                                        let finalPTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
+                                        _.each(ValidProducts, (val, DCID) => {
+                                            const userInput = PTEUtil.updateUserInput(ValidProducts[DCID]);
+                                            const contractProducts = userInput['contractProducts'].toString().replace(/(\r\n|\n|\r)/gm, "");
+                                            _.each(finalPTR, (data, idx) => {
+                                                if (selProd.DCID == data.DC_ID) {
+                                                    if (data.TIER_NBR == 1) {
+                                                        data.PTR_USER_PRD = contractProducts;
+                                                        data.PTR_SYS_PRD = JSON.stringify(val)
+                                                        this.hotTable.setDataAtRowProp(idx, 'PTR_USER_PRD', data.PTR_USER_PRD, 'no-edit')
+                                                    }
+                                                }
+                                            })
+                                        });
+                                        let denBandData = PTE_CellChange_Util.validateDensityBand(selRow, this.columns, this.curPricingTable, operation, '', false, this.validMisProd);
+                                        this.validMisProd = denBandData.validMisProds;
+                                        this.generateHandsonTable(denBandData.finalPTR);
+                                    }
+                                    //handonsontable takes time to bind the data to the so putting this logic.
+                                    setTimeout(() => {
+                                        this.isLoading = false;
+                                        this.setBusy("", "", "", false);
+                                    }, 2000);
+
+                                }
+                                else if (deletedProds && deletedProds.length > 0) {
+                                    let deletedRowIdList = distinct(deletedProds, 'DC_ID').map(item => item['DC_ID']);
+                                    _.each(deletedRowIdList, (rowId) => {
+                                        let deletedProd = deletedProds.filter(x => x.DC_ID == rowId);
+                                        rowProdCorrectordat = PTE_CellChange_Util.getOperationProdCorr(undefined, deletedProd, products);
+                                        PTE_CellChange_Util.autoFillCellOnProd(rowProdCorrectordat[0], this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, rowProdCorrectordat[1]);
+                                    })
+                                }
+                                if (this.curRow[0]) {
+                                    let includeIndx = _.findIndex(this.columns, { data: 'PTR_USER_PRD' });
+                                    let excludeIndx = _.findIndex(this.columns, { data: 'PRD_EXCLDS' });
+                                    let includeClass = this.hotTable.getCellMetaAtRow(curRowIndx).filter((col) => {
+                                        return (col['col'] == includeIndx)
+                                    }).map((obj) => {
+                                        return obj['className'];
+                                    });
+
+                                    let excludeClass = this.hotTable.getCellMetaAtRow(curRowIndx).filter((col) => {
+                                        return (col['col'] == excludeIndx)
+                                    }).map((obj) => {
+                                        return obj['className'];
+                                    });
+
+
+                                    if (this.curRow[0].delPTR_SYS_PRD &&
+                                        (includeClass[0] != 'error-product' && excludeClass[0] != 'error-product')) {
+                                        delete this.curRow[0].delPTR_SYS_PRD
                                     }
                                 }
-                            })
-                        });
-                        let denBandData = PTE_CellChange_Util.validateDensityBand(selRow, this.columns, this.curPricingTable, operation, '', false, this.validMisProd);
-                        this.validMisProd = denBandData.validMisProds;
-                        this.generateHandsonTable(denBandData.finalPTR);
+                            }
+                        }
                     }
-                        //handonsontable takes time to bind the data to the so putting this logic.
+
+                }
+                if (this.multiRowDelete.length > 0) {
+                    this.deleteRow(this.multiRowDelete, true);
+                }
+                let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
+                if (PTR.length === 0) {
+                    this.setBusy("No Products Found", "Please add products.", "Warning", false);
                     setTimeout(() => {
-                        this.isLoading = false;
                         this.setBusy("", "", "", false);
                     }, 2000);
-                    
-                });
-                
-                if (this.curRow[0]) {
-                    let includeIndx = _.findIndex(this.columns, { data: 'PTR_USER_PRD' });
-                    let excludeIndx = _.findIndex(this.columns, { data: 'PRD_EXCLDS' });
-                    let includeClass = this.hotTable.getCellMetaAtRow(curRowIndx).filter((col) => {
-                        return (col['col'] == includeIndx)
-                    }).map((obj) => {
-                        return obj['className'];
-                    });
-
-                    let excludeClass = this.hotTable.getCellMetaAtRow(curRowIndx).filter((col) => {
-                        return (col['col'] == excludeIndx)
-                    }).map((obj) => {
-                        return obj['className'];
-                    });
-
-
-                    if (this.curRow[0].delPTR_SYS_PRD &&
-                        (includeClass[0] != 'error-product' && excludeClass[0] != 'error-product')) {
-                        delete this.curRow[0].delPTR_SYS_PRD
-                    }
+                }
+                else if (action == 'onSave') {                    
+                    this.saveandValidate(true, deletedDCID);
                 }
             }
         });

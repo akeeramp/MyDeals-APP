@@ -2,22 +2,24 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/contract/ptModals/productCorrector/productcorrector.component.css" rel="stylesheet" />
+<link href="/Client/src/app/style/productCorrector.css" rel="stylesheet" />
 
 <div class="modal-content" style="background-color: #1a3e6f; overflow-y: auto; overflow-x: hidden; border-left: none; border-right: none; box-shadow: none; height: 100%;">
     <div style="padding-left: 10px; padding-right: 10px; height: 100%;">
-        <div class="prodSelector-corrector modal-header" style="margin-bottom:15px">
-            <div class="row prodCorrectorHeader" style="align-items: center; padding-top: 10px; padding-bottom: 10px; ">
+        <div class="modal-header prod-headers">
+            <div class="row prodCorrectorHeader" style=" align-items: center; padding-top: 10px; padding-bottom: 10px;">
                 <div cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle moveablemodal class="col-md-5  cursorArea" style="padding-left:0px; cursor:move">
-                    <p class="prodText">Product Corrector</p>
+                    <p class="prodText" style="margin-bottom: 0;">Product Corrector</p>
                 </div>
                 <div class="col-md-6  text-center headerMsg">
-                    <span *ngIf="curRowIssues.length <=1 " style="color: #ffffff; font-size: 18px;">
+                    <span *ngIf="numIssueRows <= 1">
                         My Deals needs help with your entered product
                     </span>
-                    <span *ngIf="curRowIssues.length >1 " style="color: #ffffff; font-size: 18px;">
+                    <span *ngIf="numIssueRows> 1">
                         My Deals needs help with <span class="yellow">{{ numIssueRows }}</span> of <span class="yellow">{{ totRows }}</span> rows
                     </span>
                 </div>
+
                 <span class="col-md-1 rowNavPanel">
                     <i role="button" title="Close" class="intelicon-close-max fr" (click)="onNoClick()"></i>
                 </span>
@@ -30,90 +32,121 @@
                 </div>
             </div>
             <div class="row subHeaderNavContainer">
-                <div class="col-md-2 mini-left miniNav" *ngIf="curRowIssues.length > 1">
-                    <div class="text-center">({{ curRowIndx+1 }} of {{ numIssueRows }} rows)</div>
+                <div class="mini-left miniNav" *ngIf="numIssueRows > 1">
+                    <div class="text-center">({{ curRowIndx }} of {{ numIssueRows }} rows)</div>
                     <div>
-                        <button class="btn btn-xs btn-primary prdBtn" (click)="prevRow()" [disabled]="curRowIndx < 1">Back</button>
-                        <button class="btn btn-xs btn-primary prdBtn" (click)="nextRow()" [disabled]="curRowIndx+1 >= numIssueRows">Next</button>
+                        <button class="btn btn-xs btn-primary prdBtn" style="margin-right: 12px;" (click)="prevRow()" [disabled]="curRowIndx <= 1">Back</button>
+                        <button class="btn btn-xs btn-primary prdBtn" (click)="nextRow()" [disabled]="curRowIndx >= numIssueRows">Next</button>
                     </div>
                 </div>
-                <div class="col-md-10 mini-right miniProdNav">
+                <div class="mini-right miniProdNav" style=" padding-top: 5px; padding-bottom: 5px;">
                     <div>Product(s) <span style="color:red">not found</span> for Row {{ rowDCId }}</div>
-                    <div style="float:left; font-size: 14px; margin-left: 10px; color: #000000;">Contract Product(s):&nbsp;{{includeProd}}</div>
-                    <br />
-                    <div *ngIf="curIncludeProd &&  curIncludeProd.length==1">
-                        Selected Contract Products: <span>{{curIncludeProd[0].prod}}</span>
+                    <div style="float:left; font-size: 14px; margin-left: 10px; color: #000000;">Contract Product(s):&nbsp;</div>
+                    <div>
+                        <ul class="productpath breadcrumb">
+                            <li *ngFor="let p of curRowIncProd | unique:'name'">
+                                <span [ngClass]="{'strike': p.matchName.length != 0,'btnInclude':showIncludeExcludeLabel && p.exclude == 'I', 'btnExclude':showIncludeExcludeLabel && p.exclude == 'E' }" class="btn btn-default btn-xs padding-tb-0">
+                                    <span class="prdAnchor {{p.status}}" (click)="clkPrdUsrNm(p)" title="{{p.reason}}">{{ p.anchorName }}</span>
+                                    <span title="Remove Product"class='intelicon-close skyblue pl10 removeProduct' (click)="removeProd(p.name, p.exclude)"></span>
+                                    
+                                </span>
+                                <div class="newProd height-auto-fix">
+                                    <span id="selectedProducts" class="assign-inline-block" *ngIf="p.matchName.length > 0">{{p.matchName.length > 1 ? p.matchName.length + " products" : p.matchName[0]}}</span>
+                                    &nbsp;
+                                </div>
+                            </li>
+                        </ul>
                     </div>
-                    <div *ngIf="curIncludeProd &&  curIncludeProd.length>1">
-                        Selected Contract Products: {{curIncludeProd.length}} products
-                    </div>
-                    <div *ngIf="excludeProd.length>0" style="float:left; font-size: 14px; margin-left: 10px; color: #000000;">Excluded Product(s):&nbsp;{{excludeProd}}</div>
-                    <br />
-                    <div *ngIf="curExcludeProd &&  curExcludeProd.length==1">
-                        Selected Excluded Products: <span>{{curExcludeProd[0].prod}}</span>
-                    </div>
-                    <div *ngIf="curExcludeProd &&  curExcludeProd.length>1">
-                        Selected Excluded Products: {{curExcludeProd.length}} products
+                    <div style="float:left; font-size: 14px; margin-left: 10px; color: #000000;" *ngIf="curRowExcludeProd.length >0">Excluded Product(s): &nbsp;</div>
+                    <div>
+                        <ul class="productpath breadcrumb">
+                            <li *ngFor="let p of curRowExcludeProd  | unique:'name'">
+                                <span [ngClass]="{'strike': p.matchName.length != 0,'btnInclude':showIncludeExcludeLabel && p.exclude == 'I', 'btnExclude':showIncludeExcludeLabel && p.exclude == 'E' }" class="btn btn-default btn-xs">
+                                    <span class="prdAnchor {{p.status}}" (click)="clkPrdUsrNm(p)" title="{{p.reason}}">{{ p.anchorName }}</span>
+                                    <span title="Remove Product" class="intelicon-close skyblue pl10 removeProduct" (click)="removeProd(p.name, p.exclude)"></span>
+                                </span>
+                                <div class="newProd">
+                                    <span id="selectedProducts" *ngIf="p.matchName.length > 0">{{p.matchName.length > 1 ? p.matchName.length + " products" : p.matchName[0]}}</span>
+                                    &nbsp;
+                                </div>
+                            </li>
+                        </ul>
                     </div>
                 </div>
+
             </div>
             <div class="row" style="margin-top: 10px;">
-                <div class="col-md-3 lnavFilter blue-lnav corrector-one-details">
+                <div *ngIf="!allDone" class="col-md-3 lnavFilter blue-lnav corrector-one-details">
                     <div class="row">
                         <div class="col">
-                            <p class='filterTitleUnderline' *ngIf="selRowIssues.length > 0">Filter by product</p>
-                            <kendo-treeview class="lblFilterProd" [nodes]="selRowIssues" [(selectedKeys)]="selRowIssuesKeys" textField="name" [hasChildren]="false" selectBy="value" [kendoTreeViewSelectable]="selection" (selectedKeysChange)="onPrdChange($event,'USR_INPUT')">
+                            <p class='filterTitleUnderline' *ngIf="curRowIssues.length > 0">Filter by product</p>
+                            <kendo-treeview class="lblFilterProd PctreeViewNodes lblFilterProdCorrect" [nodes]="curRowIssues" [(selectedKeys)]="issueRowKeys" textField="name" [hasChildren]="false" selectBy="value" [kendoTreeViewSelectable]="selection" (selectionChange)="clickFilter($event,'USR_INPUT')">
                                 <ng-template kendoTreeViewNodeTemplate let-dataItem>
-                                    {{dataItem.name }}
-                                    <span class="badge upperBadge"> {{dataItem.len == 0 ? "?" : dataItem.len }}</span>
+                                    {{ dataItem.name }}
+                                    <span *ngIf="dataItem.cnt>0">({{dataItem.cnt}})</span>
+                                    <i *ngIf="dataItem.cnt==0" class="intelicon-help-outlined ckSm" title="Click to find a possible match"> </i>
                                 </ng-template>
                             </kendo-treeview>
                         </div>
                     </div>
-                    <div class="row" *ngIf="selRowLvl.length>1">
+                    <div class="row" *ngIf="curRowLvl.length>1">
                         <div class="col">
                             <p class="filterTitleUnderline">Filter by product level</p>
-                            <kendo-treeview class="lblFilterProd" [nodes]="selRowLvl" [(selectedKeys)]="selPrdLvlKeys" textField="name" [hasChildren]="false" selectBy="value" [kendoTreeViewSelectable]="selection" (selectedKeysChange)="onPrdChange($event,'PRD_ATRB_SID')">
+                            <kendo-treeview class="lblFilterProd PctreeViewNodes lblFilterProdCorrect" [nodes]="curRowLvl" [(selectedKeys)]="issueRowKeys" textField="name" [hasChildren]="false" selectBy="value" [kendoTreeViewSelectable]="selection" (selectionChange)="clickFilter($event,'PRD_ATRB_SID')">
                             </kendo-treeview>
                         </div>
                     </div>
-                    <div class="row" *ngIf="selRowCategories.length>1">
+                    <div class="row" *ngIf="curRowCategories.length>1">
                         <div class="col">
                             <p class="filterTitleUnderline">Filter by product vertical</p>
-                            <kendo-treeview class="lblFilterProd" [nodes]="selRowCategories" [(selectedKeys)]="selPrdVerKeys" textField="name" [hasChildren]="false" selectBy="value" [kendoTreeViewSelectable]="selection" (selectedKeysChange)="onPrdChange($event,'PRD_CAT_NM')">
+                            <kendo-treeview class="lblFilterProd PctreeViewNodes lblFilterProdCorrect" [nodes]="curRowCategories" [(selectedKeys)]="issueRowKeys" textField="name" [hasChildren]="false" selectBy="value" [kendoTreeViewSelectable]="selection" (selectionChange)="clickFilter($event,'PRD_CAT_NM')">
                             </kendo-treeview>
                         </div>
                     </div>
                 </div>
-                <div class="col-md-9 oppo-grids">
-                    <kendo-grid [data]="selGridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="true" [group]="state.group"
-                        filterable="menu" (dataStateChange)="dataStateChange($event)" [resizable]="true" class="notation-flow corrector-two-details">
-                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="EXCLUDE" title="EXCLUDE" [filterable]="none" [width]="5">
+                <div class="col-md-9 oppo-grids new-now-wrap" *ngIf="!allDone && !isLoading">
+                    <kendo-grid #pdtCrtGrid id="productcorrectorgrid" [data]="selGridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+                                [sort]="state.sort" [filter]="state.filter"
+                                [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info}"
+                                [rowClass]="rowCallback"
+                                filterable="menu" (dataStateChange)="dataStateChange($event)" [resizable]="true"
+                                class="notation-flow corrector-two-details correcting-product">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}"
+                                           field="EXCLUDE" title="EXCLUDE" [filterable]="none" [width]="5">
                             <ng-template kendoGridCellTemplate let-dataItem>
-                                <div class="fl gridStatusMarker {{dataItem.EXCLUDE}}" title="{{dataItem.EXCLUDE}}"></div>
+                                <div class="fl gridStatusMarker {{dataItem.EXCLUDE}}"
+                                     title="{{dataItem.EXCLUDE}}"></div>
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column [headerClass]="{'headerClass':true}" field="USR_INPUT" title="User Entered" [width]="150">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                                <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
+                                <multicheck-filter [isPrimitive]="true" [field]="column.field"
+                                                   [currentFilter]="filter" [filterService]="filterService"
+                                                   [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
                             </ng-template>
                             <ng-template kendoGridGroupHeaderTemplate let-group let-field="field" let-value="value">
-                                {{value}}
-                                <!--this logic is yet to build dont uncomment-->
-                                <strong> <i class='intelicon-arrow-back-left skyblue pl10'></i> 
-                                Can't find what you are looking for? Use the Product Selector </strong>
+                                <p class="now-wrap-controls">
+                                    <span class="grpTitle">{{value}}</span>
+                                    <i (click)='removeProd(value,false)' title="Remove Product" class='intelicon-close skyblue pl10 removeProduct'></i>
+                                    <i class='intelicon-arrow-back-left skyblue pl10 pr10'></i>
+                                    <span class='grpDesc'>
+                                        Can't find what you are looking for?
+                                        <span class='or'>Use the</span>
+                                    </span>
+                                    <span class='lnk' (click)='openProdSelector(value)'>Product Selector</span>
+                                </p>
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="50" field="IS_SEL" title=" ">
                             <ng-template kendoGridFilterMenuTemplate let-filter let-column="column" let-filterService="filterService">
-                            <kendo-grid-boolean-filter-menu [column]="column" [filter]="filter" [filterService]="filterService"></kendo-grid-boolean-filter-menu>
+                                <kendo-grid-boolean-filter-menu [column]="column" [filter]="filter" [filterService]="filterService"></kendo-grid-boolean-filter-menu>
                             </ng-template>
                             <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                                <input class="prd-crctor-chkbox" type="checkbox" kendoCheckBox (click)="prodSelect(dataItem,$event)" [(ngModel)]="dataItem.IS_SEL" />
+                                <input class="prd-crctor-chkbox" type="checkbox" kendoCheckBox (click)="clickProd(dataItem.PRD_MBR_SID,dataItem.USR_INPUT,dataItem.HIER_VAL_NM,$event)" [(ngModel)]="dataItem.IS_SEL" />
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['HIER_VAL_NM']" [headerClass]="{'headerClass':true}" field="HIER_VAL_NM" title="Product" [width]="150">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="HIER_VAL_NM" title="Product" [width]="150">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
@@ -122,25 +155,25 @@
                                 <div [ngClass]="{'text-danger': isValidCapDetails(dataItem)}" title="{{isValidCapDetails(dataItem, true)}}">{{dataItem.HIER_VAL_NM}}</div>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['PRD_CAT_NM']" [headerClass]="{'headerClass':true}" field="PRD_CAT_NM" title="Product Vertical" [width]="80">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_CAT_NM" title="Product Vertical" [width]="80">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['BRND_NM']" [headerClass]="{'headerClass':true}" field="BRND_NM" title="Brand Name" [width]="80">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="BRND_NM" title="Brand Name" [width]="80">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['FMLY_NM']" [headerClass]="{'headerClass':true}" field="FMLY_NM" title="Family Name" [width]="80">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="FMLY_NM" title="Family Name" [width]="80">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['PRD_STRT_DTM']" [headerClass]="{'headerClass':true}" field="PRD_STRT_DTM" title="Product Effective Date" [width]="120">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_STRT_DTM" title="Product Effective Date" [width]="120">
                             <ng-template kendoGridCellTemplate let-dataItem>
                                 <div>{{dataItem.PRD_STRT_DTM | date: 'M/d/yyyy'}} - {{dataItem.PRD_END_DTM | date: 'M/d/yyyy'}}</div>
                             </ng-template>
@@ -158,7 +191,7 @@
                                             <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                                         </div>
                                         <div class="row">
-                                            <grid-popover [popOver]="popOver" [columnTypes]="'CAP'" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="'CAP'"></grid-popover>
+                                            <grid-popover [popOver]="popOver" [columnTypes]="'CAP'" [currentPricingTableRow]="data.curPricingTable" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="'CAP'"></grid-popover>
                                         </div>
                                     </div>
                                 </ng-template>
@@ -166,21 +199,21 @@
                                 <!-- Cell Content -->
                                 <div class="CAPYCS2CellContent" #popOver="ngbPopover" [ngbPopover]="popoverContent" (click)="openCAPBreakOut(dataItem, 'CAP')">
                                     <!-- CAP Info cell design -->
-                                    <div [class.isSoftWarnCell]="dataItem.CAP.includes('No')" style="text-align: center;">
+                                    <div [class.isSoftWarnCell]="dataItem.CAP?.includes('No')" style="text-align: center;">
                                         <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP !='' && dataItem.CAP !='No CAP'">
                                             <strong>{{dataItem.CAP | currency}}</strong>
                                         </span>
                                         <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP ==='No CAP'">
                                             {{dataItem.CAP}}
                                         </span>
-                                        <div *ngIf="!dataItem.CAP.includes('No')" style="line-height:1;">
+                                        <div *ngIf="!dataItem.CAP?.includes('No')" style="line-height:1;">
                                             {{ dataItem.CAP_START }} - {{ dataItem.CAP_END }}
                                         </div>
                                     </div>
                                 </div>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="!isGA" [headerClass]="{'headerClass':true}" field="HAS_L1" title="Legal Classification" [width]="150">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="HAS_L1" title="Legal Classification" [width]="150">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
@@ -189,7 +222,7 @@
                                 <div>{{ dataItem.HAS_L1 != 0 ? 'L1' : (dataItem.HAS_L2 != 0 ? 'L2' : 'Exempt') }}</div>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['MM_MEDIA_CD']" [headerClass]="{'headerClass':true}" field="MM_MEDIA_CD" title="Media Code" [width]="120">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="MM_MEDIA_CD" title="Media Code" [width]="120">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
@@ -200,16 +233,15 @@
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                             </ng-template>
                             <ng-template kendoGridCellTemplate let-dataItem>
-                                <!-- Cell Content -->
-                                <div class="CAPYCS2CellContent" (click)="openCAPBreakOut(dataItem, 'YCS2')" >
+                                <div class="CAPYCS2CellContent" (click)="openCAPBreakOut(dataItem, 'YCS2')">
                                     <!-- YCS2 Info cell design -->
-                                    <div [class.isSoftWarnCell]="dataItem.YCS2.includes('No')" style="text-align: center;">
+                                    <div [class.isSoftWarnCell]="dataItem.YCS2?.includes('No')" style="text-align: center;">
                                         {{ dataItem.YCS2 }}
                                     </div>
                                 </div>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['GDM_FMLY_NM']" [headerClass]="{'headerClass':true}" field="GDM_FMLY_NM" title="GDM Family Name" [width]="150">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="GDM_FMLY_NM" title="GDM Family Name" [width]="150">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
@@ -228,19 +260,19 @@
                                 </div>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['CPU_PROCESSOR_NUMBER']" [headerClass]="{'headerClass':true}" field="CPU_PROCESSOR_NUMBER" title="CPU Processor number" [width]="150">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="CPU_PROCESSOR_NUMBER" title="CPU Processor number" [width]="150">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['MM_CUST_CUSTOMER']" [headerClass]="{'headerClass':true}" field="MM_CUST_CUSTOMER" title="MM Customer Name" [width]="150">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="MM_CUST_CUSTOMER" title="MM Customer Name" [width]="150">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['FMLY_NM_MM']" [headerClass]="{'headerClass':true}" field="FMLY_NM_MM" title="EDW Family Name" [width]="150">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="FMLY_NM_MM" title="EDW Family Name" [width]="150">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
@@ -251,14 +283,14 @@
                                 </div>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['EPM_NM']" [headerClass]="{'headerClass':true}" field="EPM_NM" title="EPM Name" [width]="150">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="EPM_NM" title="EPM Name" [width]="150">
                             <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                 <div kendoTooltip position="bottom">
                                     <span title="{{dataItem.EPM_NM}}">{{dataItem.EPM_NM}}</span>
                                 </div>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['SKU_NM']" [headerClass]="{'headerClass':true}" field="SKU_NM" title="SKU Name" [width]="180">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="SKU_NM" title="SKU Name" [width]="180">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
@@ -269,49 +301,49 @@
                                 </div>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['NAND_FAMILY']" [headerClass]="{'headerClass':true}" field="NAND_FAMILY" title="NAND FAMILY" [width]="150">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="NAND_FAMILY" title="NAND FAMILY" [width]="150">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['NAND_Density']" [headerClass]="{'headerClass':true}" field="NAND_Density" title="Nand Density" [width]="150">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="NAND_Density" title="Nand Density" [width]="150">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['CPU_CACHE']" [headerClass]="{'headerClass':true}" field="CPU_CACHE" title="CPU CACHE" [width]="150">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="CPU_CACHE" title="CPU CACHE" [width]="150">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['CPU_PACKAGE']" [headerClass]="{'headerClass':true}" field="CPU_PACKAGE" title="CPU PACKAGE" [width]="150">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="CPU_PACKAGE" title="CPU PACKAGE" [width]="150">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['CPU_WATTAGE']" [headerClass]="{'headerClass':true}" field="CPU_WATTAGE" title="CPU WATTAGE" [width]="150">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="CPU_WATTAGE" title="CPU WATTAGE" [width]="150">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['CPU_VOLTAGE_SEGMENT']" [headerClass]="{'headerClass':true}" field="CPU_VOLTAGE_SEGMENT" title="Voltage Segment" [width]="150">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="CPU_VOLTAGE_SEGMENT" title="Voltage Segment" [width]="150">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['PRICE_SEGMENT']" [headerClass]="{'headerClass':true}" field="PRICE_SEGMENT" title="Price Segment" [width]="150">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRICE_SEGMENT" title="Price Segment" [width]="150">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [hidden]="hidden['SBS_NM']" [headerClass]="{'headerClass':true}" field="SBS_NM" title="SBS Name" [width]="150">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="SBS_NM" title="SBS Name" [width]="150">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
@@ -319,29 +351,64 @@
                         </kendo-grid-column>
                     </kendo-grid>
                     <div>
-                        <kendo-dialog *ngIf="isDuplicate" (close)="closeKendoDialog('cancel')" [minWidth]="250" [width]="450">
-                            <p style="margin: 30px; text-align: center;">
+                        <kendo-dialog *ngIf="isDuplicate" (close)="closeKendoDialog('cancel')" [minWidth]="250" [width]="450" class="k-dialog-popup-design">
+                            <p style="text-align: center;">
                                 {{duplicateMsg}}
                             </p>
                             <kendo-dialog-actions>
-                                <button kendoButton (click)="closeKendoDialog('no')">CANCEL</button>
-                                <button style="background-color: #01AEEF !important" kendoButton (click)="closeKendoDialog('yes')" themeColor="primary">
+                                <button class="k-button ok-btn-pop-up" kendoButton (click)="closeKendoDialog('yes')" themeColor="primary">
                                     OK
                                 </button>
+                                <button class="k-button cancel-btn-pop-up" kendoButton (click)="closeKendoDialog('no')">CANCEL</button>
                             </kendo-dialog-actions>
                         </kendo-dialog>
                     </div>
                 </div>
+
+
+            </div>
+
+            <div class="row alldonediv" *ngIf="allDone" style="background-color: white;margin-top:10px;">
+                <div class="col-md-2">
+
+                </div>
+                <div class="col-md-8" style="margin: 100px 400px 120px 650px;">
+                    <i class="intelicon-passed-completed-solid"></i>
+
+                    <div class="done-title">You are Done!</div>
+                    <div class="done-body">All the products have been matched.</div>
+                    <div class="done-confirm">
+                        Would you like to apply the changes to your Pricing Table?
+                    </div>
+                    <div>
+                        <button class="btn btn-default prdBtn" (click)="onNoClick()" style="margin-right:20px; font-size: 16px;">Cancel</button>
+                        <button class="btn btn-primary prdBtn" (click)="saveProducts()" style="font-size: 16px;">YES, Please Save and Close</button>
+                    </div>
+                </div>
+                <div class="col-md-2">
+
+                </div>
             </div>
         </div>
-        <div class="prodSelector-corrector modal-footer">
+        <div class="modal-footer" style="border:none">
             <div class="col-md-1 col-md-offset-5">
                 <img *ngIf="isLoading" src="/Images/loadingSmall.gif" />
             </div>
-            <div class="col-md-6" style="margin-left: 49%;margin-top: 10px;margin-bottom: 10px;">
-                <button class="btn btn-primary prdBtn" (click)="onSave()" style="float: right; margin-right: -17px;">Save and Close</button>
+            <div *ngIf="!allDone" class="col-md-6" style="margin-top: 10px;margin-bottom: 10px;">
+                <button class="btn btn-primary prdBtn" (click)="saveProducts()" style="float: right; margin-left: 5px;">Save and Close</button>
                 <button class="btn btn-default prdBtn" (click)="onNoClick()" style="margin-right:2px;float:right">Cancel</button>
             </div>
         </div>
     </div>
+
+    <kendo-dialog *ngIf="prodRemoveConfirm" (close)="closePrdRemoveDialogs()" [maxWidth]="800" class="k-dialog-popup-design">
+        <div>
+            <p>This will remove product ({{prdNm}}) from the <b>Product Corrector</b> AND from the <b>Pricing Table</b>?<br />Would you like to delete this product?</p>
+        </div>
+        <kendo-dialog-actions class="k-dialog-buttongroup k-dialog-button-layout-stretched">
+            <div kendoButton class="k-button k-primary kendopcorbtn ok-btn-pop-up" (click)="OKremoveProd(prdNm,excludeProd?.length>0?true:false)">OK</div>
+            <div kendoButton class="k-button cancelDelete cancel-btn-pop-up" (click)="closePrdRemoveDialogs()">CANCEL</div>
+        </kendo-dialog-actions>
+    </kendo-dialog>
+
 </div>

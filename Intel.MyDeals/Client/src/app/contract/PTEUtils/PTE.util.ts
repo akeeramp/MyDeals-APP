@@ -162,28 +162,48 @@ export class PTEUtil {
     static cookProducts(transformResults:any, rowData:Array<any>): any {
         _.each(rowData,(data)=>{
             //setting PTR_SYS_PRD for valid products
-            _.each(transformResults.ValidProducts,(val,DCID)=>{
-                if(data && data.DC_ID==DCID){
-                    let foramttedTranslatedResult = PTEUtil.massagingObjectsForJSON(DCID, transformResults);
-                    var userInput = PTEUtil.updateUserInput(foramttedTranslatedResult.ValidProducts[DCID]);
-                    var contractProducts = userInput['contractProducts'].toString().replace(/(\r\n|\n|\r)/gm, "");
-                    data.PTR_USER_PRD = contractProducts;
-                    var excludeProducts = userInput['excludeProducts'];                   
-                    data.PTR_SYS_PRD = JSON.stringify(val)
-                    PTE_Common_Util.setBehaviors(data);
-                    data._behaviors.isError['PTR_USER_PRD']=false;
-                    data._behaviors.validMsg['PTR_USER_PRD'] = 'Valid Product';
-                    if (excludeProducts != "" && excludeProducts != null) {
-                        data.PRD_EXCLDS = excludeProducts;
-                        data._behaviors.isError['PRD_EXCLDS'] = false;
-                        data._behaviors.validMsg['PRD_EXCLDS'] = 'Valid Product';
+            if (transformResults && transformResults.ValidProducts) {
+                _.each(transformResults.ValidProducts, (val, DCID) => {
+                    if (data && data.DC_ID == DCID) {
+                        let foramttedTranslatedResult = PTEUtil.massagingObjectsForJSON(DCID, transformResults);
+                        var userInput = PTEUtil.updateUserInput(foramttedTranslatedResult.ValidProducts[DCID]);
+                        var contractProducts = userInput['contractProducts'].toString().replace(/(\r\n|\n|\r)/gm, "");
+                        data.PTR_USER_PRD = contractProducts;
+                        var excludeProducts = userInput['excludeProducts'];
+                        data.PTR_SYS_PRD = JSON.stringify(val)
+                        PTE_Common_Util.setBehaviors(data);
+                        data._behaviors.isError['PTR_USER_PRD'] = false;
+                        data._behaviors.validMsg['PTR_USER_PRD'] = 'Valid Product';
+                        if (excludeProducts != "" && excludeProducts != null) {
+                            data.PRD_EXCLDS = excludeProducts;
+                            data._behaviors.isError['PRD_EXCLDS'] = false;
+                            data._behaviors.validMsg['PRD_EXCLDS'] = 'Valid Product';
+                        }
                     }
-                }
-            });
+                });
+            }
                //setting PTR_SYS_PRD for InValidProducts
-           _.each(transformResults.InValidProducts,(val,DCID)=>{
-              if(val.I && val.I.length>0){
-                    if(data && data.DC_ID==DCID){
+            if (transformResults && transformResults.InValidProducts) {
+                _.each(transformResults.InValidProducts, (val, DCID) => {
+                    if (val.I && val.I.length > 0) {
+                        if (data && data.DC_ID == DCID) {
+                            PTE_Common_Util.setBehaviors(data);
+                            if (_.has(val, data.PTR_USER_PRD)) {
+                                data._behaviors.isError['PTR_USER_PRD'] = true;
+                                data._behaviors.validMsg['PTR_USER_PRD'] = 'Invalid product';
+                            }
+                            if (_.has(val, data.PRD_EXCLDS)) {
+                                data._behaviors.isError['PRD_EXCLDS'] = true;
+                                data._behaviors.validMsg['PRD_EXCLDS'] = 'Invalid product';
+                            }
+                        }
+                    }
+                });
+            }
+            //setting PTR_SYS_PRD for DuplicateProducts
+            if (transformResults && transformResults.DuplicateProducts) {
+                _.each(transformResults.DuplicateProducts, (val, DCID) => {
+                    if (data && data.DC_ID == DCID) {
                         PTE_Common_Util.setBehaviors(data);
                         if (_.has(val, data.PTR_USER_PRD)) {
                             data._behaviors.isError['PTR_USER_PRD'] = true;
@@ -194,22 +214,8 @@ export class PTEUtil {
                             data._behaviors.validMsg['PRD_EXCLDS'] = 'Invalid product';
                         }
                     }
-                }
-            });
-            //setting PTR_SYS_PRD for DuplicateProducts
-            _.each(transformResults.DuplicateProducts, (val, DCID) =>{
-                if (data && data.DC_ID == DCID) {
-                    PTE_Common_Util.setBehaviors(data);
-                    if (_.has(val, data.PTR_USER_PRD)) {
-                        data._behaviors.isError['PTR_USER_PRD'] = true;
-                        data._behaviors.validMsg['PTR_USER_PRD'] = 'Invalid product';
-                    }
-                    if (_.has(val, data.PRD_EXCLDS)) {
-                        data._behaviors.isError['PRD_EXCLDS'] = true;
-                        data._behaviors.validMsg['PRD_EXCLDS'] = 'Invalid product';
-                    }
-                }
-            });
+                });
+            }
         });
 
         return { rowData };
@@ -217,16 +223,21 @@ export class PTEUtil {
     static isValidForProdCorrector(transformResults:any){
          let isError=[];
            //setting PTR_SYS_PRD for DuplicateProducts
-          _.each(transformResults.DuplicateProducts,(val,key)=>{
-                if(_.keys(val).length>0){
+        if (transformResults && transformResults.DuplicateProducts) {
+            _.each(transformResults.DuplicateProducts, (val, key) => {
+                if (_.keys(val).length > 0) {
                     isError.push('1');
                 }
             });
-            _.each(transformResults.InValidProducts,(val,key)=>{
-                if ((val.I && val.I.length > 0) || (val.E && val.E.length > 0) ){
+        }
+        if (transformResults && transformResults.InValidProducts) {
+            _.each(transformResults.InValidProducts, (val, key) => {
+                if ((val.I && val.I.length > 0) || (val.E && val.E.length > 0)) {
                     isError.push('2');
                 }
             });
+        }
+        
         return isError;
     }
     static hasProductDependency(currentPricingTableRowData, productValidationDependencies, hasProductDependencyErr): boolean {
@@ -281,10 +292,9 @@ export class PTEUtil {
 
         // Pricing table rows products to be translated
         let pricingTableRowData = currentPricingTableRowData.filter((x) => {
-            let ptr_sys_prd_keys = x['PTR_SYS_PRD'].length >0 ? Object.keys(JSON.parse(x['PTR_SYS_PRD'])).join() : '';
-
+           
             return ((x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
-                (((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) && this.isEqual(ptr_sys_prd_keys, x.PTR_USER_PRD)) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
+                ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
                 || (dealType == "KIT") || (isExcludePrdChange);
         });
 
@@ -332,16 +342,7 @@ export class PTEUtil {
             })
         }
 
-        let translationInputToSend = translationInput.filter(function (x) {
-            // If we already have the invalid JSON don't translate the products again
-            return x.SendToTranslation == true;
-        });
-
-        // Products invalid JSON data present in the row
-        let invalidProductJSONRows = pricingTableRowData.filter(function (x) {
-            return (x.PTR_SYS_INVLD_PRD != null && x.PTR_SYS_INVLD_PRD != "");
-        });
-
+       
         return translationInput;
     }
 
@@ -500,5 +501,13 @@ export class PTEUtil {
 
         let equal = data1.every(item => data2.includes(item)) && data2.every(item => data1.includes(item));
         return equal;
+    }
+    static findInArrayWhere = function (myArray, field, val) {
+        for (let i = 0; i < myArray.length; i++) {
+            if (myArray[i][field] === val) {
+                return myArray[i];
+            }
+        }
+        return null;
     }
 }

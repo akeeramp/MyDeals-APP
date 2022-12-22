@@ -674,7 +674,7 @@ export class ProductSelectorComponent {
         this.selPrdLvlKeys = [];
         this.selRowIssuesKeys = [];
         this.selPrdVerKeys = [];
-        if (this.userInput == "") return [];
+        if (this.userInput == undefined || this.userInput == null || this.userInput == "") return [];
         this.isLoadingSearchProducts = true;
         this.isfilteredGridLoading = true;
         let columnType;
@@ -703,8 +703,14 @@ export class ProductSelectorComponent {
         await this.prodSelService.GetProductDetails(data, this.pricingTableRow.CUST_MBR_SID, this.dealType)
             .subscribe(response => {
                 this.selectPath(0, true);
-                this.disableSelection = (!!response[0] && !!response[0].WITHOUT_FILTER) ? response[0].WITHOUT_FILTER : false; //"Nand (SSD)", "DCG Client SSD", "DCG DC SSD"
-                if (this.enableMultipleSelection || (((response[0].PRD_CAT_NM == 'NAND (SSD)'
+                this.disableSelection = (response.length > 0 && !!response[0] && !!response[0].WITHOUT_FILTER) ? response[0].WITHOUT_FILTER : false; //"Nand (SSD)", "DCG Client SSD", "DCG DC SSD"
+                if (response.length === 0) {
+                    this.suggestionText = "No product found for \"" + this.userInput + "\". Search resulted following products:"
+                    this.suggestedProducts = response;
+                    this.filteredGridData = process(this.suggestedProducts, this.filteredState);
+                    this.showSuggestions = true;
+                    this.initSuggestionGrid();
+                } else if (this.enableMultipleSelection || (((response[0].PRD_CAT_NM == 'NAND (SSD)'
                     || response[0].PRD_CAT_NM == 'DCG Client SSD' || response[0].PRD_CAT_NM == 'DCG DC SSD')
                     && response.filter(obj => obj.FMLY_NM !== 'NA').length > 0 && response[0].PRD_ATRB_SID == 7005)
                     && (this.dealType == 'ECAP' || this.dealType == 'KIT'))) {
@@ -1415,9 +1421,14 @@ export class ProductSelectorComponent {
             })
         }
     }
-    ngOnInit() {
+     ngOnInit() {
         this.loadPTSelctor();
         this.getProductSelection();
+         if (this.data.selVal !== '') {
+             this.userInput = this.data.selVal;
+             this.searchProduct();
+         }
+            
     }
 }
 
