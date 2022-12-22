@@ -369,7 +369,7 @@ export class dealEditorComponent {
                 || args.column.field == "DEAL_SOLD_TO_ID" || args.column.field == "TRGT_RGN") {
                 var column = this.wipTemplate.columns.filter(x => x.field == args.column.field);
                 this.openMultiSelectModal(args.dataItem, column[0]);
-            } 
+            }
         }
         else if ((args.column.field == "PRD_BCKT" && this.curPricingTable.OBJ_SET_TYPE_CD == "KIT") || (args.column.field == "TITLE" && this.curPricingTable.OBJ_SET_TYPE_CD !== "KIT")) {
             this.openDealProductModal(args.dataItem);
@@ -383,8 +383,10 @@ export class dealEditorComponent {
         else if (args.column.field == 'MISSING_CAP_COST_INFO') {
             this.openMissingCapCostInfo(args.dataItem);
         }
-        else if (args.column.field == "CNTRCT_OBJ_SID" && this.in_Is_Tender_Dashboard)
-            (<any>window).location.href = '#/tendermanager/' + args.dataItem.CNTRCT_OBJ_SID;
+        else if (args.column.field == "CNTRCT_OBJ_SID" && this.in_Is_Tender_Dashboard) {
+            const url = `Contract#/manager/${args.dataItem.CNTRCT_OBJ_SID}`;
+            window.open(url, '_blank');
+        }
     }
 
     updateModalDataItem(dataItem, field, returnVal) {

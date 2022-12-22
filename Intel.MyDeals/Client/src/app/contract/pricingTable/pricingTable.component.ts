@@ -133,9 +133,15 @@ export class pricingTableComponent {
                         //if isRedirect is true which means user navigating to the deal through the global search results then for PS and Deal ID search, DE tab should be shown and for PT ->PTE tab should be shown
                         if (isRedirect) {
                             if (this.type != "PT" && this.isDETabEnabled) {
-                                setTimeout(() => {
-                                    this.isDETab = true; this.isPTETab = false
-                                }, 0)
+                                if (this.type == 'PS' && this.pt_passed_validation != 'Complete') {
+                                    setTimeout(() => {
+                                        this.isDETab = false; this.isPTETab = true;
+                                    }, 0);
+                                } else {
+                                    setTimeout(() => {
+                                        this.isDETab = true; this.isPTETab = false
+                                    }, 0)
+                                }
                             }
                             else {
                                 setTimeout(() => {
@@ -335,7 +341,7 @@ export class pricingTableComponent {
     ngOnInit() {
         try {
             document.title = "Contract - My Deals";
-            const url = window.location.href.split('/');
+            const url = new URL(window.location.href).toString().split('/');
             this.fetchDetailsfromURL(url)
             this.lnavSvc.isLnavHidden.subscribe((isLnavHidden: any) => {
                 this.isLnavHidden = isLnavHidden?.isLnavHid;

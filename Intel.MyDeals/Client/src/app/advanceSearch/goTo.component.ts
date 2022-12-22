@@ -19,24 +19,31 @@ export class goToComponent {
     public isBusyShowFunFact: any;
     constructor(private loggerSVC: logger, protected globalSearchSVC: globalSearchResultsService) { }
     async redirecttoroute() {
-        const url = window.location.href.split('/');
-        let index = url.includes('gotoPS') ? url.indexOf('gotoPS') : url.indexOf('gotoDeal');
+        const url = new URL(window.location.href).toString().split('/');
+        let index = url.includes('gotoPs') ? url.indexOf('gotoPs') : url.indexOf('gotoDeal');
         let id = parseInt(url[index + 1]);
         let msg = 'Searching Deal' + id + '....';
         this.isLoading = true;
         this.setBusy('Searching', msg);
-        let response: any = await this.globalSearchSVC.getContractIDDetails(id, 'WIP_DEAL').toPromise().catch((error) => {
+        //goto Pricing Strategy
+        if (url[index] == 'gotoPs') {
+            let response: any = await this.globalSearchSVC.getContractIDDetails(id, 'PRC_ST').toPromise().catch((error) => {
+                this.isLoading = false;
+                this.setBusy('', '');
+                this.loggerSVC.error("GlobalSearchResultsComponent::getContractIDDetails::Unable to get Contract Data", error);
+            });
             this.isLoading = false;
             this.setBusy('', '');
-            this.loggerSVC.error("GlobalSearchResultsComponent::getContractIDDetails::Unable to get Contract Data", error);
-        });
-        this.isLoading = false;
-        this.setBusy('', '');
-        //goto Pricing Strategy
-        if (url[index] == 'gotoPS') {
-            window.location.href = "#/contractmanager/PT/" + response.ContractId + '/' + response.PricingStrategyId + '/' + response.PricingTableId + '/' + response.WipDealId;
+            window.location.href = "#/contractmanager/PS/" + response.ContractId + '/' + response.PricingStrategyId + '/' + response.PricingTableId + '/0';
         } else {
             //goto Deal
+            let response: any = await this.globalSearchSVC.getContractIDDetails(id, 'WIP_DEAL').toPromise().catch((error) => {
+                this.isLoading = false;
+                this.setBusy('', '');
+                this.loggerSVC.error("GlobalSearchResultsComponent::getContractIDDetails::Unable to get Contract Data", error);
+            });
+            this.isLoading = false;
+            this.setBusy('', '');
             window.location.href = "#/contractmanager/WIP/" + response.ContractId + '/' + response.PricingStrategyId + '/' + response.PricingTableId + '/' + response.WipDealId;
         }
     }

@@ -307,7 +307,7 @@ export class manageEmployeeComponent {
     }
 
     ngOnInit() {
-        const url = (window.location.href).split("?");
+        const url = new URL(window.location.href).toString().split('/');
         let wwid = "";
         if (url.length > 1) {
             const queryParam = url[1].split("&")

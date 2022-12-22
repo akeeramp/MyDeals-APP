@@ -935,7 +935,7 @@ export class contractDetailsComponent {
                     this.dropDownsData['CUST_ACCPT'] = CUST_ACCPT;
                     // below lines of code is to set default value for contract type dropdown.
                     this.CONTRACT_TYPE = CONTRACT_TYPE[0];
-                    const url = window.location.href.split("/");
+                    const url = new URL(window.location.href).toString().split('/');
                     const qString = url[url.length - 1];
                     if (qString.indexOf("=") != -1) {
                         const copyCid = qString.split("=");

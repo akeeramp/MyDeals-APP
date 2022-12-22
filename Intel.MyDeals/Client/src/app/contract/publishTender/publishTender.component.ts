@@ -328,7 +328,7 @@ export class publishTenderComponent {
 
 
     ngOnInit() {
-        const url = window.location.href.split('/');
+        const url = new URL(window.location.href).toString().split('/');
         this.c_Id = Number(url[url.length - 1]);
         this.OBJ_SET_TYPE_CD = this.pricingTableData.PRC_TBL_ROW[0].OBJ_SET_TYPE_CD;
         this.isDataLoading = true;

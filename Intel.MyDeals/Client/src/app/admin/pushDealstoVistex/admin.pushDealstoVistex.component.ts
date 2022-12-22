@@ -69,7 +69,7 @@ export class adminPushDealsToVistexComponent {
           
     }
     bindPathQueryParam() {
-        const url = window.location.href.split("/");
+        const url = new URL(window.location.href).toString().split('/');
         const qString = url[url.length - 1];
         let dealIds = '';
         if (qString.indexOf("=") != -1) {

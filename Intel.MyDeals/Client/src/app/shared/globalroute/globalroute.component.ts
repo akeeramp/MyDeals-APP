@@ -31,7 +31,7 @@ export class globalRouteComponent {
         //this code tells where to route  either Angular or AngularJS
         this.angularEnabled=await this.dynamicEnablementService.isAngularEnabled();
         //based on the flag it will redirect to Angular or AngularJS
-        const url = window.location.href.split('/');
+        const url = new URL(window.location.href).toString().split('/');
         let index = url.indexOf('manager');
         if(index && index>0){
             let cid = url[index + 1];

@@ -453,7 +453,7 @@ angular
 
             // ********************* Advanced Search route  starts here ************** 
             .state("gotoPS", {
-                url: "/gotoPS/:cid",
+                url: "/gotoPs/:cid",
                 abstract: false,
                 views: {
                     mainView: {

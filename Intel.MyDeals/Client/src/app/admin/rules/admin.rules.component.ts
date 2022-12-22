@@ -207,7 +207,7 @@ export class adminRulesComponent {
     }
 
     async ngOnInit() {
-        var webUrl = window.location.href;
+        var webUrl = new URL(window.location.href).toString();
         var lastLoc = webUrl.lastIndexOf('/');
         if (webUrl.length > lastLoc + 1) {
             var value = webUrl.substring(lastLoc + 1, webUrl.length);
@@ -506,7 +506,7 @@ export class adminRulesComponent {
             filters: [],
         };
         this.rid = 0;
-        var webUrl = window.location.href;
+        var webUrl = new URL(window.location.href).toString();
         var lastLoc = webUrl.lastIndexOf('/');
         if (webUrl.length > lastLoc + 1) {
             webUrl = webUrl.substring(0, lastLoc + 1);

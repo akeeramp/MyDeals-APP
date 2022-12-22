@@ -374,12 +374,7 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
         }
     }
     goToSelType(CNTRCT_OBJ_SID:any){
-        if (this.angularEnabled){
-            window.location.href = `#/contractmanager/CNTRCT/${CNTRCT_OBJ_SID}/0/0/0`;
-        } 
-        else {
-            window.location.href = `/Contract#/manager/${CNTRCT_OBJ_SID}`;
-        } 
+        window.open(`/Contract#/manager/${CNTRCT_OBJ_SID}`, '_blank') 
     }
     async getAngularStatus(){
         this.angularEnabled=await this.dynamicEnablementService.isAngularEnabled();
