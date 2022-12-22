@@ -57,3 +57,6 @@
 .micro-grid col.k-group-col {
     width: 0px !important;
 }
+.product_details_scroll .k-grid-content.k-virtual-content {
+    height: auto !important;
+}

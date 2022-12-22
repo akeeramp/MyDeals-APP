@@ -278,7 +278,7 @@
                     </div>
                     <div *ngIf="productsLoaded">
                         <kendo-grid [data]="productsgridData" [resizable]="true"
-                                    [sort]="state.sort" class="micro-grid" style="height: 140px">
+                                    [sort]="state.sort" class="micro-grid product_details_scroll" style="height: 140px">
                             <!--scrollable="none"-->
                             <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="160" field="HIER_VAL_NM" title="Product">
                             </kendo-grid-column>
