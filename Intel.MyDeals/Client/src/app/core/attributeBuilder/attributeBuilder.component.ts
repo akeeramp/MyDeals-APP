@@ -446,8 +446,12 @@ export class AttributeBuilder implements OnInit {
 
     }
     runRule() {
-        let ruleslist = this.generateCurrentRule();
+        let ruleslist = this.generateCurrentRule();     
         if (!this.validateRules()) return;
+        if (!this.enableSaveRules()) {
+            this.loggerSvc.warn('Please provide proper search key', 'Warning');
+            return;
+        }
         this.usrPrfrncssvc.updateAction(this.cat, this.subcat, "CustomSearch", ruleslist).subscribe((response: any) => {
             if (response) {
                 var runRule = {
@@ -458,7 +462,6 @@ export class AttributeBuilder implements OnInit {
         }, (error) => {
             this.loggerSvc.error("Unable to save Custom Search Options.", error);
         });
-
     }
     setDefaultRule(dataItem) {
         var selectionType;
