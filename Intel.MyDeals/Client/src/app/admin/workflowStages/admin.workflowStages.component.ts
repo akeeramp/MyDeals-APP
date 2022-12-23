@@ -19,18 +19,12 @@ import {
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
-    selector: "adminWorkflowStages",
+    selector: "admin-workflow-stages",
     templateUrl: "Client/src/app/admin/workflowStages/admin.workflowStages.component.html",
     styleUrls: ['Client/src/app/admin/workflowStages/admin.workflowStages.component.css']
 })
 export class adminWorkflowStagesComponent {
-    constructor(private workflowStageSvc: workflowStagesService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $(
-            'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
-        ).remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private workflowStageSvc: workflowStagesService, private loggerSvc: logger) { }
 
     @ViewChild('roleTierDdlTooltip', { static: false }) roleTierDdlTooltip: NgbTooltip;
     @ViewChild('wfStgLocDdlTooltip', { static: false }) wfStgLocDdlTooltip: NgbTooltip;
@@ -172,7 +166,6 @@ export class adminWorkflowStagesComponent {
     addHandler({ sender }) {
         this.closeEditor(sender);
         this.formGroup = new FormGroup({
-            //WFSTG_MBR_SID: new FormControl(),
             WFSTG_NM: new FormControl("", Validators.required),
             WFSTG_DESC: new FormControl("", Validators.required),
             ROLE_TIER_NM: new FormControl("", Validators.required),
@@ -180,7 +173,6 @@ export class adminWorkflowStagesComponent {
             WFSTG_ORD: new FormControl("", Validators.required),
             ALLW_REDEAL: new FormControl(false)
         });
-        //this.InitiateDropDowns(this.formGroup);
         this.formGroup.valueChanges.subscribe(() => {
             this.isFormChange = true;
             this.toolTipvalidationMsgs(this.formGroup.controls);
@@ -308,11 +300,6 @@ export class adminWorkflowStagesComponent {
 
     ngOnInit() {
         this.loadWorkflowStages();
-    }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 }
 

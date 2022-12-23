@@ -17,14 +17,14 @@ import {
     State,
     distinct,
 } from "@progress/kendo-data-query";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { FormGroup } from "@angular/forms";
 import { MatDialog } from "@angular/material/dialog";
 import { RulesSimulationModalComponent } from '../../admin/rules/admin.rulesSimulationModal.component';
 import { RuleDetailsModalComponent } from '../../admin/rules/admin.ruleDetailsModal.component';
 import { List } from "linqts";
 
 @Component({
-    selector: "adminRules",
+    selector: "admin-rules",
     templateUrl: "Client/src/app/admin/rules/admin.rules.component.html",
     styleUrls: ['Client/src/app/admin/rules/admin.rules.component.css'],
     encapsulation: ViewEncapsulation.None
@@ -33,12 +33,7 @@ export class adminRulesComponent {
     childGridResult: any;
     childGridData: any;
     RuleConfig: any;
-    constructor(private adminRulesSvc: adminRulesService, private loggerSvc: logger, private constantSvc: constantsService, public dialog: MatDialog) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $(
-            'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
-        ).remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+    constructor(private adminRulesSvc: adminRulesService, private loggerSvc: logger, private constantSvc: constantsService, public dialog: MatDialog) { 
         this.allData = this.allData.bind(this);
     }
 
@@ -225,12 +220,6 @@ export class adminRulesComponent {
             });
             await this.GetRules(0, "GET_RULES");
         }
-    }
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 
     stageOneChar(RULE_STAGE) {

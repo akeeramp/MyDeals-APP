@@ -1,8 +1,5 @@
-﻿import * as angular from "angular";
-import { logger } from "../../../shared/logger/logger";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+﻿import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, ViewEncapsulation, Inject } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 
 @Component({
     selector: "system-price-point",
@@ -10,7 +7,7 @@ import { downgradeComponent } from "@angular/upgrade/static";
     encapsulation: ViewEncapsulation.None
 })
 export class systemPricePointModalComponent {
-    constructor(private loggerSvc: logger, public dialogRef: MatDialogRef<systemPricePointModalComponent>,
+    constructor( public dialogRef: MatDialogRef<systemPricePointModalComponent>,
         @Inject(MAT_DIALOG_DATA) public data) {
         dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG
     }
@@ -49,9 +46,3 @@ export class systemPricePointModalComponent {
     }
 }
 
-angular
-    .module("app")
-    .directive(
-        "systemPricePoint",
-        downgradeComponent({ component: systemPricePointModalComponent })
-    );

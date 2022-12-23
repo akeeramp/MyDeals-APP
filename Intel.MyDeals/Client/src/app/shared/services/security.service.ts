@@ -1,8 +1,6 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
-import 'rxjs/add/operator/toPromise';
-import { cacheService } from "../../admin/cache/admin.cache.service";
 
 @Injectable({
     providedIn: 'root'
@@ -10,7 +8,7 @@ import { cacheService } from "../../admin/cache/admin.cache.service";
 
 export class SecurityService {
 
-    constructor(private httpClient: HttpClient,private adminCacheService : cacheService) { }
+    constructor(private httpClient: HttpClient) { }
 
     public apiBaseUrl = "/api/SecurityAttributes/";
     public securityAttributes = null;

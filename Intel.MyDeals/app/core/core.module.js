@@ -6,28 +6,11 @@
          * Angular modules
          */
         'ngAnimate'
-        , 'ngStorage'
 		, 'ngSanitize'
 		, 'ui.router'
-		, 'kendo.directives'
-		, 'ui.bootstrap'
-        , 'ui.select'
-        , 'ui.toggle'
-        , 'angular-linq'
-        , 'angular.filter'
-        , 'intcAnalytics'
-        , 'ngclipboard'
         /*
          * Our reusable cross app code modules
-         */
-		, 'blocks.confirmationModal'
-        , 'blocks.exception'
-		, 'blocks.logger'
-		, 'blocks.router'
-        , 'blocks.uiControls'
-		, 'blocks.secUtil'
-
-    ]);
+         */   ]);
 
     //TODO: Is there a better location to place the global js error handling?
     window.onerror = function (msg, url, lineNo, columnNo, error) {

@@ -21,17 +21,13 @@ import * as _ from "underscore";
 import { DatePipe } from "@angular/common";
 
 @Component({
-    selector: "adminProductCategories",
+    selector: "admin-product-categories",
     templateUrl: "Client/src/app/admin/productCategories/admin.productCategories.component.html",
     styleUrls: ["Client/src/app/admin/productCategories/admin.productCategories.component.css"]
 })
 
 export class adminProductCategoriesComponent {
-    constructor(private productCategorySvc: productCategoryService, public datepipe: DatePipe, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private productCategorySvc: productCategoryService, public datepipe: DatePipe, private loggerSvc: logger) { }
     private isLoading = true;
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
@@ -208,11 +204,6 @@ export class adminProductCategoriesComponent {
 
     ngOnInit() {
         this.loadproductCategoriesData();
-    }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 
 }

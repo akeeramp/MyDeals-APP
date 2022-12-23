@@ -18,18 +18,11 @@ import {
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
-    selector: "adminConsumptionCountry",
-    templateUrl: "Client/src/app/admin/consumptionCountry/admin.consumptionCountry.component.html",
-    //styleUrls: ['Client/src/app/admin/consumptionCountry/admin.consumptionCountry.component.css']
+    selector: "admin-consumption-country",
+    templateUrl: "Client/src/app/admin/consumptionCountry/admin.consumptionCountry.component.html"
 })
 export class adminConsumptionCountryComponent {
-    constructor(private consumptionCountrySvc: consumptionCountryService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $(
-            'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
-        ).remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private consumptionCountrySvc: consumptionCountryService, private loggerSvc: logger) { }
 
     @ViewChild("CNSMPTN_CTRY_NM_DropDown") private CNSMPTN_CTRY_NM_Ddl;
     @ViewChild("GEO_NM_DropDown") private GEO_NM_DropDownDdl;
@@ -261,11 +254,6 @@ export class adminConsumptionCountryComponent {
 
     ngOnInit() {
         this.loadConsumptionCountry();
-    }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 }
 

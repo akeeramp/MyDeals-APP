@@ -9,17 +9,13 @@ import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 
 @Component({
-    selector: "adminPushDealstoVistex",
+    selector: "admin-push-dealsto-vistex",
     templateUrl: "Client/src/app/admin/pushDealstoVistex/admin.pushDealstoVistex.component.html",
     styleUrls: ['Client/src/app/admin/pushDealstoVistex/admin.pushDealstoVistex.component.css']
 })
 
 export class adminPushDealsToVistexComponent {
-    constructor(private loggerSvc: logger, private pushDealstoVistexSvc: pushDealsToVistexService, private formBuilder: FormBuilder,) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private loggerSvc: logger, private pushDealstoVistexSvc: pushDealsToVistexService, private formBuilder: FormBuilder,) { }
     private color: ThemePalette = 'primary';
     private pushDealsToVistexForm: FormGroup;
     private loadMessage = "Admin Customer Loading..";

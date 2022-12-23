@@ -1,5 +1,3 @@
-import * as angular from "angular";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as _ from "underscore";
@@ -517,9 +515,3 @@ export class AutoFillComponent {
 
 }
 
-angular.module("app").directive(
-    "autofillSelector",
-    downgradeComponent({
-        component: AutoFillComponent,
-    })
-);

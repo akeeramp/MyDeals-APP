@@ -1,5 +1,4 @@
-﻿
-import { Component, Inject, ViewChild, ViewEncapsulation } from "@angular/core";
+﻿import { Component, Inject, ViewChild, ViewEncapsulation } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 
@@ -11,11 +10,7 @@ import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 })
 export class adminamendmentExceptioncomponent {
     constructor(public dialogRef: MatDialogRef<adminamendmentExceptioncomponent>,
-        @Inject(MAT_DIALOG_DATA) public data) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+        @Inject(MAT_DIALOG_DATA) public data) {}
 
     @ViewChild('intelTooltip', { static: false }) intelTooltip: NgbTooltip;
     @ViewChild('scopeTooltip', { static: false }) scopeTooltip: NgbTooltip;
@@ -151,7 +146,6 @@ export class adminamendmentExceptioncomponent {
     close() {
         this.dialogRef.close();
     }
-
 
     ngOnInit() {
         this.examendmentdetails = this.data.examendmentdetails;

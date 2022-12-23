@@ -1,5 +1,4 @@
-﻿import * as angular from "angular";
-import { logger } from "../../../shared/logger/logger";
+﻿import { logger } from "../../../shared/logger/logger";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, ViewEncapsulation, Inject } from "@angular/core";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";

@@ -2,7 +2,6 @@
 import { utils } from "../../shared/util/util";
 import { Component } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
-//import { logger } from "src/app/shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { cacheService } from "./admin.cache.service";
 
@@ -66,7 +65,6 @@ export class CacheComponent {
             this.currentCacheDetails =utils.isNull(res) ? "<< no data found >>" : JSON.stringify(res);
             data.loading = false;
         }, function () {
-            //op.notifyError(e.statusText, "Unable to retrieve cache details.");
             data.loading = false;
         });
     }

@@ -1,6 +1,4 @@
-﻿import * as angular from "angular";
-import { Component, Input, ViewEncapsulation, Output, EventEmitter } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
+﻿import { Component, Input, ViewEncapsulation, Output, EventEmitter } from "@angular/core";
 import { logger } from '../../../shared/logger/logger';
 import { GridUtil } from "../../../contract/grid.util";
 import { DE_Load_Util } from "../../../contract/DEUtils/DE_Load_util";
@@ -21,11 +19,7 @@ import { pricingTableEditorService } from "../../../contract/pricingTableEditor/
 })
 
 export class dealToolsComponent{
-    constructor(private dataService: dealToolsService, private loggerSvc: logger, protected dialog: MatDialog, private pteService: pricingTableEditorService) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private dataService: dealToolsService, private loggerSvc: logger, protected dialog: MatDialog, private pteService: pricingTableEditorService) {}
     @Input() dataItem;
     @Input() gridData;
     @Input() contractData;
@@ -717,9 +711,3 @@ export class dealToolsComponent{
         this.loadDealTools();
     }
 }
-angular.module("app").directive(
-    "dealToolsAngular",
-    downgradeComponent({
-        component: dealToolsComponent,
-    })
-);

@@ -1,5 +1,5 @@
 import * as angular from "angular";
-import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, ViewChild, ViewEncapsulation, OnChanges } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DisplayGrid, GridsterConfig, GridsterItem, GridType, CompactType } from 'angular-gridster2';
 import { downgradeComponent } from "@angular/upgrade/static";
 import { MatDialog } from '@angular/material/dialog';
@@ -13,6 +13,7 @@ import { GlobalSearchResultsComponent } from "../../advanceSearch/globalSearchRe
 import { userPreferencesService } from "../../shared/services/userPreferences.service";
 import { logger } from "../../shared/logger/logger";
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
+import { SecurityService } from "../../shared/services/security.service";
 
 interface Item {
     text: string;
@@ -26,11 +27,7 @@ interface Item {
     encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit {
-    constructor(protected dialog: MatDialog, protected cntrctWdgtSvc: contractStatusWidgetService, protected usrPrfrncssvc: userPreferencesService, protected loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(protected dialog: MatDialog, protected cntrctWdgtSvc: contractStatusWidgetService, protected usrPrfrncssvc: userPreferencesService, protected loggerSvc: logger,private securitySVC:SecurityService) {}
     dashboard: GridsterItem[];
     resizeEvent: EventEmitter<GridsterItem> = new EventEmitter<GridsterItem>();
     @ViewChild(GlobalSearchResultsComponent) GlobalSearchResults: GlobalSearchResultsComponent;
@@ -358,8 +355,20 @@ export class DashboardComponent implements OnInit {
         this.saveLayout();
     }
 
+    async loadsession(){
+        this.securitySVC.getSecurityDataFromSession();
+        let response=await this.securitySVC.getSecurityData().toPromise().catch((error) => {
+            this.loggerSvc.error("Dashboard component :: loadsession ::", error, error.statusText);
+        });
+        if (response) {
+            sessionStorage.setItem('securityAttributes', JSON.stringify(response.SecurityAttributes));
+            sessionStorage.setItem('securityMasks', JSON.stringify(response.SecurityMasks));
+        }
+    }
+
     //********************* search widget functions*************************
     ngOnInit(): void {
+        this.loadsession()
         document.title = "Dashboard - My Deals";
         this.selectedCustNames = window.localStorage.selectedCustNames ? JSON.parse(window.localStorage.selectedCustNames) : [];
         this.startDateValue = window.localStorage.startDateValue ? new Date(window.localStorage.startDateValue) : this.startDateValue;
@@ -408,12 +417,6 @@ export class DashboardComponent implements OnInit {
         //this functionality will disable anything of .net ifloading to stop when dashboard landing to this page
         document.getElementById('mainBody')?.setAttribute('style', 'display:none');
 
-    }
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 
     gridValsPlus() {

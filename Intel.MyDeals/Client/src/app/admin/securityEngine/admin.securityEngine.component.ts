@@ -2,9 +2,8 @@
 import { Component } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
-import { ThemePalette } from '@angular/material/core';
 import { SecurityEngineService } from "./admin.securityEngine.service";
 import { SelectEvent } from "@progress/kendo-angular-layout";
 import * as _ from 'underscore';
@@ -15,11 +14,7 @@ import * as _ from 'underscore';
     styleUrls: ['Client/src/app/admin/securityEngine/admin.securityEngine.component.css']
 })
 export class adminsecurityEngineComponent {
-    constructor(private SecurityEnginesvc: SecurityEngineService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private SecurityEnginesvc: SecurityEngineService, private loggerSvc: logger) { }
     public isGridLoading = false;
     public isShowMainContent = false;
     public currentDisplayAction = [];
@@ -231,9 +226,6 @@ export class adminsecurityEngineComponent {
                     }
                 }
             }
-
-            // Clear attrbChanged classes
-            //$('.attrbChanged').removeClass('attrbChanged');
 
             // Clear pending array
             this.pendingSaveArray = [];
@@ -457,7 +449,7 @@ export class adminsecurityEngineComponent {
             title += "Deal is Read Only\n";
         }
 
-        if (this.isASTab == true && atrbCd !== "ACTIVE" && this.GetSelectedDDlist[objtypeselectname]["ATTRBS"][dealType] !== undefined && !this.GetSelectedDDlist[objtypeselectname]["ATTRBS"][dealType].contains(atrbCd)) {
+        if (this.isASTab == true && atrbCd !== "ACTIVE" && this.GetSelectedDDlist[objtypeselectname]["ATTRBS"][dealType] !== undefined && !this.GetSelectedDDlist[objtypeselectname]["ATTRBS"][dealType].includes(atrbCd)) {
             extraClasses.push("atrbbasecolorNotInDealType");
         }
         else if (actionCollection !== undefined) {
@@ -514,7 +506,6 @@ export class adminsecurityEngineComponent {
         }
 
         if (event?.target != null) {
-            //var child = angular.element(event.target);
             var isCurrChecked = !event.target.classList.contains("atrbbasedisabled"); 
             var objtypeselectid;
             var objtypeselectname;
@@ -531,7 +522,7 @@ export class adminsecurityEngineComponent {
                 var stgs = this.selectedRoles;
                 for (var key in stgs) {
                     if (stgs.hasOwnProperty(key)) {
-                        if (event.target.title.contains(stgs[key]['dropdownName'])) {
+                        if (event.target.title.includes(stgs[key]['dropdownName'])) {
                             roleid = stgs[key]['dropdownID'];
                             rolename = stgs[key]['dropdownName'];
                         }
@@ -542,7 +533,7 @@ export class adminsecurityEngineComponent {
                 var stgs = this.dropDownDatasource['AdminRoleTypes'];
                 for (var key in stgs) {
                     if (stgs.hasOwnProperty(key)) {
-                        if (event.target.title.contains(stgs[key]['dropdownName'])) {
+                        if (event.target.title.includes(stgs[key]['dropdownName'])) {
                             roleid = stgs[key]['dropdownID'];
                             rolename = stgs[key]['dropdownName'];
                         }
@@ -555,7 +546,7 @@ export class adminsecurityEngineComponent {
                 var stgsdeal = this.selectedDealTypes;
                 for (var key in stgsdeal) {
                     if (stgsdeal.hasOwnProperty(key)) {
-                        if (event.target.title.contains(stgsdeal[key]['Alias'])) {
+                        if (event.target.title.includes(stgsdeal[key]['Alias'])) {
                             dealid = stgsdeal[key]['Id'];
                             dealnamename = stgsdeal[key]['Alias'];
                         }
@@ -566,7 +557,7 @@ export class adminsecurityEngineComponent {
                 var stgsdeal = this.drilledDowndealtype;
                 for (var key in stgsdeal) {
                     if (stgsdeal.hasOwnProperty(key)) {
-                        if (event.target.title.contains(stgsdeal[key]['Alias'])) {
+                        if (event.target.title.includes(stgsdeal[key]['Alias'])) {
                             dealid = stgsdeal[key]['Id'];
                             dealnamename = stgsdeal[key]['Alias'];
                         }
@@ -741,13 +732,11 @@ export class adminsecurityEngineComponent {
         }, function (error) {
             this.loggerSvc.error("Unable to get Security Masks.", error, error.statusText);
         });
-    }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
 
+        setTimeout(() => {
+            this.isDropdownsLoaded = true;
+        }, 200);
+    }
 }
 
 angular.module("app").directive(

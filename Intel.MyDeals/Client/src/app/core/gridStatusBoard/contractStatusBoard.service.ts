@@ -2,7 +2,6 @@
 import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
 import {SecurityService} from "../../shared/services/security.service"
-import 'rxjs/add/operator/toPromise';
 
 @Injectable({
     providedIn: 'root'

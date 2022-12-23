@@ -149,7 +149,7 @@
         <li><a href="@Url.Action("Find", "Contract")">Find a Contract</a></li>
         </ul>
         </li>*@
-            <li ui-sref-active="active" ><a class="mainMenu"  ui-sref="portal" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs"> Home</span></a></li>
+            <li ><a class="mainMenu"  href="#portal" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs"> Home</span></a></li>
             @*<li><a class="mainMenu" href="@Url.Action("Index", "Home", new { Area = "" })" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs"> Home</span></a></li>*@
             @*<li><a href="/Dashboard#/portal" title="Dashboard"><i class="intelicon-line-chart-outlined"></i><span class="hidden-xs"> Dashboard</span></a></li>*@
             @*<li><a href="@Url.Action("Index", "Home", new { Area = "" })" title="Settings"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Settings</span></a></li>*@
@@ -222,7 +222,7 @@
                     @if (env != "PROD" && env != "UNKNOWN") // Update this with ENV not prod
                     {
                         @*<li><a href="Admin#/employee">Set Your Role (Pre-prod Only)</a></li>}*@
-                        <li ui-sref-active="active"><a ui-sref="adminemployeedashboard">Set Your Role (Pre-prod Only)</a></li>
+                        <li><a href="#adminemployeedashboard">Set Your Role (Pre-prod Only)</a></li>
                     }
 
                     @if (isDeveloper)
@@ -231,13 +231,13 @@
                             <a tabindex="-1">Monitoring</a>
                             <ul class="dropdown-menu" style="width: 250px;">
                                 @*<li><a href="Admin#/cache">Cache Manager</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="admincache">Cache Manager</a></li>
+                                <li><a href="#admincache">Cache Manager</a></li>
                                 @*<li><a href="Admin#/oplog">Log Viewer</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="opLog">Log Viewer</a></li>
+                                <li><a href="#opLog">Log Viewer</a></li>
                                 @*<li><a href="Admin#/constants">Constants</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="constants">Constants</a></li>
+                                <li><a href="#constants">Constants</a></li>
                                 @*<li><a href="Admin#/batchTiming">Batch Job Details</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="batchTiming">Batch Job Details</a></li>
+                                <li><a href="#batchTiming">Batch Job Details</a></li>
                             </ul>
                         </li>
                     }
@@ -249,21 +249,21 @@
                                 @if (isRealSA || isCustomerAdmin || isDeveloper)
                                 {
                                     @*<li><a href="Admin#/customers">Customer</a></li>*@
-                                    <li ui-sref-active="active"><a ui-sref="customers">Customer</a></li>
+                                    <li><a href="#customers">Customer</a></li>
                                     @*<li><a href="Admin#/vistexcustomermapping">Customer Mapping</a></li>*@
-                                    <li ui-sref-active="active"><a ui-sref="VistexCustomerMapping">Customer Mapping</a></li>
+                                    <li><a href="#VistexCustomerMapping">Customer Mapping</a></li>
                                     @*<li><a href="Admin#/CustomerVendors">Customer - Vendors</a></li>*@
-                                    <li ui-sref-active="active"><a ui-sref="CustomerVendors">Customer - Vendors</a></li>
+                                    <li><a href="#CustomerVendors">Customer - Vendors</a></li>
                                     @*<li><a href="Admin#/UnifiedCustomerAdmin">Unified Customer Admin</a></li>*@
-                                    <li ui-sref-active="active"><a ui-sref="UnifiedCustomerAdmin">Unified Customer Admin</a></li>
+                                    <li><a href="#UnifiedCustomerAdmin">Unified Customer Admin</a></li>
                                 }
                                 @if (usrRole == "RA" && !isDeveloper)
                                 {
                                     @*<li><a href="Admin#/UnifiedCustomerAdmin">Unified Customer Admin</a></li>*@
-                                    <li ui-sref-active="active"><a ui-sref="UnifiedCustomerAdmin">Unified Customer Admin</a></li>
+                                    <li><a href="#UnifiedCustomerAdmin">Unified Customer Admin</a></li>
                                 }
                                 @*<li><a href="Admin#/UnifiedDealRecon">Unified Deal Reconciliation</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="UnifiedDealRecon">Unified Deal Reconciliation</a></li>
+                                <li><a href="#UnifiedDealRecon">Unified Deal Reconciliation</a></li>
                             </ul>
 
                         </li>
@@ -272,15 +272,15 @@
                     @if (isRealSA || isDeveloper) // All SA users allowed
                     {
                         @*<li><a href="Admin#/geo">Geo</a></li>*@
-                        <li ui-sref-active="active"><a ui-sref="adminGeo">Geo</a></li>
+                        <li><a href="#adminGeo">Geo</a></li>
                         @*<li><a href="Admin#/funfact">Fun Facts</a></li>*@
-                        <li ui-sref-active="active"><a ui-sref="funfact">Fun Facts</a></li>
+                        <li><a href="#funfact">Fun Facts</a></li>
                     }
 
                     @if (usrRole == "DA" || usrRole == "Legal" || (usrRole == "GA" && isSuper) || isRealSA || isDeveloper)
                     {
                         @*<li><a href="Admin#/meetcomp">Meet Comp</a></li>*@
-                        <li ui-sref-active="active"><a ui-sref="meetComp">Meet Comp</a></li>
+                        <li><a href="#meetComp">Meet Comp</a></li>
                     }
 
                     @if (isRealSA || isDeveloper)
@@ -289,15 +289,15 @@
                             <a tabindex="-1">Products</a>
                             <ul class="dropdown-menu" style="width: 250px;">
                                 @*<li><a href="Admin#/productAlias">Product Alias</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="productAlias">Product Alias</a></li>
+                                <li><a href="#productAlias">Product Alias</a></li>
                                 @*<li><a href="Admin#/productSelector">Product Entry</a></li>
                             <li><a href="Admin#/productEntryIncExc">Prod Include Exclude</a></li>*@
 
                                 @*<li><a href="Admin#/products">Product Hierarchy</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="products">Product Hierarchy</a></li>
+                                <li><a href="#products">Product Hierarchy</a></li>
 
                                 @*<li><a href="Admin#/productCategories">Product Vertical Rules</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="productCategories">Product Vertical Rules</a></li>
+                                <li><a href="#productCategories">Product Vertical Rules</a></li>
                             </ul>
                         </li>
                     }
@@ -308,11 +308,11 @@
                             <a tabindex="-1">Legal Configurations</a>
                             <ul class="dropdown-menu" style="width: 250px;">
                                 @*<li><a href="CostTest#/CostTest/icostproducts">Legal Classification</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="icostproducts">Legal Classification</a></li>
+                                <li><a href="#icostproducts">Legal Classification</a></li>
                                 @*<li><a href="Admin#/legalexceptions">Legal Exceptions</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="legalException">Legal Exceptions</a></li>
+                                <li><a href="#legalException">Legal Exceptions</a></li>
                                 @*<li><a href="Admin#/quoteLetter">Quote Letter</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="quoteLetter">Quote Letter</a></li>
+                                <li><a href="#quoteLetter">Quote Letter</a></li>
                             </ul>
                         </li>
                     }
@@ -320,20 +320,20 @@
                     @if (isRealSA || isCustomerAdmin || isDeveloper) // All SA users allowed
                     {
                         @*<li><a href="Admin#/dropdowns">UI Dropdown Values</a></li>*@
-                        <li ui-sref-active="active"><a ui-sref="dropdowns">UI Dropdown Values</a></li>
+                        <li><a href="#dropdowns">UI Dropdown Values</a></li>
                     }
 
                     @if (isRealSA || isDeveloper)
                     {
                         @*<li><a href="Admin#/dataquality">Data Quality (DQ)</a></li>*@
-                        <li ui-sref-active="active"><a ui-sref="dataquality">Data Quality (DQ)</a></li>
+                        <li><a href="#dataquality">Data Quality (DQ)</a></li>
 
                     }
                     @if (isDeveloper)
                     {
 
                         @*<li><a href="Admin#/dataFix">Data Fix</a></li>*@
-                        <li ui-sref-active="active"><a ui-sref="dataFix">Data Fix</a></li>
+                        <li><a href="#dataFix">Data Fix</a></li>
                     }
 
                     @if (isDeveloper)
@@ -342,9 +342,9 @@
                             <a tabindex="-1">Security Attributes</a>
                             <ul class="dropdown-menu" style="width: 250px;">
                                 @*<li><a href="Admin#/SecurityEngine">Security Engine</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="securityengine">Security Engine</a></li>
+                                <li><a href="#securityengine">Security Engine</a></li>
                                 @*<li><a href="Admin#/SecurityAttributes/DealTypes">Deal Types</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="dealTypes">Deal Types</a></li>
+                                <li><a href="#dealTypes">Deal Types</a></li>
                             </ul>
                         </li>
 
@@ -352,9 +352,9 @@
                             <a tabindex="-1">WorkFlow</a>
                             <ul class="dropdown-menu" style="width: 250px;">
                                 @*<li><a href="Admin#/workflow">WorkFlow</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="workFlow">WorkFlow</a></li>
+                                <li><a href="#workFlow">WorkFlow</a></li>
                                 @*<li><a href="Admin#/workflowstage">WorkFlow Stages</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="workflowStages">WorkFlow Stages</a></li>
+                                <li><a href="#workflowStages">WorkFlow Stages</a></li>
 
                             </ul>
                         </li>
@@ -367,26 +367,26 @@
                                 @if (isDeveloper)
                                 {
                                     @*<li><a href="Admin#/AdminTools">Support Scripts</a></li>*@
-                                    <li ui-sref-active="active"><a ui-sref="supportScript">Support Scripts</a></li>
-                                    <li ui-sref-active="active"><a ui-sref="testTenders">Test Tenders Data</a></li>
+                                    <li><a href="#supportScript">Support Scripts</a></li>
+                                    <li><a href="#testTenders">Test Tenders Data</a></li>
                                     @*<li><a href="Admin#/testtenders">Test Tenders Data</a></li>*@
                                     @*<li><a href="Admin#/dealmassupdate">Deal Mass Update</a></li>*@
-                                    <li ui-sref-active="active"><a ui-sref="dealmassupdate">Deal Mass Update</a></li>
+                                    <li><a href="#dealmassupdate">Deal Mass Update</a></li>
                                     @*<li><a href="Admin#/validateVistexR3Checks">Validate Deals for Vistex Push</a></li>*@
-                                    <li ui-sref-active="active"><a ui-sref="validateVistexR3Checks">Validate Deals for Vistex Push</a></li>
+                                    <li><a href="#validateVistexR3Checks">Validate Deals for Vistex Push</a></li>
 
                                     @*<li><a href="Admin#/pushDealstoVistex">Push Deals to Vistex</a></li>*@
-                                    <li ui-sref-active="active"><a ui-sref="pushDealstoVistex">Push Deals to Vistex</a></li>
+                                    <li><a href="#pushDealstoVistex">Push Deals to Vistex</a></li>
                                 }
                                 @if (isBulkPriceAdmin || isDeveloper)
                                 {
-                                    <li ui-sref-active="active"><a ui-sref="bulkPricingUpdate">Bulk Pricing Updates</a></li>
+                                    <li><a href="#bulkPricingUpdate">Bulk Pricing Updates</a></li>
                                     @*<!-- <li><a href="Admin#/bulkPriceUpdate">Bulk Pricing Updates</a></li> -->*@
                                 }
                                 @if (isRealSA || isDeveloper)
                                 {
                                     @*<li><a href="Admin#/consumptionCountry">Consumption Country/Region</a></li>*@
-                                    <li ui-sref-active="active"><a ui-sref="consumptionCountry">Consumption Country/Region</a></li>
+                                    <li><a href="#consumptionCountry">Consumption Country/Region</a></li>
                                 }
                             </ul>
                         </li>
@@ -396,7 +396,7 @@
                     @if (usrRole == "DA" || isRealSA || isDeveloper || isCustomerAdmin) // DA users get to edit their own records only, SA/Customer Admin get all.  Developer gets their present record and might be restricted access.
                     {
                         @*<li><a href="Admin#/manageEmployee">User Accounts Administration</a></li>*@
-                        <li ui-sref-active="active"><a ui-sref="manageEmployee">User Accounts Administration</a></li>
+                        <li><a href="#manageEmployee">User Accounts Administration</a></li>
                         //User Customer Assignments
                     }
 
@@ -406,10 +406,10 @@
                             <a tabindex="-1">Approval Rules Management</a>
                             <ul class="dropdown-menu" style="width: 250px;">
                                 @*<li><a href="Admin#/rules/">Price Rules</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="rules">Price Rules</a></li>
+                                <li><a href="#rules/">Price Rules</a></li>
                                 @*<li><a href="Admin#/ruleOwner">Rules Ownership Admin</a></li>*@
-                                @*<li ui-sref-active="active"><a ui-sref="rules">Price Rules</a></li>*@
-                                <li ui-sref-active="active"><a ui-sref="ruleOwner">Rules Ownership Admin</a></li>
+                                @*<li><a href="#rules">Price Rules</a></li>*@
+                                <li><a href="#ruleOwner">Rules Ownership Admin</a></li>
                             </ul>
                         </li>
                     }
@@ -425,11 +425,11 @@
            @*<li>
             <a class="mainMenu" href="/advancedSearch#/tenderDashboard" title="Tender Dashboard"><i class="intelicon-copy-solid"></i><span class="hidden-xs"> Tender Dashboard</span></a>
         </li>*@
-            <li ui-sref-active="active">
-            <a class="mainMenu" ui-sref="tenderDashboard" title="Tender Dashboard"><i class="intelicon-copy-solid"></i><span class="hidden-xs"> Tender Dashboard</span></a>
+            <li>
+            <a class="mainMenu" href="#tenderDashboard" title="Tender Dashboard"><i class="intelicon-copy-solid"></i><span class="hidden-xs"> Tender Dashboard</span></a>
             </li>
-            <li ui-sref-active="active">
-                <a class="mainMenu" ui-sref="advanceSearch" title="Advanced Search Tools"><i class="intelicon-search"></i><span class="hidden-xs"> Advanced Search</span></a>
+            <li>
+                <a class="mainMenu" href="#advanceSearch" title="Advanced Search Tools"><i class="intelicon-search"></i><span class="hidden-xs"> Advanced Search</span></a>
             </li>
             <li>
                 <a class="mainMenu" href="https://wiki.ith.intel.com/display/Handbook" target="_blank"><i class="intelicon-help"></i><span class="hidden-xs"> Help</span></a>
@@ -441,7 +441,7 @@
                         <i class="intelicon-reports-solid"></i><span class="hidden-xs"> Report </span><i class="intelicon-down"></i>
                     </a>
                     <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
-                        <li ui-sref-active="active"><a ui-sref="reportingdashboard">Report Dashboard</a></li>
+                        <li><a href="#reportingdashboard">Report Dashboard</a></li>
                     </ul>
                 </li>
             }

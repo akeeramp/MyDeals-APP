@@ -5,18 +5,13 @@ import { Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 
 @Component({
-    selector: "vistexTestApi",
+    selector: "admin-vistex",
     templateUrl: "Client/src/app/admin/vistex/admin.vistex.component.html",
+    styleUrls: ['Client/src/app/admin/vistex/admin.vistex.component.css']
 })
 
 export class adminVistexComponent {
-    constructor(private loggerSvc: logger, private dsaService: dsaService) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $(
-            'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
-        ).remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private loggerSvc: logger, private dsaService: dsaService) { }
 
     //Declaration Part
     private spinnerMessageHeader = "Test your API";
@@ -100,13 +95,6 @@ export class adminVistexComponent {
 
     ngOnInit() {
         this.loadVistexTestApi();
-    }
-
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 }
 

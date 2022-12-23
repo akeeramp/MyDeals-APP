@@ -5,16 +5,13 @@ import { Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 
 @Component({
-    selector: "opLog",
+    selector: "op-log",
     templateUrl: "Client/src/app/admin/oplog/admin.oplog.component.html",
     styleUrls: ['Client/src/app/admin/oplog/admin.oplog.component.css']
 })
 
 export class OpLogComponent {
-    constructor(private opLogSvc: opLogService, private loggerSvc: logger) {
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private opLogSvc: opLogService, private loggerSvc: logger) { }
 
     private title = "Opaque Log Watcher";
     public opLogData: Array<any> = [];
@@ -99,13 +96,6 @@ export class OpLogComponent {
     close() {
         this.dateRangeInvalid = false;
     }
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
-
 }
 
 angular.module("app").directive(

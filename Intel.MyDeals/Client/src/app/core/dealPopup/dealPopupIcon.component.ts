@@ -9,10 +9,7 @@ import { quickDealConstants } from "../angular.constants";
 
 export class dealPopupIconComponent {
 
-    constructor( private brdcstservice: broadCastService) {
-        $('link[rel=stylesheet][href="/content/kendo/2017.r1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor( private brdcstservice: broadCastService) {}
 
     iconEnabled: any;
 

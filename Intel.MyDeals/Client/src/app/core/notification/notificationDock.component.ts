@@ -66,13 +66,6 @@ export class notificationDockComponent {
             },(err)=>{
                 this.loggerSvc.error("Unable to Fetch Notification Count Data","Error",err);
             });
-
-        // Fix some sloopy bug when we are trying to engage an old easter egg
-        //if (window.location.href.indexOf('Snow') < 0) {
-            //this.getUnreadNotification();
-        //}
-
-
     }
     ngOnDestroy() {
         this.unreadMessagesCountSubscription.unsubscribe();

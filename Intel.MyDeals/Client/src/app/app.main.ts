@@ -1,5 +1,4 @@
 import * as angular from 'angular';
-
     angular.module('app', [
         /*
          * Order is not important. Angular makes a
@@ -17,13 +16,13 @@ import * as angular from 'angular';
         /*
          * Feature areas
          */
-        'app.admin',
-        'app.advancedSearch',
+        //'app.admin',
+        // 'app.advancedSearch',
    /*     'app.reporting',*/
-        'app.contract',
-        'app.costtest',
+        // 'app.contract',
+        // 'app.costtest',
         /*'app.dashboard',*/
-        'app.tenderManager',
-        'app.testCases'
+        // 'app.tenderManager',
+        // 'app.testCases'
     ]);
 

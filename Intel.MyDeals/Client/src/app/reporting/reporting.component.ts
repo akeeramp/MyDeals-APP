@@ -11,12 +11,7 @@ import {List} from "linqts";
     styleUrls: ['Client/src/app/reporting/reporting.component.css']
 })
 export class ReportingComponent {
-    constructor(private reportingSvc: reportingService,private loggerSvc:logger) {
-       //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-       $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-       $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-
-  }
+    constructor(private reportingSvc: reportingService,private loggerSvc:logger) { }
   //created for Angular loader
   public isLoading: string = 'true';
   public loadMessage: string = "Report is Loading ...";
@@ -218,8 +213,7 @@ export class ReportingComponent {
         //loader stops
         vm.isLoading = 'false';
         //variable assignment
-        vm.masterData = response; 
-        //vm.masterData =reportingResponse.response1; // changing to see all values
+        vm.masterData = response; // changing to see all values
         vm.ReportDealType=vm.masterData["ReportDealType"];
         vm.ReportName=vm.masterData["ReportName"]
         vm.ReportSummary = vm.masterData["ReportSummary"]
@@ -381,11 +375,7 @@ export class ReportingComponent {
   ngOnInit() {
     this.loadReportDashboard();
   }
-  ngOnDestroy() {
-    //The style removed are adding back
-    $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-    $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-}
+
 }
 angular.module("app").directive(
   "reportingDashboard",

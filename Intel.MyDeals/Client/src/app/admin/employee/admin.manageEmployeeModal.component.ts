@@ -1,7 +1,5 @@
-﻿import * as angular from 'angular';
-import { Component, Inject, ViewEncapsulation } from "@angular/core"
+﻿import { Component, Inject, ViewEncapsulation } from "@angular/core"
 import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { manageEmployeeService } from "./admin.manageEmployee.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -16,7 +14,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 export class ManageEmployeeModalComponent {
 
     constructor(public dialogRef: MatDialogRef<ManageEmployeeModalComponent>,
-        @Inject(MAT_DIALOG_DATA) public data, private dataService: manageEmployeeService,
+        @Inject(MAT_DIALOG_DATA) public data, 
         private loggerSvc: logger, private manageEmployeeSvc: manageEmployeeService) {
 
     }
@@ -168,9 +166,3 @@ export class ManageEmployeeModalComponent {
     }
 
 }
-angular.module("app").directive(
-    "manageEmployeeModal",
-    downgradeComponent({
-        component: ManageEmployeeModalComponent,
-    })
-);

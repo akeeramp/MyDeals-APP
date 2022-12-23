@@ -12,7 +12,6 @@
                                     valueField="id"
                                     [defaultItem]="defaultItem">
                 </kendo-dropdownlist>
-                <!--<select id="inputControl" kendo-drop-down-list k-options="$ctrl.dropDownOptions" k-ng-model="$ctrl.operator"></select>-->
             </div>
             <div class="col-sm-8">
                 <label class="control-label appro-label" for="inputPrice"><b>Price Point</b></label><br/>
@@ -23,7 +22,6 @@
                                       (keydown)="onKeyDown($event)"
                                       [value]="price" class="k-numberbox-design">
                 </kendo-numerictextbox>
-                <!--<input class="form-control" kendo-numeric-text-box id="inputPrice" format="'c2'" min="0.01" max="1000000" k-ng-model="$ctrl.price">-->
                 <p><small>Valid Range: 0.01 - 1,000,000</small></p>
             </div>
         </div>

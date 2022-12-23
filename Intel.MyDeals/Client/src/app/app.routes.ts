@@ -12,13 +12,7 @@ angular
                     mainView: {
                         template: '<reporting-dashboard></reporting-dashboard>'
                     }
-                },
-                resolve: {
-                    securityLoaded: ['securityService', function (securityService) {
-                        return securityService.loadSecurityData();
-                    }],
                 }
-
             })
 
             .state("tenderDashboard", {
@@ -44,26 +38,13 @@ angular
 
 
             //*****************poc items starts here*****************
-            // this is no longer needed as all component we have now in screens
-            // .state("mykendocontrol", {
-            //     url: "/mykendocontrol",
-            //     abstract: false,
-            //     views: {
-            //         mainView: {
-            //             template: '<my-kendo-control></my-kendo-control>'
-            //         }
-            //     }
-            // })
+            
             .state("mydashboard", {
                 url: "/mydashboard",
                 abstract: false,
                 views: {
                     mainView: {
                         template: '<app-dashboard></app-dashboard>'
-                    }, resolve: {
-                        securityLoaded: ['securityService', function (securityService) {
-                            return securityService.loadSecurityData();
-                        }],
                     }
                 }
             })
@@ -74,11 +55,6 @@ angular
                      mainView: {
                          template: '<app-dashboard></app-dashboard>'
                      }
-                 },
-                 resolve: {
-                     securityLoaded: ['securityService', function (securityService) {
-                         return securityService.loadSecurityData();
-                     }],
                  }
              })
      
@@ -91,11 +67,6 @@ angular
                     mainView: {
                         template: '<employee-dashboard></employee-dashboard>'
                     }
-                },
-                resolve: {
-                    securityLoaded: ['securityService', function (securityService) {
-                        return securityService.loadSecurityData();
-                    }],
                 }
             })
             .state("admincache", {
@@ -185,8 +156,6 @@ angular
                 views: {
                     mainView: {
                         template: '<admin-product-categories></admin-product-categories>'
-                        //  templateUrl: "Client/src/app/admin/CustomerVendors/customerVendors.html",
-                        //  controller: "CustomerVendorsController as vm"
                     }
                 }
             })
@@ -196,8 +165,6 @@ angular
                 views: {
                     mainView: {
                         template: '<constants></constants>'
-                        //  templateUrl: "Client/src/app/admin/constants/admin.constants.component.html",
-                        //  controller: "ConstantsController as vm"
                     }
                 }
             })
@@ -207,8 +174,6 @@ angular
                 views: {
                     mainView: {
                         template: '<admin-product-alias></admin-product-alias>'
-                        //  templateUrl: "Client/src/app/admin/productAlias/admin.productAlias.component.html",
-                        //  controller: "productAliasController as vm"
                     }
                 }
             })

@@ -1,7 +1,7 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, ViewEncapsulation, Inject } from "@angular/core";
-import { FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
+import { FileRestrictions } from "@progress/kendo-angular-upload";
 import { ThemePalette } from "@angular/material/core";
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
@@ -373,8 +373,8 @@ export class bulkUnifyModalComponent {
                 this.dealReconValidationSummary.inValidRecords = response;
                 this.generateTableData();
             }
-        }, function (response) {
-            //logger.error("Operation failed");
+        }, (response) => {
+            this.loggerSvc.error('Operation failed', '');
         });
 
     }
@@ -387,13 +387,12 @@ export class bulkUnifyModalComponent {
                     this.hotTable.setCellMetaObject(rowInd, i, { 'className': 'normal-cell', comment: { value: '' } });
             })
             if (this.tableData.length > 0) {
-                //this.spinnerMessageDescription = "Please wait while validating deal unification data.."; loader
                 //validating
                 this.unifiedDealSvc.ValidateUnifyDeals(this.tableData).subscribe((response) => {
                     this.UnifyValidation = response;
                     this.generateTableData();
-                }, function (response) {
-                    this.loggerSvc.error("Operation failed", "");
+                }, (response) => {
+                    this.loggerSvc.error('Operation failed', '');
                 });
             } else {
                 this.isAlert = true;
@@ -406,12 +405,11 @@ export class bulkUnifyModalComponent {
                     this.hotTable.setCellMetaObject(rowInd, i, { 'className': 'normal-cell', comment: { value: '' } });
             })
             if (this.tableData.length > 0) {
-                //this.spinnerMessageDescription = "Please wait while validating deal unification data..";
                 this.unifiedDealSvc.ValidateDealReconRecords(this.dealReconValidationSummary.inValidRecords).subscribe((response) => {
                     this.dealReconValidationSummary = response;
                     this.generateTableData();
-                }, function (response) {
-                    //logger.error("Operation failed");
+                }, (response) => {
+                    this.loggerSvc.error('Operation failed', '');
                 });
             } else {
                 this.isAlert = true;
@@ -691,9 +689,9 @@ export class bulkUnifyModalComponent {
             this.validUnifyDeals = [];
             this.inValidUnifyDeals = [];
             if (!this.isAlert) this.closeWindow();
-        }, function (response) {
-            this.loggerSvc.error("Operation failed")
-        });
+        }, (response) => {
+            this.loggerSvc.error('Operation failed', '');
+        })
     }
 
     getColHeaders() {// for getting column headers from config file

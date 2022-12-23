@@ -1,6 +1,4 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
+﻿import { logger } from "../../shared/logger/logger";
 import { Component,ViewEncapsulation} from '@angular/core';
 import { MatDialogRef } from '@angular/material/dialog';
 import { notificationsService } from './admin.notifications.service';
@@ -91,9 +89,3 @@ export class notificationsSettingsDialog {
     }
 }
 
-angular.module("app").directive(
-    "notificationsSettingsDialog",
-    downgradeComponent({
-        component: notificationsSettingsDialog,
-    })
-);

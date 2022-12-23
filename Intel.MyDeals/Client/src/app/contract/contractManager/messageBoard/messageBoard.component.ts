@@ -1,12 +1,6 @@
-import * as angular from "angular";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { Component, EventEmitter, Input, Output, ViewEncapsulation } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
-
-import { DomSanitizer } from '@angular/platform-browser';
 import { GridDataResult } from "@progress/kendo-angular-grid";
-import { contractManagerservice } from "../contractManager.service";
-import { logger } from "../../../shared/logger/logger";
 import { emailModal } from "../emailModal/emailModal.component";
 
 @Component({
@@ -19,7 +13,7 @@ import { emailModal } from "../emailModal/emailModal.component";
 })
 
 export class messageBoardModal {
-    constructor(protected dialog: MatDialog,private contractManagerSvc: contractManagerservice, private loggerSvc: logger, private sanitized: DomSanitizer) {
+    constructor(protected dialog: MatDialog) {
     }
     @Input() data:any;
     @Input() contractData:any;
@@ -194,13 +188,4 @@ export class messageBoardModal {
                 this.gridData = this.data;
 
             };
-      
-
 }
-
-angular.module("app").directive(
-    "messageBoardDialog",
-    downgradeComponent({
-        component: messageBoardModal,
-    })
-);

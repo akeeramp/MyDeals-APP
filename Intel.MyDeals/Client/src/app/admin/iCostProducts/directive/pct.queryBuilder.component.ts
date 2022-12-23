@@ -1,5 +1,4 @@
 ﻿import { Component, EventEmitter, Input, Output } from "@angular/core";
-import { logger } from "../../../shared/logger/logger";
 import { distinct } from "@progress/kendo-data-query";
 import * as _ from "underscore";
 
@@ -12,7 +11,7 @@ import * as _ from "underscore";
 
 export class pctQueryBuilderComponent {
 
-    constructor(private loggerSvc: logger) { }
+    constructor() { }
 
     @Input() private group: any;
     @Input() private parent: any;

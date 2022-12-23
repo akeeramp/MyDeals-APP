@@ -1,4 +1,3 @@
-import * as angular from "angular";
 import {Component,EventEmitter,Input, Output,ChangeDetectorRef} from "@angular/core";
 import {globalSearchResultsService} from "./globalSearchResults.service";
 import {logger} from "../../shared/logger/logger";
@@ -15,7 +14,6 @@ export class GlobalSearchResultsComponent  {
     //these are input coming from gloablsearch component
     @Input() searchText = "";
     response :any
-    
     @Input() opType="ALL";
     @Output() getWindowWidth = new EventEmitter;  
     @Output() isWindowOpen=new EventEmitter;
@@ -169,10 +167,7 @@ export class GlobalSearchResultsComponent  {
     //yet to migrate Advance Search Screen
     gotoAdvanced() {
         this.isWindowOpen.emit(false);
-        //$("#winGlobalSearchResults").data("kendoWindow").close();
-        //let force = (window.location.href.indexOf("advancedSearch#") >= 0);
         window.location.href = "/advancedSearch#/attributeSearch";
-        //if (force) window.location.reload(true);
     }
     async getAngularStatus(){
       //this code tells where to route  either Angular or AngularJS

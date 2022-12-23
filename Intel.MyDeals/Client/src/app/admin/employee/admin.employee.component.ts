@@ -5,15 +5,13 @@ import { downgradeComponent } from "@angular/upgrade/static";
 import { employeeService } from './admin.employee.service';
 
 @Component({
-    selector: "employeeDashboard",
+    selector: "employee-dashboard",
     templateUrl: "Client/src/app/admin/employee/admin.employee.component.html",
     styleUrls: ['Client/src/app/admin/employee/admin.employee.component.css']
 })
 
 export class EmployeeComponent {
-    constructor(private employeeSvc: employeeService,private loggerSvc:logger) {
-
-    }
+    constructor(private employeeSvc: employeeService,private loggerSvc:logger) { }
 
     private roleTypeId = (<any>window).usrRoleId;
     private isDeveloper = (<any>window).isDeveloper;

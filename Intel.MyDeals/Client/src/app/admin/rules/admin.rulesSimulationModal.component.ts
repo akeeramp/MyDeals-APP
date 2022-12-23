@@ -1,7 +1,5 @@
-﻿import * as angular from 'angular';
-import { Component, Inject, ViewEncapsulation } from "@angular/core"
+﻿import { Component, Inject, ViewEncapsulation } from "@angular/core"
 import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { adminRulesService } from "./admin.rules.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import {

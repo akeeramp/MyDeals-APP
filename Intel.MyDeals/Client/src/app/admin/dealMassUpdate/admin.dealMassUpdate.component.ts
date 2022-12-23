@@ -8,17 +8,13 @@ import { ThemePalette } from '@angular/material/core';
 import { dealMassUpdateService } from "./admin.dealMassUpdate.service";
 
 @Component({
-    selector: "dealMassUpdate",
+    selector: "deal-mass-update",
     templateUrl: "Client/src/app/admin/dealMassUpdate/admin.dealMassUpdate.component.html",
     styleUrls: ['Client/src/app/admin/dealMassUpdate/admin.dealMassUpdate.component.css'],
 })
 
 export class dealMassUpdateComponent {
-    constructor(private dealMassUpdateSvc: dealMassUpdateService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private dealMassUpdateSvc: dealMassUpdateService, private loggerSvc: logger) { }
 
     private color: ThemePalette = "primary";
     private attr = [];
@@ -222,12 +218,6 @@ export class dealMassUpdateComponent {
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
         this.gridResult = process(this.updateResponse, this.state);
-    }
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 
     ngOnInit() {

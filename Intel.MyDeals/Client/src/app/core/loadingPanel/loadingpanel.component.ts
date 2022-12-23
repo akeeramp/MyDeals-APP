@@ -1,13 +1,12 @@
-import * as angular from 'angular';
 import {Input, Component, OnInit} from "@angular/core";
-import {downgradeComponent} from "@angular/upgrade/static";
 import {loadingPanelService} from "./loadingpanel.service";
 import {logger} from "../../shared/logger/logger";
 import * as _ from "underscore";
 
 @Component({
   selector: 'loading-panel-angular',
-  templateUrl: 'Client/src/app/core/loadingPanel/loadingpanel.component.html'
+    templateUrl: 'Client/src/app/core/loadingPanel/loadingpanel.component.html',
+    styleUrls:['Client/src/app/core/loadingPanel/loadingpanel.component.css']
 })
 export class LoadingPanelComponent implements OnInit {
 
@@ -78,10 +77,3 @@ export class LoadingPanelComponent implements OnInit {
   }
 }
 
-angular.module("app").directive(
-  "loadingPanelAngular",
-  downgradeComponent({
-    component: LoadingPanelComponent,
-    inputs: ["show", "header", "description", "msgType", "isShowFunFact"],
-  })
-);

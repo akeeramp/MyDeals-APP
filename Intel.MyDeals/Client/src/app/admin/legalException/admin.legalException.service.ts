@@ -12,8 +12,6 @@ export class adminlegalExceptionService {
 
     }
 
-
-
     public createLegalException(dto) {
         const apiUrl: string = this.apiBaseUrl + "CreateLegalException" ;
         return this.httpClient.post(apiUrl,dto);

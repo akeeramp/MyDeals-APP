@@ -29,7 +29,6 @@
                                 </div>
                                 <div class="fl navIconLnk" (click)="toggleStrategyTree()" title="{{ strategyTreeCollapseAll ? 'Collapse All' : 'Expand All'}}" *ngIf="isExistingContract()">
                                     <div [ngClass]="{'rotate-90': !strategyTreeCollapseAll}">
-                                        <!--<i class="intelicon-fast-forward"></i>#collapse="ngbCollapse" [(ngbCollapse)]="isCollapsed"-->
                                         <i class="chevron linkable intelicon-fast-forward"></i>
                                     </div>
                                 </div>
@@ -99,7 +98,6 @@
                                         <div class="psNav row icon_p_fix " id="lnavPs_{{ ps.DC_ID}}" >
                                             <div class="fl col-md-1" (click)="isPSExpanded[psIndex] = !isPSExpanded[psIndex]">
                                                 <i class="glyphicon chevron linkable" style="margin-right: 5px; margin-top: 3px;" [ngClass]="{'intelicon-down': isPSExpanded[psIndex], 'intelicon-right-next': !isPSExpanded[psIndex]}"></i>
-                                                <!--<i class="chevron linkable" data-toggle="collapse" [attr.data-target]="'#sumWipGrid_'+ pt.DC_ID"-->
                                             </div>
                                             <div class="fl col-md-10" style="font-size: 12px; width: 225px;">
                                                 <div class="fl" title="{{ ps.PASSED_VALIDATION || 'Not validated yet'}}" style="margin: 0 4px 2px 0px; line-height: 1em; font-size: 20px;">

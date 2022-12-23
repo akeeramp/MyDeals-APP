@@ -9,19 +9,13 @@ import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/ke
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 @Component({
-    selector: "adminVistexCustomerMapping",
+    selector: "admin-vistex-customer-mapping",
     templateUrl: "Client/src/app/admin/vistexCustomerMapping/admin.vistexCustomerMapping.component.html",
     styleUrls: ['Client/src/app/admin/vistexcustomermapping/admin.vistexCustomerMapping.component.css']
 })
 
 export class adminVistexCustomerMappingComponent {
-    constructor(private customerMapSvc: vistexCustomerMappingService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $(
-            'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
-        ).remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private customerMapSvc: vistexCustomerMappingService, private loggerSvc: logger) { }
     @ViewChild("profileDropDown") private profileDdl;
     @ViewChild("tenderDropDown") private tenderDdl;
     @ViewChild("nonTenderDropDown") private nonTenderDdl;
@@ -35,14 +29,12 @@ export class adminVistexCustomerMappingComponent {
     private gridOptions;
     private allowCustom = true;
     private color: ThemePalette = "primary";
-
     public gridResult = [];
     public type = "numeric";
     public info = true;
     public formGroup: FormGroup;
     public isFormChange = false;
     private editedRowIndex: number;
-
     public PeriodProfile = [];
     public ARSettlementLevel = [];
     public TenderARSettlementLevel = [];
@@ -232,7 +224,6 @@ export class adminVistexCustomerMappingComponent {
                         this.gridResult.push(cust_map);
                         this.loadCustomerMapping();
                         this.loggerSvc.success("Vistex Customer Mapping updated.");
-                        /*sender.closeRow(rowIndex);*/
                     },
                     err => {
                         this.loggerSvc.error("Unable to update Vistex Customer Mapping.", err.statusText);
@@ -254,11 +245,6 @@ export class adminVistexCustomerMappingComponent {
 
     ngOnInit() {
         this.loadCustomerMapping();
-    }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 }
 

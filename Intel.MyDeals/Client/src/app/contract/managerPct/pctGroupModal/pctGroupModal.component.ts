@@ -1,13 +1,6 @@
-import * as angular from "angular";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { Component,Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
-import { DomSanitizer } from '@angular/platform-browser';
 import { DataStateChangeEvent, GridDataResult, PageSizeItem } from "@progress/kendo-angular-grid";
-import { logger } from "../../../shared/logger/logger";
-import { managerPctservice } from "../managerPct.service";
-import * as moment from "moment";
 import { process, State } from "@progress/kendo-data-query";
 
 @Component({
@@ -21,7 +14,7 @@ import { process, State } from "@progress/kendo-data-query";
 })
 
 export class pctGroupModal {
-    constructor(public dialogRef: MatDialogRef<pctGroupModal>, @Inject(MAT_DIALOG_DATA) public data, private managePctSvc: managerPctservice, private loggerSvc: logger, private sanitized: DomSanitizer) {
+    constructor(public dialogRef: MatDialogRef<pctGroupModal>, @Inject(MAT_DIALOG_DATA) public data) {
     }
     private state: State = {
         skip: 0,
@@ -78,9 +71,3 @@ export class pctGroupModal {
 
 }
 
-angular.module("app").directive(
-    "pctGroupDialog",
-    downgradeComponent({
-        component: pctGroupModal,
-    })
-);

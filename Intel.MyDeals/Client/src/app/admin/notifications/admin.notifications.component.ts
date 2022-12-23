@@ -19,17 +19,13 @@ import * as _ from "underscore";
 import { DatePipe } from "@angular/common";
 
 @Component({
-    selector: "adminNotifications",
+    selector: "admin-notifications",
     templateUrl: "Client/src/app/admin/notifications/admin.notifications.component.html",
     styleUrls: ['Client/src/app/admin/notifications/admin.notifications.component.css']
 })
 
 export class adminNotificationsComponent {
-    constructor(private notificationsSvc: notificationsService, private loggerSvc: logger, public datepipe: DatePipe, public dialog: MatDialog) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private notificationsSvc: notificationsService, private loggerSvc: logger, public datepipe: DatePipe, public dialog: MatDialog) { }
 
     public gridData: GridDataResult;
     //variable to hold the selected ID's (rows which are selected using check box)
@@ -194,11 +190,6 @@ export class adminNotificationsComponent {
         this.loadNotifications();
     }
 
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
 }
 
 angular

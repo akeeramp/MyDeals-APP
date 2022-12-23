@@ -1,5 +1,4 @@
-﻿/* eslint-disable @typescript-eslint/no-inferrable-types */
-import { Input, Component, ViewChild, OnInit, OnChanges, EventEmitter, Output } from "@angular/core"
+﻿import { Input, Component, ViewChild, OnInit, OnChanges, EventEmitter, Output } from "@angular/core"
 import { GridComponent, GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { GridStatusBoardService } from "./gridStatusBoard.service";
 import { process, State, distinct } from "@progress/kendo-data-query"; /*GroupDescriptor,*/
@@ -78,9 +77,6 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
 
     private activeFilter: string = "";
     
-    //DA - allowing to access contract/Tender manager screen
-    //private jumptoSummary = (<any>window).usrRole === "DA" ? "/summary" : "";
-
     private isInitialLoad: boolean = true;
     public state: State = {
         skip: 0,

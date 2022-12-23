@@ -1,14 +1,10 @@
-﻿import * as angular from "angular";
-import { Component, Input, ViewEncapsulation, Output, EventEmitter } from "@angular/core";
+﻿import { Component, Input, ViewEncapsulation, Output, EventEmitter } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { DataStateChangeEvent, SelectAllCheckboxState, CellClickEvent, PageSizeItem, GridComponent} from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
 import { managerExcludeGroupsService } from "./managerExcludeGroups.service";
 import { ThemePalette } from "@angular/material/core";
 import { lnavService } from "../lnav/lnav.service";
-import { headerService } from "../../shared/header/header.service";
-import { FormBuilder } from "@angular/forms";
 import { MatDialog } from '@angular/material/dialog';
 import { excludeDealGroupModalDialog } from "./excludeDealGroupModal.component"
 import { GridUtil } from "../grid.util"
@@ -34,7 +30,7 @@ export interface contractIds {
 
 export class managerExcludeGroupsComponent {
     
-    constructor(private loggerSvc: logger, private managerExcludeGrpSvc: managerExcludeGroupsService, private lnavSvc: lnavService, private headerSvc: headerService, private formBuilder: FormBuilder, protected dialog: MatDialog) {
+    constructor(private loggerSvc: logger, private managerExcludeGrpSvc: managerExcludeGroupsService, private lnavSvc: lnavService, protected dialog: MatDialog) {
 
     }
     public isLoading: boolean;
@@ -329,12 +325,4 @@ export class managerExcludeGroupsComponent {
         this.userRole = (<any>window).usrRole;
         this.loadExcludeGroups();
     }
-
-
 }
-angular.module("app").directive(
-    "managerExcludeGroups",
-    downgradeComponent({
-        component: managerExcludeGroupsComponent,
-    })
-);

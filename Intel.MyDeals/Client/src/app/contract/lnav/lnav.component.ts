@@ -1,18 +1,13 @@
-﻿import * as angular from "angular";
-import * as _ from "underscore";
+﻿import * as _ from "underscore";
 import { lnavService } from "../lnav/lnav.service";
 import { logger } from "../../shared/logger/logger";
 import { lnavUtil } from '../lnav.util';
-import { downgradeComponent } from "@angular/upgrade/static";
 import { headerService } from "../../shared/header/header.service";
-import { templatesService } from "../../shared/services/templates.service";
-import { pricingTableComponent } from "../pricingTable/pricingTable.component";
 import { MatDialog } from '@angular/material/dialog';
 import { AutoFillComponent } from "../ptModals/autofillsettings/autofillsettings.component";
 import { RenameTitleComponent } from "../ptModals/renameTitle/renameTitle.component";
 import { contractDetailsService } from "../contractDetails/contractDetails.service";
 import { Component, Input, Output, EventEmitter, ViewEncapsulation } from "@angular/core";
-import { pricingTableEditorService } from "../pricingTableEditor/pricingTableEditor.service";
 
 export interface contractIds {
     Model: string;
@@ -32,7 +27,7 @@ export interface contractIds {
 })
 
 export class lnavComponent {
-    constructor(private loggerSvc: logger, private templatesSvc: templatesService, private lnavSvc: lnavService, private pricingTableComp: pricingTableComponent, private headerSvc: headerService, private contractDetailsSvc: contractDetailsService, private dialog: MatDialog, private pteSVC: pricingTableEditorService) {
+    constructor(private loggerSvc: logger, private lnavSvc: lnavService, private headerSvc: headerService, private contractDetailsSvc: contractDetailsService, private dialog: MatDialog) {
 
     }
     @Input() contractId: number;
@@ -668,7 +663,7 @@ export class lnavComponent {
             this.newPricingTable = lnavUtil.setDefaultAttributes(this.newPricingTable, this.isTenderContract, pt, this.contractData);
         }
         if (this.contractData != null) { // Moved down due to normal items missing customer level fields in some cases.
-            this.custId = this.contractData.CUST_MBR_SID; //contractData.data[0].Customer.CUST_SID;
+            this.custId = this.contractData.CUST_MBR_SID;
         }
         if (ps == null) {
             if (this.curPricingStrategy.IS_HYBRID_PRC_STRAT === true) {
@@ -931,10 +926,3 @@ export class lnavComponent {
         });
     }
 }
-
-angular.module("app").directive(
-    "lnavView",
-    downgradeComponent({
-        component: lnavComponent,
-    })
-);

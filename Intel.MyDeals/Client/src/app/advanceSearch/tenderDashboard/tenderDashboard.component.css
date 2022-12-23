@@ -106,23 +106,7 @@ button.k-button.first-child-btn.ok-dash-style:hover {
     font-size: 19px !important;
     line-height: 22px !important;
 }
-/*manager-pct #full-pct-diabox.admin_pct_popup {
-    top: -40px !important;
-    position: relative !important;
-}
-.admin-mctpct #full-pct-diabox {
-    font-size: 14px;
-    font-family: "Intel Clear";
-    font-weight: 200;
-    font-style: normal;
-    padding: 0;
-    margin-left: 0;
-    margin-right: 0;
-}
-manager-pct#full-pct-diabox.admin_pct_popup {
-    top: -30px !important;
-    position: relative !important;
-}*/
+
 #search-info-container .right-container {
     padding: 20px 10px 20px 900px;
     margin-left: -460px;
@@ -147,8 +131,6 @@ manager-pct#full-pct-diabox.admin_pct_popup {
     border: 0 solid transparent !important;
     height: 100% !important;
     font-size: 12px !important;
-    /* margin-left: -6px !important; */
-    /* margin-right: -8px !important; */
     margin-top: 5px !important;
 }
 

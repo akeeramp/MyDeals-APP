@@ -1,7 +1,4 @@
-﻿import { PTE_Common_Util } from "../PTEUtils/PTE_Common_util";
-import { PTEUtil } from "../PTEUtils/PTE.util";
-import { DE_Common_Util } from "../DEUtils/DE_Common_util";
-import { PTE_Validation_Util } from "../PTEUtils/PTE_Validation_util";
+﻿import { DE_Common_Util } from "../DEUtils/DE_Common_util";
 import { PTE_Config_Util } from "../PTEUtils/PTE_Config_util";
 export class DE_Save_Util {
     static savedWithWarning(dataItem, groups, templates) {

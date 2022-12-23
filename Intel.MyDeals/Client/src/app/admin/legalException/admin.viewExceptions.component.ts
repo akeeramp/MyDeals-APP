@@ -7,11 +7,7 @@
     encapsulation: ViewEncapsulation.None
 })
 export class adminviewExceptionsComponent {
-    constructor() {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor() { }
 
     @Input() exdetails: any;
     @Input() childhidden: any;

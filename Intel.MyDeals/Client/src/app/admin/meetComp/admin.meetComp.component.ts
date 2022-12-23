@@ -19,12 +19,7 @@ import { MatDialog } from '@angular/material/dialog';
 })
 
 export class meetCompComponent {
-    constructor(private meetCompSvc: meetCompService, public datepipe: DatePipe, private loggerSvc: logger, protected dialog: MatDialog) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-        
-    }
+    constructor(private meetCompSvc: meetCompService, public datepipe: DatePipe, private loggerSvc: logger, protected dialog: MatDialog) { }
     private HasBulkUploadAccess = (<any>window).usrRole == "DA";
     private isAccess = true;
     private isAccessMessage: string;
@@ -326,11 +321,6 @@ export class meetCompComponent {
     ngOnInit() {
         this.loadMeetCompPage();
         this.custDropdowns();
-    }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 }
 angular.module("app").directive(

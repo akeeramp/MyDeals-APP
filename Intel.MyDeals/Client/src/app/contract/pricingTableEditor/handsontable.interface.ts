@@ -1,20 +1,3 @@
-// export class handsoneColumn extends ColumnSettings {
-//     data?: string | number | Handsontable.default.ColumnDataGetterSetterFunction;
-//     title?: string;
-//     type?: CellType | string;
-//     width?: number | string | (() => number | string);
-//     editor?: EditorType | typeof Handsontable.default._editors.Base | boolean | string | Handsontable.default;
-//     readOnly?: boolean;
-//     allowEmpty?: boolean;
-//     allowInvalid?: boolean;
-//     numericFormat?: Handsontable.default.NumericFormatOptions;
-//     datePickerConfig?: PikadayOptions;
-//     source?: string[] | number[] | ((this: CellProperties, query: string, callback: (items: string[]) => void) => void);
-//     defaultDate?: string;
-//     dateFormat?: string;
-//     correctFormat?: boolean;
-// }
-
 export const sheetObj = {
     0:"A",
     1:"B",

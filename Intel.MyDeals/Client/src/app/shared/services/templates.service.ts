@@ -13,8 +13,6 @@ export class templatesService {
     public apiBaseUrl = "/api/Templates/v1/";
 
     public readTemplates(): Observable<any> {
-        //var isGetViaAngularCache = true;
-        //if (isForceReGet) { isGetViaAngularCache = false; }
         const apiUrl: string = this.apiBaseUrl + "GetUiTemplates" ;
         return this.httpClient.get(apiUrl);
     }

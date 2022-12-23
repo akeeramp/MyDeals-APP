@@ -9,16 +9,12 @@ import { ThemePalette } from '@angular/material/core';
 
 
 @Component({
-    selector: "adminCustomer",
+    selector: "admin-customer",
     templateUrl: "Client/src/app/admin/customer/admin.customer.component.html",
 })
 
 export class adminCustomerComponent {
-    constructor(private customerSvc: customerService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private customerSvc: customerService, private loggerSvc: logger) { }
     private isLoading = true;
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
@@ -57,7 +53,6 @@ export class adminCustomerComponent {
 
     loadCustomer() {
         //Developer can see the Screen..
-        //Added By Bhuvaneswari for US932213
         if (!(<any>window).isCustomerAdmin && (<any>window).usrRole != "SA" && !(<any>window).isDeveloper) {
             document.location.href = "/Dashboard#/portal";
         }
@@ -93,11 +88,6 @@ export class adminCustomerComponent {
     }
     ngOnInit() {
         this.loadCustomer();
-    }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 
 }

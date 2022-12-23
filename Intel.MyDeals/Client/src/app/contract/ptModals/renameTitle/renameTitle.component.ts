@@ -1,7 +1,5 @@
-﻿import * as angular from "angular";
-import { Component, Inject } from '@angular/core';
+﻿import { Component, Inject } from '@angular/core';
 import { logger } from '../../../shared/logger/logger';
-import { downgradeComponent } from "@angular/upgrade/static";
 import { renameTitleService } from '../renameTitle/renameTitle.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 
@@ -56,10 +54,3 @@ export class RenameTitleComponent {
     }
 
 }
-
-angular.module("app").directive(
-    "renameTitle",
-    downgradeComponent({
-        component: RenameTitleComponent,
-    })
-);

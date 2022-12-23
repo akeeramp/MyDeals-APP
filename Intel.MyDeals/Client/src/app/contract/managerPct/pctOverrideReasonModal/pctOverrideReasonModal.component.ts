@@ -1,9 +1,5 @@
-import * as angular from "angular";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { Component,Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
-import { DomSanitizer } from '@angular/platform-browser';
 import { DataStateChangeEvent, GridDataResult, PageSizeItem } from "@progress/kendo-angular-grid";
 import { logger } from "../../../shared/logger/logger";
 import { managerPctservice } from "../managerPct.service";
@@ -20,7 +16,7 @@ import { process, State } from "@progress/kendo-data-query";
 })
 
 export class pctOverrideReasonModal {
-    constructor(public dialogRef: MatDialogRef<pctOverrideReasonModal>, @Inject(MAT_DIALOG_DATA) public data, private managePctSvc: managerPctservice, private loggerSvc: logger, private sanitized: DomSanitizer) {
+    constructor(public dialogRef: MatDialogRef<pctOverrideReasonModal>, @Inject(MAT_DIALOG_DATA) public data, private managePctSvc: managerPctservice, private loggerSvc: logger) {
     }
     private state: State = {
         skip: 0,
@@ -140,10 +136,3 @@ export class pctOverrideReasonModal {
     }
 
 }
-
-angular.module("app").directive(
-    "pctOverrideReasonDialog",
-    downgradeComponent({
-        component: pctOverrideReasonModal,
-    })
-);

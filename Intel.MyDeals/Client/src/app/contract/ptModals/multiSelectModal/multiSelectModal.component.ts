@@ -1,5 +1,3 @@
-import * as angular from "angular";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
 import * as _ from "underscore";
@@ -364,11 +362,5 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
         this.key = this.multiSelectPopUpModal.opLookupText;        
     }
   }
-  
-  angular.module("app").directive(
-    "multiSelectModal",
-    downgradeComponent({
-        component: multiSelectModalComponent,
-    })
-  );
+ 
   

@@ -15,17 +15,13 @@ import {
 } from "@progress/kendo-data-query";
 
 @Component({
-    selector: "adminFunFact",
+    selector: "admin-fun-fact",
     templateUrl: "Client/src/app/admin/funFact/admin.funFact.component.html",
     styleUrls: ['Client/src/app/admin/funFact/admin.funFact.component.css']
 })
 
 export class adminFunFactComponent {
-    constructor(private funFactSvc: funFactService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private funFactSvc: funFactService, private loggerSvc: logger) { }
     private isLoading = true;
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
@@ -112,9 +108,7 @@ export class adminFunFactComponent {
                         this.gridResult[index] = result[0];
                         this.gridData = process(this.gridResult, this.state);
                         this.isLoading = false;
-                        //this.loadFunFacts();
                         this.loggerSvc.success("Funfact updated.");
-                        //sender.closeRow(rowIndex);
                     },
                     error => {
                         this.loggerSvc.error("Unable to Update Fun Fact.", error);
@@ -237,11 +231,6 @@ export class adminFunFactComponent {
     }
     ngOnInit() {
         this.loadFunFacts();
-    }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 
 }

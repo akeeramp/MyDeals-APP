@@ -20,11 +20,7 @@ import { ContextMenu } from 'handsontable/plugins';
 })
 export class BulkPricingUpdatesComponent  {
     
-  constructor(private loggerSvc: logger, protected dialog: MatDialog,private bulkPrcSvc: bulkPricingUpdatesService) {
-    //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-    $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-    $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-   }
+  constructor(private loggerSvc: logger, protected dialog: MatDialog,private bulkPrcSvc: bulkPricingUpdatesService) {}
 
    private hotRegisterer = new HotTableRegisterer();
    private hotTable: Handsontable;
@@ -482,12 +478,6 @@ ngOnInit(){
         font-family: 'Intel Clear'; opacity: .7">${header}</span>`);
    
     })
-}
-
-ngOnDestroy() {
-    //The style removed are adding back
-    $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-    $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
 }
 }
 angular.module("app").directive(

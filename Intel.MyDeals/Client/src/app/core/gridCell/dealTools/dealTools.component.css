@@ -467,10 +467,6 @@ kendo-dialog.artho-css .k-dialog-buttongroup {
     position: fixed !important
 }
 
-/*.k-dialog .k-dialog-title, .k-dialog .k-window-title {
-    display: none !important
-}*/
-
 .k-window-title.arrow-window-title {
     position: relative !important;
     padding: 5px 15px !important;

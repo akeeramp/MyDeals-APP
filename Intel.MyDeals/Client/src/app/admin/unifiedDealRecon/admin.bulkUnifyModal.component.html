@@ -1,13 +1,11 @@
 ﻿<link href="/Client/node_modules/handsontable/dist/handsontable.full.css" rel="stylesheet" />
 <link href="/Client/node_modules/handsontable-multi-select/dist/css/handsontable-multi-select.css" rel="stylesheet" />
 <form style="margin-top: 0;" class="form-horizontal" autocomplete="off">
-    <!--<loading-panel id="UnifyUploadLoading" style="z-index:500;" show="loading" header="vm.spinnerMessageHeader" description="vm.spinnerMessageDescription" ng-show="loading" is-show-fun-fact="vm.isBusyShowFunFact"></loading-panel>-->
     <div class="modal-content unifi-popup-full-style" id="endCustomerUnifyModal">
         <div class="modal-header modalBlueBody">
             <h3 class="modal-title unifi-title" id="modal-title">{{screenTitle}}</h3>
             <i id="btnClose" class="intelicon-close unify-close-btn" (click)="closeWindow()" title="Close this window"></i>
         </div>
-        <!--ng-if="vm.HasBulkUploadAccess"-->
         <div id="modalBodyDiv" class="modal-body">
             <div *ngIf="tableData.length==0">
                 <div class="col-md-6 file-upload-position"></div>

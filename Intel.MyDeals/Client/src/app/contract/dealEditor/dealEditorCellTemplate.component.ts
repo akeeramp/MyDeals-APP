@@ -1,13 +1,8 @@
-﻿/* eslint-disable @typescript-eslint/no-inferrable-types */
-import * as angular from 'angular';
-import { Component, Input, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
-import { downgradeComponent } from '@angular/upgrade/static';
+﻿import { Component, Input, ViewEncapsulation, Output, EventEmitter } from '@angular/core';
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { NgbPopoverConfig } from "@ng-bootstrap/ng-bootstrap";
 import { MatDialog } from '@angular/material/dialog';
-
 import { logger } from '../../shared/logger/logger';
-
 import { GridUtil } from '../grid.util';
 import { PTE_Load_Util } from '../PTEUtils/PTE_Load_util';
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';

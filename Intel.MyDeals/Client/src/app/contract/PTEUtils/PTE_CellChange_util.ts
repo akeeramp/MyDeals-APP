@@ -1,11 +1,7 @@
-/* eslint-disable prefer-const */
 import * as _ from 'underscore';
-import { logger } from '../../shared/logger/logger';
 import Handsontable from 'handsontable';
-import { CellSettings } from 'handsontable/settings';
 import { PTE_Common_Util } from './PTE_Common_util';
 import { PTE_Load_Util } from './PTE_Load_util';
-import { ptBR } from 'handsontable/i18n';
 import { PTE_Helper_Util } from './PTE_Helper_util';
 import { PTEUtil } from './PTE.util';
 import * as moment from 'moment';
@@ -163,25 +159,21 @@ export class PTE_CellChange_Util {
                     currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, '', 'no-edit');
                 }
                 updateRows.push(currentString.split(','));
-                //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
             }
             else if (val.prop == 'START_DT') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after delete can give duplicate index
                 currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, contractData.START_DT, 'no-edit');
                 updateRows.push(currentString.split(','));
-                //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
             }
             else if (val.prop == 'END_DT') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after delete can give duplicate index
                 currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, contractData.END_DT, 'no-edit');
                 updateRows.push(currentString.split(','));
-                //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
             }
             else if (val.prop == 'RESET_VOLS_ON_PERIOD') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after delete can give duplicate index
                 currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, 'No', 'no-edit');
                 updateRows.push(currentString.split(','));
-                //hotTable.setDataAtRowProp(row,val.prop, tier,'no-edit');
             }
             else if (val.prop == 'CUST_ACCNT_DIV') {
                 currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, contractData.CUST_ACCNT_DIV, 'no-edit');
@@ -446,7 +438,7 @@ export class PTE_CellChange_Util {
             if (!this.isAlreadyChange(selrow)) {
                 //identify the empty row and add it there
                 let empRow = this.returnEmptyRow();
-                let ROW_ID = this.rowDCID();//_.random(250); // will be replace with some other logic
+                let ROW_ID = this.rowDCID(); // will be replace with some other logic
                 //first deleting the row this will help if the empty row and selected row doest match
                 this.hotTable.alter('remove_row', selrow, 1, 'no-edit');
                 //this line of code is only for KIT incase of success product
@@ -498,7 +490,7 @@ export class PTE_CellChange_Util {
             //identify the empty row and the next empty row will be the consecutive one
             let empRow = this.returnEmptyRow();
             _.each(items, (cellItem) => {
-                let ROW_ID = this.rowDCID();//_.random(250); // will be replace with some other logic
+                let ROW_ID = this.rowDCID(); // will be replace with some other logic
                 //add num of tier rows the logic will be based on autofill value
                 let tier = 1;
                 for (let i = empRow; i < parseInt(curPricingTable.NUM_OF_TIERS) + empRow; i++) {
@@ -543,7 +535,7 @@ export class PTE_CellChange_Util {
                     if (!this.isAlreadyChange(selrow)) {
                         //identify the empty row and add it there
                         let empRow = this.returnEmptyRow();
-                        let ROW_ID = this.rowDCID();//_.random(250); // will be replace with some other logic
+                        let ROW_ID = this.rowDCID();// will be replace with some other logic
                         //first deleting the row this will help if the empty row and selected row doest match
                         this.hotTable.alter('remove_row', selrow, 1, 'no-edit');
                         //this line of code is to mak sure we modify the product background color to sucess
@@ -1294,7 +1286,6 @@ export class PTE_CellChange_Util {
             PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
             _.each(ValidProducts, (item) => {
                 let prod = PTEUtil.getValidDenProducts(item, prdSrc);
-                //let prod = userInput["contractProducts"].split(',');
                 let selProds = _.filter(PTR, (itm) => {
                     let ptrPRD = itm["PTR_USER_PRD"] ? itm["PTR_USER_PRD"].toUpperCase().split(',') : [];
                     // logic to check matching product since the product can come in any order and case to update code with those changes
@@ -1361,15 +1352,13 @@ export class PTE_CellChange_Util {
                     if (DensityMissingProd[itm.DC_ID] != undefined && DensityMissingProd[itm.DC_ID].cond) {
                         PTE_Common_Util.setBehaviors(itm);
                         itm._dirty = true;
-                        if (DensityMissingProd[itm.DC_ID].cond.contains('nullDensity')) {
+                        if (DensityMissingProd[itm.DC_ID].cond.includes('nullDensity')) {
                             itm._behaviors.isError['DENSITY_BAND'] = true;
                             itm._behaviors.validMsg['DENSITY_BAND'] = "One or more of the products do not have density band value associated with it";
-                            //PTE_Load_Util.setBehaviors(itm, 'DENSITY_BAND', 'One or more of the products do not have density band value associated with it', curPricingTable)
                         }
                         else if (DensityMissingProd[itm.DC_ID].cond == 'insufficientDensity') {
                             itm._behaviors.isError['DENSITY_BAND'] = true;
                             itm._behaviors.validMsg['DENSITY_BAND'] = "The no. of densities selected for the product was " + DensityMissingProd[itm.DC_ID].selDen + "but the actual no. of densities for the product is" + DensityMissingProd[itm.DC_ID].actDen;
-                            //PTE_Load_Util.setBehaviors(itm, 'DENSITY_BAND', 'The no. of densities selected for the product was ' + item.selDen + 'but the actual no. of densities for the product is' + item.actDen, curPricingTable);
                         }
                     }
                 });

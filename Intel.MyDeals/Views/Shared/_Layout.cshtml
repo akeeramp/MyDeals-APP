@@ -9,31 +9,40 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>@ViewBag.Title - My Deals</title>
     @*Removing Content ~/Content/css and pull those styles as reference to get Angular kendo grid working*@
+
     <link href="/css/jquery-ui.min.css" rel="stylesheet">
     <link href="/css/toastr.min.css" rel="stylesheet">
     <link href="/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/css/jquery.rainbowJSON.css" rel="stylesheet">
     <link href="/css/it-mlaf.min.css" rel="stylesheet">
-    <link href="/Content/kendo/2017.R1/kendo.common-material.min.css" rel="stylesheet">
-    <link href="/css/kendo.intel.css" rel="stylesheet">
     <link href="/css/angular-bootstrap-toggle.min.css" rel="stylesheet">
-    <link href="/css/select.min.css" rel="stylesheet">
-    <link href="/css/select2.min.css" rel="stylesheet">
-    <link href="/css/nv.d3.min.css" rel="stylesheet">
-    <link href="/css/_report.css" rel="stylesheet">
-    <link href="/css/_contractManager.css" rel="stylesheet">
-    <link href="/css/angular-gridster.css" rel="stylesheet">
     <link href="/css/bootstrap-switch.min.css" rel="stylesheet">
-    <link href="~/Client/src/app/core/dealPopup/dealPopup.component.css" rel="stylesheet" />
 
+    <link href="/css/_report.css" rel="stylesheet">
+    <link href="/css/_dealUtil.css" rel="stylesheet" />
+    <link href="/css/_secEngine.css" rel="stylesheet" />
+    <link href="/Content/styles.css" rel="stylesheet" />
+    <link href="/css/_controls.css" rel="stylesheet" />
+    <link href="/css/_contractManager.css" rel="stylesheet" />
+    <link href="/css/_loadingPanel.directive.css" rel="stylesheet" />
+
+
+    <link href="~/Client/src/app/core/dealPopup/dealPopup.component.css" rel="stylesheet" />
     <link href="~/Client/src/app/style/common.css" rel="stylesheet" />
     <link href="~/Client/src/app/style/kendo-custom.css" rel="stylesheet" />
     <link href="~/Client/src/app/style/style.css" rel="stylesheet" />
 
-    @Styles.Render("~/MyDeals/css")
+    @*@Scripts.Render("~/bundles/scripts")*@
+    <script src="/Scripts/jquery-3.3.1.min.js"></script>
+    <script src="/Scripts/jquery-ui.min.js"></script>
+    <script src="/Scripts/modernizr-2.6.2.min.js"></script>
+    <script src="/Scripts/Angular/1.8.0/angular.min.js"></script>
+    <script src="/Scripts/toastr.min.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
+    <script src="/Scripts/Angular/ngStorage.min.js"></script>
+    <script src="/Scripts/bootstrap-switch.min.js"></script>
+    <script src="~/Scripts/popper.min.js"></script>
 
-    @Scripts.Render("~/bundles/scripts")
-    @Scripts.Render("~/MyDeals/scripts")
+    @*@Scripts.Render("~/MyDeals/scripts")*@
     <style>
         .mainBodyStyle {
             position: absolute;
@@ -85,18 +94,14 @@
     <app-loader></app-loader>
 
 
-    @Scripts.Render("~/bundles/angular")
-    @Scripts.Render("~/bundles/angularReusable")
-    @Scripts.Render("~/bundles/angularModules")
+    @*Angult JS libraries starts here*@
+    <script src="/Scripts/Angular/1.8.0/angular-ui-router.min.js"></script>
+    <script src="/Scripts/Angular/1.8.0/angular-animate.min.js"></script>
+    <script src="/Scripts/Angular/1.8.0/angular-sanitize.min.js"></script>
 
-    <script>
-        kendo.spreadsheet.defineFunction("iserror", function (value) {
-            return value;
-        }).args([
-            ["value", "anyvalue"]
-        ]);
-
-    </script>
+    <script src="/app/core/core.module.js"></script>
+    <script src="/app/core/config.js"></script>
+    @*Angult JS libraries ends here*@
     <script src="~/Client/src/dist/vendor.js"></script>
     <script src="~/Client/src/dist/bundle.js"></script>
 

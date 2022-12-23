@@ -21,7 +21,7 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
 
     resizeSub: Subscription;
     isTender = false;
-    C_CREATE_CONTRACT = this.newContractWidgetService.chkDealRules('C_CREATE_CONTRACT', (<any>window).usrRole, null, null, null); //this create contract will be implemented after header component is ready
+    C_CREATE_CONTRACT = false;
 
     //Need to change these text fields on resize event when width increases & decreases
     createContractText = 'Create a My Deals Contract';
@@ -51,7 +51,6 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 //Redirect to contract detail screen for tender creation
-                // document.location.href = "/Contract#/manager/0/details?tender=1";
                 if (this.angularEnabled){
                     window.location.href = "#tendermanager/" + result;
                 } 
@@ -95,6 +94,7 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
        this.angularEnabled=await this.dynamicEnablementService.isAngularEnabled();
     }
     ngOnInit(): void {
+        this.C_CREATE_CONTRACT=this.newContractWidgetService.chkDealRules('C_CREATE_CONTRACT', (<any>window).usrRole, null, null, null); //this create contract will be implemented after header component is ready
         //this code tells where to route  either Angular or AngularJS
         this.getAngularStatus();
         this.resizeSub = this.resizeEvent.subscribe((widget) => {

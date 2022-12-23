@@ -273,7 +273,6 @@ export class PTE_Load_Util {
             let rowIndex = _.findIndex(PTR, { DC_ID: item.DC_ID });
             startOffset = rowIndex;
             //get NUM_OF_TIERS acoording this will be the row_span for handson 
-            // let NUM_OF_TIERS = (curPTR.NUM_OF_TIERS != undefined && curPTR.NUM_OF_TIERS !=null && curPTR.NUM_OF_TIERS !='')  ? parseInt(curPTR.NUM_OF_TIERS) : this.numOfPivot(curPTR,curPricingTable);
             let NUM_OF_TIERS = this.numOfPivot(curPTR, curPricingTable);
             _.each(columns, (colItem, ind) => {
                 if (!colItem.isDimKey && !colItem.hidden && NUM_OF_TIERS != 1) {
@@ -476,7 +475,6 @@ export class PTE_Load_Util {
             var pivotDensity = curPricingTable["NUM_OF_DENSITY"];
             // if dataItem has numtiers return it do not calculate and update here. pricingTableController.js pivotKITDeals will take care of updating correct NUM_TIERS
             if (curPricingTable['OBJ_SET_TYPE_CD'] === "KIT" && !!dataItem && !!dataItem["PTR_USER_PRD"]) {
-                //if (dataItem["NUM_OF_TIERS"] !== undefined && dataItem["NUM_OF_TIERS"] !== null && dataItem["NUM_OF_TIERS"] !== '') return dataItem["NUM_OF_TIERS"];
                 var pivotVal = dataItem["PTR_USER_PRD"].split(",").length;  //KITTODO: do we have a better way of calculating number of rows without splitting PTR_USER_PRD?
                 dataItem['NUM_OF_TIERS'] = pivotVal;  //KITTODO: not sure if necessary to set num of tiers at ptr level, but it appears to be expected when applying red validation markers to various dim rows (saveEntireContractRoot()'s call of MapTieredWarnings())
                 return pivotVal;

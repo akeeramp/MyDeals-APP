@@ -1,10 +1,7 @@
-﻿import * as angular from "angular";
-import { downgradeComponent } from "@angular/upgrade/static";
-import { Component, EventEmitter, Inject, Output, ViewEncapsulation } from '@angular/core';
+﻿import { Component, EventEmitter, Inject, Output, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { managerExcludeGroupsService } from './managerExcludeGroups.service';
 import { logger } from "../../shared/logger/logger";
-import { DomSanitizer } from '@angular/platform-browser';
 import { DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from "@angular/material/core";
@@ -25,7 +22,7 @@ export class excludeDealGroupModalDialog {
     titleText: string;
     isData: boolean;
     isLoading: boolean;
-    constructor(public dialogRef: MatDialogRef<excludeDealGroupModalDialog>, @Inject(MAT_DIALOG_DATA) public dataItem: any, private managerExcludeGrpSvc: managerExcludeGroupsService, private loggerSvc: logger, private sanitized: DomSanitizer) {
+    constructor(public dialogRef: MatDialogRef<excludeDealGroupModalDialog>, @Inject(MAT_DIALOG_DATA) public dataItem: any, private managerExcludeGrpSvc: managerExcludeGroupsService, private loggerSvc: logger) {
     }
     private isSelected: boolean = true;
     private role = (<any>window).usrRole;
@@ -229,13 +226,4 @@ export class excludeDealGroupModalDialog {
     ngOnInit() {
         this.loadExcludeDealGroupModel();
     }
-
-
 }
-
-angular.module("app").directive(
-    "excludeDealGroupModalDialog",
-    downgradeComponent({
-        component: excludeDealGroupModalDialog,
-    })
-);

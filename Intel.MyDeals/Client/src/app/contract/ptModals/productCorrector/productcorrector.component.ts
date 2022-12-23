@@ -6,9 +6,7 @@ import * as _ from "underscore";
 import { MatDialog } from '@angular/material/dialog';
 import { SelectableSettings } from '@progress/kendo-angular-treeview';
 import { NgbPopoverConfig } from "@ng-bootstrap/ng-bootstrap";
-
 import { logger } from "../../../shared/logger/logger";
-
 import { ProductSelectorComponent } from "../productSelector/productselector.component";
 import { PTE_Common_Util } from "../../PTEUtils/PTE_Common_util";
 import { List } from 'linqts';

@@ -1,7 +1,5 @@
-﻿import { logger } from "../../../shared/logger/logger";
-import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
+﻿import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, ViewEncapsulation, Inject } from "@angular/core";
-import { pricingTableservice } from "../../pricingTable/pricingTable.service";
 import * as _ from 'underscore';
 
 @Component({
@@ -10,8 +8,8 @@ import * as _ from 'underscore';
     encapsulation: ViewEncapsulation.None
 })
 export class tenderGroupExclusionModalComponent {
-    constructor(private loggerSvc: logger, public dialogRef: MatDialogRef<tenderGroupExclusionModalComponent>,
-        @Inject(MAT_DIALOG_DATA) public data, private pricingTableSvc: pricingTableservice) {
+    constructor( public dialogRef: MatDialogRef<tenderGroupExclusionModalComponent>,
+        @Inject(MAT_DIALOG_DATA) public data) {
         dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG
     }
     private isShowPCT: boolean = false;

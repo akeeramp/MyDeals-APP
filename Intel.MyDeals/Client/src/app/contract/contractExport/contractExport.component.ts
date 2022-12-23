@@ -1,7 +1,5 @@
-import * as angular from "angular";
 import { Component, Input } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { PageSizeItem } from "@progress/kendo-angular-grid";
 import {  State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
@@ -166,9 +164,4 @@ showHelpTopic() {
 
 }
 
-angular.module("app").directive(
-    "contractExport",
-    downgradeComponent({
-        component: contractExportComponent,
-    })
-);
+

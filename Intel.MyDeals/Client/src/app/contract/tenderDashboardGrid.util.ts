@@ -92,12 +92,6 @@ export class TenderDashboardGridUtil {
         }
     }
 
-    //static getBidActionsLabel = function (data) {
-    //    var bidActns = this.getBidActionsList(data);
-    //    if (bidActns.length === 0) return "Not Actionable";
-    //    return data.WF_STG_CD;
-    //}
-
     static getBidActionsList = function (data) {
         var bidActns = [];
         if (data.BID_ACTNS !== undefined) {

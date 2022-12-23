@@ -1,30 +1,18 @@
-﻿import { downgradeComponent } from "@angular/upgrade/static";
-import { DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+﻿import { DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
 import { Component, Inject, Input } from "@angular/core";
-import * as angular from "angular";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import { logger } from "../../../shared/logger/logger";
 import * as _ from 'underscore';
-import { flexoverLappingcheckDealService } from "./flexOverlappingDealsCheck.service";
-import { productSelectorService } from "../productSelector/productselector.service";
-import { pricingTableEditorService } from "../../pricingTableEditor/pricingTableEditor.service";
 import { PTE_Common_Util } from '../../PTEUtils/PTE_Common_util'
-
 
 @Component({
     selector: "flexoverlappingCheckDeal",
-    templateUrl: "Client/src/app/contract/ptModals/FlexOverlappingDealsCheck/flexOverlappingDealsCheck.component.html",
-    styleUrls: ["Client/src/app/contract/ptModals/FlexOverlappingDealsCheck/flexOverlappingDealsCheck.component.css"],
+    templateUrl: "Client/src/app/contract/ptModals/FlexOverlappingDealsCheck/flexOverlappingDealsCheck.component.html"
 
 })
 
 export class FlexOverlappingCheckComponent {
-    constructor(private flexoverLappingCheckDealsSvc: flexoverLappingcheckDealService,
-        private loggerSvc: logger,
-        private pteService: pricingTableEditorService,
-        private prodSelSVC: productSelectorService,
-        public dialogRef: MatDialogRef<FlexOverlappingCheckComponent>,
+    constructor(public dialogRef: MatDialogRef<FlexOverlappingCheckComponent>,
         @Inject(MAT_DIALOG_DATA) public data: any,) { }
 
     private state: State = {
@@ -87,8 +75,8 @@ export class FlexOverlappingCheckComponent {
         for (var j = 0; j < ovlprslt.length; j++) {
             for (var i = 0; i < this.data.PTR.length; i++) {
                 if ((this.data.PTR[i].DC_ID == ovlprslt[j].ROW_ID) && this.data.PTR[i].TIER_NBR == '1') {
-                    var temp = angular.copy(this.data.PTR[i]);
-                    var tempOvlp = angular.copy(ovlprslt[j]);
+                    var temp = PTE_Common_Util.deepClone(this.data.PTR[i]);
+                    var tempOvlp = PTE_Common_Util.deepClone(ovlprslt[j]);
                     tempOvlp["START_DT"] = temp.START_DT;
                     tempOvlp["END_DT"] = temp.END_DT;
                     var prdJSON = JSON.parse(temp.PTR_SYS_PRD);
@@ -119,14 +107,3 @@ export class FlexOverlappingCheckComponent {
     }
 
 }
-
-
-
-
-
-angular.module("app").directive(
-    "flexoverlappingCheckDeal",
-    downgradeComponent({
-        component: FlexOverlappingCheckComponent,
-    })
-);

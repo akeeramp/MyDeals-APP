@@ -29,11 +29,7 @@ export class contractDetailsComponent {
     disableSave:boolean=false;
     constructor(private templatesSvc: templatesService,
         private contractDetailsSvc: contractDetailsService, private datePipe: DatePipe,
-        private loggerSvc: logger,private newContractWidgetSvc :NewContractWidgetService ) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+        private loggerSvc: logger,private newContractWidgetSvc :NewContractWidgetService ) { }
     @Input() C_ID: number;
     private Customer;
     CUST_NM_DIV: any = []; CUST_NM; TITLE = ""; files = []; START_DT; START_QTR; START_YR; END_DT; END_QTR; END_YR; NO_END_DT = false; NO_END_DT_RSN; isSubmitted = false; NOTES = "";
@@ -164,7 +160,7 @@ export class contractDetailsComponent {
         this.contractData["CUST_ACCNT_DIV_UI"] = this.contractData["CUST_ACCNT_DIV"] = "";
         this.CUST_NM_DIV = [];
         this.NO_END_DT = this.contractData.NO_END_DT = false;
-        this.noEndDate();//this.isCustomerSelected = custObj != undefined ? true : false;
+        this.noEndDate();
         this.updateCorpDivision(custObj.CUST_SID);
         this.getCurrentQuarterDetails();
         this.applyTodayDate();
@@ -190,7 +186,6 @@ export class contractDetailsComponent {
         this.contractData["NO_END_DT"] = false;
         this.contractData["CUST_MBR_SID"] = "";
         this.contractData.CUST_ACCNT_DIV_UI = "";
-        //this.contractData["CUST_SID"] = "";
         this.contractData["CONTRACT_TYPE"] = "Standard";
         this.contractData["CUST_ACCPT"] = "Pending";
         this.contractData["AttachmentError"] = false;
@@ -201,7 +196,6 @@ export class contractDetailsComponent {
         this.contractData["BACK_DATE_RSN"] = "";
         this.contractData["NOTES"] = "";
         this.contractData._behaviors.isDirty = {};
-        //this.contractData._behaviors.isReadOnly["CUST_MBR_SID"] = !this.isNewContract;
         this.contractData._behaviors.isRequired["BACK_DATE_RSN"] = this.contractData.BACK_DATE_RSN !== "" && this.contractData.BACK_DATE_RSN !== undefined;
         this.contractData._behaviors.isHidden["BACK_DATE_RSN"] = !this.contractData._behaviors.isRequired["BACK_DATE_RSN"];
         this.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;
@@ -431,7 +425,6 @@ export class contractDetailsComponent {
             this.isLoading = true;
             this.setBusy("Saving Contract", "Saving the Contract Information", "info", true);
             const ct = this.contractData;
-            //this.custId = this.contractData["CUST_SID"];
             this.contractId = -100;
             if (this.contractData["DC_ID"]) {
                 this.contractId = this.contractData["DC_ID"];
@@ -910,11 +903,7 @@ export class contractDetailsComponent {
           (s) => s.CUST_DIV_NM.toLowerCase().indexOf(value.toLowerCase()) !== -1
         );
       }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
+
     ngOnInit() {
         try {
             this.isLoading=true;

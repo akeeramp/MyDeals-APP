@@ -1,7 +1,6 @@
 import * as angular from "angular";
 import { Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { logger } from "../logger/logger";
 import * as _ from "underscore";
 import { DynamicEnablementService } from "../services/dynamicEnablement.service";
 
@@ -11,7 +10,7 @@ import { DynamicEnablementService } from "../services/dynamicEnablement.service"
 })
 
 export class globalRouteComponent {
-    constructor(private loggerSVC:logger,private dynamicEnablementService: DynamicEnablementService) { }
+    constructor(private dynamicEnablementService: DynamicEnablementService) { }
     //To load angular Contract Manager from search change value to false, will be removed once contract manager migration is done
     public angularEnabled:boolean=false;
 

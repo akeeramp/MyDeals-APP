@@ -3,7 +3,6 @@ import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { downgradeInjectable } from '@angular/upgrade/static';
 import { Observable } from "rxjs";
-import 'rxjs/add/operator/toPromise';
 
 @Injectable({
     providedIn: 'root'

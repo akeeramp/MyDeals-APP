@@ -1,6 +1,4 @@
-﻿import * as angular from "angular";
-import { downgradeComponent } from "@angular/upgrade/static";
-import { Component } from "@angular/core";
+﻿import { Component } from "@angular/core";
 
 @Component({
     selector: "trashcan",
@@ -14,9 +12,3 @@ import { Component } from "@angular/core";
 export class TrashcanComponent {
 }
 
-angular.module("app").directive(
-    "trashcan",
-    downgradeComponent({
-        component: TrashcanComponent,
-    })
-);

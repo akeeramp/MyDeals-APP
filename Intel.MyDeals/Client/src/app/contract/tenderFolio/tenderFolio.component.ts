@@ -128,8 +128,6 @@ export class TenderFolioComponent {
                 if (res.length <= 1) {
                     this.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false;
                     this.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = true;
-                    //US2444394: commented out below because we no longer want to save Customer Account Division names if there is only one possible option
-                    //if (this.contractData.CUST_ACCNT_DIV_UI !== undefined) this.contractData.CUST_ACCNT_DIV_UI = res[0].CUST_DIV_NM.toString();
                 } else {
                     this.contractData._behaviors.isRequired["CUST_ACCNT_DIV_UI"] = false; // never required... blank now mean ALL
                     this.contractData._behaviors.isHidden["CUST_ACCNT_DIV_UI"] = false;
@@ -301,7 +299,6 @@ export class TenderFolioComponent {
     }
 
     copyTender() {
-        //this.setBusy("Copy Tender Folio", "Copying the Contract Information");
         this.data.contractData.Customer = this.custSIDObj;
         this.data.contractData.CUST_MBR_SID = this.custSIDObj.CUST_SID;
         this.data.contractData.TITLE = this.tenderName;
@@ -328,16 +325,13 @@ export class TenderFolioComponent {
         this.dataService.copyTenderFolioContract(ct, this.data.copyItems.join()).subscribe((data) => {
             if (data === undefined || data['CNTRCT'].length < 2) {
                 this.showCopyAlert = true;
-                    //this.setBusy("", "");
                     return;
                 }
             var id = data['CNTRCT'][1].DC_ID;
             this.dialogRef.close(id);
-                //this.setBusy("", "");
             },
             (error) => {
                 this.loggerSvc.error("Could not create the contract.", error);
-                //this.setBusy("", "");
             }
         );
     }

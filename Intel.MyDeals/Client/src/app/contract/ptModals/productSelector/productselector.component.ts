@@ -1,6 +1,3 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types */
-import * as angular from "angular";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, SelectAllCheckboxState } from "@progress/kendo-angular-grid";
@@ -11,10 +8,8 @@ import * as moment from 'moment';
 import * as lodash from "lodash";
 import { NgbPopoverConfig } from "@ng-bootstrap/ng-bootstrap";
 import List from "linqts/dist/src/list";
-
 import { productSelectorService } from "./productselector.service";
 import { logger } from "../../../shared/logger/logger";
-
 import { gridCol, ProdSel_Util } from './prodSel_Util';
 import { PTE_Common_Util } from "../../PTEUtils/PTE_Common_util";
 import { ProductBreakoutComponent } from "./productBreakout/productBreakout.component";
@@ -55,7 +50,7 @@ export class ProductSelectorComponent {
     private animateExclude: boolean = false;
     private isTender: boolean = false;
     private showDefault = true;
-    private isGA = false; //window.usrRole == "GA"; Commeneted this stop showing L1/L2 columns till legal approves
+    private isGA = false; //window.usrRole == "GA"; Commented this stop showing L1/L2 columns till legal approves
     private dealType: string = '';
     private splitProducts;
     private drillDownPrd: string = "Select";
@@ -473,8 +468,6 @@ export class ProductSelectorComponent {
         }
 
         // We need to send two special attributes for getting the data for non CPU products
-        // drillDownFilter4 = GDM_BRND_NM/EDW Product Family/GDM_FMLY depends upon vertical
-        // drillDownFilter5 = GDM_FMLY/NAND Family depends upon vertical
         if (selectionLevel == 7007) {
             data.drillDownFilter4 = (!!!item.drillDownFilter4 && item.drillDownFilter4 == "") ? null : item.drillDownFilter4,
                 data.drillDownFilter5 = (!!!item.drillDownFilter5 && item.drillDownFilter5 == "") ? null : item.drillDownFilter5
@@ -629,7 +622,7 @@ export class ProductSelectorComponent {
         }
     }
     selectProduct(product) {
-        let item = angular.copy(product);
+        let item = PTE_Common_Util.deepClone(product);
         item.selected = event.target['checked'];
         if (item.id !== undefined && item.id != "") {
             let products = this.productSelectionLevels.filter((x) => {
@@ -1057,13 +1050,12 @@ export class ProductSelectorComponent {
     selectItem(item: any, isDrilldown?: boolean) {
         this.selectedPathParts.push(item);
         this.selectedPathParts = [...this.selectedPathParts];
-        //this.getItems(item);
         // // When toggle is level 4 show l4's under the high level products
         if (!this.showDefault && (item.allowMultiple !== undefined && item.allowMultiple) && this.enableMultipleSelection && isDrilldown) {
             let products = this.productSelectionLevels.filter((x) => {
                 return x.PRD_MBR_SID == item.id;
             })[0];
-            let product = angular.copy(products);
+            let product = PTE_Common_Util.deepClone(products);
             product['selected'] = item.selected;
             product['parentSelected'] = item.parentSelected;
             this.items = [];
@@ -1219,7 +1211,6 @@ export class ProductSelectorComponent {
                 x['noDrillDown'] = true;
                 return x;
             });
-            //this.searchProcessed = true;
             setTimeout(() => {
                 this.toggleColumnsWhenEmpty(this.gridData, 'prodGrid');
             });
@@ -1431,10 +1422,3 @@ export class ProductSelectorComponent {
             
     }
 }
-
-angular.module("app").directive(
-    "productSelector",
-    downgradeComponent({
-        component: ProductSelectorComponent,
-    })
-);

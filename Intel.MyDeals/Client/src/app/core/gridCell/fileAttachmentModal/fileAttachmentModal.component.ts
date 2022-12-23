@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { logger } from "../../../shared/logger/logger";
+﻿import { logger } from "../../../shared/logger/logger";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, ViewEncapsulation, Inject } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { dealToolsService } from "../dealTools/dealTools.service";
 import { FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
@@ -18,11 +16,7 @@ import { DatePipe } from '@angular/common';
 })
 
 export class fileAttachmentComponent {
-    constructor(private dealToolsSvc: dealToolsService, private loggerSvc: logger, private datePipe: DatePipe, public dialogRef: MatDialogRef<fileAttachmentComponent>, @Inject(MAT_DIALOG_DATA) public data) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private dealToolsSvc: dealToolsService, private loggerSvc: logger, private datePipe: DatePipe, public dialogRef: MatDialogRef<fileAttachmentComponent>, @Inject(MAT_DIALOG_DATA) public data) {}
     public dataItem = this.data.dataItem;
     public C_ADD_ATTACHMENTS: boolean = this.dealToolsSvc.chkDealRules('C_ADD_ATTACHMENTS', (<any>window).usrRole, null, null, null);
     public C_DELETE_ATTACHMENTS: boolean = ((this.dataItem.HAS_TRACKER === "1") ? false : (this.dealToolsSvc.chkDealRules('C_DELETE_ATTACHMENTS', (<any>window).usrRole, null, null, this.dataItem.PS_WF_STG_CD)));
@@ -135,9 +129,3 @@ export class fileAttachmentComponent {
         this.loadAttachments();
     }
 }
-angular.module("app").directive(
-    "fileAttachmentModal",
-    downgradeComponent({
-        component: fileAttachmentComponent,
-    })
-);

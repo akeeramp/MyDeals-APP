@@ -1,5 +1,4 @@
-﻿import * as angular from "angular";
-import { ChangeDetectorRef, Component, Input } from "@angular/core";
+﻿import { ChangeDetectorRef, Component, Input } from "@angular/core";
 import { logger } from "../../shared/logger/logger"; 
 import { dealPopupService } from "./dealPopup.service";
 import { colorDictionary, opGridTemplate } from "../angular.constants";
@@ -82,8 +81,7 @@ export class dealPopupComponent {
     };
 
 
-    constructor(private loggersvc: logger, private dealPopupsvc: dealPopupService, private brdcstservice: broadCastService,
-        private ref: ChangeDetectorRef, private lnavSvc: lnavService) {        
+    constructor(private loggersvc: logger, private dealPopupsvc: dealPopupService, private brdcstservice: broadCastService,private lnavSvc: lnavService) {        
      }
 
 
@@ -117,12 +115,10 @@ export class dealPopupComponent {
 
             if (this.data.OBJ_SET_TYPE_CD !== "ECAP" && this.data.OBJ_SET_TYPE_CD !== "KIT") {
                 this.disableQoute = true; 
-                this.ref.detectChanges();
             }
 
             if (this.data.OBJ_SET_TYPE_CD === "PROGRAM" || this.data.OBJ_SET_TYPE_CD === "ECAP") {
                 this.disableShedule = true;
-                this.ref.detectChanges();
             }
 
             if (!(this.data.WF_STG_CD !== 'Cancelled' && (this.data.WF_STG_CD === 'Active' || this.data.WF_STG_CD === 'Won' || this.data.WF_STG_CD === 'Offer' || this.data.WF_STG_CD === 'Pending' || this.data.HAS_TRACKER === '1'))) {
@@ -340,7 +336,7 @@ export class dealPopupComponent {
     openProducts() {
             const prdIds = [];
             const prods = this.data.PRODUCT_FILTER;
-            angular.forEach(prods, function (value, key) {
+            _.each(prods, function (value, key) {
                 prdIds.push(value);
             });
         const productdata = {

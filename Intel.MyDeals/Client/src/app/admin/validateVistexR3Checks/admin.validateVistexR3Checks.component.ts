@@ -20,10 +20,7 @@ import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 export class ValidateVistexR3ChecksComponent implements OnInit {
 
     constructor(public vldtVstxR3ChkSvc: ValidateVistexR3ChecksService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-        this.allData = this.allData.bind(this);
+       this.allData = this.allData.bind(this);
     }
 
     private accessAllowed = true;
@@ -46,7 +43,6 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
     { OPT_ID: 8, OPT_LBL: "8.  Settlement Partner" },
     { OPT_ID: 9, OPT_LBL: "9.  Send To Vistex" },
     { OPT_ID: 10, OPT_LBL: "10. All Attributes Report" }];
-    //apiList.Request_Type = "VISTEX_DEALS";
 
     private selectedApiID = { OPT_ID: 10, OPT_LBL: "10. All Attributes Report" };
     private DealstoSend = "";
@@ -122,12 +118,6 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
         else {
             this.loadValidateVistexPage();
         }
-    }
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 
     ValidateDealIDs() {

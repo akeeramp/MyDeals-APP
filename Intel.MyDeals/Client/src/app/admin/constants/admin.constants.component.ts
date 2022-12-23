@@ -5,7 +5,6 @@ import { Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { Cnst_Map } from './admin.constants.model';
 import { ThemePalette } from "@angular/material/core";
-//import * as _ from "underscore";
 import {
     GridDataResult,
     DataStateChangeEvent,
@@ -24,13 +23,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
     styleUrls: ['Client/src/app/admin/CustomerVendors/admin.customerVendors.component.css']
 })
 export class ConstantsComponent {
-    constructor(private constantsSvc: constantsService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $(
-            'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
-        ).remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private constantsSvc: constantsService, private loggerSvc: logger) { }
     private isLoading = true;
     private dataSource: any;
     private gridOptions: any;
@@ -245,11 +238,7 @@ export class ConstantsComponent {
     ngOnInit() {
         this.loadConstants()
     }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
+
 }
 angular.module("app").directive(
     "constants",

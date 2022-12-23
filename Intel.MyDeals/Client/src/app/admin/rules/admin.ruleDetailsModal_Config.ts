@@ -1,4 +1,3 @@
-
 export class ruleDetailsModalConfig {
     public static colHeaders = ["Product Name (Only Processor, Lvl 4 or Material Ids Allowed)", "ECAP Floor (US$)"]
     public static columns = [

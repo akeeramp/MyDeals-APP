@@ -11,11 +11,7 @@ import { logger } from "../../../shared/logger/logger";
  })
 export class missingCapCostInfoModalComponent {
     constructor(public dialogRef: MatDialogRef<missingCapCostInfoModalComponent>, private loggerSvc: logger,
-        @Inject(MAT_DIALOG_DATA) public data, private pteService: pricingTableEditorService) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+        @Inject(MAT_DIALOG_DATA) public data, private pteService: pricingTableEditorService) { }
     hasPermissionPrice: boolean;
     public fileName: string; 
     isLoading: boolean;

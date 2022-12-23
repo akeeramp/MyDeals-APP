@@ -5,12 +5,9 @@
 
     core.config(Config);
 
-    Config.$inject = ['toastr', '$httpProvider', 'intcAnalyticsProvider', '$sceDelegateProvider', '$qProvider', '$locationProvider', '$compileProvider'];
+    Config.$inject = ['$httpProvider',  '$sceDelegateProvider', '$qProvider', '$locationProvider', '$compileProvider'];
 
-    function Config(toastr, $httpProvider, intcAnalyticsProvider, $sceDelegateProvider, $qProvider, $locationProvider, $compileProvider) {
-        toastr.options.timeOut = 5000;
-        toastr.options.positionClass = 'toast-bottom-right';
-        $httpProvider.interceptors.push('progressInterceptor');
+    function Config( $httpProvider,  $sceDelegateProvider, $qProvider, $locationProvider, $compileProvider) {
         $locationProvider.hashPrefix('');
         //$compileProvider.preAssignBindingsEnabled(false);
 
@@ -23,18 +20,6 @@
         ]);
 
         $qProvider.errorOnUnhandledRejections(false);
-
-        intcAnalyticsProvider.setDebugging(true);                   //Optional line - for debugging
-        intcAnalyticsProvider.setLocalhostMode(true);               //Optional line - for local dev testing
-        intcAnalyticsProvider.setConfig({
-            config: {
-                appId: 114464,
-                localhostMode: true,                                //Optional
-                //googleAnalyticsId: 'UA-XXXXXX-X',
-                uiEnvironment: '',
-                saUsageUrl: 'https://appusage.intel.com/Service/api/LogUser' //optional
-            }
-        });
 
     }
 

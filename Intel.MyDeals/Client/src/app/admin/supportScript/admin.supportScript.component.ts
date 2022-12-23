@@ -10,14 +10,12 @@ const moment = _moment;
 
 @Component({
     selector: "admin-support-script",
-    templateUrl: "Client/src/app/admin/supportScript/admin.supportScript.component.html"
+    templateUrl: "Client/src/app/admin/supportScript/admin.supportScript.component.html",
+    styles: [`.opUiElement { width: 95% } .dateRangeLabel { font-weight: bold; } .btnExec { padding-left: 25px; } .input-error { border: red 1px solid; }`]
 })
 
 export class adminsupportScriptComponent {
     constructor(private loggersvc: logger, private adminsupportscriptsvc: adminsupportScriptService,private formBuilder: FormBuilder) {
-        //since both kendo makes issue in angular and angularjs dynamically removing angularjs
-        $('link[rel=stylesheet][href="/content/kendo/2017.r1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
         this.intializesupportScriptDataForm();
     }
      
@@ -123,12 +121,6 @@ export class adminsupportScriptComponent {
  
     }
      
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
 }
 angular.module("app").directive(
     "adminSupportScript",

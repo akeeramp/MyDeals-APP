@@ -1,6 +1,5 @@
 ﻿import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
-import 'rxjs/add/operator/toPromise';
 
 @Injectable({
     providedIn: 'root'
@@ -12,8 +11,6 @@ export class adminsupportScriptService {
     
     constructor(private httpClient: HttpClient) { }
     
-
-
     public ExecuteCostGapFiller(startYearQtr, endYearQtr, isnullCheck, prodIds) {
         const headers = { 'content-type': 'application/json' };
         const apiUrl: string = this.apiBaseUrl + "ExecuteCostGapFiller/" + startYearQtr + "/" + endYearQtr + "/" + isnullCheck;

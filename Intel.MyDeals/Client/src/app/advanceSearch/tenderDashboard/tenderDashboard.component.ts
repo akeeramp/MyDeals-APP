@@ -225,9 +225,6 @@ export class TenderDashboardComponent implements OnInit {
         }
         this.setBusy("", "");
         this.deComp.refreshGrid();
-        //if ($scope.rollBackData.length > 0) {
-        //    $scope.rollBackData[0]._behaviors = wip_data[0]._behaviors;
-        //}
     }
     refreshGridData(args) {
         this.setBusy("Loading...", "Please wait whil reloading the data", "info", true);
@@ -254,7 +251,6 @@ export class TenderDashboardComponent implements OnInit {
             } else {
                 searchUrl = searchUrl + "?$top=" + (take - 1);
             }
-            //toastr.clear();// Clear any sticky messages present
             if (this.templates != undefined && this.templates['ModelTemplates'] != undefined && this.templates['ModelTemplates'].WIP_DEAL != undefined) {
                 this.searchTenderDeals(st, en, searchUrl, take);
             }
@@ -294,7 +290,6 @@ export class TenderDashboardComponent implements OnInit {
                 var info = this.maxRecordCount.CNST_DESC != undefined ? this.maxRecordCount.CNST_DESC : "Your search options returned <b>" + response['Count'] + "</b> deals. Refine your search options"
                 info = info.replace("**", response['Count']);
                 this.loggerSvc.info(info,"");
-                //logger.stickyInfo(info);
             }
             for (var w = 0; w < this.searchResults.length; w++) {
                 var item = this.searchResults[w];

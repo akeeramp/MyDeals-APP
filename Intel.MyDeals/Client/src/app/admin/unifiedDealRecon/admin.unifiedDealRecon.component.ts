@@ -1,11 +1,10 @@
 ﻿import * as angular from "angular";
 import { logger } from "../../shared/logger/logger";
 import { unifiedDealReconService } from "./admin.unifiedDealRecon.service";
-import { Component, ViewChild } from "@angular/core";
+import { Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { endCustomerRetailModalComponent } from "../../contract/ptModals/dealEditorModals/endCustomerRetailModal.component";
 import { Unified_Deal_Recon } from "./admin.unifiedDealRecon.model";
-import { ThemePalette } from "@angular/material/core";
 import { MatDialog } from '@angular/material/dialog';
 import { bulkUnifyModalComponent } from "./admin.bulkUnifyModal.component";
 import {
@@ -18,7 +17,7 @@ import {
     State,
     distinct
 } from "@progress/kendo-data-query";
-import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { FormGroup, FormControl } from "@angular/forms";
 
 @Component({
     selector: "admin-unified-dealrecon",
@@ -27,11 +26,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 })
 export class adminUnifiedDealReconComponent {
 
-    constructor(private unifiedDealReconSvc: unifiedDealReconService, private loggerSvc: logger, protected dialog: MatDialog) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private unifiedDealReconSvc: unifiedDealReconService, private loggerSvc: logger, protected dialog: MatDialog) { }
 
     private isLoading = true;
     private gridResult: Array<any>;
@@ -156,7 +151,6 @@ export class adminUnifiedDealReconComponent {
         dialogRef.afterClosed().subscribe((endCustomerData) => {
             if (endCustomerData) {
                 this.isLoading = true;
-                //this.setBusy
                 this.dataItems = {
                     "IS_PRIMED_CUST": endCustomerData.IS_PRIME,
                     "IS_RPL": endCustomerData.IS_RPL,
@@ -259,8 +253,6 @@ export class adminUnifiedDealReconComponent {
     OpenBulkUploadUnifyModal() {
         const dialogRef = this.dialog.open(bulkUnifyModalComponent, {
             height: 'auto',
-            /*   width: '1500px',*/
-            //  data: renameData,
             panelClass: 'unified-bulk-popup'
 
         });

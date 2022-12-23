@@ -10,18 +10,12 @@ import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
-    selector: "adminProductAlias",
+    selector: "admin-product-alias",
     templateUrl: "Client/src/app/admin/productAlias/admin.productAlias.component.html",
     styleUrls: ['Client/src/app/admin/productAlias/admin.productAlias.component.css']
 })
 export class adminProductAliasComponent {
-    constructor(private productAliasSvc: productAliasService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $(
-            'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
-        ).remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private productAliasSvc: productAliasService, private loggerSvc: logger) { }
     @ViewChild("catDropDown") private catDdl;
     @ViewChild("custDropDown") private custDdl;
     @ViewChild("countDropDown") private countDdl;
@@ -272,11 +266,6 @@ export class adminProductAliasComponent {
 
     ngOnInit() {
         this.loadProductAlias();
-    }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 }
 

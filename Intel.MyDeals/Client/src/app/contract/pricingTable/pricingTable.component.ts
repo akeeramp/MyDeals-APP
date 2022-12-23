@@ -19,22 +19,17 @@ export interface contractIds {
     ps_index: number;
     pt_index: number;
     contractData: any;
-   // isVisible: boolean;
 }
 
 @Component({
-    selector: "pricingTable",
+    selector: "pricing-table",
     templateUrl: "Client/src/app/contract/pricingTable/pricingTable.component.html",
     styleUrls: ['Client/src/app/contract/pricingTable/pricingTable.component.css']
 })
 
 export class pricingTableComponent {
     constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: templatesService,
-        private pteService: pricingTableEditorService, private lnavSvc: lnavService) {
-         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-     }
+        private pteService: pricingTableEditorService, private lnavSvc: lnavService) {}
     @ViewChild(pricingTableEditorComponent) private pteComp: pricingTableEditorComponent;
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
     public curPricingStrategy = {};
@@ -181,7 +176,6 @@ export class pricingTableComponent {
         if (!isRedirect) {
             this.searchText = "";
         }
-        //this.curPricingStrategy = ContractUtil.findInArray(this.contractData["PRC_ST"], this.ps_Id)
     }
 
     refreshContract(data: any) {
@@ -354,13 +348,6 @@ export class pricingTableComponent {
       
     }
 
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
-
-  
 }
 angular.module("app").directive(
     "pricingTable",

@@ -1,7 +1,6 @@
 import { Component, Inject, Input, OnInit, ViewEncapsulation } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { process, State } from "@progress/kendo-data-query";
-
 import { logger } from "../../../../shared/logger/logger";
 import { productSelectorService } from '../productselector.service';
 

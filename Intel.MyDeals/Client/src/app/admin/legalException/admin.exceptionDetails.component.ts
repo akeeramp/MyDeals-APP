@@ -1,5 +1,4 @@
-﻿import { logger } from "../../shared/logger/logger";
-import { Component,  Inject,  Input,  ViewChild,  ViewEncapsulation } from "@angular/core";
+﻿import { Component,  Inject,  ViewChild,  ViewEncapsulation } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
@@ -54,12 +53,8 @@ export class adminexceptionDetailsComponent {
     @ViewChild('approvingTooltip', { static: false }) approvingTooltip: NgbTooltip;
     @ViewChild('dateApprovedTooltip', { static: false }) dateApprovedTooltip: NgbTooltip;
     
-    constructor(private loggerSvc: logger, public dialogRef: MatDialogRef<adminexceptionDetailsComponent>,
-        @Inject(MAT_DIALOG_DATA) public data) {
-             $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-         
-    } 
+    constructor( public dialogRef: MatDialogRef<adminexceptionDetailsComponent>,
+        @Inject(MAT_DIALOG_DATA) public data) { } 
 
     public exdetails: any;
     public type: any;

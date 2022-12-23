@@ -1,7 +1,5 @@
-import * as angular from "angular";
 import { Component, Input, ViewEncapsulation } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
@@ -10,14 +8,11 @@ import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { allDealsService } from "./allDeals.service";
 import { SelectEvent } from "@progress/kendo-angular-layout";
 import { lnavService } from "../lnav/lnav.service";
-import { excludeDealGroupModalDialog } from "../managerExcludeGroups/excludeDealGroupModal.component";
 import { MatDialog } from "@angular/material/dialog";
 import { GridUtil } from "../grid.util";
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
 import { dealProductsModalComponent } from "../ptModals/dealProductsModal/dealProductsModal.component";
 import * as _ from 'underscore';
-import { PTE_Config_Util } from "../PTEUtils/PTE_Config_util"
-import { DecimalPipe, CurrencyPipe} from '@angular/common';
 import { PTE_Common_Util } from "../PTEUtils/PTE_Common_util";
 import * as moment from "moment";
 
@@ -30,11 +25,8 @@ import * as moment from "moment";
 
 export class allDealsComponent {
     allColumns: any[];
-    constructor(private allDealsSvc: allDealsService, private loggerSvc: logger, private lnavSvc: lnavService, protected dialog: MatDialog, private decimalPipe: DecimalPipe, private currencyPipe: CurrencyPipe) {
+    constructor(private allDealsSvc: allDealsService, private loggerSvc: logger, private lnavSvc: lnavService, protected dialog: MatDialog) {
         this.allData = this.allData.bind(this);
-        //pls dont remove this even it its not as part of the route this is to handle condtions when we traverse between contract details with in manage tab
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
     @Input() contractData: any;
     @Input() UItemplate: any;
@@ -188,7 +180,7 @@ export class allDealsComponent {
     }
     getFormatedDim(dataItem, field, dim, format) {
         const item = dataItem[field];
-        if (item === undefined || item[dim] === undefined) return ""; //return item; // Used to return "undefined" which would show on the UI.
+        if (item === undefined || item[dim] === undefined) return ""; // Used to return "undefined" which would show on the UI.
         if (format === "currency") {
             const isDataNumber = /^\d + $/.test(item[dim]);
             if (isDataNumber) return item[dim];
@@ -510,9 +502,3 @@ export class allDealsComponent {
 
 }
 
-angular.module("app").directive(
-    "allDeals",
-    downgradeComponent({
-        component: allDealsComponent,
-    })
-);

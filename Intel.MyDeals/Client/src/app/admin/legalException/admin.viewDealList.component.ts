@@ -8,11 +8,7 @@ import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 })
 export class adminviewDealListcomponent {
     constructor(public dialogRef: MatDialogRef<adminviewDealListcomponent>,
-        @Inject(MAT_DIALOG_DATA) public data) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+        @Inject(MAT_DIALOG_DATA) public data) {}
 
     public dealList: string;
     public pctException: string;
@@ -26,7 +22,6 @@ export class adminviewDealListcomponent {
     close() {
         this.dialogRef.close();
     }
-
 
     ngOnInit() {
         this.dealList = this.data.dealList;

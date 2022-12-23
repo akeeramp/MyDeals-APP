@@ -1,14 +1,11 @@
-﻿import * as angular from "angular";
-import { Component, EventEmitter, Input, Output, ViewEncapsulation } from "@angular/core";
+﻿import { Component, EventEmitter, Input, Output, ViewEncapsulation } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { DataStateChangeEvent, CellClickEvent, CellCloseEvent } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
 import { managerPctservice } from "./managerPct.service";
 import { ThemePalette } from "@angular/material/core";
 import { lnavService } from "../lnav/lnav.service";
 import { headerService } from "../../shared/header/header.service";
-import { FormBuilder } from "@angular/forms";
 import { contractManagerservice } from "../contractManager/contractManager.service";
 import * as moment from "moment";
 import { excludeDealGroupModalDialog } from "../managerExcludeGroups/excludeDealGroupModal.component";
@@ -38,10 +35,8 @@ export class managerPctComponent {
     contractId: string;
     lastRun: any;
     refreshPage: boolean;
-    constructor(private loggerSvc: logger,protected dialog: MatDialog, private contractManagerSvc:contractManagerservice,private managerPctSvc: managerPctservice, private lnavSvc: lnavService, private headerSvc: headerService, private formBuilder: FormBuilder) {
-        //pls dont remove this even it its not as part of the route this is to handle condtions when we traverse between contract details with in manage tab
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
+    constructor(private loggerSvc: logger,protected dialog: MatDialog, private contractManagerSvc:contractManagerservice,private managerPctSvc: managerPctservice, private lnavSvc: lnavService, private headerSvc: headerService) {
+       
     }
     //public view: GridDataResult;
     public isLoading: boolean;
@@ -260,13 +255,11 @@ export class managerPctComponent {
 
             // Get local time in UTC
             var currentTime = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
-            // currentTime.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
             var localTime = moment(currentTime).format("MM/DD/YY HH:mm:ss");
             // Get server time from a PST time string... manually convert it to UTC
             var lastruntime = moment(this.lastRun);
 
             var serverPstTime = lastruntime.format("MM/DD/YY HH:mm:ss");
-            //var serverPstTime = moment(this.lastRun).add(moment.duration("08:00:00")).format('YYYY-MM-DD HH:mm:ss');
 
             var timeDiff = moment.duration(moment(serverPstTime).diff(moment(localTime)));
             var hh = Math.abs(timeDiff.asHours());
@@ -556,12 +549,7 @@ export class managerPctComponent {
     }
     goToNavManagePCT(DC_PARENT_ID, DC_ID, ptDC_ID, DEAL_ID) {
         window.open(`/Contract#/manager/WIP/${DC_PARENT_ID}/${DC_ID}/${ptDC_ID}/${DEAL_ID}`, '_blank')
-
     }
-   }
-angular.module("app").directive(
-    "managerPct",
-    downgradeComponent({
-        component: managerPctComponent,
-    })
-);
+
+
+}

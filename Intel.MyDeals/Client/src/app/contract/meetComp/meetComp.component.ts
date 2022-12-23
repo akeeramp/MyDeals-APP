@@ -37,11 +37,7 @@ export class meetCompContractComponent implements OnInit {
         private meetCompSvc: meetCompContractService,
         private formBuilder: FormBuilder,
         private dialog: MatDialog,
-        private pricingTableSvc: pricingTableservice) {
-        //pls dont remove this even it its not as part of the route this is to handle condtions when we traverse between contract details with in manage tab
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+        private pricingTableSvc: pricingTableservice) {}
 
     public spinnerMessageHeader = "";
     public isLoading = false;
@@ -461,10 +457,6 @@ export class meetCompContractComponent implements OnInit {
             this.loggerSvc.error("Unable to get GetMeetCompProductDetails data", err, err.statusText);
             this.isLoading = false;
         });
-        //Commenting as "isadhoc" property might need to be revisited, in current angular code we are having it's value as 1
-        /*if (response.length == 0 && this.isAdhoc == 1) {
-            this.loggerSvc.error("Meet comp is not applicable for the Products selected in the Tender Table editor", "Alert");
-        }*/
         if (response.length > 0) {
             response.forEach((obj) => {
                 obj.IS_SELECTED = false;
@@ -941,7 +933,7 @@ export class meetCompContractComponent implements OnInit {
             const mm = Math.abs(timeDiff.asMinutes());
             const ss = Math.abs(timeDiff.asSeconds());
             const zone = new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];
-            this.lastMetCompRunLocalTime = moment(new Date()).subtract(-timeDiff).format("MM/DD/YYYY hh:mm A z") + "(" + zone + ")"; //lastruntime.format("MM/DD/YY HH:mm:ss");
+            this.lastMetCompRunLocalTime = moment(new Date()).subtract(-timeDiff).format("MM/DD/YYYY hh:mm A z") + "(" + zone + ")";
             dsplNum = hh;
             dsplMsg = " hours ago";
             const childForceRun = forceRun != undefined ? forceRun : true;

@@ -21,8 +21,6 @@ export class tenderMCTPCTModalComponent {
     private selectedTab: number = 0;
     private modifieddata: any;
     loadAllContractDetails() {
-        //this.isLoading = true;
-        //this.setBusy("Loading...", "Loading data please wait", "Info", true);
         this.pricingTableSvc.readContract(this.c_Id).subscribe((response: Array<any>) => {
             if (response && response.length > 0) {
                 this.contractData = response[0];
@@ -31,9 +29,7 @@ export class tenderMCTPCTModalComponent {
             else {
                 this.loggerSvc.error('No result found.', 'Error');
             }
-            //this.isLoading = false;
         }, (error) => {
-           // this.isLoading = false;
             this.loggerSvc.error('loadAllContractDetails::readContract:: service', error);
         })
 

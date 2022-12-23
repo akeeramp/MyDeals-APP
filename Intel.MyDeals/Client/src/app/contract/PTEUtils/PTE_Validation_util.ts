@@ -1,11 +1,9 @@
 import * as _ from 'underscore';
 import * as moment from "moment";
 import { lnavUtil } from "../lnav.util";
-import { PTEUtil } from '../PTEUtils/PTE.util';
 import { PTE_Load_Util } from './PTE_Load_util';
 import { PTE_Config_Util } from './PTE_Config_util';
 import { DE_Validation_Util } from "../DEUtils/DE_Validation_util"
-import { PTE_Save_Util } from './PTE_Save_util';
 import { DE_Save_Util } from '../DEUtils/DE_Save_util';
 import { PTE_Helper_Util } from './PTE_Helper_util';
 import { PTE_Common_Util } from './PTE_Common_util';
@@ -734,8 +732,7 @@ export class PTE_Validation_Util {
         var v1 = filterData.map((val) => val[key]).filter((value, index, self) => self.indexOf(value) === index);
         var hasNotNull = v1.some(function (el) { return el !== null && el != ""; });
 
-        if (mode.indexOf("notequal") >= 0) { // Returns -1 if not in list
-            //if(v1.length > 1 && v1[0] !== "" && v1[0] != null) {  
+        if (mode.indexOf("notequal") >= 0) { // Returns -1 if not in list 
             if (v1.length > 1 && hasNotNull) {
                 _.each(data, (item) => {
                     if (!item._behaviors) item._behaviors = {};
@@ -811,8 +808,6 @@ export class PTE_Validation_Util {
                     item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalzero', curPricingTable);
                 });
             }
-
-            //else if (retOAVCond && retOADCond) { But on a line by line bases to capture both values filled out, not entire table both columns filled out.
             var testMaxAmtValues = [];
             var testMaxAmtCount = 0;
             var testMaxVolValues = [];
@@ -834,8 +829,7 @@ export class PTE_Validation_Util {
                         item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalemptyboth', curPricingTable);
                     }
                 }
-                if (isFlatRate == true) { // Check single column for Vol Tier - must have values
-                    //if (item.REBATE_OA_MAX_AMT !== undefined && item.REBATE_OA_MAX_AMT === null || item.REBATE_OA_MAX_AMT === "") {                
+                if (isFlatRate == true) { // Check single column for Vol Tier - must have values              
                     if ((item.REBATE_OA_MAX_AMT !== undefined && item.REBATE_OA_MAX_AMT === null || item.REBATE_OA_MAX_AMT === "") &&
                         (item.REBATE_OA_MAX_VOL !== undefined && item.REBATE_OA_MAX_VOL === null || item.REBATE_OA_MAX_VOL == "")) {
                         item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalboth', curPricingTable);
@@ -859,7 +853,6 @@ export class PTE_Validation_Util {
                     rebateMaxAmt = item.REBATE_OA_MAX_AMT
                 }
                 // Check for all values equal (tiers undefined is an ECAP Hybrid, tiers = 1 is a flex or VT Hybrid)
-                //if (item.REBATE_OA_MAX_AMT !== null && (item.NUM_OF_TIERS === undefined || item.NUM_OF_TIERS.toString() === '1')) {
                 if (rebateMaxAmt !== null && (item.NUM_OF_TIERS === undefined || (item.NUM_OF_TIERS.toString() === '1') || item.FLEX_ROW_TYPE === 'Accrual')) {
                     testMaxAmtCount++;
                     if (rebateMaxAmt !== undefined && testMaxAmtValues.indexOf(rebateMaxAmt.toString()) < 0) {
@@ -883,7 +876,6 @@ export class PTE_Validation_Util {
                 }
             });
             // Check if this is a flex, and if it is, only accrual single tier rows count..
-            //var elementCount = isFlexAccrual != 1 ? data.length : data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual' && val.NUM_OF_TIERS.toString() === '1').length;
             var elementCount = isFlexAccrual != 1 ? data.length : data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual').length;
             if (testMaxAmtValues.length > 1 || (testMaxAmtCount > 0 && testMaxAmtCount != elementCount)) {
                 _.each(data, (item) => {
@@ -909,7 +901,6 @@ export class PTE_Validation_Util {
             data = this.clearValidation(data, 'FLEX_ROW_TYPE');
 
             var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
-            //var accrualSingleTierEntries = data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual' && val.NUM_OF_TIERS.toString() === '1');
             var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
             restrictGroupFlexOverlap = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Consumption");
 
@@ -958,7 +949,6 @@ export class PTE_Validation_Util {
                 data = this.clearValidation(data, 'END_CUSTOMER_RETAIL', curPricingTable);
                 this.itemValidationBlock(data, "END_CUSTOMER_RETAIL", ["notequal"], curPricingTable);
             }
-            //var valTestX = data.map((val) => val.REBATE_OA_MAX_AMT).filter((value, index, self) => self.indexOf(value) === index) // null valus = not filled out
         }
         return data;
     }

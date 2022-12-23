@@ -47,3 +47,10 @@ export class dealEditorHeaderTemplateComponent implements OnInit{
         this.is_Deal_Tools_Checked = this.checkAllSelected();
     }
 }
+
+angular.module("app").directive(
+    "dealEditorHeader",
+    downgradeComponent({
+        component: dealEditorHeaderTemplateComponent,
+    })
+);

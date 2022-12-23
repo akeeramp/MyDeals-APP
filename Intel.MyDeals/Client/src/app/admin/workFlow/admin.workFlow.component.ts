@@ -19,19 +19,13 @@ import {
 } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 @Component({
-    selector: "workFlow",
+    selector: "admin-work-flow",
     templateUrl: "Client/src/app/admin/workFlow/admin.workFlow.component.html",
     styleUrls: ['Client/src/app/admin/workFlow/admin.workFlow.component.css']
 })
 
 export class adminWorkFlowComponent {
-    constructor(private workflowSvc: workflowService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $(
-            'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
-        ).remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private workflowSvc: workflowService, private loggerSvc: logger) { }
 
     @ViewChild('ROLE_TIER_NM_DdlTooltip', { static: false }) ROLE_TIER_NM_DdlTooltip: NgbTooltip;
     @ViewChild('OBJ_TYPE_DdlTooltip', { static: false }) OBJ_TYPE_DdlTooltip: NgbTooltip;
@@ -313,12 +307,6 @@ export class adminWorkFlowComponent {
 
     ngOnInit() {
         this.loadWorkflow();
-    }
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 }
 

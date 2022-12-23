@@ -1,20 +1,15 @@
-﻿/* eslint-disable @typescript-eslint/no-inferrable-types */
-/* eslint-disable prefer-const */
-import { Component, Input, OnChanges, Output, EventEmitter } from '@angular/core';
+﻿import { Component, Input, Output, EventEmitter } from '@angular/core';
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
 import * as _ from 'underscore';
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
-
 import { logger } from '../../shared/logger/logger';
 import { pricingTableEditorService } from './pricingTableEditor.service'
-import { templatesService } from '../../shared/services/templates.service';
 import { lnavService } from '../lnav/lnav.service';
 import { productSelectorService } from '../../shared/services/productSelector.service';
 import { flexoverLappingcheckDealService } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.service'
 import { contractDetailsService } from "../contractDetails/contractDetails.service"
-
 import { PRC_TBL_Model_Attributes, PRC_TBL_Model_Column, PRC_TBL_Model_Field, sheetObj, ProdCorrectObj } from './handsontable.interface';
 import { PTEUtil } from '../PTEUtils/PTE.util';
 import { ProductSelectorComponent } from '../ptModals/productSelector/productselector.component';
@@ -42,8 +37,6 @@ import { distinct } from '@progress/kendo-data-query';
 export class pricingTableEditorComponent {
 
     constructor(private pteService: pricingTableEditorService,
-            private templateService: templatesService,
-            private pricingTableService: pricingTableEditorService,
             private productSelectorService: productSelectorService,
             private loggerService: logger,
             private lnavService: lnavService,
@@ -98,7 +91,6 @@ export class pricingTableEditorComponent {
             async openPopUp() {
                 VM.curRow = [];
                 const selVal = this.hot.getDataAtCell(this.selRow, this.selCol);
-                // let modalComponent: any = null, name: string = '', height: string = "250px", width: string = '650px', data = {}, panelClass: string = "";
                 let modalComponent: any = null,
                     name: string = '',
                     height: string = '',
@@ -108,7 +100,6 @@ export class pricingTableEditorComponent {
                 if (this.field && this.field == 'PTR_USER_PRD') {
                     modalComponent = ProductSelectorComponent;
                     name = "Product Selector";
-                    // height = "80vh"; // ISSUE: Adds a blank block at the bottom of the grid taking 20% of the view
                     width = "5500px";
                     panelClass = "product-selector-dialog";
                     let obj = {};
@@ -959,7 +950,6 @@ export class pricingTableEditorComponent {
                 this.setBusy("", "", "", false);
             }
             else {
-                //this.generateHandsonTable(finalPTR);
                 //it will update cashObj for non-deleted records
                 if (finalPTR && finalPTR.length > 0) {
                     var cashObj = finalPTR.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
@@ -1145,7 +1135,6 @@ export class pricingTableEditorComponent {
                 // Do not update the cell value if exclude product is invalid/NULL
                 if (this.curPricingTable.OBJ_SET_TYPE_CD != 'KIT' && this.curPricingTable.OBJ_SET_TYPE_CD != 'ECAP'
                     && data.PRD_EXCLDS != null && data.PRD_EXCLDS != "") {
-                    //this.hotTable.setDataAtRowProp(idx, 'PRD_EXCLDS', data.PRD_EXCLDS, 'no-edit');
                     if (data && data._behaviors && data._behaviors.isError && data.PTR_SYS_INVLD_PRD == "") {
                         if (data._behaviors.isError['PRD_EXCLDS'] == false) {
                             this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'success-product');
@@ -1174,7 +1163,6 @@ export class pricingTableEditorComponent {
                 }
             }
             else if (_.contains(prdValResult, '2') && action != 'onOpenSelector') {
-                console.log("_.contains(prdValResult, '2') and not onOpenSelector");
                 await this.openProductCorrector(translateResult['Data'], action, deleteDCIDs);
                 if (curRow) {
                     curRow[0].isOpenCorrector = true;
@@ -1214,8 +1202,6 @@ export class pricingTableEditorComponent {
             if (action != 'onSave') {
                 this.validationMessage = true;
             }
-            //this.loggerService.error("validateOnlyProducts:failed","Translate API failure");
-            //this.isLoading = false;
             this.isLoading = false;
             return true;
         }
@@ -1228,8 +1214,6 @@ export class pricingTableEditorComponent {
         let hasProductDependencyErr = false;
         hasProductDependencyErr = PTEUtil.hasProductDependency(currentPricingTableRowData, this.productValidationDependencies, hasProductDependencyErr);
         if (hasProductDependencyErr) {
-            // Sync to show errors
-            //root.syncCellValidationsOnAllRows(currentPricingTableRowData);
             // Tell user to fix errors
             this.isLoading = true;
             this.setBusy("Not saved. Please fix errors.", "Please fix the errors so we can properly validate your products", "Error", true);
@@ -1264,9 +1248,6 @@ export class pricingTableEditorComponent {
         // Products that needs server side attention
         if (translationInputToSend.length > 0) {
             // Validate products
-            // Note: When changing the message here, also change the condition in $scope.saveEntireContractBase method in contract.controller.js
-            // root.setBusy("Validating your data...", "Please wait as we find your products!", "Info", true);
-            // var pcMt = new perfCacheBlock("Translate Products (DB not logged)", "MT");
             this.isLoading = true;
             this.setBusy("Validating your data...", "Please wait while we validate your information!", "Info", true);
             let resultdata = await this.productSelectorService.TranslateProducts(translationInputToSend, this.contractData.CUST_MBR_SID, this.curPricingTable.OBJ_SET_TYPE_CD, this.contractData.DC_ID, this.contractData.IS_TENDER) //Once the database is fixed remove the hard coded geo_mbr_sid
@@ -1290,7 +1271,6 @@ export class pricingTableEditorComponent {
             panelClass: string = "";
         modalComponent = ProductSelectorComponent;
         name = "Product Selector";
-        // height = "80vh"; // ISSUE: Adds a blank block at the bottom of the grid taking 20% of the view
         width = "5500px";
         panelClass = "product-selector-dialog";
         let VM = this;

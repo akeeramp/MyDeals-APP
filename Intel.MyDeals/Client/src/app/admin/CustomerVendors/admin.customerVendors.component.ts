@@ -19,18 +19,12 @@ import {
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
-    selector: "adminVendorsCustomer",
+    selector: "admin-vendors-customer",
     templateUrl: "Client/src/app/admin/CustomerVendors/admin.customerVendors.component.html",
     styleUrls: ['Client/src/app/admin/CustomerVendors/admin.customerVendors.component.css']
 })
 export class adminCustomerVendorsComponent {
-    constructor(private customerVendSvc: customerVendorService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $(
-            'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
-        ).remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private customerVendSvc: customerVendorService, private loggerSvc: logger) { }
     @ViewChild("catDropDown") private catDdl;
     @ViewChild("custDropDown") private custDdl;
     @ViewChild("countDropDown") private countDdl;
@@ -373,11 +367,6 @@ export class adminCustomerVendorsComponent {
         this.getCustomersDataSource();
         this.getVendorsInfoDropdown();
         this.loadCustomerVendors();
-    }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 }
 

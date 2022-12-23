@@ -5,11 +5,11 @@
 <div class="container-fluid">
     <div class="row" style="margin-left: 5px">
         <div id="sidebar" class="col-md-3">
-            <div *ngIf="!isDropdownsLoaded">
+            <div *ngIf="!isDropdownsLoaded" style="margin-top: 30px; margin-left: 30px;">
                 Loading dropdown data...
             </div>
             <!-- SIDE BAR -->
-            <div class="secEngine_sidebar" style="margin-top: 9px; width: 100%;">
+            <div class="secEngine_sidebar" *ngIf="isDropdownsLoaded" style="margin-top: 28px; width: 100%;">
                 <div id="secEngine_filters" style="height: calc(100vh - 175px)">
                     <div class="lbl" style="margin-top: 9px;">
                         <h5 style="font-weight: 400 !important; font-size: 17px !important;">
@@ -126,7 +126,7 @@
                     </div>
 
                     <div *ngIf="!isShowMainContent" style=" margin-left: 30px;">
-                        <h3 style=" margin-top: 50px;">Please select grid filters on the left sidebar.</h3>
+                        <h3 style=" margin-top: 47px;">Please select grid filters on the left sidebar.</h3>
                         <div><i>Detailed Instructions:</i></div>
                         <ol>
                             <li>On the left-hand side menu, select the ObjType, Roles, Stages and ObjSet types you want to view. Note that leaving the select blank will default to "ALL".</li>
@@ -140,7 +140,7 @@
                 <div *ngIf="isShowMainContent && !isGridLoading">
                     <div class="row">
                         <div class="col-md-6">
-                            <h5><span style="padding-left: 20px; font-weight: 700;">Action:</span><span style="padding-left: 10px; font-weight: 400;">{{currentDisplayAction}}</span> </h5>
+                            <h5><span style="padding-left: 45px; font-weight: 700;">Action:</span><span style="padding-left: 10px; font-weight: 400;">{{currentDisplayAction}}</span> </h5>
                         </div>
                         <div class="fr col-md-6" style="font-size: 10px; padding-left: 136px;">
                             <div class="liner-secure-engine">
@@ -183,7 +183,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="col-md-12 kendo-grid-buttons">
-                                <kendo-grid [data]="gridResult" [resizable]="true" [groupable]="false" style="height: calc(100vh - 200px);" class="security-engine-tables">
+                                <kendo-grid [data]="gridResult" [resizable]="true" [groupable]="false" style="height: calc(100vh - 175px);" class="security-engine-tables">
                                     <ng-template kendoGridToolbarTemplate>
                                         <button (click)="save()" class="btn btn-primary ">
                                             Save

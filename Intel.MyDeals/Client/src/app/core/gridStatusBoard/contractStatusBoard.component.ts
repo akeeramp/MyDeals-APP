@@ -3,7 +3,6 @@ import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/ke
 import { process, State } from "@progress/kendo-data-query";
 import { ContractStatusBoardService } from "./contractStatusBoard.service";
 import { logger } from "../../shared/logger/logger";
-import { DynamicEnablementService } from "../../shared/services/dynamicEnablement.service";
 
 @Component({
     selector: "contract-status-board-angular",
@@ -58,7 +57,7 @@ export class contractStatusBoardComponent implements OnInit {
             value: 100,
         },
     ];
-    constructor(private contractDetailsService: ContractStatusBoardService,private loggerSvc:logger,private dynamicEnablementService: DynamicEnablementService) {
+    constructor(private contractDetailsService: ContractStatusBoardService,private loggerSvc:logger) {
     }
 
     goToContract(contractId:any){

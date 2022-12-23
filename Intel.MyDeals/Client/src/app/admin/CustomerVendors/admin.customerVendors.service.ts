@@ -3,7 +3,6 @@ import {Injectable} from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import {downgradeInjectable} from '@angular/upgrade/static';
 import { Observable } from "rxjs";
-import 'rxjs/add/operator/toPromise';
 
 @Injectable({
     providedIn: 'root'
@@ -40,6 +39,6 @@ export class customerVendorService {
     
 }
 
-    angular
-    .module('app')
-    .factory('customerVendorsService', downgradeInjectable(customerVendorService));
+angular
+.module('app')
+.factory('customerVendorsService', downgradeInjectable(customerVendorService));

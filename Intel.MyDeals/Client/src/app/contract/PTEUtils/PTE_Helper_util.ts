@@ -1,5 +1,4 @@
 import * as _ from 'underscore';
-import { PTEUtil } from "./PTE.util";
 import { PTE_Load_Util } from "./PTE_Load_util";
 import { PTE_Config_Util } from "./PTE_Config_util";
 
@@ -54,8 +53,6 @@ export class PTE_Helper_Util {
     static sanitizeString(stringToSanitize, lineBreakReplacementCharacter) {
         var lineBreakMatches = stringToSanitize.match(/\r?\n|\r/g);
         if (lineBreakReplacementCharacter == null) { lineBreakReplacementCharacter = ""; }
-
-        //stringToSanitize = stringToSanitize.replace(/[^\x00-\x7F]/g, ""); // NOTE: Remove non-ASCII characters (also takes out hidden characters that causes js dictionary breaking)
         stringToSanitize = stringToSanitize.replace(/\r?\n\r?\n?|\n|\r/g, lineBreakReplacementCharacter) // replace all new line characters with commas
 
         return stringToSanitize;
@@ -155,34 +152,6 @@ export class PTE_Helper_Util {
 
     static resetDirty() {
         var field = "isDirty";
-        //var mainData = $scope.mainGridOptions.dataSource.data();
-
-        //if ($scope.dataGrid !== undefined) {
-        //	for (var i = 0; i < $scope.dataGrid.length; i++) {
-        //		if (mainData[i] !== undefined) mainData[i]._dirty = false;
-        //		angular.forEach(mainData[i],
-        //            function (value, key) {
-        //            	var item = mainData[i];
-        //            	if (item._behaviors[field] === undefined) item._behaviors[field] = {};
-        //            	item._behaviors[field][key] = false;
-
-        //            	//_MultiDim
-        //            	if (!util.isNull(root.gridDetailsDs[item["DC_ID"]])) {
-        //            		var detailData = root.gridDetailsDs[item["DC_ID"]].data();
-        //            		for (var ii = 0; ii < item._MultiDim.length; ii++) {
-        //            			detailData[ii]._dirty = false;
-        //            			angular.forEach(detailData[ii],
-        //                            function (v1, k1) {
-        //                            	var item2 = detailData[ii];
-        //                            	if (item2._behaviors === undefined || item2._behaviors === null) item2._behaviors = {};
-        //                            	if (item2._behaviors[field] === undefined || item2._behaviors[field] === null) item2._behaviors[field] = {};
-        //                            	item2._behaviors[field][k1] = false;
-        //                            });
-        //            		}
-        //            	}
-        //            });
-        //	}
-        //}
     }
 
     static GetFirstEdiatableBeforeProductCol(firstEditableColBeforeProduct, editableColsBeforeProduct, rootColToLetter) {

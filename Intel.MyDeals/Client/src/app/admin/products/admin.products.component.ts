@@ -9,17 +9,13 @@ import { ThemePalette } from '@angular/material/core';
 
 
 @Component({
-    selector: "adminProducts",
+    selector: "admin-products",
     templateUrl: "Client/src/app/admin/products/admin.products.component.html",
     styleUrls: ["Client/src/app/admin/products/admin.products.component.css"]
 })
 
 export class adminProductsComponent {
-    constructor(private productsSvc: productsService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private productsSvc: productsService, private loggerSvc: logger) { }
     private isLoading = true;
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
@@ -96,12 +92,6 @@ export class adminProductsComponent {
 
     ngOnInit() {
         this.loadProducts();
-    }
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 
 }

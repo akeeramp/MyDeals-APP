@@ -41,7 +41,6 @@
 <div *ngIf="in_Field_Name == 'TRKR_NBR'" [innerHTML]="uiDimTrkrControlWrapper(in_DataItem)|sanitizeHtml" class="dealCell"></div>
 <div *ngIf="in_Field_Name == 'START_DT' || in_Field_Name == 'LAST_REDEAL_DT'" class="dealCell" [innerHTML]="uiStartDateWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" style="top:45% !important"></div>
 <div *ngIf="in_Field_Name == 'END_DT' || in_Field_Name == 'OEM_PLTFRM_LNCH_DT' || in_Field_Name == 'OEM_PLTFRM_EOL_DT'" class="dealCell" [innerHTML]="uiControlEndDateWrapper(in_DataItem, in_Field_Name)|sanitizeHtml"></div>
-<!--<div *ngIf="in_Field_Name == 'COMP_SKU'" class="uiControlDiv isReadOnlyCell vert-center" [innerHTML]="getFormatedDim(in_DataItem)|sanitizeHtml"></div>-->
 <div *ngIf="in_Field_Name == 'COMP_SKU'" class="uiControlDiv isReadOnlyCell">
     <div class="dealCell">
         <div class="vert-center" classesreqd [innerHTML]="getFormatedDim(in_DataItem)|sanitizeHtml"></div>
@@ -125,8 +124,3 @@
      && in_Field_Name !== 'YCS2_INFO' && in_Field_Name !== 'MISSING_CAP_COST_INFO' && in_Field_Name !== 'tender_actions'" [innerHTML]="in_Template|sanitizeHtml"
     class="uiControlDiv wrap readOnlyCell dealCell">
 </div>
-<!--Code commented for twc3167-1939-->
-<!--<div *ngIf="in_Field_Name == 'CAP'" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'CAP_STRT_DT'" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'CAP_END_DT'" class="dealCell"></div>-->
-<!--rest of the other columns needs to be added-->

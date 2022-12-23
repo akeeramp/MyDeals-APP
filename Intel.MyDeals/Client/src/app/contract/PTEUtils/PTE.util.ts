@@ -1,4 +1,3 @@
-/* eslint-disable prefer-const */
 import * as _ from 'underscore';
 import { logger } from '../../shared/logger/logger';
 import { PRC_TBL_Model_Attributes, PRC_TBL_Model_Column, PRC_TBL_Model_Field } from '../pricingTableEditor/handsontable.interface';
@@ -18,10 +17,6 @@ export class PTEUtil {
         showWeekNumber: true,
         numberOfMonths: 1,
         licenseKey: '8cab5-12f1d-9a900-04238-a4819',
-        // disableDayFn(date) {
-        //   // Disable Sunday and Saturday
-        //   return date.getDay() === 0 || date.getDay() === 6;
-        // }
     };
    
     static generateHandsontableColumn(isTenderContract:any,pteService: pricingTableEditorService,
@@ -98,10 +93,7 @@ export class PTEUtil {
                 currentColumnConfig.type = 'text';
             }
         }
-        /* Is Required & Nullable -- this is behaviour of handsone but as part of our validate process we check this */
-        // if (item.isRequired || !templateColumnFields[item.field].nullable) {
-        //     currentColumnConfig.allowEmpty = false;
-        // }
+        
         /* Sorting */
         if (item.sortable) {
             currentColumnConfig.columnSorting = {
@@ -334,7 +326,6 @@ export class PTEUtil {
                         PAYOUT_BASED_ON: obj.PAYOUT_BASED_ON,
                         CUST_MBR_SID: contractData.CUST_MBR_SID,
                         IS_HYBRID_PRC_STRAT: curPricingTable.IS_HYBRID_PRC_STRAT,
-                        //SendToTranslation: (dealType == "DENSITY") || !(obj.PTR_SYS_INVLD_PRD != null && obj.PTR_SYS_INVLD_PRD != "")
                         SendToTranslation: (dealType == "DENSITY" || isExcludePrdChange || !(obj.PTR_SYS_INVLD_PRD != null && obj.PTR_SYS_INVLD_PRD != ""))
                     }
                     translationInput.push(object);

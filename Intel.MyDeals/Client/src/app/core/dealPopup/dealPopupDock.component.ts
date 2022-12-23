@@ -20,11 +20,7 @@ export class dealPopupDockComponent  {
     maxRecent: any;
     isEnabled: any; 
     
-    constructor(private brdcstservice: broadCastService) {
-        $('link[rel=stylesheet][href="/content/kendo/2017.r1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-          
-    }
+    constructor(private brdcstservice: broadCastService) { }
      
     intializedealpopupDock() { 
         this.brdcstservice.on("QuickDealToggleDeal").subscribe(event => {

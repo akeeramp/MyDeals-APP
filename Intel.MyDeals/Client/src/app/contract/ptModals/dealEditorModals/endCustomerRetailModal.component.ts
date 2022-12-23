@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { logger } from "../../../shared/logger/logger";
+﻿import { logger } from "../../../shared/logger/logger";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, ViewEncapsulation, Inject } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { pricingTableEditorService } from "../../pricingTableEditor/pricingTableEditor.service"
 import * as _ from 'underscore';
 
@@ -613,11 +611,6 @@ export class endCustomerRetailModalComponent {
             this.endCustData.END_CUST_OBJ = JSON.stringify(this.END_CUST_OBJ);
             this.dialogRef.close(this.endCustData);
         }
-        /*if (this.isAdmin == true && this.endCustData.IS_PRIME) {
-            this.message = "Deal End Customer Unified successfully";
-        } else {
-            this.message = "Selected Customer is not a Unified Customer";
-        }*/
     }
 
     getPrimeCustNames(item) {
@@ -725,10 +718,3 @@ export class endCustomerRetailModalComponent {
         this.isLoading = true;
     }
 }
-
-angular
-    .module("app")
-    .directive(
-        "endCustomerRetail",
-        downgradeComponent({ component: endCustomerRetailModalComponent })
-    );

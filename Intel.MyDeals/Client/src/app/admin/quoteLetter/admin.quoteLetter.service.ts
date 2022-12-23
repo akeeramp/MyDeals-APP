@@ -1,8 +1,6 @@
 ﻿import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
-import 'rxjs/add/operator/toPromise';
-import { logger } from "../../shared/logger/logger";
 
 @Injectable({
     providedIn: 'root'
@@ -11,7 +9,7 @@ import { logger } from "../../shared/logger/logger";
 export class quoteLetterService {
     public apiBaseUrl = "api/QuoteLetter/";
 
-    constructor(private httpClient: HttpClient, private loggerSvc: logger) {
+    constructor(private httpClient: HttpClient) {
 
     }
 

@@ -1,5 +1,4 @@
 ﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
 import { dealTypesService } from "./admin.dealTypes.service";
 import { Component } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
@@ -9,16 +8,12 @@ import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup } from "@angular/forms";
 
 @Component({
-    selector: "adminDealTypes",
+    selector: "admin-deal-types",
     templateUrl: "Client/src/app/admin/dealTypes/admin.dealTypes.component.html",
     styleUrls: ['Client/src/app/admin/dealTypes/admin.dealTypes.component.css']
 })
 export class adminDealTypesComponent {
-    constructor(private dealTypesSvc: dealTypesService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private dealTypesSvc: dealTypesService) { }
     private isLoading = true;
     private errorMsg = "";
     private dataSource;
@@ -115,11 +110,6 @@ export class adminDealTypesComponent {
         this.loadDealTypes();
     }
 
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
 }
 
 angular

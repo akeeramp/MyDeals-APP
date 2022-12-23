@@ -3,9 +3,7 @@ import { logger } from "../../shared/logger/logger";
 import { admintestTendersService } from "./admin.testTenders.service";
 import { Component, ViewEncapsulation } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
-
 import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms";
-
 
 @Component({
     selector: "admin-test-tenders",
@@ -14,11 +12,7 @@ import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms"
     encapsulation: ViewEncapsulation.None
 })
 export class adminTestTendersComponent {
-    constructor(private loggerSvc: logger, private admintestTendersService: admintestTendersService, private formBuilder: FormBuilder,) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private loggerSvc: logger, private admintestTendersService: admintestTendersService, private formBuilder: FormBuilder,) {}
 
 
     private admintestTendersForm: FormGroup;
@@ -94,7 +88,6 @@ export class adminTestTendersComponent {
                 }
             }
         }
-        //  var jsonDataPacket = angular.toJson(JsonObj);
         var jsonDataPacket = JSON.stringify(JsonObj);
         this.admintestTendersService.ExecutePostTest(jsonDataPacket).subscribe(res => {
 
@@ -122,12 +115,6 @@ export class adminTestTendersComponent {
 
         });
        
-    }
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 }
 

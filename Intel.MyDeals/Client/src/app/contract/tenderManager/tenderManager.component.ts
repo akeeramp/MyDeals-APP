@@ -11,7 +11,7 @@ import { pricingTableEditorComponent } from '../../contract/pricingTableEditor/p
 import * as _ from "underscore";
 
 @Component({
-    selector: "tenderManager",
+    selector: "tender-manager",
     templateUrl: "Client/src/app/contract/tenderManager/tenderManager.component.html",
     styleUrls: ["Client/src/app/contract/tenderManager/tenderManager.component.css"]
 })
@@ -19,11 +19,7 @@ import * as _ from "underscore";
 export class tenderManagerComponent {
     @ViewChild(pricingTableEditorComponent) private pteComp: pricingTableEditorComponent;
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
-    constructor(private pteService: pricingTableEditorService, private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private contractDetailsSvc: contractDetailsService, private templatesSvc: templatesService) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private pteService: pricingTableEditorService, private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private contractDetailsSvc: contractDetailsService, private templatesSvc: templatesService) {}
     public c_Id: any = '';
     public ps_Id: any = '';
     public pt_Id: any = '';
@@ -385,11 +381,6 @@ export class tenderManagerComponent {
         }
     }
 
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
 }
 
 angular.module("app").directive(

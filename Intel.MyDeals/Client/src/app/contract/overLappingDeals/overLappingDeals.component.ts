@@ -1,7 +1,5 @@
-import * as angular from "angular";
 import { Component, Input } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
@@ -19,9 +17,6 @@ import { MatDialog } from "@angular/material/dialog";
 export class overLappingDealsComponent {
     S_ID: any;
     constructor(private overLappingDealsSvc: overLappingDealsService, protected dialog: MatDialog, private loggerSvc: logger) {
-        //pls dont remove this even it its not as part of the route this is to handle condtions when we traverse between contract details with in manage tab
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
     }
     @Input() contractData: any;
     @Input() UItemplate: any;
@@ -67,8 +62,6 @@ export class overLappingDealsComponent {
         let hasResolved = false;
         let cnt = 0;
         let isSelected = false;
-        // data.forEach((element) => {
-        // });
     }
     distinctPrimitive(fieldName: string) {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
@@ -86,7 +79,6 @@ export class overLappingDealsComponent {
             }
             let groups = [{ field: "PROGRAM_PAYMENT" },
                 {field: "WIP_DEAL_OBJ_SID" }];
-            // this.filterOverLapData(this.gridResult);
             this.state.group = groups;
             this.gridData = process(this.gridResult, this.state);
             setTimeout(()=>{
@@ -147,9 +139,3 @@ export class overLappingDealsComponent {
 
 }
 
-angular.module("app").directive(
-    "overLappingDeals",
-    downgradeComponent({
-        component: overLappingDealsComponent,
-    })
-);

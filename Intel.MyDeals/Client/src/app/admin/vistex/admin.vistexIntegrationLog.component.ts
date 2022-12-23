@@ -10,19 +10,15 @@ import { process,State,distinct} from "@progress/kendo-data-query";
 import { FormGroup, FormControl } from "@angular/forms";
 import * as _ from 'underscore';
 @Component({
-    selector: "vistexIntegrationLog",
+    selector: "vistex-integration-log",
     templateUrl: 'Client/src/app/admin/vistex/admin.vistexIntegrationLog.component.html',
     styleUrls: ['Client/src/app/admin/vistex/admin.vistexIntegrationLog.component.css'],
     encapsulation: ViewEncapsulation.None
 })
 
-export class adminVistexIntegrationLogComponent implements OnInit,OnDestroy {
+export class adminVistexIntegrationLogComponent implements OnInit {
 
-    constructor(private loggerSvc: logger, private dsaService: dsaService) {
-         //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-         $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-         $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private loggerSvc: logger, private dsaService: dsaService) { }
 
     private requestTypeList =  [];
     private selectedRequestType = {RQST_TYPE : "VISTEX_DEALS",
@@ -278,11 +274,6 @@ export class adminVistexIntegrationLogComponent implements OnInit,OnDestroy {
         operator: "contains",
     };
 
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
 }
 angular
     .module("app")

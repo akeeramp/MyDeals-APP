@@ -1353,3 +1353,10 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
     border-color: #dee2e6;
     padding: 0 !important
 }
+.mainBodyStyle {
+    top: 69px !important;
+}
+
+.dashboard-header .btn {
+    margin-left: 5px
+}

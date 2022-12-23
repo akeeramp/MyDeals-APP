@@ -1,5 +1,4 @@
-﻿import * as angular from "angular";
-import * as _ from 'underscore';
+﻿import * as _ from 'underscore';
 export class lnavUtil {
 
     static IsUniqueInList(listToCheck: any, value: any, keyToCompare: any, checkForDouble: boolean) {

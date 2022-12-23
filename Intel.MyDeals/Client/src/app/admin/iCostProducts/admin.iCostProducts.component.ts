@@ -19,20 +19,14 @@ import {
 
 
 @Component({
-    selector: "iCostProducts",
+    selector: "i-cost-products",
     templateUrl: "Client/src/app/admin/iCostProducts/admin.iCostProducts.component.html",
     styleUrls: ['Client/src/app/admin/iCostProducts/admin.iCostProducts.component.css']
 })
 
 @Injectable()
 export class iCostProductsComponent {
-    constructor(private iCostProductSvc: iCostProductService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $(
-            'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
-        ).remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private iCostProductSvc: iCostProductService, private loggerSvc: logger) { }
 
     public validationMessage = "";
     public isRuleInvalid = false;
@@ -423,11 +417,6 @@ export class iCostProductsComponent {
             });
     }
 
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
 }
 
 angular.module("app").directive(

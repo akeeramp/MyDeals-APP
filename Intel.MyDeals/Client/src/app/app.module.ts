@@ -1,8 +1,6 @@
 //angular changes
 import './app.main';
 import './app.routes';
-import './core';
-import './advanceSearch';
 import * as $ from 'jquery';
 
 import { NgModule,ElementRef } from '@angular/core';

@@ -41,3 +41,7 @@
 .notificationSetting-popup .mat-dialog-container {
     border-radius: 0;
 }
+.toggle-button-custom.mat-slide-toggle.mat-primary .mat-slide-toggle-bar {
+    background-color: #C4D600 !important;
+    color: #fff !important;
+}

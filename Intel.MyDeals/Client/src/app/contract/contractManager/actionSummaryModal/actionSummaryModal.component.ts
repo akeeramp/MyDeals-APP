@@ -1,12 +1,6 @@
-import * as angular from "angular";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
-import { DomSanitizer } from '@angular/platform-browser';
 import { GridDataResult } from "@progress/kendo-angular-grid";
-import { contractManagerservice } from "../contractManager.service";
-import { logger } from "../../../shared/logger/logger";
 
 @Component({
     selector: "action-summary-dialog",
@@ -18,7 +12,7 @@ import { logger } from "../../../shared/logger/logger";
 })
 
 export class actionSummaryModal {
-    constructor(public dialogRef: MatDialogRef<actionSummaryModal>, @Inject(MAT_DIALOG_DATA) public data, private contractManagerSvc: contractManagerservice, private loggerSvc: logger, private sanitized: DomSanitizer) {
+    constructor(public dialogRef: MatDialogRef<actionSummaryModal>, @Inject(MAT_DIALOG_DATA) public data) {
     }
     public gridData: GridDataResult; 
     public showErrMsg: boolean;       
@@ -39,10 +33,3 @@ export class actionSummaryModal {
     
 
 }
-
-angular.module("app").directive(
-    "actionSummaryDialog",
-    downgradeComponent({
-        component: actionSummaryModal,
-    })
-);

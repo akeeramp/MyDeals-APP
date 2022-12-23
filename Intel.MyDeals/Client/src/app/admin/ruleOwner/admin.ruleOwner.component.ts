@@ -5,8 +5,6 @@ import { constantsService } from "../constants/admin.constants.service";
 import { Component, ViewChild } from "@angular/core";
 import { downgradeComponent } from "@angular/upgrade/static";
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
-
-
 import {
     GridDataResult,
     DataStateChangeEvent,
@@ -21,26 +19,19 @@ import {
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
-    selector: "ruleOwner",
+    selector: "rule-owner",
     templateUrl: "Client/src/app/admin/ruleOwner/admin.ruleOwner.component.html",
     styleUrls: ['Client/src/app/admin/cache/admin.cache.component.css']
 })
 
 export class RuleOwnerComponent {
-    constructor(private ruleOwnerSvc: ruleOwnerService, private loggerSvc: logger, private constantsSvc: constantsService) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $(
-            'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
-        ).remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private ruleOwnerSvc: ruleOwnerService, private loggerSvc: logger, private constantsSvc: constantsService) { }
 
     @ViewChild("ownerNameDropDown") private ownerDdl;
     public filterSettings: DropDownFilterSettings = {
         caseSensitive: false,
         operator: "contains",
     };
-
 
     public Rules: Array<any> = [];
     public RuleConfig: Array<any> = [];
@@ -50,16 +41,12 @@ export class RuleOwnerComponent {
     public isElligibleForApproval = false;
     public IsReadOnlyAccess = (<any>window).usrRole === "DA" ? false : true;
     public IsSecurityCheckDone = false;
-
     public gridResult: Array<any>;
     private isLoading = true;
     public ownerNameData: Array<any> = [];
     public generatedOwnerData: Array<any> = [];
-    public dropdownResult: Array<any> = [];
-    
+    public dropdownResult: Array<any> = [];  
     private selectedOwner: any = null;
-     
-
     public formGroup: FormGroup;
     public isFormChange = false;
     private editedRowIndex: number;
@@ -254,12 +241,6 @@ export class RuleOwnerComponent {
 
     ngOnInit() {
         this.getConstant();
-    }
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 }
 

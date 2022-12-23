@@ -3,7 +3,6 @@ import {  Component } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
  import * as _moment from "moment";
 import { downgradeComponent } from "@angular/upgrade/static";
-import { FormBuilder } from "@angular/forms";
 import { DataStateChangeEvent, GridDataResult, PageSizeItem } from "@progress/kendo-angular-grid";
 import { State } from "@progress/kendo-data-query";
 import { process, distinct } from "@progress/kendo-data-query";
@@ -30,7 +29,6 @@ export class adminlegalExceptionComponent {
     public gridData: GridDataResult;
     public data: unknown[];
     public mode = "virtual"; 
-
     private isLoading = true;
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
@@ -85,14 +83,9 @@ export class adminlegalExceptionComponent {
         }
     ];
 
-
-
     constructor(private loggersvc: logger, private adminlegalExceptionSrv: adminlegalExceptionService,
-        private formBuilder: FormBuilder,  protected dialog: MatDialog,
-        private datePipe: DatePipe) {
-         $('link[rel=stylesheet][href="/content/kendo/2017.r1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+         protected dialog: MatDialog,
+        private datePipe: DatePipe) { }
 
     loadlegalException() {
          if ((<any>window).usrRole != 'SA' && !(<any>window).isDeveloper &&  (<any>window).usrRole != 'Legal' ) {
@@ -270,7 +263,6 @@ export class adminlegalExceptionComponent {
                         dialogRef.afterClosed().subscribe((returnVal) => {
                             if (returnVal != undefined && returnVal != "close") {
                                 const today = new Date();
-                                //this.savedateformate(returnVal);
                                 returnVal.VER_NBR = returnVal.VER_NBR + 1;
                                 returnVal.VER_CRE_DTM = moment(today).format("l");
                                 this.adminlegalExceptionSrv.updateLegalException(returnVal).subscribe((result: Array<any>) => {
@@ -565,12 +557,6 @@ export class adminlegalExceptionComponent {
     ngOnInit() {
         this.initExdetails = this. intializeformdata();
         this.loadlegalException();
-    }
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }  
 }
 

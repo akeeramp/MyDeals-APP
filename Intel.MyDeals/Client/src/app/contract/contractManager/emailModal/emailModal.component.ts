@@ -1,9 +1,5 @@
-import * as angular from "angular";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { Component, Inject,  ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-
-import { DomSanitizer } from '@angular/platform-browser';
 import { contractManagerservice } from "../contractManager.service";
 import { logger } from "../../../shared/logger/logger";
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
@@ -22,7 +18,7 @@ export class emailModal {
     emailBody: any;
     emailSubject: any;
     headerInfo: any;
-    constructor(public dialogRef: MatDialogRef<emailModal>, @Inject(MAT_DIALOG_DATA) public data, private contractManagerSvc: contractManagerservice, private loggerSvc: logger, private sanitized: DomSanitizer) {
+    constructor(public dialogRef: MatDialogRef<emailModal>, @Inject(MAT_DIALOG_DATA) public data, private contractManagerSvc: contractManagerservice, private loggerSvc: logger) {
     }
         public dataItem ;
         public roles = ["FSE", "GA", "DA", "ALL"];
@@ -89,13 +85,4 @@ export class emailModal {
         close(){
             this.dialogRef.close();
         }
-    
-
 }
-
-angular.module("app").directive(
-    "emailDialog",
-    downgradeComponent({
-        component: emailModal,
-    })
-);

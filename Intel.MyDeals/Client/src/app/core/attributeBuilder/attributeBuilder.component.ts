@@ -1,4 +1,4 @@
-﻿import { Component, ViewEncapsulation, Input, AfterViewInit, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
+﻿import { Component, ViewEncapsulation, Input, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service';
 import { logger } from "../../shared/logger/logger";
@@ -55,11 +55,7 @@ export class AttributeBuilder implements OnInit {
     private runRuleReqd:boolean = false;
     @ViewChild("list") list;
     
-    constructor(private pteService: pricingTableEditorService, private loggerSvc: logger, protected usrPrfrncssvc: userPreferencesService,) {
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-
-    }
+    constructor(private pteService: pricingTableEditorService, private loggerSvc: logger, protected usrPrfrncssvc: userPreferencesService,) {}
     loadMyRules() {
         this.usrPrfrncssvc.getAction(this.cat, this.subcat).subscribe((data: any) => {
             this.myRules = [];
@@ -154,7 +150,6 @@ export class AttributeBuilder implements OnInit {
         }
     }
     updateRules(rulesData) {
-        //if (this.cat == "TenderDealSearch") {
             this.attributes=[];
             _.each(rulesData, (customRule) => {
                 let field = this.availableAttrs.filter(x => x.field == customRule.field)[0];
@@ -186,7 +181,6 @@ export class AttributeBuilder implements OnInit {
                     values: field.type == "number" ? parseInt(customRule.value) : (field.type == "money" || field.type == "numericOrPercentage") ? parseFloat(customRule.value) : customRule.value
                 })
             })
-        //}
     }
     async loadDefaultAttributes() {
         if (this.availableAttrs.length === 0) {

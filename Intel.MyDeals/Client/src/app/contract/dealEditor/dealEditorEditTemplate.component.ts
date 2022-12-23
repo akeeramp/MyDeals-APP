@@ -1,6 +1,4 @@
-﻿import * as angular from 'angular';
-import { Component, Input, ViewEncapsulation, Output, EventEmitter, ViewChild, ElementRef } from '@angular/core';
-import { downgradeComponent } from '@angular/upgrade/static';
+﻿import { Component, Input, ViewEncapsulation, Output, EventEmitter, ViewChild } from '@angular/core';
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';

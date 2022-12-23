@@ -1,36 +1,12 @@
-﻿import * as angular from "angular";
-import { downgradeComponent } from "@angular/upgrade/static";
-import { Component } from "@angular/core";
+﻿import { Component } from "@angular/core";
 import { pingService } from '../core.shared.service';
 import { logger } from "../../shared/logger/logger";
 
 @Component({
     selector:'ping',
     template: `<i class="fa fa-signal ping-net" role="button" [ngClass]="getClassName(pingTime)" (click)="pingHost()" title="Network Ping: {{pingTime}} ms" aria-hidden="true"></i>
-        <i class="batch-running" *ngIf="batchInProgress" title="There is a database batch job currently in progress&#013;This will effect performance a little" style="padding-left: 10px;"><b>BATCH IN PROGRESS</b></i> <!--intelicon-database-solid  Removed and replaced with text-->
-        
-        <style>
-            .ping-net.high {
-                color: #FC4C02;
-            }
-        
-            .ping-net.med {
-                color: #ffda24;
-            }
-        
-            .ping-net.low {
-                color: #76d600;
-            }
-        
-            .ping-net.none {
-                color: #cccccc;
-            }
-        
-            .batch-running {
-                color: #f3d54e;
-                margin-right: 20px;
-            }
-        </style>`,
+        <i class="batch-running" *ngIf="batchInProgress" title="There is a database batch job currently in progress&#013;This will effect performance a little" style="padding-left: 10px;"><b>BATCH IN PROGRESS</b></i>`,
+    styles: [`.ping-net.high {color: #FC4C02;} .ping-net.med {color: #ffda24;}.ping-net.low {color: #76d600; }.ping-net.none { color: #cccccc;} .batch-running {color: #f3d54e;margin- right: 20px;}`]
 })
 
 export class PingComponent {
@@ -85,9 +61,3 @@ export class PingComponent {
     }
 }
 
-angular.module("app").directive(
-    "ping",
-    downgradeComponent({
-        component: PingComponent,
-    })
-);

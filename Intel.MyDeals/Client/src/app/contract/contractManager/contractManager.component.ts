@@ -1,7 +1,5 @@
-import * as angular from "angular";
 import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
 import { distinct,process, State } from "@progress/kendo-data-query";
 import { contractManagerservice } from "./contractManager.service";
@@ -9,10 +7,8 @@ import * as moment from "moment";
 import { colorDictionary } from "../../core/angular.constants";
 import { ThemePalette } from "@angular/material/core";
 import { lnavService } from "../lnav/lnav.service";
-import { GridUtil } from "../grid.util";
 import { MatDialog } from "@angular/material/dialog";
 import { actionSummaryModal } from "./actionSummaryModal/actionSummaryModal.component";
-import { messageBoardModal } from "./messageBoard/messageBoard.component";
 import { emailModal } from "./emailModal/emailModal.component";
 import { FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
 import * as _ from 'underscore';
@@ -68,11 +64,7 @@ export class contractManagerComponent {
     parent_dcId: any;
     allPTEData: any =[];
     isToggle: boolean;
-    constructor(protected dialog: MatDialog,private loggerSvc: logger, private contractManagerSvc:contractManagerservice, private lnavSvc: lnavService) {
-        //pls dont remove this even it its not as part of the route this is to handle condtions when we traverse between contract details with in manage tab
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(protected dialog: MatDialog,private loggerSvc: logger, private contractManagerSvc:contractManagerservice, private lnavSvc: lnavService) {}
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
     private CAN_VIEW_MEET_COMP: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
 
@@ -134,7 +126,6 @@ export class contractManagerComponent {
     }
     selectAllIDs(event, id) {
         let isChecked = (document.getElementById("chkDealTools_" + id) as HTMLInputElement).checked;
-        // let dataDetails = (document.getElementById("detailGrid_" + id) as HTMLBodyElement);
         for (let i = 0; i < this.gridDataSet[id].length; i++) {
             if (!(this.gridDataSet[id][i].SALESFORCE_ID !== "" && this.gridDataSet[id][i].WF_STG_CD === 'Offer'))
                 this.gridDataSet[id][i].isLinked = isChecked;
@@ -737,19 +728,14 @@ export class contractManagerComponent {
 
             // Get local time in UTC
             var currentTime = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
-            // currentTime.toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
             var localTime = moment(currentTime).format("MM/DD/YYYY HH:mm:ss");
             // Get server time from a PST time string... manually convert it to UTC
             var lastruntime = moment(this.lastRun);
-
             var serverPstTime = lastruntime.format("MM/DD/YYYY HH:mm:ss");
-            //var serverPstTime = moment(this.lastRun).add(moment.duration("08:00:00")).format('YYYY-MM-DD HH:mm:ss');
-
             var timeDiff = moment.duration(moment(serverPstTime).diff(moment(localTime)));
             var hh = Math.abs(timeDiff.asHours());
             var mm = Math.abs(timeDiff.asMinutes());
             var ss = Math.abs(timeDiff.asSeconds());
-
             var dsplNum = hh;
             var dsplMsg = " hours ago";
             this.needToRunPct = this.forceRun() || (this.runIfStaleByHours > 0 && dsplNum >= this.runIfStaleByHours) ? true : false;
@@ -985,7 +971,6 @@ export class contractManagerComponent {
 
     continueAction(fromToggle, checkForRequirements) {
         if (this.isPending === true && this.contractData.CUST_ACCPT === "Accepted" && this.contractData.HAS_ATTACHED_FILES === "0" && this.contractData.C2A_DATA_C2A_ID.trim() === "") return;
-        // this.dialogPendingWarning.close();
         this.pendingWarningActions = false;
         this.showPendingWarning = false;
 
@@ -1017,11 +1002,6 @@ export class contractManagerComponent {
                 })
             })
             this.loadContractDetails();
-            //if(this.contractData.CUST_ACCPT === "Pending"){
-            //    this.isPending = true;
-            //} else {
-            //    this.isPending = false;
-            //}
             this.userRole = (<any>window).usrRole;
             this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
             setTimeout(() => {
@@ -1039,9 +1019,3 @@ export class contractManagerComponent {
 
 
 }
-angular.module("app").directive(
-    "contractManager",
-    downgradeComponent({
-        component: contractManagerComponent,
-    })
-);

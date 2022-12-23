@@ -1,5 +1,5 @@
 ﻿import { DE_Common_Util } from '../contract/DEUtils/DE_Common_util';
-import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
+import { CurrencyPipe } from '@angular/common';
 import { DE_Load_Util } from './DEUtils/DE_Load_util';
 import { PTE_Config_Util } from './PTEUtils/PTE_Config_util';
 import * as moment from 'moment-timezone';
@@ -44,9 +44,7 @@ export class GridUtil {
             var tmplt = '';
             if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
                 tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-            //tmplt += '<div class="uiControlDiv"';
             tmplt += '    <div class="ng-binding vert-center" ' + ' ' + '>' + (passedData['NUM_OF_TIERS'] / passedData['NUM_OF_DENSITY']) + '</div>';
-            //tmplt += '</div>';
             return tmplt;
         }
         else if (field == 'CREDIT_AMT') {
@@ -147,9 +145,7 @@ export class GridUtil {
         var tmplt = "<div class='uiControlDiv isReadOnlyCell'><div class='vert-center'><i class='valid-icon iConFont validf_" + passedData.PASSED_VALIDATION + " " + classNm + "' title='" + titleMsg + "'></i></div></div>";
         return tmplt;
     }
-    static uiControlScheduleWrapper(passedData) {
-        // if (passedData.OBJ_SET_TYPE_CD !== 'VOL_TIER' && passedData.OBJ_SET_TYPE_CD !== 'FLEX' && passedData.OBJ_SET_TYPE_CD !== 'REV_TIER')
-        //     return "";
+    static uiControlScheduleWrapper(passedData) {  return "";
         var fields = (passedData.OBJ_SET_TYPE_CD === 'VOL_TIER' || passedData.OBJ_SET_TYPE_CD === 'FLEX') ? PTE_Config_Util.volTierFields : PTE_Config_Util.revTierFields;
         if(passedData.OBJ_SET_TYPE_CD !== 'VOL_TIER' && passedData.OBJ_SET_TYPE_CD !== 'FLEX' && passedData.OBJ_SET_TYPE_CD !== 'REV_TIER'){
             fields = PTE_Config_Util.nonvolTierFields;

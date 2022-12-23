@@ -6,19 +6,13 @@ import { downgradeComponent } from "@angular/upgrade/static";
 import { saveAs } from 'file-saver';
 
 @Component({
-    selector: "quoteLetter",
+    selector: "quote-letter",
     templateUrl: "Client/src/app/admin/quoteLetter/admin.quoteLetter.component.html",
     styleUrls: ['Client/src/app/admin/quoteLetter/admin.quoteLetter.component.css']
 })
 
 export class QuoteLetterComponent {
-    constructor(private quoteLetterSvc: quoteLetterService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $(
-            'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
-        ).remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private quoteLetterSvc: quoteLetterService, private loggerSvc: logger) { }
 
     //created for Angular loader
     public isLoading = 'true';
@@ -106,13 +100,6 @@ export class QuoteLetterComponent {
     ngOnInit() {
         this.loadAdminTemplate();
     }
-
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
-
 }
 
 angular

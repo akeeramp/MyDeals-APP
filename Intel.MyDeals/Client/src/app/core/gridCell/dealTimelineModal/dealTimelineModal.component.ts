@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { logger } from "../../../shared/logger/logger";
+﻿import { logger } from "../../../shared/logger/logger";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, ViewEncapsulation, Inject } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { GridDataResult, DataStateChangeEvent} from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { dealToolsService } from "../dealTools/dealTools.service";
@@ -18,9 +16,6 @@ import * as moment from 'moment';
 
 export class dealTimelineComponent {
     constructor(private dealToolsSvc: dealToolsService,private loggerSvc: logger, public dialogRef: MatDialogRef<dealTimelineComponent>, @Inject(MAT_DIALOG_DATA) public data) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
         this.allData = this.allData.bind(this);
     }
     private dcId = this.data.dataItem.DC_ID;
@@ -117,9 +112,3 @@ export class dealTimelineComponent {
         this.loadTimeline();
     }
 }
-angular.module("app").directive(
-    "dealTimelineModal",
-    downgradeComponent({
-        component: dealTimelineComponent,
-    })
-);

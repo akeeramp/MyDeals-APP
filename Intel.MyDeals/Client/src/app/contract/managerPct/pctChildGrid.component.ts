@@ -1,14 +1,10 @@
-﻿import * as angular from "angular";
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+﻿import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { GridDataResult, SelectAllCheckboxState, CellClickEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { managerPctservice } from "./managerPct.service";
 import { ThemePalette } from "@angular/material/core";
 import { lnavService } from "../lnav/lnav.service";
-import { headerService } from "../../shared/header/header.service";
-import { FormBuilder } from "@angular/forms";
 import { Observable } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { pctOverrideReasonModal } from "./pctOverrideReasonModal/pctOverrideReasonModal.component";
@@ -21,7 +17,7 @@ import { pctGroupModal } from "./pctGroupModal/pctGroupModal.component";
 })
 
 export class pctChildGridComponent {
-    constructor(private loggerSvc: logger,protected dialog: MatDialog,  private managerPctSvc: managerPctservice, private lnavSvc: lnavService, private headerSvc: headerService, private formBuilder: FormBuilder) {
+    constructor(private loggerSvc: logger,protected dialog: MatDialog,  private managerPctSvc: managerPctservice, private lnavSvc: lnavService) {
 
     }
     //public view: Observable<GridDataResult>;
@@ -220,9 +216,3 @@ export class pctChildGridComponent {
         this.gridData = process(this.gridResult, this.childState);
     }
 }
-angular.module("app").directive(
-    "pct-child-grid",
-    downgradeComponent({
-        component: pctChildGridComponent,
-    })
-);

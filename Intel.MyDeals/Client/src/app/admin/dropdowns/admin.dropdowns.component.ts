@@ -27,13 +27,7 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 export class dropdownsComponent {
 
     //Constructor - unloading the AngularJS stylesheet 
-    constructor(private dropdownSvc: dropdownService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $(
-            'link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]'
-        ).remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private dropdownSvc: dropdownService, private loggerSvc: logger) { }
 
     @ViewChild("dealtypeDropDown") private dealtypeDdl;
     @ViewChild("attributeDropDown") private atrbDdl;
@@ -370,7 +364,6 @@ export class dropdownsComponent {
                             this.gridResult.push(ui_dropdown);
                             this.loadUIDropdown();
                             this.loggerSvc.success("New Dropdown Added.")
-                            /*sender.closeRow(rowIndex);*/
                         },
                         error => {
                             this.loggerSvc.error("Unable to insert Dropdown.", error);
@@ -384,7 +377,6 @@ export class dropdownsComponent {
                             this.gridResult[rowIndex] = ui_dropdown;
                             this.gridResult.push(ui_dropdown);
                             this.loadUIDropdown();
-                            /*sender.closeRow(rowIndex);*/
                         },
                         error => {
                             this.loggerSvc.error("Unable to update UI dropdown data.", error);
@@ -473,15 +465,7 @@ export class dropdownsComponent {
                 }
             )
     }
-    // UI button click ends       
-
-
-    //Angular OnDestroy Event
-    gOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
-    }
+    // UI button click ends
 }
 angular.module("app").directive(
     "dropdowns",

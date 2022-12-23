@@ -9,21 +9,15 @@ import { batchTimingService } from "./admin.batchTiming.service";
 
 
 @Component({
-    selector: "batchTiming",
+    selector: "batch-timing",
     templateUrl: "Client/src/app/admin/batchTiming/admin.batchTiming.component.html",
     styleUrls: ['Client/src/app/admin/batchTiming/admin.batchTiming.component.css']
 })
 
 export class batchTimingComponent {
-    constructor(private batchTimingSvc: batchTimingService, private loggerSvc: logger) {
-        //Since both kendo makes issue in Angular and AngularJS dynamically removing AngularJS
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private batchTimingSvc: batchTimingService, private loggerSvc: logger) { }
 
     // Variables
-    private isButtonDisabled = true;
-
     private isLoading = true;
     private loadMessage = "Batch Job Details Loading..";
     private type = "numeric";
@@ -108,11 +102,6 @@ export class batchTimingComponent {
 
     ngOnInit() {
         this.loadBatchTiming();
-    }
-    ngOnDestroy() {
-        //The style removed are adding back
-        $('head').append('<link rel="stylesheet" type="text/css" href="/Content/kendo/2017.R1/kendo.common-material.min.css">');
-        $('head').append('<link rel="stylesheet" type="text/css" href="/css/kendo.intel.css">');
     }
 
 }

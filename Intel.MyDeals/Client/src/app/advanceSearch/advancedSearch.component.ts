@@ -8,7 +8,6 @@ import { advancedSearchService } from "./advancedSearch.service";
 import { globalSearchResultsService } from "../advanceSearch/globalSearchResults/globalSearchResults.service";
 import { TenderDashboardConfig } from '../advanceSearch/tenderDashboard/tenderDashboard_config';
 import { AttributeBuilder } from '../core/attributeBuilder/attributeBuilder.component';
-import { templatesService } from "../shared/services/templates.service";
 import { process, State, FilterDescriptor, CompositeFilterDescriptor } from "@progress/kendo-data-query";
 import { GridUtil } from '../contract/grid.util';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, FilterService } from "@progress/kendo-angular-grid";
@@ -94,8 +93,7 @@ export class AdvancedSearchComponent implements OnInit {
     public advancedSearchDropdownFilter: any;
     public custFilter: any[] = [];
 
-    constructor(protected cntrctWdgtSvc: contractStatusWidgetService, protected loggerSvc: logger,
-        private templatesSvc: templatesService, protected globalSearchSVC: globalSearchResultsService,
+    constructor(protected cntrctWdgtSvc: contractStatusWidgetService, protected loggerSvc: logger, protected globalSearchSVC: globalSearchResultsService,
         private advancedSearchSvc: advancedSearchService) { }
 
     onCustomerChange(custData) {

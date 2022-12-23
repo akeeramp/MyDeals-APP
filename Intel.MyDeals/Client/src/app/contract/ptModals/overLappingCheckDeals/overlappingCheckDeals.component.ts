@@ -1,9 +1,7 @@
-﻿import { downgradeComponent } from "@angular/upgrade/static";
-import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+﻿import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { Component, Inject, Input } from "@angular/core";
-import * as angular from "angular";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { logger } from "../../../shared/logger/logger";
 import { overLappingcheckDealService } from "./overlappingCheckDeals.service";
@@ -303,11 +301,3 @@ export class OverlappingCheckComponent {
 
 
 }
-
-
-angular.module("app").directive(
-    "overlappingCheckDeal",
-    downgradeComponent({
-        component: OverlappingCheckComponent,
-    })
-);

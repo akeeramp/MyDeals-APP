@@ -12,7 +12,6 @@
     </div>
     <div class="row">
         <div class="col">
-            <!-- <div id="spreadsheet"></div> -->
             <button class="btn btn-sm btn-save ssToolbarBtn btn-disable-style" ssToolbarBtn (click)="validatePricingTableProducts()" [ngClass]="{'dirty' : isSaveEnabled(),'notDirty' : !isSaveEnabled()}" title="{{ isTenderContract ? 'Save your Tender Table, validate the products, and stay in your Tender Table Editor' : 'Save your Pricing Table, validate the products, and stay in your Pricing Table Editor'}}" [disabled]="!isSaveEnabled()">
                 <i class="fa fa-floppy-o skyBlue floppy-icon-style" aria-hidden="true" style="font-size: 30px" [ngClass]="{'dirty' : isSaveEnabled(),'notDirty' : !isSaveEnabled()}"></i>
                 <span class="text save-validate-txtstyle" [ngClass]="{'dirty' : isSaveEnabled(),'notDirty' : !isSaveEnabled()}">
@@ -102,7 +101,6 @@
                     </tr>
                 </table>
             </button>
-            <!-- <button (click)="openAutofill()">autofill</button> -->
             <button class="fr btn ssToolbarBtn" title="Help" style="background: none !important">
                 <table>
                     <tr><td><i class="intelicon-help skyBlue" aria-hidden="true" style="font-size:30px;background:none !important" (click)="showHelpTopic()"></i></td></tr>
@@ -112,7 +110,6 @@
     </div>
     <div class="row">
         <div class="col">
-            <!-- <div id="spreadsheet"></div> -->
             <kendo-splitter class="spliter-btom-style" orientation="vertical" style="height: calc(100vh - 270px);">
                 <kendo-splitter-pane><hot-table [hotId]="hotId" [settings]="hotSettings" class="all-spread pricing_table_celltext"></hot-table></kendo-splitter-pane>
                 <kendo-splitter-pane [(size)]="showDiscount">

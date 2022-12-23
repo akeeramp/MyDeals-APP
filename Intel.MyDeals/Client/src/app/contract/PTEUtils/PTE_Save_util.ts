@@ -268,15 +268,13 @@ export class PTE_Save_Util {
                 if (validMisProd[itm.DC_ID] != undefined && validMisProd[itm.DC_ID].cond) {
                     PTE_Common_Util.setBehaviors(itm);
                     itm._dirty = true;
-                    if (validMisProd[itm.DC_ID].cond.contains('nullDensity')) {
+                    if (validMisProd[itm.DC_ID].cond.includes('nullDensity')) {
                         itm._behaviors.isError['DENSITY_BAND'] = true;
                         itm._behaviors.validMsg['DENSITY_BAND'] = "One or more of the products do not have density band value associated with it";
-                        //PTE_Load_Util.setBehaviors(itm, 'DENSITY_BAND', 'One or more of the products do not have density band value associated with it', curPricingTable)
                     }
                     else if (validMisProd[itm.DC_ID].cond == 'insufficientDensity') {
                         itm._behaviors.isError['DENSITY_BAND'] = true;
                         itm._behaviors.validMsg['DENSITY_BAND'] = "The no. of densities selected for the product was " + validMisProd[itm.DC_ID].selDen + "but the actual no. of densities for the product is" + validMisProd[itm.DC_ID].actDen;
-                        //PTE_Load_Util.setBehaviors(itm, 'DENSITY_BAND', 'The no. of densities selected for the product was ' + item.selDen + 'but the actual no. of densities for the product is' + item.actDen, curPricingTable);
                     }
                 }
             });

@@ -3,8 +3,7 @@
         <div class="divine-pro" style="margin-bottom: 10px; font-size: 14px; line-height: 2.9em; text-align: center; position: absolute; top: -4px; right: 10px !important; ">            
             <span class="cust_title_style">Customer Acceptance</span>
             <span id="toggle-container" [title]="(isCustAcptReadOnly == true && custAccptButton !== 'Pending')? '' :'Click to Change Contract Acceptance Criteria'">
-                <!--<button type="button" class="btn  bts-btns" style="width:140px;line-height: 1em !important;height: 26px !important;" [ngClass]="custAccptButton === 'Pending' ? 'btn-primary' : 'btn-success' " (click)="pendingChange()" [disabled]="(isCustAcptReadOnly == true && custAccptButton !== 'Pending')">{{custAccptButton}}</button>-->   
-                <kendo-switch class="contract-toggle"
+               <kendo-switch class="contract-toggle"
                               offLabel="Accepted" onLabel="Pending"
                               [disabled]="(isCustAcptReadOnly == true && custAccptButton !== 'Pending')"
                               (valueChange)="pendingChange()"
@@ -97,9 +96,7 @@
                                             </div>
                                         </div>
                                     </div>
-
                                 </div>
-                                <!-- <kendo-dialog-actions><button kendoButton (click)="close('no')">OK</button></kendo-dialog-actions> -->
                             </kendo-dialog>
 
                             <kendo-dialog *ngIf="showPendingWarning" class="dialogPending contract_manager_dialog" [width]="500" [height]="350">
@@ -135,14 +132,11 @@
                                             Attach the contract associated with this deal to change your My Deals contract from Pending to Accepted.
                                         </p>
                                         <div class="f1 opUiLabel opUiLableWidth" style="text-align: left" [ngClass]="{isRequired: contractData.IsAttachmentRequired}"> &nbsp;&nbsp;&nbsp;&nbsp;Attachment(s):&nbsp;
-                                            <!--<span kendo-tooltip k-content="constants.helptipMsgAttachment" k-position="'top'" class="opElementHelpIcon intelicon-information-outlined"></span>-->
                                             <span kendoTooltip class="opElementHelpIcon contract-tooltip-style intelicon-information-outlined" k-content="constants.helptipMsgAttachment"
                                                   title="Attach multiple files.&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;&emsp;Allowed File Types: doc, xls, txt, bmp, jpg, pdf, ppt, zip, xlsx, docx, pptx, odt, ods, ott, sxw, sxc, png, 7z, xps."
                                                   position="top" [tooltipWidth]="300">
                                             </span>
                                         </div>
-                                        <!--<kendo-upload [saveUrl]="uploadSaveUrl" [restrictions]="myRestrictions" (success)="successEventHandler()" (error)="onFileUploadError()"
-                                                      (upload)="uploadEventHandler($event)" [autoUpload]="false" [(ngModel)]="files" name="files"></kendo-upload>-->
                                         <kendo-upload class="contract-correction-upload"
                                                       [saveUrl]="uploadSaveUrl"
                                                       [removeUrl]="uploadRemoveUrl"
@@ -465,8 +459,6 @@
                                                     </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}" [width]="120" [hidden]="!OtherType[pt.DC_ID]"></kendo-grid-column>
-                                                <!-- <kendo-grid-column title="Rebate Type" field="REBATE_TYPE" [headerClass]="{'headerClass':true}" [width]="100">
-        </kendo-grid-column> -->
                                                 <kendo-grid-column title="Ceiling Volume" field="VOLUME" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="OtherType[pt.DC_ID]">
                                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                                                                  let-filterService="filterService">

@@ -1,7 +1,5 @@
-import * as angular from "angular";
 import { Component, Input } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
@@ -15,11 +13,7 @@ import { contractHistoryService } from "./contractHistory.service";
 })
 
 export class contractHistoryComponent {
-    constructor(private contractHistorySvc: contractHistoryService, private loggerSvc: logger) {
-        //pls dont remove this even it its not as part of the route this is to handle condtions when we traverse between contract details with in manage tab
-        $('link[rel=stylesheet][href="/Content/kendo/2017.R1/kendo.common-material.min.css"]').remove();
-        $('link[rel=stylesheet][href="/css/kendo.intel.css"]').remove();
-    }
+    constructor(private contractHistorySvc: contractHistoryService, private loggerSvc: logger) {}
     @Input() contractData: any;
     @Input() UItemplate: any;
     private isLoading = true;
@@ -92,9 +86,3 @@ export class contractHistoryComponent {
 
 }
 
-angular.module("app").directive(
-    "contractHistory",
-    downgradeComponent({
-        component: contractHistoryComponent,
-    })
-);
