@@ -4,7 +4,7 @@
     <span *ngIf="!isMeetComp"><span class="navbar-brand admin_price_cost_header">Price Cost Test </span></span>
     <i id="btnClose" class="intelicon-close-max tender-cross-close" (click)="closeWindow()" title="Close this window"></i>
 </div>
-<div class="modal-body" id="modal-body">
+<div class="modal-body managable-meet-pct" id="modal-body">
     <div *ngIf="isMeetComp">
         <meet-comp-contract class="admin_tender_meetcomp" [objSid]="data.PRC_ST_OBJ_SID" [isAdhoc]="'1'" [objTypeId]="'2'" [cId]="c_Id" [pageNm]="'MCTPOPUP'" (refreshMCTData)="refreshMCTData($event)"></meet-comp-contract>
     </div>

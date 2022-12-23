@@ -90,14 +90,14 @@
 }
 
 kendo-datepicker.date-dashboard.date_tender_style {
-    width: 110px !important;
+    width: 125px !important;
     font-weight: 500 !important;
     position: relative !important;
 }
 
 kendo-datepicker.date-dashboard.datepick_style.k-datepicker {
     position: relative !important;
-    width: 110px !important;
+    width: 125px !important;
     font-weight: 500 !important;
 }
 .ktender_custstyle.k-multiselect .k-multiselect-wrap {

@@ -1360,3 +1360,57 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
 .dashboard-header .btn {
     margin-left: 5px
 }
+
+.managable-meet-pct meet-comp-contract.admin_tender_meetcomp {
+    bottom: auto !important;
+}
+
+.managable-meet-pct meet-comp-contract.admin_tender_meetcomp .row-cooperate {
+    margin-top: 0 !important;
+    width: 100%;
+}
+
+.managable-meet-pct meet-comp-contract.admin_tender_meetcomp .meetComp-show-hide.meet-conduct.meet-comp-blank_space {
+    top: 0 !important;
+    border-bottom: none;
+}
+
+.managable-meet-pct meet-comp-contract.admin_tender_meetcomp .row-cooperate kendo-grid#meetcomp-contract {
+    height: calc(100vh - 350px) !important;
+}
+
+.managable-meet-pct manager-pct.admin-tender-pricecosttest {
+    top: 0!important;
+}
+
+.managable-meet-pct kendo-tabstrip.art-kendo-bars {
+    margin-top: 15px !important;
+}
+
+.managable-meet-pct kendo-tabstrip.art-kendo-bars {
+    margin-top: 0px !important;
+    width: 100%;
+    margin-left: 0 !important;
+    padding: 0 15px;
+}
+
+.managable-meet-pct .admin-tender-pricecosttest div#sum-wrapper {
+    margin-left: 0 !important;
+    padding: 0 15px;
+}
+
+    .managable-meet-pct .admin-tender-pricecosttest div#sum-wrapper .another-sh-class {
+        margin: 0 -10px;
+    }
+
+.managable-meet-pct kendo-tabstrip.art-kendo-bars.k-tabstrip > .k-content.k-state-active {
+    padding: 8px;
+}
+
+.managable-meet-pct manager-pct.admin-tender-pricecosttest kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li span.k-link {
+    padding: 0.4em 0.6em !important;
+}
+
+.managable-tenders .tender_exclude_grouping kendo-grid.group-Excl-grid.grouping_grid_h {
+    height: calc(100vh - 350px) !important;
+}

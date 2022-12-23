@@ -3,6 +3,6 @@
     <h3 class="navbar-brand admin_price_cost_header" id="modal-title">Group Exclusion</h3>
     <i id="btnClose" class="intelicon-close-max tender-cross-close" (click)="closeWindow()" title="Close this window"></i>
 </div>
-<div class="modal-body" id="modal-body">
+<div class="modal-body managable-tenders" id="modal-body">
     <manager-exclude-groups class="tender_exclude_grouping" [contractData]="contractData" [UItemplate]="UItemplate" [groupTab]="selLnav" [showPCT]="isShowPCT" [isTenderDashboard]="data.isTenderDashboard" [WIP_ID]="data.WIP_ID"></manager-exclude-groups>
 </div>
