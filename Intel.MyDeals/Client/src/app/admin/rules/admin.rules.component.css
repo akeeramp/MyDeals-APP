@@ -700,7 +700,7 @@ kendo-combobox.ecap-combo-style.k-combobox.k-combobox-clearable {
     background: #fafafa !important;
     width: 200px !important;
     color: #212529 !important;
-    left: 368px !important;
+    left: 382px !important;
     top: 0 !important;
     height: 30px !important;
     box-shadow: none !important;
@@ -754,7 +754,7 @@ kendo-textbox.extra-box-style.k-textbox {
     font-weight: 500 !important;
     opacity: .7 !important;
     background: #fafafa !important;
-    left: 370px !important;
+    left: 382px !important;
     top: 0 !important;
     box-shadow: none !important
 }
@@ -779,7 +779,7 @@ kendo-textbox.box-style-numeric.k-textbox {
 
 .days-style {
     position: relative !important;
-    left: 372px !important;
+    left: 385px !important;
     height: 30px !important;
     top: 0 !important;
     border-radius: 3px !important;
@@ -791,7 +791,7 @@ kendo-textbox.box-style-numeric.k-textbox {
 
 kendo-numerictextbox.numerictextbox-style.k-widget.k-numerictextbox {
     position: relative !important;
-    left: 368px !important;
+    left: 382px !important;
     height: 30px !important;
     border: 1px solid #e5e5e5 !important;
     opacity: .7 !important;
@@ -908,7 +908,7 @@ kendo-multiselect.multi_kedo-_style.k-multiselect {
     opacity: .7 !important;
     background: #f1f1f1 !important;
     color: #212529 !important;
-    left: 370px !important;
+    left: 382px !important;
     top: 0 !important;
     box-shadow: none !important;
     width: fit-content !important;
@@ -1155,7 +1155,7 @@ kendo-dropdownlist.dealtype-dropdwn-style {
 }
 
 kendo-dropdownlist.box_style_dropdwn {
-    left: 368px !important;
+    left: 382px !important;
     background: transparent !important;
     width: 60px !important;
     height: 30px !important;
@@ -1176,7 +1176,7 @@ kendo-datepicker.calender-row-style:hover {
 }
 
 kendo-datepicker.calender-row-style {
-    left: 370px !important;
+    left: 382px !important;
     top: -1px !important;
     height: 30px !important;
     box-shadow: none !important;

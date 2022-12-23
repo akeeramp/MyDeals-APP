@@ -356,7 +356,8 @@ kendo-upload#meetCompFileUpd.meetcomp-upload {
     border-bottom: 0px !important;
     border-left: 0px !important;
     border-right: 0px !important;
-    text-align:left !important
+    text-align:left !important;
+    border-radius:0 !important
 }
 kendo-splitter.admin-meetcomp-splitter.k-widget.k-splitter.k-splitter-flex.k-splitter-vertical {
     border-color: #dee2e6 !important;
