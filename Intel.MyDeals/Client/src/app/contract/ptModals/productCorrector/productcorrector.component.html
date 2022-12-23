@@ -138,7 +138,7 @@
                                 </p>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="50" field="IS_SEL" title=" ">
+                        <kendo-grid-column  [headerClass]="{'headerClass':true}" [width]="50" field="IS_SEL" title=" ">
                             <ng-template kendoGridFilterMenuTemplate let-filter let-column="column" let-filterService="filterService">
                                 <kendo-grid-boolean-filter-menu [column]="column" [filter]="filter" [filterService]="filterService"></kendo-grid-boolean-filter-menu>
                             </ng-template>
@@ -213,7 +213,7 @@
                                 </div>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="HAS_L1" title="Legal Classification" [width]="150">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="HAS_L1" title="Legal Classification" [width]="150" *ngIf="isGA">
                             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                                 </multicheck-filter>
@@ -253,7 +253,7 @@
                             </ng-template>
                         </kendo-grid-column>
                         <!--hiding this Product description column by default-->
-                        <kendo-grid-column [hidden]="true" [headerClass]="{'headerClass':true}" field="HIER_NM_HASH" title="Product Description">
+                        <kendo-grid-column [hidden]="true" [headerClass]="{'headerClass':true}" field="HIER_NM_HASH" title="Product Description" hidden="hidden">
                             <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                 <div kendoTooltip position="bottom">
                                     <span title="{{dataItem.HIER_NM_HASH}}">{{dataItem.HIER_NM_HASH}}</span>

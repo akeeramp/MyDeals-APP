@@ -1231,13 +1231,13 @@ export class PTE_CellChange_Util {
                 if (deletedItm.exclude) {
                     let eindex = _.indexOf(exclude, deletedItm.deletedUserInput)
                     if (eindex != -1) {
-                        exclude.splice(eindex, 1)
+                       exclude= _.without(exclude, deletedItm.deletedUserInput) 
                     }
                 }
                 else {
                     let eindex = _.indexOf(Include, deletedItm.deletedUserInput)
                     if (eindex != -1) {
-                        Include.splice(eindex, 1)
+                        Include = _.without(Include, deletedItm.deletedUserInput) 
                     }
                 }
             })
@@ -1247,14 +1247,14 @@ export class PTE_CellChange_Util {
                 if (selPrdItm.prodObj.EXCLUDE) {
                     let eindex = _.indexOf(exclude, selPrdItm.prodObj.USR_INPUT)
                     if (eindex != -1) {
-                        exclude.splice(eindex, 1)
+                      exclude=  _.without(exclude, selPrdItm.prodObj.USR_INPUT) 
                     }
                     exclude.push(selPrdItm.prodObj.DERIVED_USR_INPUT);
                 }
                 else {
                     let iIndex = _.indexOf(Include, selPrdItm.prodObj.USR_INPUT)
                     if (iIndex != -1) {
-                        Include.splice(iIndex, 1)
+                        Include = _.without(Include, selPrdItm.prodObj.USR_INPUT) 
                     }
                     Include.push(selPrdItm.prodObj.DERIVED_USR_INPUT);
                 }

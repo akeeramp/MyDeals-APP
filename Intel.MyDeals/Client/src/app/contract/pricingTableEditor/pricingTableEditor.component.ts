@@ -1122,8 +1122,8 @@ export class pricingTableEditorComponent {
                     }
                 }
 
-                if (data && data._behaviors && data._behaviors.isError && data.PTR_SYS_INVLD_PRD == "") {
-                    if (!!data._behaviors.isError['PTR_USER_PRD'] || data._behaviors.isError['PTR_USER_PRD'] == false) {
+                if (data && data._behaviors && data._behaviors.isError) {
+                    if (!data._behaviors.isError['PTR_USER_PRD'] && data.PTR_SYS_INVLD_PRD == "" && data.PTR_SYS_PRD != "") {
                         this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'success-product');
                     }
                     else {
@@ -1135,8 +1135,9 @@ export class pricingTableEditorComponent {
                 // Do not update the cell value if exclude product is invalid/NULL
                 if (this.curPricingTable.OBJ_SET_TYPE_CD != 'KIT' && this.curPricingTable.OBJ_SET_TYPE_CD != 'ECAP'
                     && data.PRD_EXCLDS != null && data.PRD_EXCLDS != "") {
-                    if (data && data._behaviors && data._behaviors.isError && data.PTR_SYS_INVLD_PRD == "") {
-                        if (data._behaviors.isError['PRD_EXCLDS'] == false) {
+
+                    if (data && data._behaviors && data._behaviors.isError) {
+                        if (!data._behaviors.isError['PRD_EXCLDS'] && data.PTR_SYS_INVLD_PRD == "" && data.PTR_SYS_PRD != "") {
                             this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'success-product');
                         }
                         else {
