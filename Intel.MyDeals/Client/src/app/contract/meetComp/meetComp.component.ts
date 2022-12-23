@@ -15,6 +15,7 @@ import * as moment from "moment";
 import { MatDialog } from "@angular/material/dialog";
 import { meetCompDealDetailModalComponent } from "./meetCompDealDetailModal.component"
 import { pricingTableservice } from "../pricingTable/pricingTable.service";
+import * as _ from 'underscore';
 
 @Component({
     selector: "meet-comp-contract",
@@ -1070,7 +1071,9 @@ export class meetCompContractComponent implements OnInit {
         this.tempUpdatedList = [];
         this.meetCompUpdatedList = [];
         if (this.isAdhoc == 1 && this.PAGE_NM == 'MCTPOPUP') {
-            let data = this.meetCompMasterdata.filter(x => x.GRP == 'PRD' && x.DEFAULT_FLAG == "Y").OrderBy(x => x.MEET_COMP_STS).ToArray();
+            let data = this.meetCompMasterdata._elements.filter(x => x.GRP == 'PRD' && x.DEFAULT_FLAG == "Y");
+            if (data && data.length > 0)
+                data = _.sortBy(data, 'MEET_COMP_STS');
             this.refreshMCTData.emit(data)
         }
     }
@@ -1095,7 +1098,9 @@ export class meetCompContractComponent implements OnInit {
                 this.tmDirec.emit('PD');
             }
             if (this.isAdhoc == 1 && this.PAGE_NM == 'MCTPOPUP') {
-                let data = this.meetCompMasterdata.filter(x => x.GRP == 'PRD' && x.DEFAULT_FLAG == "Y").OrderBy(x => x.MEET_COMP_STS).ToArray();
+                let data = this.meetCompMasterdata._elements.filter(x => x.GRP == 'PRD' && x.DEFAULT_FLAG == "Y");
+                if (data && data.length > 0)
+                    data = _.sortBy(data, 'MEET_COMP_STS');
                 this.refreshMCTData.emit(data)
             }            
             this.isLoading = false;

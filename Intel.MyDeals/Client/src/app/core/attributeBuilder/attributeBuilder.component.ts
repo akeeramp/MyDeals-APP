@@ -27,6 +27,7 @@ export class AttributeBuilder implements OnInit {
     @Output() invokeSearchDatasource = new EventEmitter();
     @Output() removeLoadingPanel = new EventEmitter();
     @Output() rulesemit = new EventEmitter();
+    @Output() clearSearchResult = new EventEmitter();//For Tender Dashboard, to clear search result if runrules action got triggered
     public availableAttrs = [];
     public availAtrField = [];
     public attributes: any = [];
@@ -165,7 +166,21 @@ export class AttributeBuilder implements OnInit {
                         lookupval = this.dropdownresponses[field.field];
                     if (field.feild == "Customer.CUST_NM") selectelookupval = lookupval.filter(x => x.CUST_SID == selectelookupval);
                     }
-
+                let customValue;
+                if (field.type == "number") {
+                    if (Number.isNaN(parseInt(customRule.value)))
+                        customValue = '';
+                    else
+                        customValue = parseInt(customRule.value);
+                }
+                else if (field.type == "money" || field.type == "numericOrPercentage") {
+                    if (Number.isNaN(parseFloat(customRule.value)))
+                        customValue = '';
+                    else
+                        customValue = parseFloat(customRule.value);
+                }
+                else
+                    customValue = customRule.value;
                 this.attributes.push({
                     dropDown: lookupval.length == 0 ? [] : lookupval,
                     field: customRule.field,
@@ -173,12 +188,12 @@ export class AttributeBuilder implements OnInit {
                     opvalues: operators,
                     selectedField: field,
                     selectedOperator: selectedop ? selectedop : this.availableOperator[0],
-                    selectedValues: selectelookupval != undefined ? selectelookupval : field.type == "number" ? parseInt(customRule.value) : (field.type == "money" || field.type == "numericOrPercentage") ? parseFloat(customRule.value) : customRule.value,
+                    selectedValues: selectelookupval != undefined ? selectelookupval : customValue,
                     subType: "",
                     type: field.type,
-                    value: selectelookupval != undefined ? selectelookupval : field.type == "number" ? parseInt(customRule.value) : (field.type == "money" || field.type == "numericOrPercentage") ? parseFloat(customRule.value) : customRule.value,
+                    value: selectelookupval != undefined ? selectelookupval : customValue,
                     valueType: "",
-                    values: field.type == "number" ? parseInt(customRule.value) : (field.type == "money" || field.type == "numericOrPercentage") ? parseFloat(customRule.value) : customRule.value
+                    values: customValue
                 })
             })
     }
@@ -294,7 +309,7 @@ export class AttributeBuilder implements OnInit {
             opvalues: opvalues,
             selectedOperator: selectedOperator
         })
-        if (dataItem.type == 'list') {
+        if (dataItem.type == 'list' || dataItem.type == 'singleselect') {
             if (dataItem.lookups != undefined) {
                 if (dataItem.field == "GEO_COMBINED" || dataItem.field == "HOST_GEO") {
                     Object.assign(this.attributes[index], { dropDown: dataItem.lookups })
@@ -394,7 +409,7 @@ export class AttributeBuilder implements OnInit {
         // global search check is allowed
         if (this.isGlobal()) return true;
 
-        var invalidRows = this.attributes.filter(x => x.field === "" || x.operator === "" || x.value === undefined || x.value === "" || x.value === null || x.value.length == 0)
+        var invalidRows = this.attributes.filter(x => x.field === "" || x.operator === "" || x.value === "")
         if (invalidRows.length > 0) {
             this.isDialogVisible = true;
             return false;
@@ -441,7 +456,11 @@ export class AttributeBuilder implements OnInit {
     }
     runRule() {
         let ruleslist = this.generateCurrentRule();     
-        if (!this.validateRules()) return;
+        if (!this.validateRules()) {
+            if (this.cat == "TenderDealSearch")// To Clear the Search Result in tender Dashboard if Run Rule got triggered without complete rule
+                this.clearSearchResult.emit();
+            return;
+        }
         if (!this.enableSaveRules()) {
             this.loggerSvc.warn('Please provide proper search key', 'Warning');
             return;
@@ -489,14 +508,14 @@ export class AttributeBuilder implements OnInit {
         for (var itmCnt = 0; itmCnt < this.rules.length; itmCnt++) {
             if (dataItem != undefined && this.rules[itmCnt].title == dataItem.title) {
                 this.rules.splice(itmCnt, 1);
-                if (this.ruleToRun.title && this.ruleToRun.title == dataItem.title) {
+                if (this.ruleToRun && this.ruleToRun.title && this.ruleToRun.title == dataItem.title) {
                     this.sleepAndResetDDL();
                     this.clearRule();
                 }
             } else
                 if (dataItem == undefined && this.rules[itmCnt].title == this.currentRule) {
                     this.rules.splice(itmCnt, 1);
-                    if (this.ruleToRun.title && this.ruleToRun.title == this.currentRule) {
+                    if (this.ruleToRun && this.ruleToRun.title && this.ruleToRun.title == this.currentRule) {
                         this.sleepAndResetDDL();
                         this.clearRule();
                     }

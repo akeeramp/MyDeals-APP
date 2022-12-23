@@ -20,7 +20,8 @@
                 <app-search [title]="title" [titleText]="searchTitle"></app-search>
             </div>
             <div class="col-md-7 right-inner-container">
-                <attribute-builder-angular [attributeSource]="attributeList" [operatorSource]="operatorList" [types2operatorSource]="type2OperatorList" [cat]="cat" [subcat]="subcat" [runSearch]="runSearch" [customSettings]="customSettings" (invokeSearchDatasource)="invokeSearchDatasource($event)" (removeLoadingPanel)="removeLoadingPanel($event)"></attribute-builder-angular>
+                <attribute-builder-angular [attributeSource]="attributeList" [operatorSource]="operatorList" [types2operatorSource]="type2OperatorList" [cat]="cat" [subcat]="subcat" [runSearch]="runSearch" 
+                                           [customSettings]="customSettings" (invokeSearchDatasource)="invokeSearchDatasource($event)" (removeLoadingPanel)="removeLoadingPanel($event)" (clearSearchResult)="clearSearchResult($event)"></attribute-builder-angular>
             </div>
         </div>
     </div>

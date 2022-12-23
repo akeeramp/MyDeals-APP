@@ -383,10 +383,6 @@ export class dealEditorComponent {
         else if (args.column.field == 'MISSING_CAP_COST_INFO') {
             this.openMissingCapCostInfo(args.dataItem);
         }
-        else if (args.column.field == "CNTRCT_OBJ_SID" && this.in_Is_Tender_Dashboard) {
-            const url = `Contract#/manager/${args.dataItem.CNTRCT_OBJ_SID}`;
-            window.open(url, '_blank');
-        }
     }
 
     updateModalDataItem(dataItem, field, returnVal) {
@@ -739,8 +735,8 @@ export class dealEditorComponent {
         if (this.templates.details.Groups === undefined) this.templates.details.Groups = [];
         this.templates.details.Groups.push(data);
 
-        if (this.templates.END_CUSTOMER_RETAIL.Groups === undefined) this.templates.END_CUSTOMER_RETAIL.Groups = [];
-        this.templates.END_CUSTOMER_RETAIL.Groups.push(data);
+        if (this.templates.CUST_MBR_SID.Groups === undefined) this.templates.CUST_MBR_SID.Groups = [];
+        this.templates.CUST_MBR_SID.Groups.push(data);
         this.selectedTab = data;
         this.filterColumnbyGroup(this.selectedTab);
         this.setWarningDetails();

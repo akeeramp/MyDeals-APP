@@ -336,6 +336,7 @@ export class TenderDashboardComponent implements OnInit {
         this.changeBidAction(gridDS);
     }
     changeBidAction(gridDS) {
+        this.tenders = [];
         var linkedUnactionables = [];
         var isDealhasValidationerrors = false;
         if (this.changedDataItem["isLinked"]) {
@@ -392,19 +393,19 @@ export class TenderDashboardComponent implements OnInit {
         var isRPLStatusReviewwip = false;
         var isNoRplStatusAvailable = false;
         if (this.changedDataItem["isLinked"]) {
-            var unUnifiedDeals = this.tenders.filter((x) => x["IS_PRIMED_CUST"] == 0 && x["END_CUSTOMER_RETAIL"] !== "");
+            var unUnifiedDeals = this.tenders.filter((x) => (x["IS_PRIMED_CUST"] && x["IS_PRIMED_CUST"] == 0) && (x["END_CUSTOMER_RETAIL"] && x["END_CUSTOMER_RETAIL"] !== ""));
             isDealNotUnififed = unUnifiedDeals.length > 0 ? true : false;
-            var rpledDeals = this.tenders.filter((x) => x["IS_RPL"] == 1 && x["END_CUSTOMER_RETAIL"] !== "");
+            var rpledDeals = this.tenders.filter((x) => (x["IS_RPL"] && x["IS_RPL"] == 1) && (x["END_CUSTOMER_RETAIL"] && x["END_CUSTOMER_RETAIL"] !== ""));
             isDealRPLed = rpledDeals.length > 0 ? true : false;
-            var RPLStatusReviewwip = this.tenders.filter((x) => x["END_CUST_OBJ"] !== "" && JSON.parse(x["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD != null && x.RPL_STS_CD != "" && x.RPL_STS_CD.match("REVIEWWIP")) && x.IS_RPL == "0" && x.IS_EXCLUDE != "1").length > 0);
-            var NoRPLStatus = this.tenders.filter((x) =>x["END_CUST_OBJ"] !== "" && JSON.parse(x["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD == null || x.RPL_STS_CD == "") && x.IS_RPL == "0" && x.IS_EXCLUDE != "1" && x.PRIMED_CUST_NM.toLowerCase() != "any").length > 0);
+            var RPLStatusReviewwip = this.tenders.filter((x) => (x["END_CUST_OBJ"] && x["END_CUST_OBJ"] !== "" && JSON.parse(x["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD != null && x.RPL_STS_CD != "" && x.RPL_STS_CD.match("REVIEWWIP")) && x.IS_RPL == "0" && x.IS_EXCLUDE != "1").length > 0));
+            var NoRPLStatus = this.tenders.filter((x) => (x["END_CUST_OBJ"] && x["END_CUST_OBJ"] !== "" && JSON.parse(x["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD == null || x.RPL_STS_CD == "") && x.IS_RPL == "0" && x.IS_EXCLUDE != "1" && x.PRIMED_CUST_NM.toLowerCase() != "any").length > 0));
             isRPLStatusReviewwip = RPLStatusReviewwip.length > 0 ? true : false;
             isNoRplStatusAvailable = NoRPLStatus.length > 0 ? true : false;
         }
         else {
             isDealNotUnififed = this.changedDataItem["IS_PRIMED_CUST"] == 0 && this.changedDataItem["END_CUSTOMER_RETAIL"] !== "";
             isDealRPLed = this.changedDataItem["IS_RPL"] == 1 && this.changedDataItem["END_CUSTOMER_RETAIL"] !== "";
-            if (this.changedDataItem["END_CUST_OBJ"] != "") {
+            if (this.changedDataItem["END_CUST_OBJ"] && this.changedDataItem["END_CUST_OBJ"] != "") {
                 isRPLStatusReviewwip = JSON.parse(this.changedDataItem["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD != null && x.RPL_STS_CD != "" && x.RPL_STS_CD.match("REVIEWWIP")) && x.IS_RPL == "0" && x.IS_EXCLUDE != "1").length > 0 ? true : false;
                 isNoRplStatusAvailable = JSON.parse(this.changedDataItem["END_CUST_OBJ"]).filter(x => (x.RPL_STS_CD == null || x.RPL_STS_CD == "") && x.IS_RPL == "0" && x.IS_EXCLUDE != "1" && x.PRIMED_CUST_NM.toLowerCase() != "any").length > 0 ? true : false;
             }
@@ -461,8 +462,6 @@ export class TenderDashboardComponent implements OnInit {
         this.message = msg;
         this.isActionWarning = true;
     }
-
-
 
     floatActionsUpdated(args) {
         const actionName = args.newValue;
@@ -572,7 +571,7 @@ export class TenderDashboardComponent implements OnInit {
         const newValue = args.newValue;
         if (newValue == "Action") return;   //user selected the default non-item action so we break out here.
         this.actionType = "PS";
-        this.bidActionsUpdated(args);
+        this.changeBidAction(args.gridDS)
     }
 
     updateTenderActions() {
@@ -935,6 +934,9 @@ export class TenderDashboardComponent implements OnInit {
         if (this.searchResults.length == 0)
             this.entireDataDeleted = true;
         this.deComp.refreshGrid();
+    }
+    clearSearchResult(event) {
+        this.searchResults = [];
     }
     ngOnInit(): void {
         this.setBusy("Loading...", "Please wait while we are loading...", "info", true);
