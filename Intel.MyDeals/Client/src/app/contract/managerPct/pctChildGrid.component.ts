@@ -30,6 +30,9 @@ export class pctChildGridComponent {
     @Input() child: any;
     @Input() UItemplate: any;
     @Input() dealType: any;
+    @Input() DC_PARENT_ID: any
+    @Input() psDC_ID: any;
+    @Input() ptDC_ID: any;
     @Input() CostTestGroupDetails: any;
     @Output() refreshParent: EventEmitter<any> = new EventEmitter<any>();
     userRole = ""; canEmailIcon = true;
@@ -203,6 +206,9 @@ export class pctChildGridComponent {
             title = dataItem.PRC_CST_TST_STS;
         }
         return title;
+    }
+    goToNavManagePCTChild(DC_PARENT_ID, DC_ID, ptDC_ID, DEAL_ID) {
+        window.open(`/Contract#/manager/WIP/${DC_PARENT_ID}/${DC_ID}/${ptDC_ID}/${DEAL_ID}`, '_blank')
     }
     ngOnChanges() {
         this.userRole = (<any>window).usrRole;
