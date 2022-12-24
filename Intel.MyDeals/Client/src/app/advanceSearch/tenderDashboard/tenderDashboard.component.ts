@@ -568,8 +568,9 @@ export class TenderDashboardComponent implements OnInit {
     }
 
     approveActionsupdated(args) {
-        const newValue = args.newValue;
-        if (newValue == "Action") return;   //user selected the default non-item action so we break out here.
+        this.changedActionValue = args.newValue;
+        this.changedDataItem = args.dataItem;
+        if (this.changedActionValue == "Action") return;   //user selected the default non-item action so we break out here.
         this.actionType = "PS";
         this.changeBidAction(args.gridDS)
     }
