@@ -12,7 +12,7 @@
     </span>
 </div>
 <div id="horizontal-search" class="padding-design-horizontal">
-    <div id="search-info-container" *ngIf="showSearchFilters">
+    <div id="search-info-container" [hidden]="!showSearchFilters">
         <div class="row search-container">
             <div class="col-md-5 left-inner-container">
                 <app-search [title]="title" [titleText]="searchTitle"></app-search>
@@ -118,7 +118,7 @@
     </div>
 </div>
 
-<div id="admin-advance-grid" *ngIf="!isLoading" class="opUiContainer md dashboard either-pin oppo-grids">
+<div id="admin-advance-grid" class="opUiContainer md dashboard either-pin oppo-grids">
     <kendo-grid class="advance_grid_class" (filterChange)="filterChange($event)" [style.height]="isListExpanded ? 'calc(100vh - 225px)' : 'calc(100vh - 29rem)'" style="overflow: auto;" [data]="gridData" [skip]="state.skip" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}"
                 [groupable]="false" (dataStateChange)="dataStateChange($event)" [reorderable]="true" [filter]="state.filter" filterable="menu">
         <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columnsDisp" field="{{column.field}}" title="{{column.title}}" width="{{column.width}}">

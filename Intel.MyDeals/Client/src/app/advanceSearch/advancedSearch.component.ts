@@ -213,8 +213,11 @@ export class AdvancedSearchComponent implements OnInit {
             if (index > -1) {
                 this.hiddenColumns.splice(index, 1);
             }
+            this.columnsDisp = [];
             this.columns.forEach((row) => {
-                if (row.field == val.field) this.columnsDisp.push(row);
+                if (!(this.hiddenColumns.includes(row.field))) {
+                    this.columnsDisp.push(row);
+                }
             });
         }
         else {
