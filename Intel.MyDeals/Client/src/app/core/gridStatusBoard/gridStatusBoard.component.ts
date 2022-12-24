@@ -6,7 +6,6 @@ import { logger } from "../../shared/logger/logger";
 import { DatePipe } from "@angular/common";
 import { DashboardComponent } from "../../dashboard/dashboard/dashboard.component";
 import { contractStatusWidgetService } from '../../dashboard/contractStatusWidget.service';
-import { DynamicEnablementService } from "../../shared/services/dynamicEnablement.service";
 import * as _ from "underscore";
 import * as moment from 'moment';
 
@@ -26,10 +25,7 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
 
     @Output() public isGridLoading: EventEmitter<boolean> = new EventEmitter();
 
-    //To load angular Contract Manager from deal desk change value to false, will be removed once contract manager migration is done
-    public angularEnabled:boolean=false;
-
-    constructor(private contractService: GridStatusBoardService, private loggerSvc: logger, public datepipe: DatePipe, private dashboardParent: DashboardComponent, private cntrctWdgtSvc: contractStatusWidgetService, private dynamicEnablementService: DynamicEnablementService) {
+    constructor(private contractService: GridStatusBoardService, private loggerSvc: logger, public datepipe: DatePipe, private dashboardParent: DashboardComponent, private cntrctWdgtSvc: contractStatusWidgetService) {
 
         this.cntrctWdgtSvc.isRefresh.subscribe(res => {
             if (res) {
@@ -369,13 +365,7 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
             }
         }
     }
-
-    async getAngularStatus(){
-        this.angularEnabled=await this.dynamicEnablementService.isAngularEnabled();
-     }
-    public ngOnInit(): void {
-        //this code tells where to route  either Angular or AngularJS
-        this.getAngularStatus();
+    public ngOnInit(): void {        
         for (let i = 0; i < this.dashboardParent.dashboard.length; i++) {
             if (this.dashboardParent.dashboard[i].subConfig) {
                 if (this.dashboardParent.dashboard[i].subConfig.favContractIds !== undefined &&

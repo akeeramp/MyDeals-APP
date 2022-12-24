@@ -26,19 +26,4 @@ export class DynamicEnablementService {
             this.ANGULAR_ENABLED = false;
         }
     }
-    public isAngularEnabled_old() {
-        return this.ANGULAR_ENABLED ;
-    }
-    public async isAngularEnabled() {
-        const data = await this.constantsService.getConstantsByName(this.CONSTANT_TITLE).toPromise().catch((error) => {
-            this.loggerService.error(`The constant '${ this.CONSTANT_TITLE }' was not found and could not be retrieved; Defaulting to AngularJS components`,
-                `Constant not found`, error);
-        });
-        if (data && data.CNST_VAL_TXT) {
-            return  (data.CNST_VAL_TXT === 'true') ? true:false;
-        } 
-        else{
-           return false;
-        }
-    }
 }

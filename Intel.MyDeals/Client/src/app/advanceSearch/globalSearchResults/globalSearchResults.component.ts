@@ -1,7 +1,6 @@
 import {Component,EventEmitter,Input, Output,ChangeDetectorRef} from "@angular/core";
 import {globalSearchResultsService} from "./globalSearchResults.service";
 import {logger} from "../../shared/logger/logger";
-import { DynamicEnablementService } from "../../shared/services/dynamicEnablement.service";
 
 @Component({
   selector: "global-search-results-angular",
@@ -10,7 +9,7 @@ import { DynamicEnablementService } from "../../shared/services/dynamicEnablemen
 })
 
 export class GlobalSearchResultsComponent  {
-    constructor(protected globalSearchSVC: globalSearchResultsService, private dynamicEnablementService: DynamicEnablementService, private loggerSvc: logger, private ref: ChangeDetectorRef) {}
+    constructor(protected globalSearchSVC: globalSearchResultsService, private loggerSvc: logger, private ref: ChangeDetectorRef) {}
     //these are input coming from gloablsearch component
     @Input() searchText = "";
     response :any
@@ -19,8 +18,6 @@ export class GlobalSearchResultsComponent  {
     @Output() isWindowOpen=new EventEmitter;
     private resultTake=5;
     private viewMoreVisible = true;
-    //To load angular Contract Manager from search change value to false, will be removed once contract manager migration is done
-    public angularEnabled:boolean=false;
     public isLoading:boolean;
     private opTypes:Array<any> = [
       {
@@ -121,22 +118,15 @@ export class GlobalSearchResultsComponent  {
             this.loggerSvc.error("Unable to locate the Pricing Strategy.", "error")
             return;
         }
-      if (opType == 'CNTRCT' ) {
-          if (this.angularEnabled) window.location.href = "#/manager/CNTRCT/" + DCID + "/0/0/0";
-          else   window.location.href = "/Contract#/manager/" + DCID;
-     }
-      else if (opType == 'PRC_ST' || opType == 'PRC_TBL' || opType == 'WIP_DEAL') {
-          if (this.angularEnabled) {
-             // calling this function because to navigate to the PS we need contract data,PS ID and PT ID -- in the item we dont have PT ID for opType ->PS so hitting API to get data
-              //in case of WIp deal click on the global search results we need contract id ,PS and PT ID to navigate to respective deal so calling this function to hit the api to get the details
-              //in case of PT ID click on the global search results we need contract ID which is not present in item so calling API to get the data
-              this.getIDs(DCID, item.DC_PARENT_ID, opType)
-          }
-          else {
-            window.location.href = (opType == 'PRC_ST') ? "/advancedSearch#/gotoPs/" + DCID : (opType == 'PRC_TBL') ? "/advancedSearch#/gotoPt/" + DCID : "/advancedSearch#/gotoDeal/" + DCID;
-             
-          }
-     }
+        if (opType == 'CNTRCT' ) {
+          window.location.href = "#/manager/CNTRCT/" + DCID + "/0/0/0";
+        }
+        else if (opType == 'PRC_ST' || opType == 'PRC_TBL' || opType == 'WIP_DEAL') {          
+            //calling this function because to navigate to the PS we need contract data,PS ID and PT ID -- in the item we dont have PT ID for opType ->PS so hitting API to get data
+            //in case of WIp deal click on the global search results we need contract id ,PS and PT ID to navigate to respective deal so calling this function to hit the api to get the details
+            //in case of PT ID click on the global search results we need contract ID which is not present in item so calling API to get the data
+            this.getIDs(DCID, item.DC_PARENT_ID, opType)
+        }
     }
 
     viewMore(opType:string){
@@ -169,13 +159,8 @@ export class GlobalSearchResultsComponent  {
         this.isWindowOpen.emit(false);
         window.location.href = "/advancedSearch#/attributeSearch";
     }
-    async getAngularStatus(){
-      //this code tells where to route  either Angular or AngularJS
-      this.angularEnabled=await this.dynamicEnablementService.isAngularEnabled();
-   }
     ngOnInit() {
-        this.getAngularStatus();
         this.getObjectTypeResult(this.opType);
-   }
+    }
    
 }

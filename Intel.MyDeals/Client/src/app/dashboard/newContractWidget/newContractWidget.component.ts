@@ -5,7 +5,6 @@ import { NewContractWidgetService } from "./newContractWidget.service"
 import { MatDialog } from '@angular/material/dialog';
 import { CopyContractComponent } from '../copyContract/copyContract.component';
 import { TenderFolioComponent } from "../../contract/tenderFolio/tenderFolio.component";
-import { DynamicEnablementService } from '../../shared/services/dynamicEnablement.service';
 
 @Component({
     selector: 'app-widget-newcontract',
@@ -28,10 +27,7 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
     copyContractText = 'Copy a My Deals Contract';
     createTenderFolioText = 'Create a Customer Tender Folio';
 
-    //To load angular Contract details page change value to true, will be removed once contract details migration is done
-    public angularEnabled:boolean=false;
-
-     constructor(private newContractWidgetService: NewContractWidgetService, private dynamicEnablementService: DynamicEnablementService, protected dialog: MatDialog) {
+     constructor(private newContractWidgetService: NewContractWidgetService, protected dialog: MatDialog) {
         
     }
 
@@ -51,12 +47,7 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 //Redirect to contract detail screen for tender creation
-                if (this.angularEnabled){
-                    window.location.href = "#tendermanager/" + result;
-                } 
-                else {
-                    window.location.href = "/Contract#/manager/"+result;
-                } 
+                window.location.href = "#tendermanager/" + result;
             }
         });
     }
@@ -78,25 +69,14 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
         });
     }
     goToCreateContract(){
-        if (this.angularEnabled){
-            const selectedCustomerValue  = (this.custIds && this.custIds.length > 0) ? this.custIds[0] : undefined;
-            /*=> Emitting "value/undefined" both since the behavioursubject's getvalue() method holds the last emitted value.
-                 So even when no customer is selected in dashboard , we're emitting "undefined". Thus at time of checking/listening
-                 it doesn't get last customer's value and instead get "undefined" which signifies no customer was selected. */   
-            this.newContractWidgetService.selectedCustomer.next(selectedCustomerValue);
-            window.location.href = "#/contractdetails/0";
-        } 
-        else {
-            window.location.href = "/Contract#/manager/0/details";
-        } 
-    }
-    async getAngularStatus(){
-       this.angularEnabled=await this.dynamicEnablementService.isAngularEnabled();
+        const selectedCustomerValue  = (this.custIds && this.custIds.length > 0) ? this.custIds[0] : undefined;
+        /*=> Emitting "value/undefined" both since the behavioursubject's getvalue() method holds the last emitted value.
+                So even when no customer is selected in dashboard , we're emitting "undefined". Thus at time of checking/listening
+                it doesn't get last customer's value and instead get "undefined" which signifies no customer was selected. */   
+        this.newContractWidgetService.selectedCustomer.next(selectedCustomerValue);
+        window.location.href = "#/contractdetails/0";
     }
     ngOnInit(): void {
-        this.C_CREATE_CONTRACT=this.newContractWidgetService.chkDealRules('C_CREATE_CONTRACT', (<any>window).usrRole, null, null, null); //this create contract will be implemented after header component is ready
-        //this code tells where to route  either Angular or AngularJS
-        this.getAngularStatus();
         this.resizeSub = this.resizeEvent.subscribe((widget) => {
             if (widget === this.widget) { // or check id , type or whatever you have there
                 // resize your widget, chart, map , etc.
