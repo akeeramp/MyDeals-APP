@@ -731,7 +731,7 @@ export class PTE_Load_Util {
                     cellProperties['readOnly'] = false;
                 }
                 if ((prop == 'REBATE_OA_MAX_AMT' || prop == 'REBATE_OA_MAX_VOL') && hybridstat == "1" && (hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != undefined && hotTable.getDataAtRowProp(row, 'PTR_USER_PRD') != null) && (curPricingTable.PS_WF_STG_CD == 'Requested' || curPricingTable.PS_WF_STG_CD == 'Draft' || curPricingTable.PS_WF_STG_CD == '')) {
-                    cellProperties['readOnly'] = false;
+                    cellProperties['readOnly'] = true;
                 }
                 //cell behaviors
                 if (hotTable.getDataAtRowProp(row, '_behaviors') != undefined && hotTable.getDataAtRowProp(row, '_behaviors') != null) {

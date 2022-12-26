@@ -1,6 +1,6 @@
 ﻿<div *ngIf="in_Field_Name === 'EXCLUDE_AUTOMATION' && !in_Is_Tender_Dashboard" id="ExcludeAuto">
     <div class="input-checkbox-rel">
-        <input type='checkbox' class='grid-link-checkbox with-font box_position_fix' [(ngModel)]="in_DataItem.isExclSel" />
+        <input type='checkbox' [(ngModel)]="in_DataItem.isExclSel" />
         <label title="Exclude from Price Approval Rules"></label>
         </div>
     </div>

@@ -265,7 +265,7 @@ export class publishTenderComponent {
             }
             this.wipData = data;
             //maping the result with exlude deal
-            _.each(this.wipData,itm=>{itm['isExclSel']=false});
+            _.each(this.wipData, itm => {Object.assign(itm, {isExclSel:false})});
             this.gridData = process(this.wipData, this.state);
         }, 10);
         setTimeout(() => {
