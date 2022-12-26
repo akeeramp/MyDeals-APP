@@ -36,10 +36,10 @@
                 <div class="second-parent-tender">
                     <div class="date-range-label tender_date_range">Date Range:</div>
                     <div class="date-range-from-to">
-                        <kendo-datepicker class="date-dashboard date_tender_style k-custom-dater" #picker [(value)]="startDateValue" calendarType="classic" [(ngModel)]="startDateValue" (valueChange)="onDateChange($event,'startDateChange')">
+                        <kendo-datepicker class="date-dashboard date_tender_style k-custom-dater" #picker [(value)]="startDateValue" calendarType="classic" style="width:115px !important" [(ngModel)]="startDateValue" (valueChange)="onDateChange($event,'startDateChange')">
                         </kendo-datepicker>
                         <span class="to-design-style">to</span>
-                        <kendo-datepicker class="date-dashboard datepick_style k-custom-dater" #picker [(value)]="endDateValue" calendarType="classic" [(ngModel)]="endDateValue" (valueChange)="onDateChange($event,'endDateChange')">
+                        <kendo-datepicker class="date-dashboard datepick_style k-custom-dater" #picker [(value)]="endDateValue" calendarType="classic" style="width:115px !important" [(ngModel)]="endDateValue" (valueChange)="onDateChange($event,'endDateChange')">
                         </kendo-datepicker>
                     </div>
                     

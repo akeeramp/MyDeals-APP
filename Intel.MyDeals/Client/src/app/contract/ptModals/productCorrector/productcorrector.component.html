@@ -35,8 +35,8 @@
                 <div class="mini-left miniNav" *ngIf="numIssueRows > 1">
                     <div class="text-center">({{ curRowIndx }} of {{ numIssueRows }} rows)</div>
                     <div>
-                        <button class="btn btn-xs btn-primary prdBtn" style="margin-right: 12px;" (click)="prevRow()" [disabled]="curRowIndx <= 1">Back</button>
-                        <button class="btn btn-xs btn-primary prdBtn" (click)="nextRow()" [disabled]="curRowIndx >= numIssueRows">Next</button>
+                        <button class="btn btn-xs btn-primary prdBtn product-corrector-backbtn" style="margin-right: 12px;" (click)="prevRow()" [disabled]="curRowIndx <= 1">Back</button>
+                        <button class="btn btn-xs btn-primary prdBtn product-correct-nextbtn" (click)="nextRow()" [disabled]="curRowIndx >= numIssueRows">Next</button>
                     </div>
                 </div>
                 <div class="mini-right miniProdNav" style=" padding-top: 5px; padding-bottom: 5px;">
@@ -375,17 +375,17 @@
                 <div class="col-md-2">
 
                 </div>
-                <div class="col-md-8" style="margin: 100px 400px 120px 650px;">
-                    <i class="intelicon-passed-completed-solid"></i>
+                <div class="col-md-8" style="margin: 100px 400px 120px 610px;">
+                    <i class="intelicon-passed-completed-solid product-corrector-passedicon"></i>
 
-                    <div class="done-title">You are Done!</div>
-                    <div class="done-body">All the products have been matched.</div>
-                    <div class="done-confirm">
+                    <div class="done-title correct-title-done">You are Done!</div>
+                    <div class="done-body corrector-body-title">All the products have been matched.</div>
+                    <div class="done-confirm done-confirm-corrector">
                         Would you like to apply the changes to your Pricing Table?
                     </div>
-                    <div>
-                        <button class="btn btn-default prdBtn" (click)="onNoClick()" style="margin-right:20px; font-size: 16px;">Cancel</button>
-                        <button class="btn btn-primary prdBtn" (click)="saveProducts()" style="font-size: 16px;">YES, Please Save and Close</button>
+                    <div style="margin-left:60px">
+                        <button class="btn btn-default prdBtn cancel-correctorbtn" (click)="onNoClick()" style="margin-right:20px; font-size: 16px;">Cancel</button>
+                        <button class="btn btn-primary prdBtn saveclose-correctorbtn" (click)="saveProducts()" style="font-size: 16px;">YES, Please Save and Close</button>
                     </div>
                 </div>
                 <div class="col-md-2">

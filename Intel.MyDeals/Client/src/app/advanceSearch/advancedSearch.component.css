@@ -134,6 +134,7 @@ button.btn.btn-sm.ssToolbarBtn.advance_cleargrid {
     color: #00AEEF !important;
     line-height: 1.2em !important;
     border: 0px solid transparent !important;
+    right:40px !important
 }
 i.intelicon-cancel-filter-outlined.skyBlue.addd_cleargridbtn,
 i.intelicon-align-left.skyBlue.addd_cleargridbtn,
@@ -153,7 +154,8 @@ td.hidden-sm.hidden-xs.text_grid_style {
 button.btn.btn-sm.ssToolbarBtn.advance_word_wrap {
     position: relative !important;
     line-height: 1.2em !important;
-    color:#00AEEF !important
+    color:#00AEEF !important;
+    right: 70px !important;
 }
 span.k-icon.k-i-arrow-60-down.arrow_down_advance {
     color: #000 !important;
@@ -168,7 +170,8 @@ span.k-icon.k-i-arrow-60-down.arrow_down_advance:hover {
 button.btn.btn-sm.ssToolbarBtn.advance_col_option {
     position: relative !important;
     line-height: 1.2em !important;
-    color: #00AEEF !important
+    color: #00AEEF !important;
+    right: 40px !important;
 }
 button.btn.btn-sm.ssToolbarBtn.advance_excelbtn {
     position: relative !important;
@@ -313,7 +316,7 @@ kendo-numerictextbox.advance-numerictextbox-style.k-widget.k-numerictextbox:focu
 
 .click-adv.advSearch {
     cursor: pointer !important;
-    color: #0071c5 !important
+    color: #00AEEF !important
 }
 
 .alignDeal {
@@ -325,4 +328,29 @@ kendo-numerictextbox.advance-numerictextbox-style.k-widget.k-numerictextbox:focu
 .alignDealPopup {
     position: relative;
     top: 8px;
+}
+button.btn.btn-sm.ssToolbarBtn.advance_col_option:hover,
+button.btn.btn-sm.ssToolbarBtn.advance_word_wrap:hover,
+button.btn.btn-sm.ssToolbarBtn.advance_cleargrid:hover,
+button.btn.btn-sm.ssToolbarBtn.advance_excelbtn:hover {
+    background-color: #f2f2f2 !important;
+    color: #0071c5 !important;
+}
+
+.advance_combo-select-saverule span.k-icon.k-clear-value.k-i-close {
+    border-radius: 50% !important;
+    background-color: #dbdbdb !important;
+    height: 15px !important;
+    width: 15px !important;
+    top: 6px !important;
+    right: 10px !important;
+    color: #00AEEF !important;
+    padding-top: 1px !important;
+    opacity: 1 !important;
+}
+
+dropdown-filter.de-dropdwn-styl.advance-drop-custstyle kendo-combobox.drop-cus-filtersty.k-widget.k-combobox.k-combobox-clearable {
+    width: 185px !important;
+    box-shadow: none !important;
+    border-color: #dbdada !important;
 }

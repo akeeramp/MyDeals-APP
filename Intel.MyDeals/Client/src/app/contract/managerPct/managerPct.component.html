@@ -176,7 +176,7 @@
                                                     </ng-template>
                                                     <ng-template kendoGridCellTemplate let-dataItem>
                                                         <div class='dealLnk' style="display:flex">
-                                                            <deal-popup-icon [dealId]="dataItem.DEAL_ID" style="margin-bottom: 8px;margin-left: -12px;"></deal-popup-icon>
+                                                            <deal-popup-icon [dealId]="dataItem.DEAL_ID" style="margin-bottom: 8px;margin-left: -8px;"></deal-popup-icon>
                                                             <a style="margin-top: 5px;" (click)="goToNavManagePCT(ps.DC_PARENT_ID,ps.DC_ID,pt.DC_ID,dataItem.DEAL_ID)" title="Click to go to Deal Editor"><span class="hyperunderline">{{dataItem.DEAL_ID}}</span></a>
                                                         </div>
                                                     </ng-template>

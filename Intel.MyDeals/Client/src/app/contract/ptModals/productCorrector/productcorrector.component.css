@@ -158,20 +158,26 @@
         margin-right: 25px;
     }
 
-.done-title {
-    font-size: 30px;
+.done-title.correct-title-done {
+    font-size: 30px !important;
+    position: relative !important;
+    margin-left: 117px !important
 }
 
-.done-body {
-    font-size: 12px;
+.done-body.corrector-body-title {
+    font-size: 12px !important;
+    position: relative !important;
+    margin-left: 115px !important;
 }
 
-.done-confirm {
-    font-size: 16px;
-    text-align: justify;
-    width: 100%;
-    padding: 25px 0;
+.done-confirm.done-confirm-corrector {
+    font-size: 16px !important;
+    text-align: justify !important;
+    width: 100% !important;
+    padding: 25px 0 !important;
+    margin-left: 5px !important
 }
+
 
 .headerMsg {
     margin-top: 6px;
@@ -711,4 +717,60 @@ tr.ng-star-inserted.hide-row {
     font-size: 17px;
     font-family: 'Intel Clear';
     line-height: 1;
+}
+button.btn.btn-xs.btn-primary.prdBtn.product-correct-nextbtn,
+button.btn.btn-xs.btn-primary.prdBtn.product-corrector-backbtn {
+    background-color: #01AEEF !important;
+    border-color: #367fa9 !important;
+    font-size: 13px !important;
+    color: #fff !important;
+    border-radius: 3px !important;
+    padding: 1px 5px !important;
+}
+
+button.btn.btn-xs.btn-primary.prdBtn.product-correct-nextbtn:hover,
+button.btn.btn-xs.btn-primary.prdBtn.product-corrector-backbtn:hover {
+    background-color: #01AEEF !important;
+    color: #1a3e6f !important;
+}
+
+button.btn.btn-primary.btn-xs.prdBtn.product-corrector-backbtn[disabled],
+button.btn.btn-primary.btn-xs.prdBtn.product-correct-nextbtn[disabled] {
+    color: #00AEEF !important;
+    background-color: #003C71 !important;
+    border-color: #b1babf !important;
+    cursor: not-allowed !important;
+    pointer-events: all !important;
+}
+
+i.intelicon-passed-completed-solid.product-corrector-passedicon {
+    font-size: 60px !important;
+    color: #C4D600 !important;
+    position: relative !important;
+    margin-left: 170px !important;
+}
+
+button.btn.btn-primary.prdBtn.saveclose-correctorbtn {
+    font-size: 16px !important;
+    background-color: #00aeef !important;
+    border-color: rgb(54, 127, 169) !important;
+    color: #fff !important;
+    width: 220px !important
+}
+
+button.btn.btn-primary.prdBtn.saveclose-correctorbtn:hover {
+    background-color: #01AEEF !important;
+    color: #1a3e6f !important;
+}
+
+button.btn.btn-default.prdBtn.cancel-correctorbtn {
+    background-color: #f4f4f4 !important;
+    color: rgb(68, 68, 68) !important;
+    border-color: rgb(221, 221, 221) !important;
+    width: 73px !important
+}
+
+button.btn.btn-default.prdBtn.cancel-correctorbtn:hover {
+    background-color: rgb(231, 231, 231) !important;
+    color: rgb(0, 113, 197) !important;
 }
