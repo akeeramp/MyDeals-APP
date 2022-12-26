@@ -1,7 +1,5 @@
 ﻿import { Component, Input } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { Item } from "@progress/kendo-angular-charts/dist/es2015/common/collection.service";
-import * as angular from "angular";
 import * as moment from "moment";
 import { contractStatusWidgetService } from "../../dashboard/contractStatusWidget.service";
 import { logger } from "../logger/logger";
@@ -64,10 +62,3 @@ export class SearchComponent {
         }
     }
 }
-
-    angular
-    .module("app")
-    .directive(
-        "appSearch",
-        downgradeComponent({ component: SearchComponent })
-    );

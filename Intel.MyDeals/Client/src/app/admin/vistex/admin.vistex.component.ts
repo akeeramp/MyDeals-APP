@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { dsaService } from "./admin.vistex.service";
 import { Component } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 
 @Component({
     selector: "admin-vistex",
@@ -97,10 +95,3 @@ export class adminVistexComponent {
         this.loadVistexTestApi();
     }
 }
-
-angular
-    .module("app")
-    .directive(
-        "adminVistex",
-        downgradeComponent({ component: adminVistexComponent })
-    );

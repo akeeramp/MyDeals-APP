@@ -1,6 +1,4 @@
-﻿import * as angular from "angular";
-import { Component } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
+﻿import { Component } from "@angular/core";
 import { logger } from "../shared/logger/logger";
 import * as _ from "underscore";
 import { globalSearchResultsService } from "../advanceSearch/globalSearchResults/globalSearchResults.service";
@@ -80,9 +78,3 @@ export class goToComponent {
         this.redirecttoroute();
     }
 }
-angular.module("app").directive(
-    "gotoRoute",
-    downgradeComponent({
-        component: goToComponent,
-    })
-);

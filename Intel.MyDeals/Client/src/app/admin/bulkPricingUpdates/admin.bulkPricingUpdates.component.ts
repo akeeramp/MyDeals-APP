@@ -1,10 +1,8 @@
-import * as angular from 'angular';
 import { Component, ViewEncapsulation } from "@angular/core"
 import { logger } from "../../shared/logger/logger";
 import  Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
 import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
-import { downgradeComponent } from '@angular/upgrade/static';
 import { MatDialog } from '@angular/material/dialog';
 import { BulkPricingUpdateModalComponent } from './admin.bulkPricingUpdateModal.component';
 import {sheetObj} from '../../contract/pricingTableEditor/handsontable.interface'
@@ -95,30 +93,7 @@ export class BulkPricingUpdatesComponent  {
             },
 
           },
-          'separator': ContextMenu.SEPARATOR,
-          //'delete': {
-          //  name: 'Delete',
-          //  hidden: () => {
-          //      return ((this.hotTable.getSelectedLast()[0] > 0 && this.hotTable.getSelectedLast()[1] > 0) );
-          //  }
-            
-          //},
-          //'hide': {
-          //  name: 'Hide',
-          //  callback: () => {
-          //      if (this.hotTable.getSelectedRange()[0].from.col < 0) {
-          //          this.hotTable.getPlugin('hiddenRows').hideRow(this.hotTable.getSelectedLast()[0])
-          //      }
-          //      if (this.hotTable.getSelectedRange()[0].from.row < 0) {
-          //          this.hotTable.getPlugin('hiddenColumns').hideColumn(this.hotTable.getSelectedLast()[1])
-          //      }
-          //  this.hotTable.render();
-          //  },
-          //  hidden: () => {
-          //      return ((this.hotTable.getSelectedLast()[0] > 0 && this.hotTable.getSelectedLast()[1] > 0) );
-          //  }
-          // },
-          
+          'separator': ContextMenu.SEPARATOR,          
         }
         
       },
@@ -480,9 +455,3 @@ ngOnInit(){
     })
 }
 }
-angular.module("app").directive(
-    "adminBulkPricingUpdates",
-    downgradeComponent({
-        component: BulkPricingUpdatesComponent,
-    })
-);

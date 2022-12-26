@@ -1,6 +1,4 @@
-﻿import * as angular from "angular";
-import { Component, Input } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
+﻿import { Component, Input } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { contractDetailsService } from "./contractDetails.service";
 import { FormGroup } from "@angular/forms";
@@ -926,9 +924,8 @@ export class contractDetailsComponent {
                     this.CONTRACT_TYPE = CONTRACT_TYPE[0];
                     const url = new URL(window.location.href).toString().split('/');
                     const qString = url[url.length - 1];
-                    if (qString.indexOf("=") != -1) {
-                        const copyCid = qString.split("=");
-                        this.c_Id = Number(copyCid[copyCid.length - 1]);
+                    if (qString!= '0') {
+                        this.c_Id = Number(qString);
                         this.isCopyContract = true;
                         this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
                             this.templateData = response;
@@ -1041,9 +1038,3 @@ export class contractDetailsComponent {
     }
 
 }
-angular.module("app").directive(
-    "contractDetails",
-    downgradeComponent({
-        component: contractDetailsComponent,
-    })
-);

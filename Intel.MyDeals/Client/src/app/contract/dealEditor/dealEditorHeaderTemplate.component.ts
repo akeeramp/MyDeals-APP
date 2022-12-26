@@ -1,6 +1,4 @@
-﻿import * as angular from 'angular';
-import { Component, Input, ViewEncapsulation, OnInit } from '@angular/core';
-import { downgradeComponent } from '@angular/upgrade/static';
+﻿import { Component, Input, ViewEncapsulation, OnInit } from '@angular/core';
 import * as _ from 'underscore';
 
 @Component({
@@ -47,10 +45,3 @@ export class dealEditorHeaderTemplateComponent implements OnInit{
         this.is_Deal_Tools_Checked = this.checkAllSelected();
     }
 }
-
-angular.module("app").directive(
-    "dealEditorHeader",
-    downgradeComponent({
-        component: dealEditorHeaderTemplateComponent,
-    })
-);

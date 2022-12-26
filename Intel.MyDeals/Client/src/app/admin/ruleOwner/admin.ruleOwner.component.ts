@@ -1,9 +1,7 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { ruleOwnerService } from "./admin.ruleOwner.service";
 import { constantsService } from "../constants/admin.constants.service";
 import { Component, ViewChild } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import {
     GridDataResult,
@@ -243,9 +241,3 @@ export class RuleOwnerComponent {
         this.getConstant();
     }
 }
-
-angular
-    .module("app")
-    .directive("ruleOwner",
-        downgradeComponent({ component: RuleOwnerComponent })
-    );

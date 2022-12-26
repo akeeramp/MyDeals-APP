@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { dataFixService } from "./admin.dataFix.service";
 import { Component } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
@@ -284,11 +282,4 @@ export class adminDataFixComponent {
     }
 
 }
-
-angular
-    .module("app")
-    .directive(
-        "adminDataFix",
-        downgradeComponent({ component: adminDataFixComponent })
-    );
 

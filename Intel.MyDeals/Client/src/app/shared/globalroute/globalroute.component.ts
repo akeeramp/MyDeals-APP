@@ -1,6 +1,4 @@
-import * as angular from "angular";
 import { Component } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import * as _ from "underscore";
 
 @Component({
@@ -59,10 +57,3 @@ export class globalRouteComponent {
         this.redirectToRoute();
     }
 }
-
-angular.module("app").directive(
-    "globalRoute",
-    downgradeComponent({
-        component: globalRouteComponent,
-    })
-);

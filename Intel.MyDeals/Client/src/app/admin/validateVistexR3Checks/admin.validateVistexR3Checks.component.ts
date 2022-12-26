@@ -1,4 +1,3 @@
-import * as angular from "angular";
 import { Component, OnInit, ViewEncapsulation } from "@angular/core"
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query"; /*GroupDescriptor,*/
@@ -6,7 +5,6 @@ import { logger } from "../../shared/logger/logger";
 import { ValidateVistexR3ChecksService } from './admin.validateVistexR3Checks.service';
 import { any } from "underscore";
 import * as _ from "underscore";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 
 
@@ -304,12 +302,3 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
         { field: "Send_To_Vistex", title: "Send To Vistex", width: "150px", filterable: { multi: true, search: true } }
     ]
 }
-
-
-angular
-    .module("app")
-    .directive("validateVistexChecks",
-        downgradeComponent({ component: ValidateVistexR3ChecksComponent })
-    );
-
-

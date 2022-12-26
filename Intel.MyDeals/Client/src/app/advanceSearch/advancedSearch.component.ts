@@ -1,6 +1,4 @@
 ﻿import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
-import * as angular from "angular";
 import * as moment from "moment";
 import { contractStatusWidgetService } from "../dashboard/contractStatusWidget.service";
 import { logger } from "../shared/logger/logger";
@@ -427,10 +425,3 @@ export class AdvancedSearchComponent implements OnInit {
             });
     }
 }
-
-angular
-    .module("app")
-    .directive(
-        "appAdvancedSearch",
-        downgradeComponent({ component: AdvancedSearchComponent })
-    );

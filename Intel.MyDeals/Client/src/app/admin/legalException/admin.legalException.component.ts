@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import {  Component } from "@angular/core";
+﻿import {  Component } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
  import * as _moment from "moment";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { DataStateChangeEvent, GridDataResult, PageSizeItem } from "@progress/kendo-angular-grid";
 import { State } from "@progress/kendo-data-query";
 import { process, distinct } from "@progress/kendo-data-query";
@@ -559,10 +557,3 @@ export class adminlegalExceptionComponent {
         this.loadlegalException();
     }  
 }
-
-angular.module("app").directive(
-    "adminLegalException",
-    downgradeComponent({
-        component: adminlegalExceptionComponent,
-    })
-);

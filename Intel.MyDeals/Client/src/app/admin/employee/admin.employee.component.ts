@@ -1,7 +1,5 @@
-﻿import * as angular from 'angular';
-import { Component } from "@angular/core";
+﻿import { Component } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { employeeService } from './admin.employee.service';
 
 @Component({
@@ -77,9 +75,3 @@ export class EmployeeComponent {
         ]
     }
 }
-angular.module("app").directive(
-    "employeeDashboard",
-    downgradeComponent({
-        component: EmployeeComponent,
-    })
-);

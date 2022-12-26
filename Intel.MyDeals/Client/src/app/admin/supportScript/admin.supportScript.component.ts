@@ -1,9 +1,7 @@
-﻿import * as angular from "angular";
-import { Component } from "@angular/core";
+﻿import { Component } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { adminsupportScriptService } from "./admin.supportScript.service"
 import * as _moment from "moment";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 const moment = _moment;
 
@@ -122,9 +120,3 @@ export class adminsupportScriptComponent {
     }
      
 }
-angular.module("app").directive(
-    "adminSupportScript",
-    downgradeComponent({
-        component: adminsupportScriptComponent,
-    })
-);

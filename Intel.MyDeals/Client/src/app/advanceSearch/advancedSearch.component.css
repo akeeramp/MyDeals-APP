@@ -27,7 +27,6 @@ span.search_res_text {
 }
 #horizontal-search {
     border: 0 solid transparent !important;
-    height: 100% !important;
     font-size: 12px !important;
     margin-top: 5px !important;
 }

@@ -1,6 +1,4 @@
-﻿import * as angular from 'angular';
-import { Component } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
+﻿import { Component } from "@angular/core";
 import { adminBannerService } from './adminBanner.service';
 import { logger } from "../../shared/logger/logger";
 
@@ -44,8 +42,3 @@ export class AdminBannerComponent {
 
     }
 }
-angular
-    .module('app')
-    .directive("adminBannerAngular", downgradeComponent({
-        component: AdminBannerComponent,
-    }));

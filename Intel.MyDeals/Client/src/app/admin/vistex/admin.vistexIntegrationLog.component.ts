@@ -1,8 +1,6 @@
-import * as angular from "angular";
 import { logger } from "../../shared/logger/logger";
 import { dsaService } from "./admin.vistex.service";
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import * as moment from 'moment';
 import { GridDataResult,DataStateChangeEvent,PageSizeItem} from "@progress/kendo-angular-grid";
@@ -275,9 +273,3 @@ export class adminVistexIntegrationLogComponent implements OnInit {
     };
 
 }
-angular
-    .module("app")
-    .directive(
-        "vistexIntegrationLog",
-        downgradeComponent({ component: adminVistexIntegrationLogComponent })
-    );

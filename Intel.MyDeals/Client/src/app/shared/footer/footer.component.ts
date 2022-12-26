@@ -1,6 +1,4 @@
-import * as angular from "angular";
 import { Component } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { footerService } from "./footer.service";
 import { logger } from "../logger/logger";
 
@@ -35,10 +33,3 @@ export class FooterComponent {
         this.loadFooter();
     }
 }
-
-angular.module("app").directive(
-    "appFooter",
-    downgradeComponent({
-        component: FooterComponent,
-    })
-);

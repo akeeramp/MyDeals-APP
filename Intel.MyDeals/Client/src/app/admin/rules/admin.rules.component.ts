@@ -1,9 +1,7 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { adminRulesService } from "./admin.rules.service";
 import { constantsService } from "../constants/admin.constants.service";
 import { Component, ViewEncapsulation } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { ThemePalette } from "@angular/material/core";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
@@ -504,10 +502,3 @@ export class adminRulesComponent {
         this.gridData = process(this.gridResult, this.state);
     }
 }
-
-angular
-    .module("app")
-    .directive(
-        "adminRules",
-        downgradeComponent({ component: adminRulesComponent })
-    );

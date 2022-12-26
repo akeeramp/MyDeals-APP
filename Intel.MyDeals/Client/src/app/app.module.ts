@@ -1,27 +1,23 @@
-//angular changes
-import './app.main';
-import './app.routes';
 import * as $ from 'jquery';
 
-import { NgModule,ElementRef } from '@angular/core';
-import { FormsModule,ReactiveFormsModule } from '@angular/forms';
+import { NgModule, ElementRef, ApplicationRef } from '@angular/core';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { UpgradeModule } from '@angular/upgrade/static';
-import { HTTP_INTERCEPTORS,HttpClientModule } from '@angular/common/http';
+import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
 import { CommonModule } from "@angular/common";
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';
 //Gridster component
 import { GridsterModule } from 'angular-gridster2';
 //Added angular material for popup toggle
-import {MatDialogModule} from '@angular/material/dialog';
-import {MatFormFieldModule} from '@angular/material/form-field';
+import { MatDialogModule } from '@angular/material/dialog';
+import { MatFormFieldModule } from '@angular/material/form-field';
 import { MatInputModule } from '@angular/material/input';
 import { DragDropModule } from '@angular/cdk/drag-drop';
 //Added angular material version 11.2.13 to support button toggle
 import { MatButtonToggleModule } from '@angular/material/button-toggle';
-import {MatSlideToggleModule} from '@angular/material/slide-toggle';
-import {MatListModule} from '@angular/material/list';
+import { MatSlideToggleModule } from '@angular/material/slide-toggle';
+import { MatListModule } from '@angular/material/list';
 //Helper and utility modules
 import { Ng2SearchPipeModule } from 'ng2-search-filter';
 import { NgbModule } from '@ng-bootstrap/ng-bootstrap';
@@ -31,7 +27,7 @@ import { NgPipesModule } from 'ngx-pipes';
 //spreadsheet component
 import { HotTableModule } from '@handsontable/angular';
 //******************shared components**************************
-import {sharedComponents} from './modules/shared.module';
+import { sharedComponents } from './modules/shared.module';
 //Authentication purpose for token
 import { AuthInterceptor } from './shared/authorization/auth.interceptor';
 //reporting component
@@ -42,9 +38,9 @@ import { coreComponents } from './modules/core.module';
 import { ChartsModule } from '@progress/kendo-angular-charts';
 import { TooltipModule } from '@progress/kendo-angular-tooltip';
 import { PopupModule, POPUP_CONTAINER } from '@progress/kendo-angular-popup';
-import { GridModule,ExcelModule } from '@progress/kendo-angular-grid';
-import { DialogModule,WindowModule } from '@progress/kendo-angular-dialog';
-import { DropDownListModule,DropDownsModule } from "@progress/kendo-angular-dropdowns";
+import { GridModule, ExcelModule } from '@progress/kendo-angular-grid';
+import { DialogModule, WindowModule } from '@progress/kendo-angular-dialog';
+import { DropDownListModule, DropDownsModule } from "@progress/kendo-angular-dropdowns";
 import { InputsModule } from "@progress/kendo-angular-inputs";
 import { DateInputsModule } from "@progress/kendo-angular-dateinputs";
 import { EditorModule } from "@progress/kendo-angular-editor";
@@ -66,6 +62,17 @@ import { contractComponents } from './modules/contract.module';
 //pipe module
 import { MainPipe } from './modules/pipe.module';
 import { broadCastService } from './core/dealPopup/broadcast.service';
+import { RouterModule } from '@angular/router';
+//*********************Angular single boot files *********************
+import { routes } from './app.route.component';
+import { SecurityResolver } from './shared/security.resolve';
+import { AppRootComponent } from './app-root.component';
+import { FooterComponent } from './shared/footer/footer.component';
+import { LoadingSpinnerComponent } from './shared/loadingSpinner/loadingspinner.component';
+import { notificationDockComponent } from './core/notification/notificationDock.component';
+import {AdminBannerComponent} from './core/adminBanner/adminBanner.component';
+import {dealPopupDockComponent} from './core/dealPopup/dealPopupDock.component';
+import { GlobalSearchComponent } from './advanceSearch/globalSearch/globalSearch.component';
 
 @NgModule({
     imports: [
@@ -108,26 +115,29 @@ import { broadCastService } from './core/dealPopup/broadcast.service';
         TreeViewModule,
         DragDropModule,
         MainPipe,
-     ],
-     providers: [
+        RouterModule.forRoot(routes, { useHash: true })
+    ],
+    providers: [
         {
-          provide : HTTP_INTERCEPTORS,
-          useClass: AuthInterceptor,
-          multi   : true,
+            provide: HTTP_INTERCEPTORS,
+            useClass: AuthInterceptor,
+            multi: true,
         },
         {
             provide: POPUP_CONTAINER,
             useFactory: () => {
-               //return the container ElementRef, where the popup will be injected
-               return { nativeElement: document.body } as ElementRef;
+                //return the container ElementRef, where the popup will be injected
+                return { nativeElement: document.body } as ElementRef;
             }
-         },
-         DecimalPipe,
-         CurrencyPipe,
-         DatePipe,
-         broadCastService
+        },
+        DecimalPipe,
+        CurrencyPipe,
+        DatePipe,
+        broadCastService,
+        SecurityResolver
     ],
     declarations: [
+        AppRootComponent,
         ReportingComponent,
         sharedComponents,
         adminComponents,
@@ -136,7 +146,8 @@ import { broadCastService } from './core/dealPopup/broadcast.service';
         advanceSearchComponents,
         contractComponents,
     ],
-    entryComponents: [
+    entryComponents:[
+        AppRootComponent,
         ReportingComponent,
         sharedComponents,
         adminComponents,
@@ -144,11 +155,17 @@ import { broadCastService } from './core/dealPopup/broadcast.service';
         dashboardComponents,
         advanceSearchComponents,
         contractComponents,
-    ]
+    ],
 })
 
 export class AppModule {
-    // Override Angular bootstrap so it doesn't do anything
-    ngDoBootstrap() {
-    }
-}
+    ngDoBootstrap(appRef: ApplicationRef) {
+        appRef.bootstrap(AppRootComponent);
+        appRef.bootstrap(FooterComponent);
+        appRef.bootstrap(LoadingSpinnerComponent);
+        appRef.bootstrap(notificationDockComponent);
+        appRef.bootstrap(AdminBannerComponent);
+        appRef.bootstrap(dealPopupDockComponent);
+        appRef.bootstrap(GlobalSearchComponent);
+      }
+ }

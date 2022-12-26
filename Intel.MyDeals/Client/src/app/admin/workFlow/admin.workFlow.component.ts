@@ -1,9 +1,7 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { workflowService } from "./admin.workFlow.service";
 import { Work_Flow_Map } from "./admin.workflow.model";
 import { Component, ViewChild } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { ThemePalette } from "@angular/material/core";
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -309,10 +307,3 @@ export class adminWorkFlowComponent {
         this.loadWorkflow();
     }
 }
-
-angular
-    .module("app")
-    .directive(
-        "adminWorkFlow",
-        downgradeComponent({ component: adminWorkFlowComponent })
-    );

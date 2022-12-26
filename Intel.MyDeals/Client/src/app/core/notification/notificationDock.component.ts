@@ -1,6 +1,4 @@
-﻿import * as angular from 'angular';
-import { Component } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
+﻿import { Component } from "@angular/core";
 import { notificationsService } from '../../admin/notifications/admin.notifications.service';
 import { logger } from "../../shared/logger/logger";
 import { notificationsSettingsDialog } from '../../admin/notifications/admin.notificationsSettings.component';
@@ -71,8 +69,3 @@ export class notificationDockComponent {
         this.unreadMessagesCountSubscription.unsubscribe();
     }
 }
-angular
-    .module('app')
-    .directive("notificationDockAngular", downgradeComponent({
-        component: notificationDockComponent,
-    }));

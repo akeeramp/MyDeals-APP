@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { utils } from "../../shared/util/util";
+﻿import { utils } from "../../shared/util/util";
 import { Component } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { cacheService } from "./admin.cache.service";
 
 @Component({
@@ -156,13 +154,6 @@ export class CacheComponent {
         this.onResize();
     }
 }
-
-angular.module("app").directive(
-    "cache",
-    downgradeComponent({
-        component: CacheComponent,
-    })
-);
 
 
 

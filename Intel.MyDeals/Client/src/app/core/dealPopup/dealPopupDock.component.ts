@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { Component } from "@angular/core"; 
+﻿import { Component } from "@angular/core"; 
 import { AppEvent, broadCastService } from "./broadcast.service";
 import { quickDealConstants } from "../angular.constants";
-import { downgradeComponent } from "@angular/upgrade/static"; 
 
 
 @Component({
@@ -228,10 +226,3 @@ export class dealPopupDockComponent  {
     }
 
 }
-
-angular.module("app").directive(
-    "dealPopupDockAngular",
-    downgradeComponent({
-        component: dealPopupDockComponent,
-    })
-);

@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { consumptionCountryService } from "./admin.consumptionCountry.service";
 import { Component, ViewChild } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { consumption_Country_Map } from "./admin.consumptionCountry.model";
 import { ThemePalette } from "@angular/material/core";
 import {
@@ -256,10 +254,3 @@ export class adminConsumptionCountryComponent {
         this.loadConsumptionCountry();
     }
 }
-
-angular
-    .module("app")
-    .directive(
-        "adminConsumptionCountry",
-        downgradeComponent({ component: adminConsumptionCountryComponent })
-    );

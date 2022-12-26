@@ -20,7 +20,7 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
 
     resizeSub: Subscription;
     isTender = false;
-    C_CREATE_CONTRACT = false;
+    C_CREATE_CONTRACT = this.newContractWidgetService.chkDealRules('C_CREATE_CONTRACT', (<any>window).usrRole, null, null, null);
 
     //Need to change these text fields on resize event when width increases & decreases
     createContractText = 'Create a My Deals Contract';
@@ -64,7 +64,7 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
         });
         dialogref.afterClosed().subscribe(result => {
             if (result) {
-                document.location.href = "#contractdetails/copycid=" + result.CNTRCT_OBJ_SID;
+                document.location.href = "#contractdetails/copycid/" + result.CNTRCT_OBJ_SID;
             }
         });
     }

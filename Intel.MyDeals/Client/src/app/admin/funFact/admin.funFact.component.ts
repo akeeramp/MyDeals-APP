@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { Component, ViewChild  } from "@angular/core";
+﻿import { Component, ViewChild  } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { funFactService } from "./admin.funFact.service";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { ThemePalette } from '@angular/material/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
@@ -234,10 +232,3 @@ export class adminFunFactComponent {
     }
 
 }
-
-angular.module("app").directive(
-    "adminFunFact",
-    downgradeComponent({
-        component: adminFunFactComponent,
-    })
-);

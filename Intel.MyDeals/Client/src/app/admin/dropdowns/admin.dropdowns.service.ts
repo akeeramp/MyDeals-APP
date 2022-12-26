@@ -1,7 +1,5 @@
-﻿import * as angular from 'angular';
-import { Injectable } from "@angular/core";
+﻿import { Injectable } from "@angular/core";
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { downgradeInjectable } from '@angular/upgrade/static';
 import { Observable } from "rxjs";
 
 @Injectable({
@@ -76,6 +74,3 @@ export class dropdownService {
     }
 }
 
-angular
-    .module('app')
-    .factory('dropdownService', downgradeInjectable(dropdownService));

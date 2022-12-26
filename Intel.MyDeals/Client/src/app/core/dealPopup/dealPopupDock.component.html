@@ -2,7 +2,7 @@
     <div>
         <div class="dropdown">
             <a id="dLabel" role="button" data-toggle="dropdown" class="btn btn-primary notification-icon-deal-style"
-               data-target="#" href="">
+               data-target="#">
                 <span class="badge badge-docking"
                       *ngIf="ids!=undefined && ids.length >0">{{ids.length}}</span><span class="fa-stack">
                     <i class="fa fa-circle-o-notch fa-rotate-90" style="font-size: 26px;"></i><i class="fa fa-bars fa-stack-1x" style="font-size: 12px; margin-top: -1px;"></i>
@@ -13,15 +13,15 @@
                 <li style="width: 400px; color: #000000;">
                     <div class="fl cn-dock-title">Quick Deals</div>
                     <div class="fr cn-dock-btns" style="padding-right: 8px;">
-                        <a href="" type="button"
+                        <a
                            (click)="closeAll()" *ngIf="ids.length">
                             <i class="fa fa-window-close-o"
                                title="Close all Quick Deals"></i>
-                        </a><a href="" type="button" (click)="cascadeAll()"
-                               *ngIf="ids.length"><i class="fa fa-clone" title="Cascade all Quick Deals"></i></a><a href="" type="button" (click)="tileAll()" *ngIf="ids.length">
+                        </a><a (click)="cascadeAll()"
+                               *ngIf="ids.length"><i class="fa fa-clone" title="Cascade all Quick Deals"></i></a><a (click)="tileAll()" *ngIf="ids.length">
                             <i class="fa fa-th-large"
                                title="Tile all Quick Deals"></i>
-                        </a><a href="" type="button" (click)="lowerAll()"
+                        </a><a (click)="lowerAll()"
                                *ngIf="ids.length">
                             <i class="fa fa-ellipsis-h" style="vertical-align: sub;"
                                title="Line all Quick Deals to the bottom of the screen"></i>

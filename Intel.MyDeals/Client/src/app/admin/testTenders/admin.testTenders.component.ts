@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { admintestTendersService } from "./admin.testTenders.service";
 import { Component, ViewEncapsulation } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms";
 
 @Component({
@@ -117,10 +115,3 @@ export class adminTestTendersComponent {
        
     }
 }
-
-angular.module("app").directive(
-    "adminTestTenders",
-    downgradeComponent({
-        component: adminTestTendersComponent,
-    })
-);

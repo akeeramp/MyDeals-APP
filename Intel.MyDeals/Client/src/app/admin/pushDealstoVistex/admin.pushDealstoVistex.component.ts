@@ -1,7 +1,5 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { Component } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { pushDealsToVistexService } from "./admin.pushDealstoVistex.service";
 import { GridDataResult, DataStateChangeEvent} from "@progress/kendo-angular-grid";
@@ -90,13 +88,3 @@ export class adminPushDealsToVistexComponent {
         });
     }
 }
-
-angular.module("app").directive(
-    "adminPushDealstoVistex",
-    downgradeComponent({
-        component: adminPushDealsToVistexComponent
-    })
-);
-
-
-

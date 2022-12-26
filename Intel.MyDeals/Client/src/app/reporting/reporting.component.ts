@@ -1,7 +1,5 @@
-import * as angular from "angular";
 import {Component,ViewChild, ViewContainerRef } from "@angular/core";
 import {logger} from "../shared/logger/logger";
-import {downgradeComponent} from "@angular/upgrade/static";
 import {reportingService} from "./reporting.service";
 import {List} from "linqts";
 
@@ -377,9 +375,3 @@ export class ReportingComponent {
   }
 
 }
-angular.module("app").directive(
-  "reportingDashboard",
-  downgradeComponent({
-    component: ReportingComponent,
-  })
-);

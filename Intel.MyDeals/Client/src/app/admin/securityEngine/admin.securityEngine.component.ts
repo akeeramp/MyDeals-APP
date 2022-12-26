@@ -1,7 +1,5 @@
-﻿import * as angular from "angular";
-import { Component } from "@angular/core";
+﻿import { Component } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { SecurityEngineService } from "./admin.securityEngine.service";
@@ -738,10 +736,3 @@ export class adminsecurityEngineComponent {
         }, 200);
     }
 }
-
-angular.module("app").directive(
-    "adminSecurityEngine",
-    downgradeComponent({
-        component: adminsecurityEngineComponent,
-    })
-);

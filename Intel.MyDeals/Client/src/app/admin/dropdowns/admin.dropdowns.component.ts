@@ -1,7 +1,5 @@
-﻿import * as angular from 'angular';
-import { Component, ViewChild } from "@angular/core";
+﻿import { Component, ViewChild } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { dropdownService } from './admin.dropdowns.service';
 import { ui_dropdown } from "./admin.dropdowns.model";
 import { ThemePalette } from "@angular/material/core";
@@ -111,7 +109,6 @@ export class dropdownsComponent {
                     item => item.dropdownName
                 );
                 this.allDealTypeData = this.distinctSetTypeCd.filter(item => ["all deals", "all_deals"].includes(item.toLowerCase()));
-                /*this.allDealTypeData = this.DealTypeData.filter(item => ["all deals", "all_deals"].includes(item.dropdownName.toLowerCase()))*/
             }, function (response) {
                 this.loggerSvc.error("Unable to get Deal Type Dropdowns.", response, response.statusText);
             });
@@ -452,7 +449,6 @@ export class dropdownsComponent {
                             this.nonCorpInheritableValues.splice(indx, 1);
                         }
                     }
-                    //}
                     this.refreshGrid();
                     this.loggerSvc.success("UI Dropdown successfully deleted or deactivated.")
                 },
@@ -467,10 +463,4 @@ export class dropdownsComponent {
     }
     // UI button click ends
 }
-angular.module("app").directive(
-    "dropdowns",
-    downgradeComponent({
-        component: dropdownsComponent,
-    })
-);
 

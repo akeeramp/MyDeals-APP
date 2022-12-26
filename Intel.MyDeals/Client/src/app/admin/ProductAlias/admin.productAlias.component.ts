@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { productAliasService } from "./admin.productAlias.service";
 import { Component, ViewChild } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { Product_Alias_Map } from "./admin.productAlias.model";
 import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
@@ -268,10 +266,3 @@ export class adminProductAliasComponent {
         this.loadProductAlias();
     }
 }
-
-angular
-    .module("app")
-    .directive(
-        "adminProductAlias",
-        downgradeComponent({ component: adminProductAliasComponent })
-    );

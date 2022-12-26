@@ -1,7 +1,5 @@
-﻿import * as angular from "angular";
-import { dealTypesService } from "./admin.dealTypes.service";
+﻿import { dealTypesService } from "./admin.dealTypes.service";
 import { Component } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
@@ -111,10 +109,3 @@ export class adminDealTypesComponent {
     }
 
 }
-
-angular
-    .module("app")
-    .directive(
-        "adminDealTypes",
-        downgradeComponent({ component: adminDealTypesComponent })
-    );

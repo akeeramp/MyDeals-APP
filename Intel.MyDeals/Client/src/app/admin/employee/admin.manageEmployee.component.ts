@@ -1,9 +1,7 @@
-﻿import * as angular from 'angular';
-import { Component, ViewEncapsulation } from "@angular/core"
+﻿import { Component, ViewEncapsulation } from "@angular/core"
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query"; /*GroupDescriptor,*/
 import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { manageEmployeeService } from "./admin.manageEmployee.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
@@ -319,9 +317,3 @@ export class manageEmployeeComponent {
         this.loadEmployeeData();
     }
 }
-angular.module("app").directive(
-    "manageEmployee",
-    downgradeComponent({
-        component: manageEmployeeComponent,
-    })
-);

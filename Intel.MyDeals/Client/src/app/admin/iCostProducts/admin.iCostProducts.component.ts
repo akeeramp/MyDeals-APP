@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { iCostProductService } from "./admin.iCostProduct.service";
 import { Component } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { Injectable } from "@angular/core";
 
 import {
@@ -418,10 +416,3 @@ export class iCostProductsComponent {
     }
 
 }
-
-angular.module("app").directive(
-    "iCostProducts",
-    downgradeComponent({
-        component: iCostProductsComponent,
-    })
-);

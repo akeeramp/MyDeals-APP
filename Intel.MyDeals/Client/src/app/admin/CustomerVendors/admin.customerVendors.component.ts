@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { customerVendorService } from "./admin.customerVendors.service";
 import { Component, ViewChild } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { Cust_Map } from "./admin.customerVendors.model";
 import { ThemePalette } from "@angular/material/core";
 import * as _ from "underscore";
@@ -369,10 +367,3 @@ export class adminCustomerVendorsComponent {
         this.loadCustomerVendors();
     }
 }
-
-angular
-    .module("app")
-    .directive(
-        "adminVendorsCustomer",
-        downgradeComponent({ component: adminCustomerVendorsComponent })
-    );

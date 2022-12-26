@@ -1,7 +1,5 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { Component } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { MatDialog } from "@angular/material/dialog";
 import { notificationsModalDialog } from '../../admin/notifications/admin.notificationsModal.component';
 import {
@@ -191,10 +189,3 @@ export class adminNotificationsComponent {
     }
 
 }
-
-angular
-    .module("app")
-    .directive(
-        "adminNotifications",
-        downgradeComponent({ component: adminNotificationsComponent })
-    );

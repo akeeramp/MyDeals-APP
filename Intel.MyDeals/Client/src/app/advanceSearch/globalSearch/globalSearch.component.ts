@@ -1,6 +1,4 @@
-import * as angular from "angular";
 import {Component,ViewChild } from "@angular/core";
-import {downgradeComponent} from "@angular/upgrade/static";
 import { GlobalSearchResultsComponent } from "../globalSearchResults/globalSearchResults.component";
 
 @Component({
@@ -74,9 +72,4 @@ export class GlobalSearchComponent  {
     }
 }
 
-angular.module("app").directive(
-  "globalSearchAngular",
-  downgradeComponent({
-    component: GlobalSearchComponent,
-  })
-);
+

@@ -1,6 +1,4 @@
-﻿import * as angular from 'angular';
-import { Injectable } from "@angular/core";
-import { downgradeInjectable } from '@angular/upgrade/static';
+﻿import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
 @Injectable({
@@ -32,6 +30,3 @@ export class constantsService {
         return this.httpClient.get(apiUrl);
     }
 }
-angular
-    .module('app')
-    .factory('constantsService', downgradeInjectable(constantsService));

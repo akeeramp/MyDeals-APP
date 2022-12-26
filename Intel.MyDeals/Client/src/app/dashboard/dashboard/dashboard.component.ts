@@ -1,7 +1,5 @@
-import * as angular from "angular";
 import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DisplayGrid, GridsterConfig, GridsterItem, GridType, CompactType } from 'angular-gridster2';
-import { downgradeComponent } from "@angular/upgrade/static";
 import { MatDialog } from '@angular/material/dialog';
 import { addWidgetComponent } from "../addWidget/addWidget.component";
 import { widgetSettingsComponent } from "../widgetSettings/widgetSettings.component";
@@ -355,20 +353,8 @@ export class DashboardComponent implements OnInit {
         this.saveLayout();
     }
 
-    async loadsession(){
-        this.securitySVC.getSecurityDataFromSession();
-        let response=await this.securitySVC.getSecurityData().toPromise().catch((error) => {
-            this.loggerSvc.error("Dashboard component :: loadsession ::", error, error.statusText);
-        });
-        if (response) {
-            sessionStorage.setItem('securityAttributes', JSON.stringify(response.SecurityAttributes));
-            sessionStorage.setItem('securityMasks', JSON.stringify(response.SecurityMasks));
-        }
-    }
-
     //********************* search widget functions*************************
     ngOnInit(): void {
-        this.loadsession()
         document.title = "Dashboard - My Deals";
         this.selectedCustNames = window.localStorage.selectedCustNames ? JSON.parse(window.localStorage.selectedCustNames) : [];
         this.startDateValue = window.localStorage.startDateValue ? new Date(window.localStorage.startDateValue) : this.startDateValue;
@@ -459,10 +445,3 @@ export class DashboardComponent implements OnInit {
     }
 
 }
-
-angular.module("app").directive(
-    "appDashboard",
-    downgradeComponent({
-        component: DashboardComponent,
-    })
-);

@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { productCategoryService } from "./admin.productCategories.service";
 import { Component, ViewChild } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { ThemePalette } from "@angular/material/core";
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -207,10 +205,3 @@ export class adminProductCategoriesComponent {
     }
 
 }
-
-angular.module("app").directive(
-    "adminProductCategories",
-    downgradeComponent({
-        component: adminProductCategoriesComponent,
-    })
-);

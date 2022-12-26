@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { unifiedDealReconService } from "./admin.unifiedDealRecon.service";
 import { Component } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { endCustomerRetailModalComponent } from "../../contract/ptModals/dealEditorModals/endCustomerRetailModal.component";
 import { Unified_Deal_Recon } from "./admin.unifiedDealRecon.model";
 import { MatDialog } from '@angular/material/dialog';
@@ -272,10 +270,3 @@ export class adminUnifiedDealReconComponent {
     }
 
 }
-
-angular
-    .module("app")
-    .directive("adminUnifiedDealrecon",
-        downgradeComponent({ component: adminUnifiedDealReconComponent })
-    );
-

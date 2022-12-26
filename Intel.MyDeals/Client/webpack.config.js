@@ -56,7 +56,7 @@ module.exports = env => {
         return {
             mode: 'production',
             entry: {
-                bundle: "./src/main.ts"
+                bundle: "./src/main-prod.ts"
             },
             watch: false,
             output: {
@@ -75,7 +75,7 @@ module.exports = env => {
                             sourceMap: false,
                             compress: true,
                             module: true,
-                            mangle: false,
+                            mangle: true,
                             format: {
                                 comments: false,
                             },

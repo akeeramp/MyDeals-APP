@@ -1,8 +1,6 @@
 ﻿import { formatDate } from "@angular/common";
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { Item } from "@progress/kendo-angular-charts/dist/es2015/common/collection.service";
-import * as angular from "angular";
 import * as moment from "moment";
 import { logger } from "../../shared/logger/logger";
 import { tenderDashboardService } from "./tenderDashboard.service";
@@ -802,8 +800,8 @@ export class TenderDashboardComponent implements OnInit {
                 custNames.push(items[x].Customer.CUST_NM);
             if (endCustomers.indexOf(items[x].END_CUSTOMER_RETAIL) < 0)
                 endCustomers.push(items[x].END_CUSTOMER_RETAIL);
-            items[x].url = rootUrl + "/Dashboard#/tenderDashboard?DealType=" + this.dealType + "&Deal=" + items[x].DC_ID + "&search&approvedeals"
-            items[x].folioUrl = rootUrl + "/Dashboard#/tenderDashboard?DealType=" + this.dealType + "&FolioId=" + items[x].CNTRCT_OBJ_SID + "&search&approvedeals"
+            items[x].url = rootUrl + "/Dashboard#/tenderDashboard?DealType=" + this.dealType + "&Deal=" + items[x].DC_ID + "&search=true&approvedeals=true"
+            items[x].folioUrl = rootUrl + "/Dashboard#/tenderDashboard?DealType=" + this.dealType + "&FolioId=" + items[x].CNTRCT_OBJ_SID + "&search=true&approvedeals=true"
 
             if (stageToCheck != "" && stageToCheck != items[x].PS_WF_STG_CD) {
                 stagesOK = false;
@@ -999,10 +997,10 @@ export class TenderDashboardComponent implements OnInit {
                     source: null
                 });
             }
-            if (item.toLowerCase() == "search") {
+            if (item.toLowerCase().indexOf('search') >= 0) {
                 this.runSearch = true
             }
-            if (item.toLowerCase() == "approvedeals") {
+            if (item.toLowerCase().indexOf('approvedeals')) {
                 this.approveDeals = true
             }
         })
@@ -1018,10 +1016,3 @@ export class TenderDashboardComponent implements OnInit {
         }
     }
 }
-
-angular
-    .module("app")
-    .directive(
-        "appTenderDashboard",
-        downgradeComponent({ component: TenderDashboardComponent })
-    );

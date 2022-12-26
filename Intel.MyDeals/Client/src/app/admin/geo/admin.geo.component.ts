@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { Component } from "@angular/core";
+﻿import { Component } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { geoService } from "./admin.geo.service";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
@@ -100,10 +98,3 @@ export class geoComponent {
     }
 
 }
-
-angular.module("app").directive(
-    "adminGeo",
-    downgradeComponent({
-        component: geoComponent,
-    })
-);

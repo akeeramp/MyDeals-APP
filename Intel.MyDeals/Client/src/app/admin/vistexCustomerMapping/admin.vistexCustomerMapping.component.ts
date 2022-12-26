@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { vistexCustomerMappingService } from "./admin.vistexCustomerMapping.service";
 import { Component, ViewChild } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { Vistex_Cust_Map } from "./admin.vistexCustomerMapping.model";
 import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
@@ -247,10 +245,3 @@ export class adminVistexCustomerMappingComponent {
         this.loadCustomerMapping();
     }
 }
-
-angular
-    .module("app")
-    .directive(
-        "adminVistexCustomerMapping",
-        downgradeComponent({ component: adminVistexCustomerMappingComponent })
-    );

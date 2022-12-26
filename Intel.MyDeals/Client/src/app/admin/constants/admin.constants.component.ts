@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { constantsService } from "./admin.constants.service";
 import { Component } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { Cnst_Map } from './admin.constants.model';
 import { ThemePalette } from "@angular/material/core";
 import {
@@ -240,9 +238,3 @@ export class ConstantsComponent {
     }
 
 }
-angular.module("app").directive(
-    "constants",
-    downgradeComponent({
-        component: ConstantsComponent,
-    })
-);

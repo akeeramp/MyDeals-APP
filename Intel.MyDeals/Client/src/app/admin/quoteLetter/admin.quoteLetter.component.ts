@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { quoteLetterService } from "./admin.quoteLetter.service";
 import { Component } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { saveAs } from 'file-saver';
 
 @Component({
@@ -101,9 +99,3 @@ export class QuoteLetterComponent {
         this.loadAdminTemplate();
     }
 }
-
-angular
-    .module("app")
-    .directive("quoteLetter",
-        downgradeComponent({ component: QuoteLetterComponent })
-    );

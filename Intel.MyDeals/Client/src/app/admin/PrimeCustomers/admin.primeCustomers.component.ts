@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { primeCustomerService } from "./admin.primeCustomers.service";
 import { Component, ViewChild } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { PrimeCust_Map } from "./admin.primeCustomers.model";
 import { ThemePalette } from "@angular/material/core";
 import {
@@ -431,9 +429,3 @@ export class adminPrimeCustomersComponent {
     }
 
 }
-
-angular
-    .module("app")
-    .directive("adminPrimeCustomers",
-        downgradeComponent({ component: adminPrimeCustomersComponent })
-    );

@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import * as _ from 'underscore';
+﻿import * as _ from 'underscore';
 import { Component, ViewChild } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { pricingTableservice } from "./pricingTable.service";
 import { SelectEvent } from "@progress/kendo-angular-layout";
 import { templatesService } from "../../shared/services/templates.service";
@@ -349,9 +347,3 @@ export class pricingTableComponent {
     }
 
 }
-angular.module("app").directive(
-    "pricingTable",
-    downgradeComponent({
-        component: pricingTableComponent,
-    })
-);

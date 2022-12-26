@@ -4,6 +4,7 @@
 <html>
 
 <head>
+    <base href="/">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -35,12 +36,10 @@
     <script src="/Scripts/jquery-3.3.1.min.js"></script>
     <script src="/Scripts/jquery-ui.min.js"></script>
     <script src="/Scripts/modernizr-2.6.2.min.js"></script>
-    <script src="/Scripts/Angular/1.8.0/angular.min.js"></script>
     <script src="/Scripts/toastr.min.js"></script>
-    <script src="/Scripts/bootstrap.min.js"></script>
-    <script src="/Scripts/Angular/ngStorage.min.js"></script>
-    <script src="/Scripts/bootstrap-switch.min.js"></script>
     <script src="~/Scripts/popper.min.js"></script>
+    <script src="/Scripts/bootstrap.min.js"></script>
+    <script src="/Scripts/bootstrap-switch.min.js"></script>
 
     @*@Scripts.Render("~/MyDeals/scripts")*@
     <style>
@@ -84,8 +83,7 @@
     @*<app-header></app-header>*@
     <div id="modals"></div>
     <div id="bodyContent" class="mainBodyStyle" style="">
-        <div ui-view="dashboardView"></div>
-        <div ui-view="mainView"></div>
+        <app-root></app-root>
         @RenderBody()
     </div>
     @*@Html.Partial("_Footer")*@
@@ -93,14 +91,8 @@
     @*@Html.Partial("_Loading")*@
     <app-loader></app-loader>
 
-
     @*Angult JS libraries starts here*@
-    <script src="/Scripts/Angular/1.8.0/angular-ui-router.min.js"></script>
-    <script src="/Scripts/Angular/1.8.0/angular-animate.min.js"></script>
-    <script src="/Scripts/Angular/1.8.0/angular-sanitize.min.js"></script>
 
-    <script src="/app/core/core.module.js"></script>
-    <script src="/app/core/config.js"></script>
     @*Angult JS libraries ends here*@
     <script src="~/Client/src/dist/vendor.js"></script>
     <script src="~/Client/src/dist/bundle.js"></script>

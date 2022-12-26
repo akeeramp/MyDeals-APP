@@ -1,8 +1,6 @@
-﻿import * as angular from "angular";
-import { logger } from "../../shared/logger/logger";
+﻿import { logger } from "../../shared/logger/logger";
 import { opLogService } from "./admin.oplog.service";
 import { Component } from "@angular/core";
-import { downgradeComponent } from "@angular/upgrade/static";
 
 @Component({
     selector: "op-log",
@@ -97,10 +95,3 @@ export class OpLogComponent {
         this.dateRangeInvalid = false;
     }
 }
-
-angular.module("app").directive(
-    "opLog",
-    downgradeComponent({
-        component: OpLogComponent,
-    })
-);

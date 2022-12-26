@@ -38,9 +38,9 @@ export class SecurityService {
         this.securityAttributes = sessionStorage.getItem('securityAttributes');
         this.securityMasks = sessionStorage.getItem('securityMasks');
         this.sessionComparisonHash = sessionStorage.getItem('sessionComparisonHash');
-        this.securityAttributes = this.securityAttributes == null ? [] : JSON.parse(this.securityAttributes);
-        this.securityMasks = this.securityMasks == null ? [] : JSON.parse(this.securityMasks);
-        this.sessionComparisonHash = this.securityMasks == null ? [] : JSON.parse(this.sessionComparisonHash);
+        this.securityAttributes = (this.securityAttributes == null || this.securityAttributes == undefined || this.securityAttributes == "undefined")  ? [] : JSON.parse(this.securityAttributes);
+        this.securityMasks = (this.securityMasks == null || this.securityMasks==undefined || this.securityMasks == "undefined") ? [] : JSON.parse(this.securityMasks);
+        this.sessionComparisonHash = (this.securityMasks == null || this.securityMasks==undefined || this.securityAttributes == "undefined") ? [] : JSON.parse(this.sessionComparisonHash);
     }
 
     convertHexToBin(hex) {

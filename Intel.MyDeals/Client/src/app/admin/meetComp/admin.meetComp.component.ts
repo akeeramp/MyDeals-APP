@@ -1,9 +1,7 @@
-﻿import * as angular from 'angular';
-import { Component, ViewEncapsulation } from "@angular/core";
+﻿import { Component, ViewEncapsulation } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
-import { downgradeComponent } from "@angular/upgrade/static";
 import { meetCompService } from './admin.meetComp.service';
 import * as _ from "underscore";
 import { ThemePalette } from "@angular/material/core";
@@ -323,9 +321,3 @@ export class meetCompComponent {
         this.custDropdowns();
     }
 }
-angular.module("app").directive(
-    "adminMeetcomp",
-    downgradeComponent({
-        component: meetCompComponent,
-    })
-);
