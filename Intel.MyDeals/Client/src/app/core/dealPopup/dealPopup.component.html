@@ -239,7 +239,7 @@
                         <button class="btn btn-xs btn-default no-border" aria-pressed="false" (click)="tglGrdSize(toggleserachgrid)" type="button" data-toggle="button" autocomplete="off">
                             <i class="fa fa-arrows-v"></i>
                         </button>
-                        <input  class="round-border-search" (keypress)="onFilter($event)"  placeholder="search..." />
+                        <input  class="round-border-search"  (input)="onFilter($event)"  placeholder="search..." />
                     </div>
 
                     <kendo-grid [data]="searchgridData" [resizable]="true" [group]="group"

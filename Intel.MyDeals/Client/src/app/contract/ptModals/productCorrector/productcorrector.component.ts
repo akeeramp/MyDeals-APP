@@ -123,6 +123,8 @@ export class ProductCorrectorComponent {
     }
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
+        this.state.group = [];
+        this.state.group.push({ field: "USR_INPUT", dir: "asc" });
         this.selGridData = process(this.selGridResult, this.state);
     }
     isValidCapDetails(productJson, showErrorMesssage) {

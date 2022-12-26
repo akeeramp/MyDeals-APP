@@ -1,4 +1,5 @@
-﻿import { Component } from "@angular/core"; 
+﻿import * as angular from "angular";
+import { Component, HostListener } from "@angular/core"; 
 import { AppEvent, broadCastService } from "./broadcast.service";
 import { quickDealConstants } from "../angular.constants";
 
@@ -16,10 +17,20 @@ export class dealPopupDockComponent  {
     storage = localStorage;
     maxItems: any;
     maxRecent: any;
-    isEnabled: any; 
-    
-    constructor(private brdcstservice: broadCastService) { }
-     
+    isEnabled: any;
+    screenHeight: number;
+    screenWidth: number;
+    errormsg = "";
+    ismaxDealsOpened= false;
+    constructor(private brdcstservice: broadCastService) {
+        this.getScreenSize();
+}
+
+    @HostListener('window:resize', ['$event'])
+    getScreenSize(event?) {
+        this.screenHeight = window.innerHeight;
+        this.screenWidth = window.innerWidth; 
+    }
     intializedealpopupDock() { 
         this.brdcstservice.on("QuickDealToggleDeal").subscribe(event => {
            this.subscribeEvents(event.payload);
@@ -124,7 +135,8 @@ export class dealPopupDockComponent  {
     QuickDealToggle(Event, id, y, x) {
  
         if (this.ids.length >= this.maxItems) {
-            alert("Only " + this.maxItems + " Quick Deals can be opened at one time.<br\>Please close one before trying to open this deal.");
+            this.ismaxDealsOpened = true;
+            this.errormsg="Only " + this.maxItems + " Quick Deals can be opened at one time.<br\>Please close one before trying to open this deal.";
             return;
         }
 
@@ -162,7 +174,9 @@ export class dealPopupDockComponent  {
         this.ids = [];
         this.storage.setItem('dealPopupDockData', JSON.stringify(this.ids));
     }
-
+    closeAction() {
+        this.ismaxDealsOpened = false;
+    }
 
     cascadeAll() {
         const offset = 25;
@@ -183,7 +197,13 @@ export class dealPopupDockComponent  {
     lowerAll() {
        
         const initX = 5;
-        const initY = 320;
+        let initY = 0;
+        if (this.screenHeight > 890) {
+            initY = this.screenHeight - 600;
+        } else {
+            initY = this.screenHeight - 480;
+
+        }
         const offsetX = 100;
         for (let i = 0; i < this.ids.length; i++) {
             const item = this.ids[i];
@@ -195,12 +215,12 @@ export class dealPopupDockComponent  {
 
         this.brdcstservice.dispatch(new AppEvent("QuickDealClosePanel", "hidepanel"));
     }
-    tileAll() {
+    tileAll() { 
         const offsetX = 300;
         const offsetY = 120;
         const initX = 5;
-        const initY = 50;
-        const docWidth = 1100;
+        const initY = 5;
+        const docWidth = this.screenWidth-800;
         let r = 0;
         let c = 0;
 

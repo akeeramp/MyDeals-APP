@@ -114,6 +114,7 @@
                                    [data]="dataItem.dropDown"
                                    textField="Value"
                                    valueField="Value"
+                                   [autoClose]="false"
                                    kendoMultiSelectSummaryTag
                                    [valuePrimitive]="true"
                                    [(ngModel)]="dataItem.selectedValues"
@@ -127,6 +128,7 @@
                                    textField="PRD_CAT_NM"
                                    valueField="PRD_CAT_NM"
                                    [valuePrimitive]="true"
+                                    [autoClose]="false"
                                    kendoMultiSelectSummaryTag
                                    [(ngModel)]="dataItem.selectedValues"
                                    (valueChange)="dataChangeMulti($event, i, dataItem, 'PRD_CAT_NM')">
@@ -139,6 +141,7 @@
                                    [data]="dataItem.dropDown"
                                    textField="CUST_NM"
                                    valueField="CUST_SID"
+                                    [autoClose]="false"
                                    [valuePrimitive]="true"
                                    [(ngModel)]="dataItem.selectedValues"
                                    (valueChange)="dataChangeMulti($event, i, dataItem, 'CUST_NM')">
@@ -156,6 +159,7 @@
                                    textField="DROP_DOWN"
                                    valueField="DROP_DOWN"
                                    [valuePrimitive]="true"
+                                    [autoClose]="false"
                                    [(ngModel)]="dataItem.selectedValues"
                                    (valueChange)="dataChangeMulti($event, i, dataItem, 'DROP_DOWN')">
                 </kendo-multiselect>

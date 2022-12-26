@@ -108,7 +108,7 @@
                     <kendo-grid #pdtCrtGrid id="productcorrectorgrid" [data]="selGridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                                 [sort]="state.sort" [filter]="state.filter"
                                 [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info}"
-                                [rowClass]="rowCallback"
+                                [rowClass]="rowCallback" 
                                 filterable="menu" (dataStateChange)="dataStateChange($event)" [resizable]="true"
                                 class="notation-flow corrector-two-details correcting-product">
                         <kendo-grid-column [headerClass]="{'headerClass':true}"

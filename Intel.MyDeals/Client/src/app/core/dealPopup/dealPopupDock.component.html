@@ -73,8 +73,15 @@
             </ul>
         </div>
     </div>
-    <div  cdkDrag *ngFor="let item of ids"   [cdkDragFreeDragPosition]="item.position" style="position: absolute; top: 0; z-index: 1000; left: 0px;">
+    <div class="row " cdkDrag *ngFor="let item of ids" [cdkDragFreeDragPosition]="item.position" style="position: absolute; top: 0; z-index: 1000; left: 0px;">
 
         <deal-popup   [dealId]="item.id"  [initLeft]="item.left" [initTop]="item.top" [isOpen]="true"></deal-popup>
     </div>
 </div>
+
+ <kendo-dialog *ngIf="ismaxDealsOpened" id="searchFailure" class="k-dialog-popup-design admin-dialog-full-style">
+     <p>{{errormsg}}</p>
+     <kendo-dialog-actions class="admin-tender-action">
+         <button class='k-button ok_admin_btn' (click)="closeAction()">OK</button>
+     </kendo-dialog-actions>
+ </kendo-dialog>
