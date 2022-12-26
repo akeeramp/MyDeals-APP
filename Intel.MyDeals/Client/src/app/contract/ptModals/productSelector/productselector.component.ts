@@ -1415,7 +1415,7 @@ export class ProductSelectorComponent {
      ngOnInit() {
         this.loadPTSelctor();
         this.getProductSelection();
-         if (this.data.selVal !== '') {
+         if (this.data.selVal !== '' && this.data.source == 'Product Corrector') {
              this.userInput = this.data.selVal;
              this.searchProduct();
          }

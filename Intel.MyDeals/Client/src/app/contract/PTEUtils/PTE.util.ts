@@ -216,16 +216,16 @@ export class PTEUtil {
          let isError=[];
            //setting PTR_SYS_PRD for DuplicateProducts
         if (transformResults && transformResults.DuplicateProducts) {
-            _.each(transformResults.DuplicateProducts, (val, key) => {
+            _.each(transformResults.DuplicateProducts, (val) => {
                 if (_.keys(val).length > 0) {
                     isError.push('1');
                 }
             });
         }
         if (transformResults && transformResults.InValidProducts) {
-            _.each(transformResults.InValidProducts, (val, key) => {
+            _.each(transformResults.InValidProducts, (val) => {
                 if ((val.I && val.I.length > 0) || (val.E && val.E.length > 0)) {
-                    isError.push('2');
+                    isError.push('1');
                 }
             });
         }

@@ -826,7 +826,7 @@ export class ProductCorrectorComponent {
             'productExists': isProductExists,
             'isExcludeProduct': isExcludeProduct
         };
-        const data = { name: 'Product Selector', source: '', selVal: dataItem, contractData: this.data.contractData, curPricingTable: this.data.curPricingTable, curRow: [pricingTableRow] };
+        const data = { name: 'Product Selector', source: 'Product Corrector', selVal: dataItem, contractData: this.data.contractData, curPricingTable: this.data.curPricingTable, curRow: [pricingTableRow] };
         const dialogRefe = this.dialogService.open(ProductSelectorComponent, {
             height: "85vh",
             maxWidth: "90vw",

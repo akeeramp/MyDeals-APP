@@ -1231,13 +1231,19 @@ export class PTE_CellChange_Util {
                 if (deletedItm.exclude) {
                     let eindex = _.indexOf(exclude, deletedItm.deletedUserInput)
                     if (eindex != -1) {
-                       exclude= _.without(exclude, deletedItm.deletedUserInput) 
+                        exclude = _.without(exclude, deletedItm.deletedUserInput)
+                        //removing from PTR_SYS_PRD as well if it has any deleted product values
+                        if (PTR_SYS_PRD && PTR_SYS_PRD[deletedItm.deletedUserInput] && PTR_SYS_PRD[deletedItm.deletedUserInput].length == 1 && PTR_SYS_PRD[deletedItm.deletedUserInput][0].EXCLUDE)
+                            delete PTR_SYS_PRD[deletedItm.deletedUserInput]
                     }
                 }
                 else {
                     let eindex = _.indexOf(Include, deletedItm.deletedUserInput)
                     if (eindex != -1) {
-                        Include = _.without(Include, deletedItm.deletedUserInput) 
+                        Include = _.without(Include, deletedItm.deletedUserInput)
+                        //removing from PTR_SYS_PRD as well if it has any deleted Product values
+                        if (PTR_SYS_PRD && PTR_SYS_PRD[deletedItm.deletedUserInput] && PTR_SYS_PRD[deletedItm.deletedUserInput].length == 1 && !PTR_SYS_PRD[deletedItm.deletedUserInput][0].EXCLUDE)
+                            delete PTR_SYS_PRD[deletedItm.deletedUserInput]
                     }
                 }
             })
@@ -1247,14 +1253,20 @@ export class PTE_CellChange_Util {
                 if (selPrdItm.prodObj.EXCLUDE) {
                     let eindex = _.indexOf(exclude, selPrdItm.prodObj.USR_INPUT)
                     if (eindex != -1) {
-                      exclude=  _.without(exclude, selPrdItm.prodObj.USR_INPUT) 
+                        exclude = _.without(exclude, selPrdItm.prodObj.USR_INPUT)
+                        //removing from PTR_SYS_PRD as well if it has any values
+                        if (PTR_SYS_PRD && PTR_SYS_PRD[selPrdItm.prodObj.USR_INPUT] && PTR_SYS_PRD[selPrdItm.prodObj.USR_INPUT].length == 1 && PTR_SYS_PRD[selPrdItm.prodObj.USR_INPUT][0].EXCLUDE)
+                            delete PTR_SYS_PRD[selPrdItm.prodObj.USR_INPUT]
                     }
                     exclude.push(selPrdItm.prodObj.DERIVED_USR_INPUT);
                 }
                 else {
                     let iIndex = _.indexOf(Include, selPrdItm.prodObj.USR_INPUT)
                     if (iIndex != -1) {
-                        Include = _.without(Include, selPrdItm.prodObj.USR_INPUT) 
+                        Include = _.without(Include, selPrdItm.prodObj.USR_INPUT)
+                        //removing from PTR_SYS_PRD as well if it has any values
+                        if (PTR_SYS_PRD && PTR_SYS_PRD[selPrdItm.prodObj.USR_INPUT] && PTR_SYS_PRD[selPrdItm.prodObj.USR_INPUT].length == 1 && !PTR_SYS_PRD[selPrdItm.prodObj.USR_INPUT][0].EXCLUDE)
+                            delete PTR_SYS_PRD[selPrdItm.prodObj.USR_INPUT]
                     }
                     Include.push(selPrdItm.prodObj.DERIVED_USR_INPUT);
                 }

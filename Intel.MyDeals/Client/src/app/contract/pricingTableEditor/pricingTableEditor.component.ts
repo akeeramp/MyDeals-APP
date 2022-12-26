@@ -532,7 +532,7 @@ export class pricingTableEditorComponent {
         // This logic will add for all tier deals. 
         mergCells = PTE_Load_Util.getMergeCells(PTR, this.pricingTableTemplates.columns, this.curPricingTable);
         // Set the values for hotTable
-        PTR = PTR.length > 0 ? PTR : Handsontable.helper.createEmptySpreadsheetData(5, this.columns.length);
+        PTR = PTR && PTR.length > 0 ? PTR : Handsontable.helper.createEmptySpreadsheetData(5, this.columns.length);
         // Loading new data
         this.newPTR = PTR;
         //In some redirection scenario the code is showing error so must make sure the binding is happening only if there is and instance
@@ -757,7 +757,7 @@ export class pricingTableEditorComponent {
                 })
             });
             //delete the row data from transformResults Object if any
-            if (this.transformResults && this.transformResults['Data'] && Object.keys(this.transformResults['Data']).length == 0) {
+            if (this.transformResults && this.transformResults['Data'] && Object.keys(this.transformResults['Data']).length > 0) {
                 _.each(delRows, (delRow) => {
                     if (this.transformResults['Data'].DuplicateProducts && this.transformResults['Data'].DuplicateProducts[delRow.DC_ID]) {
                         delete this.transformResults['Data'].DuplicateProducts[delRow.DC_ID];
@@ -1153,7 +1153,10 @@ export class pricingTableEditorComponent {
             if (_.contains(prdValResult, '1')) {
                 // Product corrector if invalid products
                 this.isLoading = false;
-                if ((action == 'onOpenSelector' && translateResult['Data'] && translateResult['Data'].DuplicateProducts && translateResult['Data'].DuplicateProducts[curRow[0].DC_ID]) || action != 'onOpenSelector') {
+                if ((action == 'onOpenSelector' && translateResult['Data'] &&
+                    ((translateResult['Data'].DuplicateProducts && translateResult['Data'].DuplicateProducts[curRow[0].DC_ID]) ||
+                        (translateResult['Data'].InValidProducts && translateResult['Data'].InValidProducts[curRow[0].DC_ID]))) ||
+                    action != 'onOpenSelector') {
                     await this.openProductCorrector(translateResult['Data'], action, deleteDCIDs)
                     if (curRow) {
                         curRow[0].isOpenCorrector = true;
@@ -1162,13 +1165,6 @@ export class pricingTableEditorComponent {
                 if (action == 'onSave') {
                     this.showErrorMsg = false;
                 }
-            }
-            else if (_.contains(prdValResult, '2') && action != 'onOpenSelector') {
-                await this.openProductCorrector(translateResult['Data'], action, deleteDCIDs);
-                if (curRow) {
-                    curRow[0].isOpenCorrector = true;
-                }
-               // this.loggerService.warn('Please use product selector to choose a valid product', "Use Product Selector");
             }
             else {
                 if (this.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
