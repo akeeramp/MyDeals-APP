@@ -362,3 +362,8 @@ span.k-textbox.searchbox.advance-text-box-style {
     border-color: #d3d3d3 !important;
     box-shadow: none !important
 }
+#admin-advance-grid a.k-grid-filter.k-state-active {
+    background-color: #d3d3d3 !important;
+    position:relative !important;
+    left:0px !important
+}
