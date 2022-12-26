@@ -119,6 +119,7 @@ export class AdvancedSearchComponent implements OnInit {
             this.state = state;
             this.searchDeals();
         } else this.state = state;
+        this.gridData = process(this.gridResult, this.state);
     }
 
 

@@ -282,12 +282,15 @@ export class AttributeBuilder implements OnInit {
             this.attributes.splice(index, 1);
         }
         if (index == 0) {
-            dataItem.selectedField = [];
-            dataItem.field = '';
-            dataItem.type = '';
-            dataItem.selectedValues = [];
-            dataItem.value = ''
-            this.valueChange(dataItem, index);
+            if (this.attributes.length > 1) this.attributes.splice(index, 1);
+            else {
+                dataItem.selectedField = [];
+                dataItem.field = '';
+                dataItem.type = '';
+                dataItem.selectedValues = [];
+                dataItem.value = ''
+                this.valueChange(dataItem, index);
+            }
         }
     }
 
@@ -330,7 +333,7 @@ export class AttributeBuilder implements OnInit {
             }
         }
         this.attributes[index].field = dataItem.field;
-        this.attributes[index].operator = opvalues[0].operator;
+        this.attributes[index].operator = opvalues.length > 0 ? opvalues[0].operator: '';
         this.attributes[index].subType = null;
         this.attributes[index].type = dataItem.type;
         this.attributes[index].value = '';
@@ -346,6 +349,7 @@ export class AttributeBuilder implements OnInit {
     dataChange(idx, dataItem, selector, data?) {
        
         this.attributes[idx].values = [];
+        this.attributes[idx].value = '';
         if (selector == 'operator') {
             this.attributes[idx].operator = dataItem.selectedOperator.operator;
         } else if (selector == 'numerictextbox') {
@@ -363,6 +367,7 @@ export class AttributeBuilder implements OnInit {
 
     dataChangeMulti(data, i, dataItem, selector) {        
         this.attributes[i].values = [];
+        this.attributes[i].value = '';
         data.forEach((item) => {
             this.attributes[i].values.push(item);
             this.attributes[i].value = this.attributes[i].values;
