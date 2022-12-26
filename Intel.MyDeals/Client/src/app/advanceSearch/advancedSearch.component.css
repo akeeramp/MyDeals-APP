@@ -171,13 +171,14 @@ button.btn.btn-sm.ssToolbarBtn.advance_col_option {
     position: relative !important;
     line-height: 1.2em !important;
     color: #00AEEF !important;
-    right: 40px !important;
+    right: 45px !important;
 }
 button.btn.btn-sm.ssToolbarBtn.advance_excelbtn {
     position: relative !important;
     line-height: 1.2em !important;
     color: #00AEEF !important;
-    text-align: left !important
+    text-align: left !important;
+    right:18px !important
 }
 span.caret.down_add_style {
     position: relative !important;
@@ -353,4 +354,11 @@ dropdown-filter.de-dropdwn-styl.advance-drop-custstyle kendo-combobox.drop-cus-f
     width: 185px !important;
     box-shadow: none !important;
     border-color: #dbdada !important;
+}
+span.k-textbox.searchbox.advance-text-box-style {
+    width: 240px !important;
+    margin-left: 8px !important;
+    margin-right: 10px !important;
+    border-color: #d3d3d3 !important;
+    box-shadow: none !important
 }

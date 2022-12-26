@@ -236,9 +236,9 @@
                                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                             </ng-template>
                             <ng-template kendoGridCellTemplate let-dataItem>
-                                <div class="CAPYCS2CellContent" (click)="openCAPBreakOut(dataItem, 'YCS2')">
+                                <div class="CAPYCS2CellContent bg-yellow-remove" (click)="openCAPBreakOut(dataItem, 'YCS2')">
                                     <!-- YCS2 Info cell design -->
-                                    <div [class.isSoftWarnCell]="dataItem.YCS2?.includes('No')" style="text-align: center;">
+                                    <div [class.isSoftWarnCell]="dataItem.YCS2?.includes('No')" class="product-selector-font-align">
                                         {{ dataItem.YCS2 }}
                                     </div>
                                 </div>
