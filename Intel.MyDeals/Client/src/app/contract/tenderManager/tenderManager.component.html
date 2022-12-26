@@ -130,7 +130,7 @@
         </a>
     </div>
 </div>
-<div *ngIf="selectedTab == 'PTR' && !isLoading  && pricingTableData != undefined" class="col-md-12 parent-one loaderPTE">
+<div *ngIf="selectedTab == 'PTR' && !isLoading  && pricingTableData != undefined" class="col-md-12 parent-one loaderPTE tenderPTEsection">
     <pricing-table-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate" (warn)="isWarning" (tmDirec)="redirectingFn($event)">
     </pricing-table-editor>
 </div>

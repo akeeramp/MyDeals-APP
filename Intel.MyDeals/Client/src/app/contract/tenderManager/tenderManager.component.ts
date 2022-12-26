@@ -17,7 +17,9 @@ import * as _ from "underscore";
 export class tenderManagerComponent {
     @ViewChild(pricingTableEditorComponent) private pteComp: pricingTableEditorComponent;
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
-    constructor(private pteService: pricingTableEditorService, private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private contractDetailsSvc: contractDetailsService, private templatesSvc: templatesService) {}
+    constructor(private pteService: pricingTableEditorService, private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private contractDetailsSvc: contractDetailsService, private templatesSvc: templatesService) {
+        $('body').addClass('added-tender');
+    }
     public c_Id: any = '';
     public ps_Id: any = '';
     public pt_Id: any = '';
@@ -377,6 +379,10 @@ export class tenderManagerComponent {
             this.loggerSvc.error('Something went wrong', 'Error');
             console.error('TenderManager::ngOnInit::',ex);
         }
+    }
+
+    ngOnDestroy() {
+        $('body').removeClass('added-tender')
     }
 
 }

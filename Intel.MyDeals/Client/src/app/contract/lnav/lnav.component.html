@@ -93,7 +93,7 @@
                         </div>
                         <div class="psContainer">
                             <div>
-                                <div style="margin-top: 10px;">
+                                <div style="margin-top: 10px;padding-bottom: 45px;">
                                     <div *ngFor="let ps of contractData.PRC_ST | filter:query; let psIndex = index;" class="lnavStrategyContainer">
                                         <div class="psNav row icon_p_fix " id="lnavPs_{{ ps.DC_ID}}" >
                                             <div class="fl col-md-1" (click)="isPSExpanded[psIndex] = !isPSExpanded[psIndex]">

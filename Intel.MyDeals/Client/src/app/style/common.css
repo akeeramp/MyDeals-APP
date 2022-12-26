@@ -181,3 +181,11 @@ kendo-datepicker.date-dashboard:hover, kendo-datepicker.date-dashboard:focus, ke
 .k-calendar .k-calendar-content .k-today .k-link {
     box-shadow: none !important
 }
+
+.htCommentsContainer .htComments.commentHover {
+    left: 354px !important;
+}
+
+.added-tender .htCommentsContainer .htComments.commentHover {
+    left: 54px !important;
+}

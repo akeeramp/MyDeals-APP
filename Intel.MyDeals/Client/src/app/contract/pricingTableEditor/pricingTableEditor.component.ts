@@ -553,6 +553,7 @@ export class pricingTableEditorComponent {
                 readOnlyCellClassName: 'readonly-cell',
                 nestedHeaders: nestedHeaders
             });
+            this.hoverPTE();
         }
     }
     //functions to identify cell change
@@ -1623,6 +1624,11 @@ export class pricingTableEditorComponent {
         });
         this.autoFillData = res;
         this.loadPTE();
+    }
+    hoverPTE() {
+        $(".pricing_table_celltext .handsontable .ht_clone_inline_start .wtHolder table.htCore tr td.error-cell").hover(function () {
+            $(".htCommentsContainer .htComments").toggleClass("commentHover");
+        });
     }
     ngAfterViewInit() {
         //loading after the View init from there onwards we can reuse the hotTable instance

@@ -633,7 +633,7 @@ input[type=checkbox].with-sm-font {
 }
 
 .product-selector {
-    height: 85vh;
+    height: 88vh;
     background-color: #1a3e6f;
     overflow-y: auto;
     overflow-x: hidden;
