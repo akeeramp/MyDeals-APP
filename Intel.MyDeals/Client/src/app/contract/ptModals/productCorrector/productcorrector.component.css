@@ -7,6 +7,7 @@
     color: #0071c5;
     background: transparent !important;
     border-color: transparent !important;
+    font-size: 13px;
 }
 
 .lblFilterProd > span {
@@ -89,7 +90,7 @@
 
 .lnavFilter {
     background-color: #e7e7e8;
-    height: calc(87vh - 252px) !important;
+    height: calc(87vh - 260px) !important;
     padding: 4px;
     overflow: auto;
     font-family: 'Intel Clear', 'Arial';
@@ -417,7 +418,7 @@ span.prdAnchor {
         color: #01AEEF;
     }
 
-.strike {
+.strike .prdAnchor {
     text-decoration: line-through !important;
     cursor: pointer;
 }
@@ -521,8 +522,7 @@ span.prdAnchor {
 }
 
 .padding-tb-0 {
-    padding-top: 0;
-    padding-bottom: 0;
+    padding: 0 5px;
 }
 
 .prdBtn.btn-primary {
@@ -705,4 +705,10 @@ tr.ng-star-inserted.hide-row {
     padding-bottom: 5px;
     padding-top: 5px;
     display: inline-block;
+}
+
+.span-closer {
+    font-size: 17px;
+    font-family: 'Intel Clear';
+    line-height: 1;
 }

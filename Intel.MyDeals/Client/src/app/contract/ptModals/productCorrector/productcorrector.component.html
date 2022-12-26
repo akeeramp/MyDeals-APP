@@ -47,7 +47,7 @@
                             <li *ngFor="let p of curRowIncProd | unique:'name'">
                                 <span [ngClass]="{'strike': p.matchName.length != 0,'btnInclude':showIncludeExcludeLabel && p.exclude == 'I', 'btnExclude':showIncludeExcludeLabel && p.exclude == 'E' }" class="btn btn-default btn-xs padding-tb-0">
                                     <span class="prdAnchor {{p.status}}" (click)="clkPrdUsrNm(p)" title="{{p.reason}}">{{ p.anchorName }}</span>
-                                    <span title="Remove Product"class='intelicon-close skyblue pl10 removeProduct' (click)="removeProd(p.name, p.exclude)"></span>
+                                    <span title="Remove Product" class='skyblue pl10 removeProduct span-closer' (click)="removeProd(p.name, p.exclude)">x</span>
                                     
                                 </span>
                                 <div class="newProd height-auto-fix">
@@ -83,7 +83,7 @@
                             <kendo-treeview class="lblFilterProd PctreeViewNodes lblFilterProdCorrect" [nodes]="curRowIssues" [(selectedKeys)]="issueRowKeys" textField="name" [hasChildren]="false" selectBy="value" [kendoTreeViewSelectable]="selection" (selectionChange)="clickFilter($event,'USR_INPUT')">
                                 <ng-template kendoTreeViewNodeTemplate let-dataItem>
                                     {{ dataItem.name }}
-                                    <span *ngIf="dataItem.cnt>0">({{dataItem.cnt}})</span>
+                                    <span class="badge upperBadge big-label" *ngIf="dataItem.cnt>0">{{dataItem.cnt}}</span>
                                     <i *ngIf="dataItem.cnt==0" class="intelicon-help-outlined ckSm" title="Click to find a possible match"> </i>
                                 </ng-template>
                             </kendo-treeview>
@@ -143,7 +143,10 @@
                                 <kendo-grid-boolean-filter-menu [column]="column" [filter]="filter" [filterService]="filterService"></kendo-grid-boolean-filter-menu>
                             </ng-template>
                             <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                                <input class="prd-crctor-chkbox" type="checkbox" kendoCheckBox (click)="clickProd(dataItem.PRD_MBR_SID,dataItem.USR_INPUT,dataItem.HIER_VAL_NM,$event)" [(ngModel)]="dataItem.IS_SEL" />
+                                <div class="pc-checkbox-design">
+                                    <input class="prd-crctor-chkbox" type="checkbox" kendoCheckBox (click)="clickProd(dataItem.PRD_MBR_SID,dataItem.USR_INPUT,dataItem.HIER_VAL_NM,$event)" [(ngModel)]="dataItem.IS_SEL" />
+                                    <label></label>
+                                </div>
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column [headerClass]="{'headerClass':true}" field="HIER_VAL_NM" title="Product" [width]="150">
