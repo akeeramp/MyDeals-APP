@@ -105,7 +105,7 @@ export class adminsecurityEngineComponent {
             this.drilledDowndealtype = [];
             this.drilledDownAtrb = [];
             this.selectedIds = [];
-
+            this.selectedStages = [];
             this.GetSelectedDDlist = response;
             this.drilledDownstages = this.filterObjTypeForStages(value.Alias);
             this.drilledDowndealtype = this.filterObjTypefordealtype(value.Alias);
