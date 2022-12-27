@@ -2,6 +2,7 @@ import {ChangeDetectionStrategy, Component, EventEmitter, Input, OnDestroy, OnIn
 import {Subscription} from 'rxjs';
 import {GridsterItem} from 'angular-gridster2';
 import { DashboardComponent } from '../dashboard/dashboard.component';
+import { AppEvent, broadCastService } from '../../core/dealPopup/broadcast.service';
 
 
 @Component({
@@ -12,15 +13,15 @@ import { DashboardComponent } from '../dashboard/dashboard.component';
   encapsulation: ViewEncapsulation.None
 })
 export class SearchContractWidgetComponent implements OnInit, OnDestroy {
-constructor(private DashboardComp:DashboardComponent){
-
+    constructor(private brdcstservice: broadCastService){
 }
   @Input()
   widget;
   @Input()
   resizeEvent: EventEmitter<GridsterItem>;
   resizeSub: Subscription;
-  private searchText="";
+  private searchText = "";
+  private opType = "ALL";
   private opTypes:Array<any> = [
     {
         value: "ALL",
@@ -44,12 +45,26 @@ constructor(private DashboardComp:DashboardComponent){
     }
   ]
 
-  onOpChange(type:string){
-    this.DashboardComp.onOpChange(type,this.searchText);
+    onOpChange(type: string) {
+        this.opType = type; 
+        if (!!this.searchText && this.searchText != "" && this.searchText != null)
+        {
+            const sendObj = {
+                event: "selectedValue",
+                searchText: this.searchText,
+                opType: this.opType
+            }
+            this.brdcstservice.dispatch(new AppEvent("contractSearch", sendObj));
+        }
   }
 
   enterPressed(event:any) {
-    this.DashboardComp.enterPressed(event,this.searchText);
+     const sendObj={
+         event: event,
+         searchText: this.searchText,
+         opType: this.opType
+      }
+      this.brdcstservice.dispatch(new AppEvent("contractSearch", sendObj));
   }
  
 

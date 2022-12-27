@@ -27,7 +27,7 @@ export class contractDetailsComponent {
     disableSave:boolean=false;
     constructor(private templatesSvc: templatesService,
         private contractDetailsSvc: contractDetailsService, private datePipe: DatePipe,
-        private loggerSvc: logger,private newContractWidgetSvc :NewContractWidgetService ) { }
+        private loggerSvc: logger, private newContractWidgetSvc: NewContractWidgetService) { }
     @Input() C_ID: number;
     private Customer;
     CUST_NM_DIV: any = []; CUST_NM; TITLE = ""; files = []; START_DT; START_QTR; START_YR; END_DT; END_QTR; END_YR; NO_END_DT = false; NO_END_DT_RSN; isSubmitted = false; NOTES = "";

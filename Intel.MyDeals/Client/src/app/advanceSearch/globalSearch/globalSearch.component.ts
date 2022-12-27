@@ -1,4 +1,5 @@
 import {Component,ViewChild } from "@angular/core";
+import { broadCastService } from "../../core/dealPopup/broadcast.service";
 import { GlobalSearchResultsComponent } from "../globalSearchResults/globalSearchResults.component";
 
 @Component({
@@ -17,12 +18,16 @@ export class GlobalSearchComponent  {
     private resultTake=5;
     private windowOpened= false;
     private windowTop = 75; windowLeft = 300; windowWidth = 950; windowHeight = 500; windowMinWidth = 100; windowMinHeight = 100;
+
+    constructor(private brdcstservice: broadCastService) {
+
+    }
  
     enterPressed(event:any) {
       //KeyCode 13 is 'Enter'
       if (event.keyCode === 13 && this.searchText != "") {
          //opening kendo window
-         this.executeOnly('ALL');
+          this.executeOnly(this.opType);
          this.setWindowWidth();
          this.windowOpened=true;
       }
@@ -69,6 +74,19 @@ export class GlobalSearchComponent  {
     isWindowOpen($event:boolean){
         this.windowOpened = $event;
         this.searchText = "";
+    }
+
+    ngOnInit() {
+        
+        this.brdcstservice.on("contractSearch").subscribe(event => {
+            this.searchText = event.payload.searchText;
+            this.opType = event.payload.opType;
+            if (event.payload.event == "selectedValue") {
+                this.executeOnly(event.payload.opType);
+            } else {
+                this.enterPressed(event.payload.event);
+            }
+        });
     }
 }
 
