@@ -1257,7 +1257,7 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn 
 }
 
 #dealEditor .k-grid-header .k-grid-filter.k-state-active {
-    background-color: inherit !important
+    background-color: #fff !important
 }
 
 .one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="PRD_BCKT"], .one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_OA_MAX_VOL"], .one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_OA_MAX_AMT"], .one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="PRD_EXCLDS"] {
