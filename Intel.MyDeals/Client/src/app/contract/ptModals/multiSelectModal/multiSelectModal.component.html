@@ -4,7 +4,7 @@
     <div class="modal-header upper-model-header" *ngIf="!isTgrRgn">
         <h3 class="modal-title" id="modal-title">{{disTitle}}</h3>
     </div>
-    <loading-panel-angular id="multiSelectModalLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>
+    <!--<loading-panel-angular id="multiSelectModalLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>-->
     <div class="container-fluid overflow modal-body all-wheat markt-segmet-style">
         <div *ngIf="!isTgrRgn">
             <div *ngIf="isEmptyList">
@@ -28,7 +28,7 @@
         </div>
         <div class="row treevi-mrkt-segt">
             <div class="col">
-                <div mat-dialog-content *ngIf="!ismrktSeg">
+                <div mat-dialog-content class="border_box_fix" *ngIf="!ismrktSeg">
                     <kendo-multiselect class="fiend-all" [(ngModel)]="checkedKeys" [placeholder]="placeholderText" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false"></kendo-multiselect>
                     <kendo-treeview class="fiend-tree k-search-hiddensty" [nodes]="multiSelectData"
                                     filterInputPlaceholder="Type here to filter the values.."
@@ -56,8 +56,8 @@
         <div class="row justify-content-end" *ngIf="!isTgrRgn">
             <div class="col-md-12">
                 <div mat-dialog-actions class="col-md-7" *ngIf="multiSelectPopUpModal.enableSelectAll || multiSelectPopUpModal.enableDeselectAll">
-                    <button style="width:35%" *ngIf="multiSelectPopUpModal.enableSelectAll" (click)="selectAllCustomerReportedGeos()" class="btn btn-primary">Select All</button>&nbsp;
-                    <button style="width:40%" *ngIf="multiSelectPopUpModal.enableDeselectAll" (click)="deSelectAllCustomerReportedGeos()" class="btn btn-primary">Deselect All</button>
+                    <button style="width:35%" *ngIf="multiSelectPopUpModal.enableSelectAll" (click)="selectAllCustomerReportedGeos()" class="btn btn-primary btn_c_change">Select All</button>&nbsp;
+                    <button style="width:40%" *ngIf="multiSelectPopUpModal.enableDeselectAll" (click)="deSelectAllCustomerReportedGeos()" class="btn btn-primary btn_c_change">Deselect All</button>
                 </div>
                 <div mat-dialog-actions class="fr">
                     <button mat-button (click)="onNoClick()" class="btn btn-warning cancel-mrkt-seg">Cancel</button> &nbsp;

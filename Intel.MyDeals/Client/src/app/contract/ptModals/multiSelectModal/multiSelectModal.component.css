@@ -7,3 +7,22 @@ kendo-multiselect.border_bottom_c {
     border-color: #0071c5 !important;
     color: #ffffff !important;
 }
+.btn_c_change:hover{
+    background-color: #367fa9 !important;
+}
+
+.btn_c_change:focus {
+    color: #fff !important;
+    background-color: #00aeef !important;
+    border-color: #00aeef !important;
+}
+
+.btn_c_change {
+    color: #fff !important;
+    background: #0071c5 !important;
+    border-color: #0071c5 !important;
+}
+.border_box_fix {
+ box-shadow: 2px 2px 7px #000 !important;
+padding-right: 3px !important;
+}
