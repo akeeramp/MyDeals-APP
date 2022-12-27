@@ -97,9 +97,9 @@
                                         <div class="col-md-3 fl opUiLabel"><span *ngIf="contractData?._behaviors?.isRequired?.END_DT" class="isReqField">* </span>Select End Date:</div>
                                         <div class="col-md-9 inlineDisplay">
                                             <div class="blockdisplay">
-                                                <kendo-datepicker #picker class="fl opUiElement dateclass cd-input-bottom" calendarType="classic" [ngClass]="{'input-error': contractData?._behaviors?.validMsg?.END_DT}"
-                                                                  [(ngModel)]="END_DT" [disabled]="NO_END_DT || contractData?._behaviors?.isReadOnly['END_DT']" name="END_DT"
-                                                                  (valueChange)="getCurrentQuarterDetails('END_DT')" required></kendo-datepicker>
+                                                <kendo-datepicker #picker class="fl opUiElement dateclass cd-input-bottom" calendarType="classic" [ngClass]="{'input-error': contractData?._behaviors?.validMsg?.END_DT}" [incompleteDateValidation]="true" #contract_END_DT="ngModel"
+                                                                  [(ngModel)]="END_DT" [disabled]="NO_END_DT || contractData?._behaviors?.isReadOnly['END_DT']" name="contract_END_DT"
+                                                                  (valueChange)="getCurrentQuarterDetails('END_DT', contract_END_DT)" required></kendo-datepicker>
                                                 <kendo-formerror>
                                                     {{contractData?._behaviors?.validMsg?.END_DT}}
                                                 </kendo-formerror>

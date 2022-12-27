@@ -229,3 +229,14 @@ i#btnClose.intelicon-close-max.tender-cross-close:hover {
 .tender-grey-hover:hover {
     background-color: #f2f2f2 !important;
 }
+
+#folioCell a 
+{
+    color: #0071c5;
+    text-decoration: none;
+}
+
+#folioCell a:hover,#folioCell a:focus {
+    color: #004579;
+    text-decoration: underline !important;
+}

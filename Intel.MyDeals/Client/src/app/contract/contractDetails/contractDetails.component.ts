@@ -565,7 +565,7 @@ export class contractDetailsComponent {
         }
     }
 
-    getCurrentQuarterDetails(changeEvent = "", contract_START_DT = null) {
+    getCurrentQuarterDetails(changeEvent = "", contract_DT = null) {
         let isValidDataPresent = true;
         let yearValue, qtrValue, isDate, customerMemberSid = null;
         customerMemberSid = this.contractData.CUST_MBR_SID == "" ? null : this.contractData.CUST_MBR_SID;
@@ -579,11 +579,11 @@ export class contractDetailsComponent {
         }
         else if (changeEvent == "START_DT") {
             isDate = this.START_DT;
-            isValidDataPresent = this.isValidDate(changeEvent, isDate) && (contract_START_DT != null && contract_START_DT.status != 'INVALID') ? true : false;
+            isValidDataPresent = this.isValidDate(changeEvent, isDate) && ((contract_DT != null && contract_DT.status != 'INVALID') || contract_DT == null) ? true : false;
         }
         else if (changeEvent == "END_DT") {
             isDate = this.END_DT;
-            isValidDataPresent = this.isValidDate(changeEvent, isDate)
+            isValidDataPresent = this.isValidDate(changeEvent, isDate) && ((contract_DT != null && contract_DT.status != 'INVALID') || contract_DT == null) ? true : false;
         }
         else if (changeEvent == "START_YR" || changeEvent == "START_QTR") {
             qtrValue = this.START_QTR;
@@ -640,7 +640,7 @@ export class contractDetailsComponent {
                     this.loggerSvc.error("Unable to get current quarter data", "Error", err);
                     this.isLoading = false;
                 });
-            } else if (changeEvent == "START_DT" && contract_START_DT != null && contract_START_DT.status != 'INVALID') {
+        } else if (changeEvent == "START_DT" && contract_DT != null && contract_DT.status != 'INVALID') {
                 const strtDate = new Date(this.contractData.START_DT);
                 const selectedDate = this.START_DT;
                 this.backDateCheck(strtDate, selectedDate);

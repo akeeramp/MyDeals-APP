@@ -62,7 +62,7 @@ export class TenderDashboardGridUtil {
         }
         // if contract is not published
         if (data._contractPublished !== undefined && data._contractPublished === 0) {
-            return "<div class='noaccess' style='text-align: center; width: 100%;' title='Deals have not been published from Folio.'>Folio <a href='/Dashboard#/contractmanager/" + data._contractId + "' target='_blank'>" + data._contractId + "</a><div class='non-action-gray' style='color: #aaaaaa;'>(<i>Not Actionable</i>)</div></div>";
+            return "<div class='noaccess' style='text-align: center; width: 100%;' title='Deals have not been published from Folio.'>Folio <a href='/contract#/manager/" + data._contractId + "' target='_blank'>" + data._contractId + "</a><div class='non-action-gray' style='color: #aaaaaa;'>(<i>Not Actionable</i>)</div></div>";
         }
         var numActions = 0;
         for (var k in actions) {
@@ -120,5 +120,14 @@ export class TenderDashboardGridUtil {
             bidActns = data.BID_ACTNS;
         }
         return bidActns;
+    }
+
+    static uiReadonlyFolioWrapper = function (passedData, field) {
+        var tmplt = '<div id="folioCell" class="uiControlDiv isReadOnlyCell">';
+        tmplt += '  <a href="/contract#/manager/' + passedData[field] + '" target="_blank"">';
+        tmplt += '    <div class="ng-binding vert-center">' + passedData[field] +'</div>';
+        tmplt += '  </a>';
+        tmplt += '</div>';
+        return tmplt;
     }
 }

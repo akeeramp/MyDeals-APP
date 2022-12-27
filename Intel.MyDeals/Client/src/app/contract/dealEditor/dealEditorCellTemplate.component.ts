@@ -356,6 +356,9 @@ export class dealEditorCellTemplateComponent {
     removeDeletedRowData(event) {
         this.removeDeletedRow.emit(event);
     }
+    uiReadonlyFolioWrapper(data, field) {
+        return TenderDashboardGridUtil.uiReadonlyFolioWrapper(data, field)
+    }
     ngOnChanges() {
         try {
             if (!this.in_Is_Tender_Dashboard)//if not Tender Dashboard Screen, take salesforce Id from contract data

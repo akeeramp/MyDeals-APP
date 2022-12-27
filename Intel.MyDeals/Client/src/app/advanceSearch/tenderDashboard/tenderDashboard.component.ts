@@ -800,8 +800,8 @@ export class TenderDashboardComponent implements OnInit {
                 custNames.push(items[x].Customer.CUST_NM);
             if (endCustomers.indexOf(items[x].END_CUSTOMER_RETAIL) < 0)
                 endCustomers.push(items[x].END_CUSTOMER_RETAIL);
-            items[x].url = rootUrl + "/Dashboard#/tenderDashboard?DealType=" + this.dealType + "&Deal=" + items[x].DC_ID + "&search=true&approvedeals=true"
-            items[x].folioUrl = rootUrl + "/Dashboard#/tenderDashboard?DealType=" + this.dealType + "&FolioId=" + items[x].CNTRCT_OBJ_SID + "&search=true&approvedeals=true"
+            items[x].url = rootUrl + "/advancedSearch#/tenderDashboard?DealType=" + this.dealType + "&Deal=" + items[x].DC_ID + "&search=true&approvedeals=true"
+            items[x].folioUrl = rootUrl + "/advancedSearch#/tenderDashboard?DealType=" + this.dealType + "&FolioId=" + items[x].CNTRCT_OBJ_SID + "&search=true&approvedeals=true"
 
             if (stageToCheck != "" && stageToCheck != items[x].PS_WF_STG_CD) {
                 stagesOK = false;

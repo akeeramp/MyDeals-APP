@@ -6,6 +6,7 @@ import Handsontable from 'handsontable';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util'
 import * as moment from 'moment';
 import { PTE_Helper_Util } from './PTE_Helper_util';
+import { PTE_Validation_Util } from './PTE_Validation_util';
 
 export class PTEUtil {
 
@@ -297,7 +298,7 @@ export class PTEUtil {
         let translationInput = pricingTableRowData.map((row, index) =>{
             return {
                 ROW_NUMBER: row.DC_ID,
-                USR_INPUT: row.PTR_USER_PRD,
+                USR_INPUT: PTE_Validation_Util.getCorrectedPtrUsrPrd(row.PTR_USER_PRD),
                 EXCLUDE: false,
                 FILTER: row.PROD_INCLDS,
                 START_DATE: moment(row.START_DT).format("l"),
