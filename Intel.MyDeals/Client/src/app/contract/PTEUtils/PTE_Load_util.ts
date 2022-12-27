@@ -171,9 +171,10 @@ export class PTE_Load_Util {
                 let msg = "";
                 _.each(item._behaviors.isError, (val, key) => {
                     let colInd = _.findIndex(columns, { field: key });
-                    if (key == 'PTR_USER_PRD') {
+                    if (key == 'PTR_USER_PRD' || key == 'PRD_EXCLDS') {
                         if (val == true && item._behaviors.validMsg[`${key}`] && item._behaviors.validMsg[`${key}`] == 'Invalid Product') {
-                            cellComments.push({ row: rowInd, col: colInd, comment: { value: '', readOnly: true }, className: 'error-product' });
+                            cellComments.push({ row: rowInd, col: colInd, comment: { value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'error-product error-border' });
+                            msg += columns[colInd].title + ": " + item._behaviors.validMsg[`${key}`];
                         }
                         else if (val == false && item._behaviors.validMsg[`${key}`] && item._behaviors.validMsg[`${key}`] == 'Valid Product') {
                             cellComments.push({ row: rowInd, col: colInd, comment: { value: '', readOnly: true }, className: 'success-product' });
@@ -756,6 +757,18 @@ export class PTE_Load_Util {
             if (data._behaviors.isError['PTR_USER_PRD'] != true && data._behaviors.isError['PTR_USER_PRD'] == undefined) {
                 data._behaviors.isError['PTR_USER_PRD'] = false;
                 data._behaviors.validMsg['PTR_USER_PRD'] = 'Valid Product';
+                if (data['PRD_EXCLDS'] && !data._behaviors.isError['PRD_EXLCDS']) {
+                    data._behaviors.isError['PRD_EXCLDS'] = false;
+                    data._behaviors.validMsg['PRD_EXCLDS'] = 'Valid Product';
+                }
+            }
+            else {
+                data._behaviors.isError['PTR_USER_PRD'] = true;
+                data._behaviors.validMsg['PTR_USER_PRD'] = 'Invalid Product';
+                if (data['PRD_EXCLDS']) {
+                    data._behaviors.isError['PRD_EXCLDS'] = true;
+                    data._behaviors.validMsg['PRD_EXCLDS'] = 'Invalid Product';
+                }
             }
         })
         return PTR;
