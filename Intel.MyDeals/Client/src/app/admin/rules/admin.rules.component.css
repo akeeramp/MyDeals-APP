@@ -642,7 +642,7 @@ kendo-textarea.admin-notes-style.k-textarea {
     font-size: 16px !important;
     margin-top: 5px !important;
     height: 25px !important;
-    margin-right: 3px !important
+    margin-right: 12px !important
 }
 
     .intelicon-plus-max.mplusminus-style:hover {
@@ -844,7 +844,7 @@ button.price-rule-retry {
     position: relative;
     top: 20px;
     font-size: 11px;
-    left: 188px
+    left: 201px
 }
 
 .rows-list-style {
@@ -1201,4 +1201,11 @@ kendo-datepicker.calender-row-style {
 
 .price-rule-spread #spreadsheet table.htCore tr th {
     background: #f0f0f4 !important;
+}
+.intelicon-plus-max.mplusminus-style.add-plus.col-md-6 {
+    top: 0 !important;
+}
+
+.intelicon-minus-max.mplusminus-style.add-minus.col-md-6 {
+    top: 0 !important;
 }

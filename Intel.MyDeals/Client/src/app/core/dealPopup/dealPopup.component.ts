@@ -46,6 +46,7 @@ export class dealPopupComponent {
     properties: any = [];
     scheduleData: any = [];
     timelinegridResult: any;
+    searchHeight = 140;
     data: any; 
 
     private timelinegridData: GridDataResult;
@@ -424,11 +425,14 @@ export class dealPopupComponent {
     }
 
     tglGrdSize(toggleserachgrid) {
-        if (toggleserachgrid)
+        if (toggleserachgrid) {
+            this.searchHeight = 140;
             this.toggleserachgrid = false;
-        else
+        }
+        else {
+            this.searchHeight = 298;
             this.toggleserachgrid = true;
-
+        }
     }
 
     displayDealType() {

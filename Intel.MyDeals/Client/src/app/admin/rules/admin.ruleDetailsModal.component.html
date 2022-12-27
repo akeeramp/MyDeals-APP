@@ -99,10 +99,10 @@
                             <div class="divTableCell" style="width:75px">
                                 <span class="icnBtn icnSkyBtn"
                                       (click)="addRow(i)">
-                                    <i class="intelicon-plus-max mplusminus-style col-md-6"></i>
+                                    <i class="intelicon-plus-max mplusminus-style add-plus col-md-6"></i>
                                 </span><span class="icnBtn icnGryBtn"
                                              (click)="removeRow(i)" *ngIf="i!=0">
-                                    <i class="intelicon-minus-max mplusminus-style col-md-6"></i>
+                                    <i class="intelicon-minus-max mplusminus-style add-minus col-md-6"></i>
                                 </span>
                             </div>
                             <div class="divTableCell kdropdownlist">
@@ -148,6 +148,7 @@
                                                    [data]="dataItem.dropDown"
                                                    textField="dropdownName"
                                                    valueField="dropdownName"
+                                                   [autoClose]="false"
                                                    [(ngModel)]="dataItem.selectedValues"
                                                    (valueChange)="dataChangeMulti($event, i, dataItem, 'dropdownName')">
                                 </kendo-multiselect>
@@ -158,6 +159,7 @@
                                                    [data]="dataItem.dropDown"
                                                    textField="NAME"
                                                    valueField="EMP_WWID"
+                                                   [autoClose]="false"
                                                    [(ngModel)]="dataItem.selectedValues"
                                                    (valueChange)="dataChangeMulti($event, i, dataItem, 'name')">
                                 </kendo-multiselect>
@@ -168,6 +170,7 @@
                                                    [data]="dataItem.dropDown"
                                                    textField="value"
                                                    valueField="value"
+                                                   [autoClose]="false"
                                                    [(ngModel)]="dataItem.selectedValues"
                                                    (valueChange)="dataChangeMulti($event, i, dataItem, 'value')">
                                 </kendo-multiselect>
@@ -176,6 +179,7 @@
                                 <kendo-multiselect [disabled]="i==0"
                                                    class="multi_kedo-_style"
                                                    [data]="dataItem.dropDown"
+                                                   [autoClose]="false"
                                                    [(ngModel)]="dataItem.selectedValues"
                                                    (valueChange)="dataChangeMulti($event, i, dataItem, 'value')">
                                 </kendo-multiselect>
@@ -186,6 +190,7 @@
                                                    [data]="dataItem.dropDown"
                                                    textField="DROP_DOWN"
                                                    valueField="DROP_DOWN"
+                                                   [autoClose]="false"
                                                    [(ngModel)]="dataItem.selectedValues"
                                                    (valueChange)="dataChangeMulti($event, i, dataItem, 'dropdown')">
                                 </kendo-multiselect>
@@ -196,6 +201,7 @@
                                                    [data]="dataItem.dropDown"
                                                    textField="CUST_NM"
                                                    valueField="CUST_SID"
+                                                   [autoClose]="false"
                                                    [(ngModel)]="dataItem.selectedValues"
                                                    (valueChange)="dataChangeMulti($event, i, dataItem, 'custName')">
                                 </kendo-multiselect>
