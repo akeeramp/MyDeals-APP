@@ -485,7 +485,6 @@ kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li.k-state-disabled span 
     background-color: #cccccc !important;
     color: #5c5b5b;
     cursor: not-allowed !important;
-    pointer-events: auto !important
 }
 
 kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper ul li.k-state-disabled {

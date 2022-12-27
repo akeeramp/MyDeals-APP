@@ -9,7 +9,7 @@
             <kendo-grid-column width="33" [headerClass]="{'headerClass':true}" field="id" [sortable]="false"
                 [filterable]="none" title="">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <div><a (click)="goToContract(contractId)"
+                    <div><a href="/Contract#/manager/{{contractId}}" target="_blank"
                             title="Click to open the Contract in the Contract Editor"><span
                                 class="intelicon-frame-template new-template-icon" style="font-size: 20px;"></span></a></div>
                 </ng-template>
