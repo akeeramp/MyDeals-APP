@@ -134,7 +134,7 @@
     <pricing-table-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate" (warn)="isWarning" (tmDirec)="redirectingFn($event)">
     </pricing-table-editor>
 </div>
-<div *ngIf="selectedTab == 'DE'" class="col-md-12 loaderDE" style="border: 2px solid #bcbcbc;">
+<div *ngIf="selectedTab == 'DE'" class="col-md-12 loaderDE loading-dealer-editors" style="border: 2px solid #bcbcbc;">
     <deal-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [in_Search_Text]="searchText" [contractData]="contractData" [UItemplate]="UItemplate" (tmDirec)="redirectingFn($event)">
     </deal-editor>
 </div>

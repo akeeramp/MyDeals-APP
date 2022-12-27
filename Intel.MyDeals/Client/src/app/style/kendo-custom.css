@@ -115,3 +115,8 @@ kendo-combobox.cd-input-bottom {
 .k-calendar-header .k-calendar-title:hover {
     color: #424242 !important
 }
+
+.k-window-titlebar {
+    background-color: #0071c5 !important;
+    color: #fff !important;
+}

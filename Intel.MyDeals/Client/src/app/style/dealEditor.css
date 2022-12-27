@@ -8,3 +8,12 @@ deal-editor-cell.extraSpace-colFix .ng-binding.vert-center:hover {
     color: #004579;
     text-decoration: underline;
 }*/
+
+.loading-dealer-editors kendo-tabstrip#dealEditorTab .k-content {
+    padding: 0;
+    border-color: transparent;
+}
+
+.loading-dealer-editors {
+    padding: 0 5px;
+}
