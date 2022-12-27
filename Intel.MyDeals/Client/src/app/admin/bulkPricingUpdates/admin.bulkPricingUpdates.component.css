@@ -280,7 +280,7 @@ p.no-data-ok {
 #btnClose.admin-bulk-btnclose:hover {
     color: #fff !important;
 }
-kendo-window.bulk-meet-comp-window.k-widget.k-window {
+kendo-window.bulk-meet-comp-window.k-window {
     width: 320px !important;
     height: 270px !important;
 }
