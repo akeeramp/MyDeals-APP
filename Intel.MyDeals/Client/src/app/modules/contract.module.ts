@@ -44,6 +44,7 @@ import { pctGroupModal } from "../contract/managerPct/pctGroupModal/pctGroupModa
 import { tenderMCTPCTModalComponent } from "../contract/ptModals/tenderDashboardModals/tenderMCTPCTModal.component";
 import { tenderGroupExclusionModalComponent } from "../contract/ptModals/tenderDashboardModals/tenderGroupExclusionModal.component";
 import { missingCapCostInfoModalComponent } from "../contract/ptModals/dealEditorModals/missingCapCostInfoModal.component";
+import { dropDownModalComponent } from '../contract/ptModals/dropDownModal/dropDownModal.component';
 
 export let contractComponents = [
     contractDetailsComponent,
@@ -90,5 +91,6 @@ export let contractComponents = [
     pctGroupModal,
     missingCapCostInfoModalComponent,
     tenderMCTPCTModalComponent,
-    tenderGroupExclusionModalComponent
+    tenderGroupExclusionModalComponent,
+    dropDownModalComponent
 ]

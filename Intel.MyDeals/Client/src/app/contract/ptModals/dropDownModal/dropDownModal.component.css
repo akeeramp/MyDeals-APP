@@ -1,0 +1,69 @@
+﻿.blend-checkbox {
+    margin-top: 15px;
+    display: flex;
+    position: relative;
+    width: 100%;
+    align-items: center;
+    justify-content: flex-start;
+    font-weight: 600
+}
+
+.bottom-btns {
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%;
+    position: relative
+}
+
+    .bottom-btns button {
+        margin-left: 5px
+    }
+
+.blend-checkbox input {
+    margin-right: 5px;
+    opacity: 1;
+    width: 1rem
+}
+
+.another-header-geo {
+    font-size: 28px;
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif
+}
+
+.geoHead {
+    border-top: 1px solid;
+    border-top-color: #f4f4f4
+}
+
+.bottom-btns .btn-warning {
+    color: #0071c5 !important;
+    border-color: #e08e0b !important
+}
+
+.bottom-btns .btn-primary {
+    border-color: #367fa9 !important
+}
+
+.bottom-btns .btn-warning:hover, .bottom-btns .btn-warning:active, .bottom-btns .btn-warning.hover {
+    background-color: #e08e0b
+}
+
+button.bid-geo-cancel {
+    background-color: #f39c12 !important;
+    border-color: #e08e0b !important
+}
+
+    button.bid-geo-cancel:hover {
+        background-color: #e08e0b !important;
+        border-color: #b1babf !important
+    }
+
+button.bid-geo-saveclose {
+    background-color: #3c8dbc !important;
+    border-color: #367fa9 !important
+}
+
+button.btn.btn-primary.bid-geo-saveclose:hover {
+    background-color: #367fa9 !important;
+    border-color: #00aeef !important
+}

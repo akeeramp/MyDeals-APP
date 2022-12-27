@@ -30,6 +30,8 @@ import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 import { FlexOverlappingCheckComponent } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.component';
 import { distinct } from '@progress/kendo-data-query';
+import { dropDownModalComponent } from '../ptModals/dropDownModal/dropDownModal.component';
+
 @Component({
     selector: 'pricing-table-editor',
     templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html'
@@ -37,12 +39,12 @@ import { distinct } from '@progress/kendo-data-query';
 export class pricingTableEditorComponent {
 
     constructor(private pteService: pricingTableEditorService,
-            private productSelectorService: productSelectorService,
-            private loggerService: logger,
-            private lnavService: lnavService,
-            private flexoverLappingCheckDealsService: flexoverLappingcheckDealService,
-            private contractDetailsService: contractDetailsService,
-            protected dialog: MatDialog) {
+        private productSelectorService: productSelectorService,
+        private loggerService: logger,
+        private lnavService: lnavService,
+        private flexoverLappingCheckDealsService: flexoverLappingcheckDealService,
+        private contractDetailsService: contractDetailsService,
+        protected dialog: MatDialog) {
         /*  custom cell editor logic starts here*/
         let VM = this;
         this.custCellEditor = class custSelectEditor extends Handsontable.editors.TextEditor {
@@ -52,7 +54,7 @@ export class pricingTableEditorComponent {
             public TEXTAREA_PARENT: any;
             public textareaStyle: any
             public textareaParentStyle: any
-            public hot: Handsontable.Core;    
+            public hot: Handsontable.Core;
             public instance: any;
             public selectOptions: any;
             private selRow = 0;
@@ -126,6 +128,48 @@ export class pricingTableEditorComponent {
                     }
                     data = { name: name, source: this.source, selVal: selVal, contractData: VM.contractData, curPricingTable: VM.curPricingTable, curRow: VM.curRow };
                 }
+                else if (this.field && this.field == 'PAYOUT_BASED_ON') {
+                    modalComponent = dropDownModalComponent
+                    name = "Select Payout Based On *";
+                    width = '600px';
+                    data = { name: name, source: this.source, selVal: selVal };
+                }
+                else if (this.field && this.field == 'SETTLEMENT_PARTNER') {
+                    modalComponent = dropDownModalComponent
+                    name = "Select Payout Based On *";
+                    width = '600px';
+                    data = { name: name, source: this.source, selVal: selVal };
+                }
+                else if (this.field && this.field == 'PERIOD_PROFILE') {
+                    modalComponent = dropDownModalComponent
+                    name = "Select Period Profile";
+                    width = '600px';
+                    data = { name: name, source: this.source, selVal: selVal };
+                }
+                else if (this.field && this.field == 'RESET_VOLS_ON_PERIOD') {
+                    modalComponent = dropDownModalComponent
+                    name = "Select Reset Per Period";
+                    width = '600px';
+                    data = { name: name, source: this.source, selVal: selVal };
+                }
+                else if (this.field && this.field == 'AR_SETTLEMENT_LVL') {
+                    modalComponent = dropDownModalComponent
+                    name = "Select Settlement Level";
+                    width = '600px';
+                    data = { name: name, source: this.source, selVal: selVal };
+                }
+                else if (this.field && this.field == 'REBATE_TYPE') {
+                    modalComponent = dropDownModalComponent
+                    name = "Select Rebate Type *";
+                    width = '600px';
+                    data = { name: name, source: this.source, selVal: selVal };
+                }
+                else if (this.field && this.field == 'PROD_INCLDS') {
+                    modalComponent = dropDownModalComponent
+                    name = "Select Media *";
+                    width = '600px';
+                    data = { name: name, source: this.source, selVal: selVal };
+                }
                 else if (this.field && this.field == 'GEO_COMBINED') {
                     modalComponent = GeoSelectorComponent
                     name = "Select Geo *";
@@ -139,13 +183,13 @@ export class pricingTableEditorComponent {
                 else if (this.field && this.field == 'QLTR_BID_GEO') {
                     modalComponent = GeoSelectorComponent;
                     panelClass = 'geo_multi_style',
-                    name = "Select Bid Geo";
+                        name = "Select Bid Geo";
                     data = { name: name, source: this.source, selVal: selVal };
                 }
                 else if(this.field && this.field == 'MRKT_SEG'){
                     modalComponent = multiSelectModalComponent;
                     panelClass = 'multi-select-pte',
-                    height = "500px"
+                        height = "500px"
                     width = "700px";
                     name = this.field;
                     data = { colName: name, items: { 'data': this.source }, cellCurrValues: selVal };
@@ -154,7 +198,7 @@ export class pricingTableEditorComponent {
                     const contractStartDate = VM.contractData["START_DT"];
                     const contractEndDate = VM.contractData["END_DT"];
                     const isConsumption = this.hot.getDataAtRowProp(this.selRow, "PAYOUT_BASED_ON") === "Consumption";
-                    const isOEM = this.field === "OEM_PLTFRM_LNCH_DT" || this.field === "OEM_PLTFRM_EOL_DT"; 
+                    const isOEM = this.field === "OEM_PLTFRM_LNCH_DT" || this.field === "OEM_PLTFRM_EOL_DT";
                     modalComponent = kendoCalendarComponent;
                     height = "auto"
                     width = "600px";
@@ -338,7 +382,7 @@ export class pricingTableEditorComponent {
                 this.loggerService.error('Something went wrong', 'Error');
                 console.error('PTE::afterChange::',ex);
             }
-         
+
         },
         afterDocumentKeyDown: (event) => {
             this.afterDocumentKeyDown(event);
@@ -515,10 +559,12 @@ export class pricingTableEditorComponent {
             let currentColumnConfig = PTEUtil.generateHandsontableColumn(this.isTenderContract,this.pteService, this.loggerService, this.dropdownResponses, columnFields, columnAttributes, item, index);
             //adding for cell management in cell this can move to seperate function later
             this.ColumnConfig.push(currentColumnConfig);
-            if (item.field == 'PTR_USER_PRD' || item.field == 'GEO_COMBINED' || item.field == 'MRKT_SEG' || item.field == 'QLTR_BID_GEO' || item.field == 'CUST_ACCNT_DIV') {
+            if (item.field == 'PTR_USER_PRD' || item.field == 'GEO_COMBINED' || item.field == 'MRKT_SEG' || item.field == 'QLTR_BID_GEO' || item.field == 'CUST_ACCNT_DIV'
+                || item.field == 'PAYOUT_BASED_ON' || item.field == 'PERIOD_PROFILE' || item.field == 'RESET_VOLS_ON_PERIOD' || item.field == 'AR_SETTLEMENT_LVL'
+                || item.field == 'REBATE_TYPE' || item.field == 'PROD_INCLDS' || item.field == 'SETTLEMENT_PARTNER') {
                 currentColumnConfig.editor = this.custCellEditor;
             }
-            if(currentColumnConfig && currentColumnConfig.type=='date'){
+            if (currentColumnConfig && currentColumnConfig.type=='date'){
                 currentColumnConfig.editor = this.custCellEditor;
             }
             this.columns.push(currentColumnConfig);
@@ -562,9 +608,9 @@ export class pricingTableEditorComponent {
         if (source == 'edit' || source == 'CopyPaste.paste' || source == 'Autofill.fill') {
             let uniqchanges = [];
             _.each(changes, (item) => {
-              
-                    if (item[1] == 'PTR_USER_PRD') {
-                        if (item[3] != null && item[3] != '') {
+
+                if (item[1] == 'PTR_USER_PRD') {
+                    if (item[3] != null && item[3] != '') {
                         let obj = { row: item[0], prop: item[1], old: item[2], new: item[3] };
                         uniqchanges.push(obj);
                     }
@@ -625,10 +671,10 @@ export class pricingTableEditorComponent {
                 PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns);
             }
             if (perPro && perPro.length > 0) {
-                PTE_CellChange_Util.perProfDefault(perPro, this.contractData,this.curPricingTable);
+                PTE_CellChange_Util.perProfDefault(perPro, this.contractData, this.curPricingTable);
             }
             if (AR && AR.length > 0) {
-                PTE_CellChange_Util.autoFillARSet(AR, this.contractData,this.curPricingTable);
+                PTE_CellChange_Util.autoFillARSet(AR, this.contractData, this.curPricingTable);
             }
             //KIT on change events
             if (KIT_ECAP && KIT_ECAP.length > 0) {
@@ -637,13 +683,13 @@ export class pricingTableEditorComponent {
             if (KIT_DSCNT && KIT_DSCNT.length > 0) {
                 PTE_CellChange_Util.kitDSCNTChange(KIT_DSCNT, this.columns, this.curPricingTable);
             }
-            if(KIT_name && KIT_name.length>0){
-                this.kitNameObjArr= PTE_CellChange_Util.kitNameExists(KIT_name, this.columns, this.curPricingTable);
+            if (KIT_name && KIT_name.length > 0) {
+                this.kitNameObjArr = PTE_CellChange_Util.kitNameExists(KIT_name, this.columns, this.curPricingTable);
                 //open KIT confirmation message if the same name exists
-                if(this.kitNameObjArr && this.kitNameObjArr.length>0){
+                if (this.kitNameObjArr && this.kitNameObjArr.length > 0) {
                     //and the object will assign the first one
-                    this.kitNameObj=this.kitNameObjArr[0];
-                    this.isKitDialog=true;
+                    this.kitNameObj = this.kitNameObjArr[0];
+                    this.isKitDialog = true;
                 }
             }
             if (tierChg && tierChg.length > 0) {
@@ -656,13 +702,13 @@ export class pricingTableEditorComponent {
                 PTE_CellChange_Util.pgChgfn(pgChg, this.columns, this.curPricingTable);
             }
             if (pgChg.length == 0) {
-                PTE_CellChange_Util.checkfn(changes, this.curPricingTable,this.columns);
+                PTE_CellChange_Util.checkfn(changes, this.curPricingTable, this.columns);
             }
             //for multi tier there can be more tiers to delete so moving the logic after all change 
             if (this.multiRowDelete && this.multiRowDelete.length > 0 && this.isDeletePTR) {
                 this.deleteRow(this.multiRowDelete);
             }
-            if(startVol && startVol.length>0){
+            if (startVol && startVol.length > 0) {
                 //making the start vol val to zero incase empty
                 PTE_CellChange_Util.defaultVolVal(startVol, this.columns, this.curPricingTable);
             }
@@ -703,56 +749,56 @@ export class pricingTableEditorComponent {
             delDCIDs.push(this.hotTable.getDataAtRowProp(item.row, 'DC_ID'));
         });
         //calling the below method to validate the non-deleted records and if no client side validations then it will proceed for deletion
-        this.validatePricingTableProducts(delDCIDs);       
+        this.validatePricingTableProducts(delDCIDs);
     }
     showHelpTopic() {
-        window.open('https://wiki.ith.intel.com/display/Handbook/Pricing+Table+Editor+Features', '_blank');        
+        window.open('https://wiki.ith.intel.com/display/Handbook/Pricing+Table+Editor+Features', '_blank');
     }
     closeKitDialog() {
         //close kitdialog closes the kendo dialog and clear the kit name cell
-        PTE_CellChange_Util.closeKitDialog(this.kitNameObj,this.columns,this.curPricingTable);
-       this.isKitDialog=false;
-       //Once the first dialog is closed will splice the first record and see anyother result and will constinue till last one
-       this.kitNameObjArr.splice(0,1);
-       if(this.kitNameObjArr && this.kitNameObjArr.length>0){
-         this.kitNameObj=this.kitNameObjArr[0]
-         this.isKitDialog=true;
-       }
+        PTE_CellChange_Util.closeKitDialog(this.kitNameObj, this.columns, this.curPricingTable);
+        this.isKitDialog = false;
+        //Once the first dialog is closed will splice the first record and see anyother result and will constinue till last one
+        this.kitNameObjArr.splice(0, 1);
+        if (this.kitNameObjArr && this.kitNameObjArr.length > 0) {
+            this.kitNameObj = this.kitNameObjArr[0]
+            this.isKitDialog = true;
+        }
     }
-    mergeKitDeal(){
+    mergeKitDeal() {
         this.setBusy("Reloading...", "Table Editor Reloading please wait", "Info", true);
-        this.isKitDialog=false;
+        this.isKitDialog = false;
         setTimeout(() => {
             //will delete the rows first this must be first step
             _.each(this.kitNameObj.PTR, (itm) => {
-                let PTR=PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
-                PTR=_.map(PTR,(x)=>{ return {DEAL_GRP_NM:x['DEAL_GRP_NM'].toUpperCase()}});
-                let PTRlen=_.filter(PTR,(x)=>{return x.DEAL_GRP_NM.toUpperCase()==this.kitNameObj.name.toUpperCase()}).length;
-                let lastRow=_.findLastIndex(PTR,{DEAL_GRP_NM: this.kitNameObj.name.toUpperCase()});
-                if(PTRlen>1){
-                    let prdlen=this.hotTable.getDataAtRowProp(lastRow,'PTR_USER_PRD').split(',').length;
+                let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
+                PTR = _.map(PTR, (x) => { return { DEAL_GRP_NM: x['DEAL_GRP_NM'].toUpperCase() } });
+                let PTRlen = _.filter(PTR, (x) => { return x.DEAL_GRP_NM.toUpperCase() == this.kitNameObj.name.toUpperCase() }).length;
+                let lastRow = _.findLastIndex(PTR, { DEAL_GRP_NM: this.kitNameObj.name.toUpperCase() });
+                if (PTRlen > 1) {
+                    let prdlen = this.hotTable.getDataAtRowProp(lastRow, 'PTR_USER_PRD').split(',').length;
                     this.hotTable.alter('remove_row', lastRow, prdlen, 'no-edit');
                 }
             });
             //After delete will merge the rows
             PTE_CellChange_Util.mergeKitDeal(this.kitNameObj, this.columns, this.curPricingTable, this.contractData, this.pricingTableTemplates);
-            this.kitNameObjArr.splice(0,1);
+            this.kitNameObjArr.splice(0, 1);
             if (this.kitNameObjArr && this.kitNameObjArr.length > 0) {
                 this.kitNameObj = this.kitNameObjArr[0];
                 this.isKitDialog = true;
             }
             this.setBusy("", "", "", false);
-        },0);
+        }, 0);
     }
     deleteRow(rows: Array<any>, isProdCorrectorDeletion?): void {
         try {
             let delRows = [];
-            let PTR=PTE_Common_Util.getPTEGenerate(this.columns,this.curPricingTable);
+            let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
             //delete can be either simple row delete for PTR not saved or can be PTR which are saved
-            _.each(PTR,(PTRow,ind)=>{
+            _.each(PTR, (PTRow, ind) => {
                 _.each(rows, row => {
                     let DCID = this.hotTable.getDataAtRowProp(row.row, 'DC_ID');
-                    if (PTRow.DC_ID==DCID) {
+                    if (PTRow.DC_ID == DCID) {
                         delRows.push({ row: ind, DC_ID: PTRow.DC_ID });
                     }
                 })
@@ -797,7 +843,7 @@ export class pricingTableEditorComponent {
             if (savedRows.length > 0 && delRows.length == savedRows.length && !isProdCorrectorDeletion) {//if product deleted through product corrector, no need of api call
                 //this will openup dialog box and call closeDialog function
                 this.isDialogOpen = true;
-            }            
+            }
             //this condition for both case
             if (nonSavedRows.length > 0 && savedRows.length > 0 && !isProdCorrectorDeletion) {//if product deleted through product corrector, no need of api call
                 this.hotTable.alter('remove_row', nonSavedRows[0].row, nonSavedRows.length, 'no-edit');
@@ -881,7 +927,7 @@ export class pricingTableEditorComponent {
             if (this.savedResponseWarning && this.savedResponseWarning.length > 0)
                 PTE_Load_Util.bindWarningDetails(PTR, this.savedResponseWarning);
             //this is to make sure the saved record prod color are success by default
-            PTR=PTE_Load_Util.setPrdColor(PTR);
+            PTR = PTE_Load_Util.setPrdColor(PTR);
             this.getTemplateDetails();
             this.dropdownResponses = await this.getAllDrowdownValues();
             if (this.dropdownResponses["SETTLEMENT_PARTNER"] != undefined) {
@@ -892,11 +938,11 @@ export class pricingTableEditorComponent {
             this.generateHandsonTable(PTR);
             this.isLoading = false;
         }
-        catch(ex){
-            this.loggerService.error('Something went wrong.','Error');
-            console.error('DEAL_EDITOR::ngOnInit::',ex);
+        catch (ex) {
+            this.loggerService.error('Something went wrong.', 'Error');
+            console.error('DEAL_EDITOR::ngOnInit::', ex);
         }
-     
+
     }
     custdivnull(act: boolean) {
         if (act == true) {
@@ -910,7 +956,7 @@ export class pricingTableEditorComponent {
     undoPTE() {
         this.hotTable.undo();
         this.redoEnable = true;
-        this.undoCount -=1
+        this.undoCount -= 1
         this.redoCount += 1;
         if (this.undoCount == 0) this.undoEnable = false;
     }
@@ -922,7 +968,7 @@ export class pricingTableEditorComponent {
         if (this.undoCount > 0) this.undoEnable = true;
     }
     async ValidateAndSavePTE(isValidProd, deleteDCIDs?) {
-        if (isValidProd) {            
+        if (isValidProd) {
             //Handsonetable loading taking some time so putting this logic for loader
             let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
             //removing the deleted records from PTR
@@ -1059,11 +1105,11 @@ export class pricingTableEditorComponent {
         }
         this.isLoading = false;
 
-    }    
+    }
     async validatePricingTableProducts(deleteDCIDs?) {
         //validate Products for non-deleted records, if any product is invalid it will stop deletion as well
         let isValidProd = await this.validateOnlyProducts('onSave', undefined, deleteDCIDs);
-        if(isValidProd != undefined)
+        if (isValidProd != undefined)
             await this.saveandValidate(isValidProd, deleteDCIDs);
     }
     async saveandValidate(isValidProd, deleteDCIDs?) {
@@ -1150,7 +1196,7 @@ export class pricingTableEditorComponent {
                     }
                 }
             })
-            
+
             if (_.contains(prdValResult, '1')) {
                 // Product corrector if invalid products
                 this.isLoading = false;
@@ -1174,7 +1220,7 @@ export class pricingTableEditorComponent {
 
                     });
                     let denBandData = PTE_CellChange_Util.validateDensityBand(0, this.columns, this.curPricingTable, '', translateResult['Data'], false, this.validMisProd);
-                    this.validMisProd = denBandData.validMisProds;                    
+                    this.validMisProd = denBandData.validMisProds;
                     this.generateHandsonTable(denBandData.finalPTR);
                 }
                 if (action == 'onSave') {
@@ -1204,7 +1250,7 @@ export class pricingTableEditorComponent {
             return true;
         }
     }
-    
+
     async resetValidationMessage() {
         this.validationMessage = false;
     }
@@ -1230,10 +1276,10 @@ export class pricingTableEditorComponent {
         });
 
         let pricingTableRowData = currentPricingTableRowData.filter((x) => {
-            
+
             return ((x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
                 ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
-                || (this.curPricingTable.OBJ_SET_TYPE_CD == "KIT") || (this.isExcludePrdChange) ;
+                || (this.curPricingTable.OBJ_SET_TYPE_CD == "KIT") || (this.isExcludePrdChange);
         });
 
         // Products invalid JSON data present in the row
@@ -1242,7 +1288,7 @@ export class pricingTableEditorComponent {
             return (x.PTR_SYS_INVLD_PRD != null && x.PTR_SYS_INVLD_PRD != "");
         });
 
-        
+
         // Products that needs server side attention
         if (translationInputToSend.length > 0) {
             // Validate products
@@ -1344,7 +1390,7 @@ export class pricingTableEditorComponent {
             }
         });
     }
-    async openProductCorrector(products: any, action : string, deletedDCID?) {
+    async openProductCorrector(products: any, action: string, deletedDCID?) {
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
         let selRow: any;
         let rowProdCorrectordat: any;
@@ -1354,7 +1400,7 @@ export class pricingTableEditorComponent {
             let idx = _.findIndex(PTR, { DC_ID: parseInt(key) });
             selRows.push({ DC_ID: res.DC_ID, name: _.keys(val).toString(), row: res, indx: idx });
         });
-        _.each(products.InValidProducts,(val, key) => {
+        _.each(products.InValidProducts, (val, key) => {
             let res = _.findWhere(PTR, { DC_ID: parseInt(key) });
             let idx = _.findIndex(PTR, { DC_ID: parseInt(key) });
             if ((selRows.find(a => a.DC_ID == parseInt(key)) != undefined)
@@ -1516,7 +1562,7 @@ export class pricingTableEditorComponent {
                         this.setBusy("", "", "", false);
                     }, 2000);
                 }
-                else if (action == 'onSave') {                    
+                else if (action == 'onSave') {
                     this.saveandValidate(true, deletedDCID);
                 }
             }
@@ -1639,5 +1685,5 @@ export class pricingTableEditorComponent {
         new PTE_Common_Util(this.hotTable);
         new PTE_Load_Util(this.hotTable);
     }
-    
+
 }

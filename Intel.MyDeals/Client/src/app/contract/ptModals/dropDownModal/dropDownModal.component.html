@@ -1,0 +1,24 @@
+﻿<div class="container-fluid overflow">
+    <div class="row">
+        <div class="col">
+            <h1 class="another-header-geo" mat-dialog-title>{{data.name}}</h1>
+        </div>
+    </div>
+        <div class="row">
+            <div class="col">
+                <p *ngIf="errMsg" style="padding-top: 1em; color:red">There are no values set up for this customer/drop down.  Please contact a system admin to update proper values.</p>
+                <div id="comboDD" mat-dialog-content class="geoHead" *ngIf="listItems" style="padding-top:25px">
+                    <kendo-dropdownlist class="text-color-multi-tag divineo-one" [data]="listItems" [(ngModel)]="value" placeholder="Click to select..." style="width:60%"></kendo-dropdownlist>
+                </div>
+            </div>
+        </div>
+
+    <div class="row justify-content-end">
+        <div class="col">
+            <div class="bottom-btns" mat-dialog-actions>
+                <button mat-button (click)="onNoClick()" class="btn btn-warning bid-geo-cancel">Cancel</button>
+                <button mat-button (click)="onSave()" cdkFocusInitial class="btn btn-primary bid-geo-saveclose">Add to grid</button>
+            </div>
+        </div>
+    </div>
+</div>

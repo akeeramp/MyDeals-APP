@@ -1413,3 +1413,9 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
 .managable-tenders .tender_exclude_grouping kendo-grid.group-Excl-grid.grouping_grid_h {
     height: calc(100vh - 350px) !important;
 }
+
+#comboDD .k-dropdown .k-dropdown-wrap {
+    border-color: #fafafa;
+    color: #495057;
+    background-color: #fafafa;
+}
