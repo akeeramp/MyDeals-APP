@@ -68,7 +68,7 @@ export class lnavUtil {
         return newPricingTable;
     }
 
-    static updateNPTDefaultValues(pt, nptDefaults) {
+    static updateNPTDefaultValues(pt, nptDefaults, customer) {
         //note: copy pasted from the watch function far below, slight modifications, can probably be compressed to 1 function call for re-usability?
         if (!!nptDefaults["REBATE_TYPE"]) nptDefaults["REBATE_TYPE"].value = pt["REBATE_TYPE"];
         if (!!nptDefaults["MRKT_SEG"] && pt["MRKT_SEG"] != undefined && pt["MRKT_SEG"] != null && pt["MRKT_SEG"] != "") {
@@ -87,8 +87,20 @@ export class lnavUtil {
         if (!!nptDefaults["NUM_OF_TIERS"]) nptDefaults["NUM_OF_TIERS"].value = pt["NUM_OF_TIERS"];
         if (!!nptDefaults["NUM_OF_DENSITY"]) nptDefaults["NUM_OF_DENSITY"].value = pt["NUM_OF_DENSITY"];
         if (!!nptDefaults["SERVER_DEAL_TYPE"]) nptDefaults["SERVER_DEAL_TYPE"].value = pt["SERVER_DEAL_TYPE"];
-        if (!!nptDefaults["PERIOD_PROFILE"]) nptDefaults["PERIOD_PROFILE"].value = pt["PERIOD_PROFILE"];
-        if (!!nptDefaults["AR_SETTLEMENT_LVL"]) nptDefaults["AR_SETTLEMENT_LVL"].value = pt["AR_SETTLEMENT_LVL"];
+        if (!!nptDefaults["PERIOD_PROFILE"]) nptDefaults["PERIOD_PROFILE"].value = pt["PERIOD_PROFILE"] != "" ? pt["PERIOD_PROFILE"] : customer.DFLT_PERD_PRFL;
+        if (!!nptDefaults["AR_SETTLEMENT_LVL"]) {
+            let newArSettlementValue = pt["AR_SETTLEMENT_LVL"] != "" ? pt["AR_SETTLEMENT_LVL"] : customer.DFLT_AR_SETL_LVL;
+            if (newArSettlementValue == customer.DFLT_AR_SETL_LVL && customer.DFLT_AR_SETL_LVL == "User Select on Deal Creation") {
+                newArSettlementValue = "";
+            } else {
+                if (newArSettlementValue == "") // If no auto fill or customer default, default to Deal values
+                    newArSettlementValue = (pt["OBJ_SET_TYPE_CD"] == "ECAP" ||
+                        pt["OBJ_SET_TYPE_CD"] == "KIT")
+                        ? "Issue Credit to Billing Sold To"
+                        : "Issue Credit to Default Sold To by Region";
+            }
+            nptDefaults["AR_SETTLEMENT_LVL"].value = newArSettlementValue;
+        }
         if (!!nptDefaults["REBATE_OA_MAX_VOL"] && pt["REBATE_OA_MAX_VOL"] != "") {
             if (pt["REBATE_OA_MAX_VOL"] == null) {
                 nptDefaults["REBATE_OA_MAX_VOL"].value = null;

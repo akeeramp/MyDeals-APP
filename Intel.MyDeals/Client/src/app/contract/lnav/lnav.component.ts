@@ -650,11 +650,12 @@ export class lnavComponent {
         if (pt != null) {
             this.curPricingTable = pt;
             this.newPricingTable = pt;
+            let customer = this.contractData.Customer;
             ptTemplate = this.UItemplate.ModelTemplates.PRC_TBL[pt.OBJ_SET_TYPE_CD];
             this.newPricingTable["_extraAtrbs"] = ptTemplate.extraAtrbs;
             this.newPricingTable["_defaultAtrbs"] = ptTemplate.defaultAtrbs;
             this.newPricingTable["OBJ_SET_TYPE_CD"] = pt.OBJ_SET_TYPE_CD;
-            this.newPricingTable["_defaultAtrbs"] = lnavUtil.updateNPTDefaultValues(pt, ptTemplate.defaultAtrbs);
+            this.newPricingTable["_defaultAtrbs"] = lnavUtil.updateNPTDefaultValues(pt, ptTemplate.defaultAtrbs, customer);
         }
         else {
             ptTemplate = this.UItemplate.ModelTemplates.PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];

@@ -491,7 +491,7 @@ export class contractDetailsComponent {
             this.contractData._behaviors.isError[type] = true;
             this.contractData._behaviors.validMsg[type] = "Invalid date."
         }
-        return this.isCopyContract ? true : isValid;
+        return isValid;
     }
 
     backDateCheck(strtDate, selectedDate) {
@@ -579,7 +579,7 @@ export class contractDetailsComponent {
         }
         else if (changeEvent == "START_DT") {
             isDate = this.START_DT;
-            isValidDataPresent = this.isValidDate(changeEvent, isDate)
+            isValidDataPresent = this.isValidDate(changeEvent, isDate) && (contract_START_DT != null && contract_START_DT.status != 'INVALID') ? true : false;
         }
         else if (changeEvent == "END_DT") {
             isDate = this.END_DT;
@@ -941,6 +941,9 @@ export class contractDetailsComponent {
                                     this.Customer = this.copyContractData.Customer;
                                     this.contractData.MinYear = this.MinYear = parseInt(moment().format("YYYY")) - 6;
                                     this.contractData.MaxYear = this.MaxYear = parseInt(moment("2099").format("YYYY"));
+                                    // Set the initial Max and Min date, actual dates will be updated as per the selected customer
+                                    this.contractData.MinDate = this.MinDate = moment().subtract(6, "years").format("l");
+                                    this.contractData.MaxDate = this.MaxDate = moment("2099").format("l");
                                     // NOTE: START_QTR,START_YR,END_YR,END_QTR are not present in copyContractData,, as they are undefined calling getCurrentQuarterDetails to get the data--Check
                                     this.getCurrentQuarterDetails('START_DT');
                                     this.getCurrentQuarterDetails('END_DT');

@@ -811,7 +811,7 @@ export class GridUtil {
                             }
                             else if (templateHtml.includes("ECAP_PRICE.")) {
                                 templateHtml = templateHtml.replace("#=ECAP_PRICE.", "").replace("#", "");
-                                newHtmlVal = dataItem["ECAP_PRICE"][templateHtml];
+                                newHtmlVal = dataItem["ECAP_PRICE"] != undefined ? dataItem["ECAP_PRICE"][templateHtml] : dataItem["ECAP_PRICE_VAL"];
                             }
                             else {
                                 templateHtml = templateHtml.replace("#=", "").replace("#", "");
