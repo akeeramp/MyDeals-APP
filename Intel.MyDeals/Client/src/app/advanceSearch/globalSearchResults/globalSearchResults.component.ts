@@ -157,7 +157,7 @@ export class GlobalSearchResultsComponent  {
     //yet to migrate Advance Search Screen
     gotoAdvanced() {
         this.isWindowOpen.emit(false);
-        window.location.href = "/advancedSearch#/attributeSearch";
+        window.location.href = "#/advanceSearch";
     }
     ngOnInit() {
         this.getObjectTypeResult(this.opType);

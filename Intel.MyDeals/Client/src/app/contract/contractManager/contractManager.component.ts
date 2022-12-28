@@ -76,8 +76,6 @@ export class contractManagerComponent {
     @Input() UItemplate:any;
     @Output() refreshedContractData = new EventEmitter<any>();
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
-    private spinnerMessageHeader = "Complete"; 
-    private spinnerMessageDescription = "Reloading the page now.";
     public isLoading = false;
     private dirty = false;
     userRole = ""; canEmailIcon = true;
@@ -105,6 +103,10 @@ export class contractManagerComponent {
     private filteringData: any[][] = [];
     public pctClicked: boolean = false;
     public mctClicked: boolean = false;
+    public spinnerMessageHeader: any;
+    public spinnerMessageDescription: any;
+    public msgType: any;
+    public isBusyShowFunFact: any;
     // Allowed extensions for the attachments field
     myRestrictions: FileRestrictions = {
         allowedExtensions: ["doc", "xls", "txt", "bmp", "jpg", "pdf", "ppt", "zip", "xlsx", "docx", "pptx", "odt", "ods", "ott", "sxw", "sxc", "png", "7z", "xps"],
@@ -941,7 +943,8 @@ export class contractManagerComponent {
     }
     quickSaveContractFromDialog(value){
         if(value){
-            this.isLoading= true;
+            this.isLoading = true;
+            this.setBusy("Running PCT/MCT...", "Running Price Cost Test and Meet Comp Test", "Info", true);
             this.contractManagerSvc.actionPricingStrategies(this.contractData["CUST_MBR_SID"],this.contractData["DC_ID"],this.requestBody, this.contractData.CUST_ACCPT).subscribe((response: any) => {
             this.messages = response.Data.Messages;
             this.quickSaveContract('SaveAndLoad');
@@ -957,6 +960,7 @@ export class contractManagerComponent {
     quickSaveContract(action){
         const ct = this.contractData;
         this.custAccptButton = this.contractData.CUST_ACCPT;
+        this.setBusy("Updating Pricing Strategy...", "Please wait as we update the Pricing Strategy!", "Info", true);
         this.contractManagerSvc.createContract(this.contractData["CUST_MBR_SID"],this.contractData["DC_ID"],ct).subscribe((response: Array<any>) => {
               this.isLoading = false;
               if(action=== 'SaveAndLoad'){
@@ -1015,7 +1019,34 @@ export class contractManagerComponent {
             this.loggerSvc.error('Something went wrong', 'Error');
             console.error('ContractManager::ngOnInit::',ex);
         }
-    }  
+    }
+    setBusy(msg, detail, msgType, showFunFact) {
+        setTimeout(() => {
+            const newState = msg != undefined && msg !== "";
+            // if no change in state, simple update the text
+            if (this.isLoading === newState) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+                this.isBusyShowFunFact = showFunFact;
+                return;
+            }
+            this.isLoading = newState;
+            if (this.isLoading) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+                this.isBusyShowFunFact = showFunFact;
+            } else {
+                setTimeout(() => {
+                    this.spinnerMessageHeader = msg;
+                    this.spinnerMessageDescription = !detail ? "" : detail;
+                    this.msgType = msgType;
+                    this.isBusyShowFunFact = showFunFact;
+                }, 100);
+            }
+        });
+    }
 
 
 }
