@@ -35,6 +35,7 @@ export class dealPopupComponent {
     showSedulecolums = false;
     showProductscolums = false;
     toggleserachgrid = false;
+    disablePayment = true;
     helpTip :any;
     sel: any;
     percData: any;
@@ -121,7 +122,9 @@ export class dealPopupComponent {
             if (this.data.OBJ_SET_TYPE_CD === "PROGRAM" || this.data.OBJ_SET_TYPE_CD === "ECAP") {
                 this.disableShedule = true;
             }
-
+            if (this.data.OBJ_SET_TYPE_CD === "ECAP" && this.data.OBJ_SET_TYPE_CD === "KIT" && this.data.IS_HYBRID_PRC_STRAT =="1") {
+                this.disablePayment = false;
+            }
             if (!(this.data.WF_STG_CD !== 'Cancelled' && (this.data.WF_STG_CD === 'Active' || this.data.WF_STG_CD === 'Won' || this.data.WF_STG_CD === 'Offer' || this.data.WF_STG_CD === 'Pending' || this.data.HAS_TRACKER === '1'))) {
                 this.disableQoute = true;
             }

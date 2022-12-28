@@ -57,13 +57,13 @@
                             </li>
                         </ul>
                     </div>
-                    <div style="float: left; font-size: 14px; margin-left: 10px; margin-top: 5px; color: #000000;" *ngIf="curRowExcludeProd.length >0">Excluded Product(s): &nbsp;</div>
+                    <div style="float: left; font-size: 14px; margin-left: 10px; margin-top: 5px; color: #000000;" *ngIf="curRowExcludeProd.length >0">Excluded Product(s):</div>
                     <div>
                         <ul class="productpath breadcrumb">
                             <li *ngFor="let p of curRowExcludeProd  | unique:'name'">
                                 <span [ngClass]="{'strike': p.matchName.length != 0,'btnInclude':showIncludeExcludeLabel && p.exclude == 'I', 'btnExclude':showIncludeExcludeLabel && p.exclude == 'E' }" class="btn btn-default btn-xs">
                                     <span class="prdAnchor {{p.status}}" (click)="clkPrdUsrNm(p)" title="{{p.reason}}">{{ p.anchorName }}</span>
-                                    <span title="Remove Product" class="skyblue pl10 removeProduct" (click)="removeProd(p.name, p.exclude)"></span>
+                                    <span title="Remove Product" class="skyblue pl10 removeProduct span-closer" (click)="removeProd(p.name, p.exclude)">x</span>
                                 </span>
                                 <div class="newProd">
                                     <span id="selectedProducts" *ngIf="p.matchName.length > 0">{{p.matchName.length > 1 ? p.matchName.length + " products" : p.matchName[0]}}</span>
@@ -155,7 +155,7 @@
                                 </multicheck-filter>
                             </ng-template>
                             <ng-template kendoGridCellTemplate let-dataItem>
-                                <div [ngClass]="{'text-danger': isValidCapDetails(dataItem)}" title="{{isValidCapDetails(dataItem, true)}}">{{dataItem.HIER_VAL_NM}}</div>
+                                <div [ngClass]="{'text-danger': isValidCapDetails(dataItem)}" title="{{isValidCapDetails(dataItem, true)}}">{{dataItem.DISP_HIER_VAL_NM}}</div>
                             </ng-template>
                         </kendo-grid-column>
                         <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRD_CAT_NM" title="Product Vertical" [width]="80">

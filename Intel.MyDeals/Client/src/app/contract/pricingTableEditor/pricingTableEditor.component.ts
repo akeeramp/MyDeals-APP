@@ -1436,7 +1436,7 @@ export class pricingTableEditorComponent {
             data: data,
             panelClass: "product-corrector-dialog",
         });
-        await dialogRef.afterClosed().toPromise().then((savedResult: any) => {
+        await dialogRef.afterClosed().toPromise().then (async(savedResult: any) => {
             if (savedResult) {
                 let transformResult = savedResult.ProductCorrectorData;
                 this.transformResults["Data"] = transformResult
@@ -1582,7 +1582,7 @@ export class pricingTableEditorComponent {
                     }, 2000);
                 }
                 else if (action == 'onSave') {
-                    this.saveandValidate(true, deletedDCID);
+                   await this.saveandValidate(true, deletedDCID);
                 }
             }
         });

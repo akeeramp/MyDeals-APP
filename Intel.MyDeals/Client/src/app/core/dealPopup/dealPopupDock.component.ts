@@ -136,7 +136,7 @@ export class dealPopupDockComponent  {
  
         if (this.ids.length >= this.maxItems) {
             this.ismaxDealsOpened = true;
-            this.errormsg="Only " + this.maxItems + " Quick Deals can be opened at one time.<br\>Please close one before trying to open this deal.";
+            this.errormsg="Only " + this.maxItems + " Quick Deals can be opened at one time. Please close one before trying to open this deal.";
             return;
         }
 
