@@ -30,9 +30,11 @@ export class goToComponent {
                 this.setBusy('', '');
                 this.loggerSVC.error("GlobalSearchResultsComponent::getContractIDDetails::Unable to get Contract Data", error);
             });
-            this.isLoading = false;
-            this.setBusy('', '');
-            window.location.href = "#/contractmanager/PS/" + response.ContractId + '/' + response.PricingStrategyId + '/' + response.PricingTableId + '/0';
+            if (response) {
+                this.isLoading = false;
+                this.setBusy('', '');
+                window.location.href = "#/contractmanager/PS/" + response.ContractId + '/' + response.PricingStrategyId + '/' + response.PricingTableId + '/0'; 
+            }
         } else {
             //goto Deal
             let response: any = await this.globalSearchSVC.getContractIDDetails(id, 'WIP_DEAL').toPromise().catch((error) => {

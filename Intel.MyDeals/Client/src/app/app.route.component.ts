@@ -97,7 +97,7 @@ export const routes: Routes = [
     { path: 'supportScript', component: adminsupportScriptComponent },
     { path: 'legalException', component: adminlegalExceptionComponent },
     { path: 'bulkPricingUpdate', component: BulkPricingUpdatesComponent },
-    { path: 'gotoPS/:cid', component: goToComponent, resolve: { security: SecurityResolver }  },
+    { path: 'gotoPs/:cid', component: goToComponent, resolve: { security: SecurityResolver }  },
     { path: 'gotoDeal/:cid', component: goToComponent, resolve: { security: SecurityResolver }  },
     { path: 'contractdetails/:cid', component: contractDetailsComponent },
     { path: 'contractdetails/copycid/:', component: contractDetailsComponent },

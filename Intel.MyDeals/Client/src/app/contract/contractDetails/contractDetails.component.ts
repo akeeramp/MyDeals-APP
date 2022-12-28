@@ -648,8 +648,8 @@ export class contractDetailsComponent {
         }
 
     validateDate(dateChange) {
-        this.contractData._behaviors.isError['START_DT'] = this.contractData._behaviors.isError['END_DT'] = false;
-        this.contractData._behaviors.validMsg['START_DT'] = this.contractData._behaviors.validMsg['END_DT'] = "";
+        this.contractData._behaviors.isError[dateChange] = false;
+        this.contractData._behaviors.validMsg[dateChange] = "";
         const startDate = this.START_DT;
         const endDate = this.END_DT;
         if (dateChange == 'START_DT' || dateChange == "START_YR" || dateChange == "START_QTR") {
