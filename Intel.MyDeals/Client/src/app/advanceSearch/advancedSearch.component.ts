@@ -90,6 +90,7 @@ export class AdvancedSearchComponent implements OnInit {
     @ViewChild(AttributeBuilder) attrBuilder: AttributeBuilder;
     public advancedSearchDropdownFilter: any;
     public custFilter: any[] = [];
+    public totalCount: any;
 
     constructor(protected cntrctWdgtSvc: contractStatusWidgetService, protected loggerSvc: logger, protected globalSearchSVC: globalSearchResultsService,
         private advancedSearchSvc: advancedSearchService) { }
@@ -115,73 +116,59 @@ export class AdvancedSearchComponent implements OnInit {
 
     //pagination - load searchDeals on next click, if records > 500
     dataStateChange(state: DataStateChangeEvent): void {
-        if (this.state.skip >= 500) {
-            this.state = state;
-            this.searchDeals();
-        } else this.state = state;
+        this.state.take = state.take;
+        this.state.skip = state.skip;
+        this.state.filter = state.filter != undefined ? state.filter : this.state.filter;
+        this.state.sort = state.sort != undefined ? state.sort : this.state.sort;
+        this.state.group = state.group != undefined ? state.group : this.state.group;
         this.gridData = process(this.gridResult, this.state);
+        this.gridData.total = this.totalCount;
     }
 
 
     //on filter change
-    filterChange(filter: any): void {
-        let newfilter = filter
+    async filterChange(filter: any) {
         this.state.filter = filter;
-        let filteredData = this.gridResult;
-        let take = this.state.take;
-        let newState = this.state;
-        if (filteredData != undefined) {
-            newState.take = filteredData.length;
-            if (filter && filter.filters && filter.filters.length > 0) {
-                filter.filters.forEach((item: CompositeFilterDescriptor) => {
-                    if (item && item.filters && item.filters.length > 0) {
-                        item.filters.forEach((fltrItem: FilterDescriptor) => {
-                            let column = fltrItem.field.toString();
-                            let arrayData: any;
-                            if (column == 'Customer_NM') {
-                                arrayData = process(filteredData, newState);
-                                filteredData = arrayData.data;
-                            }
-                            else {
-                                //converting kendo date into string - for filter
-                                if ((column == 'START_DT' || column == 'END_DT' || column == 'OEM_PLTFRM_LNCH_DT' || column == 'OEM_PLTFRM_EOL_DT')) {
-                                    if (typeof fltrItem.value != 'string')
-                                        fltrItem.value = moment(fltrItem.value.toLocaleDateString()).format('MM/DD/YYYY');
-                                }
-                                let data = [];
-                                data.push(fltrItem);
-                                let filterData: any = {
-                                    filters: data,
-                                    logic: 'or'
-                                }
-                                newState.filter.filters = [];
-                                newState.filter.filters.push(filterData);
-                                //In case of multiple filter applied we need to sort each data
-                                arrayData = process(filteredData, newState);
-                                filteredData = arrayData.data;
-                            }
-                        })
-                    }
-                })
-            }
-            this.state.take = take;
-            this.state.filter = newfilter;
-            this.gridData = process(filteredData, this.state);
-            //if Date assigned to string value - converting to kendo date format
-            if (filter && filter.filters && filter.filters.length > 0) {
-                filter.filters.forEach((item: CompositeFilterDescriptor) => {
-                    if (item && item.filters && item.filters.length > 0) {
-                        item.filters.forEach((fltrItem: FilterDescriptor) => {
-                            let column = fltrItem.field.toString();
+        if (filter && filter.filters && filter.filters.length > 0) {
+            filter.filters.forEach((item: CompositeFilterDescriptor) => {
+                if (item && item.filters && item.filters.length > 0) {
+                    item.filters.forEach((fltrItem: FilterDescriptor) => {
+                        let column = fltrItem.field.toString();
+                        let arrayData: any;
+                        if (column == 'Customer_NM') {
+                            fltrItem.field = 'Customer/CUST_NM';
+                        }
+                        else if ((column == 'CAP_VAL' || column == 'ECAP_PRICE_VAL' || column == 'STRT_VOL_VAL' || column == 'END_VOL_VAL' || column == 'RATE_VAL' || column == 'TRKR_NBR_VAL')) {
+                            let fiel: any = fltrItem.field
+                            fltrItem.field = fiel.slice(0, -4);
+                        }
+                        else {
+                            //converting kendo date into string - for filter
                             if ((column == 'START_DT' || column == 'END_DT' || column == 'OEM_PLTFRM_LNCH_DT' || column == 'OEM_PLTFRM_EOL_DT')) {
-                                fltrItem.value = new Date(fltrItem.value);
+                                if (typeof fltrItem.value != 'string')
+                                    fltrItem.value = moment(fltrItem.value.toLocaleDateString()).format('MM/DD/YYYY');
                             }
-                        })
-                    }
-                })
-            }
+                        }
+                    })
+                }
+            })
+        }
+        await this.searchDeals();
+        //if Date assigned to string value - converting to kendo date format
+        if (filter && filter.filters && filter.filters.length > 0) {
+            filter.filters.forEach((item: CompositeFilterDescriptor) => {
+                if (item && item.filters && item.filters.length > 0) {
+                    item.filters.forEach((fltrItem: FilterDescriptor) => {
+                        let column = fltrItem.field.toString();
+                        if ((column == 'START_DT' || column == 'END_DT' || column == 'OEM_PLTFRM_LNCH_DT' || column == 'OEM_PLTFRM_EOL_DT')) {
+                            fltrItem.value = new Date(fltrItem.value);
+                        }
+                    })
+                }
+            })
         }
     }
+
 
 
     //multiselectfilter
@@ -245,7 +232,8 @@ export class AdvancedSearchComponent implements OnInit {
             logic: "and",
             filters: [],
         };
-        this.gridData = process(this.gridResult, this.state);
+        this.state.skip = 0;
+        this.searchDeals();
     }
 
     //Excel Export
@@ -255,7 +243,11 @@ export class AdvancedSearchComponent implements OnInit {
     exportToExcelCustomColumns() {
         GridUtil.dsToExcel(this.columns, this.gridData.data, "Search Export");
     }
-
+    pageChange(state) {
+        this.state.take = state.take;
+        this.state.skip = state.skip;
+        this.searchDeals();
+    }
     //deals search
     searchDeals() {
         this.isLoading = true;
@@ -265,18 +257,31 @@ export class AdvancedSearchComponent implements OnInit {
         var en = this.endDateValue.toLocaleDateString();
         let endDate = en.replace(/\//g, '-');
         let searchText = '';
-        var take = 500;
         if (window.localStorage.selectedCustNames != undefined)
             this.getCustomerNames();
         searchText = this.selectedCustNames.length === 0 ? "null" : this.selectedCustNames.join(',');
-        if (this.state.skip == 0) searchText += "?$inlinecount=allpages&$top=" + take;
-        else if (this.state.skip >= 500) searchText += "?$inlinecount=allpages&$top=" + this.state.take + "&$skip=" + take;
+        if (this.state.skip == 0) searchText += "?$inlinecount=allpages&$top=" + this.state.take;
+        else if (this.state.skip >= 25) searchText += "?$inlinecount=allpages&$top=" + this.state.take + "&$skip=" + this.state.skip;
+        let filter = this.state.filter;
+        if (filter && filter.filters && filter.filters.length > 0) {
+            searchText += '&$filter=';
+            filter.filters.forEach((item: CompositeFilterDescriptor, ind) => {
+                if (item && item.filters && item.filters.length > 0) {
+                    item.filters.forEach((fltrItem: FilterDescriptor) => {
+                        searchText += ind == 0 && filter.filters.length > 1 ? '(' : '';
+                        if (fltrItem.operator == 'contains') searchText += "substringof(" + "'" + fltrItem.value + "'," + fltrItem.field + ")";
+                        else searchText += fltrItem.field + ' ' + fltrItem.operator + " '" + fltrItem.value + "'"
+                        searchText += filter.filters.length != (ind + 1) && filter.filters.length > 1 ? ' and ' : '';
+                        searchText += filter.filters.length == (ind + 1) && filter.filters.length > 1 ? ')' : '';
+                    })
+                }
+            })
+        }
+
         this.advancedSearchSvc.getSearchList(startDate, endDate, searchText).subscribe((result: any) => {
             this.isLoading = false;
             this.setBusy('', '');
-            if (this.state.skip == 0) this.gridResult = result.Items;
-            else this.gridResult = this.gridResult.concat(result.Items);
-            this.gridResult.forEach((row) => {
+            result.Items.forEach((row) => {
                 Object.assign(row, {
                     Customer_NM: row.Customer.CUST_NM,
                     WF_STG_CD: row.WF_STG_CD === "Draft" ? row.PS_WF_STG_CD : row.WF_STG_CD,
@@ -288,7 +293,22 @@ export class AdvancedSearchComponent implements OnInit {
                     RATE_VAL: row.RATE != undefined ? Object.values(row.RATE)[0] : ''
                 })
             })
-            this.gridData = process(this.gridResult, this.state);
+            this.totalCount = result.Count;
+            if (this.state.skip == 0) this.gridResult = result.Items;
+            else {
+                this.gridResult = [];
+                let obj = {};
+                for (let i = 0; i < this.state.skip; i++) {
+                    this.gridResult.push(obj);
+                }
+                this.gridResult = this.gridResult.concat(result.Items);
+            }
+            let newState = {
+                skip: this.state.skip,
+                take: this.state.take
+            }
+            this.gridData = process(this.gridResult, newState);
+            this.gridData.total = result.Count;
         }, (err) => {
             this.isLoading = false;
             this.loggerSvc.error("Template Retrieval Failed", "Error", err);
