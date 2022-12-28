@@ -1375,9 +1375,9 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
     border-bottom: none;
 }
 
-.managable-meet-pct meet-comp-contract.admin_tender_meetcomp .row-cooperate kendo-grid#meetcomp-contract {
+/*.managable-meet-pct meet-comp-contract.admin_tender_meetcomp .row-cooperate kendo-grid#meetcomp-contract {
     height: calc(100vh - 540px) !important;
-}
+}*/
 
 .managable-meet-pct manager-pct.admin-tender-pricecosttest {
     top: 0!important;
@@ -1431,3 +1431,28 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
     font-size: 10px !important
 }
 
+#OvrLp kendo-grid.overDealChecking.k-grid .k-grid-table-wrap table tbody tr td {
+    padding: 2px 5px !important;
+    white-space: normal !important;
+    color: rgb(26, 62, 111) !important;
+    font-family: "Intel Clear", Arial;
+    font-size: 10px !important;
+    border-left: none;
+}
+
+    #OvrLp kendo-grid.overDealChecking.k-grid .k-grid-table-wrap table tbody tr td .text-center {
+        text-align: left !important;
+    }
+
+#OvrLp1 kendo-grid.overDealCheckingOne.k-grid .k-grid-table-wrap table tbody tr td {
+    padding: 2px 5px !important;
+    white-space: normal !important;
+    color: rgb(26, 62, 111) !important;
+    font-family: "Intel Clear", Arial;
+    font-size: 10px !important;
+    border-left: none;
+}
+
+    #OvrLp1 kendo-grid.overDealCheckingOne.k-grid .k-grid-table-wrap table tbody tr td .text-center {
+        text-align: left !important;
+    }

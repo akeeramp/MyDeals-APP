@@ -164,9 +164,9 @@ i#btnClose.intelicon-close-max.tender-cross-close:hover {
     height: calc(100vh - 465px) !important;
     position: relative !important;
 }
-.admin_tender_meetcomp kendo-grid#meetcomp-contract {
+/*.admin_tender_meetcomp kendo-grid#meetcomp-contract {
     height: calc(100vh - 529px) !important;
-}
+}*/
 .admin_tender_meetcomp .meetComp-show-hide.meet-conduct.meet-comp-blank_space {
     top: 15px !important;
     margin-left:0px !important;

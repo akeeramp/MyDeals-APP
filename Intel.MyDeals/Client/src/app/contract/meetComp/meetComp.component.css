@@ -503,8 +503,8 @@
 }
 
 .meet-conduct .k-detail-row > .k-detail-cell > div:first-child {
-    margin-left: 2px !important;
-    margin-right: 13px !important
+    margin-left: 1px !important;
+    margin-right: 0 !important
 }
 
 .indicate-dialog .k-window-content {
