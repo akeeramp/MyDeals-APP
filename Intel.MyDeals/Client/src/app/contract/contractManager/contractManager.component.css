@@ -318,10 +318,12 @@ input[type="radio"].with-font, input[type="checkbox"].with-font {
 }
 
 .stgChkBox {
-    margin: 0 4px !important;
+    margin: 0 7px !important;
     cursor: pointer;
-    width: 30px;
-    height: 20px
+    width: 20px;
+    height: 15px;
+    bottom:3px !important;
+    position:relative !important
 }
 
 #stage-fontLabel {
@@ -330,7 +332,11 @@ input[type="radio"].with-font, input[type="checkbox"].with-font {
     font-weight: 400;
     margin-top: 4px;
     margin-bottom: 0;
-    font-size: 18px
+    font-size: 15px;
+    color: #111111 !important;
+    position: relative !important;
+    bottom: 5px !important;
+    left: 4px !important;
 }
 
 input[type="radio"].with-font + label:before, input[type="checkbox"].with-font + label:before {
