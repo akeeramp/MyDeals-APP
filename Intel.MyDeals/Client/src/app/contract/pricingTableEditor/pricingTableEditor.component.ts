@@ -262,8 +262,7 @@ export class pricingTableEditorComponent {
                             }
                         }
                         else {
-                            if (this.field && selVal != result?.toString &&
-                                (this.field == 'CUST_ACCNT_DIV' || this.field == "GEO_COMBINED" || this.field == 'START_DT' || this.field == 'END_DT')) {
+                            if (this.field && selVal != result?.toString) {
                                 VM.dirty = true;
                             }
                             this.hot.setDataAtCell(this.selRow, this.selCol, result?.toString(), 'no-edit');
