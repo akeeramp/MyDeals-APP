@@ -253,8 +253,9 @@ kendo-numerictextbox.advance-numerictextbox-style.k-widget.k-numerictextbox:focu
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
 }
 #admin-advance-grid .k-grid td {
-    border-width: 0px 0px 0px 0px !important;
+    border-color: #e6e6e6 !important;
     font-size: 12px !important;
+    border-width: 0 0 1px 0px;
 }
 
 .padding-design-horizontal {

@@ -427,6 +427,8 @@ span.prdAnchor {
 .strike .prdAnchor {
     text-decoration: line-through !important;
     cursor: pointer;
+    text-decoration-color: #0071c5 !important;
+    color: #FC4C02 !important;
 }
 
     .strike span {
