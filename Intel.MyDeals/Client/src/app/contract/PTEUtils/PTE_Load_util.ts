@@ -179,6 +179,9 @@ export class PTE_Load_Util {
                         else if (val == false && item._behaviors.validMsg[`${key}`] && item._behaviors.validMsg[`${key}`] == 'Valid Product') {
                             cellComments.push({ row: rowInd, col: colInd, comment: { value: '', readOnly: true }, className: 'success-product' });
                         }
+                        else if (val == true && !item._behaviors.validMsg[`${key}`]) {
+                            cellComments.push({ row: rowInd, col: colInd, comment: { value: '', readOnly: true }, className: 'error-product' });
+                        }
                         else {
                             //this logic is to handle incase a product is success but still there are error binding but we need to maintain the success color but give message
                             if (val == true && item._behaviors.validMsg[`${key}`] && (item._behaviors.validMsg[`${key}`] != 'Invalid Product')) {
@@ -187,7 +190,7 @@ export class PTE_Load_Util {
                                     cellComments.push({ row: rowInd, col: colInd, comment: { value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'success-product error-border' });
                                 }
                                 else {
-                                    cellComments.push({ row: rowInd, col: colInd, comment: { value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'error-border' });
+                                    cellComments.push({ row: rowInd, col: colInd, comment: { value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'error-product error-border' });
                                 }
                                 msg += columns[colInd].title + ": " + item._behaviors.validMsg[`${key}`];
                             }
@@ -764,10 +767,8 @@ export class PTE_Load_Util {
             }
             else {
                 data._behaviors.isError['PTR_USER_PRD'] = true;
-                data._behaviors.validMsg['PTR_USER_PRD'] = 'Invalid Product';
                 if (data['PRD_EXCLDS']) {
                     data._behaviors.isError['PRD_EXCLDS'] = true;
-                    data._behaviors.validMsg['PRD_EXCLDS'] = 'Invalid Product';
                 }
             }
         })
