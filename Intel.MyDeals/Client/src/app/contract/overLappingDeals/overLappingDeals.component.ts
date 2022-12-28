@@ -4,9 +4,10 @@ import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/ke
 import { distinct, process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { overLappingDealsService } from "./overLapping.service";
+import { overLappingcheckDealService } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.service";
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
 import { MatDialog } from "@angular/material/dialog";
-
+import * as _ from 'underscore';
 
 @Component({
     selector: "overlapping-deals",
@@ -16,7 +17,7 @@ import { MatDialog } from "@angular/material/dialog";
 
 export class overLappingDealsComponent {
     S_ID: any;
-    constructor(private overLappingDealsSvc: overLappingDealsService, protected dialog: MatDialog, private loggerSvc: logger) {
+    constructor(private overLappingDealsSvc: overLappingDealsService, private overLappingCheckDealsSvc: overLappingcheckDealService, protected dialog: MatDialog, private loggerSvc: logger) {
     }
     @Input() contractData: any;
     @Input() UItemplate: any;
@@ -58,7 +59,18 @@ export class overLappingDealsComponent {
     ];
     public contractId: number;
     public contractDetails: any;
-    filterOverLapData(data){
+    private showKendoAlert: boolean = false;
+    private isSelectAll: boolean = true;
+    private is_selected: boolean = false;
+    private isOvlpAccess: boolean = false;
+    private isdealEndDateNeedChange: boolean = false;
+    private isRevalidate: boolean = false;
+    private isDealEndDateChange: boolean = false;
+    private isReqChange: boolean = false;
+    private ovlpErrorCount: Array<any> = [];
+    private ovlpData: any;
+
+    filterOverLapData(data) {
         let hasResolved = false;
         let cnt = 0;
         let isSelected = false;
@@ -70,6 +82,8 @@ export class overLappingDealsComponent {
         this.contractId = this.contractData.DC_ID;
         this.overLappingDealsSvc.getOverLappingDealsDetails(this.contractId).subscribe((result: any) => {
             this.loadMessage = "Done";
+            this.ovlpData = this.prepareGridData(result.Data);
+            this.ovlpErrorCount = distinct(result.Data, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
             this.gridResult = result.Data;
             if (this.gridResult.length == 0) {
                 this.isNoDealsFound = true;
@@ -124,6 +138,7 @@ export class overLappingDealsComponent {
         let data = {
             "contractData": this.contractData,
             "currPt": this.contractData,
+            "srcScrn": "overLapping"
         }
         const dialogRef = this.dialog.open(OverlappingCheckComponent, {
             data: data,
@@ -132,6 +147,163 @@ export class overLappingDealsComponent {
         });
         dialogRef.afterClosed().subscribe(result => { });
     }
+
+    closeKendoAlert() {
+        this.showKendoAlert = false;
+    }
+
+    selectAllOvlp(value) {
+        this.isSelectAll = !value;
+        _.each(this.gridResult, item => {
+            if (item.PROGRAM_PAYMENT == "Frontend YCS2") {
+                item.IS_SEL = value;
+            }
+        })
+    }
+
+    acceptSelectAll() {
+        var selectedIDS = _.filter(this.gridResult, { 'IS_SEL': true, 'PROGRAM_PAYMENT': 'Frontend YCS2' });
+        var ids = distinct(selectedIDS, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
+        if (selectedIDS.length > 0) {
+            this.acceptOvlp(ids.toString(), 'Y');
+        }
+        else {
+            this.loggerSvc.error('Select An overlap with an Active or Draft deal', 'OverLap');
+        }
+    }
+
+    getUIelement(value) {
+        var hasResolved = false;
+        var cnt = 0;
+        this.is_selected = false;
+        this.isOvlpAccess = true;
+        this.isdealEndDateNeedChange = false;
+        this.isRevalidate = false;
+        this.isDealEndDateChange = false;
+        this.isReqChange = false;
+        if (value != undefined && value != null && value != '') {
+            var groupRow = _.filter(this.gridResult, { 'WIP_DEAL_OBJ_SID': value, 'PROGRAM_PAYMENT': 'Frontend YCS2' });
+
+            if (groupRow.length > 1) {
+                if (_.filter(groupRow, { 'WF_STG_CD': 'Draft' }).length > 1) {
+                    cnt = groupRow.length;
+                }
+                else if (_.filter(groupRow, { 'WF_STG_CD': 'Draft' }).length === 1) {
+                    cnt = 1;
+                }
+                else {
+                    cnt = 2;
+                }
+            }
+
+            if (this.ovlpErrorCount.indexOf(value) > -1) {
+                hasResolved = true;
+            }
+
+            if (hasResolved && cnt > 0 && cnt === 1 && this.isOvlpAccess) {
+                this.is_selected = groupRow[0].IS_SEL;
+                this.isdealEndDateNeedChange = true;
+            }
+            else if (hasResolved && cnt > 1 && this.isOvlpAccess) {
+                this.isRevalidate = true;
+            }
+            else if (!hasResolved) {
+                this.isDealEndDateChange = true;
+            }
+            else {
+                this.isReqChange = true;
+            }
+            return true;
+        }
+        else {
+            return false;
+        }
+    }
+
+    selectCheckBox(value) {
+        _.each(this.gridResult, item => {
+            if (item.WIP_DEAL_OBJ_SID == value && item.PROGRAM_PAYMENT == "Frontend YCS2") {
+                item.IS_SEL = !item.IS_SEL;
+            }
+        })
+    }
+
+    rejectOvlp(value) {
+        this.showKendoAlert = true;
+    }
+
+    acceptOvlp(WIP_DEAL_OBJ_SID, YCS2_OVERLAP_OVERRIDE) {
+        var tempdata = this.ovlpData;
+        var START_DT = '';
+        var END_DT = '';
+        var dcID = 0;
+        var splitData = [];
+        if (WIP_DEAL_OBJ_SID.toString().indexOf(',') > -1) {
+            splitData = WIP_DEAL_OBJ_SID.toString().split(',');
+        }
+        else {
+            splitData.push(WIP_DEAL_OBJ_SID);
+        }
+        _.each(splitData, item => {
+            var data = parseInt(item);
+            var dealinfo = _.filter(this.ovlpData, { 'WIP_DEAL_OBJ_SID': data, 'WF_STG_CD': "Draft", OVLP_CD: "SELF_OVLP" });
+            if (dealinfo != undefined && dealinfo != null && dealinfo.length > 0) {
+                START_DT = dealinfo[0].START_DT;
+                END_DT = dealinfo[0].END_DT;
+            }
+        })
+        this.updateOverlapping(splitData, YCS2_OVERLAP_OVERRIDE);
+    }
+
+    updateOverlapping(data, YCS2_OVERLAP_OVERRIDE) {
+        this.isLoading = true;
+        this.overLappingCheckDealsSvc.updateOverlappingDeals(data, YCS2_OVERLAP_OVERRIDE).subscribe((result: any) => {
+            this.isLoading = false;
+            if (result[0].PRICING_TABLES > 0) {
+                if (YCS2_OVERLAP_OVERRIDE === 'N') {
+                    for (var j = 0; j < data.length; j++) {
+                        this.ovlpErrorCount.push(parseInt(data[j]));
+                        //Finding all the indexes in an Array
+                        this.resetIsSelect(parseInt(data[j]));
+                    }
+                }
+                else {
+                    for (var j = 0; j < data.length; j++) {
+                        if (this.ovlpErrorCount.indexOf(parseInt(data[j])) > -1) {
+                            this.ovlpErrorCount.splice(this.ovlpErrorCount.indexOf(parseInt(data[j])), 1);
+                        }
+                        this.resetIsSelect(parseInt(data[j]));
+                    }
+                }
+
+            }
+        }, (error) => {
+            this.isLoading = false;
+            this.loggerSvc.error('OverLapDeals service', error);
+        });
+    }
+
+    //Reset IS_SEL
+    resetIsSelect(data) {
+        for (var m = 0; m < this.ovlpData.length; m++) {
+            if (this.ovlpData[m].WIP_DEAL_OBJ_SID == parseInt(data) && this.ovlpData[m].PROGRAM_PAYMENT === "Frontend YCS2") {
+                this.ovlpData[m].IS_SEL = false;
+            }
+        }
+    }
+
+    prepareGridData(Data) {
+        for (var i = 0; i < Data.length; i++) {
+            Data[i]["IS_SEL"] = false;
+        }
+        return Data;
+    }
+
+    openDealEditor(value) {
+        window.location.href = "#/contractmanager/WIP/" + value.CONTRACT_NBR + "/" + value.PRICE_STRATEGY + "/" + value.PRICING_TABLES + "/" + value.OVLP_DEAL_OBJ_SID;
+    }
+
+
     ngOnInit() {
         this.getOverlapDetails();
     }

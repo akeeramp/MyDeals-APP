@@ -5,8 +5,8 @@
 
 
 
-<kendo-window id="OvrLp" title="Overlapping Deals" [keepContent]="true" [width]="800" (close)="closeWindow()" class="k-wind-design oppo-grids physics-css">
-    <kendo-grid [data]="gridData" [loading]="isLoading"  [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
+<kendo-window id="OvrLp" title="Overlapping Deals" [keepContent]="true" [width]="800" (close)="closeWindow()" class="k-wind-design oppo-grids physics-css" style="z-index:10001 !important">
+    <kendo-grid [data]="gridData" [loading]="isLoading" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
                 [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                 [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
                 [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" style="min-height: 383px;">
@@ -15,12 +15,27 @@
                 No Overlapping deals were found
             </div>
         </ng-template>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" field="WF_STG_CD" [filterable]="false" width="21px" title=" ">
+        <kendo-grid-column [headerClass]="{'headerClass':true}" field="WF_STG_CD" width="21px" title="" filterable="none">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                <div class="centerText Draft" title="Draft" *ngIf="dataItem.WF_STG_CD==='Draft'">D</div>
+                <div class="centerText Active" title="Active" *ngIf="dataItem.WF_STG_CD==='Active'">A</div>
+                <div class="centerText Complete" title="Complete" *ngIf="dataItem.WF_STG_CD==='Complete'">C</div>
+                <div class="centerText InComplete" title="InComplete" *ngIf="dataItem.WF_STG_CD==='InComplete'">I</div>
+                <div class="centerText Pending" title="Pending" *ngIf="dataItem.WF_STG_CD==='Pending'">P</div>
+                <div class="centerText Requested" title="Requested" *ngIf="dataItem.WF_STG_CD==='Requested'">R</div>
+                <div class="centerText Submitted" title="Submitted" *ngIf="dataItem.WF_STG_CD==='Submitted'">S</div>
+                <div class="centerText Approved" title="Approved" *ngIf="dataItem.WF_STG_CD==='Approved'">A</div>
+                <div class="centerText InProgress" title="InProgress" *ngIf="dataItem.WF_STG_CD==='InProgress'">I</div>
+                <div class="centerText Processed" title="Processed" *ngIf="dataItem.WF_STG_CD==='Processed'">P</div>
+                <div class="centerText Offer" title="" *ngIf="dataItem.WF_STG_CD==='Offer'">O</div>
+                <div class="centerText Lost" title="" *ngIf="dataItem.WF_STG_CD==='Lost'">L</div>
+                <div class="centerText Won" title="" *ngIf="dataItem.WF_STG_CD==='Won'">W</div>
+            </ng-template>
         </kendo-grid-column>
         <kendo-grid-column field="PROGRAM_PAYMENT" width="120px" title="Type" [hidden]="true">
             <ng-template kendoGridGroupHeaderTemplate let-group let-field="field" let-value="value">
                 <div *ngIf="value !== 'Frontend YCS2'"><span style='font-weight:bold;font-size:13px; color: red;letter-spacing:0.07em '>Billings Overlap</span></div>
-                <div *ngIf="value == 'Frontend YCS2'">
+                <div *ngIf="value === 'Frontend YCS2'">
                     <span style='font-weight:bold;font-size:13px; color: red;letter-spacing:0.07em '>Front End Overlap</span>&nbsp;
                     <button class='btn btn-sm btn-primary lnk btnSelect overlapBtnSelect' *ngIf="isSelectAll" (click)="selectAllOvlp(true)">Select All</button>&nbsp;
                     <button class='btn btn-sm btn-primary lnk btnSelect overlapBtnSelect' *ngIf="!isSelectAll" (click)="selectAllOvlp(false)">Clear All</button>&nbsp;
@@ -32,42 +47,50 @@
             <ng-template kendoGridGroupHeaderTemplate let-group let-field="field" let-value="value">
                 <div *ngIf="getUIelement(value)">
                     <div *ngIf="isdealEndDateNeedChange">
-                        <input type='checkbox' (click)="selectCheckBox(value)" [checked]="is_selected" class='check with-font' id='chkGrp" +value+ "' />
-                        <span class="grpTitle" style='font-weight:bold'>{{value}}</span><i class='intelicon-arrow-back-left skyblue pl10'></i>
+                        <input type='checkbox' name="chkGrp_val" (click)="selectCheckBox(value)" [(ngModel)]="is_selected" class='check with-font' id="chkGrp_val" />
+                        <label for="chkGrp_val"></label>
+                        <span class="grpTitle" style='font-weight:bold'>{{value}}</span>&nbsp;<i class='intelicon-arrow-back-left skyblue pl10'></i>&nbsp;
                         <span class='grpDesc' style='font-weight:bold;'>An overlap was located matching an Active or Draft deal.  In order to be able to create this new deal, the System will need to change the End date of the deal.  Is that ok?</span>&nbsp;
-                        <button class='btn btn-sm btn-primary overlapBtnSelect btnYNeedClr' (click)="acceptOvlp(value,'Y')"><i class='intelicon-check' style='font-size: 12px !important;'></i>Yes</button>
+                        <button class='btn btn-sm btn-primary overlapBtnSelect btnYNeedClr btnYes' (click)="acceptOvlp(value,'Y')"><i class='intelicon-check' style='font-size: 12px !important;'></i>Yes</button>
                         <span class='or'>&nbsp;OR&nbsp;</span>
-                        <button class='btn btn-sm btn-primary overlapBtnSelect btnNoIssue' (click)="rejectOvlp(value)"><i class='intelicon-close-max' style='font-size: 10px !important; padding-right: 3px;'></i> No</button>
+                        <button class='btn btn-sm btn-primary overlapBtnSelect btnNoIssue btnNo' (click)="rejectOvlp(value)"><i class='intelicon-close-max' style='font-size: 10px !important; padding-right: 3px;'></i> No</button>
                     </div>
                     <div *ngIf="isRevalidate">
-                        <span class="grpTitle" style='font-weight:bold'>{{value}}</span>
-                        <i class='intelicon-arrow-back-left skyblue pl10'></i>
+                        <span class="grpTitle" style='font-weight:bold'>{{value}}</span>&nbsp;
+                        <i class='intelicon-arrow-back-left skyblue pl10'></i>&nbsp;
                         <span class='grpDesc' style='font-weight:bold;'>An overlap was located matching another Draft deal.  Please correct and revalidate.</span>&nbsp;
-                        <button class='btn btn-sm btn-primary overlapBtnSelect btnYNeedClr' (click)="rejectOvlp(value)"><i class='intelicon-check' style='font-size: 12px !important;'></i>Yes</button>
+                        <button class='btn btn-sm btn-primary overlapBtnSelect btnYNeedClr btnYes' (click)="rejectOvlp(value)"><i class='intelicon-check' style='font-size: 12px !important;'></i>Yes</button>
                     </div>
                     <div *ngIf="isDealEndDateChange">
-                        <span class="grpTitle" style='font-weight:bold'>{{value}} </span>
-                        <i class='intelicon-arrow-back-left skyblue pl10'></i>
+                        <span class="grpTitle" style='font-weight:bold'>{{value}} </span>&nbsp;
+                        <i class='intelicon-arrow-back-left skyblue pl10'></i>&nbsp;
                         <span class='grpDesc' style='font-weight:bold;'>An overlap was located matching an Active or Draft deal.  In order to be able to create this new deal, the System will need to change the End date of the deal.  Is that ok?</span>&nbsp;
-                        <button class='btn btn-sm btn-primary' (click)="acceptOvlp(value,'N')">Undo</button>
+                        <button class='btn btn-sm btn-primary undolnk' (click)="acceptOvlp(value,'N')">
+                            <i class="intelicon-home-outlined intelicon-undo" style="font-size: 10px !important;padding-right: 3px;"></i>Undo
+                        </button>
                     </div>
                     <div *ngIf="isReqChange">
-                        <span class="grpTitle" style='font-weight:bold'>{{value}}</span>
-                        <i class='intelicon-arrow-back-left skyblue pl10'></i>
+                        <span class="grpTitle" style='font-weight:bold'>{{value}}</span>&nbsp;
+                        <i class='intelicon-arrow-back-left skyblue pl10'></i>&nbsp;
                         <span class='grpDesc' style='font-weight:bold;letter-spacing:0.07em '>Please correct and revalidate.</span>
                     </div>
                 </div>
             </ng-template>
 
         </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" field="OVLP_DEAL_OBJ_SID" width="150" title="Deal #">
+        <kendo-grid-column [headerClass]="{'headerClass':true}" field="OVLP_DEAL_OBJ_SID" width="100" title="Deal #">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                          let-filterService="filterService">
                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
                                    [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
             </ng-template>
+            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                <a (click)="openDealEditor(dataItem)" class="text-center" style="padding-left: 5px;">
+                    {{dataItem.OVLP_DEAL_OBJ_SID}}
+                </a>
+            </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" width="150" title="Contract" field="CONTRACT_NBR">
+        <kendo-grid-column [headerClass]="{'headerClass':true}" field="CONTRACT_NBR" width="150" title="Contract">
             <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                 <div class="text-center">
                     {{dataItem.CONTRACT_NM}}({{dataItem.CONTRACT_NBR}})
@@ -79,7 +102,7 @@
                                    [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" width="150" title="Pricing Strategy" field="PRICE_STRATEGY">
+        <kendo-grid-column [headerClass]="{'headerClass':true}" field="PRICE_STRATEGY" width="150" title="Pricing Strategy">
             <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                 <div class="text-center">
                     {{dataItem.PRICE_STRATEGY_NM}}({{dataItem.PRICE_STRATEGY}})
@@ -110,7 +133,7 @@
                                    [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" field="CUST_ACCNT_DIV" width="200" title="Customer Division">
+        <kendo-grid-column [headerClass]="{'headerClass':true}" field="CUST_ACCNT_DIV" width="150" title="Customer Division">
             <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                          let-filterService="filterService">
                 <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
@@ -172,12 +195,11 @@
 </kendo-window>
 <div class="k-widget k-dialog k-window k-alert" *ngIf="showKendoAlert">
     <kendo-dialog (close)="closeKendoAlert()">
-        <i class='fa fa-check' aria-hidden='true'
-            style='margin-right: 10px;'></i><div style='margin-top: 15px;'>
+        <div>
             Please go to <b>Deal Editor</b>; <b>edit</b> and <b>re-validate</b> your deal to avoid overlapping with other deals.
         </div>
-        <kendo-dialog-actions>
-            <div kendoButton (click)="closeKendoAlert()" class="kendo-alrt-btn">OK</div>
+        <kendo-dialog-actions class="dialog-button-style">
+            <button kendoButton (click)="closeKendoAlert()" class="kendo-alrt-btn"><span>OK</span></button>
         </kendo-dialog-actions>
     </kendo-dialog>
 </div>

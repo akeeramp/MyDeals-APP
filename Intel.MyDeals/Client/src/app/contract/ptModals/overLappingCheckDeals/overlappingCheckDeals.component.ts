@@ -230,7 +230,7 @@ export class OverlappingCheckComponent {
         var selectedIDS = _.filter(this.gridResult, { 'IS_SEL': true, 'PROGRAM_PAYMENT': 'Frontend YCS2' });
         var ids = distinct(selectedIDS, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
         if (selectedIDS.length > 0) {
-            this.acceptOvlp(ids, 'Y');
+            this.acceptOvlp(ids.toString(), 'Y');
         }
         else {
             this.loggerSvc.error('Select An overlap with an Active or Draft deal', 'OverLap');
@@ -290,13 +290,66 @@ export class OverlappingCheckComponent {
         this.gridData = process(this.gridResult, this.state);
     }
 
+    openDealEditor(value) {
+        window.location.href = "#/contractmanager/WIP/" + value.CONTRACT_NBR + "/" + value.PRICE_STRATEGY + "/" + value.PRICING_TABLES + "/" + value.OVLP_DEAL_OBJ_SID;
+    }
+
+    getOverlapDetails() {
+        this.pricingId = this.contractData.DC_ID;
+        this.overLappingCheckDealsSvc.getOverLappingDealsDetails(this.pricingId).subscribe((result: any) => {
+            this.loadMessage = "Done";
+            this.ovlpData = this.prepareGridData(result.Data);
+            this.ovlpErrorCount = distinct(result.Data, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
+            this.gridResult = result.Data;
+            if (this.gridResult.length == 0) {
+                this.isNoDealsFound = true;
+            }
+            else {
+                this.isNoDealsFound = false;
+            }
+            let groups = [{ field: "PROGRAM_PAYMENT" },
+            { field: "WIP_DEAL_OBJ_SID" }];
+            // this.filterOverLapData(this.gridResult);
+            this.state.group = groups;
+            this.gridData = process(this.gridResult, this.state);
+            setTimeout(() => {
+                this.isLoading = false;
+            }, 500);
+        }, (error) => {
+            this.isLoading = false;
+            this.loggerSvc.error('OverLapDeals service', error);
+        });
+        this.overLappingCheckDealsSvc.readContract(this.pricingId).subscribe((response: Array<any>) => {
+            this.contractDetails = response[0];
+        }, (err) => {
+            this.loggerSvc.error("Unable to get contract data", "Error", err);
+        });
+        this.S_ID = this.contractData.CUST_MBR_SID;
+
+        this.overLappingCheckDealsSvc.getCustomerVendors(this.S_ID).subscribe(
+            (result: Array<any>) => {
+            },
+            function (response) {
+                this.loggerSvc.error(
+                    "Unable to get Customer Vendors.",
+                    response,
+                    response.statusText
+                );
+            }
+        );
+    }
 
     ngOnInit() {
         if (this.curPricingTable == undefined) {
             this.curPricingTable = this.data.currPt;
             this.contractData = this.data.contractData;
         }
-        this.getOverlapCheckDetails();
+        if (this.data.srcScrn == "overLapping") {
+            this.getOverlapDetails();
+        }
+        else {
+            this.getOverlapCheckDetails();
+        }
     }
 
 

@@ -33,4 +33,9 @@ export class overLappingcheckDealService {
         return this.httpClient.post(apiUrl, PRICING_TABLES_ID);
     }
 
+    public getOverLappingDealsDetails(id): Observable<any> {
+        const apiUrl: string = this.apiBasePricingTableUrl + 'GetOverlappingDealsFromContract/' + id;
+        return this.httpClient.get(apiUrl);
+    }
+
 }
