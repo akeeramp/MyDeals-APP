@@ -7,6 +7,7 @@ import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
 import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
 import { unifiedDealReconService } from './admin.unifiedDealRecon.service';
+import * as _ from 'underscore';
 
 @Component({
     selector: "bulk-unify-deals",
@@ -41,6 +42,7 @@ export class bulkUnifyModalComponent {
     private validUnifyDeals: any = [];
     private UnifyValidation: any;
     public invalidRPLStatusCode = [];
+    private dealReconBackendValidation = false;
     private hotSettings: Handsontable.GridSettings = {
         wordWrap: true,
         colHeaders: this.getColHeaders(),
@@ -91,7 +93,6 @@ export class bulkUnifyModalComponent {
             if (this.UnifyValidation.InValidUnifyDeals.length > 0)
                 this.UnifyValidation.InValidUnifyDeals.forEach((row) => {
                     if (row.RPL_STS_CODE != undefined) row.RPL_STS_CODE = row.RPL_STS_CODE.toUpperCase();
-                    this.tableData.push(row)
                 });
             if (this.UnifyValidation.ValidUnifyDeals.length > 0)
                 this.UnifyValidation.ValidUnifyDeals.forEach((row) => {
@@ -103,11 +104,10 @@ export class bulkUnifyModalComponent {
                 this.hotTable = this.hotRegisterer.getInstance(this.hotId);
                 this.validateBulkData();
             }, 100);
-        } else { // for deal recon files
+        } else { // for deal recon files  
             if (this.dealReconValidationSummary.validRecords.length > 0) {
                 this.dealReconValidationSummary.validRecords.forEach((row) => {
                     if (row.Rpl_Status_Code != undefined) row.Rpl_Status_Code = row.Rpl_Status_Code.toUpperCase();
-                    this.tableData.push(row)
                 })
             }
             if (this.dealReconValidationSummary.inValidRecords.length > 0)
@@ -117,7 +117,8 @@ export class bulkUnifyModalComponent {
                 });
             //setting a delay for hotTable to populate the tabledata
             setTimeout(() => {
-                this.hotTable = this.hotRegisterer.getInstance(this.hotId);
+                if (this.dealReconValidationSummary.inValidRecords.length > 0)
+                    this.hotTable = this.hotRegisterer.getInstance(this.hotId);
                 this.validateDealRecon();
             }, 100);
         }
@@ -130,7 +131,7 @@ export class bulkUnifyModalComponent {
 
     validateDealRecon() {
         let rowMsgs = [];
-        if (this.dealReconValidationSummary.inValidRecords.length > 0) {
+        if (this.dealReconValidationSummary.inValidRecords.length > 0 && !this.dealReconBackendValidation) {
             for (let i = 0; i < this.dealReconValidationSummary.inValidRecords.length; i++) {
                 let alertMsg = "";
                 let mandatory = [];
@@ -227,13 +228,13 @@ export class bulkUnifyModalComponent {
                     this.setErrorCell(i, 7);
                     this.setErrorCell(i, 5);
                 }
-                if (this.dealReconValidationSummary.invalidCountries.length > 0) {
+                if (this.dealReconValidationSummary.invalidCountries && this.dealReconValidationSummary.invalidCountries.length > 0) {
                     if (this.dealReconValidationSummary.toBeInvalidCountries.includes(this.dealReconValidationSummary.inValidRecords[i].Unified_Country_Region.toLowerCase())) {
                         alertMsg = alertMsg + '•' + "Unified Country/Region does not exist in My Deals" + '\n';
                         this.setErrorCell(i, 4);
                     }
                 }
-                if (this.dealReconValidationSummary.toBeInvalidCountries.length > 0) { 
+                if (this.dealReconValidationSummary.toBeInvalidCountries && this.dealReconValidationSummary.toBeInvalidCountries.length > 0) {
                     if (this.dealReconValidationSummary.toBeInvalidCountries.includes(this.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Country_Region.toLowerCase())) {
                         alertMsg = alertMsg + '•' + "'To Be Unified Country/Region' does not exist in My Deals" + '\n';
                         this.setErrorCell(i, 8);
@@ -246,7 +247,7 @@ export class bulkUnifyModalComponent {
                     this.setErrorCell(i, 8);
                 }
                 var validRows = this.dealReconValidationSummary.inValidRecords.filter(x => x.Deal_ID != 0 && x.Unified_Customer_ID != 0 && x.Unified_Customer_Name != "" && x.Country_Region_Customer_ID != 0 && x.Unified_Country_Region != "");
-                if (this.dealReconValidationSummary.duplicateDealCombination.length > 0) {//
+                if (this.dealReconValidationSummary.duplicateDealCombination && this.dealReconValidationSummary.duplicateDealCombination.length > 0) {//
                     if (this.dealReconValidationSummary.duplicateDealCombination.includes(this.dealReconValidationSummary.inValidRecords[i].Deal_ID)
                         && validRows.filter(x => x.Deal_ID == this.dealReconValidationSummary.inValidRecords[i].Deal_ID
                             && x.Unified_Customer_ID == this.dealReconValidationSummary.inValidRecords[i].Unified_Customer_ID
@@ -257,19 +258,19 @@ export class bulkUnifyModalComponent {
                         this.setErrorCell(i, 0);
                     }
                 }
-                if (this.dealReconValidationSummary.duplicateCustIds.length > 0) {//
+                if (this.dealReconValidationSummary.duplicateCustIds && this.dealReconValidationSummary.duplicateCustIds.length > 0) {//
                     if (this.dealReconValidationSummary.duplicateCustIds.includes(this.dealReconValidationSummary.inValidRecords[i].Unified_Customer_ID)) {
                         alertMsg = alertMsg + '•' + "Same Unified Customer ID cannot be associated with multiple Unified Customer Names" + '\n';
                         this.setErrorCell(i, 1);
                     }
                 }
-                if (this.dealReconValidationSummary.duplicateCustNames.length > 0) {//
+                if (this.dealReconValidationSummary.duplicateCustNames && this.dealReconValidationSummary.duplicateCustNames.length > 0) {//
                     if (this.dealReconValidationSummary.duplicateCustNames.includes(this.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name)) {
                         alertMsg = alertMsg + '•' + "Same Unified Customer Name cannot be associated with multiple Unified Customer IDs" + '\n';
                         this.setErrorCell(i, 2);
                     }
                 }
-                if (this.dealReconValidationSummary.duplicateCtryIds.length > 0) {
+                if (this.dealReconValidationSummary.duplicateCtryIds && this.dealReconValidationSummary.duplicateCtryIds.length > 0) {
                     if (this.dealReconValidationSummary.duplicateCtryIds.filter(x => x.cust_Id == this.dealReconValidationSummary.inValidRecords[i].Unified_Customer_ID
                         && x.cust_Nm == this.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name
                         && x.ctry_Id == this.dealReconValidationSummary.inValidRecords[i].Country_Region_Customer_ID).length > 0) {
@@ -277,7 +278,7 @@ export class bulkUnifyModalComponent {
                         this.setErrorCell(i, 3);//Country/Region Customer ID error
                     }
                 }
-                if (this.dealReconValidationSummary.duplicateCtryNms.length > 0) {
+                if (this.dealReconValidationSummary.duplicateCtryNms && this.dealReconValidationSummary.duplicateCtryNms.length > 0) {
                     if (this.dealReconValidationSummary.duplicateCtryNms.filter(x => x.cust_Id == this.dealReconValidationSummary.inValidRecords[i].Unified_Customer_ID
                         && x.cust_Nm == this.dealReconValidationSummary.inValidRecords[i].Unified_Customer_Name
                         && x.ctry_Nm == this.dealReconValidationSummary.inValidRecords[i].Unified_Country_Region
@@ -286,19 +287,19 @@ export class bulkUnifyModalComponent {
                         this.setErrorCell(i, 4);//Unified Country/Regions error
                     }
                 }
-                if (this.dealReconValidationSummary.duplicateToBeCustIds.length > 0) {//
+                if (this.dealReconValidationSummary.duplicateToBeCustIds && this.dealReconValidationSummary.duplicateToBeCustIds.length > 0) {//
                     if (this.dealReconValidationSummary.duplicateToBeCustIds.includes(this.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_ID)) {
                         alertMsg = alertMsg + '•' + "Same 'To Be Unified Customer ID' cannot be associated with multiple 'To Be Unified Customer Names'" + '\n';
                         this.setErrorCell(i, 5);
                     }
                 }
-                if (this.dealReconValidationSummary.duplicateToBeCustNames.length > 0) {
+                if (this.dealReconValidationSummary.duplicateToBeCustNames && this.dealReconValidationSummary.duplicateToBeCustNames.length > 0) {
                     if (this.dealReconValidationSummary.duplicateToBeCustNames.includes(this.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name)) {
                         alertMsg = alertMsg + '•' + "Same 'To Be Unified Customer Name' cannot be associated with multiple 'To Be Unified Customer IDs'" + '\n';
                         this.setErrorCell(i, 6);//To Be Unified Customer Name error
                     }
                 }
-                if (this.dealReconValidationSummary.duplicateToBeCtryIds.length > 0) {
+                if (this.dealReconValidationSummary.duplicateToBeCtryIds && this.dealReconValidationSummary.duplicateToBeCtryIds.length > 0) {
                     if (this.dealReconValidationSummary.duplicateToBeCtryIds.filter(x => x.cust_Id == this.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_ID
                         && x.cust_Nm == this.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name
                         && x.ctry_Nm == this.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Country_Region
@@ -307,7 +308,7 @@ export class bulkUnifyModalComponent {
                         this.setErrorCell(i, 7);//To Be Country/Region Customer ID error
                     }
                 }
-                if (this.dealReconValidationSummary.duplicateToBeCtryNms.length > 0) {
+                if (this.dealReconValidationSummary.duplicateToBeCtryNms && this.dealReconValidationSummary.duplicateToBeCtryNms.length > 0) {
                     if (this.dealReconValidationSummary.duplicateToBeCtryNms.filter(x => x.cust_Id == this.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_ID
                         && x.cust_Nm == this.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Customer_Name
                         && x.ctry_Nm == this.dealReconValidationSummary.inValidRecords[i].To_be_Unified_Country_Region
@@ -322,7 +323,7 @@ export class bulkUnifyModalComponent {
                     alertMsg = alertMsg + '•' +"The RPL Status code contains invalid characters. Please remove spaces and special characters." + '\n';
                     this.setErrorCell(i, 9);//rpl status error
                 }
-                else if (this.dealReconValidationSummary.invalidRplStatusCodes.length > 0) {
+                else if (this.dealReconValidationSummary.invalidRplStatusCodes && this.dealReconValidationSummary.invalidRplStatusCodes.length > 0) {
                     if (this.dealReconValidationSummary.invalidRplStatusCodes.includes(this.dealReconValidationSummary.inValidRecords[i].Rpl_Status_Code)) {
                         alertMsg = alertMsg + '•' + "Invalid RPL Status code. Please refer to the notes section for allowed possible values of the RPL status code." + '\n';
                         this.setErrorCell(i, 9);//rpl status error
@@ -351,11 +352,14 @@ export class bulkUnifyModalComponent {
                 this.dealReconValidationSummary.inValidRecords = [];
                 this.updateDealRecon();
             }
-        } else {
-            // if no error and has valid records then updating the deal recon 
-            if (this.dealReconValidationSummary.inValidRecords.length == 0 && this.dealReconValidationSummary.validRecords.length > 0) {
-                this.updateDealRecon()
+        }
+        else if (this.dealReconValidationSummary.inValidRecords.length > 0 && this.dealReconBackendValidation) {
+            for (let i = 0; i < this.dealReconValidationSummary.inValidRecords.length; i++) {
+                this.setErrorCell(i, 0);
             }
+        }
+        else if (this.dealReconValidationSummary.inValidRecords.length == 0 && this.dealReconValidationSummary.validRecords.length > 0) {
+                this.updateDealRecon()
         }
     }
 
@@ -368,9 +372,26 @@ export class bulkUnifyModalComponent {
                 this.dealReconValidationSummary = [];
             }
             else {
+                this.dealReconBackendValidation = true;
+                this.tableData = [];
                 this.dealReconValidationSummary = [];
                 this.dealReconValidationSummary.validRecords = [];
-                this.dealReconValidationSummary.inValidRecords = response;
+                this.dealReconValidationSummary.inValidRecords = [];
+                _.each(response, (invalidRec) => {
+                    this.dealReconValidationSummary.inValidRecords.push({
+                        Deal_ID: invalidRec.DEAL_ID,
+                        Unified_Customer_ID: invalidRec.EXISTING_UCD_GLOBAL_ID,
+                        Unified_Customer_Name: invalidRec.EXISTING_UCD_GLOBAL_NAME,
+                        Country_Region_Customer_ID: invalidRec.EXISTING_UCD_COUNTRY_CUST_ID,
+                        Unified_Country_Region: invalidRec.EXISTING_UCD_COUNTRY,
+                        To_be_Unified_Customer_ID: invalidRec.NEW_UCD_GLOBAL_ID,
+                        To_be_Unified_Customer_Name: invalidRec.NEW_UCD_GLOBAL_NAME,
+                        To_be_Country_Region_Customer_ID: invalidRec.NEW_UCD_COUNTRY_CUST_ID,
+                        To_be_Unified_Country_Region: invalidRec.NEW_UCD_COUNTRY,
+                        Rpl_Status_Code: invalidRec.RPL_STS_CD,
+                        ERR_MSG: invalidRec.ERR_MSG
+                    })
+                })
                 this.generateTableData();
             }
         }, (response) => {
@@ -400,6 +421,7 @@ export class bulkUnifyModalComponent {
             }
         }
         else {
+            this.dealReconBackendValidation = false;
             this.tableData.forEach((row, rowInd) => {
                 for (let i = 0; i < ExcelColumnsConfig.DealReconColumns.length; i++)
                     this.hotTable.setCellMetaObject(rowInd, i, { 'className': 'normal-cell', comment: { value: '' } });
