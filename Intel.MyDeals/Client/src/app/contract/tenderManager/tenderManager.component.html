@@ -139,7 +139,7 @@
     </deal-editor>
 </div>
 <div *ngIf="selectedTab == 'MC'" class="col-md-12 loaderMeet meet-comp-tenders" style="border: 2px solid #bcbcbc;">
-    <meet-comp-contract [objSid]="contractData.DC_ID" [isTender]="contractData.IS_TENDER" [isAdhoc]="'1'" [objTypeId]="'1'" [cId]="c_Id" [pageNm]="'WIDGET'" (tmDirec)="redirectingFn($event)" (contractRefresh)="refreshContract($event)">
+    <meet-comp-contract class="tender-meet-comp-width" [objSid]="contractData.DC_ID" [isTender]="contractData.IS_TENDER" [isAdhoc]="'1'" [objTypeId]="'1'" [cId]="c_Id" [pageNm]="'WIDGET'" (tmDirec)="redirectingFn($event)" (contractRefresh)="refreshContract($event)">
     </meet-comp-contract>
 </div>
 <div *ngIf="selectedTab == 'PD'" class="col-md-12 loadpublish">

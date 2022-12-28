@@ -240,3 +240,6 @@ i#btnClose.intelicon-close-max.tender-cross-close:hover {
     color: #004579;
     text-decoration: underline !important;
 }
+.admin_tender_meetcomp kendo-grid#meetcomp-contract td.k-touch-action-auto {
+    border-width: 0px !important;
+}

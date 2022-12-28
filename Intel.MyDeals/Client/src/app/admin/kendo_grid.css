@@ -920,3 +920,6 @@ kendo-grid.security-engine-tables .k-grid-content {
 .mat-slideDisable-Custom {
     opacity: 0.7 !important;
 }
+tender-meet-comp-width kendo-grid#meetcomp-contract td.k-touch-action-auto {
+    border-width: 0px !important;
+}
