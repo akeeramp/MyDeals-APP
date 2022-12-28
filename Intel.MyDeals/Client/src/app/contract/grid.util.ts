@@ -145,7 +145,7 @@ export class GridUtil {
         var tmplt = "<div class='uiControlDiv isReadOnlyCell'><div class='vert-center'><i class='valid-icon iConFont validf_" + passedData.PASSED_VALIDATION + " " + classNm + "' title='" + titleMsg + "'></i></div></div>";
         return tmplt;
     }
-    static uiControlScheduleWrapper(passedData) {  return "";
+    static uiControlScheduleWrapper(passedData) {
         var fields = (passedData.OBJ_SET_TYPE_CD === 'VOL_TIER' || passedData.OBJ_SET_TYPE_CD === 'FLEX') ? PTE_Config_Util.volTierFields : PTE_Config_Util.revTierFields;
         if(passedData.OBJ_SET_TYPE_CD !== 'VOL_TIER' && passedData.OBJ_SET_TYPE_CD !== 'FLEX' && passedData.OBJ_SET_TYPE_CD !== 'REV_TIER'){
             fields = PTE_Config_Util.nonvolTierFields;
@@ -818,7 +818,8 @@ export class GridUtil {
                                 newHtmlVal = dataItem[templateHtml];                                
                             }
 
-                            newHtmlVal = newHtmlVal.toString().replace(/<div class='clearboth'><\/div>/g, 'LINEBREAKTOKEN');
+                            if (newHtmlVal != undefined)
+                                newHtmlVal = newHtmlVal.toString().replace(/<div class='clearboth'><\/div>/g, 'LINEBREAKTOKEN');
                             elem.innerHTML = newHtmlVal;
 
                             // Output the text content of the templated cell into the exported cell.

@@ -648,6 +648,14 @@ export class pricingTableEditorComponent {
                 this.undoEnable = true;
                 this.undoCount += 1;
             }
+            //to make sure to trigger translate API call.(Product validation)
+            _.each(PTE_Config_Util.flushSysPrdFields, (item) => {
+                let modifiedDetails = _.where(changes, { prop: item });
+                if (modifiedDetails && modifiedDetails.length > 0)
+                    _.each(modifiedDetails, (modItem) => {
+                        this.hotTable.setDataAtRowProp(modItem.row, 'PTR_SYS_PRD', '', 'no-edit');
+                    })
+            })
             let PTR = _.where(changes, { prop: 'PTR_USER_PRD' });
             let PTR_EXLDS = _.where(changes, { prop: 'PRD_EXCLDS' });
             let AR = _.where(changes, { prop: 'AR_SETTLEMENT_LVL' });
