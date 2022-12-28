@@ -134,12 +134,6 @@ export class pricingTableEditorComponent {
                     width = '600px';
                     data = { name: name, source: this.source, selVal: selVal };
                 }
-                else if (this.field && this.field == 'SETTLEMENT_PARTNER') {
-                    modalComponent = dropDownModalComponent
-                    name = "Select Payout Based On *";
-                    width = '600px';
-                    data = { name: name, source: this.source, selVal: selVal };
-                }
                 else if (this.field && this.field == 'PERIOD_PROFILE') {
                     modalComponent = dropDownModalComponent
                     name = "Select Period Profile";
@@ -167,6 +161,24 @@ export class pricingTableEditorComponent {
                 else if (this.field && this.field == 'PROD_INCLDS') {
                     modalComponent = dropDownModalComponent
                     name = "Select Media *";
+                    width = '600px';
+                    data = { name: name, source: this.source, selVal: selVal };
+                }
+                else if (this.field && this.field == 'SETTLEMENT_PARTNER') {
+                    modalComponent = dropDownModalComponent
+                    name = "Select Settlement Partner";
+                    width = '600px';
+                    data = { name: name, source: this.source, selVal: selVal };
+                }
+                else if (this.field && this.field == 'SERVER_DEAL_TYPE') {
+                    modalComponent = dropDownModalComponent
+                    name = "Select Server Deal Type";
+                    width = '600px';
+                    data = { name: name, source: this.source, selVal: selVal };
+                }
+                else if (this.field && this.field == 'PROGRAM_PAYMENT') {
+                    modalComponent = dropDownModalComponent
+                    name = "Select Program Payment *";
                     width = '600px';
                     data = { name: name, source: this.source, selVal: selVal };
                 }
@@ -560,7 +572,7 @@ export class pricingTableEditorComponent {
             this.ColumnConfig.push(currentColumnConfig);
             if (item.field == 'PTR_USER_PRD' || item.field == 'GEO_COMBINED' || item.field == 'MRKT_SEG' || item.field == 'QLTR_BID_GEO' || item.field == 'CUST_ACCNT_DIV'
                 || item.field == 'PAYOUT_BASED_ON' || item.field == 'PERIOD_PROFILE' || item.field == 'RESET_VOLS_ON_PERIOD' || item.field == 'AR_SETTLEMENT_LVL'
-                || item.field == 'REBATE_TYPE' || item.field == 'PROD_INCLDS' || item.field == 'SETTLEMENT_PARTNER') {
+                || item.field == 'REBATE_TYPE' || item.field == 'PROD_INCLDS' || item.field == 'SETTLEMENT_PARTNER' || item.field == 'SERVER_DEAL_TYPE' || item.field == 'PROGRAM_PAYMENT') {
                 currentColumnConfig.editor = this.custCellEditor;
             }
             if (currentColumnConfig && currentColumnConfig.type=='date'){

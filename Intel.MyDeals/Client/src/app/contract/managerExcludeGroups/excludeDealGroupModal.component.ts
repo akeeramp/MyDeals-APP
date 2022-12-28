@@ -6,6 +6,7 @@ import { DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from "@angular/material/core";
 import { RowClassArgs, RowArgs } from "@progress/kendo-angular-grid";
+import * as moment from "moment";
 
 @Component({
     selector: "exclude-deal-group-modal-dialog",
@@ -29,7 +30,7 @@ export class excludeDealGroupModalDialog {
     private wwid = (<any>window).usrWwid;
     public loading = true;
     public emailTable: any = "<b>Loading...</b>";
-    private gridResult;
+    private gridResult = [];
     private dealArray = [];
     private dealId;
     private childGridData;
@@ -53,8 +54,8 @@ export class excludeDealGroupModalDialog {
         take: 25,
         group: [],
         filter: {
-            logic: "and",
             filters: [],
+            logic: "and",
         }
     }
     private pageSizes: PageSizeItem[] = [
@@ -79,7 +80,24 @@ export class excludeDealGroupModalDialog {
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
-        this.gridData = process(this.gridResult, this.state); 
+        if (state.filter.filters[0] && (state.filter.filters[0]['filters'][0]['field'] == "OVLP_DEAL_STRT_DT" || state.filter.filters[0]['filters'][0]['field'] == "OVLP_DEAL_END_DT")) {
+            state.filter.filters[0]['filters'][0]['value'] = moment(state.filter.filters[0]['filters'][0]['value']).format("MM/DD/YYYY")
+            if (state.filter.filters[0]['filters'] != undefined && state.filter.filters[0]['filters'].length == 2) {
+                state.filter.filters[0]['filters'][1]['value'] = moment(state.filter.filters[0]['filters'][1]['value']).format("MM/DD/YYYY")
+            }
+        }
+        this.gridData = process(this.gridResult, this.state);
+        let childgridresult1 = this.childGridResult.filter(x => x.CST_MCP_DEAL_FLAG === 1);
+        let childgridresult2 = this.childGridResult.filter(x => x.CST_MCP_DEAL_FLAG === 0);
+        this.childGridData1 = process(childgridresult1, this.state);
+        this.childGridData2 = process(childgridresult2, this.state);
+        this.childGridData = process(this.childGridResult, this.state);
+        if (state.filter.filters[0] && (state.filter.filters[0]['filters'][0]['field'] == "OVLP_DEAL_STRT_DT" || state.filter.filters[0]['filters'][0]['field'] == "OVLP_DEAL_END_DT")) {
+            state.filter.filters[0]['filters'][0]['value'] = new Date(state.filter.filters[0]['filters'][0]['value'])
+            if (state.filter.filters[0]['filters'] != undefined && state.filter.filters[0]['filters'].length == 2) {
+                state.filter.filters[0]['filters'][1]['value'] = new Date(state.filter.filters[0]['filters'][1]['value'])
+            }
+        }
     }
 
     public expandInStockProducts({ dataItem }: RowArgs): boolean {
@@ -95,7 +113,7 @@ export class excludeDealGroupModalDialog {
         for (let i = 0; i < this.childGridResult.length; i++) {
             if (this.childGridResult[i].CST_MCP_DEAL_FLAG === 1) {
                 this.childGridResult[i].selected = !this.isDealToolsChecked;
-            }  
+            }
         }
         let childgridresult1 = this.childGridResult.filter(x => x.CST_MCP_DEAL_FLAG === 1);
         let childgridresult2 = this.childGridResult.filter(x => x.CST_MCP_DEAL_FLAG === 0);
@@ -124,13 +142,13 @@ export class excludeDealGroupModalDialog {
     };
 
     public rowCallbackParent = (context: RowClassArgs) => {
-        return { navyblue: true } 
+        return { navyblue: true }
     };
     close(): void {
         this.dialogRef.close();
     }
 
-   
+
     ok() {
         this.OVLP_DEAL_ID = this.childGridResult.filter(x => x.selected == true).map(y => y.OVLP_DEAL_ID).join();
         const returnVal: any = [];
@@ -149,16 +167,40 @@ export class excludeDealGroupModalDialog {
     }
     closeKendoAlert() {
         this.showKendoAlert = false;
-    }   
-  
+    }
+
     loadExcludeDealGroupModel() {
         this.isLoading = true;
-        if(this.dataItem.cellCurrValues?.DEAL_ID){
+        if (this.dataItem.cellCurrValues?.DEAL_ID) {
             this.pctGroupDealsView = true;
         }
         this.dealId = this.dataItem.cellCurrValues?.DC_ID ? this.dataItem.cellCurrValues.DC_ID : this.dataItem.cellCurrValues.DEAL_ID;
         this.dealArray.push(this.dataItem.cellCurrValues);
-        this.gridResult = this.dealArray;
+        var gdata = JSON.parse(JSON.stringify(this.dealArray));
+        for (let row of gdata) {
+            var ecap = row["ECAP_PRICE"] === undefined || row["ECAP_PRICE"] === null
+                ? ""
+                : (row["ECAP_PRICE"]["20___0"] === undefined || row["ECAP_PRICE"]["20___0"] === null)
+                    ? row["ECAP_PRICE"]
+                    : row["ECAP_PRICE"]["20___0"];
+            var cntrctTtl = "Product: " + (row["TITLE"]);
+            let a = {};
+            a["OVLP_DEAL_ID"] = row["DC_ID"] === undefined || row["DC_ID"] === "" ? row["DEAL_ID"] : row["DC_ID"]
+            a["OVLP_DEAL_TYPE"] = row['OBJ_SET_TYPE_CD']
+            a["OVLP_REBT_TYPE"] = row["REBATE_TYPE"] === undefined || row["REBATE_TYPE"] == "" ? row["REBT_TYPE"] : row["REBATE_TYPE"]
+            a["OVLP_CNTRCT_NM"] = cntrctTtl
+            a["OVLP_WF_STG_CD"] = this.pctGroupDealsView ? row["WF_STG_CD"] : row["DSPL_WF_STG_CD"]
+            a["OVLP_DEAL_END_DT"] = this.pctGroupDealsView ? row["DEAL_END_DT"] : row["END_DT"]
+            a["OVLP_DEAL_STRT_DT"] = this.pctGroupDealsView ? row["DEAL_STRT_DT"] : row["START_DT"]
+            a["OVLP_ADDITIVE"] = this.pctGroupDealsView ? row["ADDITIVE"] : row["DEAL_COMB_TYPE"]
+            a["OVLP_DEAL_DESC"] = row["DEAL_DESC"]
+            a["OVLP_ECAP_PRC"] = Number(ecap)
+            a["OVLP_MAX_RPU"] = row["MAX_RPU"]
+            a["OVLP_MKT_SEG"] = row["MRKT_SEG"]
+            a["OVLP_CNSMPTN_RSN"] = this.pctGroupDealsView ? row["CNSMPTN_RSN"] : row["CONSUMPTION_REASON"]
+            this.gridResult.push(a);
+
+        }
         this.gridData = process(this.gridResult, this.state);
         this.managerExcludeGrpSvc.getExcludeGroupDetails(this.dealId).subscribe((result: any) => {
             this.isLoading = false;;
@@ -200,8 +242,8 @@ export class excludeDealGroupModalDialog {
         if (this.enableCheckbox < 0 && ((<any>window).usrRole !== "DA")) {
             this.hasCheckbox = true;
         }
-        if(this.dataItem?.enableCheckbox == false){
-            this.hasCheckbox = this.dataItem.enableCheckbox; 
+        if (this.dataItem?.enableCheckbox == false) {
+            this.hasCheckbox = this.dataItem.enableCheckbox;
         }
         this.DEAL_GRP_CMNT = (this.dataItem.cellCurrValues.DEAL_GRP_CMNT === null || this.dataItem.cellCurrValues.DEAL_GRP_CMNT == undefined) ? "" : this.dataItem.cellCurrValues.DEAL_GRP_CMNT;
     }
@@ -211,7 +253,7 @@ export class excludeDealGroupModalDialog {
             if (!this.hasCheckbox) {
                 this.titleText = "Cannot edit when deal is in Sumbitted, Pending, Active, Offer or Won stages."
             }
-            else{
+            else {
                 this.titleText = null;
             }
             return this.childGridData1;
@@ -219,7 +261,7 @@ export class excludeDealGroupModalDialog {
         else {
             this.titleText = "This deal does not belong in any Cost Test Group and will be ignored in the Cost Test calculations."
             return this.childGridData2;
-            
+
         }
     }
 
