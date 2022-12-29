@@ -52,6 +52,7 @@ import { bulkUnifyModalComponent } from '../admin/unifiedDealRecon/admin.bulkUni
 import { adminsecurityEngineComponent } from '../admin/securityEngine/admin.securityEngine.component';
 import { BulkPricingUpdatesComponent } from '../admin/bulkPricingUpdates/admin.bulkPricingUpdates.component';
 import { BulkPricingUpdateModalComponent } from '../admin/bulkPricingUpdates/admin.bulkPricingUpdateModal.component';
+import { adminMydealsSupportComponent } from '../admin/mydealssupport/admin.mydealssupport.component';
 
 export let adminComponents =[
     EmployeeComponent,
@@ -108,5 +109,6 @@ export let adminComponents =[
     adminUnifiedDealReconComponent,
     bulkUnifyModalComponent,
     BulkPricingUpdatesComponent,
-    BulkPricingUpdateModalComponent
+    BulkPricingUpdateModalComponent,
+    adminMydealsSupportComponent
 ]

@@ -48,8 +48,7 @@ import { DashboardComponent } from "./dashboard/dashboard/dashboard.component";
 import { ReportingComponent } from "./reporting/reporting.component";
 import { globalRouteComponent } from "./shared/globalroute/globalroute.component";
 import { SecurityResolver } from "./shared/security.resolve";
-
-
+import { adminMydealsSupportComponent } from './admin/mydealssupport/admin.mydealssupport.component';
 export const routes: Routes = [
     { path: '', redirectTo: '/portal', pathMatch: 'full', data: { title: 'Dashboard' } },
     { path: 'reportingdashboard', component: ReportingComponent , data: { title: 'Reporting' } },
@@ -104,6 +103,6 @@ export const routes: Routes = [
     { path: 'manager/:cid', component: globalRouteComponent, resolve: { security: SecurityResolver }, data: { title: 'Admin' } },
     { path: 'manager/:type/:cid/:PSID/:PTID/:DealID', component: globalRouteComponent, resolve: { security: SecurityResolver }, data: { title: 'Admin' } },
     { path: 'contractmanager/:type/:cid/:PSID/:PTID/:DealID', component: pricingTableComponent, data: { title: 'Contract' } },
-    { path: 'tendermanager/:cid', component: tenderManagerComponent, data: { title: 'Dashboard' } }
-
+    { path: 'tendermanager/:cid', component: tenderManagerComponent, data: { title: 'Dashboard' } },
+    { path: 'mydealsupport', component: adminMydealsSupportComponent, data: { title: 'Admin' } },
 ];

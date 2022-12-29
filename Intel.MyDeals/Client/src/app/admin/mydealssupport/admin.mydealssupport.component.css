@@ -1,0 +1,29 @@
+﻿.support-header {
+    font-size: large;
+    color: #4682B4;
+    padding-top: 30px
+}
+
+.support-note {
+    font-size: x-large;
+    color: #0071c5;
+    padding-top: 20px
+}
+
+.support-impact {
+    font-weight: bold;
+    color: #004280;
+    font-size: 25px;
+    padding-left: 25px
+}
+
+.support-impactopt {
+    padding-left: 50px;
+    font-size: larger
+}
+
+    .support-impactopt p {
+        font-weight: bold;
+        color: #0071c5;
+        margin: 0
+    }

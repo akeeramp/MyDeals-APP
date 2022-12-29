@@ -838,6 +838,8 @@
     <Content Include="Client\src\app\admin\legalException\admin.viewExceptions.component.html" />
     <Content Include="Client\src\app\admin\meetComp\admin.meetComp.component.css" />
     <Content Include="Client\src\app\admin\meetComp\admin.meetComp.component.html" />
+    <Content Include="Client\src\app\admin\mydealssupport\admin.mydealssupport.component.css" />
+    <Content Include="Client\src\app\admin\mydealssupport\admin.mydealssupport.component.html" />
     <Content Include="Client\src\app\admin\notifications\admin.notifications.component.css" />
     <Content Include="Client\src\app\admin\notifications\admin.notifications.component.html" />
     <Content Include="Client\src\app\admin\notifications\admin.notificationsModal.component.html" />
@@ -885,6 +887,7 @@
     <TypeScriptCompile Include="Client\src\app\admin\legalException\admin.viewExceptions.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\meetComp\admin.meetComp.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\meetComp\admin.meetComp.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\mydealssupport\admin.mydealssupport.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.ruleDetailsModal_Config.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.ruleDetailsModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.rules.component.ts" />
@@ -2533,11 +2536,11 @@
     <TypeScriptCompile Include="Client\src\app\dashboard\widget.config.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\widgetSettings\widgetSettings.component.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\admin.module.ts" />
-	<TypeScriptCompile Include="Client\src\app\modules\advanceSearch.module.ts" />
+    <TypeScriptCompile Include="Client\src\app\modules\advanceSearch.module.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\contract.module.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\core.module.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\dashboard.module.ts" />
-	<TypeScriptCompile Include="Client\src\app\modules\pipe.module.ts" />
+    <TypeScriptCompile Include="Client\src\app\modules\pipe.module.ts" />
     <TypeScriptCompile Include="Client\src\app\modules\shared.module.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\quoteLetter\admin.quoteLetter.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\quoteLetter\admin.quoteLetter.service.ts" />
@@ -2545,8 +2548,8 @@
     <TypeScriptCompile Include="Client\src\app\reporting\reporting.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\authorization\auth.interceptor.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\authorization\auth.service.ts" />
-	<TypeScriptCompile Include="Client\src\app\shared\config\config.model.ts" />
-	<TypeScriptCompile Include="Client\src\app\shared\config\config.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\config\config.model.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\config\config.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\footer\footer.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\footer\footer.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\header\header.service.ts" />
@@ -2559,7 +2562,7 @@
     <TypeScriptCompile Include="Client\src\app\shared\logger\logger.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\search\search.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\security.resolve.ts" />
-	<TypeScriptCompile Include="Client\src\app\shared\services\dynamicEnablement.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\services\dynamicEnablement.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\services\productSelector.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\services\security.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\services\templates.service.ts" />
