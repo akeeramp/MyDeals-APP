@@ -233,7 +233,9 @@ export class pricingTableComponent {
                 //if it is Tender deal redirect to Tender manager
                 if (response[0].IS_TENDER && response[0].IS_TENDER == 1) {
                     if (this.type && this.type == 'WIP' && IDS && IDS.length > 1 && IDS[3].indexOf("?") > 0)
-                        window.location.href = "#/tendermanager/" + this.c_Id + IDS[3].substring(IDS[3].indexOf("?"),IDS[3].length);
+                        window.location.href = "#/tendermanager/" + this.c_Id + IDS[3].substring(IDS[3].indexOf("?"), IDS[3].length);
+                    else if (this.type && this.type == 'PS' && IDS)
+                        window.location.href = "#/tendermanager/" + this.c_Id + "?searchTxt=PS";
                     else
                         window.location.href = "#/tendermanager/" + this.c_Id;
                 }

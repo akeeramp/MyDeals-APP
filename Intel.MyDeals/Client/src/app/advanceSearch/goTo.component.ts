@@ -44,7 +44,7 @@ export class goToComponent {
             });
             this.isLoading = false;
             this.setBusy('', '');
-            window.location.href = "#/contractmanager/WIP/" + response.ContractId + '/' + response.PricingStrategyId + '/' + response.PricingTableId + '/' + response.WipDealId;
+            window.location.href = "#/contractmanager/WIP/" + response.ContractId + "/" + response.PricingStrategyId + "/" + response.PricingTableId + "/" + response.WipDealId + "?searchTxt=" + response.WipDealId;
         }
     }
 

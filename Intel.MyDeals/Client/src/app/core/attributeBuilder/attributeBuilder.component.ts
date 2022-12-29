@@ -296,7 +296,7 @@ export class AttributeBuilder implements OnInit {
 
     enableSaveRules() {
         if (this.cat == 'TenderDealSearch') return true;
-        else if (this.attributes[0].selectedValues != undefined && (this.attributes[0].selectedValues.length > 0 || this.attributes[0].value != ''))
+        else if (this.attributes[0].selectedValues != undefined && (this.attributes[0].selectedValues.length > 0 || (this.attributes[0].value != '' && this.attributes[0].value != null)))
             return true;
         else return false;
     }
@@ -349,7 +349,6 @@ export class AttributeBuilder implements OnInit {
     dataChange(idx, dataItem, selector, data?) {
        
         this.attributes[idx].values = [];
-        this.attributes[idx].value = '';
         if (selector == 'operator') {
             this.attributes[idx].operator = dataItem.selectedOperator.operator;
         } else if (selector == 'numerictextbox') {
@@ -358,11 +357,10 @@ export class AttributeBuilder implements OnInit {
             data = dataItem.value;
         } else if (selector == 'datePicker') {
             data = new Date(dataItem.value).toISOString();
-            
         } else {
             this.attributes[idx].value = data
         }
-        this.attributes[idx].values.push(data);
+        if(data != undefined && data != null && data != '') this.attributes[idx].values.push(data);
      }
 
     dataChangeMulti(data, i, dataItem, selector) {        
@@ -370,7 +368,6 @@ export class AttributeBuilder implements OnInit {
         this.attributes[i].value = '';
         data.forEach((item) => {
             this.attributes[i].values.push(item);
-            this.attributes[i].value = this.attributes[i].values;
         })
     }
     public filterSettings: DropDownFilterSettings = {
