@@ -21,7 +21,7 @@
             </kendo-grid-column>
             <kendo-grid-column title="Strategy Name" field="name" width="170" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem>
-                    <div class="textDecoratorWrap"><a (click)="goToContract(contractId)"
+                    <div class="textDecoratorWrap"><a href="/Contract#/manager/{{contractId}}" 
                             target="_blank" style="color: #FFA300;"
                             title="Click to open the Contract in the Contract Editor"><span
                                 style="color: #0071c5;">{{dataItem.name}} </span></a></div>

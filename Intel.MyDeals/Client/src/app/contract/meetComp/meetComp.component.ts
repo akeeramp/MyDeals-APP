@@ -1163,7 +1163,8 @@ export class meetCompContractComponent implements OnInit {
             this.meetCompSvc.getContractIDDetails(DealId).subscribe(res => {
                 this.isLoading = false;
                 if (res) {
-                    window.location.href = "#/contractmanager/WIP/" + res['ContractId'] + "/" + res['PricingStrategyId'] + "/" + res['PricingTableId'] + "/" + DealId;
+                    const url = "Contract#/manager/WIP/" + res['ContractId'] + "/" + res['PricingStrategyId'] + "/" + res['PricingTableId'] + "/" + DealId + "?searchTxt=" + DealId;
+                    window.open(url, '_blank');
                 }
             },
                 error => {

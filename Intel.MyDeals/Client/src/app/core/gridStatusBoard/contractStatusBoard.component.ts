@@ -60,14 +60,7 @@ export class contractStatusBoardComponent implements OnInit {
     constructor(private contractDetailsService: ContractStatusBoardService,private loggerSvc:logger) {
     }
 
-    goToContract(contractId:any){
-        if (this.angularEnabled){
-            window.location.href = `#/contractmanager/CNTRCT/${contractId}/0/0/0`;
-        } 
-        else {
-            window.location.href = `/Contract#/manager/${contractId}`;
-        } 
-    }
+    
     getContractDataSource() {
         this.isLoaded = false;
         this.isCntrctDtlLoaded.emit(false);
