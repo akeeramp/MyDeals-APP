@@ -1376,9 +1376,9 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
     border-bottom: none;
 }
 
-/*.managable-meet-pct meet-comp-contract.admin_tender_meetcomp .row-cooperate kendo-grid#meetcomp-contract {
+.managable-meet-pct meet-comp-contract.admin_tender_meetcomp .row-cooperate kendo-grid#meetcomp-contract {
     height: calc(100vh - 540px) !important;
-}*/
+}
 
 .managable-meet-pct manager-pct.admin-tender-pricecosttest {
     top: 0!important;

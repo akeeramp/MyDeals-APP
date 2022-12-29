@@ -39,7 +39,7 @@
         </div>
     </div>
     <div style="height:62%;padding-top: 15px;">
-        <div class="prodSelector modal-body">
+        <div class="prodSelector modal-body prodFull-height-fix">
             <div *ngIf="showSuggestions" class="productSelector subHeaderNavContainer mini-right miniProdNav">
                 <div *ngIf="!(errorMessage.length > 0)">
                     <div *ngIf="!disableSelection">{{suggestionText}}</div>
@@ -172,7 +172,7 @@
                 </div>
             </div>
             <div *ngIf="showTree && !showSuggestions" id="prodGrid" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight">
-                <kendo-grid class="raid-style" [data]="gridData" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
+                <kendo-grid class="raid-style proselector-raid-style" [data]="gridData" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
                     [groupable]="false" [resizable]="true" (dataStateChange)="dataStateChange($event)">
                     <kendo-grid-column width="65px" [columnMenu]="false">
                         <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">

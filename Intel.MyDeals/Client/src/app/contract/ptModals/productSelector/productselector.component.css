@@ -883,6 +883,13 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
         font-size: 14px
     }
 }
+.prodSelector.modal-body.prodFull-height-fix {
+    height: 100% !important;
+    overflow-y: hidden;
+}
 
+#prodGrid kendo-grid.raid-style.proselector-raid-style {
+    height: calc(100vh - 475px) !important;
+}
 
 

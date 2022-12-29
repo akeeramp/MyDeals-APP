@@ -2834,3 +2834,6 @@ i.cn-close-panel {
 .product_details_scroll .k-grid-content.k-virtual-content {
     height: 116px !important
 }
+.draggable.draggable-fix {
+    margin-left: -180px;
+}
