@@ -370,3 +370,14 @@ kendo-splitter.admin-meetcomp-splitter.k-widget.k-splitter.k-splitter-flex.k-spl
     left: 10px !important;
     position: relative !important
 }
+.meet-comp-filterheight ul {
+    list-style-type: none !important;
+    padding-left: 0 !important;
+    padding-right: 12px !important;
+    position: relative !important;
+    overflow: auto !important;
+    overflow-x: hidden !important;
+    white-space: nowrap !important;
+    max-height: 150px !important;
+    margin-bottom: 5px !important;
+}
