@@ -52,8 +52,6 @@ export class TenderDashboardComponent implements OnInit {
     public subcat = 'TenderSearchRules';
     public ruleData = [];
     public wipOptions = {};
-    public startDt = window.localStorage.startDate;
-    public endDt = window.localStorage.endDate;
     public customers = []; 
     public maxRecordCount: any;
     public templates = [];

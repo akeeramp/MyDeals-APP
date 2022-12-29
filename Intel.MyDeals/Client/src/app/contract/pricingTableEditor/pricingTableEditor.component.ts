@@ -667,14 +667,6 @@ export class pricingTableEditorComponent {
                 this.undoEnable = true;
                 this.undoCount += 1;
             }
-            //to make sure to trigger translate API call.(Product validation)
-            _.each(PTE_Config_Util.flushSysPrdFields, (item) => {
-                let modifiedDetails = _.where(changes, { prop: item });
-                if (modifiedDetails && modifiedDetails.length > 0)
-                    _.each(modifiedDetails, (modItem) => {
-                        this.hotTable.setDataAtRowProp(modItem.row, 'PTR_SYS_PRD', '', 'no-edit');
-                    })
-            })
             // Show error message on mandatory fields deletion
             if (changes.length > 0 && !this.editorOpened && changes[0].prop != 'PTR_USER_PRD' && changes[0].prop != 'START_DT' && changes[0].prop != 'END_DT' && changes[0].prop != 'OEM_PLTFRM_LNCH_DT' && changes[0].prop != 'OEM_PLTFRM_EOL_DT')  {
                this.errorOnMdtFdDeletion(changes);
@@ -766,6 +758,14 @@ export class pricingTableEditorComponent {
                 this.isExcludePrdChange = true;
                 this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_INVLD_PRD', '', 'no-edit');
             }
+            //to make sure to trigger translate API call.(Product validation)
+            _.each(PTE_Config_Util.flushSysPrdFields, (item) => {
+                let modifiedDetails = _.where(changes, { prop: item });
+                if (modifiedDetails && modifiedDetails.length > 0)
+                    _.each(modifiedDetails, (modItem) => {
+                        this.hotTable.setDataAtRowProp(modItem.row, 'PTR_SYS_PRD', '', 'no-edit');
+                    })
+            })
             let isEnable = this.hotTable.isEmptyRow(0);
             this.enableDeTab.emit({ isEnableDeTab: !isEnable, enableDeTabInfmIcon: this.isDeTabInfmIconReqd });
         }

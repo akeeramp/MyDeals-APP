@@ -466,6 +466,11 @@ export class PTE_CellChange_Util {
                     this.hotTable.setDataAtRowProp(selrow, 'PRD_EXCLDS', operation.PRD_EXCLDS, 'no-edit');
                     this.hotTable.setCellMeta(selrow, PTR_EXCLUDE_col_ind, 'className', 'success-product');
                 }
+                else if (operation && operation.operation && operation.PRD_EXCLDS != undefined && operation.PRD_EXCLDS == "") {
+                    let PTR_EXCLUDE_col_ind = _.findIndex(columns, { data: 'PRD_EXCLDS' });
+                    this.hotTable.setDataAtRowProp(selrow, 'PRD_EXCLDS', '', 'no-edit');
+                    this.hotTable.setCellMeta(selrow, PTR_EXCLUDE_col_ind, 'className', 'normal-product');
+                }
                 if (operation && operation.operation && operation.PTR_SYS_PRD) {
                     this.hotTable.setDataAtRowProp(selrow, 'PTR_USER_PRD', items[0].new, 'no-edit');
                     this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', operation.PTR_SYS_PRD, 'no-edit');
@@ -570,7 +575,11 @@ export class PTE_CellChange_Util {
                                 this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', '', 'no-edit');
                                 this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_INVLD_PRD', '', 'no-edit');
                             }
-                            
+                            if (operation && operation.operation && operation.PRD_EXCLDS != undefined && operation.PRD_EXCLDS == "") {
+                                let PTR_EXCLUDE_col_ind = _.findIndex(columns, { data: 'PRD_EXCLDS' });
+                                this.hotTable.setDataAtRowProp(selrow, 'PRD_EXCLDS', '', 'no-edit');
+                                this.hotTable.setCellMeta(selrow, PTR_EXCLUDE_col_ind, 'className', 'normal-product');
+                            }
                         }
                     }
                 }
@@ -724,7 +733,11 @@ export class PTE_CellChange_Util {
                         this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', '', 'no-edit');
                         this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_INVLD_PRD', '', 'no-edit');
                     }
-                    
+                    if (operation && operation.operation && operation.PRD_EXCLDS != undefined && operation.PRD_EXCLDS == "") {
+                        let PTR_EXCLUDE_col_ind = _.findIndex(columns, { data: 'PRD_EXCLDS' });
+                        this.hotTable.setDataAtRowProp(selrow, 'PRD_EXCLDS', '', 'no-edit');
+                        this.hotTable.setCellMeta(selrow, PTR_EXCLUDE_col_ind, 'className', 'normal-product');
+                    }
                 }
 
             }

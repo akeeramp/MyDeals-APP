@@ -48,8 +48,6 @@ export class AdvancedSearchComponent implements OnInit {
     public selectedValue: any;
     public wipData = [];
     public columns: any = TenderDashboardConfig.advancedSearchColumnConfig;
-    public startDt = window.localStorage.startDate;
-    public endDt = window.localStorage.endDate;
     public customers = [];
     public maxRecordCount: any;
     public templates: any;

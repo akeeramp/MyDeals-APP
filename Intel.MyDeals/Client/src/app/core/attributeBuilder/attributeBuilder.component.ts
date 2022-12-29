@@ -36,7 +36,6 @@ export class AttributeBuilder implements OnInit {
     public dropdownresponses: any;
     public currentRule = '';
     public myRules: any = [];
-    private selectedDashboardId;
     private isDialogVisible = false;
     private isKitDialog = false;
     private isDialogPopup = false;
@@ -393,7 +392,6 @@ export class AttributeBuilder implements OnInit {
                 }
             })
         }
-        window.localStorage.selectedDashboardId = this.selectedDashboardId;
         this.usrPrfrncssvc.updateAction(this.cat, this.subcat, "Rules", this.myRules).subscribe((response: any) => {
             this.loggerSvc.success("The search rule saved.");
             this.rules = this.myRules;
