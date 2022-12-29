@@ -16,7 +16,8 @@ export class BulkPricingUpdateModalComponent {
         dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG
     }
 
-    uploadSuccess: boolean;
+    uploadSuccess: boolean = false;
+    removeFile: boolean = false;
     showAlert: boolean;
     alertMsg: string;
     files = [];
@@ -56,6 +57,7 @@ export class BulkPricingUpdateModalComponent {
         if (e.response.body == undefined || e.response.body == null || e.response.body == "") {
             this.showAlert = true;
             this.alertMsg ="Uploaded file not having any data";
+            this.removeFile = true;
             return;
         }
         this.uploadSuccess = true;
@@ -71,9 +73,13 @@ export class BulkPricingUpdateModalComponent {
     }
 
     onFileUploadComplete() {
+        if (this.removeFile){
+            this.files = [];
+            this.removeFile = false;
+        }
         if (this.uploadSuccess) {
             this.loggerSvc.success("Successfully uploaded " + this.files.length + " attachment(s).", "Upload successful");
-        }
+        } 
     }
 
     closeAlert() {
