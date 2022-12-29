@@ -218,6 +218,7 @@ export class pricingTableEditorComponent {
                     data = { colName: name, items: { 'data': this.source }, cellCurrValues: selVal, contractStartDate: contractStartDate, contractEndDate: contractEndDate, isConsumption: isConsumption, isOEM: isOEM, contractIsTender: VM.isTenderContract };
                     panelClass = "date-calendar-pop-up";
                 }
+                VM.editorOpened = true;
                 const dialogRef = dialog.open(modalComponent, {
                     height: height,
                     width: width,
@@ -274,11 +275,15 @@ export class pricingTableEditorComponent {
                             }
                         }
                         else {
-                            if (this.field && selVal != result?.toString) {
+                            if (this.field && selVal != result?.toString &&
+                                (this.field == 'CUST_ACCNT_DIV' || this.field == "GEO_COMBINED" || this.field == 'START_DT' || this.field == 'END_DT' || this.field == 'PAYOUT_BASED_ON' || this.field == 'PERIOD_PROFILE' || this.field == 'RESET_VOLS_ON_PERIOD' || this.field == 'AR_SETTLEMENT_LVL'
+                                || this.field == 'REBATE_TYPE' || this.field == 'PROD_INCLDS' || this.field == 'SETTLEMENT_PARTNER' || this.field == 'MRKT_SEG'  )) {
                                 VM.dirty = true;
+                                VM.removeCellComments(this.selRow,this.field);
                             }
                             this.hot.setDataAtCell(this.selRow, this.selCol, result?.toString(), 'no-edit');
                         }
+                        VM.editorOpened = false;
                         setTimeout(() => {
                             VM.isLoading = false;
                             if (VM.curPricingTable.OBJ_SET_TYPE_CD && VM.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
@@ -356,6 +361,7 @@ export class pricingTableEditorComponent {
     private autoFillData: any = null;
     private ColumnConfig: Array<Handsontable.ColumnSettings> = [];
     private overlapFlexResult: any;
+    cellComments: any = [];
     private transformResults: any = [];
     // To get the selected row and col for product selector
     private multiRowDelete: Array<any> = [];
@@ -424,6 +430,7 @@ export class pricingTableEditorComponent {
     private isTenderContract = false;
     private maxKITproducts: number = PTE_Config_Util.maxKITproducts;
     private showErrorMsg;
+    private editorOpened: boolean = false;
 
     //this will help to have a custom cell validation which allow only alphabets
     private newPricingTable: any = {};
@@ -585,7 +592,7 @@ export class pricingTableEditorComponent {
         /* Hidden Columns */
         hiddenColumns = PTE_Load_Util.getHiddenColumns(columnTemplates, this.contractData.CustomerDivisions);
         let mergCells = [];
-        let cellComments = PTE_Load_Util.getCellComments(PTR, this.pricingTableTemplates.columns);
+        this.cellComments = PTE_Load_Util.getCellComments(PTR, this.pricingTableTemplates.columns);
         // This logic will add for all tier deals. 
         mergCells = PTE_Load_Util.getMergeCells(PTR, this.pricingTableTemplates.columns, this.curPricingTable);
         // Set the values for hotTable
@@ -606,7 +613,7 @@ export class pricingTableEditorComponent {
                 cells: (row: number, col: number, prop: string) => {
                     return PTE_Load_Util.disableCells(this.hotTable, row, col, prop, this.ColumnConfig, this.curPricingTable, this.isTenderContract, this.curPricingStrategy.IS_HYBRID_PRC_STRAT);
                 },
-                cell: cellComments,
+                cell: this.cellComments,
                 readOnlyCellClassName: 'readonly-cell',
                 nestedHeaders: nestedHeaders
             });
@@ -668,6 +675,10 @@ export class pricingTableEditorComponent {
                         this.hotTable.setDataAtRowProp(modItem.row, 'PTR_SYS_PRD', '', 'no-edit');
                     })
             })
+            // Show error message on mandatory fields deletion
+            if (changes.length > 0 && !this.editorOpened && changes[0].prop != 'PTR_USER_PRD' && changes[0].prop != 'START_DT' && changes[0].prop != 'END_DT' && changes[0].prop != 'OEM_PLTFRM_LNCH_DT' && changes[0].prop != 'OEM_PLTFRM_EOL_DT')  {
+               this.errorOnMdtFdDeletion(changes);
+            }
             let PTR = _.where(changes, { prop: 'PTR_USER_PRD' });
             let PTR_EXLDS = _.where(changes, { prop: 'PRD_EXCLDS' });
             let AR = _.where(changes, { prop: 'AR_SETTLEMENT_LVL' });
@@ -757,6 +768,36 @@ export class pricingTableEditorComponent {
             }
             let isEnable = this.hotTable.isEmptyRow(0);
             this.enableDeTab.emit({ isEnableDeTab: !isEnable, enableDeTabInfmIcon: this.isDeTabInfmIconReqd });
+        }
+    }
+
+    errorOnMdtFdDeletion(changes){
+        if ( (changes[0].new == null || changes[0].new == '' || changes[0].new == undefined) && this.pricingTableTemplates['model']['fields'][changes[0].prop].nullable == false ){
+            let colSPIdx = _.findIndex(this.columns, { data: changes[0].prop });
+            this.cellComments.push({ row: changes[0].row, col: colSPIdx, comment: { value: 'This field is required', readOnly: true }, className: 'error-border' });
+            this.hotTable.updateSettings({
+                cell: this.cellComments
+            });
+            this.hotTable.render();
+        } else {
+            this.removeCellComments(changes[0].row,changes[0].prop)
+        }
+    }
+
+    removeCellComments(row,prop){
+        let col = _.findIndex(this.columns, { data: prop });
+        let cellMeta = this.hotTable.getCellMeta(row, col);
+        this.cellComments.find( (cmnt,ind) => {
+            if (ind < this.cellComments.length){
+            if (cmnt.row == row && cmnt.col == col ) {
+                this.cellComments.splice(ind,1)
+            }
+        }
+        })
+        if (cellMeta && cellMeta.className && cellMeta.className.toString().match('error-border')) {
+            
+            this.hotTable.setCellMetaObject(row,col,{ 'className': '', comment: { value: '' } });
+            this.hotTable.render();
         }
     }
     async deletePTR() {

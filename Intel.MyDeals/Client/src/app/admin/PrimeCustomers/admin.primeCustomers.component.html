@@ -136,7 +136,7 @@
         <kendo-dialog *ngIf="isDialogVisible" (close)="saveCancel()">
             <p class="kendo-dialog-message" style="white-space:pre-wrap;text-align:left">{{errorMessage}}</p>
             <kendo-dialog-actions>
-                <button class='k-button' (click)="saveConfirmation()">OK</button><button class='k-button' *ngIf="cancelConfirm" (click)="saveCancel()">
+                <button class='k-button' style = "background-color: #ebebeb !important;color: black;" (click)="saveConfirmation()">OK</button><button class='k-button' *ngIf="cancelConfirm" (click)="saveCancel()">
                     CANCEL
                 </button>
             </kendo-dialog-actions>

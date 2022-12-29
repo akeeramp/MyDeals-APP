@@ -261,7 +261,7 @@ export class adminPrimeCustomersComponent {
             (x)=> {
                 const x_Prim_Cust_Nm = (x.PRIM_CUST_NM ? x.PRIM_CUST_NM.toLowerCase().trim() : '');
                 const model_Cust_Nm = (model.PRIM_CUST_NM ? model.PRIM_CUST_NM.toLowerCase().trim() : '');
-                const patt = new RegExp("^[\\w\\s.,:'\&+-]*$");
+                const patt = new RegExp("^[\\w\\s.,:'\&+-/]*$");
                 const res = patt.test(model_Cust_Nm);
 
                 if (!res) {
