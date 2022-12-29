@@ -367,6 +367,7 @@ export class AttributeBuilder implements OnInit {
         this.attributes[i].value = '';
         data.forEach((item) => {
             this.attributes[i].values.push(item);
+            this.attributes[i].value = this.attributes[i].values;
         })
     }
     public filterSettings: DropDownFilterSettings = {

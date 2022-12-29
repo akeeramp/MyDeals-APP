@@ -93,15 +93,16 @@ export class bulkUnifyModalComponent {
             if (this.UnifyValidation.InValidUnifyDeals.length > 0)
                 this.UnifyValidation.InValidUnifyDeals.forEach((row) => {
                     if (row.RPL_STS_CODE != undefined) row.RPL_STS_CODE = row.RPL_STS_CODE.toUpperCase();
+                    this.tableData.push(row);
                 });
             if (this.UnifyValidation.ValidUnifyDeals.length > 0)
                 this.UnifyValidation.ValidUnifyDeals.forEach((row) => {
-                    if (row.RPL_STS_CODE != undefined) row.RPL_STS_CODE = row.RPL_STS_CODE.toUpperCase();
-                    this.tableData.push(row)
+                    if (row.RPL_STS_CODE != undefined) row.RPL_STS_CODE = row.RPL_STS_CODE.toUpperCase();                    
                 })
             //setting a delay for hotTable to populate the tabledata
             setTimeout(() => {
-                this.hotTable = this.hotRegisterer.getInstance(this.hotId);
+                if (this.UnifyValidation.InValidUnifyDeals.length > 0)
+                    this.hotTable = this.hotRegisterer.getInstance(this.hotId);
                 this.validateBulkData();
             }, 100);
         } else { // for deal recon files  
