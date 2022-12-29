@@ -161,6 +161,7 @@ export class adminNotificationsComponent {
         if (column.field == "NOTIF_SHR_DSC") {
             const dialogRef = this.dialog.open(notificationsModalDialog, {
                 width: "900px",
+                panelClass: "notification-popup-style",
                 data: dataItem
             }
             );
