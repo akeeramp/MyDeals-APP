@@ -1,6 +1,7 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { dsaService } from "./admin.vistex.service";
 import { Component } from "@angular/core";
+import * as moment from 'moment';
 
 @Component({
     selector: "admin-vistex",
@@ -50,7 +51,8 @@ export class adminVistexComponent {
         "R": 'ReturnSalesForceTenderResults',
         "E": 'GetVistexDealOutBoundData',
         "F": 'GetVistexDealOutBoundData',
-        "M": 'GetVistexDealOutBoundData'
+        "M": 'GetVistexDealOutBoundData',
+        "L": 'GetVistexDealOutBoundData'
     };
 
     vistexApiNameChange(value) {
@@ -70,17 +72,26 @@ export class adminVistexComponent {
     //Call the API
     callAPI(mode) {
         this.isLoading = true;
-        const startTime = new Date();
+        const startTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss UTC');
 
         this.dsaService.callAPI(this.apiPair[this.selectedApiCD], mode).subscribe((result: any) => {
             this.isLoading = false;
-            const endTime = new Date();
-            result["START_TIME"] = startTime;
-            result["END_TIME"] = endTime;
-            this.responseData.unshift(result);
-            this.loggerSvc.success('Transaction was successful...');
+            if (this.selectedApiCD == "R") {
+                if (result) {
+                    this.loggerSvc.success('Transaction was successful...');
+                } else {
+                    this.loggerSvc.error('DANG!! Something went wrong...', '');
+                }
+            } else {
+                const endTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss UTC');
+                result["START_TIME"] = startTime;
+                result["END_TIME"] = endTime;
+                this.responseData.unshift(result);
+                this.loggerSvc.success('Transaction was successful...');
+            }
         }, (error) => {
             this.loggerSvc.error('Unable to run API', error);
+            this.isLoading = false;
         });
     }
 

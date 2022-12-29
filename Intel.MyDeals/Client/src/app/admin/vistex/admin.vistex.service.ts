@@ -23,17 +23,19 @@ export class dsaService {
     public callAPI(apiName, runMode) {
         let apiUrl: string;
         if ((runMode == "D") || (runMode == "E")) {
-            apiUrl = this.vistexApiBase + apiName + '/VISTEX_DEALS/';
-        } else if ((runMode == "M")) {
-            apiUrl = this.vistexApiBase + apiName + '/CNSMPTN_LD/';
+            apiUrl = this.vistexApiBase + apiName + '/VISTEX_DEALS/' + runMode;
+        } else if (runMode == "M") {
+            apiUrl = this.vistexApiBase + apiName + '/CNSMPTN_LD/' + runMode;
+        } else if (runMode == "L") {
+            apiUrl = this.vistexApiBase + apiName + '/IQR_CLM_DATA/' + runMode;
         } else if (runMode == "R") {
-            apiUrl = this.tenderApiBase + '/CNSMPTN_LD/';
+            apiUrl = this.tenderApiBase + apiName;
         }
         else {
-            apiUrl = this.vistexApiBase + apiName + '/';            
+            apiUrl = this.vistexApiBase + apiName + '/' + runMode;
         }
 
-        return this.httpClient.get(apiUrl + runMode);
+        return this.httpClient.get(apiUrl);
 
     }
 
