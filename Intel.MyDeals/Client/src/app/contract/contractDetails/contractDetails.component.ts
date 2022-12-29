@@ -908,6 +908,34 @@ export class contractDetailsComponent {
         );
       }
 
+    updateQuarterByDates(dateType, value) {
+        var customerMemberSid = this.contractData?.CUST_MBR_SID == "" ? null : this.contractData.CUST_MBR_SID;
+        var qtrValue = this.isTender == true ? "4" : null;
+        var yearValue = this.isTender == true ? new Date().getFullYear() : null;
+        this.contractDetailsSvc.getCustomerCalendar(customerMemberSid, value, qtrValue, yearValue)
+            .subscribe((response : any) => {
+                if (response) {
+                    if (moment(response['QTR_END']) < moment(new Date())) {
+                        response['QTR_END'] = moment(response['QTR_END']).add(365, 'days').format('l');
+                    }
+                    this.contractData.MinDate = moment(response['MIN_STRT']).format('l');
+                    this.contractData.MaxDate = moment(response['MIN_END']).format('l');
+                    if (dateType == 'START_DT') {
+                        this.contractData.START_QTR = response['QTR_NBR'];
+                        this.contractData.START_YR = response.YR_NBR;
+                        this.validateDate('START_DT');
+                    } else {
+                        this.contractData.END_QTR = response.QTR_NBR;
+                        this.contractData.END_YR = response.YR_NBR;
+                        this.validateDate('END_DT');
+                    }
+                }
+                this.isLoading = false;
+            },(error)=> {
+                    this.loggerSvc.error("Unable to get customer quarter data", "Error", error);
+                    this.isLoading = false;
+                });
+    }
     ngOnInit() {
         try {
             this.isLoading=true;
@@ -951,8 +979,12 @@ export class contractDetailsComponent {
                                     this.contractData.MinDate = this.MinDate = moment().subtract(6, "years").format("l");
                                     this.contractData.MaxDate = this.MaxDate = moment("2099").format("l");
                                     // NOTE: START_QTR,START_YR,END_YR,END_QTR are not present in copyContractData,, as they are undefined calling getCurrentQuarterDetails to get the data--Check
-                                    this.getCurrentQuarterDetails('START_DT');
-                                    this.getCurrentQuarterDetails('END_DT');
+                                    if (moment(this.contractData.END_DT) > moment('2099/12/31').add(0, 'years')) {
+                                        this.contractData.END_DT = moment('2099/12/31').format("MM/DD/YYYY");
+                                        this.END_DT = this.existingMinEndDate = new Date(moment(this.contractData.END_DT).format("l"));
+                                    }
+                                    this.updateQuarterByDates('START_DT', this.contractData.START_DT);
+                                    this.updateQuarterByDates('END_DT', this.contractData.END_DT);
                                     this.contractData.START_QTR = this.START_QTR = this.copyContractData.START_QTR;
                                     this.contractData.START_YR = this.START_YR = this.copyContractData.START_YR;
                                     this.contractData.END_QTR = this.END_QTR = this.copyContractData.END_QTR;
