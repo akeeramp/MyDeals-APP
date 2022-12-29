@@ -233,6 +233,9 @@
                     <kendo-grid-column title="Notes" field="NOTES" [headerClass]="{'headerClass':true}" hidden="hidden">
                     </kendo-grid-column>
                     <kendo-grid-excel fileName="MyDealsSearchResults.xlsx"></kendo-grid-excel>
+                    <ng-template kendoGridNoRecordsTemplate>
+                        No data found. Please check your filters.
+                    </ng-template>
                 </kendo-grid>
             </div>
         </div>
