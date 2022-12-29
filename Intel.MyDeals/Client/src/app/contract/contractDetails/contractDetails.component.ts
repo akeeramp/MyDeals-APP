@@ -480,7 +480,7 @@ export class contractDetailsComponent {
                 if (type == "START_DT") {
                     isValid = newDate > new Date(this.contractData.MinDate) ? true : false;
                     if (!isValid) { this.validateDate("START_DT"); }
-                } else if (type == "END_DT") {
+                } else if (type == "END_DT" && !this.isCopyContract) {
                     isValid = newDate < new Date(this.contractData.MaxDate) ? true : false;
                     if (!isValid) { this.validateDate("END_DT"); }
                 }
@@ -665,7 +665,7 @@ export class contractDetailsComponent {
                     ? "Start date cannot be less than - " + this.contractData.MinDate
                     : "Start date cannot be greater than End Date";
             }
-        } else {
+        } else if (!this.isCopyContract) {
             if (moment(endDate).isBefore(startDate) || moment(endDate).isAfter(this.contractData.MaxDate)) {
                 this.contractData._behaviors.isError['END_DT'] = true;
                 this.contractData._behaviors.validMsg['END_DT'] = moment(endDate).isAfter(this.contractData.MaxDate)
