@@ -36,7 +36,7 @@ export class contractManagerservice {
     }
     public loggingPerfomanceTimes(uids): Observable<any> {
         const apiUrl: string = 'api/Logging/PerformanceTimes';
-        return this.httpClient.post(apiUrl,[uids]);
+        return this.httpClient.post(apiUrl,uids);
     }
     public getActiveFunFacts(): Observable<any> {
         const apiUrl: string = 'api/Funfact/GetActiveFunfacts';

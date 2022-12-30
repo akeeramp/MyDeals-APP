@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
 import { distinct,process, State } from "@progress/kendo-data-query";
@@ -12,6 +12,7 @@ import { actionSummaryModal } from "./actionSummaryModal/actionSummaryModal.comp
 import { emailModal } from "./emailModal/emailModal.component";
 import { FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
 import * as _ from 'underscore';
+import { performanceBarsComponent } from '../performanceBars/performanceBar.component';
 
 export interface contractIds {
     Model: string;
@@ -43,7 +44,6 @@ export class contractManagerComponent {
     needToRunOverlaps = [];
     isRunning: boolean = false;
     messages: any;
-    marks: any=[];
     hideIfNotPending: boolean;
     pendingWarningActions= false;
     custAccptButton: any ='';
@@ -64,6 +64,7 @@ export class contractManagerComponent {
     parent_dcId: any;
     allPTEData: any =[];
     isToggle: boolean;
+    loadPerf: boolean;
     constructor(protected dialog: MatDialog,private loggerSvc: logger, private contractManagerSvc:contractManagerservice, private lnavSvc: lnavService) {}
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
     private CAN_VIEW_MEET_COMP: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
@@ -76,6 +77,7 @@ export class contractManagerComponent {
     @Input() UItemplate:any;
     @Output() refreshedContractData = new EventEmitter<any>();
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
+    @ViewChild(performanceBarsComponent) public perfComp: performanceBarsComponent;
     public isLoading = false;
     private dirty = false;
     userRole = ""; canEmailIcon = true;
@@ -87,22 +89,19 @@ export class contractManagerComponent {
     public gridData: GridDataResult[]= [];
     gridDataSet = {}; approveCheckBox = false; emailCheckBox = false; reviseCheckBox = false;
     titleFilter = ""; canActionIcon = true; public isAllCollapsed = true; canEdit = true;
-    title='';
-    category='';
-    type="block";
-    start = moment();
-    end=null;
-    executionMs= 0;
-    timeFormat="MM/DD/YYYY HH:mm:ss:SSS";
-    lapse=0;
     private windowOpened= false;
     private windowTop = 170; windowLeft = 50; windowWidth = 620; windowHeight = 238; windowMinWidth = 90; windowMinHeight = 50;
     public filteredData: any;
-    uploadSuccess = false;
+    public uploadSuccess = false;
     private isGridLoading = false;
     private filteringData: any[][] = [];
     public pctClicked: boolean = false;
     public mctClicked: boolean = false;
+    public performanceTimes: any=[];
+    public drawChart: boolean = false;
+    public isDeveloper: boolean;
+    public isTester: boolean;
+    public initialLoad: boolean = true;
     public spinnerMessageHeader: any;
     public spinnerMessageDescription: any;
     public msgType: any;
@@ -370,7 +369,6 @@ export class contractManagerComponent {
         if (this.isPending === false && this.contractData.CUST_ACCPT !== "Pending" && (this.contractData.C2A_DATA_C2A_ID === "" && this.contractData.HAS_ATTACHED_FILES === "0")) {
             this.pendingWarningActions = true;
             this.showPendingWarning = true
-            // this.dialogPendingWarning.open();
         } else if (this.isPending === false && this.contractData.CUST_ACCPT !== "Pending") {
             this.continueAction(fromToggle, false);
         } else if (this.isPending === true && this.contractData.CUST_ACCPT !== "Accepted") {
@@ -856,11 +854,14 @@ export class contractManagerComponent {
         };
         this.modelChange.emit(contractId_Map);
     }
-
+    
     actionItemsBase(approvePending, saveCustAcceptance) {
+        this.loadPerf = false;
         var data = {};
         var dataItems = [];
-
+        this.drawChart = false;
+        this.perfComp.setInitialDetails("Contract Manager", "Unknown", true);
+        this.perfComp.setInitialDetails("Gather data to pass", "UI");
         if ((approvePending === true) && this.canBypassEmptyActions) {
             var ps = this.contractData.PRC_ST;
             if (ps !== undefined) {
@@ -888,27 +889,30 @@ export class contractManagerComponent {
                 this.quickSaveContract('Save');
             }
         }
-
-    this.curDataItems = dataItems;
-    if(this.curDataItems.length > 0){
-        const dialogRef = this.dialog.open(actionSummaryModal, {
-            width: "600px",
-            panelClass: "summary-pop-up",
-            data: {
-                cellCurrValues: dataItems,
-                showErrMsg: this.needMct()
-            }
-        });
-        dialogRef.afterClosed().subscribe((returnVal) => {
-            if (returnVal == 'success') {
-                if (saveCustAcceptance === true) {
-                    this.isLoading = true;
-                    this.quickSaveContractFromDialog(this.requestBody);
-                } 
-                this.canBypassEmptyActions = false;
-            }
-        });
-    }
+        this.curDataItems = dataItems;
+        this.perfComp.setFinalDetails("Gather data to pass", "UI");
+        this.perfComp.setInitialDetails("User Modal", "UI");
+        if(this.curDataItems.length > 0){
+            const dialogRef = this.dialog.open(actionSummaryModal, {
+                width: "600px",
+                panelClass: "summary-pop-up",
+                data: {
+                    cellCurrValues: dataItems,
+                    showErrMsg: this.needMct()
+                }
+            });
+            dialogRef.afterClosed().subscribe((returnVal) => {
+                this.perfComp.setFinalDetails("User Modal", "UI");
+                if (returnVal == 'success') {
+                    if (saveCustAcceptance === true) {
+                        this.isLoading = true;
+                        this.quickSaveContractFromDialog(this.requestBody);
+                        
+                    } 
+                    this.canBypassEmptyActions = false;
+                }
+            });
+        }
             return;
 
 
@@ -941,35 +945,45 @@ export class contractManagerComponent {
             this.filteredData= this.contractData.PRC_ST;
         }
     }
-    quickSaveContractFromDialog(value){
+    async quickSaveContractFromDialog(value){
         if(value){
             this.isLoading = true;
+            this.drawChart = false;
             this.setBusy("Running PCT/MCT...", "Running Price Cost Test and Meet Comp Test", "Info", true);
-            this.contractManagerSvc.actionPricingStrategies(this.contractData["CUST_MBR_SID"],this.contractData["DC_ID"],this.requestBody, this.contractData.CUST_ACCPT).subscribe((response: any) => {
-            this.messages = response.Data.Messages;
-            this.quickSaveContract('SaveAndLoad');
-            }, (error) => {
+            this.isLoading = true;
+            this.initialLoad = false;
+            this.perfComp.setInitialDetails("Action Pricing Strategies", "MT");
+            let response: any = await this.contractManagerSvc.actionPricingStrategies(this.contractData["CUST_MBR_SID"], this.contractData["DC_ID"], this.requestBody, this.contractData.CUST_ACCPT).toPromise().catch((error) => {
                 this.loggerSvc.error('Pricing Stratergy service', error);
-            });  
+            });
+            this.messages = response.Data.Messages;
+            this.performanceTimes = response.PerformanceTimes;
+            this.perfComp.addPerfTime("Action Pricing Strategies", this.performanceTimes);
+            this.perfComp.setFinalDetails("Action Pricing Strategies", "MT");
+            await this.quickSaveContract('SaveAndLoad');
+            if (!this.initialLoad) {
+                this.perfComp.setFinalDetails("Contract Manager", "Unknown", true);
+                this.perfComp.generatechart(true);
+                this.drawChart = true;
+            }
         }
      
         this.canActionIcon = true;
     }
 
 
-    quickSaveContract(action){
+    async quickSaveContract(action){
         const ct = this.contractData;
         this.custAccptButton = this.contractData.CUST_ACCPT;
         this.setBusy("Updating Pricing Strategy...", "Please wait as we update the Pricing Strategy!", "Info", true);
-        this.contractManagerSvc.createContract(this.contractData["CUST_MBR_SID"],this.contractData["DC_ID"],ct).subscribe((response: Array<any>) => {
-              this.isLoading = false;
-              if(action=== 'SaveAndLoad'){
-                this.windowOpened = true;
-                this.loadContractDetails();
-            }
-        },  (error) => {
+        await this.contractManagerSvc.createContract(this.contractData["CUST_MBR_SID"], this.contractData["DC_ID"], ct).toPromise().catch((error) => {
             this.loggerSvc.error('Save Contract service', error);
         });
+        this.isLoading = false;
+        if (action === 'SaveAndLoad') {
+            this.windowOpened = true;
+            this.loadContractDetails();
+        }
 
     }
 
@@ -1007,6 +1021,8 @@ export class contractManagerComponent {
             })
             this.loadContractDetails();
             this.userRole = (<any>window).usrRole;
+            this.isDeveloper = (<any>window).isDeveloper;
+            this.isTester = (<any>window).isTester; 
             this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
             setTimeout(() => {
                 var isPCForceReq = this.contractData?.PRC_ST?.filter(x => x.COST_TEST_RESULT == 'Not Run Yet' || x.COST_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;

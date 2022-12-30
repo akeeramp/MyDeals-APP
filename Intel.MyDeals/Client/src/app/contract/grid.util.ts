@@ -1031,4 +1031,71 @@ export class GridUtil {
             saveAs(dataUrl, title);
         });
     }
+    static stop(value) {
+        value.end = moment();
+        value.executionMs = value.end.diff(value.start);
+        return value;
+    };
+    static add(data, marks) {
+        if(data){
+            data.lapse = moment().diff(data.start);
+            if (data.type === "block") data.lapse -= data.executionMs;
+            marks.push(data);
+        }
+    };
+    static perfCacheBlock(title, category) {
+        let perfCacheObj ={
+            title : title,
+            category : category,
+            type : "block",
+            start:  moment(),
+            marks : [],
+            end: null,
+            executionMs :0
+        }
+        return perfCacheObj;
+    }
+
+   static generateUUID() {
+        let d = new Date().getTime();
+        let uuid = 'xxxxxxxxxxxx4xxxyxxxxxxxxxxxxxxx'.replace(/[xy]/g, function (c) {
+            let r = (d + Math.random() * 16) % 16 | 0;
+            d = Math.floor(d / 16);
+            return (c == 'x' ? r : (r & 0x3 | 0x8)).toString(16);
+        });
+        return uuid;
+    };
+
+   static getChartColor(key) {
+        if (key === "UI") return "#FFA300";
+        if (key === "MT") return "#00AEEF";
+        if (key === "DB") return "#C4D600";
+        if (key === "Network") return "#FC4C02";
+        return "#dddddd";
+    };
+
+    static addPerfTimes(performanceTimes) {
+        let tempMarks = [];
+        let lapse = 0;
+        for (let p = 0; p < performanceTimes.length; p++) {
+            let item = performanceTimes[p];
+            let media = "UI";
+            if (item.Media === 2) media = "MT";
+            if (item.Media === 3) media = "DB";
+            let perf: any = GridUtil.perfCacheBlock(item.Title, media);//use gridutil
+            perf.type = "block";
+            perf.lapse = lapse;
+            perf.end = moment();
+            perf.executionMs = item.ExecutionTime;
+            perf.chartData = [{
+                name: media,
+                title: item.Title,
+                data: [item.ExecutionTime],
+                color: this.getChartColor(media)
+            }];
+            tempMarks.push(perf);
+            lapse += item.ExecutionTime;
+        }
+        return tempMarks;
+    }
 }

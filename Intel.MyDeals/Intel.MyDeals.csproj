@@ -971,6 +971,8 @@
     <Content Include="Client\src\app\contract\missingCAP\missingCAP.component.html" />
     <Content Include="Client\src\app\contract\overLappingDeals\overLapping.component.css" />
     <Content Include="Client\src\app\contract\overLappingDeals\overLapping.component.html" />
+    <Content Include="Client\src\app\contract\performanceBars\performanceBar.component.css" />
+    <Content Include="Client\src\app\contract\performanceBars\performanceBar.component.html" />
     <Content Include="Client\src\app\contract\pricingTableEditor\pricingTableEditor.component.css" />
     <Content Include="Client\src\app\contract\pricingTableEditor\pricingTableEditor.component.html" />
     <Content Include="Client\src\app\contract\pricingTable\pricingTable.component.css" />
@@ -2448,6 +2450,7 @@
     <TypeScriptCompile Include="Client\src\app\contract\missingCAP\missingCAP.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\overLappingDeals\overLapping.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\overLappingDeals\overLappingDeals.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\performanceBars\performanceBar.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\pricingTable\pricingTable.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\pricingTable\pricingTable.service.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\pricingTableEditor\custSelectEditor.class.ts" />

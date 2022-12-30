@@ -45,6 +45,7 @@ import { tenderMCTPCTModalComponent } from "../contract/ptModals/tenderDashboard
 import { tenderGroupExclusionModalComponent } from "../contract/ptModals/tenderDashboardModals/tenderGroupExclusionModal.component";
 import { missingCapCostInfoModalComponent } from "../contract/ptModals/dealEditorModals/missingCapCostInfoModal.component";
 import { dropDownModalComponent } from '../contract/ptModals/dropDownModal/dropDownModal.component';
+import { performanceBarsComponent } from "../contract/performanceBars/performanceBar.component";
 
 export let contractComponents = [
     contractDetailsComponent,
@@ -92,5 +93,6 @@ export let contractComponents = [
     missingCapCostInfoModalComponent,
     tenderMCTPCTModalComponent,
     tenderGroupExclusionModalComponent,
-    dropDownModalComponent
+    dropDownModalComponent,
+    performanceBarsComponent
 ]
