@@ -814,6 +814,7 @@ export class dealEditorComponent {
         if (groupsSetting && groupsSetting.length > 0) {
             this.groups = "";
             this.groups = JSON.parse(groupsSetting[0].PRFR_VAL);
+            this.setWarningDetails();
         }
 
         var groupColumnsSetting = data.filter(function (obj) {

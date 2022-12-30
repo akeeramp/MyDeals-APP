@@ -97,15 +97,15 @@
         "types2operator": [
             {
                 "type": "number",
-                "operator": ["=", "!=", "<", "<=", ">", ">="]
+                "operator": ["=", "IN", "!=", "<", "<=", ">", ">="]
             },
             {
                 "type": "numericOrPercentage",
-                "operator": ["=", "!=", "<", "<=", ">", ">="]
+                "operator": ["=", "IN", "!=", "<", "<=", ">", ">="]
             },
             {
                 "type": "money",
-                "operator": ["=", "!=", "<", "<=", ">", ">="]
+                "operator": ["=", "IN", "!=", "<", "<=", ">", ">="]
             },
             {
                 "type": "date",
@@ -129,7 +129,7 @@
             },
             {
                 "type": "list",
-                "operator": ["=", "!="]
+                "operator": ["LIKE","="]
             },
             {
                 "type": "list",
