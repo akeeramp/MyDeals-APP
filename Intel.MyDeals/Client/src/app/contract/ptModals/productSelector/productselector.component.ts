@@ -143,6 +143,8 @@ export class ProductSelectorComponent {
     private curRowCategories = [];
     private curRowLvl = [];
     private displayTemplateType: string = '';
+    private isAlert: boolean =  false;
+    private alertMsg: string = '';
 
 
     distinctPrimitive(fieldName: string, operation?): any {
@@ -1235,8 +1237,9 @@ export class ProductSelectorComponent {
         }
         if (((this.dealType === "KIT") || (this.isTender == true && this.dealType === "ECAP" && this.splitProducts != true))
             && this.addedProducts.length > numberOfValidItem) {
-            this.loggerService.error("You have too many products! You may have up to " + numberOfValidItem
-                + ". Please remove " + (this.addedProducts.length - numberOfValidItem) + " products from this row.", '');
+            this.isAlert = true;
+            this.alertMsg = "You have too many products! You may have up to " + numberOfValidItem
+                + ". Please remove " + (this.addedProducts.length - numberOfValidItem) + " products from this row.";
             return;
         }
 
@@ -1347,6 +1350,11 @@ export class ProductSelectorComponent {
             'prdDrawingOrd': prdDrawingOrd, 'contractProduct': contractProduct
         };
         this.dialogRef.close(productSelectorOutput);
+    }
+
+    closeDialog(){
+        this.isAlert = false;
+        this.alertMsg = '';
     }
 
     private getFullPathOfProduct(item) {

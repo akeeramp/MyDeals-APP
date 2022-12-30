@@ -620,4 +620,10 @@
             </div>
         </div>
     </div>
+    <kendo-dialog title="Please Fix" *ngIf="isAlert" (close)="closeDialog()">
+        <p  [innerHTML]="alertMsg" style="text-align: left;">
+        </p>
+        <kendo-dialog-actions><button style = "background-color: #ebebeb !important;color: black;" class='k-button' (click)="closeDialog()">OK</button>
+        </kendo-dialog-actions>
+    </kendo-dialog>
 </div>
