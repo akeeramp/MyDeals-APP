@@ -305,6 +305,9 @@ export class contractDetailsComponent {
             this.isBackDate = true;
             this.isBackdatepopupopend = true;
         }
+        else {
+            this.isBackDate = false;
+        }
     }
 
     pastDateFieldsenable() {
@@ -484,6 +487,9 @@ export class contractDetailsComponent {
                     isValid = newDate < new Date(this.contractData.MaxDate) ? true : false;
                     if (!isValid) { this.validateDate("END_DT"); }
                 }
+                else if (type == 'END_DT' && this.isCopyContract) {
+                    return true;
+                }
             }
         }
         else {
@@ -492,16 +498,6 @@ export class contractDetailsComponent {
             this.contractData._behaviors.validMsg[type] = "Invalid date."
         }
         return isValid;
-    }
-
-    backDateCheck(strtDate, selectedDate) {
-        if (strtDate > selectedDate) {
-            this.isBackDate = true;
-            this.isBackdatepopupopend = true;
-        }
-        else {
-            this.isBackDate = false;
-        }
     }
 
     getTimeLineDetails() {
@@ -623,17 +619,34 @@ export class contractDetailsComponent {
                             this.contractData.MinDate = moment(response["MIN_STRT"]).format("l");
                             this.contractData.MaxDate = moment(response["MIN_END"]).format("l");
                             this.START_DT = (changeEvent == "START_DT") ? this.START_DT : new Date(moment(response["QTR_STRT"]).format("l"));
-                            const strtDate = new Date(this.contractData.START_DT);
                             const selectedDate = this.START_DT;
-                            this.backDateCheck(strtDate, selectedDate);
+                            this.pastDateConfirm(selectedDate);
                         }
                         if (changeEvent == "END_QTR" || changeEvent == "END_YR" || changeEvent == "END_DT") {
                             this.END_DT = (changeEvent == "END_DT") ? this.END_DT : new Date(moment(response["QTR_END"]).format("l"));
                             this.END_QTR = response?.QTR_NBR;
                             this.END_YR = response?.YR_NBR;
                         }
+                        if (changeEvent == 'END_DT' && this.isCopyContract) {
+                            this.contractData._behaviors.isError[changeEvent] = false;
+                            this.contractData._behaviors.validMsg[changeEvent] = "";
+                            const startDate = this.START_DT;
+                            const endDate = this.END_DT;
+                            if (moment(endDate).isBefore(startDate) || moment(endDate).isAfter(this.contractData.MaxDate)) {
+                                this.contractData._behaviors.isError['END_DT'] = true;
+                                this.contractData._behaviors.validMsg['END_DT'] = moment(endDate).isAfter(this.contractData.MaxDate)
+                                    ? "End date cannot be greater than - " + this.contractData.MaxDate
+                                    : "End date cannot be less than Start Date";
+                            }
+                            if (this.existingMinEndDate !== null && this.contractData.PRC_ST != null && this.contractData.PRC_ST.length != 0) {
+                                if (moment(endDate).isBefore(this.existingMinEndDate)) {
+                                    this.contractData._behaviors.isError['END_DT'] = true;
+                                    this.contractData._behaviors.validMsg['END_DT'] = "Contract end date cannot be less than current Contract end date - " + this.existingMinEndDate?.toLocaleDateString() + " - if you have already created pricing strategies. ";
+                                }
+                            }
+                        }
                     }
-                    if (this.END_DT != undefined && this.START_DT != undefined) {
+                    if ((this.END_DT != undefined && !this.isCopyContract) && this.START_DT != undefined) {
                         this.validateDate(changeEvent);
                     }
                 }, (err) => {
@@ -641,9 +654,8 @@ export class contractDetailsComponent {
                     this.isLoading = false;
                 });
         } else if (changeEvent == "START_DT" && contract_DT != null && contract_DT.status != 'INVALID') {
-                const strtDate = new Date(this.contractData.START_DT);
                 const selectedDate = this.START_DT;
-                this.backDateCheck(strtDate, selectedDate);
+                this.pastDateConfirm(selectedDate);
             }
         }
 
@@ -678,7 +690,7 @@ export class contractDetailsComponent {
                     this.contractData._behaviors.validMsg['END_DT'] = "Contract end date cannot be less than current Contract end date - " + this.existingMinEndDate?.toLocaleDateString() + " - if you have already created pricing strategies. ";
                 }
             }
-        }
+        }        
     }
 
     initContract() {
@@ -908,33 +920,35 @@ export class contractDetailsComponent {
         );
       }
 
-    updateQuarterByDates(dateType, value) {
+    async updateQuarterByDates(dateType, value) {
         var customerMemberSid = this.contractData?.CUST_MBR_SID == "" ? null : this.contractData.CUST_MBR_SID;
         var qtrValue = this.isTender == true ? "4" : null;
         var yearValue = this.isTender == true ? new Date().getFullYear() : null;
-        this.contractDetailsSvc.getCustomerCalendar(customerMemberSid, value, qtrValue, yearValue)
-            .subscribe((response : any) => {
-                if (response) {
-                    if (moment(response['QTR_END']) < moment(new Date())) {
-                        response['QTR_END'] = moment(response['QTR_END']).add(365, 'days').format('l');
-                    }
-                    this.contractData.MinDate = moment(response['MIN_STRT']).format('l');
-                    this.contractData.MaxDate = moment(response['MIN_END']).format('l');
-                    if (dateType == 'START_DT') {
-                        this.contractData.START_QTR = response['QTR_NBR'];
-                        this.contractData.START_YR = response.YR_NBR;
-                        this.validateDate('START_DT');
-                    } else {
-                        this.contractData.END_QTR = response.QTR_NBR;
-                        this.contractData.END_YR = response.YR_NBR;
-                        this.validateDate('END_DT');
-                    }
-                }
-                this.isLoading = false;
-            },(error)=> {
+        let response: any;
+        response = await this.contractDetailsSvc.getCustomerCalendar(customerMemberSid, value, qtrValue, yearValue)
+            .toPromise().catch((error)=> {
                     this.loggerSvc.error("Unable to get customer quarter data", "Error", error);
                     this.isLoading = false;
-                });
+            });
+        if (response) {
+            if (moment(response['QTR_END']) < moment(new Date())) {
+                response['QTR_END'] = moment(response['QTR_END']).add(365, 'days').format('l');
+            }
+            this.contractData.MinDate = moment(response['MIN_STRT']).format('l');
+            this.contractData.MaxDate = moment(response['MIN_END']).format('l');
+            if (dateType == 'START_DT') {
+                this.contractData.START_QTR = response['QTR_NBR'];
+                this.contractData.START_YR = response.YR_NBR;
+                this.validateDate('START_DT');
+            } else {
+                this.contractData.END_QTR = response.QTR_NBR;
+                this.contractData.END_YR = response.YR_NBR;
+                this.validateDate('END_DT');
+            }
+            this.isLoading = false;
+        }
+        else
+            this.isLoading = false;
     }
     ngOnInit() {
         try {
@@ -966,7 +980,7 @@ export class contractDetailsComponent {
                             this.contractData = this.initContract();
                             this.contractDetailsSvc
                                 .readCopyContract(this.c_Id)
-                                .subscribe((response: Array<any>) => {
+                                .subscribe(async (response: Array<any>) => {
                                     this.copyContractData = response[0];
                                     this.contractData.TITLE = this.TITLE = this.copyContractData.TITLE + " (copy)";
                                     this.contractData.CUST_MBR_SID = this.Customer = Number(this.copyContractData.CUST_MBR_SID);
@@ -983,8 +997,8 @@ export class contractDetailsComponent {
                                         this.contractData.END_DT = moment('2099/12/31').format("MM/DD/YYYY");
                                         this.END_DT = this.existingMinEndDate = new Date(moment(this.contractData.END_DT).format("l"));
                                     }
-                                    this.updateQuarterByDates('START_DT', this.contractData.START_DT);
-                                    this.updateQuarterByDates('END_DT', this.contractData.END_DT);
+                                    await this.updateQuarterByDates('START_DT', this.contractData.START_DT);
+                                    await this.updateQuarterByDates('END_DT', this.contractData.END_DT);
                                     this.contractData.START_QTR = this.START_QTR = this.copyContractData.START_QTR;
                                     this.contractData.START_YR = this.START_YR = this.copyContractData.START_YR;
                                     this.contractData.END_QTR = this.END_QTR = this.copyContractData.END_QTR;

@@ -57,7 +57,7 @@ export class AttributeBuilder implements OnInit {
     
     constructor(private pteService: pricingTableEditorService, private loggerSvc: logger, protected usrPrfrncssvc: userPreferencesService,) {}
     loadMyRules() {
-        this.usrPrfrncssvc.getAction(this.cat, this.subcat).subscribe((data: any) => {
+        this.usrPrfrncssvc.getActions(this.cat, this.subcat).subscribe((data: any) => {
             this.myRules = [];
             if (data.length > 0) {
                 for (var r = 0; r < data.length; r++) {
@@ -393,7 +393,7 @@ export class AttributeBuilder implements OnInit {
                 }
             })
         }
-        this.usrPrfrncssvc.updateAction(this.cat, this.subcat, "Rules", this.myRules).subscribe((response: any) => {
+        this.usrPrfrncssvc.updateActions(this.cat, this.subcat, "Rules", this.myRules).subscribe((response: any) => {
             this.loggerSvc.success("The search rule saved.");
             this.rules = this.myRules;
             this.rulesemit.emit(this.rules);
@@ -466,7 +466,7 @@ export class AttributeBuilder implements OnInit {
             this.loggerSvc.warn('Please provide proper search key', 'Warning');
             return;
         }
-        this.usrPrfrncssvc.updateAction(this.cat, this.subcat, "CustomSearch", ruleslist).subscribe((response: any) => {
+        this.usrPrfrncssvc.updateActions(this.cat, this.subcat, "CustomSearch", ruleslist).subscribe((response: any) => {
             if (response) {
                 var runRule = {
                     rule: this.attributes
@@ -489,7 +489,7 @@ export class AttributeBuilder implements OnInit {
                 this.rules[itmCnt]["default"] = false;
             }
         }       
-        this.usrPrfrncssvc.updateAction(this.cat, this.subcat, "Rules", this.rules)
+        this.usrPrfrncssvc.updateActions(this.cat, this.subcat, "Rules", this.rules)
             .subscribe((response) =>{
                 if (selectionType == false) {
                     this.loggerSvc.success("The rule saved as Default", "Saved");
@@ -524,7 +524,7 @@ export class AttributeBuilder implements OnInit {
                 }
         }
 
-        this.usrPrfrncssvc.updateAction(this.cat, this.subcat, "Rules", this.rules)
+        this.usrPrfrncssvc.updateActions(this.cat, this.subcat, "Rules", this.rules)
             .subscribe((response) => {
                 this.loggerSvc.success("Rule was removed", "Saved");
             },

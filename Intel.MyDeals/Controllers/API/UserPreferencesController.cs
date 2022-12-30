@@ -60,28 +60,7 @@ namespace Intel.MyDeals.Controllers.API
             return SafeExecutor(() => new EmployeesLib().SetOpUserToken(data)
                 , $"Unable to set UserOpToken");
         }
-        // Once Mydeals_migration branch moved to development branch, GetAngularUserPreferences and UpdateAngularUserPreferences needs to be removed
-        [Authorize]
-        [Route("GetAngularUserPreferences/{category}/{subCategory}")]
-        [HttpGet]
-        public List<UserPreferences> GetAngularUserPreferences(string category, string subCategory)
-        {
-            return SafeExecutor(() => DataCollections.GetUserPrefrences(category, subCategory)
-                , $"Unable to get UserPreferences"
-            );
-        }
-
-        [Authorize]
-        [Route("UpdateAngularUserPreferences/{category}/{subCategory}/{key}")]
-        [HttpPost]
-        [AntiForgeryValidate]
-        public List<UserPreferences> UpdateAngularUserPreferences(string category, string subCategory, string key, [FromBody] dynamic bodyParam)
-        {
-            return SafeExecutor(() => DataCollections.UpdateUserPrefrences(category, subCategory, key, (string)bodyParam.value)
-                , $"Unable to update UserPreferences"
-            );
-        }
-
+        
         #region Manager User Calls
 
         [Authorize]

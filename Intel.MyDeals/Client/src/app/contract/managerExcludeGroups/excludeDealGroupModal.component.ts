@@ -92,6 +92,9 @@ export class excludeDealGroupModalDialog {
         this.childGridData1 = process(childgridresult1, this.state);
         this.childGridData2 = process(childgridresult2, this.state);
         this.childGridData = process(this.childGridResult, this.state);
+        if (this.childGridData.data.length > 0) {
+            this.gridData.data = this.gridResult;
+        }
         if (state.filter.filters[0] && (state.filter.filters[0]['filters'][0]['field'] == "OVLP_DEAL_STRT_DT" || state.filter.filters[0]['filters'][0]['field'] == "OVLP_DEAL_END_DT")) {
             state.filter.filters[0]['filters'][0]['value'] = new Date(state.filter.filters[0]['filters'][0]['value'])
             if (state.filter.filters[0]['filters'] != undefined && state.filter.filters[0]['filters'].length == 2) {
