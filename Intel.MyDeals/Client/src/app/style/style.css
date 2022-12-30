@@ -1454,6 +1454,10 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
     border-left: none;
 }
 
-    #OvrLp1 kendo-grid.overDealCheckingOne.k-grid .k-grid-table-wrap table tbody tr td .text-center {
-        text-align: left !important;
-    }
+#OvrLp1 kendo-grid.overDealCheckingOne.k-grid .k-grid-table-wrap table tbody tr td .text-center {
+    text-align: left !important;
+}
+
+#OvrLp kendo-grid-filter-menu {
+    padding-right: 4px !important;
+}

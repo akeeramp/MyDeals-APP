@@ -169,7 +169,7 @@ export class GridUtil {
                 var dim = "10___" + numTiers;
                 tmplt += '<div class="col-md-12 rowHeight">';
                 for (var f = 0; f < fields.length; f++) {
-                    tmplt += '<div style="height:35px !important" class="col-md-3 rowValueHeight rowRightBorder textRightAlign' + this.getClassNm(passedData, fields[f].field) + '">';
+                    tmplt += '<div style="height:35px !important;padding: 0 0 !important;text-align: right !important " class="col-md-3 rowValueHeight rowRightBorder textRightAlign' + this.getClassNm(passedData, fields[f].field) + '">';
                     if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[fields[f].field] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim] != undefined && passedData._behaviors.isError[fields[f].field + '_' + dim])
                         tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[fields[f].field + '_' + dim] + '"></div>';
                     if (passedData[fields[f].field] && passedData[fields[f].field][dim] != undefined && passedData[fields[f].field][dim] != null)
