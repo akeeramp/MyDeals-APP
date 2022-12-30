@@ -10,6 +10,8 @@ import { excludeDealGroupModalDialog } from "./excludeDealGroupModal.component"
 import { GridUtil } from "../grid.util"
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
 import * as _ from 'underscore';
+import { saveAs } from '@progress/kendo-file-saver';
+import { Workbook } from '@progress/kendo-angular-excel-export';
 
 export interface contractIds {
     Model: string;
@@ -227,42 +229,86 @@ export class managerExcludeGroupsComponent {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }
     exportToExcel(grid: GridComponent) {
+        let colWidths: any[] = [];
+        var rows = [{ cells: [] }];
         grid.columns.forEach(item => {
             if (item.hidden)
                 item.hidden = false;
-        })
-        let data = JSON.parse(JSON.stringify(grid.data));
-        grid.data = JSON.parse(JSON.stringify(this.gridResult));
-        _.each(grid.data, (dataItem) => {
-            dataItem['ECAP_PRICE'] = this.getFormatedDim(dataItem, 'ECAP_PRICE', '20___0', 'currency');
-            dataItem['MAX_RPU'] = this.getFormatedDim(dataItem, 'MAX_RPU', '20___0', 'currency');
-            dataItem['START_DT'] = new Date(dataItem['START_DT']).toString();
-            dataItem['END_DT'] = new Date(dataItem['END_DT']).toString();
-        })
-        grid.saveAsExcel();
-        grid.columns.forEach(item => {
-            if (item.title == "Rebate Type" || item.title == "Additive" || item.title == "Notes")
-                item.hidden = true;
-        })
-        grid.data = data;
+            rows[0].cells.push({
+                value: item.title,
+                textAlign: "center",
+                background: "#0071C5",
+                color: "#ffffff",
+                wrap: true
+            });
+            if (item.width !== undefined) {
+                colWidths.push({ width: item.width });
+            } else {
+                colWidths.push({ autoWidth: true });
+            }
+        });
+        this.generateExcel(grid, rows, colWidths);
     }
     exportToExcelCustomColumns(grid: GridComponent) {
+        let colWidths: any[] = [];
+        var rows = [{ cells: [] }];
         grid.columns.forEach(item => {
             if (item.hidden && item.title == "Notes")
                 item.hidden = false;
-        })
-        let customData = JSON.parse(JSON.stringify(this.gridData.data));
+            rows[0].cells.push({
+                value: item.title,
+                textAlign: "center",
+                background: "#0071C5",
+                color: "#ffffff",
+                wrap: true
+            });
+            
+            if (item.width !== undefined) {
+                colWidths.push({ width: item.width });
+            } else {
+                colWidths.push({ autoWidth: true });
+            }
+
+        });
+        this.generateExcel(grid, rows, colWidths)    
+    }
+
+    generateExcel(grid: GridComponent, rows: any, colWidths:any[]) {
+        let cells: any[] = [];
         grid.data = JSON.parse(JSON.stringify(this.gridData.data));
         _.each(grid.data, (dataItem) => {
+            cells = [];
             dataItem['ECAP_PRICE'] = this.getFormatedDim(dataItem, 'ECAP_PRICE', '20___0', 'currency');
             dataItem['MAX_RPU'] = this.getFormatedDim(dataItem, 'MAX_RPU', '20___0', 'currency');
             dataItem['START_DT'] = new Date(dataItem['START_DT']).toString();
             dataItem['END_DT'] = new Date(dataItem['END_DT']).toString();
-        })
-        grid.saveAsExcel();
-        grid.data = customData;
+            grid.columns.forEach((item: any) => {
+                let val = dataItem[item.field] == undefined ? "" : dataItem[item.field];
+                cells.push({
+                    value: val,
+                    wrap: true
+                });
+            });
+            rows.push({
+                cells: cells
+            });
+        });
+        // sheets
+        var sheets = [
+            {
+                columns: colWidths,
+                title: "PCT",
+                frozenRows: 1,
+                rows: rows
+            }
+        ];
+        var workbook = new Workbook({
+            sheets: sheets
+        });
+        workbook.toDataURL().then((dataUrl: string) => {
+            saveAs(dataUrl, 'MyDealsSearchResults.xlsx');
+        });
     }
-    
     openOverlappingDealCheck() {
         let data = {
             "contractData": this.contractData,

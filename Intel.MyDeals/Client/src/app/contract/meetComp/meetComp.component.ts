@@ -1154,7 +1154,6 @@ export class meetCompContractComponent implements OnInit {
         );
 
     gotoDeal(DealId: any): void {
-        this.isLoading = true;
         //Tender redirect to DE when clicked on Deal_id in Step MC
         if (this.isTender == "1") {
             this.tmDirec.emit('DE');
