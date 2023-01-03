@@ -28,6 +28,7 @@ export class adminsecurityEngineComponent {
     public selectedIds = [];
     public selectedAtrbAction = [];
     public selectedObjType = [];
+    public checkedSelectedObjType = [];
     public attrActionName = ['ATRB_REQUIRED'];
     private isASTab = false;
     private isDSTab = false;
@@ -99,16 +100,11 @@ export class adminsecurityEngineComponent {
 
     objtypeChange(value) {
         this.isshowdetails = false
-        this.SecurityEnginesvc.getObjAtrbs().subscribe((response: Array<any>) => {
-            this.GetSelectedDDlist = [];
-            this.drilledDownstages = [];
-            this.drilledDowndealtype = [];
-            this.drilledDownAtrb = [];
-            this.selectedIds = [];
-            this.selectedStages = [];
-            this.GetSelectedDDlist = response;
-            this.drilledDownstages = this.filterObjTypeForStages(value.Alias);
-            this.drilledDowndealtype = this.filterObjTypefordealtype(value.Alias);
+        this.selectedIds = [];
+        this.selectedStages = [];
+        this.selectedDealTypes = [];
+        this.drilledDownstages = this.filterObjTypeForStages(value.Alias);
+        this.drilledDowndealtype = this.filterObjTypefordealtype(value.Alias);
 
             // Attribute drilldown by Obj type
             if (this.selectedObjType.length != 0) {
@@ -116,11 +112,7 @@ export class adminsecurityEngineComponent {
             } else {
                 this.drilledDownAtrb = this.dropDownDatasource['AttributesByObjType']['CNTRCT'];
             }
-            this.drilledDownAtrb = _.sortBy(this.drilledDownAtrb,'ATRB_COL_NM')
-
-        }, function (error) {
-            this.loggerSvc.error("Unable to get Deal Type Attributes.", error, error.statusText);
-        });
+        this.drilledDownAtrb = _.sortBy(this.drilledDownAtrb, 'ATRB_COL_NM');
     }
 
     objtypeRoleChange(value) {
@@ -305,6 +297,22 @@ export class adminsecurityEngineComponent {
             stageColWidth = (stageColWidth < 95) ? 95 : stageColWidth;
         }
 
+        if (this.selectedRoles.length != 0) {
+            this.CheckedselectedRoles = this.selectedRoles;
+        } else {
+            this.CheckedselectedRoles = this.dropDownDatasource['AdminRoleTypes'];
+        }
+
+        if (this.selectedDealTypes.length != 0) {
+            this.CheckedselectedDealTypes = this.selectedDealTypes
+        } else {
+            this.CheckedselectedDealTypes = this.drilledDowndealtype
+        }
+
+         if (this.selectedObjType.length != 0) {
+             this.checkedSelectedObjType = this.selectedObjType;           
+        }
+
         this.columns = [];
         // Push the stages as column (headers) of the grid
         if (this.selectedStages.length != 0) {
@@ -337,28 +345,21 @@ export class adminsecurityEngineComponent {
     }
 
     drawRoles(value) {
-        if (this.isshowdetails == true) {
             var div = "<div class='atrbSubTitle'>";
-            if (this.selectedRoles.length != 0) {
-                return div + this.selectedRoles.map(function (role) {
+            if (this.CheckedselectedRoles.length != 0) {
+                return div + this.CheckedselectedRoles.map(function (role) {
                     return role.dropdownName;
                 }).join("</div>" + div) + "</div>";
             } else {
                 return div + this.dropDownDatasource['AdminRoleTypes'].map(function (role) {
                     return role.dropdownName;
                 }).join("</div>" + div) + "</div>";
-            }
-        } else {
-            var div = "<div class='atrbSubTitle'>";
-                return div + this.dropDownDatasource['AdminRoleTypes'].map(function (role) {
-                    return role.dropdownName;
-                }).join("</div>" + div) + "</div>";
-        }
+            } 
     };
 
     /*Html of multiple deal boxes for each attribute, dealtype, role, and stage */
     securityEngineDrawDeals(atrbId, atrbCd, stgId, stgName) {
-        if (this.isshowdetails == true) {
+        
             var dummyAttrName = "ACTIVE";
             var buf = "";
             var divStart = "<div style='margin: 1px;'>";
@@ -370,18 +371,6 @@ export class adminsecurityEngineComponent {
             var actnCd = "";
             var newAtrbId;
             var newAtrbCd = "";
-
-            if (this.selectedRoles.length != 0) {
-                this.CheckedselectedRoles = this.selectedRoles;
-            } else {
-                this.CheckedselectedRoles = this.dropDownDatasource['AdminRoleTypes'];
-            }
-
-            if (this.selectedDealTypes.length != 0) {
-                this.CheckedselectedDealTypes = this.selectedDealTypes
-            } else {
-                this.CheckedselectedDealTypes = this.drilledDowndealtype
-            }
 
             for (var r = 0; r < this.CheckedselectedRoles.length; r++) {
                 buf += divStart;
@@ -414,7 +403,7 @@ export class adminsecurityEngineComponent {
                 buf += divEnd;
             }
             return buf;
-        }
+        
     }
 
     /*Html of individual deal boxes */
@@ -424,9 +413,9 @@ export class adminsecurityEngineComponent {
         var isClickable = false;
         var objtypeselectid;
         var objtypeselectname;
-        if (this.selectedObjType.length != 0) {
-            objtypeselectid = this.selectedObjType['Id'];
-            objtypeselectname = this.selectedObjType['Alias'];
+        if (this.checkedSelectedObjType.length != 0) {
+            objtypeselectid = this.checkedSelectedObjType['Id'];
+            objtypeselectname = this.checkedSelectedObjType['Alias'];
         } else {
             objtypeselectid = 1;
             objtypeselectname = 'CNTRCT';

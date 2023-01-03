@@ -577,8 +577,10 @@ export class PTE_CellChange_Util {
                             }
                             if (operation && operation.operation && operation.PRD_EXCLDS != undefined && operation.PRD_EXCLDS == "") {
                                 let PTR_EXCLUDE_col_ind = _.findIndex(columns, { data: 'PRD_EXCLDS' });
-                                this.hotTable.setDataAtRowProp(selrow, 'PRD_EXCLDS', '', 'no-edit');
-                                this.hotTable.setCellMeta(selrow, PTR_EXCLUDE_col_ind, 'className', 'normal-product');
+                                if (PTR_EXCLUDE_col_ind != -1) {
+                                    this.hotTable.setDataAtRowProp(selrow, 'PRD_EXCLDS', '', 'no-edit');
+                                    this.hotTable.setCellMeta(selrow, PTR_EXCLUDE_col_ind, 'className', 'normal-product');
+                                }
                             }
                         }
                     }
