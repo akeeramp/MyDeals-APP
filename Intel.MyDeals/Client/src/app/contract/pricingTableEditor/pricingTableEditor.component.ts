@@ -280,7 +280,13 @@ export class pricingTableEditorComponent {
                                 || this.field == 'REBATE_TYPE' || this.field == 'PROD_INCLDS' || this.field == 'SETTLEMENT_PARTNER' || this.field == 'MRKT_SEG'  )) {
                                 VM.dirty = true;
                                 VM.removeCellComments(this.selRow,this.field);
+                                if (this.field == 'AR_SETTLEMENT_LVL'){
+                                    let PTR = [];
+                                    PTR.push({ row: this.selRow, prop: 'AR_SETTLEMENT_LVL', old: this.hot.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL'), new: result?.toString() });
+                                    PTE_CellChange_Util.autoFillARSet(PTR,VM.contractData, VM.curPricingTable,VM.custCellEditor);
+                                }
                             }
+                             
                             this.hot.setDataAtCell(this.selRow, this.selCol, result?.toString(), 'no-edit');
                         }
                         VM.editorOpened = false;
@@ -696,7 +702,7 @@ export class pricingTableEditorComponent {
                 PTE_CellChange_Util.perProfDefault(perPro, this.contractData, this.curPricingTable);
             }
             if (AR && AR.length > 0) {
-                PTE_CellChange_Util.autoFillARSet(AR, this.contractData, this.curPricingTable);
+                PTE_CellChange_Util.autoFillARSet(AR, this.contractData, this.curPricingTable,this.custCellEditor);
             }
             //KIT on change events
             if (KIT_ECAP && KIT_ECAP.length > 0) {
@@ -981,7 +987,12 @@ export class pricingTableEditorComponent {
         try {
             this.isLoading = true;
             this.overlapFlexResult = [];
-            this.setBusy("Loading...", "Loading the Table Editor", "Info", true);
+            if (this.savedResponseWarning.length > 0){
+                this.setBusy("Saved with warnings", "Didn't pass Validation", "Warning", true);
+            } else {
+                this.setBusy("Loading...", "Loading the Table Editor", "Info", true);
+            }
+            
             let PTR = await this.getPTRDetails();
             //to avoid losing warning details which comes only during save action
             if (this.savedResponseWarning && this.savedResponseWarning.length > 0)

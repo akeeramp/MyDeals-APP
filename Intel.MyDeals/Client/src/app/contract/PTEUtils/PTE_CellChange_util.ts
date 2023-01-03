@@ -1097,7 +1097,7 @@ export class PTE_CellChange_Util {
         })
     }
     /* AR settlement change where functions starts here */
-    static autoFillARSet(items: Array<any>, contractData: any,curPricingTable:any) {
+    static autoFillARSet(items: Array<any>, contractData: any,curPricingTable:any,cellEditor) {
         try {
             _.each(items, (item) => {
                 let colSPIdx = _.findWhere(this.hotTable.getCellMetaAtRow(item.row), { prop: 'SETTLEMENT_PARTNER' }).col;
@@ -1105,7 +1105,7 @@ export class PTE_CellChange_Util {
                     if(curPricingTable && curPricingTable[`${item.prop}`] && curPricingTable[`${item.prop}`].toLowerCase()=='cash'){
                         this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', contractData.Customer.DFLT_SETTLEMENT_PARTNER, 'no-edit');
                         //check object present 
-                        this.hotTable.setCellMeta(item.row, colSPIdx, 'editor', 'dropdown');
+                        this.hotTable.setCellMeta(item.row, colSPIdx, 'editor', cellEditor);
                         this.hotTable.setCellMeta(item.row, colSPIdx, 'className', '');
                         this.hotTable.render();
                     }
@@ -1128,7 +1128,7 @@ export class PTE_CellChange_Util {
                     else {
                         this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', contractData.Customer.DFLT_SETTLEMENT_PARTNER, 'no-edit');
                         //check object present 
-                        this.hotTable.setCellMeta(item.row, colSPIdx, 'editor', 'dropdown');
+                        this.hotTable.setCellMeta(item.row, colSPIdx, 'editor', cellEditor);
                         this.hotTable.setCellMeta(item.row, colSPIdx, 'className', '');
                         this.hotTable.render();
                     }
