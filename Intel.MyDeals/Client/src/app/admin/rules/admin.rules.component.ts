@@ -20,6 +20,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { RulesSimulationModalComponent } from '../../admin/rules/admin.rulesSimulationModal.component';
 import { RuleDetailsModalComponent } from '../../admin/rules/admin.ruleDetailsModal.component';
 import { List } from "linqts";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
     selector: "admin-rules",
@@ -31,7 +32,8 @@ export class adminRulesComponent {
     childGridResult: any;
     childGridData: any;
     RuleConfig: any;
-    constructor(private adminRulesSvc: adminRulesService, private loggerSvc: logger, private constantSvc: constantsService, public dialog: MatDialog) { 
+    constructor(private adminRulesSvc: adminRulesService, private loggerSvc: logger, private constantSvc: constantsService, public dialog: MatDialog,
+        private router: Router, private route: ActivatedRoute) { 
         this.allData = this.allData.bind(this);
     }
 
@@ -200,16 +202,11 @@ export class adminRulesComponent {
     }
 
     async ngOnInit() {
-        var webUrl = new URL(window.location.href).toString();
-        var lastLoc = webUrl.lastIndexOf('/');
-        if (webUrl.length > lastLoc + 1) {
-            var value = webUrl.substring(lastLoc + 1, webUrl.length);
-            var valueIsNumber = Number.isNaN(Number(value));
-            if (!valueIsNumber) {
-                this.rid = parseInt(value);
-                this.state.filter.filters = [{ field: "Id", operator: "eq", value: this.rid }];
-            }
-        }
+        this.rid = parseInt(this.route.snapshot.paramMap.get('rid'));
+        if (!isNaN(this.rid) && this.rid > 0)
+            this.state.filter.filters = [{ field: "Id", operator: "eq", value: this.rid }];
+        else
+            this.rid = 0;
         await this.getConstant();
         await this.loadRules();
         if ((<any>window).usrRole == 'DA' || (<any>window).usrRole == 'SA') {
@@ -479,7 +476,7 @@ export class adminRulesComponent {
         if (id != 0) {
             this.editRule(id, false);
         }
-    };
+    }
 
 
     isApprove(dataItem) {
@@ -492,13 +489,8 @@ export class adminRulesComponent {
             logic: "and",
             filters: [],
         };
-        this.rid = 0;
-        var webUrl = new URL(window.location.href).toString();
-        var lastLoc = webUrl.lastIndexOf('/');
-        if (webUrl.length > lastLoc + 1) {
-            webUrl = webUrl.substring(0, lastLoc + 1);
-            (window.location.href) = webUrl;
-        }
+        this.router.onSameUrlNavigation = 'reload';
+        this.router.navigate(['/rules']);
         this.gridData = process(this.gridResult, this.state);
     }
 }

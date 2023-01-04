@@ -12,6 +12,7 @@ import { GridUtil } from "../grid.util";
 import { DatePipe } from '@angular/common';
 import {NewContractWidgetService} from "../../dashboard/newContractWidget/newContractWidget.service"
 import * as _ from "underscore";
+import { ActivatedRoute } from "@angular/router";
 const moment = _moment;
 
 @Component({
@@ -27,7 +28,7 @@ export class contractDetailsComponent {
     disableSave:boolean=false;
     constructor(private templatesSvc: templatesService,
         private contractDetailsSvc: contractDetailsService, private datePipe: DatePipe,
-        private loggerSvc: logger, private newContractWidgetSvc: NewContractWidgetService) { }
+        private loggerSvc: logger, private newContractWidgetSvc: NewContractWidgetService, private route: ActivatedRoute) { }
     @Input() C_ID: number;
     private Customer;
     CUST_NM_DIV: any = []; CUST_NM; TITLE = ""; files = []; START_DT; START_QTR; START_YR; END_DT; END_QTR; END_YR; NO_END_DT = false; NO_END_DT_RSN; isSubmitted = false; NOTES = "";
@@ -970,9 +971,9 @@ export class contractDetailsComponent {
                     this.dropDownsData['CUST_ACCPT'] = CUST_ACCPT;
                     // below lines of code is to set default value for contract type dropdown.
                     this.CONTRACT_TYPE = CONTRACT_TYPE[0];
-                    const url = new URL(window.location.href).toString().split('/');
-                    const qString = url[url.length - 1];
-                    if (qString!= '0') {
+                      const qString = this.route.snapshot.paramMap.get('DealID');
+
+                    if (qString != '0') {
                         this.c_Id = Number(qString);
                         this.isCopyContract = true;
                         this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
@@ -1021,13 +1022,10 @@ export class contractDetailsComponent {
                             this.loggerSvc.error("Unable to fetch template data","Error",err);
                         });
                     } else {
-                        this.c_Id = Number(url[url.length - 1]);
+                        this.c_Id = parseInt(this.route.snapshot.paramMap.get('cid'));
                     }
 
                     if (this.isCopyContract == false) {
-                        if (url.length > 6) {
-                            this.c_Id = Number(url[6]);
-                        }
                         //conditions for new contract
                         if (this.c_Id <= 0) {
                             this.templatesSvc.readTemplates()

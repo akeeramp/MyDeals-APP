@@ -13,7 +13,7 @@ import { ThemePalette } from '@angular/material/core';
 })
 
 export class adminPushDealsToVistexComponent {
-    constructor(private loggerSvc: logger, private pushDealstoVistexSvc: pushDealsToVistexService, private formBuilder: FormBuilder,) { }
+    constructor(private loggerSvc: logger, private pushDealstoVistexSvc: pushDealsToVistexService, private formBuilder: FormBuilder) { }
     private color: ThemePalette = 'primary';
     private pushDealsToVistexForm: FormGroup;
     private loadMessage = "Admin Customer Loading..";
@@ -63,13 +63,7 @@ export class adminPushDealsToVistexComponent {
           
     }
     bindPathQueryParam() {
-        const url = new URL(window.location.href).toString().split('/');
-        const qString = url[url.length - 1];
-        let dealIds = '';
-        if (qString.indexOf("=") != -1) {
-            let queryParam = qString.split("=");
-            dealIds = (queryParam[queryParam.length - 1]).toString();
-        }
+        let dealIds = '';      
         return dealIds;
     }
 

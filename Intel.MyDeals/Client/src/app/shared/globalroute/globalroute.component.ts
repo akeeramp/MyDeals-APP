@@ -1,4 +1,5 @@
 import { Component } from "@angular/core";
+import { ActivatedRoute } from "@angular/router";
 import * as _ from "underscore";
 
 @Component({
@@ -7,7 +8,7 @@ import * as _ from "underscore";
 })
 
 export class globalRouteComponent {
-    constructor() { }
+    constructor(private route: ActivatedRoute) { }
     
     ngAfterViewInit() {
         //this functionality will enable when dashboard landing to this page
@@ -21,36 +22,30 @@ export class globalRouteComponent {
         //this functionality will disable anything of .net ifloading to stop when dashboard landing to this page
         document.getElementById('mainBody')?.setAttribute('style', 'display:none');
     }
-    async redirectToRoute(){
-        const url = new URL(window.location.href).toString().split('/');
-        let index = url.indexOf('manager');
-        if(index && index>0){
-            let cid = url[index + 1];
-            if (!Number.isNaN(Number(cid))) {//if user entered angular js url - contract url
-                window.location.href = "#/contractmanager/CNTRCT/" + cid + "/0/0/0";                
-            }
-            else { // Global Search Scenarios redirection
-                if (cid == "CNTRCT") {// if user searched contract
-                    let index = url.indexOf('CNTRCT');
-                    window.location.href = "#/contractmanager/CNTRCT/" + url[index + 1] + "/0/0/0";                    
-                }
-                else if (cid == "PS") {// if user searched Pricing Strategy
-                    let index = url.indexOf('PS');
-                    window.location.href = "#/contractmanager/PT/" + url[index + 1] + "/" + url[index + 2] + "/0/0";                    
-                }
-                else if (cid == "PT") {// if user searched Pricing Table
-                    let index = url.indexOf('PT');
-                    window.location.href = "#/contractmanager/PT/" + url[index + 1] + "/" + url[index + 2] + "/" + url[index + 3] +"/0";
-                }
-                else if (cid == "WIP") {// if user searched Deal Id
-                    let index = url.indexOf('WIP');
-                    window.location.href = "#/contractmanager/WIP/" + url[index + 1] + "/" + url[index + 2] + "/" + url[index + 3] + "/" + url[index + 4];
-                }
-            }
+    async redirectToRoute() {
+        const cid = this.route.snapshot.paramMap.get('cid');
+        const PSID = this.route.snapshot.paramMap.get('PSID');
+        const PTID = this.route.snapshot.paramMap.get('PTID');
+        const DealID = this.route.snapshot.paramMap.get('DealID');
+        
+        const type = this.route.snapshot.paramMap.get('type');
+        if (type == "CNTRCT") {
+            window.location.href = "#/contractmanager/CNTRCT/" + cid + "/0/0/0";
         }
-        else{
+        else if (type == "PS") {// if user searched Pricing Strategy
+            window.location.href = "#/contractmanager/PT/" + cid + "/" + PSID + "/0/0";
+        }
+        else if (type == "PT") {// if user searched Pricing Table
+            window.location.href = "#/contractmanager/PT/" + cid + "/" + PSID + "/" + PTID + "/0";
+        }
+        else if (type == "WIP") {// if user searched Deal Id
+            window.location.href = "#/contractmanager/WIP/" + cid + "/" + PSID + "/" + PTID + "/" + DealID;
+        } else if (type == null && cid != null &&  cid != "0") {
+            window.location.href = "#/contractmanager/CNTRCT/" + cid + "/0/0/0";   
+        }
+        else {
             window.location.href = "#/portal";
-        }
+        } 
 
      }
     ngOnInit() {

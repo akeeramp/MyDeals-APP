@@ -8,6 +8,7 @@ import { pricingTableEditorService } from '../../contract/pricingTableEditor/pri
 import { lnavService } from "../lnav/lnav.service";
 import { dealEditorComponent } from "../dealEditor/dealEditor.component"
 import { pricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
+import { ActivatedRoute } from '@angular/router';
 
 export interface contractIds {
     Model: string;
@@ -27,7 +28,7 @@ export interface contractIds {
 
 export class pricingTableComponent {
     constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: templatesService,
-        private pteService: pricingTableEditorService, private lnavSvc: lnavService) {}
+        private pteService: pricingTableEditorService, private lnavSvc: lnavService, private route: ActivatedRoute) {}
     @ViewChild(pricingTableEditorComponent) private pteComp: pricingTableEditorComponent;
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
     public curPricingStrategy = {};
@@ -232,8 +233,8 @@ export class pricingTableComponent {
                 this.contractData = response[0];
                 //if it is Tender deal redirect to Tender manager
                 if (response[0].IS_TENDER && response[0].IS_TENDER == 1) {
-                    if (this.type && this.type == 'WIP' && IDS && IDS.length > 1 && IDS[3].indexOf("?") > 0)
-                        window.location.href = "#/tendermanager/" + this.c_Id + IDS[3].substring(IDS[3].indexOf("?"), IDS[3].length);
+                    if (this.type && this.type == 'WIP' && IDS && IDS.length > 1 && !!this.route.snapshot.queryParams.searchTxt)
+                        window.location.href = "#/tendermanager/" + this.c_Id + "?searchTxt=" + this.route.snapshot.queryParams.searchTxt;
                     else if (this.type && this.type == 'PS' && IDS)
                         window.location.href = "#/tendermanager/" + this.c_Id + "?searchTxt=PS";
                     else
@@ -271,8 +272,8 @@ export class pricingTableComponent {
                     this.searchedContractData.pt_id = this.pt_Id = Number(IDS[2])
                     this.searchedContractData.Model = "PTE";
                     this.searchedContractData.contractData = contractData;
-                    if (this.type == 'WIP' && IDS[3].indexOf("?searchTxt=") > 0)
-                        this.searchText = Number(IDS[3].substring(IDS[3].indexOf("?") + ("?searchTxt=").length, IDS[3].length));
+                    if (this.type == 'WIP')
+                        this.searchText = this.route.snapshot.queryParams.searchTxt;// Number(IDS[3].substring(IDS[3].indexOf("?") + ("?searchTxt=").length, IDS[3].length));
                     else {
                         this.searchText = "";
                     }
@@ -286,13 +287,18 @@ export class pricingTableComponent {
         })
     }
 
-    fetchDetailsfromURL(url) {
-        var index = url.indexOf('contractmanager')
-        //type of ID(Contract,PS,PT or WIP)
-        this.type = url[index + 1];
-        var IDS = url.slice(index + 2);
-        this.c_Id = Number(IDS[0]);
-        this.loadAllContractDetails(IDS);
+    fetchDetailsfromURL() {
+       
+        let ids = []; 
+        ids.push(this.route.snapshot.paramMap.get('cid'))
+        ids.push(this.route.snapshot.paramMap.get('PSID'))
+        ids.push(this.route.snapshot.paramMap.get('PTID'))
+        ids.push(this.route.snapshot.paramMap.get('DealID'))
+        this.c_Id = parseInt(this.route.snapshot.paramMap.get('cid'))
+        this.type = this.route.snapshot.paramMap.get('type');
+        //type of ID(Contract,PS,PT or WIP) 
+        
+        this.loadAllContractDetails(ids);
     }
     async enableDealEditorTab(isRedirect = false) {
         let response = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
@@ -336,9 +342,8 @@ export class pricingTableComponent {
     }
     ngOnInit() {
         try {
-            document.title = "Contract - My Deals";
-            const url = new URL(window.location.href).toString().split('/');
-            this.fetchDetailsfromURL(url)
+            document.title = "Contract - My Deals"; 
+            this.fetchDetailsfromURL()
             this.lnavSvc.isLnavHidden.subscribe((isLnavHidden: any) => {
                 this.isLnavHidden = isLnavHidden?.isLnavHid;
             });

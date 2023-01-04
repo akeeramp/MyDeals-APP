@@ -2,6 +2,7 @@
 import { logger } from "../shared/logger/logger";
 import * as _ from "underscore";
 import { globalSearchResultsService } from "../advanceSearch/globalSearchResults/globalSearchResults.service";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
     selector: "goto-route",
@@ -15,16 +16,15 @@ export class goToComponent {
     public spinnerMessageDescription: any;
     public msgType: any;
     public isBusyShowFunFact: any;
-    constructor(private loggerSVC: logger, protected globalSearchSVC: globalSearchResultsService) { }
+    constructor(private loggerSVC: logger, protected globalSearchSVC: globalSearchResultsService, private route: ActivatedRoute) { }
     async redirecttoroute() {
-        const url = new URL(window.location.href).toString().split('/');
-        let index = url.includes('gotoPs') ? url.indexOf('gotoPs') : url.indexOf('gotoDeal');
-        let id = parseInt(url[index + 1]);
-        let msg = 'Searching Deal' + id + '....';
+         const id = this.route.snapshot.paramMap.get('cid');
+        const path = this.route.snapshot.url.filter(x => x.path == 'gotoDeal' || x.path == 'gotoPs')[0].path;
+        const msg = 'Searching Deal' + id + '....';
         this.isLoading = true;
         this.setBusy('Searching', msg);
         //goto Pricing Strategy
-        if (url[index] == 'gotoPs') {
+        if (path == 'gotoPs') {
             let response: any = await this.globalSearchSVC.getContractIDDetails(id, 'PRC_ST').toPromise().catch((error) => {
                 this.isLoading = false;
                 this.setBusy('', '');

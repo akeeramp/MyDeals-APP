@@ -8,6 +8,7 @@ import { dealEditorComponent } from "../dealEditor/dealEditor.component"
 import { pricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
 import * as _ from "underscore";
 import { performanceBarsComponent } from "../performanceBars/performanceBar.component";
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
     selector: "tender-manager",
@@ -22,7 +23,8 @@ export class tenderManagerComponent {
     isDeveloper: any;
     isTester: any;
     drawChart: boolean;
-    constructor(private pteService: pricingTableEditorService, private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private contractDetailsSvc: contractDetailsService, private templatesSvc: templatesService) {
+    constructor(private pteService: pricingTableEditorService, private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private contractDetailsSvc: contractDetailsService,
+        private templatesSvc: templatesService, private route: ActivatedRoute) {
         $('body').addClass('added-tender');
     }
     public c_Id: any = '';
@@ -78,8 +80,7 @@ export class tenderManagerComponent {
                 let compFlag = this.pricingTableData.PRC_TBL_ROW.filter(x => x.COMP_MISSING_FLG == "0");
                 this.pt_passed_validation = !(this.isPTREmpty) && (passed.length == this.pricingTableData.PRC_TBL_ROW.length) && !(this.pricingTableData.WIP_DEAL.find(x => x.warningMessages.length > 0) ? true : false) ? true : false;
                 this.compMissingFlag = !(this.isPTREmpty) && compFlag.length == this.pricingTableData.PRC_TBL_ROW.length ? true : false;
-                const url = new URL(window.location.href).toString().split('/');
-                if (url[url.length - 1].indexOf('?') > 0 && this.isPTRPartiallyComplete()) {//if deal searched through global search
+                if (!!this.route.snapshot.queryParams.searchTxt && this.isPTRPartiallyComplete()) {//if deal searched through global search
                     this.selectedTab = 'DE';
                     this.currentTAB = 'DE';
                 }
@@ -397,13 +398,14 @@ export class tenderManagerComponent {
             document.title = "Contract - My Deals";
             this.isDeveloper = (<any>window).isDeveloper;
             this.isTester = (<any>window).isTester;
-            const url = new URL(window.location.href).toString().split('/');
-            if (url[url.length - 1].indexOf('?') > 0) {//If Global search happens for tender deal ID
-                this.c_Id = Number(url[url.length - 1].substring(0, url[url.length - 1].indexOf('?')));
-                this.searchText = Number(url[url.length - 1].substring(url[url.length - 1].indexOf("?") + ("?searchTxt=").length, url[url.length - 1].length));
+            const cid = parseInt(this.route.snapshot.paramMap.get('cid'));
+            if (!!this.route.snapshot.queryParams.searchTxt) {//If Global search happens for tender deal ID
+                this.c_Id = cid;// Number(url[url.length - 1].substring(0, url[url.length - 1].indexOf('?')));
+                this.searchText = this.route.snapshot.queryParams.searchTxt;
             }
             else {
-                this.c_Id = Number(url[url.length - 1]);
+                if (!isNaN(cid) && cid>0)
+                this.c_Id = cid;
                 this.searchText = "";
             }
             this.loadAllContractDetails();

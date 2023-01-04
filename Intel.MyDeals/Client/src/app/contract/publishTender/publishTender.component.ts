@@ -12,6 +12,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { dealProductsModalComponent } from '../ptModals/dealProductsModal/dealProductsModal.component';
 import { DE_Load_Util } from '../DEUtils/DE_Load_util';
 import * as moment from "moment";
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
     selector: "publish-tender",
@@ -21,7 +22,7 @@ import * as moment from "moment";
 
 export class publishTenderComponent {
     constructor(private pricingTableSvc: pricingTableservice, private publishtenderService: publishTenderService,
-        private allDealsSvc: allDealsService, private templatesSvc: templatesService, private loggerSvc: logger, protected dialog: MatDialog) {
+        private allDealsSvc: allDealsService, private templatesSvc: templatesService, private loggerSvc: logger, protected dialog: MatDialog, private route: ActivatedRoute) {
       
     }
     @Input() private pricingTableData:any;//using in html
@@ -328,8 +329,8 @@ export class publishTenderComponent {
 
 
     ngOnInit() {
-        const url = new URL(window.location.href).toString().split('/');
-        this.c_Id = Number(url[url.length - 1]);
+        const cid = this.route.snapshot.paramMap.get('cid');
+        this.c_Id = cid;
         this.OBJ_SET_TYPE_CD = this.pricingTableData.PRC_TBL_ROW[0].OBJ_SET_TYPE_CD;
         this.isDataLoading = true;
         this.setBusy("Loading Deals...", "Please wait we are fetching WIP Deals...", "");

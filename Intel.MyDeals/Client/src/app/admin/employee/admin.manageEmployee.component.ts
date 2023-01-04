@@ -301,19 +301,7 @@ export class manageEmployeeComponent {
             });
     }
 
-    ngOnInit() {
-        const url = new URL(window.location.href).toString().split('/');
-        let wwid = "";
-        if (url.length > 1) {
-            const queryParam = url[1].split("&")
-            queryParam.forEach(item => {
-                const data = item.split("=")
-                if (data[0] == 'id') {
-                    wwid = (wwid == "" ? wwid.concat(data[1]) : wwid.concat(",", data[1]))
-                }
-            })
-            this.state.filter.filters = [{ field: "EMP_WWID", operator: "eq", value: wwid }];
-        }
+    ngOnInit() { 
         this.loadEmployeeData();
     }
 }
