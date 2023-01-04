@@ -973,8 +973,8 @@ export class contractDetailsComponent {
                     this.CONTRACT_TYPE = CONTRACT_TYPE[0];
                       const qString = this.route.snapshot.paramMap.get('DealID');
 
-                    if (qString != '0') {
-                        this.c_Id = Number(qString);
+                    if (qString ==null) {
+                        this.c_Id = parseInt(this.route.snapshot.paramMap.get('cid'));
                         this.isCopyContract = true;
                         this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
                             this.templateData = response;

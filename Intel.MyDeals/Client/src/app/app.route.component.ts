@@ -99,7 +99,7 @@ export const routes: Routes = [
     { path: 'gotoPs/:cid', component: goToComponent, resolve: { security: SecurityResolver }, data: { title: 'Admin' } },
     { path: 'gotoDeal/:cid', component: goToComponent, resolve: { security: SecurityResolver }, data: { title: 'Admin' } },
     { path: 'contractdetails/:cid', component: contractDetailsComponent, data: { title: 'Dashboard' } },
-    { path: 'contractdetails/copycid/:', component: contractDetailsComponent, data: { title: 'Dashboard' } },
+    { path: 'contractdetails/copycid/:cid', component: contractDetailsComponent, data: { title: 'Dashboard' } },
     { path: 'manager/:cid', component: globalRouteComponent, resolve: { security: SecurityResolver }, data: { title: 'Admin' } },
     { path: 'manager/:type/:cid/:PSID/:PTID/:DealID', component: globalRouteComponent, resolve: { security: SecurityResolver }, data: { title: 'Admin' } },
     { path: 'contractmanager/:type/:cid/:PSID/:PTID/:DealID', component: pricingTableComponent, data: { title: 'Contract' } },
