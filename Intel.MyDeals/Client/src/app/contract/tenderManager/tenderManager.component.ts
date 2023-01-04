@@ -7,6 +7,7 @@ import { contractDetailsService } from "../contractDetails/contractDetails.servi
 import { dealEditorComponent } from "../dealEditor/dealEditor.component"
 import { pricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
 import * as _ from "underscore";
+import { performanceBarsComponent } from "../performanceBars/performanceBar.component";
 
 @Component({
     selector: "tender-manager",
@@ -17,6 +18,10 @@ import * as _ from "underscore";
 export class tenderManagerComponent {
     @ViewChild(pricingTableEditorComponent) private pteComp: pricingTableEditorComponent;
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
+    @ViewChild(performanceBarsComponent) public perfComp: performanceBarsComponent;
+    isDeveloper: any;
+    isTester: any;
+    drawChart: boolean;
     constructor(private pteService: pricingTableEditorService, private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private contractDetailsSvc: contractDetailsService, private templatesSvc: templatesService) {
         $('body').addClass('added-tender');
     }
@@ -95,6 +100,27 @@ export class tenderManagerComponent {
 
     refreshContract(data: any) {
         this.contractData = data;
+    }
+
+    perfCompFn(data) {
+        this.drawChart = false;
+        if (data.action == 'setInitialDetails') {
+            this.perfComp.setInitialDetails(data.title, data.label, data.initial);
+        }
+        else if (data.action == 'setFinalDetails') {
+            this.perfComp.setFinalDetails(data.title, data.label, data.final);
+        }
+        else if (data.action == 'mark') {
+            this.perfComp.mark(data.title);
+        }
+        else {
+            this.perfComp.generatechart(true)
+            this.drawChart = true;
+        };
+    }
+
+    addPerfTimes(perfData) {
+        this.perfComp.addPerfTime("Update Contract And CurPricing Table", perfData);
     }
 
     isValidateTTE() {
@@ -320,6 +346,11 @@ export class tenderManagerComponent {
         }
     }
 
+    getWidth(data) {
+        if (data) return '75%';
+        else return '100%';
+    }
+
     isPTRPartiallyComplete() {
         let isPtrDirty = false;
         let rootScopeDirty = this.dirty;
@@ -364,6 +395,8 @@ export class tenderManagerComponent {
     ngOnInit() {
         try {
             document.title = "Contract - My Deals";
+            this.isDeveloper = (<any>window).isDeveloper;
+            this.isTester = (<any>window).isTester;
             const url = new URL(window.location.href).toString().split('/');
             if (url[url.length - 1].indexOf('?') > 0) {//If Global search happens for tender deal ID
                 this.c_Id = Number(url[url.length - 1].substring(0, url[url.length - 1].indexOf('?')));

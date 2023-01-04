@@ -11,6 +11,8 @@ import { GridUtil } from "../grid.util";
 })
 
 export class performanceBarsComponent {
+    public isContract: boolean = false;
+    public dealArray: any[];
     constructor(private loggerSvc: logger, private contractManagerSvc:contractManagerservice) {}
     public perfDataValue: {
         executionMs: any,
@@ -72,11 +74,22 @@ export class performanceBarsComponent {
         return "#dddddd";
     };
 
+    getBottomStyle(data) {
+        if (data) return '60%';
+        else return '-110%'
+    }
+
+    getBottomVal(data) {
+        if (data) return '100%';
+        else return '-1096%';
+    }
+
     setInitialDetails(action, label, initial?: boolean) {
         if (initial) {
             this.marks = [];
             this.tempMarkArray = [];
             this.tempMarks = {};
+            this.dealArray = [];
         }
         this.tempMarks[action] = GridUtil.perfCacheBlock(action, label)
     }
@@ -84,6 +97,8 @@ export class performanceBarsComponent {
     setFinalDetails(item, model, final?: boolean) {
         if (final) {
             GridUtil.add(GridUtil.stop(this.tempMarks[item]), this.marks);
+        } else if (item == 'Save Contract Root') {
+            GridUtil.add(GridUtil.stop(this.tempMarks[item]), this.dealArray);
         } else {
             GridUtil.add(GridUtil.stop(this.tempMarks[item]), this.tempMarkArray);
         }
@@ -93,12 +108,21 @@ export class performanceBarsComponent {
             data: [this.tempMarks[item].executionMs],
             color: GridUtil.getChartColor(model)
         }];
-        if (this.marks.length > 0) this.marks[0].marks = this.tempMarkArray;
+        if (this.dealArray.length > 0) {
+            this.dealArray[0].marks = this.tempMarkArray;
+            if (this.marks.length > 0) this.marks[0].marks = this.dealArray;
+        }
+        else
+            if (this.marks.length > 0) this.marks[0].marks = this.tempMarkArray;
     }
 
     addPerfTime(item, perfTimes) {
         this.tempMarks[item].marks = GridUtil.addPerfTimes(perfTimes);
     }
+
+    mark(title) {
+        GridUtil.add(GridUtil.prefCacheMark(title), this.tempMarkArray);
+    };
 
     generatechart(drawChart) {
         if (this.marks != undefined && this.marks.length > 0 && drawChart) {
@@ -123,7 +147,7 @@ export class performanceBarsComponent {
             for (let r = 0; r < rtn.length; r++) {
                 totTime += rtn[r].data[0];
             }
-            if (marks.executionMs > totTime) {
+            if (marks.executionMs >= totTime) {
                     rtn.push({
                         name: "Unknown",
                         title: marks.title,
@@ -146,45 +170,43 @@ export class performanceBarsComponent {
 
    
     drawChart() {
-        if (!(<any>window).isDeveloper && !(<any>window).isTester) {
-            return;
-        } else {
-            let data = {
+        this.isContract = this.marks[0].title == 'Contract Manager' ? true : false;
+        let data = {
+            executionMs: this.marks[0].executionMs,
+            data: this.getChartData(this.marks[0])
+        };
+        this.perfDataValue = data;
+        let totTimes = {};
+        let uid = GridUtil.generateUUID();
+        let logData = [];
+        for (let d = 0; d < data.data.length; d++) {
+            let item = data.data[d];
+            if (totTimes[item.name] === undefined) totTimes[item.name] = 0;
+            totTimes[item.name] += item.data[0];
+            this.totalExecutionTime += Number(item.data[0]);
+            logData.push({
+                uid: uid,
+                title: this.marks[0].title,
                 executionMs: this.marks[0].executionMs,
-                data: this.getChartData(this.marks[0])
-            };
-            this.perfDataValue = data;
-            let totTimes = {};
-            let uid = GridUtil.generateUUID();
-            let logData = [];
-            for (let d = 0; d < data.data.length; d++) {
-                let item = data.data[d];
-                if (totTimes[item.name] === undefined) totTimes[item.name] = 0;
-                totTimes[item.name] += item.data[0];
-                this.totalExecutionTime += Number(item.data[0]);
-                logData.push({
-                    uid: uid,
-                    title: this.marks[0].title,
-                    executionMs: this.marks[0].executionMs,
-                    start: this.marks[0].start,
-                    end: this.marks[0].end,
-                    mode: item.name,
-                    task: item.title,
-                    taskMs: item.data[0]
-                });
-            }
-            this.contractManagerSvc.loggingPerfomanceTimes(logData).subscribe((res) => {}, (err) => {
-                this.loggerSvc.error("perfomanceTimes error " , err);
+                start: this.marks[0].start,
+                end: this.marks[0].end,
+                mode: item.name,
+                task: item.title,
+                taskMs: item.data[0]
             });
-            this.totTimesValue = totTimes;
-            this.executionMsValue = (this.totalExecutionTime /1000).toFixed(4);
-            this.chartData = data.data;
-            this.totTimesArray  = Object.keys(totTimes).map(function(key)  
-            {  
-                let value = (totTimes[key] /1000).toFixed(4);
-                return [key, value];  
-            }); 
         }
+        this.contractManagerSvc.loggingPerfomanceTimes(logData).subscribe((res) => {}, (err) => {
+            this.loggerSvc.error("perfomanceTimes error " , err);
+        });
+        this.totTimesValue = totTimes;
+        this.executionMsValue = (this.totalExecutionTime /1000).toFixed(4);
+        this.chartData = data.data;
+        this.totTimesArray  = Object.keys(totTimes).map(function(key)  
+        {  
+            let value = (totTimes[key] /1000).toFixed(4);
+            return [key, value];  
+        }); 
+        
     };
     getTitle(value){
     }

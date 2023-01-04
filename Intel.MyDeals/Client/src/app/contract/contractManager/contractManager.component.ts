@@ -860,8 +860,10 @@ export class contractManagerComponent {
         var data = {};
         var dataItems = [];
         this.drawChart = false;
-        this.perfComp.setInitialDetails("Contract Manager", "Unknown", true);
-        this.perfComp.setInitialDetails("Gather data to pass", "UI");
+        if (this.isDeveloper || this.isTester) {
+            this.perfComp.setInitialDetails("Contract Manager", "Unknown", true);
+            this.perfComp.setInitialDetails("Gather data to pass", "UI");
+        }
         if ((approvePending === true) && this.canBypassEmptyActions) {
             var ps = this.contractData.PRC_ST;
             if (ps !== undefined) {
@@ -890,8 +892,10 @@ export class contractManagerComponent {
             }
         }
         this.curDataItems = dataItems;
-        this.perfComp.setFinalDetails("Gather data to pass", "UI");
-        this.perfComp.setInitialDetails("User Modal", "UI");
+        if (this.isDeveloper || this.isTester) {
+            this.perfComp.setFinalDetails("Gather data to pass", "UI");
+            this.perfComp.setInitialDetails("User Modal", "UI");
+        }
         if(this.curDataItems.length > 0){
             const dialogRef = this.dialog.open(actionSummaryModal, {
                 width: "600px",
@@ -952,16 +956,18 @@ export class contractManagerComponent {
             this.setBusy("Running PCT/MCT...", "Running Price Cost Test and Meet Comp Test", "Info", true);
             this.isLoading = true;
             this.initialLoad = false;
-            this.perfComp.setInitialDetails("Action Pricing Strategies", "MT");
+            if (this.isDeveloper || this.isTester) this.perfComp.setInitialDetails("Action Pricing Strategies", "MT");
             let response: any = await this.contractManagerSvc.actionPricingStrategies(this.contractData["CUST_MBR_SID"], this.contractData["DC_ID"], this.requestBody, this.contractData.CUST_ACCPT).toPromise().catch((error) => {
                 this.loggerSvc.error('Pricing Stratergy service', error);
             });
             this.messages = response.Data.Messages;
             this.performanceTimes = response.PerformanceTimes;
-            this.perfComp.addPerfTime("Action Pricing Strategies", this.performanceTimes);
-            this.perfComp.setFinalDetails("Action Pricing Strategies", "MT");
+            if (this.isDeveloper || this.isTester) {
+                this.perfComp.addPerfTime("Action Pricing Strategies", this.performanceTimes);
+                this.perfComp.setFinalDetails("Action Pricing Strategies", "MT");
+            }
             await this.quickSaveContract('SaveAndLoad');
-            if (!this.initialLoad) {
+            if (!this.initialLoad && (this.isDeveloper || this.isTester)) {
                 this.perfComp.setFinalDetails("Contract Manager", "Unknown", true);
                 this.perfComp.generatechart(true);
                 this.drawChart = true;

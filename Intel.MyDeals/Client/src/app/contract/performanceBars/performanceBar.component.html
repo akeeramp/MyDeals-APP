@@ -1,15 +1,15 @@
 <!-- PERFORMANCE BARS 4 -->
-<div id="perfDetails" *ngIf="showPerfDetails" (click)="showDetails()" style="bottom:100% !important;width: 105%;">
-    <div style='border: 1px solid #666666; padding: 6px;'>
-    <div class='fr'><i class='intelicon-close-solid closePerf' (click)='closeDetails()'></i></div>
-    <div style='font-size: 16px; margin-left: 10px; font-weight: 200;'>Performance Times</div>
-    <table><tr><th></th><th></th><th>Task / Action performed</th><th>Time in sec</th></tr>
-        <tr *ngFor="let data of perfDataValue.data">
-            <td><i class='intelicon-information-solid' style='font-size: 14px;' [ngStyle]="{'color': data.color}"></i></td>
-            <td>{{data.name}}</td>
-            <td>{{data.title}}</td>
-            <td style='text-align: right;'><span [innerHTML]="showFixedValues(data.data[0])"></span></td>
-        </tr>
+<div id="perfDetails" *ngIf="showPerfDetails" (click)="showDetails()" style="left: 13px; width: 105%;" [ngStyle]="{'bottom': getBottomVal(isContract)}">
+    <div style='border: 1px solid #666666; padding: 6px;background: #fff'>
+        <div class='fr'><i class='intelicon-close-solid closePerf' (click)='closeDetails()'></i></div>
+        <div style='font-size: 16px; margin-left: 10px; font-weight: 200;'>Performance Times</div>
+        <table><tr><th></th><th></th><th>Task / Action performed</th><th>Time in sec</th></tr>
+            <tr *ngFor="let data of perfDataValue.data">
+                <td><i class='intelicon-information-solid' style='font-size: 14px;' [ngStyle]="{'color': data.color}"></i></td>
+                <td>{{data.name}}</td>
+                <td>{{data.title}}</td>
+                <td style='text-align: right;'><span [innerHTML]="showFixedValues(data.data[0])"></span></td>
+            </tr>
         </table>
     </div>
 </div>
@@ -27,7 +27,7 @@
         </kendo-chart-series>
     </kendo-chart>
 </div>
-<div id="perfLegend" *ngIf="totTimesValue != null && totTimesArray.length != 0" style="bottom: 60%; font-size: 10px; width: 100%; height: 15%; background-color: #fff;">
+<div id="perfLegend" *ngIf="totTimesValue != null && totTimesArray.length != 0" style="left: 14px;font-size: 10px; width: 100%; height: 15%; background-color: #fff;" [ngStyle]="{'bottom': getBottomStyle(isContract)}">
 <div *ngFor="let data of totTimesArray">
     <span class='fl legKey' [ngStyle]="{'background-color': getChartColor(data[0])}"></span>
     <span class='fl legData'>{{data[0]}}&nbsp;:&nbsp;{{data[1]}}s</span>

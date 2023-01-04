@@ -1066,6 +1066,14 @@ export class GridUtil {
         return uuid;
     };
 
+    static prefCacheMark(title) {
+        let prefCacheMark = {
+            title : title,
+            type : "mark",
+            start : moment()
+        }
+        return prefCacheMark;
+    }
    static getChartColor(key) {
         if (key === "UI") return "#FFA300";
         if (key === "MT") return "#00AEEF";

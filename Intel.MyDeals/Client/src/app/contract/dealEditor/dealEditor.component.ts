@@ -53,6 +53,8 @@ export class dealEditorComponent {
     @Input() in_Search_Results: any = [];
     @Input() in_Deal_Type: string = "";
     @ViewChild(GridComponent) private grid: GridComponent;
+    @Output() perfComp = new EventEmitter;
+    @Output() addPerfTimes = new EventEmitter;
     @Output() refreshedContractData = new EventEmitter;
     @Output() tmDirec = new EventEmitter();
     @Output() deTabInfmIconUpdate = new EventEmitter();
@@ -116,7 +118,15 @@ export class dealEditorComponent {
     public isRunning: boolean = false;
     private CAN_VIEW_COST_TEST = this.securityService.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper);
     private CAN_VIEW_MEET_COMP = this.securityService.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "FSE" && this.in_Is_Tender_Dashboard);
-
+    public isDeveloper = (<any>window).isDeveloper;
+    public isTester = (<any>window).isTester
+    public perfBar = {
+        action: '',
+        title: '',
+        label: '',
+        initial: false,
+        final: false
+    }
     private state: State = {
         skip: 0,
         take: 25,
@@ -937,8 +947,24 @@ export class dealEditorComponent {
         }
     }
 
+    setPerfBarDetails(action, title, label, initial, final) {
+        this.perfBar.action = action;
+        this.perfBar.title = title;
+        this.perfBar.label = label;
+        this.perfBar.initial = initial;
+        this.perfBar.final = final
+    }
+
     async SaveDeal() {
         this.isDataLoading = true;
+        if (this.isDeveloper || this.isTester) {
+            this.setPerfBarDetails('setInitialDetails', "Deal Editor Save & Validate", "UX", true, false);
+            this.perfComp.emit(this.perfBar);
+            this.setPerfBarDetails('setInitialDetails', "Save Contract Root", "UX", false, false);
+            this.perfComp.emit(this.perfBar);
+            this.setPerfBarDetails('setInitialDetails', "Gather data to pass", "UI", false, false);
+            this.perfComp.emit(this.perfBar);
+        }
         this.setBusy("Saving your data..", "Please wait while saving data.", "Info", true);
         if (!this.in_Is_Tender_Dashboard) {//Save and Validation functionality for Contract DE screen as well as Tender Manager DE Screen
             try {
@@ -955,6 +981,12 @@ export class dealEditorComponent {
                     this.setBusy('', '', '', false);
                     this.isWarning = true;
                     this.message = "Extending Deal Dates will result in the extension of Contract Dates. Please click 'OK', if you want to proceed.";
+                }
+                if (this.isDeveloper || this.isTester) {
+                    this.setPerfBarDetails('setFinalDetails', "Deal Editor Save & Validate", "UX", false, true);
+                    this.perfComp.emit(this.perfBar);
+                    this.setPerfBarDetails('drawChart', "", "", false, false);
+                    this.perfComp.emit(this.perfBar);
                 }
             }
             catch (ex) {
@@ -1012,6 +1044,10 @@ export class dealEditorComponent {
         this.isDataLoading = true;
         this.setBusy("Saving your data...", "Please wait as we save your information!", "Info", true);
         let isShowStopError = PTE_Validation_Util.validateDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.lookBackPeriod, this.templates, this.groups);
+        if (this.isDeveloper || this.isTester) {
+            this.setPerfBarDetails('mark', "Built data structure", "", false, false);
+            this.perfComp.emit(this.perfBar);
+        }
         if (isShowStopError) {
             this.loggerService.warn("Please fix validation errors before proceeding", "");
             this.gridData = process(this.gridResult, this.state);
@@ -1040,13 +1076,31 @@ export class dealEditorComponent {
                 "EventSource": 'WIP_DEAL',
                 "Errors": {}
             }
+
+            if (this.isDeveloper || this.isTester) {
+                this.setPerfBarDetails('setFinalDetails', "Gather data to pass", "UI", false, false);
+                this.perfComp.emit(this.perfBar);
+                this.setPerfBarDetails('setInitialDetails', "Update Contract And CurPricing Table", "MT", false, false);
+                this.perfComp.emit(this.perfBar);
+            }
             let response: any = await this.pteService.updateContractAndCurPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).toPromise().catch((err) => {
                 this.loggerService.error("dealEditorComponent::saveUpdateDEAPI::", err);
                 this.isDataLoading = false;
             });
             if (response != undefined && response != null && response.Data != undefined && response.Data != null
                 && response.Data.WIP_DEAL != undefined && response.Data.WIP_DEAL != null && response.Data.WIP_DEAL.length > 0) {
+                if (this.isDeveloper || this.isTester) {
+                    this.addPerfTimes.emit(response.PerformanceTimes);
+                    this.setPerfBarDetails('setFinalDetails', "Update Contract And CurPricing Table", "MT", false, false);
+                    this.perfComp.emit(this.perfBar);
+                    this.setPerfBarDetails('setInitialDetails', "Processing returned data", "UI", false, false);
+                    this.perfComp.emit(this.perfBar);
+                }
                 this.setBusy("Saving your data...Done", "Processing results now!", "Info", true);
+                if (this.isDeveloper || this.isTester) {
+                    this.setPerfBarDetails('mark', "Constructing returnset", "", false, false);
+                    this.perfComp.emit(this.perfBar);
+                }
                 this.savedResponseWarning = [];
                 await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
                 let isanyWarnings = false;
@@ -1079,6 +1133,12 @@ export class dealEditorComponent {
                 }
             }
             await this.getWipDealData();
+            if (this.isDeveloper || this.isTester) {
+                this.setPerfBarDetails('setFinalDetails', "Processing returned data", "UI", false, false);
+                this.perfComp.emit(this.perfBar);
+                this.setPerfBarDetails('setFinalDetails', "Save Contract Root", "UX", false, false);
+                this.perfComp.emit(this.perfBar);
+            }
             this.dirty = false;
         }
     }
