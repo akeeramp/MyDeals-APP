@@ -971,9 +971,8 @@ export class contractDetailsComponent {
                     this.dropDownsData['CUST_ACCPT'] = CUST_ACCPT;
                     // below lines of code is to set default value for contract type dropdown.
                     this.CONTRACT_TYPE = CONTRACT_TYPE[0];
-                      const qString = this.route.snapshot.paramMap.get('DealID');
-
-                    if (qString ==null) {
+                    const conrtType = this.route.snapshot.url.find(x => x.path == 'copycid');
+                    if (!!conrtType && conrtType.path =='copycid') {
                         this.c_Id = parseInt(this.route.snapshot.paramMap.get('cid'));
                         this.isCopyContract = true;
                         this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
