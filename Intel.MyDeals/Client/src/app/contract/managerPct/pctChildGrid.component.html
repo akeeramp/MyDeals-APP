@@ -19,7 +19,7 @@
         <ng-template kendoGridCellTemplate let-dataItem>
             <div class='dealLnk' style="display:flex">
                 <deal-popup-icon [dealId]="dataItem.DEAL_ID" style="margin-bottom: 8px;margin-left: -7px;"></deal-popup-icon>
-                <a style="margin-top: 5px;"(click)="goToNavManagePCTChild(DC_PARENT_ID,psDC_ID,ptDC_ID,dataItem.DEAL_ID)" title="Click to go to Deal Editor"><span class="hyperunderline">{{dataItem.DEAL_ID}}</span></a>
+                <a style="margin-top: 5px;" (click)="goToNavManagePCTChild(dataItem)" title="Click to go to Deal Editor"><span class="hyperunderline">{{dataItem.DEAL_ID}}</span></a>
             </div>
         </ng-template>
     </kendo-grid-column>

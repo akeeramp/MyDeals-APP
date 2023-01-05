@@ -207,8 +207,8 @@ export class pctChildGridComponent {
         }
         return title;
     }
-    goToNavManagePCTChild(DC_PARENT_ID, DC_ID, ptDC_ID, DEAL_ID) {
-        window.open(`/Contract#/manager/WIP/${DC_PARENT_ID}/${DC_ID}/${ptDC_ID}/${DEAL_ID}`, '_blank')
+    goToNavManagePCTChild(dataItem) {
+        window.open(`/advancedSearch#/gotoDeal/${dataItem.DEAL_ID}`, '_blank')
     }
     ngOnChanges() {
         this.userRole = (<any>window).usrRole;

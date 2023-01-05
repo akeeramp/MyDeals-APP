@@ -547,8 +547,8 @@ export class managerPctComponent {
             this.isAllCollapsed = false;
         }
     }
-    goToNavManagePCT(DC_PARENT_ID, DC_ID, ptDC_ID, DEAL_ID) {
-        window.open(`/Contract#/manager/WIP/${DC_PARENT_ID}/${DC_ID}/${ptDC_ID}/${DEAL_ID}`, '_blank')
+    goToNavManagePCT(dataItem) {
+        window.open(`/advancedSearch#/gotoDeal/${dataItem.DEAL_ID}`, '_blank')
     }
 
 

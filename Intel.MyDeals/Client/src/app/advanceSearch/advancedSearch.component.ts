@@ -255,8 +255,8 @@ export class AdvancedSearchComponent implements OnInit {
         var en = this.endDateValue.toLocaleDateString();
         let endDate = en.replace(/\//g, '-');
         let searchText = '';
-        if (window.localStorage.selectedCustNames != undefined)
-            this.getCustomerNames();
+        this.selectedCustNames = [];
+        if (window.localStorage.selectedCustNames != undefined) this.getCustomerNames();
         searchText = this.selectedCustNames.length === 0 ? "null" : this.selectedCustNames.join(',');
         if (this.state.skip == 0) searchText += "?$inlinecount=allpages&$top=" + this.state.take;
         else if (this.state.skip >= 25) searchText += "?$inlinecount=allpages&$top=" + this.state.take + "&$skip=" + this.state.skip;
@@ -375,6 +375,12 @@ export class AdvancedSearchComponent implements OnInit {
 
     //invoke search deals after Run Rules completed
     invokeSearchDatasource(args) {
+        this.state.skip = 0;
+        this.state.group = [];
+        this.state.filter = {
+            logic: "and",
+            filters: [],
+        };
         if (args.rule.length > 0) {
             this.ruleData = args.rule;
             this.searchDeals();
