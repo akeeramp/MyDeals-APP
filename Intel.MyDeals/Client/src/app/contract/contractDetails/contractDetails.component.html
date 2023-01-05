@@ -88,7 +88,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <kendo-numerictextbox [min]="contractData?.MinYear"
-                                                                  [max]="contractData?.MaxYear" [autoCorrect]="false" [format]="format"
+                                                                  [max]="contractData?.MaxYear"  autoCorrect="true" [format]="format"
                                                                   [(ngModel)]="START_YR" name="START_YR" (valueChange)="onKeySearch($event,'START_YR')" class="dateboxborder font-input" required>
                                             </kendo-numerictextbox>
                                         </div>
@@ -116,7 +116,7 @@
                                         </div>
                                         <div class="col-md-4">
                                             <kendo-numerictextbox [min]="contractData?.MinYear"
-                                                                  [max]="contractData?.MaxYear" [autoCorrect]="false" [format]="format"
+                                                                  [max]="contractData?.MaxYear" autoCorrect="true" [format]="format"
                                                                   [(ngModel)]="END_YR" [disabled]="NO_END_DT" name="END_YR" (valueChange)="onKeySearch($event,'END_YR')" class="dateboxborder font-input" required></kendo-numerictextbox>
 
                                         </div>

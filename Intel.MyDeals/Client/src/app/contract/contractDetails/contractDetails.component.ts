@@ -935,15 +935,15 @@ export class contractDetailsComponent {
             if (moment(response['QTR_END']) < moment(new Date())) {
                 response['QTR_END'] = moment(response['QTR_END']).add(365, 'days').format('l');
             }
-            this.contractData.MinDate = moment(response['MIN_STRT']).format('l');
-            this.contractData.MaxDate = moment(response['MIN_END']).format('l');
+            this.contractData.MinDate = this.MinDate = moment(response['MIN_STRT']).format('l');
+            this.contractData.MaxDate = this.MaxDate = moment(response['MIN_END']).format('l');
             if (dateType == 'START_DT') {
-                this.contractData.START_QTR = response['QTR_NBR'];
-                this.contractData.START_YR = response.YR_NBR;
+                this.contractData.START_QTR = this.START_QTR = response['QTR_NBR'];
+                this.contractData.START_YR = this.START_YR = response.YR_NBR;
                 this.validateDate('START_DT');
             } else {
-                this.contractData.END_QTR = response.QTR_NBR;
-                this.contractData.END_YR = response.YR_NBR;
+                this.contractData.END_QTR = this.END_QTR = response.QTR_NBR;
+                this.contractData.END_YR = this.END_YR = response.YR_NBR;
                 this.validateDate('END_DT');
             }
             this.isLoading = false;
@@ -997,8 +997,6 @@ export class contractDetailsComponent {
                                         this.contractData.END_DT = moment('2099/12/31').format("MM/DD/YYYY");
                                         this.END_DT = this.existingMinEndDate = new Date(moment(this.contractData.END_DT).format("l"));
                                     }
-                                    await this.updateQuarterByDates('START_DT', this.contractData.START_DT);
-                                    await this.updateQuarterByDates('END_DT', this.contractData.END_DT);
                                     this.contractData.START_QTR = this.START_QTR = this.copyContractData.START_QTR;
                                     this.contractData.START_YR = this.START_YR = this.copyContractData.START_YR;
                                     this.contractData.END_QTR = this.END_QTR = this.copyContractData.END_QTR;
@@ -1009,6 +1007,8 @@ export class contractDetailsComponent {
                                     this.contractData.CUST_ACCNT_DIV_UI = !this.contractData["CUST_ACCNT_DIV"] ? "" : this.contractData["CUST_ACCNT_DIV"].split("/");
                                     this.updateCorpDivision(this.copyContractData.CUST_MBR_SID);
                                     this.pastDateConfirm(this.contractData.START_DT);  // Check for Backdate Reason
+                                    await this.updateQuarterByDates('START_DT', this.contractData.START_DT);
+                                    await this.updateQuarterByDates('END_DT', this.contractData.END_DT);
                                     //loader disable
                                     this.isLoading=false;
                                 },(err)=>{
