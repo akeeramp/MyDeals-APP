@@ -56,7 +56,7 @@
                                 </ng-template>
                                 <ng-template kendoTabContent>
                                     <div *ngIf="isDETab">
-                                        <deal-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [in_Search_Text]="searchText" [contractData]="contractData" [UItemplate]="UItemplate" (refreshedContractData)="refreshContractData($event)" (deTabInfmIconUpdate)="isDeTabInfmIconUpdate($event)" (pteRedir)="RedirectFn($event)">
+                                        <deal-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [in_Search_Text]="searchText" [contractData]="contractData" [UItemplate]="UItemplate" (refreshedContractData)="refreshContractData($event)"  (perfComp)="perfCompFn($event)" (addPerfTimes)="addPerfTimes($event)" (deTabInfmIconUpdate)="isDeTabInfmIconUpdate($event)" (pteRedir)="RedirectFn($event)">
                                         </deal-editor>
                                     </div>
                                 </ng-template>
@@ -166,11 +166,13 @@
         <lnavView [contractId]="c_Id" (modelChange)="loadModel($event)" [changedTab]="selectedTab" [contractData]="contractData" [UItemplate]="UItemplate"></lnavView>
     </div>
 </div>
+<div *ngIf="enablePerfChart && isDETab" [hidden]="!drawChart" style="position: relative; left: 76% !important; height: 3% !important; width: 400px !important; bottom: 894px !important;">
+    <performance-bars [type]="perfModel"></performance-bars>
+</div>
 
-
-    <kendo-dialog (close)="closeAlert()" *ngIf="error" id="noData" [width]="500" [height]="150">
-        <h3 style="text-align:center">No result found</h3>
-        <kendo-dialog-actions>
-            <button  class="btn btn-primary" kendoButton (click)="redirect()">OK</button>
-        </kendo-dialog-actions>
-    </kendo-dialog>
+<kendo-dialog (close)="closeAlert()" *ngIf="error" id="noData" [width]="500" [height]="150">
+    <h3 style="text-align:center">No result found</h3>
+    <kendo-dialog-actions>
+        <button  class="btn btn-primary" kendoButton (click)="redirect()">OK</button>
+    </kendo-dialog-actions>
+</kendo-dialog>

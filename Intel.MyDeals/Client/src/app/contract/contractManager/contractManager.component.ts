@@ -105,6 +105,7 @@ export class contractManagerComponent {
     public spinnerMessageHeader: any;
     public spinnerMessageDescription: any;
     public msgType: any;
+    public perfModel = 'Contract_Manager'
     public isBusyShowFunFact: any;
     // Allowed extensions for the attachments field
     myRestrictions: FileRestrictions = {

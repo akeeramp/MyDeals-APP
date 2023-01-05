@@ -11,7 +11,7 @@ import { GridUtil } from "../grid.util";
 })
 
 export class performanceBarsComponent {
-    public isContract: boolean = false;
+    @Input() type: string;
     public dealArray: any[];
     constructor(private loggerSvc: logger, private contractManagerSvc:contractManagerservice) {}
     public perfDataValue: {
@@ -74,14 +74,16 @@ export class performanceBarsComponent {
         return "#dddddd";
     };
 
-    getBottomStyle(data) {
-        if (data) return '60%';
-        else return '-110%'
+    getBottomStyle() {
+        if (this.type == 'Contract_Manager') return '60%';
+        else if (this.type == 'Tender') return '-110%';
+        else if (this.type == 'Contract') return '-462%';
     }
 
-    getBottomVal(data) {
-        if (data) return '100%';
-        else return '-1096%';
+    getBottomVal() {
+        if (this.type == 'Contract_Manager') return '100%';
+        else if (this.type == 'Tender') return '-1096%';
+        else if (this.type == 'Contract') return '-1455%';
     }
 
     setInitialDetails(action, label, initial?: boolean) {
@@ -170,7 +172,6 @@ export class performanceBarsComponent {
 
    
     drawChart() {
-        this.isContract = this.marks[0].title == 'Contract Manager' ? true : false;
         let data = {
             executionMs: this.marks[0].executionMs,
             data: this.getChartData(this.marks[0])

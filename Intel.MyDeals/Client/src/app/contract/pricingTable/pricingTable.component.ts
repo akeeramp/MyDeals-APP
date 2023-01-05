@@ -8,6 +8,7 @@ import { pricingTableEditorService } from '../../contract/pricingTableEditor/pri
 import { lnavService } from "../lnav/lnav.service";
 import { dealEditorComponent } from "../dealEditor/dealEditor.component"
 import { pricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
+import { performanceBarsComponent } from '../performanceBars/performanceBar.component';
 import { ActivatedRoute } from '@angular/router';
 
 export interface contractIds {
@@ -27,14 +28,17 @@ export interface contractIds {
 })
 
 export class pricingTableComponent {
+    public drawChart: boolean;
     constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: templatesService,
         private pteService: pricingTableEditorService, private lnavSvc: lnavService, private route: ActivatedRoute) {}
     @ViewChild(pricingTableEditorComponent) private pteComp: pricingTableEditorComponent;
+    @ViewChild(performanceBarsComponent) public perfComp: performanceBarsComponent;
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
     public curPricingStrategy = {};
     public pricingTableData = {};
     public c_Id: number;
-    type:string
+    public type: string;
+    public perfModel = 'Contract';
     public ps_Id: number;
     public pt_Id: number;
     public PRC_ST: any;
@@ -60,6 +64,7 @@ export class pricingTableComponent {
     private searchText: any;
     private selectedTab: any;
     public error: boolean = false;
+    public enablePerfChart:boolean = (<any>window).isDeveloper || (<any>window).isTester;
 
     public searchedContractData = {
         Model: "",
@@ -92,6 +97,27 @@ export class pricingTableComponent {
                 }, 100);
             }
         });
+    }
+
+    perfCompFn(data) {
+        this.drawChart = false;
+        if (data.action == 'setInitialDetails') {
+            this.perfComp.setInitialDetails(data.title, data.label, data.initial);
+        }
+        else if (data.action == 'setFinalDetails') {
+            this.perfComp.setFinalDetails(data.title, data.label, data.final);
+        }
+        else if (data.action == 'mark') {
+            this.perfComp.mark(data.title);
+        }
+        else {
+            this.perfComp.generatechart(true)
+            this.drawChart = true;
+        };
+    }
+
+    addPerfTimes(perfData) {
+        this.perfComp.addPerfTime("Update Contract And CurPricing Table", perfData);
     }
 
     async loadModel(contractModel: contractIds, isRedirect: boolean = false) {
@@ -157,7 +183,6 @@ export class pricingTableComponent {
                             }
                         }
                     }
-
                 }
             }
             //defaulting the PTE page to load the images

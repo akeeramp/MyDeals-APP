@@ -47,6 +47,7 @@ export class tenderManagerComponent {
     public result: any = null;
     public isDialogVisible = false;
     public dirtyItems;
+    public perfModel = 'Tender';
     public gotoPD = "";
     public pt_passed_validation: boolean;
     public compMissingFlag: any;
