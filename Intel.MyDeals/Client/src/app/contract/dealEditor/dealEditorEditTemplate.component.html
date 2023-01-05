@@ -136,7 +136,7 @@
 </div>
 <div *ngIf="in_Field_Name == 'DEAL_COMB_TYPE' || in_Field_Name == 'CONTRACT_TYPE' || in_Field_Name == 'PERIOD_PROFILE'
      || in_Field_Name == 'RESET_VOLS_ON_PERIOD' || in_Field_Name == 'BACK_DATE_RSN' || in_Field_Name == 'CONSUMPTION_REASON'
-     || in_Field_Name == 'SEND_TO_VISTEX' || in_Field_Name == 'SERVER_DEAL_TYPE' || in_Field_Name == 'CONSUMPTION_TYPE'">
+     || in_Field_Name == 'SEND_TO_VISTEX' || in_Field_Name == 'SERVER_DEAL_TYPE' || in_Field_Name == 'CONSUMPTION_TYPE' || in_Field_Name == 'EXPIRE_YCS2'">
     <kendo-dropdownlist [data]="dropDowResponse[in_Field_Name]"
                         [ngModel]="in_DataItem[in_Field_Name]" (blur)='showToolTip(in_DataItem, in_Field_Name, contractType)'
                         (ngModelChange)="in_DataItem[in_Field_Name] = $event"

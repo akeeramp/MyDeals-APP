@@ -130,10 +130,10 @@ export class dealEditorCellTemplateComponent {
             dim = this.ecapDimKey;
         }
         if (field == "KIT_ECAP" || field == "CAP_KIT" || field == "YCS2_KIT") {
-            if (data.ECAP_PRICE && data.ECAP_PRICE[this.kitEcapdim] !== undefined && data.ECAP_PRICE[this.kitEcapdim] !== null && data.ECAP_PRICE[this.kitEcapdim] !== "")
-                data.ECAP_PRICE[this.kitEcapdim] = this.currencyPipe.transform(data.ECAP_PRICE[this.kitEcapdim], 'USD', 'symbol', '1.2-2');
-            dim = this.kitEcapdim;
             field = field == "CAP_KIT" ? "CAP" : field == "YCS2_KIT" ? "YCS2_PRC_IRBT" : "ECAP_PRICE";
+            if (data[field] && data[field][this.kitEcapdim] !== undefined && data[field][this.kitEcapdim] !== null && data[field][this.kitEcapdim] !== "")
+                data[field][this.kitEcapdim] = this.currencyPipe.transform(data[field][this.kitEcapdim], 'USD', 'symbol', '1.2-2');
+            dim = this.kitEcapdim;
         }
         if (field == "SUBKIT_ECAP") {
             if (data.ECAP_PRICE && data.ECAP_PRICE[this.subKitEcapDim] !== undefined && data.ECAP_PRICE[this.subKitEcapDim] !== null && data.ECAP_PRICE[this.subKitEcapDim] !== "")

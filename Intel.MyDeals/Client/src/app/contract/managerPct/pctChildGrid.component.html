@@ -39,7 +39,11 @@
             'M/d/yyyy'}}-{{dataItem?.DEAL_END_DT | date: 'M/d/yyyy'}} </ng-template>
     </kendo-grid-column>
     <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}" [width]="100"
-                       [hidden]="!hasPermissionPrice" *ngIf="!isHidden('MAX_RPU')"></kendo-grid-column>
+                       [hidden]="!hasPermissionPrice" *ngIf="!isHidden('MAX_RPU')">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span>{{dataItem.MAX_RPU | currency}}</span>
+        </ng-template>
+    </kendo-grid-column>
     <kendo-grid-column title="OEM Platform Launch Date" [width]="180" field="OEM_PLTFRM_LNCH_DT"
                        [headerClass]="{'headerClass':true}" *ngIf="!isHidden('OEM_PLTFRM_LNCH_DT')">
         <ng-template kendoGridCellTemplate let-dataItem><span

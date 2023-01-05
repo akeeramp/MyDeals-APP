@@ -92,7 +92,13 @@ export class pricingTableEditorComponent {
             }
             async openPopUp() {
                 VM.curRow = [];
-                const selVal = this.hot.getDataAtCell(this.selRow, this.selCol);
+                let selVal = this.hot.getDataAtCell(this.selRow, this.selCol);
+                if (this.field == 'PAYOUT_BASED_ON' || this.field == 'PERIOD_PROFILE' || this.field == 'RESET_VOLS_ON_PERIOD'
+                    || this.field == 'AR_SETTLEMENT_LVL' || this.field == 'REBATE_TYPE' || this.field == 'PROD_INCLDS'
+                    || this.field == 'SETTLEMENT_PARTNER' || this.field == 'SERVER_DEAL_TYPE' || this.field == 'PROGRAM_PAYMENT') {
+                    if (!this.source.includes(selVal))
+                        selVal = '';
+                }
                 let modalComponent: any = null,
                     name: string = '',
                     height: string = '',
@@ -777,8 +783,13 @@ export class pricingTableEditorComponent {
         }
     }
 
-    errorOnMdtFdDeletion(changes){
-        if ( (changes[0].new == null || changes[0].new == '' || changes[0].new == undefined) && this.pricingTableTemplates['model']['fields'][changes[0].prop].nullable == false ){
+    errorOnMdtFdDeletion(changes) {
+        let isRequired = false;
+        //to check whether modified column is requirede column or not
+        let behaviors = this.hotTable.getDataAtRowProp(changes[0].row, '_behaviors');
+        if (behaviors && behaviors.isRequired && behaviors.isRequired[changes[0].prop])
+            isRequired = true;
+        if ((changes[0].new == null || changes[0].new == '' || changes[0].new == undefined) && this.pricingTableTemplates['model']['fields'][changes[0].prop].nullable == false && isRequired){
             let colSPIdx = _.findIndex(this.columns, { data: changes[0].prop });
             this.cellComments.push({ row: changes[0].row, col: colSPIdx, comment: { value: 'This field is required', readOnly: true }, className: 'error-border' });
             this.hotTable.updateSettings({

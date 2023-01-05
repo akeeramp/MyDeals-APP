@@ -236,10 +236,16 @@ export class AdvancedSearchComponent implements OnInit {
 
     //Excel Export
     exportToExcel() {
-        GridUtil.dsToExcel(this.columns, this.gridResult, "Search Export");
+        if (this.gridResult && this.gridResult.length > 0)
+            GridUtil.dsToExcel(this.columns, this.gridResult, "Search Export");
+        else
+            this.loggerSvc.warn("No Records Found", "");
     }
     exportToExcelCustomColumns() {
-        GridUtil.dsToExcel(this.columns, this.gridData.data, "Search Export");
+        if (this.gridData && this.gridData.data && this.gridData.data.length > 0)
+            GridUtil.dsToExcel(this.columns, this.gridData.data, "Search Export");
+        else
+            this.loggerSvc.warn("No Records Found", "");
     }
     pageChange(state) {
         this.state.take = state.take;
