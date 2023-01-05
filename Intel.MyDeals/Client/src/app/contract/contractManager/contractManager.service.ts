@@ -13,7 +13,7 @@ export class contractManagerservice {
     public apiBaseCostTestUrl = "/api/CostTest/v1/";
     public apiBaseContractUrl = "/api/Contracts/v1/";
     public apiBasePricingStrategyUrl = "/api/PricingStrategies/v1/";
-
+    public apiBasePricingTableUrl = "/api/PricingTables/v1/";
 
     public getWipSummary(id): Observable<any>{
         // NOTE: Don't get angular-cached data b/c it needs latest data for the $state.go to work correctly in the contact.controller.js' createPricingTable()
@@ -54,5 +54,8 @@ export class contractManagerservice {
         const apiUrl: string = '/Email/EmailNotification';
         return this.httpClient.post(apiUrl,emailInfo);
     }
-
+    public getOverlappingDealsFromPricingStrategy(ids): Observable<any> {
+        const apiUrl: string = this.apiBasePricingTableUrl + 'GetOverlappingDealsFromPricingStrategy/' + ids;
+        return this.httpClient.get(apiUrl);
+    }
 }

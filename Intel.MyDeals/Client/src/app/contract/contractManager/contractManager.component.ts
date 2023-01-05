@@ -13,6 +13,7 @@ import { emailModal } from "./emailModal/emailModal.component";
 import { FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
 import * as _ from 'underscore';
 import { performanceBarsComponent } from '../performanceBars/performanceBar.component';
+import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
 
 export interface contractIds {
     Model: string;
@@ -892,6 +893,7 @@ export class contractManagerComponent {
                 this.quickSaveContract('Save');
             }
         }
+
         this.curDataItems = dataItems;
         if (this.isDeveloper || this.isTester) {
             this.perfComp.setFinalDetails("Gather data to pass", "UI");
@@ -906,22 +908,19 @@ export class contractManagerComponent {
                     showErrMsg: this.needMct()
                 }
             });
-            dialogRef.afterClosed().subscribe((returnVal) => {
-                this.perfComp.setFinalDetails("User Modal", "UI");
+            dialogRef.afterClosed().subscribe(async (returnVal) => {
+                if (this.isDeveloper || this.isTester)
+                    this.perfComp.setFinalDetails("User Modal", "UI");
                 if (returnVal == 'success') {
                     if (saveCustAcceptance === true) {
                         this.isLoading = true;
-                        this.quickSaveContractFromDialog(this.requestBody);
-                        
+                        await this.quickSaveContractFromDialog(this.requestBody);
                     } 
                     this.canBypassEmptyActions = false;
                 }
             });
         }
             return;
-
-
-
     }
     updateTitleFilter() {
         if (this.titleFilter != "") {
@@ -950,48 +949,38 @@ export class contractManagerComponent {
             this.filteredData= this.contractData.PRC_ST;
         }
     }
-    async quickSaveContractFromDialog(value){
-        if(value){
+    async quickSaveContractFromDialog(data) {
+        this.drawChart = false;
+        if (data) {
             this.isLoading = true;
-            this.drawChart = false;
-            this.setBusy("Running PCT/MCT...", "Running Price Cost Test and Meet Comp Test", "Info", true);
-            this.isLoading = true;
-            this.initialLoad = false;
-            if (this.isDeveloper || this.isTester) this.perfComp.setInitialDetails("Action Pricing Strategies", "MT");
-            let response: any = await this.contractManagerSvc.actionPricingStrategies(this.contractData["CUST_MBR_SID"], this.contractData["DC_ID"], this.requestBody, this.contractData.CUST_ACCPT).toPromise().catch((error) => {
-                this.loggerSvc.error('Pricing Stratergy service', error);
-            });
-            this.messages = response.Data.Messages;
-            this.performanceTimes = response.PerformanceTimes;
-            if (this.isDeveloper || this.isTester) {
-                this.perfComp.addPerfTime("Action Pricing Strategies", this.performanceTimes);
-                this.perfComp.setFinalDetails("Action Pricing Strategies", "MT");
-            }
-            await this.quickSaveContract('SaveAndLoad');
-            if (!this.initialLoad && (this.isDeveloper || this.isTester)) {
-                this.perfComp.setFinalDetails("Contract Manager", "Unknown", true);
-                this.perfComp.generatechart(true);
-                this.drawChart = true;
-            }
+            this.setBusy("Saving Contract", "Saving the Contract Information", "Info", false);
+            await this.quickSaveContract('SaveContract',data);
         }
      
         this.canActionIcon = true;
     }
 
 
-    async quickSaveContract(action){
+    async quickSaveContract(action, data?){
         const ct = this.contractData;
         this.custAccptButton = this.contractData.CUST_ACCPT;
-        this.setBusy("Updating Pricing Strategy...", "Please wait as we update the Pricing Strategy!", "Info", true);
-        await this.contractManagerSvc.createContract(this.contractData["CUST_MBR_SID"], this.contractData["DC_ID"], ct).toPromise().catch((error) => {
-            this.loggerSvc.error('Save Contract service', error);
+        if (action != 'SaveContract')
+            this.setBusy("Updating Pricing Strategy...", "Please wait as we update the Pricing Strategy!", "Info", true);
+        let response = await this.contractManagerSvc.createContract(this.contractData["CUST_MBR_SID"], this.contractData["DC_ID"], ct).toPromise().catch((err) => {
+            this.loggerSvc.error('Save Contract service', err);
         });
-        this.isLoading = false;
-        if (action === 'SaveAndLoad') {
-            this.windowOpened = true;
-            this.loadContractDetails();
+        if(response) {
+            this.isLoading = false;
+            if (action === 'SaveAndLoad') {
+                this.windowOpened = true;
+                this.loadContractDetails();
+            }
+            else {
+                this.setBusy("Save Successful", "Saved the contract", "Success", true);
+                if (action == 'SaveContract' && data)// this logic is added to check is there any overlapping deals available or not
+                    await this.checkPriorToActioning(data)
+            }
         }
-
     }
 
     continueAction(fromToggle, checkForRequirements) {
@@ -1006,6 +995,125 @@ export class contractManagerComponent {
             this.actionItemsBase(true,null);
         }
         this.refreshedContractData.emit({ contractData: this.contractData });
+    }
+
+    async checkPriorToActioning(data) {
+        if (this.needToRunOverlaps.length > 0) {//If any overlapping is there, need to check PS level
+            if (this.isDeveloper || this.isTester)
+                this.perfComp.setInitialDetails("Running Overlapping check", "MT");
+            this.setBusy("Overlapping Deals Check", "Running Overlapping Deals Check.", "Info", true);
+            let response = await this.contractManagerSvc.getOverlappingDealsFromPricingStrategy(this.needToRunOverlaps.join(',')).toPromise().catch((err) => {
+                this.loggerSvc.error('Could not run Overlapping Check.', err);
+                this.setBusy("Error", "Could not Run Overlapping Check.", "Warning", false);
+                setTimeout(() => {
+                    this.setBusy("", "", "", false);
+                }, 2000);
+            });
+            if (response) {
+                if (this.isDeveloper || this.isTester)
+                    this.perfComp.setFinalDetails("Running Overlapping check", "MT");
+                if (response.Data.length == 0) {
+                    this.setBusy("PCT/MCT Complete", "Price Cost Test and Meet Comp Test Completed.", "Success", true);
+                    this.checkPctMctPriorToActioning(data)
+                }
+                else {//If PS having overlapping deals, open Overlapping deals popup
+                    this.openOverLappingDealCheck(response.Data);
+                    this.setBusy("", "", "", false);
+                }
+            }
+        }
+        else {
+            this.checkPctMctPriorToActioning(data)
+        }
+            
+    }
+
+    openOverLappingDealCheck(response) {
+        const data = {
+            "contractData": this.contractData,
+            "currPt": this.contractData,
+            "responseData": response
+        }
+        const dialogRef = this.dialog.open(OverlappingCheckComponent, {
+            data: data,
+            panelClass: 'de-css-comp'
+        });
+        dialogRef.afterClosed().subscribe(result => { });
+    }
+
+    async checkPctMctPriorToActioning(data) {// To Run MCT/PCT to update the status
+        var ids = this.getIdsToPctMct(data);
+        if (ids.length > 0) {
+            this.isRunning = true;
+            if (this.isDeveloper || this.isTester)
+                this.perfComp.setInitialDetails("Running PCT/MCT", "MT");
+            this.setBusy("Running PCT/MCT", "Running Price Cost Test and Meet Comp Test.", "Info", true);
+            let response = await this.contractManagerSvc.runPctContract(this.contractData.DC_ID).toPromise().catch((err) => {
+                this.setBusy("Error", "Could not Run PCT/MCT.", "Warning", false);
+                this.loggerSvc.error("Could not run Cost Test in manager for contract " + this.contractData.DC_ID, err);
+                setTimeout(()=> {
+                    this.setBusy("", "", "", false);
+                    this.isRunning = false;
+                }, 2000);
+            })
+            if (response) {
+                if (this.isDeveloper || this.isTester)
+                    this.perfComp.setFinalDetails("Running PCT/MCT", "MT");
+                let msg = response.Message;
+                if (msg.includes("Didn't Pass")) 
+                {
+                    this.setBusy("PCT/MCT Complete", "Price Cost Test and Meet Comp Test Completed with Failure Result.  Approval actions will not be run.", "Warning", false);
+                }
+                else 
+                {
+                    this.setBusy("PCT/MCT Complete", "Price Cost Test and Meet Comp Test Completed.", "Success",false);
+                }
+                this.isRunning = false;
+                this.actionPricingStrategies(data);
+            };
+        } else {
+            this.actionPricingStrategies(data);
+        }
+    }
+    async actionPricingStrategies(data) {
+        this.setBusy("Updating Pricing Strategy...", "Please wait as we update the Pricing Strategy!", "Info", true);
+        this.initialLoad = false;
+        if (this.isDeveloper || this.isTester)
+            this.perfComp.setInitialDetails("Action Pricing Strategies", "MT");
+        let response = await this.contractManagerSvc.actionPricingStrategies(this.contractData["CUST_MBR_SID"], this.contractData["DC_ID"], this.requestBody, this.contractData.CUST_ACCPT).toPromise().catch((err) => {
+            this.loggerSvc.error("Failed to Update Pricing Strategy", err);
+        })
+        if (response) {
+            this.performanceTimes = response.PerformanceTimes;
+            if (this.isDeveloper || this.isTester) {
+                this.perfComp.addPerfTime("Action Pricing Strategies", this.performanceTimes);
+                this.perfComp.setFinalDetails("Action Pricing Strategies", "MT");
+            }
+            this.messages = response.Data.Messages;
+            setTimeout(() => {
+                this.loadContractDetails();
+                this.setBusy("", "","",false);
+            }, 50);
+            if (this.isDeveloper || this.isTester) {
+                this.perfComp.setFinalDetails("Contract Manager", "Unknown", true);
+                this.perfComp.generatechart(true);
+                this.drawChart = true;
+            }
+        }        
+    }
+    getIdsToPctMct = function (data) {
+        var rtn = [];
+        var role = (<any>window).usrRole;
+        var apprItems = data["Approve"];
+        if (!!apprItems) {
+            for (var a = 0; a < apprItems.length; a++) {
+                var stage = apprItems[a]["WF_STG_CD"];
+                if (((role === "GA" && stage === "Requested") || (role === "DA" && stage === "Submitted"))) {
+                    rtn.push(apprItems[a]["DC_ID"]);
+                }
+            }
+        }
+        return rtn;
     }
     ngOnInit() {
         try {

@@ -24,6 +24,7 @@ export class OverlappingCheckComponent {
     }
     @Input() contractData: any;
     @Input() curPricingTable: any;
+    @Input() responseData: any;
     private acceptYes = false;
     public pricingId: number;
     public contractDetails: any;
@@ -243,10 +244,9 @@ export class OverlappingCheckComponent {
 
     getOverlapCheckDetails() {
         this.pricingId = this.curPricingTable.DC_ID;
-        this.overLappingCheckDealsSvc.getOverLappingCheckDealsDetails(this.pricingId).subscribe((result: any) => {
-            this.isLoading = false;
-            this.ovlpData = this.prepareGridData(result.Data);
-            this.ovlpErrorCount = distinct(result.Data, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
+        if (!!this.responseData && this.responseData) {
+            this.ovlpData = this.prepareGridData(this.responseData);
+            this.ovlpErrorCount = distinct(this.responseData, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
             this.gridResult = this.ovlpData;
             if (this.gridResult.length == 0) {
                 this.isNoDealsFound = true;
@@ -258,10 +258,33 @@ export class OverlappingCheckComponent {
             { field: "WIP_DEAL_OBJ_SID" }];
             this.state.group = groups;
             this.gridData = process(this.gridResult, this.state);
-        }, (error) => {
             this.isLoading = false;
-            this.loggerSvc.error('OverLapDeals service', error);
-        });
+        }
+        else
+        {
+            this.overLappingCheckDealsSvc.getOverLappingCheckDealsDetails(this.pricingId).subscribe((result: any) => {
+                this.isLoading = false;
+                this.ovlpData = this.prepareGridData(result.Data);
+                this.ovlpErrorCount = distinct(result.Data, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
+                this.gridResult = this.ovlpData;
+                if (this.gridResult.length == 0) {
+                    this.isNoDealsFound = true;
+                }
+                else {
+                    this.isNoDealsFound = false;
+                }
+                let groups = [{ field: "PROGRAM_PAYMENT" },
+                { field: "WIP_DEAL_OBJ_SID" }];
+                this.state.group = groups;
+                this.gridData = process(this.gridResult, this.state);
+            }, (error) => {
+                this.isLoading = false;
+                this.loggerSvc.error('OverLapDeals service', error);
+            });
+        }
+
+
+
         this.overLappingCheckDealsSvc.readContract(this.pricingId).subscribe((response: Array<any>) => {
             this.contractDetails = response[0];
         },(err)=>{
@@ -347,6 +370,7 @@ export class OverlappingCheckComponent {
         if (this.curPricingTable == undefined) {
             this.curPricingTable = this.data.currPt;
             this.contractData = this.data.contractData;
+            this.responseData = this.data.responseData;
         }
         if (this.data.srcScrn == "overLapping") {
             this.getOverlapDetails();
