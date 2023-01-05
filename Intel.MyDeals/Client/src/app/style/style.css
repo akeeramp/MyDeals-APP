@@ -1461,3 +1461,33 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
 #OvrLp kendo-grid-filter-menu {
     padding-right: 4px !important;
 }
+
+kendo-grid.overDealChecking.widthOutDesign.k-widget table tr th {
+    background-color: #e7e7e8 !important;
+    color: #1a3e6f !important;
+    font-size: 10px !important;
+    font-weight: 700 !important;
+    border-right-color: #c4cfd4 !important;
+    border-left-color: #c4cfd4 !important;
+    font-family: 'Intel Clear' !important;
+}
+
+kendo-grid.overDealChecking.widthOutDesign.k-widget .k-grid-filter .k-icon.k-i-filter {
+    color: #00AEEF !important;
+    opacity: 1;
+    font-size: 14px;
+}
+
+.headerTitlesOver kendo-window-titlebar {
+    padding: 10px 5px;
+}
+
+kendo-grid.overDealChecking.widthOutDesign.k-widget kendo-grid-list table tbody tr.k-grid-norecords td {
+    height: 383px;
+    width: 792px;
+    max-width: 792px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background-color: #fff !important;
+}

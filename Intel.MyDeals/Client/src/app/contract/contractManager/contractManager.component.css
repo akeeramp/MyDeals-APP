@@ -848,3 +848,7 @@ button.btn.btn-sm.btn-grey.c2a-back-btnstyle:hover {
     align-items: center !important;
     position: relative !important;
 }
+
+.collectContractManagers .sumPsContainer:last-child{
+    margin-bottom: 15px;
+}

@@ -570,3 +570,16 @@ i.intelicon-vertical-menu.blue_b_fix {
     margin-bottom: calc(100vh - 0px) !important;
     top: 30px !important;
 }
+
+.lnavAligners {
+    align-items: center;
+    justify-content: flex-start;
+    display: flex;
+}
+
+.compactWidths {
+    max-width: 200px;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}

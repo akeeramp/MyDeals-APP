@@ -354,7 +354,7 @@ a.prdAnchor {
     padding: 20px;
     padding-bottom: 0;
     min-height: 180px;
-    height: 280px;
+    height: calc(100vh - 430px) !important;
     overflow-y: auto;
     max-height: 100%;
     padding-top: 0;
@@ -869,7 +869,11 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
     width: 100%
 }
 
-@media screen and (max-height:715px) {
+#prodGrid kendo-grid.raid-style.proselector-raid-style {
+    height: calc(100vh - 440px);
+}
+
+@media screen and (max-height:700px) {
     .ps-v-modal-footer {
         padding: 0;
         bottom: 0;
@@ -882,14 +886,19 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
     .productSelector.Issue {
         font-size: 14px
     }
+
+    .prodSelector.modal-body {
+        height: 280px !important;
+    }
+
+    #prodGrid kendo-grid.raid-style.proselector-raid-style {
+        height: 276px !important;
+    }
 }
-.prodSelector.modal-body.prodFull-height-fix {
+/*.prodSelector.modal-body.prodFull-height-fix {
     height: 100% !important;
     overflow-y: hidden;
-}
+}*/
 
-#prodGrid kendo-grid.raid-style.proselector-raid-style {
-    height: calc(100vh - 475px) !important;
-}
 
 
