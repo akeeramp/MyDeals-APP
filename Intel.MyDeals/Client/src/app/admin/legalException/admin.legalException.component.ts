@@ -510,7 +510,6 @@ export class adminlegalExceptionComponent {
             }
             const dialogRef = this.dialog.open(adminDownloadExceptionscomponent, {
                 width: "600px",
-                height: "300px",
                 panelClass: 'legal-download-custom',
                 data: data,
             });

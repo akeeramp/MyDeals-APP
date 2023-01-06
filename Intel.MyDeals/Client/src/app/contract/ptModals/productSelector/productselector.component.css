@@ -873,6 +873,17 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
     height: calc(100vh - 440px);
 }
 
+.declaringProdGrid {
+    height: 100%;
+}
+
+    .declaringProdGrid kendo-grid.select-suggest-pop-up {
+        height: 86%;
+        overflow: auto;
+        position: relative;
+        top: -19px;
+    }
+
 @media screen and (max-height:700px) {
     .ps-v-modal-footer {
         padding: 0;
