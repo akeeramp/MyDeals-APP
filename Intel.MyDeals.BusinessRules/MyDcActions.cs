@@ -1150,9 +1150,10 @@ namespace Intel.MyDeals.BusinessRules
             {
                 DateTime chkDate = OpConvertSafe.ToDateTime(deEndDate.AtrbValue.ToString());
                 // Have to get a safe version of datatime(now) minus our buffer to force check to be 12AM time based like Start/End Dates
-                bool isDealTooOld = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0; 
+                bool isDealTooOld = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0;
 
-                if (deEndDate.AtrbValue.ToString() != "" && isDealTooOld) // Safety and Too Old check
+                // Added in hastracker check so that we revert back to old code conditions, remove "&& r.Dc.HasTracker()" to go back
+                if (deEndDate.AtrbValue.ToString() != "" && isDealTooOld && r.Dc.HasTracker()) // Safety and Too Old check 
                 {
                     // Lock down the entire deal, it is 90 days old!!
                     foreach (OpDataElement dx in r.Dc.DataElements) 
