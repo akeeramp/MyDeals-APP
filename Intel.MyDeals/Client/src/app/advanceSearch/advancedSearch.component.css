@@ -368,3 +368,63 @@ span.k-textbox.searchbox.advance-text-box-style {
     position:relative !important;
     left:0px !important
 }
+kendo-dialog#advance-kendo-excel-popup {
+    width: 527px !important;
+    height: 795px !important;
+    left: 50rem !important
+}
+
+p.dialogmsg-advance-kendo {
+    padding: 26px !important;
+    color: #444 !important;
+    font-family: 'Intel Clear' !important;
+    font-size: 15px !important;
+}
+
+#advance-kendo-excel-popup .k-content.k-window-content.k-dialog-content {
+    padding: 0px !important;
+}
+
+#advance-kendo-excel-popup button.k-button {
+    height: 60px !important;
+    font-family: 'Intel Clear' !important;
+}
+
+#advance-kendo-excel-popup kendo-dialog-actions.k-dialog-buttongroup.k-actions.k-actions-stretched {
+    padding: 0px !important;
+    border-bottom-left-radius: 0px !important;
+    border-bottom-right-radius: 0px !important;
+}
+
+button.okbtn-advance-kendostyle.k-button {
+    border-radius: 0 !important;
+    width: 50%;
+    font-size: 15px;
+    font-family: "Intel Clear";
+    border-color: #00AEEF !important;
+    background-color: #00AEEF !important;
+    color: #fff !important;
+}
+
+button.okbtn-advance-kendostyle.k-button:hover {
+    color: #fff !important;
+    border-color: #0071c5 !important;
+    background-color: #0071c5 !important;
+}
+
+button.cacnelbtn-advance-kendostyle.k-button {
+    border-radius: 0 !important;
+    width: 50% !important;
+    margin-left: -7px !important;
+    font-size: 15px !important;
+    font-family: "Intel Clear";
+    border-color: #fafafa !important;
+    background-color: #fafafa !important;
+    color: #212529 !important;
+}
+
+button.cacnelbtn-advance-kendostyle.k-button:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important;
+}

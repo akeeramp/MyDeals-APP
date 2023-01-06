@@ -180,7 +180,22 @@
         </kendo-grid-column>
     </kendo-grid>
 </div>
-
+<kendo-dialog *ngIf="exportAll" id="advance-kendo-excel-popup">
+    <p class="dialogmsg-advance-kendo">
+        You are exporting a rather large amount of data ({{totalCount}} rows).
+        If you would like to continue, My Deals will only export the first 2000 items.
+        You might consider narrowing down your search or using BI Reporting.
+    </p>
+    <p style="margin-left:25px;position:relative; bottom:20px;">Would you like to continue?</p>
+    <div style="display:flex">
+        <kendo-dialog-actions style="flex-grow:1;">
+            <button kendoButton class="okbtn-advance-kendostyle" (click)="exportAllOk()">OK</button>
+        </kendo-dialog-actions>
+        <kendo-dialog-actions style="flex-grow:1">
+            <button kendoButton class="cancelbtn-advance-kendostyle" (click)="close()">CANCEL</button>
+        </kendo-dialog-actions>
+    </div>
+</kendo-dialog>
 
 <loading-panel-angular id="advancedSearchLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
                        [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>

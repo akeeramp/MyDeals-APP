@@ -106,7 +106,8 @@ export class managerPctComponent {
     toggleSum() {
         this.refreshPage= false;
         this.contractData?.PRC_ST.map((x, i) => {
-            this.isPSExpanded[i] = !this.isPSExpanded[i]
+            if (this.isAllCollapsed == true) this.isPSExpanded[i] = true;
+            else this.isPSExpanded[i] = false;
         });
         this.isAllCollapsed = !this.isAllCollapsed;
     }

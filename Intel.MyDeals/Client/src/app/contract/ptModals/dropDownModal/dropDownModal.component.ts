@@ -25,7 +25,7 @@ export class dropDownModalComponent {
 
     onSave() {
         let result = '';
-        result = this.value.toString();
+        result = this.value != null ? this.value.toString() : 'No';
         this.dialogRef.close(result);
     }
     ngOnInit() {

@@ -89,6 +89,9 @@ export class AdvancedSearchComponent implements OnInit {
     public advancedSearchDropdownFilter: any;
     public custFilter: any[] = [];
     public totalCount: any;
+    public exportAll: boolean = false;
+    public exportData: any;
+    public exportRows: boolean = false;
 
     constructor(protected cntrctWdgtSvc: contractStatusWidgetService, protected loggerSvc: logger, protected globalSearchSVC: globalSearchResultsService,
         private advancedSearchSvc: advancedSearchService) { }
@@ -235,11 +238,29 @@ export class AdvancedSearchComponent implements OnInit {
     }
 
     //Excel Export
-    exportToExcel() {
-        if (this.gridResult && this.gridResult.length > 0)
-            GridUtil.dsToExcel(this.columns, this.gridResult, "Search Export");
+    async exportToExcel() {
+        if (this.totalCount > 2000) this.exportAll = true;
+        else {
+            this.exportRows = true;
+            await this.searchDeals();
+            if (this.exportData && this.exportData.length > 0)
+                GridUtil.dsToExcel(this.columns, this.exportData, "Search Export");
+            else
+                this.loggerSvc.warn("No Records Found", "");
+        }
+
+    }
+
+    async exportAllOk() {
+        await this.searchDeals();
+        if (this.exportData && this.exportData.length > 0)
+            GridUtil.dsToExcel(this.columns, this.exportData, "Search Export");
         else
             this.loggerSvc.warn("No Records Found", "");
+        
+    }
+    close() {
+        this.exportAll = false;
     }
     exportToExcelCustomColumns() {
         if (this.gridData && this.gridData.data && this.gridData.data.length > 0)
@@ -253,8 +274,9 @@ export class AdvancedSearchComponent implements OnInit {
         this.searchDeals();
     }
     //deals search
-    searchDeals() {
+    async searchDeals() {
         this.isLoading = true;
+        let exportVal = false;
         this.setBusy("Searching...", "Search speed depends on how specific your search options are.", "Info", true);
         var st = this.startDateValue.toLocaleDateString();
         let startDate = st.replace(/\//g, '-');
@@ -264,8 +286,18 @@ export class AdvancedSearchComponent implements OnInit {
         this.selectedCustNames = [];
         if (window.localStorage.selectedCustNames != undefined) this.getCustomerNames();
         searchText = this.selectedCustNames.length === 0 ? "null" : this.selectedCustNames.join(',');
-        if (this.state.skip == 0) searchText += "?$inlinecount=allpages&$top=" + this.state.take;
-        else if (this.state.skip >= 25) searchText += "?$inlinecount=allpages&$top=" + this.state.take + "&$skip=" + this.state.skip;
+        if (this.exportAll) {
+            exportVal = true;
+            this.exportAll = false;
+            searchText += "?$inlinecount=allpages&$top=" + '1999';
+        } else if (this.exportRows) {
+            exportVal = true;
+            this.exportRows = false;
+            searchText += "?$inlinecount=allpages&$top=" + this.totalCount;
+        } else {
+            if (this.state.skip == 0) searchText += "?$inlinecount=allpages&$top=" + this.state.take;
+            else if (this.state.skip >= 25) searchText += "?$inlinecount=allpages&$top=" + this.state.take + "&$skip=" + this.state.skip;
+        }
         let filter = this.state.filter;
         if (filter && filter.filters && filter.filters.length > 0) {
             searchText += '&$filter=';
@@ -282,22 +314,29 @@ export class AdvancedSearchComponent implements OnInit {
             })
         }
 
-        this.advancedSearchSvc.getSearchList(startDate, endDate, searchText).subscribe((result: any) => {
+        let result: any = await this.advancedSearchSvc.getSearchList(startDate, endDate, searchText).toPromise().catch((err) => {
             this.isLoading = false;
-            this.setBusy('', '');
-            result.Items.forEach((row) => {
-                Object.assign(row, {
-                    Customer_NM: row.Customer.CUST_NM,
-                    WF_STG_CD: row.WF_STG_CD === "Draft" ? row.PS_WF_STG_CD : row.WF_STG_CD,
-                    TRKR_NBR_VAL: row.TRKR_NBR != undefined ? Object.values(row.TRKR_NBR)[0] : '',
-                    CAP_VAL: row.CAP != undefined ? Object.values(row.CAP)[0] : '',
-                    ECAP_PRICE_VAL: row.ECAP_PRICE != undefined ? Object.values(row.ECAP_PRICE)[0] : '',
-                    STRT_VOL_VAL: row.STRT_VOL != undefined ? Object.values(row.STRT_VOL)[0] : '',
-                    END_VOL_VAL: row.END_VOL != undefined ? Object.values(row.END_VOL)[0] : '',
-                    RATE_VAL: row.RATE != undefined ? Object.values(row.RATE)[0] : ''
-                })
+            this.loggerSvc.error("Template Retrieval Failed", "Error", err);
+        });
+        this.isLoading = false;
+        this.setBusy('', '');
+        result.Items.forEach((row) => {
+            Object.assign(row, {
+                Customer_NM: row.Customer.CUST_NM,
+                WF_STG_CD: row.WF_STG_CD === "Draft" ? row.PS_WF_STG_CD : row.WF_STG_CD,
+                TRKR_NBR_VAL: row.TRKR_NBR != undefined ? Object.values(row.TRKR_NBR)[0] : '',
+                CAP_VAL: row.CAP != undefined ? Object.values(row.CAP)[0] : '',
+                ECAP_PRICE_VAL: row.ECAP_PRICE != undefined ? Object.values(row.ECAP_PRICE)[0] : '',
+                STRT_VOL_VAL: row.STRT_VOL != undefined ? Object.values(row.STRT_VOL)[0] : '',
+                END_VOL_VAL: row.END_VOL != undefined ? Object.values(row.END_VOL)[0] : '',
+                RATE_VAL: row.RATE != undefined ? Object.values(row.RATE)[0] : ''
             })
-            this.totalCount = result.Count;
+        })
+        this.totalCount = result.Count;
+        if (exportVal) {
+            exportVal = false;
+            this.exportData = result.Items;
+        } else {
             if (this.state.skip == 0) this.gridResult = result.Items;
             else {
                 this.gridResult = [];
@@ -313,11 +352,7 @@ export class AdvancedSearchComponent implements OnInit {
             }
             this.gridData = process(this.gridResult, newState);
             this.gridData.total = result.Count;
-        }, (err) => {
-            this.isLoading = false;
-            this.loggerSvc.error("Template Retrieval Failed", "Error", err);
-            //loader disable
-        });
+        }
 
     }
     //onclick of run rules button

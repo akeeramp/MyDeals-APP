@@ -102,6 +102,7 @@ export class contractManagerComponent {
     public drawChart: boolean = false;
     public isDeveloper: boolean;
     public isTester: boolean;
+    public initialLoadContract = true;
     public initialLoad: boolean = true;
     public spinnerMessageHeader: any;
     public spinnerMessageDescription: any;
@@ -705,20 +706,17 @@ export class contractManagerComponent {
         }
         this.executePct();
     }
-    executePct() {
+    async executePct() {
         this.isRunning = true;
-        this.contractManagerSvc.runPctContract(this.contractData.DC_ID).subscribe((res) => {
-            this.isRunning = false;
-            this.loadContractDetails();
-            this.isLoading = false;            
-        }, (err) => {
+        await this.contractManagerSvc.runPctContract(this.contractData.DC_ID).toPromise().catch((err) => {
             this.isRunning = false;
             this.isLoading = false;
             this.pctClicked = false;
             this.mctClicked = false;
             this.loggerSvc.error("Could not run Cost Test for contract " + this.contractId, err);
         });
-        
+        this.isRunning = false;
+        await this.loadContractDetails();
     }
     lastRunDisplay(value) {
         this.text = value;
@@ -783,39 +781,45 @@ export class contractManagerComponent {
         this.canEmailIcon = true;
         this.canActionIcon = true;
     }
-    loadContractDetails(){
-        this.contractData ={};
-        this.contractManagerSvc.readContract(this.contractId).subscribe((response: any) => {
-            if(response &&response.length>0){
-                this.contractData = response[0];
-                this.refreshedContractData.emit({ contractData: this.contractData });
-                this.refreshCheckBoxData();
-                this.contractId= this.contractData.DC_ID;
-                this.lastRun = this.contractData.LAST_COST_TEST_RUN;
-                this.contractData?.PRC_ST.map((x, i) => {
-                    //intially setting all the PS row arrow icons and PT data row arrow icons as collapses. this isPSExpanded,isPTExpanded is used to change the arrow icon css accordingly
-                    this.isPSExpanded[i] = false;
-                    if (x.PRC_TBL != undefined) x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
-                })
-                if(this.contractData.CUST_ACCPT === "Pending"){
-                    this.isPending = true;
-                    this.isToggle = true;
-                } else if(this.contractData.CUST_ACCPT === "Accepted"){
-                    this.isPending = false;
-                    this.isToggle = false;
-                }
-                this.filteredData = this.contractData?.PRC_ST; 
-                this.showData = true;
-                this.isCustAcptReadOnly = (this.contractData != undefined && this.contractData._behaviors != undefined && this.contractData._behaviors.isReadOnly != undefined && this.contractData._behaviors.isReadOnly.CUST_ACCPT == true) ? true : false;            
-            }
-            else{
-                this.loggerSvc.error('No records found','Error');
-            }
-           
-        }, (error) => {
+    async loadContractDetails(){
+        this.contractData = {};
+        let response: any = await this.contractManagerSvc.readContract(this.contractId).toPromise().catch((error) => {
             this.loggerSvc.error('Get Upper Contract service', error);
         });
-        
+        if (response && response.length > 0) {
+            this.contractData = response[0];
+            if (this.initialLoadContract) {
+                this.initialLoadContract = false;
+                var isPCForceReq = this.contractData?.PRC_ST?.filter(x => x.COST_TEST_RESULT == 'Not Run Yet' || x.COST_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
+                var isMCForceReq = this.contractData?.PRC_ST?.filter(x => x.MEETCOMP_TEST_RESULT == 'Not Run Yet' || x.MEETCOMP_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
+                if (isMCForceReq || isPCForceReq)
+                    await this.executePct();
+            }
+
+            this.refreshedContractData.emit({ contractData: this.contractData });
+            this.refreshCheckBoxData();
+            this.contractId = this.contractData.DC_ID;
+            this.lastRun = this.contractData.LAST_COST_TEST_RUN;
+            this.contractData?.PRC_ST.map((x, i) => {
+                //intially setting all the PS row arrow icons and PT data row arrow icons as collapses. this isPSExpanded,isPTExpanded is used to change the arrow icon css accordingly
+                this.isPSExpanded[i] = false;
+                if (x.PRC_TBL != undefined) x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
+            })
+            if (this.contractData.CUST_ACCPT === "Pending") {
+                this.isPending = true;
+                this.isToggle = true;
+            } else if (this.contractData.CUST_ACCPT === "Accepted") {
+                this.isPending = false;
+                this.isToggle = false;
+            }
+            this.isLoading = false;
+            this.filteredData = this.contractData?.PRC_ST;
+            this.isCustAcptReadOnly = (this.contractData != undefined && this.contractData._behaviors != undefined && this.contractData._behaviors.isReadOnly != undefined && this.contractData._behaviors.isReadOnly.CUST_ACCPT == true) ? true : false;
+            if (!this.isRunning) this.showData = true;
+        }
+        else {
+            this.loggerSvc.error('No records found', 'Error');
+        }
     }
     openPTEeditor(value){
         this.parent_dcId = value.DC_PARENT_ID
@@ -1117,6 +1121,11 @@ export class contractManagerComponent {
     }
     ngOnInit() {
         try {
+            this.userRole = (<any>window).usrRole;
+            this.isDeveloper = (<any>window).isDeveloper;
+            this.isTester = (<any>window).isTester;
+            this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
+            this.setBusy("Loading Deal..", "Gathering data....", "Info", true);
             this.contractId= this.contractData.DC_ID;
             this.lastRun = this.contractData.LAST_COST_TEST_RUN;
             this.custAccptButton = this.contractData.CUST_ACCPT;
@@ -1135,16 +1144,6 @@ export class contractManagerComponent {
                 })
             })
             this.loadContractDetails();
-            this.userRole = (<any>window).usrRole;
-            this.isDeveloper = (<any>window).isDeveloper;
-            this.isTester = (<any>window).isTester; 
-            this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
-            setTimeout(() => {
-                var isPCForceReq = this.contractData?.PRC_ST?.filter(x => x.COST_TEST_RESULT == 'Not Run Yet' || x.COST_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
-                var isMCForceReq = this.contractData?.PRC_ST?.filter(x => x.MEETCOMP_TEST_RESULT == 'Not Run Yet' || x.MEETCOMP_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
-                if (isMCForceReq || isPCForceReq)
-                    this.executePct();
-            }, 2000);
         }
         catch(ex){
             this.loggerSvc.error('Something went wrong', 'Error');

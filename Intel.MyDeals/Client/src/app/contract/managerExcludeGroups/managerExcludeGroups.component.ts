@@ -31,6 +31,10 @@ export interface contractIds {
 })
 
 export class managerExcludeGroupsComponent {
+    spinnerMessageHeader: any;
+    spinnerMessageDescription: any;
+    msgType: any;
+    isBusyShowFunFact: any;
     
     constructor(private loggerSvc: logger, private managerExcludeGrpSvc: managerExcludeGroupsService, private lnavSvc: lnavService, protected dialog: MatDialog) {
 
@@ -110,6 +114,7 @@ export class managerExcludeGroupsComponent {
 
     loadExcludeGroups() {
         this.isLoading = true;
+        this.setBusy("Loading Deal..", "Gathering data....", "Info", true);
         this.managerExcludeGrpSvc.readWipExclusionFromContract(this.contractData.DC_ID).subscribe((result: any) => {
             this.isLoading = false;
             this.dirty = false;
@@ -366,6 +371,33 @@ export class managerExcludeGroupsComponent {
             this.gridResult = this.gridResultMaster;
             this.gridData = process(this.gridResult, this.state);
         }
+    }
+    setBusy(msg, detail, msgType, showFunFact) {
+        setTimeout(() => {
+            const newState = msg != undefined && msg !== "";
+            // if no change in state, simple update the text
+            if (this.isLoading === newState) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+                this.isBusyShowFunFact = showFunFact;
+                return;
+            }
+            this.isLoading = newState;
+            if (this.isLoading) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                this.msgType = msgType;
+                this.isBusyShowFunFact = showFunFact;
+            } else {
+                setTimeout(() => {
+                    this.spinnerMessageHeader = msg;
+                    this.spinnerMessageDescription = !detail ? "" : detail;
+                    this.msgType = msgType;
+                    this.isBusyShowFunFact = showFunFact;
+                }, 100);
+            }
+        });
     }
     ngOnInit() {
         this.userRole = (<any>window).usrRole;
