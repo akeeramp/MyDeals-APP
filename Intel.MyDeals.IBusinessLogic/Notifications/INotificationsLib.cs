@@ -24,7 +24,5 @@ namespace Intel.MyDeals.IBusinessLogic
         void SendEmailNotifications();
 
         string GetEmailBodyTemplateUI(int nltId);
-
-        string GetEmailBodyTemplateUIAngular(int nltId);
     }
 }

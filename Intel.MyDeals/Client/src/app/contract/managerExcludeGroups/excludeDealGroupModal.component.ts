@@ -7,6 +7,7 @@ import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from "@angular/material/core";
 import { RowClassArgs, RowArgs } from "@progress/kendo-angular-grid";
 import * as moment from "moment";
+import * as _ from 'underscore';
 
 @Component({
     selector: "exclude-deal-group-modal-dialog",
@@ -138,10 +139,10 @@ export class excludeDealGroupModalDialog {
     public rowCallback = (context: RowClassArgs) => {
         const exChk = context.dataItem.EXCLD_DEAL_FLAG;
         const cstChk = context.dataItem.CST_MCP_DEAL_FLAG;
-        if (cstChk === 1 || (cstChk === 0 && exChk === 1)) { return { blue: true } }
-        else if (cstChk === 0) { return { grey: true } }
-        else if (cstChk === 2) { return { blue: true } }
-        else { return { grey: true } }
+        if (cstChk === 1 || cstChk === 2 || (cstChk === 0 && exChk === 1)) { return 'childColor blue' }
+        else {
+            return 'grey'
+        }
     };
 
     public rowCallbackParent = (context: RowClassArgs) => {
@@ -219,6 +220,8 @@ export class excludeDealGroupModalDialog {
             }
             let childgridresult1 = this.childGridResult.filter(x => x.CST_MCP_DEAL_FLAG === 1);
             let childgridresult2 = this.childGridResult.filter(x => x.CST_MCP_DEAL_FLAG === 0);
+            childgridresult1 = _.sortBy(_.sortBy(_.sortBy(childgridresult1, 'EXCLD_DEAL_FLAG').reverse(), 'CST_MCP_DEAL_FLAG').reverse(), 'OVLP_WF_STG_CD');
+            childgridresult2 = _.sortBy(_.sortBy(_.sortBy(childgridresult2, 'EXCLD_DEAL_FLAG').reverse(), 'CST_MCP_DEAL_FLAG').reverse(), 'OVLP_WF_STG_CD');
             this.childGridData1 = process(childgridresult1, this.state);
             this.childGridData2 = process(childgridresult2, this.state);
             if (this.childGridData1.data.length > 0 && this.childGridData2.data.length > 0) {
@@ -248,26 +251,36 @@ export class excludeDealGroupModalDialog {
         if (this.dataItem?.enableCheckbox == false) {
             this.hasCheckbox = this.dataItem.enableCheckbox;
         }
+        if ((this.gridData && this.gridData.data && this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'active'
+            || this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'offer' || this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'won'
+            || this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'pending' || this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'submitted'))
+            this.hasCheckbox = false;
         this.DEAL_GRP_CMNT = (this.dataItem.cellCurrValues.DEAL_GRP_CMNT === null || this.dataItem.cellCurrValues.DEAL_GRP_CMNT == undefined) ? "" : this.dataItem.cellCurrValues.DEAL_GRP_CMNT;
     }
 
     convertToChildData(dataItem) {
         if (dataItem.data == 'Deals below are included as part of the Cost Test') {
-            if (!this.hasCheckbox) {
-                this.titleText = "Cannot edit when deal is in Sumbitted, Pending, Active, Offer or Won stages."
-            }
-            else {
-                this.titleText = null;
-            }
             return this.childGridData1;
         }
         else {
-            this.titleText = "This deal does not belong in any Cost Test Group and will be ignored in the Cost Test calculations."
             return this.childGridData2;
-
         }
     }
-
+    checkCheckboxIsDisabled(dataItem) {
+        if ((dataItem["CST_MCP_DEAL_FLAG"] && dataItem["CST_MCP_DEAL_FLAG"] === 0 && dataItem["EXCLD_DEAL_FLAG"] && dataItem["EXCLD_DEAL_FLAG"] === 0)
+            || (dataItem["CST_MCP_DEAL_FLAG"] && dataItem["CST_MCP_DEAL_FLAG"] === 2 && dataItem["EXCLD_DEAL_FLAG"] && dataItem["EXCLD_DEAL_FLAG"] === 2))
+            return true;
+        return false;
+    }
+    getTitle(dataItem) {
+        if (dataItem["CST_MCP_DEAL_FLAG"] && dataItem["CST_MCP_DEAL_FLAG"] === 0 && dataItem["EXCLD_DEAL_FLAG"] && dataItem["EXCLD_DEAL_FLAG"] === 0)
+            return "This deal does not belong in any Cost Test Group and will be ignored in the Cost Test calculations."
+        if ((this.gridData && this.gridData.data && this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'active'
+            || this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'offer' || this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'won'
+            || this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'pending' || this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'submitted'))
+            return "Cannot edit when deal is in Sumbitted, Pending, Active, Offer or Won stages."
+        return ""
+    }
     ngOnInit() {
         this.loadExcludeDealGroupModel();
     }

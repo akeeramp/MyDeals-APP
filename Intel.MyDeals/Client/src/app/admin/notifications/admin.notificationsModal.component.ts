@@ -41,8 +41,8 @@ export class notificationsModalDialog {
         this.dialogRef.close();
     }
 
-    loadEmailBody(dataItem) {        
-        this.notificationsSvc.getEmailBodyTemplateUIAngular(dataItem.NLT_ID).subscribe(response => {
+    loadEmailBody(dataItem) {
+        this.notificationsSvc.getEmailBodyTemplateUI(dataItem.NLT_ID).subscribe(response => {
             this.emailTable = this.sanitized.bypassSecurityTrustHtml(response.toString());
             this.loading = false;
         },
