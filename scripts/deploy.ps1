@@ -63,7 +63,7 @@ try {
                 & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/$ENV $result.DEPLOY_PATH Web.Config /MT /copyall /secfix;
                 if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
             }
-            else if ($ENV -eq 'PRODA1' -or $ENV -eq 'PRODA2'){
+            elseif ($ENV -eq 'PRODA1' -or $ENV -eq 'PRODA2'){
                 $ENV='CONS'
                 & robocopy output/_PublishedWebsites/Intel.MyDeals $result.DEPLOY_PATH /e /MT /copyall /secfix ;
                 if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
