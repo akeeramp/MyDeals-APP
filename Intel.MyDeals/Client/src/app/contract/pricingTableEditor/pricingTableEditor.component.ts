@@ -283,7 +283,7 @@ export class pricingTableEditorComponent {
                         else {
                             if (this.field && selVal != result?.toString &&
                                 (this.field == 'CUST_ACCNT_DIV' || this.field == "GEO_COMBINED" || this.field == 'START_DT' || this.field == 'END_DT' || this.field == 'PAYOUT_BASED_ON' || this.field == 'PERIOD_PROFILE' || this.field == 'RESET_VOLS_ON_PERIOD' || this.field == 'AR_SETTLEMENT_LVL'
-                                || this.field == 'REBATE_TYPE' || this.field == 'PROD_INCLDS' || this.field == 'SETTLEMENT_PARTNER' || this.field == 'MRKT_SEG'  )) {
+                                || this.field == 'REBATE_TYPE' || this.field == 'PROD_INCLDS' || this.field == 'SETTLEMENT_PARTNER' || this.field == 'MRKT_SEG' || this.field == 'PROGRAM_PAYMENT'  )) {
                                 VM.dirty = true;
                                 VM.removeCellComments(this.selRow,this.field);
                                 if (this.field == 'AR_SETTLEMENT_LVL'){
