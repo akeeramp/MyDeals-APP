@@ -16,7 +16,7 @@
     </div>
 
     <div class="capbreakout modal-body">
-        <kendo-grid class="md capbreakout kendoGridHeight" id="breakOutGrid" [data]="dataSource" [loading]="isLoading"
+        <kendo-grid class="md capbreakout kendoGridHeight {{ productData[0].priceCondition }}-capBreak" id="breakOutGrid" [data]="dataSource" [loading]="isLoading"
                     [skip]="state.skip" [sortable]="false" [sort]="state.sort" [groupable]="false">
             <ng-template kendoGridToolbarTemplate>
                 <button type="button" kendoGridExcelCommand icon="file-excel" class="excelText"><span class="excelbtn-style">EXCEL<br /> EXPORT</span></button>

@@ -1491,3 +1491,50 @@ kendo-grid.overDealChecking.widthOutDesign.k-widget kendo-grid-list table tbody 
     justify-content: center;
     background-color: #fff !important;
 }
+
+/*kendo-grid.group-Excl-grid table tr.k-grid-norecords td {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 1220px;
+    padding: 50px;
+}
+
+kendo-grid.group-Excl-grid table tr.k-grid-norecords:hover {
+    background-color: transparent !important;
+}*/
+
+.batcherComp .k-grid .k-grouping-header .k-indicator-container {
+    color: var(--light-blue);
+}
+
+.batcherComp .k-grid table tr th .k-cell-inner .k-link .k-column-title {
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: #1a3e6f;
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+
+.CAP-capBreak.k-grid tr td:nth-child(2) div,
+.CAP-capBreak.k-grid tr td:nth-child(4) div,
+.YCS2-capBreak.k-grid tr td:nth-child(4) div {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+kendo-window.flexOverlapProducts .k-window-titlebar {
+    border-radius: 0 !important;
+    padding: 7.5px !important;
+    font-size: 15px !important;
+    font-weight: 500 !important;
+    font-family: 'Intel Clear' !important;
+}
+
+kendo-window.flexOverlapProducts {
+    border: none;
+}

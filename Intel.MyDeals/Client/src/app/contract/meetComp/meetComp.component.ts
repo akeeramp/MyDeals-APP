@@ -1122,7 +1122,7 @@ export class meetCompContractComponent implements OnInit {
         const dialogRef = this.dialog.open(meetCompDealDetailModalComponent, {
             width: "1350px",
             data: deal_properties,
-            panelClass: "mat-remove-space"
+            panelClass: "groupDealers"
         });
     }
 

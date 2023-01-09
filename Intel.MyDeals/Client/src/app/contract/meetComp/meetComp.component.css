@@ -600,3 +600,20 @@
 .meet-comp-tenders {
     border-bottom: none !important;
 }
+
+.groupDealers .mat-dialog-container {
+    padding: 0;
+}
+
+    .groupDealers .mat-dialog-container .modal-header {
+        padding: 15px;
+        border-bottom: 1px solid #f4f4f4;
+    }
+
+    .groupDealers .mat-dialog-container .modal-body {
+        padding: 15px;
+    }
+
+        .groupDealers .mat-dialog-container .modal-body kendo-grid.k-grid .k-grid-content {
+            height: 350px;
+        }
