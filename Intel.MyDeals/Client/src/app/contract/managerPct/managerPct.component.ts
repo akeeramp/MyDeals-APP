@@ -497,19 +497,19 @@ export class managerPctComponent {
         } else {
             this.showMultipleDialog = false;
             this.ptId = prc_tbl[0].DC_ID;
-            window.location.href = "#/contractmanager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
+            window.location.href = "#/manager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
 
         }
     }
     pickPt(pte) {
         this.ptId = pte.DC_ID;
-        window.location.href = "#/contractmanager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
+        window.location.href = "#/manager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
     }
     openPTE(dcId, psId, ptId) {
         this.parent_dcId = dcId
         this.psId = psId;
         this.ptId = ptId;
-        window.location.href = "#/contractmanager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
+        window.location.href = "#/manager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
     }
     closeMultiple() {
         this.showMultipleDialog = false;

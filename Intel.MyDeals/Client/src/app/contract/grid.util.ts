@@ -588,6 +588,12 @@ export class GridUtil {
             }
             else
                 tmplt += '>';
+            if (passedData[startDt][dimKey] == undefined) {
+                passedData[startDt][dimKey] = "";
+            }
+            if (passedData[endDt][dimKey] == undefined) {
+                passedData[endDt][dimKey] = "";
+            }
             tmplt += '<div>' +capText + '</div>';
             tmplt += '    <div class="fullHeight">';
             tmplt += '    <span class="ng-binding" id="tdsCol">' + passedData[startDt][dimKey] + '</span> - ';
@@ -821,7 +827,7 @@ export class GridUtil {
                             if (newHtmlVal != undefined)
                                 newHtmlVal = newHtmlVal.toString().replace(/<div class='clearboth'><\/div>/g, 'LINEBREAKTOKEN');
                             elem.innerHTML = newHtmlVal;
-
+                            
                             // Output the text content of the templated cell into the exported cell.
                             val = (elem.textContent || elem.innerText || "").replace(/null/g, '').replace(/undefined/g, '')
                                 .replace(/LINEBREAKTOKEN/g, '\n');
