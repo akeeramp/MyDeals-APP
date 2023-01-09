@@ -15,6 +15,8 @@ try {
         [pscustomobject]@{env='DR';DEPLOY_PATH='\\CH2DRMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='CH2DRMYDLW01.amr.corp.intel.com';pool="drmydeals.intel.com"}
         [pscustomobject]@{env='PROD1';DEPLOY_PATH='\\FM1PRDMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRDMYDLW01.amr.corp.intel.com';pool="prdmydeals.intel.com"}
         [pscustomobject]@{env='PROD2';DEPLOY_PATH='\\FM1PRDMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRDMYDLW02.amr.corp.intel.com';pool="prdmydeals.intel.com"}
+        [pscustomobject]@{env='PRODA1';DEPLOY_PATH='\\FM1PRODMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRODMYDLW01.amr.corp.intel.com';pool="prdmydeals.intel.com"}
+        [pscustomobject]@{env='PRODA2';DEPLOY_PATH='\\FM1PRODMYDLW02.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='FM1PRODMYDLW02.amr.corp.intel.com';pool="prdmydeals.intel.com"}
    )
     if ($Operation -eq 'verifyENV'){
         $result = $ENV_DATA | Where env -eq $ENV;
@@ -56,6 +58,13 @@ try {
         {
             if($ENV -eq 'PROD1' -or $ENV -eq 'PROD2' -or $ENV -eq 'DR'){
                $ENV='PROD'
+                & robocopy output/_PublishedWebsites/Intel.MyDeals $result.DEPLOY_PATH /e /MT /copyall /secfix ;
+                if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
+                & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/$ENV $result.DEPLOY_PATH Web.Config /MT /copyall /secfix;
+                if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
+            }
+            else if ($ENV -eq 'PRODA1' -or $ENV -eq 'PRODA2'){
+                $ENV='CONS'
                 & robocopy output/_PublishedWebsites/Intel.MyDeals $result.DEPLOY_PATH /e /MT /copyall /secfix ;
                 if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
                 & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/$ENV $result.DEPLOY_PATH Web.Config /MT /copyall /secfix;
