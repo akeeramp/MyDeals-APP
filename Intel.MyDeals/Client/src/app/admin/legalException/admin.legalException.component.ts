@@ -417,13 +417,13 @@ export class adminlegalExceptionComponent {
     selectAllExceptionsChange(e): void {
          if (e.target.checked) {
             this.allExceptionsSelected = true;
-            for (let i = 0; i < this.gridData.data.length; i++) {
-                this.gridData.data[i].IS_SELECTED = true;
+             for (let i = 0; i < this.gridResult.length; i++) {
+                this.gridResult[i].IS_SELECTED = true;
             }
         } else {
             this.allExceptionsSelected = false;
-            for (let i = 0; i < this.gridData.data.length; i++) {
-                this.gridData.data[i].IS_SELECTED = false;
+             for (let i = 0; i < this.gridResult.length; i++) {
+                this.gridResult[i].IS_SELECTED = false;
             }
         }
     }
@@ -501,7 +501,7 @@ export class adminlegalExceptionComponent {
     }
 
     download() {
-        const selectedlist = this.gridData.data.filter(element => {
+        const selectedlist = this.gridResult.filter(element => {
             return element.IS_SELECTED == true;
         });
         if (selectedlist && selectedlist.length > 0) {

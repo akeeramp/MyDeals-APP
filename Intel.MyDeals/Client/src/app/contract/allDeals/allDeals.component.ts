@@ -74,10 +74,6 @@ export class allDealsComponent {
     };
     private pageSizes: PageSizeItem[] = [
         {
-            text: "10",
-            value: 10
-        },
-        {
             text: "25",
             value: 25
         },
@@ -88,6 +84,14 @@ export class allDealsComponent {
         {
             text: "100",
             value: 100
+        },
+        {
+            text: "250",
+            value: 250
+        },
+        {
+            text: "500",
+            value: 500
         }
     ];
     private excelColumns = {

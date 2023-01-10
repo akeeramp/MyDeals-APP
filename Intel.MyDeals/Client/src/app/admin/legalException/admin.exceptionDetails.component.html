@@ -36,7 +36,7 @@
                      
                     <div class="panel-body">
                         <p class="divHeader"><b>*Intel Product</b></p>
-                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.INTEL_PRD" #intel_input   [title]="exdetails.INTEL_PRD == ''? 'Please fill out this field.' : ''"  name="INTEL_PRD" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
+                        <kendo-textarea maxlength="8000" type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.INTEL_PRD" #intel_input   [title]="exdetails.INTEL_PRD == ''? 'Please fill out this field.' : ''"  name="INTEL_PRD" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
                                         triggers="manual" #intelTooltip="ngbTooltip" [autoClose]="false"></kendo-textarea>
                     </div>
 
@@ -55,7 +55,7 @@
                      
                     <div class="panel-body">
                         <p class="divHeader"><b>*Scope</b></p>
-                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.SCPE" #scpe_input [title]="exdetails.SCPE == ''? 'Please fill out this field.' : ''"  name="SCPE" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
+                        <kendo-textarea maxlength="8000" type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.SCPE" #scpe_input [title]="exdetails.SCPE == ''? 'Please fill out this field.' : ''"  name="SCPE" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
                                         triggers="manual" #scopeTooltip="ngbTooltip" [autoClose]="false"></kendo-textarea>
                     </div>
                      
@@ -67,7 +67,7 @@
                      
                     <div class="panel-body">
                         <p class="divHeader"><b>*Cost</b></p>
-                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.COST" name="COST" #cost_input [title]="exdetails.COST == ''? 'Please fill out this field.' : ''"  ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
+                        <kendo-textarea maxlength="8000" type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.COST" name="COST" #cost_input [title]="exdetails.COST == ''? 'Please fill out this field.' : ''"  ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
                                         triggers="manual" #costTooltip="ngbTooltip" [autoClose]="false"></kendo-textarea>
                     </div>
 
@@ -94,68 +94,68 @@
                      
                     <div class="panel-body">
                         <p class="divHeader"><b>*Forecasted Volume By Quarter</b></p>
-                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.FRCST_VOL_BYQTR" #forecasted_input [title]="exdetails.FRCST_VOL_BYQTR == ''? 'Please fill out this field.' : ''"  name="FRCST_VOL_BYQTR" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
+                        <kendo-textarea maxlength="8000" type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.FRCST_VOL_BYQTR" #forecasted_input [title]="exdetails.FRCST_VOL_BYQTR == ''? 'Please fill out this field.' : ''"  name="FRCST_VOL_BYQTR" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
                                         triggers="manual" #volTooltip="ngbTooltip" [autoClose]="false"></kendo-textarea>
                     </div>
                      
                     <div class="panel-body">
                         <p class="divHeader"><b>*Customer Product</b></p>
-                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.CUST_PRD" #cus_input [title]="exdetails.CUST_PRD == ''? 'Please fill out this field.' : ''"  name="CUST_PRD" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
+                        <kendo-textarea maxlength="8000" type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.CUST_PRD" #cus_input [title]="exdetails.CUST_PRD == ''? 'Please fill out this field.' : ''"  name="CUST_PRD" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
                                         triggers="manual" #cusTooltip="ngbTooltip" [autoClose]="false"></kendo-textarea>
                     </div>
                      
 
                     <div class="panel-body">
                         <p class="divHeader"><b>*Comp Product</b></p>
-                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.MEET_COMP_PRD" #comp_input [title]="exdetails.MEET_COMP_PRD == ''? 'Please fill out this field.' : ''"  name="MEET_COMP_PRD" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
+                        <kendo-textarea maxlength="8000" type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.MEET_COMP_PRD" #comp_input [title]="exdetails.MEET_COMP_PRD == ''? 'Please fill out this field.' : ''"  name="MEET_COMP_PRD" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
                                         triggers="manual" #compTooltip="ngbTooltip" [autoClose]="false"></kendo-textarea>
                     </div>
                      
                     <div class="panel-body">
                         <p class="divHeader"><b>*Comp Price</b></p>
-                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.MEET_COMP_PRC" #compprice_input [title]="exdetails.MEET_COMP_PRC == ''? 'Please fill out this field.' : ''"  name="MEET_COMP_PRC" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
+                        <kendo-textarea maxlength="8000" type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.MEET_COMP_PRC" #compprice_input [title]="exdetails.MEET_COMP_PRC == ''? 'Please fill out this field.' : ''"  name="MEET_COMP_PRC" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
                                         triggers="manual" #meetcompooltip="ngbTooltip" [autoClose]="false"></kendo-textarea>
                     </div>
                      
                     <div class="panel-body">
                         <p class="divHeader"><b>*Business Object</b></p>
-                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.BUSNS_OBJ" #bussobj_input [title]="exdetails.BUSNS_OBJ == ''? 'Please fill out this field.' : ''"  name="BUSNS_OBJ" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
+                        <kendo-textarea maxlength="8000" type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.BUSNS_OBJ" #bussobj_input [title]="exdetails.BUSNS_OBJ == ''? 'Please fill out this field.' : ''"  name="BUSNS_OBJ" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
                                         triggers="manual" #busobjTooltip="ngbTooltip" [autoClose]="false"></kendo-textarea>
                     </div>
                      
                     <div class="panel-body">
                         <p class="divHeader"><b>*Potential Market Impact</b></p>
-                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.PTNTL_MKT_IMPCT" #potential_input [title]="exdetails.PTNTL_MKT_IMPCT == ''? 'Please fill out this field.' : ''"  name="PTNTL_MKT_IMPCT" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
+                        <kendo-textarea maxlength="8000" type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.PTNTL_MKT_IMPCT" #potential_input [title]="exdetails.PTNTL_MKT_IMPCT == ''? 'Please fill out this field.' : ''"  name="PTNTL_MKT_IMPCT" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
                                         triggers="manual" #marketTooltip="ngbTooltip" [autoClose]="false"></kendo-textarea>
                     </div>
                      
                     <div class="panel-body">
                         <p class="divHeader"><b>*OTHER</b></p>
-                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.OTHER" name="OTHER" #others_input [title]="exdetails.OTHER == ''? 'Please fill out this field.' : ''"  ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
+                        <kendo-textarea maxlength="8000" type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.OTHER" name="OTHER" #others_input [title]="exdetails.OTHER == ''? 'Please fill out this field.' : ''"  ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
                                         triggers="manual" #othersTooltip="ngbTooltip" [autoClose]="false"></kendo-textarea>
                     </div>
                      
                     <div class="panel-body">
                         <p class="divHeader"><b>*Justification for PCT Expiry</b></p>
-                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.JSTFN_PCT_EXCPT" #justification_input [title]="exdetails.JSTFN_PCT_EXCPT == ''? 'Please fill out this field.' : ''"  name="JSTFN_PCT_EXCPT" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
+                        <kendo-textarea maxlength="8000" type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.JSTFN_PCT_EXCPT" #justification_input [title]="exdetails.JSTFN_PCT_EXCPT == ''? 'Please fill out this field.' : ''"  name="JSTFN_PCT_EXCPT" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
                                         triggers="manual" #pctTooltip="ngbTooltip" [autoClose]="false"></kendo-textarea>
                     </div>
                      
                     <div class="panel-body">
                         <p class="divHeader"><b>*Exceptions, Restrictions & Durations</b></p>
-                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.EXCPT_RSTRIC_DURN" #excp_input [title]="exdetails.EXCPT_RSTRIC_DURN == ''? 'Please fill out this field.' : ''"  name="EXCPT_RSTRIC_DURN" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
+                        <kendo-textarea maxlength="8000" type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.EXCPT_RSTRIC_DURN" #excp_input [title]="exdetails.EXCPT_RSTRIC_DURN == ''? 'Please fill out this field.' : ''"  name="EXCPT_RSTRIC_DURN" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
                                         triggers="manual" #restip="ngbTooltip" [autoClose]="false"></kendo-textarea>
                     </div>
                      
                     <div class="panel-body">
                         <p class="divHeader"><b>*Requesting Client</b></p>
-                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.RQST_CLNT" #reqclient_input [title]="exdetails.RQST_CLNT == ''? 'Please fill out this field.' : ''"  name="RQST_CLNT" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
+                        <kendo-textarea maxlength="8000" type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.RQST_CLNT" #reqclient_input [title]="exdetails.RQST_CLNT == ''? 'Please fill out this field.' : ''"  name="RQST_CLNT" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
                                         triggers="manual" #reqclientTooltip="ngbTooltip" [autoClose]="false"></kendo-textarea>
                     </div>
                      
                     <div class="panel-body">
                         <p class="divHeader"><b>*Requesting Attorney</b></p>
-                        <kendo-textarea type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.RQST_ATRNY" #reqattr_input [title]="exdetails.RQST_ATRNY == ''? 'Please fill out this field.' : ''"  name="RQST_ATRNY" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
+                        <kendo-textarea maxlength="8000" type="textarea" rows="5" style="width:100%" [(ngModel)]="exdetails.RQST_ATRNY" #reqattr_input [title]="exdetails.RQST_ATRNY == ''? 'Please fill out this field.' : ''"  name="RQST_ATRNY" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
                                         triggers="manual" #reqTooltip="ngbTooltip" [autoClose]="false">`</kendo-textarea>
                     </div>
 
@@ -164,7 +164,7 @@
                             <div class="col-md-4">
                                 <p class="divHeader" ><b>*Approving Attorney</b></p>
                                 <div>
-                                    <kendo-textarea type="textarea" rows="3" style="width:100%;margin-bottom: 0px; margin-left: 0px;" [(ngModel)]="exdetails.APRV_ATRNY" name="APRV_ATRNY" #appattr_input [title]="exdetails.APRV_ATRNY == ''? 'Please fill out this field.' : ''" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
+                                    <kendo-textarea maxlength="8000" type="textarea" rows="3" style="width:100%;margin-bottom: 0px; margin-left: 0px;" [(ngModel)]="exdetails.APRV_ATRNY" name="APRV_ATRNY" #appattr_input [title]="exdetails.APRV_ATRNY == ''? 'Please fill out this field.' : ''" ngbTooltip="Please fill out this field." tooltipClass="toolTipReq" placement="bottom" container="body"
                                                     triggers="manual" #approvingTooltip="ngbTooltip" [autoClose]="false"></kendo-textarea>
                                 </div>
                             </div>
@@ -184,13 +184,13 @@
                         <div class="row">
                             <div class="col-md-4">
                                 <p class="divHeader" ><b>Entered By</b></p>
-                                <div><kendo-textarea type="textarea" rows="3" readonly style="width:100%;margin-bottom: 0px; margin-left: 0px;" [(ngModel)]="exdetails.CHG_EMP_NAME" name="CHG_EMP_NAME" [readonly]="true"></kendo-textarea></div>
+                                <div><kendo-textarea maxlength="8000" type="textarea" rows="3" readonly style="width:100%;margin-bottom: 0px; margin-left: 0px;" [(ngModel)]="exdetails.CHG_EMP_NAME" name="CHG_EMP_NAME" [readonly]="true"></kendo-textarea></div>
                             </div>
                             <div class="col-md-4">
                             </div>
                             <div div class="col-md-4">
                                 <p class="divHeader" ><b>Entered Date</b></p>
-                                <kendo-datepicker #picker [(ngModel)]="exdetails.CHG_DTM" style="width: 100%;" placeholder="To date" format="MM/dd/yyyy" calendarType="classic" class="datePickerWidth k-width" name="CHG_DTM">
+                                <kendo-datepicker [readonly]="true" #picker [(ngModel)]="exdetails.CHG_DTM" style="width: 100%;" placeholder="To date" format="MM/dd/yyyy" calendarType="classic" class="datePickerWidth k-width" name="CHG_DTM">
                                 </kendo-datepicker>
                             </div>
                         </div>

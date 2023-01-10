@@ -1439,11 +1439,16 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
     font-family: "Intel Clear", Arial;
     font-size: 10px !important;
     border-left: none;
+    border-right: 1px solid #e6e6e6;
+    height: 34px;
 }
 
-    #OvrLp kendo-grid.overDealChecking.k-grid .k-grid-table-wrap table tbody tr td .text-center {
-        text-align: left !important;
-    }
+#OvrLp kendo-grid.overDealChecking.k-grid .k-grid-table-wrap table tbody tr td:first-child {
+    padding: 6px 0 6px 0px !important;
+}
+#OvrLp kendo-grid.overDealChecking.k-grid .k-grid-table-wrap table tbody tr td .text-center {
+    text-align: left !important;
+}
 
 #OvrLp1 kendo-grid.overDealCheckingOne.k-grid .k-grid-table-wrap table tbody tr td {
     padding: 2px 5px !important;
