@@ -41,22 +41,18 @@ export class notificationsModalDialog {
         this.dialogRef.close();
     }
 
-    loadEmailBody(dataItem) {
-        this.notificationsSvc.getEmailBodyTemplateUI(dataItem.NLT_ID).subscribe(response => {
-            this.emailTable = this.sanitized.bypassSecurityTrustHtml(response.toString());
-            this.loading = false;
-        },
-            error => {
-                this.loggerSvc.error("notificationsModalDialog::getEmailBodyTemplateUI::Unable to get the Template", error);
-            }
-        );        
+    async loadEmailBody(dataItem) {        
+        let response:any = await this.notificationsSvc.getEmailBodyTemplateUI(dataItem.NLT_ID).toPromise().catch(error => {
+            this.loggerSvc.error("notificationsModalDialog::getEmailBodyTemplateUI::Unable to get the Template", error);
+        });
+        this.emailTable = this.sanitized.bypassSecurityTrustHtml(response.toString());
+        this.loading = false;
+        this.markAsRead(this.dataItem);
     }
 
-    async ngOnInit() {
+    ngOnInit() {
         this.loadEmailBody(this.dataItem);
-        this.markAsRead(this.dataItem);
     }
 
 
 }
-

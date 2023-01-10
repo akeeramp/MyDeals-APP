@@ -36,6 +36,7 @@ export class AttributeBuilder implements OnInit {
     public dropdownresponses: any;
     public currentRule = '';
     public myRules: any = [];
+    public initialLoad = true;
     private isDialogVisible = false;
     private isKitDialog = false;
     private isDialogPopup = false;
@@ -227,7 +228,13 @@ export class AttributeBuilder implements OnInit {
             this.disabledropdowns = true;
             this.updateRules(this.customSettings);
         }
-
+        if (this.initialLoad) {
+            this.initialLoad = false;
+            await this.getLookupVals();
+            await this.loadMyRules();
+            if (this.runSearch)
+                this.runRule();
+        }
     }
 
     getOperator(dataItem) {
@@ -592,13 +599,9 @@ export class AttributeBuilder implements OnInit {
 
     }
 
-    async ngOnInit() {
+    ngOnInit() {
         if (this.runSearch)
             this.defaultSelection = false;
-        await this.loadDefaultAttributes();
-        await this.getLookupVals();
-        await this.loadMyRules();
-        if (this.runSearch)
-            this.runRule();
+        this.loadDefaultAttributes();
     }
 }

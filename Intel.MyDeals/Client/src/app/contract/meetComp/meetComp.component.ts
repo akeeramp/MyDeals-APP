@@ -107,6 +107,7 @@ export class meetCompContractComponent implements OnInit {
     public childGridResult;
     public selectedMeetCompPrc: any;
     public selectedMeetCompSku: any;
+    public initialLoad = true;
     private state: State = {
         skip: 0,
         take: 10,
@@ -965,6 +966,11 @@ export class meetCompContractComponent implements OnInit {
         else {
             this.lastMeetCompRunValue = "";
         }
+
+        if (this.initialLoad) {
+            this.initialLoad = false;
+            await this.loadMeetCompData();
+        }
     }
 
     getMeetCompPopupMessage() {
@@ -1178,13 +1184,12 @@ export class meetCompContractComponent implements OnInit {
         this.showAlert = false;
     }
 
-    async ngOnInit() {
+    ngOnInit() {
         try {
             this.PAGE_NM = this.pageNm;
             if (!!this.objSid) {
                 this.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
-                await this.lastMeetCompRunCalc();
-                await this.loadMeetCompData();
+                this.lastMeetCompRunCalc();
             }
         }
         catch (ex) {

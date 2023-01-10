@@ -72,6 +72,7 @@ export class RuleDetailsModalComponent {
     public BlanketDiscountPercentage;
     public BlanketDiscountDollor;
     public availableAttrs = [];
+    public initialLoad = true;
     private hotId = "spreadsheet";
     private hotRegisterer = new HotTableRegisterer();
     private hotTable: Handsontable;
@@ -157,7 +158,11 @@ export class RuleDetailsModalComponent {
         let result = await forkJoin(values).toPromise().catch((err) => {
             this.loggerSvc.error('pricingTableEditorComponent::getAllDrowdownValues::service', err);
         });
-        if (result != undefined) this.dropdownresponses = result
+        if (result != undefined) this.dropdownresponses = result;
+        if (this.initialLoad) {
+            this.initialLoad = false;
+            await this.loadDetails()
+        }
     }
 
     loadData() {
@@ -255,10 +260,7 @@ export class RuleDetailsModalComponent {
         this.setBusy('', '', '', false);
     }
 
-    async ngOnInit() {
-        this.isLoading = true;
-        this.setBusy('Price Rules', 'Please wait while we Load the rule....', 'Info', true);
-        await this.getLookupVals();
+    async loadDetails() {
         this.RuleConfig = await this.adminRulesSvc.getPriceRulesConfig().toPromise().catch((error) => {
             this.loggerSvc.error("Unable to get Price Rules Config", error);
         });
@@ -267,6 +269,12 @@ export class RuleDetailsModalComponent {
         } else await this.GetRules(0, "GET_BY_RULE_ID");
         this.isLoading = false;
         this.setBusy('', '', '', false);
+    }
+
+    ngOnInit() {
+        this.isLoading = true;
+        this.setBusy('Price Rules', 'Please wait while we Load the rule....', 'Info', true);
+        this.getLookupVals();
     }
 
     dataChangeMulti(data, i, dataItem, selector) {

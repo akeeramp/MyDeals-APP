@@ -81,7 +81,7 @@ export class managerPctComponent {
     private ptId: any;
     private showMultipleDialog: boolean = false;
     private pteTableData: any
-
+    public initialLoadContract = true;
     private CAN_EDIT_COST_TEST = this.lnavSvc.chkDealRules('C_EDIT_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "SA" && (<any>window).isSuper); // Can go to cost test screen and make changes
     private hasNoPermission = !(this.CAN_EDIT_COST_TEST == undefined ? this.lnavSvc.chkDealRules('C_EDIT_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "SA" && (<any>window).isSuper) : this.CAN_EDIT_COST_TEST);
     private hasNoPermissionOvr = this.hasNoPermission && (<any>window).usrRole !== "Legal";
@@ -304,16 +304,15 @@ export class managerPctComponent {
     executePctViaBtn() {
         this.executePct();
     }
-    executePct() {
+    async executePct() {
         this.isRunning = true;
-        this.contractId= this.contractData.DC_ID;
-        this.contractManagerSvc.runPctContract(this.contractData.DC_ID).subscribe((res) => {
+        await this.contractManagerSvc.runPctContract(this.contractData.DC_ID).toPromise().catch((err) => {
             this.isRunning = false;
-            this.loadPctDetails();
-        }, (err) => {
-            this.isRunning = false;
-              this.loggerSvc.error("Could not run price Cost Test for contract " + this.contractId, err);
+            this.isLoading = false;
+            this.loggerSvc.error("Could not run Cost Test for contract " + this.contractId, err);
         });
+        this.isRunning = false;
+        await this.loadPctDetails();
         
     }
     refreshGrid(){
@@ -323,41 +322,47 @@ export class managerPctComponent {
         this.gridDataSet = {}; this.parentGridData = {};
         this.gridResult = {};
     }
-    loadPctDetails(){
+    async loadPctDetails(){
         this.isPctLoading = true;
-        this.contractManagerSvc.readContract(this.contractId).subscribe((response: any) => {
-            if(response && response.length>0){
-                this.contractData = response[0];
-                if (this.isTenderDashboard && this.contractData.PRC_ST && this.PS_ID)//PCT screen of Tender Dashboard displays only particular PS not all
-                    this.contractData.PRC_ST = this.contractData.PRC_ST.filter(x => x.DC_ID == this.PS_ID);
-                this.refreshedContractData.emit({ contractData: this.contractData });
-                this.refreshGrid();
-                this.contractId= this.contractData.DC_ID;
-                this.lastRun = this.contractData.LAST_COST_TEST_RUN;
-                this.contractData?.PRC_ST.map((x, i) => {
-                    //intially setting all the PS row arrow icons and PT data row arrow icons as collapses. this isPSExpanded,isPTExpanded is used to change the arrow icon css accordingly
-                    this.isPSExpanded[i] = false;
-                    if (this.isTenderDashboard)//PCT screen of Tender Dashboard data needs to be expanded on load
-                        this.isPSExpanded[i] = true;
-                    if (x.PRC_TBL != undefined) {
-                        x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
-                        if (this.isTenderDashboard) {//PCT screen of Tender Dashboard data needs to be expanded on load
-                            x.PRC_TBL.forEach((y) => { this.isPTExpanded[y.DC_ID] = true; this.togglePt(y); });
-                        }
-                    }
-                })
-            }
-            this.isPctLoading = false;
-            if (this.pctFilter != "") {
-                this.pricingStrategyFilter = this.contractData?.PRC_ST.filter(x => x.COST_TEST_RESULT == this.pctFilter);
-            }
-            else {
-                this.pricingStrategyFilter = this.contractData?.PRC_ST;
-            }
-        }, (error) => {
+        let response:any = await this.contractManagerSvc.readContract(this.contractId).toPromise().catch((error) => {
             this.isPctLoading = false;
             this.loggerSvc.error('Get Upper Contract service', error);
         });
+        if (response && response.length > 0) {
+            this.contractData = response[0];
+            if (this.initialLoadContract) {
+                this.initialLoadContract = false;
+                var isPCForceReq = this.contractData?.PRC_ST?.filter(x => x.COST_TEST_RESULT == 'Not Run Yet' || x.COST_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
+                var isMCForceReq = this.contractData?.PRC_ST?.filter(x => x.MEETCOMP_TEST_RESULT == 'Not Run Yet' || x.MEETCOMP_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
+                if (isMCForceReq || isPCForceReq)
+                    await this.executePct();
+            }
+            if (this.isTenderDashboard && this.contractData.PRC_ST && this.PS_ID)//PCT screen of Tender Dashboard displays only particular PS not all
+                this.contractData.PRC_ST = this.contractData.PRC_ST.filter(x => x.DC_ID == this.PS_ID);
+            this.refreshedContractData.emit({ contractData: this.contractData });
+            this.refreshGrid();
+            this.contractId = this.contractData.DC_ID;
+            this.lastRun = this.contractData.LAST_COST_TEST_RUN;
+            this.contractData?.PRC_ST.map((x, i) => {
+                //intially setting all the PS row arrow icons and PT data row arrow icons as collapses. this isPSExpanded,isPTExpanded is used to change the arrow icon css accordingly
+                this.isPSExpanded[i] = false;
+                if (this.isTenderDashboard)//PCT screen of Tender Dashboard data needs to be expanded on load
+                    this.isPSExpanded[i] = true;
+                if (x.PRC_TBL != undefined) {
+                    x.PRC_TBL.forEach((y) => this.isPTExpanded[y.DC_ID] = false);
+                    if (this.isTenderDashboard) {//PCT screen of Tender Dashboard data needs to be expanded on load
+                        x.PRC_TBL.forEach((y) => { this.isPTExpanded[y.DC_ID] = true; this.togglePt(y); });
+                    }
+                }
+            })
+        }
+        this.isPctLoading = false;
+        if (this.pctFilter != "") {
+            this.pricingStrategyFilter = this.contractData?.PRC_ST.filter(x => x.COST_TEST_RESULT == this.pctFilter);
+        }
+        else {
+            this.pricingStrategyFilter = this.contractData?.PRC_ST;
+        }
     }
 
     showHelpTopicCostTest() {
@@ -522,7 +527,6 @@ export class managerPctComponent {
         this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
         this.lastRun = this.contractData.LAST_COST_TEST_RUN;
         this.contractId= this.contractData.DC_ID;
-        this.loadPctDetails();
         _.each(this.contractData?.PRC_ST, (item) => {
             _.each(item.PRC_TBL, (prcTbl) => {
                 this.state[prcTbl.DC_ID] = {
@@ -537,16 +541,11 @@ export class managerPctComponent {
                 this.is_Deal_Tools_Checked[prcTbl.DC_ID] = false;
             })           
         })
-        setTimeout(() => {
-            var isPCForceReq = this.contractData?.PRC_ST?.filter(x => x.COST_TEST_RESULT == 'Not Run Yet' || x.COST_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
-            var isMCForceReq = this.contractData?.PRC_ST?.filter(x => x.MEETCOMP_TEST_RESULT == 'Not Run Yet' || x.MEETCOMP_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
-            if (isMCForceReq || isPCForceReq)
-                this.executePct();
-        }, 2000);
         this.pricingStrategyFilter = this.contractData?.PRC_ST;
         if (this.isTenderDashboard) {//If PCT screen triggered from Tender Dashboard, all datas needs to be expanded
             this.isAllCollapsed = false;
         }
+        this.loadPctDetails();
     }
     goToNavManagePCT(dataItem) {
         window.open(`/advancedSearch#/gotoDeal/${dataItem.DEAL_ID}`, '_blank')

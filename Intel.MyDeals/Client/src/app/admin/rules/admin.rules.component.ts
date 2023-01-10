@@ -62,6 +62,7 @@ export class adminRulesComponent {
     public isTextFontTitle = "Click me to Decrease Text size";
     public rid = 0;
     public spinnerMessageDescription = "Please wait while we loading page";
+    public initialLoad: boolean;
 
     private deletionId: any;
     private excelColumns = {
@@ -201,20 +202,14 @@ export class adminRulesComponent {
         this.loadRules();
     }
 
-    async ngOnInit() {
+    ngOnInit() {
+        this.initialLoad = true;
         this.rid = parseInt(this.route.snapshot.paramMap.get('rid'));
         if (!isNaN(this.rid) && this.rid > 0)
             this.state.filter.filters = [{ field: "Id", operator: "eq", value: this.rid }];
         else
             this.rid = 0;
-        await this.getConstant();
-        await this.loadRules();
-        if ((<any>window).usrRole == 'DA' || (<any>window).usrRole == 'SA') {
-            this.RuleConfig = await this.adminRulesSvc.getPriceRulesConfig().toPromise().catch((err) => {
-                this.loggerSvc.error("Operation failed", '');
-            });
-            await this.GetRules(0, "GET_RULES");
-        }
+        this.getConstant();
     }
 
     stageOneChar(RULE_STAGE) {
@@ -294,7 +289,16 @@ export class adminRulesComponent {
                     );
                 });
         }
-
+        if (this.initialLoad) {
+            this.initialLoad = false;
+            await this.loadRules();
+            if ((<any>window).usrRole == 'DA' || (<any>window).usrRole == 'SA') {
+                this.RuleConfig = await this.adminRulesSvc.getPriceRulesConfig().toPromise().catch((err) => {
+                    this.loggerSvc.error("Operation failed", '');
+                });
+                await this.GetRules(0, "GET_RULES");
+            }
+        }
     }
     UpdateRuleIndicator(ruleId, isTrue, strActionName, isEnabled) {
         if (isEnabled && ruleId != null && ruleId > 0) {

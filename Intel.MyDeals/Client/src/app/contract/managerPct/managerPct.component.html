@@ -15,8 +15,7 @@
                     <td style="width: 30px; height: 40px;" (click)="toggleSum()"
                         title="{{ isAllCollapsed ? 'Collapse All' : 'Expand All'}}"
                         [ngClass]="{'rotate-90': !isAllCollapsed}">
-                        <i class="chevron linkable intelicon-fast-forward"
-                           data-toggle="collapse" data-target=".multi-collapse"></i>
+                        <i class="chevron linkable intelicon-fast-forward"></i>
                     </td>
                     <td style="width: 110px; height: 40px;"></td>
                     <td style="width:40px">
@@ -66,9 +65,7 @@
                         <tr>
                             <td style="width: 30px; height: 30px;" id="PRC_ST_{{ps.DC_ID}}"
                                 (click)="isPSExpanded[psIndex]=!isPSExpanded[psIndex]">
-                                <i class="chevron linkable collapseALL" data-toggle="collapse"
-                                   [attr.data-target]="'#PSData_'+ psIndex"
-                                   [ngClass]="{'intelicon-down': isPSExpanded[psIndex], 'intelicon-right-next': !isPSExpanded[psIndex]}"></i>
+                                <i class="collapseALL chevron linkable" [ngClass]="{'intelicon-down': isPSExpanded[psIndex], 'intelicon-right-next': !isPSExpanded[psIndex]}"></i>
                             </td>
                             <td class="bigIcon" style="width: 140px; text-align: center;"
                                 *ngIf="ps?._settings?.CAN_VIEW_COST_TEST || PCTResultView">
@@ -88,13 +85,11 @@
                         </tr>
                     </table>
                     <div *ngFor="let pt of ps.PRC_TBL;let i=index">
-                        <div id="PSData_{{psIndex}}" [ngClass]="{'show': isTenderDashboard, 'collapse multi-collapse': !isTenderDashboard}">
+                        <div id="PSData_{{psIndex}}" [ngClass]="{'show': isTenderDashboard || isPSExpanded[psIndex], 'collapse multi-collapse': !isTenderDashboard}">
                             <table style="width: 100%; " *ngIf="!isTenderDashboard">
                                 <tr id="detail_{{pt.DC_ID}}">
                                     <td style="width: 30px; height: 30px; text-align: right;" *ngIf="canEdit">
-                                        <i class="chevron linkable" style="font-size: 20px; padding-left: 6px;"
-                                           data-toggle="collapse" [attr.data-target]="'#sumWipGrid_'+ pt.DC_ID"
-                                           (click)="isPTExpanded[pt.DC_ID]=!isPTExpanded[pt.DC_ID]; togglePt(pt)"
+                                        <i class="chevron linkable" style="font-size: 20px; padding-left: 6px;" (click)="isPTExpanded[pt.DC_ID]=!isPTExpanded[pt.DC_ID]; togglePt(pt)"
                                            [ngClass]="{'intelicon-down': isPTExpanded[pt.DC_ID], 'intelicon-right-next': !isPTExpanded[pt.DC_ID]}"></i>
                                     </td>
                                     <td style="width: 30px; height: 30px;"
