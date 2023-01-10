@@ -617,3 +617,8 @@
         .groupDealers .mat-dialog-container .modal-body kendo-grid.k-grid .k-grid-content {
             height: 350px;
         }
+
+kendo-grid.meetCompTable table tr th .k-cell-inner kendo-grid-filter-menu a.k-grid-filter.k-state-active {
+    background: white;
+    padding-left: 0px;
+}

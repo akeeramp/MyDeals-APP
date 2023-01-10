@@ -100,6 +100,9 @@ export class adminWorkflowStagesComponent {
             this.isLoading = true;
             this.workflowStageSvc.GetWorkFlowStages().subscribe(
                 (result: Array<any>) => {
+                    for (let i = 0; i < result.length; i++) {
+                        result[i]['WFSTG_ORD'] = Number(result[i]['WFSTG_ORD'])
+                    }
                     this.gridResult = result;
                     this.gridData = process(this.gridResult, this.state);
                     this.loadDDLValues();

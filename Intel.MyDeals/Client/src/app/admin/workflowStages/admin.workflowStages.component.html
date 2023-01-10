@@ -115,7 +115,8 @@
                         [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem" let-rowIndex="rowIndex">
-                    {{dataItem.WFSTG_ORD===1 ? "" : dataItem.WFSTG_ORD}} </ng-template>
+                    {{dataItem.WFSTG_ORD}}
+                </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <ng-template #tipWFSTG_ORD><span class="k-icon k-i-warning"
                             style="width:200px; display:initial;"></span><span>&nbsp;Order By is required</span>

@@ -980,9 +980,10 @@ export class contractManagerComponent {
                 this.loadContractDetails();
             }
             else {
-                this.setBusy("Save Successful", "Saved the contract", "Success", true);
-                if (action == 'SaveContract' && data)// this logic is added to check is there any overlapping deals available or not
+                if (action == 'SaveContract' && data) {// this logic is added to check is there any overlapping deals available or not
+                    this.setBusy("Save Successful", "Saved the contract", "Success", true);
                     await this.checkPriorToActioning(data)
+                }
             }
         }
     }
