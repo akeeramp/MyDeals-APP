@@ -22,6 +22,7 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
     }
 
     private accessAllowed = true;
+    private isLoading = true;
     private Results = [];
     private GoodToSendResults = [];
     public GoodToSendDealIds = "";
@@ -116,6 +117,15 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
         else {
             this.loadValidateVistexPage();
         }
+    }
+
+    refreshGrid() {
+        this.isLoading = true;
+        this.state.filter = {
+            logic: "and",
+            filters: [],
+        };
+        this.loadValidateVistexPage();
     }
 
     ValidateDealIDs() {

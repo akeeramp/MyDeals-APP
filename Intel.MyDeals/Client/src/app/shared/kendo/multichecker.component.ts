@@ -58,7 +58,7 @@ import * as _ from 'underscore';
       overflow: auto;
       overflow-x: hidden;
       white-space: nowrap;
-      max-height: 300px;
+      max-height: 200px;
       margin-bottom: 5px;
     }
 

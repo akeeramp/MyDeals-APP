@@ -22,21 +22,25 @@
             <div class="fl opUiLabel ng-binding" style="font-weight:bold">Mode to run : </div>
             <div class=" col-md-8 ">
                 <kendo-combobox id="comboApiName" class="fl opUiElement" [data]="apiList" textField="OPT_LBL"
-                    valueField="OPT_ID" placeholder="Select a Running Mode..." [valuePrimitive]="false"
-                    [(ngModel)]="selectedApiID"></kendo-combobox>
-            </div><button (click)=" ValidateForVistexR3() " class=" btn btn-primary ">Run Validation </button><span
-                style=" margin-left:15px;margin-top:10px; " *ngIf=" ShowResults==true "><a
-                    style="color: #0071c5 !important; text-decoration: underline !important;"><b>Results:</b></a>Deals
-                Sent:{{UpdCnt.sent}}, <i style=" color:darkblue; ">Errors Returned:{{UpdCnt.returned}}</i></span>
-            <div class=" col-md-5 local-Padding" style="padding:initial"
-                *ngIf=" ShowResults==true && GoodToSendDealIds.length>0">Deals To Send:{{GoodToSendDealIds}} <button
-                    (click)="SendDealsToVistex()" class="btn btn-primary"
-                    style="background-color: forestgreen !important;">Send Good Deals to Vistex </button></div>
+                                valueField="OPT_ID" placeholder="Select a Running Mode..." [valuePrimitive]="false"
+                                [(ngModel)]="selectedApiID"></kendo-combobox>
+            </div>
+            <div class="validProps">
+                <button (click)=" ValidateForVistexR3() " class=" btn btn-primary ">Run Validation </button>
+                <span style=" margin-left:15px;margin-top:10px; " *ngIf=" ShowResults==true ">
+                    <a style="color: #0071c5 !important; text-decoration: underline !important;"><b>Results:</b></a>
+                    Deals Sent:{{UpdCnt.sent}}, <i style=" color:darkblue; ">Errors Returned:{{UpdCnt.returned}}</i>
+                </span>
+            </div>
+            <div class=" col-md-12 local-Padding" style="padding:initial" *ngIf=" ShowResults==true && GoodToSendDealIds.length>0">
+                Deals To Send:{{GoodToSendDealIds}}
+                <button (click)="SendDealsToVistex()" class="btn btn-primary" style="background-color: forestgreen !important;">Send Good Deals to Vistex </button>
+            </div>
         </div>
     </div>
     <div class="row">
-        <div class="col-md-12 kendo-grid-buttons">
-            <kendo-grid class="gridContentScroll " [data]="gridData" *ngIf="ShowResults==true" style="height: 400px;" [pageSize]="state.take"
+        <div class="col-md-12 kendo-grid-buttons oppo-grids physics-css new-now-wrap">
+            <kendo-grid class="gridContentScroll validaterRules" [data]="gridData" *ngIf="ShowResults==true" style="height: 400px;" [pageSize]="state.take"
                 [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" filterable="menu"
                 [navigable]="true" [resizable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info}"
                 (dataStateChange)="dataStateChange($event)">
@@ -47,6 +51,7 @@
                     <button type="button" kendoGridExcelCommand icon="file-excel">
                         EXPORT ERROR DEALS TO EXCEL
                     </button>
+                    <button (click)="refreshGrid()" class="k-button clearButton" style=" margin-left: auto;"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
                 </ng-template>
                 <kendo-grid-column *ngFor="let row of gridColumns" field="{{row.field}}" title="{{row.title}}"
                     width="{{row.width}}" [hidden]="!(ShowColumns.indexOf(row.field) >-1)"

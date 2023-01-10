@@ -1,1 +1,44 @@
- .local-Padding{padding:5px}.local-Padding-Top{padding-top:5px;margin-left:-15px}.k-grid-content{height:370px!important}#OutputHolder{margin-top:-35px}a{color:#0071c5!important;text-decoration:underline!important}.dataCell{padding:0;height:50px!important;font-family:'Intel Clear','Arial'!important;font-weight:500!important;font-size:14px!important;border-width:0!important}.k-cell-inner .k-grid-filter{color:black!important}.k-grid td{border-width:0!important;border-style:none!important}.gridContentScroll .k-grid-content.k-virtual-content{overflow-x:scroll!important;overflow-y:auto!important;height:100%!important}
+.local-Padding {
+    padding: 5px
+}
+
+.local-Padding-Top {
+    padding-top: 5px;
+    margin-left: -15px
+}
+
+.validaterRules .k-grid-content {
+    height: 370px !important
+}
+
+#OutputHolder {
+    margin-top: -35px
+}
+
+a {
+    text-decoration: underline !important
+}
+
+.dataCell {
+    padding: 0;
+    height: 50px !important;
+    font-family: 'Intel Clear','Arial' !important;
+    font-weight: 500 !important;
+    font-size: 14px !important;
+    border-width: 0 !important
+}
+
+.validaterRules .k-cell-inner .k-grid-filter {
+    color: black !important
+}
+
+.validaterRules .k-grid td {
+    border-width: 0 !important;
+    border-style: none !important
+}
+
+.gridContentScroll.validaterRules .k-grid-content.k-virtual-content {
+    overflow-x: scroll !important;
+    overflow-y: auto !important;
+    height: 100% !important
+}

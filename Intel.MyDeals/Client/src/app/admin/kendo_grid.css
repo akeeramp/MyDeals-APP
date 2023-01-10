@@ -641,17 +641,30 @@ kendo-slider.sliderwidth.kendo-custom-admin-design .k-slider-wrap.k-slider-butto
         margin-left: 9px;
     }
 
-kendo-multiselect.divineo-one.x-btn-visible .k-multiselect-wrap kendo-taglist ul li span {
-    font-size: 16px;
+kendo-multiselect.divineo-one.x-btn-visible .k-multiselect-wrap kendo-taglist ul li span.k-select {
+    display: flex !important;
+    color: #444;
+    opacity: 0.8;
 }
 
-    kendo-multiselect.divineo-one.x-btn-visible .k-multiselect-wrap kendo-taglist ul li span.k-select {
-        display: flex !important;
-    }
+kendo-multiselect.divineo-one.x-btn-visible.k-state-focused .k-multiselect-wrap kendo-taglist ul li span.k-select .k-i-close {
+    color: var(--light-blue) !important;
+}
 
-        kendo-multiselect.divineo-one.x-btn-visible .k-multiselect-wrap kendo-taglist ul li span.k-select span.k-icon.k-i-close {
-            opacity: 1;
-        }
+kendo-multiselect.divineo-one.x-btn-visible.k-state-focused .k-multiselect-wrap kendo-taglist ul li span.k-select {
+    opacity: 1;
+}
+
+kendo-multiselect.divineo-one.x-btn-visible .k-multiselect-wrap kendo-taglist ul li span.k-select span.k-icon.k-i-close {
+    opacity: 1;
+    font-size: 15px;
+    position: relative;
+    top: 2px;
+}
+
+kendo-multiselect.divineo-one.x-btn-visible:hover .k-multiselect-wrap span.k-icon.k-clear-value.k-i-close {
+    padding-top: 1px;
+}
 
 kendo-multiselect.divineo-one.x-btn-visible .k-multiselect-wrap kendo-taglist ul li {
     padding-right: 0.375rem !important;

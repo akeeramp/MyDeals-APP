@@ -1492,17 +1492,17 @@ kendo-grid.overDealChecking.widthOutDesign.k-widget kendo-grid-list table tbody 
     background-color: #fff !important;
 }
 
-/*kendo-grid.group-Excl-grid table tr.k-grid-norecords td {
+kendo-grid.group-Excl-grid table tr.k-grid-norecords td {
     display: flex;
     align-items: center;
     justify-content: center;
-    width: 1220px;
+    width: 1420px;
     padding: 50px;
 }
 
 kendo-grid.group-Excl-grid table tr.k-grid-norecords:hover {
     background-color: transparent !important;
-}*/
+}
 
 .batcherComp .k-grid .k-grouping-header .k-indicator-container {
     color: var(--light-blue);
