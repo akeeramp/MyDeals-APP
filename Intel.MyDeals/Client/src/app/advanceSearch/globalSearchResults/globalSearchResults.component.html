@@ -118,12 +118,12 @@
                         <mat-list>
                             <div *ngFor="let item of objTypes['WIP_DEAL'].result">
                                 <mat-list-item>
-                                    <div >
+                                    <div>
                                         <div style="display:flex">
                                             <deal-popup-icon [dealId]="item.DC_ID"></deal-popup-icon>
                                             <div  (click)="gotoOBJ(item,'WIP_DEAL')" style="font-weight: bold; color: #003C71;margin-top:0px">#{{item.DC_ID}}</div>
                                         </div>
-                                        <div style="margin-top: -10px; margin-left: 25px;" class="search-result-item">{{item.TITLE}}</div>
+                                        <div style="margin-top: -10px; margin-left: 25px;" class="search-result-item" (click)="gotoOBJ(item,'WIP_DEAL')">{{item.TITLE}}</div>
                                     </div>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
