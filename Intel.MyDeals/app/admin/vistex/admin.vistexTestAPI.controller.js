@@ -32,7 +32,8 @@
             "E": 'GetVistexDealOutBoundData',
             "F": 'GetVistexDealOutBoundData',
             "M": 'GetVistexDealOutBoundData',
-            "L": 'GetVistexDealOutBoundData'
+            "L": 'GetVistexDealOutBoundData',
+            "T": 'ExecuteSalesForceTenderData'
         };
         //Creating API
         vm.apiList.push({ API_ID: 1, API_NM: "Customer ", API_CD: "C" });
@@ -44,6 +45,7 @@
         vm.apiList.push({ API_ID: 7, API_NM: "Prod VerticalFailed", API_CD: "F" });
         vm.apiList.push({ API_ID: 7, API_NM: "Consumption Data", API_CD: "M" });
         vm.apiList.push({ API_ID: 8, API_NM: "Claim Data", API_CD: "L" });
+        vm.apiList.push({ API_ID: 9, API_NM: "Tender Deals", API_CD: "T" }); //TENDER_DEALS
 
         vm.apiDs = new kendo.data.DataSource({
             transport: {
@@ -99,7 +101,7 @@
             vm.isBusyShowFunFact = true;
             var startTime = moment(moment.utc().toDate()).local().format('YYYY-MM-DD HH:mm:ss');
             dsaService.callAPI(vm.apiPair[vm.apiSelectedCD], vm.apiSelectedCD).then(function (response) {
-                if (vm.apiSelectedCD == "R") {
+                if (vm.apiSelectedCD == "R" || vm.apiSelectedCD == "T") {
                     if (response.status == 200) {
                         logger.success('Transaction was successful...');
                     } else {

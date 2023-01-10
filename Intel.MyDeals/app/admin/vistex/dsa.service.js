@@ -9,7 +9,6 @@
     dsaService.$inject = ['$http', 'dataService', 'logger', '$q'];
 
     function dsaService($http, dataService, logger, $q) {
-
         var apiBaseUrl = "api/DSA/";
         var vistexApiBase = "api/VistexService/";
         var tenderApiBase = "api/Integration/";
@@ -61,7 +60,7 @@
                 else if ((runMode == "L")) {
                     return dataService.get(vistexApiBase + apiName + '/IQR_CLM_DATA/' + runMode);
                 }
-                else if (runMode == "R") {
+                else if (runMode == "R" || runMode == "T") {
                 return dataService.get(tenderApiBase + apiName);
             }
             else {
