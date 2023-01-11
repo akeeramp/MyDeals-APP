@@ -80,7 +80,7 @@ export class adminUnifiedDealReconComponent {
             this.editAccess = false;
         }
         //Developer can see the Screen..
-        if (!(<any>window).isCustomerAdmin && (<any>window).usrRole != "SA" && (<any>window).usrRole != "RA" && !(<any>window).isDeveloper) {
+        if (!(<any>window).isCustomerAdmin && (<any>window).usrRole != "SA" && (<any>window).usrRole != "RA" && (<any>window).usrRole != "GA" && !(<any>window).isDeveloper) {
             document.location.href = "/Dashboard#/portal";
         }
         else {
@@ -125,7 +125,7 @@ export class adminUnifiedDealReconComponent {
 
     openEndCustomerModal(dataItem, sender, rowIndex) {
         const dialogRef = this.dialog.open(endCustomerRetailModalComponent, {
-            width: "1000px",
+            width: '1500px',
             autoFocus: false,
             data: {
                 item: {

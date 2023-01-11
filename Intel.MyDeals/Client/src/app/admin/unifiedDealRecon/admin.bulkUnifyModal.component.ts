@@ -404,13 +404,18 @@ export class bulkUnifyModalComponent {
     ValidateUnifyDeals() {
         //On click of save and validate button
         if (this.isBulkUnify) {
+            let data = []
             this.tableData.forEach((row, rowInd) => {
                 for (let i = 0; i < ExcelColumnsConfig.bulkUnifyColumns.length; i++)//removing all the cell comments 
                     this.hotTable.setCellMetaObject(rowInd, i, { 'className': 'normal-cell', comment: { value: '' } });
+                if (!(row.DEAL_END_CUSTOMER_COUNTRY == null && row.DEAL_END_CUSTOMER_RETAIL == null && row.DEAL_ID == null && row.UCD_GLOBAL_ID == null
+                    && row.RPL_STS_CODE == null && row.UCD_COUNTRY  == null  && row.UCD_GLOBAL_NAME == null))
+                    data.push(row);
+            
             })
-            if (this.tableData.length > 0) {
+            if (data.length > 0) {
                 //validating
-                this.unifiedDealSvc.ValidateUnifyDeals(this.tableData).subscribe((response) => {
+                this.unifiedDealSvc.ValidateUnifyDeals(data).subscribe((response) => {
                     this.UnifyValidation = response;
                     this.generateTableData();
                 }, (response) => {

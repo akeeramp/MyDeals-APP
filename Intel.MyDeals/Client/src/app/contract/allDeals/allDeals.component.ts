@@ -307,7 +307,11 @@ export class allDealsComponent {
                 return { Text: new Date(item[fieldName]).toString(), Value: item[fieldName] };
             }
             else if (item[fieldName] != undefined && item[fieldName] != null)
+             if (fieldName === 'ECAP_PRICE' || fieldName === 'TRKR_NBR' ){
+                return { Text: item[fieldName]['20___0'], Value: item[fieldName] }
+            } else {
                 return { Text: item[fieldName].toString(), Value: item[fieldName] }
+            }
         });
 
     }

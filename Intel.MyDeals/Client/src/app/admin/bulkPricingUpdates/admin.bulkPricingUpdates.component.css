@@ -282,7 +282,7 @@ p.no-data-ok {
 }
 kendo-window.bulk-meet-comp-window.k-window {
     width: 320px !important;
-    height: 270px !important;
+    height: auto !important;
 }
 
 .bulk-meet-comp-window p {

@@ -17,12 +17,13 @@ import { ContextMenu } from 'handsontable/plugins';
   encapsulation: ViewEncapsulation.None
 })
 export class BulkPricingUpdatesComponent  {
-    
+     
   constructor(private loggerSvc: logger, protected dialog: MatDialog,private bulkPrcSvc: bulkPricingUpdatesService) {}
 
    private hotRegisterer = new HotTableRegisterer();
    private hotTable: Handsontable;
    private hotId = "prcSpreadsheet";
+   alertTitle: string = '';
    showFunFact = true;
    spinnerMessageHeader = "";
    spinnerMessageDescription = "";
@@ -110,6 +111,7 @@ export class BulkPricingUpdatesComponent  {
    errOnDsbRowPst(cols,isCut){
     if (this.cxtPaste) {
         this.isDisAlert = true;
+        this.alertTitle = 'Copying and pasting';
         this.alertMsg = 'These actions cannot be invoked through the menu. Please use the keyboard shortcuts instead: </br> Ctrl+C for copy </br> Ctrl+X for cut </br> Ctrl+V for paste';
         this.cxtPaste = false;
     } else{
@@ -122,6 +124,7 @@ export class BulkPricingUpdatesComponent  {
        
             if ( readOnlyCols.includes(cols.sCol) || readOnlyCols.includes(cols.eCol)){
                 this.isDisAlert = true;
+                this.alertTitle = 'Error';
                 this.alertMsg = 'Cannot modify disabled cells.';
             } else if (isCut) {
                 this.hotTable.getPlugin('copyPaste').cut();

@@ -31,7 +31,7 @@
                   *ngIf="isDisAlert"
                   (close)="closeDisAlert()">
         <kendo-window-titlebar class="meet-comp-header-admin">
-        <div class="k-window-title arrow-window-title">Copying and pasting</div><button kendoWindowCloseAction class="close-icon"></button>
+        <div class="k-window-title arrow-window-title">{{alertTitle}}</div><button kendoWindowCloseAction class="close-icon"></button>
         </kendo-window-titlebar>
         <p [innerHTML]='alertMsg'></p>
         <div style="border: 1px solid #e6e6e6; margin-right: -15px; margin-left: -12px;">
