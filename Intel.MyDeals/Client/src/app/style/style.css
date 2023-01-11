@@ -1543,7 +1543,12 @@ kendo-window.flexOverlapProducts .k-window-titlebar {
 kendo-window.flexOverlapProducts {
     border: none;
 }
-#admin-legal-popup .k-widget.k-window {
+
+#prodGrid .k-grid td p.k-reset {
+    font-size: 16px;
+    font-weight: 600;
+    color: #1a3e6f;
+}#admin-legal-popup .k-widget.k-window {
     width: 550px !important;
 }
 #admin-legal-popup .k-content.k-window-content.k-dialog-content {
