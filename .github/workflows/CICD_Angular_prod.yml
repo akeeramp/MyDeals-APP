@@ -74,19 +74,19 @@ jobs:
            ./scripts/build_env.ps1 'ClientZip' '${{github.event.inputs.ENV}}' '${{github.workspace}}'
        - name:  Move Publish Site 
          run: |
-           ./scripts/deploy_env.ps1 'MovePublishENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+           ./scripts/deploy_env.ps1 'MovePublishENV' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
        - name:  Remove Client Zip 
          run: |
-           ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+           ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
        - name:  Copy Client Zip 
          run: |
-           ./scripts/deploy_env.ps1 'CopyZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+           ./scripts/deploy_env.ps1 'CopyZipENV' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
        - name:  Deploy Client App 
          run: |
-           ./scripts/deploy_env.ps1 'DeployENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+           ./scripts/deploy_env.ps1 'DeployENV' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
        - name:  Copy Publish Site to latest folder
          run: |
-           ./scripts/deploy_env.ps1 'copy_latest_prodENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{ github.event.inputs.ENV }}'  
+           ./scripts/deploy_env.ps1 'copy_latest_prodENV' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{ github.event.inputs.ENV }}'  
 
   Deploy_Latest:
     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'yes')
@@ -97,10 +97,10 @@ jobs:
     steps:
        - name:  Remove Client Zip 
          run: |
-           ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+           ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
        - name:  Move Publish Site 
          run: |
-           ./scripts/deploy_env.ps1 'MovePublish_latest_prod' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+           ./scripts/deploy_env.ps1 'MovePublish_latest_prod' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
        - name:  Deploy Client App 
          run: |
-           ./scripts/deploy_env.ps1 'DeployENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+           ./scripts/deploy_env.ps1 'DeployENV' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
