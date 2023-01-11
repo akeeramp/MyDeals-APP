@@ -102,17 +102,17 @@
                             </ng-template>
                         </kendo-grid-column>
                     </kendo-grid>
-                    <kendo-dialog *ngIf="isDeleteClick">
+                    <kendo-dialog *ngIf="isDeleteClick" id="admin-legal-popup">
                         <h3 class="kendo-dialog-message">Delete confirmation</h3>
                         <p class="kendo-dialog-message">
                             Are you sure you would like to Delete this Product Cost Test
                             Rule ?
                         </p>
                         <kendo-dialog-actions>
-                            <button class='k-button'
+                            <button class='k-button cancel-btn-legal'
                                     (click)="cancelDeleteRuleAction()">
                                 Cancel
-                            </button><button class='k-button'
+                            </button><button class='k-button delete-btn-legal'
                                              (click)="deleteItem()">
                                 Delete Rule
                             </button>

@@ -1543,3 +1543,10 @@ kendo-window.flexOverlapProducts .k-window-titlebar {
 kendo-window.flexOverlapProducts {
     border: none;
 }
+#admin-legal-popup .k-widget.k-window {
+    width: 550px !important;
+}
+#admin-legal-popup .k-content.k-window-content.k-dialog-content {
+    overflow: hidden !important;
+    padding:0px !important
+}

@@ -1,1 +1,51 @@
 ﻿.btn-primary{margin:5px;align-items:center}.btn-primary[disabled]{background-color:#edeff0!important;color:#7e868b!important;border-color:#b1babf!important;cursor:not-allowed!important;pointer-events:all!important}.commentbar{margin-top:35px;background-color:#f2f2f2;color:#322122;padding:8px 16px;font-weight:600;height:40px}.commentbar span{color:#a9bc2b}#productDropdown{min-width:100%;padding-right:15px}#radioButton{padding-top:20px}#directiveDropdown{min-width:15%}.k-grid-add{font-size:18px!important}.fa-tan{margin-right:4px}.k-allign{padding-left:15px!important}.opp-d-filter{padding-left:10px;padding-right:10px}.opp-d-filter kendo-combobox{padding-right:0!important}.header-align{padding-top:45px!important;padding-left:15px!important}.grid-box-margin{padding-right:0!important;padding-top:10px!important;padding-left:0!important}.remove-space-btw{margin-bottom:0}.paragraph-align{margin-left:15px;margin-bottom:0}.k-grid.tt-grids{height:calc(100vh - 205px)!important}
+#admin-legal-popup .kendo-dialog-message {
+    margin:25px !important;
+    text-align: left !important;
+    margin-left: 0px !important;
+    color: #111 !important;
+    font-family: 'Intel Clear' !important;
+    margin-top:20px !important;
+    padding-left:12px !important
+}
+
+#admin-legal-popup kendo-dialog-actions.k-dialog-buttongroup.k-actions {
+    width: 270px !important;
+    left: 265px !important;
+    position: relative !important;
+}
+button.k-button.delete-btn-legal {
+    font-family: 'Intel Clear' !important;
+    font-size: 15px !important;
+    padding: 8px !important;
+    background-color: #3c8dbc !important;
+    color:#fff !important;
+    margin-left:45px !important
+}
+button.k-button.delete-btn-legal:hover {
+    background-color: #367fa9 !important;
+    border-color: #00aeef !important;
+    color:#fff !important
+}
+button.k-button.cancel-btn-legal {
+    color: #111 !important;
+    background-color: #f0f0f0 !important;
+   font-size: 15px !important;
+    padding: 8px !important;
+    font-family:'Intel Clear' !important;
+    margin-left:30px !important;
+    left:40px !important
+}
+#admin-legal-popup h3.kendo-dialog-message {
+    border-bottom: 1px solid #f4f4f4 !important;
+    width: 550px !important;
+    line-height:60px !important;
+}
+#admin-legal-popup p.kendo-dialog-message {
+    border-bottom: 1px solid #f4f4f4 !important;
+    width: 550px !important;
+    line-height: 60px !important;
+    position:relative !important;
+    bottom:30px !important
+}
+
