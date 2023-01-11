@@ -7,6 +7,9 @@ import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util'
 import * as moment from 'moment';
 import { PTE_Helper_Util } from './PTE_Helper_util';
 import { PTE_Validation_Util } from './PTE_Validation_util';
+import { PTE_Load_Util } from './PTE_Load_util';
+import { PTE_Config_Util } from './PTE_Config_util';
+import { PTE_CellChange_Util } from './PTE_CellChange_util';
 
 export class PTEUtil {
 
@@ -501,5 +504,144 @@ export class PTEUtil {
             }
         }
         return null;
+    }
+
+    static populateValidProducts = function (sysProducts) {
+        var kitReOrderObject = {
+            ReOrderedJSON: {}, PRD_DRAWING_ORD: '', contractProducts: ''};
+
+        var addedProducts = [];
+        for (var key in sysProducts) {
+            if (sysProducts.hasOwnProperty(key)) {
+                _.each(sysProducts[key], (item) =>{
+                    addedProducts.push(item);
+                });
+            }
+        }
+        // Orders KIT products
+        addedProducts = _.sortBy(addedProducts,'DEAL_PRD_TYPE');//$filter('kitProducts')(addedProducts, 'DEAL_PRD_TYPE');
+        var pricingTableSysProducts = {};
+        // Construct the new reordered JSON for KIT, if user input is Ci3, derived user input will be selected products
+        _.each(addedProducts, (item) => {
+            if (!pricingTableSysProducts.hasOwnProperty(item.DERIVED_USR_INPUT)) {
+                pricingTableSysProducts[item.DERIVED_USR_INPUT] = [item];
+            } else {
+                pricingTableSysProducts[item.DERIVED_USR_INPUT].push(item);
+            }
+        });
+
+        kitReOrderObject['ReOrderedJSON'] = pricingTableSysProducts;
+        kitReOrderObject['PRD_DRAWING_ORD'] = addedProducts.map(function (p) {
+            return p.PRD_MBR_SID;
+        }).join(',');
+
+        kitReOrderObject['contractProducts'] = addedProducts.map(function (p) {
+            return p.DERIVED_USR_INPUT;
+        }).join(',');
+
+        return kitReOrderObject;
+    }
+
+    static updateProductOrdering(data, transformResults, curPricingTable) {
+        var isAllValidated = true;
+        let r: number;
+        if (transformResults && transformResults.Data) {
+            transformResults = transformResults.Data;
+        }
+        if (transformResults && transformResults.ProdctTransformResults) {
+            for (var key in transformResults.ProdctTransformResults) {
+                r = data.findIndex(x => x.DC_ID == key);
+                if (r >= 0) {
+                    // Flag dependency column errors - these columns may cause product translator to not find a valid product
+                    if (!!transformResults.InvalidDependancyColumns && !!transformResults.InvalidDependancyColumns[key] && transformResults.InvalidDependancyColumns[key].length > 0) {
+                        for (var i = 0; i < transformResults.InvalidDependancyColumns[key].length; i++) {
+                            data[r]._behaviors.isError[transformResults.InvalidDependancyColumns[key][i]] = true;
+                            data[r]._behaviors.validMsg[transformResults.InvalidDependancyColumns[key][i]] = "Value is invalid and may cause the product to validate incorrectly."
+                        }
+                    }
+
+                    //Trimming unwanted Property to make JSON light
+                    if (!!transformResults.ValidProducts[key]) {
+                        transformResults = this.massagingObjectsForJSON(key, transformResults);
+                    }
+
+                    // If no duplicate or invalid add valid JSON
+                    data[r].PTR_SYS_PRD = !!transformResults.ValidProducts[key] ? JSON.stringify(transformResults.ValidProducts[key]) : "";
+                    PTE_CellChange_Util.updatePrdColumns(r, 'PTR_SYS_PRD', data[r].PTR_SYS_PRD);
+                    if ((!!transformResults.InValidProducts[key] && (transformResults.InValidProducts[key]["I"].length > 0
+                        || transformResults.InValidProducts[key]["E"].length > 0)) || !!transformResults.DuplicateProducts[key]) {
+                        isAllValidated = false;
+                        break;
+                    }
+
+                    if (isAllValidated) {
+                        let userInput: any;
+                        if (curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                            var kitObject = this.populateValidProducts(transformResults.ValidProducts[key]);
+                            transformResults.ValidProducts[key] = kitObject['ReOrderedJSON'];
+                            let input = { 'contractProducts': '', 'excludeProducts': '' };
+                            if (transformResults.ValidProducts[key]) {
+                                input.contractProducts = kitObject['contractProducts'];
+                            }
+                            userInput = input;
+                        } else {
+                            userInput = this.updateUserInput(transformResults.ValidProducts[key]);
+                        }
+
+                        var contractProducts = userInput.contractProducts.toString().replace(/(\r\n|\n|\r)/gm, ""); // TODO: probably move all these replace functions should into the custom paste instead
+                        var originalProducts = data[r].PTR_USER_PRD.toString().replace(/(\r\n|\n|\r)/gm, ""); // NOTE: This replace function takes out hidden new line characters, which break js dictionaries
+
+                        if (curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                            var orignalUnswappedDataDict = {}; // Dictionary<product, original dataItem>
+                            var originalProductsArr = originalProducts.split(',');
+                            var isProductOrderChanged = (contractProducts !== originalProducts);
+
+                            if (isProductOrderChanged) {
+                                // Create a dictionary of products with their original tiered data
+                                for (var i = 0; i < originalProductsArr.length; i++) {
+                                    var originalIndex = r + i;
+                                    orignalUnswappedDataDict[PTE_Helper_Util.formatStringForDictKey(originalProductsArr[i])] = PTE_Common_Util.deepClone(data[originalIndex]);
+                                }
+                            }
+                        }
+
+                        data[r].PTR_USER_PRD = contractProducts;   // Change the PTR_USER_PRD to the re-ordered product list
+                        PTE_CellChange_Util.updatePrdColumns(r, 'PTR_USER_PRD', data[r].PTR_USER_PRD);
+                        data[r].PTR_SYS_PRD = !!transformResults.ValidProducts[key] ? JSON.stringify(transformResults.ValidProducts[key]) : "";
+                        PTE_CellChange_Util.updatePrdColumns(r, 'PTR_SYS_PRD', data[r].PTR_SYS_PRD);
+                        // KIT update PRD_DRWAING_ORDER and merged rows
+                        if (curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                            data[r].PRD_DRAWING_ORD = kitObject.PRD_DRAWING_ORD;
+                            let tierNbr = PTE_Load_Util.numOfPivot(data[r], curPricingTable);
+                            let mergedRows = r + tierNbr;
+                            let modifiedNumTiers = data[r].PTR_USER_PRD.split(',').length;
+                            modifiedNumTiers = modifiedNumTiers < tierNbr ? tierNbr : modifiedNumTiers;
+                            for (var a = mergedRows - 1; a >= r; a--) { // look at each tier by it's index, going backwards
+                                if (isProductOrderChanged) {
+                                    // We had swapped around the product order, so we need to map corresponding dimmed/tiered attributes to their new product order too
+                                    var newContractProdArr = contractProducts.split(',');
+                                    var currProduct = newContractProdArr[(a - r)]; // NOTE: this asssumes we swapped the PTR_USER_PRD to the re-ordered product list already
+                                    for (var d = 0; d < PTE_Config_Util.kitDimAtrbs.length; d++) {
+                                        if (PTE_Config_Util.kitDimAtrbs[d] == "TIER_NBR") { continue; }
+                                        // Check for undefined..Extra product might have been from user input translated e.g., 7230(F) ==> 7230F,7230
+                                        if (orignalUnswappedDataDict[PTE_Helper_Util.formatStringForDictKey(currProduct)] !== undefined) {
+                                            data[a][PTE_Config_Util.kitDimAtrbs[d]] = orignalUnswappedDataDict[PTE_Helper_Util.formatStringForDictKey(currProduct)][PTE_Config_Util.kitDimAtrbs[d]];
+                                            PTE_CellChange_Util.updatePrdColumns(a, PTE_Config_Util.kitDimAtrbs[d], data[a][PTE_Config_Util.kitDimAtrbs[d]]);
+                                        }
+                                    }
+                                }
+
+                                data[a].PTR_USER_PRD = data[r].PTR_USER_PRD;
+                                data[a].PRD_DRAWING_ORD = data[r].PRD_DRAWING_ORD;
+                                data[a].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
+                                data[a]['dirty'] = true;
+                                modifiedNumTiers--;
+                            }
+                        }
+
+                    }
+                }
+            }
+        }
     }
 }

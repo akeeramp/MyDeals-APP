@@ -283,7 +283,7 @@ export class pricingTableEditorComponent {
                         else {
                             if (this.field && selVal != result?.toString &&
                                 (this.field == 'CUST_ACCNT_DIV' || this.field == "GEO_COMBINED" || this.field == 'START_DT' || this.field == 'END_DT' || this.field == 'PAYOUT_BASED_ON' || this.field == 'PERIOD_PROFILE' || this.field == 'RESET_VOLS_ON_PERIOD' || this.field == 'AR_SETTLEMENT_LVL'
-                                || this.field == 'REBATE_TYPE' || this.field == 'PROD_INCLDS' || this.field == 'SETTLEMENT_PARTNER' || this.field == 'MRKT_SEG' || this.field == 'PROGRAM_PAYMENT'  )) {
+                                    || this.field == 'REBATE_TYPE' || this.field == 'PROD_INCLDS' || this.field == 'SETTLEMENT_PARTNER' || this.field == 'MRKT_SEG' || this.field == 'PROGRAM_PAYMENT' || this.field === "OEM_PLTFRM_LNCH_DT" || this.field === "OEM_PLTFRM_EOL_DT")) {
                                 VM.dirty = true;
                                 VM.removeCellComments(this.selRow,this.field);
                                 if (this.field == 'AR_SETTLEMENT_LVL'){
@@ -352,6 +352,7 @@ export class pricingTableEditorComponent {
         { text: "5 (18pt)", size: "18" },
         { text: "6 (24pt)", size: "24" },
     ];
+    private kitMergeDeleteDCIDs = [];
     private isDialogOpen: boolean = false;
     private isCustDivNull: boolean = false;
     private validationMessage: boolean = false;
@@ -846,7 +847,12 @@ export class pricingTableEditorComponent {
         this.setBusy("Reloading...", "Table Editor Reloading please wait", "Info", true);
         this.isKitDialog = false;
         setTimeout(() => {
-            //will delete the rows first this must be first step
+            let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
+            PTR = _.map(PTR, (x) => { return { DEAL_GRP_NM: x['DEAL_GRP_NM'].toUpperCase() } });
+            let firstRow = _.findIndex(PTR, { DEAL_GRP_NM: this.kitNameObj.name.toUpperCase() });
+            let products = this.hotTable.getDataAtRowProp(firstRow, 'PTR_USER_PRD').split(',');
+            PTE_CellChange_Util.mergeKitDeal(this.kitNameObj, this.columns, this.curPricingTable, this.contractData, this.pricingTableTemplates);
+            // Delete after merging, since Products, ECAP_Price, Kit Rebate, Discount Perline, Quantity, Total discount per line needs to be updated after merge 
             _.each(this.kitNameObj.PTR, (itm) => {
                 let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
                 PTR = _.map(PTR, (x) => { return { DEAL_GRP_NM: x['DEAL_GRP_NM'].toUpperCase() } });
@@ -854,11 +860,38 @@ export class pricingTableEditorComponent {
                 let lastRow = _.findLastIndex(PTR, { DEAL_GRP_NM: this.kitNameObj.name.toUpperCase() });
                 if (PTRlen > 1) {
                     let prdlen = this.hotTable.getDataAtRowProp(lastRow, 'PTR_USER_PRD').split(',').length;
-                    this.hotTable.alter('remove_row', lastRow, prdlen, 'no-edit');
+                    let DC_ID = this.hotTable.getDataAtRowProp(lastRow, 'DC_ID');
+                    let count = 0;
+                    for (let index = lastRow; index < (lastRow + prdlen); index++) {
+                        let i = firstRow + products.length + count;
+                        if (!products.includes(this.hotTable.getDataAtRowProp(index, 'PRD_BCKT'))) {
+                            let ecapPrice = this.hotTable.getDataAtRowProp(index, 'ECAP_PRICE');
+                            PTE_CellChange_Util.updatePrdColumns(i, 'ECAP_PRICE', ecapPrice);
+                            let dcntPerLine = this.hotTable.getDataAtRowProp(index, 'DSCNT_PER_LN');
+                            PTE_CellChange_Util.updatePrdColumns(i, 'DSCNT_PER_LN', dcntPerLine);
+                            let qty = this.hotTable.getDataAtRowProp(index, 'QTY');
+                            PTE_CellChange_Util.updatePrdColumns(i, 'QTY', qty);
+                            let totdcntPerLine = this.hotTable.getDataAtRowProp(index, 'TEMP_TOTAL_DSCNT_PER_LN');
+                            PTE_CellChange_Util.updatePrdColumns(i, 'TEMP_TOTAL_DSCNT_PER_LN', totdcntPerLine);
+                        }
+                        count++;
+                    }
+                    if (DC_ID > 0) {
+                        this.kitMergeDeleteDCIDs.push(DC_ID);
+                    }
+                    setTimeout(() => {
+                        //to calculate the merged row KIT Rebate value
+                        PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
+                        let DCID = this.hotTable.getDataAtRowProp(firstRow, 'DC_ID');
+                        let numOfTiers = _.where(PTR, { DC_ID: DCID }).length;
+                        let firstTierRowInd = _.findIndex(PTR, x => { return x.DC_ID == DCID })
+                        let val = PTE_Load_Util.calculateKitRebate(PTR, firstTierRowInd, numOfTiers, false)
+                        this.hotTable.setDataAtRowProp(firstTierRowInd, 'TEMP_KIT_REBATE', val, 'no-edit');
+                        //to remove the merged row
+                        this.hotTable.alter('remove_row', lastRow, prdlen, 'no-edit');
+                    },100);
                 }
             });
-            //After delete will merge the rows
-            PTE_CellChange_Util.mergeKitDeal(this.kitNameObj, this.columns, this.curPricingTable, this.contractData, this.pricingTableTemplates);
             this.kitNameObjArr.splice(0, 1);
             if (this.kitNameObjArr && this.kitNameObjArr.length > 0) {
                 this.kitNameObj = this.kitNameObjArr[0];
@@ -1189,6 +1222,16 @@ export class pricingTableEditorComponent {
 
     }
     async validatePricingTableProducts(deleteDCIDs?) {
+        if (this.kitMergeDeleteDCIDs && this.kitMergeDeleteDCIDs.length > 0) {// if any rows got deleted because while merging the rows
+            if (!deleteDCIDs)
+                deleteDCIDs = this.kitMergeDeleteDCIDs;
+            else {
+                _.each(this.kitMergeDeleteDCIDs, (delId) => {
+                    deleteDCIDs.push(delId);
+                })
+            }
+            this.kitMergeDeleteDCIDs = [];
+        }
         //validate Products for non-deleted records, if any product is invalid it will stop deletion as well
         let isValidProd = await this.validateOnlyProducts('onSave', undefined, deleteDCIDs);
         if (isValidProd != undefined)
@@ -1197,6 +1240,8 @@ export class pricingTableEditorComponent {
     async saveandValidate(isValidProd, deleteDCIDs?) {
         //Handsonetable loading taking some time so putting this logic for loader
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
+        PTEUtil.updateProductOrdering(PTR, this.transformResults, this.curPricingTable);
+
         //removing the deleted record from PTR
         if (deleteDCIDs && deleteDCIDs.length > 0) {
             _.each(deleteDCIDs, (delId) => {
@@ -1472,7 +1517,8 @@ export class pricingTableEditorComponent {
             }
         });
     }
-    async openProductCorrector(products: any, action: string, deletedDCID?) {
+    async openProductCorrector(products: any, action: string, deletedDCID?) {        
+        this.kitMergeDeleteDCIDs = []
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
         let selRow: any;
         let rowProdCorrectordat: any;
@@ -1503,11 +1549,7 @@ export class pricingTableEditorComponent {
             if (savedResult) {
                 let transformResult = savedResult.ProductCorrectorData;
                 this.transformResults["Data"] = transformResult
-                let curRowIndx;
-                let publishWipDeals = false;
-                if (Object.keys(transformResult.DuplicateProducts).length > 0 || Object.keys(transformResult.InValidProducts).length > 0) {
-                    publishWipDeals = false;
-                }
+                let curRowIndx;                
 
                 if (!!transformResult && !!transformResult.ProdctTransformResults) {
                     for (var key in transformResult.ProdctTransformResults) {
@@ -1546,7 +1588,6 @@ export class pricingTableEditorComponent {
                             }
                             else {
                                 let selProd = savedResult.selectedProducts.filter(x => x.DCID == key)[0];
-                                let idx = selProd.indx;
                                 let deletedProds = savedResult.deletedProducts;
                                 if (selProd) {
                                     if (this.curRow[0]) {
@@ -1554,13 +1595,6 @@ export class pricingTableEditorComponent {
                                     }
                                     // sometime not all prod corrector rows are slected and user click save in that case we dont need to do any action
                                     if (selProd.items && selProd.items.length > 0) {
-                                        //logic to bind the selected product and PTR_SYS_PRD to PTR
-                                        if (this.curPricingTable.OBJ_SET_TYPE_CD && this.curPricingTable.OBJ_SET_TYPE_CD == 'KIT') {
-                                            if (idx != 0) {
-                                                //this is to map the current index of prod from last selected prod length
-                                                savedResult.selectedProducts[idx].indx = savedResult.selectedProducts[idx - 1].indx + this.hotTable.getDataAtRowProp(savedResult.selectedProducts[idx - 1].indx, 'PTR_USER_PRD').split(',').length;
-                                            }
-                                        }
                                         selRow = selProd.indx;
                                         let deletedProd = undefined;
                                         if (deletedProds && deletedProds.length > 0) {
@@ -1642,10 +1676,12 @@ export class pricingTableEditorComponent {
                     this.setBusy("No Products Found", "Please add products.", "Warning", false);
                     setTimeout(() => {
                         this.setBusy("", "", "", false);
-                    }, 2000);
+                    }, 100);
                 }
                 else if (action == 'onSave') {
-                   await this.saveandValidate(true, deletedDCID);
+                    setTimeout(async() => {//wait until PTE updation completes
+                        await this.saveandValidate(true, deletedDCID);
+                    }, 100);
                 }
             }
         });

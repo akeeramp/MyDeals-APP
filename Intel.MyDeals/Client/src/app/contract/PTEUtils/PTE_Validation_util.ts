@@ -59,44 +59,45 @@ export class PTE_Validation_Util {
 
 
     static validateMultiGeoForHybrid(data: any, isHybrid: any) {
-        let returnval = "0";
         if (isHybrid == 1 || isHybrid == '1') {
             //This is Comma Separated GEOS
             var prod_used = [];
             for (var i = 0; i < data.length; i++) {
-                //Add Products
-                var temp_split = (data[i].PTR_USER_PRD.toLowerCase().trim().split(/\s*,\s*/));
-                for (var j = 0; j < temp_split.length; j++) {
-                    prod_used.push(temp_split[j]);
-                }
-                //Checking GEO
-                //Added a check to check for Geo_Combined only if it exists.
-                if (data[i].GEO_COMBINED && data[i].GEO_COMBINED.indexOf(',') > -1) {
-                    var firstBracesPos = data[i].GEO_COMBINED.lastIndexOf('[');
-                    var lastBracesPos = data[i].GEO_COMBINED.lastIndexOf(']');
-                    var lastComma = data[i].GEO_COMBINED.lastIndexOf(',');
-                    if (lastComma > lastBracesPos) {
-                        returnval = "1";
+                if (data[i].IS_CANCELLED !== "1") {
+                    //Add Products
+                    var temp_split = (data[i].PTR_USER_PRD.toLowerCase().trim().split(/\s*,\s*/));
+                    for (var j = 0; j < temp_split.length; j++) {
+                        prod_used.push(temp_split[j]);
+                    }
+                    //Checking GEO
+                    //Added a check to check for Geo_Combined only if it exists.
+                    if (data[i].GEO_COMBINED && data[i].GEO_COMBINED.indexOf(',') > -1) {
+                        var firstBracesPos = data[i].GEO_COMBINED.lastIndexOf('[');
+                        var lastBracesPos = data[i].GEO_COMBINED.lastIndexOf(']');
+                        var lastComma = data[i].GEO_COMBINED.lastIndexOf(',');
+                        if (lastComma > lastBracesPos) {
+                            return "1";
+                        }
                     }
                 }
             }
-            //This is to Check Product Line
-            if (prod_used.length > 0) {
-                var uniq = prod_used
-                    .map(function (e) {
-                        return e;
-                    }).reduce((a, b) => {
-                        a[b] = (a[b] || 0) + 1;
-                        return a
-                    }, {})
-                //Duplicate Product Check
-                var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
-                if (duplicates.length > 0) {
-                    returnval = "2";
-                }
-            }
+            ////This is to Check Product Line -- commented below part, Once Mitusha confirmed, will delete it.
+            //if (prod_used.length > 0) {
+            //    var uniq = prod_used
+            //        .map(function (e) {
+            //            return e;
+            //        }).reduce((a, b) => {
+            //            a[b] = (a[b] || 0) + 1;
+            //            return a
+            //        }, {})
+            //    //Duplicate Product Check
+            //    var duplicates = Object.keys(uniq).filter((a) => uniq[a] > 1)
+            //    if (duplicates.length > 0) {
+            //        return "2";
+            //    }
+            //}
         }
-        return returnval;
+        return "0";
        }
 
     static splitProductForDensity (response) {
