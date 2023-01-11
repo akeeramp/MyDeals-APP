@@ -1,20 +1,29 @@
 ﻿import { Injectable } from '@angular/core';
-import { Resolve } from '@angular/router';
-import { Observable, of } from 'rxjs';
-import { map } from 'rxjs/operators';
+import { Resolve, Router } from '@angular/router';
+import { Observable, of } from 'rxjs'; 
+import * as _ from 'underscore';
 import { SecurityService } from './services/security.service';
 
 
 
 @Injectable()
 export class SecurityResolver implements Resolve<Observable<any>> {
-    constructor(private securitySvc: SecurityService) { }
+    constructor(private securitySvc: SecurityService ,private router: Router) { }
 
-    resolve(): Observable<any> {
-        return this.securitySvc.getSecurityData().pipe(map(res => {
-            this.securitySvc.getSecurityDataFromSession();
-            sessionStorage.setItem('securityAttributes', JSON.stringify(res.SecurityAttributes));
-            sessionStorage.setItem('securityMasks', JSON.stringify(res.SecurityMasks));
-        }));
+    async resolve(): Promise<Observable<any>> {
+
+        //this route code is temporary and it will be removed once move as a standalone application
+        _.each(this.router.config, (route) => {
+            const routeobj = route.data.BaseHref + '#/';
+            if (route.path == '/' || route.path == '')
+                route.path ='Dashboard#/'
+            if (document.location.href.indexOf(route.path.split('/')[0]) > 0) {
+                if (document.getElementById("baseHref"))
+                document.getElementById("baseHref").setAttribute('href', routeobj);
+              }
+        }) 
+
+      await  this.securitySvc.loadSecurityData(); 
+        return of('true');
     }
 }

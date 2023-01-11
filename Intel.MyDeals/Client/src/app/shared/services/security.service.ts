@@ -1,6 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
+import { logger } from "../logger/logger";
 
 @Injectable({
     providedIn: 'root'
@@ -8,7 +9,7 @@ import { Observable } from "rxjs";
 
 export class SecurityService {
 
-    constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient,private loggerService: logger) { }
 
     public apiBaseUrl = "/api/SecurityAttributes/";
     public securityAttributes = null;
@@ -40,7 +41,8 @@ export class SecurityService {
         this.sessionComparisonHash = sessionStorage.getItem('sessionComparisonHash');
         this.securityAttributes = (this.securityAttributes == null || this.securityAttributes == undefined || this.securityAttributes == "undefined")  ? [] : JSON.parse(this.securityAttributes);
         this.securityMasks = (this.securityMasks == null || this.securityMasks==undefined || this.securityMasks == "undefined") ? [] : JSON.parse(this.securityMasks);
-        this.sessionComparisonHash = (this.securityMasks == null || this.securityMasks==undefined || this.securityAttributes == "undefined") ? [] : JSON.parse(this.sessionComparisonHash);
+        this.sessionComparisonHash = (this.securityMasks == null || this.securityMasks == undefined || this.securityAttributes == "undefined") ? [] : JSON.parse(this.sessionComparisonHash);
+
     }
 
     convertHexToBin(hex) {
@@ -102,17 +104,23 @@ export class SecurityService {
         return false;
     }
 
-    loadSecurityData() {
+    async loadSecurityData() {
         this.getSecurityDataFromSession();
-        this.getSecurityData().subscribe((response) => {
-            if (response) {
-                this.securityAttributes = response.SecurityAttributes;
-                this.securityMasks = response.SecurityMasks;
+        if (this.securityAttributes && this.securityAttributes.length == 0 && this.securityMasks && this.securityMasks.length == 0) {
+             
+            const response = await this.getSecurityData().toPromise().catch((err) => {
+                this.loggerService.error("Error", "not able to load the security data", err);
+            })
+                if (response) {
+                    this.securityAttributes = response.SecurityAttributes;
+                    this.securityMasks = response.SecurityMasks;
 
-                sessionStorage.setItem('securityAttributes', JSON.stringify(this.securityAttributes));
-                sessionStorage.setItem('securityMasks', JSON.stringify(this.securityMasks));
-            }
-            return true;
-        });
+                    sessionStorage.setItem('securityAttributes', JSON.stringify(this.securityAttributes));
+                    sessionStorage.setItem('securityMasks', JSON.stringify(this.securityMasks));
+                }
+            
+            
+            return true; 
+        }
     }
 }
