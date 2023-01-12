@@ -526,7 +526,12 @@ export class managerPctComponent {
             }
         }
     }
-    async ngOnInit() {
+    async loadPct() {
+        await this.loadPctDetails();
+        if (this.enabledPCT)
+            setTimeout(() => { this.executePct(); }, 0)
+    }
+    ngOnInit() {
         if(this.tab === 'groupExclusionDiv'){
             this.selectedTab = 5;
         }
@@ -552,9 +557,7 @@ export class managerPctComponent {
         if (this.isTenderDashboard) {//If PCT screen triggered from Tender Dashboard, all datas needs to be expanded
             this.isAllCollapsed = false;
         }
-        await this.loadPctDetails();
-        if (this.enabledPCT)
-            setTimeout(() => { this.executePct();},0)
+        this.loadPct();
     }
     goToNavManagePCT(dataItem) {
         window.open(`/advancedSearch#/gotoDeal/${dataItem.DEAL_ID}`, '_blank')

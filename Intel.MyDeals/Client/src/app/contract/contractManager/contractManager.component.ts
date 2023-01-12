@@ -1092,6 +1092,7 @@ export class contractManagerComponent {
             }
             this.messages = response.Data.Messages;
             setTimeout(() => {
+                this.windowOpened = true;
                 this.loadContractDetails();
                 this.setBusy("", "","",false);
             }, 50);
@@ -1127,7 +1128,12 @@ export class contractManagerComponent {
             }
         }
     }
-    async ngOnInit() {
+    async loadDetails() {
+        await this.loadContractDetails();
+        if (this.enabledPCT)
+            setTimeout(() => { this.executePct(); }, 0)
+    }
+    ngOnInit() {
         try {
             this.userRole = (<any>window).usrRole;
             this.isDeveloper = (<any>window).isDeveloper;
@@ -1151,9 +1157,7 @@ export class contractManagerComponent {
                     };
                 })
             })
-            await this.loadContractDetails();
-            if (this.enabledPCT)
-                setTimeout(() => { this.executePct(); }, 0)
+            this.loadDetails();
         }
         catch(ex){
             this.loggerSvc.error('Something went wrong', 'Error');
