@@ -81,7 +81,6 @@ export class managerPctComponent {
     private ptId: any;
     private showMultipleDialog: boolean = false;
     private pteTableData: any
-    public initialLoadContract = true;
     private CAN_EDIT_COST_TEST = this.lnavSvc.chkDealRules('C_EDIT_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "SA" && (<any>window).isSuper); // Can go to cost test screen and make changes
     private hasNoPermission = !(this.CAN_EDIT_COST_TEST == undefined ? this.lnavSvc.chkDealRules('C_EDIT_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "SA" && (<any>window).isSuper) : this.CAN_EDIT_COST_TEST);
     private hasNoPermissionOvr = this.hasNoPermission && (<any>window).usrRole !== "Legal";
@@ -252,7 +251,10 @@ export class managerPctComponent {
             return "Running " + this.text;
         }
         
-        if (!this.enabledPCT && this.lastRun) {
+        if (!this.enabledPCT)
+            return value + " is saved";
+
+        if (this.lastRun) {
 
             // Get local time in UTC
             var currentTime = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
@@ -330,13 +332,7 @@ export class managerPctComponent {
         });
         if (response && response.length > 0) {
             this.contractData = response[0];
-            if (this.initialLoadContract) {
-                this.initialLoadContract = false;
-                var isPCForceReq = this.contractData?.PRC_ST?.filter(x => x.COST_TEST_RESULT == 'Not Run Yet' || x.COST_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
-                var isMCForceReq = this.contractData?.PRC_ST?.filter(x => x.MEETCOMP_TEST_RESULT == 'Not Run Yet' || x.MEETCOMP_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
-                if (isMCForceReq || isPCForceReq)
-                    await this.executePct();
-            }
+            this.calcNeedToRunStatus();
             if (this.isTenderDashboard && this.contractData.PRC_ST && this.PS_ID)//PCT screen of Tender Dashboard displays only particular PS not all
                 this.contractData.PRC_ST = this.contractData.PRC_ST.filter(x => x.DC_ID == this.PS_ID);
             this.refreshedContractData.emit({ contractData: this.contractData });
@@ -519,7 +515,18 @@ export class managerPctComponent {
     closeMultiple() {
         this.showMultipleDialog = false;
     }
-    ngOnInit() {
+    calcNeedToRunStatus() {
+        this.enabledPCT = false;
+        if (this.contractData.PRC_ST === undefined || this.contractData.PRC_ST === null) return;
+
+        for (var d = 0; d < this.contractData.PRC_ST.length; d++) {
+            var stg = this.contractData.PRC_ST[d].WF_STG_CD;
+            if (stg !== "Pending" && stg !== "Approved") {
+                this.enabledPCT = true;
+            }
+        }
+    }
+    async ngOnInit() {
         if(this.tab === 'groupExclusionDiv'){
             this.selectedTab = 5;
         }
@@ -545,7 +552,9 @@ export class managerPctComponent {
         if (this.isTenderDashboard) {//If PCT screen triggered from Tender Dashboard, all datas needs to be expanded
             this.isAllCollapsed = false;
         }
-        this.loadPctDetails();
+        await this.loadPctDetails();
+        if (this.enabledPCT)
+            setTimeout(() => { this.executePct();},0)
     }
     goToNavManagePCT(dataItem) {
         window.open(`/advancedSearch#/gotoDeal/${dataItem.DEAL_ID}`, '_blank')

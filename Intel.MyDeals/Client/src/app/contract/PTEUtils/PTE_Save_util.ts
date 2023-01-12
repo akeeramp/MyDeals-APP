@@ -286,7 +286,11 @@ export class PTE_Save_Util {
         _.each(data, (item) => {
             if (curPricingTable.OBJ_SET_TYPE_CD == 'KIT') {
                 item["TEMP_SUM_TOTAL_DSCNT_PER_LN"] = 0;
-                let obj = JSON.parse(item['PTR_SYS_PRD']);
+                let obj;
+                if (item['PTR_SYS_PRD'] && typeof item['PTR_SYS_PRD'] == 'string')
+                    obj = JSON.parse(item['PTR_SYS_PRD']);
+                else
+                    obj = item['PTR_SYS_PRD'];
                 let keys = Object.keys(obj);
                 for (var key in keys) {
                     if (!Number.isNaN(Number(key))) {

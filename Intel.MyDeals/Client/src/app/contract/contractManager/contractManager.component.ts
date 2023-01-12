@@ -102,7 +102,6 @@ export class contractManagerComponent {
     public drawChart: boolean = false;
     public isDeveloper: boolean;
     public isTester: boolean;
-    public initialLoadContract = true;
     public initialLoad: boolean = true;
     public spinnerMessageHeader: any;
     public spinnerMessageDescription: any;
@@ -724,7 +723,10 @@ export class contractManagerComponent {
             return "Running " + this.text;
         }
         
-        if (!this.enabledPCT && this.lastRun) {
+        if (!this.enabledPCT)
+            return value + " is saved";
+
+        if (this.lastRun) {
 
             // Get local time in UTC
             var currentTime = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
@@ -788,13 +790,7 @@ export class contractManagerComponent {
         });
         if (response && response.length > 0) {
             this.contractData = response[0];
-            if (this.initialLoadContract) {
-                this.initialLoadContract = false;
-                var isPCForceReq = this.contractData?.PRC_ST?.filter(x => x.COST_TEST_RESULT == 'Not Run Yet' || x.COST_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
-                var isMCForceReq = this.contractData?.PRC_ST?.filter(x => x.MEETCOMP_TEST_RESULT == 'Not Run Yet' || x.MEETCOMP_TEST_RESULT == 'InComplete' || x.DC_ID <= 0).length > 0 ? true : false;
-                if (isMCForceReq || isPCForceReq)
-                    await this.executePct();
-            }
+            this.calcNeedToRunStatus();
 
             this.refreshedContractData.emit({ contractData: this.contractData });
             this.refreshCheckBoxData();
@@ -1120,7 +1116,18 @@ export class contractManagerComponent {
         }
         return rtn;
     }
-    ngOnInit() {
+    calcNeedToRunStatus() {
+        this.enabledPCT = false;
+        if (this.contractData.PRC_ST === undefined || this.contractData.PRC_ST === null) return;
+
+        for (var d = 0; d < this.contractData.PRC_ST.length; d++) {
+            var stg = this.contractData.PRC_ST[d].WF_STG_CD;
+            if (stg !== "Pending" && stg !== "Approved") {
+                this.enabledPCT = true;
+            }
+        }
+    }
+    async ngOnInit() {
         try {
             this.userRole = (<any>window).usrRole;
             this.isDeveloper = (<any>window).isDeveloper;
@@ -1144,7 +1151,9 @@ export class contractManagerComponent {
                     };
                 })
             })
-            this.loadContractDetails();
+            await this.loadContractDetails();
+            if (this.enabledPCT)
+                setTimeout(() => { this.executePct(); }, 0)
         }
         catch(ex){
             this.loggerSvc.error('Something went wrong', 'Error');

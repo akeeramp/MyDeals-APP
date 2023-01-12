@@ -538,7 +538,7 @@ export class ProductCorrectorComponent {
                     this.curRowIssues[aa].cnt = this.curRowData.filter(x => x.USR_INPUT == this.duplicateData.USR_INPUT).length;
                 }
             }
-                   
+            this.selGridData = process(this.curRowData, this.state);
             var delProduct = false;
             if (!!this.ProductCorrectorData.DuplicateProducts[this.curRowId]) {
                 if (!!this.ProductCorrectorData.DuplicateProducts[this.curRowId][this.lookUp]) {
