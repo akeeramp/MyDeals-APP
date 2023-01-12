@@ -80,7 +80,11 @@ export class emailModal {
             };
             this.contractManagerSvc.emailNotification(dataItemBody).subscribe((response: any) => {
                 this.dialogRef.close();
-          });
+            }, (error) => {
+                //while subscribing its returning httpResponse.So, for now checking response with succuss code. (server side code changes needed in future)
+                if (error.status == 200) this.dialogRef.close();
+                else this.loggerSvc.error('Failed to send Email', '');
+            });
         }
         close(){
             this.dialogRef.close();

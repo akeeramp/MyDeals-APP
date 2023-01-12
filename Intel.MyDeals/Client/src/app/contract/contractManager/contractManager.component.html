@@ -304,7 +304,7 @@
                                 <tr id="detail_{{pt.DC_ID}}">
                                     <td style="width: 20px;" *ngIf="canEdit"></td>
                                     <td style="width: 271px; height: 30px; text-align: right;" *ngIf="canEdit">
-                                        <i class="chevron linkable" data-toggle="collapse" [attr.data-target]="'#sumWipGrid_'+ pt.DC_ID" (click)="isPTExpanded[pt.DC_ID]=!isPTExpanded[pt.DC_ID]; togglePt(pt)" [ngClass]="{'intelicon-down': isPTExpanded[pt.DC_ID], 'intelicon-right-next': !isPTExpanded[pt.DC_ID]}"></i>
+                                        <i class="chevron linkable" data-toggle="collapse" [attr.data-target]="'#sumWipGrid_'+ pt.DC_ID" (click)="togglePt(pt)" [ngClass]="{'intelicon-down': isPTExpanded[pt.DC_ID], 'intelicon-right-next': !isPTExpanded[pt.DC_ID]}"></i>
                                     </td>
                                     <td style="width: 30px; height: 30px; text-align: right;" (click)="isPtCollapsed=!isPtCollapsed; togglePt( pt)" [hidden]="canEdit">
                                         <button class="chevron linkable" type="button" data-toggle="collapse" [attr.data-target]="'#sumWipGrid_'+'{{pt.DC_ID}}'" (click)="togglePt( pt)"></button>

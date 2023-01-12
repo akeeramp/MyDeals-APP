@@ -622,6 +622,7 @@ export class contractManagerComponent {
 
     togglePt(pt) {
         const ptDcId = pt.DC_ID;
+        this.isPTExpanded[pt.DC_ID] = !this.isPTExpanded[pt.DC_ID];
         this.isGridLoading = true;
         //check whether arrow icon is expanded/collapsed ,only if it is expanded then call API to get the data
         if (this.isPTExpanded[ptDcId]) {
