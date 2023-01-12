@@ -38,6 +38,8 @@ export class adminProductCategoriesComponent {
     public isFormChange = false;
     private editedRowIndex: number;
     private isDataValid = false;
+    private focusFiledld = false;
+    private focusFiledProductVertical = false;
 
     @ViewChild('dealPdctTooltip', { static: false }) dealPdctTooltip: NgbTooltip;
     @ViewChild('pdctVerticalTooltip', { static: false }) pdctVerticalTooltip: NgbTooltip;
@@ -94,7 +96,7 @@ export class adminProductCategoriesComponent {
                         item['CHG_DTM'] = this.datepipe.transform(new Date(item['CHG_DTM']), 'M/d/yyyy');
                         item['CHG_DTM'] = new Date(item['CHG_DTM']);
                     })
-                    
+
                     this.gridResult = response;
                     this.gridData = process(this.gridResult, this.state);
                     this.isLoading = false;
@@ -122,7 +124,7 @@ export class adminProductCategoriesComponent {
             DIV_NM: new FormControl(dataItem.DIV_NM),
             OP_CD: new FormControl(dataItem.OP_CD),
             DEAL_PRD_TYPE: new FormControl(dataItem.DEAL_PRD_TYPE, dataItem.ACTV_IND == true ? Validators.required : Validators.nullValidator),
-            PRD_CAT_NM: new FormControl(dataItem.PRD_CAT_NM , dataItem.ACTV_IND == true ? Validators.required : Validators.nullValidator),
+            PRD_CAT_NM: new FormControl(dataItem.PRD_CAT_NM, dataItem.ACTV_IND == true ? Validators.required : Validators.nullValidator),
             CHG_EMP_NM: new FormControl(dataItem.CHG_EMP_NM),
             CHG_DTM: new FormControl(dataItem.CHG_DTM),
             PRD_CAT_MAP_SID: new FormControl(dataItem.PRD_CAT_MAP_SID),
@@ -154,7 +156,7 @@ export class adminProductCategoriesComponent {
     }
     saveHandler({ sender, rowIndex, formGroup }) {
         //As updateCategory method in the server side expects product category as a list, sending it as array object
-        const product_categories: Product_categories[]=[];
+        const product_categories: Product_categories[] = [];
         product_categories.push(formGroup.value);
         this.isDataValid = this.formGroup.valid;
         if (!this.isDataValid) {
@@ -203,5 +205,28 @@ export class adminProductCategoriesComponent {
     ngOnInit() {
         this.loadproductCategoriesData();
     }
+    openTooltip() {
+        const data = this.formGroup.controls;
+        this.focusFiledld = true;
+        if (this.focusFiledld === true) {
+            (data.DEAL_PRD_TYPE.value == "" && data.ACTV_IND.value) ? this.dealPdctTooltip.open() : this.dealPdctTooltip.close();
+        }
+    }
+    closeTooltip() {
+        this.focusFiledld = false;
+        this.dealPdctTooltip.close();
+    }
+    productVerticalTooltipOpen() {
+        this.focusFiledProductVertical = true;
+        const data = this.formGroup.controls;
+        if (this.focusFiledProductVertical === true) {
+            (data.PRD_CAT_NM.value == "" && data.ACTV_IND.value) ? this.pdctVerticalTooltip.open() : this.pdctVerticalTooltip.close();
+        }
+    }
+    productVerticalTooltipClose() {
+        this.focusFiledProductVertical = false;
+        this.pdctVerticalTooltip.close();
+    }
+
 
 }

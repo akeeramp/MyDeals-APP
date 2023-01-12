@@ -936,3 +936,6 @@ kendo-grid.security-engine-tables .k-grid-content {
 tender-meet-comp-width kendo-grid#meetcomp-contract td.k-touch-action-auto {
     border-width: 0px !important;
 }
+ngb-tooltip-window.redColorTooltip .tooltip-inner {
+    background-color: #ed1c24 !important;
+}

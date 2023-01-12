@@ -75,7 +75,7 @@
                                 </span>
                             </div>
                             <div style="max-height: 230px; overflow: auto; margin-top: 4px; margin-right: 10px; height: 190px;">
-                                <div class="backclass" *ngFor="let item of columns | orderBy: 'title'">
+                                <div class="backclass" *ngFor="let item of columns | filter:columnSearchFilter | orderBy: 'title'">
                                     &nbsp;&nbsp;<input type='checkbox' [checked]="iscolumnchecked(item.field)" id="colChk{{item.field}}" (click)="onColumnChange(item)" />&nbsp;
                                     <label for="colChk{{item.field}}">
                                         <span [innerHTML]="item.title"></span>
