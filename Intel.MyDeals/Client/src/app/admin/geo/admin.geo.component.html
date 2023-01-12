@@ -15,7 +15,7 @@
             <strong>Read-Only</strong> screen for viewing data. </div>
     </div>
     <div class="col-md-12 kendo-grid-buttons">
-        <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+        <kendo-grid class="changedragcolor" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
             [sort]="state.sort" [filter]="state.filter" [sortable]="true"
             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="true"
             [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)">

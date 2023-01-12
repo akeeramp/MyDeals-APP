@@ -265,3 +265,9 @@ button.warn-custom {
 gridster-item.attr-li-7 .k-grid-table-wrap contract-status-board-angular .k-grid-table-wrap {
     height: auto !important;
 }
+
+.changedragcolor.k-grid .k-indicator-container {
+    margin: -0.375rem 0 !important;
+    padding: 0.375rem 0 !important;
+    color: #00aeef !important;
+}

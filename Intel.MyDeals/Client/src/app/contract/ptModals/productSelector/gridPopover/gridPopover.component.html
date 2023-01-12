@@ -1,7 +1,7 @@
 <div (click)="openModal()">
-    <kendo-grid class="gridPopover" [data]="dataSource" [loading]="isLoading" [skip]="state.skip" [sortable]="false" [sort]="state.sort" [groupable]="false">
-        <ng-template ngFor [ngForOf]="gridOptions.columns" let-column>
-            <kendo-grid-column [headerClass]="{'headerClass': true}" field="{{ column.field }}" title="{{ column.title }}"></kendo-grid-column>
+    <kendo-grid style="width:600px;"   class="gridPopover" [data]="dataSource" [loading]="isLoading" [skip]="state.skip" [sortable]="false" [sort]="state.sort" [groupable]="false">
+        <ng-template  ngFor [ngForOf]="gridOptions.columns" let-column>
+            <kendo-grid-column width="{{ (column.field == 'Level4' ) ? 100 : 61 }}" [headerClass]="{'headerClass': true}" field="{{ column.field }}" title="{{ column.title }}"></kendo-grid-column>
         </ng-template>
     </kendo-grid>
 </div>

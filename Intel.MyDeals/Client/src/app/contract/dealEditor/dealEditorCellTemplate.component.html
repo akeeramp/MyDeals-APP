@@ -68,7 +68,7 @@
                 <div *ngIf="key.indexOf('___') >= 0 && key.indexOf('_____') < 0" (click)="openModal(fieldModifier, in_DataItem, getProductSid(in_DataItem.PRODUCT_FILTER, key),fieldModifier)">
                     <!-- Popover Template -->
                     <ng-template #popoverContent>
-                        <div class="container" id="pop">
+                        <div class="container">
                             <div class="row">
                                 <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                             </div>
