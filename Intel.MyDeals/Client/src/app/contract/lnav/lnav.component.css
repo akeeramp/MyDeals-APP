@@ -583,3 +583,8 @@ i.intelicon-vertical-menu.blue_b_fix {
     white-space: nowrap;
     text-overflow: ellipsis;
 }
+.fr.navIconLnk.no-hint-collapse {
+    position: relative !important;
+    right: 8px !important;
+    border-top: 1px solid #fff !important;
+}

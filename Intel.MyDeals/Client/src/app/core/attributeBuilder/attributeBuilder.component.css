@@ -633,3 +633,7 @@ kendo-datepicker.k-custom-dater {
         color: var(--light-blue);
         background-color: #e4e7eb;
     }
+.tender-extra-box-style input {
+    color: #000 !important;
+    font-size: 12px !important;
+}

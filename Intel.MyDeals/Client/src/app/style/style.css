@@ -1555,3 +1555,6 @@ kendo-window.flexOverlapProducts {
     overflow: hidden !important;
     padding:0px !important
 }
+#manageFilterStyle a.k-grid-filter.k-state-active {
+    background-color: #ffffff !important
+}
