@@ -844,7 +844,7 @@ export class dealEditorComponent {
             }
         }
 
-        this.selectedTab = "Deal Info"
+        this.selectedTab = this.groups[0].name;
         this.filterColumnbyGroup(this.selectedTab);
     }
 

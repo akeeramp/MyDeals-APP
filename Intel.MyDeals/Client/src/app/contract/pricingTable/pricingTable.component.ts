@@ -142,6 +142,7 @@ export class pricingTableComponent {
                 if (PRC_ST != undefined && PRC_ST != null && PRC_ST.length > 0) {
                     let PRC_TBL = _.filter(PRC_ST[0].PRC_TBL, item => { return item.DC_ID == this.pt_Id });
                     if (PRC_TBL != undefined && PRC_TBL != null && PRC_TBL.length > 0) {
+                        this.curPricingStrategy = PRC_ST[0];
                         this.ps_title = PRC_ST[0].TITLE;
                         this.pt_title = PRC_TBL[0].TITLE;
                         this.pt_type = PRC_TBL[0].OBJ_SET_TYPE_CD;
@@ -210,7 +211,7 @@ export class pricingTableComponent {
         try {
             e.preventDefault();
             if (e.title == "Deal Editor") {
-                if ((this.pteComp && this.pteComp.dirty) || this.curPricingStrategy['PASSED_VALIDATION'] != "Complete") {
+                if ((this.pteComp && this.pteComp.dirty) || (this.curPricingStrategy && this.curPricingStrategy['PASSED_VALIDATION'] != "Complete")) {
                     if (this.pteComp) {
                         await this.pteComp.validatePricingTableProducts();
                         let isAnyWarnings = this.pteComp.pricingTableDet.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
