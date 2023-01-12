@@ -250,6 +250,9 @@ export class allDealsComponent {
                 x.CUST_NM = x.Customer?.CUST_NM;
             });
             this.displayDealTypes();
+            this.gridResult.forEach((item) => {
+                item.CNTRCT_OBJ_SID = item.CNTRCT_OBJ_SID != undefined ? item.CNTRCT_OBJ_SID : '';
+            })
             this.gridData = process(this.gridResult, this.state);
             this.loadDealTypestab(data);
             setTimeout(()=>{
@@ -394,6 +397,7 @@ export class allDealsComponent {
     filterdealbyTab() {
         let group = this.groups.filter(x => x.name == this.selectedTab);
         let deals = [];
+        this.state.skip = 0;
         if (group[0].name.toLowerCase() == 'all') {
             deals = this.gridResult;
             this.state.filter = {

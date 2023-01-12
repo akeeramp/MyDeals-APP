@@ -122,8 +122,17 @@ export class AdvancedSearchComponent implements OnInit {
         this.state.filter = state.filter != undefined ? state.filter : this.state.filter;
         this.state.sort = state.sort != undefined ? state.sort : this.state.sort;
         this.state.group = state.group != undefined ? state.group : this.state.group;
-        this.gridData = process(this.gridResult, this.state);
-        this.gridData.total = this.totalCount;
+        if ((this.state.sort && this.state.sort.length > 0) || (this.state.group && this.state.group.length > 0)) {
+            let sort = {
+                take: 25,
+                skip: 0,
+                sort: this.state.sort,
+                group: this.state.group
+            }
+            let data = process(this.gridData.data, sort);
+            this.gridData.data = data.data;
+            this.gridData.total = this.totalCount;
+        }
     }
 
 
@@ -337,20 +346,21 @@ export class AdvancedSearchComponent implements OnInit {
             exportVal = false;
             this.exportData = result.Items;
         } else {
-            if (this.state.skip == 0) this.gridResult = result.Items;
-            else {
-                this.gridResult = [];
-                let obj = {};
-                for (let i = 0; i < this.state.skip; i++) {
-                    this.gridResult.push(obj);
-                }
-                this.gridResult = this.gridResult.concat(result.Items);
-            }
+            this.gridResult = result.Items
+            let data: any;
             let newState = {
                 skip: this.state.skip,
                 take: this.state.take
             }
             this.gridData = process(this.gridResult, newState);
+            if (this.state.skip > 0) {
+                let state = {
+                    take: this.state.take,
+                    skip: 0
+                }
+                data = process(this.gridResult, state);
+                this.gridData.data = data.data;
+            }
             this.gridData.total = result.Count;
         }
 

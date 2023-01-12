@@ -486,7 +486,8 @@ export class GridUtil {
         if (passedData.HAS_SUBKIT == "0" && kittype == "subkit") {
             tmplt += '    <div class="vert-center">No Sub KIT</div>';
         } else {
-            tmplt += '    <div class="ng-binding vert-center">' + value + '</div>';
+            if (value == null) tmplt += '    <div class="ng-binding vert-center">' + '</div>';
+            else tmplt += '    <div class="ng-binding vert-center">' + value + '</div>';
         }
         tmplt += '</div>';
         return tmplt;
