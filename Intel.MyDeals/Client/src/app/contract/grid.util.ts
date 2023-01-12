@@ -609,7 +609,7 @@ export class GridUtil {
 
         var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
         tmplt += '    <div class="ng-binding vert-center">';
-        if (percData.vol !== 999999999) {
+        if (passedData["VOLUME"] !== undefined && percData.vol !== 999999999) {
             tmplt += '      <div class="progress .creditDebitAlignmentStyle" style="margin-bottom: 2px; background-color:#edeff0 !important; ">';
             tmplt += '        <div class="progress-bar" role="progressbar" value="' + percData.perc + '" min="0" max="100" style="width: ' + percData.perc + '%;"></div>';
             tmplt += '      </div>';
