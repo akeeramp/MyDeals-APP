@@ -628,6 +628,9 @@ export class contractDetailsComponent {
                             this.END_QTR = response?.QTR_NBR;
                             this.END_YR = response?.YR_NBR;
                         }
+                        if (changeEvent !== 'START_DT' && changeEvent !== 'END_DT') {
+                            this.validateDate(changeEvent);
+                        }
                         if (changeEvent == 'END_DT' && this.isCopyContract) {
                             this.contractData._behaviors.isError[changeEvent] = false;
                             this.contractData._behaviors.validMsg[changeEvent] = "";
@@ -661,13 +664,13 @@ export class contractDetailsComponent {
         }
 
     validateDate(dateChange) {
-        if (dateChange == undefined || dateChange == "") {
-            this.contractData._behaviors.isError['START_DT'] = this.contractData._behaviors.isError['END_DT'] = false;
-            this.contractData._behaviors.validMsg['START_DT'] = this.contractData._behaviors.validMsg['END_DT'] = "";
-        }
-        else {
+        if (dateChange !== undefined && (dateChange == "START_DT" || dateChange == "END_DT")) {
             this.contractData._behaviors.isError[dateChange] = false;
             this.contractData._behaviors.validMsg[dateChange] = "";
+        }
+        else {
+            this.contractData._behaviors.isError['START_DT'] = this.contractData._behaviors.isError['END_DT'] = false;
+            this.contractData._behaviors.validMsg['START_DT'] = this.contractData._behaviors.validMsg['END_DT'] = "";
         }
         const startDate = this.START_DT;
         const endDate = this.END_DT;
@@ -678,7 +681,7 @@ export class contractDetailsComponent {
                     ? "Start date cannot be less than - " + this.contractData.MinDate
                     : "Start date cannot be greater than End Date";
             }
-        } else if (!this.isCopyContract) {
+        } else if (dateChange == 'END_YR' || (dateChange == 'END_DT' && !this.isCopyContract)) {
             if (moment(endDate).isBefore(startDate) || moment(endDate).isAfter(this.contractData.MaxDate)) {
                 this.contractData._behaviors.isError['END_DT'] = true;
                 this.contractData._behaviors.validMsg['END_DT'] = moment(endDate).isAfter(this.contractData.MaxDate)

@@ -581,6 +581,9 @@ export class PTEUtil {
                     if (isAllValidated) {
                         let userInput: any;
                         if (curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                            userInput = this.updateUserInput(transformResults.ValidProducts[key]);
+                            if (userInput && userInput['contractProducts'])
+                                data[r].PTR_USER_PRD = userInput['contractProducts'];
                             var kitObject = this.populateValidProducts(transformResults.ValidProducts[key]);
                             transformResults.ValidProducts[key] = kitObject['ReOrderedJSON'];
                             let input = { 'contractProducts': '', 'excludeProducts': '' };
