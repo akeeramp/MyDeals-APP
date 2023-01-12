@@ -1103,11 +1103,7 @@ export class PTE_CellChange_Util {
                 let colSPIdx = _.findWhere(this.hotTable.getCellMetaAtRow(item.row), { prop: 'SETTLEMENT_PARTNER' }).col;
                 if ((item.new && item.new == '') || item.new==null){
                     if(curPricingTable && curPricingTable[`${item.prop}`] && curPricingTable[`${item.prop}`].toLowerCase()=='cash'){
-                        this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', contractData.Customer.DFLT_SETTLEMENT_PARTNER, 'no-edit');
-                        //check object present 
-                        this.hotTable.setCellMeta(item.row, colSPIdx, 'editor', cellEditor);
-                        this.hotTable.setCellMeta(item.row, colSPIdx, 'className', '');
-                        this.hotTable.render();
+                        this.autoFillOnCash(item,contractData,colSPIdx,cellEditor);
                     }
                     else{
                         this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', '', 'no-edit');
@@ -1119,18 +1115,15 @@ export class PTE_CellChange_Util {
                 }
                 else{
                     //Modiying the logic from from full table update to cell update for better performance
-                    if (item.new && item.new != '' && item.new.toLowerCase() != 'cash') {
+                    if (item.new && item.new != '' && item.new.toLowerCase() === 'cash') {
+                        this.autoFillOnCash(item,contractData,colSPIdx,cellEditor);
+                    }
+                    else {
                         this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', '', 'no-edit');
                         this.hotTable.setCellMeta(item.row, colSPIdx, 'editor', false);
                         this.hotTable.setCellMeta(item.row, colSPIdx, 'className', 'readonly-cell');
                         this.hotTable.render();
-                    }
-                    else {
-                        this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', contractData.Customer.DFLT_SETTLEMENT_PARTNER, 'no-edit');
-                        //check object present 
-                        this.hotTable.setCellMeta(item.row, colSPIdx, 'editor', cellEditor);
-                        this.hotTable.setCellMeta(item.row, colSPIdx, 'className', '');
-                        this.hotTable.render();
+                        
                     }
                 }
              
@@ -1140,6 +1133,19 @@ export class PTE_CellChange_Util {
             console.error(ex);
         }
 
+    }
+
+    static autoFillOnCash(item,contractData,colSPIdx,cellEditor){
+        // For Deleting the readonly behaviour which is added while save & validate
+        if (this.hotTable.getDataAtRowProp(item.row, '_behaviors') != undefined && this.hotTable.getDataAtRowProp(item.row, '_behaviors') != null) {
+            var behaviors = this.hotTable.getDataAtRowProp(item.row, '_behaviors');
+            delete behaviors.isReadOnly["SETTLEMENT_PARTNER"];
+        }
+        this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', contractData.Customer.DFLT_SETTLEMENT_PARTNER, 'no-edit');
+        //check object present 
+        this.hotTable.setCellMeta(item.row, colSPIdx, 'editor', cellEditor);
+        this.hotTable.setCellMeta(item.row, colSPIdx, 'className', '');
+        this.hotTable.render();
     }
     /* AR settlement change ends here */
     static dateChange(items: Array<any>, colName: string, contractData) {

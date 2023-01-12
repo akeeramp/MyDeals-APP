@@ -692,11 +692,6 @@ export class PTE_Load_Util {
                             cellProperties['readOnly'] = true;
                         }
                     } else {
-                        // For Deleting the readonly behaviour which is added while save & validate
-                        if (hotTable.getDataAtRowProp(row, '_behaviors') != undefined && hotTable.getDataAtRowProp(row, '_behaviors') != null) {
-                            var behaviors = hotTable.getDataAtRowProp(row, '_behaviors');
-                            delete behaviors.isReadOnly["SETTLEMENT_PARTNER"];
-                        }
                         if (prop == 'SETTLEMENT_PARTNER') {
                             cellProperties['readOnly'] = false;
                         }
