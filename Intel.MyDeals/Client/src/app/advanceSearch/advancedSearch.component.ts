@@ -242,6 +242,8 @@ export class AdvancedSearchComponent implements OnInit {
             logic: "and",
             filters: [],
         };
+        this.state.sort = [];
+        this.state.group = [];
         this.state.skip = 0;
         this.searchDeals();
     }

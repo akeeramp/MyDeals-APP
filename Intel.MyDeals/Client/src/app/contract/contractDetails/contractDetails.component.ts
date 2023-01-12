@@ -681,7 +681,7 @@ export class contractDetailsComponent {
                     ? "Start date cannot be less than - " + this.contractData.MinDate
                     : "Start date cannot be greater than End Date";
             }
-        } else if (dateChange == 'END_YR' || (dateChange == 'END_DT' && !this.isCopyContract)) {
+        } else if (dateChange == 'END_YR' || dateChange == "END_QTR" || (dateChange == 'END_DT' && !this.isCopyContract)) {
             if (moment(endDate).isBefore(startDate) || moment(endDate).isAfter(this.contractData.MaxDate)) {
                 this.contractData._behaviors.isError['END_DT'] = true;
                 this.contractData._behaviors.validMsg['END_DT'] = moment(endDate).isAfter(this.contractData.MaxDate)
