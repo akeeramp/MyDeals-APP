@@ -54,7 +54,7 @@ import { SecurityResolver } from "./shared/security.resolve";
 export const routes: Routes = [
     { path: '', redirectTo: '/portal', pathMatch: 'full', data: { title: 'Dashboard', BaseHref: 'Dashboard' }, resolve: { security: SecurityResolver } },
     { path: 'reportingdashboard', component: ReportingComponent, data: { title: 'Reporting', BaseHref: 'Reporting' }, resolve: { security: SecurityResolver } },
-    { path: 'tenderDashboard', component: TenderDashboardComponent, data: { title: 'Tender Dashboard', BaseHref: 'TenderDashboard' }, resolve: { security: SecurityResolver } },
+    { path: 'tenderDashboard', component: TenderDashboardComponent, data: { title: 'Tender Dashboard', BaseHref: 'AdvancedSearch' }, resolve: { security: SecurityResolver } },
     { path: 'advanceSearch', component: AdvancedSearchComponent, data: { title: 'AdvancedSearch', BaseHref: 'AdvancedSearch' }, resolve: { security: SecurityResolver } },
     { path: 'mydashboard', component: DashboardComponent, data: { title: 'Dashboard', BaseHref: 'Dashboard' }, resolve: { security: SecurityResolver } },
     { path: 'portal', component: DashboardComponent, data: { title: 'Dashboard', BaseHref: 'Dashboard' }, resolve: { security: SecurityResolver } },
