@@ -12,7 +12,7 @@
     function ConsumptionCountryController(consumptionCountryService, dropdownsService, $scope, logger, gridConstants, $uibModal) {
 
         $scope.accessAllowed = true;
-        if (!(window.usrRole === 'SA' || window.isDeveloper)) {
+        if (!(window.usrRole === 'SA' || window.isDeveloper || window.isCustomerAdmin)) {
             $scope.accessAllowed = false;
             document.location.href = "/Dashboard#/portal";
         }
