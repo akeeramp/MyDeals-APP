@@ -1548,13 +1548,28 @@ kendo-window.flexOverlapProducts {
     font-size: 16px;
     font-weight: 600;
     color: #1a3e6f;
-}#admin-legal-popup .k-widget.k-window {
+}
+
+#admin-legal-popup .k-widget.k-window {
     width: 550px !important;
 }
+
 #admin-legal-popup .k-content.k-window-content.k-dialog-content {
     overflow: hidden !important;
     padding:0px !important
 }
+
 #manageFilterStyle a.k-grid-filter.k-state-active {
     background-color: #ffffff !important
+}
+
+#horizontal.expanded:has(.contractManagerPlus) {
+    position: fixed;
+    top: 93px;
+    width: 80.5%;
+}
+
+#horizontal.expanded .few-oracle-css:has(.contractManagerPlus) {
+    top: 0;
+    position: absolute;
 }

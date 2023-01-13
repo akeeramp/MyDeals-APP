@@ -458,7 +458,7 @@ kendo-dialog.artho-css .k-dialog-buttongroup {
         top: 30%
     }
 
-.wistyle.k-window {
+.searchingStage.k-window {
     border-color: rgba(0,0,0,.2);
     box-shadow: 1px 1px 7px 1px rgba(128,128,128,.2);
     background-color: #fff;
@@ -466,6 +466,11 @@ kendo-dialog.artho-css .k-dialog-buttongroup {
     top: 178px !important;
     position: fixed !important
 }
+
+    .searchingStage.k-window.k-window-maximized {
+        top: 0 !important;
+        left: 0 !important;
+    }
 
 .k-window-title.arrow-window-title {
     position: relative !important;
