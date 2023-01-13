@@ -34,6 +34,7 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
                 this.isLoaded = false;
                 this.state.skip = 0;
                 this.loadContractData();
+                this.collapseAll();
             }
         });
     }
@@ -113,6 +114,11 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
             this.isLoaded = value;
         }
     }
+    collapseAll() {
+        this.gridResult.forEach((item, idx) => {
+            this.grid.collapseRow(idx);
+        })
+      }
 
     loadContractData() {
         this.isGridLoading.emit(true);
