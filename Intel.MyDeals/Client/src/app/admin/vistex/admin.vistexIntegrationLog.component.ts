@@ -69,6 +69,8 @@ export class adminVistexIntegrationLogComponent implements OnInit {
     ];
     public gridData: GridDataResult;
     public gridResult: Array<any>;
+    private senderGrid: any;
+    private rowIndexValue: number = 0;
 
     ngOnInit(){
         if (!(<any>window).isDeveloper) {
@@ -141,6 +143,8 @@ export class adminVistexIntegrationLogComponent implements OnInit {
     }
 
     editHandler({ sender, rowIndex, dataItem }) {
+        this.senderGrid = sender;
+        this.rowIndexValue = rowIndex;
         this.closeEditor(sender);
         this.isFormChange = false;
         this.formGroup = new FormGroup({
@@ -255,6 +259,7 @@ export class adminVistexIntegrationLogComponent implements OnInit {
     onRequestTypeChange(value){
         if (value == undefined || value == null || value == ""){return;}
         this.selectedRequestType = value;
+        this.closeEditor(this.senderGrid, this.rowIndexValue);
         this.getData();
     }
 
