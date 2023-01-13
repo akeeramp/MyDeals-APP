@@ -362,7 +362,7 @@ export class allDealsComponent {
             this.columns = this.allTabColumns;
         }
         if (this.columns.filter(x => x.field == "NOTES").length == 0) {
-            this.columns.push({
+            let notes = {
                 bypassExport: false,
                 field: "NOTES",
                 hidden: false,
@@ -371,7 +371,12 @@ export class allDealsComponent {
                 sortable: true,
                 title: "Notes",
                 width: 150
-            });
+            }
+            if (group[0].name == 'All') {
+                let index = this.columns.findIndex(x => x.field == 'LAST_TRKR_START_DT_CHK');
+                this.columns.splice(index + 1, 0, notes)
+            }else 
+                this.columns.push(notes);
         }
         if (group[0].dealType != "ECAP" && this.selectedTab != "All") {
             if (group[0].dealType == 'KIT') {
@@ -471,14 +476,12 @@ export class allDealsComponent {
         this.grid?.autoFitColumn(2);
     }
     loadDealTypestab(data){
-        for (let i = 0; i < data.length; i++) {
-                let deal= data[i].OBJ_SET_TYPE_CD;
-                this.dealTypes.forEach((element, index) => {
-                    if((element.dealType === deal) && ((this.groups.indexOf(element) === -1))){
-                        this.groups.push(element);
-                    }
-                  })
-        }
+        this.dealTypes.forEach((element) => {
+            data.forEach((row) => {
+                if ((row.OBJ_SET_TYPE_CD === element.dealType) && (this.groups.indexOf(element) === -1))
+                    this.groups.push(element);
+            });
+        });
         this.groups.push({ dealType: 'ALL_TYPES', name: "All" })
         this.loadAllTabColumns();
         this.selectedTab = this.groups[0].name;

@@ -103,6 +103,7 @@ export class contractManagerComponent {
     public isDeveloper: boolean;
     public isTester: boolean;
     public initialLoad: boolean = true;
+    private loadMessage: string = "Loading Deals";
     public spinnerMessageHeader: any;
     public spinnerMessageDescription: any;
     public msgType: any;
@@ -1140,7 +1141,6 @@ export class contractManagerComponent {
             this.isDeveloper = (<any>window).isDeveloper;
             this.isTester = (<any>window).isTester;
             this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
-            this.setBusy("Loading Deal..", "Gathering data....", "Info", true);
             this.contractId= this.contractData.DC_ID;
             this.lastRun = this.contractData.LAST_COST_TEST_RUN;
             this.custAccptButton = this.contractData.CUST_ACCPT;

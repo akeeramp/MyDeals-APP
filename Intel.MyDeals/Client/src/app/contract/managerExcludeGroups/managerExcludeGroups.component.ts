@@ -35,7 +35,7 @@ export class managerExcludeGroupsComponent {
     spinnerMessageDescription: any;
     msgType: any;
     isBusyShowFunFact: any;
-    
+
     constructor(private loggerSvc: logger, private managerExcludeGrpSvc: managerExcludeGroupsService, private lnavSvc: lnavService, protected dialog: MatDialog) {
 
     }
@@ -68,8 +68,9 @@ export class managerExcludeGroupsComponent {
     private gridResultMaster = [];
     public pricingStrategyFilter;
     private loading = true;
+    private loadMessage: string = "Loading Deals";
     dirty: boolean;
-    pctFilterEnabled:boolean = false;
+    pctFilterEnabled: boolean = false;
     private state: State = {
         skip: 0,
         take: 25,
@@ -114,9 +115,8 @@ export class managerExcludeGroupsComponent {
 
     loadExcludeGroups() {
         this.isLoading = true;
-        this.setBusy("Loading Deal..", "Gathering data....", "Info", true);
         this.managerExcludeGrpSvc.readWipExclusionFromContract(this.contractData.DC_ID).subscribe((result: any) => {
-            this.isLoading = false;
+            this.loadMessage = 'Gathering Deals';
             this.dirty = false;
             if (this.isTenderDashboard)//Tender Dashboard Group Exclusion needs to display data of correponding deal ID not all
                 this.gridResult = result.WIP_DEAL.filter(x => x.DC_ID == this.WIP_ID);
@@ -132,10 +132,13 @@ export class managerExcludeGroupsComponent {
             this.gridResultMaster = this.gridResult;
             this.displayDealTypes();
             this.gridData = process(this.gridResult, this.state);
-            if(this.showPCT){
-                this.pctFilterEnabled= true;
+            if (this.showPCT) {
+                this.pctFilterEnabled = true;
                 this.togglePctFilter();
             }
+            setTimeout(() => {
+                this.isLoading = false;
+            },500)
         }, (error) => {
             this.loggerSvc.error('Customer service', error);
             this.isLoading = false;
@@ -193,32 +196,32 @@ export class managerExcludeGroupsComponent {
 
     saveAndRunPct() {
         const dirtyRecords = this.gridResult.filter(x => x._dirty == true);
-        if(dirtyRecords.length != 0){
-        this.isLoading = true;
-        this.managerExcludeGrpSvc.updateWipDeals(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, dirtyRecords).subscribe((result: any) => {
-            this.gridResult = result;
-            this.gridData = process(this.gridResult, this.state);
-            this.managerExcludeGrpSvc.runPctContract(this.contractData.DC_ID).subscribe((res) => {
-                this.loadExcludeGroups();
-            }, (err) => {
-                this.loggerSvc.error('Could not run Cost Test in Exclude Groups for contract', err);
+        if (dirtyRecords.length != 0) {
+            this.isLoading = true;
+            this.managerExcludeGrpSvc.updateWipDeals(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, dirtyRecords).subscribe((result: any) => {
+                this.gridResult = result;
+                this.gridData = process(this.gridResult, this.state);
+                this.managerExcludeGrpSvc.runPctContract(this.contractData.DC_ID).subscribe((res) => {
+                    this.loadExcludeGroups();
+                }, (err) => {
+                    this.loggerSvc.error('Could not run Cost Test in Exclude Groups for contract', err);
+                    this.isLoading = false;
+                });
+            }, (error) => {
+                this.loggerSvc.error('Could not update exclude deals', error);
                 this.isLoading = false;
             });
-        }, (error) => {
-            this.loggerSvc.error('Could not update exclude deals', error);
-            this.isLoading = false;
-        });
         }
     }
     togglePctFilter() {
         let pctFilteredInCompleteList = this.gridResult.filter(x => x.COST_TEST_RESULT == "InComplete");
         let pctFilteredFailList = this.gridResult.filter(x => x.COST_TEST_RESULT == "Fail");
-        if(this.pctFilterEnabled){
-            if(pctFilteredFailList.length == 0 || pctFilteredInCompleteList.length == 0){
+        if (this.pctFilterEnabled) {
+            if (pctFilteredFailList.length == 0 || pctFilteredInCompleteList.length == 0) {
                 this.state.filter = {
                     logic: "or",
                     filters: [{ field: "COST_TEST_RESULT", operator: "eq", value: "Fail" },
-                    {field: "COST_TEST_RESULT",operator: "eq", value: "InComplete"}]
+                    { field: "COST_TEST_RESULT", operator: "eq", value: "InComplete" }]
                 };
             }
         } else {
@@ -227,7 +230,7 @@ export class managerExcludeGroupsComponent {
                 filters: [],
             };
         }
-        this.pctFilterEnabled= !this.pctFilterEnabled;
+        this.pctFilterEnabled = !this.pctFilterEnabled;
         this.gridData = process(this.gridResult, this.state);
     }
     distinctPrimitive(fieldName: string) {
@@ -267,7 +270,7 @@ export class managerExcludeGroupsComponent {
                 color: "#ffffff",
                 wrap: true
             });
-            
+
             if (item.width !== undefined) {
                 colWidths.push({ width: item.width });
             } else {
@@ -275,10 +278,10 @@ export class managerExcludeGroupsComponent {
             }
 
         });
-        this.generateExcel(grid, rows, colWidths)    
+        this.generateExcel(grid, rows, colWidths)
     }
 
-    generateExcel(grid: GridComponent, rows: any, colWidths:any[]) {
+    generateExcel(grid: GridComponent, rows: any, colWidths: any[]) {
         let cells: any[] = [];
         grid.data = JSON.parse(JSON.stringify(this.gridData.data));
         _.each(grid.data, (dataItem) => {
@@ -335,8 +338,8 @@ export class managerExcludeGroupsComponent {
         let data = this.gridResult;
         let modDealTypes = [];
         for (let i = 0; i < data.length; i++) {
-            if(data[i].OBJ_SET_TYPE_CD){
-                let deal= data[i].OBJ_SET_TYPE_CD;
+            if (data[i].OBJ_SET_TYPE_CD) {
+                let deal = data[i].OBJ_SET_TYPE_CD;
                 modDealTypes.push(deal.replace(/_/g, ' '));
             }
         }
@@ -372,33 +375,7 @@ export class managerExcludeGroupsComponent {
             this.gridData = process(this.gridResult, this.state);
         }
     }
-    setBusy(msg, detail, msgType, showFunFact) {
-        setTimeout(() => {
-            const newState = msg != undefined && msg !== "";
-            // if no change in state, simple update the text
-            if (this.isLoading === newState) {
-                this.spinnerMessageHeader = msg;
-                this.spinnerMessageDescription = !detail ? "" : detail;
-                this.msgType = msgType;
-                this.isBusyShowFunFact = showFunFact;
-                return;
-            }
-            this.isLoading = newState;
-            if (this.isLoading) {
-                this.spinnerMessageHeader = msg;
-                this.spinnerMessageDescription = !detail ? "" : detail;
-                this.msgType = msgType;
-                this.isBusyShowFunFact = showFunFact;
-            } else {
-                setTimeout(() => {
-                    this.spinnerMessageHeader = msg;
-                    this.spinnerMessageDescription = !detail ? "" : detail;
-                    this.msgType = msgType;
-                    this.isBusyShowFunFact = showFunFact;
-                }, 100);
-            }
-        });
-    }
+
     ngOnInit() {
         this.userRole = (<any>window).usrRole;
         this.loadExcludeGroups();

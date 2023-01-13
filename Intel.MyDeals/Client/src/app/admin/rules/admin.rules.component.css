@@ -27,6 +27,11 @@ h3 a {
     float: right
 }
 
+.rule-list-style .k-multiselect-wrap {
+    max-height: 260px;
+    overflow: auto;
+}
+
 .help {
     padding-top: 50px;
     padding-right: 40px !important

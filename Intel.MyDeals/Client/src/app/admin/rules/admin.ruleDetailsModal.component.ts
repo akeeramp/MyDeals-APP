@@ -490,31 +490,29 @@ export class RuleDetailsModalComponent {
             opvalues: opvalues,
             selectedOperator: selectedOperator
         })
-        if (dataItem.type == 'list') {
-            if (dataItem.lookups != undefined) {
-                if (dataItem.field == "GEO_COMBINED" || dataItem.field == "HOST_GEO") {
-                    let vals = [];
-                    dataItem.lookups.forEach((item) => vals.push(item.Value));
-                    Object.assign(this.Rules.Criteria[index], { dropDown: vals })
-                } else {
-                    let vals = [];
-                    dataItem.lookups.forEach((item) => vals.push(item.Value));
-                    Object.assign(this.Rules.Criteria[index], {
-                        dropDown: vals
-                    })
-                }
+        if (dataItem.lookups != undefined) {
+            if (dataItem.field == "GEO_COMBINED" || dataItem.field == "HOST_GEO" || dataItem.field == "HAS_TRCK") {
+                let vals = [];
+                dataItem.lookups.forEach((item) => vals.push(item.Value));
+                Object.assign(this.Rules.Criteria[index], { dropDown: vals })
             } else {
+                let vals = [];
+                dataItem.lookups.forEach((item) => vals.push(item.Value));
                 Object.assign(this.Rules.Criteria[index], {
-                    dropDown: this.dropdownresponses[dataItem.field]
-                });
+                    dropDown: vals
+                })
             }
+        } else {
+            Object.assign(this.Rules.Criteria[index], {
+                dropDown: this.dropdownresponses[dataItem.field]
+            });
         }
         this.Rules.Criteria[index].field = dataItem.field;
         this.Rules.Criteria[index].operator = opvalues[0].operator;
-        this.Rules.Criteria[index].subType = null;
+        this.Rules.Criteria[index].subType = dataItem.subType != undefined ? dataItem.subType  : null;
         this.Rules.Criteria[index].type = dataItem.type;
         this.Rules.Criteria[index].value = "";
-        this.Rules.Criteria[index].valueType = null;
+        this.Rules.Criteria[index].valueType = dataItem.valueType != undefined ? dataItem.valueType : null;
         this.Rules.Criteria[index].values = [];
         if (this.Rules.Criteria[index].selectedValues)
             this.Rules.Criteria[index].selectedValues = [];
@@ -543,7 +541,7 @@ export class RuleDetailsModalComponent {
             this.loggerSvc.error(("Unable to  " + (initialRuleId === 0 ? "add" : "update") + " the rule"), '');
         });
         if (response.Id > 0) {
-            this.Rules = response;
+            this.Rules = this.priceRuleCriteriaData
             this.loadData();
             this.Rules.ChangedBy = response.ChangedBy;
             this.Rules.ChangeDateTime = response.ChangeDateTime;
@@ -913,8 +911,8 @@ export class RuleDetailsModalComponent {
                 }
 
                 let duplicateListXml = [];
-                $.each(this.priceRuleCriteriaData.Criterias.Rules.filter(x => x.type == "list" && x.subType == "xml"), function (index, value) {
-                    let strTitle = this.attributeSettings.filter(x => x.field == value.field)[0].title;
+               this.priceRuleCriteriaData.Criterias.Rules.filter(x => x.type == "list" && x.subType == "xml").forEach((value) => {
+                   let strTitle = this.availableAttrs.filter(x => x.field == value.field)[0].title;
                     if (duplicateListXml.indexOf(strTitle) < 0 && this.priceRuleCriteriaData.Criterias.Rules.filter(x => x.field == value.field).length > 1)
                         duplicateListXml.push(strTitle);
                 });

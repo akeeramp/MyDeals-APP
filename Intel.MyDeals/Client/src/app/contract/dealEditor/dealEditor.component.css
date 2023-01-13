@@ -11,6 +11,11 @@
     visibility: visible
 }
 
+.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+    opacity: 1;
+    pointer-events: none;
+}
+
 .wrap {
     white-space: nowrap !important
 }
