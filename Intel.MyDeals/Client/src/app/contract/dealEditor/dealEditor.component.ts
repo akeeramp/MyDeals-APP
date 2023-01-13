@@ -221,7 +221,7 @@ export class dealEditorComponent {
                             return { Text: val, Value: item[col.field] };
                         }
                         if (moment(item[col.field], "MM/DD/YYYY", true).isValid()) {
-                            return { Text: (new Date(new Date(item[col.field]).getTime() + (new Date(item[col.field]).getTimezoneOffset() * 60000))).toString(), Value: item[col.field] };
+                            return { Text: new Date(item[col.field]).toString(), Value: item[col.field] };
                         }
                         else if (item[col.field] != undefined && item[col.field] != null)
                             return { Text: item[col.field].toString(), Value: item[col.field] }
@@ -1170,7 +1170,7 @@ export class dealEditorComponent {
             }
         });
     }
-    setWarningDetails() {
+    setWarningDetails() {        
         PTE_Common_Util.setWarningFields(this.gridResult, this.curPricingTable);
         PTE_Common_Util.clearBadegCnt(this.groups);
         for (var i = 0; i < this.gridResult.length; i++) {
@@ -1187,7 +1187,7 @@ export class dealEditorComponent {
                 }
             }
         }
-        this.numSoftWarn = PTE_Common_Util.checkSoftWarnings(this.gridResult, this.curPricingTable);
+        this.numSoftWarn = PTE_Common_Util.checkSoftWarnings(this.gridResult, this.curPricingTable);        
     }
 
     async getAllDrowdownValues() {

@@ -1240,8 +1240,13 @@ export class pricingTableEditorComponent {
     async saveandValidate(isValidProd, deleteDCIDs?) {
         //Handsonetable loading taking some time so putting this logic for loader
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
-        PTEUtil.updateProductOrdering(PTR, this.transformResults, this.curPricingTable);
-        
+        let isProductOrderChanged = PTEUtil.updateProductOrdering(PTR, this.transformResults, this.curPricingTable);
+        //To wait until hot table data rendered properly, since product order got changed
+        if (isProductOrderChanged) {
+            await new Promise(resolve => {
+                setTimeout(resolve, 100);
+            });
+        }
         //removing the deleted record from PTR
         if (deleteDCIDs && deleteDCIDs.length > 0) {
             _.each(deleteDCIDs, (delId) => {
@@ -1262,7 +1267,7 @@ export class pricingTableEditorComponent {
         else {
             this.isCustDivNull = PTE_Helper_Util.isCustDivisonNull(PTR, this.contractData.CUST_ACCNT_DIV);
             if (!this.isCustDivNull) {
-                setTimeout(async () => { await this.ValidateAndSavePTE(isValidProd, deleteDCIDs); }, 100);
+                await this.ValidateAndSavePTE(isValidProd, deleteDCIDs);
             }
         }
     }

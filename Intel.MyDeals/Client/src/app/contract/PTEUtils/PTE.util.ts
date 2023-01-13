@@ -543,8 +543,9 @@ export class PTEUtil {
     }
 
     static updateProductOrdering(data, transformResults, curPricingTable) {
-        var isAllValidated = true;
+        let isAllValidated = true;
         let r: number;
+        let isProductChanged = false;
         if (transformResults && transformResults.Data) {
             transformResults = transformResults.Data;
         }
@@ -621,6 +622,7 @@ export class PTEUtil {
                             modifiedNumTiers = modifiedNumTiers < tierNbr ? tierNbr : modifiedNumTiers;
                             for (var a = mergedRows - 1; a >= r; a--) { // look at each tier by it's index, going backwards
                                 if (isProductOrderChanged) {
+                                    isProductChanged = true;
                                     // We had swapped around the product order, so we need to map corresponding dimmed/tiered attributes to their new product order too
                                     var newContractProdArr = contractProducts.split(',');
                                     var currProduct = newContractProdArr[(a - r)]; // NOTE: this asssumes we swapped the PTR_USER_PRD to the re-ordered product list already
@@ -641,10 +643,10 @@ export class PTEUtil {
                                 modifiedNumTiers--;
                             }
                         }
-
                     }
                 }
             }
         }
+        return isProductChanged;
     }
 }

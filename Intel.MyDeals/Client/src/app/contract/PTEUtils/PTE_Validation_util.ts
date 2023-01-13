@@ -243,11 +243,6 @@ export class PTE_Validation_Util {
     static validateDeal(data: Array<any>, contractData, curPricingTable, curPricingStrategy, isTenderContract, lookBackPeriod, templates, groups): any {
         let isShowStopperError = DE_Validation_Util.validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates);
         PTE_Common_Util.setWarningFields(data, curPricingTable);
-        if (data != null) {
-            for (var i = 0; i < data.length; i++) {
-                DE_Save_Util.savedWithWarning(data[i], groups, templates);
-            }
-        }
         return isShowStopperError;
     }
     static validateTenderDashboardDeal(data, curPricingTable, groups, templates) {
