@@ -173,10 +173,6 @@ export class PTE_Save_Util {
                 item._behaviors.isError['PROGRAM_PAYMENT'] = true;
                 item._behaviors.validMsg['PROGRAM_PAYMENT'] = "Field is required";
             }
-            if (isNaN(Number(item["VOLUME"])) || item["VOLUME"].toLowerCase() == "unlimited") {
-                item._behaviors.isError['VOLUME'] = true;
-                item._behaviors.validMsg['VOLUME'] = "Enter Numeric Values";
-            }
             if (item["OBJ_SET_TYPE_CD"] == "FLEX") {
                 //Delete if there is any previous Error  messages
                 if ((invalidFlexDate || invalidFlexDate != undefined)) {
