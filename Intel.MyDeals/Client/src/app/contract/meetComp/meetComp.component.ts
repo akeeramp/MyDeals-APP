@@ -270,7 +270,8 @@ export class meetCompContractComponent implements OnInit {
                 resultMeetCompSkuArray.push(newEntry);
             }
             this.meetCompSkuDropdownData = resultMeetCompSkuArray;
-            this.selectedMeetCompSku = this.meetCompSkuDropdownData[0];
+            let sku_ind = this.meetCompSkuDropdownData.findIndex(ind => ind['COMP_SKU'] == dataItem.COMP_SKU);
+            this.selectedMeetCompSku = sku_ind > -1 ? this.meetCompSkuDropdownData[sku_ind] : {};
         }
     }
 

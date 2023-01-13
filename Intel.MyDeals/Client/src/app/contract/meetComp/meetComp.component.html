@@ -334,7 +334,7 @@
                                         <div style="padding-left:5px;" [ngClass]="{'readOnlyCell' : (usrRole == 'DA' || isEditableGrid == 'False'),'errorListRow errorItemList' : (dataItem.errObj && dataItem.errObj.COMP_SKU)}">{{dataItem.COMP_SKU}}</div>
                                     </ng-template>
                                     <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup" let-column="column">
-                                        <kendo-combobox class="contract-details-customer align-text-combo-box" #custDropDown [valuePrimitive]="true" [value]="dataItem.COMP_SKU" *ngIf="canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG == 'Y'" [data]="meetCompSkuDropdownData" [kendoDropDownFilter]="filterSettings" textField="COMP_SKU" valueField="COMP_SKU" placeholder="Select Comp SKU"
+                                        <kendo-combobox class="contract-details-customer align-text-combo-box" #custDropDown [(ngModel)]="selectedMeetCompSku" *ngIf="canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG == 'Y'" [data]="meetCompSkuDropdownData" [kendoDropDownFilter]="filterSettings" textField="COMP_SKU" valueField="COMP_SKU" placeholder="Select Comp SKU"
                                                         [allowCustom]="true" [valueNormalizer]="valueNormalizerCompSku" (valueChange)="onCompSkuChange($event,dataItem)"></kendo-combobox>
                                     </ng-template>
                                 </kendo-grid-column>
