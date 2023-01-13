@@ -22,7 +22,7 @@
                 <button class="btn btn-primary prdBtn fr" (click)="searchProduct()" style="margin: 0 0 0 10px;">
                     Search
                 </button>
-                <kendo-autocomplete id="productSearch" class="prod-autocomplete fr form-control input-sm" [(ngModel)]="userInput" [suggest]="false" [data]="productOptions" [filterable]="true" (filterChange)="changeProductOption($event)" (valueChange)="searchProduct()"
+                <kendo-autocomplete id="productSearch" class="prod-autocomplete fr form-control input-sm" [(ngModel)]="userInput" [suggest]="false" [data]="productOptions" [filterable]="true" (filterChange)="changeProductOption($event)" (keyup)="textChange($event)"
                     valueField="Name">
                 </kendo-autocomplete>
             </div>

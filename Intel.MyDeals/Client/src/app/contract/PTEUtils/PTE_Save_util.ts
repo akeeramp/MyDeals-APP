@@ -107,9 +107,9 @@ export class PTE_Save_Util {
                 if (el && !el._behaviors) el._behaviors = {};
                 if (!el._behaviors.isError) el._behaviors.isError = {};
                 if (!el._behaviors.validMsg) el._behaviors.validMsg = {};
-                if (hasTender && hasNonTender) {
+                if (hasTender && hasNonTender && el.REBATE_TYPE =="TENDER") {
                     el._behaviors.isError["REBATE_TYPE"] = true;
-                    el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same table.";
+                    el._behaviors.validMsg["REBATE_TYPE"] = "Cannot mix Tender and Non-Tender deals in the same table (Pricing Table).";
                 }
                 if (isHybridPS && Object.keys(dictProgramPayment).length == 1 && !(Object.keys(dictProgramPayment).includes("Backend"))) {
                     el._behaviors.isError["PROGRAM_PAYMENT"] = true;
@@ -172,6 +172,10 @@ export class PTE_Save_Util {
             if ((item["PROGRAM_PAYMENT"] == null || item["PROGRAM_PAYMENT"] == undefined || item["PROGRAM_PAYMENT"] == '') && curPricingTable.OBJ_SET_TYPE_CD == "ECAP") {
                 item._behaviors.isError['PROGRAM_PAYMENT'] = true;
                 item._behaviors.validMsg['PROGRAM_PAYMENT'] = "Field is required";
+            }
+            if (isNaN(Number(item["VOLUME"])) || item["VOLUME"].toLowerCase() == "unlimited") {
+                item._behaviors.isError['VOLUME'] = true;
+                item._behaviors.validMsg['VOLUME'] = "Enter Numeric Values";
             }
             if (item["OBJ_SET_TYPE_CD"] == "FLEX") {
                 //Delete if there is any previous Error  messages

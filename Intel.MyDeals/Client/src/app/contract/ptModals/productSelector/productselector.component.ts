@@ -1420,6 +1420,12 @@ export class ProductSelectorComponent {
             })
         }
     }
+
+    textChange(event) {
+        if (event.keyCode === 13 && this.userInput != "") {
+            this.searchProduct();
+        }
+    }
      ngOnInit() {
         this.loadPTSelctor();
         this.getProductSelection();

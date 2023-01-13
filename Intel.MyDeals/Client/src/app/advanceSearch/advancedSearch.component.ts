@@ -10,6 +10,7 @@ import { process, State, FilterDescriptor, CompositeFilterDescriptor } from "@pr
 import { GridUtil } from '../contract/grid.util';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, FilterService } from "@progress/kendo-angular-grid";
 import * as _ from "underscore";
+import { PTE_Common_Util } from "../contract/PTEUtils/PTE_Common_util";
 
 @Component({
     selector: 'app-advanced-search',
@@ -274,8 +275,14 @@ export class AdvancedSearchComponent implements OnInit {
         this.exportAll = false;
     }
     exportToExcelCustomColumns() {
+        this.columnsDisp = []
+        this.columns.forEach((row) => {
+            if (!(this.hiddenColumns.includes(row.field))) {
+                this.columnsDisp.push(row);
+            }
+        })
         if (this.gridData && this.gridData.data && this.gridData.data.length > 0)
-            GridUtil.dsToExcel(this.columns, this.gridData.data, "Search Export");
+            GridUtil.dsToExcel(this.columnsDisp, this.gridData.data, "Search Export");
         else
             this.loggerSvc.warn("No Records Found", "");
     }

@@ -156,47 +156,42 @@ export class PTEUtil {
     }
     // set PTR_SYS_PRD attr value after getting transform results
     static cookProducts(transformResults:any, rowData:Array<any>): any {
-        _.each(rowData,(data)=>{
+        _.each(rowData, (data) => {
+
+            //this logic has been removed added in pricing table editor validateproducts later
+            PTE_Common_Util.setBehaviors(data);
+            if (data['PTR_USER_PRD'] && data['PTR_USER_PRD'] != '') {
+                
+                data._behaviors.isError['PTR_USER_PRD'] = false;
+                data._behaviors.validMsg['PTR_USER_PRD'] = 'Valid Product';
+            }
+            if (data['PRD_EXCLDS'] && data['PRD_EXCLDS'] != '') {
+                data._behaviors.isError['PRD_EXCLDS'] = false;
+                data._behaviors.validMsg['PRD_EXCLDS'] = 'Valid Product';
+            }
+            
             //setting PTR_SYS_PRD for valid products
             if (transformResults && transformResults.ValidProducts) {
                 _.each(transformResults.ValidProducts, (val, DCID) => {
-                    if (data && data.DC_ID == DCID) {
-                        let foramttedTranslatedResult = PTEUtil.massagingObjectsForJSON(DCID, transformResults);
-                        var userInput = PTEUtil.updateUserInput(foramttedTranslatedResult.ValidProducts[DCID]);
-                        if (userInput && userInput['contractProducts']) {
-                            var contractProducts = userInput['contractProducts'].toString().replace(/(\r\n|\n|\r)/gm, "");
-                            data.PTR_USER_PRD = contractProducts;
-                            if (userInput['excludeProducts']) {
-                                var excludeProducts = userInput['excludeProducts'];
-                                data.PTR_SYS_PRD = JSON.stringify(val)
-                                PTE_Common_Util.setBehaviors(data);
-                                data._behaviors.isError['PTR_USER_PRD'] = false;
-                                data._behaviors.validMsg['PTR_USER_PRD'] = 'Valid Product';
-                                if (excludeProducts != "" && excludeProducts != null) {
-                                    data.PRD_EXCLDS = excludeProducts;
-                                    data._behaviors.isError['PRD_EXCLDS'] = false;
-                                    data._behaviors.validMsg['PRD_EXCLDS'] = 'Valid Product';
-                                }
-                            }
-                        }
+                    if (data && data.DC_ID == DCID) { 
+                        data.PTR_SYS_PRD = JSON.stringify(val)
                     }
                 });
             }
                //setting PTR_SYS_PRD for InValidProducts
             if (transformResults && transformResults.InValidProducts) {
                 _.each(transformResults.InValidProducts, (val, DCID) => {
-                    if (val.I && val.I.length > 0) {
                         if (data && data.DC_ID == DCID) {
                             PTE_Common_Util.setBehaviors(data);
-                            if (_.has(val, data.PTR_USER_PRD)) {
+                            if (val.I && val.I.length > 0 && _.find(val['I'], (test) => { return data.PTR_USER_PRD.includes(test) })) {
                                 data._behaviors.isError['PTR_USER_PRD'] = true;
                                 data._behaviors.validMsg['PTR_USER_PRD'] = 'Invalid product';
                             }
-                            if (_.has(val, data.PRD_EXCLDS)) {
+                        
+                            if (val.E && val.E.length > 0 && _.find(val['E'], (test) => { return data.PTR_USER_PRD.includes(test) })) {
                                 data._behaviors.isError['PRD_EXCLDS'] = true;
                                 data._behaviors.validMsg['PRD_EXCLDS'] = 'Invalid product';
                             }
-                        }
                     }
                 });
             }
@@ -205,11 +200,12 @@ export class PTEUtil {
                 _.each(transformResults.DuplicateProducts, (val, DCID) => {
                     if (data && data.DC_ID == DCID) {
                         PTE_Common_Util.setBehaviors(data);
-                        if (_.has(val, data.PTR_USER_PRD)) {
+                        if (_.find(val, (test) => { return data.PTR_USER_PRD.includes(test) })) {
+                           
                             data._behaviors.isError['PTR_USER_PRD'] = true;
                             data._behaviors.validMsg['PTR_USER_PRD'] = 'Invalid product';
                         }
-                        if (_.has(val, data.PRD_EXCLDS)) {
+                        if (_.find(val, (test) => { return data.PTR_USER_PRD.includes(test) })) {
                             data._behaviors.isError['PRD_EXCLDS'] = true;
                             data._behaviors.validMsg['PRD_EXCLDS'] = 'Invalid product';
                         }
