@@ -198,10 +198,10 @@ export class dealMassUpdateComponent {
 
         if (this.massUpdateData.field.ATRB_LBL == "System Price Point") {
             if (this.massUpdateData.textValue != undefined && this.massUpdateData.textValue != null && this.massUpdateData.textValue != "") {
-                let values = this.massUpdateData.textValue.split('$');
-                if (values && values.length == 2 && values[0] == '<=' && !Number.isNaN(Number(values[1]))) {
-                    if (parseFloat(values[1]) <= 0.00) {
-                        this.massUpdateData.textValue = values[0] + '$' + 0.01;
+                let values = this.massUpdateData.textValue;
+                if (values && !Number.isNaN(Number(values))) {
+                    if (parseFloat(values) <= 0.00) {
+                        this.massUpdateData.textValue = 0.01;
                     }
                 }
                 else {
