@@ -2,7 +2,7 @@
 <link href="/Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.css" rel="stylesheet" />
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <loading-panel-angular id="PTRLoading" class="ptrLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
-                       [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
+                       [description]="spinnerMessageDescription"  [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
 <div class="container-fluid overflow" style="border: 2px solid #bcbcbc; margin-top: 0px !important;">
     <div class="row">
         <div class="col">
@@ -140,6 +140,7 @@
                                             <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
                                             <kendo-toolbar-button kendoEditorInsertOrderedListButton></kendo-toolbar-button>
                                             <kendo-toolbar-button kendoEditorIndentButton></kendo-toolbar-button>
+                                            <kendo-toolbar-button kendoEditorOutdentButton></kendo-toolbar-button>
                                         </kendo-toolbar-buttongroup>
                                     </kendo-toolbar>
                                 </kendo-editor>

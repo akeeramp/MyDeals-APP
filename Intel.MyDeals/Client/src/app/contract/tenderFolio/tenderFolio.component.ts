@@ -45,6 +45,7 @@ export class TenderFolioComponent {
     private uid = -100;
     private PtDealTypes;
     private newPricingTable;
+    private isSpinnerLoading: boolean = false;
     public spinnerMessageHeader = "Tender Folio";
     public spinnerMessageDescription = "Please wait while we load your Tender Folio.";
     private isCopyTender: boolean = false;
@@ -297,8 +298,31 @@ export class TenderFolioComponent {
         else
             this.copyTender()
     }
+    setBusy(msg, detail) {
+        setTimeout(() => {
+            const newState = msg != undefined && msg !== "";
+            // if no change in state, simple update the text
+            if (this.isSpinnerLoading === newState) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+                return;
+            }
+            this.isSpinnerLoading = newState;
+            if (this.isSpinnerLoading) {
+                this.spinnerMessageHeader = msg;
+                this.spinnerMessageDescription = !detail ? "" : detail;
+            } else {
+                setTimeout(() => {
+                    this.spinnerMessageHeader = msg;
+                    this.spinnerMessageDescription = !detail ? "" : detail;
+                }, 100);
+            }
+        });
+    }
 
     copyTender() {
+        this.isSpinnerLoading = true;
+        this.setBusy("Copy Tender Folio", "Copying the Contract Information.");
         this.data.contractData.Customer = this.custSIDObj;
         this.data.contractData.CUST_MBR_SID = this.custSIDObj.CUST_SID;
         this.data.contractData.TITLE = this.tenderName;
@@ -334,6 +358,7 @@ export class TenderFolioComponent {
                 this.loggerSvc.error("Could not create the contract.", error);
             }
         );
+       this.isSpinnerLoading = false;
     }
     closeCopyAlert() {
         this.showCopyAlert = false;
