@@ -1440,7 +1440,8 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
     font-size: 10px !important;
     border-left: none;
     border-right: 1px solid #e6e6e6;
-    height: 34px;
+    height: 90px;
+    border: none !important
 }
 
 #OvrLp kendo-grid.overDealChecking.k-grid .k-grid-table-wrap table tbody tr td:first-child {
@@ -1572,4 +1573,8 @@ kendo-window.flexOverlapProducts {
 #horizontal.expanded .few-oracle-css:has(.contractManagerPlus) {
     top: 0;
     position: absolute;
+}
+.k-window-maximized kendo-grid.overDealChecking.widthOutDesign.k-widget kendo-grid-list table tbody tr.k-grid-norecords td {
+    min-width: 1915px !important;
+    border: none !important;
 }
