@@ -939,3 +939,28 @@ tender-meet-comp-width kendo-grid#meetcomp-contract td.k-touch-action-auto {
 ngb-tooltip-window.redColorTooltip .tooltip-inner {
     background-color: #ed1c24 !important;
 }
+#color_c_button .k-toolbar kendo-toolbar-renderer .k-button-group span.k-button {
+    align-self: center !important;
+    background: #d3d3d300 !important;
+    border: none !important;
+    color: #00aeef !important;
+}
+
+#color_c_button .k-toolbar kendo-toolbar-renderer button.k-button {
+    align-self: center !important;
+    background: #d3d3d300 !important;
+    border: none !important;
+    color: #00aeef !important;
+}
+
+#color_c_button .k-toolbar kendo-toolbar-renderer .k-button-group span.k-button:hover {
+    background-color: #ebebeb !important;
+    border-color: #ebebeb !important;
+    color: #444 !important;
+}
+
+#color_c_button .k-toolbar kendo-toolbar-renderer button.k-button:hover {
+    background-color: #ebebeb !important;
+    border-color: #ebebeb !important;
+    color: #444 !important;
+}
