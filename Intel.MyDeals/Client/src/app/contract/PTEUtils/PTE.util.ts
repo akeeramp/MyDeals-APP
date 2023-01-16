@@ -578,6 +578,7 @@ export class PTEUtil {
                     if (isAllValidated) {
                         let userInput: any;
                         if (curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
+                            //to update PTR_USER_PRD column with corrected data in the proper order --which used to check product order changed or not
                             for (let prd in transformResults.ValidProducts[key]) {
                                 if (transformResults.ValidProducts[key].hasOwnProperty(prd)) {
                                     var products = transformResults.ValidProducts[key][prd].filter(function (x) {

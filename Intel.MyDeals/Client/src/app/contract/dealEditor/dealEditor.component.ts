@@ -119,7 +119,8 @@ export class dealEditorComponent {
     private CAN_VIEW_COST_TEST = this.securityService.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper);
     private CAN_VIEW_MEET_COMP = this.securityService.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "FSE" && this.in_Is_Tender_Dashboard);
     public isDeveloper = (<any>window).isDeveloper;
-    public isTester = (<any>window).isTester
+    public isTester = (<any>window).isTester;
+    private isInitialLoad = true;
     public perfBar = {
         action: '',
         title: '',
@@ -316,7 +317,8 @@ export class dealEditorComponent {
     }
 
     refreshGrid() {
-        this.ngOnInit();
+        this.isInitialLoad = false;
+        this.initialization();
     }
 
     onClose(name: string) {
@@ -1362,10 +1364,12 @@ export class dealEditorComponent {
                 this.curPricingStrategy = { IS_HYBRID_PRC_STRAT: 0 }
                 this.curPricingTable = { OBJ_SET_TYPE_CD: this.in_Deal_Type }
             }
-            this.getGroupsAndTemplates();
-            this.dropdownResponses = this.getAllDrowdownValues();
-            this.selectedTab = this.groups[0].name;
-            this.filterColumnbyGroup(this.selectedTab);
+            if (this.isInitialLoad) {
+                this.getGroupsAndTemplates();
+                this.dropdownResponses = this.getAllDrowdownValues();
+                this.selectedTab = this.groups[0].name;
+                this.filterColumnbyGroup(this.selectedTab);
+            }
             if (this.in_Search_Text && this.in_Search_Text != null && this.in_Search_Text != '') {
                 this.searchFilter = this.in_Search_Text;
                 this.state.filter = {
@@ -1407,9 +1411,11 @@ export class dealEditorComponent {
     }
     
     ngOnInit() {
+        this.isInitialLoad = true;
         this.initialization();
     }
     ngOnChanges() {
+        this.isInitialLoad = false;
         this.initialization();
     }
 }
