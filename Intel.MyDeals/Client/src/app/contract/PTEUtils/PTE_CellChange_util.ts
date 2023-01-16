@@ -921,20 +921,21 @@ export class PTE_CellChange_Util {
         });
     }
 
-    static pgChgfn(items: Array<any>, columns: any[], curPricingTable: any) {
+    static pgChgfn(items: Array<any>, columns: any[], curPricingTable: any,contractData?,cellEditor?) {
         let OBJ_SET_TYPE_CD = curPricingTable.OBJ_SET_TYPE_CD;
         if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'ECAP') {
             _.each(items, item => {
                 if (item.prop && item.prop == 'PROGRAM_PAYMENT') {
-                    this.checkfn(items, curPricingTable,columns); return;
+                    let val = item.new;
+                    this.checkfn(items, curPricingTable,columns,val,contractData,cellEditor); return;
                 }
             });
         }
     }
 
-    static checkfn(items: Array<any>, curPricingTable: any,columns:any[]) {
+    static checkfn(items: Array<any>, curPricingTable: any,columns:any[],value?,contractData?,cellEditor?) {
         if (items.length > 0) {
-            let val = this.hotTable.getDataAtRowProp(items[0].row, 'PROGRAM_PAYMENT');
+            let val = value? value : this.hotTable.getDataAtRowProp(items[0].row, 'PROGRAM_PAYMENT');
             if (val != undefined && val != null && val != '' && val.toLowerCase() !== 'backend') {
                 if(_.findWhere(columns,{data:'PERIOD_PROFILE'}) !=undefined && _.findWhere(columns,{data:'PERIOD_PROFILE'}) !=null){
                     this.hotTable.setDataAtRowProp(items[0].row, 'PERIOD_PROFILE', '', 'no-edit');
@@ -962,10 +963,15 @@ export class PTE_CellChange_Util {
                 if (this.hotTable.getDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL') == '' && curPricingTable["AR_SETTLEMENT_LVL"] != undefined){
                     if(_.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=undefined && _.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=null){
                         this.hotTable.setDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL', curPricingTable["AR_SETTLEMENT_LVL"], 'no-edit');
+                        if(curPricingTable && curPricingTable['AR_SETTLEMENT_LVL'] && curPricingTable['AR_SETTLEMENT_LVL'].toLowerCase() == 'cash'){
+                            let colSPIdx = _.findWhere(this.hotTable.getCellMetaAtRow(items[0].row), { prop: 'SETTLEMENT_PARTNER' }).col;
+                            this.autoFillOnCash(items[0],contractData,colSPIdx,cellEditor);
+                        }
                     }
                 }
             }
         }
+        this.hotTable.render()
     }
 
 

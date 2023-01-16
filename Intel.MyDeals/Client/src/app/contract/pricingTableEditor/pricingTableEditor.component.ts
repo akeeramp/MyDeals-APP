@@ -286,11 +286,27 @@ export class pricingTableEditorComponent {
                                     || this.field == 'REBATE_TYPE' || this.field == 'PROD_INCLDS' || this.field == 'SETTLEMENT_PARTNER' || this.field == 'MRKT_SEG' || this.field == 'PROGRAM_PAYMENT' || this.field === "OEM_PLTFRM_LNCH_DT" || this.field === "OEM_PLTFRM_EOL_DT")) {
                                 VM.dirty = true;
                                 VM.removeCellComments(this.selRow,this.field);
-                                if (this.field == 'AR_SETTLEMENT_LVL'){
-                                    let PTR = [];
-                                    PTR.push({ row: this.selRow, prop: 'AR_SETTLEMENT_LVL', old: this.hot.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL'), new: result?.toString() });
-                                    PTE_CellChange_Util.autoFillARSet(PTR,VM.contractData, VM.curPricingTable,VM.custCellEditor);
+                                let PTR = [];
+                                if(this.field == 'PROGRAM_PAYMENT'){
+                                    PTR.push({ row: this.selRow, prop: this.field, old: this.hot.getDataAtRowProp(this.selRow, this.field), new: result?.toString() });
+                                    PTE_CellChange_Util.pgChgfn(PTR, VM.columns,VM.curPricingTable,VM.contractData,VM.custCellEditor);
                                 }
+                                if (this.field == 'AR_SETTLEMENT_LVL'){
+                                    PTR.push({ row: this.selRow, prop: this.field, old: this.hot.getDataAtRowProp(this.selRow, this.field), new: result?.toString() });
+                                    PTE_CellChange_Util.autoFillARSet(PTR,VM.contractData, VM.curPricingTable,VM.custCellEditor);
+                                    if ( this.hot.getDataAtRowProp(this.selRow, 'PERIOD_PROFILE') == '' && this.hot.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD') == ''){
+                                        PTE_CellChange_Util.checkfn(PTR,VM.curPricingTable, VM.columns,'',VM.contractData,VM.custCellEditor)
+                                    }
+                                }
+                                if (this.field == 'PERIOD_PROFILE' && this.hot.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL') == '' && this.hot.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD') == ''){
+                                    PTR.push({ row: this.selRow, prop: this.field, old: this.hot.getDataAtRowProp(this.selRow, this.field), new: result?.toString() });
+                                    PTE_CellChange_Util.checkfn(PTR,VM.curPricingTable, VM.columns,'',VM.contractData,VM.custCellEditor)
+                                }
+                                if (this.field == 'RESET_VOLS_ON_PERIOD' && this.hot.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL') == '' && this.hot.getDataAtRowProp(this.selRow, 'PERIOD_PROFILE') == ''){
+                                    PTR.push({ row: this.selRow, prop: this.field, old: this.hot.getDataAtRowProp(this.selRow, this.field), new: result?.toString() });
+                                    PTE_CellChange_Util.checkfn(PTR,VM.curPricingTable, VM.columns,'',VM.contractData,VM.custCellEditor)
+                                }
+                                
                             }
                              
                             this.hot.setDataAtCell(this.selRow, this.selCol, result?.toString(), 'no-edit');
@@ -734,10 +750,12 @@ export class pricingTableEditorComponent {
                 PTE_CellChange_Util.RateChgfn(rateChg, this.columns, this.curPricingTable);
             }
             if (pgChg && pgChg.length > 0) {
-                PTE_CellChange_Util.pgChgfn(pgChg, this.columns, this.curPricingTable);
+                if (changes.length > 0 && changes[0].old != changes[0].new)
+                    PTE_CellChange_Util.pgChgfn(pgChg, this.columns, this.curPricingTable,this.contractData,this.custCellEditor);
             }
             if (pgChg.length == 0) {
-                PTE_CellChange_Util.checkfn(changes, this.curPricingTable, this.columns);
+                if (changes.length > 0 && changes[0].old != changes[0].new)
+                    PTE_CellChange_Util.checkfn(changes, this.curPricingTable, this.columns,'',this.contractData,this.custCellEditor);
             }
             //for multi tier there can be more tiers to delete so moving the logic after all change 
             if (this.multiRowDelete && this.multiRowDelete.length > 0 && this.isDeletePTR) {
