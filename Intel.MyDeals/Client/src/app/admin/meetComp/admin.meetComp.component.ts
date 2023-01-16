@@ -84,7 +84,7 @@ export class meetCompComponent {
             logic: "and",
             filters: [],
         };
-        this.fetchMeetCompData();
+        this.gridData = process(this.gridResult, this.state);
     }
     distinctPrimitive(fieldName: string): any {
         if (this.gridResult.length > 0) {
