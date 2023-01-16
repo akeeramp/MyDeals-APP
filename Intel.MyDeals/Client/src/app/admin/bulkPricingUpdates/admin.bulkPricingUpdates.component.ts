@@ -61,7 +61,7 @@ export class BulkPricingUpdatesComponent  {
     comments: true, 
     data: this.validBulkPriceUpdates,
     manualColumnResize: true,
-    licenseKey: "8cab5-12f1d-9a900-04238-a4819",
+       licenseKey: "470b6-15eca-ea440-24021-aa526",
     columns: ExcelColumnsConfig.bulkPriceUpdateColumnData,
     nestedHeaders: this.nestedHeaders,
     readOnlyCellClassName: 'readonly-cell',
