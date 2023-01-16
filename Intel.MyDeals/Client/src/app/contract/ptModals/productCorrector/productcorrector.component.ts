@@ -788,6 +788,7 @@ export class ProductCorrectorComponent {
         }
 
         const pricingTableRow = {
+            'DC_ID': this.rowDCId,
             'START_DT': currentPricingTableRow['row']['START_DT'],
             'END_DT': currentPricingTableRow['row']['END_DT'],
             'CUST_MBR_SID': this.data.contractData.CUST_MBR_SID,
