@@ -937,9 +937,17 @@ export class PTE_CellChange_Util {
         }
     }
 
+    static delReadOnlyBehaviours(field,items){
+        // For Deleting the readonly behaviour which is added while save & validate
+        if (this.hotTable.getDataAtRowProp(items.row, '_behaviors') != undefined && this.hotTable.getDataAtRowProp(items.row, '_behaviors') != null) {
+            var behaviors = this.hotTable.getDataAtRowProp(items.row, '_behaviors');
+            delete behaviors.isReadOnly[field];
+        }
+    }
+
     static checkfn(items: Array<any>, curPricingTable: any,columns:any[],value?,contractData?,cellEditor?) {
         if (items.length > 0) {
-            let val = value? value : this.hotTable.getDataAtRowProp(items[0].row, 'PROGRAM_PAYMENT');
+            let val = value ? value : this.hotTable.getDataAtRowProp(items[0].row, 'PROGRAM_PAYMENT');
             if (val != undefined && val != null && val != '' && val.toLowerCase() !== 'backend') {
                 if(_.findWhere(columns,{data:'PERIOD_PROFILE'}) !=undefined && _.findWhere(columns,{data:'PERIOD_PROFILE'}) !=null){
                     this.hotTable.setDataAtRowProp(items[0].row, 'PERIOD_PROFILE', '', 'no-edit');
@@ -956,16 +964,19 @@ export class PTE_CellChange_Util {
             } else {
                 if (this.hotTable.getDataAtRowProp(items[0].row, 'PERIOD_PROFILE') == '' && curPricingTable["PERIOD_PROFILE"] != ''){
                     if(_.findWhere(columns,{data:'PERIOD_PROFILE'}) !=undefined && _.findWhere(columns,{data:'PERIOD_PROFILE'})!=null){
+                        this.delReadOnlyBehaviours("PERIOD_PROFILE",items[0]);
                         this.hotTable.setDataAtRowProp(items[0].row, 'PERIOD_PROFILE', curPricingTable["PERIOD_PROFILE"].toString(), 'no-edit');
                     }
                 }
                 if (this.hotTable.getDataAtRowProp(items[0].row, 'RESET_VOLS_ON_PERIOD') == ''){
                     if(_.findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=undefined && _.findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=null){
+                        this.delReadOnlyBehaviours("RESET_VOLS_ON_PERIOD",items[0]);
                         this.hotTable.setDataAtRowProp(items[0].row, 'RESET_VOLS_ON_PERIOD', 'No', 'no-edit');
                     }
                 }
                 if (this.hotTable.getDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL') == '' && curPricingTable["AR_SETTLEMENT_LVL"] != undefined){
                     if(_.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=undefined && _.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=null){
+                        this.delReadOnlyBehaviours("AR_SETTLEMENT_LVL",items[0]);
                         this.hotTable.setDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL', curPricingTable["AR_SETTLEMENT_LVL"], 'no-edit');
                         if(curPricingTable && curPricingTable['AR_SETTLEMENT_LVL'] && curPricingTable['AR_SETTLEMENT_LVL'].toLowerCase() == 'cash'){
                             let colSPIdx = _.findWhere(this.hotTable.getCellMetaAtRow(items[0].row), { prop: 'SETTLEMENT_PARTNER' }).col;
@@ -1146,11 +1157,7 @@ export class PTE_CellChange_Util {
     }
 
     static autoFillOnCash(item,contractData,colSPIdx,cellEditor){
-        // For Deleting the readonly behaviour which is added while save & validate
-        if (this.hotTable.getDataAtRowProp(item.row, '_behaviors') != undefined && this.hotTable.getDataAtRowProp(item.row, '_behaviors') != null) {
-            var behaviors = this.hotTable.getDataAtRowProp(item.row, '_behaviors');
-            delete behaviors.isReadOnly["SETTLEMENT_PARTNER"];
-        }
+        this.delReadOnlyBehaviours("SETTLEMENT_PARTNER",item);
         this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', contractData.Customer.DFLT_SETTLEMENT_PARTNER, 'no-edit');
         //check object present 
         this.hotTable.setCellMeta(item.row, colSPIdx, 'editor', cellEditor);
