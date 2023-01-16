@@ -14,6 +14,7 @@ import { FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
 import * as _ from 'underscore';
 import { performanceBarsComponent } from '../performanceBars/performanceBar.component';
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
+import { Subscription } from "rxjs";
 
 export interface contractIds {
     Model: string;
@@ -625,10 +626,10 @@ export class contractManagerComponent {
         const ptDcId = pt.DC_ID;
         this.isPTExpanded[pt.DC_ID] = !this.isPTExpanded[pt.DC_ID];
         this.isGridLoading = true;
+        let getWipSummaryApi: Subscription;
         //check whether arrow icon is expanded/collapsed ,only if it is expanded then call API to get the data
         if (this.isPTExpanded[ptDcId]) {
-            
-            this.contractManagerSvc.getWipSummary(pt.DC_ID).subscribe((response) => {
+            getWipSummaryApi = this.contractManagerSvc.getWipSummary(pt.DC_ID).subscribe((response) => {
                 if (response !== undefined) {
                     for (let i = 0; i < response.length; i++) {
                         if (response[i].WF_STG_CD === "Draft") response[i].WF_STG_CD = response[i].PS_WF_STG_CD;
@@ -659,7 +660,9 @@ export class contractManagerComponent {
                 this.loggerSvc.error('Get WIP Summary service', error);
                 this.isLoading = false;
             })
-        } else if(!this.isPTExpanded[ptDcId]){
+        } else if (!this.isPTExpanded[ptDcId]) {
+            if (getWipSummaryApi && !getWipSummaryApi.closed)
+                getWipSummaryApi.unsubscribe();
             this.isGridLoading = false;
             this.isPTEToolsOpen.pop();
         }
