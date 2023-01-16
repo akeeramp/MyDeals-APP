@@ -30,6 +30,7 @@ export class meetCompContractComponent implements OnInit {
     @Input() private objTypeId;
     @Input() private cId;;
     @Input() private pageNm;
+    @Input() private meetCompRefresh;
     @Output() tmDirec = new EventEmitter();
     @Output() contractRefresh = new EventEmitter();
     @Output() refreshMCTData = new EventEmitter();
@@ -1183,6 +1184,13 @@ export class meetCompContractComponent implements OnInit {
 
     closeShowAlert() {
         this.showAlert = false;
+    }
+    ngOnChanges() {
+        if (!!this.objSid) {
+            this.initialLoad = true;
+            this.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
+            this.lastMeetCompRunCalc();
+        }
     }
 
     ngOnInit() {

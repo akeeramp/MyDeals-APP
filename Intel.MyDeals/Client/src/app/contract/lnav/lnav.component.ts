@@ -807,6 +807,10 @@ export class lnavComponent {
         this.isLnavHidden['source'] = src;
         this.lnavSvc.isLnavHidden.next(this.isLnavHidden);
     }
+    meetCompSel() {
+        if (this.selectedTab == 1) return true;
+        else return false;
+    }
     toggleStrategyTree() {
         if (this.strategyTreeCollapseAll == true) {
             this.contractData?.PRC_ST.map((x, i) => {
@@ -914,7 +918,7 @@ export class lnavComponent {
     }
     ngOnChanges() {
         if (this.changedTab == 2) {
-            this.openMeetCompTab();
+            this.selectedTab = 1;
         }
     }
     ngAfterViewInit() {

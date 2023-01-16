@@ -126,7 +126,7 @@
                     </div>
                 </div>
                 <div *ngIf="selLnav=='MeetComp'" class="few-oracle-css">
-                    <meet-comp-contract [objSid]="contractData.DC_ID" [isAdhoc]="'1'" [objTypeId]="'1'" [cId]="c_Id" [pageNm]="'WIDGET'" (contractRefresh)="refreshContract($event)"></meet-comp-contract>
+                    <meet-comp-contract [objSid]="contractData.DC_ID" [isAdhoc]="'1'" [objTypeId]="'1'" [cId]="c_Id" [pageNm]="'WIDGET'" [meetCompRefresh]="meetCompRefresh" (contractRefresh)="refreshContract($event)"></meet-comp-contract>
                 </div>
                 <div *ngIf="selLnav=='Manage' || selLnav=='approvalDiv'" class="few-oracle-css">
                     <contract-manager [contractData]="contractData" [UItemplate]="UItemplate" (modelChange)="loadModel($event)" (refreshedContractData)="refreshContractData($event)">

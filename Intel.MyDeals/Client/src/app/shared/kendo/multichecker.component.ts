@@ -99,8 +99,8 @@ export class MultiCheckFilterComponent implements AfterViewInit {
 
     public ngAfterViewInit() {
         //this code is to remove all falsy values
-        this.currentData =_.compact(this.data);
-        this.data=_.compact(this.data);
+        this.currentData = this.field == 'COMP_SKU' || this.field=="COMP_PRC" ? this.data : _.compact(this.data);
+        this.data = this.field == 'COMP_SKU' || this.field == "COMP_PRC" ? this.data : _.compact(this.data);
         if (this.textField != undefined && this.textField != null && this.textField != '' && this.valueField != undefined && this.valueField != null && this.valueField != null) {
           if (this.data && this.data.length>0 &&this.data.filter(x => x[this.textField] == 'Select All').length == 0) {
               let selectAlldata: any = {};

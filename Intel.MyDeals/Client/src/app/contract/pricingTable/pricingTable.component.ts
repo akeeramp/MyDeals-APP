@@ -63,6 +63,7 @@ export class pricingTableComponent {
     private rowlength: any;
     private searchText: any;
     private selectedTab: any;
+    public meetCompRefresh: boolean = false;
     public error: boolean = false;
     public enablePerfChart:boolean = (<any>window).isDeveloper || (<any>window).isTester;
 
@@ -193,7 +194,8 @@ export class pricingTableComponent {
         }
         else if (this.selLnav == 'MeetComp') {
             this.isDETab = false; this.isPTETab = false;
-            this.selectedTab =2;
+            this.selectedTab = 2;
+            this.meetCompRefresh = !this.meetCompRefresh;
         }
         else {
             this.isDETab = false; this.isPTETab = false;
