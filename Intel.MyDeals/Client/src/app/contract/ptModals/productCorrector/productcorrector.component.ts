@@ -1035,42 +1035,42 @@ export class ProductCorrectorComponent {
         }
 
          _.each(this.ProductCorrectorData.ValidProducts, (product, key) => {
-            _.each(product, (selprod, keyq) => {
-                if (!!this.selectedProducts && this.selectedProducts.length == 0) {
-                    this.selectedProducts.push({
-                        DCID: parseInt(key),
-                        name: keyq.toString()
-                        , items: [],
-                        indx: _.findWhere(this.data.selRows,
-                            {
-                                DC_ID: parseInt(key)
-                            }).indx
-                    });
-                } else {
-                    if (this.selectedProducts.filter(x => x.DCID == key).length==0) {
-                        this.selectedProducts.push({
-                            DCID: parseInt(key),
-                            name: keyq.toString()
-                            , items: [],
-                            indx: _.findWhere(this.data.selRows,
-                                {
-                                    DC_ID: parseInt(key)
-                                }).indx
-                        });
-                    }
-                }
-
-
-
-                _.each(selprod, celprod => {
-                    const prd = { prod: celprod['DERIVED_USR_INPUT'], prodObj: celprod };
-                    prd.prodObj['USR_INPUT'] = keyq;
-                    prd.prodObj['IS_SEL'] = true;
-                    _.each(this.selectedProducts, (selproditem) => {
-                        if (selproditem.DCID == key)
-                            selproditem.items.push(prd);
-                    })
-                })
+             _.each(product, (selprod, keyq) => {
+                 if (!(this.ProductCorrectorData.AutoValidatedProducts && this.ProductCorrectorData.AutoValidatedProducts[parseInt(key)]
+                     && this.ProductCorrectorData.AutoValidatedProducts[parseInt(key)][keyq])) {
+                     if (!!this.selectedProducts && this.selectedProducts.length == 0) {
+                         this.selectedProducts.push({
+                             DCID: parseInt(key),
+                             name: keyq.toString()
+                             , items: [],
+                             indx: _.findWhere(this.data.selRows,
+                                 {
+                                     DC_ID: parseInt(key)
+                                 }).indx
+                         });
+                     } else {
+                         if (this.selectedProducts.filter(x => x.DCID == key).length == 0) {
+                             this.selectedProducts.push({
+                                 DCID: parseInt(key),
+                                 name: keyq.toString()
+                                 , items: [],
+                                 indx: _.findWhere(this.data.selRows,
+                                     {
+                                         DC_ID: parseInt(key)
+                                     }).indx
+                             });
+                         }
+                     }
+                     _.each(selprod, celprod => {
+                         const prd = { prod: celprod['DERIVED_USR_INPUT'], prodObj: celprod };
+                         prd.prodObj['USR_INPUT'] = keyq;
+                         prd.prodObj['IS_SEL'] = true;
+                         _.each(this.selectedProducts, (selproditem) => {
+                             if (selproditem.DCID == key)
+                                 selproditem.items.push(prd);
+                         })
+                     })
+                 }
             })
          });
 

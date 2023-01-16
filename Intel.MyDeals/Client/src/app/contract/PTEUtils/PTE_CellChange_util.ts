@@ -283,12 +283,16 @@ export class PTE_CellChange_Util {
                 currentString = row + ',' + val.prop + ',' + product + ',' + 'no-edit';
                 updateRows.push(currentString.split(','));
             }
-            else if (val.prop == 'QTY' && rowData == null) {
+            else if (val.prop == 'QTY' && (rowData == null || rowData.PRD_BCKT !== product)) {
                 //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
                 currentString = row + ',' + val.prop + ',' + '1' + ',' + 'no-edit';
                 updateRows.push(currentString.split(','));
             }
-            else if ((val.prop == 'ECAP_PRICE' || val.prop == 'ECAP_PRICE_____20_____1' || val.prop == 'TEMP_KIT_REBATE' || val.prop == 'DSCNT_PER_LN' || val.prop == 'TEMP_TOTAL_DSCNT_PER_LN') && rowData == null) {
+            else if ((val.prop == 'ECAP_PRICE' || val.prop == 'DSCNT_PER_LN' || val.prop == 'TEMP_TOTAL_DSCNT_PER_LN') && (rowData == null || rowData.PRD_BCKT !== product)) {
+                currentString = row + ',' + val.prop + ',' + '0' + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
+            }
+            else if ((val.prop == 'ECAP_PRICE_____20_____1' || val.prop == 'TEMP_KIT_REBATE') && rowData == null) {
                 currentString = row + ',' + val.prop + ',' + '0' + ',' + 'no-edit';
                 updateRows.push(currentString.split(','));
             }
@@ -363,8 +367,6 @@ export class PTE_CellChange_Util {
                     let ROW_ID = this.hotTable.getDataAtRowProp(selrow, 'DC_ID');
                     //the row can be insert or delete to get that we are removing and adding the rows
                     let DataOfRow = _.filter(PTE_Common_Util.getPTEGenerate(columns, curPricingTable), itm => { return itm.DC_ID == ROW_ID });
-                    //logic to calculate rebate price on product change in KIT and assign to DataROw so that it will assign in addUpdateRowOnchangeKIT
-                    DataOfRow[0]['TEMP_KIT_REBATE'] = this.kitEcapChangeOnProd(items[0], DataOfRow.slice(0, items[0].new.split(',').length));
                     this.hotTable.alter('remove_row', selrow, items[0].old.split(',').length, 'no-edit');
                     this.hotTable.alter('insert_row', selrow, items[0].new.split(',').length, 'no-edit');
                     //this line of code is only for KIT incase of success product
@@ -384,6 +386,8 @@ export class PTE_CellChange_Util {
                         this.addUpdateRowOnchangeKIT(this.hotTable, columns, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex], DataOfRow[prodIndex], operation);
                         prodIndex++;
                     }
+                    //logic to calculate rebate price on product change in KIT and assign to DataROw so that it will assign in addUpdateRowOnchangeKIT
+                    DataOfRow[0]['TEMP_KIT_REBATE'] = this.kitEcapChangeOnProd(items[0], DataOfRow.slice(0, items[0].new.split(',').length));
                     let PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
                     let DCIDS = _.pluck(PTR, 'DC_ID');
                     let countOfDCID = _.countBy(_.pluck(PTR, 'DC_ID'))

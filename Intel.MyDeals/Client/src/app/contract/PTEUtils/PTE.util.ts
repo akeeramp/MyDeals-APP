@@ -591,7 +591,9 @@ export class PTEUtil {
                                         else {
                                             contractProducts = contDerivedUserInput.length == 1 ? PTE_Common_Util.getFullNameOfProduct(contDerivedUserInput[0], contDerivedUserInput[0].DERIVED_USR_INPUT) : contDerivedUserInput[0].DERIVED_USR_INPUT;
                                         }
-                                        data[r].PTR_USER_PRD = data[r].PTR_USER_PRD.replace(prd, contractProducts);
+                                        let ptrUsrPrd = data[r].PTR_USER_PRD.split(',');
+                                        ptrUsrPrd[_.findIndex(ptrUsrPrd, prd)] = contractProducts;
+                                        data[r].PTR_USER_PRD = ptrUsrPrd.join(',');
                                     }
                                 }
                             }

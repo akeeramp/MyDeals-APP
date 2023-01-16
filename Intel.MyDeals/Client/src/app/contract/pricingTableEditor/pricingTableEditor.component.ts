@@ -1260,13 +1260,6 @@ export class pricingTableEditorComponent {
     async saveandValidate(isValidProd, deleteDCIDs?) {
         //Handsonetable loading taking some time so putting this logic for loader
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
-        let isProductOrderChanged = PTEUtil.updateProductOrdering(PTR, this.transformResults, this.curPricingTable);
-        //To wait until hot table data rendered properly, since product order got changed
-        if (isProductOrderChanged) {
-            await new Promise(resolve => {
-                setTimeout(resolve, 100);
-            });
-        }
         //removing the deleted record from PTR
         if (deleteDCIDs && deleteDCIDs.length > 0) {
             _.each(deleteDCIDs, (delId) => {
@@ -1376,6 +1369,7 @@ export class pricingTableEditorComponent {
                     this.generateHandsonTable(denBandData.finalPTR);
                 }
                 if (action == 'onSave') {
+                    await this.productOrdering();
                     //since the errors are binding from cook products check for any error
                     isPrdValid = _.find(updatedPTRObj.rowData, (x) => {
                         if (x._behaviors && x._behaviors.isError) {
@@ -1392,6 +1386,7 @@ export class pricingTableEditorComponent {
                     }
                     this.isLoading = false;
                 }
+                await this.productOrdering();
             }
         }
         else {
@@ -1668,6 +1663,10 @@ export class pricingTableEditorComponent {
                                     })
                                 }
                                 if (this.curRow[0]) {
+                                    curRowIndx = _.findWhere(selRows,
+                                        {
+                                            DC_ID: this.curRow[0]['DC_ID']
+                                        }).indx;
                                     let includeIndx = _.findIndex(this.columns, { data: 'PTR_USER_PRD' });
                                     let excludeIndx = _.findIndex(this.columns, { data: 'PRD_EXCLDS' });
                                     let includeClass = this.hotTable.getCellMetaAtRow(curRowIndx).filter((col) => {
@@ -1703,9 +1702,12 @@ export class pricingTableEditorComponent {
                         this.setBusy("", "", "", false);
                     }, 100);
                 }
-                else if (action == 'onSave') {
-                    setTimeout(async() => {//wait until PTE updation completes
-                        await this.saveandValidate(true, deletedDCID);
+                else {
+                    this.setBusy("Updating Products", "Please wait while processing.", "info", true);
+                    setTimeout(async () => {//wait until PTE updation completes
+                        await this.productOrdering();
+                        if (action == 'onSave')
+                            await this.saveandValidate(true, deletedDCID);
                     }, 100);
                 }
             }
@@ -1805,6 +1807,16 @@ export class pricingTableEditorComponent {
             }
         }
         this.refreshedContractData.emit({ contractData: this.contractData, PS_Passed_validation: this.curPricingStrategy.PASSED_VALIDATION, PT_Passed_validation: this.curPricingTable.PASSED_VALIDATION });
+    }
+    async productOrdering() {
+        let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
+        let isProductOrderChanged = PTEUtil.updateProductOrdering(PTR, this.transformResults, this.curPricingTable);
+        //To wait until hot table data rendered properly, since product order got changed
+        if (isProductOrderChanged) {
+            await new Promise(resolve => {
+                setTimeout(resolve, 100);
+            });
+        }
     }
     ngOnInit() {
         this.isTenderContract = Tender_Util.tenderTableLoad(this.contractData);
