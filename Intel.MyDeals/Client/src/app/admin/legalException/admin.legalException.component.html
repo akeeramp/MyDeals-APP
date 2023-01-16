@@ -54,7 +54,7 @@
                            [checked]="dataItem.IS_SELECTED" />
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column *ngIf="editAccess" [width]="200" [headerClass]="{ 'text-center': true }" [resizable]="false" [columnMenu]="false">
+            <kendo-grid-column *ngIf="editAccess" [width]="200" [headerClass]="{ 'text-center': true }" [resizable]="true" [columnMenu]="false">
 
                 <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                     <div class="row">
