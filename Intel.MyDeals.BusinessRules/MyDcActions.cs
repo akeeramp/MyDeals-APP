@@ -1142,8 +1142,6 @@ namespace Intel.MyDeals.BusinessRules
             bool converted = int.TryParse(getContValue, out int numDaysInPastLimit);
             if (!converted) numDaysInPastLimit = 90; // Safety set to 90 days if the constant didn't set correctly
 
-            numDaysInPastLimit = numDaysInPastLimit - 1; // Since forced kill message goes out on day of hard expire, make it read only a day prior. (Jyoti bug)
-
             IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
 
             if (deEndDate != null) // Seem to be cases where rule is triggered, but DC doesn't have the element, so bring this forward prior to pulling the vaule.
@@ -1152,8 +1150,7 @@ namespace Intel.MyDeals.BusinessRules
                 // Have to get a safe version of datatime(now) minus our buffer to force check to be 12AM time based like Start/End Dates
                 bool isDealTooOld = DateTime.Compare(chkDate.Date, OpConvertSafe.ToDateTime(DateTime.Now.AddDays(-numDaysInPastLimit).ToString("MM-dd-yyyy"))) < 0;
 
-                // Added in hastracker check so that we revert back to old code conditions, remove "&& r.Dc.HasTracker()" to go back
-                if (deEndDate.AtrbValue.ToString() != "" && isDealTooOld && r.Dc.HasTracker()) // Safety and Too Old check 
+                if (deEndDate.AtrbValue.ToString() != "" && isDealTooOld) // Safety and Too Old check
                 {
                     // Lock down the entire deal, it is 90 days old!!
                     foreach (OpDataElement dx in r.Dc.DataElements) 
