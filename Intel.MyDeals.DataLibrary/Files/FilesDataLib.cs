@@ -396,7 +396,7 @@ namespace Intel.MyDeals.DataLibrary
                                 int dbPrimLvlId = 0;
                                 int toBeDbPrimCustId = 0;
                                 int toBeDbPrimLvlId = 0;
-                                string ucdGlobalName = worksheet.Cells[i, 3].Value != null ? worksheet.Cells[i, 3].Value.ToString().TrimEnd() : string.Empty;
+                                string ucdGlobalName = worksheet.Cells[i, 3].Value != null ? worksheet.Cells[i, 3].Value.ToString() : string.Empty;
                                 string ucdCtry = worksheet.Cells[i, 5].Value != null ? worksheet.Cells[i, 5].Value.ToString().TrimEnd() : string.Empty;
                                 string toBeucdGlobalName = worksheet.Cells[i, 7].Value != null ? worksheet.Cells[i, 7].Value.ToString().TrimEnd() : string.Empty;
                                 string toBeCtry = worksheet.Cells[i, 9].Value != null ? worksheet.Cells[i, 9].Value.ToString().TrimEnd() : string.Empty;
