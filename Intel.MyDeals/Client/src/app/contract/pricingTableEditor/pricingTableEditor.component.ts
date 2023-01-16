@@ -1,4 +1,4 @@
-﻿import { Component, Input, Output, EventEmitter } from '@angular/core';
+﻿import { Component, Input, Output, EventEmitter, NgZone } from '@angular/core';
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
 import * as _ from 'underscore';
@@ -43,7 +43,7 @@ export class pricingTableEditorComponent {
         private loggerService: logger,
         private lnavService: lnavService,
         private flexoverLappingCheckDealsService: flexoverLappingcheckDealService,
-        private contractDetailsService: contractDetailsService,
+        private contractDetailsService: contractDetailsService, private ngZone: NgZone,
         protected dialog: MatDialog) {
         /*  custom cell editor logic starts here*/
         let VM = this;
@@ -225,6 +225,8 @@ export class pricingTableEditorComponent {
                     panelClass = "date-calendar-pop-up";
                 }
                 VM.editorOpened = true;
+                //this zone is implemented for pte dialogs double click event problem
+                ngZone.run(async () => {
                 const dialogRef = dialog.open(modalComponent, {
                     height: height,
                     width: width,
@@ -325,19 +327,19 @@ export class pricingTableEditorComponent {
                             }
                         }, 2000);
 
-                        if (VM.curRow[0] && VM.curRow[0].delPTR_SYS_PRD) {
-                            delete VM.curRow[0].delPTR_SYS_PRD
+                            if (VM.curRow[0] && VM.curRow[0].delPTR_SYS_PRD) {
+                                delete VM.curRow[0].delPTR_SYS_PRD
+                            }
+                        } else {
+                            let curRow = PTE_CellChange_Util.returnEmptyRow();
+                            let prd = this.hot.getDataAtRowProp(this.selRow, 'PTR_USER_PRD')
+                            if (this.field && this.field == 'PTR_USER_PRD' && (curRow == 0 || this.selRow == 0) && (prd == null || prd == '' || prd == undefined) ) {
+                                VM.enableDeTab.emit({ isEnableDeTab: false, enableDeTabInfmIcon: false });
+                                return [];
+                            }
                         }
-                    } else {
-                        let curRow = PTE_CellChange_Util.returnEmptyRow();
-                        let prd = this.hot.getDataAtRowProp(this.selRow, 'PTR_USER_PRD')
-                        if (this.field && this.field == 'PTR_USER_PRD' && (curRow == 0 || this.selRow == 0) && (prd == null || prd == '' || prd == undefined) ) {
-                            VM.enableDeTab.emit({ isEnableDeTab: false, enableDeTabInfmIcon: false });
-                            return [];
-                        }
-                    }
-                });
-
+                    });
+                })
                 if (VM.curRow[0] && VM.curRow[0].delPTR_SYS_PRD) {
                     VM.curRow[0]['PTR_SYS_PRD'] = ""
                     this.hot.setDataAtRowProp(this.selRow, 'PTR_SYS_PRD', '', 'no-edit');
