@@ -80,18 +80,15 @@ export class PTE_Helper_Util {
         return rootColToLetter[colName].charCodeAt(0) - "A".charCodeAt(0);
     }
 
-    static isCustDivisonNull(data, custAccntDiv) {
-        if (custAccntDiv != "") {
-            for (var i = 0; i < data.length; i++) {
-                if ((data[i].CUST_ACCNT_DIV == null || data[i].CUST_ACCNT_DIV == "") && (data[i].TIER_NBR == 1 || data[i].TIER_NBR == undefined)) {
-                    return true;
-                }
+    static isCustDivisonNull(data) {
+        let custNull: boolean = false
+        data.forEach((row) => {
+            if ((row.CUST_ACCNT_DIV == null || row.CUST_ACCNT_DIV == "") && (row.TIER_NBR == 1 || row.TIER_NBR == undefined)) {
+                if (row.START_DT != '') custNull = true;
             }
-            return false;
-        }
-        else {
-            return false;
-        }
+        });
+        if (custNull) return true;
+        else return false;
     }
 
     static CalculateFirstEdiatableBeforeProductCol(editableColsBeforeProduct, firstEditableColBeforeProduct, rootColToLetter) {

@@ -1,10 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { MatDialog } from '@angular/material/dialog';
 import { process, State } from "@progress/kendo-data-query";
-
+import { CurrencyPipe } from '@angular/common';
 import { logger } from "../../../../shared/logger/logger";
 import { productSelectorService } from '../productselector.service';
-
 import { ProductBreakoutComponent } from '../productBreakout/productBreakout.component';
 import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 
@@ -20,7 +19,7 @@ import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
 })
 export class GridPopoverComponent implements OnInit {
 
-    constructor(public dialogService: MatDialog,
+    constructor(public dialogService: MatDialog, private currencyPipe: CurrencyPipe,
         private productSelectorService: productSelectorService,
         private loggerService: logger) { }
 
@@ -117,8 +116,13 @@ export class GridPopoverComponent implements OnInit {
             this.productSelectorService.GetProductCAPYCS2Data(cellProductData[0].getAvailable,
                     cellProductData[0].priceCondition,
                     cellProductData).subscribe((response) => {
-                this.responseData = response;
-                this.dataSource = process(this.responseData, this.state);
+                        this.responseData = response;
+                        this.dataSource = process(this.responseData, this.state);
+                        this.responseData.forEach((row) => {
+                            if (row.CAP != undefined || row.CAP != '' || row.CAP != 'No CAP') {
+                                row.CAP = this.currencyPipe.transform(row.CAP, 'USD', 'symbol', '1.2-2');
+                            }
+                        })
                 this.isLoading = false;
                 return this.responseData;
             }, (error) => {

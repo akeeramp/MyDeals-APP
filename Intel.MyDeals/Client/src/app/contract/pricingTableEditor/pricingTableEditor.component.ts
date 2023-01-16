@@ -1278,7 +1278,7 @@ export class pricingTableEditorComponent {
             }
         }
         else {
-            this.isCustDivNull = PTE_Helper_Util.isCustDivisonNull(PTR, this.contractData.CUST_ACCNT_DIV);
+            this.isCustDivNull = PTE_Helper_Util.isCustDivisonNull(PTR);
             if (!this.isCustDivNull) {
                 await this.ValidateAndSavePTE(isValidProd, deleteDCIDs);
             }
