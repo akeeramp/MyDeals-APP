@@ -578,9 +578,23 @@ export class PTEUtil {
                     if (isAllValidated) {
                         let userInput: any;
                         if (curPricingTable.OBJ_SET_TYPE_CD === "KIT") {
-                            userInput = this.updateUserInput(transformResults.ValidProducts[key]);
-                            if (userInput && userInput['contractProducts'])
-                                data[r].PTR_USER_PRD = userInput['contractProducts'];
+                            for (let prd in transformResults.ValidProducts[key]) {
+                                if (transformResults.ValidProducts[key].hasOwnProperty(prd)) {
+                                    var products = transformResults.ValidProducts[key][prd].filter(function (x) {
+                                        return x.EXCLUDE === false;
+                                    });
+                                    if (products.length !== 0) {
+                                        var contDerivedUserInput = _.uniq(products, 'HIER_VAL_NM');
+                                        if (products.length === 1 && contDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == contDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
+                                            contractProducts = contDerivedUserInput[0].HIER_VAL_NM;
+                                        }
+                                        else {
+                                            contractProducts = contDerivedUserInput.length == 1 ? PTE_Common_Util.getFullNameOfProduct(contDerivedUserInput[0], contDerivedUserInput[0].DERIVED_USR_INPUT) : contDerivedUserInput[0].DERIVED_USR_INPUT;
+                                        }
+                                        data[r].PTR_USER_PRD = data[r].PTR_USER_PRD.replace(prd, contractProducts);
+                                    }
+                                }
+                            }
                             var kitObject = this.populateValidProducts(transformResults.ValidProducts[key]);
                             transformResults.ValidProducts[key] = kitObject['ReOrderedJSON'];
                             let input = { 'contractProducts': '', 'excludeProducts': '' };

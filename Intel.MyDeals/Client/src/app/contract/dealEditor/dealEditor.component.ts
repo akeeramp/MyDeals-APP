@@ -677,7 +677,7 @@ export class dealEditorComponent {
     defaultLayout() {
         this.groups = JSON.parse(JSON.stringify(this.groupsdefault));
         this.applyHideIfAllRules();
-        this.selectedTab = "Deal Info";
+        this.selectedTab = this.groups[0].name;
         var group = this.groups.filter(x => x.name == this.selectedTab);
 
         if (this.renamedefault.length > 0) {
@@ -810,7 +810,7 @@ export class dealEditorComponent {
         }), err => {
             this.loggerService.error("Unable to get Custom Layout.", err, err.statusText);
         };
-        this.selectedTab = "Deal Info";
+        this.selectedTab = this.groups[0].name;
         this.isDataLoading = false;
         this.setBusy("", "", "", false);
         this.setWarningDetails();
@@ -1364,7 +1364,7 @@ export class dealEditorComponent {
             }
             this.getGroupsAndTemplates();
             this.dropdownResponses = this.getAllDrowdownValues();
-            this.selectedTab = "Deal Info";
+            this.selectedTab = this.groups[0].name;
             this.filterColumnbyGroup(this.selectedTab);
             if (this.in_Search_Text && this.in_Search_Text != null && this.in_Search_Text != '') {
                 this.searchFilter = this.in_Search_Text;
