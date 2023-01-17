@@ -300,7 +300,7 @@ export class overLappingDealsComponent {
     }
 
     openDealEditor(value) {
-        window.location.href = "#/contractmanager/WIP/" + value.CONTRACT_NBR + "/" + value.PRICE_STRATEGY + "/" + value.PRICING_TABLES + "/" + value.OVLP_DEAL_OBJ_SID;
+        window.open(`/advancedSearch#/gotoDeal/${value.OVLP_DEAL_OBJ_SID}`, '_blank')
     }
 
 
