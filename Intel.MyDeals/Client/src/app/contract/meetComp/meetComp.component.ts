@@ -669,7 +669,8 @@ export class meetCompContractComponent implements OnInit {
             }
         }
         else {
-            this.showPrice = false;
+            val.COMP_PRC = '';
+            this.onCompPriceChange(val, dataItem);
         }
     }
 
@@ -1045,7 +1046,7 @@ export class meetCompContractComponent implements OnInit {
                     await this.updateMeetComp();
                 }
             }
-            else if (this.tempUpdatedList.length == 0 && this.isAdhoc == 0) {
+            else if (this.tempUpdatedList.length == 0 && this.isAdhoc == 1) {
                 await this.forceRunMeetComp();
             }
         }

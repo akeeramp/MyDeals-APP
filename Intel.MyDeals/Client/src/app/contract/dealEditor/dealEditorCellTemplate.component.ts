@@ -126,24 +126,24 @@ export class dealEditorCellTemplateComponent {
         let dim = "";
         if (field == "ECAP_PRICE" && data.OBJ_SET_TYPE_CD == "ECAP") {
             if (data.ECAP_PRICE && data.ECAP_PRICE[this.ecapDimKey] !== undefined && data.ECAP_PRICE[this.ecapDimKey] !== null && data.ECAP_PRICE[this.ecapDimKey] !== "")
-                data.ECAP_PRICE[this.ecapDimKey] = this.currencyPipe.transform(data.ECAP_PRICE[this.ecapDimKey], 'USD', 'symbol', '1.2-2');
+                data.ECAP_PRICE[this.ecapDimKey] = typeof data.ECAP_PRICE[this.ecapDimKey] == 'number' ? this.currencyPipe.transform(data.ECAP_PRICE[this.ecapDimKey], 'USD', 'symbol', '1.2-2') : data.ECAP_PRICE[this.ecapDimKey];
             dim = this.ecapDimKey;
         }
         if (field == "KIT_ECAP" || field == "CAP_KIT" || field == "YCS2_KIT") {
             field = field == "CAP_KIT" ? "CAP" : field == "YCS2_KIT" ? "YCS2_PRC_IRBT" : "ECAP_PRICE";
             if (data[field] && data[field][this.kitEcapdim] !== undefined && data[field][this.kitEcapdim] !== null && data[field][this.kitEcapdim] !== "")
-                data[field][this.kitEcapdim] = typeof data[field][this.kitEcapdim] == 'number' ? this.currencyPipe.transform(data[field][this.kitEcapdim], 'USD', 'symbol', '1.2-2') : '';
+                data[field][this.kitEcapdim] = typeof data[field][this.kitEcapdim] == 'number' ? this.currencyPipe.transform(data[field][this.kitEcapdim], 'USD', 'symbol', '1.2-2') : data[field][this.kitEcapdim];
             dim = this.kitEcapdim;
         }
         if (field == "SUBKIT_ECAP") {
             if (data.ECAP_PRICE && data.ECAP_PRICE[this.subKitEcapDim] !== undefined && data.ECAP_PRICE[this.subKitEcapDim] !== null && data.ECAP_PRICE[this.subKitEcapDim] !== "")
-                data.ECAP_PRICE[this.subKitEcapDim] = this.currencyPipe.transform(data.ECAP_PRICE[this.subKitEcapDim], 'USD', 'symbol', '1.2-2');
+                data.ECAP_PRICE[this.subKitEcapDim] = typeof data.ECAP_PRICE[this.subKitEcapDim] == 'number' ? this.currencyPipe.transform(data.ECAP_PRICE[this.subKitEcapDim], 'USD', 'symbol', '1.2-2') : data.ECAP_PRICE[this.subKitEcapDim];
             dim = this.subKitEcapDim;
             field = "ECAP_PRICE";
         }
         if (field == "COMPETITIVE_PRICE") {
             if (data[field] && data[field][this.ecapDimKey] !== undefined && data[field][this.ecapDimKey] !== null && data[field][this.ecapDimKey] !== "")
-                data[field][this.ecapDimKey] = this.currencyPipe.transform(data[field][this.ecapDimKey], 'USD', 'symbol', '1.2-2');
+                data[field][this.ecapDimKey] = typeof data[field][this.ecapDimKey] == 'number' ? this.currencyPipe.transform(data[field][this.ecapDimKey], 'USD', 'symbol', '1.2-2') : data[field][this.ecapDimKey];
             dim = this.ecapDimKey;
         }
         return GridUtil.uiDimControlWrapper(data, field, dim);

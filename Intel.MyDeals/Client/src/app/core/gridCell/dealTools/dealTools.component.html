@@ -5,7 +5,7 @@
 
 <div class="dealTools custom-deal-tools">
     <div *ngIf="isPublishable != true" class="tools-parent">
-        <div class="dirtyTip" *ngIf="dataItem._dirty || dataItem.isDirtyFile" title="This deal has been modified"></div>
+        <div class="dirtyTip" *ngIf="isModified" title="This deal has been modified"></div>
         <div class='grid-status fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}' [ngStyle]="getStageBgColorStyle(stgFullTitleChar())" [innerHTML]="stgOneChar()"></div>
 
         <!-- Checkbox -->

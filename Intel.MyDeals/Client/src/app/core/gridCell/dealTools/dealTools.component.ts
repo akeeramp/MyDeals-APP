@@ -19,6 +19,7 @@ import { pricingTableEditorService } from "../../../contract/pricingTableEditor/
 })
 
 export class dealToolsComponent{
+    
     constructor(private dataService: dealToolsService, private loggerSvc: logger, protected dialog: MatDialog, private pteService: pricingTableEditorService) {}
     @Input() dataItem;
     @Input() gridData;
@@ -59,6 +60,7 @@ export class dealToolsComponent{
     public openUnHoldDialog: boolean = false;
     public dealTxt;
     public notes;
+    public isModified: boolean = false;
     private objTypeSid;
     private windowOpened = false;
     private windowTop = 200; windowLeft = 350; windowWidth = 620; windowHeight = 500; windowMinWidth = 100;
@@ -149,6 +151,7 @@ export class dealToolsComponent{
         else {
             this.isSalesForceDeal = true;
         }
+        if (this.dataItem._dirty || this.dataItem.isDirtyFile) this.isModified = true;
         //if (!!this.isEditable)
         //    this.isEditable = false;
                 
