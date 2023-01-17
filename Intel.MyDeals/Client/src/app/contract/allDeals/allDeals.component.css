@@ -1,4 +1,382 @@
-.hidden{visibility:hidden}.visible{visibility:visible}.intelicon-protection-solid{font-size:20px}.dropdown{position:relative;display:inline-block;cursor:pointer}.dropdown-content{display:none;position:absolute;background-color:#f9f9f9;min-width:160px;box-shadow:0 8px 16px 0 rgba(0,0,0,.2);z-index:1;width:213.997px;height:240.838px;position:absolute;z-index:10002;top:42.987px;left:0;cursor:pointer}.dropdown-content ul li{color:var(--light-blue);padding:8px 0;text-decoration:none;display:block;cursor:pointer}.dropdown-content ul li:hover{background-color:#f1f1f1;cursor:pointer}.dropdown:hover .dropdown-content{display:block;color:var(--light-blue);cursor:pointer}.dropdown:hover .dropbtn{background-color:#0071c5;color:none;color:#fdfdfd;cursor:pointer}a{text-decoration:none!important;background-color:transparent!important}.dealTag{top:62px!important;right:20px!important;color:#003C71!important;font-weight:600}.wrapView{white-space:normal!important;height:100%!important}.normalView{white-space:nowrap!important;height:auto!important}.k-dialog .k-content{margin-top:0!important}.k-cell-inner>.k-link{white-space:normal!important}.k-grid th,.k-grid td{font-size:12px!important}.k-dialog .k-dialog-title,.k-dialog .k-window-title{display:none!important}.k-dialog .k-content{margin-top:-30px}table td{border:0 solid #ccc}.k-tabstrip-wrapper{border-bottom:0 solid #eeeeee}.k-grid-content-locked .k-grouping-row td{border-bottom:1px solid #e5e5e5;border-top:0 solid transparent;border-left:0 solid transparent;border-right:0 solid transparent}#allDealsTab{margin-top:30px}#allDealsTab .k-tabstrip-items .k-item{background:#fdfdfd;background:-moz-linear-gradient(top,#fdfdfd 0%,#d9d9d9 100%);background:-webkit-linear-gradient(top,#fdfdfd 0%,#d9d9d9 100%);background:linear-gradient(to bottom,#fdfdfd 0%,#d9d9d9 100%);color:#003C71!important;padding:0!important;text-transform:none!important;background-color:#fff;border-bottom-width:0}#allDealsTab .k-tabstrip-items .k-state-active{background:-moz-linear-gradient(top,#fdfdfd 0%,#fff 100%);background:-webkit-linear-gradient(top,#fdfdfd 0%,#fff 100%);background:linear-gradient(to bottom,#fdfdfd 0%,#fff 100%);border-color:#b1babf;border-width:1px;border-left-width:1px;border-top-width:1px;border-right-width:1px;border-bottom-width:0;border-radius:4px 4px 0 0}#allDealsTab .k-tabstrip-items .k-item .k-link:hover{background:linear-gradient(rgb(217,217,217) 0%,rgb(253,253,253) 100%)!important;color:var(--light-blue)!important}kendo-tabstrip.diff-all-deals{margin-top:32px;padding-left:20px;padding-right:20px}kendo-tabstrip.diff-all-deals .k-tabstrip-items-wrapper{background:#efefef;position:relative;width:100%}.app-filler{position:relative;width:100%;padding-left:0;padding-right:0}.new-fixes-poly{position:absolute;left:auto;top:0;margin-bottom:10px;right:0;display:flex;align-items:center;justify-content:flex-end;width:100%}.aligner-inputs{width:270px;font-size:16px;padding-left:0}.aligner-inputs input{width:100%;margin:0;border:none}.aligner-inputs i{height:100%;font-size:18px;color:var(--light-blue);width:30px;display:flex;align-items:center;justify-content:center;background:#f9f9f9}.new-rows{padding-top:15px;margin-top:10px;width:100%;position:relative}.oppo-grids{width:100%!important;padding:0!important;padding-top:10px!important}.positon-deal-tag{top:11px!important}.rowHeight{height:36px!important;padding:2px 0 0 1px;border-bottom:.01px solid rgba(0,0,0,.05)}.rowDetailHeight{border-bottom:.01px solid rgba(0,0,0,.05);padding:2px 0 0 1px!important;line-height:4}.densityRow{border:.1px solid lightgrey;padding:2px 0 0 1px;text-align:right}.densityPadding{padding:0 4px!important}.densityRatePadding{padding:0 15px!important}.rowRightBorder{border-right:.1px solid lightgrey}.rowBorder{border:.1px solid lightgrey}.rowValueHeight{height:37px!important;font-size:12px!important;text-align:left!important;overflow:hidden}.tierHeader{padding:0 4px;font-weight:400;text-transform:uppercase;font-size:10px;background:#eeeeee;text-align:center;height:100%;white-space:nowrap;border-right:.1px solid lightgrey;display:flex;align-items:center;justify-content:center}#allDeals td:has(.breakoutColumn),#allDeals .breakoutColumn>div{padding:0!important}.tierBorder{border-bottom:2px solid #0071C5}#allDeals.k-grid .k-grid-container{margin-right:0!important}.lastcolstyle{font-size:10px!important;white-space:normal!important}.kendo-grid-buttons.mgridsizefix{position:relative!important;padding-top:20px!important;width:100%!important;padding-left:0!important;padding-right:0!important}.all_deal_grid_cell deal-editor-cell .isReadOnlyCell{background:none!important}.redfont{color:#FC4C02!important}.spinner{margin:10px auto;width:50px;height:30px;text-align:center;font-size:10px}.spinner>div{background-color:#0071C5;height:100%;width:6px;display:inline-block;-webkit-animation:sk-stretchdelay 1.2s infinite ease-in-out;animation:sk-stretchdelay 1.2s infinite ease-in-out}.spinner .rect2{-webkit-animation-delay:-1.1s;animation-delay:-1.1s}.spinner .rect3{-webkit-animation-delay:-1.0s;animation-delay:-1.0s}.spinner .rect4{-webkit-animation-delay:-.9s;animation-delay:-.9s}.spinner .rect5{-webkit-animation-delay:-.8s;animation-delay:-.8s}.ss-icon-lg{font-size:4em;-webkit-animation:sk-zoom .3s 1 ease-in;animation:sk-zoom .3s 1 ease-in}.sky-blue{color:var(--light-blue)}.k-grid.deals_grid_h{height:calc(100vh - 250px)!important}.extra_box mat-dialog-container{padding:0!important}#excel_DropDown.show{transform:none!important;font-size:13px!important;color:#777!important;border-color:#eee!important;font-family:'Intel Clear'!important;top:44px!important}
+.hidden {
+    visibility: hidden
+}
+
+.visible {
+    visibility: visible
+}
+
+.intelicon-protection-solid {
+    font-size: 20px
+}
+
+.dropdown {
+    position: relative;
+    display: inline-block;
+    cursor: pointer
+}
+
+.dropdown-content {
+    display: none;
+    position: absolute;
+    background-color: #f9f9f9;
+    min-width: 160px;
+    box-shadow: 0 8px 16px 0 rgba(0,0,0,.2);
+    z-index: 1;
+    width: 213.997px;
+    height: 240.838px;
+    position: absolute;
+    z-index: 10002;
+    top: 42.987px;
+    left: 0;
+    cursor: pointer
+}
+
+    .dropdown-content ul li {
+        color: var(--light-blue);
+        padding: 8px 0;
+        text-decoration: none;
+        display: block;
+        cursor: pointer
+    }
+
+        .dropdown-content ul li:hover {
+            background-color: #f1f1f1;
+            cursor: pointer
+        }
+
+.dropdown:hover .dropdown-content {
+    display: block;
+    color: var(--light-blue);
+    cursor: pointer
+}
+
+.dropdown:hover .dropbtn {
+    background-color: #0071c5;
+    color: none;
+    color: #fdfdfd;
+    cursor: pointer
+}
+
+a {
+    text-decoration: none !important;
+    background-color: transparent !important
+}
+
+.dealTag {
+    top: 62px !important;
+    right: 20px !important;
+    color: #003C71 !important;
+    font-weight: 600
+}
+
+.wrapView {
+    white-space: normal !important;
+    height: 100% !important
+}
+
+.normalView {
+    white-space: nowrap !important;
+    height: auto !important
+}
+
+.k-dialog .k-content {
+    margin-top: 0 !important
+}
+
+.k-cell-inner > .k-link {
+    white-space: normal !important
+}
+
+.k-grid th, .k-grid td {
+    font-size: 12px !important
+}
+
+.k-dialog .k-dialog-title, .k-dialog .k-window-title {
+    display: none !important
+}
+
+.k-dialog .k-content {
+    margin-top: -30px
+}
+
+table td {
+    border: 0 solid #ccc
+}
+
+.k-tabstrip-wrapper {
+    border-bottom: 0 solid #eeeeee
+}
+
+.k-grid-content-locked .k-grouping-row td {
+    border-bottom: 1px solid #e5e5e5;
+    border-top: 0 solid transparent;
+    border-left: 0 solid transparent;
+    border-right: 0 solid transparent
+}
+
+#allDealsTab {
+    margin-top: 30px
+}
+
+    #allDealsTab .k-tabstrip-items .k-item {
+        background: #fdfdfd;
+        background: -moz-linear-gradient(top,#fdfdfd 0%,#d9d9d9 100%);
+        background: -webkit-linear-gradient(top,#fdfdfd 0%,#d9d9d9 100%);
+        background: linear-gradient(to bottom,#fdfdfd 0%,#d9d9d9 100%);
+        color: #003C71 !important;
+        padding: 0 !important;
+        text-transform: none !important;
+        background-color: #fff;
+        border-bottom-width: 0
+    }
+
+    #allDealsTab .k-tabstrip-items .k-state-active {
+        background: -moz-linear-gradient(top,#fdfdfd 0%,#fff 100%);
+        background: -webkit-linear-gradient(top,#fdfdfd 0%,#fff 100%);
+        background: linear-gradient(to bottom,#fdfdfd 0%,#fff 100%);
+        border-color: #b1babf;
+        border-width: 1px;
+        border-left-width: 1px;
+        border-top-width: 1px;
+        border-right-width: 1px;
+        border-bottom-width: 0;
+        border-radius: 4px 4px 0 0
+    }
+
+    #allDealsTab .k-tabstrip-items .k-item .k-link:hover {
+        background: linear-gradient(rgb(217,217,217) 0%,rgb(253,253,253) 100%) !important;
+        color: var(--light-blue) !important
+    }
+
+kendo-tabstrip.diff-all-deals {
+    margin-top: 32px;
+    padding-left: 20px;
+    padding-right: 20px
+}
+
+    kendo-tabstrip.diff-all-deals .k-tabstrip-items-wrapper {
+        background: #efefef;
+        position: relative;
+        width: 100%
+    }
+
+.app-filler {
+    position: relative;
+    width: 100%;
+    padding-left: 0;
+    padding-right: 0
+}
+
+.new-fixes-poly {
+    position: absolute;
+    left: auto;
+    top: 0;
+    margin-bottom: 10px;
+    right: 0;
+    display: flex;
+    align-items: center;
+    justify-content: flex-end;
+    width: 100%
+}
+
+.aligner-inputs {
+    width: 270px;
+    font-size: 16px;
+    padding-left: 0
+}
+
+    .aligner-inputs input {
+        width: 100%;
+        margin: 0;
+        border: none
+    }
+
+    .aligner-inputs i {
+        height: 100%;
+        font-size: 18px;
+        color: var(--light-blue);
+        width: 30px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: #f9f9f9
+    }
+
+.new-rows {
+    padding-top: 15px;
+    margin-top: 10px;
+    width: 100%;
+    position: relative
+}
+
+.oppo-grids {
+    width: 100% !important;
+    padding: 0 !important;
+    padding-top: 10px !important
+}
+
+.positon-deal-tag {
+    top: 11px !important
+}
+
+.rowHeight {
+    height: 36px !important;
+    padding: 2px 0 0 1px;
+    border-bottom: .01px solid rgba(0,0,0,.05)
+}
+
+.rowDetailHeight {
+    border-bottom: .01px solid rgba(0,0,0,.05);
+    padding: 2px 0 0 1px !important;
+    line-height: 4
+}
+
+.densityRow {
+    border: .1px solid lightgrey;
+    padding: 2px 0 0 1px;
+    text-align: right
+}
+
+.densityPadding {
+    padding: 0 4px !important
+}
+
+.densityRatePadding {
+    padding: 0 15px !important
+}
+
+.rowRightBorder {
+    border-right: .1px solid lightgrey
+}
+
+.rowBorder {
+    border: .1px solid lightgrey
+}
+
+.rowValueHeight {
+    height: 37px !important;
+    font-size: 12px !important;
+    text-align: left !important;
+    overflow: hidden
+}
+
+.tierHeader {
+    padding: 0 4px;
+    font-weight: 400;
+    text-transform: uppercase;
+    font-size: 10px;
+    background: #eeeeee;
+    text-align: center;
+    height: 100%;
+    white-space: nowrap;
+    border-right: .1px solid lightgrey;
+    display: flex;
+    align-items: center;
+    justify-content: center
+}
+
+#allDeals td:has(.breakoutColumn), #allDeals .breakoutColumn > div {
+    padding: 0 !important
+}
+
+.tierBorder {
+    border-bottom: 2px solid #0071C5
+}
+
+#allDeals.k-grid .k-grid-container {
+    margin-right: 0 !important
+}
+
+.lastcolstyle {
+    font-size: 10px !important;
+    white-space: normal !important
+}
+
+.kendo-grid-buttons.mgridsizefix {
+    position: relative !important;
+    padding-top: 20px !important;
+    width: 100% !important;
+    padding-left: 0 !important;
+    padding-right: 0 !important
+}
+
+.all_deal_grid_cell deal-editor-cell .isReadOnlyCell {
+    background: none !important
+}
+
+.redfont {
+    color: #FC4C02 !important
+}
+
+.spinner {
+    margin: 10px auto;
+    width: 50px;
+    height: 30px;
+    text-align: center;
+    font-size: 10px
+}
+
+    .spinner > div {
+        background-color: #0071C5;
+        height: 100%;
+        width: 6px;
+        display: inline-block;
+        -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+        animation: sk-stretchdelay 1.2s infinite ease-in-out
+    }
+
+    .spinner .rect2 {
+        -webkit-animation-delay: -1.1s;
+        animation-delay: -1.1s
+    }
+
+    .spinner .rect3 {
+        -webkit-animation-delay: -1.0s;
+        animation-delay: -1.0s
+    }
+
+    .spinner .rect4 {
+        -webkit-animation-delay: -.9s;
+        animation-delay: -.9s
+    }
+
+    .spinner .rect5 {
+        -webkit-animation-delay: -.8s;
+        animation-delay: -.8s
+    }
+
+.ss-icon-lg {
+    font-size: 4em;
+    -webkit-animation: sk-zoom .3s 1 ease-in;
+    animation: sk-zoom .3s 1 ease-in
+}
+
+.sky-blue {
+    color: var(--light-blue)
+}
+
+.k-grid.deals_grid_h {
+    height: calc(100vh - 250px) !important
+}
+
+.extra_box mat-dialog-container {
+    padding: 0 !important
+}
+
+#excel_DropDown.show {
+    transform: none !important;
+    font-size: 13px !important;
+    color: #777 !important;
+    border-color: #eee !important;
+    font-family: 'Intel Clear' !important;
+    top: 44px !important
+}
+
 .toggleSelect.manage-deals-word {
     background-color: #eeeeee !important;
+}
+
+kendo-grid.deals_grid_h table tr th .k-cell-inner kendo-grid-filter-menu a.k-grid-filter.k-state-active {
+    background: white !important;
 }
