@@ -510,7 +510,7 @@
                 </div>
             </div>
         </div>
-        <div [hidden]="initialLoad && !(isDeveloper || isTester) && !drawChart"  style="position: absolute;top:75%;bottom: 0; right: 5px;">
+        <div [hidden]="initialLoad && !(isDeveloper || isTester) && !drawChart" [ngStyle]="{ 'top': initialLoad ? '86%' : '75%'}" style="position: absolute;top:75%;bottom: 0; right: 5px;">
             <performance-bars [type]="perfModel"></performance-bars>
         </div>
         <kendo-window class="wistyle" *ngIf="windowOpened" (close)="windowClose()" [minWidth]="windowMinWidth" [minHeight]="windowMinHeight" [height]="windowHeight" [width]="windowWidth" [top]="windowTop" [left]="windowLeft">

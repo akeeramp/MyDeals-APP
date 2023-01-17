@@ -172,10 +172,10 @@
 
 .done-confirm.done-confirm-corrector {
     font-size: 16px !important;
-    text-align: justify !important;
+    text-align: center !important;
     width: 100% !important;
     padding: 25px 0 !important;
-    margin-left: 5px !important
+    margin-left: 60px !important;
 }
 
 
@@ -749,7 +749,7 @@ i.intelicon-passed-completed-solid.product-corrector-passedicon {
     font-size: 60px !important;
     color: #C4D600 !important;
     position: relative !important;
-    margin-left: 170px !important;
+    margin-left: 115px !important;
 }
 
 button.btn.btn-primary.prdBtn.saveclose-correctorbtn {
@@ -875,4 +875,10 @@ button.btn.btn-default.prdBtn.cancel-correctorbtn:hover {
 .product-selector-font-align {
     text-align: center;
     font-weight: normal;
+}
+.col-md-8.product-correct-done {
+    text-align: center !important;
+    padding-bottom: 160px !important;
+    padding-right: 115px !important;
+    padding-top: 63px !important;
 }

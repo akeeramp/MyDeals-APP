@@ -255,7 +255,7 @@ a.prdAnchor {
 
 .prodSelector .leftNavFilter {
     background-color: #e7e7e8;
-    height: calc(85vh - 390px);
+    height: calc(85vh - 390px) !important;
     padding: 4px;
     overflow: auto;
     font-family: 'Intel Clear','Arial'
