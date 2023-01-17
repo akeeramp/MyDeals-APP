@@ -61,7 +61,7 @@
 <div *ngIf="in_Field_Name == 'KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE'" [innerHTML]="uiKitCalculatedValuesControlWrapper(in_DataItem, 'kit', 'sumTD')|sanitizeHtml" class="dealCell"></div>
 <div *ngIf="in_Field_Name == 'SUBKIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE'" [innerHTML]="uiKitCalculatedValuesControlWrapper(in_DataItem, 'subkit', 'sumTD')|sanitizeHtml" class="dealCell"></div>
 <div *ngIf="in_Field_Name == 'TOTAL_CR_DB_PERC'" [innerHTML]="uiCrDbPercWrapper(in_DataItem)|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'CAP_INFO'" class="dealCell vert-center">
+<div *ngIf="in_Field_Name == 'CAP_INFO'" class="dealCell vert-center dealerCAPinfo">
     <div *ngIf="in_DataItem['ECAP_PRICE'] != undefined && in_DataItem['ECAP_PRICE'] != null">
         <div class="col-md-12">
             <div *ngFor="let key Of keyArray(in_DataItem['ECAP_PRICE']); let i = index">
@@ -90,7 +90,7 @@
         </div>
     </div>
 </div>
-<div *ngIf="in_Field_Name == 'YCS2_INFO'" class="dealCell vert-center">
+<div *ngIf="in_Field_Name == 'YCS2_INFO'" class="dealCell vert-center dealerYCS2info">
     <div *ngIf="in_DataItem['ECAP_PRICE'] != undefined && in_DataItem['ECAP_PRICE'] != null">
         <div class="col-md-12">
             <div *ngFor="let key Of keyArray(in_DataItem['ECAP_PRICE']); let i = index">

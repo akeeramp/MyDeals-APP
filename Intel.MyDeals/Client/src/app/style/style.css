@@ -1440,7 +1440,6 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
     font-size: 10px !important;
     border-left: none;
     border-right: 1px solid #e6e6e6;
-    height: 90px;
     border: none !important
 }
 
@@ -1577,4 +1576,82 @@ kendo-window.flexOverlapProducts {
 .k-window-maximized kendo-grid.overDealChecking.widthOutDesign.k-widget kendo-grid-list table tbody tr.k-grid-norecords td {
     min-width: 1915px !important;
     border: none !important;
+}
+
+.windOverLaps .k-content {
+    overflow: hidden;
+}
+
+#OvrLp .overLappedDeals .k-grid-content {
+    height: 307px;
+}
+
+#OvrLp.k-window-maximized .overLappedDeals .k-grid-content {
+    height: calc(100vh - 123px);
+}
+
+.kendoOverlappings tr td:has(.dealerCAPinfo),
+.kendoOverlappings tr td:has(.dealerYCS2info) {
+    padding: 0;
+}
+
+.kendoOverlappings .dealCell.vert-center.dealerCAPinfo .col-md-12,
+.kendoOverlappings .dealCell.vert-center.dealerYCS2info .col-md-12 {
+    padding: 0;
+    height: 100%;
+}
+
+.kendoOverlappings .dealCell.vert-center.dealerCAPinfo .rowHeight,
+.kendoOverlappings .dealCell.vert-center.dealerYCS2info .rowHeight {
+    height: auto !important;
+    display: flex;
+    width: 100%;
+    height: 100%!important;
+    align-items: center;
+    justify-content: center;
+}
+
+.kendoOverlappings .dealCell.vert-center.dealerCAPinfo span.ng-binding,
+.kendoOverlappings .dealCell.vert-center.dealerYCS2info span.ng-binding {
+    padding-left: 0;
+}
+
+.kendoOverlappings .dealCell.vert-center.dealerCAPinfo.ng-star-inserted,
+.kendoOverlappings .dealCell.vert-center.dealerYCS2info.ng-star-inserted {
+    transform: none !important;
+    top: 0 !important;
+}
+
+    .kendoOverlappings .dealCell.vert-center.dealerCAPinfo.ng-star-inserted .ng-star-inserted,
+    .kendoOverlappings .dealCell.vert-center.dealerYCS2info.ng-star-inserted .ng-star-inserted {
+        display: block;
+        width: 100%;
+        height: 100%;
+    }
+
+.kendoOverlappings .dealCell.vert-center.dealerCAPinfo .rowHeight div,
+.kendoOverlappings .dealCell.vert-center.dealerYCS2info .rowHeight div {
+    width: 100%;
+}
+
+.kendoOverlappings .dealCell.vert-center.dealerCAPinfo .uiControlDiv,
+.kendoOverlappings .dealCell.vert-center.dealerYCS2info .uiControlDiv {
+    border: none;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1 !important;
+    height: 100%;
+}
+
+.kendoOverlappings .dealCell.vert-center.dealerCAPinfo .uiControlDiv .fullHeight,
+.kendoOverlappings .dealCell.vert-center.dealerYCS2info .uiControlDiv .fullHeight {
+    height: auto !important;
+    padding-top: 5px;
+}
+
+.kendoOverlappings .dealCell.vert-center.dealerCAPinfo .uiControlDiv .capLineStyle,
+.kendoOverlappings .dealCell.vert-center.dealerYCS2info .uiControlDiv .capLineStyle {
+    padding-bottom: 5px;
 }
