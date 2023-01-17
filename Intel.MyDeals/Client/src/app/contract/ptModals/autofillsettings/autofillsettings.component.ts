@@ -17,6 +17,7 @@ import { templatesService } from "../../../shared/services/templates.service";
 export class AutoFillComponent {
     private dropdownResponses: any = null;
     private isLoading: boolean = false;
+    private isInitial: boolean = false;
     private spinnerMessageHeader: string = "";
     private rebateTypeTitle: string = "";
     private spinnerMessageDescription: string = "";
@@ -241,6 +242,7 @@ export class AutoFillComponent {
         this.dialogRef.close();
     }
     onSave() {
+        this.isInitial = false;
         this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.validMsg = this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.validMsg = "";
         this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.isError = this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.isError = false;
         this.opValidMsg = "";
