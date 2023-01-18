@@ -1662,9 +1662,9 @@ kendo-window.flexOverlapProducts {
     z-index: 0 !important;
 }
 
-.de-css-comp .k-window-maximized .k-grid-pager,
+/*.de-css-comp .k-window-maximized .k-grid-pager,
 .oo-lapping-style .k-window-maximized .k-grid-pager {
     position: absolute;
     bottom: 187px;
     width: 100%;
-}
+}*/
