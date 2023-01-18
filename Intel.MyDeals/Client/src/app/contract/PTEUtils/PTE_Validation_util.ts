@@ -51,7 +51,7 @@ export class PTE_Validation_Util {
             let invalidProduct = PTE_Common_Util.deepClone(data.InValidProducts)
             _.each(invalidProduct, (invldPrd, key) => {
                 let indx = _.findIndex(currentPricingTableRowData, { DC_ID: parseInt(key) })
-                if (key < 0 && (!indx || indx < 0)) {
+                if (parseInt(key) < 0 && indx < 0) {
                     delete data.InValidProducts[key]
                 }
             })
@@ -60,7 +60,7 @@ export class PTE_Validation_Util {
             let pdtTransformRslt = PTE_Common_Util.deepClone(data.ProdctTransformResults)
             _.each(pdtTransformRslt, (prdrslt, key) => {
                 let indx = _.findIndex(currentPricingTableRowData, { DC_ID: parseInt(key) })
-                if (key < 0 && (!indx || indx < 0)) {
+                if (parseInt(key) < 0 && indx < 0) {
                     delete data.ProdctTransformResults[key]
                 }
             })
@@ -69,7 +69,7 @@ export class PTE_Validation_Util {
             let dupPdt = PTE_Common_Util.deepClone(data.DuplicateProducts)
             _.each(dupPdt, (dup, key) => {
                 let indx = _.findIndex(currentPricingTableRowData, { DC_ID: parseInt(key) })
-                if (key < 0 && (!indx || indx < 0)) {
+                if (parseInt(key) < 0 && indx < 0) {
                     delete data.DuplicateProducts[key]
                 }
             })
@@ -78,7 +78,7 @@ export class PTE_Validation_Util {
             let validPdt = PTE_Common_Util.deepClone(data.ValidProducts)
             _.each(validPdt, (validPd, key) => {
                 let indx = _.findIndex(currentPricingTableRowData, { DC_ID: parseInt(key) })
-                if (key < 0 && (!indx || indx < 0)) {
+                if (parseInt(key) < 0 && indx < 0) {
                     delete data.ValidProducts[key]
                 }
             })

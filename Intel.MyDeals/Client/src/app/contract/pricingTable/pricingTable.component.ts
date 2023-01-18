@@ -306,7 +306,6 @@ export class pricingTableComponent {
                     this.loadModel(this.searchedContractData, true);
                 }
                 if (this.searchedContractData.ps_id == 0 && this.searchedContractData.pt_id == 0) {
-                    const prcingstar = contractData['PRC_ST'][0];
                     this.searchedContractData.C_ID = this.c_Id;
                     this.searchedContractData.ps_id = Number(IDS[1])
                     this.searchedContractData.pt_id = Number(IDS[2])
