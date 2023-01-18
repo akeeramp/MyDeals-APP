@@ -652,7 +652,8 @@ kendo-dropdownlist.font-input .k-input {
 }
 
 kendo-dialog.the-comp-de kendo-dialog-actions {
-    padding: 0
+    padding: 0;
+    gap:0px !important
 }
 
     kendo-dialog.the-comp-de kendo-dialog-actions button.first-child-btn {
@@ -673,7 +674,8 @@ kendo-dialog.the-comp-de kendo-dialog-actions {
 }
 
 kendo-dialog.the-comp-de .k-window {
-    border: none
+    border: none;
+    border-radius:0px !important
 }
 
 kendo-dialog.the-comp-de kendo-dialog-actions button.first-child-btn:hover {

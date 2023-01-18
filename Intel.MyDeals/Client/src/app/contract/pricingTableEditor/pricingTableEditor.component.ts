@@ -207,7 +207,7 @@ export class pricingTableEditorComponent {
                 else if(this.field && this.field == 'MRKT_SEG'){
                     modalComponent = multiSelectModalComponent;
                     panelClass = 'multi-select-pte',
-                        height = "500px"
+                    height = "auto"
                     width = "700px";
                     name = this.field;
                     data = { colName: name, items: { 'data': this.source }, cellCurrValues: selVal };

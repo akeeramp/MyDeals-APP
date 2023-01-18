@@ -1567,3 +1567,29 @@ grid-popover .k-grid-content {
     top: 7px !important;
     opacity: 0 !important;
 }
+.kendo-dialog-message.deal-extend-popup {
+    margin: 30px !important;
+    text-align: center !important;
+    font-family: 'Intel Clear' !important;
+    color: #444 !important;
+}
+button.k-button.first-child-btn.extend-dealpopup {
+    background: #00aeef !important;
+    color: #fff !important;
+}
+button.k-button.first-child-btn.extend-dealpopup:hover {
+    color: #fff !important; 
+    border-color: #0071c5 !important;
+    background-color: #0071c5 !important;
+}
+button.k-button.first-child-btn.cancel-extend-deal {
+    color: #444 !important;
+    border-color: #fafafa !important;
+    background-color: #fafafa !important;
+}
+
+button.k-button.first-child-btn.cancel-extend-deal:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important;
+}
