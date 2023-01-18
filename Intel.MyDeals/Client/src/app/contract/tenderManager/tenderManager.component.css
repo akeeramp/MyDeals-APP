@@ -212,3 +212,6 @@ p.tender-del-head-style {
     width: 400px !important;
     bottom: 79px !important;
 }
+performance-bars.tender-performance-style div#perfLegend {
+    z-index: 1 !important;
+}

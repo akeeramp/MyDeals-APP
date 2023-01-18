@@ -383,3 +383,6 @@ kendo-grid.deals_grid_h table tr th .k-cell-inner kendo-grid-filter-menu a.k-gri
 #allDeals.k-grid .k-grid-content {
     overflow: overlay !important;
 }
+#allDeals .ng-binding.vert-center.allDealsStart {
+    padding-top: 10px;
+}
