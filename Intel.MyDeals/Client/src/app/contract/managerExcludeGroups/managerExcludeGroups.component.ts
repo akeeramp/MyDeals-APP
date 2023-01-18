@@ -214,16 +214,12 @@ export class managerExcludeGroupsComponent {
         }
     }
     togglePctFilter() {
-        let pctFilteredInCompleteList = this.gridResult.filter(x => x.COST_TEST_RESULT == "InComplete");
-        let pctFilteredFailList = this.gridResult.filter(x => x.COST_TEST_RESULT == "Fail");
         if (this.pctFilterEnabled) {
-            if (pctFilteredFailList.length == 0 || pctFilteredInCompleteList.length == 0) {
                 this.state.filter = {
                     logic: "or",
                     filters: [{ field: "COST_TEST_RESULT", operator: "eq", value: "Fail" },
                     { field: "COST_TEST_RESULT", operator: "eq", value: "InComplete" }]
                 };
-            }
         } else {
             this.state.filter = {
                 logic: "and",
