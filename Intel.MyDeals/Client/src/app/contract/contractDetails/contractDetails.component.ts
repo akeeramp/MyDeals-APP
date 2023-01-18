@@ -354,6 +354,8 @@ export class contractDetailsComponent {
         this.contractData["BACK_DATE_RSN"] = (this.BACK_DATE_RSN?.DROP_DOWN != "" && this.BACK_DATE_RSN != undefined) ? this.BACK_DATE_RSN?.DROP_DOWN : "";
         this.contractData["CUST_ACCPT"] = this.selectedCUST_ACCPT;
         this.contractData["NOTES"] = this.NOTES;
+        this.contractData["CUST_ACCNT_DIV_UI"] = [];
+        this.contractData["CUST_ACCNT_DIV"] = ''
         if (this.CUST_NM_DIV.length > 0 && this.CUST_NM_DIV != undefined) {
             this.contractData["CUST_ACCNT_DIV_UI"] = this.CUST_NM_DIV.map((x) => (x.CUST_DIV_NM));
             this.contractData["CUST_ACCNT_DIV"] = this.contractData["CUST_ACCNT_DIV_UI"].join('/');
