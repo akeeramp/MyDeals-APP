@@ -1059,8 +1059,10 @@ export class pricingTableEditorComponent {
             
             let PTR = await this.getPTRDetails();
             //to avoid losing warning details which comes only during save action
-            if (this.savedResponseWarning && this.savedResponseWarning.length > 0)
+            if (this.savedResponseWarning && this.savedResponseWarning.length > 0) {
                 PTE_Load_Util.bindWarningDetails(PTR, this.savedResponseWarning);
+                this.dirty = PTR.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
+            }
             //this is to make sure the saved record prod color are success by default
             PTR = PTE_Load_Util.setPrdColor(PTR);
             this.getTemplateDetails();
@@ -1447,8 +1449,11 @@ export class pricingTableEditorComponent {
                     this.loggerService.error("Product Translator failure::", error);
                 })
             if (resultdata) {
-                this.transformResults['Data'] = PTE_Validation_Util.buildTranslatorOutputObjectproductCorroctor(invalidProductJSONRows, resultdata['Data']);
+                this.transformResults['Data'] = PTE_Validation_Util.buildTranslatorOutputObjectproductCorroctor(invalidProductJSONRows, resultdata['Data'], currentPricingTableRowData);
             }
+        }
+        else if (invalidProductJSONRows && invalidProductJSONRows.length > 0) {
+            this.transformResults['Data'] = PTE_Validation_Util.buildTranslatorOutputObjectproductCorroctor(invalidProductJSONRows, this.transformResults['Data'], currentPricingTableRowData);
         }
         this.isLoading = false;
         return this.transformResults;

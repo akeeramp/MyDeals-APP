@@ -45,14 +45,57 @@ export class PTE_Validation_Util {
         return data;
     }
 
-      static buildTranslatorOutputObjectproductCorroctor(invalidProductJSONRows, data) {
+    static buildTranslatorOutputObjectproductCorroctor(invalidProductJSONRows, data, currentPricingTableRowData) {
+        //To remove the DC_ID data which got saved (if DC_ID changed)
+        if (data && data.InValidProducts) {
+            let invalidProduct = PTE_Common_Util.deepClone(data.InValidProducts)
+            _.each(invalidProduct, (invldPrd, key) => {
+                let indx = _.findIndex(currentPricingTableRowData, { DC_ID: parseInt(key) })
+                if (key < 0 && (!indx || indx < 0)) {
+                    delete data.InValidProducts[key]
+                }
+            })
+        }
+        if (data && data.ProdctTransformResults) {
+            let pdtTransformRslt = PTE_Common_Util.deepClone(data.ProdctTransformResults)
+            _.each(pdtTransformRslt, (prdrslt, key) => {
+                let indx = _.findIndex(currentPricingTableRowData, { DC_ID: parseInt(key) })
+                if (key < 0 && (!indx || indx < 0)) {
+                    delete data.ProdctTransformResults[key]
+                }
+            })
+        }
+        if (data && data.DuplicateProducts) {
+            let dupPdt = PTE_Common_Util.deepClone(data.DuplicateProducts)
+            _.each(dupPdt, (dup, key) => {
+                let indx = _.findIndex(currentPricingTableRowData, { DC_ID: parseInt(key) })
+                if (key < 0 && (!indx || indx < 0)) {
+                    delete data.DuplicateProducts[key]
+                }
+            })
+        }
+        if (data && data.ValidProducts) {
+            let validPdt = PTE_Common_Util.deepClone(data.ValidProducts)
+            _.each(validPdt, (validPd, key) => {
+                let indx = _.findIndex(currentPricingTableRowData, { DC_ID: parseInt(key) })
+                if (key < 0 && (!indx || indx < 0)) {
+                    delete data.ValidProducts[key]
+                }
+            })
+        }
+        if (!data)
+            data = { ValidProducts: {}, ProdctTransformResults: {}, DuplicateProducts: {}, InValidProducts: {}};
         invalidProductJSONRows.forEach(item => {
             var inValidJSON = JSON.parse(item.PTR_SYS_INVLD_PRD);
             var validJSON = (item.PTR_SYS_PRD != null && item.PTR_SYS_PRD != "") ? JSON.parse(item.PTR_SYS_PRD) : "";
-            data.ValidProducts[item.DC_ID] = validJSON;
-            data.ProdctTransformResults[item.DC_ID] = inValidJSON.ProdctTransformResults;
-            data.DuplicateProducts[item.DC_ID] = inValidJSON.DuplicateProducts;
-            data.InValidProducts[item.DC_ID] = inValidJSON.InValidProducts;
+            if(validJSON)
+                data['ValidProducts'][item.DC_ID] = validJSON;
+            if (inValidJSON.ProdctTransformResults)
+                data['ProdctTransformResults'][item.DC_ID] = inValidJSON.ProdctTransformResults;
+            if (inValidJSON.DuplicateProducts)
+                data['DuplicateProducts'][item.DC_ID] = inValidJSON.DuplicateProducts;
+            if (inValidJSON.InValidProducts)
+                data['InValidProducts'][item.DC_ID] = inValidJSON.InValidProducts;
         });
         return data;
     }

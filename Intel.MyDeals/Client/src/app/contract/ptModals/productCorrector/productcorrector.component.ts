@@ -892,19 +892,19 @@ export class ProductCorrectorComponent {
         for (var m = 0; m <= cnt; m++) {
             var exclude = m == 0 ? "I" : "E";
             let isExclude = exclude == "I" ? false : true;
-            this.deletedProductDetails.push({
-                DC_ID: this.curRowId,
-                deletedUserInput: this.prdNm,
-                exclude: isExclude,
-                indx: _.findWhere(this.data.selRows,
-                    {
-                        DC_ID: parseInt(this.curRowId)
-                    }).indx
-            });
             var delItem = this.ProductCorrectorData.InValidProducts[this.curRowId][exclude];
             if (!!delItem) {
                 for (var i = 0; i < delItem.length; i++) {
                     if (delItem[i] === this.prdNm) {
+                        this.deletedProductDetails.push({
+                            DC_ID: this.curRowId,
+                            deletedUserInput: this.prdNm,
+                            exclude: isExclude,
+                            indx: _.findWhere(this.data.selRows,
+                                {
+                                    DC_ID: parseInt(this.curRowId)
+                                }).indx
+                        });
                         delItem.splice(i, 1);
                     }
                 }

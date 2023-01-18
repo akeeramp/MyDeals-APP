@@ -1311,7 +1311,7 @@ export class PTE_CellChange_Util {
                 PTR_SYS_PRD[`${selPrdItm.prod}`] = [selPrdItm.prodObj];
             })
         }
-        rowProdCorrectordat.push([{ row: rowIndex, prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(selProd.indx, 'PTR_USER_PRD'), new: Include.toString() }]);
+        rowProdCorrectordat.push([{ row: rowIndex, prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(rowIndex, 'PTR_USER_PRD'), new: Include.toString() }]);
         rowProdCorrectordat.push({ operation: 'prodcorr', PTR_SYS_PRD: JSON.stringify(PTR_SYS_PRD), PRD_EXCLDS: exclude.toString() });
         return rowProdCorrectordat;
     }

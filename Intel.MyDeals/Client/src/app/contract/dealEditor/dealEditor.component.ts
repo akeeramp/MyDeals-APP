@@ -120,7 +120,7 @@ export class dealEditorComponent {
     private CAN_VIEW_MEET_COMP = this.securityService.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "FSE" && this.in_Is_Tender_Dashboard);
     public isDeveloper = (<any>window).isDeveloper;
     public isTester = (<any>window).isTester;
-    //private isInitialLoad = true;
+    private isInitialLoad = true;
     public perfBar = {
         action: '',
         title: '',
@@ -234,9 +234,11 @@ export class dealEditorComponent {
     }
 
     async getGroupsAndTemplates() {
-        //Get Groups for corresponding deal type
-        this.groups = PTE_Load_Util.getRulesForDE(this.curPricingTable.OBJ_SET_TYPE_CD);
-        this.groupsdefault = PTE_Load_Util.getRulesForDE(this.curPricingTable.OBJ_SET_TYPE_CD);
+        if (!this.groups || (this.groups && this.groups.length < 0) || this.isInitialLoad) {
+            //Get Groups for corresponding deal type
+            this.groups = PTE_Load_Util.getRulesForDE(this.curPricingTable.OBJ_SET_TYPE_CD);
+            this.groupsdefault = PTE_Load_Util.getRulesForDE(this.curPricingTable.OBJ_SET_TYPE_CD);
+        }
         // Get template for the selected WIP_DEAL
         this.wipTemplate = this.UItemplate["ModelTemplates"]["WIP_DEAL"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
 
@@ -252,7 +254,10 @@ export class dealEditorComponent {
             this.gridData = process(this.gridResult, this.state);
             this.distinctPrimitive();
         }
-        this.customLayout(false);
+        if (this.isInitialLoad)
+            this.customLayout(false);
+        else 
+            this.setBusy("", "", "", false);
     }
 
     async getWipDealData() {
@@ -317,9 +322,8 @@ export class dealEditorComponent {
     }
 
     refreshGrid() {
-        this.ngOnInit();
-        /*this.isInitialLoad = false;
-        this.initialization();*/
+        this.isInitialLoad = false;
+        this.initialization();
     }
 
     onClose(name: string) {
@@ -800,22 +804,20 @@ export class dealEditorComponent {
         this.DESvc.getActions(this.opName, "CustomLayoutFor" + this.curPricingTable.OBJ_SET_TYPE_CD).subscribe((response: any) => {
             if (response && response.length > 0) {
                 this.applyCustomLayoutToGrid(response);
-                this.isDataLoading = false;
-                this.setBusy("", "", "", false);
+                this.selectedTab = this.groups[0].name;
+                this.setWarningDetails();
             } else {
                 if (reportError) {
                     alert("You have not saved a custom layout yet.");
-                    this.isDataLoading = false;
-                    this.setBusy("", "", "", false);
                 }
             }
+            this.isDataLoading = false;
+            this.setBusy("", "", "", false);
         }), err => {
             this.loggerService.error("Unable to get Custom Layout.", err, err.statusText);
+            this.isDataLoading = false;
+            this.setBusy("", "", "", false);
         };
-        this.selectedTab = this.groups[0].name;
-        this.isDataLoading = false;
-        this.setBusy("", "", "", false);
-        this.setWarningDetails();
     }
 
 
@@ -1364,12 +1366,12 @@ export class dealEditorComponent {
                 this.curPricingStrategy = { IS_HYBRID_PRC_STRAT: 0 }
                 this.curPricingTable = { OBJ_SET_TYPE_CD: this.in_Deal_Type }
             }
-            //if (this.isInitialLoad) {
-                this.getGroupsAndTemplates();
+            this.getGroupsAndTemplates();
+            if (this.isInitialLoad) {
                 this.dropdownResponses = this.getAllDrowdownValues();
                 this.selectedTab = this.groups[0].name;
                 this.filterColumnbyGroup(this.selectedTab);
-            //}
+            }
             if (this.in_Search_Text && this.in_Search_Text != null && this.in_Search_Text != '') {
                 this.searchFilter = this.in_Search_Text;
                 this.state.filter = {
@@ -1411,11 +1413,7 @@ export class dealEditorComponent {
     }
     
     ngOnInit() {
-        //this.isInitialLoad = true;
-        this.initialization();
-    }
-    ngOnChanges() {
-        //this.isInitialLoad = false;
+        this.isInitialLoad = true;
         this.initialization();
     }
 }

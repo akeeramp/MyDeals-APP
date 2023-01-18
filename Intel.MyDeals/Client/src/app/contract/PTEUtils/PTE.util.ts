@@ -173,8 +173,25 @@ export class PTEUtil {
             //setting PTR_SYS_PRD for valid products
             if (transformResults && transformResults.ValidProducts) {
                 _.each(transformResults.ValidProducts, (val, DCID) => {
-                    if (data && data.DC_ID == DCID) { 
-                        data.PTR_SYS_PRD = JSON.stringify(val)
+                    if (data && data.DC_ID == DCID) {
+                        let foramttedTranslatedResult = PTEUtil.massagingObjectsForJSON(DCID, transformResults);
+                        var userInput = PTEUtil.updateUserInput(foramttedTranslatedResult.ValidProducts[DCID]);
+                        if (userInput && userInput['contractProducts']) {
+                            var contractProducts = userInput['contractProducts'].toString().replace(/(\r\n|\n|\r)/gm, "");
+                            data.PTR_USER_PRD = contractProducts;
+                            if (userInput['excludeProducts']) {
+                                var excludeProducts = userInput['excludeProducts'];
+                                data.PTR_SYS_PRD = JSON.stringify(val)
+                                PTE_Common_Util.setBehaviors(data);
+                                data._behaviors.isError['PTR_USER_PRD'] = false;
+                                data._behaviors.validMsg['PTR_USER_PRD'] = 'Valid Product';
+                                if (excludeProducts != "" && excludeProducts != null) {
+                                    data.PRD_EXCLDS = excludeProducts;
+                                    data._behaviors.isError['PRD_EXCLDS'] = false;
+                                    data._behaviors.validMsg['PRD_EXCLDS'] = 'Valid Product';
+                                }
+                            }
+                        }
                     }
                 });
             }
