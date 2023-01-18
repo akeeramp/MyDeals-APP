@@ -41,6 +41,7 @@ export class messageBoardModal {
         }
     openEmailMsg() {
         this.isWindowOpened.emit(false);
+        document.body.classList.remove('conManages');
             let rootUrl = window.location.protocol + "//" + window.location.host;
             let items = [];
     

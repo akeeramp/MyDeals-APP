@@ -27,15 +27,16 @@
         </kendo-dialog-actions>
     </kendo-dialog>
     <!-- Error Message on pasting data to readonly cells -->
+    <div *ngIf="isDisAlert" class="k-overlay" style="display: block; z-index: 10002; opacity: 0.5;"></div>
     <kendo-window class="bulk-meet-comp-window"
                   *ngIf="isDisAlert"
-                  (close)="closeDisAlert()">
+                  (close)="closeDisAlert()" [resizable]="false" style="border: none;">
         <kendo-window-titlebar class="meet-comp-header-admin">
-        <div class="k-window-title arrow-window-title">{{alertTitle}}</div><button kendoWindowCloseAction class="close-icon"></button>
+            <div class="k-window-title arrow-window-title">{{alertTitle}}</div><button kendoWindowCloseAction class="close-icon"></button>
         </kendo-window-titlebar>
         <p [innerHTML]='alertMsg'></p>
         <div style="border: 1px solid #e6e6e6; margin-right: -15px; margin-left: -12px;">
-        <button class="fr ok-btn_fix" kendoButton (click)="closeDisAlert()">OK</button>
+            <button class="fr ok-btn_fix" kendoButton (click)="closeDisAlert()">OK</button>
         </div>
     </kendo-window>
 </div>

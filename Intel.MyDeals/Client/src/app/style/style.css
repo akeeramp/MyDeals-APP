@@ -1585,7 +1585,7 @@ kendo-window.flexOverlapProducts {
 }
 
 #OvrLp .overLappedDeals .k-grid-content {
-    height: 307px;
+    height: 100%;
 }
 
 #OvrLp.k-window-maximized .overLappedDeals .k-grid-content {
@@ -1656,4 +1656,15 @@ kendo-window.flexOverlapProducts {
 .kendoOverlappings .dealCell.vert-center.dealerCAPinfo .uiControlDiv .capLineStyle,
 .kendoOverlappings .dealCell.vert-center.dealerYCS2info .uiControlDiv .capLineStyle {
     padding-bottom: 5px;
+}
+
+.conManages nav.navbar.navbar-default.navbar-fixed-top {
+    z-index: 0 !important;
+}
+
+.de-css-comp .k-window-maximized .k-grid-pager,
+.oo-lapping-style .k-window-maximized .k-grid-pager {
+    position: absolute;
+    bottom: 187px;
+    width: 100%;
 }

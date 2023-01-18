@@ -17,3 +17,7 @@ deal-editor-cell.extraSpace-colFix .ng-binding.vert-center:hover {
 .loading-dealer-editors {
     padding: 0 5px;
 }
+
+.de-css-comp .k-dropdown .k-select {
+    padding: 0;
+}

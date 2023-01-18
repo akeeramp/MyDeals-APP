@@ -716,6 +716,10 @@ export class dealToolsComponent{
     windowClose() {
         this.windowOpened = false;
         this.refreshContract.emit(true);
+        document.body.classList.remove('conManages');
+    }
+    singleClick() {
+        document.body.classList.add('conManages');
     }
     ngOnChanges() {
         this.loadDealTools();

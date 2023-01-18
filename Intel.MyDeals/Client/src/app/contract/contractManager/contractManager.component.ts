@@ -160,7 +160,8 @@ export class contractManagerComponent {
     }
     windowClose() {
         this.windowOpened = false;
-      }
+        document.body.classList.remove('conManages');
+    }
     toggleSum() {
         if (this.isAllCollapsed == true) {
             this.contractData?.PRC_ST.map((x, i) => {
@@ -1138,6 +1139,11 @@ export class contractManagerComponent {
         if (this.enabledPCT)
             setTimeout(() => { this.executePct(); }, 0)
     }
+
+    singleClick() {
+        document.body.classList.add('conManages');
+    }
+
     ngOnInit() {
         try {
             this.userRole = (<any>window).usrRole;

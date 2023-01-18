@@ -185,7 +185,7 @@
         <div class='clearboth'></div>
     </div>
 </div>
-<kendo-window class="searchingStage" *ngIf="windowOpened" (close)="windowClose()" [minWidth]="windowMinWidth" [minHeight]="windowHeight" [width]="windowWidth" [top]="windowTop" [left]="windowLeft" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
+<kendo-window class="searchingStage" *ngIf="windowOpened" (close)="windowClose()" (click)="singleClick()" [minWidth]="windowMinWidth" [minHeight]="windowHeight" [width]="windowWidth" [top]="windowTop" [left]="windowLeft" cdkDrag cdkDragRootElement=".cdk-overlay-pane" cdkDragHandle>
     <kendo-window-titlebar>
         <div class="k-window-title arrow-window-title">Results</div><button kendoWindowCloseAction class="close-icon"></button>
     </kendo-window-titlebar>
