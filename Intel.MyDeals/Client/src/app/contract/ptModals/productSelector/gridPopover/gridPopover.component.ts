@@ -119,7 +119,7 @@ export class GridPopoverComponent implements OnInit {
                         this.responseData = response;
                         this.dataSource = process(this.responseData, this.state);
                         this.responseData.forEach((row) => {
-                            if (row.CAP != undefined || row.CAP != '' || row.CAP != 'No CAP') {
+                            if (row.CAP != undefined && row.CAP != '' && row.CAP != 'No CAP') {
                                 row.CAP = this.currencyPipe.transform(row.CAP, 'USD', 'symbol', '1.2-2');
                             }
                         })
