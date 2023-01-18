@@ -700,7 +700,14 @@ export class dealToolsComponent{
                     this.windowOpened = true;
                     this.messages = response.Messages;
                 }
-                this.setBusy("", "", "", "");                
+                this.setBusy("", "", "", ""); 
+                if (response.Messages[0].ShortMessage != 'Hold') {
+                    setTimeout(() => {
+                        this.windowOpened = false;
+                        this.refreshContract.emit(true);
+                    }, 4000);
+                }
+               
             }, (response)=> {
                 this.loggerSvc.error("Unable to update hold status of deals","Error",response);
                 this.setBusy("", "", "", "");
