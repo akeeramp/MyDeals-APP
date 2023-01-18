@@ -58,6 +58,7 @@ export class AdvancedSearchComponent implements OnInit {
     public spinnerMessageDescription: any;
     public msgType: any;
     public isBusyShowFunFact: any;
+    public columnSearchFilter: string = '';
     private state: State = {
         skip: 0,
         take: 25,
@@ -228,6 +229,11 @@ export class AdvancedSearchComponent implements OnInit {
         }
     }
 
+    columnOptionsFilter() {
+        if (this.columnSearchFilter == '')
+            return this.columns;
+        else return this.columns.filter(x => x.title.toLowerCase().includes(this.columnSearchFilter.toLowerCase()));
+    }
     //Help
     showHelpTopicGroup(helpTopic) {
         if (helpTopic && String(helpTopic).length > 0) {
@@ -239,27 +245,38 @@ export class AdvancedSearchComponent implements OnInit {
 
     //clear grid Sorting/Filtering
     clearSortingFiltering() {
-        this.state.filter = {
-            logic: "and",
-            filters: [],
-        };
-        this.state.sort = [];
-        this.state.group = [];
-        this.state.skip = 0;
-        this.searchDeals();
+        if (this.gridResult != undefined) {
+            this.state.filter = {
+                logic: "and",
+                filters: [],
+            };
+            this.state.sort = [];
+            this.state.group = [];
+            this.state.skip = 0;
+            this.searchDeals();
+        } else {
+            this.state.filter = {
+                logic: "and",
+                filters: [],
+            };
+            this.state.sort = [];
+            this.state.group = [];
+            this.state.skip = 0;
+        }
     }
 
     //Excel Export
     async exportToExcel() {
-        if (this.totalCount > 2000) this.exportAll = true;
-        else {
-            this.exportRows = true;
-            await this.searchDeals();
-            if (this.exportData && this.exportData.length > 0)
-                GridUtil.dsToExcel(this.columns, this.exportData, "Search Export");
-            else
-                this.loggerSvc.warn("No Records Found", "");
-        }
+        if (this.gridResult != undefined) {
+            if (this.totalCount > 2000) this.exportAll = true;
+            else {
+                this.exportRows = true;
+                await this.searchDeals();
+                if (this.exportData && this.exportData.length > 0)
+                    GridUtil.dsToExcel(this.columns, this.exportData, "Search Export");
+            }
+        } else
+            this.loggerSvc.warn("No Records Found", "");
 
     }
 
