@@ -8,6 +8,7 @@ import { AutoFillComponent } from "../ptModals/autofillsettings/autofillsettings
 import { RenameTitleComponent } from "../ptModals/renameTitle/renameTitle.component";
 import { contractDetailsService } from "../contractDetails/contractDetails.service";
 import { Component, Input, Output, EventEmitter, ViewEncapsulation } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
 
 export interface contractIds {
     Model: string;
@@ -27,7 +28,8 @@ export interface contractIds {
 })
 
 export class lnavComponent {
-    constructor(private loggerSvc: logger, private lnavSvc: lnavService, private headerSvc: headerService, private contractDetailsSvc: contractDetailsService, private dialog: MatDialog) {
+    constructor(private loggerSvc: logger, private lnavSvc: lnavService, private headerSvc: headerService, private contractDetailsSvc: contractDetailsService,
+        private dialog: MatDialog, private router: Router, private route: ActivatedRoute) {
 
     }
     @Input() contractId: number;
@@ -133,6 +135,9 @@ export class lnavComponent {
         }
         this.curPricingStrategyId = psId;
         this.curPricingTableId = ptId;
+        //its just update the URl when we reload  it will land on same page last selected pricing strategies 
+        const urlTree = this.router.createUrlTree(['/contractmanager', this.route.snapshot.paramMap.get('type'), this.route.snapshot.paramMap.get('cid'), psId, ptId, this.route.snapshot.paramMap.get('DealID')]);
+        this.router.navigateByUrl(urlTree);
         this.modelChange.emit(contractId_Map);
     }
     loadModel(model: string) {

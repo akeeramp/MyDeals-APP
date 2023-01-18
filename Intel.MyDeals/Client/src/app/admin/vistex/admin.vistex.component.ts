@@ -1,7 +1,7 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { dsaService } from "./admin.vistex.service";
 import { Component } from "@angular/core";
-import * as moment from 'moment';
+import * as moment from 'moment'; 
 
 @Component({
     selector: "admin-vistex",

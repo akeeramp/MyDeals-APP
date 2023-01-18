@@ -9,7 +9,7 @@ import { lnavService } from "../lnav/lnav.service";
 import { dealEditorComponent } from "../dealEditor/dealEditor.component"
 import { pricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
 import { performanceBarsComponent } from '../performanceBars/performanceBar.component';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, Router } from '@angular/router';
 
 export interface contractIds {
     Model: string;
@@ -30,7 +30,7 @@ export interface contractIds {
 export class pricingTableComponent {
     public drawChart: boolean;
     constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: templatesService,
-        private pteService: pricingTableEditorService, private lnavSvc: lnavService, private route: ActivatedRoute) {}
+        private pteService: pricingTableEditorService, private lnavSvc: lnavService, private route: ActivatedRoute, private router: Router) {}
     @ViewChild(pricingTableEditorComponent) private pteComp: pricingTableEditorComponent;
     @ViewChild(performanceBarsComponent) public perfComp: performanceBarsComponent;
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
@@ -253,10 +253,13 @@ export class pricingTableComponent {
       
     }
 
-    loadAllContractDetails(IDS=[]) {
+    async loadAllContractDetails(IDS=[]) {
         this.isLoading = true;
         this.setBusy("Loading...", "Loading data please wait", "Info", true);
-        this.pricingTableSvc.readContract(this.c_Id).subscribe((response: Array<any>) => {
+        const response: any = await this.pricingTableSvc.readContract(this.c_Id).toPromise().catch((err) => {
+            this.isLoading = false;
+            this.loggerSvc.error("Error", "not able to load contract details", err);
+        });
             if (response && response.length > 0) {
                 this.contractData = response[0];
                 //if it is Tender deal redirect to Tender manager
@@ -276,11 +279,6 @@ export class pricingTableComponent {
                 this.error = true;   
             }
             this.isLoading = false;
-        }, (error) => {
-            this.isLoading = false;
-            this.error = true;  
-        })
-     
     }
     async RedirectFn(eventData: boolean) {
         this.isPTETab = true; this.isDETab = false; this.isDETabEnabled = false;
@@ -307,7 +305,17 @@ export class pricingTableComponent {
                     }
                     this.loadModel(this.searchedContractData, true);
                 }
-                this.isLoading = false;
+                if (this.searchedContractData.ps_id == 0 && this.searchedContractData.pt_id == 0) {
+                    const prcingstar = contractData['PRC_ST'][0];
+                    this.searchedContractData.C_ID = this.c_Id;
+                    this.searchedContractData.ps_id = Number(IDS[1])
+                    this.searchedContractData.pt_id = Number(IDS[2])
+                    this.searchedContractData.contractData = contractData;
+                    this.searchedContractData.Model = "PTE";
+                    this.loadModel(this.searchedContractData, true);
+
+                }
+                 this.isLoading = false;
             }
         }, (error) => {
             this.isLoading = true;
@@ -380,7 +388,23 @@ export class pricingTableComponent {
             this.loggerSvc.error('Something went wrong', 'Error');
             console.error('PYCOmponent::ngOnInit::',ex);
         }
-      
+    }
+
+    ngAfterViewInit() {
+        //this functionality will enable when dashboard landing to this page
+        const loaders = document.getElementsByClassName('loading-screen');
+        _.each(loaders, item => {
+            item.setAttribute('style', 'display:none');
+        })
+       // document.getElementsByClassName('loading-screen')[0]?.setAttribute('style', 'display:none');
+        const divLoader = document.getElementsByClassName('jumbotron')
+        if (divLoader && divLoader.length > 0) {
+            _.each(divLoader, div => {
+                div.setAttribute('style', 'display:none');
+            })
+        }
+        //this functionality will disable anything of .net ifloading to stop when dashboard landing to this page
+        document.getElementById('mainBody')?.setAttribute('style', 'display:none');
     }
 
 }
