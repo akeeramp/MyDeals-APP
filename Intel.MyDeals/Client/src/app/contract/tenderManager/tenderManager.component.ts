@@ -133,9 +133,13 @@ export class tenderManagerComponent {
                     return true;
                 }
                 else return false;
-            } else return true;
+            } else {
+                if (this.pteComp && (this.pteComp.dirty || this.pteComp.dirtyItems)) return false;
+                else return true
+            }
         } else if (this.pt_passed_validation) {
-            return true;
+            if (this.pteComp && (this.pteComp.dirty || this.pteComp.dirtyItems)) return false;
+            else return true;
         }
     }
 
@@ -146,7 +150,7 @@ export class tenderManagerComponent {
     }
 
     isValidateMC() {
-        if (this.pt_passed_validation && this.compMissingFlag) {
+        if (this.pt_passed_validation && this.compMissingFlag && this.isPTRPartiallyComplete()) {
             return true;
         } else return false;
     }
@@ -358,7 +362,7 @@ export class tenderManagerComponent {
         let rootScopeDirty = this.dirty;
         if (this.pricingTableData !== undefined && this.pricingTableData.PRC_TBL_ROW !== undefined && this.pricingTableData.PRC_TBL_ROW.length > 0) {
             this.dirtyItems = this.pricingTableData.PRC_TBL_ROW.filter(x => x.warningMessages.length > 0);
-            if (this.dirtyItems.length > 0) isPtrDirty = true;
+            if (this.dirtyItems.length > 0 || (this.pteComp && (this.pteComp.dirty || this.pteComp.dirtyItems))) isPtrDirty = true;
         }
         else {
             isPtrDirty = true;

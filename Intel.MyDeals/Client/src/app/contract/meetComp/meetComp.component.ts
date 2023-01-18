@@ -588,7 +588,7 @@ export class meetCompContractComponent implements OnInit {
     }
 
     onCompPriceChange(val: any, dataItem: any) {
-        if (!isNaN(val.COMP_PRC)) {
+        if (!isNaN(val.COMP_PRC) && (parseFloat(val.COMP_PRC) >= 0)) {
             this.showPrice = true;
             dataItem.COMP_PRC = val.COMP_PRC == "" ? null : val.COMP_PRC;
             const objItem = this.meetCompUnchangedData
@@ -669,7 +669,8 @@ export class meetCompContractComponent implements OnInit {
             }
         }
         else {
-            val.COMP_PRC = '';
+            if (!isNaN(val.COMP_PRC)) val.COMP_PRC = dataItem.COMP_PRC != null ? dataItem.COMP_PRC : '0';
+            else val.COMP_PRC = '0';
             this.onCompPriceChange(val, dataItem);
         }
     }
