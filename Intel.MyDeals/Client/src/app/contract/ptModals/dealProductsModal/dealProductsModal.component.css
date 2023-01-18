@@ -11,3 +11,6 @@
 .deals-popup-style .deal-excel-body-style.modal-body {
     background-color: #fff !important;
 }
+#dealProduct.k-grid .k-grid-content {
+    overflow: overlay !important;
+}

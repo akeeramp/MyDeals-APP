@@ -964,3 +964,19 @@ ngb-tooltip-window.redColorTooltip .tooltip-inner {
     border-color: #ebebeb !important;
     color: #444 !important;
 }
+.CH_height .k-grid-aria-root .k-grid-header .k-grid-header-wrap table thead tr .k-header .k-cell-inner kendo-grid-filter-menu .k-grid-filter.k-state-active {
+    background-color: #fff !important;
+    height: 40px !important;
+    width: 40px !important;
+}
+
+#manageFilterStyle .k-grid-aria-root .k-grid-container .k-grid-content.k-virtual-content {
+    overflow: overlay !important;
+}
+
+.overlapping_css .k-grid-aria-root .k-grid-header .k-grid-header-wrap table thead tr .k-header .k-cell-inner kendo-grid-filter-menu .k-grid-filter.k-state-active {
+    color: #777777 !important;
+    background-color: #fff !important;
+    height: 40px !important;
+    width: 40px !important;
+}

@@ -380,3 +380,6 @@ kendo-tabstrip.diff-all-deals {
 kendo-grid.deals_grid_h table tr th .k-cell-inner kendo-grid-filter-menu a.k-grid-filter.k-state-active {
     background: white !important;
 }
+#allDeals.k-grid .k-grid-content {
+    overflow: overlay !important;
+}
