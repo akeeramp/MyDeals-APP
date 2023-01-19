@@ -296,21 +296,31 @@ export class pricingTableEditorComponent {
                                 if (this.field == 'AR_SETTLEMENT_LVL'){
                                     PTR.push({ row: this.selRow, prop: this.field, old: this.hot.getDataAtRowProp(this.selRow, this.field), new: result?.toString() });
                                     PTE_CellChange_Util.autoFillARSet(PTR,VM.contractData, VM.curPricingTable,VM.custCellEditor);
-                                    if ( this.hot.getDataAtRowProp(this.selRow, 'PERIOD_PROFILE') == '' && this.hot.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD') == ''){
-                                        PTE_CellChange_Util.checkfn(PTR,VM.curPricingTable, VM.columns,'',VM.contractData,VM.custCellEditor)
+                                }
+                                // Populating Period Profile, AR settlement level and reset per period for all rows after copying the PTE
+                                if( this.field == 'RESET_VOLS_ON_PERIOD' || this.field == 'AR_SETTLEMENT_LVL' || this.field == 'PERIOD_PROFILE' )
+                                {
+                                    let PTEdata = PTE_Common_Util.getPTEGenerate(VM.columns, VM.curPricingTable);
+                                    let cpyPT = false;
+                                    if (PTEdata && PTEdata.length > 0){
+                                        PTEdata.forEach (row => {
+                                            if (row['PERIOD_PROFILE'] === '' && row['RESET_VOLS_ON_PERIOD'] == '' && row['AR_SETTLEMENT_LVL'] == ''){
+                                                cpyPT = true;
+                                            } else {
+                                                cpyPT = false;
+                                                return;
+                                            }
+                                        });
+                                        if (cpyPT){
+                                            let dataItem = [];
+                                            PTEdata.forEach ( (prtRow,ind) => {
+                                                dataItem = [{ row: ind, prop: this.field, old: '', new: '' }];
+                                                PTE_CellChange_Util.checkfn(dataItem,VM.curPricingTable, VM.columns,'',VM.contractData,VM.custCellEditor);
+                                            })
+                                        }
                                     }
                                 }
-                                if (this.field == 'PERIOD_PROFILE' && this.hot.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL') == '' && this.hot.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD') == ''){
-                                    PTR.push({ row: this.selRow, prop: this.field, old: this.hot.getDataAtRowProp(this.selRow, this.field), new: result?.toString() });
-                                    PTE_CellChange_Util.checkfn(PTR,VM.curPricingTable, VM.columns,'',VM.contractData,VM.custCellEditor)
-                                }
-                                if (this.field == 'RESET_VOLS_ON_PERIOD' && this.hot.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL') == '' && this.hot.getDataAtRowProp(this.selRow, 'PERIOD_PROFILE') == ''){
-                                    PTR.push({ row: this.selRow, prop: this.field, old: this.hot.getDataAtRowProp(this.selRow, this.field), new: result?.toString() });
-                                    PTE_CellChange_Util.checkfn(PTR,VM.curPricingTable, VM.columns,'',VM.contractData,VM.custCellEditor)
-                                }
-                                
                             }
-                             
                             this.hot.setDataAtCell(this.selRow, this.selCol, result?.toString(), 'no-edit');
                         }
                         VM.editorOpened = false;
