@@ -1,5 +1,5 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
-import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import * as _ from "underscore";
 import { Observable, of } from "rxjs";
 import { logger } from "../../../shared/logger/logger";
@@ -11,17 +11,17 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
     templateUrl: "Client/src/app/contract/ptModals/multiSelectModal/multiSelectModal.component.html",
     styleUrls: ['Client/src/app/contract/ptModals/multiSelectModal/multiSelectModal.component.css'],
     encapsulation: ViewEncapsulation.None
-  })
+})
 
-  export class multiSelectModalComponent {
-     
+export class multiSelectModalComponent {
+
     constructor(private loggerSvc: logger,
         public dialogRef: MatDialogRef<multiSelectModalComponent>,
         @Inject(MAT_DIALOG_DATA) public modalData, private pteService: pricingTableEditorService
     ) {
         dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG  
     }
-    private disTitle:string='Select Market Segment *';
+    private disTitle: string = 'Select Market Segment *';
     private checkedKeys: any[] = [];
     private key = "DROP_DOWN";
     private mrktSeg = "MRKT_SEG";
@@ -33,7 +33,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
     private placeholderText: any;
     private isTgrRgn: boolean;
     private ismrktSeg: boolean;
-    private isEmptyList = false; 
+    private isEmptyList = false;
     private isEmptySoldToId = false;
     private isFilterEnabled; boolean;
     private isLoading = false;
@@ -59,7 +59,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
             checkParents: this.checkParents,
             mode: this.mode,
         };
-    }	
+    }
     private isChecked = (dataItem: any, index: string): CheckedState => {
         if (this.containsItem(dataItem)) { return 'checked'; }
         if (!this.isTgrRgn && dataItem.items != undefined && dataItem.items != null && dataItem.items.length > 0 && this.isIndeterminate(dataItem.items)) {
@@ -82,7 +82,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
     private isIndeterminate(items: any[] = []): boolean {
         if (items != undefined && items != null) {
             this.selectedChildCount = 0;
-            for(let item in items) {
+            for (let item in items) {
                 if (this.containsItem(items[item])) {
                     this.selectedChildCount++;
                 }
@@ -95,7 +95,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
     getModalData() {
         this.pteService.getDropDownResult(this.multiSelectPopUpModal.opLookupUrl).subscribe((response: any) => {
             if (response != null && response != undefined && response.length > 0) {
-                this.multiSelectData = response;                
+                this.multiSelectData = response;
                 if (this.colName == "DEAL_SOLD_TO_ID") {
                     this.checkedKeys = [];
                     _.each(this.modalData.cellCurrValues, (item) => {
@@ -117,7 +117,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
             this.loggerSvc.error('dealEditorComponent::readMultiSelectModal::getDropDownResult:: service', error);
             this.isLoading = false;
         });
-    }   
+    }
 
     onSelectionChange() {
         if (this.checkedKeys != undefined && this.checkedKeys.length > 0) {
@@ -131,7 +131,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
                     //Selected other than 'All Direct Market Segments', then 'All Direct Market Segments' must be removed from checkedkeys
                     if (_.indexOf(this.checkedKeys, 'All Direct Market Segments') == 0) {
                         this.checkedKeys.splice(0, 1);
-                    }                    
+                    }
                     //Selected parent Node which has child (like 'Embedded'), checkedKey will be the first childNode of the parent
                     _.each(this.checkedKeys, (key) => {
                         const selectedData = this.multiSelectData.filter(x => x.DROP_DOWN == key);
@@ -236,6 +236,14 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
                 });
                 if (_.indexOf(this.mkgvalues, "NON Corp") >= 0) {
                     let corpMarkSeg = _.map(this.nonCorpMarketSeg, (x) => { return x.DROP_DOWN })
+                    const uncheckSMB = this.mkgvalues.filter(x => x != "SMB")
+                    if (uncheckSMB.length > 0) {
+                        const uncheckNonCorp = uncheckSMB.filter(x => x != "NON Corp")
+                        if (uncheckNonCorp.length > 0) {
+                            const UncheckSMB = corpMarkSeg.filter(x => x != "SMB");
+                            corpMarkSeg = UncheckSMB;
+                        }
+                    }
                     _.each(corpMarkSeg, (val) => {
                         if ((_.indexOf(this.mkgvalues, val) < 0)) {
                             this.mkgvalues.push(val);
@@ -256,7 +264,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
     }
 
     hasChildren(node: any): boolean {
-      return node.items && node.items.length > 0;
+        return node.items && node.items.length > 0;
     }
     selectAllCustomerReportedGeos() {
         this.checkedKeys = [];
@@ -272,11 +280,11 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
     deSelectAllCustomerReportedGeos() {
         this.checkedKeys = [];
     }
-        
+
     onNoClick(): void {
-      this.dialogRef.close();
+        this.dialogRef.close();
     }
-    onSave(): void{
+    onSave(): void {
         if (this.colName == "CONSUMPTION_COUNTRY_REGION") {
             let index = 0;
             _.each(this.checkedKeys, (key) => {
@@ -306,8 +314,8 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
     }
 
     ngOnInit() {
-        if(this.modalData && this.modalData.items && this.modalData.items.label){
-            this.disTitle=`Select ${this.modalData.items.label}`;
+        if (this.modalData && this.modalData.items && this.modalData.items.label) {
+            this.disTitle = `Select ${this.modalData.items.label}`;
         }
         this.multiSelectPopUpModal = this.modalData.items;
         this.colName = this.modalData.colName;
@@ -334,15 +342,15 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
         this.spinnerMessageDescription = "Loading the " + this.multiSelectPopUpModal.label + " information.";
         if (this.ismrktSeg) {
             this.getNonCorpData();
-            this.marketSeglist  = this.multiSelectPopUpModal.data != undefined ? this.multiSelectPopUpModal.data : [];
+            this.marketSeglist = this.multiSelectPopUpModal.data != undefined ? this.multiSelectPopUpModal.data : [];
             this.multiSelectPopUpModal.opLookupText = "DROP_DOWN";
             if (this.modalData.cellCurrValues != null && this.modalData.cellCurrValues != undefined && this.modalData.cellCurrValues != "") {
                 if (typeof this.modalData.cellCurrValues == "string") {
-                    this.mkgvalues  = this.modalData.cellCurrValues.split(",").map(function (item) {
+                    this.mkgvalues = this.modalData.cellCurrValues.split(",").map(function (item) {
                         return item.trim();
                     });
                 } else {
-                    this.mkgvalues  = this.modalData.cellCurrValues.map(function (item) {
+                    this.mkgvalues = this.modalData.cellCurrValues.map(function (item) {
                         return item.trim();
                     });
                 }
@@ -359,8 +367,7 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
             this.checkedKeys = (this.modalData.cellCurrValues !== null && this.modalData.cellCurrValues.length > 0) ? this.modalData.cellCurrValues : [];
             this.getModalData();
         }
-        this.key = this.multiSelectPopUpModal.opLookupText;        
+        this.key = this.multiSelectPopUpModal.opLookupText;
     }
-  }
- 
-  
+}
+
