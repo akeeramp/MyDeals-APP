@@ -157,7 +157,8 @@ export class managerPctComponent {
                         let parentData = distinct(this.gridData, "DEAL_ID");
                         _.each(parentData, (item) => {
                             item["PRC_CST_TST_STS"] = rollupPCTStatus[item["DEAL_ID"]];
-                        })
+                        });
+                        this.state[pt.DC_ID].take = parentData.length;
                         this.gridDataSet[pt.DC_ID] = process(parentData, this.state[pt.DC_ID]);
                         this.gridResult[pt.DC_ID] = JSON.parse(JSON.stringify(this.gridDataSet[pt.DC_ID]));
                     }

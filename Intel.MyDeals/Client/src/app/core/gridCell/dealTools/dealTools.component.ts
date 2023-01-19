@@ -696,6 +696,7 @@ export class dealToolsComponent{
         this.setBusy("Updating Deals", "Updating hold status of Deals.", "", "");
         this.dataService.actionWipDeals(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, dealIdsObj)
             .subscribe((response: any) => {
+                this.refreshContract.emit(true);
                 if (response) {
                     this.windowOpened = true;
                     this.messages = response.Messages;
@@ -704,7 +705,6 @@ export class dealToolsComponent{
                 if (response.Messages[0].ShortMessage != 'Hold') {
                     setTimeout(() => {
                         this.windowOpened = false;
-                        this.refreshContract.emit(true);
                     }, 4000);
                 }
                
