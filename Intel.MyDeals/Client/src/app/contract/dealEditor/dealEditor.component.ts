@@ -245,7 +245,7 @@ export class dealEditorComponent {
         this.wipTemplate = this.UItemplate["ModelTemplates"]["WIP_DEAL"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
 
         PTE_Load_Util.wipTemplateColumnSettings(this.wipTemplate, this.isTenderContract, this.curPricingTable.OBJ_SET_TYPE_CD, this.in_Is_Tender_Dashboard);
-        this.templates = opGridTemplate.templates[`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
+        this.templates = PTE_Common_Util.deepClone(opGridTemplate.templates[`${this.curPricingTable.OBJ_SET_TYPE_CD}`]);
         if (!this.in_Is_Tender_Dashboard)//if DE not called from Tender Dashboard then we need call the service call to get WIP_DEAL data
             await this.getWipDealData();
         else {// TenderDashboard will share the search results to display in a grid , no service call required

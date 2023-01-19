@@ -915,7 +915,7 @@ export class PTE_CellChange_Util {
                 if (parseFloat(val) >= 0 || parseFloat(val) < 0) {
                     this.hotTable.setDataAtRowProp(item.row, item.prop, parseFloat(val), 'no-edit');
                 } else {
-                    if (item.prop == 'FRCST_VOL') {
+                    if (item.prop == 'FRCST_VOL' || item.prop == 'VOLUME') {
                         this.hotTable.setDataAtRowProp(item.row, item.prop, '', 'no-edit');
                     } else {
                         this.hotTable.setDataAtRowProp(item.row, item.prop, '0.00', 'no-edit');

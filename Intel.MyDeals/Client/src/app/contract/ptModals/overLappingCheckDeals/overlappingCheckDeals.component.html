@@ -5,7 +5,7 @@
 
 
 
-<kendo-window id="OvrLp" title="Overlapping Deals" [keepContent]="true" [width]="800" [height]="430" (close)="closeWindow()" class="k-wind-design headerTitlesOver windOverLaps" style="z-index:10001 !important">
+<kendo-window id="OvrLp" title="{{title}}" [keepContent]="true" [width]="800" [height]="430" (close)="closeWindow()" class="k-wind-design headerTitlesOver windOverLaps" style="z-index:10001 !important">
     <div *ngIf="isLoading" style="height:40vh;padding-top: 200px; width: 100%; text-align: center;">
         <div class="spinner">
             <div class="rect1"></div>

@@ -47,6 +47,7 @@ export class OverlappingCheckComponent {
     private showKendoAlert: boolean = false;
     private is_selected: boolean = false;
     private isNoDealsFound: boolean = false;
+    private title: string = "Overlapping Deals";
     private state: State = {
         skip: 0,
         take: 50,
@@ -245,6 +246,7 @@ export class OverlappingCheckComponent {
     getOverlapCheckDetails() {
         this.pricingId = this.curPricingTable.DC_ID;
         if (!!this.responseData && this.responseData) {
+            this.title = "Overlapping Deals - Please fix before you continue";
             this.ovlpData = this.prepareGridData(this.responseData);
             this.ovlpErrorCount = distinct(this.responseData, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
             this.gridResult = this.ovlpData;
@@ -264,6 +266,7 @@ export class OverlappingCheckComponent {
         {
             this.overLappingCheckDealsSvc.getOverLappingCheckDealsDetails(this.pricingId).subscribe((result: any) => {
                 this.isLoading = false;
+                this.title = "Overlapping Deals";
                 this.ovlpData = this.prepareGridData(result.Data);
                 this.ovlpErrorCount = distinct(result.Data, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
                 this.gridResult = this.ovlpData;

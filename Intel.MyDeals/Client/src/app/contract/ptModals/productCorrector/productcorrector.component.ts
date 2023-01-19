@@ -875,6 +875,26 @@ export class ProductCorrectorComponent {
     OKremoveProd() {
         if (!!this.ProductCorrectorData.DuplicateProducts[this.curRowId]
             && !!this.ProductCorrectorData.DuplicateProducts[this.curRowId][this.prdNm]) {
+            if (this.ProductCorrectorData.ProdctTransformResults[this.curRowId]['E'].includes(this.prdNm))
+                this.deletedProductDetails.push({
+                        DC_ID: this.curRowId,
+                        deletedUserInput: this.prdNm,
+                        exclude: true,
+                        indx: _.findWhere(this.data.selRows,
+                            {
+                                DC_ID: parseInt(this.curRowId)
+                            }).indx
+                });
+            if (this.ProductCorrectorData.ProdctTransformResults[this.curRowId]['I'].includes(this.prdNm))
+                this.deletedProductDetails.push({
+                    DC_ID: this.curRowId,
+                    deletedUserInput: this.prdNm,
+                    exclude: false,
+                    indx: _.findWhere(this.data.selRows,
+                        {
+                            DC_ID: parseInt(this.curRowId)
+                        }).indx
+                });
             delete this.ProductCorrectorData.DuplicateProducts[this.curRowId][this.prdNm];
         }
 
@@ -909,7 +929,7 @@ export class ProductCorrectorComponent {
                     }
                 }
             }
-
+            
             //Delete fromProdctTransformResults
             if (!!this.ProductCorrectorData.ProdctTransformResults[this.curRowId][exclude]
                 && !!this.ProductCorrectorData.ProdctTransformResults[this.curRowId][exclude][this.prdNm]) {

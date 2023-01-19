@@ -234,7 +234,7 @@ export class pricingTableEditorComponent {
                     panelClass: panelClass
                 });
                 await dialogRef.afterClosed().toPromise().then(result => {
-                    if (result) {
+                    if (result != undefined) {
                         if (this.field && this.field == 'PTR_USER_PRD') {//here there is no handonstable source specify bcz we need to do autofill
                             VM.isLoading = true;
                             let cntrctPrdct = [];
