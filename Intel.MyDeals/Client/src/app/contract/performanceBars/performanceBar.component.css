@@ -15,7 +15,7 @@
     right: 1px;
     font-family: verdana;
     font-size: 9px;
-    z-index: 1000;
+    z-index: 1;
     color: #666666;
 }
 
@@ -81,10 +81,6 @@ td {
     width: 10px;
     height: 10px;
     border: 1px solid #bebebe;
-}
-
-performance-bars.tender-performance-style div#perfLegend {
-    z-index: 1 !important;
 }
 
 .legData {

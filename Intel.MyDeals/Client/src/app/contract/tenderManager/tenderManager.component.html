@@ -130,7 +130,7 @@
     </div>
 </div>
 <div *ngIf="isTester || isDeveloper" [hidden]="!drawChart" style="position: relative; left: 76% !important;height: 3% !important; width: 400px !important; bottom: 79px !important;">
-    <performance-bars class="tender-performance-style" [type]="perfModel"></performance-bars>
+    <performance-bars [type]="perfModel"></performance-bars>
 </div>
 <div *ngIf="selectedTab == 'PTR' && !isLoading  && pricingTableData != undefined" class="col-md-12 parent-one loaderPTE tenderPTEsection">
     <pricing-table-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate" (warn)="isWarning" (tmDirec)="redirectingFn($event)">
