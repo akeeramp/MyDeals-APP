@@ -173,11 +173,6 @@ export class PTE_Save_Util {
                 item._behaviors.isError['PROGRAM_PAYMENT'] = true;
                 item._behaviors.validMsg['PROGRAM_PAYMENT'] = "Field is required";
             }
-            //these deal types volume always numeric it doesn't have unlimited
-            if (isNaN(Number(item["VOLUME"])) && (curPricingTable.OBJ_SET_TYPE_CD == "ECAP" || curPricingTable.OBJ_SET_TYPE_CD == "PROGRAM" || curPricingTable.OBJ_SET_TYPE_CD == "KIT" || curPricingTable.OBJ_SET_TYPE_CD == "REV_TIER")) {
-                item._behaviors.isError['VOLUME'] = true;
-                item._behaviors.validMsg['VOLUME'] = "Enter Numeric Values";
-            }
             if (item["OBJ_SET_TYPE_CD"] == "FLEX") {
                 //Delete if there is any previous Error  messages
                 if ((invalidFlexDate || invalidFlexDate != undefined)) {
