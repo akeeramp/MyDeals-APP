@@ -40,7 +40,7 @@
 <div *ngIf="in_Template.includes('gridUtils.uiReadonlyControlWrapper')" [innerHTML]="uiReadonlyControlWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" class="dealCell"></div>
 <div *ngIf="in_Template.includes('gridUtils.uiReadonlyFolioWrapper')" [innerHTML]="uiReadonlyFolioWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" class="dealCell"></div>
 <div *ngIf="in_Field_Name == 'TRKR_NBR'" [innerHTML]="uiDimTrkrControlWrapper(in_DataItem)|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'START_DT' || in_Field_Name == 'LAST_REDEAL_DT'" class="dealCell" [innerHTML]="uiStartDateWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" style="top:45% !important"></div>
+<div *ngIf="in_Field_Name == 'START_DT' || in_Field_Name == 'LAST_REDEAL_DT'" class="dealCell dealsIcon-dealcell" [innerHTML]="uiStartDateWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" style="top:45% !important"></div>
 <div *ngIf="in_Field_Name == 'END_DT' || in_Field_Name == 'OEM_PLTFRM_LNCH_DT' || in_Field_Name == 'OEM_PLTFRM_EOL_DT'" class="dealCell" [innerHTML]="uiControlEndDateWrapper(in_DataItem, in_Field_Name)|sanitizeHtml"></div>
 <div *ngIf="in_Field_Name == 'COMP_SKU'" class="uiControlDiv isReadOnlyCell">
     <div class="dealCell">
