@@ -417,7 +417,7 @@ export class endCustomerRetailModalComponent {
         dataElement.PRIMED_CUST_ID = "";
         dataElement.PRIMED_CUST_NM = "";
         dataElement.RPL_STS_CD = "";
-        var embCountry = this.showEmbAlert(this.embValidationMsg, dataItem[0].CTRY_NM, 'ok');
+        var embCountry = this.showEmbAlert(this.embValidationMsg, dataItem[0]?.CTRY_NM, 'ok');
         var fieldParent = document.getElementById("DropdownSelections_" + index) as HTMLElement;
         var field = fieldParent.children[0] as HTMLElement;
         if (dataItem === undefined || dataItem === null || dataItem.length <= 0) {
