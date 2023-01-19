@@ -222,6 +222,12 @@ export class PTE_Save_Util {
             if (item.PRD_EXCLDS && item.PRD_EXCLDS != undefined && item.PRD_EXCLDS != null && item.PRD_EXCLDS.length == 0) {
                 item.PRD_EXCLDS = "";
             }
+            if (item.FRCST_VOL != undefined && isNaN(Number(item.FRCST_VOL))) {
+                item.FRCST_VOL = "";
+            }
+            if (item.VOLUME != undefined && isNaN(Number(item.VOLUME))) {
+                item.VOLUME = "";
+            }
         });
         return PTR;
     }
