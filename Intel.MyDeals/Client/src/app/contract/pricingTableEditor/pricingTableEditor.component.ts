@@ -298,7 +298,7 @@ export class pricingTableEditorComponent {
                                     PTE_CellChange_Util.autoFillARSet(PTR,VM.contractData, VM.curPricingTable,VM.custCellEditor);
                                 }
                                 // Populating Period Profile, AR settlement level and reset per period for all rows after copying the PTE
-                                if ((this.field == 'RESET_VOLS_ON_PERIOD' || this.field == 'AR_SETTLEMENT_LVL' || this.field == 'PERIOD_PROFILE') && result?.toString != '')
+                                if ((this.field == 'RESET_VOLS_ON_PERIOD' || this.field == 'AR_SETTLEMENT_LVL' || this.field == 'PERIOD_PROFILE') && result !== '' && result !== null)
                                 {
                                     let PTEdata = PTE_Common_Util.getPTEGenerate(VM.columns, VM.curPricingTable);
                                     let cpyPT = false;
