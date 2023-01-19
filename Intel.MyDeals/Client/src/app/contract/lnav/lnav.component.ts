@@ -151,7 +151,19 @@ export class lnavComponent {
             contractData: this.contractData
         };
         this.selectedModel = model;
-        this.modelChange.emit(contractId_Map);
+          //it will update the url on page reload persist the selected state
+        if(this.route.snapshot.queryParams.loadtype=='Manage'){
+        const type=this.route.snapshot.paramMap.get('type');
+        const cid=this.route.snapshot.paramMap.get('cid');
+        const psid=this.route.snapshot.paramMap.get('PSID');
+        const ptid=this.route.snapshot.paramMap.get('PTID');
+        const dealid=this.route.snapshot.paramMap.get('DealID');
+        const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
+        this.router.navigateByUrl(urlTree+'?loadtype=Manage&&manageType='+model );
+        }
+        setTimeout(() => {
+         this.modelChange.emit(contractId_Map);
+        }, 100);
     }
     // **** PRICING STRATEGY Methods ****
     toggleAddStrategy() {
@@ -777,6 +789,11 @@ export class lnavComponent {
     }
     onTabSelect(event: any) {
         this.selectedTab = event.index;
+        const type=this.route.snapshot.paramMap.get('type');
+        const cid=this.route.snapshot.paramMap.get('cid');
+        const psid=this.route.snapshot.paramMap.get('PSID');
+        const ptid=this.route.snapshot.paramMap.get('PTID');
+        const dealid=this.route.snapshot.paramMap.get('DealID');
         this.headerSvc.getUserDetails().subscribe(res => {
             this.usrRole = res.UserToken.Role.RoleTypeCd;
             (<any>window).usrRole = this.usrRole;
@@ -789,14 +806,30 @@ export class lnavComponent {
             this.loggerSvc.error("Unable to get user role data", "Error", err);
         });
         if (event.title == "Deal Entry") {
-            this.loadModel('PTE');
+              //it will update the url on page reload persist the selected state
+            const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
+            this.router.navigateByUrl(urlTree);
+            setTimeout(() => {
+                this.loadModel('PTE');
+            }, 100);
+            
         }
         else if (event.title == "Meet Comp") {
-            this.loadModel('MeetComp');
+              //it will update the url on page reload persist the selected state
+            const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
+            this.router.navigateByUrl(urlTree+'?loadtype=MeetComp' );
+             setTimeout(() => {
+                this.loadModel('MeetComp');
+            }, 100);
         }
         else if (event.title == "Manage") {
-            this.loadModel('Manage');
-        }
+              //it will update the url on page reload persist the selected state
+            const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
+            this.router.navigateByUrl(urlTree+'?loadtype=Manage' );
+            setTimeout(() => {
+                this.loadModel('Manage');
+            }, 100);
+         }
     }
     openDealEntryTab(model: string) {
         this.selectedTab = 0;
@@ -812,10 +845,7 @@ export class lnavComponent {
         this.isLnavHidden['source'] = src;
         this.lnavSvc.isLnavHidden.next(this.isLnavHidden);
     }
-    meetCompSel() {
-        if (this.selectedTab == 1) return true;
-        else return false;
-    }
+    
     toggleStrategyTree() {
         if (this.strategyTreeCollapseAll == true) {
             this.contractData?.PRC_ST.map((x, i) => {
@@ -914,6 +944,9 @@ export class lnavComponent {
             }, err => {
                 this.loggerSvc.error("lnavSvc::isAutoFillChange**********", err);
             });
+            if(this.route.snapshot.queryParams.loadtype=='Manage'){
+               this.selectedModel= this.route.snapshot.queryParams.manageType;
+            }
         }
         catch (ex) {
             this.loggerSvc.error('Something went wrong', 'Error');
@@ -922,9 +955,7 @@ export class lnavComponent {
 
     }
     ngOnChanges() {
-        if (this.changedTab == 2) {
-            this.selectedTab = 1;
-        }
+        this.selectedTab=this.changedTab;
     }
     ngAfterViewInit() {
         //This will help to highlight the selectd PT incase of search result landing directly to PT. The logic can apply only once the page is rendered

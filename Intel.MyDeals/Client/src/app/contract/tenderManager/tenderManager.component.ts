@@ -8,7 +8,7 @@ import { dealEditorComponent } from "../dealEditor/dealEditor.component"
 import { pricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
 import * as _ from "underscore";
 import { performanceBarsComponent } from "../performanceBars/performanceBar.component";
-import { ActivatedRoute } from "@angular/router";
+import { ActivatedRoute, Router } from "@angular/router";
 
 @Component({
     selector: "tender-manager",
@@ -24,7 +24,7 @@ export class tenderManagerComponent {
     isTester: any;
     drawChart: boolean;
     constructor(private pteService: pricingTableEditorService, private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private contractDetailsSvc: contractDetailsService,
-        private templatesSvc: templatesService, private route: ActivatedRoute) {
+        private templatesSvc: templatesService, private route: ActivatedRoute, private router: Router) {
         $('body').addClass('added-tender');
     }
     public c_Id: any = '';
@@ -84,11 +84,29 @@ export class tenderManagerComponent {
                 if (!!this.route.snapshot.queryParams.searchTxt && this.isPTRPartiallyComplete()) {//if deal searched through global search
                     this.selectedTab = 'DE';
                     this.currentTAB = 'DE';
+                    const cid = this.route.snapshot.paramMap.get('cid');
+                    const urlTree = this.router.createUrlTree(['/tendermanager', cid]);
+                    //it will update the url on page reload persist the selected state
+                    this.router.navigateByUrl(urlTree + '?loadtype=DE');
+                    
                 }
                 else {
                     this.selectedTab = 'PTR';
                     this.currentTAB = 'PTR';
+                    const cid = this.route.snapshot.paramMap.get('cid');
+                    if (this.route.snapshot.queryParams.loadtype==undefined)
+                    {
+                          //it will update the url on page reload persist the selected state
+                    const urlTree = this.router.createUrlTree(['/tendermanager', cid]);
+                    this.router.navigateByUrl(urlTree + '?loadtype=PTR');
+                    }
                 }
+                if(!!this.route.snapshot.queryParams.loadtype){
+                      //it will update the url on page reload persist the selected state
+                this.currentTAB=this.route.snapshot.queryParams.loadtype;
+                this.selectedTab=this.currentTAB;
+                }
+
             }
             else{
                 this.loggerSvc.error("Something went wrong. Please contact Admin","Error");
@@ -204,6 +222,10 @@ export class tenderManagerComponent {
             if (this.gotoPD == 'PD' && this.compMissingFlag) await this.redirectingFn('PD');
             this.gotoPD = '';
         }
+          //it will update the url on page reload persist the selected state
+        const cid = this.route.snapshot.paramMap.get('cid');
+        const urlTree = this.router.createUrlTree(['/tendermanager', cid]);
+        this.router.navigateByUrl(urlTree + '?loadtype='+this.currentTAB);
     }
 
     async tenderWidgetPathManager(_actionName, selectedTab) {
@@ -350,6 +372,10 @@ export class tenderManagerComponent {
                 this.loggerSvc.error("Meet Comp is not passed. You can not Publish this deal yet.", 'error');
             }
         }
+          //it will update the url on page reload persist the selected state
+        const cid = this.route.snapshot.paramMap.get('cid');
+        const urlTree = this.router.createUrlTree(['/tendermanager', cid]);
+        this.router.navigateByUrl(urlTree + '?loadtype='+this.currentTAB);
     }
 
     getWidth(data) {

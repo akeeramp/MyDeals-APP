@@ -66,6 +66,7 @@ export class pricingTableComponent {
     public meetCompRefresh: boolean = false;
     public error: boolean = false;
     public enablePerfChart:boolean = (<any>window).isDeveloper || (<any>window).isTester;
+    public loadtype="";
 
     public searchedContractData = {
         Model: "",
@@ -129,7 +130,8 @@ export class pricingTableComponent {
             this.isShowPCT = false;
         this.selLnav = contractModel.Model;
         this.isDETab = false; this.isPTETab = false;
-        if (this.selLnav == 'PTE') {
+        this.loadtype= this.route.snapshot.queryParams.loadtype;
+        if (this.selLnav == 'PTE' && (this.loadtype !="MeetComp" && this.loadtype !="Manage")) {
             //highligh the selected lnav PT in case request coming fom search result for PTE.
             this.lnavSvc.lnavHieight.next(contractModel);
             if (contractModel.ps_id != 0 && contractModel.pt_id != 0) {
@@ -155,7 +157,7 @@ export class pricingTableComponent {
                         //if isRedirect is true which means user navigating to the deal through the global search results then for PS and Deal ID search, DE tab should be shown and for PT ->PTE tab should be shown
                         if (isRedirect) {
                             if (this.type != "PT" && this.isDETabEnabled) {
-                                if (this.type == 'PS' && this.pt_passed_validation != 'Complete') {
+                                if (this.pt_passed_validation != 'Complete' || this.loadtype == "PTEditor") {
                                     setTimeout(() => {
                                         this.isDETab = false; this.isPTETab = true;
                                     }, 0);
@@ -192,12 +194,18 @@ export class pricingTableComponent {
                 this.isPTEEnable = false;
             }
         }
-        else if (this.selLnav == 'MeetComp') {
+        else if (this.selLnav == 'MeetComp' || this.loadtype =='MeetComp') {
             this.isDETab = false; this.isPTETab = false;
-            this.selectedTab = 2;
+            this.selLnav='MeetComp';
+            this.selectedTab = 1;
             this.meetCompRefresh = !this.meetCompRefresh;
         }
         else {
+            if(this.loadtype =='Manage'){
+
+                this.selLnav=this.route.snapshot.queryParams.manageType;
+                this.selectedTab = 2;
+            }
             this.isDETab = false; this.isPTETab = false;
         }
         if (!isRedirect) {
@@ -212,6 +220,11 @@ export class pricingTableComponent {
     async onTabSelect(e: SelectEvent) {
         try {
             e.preventDefault();
+            const type=this.route.snapshot.paramMap.get('type');
+            const cid=this.route.snapshot.paramMap.get('cid');
+            const psid=this.route.snapshot.paramMap.get('PSID');
+            const ptid=this.route.snapshot.paramMap.get('PTID');
+            const dealid=this.route.snapshot.paramMap.get('DealID');
             if (e.title == "Deal Editor") {
                 if ((this.pteComp && this.pteComp.dirty) || (this.curPricingStrategy && this.curPricingStrategy['PASSED_VALIDATION'] != "Complete")) {
                     if (this.pteComp) {
@@ -243,6 +256,9 @@ export class pricingTableComponent {
                         return;
                     }
                 }
+                  //it will update the url on page reload persist the selected state
+                const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
+                this.router.navigateByUrl(urlTree+'?loadtype=PTEditor');
                 this.isDETab = false; this.isPTETab = true;
             }
         }

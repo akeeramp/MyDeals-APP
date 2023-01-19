@@ -27,6 +27,7 @@ import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';
 import { dealEditorService } from "../dealEditor/dealEditor.service";
 import { tenderMCTPCTModalComponent } from '../ptModals/tenderDashboardModals/tenderMCTPCTModal.component';
 import { SecurityService } from "../../shared/services/security.service"
+import { ActivatedRoute, Router } from '@angular/router';
 
 @Component({
     selector: 'deal-editor',
@@ -40,7 +41,8 @@ export class dealEditorComponent {
         private contractDetailsSvc: contractDetailsService,
         private loggerService: logger, private datePipe: DatePipe,
         protected dialog: MatDialog,
-        private DESvc: dealEditorService, private securityService: SecurityService) {
+        private DESvc: dealEditorService, private securityService: SecurityService,
+        private router: Router, private route: ActivatedRoute) {
     }
 
     @Input() in_Cid: any = '';
@@ -1385,6 +1387,18 @@ export class dealEditorComponent {
                     ],
                 }
                 this.gridData = process(this.gridResult, this.state);
+            }
+
+            if(this.route.snapshot.url[0].path=='contractmanager')
+            {
+            const type=this.route.snapshot.paramMap.get('type');
+            const cid=this.route.snapshot.paramMap.get('cid');
+            const psid=this.route.snapshot.paramMap.get('PSID');
+            const ptid=this.route.snapshot.paramMap.get('PTID');
+            const dealid=this.route.snapshot.paramMap.get('DealID');
+              //it will update the url on page reload persist the selected state
+            const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
+            this.router.navigateByUrl(urlTree+'?loadtype=DealEditor' );
             }
         }
         catch (ex) {
