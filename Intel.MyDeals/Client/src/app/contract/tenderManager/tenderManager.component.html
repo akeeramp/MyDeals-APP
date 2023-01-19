@@ -129,7 +129,7 @@
         </a>
     </div>
 </div>
-<div *ngIf="isTester || isDeveloper" [hidden]="!drawChart" style="position: relative; left: 76% !important;height: 3% !important; width: 400px !important; bottom: 79px !important;">
+<div *ngIf="isTester || isDeveloper" [hidden]="!drawChart" class="managingPerformanceBars">
     <performance-bars [type]="perfModel"></performance-bars>
 </div>
 <div *ngIf="selectedTab == 'PTR' && !isLoading  && pricingTableData != undefined" class="col-md-12 parent-one loaderPTE tenderPTEsection">

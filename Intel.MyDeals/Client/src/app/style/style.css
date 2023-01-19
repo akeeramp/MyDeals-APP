@@ -1662,6 +1662,36 @@ kendo-window.flexOverlapProducts {
     z-index: 0 !important;
 }
 
+
+.managingPerformanceBars .executeVals {
+    right: 0% !important;
+    text-align: right;
+}
+
+.managingPerformanceBars #perfLegend {
+    bottom: 3px !important;
+}
+
+.managingPerformanceBars {
+    position: absolute !important;
+    top: 65px;
+    right: 5px;
+    left: auto !important;
+    height: 65px !important;
+    width: 400px !important;
+}
+
+    .managingPerformanceBars #perfDetails {
+        top: 25px;
+        right: 0 !important;
+        z-index: 9999 !important;
+        bottom: auto !important;
+    }
+
+    .managingPerformanceBars i.intelicon-show-results-outlined.showMore {
+        margin-left: 5px;
+    }
+
 /*.de-css-comp .k-window-maximized .k-grid-pager,
 .oo-lapping-style .k-window-maximized .k-grid-pager {
     position: absolute;
