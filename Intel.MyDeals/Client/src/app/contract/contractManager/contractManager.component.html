@@ -340,7 +340,7 @@
                                                 <span style="margin-left: 6em; font-size:10px;">Loading.....</span>
                                             </span>
                                             <kendo-grid id="manageFilterStyle" class="approval-tables" *ngIf="state[pt.DC_ID].filter != undefined && gridDataSet[pt.DC_ID]!=undefined" [data]="gridDataSet[pt.DC_ID]"  [resizable]="true" [filter]="state[pt.DC_ID].filter" [sortable]="true"
-                                                        filterable="menu" (dataStateChange)="dataStateChange($event, pt.DC_ID)" style="height:470px">
+                                                        filterable="menu" (dataStateChange)="dataStateChange($event, pt.DC_ID)" style="height:fit-content;max-height:470px">
                                                 <kendo-grid-column title="Tools" field="NOTES" [headerClass]="{'headerClass':true}" [width]="200" [locked]="true" [filterable]="false" [sortable]="false">
                                                     <ng-template kendoGridHeaderTemplate>
                                                         <div>
