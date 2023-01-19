@@ -1539,7 +1539,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsReadOnly = true,
                 Locked = true,
                 Lockable = false,
-                Template = "#=gridUtils.uiReadonlyControlWrapper(data, 'CNTRCT_OBJ_SID')#",
+                Template = "#=gridUtils.uiReadonlyFolioWrapper(data, 'CNTRCT_OBJ_SID')#",
                 ExcelTemplate = "#=CNTRCT_OBJ_SID#",
             });
 
@@ -1737,7 +1737,7 @@ namespace Intel.MyDeals.DataLibrary
                 Label = "Meet Comp SKU",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
-                Template = "<div class=\"uiControlDiv isReadOnlyCell\"><div class=\"vert-center\">#=gridUtils.getFormatedDim(data, 'TempCOMP_SKU', '20___0', 'string')#</div></div>",
+                Template = "<div class=\"uiControlDiv isReadOnlyCell\"><div class=\"vert-center\">#=gridUtils.getFormatedDim(data, 'TempCOMP_SKU', '20___0', 'string')#</div></div>",
                 IsSortable = true,
                 Width = 100,
                 DataType = "object",
@@ -2599,7 +2599,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 // Not REV_TIER deals
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
-                HeaderTemplate = "Billing Rolling Lookback Period (Months) <span title='Invoice eligibility time period for rebate payment. Could be a rolling number of months or equal to billings dates. Enter 0 (zero) for deals using billing start and end date.'><i class='intelicon-help' style='font-size: 15px !important'></i></span>",
+                HeaderTemplate = "Billing Rolling Lookback Period (Months) <span title='Invoice eligibility time period for rebate payment. Could be a rolling number of months or equal to billings dates. Enter 0 (zero) for deals using billing start and end date.'><i class='intelicon-help' style='font-size: 15px !important'></i></span>",
                 Width = 170, // 110
                 Format = "{0:d}",
                 IsFilterable = true,
@@ -3370,7 +3370,7 @@ namespace Intel.MyDeals.DataLibrary
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT }, // not sure that KIT should be here...
                 DataType = "object",
-                Label = "<div title='Exclude from Price Approval Rules'>Exclude from Price Rules</div>",
+                Label = "<div title='Exclude from Price Approval Rules'>Exclude from Price Rules</div>",
                 Width = 120,
                 Template = "#=gridUtils.uiControlWrapper(data, 'EXCLUDE_AUTOMATION')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/EXCLUDE_AUTOMATION/",
@@ -3497,7 +3497,7 @@ namespace Intel.MyDeals.DataLibrary
                 AtrbCd = AttributeCodes.LAST_REDEAL_DT,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 Template = "#=gridUtils.uiStartDateWrapper(data, 'LAST_REDEAL_DT', \"date:'MM/dd/yyyy'\")#",
-                Label = "<div title='Date the current deal values took effect. This date can be changed on a re-deal.'>Effective Tracker Start Date</div>",
+                Label = "<div title='Date the current deal values took effect. This date can be changed on a re-deal.'>Effective Tracker Start Date</div>",
                 IsFilterable = false,
                 IsSortable = true,
                 Width = 120,

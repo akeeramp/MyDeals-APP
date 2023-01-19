@@ -140,6 +140,15 @@ gridUtils.uiReadonlyControlWrapper = function (passedData, field, format) {
     return tmplt;
 }
 
+gridUtils.uiReadonlyFolioWrapper = function (passedData, field, format) {
+    var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
+    tmplt += '  <a href="/contract#/manager/' + passedData[field] + '" target="_blank"">';
+    tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></div>';
+    tmplt += '  </a>';
+    tmplt += '</div>';
+    return tmplt;
+}
+
 gridUtils.uiReadonlyControlWrapperOEMDates = function (passedData, field, format) {
     var tmplt = '<div class="uiControlDiv isReadOnlyCell">';
     if (passedData[field] === undefined || passedData[field] === null || passedData[field] === "" || passedData[field] === "1/1/1900") {
