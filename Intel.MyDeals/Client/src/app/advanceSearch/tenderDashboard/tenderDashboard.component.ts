@@ -691,10 +691,10 @@ export class TenderDashboardComponent implements OnInit {
         var dealIds = [];
         var iqrDeals = [];
         for (var i = 0; i <= gridData.length - 1; i++) {
-            if (gridData[i].isLinked && gridData[i].SALESFORCE_ID == "") {
+            if (gridData[i].isLinked && (gridData[i].SALESFORCE_ID == undefined || gridData[i].SALESFORCE_ID == null || gridData[i].SALESFORCE_ID == "")) {
                 dealIds.push(gridData[i].DC_ID);
             }
-            else if (gridData[i].isLinked && gridData[i].SALESFORCE_ID != "") {
+            else if (gridData[i].isLinked && (gridData[i].SALESFORCE_ID !== undefined && gridData[i].SALESFORCE_ID !== null && gridData[i].SALESFORCE_ID !== "")) {
                 iqrDeals.push(gridData[i].DC_ID);
             }
         }

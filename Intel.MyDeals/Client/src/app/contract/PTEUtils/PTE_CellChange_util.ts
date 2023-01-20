@@ -162,12 +162,12 @@ export class PTE_CellChange_Util {
             }
             else if (val.prop == 'START_DT') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after delete can give duplicate index
-                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, contractData.START_DT, 'no-edit');
+                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, moment(contractData.START_DT).format("MM/DD/YYYY"), 'no-edit');
                 updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'END_DT') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after delete can give duplicate index
-                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, contractData.END_DT, 'no-edit');
+                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, moment(contractData.END_DT).format("MM/DD/YYYY"), 'no-edit');
                 updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'RESET_VOLS_ON_PERIOD') {
@@ -1319,7 +1319,7 @@ export class PTE_CellChange_Util {
     static validateDensityBand(rowIndex, columns, curPricingTable, operation, translateResult, prdSrc, DensityMissingProd) {
         let response: any;
         let ValidProducts: any;
-        let PTR: any;
+        let PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
         if (operation != '') {
             response = JSON.parse(operation.PTR_SYS_PRD);
             ValidProducts = PTE_Helper_Util.splitProductForDensity(response);
@@ -1333,7 +1333,6 @@ export class PTE_CellChange_Util {
             let pivotDensity = parseInt(curPricingTable.NUM_OF_DENSITY);
             let numOfRows = NUM_OF_TIERS * pivotDensity;
             //match the schema based on product translator/selector, in case of split product it can have multiple products
-            PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
             _.each(ValidProducts, (item) => {
                 let prod = PTEUtil.getValidDenProducts(item, prdSrc);
                 let selProds = _.filter(PTR, (itm) => {
