@@ -1,7 +1,6 @@
-
 export class PTE_Config_Util {
-    static girdMaxRows:number=200;
-    static gridMinRows:number=150;
+    static girdMaxRows:number=250;
+    static gridMinRows:number=199;
     static maxKITproducts: number = 10;
     static flushSysPrdFields = ["PTR_USER_PRD", "PRD_EXCLDS", "START_DT", "END_DT", "GEO_COMBINED", "PROD_INCLDS", "PROGRAM_PAYMENT", "REBATE_TYPE", "MRKT_SEG"];
     static productValidationDependencies = [

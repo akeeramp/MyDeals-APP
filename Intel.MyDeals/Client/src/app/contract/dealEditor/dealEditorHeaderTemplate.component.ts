@@ -16,6 +16,7 @@ export class dealEditorHeaderTemplateComponent implements OnInit{
     @Input() grid_Result;
     @Input() in_Is_Tender_Dashboard: boolean = false;//will recieve true when DE Grid Used in Tender Dashboard Screen
     public is_Deal_Tools_Checked: boolean;
+    @Input() pageChange: boolean;
     
     selectAllIDs(event) {
         this.is_Deal_Tools_Checked = event.target.checked;
@@ -41,6 +42,17 @@ export class dealEditorHeaderTemplateComponent implements OnInit{
         }
         return true;
     }
+
+    ngOnChanges() {
+        if (!this.in_Is_Tender_Dashboard) {
+            this.is_Deal_Tools_Checked = false;
+            for (let i = 0; i < this.grid_Result.length; i++) {
+                if (!(this.grid_Result[i].SALESFORCE_ID !== "" && this.grid_Result[i].WF_STG_CD === 'Offer'))
+                    this.grid_Result[i].isLinked = this.is_Deal_Tools_Checked;
+            }
+        }
+    }
+
     ngOnInit() {
         this.is_Deal_Tools_Checked = this.checkAllSelected();
     }

@@ -287,7 +287,7 @@ export class dealEditorCellTemplateComponent {
     }
     uiControlBackEndRebateWrapper(passedData) {
         let dim = this.in_Deal_Type == "KIT" ? this.kitEcapdim : this.ecapDimKey;
-        let value = this.currencyPipe.transform(PTE_Load_Util.calcBackEndRebate(passedData, this.in_Deal_Type, "ECAP_PRICE", dim), 'USD', 'symbol', '1.2-2');
+        let value = typeof PTE_Load_Util.calcBackEndRebate(passedData, this.in_Deal_Type, "ECAP_PRICE", dim) == 'number' ? this.currencyPipe.transform(PTE_Load_Util.calcBackEndRebate(passedData, this.in_Deal_Type, "ECAP_PRICE", dim), 'USD', 'symbol', '1.2-2') : '';
         return GridUtil.uiControlBackEndRebateWrapper(value);
     }
     uiTotalDiscountPerLineControlWrapper(passedData) {

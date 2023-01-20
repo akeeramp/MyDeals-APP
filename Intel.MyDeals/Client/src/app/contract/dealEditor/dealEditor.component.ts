@@ -99,6 +99,7 @@ export class dealEditorComponent {
     public gridResult = [];
     private gridData: GridDataResult;
     public isLoading = false;
+    public pageChange = false;
     private isTenderContract = false;
     private dropdownResponses: any = null;
     private EndCustDropdownResponses: any = null;
@@ -337,6 +338,7 @@ export class dealEditorComponent {
     }
 
     dataStateChange(state: DataStateChangeEvent): void {
+        if (this.state.skip != state.skip) this.pageChange = !this.pageChange;
         this.state = state;
         this.gridData = process(this.gridResult, this.state);
     }
@@ -1266,31 +1268,42 @@ export class dealEditorComponent {
                     return;
                 }
                 else {
+                    const cols = ["DC_ID", "WF_STG_CD", "PTR_USER_PRD", "TITLE", "NOTES"];
+                    let filters = []
+                    cols.forEach((item) => {
+                        if (this.gridResult.filter(x => x[item].toString().toLowerCase().includes(this.searchFilter.toLowerCase())).length > 0)
+                            filters.push({
+                                field: item,
+                                operator: item == 'DC_ID' ? "eq" : "contains",
+                                value: this.searchFilter
+                            })
+                    })
+                    if (filters.length == 0) filters = [
+                        {
+                            field: "DC_ID",
+                            operator: "eq",
+                            value: this.searchFilter
+                        }, {
+                            field: "WF_STG_CD",
+                            operator: "contains",
+                            value: this.searchFilter
+                        }, {
+                            field: "PTR_USER_PRD",
+                            operator: "contains",
+                            value: this.searchFilter
+                        }, {
+                            field: "TITLE",
+                            operator: "contains",
+                            value: this.searchFilter
+                        }, {
+                            field: "NOTES",
+                            operator: "contains",
+                            value: this.searchFilter
+                        }
+                    ];
                     this.state.filter = {
                         logic: "or",
-                        filters: [
-                            {
-                                field: "DC_ID",
-                                operator: "eq",
-                                value: this.searchFilter
-                            }, {
-                                field: "WF_STG_CD",
-                                operator: "contains",
-                                value: this.searchFilter
-                            }, {
-                                field: "PTR_USER_PRD",
-                                operator: "contains",
-                                value: this.searchFilter
-                            }, {
-                                field: "TITLE",
-                                operator: "contains",
-                                value: this.searchFilter
-                            }, {
-                                field: "NOTES",
-                                operator: "contains",
-                                value: this.searchFilter
-                            }
-                        ],
+                        filters: filters
                     }
                     this.gridData = process(this.gridResult, this.state);
                 }
