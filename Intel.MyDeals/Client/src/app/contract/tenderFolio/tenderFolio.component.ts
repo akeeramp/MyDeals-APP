@@ -429,7 +429,7 @@ export class TenderFolioComponent {
         })
     }
     ngOnInit() {
-        this.isLoading = true;
+        this.isSpinnerLoading = true;
         this.getAllCustomers();
         this.isCopyTender = this.data.copyItems && this.data.copyItems.length > 0 ? true : false;
         this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
@@ -445,9 +445,9 @@ export class TenderFolioComponent {
             }
             if (this.isCopyTender)
                 this.addCustomToTemplates();
-            this.isLoading = false;
+            this.isSpinnerLoading = false;
         }, (err) => {
-            this.isLoading = false;
+            this.isSpinnerLoading = false;
             this.loggerSvc.error("Unable to get Template Data", "Error", err);
         })
     }
