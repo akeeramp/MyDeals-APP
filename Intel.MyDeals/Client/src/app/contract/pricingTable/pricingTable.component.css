@@ -141,3 +141,27 @@ b {
     padding-left: 10px;
     padding-top: 2px
 }
+#noData .k-window.k-dialog {
+    border-radius: 0 !important;
+}
+
+.noData-kendo-dialog button.btn.btn-primary.k-button {
+    padding: 1.5em 0;
+    background-color: #dbdbdb !important;
+    color: #444444 !important;
+    font-size: 15px !important;
+    border: none !important;
+}
+
+.noData-kendo-dialog button.btn.btn-primary.k-button:focus {
+    outline: 0 !important
+}
+
+.noData-kendo-dialog button.btn.btn-primary.k-button:hover {
+    background-color: #ebebeb !important;
+    color: #444;
+}
+
+kendo-dialog-actions.noData-kendo-dialog.k-dialog-buttongroup.k-actions.k-actions-stretched {
+    padding: 0 !important;
+}

@@ -170,9 +170,9 @@
     <performance-bars [type]="perfModel"></performance-bars>
 </div>
 
-<kendo-dialog (close)="closeAlert()" *ngIf="error" id="noData" [width]="500" [height]="150">
-    <h3 style="text-align:center">No result found</h3>
-    <kendo-dialog-actions>
+<kendo-dialog (close)="closeAlert()" *ngIf="error" id="noData" [width]="500" [height]="200">
+    <h3 style="text-align: center;font-family: 'Intel Clear'; margin-top: 40px;">No result found</h3>
+    <kendo-dialog-actions class="noData-kendo-dialog">
         <button  class="btn btn-primary" kendoButton (click)="redirect()">OK</button>
     </kendo-dialog-actions>
 </kendo-dialog>
