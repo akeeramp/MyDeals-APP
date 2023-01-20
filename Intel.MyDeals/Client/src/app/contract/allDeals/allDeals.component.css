@@ -386,3 +386,7 @@ kendo-grid.deals_grid_h table tr th .k-cell-inner kendo-grid-filter-menu a.k-gri
 #allDeals .dealCell.dealsIcon-dealcell {
     padding-top: 18px;
 }
+
+#allDeals td .breakoutColumn .rowValueHeight {
+    height: 25px !important;
+}
