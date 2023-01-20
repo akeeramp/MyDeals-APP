@@ -220,7 +220,7 @@
                                 <ng-template kendoGridCellTemplate let-dataItem >
                                     <!-- Popover Template -->
                                     <ng-template #popoverContent>
-                                        <div class="popover-content">
+                                        <div class="popover-content product_selector_m">
                                             <div class="row">
                                                 <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                                             </div>
@@ -484,7 +484,7 @@
                                         <ng-template kendoGridCellTemplate let-dataItem>
                                             <!-- Popover Template -->
                                             <ng-template #popoverContent>
-                                                <div class="popover-content">
+                                                <div class="popover-content product_selector_m">
                                                     <div class="row">
                                                         <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                                                     </div>
@@ -504,8 +504,7 @@
                                                     <span *ngIf="dataItem.CAP != undefined && dataItem.CAP != null && dataItem.CAP ==='No CAP'">
                                                         {{dataItem.CAP}}
                                                     </span>
-                                                    <div *ngIf="!dataItem.CAP.includes('No')">
-                                                        <br /> {{ dataItem.CAP_START }} - {{ dataItem.CAP_END }}
+                                                    <div *ngIf="!dataItem.CAP.includes('No')"> {{ dataItem.CAP_START }} - {{ dataItem.CAP_END }}
                                                     </div>
                                                 </div>
                                             </div>
