@@ -67,6 +67,7 @@ export class pricingTableComponent {
     public error: boolean = false;
     public enablePerfChart:boolean = (<any>window).isDeveloper || (<any>window).isTester;
     public loadtype="";
+    public selectNavMenu:any;
 
     public searchedContractData = {
         Model: "",
@@ -124,6 +125,11 @@ export class pricingTableComponent {
 
     async loadModel(contractModel: contractIds, isRedirect: boolean = false) {
         this.selectedTab = 0;
+        const type=this.route.snapshot.paramMap.get('type');
+        const cid=this.route.snapshot.paramMap.get('cid');
+        const psid=this.route.snapshot.paramMap.get('PSID');
+        const ptid=this.route.snapshot.paramMap.get('PTID');
+        const dealid=this.route.snapshot.paramMap.get('DealID');
         if (this.selLnav == 'pctDiv' && contractModel.Model == 'groupExclusionDiv')
             this.isShowPCT = true;
         else if (this.selLnav !== 'pctDiv' && contractModel.Model == 'groupExclusionDiv')
@@ -131,6 +137,9 @@ export class pricingTableComponent {
         this.selLnav = contractModel.Model;
         this.isDETab = false; this.isPTETab = false;
         this.loadtype= this.route.snapshot.queryParams.loadtype;
+        if(this.loadtype=='ViewContractDetails'){
+            this.selLnav='ViewContractDetails';
+        }
         if (this.selLnav == 'PTE' && (this.loadtype !="MeetComp" && this.loadtype !="Manage")) {
             //highligh the selected lnav PT in case request coming fom search result for PTE.
             this.lnavSvc.lnavHieight.next(contractModel);
@@ -157,14 +166,19 @@ export class pricingTableComponent {
                         //if isRedirect is true which means user navigating to the deal through the global search results then for PS and Deal ID search, DE tab should be shown and for PT ->PTE tab should be shown
                         if (isRedirect) {
                             if (this.type != "PT" && this.isDETabEnabled) {
-                                if (this.pt_passed_validation != 'Complete' || this.loadtype == "PTEditor") {
+                                if (this.pt_passed_validation != 'Complete' && this.loadtype == "PTEditor") {
                                     setTimeout(() => {
                                         this.isDETab = false; this.isPTETab = true;
                                     }, 0);
                                 } else {
-                                    setTimeout(() => {
+                                    if(this.loadtype == "PTEditor"){
+                                        this.isDETab = false; this.isPTETab = true;
+                                    }else{
+                                        setTimeout(() => {
                                         this.isDETab = true; this.isPTETab = false
                                     }, 0)
+                                    }
+                                    
                                 }
                             }
                             else {
@@ -194,18 +208,34 @@ export class pricingTableComponent {
                 this.isPTEEnable = false;
             }
         }
-        else if (this.selLnav == 'MeetComp' || this.loadtype =='MeetComp') {
+        else if (this.selLnav == 'MeetComp'|| this.loadtype =='MeetComp') {
             this.isDETab = false; this.isPTETab = false;
             this.selLnav='MeetComp';
             this.selectedTab = 1;
             this.meetCompRefresh = !this.meetCompRefresh;
+            if(this.selLnav=='MeetComp'){
+                //it will update the url on page reload persist the selected state
+                const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
+                this.router.navigateByUrl(urlTree+'?loadtype=MeetComp' );
+            }
         }
         else {
-            if(this.loadtype =='Manage'){
+            this.selectNavMenu='';
+            if(this.selLnav=='ViewContractDetails'){
+                //it will update the url on page reload persist the selected state
+                const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
+                this.router.navigateByUrl(urlTree+'?loadtype=ViewContractDetails');
+            }
+            if(this.loadtype =='Manage'&& (this.selLnav!='pctDiv' && this.selLnav!='ViewContractDetails')){
 
                 this.selLnav=this.route.snapshot.queryParams.manageType;
                 this.selectedTab = 2;
             }
+            if(this.loadtype =='Manage'&& this.selLnav=='pctDiv'){
+                this.selectedTab = 2;
+                this.selectNavMenu='pctDiv'
+            }
+             
             this.isDETab = false; this.isPTETab = false;
         }
         if (!isRedirect) {

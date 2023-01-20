@@ -36,6 +36,7 @@ export class lnavComponent {
     @Input() contractData;
     @Input() UItemplate;
     @Input() changedTab: number = 0;
+    @Input() selectNavMenu:any;
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
 
     public query = "";
@@ -137,8 +138,11 @@ export class lnavComponent {
         this.curPricingTableId = ptId;
         //its just update the URl when we reload  it will land on same page last selected pricing strategies 
         const urlTree = this.router.createUrlTree(['/contractmanager', this.route.snapshot.paramMap.get('type'), this.route.snapshot.paramMap.get('cid'), psId, ptId, this.route.snapshot.paramMap.get('DealID')]);
-        this.router.navigateByUrl(urlTree);
+        this.router.navigateByUrl(urlTree); 
+         setTimeout(() => {            
         this.modelChange.emit(contractId_Map);
+        }, 100);
+       
     }
     loadModel(model: string) {
         const contractId_Map: contractIds = {
@@ -956,6 +960,19 @@ export class lnavComponent {
     }
     ngOnChanges() {
         this.selectedTab=this.changedTab;
+        if(!!this.selectNavMenu && this.selectNavMenu!=''){
+            this.selectedModel=this.selectNavMenu;
+              //it will update the url on page reload persist the selected state
+        if(this.route.snapshot.queryParams.loadtype=='Manage'){
+            const type=this.route.snapshot.paramMap.get('type');
+            const cid=this.route.snapshot.paramMap.get('cid');
+            const psid=this.route.snapshot.paramMap.get('PSID');
+            const ptid=this.route.snapshot.paramMap.get('PTID');
+            const dealid=this.route.snapshot.paramMap.get('DealID');
+            const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
+            this.router.navigateByUrl(urlTree+'?loadtype=Manage&&manageType='+this.selectNavMenu );
+         }
+      }
     }
     ngAfterViewInit() {
         //This will help to highlight the selectd PT incase of search result landing directly to PT. The logic can apply only once the page is rendered
