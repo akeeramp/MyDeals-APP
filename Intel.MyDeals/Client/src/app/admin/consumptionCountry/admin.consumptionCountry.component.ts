@@ -88,7 +88,7 @@ export class adminConsumptionCountryComponent {
     }
 
     loadConsumptionCountry() {
-        if (!((<any>window).usrRole === 'SA' || (<any>window).isDeveloper)) {
+        if (!((<any>window).usrRole === 'SA' || (<any>window).isDeveloper || (<any>window).isCustomerAdmin)) {
             document.location.href = "/Dashboard#/portal";
         } else {
             this.consumptionCountrySvc.getConsumptionCountry().subscribe(

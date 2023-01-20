@@ -28,7 +28,8 @@ export class adminVistexComponent {
         { API_ID: 6, API_NM: "Deal Failed", API_CD: "E" },
         { API_ID: 7, API_NM: "Prod Vertical Failed", API_CD: "F" },
         { API_ID: 7, API_NM: "Consumption Data", API_CD: "M" },
-        { API_ID: 8, API_NM: "Claim Data", API_CD: "L" }
+        { API_ID: 8, API_NM: "Claim Data", API_CD: "L" },
+        { API_ID: 9, API_NM: "Tender Deals", API_CD: "T" }
     ];
 
     public defaultItem = { API_ID: null, API_NM: "Select an API..." };
@@ -52,7 +53,8 @@ export class adminVistexComponent {
         "E": 'GetVistexDealOutBoundData',
         "F": 'GetVistexDealOutBoundData',
         "M": 'GetVistexDealOutBoundData',
-        "L": 'GetVistexDealOutBoundData'
+        "L": 'GetVistexDealOutBoundData',
+        "T": 'ExecuteSalesForceTenderData'
     };
 
     vistexApiNameChange(value) {
@@ -76,7 +78,7 @@ export class adminVistexComponent {
 
         this.dsaService.callAPI(this.apiPair[this.selectedApiCD], mode).subscribe((result: any) => {
             this.isLoading = false;
-            if (this.selectedApiCD == "R") {
+            if (this.selectedApiCD == "R" || this.selectedApiCD == "T") {
                 if (result) {
                     this.loggerSvc.success('Transaction was successful...');
                 } else {

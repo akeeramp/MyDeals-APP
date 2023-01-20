@@ -28,7 +28,7 @@ export class dsaService {
             apiUrl = this.vistexApiBase + apiName + '/CNSMPTN_LD/' + runMode;
         } else if (runMode == "L") {
             apiUrl = this.vistexApiBase + apiName + '/IQR_CLM_DATA/' + runMode;
-        } else if (runMode == "R") {
+        } else if (runMode == "R" || runMode == "T") {
             apiUrl = this.tenderApiBase + apiName;
         }
         else {
