@@ -501,7 +501,7 @@ export class GridUtil {
     }
     static uiTotalDiscountPerLineControlWrapper = function (passedData) {
         var data = passedData["QTY"];   //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers - are QTY and dscnt_per_line required columns?
-
+        
         if (data === undefined || data === null) return "";
 
         var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
@@ -509,8 +509,9 @@ export class GridUtil {
         var tmplt = '<div class="col-md-12">';
         for (var index in sortedKeys) { //only looking for positive dim keys
             var dimkey = sortedKeys[index];
+            var dataDscnt = passedData["DSCNT_PER_LN"] != undefined ? parseFloat(passedData["DSCNT_PER_LN"][dimkey]) : 0;
             if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
-                var value = new CurrencyPipe('en-us').transform(passedData["QTY"][dimkey] * passedData["DSCNT_PER_LN"][dimkey], 'USD', 'symbol', '1.2-2');
+                var value = new CurrencyPipe('en-us').transform(parseFloat(passedData["QTY"][dimkey]) * dataDscnt, 'USD', 'symbol', '1.2-2');
                 tmplt += '<div class="col-md-12 rowHeight">';
                 tmplt += '<div class="textRightAlign isReadOnlyCell" style="border-bottom: 0.01px solid rgba(0, 0, 0, .05);">';
                 tmplt += '<span class="ng-binding dataPadding" id="tdsCol">' + value + '</span>';
