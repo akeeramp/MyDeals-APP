@@ -1412,6 +1412,12 @@ export class ProductSelectorComponent {
         }
     }
 
+    toggleSelect(dataItem) {
+        if (this.disableSelection)
+            return;
+        this.selectProduct(dataItem);
+    }
+
     toggleSelectAll($event, searchGrid) {
         if (!this.disableSelection && searchGrid && searchGrid.length>0) {
             searchGrid.forEach(dataItem => {

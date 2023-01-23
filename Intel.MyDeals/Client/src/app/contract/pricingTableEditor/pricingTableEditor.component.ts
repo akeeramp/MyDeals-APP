@@ -190,11 +190,13 @@ export class pricingTableEditorComponent {
                 }
                 else if (this.field && this.field == 'GEO_COMBINED') {
                     modalComponent = GeoSelectorComponent
+                    panelClass = 'multi_select_style'
                     name = "Select Geo *";
                     data = { name: name, source: this.source, selVal: selVal };
                 }
                 else if (this.field && this.field == 'CUST_ACCNT_DIV') {
                     modalComponent = GeoSelectorComponent
+                    panelClass = 'multi_select_style'
                     name = "Customer Account Divisions";
                     data = { name: name, source: this.source, selVal: selVal };
                 }

@@ -87,7 +87,7 @@
                                             </ng-template>
                                             <ng-template kendoGridCellTemplate let-dataItem>
                                                 <div class='dealTools check-center'>
-                                                    <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="selectProduct(dataItem)" [(ngModel)]="dataItem.selected">
+                                                    <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="toggleSelect(dataItem)" [(ngModel)]="dataItem.selected">
                                                 </div>
                                             </ng-template>
                                         </kendo-grid-column>

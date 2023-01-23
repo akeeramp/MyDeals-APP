@@ -475,10 +475,12 @@ export class ProductCorrectorComponent {
         }
 
         _.each(this.selectedItms, (selectItem) => {
-            _.each(this.curRowData, (rowDataItem) => {
-                if (rowDataItem.PRD_MBR_SID != 0 && rowDataItem.PRD_MBR_SID == selectItem.PRD_MBR_SID)
-                    rowDataItem.IS_SEL = true;
-            })
+            if (selectItem.ROW_NM == this.curRowId) {
+                _.each(this.curRowData, (rowDataItem) => {
+                    if (rowDataItem.PRD_MBR_SID != 0 && rowDataItem.PRD_MBR_SID == selectItem.PRD_MBR_SID)
+                        rowDataItem.IS_SEL = true;
+                })
+            }
         })
         if (this.curRowProds && this.curRowProds.length > 0) {
             this.curRowIncProd = this.curRowProds.filter(x => x.exclude == 'I');
