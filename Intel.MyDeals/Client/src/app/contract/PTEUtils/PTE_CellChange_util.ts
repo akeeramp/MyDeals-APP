@@ -150,15 +150,19 @@ export class PTE_CellChange_Util {
                 }
             }
             else if (val.prop == 'SETTLEMENT_PARTNER') {
+                let updateData = [];
+                updateData.push(row);
+                updateData.push(val.prop);
                 //update PTR_USER_PRD with random value if we use row index values while adding after delete can give duplicate index
                 if ((curPricingTable[`AR_SETTLEMENT_LVL`] && curPricingTable[`AR_SETTLEMENT_LVL`].toLowerCase() == 'cash')
                         || (contractData.IS_TENDER == "1" && contractData.Customer.DFLT_TNDR_AR_SETL_LVL.toLowerCase() == 'cash')) {
-                    currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, contractData.Customer.DFLT_SETTLEMENT_PARTNER, 'no-edit');
+                    updateData.push(contractData.Customer.DFLT_SETTLEMENT_PARTNER);
                 }
                 else {
-                    currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, '', 'no-edit');
+                    updateData.push('');
                 }
-                updateRows.push(currentString.split(','));
+                updateData.push('no-edit');
+                updateRows.push(updateData);
             }
             else if (val.prop == 'START_DT') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after delete can give duplicate index

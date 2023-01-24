@@ -314,6 +314,9 @@ export class publishTenderComponent {
             }
             else if (item[fieldName] != undefined && item[fieldName] != null)
                 return { Text: item[fieldName].toString(), Value: item[fieldName] }
+            else if ((fieldName == 'MEETCOMP_TEST_RESULT' || fieldName == 'COST_TEST_RESULT') && item[fieldName] == undefined) {
+                return { Text: 'Not Run Yet', Value: undefined }
+            }
         });
     }
 
