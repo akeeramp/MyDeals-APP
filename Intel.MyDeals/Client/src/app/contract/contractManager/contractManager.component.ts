@@ -818,6 +818,7 @@ export class contractManagerComponent {
             this.filteredData = this.contractData?.PRC_ST;
             this.isCustAcptReadOnly = (this.contractData != undefined && this.contractData._behaviors != undefined && this.contractData._behaviors.isReadOnly != undefined && this.contractData._behaviors.isReadOnly.CUST_ACCPT == true) ? true : false;
             if (!this.isRunning) this.showData = true;
+            this.checkpricegrpcode();
         }
         else {
             this.loggerSvc.error('No records found', 'Error');
@@ -1142,6 +1143,28 @@ export class contractManagerComponent {
 
     singleClick() {
         document.body.classList.add('conManages');
+    }
+
+    //for missing price group code customer
+    checkpricegrpcode() {
+        if ((this.contractData !== undefined || this.contractData !== null) && (<any>window).usrRole == "DA") {
+            if (this.contractData.PRC_ST !== undefined || this.contractData.PRC_ST !== null) {
+                if (this.contractData.PRC_ST.length > 0 && this.contractData.IS_TENDER == 0) {
+                    if (this.contractData.Customer.PRC_GRP_CD == "") {
+                        for (var k = 0; k < this.contractData.PRC_ST.length; k++) {
+                            if (!this.contractData.PRC_ST[k]._actions["Approve"] && this.contractData.Customer.PRC_GRP_CD == "") {
+                                this.contractData.PRC_ST[k]._actionReasons["Approve"]
+                                    += "\nPrice Group Code required for the customer";
+                            }
+                            if (this.contractData.PRC_ST[k]._actions["Approve"] && this.contractData.Customer.PRC_GRP_CD == "") {
+                                this.contractData.PRC_ST[k]._actions["Approve"] = false;
+                                this.contractData.PRC_ST[k]._actionReasons["Approve"] = "Price Group Code required for the customer";
+                            }
+                        }
+                    }
+                }
+            }
+        }
     }
 
     ngOnInit() {
