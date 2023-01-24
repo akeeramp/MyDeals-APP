@@ -255,7 +255,7 @@ a.prdAnchor {
 
 .prodSelector .leftNavFilter {
     background-color: #e7e7e8;
-    height: calc(85vh - 390px) !important;
+    height: calc(100vh - 473px) !important;
     padding: 4px;
     overflow: auto;
     font-family: 'Intel Clear','Arial'
@@ -878,10 +878,11 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
 }
 
     .declaringProdGrid kendo-grid.select-suggest-pop-up {
-        height: 86%;
+        height: calc(100vh - 474px) !important;
         overflow: auto;
         position: relative;
-        top: -19px;
+        top: -21px;
+        margin-bottom: -42px;
     }
 
 @media screen and (max-height:700px) {
