@@ -1475,12 +1475,10 @@ export class pricingTableEditorComponent {
             name: string = '',
             height: string = '',
             width: string = '650px',
-            data = {},
-            panelClass: string = "";
-        modalComponent = ProductSelectorComponent;
+            data = {};
+         modalComponent = ProductSelectorComponent;
         name = "Product Selector";
         width = "5500px";
-        panelClass = "product-selector-dialog";
         let VM = this;
         let allOperations = [];
         let emptyRow;
@@ -1489,7 +1487,7 @@ export class pricingTableEditorComponent {
             height: height,
             width: width,
             data: data,
-            panelClass: panelClass
+            panelClass: ['dialog-side-panel', 'product-selector-dialog'],
         });
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
@@ -1579,8 +1577,8 @@ export class pricingTableEditorComponent {
             height: '90vh',
             maxWidth: "90vw",
             width: '6500px',
-            data: data,
-            panelClass: "product-corrector-dialog",
+            data: data, 
+            panelClass: ['dialog-side-panel', 'product-corrector-dialog'],
         });
         await dialogRef.afterClosed().toPromise().then (async(savedResult: any) => {
             if (savedResult) {
@@ -1793,9 +1791,8 @@ export class pricingTableEditorComponent {
             height: 'auto',
             width: '1500px',
             data: autofillData,
-            panelClass: "autofiller-pop-ups"
+            panelClass: ['dialog-side-panel', 'autofiller-pop-ups'],
         });
-
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 //the scuscriber to this in Lnav ngonint code and this fill help autofill setting from lnav screen
