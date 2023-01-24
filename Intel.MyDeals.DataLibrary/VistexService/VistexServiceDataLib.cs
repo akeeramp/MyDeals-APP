@@ -386,6 +386,30 @@ namespace Intel.MyDeals.DataLibrary
             return responseObjectDictionary;
         }
 
+        public Boolean CallProfiseeApi(string CustNM, Boolean ACTV_IND)
+        {
+            var cmd = new Procs.dbo.PR_MYDL_PROFISEE_CUST_MIGRATION()
+            {
+                in_cust_nm_list = CustNM,
+                in_actv_ind = ACTV_IND
+            };
+            try
+            {
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    //Just save the data and move on - only error will report back below
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                return false;
+                //throw;
+            }
+
+            return true;
+            //return true;
+        }
 
         public bool SaveVistexResponseData(Guid batchId, Dictionary<int, string> dealsMessages) //VTX_OBJ: DEALS
         {

@@ -347,6 +347,11 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _vistexServiceDataLib.PublishSapPo(url, jsonDatab.ToString());
         }
-        
+
+        public Boolean CallProfiseeApi(string CustNM, Boolean ACTV_IND)
+        {
+            return _vistexServiceDataLib.CallProfiseeApi(CustNM, ACTV_IND);
+        }
+
     }
 }

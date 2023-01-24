@@ -293,6 +293,15 @@
                 }
             },
             {
+                state: 'admin.vistexprofiseeapi',
+                abstract: false,
+                config: {
+                    templateUrl: 'app/admin/vistex/vistexprofiseeapi.html'
+                    , url: 'vistex/vistexprofiseeapi'
+                    , controller: 'VistexProfiseeAPIController as vm'
+                }
+            },
+            {
                 state: 'admin.securityAttributes',
                 config: {
                     abstract: false

@@ -27,6 +27,8 @@ namespace Intel.MyDeals.IDataLibrary
 
         CredentialCache GetVistexCredentials(string url);
 
+        Boolean CallProfiseeApi(string CustNM, Boolean ACTV_IND);
+
         Dictionary<string, string> PublishToSapPoDCPV(string jsonData, string mode, VistexDFDataResponseObject responseObject);
     }
 }

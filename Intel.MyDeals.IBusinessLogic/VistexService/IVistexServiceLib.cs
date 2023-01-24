@@ -27,7 +27,8 @@ namespace Intel.MyDeals.IBusinessLogic
 
         Dictionary<string, string> PublishSapPo(string url, string jsonData);
 
-
+        Boolean CallProfiseeApi(string CustNM, Boolean ACTV_IND);
+        
 
     }
 }

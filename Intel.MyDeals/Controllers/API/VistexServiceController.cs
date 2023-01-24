@@ -104,6 +104,14 @@ namespace Intel.MyDeals.Controllers.API
         {
             return _vistexServiceLib.PublishSapPo(url, jsonDatab.ToString());
         }
+        [Route("CallProfiseeApi/{CustNm}/{ACTV_IND}")]
+        [HttpGet]
+        public bool CallProfiseeApi (string CustNM, string ACTV_IND)
+        {
+            bool ACT_IND = (ACTV_IND == "1") ? true : false;
+            return _vistexServiceLib.CallProfiseeApi(CustNM, ACT_IND);
+
+        }
 
         [Route("SentVistexClaimData/{packetType}/{runMode}")] //VTX_OBJ: CLAIM DATA
         [HttpGet]

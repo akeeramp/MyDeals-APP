@@ -20,7 +20,8 @@
             sendVistexData: sendVistexData,
             getVistexOutBoundData: getVistexOutBoundData,
             getVistexProductVeticalsOutBoundData: getVistexProductVeticalsOutBoundData,
-            callAPI: callAPI
+            callAPI: callAPI,
+            callProfiseeApi: callProfiseeApi
         }
 
         return service;
@@ -48,7 +49,9 @@
         function updateVistexStatus(strTransantionId, strVistexStage, dealId, strErrorMessage, rqstSid) {
             return dataService.post(apiBaseUrl + 'UpdateVistexStatus/' + strTransantionId + "/" + strVistexStage + "/" + dealId + "/" + rqstSid, JSON.stringify(strErrorMessage) );
         }
-
+        function callProfiseeApi(custNm, actv_ind) {
+            return dataService.get(vistexApiBase + 'CallProfiseeApi/' + custNm + "/" + actv_ind);
+        }
         function callAPI(apiName, runMode) {
             if (apiName.indexOf())
                 if ((runMode == "D") || (runMode == "E")) {
