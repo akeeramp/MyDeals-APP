@@ -925,13 +925,13 @@ export class PTE_CellChange_Util {
         });
     }
 
-    static pgChgfn(items: Array<any>, columns: any[], curPricingTable: any,contractData?,cellEditor?) {
+    static pgChgfn(items: Array<any>, columns: any[], curPricingTable: any,contractData?,cellEditor?,ptDefaults?) {
         let OBJ_SET_TYPE_CD = curPricingTable.OBJ_SET_TYPE_CD;
         if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'ECAP') {
             _.each(items, item => {
                 if (item.prop && item.prop == 'PROGRAM_PAYMENT') {
                     let val = item.new;
-                    this.checkfn(items, curPricingTable,columns,val,contractData,cellEditor); return;
+                    this.checkfn(items, curPricingTable,columns,val,contractData,cellEditor,ptDefaults); return;
                 }
             });
         }
@@ -945,7 +945,7 @@ export class PTE_CellChange_Util {
         }
     }
 
-    static checkfn(items: Array<any>, curPricingTable: any,columns:any[],value?,contractData?,cellEditor?) {
+    static checkfn(items: Array<any>, curPricingTable: any,columns:any[],value?,contractData?,cellEditor?,ptDefaults?) {
         if (items.length > 0) {
             let val = value ? value : this.hotTable.getDataAtRowProp(items[0].row, 'PROGRAM_PAYMENT');
             if (val != undefined && val != null && val != '' && val.toLowerCase() !== 'backend') {
@@ -962,10 +962,11 @@ export class PTE_CellChange_Util {
                     this.hotTable.setDataAtRowProp(items[0].row, 'SETTLEMENT_PARTNER', '', 'no-edit');
                 }
             } else {
-                if (this.hotTable.getDataAtRowProp(items[0].row, 'PERIOD_PROFILE') == '' && curPricingTable["PERIOD_PROFILE"] != ''){
+                if (this.hotTable.getDataAtRowProp(items[0].row, 'PERIOD_PROFILE') == '' && curPricingTable["PERIOD_PROFILE"] != undefined){
                     if(_.findWhere(columns,{data:'PERIOD_PROFILE'}) !=undefined && _.findWhere(columns,{data:'PERIOD_PROFILE'})!=null){
                         this.delReadOnlyBehaviours("PERIOD_PROFILE",items[0]);
-                        this.hotTable.setDataAtRowProp(items[0].row, 'PERIOD_PROFILE', curPricingTable["PERIOD_PROFILE"].toString(), 'no-edit');
+                        let prdPfvalue = curPricingTable["PERIOD_PROFILE"] ? curPricingTable["PERIOD_PROFILE"] : ptDefaults["_defaultAtrbs"]["PERIOD_PROFILE"].value
+                        this.hotTable.setDataAtRowProp(items[0].row, 'PERIOD_PROFILE',prdPfvalue.toString(), 'no-edit');
                     }
                 }
                 if (this.hotTable.getDataAtRowProp(items[0].row, 'RESET_VOLS_ON_PERIOD') == ''){
@@ -977,8 +978,9 @@ export class PTE_CellChange_Util {
                 if (this.hotTable.getDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL') == '' && curPricingTable["AR_SETTLEMENT_LVL"] != undefined){
                     if(_.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=undefined && _.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=null){
                         this.delReadOnlyBehaviours("AR_SETTLEMENT_LVL",items[0]);
-                        this.hotTable.setDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL', curPricingTable["AR_SETTLEMENT_LVL"], 'no-edit');
-                        if(curPricingTable && curPricingTable['AR_SETTLEMENT_LVL'] && curPricingTable['AR_SETTLEMENT_LVL'].toLowerCase() == 'cash'){
+                        let arSVal = curPricingTable["AR_SETTLEMENT_LVL"] ? curPricingTable["AR_SETTLEMENT_LVL"] : ptDefaults["_defaultAtrbs"]["AR_SETTLEMENT_LVL"].value
+                        this.hotTable.setDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL', arSVal.toString(), 'no-edit');
+                        if(curPricingTable && curPricingTable['AR_SETTLEMENT_LVL'] && arSVal.toLowerCase() == 'cash'){
                             let colSPIdx = _.findWhere(this.hotTable.getCellMetaAtRow(items[0].row), { prop: 'SETTLEMENT_PARTNER' }).col;
                             this.autoFillOnCash(items[0],contractData,colSPIdx,cellEditor);
                         }
