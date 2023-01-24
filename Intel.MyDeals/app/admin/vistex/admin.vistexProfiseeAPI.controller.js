@@ -52,7 +52,11 @@
         vm.runProfiseeAPI = function () {
             if (vm.customerToSend.length > 0) {
                 dsaService.callProfiseeApi(vm.customerToSend, vm.selectedApiID.API_CD).then(function (response) {
-                    logger.success("Customer Migrated to profisee");
+                    if (response.data == true) {
+                        logger.success("Customer Migrated to profisee");
+                    } else {
+                        logger.warning("Something went wrong...");
+                    }
                 });
             } else {
                 logger.warning("Please select Customer name");
