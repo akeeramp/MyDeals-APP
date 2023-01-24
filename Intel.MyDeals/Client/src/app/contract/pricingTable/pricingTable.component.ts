@@ -208,7 +208,7 @@ export class pricingTableComponent {
                 this.isPTEEnable = false;
             }
         }
-        else if (this.selLnav == 'MeetComp'|| this.loadtype =='MeetComp') {
+        else if ((this.selLnav == 'MeetComp' || this.loadtype == 'MeetComp') && this.selLnav != 'ViewContractDetails') {
             this.isDETab = false; this.isPTETab = false;
             this.selLnav='MeetComp';
             this.selectedTab = 1;
