@@ -17,13 +17,16 @@ export class dealEditorHeaderTemplateComponent implements OnInit{
     @Input() in_Is_Tender_Dashboard: boolean = false;//will recieve true when DE Grid Used in Tender Dashboard Screen
     public is_Deal_Tools_Checked: boolean;
     @Input() pageCount: number;
-    @Input() grid_Data: any;
+    @Input() grid_Data: any = '';
     
     selectAllIDs(event) {
         this.is_Deal_Tools_Checked = event.target.checked;
-        for (let i = 0; i < this.pageCount; i++) {
-            if (!(this.grid_Data[i].SALESFORCE_ID !== "" && this.grid_Data[i].WF_STG_CD === 'Offer'))
-                this.grid_Data[i].isLinked = this.is_Deal_Tools_Checked;
+        if (this.grid_Data && this.grid_Data.data && this.grid_Data.data.length > 0) {
+            let count = this.pageCount > this.grid_Data.data.length ? this.grid_Data.data.length : this.pageCount;
+            for (let i = 0; i < count; i++) {
+                if (!(this.grid_Data.data[i] && this.grid_Data.data[i].SALESFORCE_ID && this.grid_Data.data[i].SALESFORCE_ID !== "" && this.grid_Data.data[i].WF_STG_CD === 'Offer'))
+                    this.grid_Data.data[i]['isLinked'] = this.is_Deal_Tools_Checked;
+            }
         }
     }
     excludeAllItems(event:any){
