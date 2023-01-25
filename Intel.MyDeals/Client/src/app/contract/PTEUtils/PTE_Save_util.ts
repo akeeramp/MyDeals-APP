@@ -288,8 +288,8 @@ export class PTE_Save_Util {
         return PTR;
     }
 
-    static fillingPayLoad(data: any, curPricingTable: any) {
-        _.each(data, (item) => {
+    static fillingPayLoad(data: any, curPricingTable: any,pteData?) {
+        _.each(data, (item,ind) => {
             if (curPricingTable.OBJ_SET_TYPE_CD == 'KIT') {
                 item["TEMP_SUM_TOTAL_DSCNT_PER_LN"] = 0;
                 let obj;
@@ -322,6 +322,10 @@ export class PTE_Save_Util {
             }
             if (item['REBATE_OA_MAX_AMT '] != undefined && item['REBATE_OA_MAX_AMT '] != null && item['REBATE_OA_MAX_AMT '] != "") {
                 item['REBATE_OA_MAX_AMT '] = item['REBATE_OA_MAX_AMT '].toString();
+            }
+            if (item['REBATE_TYPE'] === "TENDER" && pteData && pteData.length > 0  ) {
+                item['END_CUSTOMER_RETAIL'] = pteData ? pteData[ind] ['END_CUSTOMER_RETAIL'] : '';
+                item['END_CUST_OBJ'] = pteData ? pteData[ind] ['END_CUST_OBJ'] : ''
             }
         });
     }

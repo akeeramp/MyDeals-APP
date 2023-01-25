@@ -1180,7 +1180,7 @@ export class pricingTableEditorComponent {
             //sanitize Data before save this will make sure all neccessary attributes are avaialbel
             finalPTR = PTE_Save_Util.sanitizePTR(finalPTR, this.contractData);
             //Adding missed fields in SaveAPI payload
-            PTE_Save_Util.fillingPayLoad(finalPTR, this.curPricingTable);
+            PTE_Save_Util.fillingPayLoad(finalPTR, this.curPricingTable,this.pricingTableDet);
         }
         let data;
         if (deleteDCIDs && deleteDCIDs.length > 0) {//If records got deleted, need to send deleted DCID's to the save API call
