@@ -99,7 +99,7 @@ export class dealEditorComponent {
     public gridResult = [];
     private gridData: GridDataResult;
     public isLoading = false;
-    public pageChange = false;
+    public pageCount = 25;
     private isTenderContract = false;
     private dropdownResponses: any = null;
     private EndCustDropdownResponses: any = null;
@@ -155,11 +155,11 @@ export class dealEditorComponent {
         },
         {
             text: "250",
-            value: 100
+            value: 250
         },
         {
             text: "500",
-            value: 100
+            value: 500
         }
     ];
     private filteringData: any[] = [];
@@ -338,8 +338,8 @@ export class dealEditorComponent {
     }
 
     dataStateChange(state: DataStateChangeEvent): void {
-        if (this.state.skip != state.skip) this.pageChange = !this.pageChange;
         this.state = state;
+        this.pageCount = this.state.take;
         this.gridData = process(this.gridResult, this.state);
     }
 
