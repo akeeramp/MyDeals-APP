@@ -9,7 +9,6 @@
 
         <div id="RulesDetailsBodyDiv" class="modal-body">
             <form id="mainForm" style="margin-top: 10px; max-height:100px" class="form-horizontal bigFont">
-
                 <div ng-include="'app/admin/rules/rulesSimulationModal.html'"></div>
 
                 <div class="col-md-11 notes">
@@ -83,17 +82,15 @@
                                     title="{{vm.rule.IsAutomationIncluded === true ? 'Auto Approval' : 'Exclusion from Automation'}}"></toggle>
                         </div>
                     </span>
-
-
                 </div>
 
                 <div class="form-group row">
-
                     <label class="control-label isRequired col-md-2">Start Date:</label>
                     <div class="col-md-2">
                         <input kendo-date-picker
                                placeholder="From date"
-                               k-ng-model="vm.rule.StartDate"
+                               ng-model="vm.rule.StartDate"
+                               ng-change="vm.UpdateEndDateFromStartDate()"
                                style="width: 100%;" />
                     </div>
                     <label class="control-label isRequired col-md-2">End Date:</label>
@@ -104,7 +101,6 @@
                                style="width: 100%;" />
                     </div>
                 </div>
-
 
                 <div class="form-group row">
                     <label class="control-label col-md-2">Notes:</label>
@@ -211,11 +207,11 @@
         border-color: #adbd00 !important;
     }
 
-        .btn-success[disabled] {
-            color: #b1babf;
-            background-color: #edeff0 !important;
-            border-color: #b1babf !important;
-        }
+    .btn-success[disabled] {
+        color: #b1babf;
+        background-color: #edeff0 !important;
+        border-color: #b1babf !important;
+    }
 
     .notes {
         font-size: 14px;
@@ -235,7 +231,8 @@
 
     .modal-dialog {
         width: 90%;
-        margin-top: 100px; /* Put in because top bar was being hidden */
+        margin-top: 100px;
+        /* Put in because top bar was being hidden */
     }
 
     .fontSmall {

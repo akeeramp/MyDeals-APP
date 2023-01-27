@@ -481,6 +481,18 @@ function RuleModalController($rootScope, $location, ruleService, $scope, $stateP
         vm.BlanketDiscountPercentage = "";
     };
 
+    // Triggered when Start Date changes, will set End Date based on a constant from the Start Date
+    vm.UpdateEndDateFromStartDate = function () {
+        if (vm.rule.StartDate != null) {
+            var dtEffFrom = new Date(vm.rule.StartDate);
+            var dtEffTo = new Date(vm.rule.EndDate);
+            
+            dtEffTo = dtEffFrom;
+            dtEffTo.setFullYear(dtEffTo.getFullYear() + 1);
+            vm.rule.EndDate = dtEffTo.toLocaleDateString('en-US');
+        }
+    }
+
     var availableAttrs = [];
 
     vm.GetRules = function (id, actionName) {
