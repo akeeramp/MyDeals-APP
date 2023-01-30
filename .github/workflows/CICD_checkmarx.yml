@@ -1,0 +1,13 @@
+name: Checkmarx Scheduled Scan
+on:
+  schedule:
+    - cron: '30 6 * * 1,3' # the cron run on UTC so tis will run on 12am IST
+
+jobs:
+  checkmarx_schedule:
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui')
+    runs-on: [self-hosted,mydeals-runner01]
+    steps:
+        - name: Checkmarx schedule
+          run: |
+             node C:\automation_newman\checkmarx.js
