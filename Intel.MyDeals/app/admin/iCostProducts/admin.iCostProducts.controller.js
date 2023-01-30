@@ -101,9 +101,27 @@
               { field: "PRD_CAT_NM", title: "Product Vertical", width: "15%", filterable: { multi: true, search: true } },
               { field: "COST_TEST_TYPE", title: "Legal Classification", width: "15%", filterable: { multi: true, search: true } },
               { field: "CRITERIA", title: "Criteria", width: "10%", filterable: { multi: true, search: true } },
-              { field: "CONDITION", title: "Condition" }
+              { field: "CONDITION", title: "Condition", template: function (dataItem) {
+                    var parsedCondition = vm.parseConditionFromJsonTxt(dataItem.JSON_TXT);
+
+                    var htmlTemplate = ``;
+                    if (parsedCondition != '') {
+                        for (const key in parsedCondition) {
+                            if (parsedCondition[key] != '') {
+                                htmlTemplate += `<strong>${key.split('_').join(' ')}</strong> <span style='word-wrap:break-word'>${parsedCondition[key].toString().split(',').join(', ')}</span> <br />`
+                            }
+                        }
+                    }
+
+                    return htmlTemplate;
+                }
+              }
             ]
         };
+
+        vm.splitComma = function (inputString) {
+            return inputString;
+        }
 
         vm.filter = { "group": { "operator": "AND", "rules": [] } };
 
@@ -212,8 +230,6 @@
         }
 
         function computed(group) {
-            var test = JSON.stringify(group);
-
             if (!group) return "";
             for (var str = "(", i = 0; i < group.rules.length; i++) {
                 i > 0 && (str += " " + group.operator + " ");
@@ -294,6 +310,40 @@
             isEditLoading = isEditMode = false;
             vm.isButtonDisabled = true;
             vm.validationMessage = "";
+        }
+
+        vm.parseConditionFromJsonTxt = function (JSON_TXT) {
+            var groupData = JSON.parse(JSON_TXT).group;
+            if (groupData.operator == 'OR') {
+                var pcsrNbr = [];
+                var fmlyNm = [];
+                var dealPrdNm = [];
+
+                groupData.rules.forEach(item => {
+                    if (item.criteria == 'PCSR_NBR') {
+                        pcsrNbr.push(item.data);
+                    } else if (item.criteria == 'FMLY_NM') {
+                        fmlyNm.push(item.data);
+                    } else if (item.criteria == 'DEAL_PRD_NM') {
+                        dealPrdNm.push(item.data);
+                    }
+                });
+
+                var simplifiedCondition = {};
+                if (!angular.equals(pcsrNbr, {})) {
+                    simplifiedCondition["PCSR_Number"] = pcsrNbr;
+                }
+                if (!angular.equals(pcsrNbr, {})) {
+                    simplifiedCondition['Family_Name'] = fmlyNm;
+                }
+                if (!angular.equals(pcsrNbr, {})) {
+                    simplifiedCondition['Product_Name'] = dealPrdNm;
+                }
+
+                return simplifiedCondition;
+            }
+
+            return "";            
         }
 
         $scope.$watch('vm.filter', function (newValue) {
