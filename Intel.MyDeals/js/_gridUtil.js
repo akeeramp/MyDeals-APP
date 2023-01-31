@@ -1,31 +1,7 @@
 ﻿// Independant static style functions
 function gridUtils() { }
 
-//gridUtils.formatValue = function (dataValue, dataFormat) {
-//    if (dataFormat !== undefined && dataFormat !== "") {
-//        kendo.culture("en-US");
-//        dataValue = kendo.toString(dataValue, dataFormat);
-//    }
-//    return dataValue;
-//}
-
 gridUtils.uiControlWrapper = function (passedData, field, format) {
-    // This is nicer, but slower... rendering template on large data is slower
-    //var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.#=field#" kendo-tooltip k-content="dataItem._behaviors.validMsg.#=field#"></div>';
-    //tmplt += '<div class="uiControlDiv"';
-    //tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.#=field#, isReadOnlyCell: dataItem._behaviors.isReadOnly.#=field#,';
-    //tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.#=field#, isErrorCell: dataItem._behaviors.isError.#=field#, isSavedCell: dataItem._behaviors.isSaved.#=field#, isDirtyCell: dataItem._behaviors.isDirty.#=field#}">';
-    //tmplt += '    <span class="ng-binding" ng-bind="(dataItem.#=field# #=gridUtils.getFormat(field, format)#)"></span>';
-    //tmplt += '</div>';
-
-    //return kendo.template(tmplt)({
-    //    "innerData": passedData,
-    //    "field": field,
-    //    "format": format
-    //});
-
-    var msg = "";
-    var msgClass = "";
     // When payout is based on billings, show blank for Billing startdate and end date fields, as these are readonly fields
     if (passedData['PAYOUT_BASED_ON'] != undefined && passedData['PAYOUT_BASED_ON'] == 'Billings' && (field == 'REBATE_BILLING_START' || field == 'REBATE_BILLING_END')) {
         var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
@@ -35,27 +11,7 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
         return tmplt
     }
 
-    //If Billing start date is more than 6 months in the past from Deal Start date then make billing start date cell softwarning as per US759049
-    if (field == 'REBATE_BILLING_START' && passedData['REBATE_TYPE'] != 'TENDER' && passedData['PAYOUT_BASED_ON'] == 'Consumption')
-    {       
-        var dt1 = moment(passedData['START_DT']).format("MM/DD/YYYY");        
-        var dt2 = moment(passedData['REBATE_BILLING_START']).format("MM/DD/YYYY");
-        if (moment(dt1).isAfter(moment(dt2).add(6, 'months')))
-        {
-            msg = "title = 'The Billing Start Date is more than six months before the Deal Start Date.'";
-            msgClass = "isSoftWarnCell";
-        }
-
-        // MUCH FASTER
-        // Altered  " style="line-height: 1em; font-family: arial; text-align: center;" due to changes on edit cell not looking correct
-        var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
-        tmplt += '<div class="uiControlDiv ' + msgClass + '" style="line-height: 1em;" ' + msg;     
-        tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';      
-        tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></div>';
-        tmplt += '</div>';
-        return tmplt;
-    }
-    else if (field == 'NUM_OF_TIERS' && passedData['OBJ_SET_TYPE_CD'] == "DENSITY") {
+    if (field == 'NUM_OF_TIERS' && passedData['OBJ_SET_TYPE_CD'] == "DENSITY") {
         var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
         tmplt += '<div class="uiControlDiv"';
         tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';
@@ -74,12 +30,13 @@ gridUtils.uiControlWrapper = function (passedData, field, format) {
     }
     else
     {
+        var finalMsg = gridUtils.applySoftWarnings(passedData, field);
+        var msgClass = gridUtils.applySoftWarningsClass(finalMsg);
+
         // MUCH FASTER
         var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
-        tmplt += '<div class="uiControlDiv"';
+        tmplt += '<div class="uiControlDiv ' + msgClass + '" style="line-height: 1em;" ' + finalMsg;
         tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';
-        //    tmplt += '     ng-class="{isHiddenCell: dataItem._behaviors.isHidden.' + field + ', isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ',';
-        //    tmplt += '     isRequiredCell: dataItem._behaviors.isRequired.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + ', isSavedCell: dataItem._behaviors.isSaved.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + '}">';
         tmplt += '    <div class="ng-binding vert-center" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></div>';
         tmplt += '</div>';
         return tmplt;
@@ -263,8 +220,11 @@ gridUtils.uiBoolControlWrapper = function (dataItem, field) {
 }
 
 gridUtils.uiStartDateWrapper = function (passedData, field, format) {
+    var finalMsg = gridUtils.applySoftWarnings(passedData, field);
+    var msgClass = gridUtils.applySoftWarningsClass(finalMsg);
+
     var tmplt = '<div class="err-bit" ng-show="dataItem._behaviors.isError.' + field + '" kendo-tooltip k-content="dataItem._behaviors.validMsg.' + field + '"></div>';
-    tmplt += '<div class="uiControlDiv"';
+    tmplt += '<div class="uiControlDiv ' + msgClass + '" style="line-height: 1em;" ' + finalMsg;
     tmplt += '     ng-class="{isReadOnlyCell: dataItem._behaviors.isReadOnly.' + field + ', isDirtyCell: dataItem._behaviors.isDirty.' + field + ', isErrorCell: dataItem._behaviors.isError.' + field + '}">';
     tmplt += '    <div class="ng-binding vert-center"><span ng-if="displayFrontEndDateMessage(dataItem)"> <i class="intelicon-information style="font- size: 12px; color: #00AEEF;" title="If the deal start date is in the past, the deal start date will change to the date when the deal becomes active."></i> </span>';
     tmplt += '    <span class="ng-binding" ng-bind="(dataItem.' + field + ' ' + gridUtils.getFormat(field, format) + ')"></span></div>';
@@ -932,6 +892,60 @@ gridUtils.uiProductControlWrapper = function (passedData, type) {
     tmplt += '     <div class="ng-binding vert-center" style="color: #0071C5; cursor: pointer;" ng-click="openDealProducts(dataItem)" ng-bind="dataItem.TITLE" ng-attr-title="{{dataItem.TITLE}}"></div>';
     tmplt += '</div>';
     return tmplt;
+}
+
+gridUtils.applySoftWarningsClass = function (finalMsg) {
+    if (finalMsg != "")
+        return "isSoftWarnCell";
+    else
+        return "";
+}
+gridUtils.applySoftWarnings = function (passedData, field) {
+    var msg = "";
+    var finalMsg = "";
+
+    //If Billing start date is more than 6 months in the past from Deal Start date then make billing start date cell softwarning as per US759049
+    if (field == 'REBATE_BILLING_START' && passedData['REBATE_TYPE'] != 'TENDER' && passedData['PAYOUT_BASED_ON'] == 'Consumption') {
+        var dt1 = moment(passedData['START_DT']).format("MM/DD/YYYY");
+        var dt2 = moment(passedData['REBATE_BILLING_START']).format("MM/DD/YYYY");
+        if (moment(dt1).isAfter(moment(dt2).add(6, 'months'))) {
+            // direct setting of final message - msg empty, no header
+            finalMsg = "title = 'The Billing Start Date is more than six months before the Deal Start Date.'";
+        }
+    }
+
+    // Mikes Vol Tier/Flex Tier adds - &#10;&#13; are both line feeds in title.
+    if ((passedData['OBJ_SET_TYPE_CD'] == 'VOL_TIER' ||
+        (passedData['OBJ_SET_TYPE_CD'] == 'FLEX' && passedData['FLEX_ROW_TYPE'] == 'Accrual'))
+        && passedData['REBATE_TYPE'] != 'TENDER' && passedData['PAYOUT_BASED_ON'] == 'Consumption') {
+        var multiTier = passedData['NUM_OF_TIERS'] != 1;
+        var dtBS = moment(passedData['REBATE_BILLING_START']).format("MM/DD/YYYY");
+        var dtBE = moment(passedData['REBATE_BILLING_END']).format("MM/DD/YYYY");
+        var dtCS = moment(passedData['START_DT']).format("MM/DD/YYYY");
+        var dtCE = moment(passedData['END_DT']).format("MM/DD/YYYY");
+        if (field == 'REBATE_BILLING_START') {
+            if (moment(dtBE).isAfter(moment(dtBS).add(12, 'months')) && multiTier) { // If billings dates are > 1 year
+                msg += "The Rebate Billings Period is restricted to 1 year.&#10;";
+            }
+        }
+        if (field == 'REBATE_BILLING_END') {
+            if (moment(dtBE).isAfter(moment(dtBS).add(12, 'months')) && multiTier) { // If billings dates are > 1 year
+                msg += "The Rebate Billings Period is restricted to 1 year.&#10;";
+            }
+            if (moment(dtCE).isAfter(moment(dtBE).add(12, 'months'))) { // Consumption End within 1 year of Billings End
+                msg += "The Consumption End Date is limited to 1 year after Billings End Date.&#10;";
+            }
+        }
+
+        //if (field == 'START_DT') {
+        //    msg += "Test 123.&#10;";
+        //}
+
+        if (msg != "") { // Non-direct setting of final message - consolidate msg with header
+            finalMsg = "title = 'Special Approvals Needed:&#10;" + msg + "'";
+        }
+    }
+    return finalMsg;
 }
 
 //this control wrapper to be used for system generated column values that are or depend on dimentionalized attributes
