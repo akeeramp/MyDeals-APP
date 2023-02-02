@@ -1593,3 +1593,7 @@ button.k-button.first-child-btn.cancel-extend-deal:hover {
     border-color: #ebebeb !important;
     background-color: #ebebeb !important;
 }
+
+kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li span.k-icon.k-i-reload {
+    font-family: "WebComponentsIcons";
+}
