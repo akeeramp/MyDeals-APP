@@ -226,14 +226,16 @@ export class pricingTableComponent {
                 const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
                 this.router.navigateByUrl(urlTree+'?loadtype=ViewContractDetails');
             }
-            if(this.loadtype =='Manage'&& (this.selLnav!='pctDiv' && this.selLnav!='ViewContractDetails')){
-
+            if(this.loadtype =='Manage'&& (this.selLnav!='pctDiv' && this.selLnav!='ViewContractDetails' && this.selLnav!='groupExclusionDiv')){
                 this.selLnav=this.route.snapshot.queryParams.manageType;
                 this.selectedTab = 2;
             }
             if(this.loadtype =='Manage'&& this.selLnav=='pctDiv'){
                 this.selectedTab = 2;
                 this.selectNavMenu='pctDiv'
+            }
+            if( this.selLnav=='groupExclusionDiv'){
+                this.selectedTab = 2;
             }
              
             this.isDETab = false; this.isPTETab = false;
