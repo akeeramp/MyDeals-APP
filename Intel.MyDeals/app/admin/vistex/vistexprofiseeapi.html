@@ -5,7 +5,7 @@
     </div>
 </div>
 
-<div class="col-md-12" style="margin-top: 15px">
+<div ng-if="vm.hasAccess" class="col-md-12" style="margin-top: 15px">
     <div class="col-md-2" style="font-size:14px; font-weight:bold">Customer Name: </div>
     <div class="col-md-3">
         <input type="text" ng-model="vm.customerToSend" class="form-control" id="inputSuccess2" aria-describedby="inputSuccess2Status">

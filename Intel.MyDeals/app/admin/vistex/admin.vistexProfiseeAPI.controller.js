@@ -7,15 +7,26 @@
 
     SetRequestVerificationToken.$inject = ['$http'];
 
-    VistexProfiseeAPIController.$inject = ['$scope', 'logger', '$timeout', 'dsaService']
+    VistexProfiseeAPIController.$inject = ['$scope', 'logger', '$timeout', 'dsaService','constantsService']
 
-    function VistexProfiseeAPIController($scope, logger, $timeout, dsaService) {
+    function VistexProfiseeAPIController($scope, logger, $timeout, dsaService, constantsService) {
         var vm = this;
         //Developer can see the Screen..
-        //Added By Bhuvaneswari for US932213
-        if (!window.isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        }
+        vm.hasAccess = false;
+        vm.isProfiseeVisible = false;
+        
+        constantsService.getConstantsByName("PRF_MRG_EMP_ID").then(function (data) {
+            if (!!data.data) {
+                vm.validWWID = data.data.CNST_VAL_TXT === "NA" ? "" : data.data.CNST_VAL_TXT;
+                vm.hasAccess = vm.validWWID.indexOf(window.usrWwid) > -1 ? true : false;
+                vm.isProfiseeVisible = vm.hasAccess;
+                if (vm.hasAccess == false) {
+                    document.location.href = "/Dashboard#/portal";
+                }
+            }
+        });
+        
+
         vm.DealstoSend = {};
         vm.selectedApiID = 1;
         vm.vistexApiNames = {};
