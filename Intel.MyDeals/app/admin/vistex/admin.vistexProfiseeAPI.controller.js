@@ -18,7 +18,7 @@
         constantsService.getConstantsByName("PRF_MRG_EMP_ID").then(function (data) {
             if (!!data.data) {
                 vm.validWWID = data.data.CNST_VAL_TXT === "NA" ? "" : data.data.CNST_VAL_TXT;
-                vm.hasAccess = vm.validWWID.indexOf(window.usrWwid) > -1 ? true : false;
+                vm.hasAccess = vm.validWWID.indexOf(window.usrDupWwid) > -1 ? true : false;
                 vm.isProfiseeVisible = vm.hasAccess;
                 if (vm.hasAccess == false) {
                     document.location.href = "/Dashboard#/portal";
