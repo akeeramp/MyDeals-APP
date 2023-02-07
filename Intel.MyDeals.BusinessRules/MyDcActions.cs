@@ -1611,26 +1611,25 @@ namespace Intel.MyDeals.BusinessRules
 
             if (deRowType == "Accrual")
             {
-                //// Removed Accrual side as part of TWC3119-479 - Flex Fund 1 year rule limitation and apply soft warning
-                //DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
-                //DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
+                DateTime startDate = DateTime.Parse(deStartDate.AtrbValue.ToString()).Date;
+                DateTime endDate = DateTime.Parse(deEndDate.AtrbValue.ToString()).Date;
 
-                //// START Intel WW offsetting code
+                // START Intel WW offsetting code
 
-                //var currYr_WW = Workweek.Get(startDate);
-                //int currWW = Workweek.Get(startDate).Ordinal;
-                //int intDayOfWeek = (int)startDate.DayOfWeek;
+                var currYr_WW = Workweek.Get(startDate);
+                int currWW = Workweek.Get(startDate).Ordinal;
+                int intDayOfWeek = (int)startDate.DayOfWeek;
 
-                //int weeksThisYear = Year.Get(startDate).NumberOfWeeks;
-                //int addWeeks = 52; // If this isn't the last week of the year and this year contains 53 weeks, place into same WW next year
-                //if (weeksThisYear == 53 && currWW != 53) addWeeks = 53;
-                //DateTime maxEndDt = currYr_WW.Add(addWeeks).StartDate.AddDays(intDayOfWeek);
-                //// END Intel WW offsetting code
+                int weeksThisYear = Year.Get(startDate).NumberOfWeeks;
+                int addWeeks = 52; // If this isn't the last week of the year and this year contains 53 weeks, place into same WW next year
+                if (weeksThisYear == 53 && currWW != 53) addWeeks = 53;
+                DateTime maxEndDt = currYr_WW.Add(addWeeks).StartDate.AddDays(intDayOfWeek);
+                // END Intel WW offsetting code
 
-                //if (endDate > maxEndDt)
-                //{
-                //    deEndDate.AddMessage("For Accrual products, the End Date is limited to 1 Intel Calendar Year from Start Date.  The latest End Date you can use is " + maxEndDt.ToString("MM/dd/yyyy") + ".");
-                //}
+                if (endDate > maxEndDt)
+                {
+                    deEndDate.AddMessage("For Accrual products, the End Date is limited to 1 Intel Calendar Year from Start Date.  The latest End Date you can use is " + maxEndDt.ToString("MM/dd/yyyy") + ".");
+                }
             }
             else if (deRowType == "Draining")
             {
@@ -3320,8 +3319,7 @@ namespace Intel.MyDeals.BusinessRules
         public static void LongTermVolTierDates(params object[] args)
         {
             // To replace the below function
-            // To replace the function: public static void LongTermVolTierDates(params object[] args)
-
+            // public static void LongTermVolTierDates(params object[] args)
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
