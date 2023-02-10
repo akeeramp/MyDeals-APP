@@ -590,10 +590,10 @@ export class GridUtil {
             }
             else
                 tmplt += '>';
-            if (passedData[startDt][dimKey] == undefined) {
+            if (passedData[startDt] == undefined) {
                 passedData[startDt][dimKey] = "";
             }
-            if (passedData[endDt][dimKey] == undefined) {
+            if (passedData[endDt] == undefined) {
                 passedData[endDt][dimKey] = "";
             }
             tmplt += '<div>' +capText + '</div>';
