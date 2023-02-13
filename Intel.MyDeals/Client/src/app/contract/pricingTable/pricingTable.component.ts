@@ -227,6 +227,7 @@ export class pricingTableComponent {
                 this.router.navigateByUrl(urlTree+'?loadtype=ViewContractDetails');
             }
             if(this.loadtype =='Manage'&& (this.selLnav!='pctDiv' && this.selLnav!='ViewContractDetails' && this.selLnav!='groupExclusionDiv')){
+
                 this.selLnav=this.route.snapshot.queryParams.manageType;
                 this.selectedTab = 2;
             }

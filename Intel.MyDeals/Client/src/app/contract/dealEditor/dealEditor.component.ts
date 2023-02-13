@@ -1095,8 +1095,7 @@ export class dealEditorComponent {
                 this.loggerService.error("dealEditorComponent::saveUpdateDEAPI::", err);
                 this.isDataLoading = false;
             });
-            if (response != undefined && response != null && response.Data != undefined && response.Data != null
-                && response.Data.WIP_DEAL != undefined && response.Data.WIP_DEAL != null && response.Data.WIP_DEAL.length > 0) {
+            if (response != undefined && response != null && response.Data != undefined && response.Data != null) {
                 if (this.isDeveloper || this.isTester) {
                     this.addPerfTimes.emit(response.PerformanceTimes);
                     this.setPerfBarDetails('setFinalDetails', "Update Contract And CurPricing Table", "MT", false, false);
@@ -1109,34 +1108,36 @@ export class dealEditorComponent {
                     this.setPerfBarDetails('mark', "Constructing returnset", "", false, false);
                     this.perfComp.emit(this.perfBar);
                 }
-                this.savedResponseWarning = [];
-                await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
-                let isanyWarnings = false;
-                if (this.gridResult.length != response.Data.WIP_DEAL) {
-                    _.each(this.gridResult, (item) => {
-                        let isResponse = false;
-                        _.each(response.Data.WIP_DEAL, (wipItem) => {
-                            if (wipItem.DC_ID == item.DC_ID)
-                                isResponse = true;
+                if (response.Data.WIP_DEAL != undefined && response.Data.WIP_DEAL != null && response.Data.WIP_DEAL.length > 0) {
+                    this.savedResponseWarning = [];
+                    await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
+                    let isanyWarnings = false;
+                    if (this.gridResult.length != response.Data.WIP_DEAL) {
+                        _.each(this.gridResult, (item) => {
+                            let isResponse = false;
+                            _.each(response.Data.WIP_DEAL, (wipItem) => {
+                                if (wipItem.DC_ID == item.DC_ID)
+                                    isResponse = true;
+                            });
+                            if (!isResponse) {
+                                isanyWarnings = item.warningMessages !== undefined && item.warningMessages.length > 0 ? true : false;
+                            }
                         });
-                        if (!isResponse) {
-                            isanyWarnings = item.warningMessages !== undefined && item.warningMessages.length > 0 ? true : false;
-                        }
-                    });
-                }
-                isanyWarnings = response.Data.WIP_DEAL.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
-                if (isanyWarnings) {
-                    //to avoid losing warning details which comes only during save action
-                    PTE_Save_Util.saveWarningDetails(response.Data.WIP_DEAL, this.savedResponseWarning);                    
-                    this.setBusy("Saved with warnings", "Didn't pass Validation", "Warning", true);
-                    if (this.isTenderContract) {
-                        this.tmDirec.emit('');
                     }
-                }
-                else {
-                    this.setBusy("Save Successful", "Saved the contract", "Success", true);
-                    if (this.isTenderContract) {
-                        this.tmDirec.emit('');
+                    isanyWarnings = response.Data.WIP_DEAL.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
+                    if (isanyWarnings) {
+                        //to avoid losing warning details which comes only during save action
+                        PTE_Save_Util.saveWarningDetails(response.Data.WIP_DEAL, this.savedResponseWarning);
+                        this.setBusy("Saved with warnings", "Didn't pass Validation", "Warning", true);
+                        if (this.isTenderContract) {
+                            this.tmDirec.emit('');
+                        }
+                    }
+                    else {
+                        this.setBusy("Save Successful", "Saved the contract", "Success", true);
+                        if (this.isTenderContract) {
+                            this.tmDirec.emit('');
+                        }
                     }
                 }
             }

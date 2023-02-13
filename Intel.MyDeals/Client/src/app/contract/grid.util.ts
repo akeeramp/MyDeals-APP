@@ -1040,8 +1040,10 @@ export class GridUtil {
         });
     }
     static stop(value) {
-        value.end = moment();
-        value.executionMs = value.end.diff(value.start);
+        if (value) {
+            value.end = moment();
+            value.executionMs = value.end.diff(value.start);
+        }
         return value;
     };
     static add(data, marks) {

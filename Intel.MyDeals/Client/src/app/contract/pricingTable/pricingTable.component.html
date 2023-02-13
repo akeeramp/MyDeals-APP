@@ -166,7 +166,7 @@
         <lnavView [contractId]="c_Id" (modelChange)="loadModel($event)" [changedTab]="selectedTab" [contractData]="contractData" [UItemplate]="UItemplate" [selectNavMenu]="selectNavMenu"></lnavView>
     </div>
 </div>
-<div *ngIf="enablePerfChart && isDETab" [hidden]="!drawChart" style="position: relative; left: 76% !important; height: 3% !important; width: 400px !important; bottom: 894px !important;">
+<div *ngIf="enablePerfChart && isDETab" [hidden]="!drawChart" class="managingPerformanceBars">
     <performance-bars [type]="perfModel"></performance-bars>
 </div>
 

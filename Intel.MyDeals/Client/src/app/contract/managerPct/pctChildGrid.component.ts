@@ -113,6 +113,7 @@ export class pctChildGridComponent {
                 dataItem.saved = true;
                 setTimeout(()=>{
                     dataItem.saved = false;
+                    this.loggerSvc.warn("You have made a change that may affect Cost Test results.", "Please re - run Cost Test");
                 }, 3000);
             }
         });
