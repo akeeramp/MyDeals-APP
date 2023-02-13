@@ -181,6 +181,7 @@ export class ProductSelectorComponent {
         this.spinnerMessageHeader = 'Product selector loading';
         this.spinnerMessageDescription = 'Product selector loading please wait';
         this.isLoading = true;
+        this.isLoadingSearchProducts=true;
         const dtoDateRange = {
             startDate: this.pricingTableRow.START_DT, endDate: this.pricingTableRow.END_DT,
             mediaCode: this.pricingTableRow.PROD_INCLDS, dealType: this.pricingTableRow.OBJ_SET_TYPE_CD
@@ -200,6 +201,7 @@ export class ProductSelectorComponent {
             this.getItems(null);
             this.displayTemplateType = this.getDisplayTemplate();
             this.isLoading = false;
+            this.isLoadingSearchProducts=false;
         }, (error) => {
             this.isLoading = false;
             this.loggerService.error('ProductSelectorComponent::getProductSelection::', error);
@@ -1439,6 +1441,6 @@ export class ProductSelectorComponent {
              this.userInput = this.data.selVal;
              this.searchProduct();
          }
-            
+         
     }
 }

@@ -406,12 +406,13 @@ export class PTE_CellChange_Util {
         }
         //in case of copy paste or autofill
         else {
+            const oldPTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
             //for length greater than 1 it will either copy or autofill so first cleaning those records since its prod the length can be predicted so deleting full
             this.hotTable.alter('remove_row', items[0].row, PTE_Config_Util.girdMaxRows, 'no-edit');
             //identify the empty row and the next empty row will be the consecutive one
             let empRow = this.returnEmptyRow();
+            const ptrrow = oldPTR[items[0].row - 1];
             _.each(items, (cellItem) => {
-                let ROW_ID = this.rowDCID();//_.random(250); // will be replace with some other logic
                 //add num of tier rows the logic will be based on autofill value
                 let prods = _.uniq(cellItem.new.split(',')), prodIndex = 0;
                  //to identify the uniq records
@@ -419,7 +420,9 @@ export class PTE_CellChange_Util {
                 //KIT Deal will not allow more than 10 rows
                 let prdlen=prods.length>10?PTE_Config_Util.maxKITproducts:prods.length;
                 for (let i = empRow; i < prdlen + empRow; i++) {
-                    this.addUpdateRowOnchangeKIT(this.hotTable, columns, i, cellItem, ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex], null, operation);
+                    const ROW_ID = this.rowDCID(oldPTR, cellItem.row);//_.random(250); // will be replace with some other logic
+                    this.updateRowPrevDataOnDrag(this.hotTable, empRow, ROW_ID, ptrrow);
+                   // this.addUpdateRowOnchangeKIT(this.hotTable, columns, i, cellItem, ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex], null, operation);
                     prodIndex++;
                 }
                 //calling the merge cells optionfor tier 
@@ -498,16 +501,19 @@ export class PTE_CellChange_Util {
             }
         }
         else {
+            const oldPTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
             //for length greater than 1 it will eithr copy or autofill so first cleaning those recorsds
             this.hotTable.alter('remove_row', items[0].row, items.length * parseInt(curPricingTable.NUM_OF_TIERS), 'no-edit');
             //identify the empty row and the next empty row will be the consecutive one
             let empRow = this.returnEmptyRow();
+            const ptrrow = oldPTR[items[0].row - 1];
             _.each(items, (cellItem) => {
-                let ROW_ID = this.rowDCID(); // will be replace with some other logic
                 //add num of tier rows the logic will be based on autofill value
                 let tier = 1;
                 for (let i = empRow; i < parseInt(curPricingTable.NUM_OF_TIERS) + empRow; i++) {
-                    this.addUpdateRowOnchange(this.hotTable, columns, i, cellItem, ROW_ID, updateRows, curPricingTable, contractData, NUM_OF_TIERS, tier, operation);
+                    const ROW_ID = this.rowDCID(oldPTR, cellItem.row);//_.random(250); // will be replace with some other logic
+                    this.updateRowPrevDataOnDrag(this.hotTable, empRow, ROW_ID, ptrrow);
+                   // this.addUpdateRowOnchange(this.hotTable, columns, i, cellItem, ROW_ID, updateRows, curPricingTable, contractData, NUM_OF_TIERS, tier, operation);
                     tier++;
                 }
                 //calling the merge cells optionfor tier 
@@ -594,6 +600,8 @@ export class PTE_CellChange_Util {
                     }
                 }
                 else {
+
+                    let oldPTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
                     //for length greater than 1 it will eithr copy or autofill so first cleaning those recorsds
                     if (curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD == 'VOL_TIER') {
                         this.hotTable.alter('remove_row', items[0].row, items.length * parseInt(curPricingTable.NUM_OF_TIERS), 'no-edit');
@@ -604,9 +612,10 @@ export class PTE_CellChange_Util {
 
                     //identify the empty row and the next empty row will be the consecutive one
                     let empRow = this.returnEmptyRow();
+                    const ptrrow=oldPTR[items[0].row-1];
                     _.each(items, (cellItem) => {
-                        let ROW_ID = this.rowDCID();//_.random(250); // will be replace with some other logic
-                        this.addUpdateRowOnchange(this.hotTable, columns, empRow, cellItem, ROW_ID, updateRows, curPricingTable, contractData, 0, 1, operation);
+                      let ROW_ID = this.rowDCID(oldPTR,cellItem.row);//_.random(250); // will be replace with some other logic
+                        this.updateRowPrevDataOnDrag(this.hotTable,  empRow,  ROW_ID, ptrrow);
                         empRow++;
                     });
                 }
@@ -621,6 +630,17 @@ export class PTE_CellChange_Util {
         catch (ex) {
             console.error(ex);
         }
+    }
+
+    static updateRowPrevDataOnDrag(hotTable: Handsontable,  row: number,  ROW_ID: number,ptrRow:any){
+         _.each(ptrRow,(key,val)=>{
+            if(val!='IS_HYBRID_PRC_STRAT' && val!='NUM_OF_TIERS')
+            hotTable.setDataAtRowProp(row, val,key, 'no-edit');
+             if (val == 'DC_ID') {
+                //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
+                hotTable.setDataAtRowProp(row, val, ROW_ID, 'no-edit');
+            }
+        }) 
     }
 
     static addUpdateRowOnchangeDensity(hotTable: Handsontable, row: number, cellItem: any, ROW_ID: number, updateRows: Array<any>, curPricingTable: any, contractData: any, numoftier: number, tier?: number, operation?: any) {
@@ -753,18 +773,19 @@ export class PTE_CellChange_Util {
             }
         }
         else {
+            const oldPTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
             //for length greater than 1 it will eithr copy or autofill so first cleaning those recorsds
             this.hotTable.alter('remove_row', items[0].row, items.length * numOfRows, 'no-edit');
             //identify the empty row and the next empty row will be the consecutive one
             let empRow = this.returnEmptyRow();
+            const ptrrow = oldPTR[items[0].row - 1];
             _.each(items, (cellItem) => {
-                let ROW_ID = this.rowDCID();//_.random(250); // will be replace with some other logic
-                //add num of tier rows the logic will be based on autofill value
+                 //add num of tier rows the logic will be based on autofill value
                 let tier = 1;
                 for (let i = empRow; i < numOfRows + empRow; i++) {
                     for (let j = 0; j < pivotDensity; j++) {
-                        this.addUpdateRowOnchangeDensity(this.hotTable, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, NUM_OF_TIERS, tier, operation);
-                        i++
+                        const ROW_ID = this.rowDCID(oldPTR, cellItem.row);//_.random(250); // will be replace with some other logic
+                        this.updateRowPrevDataOnDrag(this.hotTable, empRow, ROW_ID, ptrrow);                        i++
                     }
                     i = i - 1;
                     tier++;
@@ -1182,10 +1203,18 @@ export class PTE_CellChange_Util {
             }
         });
     }
-    static rowDCID(): number {
+    static rowDCID(ptr?:any,rowindex?:any): number {
         let ROWID = -100;
         let PTRCount = this.hotTable.countRows();
         if (PTRCount > 0) {
+            if(ptr!=null){
+                let rowdata=ptr[rowindex];
+                if(!!rowdata && rowdata!=null){
+                    if(rowdata.DC_ID>0){
+                       return rowdata.DC_ID;
+                    }
+                }
+            }
             let distDCIDs = [];
             for (let i = 0; i < PTRCount; i++) {
                 if (!this.hotTable.isEmptyRow(i)) {
