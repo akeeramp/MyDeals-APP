@@ -336,7 +336,7 @@ export class allDealsComponent {
                         this.wipTemplate.columns[i].field = 'CUST_NM';
                         this.wipTemplate.columns[i].template= "#=CUST_NM#";
                     }
-                    if ((this.wipTemplate.columns[i].field != 'TOTAL_DOLLAR_AMOUNT') && (this.wipTemplate.columns[i].field != 'KIT_ECAP') && (this.wipTemplate.columns[i].field != 'TIER_NBR') && (this.wipTemplate.columns[i].field !='details') && (this.wipTemplate.columns[i].field != 'tools') && (this.wipTemplate.columns[i].field !="MISSING_CAP_COST_INFO") && (this.wipTemplate.columns[i].field !="LAST_REDEAL_DT")){
+                    if ((this.wipTemplate.columns[i].field != 'TOTAL_DOLLAR_AMOUNT') && (this.wipTemplate.columns[i].field != 'KIT_ECAP') && (this.wipTemplate.columns[i].field !='details') && (this.wipTemplate.columns[i].field != 'tools') && (this.wipTemplate.columns[i].field !="MISSING_CAP_COST_INFO") && (this.wipTemplate.columns[i].field !="LAST_REDEAL_DT")){
                         this.allColumns.push(this.wipTemplate.columns[i]);
                     }
                 }
@@ -387,12 +387,6 @@ export class allDealsComponent {
             }
             else if (group[0].dealType == 'PROGRAM') {
                 let col = this.wipTemplate?.columns.filter(x => x.field == 'TOTAL_DOLLAR_AMOUNT' && x.hidden == false);
-                if (col && col.length == 1) {
-                    this.columns.push(col[0]);
-                }
-            }
-            else {
-                let col = this.wipTemplate?.columns.filter(x => x.field == 'TIER_NBR' && x.hidden == false);
                 if (col && col.length == 1) {
                     this.columns.push(col[0]);
                 }

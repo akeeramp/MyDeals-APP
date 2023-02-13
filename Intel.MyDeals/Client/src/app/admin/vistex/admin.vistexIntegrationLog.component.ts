@@ -167,7 +167,8 @@ export class adminVistexIntegrationLogComponent implements OnInit {
     }
 
     closeEditor(grid, rowIndex = this.editedRowIndex) {
-        grid.closeRow(rowIndex);
+        if(grid)
+            grid.closeRow(rowIndex);
         this.editedRowIndex = undefined;
         this.formGroup = undefined;
     }

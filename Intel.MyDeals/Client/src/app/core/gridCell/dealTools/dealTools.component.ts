@@ -152,6 +152,7 @@ export class dealToolsComponent{
             this.isSalesForceDeal = true;
         }
         if (this.dataItem._dirty || this.dataItem.isDirtyFile) this.isModified = true;
+        else this.isModified = false;
         //if (!!this.isEditable)
         //    this.isEditable = false;
                 

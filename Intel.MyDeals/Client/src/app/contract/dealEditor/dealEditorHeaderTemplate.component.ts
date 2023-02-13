@@ -25,7 +25,7 @@ export class dealEditorHeaderTemplateComponent implements OnInit{
             let count = this.pageCount > this.grid_Data.data.length ? this.grid_Data.data.length : this.pageCount;
             for (let i = 0; i < count; i++) {
                 if (!(this.grid_Data.data[i] && this.grid_Data.data[i].SALESFORCE_ID && this.grid_Data.data[i].SALESFORCE_ID !== "" && this.grid_Data.data[i].WF_STG_CD === 'Offer'))
-                    this.grid_Data.data[i]['isLinked'] = this.is_Deal_Tools_Checked;
+                    this.grid_Data.data[i]['isLinked'] = this.is_Deal_Tools_Checked;                    
             }
         }
     }
@@ -45,16 +45,6 @@ export class dealEditorHeaderTemplateComponent implements OnInit{
                 return false;
         }
         return true;
-    }
-
-    ngOnChanges() {
-        if (!this.in_Is_Tender_Dashboard) {
-            this.is_Deal_Tools_Checked = false;
-            for (let i = 0; i < this.grid_Result.length; i++) {
-                if (!(this.grid_Result[i].SALESFORCE_ID !== "" && this.grid_Result[i].WF_STG_CD === 'Offer'))
-                    this.grid_Result[i].isLinked = this.is_Deal_Tools_Checked;
-            }
-        }
     }
 
     ngOnInit() {
