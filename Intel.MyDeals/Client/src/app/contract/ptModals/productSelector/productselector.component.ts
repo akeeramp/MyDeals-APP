@@ -180,7 +180,6 @@ export class ProductSelectorComponent {
     getProductSelection() {
         this.spinnerMessageHeader = 'Product selector loading';
         this.spinnerMessageDescription = 'Product selector loading please wait';
-        this.isLoading = true;
         this.isLoadingSearchProducts=true;
         const dtoDateRange = {
             startDate: this.pricingTableRow.START_DT, endDate: this.pricingTableRow.END_DT,
@@ -200,10 +199,9 @@ export class ProductSelectorComponent {
             this.productSelectionLevelsAttributes = result.ProductSelectionLevelsAttributes;
             this.getItems(null);
             this.displayTemplateType = this.getDisplayTemplate();
-            this.isLoading = false;
-            this.isLoadingSearchProducts=false;
+            this.isLoadingSearchProducts = false;
         }, (error) => {
-            this.isLoading = false;
+            this.isLoadingSearchProducts = false;
             this.loggerService.error('ProductSelectorComponent::getProductSelection::', error);
         });
     }
@@ -1434,13 +1432,14 @@ export class ProductSelectorComponent {
             this.searchProduct();
         }
     }
-     ngOnInit() {
+    ngOnInit() {
+        this.isLoadingSearchProducts = true;
         this.loadPTSelctor();
         this.getProductSelection();
          if (this.data.selVal !== '' && this.data.source == 'Product Corrector') {
              this.userInput = this.data.selVal;
              this.searchProduct();
          }
-         
+            
     }
 }
