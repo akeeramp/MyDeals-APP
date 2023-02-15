@@ -945,4 +945,13 @@ export class RuleDetailsModalComponent {
     distinctPrimitive(fieldName: string): any {
         return distinct(this.dataCollection, fieldName).map(item => item[fieldName]);
     }
+
+    UpdateEndDateFromStartDate() {
+        if (this.strtDate != null) {
+            let dtEffFrom = new Date(this.strtDate);
+            let dtEffTo = dtEffFrom;
+            dtEffTo.setFullYear(dtEffTo.getFullYear() + 1);
+            this.endDt = new Date(dtEffTo.toLocaleDateString('en-US'));
+        }
+    }
 }

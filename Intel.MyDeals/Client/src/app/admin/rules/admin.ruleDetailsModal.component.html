@@ -78,7 +78,7 @@
                 <div class="form-group row col-md-12">
                     <label class="control-label isRequired col-md-2" style="padding-right:20px;">Start Date:</label>
                     <div class="col-md-2">
-                        <kendo-datepicker #picker [(ngModel)]="strtDate" calendarType="classic"></kendo-datepicker>
+                        <kendo-datepicker #picker [(ngModel)]="strtDate" calendarType="classic" (valueChange)="UpdateEndDateFromStartDate()"></kendo-datepicker>
                     </div>
                     <label class="control-label isRequired col-md-2" style="padding-right:20px;">End Date:</label>
                     <div class="col-md-2">
