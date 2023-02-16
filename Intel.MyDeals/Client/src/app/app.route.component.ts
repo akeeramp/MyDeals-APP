@@ -48,6 +48,7 @@ import { DashboardComponent } from "./dashboard/dashboard/dashboard.component";
 import { ReportingComponent } from "./reporting/reporting.component";
 import { globalRouteComponent } from "./shared/globalroute/globalroute.component";
 import { adminMydealsSupportComponent } from './admin/mydealssupport/admin.mydealssupport.component';
+import { adminVistexProfiseeApiComponent } from './admin/vistex/admin.vistexProfiseeAPI.component'
 //added for security check
 import { SecurityResolver } from "./shared/security.resolve";
 
@@ -107,4 +108,5 @@ export const routes: Routes = [
     { path: 'contractmanager/:type/:cid/:PSID/:PTID/:DealID', component: pricingTableComponent, data: { title: 'Contract', BaseHref: 'Contract' }, resolve: { security: SecurityResolver } },
     { path: 'tendermanager/:cid', component: tenderManagerComponent, data: { title: 'Dashboard', BaseHref: 'Contract' }, resolve: { security: SecurityResolver } },
     { path: 'MyDealsSupport', component: adminMydealsSupportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
+    { path: 'vistexProfiseeApi', component: adminVistexProfiseeApiComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
 ];

@@ -1,0 +1,26 @@
+﻿<link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" />
+<link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
+<link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<div class="profiseePaddingTop">
+    <div class="col-md-12">
+        <div class="col-md-5">
+            <h2>Profisee Migration</h2>
+            <p class="profiseeMessage">This screen allow to Onboard Profisee Customer</p>
+        </div>
+    </div>
+
+    <div class="col-md-12 profiseeTools">
+        <div class="col-md-2 profiseeFontStyle">Customer Name: </div>
+        <div class="col-md-3">
+            <kendo-textbox class="form-control md" id="profiseeCust" [(ngModel)]="customerToSend"
+                           aria-describedby="profiseeCustStatus"></kendo-textbox>
+        </div>
+        <div class="col-md-3">
+            <kendo-combobox [data]="vistexApiNames" placeholder="Select a Value..." textField="API_NM" valueField="API_CD" [(ngModel)]="selectedApiID" [valuePrimitive]="true"></kendo-combobox>
+        </div>
+        <div class="col-md-2">
+            <button (click)="runProfiseeAPI()" class="btn btn-primary" id="migrate">Migrate</button>
+        </div>
+    </div>
+</div>

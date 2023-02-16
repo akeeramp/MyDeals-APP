@@ -58,4 +58,9 @@ export class dsaService {
         const apiUrl = this.apiBaseUrl + 'GetRequestTypeList';
         return this.httpClient.get(apiUrl); 
     }
+
+    public callProfiseeApi(custNm, actv_ind): Observable<any> {
+        const apiUrl = this.vistexApiBase + 'CallProfiseeApi/' + custNm + "/" + actv_ind;
+        return this.httpClient.get(apiUrl);
+    }
 }

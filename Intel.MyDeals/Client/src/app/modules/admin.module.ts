@@ -53,6 +53,7 @@ import { adminsecurityEngineComponent } from '../admin/securityEngine/admin.secu
 import { BulkPricingUpdatesComponent } from '../admin/bulkPricingUpdates/admin.bulkPricingUpdates.component';
 import { BulkPricingUpdateModalComponent } from '../admin/bulkPricingUpdates/admin.bulkPricingUpdateModal.component';
 import { adminMydealsSupportComponent } from '../admin/mydealssupport/admin.mydealssupport.component';
+import { adminVistexProfiseeApiComponent } from '../admin/vistex/admin.vistexProfiseeAPI.component';
 
 export let adminComponents =[
     EmployeeComponent,
@@ -110,5 +111,6 @@ export let adminComponents =[
     bulkUnifyModalComponent,
     BulkPricingUpdatesComponent,
     BulkPricingUpdateModalComponent,
-    adminMydealsSupportComponent
+    adminMydealsSupportComponent,
+    adminVistexProfiseeApiComponent
 ]

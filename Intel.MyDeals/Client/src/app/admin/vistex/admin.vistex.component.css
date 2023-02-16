@@ -56,3 +56,30 @@
     right: 0;
     overflow: scroll !important;
 }
+
+.profiseePaddingTop{
+    padding-top:40px;
+}
+
+.profiseeMessage {
+    color: #FC4C02
+}
+
+.profiseeTools {
+    margin-top: 15px;
+}
+
+.profiseeFontStyle {
+    font-size: 14px;
+    font-weight: bold;
+}
+
+#profiseeCust {
+    height: 35px;
+    font-size: 12px;
+    width: 100%;
+}
+
+#migrate {
+    float: left;
+}
