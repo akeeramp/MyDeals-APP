@@ -587,12 +587,12 @@ export class contractDetailsComponent {
         else if (changeEvent == "START_YR" || changeEvent == "START_QTR") {
             qtrValue = this.START_QTR;
             yearValue = this.START_YR;
-            isValidDataPresent = (yearValue != null && yearValue >= this.contractData.MinDate.split('/').at(-1)) ? true : false;
+            isValidDataPresent = yearValue != null ? true : false;
         }
         else if (changeEvent == "END_YR" || changeEvent == "END_QTR") {
             qtrValue = this.END_QTR;
             yearValue = this.END_YR;
-            isValidDataPresent = (yearValue != null && yearValue <= this.contractData.MaxDate.split('/').at(-1)) ? true : false;
+            isValidDataPresent = yearValue != null ? true : false;
         }
         if (isValidDataPresent) {
             this.isLoading = true;

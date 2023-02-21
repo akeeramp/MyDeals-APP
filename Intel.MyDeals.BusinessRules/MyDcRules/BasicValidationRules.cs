@@ -723,7 +723,8 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.LastTierEndVolumeCheck,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
                     InObjSetType = new List<string> { OpDataElementSetType.VOL_TIER.ToString(), OpDataElementSetType.FLEX.ToString(), OpDataElementSetType.REV_TIER.ToString(), OpDataElementSetType.DENSITY.ToString() },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnMergeComplete }
+                    // OnMergeComplete ensures that this tags a validation error prior to Majro change checks to alter fast-track flow
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnMergeComplete, MyRulesTrigger.OnSave }
                 },
 
                 new MyOpRule
@@ -740,7 +741,8 @@ namespace Intel.MyDeals.BusinessRules
                     Title="Billing Date Validations",
                     ActionRule = MyDcActions.CheckBillingDates,
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                    // OnMergeComplete ensures that this tags a validation error prior to Majro change checks to alter fast-track flow
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnMergeComplete, MyRulesTrigger.OnValidate }
                 },
 
                 new MyOpRule

@@ -33,6 +33,7 @@ export class dealToolsComponent{
     @Input() isDeleteEnabled;
     @Input() isManageTab;
     @Input() in_Is_Tender_Dashboard: boolean = false;//this will passed as true if its used in Tender Dashboard Screen
+    @Input() gridResult: any = '';
     @Output() iconSaveUpdate: EventEmitter<any> = new EventEmitter<any>();
     @Output() refreshContract: EventEmitter<any> = new EventEmitter<any>();
     @Output() reloadFn = new EventEmitter<any>();
@@ -430,9 +431,9 @@ export class dealToolsComponent{
     getLinkedIds(){
         let ids = [];
         if (this.dataItem?.isLinked !== undefined && this.dataItem?.isLinked) {
-            for (let i = 0; i < this.gridData.length; i++) {
-                if (this.gridData[i].isLinked !== undefined && this.gridData[i].isLinked) {
-                    ids.push(this.gridData[i]["DC_ID"]);
+            for (let i = 0; i < this.gridResult.length; i++) {
+                if (this.gridResult[i].isLinked !== undefined && this.gridResult[i].isLinked) {
+                    ids.push(this.gridResult[i]["DC_ID"]);
                 }
             }
         }
@@ -641,8 +642,8 @@ export class dealToolsComponent{
         let ids = [];
         if (model.isLinked !== undefined && model.isLinked) {
             let curHoldStatus = model._actionsPS.Hold === undefined ? false : model._actionsPS.Hold;
-            for (let v = 0; v < this.gridData.length; v++) {
-                let dataItem = this.gridData[v];
+            for (let v = 0; v < this.gridResult.length; v++) {
+                let dataItem = this.gridResult[v];
                 if (dataItem.isLinked !== undefined && dataItem.isLinked) {
                     if (dataItem?._actionsPS === undefined)
                         dataItem._actionsPS = {};

@@ -590,12 +590,14 @@ export class GridUtil {
             }
             else
                 tmplt += '>';
-            if (passedData[startDt] == undefined) {
+            if (!passedData[startDt])
+                passedData[startDt] = {};
+            if (!passedData[startDt][dimKey])
                 passedData[startDt][dimKey] = "";
-            }
-            if (passedData[endDt] == undefined) {
+            if (!passedData[endDt])
+                passedData[endDt] = {}; 
+            if (!passedData[endDt][dimKey])
                 passedData[endDt][dimKey] = "";
-            }
             tmplt += '<div>' +capText + '</div>';
             tmplt += '    <div class="fullHeight">';
             tmplt += '    <span class="ng-binding" id="tdsCol">' + passedData[startDt][dimKey] + '</span> - ';

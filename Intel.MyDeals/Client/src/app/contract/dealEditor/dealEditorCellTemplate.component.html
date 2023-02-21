@@ -7,7 +7,7 @@
 <div *ngIf="in_Field_Name === 'tools'" class="dealCell">
     <deal-tools-angular [dataItem]='in_DataItem' [in_Is_Tender_Dashboard]="in_Is_Tender_Dashboard" [isSplitEnabled]='true' [isFileAttachmentEnabled]='true' 
                         [isHistoryEnabled]='true' [isCommentEnabled]='true' [isEditable]='true' 
-                        [isQuoteLetterEnabled]='true' [isDeleteEnabled]='true' [gridData]="grid_Data" [contractData]="contract_Data"
+                        [isQuoteLetterEnabled]='true' [isDeleteEnabled]='true' [gridData]="grid_Data" [contractData]="contract_Data" [gridResult]="in_DataSet"
                         (iconSaveUpdate)="updateIcon($event)" (refreshContract)="refreshContractData($event)" (reloadFn)="reload($event)" (removeDeletedRow)="removeDeletedRowData($event)">
     </deal-tools-angular>
 </div>

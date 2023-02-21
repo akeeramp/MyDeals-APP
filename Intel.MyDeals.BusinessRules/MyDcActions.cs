@@ -2142,7 +2142,10 @@ namespace Intel.MyDeals.BusinessRules
             List<IOpDataElement> changedDes = r.Dc.GetDataElementsWhere(d => onChangeItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueDifferentFromOrig(atrbMstr)).ToList();
             List<IOpDataElement> changedIncreaseDes = r.Dc.GetDataElementsWhere(d => onChangeIncreaseItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueIncreasedFromOrig(atrbMstr)).ToList();
             List<IOpDataElement> changedDecreaseDes = r.Dc.GetDataElementsWhere(d => onChangeDecreaseItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueDecreasedFromOrig(atrbMstr)).ToList();
-
+            // Wrong way changes that also threw an error to force Fast Track redeals back into normal redeal space
+            List<IOpDataElement> WrongWayFTErrorIncDes = r.Dc.GetDataElementsWhere(d => onChangeIncreaseItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueDecreasedFromOrig(atrbMstr) && d.ValidationMessage != "").ToList();
+            List<IOpDataElement> WrongWayFTErrorDecDes = r.Dc.GetDataElementsWhere(d => onChangeDecreaseItems.Select(a => a.ATRB_COL_NM).Contains(d.AtrbCd) && d.DcID > 0 && d.HasValueChanged && d.IsValueIncreasedFromOrig(atrbMstr) && d.ValidationMessage != "").ToList();
+            
             var titleDe = changedDes.Where(x => x.AtrbCd == AttributeCodes.TITLE);
 
             // Product title changed..  Check if Atrb 15 changed
@@ -2167,20 +2170,20 @@ namespace Intel.MyDeals.BusinessRules
                 }
             }
 
-            // if not a major change... exit
-            if (!changedDes.Any() && !changedIncreaseDes.Any() && !changedDecreaseDes.Any() && r.Dc.DcID > 0) return;
+            // Consolidate all cahnges now
+            var allChanges = changedDes.Union(changedIncreaseDes).Union(changedDecreaseDes).Union(WrongWayFTErrorIncDes).Union(WrongWayFTErrorDecDes);
+
+            // if not a major change or forced major change... exit
+            if (!allChanges.Any() && r.Dc.DcID > 0) return;
 
             // Define re deal reason
-
-            // TO DO: Fix this later
-
             var reason = "Re-deal due to major change: ";
             var reasonDetails = new List<string>();
             if (r.Dc.DcID > 0)
             {
-                foreach (IOpDataElement de in changedDes.Union(changedIncreaseDes).Union(changedDecreaseDes))
+                foreach (IOpDataElement de in allChanges)
                 {
-                    MyDealsAttribute atrb = onChangeItems.Union(onChangeIncreaseItems).Union(onChangeDecreaseItems).Union(onChangeDecreaseItems).FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
+                    MyDealsAttribute atrb = onChangeItems.Union(onChangeIncreaseItems).Union(onChangeDecreaseItems).FirstOrDefault(a => a.ATRB_COL_NM == de.AtrbCd);
                     if (atrb == null) continue;
 
                     reasonDetails.Add(atrb.DATA_TYPE_CD == "DATETIME" ? 

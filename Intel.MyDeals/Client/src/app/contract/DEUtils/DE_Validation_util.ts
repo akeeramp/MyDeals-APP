@@ -73,7 +73,21 @@ export class DE_Validation_Util {
                 item._behaviors.isError['START_DT'] = true;
                 item._behaviors.validMsg['START_DT'] = "Deal Start date cannot be greater than the Deal End Date";
                 isShowStopperError = true;
-            }            
+            }
+
+            // Remove after validation error supressing rollback is corrected
+            if (moment(item["REBATE_BILLING_START"]).isAfter(moment(item["START_DT"])) && item["PAYOUT_BASED_ON"].toUpperCase() === "CONSUMPTION") {
+                item._behaviors.isError['REBATE_BILLING_START'] = true;
+                item._behaviors.validMsg['REBATE_BILLING_START'] = "The Billing Start Date must be on or earlier than the Deal Start Date.";
+                isShowStopperError = true;
+            }
+
+            // Remove after validation error supressing rollback is corrected
+            if (moment(item["REBATE_BILLING_END"]).isAfter(moment(item["END_DT"])) && item["PAYOUT_BASED_ON"].toUpperCase() === "CONSUMPTION") {
+                item._behaviors.isError['REBATE_BILLING_END'] = true;
+                item._behaviors.validMsg['REBATE_BILLING_END'] = "The Billing End Date must be on or earlier than the Deal End Date.";
+                isShowStopperError = true;
+            }
 
             if (item["END_CUSTOMER_RETAIL"] != undefined && item["END_CUSTOMER_RETAIL"] != null) { // && isTenderFlag == "1"
                 if (item._behaviors.isError['END_CUSTOMER_RETAIL']) {
