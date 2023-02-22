@@ -8,8 +8,6 @@ import { Workbook } from '@progress/kendo-angular-excel-export';
 import { ExcelExport } from "../contract/excelExport.util"
 export class GridUtil {
     static uiControlWrapper(passedData, field, format) {
-        var msg = "";
-        var msgClass = "";
         if (passedData['PAYOUT_BASED_ON'] != undefined && passedData['PAYOUT_BASED_ON'] == 'Billings' && (field == 'REBATE_BILLING_START' || field == 'REBATE_BILLING_END')) {
             var tmplt = '';
             if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
@@ -18,29 +16,7 @@ export class GridUtil {
             tmplt += '</div>';
             return tmplt
         }
-        if (field == 'REBATE_BILLING_START' && passedData['REBATE_TYPE'] != 'TENDER' && passedData['PAYOUT_BASED_ON'] == 'Consumption') {
-            var dt1 = new Date(passedData['START_DT']);
-            var dt2 = new Date(passedData['REBATE_BILLING_START']);
-            var months;
-            months = (dt1.getFullYear() - dt2.getFullYear()) * 12;
-            months -= dt2.getMonth();
-            months += dt1.getMonth();
-            months = months <= 0 ? 0 : months;
-            if (months > 6) {
-                msg = "title = 'The Billing Start Date is more than six months before the Deal Start Date.'";
-                msgClass = "isSoftWarnCell";
-            }
-
-            var tmplt = '';
-            if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
-                tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-            tmplt += '<div class="ng-binding vert-center ' + msgClass + '" style="line-height: 1em;" ' + msg +'>';
-            if (passedData[field] != undefined && passedData[field] != null)
-                tmplt += '    <span style="display:contents;">' + passedData[field] + '</span>';
-            tmplt += '</div>';
-            return tmplt;
-        }
-        else if (field == 'NUM_OF_TIERS' && passedData['OBJ_SET_TYPE_CD'] == "DENSITY") {
+        if (field == 'NUM_OF_TIERS' && passedData['OBJ_SET_TYPE_CD'] == "DENSITY") {
             var tmplt = '';
             if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
                 tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
@@ -58,11 +34,16 @@ export class GridUtil {
             return tmplt;
         }
         else {
+            var finalMsg = this.applySoftWarnings(passedData, field);
+            var msgClass = this.applySoftWarningsClass(finalMsg);
+
+            if (passedData._behaviors.isError.hasOwnProperty(field)) { msgClass = ""; } // Clear out soft warning treatment is this cell is error
+
             var tmplt = '';
             if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
                 tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
             if (passedData[field] != undefined && passedData[field] != null)
-                tmplt += '    <div class="ng-binding vert-center">' + passedData[field] + '</div>';
+                tmplt += '    <div class="ng-binding vert-center ' + msgClass + '" style="line-height: 3em;" ' + finalMsg + '>' + passedData[field] + '</div>';
             tmplt += '</div>';
             return tmplt;
         }
@@ -252,10 +233,14 @@ export class GridUtil {
         return tmplt;
     }
     static uiStartDateWrapper = function (passedData, field) {
+        var finalMsg = this.applySoftWarnings(passedData, field);
+        var msgClass = this.applySoftWarningsClass(finalMsg);
+        if (passedData._behaviors.isError.hasOwnProperty(field)) { msgClass = ""; } // Clear out soft warning treatment is this cell is error
+
         var tmplt = '';
         if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined)
             tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-        tmplt += '<div class="uiControlDiv dealCell' + this.getClassNm(passedData, field) + '">';
+        tmplt += '<div class="uiControlDiv dealCell ' + this.getClassNm(passedData, field) + ' ' + msgClass + '" style="line-height: 3em;" ' + finalMsg + '>';
         tmplt += '    <div class="ng-binding vert-center" style="padding-left: 10px !important;">';
         if (this.displayFrontEndDateMessage(passedData))
             tmplt += '<span class="vert-center" style="top: 20% !important"> <i class="intelicon-information dateWrapper" title="If the deal start date is in the past, the deal start date will change to the date when the deal becomes active."></i> </span>'
@@ -265,13 +250,18 @@ export class GridUtil {
         return tmplt;
     }
     static uiControlEndDateWrapper = function (passedData, field) {
+        var finalMsg = this.applySoftWarnings(passedData, field);
+        var msgClass = this.applySoftWarningsClass(finalMsg);
+
+        if (passedData._behaviors.isError.hasOwnProperty(field)) { msgClass = ""; } // Clear out soft warning treatment is this cell is error
+
         var classNm = "";
         if (passedData.EXPIRE_FLG == "1")
             classNm = 'redfont';
         var tmplt = '';
         if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined)
             tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-        tmplt += '<div class="uiControlDiv dealCell defence-read-cell' + this.getClassNm(passedData, field).replace(" isRequiredCell", "") + '">';
+        tmplt += '<div class="uiControlDiv dealCell defence-read-cell ' + this.getClassNm(passedData, field).replace(" isRequiredCell", "") + ' ' + msgClass + '" ' + finalMsg + '">';
         if (passedData[field] != undefined && passedData[field] != null)
             tmplt += '    <div style="padding-left: 10px !important;" class="ng-binding vert-center ' + classNm + '">' + passedData[field] + '</div>';
         tmplt += '</div>';
@@ -1117,5 +1107,66 @@ export class GridUtil {
             lapse += item.ExecutionTime;
         }
         return tempMarks;
+    }
+
+    static applySoftWarningsClass(finalMsg) {
+        if (finalMsg != "")
+            return "isSoftWarnCell";
+        else
+            return "";
+    }
+    static applySoftWarnings(passedData, field) {
+        var msg = "";
+        var finalMsg = "";
+
+        //If Billing start date is more than 6 months in the past from Deal Start date then make billing start date cell softwarning as per US759049
+        if (field == 'REBATE_BILLING_START' && passedData['REBATE_TYPE'] != 'TENDER' && passedData['PAYOUT_BASED_ON'] == 'Consumption') {
+            var dt1 = moment(passedData['START_DT']).format("MM/DD/YYYY");
+            var dt2 = moment(passedData['REBATE_BILLING_START']).format("MM/DD/YYYY");
+            if (moment(dt1).isAfter(moment(dt2).add(6, 'months'))) {
+                // direct setting of final message - msg empty, no header
+                finalMsg = "title = 'The Billing Start Date is more than six months before the Deal Start Date.'";
+            }
+        }
+
+        // Mikes Vol Tier/Flex Tier adds - &#10;&#13; are both line feeds in title.
+        if ((passedData['OBJ_SET_TYPE_CD'] == 'VOL_TIER' ||
+            (passedData['OBJ_SET_TYPE_CD'] == 'FLEX' && passedData['FLEX_ROW_TYPE'] == 'Accrual'))
+            && passedData['REBATE_TYPE'] != 'TENDER') { 
+            var multiTier = passedData['NUM_OF_TIERS'] != 1;
+            var dtBS = moment(passedData['REBATE_BILLING_START']).format("MM/DD/YYYY");
+            var dtBE = moment(passedData['REBATE_BILLING_END']).format("MM/DD/YYYY");
+            var dtCS = moment(passedData['START_DT']).format("MM/DD/YYYY");
+            var dtCE = moment(passedData['END_DT']).format("MM/DD/YYYY");
+            var basedOnConsumption = passedData['PAYOUT_BASED_ON'] == 'Consumption';
+            if (field == 'REBATE_BILLING_START' && basedOnConsumption) {
+                if (moment(dtBE).isAfter(moment(dtBS).add(12, 'months')) && multiTier) { // If billings dates are > 1 year
+                    msg += "The Rebate Billings Period is restricted to 1 year.&#10;";
+                }
+            }
+            if (field == 'REBATE_BILLING_END' && basedOnConsumption) {
+                if (moment(dtBE).isAfter(moment(dtBS).add(12, 'months')) && multiTier) { // If billings dates are > 1 year
+                    msg += "The Rebate Billings Period is restricted to 1 year.&#10;";
+                }
+                if (moment(dtCE).isAfter(moment(dtBE).add(12, 'months'))) { // Consumption End within 1 year of Billings End
+                    msg += "The Consumption End Date is limited to 1 year after Billings End Date.&#10;";
+                }
+            }
+            if (field == 'START_DT' && !basedOnConsumption) {
+                if (moment(dtCE).isAfter(moment(dtCS).add(12, 'months')) && multiTier) { // If billings dates are > 1 year - Billings Based
+                    msg += "The Rebate Billings Period is restricted to 1 year.&#10;";
+                }
+            }
+            if (field == 'END_DT' && !basedOnConsumption) {
+                if (moment(dtCE).isAfter(moment(dtCS).add(12, 'months')) && multiTier) { // If billings dates are > 1 year - Billings Based
+                    msg += "The Rebate Billings Period is restricted to 1 year.&#10;";
+                }
+            }
+
+            if (msg != "") { // Non-direct setting of final message - consolidate msg with header
+                finalMsg = "title = 'Special Approvals Needed:&#10;" + msg + "'";
+            }
+        }
+        return finalMsg;
     }
 }
