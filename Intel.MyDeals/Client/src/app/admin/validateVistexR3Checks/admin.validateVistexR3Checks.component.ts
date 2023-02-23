@@ -174,10 +174,11 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
             this.vldtVstxR3ChkSvc.getVistexCustomersMapList(data).subscribe(response => {
                 this.Results = response.R3CutoverResponses;
                 this.GoodToSendResults = response.R3CutoverResponsePassedDeals;
-                this.GoodToSendDealIds = _.pluck(this.GoodToSendResults, 'Deal_Id').toString();
+                let goodToSendDealIds = _.pluck(this.GoodToSendResults, 'Deal_Id');
+                this.GoodToSendDealIds = goodToSendDealIds.toString();
 
                 this.UpdCnt.sent = sentDeals;
-                this.UpdCnt.returned = this.Results.length;
+                this.UpdCnt.returned = (this.UpdCnt.sent - goodToSendDealIds.length);;
                 this.gridData = process(this.Results, this.state);
                 this.ShowResults = true;
                 this.GetActiveColumns(this.selectedApiID.OPT_ID);
@@ -195,7 +196,7 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
     }
 
     SendDealsToVistex() {
-        window.location.href = "#pushDealstoVistex?r3ValidDeals=" + this.GoodToSendDealIds;
+        window.open("#pushDealstoVistex?r3ValidDeals=" + this.GoodToSendDealIds, "_blank");
     }
 
     GetActiveColumns(runMode) {

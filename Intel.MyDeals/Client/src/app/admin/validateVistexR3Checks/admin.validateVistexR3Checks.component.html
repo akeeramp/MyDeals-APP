@@ -2,48 +2,64 @@
 <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" />
 <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<div class="contract-detail-form" style="overflow:auto">
+<div class="contract-detail-form">
     <div style="padding-top:50px">
         <h2>Validate Deals for Vistex Push</h2>
         <p style="color: #FC4C02">Validate existing deals against Vistex R3 requirements prior to pushing them to the
             Vistex system.</p>
     </div>
-    <div class="row">
-        <div class="col-md-5"><label class="opUiLabel">Customer : </label>
-            <kendo-dropdownlist [(ngModel)]="SelectedCustId" class="local-Padding" style="width: 450px"
-                [data]="ActiveCustomers" textField="CUST_NM" valueField="CUST_NM" [valuePrimitive]="true">
-            </kendo-dropdownlist><br /><br /><label class="opUiLabel">Deal Id(s) : </label>
-            <kendo-textarea class="local-Padding" [(ngModel)]="DealstoSend" [cols]="58" [rows]="4" resizable="both"
-                placeholder="Multiple deal IDs can be separated with comma."></kendo-textarea>
-            <div class="err-Control" style="padding-left:160px !important;" *ngIf="isDealIdError">Please enter valid
-                Deal Ids</div>
-        </div>
-        <div class="col-md-5 local-Padding">
-            <div class="fl opUiLabel ng-binding" style="font-weight:bold">Mode to run : </div>
-            <div class=" col-md-8 ">
+    <div class="container-fluid">
+        <div class="col-md-5 pull-left input-field">
+            <label class="col-md-1 opUiLabel vistex-zero-Padding">Customer : </label>
+            <kendo-dropdownlist [(ngModel)]="SelectedCustId" style="width: calc( 100% - 160px); " class="col-md-4 vistex-zero-Padding"
+                                [data]="ActiveCustomers" textField="CUST_NM" valueField="CUST_NM" [valuePrimitive]="true">
+            </kendo-dropdownlist><br /><br /><label class="opUiLabel" style="vertical-align: top;">Deal Id(s) : </label>
+            <kendo-textarea class="local-Padding validTextAreaVistexCheck" [(ngModel)]="DealstoSend" [cols]="58" [rows]="4" resizable="both"
+                            placeholder="Multiple deal IDs can be separated with comma."></kendo-textarea>
+            <div class="err-Control" style="padding-left:160px !important;" *ngIf="isDealIdError">
+                Please enter valid
+                Deal Ids
+            </div>
+            <br/><br/>
+            <div class="fl opUiLabel ng-binding">Mode to run : </div>            
+            <div style="overflow: hidden; width: calc(100% - 160px);">
                 <kendo-combobox id="comboApiName" class="fl opUiElement" [data]="apiList" textField="OPT_LBL"
                                 valueField="OPT_ID" placeholder="Select a Running Mode..." [valuePrimitive]="false"
-                                [(ngModel)]="selectedApiID"></kendo-combobox>
-            </div>
-            <div class="validProps">
-                <button (click)=" ValidateForVistexR3() " class=" btn btn-primary ">Run Validation </button>
-                <span style=" margin-left:15px;margin-top:10px; " *ngIf=" ShowResults==true ">
-                    <a style="color: #0071c5 !important; text-decoration: underline !important;"><b>Results:</b></a>
-                    Deals Sent:{{UpdCnt.sent}}, <i style=" color:darkblue; ">Errors Returned:{{UpdCnt.returned}}</i>
-                </span>
-            </div>
-            <div class=" col-md-12 local-Padding" style="padding:initial" *ngIf=" ShowResults==true && GoodToSendDealIds.length>0">
-                Deals To Send:{{GoodToSendDealIds}}
-                <button (click)="SendDealsToVistex()" class="btn btn-primary" style="background-color: forestgreen !important;">Send Good Deals to Vistex </button>
+                                [(ngModel)]="selectedApiID" style="width: 100% !important; "></kendo-combobox>
             </div>
         </div>
-    </div>
-    <div class="row">
-        <div class="col-md-12 kendo-grid-buttons oppo-grids physics-css new-now-wrap">
-            <kendo-grid class="gridContentScroll validaterRules" [data]="gridData" *ngIf="ShowResults==true" style="height: 400px;" [pageSize]="state.take"
-                [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" filterable="menu"
-                [navigable]="true" [resizable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info}"
-                (dataStateChange)="dataStateChange($event)">
+        <div class="col-md-5 pull-left input-field">
+            <div class="validProps">
+                <div class="fl opUiLabel">
+                    <button (click)=" ValidateForVistexR3() " class=" btn btn-primary ">Run Validation </button>
+                </div>
+                <div ng-if="ShowResults == true" style="overflow: hidden;">
+                    <span style="margin-top:10px; " *ngIf=" ShowResults==true ">
+                        <a style="color: #0071c5 !important; text-decoration: underline !important;"><b>Results:</b></a>
+                        Deals Validated for Vistex Push:{{UpdCnt.sent}}, <i style=" color:darkblue; ">Errors Returned / Deals not found:{{UpdCnt.returned}}</i>
+                    </span>
+                </div>
+            </div>
+            <br />
+            <div class=" col-md-12 local-Padding" style="padding:initial" *ngIf=" ShowResults==true && GoodToSendDealIds.length>0">
+                <div class="fl opUiLabel">Valid Deals ({{ UpdCnt.sent - UpdCnt.returned }}): </div>
+                <div style="overflow: hidden; height: 6vh;">
+                    <kendo-textarea class="fl opUiElement k-textarea" [(ngModel)]="GoodToSendDealIds"
+                                    style="height: inherit !important;" [readonly]="true"></kendo-textarea>
+                </div>
+                <br />
+                <div>
+                    <button (click)="SendDealsToVistex()" class="btn btn-primary" style="background-color: forestgreen !important;">Send Valid Deals to Vistex </button>
+                </div>
+            </div>
+        </div>
+        </div>
+    <div class="row" style="padding-top: 15px;">
+        <div class="col-md-12 kendo-grid-buttons oppo-grids physics-css new-now-wrap container-fluid" id="OutputContainer">
+            <kendo-grid id="OutputGrid" class="gridContentScroll validaterRules" [data]="gridData" *ngIf="ShowResults==true" style="height: 400px;" [pageSize]="state.take"
+                        [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" filterable="menu"
+                        [navigable]="true" [resizable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info}"
+                        (dataStateChange)="dataStateChange($event)">
                 <ng-template kendoGridToolbarTemplate>
                     <button (click)="clearFilters()" class="k-button clearButton">
                         <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS
@@ -54,16 +70,21 @@
                     <button (click)="refreshGrid()" class="k-button clearButton" style=" margin-left: auto;"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
                 </ng-template>
                 <kendo-grid-column *ngFor="let row of gridColumns" field="{{row.field}}" title="{{row.title}}"
-                    width="{{row.width}}" [hidden]="!(ShowColumns.indexOf(row.field) >-1)"
-                    [headerStyle]="{'color': row.title=='Errors' ? 'red':'#1a3e6f', 'font-weight' : '600', 'font-size' : '14px'}">
+                                   width="{{row.width}}" [hidden]="!(ShowColumns.indexOf(row.field) >-1)"
+                                   [headerStyle]="{'color': row.title=='Errors' ? 'red':'#1a3e6f', 'font-weight' : '600', 'font-size' : '14px'}">
                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                        let-filterService="filterService">
+                                 let-filterService="filterService">
                         <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                            style="color:black !important" [filterService]="filterService"
-                            [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                                           style="color:black !important" [filterService]="filterService"
+                                           [data]="distinctPrimitive(column.field)"></multicheck-filter>
                     </ng-template>
-                    <ng-template kendoGridCellTemplate let-dataItem><span class="dataCell"
-                            [style.color]="row.title==='Errors' ? 'red': '#1a3e6f'">{{dataItem[row.field]}} </span>
+                    <ng-template kendoGridHeaderTemplate let-dataItem>
+                        <span class="dataCell"
+                              [style.color]="row.title==='Errors' ? 'red': '#1a3e6f'" style="font-weight: 600 !important; text-transform: capitalize; font-size: 14px !important;">{{row.title}} </span>
+                    </ng-template>
+                    <ng-template kendoGridCellTemplate let-dataItem>
+                        <span class="dataCell"
+                              [style.color]="row.title==='Errors' ? 'red': '#1a3e6f'">{{dataItem[row.field]}} </span>
                     </ng-template>
                 </kendo-grid-column>
                 <kendo-grid-excel fileName="Vistex R3 Deal Review.xlsx"></kendo-grid-excel>

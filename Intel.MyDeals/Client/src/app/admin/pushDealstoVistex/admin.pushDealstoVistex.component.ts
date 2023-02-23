@@ -5,6 +5,7 @@ import { pushDealsToVistexService } from "./admin.pushDealstoVistex.service";
 import { GridDataResult, DataStateChangeEvent} from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
+import { ActivatedRoute } from "@angular/router";
 
 @Component({
     selector: "admin-push-dealsto-vistex",
@@ -13,7 +14,7 @@ import { ThemePalette } from '@angular/material/core';
 })
 
 export class adminPushDealsToVistexComponent {
-    constructor(private loggerSvc: logger, private pushDealstoVistexSvc: pushDealsToVistexService, private formBuilder: FormBuilder) { }
+    constructor(private loggerSvc: logger, private pushDealstoVistexSvc: pushDealsToVistexService, private formBuilder: FormBuilder, private route: ActivatedRoute) { }
     private color: ThemePalette = 'primary';
     private pushDealsToVistexForm: FormGroup;
     private loadMessage = "Admin Customer Loading..";
@@ -63,8 +64,8 @@ export class adminPushDealsToVistexComponent {
           
     }
     bindPathQueryParam() {
-        let dealIds = '';      
-        return dealIds;
+        let dealIds = this.route.snapshot.queryParams.r3ValidDeals;
+        return dealIds ? dealIds : "";
     }
 
     dataStateChange(state: DataStateChangeEvent): void {
