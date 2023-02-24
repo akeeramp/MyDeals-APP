@@ -16,8 +16,6 @@ on:
           - 'CONS1'
           - 'CONS2'
           - 'PERF'
-          - 'PRODA1'
-          - 'PRODA2'
       Move_Latest:
         description: 'Move latest code deployed'
         required: true
