@@ -26,7 +26,6 @@ export class CustomDropDownFilterComponent implements AfterViewInit {
     private currentData: any;
     private value: any[] = [];
 
-    protected valueAccessor = (dataItem: any) => this.isPrimitive ? dataItem : dataItem[this.valueField];    
 
     onSelectionChange(item) {
         if (!this.value.some(x => x.Value === item)) {
@@ -60,5 +59,10 @@ export class CustomDropDownFilterComponent implements AfterViewInit {
             const valuesel = this.data.filter(x => x.Value == this.value[0]);
             this.selectedValue = valuesel[0];
         }
+    }
+
+    valueAccessor(dataItem){
+        if(dataItem!=undefined)
+      return  this.isPrimitive ? dataItem : dataItem[this.valueField];
     }
 }

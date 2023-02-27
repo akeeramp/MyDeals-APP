@@ -830,10 +830,17 @@ export class GridUtil {
                         // Replace special characters that are killers - do it here to catch templated items as well as normal ones.
                         val = String(val).replace(/[\x0b\x1a]/g, " ").replace(/[’]/g, "'");
 
-                        cells.push({
-                            value: val,
-                            wrap: true
-                        });
+                        if(gridColumns[c].field=='TIER_NBR'){
+                            cells.push({
+                                value: val,
+                                wrap: false
+                            });
+                        }else{
+                            cells.push({
+                                value: val,
+                                wrap: true
+                            });
+                        }
                     }
                 }
 
