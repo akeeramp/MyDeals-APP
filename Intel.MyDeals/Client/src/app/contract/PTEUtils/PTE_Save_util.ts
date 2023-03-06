@@ -323,7 +323,7 @@ export class PTE_Save_Util {
             if (item['REBATE_OA_MAX_AMT '] != undefined && item['REBATE_OA_MAX_AMT '] != null && item['REBATE_OA_MAX_AMT '] != "") {
                 item['REBATE_OA_MAX_AMT '] = item['REBATE_OA_MAX_AMT '].toString();
             }
-            if (item['REBATE_TYPE'] === "TENDER" && pteData && pteData.length > 0  ) {
+            if (item['END_CUSTOMER_RETAIL '] != undefined && item['REBATE_TYPE'] === "TENDER" && pteData && pteData.length > 0  ) {
                 item['END_CUSTOMER_RETAIL'] = pteData ? pteData[ind] ['END_CUSTOMER_RETAIL'] : '';
                 item['END_CUST_OBJ'] = pteData ? pteData[ind] ['END_CUST_OBJ'] : ''
             }
