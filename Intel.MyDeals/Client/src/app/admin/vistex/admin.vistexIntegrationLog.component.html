@@ -144,5 +144,13 @@
                 </multicheck-filter>
             </ng-template>
         </kendo-grid-column>
+        <ng-template kendoGridDetailTemplate let-dataItem>
+            <section *ngIf="dataItem.RQST_JSON_DATA.length > 0">
+                <kendo-grid [data]="convertToDetailChildArray(dataItem)" style="height:fit-content">
+                    <kendo-grid-column field="RQST_JSON_DATA" title="Request JSON Data" [headerClass]="{'headerClass':false}">
+                    </kendo-grid-column>
+                </kendo-grid>
+            </section>
+        </ng-template>
     </kendo-grid>
 </div>

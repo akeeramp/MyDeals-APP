@@ -273,6 +273,12 @@ export class adminVistexIntegrationLogComponent implements OnInit {
         this.getData();
     }
 
+    convertToDetailChildArray(parentDataItem) {
+        return [{
+            RQST_JSON_DATA: parentDataItem.RQST_JSON_DATA
+        }];
+    }
+
     public filterSettings: DropDownFilterSettings = {
         caseSensitive: false,
         operator: "contains",
