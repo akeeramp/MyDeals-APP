@@ -139,18 +139,18 @@ namespace Intel.MyDeals.DataLibrary
             txtK1Ecap.Value = GetMoneyValue("KECAPPrice");
 
             if (txtBasedOn.Value == "Consumption") // Remove this block and expise else after Masound's release
-            {
-                txtStartDate.Value = GetValue("CBllgStart"); //Cons Start_Date
-                txtEndDate.Value = GetValue("CBllgEnd"); //Cons End_Date
-                txtConsumptionStartDate.Value = GetValue("StartDate"); //Billings Start
-                txtConsumptionEndDate.Value = GetValue("EndDate"); //Billings End
+            {
+                txtStartDate.Value = GetValue("ConsStartDt");
+                txtEndDate.Value = GetValue("ConsEndDt");
+                txtConsumptionStartDate.Value = GetValue("StartDate");
+                txtConsumptionEndDate.Value = GetValue("EndDate");
             }
             else
             {
                 txtStartDate.Value = GetValue("StartDate");
                 txtEndDate.Value = GetValue("EndDate");
-                txtConsumptionStartDate.Value = GetValue("CBllgStart");
-                txtConsumptionEndDate.Value = GetValue("CBllgEnd");
+                txtConsumptionStartDate.Value = GetValue("ConsStartDt");
+                txtConsumptionEndDate.Value = GetValue("ConsEndDt");
             }
 
             //txtK2Ecap.Value = GetMoneyValue("SKECAPPrice");
