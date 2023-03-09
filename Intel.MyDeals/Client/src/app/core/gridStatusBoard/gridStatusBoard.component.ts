@@ -246,6 +246,9 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
     }
 
     distinctPrimitive(fieldName: string): any {
+        if (fieldName == 'CUST_NM') {
+            return _.sortBy(_.uniq(_.pluck(this.gridResult, fieldName)));
+        }
         return _.uniq(_.pluck(this.gridResult,fieldName));
     }
 
