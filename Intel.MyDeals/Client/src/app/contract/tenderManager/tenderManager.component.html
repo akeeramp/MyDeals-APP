@@ -80,7 +80,7 @@
 <div class="pricing-strategy-status-bar fr" style="margin-top: 20px; padding-right: 0px;" *ngIf="pricingTableData != undefined">
     <div class="valid_{{pricingTableData.PRC_ST[0].PASSED_VALIDATION}}" style="padding: 5px 8px;"><span style="opacity: 0.5;">TENDER SHEET:</span> {{ pricingTableData.PRC_ST[0].WF_STG_CD }}</div>
 </div>
-<div class="row wizard" style="padding-top: 50px;" [ngStyle]="{'width': getWidth(isDeveloper || isTester)}" *ngIf="pricingTableData != undefined">
+<div class="row wizard" [ngStyle]="{'width': getWidth(isDeveloper || isTester), 'padding-top': getPadding(isDeveloper || isTester) }" *ngIf="pricingTableData != undefined">
     <div class="col-xs-3 col-md-3">
         <div class="wizard-panel first" [ngClass]="{'complete': isValidateTTE() == true }">
             <a id="tenderWidPTR" (click)="tenderWidgetPathManager('backToPricingTable', 'PTR')">

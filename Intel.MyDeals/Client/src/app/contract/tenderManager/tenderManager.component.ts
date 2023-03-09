@@ -383,6 +383,11 @@ export class tenderManagerComponent {
         else return '100%';
     }
 
+    getPadding(data) {
+        if (data) return '50px';
+        else return '5px';
+    }
+
     isPTRPartiallyComplete() {
         let isPtrDirty = false;
         let rootScopeDirty = this.dirty;
