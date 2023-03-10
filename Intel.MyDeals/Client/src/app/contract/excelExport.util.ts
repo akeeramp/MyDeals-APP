@@ -41,7 +41,7 @@ export class ExcelExport {
         return tmplt;
     }
     static formatDate = function (data) {
-        return moment(data).format("MM/DD/YYYY");
+        return data ? moment(data).format("MM/DD/YYYY") : '';
     }
     static exportControlScheduleWrapper(passedData) {
         var tmplt = 'Tier, Start Vol, End Vol, Rate\n';
@@ -271,7 +271,7 @@ export class ExcelExport {
         if (templateHtml.includes("exportDimTrkrControlWrapper"))
             return ExcelExport.exportDimTrkrControlWrapper(dataItem)
         else if (templateHtml.includes("formatDate"))
-            return ExcelExport.formatDate(dataItem)
+            return ExcelExport.formatDate(dataItem[field])
         else if (templateHtml.includes("exportControlScheduleWrapperDensity"))
             return ExcelExport.exportControlScheduleWrapperDensity(dataItem)
         else if (templateHtml.includes("exportControlScheduleWrapperRevTier"))
