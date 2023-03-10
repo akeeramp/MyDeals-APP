@@ -52,7 +52,7 @@ export class tenderManagerComponent {
     public pt_passed_validation: boolean;
     public compMissingFlag: any;
     private searchText: any = "";
-
+    isredirect=false;
     async loadAllContractDetails(): Promise<void> {
         let response = await this.pricingTableSvc.readContract(this.c_Id).toPromise().catch((err) => {
             this.loggerSvc.error('loadAllContractDetails::readContract:: service', err);
@@ -62,8 +62,15 @@ export class tenderManagerComponent {
             if (this.contractData.TENDER_PUBLISHED == '1') {
                 var dealType = this.contractData.PRC_ST[0].PRC_TBL[0].OBJ_SET_TYPE_CD;
                 var dealID = this.contractData.DC_ID;
+                if(this.searchText=='' || this.searchText==null)
+                {
+                    this.isredirect=true;
                 document.location.href = "#/tenderDashboard?DealType=" + dealType + "&FolioId=" + dealID + "&search=true";
-            }
+                }
+                else{
+                    this.isredirect=true;
+                 document.location.href = "#/tenderDashboard?DealType=" + dealType + "&deal=" + this.searchText + "&search=true";
+                }            }
             if (response[0].IS_TENDER && response[0].IS_TENDER == 0) window.location.href = "#/contractmanager/CNTRCT/" + this.c_Id + '/0/0/0';
             else if(this.contractData && this.contractData.PRC_ST && this.contractData.PRC_ST.length>0){
                 this.ps_Id = this.contractData.PRC_ST[0].DC_ID;
@@ -81,16 +88,16 @@ export class tenderManagerComponent {
                 let compFlag = this.pricingTableData.PRC_TBL_ROW.filter(x => x.COMP_MISSING_FLG == "0");
                 this.pt_passed_validation = !(this.isPTREmpty) && (passed.length == this.pricingTableData.PRC_TBL_ROW.length) && !(this.pricingTableData.WIP_DEAL.find(x => x.warningMessages.length > 0) ? true : false) ? true : false;
                 this.compMissingFlag = !(this.isPTREmpty) && compFlag.length == this.pricingTableData.PRC_TBL_ROW.length ? true : false;
-                if (!!this.route.snapshot.queryParams.searchTxt && this.isPTRPartiallyComplete()) {//if deal searched through global search
+                if (!!this.route.snapshot.queryParams.searchTxt && this.isPTRPartiallyComplete() && this.isredirect==false) {//if deal searched through global search
                     this.selectedTab = 'DE';
                     this.currentTAB = 'DE';
                     const cid = this.route.snapshot.paramMap.get('cid');
                     const urlTree = this.router.createUrlTree(['/tendermanager', cid]);
                     //it will update the url on page reload persist the selected state
                     this.router.navigateByUrl(urlTree + '?loadtype=DE');
-                    
                 }
                 else {
+                    if(this.isredirect==false){
                     this.selectedTab = 'PTR';
                     this.currentTAB = 'PTR';
                     const cid = this.route.snapshot.paramMap.get('cid');
@@ -101,6 +108,7 @@ export class tenderManagerComponent {
                     this.router.navigateByUrl(urlTree + '?loadtype=PTR');
                     }
                 }
+            }
                 if(!!this.route.snapshot.queryParams.loadtype){
                       //it will update the url on page reload persist the selected state
                 this.currentTAB=this.route.snapshot.queryParams.loadtype;

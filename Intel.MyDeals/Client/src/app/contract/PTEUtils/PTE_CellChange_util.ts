@@ -918,7 +918,12 @@ export class PTE_CellChange_Util {
             if ((item.prop) && (item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'VOLUME' || item.prop == 'INCENTIVE_RATE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE' || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT' || item.prop == 'FRCST_VOL')) {
                 let val = this.hotTable.getDataAtRowProp(item.row, item.prop);
                 if(val==null || val==''){
-                    val=0;
+                    if(item.prop == 'FRCST_VOL' || item.prop == 'VOLUME'){
+                        val='';
+                    }
+                    else{
+                    val=0.00;
+                    }
                 }
                 val=parseFloat(val.toString().replace(/[$,]/g, ""));
                 if ((!isNaN(val)) && ( val >= 0 || val < 0)) {
