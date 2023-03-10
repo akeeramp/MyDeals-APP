@@ -538,6 +538,7 @@ export class PTE_Load_Util {
         return data;
     }
     static calculateTotalDsctPerLine(dscntPerLine, qty) {
+        dscntPerLine=dscntPerLine.toString().replace(/[$,]/g, "");
         return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
     }
     static calculateKitRebate(data, firstTierRowIndex, numOfTiers, isDataPivoted) {
@@ -545,13 +546,16 @@ export class PTE_Load_Util {
         for (var i = 0; i < numOfTiers; i++) {
             if (isDataPivoted) {
                 var qty = (parseFloat(data[firstTierRowIndex]["QTY_____20___" + i]) || 0);
-                kitRebateTotalVal += (qty * parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20___" + i]) || 0);
+                const ecapPrice= data[firstTierRowIndex]["ECAP_PRICE_____20___" + i].toString().replace(/[$,]/g, "");
+                kitRebateTotalVal += (qty * parseFloat(ecapPrice) || 0);
             } else if (i < data.length) {
                 var qty = (parseFloat(data[(firstTierRowIndex + i)]["QTY"]) || 0);
-                kitRebateTotalVal += (qty * parseFloat(data[(firstTierRowIndex + i)]["ECAP_PRICE"]) || 0);
+                const ecapPrice= data[(firstTierRowIndex + i)]["ECAP_PRICE"].toString().replace(/[$,]/g, "");
+                kitRebateTotalVal += (qty * parseFloat(ecapPrice) || 0);
             }
         }
-        var rebateVal = (kitRebateTotalVal - parseFloat(data[firstTierRowIndex]["ECAP_PRICE_____20_____1"])) // Kit rebate - KIT ECAP (tier of "-1")
+        const ecapPrice= data[firstTierRowIndex]["ECAP_PRICE_____20_____1"].toString().replace(/[$,]/g, "");
+        var rebateVal = (kitRebateTotalVal - parseFloat(ecapPrice)) // Kit rebate - KIT ECAP (tier of "-1")
         return rebateVal;
     }
 

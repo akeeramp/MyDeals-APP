@@ -917,7 +917,8 @@ export class PTE_CellChange_Util {
         _.each(items, item => {
             if ((item.prop) && (item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'VOLUME' || item.prop == 'INCENTIVE_RATE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE' || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT' || item.prop == 'FRCST_VOL')) {
                 let val = this.hotTable.getDataAtRowProp(item.row, item.prop);
-                if (parseFloat(val) >= 0 || parseFloat(val) < 0) {
+                val=parseFloat(val.toString().replace(/[$,]/g, ""));
+                if ((!isNaN(val)) && ( val >= 0 || val < 0)) {
                     this.hotTable.setDataAtRowProp(item.row, item.prop, parseFloat(val), 'no-edit');
                 } else {
                     if (item.prop == 'FRCST_VOL' || item.prop == 'VOLUME') {
@@ -1043,6 +1044,7 @@ export class PTE_CellChange_Util {
             _.each(items, item => {
                 if (item.prop && item.prop == 'END_REV') {
                     let val = this.hotTable.getDataAtRowProp(item.row, 'END_REV');
+                    val= parseFloat(val.toString().replace(/[$,]/g, ''));
                     let DCID = this.hotTable.getDataAtRowProp(item.row, 'DC_ID');
                     let Tier = this.hotTable.getDataAtRowProp(item.row, 'TIER_NBR');
                     let numOfTiers = _.where(PTR, { DC_ID: DCID }).length;
@@ -1068,7 +1070,8 @@ export class PTE_CellChange_Util {
                 }
                 else if (item.prop && item.prop == 'STRT_REV') {
                     let val = this.hotTable.getDataAtRowProp(item.row, 'STRT_REV');
-                    if (val >= 0 || val < 0) {
+                       val= parseFloat(val.toString().replace(/[$,]/g, ''));
+                    if ((!isNaN(val)) &&- (val >= 0 || val < 0)) {
                         this.hotTable.setDataAtRowProp(item.row, 'STRT_REV', val, 'no-edit');
                     }
                     else
