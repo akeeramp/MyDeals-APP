@@ -538,6 +538,8 @@ export class PTE_Load_Util {
         return data;
     }
     static calculateTotalDsctPerLine(dscntPerLine, qty) {
+        if(dscntPerLine==null || dscntPerLine=='')
+        dscntPerLine=0;
         dscntPerLine=dscntPerLine.toString().replace(/[$,]/g, "");
         return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
     }
@@ -546,15 +548,27 @@ export class PTE_Load_Util {
         for (var i = 0; i < numOfTiers; i++) {
             if (isDataPivoted) {
                 var qty = (parseFloat(data[firstTierRowIndex]["QTY_____20___" + i]) || 0);
-                const ecapPrice= data[firstTierRowIndex]["ECAP_PRICE_____20___" + i].toString().replace(/[$,]/g, "");
+                let ecapPrice='';
+                if(data[firstTierRowIndex]["ECAP_PRICE_____20___" + i]==null || data[firstTierRowIndex]["ECAP_PRICE_____20___" + i]=='')
+                ecapPrice='0';
+                else
+                ecapPrice= data[firstTierRowIndex]["ECAP_PRICE_____20___" + i].toString().replace(/[$,]/g, "");
                 kitRebateTotalVal += (qty * parseFloat(ecapPrice) || 0);
             } else if (i < data.length) {
                 var qty = (parseFloat(data[(firstTierRowIndex + i)]["QTY"]) || 0);
-                const ecapPrice= data[(firstTierRowIndex + i)]["ECAP_PRICE"].toString().replace(/[$,]/g, "");
+                let ecapPrice='';
+                if(data[(firstTierRowIndex + i)]["ECAP_PRICE"]==null ||data[(firstTierRowIndex + i)]["ECAP_PRICE"]=='')
+                ecapPrice='0';
+                else
+                 ecapPrice= data[(firstTierRowIndex + i)]["ECAP_PRICE"].toString().replace(/[$,]/g, "");
                 kitRebateTotalVal += (qty * parseFloat(ecapPrice) || 0);
             }
         }
-        const ecapPrice= data[firstTierRowIndex]["ECAP_PRICE_____20_____1"].toString().replace(/[$,]/g, "");
+        let ecapPrice='';
+        if(data[firstTierRowIndex]["ECAP_PRICE_____20_____1"]==null ||  data[firstTierRowIndex]["ECAP_PRICE_____20_____1"]=='')
+          ecapPrice='0';
+          else
+         ecapPrice= data[firstTierRowIndex]["ECAP_PRICE_____20_____1"].toString().replace(/[$,]/g, "");
         var rebateVal = (kitRebateTotalVal - parseFloat(ecapPrice)) // Kit rebate - KIT ECAP (tier of "-1")
         return rebateVal;
     }

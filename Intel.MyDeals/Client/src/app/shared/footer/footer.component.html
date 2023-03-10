@@ -1,6 +1,6 @@
 <div class="footer-bar">
     <div class="fl" style="padding-right: 20px">{{appVersion}}</div>
-    <div class="fl env" *ngIf="!this.environment.includes('PROD')"><b>({{environment}} Environment)</b></div>
+    <div class="fl env" *ngIf="this.environment!='PROD'"><b>({{environment}} Environment)</b></div>
     <div class="fr">Intel Confidential</div>
     <div class="fr ping">
         <ping></ping>
