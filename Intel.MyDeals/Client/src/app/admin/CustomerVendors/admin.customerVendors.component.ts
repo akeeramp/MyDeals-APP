@@ -92,7 +92,12 @@ export class adminCustomerVendorsComponent {
     public gridData: GridDataResult;
 
     distinctPrimitive(fieldName: string): any {
-        return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
+        if (fieldName == 'CUST_NM') {
+            return _.sortBy(_.uniq(_.pluck(this.gridResult, fieldName)));
+        } else if (fieldName == 'BUSNS_ORG_NM') {
+            return _.sortBy(_.uniq(_.pluck(this.gridResult, fieldName)));
+        }
+        return _.uniq(_.pluck(this.gridResult, fieldName));
     }
 
     clearFilter() {
