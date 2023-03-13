@@ -10,24 +10,26 @@ import * as _ from 'underscore';
         <input id="multiCheckFilter" class="k-textbox" (input)="onInput($event)" placeholder="Search" />
         <span id="searchIcon" class="k-icon k-i-zoom"></span>
     </div>
-    <ul>      
-      <li #itemElement
-        *ngFor="let item of currentData; let i = index;"
-        (click)="onSelectionChange(valueAccessor(item), itemElement)"
-        [ngClass]="{'k-state-selected': isItemSelected(item)}">
-        <input
-          type="checkbox"
-          id="chk-{{valueAccessor(item)}}"
-          (focus)="onFocus(itemElement)"
-          class="k-checkbox"
-          [checked]="isItemSelected(item)" />
-        <label
-          class="k-multiselect-checkbox k-checkbox-label" style="white-space:break-spaces;"
-          for="chk-{{valueAccessor(item)}}">
-            {{ textAccessor(item) }}
-        </label>
-      </li>
-    </ul>
+    <cdk-virtual-scroll-viewport [itemSize]="7" style="min-height: 200px;">
+        <ul style="overflow:hidden">      
+          <li #itemElement
+            *cdkVirtualFor="let item of currentData; let i = index;"
+            (click)="onSelectionChange(valueAccessor(item), itemElement)"
+            [ngClass]="{'k-state-selected': isItemSelected(item)}">
+            <input
+              type="checkbox"
+              id="chk-{{valueAccessor(item)}}"
+              (focus)="onFocus(itemElement)"
+              class="k-checkbox"
+              [checked]="isItemSelected(item)" />
+            <label
+              class="k-multiselect-checkbox k-checkbox-label" style="white-space:break-spaces;"
+              for="chk-{{valueAccessor(item)}}">
+                {{ textAccessor(item) }}
+            </label>
+          </li>
+        </ul>
+    </cdk-virtual-scroll-viewport>
     <div id="selectedCount">{{selectedCount}} items selected</div>
   `,
     styles: [`
@@ -55,10 +57,10 @@ import * as _ from 'underscore';
       padding-left: 0;
       padding-right: 12px;
       position: relative;
-      overflow: auto;
+      overflow: hidden;
       overflow-x: hidden;
       white-space: nowrap;
-      max-height: 200px;
+      max-height: initial;
       margin-bottom: 5px;
     }
 
@@ -81,7 +83,7 @@ import * as _ from 'underscore';
 export class MultiCheckFilterComponent implements AfterViewInit {
     @Input() public isPrimitive: boolean;
     @Input() public currentFilter: any;
-    @Input() public data:any[];
+    @Input() public data: any[];
     @Input() public textField;
     @Input() public valueField;
     @Input() public filterService: FilterService;
@@ -89,7 +91,7 @@ export class MultiCheckFilterComponent implements AfterViewInit {
     @Input() public operator: string;
     @Output() public valueChange = new EventEmitter<number[]>();
 
-    public currentData: any[]=[];
+    public currentData: any[] = [];
     public showFilter = true;
     private value: any[] = [];
     private selectedCount: number = 0;
@@ -102,21 +104,22 @@ export class MultiCheckFilterComponent implements AfterViewInit {
         this.currentData = _.compact(this.data);
         if (this.data.findIndex(x => x == '') > -1) this.currentData.push('');
         if (this.data.findIndex(x => x == null) > -1) this.currentData.push(null);
+        this.currentData = _.sortBy(this.currentData);
         if (this.textField != undefined && this.textField != null && this.textField != '' && this.valueField != undefined && this.valueField != null && this.valueField != null) {
-          if (this.data && this.data.length>0 &&this.data.filter(x => x[this.textField] == 'Select All').length == 0) {
-              let selectAlldata: any = {};
-              selectAlldata[this.textField] = 'Select All';
-              selectAlldata[this.valueField] = 'Select All';
-              this.currentData.unshift(selectAlldata);
-          }
-      }
-      else {
-          if (!this.data.includes('Select All'))
-          this.currentData.unshift('Select All')
-      }
+            if (this.data && this.data.length > 0 && this.data.filter(x => x[this.textField] == 'Select All').length == 0) {
+                let selectAlldata: any = {};
+                selectAlldata[this.textField] = 'Select All';
+                selectAlldata[this.valueField] = 'Select All';
+                this.currentData.unshift(selectAlldata);
+            }
+        }
+        else {
+            if (!this.data.includes('Select All'))
+                this.currentData.unshift('Select All')
+        }
         this.value = this.currentFilter.filters.map((f: FilterDescriptor) => f.value);
-        if(this.currentData && this.currentData.length>0){
-          this.showFilter = typeof this.textAccessor(this.currentData[0]) === 'string';
+        if (this.currentData && this.currentData.length > 0) {
+            this.showFilter = typeof this.textAccessor(this.currentData[0]) === 'string';
         }
         this.selectedCount = this.value && this.value.length > 0 ? this.value.length : 0;
         if (this.value.includes('Select All'))

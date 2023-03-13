@@ -71,7 +71,8 @@ import { FooterComponent } from './shared/footer/footer.component';
 import { LoadingSpinnerComponent } from './shared/loadingSpinner/loadingspinner.component';
 import { notificationDockComponent } from './core/notification/notificationDock.component';
 import {AdminBannerComponent} from './core/adminBanner/adminBanner.component';
-import {dealPopupDockComponent} from './core/dealPopup/dealPopupDock.component';
+import { dealPopupDockComponent } from './core/dealPopup/dealPopupDock.component';
+import { ScrollingModule } from '@angular/cdk/scrolling';
 import { GlobalSearchComponent } from './advanceSearch/globalSearch/globalSearch.component';
 
 @NgModule({
@@ -114,6 +115,7 @@ import { GlobalSearchComponent } from './advanceSearch/globalSearch/globalSearch
         NavigationModule,
         TreeViewModule,
         DragDropModule,
+        ScrollingModule,
         MainPipe,
         RouterModule.forRoot(routes, { useHash: true })
     ],
