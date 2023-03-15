@@ -58,6 +58,8 @@ export class dropdownsComponent {
     public distinctCustomerName: Array<any>;
     public nonCorpInheritableValues: Array<any> = [];
     public COMP_ATRB_SIDS: Array<any> = [];
+    public checkrestrictionflag: boolean = false;
+    public restrictedGroupList = [3456, 3457, 3458, 3454];
 
 
     //For header filter
@@ -94,59 +96,73 @@ export class dropdownsComponent {
 
     //OnInit Angular event
     ngOnInit() {
-        this.getDealtypeDataSource();
-        this.getGroupsDataSource();
-        this.getCustsDataSource();
-        this.loadUIDropdown();
+        this.checkrestrictionflag = ((<any>window).usrRole === 'SA' && !(<any>window).isDeveloper) === false ? true : false;
+        this.initialization();
     }
+
+
+    async initialization() {
+        //loading data
+        try {
+            await this.getDealtypeDataSource();
+            await this.getGroupsDataSource();
+            await this.getCustsDataSource();
+            await this.loadUIDropdown();
+        } catch (ex) {
+            //in catching any errors on loading
+            this.loggerSvc.error('Something went wrong', 'Error');
+            console.error('UI_DROPDOWNS::ngOnInit::', ex);
+        }
+    }
+
 
     //Functions
-    getDealtypeDataSource() {
-        this.dropdownSvc.getDealTypesDropdowns(true)
-            .subscribe((response: Array<any>) => {
-                this.DealTypeData = response;
-                this.fullDistinctSetTypeCd = this.distinctSetTypeCd = distinct(response, "dropdownName").map(
-                    item => item.dropdownName
-                );
-                this.allDealTypeData = this.distinctSetTypeCd.filter(item => ["all deals", "all_deals"].includes(item.toLowerCase()));
-            }, function (response) {
-                this.loggerSvc.error("Unable to get Deal Type Dropdowns.", response, response.statusText);
-            });
+    async getDealtypeDataSource() {
+        this.DealTypeData = await this.dropdownSvc.getDealTypesDropdowns(true).toPromise().catch((error) => {
+            this.loggerSvc.error("Unable to get Deal Type Dropdowns.", error, error.statusText);
+        })
+        this.fullDistinctSetTypeCd = this.distinctSetTypeCd = distinct(this.DealTypeData, "dropdownName").map(
+            item => item.dropdownName
+        );
+        this.allDealTypeData = this.distinctSetTypeCd.filter(item => ["all deals", "all_deals"].includes(item.toLowerCase()));
     }
 
-    getGroupsDataSource() {
-        let checkrestrictionflag = false;
-        this.dropdownSvc.getDropdownGroups(true)
-            .subscribe((response: Array<any>) => {
-                response = response.filter(ob => ob.dropdownName !== "SETTLEMENT_PARTNER");
-                checkrestrictionflag = this.checkRestrictions(response);
-                if (checkrestrictionflag) {
-                    this.GroupData = response;
-                    this.distinctAtributeCd = distinct(response, "dropdownName").map(
-                        item => item.dropdownName
-                    );
-                }
-            }, function (response) {
-                this.loggerSvc.error("Unable to get Dropdown Groups.", response, response.statusText);
-            });
+    async getGroupsDataSource() {
+        //let checkrestrictionflag = false;
+        let response:any = await this.dropdownSvc.getDropdownGroups(true).toPromise().catch((error) => {
+            this.loggerSvc.error("Unable to get Group Dropdowns.", error, error.statusText);
+        })
+        response = response.filter(ob => ob.dropdownName !== "SETTLEMENT_PARTNER");
+        this.GroupData = response;
+        //checkrestrictionflag = this.checkRestrictions(result);
+        //this to restrict SA users to have only restricted values
+        if (this.checkrestrictionflag) {
+            this.distinctAtributeCd = distinct(this.GroupData, "dropdownName").map(
+                item => item.dropdownName
+            );
+        } else {
+            this.GroupData = _.filter(this.GroupData, (item) => {
+                let id = (item.dropdownID === undefined) ? item.ATRB_SID : item.dropdownID;
+                if (this.restrictedGroupList.includes(id)) return item
+            })
+            this.distinctAtributeCd = distinct(this.GroupData, "dropdownName").map(
+                item => item.dropdownName
+            );
+        }
     }
-    getCustsDataSource() {
-        this.dropdownSvc.getCustsDropdowns(true)
-            .subscribe((response: Array<any>) => {
-                this.CustomerData = response;
-                this.distinctCustomerName = distinct(response, "dropdownName").map(
-                    item => item.dropdownName
-                );
-            },
-                function (response) {
-                    this.loggerSvc.error("Unable to get Dropdown Customers.", response, response.statusText);
-                });
+    async getCustsDataSource() {
+        this.CustomerData = await this.dropdownSvc.getCustsDropdowns(true).toPromise().catch((error) => {
+            this.loggerSvc.error("Unable to get Dropdown Customers.", error, error.statusText);
+        })
+        this.distinctCustomerName = distinct(this.CustomerData, "dropdownName").map(
+            item => item.dropdownName
+        );
     }
 
-    loadUIDropdown() {
+    async loadUIDropdown() {
         this.COMP_ATRB_SIDS.push([3456, 3457, 3458, 3464, 3454]);
         this.selectedInheritanceGroup = "";
-        let checkrestrictionflag = false;
+        //let checkrestrictionflag = false;
         if (
             !(<any>window).isCustomerAdmin &&
             (<any>window).usrRole != "SA" &&
@@ -154,25 +170,25 @@ export class dropdownsComponent {
         ) {
             document.location.href = "/Dashboard#/portal";
         } else {
-            this.dropdownSvc.getBasicDropdowns(true).subscribe(
-                (result: Array<any>) => {
-                    this.setNonCorpInheritableValues(result);
-                    result = result.filter(ob => ob.ATRB_CD !== "SETTLEMENT_PARTNER");
-                    checkrestrictionflag = this.checkRestrictions(result);
-                    if (checkrestrictionflag) {
-                        this.gridResult = result;
-                        this.gridData = process(this.gridResult, this.state);
-                        this.isLoading = false;
-                    }
-                },
-                function (response) {
-                    this.loggerSvc.error(
-                        "Unable to get UI Dropdown Values.",
-                        response,
-                        response.statusText
-                    );
-                }
-            )
+            let result: any = await this.dropdownSvc.getBasicDropdowns(true).toPromise().catch((error) => {
+                this.loggerSvc.error("Unable to get UI Dropdown Values.", error, error.statusText);
+            })
+            this.setNonCorpInheritableValues(result);
+            result = result.filter(ob => ob.ATRB_CD !== "SETTLEMENT_PARTNER");
+            //checkrestrictionflag = this.checkRestrictions(result);
+            //this to restrict SA users to have only restricted values
+            this.gridResult = result;
+            if (this.checkrestrictionflag) {
+                this.gridData = process(this.gridResult, this.state);
+                this.isLoading = false;
+            } else {
+                this.gridResult = _.filter(this.gridResult, (item) => {
+                    let id = (item.dropdownID === undefined) ? item.ATRB_SID : item.dropdownID;
+                    if (this.restrictedGroupList.includes(id)) return item
+                })
+                this.gridData = process(this.gridResult, this.state);
+                this.isLoading = false;
+            }
         }
     }
 
@@ -188,6 +204,8 @@ export class dropdownsComponent {
         }
     }
 
+
+    //old one not using now
     checkRestrictions(dataItem): any {
         let Id: number;
         let restrictToConsumptionOnly: boolean;
@@ -208,12 +226,10 @@ export class dropdownsComponent {
     checkModelvalid(model: any, isNew: boolean) {
         let IS_MODEL_VALID = true;
         const cond = this.gridResult.filter(
-            x => x.OBJ_SET_TYPE_CD.trim() === model.OBJ_SET_TYPE_CD.trim() &&
-                x.ATRB_CD.trim() === model.ATRB_CD.trim() &&
-                x.DROP_DOWN.toString().trim() === model.DROP_DOWN.toString().trim() &&
-                x.CUST_NM.trim() === model.CUST_NM.trim() &&
-                x.ATRB_LKUP_DESC.trim() === model.ATRB_LKUP_DESC.trim() &&
-                x.ATRB_LKUP_TTIP.trim() === model.ATRB_LKUP_TTIP.trim()
+            x => x.OBJ_SET_TYPE_CD.toString().toUpperCase().trim() === model.OBJ_SET_TYPE_CD.toString().toUpperCase().trim() &&
+                x.ATRB_CD.toString().toUpperCase().trim() === model.ATRB_CD.toString().toUpperCase().trim() &&
+                x.DROP_DOWN.toString().toUpperCase().trim() === model.DROP_DOWN.toString().toUpperCase().trim() &&
+                x.CUST_NM.toString().toUpperCase().trim() === model.CUST_NM.toString().toUpperCase().trim()
         );
 
         if (this.COMP_ATRB_SIDS.indexOf(model.ATRB_SID) > -1) {
