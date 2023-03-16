@@ -2,32 +2,33 @@
     <h5 class="modal-title" id="modal-title">My Deals Email Notification</h5>
 </div>
 <div class="modal-body modalBlueBody emaiPopUpstyle" id="modal-body">
-    
     <form class="form-horizontal ng-pristine ng-valid">
         <div class="form-group">
             <label class="col-sm-2 control-label" for="inputTo">To <b>*</b></label>
 
             <div class="col-sm-7">
-                <kendo-multiselect class="divineo-one" placeholder="Select email address..." [data]="selectOptions" 
-                textField="FRST_NM" valueField="EMAIL_ADDR" [(ngModel)]="dataItem.to"
-                [kendoDropDownFilter]="filterSettings" [ngModelOptions]="{standalone: true}" 
-                style="max-height: 110px; overflow: auto;">
-                 <ng-template kendoMultiSelectItemTemplate let-data>
-                    <div class="tmpltItem">
-                    <div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>
-                    <div class="fl tmpltContract"><div class="tmpltPrimary">{{data.LST_NM}}, {{data.FRST_NM}}</div>
-                    <div class="tmpltSecondary">{{data.EMAIL_ADDR}}</div></div>
-                    <div class="fr tmpltRole">{{data.ROLE_NM}}</div><div class="clearboth">
-                    </div>
-                    </div>
-                  </ng-template>
-                  <ng-template kendoMultiSelectTagTemplate let-data>
-                    <div class="tmpltItem">
-                       <div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>
-                       <div class="fl tmpltContract"><div class="tmpltPrimary" style="text-align: left;">{{data.LST_NM}}, {{data.FRST_NM}}</div><div class="tmpltSecondary">{{data.EMAIL_ADDR}}</div></div>
-                       <div class="clearboth"></div>
-                       </div>
-                  </ng-template>
+                <kendo-multiselect class="divineo-one" placeholder="Select email address..." [data]="selectOptions"
+                                   textField="NAME" valueField="EMAIL_ADDR" [(ngModel)]="dataItem.to"
+                                   [kendoDropDownFilter]="filterSettings" [ngModelOptions]="{standalone: true}"
+                                   style="max-height: 110px; overflow: auto;">
+                    <ng-template kendoMultiSelectItemTemplate let-data>
+                        <div class="tmpltItem">
+                            <div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>
+                            <div class="fl tmpltContract">
+                                <div class="tmpltPrimary">{{data.LST_NM}}, {{data.FRST_NM}}</div>
+                                <div class="tmpltSecondary">{{data.EMAIL_ADDR}}</div>
+                            </div>
+                            <div class="fr tmpltRole">{{data.ROLE_NM}}</div><div class="clearboth">
+                            </div>
+                        </div>
+                    </ng-template>
+                    <ng-template kendoMultiSelectTagTemplate let-data>
+                        <div class="tmpltItem">
+                            <div class="fl tmpltIcn"><i class="intelicon-email-message-solid"></i></div>
+                            <div class="fl tmpltContract"><div class="tmpltPrimary" style="text-align: left;">{{data.LST_NM}}, {{data.FRST_NM}}</div><div class="tmpltSecondary">{{data.EMAIL_ADDR}}</div></div>
+                            <div class="clearboth"></div>
+                        </div>
+                    </ng-template>
                 </kendo-multiselect>
                 <div style="font-size: 11px; line-height: 1.5em;">You will automatically be copied on the email</div>
             </div>
@@ -35,9 +36,11 @@
                 <div class="btn-group btn-group-sm rolebtnstyle" role="group" aria-label="Role Filter">
                     <button *ngFor="let item of roles"
                             class="btn"
-                            [ngClass]="applyRoleClass(item) ? 'btn-skyblue' : 'btn-default' " 
+                            [ngClass]="applyRoleClass(item) ? 'btn-skyblue' : 'btn-default' "
                             (click)="selectRole(item)"
-                            type="button">{{item}}</button>
+                            type="button">
+                        {{item}}
+                    </button>
                 </div>
                 <div style="font-size: 11px; line-height: 1.5em;"><i class="intelicon-filter-solid"></i> Filter by Role</div>
             </div>
@@ -51,25 +54,25 @@
         </div>
         <div class="form-group">
             <div class="col-sm-12">
-            <kendo-editor style="width:100%;height:350px" [(ngModel)]="emailBody" [ngModelOptions]="{standalone: true}">
-                <kendo-toolbar id="emailbtnstyle">
-                    <kendo-toolbar-buttongroup>
-                        <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
-                        <kendo-toolbar-button kendoEditorItalicButton></kendo-toolbar-button>
-                        <kendo-toolbar-button kendoEditorUnderlineButton></kendo-toolbar-button>
-                        <kendo-toolbar-button kendoEditorAlignLeftButton></kendo-toolbar-button>
-                        <kendo-toolbar-button kendoEditorAlignCenterButton></kendo-toolbar-button>
-                        <kendo-toolbar-button kendoEditorAlignRightButton></kendo-toolbar-button>
-                        <kendo-toolbar-button kendoEditorAlignJustifyButton></kendo-toolbar-button>
-                        <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
-                        <kendo-toolbar-button kendoEditorInsertOrderedListButton></kendo-toolbar-button>
-                        <kendo-toolbar-button kendoEditorIndentButton></kendo-toolbar-button>
-                        <kendo-toolbar-button kendoEditorOutdentButton></kendo-toolbar-button>
-                    </kendo-toolbar-buttongroup>
-                    <kendo-toolbar-dropdownlist kendoEditorFontSize></kendo-toolbar-dropdownlist>
-                    <kendo-toolbar-colorpicker kendoEditorForeColor></kendo-toolbar-colorpicker>
-                </kendo-toolbar>
-            </kendo-editor>    
+                <kendo-editor style="width:100%;height:350px" [(ngModel)]="emailBody" [ngModelOptions]="{standalone: true}">
+                    <kendo-toolbar id="emailbtnstyle">
+                        <kendo-toolbar-buttongroup>
+                            <kendo-toolbar-button kendoEditorBoldButton></kendo-toolbar-button>
+                            <kendo-toolbar-button kendoEditorItalicButton></kendo-toolbar-button>
+                            <kendo-toolbar-button kendoEditorUnderlineButton></kendo-toolbar-button>
+                            <kendo-toolbar-button kendoEditorAlignLeftButton></kendo-toolbar-button>
+                            <kendo-toolbar-button kendoEditorAlignCenterButton></kendo-toolbar-button>
+                            <kendo-toolbar-button kendoEditorAlignRightButton></kendo-toolbar-button>
+                            <kendo-toolbar-button kendoEditorAlignJustifyButton></kendo-toolbar-button>
+                            <kendo-toolbar-button kendoEditorInsertUnorderedListButton></kendo-toolbar-button>
+                            <kendo-toolbar-button kendoEditorInsertOrderedListButton></kendo-toolbar-button>
+                            <kendo-toolbar-button kendoEditorIndentButton></kendo-toolbar-button>
+                            <kendo-toolbar-button kendoEditorOutdentButton></kendo-toolbar-button>
+                        </kendo-toolbar-buttongroup>
+                        <kendo-toolbar-dropdownlist kendoEditorFontSize></kendo-toolbar-dropdownlist>
+                        <kendo-toolbar-colorpicker kendoEditorForeColor></kendo-toolbar-colorpicker>
+                    </kendo-toolbar>
+                </kendo-editor>
             </div>
         </div>
     </form>
