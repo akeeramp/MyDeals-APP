@@ -62,8 +62,7 @@
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-combobox #attributeDropDown [data]="distinctAtributeCd"
-                        [formControl]="formGroup.get('ATRB_CD')" [allowCustom]="allowCustom"
-                        (valueChange)="handleDealTypeChange($event)"></kendo-combobox>
+                        [formControl]="formGroup.get('ATRB_CD')" [allowCustom]="allowCustom"></kendo-combobox>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="CUST_NM" title="Customer" width="200" [headerClass]="{'headerClass':true}">

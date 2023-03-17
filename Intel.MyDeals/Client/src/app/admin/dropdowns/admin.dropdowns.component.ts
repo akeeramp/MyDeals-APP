@@ -409,17 +409,6 @@ export class dropdownsComponent {
         this.isDialogVisible = true;
     }
 
-    handleDealTypeChange(value) {
-        //If the value selected in Group dropdown has allDealsFlag = 1, we show only "all deals" in Deal Type dropdown
-        if (value["allDealFlag"] == 1) {
-            this.DealTypeData = this.allDealTypeData;
-        }
-        else {
-            this.DealTypeData = this.fullDistinctSetTypeCd;
-        }
-    }
-    //Events called via html : Ends
-
     //UI button click : Starts
     clearFilter() {
         this.state.filter = {
