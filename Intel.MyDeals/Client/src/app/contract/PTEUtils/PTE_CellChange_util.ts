@@ -175,8 +175,14 @@ export class PTE_CellChange_Util {
                 updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'RESET_VOLS_ON_PERIOD') {
-                //update PTR_USER_PRD with random value if we use row index values while adding after delete can give duplicate index
-                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, 'No', 'no-edit');
+                
+                if (curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD == 'ECAP' && curPricingTable.PROGRAM_PAYMENT == 'Frontend YCS2') {
+                    //making as empty only if program payment is Frontend YCS2
+                    currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, '', 'no-edit');
+                } else {
+                    //update PTR_USER_PRD with random value if we use row index values while adding after delete can give duplicate index
+                    currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, 'No', 'no-edit');
+                }
                 updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'CUST_ACCNT_DIV') {
@@ -527,6 +533,12 @@ export class PTE_CellChange_Util {
     }
     static autoFillCellOnProd(items: Array<any>, curPricingTable: any, contractData: any, pricingTableTemplates: any, columns: any[], operation?: any) {
         try {
+            //making as empty only if program payment is Frontend YCS2
+            if( curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD == 'ECAP' && curPricingTable.PROGRAM_PAYMENT=='Frontend YCS2'){
+                curPricingTable.PERIOD_PROFILE='';
+                curPricingTable.RESET_VOLS_ON_PERIOD='';
+                curPricingTable.AR_SETTLEMENT_LVL='';
+            }
             let OBJ_SET_TYPE_CD = curPricingTable.OBJ_SET_TYPE_CD;
             if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'KIT') {
                 this.autoFillCellonProdKit(items, curPricingTable, contractData, pricingTableTemplates, columns, operation);
@@ -945,7 +957,7 @@ export class PTE_CellChange_Util {
             _.each(items, item => {
                 if (item.prop && item.prop == 'PROGRAM_PAYMENT') {
                     let val = item.new;
-                    this.checkfn(items, curPricingTable,columns,val,contractData,cellEditor,ptDefaults); return;
+                    this.checkfn(item, curPricingTable,columns,val,contractData,cellEditor,ptDefaults); return;
                 }
             });
         }
@@ -959,44 +971,44 @@ export class PTE_CellChange_Util {
         }
     }
 
-    static checkfn(items: Array<any>, curPricingTable: any,columns:any[],value?,contractData?,cellEditor?,ptDefaults?) {
-        if (items.length > 0) {
-            let val = value ? value : this.hotTable.getDataAtRowProp(items[0].row, 'PROGRAM_PAYMENT');
+    static checkfn(item: any, curPricingTable: any,columns:any[],value?,contractData?,cellEditor?,ptDefaults?) {
+        if (item!=null) {
+            let val = value ? value : this.hotTable.getDataAtRowProp(item.row, 'PROGRAM_PAYMENT');
             if (val != undefined && val != null && val != '' && val.toLowerCase() !== 'backend') {
                 if(_.findWhere(columns,{data:'PERIOD_PROFILE'}) !=undefined && _.findWhere(columns,{data:'PERIOD_PROFILE'}) !=null){
-                    this.hotTable.setDataAtRowProp(items[0].row, 'PERIOD_PROFILE', '', 'no-edit');
+                    this.hotTable.setDataAtRowProp(item.row, 'PERIOD_PROFILE', '', 'no-edit');
                 }
                 if(_.findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=undefined && _.findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=null){
-                    this.hotTable.setDataAtRowProp(items[0].row, 'RESET_VOLS_ON_PERIOD', '', 'no-edit');
+                    this.hotTable.setDataAtRowProp(item.row, 'RESET_VOLS_ON_PERIOD', '', 'no-edit');
                 }
                 if(_.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=undefined && _.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=null){
-                    this.hotTable.setDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL', '', 'no-edit');
+                    this.hotTable.setDataAtRowProp(item.row, 'AR_SETTLEMENT_LVL', '', 'no-edit');
                 }
                 if(_.findWhere(columns,{data:'SETTLEMENT_PARTNER'}) !=undefined && _.findWhere(columns,{data:'SETTLEMENT_PARTNER'}) !=null){
-                    this.hotTable.setDataAtRowProp(items[0].row, 'SETTLEMENT_PARTNER', '', 'no-edit');
+                    this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', '', 'no-edit');
                 }
             } else {
-                if (this.hotTable.getDataAtRowProp(items[0].row, 'PERIOD_PROFILE') == '' && curPricingTable["PERIOD_PROFILE"] != undefined){
+                if (this.hotTable.getDataAtRowProp(item.row, 'PERIOD_PROFILE') == '' && curPricingTable["PERIOD_PROFILE"] != undefined){
                     if(_.findWhere(columns,{data:'PERIOD_PROFILE'}) !=undefined && _.findWhere(columns,{data:'PERIOD_PROFILE'})!=null){
-                        this.delReadOnlyBehaviours("PERIOD_PROFILE",items[0]);
+                        this.delReadOnlyBehaviours("PERIOD_PROFILE",item);
                         let prdPfvalue = curPricingTable["PERIOD_PROFILE"] ? curPricingTable["PERIOD_PROFILE"] : ptDefaults["_defaultAtrbs"]["PERIOD_PROFILE"].value
-                        this.hotTable.setDataAtRowProp(items[0].row, 'PERIOD_PROFILE',prdPfvalue.toString(), 'no-edit');
+                        this.hotTable.setDataAtRowProp(item.row, 'PERIOD_PROFILE',prdPfvalue.toString(), 'no-edit');
                     }
                 }
-                if (this.hotTable.getDataAtRowProp(items[0].row, 'RESET_VOLS_ON_PERIOD') == ''){
+                if (this.hotTable.getDataAtRowProp(item.row, 'RESET_VOLS_ON_PERIOD') == ''){
                     if(_.findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=undefined && _.findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=null){
-                        this.delReadOnlyBehaviours("RESET_VOLS_ON_PERIOD",items[0]);
-                        this.hotTable.setDataAtRowProp(items[0].row, 'RESET_VOLS_ON_PERIOD', 'No', 'no-edit');
+                        this.delReadOnlyBehaviours("RESET_VOLS_ON_PERIOD",item);
+                        this.hotTable.setDataAtRowProp(item.row, 'RESET_VOLS_ON_PERIOD', 'No', 'no-edit');
                     }
                 }
-                if (this.hotTable.getDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL') == '' && curPricingTable["AR_SETTLEMENT_LVL"] != undefined){
+                if (this.hotTable.getDataAtRowProp(item.row, 'AR_SETTLEMENT_LVL') == '' && curPricingTable["AR_SETTLEMENT_LVL"] != undefined){
                     if(_.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=undefined && _.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=null){
-                        this.delReadOnlyBehaviours("AR_SETTLEMENT_LVL",items[0]);
+                        this.delReadOnlyBehaviours("AR_SETTLEMENT_LVL",item);
                         let arSVal = curPricingTable["AR_SETTLEMENT_LVL"] ? curPricingTable["AR_SETTLEMENT_LVL"] : ptDefaults["_defaultAtrbs"]["AR_SETTLEMENT_LVL"].value
-                        this.hotTable.setDataAtRowProp(items[0].row, 'AR_SETTLEMENT_LVL', arSVal.toString(), 'no-edit');
+                        this.hotTable.setDataAtRowProp(item.row, 'AR_SETTLEMENT_LVL', arSVal.toString(), 'no-edit');
                         if(curPricingTable && curPricingTable['AR_SETTLEMENT_LVL'] && arSVal.toLowerCase() == 'cash'){
-                            let colSPIdx = _.findWhere(this.hotTable.getCellMetaAtRow(items[0].row), { prop: 'SETTLEMENT_PARTNER' }).col;
-                            this.autoFillOnCash(items[0],contractData,colSPIdx,cellEditor);
+                            let colSPIdx = _.findWhere(this.hotTable.getCellMetaAtRow(item.row), { prop: 'SETTLEMENT_PARTNER' }).col;
+                            this.autoFillOnCash(item,contractData,colSPIdx,cellEditor);
                         }
                     }
                 }

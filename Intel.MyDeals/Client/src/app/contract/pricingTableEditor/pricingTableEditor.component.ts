@@ -302,16 +302,16 @@ export class pricingTableEditorComponent {
                                     PTR.push({ row: this.selRow, prop: this.field, old: this.hot.getDataAtRowProp(this.selRow, this.field), new: result?.toString() });
                                     PTE_CellChange_Util.autoFillARSet(PTR,VM.contractData, VM.curPricingTable,VM.custCellEditor);
                                     if ( this.hot.getDataAtRowProp(this.selRow, 'PERIOD_PROFILE') == '' && this.hot.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD') == ''){
-                                        PTE_CellChange_Util.checkfn(PTR,VM.curPricingTable, VM.columns,'',VM.contractData,VM.custCellEditor,VM.newPricingTable)
+                                        PTE_CellChange_Util.pgChgfn(PTR, VM.columns,VM.curPricingTable,VM.contractData,VM.custCellEditor,VM.newPricingTable);
                                     }
                                 }
                                 if (this.field == 'PERIOD_PROFILE' && this.hot.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL') == '' && this.hot.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD') == ''){
                                     PTR.push({ row: this.selRow, prop: this.field, old: this.hot.getDataAtRowProp(this.selRow, this.field), new: result?.toString() });
-                                    PTE_CellChange_Util.checkfn(PTR,VM.curPricingTable, VM.columns,'',VM.contractData,VM.custCellEditor,VM.newPricingTable)
+                                    PTE_CellChange_Util.pgChgfn(PTR, VM.columns,VM.curPricingTable,VM.contractData,VM.custCellEditor,VM.newPricingTable);
                                 }
                                 if (this.field == 'RESET_VOLS_ON_PERIOD' && this.hot.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL') == '' && this.hot.getDataAtRowProp(this.selRow, 'PERIOD_PROFILE') == ''){
                                     PTR.push({ row: this.selRow, prop: this.field, old: this.hot.getDataAtRowProp(this.selRow, this.field), new: result?.toString() });
-                                    PTE_CellChange_Util.checkfn(PTR,VM.curPricingTable, VM.columns,'',VM.contractData,VM.custCellEditor,VM.newPricingTable)
+                                    PTE_CellChange_Util.pgChgfn(PTR, VM.columns,VM.curPricingTable,VM.contractData,VM.custCellEditor,VM.newPricingTable);
                                 }
                             }
                             }
