@@ -203,11 +203,11 @@ export class dealEditorCellTemplateComponent {
                 for (let f = 0; f < this.fields.length; f++) {
                     if (data[this.fields[f].field] && data[this.fields[f].field][key] && !Number.isNaN(Number(data[this.fields[f].field][key]))) {
                         if (this.fields[f].format == "number" && this.fields[f].field == "INCENTIVE_RATE")
-                            data[this.fields[f].field][dim] = this.decimalPipe.transform(data[this.fields[f].field][dim], "1.0-2");
+                            data[this.fields[f].field][dim] =data[this.fields[f].field][dim]!="Unlimited"? this.decimalPipe.transform(data[this.fields[f].field][dim]) :data[this.fields[f].field][dim];
                         else if (this.fields[f].format == "number")
-                            data[this.fields[f].field][dim] = this.decimalPipe.transform(data[this.fields[f].field][dim], "1.0-0");
+                            data[this.fields[f].field][dim] = data[this.fields[f].field][dim]!="Unlimited"? this.decimalPipe.transform(data[this.fields[f].field][dim], "1.0-0"):data[this.fields[f].field][dim];
                         else 
-                            data[this.fields[f].field][dim] = this.currencyPipe.transform(data[this.fields[f].field][dim], 'USD', 'symbol', '1.2-2');
+                            data[this.fields[f].field][dim] =data[this.fields[f].field][dim]!="Unlimited"?  this.currencyPipe.transform(data[this.fields[f].field][dim], 'USD', 'symbol', '1.2-2'):data[this.fields[f].field][dim];
                     }
                 }
             }
