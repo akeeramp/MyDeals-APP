@@ -955,7 +955,7 @@ export class PTE_CellChange_Util {
         let OBJ_SET_TYPE_CD = curPricingTable.OBJ_SET_TYPE_CD;
         if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'ECAP') {
             _.each(items, item => {
-                if (item.prop && item.prop == 'PROGRAM_PAYMENT') {
+                if (item.prop) {
                     let val = item.new;
                     this.checkfn(item, curPricingTable,columns,val,contractData,cellEditor,ptDefaults); return;
                 }
@@ -974,7 +974,7 @@ export class PTE_CellChange_Util {
     static checkfn(item: any, curPricingTable: any,columns:any[],value?,contractData?,cellEditor?,ptDefaults?) {
         if (item!=null) {
             let val = value ? value : this.hotTable.getDataAtRowProp(item.row, 'PROGRAM_PAYMENT');
-            if (val != undefined && val != null && val != '' && val.toLowerCase() !== 'backend') {
+            if (val != undefined && val != null && val != '' && val.toLowerCase() !== 'backend' && item.prop == 'PROGRAM_PAYMENT') {
                 if(_.findWhere(columns,{data:'PERIOD_PROFILE'}) !=undefined && _.findWhere(columns,{data:'PERIOD_PROFILE'}) !=null){
                     this.hotTable.setDataAtRowProp(item.row, 'PERIOD_PROFILE', '', 'no-edit');
                 }
