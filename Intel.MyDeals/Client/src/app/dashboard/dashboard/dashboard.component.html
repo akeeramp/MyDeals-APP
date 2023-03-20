@@ -25,11 +25,9 @@
 
             <div class="fr">
                 <div class="fr">
-                    <kendo-datepicker class="date-dashboard" #picker [(value)]="startDateValue" calendarType="classic" [(ngModel)]="startDateValue" (valueChange)="onDateChange($event,'startDateChange')" style="width:110px; font-weight:500;">
-                    </kendo-datepicker>
+                    <kendo-datepicker class="date-dashboard" #picker [(value)]="startDateValue" calendarType="classic" [(ngModel)]="startDateValue" (valueChange)="onDateChange($event,'startDateChange')" style="width: min-content; min-width:125px !important; font-weight:500;"></kendo-datepicker>
                     -
-                    <kendo-datepicker class="date-dashboard" #picker [(value)]="endDateValue" calendarType="classic" [(ngModel)]="endDateValue" (valueChange)="onDateChange($event,'endDateChange')" style="width: 110px; font-weight: 500;">
-                    </kendo-datepicker>
+                    <kendo-datepicker class="date-dashboard" #picker [(value)]="endDateValue" calendarType="classic" [(ngModel)]="endDateValue" (valueChange)="onDateChange($event,'endDateChange')" style="width: min-content; min-width:125px !important; font-weight: 500;"></kendo-datepicker>
                 </div>
                 <div class="fr" style="margin: 5px 5px 0 15px; color: #aaaaaa; font-size: 14px;">Date Range:</div>
 

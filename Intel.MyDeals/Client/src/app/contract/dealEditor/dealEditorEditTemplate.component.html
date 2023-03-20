@@ -32,24 +32,22 @@
 <div *ngIf="in_Field_Name == 'REBATE_BILLING_START' || in_Field_Name == 'REBATE_BILLING_END' || in_Field_Name == 'START_DT' || in_Field_Name == 'LAST_REDEAL_DT'
      || in_Field_Name == 'END_DT' || in_Field_Name == 'OEM_PLTFRM_LNCH_DT' || in_Field_Name == 'OEM_PLTFRM_EOL_DT' || in_Field_Name == 'ON_ADD_DT'">
     <kendo-datepicker [ngModel]="in_DataItem[in_Field_Name]" id="dealDatePicker"
-                          (ngModelChange)="in_DataItem[in_Field_Name] = $event"
-                          (valueChange)="valueChange(in_DataItem, in_Field_Name)"
-                          [incompleteDateValidation]="true" 
-                          format="MM/dd/yyyy"
-                          (blur)="onBlur(dealDate)"
-                          (focus)="onBlur(dealDate)"
-                          (keydown)="onKeyDown($event, dealDate)"
-                          [ngbTooltip]="message" 
-                          #dealDateToolTip="ngbTooltip" 
-                          tooltipClass="toolTipReq" 
-                          triggers="manual" 
-                          placement="bottom"
-                          container="body"
-                          name="dealDate"
-                          #dealDate="ngModel"
-                         calendarType="classic"
-                      >
-        </kendo-datepicker>
+                      (ngModelChange)="in_DataItem[in_Field_Name] = $event"
+                      (valueChange)="valueChange(in_DataItem, in_Field_Name)"
+                      [incompleteDateValidation]="true" 
+                      format="MM/dd/yyyy"
+                      (blur)="onBlur(dealDate)"
+                      (focus)="onBlur(dealDate)"
+                      (keydown)="onKeyDown($event, dealDate)"
+                      [ngbTooltip]="message" 
+                      #dealDateToolTip="ngbTooltip" 
+                      tooltipClass="toolTipReq" 
+                      triggers="manual" 
+                      placement="bottom"
+                      container="body"
+                      name="dealDate"
+                      #dealDate="ngModel"
+                      calendarType="classic"></kendo-datepicker>
 </div>
 <div *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'VOL_TIER' || in_Deal_Type == 'REV_TIER' || in_Deal_Type == 'FLEX')">
     <div *ngFor="let fieldDet of fields">
