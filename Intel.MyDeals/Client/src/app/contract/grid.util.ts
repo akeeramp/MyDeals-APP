@@ -700,10 +700,11 @@ export class GridUtil {
     }
 
     static dsToExcel(gridColumns, data, title) {
-        var rows = [{ cells: [] }];
-        var rowsProd = [{ cells: [] }];
+        var rows = [{ cells: [], height: 80 }];
+        var rowsProd = [{ cells: [], height: 80 }];
         var colWidths = [];
         var colHidden = false;
+        var colHeight: number;
         var hasProds = false;
         var addAlways = [
             {
@@ -711,6 +712,8 @@ export class GridUtil {
                 title: "Notes"
             }
         ];
+        if (title == "Deal Editor Export") colHeight = 180;
+        else colHeight = 80;
         var forceHide = [];
 
         if (!((<any>window).usrRole === "DA" || ((<any>window).usrRole === "GA" && (<any>window).isSuper) || ((<any>window).usrRole === "Legal") || ((<any>window).usrRole === "SA"))) {
@@ -759,6 +762,7 @@ export class GridUtil {
                     color: "#ffffff",
                     wrap: true
                 });
+                rows[0].height = colHeight;
                 colWidths.push({ autoWidth: true });
             }
         }
@@ -772,6 +776,7 @@ export class GridUtil {
                 color: "#ffffff",
                 wrap: true
             });
+
         }
         for (var i = 0; i < data.length; i++) {
             //push single row for every record
@@ -829,7 +834,9 @@ export class GridUtil {
 
                         // Replace special characters that are killers - do it here to catch templated items as well as normal ones.
                         val = String(val).replace(/[\x0b\x1a]/g, " ").replace(/[’]/g, "'");
-
+                        if (gridColumns[c].field == 'LAST_TRKR_START_DT_CHK' || gridColumns[c].field == 'LAST_REDEAL_DT' || gridColumns[c].field == "BLLG_DT" || gridColumns[c].field == "OEM_PLTFRM_LNCH_DT" || gridColumns[c].field == "OEM_PLTFRM_EOL_DT") {
+                            val = val == undefined || val.length == 0 ? 'Invalid date' : val;
+                        }
                         if(gridColumns[c].field=='TIER_NBR'){
                             cells.push({
                                 value: val,
@@ -857,7 +864,8 @@ export class GridUtil {
                 }
 
                 rows.push({
-                    cells: cells
+                    cells: cells,
+                    height: 80
                 });
 
                 // Products
@@ -880,7 +888,8 @@ export class GridUtil {
                                 { value: prd["OP_CD"], wrap: true },
                                 { value: prd["PRD_STRT_DTM"], wrap: true },
                                 { value: prd["PRD_END_DTM"], wrap: true }
-                            ]
+                            ],
+                            height: 80
                         });
                     }
                 }

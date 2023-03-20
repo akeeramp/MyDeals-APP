@@ -150,7 +150,7 @@ export class ExcelExport {
         } else {
             if (passedData[field] !== undefined) {
                 var val = passedData[field][dim];
-                val = ExcelExport.getFormattedData(val, format);
+                if (val != 'No YCS2') val = ExcelExport.getFormattedData(val, format);
                 tmplt += val + '\n';
             }
         }
@@ -168,7 +168,7 @@ export class ExcelExport {
             let dimkey = sortedKeys[index];
             if (data.hasOwnProperty(dimkey) && dimkey.indexOf("___") >= 0 && dimkey.indexOf("_____") < 0) {  
                 var val = passedData[field][dimkey];
-                if (val !== "Unlimited") {
+                if (val !== "Unlimited" || val != "No YCS2") {
                     val = ExcelExport.getFormattedData(val, format);
                 }
                 tmplt += val + '\n';

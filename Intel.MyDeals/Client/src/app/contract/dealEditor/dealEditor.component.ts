@@ -1334,8 +1334,31 @@ export class dealEditorComponent {
         });
         this.grid.autoFitColumn(2);
     }
+    //excelExport columns ordering
+    columnOrdering() {
+        let columns = this.wipTemplate.columns;
+        let dealid;
+        if (this.wipTemplate.name == "VOL_TIER" || this.wipTemplate.name == "FLEX") {
+            dealid = columns.splice(12, 1);
+            columns.splice(0, 0, dealid[0]);
+        } else if (this.wipTemplate.name == "PROGRAM") {
+            dealid = columns.splice(11, 1);
+            columns.splice(0, 0, dealid[0]);
+        } else if (this.wipTemplate.name == "DENSITY") {
+            dealid = columns.splice(13, 1);
+            columns.splice(0, 0, dealid[0]);
+        } else if (this.wipTemplate.name == "REV_TIER") {
+            dealid = columns.splice(17, 1);
+            columns.splice(0, 0, dealid[0]);
+        } else {
+            dealid = columns.splice(9, 1);
+            columns.splice(0, 0, dealid[0]);
+        }
+        return columns;
+    }
     exportToExcel() {
-        GridUtil.dsToExcel(this.wipTemplate.columns, this.gridResult, "Deal Editor Export");
+        let columns = this.columnOrdering();
+        GridUtil.dsToExcel(columns, this.gridResult, "Deal Editor Export");
     }
     exportToExcelCustomColumns() {
         GridUtil.dsToExcel(this.columns, this.gridData.data, "Deal Editor Export");
