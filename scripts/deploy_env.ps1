@@ -3,8 +3,8 @@ param([string] $Operation,$USN,$PWD,$SERVER)
 try {
 
  $ENV_DATA = @(
-        [pscustomobject]@{env='CIN';DEPLOY_PATH='\\HF2CINMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2CINMYDLW01.amr.corp.intel.com';pool="cinmydeals.inte.com";config="DEV"}
-        [pscustomobject]@{env='DEV';DEPLOY_PATH='\\HF2DEVMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2DEVMYDLW01.amr.corp.intel.com';pool="devmydeals.inte.com";config="DEV"}
+        [pscustomobject]@{env='CIN';DEPLOY_PATH='\\HF2CINMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2CINMYDLW01.amr.corp.intel.com';pool="cinmydeals.intel.com";config="DEV"}
+        [pscustomobject]@{env='DEV';DEPLOY_PATH='\\HF2DEVMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2DEVMYDLW01.amr.corp.intel.com';pool="devmydeals.intel.com";config="DEV"}
         [pscustomobject]@{env='ITT';DEPLOY_PATH='\\HF2ITTMYDLW01.amr.corp.intel.com\MyDeals';DEPLOY_SERVER='HF2ITTMYDLW01.amr.corp.intel.com';pool="ittmydeals.intel.com";config="ITT"}
         [pscustomobject]@{env='EUT';DEPLOY_PATH='\\hf2cinmydlw01.amr.corp.intel.com\MyDealsEUT';DEPLOY_SERVER='hf2cinmydlw01.amr.corp.intel.com';pool="eutmydeals.intel.com";config="EUT"}
         [pscustomobject]@{env='DAY1';DEPLOY_PATH='\\hf2cinmydlw01.amr.corp.intel.com\MyDealsDay1';DEPLOY_SERVER='hf2cinmydlw01.amr.corp.intel.com';pool="mydeals-day1.intel.com";config="DAY1"}
