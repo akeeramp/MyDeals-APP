@@ -48,7 +48,8 @@ export class AttributeBuilder implements OnInit {
     private selectedRuleItem: any
     private attributeSettings: any;
     private defaultSelection: boolean = true;
-    disabledropdowns: boolean;
+    public disabledropdowns: boolean;
+    public enableTextbox: boolean[];
     public ruleToRun: any;
     private isDefaultSelected: boolean = false;
     private isDefaultChange: boolean = false;
@@ -151,51 +152,51 @@ export class AttributeBuilder implements OnInit {
         }
     }
     updateRules(rulesData) {
-            this.attributes=[];
-            _.each(rulesData, (customRule) => {
-                let field = this.availableAttrs.filter(x => x.field == customRule.field)[0];
-                let operators = this.getOperator(field);
-                let selectedop = operators.filter(x => x.operator == customRule.operator)[0];
-                let lookupval = [];
-                let selectelookupval;
-                if (field.lookups != undefined && field.lookups != null && field.lookups.length > 0) {
-                    lookupval = this.getlookupvalues(field);
-                    selectelookupval = customRule.value
-                } else
-                    if (field.lookupUrl != undefined && field.lookupUrl != null && field.lookupUrl.length > 0) {
-                        lookupval = this.dropdownresponses[field.field];
-                    if (field.feild == "Customer.CUST_NM") selectelookupval = lookupval.filter(x => x.CUST_SID == selectelookupval);
-                    }
-                let customValue;
-                if (field.type == "number") {
-                    if (Number.isNaN(parseInt(customRule.value)))
-                        customValue = '';
-                    else
-                        customValue = parseInt(customRule.value);
+        this.attributes=[];
+        _.each(rulesData, (customRule) => {
+            let field = this.availableAttrs.filter(x => x.field == customRule.field)[0];
+            let operators = this.getOperator(field);
+            let selectedop = operators.filter(x => x.operator == customRule.operator)[0];
+            let lookupval = [];
+            let selectelookupval;
+            if (field.lookups != undefined && field.lookups != null && field.lookups.length > 0) {
+                lookupval = this.getlookupvalues(field);
+                selectelookupval = customRule.value
+            } else
+                if (field.lookupUrl != undefined && field.lookupUrl != null && field.lookupUrl.length > 0) {
+                    lookupval = this.dropdownresponses[field.field];
+                if (field.feild == "Customer.CUST_NM") selectelookupval = lookupval.filter(x => x.CUST_SID == selectelookupval);
                 }
-                else if (field.type == "money" || field.type == "numericOrPercentage") {
-                    if (Number.isNaN(parseFloat(customRule.value)))
-                        customValue = '';
-                    else
-                        customValue = parseFloat(customRule.value);
-                }
+            let customValue;
+            if (field.type == "number") {
+                if (Number.isNaN(parseInt(customRule.value)))
+                    customValue = '';
                 else
-                    customValue = customRule.value;
-                this.attributes.push({
-                    dropDown: lookupval.length == 0 ? [] : lookupval,
-                    field: customRule.field,
-                    operator: selectedop ? selectedop.operator : this.availableOperator[0].operator,
-                    opvalues: operators,
-                    selectedField: field,
-                    selectedOperator: selectedop ? selectedop : this.availableOperator[0],
-                    selectedValues: selectelookupval != undefined ? selectelookupval : customValue,
-                    subType: "",
-                    type: field.type,
-                    value: selectelookupval != undefined ? selectelookupval : customValue,
-                    valueType: "",
-                    values: customValue
-                })
+                    customValue = parseInt(customRule.value);
+            }
+            else if (field.type == "money" || field.type == "numericOrPercentage") {
+                if (Number.isNaN(parseFloat(customRule.value)))
+                    customValue = '';
+                else
+                    customValue = parseFloat(customRule.value);
+            }
+            else
+                customValue = customRule.value;
+            this.attributes.push({
+                dropDown: lookupval.length == 0 ? [] : lookupval,
+                field: customRule.field,
+                operator: selectedop ? selectedop.operator : this.availableOperator[0].operator,
+                opvalues: operators,
+                selectedField: field,
+                selectedOperator: selectedop ? selectedop : this.availableOperator[0],
+                selectedValues: selectelookupval != undefined ? selectelookupval : customValue,
+                subType: "",
+                type: field.type,
+                value: selectelookupval != undefined ? selectelookupval : customValue,
+                valueType: "",
+                values: customValue
             })
+        })
     }
     async loadDefaultAttributes() {
         if (this.availableAttrs.length === 0) {
@@ -207,6 +208,7 @@ export class AttributeBuilder implements OnInit {
             }
         }
         if (this.cat == "DealSearch") {
+            this.enableTextbox = [false];
             this.disabledropdowns = false;
             this.attributes = [{
                 dropDown: [],
@@ -225,6 +227,7 @@ export class AttributeBuilder implements OnInit {
         }
         else
         {
+            this.enableTextbox = [false, false, false];
             this.disabledropdowns = true;
             this.updateRules(this.customSettings);
         }
@@ -282,6 +285,7 @@ export class AttributeBuilder implements OnInit {
             value: "",
             valueType: []
         });
+        this.enableTextbox.splice(index + 1, 0, false);
     }
     removeRow(dataItem, index) {
         if (index > 0) {
@@ -298,6 +302,7 @@ export class AttributeBuilder implements OnInit {
                 this.valueChange(dataItem, index);
             }
         }
+        this.enableTextbox.splice(index, 1);
     }
 
     enableSaveRules() {
@@ -307,6 +312,7 @@ export class AttributeBuilder implements OnInit {
         else return false;
     }
     async valueChange(dataItem, index, action?: any) {
+        this.enableTextbox[index] = false;
         let ops = this.availableType2Operator.filter(x => x.type === dataItem.type).length > 0 ? this.availableType2Operator.filter(x => x.type === dataItem.type)[0].operator : ''
         let opvalues = [];
         for (let i = 0; i < ops.length; i++) {
@@ -353,20 +359,41 @@ export class AttributeBuilder implements OnInit {
     }
 
     dataChange(idx, dataItem, selector, data?) {
-       
         this.attributes[idx].values = [];
         if (selector == 'operator') {
             this.attributes[idx].operator = dataItem.selectedOperator.operator;
+            dataItem.value = ''
+            this.attributes[idx].values = [];
+            this.enableTextbox[idx] = false;
+            if (this.attributes[idx].operator == 'IN') {
+                this.enableTextbox[idx] = true;
+            }
         } else if (selector == 'numerictextbox') {
             data = dataItem.value;
         } else if (selector == 'textbox') {
-            data = dataItem.value;
+            if (!this.enableTextbox[idx]) data = dataItem.value;
+            else {
+                data = [];
+                if (!Array.isArray(dataItem.value) && !Number.isInteger(dataItem.value)) dataItem.value = dataItem.value.split(',');
+                const index = dataItem.value.indexOf('');
+                if (index > -1) {
+                    dataItem.value.splice(index, 1);
+                }
+                data = dataItem.value
+            }
         } else if (selector == 'datePicker') {
             data = new Date(dataItem.value).toISOString();
         } else {
             this.attributes[idx].value = data
         }
-        if(data != undefined && data != null && data != '') this.attributes[idx].values.push(data);
+        if (data != undefined && data != null && data != '') {
+            if (Array.isArray(data)) {
+                data.forEach((item) => {
+                    this.attributes[idx].values.push(item);
+                })
+            }
+            else this.attributes[idx].values.push(data);
+        }
      }
 
     dataChangeMulti(data, i, dataItem, selector) {        

@@ -90,7 +90,7 @@
         </span>
 
         <span class="third-search-opt-section abValue" *ngIf="dataItem.field !== ''">
-            <span class="inner-third-span" *ngIf="dataItem.type == 'number' || dataItem.type == 'money' || dataItem.type == 'numericOrPercentage'">
+            <span class="inner-third-span" *ngIf="(dataItem.type == 'number' || dataItem.type == 'money' || dataItem.type == 'numericOrPercentage') && !enableTextbox[i]">
                 <kendo-numerictextbox [(ngModel)]="dataItem.value"
                                       class="advance-numerictextbox-style k-numberbox-design"
                                       [format]="dataItem.type == 'money'? 'c2' : dataItem.type == 'numericOrPercentage' ? '0:n2':'0:n0'"
@@ -98,18 +98,19 @@
                 <kendo-dropdownlist *ngIf="dataItem.field == 'VOL_INCR'" class="box_style_dropdwn k-dropdown-design" [data]="['%', 'unit']"></kendo-dropdownlist>
                 <button *ngIf="dataItem.field == 'END_DT_PUSH'" class="days-style"><span>Days</span></button>
             </span>
-            <span class="inner-third-span" *ngIf="dataItem.type == 'string' || dataItem.type == 'string_with_in' || dataItem.type == 'string_limited' || dataItem.type == 'autocomplete'">
+            <span class="inner-third-span" *ngIf="dataItem.type == 'string' || dataItem.type == 'string_with_in' || dataItem.type == 'string_limited' || dataItem.type == 'autocomplete' || enableTextbox[i]">
                 <kendo-textbox [(ngModel)]="dataItem.value"
                                class="tender-extra-box-style k-textbox-design"
                                (blur)="dataChange(i, dataItem, 'textbox')"></kendo-textbox>
-                <span class="span-style-tender">Use <i style="margin-right: 3px; color: #FFA300;">*</i> for wildcard searches. <i style="color:#FFA300;">example: Sam sun*</i></span>
+                <span *ngIf="!enableTextbox[i]" class="span-style-tender">Use <i style="margin-right: 3px; color: #FFA300;">*</i> for wildcard searches. <i style="color:#FFA300;">example: Sam sun*</i></span>
+                <span *ngIf="enableTextbox[i]" class="span-style-tender">Enter comma separated values: <i style="color:#FFA300;">example: 500, 600, 700</i></span>
             </span>
-            <span class="inner-third-span" *ngIf="dataItem.type == 'date'">
+            <span class="inner-third-span" *ngIf="dataItem.type == 'date' && !enableTextbox">
                 <kendo-datepicker [(ngModel)]="dataItem.value" class="calender-row-style k-custom-dater" calendarType="classic"
                                   (blur)="dataChange( i, dataItem, 'datePicker')"></kendo-datepicker>
             </span>
             <span class="inner-third-span" *ngIf="dataItem.type == 'list' && dataItem.field != 'Customer.CUST_NM' && dataItem.field != 'PRODUCT_CATEGORIES' && dataItem.field != 'MRKT_SEG'
-          && dataItem.field != 'REBATE_TYPE' && dataItem.field != 'PROGRAM_PAYMENT' && dataItem.field != 'PAYOUT_BASED_ON'  && dataItem.field != 'SERVER_DEAL_TYPE'  ">
+          && dataItem.field != 'REBATE_TYPE' && dataItem.field != 'PROGRAM_PAYMENT' && dataItem.field != 'PAYOUT_BASED_ON'  && dataItem.field != 'SERVER_DEAL_TYPE' && !enableTextbox[i]">
                 <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level"
                                    [data]="dataItem.dropDown"
                                    textField="Value"
@@ -122,7 +123,7 @@
                 </kendo-multiselect>
             </span>
 
-            <span class="inner-third-span" *ngIf="dataItem.type == 'list' && dataItem.field == 'PRODUCT_CATEGORIES'">
+            <span class="inner-third-span" *ngIf="dataItem.type == 'list' && dataItem.field == 'PRODUCT_CATEGORIES' && !enableTextbox[i]">
                 <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level"
                                    [data]="dataItem.dropDown"
                                    textField="PRD_CAT_NM"
@@ -135,7 +136,7 @@
                 </kendo-multiselect>
             </span>
 
-            <span class="inner-third-span" *ngIf="dataItem.type == 'list' && dataItem.field == 'Customer.CUST_NM'">
+            <span class="inner-third-span" *ngIf="dataItem.type == 'list' && dataItem.field == 'Customer.CUST_NM' && !enableTextbox[i]">
                 <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level"
                                    kendoMultiSelectSummaryTag
                                    [data]="dataItem.dropDown"
@@ -151,7 +152,7 @@
 
 
             <span class="inner-third-span" *ngIf="dataItem.type == 'list' && (dataItem.field == 'MRKT_SEG' || dataItem.field == 'REBATE_TYPE' || dataItem.field == 'PROGRAM_PAYMENT'
-          || dataItem.field == 'PAYOUT_BASED_ON' || dataItem.field == 'SERVER_DEAL_TYPE') ">
+          || dataItem.field == 'PAYOUT_BASED_ON' || dataItem.field == 'SERVER_DEAL_TYPE') && !enableTextbox [i]">
 
                 <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level"
                                    [data]="dataItem.dropDown"
@@ -166,7 +167,7 @@
             </span>
 
 
-            <span class="inner-third-span" *ngIf="(dataItem.type == 'singleselect')&& dataItem.field == 'OBJ_SET_TYPE_CD'">
+            <span class="inner-third-span" *ngIf="(dataItem.type == 'singleselect')&& dataItem.field == 'OBJ_SET_TYPE_CD' && !enableTextbox[i]">
                 <kendo-dropdownlist class="opUiContainer sm tender_ecap_multi_style k-dropdown-design"
                                     [data]="dataItem.dropDown"
                                     textField="Value"
@@ -177,7 +178,7 @@
                                     (valueChange)="dataChange(i, dataItem, 'combobox', $event)">
                 </kendo-dropdownlist>
             </span>
-            <span class="inner-third-span" *ngIf="(dataItem.type == 'singleselect' || dataItem.type == 'singleselect_ext' || dataItem.type == 'singleselect_read_only') && dataItem.field !== 'OBJ_SET_TYPE_CD'">
+            <span class="inner-third-span" *ngIf="(dataItem.type == 'singleselect' || dataItem.type == 'singleselect_ext' || dataItem.type == 'singleselect_read_only') && dataItem.field !== 'OBJ_SET_TYPE_CD' && !enableTextbox[i]">
                 <kendo-dropdownlist class="opUiContainer sm tender_ecap_multi_style k-dropdown-design"
                                     [data]="dataItem.dropDown"
                                     textField="DROP_DOWN"
