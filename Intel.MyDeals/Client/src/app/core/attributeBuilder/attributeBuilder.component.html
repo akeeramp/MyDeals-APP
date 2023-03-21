@@ -105,7 +105,7 @@
                 <span *ngIf="!enableTextbox[i]" class="span-style-tender">Use <i style="margin-right: 3px; color: #FFA300;">*</i> for wildcard searches. <i style="color:#FFA300;">example: Sam sun*</i></span>
                 <span *ngIf="enableTextbox[i]" class="span-style-tender">Enter comma separated values: <i style="color:#FFA300;">example: 500, 600, 700</i></span>
             </span>
-            <span class="inner-third-span" *ngIf="dataItem.type == 'date' && !enableTextbox">
+            <span class="inner-third-span" *ngIf="dataItem.type == 'date' && !enableTextbox[i]">
                 <kendo-datepicker [(ngModel)]="dataItem.value" class="calender-row-style k-custom-dater" calendarType="classic"
                                   (blur)="dataChange( i, dataItem, 'datePicker')"></kendo-datepicker>
             </span>
@@ -152,7 +152,7 @@
 
 
             <span class="inner-third-span" *ngIf="dataItem.type == 'list' && (dataItem.field == 'MRKT_SEG' || dataItem.field == 'REBATE_TYPE' || dataItem.field == 'PROGRAM_PAYMENT'
-          || dataItem.field == 'PAYOUT_BASED_ON' || dataItem.field == 'SERVER_DEAL_TYPE') && !enableTextbox [i]">
+          || dataItem.field == 'PAYOUT_BASED_ON' || dataItem.field == 'SERVER_DEAL_TYPE') && !enableTextbox[i]">
 
                 <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level"
                                    [data]="dataItem.dropDown"
