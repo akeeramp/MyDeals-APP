@@ -9,12 +9,14 @@
         <div class='grid-status fl gridStatusMarker {{dataItem.WF_STG_CD}}' title='{{stgFullTitleChar()}}' [ngStyle]="getStageBgColorStyle(stgFullTitleChar())" [innerHTML]="stgOneChar()"></div>
 
         <!-- Checkbox -->
-        <div class='fl check-parent' *ngIf="(this.editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1) && (!(isSalesForceDeal && dataItem.WF_STG_CD === 'Offer'))">
+        <div class='fl check-parent' *ngIf="(this.editable === true) && (!dataItem._parentCnt || dataItem._parentCnt <= 1) && (dataItem.WF_STG_CD !== 'Cancelled')
+                && (!(isSalesForceDeal && (dataItem.WF_STG_CD === 'Offer' || dataItem.WF_STG_CD === 'Lost' || dataItem.WF_STG_CD === 'Won')))">
             <input type="checkbox" [(ngModel)]="dataItem.isLinked" class="grid-link-checkbox with-font lnkChk_{{dataItem.DC_PARENT_ID}}" id="lnkChk_{{dataItem.DC_PARENT_ID}}" />
             <label for="lnkChk_{{dataItem.DC_PARENT_ID}}" title="Check to apply changes to all checked rows"></label>
         </div>
         <!-- SalesForce Checkbox Disabled icon except for DA users -->
-        <div class='fl md-icon' *ngIf="isSalesForceDeal && dataItem.WF_STG_CD === 'Offer'">
+        <div class='fl md-icon' *ngIf="(isSalesForceDeal && (dataItem.WF_STG_CD === 'Offer' || dataItem.WF_STG_CD === 'Lost' || dataItem.WF_STG_CD === 'Won')) 
+               || dataItem.WF_STG_CD === 'Cancelled'">
             <i class="intelicon-minus-max" title="Check to apply changes to all checked rows IS DISABLED for IQR deals" style="font-size: 20px !important; padding: 0 8px 0 3px"></i>
         </div>
 
