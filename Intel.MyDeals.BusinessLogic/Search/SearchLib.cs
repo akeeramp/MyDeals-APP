@@ -681,8 +681,10 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return GetDealList(data, new List<int>
             {
+                Attributes.AR_SETTLEMENT_LVL.ATRB_SID,
                 Attributes.BLLG_DT.ATRB_SID,
                 Attributes.CAP.ATRB_SID,
+                Attributes.CONSUMPTION_LOOKBACK_PERIOD.ATRB_SID,
                 Attributes.CREDIT_AMT.ATRB_SID,
                 Attributes.CREDIT_VOLUME.ATRB_SID,
                 Attributes.CUST_ACCNT_DIV.ATRB_SID,
@@ -705,10 +707,12 @@ namespace Intel.MyDeals.BusinessLogic
                 Attributes.NOTES.ATRB_SID,
                 Attributes.OBJ_SET_TYPE_CD.ATRB_SID,
                 Attributes.PAYOUT_BASED_ON.ATRB_SID,
+                Attributes.PERIOD_PROFILE.ATRB_SID,
                 Attributes.PRODUCT_CATEGORIES.ATRB_SID,
                 Attributes.PRODUCT_FILTER.ATRB_SID,
                 Attributes.PROGRAM_PAYMENT.ATRB_SID,
                 Attributes.PS_WF_STG_CD.ATRB_SID,
+                Attributes.QUOTE_LN_ID.ATRB_SID,
                 Attributes.RATE.ATRB_SID,
                 Attributes.REBATE_TYPE.ATRB_SID,
                 Attributes.SERVER_DEAL_TYPE.ATRB_SID,
