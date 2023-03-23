@@ -532,6 +532,8 @@ export class PTE_CellChange_Util {
 
     }
     static autoFillCellOnProd(items: Array<any>, curPricingTable: any, contractData: any, pricingTableTemplates: any, columns: any[], operation?: any) {
+        //when pasting multiple products from excel in 1 cell it should be comma deliminated
+        items.forEach((item) => { if (item.new.includes('\n')) item.new = item.new.split('\n').join(','); })
         try {
             //making as empty only if program payment is Frontend YCS2
             if( curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD == 'ECAP' && curPricingTable.PROGRAM_PAYMENT=='Frontend YCS2'){
