@@ -50,6 +50,9 @@ export class PTEUtil {
                     currentColumnConfig.validator = this.EndValueValidator;
                 }
             }
+            else if (item.field == "VOLUME") {
+                currentColumnConfig.type = 'text';
+            }
             else if (itemField === 'number') {
                 currentColumnConfig.type = 'numeric';
 
