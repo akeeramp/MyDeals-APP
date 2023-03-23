@@ -155,6 +155,8 @@ export class contractManagerComponent {
     }
     async refreshContractData(eventData: boolean) {
         if (eventData) {
+            this.clearFilter();
+            this.gridDataSet = {};
             await this.loadContractDetails();
         }
     }
@@ -951,10 +953,23 @@ export class contractManagerComponent {
         }
     }
     clearFilter() {
-        let tempData = this.contractData.PRC_ST.map(x=>x.filtered = false);
-        if(tempData.length > 0){
-            this.filteredData= this.contractData.PRC_ST;
+        let tempData = this.contractData.PRC_ST.map(x => x.filtered = false);
+        if (tempData.length > 0) {
+            this.filteredData = this.contractData.PRC_ST;
         }
+        _.each(this.contractData.PRC_ST, (prcSt) => {
+            _.each(prcSt.PRC_TBL, (prcTbl) => {
+                this.state[prcTbl.DC_ID] = {
+                    skip: 0,
+                    group: [],
+                    // Initial filter descriptor
+                    filter: {
+                        logic: "and",
+                        filters: [],
+                    },
+                };
+            })
+        })
     }
     async quickSaveContractFromDialog(data) {
         this.drawChart = false;
@@ -1180,7 +1195,6 @@ export class contractManagerComponent {
                 _.each(prcSt.PRC_TBL, (prcTbl) => {
                     this.state[prcTbl.DC_ID] = {
                         skip: 0,
-                        take: 25,
                         group: [],
                         // Initial filter descriptor
                         filter: {
