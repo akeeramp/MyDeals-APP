@@ -1698,3 +1698,11 @@ kendo-window.flexOverlapProducts {
     bottom: 187px;
     width: 100%;
 }*/
+
+kendo-grid#manageFilterStyle .k-grid-content-locked {
+    height: auto !important;
+}
+
+.cdk-virtual-scroll-content-wrapper {
+    position: unset !important;
+}
