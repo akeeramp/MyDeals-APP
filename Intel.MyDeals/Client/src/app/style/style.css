@@ -1706,3 +1706,12 @@ kendo-grid#manageFilterStyle .k-grid-content-locked {
 .cdk-virtual-scroll-content-wrapper {
     position: unset !important;
 }
+
+kendo-grid#manageFilterStyle tr.k-grid-norecords {
+    height: 38px !important;
+}
+
+kendo-grid#manageFilterStyle tr.k-grid-norecords td {
+    position: relative;
+    top: -4px;
+}
