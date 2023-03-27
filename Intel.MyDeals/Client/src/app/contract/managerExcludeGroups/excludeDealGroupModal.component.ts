@@ -175,6 +175,8 @@ export class excludeDealGroupModalDialog {
 
     loadExcludeDealGroupModel() {
         this.isLoading = true;
+        this.hasCheckbox = true;
+
         if (this.dataItem.cellCurrValues?.DEAL_ID) {
             this.pctGroupDealsView = true;
         }
@@ -210,7 +212,7 @@ export class excludeDealGroupModalDialog {
             this.isLoading = false;;
             this.childGridResult = result;
             if (this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != undefined && this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != null && this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != '') {
-                const selectedDealIds = this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS.split(',');
+                const selectedDealIds = this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS.split(',').map(x=>x.trim());
                 for (let i = 0; i < this.childGridResult.length; i++) {
                     if (selectedDealIds.indexOf(this.childGridResult[i].OVLP_DEAL_ID.toString()) > -1) {
                         this.childGridResult[i].selected = true;
@@ -218,21 +220,35 @@ export class excludeDealGroupModalDialog {
 
                 }
             }
-            let childgridresult1 = this.childGridResult.filter(x => x.CST_MCP_DEAL_FLAG === 1);
-            let childgridresult2 = this.childGridResult.filter(x => x.CST_MCP_DEAL_FLAG === 0);
+
+            for (var i = 0; i < this.childGridResult.length; i++) {
+                var exChk = this.childGridResult[i]["EXCLD_DEAL_FLAG"];
+                var cstChk =this.childGridResult[i]["CST_MCP_DEAL_FLAG"];
+                if (this.childGridResult[i]["SELF_OVLP"] !== 1) {
+                    if (cstChk === 1 || (cstChk === 0 && exChk === 1)) {
+                        this.childGridResult[i]["GRP_BY"] = 1;
+                    } else if (cstChk === 0) {
+                        this.childGridResult[i]["GRP_BY"] = 2;
+                    } else if (cstChk === 2) {
+                        this.childGridResult[i]["GRP_BY"] = 1;
+                    } else {
+                        this.childGridResult[i]["GRP_BY"] = 2;
+                    }
+                }
+            }
+
+            let childgridresult1 = this.childGridResult.filter(x => x.GRP_BY===1 );
+            let childgridresult2 = this.childGridResult.filter(x => x.GRP_BY === 2);
             childgridresult1 = _.sortBy(_.sortBy(_.sortBy(childgridresult1, 'EXCLD_DEAL_FLAG').reverse(), 'CST_MCP_DEAL_FLAG').reverse(), 'OVLP_WF_STG_CD');
             childgridresult2 = _.sortBy(_.sortBy(_.sortBy(childgridresult2, 'EXCLD_DEAL_FLAG').reverse(), 'CST_MCP_DEAL_FLAG').reverse(), 'OVLP_WF_STG_CD');
             this.childGridData1 = process(childgridresult1, this.state);
             this.childGridData2 = process(childgridresult2, this.state);
-            if (this.childGridData1.data.length > 0 && this.childGridData2.data.length > 0) {
-                this.isData = true;
-                this.childgridColumns = [{ data: 'Deals below are included as part of the Cost Test' }, { data: 'Deals shown in grey overlap but are NOT included as part of the Cost Test' }];
-            }
-            else if (this.childGridData1.data.length > 0 && this.childGridData2.data.length == 0) {
+           
+             if (this.childGridData1.data.length > 0) {
                 this.isData = true;
                 this.childgridColumns = [{ data: 'Deals below are included as part of the Cost Test' }];
             }
-            else if (this.childGridData2.data.length > 0 && this.childGridData1.data.length == 0) {
+            else if (this.childGridData2.data.length > 0 ) {
                 this.isData = true;
                 this.childgridColumns = [{ data: 'Deals shown in grey overlap but are NOT included as part of the Cost Test' }];
             }
@@ -267,10 +283,18 @@ export class excludeDealGroupModalDialog {
         }
     }
     checkCheckboxIsDisabled(dataItem) {
-        if ((dataItem["CST_MCP_DEAL_FLAG"] && dataItem["CST_MCP_DEAL_FLAG"] === 0 && dataItem["EXCLD_DEAL_FLAG"] && dataItem["EXCLD_DEAL_FLAG"] === 0)
-            || (dataItem["CST_MCP_DEAL_FLAG"] && dataItem["CST_MCP_DEAL_FLAG"] === 2 && dataItem["EXCLD_DEAL_FLAG"] && dataItem["EXCLD_DEAL_FLAG"] === 2))
+        if (dataItem["CST_MCP_DEAL_FLAG"] && dataItem["CST_MCP_DEAL_FLAG"] === 0 && dataItem["EXCLD_DEAL_FLAG"] && dataItem["EXCLD_DEAL_FLAG"] === 0) {
             return true;
-        return false;
+        }
+        else if (dataItem["CST_MCP_DEAL_FLAG"] && dataItem["CST_MCP_DEAL_FLAG"] === 0 && dataItem["EXCLD_DEAL_FLAG"] && dataItem["EXCLD_DEAL_FLAG"] === 0) {
+            return true
+        } else if ((this.gridData && this.gridData.data && this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'active'
+            || this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'offer' || this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'won'
+            || this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'pending' || this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'submitted')) {
+            return true;
+        } else {
+            return false;
+        }
     }
     getTitle(dataItem) {
         if (dataItem["CST_MCP_DEAL_FLAG"] && dataItem["CST_MCP_DEAL_FLAG"] === 0 && dataItem["EXCLD_DEAL_FLAG"] && dataItem["EXCLD_DEAL_FLAG"] === 0)

@@ -100,7 +100,7 @@
                                             <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="30">
                                                 <ng-template kendoGridCellTemplate let-dataItem>
                                                     <input type='checkbox'
-                                                           [(ngModel)]="dataItem.selected" [disabled]="!hasCheckbox||dataItem.CST_MCP_DEAL_FLAG === 0 || checkCheckboxIsDisabled(dataItem)" title="getTitle(dataItem)">
+                                                           [(ngModel)]="dataItem.selected" [disabled]="!hasCheckbox|| checkCheckboxIsDisabled(dataItem)" title="getTitle(dataItem)">
                                                     <span style="overflow:visible;white-space:normal"></span>
                                                 </ng-template>
                                             </kendo-grid-column>
