@@ -226,7 +226,7 @@ export class GridUtil {
             dim = sortedKeys[index];
             if (data.hasOwnProperty(dim) && dim.indexOf("___") >= 0 && dim.indexOf("_____") < 0) {  //capture the non-negative dimensions (we've indicated negative as five underscores), skipping things like ._events
                 if (passedData[field][dim] != undefined && passedData[field][dim] != null)
-                    tmplt += '    <div class="ng-binding">' + passedData[field][dim] + '</div>';
+                    tmplt += '    <div class="ng-binding vert-center">' + passedData[field][dim] + '</div>';
             }
         }
         tmplt += '</div></div>';
