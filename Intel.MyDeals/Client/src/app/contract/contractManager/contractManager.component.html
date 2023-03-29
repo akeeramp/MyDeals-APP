@@ -351,7 +351,7 @@
                                                     <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
                                                         <deal-tools-angular [dataItem]='dataItem' [isSplitEnabled]='false' [isFileAttachmentEnabled]='true'
                                                                             [isHistoryEnabled]='true' [isCommentEnabled]='true' [isEditable]='true'
-                                                                            [isQuoteLetterEnabled]='true' [isDeleteEnabled]='false' [gridData]="gridDataSet[pt.DC_ID]" [contractData]="contractData"
+                                                                            [isQuoteLetterEnabled]='true' [isDeleteEnabled]='false' [gridResult]="gridDataSet[pt.DC_ID]" [gridData]="gridDataSet[pt.DC_ID]" [contractData]="contractData"
                                                                             (refreshContract)="refreshContractData($event)" [isManageTab]="true"></deal-tools-angular>
                                                     </ng-template>
                                                 </kendo-grid-column>
