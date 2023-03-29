@@ -1,16 +1,15 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { dsaService } from "./admin.vistex.service";
 import { Component } from "@angular/core";
-import * as moment from 'moment'; 
+import { MomentService } from "../../shared/moment/moment.service"; 
 
 @Component({
     selector: "admin-vistex",
     templateUrl: "Client/src/app/admin/vistex/admin.vistex.component.html",
     styleUrls: ['Client/src/app/admin/vistex/admin.vistex.component.css']
 })
-
 export class adminVistexComponent {
-    constructor(private loggerSvc: logger, private dsaService: dsaService) { }
+    constructor(private loggerSvc: logger, private dsaService: dsaService, private momentService: MomentService) { }
 
     //Declaration Part
     private spinnerMessageHeader = "Test your API";
@@ -74,7 +73,7 @@ export class adminVistexComponent {
     //Call the API
     callAPI(mode) {
         this.isLoading = true;
-        const startTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss UTC');
+        const startTime = this.momentService.moment(new Date()).format('YYYY-MM-DD HH:mm:ss UTC');
 
         this.dsaService.callAPI(this.apiPair[this.selectedApiCD], mode).subscribe((result: any) => {
             this.isLoading = false;
@@ -85,7 +84,7 @@ export class adminVistexComponent {
                     this.loggerSvc.error('DANG!! Something went wrong...', '');
                 }
             } else {
-                const endTime = moment(new Date()).format('YYYY-MM-DD HH:mm:ss UTC');
+                const endTime = this.momentService.moment(new Date()).format('YYYY-MM-DD HH:mm:ss UTC');
                 result["START_TIME"] = startTime;
                 result["END_TIME"] = endTime;
                 this.responseData.unshift(result);

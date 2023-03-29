@@ -1,6 +1,5 @@
 ﻿import { Component } from "@angular/core";
 import { logger } from "../shared/logger/logger";
-import * as _ from "underscore";
 import { globalSearchResultsService } from "../advanceSearch/globalSearchResults/globalSearchResults.service";
 import { ActivatedRoute } from "@angular/router";
 

@@ -1,11 +1,12 @@
 import { DE_Common_Util } from '../DEUtils/DE_Common_util';
 import Handsontable from 'handsontable';
-import * as _ from 'underscore';
-import * as moment from 'moment';
+import { each, uniq, filter, map, where, sortBy, findWhere, max } from 'underscore';
+import { StaticMomentService } from "../../shared/moment/moment.service";
 import { extendMoment } from "moment-range";
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 import { PTE_Validation_Util } from './PTE_Validation_util';
 import { PTE_Load_Util } from './PTE_Load_util';
+
 export class PTE_Common_Util {
     private static hotTable: Handsontable
     constructor(hotTable: Handsontable) {
@@ -178,7 +179,7 @@ export class PTE_Common_Util {
         let PTRResult: Array<any> = [];
         if(rownumber){
             let obj = {}
-            _.each(columns, (val) => {
+            each(columns, (val) => {
                 if (val.data) {
                     obj[val.data.toString()] = this.hotTable.getDataAtRowProp(rownumber, val.data.toString()) != null ? this.hotTable.getDataAtRowProp(rownumber, val.data.toString()) : '';
                 }
@@ -191,7 +192,7 @@ export class PTE_Common_Util {
                 let obj = {};
                 if (!this.hotTable.isEmptyRow(i)) {
                     //the PTR must generate based on the columns we have there are certain hidden columns which can also has some values
-                    _.each(columns, (val) => {
+                    each(columns, (val) => {
                         if (val.data) {
                             obj[val.data.toString()] = this.hotTable.getDataAtRowProp(i, val.data.toString()) != null ? this.hotTable.getDataAtRowProp(i, val.data.toString()) : '';
                         }
@@ -206,13 +207,13 @@ export class PTE_Common_Util {
             //incase of tier places the NUM_OF_TIERS
             if (curPricingTable.OBJ_SET_TYPE_CD == 'VOL_TIER' || curPricingTable.OBJ_SET_TYPE_CD == 'FLEX'
                 || curPricingTable.OBJ_SET_TYPE_CD == 'REV_TIER' || curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
-                const uniqDCID = _.uniq(PTRResult, 'DC_ID');
-                _.each(uniqDCID, itmsDC => {
-                    let DCPTR = _.where(PTRResult, { DC_ID: itmsDC.DC_ID });
+                const uniqDCID = uniq(PTRResult, 'DC_ID');
+                each(uniqDCID, itmsDC => {
+                    let DCPTR = where(PTRResult, { DC_ID: itmsDC.DC_ID });
                     let selTier;
                     let pivotDensity;
                     if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
-                        let rowData = _.max(DCPTR, (itm: any) => { return parseInt(itm.TIER_NBR) });
+                        let rowData = max(DCPTR, (itm: any) => { return parseInt(itm.TIER_NBR) });
                         if (rowData.NUM_OF_DENSITY == "" || rowData.NUM_OF_DENSITY == null) {
                             pivotDensity = parseInt(curPricingTable.NUM_OF_DENSITY);
                         }
@@ -224,10 +225,10 @@ export class PTE_Common_Util {
                         selTier = numOfRows;
                     }
                     else {
-                        let selRow = _.max(DCPTR, (itm: any) => { return parseInt(itm.TIER_NBR) });
+                        let selRow = max(DCPTR, (itm: any) => { return parseInt(itm.TIER_NBR) });
                         selTier = selRow.TIER_NBR;
                     }
-                    _.each(PTRResult, (item) => {
+                    each(PTRResult, (item) => {
                         if (item.DC_ID == itmsDC.DC_ID) {
                             item.NUM_OF_TIERS = selTier;
                             if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
@@ -278,7 +279,7 @@ export class PTE_Common_Util {
             var objectId = wipdata ? 'DC_PARENT_ID':'DC_ID';
             
             //For multi tiers last record will have latest date, skipping duplicate DC_ID
-            var filterData = _.uniq(_.sortBy(data, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+            var filterData = uniq(sortBy(data, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
 
             var accrualEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Accrual')
             var drainingEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Draining')
@@ -292,8 +293,8 @@ export class PTE_Common_Util {
                 if (mode) {
                     return finalResult;
                 }
-                _.each(data, (item) => {
-                    _.each(finalResult, (itm) => {
+                each(data, (item) => {
+                    each(finalResult, (itm) => {
                         //To handle multi tier condition only assign to object which has PTR_SYS_PRD in PTE and PTR_USER_PRD in DE
                         if ((objectId == 'DC_ID' && item.PTR_SYS_PRD && (item.PTR_SYS_PRD != null || item.PTR_SYS_PRD != '')) || (objectId == 'DC_PARENT_ID' && item.PTR_USER_PRD && (item.PTR_USER_PRD != null || item.PTR_USER_PRD != ''))) {
                             if (item[objectId] == itm.ROW_ID && itm.dup && itm.dup == 'duplicate'
@@ -318,47 +319,47 @@ export class PTE_Common_Util {
     }
     static checkOVLPDate = function (data, resp, objectId) {
         //var momentRange = require('moment-range');
-        const rangemoment =extendMoment(moment);
+        const rangemoment = extendMoment(StaticMomentService.moment);
         //get uniq duplicate product
-        var uniqOvlpCombination = _.uniq(_.map(resp, (ob) => { return ob.OVLP_ROW_ID }));
+        var uniqOvlpCombination = uniq(map(resp, (ob) => { return ob.OVLP_ROW_ID }));
         //iterate through unique product
-        _.each(uniqOvlpCombination, (dup) => {
+        each(uniqOvlpCombination, (dup) => {
             //filtering the uniq prod from response and sort to get correct first and second object
-            var rowID = _.filter(resp, (ob) => { return ob['OVLP_ROW_ID'] == dup });
-            _.each(rowID, (dupPro) => {
-                _.each(rowID, (dupPr) => {
+            var rowID = filter(resp, (ob) => { return ob['OVLP_ROW_ID'] == dup });
+            each(rowID, (dupPro) => {
+                each(rowID, (dupPr) => {
                     //checking the product date overlaps or not
                     if (dupPro.ROW_ID != dupPr.ROW_ID) {
                         var firstObj = null, secObj = null;
 
                         if (objectId == 'DC_PARENT_ID') {
                             //findWhere will return the first object found 
-                            firstObj = _.findWhere(data, { 'DC_PARENT_ID': dupPro.ROW_ID });
-                            secObj = _.findWhere(data, { 'DC_PARENT_ID': dupPr.ROW_ID });
+                            firstObj = findWhere(data, { 'DC_PARENT_ID': dupPro.ROW_ID });
+                            secObj = findWhere(data, { 'DC_PARENT_ID': dupPr.ROW_ID });
                         }
                         else {
-                            firstObj = _.findWhere(data, { 'DC_ID': dupPro.ROW_ID });
-                            secObj = _.findWhere(data, { 'DC_ID': dupPr.ROW_ID });
+                            firstObj = findWhere(data, { 'DC_ID': dupPro.ROW_ID });
+                            secObj = findWhere(data, { 'DC_ID': dupPr.ROW_ID });
                         }
 
-                        var firstRange = rangemoment.range(moment(firstObj.START_DT), moment(firstObj.END_DT));
-                        var secRange = rangemoment.range(moment(secObj.START_DT), moment(secObj.END_DT));
+                        var firstRange = rangemoment.range(StaticMomentService.moment(firstObj.START_DT), StaticMomentService.moment(firstObj.END_DT));
+                        var secRange = rangemoment.range(StaticMomentService.moment(secObj.START_DT), StaticMomentService.moment(secObj.END_DT));
                         //identifying the dates are valid for overlap
-                        if (!moment(firstObj.START_DT).isBefore(firstObj.END_DT)) {
-                            _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'dateissue';
+                        if (!StaticMomentService.moment(firstObj.START_DT).isBefore(firstObj.END_DT)) {
+                            findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'dateissue';
                         }
-                        else if (!moment(secObj.START_DT).isBefore(secObj.END_DT)) {
-                            _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'dateissue';
+                        else if (!StaticMomentService.moment(secObj.START_DT).isBefore(secObj.END_DT)) {
+                            findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'dateissue';
                         }
-                        else if ((moment(firstObj.END_DT).format('MM/DD/YYYY') == moment(secObj.START_DT).format('MM/DD/YYYY')) ||
-                            (moment(firstObj.START_DT).format('MM/DD/YYYY') == moment(secObj.END_DT).format('MM/DD/YYYY'))) {
-                            _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'duplicate';
-                            _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';
+                        else if ((StaticMomentService.moment(firstObj.END_DT).format('MM/DD/YYYY') == StaticMomentService.moment(secObj.START_DT).format('MM/DD/YYYY')) ||
+                            (StaticMomentService.moment(firstObj.START_DT).format('MM/DD/YYYY') == StaticMomentService.moment(secObj.END_DT).format('MM/DD/YYYY'))) {
+                            findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'duplicate';
+                            findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';
                         }
                         //if the dates overlap add key dup as true
                         else if (firstRange.overlaps(secRange)) {
-                            _.findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'duplicate';
-                            _.findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';
+                            findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'duplicate';
+                            findWhere(resp, { 'ROW_ID': secObj[objectId] })['dup'] = 'duplicate';
                         }
                     }
                 });
@@ -374,11 +375,11 @@ export class PTE_Common_Util {
             let AcrObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'accrual');
             let DrnObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'draining');
             let AcrInc = [], AcrExc = [], DrnInc = [], DrnExc = [];
-            _.each(AcrObjs, (item) => {
+            each(AcrObjs, (item) => {
                 //to handle multi tier condition
                 if (item.PTR_SYS_PRD && (item.PTR_SYS_PRD != null || item.PTR_SYS_PRD != '')) {
                     let objAcr = Object.values(JSON.parse(item.PTR_SYS_PRD));
-                    _.each(objAcr, (itm) => {
+                    each(objAcr, (itm) => {
                         let objItm = {};
                         if (itm[0].EXCLUDE) {
                             AcrExc.push(itm[0].PRD_MBR_SID);
@@ -392,10 +393,10 @@ export class PTE_Common_Util {
                 }
 
             });
-            _.each(DrnObjs, (item) => {
+            each(DrnObjs, (item) => {
                 if (item.PTR_SYS_PRD && (item.PTR_SYS_PRD != null || item.PTR_SYS_PRD != '')) {
                     let objDrn = Object.values(JSON.parse(item.PTR_SYS_PRD));
-                    _.each(objDrn, (itm) => {
+                    each(objDrn, (itm) => {
                         let objItm = {};
                         if (itm[0].EXCLUDE) {
                             DrnExc.push(itm[0].PRD_MBR_SID);
@@ -433,19 +434,19 @@ export class PTE_Common_Util {
         if (data.PRC_TBL_ROW.length > 0 && data.WIP_DEAL.length === 0) return true;
 
         var aryWipIds = [];
-        _.each(data.WIP_DEAL, function (item) {
+        each(data.WIP_DEAL, function (item) {
             if (aryWipIds.indexOf(item.DC_PARENT_ID) < 1) aryWipIds.push(item.DC_PARENT_ID);
         });
 
         var aryPtrIds = [];
-        _.each(data.PRC_TBL_ROW, function (item) {
+        each(data.PRC_TBL_ROW, function (item) {
             if (aryPtrIds.indexOf(item.DC_ID) < 1) aryPtrIds.push(item.DC_ID);
         });
 
         var unpairedPtrs = this.arrBiDirectionalDifference(aryPtrIds, aryWipIds);
 
         var myRet = false;
-        _.each(data.WIP_DEAL, function (item) {
+        each(data.WIP_DEAL, function (item) {
             if (item.warningMessages.length > 0 && !isWip) myRet = true;
         });
 

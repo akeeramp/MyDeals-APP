@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { excludeDealGroupModalDialog } from "./excludeDealGroupModal.component"
 import { GridUtil } from "../grid.util"
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
-import * as _ from 'underscore';
+import { each } from 'underscore';
 import { saveAs } from '@progress/kendo-file-saver';
 import { Workbook } from '@progress/kendo-angular-excel-export';
 
@@ -280,7 +280,7 @@ export class managerExcludeGroupsComponent {
     generateExcel(grid: GridComponent, rows: any, colWidths: any[]) {
         let cells: any[] = [];
         grid.data = JSON.parse(JSON.stringify(this.gridData.data));
-        _.each(grid.data, (dataItem) => {
+        each(grid.data, (dataItem) => {
             cells = [];
             dataItem['ECAP_PRICE'] = this.getFormatedDim(dataItem, 'ECAP_PRICE', '20___0', 'currency');
             dataItem['MAX_RPU'] = this.getFormatedDim(dataItem, 'MAX_RPU', '20___0', 'currency');

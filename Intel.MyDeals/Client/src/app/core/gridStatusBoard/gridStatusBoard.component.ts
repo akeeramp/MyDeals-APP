@@ -6,8 +6,8 @@ import { logger } from "../../shared/logger/logger";
 import { DatePipe } from "@angular/common";
 import { DashboardComponent } from "../../dashboard/dashboard/dashboard.component";
 import { contractStatusWidgetService } from '../../dashboard/contractStatusWidget.service';
-import * as _ from "underscore";
-import * as moment from 'moment';
+import { each, sortBy, uniq, pluck } from 'underscore';
+import { MomentService } from "../../shared/moment/moment.service";
 
 @Component({
     providers: [GridStatusBoardService, DatePipe],
@@ -25,7 +25,12 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
 
     @Output() public isGridLoading: EventEmitter<boolean> = new EventEmitter();
 
-    constructor(private contractService: GridStatusBoardService, private loggerSvc: logger, public datepipe: DatePipe, private dashboardParent: DashboardComponent, private cntrctWdgtSvc: contractStatusWidgetService) {
+    constructor(private contractService: GridStatusBoardService,
+                private loggerSvc: logger,
+                public datepipe: DatePipe,
+                private dashboardParent: DashboardComponent,
+                private cntrctWdgtSvc: contractStatusWidgetService,
+                private momentService: MomentService) {
 
         this.cntrctWdgtSvc.isRefresh.subscribe(res => {
             if (res) {
@@ -124,10 +129,10 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
         this.isGridLoading.emit(true);
         this.custIds = this.custIds == undefined ? "[]" : this.custIds;
         if (this.startDt === undefined) {
-            this.startDt = window.localStorage.startDateValue ? window.localStorage.startDateValue : new Date(moment().subtract(6, 'months').format("MM/DD/YYYY"));
+            this.startDt = window.localStorage.startDateValue ? window.localStorage.startDateValue : new Date(this.momentService.moment().subtract(6, 'months').format("MM/DD/YYYY"));
         }
         if (this.endDt === undefined) {
-            this.endDt = window.localStorage.endDateValue ? window.localStorage.endDateValue : new Date(moment().add(6, 'months').format("MM/DD/YYYY"));
+            this.endDt = window.localStorage.endDateValue ? window.localStorage.endDateValue : new Date(this.momentService.moment().add(6, 'months').format("MM/DD/YYYY"));
         }
         this.dataforfilter = {
             CustomerIds: JSON.parse(this.custIds),
@@ -175,7 +180,7 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
                         response[i]["TOOLTIP_CONTENT"] = "Created By : " + response[i].CRE_EMP_NM;
                     }
                 }
-                _.each(response, item => {
+                each(response, item => {
                     item['STRT_DTM'] = new Date(item['STRT_DTM']);
                     item['END_DTM'] = new Date(item['END_DTM']);
                 })
@@ -247,9 +252,9 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
 
     distinctPrimitive(fieldName: string): any {
         if (fieldName == 'CUST_NM') {
-            return _.sortBy(_.uniq(_.pluck(this.gridResult, fieldName)));
+            return sortBy(uniq(pluck(this.gridResult, fieldName)));
         }
-        return _.uniq(_.pluck(this.gridResult,fieldName));
+        return uniq(pluck(this.gridResult,fieldName));
     }
 
     //Changes to fav contract id will broadcast a change to dashboardController to SaveLayout changes
@@ -440,4 +445,3 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
         this.loadContractData();
     }
 }
-

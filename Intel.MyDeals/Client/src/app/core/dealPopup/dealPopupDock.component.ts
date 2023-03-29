@@ -1,16 +1,12 @@
-﻿import * as angular from "angular";
-import { Component, HostListener } from "@angular/core"; 
+﻿import { Component, HostListener } from "@angular/core"; 
 import { AppEvent, broadCastService } from "./broadcast.service";
 import { quickDealConstants } from "../angular.constants";
-
 
 @Component({
     selector: "deal-popup-dock-angular",
     templateUrl: "Client/src/app/core/dealPopup/dealPopupDock.component.html", 
 })
-
 export class dealPopupDockComponent  {
-
     ids: any= [];
     recent: any = []; 
     menuOrientation = "horizontal"; 
@@ -24,40 +20,37 @@ export class dealPopupDockComponent  {
     ismaxDealsOpened= false;
     constructor(private brdcstservice: broadCastService) {
         this.getScreenSize();
-}
+    }
 
     @HostListener('window:resize', ['$event'])
     getScreenSize(event?) {
         this.screenHeight = window.innerHeight;
         this.screenWidth = window.innerWidth; 
     }
-    intializedealpopupDock() { 
+    intializedealpopupDock() {
         this.brdcstservice.on("QuickDealToggleDeal").subscribe(event => {
-           this.subscribeEvents(event.payload);
+            this.subscribeEvents(event.payload);
         });
         this.brdcstservice.on("QuickDealWidgetClosed").subscribe(event => {
             this.subscribeEvents(event.payload);
         });
 
-    this.maxItems = quickDealConstants.maxQuickDeals;
-    this.maxRecent = quickDealConstants.maxRecent;
-    this.isEnabled = quickDealConstants.enabled;
+        this.maxItems = quickDealConstants.maxQuickDeals;
+        this.maxRecent = quickDealConstants.maxRecent;
+        this.isEnabled = quickDealConstants.enabled;
 
-    if (window.navigator.userAgent.indexOf("Chrome") < 0) this.isEnabled = false;
-          
-            this.ids = JSON.parse(this.storage.getItem('dealPopupDockData')); 
+        if (window.navigator.userAgent.indexOf("Chrome") < 0) this.isEnabled = false;
+        this.ids = JSON.parse(this.storage.getItem('dealPopupDockData'));
 
         if (this.ids === undefined || this.ids === null) {
             this.ids = [];
-            
         }
         this.recent = JSON.parse(this.storage.getItem('dealPopupDockRecentData'));
-        if (this.recent === undefined || this.recent===null) this.recent = [];
+        if (this.recent === undefined || this.recent === null) this.recent = [];
     }
      
     //save
-    save = function () {
-        
+    save() {
         this.storage.setItem('dealPopupDockData', JSON.stringify(this.ids));
         this.storage.setItem('dealPopupDockRecentData', JSON.stringify(this.recent));
         const recentdeals = JSON.parse(this.storage.getItem('dealPopupDockRecentData'));
@@ -67,47 +60,53 @@ export class dealPopupDockComponent  {
         }
     } 
 
-     addIdBase(id, top, left, isOpen) {
-        if (isOpen === undefined) isOpen = false;
+    addIdBase(id, top, left, isOpen) {
+         if (isOpen === undefined) isOpen = false;
 
-        let found = false;
-        for (let i = 0; i < this.ids.length; i++) {
-            if (this.ids[i].id === id) {
-                found = true;
-                this.ids[i].top = top;
-                this.ids[i].left = left;
-            }
-        }
-        if (!found) {
-            this.ids.push({
-                id: id,
-                top: top,
-                left: left,
-                isOpen: isOpen,
-                position: { x: 0, y: 0 }
-            });
-        }
-
-        let foundRecent = false;
-        for (let i = 0; i < this.recent.length; i++) {
-            if (this.recent[i].id === id) {
-                foundRecent = true;
-                this.recent[i].top = top;
-                this.recent[i].left = left;
-            }
+         let found = false;
+         for (let i = 0; i < this.ids.length; i++) {
+             if (this.ids[i].id === id) {
+                 found = true;
+                 this.ids[i].top = top;
+                 this.ids[i].left = left;
+             }
          }
-         
-        if (!foundRecent) {
-            this.recent.push({
-                id: id,
-                top: top,
-                left: left,
-                isOpen: false,
-                position: { x: 0, y: 0 }
-            });
-        }
-        this.save();
-    }
+         if (!found) {
+             this.ids.push({
+                 id: id,
+                 top: top,
+                 left: left,
+                 isOpen: isOpen,
+                 position: {
+                     x: 0,
+                     y: 0
+                 }
+             });
+         }
+
+         let foundRecent = false;
+         for (let i = 0; i < this.recent.length; i++) {
+             if (this.recent[i].id === id) {
+                 foundRecent = true;
+                 this.recent[i].top = top;
+                 this.recent[i].left = left;
+             }
+         }
+
+         if (!foundRecent) {
+             this.recent.push({
+                 id: id,
+                 top: top,
+                 left: left,
+                 isOpen: false,
+                 position: {
+                     x: 0,
+                     y: 0
+                 }
+             });
+         }
+         this.save();
+     }
 
     addId(id, top, left) {
         this.addIdBase(id, top, left, undefined);
@@ -133,10 +132,9 @@ export class dealPopupDockComponent  {
     }
 
     QuickDealToggle(Event, id, y, x) {
- 
         if (this.ids.length >= this.maxItems) {
             this.ismaxDealsOpened = true;
-            this.errormsg="Only " + this.maxItems + " Quick Deals can be opened at one time. Please close one before trying to open this deal.";
+            this.errormsg = "Only " + this.maxItems + " Quick Deals can be opened at one time. Please close one before trying to open this deal.";
             return;
         }
 
@@ -152,22 +150,18 @@ export class dealPopupDockComponent  {
         } else {
             this.addToDockId(id, y, x);
         }
-    } 
+    }
 
-    subscribeEvents(result)
-    {
-      if (result.key == "QuickDealToggleDeal") {
-        this.QuickDealToggle(result.key, result.id, result.y, result.x);
-      }
-      else if (result.key == "QuickDealWidgetOpened") {
-           this.addId(result.id, result.y, result.x);
-      }
-      else if (result.key == "QuickDealWidgetClosed") {
-              this.delId(result.id);
-      }
-      else if (result.key == "QuickDealWidgetMoved") {
+    subscribeEvents(result) {
+        if (result.key == "QuickDealToggleDeal") {
+            this.QuickDealToggle(result.key, result.id, result.y, result.x);
+        } else if (result.key == "QuickDealWidgetOpened") {
             this.addId(result.id, result.y, result.x);
-      }
+        } else if (result.key == "QuickDealWidgetClosed") {
+            this.delId(result.id);
+        } else if (result.key == "QuickDealWidgetMoved") {
+            this.addId(result.id, result.y, result.x);
+        }
     }
 
     closeAll() {
@@ -244,5 +238,4 @@ export class dealPopupDockComponent  {
     ngOnInit() { 
         this.intializedealpopupDock();
     }
-
 }

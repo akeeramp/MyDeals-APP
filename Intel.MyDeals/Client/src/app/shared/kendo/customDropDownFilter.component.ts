@@ -1,7 +1,6 @@
 ﻿import { Component, Input, AfterViewInit } from '@angular/core';
 import { FilterDescriptor } from '@progress/kendo-data-query';
 import { FilterService } from '@progress/kendo-angular-grid';
-import * as _ from 'underscore';
 
 @Component({
     selector: 'dropDown-filter',

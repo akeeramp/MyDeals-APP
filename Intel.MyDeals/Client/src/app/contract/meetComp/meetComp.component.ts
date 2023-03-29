@@ -11,11 +11,11 @@ import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
 import { GridUtil } from "../grid.util"
 import { MeetCompContractUtil } from "./meetComp_util"
-import * as moment from "moment";
+import { MomentService } from "../../shared/moment/moment.service";
 import { MatDialog } from "@angular/material/dialog";
 import { meetCompDealDetailModalComponent } from "./meetCompDealDetailModal.component"
 import { pricingTableservice } from "../pricingTable/pricingTable.service";
-import * as _ from 'underscore';
+import { sortBy } from 'underscore';
 
 @Component({
     selector: "meet-comp-contract",
@@ -34,12 +34,12 @@ export class meetCompContractComponent implements OnInit {
     @Output() tmDirec = new EventEmitter();
     @Output() contractRefresh = new EventEmitter();
     @Output() refreshMCTData = new EventEmitter();
-    constructor(
-        private loggerSvc: logger,
-        private meetCompSvc: meetCompContractService,
-        private formBuilder: FormBuilder,
-        private dialog: MatDialog,
-        private pricingTableSvc: pricingTableservice) {}
+    constructor(private loggerSvc: logger,
+                private meetCompSvc: meetCompContractService,
+                private formBuilder: FormBuilder,
+                private dialog: MatDialog,
+                private pricingTableSvc: pricingTableservice,
+                private momentService: MomentService) {}
 
     public spinnerMessageHeader = "";
     public isLoading = false;
@@ -932,14 +932,14 @@ export class meetCompContractComponent implements OnInit {
         let dsplMsg;
         if (!!LAST_MEET_COMP_RUN) {
             const localTime = GridUtil.convertLocalToPST(new Date());
-            const lastruntime = moment(LAST_MEET_COMP_RUN);
+            const lastruntime = this.momentService.moment(LAST_MEET_COMP_RUN);
             const serverMeetCompPSTTime = lastruntime.format("MM/DD/YY HH:mm:ss");
-            const timeDiff = moment.duration(moment(serverMeetCompPSTTime).diff(moment(localTime)));
+            const timeDiff = this.momentService.moment.duration(this.momentService.moment(serverMeetCompPSTTime).diff(this.momentService.moment(localTime)));
             const hh = Math.abs(timeDiff.asHours());
             const mm = Math.abs(timeDiff.asMinutes());
             const ss = Math.abs(timeDiff.asSeconds());
             const zone = new Date().toLocaleTimeString('en-us', { timeZoneName: 'short' }).split(' ')[2];
-            this.lastMetCompRunLocalTime = moment(new Date()).subtract(-timeDiff).format("MM/DD/YYYY hh:mm A z") + "(" + zone + ")";
+            this.lastMetCompRunLocalTime = this.momentService.moment(new Date()).subtract(-timeDiff).format("MM/DD/YYYY hh:mm A z") + "(" + zone + ")";
             dsplNum = hh;
             dsplMsg = " hours ago";
             const childForceRun = forceRun != undefined ? forceRun : true;
@@ -1083,7 +1083,7 @@ export class meetCompContractComponent implements OnInit {
         if (this.isAdhoc == 1 && this.PAGE_NM == 'MCTPOPUP') {
             let data = this.meetCompMasterdata._elements.filter(x => x.GRP == 'PRD' && x.DEFAULT_FLAG == "Y");
             if (data && data.length > 0)
-                data = _.sortBy(data, 'MEET_COMP_STS');
+                data = sortBy(data, 'MEET_COMP_STS');
             this.refreshMCTData.emit(data)
         }
     }
@@ -1110,7 +1110,7 @@ export class meetCompContractComponent implements OnInit {
             if (this.isAdhoc == 1 && this.PAGE_NM == 'MCTPOPUP') {
                 let data = this.meetCompMasterdata._elements.filter(x => x.GRP == 'PRD' && x.DEFAULT_FLAG == "Y");
                 if (data && data.length > 0)
-                    data = _.sortBy(data, 'MEET_COMP_STS');
+                    data = sortBy(data, 'MEET_COMP_STS');
                 this.refreshMCTData.emit(data)
             }            
             this.isLoading = false;

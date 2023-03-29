@@ -1,5 +1,5 @@
 ﻿import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
-import * as moment from "moment";
+import { MomentService } from "../shared/moment/moment.service";
 import { contractStatusWidgetService } from "../dashboard/contractStatusWidget.service";
 import { logger } from "../shared/logger/logger";
 import { advancedSearchService } from "./advancedSearch.service";
@@ -9,7 +9,6 @@ import { AttributeBuilder } from '../core/attributeBuilder/attributeBuilder.comp
 import { process, State, FilterDescriptor, CompositeFilterDescriptor } from "@progress/kendo-data-query";
 import { GridUtil } from '../contract/grid.util';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, FilterService } from "@progress/kendo-angular-grid";
-import * as _ from "underscore";
 import { PTE_Common_Util } from "../contract/PTEUtils/PTE_Common_util";
 
 @Component({
@@ -18,10 +17,9 @@ import { PTE_Common_Util } from "../contract/PTEUtils/PTE_Common_util";
     styleUrls: ['Client/src/app/advanceSearch/advancedSearch.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-
 export class AdvancedSearchComponent implements OnInit {
-    private startDateValue: Date = new Date(moment().subtract(6, 'months').format("MM/DD/YYYY"));
-    private endDateValue: Date = new Date(moment().add(6, 'months').format("MM/DD/YYYY"));
+    private startDateValue: Date = new Date(this.momentService.moment().subtract(6, 'months').format("MM/DD/YYYY"));
+    private endDateValue: Date = new Date(this.momentService.moment().add(6, 'months').format("MM/DD/YYYY"));
     private showSearchFilters: boolean = true;
     public isListExpanded = false;
     public fruits: Array<string> = ['Apple', 'Orange', 'Banana'];
@@ -95,8 +93,11 @@ export class AdvancedSearchComponent implements OnInit {
     public exportData: any;
     public exportRows: boolean = false;
 
-    constructor(protected cntrctWdgtSvc: contractStatusWidgetService, protected loggerSvc: logger, protected globalSearchSVC: globalSearchResultsService,
-        private advancedSearchSvc: advancedSearchService) { }
+    constructor(protected cntrctWdgtSvc: contractStatusWidgetService,
+                protected loggerSvc: logger,
+                protected globalSearchSVC: globalSearchResultsService,
+                private advancedSearchSvc: advancedSearchService,
+                private momentService: MomentService) { }
 
     onCustomerChange(custData) {
         window.localStorage.selectedCustNames = JSON.stringify(custData);
@@ -158,7 +159,7 @@ export class AdvancedSearchComponent implements OnInit {
                             //converting kendo date into string - for filter
                             if ((column == 'START_DT' || column == 'END_DT' || column == 'OEM_PLTFRM_LNCH_DT' || column == 'OEM_PLTFRM_EOL_DT')) {
                                 if (typeof fltrItem.value != 'string')
-                                    fltrItem.value = moment(fltrItem.value.toLocaleDateString()).format('MM/DD/YYYY');
+                                    fltrItem.value = this.momentService.moment(fltrItem.value.toLocaleDateString()).format('MM/DD/YYYY');
                             }
                         }
                     })

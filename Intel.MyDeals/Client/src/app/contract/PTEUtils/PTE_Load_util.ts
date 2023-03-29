@@ -1,4 +1,4 @@
-import * as _ from 'underscore';
+import { each, findIndex, findWhere, uniq, isEqual } from 'underscore';
 import { DE_Load_Util } from '../DEUtils/DE_Load_util';
 import { PTE_Config_Util } from './PTE_Config_util';
 import { PTE_Common_Util } from './PTE_Common_util';
@@ -36,7 +36,7 @@ export class PTE_Load_Util {
                 if (data.data[key][i].DC_ID !== undefined &&
                     data.data[key][i].DC_ID === collection.DC_ID &&
                     data.data[key][i].warningMessages.length > 0) {
-                    _.each(data.data[key][i]._behaviors.validMsg,
+                    each(data.data[key][i]._behaviors.validMsg,
                         function (value, key) {
                             collection._behaviors.validMsg[key] = value;
                             collection._behaviors.isError[key] = value !== "";
@@ -165,12 +165,12 @@ export class PTE_Load_Util {
     }
     static getCellComments(PTR: any, columns: Array<any>): Array<any> {
         let cellComments = [];
-        _.each(PTR, (item, rowInd) => {
+        each(PTR, (item, rowInd) => {
             //this piece of code is to bind comments to the cell 
             if (item && item._behaviors && item._behaviors.validMsg && item._behaviors.isError) {
                 let msg = "";
-                _.each(item._behaviors.isError, (val, key) => {
-                    let colInd = _.findIndex(columns, { field: key });
+                each(item._behaviors.isError, (val, key) => {
+                    let colInd = findIndex(columns, { field: key });
                     if (key == 'PTR_USER_PRD' || key == 'PRD_EXCLDS') {
                         if (val == true && item._behaviors.validMsg[`${key}`] && item._behaviors.validMsg[`${key}`] == 'Invalid Product') {
                             cellComments.push({ row: rowInd, col: colInd, comment: { value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'error-product error-border' });
@@ -205,7 +205,7 @@ export class PTE_Load_Util {
                     }
                 });
                 // error cell for consoldate message in first column
-                if (_.findWhere(cellComments, { row: rowInd, col: 0 }) == undefined && msg != "") {
+                if (findWhere(cellComments, { row: rowInd, col: 0 }) == undefined && msg != "") {
                     cellComments.push({ row: rowInd, col: 0, comment: { value: msg, readOnly: true }, className: 'error-cell' });
                 }
             }
@@ -271,14 +271,14 @@ export class PTE_Load_Util {
         let mergCells = [];
         let startOffset;
         //identify distinct DCID, bcz the merge will happen for each DCID and each DCID can have diff  NUM_OF_TIERS
-        let distDCID = _.uniq(PTR, 'DC_ID');
-        _.each(distDCID, (item) => {
-            let curPTR = _.findWhere(PTR, { DC_ID: item.DC_ID });
-            let rowIndex = _.findIndex(PTR, { DC_ID: item.DC_ID });
+        let distDCID = uniq(PTR, 'DC_ID');
+        each(distDCID, (item) => {
+            let curPTR = findWhere(PTR, { DC_ID: item.DC_ID });
+            let rowIndex = findIndex(PTR, { DC_ID: item.DC_ID });
             startOffset = rowIndex;
             //get NUM_OF_TIERS acoording this will be the row_span for handson 
             let NUM_OF_TIERS = this.numOfPivot(curPTR, curPricingTable);
-            _.each(columns, (colItem, ind) => {
+            each(columns, (colItem, ind) => {
                 if (!colItem.isDimKey && !colItem.hidden && NUM_OF_TIERS != 1) {
                     mergCells.push({ row: rowIndex, col: ind, rowspan: NUM_OF_TIERS, colspan: 1 });
                 }
@@ -452,7 +452,7 @@ export class PTE_Load_Util {
                     lData["TEMP_TOTAL_DSCNT_PER_LN"] = this.calculateTotalDsctPerLine(lData["DSCNT_PER_LN_____20___" + (t - 1)], lData["QTY_____20___" + (t - 1)]);
                     lData["TEMP_KIT_REBATE"] = this.calculateKitRebate(data, d, numTiers, true);
                     if (productJSON.length !== 0) {
-                        _.each(productJSON, function (value, key) {
+                        each(productJSON, function (value, key) {
                             var bckt = data[d]["PRD_BCKT" + "_____20___" + (t - 1)];
                             if (bckt !== undefined && key.toUpperCase() === bckt.toUpperCase()) {
                                 lData["CAP"] = value[0]["CAP"];
@@ -511,7 +511,7 @@ export class PTE_Load_Util {
         if (isTenderContract && curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
             for (var d = 0; d < data.length; d++) {
 
-                if (_.isEqual(data[d], {}) || data[d]["PTR_SYS_PRD"] === "" || data[d]["PTR_USER_PRD"] === null || typeof (data[d]["PTR_USER_PRD"]) == 'undefined') continue;;
+                if (isEqual(data[d], {}) || data[d]["PTR_SYS_PRD"] === "" || data[d]["PTR_USER_PRD"] === null || typeof (data[d]["PTR_USER_PRD"]) == 'undefined') continue;;
 
                 // product JSON
                 var productJSON = JSON.parse(data[d]["PTR_SYS_PRD"]);
@@ -520,7 +520,7 @@ export class PTE_Load_Util {
                 var productArray = [];
                 for (var key in productJSON) {
                     if (productJSON.hasOwnProperty(key)) {
-                        _.each(productJSON[key], function (item) {
+                        each(productJSON[key], function (item) {
                             sysProduct.push(item);
                         });
                     }
@@ -644,7 +644,7 @@ export class PTE_Load_Util {
     }
     static getHiddenColumns(columnTemplates, customerDivisions) {
         let hiddenColumns = [];
-        _.each(columnTemplates, (item: PRC_TBL_Model_Column, index) => {
+        each(columnTemplates, (item: PRC_TBL_Model_Column, index) => {
             /* Hidden Columns */
             if (item.hidden) {
                 hiddenColumns.push(index);
@@ -693,7 +693,7 @@ export class PTE_Load_Util {
                     cellProperties['readOnly'] = false;
                 }
                 //column config has readonly property for certain column persisting that assigning for other
-                if (_.findWhere(columnConfig, { data: prop }).readOnly) {
+                if (findWhere(columnConfig, { data: prop }).readOnly) {
                     cellProperties['readOnly'] = true;
                 }
                 if ((prop == 'STRT_VOL' || prop == 'STRT_REV' || prop == 'STRT_PB') && hotTable.getDataAtRowProp(row, 'TIER_NBR') && hotTable.getDataAtRowProp(row, 'TIER_NBR') != 1) {
@@ -768,7 +768,7 @@ export class PTE_Load_Util {
     }
 
     static setPrdColor(PTR: any[]): any[] {
-        _.each(PTR, data => {
+        each(PTR, data => {
             PTE_Common_Util.setBehaviors(data);
             if (data._behaviors.isError['PTR_USER_PRD'] != true && data._behaviors.isError['PTR_USER_PRD'] == undefined) {
                 data._behaviors.isError['PTR_USER_PRD'] = false;
@@ -789,8 +789,8 @@ export class PTE_Load_Util {
     }
 
     static bindWarningDetails(data, savedWarningDetails) {
-        _.each(savedWarningDetails, (warning) => {
-            _.each(data, (dataItem) => {
+        each(savedWarningDetails, (warning) => {
+            each(data, (dataItem) => {
                 if (dataItem.DC_ID == warning.DC_ID) {
                     if (!dataItem.warningMessages)
                         dataItem.warningMessages = {};

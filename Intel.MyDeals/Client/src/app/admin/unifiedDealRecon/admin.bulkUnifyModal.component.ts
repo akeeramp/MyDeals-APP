@@ -7,7 +7,7 @@ import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
 import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
 import { unifiedDealReconService } from './admin.unifiedDealRecon.service';
-import * as _ from 'underscore';
+import { each } from 'underscore';
 
 @Component({
     selector: "bulk-unify-deals",
@@ -378,7 +378,7 @@ export class bulkUnifyModalComponent {
                 this.dealReconValidationSummary = [];
                 this.dealReconValidationSummary.validRecords = [];
                 this.dealReconValidationSummary.inValidRecords = [];
-                _.each(response, (invalidRec) => {
+                each(response, (invalidRec) => {
                     this.dealReconValidationSummary.inValidRecords.push({
                         Deal_ID: invalidRec.DEAL_ID,
                         Unified_Customer_ID: invalidRec.EXISTING_UCD_GLOBAL_ID,

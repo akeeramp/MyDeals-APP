@@ -1,8 +1,6 @@
 import {Component, Inject} from '@angular/core';
 import {MatDialogRef, MAT_DIALOG_DATA} from '@angular/material/dialog';
-import * as moment from 'moment';
-import * as _ from "underscore";
-
+import { MomentService } from "../../../shared/moment/moment.service";
 
 @Component({
     selector: "kendo-calendar-angular",
@@ -59,10 +57,9 @@ import * as _ from "underscore";
 
   export class kendoCalendarComponent {
    public value: Date;
-    constructor(
-      public dialogRef: MatDialogRef<kendoCalendarComponent>,
-      @Inject(MAT_DIALOG_DATA) public data: any,
-	) { }
+    constructor(public dialogRef: MatDialogRef<kendoCalendarComponent>,
+				@Inject(MAT_DIALOG_DATA) public data: any,
+				private momentService: MomentService) { }
 
 	private isValidDate: boolean;
 	private isDateOverlap: boolean;
@@ -111,16 +108,16 @@ import * as _ from "underscore";
 		}
 	}
     onSave(){
-      let date=moment(this.value).format('MM/DD/YYYY');
-      this.dialogRef.close(date);
+		let date=this.momentService.moment(this.value).format('MM/DD/YYYY');
+		this.dialogRef.close(date);
 	}
 	onNoClick(): void {
 		this.dialogRef.close();
 	}
     ngOnInit() {
       if(this.data && this.data.cellCurrValues){
-		  this.value = new Date(this.data.cellCurrValues);
-		  this.onChange(this.value);
+			this.value = new Date(this.data.cellCurrValues);
+			this.onChange(this.value);
       }
     }
   }

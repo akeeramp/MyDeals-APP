@@ -1,7 +1,7 @@
 import {Component} from "@angular/core";
 import {LoadingSpinnerService} from "./loadingspinner.service";
 import {logger} from "../logger/logger";
-import * as _ from "underscore";
+import { contains, first } from 'underscore';
 
 @Component({
   selector: "app-loader",
@@ -16,10 +16,8 @@ export class LoadingSpinnerComponent {
   private recents: Array<any> = [];
   private distinctURL: Array<any> = [];
 
-  constructor(
-    private loaderSvc: LoadingSpinnerService,
-    private loggerSVC: logger
-  ) {
+  constructor(private loaderSvc: LoadingSpinnerService,
+              private loggerSVC: logger) {
     this.loaderSvc.isLoading.subscribe(
       res => {
         this.isLoading = res;
@@ -39,18 +37,16 @@ export class LoadingSpinnerComponent {
     if (recentsUrls != null && recentsUrls != undefined) {
       let recentArray = recentsUrls.split(",");
       //check for the Url present in Array
-      if (!_.contains(recentArray, window.location.href)) {
+      if (!contains(recentArray, window.location.href)) {
         //pushing to the begening 
         recentArray.unshift(window.location.href);
         //identifying the recent 10 records 
-        recentArray = _.first(recentArray, 10);
+        recentArray = first(recentArray, 10);
         localStorage.setItem("recentsURLs", recentArray.toString());
       }
     } else {
       localStorage.setItem("recentsURLs", window.location.href);
     }
 
-  }
-  
+  } 
 }
-

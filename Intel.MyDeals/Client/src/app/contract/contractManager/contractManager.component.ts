@@ -3,7 +3,7 @@ import { logger } from "../../shared/logger/logger";
 import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
 import { distinct,process, State } from "@progress/kendo-data-query";
 import { contractManagerservice } from "./contractManager.service";
-import * as moment from "moment";
+import { MomentService } from "../../shared/moment/moment.service";
 import { colorDictionary } from "../../core/angular.constants";
 import { ThemePalette } from "@angular/material/core";
 import { lnavService } from "../lnav/lnav.service";
@@ -11,7 +11,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { actionSummaryModal } from "./actionSummaryModal/actionSummaryModal.component";
 import { emailModal } from "./emailModal/emailModal.component";
 import { FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
-import * as _ from 'underscore';
+import { each }from 'underscore';
 import { performanceBarsComponent } from '../performanceBars/performanceBar.component';
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
 import { Subscription } from "rxjs";
@@ -31,7 +31,6 @@ export interface contractIds {
     templateUrl: "Client/src/app/contract/contractManager/contractManager.component.html",
     styleUrls: ['Client/src/app/contract/contractManager/contractManager.component.css']
 })
-
 export class contractManagerComponent {
     runIfStaleByHours = 3;
     forceRunValue = true;
@@ -67,7 +66,11 @@ export class contractManagerComponent {
     allPTEData: any =[];
     isToggle: boolean;
     loadPerf: boolean;
-    constructor(protected dialog: MatDialog, private loggerSvc: logger, private contractManagerSvc: contractManagerservice, private lnavSvc: lnavService) {}
+    constructor(protected dialog: MatDialog,
+                private loggerSvc: logger,
+                private contractManagerSvc: contractManagerservice,
+                private lnavSvc: lnavService,
+                private momentService: MomentService) {}
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
     private CAN_VIEW_MEET_COMP: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
 
@@ -551,7 +554,7 @@ export class contractManagerComponent {
 
     distinctPrimitive(fieldName: string, id) {
         this.filteringData[id][fieldName] = distinct(this.gridDataSet[id], fieldName).map(item =>{ 
-            if (moment(item[fieldName], "MM/DD/YYYY", true).isValid()) {
+            if (this.momentService.moment(item[fieldName], "MM/DD/YYYY", true).isValid()) {
                 return { Text: new Date(item[fieldName]).toString(), Value: item[fieldName] };
             } else if(item[fieldName] != undefined && item[fieldName] != null ) {
                 return item[fieldName].toString()}});
@@ -738,11 +741,11 @@ export class contractManagerComponent {
 
             // Get local time in UTC
             var currentTime = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
-            var localTime = moment(currentTime).format("MM/DD/YYYY HH:mm:ss");
+            var localTime = this.momentService.moment(currentTime).format("MM/DD/YYYY HH:mm:ss");
             // Get server time from a PST time string... manually convert it to UTC
-            var lastruntime = moment(this.lastRun);
+            var lastruntime = this.momentService.moment(this.lastRun);
             var serverPstTime = lastruntime.format("MM/DD/YYYY HH:mm:ss");
-            var timeDiff = moment.duration(moment(serverPstTime).diff(moment(localTime)));
+            var timeDiff = this.momentService.moment.duration(this.momentService.moment(serverPstTime).diff(this.momentService.moment(localTime)));
             var hh = Math.abs(timeDiff.asHours());
             var mm = Math.abs(timeDiff.asMinutes());
             var ss = Math.abs(timeDiff.asSeconds());
@@ -934,7 +937,7 @@ export class contractManagerComponent {
     updateTitleFilter() {
         if (this.titleFilter != "") {
             this.filteredData = [];
-            _.each(this.contractData.PRC_ST, (item) => {                
+            each(this.contractData.PRC_ST, (item) => {                
                 if (item.TITLE.search(new RegExp(this.titleFilter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')) >= 0 || (item.PRC_TBL && item.PRC_TBL.length > 0 && item.PRC_TBL.filter(x => x.TITLE.search(new RegExp(this.titleFilter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')) >= 0).length > 0)) {
                     this.filteredData.push(item)
                 }
@@ -957,8 +960,8 @@ export class contractManagerComponent {
         if (tempData.length > 0) {
             this.filteredData = this.contractData.PRC_ST;
         }
-        _.each(this.contractData.PRC_ST, (prcSt) => {
-            _.each(prcSt.PRC_TBL, (prcTbl) => {
+        each(this.contractData.PRC_ST, (prcSt) => {
+            each(prcSt.PRC_TBL, (prcTbl) => {
                 this.state[prcTbl.DC_ID] = {
                     skip: 0,
                     group: [],
@@ -1191,8 +1194,8 @@ export class contractManagerComponent {
             this.contractId= this.contractData.DC_ID;
             this.lastRun = this.contractData.LAST_COST_TEST_RUN;
             this.custAccptButton = this.contractData.CUST_ACCPT;
-            _.each(this.contractData.PRC_ST, (prcSt) => {
-                _.each(prcSt.PRC_TBL, (prcTbl) => {
+            each(this.contractData.PRC_ST, (prcSt) => {
+                each(prcSt.PRC_TBL, (prcTbl) => {
                     this.state[prcTbl.DC_ID] = {
                         skip: 0,
                         group: [],
@@ -1244,7 +1247,7 @@ export class contractManagerComponent {
         document.getElementsByClassName('loading-screen')[0]?.setAttribute('style', 'display:none');
         const divLoader = document.getElementsByClassName('jumbotron')
         if (divLoader && divLoader.length > 0) {
-            _.each(divLoader, div => {
+            each(divLoader, div => {
                 div.setAttribute('style', 'display:none');
             })
         }

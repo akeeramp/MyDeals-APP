@@ -6,16 +6,20 @@ import { process, State } from "@progress/kendo-data-query";
 import { dealToolsService } from "../dealTools/dealTools.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
-import * as moment from 'moment';
+import { MomentService } from "../../../shared/moment/moment.service";
+
 @Component({
     selector: "deal-timeline-modal",
     templateUrl: "Client/src/app/core/gridCell/dealTimelineModal/dealTimelineModal.component.html",
     styleUrls: ['Client/src/app/core/gridCell/dealTimelineModal/dealTimelineModal.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-
 export class dealTimelineComponent {
-    constructor(private dealToolsSvc: dealToolsService,private loggerSvc: logger, public dialogRef: MatDialogRef<dealTimelineComponent>, @Inject(MAT_DIALOG_DATA) public data) {
+    constructor(private dealToolsSvc: dealToolsService,
+                private loggerSvc: logger,
+                public dialogRef: MatDialogRef<dealTimelineComponent>,
+                @Inject(MAT_DIALOG_DATA) public data,
+                private momentService: MomentService) {
         this.allData = this.allData.bind(this);
     }
     private dcId = this.data.dataItem.DC_ID;
@@ -51,7 +55,7 @@ export class dealTimelineComponent {
                 response[d]["ATRB_VAL"] = response[d]["ATRB_VAL"].replace(/; /g, '<br/>');
                 let regex1 = /Created Deals:/gi;
                 response[d]["ATRB_VAL"] = response[d]["ATRB_VAL"].replace(regex1, 'Created Deal(s) for product:');
-                response[d]["HIST_EFF_FR_DTM"] = moment(response[d]["HIST_EFF_FR_DTM"]).format("MM/DD/YYYY hh:mm A");
+                response[d]["HIST_EFF_FR_DTM"] = this.momentService.moment(response[d]["HIST_EFF_FR_DTM"]).format("MM/DD/YYYY hh:mm A");
             }
             this.gridResult = response;
             this.gridData = process(this.gridResult, this.state);

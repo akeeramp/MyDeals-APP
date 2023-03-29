@@ -1,7 +1,7 @@
 import {Input, Component, OnInit} from "@angular/core";
 import {loadingPanelService} from "./loadingpanel.service";
 import {logger} from "../../shared/logger/logger";
-import * as _ from "underscore";
+import { each, sample } from 'underscore';
 
 @Component({
   selector: 'loading-panel-angular',
@@ -9,7 +9,6 @@ import * as _ from "underscore";
     styleUrls:['Client/src/app/core/loadingPanel/loadingpanel.component.css']
 })
 export class LoadingPanelComponent implements OnInit {
-
   constructor(
     private loadingSvc: loadingPanelService,
     private loggerSvc: logger
@@ -35,7 +34,7 @@ export class LoadingPanelComponent implements OnInit {
           if (result && result.length == 0) {
             this.isFunFactEnabled = false;
           } else {
-            _.each(result, item => {
+            each(result, item => {
               this.funfactsList.push({
                 Title: item.FACT_HDR,
                 Description: item.FACT_TXT,
@@ -58,7 +57,7 @@ export class LoadingPanelComponent implements OnInit {
   }
 
   setFacts() {
-    this.currFunFact = _.sample(this.funfactsList);
+    this.currFunFact = sample(this.funfactsList);
     if (!this.currFunFact.Title) {
       this.currFunFact.Title = "Fun Fact";
     }
@@ -76,4 +75,3 @@ export class LoadingPanelComponent implements OnInit {
     }
   }
 }
-

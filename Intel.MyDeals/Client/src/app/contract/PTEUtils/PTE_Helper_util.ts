@@ -1,4 +1,4 @@
-import * as _ from 'underscore';
+import { each } from 'underscore';
 import { PTE_Load_Util } from "./PTE_Load_util";
 import { PTE_Config_Util } from "./PTE_Config_util";
 
@@ -282,7 +282,7 @@ export class PTE_Helper_Util {
     static splitProductForDensity = function (response) {
         let prdObj = {};
         //skipping the excluded products
-        _.each(response, (prdDet, prd) => {
+        each(response, (prdDet, prd) => {
             if (prdDet && prdDet.length > 0 && !prdDet[0].EXCLUDE) {
                 prdObj[`${prd}`] = prdDet;
             }

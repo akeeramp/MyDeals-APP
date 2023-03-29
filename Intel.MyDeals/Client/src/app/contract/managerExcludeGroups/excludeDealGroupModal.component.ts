@@ -6,8 +6,8 @@ import { DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from "@angular/material/core";
 import { RowClassArgs, RowArgs } from "@progress/kendo-angular-grid";
-import * as moment from "moment";
-import * as _ from 'underscore';
+import { MomentService } from "../../shared/moment/moment.service";
+import { sortBy } from 'underscore';
 
 @Component({
     selector: "exclude-deal-group-modal-dialog",
@@ -17,15 +17,17 @@ import * as _ from 'underscore';
     //To override the default css for the mat dialog and remove the extra padding then encapsulation should be set to none 
     encapsulation: ViewEncapsulation.None
 })
-
 export class excludeDealGroupModalDialog {
     pctGroupDealsView: boolean = false;
     showKendoAlert: boolean;
     titleText: string;
     isData: boolean;
     isLoading: boolean;
-    constructor(public dialogRef: MatDialogRef<excludeDealGroupModalDialog>, @Inject(MAT_DIALOG_DATA) public dataItem: any, private managerExcludeGrpSvc: managerExcludeGroupsService, private loggerSvc: logger) {
-    }
+    constructor(public dialogRef: MatDialogRef<excludeDealGroupModalDialog>,
+                @Inject(MAT_DIALOG_DATA) public dataItem: any,
+                private managerExcludeGrpSvc: managerExcludeGroupsService,
+                private loggerSvc: logger,
+                private momentService: MomentService) {}
     private isSelected: boolean = true;
     private role = (<any>window).usrRole;
     private wwid = (<any>window).usrWwid;
@@ -82,9 +84,9 @@ export class excludeDealGroupModalDialog {
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
         if (state.filter.filters[0] && (state.filter.filters[0]['filters'][0]['field'] == "OVLP_DEAL_STRT_DT" || state.filter.filters[0]['filters'][0]['field'] == "OVLP_DEAL_END_DT")) {
-            state.filter.filters[0]['filters'][0]['value'] = moment(state.filter.filters[0]['filters'][0]['value']).format("MM/DD/YYYY")
+            state.filter.filters[0]['filters'][0]['value'] = this.momentService.moment(state.filter.filters[0]['filters'][0]['value']).format("MM/DD/YYYY")
             if (state.filter.filters[0]['filters'] != undefined && state.filter.filters[0]['filters'].length == 2) {
-                state.filter.filters[0]['filters'][1]['value'] = moment(state.filter.filters[0]['filters'][1]['value']).format("MM/DD/YYYY")
+                state.filter.filters[0]['filters'][1]['value'] = this.momentService.moment(state.filter.filters[0]['filters'][1]['value']).format("MM/DD/YYYY")
             }
         }
         this.gridData = process(this.gridResult, this.state);
@@ -239,8 +241,8 @@ export class excludeDealGroupModalDialog {
 
             let childgridresult1 = this.childGridResult.filter(x => x.GRP_BY===1 );
             let childgridresult2 = this.childGridResult.filter(x => x.GRP_BY === 2);
-            childgridresult1 = _.sortBy(_.sortBy(_.sortBy(childgridresult1, 'EXCLD_DEAL_FLAG').reverse(), 'CST_MCP_DEAL_FLAG').reverse(), 'OVLP_WF_STG_CD');
-            childgridresult2 = _.sortBy(_.sortBy(_.sortBy(childgridresult2, 'EXCLD_DEAL_FLAG').reverse(), 'CST_MCP_DEAL_FLAG').reverse(), 'OVLP_WF_STG_CD');
+            childgridresult1 = sortBy(sortBy(sortBy(childgridresult1, 'EXCLD_DEAL_FLAG').reverse(), 'CST_MCP_DEAL_FLAG').reverse(), 'OVLP_WF_STG_CD');
+            childgridresult2 = sortBy(sortBy(sortBy(childgridresult2, 'EXCLD_DEAL_FLAG').reverse(), 'CST_MCP_DEAL_FLAG').reverse(), 'OVLP_WF_STG_CD');
             this.childGridData1 = process(childgridresult1, this.state);
             this.childGridData2 = process(childgridresult2, this.state);
            

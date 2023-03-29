@@ -3,17 +3,17 @@ import { logger } from "../../shared/logger/logger";
 import { dealPopupService } from "./dealPopup.service";
 import { colorDictionary, opGridTemplate } from "../angular.constants";
 import { AppEvent, broadCastService } from "./broadcast.service";
-import * as moment from "moment";
+import { MomentService } from "../../shared/moment/moment.service";
 import { DE_Load_Util } from "../../contract/DEUtils/DE_Load_util";
 import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { lnavService } from "../../contract/lnav/lnav.service"; 
-import * as _ from "underscore";
+import { each, sortBy } from 'underscore';
+
 @Component({
     selector: "deal-popup",
     templateUrl: "Client/src/app/core/dealPopup/dealPopup.component.html", 
 })
-
 export class dealPopupComponent {
     @Input() dealId: any;
     @Input() initLeft: any;
@@ -82,10 +82,11 @@ export class dealPopupComponent {
 
     };
 
-
-    constructor(private loggersvc: logger, private dealPopupsvc: dealPopupService, private brdcstservice: broadCastService,private lnavSvc: lnavService) {        
-     }
-
+    constructor(private loggersvc: logger,
+                private dealPopupsvc: dealPopupService,
+                private brdcstservice: broadCastService,
+                private lnavSvc: lnavService,
+                private momentService: MomentService) {}
 
     loadPopupdata(sel) {
         this.data = this.intializedata(); 
@@ -109,8 +110,8 @@ export class dealPopupComponent {
             this.openWithData = true;
             this.sel = this.sel === undefined ? 1 : sel;
             this.showPanel = true;
-            this.data.START_DT = moment(this.data.START_DT).format("MM/DD/YY");
-            this.data.END_DT = moment(this.data.END_DT).format("MM/DD/YY");
+            this.data.START_DT = this.momentService.moment(this.data.START_DT).format("MM/DD/YY");
+            this.data.END_DT = this.momentService.moment(this.data.END_DT).format("MM/DD/YY");
             this.data.NOTES = this.data.NOTES.replace(/\n/g, '<br/>');
             this.groups = opGridTemplate.groups[this.data.OBJ_SET_TYPE_CD];
             this.groupColumns = opGridTemplate.templates[this.data.OBJ_SET_TYPE_CD];
@@ -340,7 +341,7 @@ export class dealPopupComponent {
     openProducts() {
             const prdIds = [];
             const prods = this.data.PRODUCT_FILTER;
-            _.each(prods, function (value, key) {
+            each(prods, function (value, key) {
                 prdIds.push(value);
             });
         const productdata = {
@@ -360,7 +361,7 @@ export class dealPopupComponent {
 
     openSearch() {
         this.group = [];
-        this.properties = _.sortBy(this.properties, 'key');
+        this.properties = sortBy(this.properties, 'key');
         this.searchgridData = process(this.properties, this.newsearchstate); 
     }
 
@@ -532,8 +533,7 @@ export class dealPopupComponent {
     }
 
 
-    downloadQuoteLetter()
-    {
+    downloadQuoteLetter() {
         const customerSid = this.data.CUST_MBR_SID;
         const objSid = this.data.DC_ID;
         const objTypeSid = 5;
@@ -545,6 +545,4 @@ export class dealPopupComponent {
         this.loadPopupdata(this.sel);
        this. QuickDealOpenPanel();
     }
-    
 }
- 

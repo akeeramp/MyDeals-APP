@@ -4,9 +4,8 @@ import { pricingTableEditorService } from '../../contract/pricingTableEditor/pri
 import { logger } from "../../shared/logger/logger";
 import { userPreferencesService } from "../../shared/services/userPreferences.service";
 import { List } from 'linqts';
-import { forkJoin, from } from 'rxjs';
-import * as _ from 'underscore';
-import { isArray } from 'underscore';
+import { forkJoin } from 'rxjs';
+import { each, isArray } from 'underscore';
 
 @Component({
     selector: "attribute-builder-angular",
@@ -15,7 +14,6 @@ import { isArray } from 'underscore';
     encapsulation: ViewEncapsulation.None
 
 })
-
 export class AttributeBuilder implements OnInit {
     @Input() attributeSource: any;
     @Input() operatorSource: any;
@@ -153,7 +151,7 @@ export class AttributeBuilder implements OnInit {
     }
     updateRules(rulesData) {
         this.attributes=[];
-        _.each(rulesData, (customRule) => {
+        each(rulesData, (customRule) => {
             let field = this.availableAttrs.filter(x => x.field == customRule.field)[0];
             let operators = this.getOperator(field);
             let selectedop = operators.filter(x => x.operator == customRule.operator)[0];

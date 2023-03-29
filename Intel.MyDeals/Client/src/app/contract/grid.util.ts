@@ -2,7 +2,7 @@
 import { CurrencyPipe } from '@angular/common';
 import { DE_Load_Util } from './DEUtils/DE_Load_util';
 import { PTE_Config_Util } from './PTEUtils/PTE_Config_util';
-import * as moment from 'moment-timezone';
+import { StaticMomentService } from "../shared/moment/moment.service";
 import { saveAs } from '@progress/kendo-file-saver';
 import { Workbook } from '@progress/kendo-angular-excel-export';
 import { ExcelExport } from "../contract/excelExport.util"
@@ -667,8 +667,8 @@ export class GridUtil {
         return dateTimeStr;
     }
     static convertLocalToPST(strDt) {
-        moment.tz.add('America/Los_Angeles|PST PDT|80 70|01010101010|1Lzm0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0');
-        return moment.tz(strDt, "America/Los_Angeles").format("MM/DD/YY HH:mm:ss");
+        StaticMomentService.moment.tz.add('America/Los_Angeles|PST PDT|80 70|01010101010|1Lzm0 1zb0 Op0 1zb0 Rd0 1zb0 Op0 1zb0 Op0 1zb0');
+        return StaticMomentService.moment.tz(strDt, "America/Los_Angeles").format("MM/DD/YY HH:mm:ss");
     }
     static getProductMbrSid(dimProduct, dimKey) {
         let prd_mbr_sid;
@@ -1049,14 +1049,14 @@ export class GridUtil {
     }
     static stop(value) {
         if (value) {
-            value.end = moment();
+            value.end = StaticMomentService.moment();
             value.executionMs = value.end.diff(value.start);
         }
         return value;
     };
     static add(data, marks) {
         if(data){
-            data.lapse = moment().diff(data.start);
+            data.lapse = StaticMomentService.moment().diff(data.start);
             if (data.type === "block") data.lapse -= data.executionMs;
             marks.push(data);
         }
@@ -1066,7 +1066,7 @@ export class GridUtil {
             title : title,
             category : category,
             type : "block",
-            start:  moment(),
+            start:  StaticMomentService.moment(),
             marks : [],
             end: null,
             executionMs :0
@@ -1088,7 +1088,7 @@ export class GridUtil {
         let prefCacheMark = {
             title : title,
             type : "mark",
-            start : moment()
+            start : StaticMomentService.moment()
         }
         return prefCacheMark;
     }
@@ -1111,7 +1111,7 @@ export class GridUtil {
             let perf: any = GridUtil.perfCacheBlock(item.Title, media);//use gridutil
             perf.type = "block";
             perf.lapse = lapse;
-            perf.end = moment();
+            perf.end = StaticMomentService.moment();
             perf.executionMs = item.ExecutionTime;
             perf.chartData = [{
                 name: media,
@@ -1137,9 +1137,9 @@ export class GridUtil {
 
         //If Billing start date is more than 6 months in the past from Deal Start date then make billing start date cell softwarning as per US759049
         if (field == 'REBATE_BILLING_START' && passedData['REBATE_TYPE'] != 'TENDER' && passedData['PAYOUT_BASED_ON'] == 'Consumption') {
-            var dt1 = moment(passedData['START_DT']).format("MM/DD/YYYY");
-            var dt2 = moment(passedData['REBATE_BILLING_START']).format("MM/DD/YYYY");
-            if (moment(dt1).isAfter(moment(dt2).add(6, 'months'))) {
+            var dt1 = StaticMomentService.moment(passedData['START_DT']).format("MM/DD/YYYY");
+            var dt2 = StaticMomentService.moment(passedData['REBATE_BILLING_START']).format("MM/DD/YYYY");
+            if (StaticMomentService.moment(dt1).isAfter(StaticMomentService.moment(dt2).add(6, 'months'))) {
                 // direct setting of final message - msg empty, no header
                 finalMsg = "title = 'The Billing Start Date is more than six months before the Deal Start Date.'";
             }
@@ -1150,31 +1150,31 @@ export class GridUtil {
             (passedData['OBJ_SET_TYPE_CD'] == 'FLEX' && passedData['FLEX_ROW_TYPE'] == 'Accrual'))
             && passedData['REBATE_TYPE'] != 'TENDER') { 
             var multiTier = passedData['NUM_OF_TIERS'] != 1;
-            var dtBS = moment(passedData['REBATE_BILLING_START']).format("MM/DD/YYYY");
-            var dtBE = moment(passedData['REBATE_BILLING_END']).format("MM/DD/YYYY");
-            var dtCS = moment(passedData['START_DT']).format("MM/DD/YYYY");
-            var dtCE = moment(passedData['END_DT']).format("MM/DD/YYYY");
+            var dtBS = StaticMomentService.moment(passedData['REBATE_BILLING_START']).format("MM/DD/YYYY");
+            var dtBE = StaticMomentService.moment(passedData['REBATE_BILLING_END']).format("MM/DD/YYYY");
+            var dtCS = StaticMomentService.moment(passedData['START_DT']).format("MM/DD/YYYY");
+            var dtCE = StaticMomentService.moment(passedData['END_DT']).format("MM/DD/YYYY");
             var basedOnConsumption = passedData['PAYOUT_BASED_ON'] == 'Consumption';
             if (field == 'REBATE_BILLING_START' && basedOnConsumption) {
-                if (moment(dtBE).isAfter(moment(dtBS).add(12, 'months')) && multiTier) { // If billings dates are > 1 year
+                if (StaticMomentService.moment(dtBE).isAfter(StaticMomentService.moment(dtBS).add(12, 'months')) && multiTier) { // If billings dates are > 1 year
                     msg += "The Rebate Billings Period is restricted to 1 year.&#10;";
                 }
             }
             if (field == 'REBATE_BILLING_END' && basedOnConsumption) {
-                if (moment(dtBE).isAfter(moment(dtBS).add(12, 'months')) && multiTier) { // If billings dates are > 1 year
+                if (StaticMomentService.moment(dtBE).isAfter(StaticMomentService.moment(dtBS).add(12, 'months')) && multiTier) { // If billings dates are > 1 year
                     msg += "The Rebate Billings Period is restricted to 1 year.&#10;";
                 }
-                if (moment(dtCE).isAfter(moment(dtBE).add(12, 'months'))) { // Consumption End within 1 year of Billings End
+                if (StaticMomentService.moment(dtCE).isAfter(StaticMomentService.moment(dtBE).add(12, 'months'))) { // Consumption End within 1 year of Billings End
                     msg += "The Consumption End Date is limited to 1 year after Billings End Date.&#10;";
                 }
             }
             if (field == 'START_DT' && !basedOnConsumption) {
-                if (moment(dtCE).isAfter(moment(dtCS).add(12, 'months')) && multiTier) { // If billings dates are > 1 year - Billings Based
+                if (StaticMomentService.moment(dtCE).isAfter(StaticMomentService.moment(dtCS).add(12, 'months')) && multiTier) { // If billings dates are > 1 year - Billings Based
                     msg += "The Rebate Billings Period is restricted to 1 year.&#10;";
                 }
             }
             if (field == 'END_DT' && !basedOnConsumption) {
-                if (moment(dtCE).isAfter(moment(dtCS).add(12, 'months')) && multiTier) { // If billings dates are > 1 year - Billings Based
+                if (StaticMomentService.moment(dtCE).isAfter(StaticMomentService.moment(dtCS).add(12, 'months')) && multiTier) { // If billings dates are > 1 year - Billings Based
                     msg += "The Rebate Billings Period is restricted to 1 year.&#10;";
                 }
             }

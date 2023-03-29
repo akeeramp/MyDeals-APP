@@ -1,5 +1,5 @@
-import * as _ from 'underscore';
-import * as moment from 'moment';
+import { each, find, uniq, contains, values } from 'underscore';
+import { StaticMomentService } from "../../shared/moment/moment.service";
 import { PTE_Common_Util } from './PTE_Common_util';
 import { PTE_Validation_Util } from './PTE_Validation_util';
 import { DE_Save_Util } from '../DEUtils/DE_Save_util';
@@ -12,7 +12,7 @@ export class PTE_Save_Util {
         return this.validatePTEDeal(PTR, curPricingStrategy, curPricingTable, contractData, overlapFlexResult, validMisProd);
     }
     static setPTRBasicPropertyForSave(PTR: Array<any>, curPricingStrategy: any, curPricingTable: any, contractData: any) {
-        _.each(PTR, item => {
+        each(PTR, item => {
             item["_dirty"] = true;
             item["PS_WF_STG_CD"] = curPricingStrategy.WF_STG_CD;
             item["DC_PARENT_ID"] = curPricingTable.DC_ID;
@@ -25,7 +25,7 @@ export class PTE_Save_Util {
         });
     }
     static validatePTEDeal(PTR: Array<any>, curPricingStrategy: any, curPricingTable: any, contractData: any, overlapFlexResult: any, validMisProd: any): any {
-        _.each(PTR, (item) => {
+        each(PTR, (item) => {
             //defaulting the behaviours object
             PTE_Common_Util.setBehaviors(item);
         });
@@ -123,7 +123,7 @@ export class PTE_Save_Util {
                 }
             }
         }
-        _.each(PTR, (item) => {
+        each(PTR, (item) => {
             //defaulting the behaviours object
             PTE_Common_Util.setBehaviors(item);
             if (curPricingTable.OBJ_SET_TYPE_CD == 'KIT') {
@@ -135,15 +135,15 @@ export class PTE_Save_Util {
                     }
                 }
             }
-            if (moment(item["START_DT"]).isAfter(contractData.END_DT) && !isTenderContract) {
+            if (StaticMomentService.moment(item["START_DT"]).isAfter(contractData.END_DT) && !isTenderContract) {
                 item._behaviors.isError['START_DT'] = true;
-                item._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(contractData.END_DT).format("MM/DD/YYYY") + ")";
+                item._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + StaticMomentService.moment(contractData.END_DT).format("MM/DD/YYYY") + ")";
             }
-            if (moment(item["END_DT"]).isBefore(contractData.START_DT) && !isTenderContract) {
+            if (StaticMomentService.moment(item["END_DT"]).isBefore(contractData.START_DT) && !isTenderContract) {
                 item._behaviors.isError['END_DT'] = true;
-                item._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(contractData.START_DT).format("MM/DD/YYYY") + ")";
+                item._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + StaticMomentService.moment(contractData.START_DT).format("MM/DD/YYYY") + ")";
             }
-            if (moment(item["START_DT"]).isAfter(moment(item["END_DT"])) && !isTenderContract) {
+            if (StaticMomentService.moment(item["START_DT"]).isAfter(StaticMomentService.moment(item["END_DT"])) && !isTenderContract) {
                 item._behaviors.isError['START_DT'] = true;
                 item._behaviors.validMsg['START_DT'] = "Deal Start date cannot be greater than the Deal End Date";
             }
@@ -176,7 +176,7 @@ export class PTE_Save_Util {
             if (item["OBJ_SET_TYPE_CD"] == "FLEX") {
                 //Delete if there is any previous Error  messages
                 if ((invalidFlexDate || invalidFlexDate != undefined)) {
-                    _.each(invalidFlexDate, (item) => {
+                    each(invalidFlexDate, (item) => {
                         PTE_Validation_Util.setFlexBehaviors(item, 'START_DT', 'invalidDate', false);
                     });
                 }
@@ -187,7 +187,7 @@ export class PTE_Save_Util {
     }
     static validatePTEECAP(PTR: Array<any>): any {
         //check for Ecap price 
-        _.each(PTR, (item) => {
+        each(PTR, (item) => {
             //defaulting the behaviours object
             PTE_Common_Util.setBehaviors(item);
             if (item.ECAP_PRICE == null || item.ECAP_PRICE == 0 || item.ECAP_PRICE == '' || item.ECAP_PRICE < 0) {
@@ -197,7 +197,7 @@ export class PTE_Save_Util {
         return PTR;
     }
     static settlementPartnerValUpdate(PTR: Array<any>) {
-        _.each(PTR, item => {
+        each(PTR, item => {
             if (item.SETTLEMENT_PARTNER && item.SETTLEMENT_PARTNER != '') {
                 let items = item.SETTLEMENT_PARTNER.split('-');
                 if (items.length > 1) {
@@ -212,7 +212,7 @@ export class PTE_Save_Util {
     }
     //check for all attribue present
     static sanitizePTR(PTR: Array<any>, contractData: any): Array<any> {
-        _.each(PTR, (item) => {
+        each(PTR, (item) => {
             if (item && (item.CUST_MBR_SID == null || item.CUST_MBR_SID == '' || item.CUST_MBR_SID == undefined)) {
                 item.CUST_MBR_SID = contractData.CUST_MBR_SID;
             }
@@ -237,8 +237,8 @@ export class PTE_Save_Util {
         if (PTRResult && PTRResult.length > 0 && PTRResult[0]._actions) {
             let actions = PTRResult[0]._actions;
             PTRResult.splice(0, 1);
-            _.each(PTRResult, (item) => {
-                _.each(actions, act => {
+            each(PTRResult, (item) => {
+                each(actions, act => {
                     if (item.DC_ID == act.DcID) {
                         item.DC_ID = act.AltID
                     }
@@ -255,10 +255,10 @@ export class PTE_Save_Util {
         //identify the uniq records by DCID and check for errors. 
         //the error has to bind first object for tier and uniq will give first uniq record
         //since we dont have client side tier level error we can use this method. But will revisit if require
-        let uniqPTR = _.uniq(PTR, 'DC_ID');
-        let iserror = _.find(uniqPTR, (x) => {
+        let uniqPTR = uniq(PTR, 'DC_ID');
+        let iserror = find(uniqPTR, (x) => {
             if (x._behaviors && x._behaviors.isError) {
-                return _.contains(_.values(x._behaviors.isError), true)
+                return contains(values(x._behaviors.isError), true)
             }
         });
         return iserror != null ? true : false;
@@ -270,7 +270,7 @@ export class PTE_Save_Util {
 
     static ValidateDensityPTR(PTR: Array<any>, validMisProd) {
         if (validMisProd != undefined) {
-            _.each(PTR, (itm, indx) => {
+            each(PTR, (itm, indx) => {
                 if (validMisProd[itm.DC_ID] != undefined && validMisProd[itm.DC_ID].cond) {
                     PTE_Common_Util.setBehaviors(itm);
                     itm._dirty = true;
@@ -289,7 +289,7 @@ export class PTE_Save_Util {
     }
 
     static fillingPayLoad(data: any, curPricingTable: any,pteData?) {
-        _.each(data, (item,ind) => {
+        each(data, (item,ind) => {
             if (curPricingTable.OBJ_SET_TYPE_CD == 'KIT') {
                 item["TEMP_SUM_TOTAL_DSCNT_PER_LN"] = 0;
                 let obj;
@@ -332,7 +332,7 @@ export class PTE_Save_Util {
 
     static saveWarningDetails(data, savedResponseWarning) {
         let index = 0;
-        _.each(data, (dataItem) => {
+        each(data, (dataItem) => {
             if (dataItem.warningMessages && dataItem.warningMessages.length > 0
                 && dataItem._behaviors['isError'] && dataItem._behaviors['validMsg']) {
                 savedResponseWarning[index++] = {

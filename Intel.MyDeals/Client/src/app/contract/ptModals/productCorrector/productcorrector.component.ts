@@ -2,7 +2,7 @@ import { Component, Inject, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, GridComponent } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
-import * as _ from "underscore";
+import { each, uniq, findWhere } from 'underscore';
 import { MatDialog } from '@angular/material/dialog';
 import { SelectableSettings } from '@progress/kendo-angular-treeview';
 import { NgbPopoverConfig } from "@ng-bootstrap/ng-bootstrap";
@@ -11,7 +11,7 @@ import { ProductSelectorComponent } from "../productSelector/productselector.com
 import { PTE_Common_Util } from "../../PTEUtils/PTE_Common_util";
 import { List } from 'linqts';
 import { PTEUtil } from '../../PTEUtils/PTE.util';
-import * as moment from 'moment';
+import { MomentService } from "../../../shared/moment/moment.service";
 import { ProductBreakoutComponent } from '../productSelector/productBreakout/productBreakout.component';
 
 @Component({
@@ -21,10 +21,11 @@ import { ProductBreakoutComponent } from '../productSelector/productBreakout/pro
 })
 export class ProductCorrectorComponent {
     constructor(public dialogRef: MatDialogRef<ProductCorrectorComponent>,
-        @Inject(MAT_DIALOG_DATA) public data: any,
-        private loggerService: logger,
-        private dialogService: MatDialog,
-        popoverConfig: NgbPopoverConfig) {
+                @Inject(MAT_DIALOG_DATA) public data: any,
+                private loggerService: logger,
+                private dialogService: MatDialog,
+                popoverConfig: NgbPopoverConfig,
+                private momentService: MomentService) {
         popoverConfig.placement = 'auto';
         popoverConfig.container = 'body';
         popoverConfig.autoClose = 'outside';
@@ -225,12 +226,12 @@ export class ProductCorrectorComponent {
         if (this.DEAL_TYPE === 'ECAP' || this.DEAL_TYPE === 'KIT') return true;
         const existingProductTypes = [];
         for (const key in this.ProductCorrectorData.ValidProducts[this.curRowId]) {
-            _.each(this.ProductCorrectorData.ValidProducts[this.curRowId][key], (product) =>{
+            each(this.ProductCorrectorData.ValidProducts[this.curRowId][key], (product) =>{
                 existingProductTypes.push(product.PRD_CAT_NM);
             });
         }
 
-        const existingProdTypes = _.uniq(existingProductTypes, 'PRD_CAT_NM');
+        const existingProdTypes = uniq(existingProductTypes, 'PRD_CAT_NM');
 
         const isValid = this.isValidProductCombination(existingProdTypes, item.PRD_CAT_NM);
         // Check if valid combination
@@ -474,9 +475,9 @@ export class ProductCorrectorComponent {
             }
         }
 
-        _.each(this.selectedItms, (selectItem) => {
+        each(this.selectedItms, (selectItem) => {
             if (selectItem.ROW_NM == this.curRowId) {
-                _.each(this.curRowData, (rowDataItem) => {
+                each(this.curRowData, (rowDataItem) => {
                     if (rowDataItem.PRD_MBR_SID != 0 && rowDataItem.PRD_MBR_SID == selectItem.PRD_MBR_SID)
                         rowDataItem.IS_SEL = true;
                 })
@@ -500,7 +501,7 @@ export class ProductCorrectorComponent {
     toggleColumnsWhenEmptyConflictGrid(data) {
         if (!!this.grid) {
             this.grid.columns.forEach(item => {
-                let columnValue = _.uniq(data, item['field']);
+                let columnValue = uniq(data, item['field']);
                 if (columnValue.length == 1 && item['field'] !== undefined && item['field'] != "CheckBox" && item['field'] != "IS_SEL" && item['field'] != "USR_INPUT" && item['field'] != 'CAP' && item['field'] != 'YCS2' &&
                     (columnValue[0][item['field']] === "" || columnValue[0][item['field']] == null || columnValue[0][item['field']] == 'NA')) {
                     item.hidden = true;
@@ -514,7 +515,7 @@ export class ProductCorrectorComponent {
         let validProducts = [];
         for (var key in this.data.ProductCorrectorData.ValidProducts[this.curRowId]) {
             if (this.data.ProductCorrectorData.ValidProducts[this.curRowId].hasOwnProperty(key)) {
-                _.each(this.data.ProductCorrectorData.ValidProducts[this.curRowId][key], (item)=> {
+                each(this.data.ProductCorrectorData.ValidProducts[this.curRowId][key], (item)=> {
                     validProducts.push(item);
                 });
             }
@@ -732,7 +733,7 @@ export class ProductCorrectorComponent {
             }
             this.dataFilter = [];
             // clear filters
-            _.each(this.curRowIssues, (value, key)=> {
+            each(this.curRowIssues, (value, key)=> {
                 value.selected = false;
                 if (dataItem.name == value.name && value.cnt > 0) {
                     value.selected = true;
@@ -743,7 +744,7 @@ export class ProductCorrectorComponent {
                             value: dataItem.name
                         })
                     else
-                        _.each(this.dataFilter, (x) => {
+                        each(this.dataFilter, (x) => {
                             if (x.field == 'USR_INPUT')
                                 x.value = dataItem.name;
                         });
@@ -770,7 +771,7 @@ export class ProductCorrectorComponent {
     }
 
     getFormatedDate(datVal) {
-        var date = moment(new Date(datVal)).format('M/d/yyyy');
+        var date = this.momentService.moment(new Date(datVal)).format('M/d/yyyy');
         if (date === '1/1/1900') {
             return '';
         }
@@ -848,7 +849,7 @@ export class ProductCorrectorComponent {
                         this.ProductCorrectorData.ValidProducts[this.curRowId] = {};
                     if (!this.ProductCorrectorData.ValidProducts[this.curRowId][this.invalidProdName])
                         this.ProductCorrectorData.ValidProducts[this.curRowId][this.invalidProdName] = [];
-                    _.each(validateSelectedProducts[key], (product) => {
+                    each(validateSelectedProducts[key], (product) => {
                         const isValid = this.validCrossVerticals(product);
                         if (isValid) {
                             let isExclude = this.ProductCorrectorData.ProdctTransformResults[this.curRowId].E && this.ProductCorrectorData.ProdctTransformResults[this.curRowId].E.length > 0
@@ -882,7 +883,7 @@ export class ProductCorrectorComponent {
                         DC_ID: this.curRowId,
                         deletedUserInput: this.prdNm,
                         exclude: true,
-                        indx: _.findWhere(this.data.selRows,
+                        indx: findWhere(this.data.selRows,
                             {
                                 DC_ID: parseInt(this.curRowId)
                             }).indx
@@ -892,7 +893,7 @@ export class ProductCorrectorComponent {
                     DC_ID: this.curRowId,
                     deletedUserInput: this.prdNm,
                     exclude: false,
-                    indx: _.findWhere(this.data.selRows,
+                    indx: findWhere(this.data.selRows,
                         {
                             DC_ID: parseInt(this.curRowId)
                         }).indx
@@ -922,7 +923,7 @@ export class ProductCorrectorComponent {
                             DC_ID: this.curRowId,
                             deletedUserInput: this.prdNm,
                             exclude: isExclude,
-                            indx: _.findWhere(this.data.selRows,
+                            indx: findWhere(this.data.selRows,
                                 {
                                     DC_ID: parseInt(this.curRowId)
                                 }).indx
@@ -1057,8 +1058,8 @@ export class ProductCorrectorComponent {
             }
         }
 
-         _.each(this.ProductCorrectorData.ValidProducts, (product, key) => {
-             _.each(product, (selprod, keyq) => {
+         each(this.ProductCorrectorData.ValidProducts, (product, key) => {
+             each(product, (selprod, keyq) => {
                  if (!(this.ProductCorrectorData.AutoValidatedProducts && this.ProductCorrectorData.AutoValidatedProducts[parseInt(key)]
                      && this.ProductCorrectorData.AutoValidatedProducts[parseInt(key)][keyq])) {
                      if (!!this.selectedProducts && this.selectedProducts.length == 0) {
@@ -1066,7 +1067,7 @@ export class ProductCorrectorComponent {
                              DCID: parseInt(key),
                              name: keyq.toString()
                              , items: [],
-                             indx: _.findWhere(this.data.selRows,
+                             indx: findWhere(this.data.selRows,
                                  {
                                      DC_ID: parseInt(key)
                                  }).indx
@@ -1077,18 +1078,18 @@ export class ProductCorrectorComponent {
                                  DCID: parseInt(key),
                                  name: keyq.toString()
                                  , items: [],
-                                 indx: _.findWhere(this.data.selRows,
+                                 indx: findWhere(this.data.selRows,
                                      {
                                          DC_ID: parseInt(key)
                                      }).indx
                              });
                          }
                      }
-                     _.each(selprod, celprod => {
+                     each(selprod, celprod => {
                          const prd = { prod: celprod['DERIVED_USR_INPUT'], prodObj: celprod };
                          prd.prodObj['USR_INPUT'] = keyq;
                          prd.prodObj['IS_SEL'] = true;
-                         _.each(this.selectedProducts, (selproditem) => {
+                         each(this.selectedProducts, (selproditem) => {
                              if (selproditem.DCID == key)
                                  selproditem.items.push(prd);
                          })

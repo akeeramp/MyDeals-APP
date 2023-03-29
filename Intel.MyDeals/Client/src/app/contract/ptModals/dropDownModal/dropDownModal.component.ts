@@ -1,6 +1,5 @@
 ﻿import { Component, Inject } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import * as _ from "underscore";
 
 export interface DialogData {
     selVal?: string;
@@ -13,7 +12,6 @@ export interface DialogData {
     templateUrl: "Client/src/app/contract/ptModals/dropDownModal/dropDownModal.component.html",
     styleUrls: ['Client/src/app/contract/ptModals/dropDownModal/dropDownModal.component.css']
 })
-
 export class dropDownModalComponent {
     private listItems: Array<string> = [];
     private value: string = "";

@@ -14,8 +14,7 @@ import {
     distinct
 } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-import * as _ from "underscore";
-
+import { sortBy, uniq, pluck } from 'underscore';
 
 @Component({
     selector: "admin-prime-customers",
@@ -87,10 +86,10 @@ export class adminPrimeCustomersComponent {
 
     distinctPrimitive(fieldName: string): any {
         if (fieldName == 'PRIM_CUST_NM') {
-            return _.sortBy(_.uniq(_.pluck(this.gridResult, fieldName)));
+            return sortBy(uniq(pluck(this.gridResult, fieldName)));
         } else if (fieldName == 'PRIM_CUST_CTRY') {
-            return _.sortBy(_.uniq(_.pluck(this.gridResult, fieldName)));
-        } else return _.uniq(_.pluck(this.gridResult, fieldName));
+            return sortBy(uniq(pluck(this.gridResult, fieldName)));
+        } else return uniq(pluck(this.gridResult, fieldName));
     }
 
     loadPrimeCustomer() {

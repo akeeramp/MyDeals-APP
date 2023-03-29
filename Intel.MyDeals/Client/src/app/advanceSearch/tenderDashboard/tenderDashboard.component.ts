@@ -1,12 +1,12 @@
 ﻿import { formatDate } from "@angular/common";
 import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
 import { Item } from "@progress/kendo-angular-charts/dist/es2015/common/collection.service";
-import * as moment from "moment";
+import { MomentService } from "../../shared/moment/moment.service";
 import { logger } from "../../shared/logger/logger";
 import { tenderDashboardService } from "./tenderDashboard.service";
 import { TenderDashboardConfig } from '../tenderDashboard/tenderDashboard_config'
 import { templatesService } from "../../shared/services/templates.service";
-import * as _ from 'underscore';
+import { each } from 'underscore';
 import { GridUtil } from "../../contract/grid.util";
 import { TenderDashboardGridUtil } from "../../contract/tenderDashboardGrid.util";
 import { PTE_Config_Util } from "../../contract/PTEUtils/PTE_Config_util";
@@ -18,18 +18,16 @@ import { contractStatusWidgetService } from "../../dashboard/contractStatusWidge
 import { emailModal } from "../../contract/contractManager/emailModal/emailModal.component";
 import { constantsService } from "../../admin/constants/admin.constants.service";
 
-
 @Component({
     selector: 'app-tender-dashboard',
     templateUrl: 'Client/src/app/advanceSearch/tenderDashboard/tenderDashboard.component.html',
     styleUrls: ['Client/src/app/advanceSearch/tenderdashboard/tenderDashboard.component.css'],
     encapsulation: ViewEncapsulation.None
-})    
-
+})
 export class TenderDashboardComponent implements OnInit {
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
-    private startDateValue: Date = new Date(moment().subtract(6, 'months').format("MM/DD/YYYY"));
-    private endDateValue: Date = new Date(moment().add(6, 'months').format("MM/DD/YYYY"));
+    private startDateValue: Date = new Date(this.momentService.moment().subtract(6, 'months').format("MM/DD/YYYY"));
+    private endDateValue: Date = new Date(this.momentService.moment().add(6, 'months').format("MM/DD/YYYY"));
     private showSearchFilters: boolean = true;
     public isListExpanded = false;
     private showGrid: boolean = false;
@@ -74,7 +72,13 @@ export class TenderDashboardComponent implements OnInit {
     private runSearch: boolean = false;
     private approveDeals: boolean = false;
     private entireDataDeleted: boolean = false;
-    constructor(protected cntrctWdgtSvc: contractStatusWidgetService, protected loggerSvc: logger, protected tenderDashboardSvc: tenderDashboardService, private templatesSvc: templatesService, protected dialog: MatDialog, private constantsService: constantsService) { }
+    constructor(protected cntrctWdgtSvc: contractStatusWidgetService,
+                protected loggerSvc: logger,
+                protected tenderDashboardSvc: tenderDashboardService,
+                private templatesSvc: templatesService,
+                protected dialog: MatDialog,
+                private constantsService: constantsService,
+                private momentService: MomentService) { }
     
     onCustomerChange(custData) {
         window.localStorage.selectedCustNames = JSON.stringify(custData);
@@ -147,7 +151,7 @@ export class TenderDashboardComponent implements OnInit {
             let savedData = response.Data.WIP_DEAL;
             let isanyWarnings = false;
             if (savedData) {
-                _.each(savedData, (item) => {
+                each(savedData, (item) => {
                     if (item.warningMessages !== undefined && item.warningMessages.length > 0) isanyWarnings = true;
                     if (isanyWarnings) {
                         var dimStr = "_10___";  // NOTE: 10___ is the dim defined in _gridUtil.js
@@ -313,7 +317,7 @@ export class TenderDashboardComponent implements OnInit {
             });
     }
     addCustomToTemplates() {
-        _.each(this.templates['ModelTemplates']['PRC_TBL'], (value, key) => {
+        each(this.templates['ModelTemplates']['PRC_TBL'], (value, key) => {
             value._custom = {
                     "ltr": value.name[0],
                     "_active": false
@@ -924,7 +928,7 @@ export class TenderDashboardComponent implements OnInit {
         this.setBusy("","")
     }
     removeDeletedRow(event) {
-        _.each(this.searchResults, (item,index) => {
+        each(this.searchResults, (item,index) => {
             if (item._parentIdPS == event) 
                 this.searchResults.splice(index, 1);
         })
@@ -954,7 +958,7 @@ export class TenderDashboardComponent implements OnInit {
         }
         this.contractData = TenderDashboardConfig.tenderDashboardBasicContractData;
         let qm = window.location.hash.substring(window.location.hash.indexOf('?') + 1, window.location.hash.length).split('&');
-        _.each(qm, (item) => {
+        each(qm, (item) => {
             if (item.toLowerCase().indexOf('dealtype') >= 0) {
                 this.customSettings.push({
                     field: "OBJ_SET_TYPE_CD",

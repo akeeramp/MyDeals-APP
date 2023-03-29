@@ -1,19 +1,19 @@
 ﻿import { Component } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { adminsupportScriptService } from "./admin.supportScript.service"
-import * as _moment from "moment";
+import { MomentService } from "../../shared/moment/moment.service";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
-const moment = _moment;
-
 
 @Component({
     selector: "admin-support-script",
     templateUrl: "Client/src/app/admin/supportScript/admin.supportScript.component.html",
     styles: [`.opUiElement { width: 95% } .dateRangeLabel { font-weight: bold; } .btnExec { padding-left: 25px; } .input-error { border: red 1px solid; }`]
 })
-
 export class adminsupportScriptComponent {
-    constructor(private loggersvc: logger, private adminsupportscriptsvc: adminsupportScriptService,private formBuilder: FormBuilder) {
+    constructor(private loggersvc: logger,
+                private adminsupportscriptsvc: adminsupportScriptService,
+                private formBuilder: FormBuilder,
+                private momentService: MomentService) {
         this.intializesupportScriptDataForm();
     }
      
@@ -36,14 +36,14 @@ export class adminsupportScriptComponent {
 
     intializesupportScriptDataForm() {
         this.supportScriptDataForm = this.formBuilder.group({
-            START_QTR: moment().quarter(),
-            START_YR: parseInt(moment().format("YYYY")) - 1,
-            END_QTR: moment().quarter(),
-            END_YR: parseInt(moment().format("YYYY")) + 3,
+            START_QTR: this.momentService.moment().quarter(),
+            START_YR: parseInt(this.momentService.moment().format("YYYY")) - 1,
+            END_QTR: this.momentService.moment().quarter(),
+            END_YR: parseInt(this.momentService.moment().format("YYYY")) + 3,
             NOTES: '',
             isFillNullSelected: false,
-            MinYear : parseInt(moment().format("YYYY")) - 6,
-            MaxYear : parseInt(moment().format("YYYY")) + 20,
+            MinYear : parseInt(this.momentService.moment().format("YYYY")) - 6,
+            MaxYear : parseInt(this.momentService.moment().format("YYYY")) + 20,
         });
     }
 
@@ -114,9 +114,5 @@ export class adminsupportScriptComponent {
         };
     }
 
-
-    ngOnInit() {
- 
-    }
-     
+    ngOnInit() { }    
 }

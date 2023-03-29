@@ -1,6 +1,6 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import * as _ from "underscore";
+import { each, indexOf, map, clone } from 'underscore';
 import { forkJoin, Observable, of } from 'rxjs';
 import { autoFillService } from "../autofillsettings/autofillsetting.service";
 import { logger } from '../../../shared/logger/logger';
@@ -13,7 +13,6 @@ import { templatesService } from "../../../shared/services/templates.service";
     styleUrls: ["Client/src/app/contract/ptModals/autofillsettings/autofillsettings.component.css"],
     encapsulation: ViewEncapsulation.None
 })
-
 export class AutoFillComponent {
     private dropdownResponses: any = null;
     private isLoading: boolean = false;
@@ -43,13 +42,11 @@ export class AutoFillComponent {
     //UItemplate is to get lnav data
     public UItemplate: any;
 
-    constructor(
-        private autoSvc: autoFillService,
-        private loggerSvc: logger, private templatesSvc: templatesService,
-        public dialogRef: MatDialogRef<AutoFillComponent>,
-        @Inject(MAT_DIALOG_DATA) public autofillData: any
-    ) {
-        dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG  
+    constructor(private autoSvc: autoFillService,
+                private loggerSvc: logger, private templatesSvc: templatesService,
+                public dialogRef: MatDialogRef<AutoFillComponent>,
+                @Inject(MAT_DIALOG_DATA) public autofillData: any) {
+        dialogRef.disableClose = true; // prevents pop up from closing when user clicks outside of the MATDIALOG  
     }
 
     setBusy(msg, detail, msgType, showFunFact) {
@@ -106,7 +103,7 @@ export class AutoFillComponent {
     }
     async getAllDropdownValues() {
         let dropObjs = {};
-        _.each(this.autofillData.DEFAULT, (val, key) => {
+        each(this.autofillData.DEFAULT, (val, key) => {
             if (val.opLookupUrl && val.opLookupUrl != '' && val.opLookupUrl != undefined) {
                 if (key == 'PERIOD_PROFILE') {
                     let custId = this.custID ? parseInt(this.custID) : 0;
@@ -180,46 +177,46 @@ export class AutoFillComponent {
 
     onMktgValueChange(event: any) {
         var index;
-        _.each(this.marketSeglist, (key) => {
+        each(this.marketSeglist, (key) => {
             if (key.items != null) {
-                index = _.indexOf(this.marketSeglist, key);
+                index = indexOf(this.marketSeglist, key);
             }
         })
-        if (_.indexOf(event, this.marketSeglist[index].DROP_DOWN) > 0 && event.length - 1 == this.marketSeglist[index].items.length) {
+        if (indexOf(event, this.marketSeglist[index].DROP_DOWN) > 0 && event.length - 1 == this.marketSeglist[index].items.length) {
             this.mkgvalues = null;
             this.multSlctMkgValues = this.mkgvalues;
         }
         else if (event && event.length > 0) {
             var selectedList = event.join(",");
-            if (_.indexOf(event, 'All Direct Market Segments') > 0 || (event.length == 1 && _.indexOf(event, 'All Direct Market Segments') == 0)) {
+            if (indexOf(event, 'All Direct Market Segments') > 0 || (event.length == 1 && indexOf(event, 'All Direct Market Segments') == 0)) {
                 this.mkgvalues = ['All Direct Market Segments'];
                 this.multSlctMkgValues = this.mkgvalues;
             }
             else {
-                if (_.indexOf(event, 'All Direct Market Segments') == 0) {
+                if (indexOf(event, 'All Direct Market Segments') == 0) {
                     this.mkgvalues.splice(0, 1);
                 }
-                _.each(this.mkgvalues, (key) => {
+                each(this.mkgvalues, (key) => {
                     var selectedData = this.marketSeglist.filter(x => x.DROP_DOWN == key);
                     if (selectedData != undefined && selectedData != null && selectedData.length > 0 && selectedData[0].items != undefined && selectedData[0].items != null && selectedData[0].items.length > 0) {
                         this.mkgvalues = [selectedData[0].items[0].DROP_DOWN];
                     }
                 });
-                _.each(this.parentKeys, (key) => {
+                each(this.parentKeys, (key) => {
                     if (selectedList.includes(key)) {
                         this.mkgvalues = [this.mkgvalues[this.mkgvalues.length - 1]];
                     }
                 });
-                if (_.indexOf(this.mkgvalues, "NON Corp") >= 0) {
-                    let corpMarkSeg = _.map(this.nonCorpMarketSeg, (x) => { return x.DROP_DOWN })
-                    _.each(corpMarkSeg, (val) => {
-                        if ((_.indexOf(this.mkgvalues, val) < 0)) {
+                if (indexOf(this.mkgvalues, "NON Corp") >= 0) {
+                    let corpMarkSeg = map(this.nonCorpMarketSeg, (x) => { return x.DROP_DOWN })
+                    each(corpMarkSeg, (val) => {
+                        if ((indexOf(this.mkgvalues, val) < 0)) {
                             this.mkgvalues.push(val);
                         }
                     })
                 }
-                this.multSlctMkgValues = _.clone(this.mkgvalues);
-                let nonCorpIdx = _.indexOf(this.multSlctMkgValues, "NON Corp");
+                this.multSlctMkgValues = clone(this.mkgvalues);
+                let nonCorpIdx = indexOf(this.multSlctMkgValues, "NON Corp");
                 if (nonCorpIdx != -1) {
                     this.multSlctMkgValues.splice(nonCorpIdx, 1);
                 }
@@ -475,7 +472,7 @@ export class AutoFillComponent {
         this.isMultipleGeosSelected = (this.geos?.length > 1);
         this.marketSeglist = this.dropdownResponses['MRKT_SEG'];
         this.nonCorpMarketSeg = this.dropdownResponses['MRKT_SEG_NON_CORP'];
-        _.each(this.marketSeglist, (key) => {
+        each(this.marketSeglist, (key) => {
             if (key.items != undefined && key.items != null && key.items.length > 0) {
                 this.parentKeys.push(key.DROP_DOWN);
             }
@@ -514,6 +511,4 @@ export class AutoFillComponent {
             console.error('Auo_Fill::ngOnInit::', ex);
         }
     }
-
 }
-

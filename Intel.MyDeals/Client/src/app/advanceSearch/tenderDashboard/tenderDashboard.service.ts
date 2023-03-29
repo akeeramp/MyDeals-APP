@@ -1,14 +1,13 @@
 ﻿import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
 import { Observable } from "rxjs";
-import * as moment from "moment";
+import { MomentService } from "../../shared/moment/moment.service";
 
 @Injectable({
     providedIn: 'root'
 })
-
 export class tenderDashboardService {
-    constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient, private momentService: MomentService) { }
     public apiBaseUrl = "/api/Search/GetTenderDashboardList/";
     private apiBaseTenderUrl = "/api/Tenders/v1/";
     private apiBaseCostTestUrl = "/api/CostTest/v1/";
@@ -18,7 +17,7 @@ export class tenderDashboardService {
     }
 
     public searchTender(st, en, searchUrl) {
-        const apiUrl: string = this.apiBaseUrl + moment(st).format("MM-DD-YYYY") + "/" + moment(en).format("MM-DD-YYYY") + "/" + searchUrl.replace(/\./g, '&per;');
+        const apiUrl: string = this.apiBaseUrl + this.momentService.moment(st).format("MM-DD-YYYY") + "/" + this.momentService.moment(en).format("MM-DD-YYYY") + "/" + searchUrl.replace(/\./g, '&per;');
         return this.httpClient.get(apiUrl);
     }
 

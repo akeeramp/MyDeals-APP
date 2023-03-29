@@ -1,7 +1,7 @@
 ﻿import { Component, Input, ViewEncapsulation, ViewChild, Output, EventEmitter } from '@angular/core';
 import { logger } from '../../shared/logger/logger';
-import * as _ from 'underscore';
-import * as moment from "moment";
+import { each } from 'underscore';
+import { MomentService } from "../../shared/moment/moment.service";
 import { MatDialog } from '@angular/material/dialog';
 import { opGridTemplate } from "../../core/angular.constants"
 import { SelectEvent } from "@progress/kendo-angular-layout";
@@ -38,12 +38,15 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class dealEditorComponent {
 
     constructor(private pteService: pricingTableEditorService,
-        private contractDetailsSvc: contractDetailsService,
-        private loggerService: logger, private datePipe: DatePipe,
-        protected dialog: MatDialog,
-        private DESvc: dealEditorService, private securityService: SecurityService,
-        private router: Router, private route: ActivatedRoute) {
-    }
+                private contractDetailsSvc: contractDetailsService,
+                private loggerService: logger,
+                private datePipe: DatePipe,
+                protected dialog: MatDialog,
+                private DESvc: dealEditorService,
+                private securityService: SecurityService,
+                private router: Router, 
+                private route: ActivatedRoute,
+                private momentService: MomentService) {}
 
     @Input() in_Cid: any = '';
     @Input() in_Ps_Id: any = '';
@@ -173,7 +176,7 @@ export class dealEditorComponent {
                     item.filters.forEach((fltrItem: FilterDescriptor) => {
                         let column = fltrItem.field.toString();
                         if (this.dropdownFilterColumns.includes(column)) {
-                            _.each(this.gridData.data, (eachData) => {
+                            each(this.gridData.data, (eachData) => {
                                 let keys = Object.keys(eachData[column]);
                                 let isexists = false;
                                 for (var key in keys) {
@@ -192,7 +195,7 @@ export class dealEditorComponent {
     }
 
     distinctPrimitive(): any {
-        _.each(this.wipTemplate.columns, (col) => {
+        each(this.wipTemplate.columns, (col) => {
             if (col.filterable == true) {
                 let distinctData: any[] = [];
                 if (this.dropdownFilterColumns.includes(col.field)) {
@@ -206,7 +209,7 @@ export class dealEditorComponent {
                         });
                     }
                     else {
-                        _.each(this.gridResult, (item) => {
+                        each(this.gridResult, (item) => {
                             let keys = Object.keys(item[col.field]);
                             for (var key in keys) {
                                 if (item[col.field][keys[key]] != undefined && item[col.field][keys[key]] != null && distinctData.filter(x => x.Text == item[col.field][keys[key]].toString()).length == 0)
@@ -224,7 +227,7 @@ export class dealEditorComponent {
                             let val = item.WF_STG_CD === "Draft" ? item.PS_WF_STG_CD : item.WF_STG_CD;
                             return { Text: val, Value: item[col.field] };
                         }
-                        if (moment(item[col.field], "MM/DD/YYYY", true).isValid()) {
+                        if (this.momentService.moment(item[col.field], "MM/DD/YYYY", true).isValid()) {
                             return { Text: new Date(item[col.field]).toString(), Value: item[col.field] };
                         }
                         else if (item[col.field] != undefined && item[col.field] != null)
@@ -284,8 +287,8 @@ export class dealEditorComponent {
             if (this.gridResult && (this.gridResult.filter(x => x.WF_STG_CD == 'Hold').length <= response.WIP_DEAL.filter(x => x.WF_STG_CD == 'Hold').length)) {
                 let linkedIds = this.gridResult.filter(y => y.isLinked).map(x => x.DC_ID);
                 if (linkedIds.length > 0) {
-                    _.each(linkedIds, id => {
-                        _.each(response.WIP_DEAL, item => {
+                    each(linkedIds, id => {
+                        each(response.WIP_DEAL, item => {
                             if (item.DC_ID == id)
                                 item.isLinked = true;
                         })
@@ -408,7 +411,7 @@ export class dealEditorComponent {
 
     updateModalDataItem(dataItem, field, returnVal) {
         if ((dataItem.isLinked != undefined && dataItem.isLinked && this.gridResult.filter(x => x.isLinked).length > 0 && field !== 'TRGT_RGN') || (dataItem._parentCnt > 1 && !dataItem.isLinked && field !== 'TRGT_RGN')) {
-            _.each(this.gridResult, (item) => {
+            each(this.gridResult, (item) => {
                 if ((item.isLinked != undefined && item.isLinked && dataItem.isLinked) || (dataItem._parentCnt > 1 && dataItem.DC_PARENT_ID == item.DC_PARENT_ID && !dataItem.isLinked))
                     PTE_Save_Util.setDataItem(item, field, returnVal);
             })
@@ -519,7 +522,7 @@ export class dealEditorComponent {
             if (returnVal != undefined) {
                 dataItem.END_CUST_OBJ = returnVal.END_CUST_OBJ;
                 if ((dataItem.isLinked != undefined && dataItem.isLinked) || (dataItem._parentCnt > 1 && !dataItem.isLinked)) {
-                    _.each(this.gridResult, (item) => {
+                    each(this.gridResult, (item) => {
                         if ((item.isLinked != undefined && item.isLinked && dataItem.isLinked) || (dataItem._parentCnt > 1 && dataItem.DC_PARENT_ID == item.DC_PARENT_ID && !dataItem.isLinked))
                             PTE_Save_Util.setDataItem(item, 'END_CUST_OBJ', returnVal.END_CUST_OBJ);
                     })
@@ -911,7 +914,7 @@ export class dealEditorComponent {
             else {
                 args.sender.cellClick.closed = false;
                 args.sender.cellClick.isStopped = false;                
-                _.each(this.gridResult, (item) => {
+                each(this.gridResult, (item) => {
                     if (item._dirty) {
                         PTE_Common_Util.cellCloseValues(args.column.field, item);
                         if (args.column.field == "REBATE_BILLING_START" || args.column.field == "REBATE_BILLING_END"
@@ -976,8 +979,8 @@ export class dealEditorComponent {
         this.setBusy("Saving your data..", "Please wait while saving data.", "Info", true);
         if (!this.in_Is_Tender_Dashboard) {//Save and Validation functionality for Contract DE screen as well as Tender Manager DE Screen
             try {
-                _.each(this.gridResult, (item) => {
-                    if ((moment(item["START_DT"]).isBefore(this.contractData.START_DT) || moment(item["END_DT"]).isAfter(this.contractData.END_DT)) && this.isDatesOverlap == false) {
+                each(this.gridResult, (item) => {
+                    if ((this.momentService.moment(item["START_DT"]).isBefore(this.contractData.START_DT) || this.momentService.moment(item["END_DT"]).isAfter(this.contractData.END_DT)) && this.isDatesOverlap == false) {
                         this.isDatesOverlap = true;
                     }
                 });
@@ -1015,7 +1018,7 @@ export class dealEditorComponent {
                 if (cashObj && cashObj.length > 0) {
                     if (this.VendorDropDownResult != null && this.VendorDropDownResult != undefined && this.VendorDropDownResult.length > 0) {
                         var customerVendor = this.VendorDropDownResult;
-                        _.each(this.gridResult, (item) => {
+                        each(this.gridResult, (item) => {
                             var partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
                             if (partnerID && partnerID.length == 1) {
                                 item.SETTLEMENT_PARTNER = partnerID[0].DROP_DOWN;
@@ -1067,7 +1070,7 @@ export class dealEditorComponent {
             if (cashObj && cashObj.length > 0) {
                 if (this.VendorDropDownResult != null && this.VendorDropDownResult != undefined && this.VendorDropDownResult.length > 0) {
                     var customerVendor = this.VendorDropDownResult;
-                    _.each(this.gridResult, (item) => {
+                    each(this.gridResult, (item) => {
                         var partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
                         if (partnerID && partnerID.length == 1) {
                             item.SETTLEMENT_PARTNER = partnerID[0].DROP_DOWN;
@@ -1113,9 +1116,9 @@ export class dealEditorComponent {
                     await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
                     let isanyWarnings = false;
                     if (this.gridResult.length != response.Data.WIP_DEAL) {
-                        _.each(this.gridResult, (item) => {
+                        each(this.gridResult, (item) => {
                             let isResponse = false;
-                            _.each(response.Data.WIP_DEAL, (wipItem) => {
+                            each(response.Data.WIP_DEAL, (wipItem) => {
                                 if (wipItem.DC_ID == item.DC_ID)
                                     isResponse = true;
                             });
@@ -1204,7 +1207,7 @@ export class dealEditorComponent {
         let atrbs = this.isTenderContract ? PTE_Config_Util.tenderDropDownAtrbs : PTE_Config_Util.contractDropDownAtrbs;
         if (this.in_Is_Tender_Dashboard)//EXCLUDE_AUTOMATION column will have dropdown which is used only in Tender Dashboard
             atrbs.push('EXCLUDE_AUTOMATION');
-        _.each(atrbs, (item) => {
+        each(atrbs, (item) => {
             let column = this.wipTemplate.columns.filter(x => x.field == item);
             if (column && column.length > 0 && column[0].lookupUrl && column[0].lookupUrl != '') {
                 let url = "";

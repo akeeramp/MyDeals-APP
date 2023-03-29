@@ -4,7 +4,7 @@ import { Component, ViewEncapsulation, Inject } from "@angular/core";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { dealProductsService } from "../dealProductsModal/dealProductsModal.service";
-import * as _ from 'underscore';
+import { each } from 'underscore';
 import { Clipboard } from '@angular/cdk/clipboard';
 
 @Component({
@@ -103,13 +103,13 @@ export class dealProductsModalComponent {
             if (this.data.dataItem._contractPublished !== undefined && this.data.dataItem._contractPublished == 1) {
                 this.prods = this.data.dataItem.products;
                 if(this.prods && this.prods.length>0){
-                    _.each(this.prods, (value) => {
+                    each(this.prods, (value) => {
                         this.prdIds.push(parseInt(value.PRD_MBR_SID));
                     });
                 }
             } else {
                 if(this.prods){
-                    _.each(this.prods, (value) => {
+                    each(this.prods, (value) => {
                         this.prdIds.push(value);
                     });
                 }

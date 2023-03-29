@@ -1,4 +1,4 @@
-﻿import * as _ from "underscore";
+﻿import { each } from 'underscore';
 import { lnavService } from "../lnav/lnav.service";
 import { logger } from "../../shared/logger/logger";
 import { lnavUtil } from '../lnav.util';
@@ -26,7 +26,6 @@ export interface contractIds {
     styleUrls: ['Client/src/app/contract/lnav/lnav.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-
 export class lnavComponent {
     constructor(private loggerSvc: logger, private lnavSvc: lnavService, private headerSvc: headerService, private contractDetailsSvc: contractDetailsService,
         private dialog: MatDialog, private router: Router, private route: ActivatedRoute) {
@@ -184,13 +183,13 @@ export class lnavComponent {
         const values = this.newStrategy;
 
         // Clear all values
-        _.each(values,
+        each(values,
             function (value, key) {
                 values._behaviors.validMsg[key] = "";
                 values._behaviors.isError[key] = false;
             });
         // Check required
-        _.each(values,
+        each(values,
             function (value, key) {
                 if (key[0] !== '_' &&
                     !Array.isArray(value) &&
@@ -285,7 +284,7 @@ export class lnavComponent {
     }
     // **** PRICING TABLE Methods ****
     clearPtTemplateIcons() {
-        _.each(this.PtDealTypes,
+        each(this.PtDealTypes,
             function (value) {
                 value._custom._active = false;
             });
@@ -302,7 +301,7 @@ export class lnavComponent {
     isValidPt(values) {
         let isValid = true;
         // Clear all values
-        _.each(values,
+        each(values,
             function (value, key) {
                 if (values._behaviors.validMsg[key]) {
                     values._behaviors.validMsg[key] = "";
@@ -311,7 +310,7 @@ export class lnavComponent {
             });
 
         //// Check required
-        _.each(values,
+        each(values,
             function (value, key) {
                 if (key[0] !== '_' &&
                     !Array.isArray(value) &&
@@ -922,7 +921,7 @@ export class lnavComponent {
     needMct = function () {
         if (!this.contractData.PRC_ST || this.contractData.PRC_ST.length === 0) return false;
         let isNeedMCT = false;
-        _.each(this.contractData.PRC_ST, (item) => {
+        each(this.contractData.PRC_ST, (item) => {
             if (item.COMP_MISSING_FLG !== "" && (item.COMP_MISSING_FLG === "1" || item.COMP_MISSING_FLG === 1)) {
                 isNeedMCT = true;
             }

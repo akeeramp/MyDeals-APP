@@ -1,6 +1,5 @@
 ﻿import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, ViewEncapsulation, Inject } from "@angular/core";
-import * as _ from 'underscore';
 
 @Component({
     selector: "tender-group-exclusion-modal",

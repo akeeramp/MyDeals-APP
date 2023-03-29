@@ -2,21 +2,20 @@ import { logger } from "../../shared/logger/logger";
 import { dsaService } from "./admin.vistex.service";
 import { Component, OnDestroy, OnInit, ViewEncapsulation } from "@angular/core";
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
-import * as moment from 'moment';
+import { MomentService } from "../../shared/moment/moment.service";
 import { GridDataResult,DataStateChangeEvent,PageSizeItem} from "@progress/kendo-angular-grid";
 import { process,State,distinct} from "@progress/kendo-data-query";
 import { FormGroup, FormControl } from "@angular/forms";
-import * as _ from 'underscore';
+import { each } from 'underscore';
 @Component({
     selector: "vistex-integration-log",
     templateUrl: 'Client/src/app/admin/vistex/admin.vistexIntegrationLog.component.html',
     styleUrls: ['Client/src/app/admin/vistex/admin.vistexIntegrationLog.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-
 export class adminVistexIntegrationLogComponent implements OnInit {
 
-    constructor(private loggerSvc: logger, private dsaService: dsaService) { }
+    constructor(private loggerSvc: logger, private dsaService: dsaService, private momentService: MomentService) { }
 
     private requestTypeList =  [];
     private selectedRequestType = {RQST_TYPE : "VISTEX_DEALS",
@@ -27,8 +26,8 @@ export class adminVistexIntegrationLogComponent implements OnInit {
     private VistexStatuses = [];
     private DealIds = "";
     private IsDealIdsValid = true;
-    private startDate: Date = new Date(moment().subtract(30, 'days').format("MM/DD/YYYY"));
-    private endDate: Date = new Date(moment().format("MM/DD/YYYY")); 
+    private startDate: Date = new Date(this.momentService.moment().subtract(30, 'days').format("MM/DD/YYYY"));
+    private endDate: Date = new Date(this.momentService.moment().format("MM/DD/YYYY")); 
     private isLoading = true;
     private showKendoAlert = false;
     private kendoAlertMsg = "";
@@ -103,10 +102,10 @@ export class adminVistexIntegrationLogComponent implements OnInit {
     }
 
     getData(){
-        this.startDate = new Date(moment(this.startDate).format("MM/DD/YYYY"));
-        this.endDate = new Date(moment(this.endDate).format("MM/DD/YYYY"));            
+        this.startDate = new Date(this.momentService.moment(this.startDate).format("MM/DD/YYYY"));
+        this.endDate = new Date(this.momentService.moment(this.endDate).format("MM/DD/YYYY"));            
                     
-        if (moment(this.startDate, "MM/DD/YYYY", true).isValid() && moment(this.endDate, "MM/DD/YYYY", true).isValid() && moment(this.startDate).isBefore(this.endDate)) {
+        if (this.momentService.moment(this.startDate, "MM/DD/YYYY", true).isValid() && this.momentService.moment(this.endDate, "MM/DD/YYYY", true).isValid() && this.momentService.moment(this.startDate).isBefore(this.endDate)) {
             if (this.selectedRequestType == undefined || this.selectedRequestType.RQST_TYPE == undefined || this.selectedRequestType.RQST_TYPE == "" || this.selectedRequestType.RQST_TYPE == null) {
                 this.showKendoAlert = true;
                 this.kendoAlertMsg = "Please Select Request Type";
@@ -116,8 +115,8 @@ export class adminVistexIntegrationLogComponent implements OnInit {
             this.isLoading = true;
             const postData = {
                 "Dealmode": this.selectedRequestType.RQST_TYPE,
-                "StartDate": moment(this.startDate).format("MM/DD/YYYY") ,
-                "EndDate": moment(this.endDate).format("MM/DD/YYYY")
+                "StartDate": this.momentService.moment(this.startDate).format("MM/DD/YYYY") ,
+                "EndDate": this.momentService.moment(this.endDate).format("MM/DD/YYYY")
             }
             this.dsaService.getVistexLogs(postData).subscribe((response)=> {
                 this.gridResult = response;
@@ -137,8 +136,8 @@ export class adminVistexIntegrationLogComponent implements OnInit {
             this.showKendoAlert = true;
             this.kendoAlertMsg = "Please provide valid";
             this.kendoBoldMsg =  " Start and End Date";
-            this.startDate = new Date(moment().subtract(30, 'days').format("MM/DD/YYYY"));
-            this.endDate = new Date(moment().format("MM/DD/YYYY"));
+            this.startDate = new Date(this.momentService.moment().subtract(30, 'days').format("MM/DD/YYYY"));
+            this.endDate = new Date(this.momentService.moment().format("MM/DD/YYYY"));
         }
     }
 
@@ -238,7 +237,7 @@ export class adminVistexIntegrationLogComponent implements OnInit {
         }
         this.dsaService.updateVistexStatusNew(postDataObj).subscribe( (response)=> {
             if (response == strTransantionId) {
-                _.each(this.gridResult.filter(x => x.RQST_SID === rqstSid), function (dataItem) {
+                each(this.gridResult.filter(x => x.RQST_SID === rqstSid), function (dataItem) {
                     dataItem.ERR_MSG = errMsg == null ? '' : errMsg;
                     dataItem.RQST_STS = rqstStatus;
                     dataItem.BTCH_ID = rqstStatus.toLowerCase() == 'pending' ? '00000000-0000-0000-0000-000000000000': dataItem.BTCH_ID;

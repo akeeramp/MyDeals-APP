@@ -1,5 +1,4 @@
 import { Component, Input } from "@angular/core";
-import * as _ from 'underscore';
 import { logger } from "../../shared/logger/logger";
 import { contractManagerservice } from "../contractManager/contractManager.service";
 import { GridUtil } from "../grid.util";

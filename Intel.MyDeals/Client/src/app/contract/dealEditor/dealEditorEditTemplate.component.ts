@@ -2,7 +2,7 @@
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 import { NgbTooltip } from "@ng-bootstrap/ng-bootstrap";
 import { PTE_Save_Util } from '../PTEUtils/PTE_Save_util';
-import * as _ from 'underscore';
+import { each } from 'underscore';
 import { TooltipDirective } from "@progress/kendo-angular-tooltip";
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
 import { TenderDashboardGridUtil } from '../tenderDashboardGrid.util';
@@ -81,7 +81,7 @@ export class dealEditorEditTemplateComponent {
             key = '20_____1';
         }
        if ((dataItem.isLinked != undefined && dataItem.isLinked) || (dataItem._parentCnt > 1 && !dataItem.isLinked)) {// if modified dataItem is linked, then modifying corresponding columns of all other linked data
-            _.each(this.in_DataSet, (item) => {
+            each(this.in_DataSet, (item) => {
                 if ((item.isLinked != undefined && item.isLinked && dataItem.isLinked) || (dataItem._parentCnt > 1 && dataItem.DC_PARENT_ID == item.DC_PARENT_ID && !dataItem.isLinked)) {
                     let value;
                     if (key != undefined && key != null && key != "" && item[field][key] != undefined && item[field][key] != null) {
@@ -162,7 +162,7 @@ export class dealEditorEditTemplateComponent {
 
     saveLinkedDataItem(dataItem: any, field: string, value: any, key: string) { // to modify the linked/selected records if Tier column is modified 
         if ((dataItem.isLinked != undefined && dataItem.isLinked) || (dataItem._parentCnt > 1 && !dataItem.isLinked)) {
-            _.each(this.in_DataSet, (item) => {
+            each(this.in_DataSet, (item) => {
                 if ((item.isLinked != undefined && item.isLinked && dataItem.isLinked) || (dataItem._parentCnt > 1 && dataItem.DC_PARENT_ID == item.DC_PARENT_ID && !dataItem.isLinked))  {
                     if (field == 'RATE' || field == 'INCENTIVE_RATE' || field == "DENSITY_RATE") {// if modified column is rate, then all dim key values needs to be copied to all other selected records
                         var keys = Object.keys(item[field])

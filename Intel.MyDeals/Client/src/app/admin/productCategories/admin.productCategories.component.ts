@@ -15,7 +15,7 @@ import {
 } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Product_categories } from "./admin.productCategories.model";
-import * as _ from "underscore";
+import { each } from 'underscore';
 import { DatePipe } from "@angular/common";
 
 @Component({
@@ -92,7 +92,7 @@ export class adminProductCategoriesComponent {
             this.productCategorySvc.getCategories()
                 .subscribe((response: Array<any>) => {
                     //as we get the CHG_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
-                    _.each(response, item => {
+                    each(response, item => {
                         item['CHG_DTM'] = this.datepipe.transform(new Date(item['CHG_DTM']), 'M/d/yyyy');
                         item['CHG_DTM'] = new Date(item['CHG_DTM']);
                     })

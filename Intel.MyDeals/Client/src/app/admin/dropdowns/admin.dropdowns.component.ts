@@ -3,7 +3,7 @@ import { logger } from "../../shared/logger/logger";
 import { dropdownService } from './admin.dropdowns.service';
 import { ui_dropdown } from "./admin.dropdowns.model";
 import { ThemePalette } from "@angular/material/core";
-import * as _ from "underscore";
+import { indexOf, filter } from 'underscore';
 import {
     GridDataResult,
     DataStateChangeEvent,
@@ -141,7 +141,7 @@ export class dropdownsComponent {
                 item => item.dropdownName
             );
         } else {
-            this.GroupData = _.filter(this.GroupData, (item) => {
+            this.GroupData = filter(this.GroupData, (item) => {
                 let id = (item.dropdownID === undefined) ? item.ATRB_SID : item.dropdownID;
                 if (this.restrictedGroupList.includes(id)) return item
             })
@@ -182,7 +182,7 @@ export class dropdownsComponent {
                 this.gridData = process(this.gridResult, this.state);
                 this.isLoading = false;
             } else {
-                this.gridResult = _.filter(this.gridResult, (item) => {
+                this.gridResult = filter(this.gridResult, (item) => {
                     let id = (item.dropdownID === undefined) ? item.ATRB_SID : item.dropdownID;
                     if (this.restrictedGroupList.includes(id)) return item
                 })
@@ -266,17 +266,17 @@ export class dropdownsComponent {
             }
         }
         else {
-            if (_.indexOf(this.distinctCustomerName, model.CUST_NM) == -1) {
+            if (indexOf(this.distinctCustomerName, model.CUST_NM) == -1) {
                 this.errorMsg = "Please Select Valid Customer Name.";
                 this.loggerSvc.error("Please Select Valid Customer Name.", "Error");
                 IS_MODEL_VALID = false;
             }
-            if (_.indexOf(this.distinctAtributeCd, model.ATRB_CD) == -1) {
+            if (indexOf(this.distinctAtributeCd, model.ATRB_CD) == -1) {
                 this.errorMsg = "Please Select Valid Attribute Code";
                 this.loggerSvc.error("Please Select Valid Attribute Code.", "Error");
                 IS_MODEL_VALID = false;
             }
-            if (_.indexOf(this.distinctSetTypeCd, model.OBJ_SET_TYPE_CD) == -1) {
+            if (indexOf(this.distinctSetTypeCd, model.OBJ_SET_TYPE_CD) == -1) {
                 this.errorMsg = "Please Select Valid Deal Type";
                 this.loggerSvc.error("Please Select Valid Deal Type.", "Error");
                 IS_MODEL_VALID = false;

@@ -3,7 +3,7 @@ import { customerVendorService } from "./admin.customerVendors.service";
 import { Component, ViewChild } from "@angular/core";
 import { Cust_Map } from "./admin.customerVendors.model";
 import { ThemePalette } from "@angular/material/core";
-import * as _ from "underscore";
+import { sortBy, uniq, pluck, findWhere, indexOf } from 'underscore';
 import {
     GridDataResult,
     DataStateChangeEvent,
@@ -93,11 +93,11 @@ export class adminCustomerVendorsComponent {
 
     distinctPrimitive(fieldName: string): any {
         if (fieldName == 'CUST_NM') {
-            return _.sortBy(_.uniq(_.pluck(this.gridResult, fieldName)));
+            return sortBy(uniq(pluck(this.gridResult, fieldName)));
         } else if (fieldName == 'BUSNS_ORG_NM') {
-            return _.sortBy(_.uniq(_.pluck(this.gridResult, fieldName)));
+            return sortBy(uniq(pluck(this.gridResult, fieldName)));
         }
-        return _.uniq(_.pluck(this.gridResult, fieldName));
+        return uniq(pluck(this.gridResult, fieldName));
     }
 
     clearFilter() {
@@ -133,7 +133,7 @@ export class adminCustomerVendorsComponent {
         })
     }
     partnerIDChange(value: any) {
-        const selPart = _.findWhere(this.vendorDetails, { VNDR_ID: value });
+        const selPart = findWhere(this.vendorDetails, { VNDR_ID: value });
         if (selPart) {
             this.formGroup.patchValue({
                 BUSNS_ORG_NM: selPart.BUSNS_ORG_NM,
@@ -149,7 +149,7 @@ export class adminCustomerVendorsComponent {
 
     }
     partnerNMChange(value: any) {
-        const selPart = _.findWhere(this.vendorDetails, { BUSNS_ORG_NM: value });
+        const selPart = findWhere(this.vendorDetails, { BUSNS_ORG_NM: value });
         if (selPart) {
             this.formGroup.patchValue({
                 BUSNS_ORG_NM: selPart.BUSNS_ORG_NM,
@@ -214,7 +214,7 @@ export class adminCustomerVendorsComponent {
             }
         }
         else {
-            if (_.indexOf(this.distinctPartner, model.BUSNS_ORG_NM) == -1) {
+            if (indexOf(this.distinctPartner, model.BUSNS_ORG_NM) == -1) {
                 this.errorMsg = "Please Select Valid Settlement Partner.";
                 retCond = true;
             }
@@ -222,11 +222,11 @@ export class adminCustomerVendorsComponent {
                 this.errorMsg = "Please Select Valid Settlement Partner ID.";
                 retCond = true;
             }
-            if (_.indexOf(this.distinctCountry, model.CTRY_CD) == -1) {
+            if (indexOf(this.distinctCountry, model.CTRY_CD) == -1) {
                 this.errorMsg = "Please Select Valid Country Code";
                 retCond = true;
             }
-            if (_.indexOf(this.distinctCust, model.CUST_NM) == -1) {
+            if (indexOf(this.distinctCust, model.CUST_NM) == -1) {
                 this.errorMsg = "Please Select Valid Customer Name";
                 retCond = true;
             }

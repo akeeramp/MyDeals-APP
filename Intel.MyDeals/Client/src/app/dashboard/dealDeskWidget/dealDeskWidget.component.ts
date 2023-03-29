@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, Input, OnChanges, OnDestroy, OnInit, SimpleChanges, ViewEncapsulation } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GridsterItem } from 'angular-gridster2';
-import * as moment from 'moment';
+import { MomentService } from "../../shared/moment/moment.service";
 
 @Component({
     selector: 'app-widget-dealdesk',
@@ -17,8 +17,10 @@ export class DealDeskWidgetComponent implements OnInit, OnDestroy, OnChanges {
     @Input() private startDt: string;
     @Input() private endDt: string;
 
-    startDate = moment().subtract(6, 'months').format("MM/DD/YYYY");
-    endDate = moment().add(6, 'months').format("MM/DD/YYYY");
+    constructor(private momentService: MomentService) {}
+
+    startDate = this.momentService.moment().subtract(6, 'months').format("MM/DD/YYYY");
+    endDate = this.momentService.moment().add(6, 'months').format("MM/DD/YYYY");
     selectedCustomerIds = '[]';
     favCntrctIds = "";
     gridFltr = "";
@@ -28,11 +30,11 @@ export class DealDeskWidgetComponent implements OnInit, OnDestroy, OnChanges {
 
     ngOnChanges(changes: SimpleChanges): void {
         if (!!changes.startDt && changes.startDt.currentValue !== undefined) {
-            this.startDate = moment(changes.startDt.currentValue).format("MM/DD/YYYY");
+            this.startDate = this.momentService.moment(changes.startDt.currentValue).format("MM/DD/YYYY");
             this.isLoading = true
         }
         if (!!changes.endDt && changes.endDt.currentValue !== undefined) {
-            this.endDate = moment(changes.endDt.currentValue).format("MM/DD/YYYY");
+            this.endDate = this.momentService.moment(changes.endDt.currentValue).format("MM/DD/YYYY");
             this.isLoading = true;
         }
         if (!!changes.custIds && changes.custIds.currentValue !== undefined) {

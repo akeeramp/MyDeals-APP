@@ -1,12 +1,11 @@
 import { Component } from "@angular/core";
 import { ActivatedRoute } from "@angular/router";
-import * as _ from "underscore";
+import { each } from 'underscore';
 
 @Component({
     selector: "global-route",
     template:''
 })
-
 export class globalRouteComponent {
     constructor(private route: ActivatedRoute) { }
     
@@ -15,7 +14,7 @@ export class globalRouteComponent {
         document.getElementsByClassName('loading-screen')[0]?.setAttribute('style', 'display:none');
         let divLoader=document.getElementsByClassName('jumbotron')
         if(divLoader&& divLoader.length>0){
-         _.each(divLoader,div=>{
+         each(divLoader,div=>{
             div.setAttribute('style', 'display:none');
          })
         }

@@ -10,11 +10,9 @@ import {
     distinct
 } from "@progress/kendo-data-query";
 import { GridDataResult } from "@progress/kendo-angular-grid";
-import * as _ from 'underscore';
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
 import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
-
 
 @Component({
     providers: [adminRulesService],
@@ -23,7 +21,6 @@ import { pricingTableEditorService } from '../../contract/pricingTableEditor/pri
     styleUrls: ['Client/src/app/admin/rules/admin.rules.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-
 export class RuleDetailsModalComponent {
     public strtDate: any;
     public endDt: any;

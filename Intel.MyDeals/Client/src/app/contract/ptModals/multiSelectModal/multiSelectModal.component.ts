@@ -1,6 +1,6 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import * as _ from "underscore";
+import { each, indexOf, map, clone } from 'underscore';
 import { Observable, of } from "rxjs";
 import { logger } from "../../../shared/logger/logger";
 import { CheckedState, CheckableSettings } from "@progress/kendo-angular-treeview";
@@ -12,7 +12,6 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
     styleUrls: ['Client/src/app/contract/ptModals/multiSelectModal/multiSelectModal.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-
 export class multiSelectModalComponent {
 
     constructor(private loggerSvc: logger,
@@ -98,7 +97,7 @@ export class multiSelectModalComponent {
                 this.multiSelectData = response;
                 if (this.colName == "DEAL_SOLD_TO_ID") {
                     this.checkedKeys = [];
-                    _.each(this.modalData.cellCurrValues, (item) => {
+                    each(this.modalData.cellCurrValues, (item) => {
                         const selecteddata = this.multiSelectData.filter(x => x[this.multiSelectPopUpModal.opLookupValue] == item);
                         if (selecteddata != undefined && selecteddata != null && selecteddata.length > 0) {
                             this.checkedKeys.push(selecteddata[0][this.multiSelectPopUpModal.opLookupText]);
@@ -124,33 +123,33 @@ export class multiSelectModalComponent {
             if (this.ismrktSeg) {
                 const selectedList = this.checkedKeys.join(",");
                 //In Market Segment Modal, selected 'All Direct Market Segments' then checkedKey is only 'All Direct Market Segments'
-                if ((_.indexOf(this.checkedKeys, 'All Direct Market Segments') > 0) || (_.indexOf(this.checkedKeys, 'All Direct Market Segments') == 0 && this.checkedKeys.length == 1)) {
+                if ((indexOf(this.checkedKeys, 'All Direct Market Segments') > 0) || (indexOf(this.checkedKeys, 'All Direct Market Segments') == 0 && this.checkedKeys.length == 1)) {
                     this.checkedKeys = ['All Direct Market Segments'];
                 }
                 else {
                     //Selected other than 'All Direct Market Segments', then 'All Direct Market Segments' must be removed from checkedkeys
-                    if (_.indexOf(this.checkedKeys, 'All Direct Market Segments') == 0) {
+                    if (indexOf(this.checkedKeys, 'All Direct Market Segments') == 0) {
                         this.checkedKeys.splice(0, 1);
                     }
                     //Selected parent Node which has child (like 'Embedded'), checkedKey will be the first childNode of the parent
-                    _.each(this.checkedKeys, (key) => {
+                    each(this.checkedKeys, (key) => {
                         const selectedData = this.multiSelectData.filter(x => x.DROP_DOWN == key);
                         if (selectedData != undefined && selectedData != null && selectedData.length > 0 && selectedData[0].items != undefined && selectedData[0].items != null && selectedData[0].items.length > 0) {
                             this.checkedKeys = [selectedData[0].items[0].DROP_DOWN];
                         }
                     });
                     //Selected any child Node under parent ('Embedded'), checkedKey will be the last selected childNode of the parent
-                    _.each(this.parentKeys, (key) => {
+                    each(this.parentKeys, (key) => {
                         if (selectedList.includes(key)) {
                             this.checkedKeys = [this.checkedKeys[this.checkedKeys.length - 1]];
                         }
                     });
-                    if (_.indexOf(this.checkedKeys, "NON Corp") >= 0) {
-                        let nonCorpIdx = _.indexOf(this.checkedKeys, "NON Corp");
+                    if (indexOf(this.checkedKeys, "NON Corp") >= 0) {
+                        let nonCorpIdx = indexOf(this.checkedKeys, "NON Corp");
                         this.checkedKeys.splice(nonCorpIdx, 1);
-                        let corpMarkSeg = _.map(this.nonCorpMarketSeg, (x) => { return x.DROP_DOWN })
-                        _.each(corpMarkSeg, (val) => {
-                            if ((_.indexOf(this.checkedKeys, val) < 0)) {
+                        let corpMarkSeg = map(this.nonCorpMarketSeg, (x) => { return x.DROP_DOWN })
+                        each(corpMarkSeg, (val) => {
+                            if ((indexOf(this.checkedKeys, val) < 0)) {
                                 this.checkedKeys.push(val);
                             }
                         })
@@ -204,38 +203,38 @@ export class multiSelectModalComponent {
 
     onMktgValueChange(event: any) {
         var index;
-        _.each(this.marketSeglist, (key) => {
+        each(this.marketSeglist, (key) => {
             if (key.items != null) {
-                index = _.indexOf(this.marketSeglist, key);
+                index = indexOf(this.marketSeglist, key);
             }
         })
-        if (_.indexOf(event, this.marketSeglist[index].DROP_DOWN) > 0 && event.length - 1 == this.marketSeglist[index].items.length) {
+        if (indexOf(event, this.marketSeglist[index].DROP_DOWN) > 0 && event.length - 1 == this.marketSeglist[index].items.length) {
             this.mkgvalues = null;
             this.multSlctMkgValues = this.mkgvalues;
         }
         else if (event && event.length > 0) {
             var selectedList = event.join(",");
-            if (_.indexOf(event, 'All Direct Market Segments') > 0 || (event.length == 1 && _.indexOf(event, 'All Direct Market Segments') == 0)) {
+            if (indexOf(event, 'All Direct Market Segments') > 0 || (event.length == 1 && indexOf(event, 'All Direct Market Segments') == 0)) {
                 this.mkgvalues = ['All Direct Market Segments'];
                 this.multSlctMkgValues = this.mkgvalues;
             }
             else {
-                if (_.indexOf(event, 'All Direct Market Segments') == 0) {
+                if (indexOf(event, 'All Direct Market Segments') == 0) {
                     this.mkgvalues.splice(0, 1);
                 }
-                _.each(this.mkgvalues, (key) => {
+                each(this.mkgvalues, (key) => {
                     var selectedData = this.marketSeglist.filter(x => x.DROP_DOWN == key);
                     if (selectedData != undefined && selectedData != null && selectedData.length > 0 && selectedData[0].items != undefined && selectedData[0].items != null && selectedData[0].items.length > 0) {
                         this.mkgvalues = [selectedData[0].items[0].DROP_DOWN];
                     }
                 });
-                _.each(this.parentKeys, (key) => {
+                each(this.parentKeys, (key) => {
                     if (selectedList.includes(key)) {
                         this.mkgvalues = [this.mkgvalues[this.mkgvalues.length - 1]];
                     }
                 });
-                if (_.indexOf(this.mkgvalues, "NON Corp") >= 0) {
-                    let corpMarkSeg = _.map(this.nonCorpMarketSeg, (x) => { return x.DROP_DOWN })
+                if (indexOf(this.mkgvalues, "NON Corp") >= 0) {
+                    let corpMarkSeg = map(this.nonCorpMarketSeg, (x) => { return x.DROP_DOWN })
                     const uncheckSMB = this.mkgvalues.filter(x => x != "SMB")
                     if (uncheckSMB.length > 0) {
                         const uncheckNonCorp = uncheckSMB.filter(x => x != "NON Corp")
@@ -244,14 +243,14 @@ export class multiSelectModalComponent {
                             corpMarkSeg = UncheckSMB;
                         }
                     }
-                    _.each(corpMarkSeg, (val) => {
-                        if ((_.indexOf(this.mkgvalues, val) < 0)) {
+                    each(corpMarkSeg, (val) => {
+                        if ((indexOf(this.mkgvalues, val) < 0)) {
                             this.mkgvalues.push(val);
                         }
                     })
                 }
-                this.multSlctMkgValues = _.clone(this.mkgvalues);
-                let nonCorpIdx = _.indexOf(this.multSlctMkgValues, "NON Corp");
+                this.multSlctMkgValues = clone(this.mkgvalues);
+                let nonCorpIdx = indexOf(this.multSlctMkgValues, "NON Corp");
                 if (nonCorpIdx != -1) {
                     this.multSlctMkgValues.splice(nonCorpIdx, 1);
                 }
@@ -268,10 +267,10 @@ export class multiSelectModalComponent {
     }
     selectAllCustomerReportedGeos() {
         this.checkedKeys = [];
-        _.each(this.multiSelectData, (parent) => {
+        each(this.multiSelectData, (parent) => {
             this.checkedKeys.push(parent[this.multiSelectPopUpModal.opLookupText]);
             if (parent.items != undefined && parent.items != null && parent.items.length > 0) {
-                _.each(parent.items, (child) => {
+                each(parent.items, (child) => {
                     this.checkedKeys.push(child[this.multiSelectPopUpModal.opLookupText]);
                 });
             }
@@ -287,7 +286,7 @@ export class multiSelectModalComponent {
     onSave(): void {
         if (this.colName == "CONSUMPTION_COUNTRY_REGION") {
             let index = 0;
-            _.each(this.checkedKeys, (key) => {
+            each(this.checkedKeys, (key) => {
                 const dataExists = this.multiSelectData.filter(x => x.DROP_DOWN == key).length > 0;
                 if (dataExists) {
                     this.checkedKeys.splice(index, 1);
@@ -298,7 +297,7 @@ export class multiSelectModalComponent {
         }
         else if (this.colName == "DEAL_SOLD_TO_ID") {
             let selectedValue = [];
-            _.each(this.checkedKeys, (key) => {
+            each(this.checkedKeys, (key) => {
                 const selecteddata = this.multiSelectData.filter(x => x[this.multiSelectPopUpModal.opLookupText] == key);
                 if (selecteddata != undefined && selecteddata != null && selecteddata.length > 0) {
                     selectedValue.push(selecteddata[0][this.multiSelectPopUpModal.opLookupValue]);
@@ -328,7 +327,7 @@ export class multiSelectModalComponent {
         if (this.isTgrRgn) {
             let elt = Array.from(document.getElementsByTagName("mat-dialog-container") as HTMLCollectionOf<HTMLElement>);
             if (elt != undefined && elt != null) {
-                _.each(elt, (item) => {
+                each(elt, (item) => {
                     item.style.backgroundColor = "#1a3e6f";
                 });
             }
@@ -356,7 +355,7 @@ export class multiSelectModalComponent {
                 }
             }
             this.multSlctMkgValues = this.mkgvalues;
-            _.each(this.marketSeglist, (key) => {
+            each(this.marketSeglist, (key) => {
                 if (key.items != undefined && key.items != null && key.items.length > 0) {
                     this.parentKeys.push(key.DROP_DOWN);
                 }

@@ -1,5 +1,5 @@
-﻿import * as _ from 'underscore';
-import * as moment from "moment";
+﻿import { each } from 'underscore';
+import { StaticMomentService } from "../../shared/moment/moment.service";
 import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
@@ -7,7 +7,7 @@ import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 export class DE_Validation_Util {
     static validateWipDeals(data, curPricingStrategy, curPricingTable, contractData, isTenderContract, lookBackPeriod, templates) {
         let restrictGroupFlexOverlap = false;
-        _.each(data, (item) => {
+        each(data, (item) => {
             PTE_Common_Util.setBehaviors(item);
         });
         this.dataConversion(data, templates);
@@ -25,7 +25,7 @@ export class DE_Validation_Util {
     static ValidateDealData(data, curPricingTable, curPricingStrategy, contractData, lookBackPeriod, isTenderContract, restrictGroupFlexOverlap) {
         var invalidFlexDate = PTE_Validation_Util.validateFlexDate(data, curPricingTable, data);
         var isShowStopperError = false;
-        _.each(data, (item) => {
+        each(data, (item) => {
             if ((item["USER_AVG_RPU"] == null || item["USER_AVG_RPU"] == "")
                 && (item["USER_MAX_RPU"] == null || item["USER_MAX_RPU"] == "")
                 && item["RPU_OVERRIDE_CMNT"] != null && item["RPU_OVERRIDE_CMNT"] !== "") {
@@ -57,33 +57,33 @@ export class DE_Validation_Util {
                 item._behaviors.validMsg['END_DT'] = "End date is required";
                 isShowStopperError = true;
             }            
-            if (moment(item["START_DT"]).isAfter(contractData.END_DT) && !isTenderContract) {
+            if (StaticMomentService.moment(item["START_DT"]).isAfter(contractData.END_DT) && !isTenderContract) {
                 item._behaviors.isError['START_DT'] = true;
-                item._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + moment(contractData.END_DT).format("MM/DD/YYYY") + ")";
+                item._behaviors.validMsg['START_DT'] = "Start date cannot be greater than the Contract End Date (" + StaticMomentService.moment(contractData.END_DT).format("MM/DD/YYYY") + ")";
                 isShowStopperError = true;
             }
 
-            if (moment(item["END_DT"]).isBefore(contractData.START_DT) && !isTenderContract) {
+            if (StaticMomentService.moment(item["END_DT"]).isBefore(contractData.START_DT) && !isTenderContract) {
                 item._behaviors.isError['END_DT'] = true;
-                item._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + moment(contractData.START_DT).format("MM/DD/YYYY") + ")";
+                item._behaviors.validMsg['END_DT'] = "End date cannot be earlier than the Contract Start Date (" + StaticMomentService.moment(contractData.START_DT).format("MM/DD/YYYY") + ")";
                 isShowStopperError = true;
             }
 
-            if (moment(item["START_DT"]).isAfter(moment(item["END_DT"])) && !isTenderContract) {
+            if (StaticMomentService.moment(item["START_DT"]).isAfter(StaticMomentService.moment(item["END_DT"])) && !isTenderContract) {
                 item._behaviors.isError['START_DT'] = true;
                 item._behaviors.validMsg['START_DT'] = "Deal Start date cannot be greater than the Deal End Date";
                 isShowStopperError = true;
             }
 
             // Remove after validation error supressing rollback is corrected
-            if (moment(item["REBATE_BILLING_START"]).isAfter(moment(item["START_DT"])) && item["PAYOUT_BASED_ON"].toUpperCase() === "CONSUMPTION") {
+            if (StaticMomentService.moment(item["REBATE_BILLING_START"]).isAfter(StaticMomentService.moment(item["START_DT"])) && item["PAYOUT_BASED_ON"].toUpperCase() === "CONSUMPTION") {
                 item._behaviors.isError['REBATE_BILLING_START'] = true;
                 item._behaviors.validMsg['REBATE_BILLING_START'] = "The Billing Start Date must be on or earlier than the Deal Start Date.";
                 isShowStopperError = true;
             }
 
             // Remove after validation error supressing rollback is corrected
-            if (moment(item["REBATE_BILLING_END"]).isAfter(moment(item["END_DT"])) && item["PAYOUT_BASED_ON"].toUpperCase() === "CONSUMPTION") {
+            if (StaticMomentService.moment(item["REBATE_BILLING_END"]).isAfter(StaticMomentService.moment(item["END_DT"])) && item["PAYOUT_BASED_ON"].toUpperCase() === "CONSUMPTION") {
                 item._behaviors.isError['REBATE_BILLING_END'] = true;
                 item._behaviors.validMsg['REBATE_BILLING_END'] = "The Billing End Date must be on or earlier than the Deal End Date.";
                 isShowStopperError = true;
@@ -103,15 +103,15 @@ export class DE_Validation_Util {
             }
 
             if (item["REBATE_BILLING_START"] !== undefined && item["REBATE_BILLING_END"] !== undefined) {
-                if(moment(item["REBATE_BILLING_START"], "MM/DD/YYYY").isValid() && moment(item["REBATE_BILLING_START"], "MM/DD/YYYY").isBefore(moment('1/1/1900',"MM/DD/YYYY"))){
+                if(StaticMomentService.moment(item["REBATE_BILLING_START"], "MM/DD/YYYY").isValid() && StaticMomentService.moment(item["REBATE_BILLING_START"], "MM/DD/YYYY").isBefore(StaticMomentService.moment('1/1/1900',"MM/DD/YYYY"))){
                     item["REBATE_BILLING_START"]=contractData.START_DT;
                     isShowStopperError = true;
                 }
-                if(moment(item["REBATE_BILLING_END"], "MM/DD/YYYY").isValid() && moment(item["REBATE_BILLING_END"], "MM/DD/YYYY").isBefore(moment('1/1/1900',"MM/DD/YYYY"))){
+                if(StaticMomentService.moment(item["REBATE_BILLING_END"], "MM/DD/YYYY").isValid() && StaticMomentService.moment(item["REBATE_BILLING_END"], "MM/DD/YYYY").isBefore(StaticMomentService.moment('1/1/1900',"MM/DD/YYYY"))){
                     item["REBATE_BILLING_END"]=contractData.END_DT;
                     isShowStopperError = true;
                 }
-                if (moment(item["REBATE_BILLING_START"], "MM/DD/YYYY").isValid() && moment(item["REBATE_BILLING_END"], "MM/DD/YYYY").isValid() && moment(item["REBATE_BILLING_START"]).isAfter(moment(item["REBATE_BILLING_END"]))) {
+                if (StaticMomentService.moment(item["REBATE_BILLING_START"], "MM/DD/YYYY").isValid() && StaticMomentService.moment(item["REBATE_BILLING_END"], "MM/DD/YYYY").isValid() && StaticMomentService.moment(item["REBATE_BILLING_START"]).isAfter(StaticMomentService.moment(item["REBATE_BILLING_END"]))) {
                     item._behaviors.isError['REBATE_BILLING_START'] = true;
                     item._behaviors.validMsg['REBATE_BILLING_START'] = "Billing Start date cannot be greater than the Billing End Date";
                     isShowStopperError = true;
@@ -145,7 +145,7 @@ export class DE_Validation_Util {
                 if (item["OBJ_SET_TYPE_CD"] == "FLEX") {
                     //Delete if there is any previous Error  messages
                     if ((invalidFlexDate || invalidFlexDate != undefined)) {
-                        _.each(invalidFlexDate, (item) => {
+                        each(invalidFlexDate, (item) => {
                                 item = PTE_Validation_Util.setFlexBehaviors(item, 'START_DT', 'invalidDate', restrictGroupFlexOverlap);
                                 isShowStopperError = true;
                         });
@@ -181,7 +181,7 @@ export class DE_Validation_Util {
 
             if (item["OBJ_SET_TYPE_CD"] == "FLEX") {
                 if ((invalidFlexDate || invalidFlexDate != undefined)) {
-                    _.each(invalidFlexDate, (item) => {
+                    each(invalidFlexDate, (item) => {
                         if (!restrictGroupFlexOverlap) {
                             item = PTE_Validation_Util.setFlexBehaviors(item, 'START_DT', 'invalidDate', restrictGroupFlexOverlap);
                             isShowStopperError = true;
@@ -211,7 +211,7 @@ export class DE_Validation_Util {
     }
 
     static dataConversion(data, templates) {
-        _.each(data, (item) => {
+        each(data, (item) => {
             if (item.QLTR_PROJECT != undefined && item.QLTR_PROJECT != null && item.QLTR_PROJECT != "")
                 item.QLTR_PROJECT = item.QLTR_PROJECT.toUpperCase();
             if (Array.isArray(item.TRGT_RGN)) item.TRGT_RGN = item.TRGT_RGN.join();
@@ -221,14 +221,14 @@ export class DE_Validation_Util {
                 if (templates.hasOwnProperty(key)) {
                     if (templates[key].type === "date") {
                         if (item[key] != undefined && item[key] != null && item[key] != "")
-                            item[key] = moment(item[key]).format("MM/DD/YYYY");
+                            item[key] = StaticMomentService.moment(item[key]).format("MM/DD/YYYY");
                     }
                 }
             }
-            if (item["ON_ADD_DT"] !== undefined) item["ON_ADD_DT"] = moment(item["ON_ADD_DT"]).format("MM/DD/YYYY");
-            if (item["REBATE_BILLING_START"] !== undefined) item["REBATE_BILLING_START"] = moment(item["REBATE_BILLING_START"]).format("MM/DD/YYYY");
-            if (item["REBATE_BILLING_END"] !== undefined) item["REBATE_BILLING_END"] = moment(item["REBATE_BILLING_END"]).format("MM/DD/YYYY");
-            if (item["LAST_REDEAL_DT"] !== undefined) item["LAST_REDEAL_DT"] = moment(item["LAST_REDEAL_DT"]).format("MM/DD/YYYY");
+            if (item["ON_ADD_DT"] !== undefined) item["ON_ADD_DT"] = StaticMomentService.moment(item["ON_ADD_DT"]).format("MM/DD/YYYY");
+            if (item["REBATE_BILLING_START"] !== undefined) item["REBATE_BILLING_START"] = StaticMomentService.moment(item["REBATE_BILLING_START"]).format("MM/DD/YYYY");
+            if (item["REBATE_BILLING_END"] !== undefined) item["REBATE_BILLING_END"] = StaticMomentService.moment(item["REBATE_BILLING_END"]).format("MM/DD/YYYY");
+            if (item["LAST_REDEAL_DT"] !== undefined) item["LAST_REDEAL_DT"] = StaticMomentService.moment(item["LAST_REDEAL_DT"]).format("MM/DD/YYYY");
         });
     }
     static validateTenderDahsboardDeals(data, templates) {

@@ -3,7 +3,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DataStateChangeEvent, GridDataResult, PageSizeItem } from "@progress/kendo-angular-grid";
 import { logger } from "../../../shared/logger/logger";
 import { managerPctservice } from "../managerPct.service";
-import * as moment from "moment";
+import { MomentService } from "../../../shared/moment/moment.service";
 import { process, State } from "@progress/kendo-data-query";
 
 @Component({
@@ -14,10 +14,12 @@ import { process, State } from "@progress/kendo-data-query";
     //To override the default css for the mat dialog and remove the extra padding then encapsulation should be set to none 
     encapsulation: ViewEncapsulation.None
 })
-
 export class pctOverrideReasonModal {
-    constructor(public dialogRef: MatDialogRef<pctOverrideReasonModal>, @Inject(MAT_DIALOG_DATA) public data, private managePctSvc: managerPctservice, private loggerSvc: logger) {
-    }
+    constructor(public dialogRef: MatDialogRef<pctOverrideReasonModal>,
+                @Inject(MAT_DIALOG_DATA) public data,
+                private managePctSvc: managerPctservice,
+                private loggerSvc: logger,
+                private momentService: MomentService) {}
     private state: State = {
         skip: 0,
         take: 25,
@@ -66,7 +68,7 @@ export class pctOverrideReasonModal {
 
     }
     getLegalExceptionsPctDetails(date){
-        const formatedDate = moment(date).format("MM-DD-YYYY");
+        const formatedDate = this.momentService.moment(date).format("MM-DD-YYYY");
         this.managePctSvc.GetLegalExceptionsPct(formatedDate).subscribe(
             (response) => {
                 for (var i = response.length - 1; i >= 0; i -= 1) {
@@ -134,5 +136,4 @@ export class pctOverrideReasonModal {
    toggleSee() {
       this.seeMore = !this.seeMore;
     }
-
 }

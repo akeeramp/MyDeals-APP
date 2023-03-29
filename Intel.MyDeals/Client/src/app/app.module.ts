@@ -50,6 +50,8 @@ import { UploadModule } from '@progress/kendo-angular-upload';
 import { NavigationModule } from "@progress/kendo-angular-navigation";
 import { TreeViewModule } from "@progress/kendo-angular-treeview";
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
+// Moment Injection
+import { MomentService, StaticMomentService } from './shared/moment/moment.service';
 
 //*********************admin components *********************
 import { adminComponents } from './modules/admin.module';
@@ -70,7 +72,7 @@ import { AppRootComponent } from './app-root.component';
 import { FooterComponent } from './shared/footer/footer.component';
 import { LoadingSpinnerComponent } from './shared/loadingSpinner/loadingspinner.component';
 import { notificationDockComponent } from './core/notification/notificationDock.component';
-import {AdminBannerComponent} from './core/adminBanner/adminBanner.component';
+import { AdminBannerComponent } from './core/adminBanner/adminBanner.component';
 import { dealPopupDockComponent } from './core/dealPopup/dealPopupDock.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { GlobalSearchComponent } from './advanceSearch/globalSearch/globalSearch.component';
@@ -136,7 +138,9 @@ import { GlobalSearchComponent } from './advanceSearch/globalSearch/globalSearch
         CurrencyPipe,
         DatePipe,
         broadCastService,
-        SecurityResolver
+        SecurityResolver,
+        MomentService,
+        StaticMomentService
     ],
     declarations: [
         AppRootComponent,
@@ -170,4 +174,4 @@ export class AppModule {
         appRef.bootstrap(dealPopupDockComponent);
         appRef.bootstrap(GlobalSearchComponent);
       }
- }
+}

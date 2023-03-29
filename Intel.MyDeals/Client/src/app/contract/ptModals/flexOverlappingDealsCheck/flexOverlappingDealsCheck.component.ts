@@ -2,7 +2,6 @@
 import { distinct, process, State } from "@progress/kendo-data-query";
 import { Component, Inject, Input } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
-import * as _ from 'underscore';
 import { PTE_Common_Util } from '../../PTEUtils/PTE_Common_util'
 
 @Component({

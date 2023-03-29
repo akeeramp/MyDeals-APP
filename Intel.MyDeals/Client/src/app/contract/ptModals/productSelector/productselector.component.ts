@@ -1,18 +1,18 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { GridDataResult, DataStateChangeEvent, PageSizeItem, SelectAllCheckboxState } from "@progress/kendo-angular-grid";
-import { distinct, process, State } from "@progress/kendo-data-query";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem, SelectAllCheckboxState } from '@progress/kendo-angular-grid';
+import { distinct, process, State } from '@progress/kendo-data-query';
 import { SelectableSettings } from '@progress/kendo-angular-treeview';
-import * as _ from "underscore";
-import * as moment from 'moment';
-import * as lodash from "lodash";
+import { each, uniq, filter, map, where, findWhere, unique } from 'underscore';
+import { MomentService } from "../../../shared/moment/moment.service";
+import { orderBy } from 'lodash-es';
 import { NgbPopoverConfig } from "@ng-bootstrap/ng-bootstrap";
-import List from "linqts/dist/src/list";
-import { productSelectorService } from "./productselector.service";
-import { logger } from "../../../shared/logger/logger";
+import List from 'linqts/dist/src/list';
+import { productSelectorService } from './productselector.service';
+import { logger } from '../../../shared/logger/logger';
 import { gridCol, ProdSel_Util } from './prodSel_Util';
-import { PTE_Common_Util } from "../../PTEUtils/PTE_Common_util";
-import { ProductBreakoutComponent } from "./productBreakout/productBreakout.component";
+import { PTE_Common_Util } from '../../PTEUtils/PTE_Common_util';
+import { ProductBreakoutComponent } from './productBreakout/productBreakout.component';
 
 @Component({
     selector: 'product-selector',
@@ -23,11 +23,12 @@ import { ProductBreakoutComponent } from "./productBreakout/productBreakout.comp
 export class ProductSelectorComponent {
 
     constructor(public dialogRef: MatDialogRef<ProductSelectorComponent>,
-            @Inject(MAT_DIALOG_DATA) public data: any,
-            public dialogService: MatDialog,
-            private prodSelService: productSelectorService,
-            private loggerService: logger,
-            popoverConfig: NgbPopoverConfig) {
+                @Inject(MAT_DIALOG_DATA) public data: any,
+                public dialogService: MatDialog,
+                private prodSelService: productSelectorService,
+                private loggerService: logger,
+                popoverConfig: NgbPopoverConfig,
+                private momentService: MomentService) {
         popoverConfig.placement = 'auto';
         popoverConfig.container = 'body';
         popoverConfig.autoClose = 'outside';
@@ -164,8 +165,8 @@ export class ProductSelectorComponent {
                     'CUST_MBR_SID': this.pricingTableRow.CUST_MBR_SID,
                     'PRD_MBR_SID': dataItem.PRD_MBR_SID,
                     'GEO_MBR_SID': this.pricingTableRow.GEO_COMBINED,
-                    'DEAL_STRT_DT': moment(this.pricingTableRow.START_DT).format("l"),
-                    'DEAL_END_DT': moment(this.pricingTableRow.END_DT).format("l"),
+                    'DEAL_STRT_DT': this.momentService.moment(this.pricingTableRow.START_DT).format("l"),
+                    'DEAL_END_DT': this.momentService.moment(this.pricingTableRow.END_DT).format("l"),
                     'getAvailable': 'N',
                     'priceCondition': priceCondition
 
@@ -236,8 +237,8 @@ export class ProductSelectorComponent {
             this.pricingTableRow.PROD_INCLDS =this.data.curRow[0].PROD_INCLDS==undefined?this.data.curPricingTable.PROD_INCLDS:this.data.curRow[0].PROD_INCLDS;
             this.pricingTableRow.OBJ_SET_TYPE_CD = this.data.curPricingTable.OBJ_SET_TYPE_CD;
             let productArray = (this.data.curRow[0].PTR_SYS_PRD).length > 0 ? JSON.parse(this.data.curRow[0].PTR_SYS_PRD) : this.data.curRow[0].PTR_SYS_PRD;
-            _.each(productArray, pdt => {
-                _.each(pdt, item => {
+            each(productArray, pdt => {
+                each(pdt, item => {
                     if (!item.EXCLUDE) {
                         this.addedProducts.push(item);
                     }
@@ -254,14 +255,14 @@ export class ProductSelectorComponent {
         this.selectedItems = []; // Clear the selected items, when user moves around drill levels
         if (this.selectedPathParts.length === 0) {
             this.showTree = false;
-            let markLevel1 = _.uniq(this.productSelectionLevels, 'MRK_LVL1');
+            let markLevel1 = uniq(this.productSelectionLevels, 'MRK_LVL1');
             //filter the items to remove empty level
-            markLevel1 = _.filter(markLevel1, (i) => {
+            markLevel1 = filter(markLevel1, (i) => {
                 return i.MRK_LVL1 != null
                     && i.MRK_LVL1 != ""
                     && i.PRD_MRK_MBR_SID != null;
             })
-            this.items = _.map(markLevel1, (i) => {
+            this.items = map(markLevel1, (i) => {
                 return {
                     name: i.MRK_LVL1,
                     allowMultiple: this.enableMultipleSelection && !(ProdSel_Util.getVerticalSelection(i.MRK_LVL1, this.selectedPathParts, this.productSelectionLevels).length > 1),
@@ -276,14 +277,14 @@ export class ProductSelectorComponent {
 
         if (this.selectedPathParts.length === 1) {
             this.showTree = false;
-            let markLevel2 = _.uniq(this.productSelectionLevels, 'MRK_LVL2');
-            markLevel2 = _.filter(markLevel2, (i) => {
+            let markLevel2 = uniq(this.productSelectionLevels, 'MRK_LVL2');
+            markLevel2 = filter(markLevel2, (i) => {
                 return i.MRK_LVL2 != null
                     && i.MRK_LVL2 != ""
                     && i.MRK_LVL1 == item.name
                     && i.PRD_MRK_MBR_SID != null;
             });
-            this.items = _.map(markLevel2, (i) => {
+            this.items = map(markLevel2, (i) => {
                 return {
                     name: i.MRK_LVL2,
                     path: '',
@@ -302,13 +303,13 @@ export class ProductSelectorComponent {
 
         if (this.selectedPathParts.length === 2) {
             this.showTree = false;
-            let markLevel2 = _.where(this.productSelectionLevels, {
+            let markLevel2 = where(this.productSelectionLevels, {
                 'MRK_LVL1': this.selectedPathParts[0].name,
                 'MRK_LVL2': item.name,
                 'PRD_ATRB_SID': 7003
             });
-            markLevel2 = _.uniq(markLevel2, 'PRD_CAT_NM');
-            this.items = _.map(markLevel2, (i) => {
+            markLevel2 = uniq(markLevel2, 'PRD_CAT_NM');
+            this.items = map(markLevel2, (i) => {
                 return {
                     name: i.PRD_CAT_NM,
                     path: i.HIER_NM_HASH, // From this level we get hierarchy to get deal products
@@ -329,8 +330,8 @@ export class ProductSelectorComponent {
             let brandName = this.productSelectionLevels.filter((i) => {
                 return i.PRD_CAT_NM == item.name && i.PRD_ATRB_SID == 7004;
             });
-            brandName = _.uniq(brandName, 'BRND_NM');
-            this.items = _.map(brandName, (i) => {
+            brandName = uniq(brandName, 'BRND_NM');
+            this.items = map(brandName, (i) => {
                 return {
                     name: i.BRND_NM,
                     path: i.HIER_NM_HASH,
@@ -348,8 +349,8 @@ export class ProductSelectorComponent {
                     return x.PRD_CAT_NM == item.name
                 });
                 if (ProdSel_Util.arrayContainsString(this.verticalsWithDrillDownLevel4, item.name)) {
-                    this.items = _.uniq(this.prdSelLvlAtrbsForCategory, 'GDM_BRND_NM');
-                    this.items = _.map(this.items, (i) => {
+                    this.items = uniq(this.prdSelLvlAtrbsForCategory, 'GDM_BRND_NM');
+                    this.items = map(this.items, (i) => {
                         return {
                             name: i.GDM_BRND_NM,
                             path: item.path,
@@ -375,8 +376,8 @@ export class ProductSelectorComponent {
                 return i.HIER_NM_HASH.startsWith(item.path) && i.PRD_ATRB_SID == 7005;
             });
 
-            familyName = _.uniq(familyName, 'FMLY_NM');
-            this.items = _.map(familyName, (i) => {
+            familyName = uniq(familyName, 'FMLY_NM');
+            this.items = map(familyName, (i) => {
                 return {
                     name: i.FMLY_NM,
                     path: i.HIER_NM_HASH,
@@ -390,19 +391,19 @@ export class ProductSelectorComponent {
             if (this.items.length == 1 && this.items[0].name == 'NA' && this.items[0].path.startsWith('CPU SvrWS NA')) { return } // Forced breakout for CPU Q-Spec items forced into products load
 
             if (this.items.length == 1 && this.items[0].name == 'NA') {
-                let drillLevel5 = _.uniq(this.prdSelLvlAtrbsForCategory, 'PRD_FMLY_TXT');
+                let drillLevel5 = uniq(this.prdSelLvlAtrbsForCategory, 'PRD_FMLY_TXT');
                 // Check if we have prd_fmly_txt
 
                 if ((drillLevel5.length == 1 && drillLevel5[0].PRD_FMLY_TXT == "") ||
                     ProdSel_Util.arrayContainsString(this.verticalsWithGDMFamlyAsDrillLevel5, drillLevel5[0].PRD_CAT_NM)) {
                     // If null or empty fall back to GDM_FMLY_NM
-                    drillLevel5 = _.uniq(this.prdSelLvlAtrbsForCategory, 'GDM_FMLY_NM');
+                    drillLevel5 = uniq(this.prdSelLvlAtrbsForCategory, 'GDM_FMLY_NM');
                     if (this.selectedPathParts[3].drillDownFilter4 != undefined && this.selectedPathParts[3].drillDownFilter4 != "Blank_GDM") {
                         drillLevel5 = drillLevel5.filter((x) => {
                             return x.GDM_BRND_NM == this.selectedPathParts[3].drillDownFilter4;
                         })
                     }
-                    this.items = _.map(drillLevel5, (i) => {
+                    this.items = map(drillLevel5, (i) => {
                         return {
                             name: i.GDM_FMLY_NM, //TODO Chane these values in db
                             path: this.items[0].path,
@@ -418,7 +419,7 @@ export class ProductSelectorComponent {
                             return x.PRD_FMLY_TXT == this.selectedPathParts[3].drillDownFilter4;
                         })
                     }
-                    this.items = _.map(drillLevel5, (i) => {
+                    this.items = map(drillLevel5, (i) => {
                         return {
                             name: i.PRD_FMLY_TXT,
                             path: this.items[0].path,
@@ -458,8 +459,8 @@ export class ProductSelectorComponent {
 
         let data = {
             "searchHash": item.path,
-            "startDate": moment(this.pricingTableRow.START_DT).format("l"),
-            "endDate": moment(this.pricingTableRow.END_DT).format("l"),
+            "startDate": this.momentService.moment(this.pricingTableRow.START_DT).format("l"),
+            "endDate": this.momentService.moment(this.pricingTableRow.END_DT).format("l"),
             "selectionLevel": selectionLevel,
             "drillDownFilter4": null,
             "drillDownFilter5": null,
@@ -505,8 +506,8 @@ export class ProductSelectorComponent {
         else {
             columns = this.gridColumnsProduct;
         }
-            _.each(columns, (item, key) => {
-                let columnValue = _.uniq(data, item.field);
+            each(columns, (item, key) => {
+                let columnValue = uniq(data, item.field);
                 if (columnValue.length == 1 && item.field !== undefined && item.field != "CheckBox" && item.field != 'MM_MEDIA_CD'
                     && item.field != 'CAP' && item.field != 'YCS2' && (columnValue[0][item.field] === "" || columnValue[0][item.field] == null
                         || columnValue[0][item.field] == 'NA')) {
@@ -517,7 +518,7 @@ export class ProductSelectorComponent {
                 }
             });
             //setting the prdSelectionkey based on which column is visible
-            if (_.findWhere(this.gridColumnsProduct, { field: 'DEAL_PRD_NM', hidden: true })) {
+            if (findWhere(this.gridColumnsProduct, { field: 'DEAL_PRD_NM', hidden: true })) {
                 this.prdSelectionkey = 'PCSR_NBR';
             }
 
@@ -551,8 +552,8 @@ export class ProductSelectorComponent {
     addWithCapForFamily(item) {
         let data = {
             "searchHash": item.path,
-            "startDate": moment(this.pricingTableRow.START_DT).format("l"),
-            "endDate": moment(this.pricingTableRow.END_DT).format("l"),
+            "startDate": this.momentService.moment(this.pricingTableRow.START_DT).format("l"),
+            "endDate": this.momentService.moment(this.pricingTableRow.END_DT).format("l"),
             "selectionLevel": 7005,
             "drillDownFilter4": null,
             "drillDownFilter5": null,
@@ -642,7 +643,7 @@ export class ProductSelectorComponent {
         } else {
             if (this.dealType !== "ECAP" && this.dealType !== "KIT") {
                 // Get unique product types
-                let existingProdTypes = _.uniq(this.addedProducts, 'PRD_CAT_NM');
+                let existingProdTypes = uniq(this.addedProducts, 'PRD_CAT_NM');
                 existingProdTypes = existingProdTypes.map((elem) => {
                     return elem.PRD_CAT_NM;
                 });
@@ -739,8 +740,8 @@ export class ProductSelectorComponent {
     showSingleProductHierarchy(product) {
         let data = {
             "searchHash": product.HIER_NM_HASH,
-            "startDate": moment(this.pricingTableRow.START_DT).format("l"),
-            "endDate": moment(this.pricingTableRow.END_DT).format("l"),
+            "startDate": this.momentService.moment(this.pricingTableRow.START_DT).format("l"),
+            "endDate": this.momentService.moment(this.pricingTableRow.END_DT).format("l"),
             "selectionLevel": product.PRD_ATRB_SID,
             "drillDownFilter4": null,
             "drillDownFilter5": null,
@@ -774,7 +775,7 @@ export class ProductSelectorComponent {
         if (this.errorMessage != "") {
             this.showSuggestions = true;
         }
-        let productCategories = _.uniq(this.productSearchValues, 'PRD_CAT_NM');
+        let productCategories = uniq(this.productSearchValues, 'PRD_CAT_NM');
 
         this.searchItems = productCategories.map((i) => {
             return {
@@ -813,11 +814,11 @@ export class ProductSelectorComponent {
     }
     selectsearchItem(item) {
         if (item.level == "VERTICAL") {
-            let markLevel = _.where(this.productSelectionLevels, {
+            let markLevel = where(this.productSelectionLevels, {
                 PRD_CAT_NM: item.name,
                 PRD_ATRB_SID: 7003,
             });
-            let markLvl2s = _.uniq(markLevel, 'MRK_LVL2');
+            let markLvl2s = uniq(markLevel, 'MRK_LVL2');
             this.searchItems = markLvl2s.map((i) => {
                 return {
                     name: i.MRK_LVL2,
@@ -833,7 +834,7 @@ export class ProductSelectorComponent {
             return;
         }
         if (item.level == "MARKLEVEL2") {
-            let markLevel1s = _.where(this.productSelectionLevels, {
+            let markLevel1s = where(this.productSelectionLevels, {
                 PRD_CAT_NM: item.vertical,
                 PRD_ATRB_SID: 7003,
                 MRK_LVL2: item.name
@@ -845,13 +846,13 @@ export class ProductSelectorComponent {
             { name: item.name },
             { name: item.vertical, path: item.verticalPath }];
 
-            let brandNames = _.where(this.productSearchValues, { 'PRD_CAT_NM': item.vertical });
+            let brandNames = where(this.productSearchValues, { 'PRD_CAT_NM': item.vertical });
             if (brandNames.length == 1 && brandNames[0].PRD_ATRB_SID == 7003) {
                 this.selectedPathParts[this.selectedPathParts.length - 1]['selected'] = true;
                 this.selectPath(this.selectedPathParts.length + 1);
                 return;
             }
-            brandNames = _.uniq(brandNames, 'BRND_NM');
+            brandNames = uniq(brandNames, 'BRND_NM');
             this.searchItems = brandNames.map((i) => {
                 return {
                     name: i.BRND_NM,
@@ -869,7 +870,7 @@ export class ProductSelectorComponent {
         if (item.level == "Brand") {
             this.selectedPathParts.push(item);
 
-            let familyNames = _.where(this.productSearchValues, {
+            let familyNames = where(this.productSearchValues, {
                 'PRD_CAT_NM': item.vertical,
                 'BRND_NM': item.name
             });
@@ -879,7 +880,7 @@ export class ProductSelectorComponent {
                 return;
             }
 
-            familyNames = _.uniq(familyNames, 'FMLY_NM');
+            familyNames = uniq(familyNames, 'FMLY_NM');
             this.searchItems = familyNames.map((i) => {
                 return {
                     name: i.FMLY_NM,
@@ -898,7 +899,7 @@ export class ProductSelectorComponent {
         if (item.level == "Family") {
             this.selectedPathParts.push(item);
             // Filter the search results based on the hierarchy
-            let products = _.where(this.productSearchValues, {
+            let products = where(this.productSearchValues, {
                 'PRD_CAT_NM': item.vertical,
                 'FMLY_NM': item.name,
                 'BRND_NM': item.brand
@@ -945,7 +946,7 @@ export class ProductSelectorComponent {
             if (item.selected) {
                 item['EXCLUDE'] = true;
                 this.excludedProducts.push(item);
-                this.excludedProducts = _.uniq(this.excludedProducts, 'PRD_MBR_SID');
+                this.excludedProducts = uniq(this.excludedProducts, 'PRD_MBR_SID');
             } else {
                 this.excludedProducts = this.excludedProducts.filter((x) => {
                     return x.PRD_MBR_SID != item.PRD_MBR_SID;
@@ -958,7 +959,7 @@ export class ProductSelectorComponent {
             if (item.selected) {
                 item['EXCLUDE'] = false;
                 this.addedProducts.push(item);
-                this.addedProducts = _.uniq(this.addedProducts, 'PRD_MBR_SID');
+                this.addedProducts = uniq(this.addedProducts, 'PRD_MBR_SID');
             } else {
                 this.addedProducts = this.addedProducts.filter((x) => {
                     return x.PRD_MBR_SID != item.PRD_MBR_SID;
@@ -968,7 +969,7 @@ export class ProductSelectorComponent {
             if (!item.selected) {
                 item['EXCLUDE'] = true;
                 this.excludedProducts.push(item);
-                this.excludedProducts = _.uniq(this.excludedProducts, 'PRD_MBR_SID');
+                this.excludedProducts = uniq(this.excludedProducts, 'PRD_MBR_SID');
             } else {
                 this.excludedProducts = this.excludedProducts.filter((x) => {
                     return x.PRD_MBR_SID != item.PRD_MBR_SID;
@@ -1020,7 +1021,7 @@ export class ProductSelectorComponent {
     onPrdChange(evt: any, field: string) {
         this.filteredState.filter.filters = [];
         if (evt && evt.length && evt.length > 0 && field) {
-            _.each(evt, itm => {
+            each(evt, itm => {
                 this.filteredState.filter.filters.push({
                     field: field,
                     operator: 'eq',
@@ -1072,9 +1073,9 @@ export class ProductSelectorComponent {
         this.curRowIssues = [];
         this.curRowCategories = [];
         this.curRowLvl = [];
-        let suggestions = _.unique(this.suggestedProducts, 'USR_INPUT');
+        let suggestions = unique(this.suggestedProducts, 'USR_INPUT');
         for (let x = 0; x < suggestions.length; x++) {
-            let prods = _.where(this.suggestedProducts, { 'USR_INPUT': suggestions[x].USR_INPUT });
+            let prods = where(this.suggestedProducts, { 'USR_INPUT': suggestions[x].USR_INPUT });
             let cnt = prods.length;
             this.curRowIssues.push({
                 "id": x,
@@ -1085,7 +1086,7 @@ export class ProductSelectorComponent {
                 "cnt": cnt
             });
         }
-        let curRowCategories = _.unique(this.suggestedProducts, 'PRD_CAT_NM');
+        let curRowCategories = unique(this.suggestedProducts, 'PRD_CAT_NM');
         for (let x = 0; x < curRowCategories.length; x++) {
             this.curRowCategories.push({
                 "id": x,
@@ -1094,7 +1095,7 @@ export class ProductSelectorComponent {
                 "selected": false
             });
         }
-        let curRowLvl = _.unique(this.suggestedProducts, 'PRD_ATRB_SID');
+        let curRowLvl = unique(this.suggestedProducts, 'PRD_ATRB_SID');
         for (let x = 0; x < curRowLvl.length; x++) {
             this.curRowLvl.push({
                 "id": x,
@@ -1224,7 +1225,7 @@ export class ProductSelectorComponent {
         const numberOfValidItem = (this.isTender == true && this.dealType === "ECAP" && this.splitProducts != true) ? 1 : 10; //Added Tender ECAP Rules
         if (this.dealType !== "ECAP" && this.dealType !== "KIT") {
             // Get unique product types
-            let existingProdTypes = _.uniq(this.addedProducts, 'PRD_CAT_NM');
+            let existingProdTypes = uniq(this.addedProducts, 'PRD_CAT_NM');
             existingProdTypes = existingProdTypes.map((elem) => {
                 return elem.PRD_CAT_NM;
             });
@@ -1317,7 +1318,7 @@ export class ProductSelectorComponent {
 
         let pricingTableSysProducts = {};
 
-        _.each(this.addedProducts, function (item, key) {
+        each(this.addedProducts, function (item, key) {
             if (!Object.hasOwnProperty.call(pricingTableSysProducts, item.USR_INPUT)) {
                 pricingTableSysProducts[item.USR_INPUT] = [item];
             } else if (this.dealType === "KIT") {
@@ -1330,7 +1331,7 @@ export class ProductSelectorComponent {
             }
         });
 
-        _.each(this.excludedProducts, function (item, key) {
+        each(this.excludedProducts, function (item, key) {
             if (!Object.hasOwnProperty.call(pricingTableSysProducts, item.USR_INPUT)) {
                 pricingTableSysProducts[item.USR_INPUT] = [item];
             } else {
@@ -1384,7 +1385,7 @@ export class ProductSelectorComponent {
 
         let filtered = items;
         // L1 products will be primary irrespective of CAP and CPU/CS. Within L1 products with highest CAP will be primary. This applies to L2 as well.
-        filtered = lodash.orderBy(filtered, ['-HAS_L1', '-HAS_L2', parseFloat(items)]);
+        filtered = orderBy(filtered, ['-HAS_L1', '-HAS_L2', parseFloat(items)]);
         return filtered;
     }
     parseFloat(product) {

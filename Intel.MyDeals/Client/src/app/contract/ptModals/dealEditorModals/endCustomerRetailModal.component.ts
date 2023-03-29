@@ -2,7 +2,7 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, ViewEncapsulation, Inject } from "@angular/core";
 import { pricingTableEditorService } from "../../pricingTableEditor/pricingTableEditor.service"
-import * as _ from 'underscore';
+import { each } from 'underscore';
 
 @Component({
     selector: "end-customer-retail",
@@ -264,7 +264,7 @@ export class endCustomerRetailModalComponent {
             }
         }
 
-        _.each(ctryValues, (item, i) => {
+        each(ctryValues, (item, i) => {
             //Embargo Country/Region validation alert.
             var embCtry = this.showEmbAlert(this.embValidationMsg, item, 'ok');
             if (embCtry) {
@@ -288,7 +288,7 @@ export class endCustomerRetailModalComponent {
                 this.END_CUST_OBJ = res;
                 this.validateFlag = false;
                 var i = 0;
-                _.each(this.END_CUST_OBJ, (item) => {
+                each(this.END_CUST_OBJ, (item) => {
                     var responsedata = this.END_CUST_OBJ.filter(x => x.PRIMED_CUST_ID != null && x.PRIMED_CUST_ID != "" && x.PRIMED_CUST_ID == item.PRIMED_CUST_ID && x.PRIMED_CUST_CNTRY == item.PRIMED_CUST_CNTRY);
                     if (responsedata.length > 1) {
                         this.validateFlag = true;
@@ -332,7 +332,7 @@ export class endCustomerRetailModalComponent {
     validateDuplicateEntry(i, ecVal, ctryVal) {
         var duplicateIndex = 0;
         var rowError = false;
-        _.each(this.END_CUST_OBJ, (item) => {
+        each(this.END_CUST_OBJ, (item) => {
             if (i != duplicateIndex && item.END_CUSTOMER_RETAIL.toUpperCase() == ecVal.toUpperCase() && item.PRIMED_CUST_CNTRY == ctryVal) {
                 this.isError = true;
                 this.validateFlag = true;
@@ -582,7 +582,7 @@ export class endCustomerRetailModalComponent {
                     }
                 }
             }
-            _.each(this.END_CUST_OBJ, (item) => {
+            each(this.END_CUST_OBJ, (item) => {
                 //Embargo Country/Region validation alert.
                 if (item.END_CUSTOMER_RETAIL === endCustomer && item.PRIMED_CUST_CNTRY === dataElement.PRIMED_CUST_CNTRY) {
                     this.showEmbAlert(this.embValidationMsg, item, 'ok');

@@ -1,14 +1,12 @@
 ﻿import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { distinct } from "@progress/kendo-data-query";
-import * as _ from "underscore";
+import { sortBy } from 'underscore';
 
 @Component({
     selector: "pct-query-builder-angular",
     templateUrl: "Client/src/app/admin/iCostProducts/directive/pct.queryBuilder.directive.html",
     styleUrls: ['Client/src/app/admin/iCostProducts/admin.iCostProducts.component.css']
 })
-
-
 export class pctQueryBuilderComponent {
 
     constructor() { }
@@ -28,7 +26,7 @@ export class pctQueryBuilderComponent {
     private origAttrList: Array<any> = [];
 
     addCondition() {
-        this.attrList = _.sortBy(distinct(this.leftValues, "ATRB_COL_NM"),"DISPLAYNAME");
+        this.attrList = sortBy(distinct(this.leftValues, "ATRB_COL_NM"),"DISPLAYNAME");
         this.group.rules.push({
             condition: '=',
             criteria: '',
@@ -84,7 +82,7 @@ export class pctQueryBuilderComponent {
             }
         });
 
-        this.origAttrValueList = this.attrValueList = _.sortBy(this.attrValueList,"VALUE");
+        this.origAttrValueList = this.attrValueList = sortBy(this.attrValueList,"VALUE");
         
     }
 

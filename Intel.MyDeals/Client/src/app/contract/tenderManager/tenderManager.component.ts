@@ -6,7 +6,7 @@ import { templatesService } from "../../shared/services/templates.service";
 import { contractDetailsService } from "../contractDetails/contractDetails.service";
 import { dealEditorComponent } from "../dealEditor/dealEditor.component"
 import { pricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
-import * as _ from "underscore";
+import { each } from 'underscore';
 import { performanceBarsComponent } from "../performanceBars/performanceBar.component";
 import { ActivatedRoute, Router } from "@angular/router";
 
@@ -15,7 +15,6 @@ import { ActivatedRoute, Router } from "@angular/router";
     templateUrl: "Client/src/app/contract/tenderManager/tenderManager.component.html",
     styleUrls: ["Client/src/app/contract/tenderManager/tenderManager.component.css"]
 })
-
 export class tenderManagerComponent {
     @ViewChild(pricingTableEditorComponent) private pteComp: pricingTableEditorComponent;
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
@@ -467,18 +466,17 @@ export class tenderManagerComponent {
     ngAfterViewInit() {
         //this functionality will enable when dashboard landing to this page
         const loaders = document.getElementsByClassName('loading-screen');
-        _.each(loaders, item => {
+        each(loaders, item => {
             item.setAttribute('style', 'display:none');
         })
        // document.getElementsByClassName('loading-screen')[0]?.setAttribute('style', 'display:none');
         const divLoader = document.getElementsByClassName('jumbotron')
         if (divLoader && divLoader.length > 0) {
-            _.each(divLoader, div => {
+            each(divLoader, div => {
                 div.setAttribute('style', 'display:none');
             })
         }
         //this functionality will disable anything of .net ifloading to stop when dashboard landing to this page
         document.getElementById('mainBody')?.setAttribute('style', 'display:none');
     }
-
 }

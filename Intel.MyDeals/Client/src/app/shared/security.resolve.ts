@@ -1,10 +1,8 @@
 ﻿import { Injectable } from '@angular/core';
 import { Resolve, Router } from '@angular/router';
 import { Observable, of } from 'rxjs'; 
-import * as _ from 'underscore';
+import { each } from 'underscore';
 import { SecurityService } from './services/security.service';
-
-
 
 @Injectable()
 export class SecurityResolver implements Resolve<Observable<any>> {
@@ -13,7 +11,7 @@ export class SecurityResolver implements Resolve<Observable<any>> {
     async resolve(): Promise<Observable<any>> {
 
         //this route code is temporary and it will be removed once move as a standalone application
-        _.each(this.router.config, (route) => {
+        each(this.router.config, (route) => {
             const routeobj = route.data.BaseHref + '#/';
             if (route.path == '/' || route.path == '')
                 route.path ='Dashboard#/'

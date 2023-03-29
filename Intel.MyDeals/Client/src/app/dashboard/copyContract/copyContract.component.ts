@@ -4,7 +4,7 @@ import { GridStatusBoardService } from "../../core/gridStatusBoard/gridStatusBoa
 import { logger } from "../../shared/logger/logger";
 import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
-import * as moment from 'moment';
+import { MomentService } from "../../shared/moment/moment.service";
 import { contractStatusWidgetService } from '../contractStatusWidget.service';
 
 export interface DialogData {
@@ -13,7 +13,6 @@ export interface DialogData {
     selectedCustIds: any;
 }
 
-
 @Component({
     providers: [GridStatusBoardService],
     selector: "copy-contract",
@@ -21,18 +20,19 @@ export interface DialogData {
     styleUrls: ['Client/src/app/dashboard/copyContract/copyContract.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-
 export class CopyContractComponent {
-    constructor(public dialogRef: MatDialogRef<CopyContractComponent>, private loggerSvc: logger,
-        @Inject(MAT_DIALOG_DATA) public data: DialogData, private dataService: GridStatusBoardService, private ctrctWdgtSvc: contractStatusWidgetService) {
-
-    }
+    constructor(public dialogRef: MatDialogRef<CopyContractComponent>,
+                private loggerSvc: logger,
+                @Inject(MAT_DIALOG_DATA) public data: DialogData,
+                private dataService: GridStatusBoardService,
+                private ctrctWdgtSvc: contractStatusWidgetService,
+                private momentService: MomentService) {}
 
     private isCopyCntrctListLoaded = false;
     private copyCntrctCustomerName = '<All>';
     private copyCntrctSelectedItem = {};
-    private copyCntrctStartDate = moment(this.data.startDate).format("MM/DD/YYYY");
-    private copyCntrctEndDate = moment(this.data.endDate).format("MM/DD/YYYY");
+    private copyCntrctStartDate = this.momentService.moment(this.data.startDate).format("MM/DD/YYYY");
+    private copyCntrctEndDate = this.momentService.moment(this.data.endDate).format("MM/DD/YYYY");
     private includeTenders = true;
     private selectedCustomerIds: Array<any> = [];
     private copyCntrctList: any;

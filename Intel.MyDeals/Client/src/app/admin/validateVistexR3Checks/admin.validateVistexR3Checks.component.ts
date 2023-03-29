@@ -3,10 +3,8 @@ import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/ke
 import { process, State, distinct } from "@progress/kendo-data-query"; /*GroupDescriptor,*/
 import { logger } from "../../shared/logger/logger";
 import { ValidateVistexR3ChecksService } from './admin.validateVistexR3Checks.service';
-import { any } from "underscore";
-import * as _ from "underscore";
+import { any, pluck } from 'underscore';
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
-
 
 @Component({
     selector: "validate-vistex-checks",
@@ -174,7 +172,7 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
             this.vldtVstxR3ChkSvc.getVistexCustomersMapList(data).subscribe(response => {
                 this.Results = response.R3CutoverResponses;
                 this.GoodToSendResults = response.R3CutoverResponsePassedDeals;
-                let goodToSendDealIds = _.pluck(this.GoodToSendResults, 'Deal_Id');
+                let goodToSendDealIds = pluck(this.GoodToSendResults, 'Deal_Id');
                 this.GoodToSendDealIds = goodToSendDealIds.toString();
 
                 this.UpdCnt.sent = sentDeals;

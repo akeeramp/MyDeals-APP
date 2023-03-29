@@ -4,8 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { addWidgetComponent } from "../addWidget/addWidget.component";
 import { widgetSettingsComponent } from "../widgetSettings/widgetSettings.component";
 import { configWidgets, configLayouts } from "../widget.config";
-import * as _ from "underscore";
-import * as moment from 'moment';
+import { findWhere, each } from 'underscore';
+import { MomentService } from "../../shared/moment/moment.service";
 import { contractStatusWidgetService } from '../contractStatusWidget.service';
 import { GlobalSearchResultsComponent } from "../../advanceSearch/globalSearchResults/globalSearchResults.component";
 import { userPreferencesService } from "../../shared/services/userPreferences.service";
@@ -17,6 +17,7 @@ interface Item {
     text: string;
     value: number;
 }
+
 @Component({
     selector: 'app-dashboard',
     templateUrl: 'Client/src/app/dashboard/dashboard/dashboard.component.html',
@@ -25,14 +26,19 @@ interface Item {
     encapsulation: ViewEncapsulation.None
 })
 export class DashboardComponent implements OnInit {
-    constructor(protected dialog: MatDialog, protected cntrctWdgtSvc: contractStatusWidgetService, protected usrPrfrncssvc: userPreferencesService, protected loggerSvc: logger,private securitySVC:SecurityService) {}
+    constructor(protected dialog: MatDialog,
+                protected cntrctWdgtSvc: contractStatusWidgetService,
+                protected usrPrfrncssvc: userPreferencesService,
+                protected loggerSvc: logger,
+                private securitySVC: SecurityService,
+                private momentService: MomentService) {}
     dashboard: GridsterItem[];
     resizeEvent: EventEmitter<GridsterItem> = new EventEmitter<GridsterItem>();
     @ViewChild(GlobalSearchResultsComponent) GlobalSearchResults: GlobalSearchResultsComponent;
     @Output() refreshEvent = new EventEmitter<any>();
 
-    private startDateValue: Date = new Date(moment().subtract(6, 'months').format("MM/DD/YYYY"));
-    private endDateValue: Date = new Date(moment().add(6, 'months').format("MM/DD/YYYY"));
+    private startDateValue: Date = new Date(this.momentService.moment().subtract(6, 'months').format("MM/DD/YYYY"));
+    private endDateValue: Date = new Date(this.momentService.moment().add(6, 'months').format("MM/DD/YYYY"));
     //using for kendo-window  search option
     private searchText = "";
     private opType = "ALL";
@@ -134,7 +140,7 @@ export class DashboardComponent implements OnInit {
         });
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
-                let widgetdet = _.findWhere(configWidgets, { type: result });
+                let widgetdet = findWhere(configWidgets, { type: result });
                 if (widgetdet) {
                     const widget = JSON.parse(JSON.stringify(widgetdet))
                     if (widget.canAdd) {
@@ -177,7 +183,7 @@ export class DashboardComponent implements OnInit {
             this.loggerSvc.error("Unable to get Widget Data","Error",err);
         });
         if (response && response.length > 0) {
-            const savedWidgetSettingsForSpecifiedRole = _.findWhere(response, { PRFR_KEY: "1" });
+            const savedWidgetSettingsForSpecifiedRole = findWhere(response, { PRFR_KEY: "1" });
             if (savedWidgetSettingsForSpecifiedRole) {
                 this.savedWidgetSettings = JSON.parse(savedWidgetSettingsForSpecifiedRole.PRFR_VAL);
             }
@@ -214,7 +220,7 @@ export class DashboardComponent implements OnInit {
 
         if (useSavedWidgetSettings && this.savedWidgetSettings.length > 0) {
             for (let i = 0; i < this.savedWidgetSettings.length; i++) {
-                let widgetdet = _.findWhere(configWidgets, { id: this.savedWidgetSettings[i].id });
+                let widgetdet = findWhere(configWidgets, { id: this.savedWidgetSettings[i].id });
                 if (widgetdet) {
                     const widget = JSON.parse(JSON.stringify(widgetdet))
                     widget.name = this.savedWidgetSettings[i].name;
@@ -237,12 +243,12 @@ export class DashboardComponent implements OnInit {
             }
         }
         else {
-            let defaultLayout = _.findWhere(configLayouts, { id: key });
+            let defaultLayout = findWhere(configLayouts, { id: key });
             if (defaultLayout) {
                 const defLayout = JSON.parse(JSON.stringify(defaultLayout));
                 const defWidget = defLayout.widgets;
                 for (let i = 0; i < defWidget.length; i++) {
-                    let widgetdet = _.findWhere(configWidgets, { id: defWidget[i].id });
+                    let widgetdet = findWhere(configWidgets, { id: defWidget[i].id });
                     if (widgetdet) {
                         const widget = JSON.parse(JSON.stringify(widgetdet))
                         if (widget.position == null) {
@@ -396,7 +402,7 @@ export class DashboardComponent implements OnInit {
         document.getElementsByClassName('loading-screen')[0]?.setAttribute('style', 'display:none');
         let divLoader=document.getElementsByClassName('jumbotron')
         if(divLoader&& divLoader.length>0){
-        _.each(divLoader,div=>{
+        each(divLoader,div=>{
             div.setAttribute('style', 'display:none');
         })
         }
@@ -443,5 +449,4 @@ export class DashboardComponent implements OnInit {
             $("#height-grids").removeClass("sum-fixes-plus");
         }
     }
-
 }

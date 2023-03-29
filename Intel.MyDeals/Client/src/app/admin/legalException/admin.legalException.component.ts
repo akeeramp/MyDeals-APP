@@ -1,6 +1,6 @@
 ﻿import {  Component } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
- import * as _moment from "moment";
+import { MomentService } from "../../shared/moment/moment.service";
 import { DataStateChangeEvent, GridDataResult, PageSizeItem } from "@progress/kendo-angular-grid";
 import { State } from "@progress/kendo-data-query";
 import { process, distinct } from "@progress/kendo-data-query";
@@ -14,14 +14,11 @@ import { DatePipe, formatDate } from '@angular/common';
 import { adminDownloadExceptionscomponent } from "./admin.downloadExceptions.component"
 import { adminviewDealListcomponent } from "./admin.viewDealList.component";
 
-const moment = _moment;
-
 @Component({
     selector: "admin-legal-exception",
     templateUrl: "Client/src/app/admin/legalException/admin.legalException.component.html",
     styleUrls: ['Client/src/app/admin/legalException/admin.legalException.component.css']
 })
-
 export class adminlegalExceptionComponent {
     public isVirtual = true;
     public gridData: GridDataResult;
@@ -81,9 +78,11 @@ export class adminlegalExceptionComponent {
         }
     ];
 
-    constructor(private loggersvc: logger, private adminlegalExceptionSrv: adminlegalExceptionService,
-         protected dialog: MatDialog,
-        private datePipe: DatePipe) { }
+    constructor(private loggersvc: logger,
+                private adminlegalExceptionSrv: adminlegalExceptionService,
+                protected dialog: MatDialog,
+                private datePipe: DatePipe,
+                private momentService: MomentService) { }
 
     loadlegalException() {
          if ((<any>window).usrRole != 'SA' && !(<any>window).isDeveloper &&  (<any>window).usrRole != 'Legal' ) {
@@ -262,7 +261,7 @@ export class adminlegalExceptionComponent {
                             if (returnVal != undefined && returnVal != "close") {
                                 const today = new Date();
                                 returnVal.VER_NBR = returnVal.VER_NBR + 1;
-                                returnVal.VER_CRE_DTM = moment(today).format("l");
+                                returnVal.VER_CRE_DTM = this.momentService.moment(today).format("l");
                                 this.adminlegalExceptionSrv.updateLegalException(returnVal).subscribe((result: Array<any>) => {
                                     this.loggersvc.success('Legal Exception added.');
                                 }, (error) => {
@@ -440,11 +439,11 @@ export class adminlegalExceptionComponent {
 
     savedateformate(item: any) {
         if (item != undefined) {
-            item.DT_APRV = moment(item.DT_APRV).format("l");
-            item.CHG_DTM = moment(item.CHG_DTM).format("l");
-            item.PCT_LGL_EXCPT_STRT_DT = moment(item.PCT_LGL_EXCPT_STRT_DT).format("l");
-            item.PCT_LGL_EXCPT_END_DT = moment(item.PCT_LGL_EXCPT_END_DT).format("l");
-            item.VER_CRE_DTM = moment(item.VER_CRE_DTM).format("l");
+            item.DT_APRV = this.momentService.moment(item.DT_APRV).format("l");
+            item.CHG_DTM = this.momentService.moment(item.CHG_DTM).format("l");
+            item.PCT_LGL_EXCPT_STRT_DT = this.momentService.moment(item.PCT_LGL_EXCPT_STRT_DT).format("l");
+            item.PCT_LGL_EXCPT_END_DT = this.momentService.moment(item.PCT_LGL_EXCPT_END_DT).format("l");
+            item.VER_CRE_DTM = this.momentService.moment(item.VER_CRE_DTM).format("l");
         }
     }
 
@@ -483,10 +482,10 @@ export class adminlegalExceptionComponent {
                 if (this.filterDataChildGrid[i].VER_NBR == dataItem.VER_NBR) {
                     this.filterDataChildGrid[i].IS_SELECTED = true;
                     this.filterDataChildGrid[i].IS_ChildGrid = true;
-                    this.filterDataChildGrid[i].PCT_LGL_EXCPT_STRT_DT = moment(dataItem.PCT_LGL_EXCPT_STRT_DT).format("l");
-                    this.filterDataChildGrid[i].PCT_LGL_EXCPT_END_DT = moment(dataItem.PCT_LGL_EXCPT_END_DT).format("l");
-                    this.filterDataChildGrid[i].DT_APRV = moment(dataItem.DT_APRV).format("l");
-                    this.filterDataChildGrid[i].CHG_DTM = moment(dataItem.CHG_DTM).format("l");
+                    this.filterDataChildGrid[i].PCT_LGL_EXCPT_STRT_DT = this.momentService.moment(dataItem.PCT_LGL_EXCPT_STRT_DT).format("l");
+                    this.filterDataChildGrid[i].PCT_LGL_EXCPT_END_DT = this.momentService.moment(dataItem.PCT_LGL_EXCPT_END_DT).format("l");
+                    this.filterDataChildGrid[i].DT_APRV = this.momentService.moment(dataItem.DT_APRV).format("l");
+                    this.filterDataChildGrid[i].CHG_DTM = this.momentService.moment(dataItem.CHG_DTM).format("l");
                 }
             }
         }

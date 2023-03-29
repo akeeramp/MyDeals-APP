@@ -12,9 +12,9 @@ import { MatDialog } from "@angular/material/dialog";
 import { GridUtil } from "../grid.util";
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
 import { dealProductsModalComponent } from "../ptModals/dealProductsModal/dealProductsModal.component";
-import * as _ from 'underscore';
+import { each } from 'underscore';
 import { PTE_Common_Util } from "../PTEUtils/PTE_Common_util";
-import * as moment from "moment";
+import { MomentService } from "../../shared/moment/moment.service";
 
 @Component({
     selector: "all-deals",
@@ -22,10 +22,13 @@ import * as moment from "moment";
     styleUrls: ["Client/src/app/contract/allDeals/allDeals.component.css"],
     encapsulation: ViewEncapsulation.None
 })
-
 export class allDealsComponent {
     allColumns: any[];
-    constructor(private allDealsSvc: allDealsService, private loggerSvc: logger, private lnavSvc: lnavService, protected dialog: MatDialog) {
+    constructor(private allDealsSvc: allDealsService,
+                private loggerSvc: logger,
+                private lnavSvc: lnavService,
+                protected dialog: MatDialog,
+                private momentService: MomentService) {
         this.allData = this.allData.bind(this);
     }
     @Input() contractData: any;
@@ -169,7 +172,7 @@ export class allDealsComponent {
                         deals = this.gridResult;
                     }
                     else {
-                        _.each(this.gridResult, (item) => {
+                        each(this.gridResult, (item) => {
                             if (item.OBJ_SET_TYPE_CD == group[0].dealType)
                                 deals.push(item);
                         });
@@ -306,7 +309,7 @@ export class allDealsComponent {
                 let val = item.WF_STG_CD === "Draft" ? item.PS_WF_STG_CD : item.WF_STG_CD;
                 return { Text: val, Value: item[fieldName] };
             }
-            if (moment(item[fieldName], "MM/DD/YYYY", true).isValid()) {
+            if (this.momentService.moment(item[fieldName], "MM/DD/YYYY", true).isValid()) {
                 return { Text: new Date(item[fieldName]).toString(), Value: item[fieldName] };
             }
             else if (item[fieldName] != undefined && item[fieldName] != null)
@@ -405,7 +408,7 @@ export class allDealsComponent {
             };
         }
         else {
-            _.each(this.gridResult, (item) => {
+            each(this.gridResult, (item) => {
                 if (item.OBJ_SET_TYPE_CD == group[0].dealType)
                     deals.push(item);
             });
@@ -506,8 +509,5 @@ export class allDealsComponent {
             this.loggerSvc.error('Something went wrong', 'Error');
             console.error('AllDeals::ngOnInit::',ex);
         }
-       
     }
-
 }
-

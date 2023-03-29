@@ -1,5 +1,5 @@
 import Handsontable from 'handsontable';
-import * as _ from 'underscore';
+import { each } from 'underscore';
 
 export class SelectEditor extends Handsontable.editors.SelectEditor {
   private select:HTMLSelectElement
@@ -14,7 +14,7 @@ export class SelectEditor extends Handsontable.editors.SelectEditor {
   setValue(value) {
     console.log('SelectEditor******setValue*****',value);
     let selected = [];
-    _.each(this.select.options,(item)=>{
+    each(this.select.options,(item)=>{
       if(item.selected){
         selected.push(item.text);
       }

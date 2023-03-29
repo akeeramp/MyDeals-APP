@@ -7,10 +7,10 @@ import { ThemePalette } from "@angular/material/core";
 import { lnavService } from "../lnav/lnav.service";
 import { headerService } from "../../shared/header/header.service";
 import { contractManagerservice } from "../contractManager/contractManager.service";
-import * as moment from "moment";
+import { MomentService } from "../../shared/moment/moment.service";
 import { excludeDealGroupModalDialog } from "../managerExcludeGroups/excludeDealGroupModal.component";
 import { MatDialog } from "@angular/material/dialog";
-import * as _ from 'underscore';
+import { each } from 'underscore';
 import { tenderGroupExclusionModalComponent } from "../ptModals/tenderDashboardModals/tenderGroupExclusionModal.component";
 
 export interface contractIds {
@@ -29,15 +29,18 @@ export interface contractIds {
     styleUrls: ['Client/src/app/contract/managerPct/managerPct.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-
 export class managerPctComponent {
     isRunning: boolean;
     contractId: string;
     lastRun: any;
     refreshPage: boolean;
-    constructor(private loggerSvc: logger,protected dialog: MatDialog, private contractManagerSvc:contractManagerservice,private managerPctSvc: managerPctservice, private lnavSvc: lnavService, private headerSvc: headerService) {
-       
-    }
+    constructor(private loggerSvc: logger,
+                protected dialog: MatDialog,
+                private contractManagerSvc:contractManagerservice,
+                private managerPctSvc: managerPctservice,
+                private lnavSvc: lnavService,
+                private headerSvc: headerService,
+                private momentService: MomentService) {}
     //public view: GridDataResult;
     public isLoading: boolean;
     private color: ThemePalette = 'primary';
@@ -155,7 +158,7 @@ export class managerPctComponent {
                         this.parentGridData[pt.DC_ID] = JSON.parse(JSON.stringify(this.gridData));
                         this.parentGridResult[pt.DC_ID] = JSON.parse(JSON.stringify(this.parentGridData[pt.DC_ID]));
                         let parentData:any = distinct(this.gridData, "DEAL_ID");
-                        _.each(parentData, (item) => {
+                        each(parentData, (item) => {
                             item["PRC_CST_TST_STS"] = rollupPCTStatus[item["DEAL_ID"]];
                         });
                         this.state[pt.DC_ID].take = parentData.length;
@@ -179,7 +182,7 @@ export class managerPctComponent {
         this.parentGridData[id] = parentfilter.data;
         this.gridDataSet[id] = process(this.gridResult[id].data, this.state[id]);
         if (parentfilter.data.length > 0 && this.gridDataSet[id].data.length <= 0) {
-            _.each(parentfilter.data, (item) => {
+            each(parentfilter.data, (item) => {
                 let data = this.gridResult[id].data.filter(x => x.DEAL_ID == item.DEAL_ID);
                 if (data && data.length > 0) {
                     this.gridDataSet[id].data.push(item);
@@ -260,13 +263,13 @@ export class managerPctComponent {
 
             // Get local time in UTC
             var currentTime = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
-            var localTime = moment(currentTime).format("MM/DD/YY HH:mm:ss");
+            var localTime = this.momentService.moment(currentTime).format("MM/DD/YY HH:mm:ss");
             // Get server time from a PST time string... manually convert it to UTC
-            var lastruntime = moment(this.lastRun);
+            var lastruntime = this.momentService.moment(this.lastRun);
 
             var serverPstTime = lastruntime.format("MM/DD/YY HH:mm:ss");
 
-            var timeDiff = moment.duration(moment(serverPstTime).diff(moment(localTime)));
+            var timeDiff = this.momentService.moment.duration(this.momentService.moment(serverPstTime).diff(this.momentService.moment(localTime)));
             var hh = Math.abs(timeDiff.asHours());
             var mm = Math.abs(timeDiff.asMinutes());
             var ss = Math.abs(timeDiff.asSeconds());
@@ -484,7 +487,7 @@ export class managerPctComponent {
     updateTitleFilter() {
         if (this.titleFilter != "") {
             this.pricingStrategyFilter = [];
-            _.each(this.contractData.PRC_ST, (item) => {
+            each(this.contractData.PRC_ST, (item) => {
                 if (item.TITLE.search(new RegExp(this.titleFilter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')) >= 0 || (item.PRC_TBL && item.PRC_TBL.length > 0 && item.PRC_TBL.filter(x => x.TITLE.search(new RegExp(this.titleFilter.replace(/[.*+?^${}()|[\]\\]/g, '\\$&'), 'i')) >= 0).length > 0)) {
                     this.pricingStrategyFilter.push(item)
                 }
@@ -545,8 +548,8 @@ export class managerPctComponent {
         this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
         this.lastRun = this.contractData.LAST_COST_TEST_RUN;
         this.contractId= this.contractData.DC_ID;
-        _.each(this.contractData?.PRC_ST, (item) => {
-            _.each(item.PRC_TBL, (prcTbl) => {
+        each(this.contractData?.PRC_ST, (item) => {
+            each(item.PRC_TBL, (prcTbl) => {
                 this.state[prcTbl.DC_ID] = {
                     skip: 0,
                     take: 25,
@@ -568,6 +571,4 @@ export class managerPctComponent {
     goToNavManagePCT(dataItem) {
         window.open(`/advancedSearch#/gotoDeal/${dataItem.DEAL_ID}`, '_blank')
     }
-
-
 }

@@ -1,7 +1,8 @@
-﻿import * as moment from "moment";
+﻿import { StaticMomentService } from "../shared/moment/moment.service";
 import { GridUtil } from "../contract/grid.util"
 import { DE_Load_Util } from "../contract/DEUtils/DE_Load_util"
 import { DecimalPipe, CurrencyPipe} from '@angular/common';
+
 export class ExcelExport {
     static exportDimTrkrControlWrapper(passedData) {
         var tmplt = '';
@@ -41,7 +42,7 @@ export class ExcelExport {
         return tmplt;
     }
     static formatDate = function (data) {
-        return data ? moment(data).format("MM/DD/YYYY") : '';
+        return data ? StaticMomentService.moment(data).format("MM/DD/YYYY") : '';
     }
     static exportControlScheduleWrapper(passedData) {
         var tmplt = 'Tier, Start Vol, End Vol, Rate\n';
@@ -349,7 +350,7 @@ export class ExcelExport {
                 return new DecimalPipe('en-us').transform(data, "1.0-2");
         }
         else if (format.toLowerCase() == "date") {
-            return moment(data).format("MM/DD/YYYY");
+            return StaticMomentService.moment(data).format("MM/DD/YYYY");
         }
         else
             return data;

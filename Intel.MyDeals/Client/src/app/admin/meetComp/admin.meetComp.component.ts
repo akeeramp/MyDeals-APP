@@ -3,7 +3,7 @@ import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { meetCompService } from './admin.meetComp.service';
-import * as _ from "underscore";
+import { where, pluck, each } from 'underscore';
 import { ThemePalette } from "@angular/material/core";
 import { DatePipe } from "@angular/common";
 import { BulkUploadMeetCompModalComponent } from './admin.bulkUploadMeetCompModal.component';
@@ -150,12 +150,12 @@ export class meetCompComponent {
     }
     meetCompProdCatName() {
         if (this.selectedCustomerID > -1) {
-            const result = _.where(this.meetCompDIMMasterData, x => { x.CUST_MBR_SID == this.selectedCustomerID });
-            const res = _.pluck(result, 'PRD_CAT_NM' )
+            const result = where(this.meetCompDIMMasterData, x => { x.CUST_MBR_SID == this.selectedCustomerID });
+            const res = pluck(result, 'PRD_CAT_NM' )
             return distinct(res);
         }
         else if (this.selectedCustomerID == -1) {
-            const res = _.pluck(this.meetCompDIMMasterData, 'PRD_CAT_NM')
+            const res = pluck(this.meetCompDIMMasterData, 'PRD_CAT_NM')
             return distinct(res);
         }
     }
@@ -173,7 +173,7 @@ export class meetCompComponent {
             const res = this.meetCompDIMMasterData.filter(x=>
                 (x.PRD_CAT_NM == this.selectedProdCatName && x.CUST_MBR_SID == this.selectedCustomerID)
             );
-            const brandsArr = _.pluck(res, 'BRND_NM');
+            const brandsArr = pluck(res, 'BRND_NM');
             const brandName = distinct(brandsArr);
             if (brandName.length == 1 && brandName[0] == 'NA') {
                 this.disabled = true;
@@ -190,7 +190,7 @@ export class meetCompComponent {
             const res = this.meetCompDIMMasterData.filter(x =>
                 (x.PRD_CAT_NM == this.selectedProdCatName)
             );
-            const brandsArr = _.pluck(res, 'BRND_NM');
+            const brandsArr = pluck(res, 'BRND_NM');
             const brandName = distinct(brandsArr);
             if (brandName.length == 1 && brandName[0]== 'NA') {
                 this.disabled = true;
@@ -219,7 +219,7 @@ export class meetCompComponent {
             (x.PRD_CAT_NM == this.selectedProdCatName && x.CUST_MBR_SID == this.selectedCustomerID &&
                 x.BRND_NM == this.selectedBrandName)
             );
-            const prodName = _.pluck(res, 'HIER_VAL_NM');
+            const prodName = pluck(res, 'HIER_VAL_NM');
             this.selectedProdName = '';
             return distinct(prodName);
         }
@@ -227,7 +227,7 @@ export class meetCompComponent {
             const res = this.meetCompDIMMasterData.filter(x =>
                 (x.PRD_CAT_NM == this.selectedProdCatName && x.BRND_NM == this.selectedBrandName)
             );
-            const prodName = _.pluck(res, 'HIER_VAL_NM');
+            const prodName = pluck(res, 'HIER_VAL_NM');
             this.selectedProdName = '';
             return distinct(prodName);
         }
@@ -276,7 +276,7 @@ export class meetCompComponent {
             };
             this.meetCompSvc.getMeetCompData(meetCompSearch).subscribe((response: Array<any>) => {
                 this.isBusy = false;
-                _.each(response, item => {
+                each(response, item => {
                     item['CHG_DTM'] = this.datepipe.transform(new Date(item['CHG_DTM']), 'M/d/yyyy');
                     item['CRE_DTM'] = this.datepipe.transform(new Date(item['CRE_DTM']), 'M/d/yyyy');
                     item['CHG_DTM'] = new Date(item['CHG_DTM']);

@@ -1,4 +1,4 @@
-﻿import * as _ from 'underscore';
+﻿import { pluck, where, each } from 'underscore';
 import { Component, Input } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { publishTenderService } from './publishTender.service'
@@ -11,7 +11,7 @@ import { distinct, process, State } from '@progress/kendo-data-query';
 import { MatDialog } from '@angular/material/dialog';
 import { dealProductsModalComponent } from '../ptModals/dealProductsModal/dealProductsModal.component';
 import { DE_Load_Util } from '../DEUtils/DE_Load_util';
-import * as moment from "moment";
+import { MomentService } from "../../shared/moment/moment.service";
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -19,12 +19,15 @@ import { ActivatedRoute } from '@angular/router';
     templateUrl: "Client/src/app/contract/publishTender/publishTender.component.html",
     styleUrls: ["Client/src/app/contract/publishTender/publishTender.component.css"]
 })
-
 export class publishTenderComponent {
-    constructor(private pricingTableSvc: pricingTableservice, private publishtenderService: publishTenderService,
-        private allDealsSvc: allDealsService, private templatesSvc: templatesService, private loggerSvc: logger, protected dialog: MatDialog, private route: ActivatedRoute) {
-      
-    }
+    constructor(private pricingTableSvc: pricingTableservice,
+                private publishtenderService: publishTenderService,
+                private allDealsSvc: allDealsService,
+                private templatesSvc: templatesService,
+                private loggerSvc: logger,
+                protected dialog: MatDialog,
+                private route: ActivatedRoute,
+                private momentService: MomentService) {}
     @Input() private pricingTableData:any;//using in html
     public c_Id: any = '';
     public showMCTag = false;
@@ -81,7 +84,7 @@ export class publishTenderComponent {
         this.isDataLoading=true;
         this.spinnerMessageHeader="Publishing deals";
         this.spinnerMessageDescription="Converting into individual deals. Then we will redirect you to Tender Dashboard.";
-        this.exlusionList=_.pluck(_.where(this.gridData.data,{isExclSel:true}),'DC_ID');
+        this.exlusionList=pluck(where(this.gridData.data,{isExclSel:true}),'DC_ID');
         this.publishtenderService.publishTenderDeals(this.contractData[0].DC_ID, this.exlusionList).subscribe((response) => {
             if (response) {
                 this.setBusy("Published deals Successfully", "Redirecting to Tender Dashboard", "Success");
@@ -256,7 +259,7 @@ export class publishTenderComponent {
                             }
                         }
                     }
-                    _.each(wipTemplate['model'], (key, index) => {
+                    each(wipTemplate['model'], (key, index) => {
                         if (excludeCols.indexOf(key) < 0) {
                             if (this.wipOptions['model'].fields[key] === undefined)
                                 this.wipOptions['model'].fields[key] = this[key];
@@ -266,7 +269,7 @@ export class publishTenderComponent {
             }
             this.wipData = data;
             //maping the result with exlude deal
-            _.each(this.wipData, itm => {Object.assign(itm, {isExclSel:false})});
+            each(this.wipData, itm => {Object.assign(itm, {isExclSel:false})});
             this.gridData = process(this.wipData, this.state);
         }, 10);
         setTimeout(() => {
@@ -309,7 +312,7 @@ export class publishTenderComponent {
             if (fieldName == 'CUST_MBR_SID') {
                 return { Text: item.Customer.CUST_NM, Value: item[fieldName] };
             }
-            if (moment(item[fieldName], "MM/DD/YYYY", true).isValid()) {
+            if (this.momentService.moment(item[fieldName], "MM/DD/YYYY", true).isValid()) {
                 return { Text: new Date(item[fieldName]).toString(), Value: item[fieldName] };
             }
             else if (item[fieldName] != undefined && item[fieldName] != null)
@@ -345,8 +348,6 @@ export class publishTenderComponent {
                 this.initTender();
             },err=>{
                 this.loggerSvc.error("Error", "Publishing deals Loading failed. Contact Administrator.",err);
-            });
-       
+            });  
     }
-
 }

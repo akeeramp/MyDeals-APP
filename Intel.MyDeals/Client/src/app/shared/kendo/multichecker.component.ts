@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { distinct, filterBy, FilterDescriptor } from '@progress/kendo-data-query';
 import { FilterService } from '@progress/kendo-angular-grid';
-import * as _ from 'underscore';
+import { each, compact, sortBy } from 'underscore';
 
 @Component({
     selector: 'multicheck-filter',
@@ -108,10 +108,10 @@ export class MultiCheckFilterComponent implements AfterViewInit {
 
     public ngAfterViewInit() {
         //this code is to remove all falsy values
-        this.currentData = _.compact(this.data);
+        this.currentData = compact(this.data);
         if (this.data.findIndex(x => x == '') > -1) this.currentData.push('');
         if (this.data.findIndex(x => x == null) > -1) this.currentData.push(null);
-        this.currentData = _.sortBy(this.currentData);
+        this.currentData = sortBy(this.currentData);
         if (this.textField != undefined && this.textField != null && this.textField != '' && this.valueField != undefined && this.valueField != null && this.valueField != null) {
             if (this.data && this.data.length > 0 && this.data.filter(x => x[this.textField] == 'Select All').length == 0) {
                 let selectAlldata: any = {};
@@ -169,7 +169,7 @@ export class MultiCheckFilterComponent implements AfterViewInit {
                 }
             }
         }
-        _.each(this.value, itm => {
+        each(this.value, itm => {
             let operator = 'eq';
             if (itm == null) {
                 operator = "isnull";

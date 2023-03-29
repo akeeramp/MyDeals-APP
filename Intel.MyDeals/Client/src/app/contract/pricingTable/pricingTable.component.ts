@@ -1,4 +1,4 @@
-﻿import * as _ from 'underscore';
+﻿import { each, filter } from 'underscore';
 import { Component, ViewChild } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { pricingTableservice } from "./pricingTable.service";
@@ -26,7 +26,6 @@ export interface contractIds {
     templateUrl: "Client/src/app/contract/pricingTable/pricingTable.component.html",
     styleUrls: ['Client/src/app/contract/pricingTable/pricingTable.component.css']
 })
-
 export class pricingTableComponent {
     public drawChart: boolean;
     constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: templatesService,
@@ -150,9 +149,9 @@ export class pricingTableComponent {
                 this.pt_Id = contractModel.pt_id;
                 this.c_Id = contractModel.C_ID;
                 this.contractData = contractModel.contractData;
-                let PRC_ST = _.filter(this.contractData.PRC_ST, item => { return item.DC_ID == this.ps_Id });
+                let PRC_ST = filter(this.contractData.PRC_ST, item => { return item.DC_ID == this.ps_Id });
                 if (PRC_ST != undefined && PRC_ST != null && PRC_ST.length > 0) {
-                    let PRC_TBL = _.filter(PRC_ST[0].PRC_TBL, item => { return item.DC_ID == this.pt_Id });
+                    let PRC_TBL = filter(PRC_ST[0].PRC_TBL, item => { return item.DC_ID == this.pt_Id });
                     if (PRC_TBL != undefined && PRC_TBL != null && PRC_TBL.length > 0) {
                         this.curPricingStrategy = PRC_ST[0];
                         this.ps_title = PRC_ST[0].TITLE;
@@ -447,13 +446,13 @@ export class pricingTableComponent {
     ngAfterViewInit() {
         //this functionality will enable when dashboard landing to this page
         const loaders = document.getElementsByClassName('loading-screen');
-        _.each(loaders, item => {
+        each(loaders, item => {
             item.setAttribute('style', 'display:none');
         })
        // document.getElementsByClassName('loading-screen')[0]?.setAttribute('style', 'display:none');
         const divLoader = document.getElementsByClassName('jumbotron')
         if (divLoader && divLoader.length > 0) {
-            _.each(divLoader, div => {
+            each(divLoader, div => {
                 div.setAttribute('style', 'display:none');
             })
         }

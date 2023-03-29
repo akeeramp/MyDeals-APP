@@ -1,11 +1,9 @@
-import {Injectable} from "@angular/core";
-import { HttpClient} from '@angular/common/http';
-import * as _ from "underscore";
+import { Injectable } from "@angular/core";
+import { HttpClient } from '@angular/common/http';
 
 @Injectable({
     providedIn: 'root'
- })
-
+})
 export class globalSearchResultsService { 
     public apiBaseUrl = "/api/Search/GetGlobalSearchList/";
     apiUrl = "";
@@ -22,6 +20,4 @@ export class globalSearchResultsService {
         else this.apiUrl = "GotoPT/";
         return this.httpClient.get("api/Search/" + this.apiUrl + id);
     }
-
 }
-

@@ -1,5 +1,5 @@
-import * as _ from 'underscore';
-import * as moment from "moment";
+import { each, uniq, sortBy, findIndex } from 'underscore';
+import { StaticMomentService } from "../../shared/moment/moment.service";
 import { lnavUtil } from "../lnav.util";
 import { PTE_Load_Util } from './PTE_Load_util';
 import { PTE_Config_Util } from './PTE_Config_util';
@@ -49,8 +49,8 @@ export class PTE_Validation_Util {
         //To remove the DC_ID data which got saved (if DC_ID changed)
         if (data && data.InValidProducts) {
             let invalidProduct = PTE_Common_Util.deepClone(data.InValidProducts)
-            _.each(invalidProduct, (invldPrd, key) => {
-                let indx = _.findIndex(currentPricingTableRowData, { DC_ID: parseInt(key) })
+            each(invalidProduct, (invldPrd, key) => {
+                let indx = findIndex(currentPricingTableRowData, { DC_ID: parseInt(key) })
                 if (parseInt(key) < 0 && indx < 0) {
                     delete data.InValidProducts[key]
                 }
@@ -58,8 +58,8 @@ export class PTE_Validation_Util {
         }
         if (data && data.ProdctTransformResults) {
             let pdtTransformRslt = PTE_Common_Util.deepClone(data.ProdctTransformResults)
-            _.each(pdtTransformRslt, (prdrslt, key) => {
-                let indx = _.findIndex(currentPricingTableRowData, { DC_ID: parseInt(key) })
+            each(pdtTransformRslt, (prdrslt, key) => {
+                let indx = findIndex(currentPricingTableRowData, { DC_ID: parseInt(key) })
                 if (parseInt(key) < 0 && indx < 0) {
                     delete data.ProdctTransformResults[key]
                 }
@@ -67,8 +67,8 @@ export class PTE_Validation_Util {
         }
         if (data && data.DuplicateProducts) {
             let dupPdt = PTE_Common_Util.deepClone(data.DuplicateProducts)
-            _.each(dupPdt, (dup, key) => {
-                let indx = _.findIndex(currentPricingTableRowData, { DC_ID: parseInt(key) })
+            each(dupPdt, (dup, key) => {
+                let indx = findIndex(currentPricingTableRowData, { DC_ID: parseInt(key) })
                 if (parseInt(key) < 0 && indx < 0) {
                     delete data.DuplicateProducts[key]
                 }
@@ -76,8 +76,8 @@ export class PTE_Validation_Util {
         }
         if (data && data.ValidProducts) {
             let validPdt = PTE_Common_Util.deepClone(data.ValidProducts)
-            _.each(validPdt, (validPd, key) => {
-                let indx = _.findIndex(currentPricingTableRowData, { DC_ID: parseInt(key) })
+            each(validPdt, (validPd, key) => {
+                let indx = findIndex(currentPricingTableRowData, { DC_ID: parseInt(key) })
                 if (parseInt(key) < 0 && indx < 0) {
                     delete data.ValidProducts[key]
                 }
@@ -299,7 +299,7 @@ export class PTE_Validation_Util {
         return isShowStopperError;
     }
     static setToSame(data, elem) {
-        _.each(data, (item) => {
+        each(data, (item) => {
             if (item[elem] != undefined && (item[elem] == null || item[elem] == '')) {
                 item[elem] = null;
             }
@@ -308,7 +308,7 @@ export class PTE_Validation_Util {
     }
 
     static clearValidation(data, elem) {
-        _.each(data, (item) => {
+        each(data, (item) => {
             if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
                 delete item._behaviors.isRequired[elem];
                 delete item._behaviors.isError[elem];
@@ -319,7 +319,7 @@ export class PTE_Validation_Util {
     }
 
     static clearSettlementPartner = function (data) {
-        _.each(data, (item) => {
+        each(data, (item) => {
             if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
                 if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
                     item.SETTLEMENT_PARTNER = null;
@@ -343,12 +343,12 @@ export class PTE_Validation_Util {
             var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
             var objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';
             //For multi tiers last record will have latest date, skipping duplicate DC_ID
-            var filterData = _.uniq(_.sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+            var filterData = uniq(sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
 
             var minAccrualDate = new Date(Math.min.apply(null, filterData.map(function (x) { return new Date(x.START_DT); })));
 
             var drainingInvalidDates = drainingEntries.filter(
-                (val) => moment(val.START_DT) < (moment(minAccrualDate).add(0, 'days'))
+                (val) => StaticMomentService.moment(val.START_DT) < (StaticMomentService.moment(minAccrualDate).add(0, 'days'))
             );
         }
         return drainingInvalidDates;
@@ -387,27 +387,27 @@ export class PTE_Validation_Util {
             var objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';
             var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
             var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
-            var filterData = _.uniq(_.sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+            var filterData = uniq(sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
             accrualRule = filterData.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == filterData[0].PAYOUT_BASED_ON);
             drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == drainingEntries[0].PAYOUT_BASED_ON);
             if (accrualEntries.length > 0 && drainingRule && drainingEntries.length > 0) { restrictGroupFlexOverlap = true; }
             if (!accrualRule) {
-                _.each(filterData, (item) => {
+                each(filterData, (item) => {
                     item = this.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'nequalpayout', restrictGroupFlexOverlap);
                 });
             }
             if (!drainingRule) {
-                _.each(drainingEntries, (item) => {
+                each(drainingEntries, (item) => {
                     item = this.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'nequalpayout', restrictGroupFlexOverlap);
                 });
             }
             if ((filterData.some(function (el) { return el.PAYOUT_BASED_ON.toUpperCase() == 'CONSUMPTION' })) && (drainingEntries.some(function (el) { return el.PAYOUT_BASED_ON.toUpperCase() == 'BILLINGS' }))) {
                 var restrictedAccrualData = filterData.filter((val) => val.PAYOUT_BASED_ON.toUpperCase() == 'CONSUMPTION');
                 var restrictedDraininngData = drainingEntries.filter((val) => val.PAYOUT_BASED_ON.toUpperCase() == 'BILLINGS');
-                _.each(restrictedAccrualData, (item) => {
+                each(restrictedAccrualData, (item) => {
                     item = this.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'notallowed', restrictGroupFlexOverlap);
                 });
-                _.each(restrictedDraininngData, (item) => {
+                each(restrictedDraininngData, (item) => {
                     item = this.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'notallowed', restrictGroupFlexOverlap);
                 });
             }
@@ -453,23 +453,23 @@ export class PTE_Validation_Util {
         var endDate = contractData.END_DT;
 
         if (dateType == 'START_DT') {
-            if (moment(startDate).isAfter(endDate) || moment(startDate).isBefore(contractData.MinDate)) {
+            if (StaticMomentService.moment(startDate).isAfter(endDate) || StaticMomentService.moment(startDate).isBefore(contractData.MinDate)) {
                 contractData._behaviors.isError['START_DT'] = true;
                 contractData._behaviors
-                    .validMsg['START_DT'] = moment(startDate).isBefore(contractData.MinDate)
+                    .validMsg['START_DT'] = StaticMomentService.moment(startDate).isBefore(contractData.MinDate)
                         ? "Start date cannot be less than - " + contractData.MinDate
                         : "Start date cannot be greater than End Date";
             }
         } else {
-            if (moment(endDate).isBefore(startDate) || moment(endDate).isAfter(contractData.MaxDate)) {
+            if (StaticMomentService.moment(endDate).isBefore(startDate) || StaticMomentService.moment(endDate).isAfter(contractData.MaxDate)) {
                 contractData._behaviors.isError['END_DT'] = true;
                 contractData._behaviors
-                    .validMsg['END_DT'] = moment(endDate).isAfter(contractData.MaxDate)
+                    .validMsg['END_DT'] = StaticMomentService.moment(endDate).isAfter(contractData.MaxDate)
                         ? "End date cannot be greater than - " + contractData.MaxDate
                         : "End date cannot be less than Start Date";
             }
             if (existingMinEndDate !== "" && contractData.PRC_ST != null && contractData.PRC_ST.length != 0) {
-                if (moment(endDate).isBefore(existingMinEndDate)) {
+                if (StaticMomentService.moment(endDate).isBefore(existingMinEndDate)) {
                     contractData._behaviors.isError['END_DT'] = true;
                     contractData._behaviors
                         .validMsg['END_DT'] = "Contract end date cannot be less than current Contract end date - " + existingMinEndDate + " - if you have already created pricing strategies. ";
@@ -577,10 +577,10 @@ export class PTE_Validation_Util {
             spreadData = data
         }
         //For multi tiers last record will have latest date, skipping duplicate DC_ID
-        var filterData = _.uniq(_.sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+        var filterData = uniq(sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
         var isMarketSegment = filterData.some((val) => val.MRKT_SEG == null || val.MRKT_SEG == '');
         if (isMarketSegment) {
-            _.each(data, (item) => {
+            each(data, (item) => {
                 if (item.MRKT_SEG == null || item.MRKT_SEG == '') {
                     if (!item._behaviors) item._behaviors = {};
                     if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
@@ -598,7 +598,7 @@ export class PTE_Validation_Util {
 
      static ValidateEndCustomer(data, actionName, curPricingStrategy, curPricingTable) {
         if (actionName !== "OnLoad") {
-            _.each(data, (item) => {
+            each(data, (item) => {
                 if (item._behaviors && item._behaviors.validMsg && item._behaviors.validMsg["END_CUSTOMER_RETAIL"] != undefined) {
                     item = this.clearEndCustomer(item);
                 }
@@ -612,26 +612,26 @@ export class PTE_Validation_Util {
                     if (data[0].END_CUST_OBJ != null && data[0].END_CUST_OBJ != undefined && data[0].END_CUST_OBJ != "") {
                         endCustObj = JSON.parse(data[0].END_CUST_OBJ)
                     }
-                    _.each(data, (item) => {
+                    each(data, (item) => {
                         var parsedEndCustObj = "";
                         if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
                             parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
                             if (parsedEndCustObj.length != endCustObj.length) {
-                                _.each(data, (item) => {
+                                each(data, (item) => {
                                     item = this.setEndCustomer(item, 'Hybrid Vol_Tier Deal', curPricingTable);
                                 });
                             }
                             else {
                                 for (var i = 0; i < parsedEndCustObj.length; i++) {
                                     var exists = false;
-                                    _.each(endCustObj, (item) => {
+                                    each(endCustObj, (item) => {
                                         if (item["END_CUSTOMER_RETAIL"] == parsedEndCustObj[i]["END_CUSTOMER_RETAIL"] &&
                                             item["PRIMED_CUST_CNTRY"] == parsedEndCustObj[i]["PRIMED_CUST_CNTRY"]) {
                                             exists = true;
                                         }
                                     });
                                     if (!exists) {
-                                        _.each(data, (item) => {
+                                        each(data, (item) => {
                                             item = this.setEndCustomer(item, 'Hybrid Vol_Tier Deal', curPricingTable);
                                         });
                                         i = parsedEndCustObj.length;
@@ -641,7 +641,7 @@ export class PTE_Validation_Util {
                         }
                         if (endCustObj == "" || parsedEndCustObj == "") {
                             if (parsedEndCustObj.length != endCustObj.length) {
-                                _.each(data, (item) => {
+                                each(data, (item) => {
                                     item = this.setEndCustomer(item, 'Hybrid Vol_Tier Deal', curPricingTable);
                                 });
                             }
@@ -656,26 +656,26 @@ export class PTE_Validation_Util {
                     if (data[0].END_CUST_OBJ != null && data[0].END_CUST_OBJ != undefined && data[0].END_CUST_OBJ != "") {
                         endCustObj = JSON.parse(data[0].END_CUST_OBJ)
                     }
-                    _.each(data, (item) => {
+                    each(data, (item) => {
                         var parsedEndCustObj = "";
                         if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
                             parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
                             if (parsedEndCustObj.length != endCustObj.length) {
-                                _.each(data, (item) => {
+                                each(data, (item) => {
                                     item = this.setEndCustomer(item, 'Hybrid ' + curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal', curPricingTable);
                                 });
                             }
                             else {
                                 for (var i = 0; i < parsedEndCustObj.length; i++) {
                                     var exists = false;
-                                    _.each(endCustObj, (item) => {
+                                    each(endCustObj, (item) => {
                                         if (item["END_CUSTOMER_RETAIL"] == parsedEndCustObj[i]["END_CUSTOMER_RETAIL"] &&
                                             item["PRIMED_CUST_CNTRY"] == parsedEndCustObj[i]["PRIMED_CUST_CNTRY"]) {
                                             exists = true;
                                         }
                                     });
                                     if (!exists) {
-                                        _.each(data, (item) => {
+                                        each(data, (item) => {
                                             item = this.setEndCustomer(item, 'Hybrid ' + curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal', curPricingTable);
                                         });
                                         i = parsedEndCustObj.length;
@@ -685,7 +685,7 @@ export class PTE_Validation_Util {
                         }
                         if (endCustObj == "" || parsedEndCustObj == "") {
                             if (parsedEndCustObj.length != endCustObj.length) {
-                                _.each(data, (item) => {
+                                each(data, (item) => {
                                     item = this.setEndCustomer(item, 'Hybrid ' + curPricingTable['OBJ_SET_TYPE_CD'] + ' Deal', curPricingTable);
                                 });
                             }
@@ -730,7 +730,7 @@ export class PTE_Validation_Util {
             if (hybCond == '1') {
                 retCond = data.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '' && val.SETTLEMENT_PARTNER == data[0].SETTLEMENT_PARTNER);
                 if (!retCond) {
-                    _.each(data, (item) => {
+                    each(data, (item) => {
                         item = this.setSettlementPartner(item, '1');
                     });
                 }
@@ -741,7 +741,7 @@ export class PTE_Validation_Util {
             else {
                 retCond = cashObj.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '');
                 if (!retCond) {
-                    _.each(data, (item) => {
+                    each(data, (item) => {
                         if (item._behaviors && item._behaviors.isRequired && item._behaviors.isError && item._behaviors.validMsg) {
                             if (item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() != 'cash' && item.HAS_TRACKER == "0") {
                                 item.SETTLEMENT_PARTNER = null;
@@ -766,14 +766,14 @@ export class PTE_Validation_Util {
 
     static itemValidationBlock (data, key, mode, curPricingTable) {        
         //For multi tiers last record will have latest date, skipping duplicate DC_ID
-        var filterData = _.uniq(_.sortBy(data, function (itm) { return itm.TIER_NBR }), function (obj) { return obj["DC_ID"] });
+        var filterData = uniq(sortBy(data, function (itm) { return itm.TIER_NBR }), function (obj) { return obj["DC_ID"] });
 
         var v1 = filterData.map((val) => val[key]).filter((value, index, self) => self.indexOf(value) === index);
         var hasNotNull = v1.some(function (el) { return el !== null && el != ""; });
 
         if (mode.indexOf("notequal") >= 0) { // Returns -1 if not in list 
             if (v1.length > 1 && hasNotNull) {
-                _.each(data, (item) => {
+                each(data, (item) => {
                     if (!item._behaviors) item._behaviors = {};
                     if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
                     if (item._behaviors.isReadOnly[key] === undefined) { // If not read only, set error message
@@ -785,7 +785,7 @@ export class PTE_Validation_Util {
         if (mode.indexOf("equalblank") >= 0) { // Returns -1 if not in list
             if (hasNotNull == false && v1[0] !== "") {
                 var v1List = data.filter((val) => val[key] === null);
-                _.each(v1List, (item) => {
+                each(v1List, (item) => {
                     if (!item._behaviors) item._behaviors = {};
                     if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
                     if (item._behaviors.isReadOnly[key] === undefined) { // If not read only, set blank error message
@@ -796,7 +796,7 @@ export class PTE_Validation_Util {
         }
         //Additional check for settlement partner if AR Settlement Level is 'CASH'
         if (key == "SETTLEMENT_PARTNER" && !hasNotNull) {
-            _.each(data, (item) => {
+            each(data, (item) => {
                 if (!item._behaviors) item._behaviors = {};
                 if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
                 if (item._behaviors.isReadOnly[key] === undefined && item.AR_SETTLEMENT_LVL && item.AR_SETTLEMENT_LVL.toLowerCase() == 'cash') { // If not read only, set error message
@@ -808,7 +808,7 @@ export class PTE_Validation_Util {
         if (key == "END_CUSTOMER_RETAIL") {
             var uniqueEndCustomerCountry = filterData.map((val) => val["PRIMED_CUST_CNTRY"]).filter((value, index, self) => self.indexOf(value) === index);
             if (uniqueEndCustomerCountry.length > 1) {
-                _.each(data, (item) => {
+                each(data, (item) => {
                     if (!item._behaviors) item._behaviors = {};
                     if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
                     if (item._behaviors.isReadOnly[key] === undefined) { // If not read only, set error message
@@ -838,12 +838,12 @@ export class PTE_Validation_Util {
             retZeroOAD = data.every((val) => val.REBATE_OA_MAX_AMT === 0);
 
             if (retZeroOAV) {
-                _.each(data, (item) => {
+                each(data, (item) => {
                     item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalzero', curPricingTable);
                 });
             }
             else if (retZeroOAD) {
-                _.each(data, (item) => {
+                each(data, (item) => {
                     item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalzero', curPricingTable);
                 });
             }
@@ -853,7 +853,7 @@ export class PTE_Validation_Util {
             var testMaxVolCount = 0;
             var rebateMaxAmt;
             var rabateMaxVOL;
-            _.each(data, (item) => {
+            each(data, (item) => {
                 // Are both values populated on this item?
                 if ((item.REBATE_OA_MAX_AMT !== undefined && item.REBATE_OA_MAX_AMT !== null && item.REBATE_OA_MAX_AMT !== "") &&
                     (item.REBATE_OA_MAX_VOL !== undefined && item.REBATE_OA_MAX_VOL !== null && item.REBATE_OA_MAX_VOL !== "")) {
@@ -917,17 +917,17 @@ export class PTE_Validation_Util {
             // Check if this is a flex, and if it is, only accrual single tier rows count..
             var elementCount = isFlexAccrual != 1 ? data.length : data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual').length;
             if (testMaxAmtValues.length > 1 || (testMaxAmtCount > 0 && testMaxAmtCount != elementCount)) {
-                _.each(data, (item) => {
+                each(data, (item) => {
                     item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'notequal', curPricingTable);
                 });
             }
             if (testMaxVolValues.length > 1 || (testMaxVolValues.length > 0 && testMaxVolCount != elementCount)) {
-                _.each(data, (item) => {
+                each(data, (item) => {
                     item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'notequal', curPricingTable);
                 });
             }
             if (testMaxAmtValues.length > 0 && testMaxVolValues.length > 0) {
-                _.each(data, (item) => {
+                each(data, (item) => {
                     item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalboth', curPricingTable);
                     item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_VOL', 'equalboth', curPricingTable);
                 });
@@ -944,7 +944,7 @@ export class PTE_Validation_Util {
             restrictGroupFlexOverlap = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Consumption");
 
             if (drainingEntries.length > 0 && accrualEntries.length == 0) {
-                _.each(data, (item) => {
+                each(data, (item) => {
                     item = this.setFlexBehaviors(item, 'FLEX_ROW_TYPE', 'flexrowtype', restrictGroupFlexOverlap);
                 });
             }
@@ -1000,7 +1000,7 @@ export class PTE_Validation_Util {
             retCond = data.every((val) => val.AR_SETTLEMENT_LVL != null && val.AR_SETTLEMENT_LVL != '' && val.AR_SETTLEMENT_LVL ==
                 data[0].AR_SETTLEMENT_LVL);
             if (!retCond) {
-                _.each(data, (item) => {
+                each(data, (item) => {
                     this.setBehaviors(item, 'AR_SETTLEMENT_LVL', 'notequal');
                 });
             }
@@ -1055,7 +1055,7 @@ export class PTE_Validation_Util {
                     var sysProducts = JSON.parse(previous.PTR_SYS_PRD);
                     for (var key in sysProducts) {
                         if (sysProducts.hasOwnProperty(key)) {
-                            _.each(sysProducts[key], function (item) {
+                            each(sysProducts[key], function (item) {
                                 if (dictDuplicateProducts[item.PRD_MBR_SID] == undefined) {
                                     dictDuplicateProducts[item.PRD_MBR_SID] = previous.DC_ID;
                                 } else if (dictDuplicateProducts[item.PRD_MBR_SID].toString().indexOf(previous.DC_ID.toString()) < 0) {
@@ -1079,7 +1079,7 @@ export class PTE_Validation_Util {
                     var sysProducts = JSON.parse(current.PTR_SYS_PRD);
                     for (var key in sysProducts) {
                         if (sysProducts.hasOwnProperty(key)) {
-                            _.each(sysProducts[key], function (item) {
+                            each(sysProducts[key], function (item) {
                                 if (dictDuplicateProducts[item.PRD_MBR_SID] == undefined) {
                                     dictDuplicateProducts[item.PRD_MBR_SID] = current.DC_ID;
                                 } else if (dictDuplicateProducts[item.PRD_MBR_SID].toString().indexOf(current.DC_ID.toString()) < 0) {

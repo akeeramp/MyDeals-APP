@@ -1,10 +1,10 @@
-import * as _ from 'underscore';
+import { each, uniq, sortBy, pluck, findWhere, findIndex, reject, find, keys, isUndefined } from 'underscore';
 import { logger } from '../../shared/logger/logger';
 import { PRC_TBL_Model_Attributes, PRC_TBL_Model_Column, PRC_TBL_Model_Field } from '../pricingTableEditor/handsontable.interface';
 import { pricingTableEditorService } from '../pricingTableEditor/pricingTableEditor.service';
 import Handsontable from 'handsontable';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util'
-import * as moment from 'moment';
+import { StaticMomentService } from "../../shared/moment/moment.service";
 import { PTE_Helper_Util } from './PTE_Helper_util';
 import { PTE_Validation_Util } from './PTE_Validation_util';
 import { PTE_Load_Util } from './PTE_Load_util';
@@ -37,7 +37,7 @@ export class PTEUtil {
         }
 
         /* Type & Format */
-        if (!_.isUndefined(templateColumnFields[item.field].type)) {
+        if (!isUndefined(templateColumnFields[item.field].type)) {
             const itemField = templateColumnFields[item.field].type;
 
             if (item.field == "END_VOL" || item.field == "END_PB" || item.field === 'STRT_VOL') {
@@ -85,13 +85,13 @@ export class PTEUtil {
                 if (item.lookupUrl) {
                     // for tender, PAYOUT_BASED_ON  must not have Billings
                     if(item.field=='PAYOUT_BASED_ON' && isTenderContract){
-                        currentColumnConfig.source=_.reject(_.pluck(dropdownResponses[`${item.field}`],`${item.lookupValue}`),itm=>{ return itm =='Billings'});
+                        currentColumnConfig.source=reject(pluck(dropdownResponses[`${item.field}`],`${item.lookupValue}`),itm=>{ return itm =='Billings'});
                     }
                     //market segment has items which has child so we need to pass the full object
                     else if(item.field=='MRKT_SEG'){
                         currentColumnConfig.source=dropdownResponses[`${item.field}`];
                     }else{
-                        currentColumnConfig.source=_.pluck(dropdownResponses[`${item.field}`],`${item.lookupValue}`);
+                        currentColumnConfig.source=pluck(dropdownResponses[`${item.field}`],`${item.lookupValue}`);
                     }
                     
                 }
@@ -125,7 +125,7 @@ export class PTEUtil {
         }
     }
     static validatePTEDeal(PTR:Array<any>):any{
-        _.each(PTR,(item) =>{
+        each(PTR,(item) =>{
             //defaulting the behaviours object
             PTE_Common_Util.setBehaviors(item);
         });
@@ -133,7 +133,7 @@ export class PTEUtil {
     }
     static validatePTEECAP(PTR:Array<any>):any{
         //check for Ecap price 
-        _.each(PTR,(item) =>{
+        each(PTR,(item) =>{
             //defaulting the behaviours object
             PTE_Common_Util.setBehaviors(item);
             if(item.ECAP_PRICE==null || item.ECAP_PRICE==0 || item.ECAP_PRICE=='' || item.ECAP_PRICE <0){
@@ -144,12 +144,12 @@ export class PTEUtil {
     }
     static getCellComments(PTR: any,columns:Array<any>): Array<any> {
         let cellComments = [];
-        _.each(PTR, (item, rowInd) => {
+        each(PTR, (item, rowInd) => {
             if (item._behaviors && item._behaviors.validMsg) {
-                _.each(item._behaviors.validMsg, (val, key) => {
-                    let colInd = _.findIndex(columns, { field: key });
+                each(item._behaviors.validMsg, (val, key) => {
+                    let colInd = findIndex(columns, { field: key });
                     cellComments.push({ row: rowInd, col: colInd, comment: { value: val,readOnly: true }, className: 'error-border' });
-                    if (_.findWhere(cellComments, { row: rowInd, col: 0 }) == undefined) {
+                    if (findWhere(cellComments, { row: rowInd, col: 0 }) == undefined) {
                         cellComments.push({ row: rowInd, col: 0, className: 'error-cell' });
                     }
                 });
@@ -159,7 +159,7 @@ export class PTEUtil {
     }
     // set PTR_SYS_PRD attr value after getting transform results
     static cookProducts(transformResults:any, rowData:Array<any>): any {
-        _.each(rowData, (data) => {
+        each(rowData, (data) => {
 
             //this logic has been removed added in pricing table editor validateproducts later
             PTE_Common_Util.setBehaviors(data);
@@ -175,7 +175,7 @@ export class PTEUtil {
             
             //setting PTR_SYS_PRD for valid products
             if (transformResults && transformResults.ValidProducts) {
-                _.each(transformResults.ValidProducts, (val, DCID) => {
+                each(transformResults.ValidProducts, (val, DCID) => {
                     if (data && data.DC_ID == DCID) {
                         let foramttedTranslatedResult = PTEUtil.massagingObjectsForJSON(DCID, transformResults);
                         var userInput = PTEUtil.updateUserInput(foramttedTranslatedResult.ValidProducts[DCID]);
@@ -200,15 +200,15 @@ export class PTEUtil {
             }
                //setting PTR_SYS_PRD for InValidProducts
             if (transformResults && transformResults.InValidProducts) {
-                _.each(transformResults.InValidProducts, (val, DCID) => {
+                each(transformResults.InValidProducts, (val, DCID) => {
                         if (data && data.DC_ID == DCID) {
                             PTE_Common_Util.setBehaviors(data);
-                            if (val.I && val.I.length > 0 && _.find(val['I'], (test) => { return data.PTR_USER_PRD.includes(test) })) {
+                            if (val.I && val.I.length > 0 && find(val['I'], (test) => { return data.PTR_USER_PRD.includes(test) })) {
                                 data._behaviors.isError['PTR_USER_PRD'] = true;
                                 data._behaviors.validMsg['PTR_USER_PRD'] = 'Invalid product';
                             }
                         
-                            if (val.E && val.E.length > 0 && _.find(val['E'], (test) => { return data.PTR_USER_PRD.includes(test) })) {
+                            if (val.E && val.E.length > 0 && find(val['E'], (test) => { return data.PTR_USER_PRD.includes(test) })) {
                                 data._behaviors.isError['PRD_EXCLDS'] = true;
                                 data._behaviors.validMsg['PRD_EXCLDS'] = 'Invalid product';
                             }
@@ -217,15 +217,15 @@ export class PTEUtil {
             }
             //setting PTR_SYS_PRD for DuplicateProducts
             if (transformResults && transformResults.DuplicateProducts) {
-                _.each(transformResults.DuplicateProducts, (val, DCID) => {
+                each(transformResults.DuplicateProducts, (val, DCID) => {
                     if (data && data.DC_ID == DCID) {
                         PTE_Common_Util.setBehaviors(data);
-                        if (_.find(val, (test) => { return data.PTR_USER_PRD.includes(test) })) {
+                        if (find(val, (test) => { return data.PTR_USER_PRD.includes(test) })) {
                            
                             data._behaviors.isError['PTR_USER_PRD'] = true;
                             data._behaviors.validMsg['PTR_USER_PRD'] = 'Invalid product';
                         }
-                        if (_.find(val, (test) => { return data.PTR_USER_PRD.includes(test) })) {
+                        if (find(val, (test) => { return data.PTR_USER_PRD.includes(test) })) {
                             data._behaviors.isError['PRD_EXCLDS'] = true;
                             data._behaviors.validMsg['PRD_EXCLDS'] = 'Invalid product';
                         }
@@ -240,14 +240,14 @@ export class PTEUtil {
          let isError=[];
            //setting PTR_SYS_PRD for DuplicateProducts
         if (transformResults && transformResults.DuplicateProducts) {
-            _.each(transformResults.DuplicateProducts, (val) => {
-                if (_.keys(val).length > 0) {
+            each(transformResults.DuplicateProducts, (val) => {
+                if (keys(val).length > 0) {
                     isError.push('1');
                 }
             });
         }
         if (transformResults && transformResults.InValidProducts) {
-            _.each(transformResults.InValidProducts, (val) => {
+            each(transformResults.InValidProducts, (val) => {
                 if ((val.I && val.I.length > 0) || (val.E && val.E.length > 0)) {
                     isError.push('1');
                 }
@@ -258,10 +258,10 @@ export class PTEUtil {
     }
     static hasProductDependency(currentPricingTableRowData, productValidationDependencies, hasProductDependencyErr): boolean {
        //this code will help us to identify uniq entry in case of tier
-        let uniqDCIDS=_.uniq(_.pluck(currentPricingTableRowData,'DC_ID'));
+        let uniqDCIDS=uniq(pluck(currentPricingTableRowData,'DC_ID'));
         let distinctPricingTableRowData=[];
-        _.each(uniqDCIDS,DCID=>{
-            distinctPricingTableRowData.push(_.findWhere(currentPricingTableRowData,{DC_ID:DCID}));
+        each(uniqDCIDS,DCID=>{
+            distinctPricingTableRowData.push(findWhere(currentPricingTableRowData,{DC_ID:DCID}));
         });
         // Validate columns that product is dependent on
         for (var i = 0; i < distinctPricingTableRowData.length; i++) {
@@ -315,7 +315,7 @@ export class PTEUtil {
         });
 
         //find uniq records incase of tier logic
-        pricingTableRowData=_.uniq(pricingTableRowData,'DC_ID');
+        pricingTableRowData=uniq(pricingTableRowData,'DC_ID');
         // Convert into format accepted by translator API
         // ROW_NUMBER, CUST_MBR_SID, IS_HYBRID_PRC_STRAT - Remove hard coded values
         let translationInput = pricingTableRowData.map((row, index) =>{
@@ -324,8 +324,8 @@ export class PTEUtil {
                 USR_INPUT: PTE_Validation_Util.getCorrectedPtrUsrPrd(row.PTR_USER_PRD),
                 EXCLUDE: false,
                 FILTER: row.PROD_INCLDS,
-                START_DATE: moment(row.START_DT).format("l"),
-                END_DATE: moment(row.END_DT).format("l"),
+                START_DATE: StaticMomentService.moment(row.START_DT).format("l"),
+                END_DATE: StaticMomentService.moment(row.END_DT).format("l"),
                 GEO_COMBINED: row.GEO_COMBINED,
                 PROGRAM_PAYMENT: row.PROGRAM_PAYMENT,
                 PAYOUT_BASED_ON: row.PAYOUT_BASED_ON,
@@ -336,15 +336,15 @@ export class PTEUtil {
         });
 
         if (currentPricingTableRowData && currentPricingTableRowData[0] && currentPricingTableRowData[0].PRD_EXCLDS != undefined) {
-            _.each(pricingTableRowData, obj => {
+            each(pricingTableRowData, obj => {
                 if (!!obj.PRD_EXCLDS && obj.PRD_EXCLDS.length > 0) {
                     let object = {
                         ROW_NUMBER: obj.DC_ID,
                         USR_INPUT: obj.PRD_EXCLDS,
                         EXCLUDE: true,
                         FILTER: obj.PROD_INCLDS,
-                        START_DATE: moment(obj.START_DT).format("l"),
-                        END_DATE: moment(obj.END_DT).format("l"),
+                        START_DATE: StaticMomentService.moment(obj.START_DT).format("l"),
+                        END_DATE: StaticMomentService.moment(obj.END_DT).format("l"),
                         GEO_COMBINED: PTE_Helper_Util.getFormatedGeos(obj.GEO_COMBINED),
                         PROGRAM_PAYMENT: obj.PROGRAM_PAYMENT,
                         PAYOUT_BASED_ON: obj.PAYOUT_BASED_ON,
@@ -413,7 +413,7 @@ export class PTEUtil {
                     return x.EXCLUDE === false;
                 });
                 if (products.length !== 0) {
-                    var contDerivedUserInput = _.uniq(products, 'HIER_VAL_NM');
+                    var contDerivedUserInput = uniq(products, 'HIER_VAL_NM');
                     if (products.length === 1 && contDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == contDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
                         contractProducts = contDerivedUserInput[0].HIER_VAL_NM;
                     } else {
@@ -429,7 +429,7 @@ export class PTEUtil {
                     return x.EXCLUDE === true;
                 });
                 if (products.length !== 0) {
-                    var exclDerivedUserInput = _.uniq(products, 'HIER_VAL_NM');
+                    var exclDerivedUserInput = uniq(products, 'HIER_VAL_NM');
                     if (products.length === 1 && exclDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() === exclDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
                         excludeProducts = exclDerivedUserInput[0].HIER_VAL_NM;
                     } else {
@@ -482,7 +482,7 @@ export class PTEUtil {
         var userInput = products.filter(function (x) {
             return x.EXCLUDE === (typeOfProduct === "E");
         });
-        userInput = _.uniq(userInput, fieldNm);
+        userInput = uniq(userInput, fieldNm);
 
         userInput = userInput.map(function (elem) {
             return elem[fieldNm];
@@ -533,16 +533,16 @@ export class PTEUtil {
         var addedProducts = [];
         for (var key in sysProducts) {
             if (sysProducts.hasOwnProperty(key)) {
-                _.each(sysProducts[key], (item) =>{
+                each(sysProducts[key], (item) =>{
                     addedProducts.push(item);
                 });
             }
         }
         // Orders KIT products
-        addedProducts = _.sortBy(addedProducts,'DEAL_PRD_TYPE');//$filter('kitProducts')(addedProducts, 'DEAL_PRD_TYPE');
+        addedProducts = sortBy(addedProducts,'DEAL_PRD_TYPE');//$filter('kitProducts')(addedProducts, 'DEAL_PRD_TYPE');
         var pricingTableSysProducts = {};
         // Construct the new reordered JSON for KIT, if user input is Ci3, derived user input will be selected products
-        _.each(addedProducts, (item) => {
+        each(addedProducts, (item) => {
             if (!pricingTableSysProducts.hasOwnProperty(item.DERIVED_USR_INPUT)) {
                 pricingTableSysProducts[item.DERIVED_USR_INPUT] = [item];
             } else {
@@ -605,7 +605,7 @@ export class PTEUtil {
                                         return x.EXCLUDE === false;
                                     });
                                     if (products.length !== 0) {
-                                        var contDerivedUserInput = _.uniq(products, 'HIER_VAL_NM');
+                                        var contDerivedUserInput = uniq(products, 'HIER_VAL_NM');
                                         if (products.length === 1 && contDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == contDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
                                             contractProducts = contDerivedUserInput[0].HIER_VAL_NM;
                                         }
@@ -613,7 +613,7 @@ export class PTEUtil {
                                             contractProducts = contDerivedUserInput.length == 1 ? PTE_Common_Util.getFullNameOfProduct(contDerivedUserInput[0], contDerivedUserInput[0].DERIVED_USR_INPUT) : contDerivedUserInput[0].DERIVED_USR_INPUT;
                                         }
                                         let ptrUsrPrd = data[r].PTR_USER_PRD.split(',');
-                                        ptrUsrPrd[_.findIndex(ptrUsrPrd, prd)] = contractProducts;
+                                        ptrUsrPrd[findIndex(ptrUsrPrd, prd)] = contractProducts;
                                         data[r].PTR_USER_PRD = ptrUsrPrd.join(',');
                                     }
                                 }

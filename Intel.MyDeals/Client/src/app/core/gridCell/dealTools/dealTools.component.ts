@@ -3,7 +3,7 @@ import { logger } from '../../../shared/logger/logger';
 import { GridUtil } from "../../../contract/grid.util";
 import { DE_Load_Util } from "../../../contract/DEUtils/DE_Load_util";
 import { dealToolsService } from '../dealTools/dealTools.service';
-import * as _ from 'underscore';
+import { countBy, each } from 'underscore';
 import { MatDialog } from '@angular/material/dialog';
 import { dealTimelineComponent } from '../dealTimelineModal/dealTimelineModal.component';
 import { fileAttachmentComponent } from '../fileAttachmentModal/fileAttachmentModal.component';
@@ -17,7 +17,6 @@ import { pricingTableEditorService } from "../../../contract/pricingTableEditor/
     styleUrls: ['Client/src/app/core/gridCell/dealTools/dealTools.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-
 export class dealToolsComponent{
     
     constructor(private dataService: dealToolsService, private loggerSvc: logger, protected dialog: MatDialog, private pteService: pricingTableEditorService) {}
@@ -124,8 +123,8 @@ export class dealToolsComponent{
         else {
             distinctData = distinct(this.gridData, 'DEAL_ID');//contract manage tab
         }
-        let childParent = _.countBy(distinctData, 'DC_PARENT_ID');
-        _.each(this.gridData, item => {
+        let childParent = countBy(distinctData, 'DC_PARENT_ID');
+        each(this.gridData, item => {
             item['_parentCnt'] = childParent[`${item.DC_PARENT_ID}`]
         });
 

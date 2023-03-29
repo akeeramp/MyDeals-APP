@@ -4,9 +4,8 @@ import { TenderFolioService } from '../tenderFolio/tenderFolio.service';
 import { templatesService } from "../../shared/services/templates.service";
 import { logger } from '../../shared/logger/logger'
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
-import * as _moment from 'moment';
-const moment = _moment;
-import * as _ from 'underscore';
+import { MomentService } from "../../shared/moment/moment.service";
+import { each } from 'underscore';
 
 @Component({
     providers: [TenderFolioService],
@@ -15,16 +14,14 @@ import * as _ from 'underscore';
     styleUrls: ["Client/src/app/contract/tenderFolio/tenderFolio.component.css"],
     encapsulation: ViewEncapsulation.None
 })
-
 export class TenderFolioComponent {
 
-    constructor(
-        public dialogRef: MatDialogRef<TenderFolioComponent>,
-        @Inject(MAT_DIALOG_DATA) public data, private dataService: TenderFolioService,
-        private loggerSvc: logger,
-        private templatesSvc: templatesService
-
-    ) { }
+    constructor(public dialogRef: MatDialogRef<TenderFolioComponent>,
+                @Inject(MAT_DIALOG_DATA) public data,
+                private dataService: TenderFolioService,
+                private loggerSvc: logger,
+                private templatesSvc: templatesService,
+                private momentService: MomentService) { }
 
     private isLoading = true;
     private showCustDivAlert = false;
@@ -73,7 +70,7 @@ export class TenderFolioComponent {
         let result = {};
         const dealDisplayOrder = ["ECAP", "KIT"];
         const items = this.templateData["ModelTemplates"].PRC_TBL;
-        _.each(items, function (value, key) {
+        each(items, function (value, key) {
             if (value.name !== 'ALL_TYPES') {
                 value._custom = {
                     "ltr": value.name[0],
@@ -337,7 +334,7 @@ export class TenderFolioComponent {
         var ct = [];
         ct.push(this.data.contractData);
         var objSetTypeCd = "";
-        _.each(this.templateData.ModelTemplates.PRC_TBL,
+        each(this.templateData.ModelTemplates.PRC_TBL,
             function (value, key) {
                 if (value._custom._active === true) {
                     objSetTypeCd = key;
@@ -381,16 +378,16 @@ export class TenderFolioComponent {
         const qtrValue = "4";
         const yearValue = new Date().getFullYear();
         this.dataService.getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue).subscribe((response: Array<any>) => {
-            if (moment(response["QTR_END"]) < moment(new Date())) {
-                response["QTR_END"] = moment(response["QTR_END"]).add(365, 'days').format('l');
+            if (this.momentService.moment(response["QTR_END"]) < this.momentService.moment(new Date())) {
+                response["QTR_END"] = this.momentService.moment(response["QTR_END"]).add(365, 'days').format('l');
             }
-            this.contractData.MinDate = moment(response["MIN_STRT"]).format('l');
-            this.contractData.MaxDate = moment(response["MIN_END"]).format('l');
+            this.contractData.MinDate = this.momentService.moment(response["MIN_STRT"]).format('l');
+            this.contractData.MaxDate = this.momentService.moment(response["MIN_END"]).format('l');
             this.contractData.START_QTR = this.contractData.END_QTR = response["QTR_NBR"];
             this.contractData.START_YR = this.contractData.END_YR = response["YR_NBR"];
             // By default we dont want a contract to be backdated
-            this.contractData.START_DT = moment().format('l');
-            this.contractData.END_DT = moment(response["QTR_END"]).format('l');
+            this.contractData.START_DT = this.momentService.moment().format('l');
+            this.contractData.END_DT = this.momentService.moment(response["QTR_END"]).format('l');
         }, (err) => {
             this.loggerSvc.error("Unable to get customer calender data", "Error", err);
         });
@@ -402,11 +399,11 @@ export class TenderFolioComponent {
         this.contractData.TENDER_PUBLISHED = 0;
         // Set dates Max and Min Values for numeric text box
         // Setting MinDate to (Today - 5 years + 1) | +1 to accommodate HP dates, Q4 2017 spreads across two years 2017 and 2018
-        this.contractData.MinYear = parseInt(moment().format("YYYY")) - 6;
-        this.contractData.MaxYear = parseInt(moment("2099").format("YYYY"));
+        this.contractData.MinYear = parseInt(this.momentService.moment().format("YYYY")) - 6;
+        this.contractData.MaxYear = parseInt(this.momentService.moment("2099").format("YYYY"));
         // Set the initial Max and Min date, actual dates will be updated as per the selected customer
-        this.contractData.MinDate = moment().subtract(6, "years").format("l");
-        this.contractData.MaxDate = moment("2099").format("l");
+        this.contractData.MinDate = this.momentService.moment().subtract(6, "years").format("l");
+        this.contractData.MaxDate = this.momentService.moment("2099").format("l");
         this.contractData.CUST_ACCNT_DIV_UI = "";
         this.contractData.CUST_ACCPT = this.contractData.CUST_ACCPT === "" ? "Pending" : this.contractData.CUST_ACCPT;
         this.contractData["NO_END_DT"] = (this.contractData.NO_END_DT_RSN !== "" && this.contractData.NO_END_DT_RSN !== undefined);
@@ -421,7 +418,7 @@ export class TenderFolioComponent {
         operator: "startsWith",
     };
     addCustomToTemplates() {
-        _.each(this.templateData['ModelTemplates']['PRC_TBL'], (value, key) => {
+        each(this.templateData['ModelTemplates']['PRC_TBL'], (value, key) => {
             value._custom = {
                 "ltr": value.name[0],
                 "_active": false

@@ -4,7 +4,7 @@ import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-gr
 import { process, State } from "@progress/kendo-data-query";
 import { SecurityEngineService } from "./admin.securityEngine.service";
 import { SelectEvent } from "@progress/kendo-angular-layout";
-import * as _ from 'underscore';
+import { sortBy } from 'underscore';
 
 @Component({
     selector: "admin-security-engine",
@@ -112,7 +112,7 @@ export class adminsecurityEngineComponent {
             } else {
                 this.drilledDownAtrb = this.dropDownDatasource['AttributesByObjType']['CNTRCT'];
             }
-        this.drilledDownAtrb = _.sortBy(this.drilledDownAtrb, 'ATRB_COL_NM');
+        this.drilledDownAtrb = sortBy(this.drilledDownAtrb, 'ATRB_COL_NM');
     }
 
     objtypeRoleChange(value) {

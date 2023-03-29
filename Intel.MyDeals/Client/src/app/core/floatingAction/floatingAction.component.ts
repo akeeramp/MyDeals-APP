@@ -1,5 +1,5 @@
 ﻿import { Component, EventEmitter, Output, ViewEncapsulation } from "@angular/core";
-import * as _ from 'underscore';
+import { each } from 'underscore';
 
 @Component({
     selector: "floating-action",
@@ -15,7 +15,7 @@ export class floatingActioncomponent {
     @Output() onAction = new EventEmitter();
 
     toggle() { 
-        _.each(this.menuList, (items) => {
+        each(this.menuList, (items) => {
             if (items.status == "open") {
                
                     items.status = "close";
@@ -26,7 +26,7 @@ export class floatingActioncomponent {
         });
 
         if (this.isdropped) {
-            _.each(this.menuList, (items) => {
+            each(this.menuList, (items) => {
                 if (items.status == "open") {
                     items.status = "close";
                 }
@@ -73,7 +73,7 @@ export class floatingActioncomponent {
         ]
     }
     start() {
-        _.each(this.menuList, (items) => {
+        each(this.menuList, (items) => {
             if (items.status == "open") {
                 items.status = "close";
             }

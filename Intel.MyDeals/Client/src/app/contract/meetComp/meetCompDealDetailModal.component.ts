@@ -4,7 +4,7 @@ import {GridDataResult,DataStateChangeEvent,PageSizeItem} from "@progress/kendo-
 import {process, State} from "@progress/kendo-data-query";
 import {logger} from "../../shared/logger/logger";
 import { meetCompContractService } from "./meetComp.service";
-import * as _ from "underscore";
+import { each } from 'underscore';
 import { DatePipe } from "@angular/common";
 
 @Component({
@@ -13,7 +13,6 @@ import { DatePipe } from "@angular/common";
   styleUrls: [ "Client/src/app/contract/meetComp/meetCompDealDetailModal.component.css"],
   encapsulation: ViewEncapsulation.None
 })
-
 export class meetCompDealDetailModalComponent implements OnInit {
 
     private gridData: GridDataResult;
@@ -70,7 +69,7 @@ export class meetCompDealDetailModalComponent implements OnInit {
         this.meetCompSvc.getDealDetails(DEAL_OBJ_SID,GRP_PRD_SID,DEAL_PRD_TYPE).subscribe( (response:Array<any>)=> {
             this.isLoading = false;
             if (response && response.length > 0) {
-                _.each(response, item => {
+                each(response, item => {
                     item['STRT_DT'] = this.datepipe.transform(new Date(item['STRT_DT']), 'M/d/yyyy');
                     item['END_DT'] = this.datepipe.transform(new Date(item['END_DT']), 'M/d/yyyy');
                     item['STRT_DT'] = new Date(item['STRT_DT']);

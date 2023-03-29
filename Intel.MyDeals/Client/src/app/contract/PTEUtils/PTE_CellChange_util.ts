@@ -1,10 +1,10 @@
-import * as _ from 'underscore';
+import { countBy, each, uniq, filter, map, where, sortBy, pluck, findWhere, indexOf, findIndex, find, keys, compact, without, isEqual, union, first } from 'underscore';
 import Handsontable from 'handsontable';
 import { PTE_Common_Util } from './PTE_Common_util';
 import { PTE_Load_Util } from './PTE_Load_util';
 import { PTE_Helper_Util } from './PTE_Helper_util';
 import { PTEUtil } from './PTE.util';
-import * as moment from 'moment';
+import { StaticMomentService } from "../../shared/moment/moment.service";
 import { PTE_Config_Util } from './PTE_Config_util';
 
 export class PTE_CellChange_Util {
@@ -39,8 +39,8 @@ export class PTE_CellChange_Util {
 
     static addUpdateRowOnchange(hotTable: Handsontable, columns: any[], row: number, cellItem: any, ROW_ID: number, updateRows: Array<any>, curPricingTable: any, contractData: any, numoftier: number, tier?: number, operation?: any) {
         //make the selected row PTR_USER_PRD empty if its not the empty row
-        let cols = _.map(columns, col => { return { prop: col.data } });
-        _.each(cols, (val, key) => {
+        let cols = map(columns, col => { return { prop: col.data } });
+        each(cols, (val, key) => {
             let currentString = '';
             if (val.prop == 'PTR_USER_PRD') {
                 //update PTR_USER_PRD with entered value
@@ -166,12 +166,12 @@ export class PTE_CellChange_Util {
             }
             else if (val.prop == 'START_DT') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after delete can give duplicate index
-                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, moment(contractData.START_DT).format("MM/DD/YYYY"), 'no-edit');
+                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, StaticMomentService.moment(contractData.START_DT).format("MM/DD/YYYY"), 'no-edit');
                 updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'END_DT') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after delete can give duplicate index
-                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, moment(contractData.END_DT).format("MM/DD/YYYY"), 'no-edit');
+                currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, StaticMomentService.moment(contractData.END_DT).format("MM/DD/YYYY"), 'no-edit');
                 updateRows.push(currentString.split(','));
             }
             else if (val.prop == 'RESET_VOLS_ON_PERIOD') {
@@ -268,7 +268,7 @@ export class PTE_CellChange_Util {
         //identify distinct DCID, bcz the merge will happen for each DCID and each DCID can have diff  NUM_OF_TIERS
         //get NUM_OF_TIERS acoording this will be the row_span for handson
         mergCells = this.hotTable.getSettings().mergeCells;
-        _.each(pricingTableTemplates.columns, (colItem, ind) => {
+        each(pricingTableTemplates.columns, (colItem, ind) => {
             //dont merge if rowspan and colspan is 1
             if (!colItem.isDimKey && !colItem.hidden && NUM_OF_TIERS != 1) {
                 mergCells.push({ row: empRow, col: ind, rowspan: NUM_OF_TIERS, colspan: 1 });
@@ -279,8 +279,8 @@ export class PTE_CellChange_Util {
     }
     static addUpdateRowOnchangeKIT(hotTable: Handsontable, columns: any[], row: number, cellItem: any, ROW_ID: number, updateRows: Array<any>, curPricingTable: any, contractData: any, product: number, rowData?: any, operation?: any) {
         //make the selected row PTR_USER_PRD empty if its not the empty row
-        let cols = _.map(columns, col => { return { prop: col.data } });
-        _.each(cols, (val, key) => {
+        let cols = map(columns, col => { return { prop: col.data } });
+        each(cols, (val, key) => {
             let currentString = '';
             if (val.prop == 'PTR_USER_PRD') {
                 hotTable.setDataAtRowProp(row, 'PTR_USER_PRD', cellItem.new, 'no-edit');
@@ -317,7 +317,7 @@ export class PTE_CellChange_Util {
         let mergCells: any = null;
         if (!isExist) {
             mergCells = this.hotTable.getSettings().mergeCells;
-            _.each(pricingTableTemplates.columns, (colItem, ind) => {
+            each(pricingTableTemplates.columns, (colItem, ind) => {
                 //dont merge if rowspan and colspan is 1
                 if (!colItem.isDimKey && !colItem.hidden && prodLen != 1) {
                     mergCells.push({ row: empRow, col: ind, rowspan: prodLen, colspan: 1 });
@@ -330,8 +330,8 @@ export class PTE_CellChange_Util {
         else {
             //for existing rows its only updting the row span
             mergCells = [];
-            _.each(itrObj, item => {
-                _.each(pricingTableTemplates.columns, (colItem, ind) => {
+            each(itrObj, item => {
+                each(pricingTableTemplates.columns, (colItem, ind) => {
                     //dont merge if rowspan and colspan is 1
                     if (!colItem.isDimKey && !colItem.hidden && item.leng != 1) {
                         mergCells.push({ row: item.indx, col: ind, rowspan: item.leng, colspan: 1 });
@@ -348,7 +348,7 @@ export class PTE_CellChange_Util {
         if (items && items.length == 1) {
             const selrow = items[0].row;
             //to identify the uniq records
-            let prods =_.uniq(items[0].new.split(','));
+            let prods =uniq(items[0].new.split(','));
             items[0].new=prods.toString();
             if (!this.isAlreadyChange(selrow)) {
                 //identify the empty row and add it there
@@ -357,7 +357,7 @@ export class PTE_CellChange_Util {
                 this.hotTable.alter('remove_row', selrow, 1, 'no-edit');
                 //this line of code is only for KIT incase of success product
                 if (operation && operation.operation) {
-                    let PTR_col_ind = _.findIndex(columns, { data: 'PTR_USER_PRD' });
+                    let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
                     this.hotTable.setCellMeta(empRow, PTR_col_ind, 'className', 'success-product');
                 }
                 //based on the number of products listed we have to iterate the 
@@ -376,17 +376,17 @@ export class PTE_CellChange_Util {
                     //get the DC_ID of selected row
                     let ROW_ID = this.hotTable.getDataAtRowProp(selrow, 'DC_ID');
                     //the row can be insert or delete to get that we are removing and adding the rows
-                    let DataOfRow = _.filter(PTE_Common_Util.getPTEGenerate(columns, curPricingTable), itm => { return itm.DC_ID == ROW_ID });
+                    let DataOfRow = filter(PTE_Common_Util.getPTEGenerate(columns, curPricingTable), itm => { return itm.DC_ID == ROW_ID });
                     this.hotTable.alter('remove_row', selrow, items[0].old.split(',').length, 'no-edit');
                     this.hotTable.alter('insert_row', selrow, items[0].new.split(',').length, 'no-edit');
                     //this line of code is only for KIT incase of success product
                     if (operation && operation.operation) {
-                        let PTR_col_ind = _.findIndex(columns, { data: 'PTR_USER_PRD' });
+                        let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
                         this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'success-product');
                     }
                     //this line of code is only for KIT incase of any change in product
                     else {
-                        let PTR_col_ind = _.findIndex(columns, { data: 'PTR_USER_PRD' });
+                        let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
                         this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'normal-product');
                     }
                     let prodIndex = 0;
@@ -399,12 +399,12 @@ export class PTE_CellChange_Util {
                     //logic to calculate rebate price on product change in KIT and assign to DataROw so that it will assign in addUpdateRowOnchangeKIT
                     DataOfRow[0]['TEMP_KIT_REBATE'] = this.kitEcapChangeOnProd(items[0], DataOfRow.slice(0, items[0].new.split(',').length));
                     let PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
-                    let DCIDS = _.pluck(PTR, 'DC_ID');
-                    let countOfDCID = _.countBy(_.pluck(PTR, 'DC_ID'))
+                    let DCIDS = pluck(PTR, 'DC_ID');
+                    let countOfDCID = countBy(pluck(PTR, 'DC_ID'))
                     let iterObj = [];
                     //calling the merge cells options numb of products ans setting mergcells to null first since we are doing all togather
-                    _.each(_.uniq(DCIDS), DCID => {
-                        iterObj.push({ DCID: DCID, leng: countOfDCID[`${DCID}`], indx: _.indexOf(DCIDS, DCID) })
+                    each(uniq(DCIDS), DCID => {
+                        iterObj.push({ DCID: DCID, leng: countOfDCID[`${DCID}`], indx: indexOf(DCIDS, DCID) })
                     });
                     this.getMergeCellsOnEditKit(true, 1, 1, pricingTableTemplates, iterObj);
                 }
@@ -416,10 +416,10 @@ export class PTE_CellChange_Util {
             this.hotTable.alter('remove_row', items[0].row, PTE_Config_Util.girdMaxRows, 'no-edit');
             //identify the empty row and the next empty row will be the consecutive one
             let empRow = this.returnEmptyRow();
-            _.each(items, (cellItem) => {
+            each(items, (cellItem) => {
                 let ROW_ID = this.rowDCID();
                 //add num of tier rows the logic will be based on autofill value
-                let prods = _.uniq(cellItem.new.split(',')), prodIndex = 0;
+                let prods = uniq(cellItem.new.split(',')), prodIndex = 0;
                  //to identify the uniq records
                 cellItem.new=prods.toString();
                 //KIT Deal will not allow more than 10 rows
@@ -457,7 +457,7 @@ export class PTE_CellChange_Util {
                 this.hotTable.alter('remove_row', selrow, 1, 'no-edit');
                 //this line of code is only for KIT incase of success product
                 if (operation && operation.operation) {
-                    let PTR_col_ind = _.findIndex(columns, { data: 'PTR_USER_PRD' });
+                    let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
                     this.hotTable.setCellMeta(empRow, PTR_col_ind, 'className', 'success-product');
                 }
                 //add num of tier rows the logic will be based on autofill value
@@ -472,16 +472,16 @@ export class PTE_CellChange_Util {
             else {
                 //this line of code is only for KIT incase of success product
                 if (operation && operation.operation) {
-                    let PTR_col_ind = _.findIndex(columns, { data: 'PTR_USER_PRD' });
+                    let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
                     this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'success-product');
                 }
                 if (operation && operation.operation && operation.PRD_EXCLDS) {
-                    let PTR_EXCLUDE_col_ind = _.findIndex(columns, { data: 'PRD_EXCLDS' });
+                    let PTR_EXCLUDE_col_ind = findIndex(columns, { data: 'PRD_EXCLDS' });
                     this.hotTable.setDataAtRowProp(selrow, 'PRD_EXCLDS', operation.PRD_EXCLDS, 'no-edit');
                     this.hotTable.setCellMeta(selrow, PTR_EXCLUDE_col_ind, 'className', 'success-product');
                 }
                 else if (operation && operation.operation && operation.PRD_EXCLDS != undefined && operation.PRD_EXCLDS == "") {
-                    let PTR_EXCLUDE_col_ind = _.findIndex(columns, { data: 'PRD_EXCLDS' });
+                    let PTR_EXCLUDE_col_ind = findIndex(columns, { data: 'PRD_EXCLDS' });
                     this.hotTable.setDataAtRowProp(selrow, 'PRD_EXCLDS', '', 'no-edit');
                     this.hotTable.setCellMeta(selrow, PTR_EXCLUDE_col_ind, 'className', 'normal-product');
                 }
@@ -492,7 +492,7 @@ export class PTE_CellChange_Util {
                 else {
                     //this will rever the produc color back to empty
                     if (items[0].old != items[0].new && (operation == undefined || operation == null)) {
-                        let PTR_col_ind = _.findIndex(columns, { data: 'PTR_USER_PRD' });
+                        let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
                         this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'normal-product');
 
                         //This will make sure to hit translate API
@@ -508,7 +508,7 @@ export class PTE_CellChange_Util {
             this.hotTable.alter('remove_row', items[0].row, items.length * parseInt(curPricingTable.NUM_OF_TIERS), 'no-edit');
             //identify the empty row and the next empty row will be the consecutive one
             let empRow = this.returnEmptyRow();
-            _.each(items, (cellItem) => {
+            each(items, (cellItem) => {
                 let ROW_ID = this.rowDCID(); 
                 //add num of tier rows the logic will be based on autofill value
                 let tier = 1;
@@ -567,7 +567,7 @@ export class PTE_CellChange_Util {
                         this.hotTable.alter('remove_row', selrow, 1, 'no-edit');
                         //this line of code is to mak sure we modify the product background color to sucess
                         if (operation && operation.operation) {
-                            let PTR_col_ind = _.findIndex(columns, { data: 'PTR_USER_PRD' });
+                            let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
                             this.hotTable.setCellMeta(empRow, PTR_col_ind, 'className', 'success-product');
                         }
                         this.addUpdateRowOnchange(this.hotTable, columns, empRow, items[0], ROW_ID, updateRows, curPricingTable, contractData, 0, 1, operation);
@@ -575,7 +575,7 @@ export class PTE_CellChange_Util {
                     else {
                         //this line of code is to mak sure we modify the product background color to sucess
                         if (operation && operation.operation) {
-                            let PTR_col_ind = _.findIndex(columns, { data: 'PTR_USER_PRD' });
+                            let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
                             this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'success-product');
                         }
                         //identify if the changes are coming from prod selector or corrector
@@ -590,7 +590,7 @@ export class PTE_CellChange_Util {
                         else {
                             //this will rever the produc color back to empty
                             if (items[0].old != items[0].new && (operation == undefined || operation == null)) {
-                                let PTR_col_ind = _.findIndex(columns, { data: 'PTR_USER_PRD' });
+                                let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
                                 this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'normal-product');
 
                                 //This will make sure to hit translate API
@@ -598,7 +598,7 @@ export class PTE_CellChange_Util {
                                 this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_INVLD_PRD', '', 'no-edit');
                             }
                             if (operation && operation.operation && operation.PRD_EXCLDS != undefined && operation.PRD_EXCLDS == "") {
-                                let PTR_EXCLUDE_col_ind = _.findIndex(columns, { data: 'PRD_EXCLDS' });
+                                let PTR_EXCLUDE_col_ind = findIndex(columns, { data: 'PRD_EXCLDS' });
                                 if (PTR_EXCLUDE_col_ind != -1) {
                                     this.hotTable.setDataAtRowProp(selrow, 'PRD_EXCLDS', '', 'no-edit');
                                     this.hotTable.setCellMeta(selrow, PTR_EXCLUDE_col_ind, 'className', 'normal-product');
@@ -619,8 +619,8 @@ export class PTE_CellChange_Util {
 
                     //identify the empty row and the next empty row will be the consecutive one
                     let empRow = this.returnEmptyRow();
-                    _.each(items, (cellItem) => {
-                        let ROW_ID = this.rowDCID();//_.random(250); // will be replace with some other logic
+                    each(items, (cellItem) => {
+                        let ROW_ID = this.rowDCID();//random(250); // will be replace with some other logic
                         this.addUpdateRowOnchange(this.hotTable, columns, empRow, cellItem, ROW_ID, updateRows, curPricingTable, contractData, 0, 1, operation);
                         empRow++;
                     });
@@ -640,7 +640,7 @@ export class PTE_CellChange_Util {
 
     static addUpdateRowOnchangeDensity(hotTable: Handsontable, row: number, cellItem: any, ROW_ID: number, updateRows: Array<any>, curPricingTable: any, contractData: any, numoftier: number, tier?: number, operation?: any) {
         //make the selected row PTR_USER_PRD empty if its not the empty row
-        _.each(hotTable.getCellMetaAtRow(0), (val, key) => {
+        each(hotTable.getCellMetaAtRow(0), (val, key) => {
             let currentString = '';
             if (val.prop == 'PTR_USER_PRD') {
                 //update PTR_USER_PRD with entered value
@@ -692,7 +692,7 @@ export class PTE_CellChange_Util {
         let mergCells: any = null;
         let startOffset = empRow;
         mergCells = this.hotTable.getSettings().mergeCells;
-        _.each(pricingTableTemplates.columns, (colItem, ind) => {
+        each(pricingTableTemplates.columns, (colItem, ind) => {
             if (colItem.field == 'TIER_NBR' || colItem.field == 'STRT_PB' || colItem.field == 'END_PB') {
                 for (let i = 1; i <= NUM_OF_TIERS; i++) {
                     mergCells.push({ row: startOffset, col: ind, rowspan: pivotDensity, colspan: 1 });
@@ -720,7 +720,7 @@ export class PTE_CellChange_Util {
             if (!this.isAlreadyChange(selrow)) {
                 //identify the empty row and add it there
                 let empRow = this.returnEmptyRow();
-                let ROW_ID = this.rowDCID();//_.random(250); // will be replace with some other logic
+                let ROW_ID = this.rowDCID();//random(250); // will be replace with some other logic
                 //first deleting the row this will help if the empty row and selected row doest match
                 this.hotTable.alter('remove_row', selrow, 1, 'no-edit');
                 //add num of tier rows the logic will be based on autofill value
@@ -737,7 +737,7 @@ export class PTE_CellChange_Util {
             }
             else {
                 if (operation && operation.operation) {
-                    let PTR_col_ind = _.findIndex(columns, { data: 'PTR_USER_PRD' });
+                    let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
                     this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'success-product');
                 }                
                 if (operation && operation.operation && operation.PTR_SYS_PRD) {
@@ -751,7 +751,7 @@ export class PTE_CellChange_Util {
                 else {
                     //this will rever the produc color back to empty
                     if (items[0].old != items[0].new && (operation == undefined || operation == null)) {
-                        let PTR_col_ind = _.findIndex(columns, { data: 'PTR_USER_PRD' });
+                        let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
                         this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'normal-product');
 
                         //This will make sure to hit translate API
@@ -759,7 +759,7 @@ export class PTE_CellChange_Util {
                         this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_INVLD_PRD', '', 'no-edit');
                     }
                     if (operation && operation.operation && operation.PRD_EXCLDS != undefined && operation.PRD_EXCLDS == "") {
-                        let PTR_EXCLUDE_col_ind = _.findIndex(columns, { data: 'PRD_EXCLDS' });
+                        let PTR_EXCLUDE_col_ind = findIndex(columns, { data: 'PRD_EXCLDS' });
                         this.hotTable.setDataAtRowProp(selrow, 'PRD_EXCLDS', '', 'no-edit');
                         this.hotTable.setCellMeta(selrow, PTR_EXCLUDE_col_ind, 'className', 'normal-product');
                     }
@@ -772,7 +772,7 @@ export class PTE_CellChange_Util {
             this.hotTable.alter('remove_row', items[0].row, items.length * numOfRows, 'no-edit');
             //identify the empty row and the next empty row will be the consecutive one
             let empRow = this.returnEmptyRow();
-            _.each(items, (cellItem) => {
+            each(items, (cellItem) => {
                 let ROW_ID = this.rowDCID();
                  //add num of tier rows the logic will be based on autofill value
                 let tier = 1;
@@ -802,8 +802,8 @@ export class PTE_CellChange_Util {
     
     static kitEcapChangeOnProd(item: any, PTR: any[]): number {
         let DCID = this.hotTable.getDataAtRowProp(item.row, 'DC_ID');
-        let numOfTiers = _.where(PTR, { DC_ID: DCID }).length;
-        let firstTierRowInd = _.findIndex(PTR, x => { return x.DC_ID == DCID })
+        let numOfTiers = where(PTR, { DC_ID: DCID }).length;
+        let firstTierRowInd = findIndex(PTR, x => { return x.DC_ID == DCID })
         let val = PTE_Load_Util.calculateKitRebate(PTR, firstTierRowInd, numOfTiers, false)
         return val
     }
@@ -812,10 +812,10 @@ export class PTE_CellChange_Util {
             let OBJ_SET_TYPE_CD = curPricingTable.OBJ_SET_TYPE_CD;
             if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'KIT') {
                 let PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
-                _.each(items, item => {
+                each(items, item => {
                     let DCID = this.hotTable.getDataAtRowProp(item.row, 'DC_ID');
-                    let numOfTiers = _.where(PTR, { DC_ID: DCID }).length;
-                    let firstTierRowInd = _.findIndex(PTR, x => { return x.DC_ID == DCID })
+                    let numOfTiers = where(PTR, { DC_ID: DCID }).length;
+                    let firstTierRowInd = findIndex(PTR, x => { return x.DC_ID == DCID })
                     let val = PTE_Load_Util.calculateKitRebate(PTR, firstTierRowInd, numOfTiers, false)
                     this.hotTable.setDataAtRowProp(firstTierRowInd, 'TEMP_KIT_REBATE', val, 'no-edit');
                 });
@@ -829,7 +829,7 @@ export class PTE_CellChange_Util {
         try {
             let OBJ_SET_TYPE_CD = curPricingTable.OBJ_SET_TYPE_CD;
             if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'KIT') {
-                _.each(items, item => {
+                each(items, item => {
                     let val = PTE_Load_Util.calculateTotalDsctPerLine(this.hotTable.getDataAtRowProp(item.row, 'DSCNT_PER_LN'), this.hotTable.getDataAtRowProp(item.row, 'QTY'))
                     this.hotTable.setDataAtRowProp(item.row, 'TEMP_TOTAL_DSCNT_PER_LN', val, 'no-edit');
                     if (item.prop && item.prop == 'QTY') {
@@ -853,13 +853,13 @@ export class PTE_CellChange_Util {
                 columnList.push({ data: '_behaviors' });
               //check for the same KIT name exists
                 let PTR = PTE_Common_Util.getPTEGenerate(columnList, curPricingTable);
-              let uniqnames=_.uniq(_.pluck(items,'new'));
+              let uniqnames=uniq(pluck(items,'new'));
               let PTR_exist=[];
               //iterate throght the PTR and get consolidate result for all duplicate
-              _.each(uniqnames,uniqnm=>{
+              each(uniqnames,uniqnm=>{
                 if(uniqnm && uniqnm !=''){
                     let curPTR=[];
-                    _.each(PTR,(cr,row)=>{
+                    each(PTR,(cr,row)=>{
                         if(cr['DEAL_GRP_NM'].toUpperCase()==uniqnm.toUpperCase()){
                          cr['row']=row;
                          curPTR.push(cr);
@@ -875,7 +875,7 @@ export class PTE_CellChange_Util {
                             PTR_exist.push({ PTR: curPTR, name: uniqnm, issueType: 'notEditable' })
                         else {
                             //identify the uniq product count of the duplicate KIT
-                            let unqcount = _.uniq(_.compact(_.pluck(curPTR, 'PTR_USER_PRD').toString().split(','))).length
+                            let unqcount = uniq(compact(pluck(curPTR, 'PTR_USER_PRD').toString().split(','))).length
                             if (unqcount && unqcount > PTE_Config_Util.maxKITproducts) {
                                 PTR_exist.push({ PTR: curPTR, name: uniqnm, issueType: 'dupMoreLeng' })
                             }
@@ -902,14 +902,14 @@ export class PTE_CellChange_Util {
     static mergeKitDeal(items: any, columns: any[], curPricingTable: any,contractData:any,pricingTableTemplates:any){
         //first delete all the rows except the min one
         let PTR=PTE_Common_Util.getPTEGenerate(columns,curPricingTable);
-        PTR=_.map(PTR,(x)=>{ return {DEAL_GRP_NM:x['DEAL_GRP_NM'].toUpperCase()}});
-        let firstInd=_.findIndex(PTR,{DEAL_GRP_NM:items.name.toUpperCase()});
+        PTR=map(PTR,(x)=>{ return {DEAL_GRP_NM:x['DEAL_GRP_NM'].toUpperCase()}});
+        let firstInd=findIndex(PTR,{DEAL_GRP_NM:items.name.toUpperCase()});
         let prods='';
-        _.each(items.PTR,PTR=>{
+        each(items.PTR,PTR=>{
             prods=prods+PTR['PTR_USER_PRD']+',';
         });
          //modify the first cell with all uniq products
-        let uniqprod=_.uniq(prods.substring(0, prods.length - 1).split(','));
+        let uniqprod=uniq(prods.substring(0, prods.length - 1).split(','));
         //making sure not more than max KIT prod is available.
         uniqprod=uniqprod.length>PTE_Config_Util.maxKITproducts?uniqprod.slice(0,PTE_Config_Util.maxKITproducts):uniqprod;
         let Row=[{ row: firstInd, prop:'PTR_USER_PRD' , old: this.hotTable.getDataAtRowProp(firstInd,'PTR_USER_PRD'), new: uniqprod.toString()}];
@@ -918,9 +918,9 @@ export class PTE_CellChange_Util {
     }
     static closeKitDialog(items: any, columns: any[], curPricingTable: any,){
         let PTR=PTE_Common_Util.getPTEGenerate(columns,curPricingTable);
-        PTR=_.map(PTR,(x)=>{ return {DEAL_GRP_NM:x['DEAL_GRP_NM'].toUpperCase()}});
-        let firstInd=_.findIndex(PTR,{DEAL_GRP_NM:items.name.toUpperCase()});
-        _.each(PTR,(cr,ind)=>{
+        PTR=map(PTR,(x)=>{ return {DEAL_GRP_NM:x['DEAL_GRP_NM'].toUpperCase()}});
+        let firstInd=findIndex(PTR,{DEAL_GRP_NM:items.name.toUpperCase()});
+        each(PTR,(cr,ind)=>{
             //this will make sure we are not clearing first row
             if(firstInd !=ind && cr['DEAL_GRP_NM'].toUpperCase()==items.name.toUpperCase()){
                 this.hotTable.setDataAtRowProp(ind,'DEAL_GRP_NM','','no-edit');
@@ -928,7 +928,7 @@ export class PTE_CellChange_Util {
         });
     }
     static RateChgfn(items: Array<any>, columns: any[], curPricingTable: any) {
-        _.each(items, item => {
+        each(items, item => {
             if ((item.prop) && (item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'VOLUME' || item.prop == 'INCENTIVE_RATE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE' || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT' || item.prop == 'FRCST_VOL')) {
                 let val = this.hotTable.getDataAtRowProp(item.row, item.prop);
                 if(val==null || val==''){
@@ -956,7 +956,7 @@ export class PTE_CellChange_Util {
     static pgChgfn(items: Array<any>, columns: any[], curPricingTable: any,contractData?,cellEditor?,ptDefaults?) {
         let OBJ_SET_TYPE_CD = curPricingTable.OBJ_SET_TYPE_CD;
         if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'ECAP') {
-            _.each(items, item => {
+            each(items, item => {
                 if (item.prop) {
                     let val = item.new;
                     this.checkfn(item, curPricingTable,columns,val,contractData,cellEditor,ptDefaults); return;
@@ -977,39 +977,39 @@ export class PTE_CellChange_Util {
         if (item!=null) {
             let val = value ? value : this.hotTable.getDataAtRowProp(item.row, 'PROGRAM_PAYMENT');
             if (val != undefined && val != null && val != '' && val.toLowerCase() !== 'backend' && item.prop == 'PROGRAM_PAYMENT') {
-                if(_.findWhere(columns,{data:'PERIOD_PROFILE'}) !=undefined && _.findWhere(columns,{data:'PERIOD_PROFILE'}) !=null){
+                if(findWhere(columns,{data:'PERIOD_PROFILE'}) !=undefined && findWhere(columns,{data:'PERIOD_PROFILE'}) !=null){
                     this.hotTable.setDataAtRowProp(item.row, 'PERIOD_PROFILE', '', 'no-edit');
                 }
-                if(_.findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=undefined && _.findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=null){
+                if(findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=undefined && findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=null){
                     this.hotTable.setDataAtRowProp(item.row, 'RESET_VOLS_ON_PERIOD', '', 'no-edit');
                 }
-                if(_.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=undefined && _.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=null){
+                if(findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=undefined && findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=null){
                     this.hotTable.setDataAtRowProp(item.row, 'AR_SETTLEMENT_LVL', '', 'no-edit');
                 }
-                if(_.findWhere(columns,{data:'SETTLEMENT_PARTNER'}) !=undefined && _.findWhere(columns,{data:'SETTLEMENT_PARTNER'}) !=null){
+                if(findWhere(columns,{data:'SETTLEMENT_PARTNER'}) !=undefined && findWhere(columns,{data:'SETTLEMENT_PARTNER'}) !=null){
                     this.hotTable.setDataAtRowProp(item.row, 'SETTLEMENT_PARTNER', '', 'no-edit');
                 }
             } else {
                 if (this.hotTable.getDataAtRowProp(item.row, 'PERIOD_PROFILE') == '' && curPricingTable["PERIOD_PROFILE"] != undefined){
-                    if(_.findWhere(columns,{data:'PERIOD_PROFILE'}) !=undefined && _.findWhere(columns,{data:'PERIOD_PROFILE'})!=null){
+                    if(findWhere(columns,{data:'PERIOD_PROFILE'}) !=undefined && findWhere(columns,{data:'PERIOD_PROFILE'})!=null){
                         this.delReadOnlyBehaviours("PERIOD_PROFILE",item);
                         let prdPfvalue = curPricingTable["PERIOD_PROFILE"] ? curPricingTable["PERIOD_PROFILE"] : ptDefaults["_defaultAtrbs"]["PERIOD_PROFILE"].value
                         this.hotTable.setDataAtRowProp(item.row, 'PERIOD_PROFILE',prdPfvalue.toString(), 'no-edit');
                     }
                 }
                 if (this.hotTable.getDataAtRowProp(item.row, 'RESET_VOLS_ON_PERIOD') == ''){
-                    if(_.findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=undefined && _.findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=null){
+                    if(findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=undefined && findWhere(columns,{data:'RESET_VOLS_ON_PERIOD'}) !=null){
                         this.delReadOnlyBehaviours("RESET_VOLS_ON_PERIOD",item);
                         this.hotTable.setDataAtRowProp(item.row, 'RESET_VOLS_ON_PERIOD', 'No', 'no-edit');
                     }
                 }
                 if (this.hotTable.getDataAtRowProp(item.row, 'AR_SETTLEMENT_LVL') == '' && curPricingTable["AR_SETTLEMENT_LVL"] != undefined){
-                    if(_.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=undefined && _.findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=null){
+                    if(findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=undefined && findWhere(columns,{data:'AR_SETTLEMENT_LVL'}) !=null){
                         this.delReadOnlyBehaviours("AR_SETTLEMENT_LVL",item);
                         let arSVal = curPricingTable["AR_SETTLEMENT_LVL"] ? curPricingTable["AR_SETTLEMENT_LVL"] : ptDefaults["_defaultAtrbs"]["AR_SETTLEMENT_LVL"].value
                         this.hotTable.setDataAtRowProp(item.row, 'AR_SETTLEMENT_LVL', arSVal.toString(), 'no-edit');
                         if(curPricingTable && curPricingTable['AR_SETTLEMENT_LVL'] && arSVal.toLowerCase() == 'cash'){
-                            let colSPIdx = _.findWhere(this.hotTable.getCellMetaAtRow(item.row), { prop: 'SETTLEMENT_PARTNER' }).col;
+                            let colSPIdx = findWhere(this.hotTable.getCellMetaAtRow(item.row), { prop: 'SETTLEMENT_PARTNER' }).col;
                             this.autoFillOnCash(item,contractData,colSPIdx,cellEditor);
                         }
                     }
@@ -1024,14 +1024,14 @@ export class PTE_CellChange_Util {
         let OBJ_SET_TYPE_CD = curPricingTable.OBJ_SET_TYPE_CD;
         let PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
         if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'DENSITY') {
-            _.each(items, item => {
+            each(items, item => {
                 if (item.prop && item.prop == 'END_PB') {
                     let val = this.hotTable.getDataAtRowProp(item.row, 'END_PB');
                     let DCID = this.hotTable.getDataAtRowProp(item.row, 'DC_ID');
                     let Tier = this.hotTable.getDataAtRowProp(item.row, 'TIER_NBR');
                     let noofDensity = DCID < 0 ? curPricingTable.NUM_OF_DENSITY : this.hotTable.getDataAtRowProp(item.row, 'NUM_OF_DENSITY');
                     let startPBInd = item.row + parseInt(noofDensity);
-                    let numOfTiers = (_.where(PTR, { DC_ID: DCID }).length) / noofDensity;
+                    let numOfTiers = (where(PTR, { DC_ID: DCID }).length) / noofDensity;
                     if (Tier < numOfTiers) {
                         if (val > 0 || val === 0) {
                             this.hotTable.setDataAtRowProp(item.row, 'END_PB', val, 'no-edit');
@@ -1063,7 +1063,7 @@ export class PTE_CellChange_Util {
                 }
             });
         } else if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'REV_TIER') {
-            _.each(items, item => {
+            each(items, item => {
                 if (item.prop && item.prop == 'END_REV') {
                     let val = this.hotTable.getDataAtRowProp(item.row, 'END_REV');
                     if(val==null || val==''){
@@ -1072,7 +1072,7 @@ export class PTE_CellChange_Util {
                     val= parseFloat(val.toString().replace(/[$,]/g, ''));
                     let DCID = this.hotTable.getDataAtRowProp(item.row, 'DC_ID');
                     let Tier = this.hotTable.getDataAtRowProp(item.row, 'TIER_NBR');
-                    let numOfTiers = _.where(PTR, { DC_ID: DCID }).length;
+                    let numOfTiers = where(PTR, { DC_ID: DCID }).length;
                     if (Tier < numOfTiers) {
                         if (val > 0 || val === 0) {
                             this.hotTable.setDataAtRowProp(item.row, 'END_REV', val, 'no-edit');
@@ -1107,12 +1107,12 @@ export class PTE_CellChange_Util {
                 }
             });
         } else if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'FLEX' || OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'VOL_TIER') {
-            _.each(items, item => {
+            each(items, item => {
                 if (item.prop && item.prop == 'END_VOL') {
                     let val = this.hotTable.getDataAtRowProp(item.row, 'END_VOL');
                     let DCID = this.hotTable.getDataAtRowProp(item.row, 'DC_ID');
                     let Tier = this.hotTable.getDataAtRowProp(item.row, 'TIER_NBR');
-                    let numOfTiers = _.where(PTR, { DC_ID: DCID }).length;
+                    let numOfTiers = where(PTR, { DC_ID: DCID }).length;
                     if (val > 0) {
                         val = Math.trunc(this.hotTable.getDataAtRowProp(item.row, 'END_VOL'));
                     }
@@ -1149,7 +1149,7 @@ export class PTE_CellChange_Util {
     }
     
     static perProfDefault(items: Array<any>, contractData: any,curPricingTable:any) {
-        _.each(items, (item) => {
+        each(items, (item) => {
             if ((item.new && item.new == '') || item.new==null){
                 this.hotTable.setDataAtRowProp(item.row, item.prop,curPricingTable[`${item.prop}`] , 'no-edit');
             }
@@ -1158,8 +1158,8 @@ export class PTE_CellChange_Util {
     /* AR settlement change where functions starts here */
     static autoFillARSet(items: Array<any>, contractData: any,curPricingTable:any,cellEditor) {
         try {
-            _.each(items, (item) => {
-                let colSPIdx = _.findWhere(this.hotTable.getCellMetaAtRow(item.row), { prop: 'SETTLEMENT_PARTNER' }).col;
+            each(items, (item) => {
+                let colSPIdx = findWhere(this.hotTable.getCellMetaAtRow(item.row), { prop: 'SETTLEMENT_PARTNER' }).col;
                 if ((item.new && item.new == '') || item.new==null){
                     if(curPricingTable && curPricingTable[`${item.prop}`] && curPricingTable[`${item.prop}`].toLowerCase()=='cash'){
                         this.autoFillOnCash(item,contractData,colSPIdx,cellEditor);
@@ -1204,12 +1204,12 @@ export class PTE_CellChange_Util {
     }
     /* AR settlement change ends here */
     static dateChange(items: Array<any>, colName: string, contractData) {
-        _.each(items, (item) => {
-            if (item.new == undefined || item.new == null || item.new == '' || !moment(item.new, "MM/DD/YYYY", true).isValid() || moment(item.new).toString() === "Invalid date" || moment(item.new).format("MM/DD/YYYY") === "12/30/1899") {
+        each(items, (item) => {
+            if (item.new == undefined || item.new == null || item.new == '' || !StaticMomentService.moment(item.new, "MM/DD/YYYY", true).isValid() || StaticMomentService.moment(item.new).toString() === "Invalid date" || StaticMomentService.moment(item.new).format("MM/DD/YYYY") === "12/30/1899") {
                 if (colName == 'OEM_PLTFRM_LNCH_DT' || colName == 'OEM_PLTFRM_EOL_DT') {
                     this.hotTable.setDataAtRowProp(item.row, colName, '', 'no-edit');
                 } else {
-                    this.hotTable.setDataAtRowProp(item.row, colName, moment(contractData[colName]).format("MM/DD/YYYY"), 'no-edit');
+                    this.hotTable.setDataAtRowProp(item.row, colName, StaticMomentService.moment(contractData[colName]).format("MM/DD/YYYY"), 'no-edit');
                 }
             }
         });
@@ -1230,7 +1230,7 @@ export class PTE_CellChange_Util {
                 }
             }
             //the sort by resulting is coming is the ascending order so negative will be first
-            let rowId = _.first(_.sortBy(distDCIDs));
+            let rowId = first(sortBy(distDCIDs));
             //the result can have both existing and empty result so considering both
             if (rowId < 0) {
                 return rowId - 1;
@@ -1256,9 +1256,9 @@ export class PTE_CellChange_Util {
         let newVal = [];
         //Update the user entered prod text with product transition data
         if (userProds.length > 0) {
-            _.each(userProds, prod => {
-                let prodObjs = _.pluck(selProd.items, 'prodObj')
-                let userInputVal = _.where(prodObjs, { USR_INPUT: prod });
+            each(userProds, prod => {
+                let prodObjs = pluck(selProd.items, 'prodObj')
+                let userInputVal = where(prodObjs, { USR_INPUT: prod });
                 if (userInputVal.length > 0) {
                     newVal.push(userInputVal[0]["DERIVED_USR_INPUT"]);
                 }
@@ -1300,23 +1300,23 @@ export class PTE_CellChange_Util {
             res = products.ProdctTransformResults[selProd.DCID];
         else
             res = products.ProdctTransformResults[deletedProd[0].DC_ID];
-        let exclude = _.sortBy(res.E);
-        let Include = _.sortBy(res.I);
+        let exclude = sortBy(res.E);
+        let Include = sortBy(res.I);
         if (deletedProd) {
-            _.each(deletedProd, (deletedItm) => {
+            each(deletedProd, (deletedItm) => {
                 if (deletedItm.exclude) {
-                    let eindex = _.indexOf(exclude, deletedItm.deletedUserInput)
+                    let eindex = indexOf(exclude, deletedItm.deletedUserInput)
                     if (eindex != -1) {
-                        exclude = _.without(exclude, deletedItm.deletedUserInput)
+                        exclude = without(exclude, deletedItm.deletedUserInput)
                         //removing from PTR_SYS_PRD as well if it has any deleted product values
                         if (PTR_SYS_PRD && PTR_SYS_PRD[deletedItm.deletedUserInput] && PTR_SYS_PRD[deletedItm.deletedUserInput].length == 1 && PTR_SYS_PRD[deletedItm.deletedUserInput][0].EXCLUDE)
                             delete PTR_SYS_PRD[deletedItm.deletedUserInput]
                     }
                 }
                 else {
-                    let eindex = _.indexOf(Include, deletedItm.deletedUserInput)
+                    let eindex = indexOf(Include, deletedItm.deletedUserInput)
                     if (eindex != -1) {
-                        Include = _.without(Include, deletedItm.deletedUserInput)
+                        Include = without(Include, deletedItm.deletedUserInput)
                         //removing from PTR_SYS_PRD as well if it has any deleted Product values
                         if (PTR_SYS_PRD && PTR_SYS_PRD[deletedItm.deletedUserInput] && PTR_SYS_PRD[deletedItm.deletedUserInput].length == 1 && !PTR_SYS_PRD[deletedItm.deletedUserInput][0].EXCLUDE)
                             delete PTR_SYS_PRD[deletedItm.deletedUserInput]
@@ -1325,11 +1325,11 @@ export class PTE_CellChange_Util {
             })
         }
         if (selProd) {
-            _.each(selProd.items, selPrdItm => {
+            each(selProd.items, selPrdItm => {
                 if (selPrdItm.prodObj.EXCLUDE) {
-                    let eindex = _.indexOf(exclude, selPrdItm.prodObj.USR_INPUT)
+                    let eindex = indexOf(exclude, selPrdItm.prodObj.USR_INPUT)
                     if (eindex != -1) {
-                        exclude = _.without(exclude, selPrdItm.prodObj.USR_INPUT)
+                        exclude = without(exclude, selPrdItm.prodObj.USR_INPUT)
                         //removing from PTR_SYS_PRD as well if it has any values
                         if (PTR_SYS_PRD && PTR_SYS_PRD[selPrdItm.prodObj.USR_INPUT] && PTR_SYS_PRD[selPrdItm.prodObj.USR_INPUT].length == 1 && PTR_SYS_PRD[selPrdItm.prodObj.USR_INPUT][0].EXCLUDE)
                             delete PTR_SYS_PRD[selPrdItm.prodObj.USR_INPUT]
@@ -1337,9 +1337,9 @@ export class PTE_CellChange_Util {
                     exclude.push(selPrdItm.prodObj.DERIVED_USR_INPUT);
                 }
                 else {
-                    let iIndex = _.indexOf(Include, selPrdItm.prodObj.USR_INPUT)
+                    let iIndex = indexOf(Include, selPrdItm.prodObj.USR_INPUT)
                     if (iIndex != -1) {
-                        Include = _.without(Include, selPrdItm.prodObj.USR_INPUT)
+                        Include = without(Include, selPrdItm.prodObj.USR_INPUT)
                         //removing from PTR_SYS_PRD as well if it has any values
                         if (PTR_SYS_PRD && PTR_SYS_PRD[selPrdItm.prodObj.USR_INPUT] && PTR_SYS_PRD[selPrdItm.prodObj.USR_INPUT].length == 1 && !PTR_SYS_PRD[selPrdItm.prodObj.USR_INPUT][0].EXCLUDE)
                             delete PTR_SYS_PRD[selPrdItm.prodObj.USR_INPUT]
@@ -1365,30 +1365,30 @@ export class PTE_CellChange_Util {
         else {
             ValidProducts = translateResult.ValidProducts;
         }
-        if ((response && _.keys(response).length > 0) || (ValidProducts && _.keys(ValidProducts).length > 0)) {
+        if ((response && keys(response).length > 0) || (ValidProducts && keys(ValidProducts).length > 0)) {
             let selrow = rowIndex;
             let NUM_OF_TIERS = parseInt(curPricingTable.NUM_OF_TIERS);
             let pivotDensity = parseInt(curPricingTable.NUM_OF_DENSITY);
             let numOfRows = NUM_OF_TIERS * pivotDensity;
             //match the schema based on product translator/selector, in case of split product it can have multiple products
-            _.each(ValidProducts, (item) => {
+            each(ValidProducts, (item) => {
                 let prod = PTEUtil.getValidDenProducts(item, prdSrc);
-                let selProds = _.filter(PTR, (itm) => {
+                let selProds = filter(PTR, (itm) => {
                     let ptrPRD = itm["PTR_USER_PRD"] ? itm["PTR_USER_PRD"].toUpperCase().split(',') : [];
                     // logic to check matching product since the product can come in any order and case to update code with those changes
-                    if (ptrPRD.length > 0 && _.isEqual(_.sortBy(ptrPRD), _.sortBy(prod.map(v => v.toUpperCase())))) {
+                    if (ptrPRD.length > 0 && isEqual(sortBy(ptrPRD), sortBy(prod.map(v => v.toUpperCase())))) {
                         return itm;
                     }
                 });
                 if (selProds && selProds.length > 0) {
-                    let distinctDC_IDs = _.uniq(_.pluck(selProds, 'DC_ID'));
-                    _.each(distinctDC_IDs, dcid => {
-                        let selProd = _.findWhere(selProds, { DC_ID: dcid });
+                    let distinctDC_IDs = uniq(pluck(selProds, 'DC_ID'));
+                    each(distinctDC_IDs, dcid => {
+                        let selProd = findWhere(selProds, { DC_ID: dcid });
                         if (DensityMissingProd[dcid] != undefined) {
                             delete DensityMissingProd[dcid];
                         }
                         let Nand_Den = [];
-                        _.each(item, (prdDet) => {
+                        each(item, (prdDet) => {
                             // Handle single product with multiple density_band
                             let densities = prdDet[0].NAND_TRUE_DENSITY ? prdDet[0].NAND_TRUE_DENSITY.split(",").map(function (el) { return el.trim(); }) : [];
                             if (densities.length == 0 && !prdDet[0].EXCLUDE) {
@@ -1397,7 +1397,7 @@ export class PTE_CellChange_Util {
                             densities.sort();
                             if (densities.length > 0 || densities.length == 0) {
                                 //underscore union creates a single array without duplicates.
-                                Nand_Den = _.union(Nand_Den, densities);
+                                Nand_Den = union(Nand_Den, densities);
                             }
                         });
                         if (Nand_Den.indexOf("null") > -1) {
@@ -1412,15 +1412,15 @@ export class PTE_CellChange_Util {
                             for (var tier = 1; tier <= tierNumber; tier++) {
                                 let prodInd = 0;
                                 let ind = 0;
-                                _.filter(PTR, (item) => {
+                                filter(PTR, (item) => {
                                     // this condition is added in case of product corrector, only the selected Prod added to first row rest all will have user selected product
-                                    var firstObj = _.find(PTR, (itm) => { return itm.DC_ID == selProd.DC_ID });
+                                    var firstObj = find(PTR, (itm) => { return itm.DC_ID == selProd.DC_ID });
                                     if (item.DC_ID == selProd.DC_ID) {
                                         item.PTR_USER_PRD = firstObj.PTR_USER_PRD
                                     }
 
                                     let ptrPRD = item.PTR_USER_PRD ? item.PTR_USER_PRD.toUpperCase().split(',') : [];
-                                    if (_.isEqual(_.sortBy(ptrPRD), _.sortBy(prod.map(v => v.toUpperCase()))) && item.TIER_NBR == tier && item.DC_ID == selProd.DC_ID) {
+                                    if (isEqual(sortBy(ptrPRD), sortBy(prod.map(v => v.toUpperCase()))) && item.TIER_NBR == tier && item.DC_ID == selProd.DC_ID) {
                                         this.hotTable.setDataAtRowProp(ind, 'DENSITY_BAND', Nand_Den[prodInd], 'no-edit');
                                         item.DENSITY_BAND = Nand_Den[prodInd];
                                         prodInd++;
@@ -1435,7 +1435,7 @@ export class PTE_CellChange_Util {
                 }
             })
             if (DensityMissingProd != undefined) {
-                _.each(PTR, (itm, indx) => {
+                each(PTR, (itm, indx) => {
                     if (DensityMissingProd[itm.DC_ID] != undefined && DensityMissingProd[itm.DC_ID].cond) {
                         PTE_Common_Util.setBehaviors(itm);
                         itm._dirty = true;

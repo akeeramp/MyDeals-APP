@@ -341,7 +341,7 @@ export class ruleDetailsModalConfig {
             field: "END_DT",
             title: "End Date",
             type: "date",
-            template: "#if(END_DT==null){#  #}else{# #= moment(END_DT).format('MM/DD/YYYY') # #}#",
+            template: "#if(END_DT==null){#  #}else{# #= momentService.moment(END_DT).format('MM/DD/YYYY') # #}#",
             width: 150
         },
         {

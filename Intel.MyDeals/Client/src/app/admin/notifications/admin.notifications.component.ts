@@ -13,7 +13,7 @@ import {
     distinct
 } from "@progress/kendo-data-query";
 import { notificationsService } from './admin.notifications.service';
-import * as _ from "underscore";
+import { each } from 'underscore';
 import { DatePipe } from "@angular/common";
 
 @Component({
@@ -79,11 +79,11 @@ export class adminNotificationsComponent {
         this.notificationsSvc.getNotification('SELECT ALL').subscribe(
             (response: Array<any>) => {
                 //as we get the CRE_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
-                _.each(response, item => {
+                each(response, item => {
                     item['CRE_DTM'] = this.datepipe.transform(new Date(item['CRE_DTM']), 'M/d/yyyy HH:mm:ss.SSS');
                     item['CRE_DTM'] = new Date(item['CRE_DTM']);
                 })
-                _.each(response, item => {
+                each(response, item => {
                     item['CRE_UPDATED_DATE'] = this.datepipe.transform(new Date(item['CRE_DTM']), 'M/d/yyyy');
                     item['CRE_UPDATED_DATE'] = new Date(item['CRE_UPDATED_DATE']);
                 })

@@ -5,9 +5,7 @@ import { Component, Inject, Input } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { logger } from "../../../shared/logger/logger";
 import { overLappingcheckDealService } from "./overlappingCheckDeals.service";
-import * as _ from 'underscore';
-
-
+import { each, filter } from 'underscore';
 
 @Component({
     selector: "overlappingCheckDeal",
@@ -15,7 +13,6 @@ import * as _ from 'underscore';
     styleUrls: ["Client/src/app/contract/ptModals/overlappingCheckDeals/overlappingCheckDeals.component.css"],
 
 })
-
 export class OverlappingCheckComponent {
     S_ID: any;
     constructor(private overLappingCheckDealsSvc: overLappingcheckDealService, private loggerSvc: logger, public dialogRef: MatDialogRef<OverlappingCheckComponent>,
@@ -105,13 +102,13 @@ export class OverlappingCheckComponent {
         this.isDealEndDateChange = false;
         this.isReqChange = false;
         if (value != undefined && value != null && value != '') {
-            var groupRow = _.filter(this.gridResult, { 'WIP_DEAL_OBJ_SID': value, 'PROGRAM_PAYMENT': 'Frontend YCS2' });
+            var groupRow = filter(this.gridResult, { 'WIP_DEAL_OBJ_SID': value, 'PROGRAM_PAYMENT': 'Frontend YCS2' });
 
             if (groupRow.length > 1) {
-                if (_.filter(groupRow, { 'WF_STG_CD': 'Draft' }).length > 1) {
+                if (filter(groupRow, { 'WF_STG_CD': 'Draft' }).length > 1) {
                     cnt = groupRow.length;
                 }
-                else if (_.filter(groupRow, { 'WF_STG_CD': 'Draft' }).length === 1) {
+                else if (filter(groupRow, { 'WF_STG_CD': 'Draft' }).length === 1) {
                     cnt = 1;
                 }
                 else {
@@ -159,9 +156,9 @@ export class OverlappingCheckComponent {
         else {
             splitData.push(WIP_DEAL_OBJ_SID);
         }
-        _.each(splitData, item => {
+        each(splitData, item => {
             var data = parseInt(item);
-            var dealinfo = _.filter(this.ovlpData, { 'WIP_DEAL_OBJ_SID': data, 'WF_STG_CD': "Draft", OVLP_CD: "SELF_OVLP" });
+            var dealinfo = filter(this.ovlpData, { 'WIP_DEAL_OBJ_SID': data, 'WF_STG_CD': "Draft", OVLP_CD: "SELF_OVLP" });
             if (dealinfo != undefined && dealinfo != null && dealinfo.length > 0) {
                 START_DT = dealinfo[0].START_DT;
                 END_DT = dealinfo[0].END_DT;
@@ -213,7 +210,7 @@ export class OverlappingCheckComponent {
 
     selectAllOvlp(value) {
         this.isSelectAll = !value;
-        _.each(this.gridResult, item => {
+        each(this.gridResult, item => {
             if (item.PROGRAM_PAYMENT == "Frontend YCS2") {
                 item.IS_SEL = value;
             }
@@ -221,7 +218,7 @@ export class OverlappingCheckComponent {
     }
 
     selectCheckBox(value) {
-        _.each(this.gridResult, item => {
+        each(this.gridResult, item => {
             if (item.WIP_DEAL_OBJ_SID == value && item.PROGRAM_PAYMENT == "Frontend YCS2") {
                 item.IS_SEL = !item.IS_SEL;
             }
@@ -233,7 +230,7 @@ export class OverlappingCheckComponent {
     }
 
     acceptSelectAll() {
-        var selectedIDS = _.filter(this.gridResult, { 'IS_SEL': true, 'PROGRAM_PAYMENT': 'Frontend YCS2' });
+        var selectedIDS = filter(this.gridResult, { 'IS_SEL': true, 'PROGRAM_PAYMENT': 'Frontend YCS2' });
         var ids = distinct(selectedIDS, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
         if (selectedIDS.length > 0) {
             this.acceptOvlp(ids.toString(), 'Y');

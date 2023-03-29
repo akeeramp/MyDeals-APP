@@ -1,4 +1,4 @@
-import * as _ from "underscore";
+import { sortBy, uniq } from 'underscore';
 
 export interface gridCol {
     title: string,
@@ -278,7 +278,7 @@ export class ProdSel_Util {
             default:
                 column = "PCSR_NBR";
         }
-        return _.sortBy(gridResult, column);
+        return sortBy(gridResult, column);
     }
     static newItem = function () {
         return {
@@ -313,7 +313,7 @@ export class ProdSel_Util {
             return x[markLevel] == markLevelName && x['PRD_CAT_NM'] != null && x['PRD_CAT_NM'] != ""
         });
 
-        verticals = _.uniq(verticals, 'PRD_CAT_NM_SID');
+        verticals = uniq(verticals, 'PRD_CAT_NM_SID');
         if (verticals.length > 0) {
             return verticals;
         }
@@ -353,7 +353,7 @@ export class ProdSel_Util {
         verticals = productSelectionLevels.filter((x) => {
             return x[markLevel] == markLevelName && x['PRD_CAT_NM'] != null && x['PRD_CAT_NM'] != ""
         });
-        verticals = _.uniq(verticals, 'PRD_CAT_NM');
+        verticals = uniq(verticals, 'PRD_CAT_NM');
         verticals = verticals.map((elem) => {
             return elem.PRD_CAT_NM;
         }).join(" | ");

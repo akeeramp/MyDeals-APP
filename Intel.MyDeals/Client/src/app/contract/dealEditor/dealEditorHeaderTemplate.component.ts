@@ -1,5 +1,5 @@
 ﻿import { Component, Input, ViewEncapsulation, OnInit } from '@angular/core';
-import * as _ from 'underscore';
+import { each } from 'underscore';
 
 @Component({
     selector: 'deal-editor-header',
@@ -30,7 +30,7 @@ export class dealEditorHeaderTemplateComponent implements OnInit{
         }
     }
     excludeAllItems(event:any){
-        _.each(this.grid_Result,itm=>{itm['isExclSel']=event.target.checked});
+        each(this.grid_Result,itm=>{itm['isExclSel']=event.target.checked});
     }
     checkAllSelected() {
         let gridData = this.grid_Result.filter(item => {

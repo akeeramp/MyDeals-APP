@@ -1,6 +1,6 @@
 ﻿import { Component, Input } from "@angular/core";
 import { Item } from "@progress/kendo-angular-charts/dist/es2015/common/collection.service";
-import * as moment from "moment";
+import { MomentService } from "../../shared/moment/moment.service";
 import { contractStatusWidgetService } from "../../dashboard/contractStatusWidget.service";
 import { logger } from "../logger/logger";
 
@@ -10,8 +10,8 @@ import { logger } from "../logger/logger";
     styleUrls: ['Client/src/app/shared/search/search.component.css'],
 })
 export class SearchComponent {
-    private startDateValue: Date = new Date(moment().subtract(6, 'months').format("MM/DD/YYYY"));
-    private endDateValue: Date = new Date(moment().add(6, 'months').format("MM/DD/YYYY"));
+    private startDateValue: Date = new Date(this.momentService.moment().subtract(6, 'months').format("MM/DD/YYYY"));
+    private endDateValue: Date = new Date(this.momentService.moment().add(6, 'months').format("MM/DD/YYYY"));
     private showSearchFilters: boolean = true;
     private showGrid: boolean = false;
     public fruits: Array<string> = ['Apple', 'Orange', 'Banana'];
@@ -28,7 +28,9 @@ export class SearchComponent {
     @Input() title: string = " ";
     @Input() titleText: string = " ";
 
-    constructor(protected cntrctWdgtSvc: contractStatusWidgetService, protected loggerSvc: logger) { }
+    constructor(protected cntrctWdgtSvc: contractStatusWidgetService,
+                protected loggerSvc: logger,
+                private momentService: MomentService) { }
     ngOnInit(): void {
         this.showSearchFilters = false;
         this.selectedCustNames = window.localStorage.selectedCustNames ? JSON.parse(window.localStorage.selectedCustNames) : [];
