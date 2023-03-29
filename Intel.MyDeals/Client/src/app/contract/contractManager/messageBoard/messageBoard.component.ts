@@ -56,7 +56,9 @@ export class messageBoardModal {
             // set this flag to false when stages are not unique as per role
             let stagesOK = true;
             let ids =[];
-            ids = this.data[0].KeyIdentifiers;
+            this.data.forEach((item) => {
+                ids.push(item.KeyIdentifiers[0])
+            });
             for (let a = 0; a < this.contractData.PRC_ST.length; a++) {
                 let stItem = this.contractData.PRC_ST[a];
                 if (!!stItem && ids.indexOf(stItem.DC_ID) >= 0) {

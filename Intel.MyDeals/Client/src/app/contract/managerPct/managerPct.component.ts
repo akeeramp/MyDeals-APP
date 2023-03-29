@@ -154,11 +154,12 @@ export class managerPctComponent {
                         }
                         this.parentGridData[pt.DC_ID] = JSON.parse(JSON.stringify(this.gridData));
                         this.parentGridResult[pt.DC_ID] = JSON.parse(JSON.stringify(this.parentGridData[pt.DC_ID]));
-                        let parentData = distinct(this.gridData, "DEAL_ID");
+                        let parentData:any = distinct(this.gridData, "DEAL_ID");
                         _.each(parentData, (item) => {
                             item["PRC_CST_TST_STS"] = rollupPCTStatus[item["DEAL_ID"]];
                         });
                         this.state[pt.DC_ID].take = parentData.length;
+                        if (this.pctFilter != '') parentData = parentData.filter(x => x.PRC_CST_TST_STS == this.pctFilter);
                         this.gridDataSet[pt.DC_ID] = process(parentData, this.state[pt.DC_ID]);
                         this.gridResult[pt.DC_ID] = JSON.parse(JSON.stringify(this.gridDataSet[pt.DC_ID]));
                     }
@@ -372,6 +373,7 @@ export class managerPctComponent {
     }
 
     onTabSelect(event: any) {
+        this.gridDataSet = {};
         this.selectedTab = event.index;
         if (this.isTenderDashboard && event.index == 1)//PCT screen of Tender Dashboard have only two tabs (All, Grouping Exclusions)
             this.selectedTab = 5;
@@ -400,6 +402,9 @@ export class managerPctComponent {
         this.selTab(event.title);
         if (this.pctFilter != "") {
             this.pricingStrategyFilter = this.contractData?.PRC_ST.filter(x => x.COST_TEST_RESULT == this.pctFilter);
+            this.pricingStrategyFilter.forEach((item) => {
+                item.PRC_TBL = item.PRC_TBL.filter(x => x.COST_TEST_RESULT == this.pctFilter);
+            })
         }
         else {
             this.pricingStrategyFilter = this.contractData?.PRC_ST;

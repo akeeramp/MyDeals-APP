@@ -18,7 +18,6 @@ export class pctGroupModal {
     }
     private state: State = {
         skip: 0,
-        take: 25,
         group: [],
         filter: {
             logic: "and",
