@@ -356,6 +356,12 @@ export class AttributeBuilder implements OnInit {
         });
     }
 
+    //clicking on enter on textbox/numeric textbox/date triggers search
+    onEnter(i, dataItem, value) {
+        this.dataChange(i, dataItem, value);
+        this.runRule();
+    }
+
     dataChange(idx, dataItem, selector, data?) {
         this.attributes[idx].values = [];
         if (selector == 'operator') {

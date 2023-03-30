@@ -92,7 +92,7 @@
         <span class="third-search-opt-section abValue" *ngIf="dataItem.field !== ''">
             <span class="inner-third-span" *ngIf="(dataItem.type == 'number' || dataItem.type == 'money' || dataItem.type == 'numericOrPercentage') && !enableTextbox[i]">
                 <kendo-numerictextbox [(ngModel)]="dataItem.value"
-                                      (keyup.enter)="runRule()"
+                                      (keyup.enter)="onEnter( i, dataItem, 'numerictextbox')"
                                       class="advance-numerictextbox-style k-numberbox-design"
                                       [format]="dataItem.type == 'money'? 'c2' : dataItem.type == 'numericOrPercentage' ? '0:n2':'0:n0'"
                                       (blur)="dataChange(i, dataItem, 'numerictextbox')"></kendo-numerictextbox>
@@ -101,7 +101,7 @@
             </span>
             <span class="inner-third-span" *ngIf="dataItem.type == 'string' || dataItem.type == 'string_with_in' || dataItem.type == 'string_limited' || dataItem.type == 'autocomplete' || enableTextbox[i]">
                 <kendo-textbox [(ngModel)]="dataItem.value"
-                               (keyup.enter)="runRule()"
+                               (keyup.enter)="onEnter( i, dataItem, 'textbox')"
                                class="tender-extra-box-style k-textbox-design"
                                (blur)="dataChange(i, dataItem, 'textbox')"></kendo-textbox>
                 <span *ngIf="!enableTextbox[i]" class="span-style-tender">Use <i style="margin-right: 3px; color: #FFA300;">*</i> for wildcard searches. <i style="color:#FFA300;">example: Sam sun*</i></span>
@@ -109,14 +109,13 @@
             </span>
             <span class="inner-third-span" *ngIf="dataItem.type == 'date' && !enableTextbox[i]">
                 <kendo-datepicker [(ngModel)]="dataItem.value" class="calender-row-style k-custom-dater" calendarType="classic"
-                                  (keyup.enter)="runRule()"
+                                  (keyup.enter)="onEnter( i, dataItem, 'datePicker')"
                                   (blur)="dataChange( i, dataItem, 'datePicker')"></kendo-datepicker>
             </span>
             <span class="inner-third-span" *ngIf="dataItem.type == 'list' && dataItem.field != 'Customer.CUST_NM' && dataItem.field != 'PRODUCT_CATEGORIES' && dataItem.field != 'MRKT_SEG'
           && dataItem.field != 'REBATE_TYPE' && dataItem.field != 'PROGRAM_PAYMENT' && dataItem.field != 'PAYOUT_BASED_ON'  && dataItem.field != 'SERVER_DEAL_TYPE' && !enableTextbox[i]">
                 <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level"
                                    [data]="dataItem.dropDown"
-                                   (keyup.enter)="runRule()"
                                    textField="Value"
                                    valueField="Value"
                                    [autoClose]="false"
@@ -130,7 +129,6 @@
             <span class="inner-third-span" *ngIf="dataItem.type == 'list' && dataItem.field == 'PRODUCT_CATEGORIES' && !enableTextbox[i]">
                 <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level"
                                    [data]="dataItem.dropDown"
-                                   (keyup.enter)="runRule()"
                                    textField="PRD_CAT_NM"
                                    valueField="PRD_CAT_NM"
                                    [valuePrimitive]="true"
@@ -145,7 +143,6 @@
                 <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level"
                                    kendoMultiSelectSummaryTag
                                    [data]="dataItem.dropDown"
-                                   (keyup.enter)="runRule()"
                                    textField="CUST_NM"
                                    valueField="CUST_SID"
                                     [autoClose]="false"
@@ -164,7 +161,6 @@
                                    [data]="dataItem.dropDown"
                                    kendoMultiSelectSummaryTag
                                    textField="DROP_DOWN"
-                                   (keyup.enter)="runRule()"
                                    valueField="DROP_DOWN"
                                    [valuePrimitive]="true"
                                     [autoClose]="false"
@@ -178,7 +174,6 @@
                 <kendo-dropdownlist class="opUiContainer sm tender_ecap_multi_style k-dropdown-design"
                                     [data]="dataItem.dropDown"
                                     textField="Value"
-                                    (keyup.enter)="runRule()"
                                     valueField="Value"
                                     [(ngModel)]="dataItem.value"
                                     [valuePrimitive]="true"
@@ -190,7 +185,6 @@
                 <kendo-dropdownlist class="opUiContainer sm tender_ecap_multi_style k-dropdown-design"
                                     [data]="dataItem.dropDown"
                                     textField="DROP_DOWN"
-                                    (keyup.enter)="runRule()"
                                     valueField="DROP_DOWN"
                                     [valuePrimitive]="true"
                                     [kendoDropDownFilter]="filterSettings"
