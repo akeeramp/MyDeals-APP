@@ -24,7 +24,7 @@
                 <div style="color: #ffffff; font-weight: bold; margin-bottom: 15px; margin-top: 20px; float: left"
                      *ngIf="!hasCheckbox">Deals marked with "✓" are excluded: </div>
                 <div style='color: #ffffff; font-weight: bold; margin-bottom: 15px; margin-top: 20px; float: left; padding-left: 20px'>
-                    <mat-slide-toggle [color]="color" [(ngModel)]="isSelected"
+                    <mat-slide-toggle [color]="color" [(ngModel)]="isSelected" (change)="onToggleChange()"
                                       title='Click to see Excluded/Included by USER'></mat-slide-toggle>
                 </div>
                 <div class="row oppo-grids new-now-wrap" style="margin: 0px;width:100%">
@@ -88,9 +88,9 @@
                                            [headerClass]="{'headerClass':true}" [width]="180" [hidden]="pctGroupDealsView"></kendo-grid-column>
                         <kendo-grid-column title="Consumption Reason" field="OVLP_CNSMPTN_RSN"
                                            [headerClass]="{'headerClass':true}" [width]="140" [hidden]="!pctGroupDealsView"></kendo-grid-column>
-                        <ng-template *ngIf="isSelected && isData" kendoGridDetailTemplate let-dataItem>
+                        <ng-template *ngIf="isData" kendoGridDetailTemplate let-dataItem>
                             <div id="childGrid" class="opUiContainer md dashboard group-exclude-child">
-                                <kendo-grid [data]="childgridColumns" (dataStateChange)="dataStateChange($event)" [kendoGridExpandDetailsBy]="expandDetailsBy"
+                                <kendo-grid *ngFor="let childColumn of childGrid" [data]="childColumn" (dataStateChange)="dataStateChange($event)" [kendoGridExpandDetailsBy]="expandDetailsBy"
                                             [(expandedDetailKeys)]="expandedDetailKeys" class="height-auto-child child-head icon-changes" [hideHeader]="true">
                                     <kendo-grid-column field="data" title=""
                                                        [headerClass]="{'headerClass':false}" [width]="1500"></kendo-grid-column>

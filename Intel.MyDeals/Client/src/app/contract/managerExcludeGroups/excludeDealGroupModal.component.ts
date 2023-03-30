@@ -39,7 +39,7 @@ export class excludeDealGroupModalDialog {
     private childGridData;
     private childGridData1;
     private childGridData2;
-    private childgridColumns;
+    private childGrid = [];
     private childGridResult;
     private color: ThemePalette = 'primary';
     private GRP_BY = 0;
@@ -54,7 +54,6 @@ export class excludeDealGroupModalDialog {
 
     private state: State = {
         skip: 0,
-        take: 25,
         group: [],
         filter: {
             filters: [],
@@ -239,22 +238,28 @@ export class excludeDealGroupModalDialog {
                 }
             }
 
-            let childgridresult1 = this.childGridResult.filter(x => x.GRP_BY===1 );
+            //filtering child grid accordingly - whether included in PCT or not
+            //included in PCT
+            let childgridresult1 = this.childGridResult.filter(x => x.GRP_BY === 1);
+            // not included in PCT
             let childgridresult2 = this.childGridResult.filter(x => x.GRP_BY === 2);
-            childgridresult1 = sortBy(sortBy(sortBy(childgridresult1, 'EXCLD_DEAL_FLAG').reverse(), 'CST_MCP_DEAL_FLAG').reverse(), 'OVLP_WF_STG_CD');
+            //sorting excluded deals 
+            childgridresult1 = sortBy(childgridresult1, 'EXCLD_DEAL_FLAG').reverse();
             childgridresult2 = sortBy(sortBy(sortBy(childgridresult2, 'EXCLD_DEAL_FLAG').reverse(), 'CST_MCP_DEAL_FLAG').reverse(), 'OVLP_WF_STG_CD');
             this.childGridData1 = process(childgridresult1, this.state);
             this.childGridData2 = process(childgridresult2, this.state);
-           
-             if (this.childGridData1.data.length > 0) {
+
+            if (this.childGridData1.data.length > 0) {
                 this.isData = true;
-                this.childgridColumns = [{ data: 'Deals below are included as part of the Cost Test' }];
+                this.childGrid[0] = [{ data: 'Deals below are included as part of the Cost Test' }];
+
             }
-            else if (this.childGridData2.data.length > 0 ) {
+            if (this.childGridData2.data.length > 0) {
                 this.isData = true;
-                this.childgridColumns = [{ data: 'Deals shown in grey overlap but are NOT included as part of the Cost Test' }];
+                this.childGrid[1] = [{ data: 'Deals shown in grey overlap but are NOT included as part of the Cost Test' }];
+
             }
-            else {
+            if (this.childGridData1.data.length == 0 && this.childGridData2.data.length == 0) {
                 this.isData = false;
             }
             this.childGridData = process(this.childGridResult, this.state);
@@ -274,6 +279,45 @@ export class excludeDealGroupModalDialog {
             || this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'pending' || this.gridData.data[0]["OVLP_WF_STG_CD"].toLowerCase() == 'submitted'))
             this.hasCheckbox = false;
         this.DEAL_GRP_CMNT = (this.dataItem.cellCurrValues.DEAL_GRP_CMNT === null || this.dataItem.cellCurrValues.DEAL_GRP_CMNT == undefined) ? "" : this.dataItem.cellCurrValues.DEAL_GRP_CMNT;
+    }
+
+    //handling changes on toggle changes
+    onToggleChange() {
+        this.childGrid = []
+        //during on condition all the values are displayed including unchecked and deals overlapped
+        if (this.isSelected) {
+            let childgridresult1 = this.childGridResult.filter(x => x.GRP_BY === 1);
+            let childgridresult2 = this.childGridResult.filter(x => x.GRP_BY === 2);
+            childgridresult1 = sortBy(childgridresult1, 'EXCLD_DEAL_FLAG').reverse();
+            childgridresult2 = sortBy(sortBy(sortBy(childgridresult2, 'EXCLD_DEAL_FLAG').reverse(), 'CST_MCP_DEAL_FLAG').reverse(), 'OVLP_WF_STG_CD');
+            this.childGridData1 = process(childgridresult1, this.state);
+            //checking for data included in PCT
+            if (this.childGridData1.data.length > 0) {
+                this.isData = true;
+                this.childGrid[0] = [{ data: 'Deals below are included as part of the Cost Test' }];
+            }
+            //checking for data not included in pct
+            if (this.childGridData2.data.length > 0) {
+                this.isData = true;
+                this.childGrid[1] = [{ data: 'Deals shown in grey overlap but are NOT included as part of the Cost Test' }];
+            }
+            if (this.childGridData1.data.length == 0 && this.childGridData2.data.length == 0) {
+                this.isData = false;
+            }
+        } else {
+            // during off condition only data checked and included in PCT are shown
+            let childgridresult1 = this.childGridResult.filter(x => x.GRP_BY === 1);
+            childgridresult1 = this.childGridResult.filter(x => x.EXCLD_DEAL_FLAG === 1);
+            this.childGridData1 = process(childgridresult1, this.state);
+            if (this.childGridData1.data.length > 0) {
+                this.isData = true;
+                this.childGrid[0] = [{ data: 'Deals below are included as part of the Cost Test' }];
+            }
+            else {
+                this.isData = false;
+            }
+        }
+
     }
 
     convertToChildData(dataItem) {
