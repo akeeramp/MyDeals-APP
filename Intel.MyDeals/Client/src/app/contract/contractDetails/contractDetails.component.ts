@@ -641,6 +641,10 @@ export class contractDetailsComponent {
                             this.contractData._behaviors.validMsg[changeEvent] = "";
                             const startDate = this.START_DT;
                             const endDate = this.END_DT;
+                            if (this.momentService.moment(startDate).isSameOrBefore(endDate) && this.momentService.moment(startDate).isAfter(this.contractData.MinDate)){
+                                this.contractData._behaviors.isError['START_DT'] = false;
+                                this.contractData._behaviors.validMsg['START_DT'] = ""
+                            }
                             if (this.momentService.moment(endDate).isBefore(startDate) || this.momentService.moment(endDate).isAfter(this.contractData.MaxDate)) {
                                 this.contractData._behaviors.isError['END_DT'] = true;
                                 this.contractData._behaviors.validMsg['END_DT'] = this.momentService.moment(endDate).isAfter(this.contractData.MaxDate)
@@ -680,6 +684,10 @@ export class contractDetailsComponent {
         const startDate = this.START_DT;
         const endDate = this.END_DT;
         if (dateChange == 'START_DT' || dateChange == "START_YR" || dateChange == "START_QTR") {
+            if (this.momentService.moment(endDate).isSameOrAfter(startDate) && this.momentService.moment(endDate).isBefore(this.contractData.MaxDate)){
+                this.contractData._behaviors.isError['END_DT'] = false;
+                this.contractData._behaviors.validMsg['END_DT'] = ""
+            }
             if (this.momentService.moment(startDate).isAfter(endDate) || this.momentService.moment(startDate).isBefore(this.contractData.MinDate)) {
                 this.contractData._behaviors.isError['START_DT'] = true;
                 this.contractData._behaviors.validMsg['START_DT'] = this.momentService.moment(startDate).isBefore(this.contractData.MinDate)
@@ -687,6 +695,10 @@ export class contractDetailsComponent {
                     : "Start date cannot be greater than End Date";
             }
         } else if (dateChange == 'END_YR' || dateChange == "END_QTR" || (dateChange == 'END_DT' && !this.isCopyContract)) {
+            if (this.momentService.moment(startDate).isSameOrBefore(endDate) && this.momentService.moment(startDate).isAfter(this.contractData.MinDate)){
+                this.contractData._behaviors.isError['START_DT'] = false;
+                this.contractData._behaviors.validMsg['START_DT'] = ""
+            }
             if (this.momentService.moment(endDate).isBefore(startDate) || this.momentService.moment(endDate).isAfter(this.contractData.MaxDate)) {
                 this.contractData._behaviors.isError['END_DT'] = true;
                 this.contractData._behaviors.validMsg['END_DT'] = this.momentService.moment(endDate).isAfter(this.contractData.MaxDate)
