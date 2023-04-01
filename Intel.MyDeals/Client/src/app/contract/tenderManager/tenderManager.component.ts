@@ -61,15 +61,17 @@ export class tenderManagerComponent {
             if (this.contractData.TENDER_PUBLISHED == '1') {
                 var dealType = this.contractData.PRC_ST[0].PRC_TBL[0].OBJ_SET_TYPE_CD;
                 var dealID = this.contractData.DC_ID;
-                if(this.searchText=='' || this.searchText==null)
-                {
+                if(this.searchText=='' || this.searchText==null){
                     this.isredirect=true;
-                document.location.href = "#/tenderDashboard?DealType=" + dealType + "&FolioId=" + dealID + "&search=true";
+                    document.location.href = "#/tenderDashboard?DealType=" + dealType + "&FolioId=" + dealID + "&search=true";
+                } else if (this.searchText == "PS") {
+                    this.isredirect = true;
+                    document.location.href = "#/tenderDashboard?DealType=" + dealType + "&PsId=" + this.route.snapshot.queryParams.PsId + "&search=true";
+                } else{
+                    this.isredirect=true;
+                    document.location.href = "#/tenderDashboard?DealType=" + dealType + "&deal=" + this.searchText + "&search=true";
                 }
-                else{
-                    this.isredirect=true;
-                 document.location.href = "#/tenderDashboard?DealType=" + dealType + "&deal=" + this.searchText + "&search=true";
-                }            }
+            }
             if (response[0].IS_TENDER && response[0].IS_TENDER == 0) window.location.href = "#/contractmanager/CNTRCT/" + this.c_Id + '/0/0/0';
             else if(this.contractData && this.contractData.PRC_ST && this.contractData.PRC_ST.length>0){
                 this.ps_Id = this.contractData.PRC_ST[0].DC_ID;
