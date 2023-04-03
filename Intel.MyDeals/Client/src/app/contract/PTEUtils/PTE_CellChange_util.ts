@@ -1204,8 +1204,8 @@ export class PTE_CellChange_Util {
     }
     /* AR settlement change ends here */
     static dateChange(items: Array<any>, colName: string, contractData) {
-        each(items, (item) => {
-            if (item.new == undefined || item.new == null || item.new == '' || !StaticMomentService.moment(item.new, "MM/DD/YYYY", true).isValid() || StaticMomentService.moment(item.new).toString() === "Invalid date" || StaticMomentService.moment(item.new).format("MM/DD/YYYY") === "12/30/1899") {
+        each(items, (item) => { 
+            if (item.new == undefined || item.new == null || item.new == '' || !(StaticMomentService.moment(item.new, "MM/DD/YYYY", true).isValid() || StaticMomentService.moment(item.new, "M/D/YYYY", true).isValid()) || StaticMomentService.moment(item.new).toString() === "Invalid date" || StaticMomentService.moment(item.new).format("MM/DD/YYYY") === "12/30/1899") {
                 if (colName == 'OEM_PLTFRM_LNCH_DT' || colName == 'OEM_PLTFRM_EOL_DT') {
                     this.hotTable.setDataAtRowProp(item.row, colName, '', 'no-edit');
                 } else {

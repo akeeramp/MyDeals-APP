@@ -79,6 +79,7 @@ export class PTEUtil {
                 currentColumnConfig.type = 'date';
                 currentColumnConfig.dateFormat = this.defaultDateFormat;
                 currentColumnConfig.datePickerConfig = this.defaultDatePickerConfig;
+                currentColumnConfig.correctFormat = true
             } 
             else if (templateColumnFields[item.field].uiType &&(templateColumnFields[item.field].uiType=='DROPDOWN' ||  templateColumnFields[item.field].uiType=='MULTISELECT' ||  templateColumnFields[item.field].uiType=='EMBEDDEDMULTISELECT')) {
                 currentColumnConfig.type = 'dropdown';
