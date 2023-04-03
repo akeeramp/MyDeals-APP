@@ -34,7 +34,7 @@
                         <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="35">
                             <ng-template kendoGridHeaderTemplate>
                                 <input type="checkbox"
-                                       (click)='clkAllItems()' [(ngModel)]="isDealToolsChecked"
+                                       (click)='clkAllItems($event)' [(ngModel)]="isDealToolsChecked"
                                        [disabled]="!hasCheckbox" /><span style="overflow:visible;white-space:normal"></span>
                             </ng-template>
                         </kendo-grid-column>

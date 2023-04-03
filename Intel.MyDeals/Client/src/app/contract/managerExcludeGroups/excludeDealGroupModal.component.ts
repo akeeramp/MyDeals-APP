@@ -7,7 +7,7 @@ import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from "@angular/material/core";
 import { RowClassArgs, RowArgs } from "@progress/kendo-angular-grid";
 import { MomentService } from "../../shared/moment/moment.service";
-import { sortBy } from 'underscore';
+import { sortBy, isString } from 'underscore';
 
 @Component({
     selector: "exclude-deal-group-modal-dialog",
@@ -60,48 +60,32 @@ export class excludeDealGroupModalDialog {
             logic: "and",
         }
     }
-    private pageSizes: PageSizeItem[] = [
-        {
-            text: "10",
-            value: 10
-        },
-        {
-            text: "25",
-            value: 25
-        },
-        {
-            text: "50",
-            value: 50
-        },
-        {
-            text: "100",
-            value: 100
-        }
-    ];
     public gridData: any;
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
-        if (state.filter.filters[0] && (state.filter.filters[0]['filters'][0]['field'] == "OVLP_DEAL_STRT_DT" || state.filter.filters[0]['filters'][0]['field'] == "OVLP_DEAL_END_DT")) {
-            state.filter.filters[0]['filters'][0]['value'] = this.momentService.moment(state.filter.filters[0]['filters'][0]['value']).format("MM/DD/YYYY")
-            if (state.filter.filters[0]['filters'] != undefined && state.filter.filters[0]['filters'].length == 2) {
-                state.filter.filters[0]['filters'][1]['value'] = this.momentService.moment(state.filter.filters[0]['filters'][1]['value']).format("MM/DD/YYYY")
-            }
-        }
         this.gridData = process(this.gridResult, this.state);
-        let childgridresult1 = this.childGridResult.filter(x => x.CST_MCP_DEAL_FLAG === 1);
-        let childgridresult2 = this.childGridResult.filter(x => x.CST_MCP_DEAL_FLAG === 0);
-        this.childGridData1 = process(childgridresult1, this.state);
-        this.childGridData2 = process(childgridresult2, this.state);
+        this.state.filter.filters.forEach((row) => {
+            if (row['filters'][0]['field'] == "OVLP_DEAL_STRT_DT" || row['filters'][0]['field'] == "OVLP_DEAL_END_DT") {
+                this.childGridResult.forEach((row) => {
+                    row.OVLP_DEAL_STRT_DT = new Date(row.OVLP_DEAL_STRT_DT);
+                    row.OVLP_DEAL_END_DT = new Date(row.OVLP_DEAL_END_DT);
+                })
+            }
+        })
         this.childGridData = process(this.childGridResult, this.state);
+        this.state.filter.filters.forEach((row) => {
+            if (row['filters'][0]['field'] == "OVLP_DEAL_STRT_DT" || row['filters'][0]['field'] == "OVLP_DEAL_END_DT") {
+                this.childGridResult.forEach((row) => {
+                    row.OVLP_DEAL_STRT_DT = row.OVLP_DEAL_STRT_DT.toLocaleDateString();
+                    row.OVLP_DEAL_END_DT = row.OVLP_DEAL_END_DT.toLocaleDateString();                                       
+                })
+            }
+        })
+        this.childGridData1 = this.childGridData.data.filter(x => x.CST_MCP_DEAL_FLAG === 1);
+        this.childGridData2 = this.childGridData.data.filter(x => x.CST_MCP_DEAL_FLAG === 0);
         if (this.childGridData.data.length > 0) {
             this.gridData.data = this.gridResult;
-        }
-        if (state.filter.filters[0] && (state.filter.filters[0]['filters'][0]['field'] == "OVLP_DEAL_STRT_DT" || state.filter.filters[0]['filters'][0]['field'] == "OVLP_DEAL_END_DT")) {
-            state.filter.filters[0]['filters'][0]['value'] = new Date(state.filter.filters[0]['filters'][0]['value'])
-            if (state.filter.filters[0]['filters'] != undefined && state.filter.filters[0]['filters'].length == 2) {
-                state.filter.filters[0]['filters'][1]['value'] = new Date(state.filter.filters[0]['filters'][1]['value'])
-            }
         }
     }
 
@@ -114,17 +98,10 @@ export class excludeDealGroupModalDialog {
         return dataItem.data;
     };
 
-    clkAllItems(): void {
-        for (let i = 0; i < this.childGridResult.length; i++) {
-            if (this.childGridResult[i].CST_MCP_DEAL_FLAG === 1) {
-                this.childGridResult[i].selected = !this.isDealToolsChecked;
-            }
-        }
-        let childgridresult1 = this.childGridResult.filter(x => x.CST_MCP_DEAL_FLAG === 1);
-        let childgridresult2 = this.childGridResult.filter(x => x.CST_MCP_DEAL_FLAG === 0);
-        this.childGridData1 = process(childgridresult1, this.state);
-        this.childGridData2 = process(childgridresult2, this.state);
-        this.childGridData = process(this.childGridResult, this.state);
+    clkAllItems(event): void {
+        this.childGridData.data.forEach((row) => {
+                row.selected = event.target.checked;
+        });
     }
 
     getFormatedDim(dataItem, field, dim, format) {
@@ -238,31 +215,24 @@ export class excludeDealGroupModalDialog {
                 }
             }
 
+            this.childGridResult = sortBy(sortBy(sortBy(this.childGridResult, 'OVLP_WF_STG_CD'), 'CST_MCP_DEAL_FLAG').reverse(), 'EXCLD_DEAL_FLAG').reverse();
+            this.childGridData = process(this.childGridResult, this.state);
             //filtering child grid accordingly - whether included in PCT or not
             //included in PCT
-            let childgridresult1 = this.childGridResult.filter(x => x.GRP_BY === 1);
+            this.childGridData1 = this.childGridData.data.filter(x => x.GRP_BY === 1);
             // not included in PCT
-            let childgridresult2 = this.childGridResult.filter(x => x.GRP_BY === 2);
-            //sorting excluded deals 
-            childgridresult1 = sortBy(childgridresult1, 'EXCLD_DEAL_FLAG').reverse();
-            childgridresult2 = sortBy(sortBy(sortBy(childgridresult2, 'EXCLD_DEAL_FLAG').reverse(), 'CST_MCP_DEAL_FLAG').reverse(), 'OVLP_WF_STG_CD');
-            this.childGridData1 = process(childgridresult1, this.state);
-            this.childGridData2 = process(childgridresult2, this.state);
-
-            if (this.childGridData1.data.length > 0) {
+            this.childGridData2 = this.childGridData.data.filter(x => x.GRP_BY === 2);
+            if (this.childGridData1.length > 0) {
                 this.isData = true;
                 this.childGrid[0] = [{ data: 'Deals below are included as part of the Cost Test' }];
-
             }
-            if (this.childGridData2.data.length > 0) {
+            if (this.childGridData2.length > 0) {
                 this.isData = true;
                 this.childGrid[1] = [{ data: 'Deals shown in grey overlap but are NOT included as part of the Cost Test' }];
-
             }
-            if (this.childGridData1.data.length == 0 && this.childGridData2.data.length == 0) {
+            if (this.childGridData1.length == 0 && this.childGridData2.length == 0) {
                 this.isData = false;
             }
-            this.childGridData = process(this.childGridResult, this.state);
         }, (error) => {
             this.isLoading = false;
             this.loggerSvc.error('Customer service subgrid', error);
@@ -286,30 +256,28 @@ export class excludeDealGroupModalDialog {
         this.childGrid = []
         //during on condition all the values are displayed including unchecked and deals overlapped
         if (this.isSelected) {
-            let childgridresult1 = this.childGridResult.filter(x => x.GRP_BY === 1);
-            let childgridresult2 = this.childGridResult.filter(x => x.GRP_BY === 2);
-            childgridresult1 = sortBy(childgridresult1, 'EXCLD_DEAL_FLAG').reverse();
-            childgridresult2 = sortBy(sortBy(sortBy(childgridresult2, 'EXCLD_DEAL_FLAG').reverse(), 'CST_MCP_DEAL_FLAG').reverse(), 'OVLP_WF_STG_CD');
-            this.childGridData1 = process(childgridresult1, this.state);
+            //filtering child grid accordingly - whether included in PCT or not
+            //included in PCT
+            this.childGridData1 = this.childGridData.data.filter(x => x.GRP_BY === 1);
+            // not included in PCT
+            this.childGridData2 = this.childGridData.data.filter(x => x.GRP_BY === 2);
             //checking for data included in PCT
-            if (this.childGridData1.data.length > 0) {
+            if (this.childGridData1.length > 0) {
                 this.isData = true;
                 this.childGrid[0] = [{ data: 'Deals below are included as part of the Cost Test' }];
             }
             //checking for data not included in pct
-            if (this.childGridData2.data.length > 0) {
+            if (this.childGridData2.length > 0) {
                 this.isData = true;
                 this.childGrid[1] = [{ data: 'Deals shown in grey overlap but are NOT included as part of the Cost Test' }];
             }
-            if (this.childGridData1.data.length == 0 && this.childGridData2.data.length == 0) {
+            if (this.childGridData1.length == 0 && this.childGridData2.length == 0) {
                 this.isData = false;
             }
         } else {
             // during off condition only data checked and included in PCT are shown
-            let childgridresult1 = this.childGridResult.filter(x => x.GRP_BY === 1);
-            childgridresult1 = this.childGridResult.filter(x => x.EXCLD_DEAL_FLAG === 1);
-            this.childGridData1 = process(childgridresult1, this.state);
-            if (this.childGridData1.data.length > 0) {
+            this.childGridData1 = this.childGridData.data.filter(x => x.GRP_BY === 1 && x.EXCLD_DEAL_FLAG === 1);
+            if (this.childGridData1.length > 0) {
                 this.isData = true;
                 this.childGrid[0] = [{ data: 'Deals below are included as part of the Cost Test' }];
             }
@@ -317,7 +285,6 @@ export class excludeDealGroupModalDialog {
                 this.isData = false;
             }
         }
-
     }
 
     convertToChildData(dataItem) {
