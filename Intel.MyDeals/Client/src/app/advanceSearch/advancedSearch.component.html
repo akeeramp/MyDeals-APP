@@ -167,7 +167,7 @@
                     <a class='advSearch click-adv' (click)="goto(dataItem.CNTRCT_OBJ_SID, 'gotoContract')" title='Click to Edit'><span>{{dataItem.CNTRCT_OBJ_SID}}</span></a>
                 </div>
                 <div *ngIf="column.field == 'PRC_ST_TITLE'">
-                    <a  class='advSearch click-adv' (click)="goto(dataItem.PRC_ST_OBJ_SID, 'gotoPS')" title='Click to Edit'><span>{{dataItem.PRC_ST_TITLE}}</span></a>
+                    <a class='advSearch click-adv' (click)="goto(dataItem.PRC_ST_OBJ_SID, 'gotoPS')" title='Click to Edit'><span>{{dataItem.PRC_ST_TITLE}}</span></a>
                 </div>
                 <div *ngIf="column.field == 'Customer'">
                     <span>{{dataItem[column.field].CUST_NM}}</span>
@@ -178,6 +178,9 @@
 
             </ng-template>
         </kendo-grid-column>
+        <ng-template kendoGridNoRecordsTemplate>
+            <div class="NoDataFound">There is no data to display.</div>
+        </ng-template>
     </kendo-grid>
 </div>
 <kendo-dialog *ngIf="exportAll" id="advance-kendo-excel-popup">

@@ -257,6 +257,19 @@ kendo-numerictextbox.advance-numerictextbox-style.k-widget.k-numerictextbox:focu
     font-size: 12px !important;
     border-width: 0 0 1px 0px;
 }
+#admin-advance-grid .k-grid .k-grid-norecords td {
+    padding: 0;
+}
+.NoDataFound {
+    font-weight: bolder;
+    color: #A30003;
+    background-color: #EBC3BC;
+    height: 40px;
+    display: flex;
+    align-content: center;
+    justify-content: center;
+    align-items: center;
+}
 
 .padding-design-horizontal {
     padding-top: 45px;
