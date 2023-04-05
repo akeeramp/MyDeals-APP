@@ -60,7 +60,7 @@ export class contractDetailsComponent {
     public dropDownsData = {};
     public titleErrorMsg: string;
     public isTender = false;
-    public today: string = this.momentService.moment().format("l");
+    public today: string = this.momentService.moment().format("MM/DD/YYYY");
     public MinYear: number; public MaxYear: number; public MinDate: string;
     public MaxDate: string;
     public saveBtnName: string; isTenderContract = false;
@@ -120,7 +120,10 @@ export class contractDetailsComponent {
     onFileUploadComplete() {
         if (this.uploadSuccess) {
             this.loggerSvc.success("Successfully uploaded " + this.files.length + " attachment(s).", "Upload successful");
-            window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
+
+            this.isLoading = false;
+            this.setBusy("", "", "", false);
+            window.location.href = "#/manager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0"; 
         }
     }
 
@@ -182,8 +185,8 @@ export class contractDetailsComponent {
         this.contractData.MinYear = this.MinYear = parseInt(this.momentService.moment().format("YYYY")) - 6;
         this.contractData.MaxYear = this.MaxYear = parseInt(this.momentService.moment("2099").format("YYYY"));
         // Set the initial Max and Min date, actual dates will be updated as per the selected customer
-        this.contractData.MinDate = this.MinDate = this.momentService.moment().subtract(6, "years").format("l");
-        this.contractData.MaxDate = this.MaxDate = this.momentService.moment("2099").format("l");
+        this.contractData.MinDate = this.MinDate = this.momentService.moment().subtract(6, "years").format("MM/DD/YYYY");
+        this.contractData.MaxDate = this.MaxDate = this.momentService.moment("2099").format("MM/DD/YYYY");
         //loading initial values of Contract
         this.contractData["NO_END_DT"] = false;
         this.contractData["CUST_MBR_SID"] = "";
@@ -322,7 +325,7 @@ export class contractDetailsComponent {
     }
 
     applyTodayDate() { //apply today's date on cancel click event of back date reason popup
-        const today = this.momentService.moment().format("l");
+        const today = this.momentService.moment().format("MM/DD/YYYY");
         this.START_DT = new Date(this.momentService.moment(this.contractData.START_DT).isBefore(today) ? today : this.contractData.START_DT);
         this.START_YR = new Date().getFullYear();
         this.isBackdatepopupopend = false;
@@ -345,12 +348,12 @@ export class contractDetailsComponent {
         });
         this.isSubmitted = true;
         //setting the UI properties
-        this.contractData["END_DT"] = this.momentService.moment(this.END_DT).format("l");
+        this.contractData["END_DT"] = this.momentService.moment(this.END_DT).format("MM/DD/YYYY");
         this.contractData["END_QTR"] = this.END_QTR;
         this.contractData["END_YR"] = this.END_YR;
         this.contractData["TITLE"] = this.TITLE;
         this.contractData["displayTitle"] = this.TITLE;
-        this.contractData["START_DT"] = this.momentService.moment(this.START_DT).format("l");
+        this.contractData["START_DT"] = this.momentService.moment(this.START_DT).format("MM/DD/YYYY");
         this.contractData["START_QTR"] = this.START_QTR;
         this.contractData["START_YR"] = this.START_YR;
         this.contractData["C2A_DATA_C2A_ID"] = this.C2A_DATA_C2A_ID;
@@ -372,7 +375,7 @@ export class contractDetailsComponent {
             this.contractData._behaviors.isError["TITLE"] = true;
             this.isValid = false;
         }
-        const maximumDate = this.momentService.moment(ct.START_DT).add(20, 'years').format('l');
+        const maximumDate = this.momentService.moment(ct.START_DT).add(20, 'years').format("MM/DD/YYYY");
         if (!this.contractData._behaviors) this.contractData._behaviors = {};
         if (this.momentService.moment(ct.END_DT) > this.momentService.moment('2099/12/31').add(0, 'years')) {
             this.contractData._behaviors.validMsg["END_DT"] = "Please select a date before 12/31/2099";
@@ -459,12 +462,14 @@ export class contractDetailsComponent {
                         
                     }
                     if (this.hasUnSavedFiles) {
-                        this.uploadFile(); 
+                        this.uploadFile();
                     }
-                    this.isLoading = false;
-                    this.setBusy("", "", "", false);
-                    //this will redirect incase of newly added/edited
-                    window.location.href ="#/manager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";   
+                    else {
+                        this.isLoading = false;
+                        this.setBusy("", "", "", false);
+                        //this will redirect incase of newly added/edited
+                        window.location.href = "#/manager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0"; 
+                    } 
                                    
                 },(err)=>{
                     this.loggerSvc.error("Unable to create contract","Error",err);
@@ -552,10 +557,10 @@ export class contractDetailsComponent {
                     if (changeEvent == "START_QTR" || changeEvent == "START_YR" || changeEvent == "START_DT") {
                         this.START_QTR = response?.QTR_NBR;
                         this.START_YR = response?.YR_NBR;
-                        this.START_DT = (changeEvent == "START_DT") ? this.START_DT : new Date(this.momentService.moment(response["QTR_STRT"]).format("l"));
+                        this.START_DT = (changeEvent == "START_DT") ? this.START_DT : new Date(this.momentService.moment(response["QTR_STRT"]).format("MM/DD/YYYY"));
                     }
                     if (changeEvent == "END_QTR" || changeEvent == "END_YR" || changeEvent == "END_DT") {
-                        this.END_DT = (changeEvent == "END_DT") ? this.END_DT : new Date(this.momentService.moment(response["QTR_END"]).format("l"));
+                        this.END_DT = (changeEvent == "END_DT") ? this.END_DT : new Date(this.momentService.moment(response["QTR_END"]).format("MM/DD/YYYY"));
                         this.END_QTR = response?.QTR_NBR;
                         this.END_YR = response?.YR_NBR;
                     }
@@ -605,16 +610,16 @@ export class contractDetailsComponent {
                     if (response != null) {
                         if (changeEvent == "") {
                             if (this.momentService.moment(response["QTR_END"]) < this.momentService.moment(new Date())) {
-                                response["QTR_END"] = this.momentService.moment(response["QTR_END"]).add(365, "days").format("l");
+                                response["QTR_END"] = this.momentService.moment(response["QTR_END"]).add(365, "days").format("MM/DD/YYYY");
                             }
-                            this.contractData.MinDate = this.momentService.moment(response["MIN_STRT"]).format("l");
-                            this.contractData.MaxDate = this.momentService.moment(response["MIN_END"]).format("l");
+                            this.contractData.MinDate = this.momentService.moment(response["MIN_STRT"]).format("MM/DD/YYYY");
+                            this.contractData.MaxDate = this.momentService.moment(response["MIN_END"]).format("MM/DD/YYYY");
                             // By default we dont want a contract to be backdated
-                            this.contractData.START_DT = this.isTender == true ? this.momentService.moment().format("l") : this.momentService.moment(response["QTR_STRT"]).isBefore(this.today)
+                            this.contractData.START_DT = this.isTender == true ? this.momentService.moment().format("MM/DD/YYYY") : this.momentService.moment(response["QTR_STRT"]).isBefore(this.today)
                                 ? this.today
-                                : this.momentService.moment(response["QTR_STRT"]).format("l");
+                                : this.momentService.moment(response["QTR_STRT"]).format("MM/DD/YYYY");
                             this.START_DT = new Date(this.contractData.START_DT);
-                            this.contractData.END_DT = this.momentService.moment(response["QTR_END"]).format("l");
+                            this.contractData.END_DT = this.momentService.moment(response["QTR_END"]).format("MM/DD/YYYY");
                             this.END_DT = new Date(this.contractData.END_DT);
                             this.START_QTR = this.END_QTR = this.contractData.START_QTR = this.contractData.END_QTR = response?.QTR_NBR;
                             this.END_YR = this.START_YR = this.contractData.START_YR = this.contractData.END_YR = response?.YR_NBR;
@@ -622,14 +627,14 @@ export class contractDetailsComponent {
                         if (changeEvent == "START_QTR" || changeEvent == "START_YR" || changeEvent == "START_DT") {
                             this.START_QTR = response?.QTR_NBR;
                             this.START_YR = response?.YR_NBR;
-                            this.contractData.MinDate = this.momentService.moment(response["MIN_STRT"]).format("l");
-                            this.contractData.MaxDate = this.momentService.moment(response["MIN_END"]).format("l");
-                            this.START_DT = (changeEvent == "START_DT") ? this.START_DT : new Date(this.momentService.moment(response["QTR_STRT"]).format("l"));
+                            this.contractData.MinDate = this.momentService.moment(response["MIN_STRT"]).format("MM/DD/YYYY");
+                            this.contractData.MaxDate = this.momentService.moment(response["MIN_END"]).format("MM/DD/YYYY");
+                            this.START_DT = (changeEvent == "START_DT") ? this.START_DT : new Date(this.momentService.moment(response["QTR_STRT"]).format("MM/DD/YYYY"));
                             const selectedDate = this.START_DT;
                             this.pastDateConfirm(selectedDate);
                         }
                         if (changeEvent == "END_QTR" || changeEvent == "END_YR" || changeEvent == "END_DT") {
-                            this.END_DT = (changeEvent == "END_DT") ? this.END_DT : new Date(this.momentService.moment(response["QTR_END"]).format("l"));
+                            this.END_DT = (changeEvent == "END_DT") ? this.END_DT : new Date(this.momentService.moment(response["QTR_END"]).format("MM/DD/YYYY"));
                             this.END_QTR = response?.QTR_NBR;
                             this.END_YR = response?.YR_NBR;
                         }
@@ -725,7 +730,7 @@ export class contractDetailsComponent {
     }
 
     noEndDate() {
-        this.END_DT = new Date(this.momentService.moment().add(20, 'years').format("l"));
+        this.END_DT = new Date(this.momentService.moment().add(20, 'years').format("MM/DD/YYYY"));
         this.contractData._behaviors.isReadOnly["END_DT"] = this.NO_END_DT;
         this.contractData._behaviors.isReadOnly["END_QTR"] = this.NO_END_DT;
         this.contractData._behaviors.isReadOnly["END_YR"] = this.NO_END_DT;
@@ -830,8 +835,8 @@ export class contractDetailsComponent {
         }
         this.contractType = ' Contract';
         this.TITLE = this.contractData.TITLE;
-        this.START_DT = new Date(this.momentService.moment(this.contractData.START_DT).format("l"));
-        this.END_DT = this.existingMinEndDate = new Date(this.momentService.moment(this.contractData.END_DT).format("l"));
+        this.START_DT = this.momentService.moment(this.contractData.START_DT, "MM/DD/YYYY").toDate();
+        this.END_DT = this.existingMinEndDate = this.momentService.moment(this.contractData.END_DT, "MM/DD/YYYY").toDate();
         this.selectedCUST_ACCPT = this.contractData.CUST_ACCPT;
         if (this.contractData.CUST_ACCPT) {
             this.disableCustAccpt = true;
@@ -953,10 +958,10 @@ export class contractDetailsComponent {
             });
         if (response) {
             if (this.momentService.moment(response['QTR_END']) < this.momentService.moment(new Date())) {
-                response['QTR_END'] = this.momentService.moment(response['QTR_END']).add(365, 'days').format('l');
+                response['QTR_END'] = this.momentService.moment(response['QTR_END']).add(365, 'days').format("MM/DD/YYYY");
             }
-            this.contractData.MinDate = this.MinDate = this.momentService.moment(response['MIN_STRT']).format('l');
-            this.contractData.MaxDate = this.MaxDate = this.momentService.moment(response['MIN_END']).format('l');
+            this.contractData.MinDate = this.MinDate = this.momentService.moment(response['MIN_STRT']).format("MM/DD/YYYY");
+            this.contractData.MaxDate = this.MaxDate = this.momentService.moment(response['MIN_END']).format("MM/DD/YYYY");
             if (dateType == 'START_DT') {
                 this.contractData.START_QTR = this.START_QTR = response['QTR_NBR'];
                 this.contractData.START_YR = this.START_YR = response.YR_NBR;
@@ -1004,18 +1009,18 @@ export class contractDetailsComponent {
                                     this.copyContractData = response[0];
                                     this.contractData.TITLE = this.TITLE = this.copyContractData.TITLE + " (copy)";
                                     this.contractData.CUST_MBR_SID = this.Customer = Number(this.copyContractData.CUST_MBR_SID);
-                                    this.contractData.START_DT = this.START_DT = this.stDate = new Date(this.momentService.moment(this.copyContractData.START_DT).format("l"));
-                                    this.contractData.END_DT = this.END_DT = this.existingMinEndDate = new Date(this.momentService.moment(this.copyContractData.END_DT).format("l"));
+                                    this.contractData.START_DT = this.START_DT = this.stDate = new Date(this.momentService.moment(this.copyContractData.START_DT).format("MM/DD/YYYY"));
+                                    this.contractData.END_DT = this.END_DT = this.existingMinEndDate = new Date(this.momentService.moment(this.copyContractData.END_DT).format("MM/DD/YYYY"));
                                     this.Customer = this.copyContractData.Customer;
                                     this.contractData.MinYear = this.MinYear = parseInt(this.momentService.moment().format("YYYY")) - 6;
                                     this.contractData.MaxYear = this.MaxYear = parseInt(this.momentService.moment("2099").format("YYYY"));
                                     // Set the initial Max and Min date, actual dates will be updated as per the selected customer
-                                    this.contractData.MinDate = this.MinDate = this.momentService.moment().subtract(6, "years").format("l");
-                                    this.contractData.MaxDate = this.MaxDate = this.momentService.moment("2099").format("l");
+                                    this.contractData.MinDate = this.MinDate = this.momentService.moment().subtract(6, "years").format("MM/DD/YYYY");
+                                    this.contractData.MaxDate = this.MaxDate = this.momentService.moment("2099").format("MM/DD/YYYY");
                                     // NOTE: START_QTR,START_YR,END_YR,END_QTR are not present in copyContractData,, as they are undefined calling getCurrentQuarterDetails to get the data--Check
                                     if (this.momentService.moment(this.contractData.END_DT) > this.momentService.moment('2099/12/31').add(0, 'years')) {
                                         this.contractData.END_DT = this.momentService.moment('2099/12/31').format("MM/DD/YYYY");
-                                        this.END_DT = this.existingMinEndDate = new Date(this.momentService.moment(this.contractData.END_DT).format("l"));
+                                        this.END_DT = this.existingMinEndDate = new Date(this.momentService.moment(this.contractData.END_DT).format("MM/DD/YYYY"));
                                     }
                                     this.contractData.START_QTR = this.START_QTR = this.copyContractData.START_QTR;
                                     this.contractData.START_YR = this.START_YR = this.copyContractData.START_YR;
@@ -1077,8 +1082,8 @@ export class contractDetailsComponent {
                                     } else {
                                         this.isTenderContract = this.contractData["IS_TENDER"];
                                     }
-                                    this.contractData.MinDate = this.MinDate = this.momentService.moment().subtract(6, "years").format("l");
-                                    this.contractData.MaxDate = this.MaxDate = this.momentService.moment("2099").format("l");
+                                    this.contractData.MinDate = this.MinDate = this.momentService.moment().subtract(6, "years").format("MM/DD/YYYY");
+                                    this.contractData.MaxDate = this.MaxDate = this.momentService.moment("2099").format("MM/DD/YYYY");
                                     this.contractData.MinYear = this.MinYear = parseInt(this.momentService.moment().format("YYYY")) - 6;
                                     this.contractData.MaxYear = this.MaxYear = parseInt(this.momentService.moment("2099").format("YYYY"));
                                     this.initialEndDateReadOnly = this.contractData?._behaviors && this.contractData?._behaviors?.isReadOnly && this.contractData?._behaviors?.isReadOnly["END_DT"] && this.contractData?._behaviors?.isReadOnly["END_DT"];
