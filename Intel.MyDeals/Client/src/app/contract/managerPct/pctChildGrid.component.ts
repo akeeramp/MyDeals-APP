@@ -67,7 +67,6 @@ export class pctChildGridComponent {
 
     private childState: State = {
         skip: 0,
-        take: 25,
         group: [],
         filter: {
             logic: "and",

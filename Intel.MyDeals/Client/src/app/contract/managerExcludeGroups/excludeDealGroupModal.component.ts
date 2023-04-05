@@ -82,8 +82,10 @@ export class excludeDealGroupModalDialog {
                 })
             }
         })
-        this.childGridData1 = this.childGridData.data.filter(x => x.CST_MCP_DEAL_FLAG === 1);
-        this.childGridData2 = this.childGridData.data.filter(x => x.CST_MCP_DEAL_FLAG === 0);
+        //included in PCT
+        this.childGridData1 = this.childGridData.data.filter(x => x.GRP_BY === 1);
+        // not included in PCT
+        this.childGridData2 = this.childGridData.data.filter(x => x.GRP_BY === 2);
         if (this.childGridData.data.length > 0) {
             this.gridData.data = this.gridResult;
         }

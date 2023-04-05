@@ -161,7 +161,7 @@ export class managerPctComponent {
                         each(parentData, (item) => {
                             item["PRC_CST_TST_STS"] = rollupPCTStatus[item["DEAL_ID"]];
                         });
-                        this.state[pt.DC_ID].take = parentData.length;
+                        //this.state[pt.DC_ID].take = parentData.length;
                         if (this.pctFilter != '') parentData = parentData.filter(x => x.PRC_CST_TST_STS == this.pctFilter);
                         this.gridDataSet[pt.DC_ID] = process(parentData, this.state[pt.DC_ID]);
                         this.gridResult[pt.DC_ID] = JSON.parse(JSON.stringify(this.gridDataSet[pt.DC_ID]));
@@ -552,7 +552,6 @@ export class managerPctComponent {
             each(item.PRC_TBL, (prcTbl) => {
                 this.state[prcTbl.DC_ID] = {
                     skip: 0,
-                    take: 25,
                     group: [],
                     filter: {
                         logic: "and",
