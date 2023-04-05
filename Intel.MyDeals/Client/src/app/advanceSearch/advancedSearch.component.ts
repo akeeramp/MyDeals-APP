@@ -314,6 +314,8 @@ export class AdvancedSearchComponent implements OnInit {
         this.isLoading = true;
         let exportVal = false;
         this.setBusy("Searching...", "Search speed depends on how specific your search options are.", "Info", true);
+        this.startDateValue = window.localStorage.startDateValue ? new Date(window.localStorage.startDateValue) : this.startDateValue;
+        this.endDateValue = window.localStorage.endDateValue ? new Date(window.localStorage.endDateValue) : this.endDateValue;
         var st = this.startDateValue.toLocaleDateString();
         let startDate = st.replace(/\//g, '-');
         var en = this.endDateValue.toLocaleDateString();
