@@ -59,7 +59,7 @@ export class adminCustomerVendorsComponent {
     public formGroup: FormGroup;
     public isFormChange = false;
     private editedRowIndex: number;
-
+    public virtual: any = { itemHeight: 28 };
     public state: State = {
         skip: 0,
         take: 25,
@@ -122,9 +122,9 @@ export class adminCustomerVendorsComponent {
     getVendorsInfoDropdown() {
         this.customerVendSvc.getVendorsData().subscribe((response: Array<any>) => {
             this.vendorDetails = response;
-            this.distinctPartner = distinct(response, "BUSNS_ORG_NM").map(
+            this.distinctPartner = sortBy(distinct(response, "BUSNS_ORG_NM").map(
                 item => item.BUSNS_ORG_NM
-            );
+            ));
             this.distinctPartId = distinct(response, 'VNDR_ID').map(
                 item => item.VNDR_ID
             );

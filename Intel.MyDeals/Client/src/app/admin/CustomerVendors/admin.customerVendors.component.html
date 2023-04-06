@@ -53,7 +53,7 @@
                         [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-combobox #custDropDown [data]="distinctCust" [placeholder]="'Select Customer..'"
+                    <kendo-combobox #custDropDown [data]="distinctCust" [placeholder]="'Select Customer..'" [virtual]="virtual"
                         [formControl]="formGroup.get('CUST_NM')" [allowCustom]="allowCustom"></kendo-combobox>
                 </ng-template>
             </kendo-grid-column>
@@ -66,7 +66,7 @@
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-combobox #catDropDown [data]="distinctPartner" [placeholder]="'Select Vendor by Name..'"
-                        [formControl]="formGroup.get('BUSNS_ORG_NM')" [allowCustom]="allowCustom"
+                        [formControl]="formGroup.get('BUSNS_ORG_NM')" [allowCustom]="allowCustom" [virtual]="virtual"
                         (valueChange)="partnerNMChange($event)"></kendo-combobox>
                 </ng-template>
             </kendo-grid-column>
@@ -79,7 +79,7 @@
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-combobox #partDropDown [data]="distinctPartId" [formControl]="formGroup.get('DROP_DOWN')"
-                        [placeholder]="'Select Vendor by ID..'" [allowCustom]="allowCustom"
+                        [placeholder]="'Select Vendor by ID..'" [allowCustom]="allowCustom" [virtual]="virtual"
                         (valueChange)="partnerIDChange($event)"></kendo-combobox>
                 </ng-template>
             </kendo-grid-column>
