@@ -429,7 +429,7 @@ export class adminlegalExceptionComponent {
 
     changedateformat(item: any) {
         if (item != undefined) {
-            item.DT_APRV = item.DT_APRVDT_APRV !=undefined ? new Date(item.DT_APRVDT_APRV) : new Date();
+            item.DT_APRV = item.DT_APRV !=undefined ? new Date(item.DT_APRV) : new Date();
             item.CHG_DTM = new Date(item.CHG_DTM);
             item.PCT_LGL_EXCPT_STRT_DT = new Date(item.PCT_LGL_EXCPT_STRT_DT);
             item.PCT_LGL_EXCPT_END_DT = new Date(item.PCT_LGL_EXCPT_END_DT);
