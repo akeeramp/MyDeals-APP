@@ -1061,8 +1061,7 @@ export class contractManagerComponent {
             "responseData": response
         }
         const dialogRef = this.dialog.open(OverlappingCheckComponent, {
-            data: data,
-            panelClass: 'de-css-comp'
+            data: data
         });
         dialogRef.afterClosed().subscribe(result => { });
     }

@@ -12,13 +12,11 @@
     <div>
         <div class="col-md-12" style="margin-top: 15px">
             <div class="col-md-1" style="font-size:14px; font-weight:bold">API Name: </div>
-            <div class="col-md-2">
+            <div class="col-md-5">
                 <kendo-dropdownlist id="comboApiName" class="opUiContainer md" [data]="apiList" textField="API_NM"
                                     [defaultItem]="defaultItem" [itemDisabled]="itemDisabled"
                                     valueField="API_CD" [(ngModel)]="selectedApiCD" [valuePrimitive]="true"></kendo-dropdownlist>
-            </div>
-            <div class="col-md-2">
-                <button (click)="runApi()" class="btn btn-primary" style="float: left;">Simulate</button>
+                <button (click)="runApi()" class="btn btn-primary" style="margin-left: 15px">Simulate</button>
             </div>
         </div>
         <div class="col-md-12" style="margin-top:20px" [hidden]="!responseData.length>0">

@@ -7,11 +7,6 @@
     height: 200px !important
 }
 
-.oo-lapping-style mat-dialog-container {
-    padding: 0 !important;
-    overflow: hidden !important
-}
-
 #OvrLp .k-grid {
     height: 100%
 }

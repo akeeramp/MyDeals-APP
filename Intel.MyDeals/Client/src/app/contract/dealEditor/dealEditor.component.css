@@ -178,7 +178,7 @@ tr:last-child > td {
 }
 
 .one-check .k-grid .k-grid-content {
-    overflow-y: overlay
+    overflow-y: overlay;
 }
 
 .one-check .k-grid-edit-row .k-textbox, .one-check .k-widgetGr, .one-check .k-grid-edit-row .k-widget {
@@ -446,6 +446,10 @@ k-state-focused .k-touch-action-auto .k-grid-edit-cell {
 .op-grid.k-grid .k-grid-filter .k-icon.k-i-filter {
     color: #00AEEF;
     opacity: 1
+}
+
+.op-grid.k-grid .k-grid-filter .k-icon.k-i-filter:hover {
+    color: #0071c5 !important
 }
 
 .intelicon-protection-solid {
@@ -948,10 +952,6 @@ ngb-tooltip-window .tooltip-inner {
         box-shadow: none
     }
 
-.de-css-comp mat-dialog-container {
-    padding: 0
-}
-
 .breakoutColumn.tier .rowHeight {
     height: auto !important
 }
@@ -1135,10 +1135,6 @@ button.k-button.add-tab-cancelbtn {
     height: 85px
 }
 
-.deHeaderFilt-hover .op-grid.k-grid .k-grid-filter .k-icon.k-i-filter:hover {
-    color: #0071c5 !important
-}
-
 .k-list .k-item.k-state-focused.k-state-selected {
     background-color: #ebebeb !important;
     color: #0071c5 !important
@@ -1236,31 +1232,6 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn 
     padding-bottom: 0 !important
 }
 
-.de-css-comp th.k-group-cell.k-header {
-    background-color: #e7e7e8 !important;
-    border-right: 1px solid #e6e6e6
-}
-
-.de-css-comp .k-grid-filter .k-icon.k-i-filter {
-    color: #00AEEF !important;
-    opacity: 1;
-    font-size: 14px
-}
-
-    .de-css-comp .k-grid-filter .k-icon.k-i-filter:hover {
-        color: #0071c5 !important
-    }
-
-.de-css-comp mat-dialog-container kendo-grid kendo-grid-list table tbody tr.k-grid-norecords td {
-    height: 383px;
-    width: 792px;
-    max-width: 792px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background-color: #fff !important
-}
-
 #dealEditor .k-grid-header .k-grid-filter.k-state-active {
     background-color: #fff !important
 }
@@ -1272,107 +1243,6 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn 
 
 #dealEditorTab .k-tabstrip-items .k-item:hover {
     background: #eee !important
-}
-
-.de-css-comp th.k-header.headerClass.k-filterable {
-    background-color: #e7e7e8 !important;
-    color: #1a3e6f !important;
-    font-size: 10px !important;
-    font-weight: 700 !important;
-    border-right-color: #c4cfd4 !important;
-    border-left-color: #c4cfd4 !important;
-    font-family: 'Intel Clear' !important
-}
-
-.de-css-comp .k-grid-header .k-header:first-child, .de-css-comp th.k-group-cell.k-header {
-    background-color: #e7e7e8 !important;
-    border-right-color: #c4cfd4 !important;
-    border-left-color: #c4cfd4 !important
-}
-
-.de-css-comp .k-window-titlebar {
-    border-radius: 0 !important;
-    padding: 7.5px !important;
-    font-size: 15px !important;
-    font-weight: 500 !important;
-    font-family: 'Intel Clear' !important
-}
-
-.de-css-comp span.k-icon.k-i-window-minimize, .de-css-comp span.k-icon.k-i-window-maximize {
-    color: #428bca !important
-}
-
-.de-css-comp .k-window-titlebar .k-state-hover {
-    background-color: #008bd1 !important;
-    border-color: #008bd1 !important
-}
-
-.de-css-comp .k-button.k-bare {
-    font-size: 5px !important
-}
-
-.de-css-comp span.k-icon.k-i-close {
-    opacity: .7 !important
-}
-
-.de-css-comp .k-button.k-bare:hover {
-    font-size: 5px !important
-}
-
-.de-css-comp span.k-icon.k-i-window-maximize:hover, .de-css-comp span.k-icon.k-i-window-minimize:hover {
-    color: #000 !important
-}
-
-.de-css-comp .k-link:hover {
-    background-color: transparent !important;
-    color: #1a3e6f !important
-}
-
-.de-css-comp .k-window-actions {
-    gap: 0 !important
-}
-
-.de-css-comp .k-grid-pager {
-    border-color: #dee2e6;
-    color: #212529 !important;
-    font-size: 10px !important;
-    background-color: #e7e7e8 !important
-}
-
-.de-css-comp .k-pager-nav.k-link {
-    color: #0071c5 !important;
-    background: #e7e7e8 !important;
-    border: none !important;
-    opacity: .25 !important
-}
-
-.de-css-comp .k-pager-wrap .k-dropdown .k-dropdown-wrap {
-    background-color: #fafafa !important;
-    border-color: #fafafa !important;
-    color: #444 !important
-}
-
-.de-css-comp .k-pager-wrap .k-link.k-state-disabled .k-icon:hover {
-    color: #00aeef !important;
-    opacity: 1 !important
-}
-
-.de-css-comp span.k-icon.k-i-arrow-s {
-    color: #000 !important;
-    opacity: .25 !important
-}
-
-    .de-css-comp span.k-icon.k-i-arrow-s:hover {
-        color: #00aeef !important;
-        opacity: 1 !important
-    }
-
-.de-css-comp span .k-dropdown .k-select {
-    padding: 0 !important
-}
-
-.de-css-comp span .k-input {
-    padding: 10px !important
 }
 
 .end-customer-popupSty mat-dialog-container {

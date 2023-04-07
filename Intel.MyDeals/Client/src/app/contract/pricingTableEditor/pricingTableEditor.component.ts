@@ -1732,8 +1732,7 @@ export class pricingTableEditorComponent {
             "currPt": this.curPricingTable,
         }
         const dialogRef = this.dialog.open(OverlappingCheckComponent, {
-            data: data,
-            panelClass: 'oo-lapping-style'
+            data: data
         });
         dialogRef.afterClosed().subscribe(result => { });
     }
@@ -1746,8 +1745,7 @@ export class pricingTableEditorComponent {
             "overlapFlexResult": this.overlapFlexResult
         }
         const dialogRef = this.dialog.open(FlexOverlappingCheckComponent, {
-            data: data,
-            panelClass: 'flex-overlapping-deals',
+            data: data
         });
         dialogRef.afterClosed().subscribe(result => { });
     }

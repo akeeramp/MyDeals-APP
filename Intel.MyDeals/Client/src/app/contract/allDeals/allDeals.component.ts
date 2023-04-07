@@ -452,9 +452,7 @@ export class allDealsComponent {
             "currPt": this.contractData,
         }
         const dialogRef = this.dialog.open(OverlappingCheckComponent, {
-            
-            data: data,
-            panelClass: 'extra_box'
+            data: data
         });
         dialogRef.afterClosed().subscribe(result => { });
     }

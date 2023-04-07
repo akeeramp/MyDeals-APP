@@ -555,8 +555,7 @@ export class dealEditorComponent {
             "currPt": this.curPricingTable,
         }
         const dialogRef = this.dialog.open(OverlappingCheckComponent, {
-            data: data,
-            panelClass: 'de-css-comp'
+            data: data
         });
         dialogRef.afterClosed().subscribe(result => { });
     }

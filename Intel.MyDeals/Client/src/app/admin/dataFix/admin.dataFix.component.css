@@ -1,1 +1,253 @@
-﻿.control-label{text-align:right;padding-right:14px}#dataFixAttributes .dataValue{height:30px;font-size:12px;width:100%}.dealTools{margin-left:10px}.btn-primary[disabled]{background-color:#edeff0!important;color:#b1babf!important;border-color:#b1babf!important}.grid-link-checkbox with-font{height:15px;width:15px}.k-dropdown .k-dropdown-wrap{background-color:#fff!important}.AlertMsg{width:100px;color:black;background-color:lightgray;border:none}.btn[disabled]{cursor:not-allowed!important}#dataFixAttributes .dataValueNumeric{font-size:11px;width:75px}.inputWidth{width:100%;font-size:11px}#dataFixAttributes table thead th,.col{text-align:center;font-size:13px}#dataFixAttributes table tbody td,.data{padding-right:2px}#dataFixAttributes{max-height:250px;overflow:auto}.headerFont *{font-size:13px;text-align:center}.addModeScroll{max-height:500px;overflow:auto}#dataFixAttributes .abValue{font-size:12px;text-align:center;padding:5px;width:100%}#dataFixActions .dataValue{height:30px;font-size:12px;width:720px}#dataFixActions table thead th{text-align:center;font-size:13px}#dataFixActions table tbody td{padding-right:2px}#dataFixActions{max-height:250px;overflow:auto}#dataFixActions .abValue{font-size:12px;text-align:center;padding:5px;width:100%}.k-animation-container ul{min-width:50px!important}.filterRow{margin-bottom:7px}.filterRow .k-dropdown{border:1px solid #e5e5e5;border-radius:3px}.icnBtn{border-radius:4px;width:24px;padding:2px 5px;margin:2px 12px 2px 0;cursor:pointer}.icnBtn i{color:#ffffff}.icnSkyBtn{background-color:#00AEEF}.icnSkyBtn:hover{background-color:#0071C5}.icnGryBtn{background-color:#bbbbbb}.icnGryBtn:hover{background-color:#cccccc}.k-window-titlebar.k-dialog-titlebar.k-header{display:none}.btn-def{margin:0 0 0 15px}.h5-small{font-size:12px;color:#444444;font-weight:200;margin-left:10px;font-style:italic}.curRule{color:#0071C5;margin-left:10px}.icnSky{cursor:pointer;color:#00AEEF;margin-left:8px}.menu-container li a{cursor:pointer}.sm-help{font-size:11px;color:#666666;line-height:1.1em}.sm-help I{color:#FFA300}.divTable{display:table;width:100%}.divTableRow{display:table-row}.divTableCell,.divTableHead{display:table-cell;padding-right:2px}.divTableBody{display:table-row-group}.kdropdownlist{width:150px}.fontWeight{font-weight:bold}.messageBox{color:#FC4C02;font-size:15px}.datafixAlert{font-weight:bold;color:red;padding-left:33px}.dataFix{padding-left:15px!important;margin-top:50px!important}.text-alignfix{margin-top:-5px;margin-bottom:-1.2rem;line-height:1.2;font-weight:500}.grid-table-lr{padding-left:20px!important;padding-right:5px!important}.set-bottom-left{padding-left:20px;margin-bottom:-1rem}.fixed-bottom-space{margin-bottom:-1.3rem}
+﻿.control-label {
+    text-align: right;
+    padding-right: 14px
+}
+
+#dataFixAttributes .dataValue {
+    height: 30px;
+    font-size: 12px;
+    width: 100%
+}
+
+.dealTools {
+    margin-left: 10px
+}
+
+.btn-primary[disabled] {
+    background-color: #edeff0 !important;
+    color: #b1babf !important;
+    border-color: #b1babf !important
+}
+
+.grid-link-checkbox with-font {
+    height: 15px;
+    width: 15px
+}
+
+.k-dropdown .k-dropdown-wrap {
+    background-color: #fff !important
+}
+
+.AlertMsg {
+    width: 100px;
+    color: black;
+    background-color: lightgray;
+    border: none
+}
+
+.btn[disabled] {
+    cursor: not-allowed !important
+}
+
+#dataFixAttributes .dataValueNumeric {
+    font-size: 11px;
+    width: 75px
+}
+
+.inputWidth {
+    width: 100%;
+    font-size: 11px
+}
+
+#dataFixAttributes table thead th, .col {
+    text-align: center;
+    font-size: 13px
+}
+
+#dataFixAttributes table tbody td, .data {
+    padding-right: 2px
+}
+
+#dataFixAttributes {
+    max-height: 250px;
+    overflow: auto
+}
+
+.headerFont * {
+    font-size: 13px;
+    text-align: center
+}
+
+.addModeScroll {
+    max-height: 500px;
+    overflow: auto
+}
+
+#dataFixAttributes .abValue {
+    font-size: 12px;
+    text-align: center;
+    padding: 5px;
+    width: 100%
+}
+
+#dataFixActions .dataValue {
+    height: 30px;
+    font-size: 12px;
+    width: 720px
+}
+
+#dataFixActions table thead th {
+    text-align: center;
+    font-size: 13px
+}
+
+#dataFixActions table tbody td {
+    padding-right: 2px
+}
+
+#dataFixActions {
+    max-height: 250px;
+    overflow: auto
+}
+
+    #dataFixActions .abValue {
+        font-size: 12px;
+        text-align: center;
+        padding: 5px;
+        width: 100%
+    }
+
+.k-animation-container ul {
+    min-width: 50px !important
+}
+
+.filterRow {
+    margin-bottom: 7px
+}
+
+    .filterRow .k-dropdown {
+        border: 1px solid #e5e5e5;
+        border-radius: 3px
+    }
+
+.icnBtn {
+    border-radius: 4px;
+    width: 24px;
+    padding: 2px 5px;
+    margin: 2px 12px 2px 0;
+    cursor: pointer
+}
+
+    .icnBtn i {
+        color: #ffffff
+    }
+
+.icnSkyBtn {
+    background-color: #00AEEF
+}
+
+    .icnSkyBtn:hover {
+        background-color: #0071C5
+    }
+
+.icnGryBtn {
+    background-color: #bbbbbb
+}
+
+    .icnGryBtn:hover {
+        background-color: #cccccc
+    }
+
+.k-window-titlebar.k-dialog-titlebar.k-header {
+    display: none
+}
+
+.btn-def {
+    margin: 0 0 0 15px
+}
+
+.h5-small {
+    font-size: 12px;
+    color: #444444;
+    font-weight: 200;
+    margin-left: 10px;
+    font-style: italic
+}
+
+.curRule {
+    color: #0071C5;
+    margin-left: 10px
+}
+
+.icnSky {
+    cursor: pointer;
+    color: #00AEEF;
+    margin-left: 8px
+}
+
+.menu-container li a {
+    cursor: pointer
+}
+
+.sm-help {
+    font-size: 11px;
+    color: #666666;
+    line-height: 1.1em
+}
+
+    .sm-help I {
+        color: #FFA300
+    }
+
+.divTable {
+    display: table;
+    width: 100%
+}
+
+.divTableRow {
+    display: table-row
+}
+
+.divTableCell, .divTableHead {
+    display: table-cell;
+    padding-right: 2px
+}
+
+.divTableBody {
+    display: table-row-group
+}
+
+.kdropdownlist {
+    width: 150px
+}
+
+.fontWeight {
+    font-weight: bold
+}
+
+.messageBox {
+    color: #FC4C02;
+    font-size: 15px
+}
+
+.datafixAlert {
+    font-weight: bold;
+    color: red;
+    padding-left: 33px
+}
+
+.dataFix {
+    padding-left: 15px !important;
+    margin-top: 50px !important
+}
+
+.text-alignfix {
+    margin-top: -5px;
+    margin-bottom: -1.2rem;
+    line-height: 1.2;
+    font-weight: 500
+}
+
+.grid-table-lr {
+    padding-left: 20px !important;
+    padding-right: 5px !important
+}
+
+.set-bottom-left {
+    padding-left: 20px;
+    margin-bottom: -1rem
+}
+
+.fixed-bottom-space {
+    margin-bottom: -1.3rem
+}

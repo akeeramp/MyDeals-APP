@@ -554,7 +554,7 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-
     height: calc(100vh - 591px)
 }
 
-.extra_box_padding mat-dialog-container {
+/*.extra_box_padding mat-dialog-container {
     padding: 0 !important
 }
 
@@ -581,7 +581,7 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-
     align-items: center;
     justify-content: center;
     background-color: #fff !important
-}
+}*/
 
 .excl-DG-modal.cdk-overlay-pane {
     max-width: 95vw !important;

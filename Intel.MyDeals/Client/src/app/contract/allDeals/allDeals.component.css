@@ -359,10 +359,6 @@ kendo-tabstrip.diff-all-deals {
     height: calc(100vh - 250px) !important
 }
 
-.extra_box mat-dialog-container {
-    padding: 0 !important
-}
-
 #excel_DropDown.show {
     transform: none !important;
     font-size: 13px !important;
