@@ -997,15 +997,6 @@ kendo-tabstrip.tabs-coll {
     overflow-y: auto !important
 }
 
-#colOpt:hover, #colOpt ~ td:hover {
-    background-color: #1891ee !important;
-    color: white !important
-}
-
-#colOpt {
-    color: #00AEEF
-}
-
 kendo-dialog-actions.add-tab-style.k-dialog-buttongroup {
     padding: 0 !important;
     border-width: 0 !important;

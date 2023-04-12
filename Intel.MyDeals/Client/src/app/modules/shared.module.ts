@@ -6,11 +6,13 @@ import {LoadingSpinnerComponent} from '../shared/loadingSpinner/loadingspinner.c
 import { CustomDropDownFilterComponent } from '../shared/kendo/customDropDownFilter.component';
 import { globalRouteComponent } from '../shared/globalroute/globalroute.component';
 import { SearchComponent } from '../shared/search/search.component';
+import { HeaderComponent } from '../shared/header/header.component';
 
 export let sharedComponents =[
     LoaderComponent,
     MultiCheckFilterComponent,
     CustomDateFilterComponent,
+    HeaderComponent,
     FooterComponent,
     LoadingSpinnerComponent,
     CustomDropDownFilterComponent,

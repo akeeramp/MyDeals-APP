@@ -3,11 +3,10 @@ import { logger } from "../../shared/logger/logger";
 import { employeeService } from './admin.employee.service';
 
 @Component({
-    selector: "employee-dashboard",
-    templateUrl: "Client/src/app/admin/employee/admin.employee.component.html",
+    selector: 'employee-dashboard',
+    templateUrl: 'Client/src/app/admin/employee/admin.employee.component.html',
     styleUrls: ['Client/src/app/admin/employee/admin.employee.component.css']
 })
-
 export class EmployeeComponent {
     constructor(private employeeSvc: employeeService,private loggerSvc:logger) { }
 
@@ -40,38 +39,14 @@ export class EmployeeComponent {
 
     ngOnInit() {
         this.roles = [
-            {
-                value: 9,
-                label: "SA"
-            },
-            {
-                value: 3,
-                label: "DA"
-            },
-            {
-                value: 6,
-                label: "GA"
-            },
-            {
-                value: 5,
-                label: "FSE"
-            },
-            {
-                value: 4,
-                label: "Finance"
-            },
-            {
-                value: 7,
-                label: "Legal"
-            },
-            {
-                value: 2,
-                label: "CBA"
-            },
-            {
-                value: 8,
-                label: "RA"
-            }
+            { value: 9, label: "SA" },
+            { value: 3, label: "DA" },
+            { value: 6, label: "GA" },
+            { value: 5, label: "FSE" },
+            { value: 4, label: "Finance" },
+            { value: 7, label: "Legal" },
+            { value: 2, label: "CBA" },
+            { value: 8, label: "RA" }
         ]
     }
 }

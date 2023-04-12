@@ -1,0 +1,283 @@
+<nav class="navbar navbar-default navbar-fixed-top">
+    <div class="container-fluid">
+        <table style="display: table; width:100%">
+            <tr>
+                <td>
+                    <div class="navbar-header" style="margin-left: 5px;">
+                        <img class="navbar-logo" src="/images/intel-logo-white-100.png">
+                        <a class="navbar-brand" href="/" title="Back to the My Deals Dashboard">My Deals</a>
+                    </div>
+                </td>
+                <td style="vertical-align: top">
+                    <div style="text-align: left;" class="navbar-collapse collapse">
+                        <div style="font-size: 14px; color: white; font-weight: bold; padding-left: 10px; padding-right: 10px; padding-bottom:5px;padding-top:5px; background-color: #00B1F1; display: inline-block">
+                            Google Chrome Required <img src="/images/ChromeIcon.png" style="width: 24px; height: 24px; margin-left: 10px">
+                            <div *ngIf="!isProduction()">
+                                <span class="pre-prod-environment">Pre-Production Environment: {{ environment }}</span>
+                            </div>
+                        </div>
+                    </div>
+                </td>
+                <td width="auto">
+                    <!-- Collect the nav links, forms, and other content for toggling -->
+                    <div class="collapse navbar-collapse" id="myDeals-navbar-collapse">
+                        <ul class="nav navbar-nav navbar-right">
+                            <li style="text-align: center;">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="padding: 7px;min-height:50px">
+                                    <div class="fl" id="divUsrImg">
+                                        <img src="https://photos.intel.com/images/{{ getUserWwid() }}.jpg" />
+                                    </div>
+                                    <div class="fl hidden-sm" style="margin-top: 7px; margin-right: 10px;" title="{{ getExtraUserPrivsDetailAsString() }}">
+                                        <div id="divUsrName">{{ getUserName() }}</div>
+                                        <div id="divUsrRole">{{ getSuperPrefix() }} {{ getUserRoleExtension() }} {{ getUserRole() }} <span style="color: Yellow;">{{ getExtraUserPrivs() }}</span></div>
+                                    </div>
+                                    <div class="fl">
+                                        <notification-dock-angular></notification-dock-angular>
+                                    </div>
+                                </a>
+                            </li>
+                        </ul>
+                        <div class="fr">
+                            <admin-banner-angular></admin-banner-angular>
+                            <deal-popup-dock-angular></deal-popup-dock-angular>
+                        </div>
+                    </div>
+                </td>
+
+            </tr>
+        </table>
+    </div>
+
+    <div class="menu-bar above-limited">
+        <ul class="nav nav-tabs nav-tabs-intel-blocks header-fixes menu-one" id="myTab" role="tablist">
+            <li>
+                <a class="mainMenu"  href="#portal" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs">Home</span></a>
+            </li>
+            <li class="dropdown" *ngIf="isDeveloper()">
+                <a class="btn btn-primary mainMenu primary-one" role="button" href="/" data-toggle="dropdown" data-target="#" title="Developer Documents"><i class="intelicon-attach-document-solid"></i><span class="hidden-xs"> Docs </span><i class="intelicon-down"></i></a>
+                <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
+                    <li><a href="/CodingPractices">Coding Practices</a></li>
+                </ul>
+            </li>
+            <li class="dropdown">
+                <a class="btn btn-primary mainMenu primary-one" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#" title="Administrative Tools"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Admin</span> <i class="intelicon-down"></i></a>
+
+                <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
+                    <li class="dropdown-submenu" *ngIf="isDeveloper()">
+                        <a tabindex="-1">DSA</a>
+                        <ul class="dropdown-menu" style="width: 250px;">
+                            <li><a href="#vistexTestApi">Test API</a></li>
+                            <li><a href="#vistexProfiseeApi">Profisee Migration </a></li>
+                            <li><a href="#vistex">Integration Logs</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown-submenu">
+                        <a tabindex="-1">TroubleShooting</a>
+                        <ul class="dropdown-menu header-methods" style="width: 250px;">
+                            <li class="menu-detailed">
+                                <a href="/error/ResetMyCache" onclick="clearSessionData('/error/ResetMyCache');return false;">
+                                    <i class="fl fa fa-user-md"></i>
+                                    <div class="fl">
+                                        Clear <b>My</b> View Model
+                                        <div>Clear only your settings</div>
+                                    </div>
+                                    <div class="clearboth"></div>
+                                </a>
+                            </li>
+                            <li class="menu-detailed" *ngIf="isRealSA() || isDeveloper()">
+                                <a href="/error/ResetAVM" onclick="clearSessionData('/error/ResetAVM'); return false;">
+                                    <i class="fl fa fa-medkit"></i>
+                                    <div class="fl">
+                                        Clear <b>App</b> View Model
+                                        <div>Clear only the Middle Tier Cache</div>
+                                    </div>
+                                    <div class="clearboth"></div>
+                                </a>
+                            </li>
+                            <li class="menu-detailed" *ngIf="isRealSA() || isDeveloper()">
+                                <a href="/error/ResetMT" onclick="clearSessionData('/error/ResetMT'); return false;">
+                                    <i class="fl fa fa-heartbeat"></i>
+                                    <div class="fl">
+                                        Clear <b>All</b> View Models
+                                        <div>Clear Middle Tier and ALL Users</div>
+                                    </div>
+                                    <div class="clearboth"></div>
+                                </a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li *ngIf="!isProduction() && isEnvironmentKnown()">
+                        <a href="#adminemployeedashboard">Set Your Role (Pre-prod Only)</a>
+                    </li>
+
+                    <li class="dropdown-submenu" *ngIf="isDeveloper()">
+                        <a tabindex="-1">Monitoring</a>
+                        <ul class="dropdown-menu" style="width: 250px;">
+                            <li><a href="#admincache">Cache Manager</a></li>
+                            <li><a href="#opLog">Log Viewer</a></li>
+                            <li><a href="#constants">Constants</a></li>
+                            <li><a href="#batchTiming">Batch Job Details</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown-submenu" *ngIf="isCustomerMenuEnabled()">
+                        <a tabindex="-1">Customer</a>
+                        <ul class="dropdown-menu" style="width: 250px;">
+                            <li *ngIf="isRealSA() || isCustomerAdmin() || isDeveloper()">
+                                <a href="#customers">Customer</a>
+                            </li>
+                            <li *ngIf="isRealSA() || isCustomerAdmin() || isDeveloper()">
+                                <a href="#VistexCustomerMapping">Customer Mapping</a>
+                            </li>
+                            <li *ngIf="isRealSA() || isCustomerAdmin() || isDeveloper()">
+                                <a href="#CustomerVendors">Customer - Vendors</a>
+                            </li>
+                            <li *ngIf="isRealSA() || isCustomerAdmin() || isDeveloper()">
+                                <a href="#UnifiedCustomerAdmin">Unified Customer Admin</a>
+                            </li>
+                            <li *ngIf="getUserRole() == 'RA' || !isDeveloper()">
+                                <a href="#UnifiedCustomerAdmin">Unified Customer Admin</a>
+                            </li>
+                            <li>
+                                <a href="#UnifiedDealRecon">Unified Deal Reconciliation</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li *ngIf="isRealSA() || isDeveloper()">
+                        <a href="#adminGeo">Geo</a>
+                    </li>
+                    <li *ngIf="isRealSA() || isDeveloper()">
+                        <a href="#funfact">Fun Facts</a>
+                    </li>
+
+                    <li *ngIf="isAdminMeetCompMenuItemEnabled()">
+                        <a href="#meetComp">Meet Comp</a>
+                    </li>
+
+                    <li class="dropdown-submenu" *ngIf="isRealSA() || isDeveloper()">
+                        <a tabindex="-1">Products</a>
+                        <ul class="dropdown-menu" style="width: 250px;">
+                            <li>
+                                <a href="#productAlias">Product Alias</a>
+                            </li>
+                            <li>
+                                <a href="#products">Product Hierarchy</a>
+                            </li>
+                            <li>
+                                <a href="#productCategories">Product Vertical Rules</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown-submenu" *ngIf="getUserRole() == 'Legal' || isRealSA() || isDeveloper()">
+                        <a tabindex="-1">Legal Configurations</a>
+                        <ul class="dropdown-menu" style="width: 250px;">
+                            <li>
+                                <a href="#icostproducts">Legal Classification</a>
+                            </li>
+                            <li>
+                                <a href="#legalException">Legal Exceptions</a>
+                            </li>
+                            <li>
+                                <a href="#quoteLetter">Quote Letter</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li *ngIf="isRealSA() || isCustomerAdmin() || isDeveloper()">
+                        <a href="#dropdowns">UI Dropdown Values</a>
+                    </li>
+
+                    <li *ngIf="isRealSA() || isDeveloper()">
+                        <a href="#dataquality">Data Quality (DQ)</a>
+                    </li>
+
+                    <li *ngIf="isDeveloper()">
+                        <a href="#dataFix">Data Fix</a>
+                    </li>
+
+                    <li class="dropdown-submenu" *ngIf="isDeveloper()">
+                        <a tabindex="-1">Security Attributes</a>
+                        <ul class="dropdown-menu" style="width: 250px;">
+                            <li><a href="#securityengine">Security Engine</a></li>
+                            <li><a href="#dealTypes">Deal Types</a></li>
+                        </ul>
+                    </li>
+        
+                    <li class="dropdown-submenu" *ngIf="isDeveloper()">
+                        <a tabindex="-1">WorkFlow</a>
+                        <ul class="dropdown-menu" style="width: 250px;">
+                            <li><a href="#workFlow">WorkFlow</a></li>
+                            <li><a href="#workflowStages">WorkFlow Stages</a></li>
+                        </ul>
+                    </li>
+
+                    <li class="dropdown-submenu" *ngIf="isRealSA() || isDeveloper() || isCustomerAdmin()">
+                        <a tabindex="-1">Admin Tools</a>
+                        <ul class="dropdown-menu" style="width: 250px;">
+                            <li *ngIf="isDeveloper()">
+                                <a href="#supportScript">Support Scripts</a>
+                            </li>
+                            <li *ngIf="isDeveloper()">
+                                <a href="#testTenders">Test Tenders Data</a>
+                            </li>
+                            <li *ngIf="isDeveloper()">
+                                <a href="#dealmassupdate">Deal Mass Update</a>
+                            </li>
+                            <li *ngIf="isDeveloper()">
+                                <a href="#validateVistexR3Checks">Validate Deals for Vistex Push</a>
+                            </li>
+                            <li *ngIf="isDeveloper()">
+                                <a href="#pushDealstoVistex">Push Deals to Vistex</a>
+                            </li>
+                            <li *ngIf="isBulkPriceAdmin() || isDeveloper()">
+                                <a href="#bulkPricingUpdate">Bulk Pricing Updates</a>
+                            </li>
+                            <li *ngIf="isRealSA() || isDeveloper() || isCustomerAdmin()">
+                                <a href="#consumptionCountry">Consumption Country/Region</a>
+                            </li>
+                        </ul>
+                    </li>
+
+                    <li *ngIf="getUserRole() == 'DA' || isRealSA() || isDeveloper() || isCustomerAdmin()">
+                        <a href="#manageEmployee">User Accounts Administration</a>
+                    </li>
+
+                    <li class="dropdown-submenu" *ngIf="getUserRole() == 'DA' || getUserRole() == 'GA' || isRealSA() || isDeveloper()">
+                        <a tabindex="-1">Approval Rules Management</a>
+                        <ul class="dropdown-menu" style="width: 250px;">
+                            <li><a href="#rules">Price Rules</a></li>
+                            <li><a href="#ruleOwner">Rules Ownership Admin</a></li>
+                        </ul>
+                    </li>
+
+                    <li *ngIf="this.environment == 'LOCAL' && getUserWwid() == 10548414">
+                        <a href="Admin#/MyDealsManual?topic=intro">My Deals Manual</a>
+                    </li>
+                </ul>
+            </li>
+            <li>
+                <a class="mainMenu" href="#tenderDashboard" title="Tender Dashboard"><i class="intelicon-copy-solid"></i><span class="hidden-xs">Tender Dashboard</span></a>
+            </li>
+            <li>
+                <a class="mainMenu" href="#advanceSearch" title="Advanced Search Tools"><i class="intelicon-search"></i><span class="hidden-xs">Advanced Search</span></a>
+            </li>
+            <li>
+                <a class="mainMenu" href="https://wiki.ith.intel.com/display/Handbook" target="_blank"><i class="intelicon-help"></i><span class="hidden-xs">Help</span></a>
+            </li>
+            <li class="dropdown" *ngIf="isReportingUser()">
+                <a class="btn btn-primary mainMenu primary-one" role="button" href="/" data-toggle="dropdown" data-target="#" title="Reporting Dashboard">
+                    <i class="intelicon-reports-solid"></i><span class="hidden-xs">Report</span><i class="intelicon-down"></i>
+                </a>
+                <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
+                    <li><a href="#reportingdashboard">Report Dashboard</a></li>
+                </ul>
+            </li>
+        </ul>
+
+        <global-search-angular></global-search-angular>
+    </div>
+</nav>

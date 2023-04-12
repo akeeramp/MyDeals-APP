@@ -2,7 +2,6 @@
 
 <!DOCTYPE html>
 <html>
-
 <head>
     <base href="/" id="baseHref">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
@@ -11,92 +10,84 @@
     <title>@ViewBag.Title - My Deals</title>
     @*Removing Content ~/Content/css and pull those styles as reference to get Angular kendo grid working*@
 
-    <link href="/css/jquery-ui.min.css" rel="stylesheet">
-    <link href="/css/toastr.min.css" rel="stylesheet">
-    <link href="/css/font-awesome.min.css" rel="stylesheet">
-    <link href="/css/it-mlaf.min.css" rel="stylesheet">
-    <link href="/css/angular-bootstrap-toggle.min.css" rel="stylesheet">
-    <link href="/css/bootstrap-switch.min.css" rel="stylesheet">
+    <!-- #region CSS / Style Sheets -->
+        @* @Styles.Render("~/MyDeals/cssAng") *@
+        <link href="/css/_loadingPanel.directive.css" rel="stylesheet">
+        <link href="/css/jquery-ui.min.css" rel="stylesheet">
+        <link href="/css/toastr.min.css" rel="stylesheet">
+        <link href="/css/it-mlaf.min.css" rel="stylesheet">
+        <link href="/css/angular-bootstrap-toggle.min.css" rel="stylesheet">
 
-    <link href="/css/_report.css" rel="stylesheet">
-    <link href="/css/_dealUtil.css" rel="stylesheet" />
-    <link href="/css/_secEngine.css" rel="stylesheet" />
-    <link href="/Content/styles.css" rel="stylesheet" />
-    <link href="/css/_controls.css" rel="stylesheet" />
-    <link href="/css/_contractManager.css" rel="stylesheet" />
-    <link href="/css/_loadingPanel.directive.css" rel="stylesheet" />
+        @* @Styles.Render("~/MyDeals/cssClient") *@
+        <link href="/Client/src/app/core/dealPopup/dealPopup.component.css" rel="stylesheet">
+        <link href="/Client/src/dist/vendor.css" rel="stylesheet">
+        <link href="/Client/src/dist/globalStyle.css" rel="stylesheet">
 
+        <style>
+            .mainBodyStyle {
+                position: absolute;
+                top: 0px !important;
+                left: 0;
+                right: 0;
+                overflow: hidden !important;
+                height: 100%;
+            }
 
-    <link href="~/Client/src/app/core/dealPopup/dealPopup.component.css" rel="stylesheet" />
-    <link href="~/Client/src/app/style/common.css" rel="stylesheet" />
-    <link href="~/Client/src/app/style/kendo-custom.css" rel="stylesheet" />
-    <link href="~/Client/src/app/style/style.css" rel="stylesheet" />
+            myInvalidClass {
+                background-color: red;
+            }
 
-    @*@Scripts.Render("~/bundles/scripts")*@
-    <script src="/Scripts/jquery-3.3.1.min.js"></script>
-    <script src="/Scripts/jquery-ui.min.js"></script>
-    <script src="/Scripts/modernizr-2.6.2.min.js"></script>
-    <script src="/Scripts/toastr.min.js"></script>
-    <script src="~/Scripts/popper.min.js"></script>
-    <script src="/Scripts/bootstrap.min.js"></script>
-    <script src="/Scripts/bootstrap-switch.min.js"></script>
+            .loading-screen {
+                top: 0px !important;
+                height: 100vh !important;
+                margin-top: 100px !important;
+            }
 
-    @*@Scripts.Render("~/MyDeals/scripts")*@
-    <style>
-        .mainBodyStyle {
-            position: absolute;
-            top: 84px;
-            bottom: 15px;
-            left: 0;
-            right: 0;
-            overflow: hidden !important;
-        }
+            app-root {
+                display: block;
+                margin: 25px auto 0 auto;
+            }
+        </style>
+    <!-- #endregion -->
 
-        myInvalidClass {
-            background-color: red;
-        }
+    <!-- #region JavaScript Libraries -->
+        @*@Scripts.Render("~/bundles/scripts")*@
+        @* Versions of Bootstrap, Bootstrap-Switch, Popper, JQuery must match those in the Angular project's package.json file *@
+        <script src="/Scripts/jquery.min.js"></script>
+        @*<script src="/Scripts/jquery-ui.min.js" async></script>*@
+        <script src="/Scripts/popper_1.16.1.min.js"></script>   @* Popper.js 1.16.1 is the latest version compatible with Bootstrap 4.x; when upgrading to Bootstrap 5, can upgrade this to @popperjs/core^2.0*@
+        <script src="/Scripts/bootstrap.min.js" async></script>
+        <script src="/Scripts/bootstrap-switch.min.js" async></script>
+        <script src="/Scripts/modernizr-2.8.3.js" async></script> @* 2.8.3 is the most up to date version compatible with our project, look into upgrading dependency calls or omitting Modernizr from the project in the future*@
 
-        .loading-screen {
-            top: 20px !important;
-            height: 400px !important;
-            margin-top: 100px !important;
-        }
-    </style>
+        @* @Scripts.Render("~/MyDeals/bundleAng") *@
+        <script src="/Client/src/dist/vendor.js" async></script>
+        <script src="/Client/src/dist/globalStyle.js" async></script>
+        <script src="/Client/src/dist/bundle.js" async></script>
+    <!-- #endregion -->
 
 </head>
 
-<body @Html.RequestVerificationToken()>
-    @*Since Angular bundle size is increasing the overall loading time will incresing which cause delay in UI landing page to load.
-        To avoid that brining the loading to _layout.cshtml page and will make is disable in dashboard*@
-    <div class="loading-screen">
-        <div class="fullHeight">
-            <div class="jumbotron ng-scope">
-                <div class="container">
-                    <h1><strong>My</strong> Deals </h1><p class="lead"> Dashboard. </p>
-                    <p>Dashboard is loading please wait...</p>
+    <body @Html.RequestVerificationToken()>
+        @*Since Angular bundle size is increasing the overall loading time will incresing which cause delay in UI landing page to load.
+            To avoid that brining the loading to _layout.cshtml page and will make is disable in dashboard*@
+        <div class="loading-screen">
+            <div class="fullHeight">
+                <div class="jumbotron ng-scope">
+                    <div class="container">
+                        <h1><strong>My</strong> Deals </h1><p class="lead"> Dashboard. </p>
+                        <p>Dashboard is loading please wait...</p>
+                    </div>
                 </div>
             </div>
         </div>
-    </div>
 
-    @Html.Partial("_Header")
-    @*<app-header></app-header>*@
-    <div id="modals"></div>
-    <div id="bodyContent" class="mainBodyStyle" style="">
-        <app-root></app-root>
-        @RenderBody()
-    </div>
-    @*@Html.Partial("_Footer")*@
-    <app-footer></app-footer>
-    @*@Html.Partial("_Loading")*@
-    <app-loader></app-loader>
-
-    @*Angult JS libraries starts here*@
-
-    @*Angult JS libraries ends here*@
-    <script src="~/Client/src/dist/vendor.js"></script>
-    <script src="~/Client/src/dist/bundle.js"></script>
-
-</body>
-
+        @Html.Partial("_Header")
+        <div id="modals"></div>
+        <div id="bodyContent" class="mainBodyStyle">
+            <app-root></app-root>
+            @RenderBody()
+        </div>
+        <app-loader></app-loader>
+    </body>
 </html>

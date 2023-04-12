@@ -1,0 +1,6 @@
+div#main {
+    position: fixed;
+    top: 75px;
+    width: -webkit-fill-available;
+    height: calc(100% - 15px);
+}

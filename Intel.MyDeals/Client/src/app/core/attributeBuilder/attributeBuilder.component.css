@@ -1,4 +1,6 @@
-﻿#ruleDropDownList_listbox li {
+﻿@import '../../style/attributeBuilder.css';
+
+#ruleDropDownList_listbox li {
     float: left
 }
 

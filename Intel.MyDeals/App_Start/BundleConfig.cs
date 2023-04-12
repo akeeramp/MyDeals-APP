@@ -359,104 +359,64 @@ namespace Intel.MyDeals
                 ));
         }
 
-        public static void RegisterBundlesAng(BundleCollection bundles)
+        public static void RegisterBundlesAngNew(BundleCollection bundles)
         {
-            bundles.Add(new ScriptBundle("~/bundles/jquery").Include(
-                        "~/Scripts/jquery-{version}.js"));
+            bundles.Add(new Bundle("~/MyDeals/bundleAng")
+               .IncludeDirectory("~/Client/src/dist", "*.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/scripts").Include(
-                "~/Scripts/jquery-3.3.1.min.js",
-                "~/Scripts/Angular/1.8.0/angular.min.js",
-                "~/Scripts/kendo/2017.R1/jszip.min.js",
-                "~/Scripts/kendo/2017.R1/kendo.all.min.js",
-                "~/Scripts/kendo/kendo.aspnetmvc.min.js",
-                "~/Scripts/moment.min.js",
-                 "~/Scripts/moment-timezone.js",
-                "~/Scripts/moment-range.min.js",
-                "~/Scripts/underscore-min.js",
-                "~/Scripts/Opaque/OpaqueUtils.js",
-                "~/Scripts/toastr.min.js",
-                "~/Scripts/jquery.rainbowJSON.js",
+            bundles.Add(new ScriptBundle("~/bundles/scriptsAng").Include(
+                "~/Scripts/jquery.min.js",
                 "~/Scripts/jquery-ui.min.js",
+                "~/Scripts/modernizr-build.js",
                 "~/Scripts/popper.min.js",
                 "~/Scripts/bootstrap.min.js",
-                "~/Scripts/angular-bootstrap-toggle.js",
-                "~/Scripts/Angular/select.min.js",
-                "~/Scripts/Angular/angular-linq.min.js",
-                "~/Scripts/Angular/ngStorage.min.js",
-                "~/Scripts/angular-gridster.min.js",
-                "~/Scripts/base64-string.js",
-                "~/Scripts/lz-string.min.js",
-                "~/Scripts/bootstrap-switch.min.js",
-                "~/Scripts/intcAnalytics.js",
-                "~/Scripts/Angular/clipboard.min.js",
-                "~/Scripts/Angular/ngclipboard.min.js",
-                "~/Scripts/modernizr-2.6.2.min.js",
-                "~/Scripts/anime.min.js",
-                 "~/Scripts/pikaday.js"
-                ));
+                "~/Scripts/bootstrap-switch.min.js"));
 
-            bundles.Add(new ScriptBundle("~/bundles/angular").Include(
-           //"~/Scripts/Angular/1.8.0/angular.min.js",
-           "~/Scripts/Angular/1.8.0/angular-ui-router.min.js"
-           , "~/Scripts/Angular/1.8.0/angular-animate.min.js"
-           , "~/Scripts/Angular/1.8.0/angular-sanitize.min.js"
-           , "~/Scripts/Angular/ui-bootstrap-tpls-2.2.0.min.js"
-           , "~/Scripts/Angular/angular-linq.min.js"
-           , "~/Scripts/Angular/angular-filter.min.js"
-              //"~/Scripts/angular-bootstrap-toggle.js",
-              //  "~/Scripts/Angular/select.min.js",
-              //  "~/Scripts/Angular/angular-linq.min.js",
-              //  "~/Scripts/Angular/ngStorage.min.js",
-              //  "~/Scripts/angular-gridster.min.js",
-              //    "~/Scripts/Angular/clipboard.min.js",
-              //  "~/Scripts/Angular/ngclipboard.min.js",
-              //  "~/Scripts/intcAnalytics.js"
-           ));           
+            bundles.Add(new StyleBundle("~/MyDeals/cssAng")
+                .Include(
+                    "~/css/_loadingPanel.directive.css",
+                    "~/css/jquery-ui.min.css",
+                    "~/css/toastr.min.css",
+                    "~/css/it-mlaf.min.css",
+                    "~/css/angular-bootstrap-toggle.min.css")
+                .IncludeDirectory("~/Client/src/dist", "*.css"));
+            //"~/css/_report.css","~/css/_dealUtil.css","~/css/_secEngine.css","~/Content/styles.css","~/css/_controls.css","~/css/_contractManager.css",
+            //"~/css/font-awesome.min.css",
+            //"~/css/bootstrap-switch.min.css"
 
-            bundles.Add(new ScriptBundle("~/MyDeals/scripts").Include(
-                "~/js/_util.js",
-                "~/js/_gridUtil.js",
-                "~/js/helpUtil.js",
-                "~/js/_contractUtil.js",
-                "~/js/_pricingTableUtil.js",
-                "~/js/_commonUtil.js",
-                "~/js/_contractSaveUtil.js"
-                ));
+            bundles.Add(new StyleBundle("~/MyDeals/cssClient").Include(
+                "~/Client/src/app/core/dealPopup/dealPopup.component.css"));
+            //"~/Client/src/app/style/common.css", "~/Client/src/app/style/kendo-custom.css", "~/Client/src/app/style/style.css"
+        }
 
-            bundles.Add(new StyleBundle("~/Content/css").Include(
-                "~/css/toastr.min.css",
-                "~/css/font-awesome.min.css",
-                "~/css/jquery.rainbowJSON.css",
-                "~/css/jquery-ui.min.css",
-                "~/css/it-mlaf.min.css",
-                //*************AngularJS kendo purpose will relace with Angulr CSS*****************//
-                "~/Content/kendo/2017.R1/kendo.common-material.min.css",
-                "~/css/kendo.intel.css",
-                "~/css/angular-bootstrap-toggle.min.css",
-                "~/css/select.min.css",
-                "~/css/select2.min.css",
-                "~/css/nv.d3.min.css",
-                "~/css/_report.css",
-                "~/css/angular-gridster.css",
-                "~/css/bootstrap-switch.min.css"
-                //  "~/css/pikaday.css"
-                // TODO: Check with Tory...Commenting this for now as its affecting global css
-                // May be refer this in handbook html directly
-                //"~/css/simple-sidebar.css"
-                ));
+        public static void RegisterBundlesAng(BundleCollection bundles)
+        {
+            bundles.Add(new Bundle("~/MyDeals/bundleAng")
+               .IncludeDirectory("~/Client/src/dist", "*.js"));
 
-            //"~/Content/kendo/2016.3.914/kendo.office365.min.css",
+            bundles.Add(new ScriptBundle("~/bundles/scriptsAng").Include(
+                "~/Scripts/jquery.min.js",
+                "~/Scripts/jquery-ui.min.js",
+                "~/Scripts/modernizr-build.js",
+                "~/Scripts/popper.min.js",
+                "~/Scripts/bootstrap.min.js",
+                "~/Scripts/bootstrap-switch.min.js"));
 
-            bundles.Add(new StyleBundle("~/MyDeals/css").Include(
-                "~/css/_dealUtil.css",
-                "~/css/_secEngine.css",
-                "~/Content/styles.css",
-                "~/css/_controls.css",
-                "~/css/_contractManager.css",
-                "~/css/_loadingPanel.directive.css",
-                "~/css/_dashboard.css"
-                ));
+            bundles.Add(new StyleBundle("~/MyDeals/cssAng")
+                .Include(
+                    "~/css/_loadingPanel.directive.css",
+                    "~/css/jquery-ui.min.css",
+                    "~/css/toastr.min.css",
+                    "~/css/it-mlaf.min.css",
+                    "~/css/angular-bootstrap-toggle.min.css"));
+            //"~/css/_report.css","~/css/_dealUtil.css","~/css/_secEngine.css","~/Content/styles.css","~/css/_controls.css","~/css/_contractManager.css",
+            //"~/css/font-awesome.min.css",
+            //"~/css/bootstrap-switch.min.css"
+
+            bundles.Add(new StyleBundle("~/MyDeals/cssClient")
+                .Include("~/Client/src/app/core/dealPopup/dealPopup.component.css")
+                .IncludeDirectory("~/Client/src/dist", "*.css"));
+            //"~/Client/src/app/style/common.css", "~/Client/src/app/style/kendo-custom.css", "~/Client/src/app/style/style.css"
         }
     }
 }

@@ -2,18 +2,15 @@
 import { Title } from '@angular/platform-browser';
 import { Router, NavigationEnd, ActivatedRoute } from '@angular/router'; 
 import { filter, map } from "rxjs/operators";
+
 @Component({
-    selector: "app-root",
-    template: `
-    <router-outlet>
-    </router-outlet> 
-    `
+    selector: 'app-root',
+    templateUrl: 'Client/src/app/app-root.component.html',
+    styleUrls: ['Client/src/app/app-root.component.css']
 })
 export class AppRootComponent {
-    constructor(
-        private router: Router,
-        private titleService: Title
-    ) { }
+    constructor(private router: Router,
+                private titleService: Title) { }
 
     ngOnInit() {
         this.router.events

@@ -76,6 +76,7 @@ import { AdminBannerComponent } from './core/adminBanner/adminBanner.component';
 import { dealPopupDockComponent } from './core/dealPopup/dealPopupDock.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { GlobalSearchComponent } from './advanceSearch/globalSearch/globalSearch.component';
+import { HeaderComponent } from './shared/header/header.component';
 
 @NgModule({
     imports: [
@@ -167,6 +168,7 @@ import { GlobalSearchComponent } from './advanceSearch/globalSearch/globalSearch
 export class AppModule {
     ngDoBootstrap(appRef: ApplicationRef) {
         appRef.bootstrap(AppRootComponent);
+        appRef.bootstrap(HeaderComponent);
         appRef.bootstrap(FooterComponent);
         appRef.bootstrap(LoadingSpinnerComponent);
         appRef.bootstrap(notificationDockComponent);

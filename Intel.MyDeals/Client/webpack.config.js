@@ -1,7 +1,8 @@
 const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
-//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const MiniCssExtractPlugin = require("mini-css-extract-plugin");
+const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 
 module.exports = env => {
     const mode = env.mode;
@@ -9,7 +10,12 @@ module.exports = env => {
         return {
             mode: mode,
             entry: {
-                bundle: "./src/main.ts"
+                bundle: "./src/main.ts",
+                globalStyle: './src/app/style/style.css',
+            },
+            cache: {
+                type: 'filesystem',
+                compression: 'gzip',
             },
             watch: false,
             output: {
@@ -22,10 +28,14 @@ module.exports = env => {
                 mainFields: ['es2015', 'browser', 'module', 'main'],
                 extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
             },
-            // plugins: [
-            //     new BundleAnalyzerPlugin()
-            // ],
+            plugins: [
+                new MiniCssExtractPlugin(),
+            ],
             optimization: {
+                minimize: true,
+                minimizer: [
+                    new CssMinimizerPlugin(),
+                ],
                 splitChunks: {
                     chunks: 'all',
                     maxAsyncRequests: 30,
@@ -41,22 +51,26 @@ module.exports = env => {
                 },
             },
             module: {
-                rules: [{
-                    test: /\.tsx?$/,
-                    loader: "ts-loader",
-                    exclude: /node_modules/
-                }]
+                rules: [
+                    {
+                        test: /\.tsx?$/,
+                        loader: "ts-loader",
+                        exclude: /node_modules/
+                    }, {
+                        test: /\.css$/,
+                        use: [ 'style-loader', 'css-loader' ]
+                    }
+                ]
             },
             //this will help to avoid sourcemap issue for chrome devtool to load
             devtool: "eval-cheap-source-map"
-
         }
-
     } else {
         return {
             mode: 'production',
             entry: {
-                bundle: "./src/main-prod.ts"
+                bundle: "./src/main-prod.ts",
+                globalStyle: './src/app/style/style.css'
             },
             watch: false,
             output: {
@@ -69,6 +83,7 @@ module.exports = env => {
                 mangleWasmImports: false,
                 mangleExports: false,
                 minimizer: [
+                    new CssMinimizerPlugin(),
                     new TerserPlugin({
                         terserOptions: {
                             toplevel: true,
@@ -83,7 +98,6 @@ module.exports = env => {
                         extractComments: false,
                         // enable parallel running
                         parallel: true,
-
                     }),
                 ],
                 splitChunks: {
@@ -110,14 +124,21 @@ module.exports = env => {
                 mainFields: ['es2015', 'browser', 'module', 'main'],
                 extensions: [".webpack.js", ".web.js", ".ts", ".tsx", ".js"]
             },
+            plugins: [
+                new MiniCssExtractPlugin(),
+            ],
             module: {
-                rules: [{
-                    test: /\.tsx?$/,
-                    loader: "ts-loader",
-                    exclude: /node_modules/
-                }, ]
-            },
+                rules: [
+                    {
+                        test: /\.tsx?$/,
+                        loader: "ts-loader",
+                        exclude: /node_modules/
+                    }, {
+                        test: /\.css$/,
+                        use: [ MiniCssExtractPlugin.loader, 'css-loader' ]
+                    }
+                ]
+            }
         }
     }
-
 };

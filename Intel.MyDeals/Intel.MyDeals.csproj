@@ -30,7 +30,7 @@
     <SccProvider>SAK</SccProvider>
     <TargetFrameworkProfile />
     <Use64BitIISExpress />
-    <TypeScriptToolsVersion>4.3</TypeScriptToolsVersion>
+    <TypeScriptToolsVersion>Latest</TypeScriptToolsVersion>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -40,6 +40,19 @@
     <DefineConstants>DEBUG;TRACE</DefineConstants>
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
+    <TypeScriptTarget>ES5</TypeScriptTarget>
+    <TypeScriptJSXEmit>React</TypeScriptJSXEmit>
+    <TypeScriptModuleKind />
+    <TypeScriptCompileOnSaveEnabled>True</TypeScriptCompileOnSaveEnabled>
+    <TypeScriptNoImplicitAny>False</TypeScriptNoImplicitAny>
+    <TypeScriptRemoveComments>False</TypeScriptRemoveComments>
+    <TypeScriptOutFile />
+    <TypeScriptOutDir />
+    <TypeScriptGeneratesDeclarations>False</TypeScriptGeneratesDeclarations>
+    <TypeScriptNoEmitOnError>True</TypeScriptNoEmitOnError>
+    <TypeScriptSourceMap>True</TypeScriptSourceMap>
+    <TypeScriptMapRoot />
+    <TypeScriptSourceRoot />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Release|AnyCPU' ">
     <DebugType>pdbonly</DebugType>
@@ -334,6 +347,7 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Remove="Client\node_modules\**" />
     <TypeScriptCompile Include="Client\src\app\admin\batchTiming\admin.batchTiming.component.ts" />
     <Content Include="Client\Images\032.gif" />
     <Content Include="Client\Images\check-checked.png" />
@@ -742,6 +756,10 @@
     <Content Include="Client\src\app\style\publishTender.css" />
     <Content Include="Client\src\app\style\style.css" />
     <Content Include="Client\src\dist\bundle.js" />
+    <Content Include="Client\src\dist\vendor.js" />
+    <Content Include="Client\src\dist\vendor.css" />
+    <Content Include="Client\src\dist\globalStyle.js" />
+    <Content Include="Client\src\dist\globalStyle.css" />
     <Content Include="Client\webpack.config.js" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />
@@ -1764,25 +1782,12 @@
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
     <Content Include="Scripts\intcAnalytics.js" />
-    <Content Include="Scripts\jquery-3.3.1.min.js" />
+    <Content Include="Scripts\jquery.min.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
-    <Content Include="Scripts\jquery.rainbowJSON.js" />
-    <Content Include="Scripts\kendo\2017.R1\jquery.min.js" />
-    <Content Include="Scripts\kendo\2017.R1\jszip.min.js" />
-    <Content Include="Scripts\kendo\2017.R1\kendo.all.min.js" />
-    <Content Include="Scripts\kendo\2017.R1\kendo.angular.min.js" />
-    <Content Include="Scripts\kendo\2018.R1\jszip.min.js" />
-    <Content Include="Scripts\kendo\2018.R1\kendo.all.min.js" />
-    <Content Include="Scripts\lz-string.min.js" />
-    <Content Include="Scripts\modernizr-2.6.2.min.js" />
-    <Content Include="Scripts\Modernizr.js" />
-    <Content Include="Scripts\moment-timezone.js" />
-    <Content Include="Scripts\moment.min.js" />
-    <Content Include="Scripts\moment-range.min.js" />
-    <Content Include="Scripts\underscore-min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\Opaque\OpaqueUtils.js" />
     <Content Include="Scripts\polyfills.js" />
-    <Content Include="Scripts\popper.min.js" />
+    <Content Include="Scripts\popper_1.16.1.min.js" />
     <Content Include="Scripts\respond.js" />
     <Content Include="Scripts\respond.min.js" />
     <Content Include="Scripts\toastr.min.js" />
@@ -1954,6 +1959,7 @@
     <None Include="Project_Readme.html" />
   </ItemGroup>
   <ItemGroup>
+    <TypeScriptCompile Remove="Client\node_modules\**" />
     <TypeScriptCompile Include="Client\src\app\admin\cache\admin.cache.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\cache\admin.cache.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\constants\admin.constants.model.ts" />

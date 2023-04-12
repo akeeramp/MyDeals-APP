@@ -1,4 +1,48 @@
-﻿.ok-btn-pop-up{border-color:var(--light-blue)!important;background-color:var(--light-blue)!important;color:#fff!important}.cancel-btn-pop-up{border-color:#fafafa!important;background-color:#fafafa!important;color:#212529!important}.ok-btn-pop-up:hover{color:#fff!important;border-color:#0071c5!important;background-color:#0071c5!important}.cancel-btn-pop-up:hover{color:#444!important;border-color:#ebebeb!important;background-color:#ebebeb!important}.border-blue-design{border-bottom:3px solid rgb(0,113,197)!important;border-bottom-color:rgb(0,113,197)!important}.kendo-grid-buttons.oppo-grids.physics-css.there-grid kendo-grid .k-grid-aria-root .k-grid-header table thead tr th span.k-cell-inner{align-items:flex-start}.k-family{font-family:'intelicon'!important;font-size:25px}.divisionblock .k-list>.k-state-hover,.divisionblock .k-list>.k-state-selected.k-state-hover{background-color:#ebebeb!important;border-color:#ebebeb!important}.divisionblock.k-multiselect .k-multiselect-wrap li.k-button,.k-dropdowntree .k-multiselect-wrap li.k-button{float:left;color:#444!IMPORTANT;font-size:12px;border:none;border-radius:1.071em!important;margin:3px 0 3px 3px!important;padding:0 1.6em 0 .857em!important;line-height:1.86em!important;background:#fafafa!important;font-family:'Intel Clear'!important}.divisionblock.k-multiselect .k-multiselect-wrap li.k-button:hover{background:#ced4da6b!important}.divisionblock.k-multiselect .k-multiselect-wrap{box-shadow:none!important}.divisionblock.k-multiselect.k-state-focused>.k-multiselect-wrap{border-color:#eee!important;box-shadow:0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%)!important}kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.k-state-focused .k-multiselect-wrap kendo-taglist ul li span.k-select{color:var(--light-blue);opacity:1}kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level .k-multiselect-wrap .k-icon.k-clear-value.k-i-close{display:none}kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.k-state-focused .k-multiselect-wrap .k-icon.k-clear-value.k-i-close{color:var(--light-blue);opacity:1}kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level:hover .k-multiselect-wrap .k-icon.k-clear-value.k-i-close{border-radius:50%;background-color:#dbdbdb;width:15px;height:15px;top:9px;right:7px;opacity:1;display:inline-flex!important}.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal Start Date"],.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal End Date"]{border-bottom:3px solid rgb(0,113,197)!important;border-bottom-color:rgb(0,113,197)!important}
+﻿/* Testing order */
+@import '../../../../css/_report.css';
+@import '../../../../css/_dealUtil.css';
+@import '../../../../css/_secEngine.css';
+@import '../../../../Content/styles.css';
+@import '../../../../css/_controls.css';
+@import '../../../../css/_contractManager.css';
+@import '../../../node_modules/font-awesome/css/font-awesome.min.css';
+@import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
+@import '../../../node_modules/@progress/kendo-theme-bootstrap/dist/all.css';
+@import '../../../node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css';
+@import '../../../node_modules/@angular/material/prebuilt-themes/indigo-pink.css';
+@import '../../../node_modules/ngx-toastr/toastr.css';
+@import './common.css';
+@import './kendo-custom.css';
+
+/* Intel IT */
+/* @import '../../../../css/it-mlaf.min.css';    Need to resolve an issue for missing images/fonts when adding to bundle, in the meantime, it should be included in the project's BundleConfig */
+
+/* Dependency CSS */
+/* @import "../../../node_modules/font-awesome/css/font-awesome.min.css";
+@import "../../../node_modules/bootstrap/dist/css/bootstrap.min.css";
+@import '../../../node_modules/@progress/kendo-theme-bootstrap/dist/all.css';
+@import '../../../node_modules/@angular/material/prebuilt-themes/indigo-pink.css';
+@import "../../../node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css";
+@import '../../../node_modules/ngx-toastr/toastr.css'; */
+
+/* Global Project CSS */
+/* @import "../../../../css/_report.css";
+@import "../../../../css/_dealUtil.css";
+@import "../../../../css/_secEngine.css";
+@import '../../../../Content/styles.css';
+@import "../../../../css/_controls.css";
+@import "../../../../css/_contractManager.css"; */
+/* font awesome, Intel IT, angular bootstrap toggle, bootstrap switch */
+/* @import "./common.css";
+@import "./kendo-custom.css"; */
+
+.padding-design-horizontal {
+    display: block;
+    max-width: 95vw;
+    margin: 0 auto;
+}
+
+.ok-btn-pop-up{border-color:var(--light-blue)!important;background-color:var(--light-blue)!important;color:#fff!important}.cancel-btn-pop-up{border-color:#fafafa!important;background-color:#fafafa!important;color:#212529!important}.ok-btn-pop-up:hover{color:#fff!important;border-color:#0071c5!important;background-color:#0071c5!important}.cancel-btn-pop-up:hover{color:#444!important;border-color:#ebebeb!important;background-color:#ebebeb!important}.border-blue-design{border-bottom:3px solid rgb(0,113,197)!important;border-bottom-color:rgb(0,113,197)!important}.kendo-grid-buttons.oppo-grids.physics-css.there-grid kendo-grid .k-grid-aria-root .k-grid-header table thead tr th span.k-cell-inner{align-items:flex-start}.k-family{font-family:'intelicon'!important;font-size:25px}.divisionblock .k-list>.k-state-hover,.divisionblock .k-list>.k-state-selected.k-state-hover{background-color:#ebebeb!important;border-color:#ebebeb!important}.divisionblock.k-multiselect .k-multiselect-wrap li.k-button,.k-dropdowntree .k-multiselect-wrap li.k-button{float:left;color:#444!IMPORTANT;font-size:12px;border:none;border-radius:1.071em!important;margin:3px 0 3px 3px!important;padding:0 1.6em 0 .857em!important;line-height:1.86em!important;background:#fafafa!important;font-family:'Intel Clear'!important}.divisionblock.k-multiselect .k-multiselect-wrap li.k-button:hover{background:#ced4da6b!important}.divisionblock.k-multiselect .k-multiselect-wrap{box-shadow:none!important}.divisionblock.k-multiselect.k-state-focused>.k-multiselect-wrap{border-color:#eee!important;box-shadow:0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%)!important}kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.k-state-focused .k-multiselect-wrap kendo-taglist ul li span.k-select{color:var(--light-blue);opacity:1}kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level .k-multiselect-wrap .k-icon.k-clear-value.k-i-close{display:none}kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.k-state-focused .k-multiselect-wrap .k-icon.k-clear-value.k-i-close{color:var(--light-blue);opacity:1}kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level:hover .k-multiselect-wrap .k-icon.k-clear-value.k-i-close{border-radius:50%;background-color:#dbdbdb;width:15px;height:15px;top:9px;right:7px;opacity:1;display:inline-flex!important}.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal Start Date"],.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal End Date"]{border-bottom:3px solid rgb(0,113,197)!important;border-bottom-color:rgb(0,113,197)!important}
 kendo-grid.file-attachment-contract kendo-grid-list .k-grid-content {
     overflow: overlay;
 }
