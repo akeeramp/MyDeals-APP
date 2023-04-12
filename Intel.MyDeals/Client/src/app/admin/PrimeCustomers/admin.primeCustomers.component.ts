@@ -55,6 +55,7 @@ export class adminPrimeCustomersComponent {
     isCombExists = false; isDialogVisible = false; cancelConfirm = false;
     public isUnifiedIdEditable = false; isPrimCustNmEditable = false;
     isPrimLvlIdEditable = false; isPrimCustCtryEditable = false; isRplStsDdEditable = false;
+    public virtual: any = { itemHeight: 28 };
     private state: State = {
         skip: 0,
         take: 25,

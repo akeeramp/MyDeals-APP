@@ -84,7 +84,7 @@
                                        [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-combobox #primeCustNmDropDown [data]="distinctPrimeCustNm" [placeholder]="'Enter Customer Name..'"
+                    <kendo-combobox #primeCustNmDropDown [data]="distinctPrimeCustNm" [placeholder]="'Enter Customer Name..'" [virtual]="virtual"
                                     [formControl]="formGroup.get('PRIM_CUST_NM')" [allowCustom]="allowCustom"></kendo-combobox>
                 </ng-template>
             </kendo-grid-column>
@@ -115,7 +115,7 @@
                                        [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                    <kendo-combobox #primeCtryDropDown [data]="distinctprimeCtry"
+                    <kendo-combobox #primeCtryDropDown [data]="distinctprimeCtry" [virtual]="virtual"
                                     [formControl]="formGroup.get('PRIM_CUST_CTRY')" [allowCustom]="allowCustom"></kendo-combobox>
                 </ng-template>
             </kendo-grid-column>

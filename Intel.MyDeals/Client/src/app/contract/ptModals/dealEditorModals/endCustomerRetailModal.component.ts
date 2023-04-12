@@ -41,6 +41,7 @@ export class endCustomerRetailModalComponent {
     private msg: any;
     private isWarning = false;
     private message: any;
+    public virtual: any = { itemHeight: 28 };
 
     addRow(e) {
         this.validateFlag = true;

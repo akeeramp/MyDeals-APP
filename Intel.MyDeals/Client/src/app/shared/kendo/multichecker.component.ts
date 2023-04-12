@@ -1,7 +1,7 @@
 import { Component, Input, Output, EventEmitter, AfterViewInit } from '@angular/core';
 import { distinct, filterBy, FilterDescriptor } from '@progress/kendo-data-query';
 import { FilterService } from '@progress/kendo-angular-grid';
-import { each, compact, sortBy } from 'underscore';
+import { each, compact, sortBy, filter } from 'underscore';
 
 @Component({
     selector: 'multicheck-filter',
@@ -82,6 +82,11 @@ import { each, compact, sortBy } from 'underscore';
         max-height: 200px!important;
         overflow: auto!important;
     }
+    cdk-virtual-scroll-viewport.cdk-virtual-scroll-viewport ul li {
+        word-wrap: break-word;
+        width: 100%;
+        max-width: 1000px;
+    }
     cdk-virtual-scroll-viewport {
         display: unset;
     }
@@ -109,11 +114,23 @@ export class MultiCheckFilterComponent implements AfterViewInit {
     public ngAfterViewInit() {
         //this code is to remove all falsy values
         this.currentData = compact(this.data);
-        if (this.data.findIndex(x => x == '') > -1) this.currentData.push('');
-        if (this.data.findIndex(x => x == null) > -1) this.currentData.push(null);
+        if (this.data.findIndex(x => x == '') > -1 && this.data.findIndex(x => x == undefined) == -1) {
+            if (this.isPrimitive) this.currentData.push('');
+            else this.currentData.push({
+                'Text': '',
+                'Value': ''
+            });
+        }
+        if (this.data.findIndex(x => x == null) > -1 && this.data.findIndex(x => x == undefined) == -1) {
+            if (this.isPrimitive) this.currentData.push(null);
+            else this.currentData.push({
+                'Text': 'null',
+                'Value': null
+            });
+        };
         this.currentData = sortBy(this.currentData);
         if (this.textField != undefined && this.textField != null && this.textField != '' && this.valueField != undefined && this.valueField != null && this.valueField != null) {
-            if (this.data && this.data.length > 0 && this.data.filter(x => x[this.textField] == 'Select All').length == 0) {
+            if (this.data && this.data.length > 0 && filter(this.data, (x) => { return x && x[this.textField] && x[this.textField] == 'Select All' }).length == 0) {
                 let selectAlldata: any = {};
                 selectAlldata[this.textField] = 'Select All';
                 selectAlldata[this.valueField] = 'Select All';

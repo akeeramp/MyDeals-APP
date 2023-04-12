@@ -51,7 +51,7 @@
                     </div>
                     <div [ngClass]="{'col-md-5':isAdmin, 'col-md-4':!isAdmin}">
                         <span class="fl" *ngIf="i == 0" [ngStyle]="{'width:340px' : (isAny && isAdmin), 'width:290px' : isAny, 'width:350px' : isAdmin, 'width:300px' : (!isAny && !isAdmin)}">
-                            <kendo-combobox [data]="endCustOptions" [id]="'ComboBoxSelect_'+i"
+                            <kendo-combobox [data]="endCustOptions" [id]="'ComboBoxSelect_'+i" [virtual]="virtual"
                                             textField="Text"
                                             valueField="Value"
                                             [(ngModel)]="endCust.END_CUSTOMER_RETAIL"
@@ -65,7 +65,7 @@
                             </kendo-combobox>
                         </span>
                         <span class="fl" *ngIf="i > 0" [ngStyle]="{'width:340px' : (isAny && isAdmin), 'width:290px' : isAny, 'width:350px' : isAdmin, 'width:300px' : (!isAny && !isAdmin)}">
-                            <kendo-combobox [data]="endCustOptionsWithOutAny" [id]="'ComboBoxSelect_'+i"
+                            <kendo-combobox [data]="endCustOptionsWithOutAny" [id]="'ComboBoxSelect_'+i" [virtual]="virtual"
                                             textField="Text"
                                             valueField="Value"
                                             [(ngModel)]="endCust.END_CUSTOMER_RETAIL"
@@ -81,7 +81,7 @@
                     </div>
                     <div [ngClass]="{'col-md-3':isAny, 'col-md-4': !isAny}">
                         <span class="fl" [ngStyle]="{'width:250px' : isAny, 'width:315px;margin-left:30px' : isAdmin, 'width:300px;margin-left:30px' : !isAdmin}">
-                            <kendo-combobox [data]="countries" [id]="'DropdownSelections_'+i"
+                            <kendo-combobox [data]="countries" [id]="'DropdownSelections_'+i" [virtual]="virtual"
                                             textField="CTRY_NM"
                                             valueField="CTRY_NM"
                                             [(ngModel)]="endCust.PRIMED_CUST_CNTRY"
