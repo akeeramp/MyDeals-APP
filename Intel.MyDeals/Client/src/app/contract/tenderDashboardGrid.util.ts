@@ -124,7 +124,7 @@ export class TenderDashboardGridUtil {
 
     static uiReadonlyFolioWrapper = function (passedData, field) {
         var tmplt = '<div id="folioCell" class="uiControlDiv isReadOnlyCell">';
-        tmplt += '  <a href="/contract#/manager/' + passedData[field] + '" target="_blank"">';
+        tmplt += ' <a href="/contract#/manager/' + passedData[field] + '" ">';
         tmplt += '    <div class="ng-binding vert-center">' + passedData[field] +'</div>';
         tmplt += '  </a>';
         tmplt += '</div>';
