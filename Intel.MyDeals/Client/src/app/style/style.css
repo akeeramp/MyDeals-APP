@@ -1751,3 +1751,108 @@ kendo-popup.k-animation-container .k-list-filter {
     kendo-popup.k-animation-container .k-list-filter input.k-textbox:focus {
         box-shadow: none;
     }
+
+/*    summary Wrappers Manage Screen*/
+#sum-wrapper {
+    height: 100vh;
+    overflow: auto;
+    padding: 105px 0 0 0;
+    -webkit-box-sizing: border-box;
+    -moz-box-sizing: border-box;
+    box-sizing: border-box
+}
+
+#sum-header {
+    height: 110px;
+    margin-top: -78px;
+    font-size: 14px;
+    font-family: "Intel Clear";
+    font-weight: 200;
+    font-style: normal;
+    padding-left: 10px;
+    padding-right: 10px;
+    padding-top: 10px;
+    margin-left: 0;
+    margin-right: 0
+}
+
+#sum-container {
+    height: 80%;
+    overflow: auto
+}
+
+    #sum-container .k-textbox.k-space-left {
+        padding-left: 2.1em
+    }
+
+#sum-header hr {
+    height: 1px;
+    margin: 6px 0;
+    border-top: 1px solid #555
+}
+
+.sum-main-body {
+    margin: 5px 10px;
+    padding: 0 10px
+}
+
+.sum-main-container {
+    height: 100%;
+    overflow: auto
+}
+
+.dropdown-menu label {
+    font-weight: 400;
+    margin-top: 0;
+    margin-bottom: 0
+}
+
+.sum-filter-bar {
+    border: 0 solid #e4e4e4;
+    border-left: 1px solid #e4e4e4;
+    border-right: 1px solid #e4e4e4;
+    background-color: #eeeeee;
+    height: 50px;
+    font-size: 14px;
+    font-family: "Intel Clear";
+    background: linear-gradient(to bottom, #fdfdfd 0%,#d9d9d9 100%);
+}
+
+.sum-main-body .tbl-header {
+    margin-top: 6px
+}
+
+.sum-main-body .bold {
+    color: #00aeef;
+    font-weight: bold;
+    font-size: 14px;
+    line-height: 1em
+}
+
+.sum-main-body .bolder {
+    color: #00aeef;
+    font-weight: bold;
+    font-size: 16px;
+    line-height: 1em
+}
+
+.sum-main-body label {
+    margin-bottom: 0
+}
+
+.sum-main-body .stage {
+    text-align: center
+}
+
+    .sum-main-body .stage div {
+        margin: 0 10px;
+        padding: 4px 4px
+    }
+
+.sum-filter-bar.add-sub-sum {
+    padding: 0 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding-top: 7px !important
+}
