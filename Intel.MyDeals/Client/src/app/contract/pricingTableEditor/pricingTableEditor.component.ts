@@ -10,7 +10,7 @@ import { lnavService } from '../lnav/lnav.service';
 import { productSelectorService } from '../../shared/services/productSelector.service';
 import { flexoverLappingcheckDealService } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.service'
 import { contractDetailsService } from "../contractDetails/contractDetails.service"
-import { PRC_TBL_Model_Attributes, PRC_TBL_Model_Column, PRC_TBL_Model_Field, sheetObj, ProdCorrectObj } from './handsontable.interface';
+import { PRC_TBL_Model_Attributes, PRC_TBL_Model_Column, PRC_TBL_Model_Field, sheetObj } from './handsontable.interface';
 import { PTEUtil } from '../PTEUtils/PTE.util';
 import { ProductSelectorComponent } from '../ptModals/productSelector/productselector.component';
 import { ProductCorrectorComponent } from '../ptModals/productCorrector/productcorrector.component';
@@ -34,7 +34,8 @@ import { dropDownModalComponent } from '../ptModals/dropDownModal/dropDownModal.
 
 @Component({
     selector: 'pricing-table-editor',
-    templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html'
+    templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html',
+    // styleUrls: ['Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.css']
 })
 export class pricingTableEditorComponent {
 

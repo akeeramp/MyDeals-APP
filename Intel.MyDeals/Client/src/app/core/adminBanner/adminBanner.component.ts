@@ -4,11 +4,11 @@ import { logger } from "../../shared/logger/logger";
 
 @Component({
     selector: 'admin-banner-angular',
-    templateUrl: 'Client/src/app/core/adminBanner/adminBanner.component.html'
+    templateUrl: 'Client/src/app/core/adminBanner/adminBanner.component.html',
+    styleUrls: ['Client/src/app/core/adminBanner/adminBanner.component.css']
 })
 export class AdminBannerComponent {
-    constructor(private adminSvc: adminBannerService, private loggerSvc: logger) {
-    }
+    constructor(private adminSvc: adminBannerService, private loggerSvc: logger) {}
 
     private adminBannerMessage = "";
     private adminMessage = "ADMIN_MESSAGE";

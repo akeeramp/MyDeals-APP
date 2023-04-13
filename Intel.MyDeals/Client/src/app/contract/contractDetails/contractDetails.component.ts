@@ -15,10 +15,9 @@ import { each } from 'underscore';
 import { ActivatedRoute } from "@angular/router";
 
 @Component({
-    selector: "contract-details",
-    templateUrl: "Client/src/app/contract/contractDetails/contractDetails.component.html",
-    styleUrls: ["Client/src/app/contract/contractDetails/contractDetails.component.css"],
-
+    selector: 'contract-details',
+    templateUrl: 'Client/src/app/contract/contractDetails/contractDetails.component.html',
+    styleUrls: ['Client/src/app/contract/contractDetails/contractDetails.component.css'],
 })
 export class contractDetailsComponent {
     contractType: string;

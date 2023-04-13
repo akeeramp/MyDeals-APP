@@ -1,7 +1,14 @@
+@import '../../admin/kendo_grid.css';
+
 div.overFlowWidget {
     width: auto;
     height: calc(100vh - 12vh) !important;
-    overflow: auto !important
+    /* overflow: auto !important */
+}
+
+div.overFlowWidget>div.row {
+    margin-left: auto;
+    overflow-x: hidden;
 }
 
 .widgetHeader {
@@ -11,7 +18,7 @@ div.overFlowWidget {
     border: 1px solid transparent;
     border-bottom: 1px solid #eee;
     cursor: move;
-    width: 100%;
+    width: auto !important;
     height: 36px
 }
 
@@ -27,20 +34,20 @@ div.overFlowWidget {
     border-radius: 3px
 }
 
-    .widgetFull:hover {
-        border: 1px solid #0071c5 !important
-    }
+.widgetFull:hover {
+    border: 1px solid #0071c5 !important
+}
 
-        .widgetFull:hover .widgetHeader {
-            background-color: #0071c5 !important;
-            color: white
-        }
+.widgetFull:hover .widgetHeader {
+    background-color: #0071c5 !important;
+    color: white
+}
 
-        .widgetFull:hover .btn-icons {
-            color: white !important
-        }
+.widgetFull:hover .btn-icons {
+    color: white !important
+}
 
-        /*.widgetFull:hover a:hover {
+/*.widgetFull:hover a:hover {
             color: #00aeef !important
         }*/
 
@@ -61,7 +68,10 @@ gridster {
 
 
 
-gridster-item.attr-li-6, gridster-item.attr-li-8, gridster-item.attr-li-9, gridster-item.attr-li-10 {
+gridster-item.attr-li-6,
+gridster-item.attr-li-8,
+gridster-item.attr-li-9,
+gridster-item.attr-li-10 {
     height: 255px !important;
     min-height: 200px
 }
@@ -70,9 +80,9 @@ gridster-item.attr-li-7 {
     height: 570px !important
 }
 
-    gridster-item.attr-li-7 .k-grid-table-wrap {
-        height: 435px
-    }
+gridster-item.attr-li-7 .k-grid-table-wrap {
+    height: 435px
+}
 
 .sum-fixes {
     width: 100vw;
@@ -89,7 +99,8 @@ gridster-item.attr-li-7 {
     background-color: #fff !important
 }
 
-.htDatepickerHolder .pika-single .pika-table th, .htDatepickerHolder .pika-single .pika-table td {
+.htDatepickerHolder .pika-single .pika-table th,
+.htDatepickerHolder .pika-single .pika-table td {
     height: 35px;
     width: 35px;
     text-align: center
@@ -103,13 +114,15 @@ gridster-item.attr-li-7 {
     background: #fff
 }
 
-.htDatepickerHolder .pika-button:hover, .htDatepickerHolder .pika-row.pick-whole-week:hover .pika-button {
+.htDatepickerHolder .pika-button:hover,
+.htDatepickerHolder .pika-row.pick-whole-week:hover .pika-button {
     color: #444;
     background: #eeeeee;
     border-radius: 50%
 }
 
-.htDatepickerHolder .is-selected .pika-button, .htDatepickerHolder .has-event .pika-button {
+.htDatepickerHolder .is-selected .pika-button,
+.htDatepickerHolder .has-event .pika-button {
     width: 35px;
     height: 35px;
     text-align: center !important;
@@ -169,7 +182,10 @@ gridster-item.attr-li-7 kendo-grid.k-widget.k-grid table thead tr th .k-link:hov
         height: 78vh
     }
 
-    gridster-item.attr-li-6, gridster-item.attr-li-8, gridster-item.attr-li-9, gridster-item.attr-li-10 {
+    gridster-item.attr-li-6,
+    gridster-item.attr-li-8,
+    gridster-item.attr-li-9,
+    gridster-item.attr-li-10 {
         height: 221px !important;
         min-height: 200px
     }
@@ -178,13 +194,13 @@ gridster-item.attr-li-7 kendo-grid.k-widget.k-grid table thead tr th .k-link:hov
         height: 470px !important
     }
 
-        gridster-item.attr-li-7 .left-pane-widget .stgLnk {
-            font-size: 14px
-        }
+    gridster-item.attr-li-7 .left-pane-widget .stgLnk {
+        font-size: 14px
+    }
 
-            gridster-item.attr-li-7 .left-pane-widget .stgLnk .badge {
-                font-size: 11px !important
-            }
+    gridster-item.attr-li-7 .left-pane-widget .stgLnk .badge {
+        font-size: 11px !important
+    }
 
     gridster-item.attr-li-6 .first-component .fl.icon-parent i {
         font-size: 30px !important;
@@ -219,7 +235,10 @@ gridster-item.attr-li-7 kendo-grid.k-widget.k-grid table thead tr th .k-link:hov
         height: 75vh
     }
 
-    gridster-item.attr-li-6, gridster-item.attr-li-8, gridster-item.attr-li-9, gridster-item.attr-li-10 {
+    gridster-item.attr-li-6,
+    gridster-item.attr-li-8,
+    gridster-item.attr-li-9,
+    gridster-item.attr-li-10 {
         height: 204px !important;
         min-height: 200px
     }
@@ -235,21 +254,23 @@ button.warn-custom {
     color: #0071c5
 }
 
-    button.warn-custom:hover {
-        background-color: #e08e0b;
-        color: #0071c5;
-        border-color: #b1babf !important
-    }
+button.warn-custom:hover {
+    background-color: #e08e0b;
+    color: #0071c5;
+    border-color: #b1babf !important
+}
 
 .add-widget-link {
     color: #0071c5;
     text-decoration: none
 }
+
 .contract-correction-upload.k-upload .k-upload-files .k-upload-action {
     border: none !important;
     background-color: transparent !important;
     padding: 0px !important;
 }
+
 .contract_manager_dialog .k-window.k-dialog {
     border-radius: 0px !important;
     border-top: 0px !important;
@@ -257,10 +278,10 @@ button.warn-custom {
     border-left: 0px !important;
 }
 
-    .add-widget-link:hover {
-        color: #004579;
-        text-decoration: underline !important
-    }
+.add-widget-link:hover {
+    color: #004579;
+    text-decoration: underline !important
+}
 
 gridster-item.attr-li-7 .k-grid-table-wrap contract-status-board-angular .k-grid-table-wrap {
     height: auto !important;

@@ -1,11 +1,10 @@
 <!-- <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" /> -->
 <!-- <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" /> -->
 <!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
-<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<loading-panel-angular style="margin:auto !important" [show]="isLoading" [header]="'Loading Default Layout'" [description]="'Please wait...'" [msgType]="'Info'" [isShowFunFact]="false">
-</loading-panel-angular>
-<div class="container-fluid ">
+<!-- <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" /> -->
 
+<loading-panel-angular style="margin:auto !important" [show]="isLoading" [header]="'Loading Default Layout'" [description]="'Please wait...'" [msgType]="'Info'" [isShowFunFact]="false"></loading-panel-angular>
+<div class="container-fluid ">
     <div class="row dashboard-header">
         <div class="left-inner-container" style="width: 98%;">
             <div class="fr helpBtn" style="margin-left: 15px">
@@ -47,9 +46,8 @@
         </div>
     </div>
 
-
     <div class="overFlowWidget" [hidden]="dashboard.length == 0">
-        <div class="row" style="overflow-x: hidden;">
+        <div class="row">
             <div id="height-grids" class="sum-fixes">
                 <gridster [options]="options" class="another-parent" id="parentID">
                     <gridster-item [item]="item" *ngFor="let item of dashboard; let indx = index" class="attr-li-{{item.id}} few-grid-find">

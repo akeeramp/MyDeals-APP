@@ -5,14 +5,15 @@
 @import '../../../../Content/styles.css';
 @import '../../../../css/_controls.css';
 @import '../../../../css/_contractManager.css';
-@import '../../../node_modules/font-awesome/css/font-awesome.min.css';
-@import '../../../node_modules/bootstrap/dist/css/bootstrap.min.css';
-@import '../../../node_modules/@progress/kendo-theme-bootstrap/dist/all.css';
-@import '../../../node_modules/bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css';
-@import '../../../node_modules/@angular/material/prebuilt-themes/indigo-pink.css';
+@import '~font-awesome/css/font-awesome.min.css';
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~@progress/kendo-theme-bootstrap/dist/all.css';
+@import '~bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css';
+@import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import '../../../node_modules/ngx-toastr/toastr.css';
 @import './common.css';
 @import './kendo-custom.css';
+@import '~handsontable/dist/handsontable.full.min.css';
 
 /* Intel IT */
 /* @import '../../../../css/it-mlaf.min.css';    Need to resolve an issue for missing images/fonts when adding to bundle, in the meantime, it should be included in the project's BundleConfig */

@@ -1,10 +1,10 @@
 td.error-product {
-    color:rgb(252,76,2)!important;
-    font-weight:bold!important
+    color: rgb(252, 76, 2) !important;
+    font-weight: bold !important
 }
 
 td.success-product {
-    color: rgb(155,198,0) !important;
+    color: rgb(155, 198, 0) !important;
     font-weight: bold !important
 }
 
@@ -24,8 +24,8 @@ td.error-cell {
 }
 
 td:not(.error-cell).readonly-cell {
-    background-color: rgb(245,245,245) !important;
-    border-color: rgb(221,221,221)
+    background-color: rgb(245, 245, 245) !important;
+    border-color: rgb(221, 221, 221)
 }
 
 .k-item.k-state-active {
@@ -88,10 +88,10 @@ td:not(.error-cell).readonly-cell {
     padding: 3px 10px
 }
 
-    .ssToolbarBtn:hover {
-        background-color: #f2f2f2 !important;
-        color: #0071c5 !important
-    }
+.ssToolbarBtn:hover {
+    background-color: #f2f2f2 !important;
+    color: #0071c5 !important
+}
 
 .dirty {
     color: #00AEEF !important
@@ -103,13 +103,14 @@ td:not(.error-cell).readonly-cell {
     cursor: not-allowed !important
 }
 
-.ssToolbarBtn.btn-save, .ssToolbarBtn {
+.ssToolbarBtn.btn-save,
+.ssToolbarBtn {
     background-color: transparent !important
 }
 
-    .ssToolbarBtn.btn-save.dirty:hover {
-        background-color: #f2f2f2 !important
-    }
+.ssToolbarBtn.btn-save.dirty:hover {
+    background-color: #f2f2f2 !important
+}
 
 .ptekendo kendo-editor .k-editor-content {
     z-index: 1;
@@ -178,7 +179,7 @@ td:not(.error-cell).readonly-cell {
 
 .mat-dialog-container {
     background: #fff;
-    color: rgba(0,0,0,.87)
+    color: rgba(0, 0, 0, .87)
 }
 
 .parent-one.loaderPTE pricing-table-editor loading-panel-angular .ss-loading-overlay {
@@ -213,7 +214,7 @@ kendo-tabstrip.tabs-coll {
     width: 100%
 }
 
-.ptrLoading > .ss-loading-overlay > .myLoader {
+.ptrLoading>.ss-loading-overlay>.myLoader {
     left: 50% !important
 }
 
@@ -246,11 +247,11 @@ button.k-button.mykbtnstyles {
     background: #dededd !important
 }
 
-    button.k-button.mykbtnstyles:hover {
-        color: #444 !important;
-        background: #ebebeb !important;
-        border-color: #fafafa !important
-    }
+button.k-button.mykbtnstyles:hover {
+    color: #444 !important;
+    background: #ebebeb !important;
+    border-color: #fafafa !important
+}
 
 .k-button.new-k-button {
     background: #00aeef !important;
@@ -258,20 +259,20 @@ button.k-button.mykbtnstyles {
     padding: 20px 10px
 }
 
-    .k-button.new-k-button:hover {
-        background: #0071c5 !important;
-        color: #ffffff !important
-    }
+.k-button.new-k-button:hover {
+    background: #0071c5 !important;
+    color: #ffffff !important
+}
 
 .k-button.new-c-button {
     background: #ffffff !important;
     padding: 20px 10px
 }
 
-    .k-button.new-c-button:hover {
-        background: #ebebeb !important;
-        color: #444 !important
-    }
+.k-button.new-c-button:hover {
+    background: #ebebeb !important;
+    color: #444 !important
+}
 
 .ptevalidopoup .k-window {
     border-radius: 0
@@ -293,24 +294,24 @@ kendo-dialog-actions.pteokbtnstyle.alter-btns-ok {
     border-radius: 0 !important
 }
 
-    kendo-dialog-actions.pteokbtnstyle.alter-btns-ok button.mykbtnstyles {
-        color: #444 !important;
-        border-color: #fafafa !important;
-        background-color: #fafafa !important;
-        padding: 1.5em 0;
-        border-radius: 0 !important;
-        border-bottom: 0;
-        box-shadow: none;
-        height: auto !important
-    }
+kendo-dialog-actions.pteokbtnstyle.alter-btns-ok button.mykbtnstyles {
+    color: #444 !important;
+    border-color: #fafafa !important;
+    background-color: #fafafa !important;
+    padding: 1.5em 0;
+    border-radius: 0 !important;
+    border-bottom: 0;
+    box-shadow: none;
+    height: auto !important
+}
 
-        kendo-dialog-actions.pteokbtnstyle.alter-btns-ok button.mykbtnstyles:hover {
-            color: #444 !important;
-            border-color: #ebebeb !important;
-            background-color: #ebebeb !important
-        }
+kendo-dialog-actions.pteokbtnstyle.alter-btns-ok button.mykbtnstyles:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important
+}
 
-.product-selector-dialog > mat-dialog-container {
+.product-selector-dialog>mat-dialog-container {
     background-color: #1a3e6f !important;
     padding: 0 !important
 }
@@ -385,7 +386,8 @@ i.fa.undo-redo-style.dirty {
     font-size: 16px
 }
 
-.htCustCellEditor:hover, .htCustCellEditor:focus {
+.htCustCellEditor:hover,
+.htCustCellEditor:focus {
     background-color: #00aeef !important
 }
 
@@ -405,9 +407,9 @@ i.fa.undo-redo-style.dirty {
     font-size: 14px
 }
 
-    .oo-lapping-style .k-grid-filter .k-icon.k-i-filter:hover {
-        color: #0071c5 !important
-    }
+.oo-lapping-style .k-grid-filter .k-icon.k-i-filter:hover {
+    color: #0071c5 !important
+}
 
 .oo-lapping-style th.k-header.headerClass.k-filterable {
     background-color: #e7e7e8 !important;
@@ -419,7 +421,8 @@ i.fa.undo-redo-style.dirty {
     font-family: 'Intel Clear' !important
 }
 
-.oo-lapping-style.k-grid-header .k-header:first-child, .oo-lapping-style th.k-group-cell.k-header {
+.oo-lapping-style.k-grid-header .k-header:first-child,
+.oo-lapping-style th.k-group-cell.k-header {
     background-color: #e7e7e8 !important;
     border-right-color: #c4cfd4 !important;
     border-left-color: #c4cfd4 !important
@@ -433,7 +436,8 @@ i.fa.undo-redo-style.dirty {
     font-family: 'Intel Clear' !important
 }
 
-.oo-lapping-style span.k-icon.k-i-window-minimize, .oo-lapping-style span.k-icon.k-i-window-maximize {
+.oo-lapping-style span.k-icon.k-i-window-minimize,
+.oo-lapping-style span.k-icon.k-i-window-maximize {
     color: #428bca !important
 }
 
@@ -454,7 +458,8 @@ i.fa.undo-redo-style.dirty {
     font-size: 5px !important
 }
 
-.oo-lapping-style span.k-icon.k-i-window-maximize:hover, .oo-lapping-style span.k-icon.k-i-window-minimize:hover {
+.oo-lapping-style span.k-icon.k-i-window-maximize:hover,
+.oo-lapping-style span.k-icon.k-i-window-minimize:hover {
     color: #000 !important
 }
 
@@ -497,10 +502,10 @@ i.fa.undo-redo-style.dirty {
     opacity: .25 !important
 }
 
-    .oo-lapping-style span.k-icon.k-i-arrow-s:hover {
-        color: #00aeef !important;
-        opacity: 1 !important
-    }
+.oo-lapping-style span.k-icon.k-i-arrow-s:hover {
+    color: #00aeef !important;
+    opacity: 1 !important
+}
 
 .oo-lapping-style .k-dropdown .k-select {
     padding: 0 !important
@@ -517,16 +522,16 @@ i.fa.undo-redo-style.dirty {
     color: #00aeef !important
 }
 
-    #show-hide-editor-style.k-toolbar .k-button-group .k-button:hover {
-        background: #ebebeb !important;
-        color: #444 !important
-    }
+#show-hide-editor-style.k-toolbar .k-button-group .k-button:hover {
+    background: #ebebeb !important;
+    color: #444 !important
+}
 
-    #show-hide-editor-style.k-toolbar .k-button-group .k-button.k-state-selected {
-        box-shadow: none !important;
-        background-color: #dbdbdb !important;
-        border-color: #dbdbdb !important
-    }
+#show-hide-editor-style.k-toolbar .k-button-group .k-button.k-state-selected {
+    box-shadow: none !important;
+    background-color: #dbdbdb !important;
+    border-color: #dbdbdb !important
+}
 
 #show-hide-editor-style .k-dropdown .k-dropdown-wrap {
     border-color: #eaeef2 !important;
@@ -541,9 +546,9 @@ i.fa.undo-redo-style.dirty {
 }
 
 .multi-select-pte .mat-dialog-container {
-    box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%),0 24px 38px 3px rgb(0 0 0 / 14%),0 9px 46px 8px rgb(0 0 0 / 12%) !important;
+    box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%), 0 24px 38px 3px rgb(0 0 0 / 14%), 0 9px 46px 8px rgb(0 0 0 / 12%) !important;
     background: #fff !important;
-    color: rgba(0,0,0,.87) !important;
+    color: rgba(0, 0, 0, .87) !important;
     border-radius: 0 !important;
     overflow: hidden !important;
     height: fit-content !important
@@ -558,7 +563,8 @@ i.fa.undo-redo-style.dirty {
     border-left-color: #c4cfd4 !important
 }
 
-.oo-lapping-style .k-i-sort-asc-sm, .oo-lapping-style .k-i-sort-desc-sm {
+.oo-lapping-style .k-i-sort-asc-sm,
+.oo-lapping-style .k-i-sort-desc-sm {
     position: relative !important;
     padding: 4px !important
 }
@@ -579,9 +585,9 @@ i.fa.undo-redo-style.dirty {
 }
 
 .geo_multi_style .mat-dialog-container {
-    box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%),0 24px 38px 3px rgb(0 0 0 / 14%),0 9px 46px 8px rgb(0 0 0 / 12%) !important;
+    box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%), 0 24px 38px 3px rgb(0 0 0 / 14%), 0 9px 46px 8px rgb(0 0 0 / 12%) !important;
     background: #fff !important;
-    color: rgba(0,0,0,.87) !important;
+    color: rgba(0, 0, 0, .87) !important;
     border-radius: 0 !important
 }
 
@@ -646,7 +652,8 @@ kendo-multiselect.fiend-all.k-widget.k-multiselect.ng-dirty {
     color: #444444 !important
 }
 
-.cdk-overlay-container:has(.multi_select_style) ~ kendo-popup .k-list .k-item.k-state-focused.k-state-selected, .cdk-overlay-container:has(.geo_multi_style) ~ kendo-popup .k-list .k-item.k-state-focused.k-state-selected {
+.cdk-overlay-container:has(.multi_select_style)~kendo-popup .k-list .k-item.k-state-focused.k-state-selected,
+.cdk-overlay-container:has(.geo_multi_style)~kendo-popup .k-list .k-item.k-state-focused.k-state-selected {
     background-color: var(--light-blue) !important;
     color: #fff !important
 }
@@ -666,4 +673,12 @@ kendo-multiselect.fiend-all.k-widget.k-multiselect.ng-dirty {
     top: 10;
     animation: slide .5s forwards;
     animation-delay: 0s
+}
+
+button td.button-intel {
+    font-family: 'Intel Clear';
+    font-size: 11px;
+    padding-left: 5px;
+    text-align: left;
+    color: #00AEEF;
 }

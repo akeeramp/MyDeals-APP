@@ -1,9 +1,8 @@
 ﻿<!-- <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" /> -->
 <!-- <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" /> -->
 <!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
+<!-- <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" /> -->
 <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
-<!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@4.6.1/dist/css/bootstrap.min.css" /> -->
-<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 
 <loading-panel-angular id="CNTTRLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
                        [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
@@ -291,35 +290,35 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row top">
-                                    <div class="col-md-6">
-                                        <div class="col-md-12">
-                                            <h6>Timeline</h6>
-                                            <div *ngFor="let data of TimeLineDetails;let i = index">
-                                                <div *ngIf="i<=maxCount" class="details">
-                                                    <p><span style="color: #003C71;font-size: 14px;float:left">{{data.ATRB_DESC}}</span> <span style="float: right;" class="updateBy">updated by {{data.FRST_NM}}{{data.LST_NM}}({{data.USR_ROLES}})({{data.CHG_EMP_WWID}})</span></p>
-                                                    <p><span class="atbrDetails" style="float:left;">"{{data.ATRB_VAL}}"</span><span style="float: right;" class="atbrDate">{{data.HIST_EFF_FR_DTM}}</span></p>
-                                                </div>
-                                            </div>
-                                            <div *ngIf="isShowBtn">
-                                                <a (click)="showAll()" class="showMore" title={{btnText}}>
-                                                    {{btnText}} <i *ngIf="btnText == 'Show More'" class="intelicon-down"></i> <i *ngIf="btnText == 'Show Less'" class="intelicon-up"></i>
-                                                </a>
+                            </div>
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="col-md-11 display top">
+                                        <h6 class="myadjust">Timeline</h6>
+                                        <div *ngFor="let data of TimeLineDetails;let i = index">
+                                            <div *ngIf="i<=maxCount" class="details">
+                                                <p><span style="color: #003C71;font-size: 14px;float:left">{{data.ATRB_DESC}}</span> <span style="float: right;" class="updateBy">updated by {{data.FRST_NM}}{{data.LST_NM}}({{data.USR_ROLES}})({{data.CHG_EMP_WWID}})</span></p>
+                                                <p><span class="atbrDetails" style="float:left;">"{{data.ATRB_VAL}}"</span><span style="float: right;" class="atbrDate">{{data.HIST_EFF_FR_DTM}}</span></p>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="col-md-12">
-                                            <h6 class="noBottemBorder">Notes</h6>
-                                        </div>
-                                        <div class="col-md-11">
-                                            <kendo-textarea style="margin-top: 5px; border-radius: 5px; width: 100%; padding-right: 0px; box-shadow: none; border-color: #e7e7e7; " resizable="vertical"
-                                                            [rows]="4" [(ngModel)]="NOTES" name="NOTES"></kendo-textarea>
+                                        <div *ngIf="isShowBtn">
+                                            <a (click)="showAll()" class="showMore" title={{btnText}}>
+                                                {{btnText}} <i *ngIf="btnText == 'Show More'" class="intelicon-down"></i> <i *ngIf="btnText == 'Show Less'" class="intelicon-up"></i>
+                                            </a>
                                         </div>
                                     </div>
                                 </div>
+                                <div class="col-md-6">
+                                    <div class="col-md-11 display top">
+                                        <h6 class="myadjust noBottemBorder">Notes</h6>
+                                    </div>
+                                    <div class="col-md-11">
+                                        <kendo-textarea style="margin-top: 5px; border-radius: 5px; width: 100%; padding-right: 0px; box-shadow: none; border-color: #e7e7e7; " resizable="vertical"
+                                                        [rows]="4" [(ngModel)]="NOTES" name="NOTES"></kendo-textarea>
+                                    </div>
+                                </div>
                             </div>
-
                         </div>
                         <div id="secFooter">
                             <button class="btn btn-primary mleft" type="button" (click)="deleteContract()" *ngIf="showDeleteButton">

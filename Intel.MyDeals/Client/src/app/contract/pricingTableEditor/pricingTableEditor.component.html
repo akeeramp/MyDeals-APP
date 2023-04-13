@@ -1,8 +1,8 @@
-﻿<link href="/Client/node_modules/handsontable/dist/handsontable.full.css" rel="stylesheet" />
+﻿<!-- NOTE: Need to resolve issue where certain components (such as `pricingTableEditor.component.ts` cannot import styles using `styleUrls`) -->
 <link href="/Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.css" rel="stylesheet" />
-<!-- <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" /> -->
+
 <loading-panel-angular id="PTRLoading" class="ptrLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
-                       [description]="spinnerMessageDescription"  [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
+                       [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
 <div class="container-fluid overflow" style="border: 2px solid #bcbcbc; margin-top: 0px !important;">
     <div class="row">
         <div class="col">
@@ -26,51 +26,47 @@
                    style="font-size: 23px; margin-top: 2px;"></i>
             </button>
             <!-- Product Validator Button -->
-            <button class="btn btn-sm ssToolbarBtn" *ngIf="C_EDIT_PRODUCT" (click)="openProductSelector()"
-                    title="Use Product Selector to search for Product(s)">
+            <button class="btn btn-sm ssToolbarBtn" *ngIf="C_EDIT_PRODUCT" (click)="openProductSelector()" title="Use Product Selector to search for Product(s)">
                 <table>
                     <tr>
                         <td>
-                            <i class="fa intelicon-search skyBlue" aria-hidden="true" style="font-size:26px"></i>
+                            <i class="intelicon-search skyBlue" aria-hidden="true" style="font-size:26px"></i>
                         </td>
-                        <td class="hidden-sm hidden-xs"
-                            style="font-family: 'Intel Clear'; font-size:11px; padding-left: 5px; text-align: left; color: #00AEEF;">
+                        <td class="hidden-sm hidden-xs button-intel">
                             Product <br />Selector
                         </td>
                     </tr>
                 </table>
             </button>
-            <button class="btn btn-sm ssToolbarBtn" *ngIf="C_EDIT_PRODUCT" (click)="validateOnlyProducts('onLoad')"
-                    title="Validate the products entered in the web sheet">
+            <button class="btn btn-sm ssToolbarBtn" *ngIf="C_EDIT_PRODUCT" (click)="validateOnlyProducts('onLoad')" title="Validate the products entered in the web sheet">
                 <table>
                     <tr>
                         <td>
                             <i class="fa fa-check-square skyBlue" aria-hidden="true" style="font-size: 26px"></i>
                         </td>
-                        <td class="hidden-sm hidden-xs"
-                            style="font-family: 'Intel Clear'; font-size:11px; padding-left: 5px; text-align: left; color: #00AEEF;">
+                        <td class="hidden-sm hidden-xs button-intel">
                             Validate Products <br />Entered in web sheet
                         </td>
                     </tr>
                 </table>
             </button>
             <button class="btn btn-sm ssToolbarBtn" (click)="flexOverlappingDealCheck()" *ngIf="curPricingTable.OBJ_SET_TYPE_CD == 'FLEX' && overlapFlexResult != undefined && overlapFlexResult.length > 0" title="check for Flex Overlapping Deals.">
-        <table>
-            <tr>
-                <td>
-                    <i class="intelicon-replace-swap skyBlue" aria-hidden="true" style="font-size: 30px"></i>
-                </td>
-                <td class="hidden-md hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
-                    Flex<br />Deals Overlap Check
-                </td>
-            </tr>
-        </table>
-    </button>
+                <table>
+                    <tr>
+                        <td>
+                            <i class="intelicon-replace-swap skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                        </td>
+                        <td class="hidden-md hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
+                            Flex<br />Deals Overlap Check
+                        </td>
+                    </tr>
+                </table>
+            </button>
             <button class="btn btn-sm ssToolbarBtn" title="Check for Overlapping Deals" (click)="openOverLappingDealCheck()">
                 <table>
                     <tr>
                         <td><i class="intelicon-copy-outlined skyBlue" style="font-size: 30px"></i></td>
-                        <td class="hidden-sm hidden-xs" style="font-family: 'Intel Clear'; font-size:11px; padding-left:5px; text-align:left; color:#00AEEF;">
+                        <td class="hidden-sm hidden-xs button-intel">
                             Overlapping<br />Deals Check
                         </td>
                     </tr>
@@ -82,7 +78,7 @@
                         <td>
                             <i class="intelicon-legal skyBlue" aria-hidden="true" style="font-size: 30px"></i>
                         </td>
-                        <td class="hidden-sm hidden-xs" style="padding-left: 5px; font-size: 11px; text-align: left; color: #00AEEF;">
+                        <td class="hidden-sm hidden-xs button-intel">
                             Show/Hide<br />Additional Discounts
                         </td>
                     </tr>
@@ -94,7 +90,7 @@
                         <td>
                             <i class="fa fa-edit skyBlue" aria-hidden="true" style="font-size: 30px"></i>
                         </td>
-                        <td class="hidden-sm hidden-xs" style="padding-left: 5px; font-size: 11px; text-align: left; color: #00AEEF;">
+                        <td class="hidden-sm hidden-xs button-intel">
                             Autofill <br /> Defaults
                         </td>
                     </tr>
