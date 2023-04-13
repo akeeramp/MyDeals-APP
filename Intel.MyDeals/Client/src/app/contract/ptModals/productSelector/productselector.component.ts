@@ -17,7 +17,7 @@ import { ProductBreakoutComponent } from './productBreakout/productBreakout.comp
 @Component({
     selector: 'product-selector',
     templateUrl: 'Client/src/app/contract/ptModals/productSelector/productselector.component.html',
-    styleUrls: ['Client/src/app/contract/ptModals/productSelector/productSelector.component.css'],
+    styleUrls: ['Client/src/app/contract/ptModals/productSelector/productselector.component.css'],
     encapsulation: ViewEncapsulation.Emulated
 })
 export class ProductSelectorComponent {

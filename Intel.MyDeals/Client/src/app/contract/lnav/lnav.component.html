@@ -11,7 +11,7 @@
             </div>
         </div>
     </div>
-    <div class="lnavMenuContainer">
+    <div class="lnavMenuContainer mainMenuContainer">
         <kendo-tabstrip (tabSelect)="onTabSelect($event)" class="gaming-tab" style="background-color: #ffffff !important;">
             <kendo-tabstrip-tab title="Deal Entry" class="flowBtn" [selected]="selectedTab == 0">
                 <ng-template kendoTabContent>
@@ -156,7 +156,7 @@
                     </div>
                 </ng-template>
             </kendo-tabstrip-tab>
-            <kendo-tabstrip-tab  [selected]="selectedTab == 1" [disabled]="enableFlowBtn()" title="Meet Comp">
+            <kendo-tabstrip-tab  [selected]="selectedTab == 1" [disabled]="enableFlowBtn()" title="Meet Comp" class="center-tabstrip">
                 <ng-template kendoTabTitle>
                     <i *ngIf="needMct()" id="meetCompIcon" class="intelicon-information-outlined font-med" title="Meet Comp needs to be reviewed" style="color: yellow;">&nbsp;</i>
                     Meet Comp

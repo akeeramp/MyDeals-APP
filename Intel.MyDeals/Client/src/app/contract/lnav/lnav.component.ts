@@ -21,16 +21,14 @@ export interface contractIds {
 }
 
 @Component({
-    selector: "lnavView",
-    templateUrl: "Client/src/app/contract/lnav/lnav.component.html",
+    selector: 'lnavView',
+    templateUrl: 'Client/src/app/contract/lnav/lnav.component.html',
     styleUrls: ['Client/src/app/contract/lnav/lnav.component.css'],
     encapsulation: ViewEncapsulation.None
 })
 export class lnavComponent {
     constructor(private loggerSvc: logger, private lnavSvc: lnavService, private headerSvc: headerService, private contractDetailsSvc: contractDetailsService,
-        private dialog: MatDialog, private router: Router, private route: ActivatedRoute) {
-
-    }
+        private dialog: MatDialog, private router: Router, private route: ActivatedRoute) {}
     @Input() contractId: number;
     @Input() contractData;
     @Input() UItemplate;

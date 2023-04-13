@@ -5,8 +5,8 @@ import { pricingTableEditorService } from "../../pricingTableEditor/pricingTable
 import { each } from 'underscore';
 
 @Component({
-    selector: "end-customer-retail",
-    templateUrl: "Client/src/app/contract/ptModals/dealEditorModals/endCustomerRetailModal.component.html",
+    selector: 'end-customer-retail',
+    templateUrl: 'Client/src/app/contract/ptModals/dealEditorModals/endCustomerRetailModal.component.html',
     styleUrls: ['Client/src/app/contract/ptModals/dealEditorModals/dealEditorModals.component.css'],
     encapsulation: ViewEncapsulation.None
 })

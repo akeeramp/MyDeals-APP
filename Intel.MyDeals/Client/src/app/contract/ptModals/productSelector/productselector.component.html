@@ -1,8 +1,8 @@
 <!-- <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" /> -->
 <!-- <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" /> -->
 <!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
-<link href="/Client/src/app/contract/ptModals/productSelector/productselector.component.css" rel="stylesheet" />
- <div class="product-selector modal-content">
+<!-- <link href="/Client/src/app/contract/ptModals/productSelector/productselector.component.css" rel="stylesheet" /> -->
+<div class="product-selector modal-content">
     <div class="prodSelector modal-header header-PS">
         <div class="row" style="width:100%">
             <div class="col-md-4 col-sm-4 col-xs-4">
@@ -37,7 +37,7 @@
             </ul>
         </div>
     </div>
-    <div style="height:60%;padding-top: 15px;">
+    <div style="height:65%;padding-top: 15px;">
         <div class="prodSelector modal-body prodFull-height-fix">
             <div *ngIf="showSuggestions" class="productSelector subHeaderNavContainer mini-right miniProdNav">
                 <div *ngIf="!(errorMessage.length > 0)">
@@ -557,7 +557,7 @@
                                 <span [ngClass]="{'animate':animateInclude}" class="arcAnimate ani-mate">
                                     <small role="button">&nbsp;({{addedProducts.length}})</small>
                                 </span>
-                        </span>
+                            </span>
                         </span>
                         <trashcan title="Clear products" class="fr clear-shift-style" (click)="clearProducts()" [ngClass]="{'trash-margin': !enableMultipleSelection }"></trashcan>
                     </div>
@@ -574,8 +574,8 @@
                     </div>
                 </div>
                 <div *ngIf="!excludeMode" class="row">
-                    <div [ngClass]="{'col-md-6':enableMultipleSelection,'paddingLeftNone':enableMultipleSelection}">
-                        <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:100px; width:100%; overflow:hidden auto;padding:5px;">
+                    <div [ngClass]="{'col-md-6':enableMultipleSelection, 'paddingLeftNone':enableMultipleSelection, 'col-md-12':!enableMultipleSelection}">
+                        <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:100px; width:100%; overflow:hidden auto; padding:5px;">
                             <span *ngFor="let item of addedProducts">
                                 <span (click)="showSingleProductHierarchy(item)" class="product-list"
                                       [ngClass]="{'text-danger': isValidCapDetails(item)}" title="{{isValidCapDetails(item, true)}}">
@@ -586,7 +586,7 @@
                         </div>
                     </div>
                     <div *ngIf="enableMultipleSelection" class="col-md-6 paddingRightNone">
-                        <div contenteditable="false" class="prodSelected text-left" style="background-color: white; height: 100px; width: 100%; overflow: hidden auto;padding:5px;">
+                        <div contenteditable="false" class="prodSelected text-left" style="background-color: white; height: 100px; width: 100%; overflow: hidden auto; padding:5px;">
                             <span *ngFor="let item of excludedProducts">
                                 <span class="product-list" [ngClass]="{'text-danger': isValidCapDetails(item)}" title="{{isValidCapDetails(item, true)}}">
                                     {{item.HIER_VAL_NM}}  &nbsp;

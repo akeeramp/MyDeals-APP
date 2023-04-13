@@ -588,3 +588,12 @@ i.intelicon-vertical-menu.blue_b_fix {
     right: 8px !important;
     border-top: 2px solid #fff !important;
 }
+
+div.mainMenuContainer li#k-tabstrip-tab-1 {
+    width: 34%;
+    margin-left: 0 !important;
+}
+
+div.mainMenuContainer {
+    width: 102%;
+}
