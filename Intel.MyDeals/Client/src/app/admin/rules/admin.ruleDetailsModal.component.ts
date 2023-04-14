@@ -315,7 +315,7 @@ export class RuleDetailsModalComponent {
         } else if (selector == 'textbox') {
             this.Rules.Criteria[idx].value = dataItem.value
         } else if (selector == 'datePicker') {
-            this.Rules.Criteria[idx].value = dataItem.value.toString()
+            this.Rules.Criteria[idx].value = dataItem.value;
         } else {
             this.Rules.Criteria[idx].value = data
             this.Rules.Criteria[idx].selectedValues = data;
