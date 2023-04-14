@@ -1,4 +1,3 @@
-<!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
 <loading-panel-angular id="autoLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription" [msgType]="msgType"></loading-panel-angular>
 <div class="container-fluid overflow autoFillSetting af-setting-fixes" [hidden]="isLoading && isInitial">
     <div class="modal-content headingcontent totalcontent">
@@ -32,7 +31,7 @@
                             <div class="row">
                                 <div class="md intel">
                                     <div *ngFor="let drops of dropdownResponses |keyvalue">
-                                        <div *ngIf="drops.key==item.key" class="mattoggelbutton">
+                                        <div *ngIf="drops.key==item.key" class="mattogglebutton">
                                             <div *ngIf="item.value.opLookupText=='DROP_DOWN'" class="another-container">
                                                 <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="matbutton mat-icon" style="width:100%; margin:1%">
                                                     <mat-button-toggle style="width:100%" *ngFor="let elem of drops.value" value="{{elem.DROP_DOWN}}" [checked]="item.value.value==elem.DROP_DOWN" (change)="onAutoChange(item.key,elem.DROP_DOWN)" [disabled]="isUIDisable(item.key, elem.DROP_DOWN)">

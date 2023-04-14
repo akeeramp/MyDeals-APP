@@ -72,3 +72,8 @@
 .btn-group {
     height: auto !important
 }
+
+.btn-primary:not(:disabled):not(.disabled).active, .btn-primary:not(:disabled):not(.disabled):active, .show>.btn-primary.dropdown-toggle {
+    background-color: #0062cc !important;
+    border-color: #005cbf !important;
+}

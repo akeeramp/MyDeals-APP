@@ -54,7 +54,7 @@
 
 .new-bus-contract #secContainer {
     overflow: auto !important;
-    height: 73vh;
+    height: 85vh;
     line-height: 1.5
 }
 
@@ -133,6 +133,7 @@
 .new-bus-contract #secFooter {
     margin: 0 0 -50px 0;
     height: 50px;
+    width: -webkit-fill-available;
     border-top: 1px solid #eeeeee;
     padding: 7px 10px;
     text-align: right;
