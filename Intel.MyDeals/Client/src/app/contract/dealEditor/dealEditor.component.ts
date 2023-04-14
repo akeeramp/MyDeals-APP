@@ -127,6 +127,7 @@ export class dealEditorComponent {
     public isDeveloper = (<any>window).isDeveloper;
     public isTester = (<any>window).isTester;
     private isInitialLoad = true;
+    private dealId: any;
     public perfBar = {
         action: '',
         title: '',
@@ -308,12 +309,29 @@ export class dealEditorComponent {
         }
     }
 
+    filterOnDealId(dealId){
+        this.state.filter = {
+            logic: "or",
+            filters: [
+                {
+                    field: "DC_ID",
+                    operator: "eq",
+                    value: dealId
+                }
+            ],
+        }
+        this.gridData = process(this.gridResult, this.state);
+    }
+
     onTabSelect(e: SelectEvent) {
         e.preventDefault();
         if (e.title != undefined) {
             this.searchFilter = "";
             this.clearSearchGrid();
             this.selectedTab = e.title;
+            if (this.dealId && this.dealId > 0) {
+                this.filterOnDealId(this.dealId)
+            }
             var group = this.groups.filter(x => x.name == this.selectedTab);
             if (group[0].isTabHidden) {
                 var tabs = this.groups.filter(x => x.isTabHidden === false);
@@ -1415,17 +1433,7 @@ export class dealEditorComponent {
             }
             if (this.in_Search_Text && this.in_Search_Text != null && this.in_Search_Text != '') {
                 this.searchFilter = this.in_Search_Text;
-                this.state.filter = {
-                    logic: "or",
-                    filters: [
-                        {
-                            field: "DC_ID",
-                            operator: "eq",
-                            value: this.searchFilter
-                        }
-                    ],
-                }
-                this.gridData = process(this.gridResult, this.state);
+                this.filterOnDealId(this.searchFilter)
             }
 
             if(this.route.snapshot.url[0].path=='contractmanager')
@@ -1434,9 +1442,9 @@ export class dealEditorComponent {
             const cid=this.route.snapshot.paramMap.get('cid');
             const psid=this.route.snapshot.paramMap.get('PSID');
             const ptid=this.route.snapshot.paramMap.get('PTID');
-            const dealid=this.route.snapshot.paramMap.get('DealID');
+            this.dealId=this.route.snapshot.paramMap.get('DealID');
               //it will update the url on page reload persist the selected state
-            const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
+            const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, this.dealId ]);
             this.router.navigateByUrl(urlTree+'?loadtype=DealEditor' );
             }
         }

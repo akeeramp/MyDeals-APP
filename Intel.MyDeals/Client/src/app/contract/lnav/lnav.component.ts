@@ -134,7 +134,7 @@ export class lnavComponent {
         this.curPricingStrategyId = psId;
         this.curPricingTableId = ptId;
         //its just update the URl when we reload  it will land on same page last selected pricing strategies 
-        const urlTree = this.router.createUrlTree(['/contractmanager', this.route.snapshot.paramMap.get('type'), this.route.snapshot.paramMap.get('cid'), psId, ptId, this.route.snapshot.paramMap.get('DealID')]);
+        const urlTree = this.router.createUrlTree(['/contractmanager', this.route.snapshot.paramMap.get('type'), this.route.snapshot.paramMap.get('cid'), psId, ptId, 0]);
         this.router.navigateByUrl(urlTree); 
          setTimeout(() => {            
         this.modelChange.emit(contractId_Map);
