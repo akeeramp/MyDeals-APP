@@ -8,9 +8,10 @@ import { employeeService } from './admin.employee.service';
     styleUrls: ['Client/src/app/admin/employee/admin.employee.component.css']
 })
 export class EmployeeComponent {
-    constructor(private employeeSvc: employeeService,private loggerSvc:logger) { }
+    constructor(private employeeSvc: employeeService,
+                private loggerSvc:logger) { }
 
-    private roleTypeId = (<any>window).usrRoleId;
+    protected roleTypeId = (<any>window).usrRoleId;
     private isDeveloper = (<any>window).isDeveloper;
     private isTester = (<any>window).isTester;
     private isSuper = (<any>window).isSuper;
@@ -31,10 +32,6 @@ export class EmployeeComponent {
             }, err => {
                 this.loggerSvc.error("Unable to set User Roles.", err);
             });
-    }
-
-    onChange(roleId: any) {
-        this.roleTypeId = roleId;
     }
 
     ngOnInit() {

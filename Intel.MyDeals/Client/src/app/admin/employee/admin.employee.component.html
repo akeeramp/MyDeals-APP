@@ -1,21 +1,22 @@
-﻿<!-- <link href="/Client/src/app/admin/kendo_nongrid.css" rel="stylesheet" /> -->
-<div class="empRole">
+﻿<div class="empRole">
     <h2>Employee Role Manager</h2>
+
     <h5 class="role-heading">Select your User Role</h5>
-    <div class="btn-group btn-group-lg">
-        <mat-button-toggle-group name="fontStyle" aria-label="Font Style">
-            <mat-button-toggle class="btn btn-primary" *ngFor="let toggle of roles" value="{{toggle.value}}"
-                [checked]="roleTypeId==toggle.value" (change)="onChange(toggle.value)">{{toggle.label}}
-            </mat-button-toggle>
-        </mat-button-toggle-group>
+    <div class="btn-group btn-group-lg btn-group-toggle" ngbRadioGroup [(ngModel)]="roleTypeId">
+        <label ngbButtonLabel class="btn btn-primary" *ngFor="let toggle of roles">
+            <input ngbButton type="radio" [value]="toggle.value">{{ toggle.label }}
+        </label>
     </div>
+
     <h5 class="role-heading">Select any special purpose bits for your role</h5>
     <div>
         <div><input type="checkbox" name="empIsDeveloper" class="with-font" id="emp_Is_Developer"
-                [(ngModel)]="isDeveloper" /><label for="emp_Is_Developer">Is A Developer</label></div>
+                    [(ngModel)]="isDeveloper" /><label for="emp_Is_Developer">Is A Developer</label></div>
         <div><input type="checkbox" name="empIsTester" class="with-font" id="emp_Is_Tester"
-                [(ngModel)]="isTester" /><label for="emp_Is_Tester">Is A Tester</label></div>
-        <div><input type="checkbox" name="empIsSuper" class="with-font" id="emp_Is_Super" [(ngModel)]="isSuper" /><label
-                for="emp_Is_Super">Is A Super User</label></div>
-    </div><button (click)="save()" class="btn btn-primary btn-lg">Save This Role</button>
+                    [(ngModel)]="isTester" /><label for="emp_Is_Tester">Is A Tester</label></div>
+        <div><input type="checkbox" name="empIsSuper" class="with-font" id="emp_Is_Super" 
+                    [(ngModel)]="isSuper" /><label for="emp_Is_Super">Is A Super User</label></div>
+    </div>
+
+    <button (click)="save()" class="btn btn-primary btn-lg">Save This Role</button>
 </div>
