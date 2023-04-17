@@ -3,27 +3,18 @@ import { productCategoryService } from "./admin.productCategories.service";
 import { Component, ViewChild } from "@angular/core";
 import { ThemePalette } from "@angular/material/core";
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
-import {
-    GridDataResult,
-    DataStateChangeEvent,
-    PageSizeItem,
-} from "@progress/kendo-angular-grid";
-import {
-    process,
-    State,
-    distinct,
-} from "@progress/kendo-data-query";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Product_categories } from "./admin.productCategories.model";
 import { each } from 'underscore';
 import { DatePipe } from "@angular/common";
 
 @Component({
-    selector: "admin-product-categories",
-    templateUrl: "Client/src/app/admin/productCategories/admin.productCategories.component.html",
-    styleUrls: ["Client/src/app/admin/productCategories/admin.productCategories.component.css"]
+    selector: 'admin-product-categories',
+    templateUrl: 'Client/src/app/admin/productCategories/admin.productCategories.component.html',
+    styleUrls: ['Client/src/app/admin/productCategories/admin.productCategories.component.css']
 })
-
 export class adminProductCategoriesComponent {
     constructor(private productCategorySvc: productCategoryService, public datepipe: DatePipe, private loggerSvc: logger) { }
     private isLoading = true;

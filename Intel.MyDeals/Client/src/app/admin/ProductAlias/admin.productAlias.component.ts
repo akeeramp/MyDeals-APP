@@ -8,8 +8,8 @@ import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 
 @Component({
-    selector: "admin-product-alias",
-    templateUrl: "Client/src/app/admin/productAlias/admin.productAlias.component.html",
+    selector: 'admin-product-alias',
+    templateUrl: 'Client/src/app/admin/productAlias/admin.productAlias.component.html',
     styleUrls: ['Client/src/app/admin/productAlias/admin.productAlias.component.css']
 })
 export class adminProductAliasComponent {

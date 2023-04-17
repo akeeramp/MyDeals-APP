@@ -6,12 +6,12 @@ import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+
 @Component({
-    selector: "admin-vistex-customer-mapping",
-    templateUrl: "Client/src/app/admin/vistexCustomerMapping/admin.vistexCustomerMapping.component.html",
+    selector: 'admin-vistex-customer-mapping',
+    templateUrl: 'Client/src/app/admin/vistexCustomerMapping/admin.vistexCustomerMapping.component.html',
     styleUrls: ['Client/src/app/admin/vistexcustomermapping/admin.vistexCustomerMapping.component.css']
 })
-
 export class adminVistexCustomerMappingComponent {
     constructor(private customerMapSvc: vistexCustomerMappingService, private loggerSvc: logger) { }
     @ViewChild("profileDropDown") private profileDdl;

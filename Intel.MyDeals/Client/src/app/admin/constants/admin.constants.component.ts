@@ -3,22 +3,14 @@ import { constantsService } from "./admin.constants.service";
 import { Component } from "@angular/core";
 import { Cnst_Map } from './admin.constants.model';
 import { ThemePalette } from "@angular/material/core";
-import {
-    GridDataResult,
-    DataStateChangeEvent,
-    PageSizeItem,
-
-} from "@progress/kendo-angular-grid";
-import {
-    process,
-    State,
-    distinct,
-} from "@progress/kendo-data-query";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+
 @Component({
-    selector: "constants",
-    templateUrl: "Client/src/app/admin/constants/admin.constants.component.html",
-    styleUrls: ['Client/src/app/admin/CustomerVendors/admin.customerVendors.component.css']
+    selector: 'constants',
+    templateUrl: 'Client/src/app/admin/constants/admin.constants.component.html',
+    styleUrls: ['Client/src/app/admin/constants/admin.constants.component.css']
 })
 export class ConstantsComponent {
     constructor(private constantsSvc: constantsService, private loggerSvc: logger) { }

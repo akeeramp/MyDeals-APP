@@ -5,13 +5,11 @@ import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { batchTimingService } from "./admin.batchTiming.service";
 
-
 @Component({
-    selector: "batch-timing",
-    templateUrl: "Client/src/app/admin/batchTiming/admin.batchTiming.component.html",
+    selector: 'batch-timing',
+    templateUrl: 'Client/src/app/admin/batchTiming/admin.batchTiming.component.html',
     styleUrls: ['Client/src/app/admin/batchTiming/admin.batchTiming.component.css']
 })
-
 export class batchTimingComponent {
     constructor(private batchTimingSvc: batchTimingService, private loggerSvc: logger) { }
 

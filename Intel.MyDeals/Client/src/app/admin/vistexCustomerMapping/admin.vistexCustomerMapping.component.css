@@ -1,1 +1,37 @@
-﻿.ok-button-v{color:#444;border-color:#fafafa;background-color:#e9e9e9!important;width:100%;height:50px}.custom-padd-0{padding:0!important}.head-right-shift{padding-top:50px;padding-left:14px!important;padding-bottom:10px}.bottom-s-remove{line-height:1.1}.customer-table-lR{padding-left:14px!important;padding-right:5px!important;padding-top:0!important}.k-grid.cm-height-table{height:calc(100vh - 205px)!important}.cancel-space-r{margin-left:-1.14em!important}
+﻿@import '../kendo_grid.css';
+
+.ok-button-v {
+    color: #444;
+    border-color: #fafafa;
+    background-color: #e9e9e9 !important;
+    width: 100%;
+    height: 50px
+}
+
+.custom-padd-0 {
+    padding: 0 !important
+}
+
+.head-right-shift {
+    padding-top: 50px;
+    padding-left: 14px !important;
+    padding-bottom: 10px
+}
+
+.bottom-s-remove {
+    line-height: 1.1
+}
+
+.customer-table-lR {
+    padding-left: 14px !important;
+    padding-right: 5px !important;
+    padding-top: 0 !important
+}
+
+.k-grid.cm-height-table {
+    height: calc(100vh - 205px) !important
+}
+
+.cancel-space-r {
+    margin-left: -1.14em !important
+}

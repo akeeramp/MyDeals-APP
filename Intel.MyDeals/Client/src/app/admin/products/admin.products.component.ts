@@ -5,13 +5,11 @@ import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/ke
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 
-
 @Component({
-    selector: "admin-products",
-    templateUrl: "Client/src/app/admin/products/admin.products.component.html",
-    styleUrls: ["Client/src/app/admin/products/admin.products.component.css"]
+    selector: 'admin-products',
+    templateUrl: 'Client/src/app/admin/products/admin.products.component.html',
+    styleUrls: ['Client/src/app/admin/products/admin.products.component.css']
 })
-
 export class adminProductsComponent {
     constructor(private productsSvc: productsService, private loggerSvc: logger) { }
     private isLoading = true;

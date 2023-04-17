@@ -1,7 +1,7 @@
 ﻿<!-- <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" /> -->
 <!-- <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" /> -->
 <!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
-<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<!-- <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" /> -->
 <div class="row">
     <div class="col-md-9 k-header-alignment">
         <h3>Unified Deal Reconciliation</h3>
@@ -10,7 +10,7 @@
         <button class="btn btn-primary" (click)="OpenBulkUploadUnifyModal()" style="float:right;margin-top:40px; margin-right:41px;">Upload Unified Data</button>
     </div>
 </div>
-<div class="row">
+<div class="row" style="display: contents;">
     <div class="col-md-12 kendo-grid-buttons">
         <kendo-grid class="cm-height-table admin-deal-grid" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                     [sort]="state.sort" [filter]="state.filter" [sortable]="true"
@@ -20,11 +20,11 @@
             <ng-template kendoGridToolbarTemplate>
                 <button (click)="clearFilter()" class="k-button clearButton filter-clear-text">
                     <span class="k-icon intelicon-cancel-filter-solid k-icon-md  k-family unifie-clear-filter"></span><span class="unifie-clear-text">CLEAR FILTERS</span>
-</button>
+                </button>
                 <kendo-grid-spacer></kendo-grid-spacer>
                 <button (click)="refreshGrid()" class="k-button clearButton filter-clear-text">
                     <span class="k-icon k-i-reload refresh-clear-filter k-icon-md"></span><span class="unifie-clear-text">Refresh</span>
-</button>
+                </button>
             </ng-template>
             <kendo-grid-command-column width="100" *ngIf="editAccess" [headerClass]="{'headerClass':true}" [columnMenu]="false">
                 <ng-template kendoGridCellTemplate let-isNew="isNew">

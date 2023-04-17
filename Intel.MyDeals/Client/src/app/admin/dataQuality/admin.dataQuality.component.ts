@@ -6,11 +6,10 @@ import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 
 @Component({
-    selector: "admin-dataquality",
-    templateUrl: "Client/src/app/admin/dataQuality/admin.dataQuality.component.html",
+    selector: 'admin-dataquality',
+    templateUrl: 'Client/src/app/admin/dataQuality/admin.dataQuality.component.html',
     styleUrls: ['Client/src/app/admin/dataQuality/admin.dataQuality.component.css']
 })
-
 export class admindataQualityComponent {
     constructor(private dataQualitySvc: dataQualityService, private loggerSvc: logger) { }
     private isLoading = true;

@@ -1,4 +1,6 @@
-﻿td.error-product {
+﻿@import '../kendo_grid.css';
+
+td.error-product {
     color: red !important;
     font-weight: bold !important;
 }
