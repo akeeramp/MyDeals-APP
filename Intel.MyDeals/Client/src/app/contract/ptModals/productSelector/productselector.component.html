@@ -549,8 +549,8 @@
                     </span>
                     <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')"></trashcan>
                 </div>
-                <div *ngIf="!excludeMode" class="row">
-                    <div [ngClass]="{'col-md-6':enableMultipleSelection, 'paddingRight15 pad-right-remove': !enableMultipleSelection}" style="text-align: left;">
+                <div *ngIf="!excludeMode" class="row" style="display: contents;">
+                    <div [ngClass]="{'col-md-6':enableMultipleSelection, 'paddingRight15': !enableMultipleSelection}" style="text-align: left; width: -webkit-fill-available;">
                         <span [ngClass]="{'paddingLeft15': !enableMultipleSelection}">
                             <span [ngClass]="{'paddingLeftNone':enableMultipleSelection}" class="text-left textProdSelector">
                                 Selected Products

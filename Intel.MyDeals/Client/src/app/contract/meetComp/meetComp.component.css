@@ -14,7 +14,7 @@
     font-size: 12px !important
 }
 
-.meet-conduct .k-cell-inner > .k-link:hover {
+.meet-conduct .k-cell-inner>.k-link:hover {
     background: none !important;
     color: #1a3e6f !important
 }
@@ -30,13 +30,26 @@
     opacity: .45
 }
 
-.meet-conduct .k-grid td.k-state-focused, .meet-conduct .k-grid th.k-state-focused, .meet-conduct .k-grid th:focus, .meet-conduct .k-grid .k-master-row > td:focus, .meet-conduct .k-grid .k-grouping-row > td:focus, .meet-conduct .k-grid .k-detail-row > td:focus, .meet-conduct .k-grid .readOnlyCell > td:focus, .meet-conduct .k-grid .k-detail-row > td:focus {
+.meet-conduct .k-grid td.k-state-focused,
+.meet-conduct .k-grid th.k-state-focused,
+.meet-conduct .k-grid th:focus,
+.meet-conduct .k-grid .k-master-row>td:focus,
+.meet-conduct .k-grid .k-grouping-row>td:focus,
+.meet-conduct .k-grid .k-detail-row>td:focus,
+.meet-conduct .k-grid .readOnlyCell>td:focus,
+.meet-conduct .k-grid .k-detail-row>td:focus {
     box-shadow: inset 0 0 0 1px #00aeef !important
 }
 
-    .meet-conduct .k-grid td.k-state-focused, .meet-conduct .k-grid th:focus:hover, .meet-conduct .k-grid .k-master-row > td:focus:hover, .meet-conduct .k-grid .k-grouping-row > td:focus:hover, .meet-conduct .k-grid .k-detail-row > td:focus:hover, .meet-conduct .k-grid .readOnlyCell > td:focus:hover, .meet-conduct .k-grid .k-detail-row > td:focus:hover {
-        box-shadow: inset 0 0 0 1px #003C71 !important
-    }
+.meet-conduct .k-grid td.k-state-focused,
+.meet-conduct .k-grid th:focus:hover,
+.meet-conduct .k-grid .k-master-row>td:focus:hover,
+.meet-conduct .k-grid .k-grouping-row>td:focus:hover,
+.meet-conduct .k-grid .k-detail-row>td:focus:hover,
+.meet-conduct .k-grid .readOnlyCell>td:focus:hover,
+.meet-conduct .k-grid .k-detail-row>td:focus:hover {
+    box-shadow: inset 0 0 0 1px #003C71 !important
+}
 
 .meet-conduct .k-grid-content {
     overflow-y: overlay
@@ -46,7 +59,7 @@
     white-space: nowrap !important
 }
 
-.meet-conduct .childGrid > .k-grid-content {
+.meet-conduct .childGrid>.k-grid-content {
     height: auto !important
 }
 
@@ -54,9 +67,9 @@
     transition: all linear .5s
 }
 
-    .meet-conduct .meetComp-show-hide.ng-hide {
-        opacity: 0
-    }
+.meet-conduct .meetComp-show-hide.ng-hide {
+    opacity: 0
+}
 
 .meet-conduct .btnPctMct {
     font-size: 14px;
@@ -115,12 +128,12 @@
     margin: 0
 }
 
-    .meet-conduct #tabstrip h2 span {
-        background: none;
-        padding-left: 5px;
-        font-size: .3em;
-        vertical-align: top
-    }
+.meet-conduct #tabstrip h2 span {
+    background: none;
+    padding-left: 5px;
+    font-size: .3em;
+    vertical-align: top
+}
 
 .meet-conduct #tabstrip p {
     margin: 0;
@@ -153,7 +166,7 @@
     overflow: hidden !important
 }
 
-.meet-conduct .k-detail-row > .k-detail-cell > div:first-child {
+.meet-conduct .k-detail-row>.k-detail-cell>div:first-child {
     margin-top: 0 !important;
     margin-left: -6px !important;
     overflow: hidden !important
@@ -169,7 +182,8 @@
     color: #c4d600
 }
 
-.meet-conduct .inComplete, .meet-conduct .incomplete {
+.meet-conduct .inComplete,
+.meet-conduct .incomplete {
     font-size: 20px !important;
     color: #F3D54E
 }
@@ -180,13 +194,13 @@
 
 .meet-conduct .errorItemList {
     height: inherit;
-    border-color: rgb(255,0,0) !important;
-    border: 1px solid rgb(255,0,0) !important
+    border-color: rgb(255, 0, 0) !important;
+    border: 1px solid rgb(255, 0, 0) !important
 }
 
 .meet-conduct .errorIcon {
     font-size: 20px !important;
-    color: rgb(255,0,0)
+    color: rgb(255, 0, 0)
 }
 
 .meet-conduct .notRunYetIcon {
@@ -199,7 +213,7 @@
     color: #c7c7c7
 }
 
-.meet-conduct .k-grid-content > table > tbody > tr > td {
+.meet-conduct .k-grid-content>table>tbody>tr>td {
     padding-left: 5px !important
 }
 
@@ -252,20 +266,23 @@
     cursor: pointer
 }
 
-.meet-conduct .k-dialog.k-alert .k-dialog-titlebar, .meet-conduct .k-dialog.k-confirm .k-dialog-titlebar, .meet-conduct .k-dialog.k-prompt .k-dialog-titlebar {
+.meet-conduct .k-dialog.k-alert .k-dialog-titlebar,
+.meet-conduct .k-dialog.k-confirm .k-dialog-titlebar,
+.meet-conduct .k-dialog.k-prompt .k-dialog-titlebar {
     display: none
 }
 
-.meet-conduct .k-menu .k-item > .k-link {
+.meet-conduct .k-menu .k-item>.k-link {
     padding: 0;
     color: #00AEEF
 }
 
-    .meet-conduct .k-menu .k-item > .k-link:hover {
-        color: #FFFFFF
-    }
+.meet-conduct .k-menu .k-item>.k-link:hover {
+    color: #FFFFFF
+}
 
-.meet-conduct .dealTools input[type=radio].with-font, .meet-conduct .dealTools input[type=checkbox].with-font {
+.meet-conduct .dealTools input[type=radio].with-font,
+.meet-conduct .dealTools input[type=checkbox].with-font {
     border: 0;
     clip: rect(0 0 0 0);
     height: 1px;
@@ -276,54 +293,68 @@
     width: 1px
 }
 
-    .meet-conduct .dealTools input[type=radio].with-font + label:before, .meet-conduct .dealTools input[type=checkbox].with-font + label:before {
-        font-family: FontAwesome;
-        display: inline-block;
-        content: "\f096";
-        font-size: 20px;
-        letter-spacing: 10px;
-        color: #00AEEF;
-        margin-left: 10px
-    }
+.meet-conduct .dealTools input[type=radio].with-font+label:before,
+.meet-conduct .dealTools input[type=checkbox].with-font+label:before {
+    font-family: FontAwesome;
+    display: inline-block;
+    content: "\f096";
+    font-size: 20px;
+    letter-spacing: 10px;
+    color: #00AEEF;
+    margin-left: 10px
+}
 
-    .meet-conduct .dealTools input[type=radio].with-font:hover + label:before, .meet-conduct .dealTools input[type=checkbox].with-font:hover + label:before {
-        color: #003C71;
-        cursor: pointer
-    }
+.meet-conduct .dealTools input[type=radio].with-font:hover+label:before,
+.meet-conduct .dealTools input[type=checkbox].with-font:hover+label:before {
+    color: #003C71;
+    cursor: pointer
+}
 
-    .meet-conduct .dealTools input[type=radio].with-font.disabled + label:before, .meet-conduct .dealTools input[type=checkbox].with-font.disabled + label:before {
-        color: #cccccc;
-        cursor: default
-    }
+.meet-conduct .dealTools input[type=radio].with-font.disabled+label:before,
+.meet-conduct .dealTools input[type=checkbox].with-font.disabled+label:before {
+    color: #cccccc;
+    cursor: default
+}
 
-    .meet-conduct .dealTools input[type=radio].with-font:checked + label:before, .meet-conduct .dealTools input[type=checkbox].with-font:checked + label:before {
-        content: "\f046";
-        font-size: 20px;
-        letter-spacing: 5px;
-        color: #C4D600;
-        margin-left: 10px
-    }
+.meet-conduct .dealTools input[type=radio].with-font:checked+label:before,
+.meet-conduct .dealTools input[type=checkbox].with-font:checked+label:before {
+    content: "\f046";
+    font-size: 20px;
+    letter-spacing: 5px;
+    color: #C4D600;
+    margin-left: 10px
+}
 
-    .meet-conduct .dealTools input[type=radio].with-font:focus + label:before, .meet-conduct .dealTools input[type=checkbox].with-font:focus + label:before {
-        font-weight: bold;
-        color: #00AEEF
-    }
+.meet-conduct .dealTools input[type=radio].with-font:focus+label:before,
+.meet-conduct .dealTools input[type=checkbox].with-font:focus+label:before {
+    font-weight: bold;
+    color: #00AEEF
+}
 
-    .meet-conduct .dealTools input[type=radio].with-font:checked:focus + label:before, .meet-conduct .dealTools input[type=checkbox].with-font:checked:focus + label:before {
-        font-weight: bold;
-        color: #C4D600
-    }
+.meet-conduct .dealTools input[type=radio].with-font:checked:focus+label:before,
+.meet-conduct .dealTools input[type=checkbox].with-font:checked:focus+label:before {
+    font-weight: bold;
+    color: #C4D600
+}
 
 .meet-conduct .delete-attach-icon {
     font-size: 16px;
     cursor: pointer
 }
 
-    .meet-conduct .delete-attach-icon:hover {
-        text-decoration: none
-    }
+.meet-conduct .delete-attach-icon:hover {
+    text-decoration: none
+}
 
-.meet-conduct .k-grid td.k-state-focused, .meet-conduct .k-grid th.k-state-focused, .meet-conduct .k-grid th:focus, .meet-conduct .k-grid .k-master-row > td:focus, .meet-conduct .k-grid .k-grouping-row > td:focus, .meet-conduct .k-grid .k-detail-row > td:focus, .meet-conduct .k-grid .k-group-footer > td:focus, .meet-conduct .k-grid .k-grid-pager.k-state-focused, .meet-conduct .k-grid .k-grid-pager:focus {
+.meet-conduct .k-grid td.k-state-focused,
+.meet-conduct .k-grid th.k-state-focused,
+.meet-conduct .k-grid th:focus,
+.meet-conduct .k-grid .k-master-row>td:focus,
+.meet-conduct .k-grid .k-grouping-row>td:focus,
+.meet-conduct .k-grid .k-detail-row>td:focus,
+.meet-conduct .k-grid .k-group-footer>td:focus,
+.meet-conduct .k-grid .k-grid-pager.k-state-focused,
+.meet-conduct .k-grid .k-grid-pager:focus {
     box-shadow: inset 0 0 0 2px rgb(0 0 0 / 8%)
 }
 
@@ -349,7 +380,7 @@
     height: 100%
 }
 
-.meet-conduct tr:last-child > td {
+.meet-conduct tr:last-child>td {
     border-bottom: none !important
 }
 
@@ -364,14 +395,16 @@
     padding-bottom: 5px
 }
 
-.meet-conduct .opUiContainer.md .opElementHelpIcon, .meet-conduct .opUiContainer.md [class^="intelicon-"], .meet-conduct .opUiContainer.md [class*=" intelicon-"] {
+.meet-conduct .opUiContainer.md .opElementHelpIcon,
+.meet-conduct .opUiContainer.md [class^="intelicon-"],
+.meet-conduct .opUiContainer.md [class*=" intelicon-"] {
     font-size: 20px !important
 }
 
 .meet-conduct .k-grid-header th.k-header {
     padding: 0 !important;
     vertical-align: middle !important;
-    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif
 }
 
 .meet-conduct .k-grid .k-detail-row .k-detail-cell {
@@ -395,7 +428,7 @@
     font-size: 14.5px !important;
     color: #444444;
     background-color: #ffffff;
-    font-family: Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif !important;
+    font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif !important;
     word-break: break-word
 }
 
@@ -410,22 +443,22 @@
     color: #ffffff;
     font-weight: 500;
     font-size: 15px !important;
-    font-family: Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif !important;
+    font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif !important;
     background-color: #00AEEF;
     padding: 19px;
     text-align: center;
     cursor: pointer
 }
 
-    .meet-conduct .primary-btn:hover {
-        background-color: #0071C5
-    }
+.meet-conduct .primary-btn:hover {
+    background-color: #0071C5
+}
 
 .meet-conduct .secondary-btn {
     color: #444444;
     font-weight: 500;
     font-size: 15px !important;
-    font-family: Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif !important;
+    font-family: Intel Clear, Helvetica Neue, Helvetica, Arial, sans-serif !important;
     background-color: #fafafa;
     padding: 19px;
     text-align: center;
@@ -436,11 +469,11 @@
     color: #0071C5 !important
 }
 
-    .deallink:hover {
-        text-decoration: underline !important;
-        cursor: pointer !important;
-        color: #004579 !important
-    }
+.deallink:hover {
+    text-decoration: underline !important;
+    cursor: pointer !important;
+    color: #004579 !important
+}
 
 .meet-conduct .secondary-btn:hover {
     background-color: #ebebeb
@@ -450,7 +483,8 @@
     border: 0 !important
 }
 
-.meet-conduct a:hover, .meet-conduct a:focus {
+.meet-conduct a:hover,
+.meet-conduct a:focus {
     color: #004579 !important;
     text-decoration: none
 }
@@ -471,13 +505,13 @@
     font-size: 14px !important
 }
 
-    .either-pin kendo-grid kendo-grid-list .k-icon.k-i-plus:before {
-        content: "\e005" !important
-    }
+.either-pin kendo-grid kendo-grid-list .k-icon.k-i-plus:before {
+    content: "\e005" !important
+}
 
-    .either-pin kendo-grid kendo-grid-list .k-icon.k-i-minus:before {
-        content: "\e001" !important
-    }
+.either-pin kendo-grid kendo-grid-list .k-icon.k-i-minus:before {
+    content: "\e001" !important
+}
 
 .all-labels {
     font-weight: bold !important
@@ -502,7 +536,7 @@
     padding: 0 !important
 }
 
-.meet-conduct .k-detail-row > .k-detail-cell > div:first-child {
+.meet-conduct .k-detail-row>.k-detail-cell>div:first-child {
     margin-left: 1px !important;
     margin-right: 0 !important
 }
@@ -549,10 +583,10 @@
     background-color: #fafafa !important
 }
 
-    .noMCok.k-button:hover {
-        color: #444 !important;
-        background-color: #ebebeb !important
-    }
+.noMCok.k-button:hover {
+    color: #444 !important;
+    background-color: #ebebeb !important
+}
 
 .k-combobox .k-clear-value {
     width: calc(13px + .75rem) !important;
@@ -569,9 +603,9 @@
     left: 4px !important
 }
 
-    .meet-conduct span.k-icon.k-i-filter:hover {
-        color: #0071C5 !important
-    }
+.meet-conduct span.k-icon.k-i-filter:hover {
+    color: #0071C5 !important
+}
 
 #childGrid .meet-child-grid {
     height: fit-content !important;
@@ -582,8 +616,9 @@
 .oppo-grids.physics-css.child-td-mc kendo-grid table tr th .k-i-filter {
     padding-top: 0 !important;
 }
+
 .meet-comp-header-line {
-    margin-top: 0px;  
+    margin-top: 0px;
     border-bottom: 2px solid #bcbcbc;
 }
 
@@ -605,20 +640,26 @@
     padding: 0;
 }
 
-    .groupDealers .mat-dialog-container .modal-header {
-        padding: 15px;
-        border-bottom: 1px solid #f4f4f4;
-    }
+.groupDealers .mat-dialog-container .modal-header {
+    padding: 15px;
+    border-bottom: 1px solid #f4f4f4;
+}
 
-    .groupDealers .mat-dialog-container .modal-body {
-        padding: 15px;
-    }
+.groupDealers .mat-dialog-container .modal-body {
+    padding: 15px;
+}
 
-        .groupDealers .mat-dialog-container .modal-body kendo-grid.k-grid .k-grid-content {
-            height: 350px;
-        }
+.groupDealers .mat-dialog-container .modal-body kendo-grid.k-grid .k-grid-content {
+    height: 350px;
+}
 
 kendo-grid.meetCompTable table tr th .k-cell-inner kendo-grid-filter-menu a.k-grid-filter.k-state-active {
     background: white;
     padding-left: 0px;
+}
+
+div.wrapColumnData {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }

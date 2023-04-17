@@ -44,7 +44,7 @@
                         <span title="Non – Sanctioned" *ngIf="endCust.IS_PRIMED_CUST==1 && endCust.IS_RPL==0 && (endCust.RPL_STS_CD != null && endCust.RPL_STS_CD != '' && !endCust.RPL_STS_CD.match('REVIEWWIP'))" class="fl icnBtn icnGreenBtn"><i class="intelicon-passed-completed-solid"></i></span>
                         <span title="Sanctioned" *ngIf="endCust.IS_PRIMED_CUST==1 && endCust.IS_RPL==1" class="fl icnBtn icnRedBtn"><i class="intelicon-alert-solid"></i></span>
                     </div>
-                    <div class="col-md-1 rightZeroPadding" *ngIf="!isAdmin" style="width:90px;">
+                    <div class="col-md-1 rightZeroPadding" *ngIf="!isAdmin" style="width: 90px; display: contents;">
                         <span class="fl icnBtn icnSkyBtn" (click)="addRow(endCust)"><i class="intelicon-plus-max"></i></span>
                         <span class="fl icnBtn icnGryBtn" (click)="removeRow(endCust)" *ngIf="i>0"><i class="intelicon-minus-max"></i></span>
                         <span class="fl icnBtn" *ngIf="i == 0"></span>
