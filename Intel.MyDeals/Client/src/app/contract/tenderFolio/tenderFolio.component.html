@@ -1,6 +1,3 @@
-<!-- <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" /> -->
-<!-- <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" /> -->
-<!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <loading-panel-angular style="z-index: 500; display: flex; justify-content: center; " [show]="isSpinnerLoading" 
                        [header]="spinnerMessageHeader" [description]="spinnerMessageDescription" >
@@ -88,7 +85,7 @@
         </div>
     </div>
     <div id="secFooter">
-        <button class="tndr-btn btn" type="button" (click)="ValidateTender()"><span *ngIf="!isCopyTender">Create Tender Folio</span><span *ngIf="isCopyTender">Copy</span></button>
+        <button class="tndr-btn btn" type="button" (click)="ValidateTender()" [disabled]="isValidatingTender"><span *ngIf="!isCopyTender">Create Tender Folio</span><span *ngIf="isCopyTender">Copy</span></button>
     </div>
     <kendo-dialog *ngIf="showCopyAlert" (close)="closeCopyAlert()" [height]="155" [width]="245">
         <div class="kendoAlert">Unable to successfully create the Tender Copies.</div>

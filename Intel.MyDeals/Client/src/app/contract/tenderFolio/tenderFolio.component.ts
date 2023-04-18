@@ -155,8 +155,10 @@ export class TenderFolioComponent {
         })
     }
     saveContractTender() {
-        this.spinnerMessageHeader = "Saving Tender Folio";
-        this.spinnerMessageDescription = "Saving the Tender Folio Information.";
+        // this.spinnerMessageHeader = "Saving Tender Folio";
+        // this.spinnerMessageDescription = "Saving the Tender Folio Information.";
+        this.isSpinnerLoading = true;
+        this.setBusy("Saving Tender Folio", "Saving the Tender Folio Information.");
         this.contractData.Customer = this.custSIDObj;
         this.contractData.CUST_MBR_SID = this.custSIDObj.CUST_SID;
         this.contractData.TITLE = this.tenderName;
@@ -199,6 +201,7 @@ export class TenderFolioComponent {
             }
         }
         this.createTenderContract(ps, pt);
+        this.isSpinnerLoading = false;
     }
 
     createTenderContract(ps, pt) {
@@ -250,7 +253,9 @@ export class TenderFolioComponent {
         if (this.newPricingTable["_defaultAtrbs"].REBATE_OA_MAX_AMT) this.newPricingTable["_defaultAtrbs"].REBATE_OA_MAX_AMT.value = "";
     }
 
+    private isValidatingTender: boolean = false;
     ValidateTender() {
+        this.isValidatingTender = true;
         if (!this.custSIDObj) {
             this.isCustSelected = true;
         } else {
@@ -286,6 +291,7 @@ export class TenderFolioComponent {
                     this.copyTender()
             }
         }
+        this.isValidatingTender = false;
     }
 
     saveWithoutCustDivs() {
