@@ -1,4 +1,5 @@
-/* @import url('../../../../node_modules/bootstrap/dist/css/bootstrap.min.css'); */
+@import '../../admin/kendo_grid.css';
+
 .menu-bar {
     background-color: #0071C5;
     padding: 0 6px 6px 6px;
