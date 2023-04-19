@@ -1169,18 +1169,8 @@ export class meetCompContractComponent implements OnInit {
             this.tmDirec.emit('DE');
         } else {
             //Contract redirect to DE when clicked on Deal_id in Meetcomp
-            this.meetCompSvc.getContractIDDetails(DealId).subscribe(res => {
-                this.isLoading = false;
-                if (res) {
-                    const url = "Contract#/manager/WIP/" + res['ContractId'] + "/" + res['PricingStrategyId'] + "/" + res['PricingTableId'] + "/" + DealId + "?searchTxt=" + DealId;
-                    window.open(url, '_blank');
-                }
-            },
-                error => {
-                    this.loggerSvc.error("MeetcompComponent::getContractIDDetails::Unable to get Contract Data", error);
-                    this.isLoading = false;
-                }
-            );
+            const url = `advancedSearch#/gotoDeal/${DealId}`;
+            window.open(url, '_self');
         }
     }
 
