@@ -178,7 +178,7 @@
 
 .af-setting-fixes .label {
     margin-top: 6px;
-    margin-left: -6px
+    /*margin-left: -6px*/
 }
 
 .af-setting-fixes .autofillrow .k-numerictextbox .k-numeric-wrap {
@@ -260,10 +260,10 @@
     margin-right: 3px
 }
 
-.af-setting-fixes .marketSegment {
+/*.af-setting-fixes .marketSegment {
     padding-left: 30px !important
 }
-
+*/
 .af-setting-fixes.autoFillSetting.totalcontent.modal-content {
     padding: 20px
 }
@@ -358,4 +358,10 @@
 
 div.md.intel {
     width: -webkit-fill-available;
+}
+
+.row-Autofill-Customize {
+    width: 100%;
+    margin-left: 0;
+    margin-right: 0;
 }

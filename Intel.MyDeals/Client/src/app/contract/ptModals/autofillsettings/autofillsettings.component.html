@@ -64,10 +64,10 @@
                         </div>
                     </div>
                 </div>
-                <div class="col-md-4 marketSegment">
-                    <div [hidden]="(autofillData.DEFAULT['MRKT_SEG'].value.type == 'EMBEDDEDMULTISELECT')" class="autofilltreeview row">
-                        <div class="row">
-                            <div class="col">
+                <div class="col-md-4 marketSegment" style="padding-left: 25px;">
+                    <div [hidden]="(autofillData.DEFAULT['MRKT_SEG'].value.type == 'EMBEDDEDMULTISELECT')" class="autofilltreeview">
+                        <div class="row row-Autofill-Customize">
+                            <div class="col" style="padding-right: 0; padding-left: 0;">
                                 <h5 class="headstyle" style="margin-bottom:-25px !important">Market Segment</h5>
                                 <div kendoTooltip class="helpset opElementHelpIcon intelicon-information-outlined" style="float: right; color: #f3d54e !important; font-size: 14px; " title="You cannot mix ALL & other market segments.Non Corp selects: Consumer retail pull,Education,Goverment,& SMB">
                                 </div>
@@ -88,9 +88,9 @@
                         </div>
                         <div class="col-md-12 autofillrow" *ngIf="autofillData.isVistexHybrid == true">
                             <div class="row">
-                                <div class="col-md-6" style="margin-top:-5px;width: 225px!important">
-                                    <div style="padding-left:6px">
-                                        <p class="fl label ng-binding" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 13px !important; color: #1a3e6f;white-space:pre-line;text-align:left">Overarching Maximum Volume:</p>
+                                <div class="col-md-6" style="margin-top: -5px; width: 225px !important; padding-left: 0; padding-right: 0;">
+                                    <div>
+                                        <p class="fl label ng-binding" style="padding-left: 0; font-family: 'Intel Clear'; font-weight: bold !important; font-size: 13px !important; color: #1a3e6f; white-space: pre-line; text-align: left">Overarching Maximum Volume:</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6" style="margin-top:-5px;width: 168px!important">
@@ -105,7 +105,7 @@
                         </div>
                         <div class="col-md-12 autofillrow">
                             <div class="row">
-                                <div class="col-md-6" style="margin-top:-5px;width: 225px!important">
+                                <div class="col-md-6" style="margin-top: -5px; width: 225px !important; padding-left: 0; padding-right: 0;">
                                     <div>
                                         <p class="fl opUiLabel autofillabel ng-binding" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 13px !important; color: #1a3e6f;">Overarching Maximum Dollar($):</p>
                                     </div>
