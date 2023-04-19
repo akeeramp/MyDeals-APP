@@ -778,7 +778,7 @@ export class PTE_CellChange_Util {
                 let tier = 1;
                 for (let i = empRow; i < numOfRows + empRow; i++) {
                     for (let j = 0; j < pivotDensity; j++) {
-                        this.addUpdateRowOnchangeDensity(this.hotTable, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, NUM_OF_TIERS, tier, operation);
+                        this.addUpdateRowOnchangeDensity(this.hotTable, i,cellItem, ROW_ID, updateRows, curPricingTable, contractData, NUM_OF_TIERS, tier, operation);
                         i++
                     }
                     i = i - 1;
