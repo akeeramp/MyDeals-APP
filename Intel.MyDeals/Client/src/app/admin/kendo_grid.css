@@ -300,10 +300,10 @@ a {
     padding: 5px 20px !important
 }
 
-.nav-tabs-intel-blocks.nav .dropdown-search li a {
-    background-color: #fff !important;
-    color: #0071C5 !important
-}
+    .nav-tabs-intel-blocks.nav .dropdown-search li a {
+        background-color: #fff !important;
+        color: #0071C5 !important
+    }
 
 .dropdown-menu {
     min-width: 200px !important
@@ -979,4 +979,11 @@ ngb-tooltip-window.redColorTooltip .tooltip-inner {
     background-color: #fff !important;
     height: 40px !important;
     width: 40px !important;
+}
+
+.head-navbar .nav.nav-tabs-intel-blocks li ul li a:hover, .nav.nav-tabs-intel-blocks li ul li a:focus {
+    background-color: #003c71 !important;
+    border-right: 0 solid transparent;
+    border-radius: 3px;
+    color: #fff !important;
 }
