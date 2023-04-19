@@ -757,7 +757,7 @@ export class pricingTableEditorComponent {
                 PTE_CellChange_Util.RateChgfn(rateChg, this.columns, this.curPricingTable);
             }
             if (pgChg && pgChg.length > 0) {
-                if (changes.length > 0 && changes[0].old != changes[0].new){
+                if (changes.length > 0){
                     this.createNewPrcObt(this.curPricingTable);
                     PTE_CellChange_Util.pgChgfn(pgChg, this.columns, this.curPricingTable,this.contractData,this.custCellEditor,this.newPricingTable);
                 }    
