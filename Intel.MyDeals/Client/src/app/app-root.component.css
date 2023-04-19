@@ -1,6 +1,6 @@
 div#main {
     position: fixed;
-    top: 75px;
+    margin-top: -22px;
     width: -webkit-fill-available;
     height: calc(100% - 15px);
 }

@@ -40,13 +40,8 @@
 
             .loading-screen {
                 top: 0px !important;
-                height: 100vh !important;
-                margin-top: 100px !important;
-            }
-
-            app-root {
-                display: block;
-                margin: 25px auto 0 auto;
+                height: 100% !important;
+                /*margin-top: 100px !important;*/
             }
         </style>
     <!-- #endregion -->
@@ -73,12 +68,10 @@
         @*Since Angular bundle size is increasing the overall loading time will incresing which cause delay in UI landing page to load.
             To avoid that brining the loading to _layout.cshtml page and will make is disable in dashboard*@
         <div class="loading-screen">
-            <div class="fullHeight">
-                <div class="jumbotron ng-scope">
-                    <div class="container">
-                        <h1><strong>My</strong> Deals </h1><p class="lead"> Dashboard. </p>
-                        <p>Dashboard is loading please wait...</p>
-                    </div>
+            <div class="jumbotron ng-scope">
+                <div class="container">
+                    <h1><strong>My</strong> Deals </h1><p class="lead"> Dashboard. </p>
+                    <p>Dashboard is loading please wait...</p>
                 </div>
             </div>
         </div>

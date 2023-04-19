@@ -192,7 +192,7 @@ span.caret.down_add_style {
     cursor: pointer;
     right: 20px !important;
     font-size: 12px !important;
-    margin-top: 23px !important;
+    margin-top: 10px !important;
     text-align: right;
     padding: 0 10px 0;
     position: absolute;
@@ -272,7 +272,7 @@ kendo-numerictextbox.advance-numerictextbox-style.k-widget.k-numerictextbox:focu
 }
 
 .padding-design-horizontal {
-    padding-top: 45px;
+    padding-top: 25px;
 }
 
 .advance-poly {

@@ -37,6 +37,10 @@
 /* @import "./common.css";
 @import "./kendo-custom.css"; */
 
+app-header {
+    display: initial;
+}
+
 .padding-design-horizontal {
     display: block;
     max-width: 95vw;
@@ -265,7 +269,7 @@ kendo-grid.icon-changes table tr td.k-detail-cell table tr td a.k-plus:focus:bef
     font-weight: 200 !important;
     font-style: normal !important;
     background-color: #fafafa !important;
-    margin-top: 28px !important
+    /* margin-top: 28px !important */
 }
 
 .advancedSearch:hover, .advancedSearch:focus {
@@ -1355,9 +1359,6 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
 .mybuttondialog .k-dialog-buttongroup {
     border-color: #dee2e6;
     padding: 0 !important
-}
-.mainBodyStyle {
-    top: 69px !important;
 }
 
 .dashboard-header .btn {

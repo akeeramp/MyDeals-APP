@@ -3,55 +3,55 @@
     overflow: auto !important
 }
 
-    .editor101 h4 {
-        margin-top: 0;
-        color: #0071C5
-    }
+.editor101 h4 {
+    margin-top: 0;
+    color: #0071C5
+}
 
-    .editor101 .pnl {
-        margin: 10px 10px;
-        border: 1px solid #e7e7e8
-    }
+.editor101 .pnl {
+    margin: 10px 10px;
+    border: 1px solid #e7e7e8
+}
 
-    .editor101 .head {
-        border-bottom: 1px solid #e7e7e8;
-        background-color: #e7e7e8;
-        padding: 6px;
-        font-size: 16px;
-        color: #0071C5;
-        font-weight: 600
-    }
+.editor101 .head {
+    border-bottom: 1px solid #e7e7e8;
+    background-color: #e7e7e8;
+    padding: 6px;
+    font-size: 16px;
+    color: #0071C5;
+    font-weight: 600
+}
 
-    .editor101 .body {
-        padding: 5px
-    }
+.editor101 .body {
+    padding: 5px
+}
 
-    .editor101 .icon {
-        text-align: center;
-        margin: 5px 7px;
-        width: 70px
-    }
+.editor101 .icon {
+    text-align: center;
+    margin: 5px 7px;
+    width: 70px
+}
 
-        .editor101 .icon i {
-            color: #00AEEF;
-            font-size: 30px
-        }
+.editor101 .icon i {
+    color: #00AEEF;
+    font-size: 30px
+}
 
-            .editor101 .icon i.inverse {
-                color: #ffffff;
-                font-size: 30px;
-                background-color: #00AEEF;
-                border-radius: 4px;
-                padding: 4px
-            }
+.editor101 .icon i.inverse {
+    color: #ffffff;
+    font-size: 30px;
+    background-color: #00AEEF;
+    border-radius: 4px;
+    padding: 4px
+}
 
-        .editor101 .icon div {
-            font-weight: 600
-        }
+.editor101 .icon div {
+    font-weight: 600
+}
 
-        .editor101 .icon p {
-            margin: 6px 0
-        }
+.editor101 .icon p {
+    margin: 6px 0
+}
 
 #left-pane {
     height: auto;
@@ -109,7 +109,7 @@
     padding: 4px;
     color: #003C71;
     text-align: center;
-    font: 12px Arial,sans-serif;
+    font: 12px Arial, sans-serif;
     font-weight: bold;
     margin: 1px 6px 0 2px
 }
@@ -122,7 +122,13 @@ b {
     font-weight: bold !important
 }
 
-.isHybridIdentHeader, .isHybridIdentHeader_Complete, .isHybridIdentHeader_Finalizing, .isHybridIdentHeader_Valid, .isHybridIdentHeader_Dirty, .isHybridIdentHeader_0, .isHybridIdentHeader_ {
+.isHybridIdentHeader,
+.isHybridIdentHeader_Complete,
+.isHybridIdentHeader_Finalizing,
+.isHybridIdentHeader_Valid,
+.isHybridIdentHeader_Dirty,
+.isHybridIdentHeader_0,
+.isHybridIdentHeader_ {
     font-size: 11px;
     font-weight: bold;
     color: blue;
@@ -141,6 +147,7 @@ b {
     padding-left: 10px;
     padding-top: 2px
 }
+
 #noData .k-window.k-dialog {
     border-radius: 0 !important;
 }

@@ -6,7 +6,7 @@
 <loading-panel-angular [show]="isLoading" [header]="spinnerMessageHeader" [isShowFunFact]="isBusyShowFunFact"
                        [description]="spinnerMessageDescription" [msgType]="msgType"></loading-panel-angular>
 
-<div id="horizontal" [ngClass]="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}">
+<div id="horizontal" [ngClass]="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}" style="position: relative; top: -20px;">
     <div id="center-pane" class="fr" [ngClass]="{'overFlowHidden': isTenderContract==true}">
         <div id="contractContainerWrapper">
             <div id="contractContainer" class="fullHeight new-property">
@@ -65,7 +65,7 @@
                     </div>
                     <div *ngIf="!isPTEEnable">
                         <div class="container-fluid editor101">
-                            <div class="col-md-11" style="text-align: center;padding-top: 60px;">
+                            <div class="col-md-11" style="text-align: center;padding-top: 20px;">
                                 <h4>Contract Editor 101</h4>
                             </div>
                             <div class="col-md-5">
