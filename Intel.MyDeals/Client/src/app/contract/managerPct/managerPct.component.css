@@ -556,9 +556,9 @@ kendo-grid#pctChild table tr td .cell-information {
     margin: -8px
 }
 
-#managerPCTGrid {
+/*#managerPCTGrid {
     overflow-y: scroll !important
-}
+}*/
 
 .cell-error {
     background-color: #f4949d;
@@ -757,3 +757,7 @@ kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active {
     .new-view .sumGridOptionsExpand > .k-grid-content-locked {
         height: auto !important
     }
+
+.new-view#sum-wrapper {
+    height: calc(100vh - 195px)!important;
+}
