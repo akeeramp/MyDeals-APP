@@ -1,13 +1,12 @@
-import {Component,EventEmitter,Input, Output,ChangeDetectorRef} from "@angular/core";
-import {globalSearchResultsService} from "./globalSearchResults.service";
-import {logger} from "../../shared/logger/logger";
+import { Component, EventEmitter, Input, Output, ChangeDetectorRef } from "@angular/core";
+import { globalSearchResultsService } from "./globalSearchResults.service";
+import { logger } from "../../shared/logger/logger";
 
 @Component({
   selector: "global-search-results-angular",
   templateUrl: "Client/src/app/advanceSearch/globalSearchResults/globalSearchResults.component.html",
   styleUrls:["Client/src/app/advanceSearch/globalSearchResults/globalSearchResults.component.css"]
 })
-
 export class GlobalSearchResultsComponent  {
     constructor(protected globalSearchSVC: globalSearchResultsService, private loggerSvc: logger, private ref: ChangeDetectorRef) {}
     //these are input coming from gloablsearch component
