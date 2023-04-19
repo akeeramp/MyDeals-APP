@@ -27,6 +27,10 @@ export class HeaderComponent {
         return (<any> window).usrRoleId;
     }
 
+    generateUserRole(): string {
+        return `${ this.getSuperPrefix() } ${ this.getUserRoleExtension() } ${ this.getUserRole() }`;
+    }
+
     getUserName(): string {
         return (<any> window).usrName;
     }
