@@ -552,7 +552,7 @@
                 <div *ngIf="!excludeMode" class="row" style="display: contents;">
                     <div [ngClass]="{'col-md-6':enableMultipleSelection, 'paddingRight15': !enableMultipleSelection}" style="text-align: left; width: -webkit-fill-available;">
                         <span [ngClass]="{'paddingLeft15': !enableMultipleSelection}">
-                            <span [ngClass]="{'paddingLeftNone':enableMultipleSelection}" class="text-left textProdSelector">
+                            <span [ngClass]="{'paddingLeftNone':enableMultipleSelection}" class="text-left textProdSelector" style=" margin: -14px !important;">
                                 Selected Products
                                 <span [ngClass]="{'animate':animateInclude}" class="arcAnimate ani-mate">
                                     <small role="button">&nbsp;({{addedProducts.length}})</small>
@@ -563,14 +563,14 @@
                     </div>
                     <div *ngIf="enableMultipleSelection" class="col-md-6 multiple-selector">
                         <span>
-                            <span class="paddingRightNone text-left textProdSelector">
+                            <span class="paddingRightNone text-left textProdSelector"  style="margin: -15px !important;">
                                 Excluded Products
                                 <span class="arcAnimate text-shift-left ani-mate" style="margin-right: 0 !important;">
                                     <small role="button">&nbsp;({{excludedProducts.length}})</small>
                                 </span>
                             </span>
                         </span>
-                        <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')"></trashcan>
+                        <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')"  style="margin-right: -10px !important;"></trashcan>
                     </div>
                 </div>
                 <div *ngIf="!excludeMode" class="row">
