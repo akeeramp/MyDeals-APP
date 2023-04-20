@@ -114,6 +114,7 @@ export class adminCustomerVendorsComponent {
                 this.distinctCust = distinct(response, "CUST_NM").map(
                     item => item.CUST_NM
                 );
+                this.isLoading = (this.vendorDetails && this.gridResult) ? false : true;
             }, function (response) {
                 this.loggerSvc.error("Unable to get Dropdown Customers.", response, response.statusText);
             });
@@ -128,6 +129,7 @@ export class adminCustomerVendorsComponent {
             this.distinctPartId = distinct(response, 'VNDR_ID').map(
                 item => item.VNDR_ID
             );
+            this.isLoading = (this.custData && this.gridResult) ? false : true;
         }, function (response) {
             this.loggerSvc.error("Unable to get Dropdown vendors.", response, response.statusText);
         })
@@ -180,7 +182,7 @@ export class adminCustomerVendorsComponent {
                         item => item.CTRY_CD
                     );
                     this.gridData = process(this.gridResult, this.state);
-                    this.isLoading = false;
+                    this.isLoading = (this.vendorDetails && this.custData) ? false : true;
                 },
                 function (response) {
                     this.loggerSvc.error(
