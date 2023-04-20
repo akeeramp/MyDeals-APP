@@ -1858,3 +1858,61 @@ kendo-popup.k-animation-container .k-list-filter {
     justify-content: center;
     padding-top: 7px !important
 }
+
+kendo-grid.raid-style.proselector-raid-style table tr th .k-cell-inner .k-grid-filter .k-icon {
+    color: #000;
+    opacity: .45;
+}
+
+kendo-grid.raid-style.proselector-raid-style table tr th .k-cell-inner .k-grid-filter.k-state-active {
+    background-color: #fff;
+}
+
+kendo-grid.raid-style.proselector-raid-style table tr th .k-cell-inner .k-column-title {
+    overflow: hidden !important;
+    white-space: nowrap !important;
+}
+
+
+kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner .k-link .k-column-title {
+    text-transform: capitalize;
+    color: #1a3e6f;
+    font-size: 12px !important;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-weight: 600;
+    white-space: nowrap !important;
+    overflow: hidden !important
+}
+
+kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner .k-link:hover {
+    background: transparent !important
+}
+
+/*kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-filter-menu .k-grid-filter span.k-icon.k-i-filter {
+    color: #808080
+}*/
+
+    kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-filter-menu .k-grid-filter span.k-icon.k-i-filter:hover {
+        color: #00aeef !important;
+        opacity: 1;
+    }
+
+
+#prodGrid .k-grid td {
+    border-width: 0 !important;
+    padding: 0;
+    height: 50px;
+    color: #1a3e6f;
+    font-family: 'Intel Clear', 'Arial';
+    font-weight: 500
+}
+
+#prodGrid .k-grid td,
+#prodGrid .k-grid td div,
+#prodGrid .k-grid td span {
+    white-space: nowrap !important;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    position: relative;
+    width: 100%
+}

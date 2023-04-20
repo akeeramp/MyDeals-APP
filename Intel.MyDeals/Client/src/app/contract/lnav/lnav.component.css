@@ -379,7 +379,7 @@
         color: #00aeef
     }
 
-.k-link:hover {
+#lnavContainerWrapper .k-link:hover {
     background-color: #00AEEF !important;
     color: #FFFFFF !important
 }
