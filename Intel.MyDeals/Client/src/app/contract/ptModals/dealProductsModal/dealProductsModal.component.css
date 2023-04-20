@@ -121,5 +121,5 @@ button.excelText.differ-artho-excel.iconsize.k-button-icontext.k-button.k-grid-e
     background: #fff !important;
     padding: 0 !important;
     border-radius: 0 !important;
-    overflow: visible !important;
+    overflow-x: hidden !important;
 }
