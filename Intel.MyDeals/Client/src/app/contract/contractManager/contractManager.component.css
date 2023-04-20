@@ -569,11 +569,11 @@ kendo-switch.contract-toggle {
 }
 
 .contract_manage_correction {
-    padding: 15px 25px !important;
+    padding: 15px 25px 0px !important;
     height: 250px !important;
     background-color: #003C71 !important;
     color: #ffffff !important;
-    height: 275px !important;
+    height: 22em !important;
 }
 
 .contract_manage_correction p {
@@ -597,7 +597,7 @@ button.btn.btn-sm.btn-skyblue.contract_manager_file:hover {
 }
 
 button.btn.btn-sm.btn-grey.contract_correction_cancel {
-    margin: -124px 10px -30px 10px !important;
+    margin: -150px 10px -30px !important;
     width: 143px !important;
     background-color: #e4e9ea !important;
     border: 1px solid #e4e9ea !important;
@@ -606,7 +606,7 @@ button.btn.btn-sm.btn-grey.contract_correction_cancel {
 }
 
 button.btn.btn-sm.btn-grey.contract_correction_backbtn {
-    margin: -124px 0px -30px -92px !important;
+    margin: -150px 0px -30px -92px !important;
     width: 135px !important;
     background-color: #e4e9ea !important;
     border: 1px solid #e4e9ea !important;
@@ -630,7 +630,7 @@ button.btn.btn-sm.btn-grey.contract_correction_cancel:hover {
 }
 
 button.btn.btn-sm.btn-skyblue.contract_done_btn {
-    top: -50px !important;
+    top: -64px !important;
     position: relative !important;
     left: 65px !important;
     width: 135px !important;
@@ -659,14 +659,13 @@ button.btn.btn-sm.btn-skyblue.contract_done_btn:hover {
 
 .c2a-popup-style {
     padding: 15px 25px !important;
-    height: 250px !important;
     background-color: #003C71 !important;
     color: #ffffff !important;
-    height: 275px !important;
+    height: 22em !important;
 }
 
 button.btn.btn-sm.btn-grey.c2a-back-btnstyle {
-    margin: -124px 0px -30px -92px !important;
+    margin: -150px 0px -30px -70px !important;
     width: 135px !important;
     background-color: #e4e9ea !important;
     border: 1px solid #e4e9ea !important;
@@ -721,12 +720,12 @@ button.btn.btn-sm.btn-grey.c2a-back-btnstyle:hover {
 
 .contract_manage_uploadscreen {
     padding: 15px 25px !important;
-    height: 250px !important;
+    /*height: 250px !important;*/
     background-color: #003C71 !important;
     color: #ffffff !important;
     min-height: 280px !important;
     max-height: 320px !important;
-    height: max-content !important;
+    height: 22em !important;
 }
 
 .contract_manage_uploadscreen p {
