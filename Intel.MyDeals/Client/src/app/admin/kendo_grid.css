@@ -987,3 +987,11 @@ ngb-tooltip-window.redColorTooltip .tooltip-inner {
     border-radius: 3px;
     color: #fff !important;
 }
+kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner .k-link .k-column-title {
+    white-space: nowrap !important;
+}
+
+#prodGrid.opUiContainer.md.k-grid td {
+    border-width: 0 !important;
+    white-space: nowrap !important
+}
