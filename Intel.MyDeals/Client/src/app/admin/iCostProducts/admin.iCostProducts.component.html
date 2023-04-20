@@ -123,8 +123,8 @@
         </div>
     </div>
     <div *ngIf="!addNewRules">
-        <div class="col-md-12">
-            <form name="rules" novalidate>
+        <div class="col-md-12" style="margin-right:100em !important">
+            <form name="rules" novalidate >
                 <div class="panel panel-primary">
                     <div class="panel-heading">
                         <button class="btn btn-primary small k-grid-add" (click)="savePCTRules()"
@@ -139,7 +139,7 @@
                             <div class="row form-inline">
                                 <div class="col-md-3">
                                     <div class="opp-d-filter">
-                                        <p><label class="control-label">Select Product Type:</label></p>
+                                        <p><label class="control-label" style="margin-right: 281px !important;">Select Product Type:</label></p>
                                         <kendo-combobox id="productDropdown" title="Select a Product Type"
                                                         placeholder="Select..." [(ngModel)]="pctRule.DEAL_PRD_TYPE_SID"
                                                         [data]="distinctProductType | orderBy: 'PRD_TYPE'"
@@ -152,7 +152,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="opp-d-filter">
-                                        <p><label class="control-label">Select Product Vertical:</label></p>
+                                        <p><label class="control-label" style="margin-right: 111px !important;">Select Product Vertical:</label></p>
                                         <kendo-combobox id="productDropdown" title="Select a Vertical"
                                                         placeholder="Select..." [(ngModel)]="pctRule.PRD_CAT_NM_SID"
                                                         [data]="ProductVertical" [ngModelOptions]="{standalone: true}"
@@ -165,7 +165,7 @@
                                     </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="control-label">Select Level:</label>
+                                        <label class="control-label " style="margin-right: 198px !important;">Select Level:</label>
                                         <div id="radioButton">
                                             <div class="radio-inline" *ngFor="let type of costTestProductType">
                                                 <input type="radio" title="type.name" [value]="type.name"
