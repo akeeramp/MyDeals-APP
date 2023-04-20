@@ -1,14 +1,302 @@
-﻿.btnClose,.noaccessex{cursor:pointer}::ng-deep #legalGrid tr td{white-space:nowrap!important;height:60px!important}.leagalgridheader{white-space:normal}#RulesDetailsBodyDiv{max-height:calc(100vh - 180px);overflow:scroll}.dealTools{width:20px;float:LEFT;margin-top:3px}.grid-link-checkbox with-font{height:17px;width:17px;border:2px solid}.legaliexgridbuttons{background:0 0;border:none;font-size:x-large}.noaccessex{font-size:25px;color:#00aeef}::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar{background-color:#04b8fb!important;cursor:not-allowed}.deal-align,.dealist-align{width:100%!important;height:361px!important}.exceptionDetailsForm,.exceptionsCompareForm{overflow:auto;width:100%;height:calc(85vh - 150px)!important;border-bottom:none;margin-bottom:30px}.iconalign{float:right;font-size:24px}.divHeader,.fontcss{font-weight:700;font-size:13px!important}.h3align{margin-top:0}.divHeader{padding-left:10px;margin-bottom:0;margin-left:15px}.notes{font-size:14px;margin-left:40px;padding:0}.bluebold{color:#0071c5;font-weight:600}.redbold{color:red;font-weight:700}.btnClose{float:right;margin-top:-15px;background:0 0;padding:3px;font-size:22px}.footer{position:fixed;bottom:50px;width:100%;height:60px;margin-left:-2px}#legalGrid{height:calc(100vh - 180px) !important}#legalGrid .k-plus::before,.k-i-plus::before{content:"\e005"!important}#legalGrid .k-minus::before,.k-i-minus::before{content:"\e006"!important}.header-css{margin-top:30px;margin-bottom:0;font-size:26px;margin-left:7px}.float{float:right;padding-top:5px;cursor:pointer}.align-padding{padding-left:4px!important}.cancel-btn{margin-top:-49px;margin-left:372px}.save-btn{margin-left:382px;margin-top:-16px}.checkbox-align{margin-left:7px!important}.dealList{margin:0 0 0 35px!important;border-color:#000!important}.applyopacity{opacity:.4}.edit-savebtn{margin-left:772px;margin-top:-45px}.edit-cancelbtn{margin-top:-45px;margin-left:759px}#ruleModal .modal-footer{bottom:-59px;width:100%;border:1px solid #003c71;margin-left:0;height:67px}#ruleModal .modal-body{overflow:hidden;width:100%;height:100px!important;border-bottom:none}#ruleModal .modalBlueBody{background-color:#003c71;color:#fff}#ruleModal{height:100%}#ruleModal .modal-header{padding:25px;border-bottom:1px solid #e5e5e5;min-height:16.5px}.legal-download-custom mat-dialog-container{padding:0!important}.dealbtn-margin{margin-left:306px!important}.deal-btn{margin-top:-15px;margin-left:660px}.custom-dialog-container .mat-dialog-container{padding-left:0!important;padding-top:0!important;padding-right:0!important}.delete-btn{margin-top:-49px;margin-left:276px}.legalheader-align{color:#fff;background-color:#0071c5;border-color:#0071c5;box-shadow:none;font-size:17px}.legalheader-align:hover{background-color:#008bd1!important;border-color:#008bd1!important}.legalpage-margin{margin-top:4px}.show-float-icon{font-size:30px;float:right;margin:auto;margin-right:unset}.viewExceptionheader{background-color:#0977ca;color:white;font-size:27px;padding:5px 8px 0 7px}.divHeadermain{margin-bottom:0}.paneldivheader{background-color:#003C71;color:white;font-size:27px;padding:0 20px 0 25px}.gridCheckboxAlign{margin-left:20px}.dealList{height:calc(70vh - 150px)!important;margin-bottom:30px}.dealistp{padding:10px 0 0 25px;font-weight:600}.dealListbtn{margin:25px 0 0 25px}
+﻿.btnClose, .noaccessex {
+    cursor: pointer
+}
+
+::ng-deep #legalGrid tr td {
+    white-space: nowrap !important;
+    height: 60px !important
+}
+
+.leagalgridheader {
+    white-space: normal
+}
+
+#RulesDetailsBodyDiv {
+    height: calc(100vh - 230px) !important;
+    overflow-x: scroll;
+}
+
+.dealTools {
+    width: 20px;
+    float: LEFT;
+    margin-top: 3px
+}
+
+.grid-link-checkbox with-font {
+    height: 17px;
+    width: 17px;
+    border: 2px solid
+}
+
+.legaliexgridbuttons {
+    background: 0 0;
+    border: none;
+    font-size: x-large
+}
+
+.noaccessex {
+    font-size: 25px;
+    color: #00aeef
+}
+
+::ng-deep .mat-slide-toggle.mat-checked .mat-slide-toggle-bar {
+    background-color: #04b8fb !important;
+    cursor: not-allowed
+}
+
+.deal-align, .dealist-align {
+    width: 100% !important;
+    height: 361px !important
+}
+
+.exceptionDetailsForm, .exceptionsCompareForm {
+    overflow: auto;
+    width: 100%;
+    height: calc(85vh - 150px) !important;
+    border-bottom: none;
+    margin: 0 15px 30px 15px;
+}
+
+.iconalign {
+    float: right;
+    font-size: 24px
+}
+
+.divHeader, .fontcss {
+    font-weight: 700;
+    font-size: 13px !important
+}
+
+.h3align {
+    margin-top: 0
+}
+
+.divHeader {
+    padding-left: 10px;
+    margin-bottom: 0;
+    margin-left: 15px
+}
+
+.notes {
+    font-size: 14px;
+    margin-left: 40px;
+    padding: 0
+}
+
+.bluebold {
+    color: #0071c5;
+    font-weight: 600
+}
+
+.redbold {
+    color: red;
+    font-weight: 700
+}
+
+.btnClose {
+    float: right;
+    margin-top: -15px;
+    background: 0 0;
+    padding: 3px;
+    font-size: 22px
+}
+
+.footer {
+    position: fixed;
+    bottom: 50px;
+    width: 100%;
+    height: 60px;
+    margin-left: -2px
+}
+
+#legalGrid {
+    height: calc(100vh - 180px) !important
+}
+
+    #legalGrid .k-plus::before, .k-i-plus::before {
+        content: "\e005" !important
+    }
+
+    #legalGrid .k-minus::before, .k-i-minus::before {
+        content: "\e006" !important
+    }
+
+.header-css {
+    margin-top: 30px;
+    margin-bottom: 0;
+    font-size: 26px;
+    margin-left: 7px
+}
+
+.float {
+    float: right;
+    padding-top: 5px;
+    cursor: pointer
+}
+
+.align-padding {
+    padding-left: 4px !important
+}
+
+.cancel-btn {
+    margin-top: -49px;
+    margin-left: 372px
+}
+
+.save-btn {
+    margin-left: 382px;
+    margin-top: -16px
+}
+
+.checkbox-align {
+    margin-left: 7px !important
+}
+
+.dealList {
+    margin: 0 0 0 35px !important;
+    border-color: #000 !important
+}
+
+.applyopacity {
+    opacity: .4
+}
+
+.edit-savebtn {
+    margin-left: 772px;
+    margin-top: -45px
+}
+
+.edit-cancelbtn {
+    margin-top: -45px;
+    margin-left: 759px
+}
+
+#ruleModal .modal-footer {
+    bottom: -59px;
+    width: 100%;
+    border: 1px solid #003c71;
+    margin-left: 0;
+    height: 67px
+}
+
+#ruleModal .modal-body {
+    overflow: hidden;
+    width: 100%;
+    height: 100px !important;
+    border-bottom: none
+}
+
+#ruleModal .modalBlueBody {
+    background-color: #003c71;
+    color: #fff
+}
+
+#ruleModal {
+    height: 100%
+}
+
+    #ruleModal .modal-header {
+        padding: 25px;
+        border-bottom: 1px solid #e5e5e5;
+        min-height: 16.5px
+    }
+
+.legal-download-custom mat-dialog-container {
+    padding: 0 !important
+}
+
+.dealbtn-margin {
+    margin-left: 306px !important
+}
+
+.deal-btn {
+    margin-top: -15px;
+    margin-left: 660px
+}
+
+.custom-dialog-container .mat-dialog-container {
+    padding-left: 0 !important;
+    padding-top: 0 !important;
+    padding-right: 0 !important;
+    overflow: unset !important;
+}
+
+.delete-btn {
+    margin-top: -49px;
+    margin-left: 276px
+}
+
+.legalheader-align {
+    color: #fff;
+    background-color: #0071c5;
+    border-color: #0071c5;
+    box-shadow: none;
+    font-size: 17px
+}
+
+    .legalheader-align:hover {
+        background-color: #008bd1 !important;
+        border-color: #008bd1 !important
+    }
+
+.legalpage-margin {
+    margin-top: 4px
+}
+
+.show-float-icon {
+    font-size: 30px;
+    float: right;
+    margin: auto;
+    margin-right: unset
+}
+
+.viewExceptionheader {
+    background-color: #0977ca;
+    color: white;
+    font-size: 27px;
+    padding: 5px 8px 0 7px
+}
+
+.divHeadermain {
+    margin-bottom: 0
+}
+
+.paneldivheader {
+    background-color: #003C71;
+    color: white;
+    font-size: 27px;
+    padding: 0 20px 0 25px
+}
+
+.gridCheckboxAlign {
+    margin-left: 20px
+}
+
+.dealList {
+    height: calc(70vh - 150px) !important;
+    margin-bottom: 30px
+}
+
+.dealistp {
+    padding: 10px 0 0 25px;
+    font-weight: 600
+}
+
+.dealListbtn {
+    margin: 25px 0 0 25px
+}
+
 .toggle-align-grid.toggle-button-custom.mat-slide-toggle.mat-disabled {
     opacity: 0.7 !important;
 }
+
 .downloader-pop-up .modalBlueBody {
     padding: 5px 15px !important;
 }
 
-.downloader-pop-up .modalBlueBody h3#modalTitle {
-    margin-bottom: 0;
-}
+    .downloader-pop-up .modalBlueBody h3#modalTitle {
+        margin-bottom: 0;
+    }
 
     .downloader-pop-up .modalBlueBody #btnClose {
         float: right;
@@ -24,6 +312,7 @@
     text-align: right;
     border-top: 1px solid #f4f4f4 !important;
 }
+
 #legalGrid.k-grid .k-grid-content {
     overflow: overlay !important;
 }

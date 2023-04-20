@@ -160,7 +160,7 @@ export class adminlegalExceptionComponent {
     public openCreateExceptionDialog(): void {
         const creacteExceptionobj = this.intializeformdata();
         const dialogRef = this.dialog.open(adminexceptionDetailsComponent, {
-            width: "1800px",
+            width: "95%",
             maxWidth:"100vw",
             data: {
                 dialogTitle: "Add New Exception Record",

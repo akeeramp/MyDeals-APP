@@ -11,7 +11,7 @@ import { each, compact, sortBy, filter } from 'underscore';
         <span id="searchIcon" class="k-icon k-i-zoom"></span>
     </div>
     <cdk-virtual-scroll-viewport [itemSize]="7">
-        <ul style="overflow:hidden">      
+        <ul style="overflow:hidden; max-width: 300px;">      
           <li #itemElement
             *cdkVirtualFor="let item of currentData; let i = index;"
             (click)="onSelectionChange(valueAccessor(item), itemElement)"
@@ -23,7 +23,7 @@ import { each, compact, sortBy, filter } from 'underscore';
               class="k-checkbox"
               [checked]="isItemSelected(item)" />
             <label
-              class="k-multiselect-checkbox k-checkbox-label" style="white-space:break-spaces;"
+              class="k-multiselect-checkbox k-checkbox-label" style="white-space:normal !important;"
               for="chk-{{valueAccessor(item)}}">
                 {{ textAccessor(item) }}
             </label>
