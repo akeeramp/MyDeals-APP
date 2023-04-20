@@ -119,4 +119,14 @@ span.pre-prod-environment {
 
 .navbar {
     display: block;
+    padding: unset;
+    padding-top: 0.5rem;
+}
+
+.menu-bar .nav {
+    margin-left: -10px !important;
+}
+
+#myDeals-navbar-collapse {
+    margin-right: -15px;
 }
