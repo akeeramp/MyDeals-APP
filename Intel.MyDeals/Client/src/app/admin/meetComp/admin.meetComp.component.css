@@ -111,7 +111,7 @@ button#saveImportBtn.saveimported-databtn:hover {
   border: 0.5px solid #003c71;
 }
 #modalBodyDiv .row {
-  margin-left: 20px;
+  margin-left: -5px;
   width: 733px;
 }
 .notes {
@@ -204,7 +204,8 @@ button#saveImportBtn.saveimported-databtn:hover {
   position: relative;
   margin-top: -150px;
   border-radius:0px !important;
-  overflow:hidden !important
+  overflow:hidden !important;
+  margin-right: 30px !important;
 }
 #meetCompAlert .k-dialog .k-button {
   color: black;

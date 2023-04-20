@@ -12,7 +12,7 @@
         </div>
         <div id="modalBodyDiv" class="modal-body" *ngIf="HasBulkUploadAccess">
             <div id="extractMeetComp" *ngIf="meetComps.length <= 0">
-                <div class="row" style="margin-top: 10px;">
+                <div class="row" style="margin-top: -5px;">
                     <div class="col-md-11 notes-meetcomp">
                         <span class="redbold">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Duplicate
                             entries will be ignored. Your attachment will upload after clicking the "Upload Meet Comp"
@@ -28,13 +28,13 @@
 
                     </div>
                 </div>
-                <div class="form-group row">
+                <div class="form-group row" style="margin-bottom: 5px">
                     <div class="col-md-8" id="meetCompurlLink">
                         <a class="text-dwnlod-style-bulkupload" download target="_blank"  href="/api/FileAttachments/GetMeetCompTemplateFile">Click here to
                             download the template</a>
                     </div>
                     <div class="col-md-3">
-                        <button (click)="uploadFile()" class="btn btn-primary" style="margin-left: 25px">Upload Meet
+                        <button (click)="uploadFile()" class="btn btn-primary" style="margin-left: -5px">Upload Meet
                             Comp</button>
                     </div>
                 </div>
