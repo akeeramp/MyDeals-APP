@@ -107,7 +107,7 @@
                             <div class="row">
                                 <div class="col-md-6" style="margin-top: -5px; width: 225px !important; padding-left: 0; padding-right: 0;">
                                     <div>
-                                        <p class="fl opUiLabel autofillabel ng-binding" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 13px !important; color: #1a3e6f;">Overarching Maximum Dollar($):</p>
+                                        <p class="fl opUiLabel autofillabel ng-binding" style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 13px !important; color: #1a3e6f; padding-left: 0;">Overarching Maximum Dollar($):</p>
                                     </div>
                                 </div>
                                 <div class="col-md-6" style="margin-top:-5px;width: 168px!important">
@@ -129,16 +129,22 @@
             </div>
 
 
-            <div class="row" style="width:100%">
+            <div class="row" style="width: 100%; margin-left: 0; margin-right: 0;">
                 <div class="col-md-8">
                     <!--empty space-->
                 </div>
-                <div class="col-md-2" style="padding-right: 10px;padding-left:10px">
-                    <button mat-button (click)="onNoClick()" class="afBtn afClsBtn auto-cs-btn" style="">Cancel</button>
+                <div class="col-md-4" style=" padding-left: 25px; padding-right: 0;">
+                    <div class="btnsAutofillers">
+                        <button mat-button (click)="onNoClick()" class="afBtn afClsBtn auto-cs-btn" style="">Cancel</button>
+                        <button mat-button (click)="onSave()" cdkFocusInitial class="afBtn afSaveBtn auto-cs-btn" style="border: 1px solid;">Save & Close</button>
+                    </div>
+                </div>
+                <!--<div class="col-md-2" style="padding-right: 10px;padding-left:10px">
+                    
                 </div>
                 <div class="col-md-2">
-                    <button mat-button (click)="onSave()" cdkFocusInitial class="afBtn afSaveBtn auto-cs-btn" style="border: 1px solid;">Save & Close</button>
-                </div>
+                    
+                </div>-->
             </div>
 
         </div>

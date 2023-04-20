@@ -365,3 +365,15 @@ div.md.intel {
     margin-left: 0;
     margin-right: 0;
 }
+
+.btnsAutofillers {
+    display: flex;
+    align-items: center;
+    justify-content: start;
+    width: 100%;
+}
+
+.af-setting-fixes .btnsAutofillers button {
+    margin-left: 5px !important;
+    margin-right: 5px !important;
+}
