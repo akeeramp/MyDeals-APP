@@ -1458,3 +1458,16 @@ button.k-button.first-child-btn.cancel-extend-deal:hover {
 kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li span.k-icon.k-i-reload {
     font-family: "WebComponentsIcons";
 }
+.dropdown:hover .tool_column_bg {
+    background-color: #1891ee !important;
+}
+.clearfix:hover .tool_column_bg {
+    background-color: #1891ee !important;
+}
+
+.clearfix:hover .tool_column_bg .text_bg {
+    color: white !important;
+}
+.dropdown:hover .tool_column_bg .text_bg {
+    color: white !important;
+}
