@@ -51,7 +51,7 @@
 
 .exceptionDetailsForm, .exceptionsCompareForm {
     overflow: auto;
-    width: 100%;
+    width: 98%;
     height: calc(85vh - 150px) !important;
     border-bottom: none;
     margin: 0 15px 30px 15px;

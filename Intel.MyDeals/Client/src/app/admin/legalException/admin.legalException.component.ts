@@ -160,7 +160,7 @@ export class adminlegalExceptionComponent {
     public openCreateExceptionDialog(): void {
         const creacteExceptionobj = this.intializeformdata();
         const dialogRef = this.dialog.open(adminexceptionDetailsComponent, {
-            width: "95%",
+            width: "98%",
             maxWidth:"100vw",
             data: {
                 dialogTitle: "Add New Exception Record",
@@ -192,7 +192,7 @@ export class adminlegalExceptionComponent {
         {  
             this.changedateformat(item);
             const dialogRef = this.dialog.open(adminexceptionDetailsComponent, {
-                width: "1800px",
+                width: "98%",
                 maxWidth: "100vw",
                 data: {
                     dialogTitle: "Edit Exception Record",
@@ -247,7 +247,7 @@ export class adminlegalExceptionComponent {
                     if (selectedlist[0].USED_IN_DL == 'Y') {
 
                         const dialogRef = this.dialog.open(adminamendmentExceptioncomponent, {
-                            width: "1800px",
+                            width: "98%",
                             maxWidth: "100vw",
                             data: {
                                 dialogTitle: "Add Amendment Exception Record",
@@ -330,7 +330,7 @@ export class adminlegalExceptionComponent {
                     this.changedateformat(comareobj2);
 
                     const dialogRef = this.dialog.open(admincompareExceptionscomponent, {
-                        width: "1800px",
+                        width: "98%",
                         maxWidth: "100vw",
                         data: {
                             dialogTitle: "Compare Exceptions",

@@ -15,25 +15,25 @@
                     [kendoGridExpandDetailsBy]="expandDetailsBy" [(expandedDetailKeys)]="expandedDetailKeys" (detailExpand)="detailExpand($event)" class="legal-exception-design">
 
             <ng-template kendoGridToolbarTemplate>
-                <button *ngIf="editAccess" kendoButton (click)="openCreateExceptionDialog()" class="k-button k-button-icontext legalheader-align">
+                <button *ngIf="editAccess" kendoButton (click)="openCreateExceptionDialog()" class="k-button k-button-icontext legalheader-align" style="border:unset !important;">
                     <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RECORD
                 </button>
-                <button (click)="clearFilter()" class="k-button k-button-icontext legalheader-align">
+                <button (click)="clearFilter()" class="k-button k-button-icontext legalheader-align" style="border:unset !important;">
                     <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTER
                 </button>
-                <button (click)="openCompareExceptionDialog()" class="k-button k-button-icontext legalheader-align">
+                <button (click)="openCompareExceptionDialog()" class="k-button k-button-icontext legalheader-align" style="border:unset !important;">
                     <span class="k-icon intelicon-related k-icon-md k-family"></span>COMPARE
                 </button>
-                <button *ngIf="editAccess" (click)="openCreateAmendmentExceptionDialog()" class="k-button k-button-icontext legalheader-align">
+                <button *ngIf="editAccess" (click)="openCreateAmendmentExceptionDialog()" class="k-button k-button-icontext legalheader-align" style="border:unset !important;">
                     <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD AMENDMENT
                 </button>
-                <button *ngIf="editAccess" (click)="download()" class="k-button k-button-icontext legalheader-align">
+                <button *ngIf="editAccess" (click)="download()" class="k-button k-button-icontext legalheader-align" style="border:unset !important;">
                     <span class="intelicon-ms-excel-outlined k-icon-md k-family"></span>DOWNLOAD
                 </button>
-                <button (click)="refreshGrid()" class="k-button k-button-icontext legalheader-align">
+                <button (click)="refreshGrid()" class="k-button k-button-icontext legalheader-align" style="border:unset !important;">
                     <span class="k-icon k-i-reload k-icon-md"></span>REFRESH
                 </button>
-                <button (click)="Hideshow()" class="k-button k-button-icontext legalheader-align show-float-icon">
+                <button (click)="Hideshow()" class="k-button k-button-icontext legalheader-align show-float-icon" style="border:unset !important;">
                     <span class="intelicon-show-results-outlined" title="Show Additional Column"></span>
                 </button>
             </ng-template>
