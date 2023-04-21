@@ -454,7 +454,7 @@ i.cn-close-panel {
     -webkit-transform-origin: 50% 100%;
     -moz-transform-origin: 50% 100%;
     -ms-transform-origin: 50% 100%;
-    transform-origin: 62% 100%;
+    transform-origin: 50% 100%;
     overflow: hidden;
     -webkit-transition: border .3s ease;
     -moz-transition: border .3s ease;
@@ -946,7 +946,7 @@ i.cn-close-panel {
 .product_details_scroll .k-grid-content.k-virtual-content {
     height: 116px !important
 }
-.valid_0 {
+/*.valid_0 {
     background-color: #eeeeee
 }
 
@@ -2833,7 +2833,7 @@ i.cn-close-panel {
 
 .product_details_scroll .k-grid-content.k-virtual-content {
     height: 116px !important
-}
+}*/
 .draggable.draggable-fix {
     margin-left: -180px;
 }
