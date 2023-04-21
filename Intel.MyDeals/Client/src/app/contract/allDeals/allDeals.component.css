@@ -379,7 +379,8 @@ kendo-grid.deals_grid_h table tr th .k-cell-inner kendo-grid-filter-menu a.k-gri
     overflow: overlay !important;
 }
 #allDeals .dealCell.dealsIcon-dealcell {
-    padding-top: 18px;
+/*    padding-top: 18px;*/
+    vertical-align: middle;
 }
 
 #allDeals td .breakoutColumn .rowValueHeight {

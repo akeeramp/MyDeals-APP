@@ -144,10 +144,10 @@ export class allDealsComponent {
                         filters: [
                             {
                                 field: "DC_ID",
-                                operator: "eq",
+                                operator: "contains",
                                 value: this.searchFilter
                             }, {
-                                field: "WF_STG_CD",
+                                field: "PS_WF_STG_CD",
                                 operator: "contains",
                                 value: this.searchFilter
                             }, {
@@ -236,7 +236,9 @@ export class allDealsComponent {
         }
         let dealsTypesArray = Array.from(new Set(modDealTypes));
         this.dealCnt = modDealTypes.length;
-        return modDealTypes.length > 0 ? this.dealCnt + " " + dealsTypesArray.join() + (this.dealCnt === 1 ? " Deal" : " Deals") : "";
+        // Pulled out long deals types list since tabs tell the types.
+        //return modDealTypes.length > 0 ? this.dealCnt + " " + dealsTypesArray.join() + (this.dealCnt === 1 ? " Deal" : " Deals") : "";
+        return modDealTypes.length > 0 ? this.dealCnt + (this.dealCnt === 1 ? " Deal Total" : " Deals Total") : "";
     }
     
     loadAllDealsData() {

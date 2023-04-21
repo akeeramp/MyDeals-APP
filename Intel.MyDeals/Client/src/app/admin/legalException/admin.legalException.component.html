@@ -58,27 +58,13 @@
 
                 <ng-template kendoGridCellTemplate let-dataItem let-rowIndex="rowIndex">
                     <div class="row">
-                        <div class="col">
-                            <button type="button" class="legaliexgridbuttons" title='View' (click)="viewExceptionDetails(dataItem)">
-                                <span class="intelicon-search"></span>
-                            </button>
-                        </div>
-                        <div class="col" *ngIf="dataItem.DEALS_USED_IN_EXCPT == '' || dataItem.DEALS_USED_IN_EXCPT == null">
-                            <button type="button" class="legaliexgridbuttons intelicon-edit" title='Edit' (click)="openEditExceptionDialog(dataItem)">
-                            </button>
-                        </div>
-                        <div class="col" *ngIf="dataItem.DEALS_USED_IN_EXCPT != '' && dataItem.DEALS_USED_IN_EXCPT != null">
-                            <button type="button" class="legaliexgridbuttons intelicon-no-access noaccessex" title='Edit' (click)="openEditExceptionDialog(dataItem)">
-                            </button>
-                        </div>
-                        <div class="col">
-                            <button type="button" [ngClass]="{'applyopacity': dataItem.DEALS_USED_IN_EXCPT == '' || dataItem.DEALS_USED_IN_EXCPT == null}" class="legaliexgridbuttons intelicon-reports-outlined" title='List of deals applied to this Exception' (click)="openDealListExceptionDialog(dataItem)">
-                            </button>
-                        </div>
-                        <div class="col">
-                            <button type="button" [ngClass]="{'applyopacity': dataItem.DEALS_USED_IN_EXCPT != '' && dataItem.DEALS_USED_IN_EXCPT != null}" class="legaliexgridbuttons intelicon-trash-solid dealTools" title='Only exception not applied to a deal can be Deleted' (click)="DeleteException(dataItem,rowIndex)">
-                            </button>
-                        </div>
+                        <button type="button" class="legaliexgridbuttons" title='View' (click)="viewExceptionDetails(dataItem)" style="margin-left:6px;">
+                            <span class="intelicon-search"></span>
+                        </button>
+                        <button *ngIf="dataItem.DEALS_USED_IN_EXCPT == '' || dataItem.DEALS_USED_IN_EXCPT == null" type="button" class="legaliexgridbuttons intelicon-edit" title='Edit' (click)="openEditExceptionDialog(dataItem)"></button>
+                        <button *ngIf="dataItem.DEALS_USED_IN_EXCPT != '' && dataItem.DEALS_USED_IN_EXCPT != null" type="button" class="legaliexgridbuttons intelicon-no-access noaccessex" title='Edit' (click)="openEditExceptionDialog(dataItem)"></button>
+                        <button type="button" [ngClass]="{'applyopacity': dataItem.DEALS_USED_IN_EXCPT == '' || dataItem.DEALS_USED_IN_EXCPT == null}" class="legaliexgridbuttons intelicon-reports-outlined" title='List of deals applied to this Exception' (click)="openDealListExceptionDialog(dataItem)"></button>
+                        <button type="button" [ngClass]="{'applyopacity': dataItem.DEALS_USED_IN_EXCPT != '' && dataItem.DEALS_USED_IN_EXCPT != null}" class="legaliexgridbuttons intelicon-trash-solid dealTools" title='Only exception not applied to a deal can be Deleted' (click)="DeleteException(dataItem,rowIndex)"></button>
                     </div>
                 </ng-template>
 
