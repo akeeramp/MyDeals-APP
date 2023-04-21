@@ -133,10 +133,10 @@
                             <li *ngIf="isRealSA() || isCustomerAdmin() || isDeveloper()">
                                 <a href="#CustomerVendors">Customer - Vendors</a>
                             </li>
-                            <li *ngIf="isRealSA() || isCustomerAdmin() || isDeveloper()">
+                            <li *ngIf="isRealSA() || isCustomerAdmin() || (isDeveloper() && getUserRole() != 'RA' )">
                                 <a href="#UnifiedCustomerAdmin">Unified Customer Admin</a>
                             </li>
-                            <li *ngIf="getUserRole() == 'RA' || !isDeveloper()">
+                            <li *ngIf="getUserRole() == 'RA' || ( !isDeveloper() && getUserRole() != 'GA') ">
                                 <a href="#UnifiedCustomerAdmin">Unified Customer Admin</a>
                             </li>
                             <li>
