@@ -975,6 +975,11 @@ export class contractDetailsComponent {
         else
             this.isLoading = false;
     }
+
+    isFooterFullWidth(): boolean {
+        return document.getElementById('lnavContainerWrapper') == null;
+    }
+
     ngOnInit() {
         try {
             this.isLoading=true;

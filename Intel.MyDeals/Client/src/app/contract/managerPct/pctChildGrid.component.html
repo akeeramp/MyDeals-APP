@@ -59,13 +59,13 @@
     <kendo-grid-column title="CAP" field="CAP" [headerClass]="{'headerClass':true}" [width]="100"
         [hidden]="(dealType == 'KIT' && !hasPermissionPrice) || (dealType == 'ECAP' && !hasSpecialPricePermission)" *ngIf="!isHidden('CAP')">
         <ng-template kendoGridCellTemplate let-dataItem>
-             <span [ngClass]="{'cell-warning': isErrorOrWarning(dataItem, 'CAP'),'cell-information':isInformation(dataItem,'CAP')}">
+             <span class="cell-common" [ngClass]="{'cell-warning': isErrorOrWarning(dataItem, 'CAP'),'cell-information':isInformation(dataItem,'CAP')}">
                  {{dataItem.CAP | currency}}
              </span>
          </ng-template></kendo-grid-column>
     <kendo-grid-column title="ECAP Price" field="ECAP_PRC" [headerClass]="{'headerClass':true}" [width]="120" *ngIf="!isHidden('ECAP_PRC')">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <span [ngClass]="{'cell-warning': isErrorOrWarning(dataItem, 'ECAP_PRC'),'cell-information':isInformation(dataItem,'ECAP_PRC')}">
+            <span class="cell-common" [ngClass]="{'cell-warning': isErrorOrWarning(dataItem, 'ECAP_PRC'),'cell-information':isInformation(dataItem,'ECAP_PRC')}">
                 {{dataItem.ECAP_PRC | currency}}
             </span>
         </ng-template>
@@ -79,7 +79,7 @@
         </ng-template></kendo-grid-column>
     <kendo-grid-column title="Lowest Net Price" field="LOW_NET_PRC" format="{0:c}" [headerClass]="{'headerClass':true}" [width]="140" *ngIf="!isHidden('LOW_NET_PRC')">
         <ng-template kendoGridCellTemplate let-dataItem>
-           <div title="{{ dataItem?.LNP_FRMULA ? dataItem.LNP_FRMULA : ''}}" [ngClass]="{'cell-error': isErrorOrWarning(dataItem, 'LOW_NET_PRC'),'cell-information':isInformation(dataItem,'LOW_NET_PRC')}">
+           <div title="{{ dataItem?.LNP_FRMULA ? dataItem.LNP_FRMULA : ''}}" class="cell-common" [ngClass]="{'cell-error': isErrorOrWarning(dataItem, 'LOW_NET_PRC'),'cell-information':isInformation(dataItem,'LOW_NET_PRC')}">
             <span>
                 {{dataItem.LOW_NET_PRC | currency}}
             </span>
@@ -89,7 +89,7 @@
     <kendo-grid-column title="Cost" field="PRD_COST" [headerClass]="{'headerClass':true}" [width]="100"
         [hidden]="!hasPermissionPrice" *ngIf="!isHidden('PRD_COST')">
         <ng-template kendoGridCellTemplate let-dataItem>
-            <span [ngClass]="{'cell-warning': isErrorOrWarning(dataItem, 'PRD_COST'),'cell-information':isInformation(dataItem,'PRD_COST')}">
+            <span class="cell-common" [ngClass]="{'cell-warning': isErrorOrWarning(dataItem, 'PRD_COST'),'cell-information':isInformation(dataItem,'PRD_COST')}">
                 {{dataItem.PRD_COST | currency}}
             </span>
         </ng-template></kendo-grid-column>
@@ -120,7 +120,7 @@
     <kendo-grid-column title="Retail Cycle" field="RTL_CYC_NM" [headerClass]="{'headerClass':true}" [width]="140"
                        [hidden]="hasNoPermission" *ngIf="!isHidden('RTL_CYC_NM')">
         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-            <span *ngIf="dataItem.RTL_CYC_NM == undefined || dataItem.RTL_CYC_NM === ''" [ngClass]="{'cell-warning': isErrorOrWarning(dataItem, 'RTL_CYC_NM'),'cell-information':isInformation(dataItem,'RTL_CYC_NM')}"></span>
+            <span class="cell-common" *ngIf="dataItem.RTL_CYC_NM == undefined || dataItem.RTL_CYC_NM === ''" [ngClass]="{'cell-warning': isErrorOrWarning(dataItem, 'RTL_CYC_NM'),'cell-information':isInformation(dataItem,'RTL_CYC_NM')}"></span>
             <span *ngIf="dataItem.RTL_CYC_NM !== undefined && dataItem.RTL_CYC_NM !== ''" [innerHTML]="dataItem.RTL_CYC_NM"></span>
         </ng-template>
     </kendo-grid-column>

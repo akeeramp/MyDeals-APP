@@ -513,15 +513,6 @@ kendo-tabstrip.art-kendo-bars {
     margin-top: 34px !important
 }
 
-.cell-warning {
-    background-color: #f9e9a5
-}
-
-.cell-error {
-    background-color: #f4949d;
-    color: #ffffff !important
-}
-
 kendo-grid#managerPCTGrid table tr td {
     padding-top: 2px;
     padding-bottom: 2px;
@@ -547,29 +538,25 @@ kendo-grid#pctChild table tr td .cell-information {
 
 .cell-information {
     background-color: #e5e5e5;
-    width: 100%;
-    height: 51px;
-    display: flex;
-    align-items: center;
-    justify-content: flex-start;
-    padding: 10px;
-    margin: -8px
 }
 
-/*#managerPCTGrid {
-    overflow-y: scroll !important
-}*/
+.cell-warning {
+    background-color: #f9e9a5
+}
 
 .cell-error {
     background-color: #f4949d;
     color: #ffffff !important;
-    width: 100%;
+}
+
+.cell-common {
+    width: -webkit-fill-available;
     height: 51px;
     display: flex;
     align-items: center;
     justify-content: flex-start;
     padding: 10px;
-    margin: -8px
+    margin: -8px;
 }
 
 .k-style-box:hover {
