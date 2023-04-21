@@ -66,7 +66,7 @@ button.k-button.first-child-btn.ok-dash-style:hover {
     cursor: pointer;
     right: 20px !important;
     font-size: 12px !important;
-    margin-top: 23px !important;
+    margin-top: 0px !important;
     text-align: right;
     padding: 0 10px 0;
     position: absolute;
@@ -138,9 +138,12 @@ button.k-button.first-child-btn.ok-dash-style:hover {
     width: 100% !important;
     margin: auto !important;
 }
-deal-editor.tender_de_admin{
-    position:relative !important;
-    top:30px !important
+deal-editor.tender_de_admin {
+    position: relative !important;
+    top: 30px !important;
+    display: block !important;
+    width: calc(100% - -31px) !important;
+    margin-left: -15px !important;
 }
 meet-comp-contract.admin_tender_meetcomp {
     position: relative;
@@ -213,7 +216,7 @@ i#btnClose.intelicon-close-max.tender-cross-close:hover {
 }
 
 .padding-design-horizontal {
-    padding-top: 45px;
+    padding-top: 20px;
 }
 
 .tender-de-custom #dealEditor .k-grid-header .headerClass[aria-label="GEO_APPROVED_BY"],
@@ -242,4 +245,7 @@ i#btnClose.intelicon-close-max.tender-cross-close:hover {
 }
 .admin_tender_meetcomp kendo-grid#meetcomp-contract td.k-touch-action-auto {
     border-width: 0px !important;
+}
+div#horizontal-search.padding-design-horizontal {
+    max-width: 97vw !important;
 }

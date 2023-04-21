@@ -18,7 +18,7 @@
 
 .actionIcon {
     top: 0px;
-    width: 40px !important;
+    width: 115px !important;
     height: 40px !important;
     background-color: white;
     -moz-border-radius: 50%;
@@ -55,26 +55,35 @@
     animation-delay: .2s;
     visibility: visible;
     background-color: #24B9F1;
-     
+    left: -14px !important;
+    position: relative !important;
 }
 .item-1 {
     animation-delay: .4s;
     visibility: visible;
     background-color: #4DC8F1;
+    left: -52px !important;
+    position: relative !important;
 }
 .item-2 {
     animation-delay: .8s;
     visibility: visible;
     background-color: #6CCBF1;
+    left: -87px !important;
+    position: relative !important;
 }
 .item-3 {
     animation-delay: 1s;
     visibility: visible;
     background-color: #89D4F1;
+    left: -125px !important;
+    position: relative !important
 }
 .item-4 {
     animation-delay: 1.2s;
     background-color: #A1DBF1;
+    left: -160px !important;
+    position: relative !important;
 }
 
 
