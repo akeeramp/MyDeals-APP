@@ -393,7 +393,7 @@ export class tenderManagerComponent {
     }
 
     getPadding(data) {
-        if (data) return '50px';
+        if (data) return '30px';
         else return '5px';
     }
 

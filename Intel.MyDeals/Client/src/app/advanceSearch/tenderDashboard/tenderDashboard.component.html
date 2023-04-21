@@ -1,7 +1,4 @@
-﻿<!-- <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" /> -->
-<!-- <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" /> -->
-<!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
-<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 
 <loading-panel-angular id="tenderDashboardLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
                        [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
@@ -25,7 +22,7 @@
             </div>
         </div>
     </div>
-   
+
     <div *ngIf="searchResults.length > 0 || entireDataDeleted" [ngClass]="{'tender-db-styles':showSearchFilters==false}" class="tender-de-custom" style="margin-top: -25px;">
         <deal-editor class="tender_de_admin" [in_Deal_Type]="dealType" [in_Is_Tender_Dashboard]="true" [in_Search_Results]="searchResults" [in_Search_Text]="searchText" [UItemplate]="templates" (invokeSearchDatasource)="invokeSearchData($event)"
                         (bidActionsUpdated)="bidActionsUpdated($event)" (tenderCopyDeals)="tenderCopyDeals($event)" (floatActionsUpdated)="floatActionsUpdated($event)" (runPCTMCT)="runPCTMCT($event)" (emailData)="openEmail($event)" (refreshGridData)="refreshGridData($event)" (removeDeletedRow)="removeDeletedRow($event)">
@@ -46,4 +43,3 @@
         <button class='k-button first-child-btn cancel-dash-btn-style' (click)="cancelTenderAction()">CANCEL</button>
     </kendo-dialog-actions>
 </kendo-dialog>
-
