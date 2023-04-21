@@ -155,8 +155,6 @@ export class TenderFolioComponent {
         })
     }
     saveContractTender() {
-        // this.spinnerMessageHeader = "Saving Tender Folio";
-        // this.spinnerMessageDescription = "Saving the Tender Folio Information.";
         this.isSpinnerLoading = true;
         this.setBusy("Saving Tender Folio", "Saving the Tender Folio Information.");
         this.contractData.Customer = this.custSIDObj;
@@ -201,7 +199,6 @@ export class TenderFolioComponent {
             }
         }
         this.createTenderContract(ps, pt);
-        this.isSpinnerLoading = false;
     }
 
     createTenderContract(ps, pt) {
@@ -220,10 +217,12 @@ export class TenderFolioComponent {
             if (response.CNTRCT && response.CNTRCT.length > 0) {
                 this.isLoading = false;
                 //Redirecting to newContractWidget,handle & call saveContractTender() function of contractDetail page from there
+                this.isSpinnerLoading = false;
                 this.dialogRef.close(response.CNTRCT[1]["DC_ID"]);
             }
         }, (error) => {
             this.isLoading = false;
+            this.isSpinnerLoading = false;
             this.loggerSvc.error('createTenderContract', '', "tenderFolioComponent::createTenderContract:: " + JSON.stringify(error));
         })
     }
