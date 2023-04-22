@@ -151,7 +151,7 @@
                     </kendo-grid-string-filter-menu>
                 </div>
                 <div *ngIf="column.field == 'DC_ID' || column.field == 'CAP_VAL' || column.field == 'ECAP_PRICE_VAL' || column.field == 'TOT_QTY_PAID' || column.field == 'VOLUME' || column.field == 'STRT_VOL_VAL' || column.field == 'END_VOL_VAL' || column.field == 'RATE_VAL' || column.field == 'TOTAL_DOLLAR_AMOUNT' || column.field == 'CREDIT_VOLUME' || column.field == 'DEBIT_VOLUME' || column.field == 'CREDIT_AMT' || column.field == 'DEBIT_AMT' || column.field == 'CONSUMPTION_LOOKBACK_PERIOD' ">
-                    <kendo-grid-numeric-filter-menu [column]="column" [filter]="filter" [filterService]="filterService"></kendo-grid-numeric-filter-menu>
+                    <kendo-grid-numeric-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [format]="'#########'"></kendo-grid-numeric-filter-menu>
                 </div>
 
             </ng-template>

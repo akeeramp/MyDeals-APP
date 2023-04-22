@@ -145,6 +145,9 @@ export class MultiCheckFilterComponent implements AfterViewInit {
         if (this.currentData && this.currentData.length > 0) {
             this.showFilter = typeof this.textAccessor(this.currentData[0]) === 'string';
         }
+        if (this.currentData.length == 1) {
+            this.value.push('Select All');
+        }
         this.selectedCount = this.value && this.value.length > 0 ? this.value.length : 0;
         if (this.value.includes('Select All'))
             this.selectedCount--;
@@ -155,58 +158,60 @@ export class MultiCheckFilterComponent implements AfterViewInit {
     }
 
     public onSelectionChange(item, li) {
-        let filter = [];
-        if (this.value.some(x => x === item)) {
-            if (item == 'Select All') {
-                this.value = [];
+        if (this.currentData.length > 1) {
+            let filter = [];
+            if (this.value.some(x => x === item)) {
+                if (item == 'Select All') {
+                    this.value = [];
+                }
+                else
+                    this.value = this.value.filter(x => x !== item);
+            } else {
+                this.value.push(item);
             }
-            else
-                this.value = this.value.filter(x => x !== item);
-        } else {
-            this.value.push(item);
-        }
-        if (this.value.includes('Select All') && item == 'Select All') {
-            if (this.valueField != undefined && this.valueField != null && this.valueField != '')
-                this.value = this.currentData.map(x => x[this.valueField]);
-            else
-                this.value = this.currentData;
-        }
-        if (this.value.includes('Select All') && item !== 'Select All') {
-            this.value = this.value.filter(x => x !== 'Select All');
-        }
-        else if (!this.value.includes('Select All') && item !== 'Select All') {
-            if (this.valueField != undefined && this.valueField != null && this.valueField != '') {
-                if (this.value.length == this.currentData.filter(x => x[this.valueField] != 'Select All').length) {
-                    this.value.push('Select All');
+            if (this.value.includes('Select All') && item == 'Select All') {
+                if (this.valueField != undefined && this.valueField != null && this.valueField != '')
+                    this.value = this.currentData.map(x => x[this.valueField]);
+                else
+                    this.value = this.currentData;
+            }
+            if (this.value.includes('Select All') && item !== 'Select All') {
+                this.value = this.value.filter(x => x !== 'Select All');
+            }
+            else if (!this.value.includes('Select All') && item !== 'Select All') {
+                if (this.valueField != undefined && this.valueField != null && this.valueField != '') {
+                    if (this.value.length == this.currentData.filter(x => x[this.valueField] != 'Select All').length) {
+                        this.value.push('Select All');
+                    }
+                }
+                else if (this.valueField == undefined || this.valueField == null || this.valueField == '') {
+                    if (this.value.length == this.currentData.filter(x => x != 'Select All').length) {
+                        this.value.push('Select All');
+                    }
                 }
             }
-            else if (this.valueField == undefined || this.valueField == null || this.valueField == '') {
-                if (this.value.length == this.currentData.filter(x => x != 'Select All').length) {
-                    this.value.push('Select All');
+            each(this.value, itm => {
+                let operator = 'eq';
+                if (itm == null) {
+                    operator = "isnull";
+                } else if (itm != undefined && itm.length == 0) {
+                    operator = "isempty";
                 }
-            }
+                filter.push({
+                    field: this.field,
+                    operator: operator,
+                    value: itm
+                })
+            });
+            this.filterService.filter({
+                filters: filter,
+                logic: 'or'
+            });
+            this.onFocus(li);
+            this.selectedCount = this.value && this.value.length > 0 ? this.value.length : 0;
+            if (this.value.includes('Select All'))
+                this.selectedCount--;
         }
-        each(this.value, itm => {
-            let operator = 'eq';
-            if (itm == null) {
-                operator = "isnull";
-            } else if (itm != undefined && itm.length == 0) {
-                operator = "isempty";
-            }
-            filter.push({
-                field: this.field,
-                operator: operator,
-                value: itm
-            })
-        });
-        this.filterService.filter({
-            filters: filter,
-            logic: 'or'
-        });
-        this.onFocus(li);
-        this.selectedCount = this.value && this.value.length > 0 ? this.value.length : 0;
-        if (this.value.includes('Select All'))
-            this.selectedCount--;
     }
 
 
