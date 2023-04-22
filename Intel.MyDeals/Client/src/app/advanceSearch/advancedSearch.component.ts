@@ -498,17 +498,17 @@ export class AdvancedSearchComponent implements OnInit {
         //redirect to contractManager directly
         if (action == 'gotoContract') {
             const url = `Contract#/manager/${id}`;
-            window.open(url, '_self');
+            window.open(url, '_blank');
         }
         else {
             //routing function redirecting to goto component
             if (action == 'gotoPS') {
                 const url = `advancedSearch#/gotoPs/${id}`;
-                window.open(url, '_self');
+                window.open(url, '_blank');
             }
             else {
                 const url = `advancedSearch#/gotoDeal/${id}`;
-                window.open(url, '_self');
+                window.open(url, '_blank');
             }
         }
     }
