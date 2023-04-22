@@ -153,8 +153,6 @@ export class dealToolsComponent{
         }
         if (this.dataItem._dirty || this.dataItem.isDirtyFile) this.isModified = true;
         else this.isModified = false;
-        //if (!!this.isEditable)
-        //    this.isEditable = false;
                 
         // Swap IF statement to prevent IQR from having access to quote letters
         if (this.dataItem?.OBJ_SET_TYPE_CD !== 'ECAP' && this.dataItem?.OBJ_SET_TYPE_CD !== 'KIT')
@@ -174,9 +172,9 @@ export class dealToolsComponent{
         //PS object is holding the Pricing Strategy ID with Pricing Strategy Status
         this.dataItem.PS = {};
         if (this.contractData.PRC_ST) {
-            for (let i = 0; i < this.contractData.PRC_ST.length; i++) {
-                this.dataItem.PS[this.contractData.PRC_ST[i].DC_ID] = this.contractData.PRC_ST[i].IS_HYBRID_PRC_STRAT;
-            }
+            each(this.contractData.PRC_ST, item => {
+                this.dataItem.PS[item.DC_ID] = item.IS_HYBRID_PRC_STRAT;
+            });
         }
         this.dealTxt = this.getLinkedHoldIds(this.dataItem).length > 1 ? "deals" : "deal";
     }
@@ -253,25 +251,25 @@ export class dealToolsComponent{
                 }
                 // update local data with new ids to prevent the need to refresh the screen
                 if (!!response.Messages) {
-                    for (var m = 0; m < response.Messages.length; m++) {
-                        var dcId = response.Messages[m].KeyIdentifiers[0];
-                        var dcParentId = response.Messages[m].KeyIdentifiers[1];
-                        var dcPrdTitle = response.Messages[m].ExtraDetails[0];
-                        var dcKitName = response.Messages[m].ExtraDetails[1];
+                    each(response.Messages, item => {
+                        var dcId = item.KeyIdentifiers[0];
+                        var dcParentId = item.KeyIdentifiers[1];
+                        var dcPrdTitle = item.ExtraDetails[0];
+                        var dcKitName = item.ExtraDetails[1];
 
                         if (this.gridData !== undefined) {
-                            for (var d = 0; d < this.gridData.length; d++) {
-                                if (this.gridData[d].DC_ID === dcId) {
-                                    this.gridData[d].DC_PARENT_ID = dcParentId;
-                                    this.gridData[d]._parentCnt = 1;
-                                    this.gridData[d].PTR_USER_PRD = dcPrdTitle;
+                            each(this.gridData, row => {
+                                if (row.DC_ID === dcId) {
+                                    row.DC_PARENT_ID = dcParentId;
+                                    row._parentCnt = 1;
+                                    row.PTR_USER_PRD = dcPrdTitle;
                                     if (dcKitName !== "") {
-                                        this.gridData[d].DEAL_GRP_NM = dcKitName;
+                                        row.DEAL_GRP_NM = dcKitName;
                                     }
                                 }
-                            }
+                            })
                         }
-                    }
+                    });
                 }
                 this.refreshContract.emit(true);
                 this.setBusy("Split Successful", "Split the Pricing Table Row into single Deals", "Success","");
@@ -430,11 +428,11 @@ export class dealToolsComponent{
     getLinkedIds(){
         let ids = [];
         if (this.dataItem?.isLinked !== undefined && this.dataItem?.isLinked) {
-            for (let i = 0; i < this.gridResult.length; i++) {
-                if (this.gridResult[i].isLinked !== undefined && this.gridResult[i].isLinked) {
-                    ids.push(this.gridResult[i]["DC_ID"]);
+            each(this.gridResult, row => {
+                if (row.isLinked !== undefined && row.isLinked) {
+                    ids.push(row["DC_ID"]);
                 }
-            }
+            });
         }
         return ids;
     }
@@ -464,10 +462,10 @@ export class dealToolsComponent{
                 return;
             }
             let row = null;
-            for (var d = 0; d < this.gridData.length; d++) {
-                if (this.gridData[d].DC_PARENT_ID === ptrId)
-                    row = this.gridData.splice(d, 1);
-            }
+            each(this.gridData, (item, ind) => {
+                if (item.DC_PARENT_ID === ptrId)
+                    row = this.gridData.splice(ind, 1);
+            });
             this.refreshContract.emit(true);
             this.isBusy = false
             this.loggerSvc.success("Delete Successful", "Deleted the Pricing Table Row and Deal");
@@ -494,10 +492,10 @@ export class dealToolsComponent{
                     return;
                 }
             }
-            for (var d = 0; d < this.gridData.length; d++) {
-                if (this.gridData[d]._parentIdPS === psId)
-                    this.gridData.splice(d, 1);
-            }
+            each(this.gridData, (item, ind) => {
+                if (item._parentIdPS === psId)
+                    this.gridData.splice(ind, 1);
+            });
             this.removeDeletedRow.emit(psId);
             this.isBusy = false
             this.loggerSvc.success("Delete Successful", "Deleted the tender Deal");
@@ -637,12 +635,12 @@ export class dealToolsComponent{
             return this.holdItems[this.getHoldValue(this.dataItem)].title;
         }
     }
+
     getLinkedHoldIds(model){
         let ids = [];
         if (model.isLinked !== undefined && model.isLinked) {
             let curHoldStatus = model._actionsPS.Hold === undefined ? false : model._actionsPS.Hold;
-            for (let v = 0; v < this.gridResult.length; v++) {
-                let dataItem = this.gridResult[v];
+            each(this.gridResult, dataItem => {
                 if (dataItem.isLinked !== undefined && dataItem.isLinked) {
                     if (dataItem?._actionsPS === undefined)
                         dataItem._actionsPS = {};
@@ -661,7 +659,7 @@ export class dealToolsComponent{
                         }
                     }
                 }
-            }
+            });
         }
         else {
             if (model["DC_ID"] != undefined) {

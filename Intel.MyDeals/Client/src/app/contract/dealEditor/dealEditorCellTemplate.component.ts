@@ -8,6 +8,7 @@ import { PTE_Load_Util } from '../PTEUtils/PTE_Load_util';
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 import { ProductBreakoutComponent } from '../ptModals/productSelector/productBreakout/productBreakout.component';
 import { TenderDashboardGridUtil } from '../tenderDashboardGrid.util';
+import { each } from 'underscore';
 
 @Component({
     selector: 'deal-editor-cell',
@@ -49,9 +50,9 @@ export class dealEditorCellTemplateComponent {
     private subKitEcapDim = "20_____2";
     private dim = "10___";
     private fields: any;
-    private YCS2modifier:string = "";
-    private fieldModifier: string = "";
-    private fieldText: string = "";
+    private YCS2modifier: string;
+    private fieldModifier: string;
+    private fieldText: string;
 
     private openModal(columnTypes: string, currentPricingTableRow, productMemberSId, priceCondition) {
         // Open Modal with data
@@ -90,17 +91,18 @@ export class dealEditorCellTemplateComponent {
             if (data[field] != undefined && data[field] != null && data[field] != "")
                 data[field] = this.decimalPipe.transform(data[field], "1.0-0");
         }
-        if (field == "REBATE_OA_MAX_AMT" || field == "MAX_RPU" || field == "USER_MAX_RPU" ||
+        else if (field == "REBATE_OA_MAX_AMT" || field == "MAX_RPU" || field == "USER_MAX_RPU" ||
             field == "AVG_RPU" || field == "USER_AVG_RPU" || field == "TOTAL_DOLLAR_AMOUNT" || field == "MAX_PAYOUT"
             || field == "ADJ_ECAP_UNIT" || field == "CREDIT_AMT" || field == "DEBIT_AMT") {
             if (data[field] != undefined && data[field] != null && data[field] != "")
                 data[field] = this.currencyPipe.transform(parseFloat(data[field]), 'USD', 'symbol', '1.2-2');
         }
-        if (field == "BLLG_DT" || field == "LAST_TRKR_START_DT_CHK" || field == "ON_ADD_DT"
+        else if (field == "BLLG_DT" || field == "LAST_TRKR_START_DT_CHK" || field == "ON_ADD_DT"
             || field == "REBATE_BILLING_START" || field == "REBATE_BILLING_END") {
-            if (data[field] == "Invalid date") data[field] = "";
-            if (data[field] != undefined && data[field] != null && data[field] != "")
-                data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
+            if (data[field] != undefined) {
+                if (data[field] == "Invalid date") data[field] = "";
+                else if (data[field] != null && data[field] != "") data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
+            }
         }
         return GridUtil.uiControlWrapper(data, field, format);
     }
@@ -114,12 +116,7 @@ export class dealEditorCellTemplateComponent {
     }
 
     keyArray(data: any) {
-        let arr = new Array();
-        let keys = Object.keys(data).sort();
-        for (let i = 0; i < keys.length; i++) {
-            arr.push(keys[i]);
-        }
-        return arr;
+        return Object.keys(data).sort();
     }
 
     uiDimControlWrapper(passedData, field) {
@@ -130,19 +127,19 @@ export class dealEditorCellTemplateComponent {
                 data.ECAP_PRICE[this.ecapDimKey] = !Number.isNaN(Number(data.ECAP_PRICE[this.ecapDimKey])) ? this.currencyPipe.transform(data.ECAP_PRICE[this.ecapDimKey], 'USD', 'symbol', '1.2-2') : data.ECAP_PRICE[this.ecapDimKey];
             dim = this.ecapDimKey;
         }
-        if (field == "KIT_ECAP" || field == "CAP_KIT" || field == "YCS2_KIT") {
+        else if (field == "KIT_ECAP" || field == "CAP_KIT" || field == "YCS2_KIT") {
             field = field == "CAP_KIT" ? "CAP" : field == "YCS2_KIT" ? "YCS2_PRC_IRBT" : "ECAP_PRICE";
             if (data[field] && data[field][this.kitEcapdim] !== undefined && data[field][this.kitEcapdim] !== null && data[field][this.kitEcapdim] !== "" && data[field][this.kitEcapdim] !== "No YCS2" && data[field][this.kitEcapdim] !== "No CAP")
                 data[field][this.kitEcapdim] = !Number.isNaN(Number(data[field][this.kitEcapdim])) ? this.currencyPipe.transform(data[field][this.kitEcapdim], 'USD', 'symbol', '1.2-2') : data[field][this.kitEcapdim];
             dim = this.kitEcapdim;
         }
-        if (field == "SUBKIT_ECAP") {
+        else if (field == "SUBKIT_ECAP") {
             if (data.ECAP_PRICE && data.ECAP_PRICE[this.subKitEcapDim] !== undefined && data.ECAP_PRICE[this.subKitEcapDim] !== null && data.ECAP_PRICE[this.subKitEcapDim] !== "")
                 data.ECAP_PRICE[this.subKitEcapDim] = !Number.isNaN(Number(data.ECAP_PRICE[this.subKitEcapDim])) ? this.currencyPipe.transform(data.ECAP_PRICE[this.subKitEcapDim], 'USD', 'symbol', '1.2-2') : data.ECAP_PRICE[this.subKitEcapDim];
             dim = this.subKitEcapDim;
             field = "ECAP_PRICE";
         }
-        if (field == "COMPETITIVE_PRICE") {
+        else if (field == "COMPETITIVE_PRICE") {
             if (data[field] && data[field][this.ecapDimKey] !== undefined && data[field][this.ecapDimKey] !== null && data[field][this.ecapDimKey] !== "")
                 data[field][this.ecapDimKey] = !Number.isNaN(Number(data[field][this.ecapDimKey])) ? this.currencyPipe.transform(data[field][this.ecapDimKey], 'USD', 'symbol', '1.2-2') : data[field][this.ecapDimKey];
             dim = this.ecapDimKey;
@@ -167,13 +164,14 @@ export class dealEditorCellTemplateComponent {
                             data[field][dimKey] = this.currencyPipe.transform(data[field][dimKey], 'USD', 'symbol', '1.2-2');
                         }
                     }
-                    if (field == "QTY") {
+                    else if (field == "QTY") {
                         data[field][dimKey] = this.decimalPipe.transform(data[field][dimKey], "1.0-0");
                     }
-                    if (field == "CAP_STRT_DT" || field == "CAP_END_DT" || field == "YCS2_START_DT" || field == "YCS2_END_DT" && data[field][dimKey] != undefined && data[field][dimKey] != null && data[field][dimKey] != "") {
-                        if (data[field][dimKey] == "Invalid date") data[field][dimKey] = "";
-                        if (data[field][dimKey] != undefined && data[field][dimKey] != null && data[field][dimKey] != "")
-                        data[field][dimKey] = this.datePipe.transform(data[field][dimKey], "MM/dd/yyyy");
+                    else if (field == "CAP_STRT_DT" || field == "CAP_END_DT" || field == "YCS2_START_DT" || field == "YCS2_END_DT" && data[field][dimKey] != undefined && data[field][dimKey] != null && data[field][dimKey] != "") {
+                        if (data[field] != undefined) {
+                            if (data[field] == "Invalid date") data[field] = "";
+                            else if (data[field] != null && data[field] != "") data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
+                        }
                     }
                 }
                 return GridUtil.uiPositiveDimControlWrapper(data, field);
@@ -200,16 +198,16 @@ export class dealEditorCellTemplateComponent {
             if (Object.hasOwnProperty.call(tiers, key) && key.indexOf("___") >= 0) {
                 numTiers++;
                 const dim = "10___" + numTiers;
-                for (let f = 0; f < this.fields.length; f++) {
-                    if (data[this.fields[f].field] && data[this.fields[f].field][key] && !Number.isNaN(Number(data[this.fields[f].field][key]))) {
-                        if (this.fields[f].format == "number" && this.fields[f].field == "INCENTIVE_RATE")
-                            data[this.fields[f].field][dim] =data[this.fields[f].field][dim]!="Unlimited"? this.decimalPipe.transform(data[this.fields[f].field][dim]) :data[this.fields[f].field][dim];
-                        else if (this.fields[f].format == "number")
-                            data[this.fields[f].field][dim] = data[this.fields[f].field][dim]!="Unlimited"? this.decimalPipe.transform(data[this.fields[f].field][dim], "1.0-0"):data[this.fields[f].field][dim];
-                        else 
-                            data[this.fields[f].field][dim] =data[this.fields[f].field][dim]!="Unlimited"?  this.currencyPipe.transform(data[this.fields[f].field][dim], 'USD', 'symbol', '1.2-2'):data[this.fields[f].field][dim];
+                each(this.fields, row => {
+                    if (data[row.field] && data[row.field][key] && !Number.isNaN(Number(data[row.field][key]))) {
+                        if (row.format == "number" && row.field == "INCENTIVE_RATE")
+                            data[row.field][dim] = data[row.field][dim] != "Unlimited" ? this.decimalPipe.transform(data[row.field][dim]) : data[row.field][dim];
+                        else if (row.format == "number")
+                            data[row.field][dim] = data[row.field][dim] != "Unlimited" ? this.decimalPipe.transform(data[row.field][dim], "1.0-0") : data[row.field][dim];
+                        else
+                            data[row.field][dim] = data[row.field][dim] != "Unlimited" ? this.currencyPipe.transform(data[row.field][dim], 'USD', 'symbol', '1.2-2') : data[row.field][dim];
                     }
-                }
+                })
             }
         }
         return GridUtil.uiControlScheduleWrapper(data);
@@ -221,20 +219,18 @@ export class dealEditorCellTemplateComponent {
         for (const key in tiers) {
             if (Object.hasOwnProperty.call(tiers, key) && key.indexOf("___") >= 0) {
                 numTiers++;
-                for (let f = 0; f < this.fields.length; f++) {
-                    let dim = (this.fields[f].field == "DENSITY_BAND" || this.fields[f].field == "DENSITY_RATE") ? "8___" : "10___" + numTiers;
-                    if (this.fields[f].field == "DENSITY_RATE") {
+                each(this.fields, row => {
+                    let dim = (row.field == "DENSITY_BAND" || row.field == "DENSITY_RATE") ? "8___" : "10___" + numTiers;
+                    if (row.field == "DENSITY_RATE") {
                         for (let bands = 1; bands <= passedData.NUM_OF_DENSITY; bands++) {
-                            data[this.fields[f].field][dim + bands + '____' + key] = this.currencyPipe.transform(data[this.fields[f].field][dim + bands + '____' + key], 'USD', 'symbol', '1.2-2');
+                            data[row.field][dim + bands + '____' + key] = this.currencyPipe.transform(data[row.field][dim + bands + '____' + key], 'USD', 'symbol', '1.2-2');
+                        }
+                    } else if (row.field == "STRT_PB" || row.field == "END_PB") {
+                        if (!Number.isNaN(Number(data[row.field][key]))) {
+                            if (row.format == "number")  data[row.field][key] = this.decimalPipe.transform(data[row.field][key], "1.0-3");
                         }
                     }
-                    else if (this.fields[f].field == "STRT_PB" || this.fields[f].field == "END_PB") {
-                        if (!Number.isNaN(Number(data[this.fields[f].field][key]))) {
-                            if (this.fields[f].format == "number")
-                                data[this.fields[f].field][key] = this.decimalPipe.transform(data[this.fields[f].field][key], "1.0-3");
-                        }
-                    }
-                }
+                })
             }
         }
         return GridUtil.uiControlScheduleWrapperDensity(data);
@@ -249,18 +245,20 @@ export class dealEditorCellTemplateComponent {
     uiStartDateWrapper(passedData, field) {
         let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
         if (field == "START_DT" || field == "LAST_REDEAL_DT") {
-            if (data[field] == "Invalid date") data[field] = "";
-            if (data[field] != undefined && data[field] != null && data[field] != "")
-                data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
+            if (data[field] != undefined) {
+                if (data[field] == "Invalid date") data[field] = "";
+                else if (data[field] != null && data[field] != "") data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
+            }
         }
         return GridUtil.uiStartDateWrapper(data, field);
     }
     uiControlEndDateWrapper(passedData, field) {
         let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
         if (field == "END_DT" || field == "OEM_PLTFRM_LNCH_DT" || field == "OEM_PLTFRM_EOL_DT") {
-            if (data[field] == "Invalid date") data[field] = "";
-            if (data[field] != undefined && data[field] != null && data[field] != "")
-                data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
+            if (data[field] != undefined) {
+                if (data[field] == "Invalid date") data[field] = "";
+                else if (data[field] != null && data[field] != "") data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
+            }
         }
         return GridUtil.uiControlEndDateWrapper(data, field);
     }
@@ -360,23 +358,13 @@ export class dealEditorCellTemplateComponent {
     uiReadonlyFolioWrapper(data, field) {
         return TenderDashboardGridUtil.uiReadonlyFolioWrapper(data, field)
     }
-    ngOnChanges() {
-        try {
-            if (!this.in_Is_Tender_Dashboard)//if not Tender Dashboard Screen, take salesforce Id from contract data
-                this.in_DataItem.SALESFORCE_ID = this.contract_Data.SALESFORCE_ID;
-            this.fields = (this.in_Deal_Type === 'VOL_TIER' || this.in_Deal_Type === 'FLEX') ? PTE_Config_Util.volTierFields : this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : PTE_Config_Util.densityFields;
-            if (this.in_Field_Name === "CAP_INFO") {
-                this.fieldModifier = "CAP";
-                this.fieldText = this.fieldModifier + "_STRT_DT";
-            }
-            else if (this.in_Field_Name === "YCS2_INFO") {
-                this.fieldModifier = "YCS2";
-                this.YCS2modifier = "_PRC_IRBT";
-                this.fieldText = this.fieldModifier + "_START_DT";
-            }
-        } catch(ex) {
-            console.error(ex);
-        }
+    ngOnInit() {
+        if (!this.in_Is_Tender_Dashboard)//if not Tender Dashboard Screen, take salesforce Id from contract data
+            this.in_DataItem.SALESFORCE_ID = this.contract_Data.SALESFORCE_ID;
+        this.fields= (this.in_Deal_Type === 'VOL_TIER' || this.in_Deal_Type === 'FLEX') ? PTE_Config_Util.volTierFields : this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : PTE_Config_Util.densityFields;
+        this.YCS2modifier = this.in_Field_Name === "YCS2_INFO" ? "_PRC_IRBT" : "";
+        this.fieldModifier = this.in_Field_Name === "CAP_INFO" ? "CAP" : this.in_Field_Name === "YCS2_INFO" ? "YCS2" : "";
+        this.fieldText = (this.in_Field_Name === "CAP_INFO" || this.in_Field_Name === "YCS2_INFO") ? this.fieldModifier + "_STRT_DT" : "";
     }
 
 }

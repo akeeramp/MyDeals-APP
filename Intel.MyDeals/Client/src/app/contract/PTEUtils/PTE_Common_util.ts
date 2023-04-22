@@ -38,7 +38,7 @@ export class PTE_Common_Util {
         if (!!dataItem._behaviors && !!dataItem._behaviors.validMsg && !jQuery.isEmptyObject(dataItem._behaviors.validMsg)) {
             if (dataItem._behaviors.validMsg[atrbName] != null) {
                 try {
-                    var jsonTierMsg = JSON.parse(dataItem._behaviors.validMsg[atrbName]);
+                    let jsonTierMsg = JSON.parse(dataItem._behaviors.validMsg[atrbName]);
 
                     if (dataItem.OBJ_SET_TYPE_CD === "KIT") {
                         if (jsonTierMsg["-1"] != null && jsonTierMsg["-1"] != undefined) {
@@ -61,15 +61,15 @@ export class PTE_Common_Util {
         }
     }
     static setWarningFields(data, curPricingTable) {
-        var anyWarnings = false;
-        for (var i = 0; i < data.length; i++) {
-            var dataItem = data[i];
+        let anyWarnings = false;
+        for (let i = 0; i < data.length; i++) {
+            const dataItem = data[i];
             if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
             if (anyWarnings) {
-                var dimStr = "_10___";  // NOTE: 10___ is the dim defined in _gridUtil.js
-                var isKit = 0;
-                var relevantAtrbs = curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY" ? PTE_Config_Util.densityTierAtrbs : PTE_Config_Util.tierAtrbs;
-                var tierCount = dataItem.NUM_OF_TIERS;
+                let dimStr = "_10___";  // NOTE: 10___ is the dim defined in _gridUtil.js
+                let isKit = 0;
+                let relevantAtrbs = curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY" ? PTE_Config_Util.densityTierAtrbs : PTE_Config_Util.tierAtrbs;
+                let tierCount = dataItem.NUM_OF_TIERS;
                 let curTier = 1, db = 1;
                 if (curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
                     if (dataItem.PRODUCT_FILTER === undefined) { continue; }
@@ -80,23 +80,23 @@ export class PTE_Common_Util {
                 }
                 // map tiered warnings
                 if (curPricingTable['OBJ_SET_TYPE_CD'] != "DENSITY") {
-                    for (var t = 1 - isKit; t <= tierCount - isKit; t++) {
-                        for (var a = 0; a < relevantAtrbs.length; a++) {
+                    for (let t = 1 - isKit; t <= tierCount - isKit; t++) {
+                        for (let a = 0; a < relevantAtrbs.length; a++) {
                             this.mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + t), t);    //TODO: what happens in negative dim cases? this doesnt cover does it?
                         }
                     }
-                    for (var a = 0; a < relevantAtrbs.length; a++) {
+                    for (let a = 0; a < relevantAtrbs.length; a++) {
                         delete dataItem._behaviors.validMsg[relevantAtrbs[a]];
                     }
                 }
                 else {
-                    var densityCount = dataItem.NUM_OF_DENSITY;
-                    for (var t = 1 - isKit; t <= tierCount - isKit; t++) {
+                    const densityCount = dataItem.NUM_OF_DENSITY;
+                    for (let t = 1 - isKit; t <= tierCount - isKit; t++) {
                         if (db > densityCount) {
                             db = 1;
                             curTier++;
                         }
-                        for (var a = 0; a < relevantAtrbs.length; a++) {
+                        for (let a = 0; a < relevantAtrbs.length; a++) {
                             dimStr = (relevantAtrbs[a] == "DENSITY_RATE") ? "_8___" : "_10___";
                             if (relevantAtrbs[a] == "DENSITY_RATE") {
                                 this.mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + db + "____10___" + curTier), curTier);
@@ -106,7 +106,7 @@ export class PTE_Common_Util {
                                 this.mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + t), t); //TODO: what happens in negative dim cases? this doesnt cover does it?
                         }
                     }
-                    for (var a = 0; a < relevantAtrbs.length; a++) {
+                    for (let a = 0; a < relevantAtrbs.length; a++) {
                         delete dataItem._behaviors.validMsg[relevantAtrbs[a]];
                     }
                 }
@@ -178,11 +178,11 @@ export class PTE_Common_Util {
     static getPTEGenerate(columns: Array<any>, curPricingTable: any, rownumber?: number): Array<any> {
         let PTRResult: Array<any> = [];
         if(rownumber){
-            let obj = {}
+            let obj = {};
             each(columns, (val) => {
                 if (val.data) {
                     obj[val.data.toString()] = this.hotTable.getDataAtRowProp(rownumber, val.data.toString()) != null ? this.hotTable.getDataAtRowProp(rownumber, val.data.toString()) : '';
-                }
+                 }
             });
             PTRResult.push(obj);
         }
@@ -209,7 +209,7 @@ export class PTE_Common_Util {
                 || curPricingTable.OBJ_SET_TYPE_CD == 'REV_TIER' || curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
                 const uniqDCID = uniq(PTRResult, 'DC_ID');
                 each(uniqDCID, itmsDC => {
-                    let DCPTR = where(PTRResult, { DC_ID: itmsDC.DC_ID });
+                    const DCPTR = where(PTRResult, { DC_ID: itmsDC.DC_ID });
                     let selTier;
                     let pivotDensity;
                     if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
@@ -254,7 +254,7 @@ export class PTE_Common_Util {
 
     //This function is to add all missing common attributes with expected values for save 
     static addPTEAttributes(PTRResult, curPricingTable) {
-        for (var j = 0; j < PTRResult.length; j++) {
+        for (let j = 0; j < PTRResult.length; j++) {
             PTRResult[j]["IS_HYBRID_PRC_STRAT"] = curPricingTable["IS_HYBRID_PRC_STRAT"] != null ? curPricingTable["IS_HYBRID_PRC_STRAT"] : null;
         }
         return PTRResult;
@@ -276,20 +276,19 @@ export class PTE_Common_Util {
             data = PTE_Validation_Util.clearValidation(data, "PTR_USER_PRD");
 
             //Parent is set for PTE not DE level
-            var objectId = wipdata ? 'DC_PARENT_ID':'DC_ID';
+            let objectId = wipdata ? 'DC_PARENT_ID':'DC_ID';
             
             //For multi tiers last record will have latest date, skipping duplicate DC_ID
-            var filterData = uniq(sortBy(data, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+            const filterData = uniq(sortBy(data, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
 
-            var accrualEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Accrual')
-            var drainingEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Draining')
-            var accrualRule = accrualEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Billings");
-            var drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Consumption");
+            const accrualEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Accrual')
+            const drainingEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Draining')
+            const drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Consumption");
 
             if (accrualEntries.length > 0 && drainingRule && drainingEntries.length > 0) { restrictGroupFlexOverlap = true; }
             if (overlapFlexResult && overlapFlexResult.length && overlapFlexResult.length > 0) {
                 //Assigning  validation result to a variable and finally iterate between this result and bind the errors
-                var finalResult = this.checkOVLPDate(filterData, overlapFlexResult, objectId);
+                const finalResult = this.checkOVLPDate(filterData, overlapFlexResult, objectId);
                 if (mode) {
                     return finalResult;
                 }
@@ -321,16 +320,16 @@ export class PTE_Common_Util {
         //var momentRange = require('moment-range');
         const rangemoment = extendMoment(StaticMomentService.moment);
         //get uniq duplicate product
-        var uniqOvlpCombination = uniq(map(resp, (ob) => { return ob.OVLP_ROW_ID }));
+        const uniqOvlpCombination = uniq(map(resp, (ob) => { return ob.OVLP_ROW_ID }));
         //iterate through unique product
         each(uniqOvlpCombination, (dup) => {
             //filtering the uniq prod from response and sort to get correct first and second object
-            var rowID = filter(resp, (ob) => { return ob['OVLP_ROW_ID'] == dup });
+            const rowID = filter(resp, (ob) => { return ob['OVLP_ROW_ID'] == dup });
             each(rowID, (dupPro) => {
                 each(rowID, (dupPr) => {
                     //checking the product date overlaps or not
                     if (dupPro.ROW_ID != dupPr.ROW_ID) {
-                        var firstObj = null, secObj = null;
+                        let firstObj = null, secObj = null;
 
                         if (objectId == 'DC_PARENT_ID') {
                             //findWhere will return the first object found 
@@ -342,8 +341,8 @@ export class PTE_Common_Util {
                             secObj = findWhere(data, { 'DC_ID': dupPr.ROW_ID });
                         }
 
-                        var firstRange = rangemoment.range(StaticMomentService.moment(firstObj.START_DT), StaticMomentService.moment(firstObj.END_DT));
-                        var secRange = rangemoment.range(StaticMomentService.moment(secObj.START_DT), StaticMomentService.moment(secObj.END_DT));
+                        const firstRange = rangemoment.range(StaticMomentService.moment(firstObj.START_DT), StaticMomentService.moment(firstObj.END_DT));
+                        const secRange = rangemoment.range(StaticMomentService.moment(secObj.START_DT), StaticMomentService.moment(secObj.END_DT));
                         //identifying the dates are valid for overlap
                         if (!StaticMomentService.moment(firstObj.START_DT).isBefore(firstObj.END_DT)) {
                             findWhere(resp, { 'ROW_ID': firstObj[objectId] })['dup'] = 'dateissue';
@@ -372,13 +371,13 @@ export class PTE_Common_Util {
     static getOverlapFlexProducts(curPricingTable, pricingTableRowData) {
         if (curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD == "FLEX") {
             let data = pricingTableRowData;
-            let AcrObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'accrual');
-            let DrnObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'draining');
+            const AcrObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'accrual');
+            const DrnObjs = data.filter(ob => ob.FLEX_ROW_TYPE && ob.FLEX_ROW_TYPE.toLowerCase() == 'draining');
             let AcrInc = [], AcrExc = [], DrnInc = [], DrnExc = [];
             each(AcrObjs, (item) => {
                 //to handle multi tier condition
                 if (item.PTR_SYS_PRD && (item.PTR_SYS_PRD != null || item.PTR_SYS_PRD != '')) {
-                    let objAcr = Object.values(JSON.parse(item.PTR_SYS_PRD));
+                    const objAcr = Object.values(JSON.parse(item.PTR_SYS_PRD));
                     each(objAcr, (itm) => {
                         let objItm = {};
                         if (itm[0].EXCLUDE) {
@@ -395,7 +394,7 @@ export class PTE_Common_Util {
             });
             each(DrnObjs, (item) => {
                 if (item.PTR_SYS_PRD && (item.PTR_SYS_PRD != null || item.PTR_SYS_PRD != '')) {
-                    let objDrn = Object.values(JSON.parse(item.PTR_SYS_PRD));
+                    const objDrn = Object.values(JSON.parse(item.PTR_SYS_PRD));
                     each(objDrn, (itm) => {
                         let objItm = {};
                         if (itm[0].EXCLUDE) {
@@ -433,19 +432,19 @@ export class PTE_Common_Util {
         if (data === undefined || data === null || data.PRC_TBL_ROW === undefined || data.WIP_DEAL === undefined) return false;
         if (data.PRC_TBL_ROW.length > 0 && data.WIP_DEAL.length === 0) return true;
 
-        var aryWipIds = [];
+        let aryWipIds = [];
         each(data.WIP_DEAL, function (item) {
             if (aryWipIds.indexOf(item.DC_PARENT_ID) < 1) aryWipIds.push(item.DC_PARENT_ID);
         });
 
-        var aryPtrIds = [];
+        let aryPtrIds = [];
         each(data.PRC_TBL_ROW, function (item) {
             if (aryPtrIds.indexOf(item.DC_ID) < 1) aryPtrIds.push(item.DC_ID);
         });
 
-        var unpairedPtrs = this.arrBiDirectionalDifference(aryPtrIds, aryWipIds);
+        const unpairedPtrs = this.arrBiDirectionalDifference(aryPtrIds, aryWipIds);
 
-        var myRet = false;
+        let myRet = false;
         each(data.WIP_DEAL, function (item) {
             if (item.warningMessages.length > 0 && !isWip) myRet = true;
         });

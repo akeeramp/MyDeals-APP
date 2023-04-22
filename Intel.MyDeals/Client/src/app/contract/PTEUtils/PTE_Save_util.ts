@@ -48,22 +48,22 @@ export class PTE_Save_Util {
         }
         let invalidFlexDate = PTE_Validation_Util.validateFlexDate(PTR, curPricingTable, undefined);
         // Check if the rows have duplicate products
-        var isHybridPS = curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
-        var duplicateProductRows = isHybridPS ? PTE_Validation_Util.hasDuplicateProduct(PTR) : {};
-        var hasTender, hasNonTender = false;
+        const isHybridPS = curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
+        const duplicateProductRows = isHybridPS ? PTE_Validation_Util.hasDuplicateProduct(PTR) : {};
+        let hasTender, hasNonTender = false;
         //bydefault setting an error can help to avoid any missing scenario bcz of is dirty flag
-        var errDeals = [0];
-        var dictRebateType = [];
-        var dictPayoutBasedon = [];
-        var dictCustDivision = [];
-        var dictGeoCombined = [];
-        var dictPeriodProfile = [];
-        var dictResetPerPeriod = [];
-        var dictProgramPayment = [];
-        var dictOverarchingDollar = [];
-        var dictOverarchingVolume = [];
+        let errDeals = [0];
+        let dictRebateType = [];
+        let dictPayoutBasedon = [];
+        let dictCustDivision = [];
+        let dictGeoCombined = [];
+        let dictPeriodProfile = [];
+        let dictResetPerPeriod = [];
+        let dictProgramPayment = [];
+        let dictOverarchingDollar = [];
+        let dictOverarchingVolume = [];
         let isTenderContract = contractData["IS_TENDER"] == "1" ? true : false
-        for (var s = 0; s < PTR.length; s++) {
+        for (let s = 0; s < PTR.length; s++) {
             if (PTR[s]["_dirty"] !== undefined && PTR[s]["_dirty"] === true) errDeals.push(s);
             if (duplicateProductRows["duplicateProductDCIds"] !== undefined && duplicateProductRows.duplicateProductDCIds[PTR[s].DC_ID] !== undefined) errDeals.push(s);
             if ((curPricingTable.OBJ_SET_TYPE_CD !== "KIT" && curPricingTable.OBJ_SET_TYPE_CD !== "VOL_TIER"
@@ -77,7 +77,7 @@ export class PTE_Save_Util {
                 if (isHybridPS) {
                     dictRebateType[PTR[s]["REBATE_TYPE"]] = s;
                     dictPayoutBasedon[PTR[s]["PAYOUT_BASED_ON"]] = s;
-                    var isCustDivValid = PTE_Validation_Util.validateCustomerDivision(dictCustDivision, PTR[0]["CUST_ACCNT_DIV"], PTR[s]["CUST_ACCNT_DIV"]);
+                    const isCustDivValid = PTE_Validation_Util.validateCustomerDivision(dictCustDivision, PTR[0]["CUST_ACCNT_DIV"], PTR[s]["CUST_ACCNT_DIV"]);
                     if (isCustDivValid) {
                         dictCustDivision[PTR[0]["CUST_ACCNT_DIV"]] = s;
                     }
@@ -102,8 +102,8 @@ export class PTE_Save_Util {
         }
 
         if (errDeals.length > 0) {
-            for (var t = 0; t < errDeals.length; t++) {
-                var el = PTR[errDeals[t]];
+            for (let t = 0; t < errDeals.length; t++) {
+                const el = PTR[errDeals[t]];
                 if (el && !el._behaviors) el._behaviors = {};
                 if (!el._behaviors.isError) el._behaviors.isError = {};
                 if (!el._behaviors.validMsg) el._behaviors.validMsg = {};
@@ -298,7 +298,7 @@ export class PTE_Save_Util {
                 else
                     obj = item['PTR_SYS_PRD'];
                 let keys = Object.keys(obj);
-                for (var key in keys) {
+                for (let key in keys) {
                     if (!Number.isNaN(Number(key))) {
                         if (obj[keys[key]][0].CAP != undefined && obj[keys[key]][0].CAP != null) {
                             if ((item['CAP'] == undefined || item['CAP'] == null || item['CAP'] == "" || item['CAP'] == 'No CAP') || (item['CAP'] !== undefined && item['CAP'] != null && item['CAP'] !== "" && parseFloat(item['CAP']) < parseFloat(obj[keys[key]][0].CAP)))

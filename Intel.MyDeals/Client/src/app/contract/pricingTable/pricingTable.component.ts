@@ -160,8 +160,10 @@ export class pricingTableComponent {
                         this.wf_Stage = PRC_ST[0].WF_STG_CD;
                         this.ps_passed_validation = PRC_ST[0].PASSED_VALIDATION;
                         this.is_hybrid_ps = PRC_ST[0].IS_HYBRID_PRC_STRAT;
-                        this.pt_passed_validation = PRC_TBL[0].PASSED_VALIDATION
-                        await this.enableDealEditorTab();
+                        this.pt_passed_validation = PRC_TBL[0].PASSED_VALIDATION;
+                        if (PRC_TBL[0].warningMessages.length == 0) {
+                            this.isDETabEnabled = true;
+                        } else this.isDETabEnabled = false;
                         //if isRedirect is true which means user navigating to the deal through the global search results then for PS and Deal ID search, DE tab should be shown and for PT ->PTE tab should be shown
                         if (isRedirect) {
                             if (this.type != "PT" && this.isDETabEnabled) {
@@ -187,7 +189,7 @@ export class pricingTableComponent {
                             }
                         }
                         else {
-                            if (this.pt_passed_validation == 'Complete' && this.rowlength != 0) {
+                            if (this.pt_passed_validation == 'Complete') {
                                 //for the page to redirect
                                 setTimeout(() => {
                                     this.isDETab = true; this.isPTETab = false;
@@ -242,6 +244,12 @@ export class pricingTableComponent {
         }
         if (!isRedirect) {
             this.searchText = "";
+        }
+    }
+
+    loadPTEditor(event) {
+        if (event) {
+            this.isDETab = false; this.isPTETab = true; this.isDETabEnabled = false;
         }
     }
 
@@ -388,18 +396,6 @@ export class pricingTableComponent {
         //type of ID(Contract,PS,PT or WIP) 
         
         this.loadAllContractDetails(ids);
-    }
-    async enableDealEditorTab(isRedirect = false) {
-        let response = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
-            this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
-        });
-        if (response && response.PRC_TBL_ROW && response.PRC_TBL_ROW.length > 0 && response.PRC_TBL_ROW.filter(x => x.warningMessages.length > 0).length == 0) {
-            this.isDETabEnabled = true;
-            this.rowlength = response.PRC_TBL_ROW.length;
-        } else {
-            this.isDETabEnabled = false;
-            this.rowlength = response.PRC_TBL_ROW.length;
-        }
     }
 
     enableDETab(deTabInfo: any) {

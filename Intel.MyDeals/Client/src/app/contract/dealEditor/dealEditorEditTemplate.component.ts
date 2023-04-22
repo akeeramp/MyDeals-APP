@@ -165,7 +165,7 @@ export class dealEditorEditTemplateComponent {
             each(this.in_DataSet, (item) => {
                 if ((item.isLinked != undefined && item.isLinked && dataItem.isLinked) || (dataItem._parentCnt > 1 && dataItem.DC_PARENT_ID == item.DC_PARENT_ID && !dataItem.isLinked))  {
                     if (field == 'RATE' || field == 'INCENTIVE_RATE' || field == "DENSITY_RATE") {// if modified column is rate, then all dim key values needs to be copied to all other selected records
-                        var keys = Object.keys(item[field])
+                        let keys = Object.keys(item[field])
                         for (var index in keys) {
                             if (dataItem[field][keys[index]] != undefined && dataItem[field][keys[index]] != null)
                                 value = dataItem[field][keys[index]];
@@ -185,76 +185,53 @@ export class dealEditorEditTemplateComponent {
         }
     }
     updateTierAttributes(dataItem: any, field: string, row: number) {
+        let dimKey = "10___" + (row);
         if (field === "END_VOL" || field === "END_REV" || field === "END_PB") {
-            if (field === "END_REV" && (dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 9999999999.99 || dataItem[field]["10___" + row] == "9999999999.99")) {
-                dataItem[field]["10___" + row] = 9999999999.99;
-                this.saveLinkedDataItem(dataItem, field, 9999999999.99, "10___" + row)
+            if (field === "END_REV" && (dataItem[field][dimKey] === null || dataItem[field]["10___" + row] == 9999999999.99 || dataItem[field][dimKey] == "9999999999.99")) {
+                dataItem[field][dimKey] = 9999999999.99;
             }
-            else if ((dataItem[field]["10___" + row] === null || dataItem[field]["10___" + row] == 999999999 || dataItem[field]["10___" + row] == "999999999")) {
-                dataItem[field]["10___" + row] = "Unlimited";
-                this.saveLinkedDataItem(dataItem, field, "Unlimited", "10___" + row)
+            else if ((dataItem[field][dimKey] === null || dataItem[field][dimKey] == 999999999 || dataItem[field][dimKey] == "999999999")) {
+                dataItem[field][dimKey] = "Unlimited";
             }
+            this.saveLinkedDataItem(dataItem, field, dataItem[field][dimKey], dimKey)
         }
-        if ((field === "STRT_VOL" || field === "STRT_REV" || field === "RATE" || field === "INCENTIVE_RATE" || field === "STRT_PB") && dataItem[field]["10___" + row] === null) {
-            dataItem[field]["10___" + row] = 0;            
-            this.saveLinkedDataItem(dataItem, field, 0, "10___" + row)
+        else if ((field === "STRT_VOL" || field === "STRT_REV" || field === "RATE" || field === "INCENTIVE_RATE" || field === "STRT_PB") && dataItem[field][dimKey] === null) {
+            dataItem[field][dimKey] = 0;
+            this.saveLinkedDataItem(dataItem, field, 0, dimKey)
         }
-        if (field === "DENSITY_RATE") {
-            for (var key in dataItem[field]) {
-                if (key.indexOf("___") >= 0 && dataItem[field][key] == null) {
-                    dataItem[field][key] = 0;
-                    this.saveLinkedDataItem(dataItem, field, 0, key)
+        else
+            if (field === "DENSITY_RATE") {
+                for (var key in dataItem[field]) {
+                    if (key.indexOf("___") >= 0 && dataItem[field][key] == null) {
+                        dataItem[field][key] = 0;
+                        this.saveLinkedDataItem(dataItem, field, 0, key)
+                    }
                 }
             }
-        }        
         this.updateDataItem(dataItem, field);
-        if (field === "END_VOL") {
-            //if there is a next row/tier
-            if (!!dataItem["STRT_VOL"]["10___" + (row + 1)]) {
-                if (dataItem[field]["10___" + row].toString().toLowerCase() === "unlimited") {
-                    dataItem["STRT_VOL"]["10___" + (row + 1)] = 0;
-                    this.saveLinkedDataItem(dataItem, "STRT_VOL", 0, "10___" + (row + 1));
-                } else {
-                    //if end vol is a number, then set next start vol to that number + 1
-                    dataItem["STRT_VOL"]["10___" + (row + 1)] = parseInt(dataItem[field]["10___" + row]) + 1;
-                    this.saveLinkedDataItem(dataItem, "STRT_VOL", parseInt(dataItem[field]["10___" + row]) + 1, "10___" + (row + 1));
+        //if there is a next row/tier
+        let keys = ["STRT_VOL", "STRT_REV", "STRT_PB"];
+        dimKey = "10___" + (row + 1);
+        each(keys, key => {
+            if (!!dataItem[key][dimKey]) {
+                if (field === "END_VOL" || field === "END_PB" || field === "END_REV") {
+                    if (dataItem[field]["10___" + row].toString().toLowerCase() === "unlimited" || dataItem[field]["10___" + row] === "9999999999.99") {
+                        dataItem[key][dimKey] = 0;
+                    } else if (field === "END_VOL") {
+                        //if end vol is a number, then set next start vol to that number + 1
+                        dataItem[key][dimKey] = parseInt(dataItem[field]["10___" + row]) + 1;
+                    } else if (field === "END_PB") {
+                        //if end pb is a number, then set next start pb to that number + 0.001
+                        dataItem[key][dimKey] = (dataItem[field]["10___" + row] + .001).toFixed(3);
+                    } else {// field === "END_REV"
+                        //if end rev is a number, then set next start rev to that number + .01 (a penny)
+                        dataItem[key][dimKey] = (dataItem[field]["10___" + row] + .01).toFixed(2);
+                    }
                 }
-                this.updateDataItem(dataItem, 'STRT_VOL');
+                this.saveLinkedDataItem(dataItem, key, dataItem[key][dimKey], dimKey);
+                this.updateDataItem(dataItem, key);
             }
-        }
-
-        // REV ITEMS
-        if (field === "END_REV") {
-            //if there is a next row/tier
-            if (!!dataItem["STRT_REV"]["10___" + (row + 1)]) {
-                if (dataItem[field]["10___" + row] === "9999999999.99") { // Was "Unlimited"
-                    dataItem["STRT_REV"]["10___" + (row + 1)] = 0;
-                    this.saveLinkedDataItem(dataItem, "STRT_REV", 0, "10___" + (row + 1))
-                } else {
-                    //if end vol is a number, then set next start vol to that number + .01 (a penny)
-                    dataItem["STRT_REV"]["10___" + (row + 1)] = (dataItem[field]["10___" + row] + .01).toFixed(2);
-                    this.saveLinkedDataItem(dataItem, "STRT_REV", (dataItem[field]["10___" + row] + .01).toFixed(2), "10___" + (row + 1))
-                }
-                this.updateDataItem(dataItem, 'STRT_REV');
-            }
-        }
-
-        //DENSITY ITEMS
-        if (field === "END_PB") {
-            //if there is a next row/tier
-            if (!!dataItem["STRT_PB"]["10___" + (row + 1)]) {
-                if (dataItem[field]["10___" + row].toString().toLowerCase() === "unlimited") {
-                    dataItem["STRT_PB"]["10___" + (row + 1)] = 0;
-                    this.saveLinkedDataItem(dataItem, "STRT_PB", 0, "10___" + (row + 1))
-                } else {
-                    //if end pb is a number, then set next start pb to that number + 0.001
-                    dataItem["STRT_PB"]["10___" + (row + 1)] = (dataItem[field]["10___" + row] + .001).toFixed(3);
-                    this.saveLinkedDataItem(dataItem, "STRT_PB", (dataItem[field]["10___" + row] + .001).toFixed(3), "10___" + (row + 1))
-                }
-                this.updateDataItem(dataItem, 'STRT_PB');
-            }
-        }
-        this.saveLinkedDataItem(dataItem, field, dataItem[field]["10___" + row], "10___" + row)
+        })
     }
     convertToLowerCase(value) {
         if (typeof value !== 'number')
@@ -273,12 +250,11 @@ export class dealEditorEditTemplateComponent {
     getBidActions(data) {
         return TenderDashboardGridUtil.getBidActions(data);
     }
-    actionChange(dataItem) {
-        let event = {
+    actionChange(dataItem) { 
+        this.bidActionsUpdated.emit({
             newValue: this.selectedValue[this.bidActnsDropDownValue],
             dataItem: dataItem
-        }
-        this.bidActionsUpdated.emit(event);
+        });
     }
     onExcludeBlur(value) {
         if (value == undefined || value == null || value == "") {
@@ -292,16 +268,16 @@ export class dealEditorEditTemplateComponent {
     }
     ngOnInit() {
         this.fields = (this.in_Deal_Type === 'VOL_TIER' || this.in_Deal_Type === 'FLEX') ? PTE_Config_Util.volTierFields : this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : PTE_Config_Util.densityFields;
-        var keys = Object.keys(this.in_DropDownResponses.__zone_symbol__value);
-        for (var key = 0; key < keys.length; key++) {
-            if (keys[key] == "EXPIRE_FLG")
-                this.dropDowResponse[`${keys[key]}`] = this.in_DropDownResponses.__zone_symbol__value[keys[key]];
-            else if (keys[key] != "QLTR_BID_GEO")
-                this.dropDowResponse[`${keys[key]}`] = this.in_DropDownResponses.__zone_symbol__value[keys[key]].map(a => a.DROP_DOWN);
+        var keys = Object.keys(this.in_DropDownResponses);
+        each(keys, key => {
+            if (key == "EXPIRE_FLG")
+                this.dropDowResponse[`${key}`] = this.in_DropDownResponses[key];
+            else if (key != "QLTR_BID_GEO")
+                this.dropDowResponse[`${key}`] = this.in_DropDownResponses[key].map(a => a.DROP_DOWN);
             else
-                this.dropDowResponse[`${keys[key]}`] = this.in_DropDownResponses.__zone_symbol__value[keys[key]].map(a => a.dropdownName);
-        }
-        this.message = this.in_Field_Name + " is not a valid date."
+                this.dropDowResponse[`${key}`] = this.in_DropDownResponses[key].map(a => a.dropdownName);
+        });
+        this.message = this.in_Field_Name + " is not a valid date.";
         if (this.in_Field_Name == "tender_actions") {//dropdown values added for the field tender_actions(tender Dashboard)
             let approveActions = [];
             approveActions.push({ text: "Action", value: "Action" })  //placeholder dummy for a user non-selection

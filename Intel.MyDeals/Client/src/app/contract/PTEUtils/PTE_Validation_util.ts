@@ -11,13 +11,13 @@ import { PTE_Common_Util } from './PTE_Common_util';
 export class PTE_Validation_Util {
     static getCorrectedPtrUsrPrd (userInpProdName) {
         userInpProdName = userInpProdName.trim();
-        var retVal = "";
+        let retVal = "";
         if (userInpProdName.indexOf("NAND") != -1) {
             if (userInpProdName.indexOf(",") != -1) {
 
-                var splitStr = userInpProdName.split(",");
-                for (var i = 0; i < splitStr.length; i++) {
-                    var individProdName = splitStr[i].trim();
+                const splitStr = userInpProdName.split(",");
+                for (let i = 0; i < splitStr.length; i++) {
+                    const individProdName = splitStr[i].trim();
                     if (individProdName.indexOf("NAND") != -1) {
                         retVal = retVal + ((retVal.length == 0) ? individProdName.substring(individProdName.lastIndexOf(" ")) : "," + individProdName.substring(individProdName.lastIndexOf(" ")));
                     } else {
@@ -35,8 +35,8 @@ export class PTE_Validation_Util {
 
     static buildTranslatorOutputObject (invalidProductJSONRows, data) {
         invalidProductJSONRows.forEach(item => {
-            var inValidJSON = JSON.parse(item.PTR_SYS_INVLD_PRD);
-            var validJSON = (item.PTR_SYS_PRD != null && item.PTR_SYS_PRD != "") ? JSON.parse(item.PTR_SYS_PRD) : "";
+            const inValidJSON = JSON.parse(item.PTR_SYS_INVLD_PRD);
+            const validJSON = (item.PTR_SYS_PRD != null && item.PTR_SYS_PRD != "") ? JSON.parse(item.PTR_SYS_PRD) : "";
             data.ValidProducts[item.ROW_NUMBER] = validJSON;
             data.ProdctTransformResults[item.ROW_NUMBER] = inValidJSON.ProdctTransformResults;
             data.DuplicateProducts[item.ROW_NUMBER] = inValidJSON.DuplicateProducts;
@@ -86,8 +86,8 @@ export class PTE_Validation_Util {
         if (!data)
             data = { ValidProducts: {}, ProdctTransformResults: {}, DuplicateProducts: {}, InValidProducts: {}};
         invalidProductJSONRows.forEach(item => {
-            var inValidJSON = JSON.parse(item.PTR_SYS_INVLD_PRD);
-            var validJSON = (item.PTR_SYS_PRD != null && item.PTR_SYS_PRD != "") ? JSON.parse(item.PTR_SYS_PRD) : "";
+            const inValidJSON = JSON.parse(item.PTR_SYS_INVLD_PRD);
+            const validJSON = (item.PTR_SYS_PRD != null && item.PTR_SYS_PRD != "") ? JSON.parse(item.PTR_SYS_PRD) : "";
             if(validJSON)
                 data['ValidProducts'][item.DC_ID] = validJSON;
             if (inValidJSON.ProdctTransformResults)
@@ -104,20 +104,19 @@ export class PTE_Validation_Util {
     static validateMultiGeoForHybrid(data: any, isHybrid: any) {
         if (isHybrid == 1 || isHybrid == '1') {
             //This is Comma Separated GEOS
-            var prod_used = [];
-            for (var i = 0; i < data.length; i++) {
+            let prod_used = [];
+            for (let i = 0; i < data.length; i++) {
                 if (data[i].IS_CANCELLED !== "1") {
                     //Add Products
-                    var temp_split = (data[i].PTR_USER_PRD.toLowerCase().trim().split(/\s*,\s*/));
-                    for (var j = 0; j < temp_split.length; j++) {
+                    const temp_split = (data[i].PTR_USER_PRD.toLowerCase().trim().split(/\s*,\s*/));
+                    for (let j = 0; j < temp_split.length; j++) {
                         prod_used.push(temp_split[j]);
                     }
                     //Checking GEO
                     //Added a check to check for Geo_Combined only if it exists.
                     if (data[i].GEO_COMBINED && data[i].GEO_COMBINED.indexOf(',') > -1) {
-                        var firstBracesPos = data[i].GEO_COMBINED.lastIndexOf('[');
-                        var lastBracesPos = data[i].GEO_COMBINED.lastIndexOf(']');
-                        var lastComma = data[i].GEO_COMBINED.lastIndexOf(',');
+                        const lastBracesPos = data[i].GEO_COMBINED.lastIndexOf(']');
+                        const lastComma = data[i].GEO_COMBINED.lastIndexOf(',');
                         if (lastComma > lastBracesPos) {
                             return "1";
                         }
@@ -155,7 +154,7 @@ export class PTE_Validation_Util {
         if (response.splitProducts) {
             let prod = {};
             let items = Object.keys(prdObj);
-            for (var i = 0; i < items.length; i++) {
+            for (let i = 0; i < items.length; i++) {
                 let obj = {};
                 obj[`${items[i]}`] = prdObj[`${items[i]}`]
                 prod[i + 1] = obj;
@@ -168,12 +167,12 @@ export class PTE_Validation_Util {
     }
 
     static anyPtrDirtyValidation ($linq, pricingTableRow) {
-        var validServerType = $linq.Enumerable().From(pricingTableRow).Where(
+        const validServerType = $linq.Enumerable().From(pricingTableRow).Where(
             function (x) {
                 return x._behaviors.isError.SERVER_DEAL_TYPE === true;
             }).ToArray();
 
-        var dirtyItems = $linq.Enumerable().From(pricingTableRow).Where(
+            const dirtyItems = $linq.Enumerable().From(pricingTableRow).Where(
             function (x) {
                 return x.PASSED_VALIDATION === "Dirty";
             }).ToArray();
@@ -183,8 +182,8 @@ export class PTE_Validation_Util {
 
     static FixEcapKitField (pricingTableRow) {
         // Implement a rule to set KIT_ECAP column read only property = source column read only setting
-        for (var i = 0; i < pricingTableRow.length; i++) {
-            var item = pricingTableRow[i];
+        for (let i = 0; i < pricingTableRow.length; i++) {
+            const item = pricingTableRow[i];
             if (item._behaviors !== undefined && item._behaviors.isReadOnly !== undefined && item._behaviors.isReadOnly["ECAP_PRICE"] !== undefined && item._behaviors.isReadOnly["ECAP_PRICE"] === true) {
                 item._behaviors.isReadOnly["ECAP_PRICE_____20_____1"] = true;
             }
@@ -213,19 +212,19 @@ export class PTE_Validation_Util {
     }
 
     static warningHandler (pricingTableData, kitDimAtrbs) {
-        for (var i = 0; i < pricingTableData.data.WIP_DEAL.length; i++) {
-            var dataItem = pricingTableData.data.WIP_DEAL[i];
-            var objTypeCd = dataItem.OBJ_SET_TYPE_CD;
+        for (let i = 0; i < pricingTableData.data.WIP_DEAL.length; i++) {
+            const dataItem = pricingTableData.data.WIP_DEAL[i];
+            const objTypeCd = dataItem.OBJ_SET_TYPE_CD;
             if (objTypeCd === "KIT" || objTypeCd === "FLEX" || objTypeCd === "VOL_TIER"
                 || objTypeCd === "REV_TIER" || objTypeCd === "DENSITY") {
-                var anyWarnings = false;
+                let anyWarnings = false;
                 if (dataItem.warningMessages !== undefined && dataItem.warningMessages.length > 0) anyWarnings = true;
-                var tierAtrbs = PTE_Config_Util.tierAtrbs;
+                const tierAtrbs = PTE_Config_Util.tierAtrbs;
                 if (anyWarnings) {
-                    var dimStr = "_10___";
-                    var isKit = 0;
-                    var relevantAtrbs = tierAtrbs;
-                    var tierCount = dataItem.NUM_OF_TIERS;
+                    let dimStr = "_10___";
+                    let isKit = 0;
+                    let relevantAtrbs = tierAtrbs;
+                    let tierCount = dataItem.NUM_OF_TIERS;
 
                     if (objTypeCd === "KIT") {
                         if (dataItem.PRODUCT_FILTER === undefined) { continue; }
@@ -235,12 +234,12 @@ export class PTE_Validation_Util {
                         tierCount = Object.keys(dataItem.PRODUCT_FILTER).length;
                     }
 
-                    for (var t = 1 - isKit; t <= tierCount - isKit; t++) {
-                        for (var a = 0; a < relevantAtrbs.length; a++) {
+                    for (let t = 1 - isKit; t <= tierCount - isKit; t++) {
+                        for (let a = 0; a < relevantAtrbs.length; a++) {
                             PTE_Common_Util.mapTieredWarnings(dataItem, dataItem, relevantAtrbs[a], (relevantAtrbs[a] + dimStr + t), t);
                         }
                     }
-                    for (var a = 0; a < relevantAtrbs.length; a++) {
+                    for (let a = 0; a < relevantAtrbs.length; a++) {
                         delete dataItem._behaviors.validMsg[relevantAtrbs[a]];
                     }
                 }
@@ -249,7 +248,7 @@ export class PTE_Validation_Util {
     }
 
     static setModalOptions (confirmationModPerDealGrp, key, maxKITproducts) {
-        var modalOptions = null;
+        let modalOptions = null;
         if (confirmationModPerDealGrp[key].isNonEditableKITname) {
             // User tried to merge a deal group name that exists and cannot be edited (like when it has a tracker number)
             modalOptions = {
@@ -292,7 +291,7 @@ export class PTE_Validation_Util {
         let isShowStopperError = DE_Validation_Util.validateTenderDahsboardDeals(data, templates);
         PTE_Common_Util.setWarningFields(data, curPricingTable);
         if (data != null) {
-            for (var i = 0; i < data.length; i++) {
+            for (let i = 0; i < data.length; i++) {
                 DE_Save_Util.savedWithWarning(data[i], groups, templates);
             }
         }
@@ -339,13 +338,13 @@ export class PTE_Validation_Util {
     static validateFlexDate(data, curPricingTable, wipData) {
         if (curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
             data = this.clearValidation(data, 'START_DT');
-            var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
-            var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
-            var objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';
+            const accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
+            const drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
+            const objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';
             //For multi tiers last record will have latest date, skipping duplicate DC_ID
-            var filterData = uniq(sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+            const filterData = uniq(sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
 
-            var minAccrualDate = new Date(Math.min.apply(null, filterData.map(function (x) { return new Date(x.START_DT); })));
+            const minAccrualDate = new Date(Math.min.apply(null, filterData.map(function (x) { return new Date(x.START_DT); })));
 
             var drainingInvalidDates = drainingEntries.filter(
                 (val) => StaticMomentService.moment(val.START_DT) < (StaticMomentService.moment(minAccrualDate).add(0, 'days'))
@@ -383,11 +382,11 @@ export class PTE_Validation_Util {
     static validateFlexRules(data, curPricingTable, wipData, restrictGroupFlexOverlap) {
         if (curPricingTable.OBJ_SET_TYPE_CD == "FLEX") {
             data = this.clearValidation(data, 'PAYOUT_BASED_ON');
-            var accrualRule = true, drainingRule = true;
-            var objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';
-            var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
-            var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
-            var filterData = uniq(sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+            let accrualRule = true, drainingRule = true;
+            const objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';
+            const accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
+            const drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
+            const filterData = uniq(sortBy(accrualEntries, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
             accrualRule = filterData.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == filterData[0].PAYOUT_BASED_ON);
             drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == drainingEntries[0].PAYOUT_BASED_ON);
             if (accrualEntries.length > 0 && drainingRule && drainingEntries.length > 0) { restrictGroupFlexOverlap = true; }
@@ -402,8 +401,8 @@ export class PTE_Validation_Util {
                 });
             }
             if ((filterData.some(function (el) { return el.PAYOUT_BASED_ON.toUpperCase() == 'CONSUMPTION' })) && (drainingEntries.some(function (el) { return el.PAYOUT_BASED_ON.toUpperCase() == 'BILLINGS' }))) {
-                var restrictedAccrualData = filterData.filter((val) => val.PAYOUT_BASED_ON.toUpperCase() == 'CONSUMPTION');
-                var restrictedDraininngData = drainingEntries.filter((val) => val.PAYOUT_BASED_ON.toUpperCase() == 'BILLINGS');
+                const restrictedAccrualData = filterData.filter((val) => val.PAYOUT_BASED_ON.toUpperCase() == 'CONSUMPTION');
+                const restrictedDraininngData = drainingEntries.filter((val) => val.PAYOUT_BASED_ON.toUpperCase() == 'BILLINGS');
                 each(restrictedAccrualData, (item) => {
                     item = this.setFlexBehaviors(item, 'PAYOUT_BASED_ON', 'notallowed', restrictGroupFlexOverlap);
                 });
@@ -449,8 +448,8 @@ export class PTE_Validation_Util {
         contractData._behaviors.validMsg['START_DT'] =
             contractData._behaviors.validMsg['END_DT'] = "";
 
-        var startDate = contractData.START_DT;
-        var endDate = contractData.END_DT;
+        let startDate = contractData.START_DT;
+        let endDate = contractData.END_DT;
 
         if (dateType == 'START_DT') {
             if (StaticMomentService.moment(startDate).isAfter(endDate) || StaticMomentService.moment(startDate).isBefore(contractData.MinDate)) {
@@ -480,11 +479,11 @@ export class PTE_Validation_Util {
     }
 
     static validateTitles = function (dataItem, curPricingStrategy, contractData, curPricingTable, ptTitle) {
-        var rtn = true;
+        let rtn = true;
 
         if (!curPricingStrategy) return true;
-        var isPsUnique = lnavUtil.IsUniqueInList(contractData.PRC_ST, curPricingStrategy["TITLE"], "TITLE", true);
-        var isPtUnique = !curPricingTable ? true : lnavUtil.IsUniqueInList(curPricingStrategy.PRC_TBL, curPricingTable["TITLE"], "TITLE", true);
+        const isPsUnique = lnavUtil.IsUniqueInList(contractData.PRC_ST, curPricingStrategy["TITLE"], "TITLE", true);
+        const isPtUnique = !curPricingTable ? true : lnavUtil.IsUniqueInList(curPricingStrategy.PRC_TBL, curPricingTable["TITLE"], "TITLE", true);
 
         // Pricing Table
         if (!!curPricingTable) {
@@ -566,10 +565,10 @@ export class PTE_Validation_Util {
 
     static validateMarketSegment = function (data, wipData, spreadDs) {
         data = this.clearValidation(data, 'MRKT_SEG');
-        var objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';
+        const objectId = wipData ? 'DC_PARENT_ID' : 'DC_ID';
         //In SpreadData for Multi-Tier Tier_NBR one always has the updated date
         //Added if condition as this function gets called both on saveandvalidate of WIP and PTR.As spreadDS is undefined in WIP object added this condition
-        var spreadData;
+        let spreadData;
         if (spreadDs != undefined) {
             spreadData = spreadDs;
         }
@@ -577,8 +576,8 @@ export class PTE_Validation_Util {
             spreadData = data
         }
         //For multi tiers last record will have latest date, skipping duplicate DC_ID
-        var filterData = uniq(sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
-        var isMarketSegment = filterData.some((val) => val.MRKT_SEG == null || val.MRKT_SEG == '');
+        const filterData = uniq(sortBy(spreadData, function (itm) { return itm.TIER_NBR }), function (obj) { return obj[objectId] });
+        const isMarketSegment = filterData.some((val) => val.MRKT_SEG == null || val.MRKT_SEG == '');
         if (isMarketSegment) {
             each(data, (item) => {
                 if (item.MRKT_SEG == null || item.MRKT_SEG == '') {
@@ -605,15 +604,15 @@ export class PTE_Validation_Util {
             });
         }
         if (curPricingStrategy.IS_HYBRID_PRC_STRAT === '1' && (curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP")) {
-            var rebateType = data.filter(ob => ob.REBATE_TYPE.toLowerCase() == 'tender');
+            const rebateType = data.filter(ob => ob.REBATE_TYPE.toLowerCase() == 'tender');
             if (rebateType && rebateType.length > 0) {
                 if (data.length > 1) {
-                    var endCustObj = ""
+                    let endCustObj = ""
                     if (data[0].END_CUST_OBJ != null && data[0].END_CUST_OBJ != undefined && data[0].END_CUST_OBJ != "") {
                         endCustObj = JSON.parse(data[0].END_CUST_OBJ)
                     }
                     each(data, (item) => {
-                        var parsedEndCustObj = "";
+                        let parsedEndCustObj = "";
                         if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
                             parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
                             if (parsedEndCustObj.length != endCustObj.length) {
@@ -622,8 +621,8 @@ export class PTE_Validation_Util {
                                 });
                             }
                             else {
-                                for (var i = 0; i < parsedEndCustObj.length; i++) {
-                                    var exists = false;
+                                for (let i = 0; i < parsedEndCustObj.length; i++) {
+                                    let exists = false;
                                     each(endCustObj, (item) => {
                                         if (item["END_CUSTOMER_RETAIL"] == parsedEndCustObj[i]["END_CUSTOMER_RETAIL"] &&
                                             item["PRIMED_CUST_CNTRY"] == parsedEndCustObj[i]["PRIMED_CUST_CNTRY"]) {
@@ -652,12 +651,12 @@ export class PTE_Validation_Util {
             }
             else {
                 if (data.length > 1) {
-                    var endCustObj = ""
+                    let endCustObj = ""
                     if (data[0].END_CUST_OBJ != null && data[0].END_CUST_OBJ != undefined && data[0].END_CUST_OBJ != "") {
                         endCustObj = JSON.parse(data[0].END_CUST_OBJ)
                     }
                     each(data, (item) => {
-                        var parsedEndCustObj = "";
+                        let parsedEndCustObj = "";
                         if (item.END_CUST_OBJ != null && item.END_CUST_OBJ != undefined && item.END_CUST_OBJ != "") {
                             parsedEndCustObj = JSON.parse(item.END_CUST_OBJ);
                             if (parsedEndCustObj.length != endCustObj.length) {
@@ -666,8 +665,8 @@ export class PTE_Validation_Util {
                                 });
                             }
                             else {
-                                for (var i = 0; i < parsedEndCustObj.length; i++) {
-                                    var exists = false;
+                                for (let i = 0; i < parsedEndCustObj.length; i++) {
+                                    let exists = false;
                                     each(endCustObj, (item) => {
                                         if (item["END_CUSTOMER_RETAIL"] == parsedEndCustObj[i]["END_CUSTOMER_RETAIL"] &&
                                             item["PRIMED_CUST_CNTRY"] == parsedEndCustObj[i]["PRIMED_CUST_CNTRY"]) {
@@ -723,9 +722,9 @@ export class PTE_Validation_Util {
     }
 
     static validateSettlementPartner = function (data, curPricingStrategy) {
-        var hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond = true;
+        let hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond = true;
         //check if settlement is cash and pgm type is backend
-        var cashObj = data.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
+        const cashObj = data.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
         if (cashObj && cashObj.length > 0) {
             if (hybCond == '1') {
                 retCond = data.every((val) => val.SETTLEMENT_PARTNER != null && val.SETTLEMENT_PARTNER != '' && val.SETTLEMENT_PARTNER == data[0].SETTLEMENT_PARTNER);
@@ -766,10 +765,10 @@ export class PTE_Validation_Util {
 
     static itemValidationBlock (data, key, mode, curPricingTable) {        
         //For multi tiers last record will have latest date, skipping duplicate DC_ID
-        var filterData = uniq(sortBy(data, function (itm) { return itm.TIER_NBR }), function (obj) { return obj["DC_ID"] });
+        const filterData = uniq(sortBy(data, function (itm) { return itm.TIER_NBR }), function (obj) { return obj["DC_ID"] });
 
-        var v1 = filterData.map((val) => val[key]).filter((value, index, self) => self.indexOf(value) === index);
-        var hasNotNull = v1.some(function (el) { return el !== null && el != ""; });
+        let v1 = filterData.map((val) => val[key]).filter((value, index, self) => self.indexOf(value) === index);
+        const hasNotNull = v1.some(function (el) { return el !== null && el != ""; });
 
         if (mode.indexOf("notequal") >= 0) { // Returns -1 if not in list 
             if (v1.length > 1 && hasNotNull) {
@@ -784,7 +783,7 @@ export class PTE_Validation_Util {
         }
         if (mode.indexOf("equalblank") >= 0) { // Returns -1 if not in list
             if (hasNotNull == false && v1[0] !== "") {
-                var v1List = data.filter((val) => val[key] === null);
+                const v1List = data.filter((val) => val[key] === null);
                 each(v1List, (item) => {
                     if (!item._behaviors) item._behaviors = {};
                     if (!item._behaviors.isReadOnly) item._behaviors.isReadOnly = {};
@@ -806,7 +805,7 @@ export class PTE_Validation_Util {
         }
 
         if (key == "END_CUSTOMER_RETAIL") {
-            var uniqueEndCustomerCountry = filterData.map((val) => val["PRIMED_CUST_CNTRY"]).filter((value, index, self) => self.indexOf(value) === index);
+            const uniqueEndCustomerCountry = filterData.map((val) => val["PRIMED_CUST_CNTRY"]).filter((value, index, self) => self.indexOf(value) === index);
             if (uniqueEndCustomerCountry.length > 1) {
                 each(data, (item) => {
                     if (!item._behaviors) item._behaviors = {};
@@ -822,9 +821,9 @@ export class PTE_Validation_Util {
     }
     // validate OverArching conditions
     static validateOverArching = function (data, curPricingStrategy, curPricingTable) {
-        var hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT, retZeroOAD = false, retZeroOAV = false;
-        var isFlexAccrual = data.every((val) => val.FLEX_ROW_TYPE === 'Accrual');
-        var isFlatRate = curPricingTable.OBJ_SET_TYPE_CD === 'VOL_TIER';
+        let hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT, retZeroOAD = false, retZeroOAV = false;
+        let isFlexAccrual = data.every((val) => val.FLEX_ROW_TYPE === 'Accrual');
+        let isFlatRate = curPricingTable.OBJ_SET_TYPE_CD === 'VOL_TIER';
         //calling clear overarching in the begening
         data = this.clearValidation(data, 'REBATE_OA_MAX_AMT');
         data = this.clearValidation(data, 'REBATE_OA_MAX_VOL');
@@ -847,12 +846,12 @@ export class PTE_Validation_Util {
                     item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'equalzero', curPricingTable);
                 });
             }
-            var testMaxAmtValues = [];
-            var testMaxAmtCount = 0;
-            var testMaxVolValues = [];
-            var testMaxVolCount = 0;
-            var rebateMaxAmt;
-            var rabateMaxVOL;
+            let testMaxAmtValues = [];
+            let testMaxAmtCount = 0;
+            let testMaxVolValues = [];
+            let testMaxVolCount = 0;
+            let rebateMaxAmt;
+            let rabateMaxVOL;
             each(data, (item) => {
                 // Are both values populated on this item?
                 if ((item.REBATE_OA_MAX_AMT !== undefined && item.REBATE_OA_MAX_AMT !== null && item.REBATE_OA_MAX_AMT !== "") &&
@@ -915,7 +914,7 @@ export class PTE_Validation_Util {
                 }
             });
             // Check if this is a flex, and if it is, only accrual single tier rows count..
-            var elementCount = isFlexAccrual != 1 ? data.length : data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual').length;
+            const elementCount = isFlexAccrual != 1 ? data.length : data.filter((val) => val.FLEX_ROW_TYPE === 'Accrual').length;
             if (testMaxAmtValues.length > 1 || (testMaxAmtCount > 0 && testMaxAmtCount != elementCount)) {
                 each(data, (item) => {
                     item = PTE_Load_Util.setBehaviors(item, 'REBATE_OA_MAX_AMT', 'notequal', curPricingTable);
@@ -939,8 +938,8 @@ export class PTE_Validation_Util {
         if (curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD === "FLEX") {
             data = this.clearValidation(data, 'FLEX_ROW_TYPE');
 
-            var accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
-            var drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
+            const accrualEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Accrual');
+            const drainingEntries = data.filter((val) => val.FLEX_ROW_TYPE == 'Draining');
             restrictGroupFlexOverlap = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Consumption");
 
             if (drainingEntries.length > 0 && accrualEntries.length == 0) {
@@ -957,8 +956,8 @@ export class PTE_Validation_Util {
         return data;
     }
     static validateHybridFields = function (data, curPricingStrategy, curPricingTable) {
-        var hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT;            
-        var isFlexDeal = curPricingTable.OBJ_SET_TYPE_CD === 'FLEX';
+        const hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT;            
+        const isFlexDeal = curPricingTable.OBJ_SET_TYPE_CD === 'FLEX';
         //calling clear overarching in the begening
 
         if (hybCond == '1' || isFlexDeal) {
@@ -993,7 +992,7 @@ export class PTE_Validation_Util {
     }
     //validate settlement level for hybrid 
     static validateSettlementLevel = function (data, curPricingStrategy) {
-        var hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond = false;
+        let hybCond = curPricingStrategy.IS_HYBRID_PRC_STRAT, retCond = false;
         //calling clear all validation
         data = this.clearValidation(data, 'AR_SETTLEMENT_LVL');
         if (hybCond == '1') {
@@ -1009,8 +1008,8 @@ export class PTE_Validation_Util {
     }
 
     static hasDuplicateProduct(pricingTableRows) {
-        var rows = JSON.parse(JSON.stringify(pricingTableRows));
-        var sortedRanges = rows.sort((previous, current) => {
+        const rows = JSON.parse(JSON.stringify(pricingTableRows));
+        const sortedRanges = rows.sort((previous, current) => {
 
             previous.START_DT = previous.START_DT instanceof Date ? previous.START_DT : new Date(previous.START_DT);
             current.END_DT = current.END_DT instanceof Date ? current.END_DT : new Date(current.END_DT);
@@ -1019,8 +1018,8 @@ export class PTE_Validation_Util {
             current.START_DT = current.START_DT instanceof Date ? current.START_DT : new Date(current.START_DT);
 
             // get the start date from previous and current
-            var previousTime = previous.START_DT.getTime();
-            var currentTime = current.END_DT.getTime();
+            const previousTime = previous.START_DT.getTime();
+            const currentTime = current.END_DT.getTime();
 
             // if the previous is earlier than the current
             if (previousTime < currentTime) {
@@ -1036,24 +1035,24 @@ export class PTE_Validation_Util {
             return 1;
         });
 
-        var dictDuplicateProducts = {};
+        let dictDuplicateProducts = {};
 
-        var result = sortedRanges.reduce((result, current, idx, arr) => {
+        let result = sortedRanges.reduce((result, current, idx, arr) => {
             // get the previous range
             if (idx === 0) { return result; }
-            var previous = arr[idx - 1];
+            const previous = arr[idx - 1];
 
 
             // check for any overlap
-            var previousEnd = previous.END_DT.getTime();
-            var currentStart = current.START_DT.getTime();
-            var overlap = (previousEnd >= currentStart);
+            const previousEnd = previous.END_DT.getTime();
+            const currentStart = current.START_DT.getTime();
+            const overlap = (previousEnd >= currentStart);
 
             // store the result
             if (overlap) {
                 if (previous.PTR_SYS_PRD !== "") {
-                    var sysProducts = JSON.parse(previous.PTR_SYS_PRD);
-                    for (var key in sysProducts) {
+                    const sysProducts = JSON.parse(previous.PTR_SYS_PRD);
+                    for (let key in sysProducts) {
                         if (sysProducts.hasOwnProperty(key)) {
                             each(sysProducts[key], function (item) {
                                 if (dictDuplicateProducts[item.PRD_MBR_SID] == undefined) {
@@ -1076,8 +1075,8 @@ export class PTE_Validation_Util {
                 }
 
                 if (current.PTR_SYS_PRD !== "") {
-                    var sysProducts = JSON.parse(current.PTR_SYS_PRD);
-                    for (var key in sysProducts) {
+                    const sysProducts = JSON.parse(current.PTR_SYS_PRD);
+                    for (let key in sysProducts) {
                         if (sysProducts.hasOwnProperty(key)) {
                             each(sysProducts[key], function (item) {
                                 if (dictDuplicateProducts[item.PRD_MBR_SID] == undefined) {
@@ -1113,8 +1112,8 @@ export class PTE_Validation_Util {
         if (baseCustDiv != null && custDiv != null) {
             if (Object.keys(dictCustDivision).length == 1 && baseCustDiv.indexOf("/") !== -1 && custDiv.indexOf("/") !== -1
                 && baseCustDiv.split("/").length == custDiv.split("/").length) {
-                var divs = custDiv.split("/");
-                for (var z = 0; z < divs.length; z++) {
+                const divs = custDiv.split("/");
+                for (let z = 0; z < divs.length; z++) {
                     if (baseCustDiv.indexOf(divs[z]) == -1) {
                         return false;
                     }

@@ -1,8 +1,8 @@
 ﻿<link href="/Client/src/app/style/dealEditor.css" rel="stylesheet" />
 <loading-panel-angular id="DELoading" style="z-index:500;" [show]="isDataLoading" [header]="spinnerMessageHeader"
                        [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
-<kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event)" id="dealEditorTab" class="width-fixes new-allDeals fs-increase" style="min-height:400px;">
-    <kendo-tabstrip-tab *ngFor="let data of groups" title="{{data.name}}" [selected]="selectedTab === data.name" [cssClass]="data.isTabHidden? 'hidden' : 'visible'">
+<kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event);" id="dealEditorTab" class="width-fixes new-allDeals fs-increase" style="min-height:400px;">
+    <kendo-tabstrip-tab *ngFor="let data of groups;" title="{{data.name}}" [selected]="selectedTab === data.name" [cssClass]="data.isTabHidden? 'hidden' : 'visible'">
         <ng-template kendoTabTitle>
             <span><i *ngIf="data.name !== 'CAP Info' && data.name !== 'All'" class="intelicon-pin-outlined" style="color: #00aeef; border-radius: 15px; font-size:16px; padding: 3px;" title="Pin tab so it always shows in the grid"></i></span>&nbsp;
             <span class="colorChg">{{data.name}} &nbsp;</span>
@@ -225,7 +225,7 @@
             </div>
             <div class="op-grid-container one-check oppo-grids">
                 <kendo-grid *ngIf="columns.length != 0" id="dealEditor" [data]="gridData" [navigable]="true" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
-                            [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true"
+                            [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true" [virtualColumns]="true"
                             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" (cellClose)="cellCloseHandler($event)"
                             filterable="menu" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)" (filterChange)="filterChange($event)"
                             class="opUiContainer dashboard op-grid k-grid k-widgetGr k-reorderable k-editable k-grid-lockedcolumns md"
@@ -243,7 +243,7 @@
                             </div>
                         </ng-template>
                         <ng-template kendoGridHeaderTemplate>
-                            <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [pageCount]="pageCount" [in_Title]="column.title" [in_Is_Tender_Dashboard]="in_Is_Tender_Dashboard" [grid_Result]="gridResult" [grid_Data]="gridData"></deal-editor-header>
+                            <deal-editor-header [in_Field_Name]="column.field" [in_Header_Template]="column.headerTemplate" [pageCount]="state.take" [in_Title]="column.title" [in_Is_Tender_Dashboard]="in_Is_Tender_Dashboard" [grid_Result]="gridResult" [grid_Data]="gridData"></deal-editor-header>
                         </ng-template>
                         <ng-template let-dataItem="dataItem" kendoGridCellTemplate>
                             <deal-editor-cell class="extraSpace-colFix" [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="curPricingTable.OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [contract_Data]="contractData" [grid_Data]="gridData.data" [in_Is_Tender_Dashboard]="in_Is_Tender_Dashboard"

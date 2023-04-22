@@ -1,7 +1,5 @@
 import { each, uniq, sortBy, pluck, findWhere, findIndex, reject, find, keys, isUndefined } from 'underscore';
-import { logger } from '../../shared/logger/logger';
-import { PRC_TBL_Model_Attributes, PRC_TBL_Model_Column, PRC_TBL_Model_Field } from '../pricingTableEditor/handsontable.interface';
-import { pricingTableEditorService } from '../pricingTableEditor/pricingTableEditor.service';
+import {  PRC_TBL_Model_Column, PRC_TBL_Model_Field } from '../pricingTableEditor/handsontable.interface';
 import Handsontable from 'handsontable';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util'
 import { StaticMomentService } from "../../shared/moment/moment.service";
@@ -23,13 +21,11 @@ export class PTEUtil {
         licenseKey: '470b6-15eca-ea440-24021-aa526',
     };
    
-    static generateHandsontableColumn(isTenderContract:any,pteService: pricingTableEditorService,
-        loggerService: logger,
+    static generateHandsontableColumn(isTenderContract:any,
         dropdownResponses: any[],
         templateColumnFields: PRC_TBL_Model_Field[],
-        templateColumnAttributes: PRC_TBL_Model_Attributes[],
         item: PRC_TBL_Model_Column,
-        index: number): Handsontable.ColumnSettings {
+        ): Handsontable.ColumnSettings {
         let currentColumnConfig: Handsontable.ColumnSettings = {
             data: item.field,
             width: item.width,
@@ -179,16 +175,16 @@ export class PTEUtil {
                 each(transformResults.ValidProducts, (val, DCID) => {
                     if (data && data.DC_ID == DCID) {
                         let foramttedTranslatedResult = PTEUtil.massagingObjectsForJSON(DCID, transformResults);
-                        var userInput = PTEUtil.updateUserInput(foramttedTranslatedResult.ValidProducts[DCID]);
+                        const userInput = PTEUtil.updateUserInput(foramttedTranslatedResult.ValidProducts[DCID]);
                         if (userInput && userInput['contractProducts']) {
-                            var contractProducts = userInput['contractProducts'].toString().replace(/(\r\n|\n|\r)/gm, "");
+                            const contractProducts = userInput['contractProducts'].toString().replace(/(\r\n|\n|\r)/gm, "");
                             data.PTR_USER_PRD = contractProducts;
                             data.PTR_SYS_PRD = JSON.stringify(val)
                             PTE_Common_Util.setBehaviors(data);
                             data._behaviors.isError['PTR_USER_PRD'] = false;
                             data._behaviors.validMsg['PTR_USER_PRD'] = 'Valid Product';
                             if (userInput['excludeProducts']) {
-                                var excludeProducts = userInput['excludeProducts'];
+                                const excludeProducts = userInput['excludeProducts'];
                                 if (excludeProducts != "" && excludeProducts != null) {
                                     data.PRD_EXCLDS = excludeProducts;
                                     data._behaviors.isError['PRD_EXCLDS'] = false;
@@ -265,8 +261,8 @@ export class PTEUtil {
             distinctPricingTableRowData.push(findWhere(currentPricingTableRowData,{DC_ID:DCID}));
         });
         // Validate columns that product is dependent on
-        for (var i = 0; i < distinctPricingTableRowData.length; i++) {
-            for (var d = 0; d < productValidationDependencies.length; d++) {
+        for (let i = 0; i < distinctPricingTableRowData.length; i++) {
+            for (let d = 0; d < productValidationDependencies.length; d++) {
                 if (distinctPricingTableRowData[i][productValidationDependencies[d]] === null || distinctPricingTableRowData[i][productValidationDependencies[d]] === "") {
                     PTE_Common_Util.setBehaviors(distinctPricingTableRowData[i]);
                     distinctPricingTableRowData[i]._behaviors.isError[productValidationDependencies[d]] = true;
@@ -363,7 +359,7 @@ export class PTEUtil {
     }
 
     static massagingObjectsForJSON(key, transformResult) {
-        for (var validKey in transformResult.ValidProducts[key]) {
+        for (let validKey in transformResult.ValidProducts[key]) {
             transformResult.ValidProducts[key][validKey] = transformResult.ValidProducts[key][validKey].map(function (x) {
                 return {
                     BRND_NM: x.BRND_NM,
@@ -404,18 +400,18 @@ export class PTEUtil {
             return "";
         }
         let input = { contractProducts: "", excludeProducts: "" };
-        for (var prd in validProducts) {
+        for (let prd in validProducts) {
             if (validProducts.hasOwnProperty(prd)) {
-                var contractProducts = "";
-                var excludeProducts = "";
+                let contractProducts = "";
+                let excludeProducts = "";
 
                 // Include products
-                var products = validProducts[prd].filter(function (x) {
+                let Includeproducts = validProducts[prd].filter(function (x) {
                     return x.EXCLUDE === false;
                 });
-                if (products.length !== 0) {
-                    var contDerivedUserInput = uniq(products, 'HIER_VAL_NM');
-                    if (products.length === 1 && contDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == contDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
+                if (Includeproducts.length !== 0) {
+                    let contDerivedUserInput = uniq(Includeproducts, 'HIER_VAL_NM');
+                    if (Includeproducts.length === 1 && contDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == contDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
                         contractProducts = contDerivedUserInput[0].HIER_VAL_NM;
                     } else {
                         contractProducts = contDerivedUserInput.length == 1 ? PTE_Common_Util.getFullNameOfProduct(contDerivedUserInput[0], contDerivedUserInput[0].DERIVED_USR_INPUT) : contDerivedUserInput[0].DERIVED_USR_INPUT;
@@ -426,11 +422,11 @@ export class PTEUtil {
                 }
 
                 // Exclude Products
-                var products = validProducts[prd].filter(function (x) {
+                let products = validProducts[prd].filter(function (x) {
                     return x.EXCLUDE === true;
                 });
                 if (products.length !== 0) {
-                    var exclDerivedUserInput = uniq(products, 'HIER_VAL_NM');
+                    const exclDerivedUserInput = uniq(products, 'HIER_VAL_NM');
                     if (products.length === 1 && exclDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() === exclDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
                         excludeProducts = exclDerivedUserInput[0].HIER_VAL_NM;
                     } else {
@@ -449,23 +445,23 @@ export class PTEUtil {
         if (!validProducts) {
             return "";
         }
-        var products = { 'contractProducts': '', 'excludeProducts': '' };
+        let products = { 'contractProducts': '', 'excludeProducts': '' };
 
-        for (var prd in validProducts) {
+        for (let prd in validProducts) {
             if (!!autoValidatedProducts && autoValidatedProducts.hasOwnProperty(prd)) {
-                var autoTranslated = {};
+                let autoTranslated = {};
                 autoTranslated[prd] = autoValidatedProducts[prd];
 
-                var updatedUserInput = PTEUtil.updateUserInput(autoTranslated);
+                const updatedUserInput = PTEUtil.updateUserInput(autoTranslated);
 
                 // Include products
-                var autoValidContProd = updatedUserInput["contractProducts"];
+                const autoValidContProd = updatedUserInput["contractProducts"];
                 if (autoValidContProd !== "") {
                     products.contractProducts = products.contractProducts === "" ? autoValidContProd : products.contractProducts + "," + autoValidContProd;
                 }
 
                 // Exclude Products
-                var autoValidExcludeProd = updatedUserInput["excludeProducts"];
+                const autoValidExcludeProd = updatedUserInput["excludeProducts"];
                 if (autoValidExcludeProd !== "") {
                     products.excludeProducts = products.excludeProducts === "" ? autoValidExcludeProd : products.excludeProducts + "," + autoValidExcludeProd;
                 }
@@ -480,7 +476,7 @@ export class PTEUtil {
 
     static getUserInput = function (updatedUserInput, products, typeOfProduct, fieldNm) {
 
-        var userInput = products.filter(function (x) {
+        let userInput = products.filter(function (x) {
             return x.EXCLUDE === (typeOfProduct === "E");
         });
         userInput = uniq(userInput, fieldNm);
@@ -528,11 +524,11 @@ export class PTEUtil {
     }
 
     static populateValidProducts = function (sysProducts) {
-        var kitReOrderObject = {
+        let kitReOrderObject = {
             ReOrderedJSON: {}, PRD_DRAWING_ORD: '', contractProducts: ''};
 
-        var addedProducts = [];
-        for (var key in sysProducts) {
+        let addedProducts = [];
+        for (let key in sysProducts) {
             if (sysProducts.hasOwnProperty(key)) {
                 each(sysProducts[key], (item) =>{
                     addedProducts.push(item);
@@ -541,7 +537,7 @@ export class PTEUtil {
         }
         // Orders KIT products
         addedProducts = sortBy(addedProducts,'DEAL_PRD_TYPE');//$filter('kitProducts')(addedProducts, 'DEAL_PRD_TYPE');
-        var pricingTableSysProducts = {};
+        let pricingTableSysProducts = {};
         // Construct the new reordered JSON for KIT, if user input is Ci3, derived user input will be selected products
         each(addedProducts, (item) => {
             if (!pricingTableSysProducts.hasOwnProperty(item.DERIVED_USR_INPUT)) {
@@ -571,12 +567,12 @@ export class PTEUtil {
             transformResults = transformResults.Data;
         }
         if (transformResults && transformResults.ProdctTransformResults) {
-            for (var key in transformResults.ProdctTransformResults) {
+            for (let key in transformResults.ProdctTransformResults) {
                 r = data.findIndex(x => x.DC_ID == key);
                 if (r >= 0) {
                     // Flag dependency column errors - these columns may cause product translator to not find a valid product
                     if (!!transformResults.InvalidDependancyColumns && !!transformResults.InvalidDependancyColumns[key] && transformResults.InvalidDependancyColumns[key].length > 0) {
-                        for (var i = 0; i < transformResults.InvalidDependancyColumns[key].length; i++) {
+                        for (let i = 0; i < transformResults.InvalidDependancyColumns[key].length; i++) {
                             data[r]._behaviors.isError[transformResults.InvalidDependancyColumns[key][i]] = true;
                             data[r]._behaviors.validMsg[transformResults.InvalidDependancyColumns[key][i]] = "Value is invalid and may cause the product to validate incorrectly."
                         }
@@ -602,11 +598,11 @@ export class PTEUtil {
                             //to update PTR_USER_PRD column with corrected data in the proper order --which used to check product order changed or not
                             for (let prd in transformResults.ValidProducts[key]) {
                                 if (transformResults.ValidProducts[key].hasOwnProperty(prd)) {
-                                    var products = transformResults.ValidProducts[key][prd].filter(function (x) {
+                                    let products = transformResults.ValidProducts[key][prd].filter(function (x) {
                                         return x.EXCLUDE === false;
                                     });
                                     if (products.length !== 0) {
-                                        var contDerivedUserInput = uniq(products, 'HIER_VAL_NM');
+                                        let contDerivedUserInput = uniq(products, 'HIER_VAL_NM');
                                         if (products.length === 1 && contDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == contDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
                                             contractProducts = contDerivedUserInput[0].HIER_VAL_NM;
                                         }
@@ -640,8 +636,8 @@ export class PTEUtil {
 
                             if (isProductOrderChanged) {
                                 // Create a dictionary of products with their original tiered data
-                                for (var i = 0; i < originalProductsArr.length; i++) {
-                                    var originalIndex = r + i;
+                                for (let i = 0; i < originalProductsArr.length; i++) {
+                                    let originalIndex = r + i;
                                     orignalUnswappedDataDict[PTE_Helper_Util.formatStringForDictKey(originalProductsArr[i])] = PTE_Common_Util.deepClone(data[originalIndex]);
                                 }
                             }
@@ -658,12 +654,12 @@ export class PTEUtil {
                             let mergedRows = r + tierNbr;
                             let modifiedNumTiers = data[r].PTR_USER_PRD.split(',').length;
                             modifiedNumTiers = modifiedNumTiers < tierNbr ? tierNbr : modifiedNumTiers;
-                            for (var a = mergedRows - 1; a >= r; a--) { // look at each tier by it's index, going backwards
+                            for (let a = mergedRows - 1; a >= r; a--) { // look at each tier by it's index, going backwards
                                 if (isProductOrderChanged) {
                                     isProductChanged = true;
                                     // We had swapped around the product order, so we need to map corresponding dimmed/tiered attributes to their new product order too
-                                    var newContractProdArr = contractProducts.split(',');
-                                    var currProduct = newContractProdArr[(a - r)]; // NOTE: this asssumes we swapped the PTR_USER_PRD to the re-ordered product list already
+                                    const newContractProdArr = contractProducts.split(',');
+                                    const currProduct = newContractProdArr[(a - r)]; // NOTE: this asssumes we swapped the PTR_USER_PRD to the re-ordered product list already
                                     for (var d = 0; d < PTE_Config_Util.kitDimAtrbs.length; d++) {
                                         if (PTE_Config_Util.kitDimAtrbs[d] == "TIER_NBR") { continue; }
                                         // Check for undefined..Extra product might have been from user input translated e.g., 7230(F) ==> 7230F,7230

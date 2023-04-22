@@ -30,9 +30,9 @@ export class PTE_Load_Util {
         return DE_Load_Util.getColorPct(result);
     }
     static checkForMessages(collection, key, data) {
-        var isValid = true;
+        let isValid = true;
         if (data.data[key] !== undefined) {
-            for (var i = 0; i < data.data[key].length; i++) {
+            for (let i = 0; i < data.data[key].length; i++) {
                 if (data.data[key][i].DC_ID !== undefined &&
                     data.data[key][i].DC_ID === collection.DC_ID &&
                     data.data[key][i].warningMessages.length > 0) {
@@ -49,7 +49,6 @@ export class PTE_Load_Util {
     }
     //coomon util has same functionality need to modify that with this
     static setBehaviors(item, elem, cond, curPricingTable) {
-        var isFlexDeal = (item.OBJ_SET_TYPE_CD === 'FLEX');
         if (!item._behaviors) item._behaviors = {};
         if (!item._behaviors.isRequired) item._behaviors.isRequired = {};
         if (!item._behaviors.isError) item._behaviors.isError = {};
@@ -141,8 +140,8 @@ export class PTE_Load_Util {
     }
     //coomon util has same functionality need to modify that with this
     static setBehaviorsValidMessage(item, elem, elemLabel, cond, curPricingTable) {
-        var isFlexDeal = curPricingTable.OBJ_SET_TYPE_CD === 'FLEX';
-        var dealTypeLabel = isFlexDeal === true ? "FLEX PT" : "HYBRID PS";
+        const isFlexDeal = curPricingTable.OBJ_SET_TYPE_CD === 'FLEX';
+        const dealTypeLabel = isFlexDeal === true ? "FLEX PT" : "HYBRID PS";
 
         if (cond == 'notequal') {
             item._behaviors.validMsg[elem] = "All deals within a " + dealTypeLabel + " should have the same '" + elemLabel + "' value.";
@@ -170,7 +169,7 @@ export class PTE_Load_Util {
             if (item && item._behaviors && item._behaviors.validMsg && item._behaviors.isError) {
                 let msg = "";
                 each(item._behaviors.isError, (val, key) => {
-                    let colInd = findIndex(columns, { field: key });
+                    const colInd = findIndex(columns, { field: key });
                     if (key == 'PTR_USER_PRD' || key == 'PRD_EXCLDS') {
                         if (val == true && item._behaviors.validMsg[`${key}`] && item._behaviors.validMsg[`${key}`] == 'Invalid Product') {
                             cellComments.push({ row: rowInd, col: colInd, comment: { value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'error-product error-border' });
@@ -214,7 +213,7 @@ export class PTE_Load_Util {
     }
     static PTEColumnSettings(template, isTenderContract, curPricingTable) {
         if (template !== undefined && template !== null) {
-            for (var i = template.columns.length - 1; i >= 0; i--) {
+            for (let i = template.columns.length - 1; i >= 0; i--) {
                 if (!isTenderContract && PTE_Config_Util.tenderOnlyColumns.indexOf(template.columns[i].field) !== -1) {
                     template.columns.splice(i, 1);
                 }
@@ -256,7 +255,7 @@ export class PTE_Load_Util {
                     }
                       
                 });
-                for (i = 0; i < template.columns.length; i++) {
+                for (let i = 0; i < template.columns.length; i++) {
                     if (PTE_Config_Util.tenderRequiredColumns.indexOf(template.columns[i].field) >= 0) {
                            //checking the last index not *
                         if(template.columns[i].title.charAt(template.columns[i].title.length - 1) !='*'){
@@ -271,20 +270,20 @@ export class PTE_Load_Util {
         let mergCells = [];
         let startOffset;
         //identify distinct DCID, bcz the merge will happen for each DCID and each DCID can have diff  NUM_OF_TIERS
-        let distDCID = uniq(PTR, 'DC_ID');
+        const distDCID = uniq(PTR, 'DC_ID');
         each(distDCID, (item) => {
-            let curPTR = findWhere(PTR, { DC_ID: item.DC_ID });
-            let rowIndex = findIndex(PTR, { DC_ID: item.DC_ID });
+            const curPTR = findWhere(PTR, { DC_ID: item.DC_ID });
+            const rowIndex = findIndex(PTR, { DC_ID: item.DC_ID });
             startOffset = rowIndex;
             //get NUM_OF_TIERS acoording this will be the row_span for handson 
-            let NUM_OF_TIERS = this.numOfPivot(curPTR, curPricingTable);
+            const NUM_OF_TIERS = this.numOfPivot(curPTR, curPricingTable);
             each(columns, (colItem, ind) => {
                 if (!colItem.isDimKey && !colItem.hidden && NUM_OF_TIERS != 1) {
                     mergCells.push({ row: rowIndex, col: ind, rowspan: NUM_OF_TIERS, colspan: 1 });
                 }
                 if (curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY' && (colItem.field == 'TIER_NBR' || colItem.field == 'STRT_PB' || colItem.field == 'END_PB')) {
-                    let pivotDensity = parseInt(curPTR.NUM_OF_DENSITY);
-                    let densityTiers = NUM_OF_TIERS / pivotDensity;
+                    const pivotDensity = parseInt(curPTR.NUM_OF_DENSITY);
+                    const densityTiers = NUM_OF_TIERS / pivotDensity;
                     for (let i = 1; i <= densityTiers; i++) {
                         mergCells.push({ row: startOffset, col: ind, rowspan: pivotDensity, colspan: 1 });
                         startOffset = startOffset + pivotDensity;
@@ -297,20 +296,20 @@ export class PTE_Load_Util {
     }
     static pivotData(data, isTenderContract, curPricingTable, kitDimAtrbs) {        //convert how we save data in MT to UI spreadsheet consumable format
         data = this.assignProductProprties(data, isTenderContract, curPricingTable);
-        var tierAtrbs = PTE_Config_Util.tierAtrbs;
-        var densityTierAtrbs = PTE_Config_Util.densityTierAtrbs;
+        const tierAtrbs = PTE_Config_Util.tierAtrbs;
+        const densityTierAtrbs = PTE_Config_Util.densityTierAtrbs;
         if (!this.isPivotable(curPricingTable)) return data;
-        var newData = [];
+        const newData = [];
         let dealType = curPricingTable['OBJ_SET_TYPE_CD'];
 
-        for (var d = 0; d < data.length; d++) {
+        for (let d = 0; d < data.length; d++) {
             // Tiered data
-            var productJSON = data[d]["PTR_SYS_PRD"] !== undefined && data[d]["PTR_SYS_PRD"] !== null && data[d]["PTR_SYS_PRD"] !== "" ? JSON.parse(data[d]["PTR_SYS_PRD"]) : [];
-            var numTiers = this.numOfPivot(data[d], curPricingTable);
+            const productJSON = data[d]["PTR_SYS_PRD"] !== undefined && data[d]["PTR_SYS_PRD"] !== null && data[d]["PTR_SYS_PRD"] !== "" ? JSON.parse(data[d]["PTR_SYS_PRD"]) : [];
+            const numTiers = this.numOfPivot(data[d], curPricingTable);
             let curTier = 1, db = 1, dt = 1;
 
-            for (var t = 1; t <= numTiers; t++) {
-                var lData = PTE_Common_Util.deepClone(data[d]);
+            for (let t = 1; t <= numTiers; t++) {
+                const lData = PTE_Common_Util.deepClone(data[d]);
 
                 if (dealType === "VOL_TIER" || dealType === "FLEX" ||
                     dealType === "REV_TIER") {
@@ -325,8 +324,8 @@ export class PTE_Load_Util {
                     }
 
                     // Vol-tier specific cols with tiers
-                    for (var i = 0; i < tierAtrbs.length; i++) {
-                        var tieredItem = tierAtrbs[i];
+                    for (let i = 0; i < tierAtrbs.length; i++) {
+                        const tieredItem = tierAtrbs[i];
                         lData[tieredItem] = lData[tieredItem + "_____10___" + t];
 
                         PTE_Common_Util.mapTieredWarnings(data[d], lData, tieredItem, tieredItem, t);
@@ -378,8 +377,8 @@ export class PTE_Load_Util {
                     let endKey = "END_PB", strtKey = "STRT_PB";
 
                     // Density specific cols with tiers
-                    for (var i = 0; i < densityTierAtrbs.length; i++) {
-                        var tieredItem = densityTierAtrbs[i];
+                    for (let i = 0; i < densityTierAtrbs.length; i++) {
+                        const tieredItem = densityTierAtrbs[i];
                         if (tieredItem != "DENSITY_RATE") {
                             let dimKey = (tieredItem == "DENSITY_BAND") ? "_____8___" : "_____10___";
                             if (tieredItem != "DENSITY_BAND") {
@@ -437,7 +436,7 @@ export class PTE_Load_Util {
                 }
                 else if (dealType === "KIT") {
                     // KIT specific cols with 'tiers'
-                    for (var i = 0; i < kitDimAtrbs.length; i++) {
+                    for (let i = 0; i < kitDimAtrbs.length; i++) {
                         let tieredItem = kitDimAtrbs[i];
                         lData[tieredItem] = lData[tieredItem + "_____20___" + (t - 1)]; //-1 because KIT dim starts at 0 whereas VT num tiers begin at 1
                         if (tieredItem == "TIER_NBR") {
@@ -453,7 +452,7 @@ export class PTE_Load_Util {
                     lData["TEMP_KIT_REBATE"] = this.calculateKitRebate(data, d, numTiers, true);
                     if (productJSON.length !== 0) {
                         each(productJSON, function (value, key) {
-                            var bckt = data[d]["PRD_BCKT" + "_____20___" + (t - 1)];
+                            const bckt = data[d]["PRD_BCKT" + "_____20___" + (t - 1)];
                             if (bckt !== undefined && key.toUpperCase() === bckt.toUpperCase()) {
                                 lData["CAP"] = value[0]["CAP"];
                                 lData["YCS2"] = value[0]["YCS2"];
@@ -475,11 +474,11 @@ export class PTE_Load_Util {
         if (curPricingTable === undefined) return 1;
         if (curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" || curPricingTable['OBJ_SET_TYPE_CD'] === "KIT" ||
             curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
-            var pivotFieldName = "NUM_OF_TIERS";
-            var pivotDensity = curPricingTable["NUM_OF_DENSITY"];
+                const pivotFieldName = "NUM_OF_TIERS";
+                const pivotDensity = curPricingTable["NUM_OF_DENSITY"];
             // if dataItem has numtiers return it do not calculate and update here. pricingTableController.js pivotKITDeals will take care of updating correct NUM_TIERS
             if (curPricingTable['OBJ_SET_TYPE_CD'] === "KIT" && !!dataItem && !!dataItem["PTR_USER_PRD"]) {
-                var pivotVal = dataItem["PTR_USER_PRD"].split(",").length;  //KITTODO: do we have a better way of calculating number of rows without splitting PTR_USER_PRD?
+                const pivotVal = dataItem["PTR_USER_PRD"].split(",").length;  //KITTODO: do we have a better way of calculating number of rows without splitting PTR_USER_PRD?
                 dataItem['NUM_OF_TIERS'] = pivotVal;  //KITTODO: not sure if necessary to set num of tiers at ptr level, but it appears to be expected when applying red validation markers to various dim rows (saveEntireContractRoot()'s call of MapTieredWarnings())
                 return pivotVal;
             }
@@ -490,7 +489,7 @@ export class PTE_Load_Util {
             }
             if (!!dataItem[pivotFieldName]) return parseInt(dataItem[pivotFieldName]);      //if dataItem (ptr) has its own num tiers atrb
             //VT deal type
-            var pivotVal = curPricingTable[pivotFieldName];
+            let pivotVal = curPricingTable[pivotFieldName];
             //logic to add Density multiply by number of tier to add those many rows in spreadsheet
             return pivotVal === undefined ? 1 : (pivotDensity == undefined ? parseInt(pivotVal) : parseInt(pivotVal) * parseInt(pivotDensity));
         }
@@ -500,7 +499,7 @@ export class PTE_Load_Util {
         if (!curPricingTable) return false;
         if (curPricingTable['OBJ_SET_TYPE_CD'] === "VOL_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "FLEX" ||
             curPricingTable['OBJ_SET_TYPE_CD'] === "REV_TIER" || curPricingTable['OBJ_SET_TYPE_CD'] === "DENSITY") {
-            var pivotFieldName = "NUM_OF_TIERS";
+            let pivotFieldName = "NUM_OF_TIERS";
             return !!curPricingTable[pivotFieldName];        //For code review - Note: is this redundant?  can't we just have VT and KIT always return true?  VT will always have a num of tiers.  If actually not redundant then we need to do similar for KIT deal type
         }
         if (curPricingTable['OBJ_SET_TYPE_CD'] === "KIT") {
@@ -509,16 +508,16 @@ export class PTE_Load_Util {
     }
     static assignProductProprties(data, isTenderContract, curPricingTable) {
         if (isTenderContract && curPricingTable['OBJ_SET_TYPE_CD'] === "ECAP") {
-            for (var d = 0; d < data.length; d++) {
+            for (let d = 0; d < data.length; d++) {
 
                 if (isEqual(data[d], {}) || data[d]["PTR_SYS_PRD"] === "" || data[d]["PTR_USER_PRD"] === null || typeof (data[d]["PTR_USER_PRD"]) == 'undefined') continue;;
 
                 // product JSON
-                var productJSON = JSON.parse(data[d]["PTR_SYS_PRD"]);
-                var sysProduct = [];
+                const productJSON = JSON.parse(data[d]["PTR_SYS_PRD"]);
+                let sysProduct = [];
 
-                var productArray = [];
-                for (var key in productJSON) {
+                let productArray = [];
+                for (let key in productJSON) {
                     if (productJSON.hasOwnProperty(key)) {
                         each(productJSON[key], function (item) {
                             sysProduct.push(item);
@@ -526,7 +525,7 @@ export class PTE_Load_Util {
                     }
                 }
                 // Take the first product
-                var contractProduct = data[d]["PTR_USER_PRD"].split(',')[0];
+                let contractProduct = data[d]["PTR_USER_PRD"].split(',')[0];
                 sysProduct = sysProduct.filter(function (x) {
                     return x.USR_INPUT === contractProduct || x.HIER_VAL_NM === contractProduct;
                 });
@@ -544,10 +543,10 @@ export class PTE_Load_Util {
         return (parseFloat(dscntPerLine) * parseInt(qty) || 0);
     }
     static calculateKitRebate(data, firstTierRowIndex, numOfTiers, isDataPivoted) {
-        var kitRebateTotalVal = 0;
-        for (var i = 0; i < numOfTiers; i++) {
+        let kitRebateTotalVal = 0;
+        for (let i = 0; i < numOfTiers; i++) {
             if (isDataPivoted) {
-                var qty = (parseFloat(data[firstTierRowIndex]["QTY_____20___" + i]) || 0);
+                const qty = (parseFloat(data[firstTierRowIndex]["QTY_____20___" + i]) || 0);
                 let ecapPrice='';
                 if(data[firstTierRowIndex]["ECAP_PRICE_____20___" + i]==null || data[firstTierRowIndex]["ECAP_PRICE_____20___" + i]=='')
                 ecapPrice='0';
@@ -555,7 +554,7 @@ export class PTE_Load_Util {
                 ecapPrice= data[firstTierRowIndex]["ECAP_PRICE_____20___" + i].toString().replace(/[$,]/g, "");
                 kitRebateTotalVal += (qty * parseFloat(ecapPrice) || 0);
             } else if (i < data.length) {
-                var qty = (parseFloat(data[(firstTierRowIndex + i)]["QTY"]) || 0);
+                const qty = (parseFloat(data[(firstTierRowIndex + i)]["QTY"]) || 0);
                 let ecapPrice='';
                 if(data[(firstTierRowIndex + i)]["ECAP_PRICE"]==null ||data[(firstTierRowIndex + i)]["ECAP_PRICE"]=='')
                 ecapPrice='0';
@@ -569,25 +568,25 @@ export class PTE_Load_Util {
           ecapPrice='0';
           else
          ecapPrice= data[firstTierRowIndex]["ECAP_PRICE_____20_____1"].toString().replace(/[$,]/g, "");
-        var rebateVal = (kitRebateTotalVal - parseFloat(ecapPrice)) // Kit rebate - KIT ECAP (tier of "-1")
+        const rebateVal = (kitRebateTotalVal - parseFloat(ecapPrice)) // Kit rebate - KIT ECAP (tier of "-1")
         return rebateVal;
     }
 
     static mapProperty(src, data, curPricingTable) {
         if (this.isPivotable(curPricingTable)) {
-            var srcTierNum = parseInt(src.TIER_NBR);
-            var dataTierNum = parseInt(data.TIER_NBR);
+            const srcTierNum = parseInt(src.TIER_NBR);
+            const dataTierNum = parseInt(data.TIER_NBR);
             if (src["DC_ID"] === data["DC_ID"] && (!srcTierNum && dataTierNum === 1 || srcTierNum === dataTierNum)) {
-                var arItems = data;
-                for (var key in arItems) {
+                const arItems = data;
+                for (let key in arItems) {
                     if (arItems.hasOwnProperty(key) && data[key] !== undefined)
                         src[key] = data[key];
                 }
             }
         } else {
             if (src["DC_ID"] === data["DC_ID"]) {
-                var arItems = data;
-                for (var key in arItems) {
+                const arItems = data;
+                for (let key in arItems) {
                     if (arItems.hasOwnProperty(key) && data[key] !== undefined)
                         src[key] = data[key];
                 }
@@ -604,13 +603,13 @@ export class PTE_Load_Util {
 
     static updateResults(data, source, curPricingTable) {
         let renameMapping = {};
-        var i, p;
+        let i, p;
         if (data !== undefined && data !== null) {
             // look for actions -> this has to be first because remapping might happen
             for (i = 0; i < data.length; i++) {
                 if (data[i]["_actions"] !== undefined) {
-                    var actions = data[i]["_actions"];
-                    for (var a = 0; a < actions.length; a++) {
+                    let actions = data[i]["_actions"];
+                    for (let a = 0; a < actions.length; a++) {
                         if (actions[a]["Action"] === "ID_CHANGE") {
                             if (Array.isArray(source)) {
                                 for (p = 0; p < source.length; p++) {
@@ -625,7 +624,7 @@ export class PTE_Load_Util {
             }
 
             // Now look for items that need to be updated
-            for (i = 0; i < data.length; i++) {
+            for (let i = 0; i < data.length; i++) {
                 if (data[i]["DC_ID"] !== undefined && data[i]["DC_ID"] !== null) {
                     if (Array.isArray(source)) {
                         for (p = 0; p < source.length; p++) {
@@ -650,7 +649,7 @@ export class PTE_Load_Util {
                 hiddenColumns.push(index);
             }
             if (item.field == "CUST_ACCNT_DIV") {
-                var custD = customerDivisions.filter(function (x) {
+                const custD = customerDivisions.filter(function (x) {
                     return x["ACTV_IND"] === true
                 });
                 if (!customerDivisions || custD.length <= 1) {
@@ -672,7 +671,7 @@ export class PTE_Load_Util {
             }
             else {
                 if (hotTable.getDataAtRowProp(row, '_behaviors') != undefined && hotTable.getDataAtRowProp(row, '_behaviors') != null) {
-                    var behaviors = hotTable.getDataAtRowProp(row, '_behaviors');
+                    const behaviors = hotTable.getDataAtRowProp(row, '_behaviors');
                     if (behaviors.isReadOnly != undefined && behaviors.isReadOnly != null) {
                         if (behaviors.isReadOnly["ECAP_PRICE"] != undefined && behaviors.isReadOnly["ECAP_PRICE"] != null && prop == "ECAP_PRICE_____20_____1" && behaviors.isReadOnly["ECAP_PRICE"] == true) {
                             cellProperties['readOnly'] = true;
@@ -752,7 +751,7 @@ export class PTE_Load_Util {
                 }
                 //cell behaviors
                 if (hotTable.getDataAtRowProp(row, '_behaviors') != undefined && hotTable.getDataAtRowProp(row, '_behaviors') != null) {
-                    var behaviors = hotTable.getDataAtRowProp(row, '_behaviors');
+                    const behaviors = hotTable.getDataAtRowProp(row, '_behaviors');
                     if (behaviors.isReadOnly != undefined && behaviors.isReadOnly != null) {
                         if (behaviors.isReadOnly["ECAP_PRICE"] != undefined && behaviors.isReadOnly["ECAP_PRICE"] != null && prop == "ECAP_PRICE_____20_____1" && behaviors.isReadOnly["ECAP_PRICE"] == true) {
                             cellProperties['readOnly'] = true;

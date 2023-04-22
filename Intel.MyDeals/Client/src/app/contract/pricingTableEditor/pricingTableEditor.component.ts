@@ -34,8 +34,7 @@ import { dropDownModalComponent } from '../ptModals/dropDownModal/dropDownModal.
 
 @Component({
     selector: 'pricing-table-editor',
-    templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html',
-    // styleUrls: ['Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.css']
+    templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html'
 })
 export class pricingTableEditorComponent {
 
@@ -422,13 +421,12 @@ export class pricingTableEditorComponent {
                 if(changes){
                     //using => operator to-call-parent-function-from-callback-function
                     //loading screen changes are moved to the top to  make better performance
-                    this.spinnerMessageHeader = 'Loading...';
-                    this.spinnerMessageDescription = 'Loading the Table Editor';
-                    this.isLoading=true;
-                    setTimeout(()=>{
+                    this.pteLoaderPopUp(source);
+                    setTimeout(() => {
                         this.afterCellChange(changes, source);
-                        this.isLoading=false;
-                    },0)
+                        this.pteLoaderPopUp(source);
+                    },0);
+                   
                 }
             }
             catch(ex){
@@ -450,7 +448,7 @@ export class pricingTableEditorComponent {
     private hotId = "spreadsheet";
     // Cached Dropdown API Responses (that do not usually change)
     private dropdownResponseLocalStorageKey = 'pricingTableEditor_DropdownApiResponses';
-    private dropdownResponses: any = null;
+    private dropdownResponses: any = {};
     private psTitle = "Pricing Strategy";
     private ptTitle = "Pricing Table";
     private ptTitleLbl = "Enter " + this.ptTitle + " Name";
@@ -482,7 +480,18 @@ export class pricingTableEditorComponent {
     public undoCount = 0;
     public redoEnable: boolean = false;
     public redoCount = 0;
-
+    
+    pteLoaderPopUp(source){
+        if(source && source == 'edit' || source == 'CopyPaste.paste' || source == 'Autofill.fill'){
+            this.spinnerMessageHeader = 'Loading...';
+            this.spinnerMessageDescription = 'Loading the Table Editor';
+            this.isLoading=true;
+        }
+        
+         if(source && source=='stop-loader'){
+            this.isLoading=false;
+        }
+    }
     setBusy(msg, detail, msgType, showFunFact) {
         setTimeout(() => {
             const newState = msg != undefined && msg !== "";
@@ -595,8 +604,8 @@ export class pricingTableEditorComponent {
         }
     }
     getMergeCellsOnDelete() {
-        let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
-        let mergCells = PTE_Load_Util.getMergeCells(PTR, this.pricingTableTemplates.columns, this.curPricingTable);
+        const PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
+        const mergCells = PTE_Load_Util.getMergeCells(PTR, this.pricingTableTemplates.columns, this.curPricingTable);
         this.hotTable.updateSettings({ mergeCells: mergCells });
     }
     generateHandsonTable(PTR: any) {
@@ -610,7 +619,7 @@ export class pricingTableEditorComponent {
         const columnAttributes: PRC_TBL_Model_Attributes[] = this.pricingTableTemplates.defaultAtrbs;
         // Iterate through each column from the Pricing Table Template
         each(columnTemplates, (item: PRC_TBL_Model_Column, index) => {
-            let currentColumnConfig = PTEUtil.generateHandsontableColumn(this.isTenderContract,this.pteService, this.loggerService, this.dropdownResponses, columnFields, columnAttributes, item, index);
+            let currentColumnConfig = PTEUtil.generateHandsontableColumn(this.isTenderContract, this.dropdownResponses, columnFields, item);
             //adding for cell management in cell this can move to seperate function later
             this.ColumnConfig.push(currentColumnConfig);
             if (item.field == 'PTR_USER_PRD' || item.field == 'GEO_COMBINED' || item.field == 'MRKT_SEG' || item.field == 'QLTR_BID_GEO' || item.field == 'CUST_ACCNT_DIV'
@@ -665,7 +674,7 @@ export class pricingTableEditorComponent {
 
                 if (item[1] == 'PTR_USER_PRD') {
                     if (item[3] != null && item[3] != '') {
-                        let obj = { row: item[0], prop: item[1], old: item[2], new: item[3] };
+                        const obj = { row: item[0], prop: item[1], old: item[2], new: item[3] };
                         uniqchanges.push(obj);
                     }
                     else {
@@ -678,7 +687,7 @@ export class pricingTableEditorComponent {
                     }
                 }
                 else {
-                    let obj = { row: item[0], prop: item[1], old: item[2], new: item[3] };
+                    const obj = { row: item[0], prop: item[1], old: item[2], new: item[3] };
                     uniqchanges.push(obj);
                 }
 
@@ -707,21 +716,21 @@ export class pricingTableEditorComponent {
             if (changes.length > 0 && !this.editorOpened && changes[0].prop != 'PTR_USER_PRD' && changes[0].prop != 'START_DT' && changes[0].prop != 'END_DT' && changes[0].prop != 'OEM_PLTFRM_LNCH_DT' && changes[0].prop != 'OEM_PLTFRM_EOL_DT')  {
                this.errorOnMdtFdDeletion(changes);
             }
-            let PTR = where(changes, { prop: 'PTR_USER_PRD' });
-            let PTR_EXLDS = where(changes, { prop: 'PRD_EXCLDS' });
-            let AR = where(changes, { prop: 'AR_SETTLEMENT_LVL' });
-            let startVol = where(changes, { prop: 'STRT_VOL' });
-            let rebateType = where(changes, { prop: 'REBATE_TYPE' });
+            const PTR = where(changes, { prop: 'PTR_USER_PRD' });
+            const PTR_EXLDS = where(changes, { prop: 'PRD_EXCLDS' });
+            const AR = where(changes, { prop: 'AR_SETTLEMENT_LVL' });
+            const startVol = where(changes, { prop: 'STRT_VOL' });
+            const rebateType = where(changes, { prop: 'REBATE_TYPE' });
             //KIT On change events
-            let KIT_ECAP = filter(changes, item => { return item.prop == 'ECAP_PRICE_____20_____1' || item.prop == 'ECAP_PRICE' });
-            let KIT_DSCNT = filter(changes, item => { return item.prop == 'DSCNT_PER_LN' || item.prop == 'QTY' });
-            let KIT_name = where(changes, { prop: 'DEAL_GRP_NM' })
+            const KIT_ECAP = filter(changes, item => { return item.prop == 'ECAP_PRICE_____20_____1' || item.prop == 'ECAP_PRICE' });
+            const KIT_DSCNT = filter(changes, item => { return item.prop == 'DSCNT_PER_LN' || item.prop == 'QTY' });
+            const KIT_name = where(changes, { prop: 'DEAL_GRP_NM' })
             //Voltier Changes
-            let tierChg = filter(changes, item => { return item.prop == 'END_PB' || item.prop == 'STRT_PB' || item.prop == 'END_REV' || item.prop == 'STRT_REV' || item.prop == 'END_VOL' || item.prop == 'STRT_VOL' });
-            let rateChg = filter(changes, item => { return item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE' || item.prop == 'VOLUME' || item.prop == 'FRCST_VOL' || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT' || item.prop == 'INCENTIVE_RATE' });
-            let pgChg = filter(changes, item => { return item.prop == 'PROGRAM_PAYMENT' });
+            const tierChg = filter(changes, item => { return item.prop == 'END_PB' || item.prop == 'STRT_PB' || item.prop == 'END_REV' || item.prop == 'STRT_REV' || item.prop == 'END_VOL' || item.prop == 'STRT_VOL' });
+            const rateChg = filter(changes, item => { return item.prop == 'DENSITY_RATE' || item.prop == 'ECAP_PRICE' || item.prop == 'TOTAL_DOLLAR_AMOUNT' || item.prop == 'RATE' || item.prop == 'VOLUME' || item.prop == 'FRCST_VOL' || item.prop == 'ADJ_ECAP_UNIT' || item.prop == 'MAX_PAYOUT' || item.prop == 'INCENTIVE_RATE' });
+            const pgChg = filter(changes, item => { return item.prop == 'PROGRAM_PAYMENT' });
             // settlement level and period profile set to default value on delete
-            let perPro = where(changes, { prop: 'PERIOD_PROFILE' });
+            const perPro = where(changes, { prop: 'PERIOD_PROFILE' });
             //here we are using if conditions because at a time multiple changes can happen
             if (PTR && PTR.length > 0) {
                 this.undoEnable = false;
@@ -729,7 +738,7 @@ export class pricingTableEditorComponent {
                 PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns);
             }
             if (perPro && perPro.length > 0) {
-                PTE_CellChange_Util.perProfDefault(perPro, this.contractData, this.curPricingTable);
+                PTE_CellChange_Util.perProfDefault(perPro, this.curPricingTable);
             }
             if (AR && AR.length > 0) {
                 PTE_CellChange_Util.autoFillARSet(AR, this.contractData, this.curPricingTable,this.custCellEditor);
@@ -794,8 +803,8 @@ export class pricingTableEditorComponent {
                 PTE_CellChange_Util.dateChange(OEMEOLDt, 'OEM_PLTFRM_EOL_DT', this.contractData);
             }
             if ((PTR_EXLDS && PTR_EXLDS.length > 0)) {
-                let selrow = PTR_EXLDS[0].row;
-                let PTR_Exccol_ind = findIndex(this.columns, { data: 'PRD_EXCLDS' });
+                const selrow = PTR_EXLDS[0].row;
+                const PTR_Exccol_ind = findIndex(this.columns, { data: 'PRD_EXCLDS' });
                 this.hotTable.setCellMeta(selrow, PTR_Exccol_ind, 'className', 'normal-product');
                 this.hotTable.render();
                 this.isExcludePrdChange = true;
@@ -803,25 +812,27 @@ export class pricingTableEditorComponent {
             }
             //to make sure to trigger translate API call.(Product validation)
             each(PTE_Config_Util.flushSysPrdFields, (item) => {
-                let modifiedDetails = where(changes, { prop: item });
+                const modifiedDetails = where(changes, { prop: item });
                 if (modifiedDetails && modifiedDetails.length > 0)
                     each(modifiedDetails, (modItem) => {
                         this.hotTable.setDataAtRowProp(modItem.row, 'PTR_SYS_PRD', '', 'no-edit');
                     })
             })
-            let isEnable = this.hotTable.isEmptyRow(0);
+            const isEnable = this.hotTable.isEmptyRow(0);
             this.enableDeTab.emit({ isEnableDeTab: !isEnable, enableDeTabInfmIcon: this.isDeTabInfmIconReqd });
+            //to stop loader
+            this.hotTable.setDataAtRowProp(0,'DC_ID',this.hotTable.getDataAtRowProp(0,'DC_ID'),'stop-loader');
         }
     }
 
     errorOnMdtFdDeletion(changes) {
         let isRequired = false;
         //to check whether modified column is requirede column or not
-        let behaviors = this.hotTable.getDataAtRowProp(changes[0].row, '_behaviors');
+        const behaviors = this.hotTable.getDataAtRowProp(changes[0].row, '_behaviors');
         if (behaviors && behaviors.isRequired && behaviors.isRequired[changes[0].prop])
             isRequired = true;
         if ((changes[0].new == null || changes[0].new == '' || changes[0].new == undefined) && this.pricingTableTemplates['model']['fields'][changes[0].prop].nullable == false && isRequired){
-            let colSPIdx = findIndex(this.columns, { data: changes[0].prop });
+            const colSPIdx = findIndex(this.columns, { data: changes[0].prop });
             this.cellComments.push({ row: changes[0].row, col: colSPIdx, comment: { value: 'This field is required', readOnly: true }, className: 'error-border' });
             this.hotTable.updateSettings({
                 cell: this.cellComments
@@ -833,8 +844,8 @@ export class pricingTableEditorComponent {
     }
 
     removeCellComments(row,prop){
-        let col = findIndex(this.columns, { data: prop });
-        let cellMeta = this.hotTable.getCellMeta(row, col);
+        const col = findIndex(this.columns, { data: prop });
+        const cellMeta = this.hotTable.getCellMeta(row, col);
         this.cellComments.find( (cmnt,ind) => {
             if (ind < this.cellComments.length){
             if (cmnt.row == row && cmnt.col == col ) {
@@ -933,11 +944,11 @@ export class pricingTableEditorComponent {
     deleteRow(rows: Array<any>, isProdCorrectorDeletion?): void {
         try {
             let delRows = [];
-            let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
+            const PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
             //delete can be either simple row delete for PTR not saved or can be PTR which are saved
             each(PTR, (PTRow, ind) => {
                 each(rows, row => {
-                    let DCID = this.hotTable.getDataAtRowProp(row.row, 'DC_ID');
+                    const DCID = this.hotTable.getDataAtRowProp(row.row, 'DC_ID');
                     if (PTRow.DC_ID == DCID) {
                         delRows.push({ row: ind, DC_ID: PTRow.DC_ID });
                     }
@@ -968,8 +979,8 @@ export class pricingTableEditorComponent {
                     }
                 })
             }
-            let savedRows = filter(delRows, row => { return row.DC_ID > 0 });
-            let nonSavedRows = filter(delRows, row => { return row.DC_ID < 0 });
+            const savedRows = filter(delRows, row => { return row.DC_ID > 0 });
+            const nonSavedRows = filter(delRows, row => { return row.DC_ID < 0 });
             //this condition means all rows are non DC_ID rows so that no need to hit API
             if (nonSavedRows.length > 0 && nonSavedRows.length == delRows.length) {
                 //multiple delete at the sametime this will avoid issues of deleting one by one
@@ -1076,7 +1087,9 @@ export class pricingTableEditorComponent {
             //this is to make sure the saved record prod color are success by default
             PTR = PTE_Load_Util.setPrdColor(PTR);
             this.getTemplateDetails();
-            this.dropdownResponses = await this.getAllDrowdownValues();
+            if (Object.keys(this.dropdownResponses).length ==0) {
+                this.dropdownResponses = await this.getAllDrowdownValues();
+            }
             if (this.dropdownResponses["SETTLEMENT_PARTNER"] != undefined) {
                 this.VendorDropDownResult = this.dropdownResponses["SETTLEMENT_PARTNER"];
             }
@@ -1146,12 +1159,12 @@ export class pricingTableEditorComponent {
             else {
                 //it will update cashObj for non-deleted records
                 if (finalPTR && finalPTR.length > 0) {
-                    var cashObj = finalPTR.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
+                    const cashObj = finalPTR.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
                     if (cashObj && cashObj.length > 0) {
                         if (this.VendorDropDownResult != null && this.VendorDropDownResult != undefined && this.VendorDropDownResult.length > 0) {
-                            var customerVendor = this.VendorDropDownResult;
+                            const customerVendor = this.VendorDropDownResult;
                             each(finalPTR, (item) => {
-                                var partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
+                                const partnerID = customerVendor.filter(x => x.BUSNS_ORG_NM == item.SETTLEMENT_PARTNER);
                                 if (partnerID && partnerID.length == 1) {
                                     item.SETTLEMENT_PARTNER = partnerID[0].DROP_DOWN;
                                 }
@@ -1265,7 +1278,7 @@ export class pricingTableEditorComponent {
             this.kitMergeDeleteDCIDs = [];
         }
         //validate Products for non-deleted records, if any product is invalid it will stop deletion as well
-        let isValidProd = await this.validateOnlyProducts('onSave', undefined, deleteDCIDs);
+        const isValidProd = await this.validateOnlyProducts('onSave', undefined, deleteDCIDs);
         if (isValidProd != undefined)
             await this.saveandValidate(isValidProd, deleteDCIDs);
     }
@@ -1585,7 +1598,7 @@ export class pricingTableEditorComponent {
                 let curRowIndx;                
 
                 if (!!transformResult && !!transformResult.ProdctTransformResults) {
-                    for (var key in transformResult.ProdctTransformResults) {
+                    for (let key in transformResult.ProdctTransformResults) {
                         let r = parseInt(key);
                         let allIssuesDone = false;
 
@@ -1753,8 +1766,8 @@ export class pricingTableEditorComponent {
     createNewPrcObt (pt){ 
         if (pt != null) {
             this.newPricingTable = pt;
-            let  ptTemplate  = this.UItemplate.ModelTemplates.PRC_TBL[pt.OBJ_SET_TYPE_CD];
-            let customer = this.contractData.Customer;
+            const  ptTemplate  = this.UItemplate.ModelTemplates.PRC_TBL[pt.OBJ_SET_TYPE_CD];
+            const customer = this.contractData.Customer;
             this.newPricingTable["_extraAtrbs"] = ptTemplate.extraAtrbs;
             this.newPricingTable["_defaultAtrbs"] = ptTemplate.defaultAtrbs;
             this.newPricingTable["OBJ_SET_TYPE_CD"] = pt.OBJ_SET_TYPE_CD;

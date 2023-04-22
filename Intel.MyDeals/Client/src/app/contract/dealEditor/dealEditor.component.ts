@@ -72,6 +72,7 @@ export class dealEditorComponent {
     @Output() emailData = new EventEmitter();
     @Output() refreshGridData = new EventEmitter();
     @Output() removeDeletedRow = new EventEmitter();
+    @Output() loadPTEditor = new EventEmitter();
     private isWarning: boolean = false;
     private message: string = "";
     public dirty = false;
@@ -102,9 +103,8 @@ export class dealEditorComponent {
     public gridResult = [];
     private gridData: GridDataResult;
     public isLoading = false;
-    public pageCount = 25;
     private isTenderContract = false;
-    private dropdownResponses: any = null;
+    private dropdownResponses: any = {};
     private EndCustDropdownResponses: any = null;
     private enableSelectAll: boolean = false;
     private enableDeselectAll: boolean = false;
@@ -146,24 +146,16 @@ export class dealEditorComponent {
     };
     private pageSizes: PageSizeItem[] = [
         {
+            text: "10",
+            value: 10
+        },
+        {
             text: "25",
             value: 25
         },
         {
             text: "50",
             value: 50
-        },
-        {
-            text: "100",
-            value: 100
-        },
-        {
-            text: "250",
-            value: 250
-        },
-        {
-            text: "500",
-            value: 500
         }
     ];
     private filteringData: any[] = [];
@@ -211,11 +203,10 @@ export class dealEditorComponent {
                     }
                     else {
                         each(this.gridResult, (item) => {
-                            let keys = Object.keys(item[col.field]);
-                            for (var key in keys) {
-                                if (item[col.field][keys[key]] != undefined && item[col.field][keys[key]] != null && distinctData.filter(x => x.Text == item[col.field][keys[key]].toString()).length == 0)
-                                    distinctData.push({ Text: item[col.field][keys[key]].toString(), Value: item[col.field][keys[key]] });
-                            }
+                            each(Object.keys(item[col.field]), key => {
+                                if (item[col.field][key] != undefined && item[col.field][key] != null && distinctData.filter(x => x.Text == item[col.field][key].toString()).length == 0)
+                                    distinctData.push({ Text: item[col.field][key].toString(), Value: item[col.field][key] });
+                            })
                         });
                     }
                 }
@@ -250,7 +241,7 @@ export class dealEditorComponent {
         this.wipTemplate = this.UItemplate["ModelTemplates"]["WIP_DEAL"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
 
         PTE_Load_Util.wipTemplateColumnSettings(this.wipTemplate, this.isTenderContract, this.curPricingTable.OBJ_SET_TYPE_CD, this.in_Is_Tender_Dashboard);
-        this.templates = PTE_Common_Util.deepClone(opGridTemplate.templates[`${this.curPricingTable.OBJ_SET_TYPE_CD}`]);
+        this.templates = JSON.parse(JSON.stringify(opGridTemplate.templates[`${this.curPricingTable.OBJ_SET_TYPE_CD}`])); //PTE_Common_Util.deepClone(opGridTemplate.templates[`${this.curPricingTable.OBJ_SET_TYPE_CD}`]);
         if (!this.in_Is_Tender_Dashboard)//if DE not called from Tender Dashboard then we need call the service call to get WIP_DEAL data
             await this.getWipDealData();
         else {// TenderDashboard will share the search results to display in a grid , no service call required
@@ -271,6 +262,9 @@ export class dealEditorComponent {
         let response: any = await this.pteService.readPricingTable(this.in_Pt_Id).toPromise().catch((err) => {
             this.loggerService.error('dealEditorComponent::readPricingTable::readTemplates:: service', err);
         });
+        if (response && (response.PRC_TBL_ROW && response.PRC_TBL_ROW.length == 0 || response.PRC_TBL_ROW.filter(x => x.warningMessages.length > 0).length > 0)) {
+            this.loadPTEditor.emit(true);
+        }
         if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
             //to avoid losing warning details which comes only during save action
             if (this.savedResponseWarning && this.savedResponseWarning.length > 0)
@@ -324,25 +318,29 @@ export class dealEditorComponent {
     }
 
     onTabSelect(e: SelectEvent) {
-        e.preventDefault();
-        if (e.title != undefined) {
-            this.searchFilter = "";
-            this.clearSearchGrid();
-            this.selectedTab = e.title;
-            if (this.dealId && this.dealId > 0) {
-                this.filterOnDealId(this.dealId)
+        this.isLoading = true;
+        this.gridData.data = [];
+        setTimeout(() => {
+            e.preventDefault();
+            if (e.title != undefined) {
+                this.searchFilter = "";
+                this.clearSearchGrid();
+                this.selectedTab = e.title;
+                var group = this.groups.filter(x => x.name == this.selectedTab);
+                if (group[0].isTabHidden) {
+                    var tabs = this.groups.filter(x => x.isTabHidden === false);
+                    this.selectedTab = tabs[0].name;
+                    this.filterColumnbyGroup(this.selectedTab);
+                }
+                else
+                    this.filterColumnbyGroup(this.selectedTab);
+            } else {
+                this.refreshGrid();
             }
-            var group = this.groups.filter(x => x.name == this.selectedTab);
-            if (group[0].isTabHidden) {
-                var tabs = this.groups.filter(x => x.isTabHidden === false);
-                this.selectedTab = tabs[0].name;
-                this.filterColumnbyGroup(this.selectedTab);
-            }
-            else
-                this.filterColumnbyGroup(this.selectedTab);
-        } else {
-            this.refreshGrid();
-        }
+            this.gridData = process(this.gridResult, this.state);
+            this.isLoading = false;
+        },0)
+        
     }
 
     refreshGrid() {
@@ -351,80 +349,79 @@ export class dealEditorComponent {
     }
 
     onClose(name: string) {
-        for (var i = 0; i < this.groups.length; i++) {
-            if (name == this.groups[i].name) {
-                this.groups[i].isTabHidden = true;
-            }
-        }
+        each(this.groups, group => { if (name == group.name) group.isTabHidden = true; } )
     }
 
     dataStateChange(state: DataStateChangeEvent): void {
-        this.state = state;
-        this.pageCount = this.state.take;
-        this.gridData = process(this.gridResult, this.state);
+        this.isLoading = true;
+        setTimeout(() => {
+            this.state = state;
+            this.gridData = process(this.gridResult, this.state);
+            this.isLoading = false;
+        }, 0);
     }
 
     filterColumnbyGroup(groupName: string) {
-        var group = this.groups.filter(x => x.name == groupName);
         this.columns = [];
-        if (group.length > 0) {
-            for (var i = 0; i < this.wipTemplate.columns.length; i++) {
-                var gptemplate = this.templates[this.wipTemplate.columns[i].field];
+        if (this.groups.filter(x => x.name == groupName).length > 0) {
+            each(this.wipTemplate.columns, column => {
                 if (groupName.toLowerCase() == "all") {
-                    if (gptemplate === undefined && (this.wipTemplate.columns[i].width === undefined || this.wipTemplate.columns[i].width == '0')) {
-                        this.wipTemplate.columns[i].width = 1;
+                    if (this.templates[column.field] === undefined && (column.width === undefined || column.width == '0')) {
+                        column.width = 1;
                     }
-                    this.columns.push(this.wipTemplate.columns[i]);
+                    this.columns.push(column);
                 }
                 else {
-                    if (gptemplate != undefined && gptemplate.Groups.includes(groupName)) {
-                        this.columns.push(this.wipTemplate.columns[i]);
+                    if (this.templates[column.field] != undefined && this.templates[column.field].Groups.includes(groupName)) {
+                        this.columns.push(column);
                     }
                 }
-            }
+            })
         }
     }
 
     cellClickHandler(args: CellClickEvent): void {
-        this.invalidField = false;
-        if (args.dataItem != undefined) {
-            PTE_Common_Util.parseCellValues(args.column.field, args.dataItem);
-        }
-        if (!args.isEdited && args.column.field !== 'MISSING_CAP_COST_INFO' && args.column.field !== "details" && args.column.field !== "tools" && args.column.field !== "PRD_BCKT" && args.column.field !== "CUST_MBR_SID" && args.column.field !== "CAP_INFO" && args.column.field !== "YCS2_INFO" && args.column.field !== "COMPETITIVE_PRICE" && args.column.field !== "COMP_SKU" &&
-            args.column.field !== "BACKEND_REBATE" && args.column.field !== "CAP_KIT" && args.column.field !== "PRIMARY_OR_SECONDARY" && args.column.field !== "KIT_REBATE_BUNDLE_DISCOUNT" &&
-            args.column.field !== "TOTAL_DSCNT_PR_LN" && args.column.field !== "KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE" && !(args.dataItem._behaviors != undefined &&
-                args.dataItem._behaviors.isReadOnly != undefined && args.dataItem._behaviors.isReadOnly[args.column.field] != undefined && args.dataItem._behaviors.isReadOnly[args.column.field])) {
-            args.sender.editCell(
-                args.rowIndex,
-                args.columnIndex
-            );
-            if (args.column.field == "SYS_PRICE_POINT") {
-                this.openSystemPriceModal(args.dataItem);
+        this.isLoading = true;
+        setTimeout(() => {
+            this.invalidField = false;
+            if (args.dataItem != undefined) {
+                PTE_Common_Util.parseCellValues(args.column.field, args.dataItem);
             }
-            else if (args.column.field == "END_CUSTOMER_RETAIL") {
-                var column = this.wipTemplate.columns.filter(x => x.field == args.column.field);
-                this.openEndCustomerModal(args.dataItem, column[0]);
+            if (!args.isEdited && args.column.field !== 'MISSING_CAP_COST_INFO' && args.column.field !== "details" && args.column.field !== "tools" && args.column.field !== "PRD_BCKT" && args.column.field !== "CUST_MBR_SID" && args.column.field !== "CAP_INFO" && args.column.field !== "YCS2_INFO" && args.column.field !== "COMPETITIVE_PRICE" && args.column.field !== "COMP_SKU" &&
+                args.column.field !== "BACKEND_REBATE" && args.column.field !== "CAP_KIT" && args.column.field !== "PRIMARY_OR_SECONDARY" && args.column.field !== "KIT_REBATE_BUNDLE_DISCOUNT" &&
+                args.column.field !== "TOTAL_DSCNT_PR_LN" && args.column.field !== "KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE" && !(args.dataItem._behaviors != undefined &&
+                    args.dataItem._behaviors.isReadOnly != undefined && args.dataItem._behaviors.isReadOnly[args.column.field] != undefined && args.dataItem._behaviors.isReadOnly[args.column.field])) {
+                args.sender.editCell(
+                    args.rowIndex,
+                    args.column.leafIndex
+                );
+                if (args.column.field == "SYS_PRICE_POINT") {
+                    this.openSystemPriceModal(args.dataItem);
+                }
+                else if (args.column.field == "END_CUSTOMER_RETAIL") {
+                    this.openEndCustomerModal(args.dataItem, this.wipTemplate.columns.filter(x => x.field == args.column.field)[0]);
+                }
+                else if (args.column.field == "MRKT_SEG" || args.column.field == "CONSUMPTION_COUNTRY_REGION"
+                    || args.column.field == "CONSUMPTION_CUST_PLATFORM" || args.column.field == "CONSUMPTION_CUST_SEGMENT"
+                    || args.column.field == "CONSUMPTION_CUST_RPT_GEO" || args.column.field == "CONSUMPTION_SYS_CONFIG"
+                    || args.column.field == "DEAL_SOLD_TO_ID" || args.column.field == "TRGT_RGN") {
+                    this.openMultiSelectModal(args.dataItem, this.wipTemplate.columns.filter(x => x.field == args.column.field)[0]);
+                }
             }
-            else if (args.column.field == "MRKT_SEG" || args.column.field == "CONSUMPTION_COUNTRY_REGION"
-                || args.column.field == "CONSUMPTION_CUST_PLATFORM" || args.column.field == "CONSUMPTION_CUST_SEGMENT"
-                || args.column.field == "CONSUMPTION_CUST_RPT_GEO" || args.column.field == "CONSUMPTION_SYS_CONFIG"
-                || args.column.field == "DEAL_SOLD_TO_ID" || args.column.field == "TRGT_RGN") {
-                var column = this.wipTemplate.columns.filter(x => x.field == args.column.field);
-                this.openMultiSelectModal(args.dataItem, column[0]);
+            else if ((args.column.field == "PRD_BCKT" && this.curPricingTable.OBJ_SET_TYPE_CD == "KIT") || (args.column.field == "TITLE" && this.curPricingTable.OBJ_SET_TYPE_CD !== "KIT")) {
+                this.openDealProductModal(args.dataItem);
             }
-        }
-        else if ((args.column.field == "PRD_BCKT" && this.curPricingTable.OBJ_SET_TYPE_CD == "KIT") || (args.column.field == "TITLE" && this.curPricingTable.OBJ_SET_TYPE_CD !== "KIT")) {
-            this.openDealProductModal(args.dataItem);
-        }
-        else if (this.in_Is_Tender_Dashboard && args.column.field == "MEETCOMP_TEST_RESULT") {// functionality required only for Grid in TenderDashboard Screen
-            this.openMCTPCTModal(args.dataItem, true)
-        }
-        else if (this.in_Is_Tender_Dashboard && args.column.field == "COST_TEST_RESULT") {// functionality required only for Grid in TenderDashboard Screen
-            this.openMCTPCTModal(args.dataItem, false)
-        }
-        else if (args.column.field == 'MISSING_CAP_COST_INFO') {
-            this.openMissingCapCostInfo(args.dataItem);
-        }
+            else if (this.in_Is_Tender_Dashboard && args.column.field == "MEETCOMP_TEST_RESULT") {// functionality required only for Grid in TenderDashboard Screen
+                this.openMCTPCTModal(args.dataItem, true)
+            }
+            else if (this.in_Is_Tender_Dashboard && args.column.field == "COST_TEST_RESULT") {// functionality required only for Grid in TenderDashboard Screen
+                this.openMCTPCTModal(args.dataItem, false)
+            }
+            else if (args.column.field == 'MISSING_CAP_COST_INFO') {
+                this.openMissingCapCostInfo(args.dataItem);
+            }
+            this.isLoading = false;
+        }, 0);
     }
 
     updateModalDataItem(dataItem, field, returnVal) {
@@ -454,20 +451,11 @@ export class dealEditorComponent {
 
 
     openSystemPriceModal(dataItem) {
-        let sysPricePoint = "";
-        if (dataItem["SYS_PRICE_POINT"] != undefined && dataItem["SYS_PRICE_POINT"] != null && dataItem["SYS_PRICE_POINT"] != "") {
-            if (dataItem["SYS_PRICE_POINT"]) {
-                sysPricePoint = dataItem["SYS_PRICE_POINT"];
-            }
-        }
-        else {
-                sysPricePoint = ""; 
-        }
         const dialogRef = this.dialog.open(systemPricePointModalComponent, {
             width: "700px",
             data: {
                 label: "System Price Point",
-                cellCurrValues: sysPricePoint
+                cellCurrValues: (dataItem["SYS_PRICE_POINT"] && dataItem["SYS_PRICE_POINT"] != null && dataItem["SYS_PRICE_POINT"] != "") ? dataItem["SYS_PRICE_POINT"] : ""
             }
         });
         dialogRef.afterClosed().subscribe((returnVal) => {
@@ -496,8 +484,7 @@ export class dealEditorComponent {
             if (!isMeetComp || (isMeetComp && returnVal && returnVal.length > 0)) {
                 let ids = [];
                 ids.push(dataItem.DC_ID);
-                let args = { wipIds: ids };
-                this.refreshGridData.emit(args);
+                this.refreshGridData.emit({ wipIds: ids });
             }
         });
     }
@@ -629,7 +616,7 @@ export class dealEditorComponent {
             }
         }
         if (column.field == "MRKT_SEG") {
-            source = this.dropdownResponses.__zone_symbol__value["MRKT_SEG"]
+            source = this.dropdownResponses["MRKT_SEG"]
         }
         const dialogRef = this.dialog.open(multiSelectModalComponent, {
             panelClass: 'multiselect-scroll-style',
@@ -667,23 +654,16 @@ export class dealEditorComponent {
 
     renametabdata() {
         if (this.Derenametab === "" || this.Derenametab.toLowerCase() == "overlapping") return;
-        for (var g = 0; g < this.groups.length; g++) {
-            if (this.groups[g].name == this.selectedTab) {
-                this.groups[g].name = this.Derenametab;
-                this.renamedefault.push({ "key": this.Derenametab, "value": this.selectedTab });
+        each(this.groups, group => {
+            if (group.name == this.selectedTab) {
+               group.name = this.Derenametab;
+               this.renamedefault.push({ "key": this.Derenametab, "value": this.selectedTab });
             }
-        }
-
-        for (var i = 0; i < this.wipTemplate.columns.length; i++) {
-            var gptemplate = this.templates[this.wipTemplate.columns[i].field];
-            if (gptemplate != undefined && gptemplate.Groups.includes(this.selectedTab)) {
-                for (var g = 0; g < this.templates[this.wipTemplate.columns[i].field].Groups.length; g++) {
-                    if (this.templates[this.wipTemplate.columns[i].field].Groups[g] == this.selectedTab) {
-                        this.templates[this.wipTemplate.columns[i].field].Groups[g] = this.Derenametab;
-                    }
-                }
-            }
-        }
+        });
+        each(this.wipTemplate.columns, column => {
+            if (this.templates[column.field] != undefined && this.templates[column.field].Groups.includes(this.selectedTab))
+                each(this.templates[column.field].Groups, row => { if (row == this.selectedTab) row = this.Derenametab; });
+        });
         this.selectedTab = this.Derenametab;
         this.isrenameDialog = false;
     }
@@ -708,41 +688,22 @@ export class dealEditorComponent {
         this.groups = JSON.parse(JSON.stringify(this.groupsdefault));
         this.applyHideIfAllRules();
         this.selectedTab = this.groups[0].name;
-        var group = this.groups.filter(x => x.name == this.selectedTab);
-
         if (this.renamedefault.length > 0) {
-            for (var i = 0; i < this.wipTemplate.columns.length; i++) {
-                if (this.templates[this.wipTemplate.columns[i].field] != undefined && this.templates[this.wipTemplate.columns[i].field].Groups != undefined) {
-                    for (var g = 0; g < this.templates[this.wipTemplate.columns[i].field].Groups.length; g++) {
-                        for (var j = 0; j < this.renamedefault.length; j++) {
-                            if (this.templates[this.wipTemplate.columns[i].field].Groups.includes(this.renamedefault[j].key)) {
-                                if (this.templates[this.wipTemplate.columns[i].field].Groups[g] == this.renamedefault[j].key) {
-                                    this.templates[this.wipTemplate.columns[i].field].Groups[g] = this.renamedefault[j].value;
-                                }
-                            }
-                            else {
-                                continue;
-                            }
-                        }
-                    }
+            each(this.wipTemplate.columns, column => {
+                if (this.templates[column.field] != undefined && this.templates[column.field].Groups != undefined) {
+                    each(this.templates[column.field].Groups, row => {
+                        each(this.renamedefault, item => {
+                            if (this.templates[column.field].Groups.includes(item.key) && row == item.key) row = item.value;
+                        })
+                    })
                 }
-            }
+            });
         }
-
         this.renamedefault = [];
-
-        if (group[0].isTabHidden) {
-            var tabs = this.groups.filter(x => x.isTabHidden === false);
-            this.selectedTab = tabs[0].name;
-            this.filterColumnbyGroup(this.selectedTab);
-        }
-        else {
-            this.filterColumnbyGroup(this.selectedTab);
-        }
+        if (this.groups.filter(x => x.name == this.selectedTab)[0].isTabHidden) this.selectedTab = this.groups.filter(x => x.isTabHidden === false)[0].name;
+        this.filterColumnbyGroup(this.selectedTab);
         this.setWarningDetails();
     }
-
-    //Default Layout
 
     //<To Add Tab Data?
     addTab = function () {
@@ -753,12 +714,12 @@ export class dealEditorComponent {
     Addtabdata() {
         if (this.DeAddtab === "") this.DeAddtab = "New Tab";
         // Prevent duplicate tab names.
-        for (var g = 0; g < this.groups.length; g++) {
-            if (this.groups[g].name.trim().toLowerCase() === this.DeAddtab.trim().toLowerCase()) {
+        each(this.groups, group => {
+            if (group.name.trim().toLowerCase() === this.DeAddtab.trim().toLowerCase()) {
                 this.loggerService.error("Tab name already exists.", null, "Add Tab Failed");
                 return;
             }
-        }
+        });
         this.addToTab(this.DeAddtab.trim());
         this.isAddDialog = false
     }
@@ -786,10 +747,10 @@ export class dealEditorComponent {
     saveLayout() {
         this.isDataLoading = true;
         this.setBusy("Saving...", "Saving the Layout", "Info", true);
-        var groupSettings = PTE_Common_Util.deepClone(this.groups);
-        for (var i = 0; i < groupSettings.length; i++) {
-            groupSettings[i].isPinned = false;
-        }
+        var groupSettings = JSON.parse(JSON.stringify(this.groups))//PTE_Common_Util.deepClone(this.groups);
+        each(groupSettings, item => {
+            item.isPinned = false;
+        });
 
         forkJoin({
             request1: this.DESvc.updateActions(this.opName, "CustomLayoutFor" + this.curPricingTable.OBJ_SET_TYPE_CD, "Groups", JSON.stringify(groupSettings)),
@@ -811,11 +772,9 @@ export class dealEditorComponent {
     getColumnOrder() {
         const grid = this.wipTemplate;
         let columnOrderArr = [];
-
-        for (let i = 0; i < grid.columns.length; i++) {
-            columnOrderArr.push(grid.columns[i]["field"]);
-        }
-
+        each(grid.columns, column => {
+            columnOrderArr.push(column["field"]);
+        });
         return columnOrderArr;
     }
 
@@ -863,14 +822,14 @@ export class dealEditorComponent {
             this.templates = JSON.parse(groupColumnsSetting[0].PRFR_VAL);
         }
 
-        for (var i = 0; i < this.groups.length; i++) {
+        each(this.groups, group => {
             if (this.templates.END_CUSTOMER_RETAIL.Groups != undefined) {
-                if (this.templates.END_CUSTOMER_RETAIL.Groups.includes(this.groups[i].name) && this.groups[i].name != "Deal Info") {
+                if (this.templates.END_CUSTOMER_RETAIL.Groups.includes(group.name) && group.name != "Deal Info") {
                     if (this.templates.END_CUSTOMER_RETAIL.Groups === undefined) this.templates.END_CUSTOMER_RETAIL.Groups = [];
-                    this.templates.END_CUSTOMER_RETAIL.Groups.push(this.groups[i].name);
+                    this.templates.END_CUSTOMER_RETAIL.Groups.push(group.name);
                 }
             }
-        }
+        });
 
         this.selectedTab = this.groups[0].name;
         this.filterColumnbyGroup(this.selectedTab);
@@ -888,9 +847,7 @@ export class dealEditorComponent {
     onColumnChange(val) {
 
         var col = this.wipTemplate.columns.filter(x => x.field == val.field);
-
         if (col == undefined || col == null || col.length == 0) return;
-
         var colGrp = this.templates[val.field];
         if (colGrp == undefined || colGrp.Groups == undefined) {
             colGrp = { Groups: [] };
@@ -902,7 +859,6 @@ export class dealEditorComponent {
                 colGrp.Groups.push(this.selectedTab);
             }
         } else {
-
             if (colGrp != undefined) {
                 var index = colGrp.Groups.indexOf(this.selectedTab);
                 if (index > -1) {
@@ -1122,12 +1078,10 @@ export class dealEditorComponent {
                     this.perfComp.emit(this.perfBar);
                     this.setPerfBarDetails('setInitialDetails', "Processing returned data", "UI", false, false);
                     this.perfComp.emit(this.perfBar);
-                }
-                this.setBusy("Saving your data...Done", "Processing results now!", "Info", true);
-                if (this.isDeveloper || this.isTester) {
                     this.setPerfBarDetails('mark', "Constructing returnset", "", false, false);
                     this.perfComp.emit(this.perfBar);
                 }
+                this.setBusy("Saving your data...Done", "Processing results now!", "Info", true);
                 if (response.Data.WIP_DEAL != undefined && response.Data.WIP_DEAL != null && response.Data.WIP_DEAL.length > 0) {
                     this.savedResponseWarning = [];
                     await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
@@ -1149,16 +1103,11 @@ export class dealEditorComponent {
                         //to avoid losing warning details which comes only during save action
                         PTE_Save_Util.saveWarningDetails(response.Data.WIP_DEAL, this.savedResponseWarning);
                         this.setBusy("Saved with warnings", "Didn't pass Validation", "Warning", true);
-                        if (this.isTenderContract) {
-                            this.tmDirec.emit('');
-                        }
                     }
                     else {
                         this.setBusy("Save Successful", "Saved the contract", "Success", true);
-                        if (this.isTenderContract) {
-                            this.tmDirec.emit('');
-                        }
                     }
+                    if (this.isTenderContract) this.tmDirec.emit('');
                 }
             }
             await this.getWipDealData();
@@ -1281,65 +1230,73 @@ export class dealEditorComponent {
     }
 
     filterDealData(event) {
-        if (event.keyCode == 13) {
-            if (this.searchFilter != undefined && this.searchFilter != null && this.searchFilter != "") {
-                if (this.searchFilter.length < 3) {
-                    // This breaks the tab filtering
-                    this.clearSearchGrid();
-                    return;
+        this.isLoading = true
+        setTimeout(() => {
+            if (event.keyCode == 13) {
+                if (this.searchFilter != undefined && this.searchFilter != null && this.searchFilter != "") {
+                    if (this.searchFilter.length < 3) {
+                        // This breaks the tab filtering
+                        this.clearSearchGrid();
+                        return;
+                    }
+                    else {
+                        const cols = ["DC_ID", "WF_STG_CD", "PTR_USER_PRD", "TITLE", "NOTES"];
+                        let filters = []
+                        each(cols, item => {
+                            if (this.gridResult.filter(x => x[item].toString().toLowerCase().includes(this.searchFilter.toLowerCase())).length > 0)
+                                filters.push({
+                                    field: item,
+                                    operator: item == 'DC_ID' ? "eq" : "contains",
+                                    value: this.searchFilter
+                                })
+                        });
+                        if (filters.length == 0) filters = [
+                            {
+                                field: "DC_ID",
+                                operator: "eq",
+                                value: this.searchFilter
+                            }, {
+                                field: "WF_STG_CD",
+                                operator: "contains",
+                                value: this.searchFilter
+                            }, {
+                                field: "PTR_USER_PRD",
+                                operator: "contains",
+                                value: this.searchFilter
+                            }, {
+                                field: "TITLE",
+                                operator: "contains",
+                                value: this.searchFilter
+                            }, {
+                                field: "NOTES",
+                                operator: "contains",
+                                value: this.searchFilter
+                            }
+                        ];
+                        this.state.filter = {
+                            logic: "or",
+                            filters: filters
+                        }
+                        this.gridData = process(this.gridResult, this.state);
+                    }
                 }
                 else {
-                    const cols = ["DC_ID", "WF_STG_CD", "PTR_USER_PRD", "TITLE", "NOTES"];
-                    let filters = []
-                    cols.forEach((item) => {
-                        if (this.gridResult.filter(x => x[item].toString().toLowerCase().includes(this.searchFilter.toLowerCase())).length > 0)
-                            filters.push({
-                                field: item,
-                                operator: item == 'DC_ID' ? "eq" : "contains",
-                                value: this.searchFilter
-                            })
-                    })
-                    if (filters.length == 0) filters = [
-                        {
-                            field: "DC_ID",
-                            operator: "eq",
-                            value: this.searchFilter
-                        }, {
-                            field: "WF_STG_CD",
-                            operator: "contains",
-                            value: this.searchFilter
-                        }, {
-                            field: "PTR_USER_PRD",
-                            operator: "contains",
-                            value: this.searchFilter
-                        }, {
-                            field: "TITLE",
-                            operator: "contains",
-                            value: this.searchFilter
-                        }, {
-                            field: "NOTES",
-                            operator: "contains",
-                            value: this.searchFilter
-                        }
-                    ];
-                    this.state.filter = {
-                        logic: "or",
-                        filters: filters
-                    }
-                    this.gridData = process(this.gridResult, this.state);
+                    this.clearSearchGrid();
                 }
             }
-            else {
-                this.clearSearchGrid();
-            }
-        }
+            this.isLoading = false;
+        }, 0);
     }
     clearSearchGrid() {
-        this.state.filter = {
-            logic: "and",
-            filters: [],
-        }
-        this.gridData = process(this.gridResult, this.state);
+        this.isLoading = true;
+        setTimeout(() => {
+            this.state.filter = {
+                logic: "and",
+                filters: [],
+            }
+            this.gridData = process(this.gridResult, this.state);
+            this.isLoading = false;
+        });
     }
     toggleWrap = function () {
         const elements = Array.from(
@@ -1410,7 +1367,7 @@ export class dealEditorComponent {
     displaydealType() {
         return this.curPricingTable.OBJ_SET_TYPE_CD.replace(/_/g, ' ');
     }
-    initialization() {
+    async initialization() {
         try {
             
             this.isDataLoading = true;
@@ -1427,7 +1384,9 @@ export class dealEditorComponent {
             }
             this.getGroupsAndTemplates();
             if (this.isInitialLoad) {
-                this.dropdownResponses = this.getAllDrowdownValues();
+                if (Object.keys(this.dropdownResponses).length == 0) {
+                    this.dropdownResponses = await this.getAllDrowdownValues();
+                }
                 this.selectedTab = this.groups[0].name;
                 this.filterColumnbyGroup(this.selectedTab);
             }
@@ -1436,16 +1395,15 @@ export class dealEditorComponent {
                 this.filterOnDealId(this.searchFilter)
             }
 
-            if(this.route.snapshot.url[0].path=='contractmanager')
-            {
-            const type=this.route.snapshot.paramMap.get('type');
-            const cid=this.route.snapshot.paramMap.get('cid');
-            const psid=this.route.snapshot.paramMap.get('PSID');
-            const ptid=this.route.snapshot.paramMap.get('PTID');
-            this.dealId=this.route.snapshot.paramMap.get('DealID');
-              //it will update the url on page reload persist the selected state
-            const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, this.dealId ]);
-            this.router.navigateByUrl(urlTree+'?loadtype=DealEditor' );
+            if(this.route.snapshot.url[0].path=='contractmanager'){
+                const type=this.route.snapshot.paramMap.get('type');
+                const cid=this.route.snapshot.paramMap.get('cid');
+                const psid=this.route.snapshot.paramMap.get('PSID');
+                const ptid=this.route.snapshot.paramMap.get('PTID');
+                const dealid=this.route.snapshot.paramMap.get('DealID');
+                  //it will update the url on page reload persist the selected state
+                const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
+                this.router.navigateByUrl(urlTree+'?loadtype=DealEditor' );
             }
         }
         catch (ex) {

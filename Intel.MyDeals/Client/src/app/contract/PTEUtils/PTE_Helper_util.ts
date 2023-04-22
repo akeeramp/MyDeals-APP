@@ -5,7 +5,7 @@ import { PTE_Config_Util } from "./PTE_Config_util";
 export class PTE_Helper_Util {
     static getFormatedGeos(geos) {
         if (geos == null) { return null; }
-        var isBlendedGeo = (geos.indexOf('[') > -1) ? true : false;
+        const isBlendedGeo = (geos.indexOf('[') > -1) ? true : false;
         if (isBlendedGeo) {
             geos = geos.replace('[', '');
             geos = geos.replace(']', '');
@@ -19,7 +19,7 @@ export class PTE_Helper_Util {
     //// Note that all keys put into the dealGrpKey should use this function for proper deal grp name merging validation.
     //// </summary>
     static formatStringForDictKey(valueToFormat) {
-        var result = "";
+        let result = "";
         if (valueToFormat != null) {
             result = valueToFormat.toString().toUpperCase().replace(/\s/g, "");
         }
@@ -33,9 +33,9 @@ export class PTE_Helper_Util {
     };
 
     static hasDataOrPurge(data, rowStart, rowStop) {
-        var ids = [];
+        let ids = [];
         if (data.length === 0) return ids;
-        for (var n = rowStop; n >= rowStart; n--) {
+        for (let n = rowStop; n >= rowStart; n--) {
             if (!!data[n]) {
                 if (data[n].DC_ID !== null && data[n].DC_ID > 0) {
                     if (ids.indexOf(data[n].DC_ID) < 0) ids.push(data[n].DC_ID);
@@ -51,7 +51,7 @@ export class PTE_Helper_Util {
     //	Sanitize data to remove non-ascii characters and hidden line breaks (Mainly for excel copy/paste)
     /// </summary>
     static sanitizeString(stringToSanitize, lineBreakReplacementCharacter) {
-        var lineBreakMatches = stringToSanitize.match(/\r?\n|\r/g);
+        const lineBreakMatches = stringToSanitize.match(/\r?\n|\r/g);
         if (lineBreakReplacementCharacter == null) { lineBreakReplacementCharacter = ""; }
         stringToSanitize = stringToSanitize.replace(/\r?\n\r?\n?|\n|\r/g, lineBreakReplacementCharacter) // replace all new line characters with commas
 
@@ -59,8 +59,8 @@ export class PTE_Helper_Util {
     }
 
     static fromOaDate(oadate) {
-        var date = new Date(((oadate - 25569) * 86400000));
-        var tz = date.getTimezoneOffset();
+        const date = new Date(((oadate - 25569) * 86400000));
+        const tz = date.getTimezoneOffset();
         return new Date(((oadate - 25569 + (tz / (60 * 24))) * 86400000));
     }
 
@@ -93,7 +93,7 @@ export class PTE_Helper_Util {
 
     static CalculateFirstEdiatableBeforeProductCol(editableColsBeforeProduct, firstEditableColBeforeProduct, rootColToLetter) {
         if (editableColsBeforeProduct.length > 0) {
-            for (var i = 0; i < editableColsBeforeProduct.length; i++) {
+            for (let i = 0; i < editableColsBeforeProduct.length; i++) {
                 if (firstEditableColBeforeProduct === null) {
                     firstEditableColBeforeProduct = editableColsBeforeProduct[i];
                 } else if (rootColToLetter[firstEditableColBeforeProduct] > rootColToLetter[editableColsBeforeProduct[i]]) {
@@ -109,7 +109,7 @@ export class PTE_Helper_Util {
     }
 
     static RemoveGhostRows(pricingTableRow, rootSpreadDsData) {
-        for (var i = 0; i < pricingTableRow.length; i++) {
+        for (let i = 0; i < pricingTableRow.length; i++) {
             if (pricingTableRow.length != rootSpreadDsData.length) {
                 if (i < rootSpreadDsData.length) {
                     if (rootSpreadDsData[i].DC_ID != pricingTableRow[i].DC_ID) {
@@ -148,7 +148,7 @@ export class PTE_Helper_Util {
     }
 
     static resetDirty() {
-        var field = "isDirty";
+        const field = "isDirty";
     }
 
     static GetFirstEdiatableBeforeProductCol(firstEditableColBeforeProduct, editableColsBeforeProduct, rootColToLetter) {
@@ -169,17 +169,17 @@ export class PTE_Helper_Util {
     static deNormalizeData = function (data, curPricingTable) {      //convert how we keep data in UI to MT consumable format
         if (!PTE_Load_Util.isPivotable(curPricingTable)) return data;
         //For multi tiers last record will have latest date, skipping duplicate DC_ID
-        var a;
-        var newData = [];
-        var lData = {};
-        var tierDimKey = "_____10___";
-        var prodDimKey = "_____20___";
+        let a;
+        let newData = [];
+        let lData = {};
+        let tierDimKey = "_____10___";
+        let prodDimKey = "_____20___";
 
-        var dimKey;
-        var dimAtrbs;
-        var isKit = 0;
-        var tierAtrbs = PTE_Config_Util.tierAtrbs;
-        var densityTierAtrbs = PTE_Config_Util.densityTierAtrbs;
+        let dimKey;
+        let dimAtrbs;
+        let isKit = 0;
+        let tierAtrbs = PTE_Config_Util.tierAtrbs;
+        let densityTierAtrbs = PTE_Config_Util.densityTierAtrbs;
         let dealType = curPricingTable['OBJ_SET_TYPE_CD'];
 
         if (dealType === "VOL_TIER" || dealType === "FLEX" ||
@@ -193,10 +193,10 @@ export class PTE_Helper_Util {
             isKit = 1;
         }
 
-        var prevTier = 1, densityBand = 1;
+        let prevTier = 1, densityBand = 1;
 
-        for (var d = 0; d < data.length; d) {
-            var numTiers = PTE_Load_Util.numOfPivot(data[d], curPricingTable);      //KITTODO: rename numTiers to more generic var name for kit deals?
+        for (let d = 0; d < data.length; d) {
+            const numTiers = PTE_Load_Util.numOfPivot(data[d], curPricingTable);      //KITTODO: rename numTiers to more generic var name for kit deals?
             if (dealType == "DENSITY") {
                 let numDensityBands = parseInt(data[d]["NUM_OF_DENSITY"]);
                 let densityNumTiers = numTiers / numDensityBands;
@@ -204,7 +204,7 @@ export class PTE_Helper_Util {
                 let curRow = parseInt(data[d]["DC_ID"]);
                 let count = 0;
 
-                for (var x = 1 - isKit; x <= numTiers - isKit; x++) {
+                for (let x = 1 - isKit; x <= numTiers - isKit; x++) {
                     if (prevTier != data[d].TIER_NBR || prevRow != curRow) { densityBand = 1; prevTier = data[d].TIER_NBR; }
                     if (prevRow != curRow) {
                         count = d;
@@ -243,7 +243,7 @@ export class PTE_Helper_Util {
             }
             else {
 
-                for (var t = 1 - isKit; t <= numTiers - isKit; t++) { // each tier
+                for (let t = 1 - isKit; t <= numTiers - isKit; t++) { // each tier
                     if (t === 1 - isKit) { lData = data[d]; }
                     for (a = 0; a < dimAtrbs.length; a++) { // each tiered attribute
                         lData[dimAtrbs[a] + dimKey + t] = data[d][dimAtrbs[a]];
@@ -254,8 +254,8 @@ export class PTE_Helper_Util {
                             if (dealType === "KIT") {
                                 // Clear out the dimensions of the not-in-use tiers because KIT has dynamic tiering,
                                 //		which might leave those dimensions with data, and save stray attributes with no product association in our db.
-                                for (var i = 0; i < PTE_Config_Util.maxKITproducts; i++) {
-                                    var tierToDel = (t + 1 + i);
+                                for (let i = 0; i < PTE_Config_Util.maxKITproducts; i++) {
+                                    const tierToDel = (t + 1 + i);
                                     lData[dimAtrbs[a] + dimKey + tierToDel] = "";
                                 }
                             }
@@ -291,7 +291,7 @@ export class PTE_Helper_Util {
         if (response.splitProducts) {
             let prod = {};
             let items = Object.keys(prdObj);
-            for (var i = 0; i < items.length; i++) {
+            for (let i = 0; i < items.length; i++) {
                 let obj = {};
                 obj[`${items[i]}`] = prdObj[`${items[i]}`]
                 prod[i + 1] = obj;

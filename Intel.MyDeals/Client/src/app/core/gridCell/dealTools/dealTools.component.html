@@ -109,7 +109,7 @@
                     <button kendoButton class="k-button cancelDelete cancel-btn-pop-up line-height-unset" style="width: 50% !important;" (click)="closeDialogs()">CANCEL</button>
                 </kendo-dialog-actions>
             </kendo-dialog>
-           <kendo-dialog *ngIf="alertCancel" (close)="closeDialogs()" [maxWidth]="440" [height]="245">
+            <kendo-dialog *ngIf="alertCancel" (close)="closeDialogs()" [maxWidth]="440" [height]="245">
                 <div class="kendoAlert" style="padding: 2.4em;">
                     <h4 style="margin-top: 22px !important; font-size: 24px !important;">Unable to Cancel</h4>
                     <p>You cannot cancel multiple deals as a single operation.<br>Please uncheck all deals before trying to cancel deals.</p>
