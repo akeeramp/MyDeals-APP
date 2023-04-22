@@ -2,11 +2,6 @@
     max-width: 60%
 }
 
-.meet-conduct .k-icon:hover {
-    color: #00AEEF !important;
-    opacity: unset !important
-}
-
 .meet-conduct .k-label {
     padding: 1px;
     min-width: 7px;
@@ -23,11 +18,6 @@
     font-size: 12px !important;
     font-weight: 600 !important;
     color: #1a3e6f
-}
-
-.meet-conduct .k-icon {
-    color: #000000;
-    opacity: .45
 }
 
 .meet-conduct .k-grid td.k-state-focused,
@@ -359,7 +349,7 @@
 }
 
 .meet-conduct .k-grid-header .headerClass {
-    background: #efefef !important
+    background: #E7E7E8 !important
 }
 
 .meet-conduct .fr {
@@ -597,24 +587,10 @@
     box-shadow: inset 0 0 0 1px #00AEEF !important
 }
 
-.meet-conduct span.k-icon.k-i-filter {
-    color: #00aeef !important;
-    opacity: 1 !important;
-    left: 4px !important
-}
-
-.meet-conduct span.k-icon.k-i-filter:hover {
-    color: #0071C5 !important
-}
-
 #childGrid .meet-child-grid {
     height: fit-content !important;
     min-width: 2355px !important;
     width: fit-content !important
-}
-
-.oppo-grids.physics-css.child-td-mc kendo-grid table tr th .k-i-filter {
-    padding-top: 0 !important;
 }
 
 .meet-comp-header-line {
@@ -651,11 +627,6 @@
 
 .groupDealers .mat-dialog-container .modal-body kendo-grid.k-grid .k-grid-content {
     height: 350px;
-}
-
-kendo-grid.meetCompTable table tr th .k-cell-inner kendo-grid-filter-menu a.k-grid-filter.k-state-active {
-    background: white;
-    padding-left: 0px;
 }
 
 div.wrapColumnData {

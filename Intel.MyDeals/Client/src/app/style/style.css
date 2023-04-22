@@ -132,21 +132,30 @@ kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li {
     font-size: 14px !important;
 }
 
-kendo-grid.exclude-filter-style table thead tr th kendo-grid-filter-menu .k-grid-filter.k-state-active {
-    background-color: var(--white);
-    color: var(--light-blue)!important;
+/*Updated Grid filter Items*/
+.k-grid-header {
+    background-color: #E7E7E8;
 }
 
-kendo-grid.exclude-filter-style table thead tr th kendo-grid-filter-menu .k-grid-filter.k-state-active span.k-icon.k-i-filter,
-kendo-grid.exclude-filter-style table thead tr th kendo-grid-filter-menu span.k-icon.k-i-filter:hover {
-    color: var(--light-blue) !important;
+.k-grid-header .k-grid-filter.k-state-active {
+    background-color: #E7E7E8;
 }
 
-kendo-grid.exclude-filter-style table thead tr th kendo-grid-filter-menu span.k-icon.k-i-filter {
-    font-size: 18px !important;
-    color: #777777 !important;
-    margin-top: 2px !important;
+.k-state-active > .k-i-filter, .k-grid-filter.k-state-active {
+    color: #003C71 !important; /*Pink to test*/
 }
+
+.k-i-filter, .k-grid-filter {
+    font-size: 15px !important;
+    color: #00AEEF;  /*Orange to test*/
+    margin-top: -2px;
+}
+
+    .k-i-filter:hover, .k-grid-filter:hover {
+        color: #0071C5 !important; /*Green to test*/
+    }
+
+/*END Updated Grid filter Items*/
 
 .new-now-wrap.oppo-grids kendo-grid.exclude-filter-style .k-grid-header table thead tr th span.k-cell-inner .k-link {
     display: flex;
@@ -942,34 +951,9 @@ kendo-window#OvrLp .k-window-content {
     padding: 0 !important
 }
 
-#manageFilterStyle .k-icon.k-i-filter {
-    color: var(--light-blue) !important;
-    opacity: 1;
-    margin-top: 2px
-}
-
-    #manageFilterStyle .k-icon.k-i-filter:hover {
-        color: #0071c5 !important
-    }
-
 .overlapping_css th.k-group-cell.k-header {
     background-color: #e7e7e8 !important;
     border-right: 1px solid #e6e6e6
-}
-
-.overlapping_css .k-grid-filter .k-icon.k-i-filter {
-    opacity: 1;
-    font-size: 14px
-}
-
-.overlapping_css .k-grid-filter .k-icon.k-i-filter:hover {
-    color: #0071c5 !important
-}
-
-kendo-grid.contract-history-style span.k-icon.k-i-filter {
-    font-size: 18px !important;
-    color: #777777 !important;
-    margin-top: 2px !important
 }
 
 .cm-height-table .k-grid-header .headerClass {
@@ -1005,10 +989,6 @@ kendo-grid.contract-history-style span.k-icon.k-i-filter {
 
 .globalSearch-popupbox .k-dialog .k-content.k-window-content.k-dialog-content {
     padding: 2.4em !important
-}
-
-kendo-grid.contract-history-style span.k-icon.k-i-filter:hover {
-    color: #00aeef !important
 }
 
 .globalSearch-popupbox .k-window.k-dialog {
@@ -1099,17 +1079,6 @@ kendo-textbox.kendoInput.font-input.cd-input-bottom.k-textbox-design.k-textbox.n
 kendo-window#OvrLp.k-wind-design {
     padding-top: 0 !important;
 }
-
-.admin-deal-grid .k-icon.k-i-filter {
-    font-size: 20px !important;
-    color: #000 !important;
-    opacity: .45 !important;
-}
-
-    .admin-deal-grid .k-icon.k-i-filter:hover {
-        color: #00aeef !important;
-        opacity: 1 !important;
-    }
 
 .admin-deal-grid .k-column-title {
     font-size: 14px !important;
@@ -1466,10 +1435,6 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
     text-align: left !important;
 }
 
-#OvrLp kendo-grid-filter-menu {
-    padding-right: 4px !important;
-}
-
 /*--------------------Overlapping Deals Dialog CSS--------------------*/
 .k-window-maximized kendo-grid.overDealChecking.widthOutDesign.k-widget kendo-grid-list table tbody tr.k-grid-norecords td {
     min-width: 1915px !important;
@@ -1488,16 +1453,6 @@ kendo-grid.overDealChecking.widthOutDesign.k-widget table tr th {
     border-right-color: #c4cfd4 !important;
     border-left-color: #c4cfd4 !important;
     font-family: 'Intel Clear' !important;
-}
-
-kendo-grid.overDealChecking.widthOutDesign.k-widget .k-grid-filter .k-icon.k-i-filter {
-    color: #00AEEF !important;
-    opacity: 1;
-    font-size: 14px;
-}
-
-kendo-grid.overDealChecking.widthOutDesign.k-widget .k-grid-filter .k-icon.k-i-filter:hover {
-    color: #0071c5 !important;
 }
 
 kendo-grid.overDealChecking.widthOutDesign.k-widget kendo-grid-list table tbody tr.k-grid-norecords td {
@@ -1575,11 +1530,11 @@ kendo-window.flexOverlapProducts {
 
 #admin-legal-popup .k-content.k-window-content.k-dialog-content {
     overflow: hidden !important;
-    padding:0px !important
+    padding:0px !important;
 }
 
 #manageFilterStyle a.k-grid-filter.k-state-active {
-    background-color: #ffffff !important
+    background-color: #EFEFEF;
 }
 
 #horizontal.expanded:has(.contractManagerPlus) {

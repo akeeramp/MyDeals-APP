@@ -12,7 +12,3 @@
 kendo-grid.container-pct table tr th .k-link {
     display: flex !important;
 }
-
-kendo-grid.container-pct table tr th a.k-grid-filter.k-state-active {
-    background-color: #fff;
-}

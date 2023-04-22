@@ -1,11 +1,59 @@
-﻿#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="START_DT"],#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="END_DT"],#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="TITLE"],#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="ECAP_PRICE"],#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="VOLUME"],#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="TERMS"],#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="GEO_APPROVED_BY"],#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="DIV_APPROVED_BY"]{border-bottom:3px solid rgb(0,113,197)!important}#pubOpGrid .k-cell-inner .k-grid-filter{text-align:center!important;display:inline-block!important;position:relative!important;padding:0!important;vertical-align:middle!important;align-content:center!important;width:0!important;height:0!important;top:-10px!important;margin-right:10px!important}#pubOpGrid .k-grid .k-grid-content{overflow:overlay}.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th .k-cell-inner kendo-grid-filter-menu a .k-i-filter{color:var(--light-blue)}.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th{vertical-align:top!important;font-family:'Intel Clear'!important;font-size:12px!important;font-weight:600!important;white-space:normal!important;color:#1A3E6F!important}.filter-alignment-fixes kendo-grid .k-grid-aria-root kendo-grid-list table tbody tr td .isReadOnlyCell{background:transparent!important}.filter-alignment-fixes kendo-grid .k-grid-aria-root kendo-grid-list table tbody tr td:first-child deal-editor-cell{display:flex;align-items:center;justify-content:center;position:relative}.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th .k-cell-inner{align-items:flex-start}.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th .k-cell-inner kendo-grid-filter-menu{padding:.5rem .5rem}
+﻿#pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="START_DT"], #pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="END_DT"], #pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="TITLE"], #pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="ECAP_PRICE"], #pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="VOLUME"], #pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="TERMS"], #pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="GEO_APPROVED_BY"], #pubOpGrid kendo-grid.mpublishgrid.k-widget.k-grid table tr th[ng-reflect-header-label-text="DIV_APPROVED_BY"] {
+    border-bottom: 3px solid rgb(0,113,197) !important
+}
+
+#pubOpGrid .k-cell-inner .k-grid-filter {
+    text-align: center !important;
+    display: inline-block !important;
+    position: relative !important;
+    padding: 0 !important;
+    vertical-align: middle !important;
+    align-content: center !important;
+    width: 0 !important;
+    height: 0 !important;
+    top: -10px !important;
+    margin-right: 10px !important
+}
+
+#pubOpGrid .k-grid .k-grid-content {
+    overflow: overlay;
+}
+
+.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th {
+    vertical-align: top !important;
+    font-family: 'Intel Clear' !important;
+    font-size: 12px !important;
+    font-weight: 600 !important;
+    white-space: normal !important;
+    color: #1A3E6F !important
+}
+
+.filter-alignment-fixes kendo-grid .k-grid-aria-root kendo-grid-list table tbody tr td .isReadOnlyCell {
+    background: transparent !important
+}
+
+.filter-alignment-fixes kendo-grid .k-grid-aria-root kendo-grid-list table tbody tr td:first-child deal-editor-cell {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative
+}
+
+.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th .k-cell-inner {
+    align-items: flex-start
+}
+
+.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th .k-cell-inner kendo-grid-filter-menu {
+    padding: .5rem .5rem
+}
+
 .k-grid-filter-popup.k-popup .k-filter-menu-container {
     width: auto !important;
 }
 
-    .k-grid-filter-popup.k-popup .k-filter-menu-container ul li label.k-multiselect-checkbox.k-checkbox-label {
-        white-space: nowrap !important
-    }
+.k-grid-filter-popup.k-popup .k-filter-menu-container ul li label.k-multiselect-checkbox.k-checkbox-label {
+    white-space: nowrap !important
+}
 
 #searchIcon {
     bottom: 25px !important;
@@ -14,6 +62,7 @@
     display: block !important;
     left: 0 !important
 }
-.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th .k-cell-inner kendo-grid-filter-menu a .k-i-filter:hover {
-    color: #0071c5 !important;
+
+.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th .k-cell-inner kendo-grid-filter-menu a .k-i-filter {
+    background-color: #fafafa !important;
 }

@@ -166,7 +166,7 @@ export class allDealsComponent {
                         ],
                     }
 
-                    let group = this.groups.filter(x => x.name == this.selectedTab);
+                    let group = this.groups.filter(x => x.name == "All"); //x => x.name == this.selectedTab - forced search to be global
                     let deals = [];
                     if (group[0].name.toLowerCase() == 'all') {
                         deals = this.gridResult;

@@ -670,22 +670,6 @@ kendo-multiselect.divineo-one.x-btn-visible .k-multiselect-wrap kendo-taglist ul
     padding-right: 0.375rem !important;
 }
 
-kendo-grid.legal-exception-design table tr th .k-cell-inner kendo-grid-filter-menu .k-grid-filter span.k-icon.k-i-filter {
-    color: #808080;
-}
-
-kendo-grid.legal-exception-design table tr th .k-cell-inner kendo-grid-filter-menu .k-grid-filter span.k-icon.k-i-filter:hover {
-    color: var(--light-blue);
-}
-
-kendo-grid.legal-exception-design table tr th .k-cell-inner kendo-grid-filter-menu a.k-grid-filter.k-state-active {
-    background-color: #fff;
-}
-
-kendo-grid.legal-exception-design table tr th .k-cell-inner kendo-grid-filter-menu a.k-grid-filter.k-state-active span.k-icon.k-i-filter {
-    color: var(--light-blue);
-}
-
 kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.fs-changes.k-widget.k-multiselect .k-multiselect-wrap kendo-taglist ul li {
     padding: 0.09375rem 0.375rem !important;
 }
@@ -964,21 +948,13 @@ ngb-tooltip-window.redColorTooltip .tooltip-inner {
     border-color: #ebebeb !important;
     color: #444 !important;
 }
-.CH_height .k-grid-aria-root .k-grid-header .k-grid-header-wrap table thead tr .k-header .k-cell-inner kendo-grid-filter-menu .k-grid-filter.k-state-active {
-    background-color: #fff !important;
-    height: 40px !important;
-    width: 40px !important;
+.CH_height .k-grid-aria-root .k-grid-header .k-grid-header-wrap table thead tr .k-header .k-cell-inner kendo-grid-filter-menu .k-grid-filter.k-state-active,
+.overlapping_css .k-grid-aria-root .k-grid-header .k-grid-header-wrap table thead tr .k-header .k-cell-inner kendo-grid-filter-menu .k-grid-filter.k-state-active {
+    background-color: #e7e7e8;
 }
 
 #manageFilterStyle .k-grid-aria-root .k-grid-container .k-grid-content.k-virtual-content {
     overflow: overlay !important;
-}
-
-.overlapping_css .k-grid-aria-root .k-grid-header .k-grid-header-wrap table thead tr .k-header .k-cell-inner kendo-grid-filter-menu .k-grid-filter.k-state-active {
-    color: #777777 !important;
-    background-color: #fff !important;
-    height: 40px !important;
-    width: 40px !important;
 }
 
 .head-navbar .nav.nav-tabs-intel-blocks li ul li a:hover, .nav.nav-tabs-intel-blocks li ul li a:focus {

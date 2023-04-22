@@ -443,15 +443,6 @@ k-state-focused .k-touch-action-auto .k-grid-edit-cell {
     font-weight: 600
 }
 
-.op-grid.k-grid .k-grid-filter .k-icon.k-i-filter {
-    color: #00AEEF;
-    opacity: 1
-}
-
-.op-grid.k-grid .k-grid-filter .k-icon.k-i-filter:hover {
-    color: #0071c5 !important
-}
-
 .intelicon-protection-solid {
     font-size: 20px
 }
@@ -770,7 +761,7 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper {
 }
 
     .chkColItem:hover {
-        background-color: #efefef
+        background-color: #E7E7E8
     }
 
 .k-textbox.form-control {
@@ -1221,10 +1212,6 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn 
     padding: 15px !important;
     padding-top: 2px !important;
     padding-bottom: 0 !important
-}
-
-#dealEditor .k-grid-header .k-grid-filter.k-state-active {
-    background-color: #fff !important
 }
 
 .one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="PRD_BCKT"], .one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_OA_MAX_VOL"], .one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_OA_MAX_AMT"], .one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="PRD_EXCLDS"] {

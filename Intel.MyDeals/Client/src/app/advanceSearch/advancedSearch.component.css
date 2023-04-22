@@ -3,6 +3,7 @@
     color: #c1c1c1 !important;
     position: relative !important;
 }
+
 span.add_text_italic {
     font-size: 12px !important;
     color: #444444 !important;
@@ -11,6 +12,7 @@ span.add_text_italic {
     position: relative !important;
     margin-left: 10px !important;
 }
+
 span.search_res_text {
     font-size: 20px !important;
     color: #003C71 !important;
@@ -18,13 +20,16 @@ span.search_res_text {
     position: relative !important;
     font-family:'Intel Clear' !important
 }
+
 .search-toolbar.advance_toolbar {
     position: relative !important;
 }
+
 .search-toolbar {
     height: 30px;
     padding: 0 15px;
 }
+
 #horizontal-search {
     border: 0 solid transparent !important;
     font-size: 12px !important;
@@ -75,15 +80,18 @@ span.search_res_text {
     padding: 10px !important;
     height: fit-content !important;
 }
+
 .search-container {
     padding: 0 !important;
 }
+
 .search_style_tender {
     color: #003C71 !important;
     font-weight: 600 !important;
     font-size: 20px !important;
     font-family: 'Intel Clear' !important;
 }
+
 kendo-combobox#ruleDropDownList.advance_combo-select-saverule {
     height: 30px !important;
     position: relative !important;
@@ -91,10 +99,12 @@ kendo-combobox#ruleDropDownList.advance_combo-select-saverule {
     font-family: 'Intel Clear' !important;
     width:100%;
 }
+
 kendo-combobox#ruleDropDownList.advance_combo-select-saverule:hover,
 kendo-combobox#ruleDropDownList.advance_combo-select-saverule:focus-within {
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
 }
+
 .advance_combo-select-saverule span.k-dropdown-wrap {
     border-color: #f0f0f0 !important;
     color: #212529 !important;
@@ -102,11 +112,13 @@ kendo-combobox#ruleDropDownList.advance_combo-select-saverule:focus-within {
     border-radius: 0px !important;
     box-shadow: none !important;
 }
+
 .advance_combo-select-saverule.k-combobox .k-dropdown-wrap .k-select {
     border-left: 1px solid #f0f0f0 !important;
     background-color: #cecece1f !important;
     color: #727578 !important;
 }
+
 #admin-advance-grid.oppo-grids kendo-grid .k-grid-header table thead tr th {
     font-size: 12px !important;
     background-color: #fafafa !important;
@@ -119,16 +131,20 @@ kendo-combobox#ruleDropDownList.advance_combo-select-saverule:focus-within {
     font-family: 'Intel Clear', 'Arial' !important;
     color: #1a3e6f !important;
 }
+
 #admin-advance-grid.oppo-grids .k-grid-header {
     border-top: 1px solid #3343a4 !important;
 }
+
 .advance_icons_style{
     position:relative !important;
 }
+
 i.intelicon-help.advance_helpicon {
     font-size: 30px !important;
     position: relative !important;
 }
+
 button.btn.btn-sm.ssToolbarBtn.advance_cleargrid {
     position: relative !important;
     color: #00AEEF !important;
@@ -136,6 +152,7 @@ button.btn.btn-sm.ssToolbarBtn.advance_cleargrid {
     border: 0px solid transparent !important;
     right:40px !important
 }
+
 i.intelicon-cancel-filter-outlined.skyBlue.addd_cleargridbtn,
 i.intelicon-align-left.skyBlue.addd_cleargridbtn,
 i.intelicon-view-by-columns.addd_cleargridbtn,
@@ -144,6 +161,7 @@ i.intelicon-ms-excel-outlined.skyBlue.add_iconstyle {
     border: 0px solid transparent;
     color: #00aeef !important
 }
+
 td.hidden-sm.hidden-xs.text_grid_style {
     left: 5px !important;
     position: relative !important;
@@ -151,12 +169,14 @@ td.hidden-sm.hidden-xs.text_grid_style {
     color:#00aeef !important;
     text-align:left !important;
 }
+
 button.btn.btn-sm.ssToolbarBtn.advance_word_wrap {
     position: relative !important;
     line-height: 1.2em !important;
     color:#00AEEF !important;
     right: 70px !important;
 }
+
 span.k-icon.k-i-arrow-60-down.arrow_down_advance {
     color: #000 !important;
     position: relative !important;
@@ -164,15 +184,18 @@ span.k-icon.k-i-arrow-60-down.arrow_down_advance {
     top: 2px !important;
 
 }
+
 span.k-icon.k-i-arrow-60-down.arrow_down_advance:hover {
     color: #00AEEF !important;
 }
+
 button.btn.btn-sm.ssToolbarBtn.advance_col_option {
     position: relative !important;
     line-height: 1.2em !important;
     color: #00AEEF !important;
     right: 45px !important;
 }
+
 button.btn.btn-sm.ssToolbarBtn.advance_excelbtn {
     position: relative !important;
     line-height: 1.2em !important;
@@ -180,6 +203,7 @@ button.btn.btn-sm.ssToolbarBtn.advance_excelbtn {
     text-align: left !important;
     right:18px !important
 }
+
 span.caret.down_add_style {
     position: relative !important;
     color: #000 !important;
@@ -187,6 +211,7 @@ span.caret.down_add_style {
     left: 10px !important;
     top: 1px !important
 }
+
 .advance-show-hide-options {
     color: #00AEEF !important;
     cursor: pointer;
@@ -198,6 +223,7 @@ span.caret.down_add_style {
     position: absolute;
     z-index: 9;
 }
+
 .advance-show-hide-options:hover {
     color: #32589c !important
 }
@@ -223,6 +249,7 @@ span.caret.down_add_style {
 span.advance_grid_class.diff-font-style.k-column-title {
     font-weight: 500
 }
+
 kendo-numerictextbox.advance-numerictextbox-style.k-widget.k-numerictextbox {
     position: relative !important;
     height: 27px !important;
@@ -231,35 +258,43 @@ kendo-numerictextbox.advance-numerictextbox-style.k-widget.k-numerictextbox {
     width: 183px !important;
     box-shadow: none !important;
 }
+
 .advance-numerictextbox-style.k-numerictextbox .k-input {
     padding: 9px 7px 12px !important;
     font-size: 11px !important
 }
+
 span.advance-numerictextbox-style.k-numeric-wrap.k-numerictextbox {
     border-color: #e7e5e5 !important;
     background-color:#fff !important
 }
+
 .advance-numerictextbox-style.k-numerictextbox .k-numeric-wrap.k-state-focused {
     box-shadow: none !important;
     border-color: #e7e5e5 !important
 }
+
 .advance-numerictextbox-style.k-numerictextbox .k-select {
     background-color: #fff !important;
     border-left: transparent !important;
     color: #585050bd !important;
 }
+
 kendo-numerictextbox.advance-numerictextbox-style.k-widget.k-numerictextbox:hover,
 kendo-numerictextbox.advance-numerictextbox-style.k-widget.k-numerictextbox:focus-within{
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
 }
+
 #admin-advance-grid .k-grid td {
     border-color: #e6e6e6 !important;
     font-size: 12px !important;
     border-width: 0 0 1px 0px;
 }
+
 #admin-advance-grid .k-grid .k-grid-norecords td {
     padding: 0;
 }
+
 .NoDataFound {
     font-weight: bolder;
     color: #A30003;
@@ -344,6 +379,7 @@ kendo-numerictextbox.advance-numerictextbox-style.k-widget.k-numerictextbox:focu
     position: relative;
     top: 8px;
 }
+
 button.btn.btn-sm.ssToolbarBtn.advance_col_option:hover,
 button.btn.btn-sm.ssToolbarBtn.advance_word_wrap:hover,
 button.btn.btn-sm.ssToolbarBtn.advance_cleargrid:hover,
@@ -369,6 +405,7 @@ dropdown-filter.de-dropdwn-styl.advance-drop-custstyle kendo-combobox.drop-cus-f
     box-shadow: none !important;
     border-color: #dbdada !important;
 }
+
 span.k-textbox.searchbox.advance-text-box-style {
     width: 240px !important;
     margin-left: 8px !important;
@@ -376,11 +413,11 @@ span.k-textbox.searchbox.advance-text-box-style {
     border-color: #d3d3d3 !important;
     box-shadow: none !important
 }
-#admin-advance-grid a.k-grid-filter.k-state-active {
-    background-color: #d3d3d3 !important;
-    position:relative !important;
-    left:0px !important
+
+#admin-advance-grid .k-grid-header, .k-grid-header .k-grid-filter.k-state-active {
+    background-color: #FAFAFA !important;
 }
+
 kendo-dialog#advance-kendo-excel-popup {
     width: 527px !important;
     height: 795px !important;

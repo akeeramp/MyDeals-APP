@@ -124,17 +124,17 @@ td {
     padding: 4px 0 0 5px
 }
 
-    .dealTools .md-icon i:hover {
-        color: #003C71 !important
-    }
+.dealTools .md-icon i:hover {
+    color: #003C71 !important
+}
 
 .dealTools .md-icon-disabled {
     padding: 4px 2px 0 1px
 }
 
-    .dealTools .md-icon-disabled i {
-        color: #00AEEF
-    }
+.dealTools .md-icon-disabled i {
+    color: #00AEEF
+}
 
 .dealTools {
     line-height: 1.8em;
@@ -142,17 +142,17 @@ td {
     width: 100%
 }
 
-    .dealTools .gridStatusMarker {
-        font-family: arial
-    }
+.dealTools .gridStatusMarker {
+    font-family: arial
+}
 
-    .dealTools a {
-        text-decoration: none
-    }
+.dealTools a {
+    text-decoration: none
+}
 
-    .dealTools i:hover {
-        color: #003C71
-    }
+.dealTools i:hover {
+    color: #003C71
+}
 
 .rulesGidIcon {
     font-size: 20px;
@@ -269,29 +269,19 @@ a:hover {
     border-color: #adbd00 !important
 }
 
-    .btn-success[disabled] {
-        color: #b1babf !important;
-        background-color: #edeff0 !important;
-        border-color: #b1babf !important
-    }
+.btn-success[disabled] {
+    color: #b1babf !important;
+    background-color: #edeff0 !important;
+    border-color: #b1babf !important
+}
 
-    .btn-success:hover, .btn-success:focus {
-        color: #0071c5 !important
-    }
+.btn-success:hover, .btn-success:focus {
+    color: #0071c5 !important
+}
 
 kendo-grid.runprice-grid-style {
     height: calc(81vh - 120px) !important
 }
-
-.runprice-grid-style .k-icon.k-i-filter, .dispResults .k-icon.k-i-filter {
-    font-size: 14px !important;
-    color: #3343a4 !important;
-    opacity: 1 !important
-}
-
-    .runprice-grid-style .k-icon.k-i-filter:hover, .dispResults .k-icon.k-i-filter:hover {
-        color: #00aeef !important
-    }
 
 .admin-simulate-style .mat-dialog-container {
     box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%),0 24px 38px 3px rgb(0 0 0 / 14%),0 9px 46px 8px rgb(0 0 0 / 12%) !important;
@@ -324,7 +314,7 @@ kendo-grid.runprice-grid-style {
 .dispResults .k-grid-header .headerClass {
     border-bottom-style: solid !important;
     border-bottom-width: 2px !important;
-    background-color: #ffffff !important;
+    background-color: #E7E7E8;
     border-right-color: #c4cfd4 !important;
     border-left-color: #c4cfd4 !important;
     color: #1a3e6f !important;
@@ -350,25 +340,25 @@ kendo-grid.runprice-grid-style {
     background-color: #ffffff !important
 }
 
-    .rule-list-style.k-multiselect .k-multiselect-wrap:hover {
-        border-color: #e6e6e6 !important;
-        background-color: #ffffff !important;
-        box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important
-    }
+.rule-list-style.k-multiselect .k-multiselect-wrap:hover {
+    border-color: #e6e6e6 !important;
+    background-color: #ffffff !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important
+}
 
-    .rule-list-style.k-multiselect .k-multiselect-wrap .k-button {
-        margin-bottom: calc(.25rem - 1px) !important;
-        font-family: 'Intel Clear' !important;
-        border-radius: 23px !important;
-        font-size: 15px !important;
-        text-transform: uppercase !important
-    }
+.rule-list-style.k-multiselect .k-multiselect-wrap .k-button {
+    margin-bottom: calc(.25rem - 1px) !important;
+    font-family: 'Intel Clear' !important;
+    border-radius: 23px !important;
+    font-size: 15px !important;
+    text-transform: uppercase !important
+}
 
-        .rule-list-style.k-multiselect .k-multiselect-wrap .k-button:hover {
-            background-color: #00aeef !important;
-            border-color: #00aeef !important;
-            color: #fff !important
-        }
+.rule-list-style.k-multiselect .k-multiselect-wrap .k-button:hover {
+    background-color: #00aeef !important;
+    border-color: #00aeef !important;
+    color: #fff !important
+}
 
 .simbtnstyle:hover {
     background-color: #e7e7e7 !important;
@@ -383,9 +373,9 @@ kendo-grid.runprice-grid-style {
     font-family: 'Intel Clear' !important
 }
 
-    .k-list .k-item.k-state-selected:hover {
-        border: 1px solid #ebebeb !important
-    }
+.k-list .k-item.k-state-selected:hover {
+    border: 1px solid #ebebeb !important
+}
 
 .k-list .k-item.k-state-focused.k-state-selected {
     background-color: #00aeef !important
@@ -406,9 +396,9 @@ kendo-grid.runprice-grid-style {
     line-height: 2.14em !important
 }
 
-    .k-list .k-item:hover {
-        background: #ebebeb !important
-    }
+.k-list .k-item:hover {
+    background: #ebebeb !important
+}
 
 .rule-list-style.k-multiselect .k-multiselect-wrap:hover .k-clear-value {
     visibility: visible !important;
@@ -454,7 +444,7 @@ kendo-grid.runprice-grid-style {
 .runprice-grid-style .k-grid-header .headerClass {
     border-bottom-style: solid !important;
     border-bottom-width: 2px !important;
-    background-color: #ffffff !important;
+    background-color: #E7E7E8 !important;
     border-right-color: #c4cfd4 !important;
     border-left-color: #c4cfd4 !important;
     color: #1a3e6f !important;

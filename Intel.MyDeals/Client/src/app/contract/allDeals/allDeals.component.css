@@ -156,7 +156,7 @@ kendo-tabstrip.diff-all-deals {
 }
 
     kendo-tabstrip.diff-all-deals .k-tabstrip-items-wrapper {
-        background: #efefef;
+        background: #E7E7E8;
         position: relative;
         width: 100%
     }
@@ -372,14 +372,11 @@ kendo-tabstrip.diff-all-deals {
     background-color: #eeeeee !important;
 }
 
-kendo-grid.deals_grid_h table tr th .k-cell-inner kendo-grid-filter-menu a.k-grid-filter.k-state-active {
-    background: white !important;
-}
 #allDeals.k-grid .k-grid-content {
     overflow: overlay !important;
 }
+
 #allDeals .dealCell.dealsIcon-dealcell {
-/*    padding-top: 18px;*/
     vertical-align: middle;
 }
 
