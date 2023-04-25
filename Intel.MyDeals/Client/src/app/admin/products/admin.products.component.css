@@ -1,9 +1,5 @@
 ﻿@import '../kendo_grid.css';
 
-.grid_read .k-indicator-container {
-    color: #00aeef
-}
-
 .box_size {
     padding-left: 14px !important;
     padding-right: 5px !important;
@@ -17,18 +13,18 @@
 
 .header-positionfix {
     margin-bottom: 0;
-    line-height: 1.1
+    line-height: 1.1;
 }
 
 kendo-grid {
     height: calc(75vh - 40px - 15px) !important;
 }
 
-.k-grid-draggable-header a.k-link {
-    color: #0071c5 !important;
+.k-indicator-container .k-link {
+    color: #00aeef !important;
 }
 
 .k-touch-action-auto > .text-center {
-    text-align-last: initial;
-    width: 50%;
+    text-align-last: initial !important;
+    width: 50% !important;
 }

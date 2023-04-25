@@ -8,7 +8,7 @@ import { ThemePalette } from '@angular/material/core';
 @Component({
     selector: 'admin-products',
     templateUrl: 'Client/src/app/admin/products/admin.products.component.html',
-    styleUrls: ['Client/src/app/admin/products/admin.products.component.css']
+    // styleUrls: ['Client/src/app/admin/products/admin.products.component.css']
 })
 export class adminProductsComponent {
     constructor(private productsSvc: productsService, private loggerSvc: logger) { }
