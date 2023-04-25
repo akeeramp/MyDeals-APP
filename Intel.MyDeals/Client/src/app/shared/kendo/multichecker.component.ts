@@ -158,7 +158,7 @@ export class MultiCheckFilterComponent implements AfterViewInit {
     }
 
     public onSelectionChange(item, li) {
-        if (this.currentData.length > 1) {
+        if (this.currentData.length > 0) {
             let filter = [];
             if (this.value.some(x => x === item)) {
                 if (item == 'Select All') {
