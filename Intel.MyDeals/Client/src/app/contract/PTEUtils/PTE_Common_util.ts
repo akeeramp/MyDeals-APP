@@ -284,8 +284,9 @@ export class PTE_Common_Util {
             const accrualEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Accrual')
             const drainingEntries = filterData.filter((val) => val.FLEX_ROW_TYPE == 'Draining')
             const drainingRule = drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Consumption");
+            const restrictGroupFlexOverlap= drainingEntries.every((val) => val.PAYOUT_BASED_ON != null && val.PAYOUT_BASED_ON != '' && val.PAYOUT_BASED_ON == "Consumption");
 
-            if (accrualEntries.length > 0 && drainingRule && drainingEntries.length > 0) { restrictGroupFlexOverlap = true; }
+           // if (accrualEntries.length > 0 && drainingRule && drainingEntries.length > 0) { restrictGroupFlexOverlap = true; }
             if (overlapFlexResult && overlapFlexResult.length && overlapFlexResult.length > 0) {
                 //Assigning  validation result to a variable and finally iterate between this result and bind the errors
                 const finalResult = this.checkOVLPDate(filterData, overlapFlexResult, objectId);
@@ -296,8 +297,7 @@ export class PTE_Common_Util {
                     each(finalResult, (itm) => {
                         //To handle multi tier condition only assign to object which has PTR_SYS_PRD in PTE and PTR_USER_PRD in DE
                         if ((objectId == 'DC_ID' && item.PTR_SYS_PRD && (item.PTR_SYS_PRD != null || item.PTR_SYS_PRD != '')) || (objectId == 'DC_PARENT_ID' && item.PTR_USER_PRD && (item.PTR_USER_PRD != null || item.PTR_USER_PRD != ''))) {
-                            if (item[objectId] == itm.ROW_ID && itm.dup && itm.dup == 'duplicate'
-                                && (!(restrictGroupFlexOverlap))) {
+                            if (item[objectId] == itm.ROW_ID && itm.dup && itm.dup == 'duplicate'&& (!(restrictGroupFlexOverlap))) {
                                 OVLPFlexPdtPTRUSRPRDError = true;
                                 item = PTE_Load_Util.setBehaviors(item, "PTR_USER_PRD", "duplicate", curPricingTable);
                             }

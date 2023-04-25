@@ -299,7 +299,7 @@ export class PTE_CellChange_Util {
         return (row + ',' + property + ',' + cellValue + ',' + editConfig);
     }
 
-    static getMergeCellsOnEdit(empRow: number, NUM_OF_TIERS: number, pricingTableTemplates: any): void {
+    static getMergeCellsOnEdit(empRow: number, NUM_OF_TIERS: number, pricingTableTemplates: any) {
         let mergCells: any = null;
         //identify distinct DCID, bcz the merge will happen for each DCID and each DCID can have diff  NUM_OF_TIERS
         //get NUM_OF_TIERS acoording this will be the row_span for handson
@@ -309,9 +309,9 @@ export class PTE_CellChange_Util {
             if (!colItem.isDimKey && !colItem.hidden && NUM_OF_TIERS != 1) {
                 mergCells.push({ row: empRow, col: ind, rowspan: NUM_OF_TIERS, colspan: 1 });
             }
-        })
-        this.hotTable.updateSettings({ mergeCells: mergCells });
-
+        });      
+         // this.hotTable.updateSettings({ mergeCells: mergCells });
+        return mergCells;
     }
     static addUpdateRowOnchangeKIT(hotTable: Handsontable, columns: any[], row: number, cellItem: any, ROW_ID: number, updateRows: Array<any>, curPricingTable: any, contractData: any, product: number, rowData?: any, operation?: any) {
         //make the selected row PTR_USER_PRD empty if its not the empty row
@@ -468,6 +468,7 @@ export class PTE_CellChange_Util {
             for (let i = 0; i < itemslist.Count(); i = i + NumberOfProducts) {
                 let first50 = itemslist.Skip(i).Take(NumberOfProducts).ToArray();
                 let updateitems = [];
+             let mergCells=[];
                 each(first50, (cellItem) => {
                     //let ROW_ID = this.rowDCID();
                     //add num of tier rows the logic will be based on autofill value
@@ -482,10 +483,11 @@ export class PTE_CellChange_Util {
                     }
                     ROW_ID--;
                     //calling the merge cells optionfor tier 
-                    this.getMergeCellsOnEdit(empRow, prdlen, pricingTableTemplates);
+                    mergCells=this.getMergeCellsOnEdit(empRow, prdlen, pricingTableTemplates);
                     //the next empty row will be previus empty row + num of tiers;
                     empRow = empRow + prdlen;
                 });
+                this.hotTable.updateSettings({ mergeCells: mergCells });
                 if (updateitems && updateitems.length > 0) {
                     //appending everything together batch function will improve the performace
                     this.hotTable.batch(() => {
@@ -516,13 +518,15 @@ export class PTE_CellChange_Util {
                     this.hotTable.setCellMeta(empRow, PTR_col_ind, 'className', 'success-product');
                 }
                 //add num of tier rows the logic will be based on autofill value
+                let mergCells=[];
                 let tier = 1;
                 for (let i = empRow; i < parseInt(NUM_OF_TIERS) + empRow; i++) {
                     this.addUpdateRowOnchange(this.hotTable, columns, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, NUM_OF_TIERS, tier, operation);
                     tier++;
                 }
                 //calling the merge cells option only where tier
-                this.getMergeCellsOnEdit(empRow, parseInt(curPricingTable.NUM_OF_TIERS), pricingTableTemplates);
+                mergCells= this.getMergeCellsOnEdit(empRow, parseInt(curPricingTable.NUM_OF_TIERS), pricingTableTemplates);
+                this.hotTable.updateSettings({ mergeCells: mergCells });
             }
             else {
                 //this line of code is only for KIT incase of success product
@@ -576,6 +580,7 @@ export class PTE_CellChange_Util {
             for (let i = 0; i < itemslist.Count(); i = i + NumberOfProducts) {
                 let first50 = itemslist.Skip(i).Take(NumberOfProducts).ToArray();
                 let updateitems = [];
+                let mergCells=[];
                 each(first50, (cellItem) => {
                     //let ROW_ID = this.rowDCID(); 
                     //add num of tier rows the logic will be based on autofill value
@@ -586,10 +591,12 @@ export class PTE_CellChange_Util {
                     }
                     ROW_ID--;
                     //calling the merge cells optionfor tier 
-                    this.getMergeCellsOnEdit(empRow, parseInt(curPricingTable.NUM_OF_TIERS), pricingTableTemplates);
+                    mergCells= this.getMergeCellsOnEdit(empRow, parseInt(curPricingTable.NUM_OF_TIERS), pricingTableTemplates);
                     //the next empty row will be previus empty row + num of tiers;
                     empRow = empRow + parseInt(curPricingTable.NUM_OF_TIERS);
                 });
+
+                this.hotTable.updateSettings({ mergeCells: mergCells });
                 if (updateitems && updateitems.length > 0) {
                     //appending everything togather batch function will improve the performace
                     this.hotTable.batch(() => {
@@ -774,7 +781,7 @@ export class PTE_CellChange_Util {
         });
     }
 
-    static getMergeCellsOnEditDensity(empRow: number, NUM_OF_TIERS: number, pivotDensity: number, numOfRows: number, pricingTableTemplates: any): void {
+    static getMergeCellsOnEditDensity(empRow: number, NUM_OF_TIERS: number, pivotDensity: number, numOfRows: number, pricingTableTemplates: any) {
         let mergCells: any = null;
         let startOffset = empRow;
         mergCells = this.hotTable.getSettings().mergeCells;
@@ -791,7 +798,8 @@ export class PTE_CellChange_Util {
                 mergCells.push({ row: empRow, col: ind, rowspan: numOfRows, colspan: 1 });
             }
         });
-        this.hotTable.updateSettings({ mergeCells: mergCells });
+       // this.hotTable.updateSettings({ mergeCells: mergCells });
+       return mergCells;
     }
 
     static autoFillCellonProdDensity(items: Array<any>, curPricingTable: any, contractData: any, pricingTableTemplates: any, columns: any[], operation?: any) {
@@ -811,6 +819,7 @@ export class PTE_CellChange_Util {
                 this.hotTable.alter('remove_row', selrow, 1, 'no-edit');
                 //add num of tier rows the logic will be based on autofill value
                 let tier = 1;
+                let mergCells=[];
                 for (let i = empRow; i < numOfRows + empRow; i++) {
                     for (let j = 0; j < pivotDensity; j++) {
                         this.addUpdateRowOnchangeDensity(this.hotTable, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, NUM_OF_TIERS, tier, operation);
@@ -819,7 +828,8 @@ export class PTE_CellChange_Util {
                     i = i - 1;
                     tier++;
                 }
-                this.getMergeCellsOnEditDensity(empRow, NUM_OF_TIERS, pivotDensity, numOfRows, pricingTableTemplates);
+                mergCells= this.getMergeCellsOnEditDensity(empRow, NUM_OF_TIERS, pivotDensity, numOfRows, pricingTableTemplates);
+                this.hotTable.updateSettings({ mergeCells: mergCells });
             }
             else {
                 if (operation && operation.operation) {
@@ -870,6 +880,7 @@ export class PTE_CellChange_Util {
             for (let i = 0; i < itemslist.Count(); i = i + NumberOfProducts) {
                 let first50 = itemslist.Skip(i).Take(NumberOfProducts).ToArray();
                 let updateitems = [];
+                let mergCells=[];
                 each(first50, (cellItem) => {
                     // let ROW_ID = this.rowDCID();
                     //add num of tier rows the logic will be based on autofill value
@@ -884,10 +895,11 @@ export class PTE_CellChange_Util {
                     }
                     ROW_ID--;
                     //calling the merge cells optionfor tier 
-                    this.getMergeCellsOnEditDensity(empRow, NUM_OF_TIERS, pivotDensity, numOfRows, pricingTableTemplates);
+                    mergCells=  this.getMergeCellsOnEditDensity(empRow, NUM_OF_TIERS, pivotDensity, numOfRows, pricingTableTemplates);
                     //the next empty row will be previus empty row + num of tiers;
                     empRow = empRow + numOfRows;
                 });
+                this.hotTable.updateSettings({ mergeCells: mergCells });
                 if (updateitems && updateitems.length > 0) {
                     //appending everything togather batch function will improve the performace
                     this.hotTable.batch(() => {
