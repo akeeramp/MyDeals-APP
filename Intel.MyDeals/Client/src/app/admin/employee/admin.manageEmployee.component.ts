@@ -10,12 +10,11 @@ import { MatDialog } from '@angular/material/dialog';
 import { ManageEmployeeModalComponent } from './admin.manageEmployeeModal.component';
 
 @Component({
-    selector: "manage-employee",
-    templateUrl: "Client/src/app/admin/employee/admin.manageEmployee.component.html",
+    selector: 'manage-employee',
+    templateUrl: 'Client/src/app/admin/employee/admin.manageEmployee.component.html',
     styleUrls: ['Client/src/app/admin/employee/admin.manageEmployee.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-
 export class manageEmployeeComponent {
     constructor(private manageEmployeeSvc: manageEmployeeService, private loggerSvc: logger, private sanitizer: DomSanitizer, protected dialog: MatDialog) {
         this.allData = this.allData.bind(this);

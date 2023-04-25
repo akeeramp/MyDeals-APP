@@ -1,1 +1,142 @@
-﻿.cust-clickable{padding:0 4px;color:#0071C5;cursor:pointer}.cust{padding:0 4px;color:#CCCCCC}.vert-clickable{padding:0 4px;color:#0071C5;cursor:pointer}.vert{padding:0 4px;color:#CCCCCC}.filter-col{font-size:26px;color:#C4D600}.align-center{text-align:center!important}.k-button{font-weight:500}.k-button:hover{border-radius:0}.k-grid td{border-width:0!important;border-style:none!important;padding-left:15px}.k-dialog.k-alert .k-content,.k-dialog.k-confirm .k-content{padding:2.4em}.k-dialog-wrapper .k-dialog{border:none}.kendo-alrt-btn{padding:5px 90px 5px 180px;width:100%}.kendo-alrt-btn:hover{cursor:pointer}span.k-icon.k-i-file-excel{font-size:32px}.my_sidebar{padding:40px;background-color:#eeeeee}.my_filters{padding:40px}.nm{color:#0071C5}.k-window-titlebar.k-dialog-titlebar.k-header{display:none}.k-widget.k-dialog.k-window.k-alert .k-content{background-color:#003C71;color:#ffffff}.excelText{line-height:1.2em;font-size:12px;float:right}.excelText span{text-align:left}.selCustomers{margin-bottom:330px!important;max-height:150px;overflow:auto}#selCustomers-list.k-list-container.k-popup.k-group.k-reset,#selCustomers-list.k-list-container.k-popup.k-group.k-reset .k-list-scroller,#selCustomers-list.k-list-container.k-popup.k-group.k-reset .k-list-scroller ul{height:300px!important}.role-title{font-family:"Intel Clear","Arial";font-size:14px;font-weight:bold;font-weight:600;color:#000000;padding:4px 0}.info-container{text-align:center}.info-box-container{border:1px solid #d7d7d7;border-radius:6px;padding:30px;margin:10px 50px;text-align:left}.filter-container{margin-top:10px;text-align:right;font-size:12px;color:#aaaaaa}
+﻿.cust-clickable {
+    padding: 0 4px;
+    color: #0071C5;
+    cursor: pointer
+}
+
+.cust {
+    padding: 0 4px;
+    color: #CCCCCC
+}
+
+.vert-clickable {
+    padding: 0 4px;
+    color: #0071C5;
+    cursor: pointer
+}
+
+.vert {
+    padding: 0 4px;
+    color: #CCCCCC
+}
+
+.filter-col {
+    font-size: 26px;
+    color: #C4D600
+}
+
+.align-center {
+    text-align: center !important
+}
+
+.k-button {
+    font-weight: 500
+}
+
+.k-button:hover {
+    border-radius: 0
+}
+
+.k-grid td {
+    border-width: 0 !important;
+    border-style: none !important;
+    padding-left: 15px
+}
+
+.k-dialog.k-alert .k-content,
+.k-dialog.k-confirm .k-content {
+    padding: 2.4em
+}
+
+.k-dialog-wrapper .k-dialog {
+    border: none
+}
+
+.kendo-alrt-btn {
+    padding: 5px 90px 5px 180px;
+    width: 100%
+}
+
+.kendo-alrt-btn:hover {
+    cursor: pointer
+}
+
+span.k-icon.k-i-file-excel {
+    font-size: 32px
+}
+
+.my_sidebar {
+    padding: 40px;
+    background-color: #eeeeee
+}
+
+.my_filters {
+    padding: 40px
+}
+
+.nm {
+    color: #0071C5
+}
+
+.k-window-titlebar.k-dialog-titlebar.k-header {
+    display: none
+}
+
+.k-widget.k-dialog.k-window.k-alert .k-content {
+    background-color: #003C71;
+    color: #ffffff
+}
+
+.excelText {
+    line-height: 1.2em;
+    font-size: 12px;
+    float: right
+}
+
+.excelText span {
+    text-align: left
+}
+
+.selCustomers {
+    margin-bottom: 330px !important;
+    max-height: 150px;
+    overflow: auto
+}
+
+#selCustomers-list.k-list-container.k-popup.k-group.k-reset,
+#selCustomers-list.k-list-container.k-popup.k-group.k-reset .k-list-scroller,
+#selCustomers-list.k-list-container.k-popup.k-group.k-reset .k-list-scroller ul {
+    height: 300px !important
+}
+
+.role-title {
+    font-family: "Intel Clear", "Arial";
+    font-size: 14px;
+    font-weight: bold;
+    font-weight: 600;
+    color: #000000;
+    padding: 4px 0
+}
+
+.info-container {
+    text-align: center
+}
+
+.info-box-container {
+    border: 1px solid #d7d7d7;
+    border-radius: 6px;
+    padding: 30px;
+    margin: 10px 50px;
+    text-align: left
+}
+
+.filter-container {
+    margin-top: 10px;
+    text-align: right;
+    font-size: 12px;
+    color: #aaaaaa
+}
+
+kendo-grid {
+    height: calc(100vh - 250px) !important;
+}

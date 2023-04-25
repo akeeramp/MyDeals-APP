@@ -8,12 +8,14 @@ import { forkJoin } from "rxjs";
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 
 @Component({
-    selector: "admin-data-fix",
-    templateUrl: "Client/src/app/admin/dataFix/admin.dataFix.component.html",
+    selector: 'admin-data-fix',
+    templateUrl: 'Client/src/app/admin/dataFix/admin.dataFix.component.html',
     styleUrls: ['Client/src/app/admin/dataFix/admin.dataFix.component.css']
 })
 export class adminDataFixComponent {
-    constructor(private dataFixSvc: dataFixService, private loggerSvc: logger) { }
+    constructor(private dataFixSvc: dataFixService, 
+                private loggerSvc: logger) { }
+
     private isLoading = true;
     private color: ThemePalette = "primary";
     OpDataElements = [];
@@ -44,22 +46,10 @@ export class adminDataFixComponent {
         },
     };
     public pageSizes: PageSizeItem[] = [
-        {
-            text: "10",
-            value: 10,
-        },
-        {
-            text: "25",
-            value: 25,
-        },
-        {
-            text: "50",
-            value: 50,
-        },
-        {
-            text: "100",
-            value: 100,
-        },
+        { text: "10", value: 10, },
+        { text: "25", value: 25, },
+        { text: "50", value: 50, },
+        { text: "100", value: 100, },
     ];
 
     public gridData: GridDataResult;
@@ -74,7 +64,6 @@ export class adminDataFixComponent {
         this.state = state;
         this.gridData = process(this.gridResult, this.state);
     }
-
 
     loadDataFix() {
         if (!((<any>window).isDeveloper)) {
@@ -280,6 +269,4 @@ export class adminDataFixComponent {
 
         }
     }
-
 }
-

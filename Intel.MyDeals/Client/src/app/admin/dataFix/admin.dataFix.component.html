@@ -1,7 +1,4 @@
-﻿<!-- <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" /> -->
-<!-- <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" /> -->
-<!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
-<!-- <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" /> -->
+﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="row" style="display: contents;">
     <div class="col-md-12 dataFix">
         <h3 class="text-alignfix">Data Fix</h3>
@@ -15,7 +12,7 @@
                 This screen allows to fix the data quality issues in 'My Deals' system
             </div>
         </div>
-        <div class="col-md-12 kendo-grid-buttons addModeScroll grid-table-lr">
+        <div class="col-md-12 kendo-grid-buttons grid-table-lr">
             <div *ngIf="!IsAddMode">
                 <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                             [sort]="state.sort" [filter]="state.filter" [sortable]="true"
@@ -34,15 +31,14 @@
                         </button>
                     </ng-template>
                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="INCDN_NBR" title="Incident Number">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            <div class="incidentNumberCell">{{ dataItem.INCDN_NBR }}</div>
+                        </ng-template>
                     </kendo-grid-column>
-                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="INCDN_MSG" title="Message">
-                    </kendo-grid-column>
-                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="INCDN_STS" title="Incident Status">
-                    </kendo-grid-column>
-                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CRE_EMP_NM" title="Created By">
-                    </kendo-grid-column>
-                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CRE_DTM" title="Created On">
-                    </kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="INCDN_MSG" title="Message"></kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="INCDN_STS" title="Incident Status"></kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CRE_EMP_NM" title="Created By"></kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="CRE_DTM" title="Created On"></kendo-grid-column>
                 </kendo-grid>
             </div>
             <div *ngIf="IsAddMode">

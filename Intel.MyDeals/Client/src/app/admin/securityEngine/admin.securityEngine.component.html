@@ -1,17 +1,14 @@
-﻿<!-- <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" /> -->
-<!-- <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" /> -->
-<!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
-<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<div class="container-fluid">
+﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<div class="">
     <div class="row" style="margin-left: 5px">
         <div id="sidebar" class="col-md-3">
             <div *ngIf="!isDropdownsLoaded" style="margin-top: 30px; margin-left: 30px;">
                 Loading dropdown data...
             </div>
             <!-- SIDE BAR -->
-            <div class="secEngine_sidebar" *ngIf="isDropdownsLoaded" style="margin-top: 28px; width: 100%;">
+            <div class="secEngine_sidebar" *ngIf="isDropdownsLoaded" style="width: 100%;">
                 <div id="secEngine_filters" style="height: calc(100vh - 175px)">
-                    <div class="lbl" style="margin-top: 9px;">
+                    <div class="lbl" style="margin-top: 9px; padding-left: 15px;">
                         <h5 style="font-weight: 400 !important; font-size: 17px !important;">
                             Security Attributes Properties
                             <!-- Help button -->
@@ -106,7 +103,7 @@
                 </div>
                 <!-- BUTTON -->
                 <div class="row secEngine_viewButton">
-                    <button class="btn btn-primary col-md-12" style=" margin-left: 11px;" (click)="getGridData()">View Security Attributes<i class="intelicon-arrow-forward-right"></i></button>
+                    <button class="btn btn-primary col-md-12" style=" margin-left: 6px;" (click)="getGridData()">View Security Attributes<i class="intelicon-arrow-forward-right"></i></button>
                 </div>
             </div>
         </div>
@@ -115,7 +112,7 @@
                 <!-- Main block -->
                 <div class="col-md-12">
 
-                    <div class="col-md-12" style="padding-top: 46px; padding-left: 36px;">
+                    <div class="col-md-12" style="padding-top: 20px; padding-left: 36px;">
                         <div *ngIf="isGridLoading">
                             <h3>Loading grid data... </h3>
                             <div>

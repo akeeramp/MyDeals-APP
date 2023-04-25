@@ -11,11 +11,24 @@
 }
 
 .header_space {
-    margin-top: -10px !important;
-    padding-left: 14px !important
+    padding-left: 30px !important;
+    padding-top: 20px !important;
 }
 
 .header-positionfix {
     margin-bottom: 0;
     line-height: 1.1
+}
+
+kendo-grid {
+    height: calc(75vh - 40px - 15px) !important;
+}
+
+.k-grid-draggable-header a.k-link {
+    color: #0071c5 !important;
+}
+
+.k-touch-action-auto > .text-center {
+    text-align-last: initial;
+    width: 50%;
 }

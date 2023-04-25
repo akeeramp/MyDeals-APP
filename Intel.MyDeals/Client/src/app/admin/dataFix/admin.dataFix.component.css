@@ -1,6 +1,4 @@
-﻿@import '../kendo_grid.css';
-
-.control-label {
+﻿.control-label {
     text-align: right;
     padding-right: 14px
 }
@@ -51,12 +49,14 @@
     font-size: 11px
 }
 
-#dataFixAttributes table thead th, .col {
+#dataFixAttributes table thead th,
+.col {
     text-align: center;
     font-size: 13px
 }
 
-#dataFixAttributes table tbody td, .data {
+#dataFixAttributes table tbody td,
+.data {
     padding-right: 2px
 }
 
@@ -71,7 +71,7 @@
 }
 
 .addModeScroll {
-    max-height: 500px;
+    /* max-height: 500px; */
     overflow: auto
 }
 
@@ -102,12 +102,12 @@
     overflow: auto
 }
 
-    #dataFixActions .abValue {
-        font-size: 12px;
-        text-align: center;
-        padding: 5px;
-        width: 100%
-    }
+#dataFixActions .abValue {
+    font-size: 12px;
+    text-align: center;
+    padding: 5px;
+    width: 100%
+}
 
 .k-animation-container ul {
     min-width: 50px !important
@@ -117,10 +117,10 @@
     margin-bottom: 7px
 }
 
-    .filterRow .k-dropdown {
-        border: 1px solid #e5e5e5;
-        border-radius: 3px
-    }
+.filterRow .k-dropdown {
+    border: 1px solid #e5e5e5;
+    border-radius: 3px
+}
 
 .icnBtn {
     border-radius: 4px;
@@ -130,25 +130,25 @@
     cursor: pointer
 }
 
-    .icnBtn i {
-        color: #ffffff
-    }
+.icnBtn i {
+    color: #ffffff
+}
 
 .icnSkyBtn {
     background-color: #00AEEF
 }
 
-    .icnSkyBtn:hover {
-        background-color: #0071C5
-    }
+.icnSkyBtn:hover {
+    background-color: #0071C5
+}
 
 .icnGryBtn {
     background-color: #bbbbbb
 }
 
-    .icnGryBtn:hover {
-        background-color: #cccccc
-    }
+.icnGryBtn:hover {
+    background-color: #cccccc
+}
 
 .k-window-titlebar.k-dialog-titlebar.k-header {
     display: none
@@ -187,9 +187,9 @@
     line-height: 1.1em
 }
 
-    .sm-help I {
-        color: #FFA300
-    }
+.sm-help I {
+    color: #FFA300
+}
 
 .divTable {
     display: table;
@@ -200,7 +200,8 @@
     display: table-row
 }
 
-.divTableCell, .divTableHead {
+.divTableCell,
+.divTableHead {
     display: table-cell;
     padding-right: 2px
 }
@@ -230,7 +231,7 @@
 
 .dataFix {
     padding-left: 15px !important;
-    margin-top: 50px !important
+    margin-top: 30px !important
 }
 
 .text-alignfix {
@@ -252,4 +253,13 @@
 
 .fixed-bottom-space {
     margin-bottom: -1.3rem
+}
+
+.incidentNumberCell {
+    cursor: pointer;
+    color: cornflowerblue;
+}
+
+kendo-grid {
+    height: calc(75vh - 40px - 15px);
 }

@@ -30,30 +30,17 @@ export class adminProductsComponent {
         },
     };
     private pageSizes: PageSizeItem[] = [
-        {
-            text: "10",
-            value: 10
-        },
-        {
-            text: "25",
-            value: 25
-        },
-        {
-            text: "50",
-            value: 50
-        },
-        {
-            text: "100",
-            value: 100
-        }
+        { text: "10", value: 10 },
+        { text: "25", value: 25 },
+        { text: "50", value: 50 },
+        { text: "100", value: 100 }
     ];
 
     loadProducts() {
         //Developer can see the Screen..
         if (!(<any>window).isCustomerAdmin && (<any>window).usrRole != "SA" && !(<any>window).isDeveloper) {
             document.location.href = "/Dashboard#/portal";
-        }
-        else {
+        } else {
             this.productsSvc.getProducts().subscribe((result: Array<any>) => {
                 this.isLoading = false;
                 this.gridResult = result;
@@ -89,5 +76,4 @@ export class adminProductsComponent {
     ngOnInit() {
         this.loadProducts();
     }
-
 }
