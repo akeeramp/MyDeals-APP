@@ -21,7 +21,8 @@ import { each, compact, sortBy, filter } from 'underscore';
               id="chk-{{valueAccessor(item)}}"
               (focus)="onFocus(itemElement)"
               class="k-checkbox"
-              [checked]="isItemSelected(item)" />
+              [checked]="isItemSelected(item)"
+              [disabled] = "currentData.length == 1 && textAccessor(item) == 'Select All'" />
             <label
               class="k-multiselect-checkbox k-checkbox-label" style="white-space:normal !important;"
               for="chk-{{valueAccessor(item)}}">
@@ -158,7 +159,7 @@ export class MultiCheckFilterComponent implements AfterViewInit {
     }
 
     public onSelectionChange(item, li) {
-        if (this.currentData.length > 0) {
+        if (!(this.currentData.length == 1 && this.currentData[0].Text == 'Select All')) {
             let filter = [];
             if (this.value.some(x => x === item)) {
                 if (item == 'Select All') {
