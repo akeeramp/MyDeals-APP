@@ -8,6 +8,7 @@ import { ThemePalette } from "@angular/material/core";
 import { DatePipe } from "@angular/common";
 import { BulkUploadMeetCompModalComponent } from './admin.bulkUploadMeetCompModal.component';
 import { MatDialog } from '@angular/material/dialog';
+import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 
 @Component({
     selector: "admin-meetcomp",
@@ -67,6 +68,11 @@ export class meetCompComponent {
             value: 100,
         }
     ];
+
+    public filterSettings: DropDownFilterSettings = {
+        caseSensitive: false,
+        operator: "startsWith",
+    };
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;

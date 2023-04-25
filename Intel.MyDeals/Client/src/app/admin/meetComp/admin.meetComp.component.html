@@ -14,16 +14,16 @@
 </div>
 <div class="fl col-md-12" style="padding-top: 20px;">
     <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Customer:</div>
-    <kendo-combobox [data]="customers" [(ngModel)]="selectedCustomerID" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" class="opUiContainer md" (valueChange)="custValueChange($event)" textField="CUST_NM" valueField="CUST_SID" [ngClass]="{'errorCode': isCustomerMissing==true}"
+    <kendo-combobox [data]="customers" [(ngModel)]="selectedCustomerID" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" [kendoDropDownFilter]="filterSettings" class="opUiContainer md" (valueChange)="custValueChange($event)" textField="CUST_NM" valueField="CUST_SID" [ngClass]="{'errorCode': isCustomerMissing==true}"
         placeholder="Select a Customer..." style="width: 230px; float: left; height: 35px;"></kendo-combobox>
     <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Product Vertical:</div>
-    <kendo-combobox [data]="prodCats" [(ngModel)]="selectedProdCatName" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" class="opUiContainer md" (valueChange)="prodCatValueChange($event)" textField="PRD_CAT_NM" valueField="PRD_CAT_NM" [ngClass]="{'errorCode': isCatMissing==true}"
+    <kendo-combobox [data]="prodCats" [(ngModel)]="selectedProdCatName" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" [kendoDropDownFilter]="filterSettings" class="opUiContainer md" (valueChange)="prodCatValueChange($event)" textField="PRD_CAT_NM" valueField="PRD_CAT_NM" [ngClass]="{'errorCode': isCatMissing==true}"
         placeholder="Select a Product Vertical..." style="width: 230px; float: left; height: 35px;"></kendo-combobox>
     <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Brand Name:</div>
-    <kendo-combobox [data]="brands" [(ngModel)]="selectedBrandName" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" [disabled]="disabled" class="opUiContainer md" (valueChange)="brandNameValueChange($event)" textField="BRND_NM" valueField="BRND_NM"
+    <kendo-combobox [data]="brands" [(ngModel)]="selectedBrandName" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" [kendoDropDownFilter]="filterSettings" [disabled]="disabled" class="opUiContainer md" (valueChange)="brandNameValueChange($event)" textField="BRND_NM" valueField="BRND_NM"
         [ngClass]="{'errorCode': isBrandMissing==true}" placeholder="Select a Brand Name..." style="width: 230px; float: left; height: 35px;"></kendo-combobox>
     <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Product Name:</div>
-    <kendo-multiselect [data]="products" [(ngModel)]="selectedProdName" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" class="opUiContainer md" (valueChange)="prodNameValueChange($event)" [autoClose]="false" textField="HIER_VAL_NM" valueField="HIER_VAL_NM"
+    <kendo-multiselect [data]="products" [(ngModel)]="selectedProdName" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" [kendoDropDownFilter]="filterSettings" class="opUiContainer md" (valueChange)="prodNameValueChange($event)" [autoClose]="false" textField="HIER_VAL_NM" valueField="HIER_VAL_NM"
         placeholder="All Product(s) selected..." style="width: 240px; float: left; height: auto;"></kendo-multiselect><button class="btn btn-sm btn-skyblue-sm fl" (click)="fetchMeetCompData()" type="button" title="Get Meet Comp" style="margin-left: 20px; background-color: #e4e7eb;"><i class="fa fa-refresh fa-fw iconRunPct"
             style="font-size: 20px"></i></button>
 </div>
