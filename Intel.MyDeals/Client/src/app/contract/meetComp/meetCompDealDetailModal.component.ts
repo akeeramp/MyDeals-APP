@@ -64,7 +64,7 @@ export class meetCompDealDetailModalComponent implements OnInit {
         this.dialogRef.close();
     }
 
-    getDealDeatils(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE){
+    getDealDetails(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE){
         this.isLoading = true;
         this.meetCompSvc.getDealDetails(DEAL_OBJ_SID,GRP_PRD_SID,DEAL_PRD_TYPE).subscribe( (response:Array<any>)=> {
             this.isLoading = false;
@@ -90,6 +90,6 @@ export class meetCompDealDetailModalComponent implements OnInit {
     }
 
     ngOnInit(): void {
-        this.getDealDeatils(this.deal_properties.DEAL_OBJ_SID,this.deal_properties.GRP_PRD_SID,this.deal_properties.DEAL_PRD_TYPE);
+        this.getDealDetails(this.deal_properties.DEAL_OBJ_SID,this.deal_properties.GRP_PRD_SID,this.deal_properties.DEAL_PRD_TYPE);
     } 
 }

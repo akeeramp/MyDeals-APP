@@ -1,27 +1,23 @@
-    <div class="modal-header modalBlueBody" id="pctGroupModal">
-        <h5 class="modal-title" id="modal-title">Deal Number {{dealId}}</h5>
-    </div>
-    <div class="modal-body modalBlueBody oppo-grids physics-css new-now-wrap" id="modal-body">
-
-        <kendo-grid [data]="gridData" [pageSize]="state.take" [skip]="state.skip" class="opUiContainer md dashboard orPanel container-pct"
-        [sort]="state.sort" [filter]="state.filter" [sortable]="true" [groupable]="false"
-        [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)">
-        <kendo-grid-column [headerClass]="{'headerClass':true}"  width="80px" title="Deal #" field="OVLP_DEAL_ID">
-        </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}"  width="80px" title="Deal TypeAA" field="OVLP_DEAL_TYPE">
-        </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}"  width="120px" title="Rebate Type" field="OVLP_REBT_TYPE">
-        </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" width="160px" title="Contract" field="OVLP_CNTRCT_NM">
-        </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" width="80px" title="Stage" field="OVLP_WF_STG_CD">
-        </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}"  width="120px" title="Deal Description" field="OVLP_DEAL_DESC">
-        </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" width="120px" title="ECAP" field="OVLP_ECAP_PRC" format="{0:c}">
-        </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" width="120px" title="Max RPU" field="OVLP_MAX_RPU" format="{0:c}">
-        </kendo-grid-column>
+<div class="modal-header modalBlueBody" id="pctGroupModal">
+    <h5 class="modal-title" id="modal-title">Deal Number #{{ dealId }}</h5>
+</div>
+<div class="modal-body modalBlueBody oppo-grids physics-css new-now-wrap" id="modal-body">
+    <kendo-grid [data]="gridData" [pageSize]="state.take" [skip]="state.skip" class="opUiContainer md dashboard orPanel container-pct"
+                [sort]="state.sort" [filter]="state.filter" [sortable]="true" [groupable]="false"
+                [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)">
+        <ng-template kendoGridToolbarTemplate>
+            <button type="button" kendoGridExcelCommand icon="file-excel">
+                EXPORT TO EXCEL
+            </button>
+        </ng-template>
+        <kendo-grid-column [headerClass]="{'headerClass':true}"  width="80px" title="Overlapped Deals" field="OVLP_DEAL_ID"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}"  width="80px" title="Deal TypeAA" field="OVLP_DEAL_TYPE"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}"  width="120px" title="Rebate Type" field="OVLP_REBT_TYPE"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="160px" title="Contract" field="OVLP_CNTRCT_NM"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="80px" title="Stage" field="OVLP_WF_STG_CD"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}"  width="120px" title="Deal Description" field="OVLP_DEAL_DESC"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="120px" title="ECAP" field="OVLP_ECAP_PRC" format="{0:c}"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="120px" title="Max RPU" field="OVLP_MAX_RPU" format="{0:c}"></kendo-grid-column>
         <kendo-grid-column [headerClass]="{'headerClass':true}" width="80px" title="Start Date" field="OVLP_DEAL_STRT_DT">
             <ng-template kendoGridCellTemplate let-dataItem>
                 {{dataItem.OVLP_DEAL_STRT_DT | date: 'M/d/yyyy'}}
@@ -32,20 +28,27 @@
                 {{dataItem.OVLP_DEAL_END_DT | date: 'M/d/yyyy'}}
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" width="120px" title="Additive" field="OVLP_ADDITIVE">
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="80px" title="Billing Start Date" field="OVLP_REBATE_BILLING_START">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{((dataItem.OVLP_REBATE_BILLING_START.includes('1900')) ? '' : (dataItem.OVLP_REBATE_BILLING_START | date:'M/d/yyyy'))}}
+            </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" width="120px" title="Consumption Reason" field="OVLP_CNSMPTN_RSN">
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="80px" title="Billing End Date" field="OVLP_REBATE_BILLING_END">
+            <ng-template kendoGridCellTemplate let-dataItem>
+                {{((!dataItem.OVLP_REBATE_BILLING_END || dataItem.OVLP_REBATE_BILLING_END.includes('1900')) ? '' : (dataItem.OVLP_REBATE_BILLING_END | date:'M/d/yyyy'))}}
+            </ng-template>
         </kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" width="140px" title="Consumption Reason Comments" field="OVLP_CNSMPTN_RSN_CMNT">
-        </kendo-grid-column>
-        </kendo-grid>
-        <br/>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="fr">
-                    <button class="btn btn-primary" type="button" (click)="ok()">Close</button>
-                </div>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="120px" title="Additive" field="OVLP_ADDITIVE"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="120px" title="Consumption Reason" field="OVLP_CNSMPTN_RSN"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="140px" title="Consumption Reason Comments" field="OVLP_CNSMPTN_RSN_CMNT"></kendo-grid-column>
+        <kendo-grid-excel fileName="Pricing Cost - Overlapping Deals - Deal {{ dealId }}.xlsx"></kendo-grid-excel>
+    </kendo-grid>
+    <br/>
+    <div class="row">
+        <div class="col-md-12">
+            <div class="fr">
+                <button class="btn btn-primary" type="button" (click)="ok()">Close</button>
             </div>
         </div>
-
     </div>
+</div>

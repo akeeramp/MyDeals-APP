@@ -6,7 +6,7 @@
     <div class="prodSelector modal-header">
         <div class="row" style="width: 100%;height: 40px;">
             <div class="col-md-10">
-                <p style="color:#ffffff; font-size:20px">Deal Group Details</p>
+                <p style="color:#ffffff; font-size:20px">Deal Number #{{ this.deal_properties.DEAL_OBJ_SID }}</p>
             </div>
             <div class="col-md-2 modalCloseIcon" style="color: white;">
                 <i role="button" title="Close" class="intelicon-close-max" (click)="close()" style="float: right;margin-top: 5px;"></i>
@@ -15,8 +15,13 @@
     </div>
     <div class="prodSelector modal-body other-modal-body new-now-wrap oppo-grids">
         <kendo-grid [data]="gridData" [loading]="isLoading" [skip]="state.skip" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true,buttonCount:5}"
-            [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" style="margin-bottom: 22px;height: auto;">
-            <kendo-grid-column field="DEAL_OBJ_SID" title="Deal ID" width="150" [headerClass]="{'headerClass':true}">
+                    [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" style="margin-bottom: 22px;height: auto;">
+            <ng-template kendoGridToolbarTemplate>
+                <button type="button" kendoGridExcelCommand icon="file-excel">
+                    EXPORT TO EXCEL
+                </button>
+            </ng-template>
+            <kendo-grid-column field="DEAL_OBJ_SID" title="Overlapped Deals" width="150" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                     <div class='readOnlyCell dealDetailCell' title="{{dataItem.DEAL_OBJ_SID}}">{{dataItem.DEAL_OBJ_SID}}</div>
                 </ng-template>
@@ -69,6 +74,7 @@
                     <div class='readOnlyCell dealDetailCell' title="{{dataItem.CNSMPTN_RSN}}">{{dataItem.CNSMPTN_RSN}}</div>
                 </ng-template>
             </kendo-grid-column>
+            <kendo-grid-excel fileName="Meet Comp - Deal {{ this.deal_properties.DEAL_OBJ_SID }}.xlsx"></kendo-grid-excel>
         </kendo-grid>
     </div>
 </div>

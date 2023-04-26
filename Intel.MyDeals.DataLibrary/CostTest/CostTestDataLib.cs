@@ -65,6 +65,8 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_PRODUCT = DB.GetReaderOrdinal(rdr, "PRODUCT");
                     int IDX_PROG_PMT = DB.GetReaderOrdinal(rdr, "PROG_PMT");
                     int IDX_PYOUT_BASE_ON = DB.GetReaderOrdinal(rdr, "PYOUT_BASE_ON");
+                    int IDX_REBATE_BILLING_END = DB.GetReaderOrdinal(rdr, "REBATE_BILLING_END");
+                    int IDX_REBATE_BILLING_START = DB.GetReaderOrdinal(rdr, "REBATE_BILLING_START");
                     int IDX_REBT_TYPE = DB.GetReaderOrdinal(rdr, "REBT_TYPE");
                     int IDX_RTL_CYC_NM = DB.GetReaderOrdinal(rdr, "RTL_CYC_NM");
                     int IDX_RTL_PULL_DLR = DB.GetReaderOrdinal(rdr, "RTL_PULL_DLR");
@@ -110,6 +112,8 @@ namespace Intel.MyDeals.DataLibrary
                             PRODUCT = (IDX_PRODUCT < 0 || rdr.IsDBNull(IDX_PRODUCT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRODUCT),
                             PROG_PMT = (IDX_PROG_PMT < 0 || rdr.IsDBNull(IDX_PROG_PMT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PROG_PMT),
                             PYOUT_BASE_ON = (IDX_PYOUT_BASE_ON < 0 || rdr.IsDBNull(IDX_PYOUT_BASE_ON)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PYOUT_BASE_ON),
+                            REBATE_BILLING_END = (IDX_REBATE_BILLING_END < 0 || rdr.IsDBNull(IDX_REBATE_BILLING_END)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_REBATE_BILLING_END),
+                            REBATE_BILLING_START = (IDX_REBATE_BILLING_START < 0 || rdr.IsDBNull(IDX_REBATE_BILLING_START)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_REBATE_BILLING_START),
                             REBT_TYPE = (IDX_REBT_TYPE < 0 || rdr.IsDBNull(IDX_REBT_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_REBT_TYPE),
                             RTL_CYC_NM = (IDX_RTL_CYC_NM < 0 || rdr.IsDBNull(IDX_RTL_CYC_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RTL_CYC_NM),
                             RTL_PULL_DLR = (IDX_RTL_PULL_DLR < 0 || rdr.IsDBNull(IDX_RTL_PULL_DLR)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_RTL_PULL_DLR),
@@ -136,6 +140,8 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_OVLP_MAX_RPU = DB.GetReaderOrdinal(rdr, "OVLP_MAX_RPU");
                     int IDX_OVLP_OEM_PLTFRM_EOL_DT = DB.GetReaderOrdinal(rdr, "OVLP_OEM_PLTFRM_EOL_DT");
                     int IDX_OVLP_OEM_PLTFRM_LNCH_DT = DB.GetReaderOrdinal(rdr, "OVLP_OEM_PLTFRM_LNCH_DT");
+                    int IDX_OVLP_REBATE_BILLING_END = DB.GetReaderOrdinal(rdr, "OVLP_REBATE_BILLING_END");
+                    int IDX_OVLP_REBATE_BILLING_START = DB.GetReaderOrdinal(rdr, "OVLP_REBATE_BILLING_START");
                     int IDX_OVLP_REBT_TYPE = DB.GetReaderOrdinal(rdr, "OVLP_REBT_TYPE");
                     int IDX_OVLP_WF_STG_CD = DB.GetReaderOrdinal(rdr, "OVLP_WF_STG_CD");
                     IDX_PRODUCT = DB.GetReaderOrdinal(rdr, "PRODUCT");
@@ -159,6 +165,8 @@ namespace Intel.MyDeals.DataLibrary
                             OVLP_MAX_RPU = (IDX_OVLP_MAX_RPU < 0 || rdr.IsDBNull(IDX_OVLP_MAX_RPU)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_OVLP_MAX_RPU),
                             OVLP_OEM_PLTFRM_EOL_DT = (IDX_OVLP_OEM_PLTFRM_EOL_DT < 0 || rdr.IsDBNull(IDX_OVLP_OEM_PLTFRM_EOL_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OVLP_OEM_PLTFRM_EOL_DT),
                             OVLP_OEM_PLTFRM_LNCH_DT = (IDX_OVLP_OEM_PLTFRM_LNCH_DT < 0 || rdr.IsDBNull(IDX_OVLP_OEM_PLTFRM_LNCH_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OVLP_OEM_PLTFRM_LNCH_DT),
+                            OVLP_REBATE_BILLING_END = (IDX_OVLP_REBATE_BILLING_END < 0 || rdr.IsDBNull(IDX_OVLP_REBATE_BILLING_END)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OVLP_REBATE_BILLING_END),
+                            OVLP_REBATE_BILLING_START = (IDX_OVLP_REBATE_BILLING_START < 0 || rdr.IsDBNull(IDX_OVLP_REBATE_BILLING_START)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OVLP_REBATE_BILLING_START),
                             OVLP_REBT_TYPE = (IDX_OVLP_REBT_TYPE < 0 || rdr.IsDBNull(IDX_OVLP_REBT_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_REBT_TYPE),
                             OVLP_WF_STG_CD = (IDX_OVLP_WF_STG_CD < 0 || rdr.IsDBNull(IDX_OVLP_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_WF_STG_CD),
                             PRODUCT = (IDX_PRODUCT < 0 || rdr.IsDBNull(IDX_PRODUCT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRODUCT)

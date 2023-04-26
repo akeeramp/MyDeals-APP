@@ -218,10 +218,22 @@
                                                         <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
                                                     </ng-template>
                                                     <ng-template kendoGridCellTemplate let-dataItem>
-                                                        {{
-dataItem.DEAL_STRT_DT | date:
-                                                        'M/d/yyyy'
-                                                        }}-{{dataItem?.DEAL_END_DT | date: 'M/d/yyyy'}}
+                                                        {{ dataItem.DEAL_STRT_DT | date: 'M/d/yyyy' }}-{{dataItem?.DEAL_END_DT | date: 'M/d/yyyy'}}
+                                                    </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Billing Start/End" field="REBATE_BILLING_START" [filterable]="true"
+                                                                   [headerClass]="{'headerClass':true}" [width]="180" *ngIf="!isHidden(pt.DC_ID, 'REBATE_BILLING_START')">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
+                                                    </ng-template>
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        {{((dataItem.REBATE_BILLING_START.includes('1900')) ? '' : (dataItem.REBATE_BILLING_START | date:'M/d/yyyy'))}}-{{((!dataItem.REBATE_BILLING_END || dataItem.REBATE_BILLING_END.includes('1900')) ? '' : (dataItem.REBATE_BILLING_END | date:'M/d/yyyy'))}}
+                                                    </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Payout Based" field="PYOUT_BASE_ON" [filterable]="true"
+                                                                   [headerClass]="{'headerClass':true}" [width]="100" *ngIf="!isHidden(pt.DC_ID, 'PYOUT_BASE_ON')">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
                                                     </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Max RPU" [headerClass]="{'headerClass':true}" [filterable]="true" field="MAX_RPU"

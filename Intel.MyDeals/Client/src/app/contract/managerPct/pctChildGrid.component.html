@@ -38,6 +38,12 @@
         <ng-template kendoGridCellTemplate let-dataItem>{{dataItem.DEAL_STRT_DT | date:
             'M/d/yyyy'}}-{{dataItem?.DEAL_END_DT | date: 'M/d/yyyy'}} </ng-template>
     </kendo-grid-column>
+    <kendo-grid-column title="Billing Start/End" field="REBATE_BILLING_START" [headerClass]="{'headerClass':true}" [width]="180" *ngIf="!isHidden('REBATE_BILLING_START')">
+        <ng-template kendoGridCellTemplate let-dataItem>
+            {{((dataItem.REBATE_BILLING_START.includes('1900')) ? '' : (dataItem.REBATE_BILLING_START | date:'M/d/yyyy'))}}-{{((!dataItem.REBATE_BILLING_END || dataItem.REBATE_BILLING_END.includes('1900')) ? '' : (dataItem.REBATE_BILLING_END | date:'M/d/yyyy'))}}
+        </ng-template>
+    </kendo-grid-column>
+    <kendo-grid-column title="Payout Based" field="PYOUT_BASE_ON" [headerClass]="{'headerClass':true}" [width]="100" *ngIf="!isHidden('PYOUT_BASE_ON')"></kendo-grid-column>
     <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}" [width]="100"
                        [hidden]="!hasPermissionPrice" *ngIf="!isHidden('MAX_RPU')">
         <ng-template kendoGridCellTemplate let-dataItem>
@@ -46,8 +52,8 @@
     </kendo-grid-column>
     <kendo-grid-column title="OEM Platform Launch Date" [width]="180" field="OEM_PLTFRM_LNCH_DT"
                        [headerClass]="{'headerClass':true}" *ngIf="!isHidden('OEM_PLTFRM_LNCH_DT')">
-        <ng-template kendoGridCellTemplate let-dataItem><span
-                                                              *ngIf="dataItem.OEM_PLTFRM_LNCH_DT!='1/1/1900'">{{dataItem.OEM_PLTFRM_LNCH_DT| date: 'M/d/yyyy'}}</span>
+        <ng-template kendoGridCellTemplate let-dataItem>
+            <span *ngIf="dataItem.OEM_PLTFRM_LNCH_DT!='1/1/1900'">{{dataItem.OEM_PLTFRM_LNCH_DT| date: 'M/d/yyyy'}}</span>
         </ng-template>
     </kendo-grid-column>
     <kendo-grid-column title="OEM Platform EOL Date" [width]="180" field="OEM_PLTFRM_EOL_DT"
