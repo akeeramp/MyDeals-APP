@@ -1872,6 +1872,8 @@ namespace Intel.MyDeals.BusinessLogic
 
             List<TenderTransferObject> returnStagedWorkRecords = _jmsDataLib.FetchTendersStagedData("TENDER_DEALS_RESPONSE", Guid.Empty);
 
+            if (returnStagedWorkRecords.Count == 0) executionResponse += "There are no records to process<br>";
+
             foreach (TenderTransferObject workRecord in returnStagedWorkRecords.OrderBy(a => a.RqstSid))
             {
                 bool saveSuccessfulReturnToTenders = _jmsDataLib.PublishBackToSfTenders(workRecord.RqstJsonData);

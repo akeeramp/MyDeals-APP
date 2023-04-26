@@ -24,6 +24,8 @@ export class dsaService {
         let apiUrl: string;
         if ((runMode == "D") || (runMode == "E")) {
             apiUrl = this.vistexApiBase + apiName + '/VISTEX_DEALS/' + runMode;
+        } else if (runMode == "F") {
+            apiUrl = this.vistexApiBase + apiName + '/PROD_VERT_RULES/' + runMode;
         } else if (runMode == "M") {
             apiUrl = this.vistexApiBase + apiName + '/CNSMPTN_LD/' + runMode;
         } else if (runMode == "L") {
