@@ -27,6 +27,7 @@ export class GlobalSearchComponent  {
       //KeyCode 13 is 'Enter'
       if (event.keyCode === 13 && this.searchText != "") {
          //opening kendo window
+         this.searchText=this.searchText.trim();
           this.executeOnly(this.opType);
          this.setWindowWidth();
          this.windowOpened=true;

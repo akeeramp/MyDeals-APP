@@ -463,7 +463,7 @@ export class dealToolsComponent{
             }
             let row = null;
             each(this.gridData, (item, ind) => {
-                if (item.DC_PARENT_ID === ptrId)
+                if (item!=undefined && item.DC_PARENT_ID === ptrId)
                     row = this.gridData.splice(ind, 1);
             });
             this.refreshContract.emit(true);
@@ -695,10 +695,11 @@ export class dealToolsComponent{
         this.setBusy("Updating Deals", "Updating hold status of Deals.", "", "");
         this.dataService.actionWipDeals(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, dealIdsObj)
             .subscribe((response: any) => {
-                this.refreshContract.emit(true);
+                
                 if (response) {
                     this.windowOpened = true;
                     this.messages = response.Messages;
+                  //  this.refreshContract.emit(true);
                 }
                 this.setBusy("", "", "", ""); 
                 if (response.Messages[0].ShortMessage != 'Hold') {

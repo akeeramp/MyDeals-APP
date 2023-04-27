@@ -638,6 +638,7 @@ export class PTEUtil {
                                 // Create a dictionary of products with their original tiered data
                                 for (let i = 0; i < originalProductsArr.length; i++) {
                                     let originalIndex = r + i;
+                                    if(data[originalIndex]!=undefined)
                                     orignalUnswappedDataDict[PTE_Helper_Util.formatStringForDictKey(originalProductsArr[i])] = PTE_Common_Util.deepClone(data[originalIndex]);
                                 }
                             }
@@ -669,12 +670,14 @@ export class PTEUtil {
                                         }
                                     }
                                 }
-
+                                if(data[a]!=undefined)
+                                {
                                 data[a].PTR_USER_PRD = data[r].PTR_USER_PRD;
                                 data[a].PRD_DRAWING_ORD = data[r].PRD_DRAWING_ORD;
                                 data[a].PTR_SYS_PRD = data[r].PTR_SYS_PRD;
                                 data[a]['dirty'] = true;
                                 modifiedNumTiers--;
+                                }
                             }
                         }
                     }

@@ -632,7 +632,7 @@ export class ProductCorrectorComponent {
             this.ProductCorrectorData.ValidProducts[this.curRowId][item.name].push(foundItem);
 
             this.curRowData.forEach((item) =>{
-                if (item.PRD_MBR_SID == foundItem.PRD_MBR_SID) {
+                if (item.PRD_MBR_SID == foundItem.PRD_MBR_SID && item.USR_INPUT==foundItem.USR_INPUT) {
                     item.IS_SEL = true;
                 }
             });
@@ -684,7 +684,7 @@ export class ProductCorrectorComponent {
             });
             if (this.ProductCorrectorData.ValidProducts[this.curRowId][item.name].length === 0) delete this.ProductCorrectorData.ValidProducts[this.curRowId][item.name];
             this.curRowData.forEach((item)=> {
-                if (item.PRD_MBR_SID == foundItem.PRD_MBR_SID) {
+                if (item.PRD_MBR_SID == foundItem.PRD_MBR_SID && item.USR_INPUT==foundItem.USR_INPUT) {
                     item.IS_SEL = false;
                 }
             });
