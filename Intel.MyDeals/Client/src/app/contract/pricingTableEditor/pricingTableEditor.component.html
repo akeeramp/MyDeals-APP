@@ -11,96 +11,102 @@
     </div>
     <div class="row">
         <div class="col">
-            <button class="btn btn-sm btn-save ssToolbarBtn btn-disable-style" ssToolbarBtn (click)="validatePricingTableProducts()" [ngClass]="{'dirty' : isSaveEnabled(),'notDirty' : !isSaveEnabled()}" title="{{ isTenderContract ? 'Save your Tender Table, validate the products, and stay in your Tender Table Editor' : 'Save your Pricing Table, validate the products, and stay in your Pricing Table Editor'}}" [disabled]="!isSaveEnabled()">
-                <i class="fa fa-floppy-o skyBlue floppy-icon-style" aria-hidden="true" style="font-size: 30px" [ngClass]="{'dirty' : isSaveEnabled(),'notDirty' : !isSaveEnabled()}"></i>
-                <span class="text save-validate-txtstyle" [ngClass]="{'dirty' : isSaveEnabled(),'notDirty' : !isSaveEnabled()}">
-                      Save & Validate
-                </span>
-            </button>
-            <button class="btn btn-sm ssToolbarBtn btn-disable-style" title="Undo" (click)="undoPTE()" [disabled]="!undoEnable">
-                <i class="fa fa-reply skyBlue undo-redo-style" aria-hidden="true" [ngClass]="{'dirty' : undoEnable,'notDirty' : !(undoEnable)}"
-                   style="font-size: 23px; margin-top: 2px;"></i>
-            </button>
-            <button class="btn btn-sm ssToolbarBtn btn-disable-style" title="Redo" (click)="redoPTE()" [disabled]="!redoEnable">
-                <i class="fa fa-share skyBlue undo-redo-style" aria-hidden="true" [ngClass]="{'dirty' : redoEnable,'notDirty' : !(redoEnable)}"
-                   style="font-size: 23px; margin-top: 2px;"></i>
-            </button>
+            <span class="pte-btn-container-left">
+                <button class="btn btn-sm btn-save ssToolbarBtn btn-disable-style" ssToolbarBtn (click)="validatePricingTableProducts()" [ngClass]="{'dirty' : isSaveEnabled(),'notDirty' : !isSaveEnabled()}" title="{{ isTenderContract ? 'Save your Tender Table, validate the products, and stay in your Tender Table Editor' : 'Save your Pricing Table, validate the products, and stay in your Pricing Table Editor'}}" [disabled]="!isSaveEnabled()">
+                    <i class="fa fa-floppy-o skyBlue floppy-icon-style" aria-hidden="true" style="font-size: 30px" [ngClass]="{'dirty' : isSaveEnabled(),'notDirty' : !isSaveEnabled()}"></i>
+                    <span class="text save-validate-txtstyle" [ngClass]="{'dirty' : isSaveEnabled(),'notDirty' : !isSaveEnabled()}">
+                          Save & Validate
+                    </span>
+                </button>
+                <button class="btn btn-sm ssToolbarBtn btn-disable-style" title="Undo" (click)="undoPTE()" [disabled]="!undoEnable">
+                    <i class="fa fa-reply skyBlue undo-redo-style" aria-hidden="true" [ngClass]="{'dirty' : undoEnable,'notDirty' : !(undoEnable)}"
+                       style="font-size: 23px; margin-top: 2px;"></i>
+                </button>
+                <button class="btn btn-sm ssToolbarBtn btn-disable-style" title="Redo" (click)="redoPTE()" [disabled]="!redoEnable">
+                    <i class="fa fa-share skyBlue undo-redo-style" aria-hidden="true" [ngClass]="{'dirty' : redoEnable,'notDirty' : !(redoEnable)}"
+                       style="font-size: 23px; margin-top: 2px;"></i>
+                </button>
+            </span>
             <!-- Product Validator Button -->
-            <button class="btn btn-sm ssToolbarBtn" *ngIf="C_EDIT_PRODUCT" (click)="openProductSelector()" title="Use Product Selector to search for Product(s)">
-                <table>
-                    <tr>
-                        <td>
-                            <i class="intelicon-search skyBlue" aria-hidden="true" style="font-size:26px"></i>
-                        </td>
-                        <td class="hidden-sm hidden-xs button-intel">
-                            Product <br />Selector
-                        </td>
-                    </tr>
-                </table>
-            </button>
-            <button class="btn btn-sm ssToolbarBtn" *ngIf="C_EDIT_PRODUCT" (click)="validateOnlyProducts('onLoad')" title="Validate the products entered in the web sheet">
-                <table>
-                    <tr>
-                        <td>
-                            <i class="fa fa-check-square skyBlue" aria-hidden="true" style="font-size: 26px"></i>
-                        </td>
-                        <td class="hidden-sm hidden-xs button-intel">
-                            Validate Products <br />Entered in web sheet
-                        </td>
-                    </tr>
-                </table>
-            </button>
-            <button class="btn btn-sm ssToolbarBtn" (click)="flexOverlappingDealCheck()" *ngIf="curPricingTable.OBJ_SET_TYPE_CD == 'FLEX' && overlapFlexResult != undefined && overlapFlexResult.length > 0" title="check for Flex Overlapping Deals.">
-                <table>
-                    <tr>
-                        <td>
-                            <i class="intelicon-replace-swap skyBlue" aria-hidden="true" style="font-size: 30px"></i>
-                        </td>
-                        <td class="hidden-md hidden-sm hidden-xs" style="padding-left: 5px; text-align: left; color: #00AEEF;">
-                            Flex<br />Deals Overlap Check
-                        </td>
-                    </tr>
-                </table>
-            </button>
-            <button class="btn btn-sm ssToolbarBtn" title="Check for Overlapping Deals" (click)="openOverLappingDealCheck()">
-                <table>
-                    <tr>
-                        <td><i class="intelicon-copy-outlined skyBlue" style="font-size: 30px"></i></td>
-                        <td class="hidden-sm hidden-xs button-intel">
-                            Overlapping<br />Deals Check
-                        </td>
-                    </tr>
-                </table>
-            </button>
-            <button class="btn btn-sm ssToolbarBtn" title="Show/Hide Additional Discounts and Requirements." (click)="toggleShowHideDiscount()">
-                <table>
-                    <tr>
-                        <td>
-                            <i class="intelicon-legal skyBlue" aria-hidden="true" style="font-size: 30px"></i>
-                        </td>
-                        <td class="hidden-sm hidden-xs button-intel">
-                            Show/Hide<br />Additional Discounts
-                        </td>
-                    </tr>
-                </table>
-            </button>
-            <button class="btn btn-sm ssToolbarBtn" *ngIf="C_ADD_PRICING_TABLE" (click)="openAutoFill()" title="View autofill defaults,when changing values only new items entered in the grid will reflect updates.">
-                <table>
-                    <tr>
-                        <td>
-                            <i class="fa fa-edit skyBlue" aria-hidden="true" style="font-size: 30px"></i>
-                        </td>
-                        <td class="hidden-sm hidden-xs button-intel">
-                            Autofill <br /> Defaults
-                        </td>
-                    </tr>
-                </table>
-            </button>
-            <button class="fr btn ssToolbarBtn" title="Help" style="background: none !important">
-                <table>
-                    <tr><td><i class="intelicon-help skyBlue" aria-hidden="true" style="font-size:30px;background:none !important" (click)="showHelpTopic()"></i></td></tr>
-                </table>
-            </button>
+            <span class="pte-btn-container-right">
+                <button class="btn btn-sm ssToolbarBtn" *ngIf="C_EDIT_PRODUCT" (click)="openProductSelector()" title="Use Product Selector to search for Product(s)">
+                    <table>
+                        <tr>
+                            <td>
+                                <i class="intelicon-search skyBlue" aria-hidden="true" style="font-size:26px"></i>
+                            </td>
+                            <td class="hidden-sm hidden-xs button-intel">
+                                Product <br />Selector
+                            </td>
+                        </tr>
+                    </table>
+                </button>
+                <button class="btn btn-sm ssToolbarBtn" *ngIf="C_EDIT_PRODUCT" (click)="validateOnlyProducts('onLoad')" title="Validate the products entered in the web sheet">
+                    <table>
+                        <tr>
+                            <td>
+                                <i class="fa fa-check-square skyBlue" aria-hidden="true" style="font-size: 26px"></i>
+                            </td>
+                            <td class="hidden-sm hidden-xs button-intel">
+                                Validate Products <br />Entered in web sheet
+                            </td>
+                        </tr>
+                    </table>
+                </button>
+                <button class="btn btn-sm ssToolbarBtn" (click)="flexOverlappingDealCheck()" 
+                        *ngIf="curPricingTable.OBJ_SET_TYPE_CD == 'FLEX' && overlapFlexResult != undefined && overlapFlexResult.length > 0" 
+                        title="Check for Flex Overlapping Deals.">
+                    <table>
+                        <tr>
+                            <td>
+                                <i class="intelicon-replace-swap skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                            </td>
+                            <td class="hidden-md hidden-sm hidden-xs button-intel">
+                                Flex<br />Deals Overlap Check
+                            </td>
+                        </tr>
+                    </table>
+                </button>
+                <button class="btn btn-sm ssToolbarBtn" title="Check for Overlapping Deals" (click)="openOverLappingDealCheck()">
+                    <table>
+                        <tr>
+                            <td><i class="intelicon-copy-outlined skyBlue" style="font-size: 30px"></i></td>
+                            <td class="hidden-sm hidden-xs button-intel">
+                                Overlapping<br />Deals Check
+                            </td>
+                        </tr>
+                    </table>
+                </button>
+                <button class="btn btn-sm ssToolbarBtn" title="Show/Hide Additional Discounts and Requirements." (click)="toggleShowHideDiscount()">
+                    <table>
+                        <tr>
+                            <td>
+                                <i class="intelicon-legal skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                            </td>
+                            <td class="hidden-sm hidden-xs button-intel">
+                                Show/Hide<br />Additional Discounts
+                            </td>
+                        </tr>
+                    </table>
+                </button>
+                <button class="btn btn-sm ssToolbarBtn" *ngIf="C_ADD_PRICING_TABLE" (click)="openAutoFill()" title="View autofill defaults,when changing values only new items entered in the grid will reflect updates.">
+                    <table>
+                        <tr>
+                            <td>
+                                <i class="fa fa-edit skyBlue" aria-hidden="true" style="font-size: 30px"></i>
+                            </td>
+                            <td class="hidden-sm hidden-xs button-intel">
+                                Autofill <br /> Defaults
+                            </td>
+                        </tr>
+                    </table>
+                </button>
+                <button class="fr btn ssToolbarBtn" title="Help" style="background: none !important">
+                    <table>
+                        <tr><td><i class="intelicon-help skyBlue" aria-hidden="true" style="font-size:30px;background:none !important" (click)="showHelpTopic()"></i></td></tr>
+                    </table>
+                </button>
+            </span>
         </div>
     </div>
     <div class="row">
