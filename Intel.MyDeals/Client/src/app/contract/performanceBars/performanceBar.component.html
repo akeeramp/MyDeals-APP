@@ -15,7 +15,7 @@
 </div>
 <div id="perfChart" style="height: 40px; padding: 0; background-color: #fff;">
 <div class='clearboth'></div>
-<div *ngIf="executionMsValue != 0" class="executeVals" style="position: relative;right: -50%;">Total Execution Time: <b>{{executionMsValue}} sec</b> <i class='intelicon-show-results-outlined showMore' (click)='showDetails()'></i></div>
+<div *ngIf="executionMsValue != 0" class="executeVals" style="position: relative; right: -50%;">Total Execution Time: <b>{{executionMsValue}} sec</b> <i class='intelicon-show-results-outlined showMore' (click)='showDetails()'></i></div>
         <kendo-chart [legend]="barChartObj.legend" [chartArea]="barChartObj.chartArea" [seriesDefaults]="barChartObj.seriesDefaults"  [valueAxis]="barChartObj.valueAxis" [categoryAxis]="barChartObj.categoryAxis">
     <kendo-chart-series>
         <kendo-chart-series-item type="bar" *ngFor="let series of chartData"[name]="series.name" [data]="series.data" [color]="getChartColor(series.name)">
