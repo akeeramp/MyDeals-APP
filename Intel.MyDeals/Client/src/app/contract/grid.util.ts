@@ -513,73 +513,73 @@ export class GridUtil {
         return tmplt;
     }
     static uiMoneyDatesControlWrapper(passedData, field, startDt, endDt, dimKey) {
-        var msg = "";
-        var msgClass = "";
-        var tmplt = '';
-        if (!dimKey) dimKey = "";
-        if (dimKey !== "" && !!passedData[field]) {
+        let msg = '';
+        let msgClass = '';
+        let tmplt = '';
+        if (!dimKey) dimKey = '';
+        if (dimKey !== '' && !!passedData[field]) {
             if (passedData[field][dimKey] !== undefined) passedData[field][dimKey] = passedData[field][dimKey].replace(/$|,/g, '');
         } else {
             if (passedData[field] !== undefined) passedData[field] = passedData[field].replace(/$|,/g, '');
         }
-        var fieldVal = (dimKey !== "")
-            ? !!passedData[field] && !!passedData[field][dimKey] ? passedData[field][dimKey] : ""
-            : !!passedData[field] && !!passedData[field] ? passedData[field] : "";
-        var startVal = (dimKey !== "")
-            ? !!passedData[startDt] && !!passedData[startDt][dimKey] ? passedData[startDt][dimKey] : ""
-            : !!passedData[startDt] && !!passedData[startDt] ? passedData[startDt] : "";
+        const fieldVal = (dimKey !== '')
+            ? !!passedData[field] && !!passedData[field][dimKey] ? passedData[field][dimKey] : ''
+            : !!passedData[field] && !!passedData[field] ? passedData[field] : '';
+        const startVal = (dimKey !== '')
+            ? !!passedData[startDt] && !!passedData[startDt][dimKey] ? passedData[startDt][dimKey] : ''
+            : !!passedData[startDt] && !!passedData[startDt] ? passedData[startDt] : '';
 
         if (field === "CAP" && fieldVal === "No CAP") {
-            tmplt += '<div class="uiControlDiv isSoftWarnCell capInfoWrapper fullHeight">';
+            tmplt += '<div class="uiControlDiv isSoftWarnCell capInfoWrapper">';
             tmplt += '<div class="capLineStyle">No CAP</div>';
             if (startVal !== "" && startVal !== '01/01/1900') {
                 tmplt += '<div>Availability:<span class="ng-binding">' + passedData[startDt][dimKey] + '</span><span></div>';
             }
             tmplt += '</div>';
-
         } else if (field === "YCS2_PRC_IRBT" && fieldVal === "No YCS2") {
-            tmplt += '<div class="uiControlDiv isSoftWarnCell capInfoWrapper fullHeight">';
+            tmplt += '<div class="uiControlDiv isSoftWarnCell capInfoWrapper">';
             tmplt += '<div class="capLineStyle">No YCS2</div>';
             if (startVal !== "" && startVal !== '01/01/1900') {
                 tmplt += '<div>Availability:<span class="ng-binding">' + passedData[startDt][dimKey] + '</span><span></div>';
             }
             tmplt += '</div>';
-
         } else {
             if (field === "CAP") {
-                var cap = (dimKey !== "")
+                const cap = (dimKey !== "")
                     ? !!passedData[startDt] && !!passedData.CAP[dimKey] ? parseFloat(passedData.CAP[dimKey].toString().replace(/,|$/g, '')) : ""
                     : !!passedData[startDt] && !!passedData.CAP ? parseFloat(passedData.CAP.toString().replace(/,|$/g, '')) : "";
 
-                var ecap = (dimKey !== "")
+                const ecap = (dimKey !== "")
                     ? !!passedData[startDt] && !!passedData.ECAP_PRICE[dimKey] ? parseFloat(passedData.ECAP_PRICE[dimKey].toString().replace(/,|$/g, '')) : ""
                     : !!passedData[startDt] && !!passedData.ECAP_PRICE ? parseFloat(passedData.ECAP_PRICE.toString().replace(/,|$/g, '')) : "";
 
                 if (ecap > cap) {
-                    var dsplCap = cap === "" ? "No CAP" : cap;
-                    var dsplEcap = ecap === "" ? "No ECAP" : ecap;
+                    const dsplCap = cap === "" ? "No CAP" : cap;
+                    const dsplEcap = ecap === "" ? "No ECAP" : ecap;
                     msg = "ECAP ($" + dsplEcap + ") is greater than the CAP ($" + dsplCap + ")";
                     msgClass = "isSoftWarnCell";
                 }
             }
-            var capText = '<span class="ng-binding boldFont">' + new CurrencyPipe('en-us').transform(parseFloat(passedData[field][dimKey]), 'USD', 'symbol', '1.2-2') + '</span>';
 
+            let capText = '<span class="ng-binding boldFont">' + new CurrencyPipe('en-us').transform(parseFloat(passedData[field][dimKey]), 'USD', 'symbol', '1.2-2') + '</span>';
             if (fieldVal !== "" && fieldVal.indexOf("-") > -1) {
                 msg = "CAP price " + fieldVal + " cannot be a range.";
                 msgClass = "isSoftWarnCell";
                 capText = '<span class="ng-binding boldFont" id="tdsCol">' + passedData[field][dimKey] + '</span>';
             }
-            if (passedData != undefined && passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
+            if (passedData != undefined && passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field]) {
                 tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-            if (msgClass == "isSoftWarnCell")
+            }
+            if (msgClass == "isSoftWarnCell") {
                 tmplt += '<div class="uiControlDiv msgClassStyles ' + msgClass + '"';
-            else
+            } else {
                 tmplt += '<div class="uiControlDiv msgClassStyles ' + msgClass + ' ' + this.getClassNm(passedData, field) + '"';
+            }
             if (msg != "") {
                 tmplt += ' title="' + msg + '" > ';
-            }
-            else
+            } else{
                 tmplt += '>';
+            }
             if (!passedData[startDt])
                 passedData[startDt] = {};
             if (!passedData[startDt][dimKey])
@@ -588,11 +588,9 @@ export class GridUtil {
                 passedData[endDt] = {}; 
             if (!passedData[endDt][dimKey])
                 passedData[endDt][dimKey] = "";
-            tmplt += '<div>' +capText + '</div>';
-            tmplt += '    <div class="fullHeight">';
-            tmplt += '    <span class="ng-binding" id="tdsCol">' + passedData[startDt][dimKey] + '</span> - ';
-            tmplt += '    <span class="ng-binding" id="tdsCol">' + passedData[endDt][dimKey] + '</span>';
-            tmplt += '    </div>';
+
+            tmplt += `<div>${ capText }</div>`;
+            tmplt += `<div><span class="ng-binding" id="tdsCol">${ passedData[startDt][dimKey] }</span> - <span class="ng-binding" id="tdsCol">${ passedData[endDt][dimKey] }</span></div>`;
             tmplt += '</div>';
         }
         return tmplt;

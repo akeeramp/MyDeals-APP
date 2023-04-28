@@ -90,25 +90,25 @@
     cursor: pointer
 }
 
-    #endCustomermodalBody .icnBtn i {
-        color: #ffffff
-    }
+#endCustomermodalBody .icnBtn i {
+    color: #ffffff
+}
 
 #endCustomermodalBody .icnSkyBtn {
     background-color: #00aeef
 }
 
-    #endCustomermodalBody .icnSkyBtn:hover {
-        background-color: #0071c5
-    }
+#endCustomermodalBody .icnSkyBtn:hover {
+    background-color: #0071c5
+}
 
 #endCustomermodalBody .icnGryBtn {
     background-color: #bbbbbb
 }
 
-    #endCustomermodalBody .icnGryBtn:hover {
-        background-color: #cccccc
-    }
+#endCustomermodalBody .icnGryBtn:hover {
+    background-color: #cccccc
+}
 
 #endCustomermodalBody .icnGreenBtn {
     background-color: #008000
@@ -155,7 +155,24 @@
     width: 300px !important;
 }
 
-.btn-primary.disabled, .btn-primary.disabled:hover, .btn-primary.disabled:focus, .btn-primary.disabled.focus, .btn-primary.disabled:active, .btn-primary.disabled.active, .btn-primary[disabled], .btn-primary[disabled]:hover, .btn-primary[disabled]:focus, .btn-primary[disabled].focus, .btn-primary[disabled]:active, .btn-primary[disabled].active, fieldset[disabled] .btn-primary, fieldset[disabled] .btn-primary:hover, fieldset[disabled] .btn-primary:focus, fieldset[disabled] .btn-primary.focus, fieldset[disabled] .btn-primary:active, fieldset[disabled] .btn-primary.active {
+.btn-primary.disabled,
+.btn-primary.disabled:hover,
+.btn-primary.disabled:focus,
+.btn-primary.disabled.focus,
+.btn-primary.disabled:active,
+.btn-primary.disabled.active,
+.btn-primary[disabled],
+.btn-primary[disabled]:hover,
+.btn-primary[disabled]:focus,
+.btn-primary[disabled].focus,
+.btn-primary[disabled]:active,
+.btn-primary[disabled].active,
+fieldset[disabled] .btn-primary,
+fieldset[disabled] .btn-primary:hover,
+fieldset[disabled] .btn-primary:focus,
+fieldset[disabled] .btn-primary.focus,
+fieldset[disabled] .btn-primary:active,
+fieldset[disabled] .btn-primary.active {
     background-color: #edeff0 !important;
     color: #b1babf !important;
     border-color: #b1babf !important
@@ -169,17 +186,18 @@
     background: transparent !important
 }
 
-#endCustomerWarning .k-button, #endCustomerWarning .k-button:hover {
+#endCustomerWarning .k-button,
+#endCustomerWarning .k-button:hover {
     color: #444 !important;
     border-color: #fafafa;
     background-color: #cccccc !important
 }
 
-    #endCustomerWarning .k-button:hover {
-        color: #444 !important;
-        border-color: #fafafa;
-        background-color: #fafafa !important
-    }
+#endCustomerWarning .k-button:hover {
+    color: #444 !important;
+    border-color: #fafafa;
+    background-color: #fafafa !important
+}
 
 #endCustomermodalBody {
     padding: 15px !important
@@ -208,7 +226,7 @@
 }
 
 .endCustomerBoxStyle .k-dropdown-wrap:hover {
-    box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important
 }
 
 button.btn.btn-warning.btn-styCancel {
@@ -217,9 +235,9 @@ button.btn.btn-warning.btn-styCancel {
     color: #0071c5 !important
 }
 
-    button.btn.btn-warning.btn-styCancel:hover {
-        background-color: #e08e0b !important
-    }
+button.btn.btn-warning.btn-styCancel:hover {
+    background-color: #e08e0b !important
+}
 
 #endCustomerWarning .k-button.noRemoveWarning {
     color: #444 !important;
@@ -227,11 +245,11 @@ button.btn.btn-warning.btn-styCancel {
     background-color: #fafafa !important
 }
 
-    #endCustomerWarning .k-button.noRemoveWarning:hover {
-        color: #444 !important;
-        border-color: #ebebeb !important;
-        background-color: #ebebeb !important
-    }
+#endCustomerWarning .k-button.noRemoveWarning:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important
+}
 
 #endCustomerWarning kendo-dialog-actions.k-dialog-buttongroup.k-actions.k-actions-stretched {
     padding: 0 !important
@@ -271,4 +289,8 @@ button.btn.endCusbtn-style[disabled] {
     position: absolute;
     left: 22% !important;
     top: 30% !important;
+}
+
+.modal-body kendo-grid {
+    width: -webkit-fill-available;
 }

@@ -1298,18 +1298,9 @@ export class dealEditorComponent {
             this.isLoading = false;
         });
     }
-    toggleWrap = function () {
-        const elements = Array.from(
-            document.getElementsByClassName('ng-binding') as HTMLCollectionOf<HTMLElement>
-        );
+    toggleWrap = function() {
         this.wrapEnabled = !this.wrapEnabled;
-        var newVal = this.wrapEnabled ? "normal" : "nowrap";
-        var newH = this.wrapEnabled ? "100%" : "auto";
-        elements.forEach((item) => {
-            item.style.setProperty('white-space', newVal);
-            item.style.setProperty("height", newH);
-        });
-        this.grid.autoFitColumn(2);
+        this.grid?.autoFitColumn(2);
     }
     //excelExport columns ordering
     columnOrdering() {

@@ -1,4 +1,9 @@
-﻿#ExcludeAuto {
+﻿kendo-grid {
+    width: 320px;
+    height: calc(100vh - 350px);
+}
+
+#ExcludeAuto {
     display: flex;
     justify-content: center
 }
@@ -56,9 +61,9 @@
     font-size: 13px !important
 }
 
-    .badge.warning {
-        background-color: #f3D54E
-    }
+.badge.warning {
+    background-color: #f3D54E
+}
 
 #tabErrorCnt {
     font-weight: bold !important;
@@ -68,12 +73,12 @@
 .rowHeight {
     height: 50px !important;
     padding: 2px 0 0 1px;
-    border-bottom: .01px solid rgba(0,0,0,.05)
+    border-bottom: .01px solid rgba(0, 0, 0, .05)
 }
 
 .op-grid.k-grid .uiControlDiv.msgClassStyles {
-    height: 40px;
-    min-height: 40px;
+    /* height: 40px; */
+    /* min-height: 40px; */
     margin: 0;
     line-height: 1 !important;
     margin-top: 1px !important;
@@ -85,12 +90,11 @@
 }
 
 .op-grid.k-grid .uiControlDiv.isSoftWarnCell.capInfoWrapper {
-    height: 40px;
-    min-height: 40px;
+    /* height: 40px; */
     margin: 0;
     line-height: 1 !important;
-    margin-top: 1px !important;
-    margin-bottom: 1px !important;
+    /* margin-top: 1px !important;
+    margin-bottom: 1px !important; */
     display: flex;
     align-items: center;
     justify-content: center;
@@ -98,7 +102,7 @@
 }
 
 .rowDetailHeight {
-    border-bottom: .01px solid rgba(0,0,0,.05);
+    border-bottom: .01px solid rgba(0, 0, 0, .05);
     padding: 2px 0 0 1px !important;
     line-height: 2;
     height: 42px !important
@@ -166,7 +170,7 @@
     margin: 1px 0 0 1px !important
 }
 
-tr:last-child > td {
+tr:last-child>td {
     border-bottom-width: 1px !important
 }
 
@@ -181,7 +185,9 @@ tr:last-child > td {
     overflow-y: overlay;
 }
 
-.one-check .k-grid-edit-row .k-textbox, .one-check .k-widgetGr, .one-check .k-grid-edit-row .k-widget {
+.one-check .k-grid-edit-row .k-textbox,
+.one-check .k-widgetGr,
+.one-check .k-grid-edit-row .k-widget {
     width: 100% !important
 }
 
@@ -293,7 +299,7 @@ tr:last-child > td {
 }
 
 .missingCapStyle {
-    color: rgb(243,213,78);
+    color: rgb(243, 213, 78);
     font-size: 18px !important
 }
 
@@ -350,7 +356,7 @@ tr:last-child > td {
     white-space: nowrap
 }
 
-.k-grid-content-locked + .k-grid-content {
+.k-grid-content-locked+.k-grid-content {
     display: inline-block;
     vertical-align: top
 }
@@ -397,13 +403,27 @@ tr:last-child > td {
     border-bottom: .5px solid lightgrey !important
 }
 
-.k-grid td.k-state-focused, .k-grid th.k-state-focused, .k-grid th:focus, .k-grid .k-master-row > td:focus, .k-grid .k-grouping-row > td:focus, .k-grid .k-detail-row > td:focus, .k-grid .readOnlyCell > td:focus, .k-grid .k-detail-row > td:focus {
+.k-grid td.k-state-focused,
+.k-grid th.k-state-focused,
+.k-grid th:focus,
+.k-grid .k-master-row>td:focus,
+.k-grid .k-grouping-row>td:focus,
+.k-grid .k-detail-row>td:focus,
+.k-grid .readOnlyCell>td:focus,
+.k-grid .k-detail-row>td:focus {
     box-shadow: inset 0 0 0 1px #00aeef !important
 }
 
-    .k-grid td.k-state-focused, .k-grid th.k-state-focused, .k-grid th:focus:hover, .k-grid .k-master-row > td:focus:hover, .k-grid .k-grouping-row > td:focus:hover, .k-grid .k-detail-row > td:focus:hover, .k-grid .readOnlyCell > td:focus:hover, .k-grid .k-detail-row > td:focus:hover {
-        box-shadow: inset 0 0 0 1px #003C71 !important
-    }
+.k-grid td.k-state-focused,
+.k-grid th.k-state-focused,
+.k-grid th:focus:hover,
+.k-grid .k-master-row>td:focus:hover,
+.k-grid .k-grouping-row>td:focus:hover,
+.k-grid .k-detail-row>td:focus:hover,
+.k-grid .readOnlyCell>td:focus:hover,
+.k-grid .k-detail-row>td:focus:hover {
+    box-shadow: inset 0 0 0 1px #003C71 !important
+}
 
 .dealTools {
     margin-top: 0 !important
@@ -415,9 +435,9 @@ tr:last-child > td {
     padding: 0 !important
 }
 
-    .gridStatusMarker.Active {
-        line-height: 2
-    }
+.gridStatusMarker.Active {
+    line-height: 2
+}
 
 .dealDetail .dealDetailContainer {
     line-height: 2
@@ -429,7 +449,7 @@ tr:last-child > td {
 }
 
 k-state-focused .k-touch-action-auto .k-grid-edit-cell {
-    background-color: rgba(0,0,0,0) !important
+    background-color: rgba(0, 0, 0, 0) !important
 }
 
 .one-check .k-label {
@@ -495,7 +515,7 @@ k-state-focused .k-touch-action-auto .k-grid-edit-cell {
     color: #ff0000 !important
 }
 
-tr:last-child > td {
+tr:last-child>td {
     border-bottom-width: 0 !important
 }
 
@@ -511,28 +531,35 @@ tr:last-child > td {
     padding-left: 1.286em !important
 }
 
-.k-grid .k-grid-header-locked, .k-grid .k-grid-content-locked, .k-grid .k-grid-header-locked .k-header, .k-grid .k-grid-content-locked td {
+.k-grid .k-grid-header-locked,
+.k-grid .k-grid-content-locked,
+.k-grid .k-grid-header-locked .k-header,
+.k-grid .k-grid-content-locked td {
     border-color: #ccc !important
 }
 
-    .k-grid .k-grid-header-locked, .k-grid .k-grid-content-locked, .k-grid .k-grid-header-locked .k-header, .k-grid .k-grid-content-locked td {
-        border-color: #ccc !important
-    }
+.k-grid .k-grid-header-locked,
+.k-grid .k-grid-content-locked,
+.k-grid .k-grid-header-locked .k-header,
+.k-grid .k-grid-content-locked td {
+    border-color: #ccc !important
+}
 
 #dealEditor.op-grid.k-grid tr:hover {
     background-color: #ecf8fb !important
 }
 
-.k-grid .k-grid-content-locked .k-state-hover td, .k-grid .k-grid-content-locked tr:hover td {
+.k-grid .k-grid-content-locked .k-state-hover td,
+.k-grid .k-grid-content-locked tr:hover td {
     background-color: #ecf8fb !important
 }
 
-.k-cell-inner > .k-link:hover {
+.k-cell-inner>.k-link:hover {
     background: none !important;
     color: #1a3e6f !important
 }
 
-#dealEditorTab > .k-tabstrip-items-wrapper > .k-tabstrip-items > li > .k-link:hover {
+#dealEditorTab>.k-tabstrip-items-wrapper>.k-tabstrip-items>li>.k-link:hover {
     background: #eee !important
 }
 
@@ -554,15 +581,30 @@ tr:last-child > td {
     color: #00AEEF
 }
 
-.opUiContainer.md .opElementHelpIcon, .opUiContainer.md [class*=" intelicon-"] {
+.opUiContainer.md .opElementHelpIcon,
+.opUiContainer.md [class*=" intelicon-"] {
     font-size: 20px !important
 }
 
-.k-grid td.k-state-focused, .k-grid th.k-state-focused, .k-grid th:focus:hover, .k-grid .k-master-row > td:focus:hover, .k-grid .k-grouping-row > td:focus:hover, .k-grid .k-detail-row > td:focus:hover, .k-grid .readOnlyCell > td:focus:hover, .k-grid .k-detail-row > td:focus:hover {
+.k-grid td.k-state-focused,
+.k-grid th.k-state-focused,
+.k-grid th:focus:hover,
+.k-grid .k-master-row>td:focus:hover,
+.k-grid .k-grouping-row>td:focus:hover,
+.k-grid .k-detail-row>td:focus:hover,
+.k-grid .readOnlyCell>td:focus:hover,
+.k-grid .k-detail-row>td:focus:hover {
     box-shadow: inset 0 0 0 1px #00aeef !important
 }
 
-.k-grid td.k-state-focused, .k-grid th.k-state-focused, .k-grid th:focus, .k-grid .k-master-row > td:focus, .k-grid .k-grouping-row > td:focus, .k-grid .k-detail-row > td:focus, .k-grid .readOnlyCell > td:focus, .k-grid .k-detail-row > td:focus {
+.k-grid td.k-state-focused,
+.k-grid th.k-state-focused,
+.k-grid th:focus,
+.k-grid .k-master-row>td:focus,
+.k-grid .k-grouping-row>td:focus,
+.k-grid .k-detail-row>td:focus,
+.k-grid .readOnlyCell>td:focus,
+.k-grid .k-detail-row>td:focus {
     box-shadow: inset 0 0 0 1px #00aeef !important
 }
 
@@ -588,11 +630,12 @@ tr:last-child > td {
     line-height: 1.5
 }
 
-.width-fixes .k-filterable > .k-cell-inner {
+.width-fixes .k-filterable>.k-cell-inner {
     margin-right: 0 !important
 }
 
-kendo-grid-string-filter-menu .k-dropdown .k-dropdown-wrap, kendo-grid-string-filter-menu .k-dropdowntree .k-dropdown-wrap {
+kendo-grid-string-filter-menu .k-dropdown .k-dropdown-wrap,
+kendo-grid-string-filter-menu .k-dropdowntree .k-dropdown-wrap {
     width: 85% !important
 }
 
@@ -613,7 +656,8 @@ kendo-grid-string-filter-menu .k-dropdown .k-dropdown-wrap, kendo-grid-string-fi
     top: 44px !important
 }
 
-.k-filter-menu .k-multiselect-wrap, .k-filter-menu .k-dropdown .k-dropdown-wrap {
+.k-filter-menu .k-multiselect-wrap,
+.k-filter-menu .k-dropdown .k-dropdown-wrap {
     width: 90% !important;
     left: -15px !important
 }
@@ -627,7 +671,7 @@ kendo-grid-string-filter-menu .k-dropdown .k-dropdown-wrap, kendo-grid-string-fi
     line-height: 10px !important
 }
 
-#btnFilter ~ .k-action-buttons.k-button-group {
+#btnFilter~.k-action-buttons.k-button-group {
     display: none !important
 }
 
@@ -636,29 +680,29 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper {
     z-index: 1
 }
 
-    kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul {
-        position: relative;
-        background: #f9f9f9 !important;
-        height: 40px
-    }
+kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul {
+    position: relative;
+    background: #f9f9f9 !important;
+    height: 40px
+}
 
-        kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li {
-            border-top: none !important;
-            height: 40px
-        }
+kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li {
+    border-top: none !important;
+    height: 40px
+}
 
-            kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
-                position: absolute;
-                right: 15px
-            }
+kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
+    position: absolute;
+    right: 15px
+}
 
-            kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:nth-last-child(2) {
-                position: absolute;
-                right: 60px;
-                border: none !important;
-                border-bottom-width: 1px !important;
-                border-top: 1px solid #ffffff !important
-            }
+kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:nth-last-child(2) {
+    position: absolute;
+    right: 60px;
+    border: none !important;
+    border-bottom-width: 1px !important;
+    border-top: 1px solid #ffffff !important
+}
 
 #dealEditor .k-grid-header .headerClass span.k-cell-inner {
     align-items: flex-start;
@@ -666,9 +710,9 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper {
     align-items: flex-start
 }
 
-    #dealEditor .k-grid-header .headerClass span.k-cell-inner span.k-link {
-        padding: 0
-    }
+#dealEditor .k-grid-header .headerClass span.k-cell-inner span.k-link {
+    padding: 0
+}
 
 .one-check kendo-pager-page-sizes.k-label {
     display: flex;
@@ -690,7 +734,7 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper {
     position: absolute;
     background-color: #f9f9f9;
     min-width: 160px;
-    box-shadow: 0 8px 16px 0 rgba(0,0,0,.2);
+    box-shadow: 0 8px 16px 0 rgba(0, 0, 0, .2);
     z-index: 1;
     width: 213.997px;
     height: 240.838px;
@@ -701,18 +745,18 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper {
     cursor: pointer
 }
 
-    .dropdown-content ul li {
-        color: #00AEEF;
-        padding: 8px 0;
-        text-decoration: none;
-        display: block;
-        cursor: pointer
-    }
+.dropdown-content ul li {
+    color: #00AEEF;
+    padding: 8px 0;
+    text-decoration: none;
+    display: block;
+    cursor: pointer
+}
 
-        .dropdown-content ul li:hover {
-            background-color: #f1f1f1;
-            cursor: pointer
-        }
+.dropdown-content ul li:hover {
+    background-color: #f1f1f1;
+    cursor: pointer
+}
 
 .dropdown:hover .dropdown-content {
     display: block;
@@ -747,9 +791,9 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper {
     border-bottom: 1px solid #ddd
 }
 
-    #myInput:focus {
-        outline: 3px solid #ddd
-    }
+#myInput:focus {
+    outline: 3px solid #ddd
+}
 
 .backclass:hover {
     background-color: #f1f1f1;
@@ -760,15 +804,16 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper {
     cursor: pointer
 }
 
-    .chkColItem:hover {
-        background-color: #E7E7E8
-    }
+.chkColItem:hover {
+    background-color: #E7E7E8
+}
 
 .k-textbox.form-control {
     padding: 1.375rem .75rem
 }
 
-.k-dialog .k-button, .k-dialog .k-toolbar .k-button {
+.k-dialog .k-button,
+.k-dialog .k-toolbar .k-button {
     padding: 1.375rem .75rem;
     line-height: 1.143em !important;
     background: #0071c5 !important
@@ -804,9 +849,9 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper {
     height: 200px !important
 }
 
-    .new-effect ul li {
-        padding: .6em 1.8em .38em .9em !important
-    }
+.new-effect ul li {
+    padding: .6em 1.8em .38em .9em !important
+}
 
 .dropdown-content.new-effect ul {
     margin-bottom: 0;
@@ -834,7 +879,7 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper {
 .k-textbox.design:hover {
     background-color: #fff;
     border-color: #f5f5f5;
-    box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%)
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%)
 }
 
 .mycol-style {
@@ -870,7 +915,7 @@ ngb-tooltip-window .tooltip-inner {
 }
 
 .mpublishgrid .k-grid-content tr {
-    background-color: rgba(0,0,0,.05) !important
+    background-color: rgba(0, 0, 0, .05) !important
 }
 
 .mpublishgrid.k-grid td {
@@ -888,19 +933,20 @@ ngb-tooltip-window .tooltip-inner {
     padding: 0
 }
 
-    .mpublishgrid.k-grid td deal-editor-cell .dealCell .col-md-12.textRightAlign .uiControlDiv .capLineStyle {
-        height: 40px !important;
-        margin-top: 1px
-    }
+.mpublishgrid.k-grid td deal-editor-cell .dealCell .col-md-12.textRightAlign .uiControlDiv .capLineStyle {
+    height: 40px !important;
+    margin-top: 1px
+}
 
-    .mpublishgrid.k-grid td deal-editor-cell .dealCell .col-md-12.textRightAlign .uiControlDiv {
-        display: flex;
-        align-items: center;
-        justify-content: center;
-        flex-direction: column
-    }
+.mpublishgrid.k-grid td deal-editor-cell .dealCell .col-md-12.textRightAlign .uiControlDiv {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-direction: column
+}
 
-.mpublishgrid.k-grid td:has(#CAP_INFO), .mpublishgrid.k-grid td:has(#YCS2_INFO) {
+.mpublishgrid.k-grid td:has(#CAP_INFO),
+.mpublishgrid.k-grid td:has(#YCS2_INFO) {
     padding: 0
 }
 
@@ -928,20 +974,20 @@ ngb-tooltip-window .tooltip-inner {
     width: 70vw !important
 }
 
-    .product-breakout-modal > mat-dialog-container {
-        background-color: #1a3e6f !important;
-        padding: 0 !important;
-        background-color: #1a3e6f !important;
-        padding: 0 !important;
-        margin-left: auto !important;
-        margin-right: auto !important;
-        border-radius: 0 !important;
-        width: 70% !important
-    }
+.product-breakout-modal>mat-dialog-container {
+    background-color: #1a3e6f !important;
+    padding: 0 !important;
+    background-color: #1a3e6f !important;
+    padding: 0 !important;
+    margin-left: auto !important;
+    margin-right: auto !important;
+    border-radius: 0 !important;
+    width: 70% !important
+}
 
-    .product-breakout-modal mat-dialog-container product-breakout .modal-content {
-        box-shadow: none
-    }
+.product-breakout-modal mat-dialog-container product-breakout .modal-content {
+    box-shadow: none
+}
 
 .breakoutColumn.tier .rowHeight {
     height: auto !important
@@ -994,7 +1040,7 @@ kendo-dialog-actions.add-tab-style.k-dialog-buttongroup {
     border-bottom-left-radius: 0 !important;
     border-bottom-right-radius: 0 !important;
     gap: 0 !important;
- 
+
 }
 
 button.k-button.add-tab-okbtn {
@@ -1004,11 +1050,11 @@ button.k-button.add-tab-okbtn {
     padding: 1.375rem .75rem !important
 }
 
-    button.k-button.add-tab-okbtn:hover {
-        color: #fff !important;
-        border-color: #0071c5 !important;
-        background-color: #0071c5 !important
-    }
+button.k-button.add-tab-okbtn:hover {
+    color: #fff !important;
+    border-color: #0071c5 !important;
+    background-color: #0071c5 !important
+}
 
 button.k-button.add-tab-cancelbtn {
     font-family: 'Intel Clear' !important;
@@ -1018,11 +1064,11 @@ button.k-button.add-tab-cancelbtn {
     color: #444444 !important
 }
 
-    button.k-button.add-tab-cancelbtn:hover {
-        color: #444 !important;
-        border-color: #ebebeb !important;
-        background-color: #ebebeb !important
-    }
+button.k-button.add-tab-cancelbtn:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important
+}
 
 .tab-name-style {
     padding: 1.2em 1.2em .6em 1.2em;
@@ -1038,15 +1084,15 @@ button.k-button.add-tab-cancelbtn {
     border-color: #e6e6e6 !important
 }
 
-    .add-tab-textbox-style.k-textbox:focus-within {
-        border: #f0f0f0 !important;
-        box-shadow: 0 2px 6px rgb(0 0 0 /20%),0 2px 3px rgb(0 0 0 / 5%) !important
-    }
+.add-tab-textbox-style.k-textbox:focus-within {
+    border: #f0f0f0 !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important
+}
 
-    .add-tab-textbox-style.k-textbox:hover {
-        box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important;
-        border-color: #f0f0f0 !important
-    }
+.add-tab-textbox-style.k-textbox:hover {
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+    border-color: #f0f0f0 !important
+}
 
 .tool-hover:hover {
     background-color: #f2f2f2 !important;
@@ -1172,9 +1218,9 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn 
     background-color: #fafafa !important
 }
 
-    kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:hover {
-        background-color: #dbdbdb !important
-    }
+kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:hover {
+    background-color: #dbdbdb !important
+}
 
 .product-breakout-modal .capModalCloseIcon {
     font-size: 26px !important;
@@ -1195,9 +1241,9 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn 
     border-radius: 0 !important
 }
 
-    .product-breakout-modal .excelText:hover {
-        background-color: #37a4cd7a !important
-    }
+.product-breakout-modal .excelText:hover {
+    background-color: #37a4cd7a !important
+}
 
 .product-breakout-modal .k-i-file-excel {
     font-size: 25px !important
@@ -1214,9 +1260,12 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn 
     padding-bottom: 0 !important
 }
 
-.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="PRD_BCKT"], .one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_OA_MAX_VOL"], .one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_OA_MAX_AMT"], .one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="PRD_EXCLDS"] {
-    border-bottom: 3px solid rgb(0,113,197) !important;
-    border-bottom-color: rgb(0,113,197) !important
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="PRD_BCKT"],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_OA_MAX_VOL"],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="REBATE_OA_MAX_AMT"],
+.one-check kendo-grid#dealEditor .k-grid-header-wrap table thead tr th[aria-label="PRD_EXCLDS"] {
+    border-bottom: 3px solid rgb(0, 113, 197) !important;
+    border-bottom-color: rgb(0, 113, 197) !important
 }
 
 #dealEditorTab .k-tabstrip-items .k-item:hover {
@@ -1242,7 +1291,8 @@ dropdown-filter.de-dropdwn-styl kendo-dropdownlist.drop-cus-filtersty.k-widget.k
     background-color: #ed1c24 !important
 }
 
-#capYcs2Col, #tdsCol {
+#capYcs2Col,
+#tdsCol {
     position: relative;
     top: 25%
 }
@@ -1270,7 +1320,7 @@ dropdown-filter.de-dropdwn-styl kendo-dropdownlist.drop-cus-filtersty.k-widget.k
     text-align: center !important
 }
 
-.deal-pmc-custom .k-grid tr:last-child > td {
+.deal-pmc-custom .k-grid tr:last-child>td {
     border-bottom: 0 !important
 }
 
@@ -1294,13 +1344,13 @@ dropdown-filter.de-dropdwn-styl kendo-dropdownlist.drop-cus-filtersty.k-widget.k
     padding-bottom: 5px !important
 }
 
-    .breakoutColumn.dealCell.tier .densityRow .col-md-3.densityPadding .densityRow:first-child {
-        border-top: none !important
-    }
+.breakoutColumn.dealCell.tier .densityRow .col-md-3.densityPadding .densityRow:first-child {
+    border-top: none !important
+}
 
-    .breakoutColumn.dealCell.tier .densityRow .col-md-3.densityPadding .densityRow:last-child {
-        border-bottom: none !important
-    }
+.breakoutColumn.dealCell.tier .densityRow .col-md-3.densityPadding .densityRow:last-child {
+    border-bottom: none !important
+}
 
 .breakoutColumn.dealCell.tier .densityRow .densityPadding {
     padding: 0 !important
@@ -1310,11 +1360,11 @@ dropdown-filter.de-dropdwn-styl kendo-dropdownlist.drop-cus-filtersty.k-widget.k
     border-left: none !important
 }
 
-    .breakoutColumn.dealCell.tier .densityRow .col-md-3.densityPadding .densityRow span.dataPadding {
-        display: block;
-        padding-top: 5px;
-        padding-bottom: 5px
-    }
+.breakoutColumn.dealCell.tier .densityRow .col-md-3.densityPadding .densityRow span.dataPadding {
+    display: block;
+    padding-top: 5px;
+    padding-bottom: 5px
+}
 
 .tier-child-two .col-md-3 {
     padding: 0 !important
@@ -1344,12 +1394,13 @@ dropdown-filter.de-dropdwn-styl kendo-dropdownlist.drop-cus-filtersty.k-widget.k
     position: relative
 }
 
-    .parent-tier-child kendo-numerictextbox span.k-link .k-icon {
-        position: absolute;
-        left: -5px
-    }
+.parent-tier-child kendo-numerictextbox span.k-link .k-icon {
+    position: absolute;
+    left: -5px
+}
 
-.breakout-column .densityRow .densityPadding .densityRow .dataPadding, .breakout-column .densityRow .dataPadding {
+.breakout-column .densityRow .densityPadding .densityRow .dataPadding,
+.breakout-column .densityRow .dataPadding {
     display: block;
     width: 100%;
     overflow: hidden;
@@ -1371,7 +1422,16 @@ dropdown-filter.de-dropdwn-styl kendo-dropdownlist.drop-cus-filtersty.k-widget.k
 
 .CAPYCS2CellContent {
     cursor: pointer;
-    height: 33px;
+}
+
+.CAPYCS2CellContent.rowHeight,
+.CAPYCS2CellContent .isReadOnlyCell {
+    height: unset !important;
+}
+
+.dealerCAPinfo,
+.dealerYCS2info {
+    height: unset !important;
 }
 
 grid-popover .k-grid-content {
@@ -1386,7 +1446,9 @@ grid-popover .k-grid-content {
     max-width: 400px;
     min-width: 400px;
 }
-.input-checkbox-rel input[type=radio].with-font + label:before, .input-checkbox-rel input[type=checkbox].with-font + label:before {
+
+.input-checkbox-rel input[type=radio].with-font+label:before,
+.input-checkbox-rel input[type=checkbox].with-font+label:before {
     font-family: FontAwesome !important;
     display: inline-block !important;
     content: "\f096" !important;
@@ -1396,12 +1458,14 @@ grid-popover .k-grid-content {
     margin-left: 10px !important;
 }
 
-.input-checkbox-rel input[type=radio].with-font:hover + label:before, .input-checkbox-rel input[type=checkbox].with-font:hover + label:before {
+.input-checkbox-rel input[type=radio].with-font:hover+label:before,
+.input-checkbox-rel input[type=checkbox].with-font:hover+label:before {
     color: #003C71 !important;
     cursor: pointer !important;
 }
 
-.input-checkbox-rel input[type=radio].with-font:checked:focus + label:before, .input-checkbox-rel input[type=checkbox].with-font:checked:focus + label:before {
+.input-checkbox-rel input[type=radio].with-font:checked:focus+label:before,
+.input-checkbox-rel input[type=checkbox].with-font:checked:focus+label:before {
     content: "\f046" !important;
     font-size: 20px !important;
     letter-spacing: 5px !important;
@@ -1415,21 +1479,25 @@ grid-popover .k-grid-content {
     top: 7px !important;
     opacity: 0 !important;
 }
+
 .kendo-dialog-message.deal-extend-popup {
     margin: 30px !important;
     text-align: center !important;
     font-family: 'Intel Clear' !important;
     color: #444 !important;
 }
+
 button.k-button.first-child-btn.extend-dealpopup {
     background: #00aeef !important;
     color: #fff !important;
 }
+
 button.k-button.first-child-btn.extend-dealpopup:hover {
-    color: #fff !important; 
+    color: #fff !important;
     border-color: #0071c5 !important;
     background-color: #0071c5 !important;
 }
+
 button.k-button.first-child-btn.cancel-extend-deal {
     color: #444 !important;
     border-color: #fafafa !important;
@@ -1445,9 +1513,11 @@ button.k-button.first-child-btn.cancel-extend-deal:hover {
 kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li span.k-icon.k-i-reload {
     font-family: "WebComponentsIcons";
 }
+
 .dropdown:hover .tool_column_bg {
     background-color: #1891ee !important;
 }
+
 .clearfix:hover .tool_column_bg {
     background-color: #1891ee !important;
 }
@@ -1455,6 +1525,17 @@ kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li span.k-icon.k-i-reload 
 .clearfix:hover .tool_column_bg .text_bg {
     color: white !important;
 }
+
 .dropdown:hover .tool_column_bg .text_bg {
     color: white !important;
+}
+
+.enableWrapping td {
+    white-space: normal !important;
+    height: 100% !important;
+}
+
+.enableWrapping td {
+    white-space: nowrap;
+    height: auto;
 }

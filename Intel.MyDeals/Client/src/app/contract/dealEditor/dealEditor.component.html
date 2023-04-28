@@ -93,7 +93,6 @@
                         </table>
                     </button>
                 </div>
-
                 <div class="fr" style="margin-top: 2px; margin-left:8px" *ngIf="!in_Is_Tender_Dashboard">
                     <button class="btn btn-sm ssToolbarBtn tool-hover" title="Check for Overlapping Deals" (click)="openOverLappingDealCheck()">
                         <table>
@@ -106,9 +105,7 @@
                         </table>
                     </button>
                 </div>
-
                 <div class="fr clearfix" style="margin-top: 2px; margin-left: 8px; position: relative;">
-
                     <button class="btn btn-sm ssToolbarBtn dropdown-toggle tool-hover tool_column_bg" type="button" data-toggle="dropdown">
                         <table>
                             <tr>
@@ -133,14 +130,13 @@
                                 <div class="backclass" *ngFor="let item of wipTemplate.columns | filter:columnSearchFilter | orderBy: 'title'">
                                     &nbsp;&nbsp;<input type='checkbox' [checked]="iscolumnchecked(item.field)" id="colChk{{item.field}}" (click)="onColumnChange(item)" />&nbsp;
                                     <label for="colChk{{item.field}}">
-                                        <span [innerHTML]="item.title"></span>
+                                        <span [innerHTML]="item.title | sanitizeHtml"></span>
                                     </label>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
-
                 <div class="fr dropdown " style="margin-top: 2px; margin-left:8px;">
                     <button class="btn btn-sm ssToolbarBtn dropdown-toggle tool-hover tool_column_bg" type="button">
                         <table>
@@ -229,7 +225,7 @@
                             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" (cellClose)="cellCloseHandler($event)"
                             filterable="menu" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)" (filterChange)="filterChange($event)"
                             class="opUiContainer dashboard op-grid k-grid k-widgetGr k-reorderable k-editable k-grid-lockedcolumns md"
-                            style="width: 320px; height: calc(100vh - 350px);" data-role="grid">
+                            [ngClass]="{ 'enableWrapping': wrapEnabled, 'disableWrapping': !wrapEnabled }" data-role="grid">
                     <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" field="{{column.field}}"
                                        [locked]="column.locked == true" width="{{ (column.field == 'CAP_STRT_DT' || column.field == 'CAP_END_DT' || column.field == 'YCS2_START_DT' || column.field == 'YCS2_END_DT' ) ? column.width + 30 : (column.field == 'START_DT' || column.field == 'END_DT') ? column.width + 15 : column.width }}" [filterable]="column.filterable" [sortable]="column.sortable">
                         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
