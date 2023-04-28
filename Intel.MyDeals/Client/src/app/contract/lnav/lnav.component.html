@@ -235,7 +235,7 @@
 </div>
 
 <div class="navIconLnk-small-wrapper" *ngIf="isLnavHidden.isLnavHid">
-    <div class="navIconLnk-small-wrapper" *ngIf="isLnavHidden.source == 'PT'">
+    <div class="navIconLnk-small-wrapper navIconLnk-small-wrapper-child" *ngIf="isLnavHidden.source == 'PT'">
         <div class="contract-status-bar stage_{{ contractData.WF_STG_CD }}"></div>
 
         <div class="navIconLnk" title="Show Panel" (click)="toggleLnav('PT')">
@@ -279,7 +279,7 @@
         </div>
     </div>
 
-    <div class="navIconLnk-small-wrapper" *ngIf="isLnavHidden.source == 'MC'">
+    <div class="navIconLnk-small-wrapper navIconLnk-small-wrapper-child" *ngIf="isLnavHidden.source == 'MC'">
         <div class="contract-status-bar stage_{{ contractData.WF_STG_CD }}"></div>
 
         <div class="navIconLnk" title="Show Panel" (click)="toggleLnav('MC')">
@@ -316,7 +316,7 @@
         </div>
     </div>
 
-    <div class="navIconLnk-small-wrapper" *ngIf="isLnavHidden.source == 'MN'">
+    <div class="navIconLnk-small-wrapper navIconLnk-small-wrapper-child" *ngIf="isLnavHidden.source == 'MN'">
         <div class="contract-status-bar stage_{{ contractData.WF_STG_CD }}"></div>
 
         <div class="navIconLnk" title="Show Panel" (click)="toggleLnav()">
