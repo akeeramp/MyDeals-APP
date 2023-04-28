@@ -24,8 +24,8 @@ export interface contractIds {
 }
 
 @Component({
-    selector: "manager-pct",
-    templateUrl: "Client/src/app/contract/managerPct/managerPct.component.html",
+    selector: 'manager-pct',
+    templateUrl: 'Client/src/app/contract/managerPct/managerPct.component.html',
     styleUrls: ['Client/src/app/contract/managerPct/managerPct.component.css'],
     encapsulation: ViewEncapsulation.None
 })

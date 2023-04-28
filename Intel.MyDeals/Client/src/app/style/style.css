@@ -47,7 +47,108 @@ app-header {
     margin: 0 auto;
 }
 
-.ok-btn-pop-up{border-color:var(--light-blue)!important;background-color:var(--light-blue)!important;color:#fff!important}.cancel-btn-pop-up{border-color:#fafafa!important;background-color:#fafafa!important;color:#212529!important}.ok-btn-pop-up:hover{color:#fff!important;border-color:#0071c5!important;background-color:#0071c5!important}.cancel-btn-pop-up:hover{color:#444!important;border-color:#ebebeb!important;background-color:#ebebeb!important}.border-blue-design{border-bottom:3px solid rgb(0,113,197)!important;border-bottom-color:rgb(0,113,197)!important}.kendo-grid-buttons.oppo-grids.physics-css.there-grid kendo-grid .k-grid-aria-root .k-grid-header table thead tr th span.k-cell-inner{align-items:flex-start}.k-family{font-family:'intelicon'!important;font-size:25px}.divisionblock .k-list>.k-state-hover,.divisionblock .k-list>.k-state-selected.k-state-hover{background-color:#ebebeb!important;border-color:#ebebeb!important}.divisionblock.k-multiselect .k-multiselect-wrap li.k-button,.k-dropdowntree .k-multiselect-wrap li.k-button{float:left;color:#444!IMPORTANT;font-size:12px;border:none;border-radius:1.071em!important;margin:3px 0 3px 3px!important;padding:0 1.6em 0 .857em!important;line-height:1.86em!important;background:#fafafa!important;font-family:'Intel Clear'!important}.divisionblock.k-multiselect .k-multiselect-wrap li.k-button:hover{background:#ced4da6b!important}.divisionblock.k-multiselect .k-multiselect-wrap{box-shadow:none!important}.divisionblock.k-multiselect.k-state-focused>.k-multiselect-wrap{border-color:#eee!important;box-shadow:0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%)!important}kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.k-state-focused .k-multiselect-wrap kendo-taglist ul li span.k-select{color:var(--light-blue);opacity:1}kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level .k-multiselect-wrap .k-icon.k-clear-value.k-i-close{display:none}kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.k-state-focused .k-multiselect-wrap .k-icon.k-clear-value.k-i-close{color:var(--light-blue);opacity:1}kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level:hover .k-multiselect-wrap .k-icon.k-clear-value.k-i-close{border-radius:50%;background-color:#dbdbdb;width:15px;height:15px;top:9px;right:7px;opacity:1;display:inline-flex!important}.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal Start Date"],.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal End Date"]{border-bottom:3px solid rgb(0,113,197)!important;border-bottom-color:rgb(0,113,197)!important}
+.ok-btn-pop-up {
+    border-color: var(--light-blue) !important;
+    background-color: var(--light-blue) !important;
+    color: #fff !important
+}
+
+.cancel-btn-pop-up {
+    border-color: #fafafa !important;
+    background-color: #fafafa !important;
+    color: #212529 !important
+}
+
+.ok-btn-pop-up:hover {
+    color: #fff !important;
+    border-color: #0071c5 !important;
+    background-color: #0071c5 !important
+}
+
+.cancel-btn-pop-up:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important
+}
+
+.border-blue-design {
+    border-bottom: 3px solid rgb(0, 113, 197) !important;
+    border-bottom-color: rgb(0, 113, 197) !important
+}
+
+.kendo-grid-buttons.oppo-grids.physics-css.there-grid kendo-grid .k-grid-aria-root .k-grid-header table thead tr th span.k-cell-inner {
+    align-items: flex-start
+}
+
+.k-family {
+    font-family: 'intelicon' !important;
+    font-size: 25px
+}
+
+.divisionblock .k-list>.k-state-hover,
+.divisionblock .k-list>.k-state-selected.k-state-hover {
+    background-color: #ebebeb !important;
+    border-color: #ebebeb !important
+}
+
+.divisionblock.k-multiselect .k-multiselect-wrap li.k-button,
+.k-dropdowntree .k-multiselect-wrap li.k-button {
+    float: left;
+    color: #444 !IMPORTANT;
+    font-size: 12px;
+    border: none;
+    border-radius: 1.071em !important;
+    margin: 3px 0 3px 3px !important;
+    padding: 0 1.6em 0 .857em !important;
+    line-height: 1.86em !important;
+    background: #fafafa !important;
+    font-family: 'Intel Clear' !important
+}
+
+.divisionblock.k-multiselect .k-multiselect-wrap li.k-button:hover {
+    background: #ced4da6b !important
+}
+
+.divisionblock.k-multiselect .k-multiselect-wrap {
+    box-shadow: none !important
+}
+
+.divisionblock.k-multiselect.k-state-focused>.k-multiselect-wrap {
+    border-color: #eee !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important
+}
+
+kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.k-state-focused .k-multiselect-wrap kendo-taglist ul li span.k-select {
+    color: var(--light-blue);
+    opacity: 1
+}
+
+kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level .k-multiselect-wrap .k-icon.k-clear-value.k-i-close {
+    display: none
+}
+
+kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.k-state-focused .k-multiselect-wrap .k-icon.k-clear-value.k-i-close {
+    color: var(--light-blue);
+    opacity: 1
+}
+
+kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level:hover .k-multiselect-wrap .k-icon.k-clear-value.k-i-close {
+    border-radius: 50%;
+    background-color: #dbdbdb;
+    width: 15px;
+    height: 15px;
+    top: 9px;
+    right: 7px;
+    opacity: 1;
+    display: inline-flex !important
+}
+
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal Start Date"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal End Date"] {
+    border-bottom: 3px solid rgb(0, 113, 197) !important;
+    border-bottom-color: rgb(0, 113, 197) !important
+}
+
 kendo-grid.file-attachment-contract kendo-grid-list .k-grid-content {
     overflow: overlay;
 }
@@ -55,14 +156,117 @@ kendo-grid.file-attachment-contract kendo-grid-list .k-grid-content {
 kendo-grid.file-attachment-contract kendo-grid-list .k-grid-content table tr td {
     font-size: 12px;
 }
-.ok-btn-pop-up{border-color:var(--light-blue)!important;background-color:var(--light-blue)!important;color:#fff!important}.cancel-btn-pop-up{border-color:#fafafa!important;background-color:#fafafa!important;color:#212529!important}.ok-btn-pop-up:hover{color:#fff!important;border-color:#0071c5!important;background-color:#0071c5!important}.cancel-btn-pop-up:hover{color:#444!important;border-color:#ebebeb!important;background-color:#ebebeb!important}.border-blue-design{border-bottom:3px solid rgb(0,113,197)!important;border-bottom-color:rgb(0,113,197)!important}.kendo-grid-buttons.oppo-grids.physics-css.there-grid kendo-grid .k-grid-aria-root .k-grid-header table thead tr th span.k-cell-inner{align-items:flex-start}.k-family{font-family:'intelicon'!important;font-size:25px}.divisionblock .k-list>.k-state-hover,.divisionblock .k-list>.k-state-selected.k-state-hover{background-color:#ebebeb!important;border-color:#ebebeb!important}.divisionblock.k-multiselect .k-multiselect-wrap li.k-button,.k-dropdowntree .k-multiselect-wrap li.k-button{float:left;color:#444!IMPORTANT;font-size:12px;border:none;border-radius:1.071em!important;margin:3px 0 3px 3px!important;padding:0 1.6em 0 .857em!important;line-height:1.86em!important;background:#fafafa!important;font-family:'Intel Clear'!important}.divisionblock.k-multiselect .k-multiselect-wrap li.k-button:hover{background:#ced4da6b!important}.divisionblock.k-multiselect .k-multiselect-wrap{box-shadow:none!important}.divisionblock.k-multiselect.k-state-focused>.k-multiselect-wrap{border-color:#eee!important;box-shadow:0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%)!important}kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.k-state-focused .k-multiselect-wrap kendo-taglist ul li span.k-select{color:var(--light-blue);opacity:1}kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level .k-multiselect-wrap .k-icon.k-clear-value.k-i-close{display:none}kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.k-state-focused .k-multiselect-wrap .k-icon.k-clear-value.k-i-close{color:var(--light-blue);opacity:1}kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level:hover .k-multiselect-wrap .k-icon.k-clear-value.k-i-close{border-radius:50%;background-color:#dbdbdb;width:15px;height:15px;top:9px;right:7px;opacity:1;display:inline-flex!important}.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal Start Date"],.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal End Date"]{border-bottom:3px solid rgb(0,113,197)!important;border-bottom-color:rgb(0,113,197)!important}
+
+.ok-btn-pop-up {
+    border-color: var(--light-blue) !important;
+    background-color: var(--light-blue) !important;
+    color: #fff !important
+}
+
+.cancel-btn-pop-up {
+    border-color: #fafafa !important;
+    background-color: #fafafa !important;
+    color: #212529 !important
+}
+
+.ok-btn-pop-up:hover {
+    color: #fff !important;
+    border-color: #0071c5 !important;
+    background-color: #0071c5 !important
+}
+
+.cancel-btn-pop-up:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important
+}
+
+.border-blue-design {
+    border-bottom: 3px solid rgb(0, 113, 197) !important;
+    border-bottom-color: rgb(0, 113, 197) !important
+}
+
+.kendo-grid-buttons.oppo-grids.physics-css.there-grid kendo-grid .k-grid-aria-root .k-grid-header table thead tr th span.k-cell-inner {
+    align-items: flex-start
+}
+
+.k-family {
+    font-family: 'intelicon' !important;
+    font-size: 25px
+}
+
+.divisionblock .k-list>.k-state-hover,
+.divisionblock .k-list>.k-state-selected.k-state-hover {
+    background-color: #ebebeb !important;
+    border-color: #ebebeb !important
+}
+
+.divisionblock.k-multiselect .k-multiselect-wrap li.k-button,
+.k-dropdowntree .k-multiselect-wrap li.k-button {
+    float: left;
+    color: #444 !IMPORTANT;
+    font-size: 12px;
+    border: none;
+    border-radius: 1.071em !important;
+    margin: 3px 0 3px 3px !important;
+    padding: 0 1.6em 0 .857em !important;
+    line-height: 1.86em !important;
+    background: #fafafa !important;
+    font-family: 'Intel Clear' !important
+}
+
+.divisionblock.k-multiselect .k-multiselect-wrap li.k-button:hover {
+    background: #ced4da6b !important
+}
+
+.divisionblock.k-multiselect .k-multiselect-wrap {
+    box-shadow: none !important
+}
+
+.divisionblock.k-multiselect.k-state-focused>.k-multiselect-wrap {
+    border-color: #eee !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important
+}
+
+kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.k-state-focused .k-multiselect-wrap kendo-taglist ul li span.k-select {
+    color: var(--light-blue);
+    opacity: 1
+}
+
+kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level .k-multiselect-wrap .k-icon.k-clear-value.k-i-close {
+    display: none
+}
+
+kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level.k-state-focused .k-multiselect-wrap .k-icon.k-clear-value.k-i-close {
+    color: var(--light-blue);
+    opacity: 1
+}
+
+kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level:hover .k-multiselect-wrap .k-icon.k-clear-value.k-i-close {
+    border-radius: 50%;
+    background-color: #dbdbdb;
+    width: 15px;
+    height: 15px;
+    top: 9px;
+    right: 7px;
+    opacity: 1;
+    display: inline-flex !important
+}
+
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal Start Date"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal End Date"] {
+    border-bottom: 3px solid rgb(0, 113, 197) !important;
+    border-bottom-color: rgb(0, 113, 197) !important
+}
+
 kendo-multiselect.text-color-multi-tag.divineo-one kendo-taglist li span {
     line-height: 1.86em;
     font-weight: 400;
     text-transform: uppercase;
     font-size: 14px !important;
-    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif !important;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
+
 kendo-multiselect.text-color-multi-tag.divineo-one .k-multiselect-wrap kendo-taglist li {
     border-radius: 1.071em !important;
     margin: 3px 0 3px 3px !important;
@@ -73,14 +277,17 @@ kendo-multiselect.text-color-multi-tag.divineo-one .k-multiselect-wrap kendo-tag
     border-color: #fafafa !important;
     background-color: #fafafa !important;
 }
+
 kendo-multiselect.text-color-multi-tag.divineo-one .k-multiselect-wrap kendo-taglist li span.k-select {
     display: flex !important;
 }
+
 kendo-multiselect.text-color-multi-tag.divineo-one kendo-taglist li.k-button:hover {
     color: #444 !important;
     border: 1px solid #ebebeb !important;
     background-color: #ebebeb !important;
 }
+
 kendo-multiselect.text-color-multi-tag.divineo-one .k-multiselect-wrap {
     border-top: 1px solid #0071c5;
     border-bottom: 3px solid #0071c5;
@@ -89,10 +296,13 @@ kendo-multiselect.text-color-multi-tag.divineo-one .k-multiselect-wrap {
 kendo-multiselect.text-color-multi-tag.divineo-one:hover .k-multiselect-wrap {
     border-top: 1px solid #ced4da;
 }
+
 kendo-multiselect.text-color-multi-tag.divineo-one kendo-taglist li span.k-icon {
     font-family: "WebComponentsIcons" !important;
 }
-kendo-combobox.focus-align-combo-box:focus, kendo-combobox.focus-align-combo-box:focus-within {
+
+kendo-combobox.focus-align-combo-box:focus,
+kendo-combobox.focus-align-combo-box:focus-within {
     background-color: #fff;
     border-color: #f5f5f5;
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%);
@@ -105,21 +315,24 @@ kendo-combobox.focus-align-combo-box span.k-state-focused .k-icon {
 kendo-combobox.focus-align-combo-box span.k-state-focused span.k-icon.k-clear-value.k-i-close {
     font-size: 12px;
 }
+
 kendo-combobox.contract-details-customer.align-text-combo-box span.k-select .k-icon {
     padding-top: 0 !important;
 }
+
 kendo-combobox.contract-details-customer.align-text-combo-box .k-icon.k-clear-value {
     padding-top: 0 !important;
     width: 15px !important;
     height: 15px !important;
     top: 11px;
 }
+
 kendo-combobox.contract-details-customer.align-text-combo-box.closed-alignment-fixes .k-icon.k-clear-value {
     top: 0;
 }
 
 kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li span.k-link {
-    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
     padding: 0.6em !important;
 }
 
@@ -141,19 +354,25 @@ kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li {
     background-color: #E7E7E8;
 }
 
-.k-state-active > .k-i-filter, .k-grid-filter.k-state-active {
-    color: #003C71 !important; /*Pink to test*/
+.k-state-active>.k-i-filter,
+.k-grid-filter.k-state-active {
+    color: #003C71 !important;
+    /*Pink to test*/
 }
 
-.k-i-filter, .k-grid-filter {
+.k-i-filter,
+.k-grid-filter {
     font-size: 15px !important;
-    color: #00AEEF;  /*Orange to test*/
+    color: #00AEEF;
+    /*Orange to test*/
     margin-top: -2px;
 }
 
-    .k-i-filter:hover, .k-grid-filter:hover {
-        color: #0071C5 !important; /*Green to test*/
-    }
+.k-i-filter:hover,
+.k-grid-filter:hover {
+    color: #0071C5 !important;
+    /*Green to test*/
+}
 
 /*END Updated Grid filter Items*/
 
@@ -232,11 +451,11 @@ kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li {
     border-color: #dfdfdf;
 }
 
-    kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li.k-state-active span.k-link {
-        font-size: 15px;
-    }
+kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li.k-state-active span.k-link {
+    font-size: 15px;
+}
 
-kendo-grid.highlightsty-title table tr td.k-detail-cell > div:first-child {
+kendo-grid.highlightsty-title table tr td.k-detail-cell>div:first-child {
     padding: 0 !important;
     margin: 5px 5px 5px 0;
 }
@@ -250,7 +469,7 @@ kendo-grid.icon-changes table tr td a.k-icon:hover {
 }
 
 kendo-grid.icon-changes table tr td a.k-icon:focus {
-    color: rgb(128,128,128) !important;
+    color: rgb(128, 128, 128) !important;
 }
 
 kendo-grid.icon-changes table tr td.k-detail-cell table tr td a.k-minus:focus:before {
@@ -281,7 +500,8 @@ kendo-grid.icon-changes table tr td.k-detail-cell table tr td a.k-plus:focus:bef
     /* margin-top: 28px !important */
 }
 
-.advancedSearch:hover, .advancedSearch:focus {
+.advancedSearch:hover,
+.advancedSearch:focus {
     color: #004579 !important;
     text-decoration: underline !important
 }
@@ -313,9 +533,9 @@ kendo-grid.icon-changes table tr td.k-detail-cell table tr td a.k-plus:focus:bef
     border: 1px solid #fff
 }
 
-    .header-fixes li.dropdown .dropdown-menu li:last-child {
-        border-bottom: none
-    }
+.header-fixes li.dropdown .dropdown-menu li:last-child {
+    border-bottom: none
+}
 
 .header-fixes li.dropdown .dropdown-menu {
     border-radius: 0 !important
@@ -337,7 +557,7 @@ kendo-grid.icon-changes table tr td.k-detail-cell table tr td a.k-plus:focus:bef
 
 .windowTitle {
     font-weight: 500;
-    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif
 }
 
 .closeBtn.k-button-icon {
@@ -350,14 +570,14 @@ kendo-grid.icon-changes table tr td.k-detail-cell table tr td a.k-plus:focus:bef
     border-radius: 0 !important
 }
 
-    .k-widget.k-window .search-advanced-tag {
-        margin-left: 0 !important
-    }
+.k-widget.k-window .search-advanced-tag {
+    margin-left: 0 !important
+}
 
-    .k-widget.k-window .k-window-titlebar.k-header .k-window-actions {
-        position: relative;
-        right: 15px
-    }
+.k-widget.k-window .k-window-titlebar.k-header .k-window-actions {
+    position: relative;
+    right: 15px
+}
 
 .header-methods .menu-detailed a i {
     font-size: 28px !important
@@ -372,28 +592,28 @@ kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper {
     margin-top: 4px
 }
 
-    kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li {
-        border-radius: 0 !important;
-        margin-left: 1px !important;
-        margin-right: 5px !important
-    }
+kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li {
+    border-radius: 0 !important;
+    margin-left: 1px !important;
+    margin-right: 5px !important
+}
 
-        kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li:hover {
-            background-color: #0071c5 !important
-        }
+kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li:hover {
+    background-color: #0071c5 !important
+}
 
-        kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li:first-child {
-            margin-left: 0 !important
-        }
+kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li:first-child {
+    margin-left: 0 !important
+}
 
-        kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li:last-child {
-            margin-right: 0 !important
-        }
+kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li:last-child {
+    margin-right: 0 !important
+}
 
-        kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li span {
-            font-size: 12px;
-            font-weight: 600
-        }
+kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li span {
+    font-size: 12px;
+    font-weight: 600
+}
 
 .copper-btns mat-button-toggle button .mat-button-toggle-label-content {
     padding: 0 !important;
@@ -406,7 +626,8 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     left: 0 !important
 }
 
-.width-fixes .k-grid .k-grid-edit-row td deal-editor-edit .k-datepicker, .width-fixes .k-grid .k-grid-edit-row td deal-editor-edit .k-numerictextbox {
+.width-fixes .k-grid .k-grid-edit-row td deal-editor-edit .k-datepicker,
+.width-fixes .k-grid .k-grid-edit-row td deal-editor-edit .k-numerictextbox {
     width: 100%
 }
 
@@ -414,7 +635,8 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     width: 100% !important
 }
 
-.handsontable.listbox tr td.current, .handsontable.listbox tr:hover td {
+.handsontable.listbox tr td.current,
+.handsontable.listbox tr:hover td {
     background: var(--light-blue) !important;
     color: #fff
 }
@@ -425,7 +647,8 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     color: #fff !important
 }
 
-.newbotborder.k-dropdown .k-dropdown-wrap, .newbotborder .k-dropdowntree .k-dropdown-wrap {
+.newbotborder.k-dropdown .k-dropdown-wrap,
+.newbotborder .k-dropdowntree .k-dropdown-wrap {
     border-color: #ced4da38 !important;
     background-color: #fafafa !important;
     border-bottom: 2px solid #0071c5 !important;
@@ -433,13 +656,13 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     border-radius: 0 !important
 }
 
-    .newbotborder.k-dropdown .k-dropdown-wrap:hover {
-        background: #fff !important
-    }
+.newbotborder.k-dropdown .k-dropdown-wrap:hover {
+    background: #fff !important
+}
 
-    .newbotborder.k-dropdown .k-dropdown-wrap .k-select {
-        color: #727578b0 !important
-    }
+.newbotborder.k-dropdown .k-dropdown-wrap .k-select {
+    color: #727578b0 !important
+}
 
 .newbotborder .k-icon:hover {
     color: #444 !important
@@ -456,7 +679,7 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
 }
 
 .noborderclass.k-combobox:hover {
-    box-shadow: 0 2px 6px rgb(0 0 0 /20%),0 2px 3px rgb(0 0 0 / 5%) !important
+    box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important
 }
 
 .noborderclass.k-combobox .k-select {
@@ -466,10 +689,10 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     background-color: #dbdbdb2e !important
 }
 
-    .noborderclass.k-combobox .k-select:hover {
-        background-color: transparent !important;
-        color: #727579 !important
-    }
+.noborderclass.k-combobox .k-select:hover {
+    background-color: transparent !important;
+    color: #727579 !important
+}
 
 .noborderclass.k-combobox .k-icon:hover {
     color: #444 !important
@@ -489,10 +712,11 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     border-color: #ced4da6b !important
 }
 
-    .borderless.k-textbox:hover, .borderless.k-textbox:focus {
-        box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important;
-        background-color: none !important
-    }
+.borderless.k-textbox:hover,
+.borderless.k-textbox:focus {
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+    background-color: none !important
+}
 
 .dateboxborder.k-numerictextbox .k-numeric-wrap {
     color: #495057 !important;
@@ -500,17 +724,17 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     font-family: 'Intel Clear'
 }
 
-    .dateboxborder.k-numerictextbox .k-numeric-wrap:hover {
-        background-color: none !important;
-        box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important;
-        color: #444 !important
-    }
+.dateboxborder.k-numerictextbox .k-numeric-wrap:hover {
+    background-color: none !important;
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important;
+    color: #444 !important
+}
 
-    .dateboxborder.k-numerictextbox .k-numeric-wrap.k-state-focused {
-        border-color: #e7e7e7 !important;
-        background-color: #ffffff !important;
-        box-shadow: none !important
-    }
+.dateboxborder.k-numerictextbox .k-numeric-wrap.k-state-focused {
+    border-color: #e7e7e7 !important;
+    background-color: #ffffff !important;
+    box-shadow: none !important
+}
 
 .dateboxborder.k-numerictextbox .k-select {
     border-color: none !important;
@@ -539,9 +763,9 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     border: none
 }
 
-    .sliderwidth.k-slider .k-button .k-icon:hover {
-        color: #444 !important
-    }
+.sliderwidth.k-slider .k-button .k-icon:hover {
+    color: #444 !important
+}
 
 .sliderwidth.k-slider .k-draghandle {
     color: #ffffff !important;
@@ -560,9 +784,9 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     width: 180px !important
 }
 
-    .sliderwidth.k-slider-horizontal .k-slider-buttons .k-slider-track {
-        height: 3px !important
-    }
+.sliderwidth.k-slider-horizontal .k-slider-buttons .k-slider-track {
+    height: 3px !important
+}
 
 .sliderwidth.k-slider .k-slider-track {
     background-color: #c6c7c8
@@ -586,12 +810,12 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     font-size: 15px !important;
     border: none !important;
     font-weight: 400 !important;
-    box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important
 }
 
-    .kuploadaction.k-upload .k-upload-button:hover {
-        background-color: #eee !important
-    }
+.kuploadaction.k-upload .k-upload-button:hover {
+    background-color: #eee !important
+}
 
 .kuploadaction.k-upload .k-dropzone {
     background: transparent !important;
@@ -607,10 +831,10 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     border-radius: 0 !important
 }
 
-    .enddateblock .k-dropdown .k-dropdown-wrap:hover {
-        background-color: transparent !important;
-        border-color: #ced4da57 !important
-    }
+.enddateblock .k-dropdown .k-dropdown-wrap:hover {
+    background-color: transparent !important;
+    border-color: #ced4da57 !important
+}
 
 .enddateblock kendo-dropdownlist {
     background: #fafafa !important;
@@ -629,9 +853,10 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
     background: transparent
 }
 
-.dateboxborder input:focus-within, .dateboxborder:focus-within {
+.dateboxborder input:focus-within,
+.dateboxborder:focus-within {
     border-color: #ced4da6b !important;
-    box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important
 }
 
 .sliderwidth.k-slider .k-button:focus {
@@ -647,22 +872,22 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
 
 kendo-dropdownlist.font-input .k-input {
     font-size: 14px;
-    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif
 }
 
 .dateboxborder.k-numerictextbox:focus-within {
     border-color: #f0f0f0 !important;
-    box-shadow: 0 2px 6px rgb(0 0 0 /20%),0 2px 3px rgb(0 0 0 / 5%) !important
+    box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important
 }
 
 .borderless.k-textbox:focus-within {
     border-color: #f0f0f0 !important;
-    box-shadow: 0 2px 6px rgb(0 0 0 /20%),0 2px 3px rgb(0 0 0 / 5%) !important
+    box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important
 }
 
 .noborderclass.k-combobox:focus-within {
     border-color: #f0f0f0 !important;
-    box-shadow: 0 2px 6px rgb(0 0 0 /20%),0 2px 3px rgb(0 0 0 / 5%) !important
+    box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important
 }
 
 .dateclass.k-datepicker .k-input:focus-within {
@@ -695,21 +920,21 @@ kendo-dropdownlist.font-input .k-input {
 
 kendo-dialog.the-comp-de kendo-dialog-actions {
     padding: 0;
-    gap:0px !important
+    gap: 0px !important
 }
 
-    kendo-dialog.the-comp-de kendo-dialog-actions button.first-child-btn {
-        color: #fff;
-        border-color: var(--light-blue);
-        background-color: var(--light-blue) !important
-    }
+kendo-dialog.the-comp-de kendo-dialog-actions button.first-child-btn {
+    color: #fff;
+    border-color: var(--light-blue);
+    background-color: var(--light-blue) !important
+}
 
-    kendo-dialog.the-comp-de kendo-dialog-actions button:last-child.last-child-btn {
-        color: #444;
-        border-color: #fafafa;
-        background-color: #fafafa !important;
-        margin-left: -7px
-    }
+kendo-dialog.the-comp-de kendo-dialog-actions button:last-child.last-child-btn {
+    color: #444;
+    border-color: #fafafa;
+    background-color: #fafafa !important;
+    margin-left: -7px
+}
 
 kendo-dialog.the-comp-de kendo-dialog-actions {
     border-radius: 0 !important
@@ -717,7 +942,7 @@ kendo-dialog.the-comp-de kendo-dialog-actions {
 
 kendo-dialog.the-comp-de .k-window {
     border: none;
-    border-radius:0px !important
+    border-radius: 0px !important
 }
 
 kendo-dialog.the-comp-de kendo-dialog-actions button.first-child-btn:hover {
@@ -791,9 +1016,9 @@ kendo-window.dashboard-kendo-window.process-search.k-window kendo-window-titleba
     padding: 3px 15px
 }
 
-    kendo-window.dashboard-kendo-window.process-search.k-window kendo-window-titlebar .k-window-title {
-        padding: 0 !important
-    }
+kendo-window.dashboard-kendo-window.process-search.k-window kendo-window-titlebar .k-window-title {
+    padding: 0 !important
+}
 
 .mainBodyStyle:has(.process-search) {
     position: fixed !important;
@@ -806,29 +1031,29 @@ kendo-dialog.kit-name-popup .k-window {
     border-radius: 0
 }
 
-    kendo-dialog.kit-name-popup .k-window .k-content {
-        padding: 0;
-        border-bottom: 1px solid #f4f4f4 !important
-    }
+kendo-dialog.kit-name-popup .k-window .k-content {
+    padding: 0;
+    border-bottom: 1px solid #f4f4f4 !important
+}
 
-        kendo-dialog.kit-name-popup .k-window .k-content .all-merge-confirmation h3 {
-            padding: 15px;
-            border-bottom: 1px solid #f4f4f4;
-            min-height: 16.5px;
-            margin-top: 20px !important;
-            margin: 0;
-            font-weight: 500;
-            line-height: 1.1;
-            color: inherit;
-            font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif
-        }
+kendo-dialog.kit-name-popup .k-window .k-content .all-merge-confirmation h3 {
+    padding: 15px;
+    border-bottom: 1px solid #f4f4f4;
+    min-height: 16.5px;
+    margin-top: 20px !important;
+    margin: 0;
+    font-weight: 500;
+    line-height: 1.1;
+    color: inherit;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif
+}
 
-        kendo-dialog.kit-name-popup .k-window .k-content .all-merge-confirmation p {
-            position: relative;
-            padding: 15px;
-            margin: 0;
-            text-align: left
-        }
+kendo-dialog.kit-name-popup .k-window .k-content .all-merge-confirmation p {
+    position: relative;
+    padding: 15px;
+    margin: 0;
+    text-align: left
+}
 
 kendo-dialog-actions.kit-merge-btns {
     padding: 15px;
@@ -868,10 +1093,10 @@ kendo-dialog.kit-name-popup kendo-dialog-actions.kit-merge-btns button.merge-btn
     color: #fff
 }
 
-    kendo-dialog.kit-name-popup kendo-dialog-actions.kit-merge-btns button.merge-btns:hover {
-        background-color: #367fa9 !important;
-        color: #fff
-    }
+kendo-dialog.kit-name-popup kendo-dialog-actions.kit-merge-btns button.merge-btns:hover {
+    background-color: #367fa9 !important;
+    color: #fff
+}
 
 button.dash-popup-okbtn.k-button {
     height: 60px !important;
@@ -896,27 +1121,27 @@ kendo-dialog.widget-settings-proper .k-dialog {
     border-radius: 0
 }
 
-    kendo-dialog.widget-settings-proper .k-dialog .k-window-content {
-        border-radius: 0;
-        padding: 0
-    }
+kendo-dialog.widget-settings-proper .k-dialog .k-window-content {
+    border-radius: 0;
+    padding: 0
+}
 
-        kendo-dialog.widget-settings-proper .k-dialog .k-window-content .modal-header {
-            padding: 15px !important;
-            border-bottom: 1px solid #f4f4f4;
-            min-height: 16.5px
-        }
+kendo-dialog.widget-settings-proper .k-dialog .k-window-content .modal-header {
+    padding: 15px !important;
+    border-bottom: 1px solid #f4f4f4;
+    min-height: 16.5px
+}
 
-        kendo-dialog.widget-settings-proper .k-dialog .k-window-content .modal-body {
-            position: relative;
-            padding: 15px
-        }
+kendo-dialog.widget-settings-proper .k-dialog .k-window-content .modal-body {
+    position: relative;
+    padding: 15px
+}
 
-        kendo-dialog.widget-settings-proper .k-dialog .k-window-content .modal-footer {
-            padding: 15px;
-            text-align: right;
-            border-top: 1px solid #f4f4f4
-        }
+kendo-dialog.widget-settings-proper .k-dialog .k-window-content .modal-footer {
+    padding: 15px;
+    text-align: right;
+    border-top: 1px solid #f4f4f4
+}
 
 .widget-heading {
     font-size: 20px !important;
@@ -938,9 +1163,9 @@ kendo-dialog.widget-settings-proper .k-dialog {
     padding: 0 !important;
 }
 
-    .add-widget-box mat-dialog-container .modalbody.mat-dialog-content .container.add-widget-container {
-        padding: 0 !important
-    }
+.add-widget-box mat-dialog-container .modalbody.mat-dialog-content .container.add-widget-container {
+    padding: 0 !important
+}
 
 
 kendo-dialog.cm-pop-up .k-window-content {
@@ -1014,13 +1239,14 @@ kendo-grid.admin-deal-grid.k-widget.k-grid {
     cursor: pointer !important;
 }
 
-    .sec-eng-multi-list .k-multiselect-wrap kendo-taglist ul li:hover {
-        background-color: #ebebeb !important;
-        color: #444 !important;
-        border-color: #ebebeb !important;
-    }
+.sec-eng-multi-list .k-multiselect-wrap kendo-taglist ul li:hover {
+    background-color: #ebebeb !important;
+    color: #444 !important;
+    border-color: #ebebeb !important;
+}
 
-.tab-sec-add .k-tabstrip-items .k-item.k-state-active, .k-tabstrip-items .k-item.k-state-selected {
+.tab-sec-add .k-tabstrip-items .k-item.k-state-active,
+.k-tabstrip-items .k-item.k-state-selected {
     color: #fff;
     background-color: #00aeef;
     border: 1px solid #00aeef;
@@ -1059,7 +1285,7 @@ kendo-dropdownlist.inputWidth.font-input.backdate_contract_style.k-dropdown.ng-d
 }
 
 .cdk-overlay-container:has(.add-widget-box) {
-    background: rgba(0,0,0,.3);
+    background: rgba(0, 0, 0, .3);
 }
 
 .cdk-global-overlay-wrapper:has(.add-widget-box) {
@@ -1098,7 +1324,7 @@ kendo-window#OvrLp.k-wind-design {
     font-weight: 600 !important;
     text-transform: capitalize !important;
     color: #1a3e6f !important;
-    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif !important;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
 
 .grid_text_filter .k-grid-header table thead tr th span.k-cell-inner .k-link {
@@ -1109,13 +1335,13 @@ kendo-window#OvrLp.k-wind-design {
     text-overflow: ellipsis;
 }
 
-    .grid_text_filter .k-grid-header table thead tr th span.k-cell-inner .k-link .k-column-title {
-        display: block;
-        width: 100%;
-        white-space: nowrap !important;
-        overflow: hidden !important;
-        text-overflow: ellipsis;
-    }
+.grid_text_filter .k-grid-header table thead tr th span.k-cell-inner .k-link .k-column-title {
+    display: block;
+    width: 100%;
+    white-space: nowrap !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis;
+}
 
 .grid_text_filter .k-grid-header table thead tr th span.k-cell-inner {
     margin: -0.75rem calc(-4.5em + -0.75rem + 19px) -0.75rem -0.65rem;
@@ -1215,11 +1441,11 @@ kendo-upload.contract-correction-upload.k-widget.k-upload {
     background-color: #ffff !important
 }
 
-    .contract-correction-upload.k-upload .k-upload-button:hover {
-        color: #444 !important;
-        border-color: #ebebeb !important;
-        background-color: #ebebeb !important;
-    }
+.contract-correction-upload.k-upload .k-upload-button:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important;
+}
 
 .contract-correction-upload.k-upload .k-dropzone {
     background-color: #003C71 !important;
@@ -1237,10 +1463,10 @@ kendo-upload.contract-correction-upload.k-widget.k-upload {
     max-height: 90px !important;
 }
 
-    .contract-correction-upload.k-upload .k-upload-files .k-file {
-        padding: 10px !important;
-        overflow-x: clip !important;
-    }
+.contract-correction-upload.k-upload .k-upload-files .k-file {
+    padding: 10px !important;
+    overflow-x: clip !important;
+}
 
 .contract-correction-upload.k-upload .k-progressbar {
     height: 2px !important;
@@ -1288,11 +1514,11 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
     padding-bottom: 10px;
 }
 
-    .kendoWindow kendo-window-titlebar .k-window-title {
-        font-size: 1.2em !important;
-        font-weight: 400;
-        font-family: 'Intel Clear';
-    }
+.kendoWindow kendo-window-titlebar .k-window-title {
+    font-size: 1.2em !important;
+    font-weight: 400;
+    font-family: 'Intel Clear';
+}
 
 .ss-loading-overlay {
     top: 20px !important;
@@ -1320,7 +1546,8 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
     color: #ffff !important
 }
 
-.mybuttondialog .k-dialog .k-dialog-buttongroup, .k-dialog .k-dialog-buttongroup .k-button {
+.mybuttondialog .k-dialog .k-dialog-buttongroup,
+.k-dialog .k-dialog-buttongroup .k-button {
     border-width: 0 !important;
     border-radius: 0 !important
 }
@@ -1353,7 +1580,7 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
 }
 
 .managable-meet-pct manager-pct.admin-tender-pricecosttest {
-    top: 0!important;
+    top: 0 !important;
 }
 
 .managable-meet-pct kendo-tabstrip.art-kendo-bars {
@@ -1372,11 +1599,11 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
     padding: 0 15px;
 }
 
-    .managable-meet-pct .admin-tender-pricecosttest div#sum-wrapper .another-sh-class {
-        margin: 0 -10px;
-    }
+.managable-meet-pct .admin-tender-pricecosttest div#sum-wrapper .another-sh-class {
+    margin: 0 -10px;
+}
 
-.managable-meet-pct kendo-tabstrip.art-kendo-bars.k-tabstrip > .k-content.k-state-active {
+.managable-meet-pct kendo-tabstrip.art-kendo-bars.k-tabstrip>.k-content.k-state-active {
     padding: 8px;
 }
 
@@ -1418,6 +1645,7 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
 #OvrLp kendo-grid.overDealChecking.k-grid .k-grid-table-wrap table tbody tr td:first-child {
     padding: 6px 0 6px 0px !important;
 }
+
 #OvrLp kendo-grid.overDealChecking.k-grid .k-grid-table-wrap table tbody tr td .text-center {
     text-align: left !important;
 }
@@ -1495,7 +1723,7 @@ kendo-grid.group-Excl-grid table tr.k-grid-norecords:hover {
     font-weight: 600;
     text-transform: capitalize;
     color: #1a3e6f;
-    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 .CAP-capBreak.k-grid tr td:nth-child(2) div,
@@ -1530,7 +1758,7 @@ kendo-window.flexOverlapProducts {
 
 #admin-legal-popup .k-content.k-window-content.k-dialog-content {
     overflow: hidden !important;
-    padding:0px !important;
+    padding: 0px !important;
 }
 
 #manageFilterStyle a.k-grid-filter.k-state-active {
@@ -1576,7 +1804,7 @@ kendo-window.flexOverlapProducts {
     height: auto !important;
     display: flex;
     width: 100%;
-    height: 100%!important;
+    height: 100% !important;
     align-items: center;
     justify-content: center;
 }
@@ -1592,12 +1820,12 @@ kendo-window.flexOverlapProducts {
     top: 0 !important;
 }
 
-    .kendoOverlappings .dealCell.vert-center.dealerCAPinfo.ng-star-inserted .ng-star-inserted,
-    .kendoOverlappings .dealCell.vert-center.dealerYCS2info.ng-star-inserted .ng-star-inserted {
-        display: block;
-        width: 100%;
-        height: 100%;
-    }
+.kendoOverlappings .dealCell.vert-center.dealerCAPinfo.ng-star-inserted .ng-star-inserted,
+.kendoOverlappings .dealCell.vert-center.dealerYCS2info.ng-star-inserted .ng-star-inserted {
+    display: block;
+    width: 100%;
+    height: 100%;
+}
 
 .kendoOverlappings .dealCell.vert-center.dealerCAPinfo .rowHeight div,
 .kendoOverlappings .dealCell.vert-center.dealerYCS2info .rowHeight div {
@@ -1649,16 +1877,16 @@ kendo-window.flexOverlapProducts {
     width: 400px !important;
 }
 
-    .managingPerformanceBars #perfDetails {
-        top: 25px;
-        right: 0 !important;
-        z-index: 9999 !important;
-        bottom: auto !important;
-    }
+.managingPerformanceBars #perfDetails {
+    top: 25px;
+    right: 0 !important;
+    z-index: 9999 !important;
+    bottom: auto !important;
+}
 
-    .managingPerformanceBars i.intelicon-show-results-outlined.showMore {
-        margin-left: 5px;
-    }
+.managingPerformanceBars i.intelicon-show-results-outlined.showMore {
+    margin-left: 5px;
+}
 
 kendo-grid#manageFilterStyle .k-grid-content-locked {
     height: auto !important;
@@ -1696,18 +1924,18 @@ kendo-popup.k-animation-container .k-list-filter {
     margin-top: 2px;
 }
 
-    kendo-popup.k-animation-container .k-list-filter span.k-icon.k-i-search {
-        position: absolute;
-        right: 6px;
-        top: 50%;
-        -webkit-transform: translateY(-50%);
-        -ms-transform: translateY(-50%);
-        transform: translateY(-50%);
-    }
+kendo-popup.k-animation-container .k-list-filter span.k-icon.k-i-search {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    -webkit-transform: translateY(-50%);
+    -ms-transform: translateY(-50%);
+    transform: translateY(-50%);
+}
 
-    kendo-popup.k-animation-container .k-list-filter input.k-textbox:focus {
-        box-shadow: none;
-    }
+kendo-popup.k-animation-container .k-list-filter input.k-textbox:focus {
+    box-shadow: none;
+}
 
 /*    summary Wrappers Manage Screen*/
 #sum-wrapper {
@@ -1733,14 +1961,9 @@ kendo-popup.k-animation-container .k-list-filter {
     margin-right: 0
 }
 
-#sum-container {
-    height: 80%;
-    overflow: auto
+#sum-container .k-textbox.k-space-left {
+    padding-left: 2.1em
 }
-
-    #sum-container .k-textbox.k-space-left {
-        padding-left: 2.1em
-    }
 
 #sum-header hr {
     height: 1px;
@@ -1772,7 +1995,7 @@ kendo-popup.k-animation-container .k-list-filter {
     height: 50px;
     font-size: 14px;
     font-family: "Intel Clear";
-    background: linear-gradient(to bottom, #fdfdfd 0%,#d9d9d9 100%);
+    background: linear-gradient(to bottom, #fdfdfd 0%, #d9d9d9 100%);
 }
 
 .sum-main-body .tbl-header {
@@ -1801,10 +2024,10 @@ kendo-popup.k-animation-container .k-list-filter {
     text-align: center
 }
 
-    .sum-main-body .stage div {
-        margin: 0 10px;
-        padding: 4px 4px
-    }
+.sum-main-body .stage div {
+    margin: 0 10px;
+    padding: 4px 4px
+}
 
 .sum-filter-bar.add-sub-sum {
     padding: 0 10px;
@@ -1847,10 +2070,10 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner .k-link:hove
     color: #808080
 }*/
 
-    kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-filter-menu .k-grid-filter span.k-icon.k-i-filter:hover {
-        color: #00aeef !important;
-        opacity: 1;
-    }
+kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-filter-menu .k-grid-filter span.k-icon.k-i-filter:hover {
+    color: #00aeef !important;
+    opacity: 1;
+}
 
 
 #prodGrid .k-grid td {

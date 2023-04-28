@@ -81,7 +81,7 @@
 }
 
 #contractContainerWrapper {
-    height: 100%;
+    height: calc(100% - 95px);
     padding: 0 0 0 0 !important;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
