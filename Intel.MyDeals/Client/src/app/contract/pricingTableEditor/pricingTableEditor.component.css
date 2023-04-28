@@ -682,26 +682,3 @@ button td.button-intel {
     text-align: left;
     color: #00AEEF;
 }
-
-.pte-btn-container-left {
-    display: -webkit-inline-box;
-    width: 10vw !important;
-}
-
-@media (max-width: 2120px) {
-    .pte-btn-container-left {
-        width: 12vw !important;
-    }
-}
-
-@media (max-width: 1350px) {    
-    .pte-btn-container-left {
-        width: 20vw !important;
-    }
-}
-
-@media (max-width: 670px) {    
-    .pte-btn-container-left {
-        width: 30vw !important;
-    }
-}
