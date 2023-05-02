@@ -3,7 +3,7 @@
 
 <div class="paneldivheader">{{dialogTitle}} <i id="btnClose" class="intelicon-close float" (click)="close()" title="Close this window"></i> </div>
 <div>
-        <div *ngIf="dealList!=undefined" class="dealList">
+        <div *ngIf="dealList!=undefined" class="dealList viewDealListed">
             <div class="row">
                 <div class="col-md-12">
                     <p class="dealistp">
@@ -17,8 +17,8 @@
                 <div class="row ">
                     <div class="col-md-9">
                     </div>
-                    <div class="col-md-1">
-                        <button type="submit" class="btn btn-primary dealListbtn" (click)="close()">Cancel/Close</button>
+                    <div class="col-md-2">
+                        <button type="submit" class="btn btn-primary dealListbtn" (click)="close()" style="margin-left:0;">Cancel/Close</button>
                     </div>
                 </div>
             </div>

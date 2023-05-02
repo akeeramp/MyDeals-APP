@@ -2094,3 +2094,30 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
     position: relative;
     width: 100%
 }
+
+kendo-grid.filterDesignComp table tr th .k-grid-filter .k-i-filter {
+    color: #000;
+    opacity: .45;
+}
+
+    kendo-grid.filterDesignComp table tr th .k-grid-filter .k-i-filter:hover {
+        opacity: 1;
+        color: #00aeef !important;
+    }
+
+kendo-grid.filterDesignComp table tr th a.k-grid-filter.k-state-active {
+    background-color: #fff;
+}
+
+    kendo-grid.filterDesignComp table tr th a.k-grid-filter.k-state-active .k-i-filter {
+        opacity: 1;
+        color: var(--light-blue) !important;
+    }
+
+kendo-grid.filterDesignComp table tr th .k-cell-inner {
+    font-size: 14px;
+    font-weight: 600;
+    text-transform: capitalize;
+    color: #1a3e6f;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}

@@ -455,6 +455,10 @@ kendo-tabstrip.gaming-tab .k-tabstrip-items-wrapper .k-tabstrip-items li:hover {
     background-color: #00AEEF !important
 }
 
+button.btn.btn-sm.btn-primary.new-comp-style:hover {
+    background-color: #00AEEF !important;
+}
+
 .mr-five {
     margin-right: 5px
 }
