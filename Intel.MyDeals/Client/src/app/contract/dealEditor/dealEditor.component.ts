@@ -391,9 +391,10 @@ export class dealEditorComponent {
                 args.column.field !== "BACKEND_REBATE" && args.column.field !== "CAP_KIT" && args.column.field !== "PRIMARY_OR_SECONDARY" && args.column.field !== "KIT_REBATE_BUNDLE_DISCOUNT" &&
                 args.column.field !== "TOTAL_DSCNT_PR_LN" && args.column.field !== "KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE" && !(args.dataItem._behaviors != undefined &&
                     args.dataItem._behaviors.isReadOnly != undefined && args.dataItem._behaviors.isReadOnly[args.column.field] != undefined && args.dataItem._behaviors.isReadOnly[args.column.field])) {
+                //to handle on-click action on kendogrid cells
                 args.sender.editCell(
                     args.rowIndex,
-                    args.column.leafIndex
+                    args.column.isLocked || args.column.field == "EXCLUDE_AUTOMATION" ? args.columnIndex : args.column.leafIndex
                 );
                 if (args.column.field == "SYS_PRICE_POINT") {
                     this.openSystemPriceModal(args.dataItem);
