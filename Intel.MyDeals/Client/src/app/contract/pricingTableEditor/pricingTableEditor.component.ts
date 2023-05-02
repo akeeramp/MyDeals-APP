@@ -1735,6 +1735,7 @@ export class pricingTableEditorComponent {
                         if (action == 'onSave')
                             await this.saveandValidate(true, deletedDCID);
                     }, 100);
+                    this.setBusy("", "", "", false);
                 }
             }
         });
