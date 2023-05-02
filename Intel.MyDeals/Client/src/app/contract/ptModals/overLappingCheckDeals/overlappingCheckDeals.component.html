@@ -208,7 +208,7 @@
         </kendo-grid>
     </div>
 </kendo-window>
-<div class="k-widget k-dialog k-window k-alert" *ngIf="showKendoAlert">
+<div class="k-widget k-dialog k-window k-alert" *ngIf="showKendoAlert" style="z-index:99999;">
     <kendo-dialog (close)="closeKendoAlert()">
         <div>
             Please go to <b>Deal Editor</b>; <b>edit</b> and <b>re-validate</b> your deal to avoid overlapping with other deals.

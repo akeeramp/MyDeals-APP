@@ -228,6 +228,7 @@ export class AutoFillComponent {
         }
         else {
             this.multSlctMkgValues = this.mkgvalues;
+            this.autofillData["DEFAULT"]["MRKT_SEG"].value = this.multSlctMkgValues;
         }
     }
 

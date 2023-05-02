@@ -110,10 +110,11 @@
     }
     .err-bit {
         margin: -11px 0 0 -10px;
-        position: absolute;
+        position: relative;
         border-style: solid;
         border-color: #ED1C24 transparent transparent #ED1C24;
-        border-width: 3px;
+        border-width: 4px;
+        top: -14px;
     }
     .err-bit-el {
         border-style: solid;
