@@ -20,7 +20,6 @@ td.error-border {
 }
 
 td.error-cell {
-    background-color: #fc4c02;
     border: solid red 1px !important;
 }
 
