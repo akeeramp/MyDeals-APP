@@ -663,7 +663,10 @@ export class dealEditorComponent {
         });
         each(this.wipTemplate.columns, column => {
             if (this.templates[column.field] != undefined && this.templates[column.field].Groups.includes(this.selectedTab))
-                each(this.templates[column.field].Groups, row => { if (row == this.selectedTab) row = this.Derenametab; });
+                each(this.templates[column.field].Groups, row => {
+                     if (row == this.selectedTab) 
+                     this.templates[column.field].Groups = this.Derenametab; 
+                    });
         });
         this.selectedTab = this.Derenametab;
         this.isrenameDialog = false;
