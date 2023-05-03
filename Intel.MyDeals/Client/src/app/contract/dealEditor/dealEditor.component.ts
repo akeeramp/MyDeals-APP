@@ -323,26 +323,27 @@ export class dealEditorComponent {
     onTabSelect(e: SelectEvent) {
         this.isLoading = true;
         this.gridData.data = [];
-        setTimeout(() => {
-            e.preventDefault();
-            if (e.title != undefined) {
-                this.searchFilter = "";
-                this.clearSearchGrid();
-                this.selectedTab = e.title;
-                var group = this.groups.filter(x => x.name == this.selectedTab);
-                if (group[0].isTabHidden) {
-                    var tabs = this.groups.filter(x => x.isTabHidden === false);
-                    this.selectedTab = tabs[0].name;
-                    this.filterColumnbyGroup(this.selectedTab);
-                }
-                else
-                    this.filterColumnbyGroup(this.selectedTab);
-            } else {
-                this.refreshGrid();
+        e.preventDefault();
+        if (e.title != undefined) {
+            this.searchFilter = "";
+            this.clearSearchGrid();
+            this.selectedTab = e.title;
+            var group = this.groups.filter(x => x.name == this.selectedTab);
+            if (group[0].isTabHidden) {
+                var tabs = this.groups.filter(x => x.isTabHidden === false);
+                this.selectedTab = tabs[0].name;
+                this.filterColumnbyGroup(this.selectedTab);
             }
+            else
+                this.filterColumnbyGroup(this.selectedTab);
+        } else {
+            this.refreshGrid();
+        }
+        setTimeout(() => {
             this.gridData = process(this.gridResult, this.state);
             this.isLoading = false;
         },0)
+        
         
     }
 
@@ -650,7 +651,7 @@ export class dealEditorComponent {
         this.invalidField = value;
     }
 
-    renameTab = function () {
+    renameTab() {
         this.Derenametab = "";
         this.Derenametab = this.selectedTab;
         this.isrenameDialog = true
@@ -667,9 +668,11 @@ export class dealEditorComponent {
         each(this.wipTemplate.columns, column => {
             if (this.templates[column.field] != undefined && this.templates[column.field].Groups.includes(this.selectedTab))
                 each(this.templates[column.field].Groups, row => {
-                     if (row == this.selectedTab) 
-                     this.templates[column.field].Groups = this.Derenametab; 
-                    });
+                    if (row == this.selectedTab) {
+                        let ind = this.templates[column.field].Groups.findIndex(item => item == row);
+                        this.templates[column.field].Groups[ind] = this.Derenametab;
+                    } 
+                });
         });
         this.selectedTab = this.Derenametab;
         this.isrenameDialog = false;
