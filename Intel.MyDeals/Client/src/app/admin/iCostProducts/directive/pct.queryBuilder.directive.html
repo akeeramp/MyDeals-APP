@@ -1,12 +1,12 @@
 ﻿<div class="alert alert-info alert-group">
     <form name="qb.form" novalidate>
-        <div class="form-inline">
+        <div class="form-inline" style="padding: 15px;">
             <kendo-dropdownlist [(ngModel)]="group.operator" [data]="operators" [ngModelOptions]="{standalone: true}" class="form-control input-sm"
-                                style="width: 100px; height: auto" textField="name" valueField="name" [valuePrimitive]="true">
+                                style="width: 100px; height: auto; padding: 3px; font-size: 13px; border-radius: 3px;" textField="name" valueField="name" [valuePrimitive]="true">
             </kendo-dropdownlist>
-            <button style="margin-left: 5px" (click)="addCondition()" class="btn btn-sm btn-default"><span class="intelicon-plus-outlined"></span> Add Condition</button>
-            <button style="margin-left: 5px" (click)="addGroup()" class="btn btn-sm btn-default"><span class="intelicon-plus-outlined"></span> Add Group</button>
-            <button style="margin-left: 5px" (click)="removeGroup()" class="btn btn-sm btn-danger"><span class="intelicon-minus-outlined"></span> Remove Group</button>
+            <button style="margin-left: 5px; padding: 8px; font-size: 14px;" (click)="addCondition()" class="btn btn-sm btn-default"><span class="intelicon-plus-outlined"></span> Add Condition</button>
+            <button style="margin-left: 5px; padding: 8px; font-size: 14px;" (click)="addGroup()" class="btn btn-sm btn-default"><span class="intelicon-plus-outlined"></span> Add Group</button>
+            <button style="margin-left: 5px; padding: 8px; font-size: 14px;" (click)="removeGroup()" class="btn btn-sm btn-danger"><span class="intelicon-minus-outlined"></span> Remove Group</button>
         </div>
         <div class="group-conditions">
             <div *ngFor="let rule of group.rules; let indx = index" class="condition">
@@ -24,7 +24,7 @@
                                 </kendo-combobox>
 
                                 <kendo-dropdownlist [(ngModel)]="rule.condition" [data]="conditions" [ngModelOptions]="{standalone: true}" class="qb-field form-control input-sm"
-                                                    style="width: 100px; height: auto" textField="name" valueField="name" [valuePrimitive]="true">
+                                                    style="width: 100px; height: auto; padding: 3px; font-size: 10px;" textField="name" valueField="name" [valuePrimitive]="true">
                                 </kendo-dropdownlist>
                                 <span [ngSwitch]="rule.condition == 'LIKE'">
                                     <span *ngSwitchCase="true">
@@ -39,7 +39,7 @@
                                         </kendo-combobox>
                                     </span>
                                 </span>
-                                <button (click)="removeCondition(indx)" class="btn btn-sm btn-danger" style="margin-left: 5px;"><span class="intelicon-minus-outlined"></span></button>
+                                <button (click)="removeCondition(indx)" class="btn btn-sm btn-danger" style="margin-left: 5px; padding: 6px 15px; font-size: 14px;"><span class="intelicon-minus-outlined"></span></button>
                             </div>
                         </div>
                     </div>

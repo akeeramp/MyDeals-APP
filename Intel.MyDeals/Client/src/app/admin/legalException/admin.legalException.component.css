@@ -324,3 +324,7 @@
 .mat-dialog-container:has(.dealList.viewDealListed) {
     padding-bottom: 20px;
 }
+
+kendo-grid#legalDetailGrid tr td {
+    height: auto !important;
+}

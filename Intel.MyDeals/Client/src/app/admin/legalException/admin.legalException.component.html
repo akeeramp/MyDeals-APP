@@ -6,7 +6,7 @@
     <h2 class="header-css">Cost Test Legal Exceptions</h2>
 </div>
 <div class="col-md-{{colexpand}}">
-    <div>
+    <div style="margin-bottom: 30px;">
         <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" id="legalGrid"
                     [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                     [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
@@ -300,7 +300,7 @@
                 </ng-template>
             </kendo-grid-column>
             <ng-template kendoGridDetailTemplate let-dataItem="dataItem">
-                <kendo-grid [data]="childgridData" [pageSize]="childState.take" [skip]="childState.skip" id="legalDetailGrid"
+                <kendo-grid style="max-height: 480px; height: auto;" [data]="childgridData" [pageSize]="childState.take" [skip]="childState.skip" id="legalDetailGrid"
                             [sort]="childState.sort" [filter]="childState.filter" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
                             [resizable]="true" [group]="childState.group" filterable="menu" [sortable]="true"
                             (dataStateChange)="childDataStateChange($event)">

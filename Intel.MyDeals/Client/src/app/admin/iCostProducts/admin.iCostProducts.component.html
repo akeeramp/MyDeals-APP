@@ -19,7 +19,7 @@
                                 [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [reorderable]="true"
                                 [resizable]="true" [group]="state.group" filterable="menu" (cellClick)="editClick($event)"
                                 [navigable]="true" (dataStateChange)="dataStateChange($event)" (edit)="editHandler($event)"
-                                [columnMenu]="{sort: false}">
+                                [columnMenu]="{sort: false}" style="padding-left: 15px; padding-right: 15px;">
                         <ng-template kendoGridToolbarTemplate>
                             <button class="btn btn-primary small k-grid-add"
                                     (click)="addItem()">
@@ -122,8 +122,8 @@
             </div>
         </div>
     </div>
-    <div *ngIf="!addNewRules">
-        <div class="col-md-12" style="margin-right:100em !important">
+    <div *ngIf="!addNewRules" style="width: 100%;">
+        <div class="col-md-12">
             <form name="rules" novalidate >
                 <div class="panel panel-primary">
                     <div class="panel-heading">
@@ -139,7 +139,7 @@
                             <div class="row form-inline">
                                 <div class="col-md-3">
                                     <div class="opp-d-filter">
-                                        <p><label class="control-label" style="margin-right: 281px !important;">Select Product Type:</label></p>
+                                        <label class="control-label alignLabels">Select Product Type:</label>
                                         <kendo-combobox id="productDropdown" title="Select a Product Type"
                                                         placeholder="Select..." [(ngModel)]="pctRule.DEAL_PRD_TYPE_SID"
                                                         [data]="distinctProductType | orderBy: 'PRD_TYPE'"
@@ -152,7 +152,7 @@
                                 </div>
                                 <div class="col-md-2">
                                     <div class="opp-d-filter">
-                                        <p><label class="control-label" style="margin-right: 111px !important;">Select Product Vertical:</label></p>
+                                        <label class="control-label alignLabels">Select Product Vertical:</label>
                                         <kendo-combobox id="productDropdown" title="Select a Vertical"
                                                         placeholder="Select..." [(ngModel)]="pctRule.PRD_CAT_NM_SID"
                                                         [data]="ProductVertical" [ngModelOptions]="{standalone: true}"
@@ -165,7 +165,7 @@
                                     </div>
                                     </div>
                                     <div class="col-md-2">
-                                        <label class="control-label " style="margin-right: 198px !important;">Select Level:</label>
+                                        <label class="control-label alignLabels">Select Level:</label>
                                         <div id="radioButton">
                                             <div class="radio-inline" *ngFor="let type of costTestProductType">
                                                 <input type="radio" title="type.name" [value]="type.name"
@@ -181,19 +181,21 @@
                                     </div>
                                     <div class="clearboth"></div>
                                     <div class="col-md-12" style="padding-top: 20px;" *ngIf="showQueryBuilder">
-                                        <div class="fl">Add more</div>
-                                        <kendo-dropdownlist [(ngModel)]="pctRule.CRITERIA" [data]="conditionCriteria"
-                                                            [ngModelOptions]="{standalone: true}" class="fl" style="margin: 0 10px;"
-                                                            title="Select a Criteria" [required]="true" textField="name" valueField="name"
-                                                            [valuePrimitive]="true"></kendo-dropdownlist>
-                                        <div class="fl">conditions below if required:</div>
-                                        <div class="clearboth"></div>
-                                        <pct-query-builder-angular *ngIf="isAttributeLoaded | async" [group]="filter.group"
-                                                                   [parent]="initial" [form]="form" [operators]="operators"
-                                                                   [leftValues]="leftValues" (saveEnable)="enableSaveHandler($event)">
-                                        </pct-query-builder-angular>
+                                        <div class="icostedProducts">
+                                            <div class="fl">Add more</div>
+                                            <kendo-dropdownlist [(ngModel)]="pctRule.CRITERIA" [data]="conditionCriteria"
+                                                                [ngModelOptions]="{standalone: true}" class="fl" style="margin: 0 10px;"
+                                                                title="Select a Criteria" [required]="true" textField="name" valueField="name"
+                                                                [valuePrimitive]="true"></kendo-dropdownlist>
+                                            <div class="fl">conditions below if required:</div>
+                                        </div>
+                                            <div class="clearboth"></div>
+                                            <pct-query-builder-angular *ngIf="isAttributeLoaded | async" [group]="filter.group"
+                                                                       [parent]="initial" [form]="form" [operators]="operators"
+                                                                       [leftValues]="leftValues" (saveEnable)="enableSaveHandler($event)">
+                                            </pct-query-builder-angular>
+                                        </div>
                                     </div>
-                                </div>
                         </div>
                     </div>
                 </div>
