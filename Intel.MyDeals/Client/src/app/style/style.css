@@ -1785,7 +1785,7 @@ kendo-window.flexOverlapProducts {
 }
 
 #OvrLp.k-window-maximized .overLappedDeals .k-grid-content {
-    height: calc(100vh - 123px);
+    height: calc(100vh - 135px);
 }
 
 .kendoOverlappings tr td:has(.dealerCAPinfo),
@@ -2121,3 +2121,36 @@ kendo-grid.filterDesignComp table tr th .k-cell-inner {
     color: #1a3e6f;
     font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
 }
+
+.prodSelector .leftNavFilter {
+    background-color: #e7e7e8;
+    height: calc(100vh - 473px) !important;
+    padding: 4px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-family: 'Intel Clear', 'Arial'
+}
+
+.leftNavFilter kendo-treeview ul li span {
+    background-color: transparent !important;
+    color: #00AEEF !important
+}
+
+    .leftNavFilter kendo-treeview ul li span.k-in.k-state-selected {
+        background-color: rgba(2, 173, 255, 1) !important;
+        color: #fff !important
+    }
+
+    .leftNavFilter kendo-treeview ul li span.k-in.k-state-focused {
+        box-shadow: none !important
+    }
+
+    .leftNavFilter kendo-treeview ul li span span.badge.upperBadge {
+        font-size: 10px;
+        padding: 2px 4px;
+        background-color: #fff !important;
+        color: #00AEEF !important;
+        vertical-align: text-top;
+        font-weight: 600;
+        margin-left: 6px
+    }

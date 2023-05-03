@@ -385,7 +385,20 @@ kendo-tabstrip.diff-all-deals {
 #allDeals td .breakoutColumn .rowValueHeight {
     height: 25px !important;
 }
-.all_deal_grid_cell .dealCell .vert-center .dateWrapper.intelicon-information {
+
+#allDeals .dealCell .uiControlDiv.trackingNumParent {
+    width: 100%;
+    height: 100%;
+}
+
+    #allDeals .dealCell .uiControlDiv.trackingNumParent .vert-center {
+        width: 100%;
+        height: 100%;
+    }
+
+.allDealsOvrLap mat-dialog-container {
+    padding: 0;
+}.all_deal_grid_cell .dealCell .vert-center .dateWrapper.intelicon-information {
     right: 15px !important;
     position: relative !important;
     top: 18px !important;

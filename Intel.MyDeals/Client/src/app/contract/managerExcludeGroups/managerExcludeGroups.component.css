@@ -473,7 +473,12 @@ tr.grey, tr.k-alt.grey {
     #GroupExclusionTab .k-tabstrip-items .k-state-disabled {
         position: absolute !important;
         width: auto !important;
-        right: 15px !important
+        right: 15px !important;
+        opacity: 1;
+    }
+
+    .manageExclGroupOvrLap mat-dialog-container {
+        padding: 0;
     }
 
     #GroupExclusionTab > .k-tabstrip-items-wrapper > .k-tabstrip-items > li > .k-link, #GroupExclusionTab .k-tabstrip-items-wrapper ul {

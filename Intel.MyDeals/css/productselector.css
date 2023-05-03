@@ -316,7 +316,7 @@ a.prdAnchor {
 
 .prodSelector.modal-body {
     padding-top: 2px;
-    padding-bottom: 0px;
+    padding-bottom: 5px;
     min-height: 365px;
     max-height: calc(85vh - 365px);
     height: calc(85vh - 365px);

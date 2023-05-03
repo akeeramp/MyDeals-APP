@@ -319,7 +319,8 @@ export class managerExcludeGroupsComponent {
             "currPt": this.contractData,
         }
         const dialogRef = this.dialog.open(OverlappingCheckComponent, {
-            data: data
+            data: data,
+            panelClass: 'manageExclGroupOvrLap',
         });
         dialogRef.afterClosed().subscribe(result => { });
     }

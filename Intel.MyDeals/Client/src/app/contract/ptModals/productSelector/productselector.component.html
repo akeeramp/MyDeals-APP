@@ -33,17 +33,17 @@
             </ul>
         </div>
     </div>
-    <div style="padding-top: 15px;">
+    <div style="">
         <div class="prodSelector modal-body prodFull-height-fix">
             <div *ngIf="showSuggestions" class="productSelector subHeaderNavContainer mini-right miniProdNav">
-                <div *ngIf="!(errorMessage.length > 0)">
+                <div *ngIf="!(errorMessage.length > 0)" style="height: calc(100% - 25px);">
                     <div *ngIf="!disableSelection">{{suggestionText}}</div>
                     <div class="productSelector Issue" *ngIf="disableSelection">Product(s) does not match the global filter criteria (Media Code in Autofill defaults for instance) or is not active within the deal date range.</div>
                     <div style="padding-top:5px;" id="prodGrid" class="declaringProdGrid">
                         <table *ngIf="suggestedProducts.length !== 0" style="width: 100%; height: 100%;table-layout:fixed">
                             <tr>
                                 <td style="width:20%;min-width:20px;max-width:200px">
-                                    <div class="leftNavFilter height-100">
+                                    <div class="leftNavFilter">
                                         <div class="row">
                                             <div class="col">
                                                 <p class='filterTitleUnderline' *ngIf="curRowIssues.length > 0">Products Found</p>
