@@ -5,14 +5,14 @@
 <link href="/Client/src/app/style/reporting.css" rel="stylesheet" />
 
 <cc-loader [isLoading]="isLoading" [module]="moduleName" [isInitializing]="false" [message]="loadMessage"></cc-loader>
-<div class="container-fluid overFlowDash" [hidden]="isLoading=='true'">
-    <div class="row">
+<div class="overFlowDash" [hidden]="isLoading=='true'">
+    <div class="rpt-row" style="background-color: #ECF0F5;">
         <div class="col-md-12 col-md-fixhyt">
             <div class="hold-transition skin-blue sidebar-mini">
                 <div id="reportScopeID" class="wrapper">
                     <aside class="main-sidebar">
                         <section class="sidebar">
-                            <div class="row">
+                            <div class="rpt-row">
                                 <div class="col-xs-12 col-md-11 col-md-offset-0" style="width: 94.66667%;">
                                     <div class="panel sidenav" *ngFor="let x of getReportCatagory">
                                         <div class="panel-heading">{{x.CTGR_NM}}</div>
@@ -40,7 +40,7 @@
                             </ol>
                         </section>
                         <section class="content">
-                            <div class="row new-row">
+                            <div class="rpt-row new-row">
                                 <div class="col-md-3 col-sm-6 col-xs-12">
                                     <div class="info-box"><span class="info-box-icon bg-aqua"><i class="intelicon-gauge"
                                                 style="font-size:80px"></i></span>
@@ -78,7 +78,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" [hidden]="!isRecordAvailable">
+                            <div class="rpt-row" [hidden]="!isRecordAvailable">  
                                 <div class="col-md-12">
                                     <div class="box">
                                         <div class="box-header with-border">
@@ -86,7 +86,7 @@
                                             <div class="box-tools pull-right"></div>
                                         </div>
                                         <div class="box-body">
-                                            <div class="row">
+                                            <div class="rpt-row">
                                                 <div class="col-md-8">
                                                     <div class="chart">
                                                         <div id="chart" class="kendocontainer">
@@ -103,7 +103,8 @@
                                                     </div>
                                                 </div>
                                                 <div class="col-md-4">
-                                                    <div class="progress-group" *ngFor="let x of ReportDashboardData | slice : 0:5 "><span class="progress-text">{{x.RPT_NM}}</span><span class="progress-number"><b>{{x.TOTAL_TIME}}/{{x.TOTAL_REPORT_TIME}}</b></span>
+                                                    <div class="progress-group" *ngFor="let x of ReportDashboardData | slice : 0:5 ">
+                                                        <span class="progress-text">{{x.RPT_NM}}</span><span class="progress-number"><b>{{x.TOTAL_TIME}}/{{x.TOTAL_REPORT_TIME}}</b></span>
                                                         <div class="progress sm">
                                                             <div class="progress-bar progress-bar{{x.COLOR_CD}}" [ngStyle]="{'width':getWidthDB(x.TOTAL_TIME,x.TOTAL_REPORT_TIME)}">
                                                             </div>
@@ -115,7 +116,7 @@
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" [hidden]="!isRecordAvailable">
+                            <div class="rpt-row" [hidden]="!isRecordAvailable"> 
                                 <div class="col-md-8">
                                     <div class="box box-success">
                                         <div class="box-header with-border">
@@ -123,7 +124,7 @@
                                             <div class="box-tools pull-right"></div>
                                         </div>
                                         <div class="box-body no-padding">
-                                            <div class="row">
+                                            <div class="rpt-row">
                                                 <div class="col-md-6 col-sm-8">
                                                     <div class="pad">
                                                         <div id="chartPie" class="kendocontainer">
@@ -161,24 +162,29 @@
                                 <div class="col-md-4 vfkd-align-fix">
                                     <div class="info-box bg-{{x.COLOR}}" *ngFor="let x of ReportDealType | slice :0:5 ">
                                         <span class="info-box-icon"><i class="fa fa-circle-o text-white"></i></span>
-                                        <div class="info-box-content"><span class="info-box-text">{{x.DEAL_TYPE}}</span><span class="info-box-number">{{x.Deal_Count | number : fractionSize}}</span>
+                                        <div class="info-box-content-lower">
+                                            <span class="info-box-text">{{x.DEAL_TYPE}}</span><span class="info-box-number">{{x.Deal_Count | number : fractionSize}}</span>
                                             <div class="progress">
                                                 <div class="progress-bar" [ngStyle]="{'width':getWidthDT(x.Deal_Count)}"></div>
-                                            </div><span class="progress-description">Total Number of Deals
-                                                -{{totalDealCount | number : fractionSize}} </span>
+                                            </div><span class="progress-description">
+                                                Total Number of Deals
+                                                -{{totalDealCount | number : fractionSize}}
+                                            </span>
                                         </div>
                                     </div>
                                 </div>
                             </div>
-                            <div class="row" [hidden]="!isRecordAvailable">
+                            <div class="rpt-row" [hidden]="!isRecordAvailable"> 
                                 <div class="col-md-12">
                                     <div class="box box">
                                         <div class="box-header with-border">
-                                            <h3 class="box-title">Report(s) Log</h3><label class="switch" title='Excluded/Included by USER'><input type="checkbox"
-                                                    [(ngModel)]="reportLogView" title='Click to see Summarized view'
-                                                    checked><span class="slider" title='Click to see Summarized view'>
+                                            <h3 class="box-title">Report(s) Log</h3><label class="switch" title='Excluded/Included by USER'>
+                                                <input type="checkbox"
+                                                       [(ngModel)]="reportLogView" title='Click to see Summarized view'
+                                                       checked><span class="slider" title='Click to see Summarized view'>
                                                     <p class={{reportLogView}}></p>
-                                                </span></label>
+                                                </span>
+                                            </label>
                                             <div class="box-tools pull-right"></div>
                                         </div>
                                         <div class="box-body">
@@ -226,9 +232,11 @@
                                                             <td>{{x.TOTAL_REPORT_TIME_TAKEN}}</td>
                                                         </tr>
                                                     </tbody>
-                                                </table><a *ngIf="ReportLogDeatils.length > 10 && reportLogView == true" (click)="showAll(numberOfRecrods)" class="showMore" title={{btnText}}>{{btnText}} <i *ngIf="btnText=='Show more '"
-                                                        class="intelicon-down"></i><i *ngIf="btnText=='Show less '"
-                                                        class="intelicon-up"></i></a>
+                                                </table><a *ngIf="ReportLogDeatils.length > 10 && reportLogView == true" (click)="showAll(numberOfRecrods)" class="showMore" title={{btnText}}>
+                                                    {{btnText}} <i *ngIf="btnText=='Show more '"
+                                                                   class="intelicon-down"></i><i *ngIf="btnText=='Show less '"
+                                                                                                 class="intelicon-up"></i>
+                                                </a>
                                             </div>
                                         </div>
                                     </div>

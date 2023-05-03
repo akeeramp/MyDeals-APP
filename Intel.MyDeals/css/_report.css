@@ -328,11 +328,11 @@ text {
 /* Content */
 .content {
     min-height: 250px;
-    padding: 15px;
+    /*padding: 15px;*/
     margin-right: auto;
     margin-left: auto;
     padding-left: 15px;
-    padding-right: 15px;
+    /*padding-right: 15px;*/
 }
 
 
@@ -528,7 +528,7 @@ text {
 
 .content-header {
     position: relative;
-    padding: 15px 15px 0 15px;
+    /*padding: 15px 15px 0 15px;*/
 }
 
     .content-header > h1 {
@@ -586,12 +586,13 @@ text {
     left: 0;
     padding-top: 0px;
     min-height: 100%;
-    width: 350px;
-    z-index: 810;
+    width: 370px;
+    /*z-index: 810;*/
     -webkit-transition: -webkit-transform 0.3s ease-in-out, width 0.3s ease-in-out;
     -moz-transition: -moz-transform 0.3s ease-in-out, width 0.3s ease-in-out;
     -o-transition: -o-transform 0.3s ease-in-out, width 0.3s ease-in-out;
     transition: transform 0.3s ease-in-out, width 0.3s ease-in-out;
+    background-color: #ECF0F5;
 }
 
 @media (max-width: 767px) {
@@ -2380,6 +2381,21 @@ text {
     display: block;
     float: left;
     height: 90px;
+    width: 90px;
+    text-align: center;
+    font-size: 45px;
+    line-height: 90px;
+    background: rgba(0, 0, 0, 0.2);
+}
+
+.info-box-icon-lower {
+    border-top-left-radius: 2px;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-bottom-left-radius: 2px;
+    display: block;
+    float: left;
+    height: 94px;
     width: 90px;
     text-align: center;
     font-size: 45px;
