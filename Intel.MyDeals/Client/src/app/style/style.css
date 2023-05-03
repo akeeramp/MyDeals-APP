@@ -997,10 +997,6 @@ kendo-treeview.k-widget.k-treeview.fiend-tree ul li kendo-checkbox .k-checkbox {
     margin-left: 347px !important;
 }
 
-.mainBodyStyle:has(reporting-dashboard) {
-    overflow-y: auto !important
-}
-
 .cc-pop-up-footers {
     margin-left: -24px;
     margin-right: -24px;

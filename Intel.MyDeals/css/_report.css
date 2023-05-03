@@ -2412,10 +2412,21 @@ text {
     margin-left: 90px;
 }
 
+.info-box-small-text {
+    display: block;
+    font-size: 10px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
 .info-box-number {
     display: block;
     font-weight: bold;
     font-size: 18px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .info-box-number-side {

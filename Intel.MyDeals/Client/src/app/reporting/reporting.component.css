@@ -94,7 +94,7 @@ div.overFlowDash {
 }
 
 .mainBodyStyle:has(reporting-dashboard) {
-    overflow-y: auto !important
+    overflow-y: hidden !important
 }
 
 .col-md-fixhyt {

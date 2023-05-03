@@ -481,10 +481,6 @@ kendo-dialog-actions.delete-actions button.k-button.del-cancel:active {
     color: #0071c5 !important
 }
 
-.mainBodyStyle:has(reporting-dashboard) {
-    overflow-y: auto !important
-}
-
 .ns-Header {
     padding: 15px;
     border-bottom: 1px solid #e5e5e5
