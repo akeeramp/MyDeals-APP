@@ -587,7 +587,8 @@ export class PTEUtil {
                     data[r].PTR_SYS_PRD = !!transformResults.ValidProducts[key] ? JSON.stringify(transformResults.ValidProducts[key]) : "";
                     PTE_CellChange_Util.updatePrdColumns(r, 'PTR_SYS_PRD', data[r].PTR_SYS_PRD);
                     if ((!!transformResults.InValidProducts[key] && (transformResults.InValidProducts[key]["I"].length > 0
-                        || transformResults.InValidProducts[key]["E"].length > 0)) || !!transformResults.DuplicateProducts[key]) {
+                        || transformResults.InValidProducts[key]["E"].length > 0)) || (transformResults.DuplicateProducts !== undefined
+                        && !!transformResults.DuplicateProducts[key])) {
                         isAllValidated = false;
                         break;
                     }
