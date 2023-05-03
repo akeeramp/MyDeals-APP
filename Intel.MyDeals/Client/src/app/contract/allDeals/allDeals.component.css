@@ -385,3 +385,8 @@ kendo-tabstrip.diff-all-deals {
 #allDeals td .breakoutColumn .rowValueHeight {
     height: 25px !important;
 }
+.all_deal_grid_cell .dealCell .vert-center .dateWrapper.intelicon-information {
+    right: 15px !important;
+    position: relative !important;
+    top: 18px !important;
+}
