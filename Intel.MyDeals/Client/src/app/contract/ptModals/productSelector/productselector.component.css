@@ -572,9 +572,9 @@ input[type=checkbox].with-sm-font:focus+label:before {
     padding-left: 15px !important
 }
 
-.paddingRight15 {
+/*.paddingRight15 {
     padding-right: 15px !important
-}
+}*/
 
 .arcAnimate.ani-mate {
     width: auto
@@ -853,3 +853,6 @@ kendo-grid.raid-style {
 .popover-content.product_selector_m {
     max-width: 614px !important;
 }
+.paddingLeft15 {
+    margin-left: 15px;
+} 

@@ -69,7 +69,7 @@
                     <!-- Popover Template -->
                     <ng-template #popoverContent>
                         <div class="container">
-                            <div class="row">
+                            <div class="row" style="flex-direction:row-reverse">
                                 <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                             </div>
                             <div *ngIf="popOver" class="row">
