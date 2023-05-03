@@ -195,7 +195,7 @@ text {
     height: 100%;
     position: relative;
     overflow-x: hidden;
-    overflow-y: auto;
+    overflow-y: hidden;
 }
 
     .wrapper:before,
@@ -2418,6 +2418,12 @@ text {
     font-size: 18px;
 }
 
+.info-box-number-side {
+    font-weight: bold;
+    font-size: 18px;
+    padding-left: 10px;
+}
+
 .progress-description,
 .info-box-text {
     display: block;
@@ -2425,6 +2431,15 @@ text {
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
+}
+
+.info-box-text-side {
+    display: block;
+    font-size: 14px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    padding-left: 10px;
 }
 
 .info-box-text {
@@ -2437,6 +2452,11 @@ text {
 
 .progress-description {
     margin: 0;
+}
+
+.progress-description-side {
+    margin: 0;
+    padding-left: 10px;
 }
 /*
  * Component: Timeline

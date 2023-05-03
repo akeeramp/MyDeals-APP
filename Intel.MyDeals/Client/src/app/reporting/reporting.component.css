@@ -82,7 +82,7 @@ div.overFlowDash {
     display: flex;
     flex-wrap: wrap;
     margin-left: -15px;
-    margin-right: 5px;
+    margin-right: 0px;
     overflow-y: auto;
 }
 
