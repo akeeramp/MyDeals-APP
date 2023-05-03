@@ -36,6 +36,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     encapsulation: ViewEncapsulation.None
 })
 export class dealEditorComponent {
+    
 
     constructor(private pteService: pricingTableEditorService,
                 private contractDetailsSvc: contractDetailsService,
@@ -81,6 +82,7 @@ export class dealEditorComponent {
     public DeAddtab = "";
     public columnSearchFilter;
     public defaultColumnOrderArr;
+    public savingDeal: boolean = false;
     public curGroup;
     public groupsdefault;
     public opName = "DealEditor";
@@ -262,7 +264,7 @@ export class dealEditorComponent {
         let response: any = await this.pteService.readPricingTable(this.in_Pt_Id).toPromise().catch((err) => {
             this.loggerService.error('dealEditorComponent::readPricingTable::readTemplates:: service', err);
         });
-        if (response && (response.PRC_TBL_ROW && response.PRC_TBL_ROW.length == 0 || response.PRC_TBL_ROW.filter(x => x.warningMessages.length > 0).length > 0)) {
+        if (!this.isTenderContract && !this.savingDeal && response && (response.PRC_TBL_ROW && response.PRC_TBL_ROW.length == 0 || response.PRC_TBL_ROW.filter(x => x.warningMessages.length > 0).length > 0)) {
             this.loadPTEditor.emit(true);
         }
         if (response && response.WIP_DEAL && response.WIP_DEAL.length > 0) {
@@ -290,6 +292,7 @@ export class dealEditorComponent {
                     })
                 }
             }
+            this.savingDeal = false;
             this.gridResult = response.WIP_DEAL;
             this.setWarningDetails();
             this.applyHideIfAllRules();
@@ -1030,6 +1033,7 @@ export class dealEditorComponent {
         this.isWarning = false;
         this.isDatesOverlap = false;
         this.isDataLoading = true;
+        this.savingDeal = true;
         this.setBusy("Saving your data...", "Please wait as we save your information!", "Info", true);
         let isShowStopError = PTE_Validation_Util.validateDeal(this.gridResult, this.contractData, this.curPricingTable, this.curPricingStrategy, this.isTenderContract, this.lookBackPeriod, this.templates, this.groups);
         if (this.isDeveloper || this.isTester) {
