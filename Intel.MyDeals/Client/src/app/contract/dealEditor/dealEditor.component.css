@@ -1,7 +1,7 @@
-﻿kendo-grid {
+﻿/*kendo-grid {
     width: 320px;
     height: calc(100vh - 350px);
-}
+}*/
 
 #ExcludeAuto {
     display: flex;
