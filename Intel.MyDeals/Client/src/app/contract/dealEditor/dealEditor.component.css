@@ -745,7 +745,7 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:nth-last-child(2) {
     height: 240.838px;
     position: absolute;
     z-index: 10002;
-    top: 42.987px;
+    top: 40px;
     left: 0;
     cursor: pointer
 }
@@ -892,7 +892,7 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:nth-last-child(2) {
     overflow-y: hidden !important;
     margin-top: 5px !important;
     margin-left: 1px !important;
-    height: 236.376px !important;
+    height: auto !important;
     z-index: 10002;
     top: 36px;
     left: 0;
@@ -1543,4 +1543,12 @@ kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li span.k-icon.k-i-reload 
 .enableWrapping td {
     white-space: nowrap;
     height: auto;
+}
+
+.dealsInputOpt:focus-visible, .dealsInputOpt:focus {
+    outline: none;
+}
+
+kendo-grid#dealEditor .k-grid-header-wrap {
+    background: #fff;
 }

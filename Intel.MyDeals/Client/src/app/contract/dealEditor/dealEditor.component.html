@@ -123,10 +123,10 @@
                             <div>
                                 <span class="k-textbox searchbox">
                                     <i class="intelicon-search" style="font-size:18px; color:#00AEEF; margin-top:3px;"></i>
-                                    <input type="search" style="font: icon; font-family: 'Intel Clear'; border: none; height: 30px; width: 95%; border-color: lightgrey; " [(ngModel)]="columnSearchFilter" />
+                                    <input type="search" class="dealsInputOpt" style="font: icon; font-family: 'Intel Clear'; border: none; height: 30px; width: 95%; border-color: lightgrey; " [(ngModel)]="columnSearchFilter" />
                                 </span>
                             </div>
-                            <div style="max-height: 230px; overflow: auto; margin-top: 4px; margin-right: 10px; height: 190px;">
+                            <div style="max-height: 230px; overflow: auto; margin-top: 4px; margin-right: 10px; height: auto; ">
                                 <div class="backclass" *ngFor="let item of wipTemplate.columns | filter:columnSearchFilter | orderBy: 'title'">
                                     &nbsp;&nbsp;<input type='checkbox' [checked]="iscolumnchecked(item.field)" id="colChk{{item.field}}" (click)="onColumnChange(item)" />&nbsp;
                                     <label for="colChk{{item.field}}">
