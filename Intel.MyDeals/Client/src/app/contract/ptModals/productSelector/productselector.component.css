@@ -855,4 +855,20 @@ kendo-grid.raid-style {
 }
 .paddingLeft15 {
     margin-left: 15px;
-} 
+}
+
+button.btn-primary.btnPrimes.ng-star-inserted {
+    background-color: #ebebeb !important;
+    border-color: #ebebeb !important;
+    color: #444 !important;
+    padding: 15px 0 !important;
+    border: none;
+}
+
+kendo-dialog.alterAlertMsg .k-window {
+    border: none;
+}
+
+    kendo-dialog.alterAlertMsg .k-window kendo-dialog-actions {
+        padding: 0;
+    }

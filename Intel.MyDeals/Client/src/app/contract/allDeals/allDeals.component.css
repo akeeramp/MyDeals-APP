@@ -398,7 +398,13 @@ kendo-tabstrip.diff-all-deals {
 
 .allDealsOvrLap mat-dialog-container {
     padding: 0;
-}.all_deal_grid_cell .dealCell .vert-center .dateWrapper.intelicon-information {
+}
+
+    .allDealsOvrLap mat-dialog-container .k-window {
+        min-height: auto !important;
+    }
+
+.all_deal_grid_cell .dealCell .vert-center .dateWrapper.intelicon-information {
     right: 15px !important;
     position: relative !important;
     top: 18px !important;

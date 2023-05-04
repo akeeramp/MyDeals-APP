@@ -92,7 +92,8 @@
     background-color: #e7e7e8;
     height: calc(87vh - 260px) !important;
     padding: 4px;
-    overflow: auto;
+    overflow-y: auto;
+    overflow-x: hidden;
     font-family: 'Intel Clear', 'Arial';
 }
 

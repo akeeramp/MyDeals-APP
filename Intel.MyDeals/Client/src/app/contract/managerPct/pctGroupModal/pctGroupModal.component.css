@@ -12,3 +12,11 @@
 kendo-grid.container-pct table tr th .k-link {
     display: flex !important;
 }
+
+.container-pct .k-grid-content {
+    overflow: overlay;
+}
+
+.container-pct table tr td {
+    word-break: break-word;
+}

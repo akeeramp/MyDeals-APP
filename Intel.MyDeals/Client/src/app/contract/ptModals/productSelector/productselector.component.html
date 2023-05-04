@@ -614,11 +614,11 @@
             </div>
         </div>
     </div>
-    <kendo-dialog title="Please Fix" *ngIf="isAlert" (close)="closeDialog()">
-        <p  [innerHTML]="alertMsg" style="text-align: left;">
+    <kendo-dialog *ngIf="isAlert" (close)="closeDialog()" class="alterAlertMsg">
+        <p  [innerHTML]="alertMsg" style="text-align: center; margin-bottom: 0;">
         </p>
-        <kendo-dialog-actions>
-            <button (click)="closeDialog()" class="btn-primary">OK</button>
+        <kendo-dialog-actions style="padding: 0;">
+            <button (click)="closeDialog()" class="btn-primary btnPrimes">OK</button>
         </kendo-dialog-actions>
     </kendo-dialog>
 </div>

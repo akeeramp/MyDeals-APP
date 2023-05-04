@@ -481,6 +481,10 @@ tr.grey, tr.k-alt.grey {
         padding: 0;
     }
 
+        .manageExclGroupOvrLap mat-dialog-container .k-window {
+            min-height: auto !important;
+        }
+
     #GroupExclusionTab > .k-tabstrip-items-wrapper > .k-tabstrip-items > li > .k-link, #GroupExclusionTab .k-tabstrip-items-wrapper ul {
         position: relative;
         background: #f9f9f9 !important
