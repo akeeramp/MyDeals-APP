@@ -127,7 +127,7 @@
                                         <div id='detailGrid_{{pt.DC_ID}}'
                                              class='opUiContainer md dashboard sumGridOptionsExpand oppo-grids new-now-wrap physics-css either-pin'>
                                             <span *ngIf="gridDataSet[pt.DC_ID]==undefined" class="k-i-loading loading-design-custom">
-                                                <span style="margin-left: 6em; font-size:10px;">Loading.....</span>
+                                                <span style="margin-left: 6em; font-size:10px; line-height: 1.0 !important; ">Loading.....</span>
                                             </span>
                                             <kendo-grid *ngIf="gridDataSet[pt.DC_ID]!=undefined" [data]="gridDataSet[pt.DC_ID]" [resizable]="true" class="manage-tables" id="managerPCTGrid"
                                                         [sortable]="true" [sort]="state[pt.DC_ID].sort" [skip]="state[pt.DC_ID].skip"
