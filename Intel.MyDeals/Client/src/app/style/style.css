@@ -143,11 +143,11 @@ kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level:hov
     display: inline-flex !important
 }
 
-.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal Start Date"],
+/*.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal Start Date"],
 .oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal End Date"] {
     border-bottom: 3px solid rgb(0, 113, 197) !important;
     border-bottom-color: rgb(0, 113, 197) !important
-}
+}*/
 
 kendo-grid.file-attachment-contract kendo-grid-list .k-grid-content {
     overflow: overlay;
@@ -254,7 +254,22 @@ kendo-multiselect.kendoInput.divisionblock.cd-input-bottom.cd-division-level:hov
 }
 
 .oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal Start Date"],
-.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal End Date"] {
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Deal End Date"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="ECAP Price"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Ceiling Volume"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Additional Ts And Cs"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="My Deals Product"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Billings START Date (for Consumption)"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Billings END Date (for Consumption)"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Excluded Products"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Overarching Max Volume"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Overarching Max Dollar"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Notes"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Geo Approved By"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Div Approved By"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="OEM Platform Launch Date"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="OEM Platform EOL Date"],
+.oppo-grids kendo-grid.k-grid .k-grid-header-wrap table thead tr th[aria-label="Total Dollar Amount"] {
     border-bottom: 3px solid rgb(0, 113, 197) !important;
     border-bottom-color: rgb(0, 113, 197) !important
 }
