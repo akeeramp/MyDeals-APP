@@ -171,13 +171,13 @@ export class dealEditorComponent {
                     item.filters.forEach((fltrItem: FilterDescriptor) => {
                         let column = fltrItem.field.toString();
                         if (this.dropdownFilterColumns.includes(column)) {
-                            each(this.gridData.data, (eachData) => {
+                            each(this.gridResult, (eachData) => {
                                 let keys = Object.keys(eachData[column]);
                                 let isexists = false;
-                                for (var key in keys) {
-                                    if (eachData[column][keys[key]] == fltrItem.value.toString())
+                                each(keys, key => {
+                                    if (eachData[column][key] == fltrItem.value.toString())
                                         isexists = true;
-                                }
+                                })
                                 if (isexists)
                                     arrayData.push(eachData);
                             })
@@ -360,7 +360,7 @@ export class dealEditorComponent {
         this.isLoading = true;
         setTimeout(() => {
             this.state = state;
-            this.gridData = process(this.gridResult, this.state);
+            this.gridData = this.gridData.data.length > 0 ? this.gridData : process(this.gridResult, this.state);
             this.isLoading = false;
         }, 0);
     }
