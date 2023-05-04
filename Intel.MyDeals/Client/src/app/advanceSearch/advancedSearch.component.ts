@@ -360,45 +360,46 @@ export class AdvancedSearchComponent implements OnInit {
         });
         this.isLoading = false;
         this.setBusy('', '');
-        result.Items.forEach((row) => {
-            let crtAmt,dbtAmt = 0
-            crtAmt = (Number(row.CREDIT_AMT) > 0) ? Number(row.CREDIT_AMT) : 0;
-            dbtAmt = (Number(row.DEBIT_AMT) > 0) ? Number(row.DEBIT_AMT) : 0;
-            Object.assign(row, {
-                Customer_NM: row.Customer.CUST_NM,
-                WF_STG_CD: row.WF_STG_CD === "Draft" ? row.PS_WF_STG_CD : row.WF_STG_CD,
-                TRKR_NBR_VAL: row.TRKR_NBR != undefined ? Object.values(row.TRKR_NBR)[0] : '',
-                CAP_VAL: row.CAP != undefined ? Object.values(row.CAP)[0] : '',
-                ECAP_PRICE_VAL: row.ECAP_PRICE != undefined ? Object.values(row.ECAP_PRICE)[0] : '',
-                STRT_VOL_VAL: row.STRT_VOL != undefined ? Object.values(row.STRT_VOL)[0] : '',
-                END_VOL_VAL: row.END_VOL != undefined ? Object.values(row.END_VOL)[0] : '',
-                RATE_VAL: row.RATE != undefined ? Object.values(row.RATE)[0] : '',
-                TOT_QTY_PAID: ((crtAmt + dbtAmt) > 0) ? (crtAmt + dbtAmt) : ''
+        if (result != undefined) {
+            result.Items.forEach((row) => {
+                let crtAmt, dbtAmt = 0
+                crtAmt = (Number(row.CREDIT_AMT) > 0) ? Number(row.CREDIT_AMT) : 0;
+                dbtAmt = (Number(row.DEBIT_AMT) > 0) ? Number(row.DEBIT_AMT) : 0;
+                Object.assign(row, {
+                    Customer_NM: row.Customer.CUST_NM,
+                    WF_STG_CD: row.WF_STG_CD === "Draft" ? row.PS_WF_STG_CD : row.WF_STG_CD,
+                    TRKR_NBR_VAL: row.TRKR_NBR != undefined ? Object.values(row.TRKR_NBR)[0] : '',
+                    CAP_VAL: row.CAP != undefined ? Object.values(row.CAP)[0] : '',
+                    ECAP_PRICE_VAL: row.ECAP_PRICE != undefined ? Object.values(row.ECAP_PRICE)[0] : '',
+                    STRT_VOL_VAL: row.STRT_VOL != undefined ? Object.values(row.STRT_VOL)[0] : '',
+                    END_VOL_VAL: row.END_VOL != undefined ? Object.values(row.END_VOL)[0] : '',
+                    RATE_VAL: row.RATE != undefined ? Object.values(row.RATE)[0] : '',
+                    TOT_QTY_PAID: ((crtAmt + dbtAmt) > 0) ? (crtAmt + dbtAmt) : ''
+                })
             })
-        })
-        this.totalCount = result.Count;
-        if (exportVal) {
-            exportVal = false;
-            this.exportData = result.Items;
-        } else {
-            this.gridResult = result.Items
-            let data: any;
-            let newState = {
-                skip: this.state.skip,
-                take: this.state.take
-            }
-            this.gridData = process(this.gridResult, newState);
-            if (this.state.skip > 0) {
-                let state = {
-                    take: this.state.take,
-                    skip: 0
+            this.totalCount = result.Count;
+            if (exportVal) {
+                exportVal = false;
+                this.exportData = result.Items;
+            } else {
+                this.gridResult = result.Items
+                let data: any;
+                let newState = {
+                    skip: this.state.skip,
+                    take: this.state.take
                 }
-                data = process(this.gridResult, state);
-                this.gridData.data = data.data;
+                this.gridData = process(this.gridResult, newState);
+                if (this.state.skip > 0) {
+                    let state = {
+                        take: this.state.take,
+                        skip: 0
+                    }
+                    data = process(this.gridResult, state);
+                    this.gridData.data = data.data;
+                }
+                this.gridData.total = result.Count;
             }
-            this.gridData.total = result.Count;
         }
-
     }
     //onclick of run rules button
     onSaveRule(data) {
