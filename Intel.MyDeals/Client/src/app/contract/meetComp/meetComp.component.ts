@@ -1120,7 +1120,7 @@ export class meetCompContractComponent implements OnInit {
     }
 
     showHelpTopic() {
-        window.open('https://wiki.ith.intel.com/display/Handbook/Auto+Population', '_blank');
+        window.open('https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Meet-Comp.aspx', '_blank');
     }
 
     getDealDeatils(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE) {

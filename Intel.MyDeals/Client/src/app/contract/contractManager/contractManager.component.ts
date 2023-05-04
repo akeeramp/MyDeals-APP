@@ -690,12 +690,7 @@ export class contractManagerComponent {
         return false;
     }
     showingHelpTopicContract() {
-        const helpTopic = "Features";
-        if (helpTopic && String(helpTopic).length > 0) {
-            window.open('https://wiki.ith.intel.com/display/Handbook/' + helpTopic + '?src=contextnavpagetreemode', '_blank');
-        } else {
-            window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
-        }
+        window.open('https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Contract-Manager-Tab.aspx', '_blank');
     }
 
     public close(status: string): void {

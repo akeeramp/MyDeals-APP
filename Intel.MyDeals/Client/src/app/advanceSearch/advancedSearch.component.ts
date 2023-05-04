@@ -243,11 +243,7 @@ export class AdvancedSearchComponent implements OnInit {
     }
     //Help
     showHelpTopicGroup(helpTopic) {
-        if (helpTopic && String(helpTopic).length > 0) {
-            window.open('https://wiki.ith.intel.com/display/Handbook/' + helpTopic + '?src=contextnavpagetreemode', '_blank');
-        } else {
-            window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
-        }
+        window.open('https://intel.sharepoint.com/sites/mydealstrainingportal', '_blank');
     }
 
     //clear grid Sorting/Filtering

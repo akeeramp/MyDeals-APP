@@ -367,12 +367,7 @@ export class managerPctComponent {
     }
 
     showHelpTopicCostTest() {
-        const helpTopic = "Cost+Test";
-        if (helpTopic && String(helpTopic).length > 0) {
-            window.open('https://wiki.ith.intel.com/display/Handbook/' + helpTopic + '?src=contextnavpagetreemode', '_blank');
-        } else {
-            window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
-        }
+        window.open('https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Price-Cost-Test.aspx', '_blank');
     }
 
     onTabSelect(event: any) {

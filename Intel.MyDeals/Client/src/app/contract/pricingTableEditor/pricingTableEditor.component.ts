@@ -871,7 +871,7 @@ export class pricingTableEditorComponent {
         this.validatePricingTableProducts(delDCIDs);
     }
     showHelpTopic() {
-        window.open('https://wiki.ith.intel.com/display/Handbook/Pricing+Table+Editor+Features', '_blank');
+        window.open('https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Pricing-Table-Editor.aspx', '_blank');
     }
     closeKitDialog() {
         //close kitdialog closes the kendo dialog and clear the kit name cell

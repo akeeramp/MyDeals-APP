@@ -765,28 +765,13 @@ export class lnavComponent {
     }
     //Help navigation
     showHelpTopicMeetComp() {
-        const helpTopic = "Auto+Population";
-        if (helpTopic && String(helpTopic).length > 0) {
-            window.open('https://wiki.ith.intel.com/display/Handbook/' + helpTopic + '?src=contextnavpagetreemode', '_blank');
-        } else {
-            window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
-        }
+        window.open('https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Meet-Comp.aspx', '_blank'); 
     }
     showHelpTopicCostTest() {
-        const helpTopic = "Cost+Test";
-        if (helpTopic && String(helpTopic).length > 0) {
-            window.open('https://wiki.ith.intel.com/display/Handbook/' + helpTopic + '?src=contextnavpagetreemode', '_blank');
-        } else {
-            window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
-        }
+        window.open('https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Price-Cost-Test.aspx', '_blank');
     }
     showHelpTopicContract() {
-        const helpTopic = "Contract+Navigator";
-        if (helpTopic && String(helpTopic).length > 0) {
-            window.open('https://wiki.ith.intel.com/display/Handbook/' + helpTopic + '?src=contextnavpagetreemode', '_blank');
-        } else {
-            window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
-        }
+        window.open('https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Deal-Manager.aspx', '_blank'); 
     }
     onTabSelect(event: any) {
         this.selectedTab = event.index;

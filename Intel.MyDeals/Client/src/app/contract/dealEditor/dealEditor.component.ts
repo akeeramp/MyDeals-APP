@@ -1364,7 +1364,7 @@ export class dealEditorComponent {
         }
     }
     showHelpTopic() {
-        window.open('https://wiki.ith.intel.com/display/Handbook/Deal+Editor+Features', '_blank');
+        window.open('https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Deal-Editor.aspx', '_blank');
     }
     displaydealType() {
         return this.curPricingTable.OBJ_SET_TYPE_CD.replace(/_/g, ' ');

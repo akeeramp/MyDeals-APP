@@ -436,11 +436,7 @@ export class allDealsComponent {
         });
     }
     showHelpTopicGroup(helpTopic) {
-        if (helpTopic && String(helpTopic).length > 0) {
-            window.open('https://wiki.ith.intel.com/display/Handbook/' + helpTopic + '?src=contextnavpagetreemode', '_blank');
-        } else {
-            window.open('https://wiki.ith.intel.com/spaces/viewspace.action?key=Handbook', '_blank');
-        }
+        window.open('https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Contract-Manager-Tab.aspx', '_blank');
     }
     exportToExcel() {
         GridUtil.dsToExcel(this.wipTemplate.columns, this.gridResult, "Deal Editor Export");
