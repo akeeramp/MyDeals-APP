@@ -703,7 +703,10 @@ export class dealEditorComponent {
                 if (this.templates[column.field] != undefined && this.templates[column.field].Groups != undefined) {
                     each(this.templates[column.field].Groups, row => {
                         each(this.renamedefault, item => {
-                            if (this.templates[column.field].Groups.includes(item.key) && row == item.key) row = item.value;
+                            if (this.templates[column.field].Groups.includes(item.key) && row == item.key) {
+                                let ind = this.templates[column.field].Groups.findIndex(item => item == row);
+                                this.templates[column.field].Groups[ind] = item.value;
+                            }
                         })
                     })
                 }
