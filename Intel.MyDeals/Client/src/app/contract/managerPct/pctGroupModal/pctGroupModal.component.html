@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body modalBlueBody oppo-grids physics-css new-now-wrap" id="modal-body">
     <kendo-grid [data]="gridData" [pageSize]="state.take" [skip]="state.skip" class="opUiContainer md dashboard orPanel container-pct"
-                [sort]="state.sort" [filter]="state.filter" [sortable]="true" [groupable]="false"
+                [sort]="state.sort" [filter]="state.filter" [sortable]="true" [groupable]="false" [resizable]="true"
                 [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)">
         <ng-template kendoGridToolbarTemplate>
             <button type="button" kendoGridExcelCommand icon="file-excel">

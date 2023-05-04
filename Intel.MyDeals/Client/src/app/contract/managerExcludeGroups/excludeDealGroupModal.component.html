@@ -29,7 +29,7 @@
                 </div>
                 <div class="row oppo-grids new-now-wrap" style="margin: 0px;width:100%">
                     <kendo-grid class="exclude-filter-style view_popup_height icon-changes" [data]="gridData" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
-                                [groupable]="false" [group]="state.group" filterable="menu" [navigable]="true"
+                                [groupable]="false" [group]="state.group" filterable="menu" [navigable]="true"  [resizable]="true"
                                 (dataStateChange)="dataStateChange($event)" style="height: calc(100vh - 400px); width:100%; line-height:10px;" [isDetailExpanded]="expandInStockProducts">
                         <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="35">
                             <ng-template kendoGridHeaderTemplate>
@@ -90,8 +90,8 @@
                                            [headerClass]="{'headerClass':true}" [width]="140" [hidden]="!pctGroupDealsView"></kendo-grid-column>
                         <ng-template *ngIf="isData" kendoGridDetailTemplate let-dataItem>
                             <div id="childGrid" class="opUiContainer md dashboard group-exclude-child">
-                                <kendo-grid *ngFor="let childColumn of childGrid" [data]="childColumn" (dataStateChange)="dataStateChange($event)" [kendoGridExpandDetailsBy]="expandDetailsBy"
-                                            [(expandedDetailKeys)]="expandedDetailKeys" class="height-auto-child child-head icon-changes" [hideHeader]="true">
+                              <kendo-grid *ngFor="let childColumn of childGrid" [data]="childColumn" (dataStateChange)="dataStateChange($event)" [kendoGridExpandDetailsBy]="expandDetailsBy"
+                                            [(expandedDetailKeys)]="expandedDetailKeys" class="height-auto-child child-head icon-changes" [hideHeader]="true"[resizable]="true">
                                     <kendo-grid-column field="data" title=""
                                                        [headerClass]="{'headerClass':false}" [width]="1500"></kendo-grid-column>
                                     <ng-template kendoGridDetailTemplate let-dataItem>
@@ -105,7 +105,7 @@
                                                 </ng-template>
                                             </kendo-grid-column>
                                             <kendo-grid-column title="Deal Id" field="OVLP_DEAL_ID"
-                                                               [headerClass]="{'headerClass':true}" [width]="55"></kendo-grid-column>
+                                                               [headerClass]="{'headerClass':true}" [width]="80"></kendo-grid-column>
                                             <kendo-grid-column title="Deal Type" field="OVLP_DEAL_TYPE"
                                                                [headerClass]="{'headerClass':true}" [width]="90"></kendo-grid-column>
                                             <kendo-grid-column title="Rebate Type" field="OVLP_REBT_TYPE"

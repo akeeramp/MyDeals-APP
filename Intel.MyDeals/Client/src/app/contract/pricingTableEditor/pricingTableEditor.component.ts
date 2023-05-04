@@ -1584,6 +1584,8 @@ export class pricingTableEditorComponent {
                 selRows.push({ DC_ID: res.DC_ID, name: uniq(values(val)[1]).toString(), row: res, indx: idx });
         });
         let data = { ProductCorrectorData: products, contractData: this.contractData, curPricingTable: this.curPricingTable, selRows: selRows };
+        this.isLoading=true;    
+        this.setBusy("Updating Products", "Please wait while processing.", "info", true);
         const dialogRef = this.dialog.open(ProductCorrectorComponent, {
             height: '90vh',
             maxWidth: "90vw",
@@ -1674,10 +1676,10 @@ export class pricingTableEditorComponent {
                                         this.generateHandsonTable(denBandData.finalPTR);
                                     }
                                     //handonsontable takes time to bind the data to the so putting this logic.
-                                    setTimeout(() => {
-                                        this.isLoading = false;
-                                        this.setBusy("", "", "", false);
-                                    }, 2000);
+                                    // setTimeout(() => {
+                                    //     this.isLoading = false;
+                                    //     this.setBusy("", "", "", false);
+                                    // }, 2000);
 
                                 }
                                 else if (deletedProds && deletedProds.length > 0) {
@@ -1737,6 +1739,9 @@ export class pricingTableEditorComponent {
                     }, 100);
                     this.setBusy("", "", "", false);
                 }
+            }else{
+                this.isLoading=false;    
+                this.setBusy("", "", "", false);
             }
         });
     }
