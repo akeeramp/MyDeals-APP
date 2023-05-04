@@ -175,7 +175,13 @@ export class AdvancedSearchComponent implements OnInit {
                         let column = fltrItem.field.toString();
                         if ((column == 'START_DT' || column == 'END_DT' || column == 'OEM_PLTFRM_LNCH_DT' || column == 'OEM_PLTFRM_EOL_DT')) {
                             fltrItem.value = new Date(fltrItem.value);
-                        }
+                        } else if ((column == 'CAP' || column == 'ECAP_PRICE' || column == 'STRT_VOL' || column == 'END_VOL' || column == 'RATE' || column == 'TRKR_NBR')) {
+                            //let fiel: any = fltrItem.field
+                            fltrItem.field = fltrItem.field + '_VAL';
+                        } else
+                            if (column == 'Customer/CUST_NM') {
+                                fltrItem.field = 'Customer_NM';
+                            }
                     })
                 }
             })
