@@ -110,7 +110,7 @@ export class meetCompComponent {
     }
     OpenBulkUploadMeetCompModal() {
         this.dialog.open(BulkUploadMeetCompModalComponent, {
-            width: '770px',
+            width: '797px',
             disableClose: false,
             panelClass: 'meetcomp-custom',
     

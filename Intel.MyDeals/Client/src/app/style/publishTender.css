@@ -64,5 +64,5 @@
 }
 
 .filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th .k-cell-inner kendo-grid-filter-menu a .k-i-filter {
-    background-color: #fafafa !important;
+    background-color: transparent !important;
 }

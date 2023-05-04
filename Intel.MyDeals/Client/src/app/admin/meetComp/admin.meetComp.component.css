@@ -420,12 +420,11 @@ kendo-splitter.admin-meetcomp-splitter.k-widget.k-splitter.k-splitter-flex.k-spl
     border-color: #dee2e6 !important;
     color: #212529 !important;
     background-color: #ffffff !important;
-    width: 736px !important;
-    margin: 10px !important;
+    width: 100% !important;
+    margin: 10px 0 !important;
     overflow: scroll !important;
     border-left: 0px !important;
-    left: 10px !important;
-    position: relative !important
+    position: relative !important;
 }
 
 .meet-comp-filterheight ul {

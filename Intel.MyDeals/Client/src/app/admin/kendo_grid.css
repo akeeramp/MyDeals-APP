@@ -970,3 +970,37 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner .k-link .k-c
 .product-breakout-modal .mat-dialog-container {
     padding: 0 !important;
 }
+
+.ok_cncl_btn_fix {
+    padding: 0px !important;
+}
+
+.k-dialog .k-button.ok_btn_fix {
+    color: #fff !important;
+    border-color: #00aeef !important;
+    padding: 1.5em 0 !important;
+    background-color: #00aeef !important;
+    font-size: 14px;
+}
+
+.k-dialog .k-button.cancel_btn_fix {
+    color: #444 !important;
+    border-color: #fafafa !important;
+    padding: 1.5em 0 !important;
+    margin-left: -1.14em !important;
+    font-size: 14px;
+}
+
+.deactivatePopUp .k-window.k-dialog {
+    border: none;
+}
+
+.k-dialog .k-button.ok_btn_fix:hover {
+    color: #fff !important;
+    border-color: #0071c5 !important;
+    background-color: #0071c5 !important;
+}
+
+.deactivatePopUp .k-window.k-dialog {
+    border: none;
+}

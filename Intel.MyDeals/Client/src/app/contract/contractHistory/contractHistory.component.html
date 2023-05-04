@@ -7,14 +7,14 @@
 
 <div *ngIf="!isLoading" class="row">
     <div class="col-md-12 contract_h_align" >
-        <h3 class="header_text_fix" >Contract History</h3>
+        <h3 class="header_text_fix" style="padding: 5px;">Contract History</h3>
         <hr class="header_b_line" >
     </div>
     <div class="col-md-12 kendo-grid-buttons oppo-grids CTgrid_lR">
         <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                     [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false"
-                    [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" class="contract-history-style CH_height">
+                    [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" class="contract-history-style CH_height" style="padding: 5px; border: none;">
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="OBJ_DESC" title="Object Type" width="140px">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">

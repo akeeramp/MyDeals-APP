@@ -133,10 +133,11 @@
                 </ng-template>
             </kendo-grid-column>
         </kendo-grid>
-        <kendo-dialog *ngIf="isDialogVisible" (close)="saveCancel()">
-            <p class="kendo-dialog-message" style="white-space:pre-wrap;text-align:left">{{errorMessage}}</p>
-            <kendo-dialog-actions>
-                <button class='k-button' style = "background-color: #ebebeb !important;color: black;" (click)="saveConfirmation()">OK</button><button class='k-button' *ngIf="cancelConfirm" (click)="saveCancel()">
+        <kendo-dialog *ngIf="isDialogVisible" (close)="saveCancel()" class="deactivatePopUp">
+            <p class="kendo-dialog-message" style="white-space: pre-wrap; text-align: left; margin: 15px;">{{errorMessage}}</p>
+            <kendo-dialog-actions class="ok_cncl_btn_fix">
+                <button class='k-button ok_btn_fix' (click)="saveConfirmation()">OK</button>
+                <button class='k-button cancel_btn_fix' *ngIf="cancelConfirm" (click)="saveCancel()">
                     CANCEL
                 </button>
             </kendo-dialog-actions>

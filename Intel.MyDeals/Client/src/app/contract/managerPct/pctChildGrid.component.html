@@ -104,7 +104,7 @@
     <kendo-grid-column title="Cost Test Analysis Override" field="COST_TEST_OVRRD_FLG"
                        [headerClass]="{'headerClass':true}" [width]="150" [hidden]="hasNoPermissionOvr" *ngIf="!isHidden('COST_TEST_OVRRD_FLG')">
         <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-            <div style="text-align: center;">
+            <div style="text-align: center; position: relative; top: 14px; ">
               <span *ngIf="dataItem.PRC_CST_TST_STS === 'Pass' ||  dataItem.PRC_CST_TST_STS === 'NA'|| dataItem._readonly === true || hasNoPermission === true" (change)="onOff(dataItem.COST_TEST_OVRRD_FLG)" style="vertical-align: -webkit-baseline-middle;">{{dataItem.COST_TEST_OVRRD_FLG}}</span>
               <span *ngIf="dataItem.PRC_CST_TST_STS !=='Pass' && dataItem.PRC_CST_TST_STS !== 'NA' && hasNoPermission !== true && dataItem._readonly !== true">
                 <label class="switch">
