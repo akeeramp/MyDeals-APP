@@ -640,7 +640,7 @@ export class dealToolsComponent{
         let ids = [];
         if (model.isLinked !== undefined && model.isLinked) {
             let curHoldStatus = model._actionsPS.Hold === undefined ? false : model._actionsPS.Hold;
-            each(this.gridResult, dataItem => {
+            each(this.gridData, dataItem => {
                 if (dataItem.isLinked !== undefined && dataItem.isLinked) {
                     if (dataItem?._actionsPS === undefined)
                         dataItem._actionsPS = {};
