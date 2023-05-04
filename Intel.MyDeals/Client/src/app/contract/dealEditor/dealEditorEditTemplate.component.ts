@@ -231,7 +231,7 @@ export class dealEditorEditTemplateComponent {
                 this.saveLinkedDataItem(dataItem, key, dataItem[key][dimKey], dimKey);
                 this.updateDataItem(dataItem, key);
             }
-          }
+          
         })
     }
     convertToLowerCase(value) {
