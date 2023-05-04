@@ -791,3 +791,8 @@ button.btn.btn-sm.btn-grey.c2a-back-btnstyle:hover {
 .sky-blue {
     color: var(--light-blue)
 }
+
+.contractManagerPlus #sum-container {
+    height: 80%;
+    overflow: auto;
+}
