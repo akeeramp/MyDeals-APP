@@ -1,6 +1,3 @@
-<!-- <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" /> -->
-<!-- <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" /> -->
-<!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
 <link href="/Client/src/app/contract/ptModals/productCorrector/productcorrector.component.css" rel="stylesheet" />
 <link href="/Client/src/app/style/productCorrector.css" rel="stylesheet" />
 
@@ -395,7 +392,7 @@
         </div>
         <div class="modal-footer" style="border:none">
             <div class="col-md-1 col-md-offset-5">
-                <img *ngIf="isLoading" src="/Images/loadingSmall.gif" />
+                <img *ngIf="isLoading" src="/Images/loadingSmall.gif" alt="loader image"/>
             </div>
             <div *ngIf="!allDone" class="col-md-6" style="margin-top: 10px;margin-bottom: 10px;">
                 <button class="btn btn-primary prdBtn" (click)="saveProducts()" style="float: right; margin-left: 5px;">Save and Close</button>

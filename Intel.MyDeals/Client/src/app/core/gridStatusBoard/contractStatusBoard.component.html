@@ -1,6 +1,4 @@
 ﻿<link href="/Client/src/app/core/gridStatusBoard/contractStatusBoard.component.css" rel="stylesheet" />
-<!-- <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" /> -->
-<!-- <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" /> -->
 <div *ngIf="isLoaded">
     <div>
         <kendo-grid [data]="gridData" [navigable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort"

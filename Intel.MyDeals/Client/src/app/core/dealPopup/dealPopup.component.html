@@ -276,7 +276,7 @@
                     <div *ngIf="productsLoaded">
                         <kendo-grid [data]="productsgridData" [resizable]="true"
                                     [sort]="state.sort" class="micro-grid product_details_scroll" style="height: 140px">
-                            <!--scrollable="none"-->
+                            
                             <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="160" field="HIER_VAL_NM" title="Product">
                             </kendo-grid-column>
                             <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="35" field="CAP" title="CAP-YCP1"  hidden="hidden">
@@ -391,7 +391,7 @@
                     </div>
                 </div>
                 <div class="body" style="padding: 27px 40px;">
-                    <img src="/Images/QuoteLetter.png" class="fl" style="margin-right: 15px; margin-top: 8px;" />
+                    <img src="/Images/QuoteLetter.png" alt="QuoteLetter Image" class="fl" style="margin-right: 15px; margin-top: 8px;" />
                     <div class="cn-deal-title">
                         <span class="org">Quote Letter</span>
                     </div>

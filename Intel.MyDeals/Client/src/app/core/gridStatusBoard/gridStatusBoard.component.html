@@ -1,7 +1,4 @@
-﻿<!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
-<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<!-- <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" /> -->
-<!-- <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" /> -->
+﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <link href="/Client/src/app/core/gridStatusBoard/gridStatusBoard.component.css" rel="stylesheet" />
 <div class="container-fluid widget-container" style="overflow: hidden; height: 100%; padding: 0 10px !important;">
     <div class="horizontal-widget">
@@ -93,7 +90,7 @@
                     <div *kendoGridDetailTemplate="let dataItem">
                         <div *ngIf="!isLoaded">
                             <div style="padding-top: 50px;">Retrieving Data. Please wait...</div>
-                            <img src="/images/032.gif" />
+                            <img src="/images/032.gif" alt="Some Loading gif Image"/>
                         </div>
                         <contract-status-board-angular [contractObjSid]="dataItem.CNTRCT_OBJ_SID"  [angularEnabled]="angularEnabled" (isCntrctDtlLoaded)="cntrctDtlLoadStatus($event)"></contract-status-board-angular>
                     </div>

@@ -2,7 +2,7 @@
     <div class="modal-header modalBlueBody new-spacing">
         <h5 class="modal-title" id="modal-title">
             Timeline for deal {{dcId}}
-            <img *ngIf="loading" src="/Images/loadingSmall.gif" style="margin-left: 25px;" />
+            <img *ngIf="loading" src="/Images/loadingSmall.gif" alt="loader image" style="margin-left: 25px;" />
         </h5>
         <i id="btnAnchordisable" (click)="isExpandable()" [ngClass]="isExpand?'intelicon-locked-outlined': 'intelicon-unlocked-outlined'" title={{isExpandTitle}}></i>
         <i id="btnEnlargeText" (click)="isFontSizeChange()" [ngClass]="isTextIncrease?'intelicon-increase-text-outlined': 'intelicon-decrease-text-outlined'" title={{isTextFontTitle}}></i>
