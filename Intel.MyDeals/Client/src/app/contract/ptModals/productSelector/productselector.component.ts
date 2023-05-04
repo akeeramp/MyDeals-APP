@@ -97,7 +97,7 @@ export class ProductSelectorComponent {
         group: [{field:'USR_INPUT'}],
         // Initial filter descriptor
         filter: {
-            logic: "or",
+            logic: "and",
             filters: [],
         },
     };
