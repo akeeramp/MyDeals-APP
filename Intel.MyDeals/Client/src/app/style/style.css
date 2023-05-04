@@ -1899,13 +1899,13 @@ kendo-window.flexOverlapProducts {
     margin-left: 5px;
 }
 
-kendo-grid#manageFilterStyle .k-grid-content-locked {
+/*kendo-grid#manageFilterStyle .k-grid-content-locked {
     height: auto !important;
 }
 
 .cdk-virtual-scroll-content-wrapper {
     position: unset !important;
-}
+}*/
 
 kendo-grid#manageFilterStyle tr.k-grid-norecords {
     height: 38px !important;

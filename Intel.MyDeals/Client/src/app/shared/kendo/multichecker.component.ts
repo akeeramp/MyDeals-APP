@@ -10,7 +10,7 @@ import { each, compact, sortBy, filter } from 'underscore';
         <input id="multiCheckFilter" class="k-textbox" (input)="onInput($event)" placeholder="Search" />
         <span id="searchIcon" class="k-icon k-i-zoom"></span>
     </div>
-    <cdk-virtual-scroll-viewport [itemSize]="7">
+    <cdk-virtual-scroll-viewport [itemSize]="7"  style="min-height: 200px;">
         <ul style="overflow:hidden; max-width: 300px;">      
           <li #itemElement
             *cdkVirtualFor="let item of currentData; let i = index;"
@@ -79,17 +79,10 @@ import { each, compact, sortBy, filter } from 'underscore';
    #selectedCount{
         font-weight:bold;
     }
-    cdk-virtual-scroll-viewport.cdk-virtual-scroll-viewport ul {
-        max-height: 200px!important;
-        overflow: auto!important;
-    }
     cdk-virtual-scroll-viewport.cdk-virtual-scroll-viewport ul li {
         word-wrap: break-word;
         width: 100%;
         max-width: 1000px;
-    }
-    cdk-virtual-scroll-viewport {
-        display: unset;
     }
   `]
 })
