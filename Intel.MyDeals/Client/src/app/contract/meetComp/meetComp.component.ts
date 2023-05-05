@@ -160,8 +160,21 @@ export class meetCompContractComponent implements OnInit {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }
 
-    distinctPrimitiveChild(fieldName: string): any {
-        return distinct(this.childGridResult, fieldName).map(
+    distinctPrimitiveChild(fieldName: string, dataItem): any {
+        const meetCompListObj = new List<any>(this.meetCompMasterResult);
+        let result = meetCompListObj
+            .Where(function (x) {
+                return (
+                    x.GRP_PRD_SID == dataItem.GRP_PRD_SID &&
+                    x.GRP == "DEAL" &&
+                    x.DEFAULT_FLAG == "D"
+                );
+            })
+            .OrderBy(function (x) {
+                return x.MEET_COMP_STS;
+            })
+            .ToArray();
+        return distinct(result, fieldName).map(
             item => item[fieldName]
         );
     }
@@ -180,6 +193,7 @@ export class meetCompContractComponent implements OnInit {
                 return x.MEET_COMP_STS;
             })
             .ToArray();
+        this.childState.take = this.childGridResult.length;
         this.childGridData = process(this.childGridResult, this.childState);
         return this.childGridData;
     }
