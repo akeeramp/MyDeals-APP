@@ -161,7 +161,9 @@ export class PTE_Save_Util {
                 item._behaviors.isError['REBATE_TYPE'] = true;
                 item._behaviors.validMsg['REBATE_TYPE'] = "Field is required";
             }
-            if ((item["GEO_COMBINED"] == null || item["GEO_COMBINED"] == undefined || item["GEO_COMBINED"] == '') && (item["TIER_NBR"] == undefined || item["TIER_NBR"] == "1") && (item['NUM_OF_DENSITY'] == undefined || item['NUM_OF_DENSITY'] == "1")) {
+            if ((item["GEO_COMBINED"] == null || item["GEO_COMBINED"] == undefined || item["GEO_COMBINED"] == '') ) {
+                //this one is removed if and tested as per js its working fine if any issue we can add this in above condition
+                //&& (item["TIER_NBR"] == '' || item["TIER_NBR"] == undefined || item["TIER_NBR"] == "1") && (item['NUM_OF_DENSITY'] == undefined || item['NUM_OF_DENSITY'] == "1")
                 item._behaviors.isError['GEO_COMBINED'] = true;
                 item._behaviors.validMsg['GEO_COMBINED'] = "Field is required";
             }
