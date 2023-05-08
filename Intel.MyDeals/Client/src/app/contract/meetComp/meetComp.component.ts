@@ -475,7 +475,7 @@ export class meetCompContractComponent implements OnInit {
             this.loggerSvc.error("Unable to get GetMeetCompProductDetails data", err, err.statusText);
             this.isLoading = false;
         });
-        if (response.length > 0) {
+        if (response && response.length > 0) {
             response.forEach((obj) => {
                 obj.IS_SELECTED = false;
                 //Setting COMP_PRC to null. Its nullable Int
