@@ -1392,9 +1392,23 @@ export class dealEditorComponent {
                 if (Object.keys(this.dropdownResponses).length == 0) {
                     this.dropdownResponses = await this.getAllDrowdownValues();
                 }
-                this.selectedTab = this.groups[0].name;
-                this.filterColumnbyGroup(this.selectedTab);
             }
+            this.selectedTab = this.groups[0].name;
+            if (this.renamedefault.length > 0) {
+                each(this.wipTemplate.columns, column => {
+                    if (this.templates[column.field] != undefined && this.templates[column.field].Groups != undefined) {
+                        each(this.templates[column.field].Groups, row => {
+                            each(this.renamedefault, item => {
+                                if (this.templates[column.field].Groups.includes(item.value) && row == item.value) {
+                                    let ind = this.templates[column.field].Groups.findIndex(item => item == row);
+                                    this.templates[column.field].Groups[ind] = item.key;
+                                }
+                            })
+                        })
+                    }
+                });
+            }
+            this.filterColumnbyGroup(this.selectedTab);
             if (this.in_Search_Text && this.in_Search_Text != null && this.in_Search_Text != '') {
                 this.searchFilter = this.in_Search_Text;
                 this.filterOnDealId(this.searchFilter)
