@@ -95,6 +95,9 @@ export class multiSelectModalComponent {
         this.pteService.getDropDownResult(this.multiSelectPopUpModal.opLookupUrl).subscribe((response: any) => {
             if (response != null && response != undefined && response.length > 0) {
                 this.multiSelectData = response;
+                each(this.multiSelectData, row => {
+                    row.DROP_DOWN = row.DROP_DOWN.trimStart();
+                })
                 if (this.colName == "DEAL_SOLD_TO_ID") {
                     this.checkedKeys = [];
                     each(this.modalData.cellCurrValues, (item) => {
