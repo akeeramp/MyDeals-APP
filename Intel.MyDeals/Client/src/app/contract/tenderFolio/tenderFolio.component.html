@@ -25,7 +25,7 @@
                             <div class="col-md-12">
                                 <h6 class="rmv-padding" style="margin-bottom: 20px !important;">{{contractType}} Information</h6>
                             </div>
-                            <div class="col-md-12">
+                            <div class="col-md-12" style="margin-bottom: 20px;">
                                 <label class="rmv-mrgn-btm">
                                     <span class="red-color">
                                         *
@@ -44,8 +44,8 @@
                                     </kendo-dialog-actions>
                                 </kendo-dialog>
                             </div>
-                            <div *ngIf="isCustDiv" class="col-md-12">
-                                <div *ngIf="isCustDiv" style="width: 100%; margin-bottom: 20px; ">
+                            <div *ngIf="isCustDiv" class="col-md-12" style="margin-bottom: 20px;">
+                                <div *ngIf="isCustDiv" style="width: 100%;">
                                     <label class="rmv-mrgn-btm"><span>Division:</span></label><br />
                                     <kendo-multiselect class="division-name style-both-clas divineo-one" #cmbmulti [kendoDropDownFilter]="filterSettings" [data]="selectedData" textField="CUST_DIV_NM" valueField="CUST_DIV_NM" [(ngModel)]="CUST_NM_DIV" [ngModelOptions]="{standalone: true}" [autoClose]="false"></kendo-multiselect>
                                     <div class="description">Blank means that ALL divisions are included</div>
@@ -58,7 +58,7 @@
                                     <button kendoButton (click)="closeCustDivsAlert()" class="cancel-btn-pop-up line-height-unset">CANCEL</button>
                                 </kendo-dialog-actions>
                             </kendo-dialog>
-                            <div class="col-md-12">
+                            <div class="col-md-12" style="margin-bottom: 20px;">
                                 <label class="rmv-padding rmv-mrgn-btm">
                                     <span class="red-color">
                                         *

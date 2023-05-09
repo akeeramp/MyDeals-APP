@@ -916,8 +916,14 @@ ngb-tooltip-window .tooltip-inner {
 .dealCell.isErrorCell {
     display: flex;
     align-items: baseline;
-    justify-content: flex-start
+    justify-content: flex-start;
+    position: relative;
 }
+
+    .dealCell.isErrorCell .err-bit {
+        position: absolute;
+        top: -2px;
+    }
 
 .mpublishgrid .k-grid-content tr {
     background-color: rgba(0, 0, 0, .05) !important

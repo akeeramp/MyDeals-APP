@@ -41,7 +41,7 @@ export class GridUtil {
 
             var tmplt = '';
             if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
-                tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '" style="padding-top: 11px"></div>';
+                tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
             if (passedData[field] != undefined && passedData[field] != null)
                 tmplt += '    <div class="ng-binding vert-center ' + msgClass + '" style="line-height: 3em;" ' + finalMsg + '>' + passedData[field] + '</div>';
             tmplt += '</div>';

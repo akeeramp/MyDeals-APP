@@ -65,7 +65,7 @@
     width: 100% !important;
     max-width: none !important;
     height: 39px !important;
-    margin-bottom: 20px;
+    /*margin-bottom: 20px;*/
 }
 
 .tender-modals .combobox, .tender-modals .inputtext {
