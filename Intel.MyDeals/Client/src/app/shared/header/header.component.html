@@ -25,8 +25,9 @@
                             <li style="text-align: center;">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false" style="padding: 7px;min-height:50px">
                                     <div class="fl" id="divUsrImg">
-                                        <!--<img src="https://photos.intel.com/images/{{ getUserWwid() }}.jpg" />-->
-                                        <img src="https://delve.office.com/mt/v3/people/profileimage?userId={{ getUserEmail() }}" />
+                                        <img src="https://photos.intel.com/images/{{ getUserWwid() }}.jpg" />
+                                        <!--<img src="https://delve.office.com/mt/v3/people/profileimage?userId={{ getUserEmail() }}" />-->
+                                        <!--<img src="{{ getUserBadge() }}" alt="Red dot" />-->
                                     </div>
                                     <div class="fl hidden-sm" style="margin-top: 7px; margin-right: 10px;" title="{{ getExtraUserPrivsDetailAsString() }}">
                                         <div id="divUsrName">{{ getUserName() }}</div>
