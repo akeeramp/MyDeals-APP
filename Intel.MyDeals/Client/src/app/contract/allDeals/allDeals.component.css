@@ -403,9 +403,13 @@ kendo-tabstrip.diff-all-deals {
     .allDealsOvrLap mat-dialog-container .k-window {
         min-height: auto !important;
     }
+.all_deal_grid_cell .dealsIcon-dealcell .class_date.dealCell.uiControlDiv {
+    display: flex !important;
+    align-items: center !important;
+    justify-content: center !important;
+}
 
-.all_deal_grid_cell .dealCell .vert-center .dateWrapper.intelicon-information {
-    right: 15px !important;
-    position: relative !important;
-    top: 18px !important;
+.all_deal_grid_cell .class_date.dealCell.uiControlDiv .vert-center {
+    top: 0% !important;
+    transform: translateY(0%) !important;
 }
