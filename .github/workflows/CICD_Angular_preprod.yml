@@ -32,17 +32,23 @@ jobs:
      if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
      runs-on: [self-hosted,mydeals-runner01]
      steps:
-       - name: Checkout Directory
-         uses: actions/checkout@master
        - name: Verify environement 
          run: |
             echo "RUN Verify command for ${{github.event.inputs.ENV}}"
-             ./scripts/deploy_env.ps1 'verifyENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+             C:\Abhilash\deploy_env.ps1 'verifyENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+  
+  Checkout-Repo:
+     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no')
+     runs-on: [self-hosted,mydeals-runner01]
+     needs:  Verify-environement
+     steps:
+       - name: Checkout Directory
+         uses: actions/checkout@master
 
   Restore-packages:
      if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no') 
      runs-on: [self-hosted,mydeals-runner01]
-     needs:  Verify-environement
+     needs:  Checkout-Repo
      steps:
        - name: Checkout Directory
          uses: actions/checkout@master
@@ -52,7 +58,7 @@ jobs:
             ./scripts/build_env.ps1 'nuget' '${{env.NUGET_PATH}}' '${{github.workspace}}'
 
   Build-Angular:
-    if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
+    if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no')
     runs-on: [self-hosted, mydeals-runner01]
     needs: Restore-packages
     steps:
@@ -101,10 +107,10 @@ jobs:
     steps:
        - name:  Remove Client Zip 
          run: |
-           ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+           C:\Abhilash\deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
        - name:  Move Publish Site 
          run: |
-           ./scripts/deploy_env.ps1 'MovePublish_latest' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+           C:\Abhilash\deploy_env.ps1 'MovePublish_latest' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
        - name:  Deploy Client App 
          run: |
-           ./scripts/deploy_env.ps1 'DeployENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+           C:\Abhilash\deploy_env.ps1 'DeployENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'

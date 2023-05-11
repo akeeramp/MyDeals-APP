@@ -27,20 +27,26 @@ env:
   MSBUILD_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\msbuild.exe
 jobs:
   Verify-environement:
-     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui')
+     if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
+     runs-on: [self-hosted,mydeals-runner01]
+     steps:
+       - name: Verify environement 
+         run: |
+            echo "RUN Verify command for ${{github.event.inputs.ENV}}"
+             C:\Abhilash\deploy_env.ps1 'verifyENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+  
+  Checkout-Repo:
+     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no')
      runs-on: [self-hosted,mydeals-prd-automation]
+     needs:  Verify-environement
      steps:
        - name: Checkout Directory
          uses: actions/checkout@master
-       - name: Verify environment 
-         run: |
-            echo "RUN Verify command for ${{github.event.inputs.ENV}}"
-             ./scripts/deploy_env.ps1 'verifyENV' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
 
   Restore-packages:
      if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'no')
      runs-on: [self-hosted,mydeals-prd-automation]
-     needs:  Verify-environement
+     needs:  Checkout-Repo
      steps:
        - name: Restore NUGET Packages 
          run: |
@@ -97,10 +103,10 @@ jobs:
     steps:
        - name:  Remove Client Zip 
          run: |
-           ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
+           C:\Abhilash\deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
        - name:  Move Publish Site 
          run: |
-           ./scripts/deploy_env.ps1 'MovePublish_latest_prod' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
+           C:\Abhilash\deploy_env.ps1 'MovePublish_latest_prod' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
        - name:  Deploy Client App 
          run: |
-           ./scripts/deploy_env.ps1 'DeployENV' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
+           C:\Abhilash\deploy_env.ps1 'DeployENV' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
