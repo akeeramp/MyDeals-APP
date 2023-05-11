@@ -23,7 +23,11 @@ kendo-grid#dealEditor {
 
 .cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
     opacity: 1;
-    pointer-events: none;
+    z-index: 999999;
+}
+
+.cdk-global-overlay-wrapper {
+    z-index: 999999;
 }
 
 .wrap {

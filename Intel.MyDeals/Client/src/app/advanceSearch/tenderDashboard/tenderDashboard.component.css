@@ -164,12 +164,21 @@ i#btnClose.intelicon-close-max.tender-cross-close:hover {
     background: #00aeef !important;
 }
 .tender_de_admin kendo-grid#dealEditor {
-    height: calc(100vh - 465px) !important;
+    height: calc(100vh - 420px) !important;
     position: relative !important;
 }
 /*.admin_tender_meetcomp kendo-grid#meetcomp-contract {
     height: calc(100vh - 529px) !important;
 }*/
+
+kendo-numerictextbox.advance-numerictextbox-style input.k-input {
+    font-size: 12px;
+}
+
+.tender-de-custom kendo-tabstrip#dealEditorTab .k-content {
+    padding: 0;
+}
+
 .admin_tender_meetcomp .meetComp-show-hide.meet-conduct.meet-comp-blank_space {
     top: 15px !important;
     margin-left:0px !important;

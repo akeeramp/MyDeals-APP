@@ -233,10 +233,18 @@ span.caret.down_add_style {
     top: 0px !important;
     right: -10px !important;
     color: #010101 !important;
-    opacity: 0.45 !important;
 }
 
 #admin-advance-grid a.k-grid-filter:hover {
+    color: #00AEEF !important;
+}
+
+#admin-advance-grid a.k-grid-filter span.k-icon.k-i-filter {
+    color: #010101 !important;
+    opacity: 0.45 !important;
+}
+
+#admin-advance-grid a.k-grid-filter span.k-icon.k-i-filter:hover {
     color: #00AEEF !important;
     opacity: 1 !important
 }
@@ -477,4 +485,17 @@ button.cacnelbtn-advance-kendostyle.k-button:hover {
     color: #444 !important;
     border-color: #ebebeb !important;
     background-color: #ebebeb !important;
+}
+
+kendo-grid-numeric-filter-menu > kendo-dropdownlist {
+    margin-top: 10px;
+    margin-bottom: 10px;
+}
+
+kendo-grid-filter-menu-container =date-range-filter label.k-form-field > kendo-dropdownlist {
+    margin-bottom: 10px;
+}
+
+input.advanceSearchInput:focus {
+    outline: none !important;
 }

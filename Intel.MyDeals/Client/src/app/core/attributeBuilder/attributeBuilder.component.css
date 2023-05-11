@@ -629,6 +629,7 @@ kendo-datepicker.k-custom-dater {
 
     kendo-datepicker.k-custom-dater .k-input {
         height: 100%;
+        font-size: 12px;
     }
 
     kendo-datepicker.k-custom-dater span.k-picker-wrap.k-state-focused .k-select {
