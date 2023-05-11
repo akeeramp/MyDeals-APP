@@ -1759,8 +1759,9 @@ namespace Intel.MyDeals.BusinessRules
             OverlapChecksDataLib ochkDataLib = new OverlapChecksDataLib();
             List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(r.Dc.DcID, dealStartDate, dealEndDate, projectName, endCustomer, endCustomerCntry, custId, myPrdMbrSid);
             bool SfConditionsCheck = isSfDeal == "" 
-                || ((dePSWFStgCd.HasValueChanged == true && (dePSWFStgCd.AtrbValue.ToString() != "Requested" && dePSWFStgCd.AtrbValue.ToString() != "Cancelled")) 
-                || dePSWFStgCd.HasValueChanged == false);
+                || dePSWFStgCd != null 
+                && ((dePSWFStgCd.HasValueChanged == true && (dePSWFStgCd.AtrbValue.ToString() != "Requested" && dePSWFStgCd.AtrbValue.ToString() != "Cancelled")) 
+                    || dePSWFStgCd.HasValueChanged == false);
 
             // If normal deal, apply messages OR If SF deal, bypass message if certain conditions are met, but if no stage change, apply message as needed
             if (SfConditionsCheck && overlapsCheckDeals.Count > 0)
