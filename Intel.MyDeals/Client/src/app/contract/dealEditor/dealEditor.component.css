@@ -929,6 +929,11 @@ ngb-tooltip-window .tooltip-inner {
         top: -2px;
     }
 
+.isErrorCell .err-bit {
+    position: absolute;
+    top: -2px;
+}
+
 .mpublishgrid .k-grid-content tr {
     background-color: rgba(0, 0, 0, .05) !important
 }
