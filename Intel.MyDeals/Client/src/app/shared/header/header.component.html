@@ -52,7 +52,7 @@
     <div class="menu-bar above-limited">
         <ul class="nav nav-tabs nav-tabs-intel-blocks header-fixes" id="myTab" role="tablist">
             <li>
-                <a class="mainMenu"  href="#portal" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs">Home</span></a>
+                <a class="mainMenu"  href="Dashboard#/portal" title="Home"><i class="intelicon-home-solid"></i><span class="hidden-xs">Home</span></a>
             </li>
             <li class="dropdown" *ngIf="isDeveloper()">
                 <a class="btn btn-primary mainMenu primary-one" role="button" href="/" data-toggle="dropdown" data-target="#" title="Developer Documents"><i class="intelicon-attach-document-solid"></i><span class="hidden-xs"> Docs </span><i class="intelicon-down"></i></a>
@@ -67,9 +67,9 @@
                     <li class="dropdown-submenu" *ngIf="isDeveloper()">
                         <a tabindex="-1">DSA</a>
                         <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="#vistexTestApi">Test API</a></li>
-                            <li><a href="#vistexProfiseeApi">Profisee Migration </a></li>
-                            <li><a href="#vistex">Integration Logs</a></li>
+                            <li><a href="Admin#/vistexTestApi">Test API</a></li>
+                            <li><a href="Admin#/vistexProfiseeApi">Profisee Migration </a></li>
+                            <li><a href="Admin#/vistex">Integration Logs</a></li>
                         </ul>
                     </li>
 
@@ -110,16 +110,16 @@
                     </li>
 
                     <li *ngIf="!isProduction() && isEnvironmentKnown()">
-                        <a href="#adminemployeedashboard">Set Your Role (Pre-prod Only)</a>
+                        <a href="Admin#/adminemployeedashboard">Set Your Role (Pre-prod Only)</a>
                     </li>
 
                     <li class="dropdown-submenu" *ngIf="isDeveloper()">
                         <a tabindex="-1">Monitoring</a>
                         <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="#admincache">Cache Manager</a></li>
-                            <li><a href="#opLog">Log Viewer</a></li>
-                            <li><a href="#constants">Constants</a></li>
-                            <li><a href="#batchTiming">Batch Job Details</a></li>
+                            <li><a href="Admin#/admincache">Cache Manager</a></li>
+                            <li><a href="Admin#/opLog">Log Viewer</a></li>
+                            <li><a href="Admin#/constants">Constants</a></li>
+                            <li><a href="Admin#/batchTiming">Batch Job Details</a></li>
                         </ul>
                     </li>
 
@@ -127,45 +127,45 @@
                         <a tabindex="-1">Customer</a>
                         <ul class="dropdown-menu" style="width: 250px;">
                             <li *ngIf="isRealSA() || isCustomerAdmin() || isDeveloper()">
-                                <a href="#customers">Customer</a>
+                                <a href="Admin#/customers">Customer</a>
                             </li>
                             <li *ngIf="isRealSA() || isCustomerAdmin() || isDeveloper()">
-                                <a href="#VistexCustomerMapping">Customer Mapping</a>
+                                <a href="Admin#/VistexCustomerMapping">Customer Mapping</a>
                             </li>
                             <li *ngIf="isRealSA() || isCustomerAdmin() || isDeveloper()">
-                                <a href="#CustomerVendors">Customer - Vendors</a>
+                                <a href="Admin#/CustomerVendors">Customer - Vendors</a>
                             </li>
+
                             <li *ngIf="isRealSA() || isCustomerAdmin() || getUserRole() == 'RA' || isDeveloper() ">
-                                <a href="#UnifiedCustomerAdmin">Unified Customer Admin</a>
-                            </li>
+                                <a href="Admin#/UnifiedCustomerAdmin">Unified Customer Admin</a>
                             <li>
-                                <a href="#UnifiedDealRecon">Unified Deal Reconciliation</a>
+                                <a href="Admin#/UnifiedDealRecon">Unified Deal Reconciliation</a>
                             </li>
                         </ul>
                     </li>
 
                     <li *ngIf="isRealSA() || isDeveloper()">
-                        <a href="#adminGeo">Geo</a>
+                        <a href="Admin#/adminGeo">Geo</a>
                     </li>
                     <li *ngIf="isRealSA() || isDeveloper()">
-                        <a href="#funfact">Fun Facts</a>
+                        <a href="Admin#/funfact">Fun Facts</a>
                     </li>
 
                     <li *ngIf="isAdminMeetCompMenuItemEnabled()">
-                        <a href="#meetComp">Meet Comp</a>
+                        <a href="Admin#/meetComp">Meet Comp</a>
                     </li>
 
                     <li class="dropdown-submenu" *ngIf="isRealSA() || isDeveloper()">
                         <a tabindex="-1">Products</a>
                         <ul class="dropdown-menu" style="width: 250px;">
                             <li>
-                                <a href="#productAlias">Product Alias</a>
+                                <a href="Admin#/productAlias">Product Alias</a>
                             </li>
                             <li>
-                                <a href="#products">Product Hierarchy</a>
+                                <a href="Admin#/products">Product Hierarchy</a>
                             </li>
                             <li>
-                                <a href="#productCategories">Product Vertical Rules</a>
+                                <a href="Admin#/productCategories">Product Vertical Rules</a>
                             </li>
                         </ul>
                     </li>
@@ -174,42 +174,42 @@
                         <a tabindex="-1">Legal Configurations</a>
                         <ul class="dropdown-menu" style="width: 250px;">
                             <li>
-                                <a href="#icostproducts">Legal Classification</a>
+                                <a href="Admin#/icostproducts">Legal Classification</a>
                             </li>
                             <li>
-                                <a href="#legalException">Legal Exceptions</a>
+                                <a href="Admin#/legalException">Legal Exceptions</a>
                             </li>
                             <li>
-                                <a href="#quoteLetter">Quote Letter</a>
+                                <a href="Admin#/quoteLetter">Quote Letter</a>
                             </li>
                         </ul>
                     </li>
 
                     <li *ngIf="isRealSA() || isCustomerAdmin() || isDeveloper()">
-                        <a href="#dropdowns">UI Dropdown Values</a>
+                        <a href="Admin#/dropdowns">UI Dropdown Values</a>
                     </li>
 
                     <li *ngIf="isRealSA() || isDeveloper()">
-                        <a href="#dataquality">Data Quality (DQ)</a>
+                        <a href="Admin#/dataquality">Data Quality (DQ)</a>
                     </li>
 
                     <li *ngIf="isDeveloper()">
-                        <a href="#dataFix">Data Fix</a>
+                        <a href="Admin#/dataFix">Data Fix</a>
                     </li>
 
                     <li class="dropdown-submenu" *ngIf="isDeveloper()">
                         <a tabindex="-1">Security Attributes</a>
                         <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="#securityengine">Security Engine</a></li>
-                            <li><a href="#dealTypes">Deal Types</a></li>
+                            <li><a href="Admin#/securityengine">Security Engine</a></li>
+                            <li><a href="Admin#/dealTypes">Deal Types</a></li>
                         </ul>
                     </li>
         
                     <li class="dropdown-submenu" *ngIf="isDeveloper()">
                         <a tabindex="-1">WorkFlow</a>
                         <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="#workFlow">WorkFlow</a></li>
-                            <li><a href="#workflowStages">WorkFlow Stages</a></li>
+                            <li><a href="Admin#/workFlow">WorkFlow</a></li>
+                            <li><a href="Admin#/workflowStages">WorkFlow Stages</a></li>
                         </ul>
                     </li>
 
@@ -217,38 +217,38 @@
                         <a tabindex="-1">Admin Tools</a>
                         <ul class="dropdown-menu" style="width: 250px;">
                             <li *ngIf="isDeveloper()">
-                                <a href="#supportScript">Support Scripts</a>
+                                <a href="Admin#/supportScript">Support Scripts</a>
                             </li>
                             <li *ngIf="isDeveloper()">
-                                <a href="#testTenders">Test Tenders Data</a>
+                                <a href="Admin#/testTenders">Test Tenders Data</a>
                             </li>
                             <li *ngIf="isDeveloper()">
-                                <a href="#dealmassupdate">Deal Mass Update</a>
+                                <a href="Admin#/dealmassupdate">Deal Mass Update</a>
                             </li>
                             <li *ngIf="isDeveloper()">
-                                <a href="#validateVistexR3Checks">Validate Deals for Vistex Push</a>
+                                <a href="Admin#/validateVistexR3Checks">Validate Deals for Vistex Push</a>
                             </li>
                             <li *ngIf="isDeveloper()">
-                                <a href="#pushDealstoVistex">Push Deals to Vistex</a>
+                                <a href="Admin#/pushDealstoVistex">Push Deals to Vistex</a>
                             </li>
                             <li *ngIf="isBulkPriceAdmin() || isDeveloper()">
-                                <a href="#bulkPricingUpdate">Bulk Pricing Updates</a>
+                                <a href="Admin#/bulkPricingUpdate">Bulk Pricing Updates</a>
                             </li>
                             <li *ngIf="isRealSA() || isDeveloper() || isCustomerAdmin()">
-                                <a href="#consumptionCountry">Consumption Country/Region</a>
+                                <a href="Admin#/consumptionCountry">Consumption Country/Region</a>
                             </li>
                         </ul>
                     </li>
 
                     <li *ngIf="getUserRole() == 'DA' || isRealSA() || isDeveloper() || isCustomerAdmin()">
-                        <a href="#manageEmployee">User Accounts Administration</a>
+                        <a href="Admin#/manageEmployee">User Accounts Administration</a>
                     </li>
 
                     <li class="dropdown-submenu" *ngIf="getUserRole() == 'DA' || getUserRole() == 'GA' || isRealSA() || isDeveloper()">
                         <a tabindex="-1">Approval Rules Management</a>
                         <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="#rules">Price Rules</a></li>
-                            <li><a href="#ruleOwner">Rules Ownership Admin</a></li>
+                            <li><a href="Admin#/rules">Price Rules</a></li>
+                            <li><a href="Admin#/ruleOwner">Rules Ownership Admin</a></li>
                         </ul>
                     </li>
 
@@ -258,10 +258,10 @@
                 </ul>
             </li>
             <li>
-                <a class="mainMenu" href="#tenderDashboard" title="Tender Dashboard"><i class="intelicon-copy-solid"></i><span class="hidden-xs">Tender Dashboard</span></a>
+                <a class="mainMenu" href="AdvancedSearch#/tenderDashboard" title="Tender Dashboard"><i class="intelicon-copy-solid"></i><span class="hidden-xs">Tender Dashboard</span></a>
             </li>
             <li>
-                <a class="mainMenu" href="#advanceSearch" title="Advanced Search Tools"><i class="intelicon-search"></i><span class="hidden-xs">Advanced Search</span></a>
+                <a class="mainMenu" href="AdvancedSearch#/advanceSearch" title="Advanced Search Tools"><i class="intelicon-search"></i><span class="hidden-xs">Advanced Search</span></a>
             </li>
             <li>
                 <a class="mainMenu" href="https://intel.sharepoint.com/sites/mydealstrainingportal" target="_blank"><i class="intelicon-help"></i><span class="hidden-xs">Help</span></a>
@@ -271,7 +271,7 @@
                     <i class="intelicon-reports-solid"></i><span class="hidden-xs">Report</span><i class="intelicon-down"></i>
                 </a>
                 <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
-                    <li><a href="#reportingdashboard">Report Dashboard</a></li>
+                    <li><a href="Reporting#/reportingdashboard">Report Dashboard</a></li>
                 </ul>
             </li>
         </ul>

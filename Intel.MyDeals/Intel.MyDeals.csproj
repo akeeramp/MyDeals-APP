@@ -755,9 +755,6 @@
     <Content Include="Client\src\app\style\productCorrector.css" />
     <Content Include="Client\src\app\style\publishTender.css" />
     <Content Include="Client\src\app\style\style.css" />
-    <Content Include="Client\src\dist\bundle.js" />
-    <Content Include="Client\src\dist\vendor.js" />
-    <Content Include="Client\src\dist\vendor.css" />
     <Content Include="Client\src\dist\globalStyle.js" />
     <Content Include="Client\src\dist\globalStyle.css" />
     <Content Include="Client\webpack.config.js" />
@@ -1784,6 +1781,7 @@
     <Content Include="Scripts\intcAnalytics.js" />
     <Content Include="Scripts\jquery.min.js" />
     <Content Include="Scripts\jquery-ui.min.js" />
+    <Content Include="Scripts\modernizr-2.8.3.js" />
     <Content Include="Scripts\modernizr-2.8.3.min.js" />
     <Content Include="Scripts\Opaque\OpaqueUtils.js" />
     <Content Include="Scripts\polyfills.js" />

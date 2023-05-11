@@ -2,13 +2,12 @@ import { GlobalSearchComponent } from '../advanceSearch/globalSearch/globalSearc
 import { GlobalSearchResultsComponent } from '../advanceSearch/globalSearchResults/globalSearchResults.component';
 import { TenderDashboardComponent } from '../advanceSearch/tenderDashboard/tenderDashboard.component';
 import { AdvancedSearchComponent } from '../advanceSearch/advancedSearch.component';
-import { goToComponent } from '../advanceSearch/goTo.component'
-
+import { goToComponent } from '../contract/goTo.component';
 
 export let advanceSearchComponents = [
     GlobalSearchComponent,
     GlobalSearchResultsComponent,
     TenderDashboardComponent,
     AdvancedSearchComponent,
-	goToComponent
+    goToComponent
 ]

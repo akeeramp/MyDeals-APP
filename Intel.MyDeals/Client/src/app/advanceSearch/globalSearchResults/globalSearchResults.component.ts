@@ -118,7 +118,7 @@ export class GlobalSearchResultsComponent  {
             return;
         }
         if (opType == 'CNTRCT' ) {
-          window.location.href = "#/manager/CNTRCT/" + DCID + "/0/0/0";
+          window.location.href = "Contract#/manager/CNTRCT/" + DCID + "/0/0/0";
         }
         else if (opType == 'PRC_ST' || opType == 'PRC_TBL' || opType == 'WIP_DEAL') {          
             //calling this function because to navigate to the PS we need contract data,PS ID and PT ID -- in the item we dont have PT ID for opType ->PS so hitting API to get data
@@ -140,10 +140,10 @@ export class GlobalSearchResultsComponent  {
             if (res) {
                 this.response = res;
                 if (opType == "WIP_DEAL")
-                    window.location.href = "#/gotoDeal/" + dcId;
+                    window.location.href = "Contract#/gotoDeal/" + dcId;
                 else if (opType == "PRC_ST")
-                    window.location.href = "#/gotoPs/" + this.response.PricingStrategyId;
-                else window.location.href = "#/manager/PT/" + this.response.ContractId + "/" + parentdcID + "/" + dcId + "/0";
+                    window.location.href = "Contract#/gotoPs/" + this.response.PricingStrategyId;
+                else window.location.href = "Contract#/manager/PT/" + this.response.ContractId + "/" + parentdcID + "/" + dcId + "/0";
             }
         },
             error => {
@@ -156,7 +156,7 @@ export class GlobalSearchResultsComponent  {
     //yet to migrate Advance Search Screen
     gotoAdvanced() {
         this.isWindowOpen.emit(false);
-        window.location.href = "#/advanceSearch";
+        window.location.href = "AdvancedSearch#/advanceSearch";
     }
     ngOnInit() {
         this.getObjectTypeResult(this.opType);

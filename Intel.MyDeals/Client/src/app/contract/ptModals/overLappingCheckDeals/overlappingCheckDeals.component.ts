@@ -318,7 +318,7 @@ export class OverlappingCheckComponent {
     }
 
     openDealEditor(value) {
-        window.open(`/advancedSearch#/gotoDeal/${value.OVLP_DEAL_OBJ_SID}`, '_blank')
+        window.open(`/Contract#/gotoDeal/${value.OVLP_DEAL_OBJ_SID}`, '_blank')
     }
 
     getOverlapDetails() {

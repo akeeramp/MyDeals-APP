@@ -451,7 +451,7 @@
             title: "Pricing Strategy",
             type: "string",
             width: 140,
-            template: "<a href='/advancedSearch\\#/gotoPs/#=data.PRC_ST_OBJ_SID#' target='_blank' class='objDealId'>#=data.PRC_ST_TITLE#</a>"
+            template: "<a href='/Contract\\#/gotoPs/#=data.PRC_ST_OBJ_SID#' target='_blank' class='objDealId'>#=data.PRC_ST_TITLE#</a>"
         }, {
             field: "CNTRCT_C2A_DATA_C2A_ID",
             title: "C2A Id",
@@ -463,7 +463,7 @@
             type: "number",
             width: 100,
             filterable: "numObjFilter",
-            template: "<deal-popup-icon deal-id=\"'#=data.DC_ID#'\"></deal-popup-icon><a href='/advancedSearch\\#/gotoDeal/#=data.DC_ID#' target='_blank' class='objDealId'>#=data.DC_ID#</a>"
+            template: "<deal-popup-icon deal-id=\"'#=data.DC_ID#'\"></deal-popup-icon><a href='/Contract\\#/gotoDeal/#=data.DC_ID#' target='_blank' class='objDealId'>#=data.DC_ID#</a>"
         }, {
             field: "WF_STG_CD",
             title: "Deal Status",

@@ -731,7 +731,7 @@ export class TenderDashboardComponent implements OnInit {
             });
             dialogRef.afterClosed().subscribe(result => {
                 if (result) {
-                    window.location.href = "#tendermanager/" + result;
+                    window.location.href = "Contract#/tendermanager/" + result;
                 }
             });
         }

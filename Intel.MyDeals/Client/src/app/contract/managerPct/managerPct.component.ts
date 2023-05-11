@@ -502,19 +502,19 @@ export class managerPctComponent {
         } else {
             this.showMultipleDialog = false;
             this.ptId = prc_tbl[0].DC_ID;
-            window.location.href = "#/manager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
+            window.location.href = "Contract#/manager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
 
         }
     }
     pickPt(pte) {
         this.ptId = pte.DC_ID;
-        window.location.href = "#/manager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
+        window.location.href = "Contract#/manager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
     }
     openPTE(dcId, psId, ptId) {
         this.parent_dcId = dcId
         this.psId = psId;
         this.ptId = ptId;
-        window.location.href = "#/manager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
+        window.location.href = "Contract#/manager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
     }
     closeMultiple() {
         this.showMultipleDialog = false;
@@ -563,6 +563,6 @@ export class managerPctComponent {
         this.loadPct();
     }
     goToNavManagePCT(dataItem) {
-        window.open(`/advancedSearch#/gotoDeal/${dataItem.DEAL_ID}`, '_blank')
+        window.open(`/Contract#/gotoDeal/${dataItem.DEAL_ID}`, '_blank')
     }
 }

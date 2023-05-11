@@ -39,7 +39,7 @@ import { adminVistexCustomerMappingComponent } from "./admin/vistexCustomerMappi
 import { adminWorkFlowComponent } from "./admin/workFlow/admin.workFlow.component";
 import { adminWorkflowStagesComponent } from "./admin/workflowStages/admin.workflowStages.component";
 import { AdvancedSearchComponent } from "./advanceSearch/advancedSearch.component";
-import { goToComponent } from "./advanceSearch/goTo.component";
+import { goToComponent } from "./contract/goTo.component";
 import { TenderDashboardComponent } from "./advanceSearch/tenderDashboard/tenderDashboard.component";
 import { contractDetailsComponent } from "./contract/contractDetails/contractDetails.component";
 import { pricingTableComponent } from "./contract/pricingTable/pricingTable.component";

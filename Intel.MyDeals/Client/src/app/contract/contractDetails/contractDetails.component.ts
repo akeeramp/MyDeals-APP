@@ -122,7 +122,7 @@ export class contractDetailsComponent {
 
             this.isLoading = false;
             this.setBusy("", "", "", false);
-            window.location.href = "#/manager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0"; 
+            window.location.href = "Contract#/manager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0"; 
         }
     }
 
@@ -467,7 +467,7 @@ export class contractDetailsComponent {
                         this.isLoading = false;
                         this.setBusy("", "", "", false);
                         //this will redirect incase of newly added/edited
-                        window.location.href = "#/manager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0"; 
+                        window.location.href = "Contract#/manager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0"; 
                     } 
                                    
                 },(err)=>{
@@ -785,7 +785,7 @@ export class contractDetailsComponent {
                         if (this.hasUnSavedFiles) {
                             this.uploadFile();
                         } else {
-                            window.location.href = "#contractmanager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
+                            window.location.href = "Contract#/contractmanager/CNTRCT/" + this.contractData["DC_ID"] + "/0/0/0";
                         }
                     }
                     }

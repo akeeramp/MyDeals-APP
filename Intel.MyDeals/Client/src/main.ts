@@ -1,4 +1,4 @@
-import './polyfills.ts';
+import './polyfills';
 import './load-libs';
 
 import { platformBrowserDynamic } from '@angular/platform-browser-dynamic';

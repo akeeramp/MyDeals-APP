@@ -32,7 +32,7 @@ export class goToComponent {
             if (response) {
                 this.isLoading = false;
                 this.setBusy('', '');
-                window.location.href = "#/contractmanager/PS/" + response.ContractId + '/' + response.PricingStrategyId + '/' + response.PricingTableId + '/0'; 
+                window.location.href = "Contract#/contractmanager/PS/" + response.ContractId + '/' + response.PricingStrategyId + '/' + response.PricingTableId + '/0'; 
             }
         } else {
             //goto Deal
@@ -43,7 +43,7 @@ export class goToComponent {
             });
             this.isLoading = false;
             this.setBusy('', '');
-            window.location.href = "#/contractmanager/WIP/" + response.ContractId + "/" + response.PricingStrategyId + "/" + response.PricingTableId + "/" + response.WipDealId + "?searchTxt=" + response.WipDealId;
+            window.location.href = "Contract#/contractmanager/WIP/" + response.ContractId + "/" + response.PricingStrategyId + "/" + response.PricingTableId + "/" + response.WipDealId + "?searchTxt=" + response.WipDealId;
         }
     }
 

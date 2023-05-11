@@ -14,6 +14,7 @@
 @import './common.css';
 @import './kendo-custom.css';
 @import '~handsontable/dist/handsontable.full.min.css';
+@import '../../app/core/dealPopup/dealPopup.component.css';
 
 /* Intel IT */
 /* @import '../../../../css/it-mlaf.min.css';    Need to resolve an issue for missing images/fonts when adding to bundle, in the meantime, it should be included in the project's BundleConfig */

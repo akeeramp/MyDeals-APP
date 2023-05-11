@@ -418,7 +418,7 @@ export class contractManagerComponent {
                     "DC_ID": stItem.DC_ID,
                     "NEW_STG": stItem.WF_STG_CD,
                     "TITLE": stItem.TITLE,
-                    "url": rootUrl + "/advancedSearch#/gotoPs/" + stItem.DC_ID,
+                    "url": rootUrl + "/Contract#/gotoPs/" + stItem.DC_ID,
                     "contractUrl": rootUrl + "/contract#/manager/" + this.contractData.DC_ID
                 };
 
@@ -834,19 +834,19 @@ export class contractManagerComponent {
         } else {
             this.showMultipleDialog = false;
             this.ptId = prc_tbl[0].DC_ID;
-            window.location.href = "#/manager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
+            window.location.href = "Contract#/manager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
 
         }
     }
     pickPt(pte){
         this.ptId = pte.DC_ID;
-        window.location.href = "#/manager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
+        window.location.href = "Contract#/manager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
     }
     openPTE(dcId, psId, ptId) {
         this.parent_dcId = dcId
         this.psId = psId;
         this.ptId = ptId;
-        window.location.href = "#/manager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
+        window.location.href = "Contract#/manager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
     }
     closeMultiple(){
         this.showMultipleDialog = false;
@@ -1234,18 +1234,5 @@ export class contractManagerComponent {
                 }, 100);
             }
         });
-    }
-
-    ngAfterViewInit() {
-        //this functionality will enable when dashboard landing to this page
-        document.getElementsByClassName('loading-screen')[0]?.setAttribute('style', 'display:none');
-        const divLoader = document.getElementsByClassName('jumbotron')
-        if (divLoader && divLoader.length > 0) {
-            each(divLoader, div => {
-                div.setAttribute('style', 'display:none');
-            })
-        }
-        //this functionality will disable anything of .net ifloading to stop when dashboard landing to this page
-        document.getElementById('mainBody')?.setAttribute('style', 'display:none');
     }
 }

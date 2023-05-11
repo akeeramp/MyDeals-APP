@@ -70,7 +70,7 @@ export class messageBoardModal {
                         "DC_ID": stItem.DC_ID,
                         "NEW_STG": stItem.WF_STG_CD,
                         "TITLE": stItem.TITLE,
-                        "url": rootUrl + "/advancedSearch#/gotoPs/" + stItem.DC_ID,
+                        "url": rootUrl + "/Contract#/gotoPs/" + stItem.DC_ID,
                         "contractUrl": rootUrl + "/Dashboard#/contractmanager/CNTRCT/" + this.contractData.DC_ID+ "/0/0/0"
                     };
     

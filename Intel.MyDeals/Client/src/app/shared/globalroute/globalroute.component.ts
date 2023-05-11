@@ -29,21 +29,21 @@ export class globalRouteComponent {
         
         const type = this.route.snapshot.paramMap.get('type');
         if (type == "CNTRCT") {
-            window.location.href = "#/contractmanager/CNTRCT/" + cid + "/0/0/0";
+            window.location.href = "Contract#/contractmanager/CNTRCT/" + cid + "/0/0/0";
         }
         else if (type == "PS") {// if user searched Pricing Strategy
-            window.location.href = "#/contractmanager/PT/" + cid + "/" + PSID + "/0/0";
+            window.location.href = "Contract#/contractmanager/PT/" + cid + "/" + PSID + "/0/0";
         }
         else if (type == "PT") {// if user searched Pricing Table
-            window.location.href = "#/contractmanager/PT/" + cid + "/" + PSID + "/" + PTID + "/0";
+            window.location.href = "Contract#/contractmanager/PT/" + cid + "/" + PSID + "/" + PTID + "/0";
         }
         else if (type == "WIP") {// if user searched Deal Id
-            window.location.href = "#/contractmanager/WIP/" + cid + "/" + PSID + "/" + PTID + "/" + DealID;
+            window.location.href = "Contract#/contractmanager/WIP/" + cid + "/" + PSID + "/" + PTID + "/" + DealID;
         } else if (type == null && cid != null &&  cid != "0") {
-            window.location.href = "#/contractmanager/CNTRCT/" + cid + "/0/0/0";   
+            window.location.href = "Contract#/contractmanager/CNTRCT/" + cid + "/0/0/0";   
         }
         else {
-            window.location.href = "#/portal";
+            window.location.href = "Dashboard#/portal";
         } 
 
      }

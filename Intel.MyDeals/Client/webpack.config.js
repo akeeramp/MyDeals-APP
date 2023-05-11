@@ -3,6 +3,8 @@ const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
+//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+const MinifyHtmlWebpackPlugin = require('minify-html-webpack-plugin');
 
 module.exports = env => {
     const mode = env.mode;
@@ -10,7 +12,11 @@ module.exports = env => {
         return {
             mode: mode,
             entry: {
-                bundle: "./src/main.ts",
+                contract: "./src/appModules/contract/main-contract.ts",
+                dashboard: "./src/appModules/dashboard/main-dashboard.ts",
+                admin: "./src/appModules/admin/main-admin.ts",
+                advance: "./src/appModules/advancesearch/main-advance.ts",
+                report:"./src/appModules/reporting/main-report.ts",
                 globalStyle: './src/app/style/style.css',
             },
             cache: {
@@ -30,25 +36,26 @@ module.exports = env => {
             },
             plugins: [
                 new MiniCssExtractPlugin(),
+                //new BundleAnalyzerPlugin()
             ],
             optimization: {
                 minimize: true,
                 minimizer: [
                     new CssMinimizerPlugin(),
                 ],
-                splitChunks: {
-                    chunks: 'all',
-                    maxAsyncRequests: 30,
-                    maxInitialRequests: 30,
-                    cacheGroups: {
-                        defaultVendors: {
-                            name: 'vendor',
-                            test: /[\\/]node_modules[\\/]/,
-                            priority: -10,
-                            reuseExistingChunk: true,
-                        },
-                    },
-                },
+                // splitChunks: {
+                //     chunks: 'all',
+                //     maxAsyncRequests: 30,
+                //     maxInitialRequests: 30,
+                //     cacheGroups: {
+                //         defaultVendors: {
+                //             name: 'vendor',
+                //             test: /[\\/]node_modules[\\/]/,
+                //             priority: -10,
+                //             reuseExistingChunk: true,
+                //         },
+                //     },
+                // },
             },
             module: {
                 rules: [
@@ -56,7 +63,8 @@ module.exports = env => {
                         test: /\.tsx?$/,
                         loader: "ts-loader",
                         exclude: /node_modules/
-                    }, {
+                    },
+                      {
                         test: /\.css$/,
                         use: [ MiniCssExtractPlugin.loader, 'css-loader' ]
                     }
@@ -69,8 +77,12 @@ module.exports = env => {
         return {
             mode: 'production',
             entry: {
-                bundle: "./src/main-prod.ts",
-                globalStyle: './src/app/style/style.css'
+                contract: "./src/appModules/contract/main-contract-prod.ts",
+                dashboard: "./src/appModules/dashboard/main-dashboard-prod.ts",
+                admin: "./src/appModules/admin/main-admin-prod.ts",
+                advance: "./src/appModules/advancesearch/main-advance-prod.ts",
+                report:"./src/appModules/reporting/main-report-prod.ts",
+                globalStyle: './src/app/style/style.css',
             },
             watch: false,
             output: {
@@ -100,19 +112,19 @@ module.exports = env => {
                         parallel: true,
                     }),
                 ],
-                splitChunks: {
-                    chunks: 'all',
-                    maxAsyncRequests: 30,
-                    maxInitialRequests: 30,
-                    cacheGroups: {
-                        defaultVendors: {
-                            name: 'vendor',
-                            test: /[\\/]node_modules[\\/]/,
-                            priority: -10,
-                            reuseExistingChunk: true,
-                        },
-                    },
-                },
+                // splitChunks: {
+                //     chunks: 'all',
+                //     maxAsyncRequests: 30,
+                //     maxInitialRequests: 30,
+                //     cacheGroups: {
+                //         defaultVendors: {
+                //             name: 'vendor',
+                //             test: /[\\/]node_modules[\\/]/,
+                //             priority: -10,
+                //             reuseExistingChunk: true,
+                //         },
+                //     },
+                // },
             },
             performance: {
                 hints: false,
@@ -126,6 +138,18 @@ module.exports = env => {
             },
             plugins: [
                 new MiniCssExtractPlugin(),
+                new MinifyHtmlWebpackPlugin({
+                    src: './src/app/',
+                    dest: './src/app/',
+                    ignoreFileNameRegex:/\.[tj]sx?$/,
+                    rules: {
+                        caseSensitive:true,
+                        collapseWhitespace: true,
+                        removeComments: true,
+                        continueOnParseError:true,
+                        minifyCSS:true
+                    }
+                })
             ],
             module: {
                 rules: [

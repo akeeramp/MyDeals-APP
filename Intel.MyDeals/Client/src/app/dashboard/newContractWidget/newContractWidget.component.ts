@@ -47,7 +47,7 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
         dialogRef.afterClosed().subscribe(result => {
             if (result) {
                 //Redirect to contract detail screen for tender creation
-                window.location.href = "#tendermanager/" + result;
+                window.location.href = "Contract#/tendermanager/" + result;
             }
         });
     }
@@ -64,7 +64,7 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
         });
         dialogref.afterClosed().subscribe(result => {
             if (result) {
-                document.location.href = "#contractdetails/copycid/" + result.CNTRCT_OBJ_SID;
+                document.location.href = "Contract#/contractdetails/copycid/" + result.CNTRCT_OBJ_SID;
             }
         });
     }
@@ -74,7 +74,7 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
                 So even when no customer is selected in dashboard , we're emitting "undefined". Thus at time of checking/listening
                 it doesn't get last customer's value and instead get "undefined" which signifies no customer was selected. */   
         this.newContractWidgetService.selectedCustomer.next(selectedCustomerValue);
-        window.location.href = "#/contractdetails/0";
+        window.location.href = "Contract#/contractdetails/0";
     }
     ngOnInit(): void {
         this.resizeSub = this.resizeEvent.subscribe((widget) => {

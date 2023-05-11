@@ -23,6 +23,7 @@ namespace Intel.MyDeals
             GlobalConfiguration.Configure(WebApiConfig.Register);
             FilterConfig.RegisterGlobalFilters(GlobalFilters.Filters);
             RouteConfig.RegisterRoutes(RouteTable.Routes);
+            BundleConfig.RegisterBundlesAngNew(BundleTable.Bundles);
             UnityConfig.RegisterComponents();
             AppHelper.SetupDataAccessLib();
 

@@ -359,7 +359,7 @@ namespace Intel.MyDeals
                 ));
         }
 
-        public static void RegisterBundlesAngNew(BundleCollection bundles)
+        public static void RegisterBundlesAngNew1(BundleCollection bundles)
         {
             bundles.Add(new Bundle("~/MyDeals/bundleAng")
                .IncludeDirectory("~/Client/src/dist", "*.js"));
@@ -418,5 +418,26 @@ namespace Intel.MyDeals
                 .IncludeDirectory("~/Client/src/dist", "*.css"));
             //"~/Client/src/app/style/common.css", "~/Client/src/app/style/kendo-custom.css", "~/Client/src/app/style/style.css"
         }
+
+        public static void RegisterBundlesAngNew(BundleCollection bundles)
+        {
+            bundles.Add(new ScriptBundle("~/bundles/scriptsAng").Include(
+             "~/Scripts/jquery.min.js",
+              "~/Scripts/popper_1.16.1.min.js",
+              "~/Scripts/bootstrap.min.js",
+              "~/Scripts/bootstrap-switch.min.js",
+             "~/Scripts/modernizr-2.8.3.min.js"
+
+             ));
+            bundles.Add(new StyleBundle("~/MyDeals/cssAng").Include(
+              "~/css/_loadingPanel.directive.css",
+              "~/css/jquery-ui.min.css",
+               "~/css/toastr.min.css",
+               "~/css/it-mlaf.min.css",
+                "~/css/angular-bootstrap-toggle.min.css"
+              ));
+
+        }
+
     }
 }

@@ -1,12 +1,13 @@
-﻿@Styles.Render("~/css/_cache.css")
+﻿<script src="~/Client/src/dist/report.js" async></script>
 
 @{
     ViewBag.Title = "Reporting";
 }
-<div class="container-fluid">
-    <div class="row">
-        <div class="col-md-12">
-            <div ui-view></div>
+<div class="loading-screen">
+    <div class="jumbotron ng-scope">
+        <div class="container">
+            <h1><strong>My</strong> Deals </h1><p class="lead"> Reporting </p>
+            <p>Reporting is loading please wait...</p>
         </div>
     </div>
 </div>

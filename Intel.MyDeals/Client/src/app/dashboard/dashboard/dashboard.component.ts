@@ -392,20 +392,6 @@ export class DashboardComponent implements OnInit {
         $("body").removeClass("z-index-zero");
     }
 
-    ngAfterViewInit() {
-        //this functionality will enable when dashboard landing to this page
-        document.getElementsByClassName('loading-screen')[0]?.setAttribute('style', 'display:none');
-        let divLoader=document.getElementsByClassName('jumbotron')
-        if(divLoader&& divLoader.length>0){
-        each(divLoader,div=>{
-            div.setAttribute('style', 'display:none');
-        })
-        }
-        //this functionality will disable anything of .net ifloading to stop when dashboard landing to this page
-        document.getElementById('mainBody')?.setAttribute('style', 'display:none');
-
-    }
-
     gridValsPlus() {
         var parent = document.getElementById("parentID");
         var nodesSameClass = parent.getElementsByClassName("few-grid-find");

@@ -1183,7 +1183,7 @@ export class meetCompContractComponent implements OnInit {
             this.tmDirec.emit('DE');
         } else {
             //Contract redirect to DE when clicked on Deal_id in Meetcomp
-            const url = `advancedSearch#/gotoDeal/${DealId}`;
+            const url = `Contract#/gotoDeal/${DealId}`;
             window.open(url, '_self');
         }
     }

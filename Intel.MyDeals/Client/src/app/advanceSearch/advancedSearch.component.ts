@@ -506,11 +506,11 @@ export class AdvancedSearchComponent implements OnInit {
         else {
             //routing function redirecting to goto component
             if (action == 'gotoPS') {
-                const url = `advancedSearch#/gotoPs/${id}`;
+                const url = `Contract#/gotoPs/${id}`;
                 window.open(url, '_blank');
             }
             else {
-                const url = `advancedSearch#/gotoDeal/${id}`;
+                const url = `Contract#/gotoDeal/${id}`;
                 window.open(url, '_blank');
             }
         }
