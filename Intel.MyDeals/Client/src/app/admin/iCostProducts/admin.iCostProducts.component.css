@@ -79,7 +79,8 @@
 }
 
 .k-grid.tt-grids {
-    height: calc(100vh - 205px) !important
+    height: calc(100vh - 205px) !important;
+    width: calc(100vh - -998px) !important
 }
 
 #admin-legal-popup .kendo-dialog-message {
