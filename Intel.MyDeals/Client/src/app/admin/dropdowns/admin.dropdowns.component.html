@@ -22,7 +22,7 @@
             <kendo-grid-command-column title="Commands" width="120" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-isNew="isNew"><button id="command-icon"
                         kendoGridEditCommand><span class="k-icon k-i-edit k-icon-sm space-remove-btw-two"></span></button><button
-                        kendoGridRemoveCommand id="command-icon" (click)="open()" class="k-button"><span
+                        kendoGridRemoveCommand id="command-icon" class="k-button"><span
                             class="k-icon k-i-delete k-icon-sm"></span></button><button id="command-icon"
                         kendoGridSaveCommand [disabled]="formGroup?.invalid"><span
                             class="k-icon k-i-check k-icon-sm"></span></button><button id="command-icon"

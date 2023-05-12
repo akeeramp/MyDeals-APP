@@ -169,7 +169,7 @@ export class excludeDealGroupModalDialog {
                 : (row["ECAP_PRICE"]["20___0"] === undefined || row["ECAP_PRICE"]["20___0"] === null)
                     ? row["ECAP_PRICE"]
                     : row["ECAP_PRICE"]["20___0"];
-            var cntrctTtl = "Product: " + (row["TITLE"]);
+            var cntrctTtl = row["REBT_TYPE"] && row["REBT_TYPE"] == "TENDER" ? "Product: " + (row["PRODUCT"]) : "Product: " + (row["TITLE"]);
             let a = {};
             a["OVLP_DEAL_ID"] = row["DC_ID"] === undefined || row["DC_ID"] === "" ? row["DEAL_ID"] : row["DC_ID"]
             a["OVLP_DEAL_TYPE"] = row['OBJ_SET_TYPE_CD']
@@ -180,7 +180,7 @@ export class excludeDealGroupModalDialog {
             a["OVLP_DEAL_STRT_DT"] = this.pctGroupDealsView ? row["DEAL_STRT_DT"] : row["START_DT"]
             a["OVLP_ADDITIVE"] = this.pctGroupDealsView ? row["ADDITIVE"] : row["DEAL_COMB_TYPE"]
             a["OVLP_DEAL_DESC"] = row["DEAL_DESC"]
-            a["OVLP_ECAP_PRC"] = Number(ecap)
+            a["OVLP_ECAP_PRC"] = row["REBT_TYPE"] && row["REBT_TYPE"] == "TENDER" ? row["ECAP_PRC"] : Number(ecap);
             a["OVLP_MAX_RPU"] = row["MAX_RPU"]
             a["OVLP_MKT_SEG"] = row["MRKT_SEG"]
             a["OVLP_CNSMPTN_RSN"] = this.pctGroupDealsView ? row["CNSMPTN_RSN"] : row["CONSUMPTION_REASON"]
