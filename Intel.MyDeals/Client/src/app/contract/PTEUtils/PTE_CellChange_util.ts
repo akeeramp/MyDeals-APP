@@ -975,8 +975,15 @@ export class PTE_CellChange_Util {
                     let curPTR=[];
                     each(PTR,(cr,row)=>{
                         if(cr['DEAL_GRP_NM'].toUpperCase()==uniqnm.toUpperCase()){
-                         cr['row']=row;
-                         curPTR.push(cr);
+                            if (curPTR.length > 0) {
+                                if (curPTR.find(x => x.DC_ID != cr['DC_ID'])) {
+                                    cr['row'] = row;
+                                    curPTR.push(cr);
+                                }
+                            } else {
+                                cr['row'] = row;
+                                curPTR.push(cr);
+                            }
                        }
                      });
                     //If there is already same name the length will atleast 2
@@ -1089,7 +1096,7 @@ export class PTE_CellChange_Util {
     static checkfn(item: any, curPricingTable: any,columns:any[],value?,contractData?,cellEditor?,ptDefaults?) {
         if (item!=null) {
             const val = value ? value : this.hotTable.getDataAtRowProp(item.row, 'PROGRAM_PAYMENT');
-            if (val != undefined && val != null && val != '' && val.toLowerCase() !== 'backend' && item.prop == 'PROGRAM_PAYMENT') {
+            if (val != undefined && val != null && val != '' && val.toLowerCase() !== 'backend') {
                 if(findWhere(columns,{data:'PERIOD_PROFILE'}) !=undefined && findWhere(columns,{data:'PERIOD_PROFILE'}) !=null){
                     this.hotTable.setDataAtRowProp(item.row, 'PERIOD_PROFILE', '', 'no-edit');
                 }
