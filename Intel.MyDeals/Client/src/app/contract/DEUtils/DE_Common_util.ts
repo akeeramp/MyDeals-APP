@@ -103,9 +103,12 @@ export class DE_Common_Util {
             }
         }
         if (field == "QLTR_BID_GEO" && dataItem[field] != undefined && dataItem[field] != null && dataItem[field] != "") {
-            dataItem[field] = dataItem[field].split(",").map(function (item) {
-                return item.trim();
-            });
+            if (Array.isArray(dataItem[field])) return dataItem[field];
+            else {
+                dataItem[field] = dataItem[field].split(",").map(function (item) {
+                    return item.trim();
+                });
+            }
         }
     }
 

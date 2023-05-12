@@ -129,6 +129,7 @@ export class dealEditorComponent {
     public isDeveloper = (<any>window).isDeveloper;
     public isTester = (<any>window).isTester;
     private isInitialLoad = true;
+    public allTabRename= '';
     private dealId: any;
     public perfBar = {
         action: '',
@@ -234,16 +235,18 @@ export class dealEditorComponent {
     }
 
     async getGroupsAndTemplates() {
-        if (!this.groups || (this.groups && this.groups.length < 0) || this.isInitialLoad) {
-            //Get Groups for corresponding deal type
-            this.groups = PTE_Load_Util.getRulesForDE(this.curPricingTable.OBJ_SET_TYPE_CD);
-            this.groupsdefault = PTE_Load_Util.getRulesForDE(this.curPricingTable.OBJ_SET_TYPE_CD);
-        }
-        // Get template for the selected WIP_DEAL
-        this.wipTemplate = this.UItemplate["ModelTemplates"]["WIP_DEAL"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
+        if (this.isInitialLoad) {
+            if (!this.groups || this.groups && this.groups.length <= 0) {
+                //Get Groups for corresponding deal type
+                this.groups = PTE_Load_Util.getRulesForDE(this.curPricingTable.OBJ_SET_TYPE_CD);
+                this.groupsdefault = PTE_Load_Util.getRulesForDE(this.curPricingTable.OBJ_SET_TYPE_CD);
+            }
+            // Get template for the selected WIP_DEAL
+            this.wipTemplate = this.UItemplate["ModelTemplates"]["WIP_DEAL"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
 
-        PTE_Load_Util.wipTemplateColumnSettings(this.wipTemplate, this.isTenderContract, this.curPricingTable.OBJ_SET_TYPE_CD, this.in_Is_Tender_Dashboard);
-        this.templates = JSON.parse(JSON.stringify(opGridTemplate.templates[`${this.curPricingTable.OBJ_SET_TYPE_CD}`])); //PTE_Common_Util.deepClone(opGridTemplate.templates[`${this.curPricingTable.OBJ_SET_TYPE_CD}`]);
+            PTE_Load_Util.wipTemplateColumnSettings(this.wipTemplate, this.isTenderContract, this.curPricingTable.OBJ_SET_TYPE_CD, this.in_Is_Tender_Dashboard);
+            if (this.templates == undefined) this.templates = JSON.parse(JSON.stringify(opGridTemplate.templates[`${this.curPricingTable.OBJ_SET_TYPE_CD}`]));
+        }
         if (!this.in_Is_Tender_Dashboard)//if DE not called from Tender Dashboard then we need call the service call to get WIP_DEAL data
             await this.getWipDealData();
         else {// TenderDashboard will share the search results to display in a grid , no service call required
@@ -358,6 +361,7 @@ export class dealEditorComponent {
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.isLoading = true;
+        this.gridData.data = [];
         setTimeout(() => {
             this.state = state;
             this.gridData = this.gridData.data.length > 0 ? this.gridData : process(this.gridResult, this.state);
@@ -369,7 +373,7 @@ export class dealEditorComponent {
         this.columns = [];
         if (this.groups.filter(x => x.name == groupName).length > 0) {
             each(this.wipTemplate.columns, column => {
-                if (groupName.toLowerCase() == "all") {
+                if (groupName.toLowerCase() == "all" || groupName.toLowerCase() == this.allTabRename.toLowerCase()) {
                     if (this.templates[column.field] === undefined && (column.width === undefined || column.width == '0')) {
                         column.width = 1;
                     }
@@ -391,6 +395,13 @@ export class dealEditorComponent {
             if (args.dataItem != undefined) {
                 PTE_Common_Util.parseCellValues(args.column.field, args.dataItem);
             }
+            if (args.dataItem.OBJ_SET_TYPE_CD == 'ECAP' || args.dataItem.OBJ_SET_TYPE_CD == 'KIT') {
+                if (args.column.field == "REBATE_DEAL_ID" || args.column.field == "LAST_TRKR_START_DT_CHK")
+                    if (this.selectedTab.toLowerCase() == "all" || this.selectedTab.toLowerCase() == this.allTabRename.toLowerCase()) args.column.leafIndex += 3;
+                    else args.column.leafIndex += 2;
+            } else if (args.column.field == "REBATE_DEAL_ID" || args.column.field == "LAST_TRKR_START_DT_CHK" || args.column.field == "USER_MAX_RPU" || args.column.field == "USER_MAX_RPU" || args.column.field == "USER_AVG_RPU" || args.column.field == "RPU_OVERRIDE_CMNT")
+                if (this.selectedTab.toLowerCase() == "all" || this.selectedTab.toLowerCase() == this.allTabRename.toLowerCase()) args.column.leafIndex += 2;
+                else args.column.leafIndex += 1;
             if (!args.isEdited && args.column.field !== 'MISSING_CAP_COST_INFO' && args.column.field !== "details" && args.column.field !== "tools" && args.column.field !== "PRD_BCKT" && args.column.field !== "CUST_MBR_SID" && args.column.field !== "CAP_INFO" && args.column.field !== "YCS2_INFO" && args.column.field !== "COMPETITIVE_PRICE" && args.column.field !== "COMP_SKU" &&
                 args.column.field !== "BACKEND_REBATE" && args.column.field !== "AUTO_APPROVE_RULE_INFO" && args.column.field !== "CAP_KIT" && args.column.field !== "PRIMARY_OR_SECONDARY" && args.column.field !== "KIT_REBATE_BUNDLE_DISCOUNT" &&
                 args.column.field !== "TOTAL_CR_DB_PERC" && args.column.field !== "TOTAL_DSCNT_PR_LN" && args.column.field !== "KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE" && !(args.dataItem._behaviors != undefined &&
@@ -674,6 +685,7 @@ export class dealEditorComponent {
                     } 
                 });
         });
+        if (this.selectedTab.toLowerCase() == 'all') this.allTabRename = this.Derenametab;
         this.selectedTab = this.Derenametab;
         this.isrenameDialog = false;
     }
@@ -731,7 +743,7 @@ export class dealEditorComponent {
             if (group.name.trim().toLowerCase() === this.DeAddtab.trim().toLowerCase()) {
                 this.loggerService.error("Tab name already exists.", null, "Add Tab Failed");
                 return;
-            }
+            } 
         });
         this.addToTab(this.DeAddtab.trim());
         this.isAddDialog = false
@@ -792,7 +804,7 @@ export class dealEditorComponent {
     }
 
 
-    customLayout = function (reportError) {
+    customLayout(reportError) {
         this.isDataLoading = true;
         this.setBusy("Custom...", "Loading the current Layout", "Info", false);
 
@@ -1392,22 +1404,8 @@ export class dealEditorComponent {
                 if (Object.keys(this.dropdownResponses).length == 0) {
                     this.dropdownResponses = await this.getAllDrowdownValues();
                 }
-            }
+            } 
             this.selectedTab = this.groups[0].name;
-            if (this.renamedefault.length > 0) {
-                each(this.wipTemplate.columns, column => {
-                    if (this.templates[column.field] != undefined && this.templates[column.field].Groups != undefined) {
-                        each(this.templates[column.field].Groups, row => {
-                            each(this.renamedefault, item => {
-                                if (this.templates[column.field].Groups.includes(item.value) && row == item.value) {
-                                    let ind = this.templates[column.field].Groups.findIndex(item => item == row);
-                                    this.templates[column.field].Groups[ind] = item.key;
-                                }
-                            })
-                        })
-                    }
-                });
-            }
             this.filterColumnbyGroup(this.selectedTab);
             if (this.in_Search_Text && this.in_Search_Text != null && this.in_Search_Text != '') {
                 this.searchFilter = this.in_Search_Text;

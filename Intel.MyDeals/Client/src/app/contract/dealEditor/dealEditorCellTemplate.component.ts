@@ -167,11 +167,9 @@ export class dealEditorCellTemplateComponent {
                     else if (field == "QTY") {
                         data[field][dimKey] = this.decimalPipe.transform(data[field][dimKey], "1.0-0");
                     }
-                    else if (field == "CAP_STRT_DT" || field == "CAP_END_DT" || field == "YCS2_START_DT" || field == "YCS2_END_DT" && data[field][dimKey] != undefined && data[field][dimKey] != null && data[field][dimKey] != "") {
-                        if (data[field] != undefined) {
-                            if (data[field] == "Invalid date") data[field] = "";
-                            else if (data[field] != null && data[field] != "") data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
-                        }
+                    else if ((field == "CAP_STRT_DT" || field == "CAP_END_DT" || field == "YCS2_START_DT" || field == "YCS2_END_DT") && (data[field][dimKey] != undefined && data[field][dimKey] != null && data[field][dimKey] != "")) {
+                        if (data[field][dimKey] == "Invalid date") data[field][dimKey] = "";
+                        else data[field][dimKey] = this.datePipe.transform(data[field][dimKey], "MM/dd/yyyy");
                     }
                 }
                 return GridUtil.uiPositiveDimControlWrapper(data, field);
