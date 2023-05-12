@@ -27,6 +27,26 @@ import { dealDetailsComponent } from '../../app/core/gridCell/dealDetail/dealDet
 import { messageBoardModal } from '../../app/contract/contractManager/messageBoard/messageBoard.component';
 import { PingComponent } from '../../app/core/ping/ping.component';
 
+import { multiSelectModalComponent } from '../../app/contract/ptModals/multiSelectModal/multiSelectModal.component';
+import { tenderMCTPCTModalComponent } from '../../app/contract/ptModals/tenderDashboardModals/tenderMCTPCTModal.component';
+import { excludeDealGroupModalDialog } from '../../app/contract/managerExcludeGroups/excludeDealGroupModal.component';
+import { managerExcludeGroupsComponent } from '../../app/contract/managerExcludeGroups/managerExcludeGroups.component';
+import { pctGroupModal } from '../../app/contract/managerPct/pctGroupModal/pctGroupModal.component';
+import { meetCompDealDetailModalComponent } from '../../app/contract/meetComp/meetCompDealDetailModal.component';
+import { pctOverrideReasonModal } from '../../app/contract/managerPct/pctOverrideReasonModal/pctOverrideReasonModal.component';
+import { meetCompContractComponent } from '../../app/contract/meetComp/meetComp.component';
+import { managerPctComponent } from '../../app/contract/managerPct/managerPct.component';
+import { iconMctPctComponent } from '../../app/core/gridCell/iconMctPct/iconMctPct.component';
+import { pctChildGridComponent } from '../../app/contract/managerPct/pctChildGrid.component';
+import { missingCapCostInfoModalComponent } from '../../app/contract/ptModals/dealEditorModals/missingCapCostInfoModal.component';
+import { tenderGroupExclusionModalComponent } from '../../app/contract/ptModals/tenderDashboardModals/tenderGroupExclusionModal.component';
+import { endCustomerRetailModalComponent } from '../../app/contract/ptModals/dealEditorModals/endCustomerRetailModal.component';
+import { emailModal } from '../../app/contract/contractManager/emailModal/emailModal.component';
+import { systemPricePointModalComponent } from '../../app/contract/ptModals/dealEditorModals/systemPricePointModal.component';
+import { TenderFolioComponent } from '../../app/contract/tenderFolio/tenderFolio.component';
+import { dealProductsModalComponent } from '../../app/contract/ptModals/dealProductsModal/dealProductsModal.component';
+import { ProductBreakoutComponent } from '../../app/contract/ptModals/productSelector/productBreakout/productBreakout.component';
+
 export let AdvanceUtilComponents = [ 
     LoadingPanelComponent,
     MultiCheckFilterComponent,
@@ -53,5 +73,24 @@ export let AdvanceUtilComponents = [
     messageBoardModal,
     GridPopoverComponent,
     dealDetailsComponent,
-    PingComponent
+    PingComponent,
+    multiSelectModalComponent,
+    tenderMCTPCTModalComponent,
+    excludeDealGroupModalDialog,
+    managerExcludeGroupsComponent,
+    pctGroupModal,
+    meetCompDealDetailModalComponent,
+    pctOverrideReasonModal,
+    meetCompContractComponent,
+    managerPctComponent,
+    iconMctPctComponent,
+    pctChildGridComponent,
+    missingCapCostInfoModalComponent,
+    tenderGroupExclusionModalComponent,
+    endCustomerRetailModalComponent,
+    emailModal,
+    systemPricePointModalComponent,
+    TenderFolioComponent,
+    dealProductsModalComponent,
+    ProductBreakoutComponent
 ]

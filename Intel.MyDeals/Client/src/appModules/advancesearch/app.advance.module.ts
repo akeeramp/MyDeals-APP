@@ -28,6 +28,8 @@ import { AuthInterceptor } from '../../app/shared/authorization/auth.interceptor
 //import { ReportingComponent } from './reporting/reporting.component';
 
 //kendo components
+import { EditorModule } from "@progress/kendo-angular-editor";
+import { TreeViewModule } from "@progress/kendo-angular-treeview";
 import { ChartsModule } from '@progress/kendo-angular-charts';
 import { TooltipModule } from '@progress/kendo-angular-tooltip';
 import { GridModule, ExcelModule } from '@progress/kendo-angular-grid';
@@ -96,6 +98,8 @@ import { AdvanceUtilComponents } from './advance-util.module';
         DragDropModule,
         ScrollingModule,
         MainPipe,
+        TreeViewModule,
+        EditorModule,
         RouterModule.forRoot(routesAdvance, { useHash: true })
     ],
     providers: [
