@@ -48,6 +48,7 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
     private isLoaded: boolean = false;
     private dataforfilter: any; //holds filters for data fetch -during API call
     private gridResult: Array<any>;
+    private allData: Array<any>;
 
     //Variable to hold the API response data and holding filter data
     private contractDs: GridDataResult;
@@ -185,7 +186,7 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
                     item['END_DTM'] = new Date(item['END_DTM']);
                 })
 
-                this.gridResult = response;
+                this.gridResult = this.allData = response;
                 //Storing the filter response in variable to be used while filter
                 this.gridresultAlert = this.gridResult.filter(x => x.HAS_ALERT === true);
                 this.gridresultFavorite = this.gridResult.filter(x => x.IS_FAVORITE === true);
@@ -332,7 +333,7 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
         switch (filter) {
             case "fltr_All":
                 this.activekey = "all";
-                this.contractDs = process(this.gridResult, this.state);
+                this.contractDs = process(this.allData, this.state);
                 break;
             case "fltr_Favorites":
                 this.activekey = "fav";
