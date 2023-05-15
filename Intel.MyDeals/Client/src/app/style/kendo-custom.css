@@ -533,3 +533,6 @@ kendo-combobox.cd-input-bottom {
     background-color: #0071c5 !important;
     color: #fff !important;
 }
+.system_price_DE .mat-dialog-container {
+    padding: 0px !important;
+}
