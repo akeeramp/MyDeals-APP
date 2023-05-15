@@ -682,3 +682,6 @@ button td.button-intel {
     text-align: left;
     color: #00AEEF;
 }
+.pteDealsOvrLap mat-dialog-container {
+    padding: 0;
+}

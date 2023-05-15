@@ -1567,3 +1567,6 @@ kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li span.k-icon.k-i-reload 
 kendo-grid#dealEditor .k-grid-header-wrap {
     background: #fff;
 }
+.deDealsOvrLap mat-dialog-container {
+    padding: 0;
+}

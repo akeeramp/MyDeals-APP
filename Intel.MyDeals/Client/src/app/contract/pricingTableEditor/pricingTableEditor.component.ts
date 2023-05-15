@@ -1838,7 +1838,8 @@ export class pricingTableEditorComponent {
             "currPt": this.curPricingTable,
         }
         const dialogRef = this.dialog.open(OverlappingCheckComponent, {
-            data: data
+            data: data,
+            panelClass: 'pteDealsOvrLap',
         });
         dialogRef.afterClosed().subscribe(result => { });
     }
