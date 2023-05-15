@@ -328,8 +328,10 @@ export class pricingTableComponent {
                 if (response[0].IS_TENDER && response[0].IS_TENDER == 1) {
                     if (this.type && this.type == 'WIP' && IDS && IDS.length > 1 && !!this.route.snapshot.queryParams.searchTxt)
                         window.location.href = "Contract#/tendermanager/" + this.c_Id + "?searchTxt=" + this.route.snapshot.queryParams.searchTxt;
-                    else if (this.type && (this.type == 'PS' || this.type == 'PT') && IDS)
+                    else if (this.type && this.type == 'PS' && IDS)
                         window.location.href = "Contract#/tendermanager/" + this.c_Id + "?searchTxt=PS&PsId=" + this.route.snapshot.params.PSID;
+                    else if (this.type && this.type == 'PT' && IDS)
+                        window.location.href = "Contract#/tendermanager/" + this.c_Id + "?searchTxt=PT&PsId=" + this.route.snapshot.params.PTID;
                     else
                         window.location.href = "Contract#/tendermanager/" + this.c_Id;
                 }

@@ -454,6 +454,7 @@ export class dealEditorComponent {
             }
         }
         this.dirty = true;
+        this.gridData = process(this.gridResult, this.state)
     }
 
     updateSaveIcon(eventData: boolean) {
@@ -1407,7 +1408,7 @@ export class dealEditorComponent {
             } 
             this.selectedTab = this.groups[0].name;
             this.filterColumnbyGroup(this.selectedTab);
-            if (this.in_Search_Text && this.in_Search_Text != null && this.in_Search_Text != '') {
+            if (this.in_Search_Text && this.in_Search_Text != null && this.in_Search_Text != '' && this.in_Search_Text != 'PS') {
                 this.searchFilter = this.in_Search_Text;
                 this.filterOnDealId(this.searchFilter)
             }

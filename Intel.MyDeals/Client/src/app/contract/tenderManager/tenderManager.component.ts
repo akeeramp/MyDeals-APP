@@ -89,7 +89,7 @@ export class tenderManagerComponent {
                 let compFlag = this.pricingTableData.PRC_TBL_ROW.filter(x => x.COMP_MISSING_FLG == "0");
                 this.pt_passed_validation = !(this.isPTREmpty) && (passed.length == this.pricingTableData.PRC_TBL_ROW.length) && !(this.pricingTableData.WIP_DEAL.find(x => x.warningMessages.length > 0) ? true : false) ? true : false;
                 this.compMissingFlag = !(this.isPTREmpty) && compFlag.length == this.pricingTableData.PRC_TBL_ROW.length ? true : false;
-                if (!!this.route.snapshot.queryParams.searchTxt && this.isPTRPartiallyComplete() && this.isredirect==false) {//if deal searched through global search
+                if (!!this.route.snapshot.queryParams.searchTxt && this.route.snapshot.queryParams.searchTxt != 'PT' && this.isPTRPartiallyComplete() && this.isredirect==false) {//if deal searched through global search
                     this.selectedTab = 'DE';
                     this.currentTAB = 'DE';
                     const cid = this.route.snapshot.paramMap.get('cid');
