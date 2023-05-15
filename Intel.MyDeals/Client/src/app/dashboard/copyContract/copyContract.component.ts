@@ -28,7 +28,7 @@ export class CopyContractComponent {
                 private ctrctWdgtSvc: contractStatusWidgetService,
                 private momentService: MomentService) {}
 
-    private isCopyCntrctListLoaded = false;
+    private copyLoading = true;
     private copyCntrctCustomerName = '<All>';
     private copyCntrctSelectedItem = {};
     private copyCntrctStartDate = this.momentService.moment(this.data.startDate).format("MM/DD/YYYY");
@@ -36,6 +36,10 @@ export class CopyContractComponent {
     private includeTenders = true;
     private selectedCustomerIds: Array<any> = [];
     private copyCntrctList: any;
+
+    //public copyLoading = true;
+    private spinnerMessageHeader = "Loading contracts";
+    private spinnerMessageDescription = "Please wait while we load your contracts.";
 
     public gridData: GridDataResult;
     public orgGridData: GridDataResult;
@@ -108,7 +112,8 @@ export class CopyContractComponent {
                 this.copyCntrctList = response;
                 this.gridData = process(this.copyCntrctList, this.state);
                 this.orgGridData = process(this.copyCntrctList, this.state);
-                this.isCopyCntrctListLoaded = true;
+                //this.isCopyCntrctListLoaded = true;
+                this.copyLoading = false;
             }, (error) => {
                 this.loggerSvc.error("copyContract::ngOnInit::Unable to GetDashboardContractSummary.", error);
             }

@@ -5,14 +5,14 @@
 <loading-panel-angular [show]="isBusy" [header]="'Meet Comp...'" [isShowFunFact]="false" [description]="'Please wait we are fetching Meet Comp Data...'" [msgType]="'Info'"></loading-panel-angular>
 <div class="col-md-12">
     <div class="col-md-9">
-        <h2>Meet Comp </h2>
+        <h2 style="margin-top:15px!important;">Meet Comp </h2>
     </div>
-    <div class="col-md-3" *ngIf="HasBulkUploadAccess"><button (click)="OpenBulkUploadMeetCompModal()" class="btn btn-primary" style="float: right; margin-top: 42px">Upload Meet Comp</button></div>
+    <div class="col-md-3" *ngIf="HasBulkUploadAccess"><button (click)="OpenBulkUploadMeetCompModal()" class="btn btn-primary" style="float: right; margin-top: 15px">Upload Meet Comp</button></div>
 </div>
 <div class="col-md-12" *ngIf="isAccess==false">
     <div class="alert alert-danger">{{isAccessMessage}}</div>
 </div>
-<div class="fl col-md-12" style="padding-top: 20px;">
+<div class="fl col-md-12" style="padding-top: 15px;">
     <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Customer:</div>
     <kendo-combobox [data]="customers" [(ngModel)]="selectedCustomerID" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" [kendoDropDownFilter]="filterSettings" class="opUiContainer md" (valueChange)="custValueChange($event)" textField="CUST_NM" valueField="CUST_SID" [ngClass]="{'errorCode': isCustomerMissing==true}"
         placeholder="Select a Customer..." style="width: 230px; float: left; height: 35px;"></kendo-combobox>
@@ -29,7 +29,7 @@
 </div>
 <div class="col-md-12 kendo-grid-buttons" style="padding-top: 20px !important;">
     <kendo-grid [data]="gridData" filterable="menu" [scrollable]="true" [sortable]="true" [navigable]="true" [columnMenu]="{sort:true}" [resizable]="true" [reorderable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter"
-        [group]="state.group" [groupable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" class="pro-meetComp" [height]="520" (dataStateChange)="dataStateChange($event)">
+        [group]="state.group" [groupable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" class="pro-meetComp" (dataStateChange)="dataStateChange($event)" style="height: calc(100vh - 240px);">
         <ng-template kendoGridToolbarTemplate><button (click)="clearFilter()" class="k-button clearButton"><span
                     class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS </button>
             <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()" class="k-button clearButton"><span

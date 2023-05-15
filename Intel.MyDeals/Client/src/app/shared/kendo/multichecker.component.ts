@@ -24,7 +24,7 @@ import { each, compact, sortBy, filter } from 'underscore';
               [checked]="isItemSelected(item)"
               [disabled] = "currentData.length == 1 && textAccessor(item) == 'Select All'" />
             <label
-              class="k-multiselect-checkbox k-checkbox-label" style="white-space:normal !important;"
+              class="k-multiselect-checkbox k-checkbox-label"
               for="chk-{{valueAccessor(item)}}">
                 {{ textAccessor(item) }}
             </label>
