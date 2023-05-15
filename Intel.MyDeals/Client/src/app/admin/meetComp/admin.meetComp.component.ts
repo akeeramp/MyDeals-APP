@@ -35,6 +35,7 @@ export class meetCompComponent {
     private meetCompMasterData = [];
     private isCustomerMissing = false;
     private isCatMissing = false;
+    private filteredData = {};
     private isBrandMissing = false;
     private isBusy = false;
     private gridData: GridDataResult;
@@ -93,10 +94,11 @@ export class meetCompComponent {
         this.gridData = process(this.gridResult, this.state);
     }
     distinctPrimitive(fieldName: string): any {
-        if (this.gridResult.length > 0) {
-            return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
+        if (this.gridResult.length > 0 && this.filteredData[fieldName]) {
+            return this.filteredData[fieldName];
         }
         return this.gridResult;
+        
     }
     loadMeetCompPage() {
         //Developer can see the Screen..
@@ -281,7 +283,6 @@ export class meetCompComponent {
                 "HIER_VAL_NM": value.toString()
             };
             this.meetCompSvc.getMeetCompData(meetCompSearch).subscribe((response: Array<any>) => {
-                this.isBusy = false;
                 each(response, item => {
                     item['CHG_DTM'] = this.datepipe.transform(new Date(item['CHG_DTM']), 'M/d/yyyy');
                     item['CRE_DTM'] = this.datepipe.transform(new Date(item['CRE_DTM']), 'M/d/yyyy');
@@ -289,6 +290,14 @@ export class meetCompComponent {
                     item['CRE_DTM'] = new Date(item['CRE_DTM']);
                 })
                 this.gridResult = response;
+                //setting filterdata
+                this.filteredData['CUST_NM'] = distinct(this.gridResult, 'CUST_NM').map(item => item['CUST_NM']);
+                this.filteredData['HIER_VAL_NM'] = distinct(this.gridResult, 'HIER_VAL_NM').map(item => item['HIER_VAL_NM']);
+                this.filteredData['MEET_COMP_PRD'] = distinct(this.gridResult, 'MEET_COMP_PRD').map(item => item['MEET_COMP_PRD']);
+                this.filteredData['CRE_EMP_NM'] = distinct(this.gridResult, 'CRE_EMP_NM').map(item => item['CRE_EMP_NM']);
+                this.filteredData['CHG_EMP_NM'] = distinct(this.gridResult, 'CHG_EMP_NM').map(item => item['CHG_EMP_NM']);
+                this.filteredData['PRD_CAT_NM'] = distinct(this.gridResult, 'PRD_CAT_NM').map(item => item['PRD_CAT_NM']);
+                this.isBusy = false;
                 this.gridData = process(this.gridResult, this.state);
             }, (error) => {
                 this.loggerSvc.error("Unable to get Meet Comp Data [MC Data].", '', 'meetCompComponent::fetchMeetCompData::' + JSON.stringify(error));

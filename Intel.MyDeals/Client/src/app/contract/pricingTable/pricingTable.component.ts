@@ -331,7 +331,7 @@ export class pricingTableComponent {
                     else if (this.type && this.type == 'PS' && IDS)
                         window.location.href = "Contract#/tendermanager/" + this.c_Id + "?searchTxt=PS&PsId=" + this.route.snapshot.params.PSID;
                     else if (this.type && this.type == 'PT' && IDS)
-                        window.location.href = "Contract#/tendermanager/" + this.c_Id + "?searchTxt=PT&PsId=" + this.route.snapshot.params.PTID;
+                        window.location.href = "Contract#/tendermanager/" + this.c_Id + "?searchTxt=PT&PtId=" + this.route.snapshot.params.PTID;
                     else
                         window.location.href = "Contract#/tendermanager/" + this.c_Id;
                 }
