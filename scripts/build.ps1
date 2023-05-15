@@ -6,7 +6,7 @@ try {
     }
     elseif ($Operation -eq 'NPMInstall' ){
         Set-Location -Path Intel.MyDeals/Client/ -PassThru;
-        npm install;
+        npm install --force;
         Set-Location -Path .. -PassThru ; 
         Set-Location -Path ..  -PassThru;
     }
