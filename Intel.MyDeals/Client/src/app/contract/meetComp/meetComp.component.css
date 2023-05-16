@@ -540,9 +540,9 @@
     top: 10% !important
 }
 
-.meet-comp-filter ul {
-    max-height: 300px
-}
+/*.meet-comp-filter ul {
+    max-height: 300px;
+}*/
 
 .meet-comp-blank_space {
     color: #c1c1c1

@@ -11,7 +11,7 @@ import { each, compact, sortBy, filter } from 'underscore';
         <span id="searchIcon" class="k-icon k-i-zoom"></span>
     </div>
     <cdk-virtual-scroll-viewport [itemSize]="7"  style="min-height: 200px;">
-        <ul style="overflow:hidden; max-width: 300px;">      
+        <ul style="overflow:hidden !important; max-width: 300px;">      
           <li #itemElement
             *cdkVirtualFor="let item of currentData; let i = index;"
             (click)="onSelectionChange(valueAccessor(item), itemElement)"
