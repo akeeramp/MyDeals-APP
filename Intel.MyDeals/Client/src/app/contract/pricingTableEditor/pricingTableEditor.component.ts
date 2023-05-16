@@ -338,6 +338,12 @@ export class pricingTableEditorComponent {
                                         }
                                     }
                                 }
+
+                                if(this.field='GEO_COMBINED'){
+                                    const col = findIndex(VM.columns, { data: this.field });
+                                    this.hot.setCellMetaObject(this.selRow,col,{ 'className': '', comment: { value: '' } });
+                                    this.hot.render();
+                                }
                             }
                             this.hot.setDataAtCell(this.selRow, this.selCol, result?.toString(), 'no-edit');
                         }
@@ -756,7 +762,7 @@ export class pricingTableEditorComponent {
             // settlement level and period profile set to default value on delete
             const perPro = where(changes, { prop: 'PERIOD_PROFILE' });
             const restprd = where(changes, { prop: 'RESET_VOLS_ON_PERIOD' });
-            
+            const geo=where(changes, { prop: 'GEO_COMBINED' });
             //here we are using if conditions because at a time multiple changes can happen
             if (PTR && PTR.length > 0) {
                 this.undoEnable = false;
@@ -777,6 +783,28 @@ export class pricingTableEditorComponent {
                 }else{
                     this.setDeafultARSettlementAndRestPeriod(AR);
                 }
+            }
+            if(geo && geo.length>0){
+                let isvalidGeo=true
+                let geolist=geo[0].new.split(',');
+                const col = findIndex(this.columns, { data: geo[0].prop });
+                each(geolist,geoname=>{
+                    geoname=  geoname.replace(/[\[\]']+/g, '');
+                    const geoprest=  this.dropdownResponses.GEO_COMBINED.find(x=>x.dropdownName==geoname);
+                    if(geoprest==undefined){
+                        isvalidGeo=false;
+                        const invalidname=geoname +' is not valid Geo'
+                        this.hotTable.setCellMetaObject(geo[0].row,col,{ 'className': 'error-product', comment: { value: invalidname } });
+                        this.hotTable.render();
+                    }
+                });
+             
+              if(!isvalidGeo){
+              this.hotTable.setDataAtRowProp(geo[0].row, geo[0].prop, '', 'no-edit');
+              }else{
+                this.hotTable.setCellMetaObject(geo[0].row,col,{ 'className': '', comment: { value: '' } });
+                        this.hotTable.render();
+              }
             }
             if(restprd && restprd.length>0){
                 this.setDeafultARSettlementAndRestPeriod(restprd);
@@ -843,7 +871,9 @@ export class pricingTableEditorComponent {
             if ((PTR_EXLDS && PTR_EXLDS.length > 0)) {
                 const selrow = PTR_EXLDS[0].row;
                 const PTR_Exccol_ind = findIndex(this.columns, { data: 'PRD_EXCLDS' });
+                const PTR_Inccol_ind = findIndex(this.columns, { data: 'PTR_USER_PRD' });
                 this.hotTable.setCellMeta(selrow, PTR_Exccol_ind, 'className', 'normal-product');
+                this.hotTable.setCellMeta(selrow, PTR_Inccol_ind, 'className', 'normal-product');
                 this.hotTable.render();
                 this.isExcludePrdChange = true;
                 this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_INVLD_PRD', '', 'no-edit');
