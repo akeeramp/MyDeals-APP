@@ -22,6 +22,8 @@ import { CustomDropDownFilterComponent } from '../../app/shared/kendo/customDrop
 import { floatingActioncomponent } from '../../app/core/floatingAction/floatingAction.component';
 import { HeaderComponent } from '../../app/shared/header/header.component';
 import { PingComponent } from '../../app/core/ping/ping.component';
+import { fileAttachmentComponent } from '../../app/core/gridCell/fileAttachmentModal/fileAttachmentModal.component';
+import { dealTimelineComponent } from '../../app/core/gridCell/dealTimelineModal/dealTimelineModal.component';
 
 export let ContractUtilComponents = [ 
     LoadingPanelComponent,
@@ -46,5 +48,7 @@ export let ContractUtilComponents = [
     CustomDropDownFilterComponent,
     floatingActioncomponent,
     HeaderComponent,
-    PingComponent
+    PingComponent,
+    fileAttachmentComponent,
+    dealTimelineComponent
 ]

@@ -46,6 +46,8 @@ import { systemPricePointModalComponent } from '../../app/contract/ptModals/deal
 import { TenderFolioComponent } from '../../app/contract/tenderFolio/tenderFolio.component';
 import { dealProductsModalComponent } from '../../app/contract/ptModals/dealProductsModal/dealProductsModal.component';
 import { ProductBreakoutComponent } from '../../app/contract/ptModals/productSelector/productBreakout/productBreakout.component';
+import { fileAttachmentComponent } from '../../app/core/gridCell/fileAttachmentModal/fileAttachmentModal.component';
+import { dealTimelineComponent } from '../../app/core/gridCell/dealTimelineModal/dealTimelineModal.component';
 
 export let AdvanceUtilComponents = [ 
     LoadingPanelComponent,
@@ -92,5 +94,7 @@ export let AdvanceUtilComponents = [
     systemPricePointModalComponent,
     TenderFolioComponent,
     dealProductsModalComponent,
-    ProductBreakoutComponent
+    ProductBreakoutComponent,
+    fileAttachmentComponent,
+    dealTimelineComponent
 ]
