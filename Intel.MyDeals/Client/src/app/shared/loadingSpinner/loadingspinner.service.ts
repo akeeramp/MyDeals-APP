@@ -5,10 +5,8 @@ import { BehaviorSubject } from 'rxjs';
 @Injectable({
     providedIn: 'root'
 })
-
 export class LoadingSpinnerService {
-    
     constructor(private httpClient: HttpClient) { }
-    public isLoading = new BehaviorSubject(false);
-  
+
+    public isLoading = new BehaviorSubject(false); 
 }

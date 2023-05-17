@@ -1,14 +1,34 @@
-import {Component} from "@angular/core";
-import {LoadingSpinnerService} from "./loadingspinner.service";
-import {logger} from "../logger/logger";
+import { Component } from "@angular/core";
+import { LoadingSpinnerService } from "./loadingspinner.service";
+import { logger } from "../logger/logger";
 import { contains, first } from 'underscore';
 
 @Component({
-  selector: "app-loader",
-  templateUrl:
-        "Client/src/app/shared/loadingSpinner/loadingspinner.component.html",
-    styles: [`#saving-bar {position: absolute;right: 1px;bottom: 0;opacity: .8;margin-bottom: -2px;overflow: hidden;}
-                #saving-text {position: absolute;right: 0;bottom: 0;width: 210px;height: 12px;font-size: 10px;font-family: arial;line-height: .9em;text-align: center;overflow: hidden;text-transform: uppercase;}`]
+  selector: 'app-loader',
+  templateUrl: 'Client/src/app/shared/loadingSpinner/loadingspinner.component.html',
+    styles: [`
+      #saving-bar {
+        position: absolute;
+        right: 1px;
+        bottom: 0;
+        opacity: .8;
+        margin-bottom: -2px;
+        overflow: hidden;
+      }
+
+      #saving-text {
+        position: absolute;
+        right: 0;
+        bottom: 0;
+        width: 210px;
+        height: 12px;
+        font-size: 10px;
+        font-family: arial;
+        line-height: .9em;
+        text-align: center;
+        overflow: hidden;
+        text-transform: uppercase;
+      }`]
 })
 export class LoadingSpinnerComponent {
   private isLoading = true;
@@ -47,6 +67,5 @@ export class LoadingSpinnerComponent {
     } else {
       localStorage.setItem("recentsURLs", window.location.href);
     }
-
   } 
 }
