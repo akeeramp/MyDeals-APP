@@ -1573,7 +1573,7 @@ kendo-grid#dealEditor .k-grid-header-wrap {
 
 .bidGeoMultiSelect .k-multiselect-wrap.k-floatwrap ul li {
     background-color: var(--dark-blue);
-    margin: 0;
+    margin: 1px;
     padding: 5px !important;
     font-size: 12px !important;
     gap: 0.2rem;
@@ -1585,6 +1585,7 @@ kendo-grid#dealEditor .k-grid-header-wrap {
 
     .bidGeoMultiSelect .k-multiselect-wrap.k-floatwrap ul li span {
         color: #fff;
+        line-height: 1;
     }
 
     .bidGeoMultiSelect .k-multiselect-wrap.k-floatwrap ul li span.k-select {
