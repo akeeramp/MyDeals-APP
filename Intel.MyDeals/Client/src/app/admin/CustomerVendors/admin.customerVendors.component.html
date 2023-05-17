@@ -92,9 +92,9 @@
                 </ng-template>
             </kendo-grid-column>
         </kendo-grid>
-        <kendo-dialog title="Please Fix" *ngIf="isCombExists" (close)="saveConfirmation()">
+        <kendo-dialog title="Please Fix" *ngIf="isCombExists" class="fix_close" (close)="saveConfirmation()">
             <p style="margin: 30px; text-align: center;">{{errorMsg}}</p>
-            <kendo-dialog-actions><button class='k-button' (click)="saveConfirmation()">OK</button>
+            <kendo-dialog-actions class="ok_cncl_btn_fix"><button class='k-button ok_button_f' (click)="saveConfirmation()">OK</button>
             </kendo-dialog-actions>
         </kendo-dialog>
     </div>

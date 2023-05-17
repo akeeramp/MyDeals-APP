@@ -60,3 +60,14 @@ button.cons-button-delete.k-button:hover {
     background: #367fa9 !important;
     color: #ffffff !important
 }
+.ok_button_f {
+    padding: 1.5em !important;
+    color: #111 !important;
+    background-color: #dbdbdb !important;
+}
+.ok_cncl_btn_fix {
+    padding: 0px !important;
+}
+kendo-dialog.fix_close .k-window-actions .k-button {
+    background: none !important;
+}

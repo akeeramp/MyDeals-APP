@@ -1004,3 +1004,6 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner .k-link .k-c
 .deactivatePopUp .k-window.k-dialog {
     border: none;
 }
+kendo-dialog.fix_close .k-window-actions .k-button {
+    background: none !important;
+}
