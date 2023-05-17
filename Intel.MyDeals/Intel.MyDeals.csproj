@@ -271,6 +271,7 @@
     <Compile Include="Controllers\API\DataFixController.cs" />
     <Compile Include="Controllers\API\DealMassUpdateController.cs" />
     <Compile Include="Controllers\API\DownStreamController.cs" />
+    <Compile Include="Controllers\API\HealthCheckController.cs" />
     <Compile Include="Controllers\API\IntegrationController.cs" />
     <Compile Include="Controllers\API\PrimeCustomersController.cs" />
     <Compile Include="Controllers\API\PushDealstoVistexController.cs" />
