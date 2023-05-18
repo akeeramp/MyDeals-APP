@@ -2,7 +2,7 @@
 
 div.overFlowWidget {
     width: auto;
-    height: calc(100vh - 2vh) !important;
+    height: calc(100vh - 12vh) !important;
     overflow: auto !important 
 }
 

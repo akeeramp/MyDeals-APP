@@ -6,10 +6,11 @@
      max-height: 100% !important
  }
 
- .overFlowWidRecent {
-     height: 212px;
-     overflow-y: auto
- }
+.overFlowWidRecent {
+    height: 212px;
+    overflow-y: auto;
+    margin-right: 8px;
+}
 
  .recent-widget-link {
      color: #0071c5;

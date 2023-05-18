@@ -1591,3 +1591,7 @@ kendo-grid#dealEditor .k-grid-header-wrap {
     .bidGeoMultiSelect .k-multiselect-wrap.k-floatwrap ul li span.k-select {
         display: inline-flex !important;
     }
+
+kendo-datepicker#dealDatePicker .k-input {
+    font-size: 12px;
+}
