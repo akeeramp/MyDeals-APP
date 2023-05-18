@@ -965,7 +965,9 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner .k-link .k-c
 
 #prodGrid.opUiContainer.md.k-grid td {
     border-width: 0 !important;
-    white-space: nowrap !important
+    white-space: nowrap !important;
+    padding-left:10px !important;
+    padding-right:10px !important
 }
 .product-breakout-modal .mat-dialog-container {
     padding: 0 !important;
@@ -1006,4 +1008,7 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner .k-link .k-c
 }
 kendo-dialog.fix_close .k-window-actions .k-button {
     background: none !important;
+}
+#prodGrid .k-grid .k-grid-content {
+    overflow: overlay !important
 }

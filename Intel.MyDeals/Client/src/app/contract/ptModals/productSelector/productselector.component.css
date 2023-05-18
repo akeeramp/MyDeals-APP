@@ -807,7 +807,7 @@ kendo-grid.raid-style {
 }
 
 #prodGrid kendo-grid.raid-style.proselector-raid-style {
-    height: calc(90vh - 440px);
+    height: calc(90vh - 385px);
 }
 
 .declaringProdGrid {

@@ -256,7 +256,7 @@
                             </div>
                             <div *ngIf="column.field == 'EPM_NM' || column.field == 'SKU_NM'">
                                 <ng-template kendoGridCellTemplate let-dataItem>
-                                    <div kendoTooltip position="bottom">
+                                    <div kendoTooltip position="left" [tooltipWidth]="263">
                                         <span title="{{dataItem.EPM_NM}}">{{dataItem.EPM_NM}}</span>
                                     </div>
                                 </ng-template>
