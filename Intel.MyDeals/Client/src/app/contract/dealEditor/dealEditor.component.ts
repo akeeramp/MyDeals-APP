@@ -129,7 +129,8 @@ export class dealEditorComponent {
     public isDeveloper = (<any>window).isDeveloper;
     public isTester = (<any>window).isTester;
     private isInitialLoad = true;
-    public allTabRename= '';
+    public allTabRename = '';
+    private datesModified = false;
     private dealId: any;
     public perfBar = {
         action: '',
@@ -928,6 +929,7 @@ export class dealEditorComponent {
                 if ((args.column.field == "START_DT" || args.column.field == "END_DT") && args.dataItem._behaviors != undefined && args.dataItem._behaviors != null
                     && args.dataItem._behaviors.isDirty != undefined && args.dataItem._behaviors.isDirty != null && args.dataItem._behaviors.isDirty[args.column.field] != undefined
                     && args.dataItem._behaviors.isDirty[args.column.field] != null && args.dataItem._behaviors.isDirty[args.column.field]) {
+                    this.datesModified = true;
                     if (args.dataItem.PAYOUT_BASED_ON != undefined && args.dataItem.PAYOUT_BASED_ON != null && args.dataItem.PAYOUT_BASED_ON != "" && args.dataItem.PAYOUT_BASED_ON == "Consumption") {
                         this.isWarning = true;
                         this.message = "Changes to deal Start/End Dates for Consumption deals will change Billings Start/End Dates.\nValidate Billings Start/End Dates with the Contract.";
@@ -981,7 +983,7 @@ export class dealEditorComponent {
         if (!this.in_Is_Tender_Dashboard) {//Save and Validation functionality for Contract DE screen as well as Tender Manager DE Screen
             try {
                 each(this.gridResult, (item) => {
-                    if ((this.momentService.moment(item["START_DT"]).isBefore(this.contractData.START_DT) || this.momentService.moment(item["END_DT"]).isAfter(this.contractData.END_DT)) && this.isDatesOverlap == false) {
+                    if ((this.momentService.moment(item["START_DT"]).isBefore(this.contractData.START_DT) || this.momentService.moment(item["END_DT"]).isAfter(this.contractData.END_DT)) && this.isDatesOverlap == false && this.datesModified) {
                         this.isDatesOverlap = true;
                     }
                 });
@@ -1053,6 +1055,7 @@ export class dealEditorComponent {
     async SaveDealData() {
         this.isWarning = false;
         this.isDatesOverlap = false;
+        this.datesModified = false;
         this.isDataLoading = true;
         this.savingDeal = true;
         this.setBusy("Saving your data...", "Please wait as we save your information!", "Info", true);

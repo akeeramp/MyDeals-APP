@@ -4,11 +4,11 @@
 <kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event);" id="dealEditorTab" class="width-fixes new-allDeals fs-increase" style="min-height:400px;">
     <kendo-tabstrip-tab *ngFor="let data of groups;" title="{{data.name}}" [selected]="selectedTab === data.name" [cssClass]="data.isTabHidden? 'hidden' : 'visible'">
         <ng-template kendoTabTitle>
-            <span><i *ngIf="data.name !== 'CAP Info' && data.name !== 'All'" class="intelicon-pin-outlined" style="color: #00aeef; border-radius: 15px; font-size:16px; padding: 3px;" title="Pin tab so it always shows in the grid"></i></span>&nbsp;
+            <span><i *ngIf="data.name !== 'CAP Info' && data.name !== 'All' && data.name !== allTabRename" class="intelicon-pin-outlined" style="color: #00aeef; border-radius: 15px; font-size:16px; padding: 3px;" title="Pin tab so it always shows in the grid"></i></span>&nbsp;
             <span class="colorChg">{{data.name}} &nbsp;</span>
             <span class="badge error ng-binding badges-font-changes" id="tabErrorCnt" *ngIf="data.numErrors > 0">{{data.numErrors}}</span>&nbsp;
             <span class="badge warning badges-font-changes" id="tabErrorCnt" *ngIf="data.name == 'CAP Info' && numSoftWarn > 0">{{numSoftWarn}}</span>&nbsp;
-            <i id="btnClose" *ngIf="data.name !== 'CAP Info' && (data.name !== 'All' || data.name !== allTabRename)" style="color: #00aeef; border-radius: 15px; font-size: 16px;" class="intelicon-close" (click)="onClose(data.name)" title="Close tab"></i>
+            <i id="btnClose" *ngIf="data.name !== 'CAP Info' && data.name !== 'All' && data.name !== allTabRename" style="color: #00aeef; border-radius: 15px; font-size: 16px;" class="intelicon-close" (click)="onClose(data.name)" title="Close tab"></i>
         </ng-template>
         <ng-template kendoTabContent>
             <div id="ToolDeBtn" class="flex-container" style="display:flex">
