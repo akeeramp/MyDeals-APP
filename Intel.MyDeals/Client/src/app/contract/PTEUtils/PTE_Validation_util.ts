@@ -287,12 +287,12 @@ export class PTE_Validation_Util {
         PTE_Common_Util.setWarningFields(data, curPricingTable);
         return isShowStopperError;
     }
-    static validateTenderDashboardDeal(data, curPricingTable, groups, templates) {
+    static validateTenderDashboardDeal(data, curPricingTable, groups, templates, allTabRename) {
         let isShowStopperError = DE_Validation_Util.validateTenderDahsboardDeals(data, templates);
         PTE_Common_Util.setWarningFields(data, curPricingTable);
         if (data != null) {
             for (let i = 0; i < data.length; i++) {
-                DE_Save_Util.savedWithWarning(data[i], groups, templates);
+                DE_Save_Util.savedWithWarning(data[i], groups, templates, allTabRename);
             }
         }
         return isShowStopperError;

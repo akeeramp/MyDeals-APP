@@ -6,11 +6,11 @@ export class DE_Common_Util {
             groups[g].numErrors = 0;
         }
     }
-    static increaseBadgeCnt(key, groups, templates): void {
+    static increaseBadgeCnt(key, groups, templates, allTabRename): void {
         if (templates[key] === undefined) return;
         for (var i = 0; i < templates[key].Groups.length; i++) {
             for (var g = 0; g < groups.length; g++) {
-                if (groups[g].name === templates[key].Groups[i] || groups[g].name === "All") {
+                if (groups[g].name === templates[key].Groups[i] || groups[g].name === "All" || groups[g].name === allTabRename) {
                     groups[g].numErrors++;
                 }
             }

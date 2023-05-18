@@ -1007,7 +1007,7 @@ export class dealEditorComponent {
             }
         }
         else {//Save and Validation functionality for Tender Dashboard DE screen
-            let isShowStopError = PTE_Validation_Util.validateTenderDashboardDeal(this.gridResult, this.curPricingTable, this.groups, this.templates);
+            let isShowStopError = PTE_Validation_Util.validateTenderDashboardDeal(this.gridResult, this.curPricingTable, this.groups, this.templates, this.allTabRename);
             if (isShowStopError) {
                 this.loggerService.warn("Please fix validation errors before proceeding", "");
                 this.gridData = process(this.gridResult, this.state);
@@ -1187,10 +1187,10 @@ export class dealEditorComponent {
                 for (var key in keys) {
                     if (PTE_Config_Util.tierAtrbs.indexOf(keys[key]) >= 0 && this.gridResult[i].NUM_OF_TIERS != undefined && !tierAtrbAdded) {
                         this.gridResult[i]._behaviors.isError["TIER_NBR"] = true;
-                        PTE_Common_Util.increaseBadgeCnt("TIER_NBR", this.groups, this.templates);
+                        PTE_Common_Util.increaseBadgeCnt("TIER_NBR", this.groups, this.templates, this.allTabRename);
                         tierAtrbAdded = true;
                     }
-                    PTE_Common_Util.increaseBadgeCnt(keys[key], this.groups, this.templates);
+                    PTE_Common_Util.increaseBadgeCnt(keys[key], this.groups, this.templates, this.allTabRename);
                 }
             }
         }
@@ -1415,7 +1415,7 @@ export class dealEditorComponent {
                 this.filterOnDealId(this.searchFilter)
             }
 
-            if(this.route.snapshot.url[0].path=='contractmanager'){
+            if (this.route.snapshot.url[0].path == 'contractmanager' && this.isInitialLoad){
                 const type=this.route.snapshot.paramMap.get('type');
                 const cid=this.route.snapshot.paramMap.get('cid');
                 const psid=this.route.snapshot.paramMap.get('PSID');

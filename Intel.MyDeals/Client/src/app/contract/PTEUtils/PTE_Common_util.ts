@@ -116,8 +116,8 @@ export class PTE_Common_Util {
     static clearBadegCnt(groups) {
         DE_Common_Util.clearBadegCnt(groups);
     }
-    static increaseBadgeCnt(key, groups, templates) {
-        DE_Common_Util.increaseBadgeCnt(key, groups, templates);
+    static increaseBadgeCnt(key, groups, templates, allTabRename) {
+        DE_Common_Util.increaseBadgeCnt(key, groups, templates, allTabRename);
     }
     static checkSoftWarnings(data, curPricingTable) {
         return DE_Common_Util.checkSoftWarnings(data, curPricingTable);
