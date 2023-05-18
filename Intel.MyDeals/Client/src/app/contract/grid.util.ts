@@ -43,7 +43,7 @@ export class GridUtil {
             if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
                 tmplt = '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
             if (passedData[field] != undefined && passedData[field] != null)
-                tmplt += '    <div class="ng-binding vert-center ' + msgClass + '" style="line-height: 3em;" ' + finalMsg + '>' + passedData[field] + '</div>';
+                tmplt += '    <div class="ng-binding vert-center ' + msgClass + '" style="line-height: 2em;white-space: nowrap;transform: translateY(0%) !important;" ' + finalMsg + '>' + passedData[field] + '</div>';
             tmplt += '</div>';
             return tmplt;
         }
@@ -212,7 +212,7 @@ export class GridUtil {
         var sortedKeys = Object.keys(data).sort();  //to enforce primary listed before secondaries and dims are shown in order
         if (passedData._behaviors != undefined && passedData._behaviors.isError != undefined && passedData._behaviors.isError[field] != undefined)
             tmplt += '<div class="err-bit" kendoTooltip title="' + passedData._behaviors.validMsg[field] + '"></div>';
-        tmplt += '<div class="uiControlDiv trackingNumParent' + this.getClassNm(passedData, field) + '">';
+        tmplt += '<div class="uiControlDiv trackingNumParent tracker-number-class' + this.getClassNm(passedData, field) + '">';
         tmplt += '<div class="vert-center">';
         dim = "20_____2"
         if (passedData[field][dim] != null && passedData[field][dim] != undefined) {

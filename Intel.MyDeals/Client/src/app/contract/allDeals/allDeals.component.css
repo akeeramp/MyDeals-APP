@@ -413,3 +413,11 @@ kendo-tabstrip.diff-all-deals {
     top: 0% !important;
     transform: translateY(0%) !important;
 }
+.uiControlDiv.trackingNumParent.tracker-number-class {
+    top: 0% !important;
+    transform: translateY(100%) !important;
+    position: relative;
+    white-space:nowrap !important;
+    padding:0px !important;
+    left:-5px !important
+}
