@@ -786,7 +786,7 @@ export class pricingTableEditorComponent {
             }
             if(geo && geo.length>0){
                 let isvalidGeo=true
-                let geolist=geo[0].new.split(',');
+                let geolist=geo[0].new && geo[0].new != null ? geo[0].new.split(','): '';
                 const col = findIndex(this.columns, { data: geo[0].prop });
                 each(geolist,geoname=>{
                     geoname=  geoname.replace(/[\[\]']+/g, '');
