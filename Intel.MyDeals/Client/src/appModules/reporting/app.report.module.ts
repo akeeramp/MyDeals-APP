@@ -1,5 +1,5 @@
 
-import { NgModule, ApplicationRef } from '@angular/core';
+import { NgModule, ElementRef, ApplicationRef } from '@angular/core';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { BrowserModule } from '@angular/platform-browser';
 import { HTTP_INTERCEPTORS, HttpClientModule } from '@angular/common/http';
@@ -45,6 +45,8 @@ import { notificationDockComponent } from '../../app/core/notification/notificat
 import { AdminBannerComponent } from '../../app/core/adminBanner/adminBanner.component';
 import { dealPopupDockComponent } from '../../app/core/dealPopup/dealPopupDock.component';
 import { GlobalSearchComponent } from '../../app/advanceSearch/globalSearch/globalSearch.component';
+import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingspinner.component';
+import { POPUP_CONTAINER } from '@progress/kendo-angular-popup';
 
 @NgModule({
     imports: [
@@ -79,6 +81,13 @@ import { GlobalSearchComponent } from '../../app/advanceSearch/globalSearch/glob
             useClass: AuthInterceptor,
             multi: true,
         },
+        {
+            provide: POPUP_CONTAINER,
+            useFactory: () => {
+                //return the container ElementRef, where the popup will be injected
+                return { nativeElement: document.body } as ElementRef;
+            }
+        },
         broadCastService,
         SecurityResolver,
         MomentService
@@ -104,5 +113,6 @@ export class AppReportModule {
         appRef.bootstrap(AdminBannerComponent);
         appRef.bootstrap(dealPopupDockComponent);
         appRef.bootstrap(GlobalSearchComponent);
+        appRef.bootstrap(LoadingSpinnerComponent);
       }
 }

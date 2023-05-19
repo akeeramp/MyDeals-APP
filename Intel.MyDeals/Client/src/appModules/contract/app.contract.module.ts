@@ -57,7 +57,7 @@ import { AdminBannerComponent } from '../../app/core/adminBanner/adminBanner.com
 import { dealPopupDockComponent } from '../../app/core/dealPopup/dealPopupDock.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { GlobalSearchComponent } from '../../app/advanceSearch/globalSearch/globalSearch.component';
-
+import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingspinner.component';
 import { ContractUtilComponents } from './contract-util.module';
 @NgModule({
     imports: [
@@ -140,5 +140,6 @@ export class AppContractModule {
         appRef.bootstrap(AdminBannerComponent);
         appRef.bootstrap(dealPopupDockComponent);
         appRef.bootstrap(GlobalSearchComponent);
+        appRef.bootstrap(LoadingSpinnerComponent);
       }
 }

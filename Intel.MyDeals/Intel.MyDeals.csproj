@@ -606,6 +606,39 @@
     <Content Include="Client\src\app\advanceSearch\advancedSearch.component.html" />
     <Content Include="Client\src\app\advanceSearch\globalSearch\globalSearch.component.css" />
     <Content Include="Client\src\app\advanceSearch\globalSearch\globalSearch.component.html" />
+
+
+    <TypeScriptCompile Include="Client\src\appModules\admin\admin-util.module.ts" />
+    <TypeScriptCompile Include="Client\src\appModules\admin\app.admin.module.ts" />
+  <TypeScriptCompile Include="Client\src\appModules\admin\app.route-admin.component.ts" />
+<TypeScriptCompile Include="Client\src\appModules\admin\main-admin.ts" />
+<TypeScriptCompile Include="Client\src\appModules\admin\main-admin-prod.ts" />
+
+    <TypeScriptCompile Include="Client\src\appModules\advancesearch\advance-util.module.ts" />
+    <TypeScriptCompile Include="Client\src\appModules\advancesearch\app.advance.module.ts" />
+  <TypeScriptCompile Include="Client\src\appModules\advancesearch\app.route-advance.component.ts" />
+<TypeScriptCompile Include="Client\src\appModules\advancesearch\main-advance.ts" />
+<TypeScriptCompile Include="Client\src\appModules\advancesearch\main-advance-prod.ts" />
+
+    <TypeScriptCompile Include="Client\src\appModules\contract\contract-util.module.ts" />
+    <TypeScriptCompile Include="Client\src\appModules\contract\app.contract.module.ts" />
+  <TypeScriptCompile Include="Client\src\appModules\contract\app.route-contract.component.ts" />
+<TypeScriptCompile Include="Client\src\appModules\contract\main-contract.ts" />
+<TypeScriptCompile Include="Client\src\appModules\contract\main-contract-prod.ts" />
+
+    <TypeScriptCompile Include="Client\src\appModules\dashboard\dashboard-util.module.ts" />
+    <TypeScriptCompile Include="Client\src\appModules\dashboard\app.dashboard.module.ts" />
+  <TypeScriptCompile Include="Client\src\appModules\dashboard\app.route-dashboard.component.ts" />
+<TypeScriptCompile Include="Client\src\appModules\dashboard\main-dashboard.ts" />
+<TypeScriptCompile Include="Client\src\appModules\dashboard\main-dashboard-prod.ts" />
+
+    <TypeScriptCompile Include="Client\src\appModules\reporting\report-util.module.ts" />
+    <TypeScriptCompile Include="Client\src\appModules\reporting\app.report.module.ts" />
+  <TypeScriptCompile Include="Client\src\appModules\reporting\app.route-report.component.ts" />
+<TypeScriptCompile Include="Client\src\appModules\reporting\main-report.ts" />
+<TypeScriptCompile Include="Client\src\appModules\reporting\main-report-prod.ts" />
+
+
     <TypeScriptCompile Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\vistex\admin.vistexIntegrationLog.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\vistex\admin.vistexProfiseeAPI.component.ts" />

@@ -14,6 +14,7 @@ import { dealPopupComponent } from '../../app/core/dealPopup/dealPopup.component
 import { dealPopupDockComponent } from '../../app/core/dealPopup/dealPopupDock.component';
 import { HeaderComponent } from '../../app/shared/header/header.component';
 import { PingComponent } from '../../app/core/ping/ping.component';
+import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingspinner.component';
 
 export let AdminUtilComponents = [ 
     LoadingPanelComponent,
@@ -30,5 +31,6 @@ export let AdminUtilComponents = [
     dealPopupComponent,
     dealPopupDockComponent,
     HeaderComponent,
-    PingComponent
+    PingComponent,
+    LoadingSpinnerComponent
 ]

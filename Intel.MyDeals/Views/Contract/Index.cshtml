@@ -1,20 +1,17 @@
 ﻿<script src="~/Client/src/dist/contract.js" async></script>
-
+@Styles.Render("~/css/_cache.css")
 @{
     ViewBag.Title = "Contract";
 }
 
-<div ui-view="bodyView" class="fullHeight">
+<div class="loading-screen">
     <div class="jumbotron ng-scope">
         <div class="container">
-            <h1><strong>My</strong> Deals</h1>
-            <p class="lead">Contract Manager.</p>
-            <p>
-                <small>Initializing... </small>
-            </p>
-            <p>
-                The contract manager is a "contract" friendly deal entry and management tool.
-            </p>
+            <h1><strong>My Deals</strong></h1>
+            <p class="lead">Contract Manager</p>
+            <br />
+            <p class="load-text">The contract manager is a "contract" friendly deal entry and management tool.</p>
+            <img src="/images/loading022.gif" />
         </div>
     </div>
-</div> 
+</div>

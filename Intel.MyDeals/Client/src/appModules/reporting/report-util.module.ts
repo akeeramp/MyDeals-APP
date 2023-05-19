@@ -13,6 +13,7 @@ import { dealPopupComponent } from '../../app/core/dealPopup/dealPopup.component
 import { dealPopupDockComponent } from '../../app/core/dealPopup/dealPopupDock.component';
 import { HeaderComponent } from '../../app/shared/header/header.component';
 import { PingComponent } from '../../app/core/ping/ping.component';
+import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingspinner.component';
 
 export let ReportUtilComponents = [ 
     LoadingPanelComponent,
@@ -28,5 +29,6 @@ export let ReportUtilComponents = [
     dealPopupComponent,
     dealPopupDockComponent,
     HeaderComponent,
-    PingComponent
+    PingComponent,
+    LoadingSpinnerComponent
 ]

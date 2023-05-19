@@ -20,6 +20,7 @@ import { dealPopupDockComponent } from '../../app/core/dealPopup/dealPopupDock.c
 import { HeaderComponent } from '../../app/shared/header/header.component';
 import { PingComponent } from '../../app/core/ping/ping.component';
 import { TenderFolioComponent } from '../../app/contract/tenderFolio/tenderFolio.component';
+import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingspinner.component';
 
 export let DashboardUtilComponents = [ 
     LoadingPanelComponent,
@@ -42,5 +43,6 @@ export let DashboardUtilComponents = [
     dealPopupDockComponent,
     HeaderComponent,
     PingComponent,
-    TenderFolioComponent
+    TenderFolioComponent,
+    LoadingSpinnerComponent
 ]

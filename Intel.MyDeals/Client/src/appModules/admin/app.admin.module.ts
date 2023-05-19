@@ -62,6 +62,8 @@ import { AdminBannerComponent } from '../../app/core/adminBanner/adminBanner.com
 import { dealPopupDockComponent } from '../../app/core/dealPopup/dealPopupDock.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { GlobalSearchComponent } from '../../app/advanceSearch/globalSearch/globalSearch.component';
+import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingspinner.component';
+import { POPUP_CONTAINER } from '@progress/kendo-angular-popup';
 import { AdminUtilComponents } from './admin-util.module';
 
 @NgModule({
@@ -112,6 +114,13 @@ import { AdminUtilComponents } from './admin-util.module';
             useClass: AuthInterceptor,
             multi: true,
         },
+        {
+            provide: POPUP_CONTAINER,
+            useFactory: () => {
+                //return the container ElementRef, where the popup will be injected
+                return { nativeElement: document.body } as ElementRef;
+            }
+        },
         DecimalPipe,
         CurrencyPipe,
         DatePipe,
@@ -141,5 +150,6 @@ export class AppAdminModule {
         appRef.bootstrap(AdminBannerComponent);
         appRef.bootstrap(dealPopupDockComponent);
         appRef.bootstrap(GlobalSearchComponent);
+        appRef.bootstrap(LoadingSpinnerComponent);
       }
 }
