@@ -59,6 +59,11 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { GlobalSearchComponent } from '../../app/advanceSearch/globalSearch/globalSearch.component';
 import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingspinner.component';
 import { ContractUtilComponents } from './contract-util.module';
+import { registerAllModules } from 'handsontable/registry';
+
+// register Handsontable's modules
+registerAllModules();
+
 @NgModule({
     imports: [
         CommonModule,

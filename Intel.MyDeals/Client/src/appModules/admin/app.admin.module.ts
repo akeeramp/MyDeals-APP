@@ -64,7 +64,11 @@ import { ScrollingModule } from '@angular/cdk/scrolling';
 import { GlobalSearchComponent } from '../../app/advanceSearch/globalSearch/globalSearch.component';
 import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingspinner.component';
 import { POPUP_CONTAINER } from '@progress/kendo-angular-popup';
+import { registerAllModules } from 'handsontable/registry';
 import { AdminUtilComponents } from './admin-util.module';
+
+// register Handsontable's modules
+registerAllModules();
 
 @NgModule({
     imports: [
