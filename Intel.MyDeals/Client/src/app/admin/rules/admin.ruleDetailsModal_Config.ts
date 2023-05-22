@@ -3,7 +3,7 @@ export class ruleDetailsModalConfig {
     public static columns = [
         {
             data: 'ProductName',
-            type: 'text',
+            type: 'text'
         },
         {
             data: 'Price',

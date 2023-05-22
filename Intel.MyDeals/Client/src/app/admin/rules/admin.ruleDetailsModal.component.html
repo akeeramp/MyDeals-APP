@@ -36,9 +36,7 @@
                                           [(ngModel)]="Rules.RuleStage" on="Approved" off="Pending Approval"
                                           onstyle="btn-success" offstyle="btn-danger"
                                           title="{{Rules.RuleStage === true ? 'Click to Un-Approve' : 'Click to Approve'}}"
-                                          (change)="UpdateRuleIndicator(Rules.Id, Rules.RuleStage,'UPDATE_STAGE_IND',((isElligibleForApproval == true && Rules.IsAutomationIncluded == true) ? true : false))">
-
-                        </mat-slide-toggle>
+                                          (change)="UpdateRuleIndicator(Rules.Id, Rules.RuleStage,'UPDATE_STAGE_IND',((isElligibleForApproval == true && Rules.IsAutomationIncluded == true) ? true : false))"></mat-slide-toggle>
                     </div>
                 </div>
                 <div class="form-group row col-md-12">
@@ -55,9 +53,7 @@
                                           onstyle="btn-success"
                                           offstyle="btn-danger"
                                           title="{{Rules.IsActive === true ? 'Active' : 'Inactivate'}}"
-                                          (change)="UpdateRuleIndicator(Rules.Id, Rules.IsActive,'UPDATE_ACTV_IND',true)">
-
-                        </mat-slide-toggle>
+                                          (change)="UpdateRuleIndicator(Rules.Id, Rules.IsActive,'UPDATE_ACTV_IND',true)"></mat-slide-toggle>
                     </span>
                     <label class="control-label col-md-1" style="float: left; padding-right:20px; font-weight: bold;">Rule Type:</label>
                     <span class="col-md-2" style="float: right;">
@@ -69,9 +65,7 @@
                                               off="Exclusion Rule"
                                               onstyle="btn-success"
                                               offstyle="btn-danger"
-                                              title="{{Rules.IsAutomationIncluded === true ? 'Auto Approval' : 'Exclusion from Automation'}}">
-
-                            </mat-slide-toggle>
+                                              title="{{Rules.IsAutomationIncluded === true ? 'Auto Approval' : 'Exclusion from Automation'}}"></mat-slide-toggle>
                         </span>
                     </span>
                 </div>
@@ -94,14 +88,12 @@
                 <div class="form-group row col-md-12" style="">
                     <label class="control-label col-md-2" style="padding-right: 20px; font-weight: bold;">Criteria:</label>
                     <div class="col-md-9">
-                        <div *ngFor="let dataItem of Rules.Criteria;let i=index trackBy i"
+                        <div *ngFor="let dataItem of Rules.Criteria; let i=index trackBy i"
                              class="divTableRow" style="margin-bottom: 10px;">
                             <div class="divTableCell" style="width:75px">
-                                <span class="icnBtn icnSkyBtn"
-                                      (click)="addRow(i)">
+                                <span class="icnBtn icnSkyBtn" (click)="addRow(i)">
                                     <i class="intelicon-plus-max mplusminus-style add-plus col-md-6"></i>
-                                </span><span class="icnBtn icnGryBtn"
-                                             (click)="removeRow(i)" *ngIf="i!=0">
+                                </span><span class="icnBtn icnGryBtn" (click)="removeRow(i)" *ngIf="i!=0">
                                     <i class="intelicon-minus-max mplusminus-style add-minus col-md-6"></i>
                                 </span>
                             </div>
@@ -150,8 +142,7 @@
                                                    valueField="dropdownName"
                                                    [autoClose]="false"
                                                    [(ngModel)]="dataItem.selectedValues"
-                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'dropdownName')">
-                                </kendo-multiselect>
+                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'dropdownName')"></kendo-multiselect>
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && dataItem.field == 'CRE_EMP_NAME'">
                                 <kendo-multiselect [disabled]="i==0"
@@ -161,8 +152,7 @@
                                                    valueField="EMP_WWID"
                                                    [autoClose]="false"
                                                    [(ngModel)]="dataItem.selectedValues"
-                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'name')">
-                                </kendo-multiselect>
+                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'name')"></kendo-multiselect>
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && (dataItem.field == 'PCSR_NBR' || dataItem.field == 'OP_CD' || dataItem.field == 'DIV_NM' || dataItem.field == 'FMLY_NM' || dataItem.field == 'PRD_CAT_NM')">
                                 <kendo-multiselect [disabled]="i==0"
@@ -172,8 +162,7 @@
                                                    valueField="value"
                                                    [autoClose]="false"
                                                    [(ngModel)]="dataItem.selectedValues"
-                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'value')">
-                                </kendo-multiselect>
+                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'value')"></kendo-multiselect>
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && (dataItem.field == 'HOST_GEO' || dataItem.field == 'GEO_COMBINED')">
                                 <kendo-multiselect [disabled]="i==0"
@@ -181,8 +170,7 @@
                                                    [data]="dataItem.dropDown"
                                                    [autoClose]="false"
                                                    [(ngModel)]="dataItem.selectedValues"
-                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'value')">
-                                </kendo-multiselect>
+                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'value')"></kendo-multiselect>
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && (dataItem.field == 'PAYOUT_BASED_ON' || dataItem.field == 'MRKT_SEG' || dataItem.field == 'SERVER_DEAL_TYPE')">
                                 <kendo-multiselect [disabled]="i==0"
@@ -192,8 +180,7 @@
                                                    valueField="DROP_DOWN"
                                                    [autoClose]="false"
                                                    [(ngModel)]="dataItem.selectedValues"
-                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'dropdown')">
-                                </kendo-multiselect>
+                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'dropdown')"></kendo-multiselect>
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && dataItem.field == 'CUST_NM'">
                                 <kendo-multiselect [disabled]="i==0"
@@ -203,18 +190,15 @@
                                                    valueField="CUST_SID"
                                                    [autoClose]="false"
                                                    [(ngModel)]="dataItem.selectedValues"
-                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'custName')">
-                                </kendo-multiselect>
+                                                   (valueChange)="dataChangeMulti($event, i, dataItem, 'custName')"></kendo-multiselect>
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'singleselect' || dataItem.type == 'singleselect_ext' || dataItem.type == 'singleselect_read_only'">
                                 <kendo-combobox [disabled]="i==0"
                                                 class="ecap-combo-style"
                                                 [data]="dataItem.dropDown"
                                                 [(ngModel)]="dataItem.selectedValues"
-                                                (valueChange)="dataChange(i, dataItem, 'combobox', $event)">
-                                </kendo-combobox>
+                                                (valueChange)="dataChange(i, dataItem, 'combobox', $event)"></kendo-combobox>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -266,5 +250,5 @@
         </kendo-dialog>
     </div>
 </div>
-<loading-panel-angular id="PriceRulesLoading"  style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
-                           [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType" class="loader-fixes"></loading-panel-angular>
+<loading-panel-angular id="PriceRulesLoading"  style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"
+                       [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType" class="loader-fixes"></loading-panel-angular>

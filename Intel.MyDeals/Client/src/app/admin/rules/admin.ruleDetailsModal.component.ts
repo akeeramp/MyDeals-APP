@@ -4,20 +4,19 @@ import { adminRulesService } from "./admin.rules.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { ruleDetailsModalConfig } from './admin.ruleDetailsModal_Config'
 import { forkJoin } from 'rxjs';
-import {
-    process,
-    State,
-    distinct
-} from "@progress/kendo-data-query";
+import { State, distinct } from "@progress/kendo-data-query";
 import { GridDataResult } from "@progress/kendo-angular-grid";
-import Handsontable from 'handsontable';
+import Handsontable from 'handsontable/base';
+import { registerAllModules } from 'handsontable/registry';
 import { HotTableRegisterer } from '@handsontable/angular';
 import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
 
+registerAllModules();
+
 @Component({
     providers: [adminRulesService],
-    selector: "ruleDetailsModal",
-    templateUrl: "Client/src/app/admin/rules/admin.ruleDetailsModal.component.html",
+    selector: 'ruleDetailsModal',
+    templateUrl: 'Client/src/app/admin/rules/admin.ruleDetailsModal.component.html',
     styleUrls: ['Client/src/app/admin/rules/admin.rules.component.css'],
     encapsulation: ViewEncapsulation.None
 })
@@ -48,11 +47,10 @@ export class RuleDetailsModalComponent {
     public submitRule: any;
 
     constructor(public dialogRef: MatDialogRef<RuleDetailsModalComponent>,
-        private pteService: pricingTableEditorService,
-        @Inject(MAT_DIALOG_DATA) public data, private adminRulesSvc: adminRulesService,
-        private loggerSvc: logger) {
-
-    }
+                @Inject(MAT_DIALOG_DATA) public data, 
+                private pteService: pricingTableEditorService,
+                private adminRulesSvc: adminRulesService,
+                private loggerSvc: logger) { }
     public dealsList = "";
     public selectedIds = [];
     public availAtrField = [];
@@ -92,7 +90,6 @@ export class RuleDetailsModalComponent {
         colWidths: [350, 160],
         manualColumnResize: true,
         licenseKey: "470b6-15eca-ea440-24021-aa526",
-
     };
     public state: State = {
         skip: 0,
@@ -147,15 +144,21 @@ export class RuleDetailsModalComponent {
 
     async getLookupVals() {
         let values: any = {};
+
+        const ROW_TYPES = ['singleselect_ext', 'list']; // Added `singleselect_ext` to fix loading the `Payout Based On` dropdown
         ruleDetailsModalConfig.attributeSettings.forEach((row) => {
-            if (row.type == 'list' && row.lookupUrl != undefined) {
+            if (ROW_TYPES.includes(row.type) && row.lookupUrl != undefined) {
                 values[`${row.field}`] = this.pteService.readDropdownEndpoint(row.lookupUrl);
             }
         });
+
         let result = await forkJoin(values).toPromise().catch((err) => {
             this.loggerSvc.error('pricingTableEditorComponent::getAllDrowdownValues::service', err);
         });
-        if (result != undefined) this.dropdownresponses = result;
+        if (result != undefined) {
+            this.dropdownresponses = result;
+        }
+
         if (this.initialLoad) {
             this.initialLoad = false;
             await this.loadDetails()
@@ -209,32 +212,37 @@ export class RuleDetailsModalComponent {
                     })
                 }
             } else {
-                if (selectedField.field == 'QLTR_BID_GEO')
+                if (selectedField.field == 'QLTR_BID_GEO') {
                     row.values.forEach((item) => {
                         selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.dropdownName === item)[0])
                     })
-                else if (selectedField.field == "PCSR_NBR" || selectedField.field == "OP_CD" || selectedField.field == "DIV_NM" || selectedField.field == "FMLY_NM" || selectedField.field == "PRD_CAT_NM")
+                } else if (selectedField.field == "PCSR_NBR" || selectedField.field == "OP_CD" || selectedField.field == "DIV_NM" || selectedField.field == "FMLY_NM" || selectedField.field == "PRD_CAT_NM") {
                     row.values.forEach((item) => {
                         selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.value === item)[0])
                     })
-                else if (selectedField.field == "PAYOUT_BASED_ON" || selectedField.field == "MRKT_SEG" || selectedField.field == "SERVER_DEAL_TYPE")
+                } else if (selectedField.field == "PAYOUT_BASED_ON" || selectedField.field == "MRKT_SEG" || selectedField.field == "SERVER_DEAL_TYPE") {
                     row.values.forEach((item) => {
                         selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.DROP_DOWN === item)[0])
                     })
-                else if (selectedField.field == 'CRE_EMP_NAME')
+                } else if (selectedField.field == 'CRE_EMP_NAME') {
                     row.values.forEach((item) => {
-                        selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.EMP_WWID === parseInt(item))[0])
+                        const currentSelectedValue = this.dropdownresponses[selectedField.field].filter(x => x.EMP_WWID === parseInt(item))[0];
+                        if (currentSelectedValue) {
+                            selectedValues.push(currentSelectedValue);
+                        }
                     })
-                else
-                    if (selectedField.field == 'CUST_NM')
+                } else {
+                    if (selectedField.field == 'CUST_NM') {
                         row.values.forEach((item) => {
                             selectedValues.push(this.dropdownresponses[selectedField.field].filter(x => x.CUST_SID === parseInt(item))[0])
                         })
+                    }
+                }
+
                 Object.assign(row, {
                     dropDown: this.dropdownresponses[selectedField.field],
                     selectedValues: selectedValues
                 });
-
             }
         });
         this.criteria[0].selectedValues = "ECAP";
@@ -322,7 +330,6 @@ export class RuleDetailsModalComponent {
         }
     }
 
-
     async GetRules(id, actionName) {
         this.adminRulesSvc.getPriceRules(id, actionName).subscribe((response) => {
             this.Rules = response[0];
@@ -392,7 +399,6 @@ export class RuleDetailsModalComponent {
             this.BlanketDiscountDollor = "";
             this.BlanketDiscountPercentage = "";
             if (toggleButtonEvent) {
-
                 this.Rules.RuleStage = true;
                 this.Rules.IsActive = true;
             }
@@ -437,8 +443,7 @@ export class RuleDetailsModalComponent {
                             this.loggerSvc.success("Rule has been updated successfully with the stage '" + (isTrue ? "Approved" : "Pending") + "'");
                         } break;
                     }
-                }
-                else {
+                } else {
                     switch (strActionName) {
                         case "UPDATE_ACTV_IND": {
                             this.Rules.IsActive = !isTrue;
@@ -475,6 +480,7 @@ export class RuleDetailsModalComponent {
             valueType: []
         });
     }
+
     async valueChange(dataItem, index, action?: any) {
         let ops = ruleDetailsModalConfig.operatorSettings.types2operator.filter(x => x.type === dataItem.type).length > 0 ? ruleDetailsModalConfig.operatorSettings.types2operator.filter(x => x.type === dataItem.type)[0].operator : ''
         let opvalues = [];
@@ -482,7 +488,7 @@ export class RuleDetailsModalComponent {
             let val = this.operatorsList.filter(x => x.operator === ops[i])
             opvalues.push(val[0]);
         }
-        let selectedOperator = opvalues[0]
+        const selectedOperator = opvalues[0]
         Object.assign(this.Rules.Criteria[index], {
             opvalues: opvalues,
             selectedOperator: selectedOperator
@@ -500,10 +506,13 @@ export class RuleDetailsModalComponent {
                 })
             }
         } else {
+            const dropdownValue = (dataItem.field == "PAYOUT_BASED_ON") ? (this.dropdownresponses[dataItem.field]).map(e => e.DROP_DOWN) : this.dropdownresponses[dataItem.field];
+
             Object.assign(this.Rules.Criteria[index], {
-                dropDown: this.dropdownresponses[dataItem.field]
+                dropDown: dropdownValue
             });
         }
+
         this.Rules.Criteria[index].field = dataItem.field;
         this.Rules.Criteria[index].operator = opvalues[0].operator;
         this.Rules.Criteria[index].subType = dataItem.subType != undefined ? dataItem.subType  : null;
@@ -533,7 +542,7 @@ export class RuleDetailsModalComponent {
     async UpdatePriceRule(priceRuleCriteria, strActionName) {
         this.isLoading = true;
         this.setBusy('Price Rules', 'Please wait while we update the rule....', 'Info', true);
-        let initialRuleId = priceRuleCriteria.Id;
+        const initialRuleId = priceRuleCriteria.Id;
         let response: any = await this.adminRulesSvc.updatePriceRule(priceRuleCriteria, strActionName).toPromise().catch((err) => {
             this.loggerSvc.error(("Unable to  " + (initialRuleId === 0 ? "add" : "update") + " the rule"), '');
         });
@@ -574,7 +583,6 @@ export class RuleDetailsModalComponent {
             }
         }
     }
-
 
     async validateProduct(showPopup, isSave, strActionName) {
         this.isLoading = true;
@@ -682,8 +690,7 @@ export class RuleDetailsModalComponent {
                 }
             }
 
-        }
-        else {
+        } else {
             if (isSave) {
                 this.saveRule(strActionName, false);
             }
@@ -805,8 +812,7 @@ export class RuleDetailsModalComponent {
         if (this.isAlertText == 'Saving these changes will require the rule to be re-approved. Are you sure that you wish to save the changes??') {
             if (str == 'yes') await this.updateRuleDraft('Submit', true);
             this.isElligibleForApproval = this.data.isEligible;
-        }
-        else {
+        } else {
             if (this.isAlertText.startsWith('Below')) {
                 await this.UpdatePriceRule(this.priceRuleCriteriaData, 'Submit');
             }
@@ -814,9 +820,9 @@ export class RuleDetailsModalComponent {
     }
 
     async updateRuleDraft(strActionName, isProductValidationRequired) {
-        if (isProductValidationRequired && this.Rules.IsAutomationIncluded && (strActionName === "SUBMIT" || (this.Rules.IsActive && this.Rules.RuleStage)))
+        if (isProductValidationRequired && this.Rules.IsAutomationIncluded && (strActionName === "SUBMIT" || (this.Rules.IsActive && this.Rules.RuleStage))) {
             await this.validateProduct(false, true, strActionName);
-        else {
+        } else {
             this.isLoading = true;
             this.setBusy('Price Rules', 'Please wait while we Save the rule..', 'Info', true);
             if (strActionName === "SAVE_AS_DRAFT" && this.Rules.IsAutomationIncluded)
@@ -915,8 +921,7 @@ export class RuleDetailsModalComponent {
                 });
                 if (duplicateListXml.length == 0) {
                     await this.UpdatePriceRule(this.priceRuleCriteriaData, strActionName);
-                }
-                else {
+                } else {
                     this.isLoading = false;
                     this.setBusy('', '', '', false);
                     this.isAlertVal = true;
