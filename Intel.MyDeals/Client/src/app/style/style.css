@@ -1587,9 +1587,9 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
     border-bottom: none;
 }
 
-.managable-meet-pct meet-comp-contract.admin_tender_meetcomp .row-cooperate kendo-grid#meetcomp-contract {
-    height: calc(100vh - 450px) !important;
-}
+    .managable-meet-pct meet-comp-contract.admin_tender_meetcomp .row-cooperate kendo-grid#meetcomp-contract {
+        height: 335px !important;
+    }
 
 .managable-meet-pct manager-pct.admin-tender-pricecosttest {
     top: 0 !important;
@@ -1624,7 +1624,7 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
 }
 
 .managable-tenders .tender_exclude_grouping kendo-grid.group-Excl-grid.grouping_grid_h {
-    height: calc(100vh - 350px) !important;
+    height: 330px !important;
 }
 
 #comboDD .k-dropdown .k-dropdown-wrap {
@@ -2165,4 +2165,16 @@ kendo-grid.filterDesignComp table tr th .k-cell-inner {
         vertical-align: text-top;
         font-weight: 600;
         margin-left: 6px
+    }
+
+kendo-datepicker.createContractDatepicker .k-input {
+    font-size: 12px;
+}
+
+.overlapOvrLap .mat-dialog-container {
+    padding: 0;
+}
+
+    .overlapOvrLap .mat-dialog-container .k-window {
+        min-height: auto !important;
     }

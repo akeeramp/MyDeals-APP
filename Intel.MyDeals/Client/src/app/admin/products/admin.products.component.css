@@ -28,3 +28,7 @@ kendo-grid {
     text-align-last: initial !important;
     width: 50% !important;
 }
+
+#adminproduct .k-indicator-container {
+    color: #00aeef !important;
+}

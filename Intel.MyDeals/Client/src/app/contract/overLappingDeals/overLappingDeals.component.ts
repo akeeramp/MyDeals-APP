@@ -141,7 +141,8 @@ export class overLappingDealsComponent {
             "srcScrn": "overLapping"
         }
         const dialogRef = this.dialog.open(OverlappingCheckComponent, {
-            data: data
+            data: data,
+            panelClass: 'overlapOvrLap',
         });
         dialogRef.afterClosed().subscribe(result => { });
     }

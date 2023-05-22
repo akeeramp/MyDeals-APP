@@ -8,8 +8,8 @@
             <!-- SIDE BAR -->
             <div class="secEngine_sidebar" *ngIf="isDropdownsLoaded" style="width: 100%;">
                 <div id="secEngine_filters" style="height: calc(100vh - 175px)">
-                    <div class="lbl" style="margin-top: 9px; padding-left: 15px;">
-                        <h5 style="font-weight: 400 !important; font-size: 17px !important;">
+                    <div class="lbl" style="margin-top: 9px; padding-left: 10px;">
+                        <h5 style="font-weight: 400 !important; font-size: 16px !important;">
                             Security Attributes Properties
                             <!-- Help button -->
                             <i class="intelicon-help-outlined" (click)="clickHelpButton()" style="cursor: pointer; color: #0071C5;"></i>
@@ -58,19 +58,21 @@
                     </div>
 
                     <!-- Tabs -->
-                    <div class="col-md-12 secEngine_tabs" style=" padding-left: 20px;">
+                    <div class="col-md-12 secEngine_tabs" style="padding-left: 10px; padding-right: 10px;">
                         <kendo-tabstrip class="tab-sec-add tab-security-engine" active="" style="margin: 6px;" (tabSelect)="onTabSelect($event)">
                             <kendo-tabstrip-tab index="0" title="Attribute Security" [selected]="isASTab">
                                 <ng-template kendoTabContent>
                                     <div class="col-md-12">
                                         <div class="row">
-                                            <div>Attribute Action:</div>
-                                            <kendo-dropdownlist [data]="drilledDownActionAtrb" textField="dropdownName" style="width: 14em !important;"
-                                                                [(ngModel)]="selectedAtrbAction" valueField="dropdownID" class="inputWidth font-input cd-input-bottom k-dropdown-design font-comp-red" name="dropdownName">
-                                            </kendo-dropdownlist>
+                                            <div class="col-md-12">
+                                                <div style="font-size: 12px;">Attribute Action:</div>
+                                                <kendo-dropdownlist [data]="drilledDownActionAtrb" textField="dropdownName" style="width: 14em !important;"
+                                                                    [(ngModel)]="selectedAtrbAction" valueField="dropdownID" class="inputWidth font-input cd-input-bottom k-dropdown-design font-comp-red" name="dropdownName">
+                                                </kendo-dropdownlist>
+                                            </div>
                                         </div>
                                         <div class="row" style="padding-top:20px;">
-                                            <div class="col-md-4">Attributes: </div>
+                                            <div class="col-md-4" style="font-size: 12px;">Attributes: </div>
                                             <div class="col-md-8">
                                                 <span placement="top" ngbTooltip="Click this to get a best guess of what attributes you'd want">
                                                     <!---->
@@ -90,10 +92,12 @@
                                 <ng-template kendoTabContent>
                                     <div class="col-md-12">
                                         <div class="row" style="margin-bottom:80px;">
-                                            <div style="font-size: 11px; font-weight: 500;">Deal Action:</div>
-                                            <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level fs-changes disk-fs-changes" [data]="drilledDownAction" [placeholder]="'All Deal Actions'" textField="dropdownName" valueField="dropdownID"
-                                                               [(ngModel)]="selectedDealactions" [autoClose]="true" [kendoDropDownFilter]="filterSettings">
-                                            </kendo-multiselect>
+                                            <div class="col-md-12">
+                                                <div style="font-size: 11px; font-weight: 500;">Deal Action:</div>
+                                                <kendo-multiselect class="kendoInput divisionblock cd-input-bottom cd-division-level fs-changes disk-fs-changes" [data]="drilledDownAction" [placeholder]="'All Deal Actions'" textField="dropdownName" valueField="dropdownID"
+                                                                   [(ngModel)]="selectedDealactions" [autoClose]="true" [kendoDropDownFilter]="filterSettings">
+                                                </kendo-multiselect>
+                                            </div>
                                         </div>
                                     </div>
                                 </ng-template>

@@ -162,14 +162,14 @@
  }
 
  #secEngine_filters>div.lbl {
-     padding-left: 25px;
+     padding-left: 15px;
      margin-bottom: 8px
  }
 
  #secEngine_filters>div.lbl>div:nth-child(1) {
      float: left;
-     font-size: 12px;
-     width: 80px;
+     font-size: 11px;
+     width: 75px;
      margin-top: 5px;
      color: #0071C5
  }

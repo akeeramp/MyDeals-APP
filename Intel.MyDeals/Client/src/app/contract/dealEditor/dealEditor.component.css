@@ -316,12 +316,12 @@ tr:last-child>td {
     font-size: 20px !important
 }
 
-.k-hstack {
+/*.k-hstack {
     height: 37px;
     font-size: 14px;
     font-family: "Intel Clear"
 }
-
+*/
 .op-grid-container {
     height: 100%;
     padding: 0 10px;

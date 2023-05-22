@@ -12,7 +12,7 @@
         <kendo-grid class="changedragcolor" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" 
                     [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                     [pageable]="{ type:type, pageSizes: pageSizes, info:info, refresh:true }" [groupable]="true"
-                    [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)">
+                    [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" id="adminproduct">
             <ng-template kendoGridToolbarTemplate>
                 <button (click)="clearFilter()" class="k-button clearButton">
                     <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS
