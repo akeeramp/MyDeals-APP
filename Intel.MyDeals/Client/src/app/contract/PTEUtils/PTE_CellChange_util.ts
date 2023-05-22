@@ -1036,13 +1036,13 @@ export class PTE_CellChange_Util {
         PTE_CellChange_Util.autoFillCellonProdKit(Row,curPricingTable,contractData,pricingTableTemplates,columns);
         // compare the rows and see any products are repeating and only add repeating product to first one.
     }
-    static closeKitDialog(items: any, columns: any[], curPricingTable: any,){
+    static closeKitDialog(items: any, columns: any[], curPricingTable: any,lastEditedKitName:any){
         let PTR=PTE_Common_Util.getPTEGenerate(columns,curPricingTable);
         PTR=map(PTR,(x)=>{ return {DEAL_GRP_NM:x['DEAL_GRP_NM'].toUpperCase()}});
         let firstInd=findIndex(PTR,{DEAL_GRP_NM:items.name.toUpperCase()});
         each(PTR,(cr,ind)=>{
             //this will make sure we are not clearing first row
-            if(firstInd !=ind && cr['DEAL_GRP_NM'].toUpperCase()==items.name.toUpperCase()){
+            if(lastEditedKitName[0].row  ==ind && cr['DEAL_GRP_NM'].toUpperCase()==items.name.toUpperCase()){
                 this.hotTable.setDataAtRowProp(ind,'DEAL_GRP_NM','','no-edit');
             }
         });

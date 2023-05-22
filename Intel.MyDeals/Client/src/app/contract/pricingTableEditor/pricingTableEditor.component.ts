@@ -428,6 +428,7 @@ export class pricingTableEditorComponent {
     private overlapFlexResult: any;
     cellComments: any = [];
     private transformResults: any = [];
+    private lastEditedKitName:any;
     // To get the selected row and col for product selector
     private multiRowDelete: Array<any> = [];
     // Handsontable Variables basic hottable structure
@@ -817,13 +818,14 @@ export class pricingTableEditorComponent {
                 PTE_CellChange_Util.kitDSCNTChange(KIT_DSCNT, this.columns, this.curPricingTable);
             }
             if (KIT_name && KIT_name.length > 0) {
+                this.lastEditedKitName=KIT_name;
                 this.kitNameObjArr = PTE_CellChange_Util.kitNameExists(KIT_name, this.columns, this.curPricingTable);
                 //open KIT confirmation message if the same name exists
                 if (this.kitNameObjArr && this.kitNameObjArr.length > 0) {
                     //and the object will assign the first one
                     this.kitNameObj = this.kitNameObjArr[0];
                     this.isKitDialog = true;
-                }
+                }  
             }
             if (tierChg && tierChg.length > 0) {
                 PTE_CellChange_Util.tierChange(tierChg, this.columns, this.curPricingTable);
@@ -991,7 +993,7 @@ export class pricingTableEditorComponent {
     }
     closeKitDialog() {
         //close kitdialog closes the kendo dialog and clear the kit name cell
-        PTE_CellChange_Util.closeKitDialog(this.kitNameObj, this.columns, this.curPricingTable);
+        PTE_CellChange_Util.closeKitDialog(this.kitNameObj, this.columns, this.curPricingTable,this.lastEditedKitName);
         this.isKitDialog = false;
         //Once the first dialog is closed will splice the first record and see anyother result and will constinue till last one
         this.kitNameObjArr.splice(0, 1);
