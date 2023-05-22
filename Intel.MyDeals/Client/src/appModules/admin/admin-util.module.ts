@@ -15,6 +15,7 @@ import { dealPopupDockComponent } from '../../app/core/dealPopup/dealPopupDock.c
 import { HeaderComponent } from '../../app/shared/header/header.component';
 import { PingComponent } from '../../app/core/ping/ping.component';
 import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingspinner.component';
+import { endCustomerRetailModalComponent } from '../../app/contract/ptModals/dealEditorModals/endCustomerRetailModal.component'
 
 export let AdminUtilComponents = [ 
     LoadingPanelComponent,
@@ -32,5 +33,6 @@ export let AdminUtilComponents = [
     dealPopupDockComponent,
     HeaderComponent,
     PingComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    endCustomerRetailModalComponent
 ]

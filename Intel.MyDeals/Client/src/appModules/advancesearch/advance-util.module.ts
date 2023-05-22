@@ -48,6 +48,7 @@ import { dealProductsModalComponent } from '../../app/contract/ptModals/dealProd
 import { ProductBreakoutComponent } from '../../app/contract/ptModals/productSelector/productBreakout/productBreakout.component';
 import { fileAttachmentComponent } from '../../app/core/gridCell/fileAttachmentModal/fileAttachmentModal.component';
 import { dealTimelineComponent } from '../../app/core/gridCell/dealTimelineModal/dealTimelineModal.component';
+import { OverlappingCheckComponent } from '../../app/contract/ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 
 export let AdvanceUtilComponents = [ 
     LoadingPanelComponent,
@@ -96,5 +97,6 @@ export let AdvanceUtilComponents = [
     dealProductsModalComponent,
     ProductBreakoutComponent,
     fileAttachmentComponent,
-    dealTimelineComponent
+    dealTimelineComponent,
+    OverlappingCheckComponent
 ]
