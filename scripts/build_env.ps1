@@ -19,7 +19,9 @@ try {
     elseif ($Operation -eq 'MSBuild' ){
      & $PATH /p:OutDir="$DIR/output" /p:TransformConfigFiles=true /p:Configuration=Release /p:Platform="Any CPU" /p:GenerateSerializationAssemblies=Off;
     }
-
+    elseif($Operation -eq 'MSBuildNUnit'){
+        & $PATH .\Intel.MyDeals.BusinessLogicNew.Test\Intel.MyDeals.BusinessLogicNew.Test.csproj /t:rebuild -restore /p:Configuration=Debug
+    }
     elseif ($Operation -eq 'MovePublish' ){
      & robocopy output/_PublishedWebsites/Intel.MyDeals $PATH /e /MT /copyall /secfix ;
      if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
@@ -29,10 +31,6 @@ try {
     elseif ($Operation -eq 'ClientZip' ){
      if (Test-Path "C:\ClientZip\Client.zip") {Remove-Item -Path "C:\ClientZip\Client.zip"};
      Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::CreateFromDirectory((Get-Location).path+"\Intel.MyDeals\Client\", "C:\ClientZip\Client.zip");
-    }
-    elseif ($Operation -eq 'ClientZip_latest' ){
-     if (Test-Path "C:\ClientZip\Client.zip") {Remove-Item -Path "C:\ClientZip\Client.zip"};
-     Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::CreateFromDirectory("C:\mydeals_latest_angular\Client", "C:\ClientZip\Client.zip");
     }
     else {
         Write-Host "Please provide correct values" -BackgroundColor DarkRed

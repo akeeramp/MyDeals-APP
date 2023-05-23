@@ -135,27 +135,6 @@ try {
             }
         }
     }
-    elseif ($Operation -eq 'Deploy_latest' ){
-     $result =  $ENV_DATA | Where env -eq $SERVER;
-     $pool = $result.pool;
-     if($result -eq $null){
-            Write-Host "Please provide correct values for environment" -BackgroundColor DarkRed
-            EXIT 1
-        }
-        else{
-            $pw = convertto-securestring -AsPlainText -Force -String "$PWD";
-            $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "$USN",$pw; 
-            & Invoke-Command -computername $result.DEPLOY_SERVER -credential $cred -ScriptBlock {param($pool)
-              Remove-Item "D:\WebSites\MyDeals\Client\*" -Force -Recurse;
-              Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDeals\Client.zip", "D:\WebSites\MyDeals\Client\");
-              Restart-WebAppPool -Name $pool
-        } -Argumentlist $pool 
-    }
-    else {
-        Write-Host "Please provide correct values" -BackgroundColor DarkRed
-        EXIT 1
-    }
- }
 }
 catch {
     # Get the current error

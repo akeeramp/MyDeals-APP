@@ -1,0 +1,38 @@
+name: NUnit Check
+on:
+  pull_request:
+    branches: [development,RC_*]
+    types:
+      - opened
+      - reopened
+      - synchronize
+    paths:
+      - '**.cs'
+env:
+  NUGET_PATH: C:\NuGet\nuget.exe
+  MSBUILD_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\msbuild.exe
+
+jobs:     
+  Run-NUnitTests:
+      name: Run NUnit Tests
+      runs-on: [self-hosted, mydeals-runner01]
+      steps:
+       - name: Checkout Directory
+         uses: actions/checkout@master
+       - name: Restore NUGET Packages 
+         run: |
+            echo "RUN NUGET Packages script at ${{env.NUGET_PATH}}"
+            ./scripts/build_env.ps1 'nuget' '${{env.NUGET_PATH}}' '${{github.workspace}}'
+       - name: MS Build NUnit
+         run: |
+            ./scripts/build_env.ps1 'MSBuildNUnit' '${{env.MSBUILD_PATH}}'
+       - name: Run NUnit Tests
+         run: |
+           ./scripts/nunit.ps1 '${{github.workspace}}'
+       - name : Upload artifacts    
+         if: always()
+         uses: actions/upload-artifact@v2
+         with:
+          name: NUnit-Report
+          path: ${{github.workspace}}\Nunit_Result\TestResult.xml
+          retention-days: 7

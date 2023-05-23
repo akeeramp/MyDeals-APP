@@ -1,7 +1,7 @@
 name: Angular Automation
 on:
   push:
-    branches: [MyDeals_Migration,MyDeals_Migration_RLS]
+    branches: [development,RC_*]
 env:
   SERVER: DEV
   NUGET_PATH: C:\NuGet\nuget.exe
@@ -19,7 +19,7 @@ jobs:
        - name: Restore NUGET Packages 
          run: |
             echo "RUN NUGET Packages script at ${{env.NUGET_PATH}}"
-            ./scripts/build.ps1 'nuget' '${{env.NUGET_PATH}}' '${{github.workspace}}'
+            ./scripts/build_env.ps1 'nuget' '${{env.NUGET_PATH}}' '${{github.workspace}}'
 
   Build-Angular:
     if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
@@ -28,18 +28,15 @@ jobs:
     steps:
        - name: NPM Install 
          run: |
-           ./scripts/build.ps1 'NPMInstall' 'path' '${{github.workspace}}'
+           ./scripts/build_env.ps1 'NPMInstall' 'path' '${{github.workspace}}'
        - name: NPM Build
          run: |
-           ./scripts/build.ps1 'NPMBuild' 'path' '${{github.workspace}}'
-      #  - name: Activate Kendo UI License
-      #    run: |
-      #       ./scripts/build.ps1 'LICENSE_Activate' 'path' '${{github.workspace}}'
+           ./scripts/build_env.ps1 'NPMBuild' 'path' '${{github.workspace}}'
          env:
            KENDO_UI_LICENSE: ${{ secrets.KENDO_UI_LICENSE }}
        - name: MS build publish
          run: |
-            ./scripts/build.ps1 'MSBuild' '${{env.MSBUILD_PATH}}' '${{github.workspace}}'
+            ./scripts/build_env.ps1 'MSBuild' '${{env.MSBUILD_PATH}}' '${{github.workspace}}'
 
   Angular_deploy:
     if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
@@ -48,19 +45,19 @@ jobs:
     steps:
        - name:  Move Publish Site 
          run: |
-           ./scripts/build.ps1 'MovePublish' '${{env.CINR_DEPLOY_PATH}}' '${{github.workspace}}'
+           ./scripts/build_env.ps1 'MovePublish' '${{env.CINR_DEPLOY_PATH}}' '${{github.workspace}}'
        - name:  Generate Client Zip Module
          run: |
-           ./scripts/build.ps1 'ClientZip' '${{env.CINR_DEPLOY_PATH}}' '${{github.workspace}}'
+           ./scripts/build_env.ps1 'ClientZip' '${{env.CINR_DEPLOY_PATH}}' '${{github.workspace}}'
 
        - name:  Remove Client Zip
          run: |
-           ./scripts/deploy.ps1 'RemoveZip' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.CINR_DEPLOY_SERVER}}'
+           ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.CINR_DEPLOY_SERVER}}'
        - name:  Copy Client Zip
          run: |
-           ./scripts/deploy.ps1 'CopyZip' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.CINR_DEPLOY_PATH}}'
+           ./scripts/deploy_env.ps1 'CopyZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.CINR_DEPLOY_PATH}}'
        - name:  Deploy Client App
          run: |
-           ./scripts/deploy.ps1 'Deploy' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.CINR_DEPLOY_SERVER}}'
+           ./scripts/deploy_env.ps1 'DeployENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.CINR_DEPLOY_SERVER}}'
   
  

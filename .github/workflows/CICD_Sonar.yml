@@ -1,0 +1,30 @@
+name: Sonar Check
+
+on:
+  pull_request:
+    branches: [development,RC_*]
+    types:
+      - opened
+      - reopened
+      - synchronize
+    paths:
+      - '**.ts'
+      - '**.html'
+      - '**.css' #sonar will trigger only for files having UI changes
+jobs:
+  RunSonarCheck:
+    name: Run Sonar Check
+    runs-on:  [self-hosted, mydeals-runner01]
+    steps:
+      - name: Checkout Directory
+        uses: actions/checkout@master
+
+      - name: Sonar Scan
+        run: |
+          echo "Scan Sonar"
+          ./scripts/sonar.ps1 'Scan' '${{ secrets.SONAR_PWD }}'
+      
+      - name: Sonar Scan Result
+        run: |
+          echo "Get Sonar Scan Result"
+          ./scripts/sonar.ps1 'GetResult' '${{ secrets.SONAR_PWD }}'          

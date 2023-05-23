@@ -1,0 +1,18 @@
+name: Mocked NUnit/Sonar Checks
+on:
+  pull_request:
+    branches: [development,RC_*]
+
+jobs:
+  Run-NUnitTests:
+      name: Run NUnit Tests
+      runs-on: [self-hosted, mydeals-runner01]
+      steps:
+       - name: Mock NUnit Test
+         run : echo "Mocked NUnit Test Complete"
+  RunSonarCheck:
+      name: Run Sonar Check
+      runs-on: [self-hosted, mydeals-runner01]
+      steps:
+       - name: Mock Sonar Scan
+         run : echo "Mocked Sonar Scan Complete"
