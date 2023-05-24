@@ -27,7 +27,7 @@
             <div class="col-sm-8 col-sm-offset-2">
                 <div class="inner-addon right-addon app-layers">
                     <i class="glyphicon glyphicon-search"></i>
-                    <input type="text" class="form-control" style="height:38px" maxlength="40" (input)="onCopyCntrctSearchTextChanged($event.target.value)" />
+                    <input type="text" class="form-control" style="height:38px" maxlength="40" [disabled]="copyLoading" (input)="onCopyCntrctSearchTextChanged($event.target.value)" />
                 </div>
             </div>
         </div>
