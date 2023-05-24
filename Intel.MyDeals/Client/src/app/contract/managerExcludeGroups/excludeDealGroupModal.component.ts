@@ -169,7 +169,7 @@ export class excludeDealGroupModalDialog {
                 : (row["ECAP_PRICE"]["20___0"] === undefined || row["ECAP_PRICE"]["20___0"] === null)
                     ? row["ECAP_PRICE"]
                     : row["ECAP_PRICE"]["20___0"];
-            var cntrctTtl = row["REBT_TYPE"] && row["REBT_TYPE"] == "TENDER" ? "Product: " + (row["PRODUCT"]) : "Product: " + (row["TITLE"]);
+            var cntrctTtl = row["REBT_TYPE"] && row["REBT_TYPE"] == "TENDER" ? "Product: " + (row["PRODUCT"]) : row["TITLE"] ? "Product: " + (row["TITLE"]) : "Product: " + (row["PRODUCT"]);
             let a = {};
             a["OVLP_DEAL_ID"] = row["DC_ID"] === undefined || row["DC_ID"] === "" ? row["DEAL_ID"] : row["DC_ID"]
             a["OVLP_DEAL_TYPE"] = row['OBJ_SET_TYPE_CD']

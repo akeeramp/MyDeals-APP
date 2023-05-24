@@ -22,7 +22,7 @@ export class dealTimelineComponent {
                 private momentService: MomentService) {
         this.allData = this.allData.bind(this);
     }
-    private dcId = this.data.dataItem.DC_ID;
+    private dcId = this.data.item.objSid;
     private loading = true;
     public isTextIncrease = true;
     public isTextFontTitle = "Click to Decrease Text";

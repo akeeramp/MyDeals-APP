@@ -297,6 +297,9 @@ export class dealEditorComponent {
                 }
             }
             this.savingDeal = false;
+            each(response.WIP_DEAL, row => {
+                row.PTR_USER_PRD = row.PTR_USER_PRD.split(',').join(', ');
+            })
             this.gridResult = response.WIP_DEAL;
             this.setWarningDetails();
             this.applyHideIfAllRules();

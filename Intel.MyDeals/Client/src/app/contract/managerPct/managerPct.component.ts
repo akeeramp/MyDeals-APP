@@ -198,7 +198,7 @@ export class managerPctComponent {
                 args.columnIndex,
             );
         }
-        if (args.column.field == "GRP_DEALS") {
+        if (args.column.field == "GRP_DEALS" && args.dataItem.PRC_CST_TST_STS != 'NA') {
             this.openExcludeDealGroupModal(args.dataItem);
         }
     }

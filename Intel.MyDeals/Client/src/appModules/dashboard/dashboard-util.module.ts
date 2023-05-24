@@ -21,6 +21,7 @@ import { HeaderComponent } from '../../app/shared/header/header.component';
 import { PingComponent } from '../../app/core/ping/ping.component';
 import { TenderFolioComponent } from '../../app/contract/tenderFolio/tenderFolio.component';
 import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingspinner.component';
+import { notificationsSettingsDialog } from '../../app/admin/notifications/admin.notificationsSettings.component';
 
 export let DashboardUtilComponents = [ 
     LoadingPanelComponent,
@@ -44,5 +45,6 @@ export let DashboardUtilComponents = [
     HeaderComponent,
     PingComponent,
     TenderFolioComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    notificationsSettingsDialog
 ]

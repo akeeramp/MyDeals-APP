@@ -108,7 +108,8 @@ export class MultiCheckFilterComponent implements AfterViewInit {
     public ngAfterViewInit() {
         //this code is to remove all falsy values
         this.currentData = compact(this.data);
-        if (this.data.findIndex(x => x == '') > -1 && this.data.findIndex(x => x == undefined) == -1) {
+        if (this.data.includes(0)) this.currentData.push(0);
+        if (this.data.findIndex(x => x == '' && typeof x == 'string') > -1 && this.data.findIndex(x => x == undefined) == -1) {
             if (this.isPrimitive) this.currentData.push('');
             else this.currentData.push({
                 'Text': '',

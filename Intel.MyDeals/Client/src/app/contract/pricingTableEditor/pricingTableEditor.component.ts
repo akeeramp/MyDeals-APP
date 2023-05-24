@@ -802,9 +802,11 @@ export class pricingTableEditorComponent {
              
               if(!isvalidGeo){
               this.hotTable.setDataAtRowProp(geo[0].row, geo[0].prop, '', 'no-edit');
-              }else{
-                this.hotTable.setCellMetaObject(geo[0].row,col,{ 'className': '', comment: { value: '' } });
-                        this.hotTable.render();
+              } else {
+                  if (geolist != '') {
+                      this.hotTable.setCellMetaObject(geo[0].row, col, { 'className': '', comment: { value: '' } });
+                      this.hotTable.render();
+                  }
               }
             }
             if(restprd && restprd.length>0){
@@ -947,7 +949,7 @@ export class pricingTableEditorComponent {
         let isRequired = false;
         //to check whether modified column is requirede column or not
         const behaviors = this.hotTable.getDataAtRowProp(changes[0].row, '_behaviors');
-        if (behaviors && behaviors.isRequired && behaviors.isRequired[changes[0].prop])
+        if ((behaviors && behaviors.isRequired && behaviors.isRequired[changes[0].prop]) || this.productValidationDependencies.includes(changes[0].prop))
             isRequired = true;
         if ((changes[0].new == null || changes[0].new == '' || changes[0].new == undefined) && this.pricingTableTemplates['model']['fields'][changes[0].prop].nullable == false && isRequired){
             const colSPIdx = findIndex(this.columns, { data: changes[0].prop });
@@ -1385,6 +1387,20 @@ export class pricingTableEditorComponent {
 
     }
     async validatePricingTableProducts(deleteDCIDs?) {
+        let currentPricingTableRowData = this.newPTR.filter(x => x.DC_ID != null);
+        let hasProductDependencyErr = false;
+        hasProductDependencyErr = PTEUtil.hasProductDependency(currentPricingTableRowData, this.productValidationDependencies, hasProductDependencyErr);
+        if (hasProductDependencyErr) {
+            // if errors are present this will terminate and save will not go forward
+            this.isLoading = true;
+            this.setBusy("Not saved. Please fix errors.", "Please fix the errors so we can properly validate your products", "Error", true);
+            setTimeout(() => {
+                this.isLoading = false;
+                this.setBusy("", "", "", false);
+            }, 5000);
+            this.loggerService.warn('Mandatory validations failure.', 'Warning');
+            return;
+        }
         if (this.kitMergeDeleteDCIDs && this.kitMergeDeleteDCIDs.length > 0) {// if any rows got deleted because while merging the rows
             if (!deleteDCIDs)
                 deleteDCIDs = this.kitMergeDeleteDCIDs;
@@ -1548,17 +1564,16 @@ export class pricingTableEditorComponent {
         let hasProductDependencyErr = false;
         hasProductDependencyErr = PTEUtil.hasProductDependency(currentPricingTableRowData, this.productValidationDependencies, hasProductDependencyErr);
         if (hasProductDependencyErr) {
-            // Tell user to fix errors
+            // if errors are present this will terminate and save will not go forward
             this.isLoading = true;
             this.setBusy("Not saved. Please fix errors.", "Please fix the errors so we can properly validate your products", "Error", true);
             setTimeout(() => {
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             }, 1300);
+            this.loggerService.warn('Mandatory validations failure.', 'Warning');
             return;
         }
-
-
         let translationInput = PTEUtil.translationToSendObj(this.curPricingTable, currentPricingTableRowData, this.contractData, this.isExcludePrdChange);
         let translationInputToSend = translationInput.filter(function (x) {
             // If we already have the invalid JSON don't translate the products again
