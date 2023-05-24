@@ -125,6 +125,7 @@ export class adminUnifiedDealReconComponent {
 
     openEndCustomerModal(dataItem, sender, rowIndex) {
         const dialogRef = this.dialog.open(endCustomerRetailModalComponent, {
+            panelClass: "admin-end-customer",
             width: '1500px',
             autoFocus: false,
             data: {

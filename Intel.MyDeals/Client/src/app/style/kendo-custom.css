@@ -536,3 +536,10 @@ kendo-combobox.cd-input-bottom {
 .system_price_DE .mat-dialog-container {
     padding: 0px !important;
 }
+.admin-end-customer .mat-dialog-container {
+    width: 860px !important;
+    left: 210px !important;
+    position: relative !important;
+    border-radius: 0px !important;
+    padding: 0px !important;
+}
