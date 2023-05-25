@@ -8,6 +8,7 @@
                 <td style="width: 95%;">
                     <kendo-grid class="pct_overridestyle" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                     [sort]="state.sort" [filter]="state.filter" [sortable]="true" [groupable]="false"
+                    [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="true"
                     [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)">
                     <kendo-grid-column [headerClass]="{'headerClass':true}" [locked]="true" [filterable]="false" width="50px" title=" " field="isSelected">
                         <ng-template kendoGridCellTemplate let-dataItem>
