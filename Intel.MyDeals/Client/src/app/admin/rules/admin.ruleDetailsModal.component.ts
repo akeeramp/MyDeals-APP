@@ -549,6 +549,7 @@ export class RuleDetailsModalComponent {
         if (response.Id > 0) {
             this.Rules = this.priceRuleCriteriaData
             this.loadData();
+            this.Rules.Id=response.Id;
             this.Rules.ChangedBy = response.ChangedBy;
             this.Rules.ChangeDateTime = response.ChangeDateTime;
             this.Rules.ChangeDateTimeFormat = response.ChangeDateTimeFormat;
