@@ -285,10 +285,11 @@ export class pricingTableEditorComponent {
                             }
                         }
                         else {
+                            VM.dirty = true;
                             if (this.field && selVal != result?.toString && result !== '' && result !== null &&
                                 (this.field == 'CUST_ACCNT_DIV' || this.field == "GEO_COMBINED" || this.field == 'START_DT' || this.field == 'END_DT' || this.field == 'PAYOUT_BASED_ON' || this.field == 'PERIOD_PROFILE' || this.field == 'RESET_VOLS_ON_PERIOD' || this.field == 'AR_SETTLEMENT_LVL'
                                     || this.field == 'REBATE_TYPE' || this.field == 'PROD_INCLDS' || this.field == 'SETTLEMENT_PARTNER' || this.field == 'MRKT_SEG' || this.field == 'PROGRAM_PAYMENT' || this.field === "OEM_PLTFRM_LNCH_DT" || this.field === "OEM_PLTFRM_EOL_DT")) {
-                                VM.dirty = true;
+                                //VM.dirty = true;
                                 VM.removeCellComments(this.selRow, this.field);
                                 let PTR = [];
                                 if (this.field == 'PROGRAM_PAYMENT') {
