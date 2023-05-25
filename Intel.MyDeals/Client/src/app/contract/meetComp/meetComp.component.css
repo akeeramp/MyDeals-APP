@@ -637,3 +637,11 @@ div.wrapColumnData {
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+kendo-grid#meetcomp-contract td {
+    font-size: 12px;
+}
+
+kendo-grid#meetcomp-contract .k-input {
+    font-size: 12px;
+}

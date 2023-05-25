@@ -1592,6 +1592,6 @@ kendo-grid#dealEditor .k-grid-header-wrap {
         display: inline-flex !important;
     }
 
-kendo-datepicker#dealDatePicker .k-input {
+kendo-datepicker#dealDatePicker .k-input, kendo-grid#dealEditor .k-input {
     font-size: 12px;
 }

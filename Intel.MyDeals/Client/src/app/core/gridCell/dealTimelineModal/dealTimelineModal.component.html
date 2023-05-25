@@ -10,7 +10,7 @@
     </div>
     <div class="modal-body modalBlueBody hresize common-messages" id="modal-body">
         <kendo-grid [data]="gridData" [loading]="loading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [sortable]="true" [resizable]="true" [scrollable]="true" (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)"
-                    style="max-height: calc(100vh - 510px); margin-bottom: 20px; border: none; height: calc(100% - 0px);" [ngClass]="isTextIncrease? 'opUiContainer md k-grid k-widget' : 'opUiContainer sm k-grid k-widget'">
+                    style=" max-height: 480px; margin-bottom: 20px; border: none; height: 100%;" [ngClass]="isTextIncrease? 'opUiContainer md k-grid k-widget' : 'opUiContainer sm k-grid k-widget'">
             <ng-template kendoGridToolbarTemplate>
                 <button [disabled]="loading" type="button" class="excelBtn metho-comp" kendoGridExcelCommand icon="file-excel">
                     EXCEL EXPORT

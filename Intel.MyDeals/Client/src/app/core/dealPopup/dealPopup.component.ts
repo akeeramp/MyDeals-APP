@@ -445,12 +445,14 @@ export class dealPopupComponent {
 
     getColorPct(costTestResult) {
         if (!costTestResult) costTestResult = "InComplete";
-        return this.getColor('pct', costTestResult, colorDictionary);
+        //return this.getColor('pct', costTestResult, colorDictionary);
+        return { backgroundColor: this.getColor('pct', costTestResult, colorDictionary) };
 
     }
     getColorMct(meetCostTestResult) { 
         if (!meetCostTestResult) meetCostTestResult = "InComplete";
-        return this.getColor('mct', meetCostTestResult, colorDictionary);
+        //return this.getColor('mct', meetCostTestResult, colorDictionary);
+        return { backgroundColor: this.getColor('mct', meetCostTestResult, colorDictionary) };
     }
      
     getColor(k: string, c: string, colorDictionary): string {
