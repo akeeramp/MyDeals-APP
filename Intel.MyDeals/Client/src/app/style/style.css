@@ -2178,3 +2178,6 @@ kendo-datepicker.createContractDatepicker .k-input {
     .overlapOvrLap .mat-dialog-container .k-window {
         min-height: auto !important;
     }
+kendo-dialog.backdate-popup .k-window-content {
+    padding: 0 !important;
+}

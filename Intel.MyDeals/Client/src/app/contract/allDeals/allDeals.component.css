@@ -421,3 +421,6 @@ kendo-tabstrip.diff-all-deals {
     padding:0px !important;
     left:-5px !important
 }
+#allDeals .vert-center.ng-binding.wordWrapTransform {
+    transform: translateY(0%) !important;
+}
