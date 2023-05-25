@@ -300,12 +300,13 @@ export class pricingTableEditorComponent {
                                     VM.createNewPrcObt(VM.curPricingTable);
                                     let PTRCount = this.hot.countRows();
                                     if (this.field == 'AR_SETTLEMENT_LVL') {
-
+                                        let ptrow = [];
+                                        ptrow.push({ row: this.selRow, prop: this.field, old: this.hot.getDataAtRowProp(this.selRow, this.field), new: result?.toString() });
+                                        PTE_CellChange_Util.autoFillARSet(ptrow, VM.contractData, VM.curPricingTable, VM.custCellEditor);
                                         for (let i = 0; i < PTRCount; i++) {
                                             if (!this.hot.isEmptyRow(i)) {
                                                 let ptrows = [];
                                                 ptrows.push({ row: i, prop: this.field, old: this.hot.getDataAtRowProp(i, this.field), new: result?.toString() });
-                                                PTE_CellChange_Util.autoFillARSet(ptrows, VM.contractData, VM.curPricingTable, VM.custCellEditor);
                                                 if (this.hot.getDataAtRowProp(i, 'PERIOD_PROFILE') == '' && this.hot.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD') == '') {
                                                     PTE_CellChange_Util.checkfn(ptrows[0], VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable)
                                                 }
@@ -910,7 +911,7 @@ export class pricingTableEditorComponent {
                      if (!this.hotTable.isEmptyRow(i)) {
                          let ptrows = [];
                          ptrows.push({ row: i, prop: field, old: this.hotTable.getDataAtRowProp(i, field), new: '' });
-                         PTE_CellChange_Util.autoFillARSet(ptrows, this.contractData, this.curPricingTable, this.custCellEditor);
+                        // PTE_CellChange_Util.autoFillARSet(ptrows, this.contractData, this.curPricingTable, this.custCellEditor);
                          if (this.hotTable.getDataAtRowProp(i, 'PERIOD_PROFILE') == '' && this.hotTable.getDataAtRowProp(selrow, 'RESET_VOLS_ON_PERIOD') == '') {
                              PTE_CellChange_Util.checkfn(ptrows[0], this.curPricingTable, this.columns, '', this.contractData, this.custCellEditor, this.newPricingTable)
                          }

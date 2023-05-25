@@ -87,7 +87,7 @@
                               [style.color]="row.title==='Errors' ? 'red': '#1a3e6f'">{{dataItem[row.field]}} </span>
                     </ng-template>
                 </kendo-grid-column>
-                <kendo-grid-excel fileName="Vistex R3 Deal Review.xlsx"></kendo-grid-excel>
+                <kendo-grid-excel fileName="Vistex R3 Deal Review.xlsx" [fetchData]="allData"></kendo-grid-excel>
             </kendo-grid>
         </div>
     </div>

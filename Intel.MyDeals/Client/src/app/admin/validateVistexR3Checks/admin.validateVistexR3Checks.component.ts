@@ -78,10 +78,13 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
     ];
 
     public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.Results.length;
         const result: ExcelExportData = {
-            data: process(this.Results, this.state).data,
+            data: process(this.Results, excelState).data,
         };
-        return result;
+        return result; 
     }
 
     distinctPrimitive(fieldName: string) {
@@ -141,8 +144,8 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
         let sentDeals = 0;
         //removing extra spaces and commas from deal Ids(DealstoSend) string
         if (this.DealstoSend != undefined) {
-            this.DealstoSend = this.DealstoSend.replace(/ /g, "");
-            if (this.DealstoSend.slice(-1) == ',') {
+            this.DealstoSend = this.DealstoSend.replace(/ |\n|\r/g, "");
+             if (this.DealstoSend.slice(-1) == ',') {
                 this.DealstoSend = this.DealstoSend.replace(/,+$/g, "");
             }
             //Finding total Deal Ids present in DealstoSend string
