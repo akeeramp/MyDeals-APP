@@ -47,7 +47,7 @@ export class dropdownsComponent {
     public gridResult: Array<any>;
     public formGroup: FormGroup;
     public gridData: GridDataResult;
-    public isFormChange= false;
+    public isFormChange = false;
     public DealTypeData: Array<any>;
     public allDealTypeData: Array<any>;
     public distinctSetTypeCd: Array<any>;
@@ -129,7 +129,7 @@ export class dropdownsComponent {
 
     async getGroupsDataSource() {
         //let checkrestrictionflag = false;
-        let response:any = await this.dropdownSvc.getDropdownGroups(true).toPromise().catch((error) => {
+        let response: any = await this.dropdownSvc.getDropdownGroups(true).toPromise().catch((error) => {
             this.loggerSvc.error("Unable to get Group Dropdowns.", error, error.statusText);
         })
         response = response.filter(ob => ob.dropdownName !== "SETTLEMENT_PARTNER");
@@ -160,7 +160,7 @@ export class dropdownsComponent {
     }
 
     async loadUIDropdown() {
-        this.COMP_ATRB_SIDS.push([3456, 3457, 3458, 3464, 3454]);
+        this.COMP_ATRB_SIDS.push(3456, 3457, 3458, 3464, 3454); // Removed [] from this since it was making push value a single value of array
         this.selectedInheritanceGroup = "";
         //let checkrestrictionflag = false;
         if (
@@ -234,51 +234,51 @@ export class dropdownsComponent {
 
         if (this.COMP_ATRB_SIDS.indexOf(model.ATRB_SID) > -1) {
             if (model.DROP_DOWN.length > 40) {
-                this.loggerSvc.warn("Value can not be more than 40 characters long.", "Warning");
-                this.errorMsg = "Value can not be more than 40 characters long.";
+                this.loggerSvc.warn(model.ATRB_CD + " values can not be more than 40 characters long.", "Validation Error");
+                this.errorMsg = model.ATRB_CD + " values can not be more than 40 characters long.";
                 IS_MODEL_VALID = false;
             } else if (model.DROP_DOWN.indexOf(',') > -1) {
-                this.loggerSvc.warn("Value can not have comma(,).", "Warning");
-                this.errorMsg = "Value can not have comma(,).";
+                this.loggerSvc.warn(model.ATRB_CD + " values can not have embedded commas (,).", "Validation Error");
+                this.errorMsg = model.ATRB_CD + " values can not have embedded commas (,).";
                 IS_MODEL_VALID = false;
             }
         }
 
         if (this.selectedInheritanceGroup == "MRKT_SEG_NON_CORP") {
             this.errorMsg = "MRKT_SEG_NON_CORP values must match an existing MRKT_SEG_COMBINED value.";
-            this.loggerSvc.error("MRKT_SEG_NON_CORP values must match an existing MRKT_SEG_COMBINED value.", "Error");
+            this.loggerSvc.error("MRKT_SEG_NON_CORP values must match an existing MRKT_SEG_COMBINED value.", "Validation Error");
             IS_MODEL_VALID = (this.nonCorpInheritableValues.indexOf(model.DROP_DOWN) > -1);
         }
 
         if (isNew && cond.length > 0) {
             this.errorMsg = "This Combination of Customer,Group,DealType and dropdown already exists.";
-            this.loggerSvc.error("This Combination of Customer,Group,DealType and dropdown already exists.", "Error");
+            this.loggerSvc.error("This Combination of Customer,Group,DealType and dropdown already exists.", "Validation Error");
             IS_MODEL_VALID = false;
         } else if (!isNew && cond.length > 0) {
             if (cond.filter(x => x.ACTV_IND === model.ACTV_IND).length == 1) {
-                this.errorMsg = "This Combination of Customer,Group,DealType and dropdown already exists.";
-                this.loggerSvc.error("This Combination of Customer,Group,DealType and dropdown already exists.","Error");
+                this.errorMsg = "This Combination of [Customer, Group, DealType, Dropdown] already exists.";
+                this.loggerSvc.error("This Combination of [Customer, Group, DealType, Dropdown] already exists.", "Validation Error");
                 IS_MODEL_VALID = false;
             } else if (cond.filter(x => x.ACTV_IND != model.ACTV_IND && x.ATRB_LKUP_SID != model.ATRB_LKUP_SID).length == 1) {
-                this.errorMsg = "This Combination of Customer,Group,DealType and dropdown already exists.";
-                this.loggerSvc.error("This Combination of Customer,Group,DealType and dropdown already exists.", "Error");
+                this.errorMsg = "This Combination of [Customer, Group, DealType, Dropdown] already exists.";
+                this.loggerSvc.error("This Combination of [Customer, Group, DealType, Dropdown] already exists.", "Validation Error");
                 IS_MODEL_VALID = false;
             }
         }
         else {
             if (indexOf(this.distinctCustomerName, model.CUST_NM) == -1) {
                 this.errorMsg = "Please Select Valid Customer Name.";
-                this.loggerSvc.error("Please Select Valid Customer Name.", "Error");
+                this.loggerSvc.error("Please Select Valid Customer Name.", "Validation Error");
                 IS_MODEL_VALID = false;
             }
             if (indexOf(this.distinctAtributeCd, model.ATRB_CD) == -1) {
                 this.errorMsg = "Please Select Valid Attribute Code";
-                this.loggerSvc.error("Please Select Valid Attribute Code.", "Error");
+                this.loggerSvc.error("Please Select Valid Attribute Code.", "Validation Error");
                 IS_MODEL_VALID = false;
             }
             if (indexOf(this.distinctSetTypeCd, model.OBJ_SET_TYPE_CD) == -1) {
                 this.errorMsg = "Please Select Valid Deal Type";
-                this.loggerSvc.error("Please Select Valid Deal Type.", "Error");
+                this.loggerSvc.error("Please Select Valid Deal Type.", "Validation Error");
                 IS_MODEL_VALID = false;
             }
         }
