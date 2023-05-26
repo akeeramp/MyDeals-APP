@@ -463,7 +463,7 @@ export class dealToolsComponent{
             }
             let row = null;
             each(this.gridData, (item, ind) => {
-                if (item!=undefined && item.DC_PARENT_ID === ptrId)
+                if (item && item.DC_PARENT_ID && item.DC_PARENT_ID === ptrId)
                     row = this.gridData.splice(ind, 1);
             });
             this.refreshContract.emit(true);
@@ -493,7 +493,7 @@ export class dealToolsComponent{
                 }
             }
             each(this.gridData, (item, ind) => {
-                if (item._parentIdPS === psId)
+                if (item && item._parentIdPS && item._parentIdPS === psId)
                     this.gridData.splice(ind, 1);
             });
             this.removeDeletedRow.emit(psId);

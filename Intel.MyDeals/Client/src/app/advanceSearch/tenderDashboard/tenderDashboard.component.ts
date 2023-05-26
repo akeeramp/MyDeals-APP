@@ -929,7 +929,7 @@ export class TenderDashboardComponent implements OnInit {
     }
     removeDeletedRow(event) {
         each(this.searchResults, (item,index) => {
-            if (item._parentIdPS == event) 
+            if (item && item._parentIdPS && item._parentIdPS == event)
                 this.searchResults.splice(index, 1);
         })
         if (this.searchResults.length == 0)
