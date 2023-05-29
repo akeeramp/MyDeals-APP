@@ -258,3 +258,8 @@ kendo-numerictextbox.advance-numerictextbox-style input.k-input {
 div#horizontal-search.padding-design-horizontal {
     max-width: 97vw !important;
 }
+
+.tender_de_admin kendo-grid#dealEditor .dealCell .uiControlDiv.trackingNumParent.tracker-number-class .vert-center {
+    top: 0% !important;
+    transform: translateY(0%) !important;
+}
