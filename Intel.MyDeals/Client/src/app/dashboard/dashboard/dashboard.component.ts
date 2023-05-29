@@ -272,7 +272,7 @@ export class DashboardComponent implements OnInit {
     }
 
     showHelpTopic() {        
-        window.open('https://intel.sharepoint.com/sites/mydealstrainingportal', '_blank');
+        window.open('https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Dashboard.aspx', '_blank');
     }
     //********************* search widget functions*************************
     enterPressed(event: any, searchText: any) {

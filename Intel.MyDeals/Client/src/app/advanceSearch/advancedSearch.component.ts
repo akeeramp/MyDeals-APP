@@ -243,7 +243,7 @@ export class AdvancedSearchComponent implements OnInit {
     }
     //Help
     showHelpTopicGroup(helpTopic) {
-        window.open('https://intel.sharepoint.com/sites/mydealstrainingportal', '_blank');
+        window.open('https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Dashboard.aspx', '_blank');
     }
 
     //clear grid Sorting/Filtering
