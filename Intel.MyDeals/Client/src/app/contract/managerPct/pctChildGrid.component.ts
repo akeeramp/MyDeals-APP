@@ -118,7 +118,7 @@ export class pctChildGridComponent {
         });
     }
     cellClickHandler(args: CellClickEvent): void {
-        if (args.column.field == "GRP_DEALS") {
+        if (args.column.field == "GRP_DEALS" && args.dataItem.PRC_CST_TST_STS != 'NA') {
             let dealId= args.dataItem.DEAL_ID;
             let data = this.CostTestGroupDetails.filter(x => x.DEAL_PRD_RNK == args.dataItem.DEAL_PRD_RNK)
             this.openPctGroupModal(data, dealId);
