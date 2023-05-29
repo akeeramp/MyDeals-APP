@@ -107,9 +107,11 @@ export class TenderFolioComponent {
             if (response) {
                 this.isTitleError = true;
                 this.titleErrorMsg = "This contract name already exists in another contract.";
+                this.isValidatingTender=true;
             }
             else {
                 this.isTitleError = false;
+                this.isValidatingTender=false;
             }
         }, (err) => {
             this.loggerSvc.error("Unable to Validate duplicate contract title", "Error", err);
