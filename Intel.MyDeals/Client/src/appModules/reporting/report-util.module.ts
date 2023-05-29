@@ -14,6 +14,8 @@ import { dealPopupDockComponent } from '../../app/core/dealPopup/dealPopupDock.c
 import { HeaderComponent } from '../../app/shared/header/header.component';
 import { PingComponent } from '../../app/core/ping/ping.component';
 import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingspinner.component';
+import { notificationsSettingsDialog } from '../../app/admin/notifications/admin.notificationsSettings.component';
+import { notificationsModalDialog } from '../../app/admin/notifications/admin.notificationsModal.component'
 
 export let ReportUtilComponents = [ 
     LoadingPanelComponent,
@@ -30,5 +32,7 @@ export let ReportUtilComponents = [
     dealPopupDockComponent,
     HeaderComponent,
     PingComponent,
-    LoadingSpinnerComponent
+    LoadingSpinnerComponent,
+    notificationsSettingsDialog,
+    notificationsModalDialog
 ]

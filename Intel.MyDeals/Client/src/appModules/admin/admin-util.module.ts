@@ -16,6 +16,8 @@ import { HeaderComponent } from '../../app/shared/header/header.component';
 import { PingComponent } from '../../app/core/ping/ping.component';
 import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingspinner.component';
 import { endCustomerRetailModalComponent } from '../../app/contract/ptModals/dealEditorModals/endCustomerRetailModal.component'
+import { notificationsSettingsDialog } from '../../app/admin/notifications/admin.notificationsSettings.component';
+import { notificationsModalDialog } from '../../app/admin/notifications/admin.notificationsModal.component'
 
 export let AdminUtilComponents = [ 
     LoadingPanelComponent,
@@ -34,5 +36,7 @@ export let AdminUtilComponents = [
     HeaderComponent,
     PingComponent,
     LoadingSpinnerComponent,
-    endCustomerRetailModalComponent
+    endCustomerRetailModalComponent,
+    notificationsSettingsDialog,
+    notificationsModalDialog
 ]

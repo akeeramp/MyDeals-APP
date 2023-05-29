@@ -24,6 +24,8 @@ import { HeaderComponent } from '../../app/shared/header/header.component';
 import { PingComponent } from '../../app/core/ping/ping.component';
 import { fileAttachmentComponent } from '../../app/core/gridCell/fileAttachmentModal/fileAttachmentModal.component';
 import { dealTimelineComponent } from '../../app/core/gridCell/dealTimelineModal/dealTimelineModal.component';
+import { notificationsSettingsDialog } from '../../app/admin/notifications/admin.notificationsSettings.component';
+import { notificationsModalDialog } from '../../app/admin/notifications/admin.notificationsModal.component'
 
 export let ContractUtilComponents = [ 
     LoadingPanelComponent,
@@ -50,5 +52,7 @@ export let ContractUtilComponents = [
     HeaderComponent,
     PingComponent,
     fileAttachmentComponent,
-    dealTimelineComponent
+    dealTimelineComponent,
+    notificationsSettingsDialog,
+    notificationsModalDialog
 ]

@@ -49,6 +49,8 @@ import { ProductBreakoutComponent } from '../../app/contract/ptModals/productSel
 import { fileAttachmentComponent } from '../../app/core/gridCell/fileAttachmentModal/fileAttachmentModal.component';
 import { dealTimelineComponent } from '../../app/core/gridCell/dealTimelineModal/dealTimelineModal.component';
 import { OverlappingCheckComponent } from '../../app/contract/ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
+import { notificationsSettingsDialog } from '../../app/admin/notifications/admin.notificationsSettings.component';
+import { notificationsModalDialog } from '../../app/admin/notifications/admin.notificationsModal.component'
 
 export let AdvanceUtilComponents = [ 
     LoadingPanelComponent,
@@ -98,5 +100,7 @@ export let AdvanceUtilComponents = [
     ProductBreakoutComponent,
     fileAttachmentComponent,
     dealTimelineComponent,
-    OverlappingCheckComponent
+    OverlappingCheckComponent,
+    notificationsSettingsDialog,
+    notificationsModalDialog
 ]
