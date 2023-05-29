@@ -404,8 +404,8 @@ export class dealEditorComponent {
                 if (args.column.field == "REBATE_DEAL_ID" || args.column.field == "LAST_TRKR_START_DT_CHK")
                     if (this.selectedTab.toLowerCase() == "all" || this.selectedTab.toLowerCase() == this.allTabRename.toLowerCase()) args.column.leafIndex += 3;
                     else args.column.leafIndex += 2;
-            } else if (args.column.field == "REBATE_DEAL_ID" || args.column.field == "LAST_TRKR_START_DT_CHK" || args.column.field == "USER_MAX_RPU" || args.column.field == "USER_MAX_RPU" || args.column.field == "USER_AVG_RPU" || args.column.field == "RPU_OVERRIDE_CMNT") {
-                if (args.dataItem.OBJ_SET_TYPE_CD != 'VOL_TIER' || args.dataItem.OBJ_SET_TYPE_CD != 'PROGRAM' || args.dataItem.OBJ_SET_TYPE_CD != 'FLEX') {
+            } else if (args.column.field == "REBATE_DEAL_ID" || args.column.field == "LAST_TRKR_START_DT_CHK" || args.column.field == "USER_MAX_RPU" || args.column.field == "USER_AVG_RPU" || args.column.field == "RPU_OVERRIDE_CMNT") {
+                if (args.dataItem.OBJ_SET_TYPE_CD == 'ECAP' || args.dataItem.OBJ_SET_TYPE_CD == 'REV_TIER' || args.dataItem.OBJ_SET_TYPE_CD == 'DENSITY' || args.dataItem.OBJ_SET_TYPE_CD == 'KIT') {
                     if (this.selectedTab.toLowerCase() == "all" || this.selectedTab.toLowerCase() == this.allTabRename.toLowerCase()) args.column.leafIndex += 2;
                     else args.column.leafIndex += 1;
                 }
