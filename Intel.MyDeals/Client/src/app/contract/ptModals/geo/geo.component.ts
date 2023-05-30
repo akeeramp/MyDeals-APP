@@ -32,7 +32,7 @@ export interface DialogData {
         result=`[${nonWorld.toString()}],Worldwide`
        }
        else{
-        result=`[${this.value.toString()}]`
+        result= this.value.length > 0 ? `[${this.value.toString()}]` : ''
        }
       }
       else if (this.isCustDiv) {
@@ -50,13 +50,13 @@ export interface DialogData {
         //identifying blend is enabled or no if yes enable the flag and remove the scquare bracket
         this.isBlend=(this.data.selVal?.indexOf("[") >= 0);
         if(this.isBlend){
-          this.value=this.data.selVal? this.data.selVal.replace('[','').replace(']','').split(','):null;
+          this.value=this.data.selVal? this.data.selVal.replace('[','').replace(']','').split(','):[];
         }
         else if (this.isCustDiv) {
-            this.value = this.data.selVal ? this.data.selVal.split('/') : null;
+            this.value = this.data.selVal ? this.data.selVal.split('/') : [];
         }
         else{
-          this.value=this.data.selVal? this.data.selVal.split(','):null;
+          this.value=this.data.selVal? this.data.selVal.split(','): [];
         }
     }
     onNoClick(): void {
