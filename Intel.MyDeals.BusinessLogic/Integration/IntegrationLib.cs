@@ -13,6 +13,7 @@ using Intel.Opaque;
 using Intel.Opaque.Data;
 using Newtonsoft.Json;
 using Intel.MyDeals.BusinessRules;
+using System.Data;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -528,11 +529,54 @@ namespace Intel.MyDeals.BusinessLogic
             if (customer.ToUpper() != "ANY")
             {
                 EndCustomerObject endCustObj = _primeCustomerLib.FetchEndCustomerMap(customer, endCustomerCountry);
-                isPrimedCustomer = endCustObj.IsUnifiedEndCustomer.ToString();
-                isRPLedCustomer = endCustObj.IsRPLedEndCustomer.ToString();
-                RPLStatusCode = endCustObj.RPLStatusCode.ToString();
-                primedCustomerL1Id = endCustObj.UnifiedEndCustomerId.ToString() == "0" ? "" : endCustObj.UnifiedEndCustomerId.ToString();
-                primedCustomerL2Id = endCustObj.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObj.UnifiedCountryEndCustomerId.ToString();
+                if (endCustObj.UnifiedEndCustomerId.ToString() == "0")
+                {
+                    DataTable primedCustomerData = new DataTable();
+                    try
+                    {
+                        primedCustomerData = _primeCustomerLib.InsertPrimedCustomerData(customer, workRecordDataFields.recordDetails.quote.EndCustomerCountry, workRecordDataFields.recordDetails.quote.UnifiedEndCustomer, Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId), Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId), workRecordDataFields.recordDetails.quote.ComplianceWatchList, 99999999);
+                    }
+                    catch
+                    {
+                        //continue the flow;
+                    }
+                    if (primedCustomerData != null && primedCustomerData.Rows.Count != 0)
+                    {
+                        //Use Mydeals data after Master data insert into MyDeals
+                        isPrimedCustomer = primedCustomerData.Rows[0][3].ToString();
+                        isRPLedCustomer = primedCustomerData.Rows[0][4].ToString() == "False" ? "0" : "1";
+                        RPLStatusCode = workRecordDataFields.recordDetails.quote.ComplianceWatchList.ToString();
+                        primedCustomerL1Id = workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId.ToString();
+                        primedCustomerL2Id = workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId.ToString();
+                        primedCustName = primedCustomerData.Rows[0][0].ToString();
+                    }
+                    else
+                    {
+                        isPrimedCustomer = endCustObj.IsUnifiedEndCustomer.ToString();
+                        isRPLedCustomer = endCustObj.IsRPLedEndCustomer.ToString();
+                        RPLStatusCode = endCustObj.RPLStatusCode.ToString();
+                        primedCustomerL1Id = endCustObj.UnifiedEndCustomerId.ToString() == "0" ? "" : endCustObj.UnifiedEndCustomerId.ToString();
+                        primedCustomerL2Id = endCustObj.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObj.UnifiedCountryEndCustomerId.ToString();
+                        if ((endCustomer == null || endCustomer == "") && (unifiedEndCustomer != null && unifiedEndCustomer != ""))
+                            primedCustName = unifiedEndCustomer;
+                        else
+                            primedCustName = endCustObj.UnifiedEndCustomer;
+                    }
+                }
+                else
+                {
+                    //Use Mydeals data as the data exists in Mydeals
+                    isPrimedCustomer = endCustObj.IsUnifiedEndCustomer.ToString();
+                    isRPLedCustomer = endCustObj.IsRPLedEndCustomer.ToString();
+                    RPLStatusCode = endCustObj.RPLStatusCode.ToString();
+                    primedCustomerL1Id = endCustObj.UnifiedEndCustomerId.ToString() == "0" ? "" : endCustObj.UnifiedEndCustomerId.ToString();
+                    primedCustomerL2Id = endCustObj.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObj.UnifiedCountryEndCustomerId.ToString();
+                    if ((endCustomer == null || endCustomer == "") && (unifiedEndCustomer != null && unifiedEndCustomer != ""))
+                        primedCustName = unifiedEndCustomer;
+                    else
+                        primedCustName = endCustObj.UnifiedEndCustomer;
+
+                }
                 //As END_CUST_OBJ is the one which is used to load data in the End customer pop up(both in deal editor and deal reconcilaition screen), Creating End customer obj to update deal level END_CUST_OBJ attribute
                 if ((customer != "" || customer != null) && (endCustomerCountry != "" || endCustomerCountry != null))
                 {
@@ -546,14 +590,10 @@ namespace Intel.MyDeals.BusinessLogic
                        PRIMED_CUST_ID = primedCustomerL1Id,
                        RPL_STS_CD = RPLStatusCode,
                        IS_RPL = isRPLedCustomer,
-                       PRIMED_CUST_NM = endCustObj.UnifiedEndCustomer
+                       PRIMED_CUST_NM = primedCustName
                     });
                     endCustomerObject = JsonConvert.SerializeObject(endCustData);
                 }
-                if ((endCustomer == null || endCustomer == "") && (unifiedEndCustomer != null && unifiedEndCustomer != ""))
-                    primedCustName = unifiedEndCustomer;
-                else
-                    primedCustName = endCustObj.UnifiedEndCustomer;
             }
             else
             {
@@ -1235,11 +1275,53 @@ namespace Intel.MyDeals.BusinessLogic
                 if (isIQRUnified == false || isMyDealsUnified != "1")
                 {
                     EndCustomerObject endCustObj = _primeCustomerLib.FetchEndCustomerMap(customer, endCustomerCountry);
-                    isPrimedCustomer = endCustObj.IsUnifiedEndCustomer.ToString();
-                    isRPLedCustomer = endCustObj.IsRPLedEndCustomer.ToString();
-                    RPLStatusCode = endCustObj.RPLStatusCode.ToString();
-                    primedCustomerL1Id = endCustObj.UnifiedEndCustomerId.ToString() == "0" ? "" : endCustObj.UnifiedEndCustomerId.ToString();
-                    primedCustomerL2Id = endCustObj.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObj.UnifiedCountryEndCustomerId.ToString();
+                    if (endCustObj.UnifiedEndCustomerId.ToString() == "0")
+                    {
+                        DataTable primedCustomerData = new DataTable();
+                        try
+                        {
+                            primedCustomerData = _primeCustomerLib.InsertPrimedCustomerData(customer, workRecordDataFields.recordDetails.quote.EndCustomerCountry, workRecordDataFields.recordDetails.quote.UnifiedEndCustomer, Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId), Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId), workRecordDataFields.recordDetails.quote.ComplianceWatchList, 99999999);
+                        }
+                        catch
+                        {
+                            //continue the flow;
+                        }
+                        if (primedCustomerData != null && primedCustomerData.Rows.Count != 0)
+                        {
+                            //Use MyDeals data after the Master Data update in MyDeals
+                            isPrimedCustomer = primedCustomerData.Rows[0][3].ToString();
+                            isRPLedCustomer = primedCustomerData.Rows[0][4].ToString() == "False" ? "0" : "1";
+                            RPLStatusCode = workRecordDataFields.recordDetails.quote.ComplianceWatchList.ToString();
+                            primedCustomerL1Id = workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId.ToString();
+                            primedCustomerL2Id = workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId.ToString();
+                            primedCustName = primedCustomerData.Rows[0][0].ToString();
+                        }
+                        else
+                        {
+                            isPrimedCustomer = endCustObj.IsUnifiedEndCustomer.ToString();
+                            isRPLedCustomer = endCustObj.IsRPLedEndCustomer.ToString();
+                            RPLStatusCode = endCustObj.RPLStatusCode.ToString();
+                            primedCustomerL1Id = endCustObj.UnifiedEndCustomerId.ToString() == "0" ? "" : endCustObj.UnifiedEndCustomerId.ToString();
+                            primedCustomerL2Id = endCustObj.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObj.UnifiedCountryEndCustomerId.ToString();
+                            if ((endCustomer == null || endCustomer == "") && (unifiedEndCustomer != null && unifiedEndCustomer != ""))
+                                primedCustName = unifiedEndCustomer;
+                            else
+                                primedCustName = endCustObj.UnifiedEndCustomer;
+                        }
+                    }
+                    else
+                    {
+                        //Use MyDeals data as the data exists in MyDeals
+                        isPrimedCustomer = endCustObj.IsUnifiedEndCustomer.ToString();
+                        isRPLedCustomer = endCustObj.IsRPLedEndCustomer.ToString();
+                        RPLStatusCode = endCustObj.RPLStatusCode.ToString();
+                        primedCustomerL1Id = endCustObj.UnifiedEndCustomerId.ToString() == "0" ? "" : endCustObj.UnifiedEndCustomerId.ToString();
+                        primedCustomerL2Id = endCustObj.UnifiedCountryEndCustomerId.ToString() == "0" ? null : endCustObj.UnifiedCountryEndCustomerId.ToString();
+                        if ((endCustomer == null || endCustomer == "") && (unifiedEndCustomer != null && unifiedEndCustomer != ""))
+                            primedCustName = unifiedEndCustomer;
+                        else
+                            primedCustName = endCustObj.UnifiedEndCustomer;
+                    }
                     //As END_CUST_OBJ is the one which is used to load data in the End customer pop up, Creating End customer obj to update deal level END_CUST_OBJ attribute 
                     if ((customer != "" || customer != null) && (endCustomerCountry != "" || endCustomerCountry != null))
                     {
@@ -1253,14 +1335,11 @@ namespace Intel.MyDeals.BusinessLogic
                             PRIMED_CUST_ID = primedCustomerL1Id,
                             RPL_STS_CD = RPLStatusCode,
                             IS_RPL = isRPLedCustomer,
-                            PRIMED_CUST_NM = endCustObj.UnifiedEndCustomer
+                            PRIMED_CUST_NM = primedCustName
                         });
                         endCustomerObject = JsonConvert.SerializeObject(endCustData);
                     }
-                    if ((endCustomer == null || endCustomer == "") && (unifiedEndCustomer!=null && unifiedEndCustomer!=""))
-                    primedCustName = unifiedEndCustomer;
-                    else 
-                        primedCustName = endCustObj.UnifiedEndCustomer; 
+                   
                     UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL), customer);
                     UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.IS_PRIMED_CUST), isPrimedCustomer);
                     UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.PRIMED_CUST_ID), primedCustomerL1Id);
@@ -1651,18 +1730,47 @@ namespace Intel.MyDeals.BusinessLogic
                                 destinationStage == WorkFlowStages.Won ? WorkFlowStages.Won : WorkFlowStages.Lost);
                             if(destinationStage == WorkFlowStages.Won && isPrimedCust && isMyDealsUnified != "1")
                             {
-                                List<EndCustomer> endCustData = new List<EndCustomer>();
-                                endCustData.Add(new EndCustomer
+                                DataTable primedCustomerData = new DataTable();
+                                try
                                 {
-                                    END_CUSTOMER_RETAIL = endCustomer,
-                                    PRIMED_CUST_CNTRY = endCustomerCountry,
-                                    IS_EXCLUDE = "0",
-                                    IS_PRIMED_CUST = "1",
-                                    PRIMED_CUST_ID = IQRprimedCustomerL1Id,
-                                    RPL_STS_CD = IQRRPLStatusCode,
-                                    IS_RPL = "0",
-                                    PRIMED_CUST_NM = unifiedEndCustomer
-                                });
+                                    primedCustomerData = _primeCustomerLib.InsertPrimedCustomerData(endCustomer, workRecordDataFields.recordDetails.quote.EndCustomerCountry, workRecordDataFields.recordDetails.quote.UnifiedEndCustomer, Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId), Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId), workRecordDataFields.recordDetails.quote.ComplianceWatchList, 99999999);
+                                }
+                                catch
+                                {
+                                    //continue the flow;
+                                }
+                                List<EndCustomer> endCustData = new List<EndCustomer>();
+                                if (primedCustomerData != null && primedCustomerData.Rows.Count != 0)
+                                {
+
+                                    endCustData.Add(new EndCustomer
+                                    {
+                                        END_CUSTOMER_RETAIL = endCustomer,
+                                        PRIMED_CUST_CNTRY = workRecordDataFields.recordDetails.quote.EndCustomerCountry,
+                                        IS_EXCLUDE = "0",
+                                        IS_PRIMED_CUST = "1",
+                                        PRIMED_CUST_ID = workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId,
+                                        RPL_STS_CD = workRecordDataFields.recordDetails.quote.ComplianceWatchList,
+                                        IS_RPL = "0",
+                                        PRIMED_CUST_NM = workRecordDataFields.recordDetails.quote.UnifiedEndCustomer
+                                    });
+
+
+                                }
+                                else
+                                {
+                                    endCustData.Add(new EndCustomer
+                                    {
+                                        END_CUSTOMER_RETAIL = endCustomer,
+                                        PRIMED_CUST_CNTRY = endCustomerCountry,
+                                        IS_EXCLUDE = "0",
+                                        IS_PRIMED_CUST = "1",
+                                        PRIMED_CUST_ID = IQRprimedCustomerL1Id,
+                                        RPL_STS_CD = IQRRPLStatusCode,
+                                        IS_RPL = "0",
+                                        PRIMED_CUST_NM = unifiedEndCustomer
+                                    });
+                                }
                                 endCustomerObject = JsonConvert.SerializeObject(endCustData);
 
                                 myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].SetDataElementValue(AttributeCodes.IS_PRIMED_CUST, "1");

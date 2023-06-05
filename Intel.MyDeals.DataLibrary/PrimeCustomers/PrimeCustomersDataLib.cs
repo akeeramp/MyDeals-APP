@@ -151,7 +151,7 @@ namespace Intel.MyDeals.DataLibrary
                             CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
                             CNTRCT_OBJ_SID = (IDX_CNTRCT_OBJ_SID < 0 || rdr.IsDBNull(IDX_CNTRCT_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNTRCT_OBJ_SID),
                             EMP_WWID = (IDX_EMP_WWID < 0 || rdr.IsDBNull(IDX_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_EMP_WWID),
-	                        END_CUST_OBJ = (IDX_END_CUST_OBJ < 0 || rdr.IsDBNull(IDX_END_CUST_OBJ)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_OBJ),
+                            END_CUST_OBJ = (IDX_END_CUST_OBJ < 0 || rdr.IsDBNull(IDX_END_CUST_OBJ)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_OBJ),
                             END_CUSTOMER_COUNTRY = (IDX_END_CUSTOMER_COUNTRY < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_COUNTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_COUNTRY),
                             END_CUSTOMER_RETAIL = (IDX_END_CUSTOMER_RETAIL < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_RETAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_RETAIL),
                             OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
@@ -688,7 +688,7 @@ namespace Intel.MyDeals.DataLibrary
                         });
                     }
                 }
-                
+
             }
             catch (Exception ex)
             {
@@ -696,6 +696,30 @@ namespace Intel.MyDeals.DataLibrary
                 throw;
             }
             return ret;
+        }
+        public DataTable InsertPrimedCustomerData(string endCustomerRetail, string endCustomerCountry, string primCustomerName, int primCustomerId, int primCustomerLvlId, string rplStatusCode, int empWWID)
+        {
+            try
+            {
+                var cmd = new Procs.dbo.PR_INS_MYDL_PRIM_CUST()
+                {
+                    in_end_cust_retail = endCustomerRetail,
+                    in_cust_ctry = endCustomerCountry,
+                    in_cust_nm = primCustomerName,
+                    in_cust_id = primCustomerId,
+                    in_cust_lvl_id = primCustomerLvlId,
+                    in_rpl_sts_cd = rplStatusCode,
+                    in_emp_wwid = empWWID
+                };
+
+                return DataAccess.ExecuteDataTable(cmd);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                return null;
+            }
+
         }
     }
 }

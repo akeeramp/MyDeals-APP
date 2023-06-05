@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Data;
 using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.IDataLibrary
@@ -28,7 +29,7 @@ namespace Intel.MyDeals.IDataLibrary
         List<UnifiedDealsSummary> UploadBulkUnifyDeals(List<UnifyDeal> unifyDeals);
 
         List<DealsUnificationValidationSummary> ValidateBulkUnifyDeals(List<UnifyDeal> unifyDeals);
-        
+
         List<UnPrimedDealLogs> UnPrimeDealsLogs(int dealId, string endCustData);
 
         List<UCDRetry> RetryUCDRequest(bool retryFlag, string endCustomer, string endCustomerCtry);
@@ -38,5 +39,7 @@ namespace Intel.MyDeals.IDataLibrary
         List<RplStatusCode> GetRplStatusCodes();
 
         List<DealReconInvalidRecords> updateDealRecon(List<DealRecon> lstDealRecon);
+
+        DataTable InsertPrimedCustomerData(string endCustomerRetail, string endCustomerCountry, string primCustomerName, int primCustomerId, int primCustomerLvlId, string rplStatusCode, int empWWID);
     }
 }
