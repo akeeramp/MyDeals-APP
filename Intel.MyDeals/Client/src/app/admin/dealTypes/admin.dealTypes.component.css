@@ -1,1 +1,5 @@
-﻿.k-family{font-family:'intelicon'!important}.k-icon-md{font-size:25px}
+﻿﻿.kendo-grid-buttons.dealTypers {
+    padding-left: 25px !important;
+    padding-right: 25px !important;
+    width: 100% !important;
+}

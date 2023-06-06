@@ -2,16 +2,16 @@
 <!-- <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" /> -->
 <!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<div class="col-md-12" style="padding-top: 40px;">
-    <h2>Rule Ownership</h2>
+<div class="col-md-12" style="padding-top: 20px;">
+    <h2 style="margin-bottom: 0;">Rule Ownership</h2>
     <p style="color: #FC4C02">This screen allows Approvers to update owner of the rules</p>
 </div>
 <div class="col-md-12" *ngIf="IsSecurityCheckDone && !(isElligibleForApproval || IsReadOnlyAccess)" style="text-align: center;color: red;">
     <h3>You do not have a permission to access this page!</h3>
 </div>
-<div class="col-md-12 kendo-grid-buttons remove-space-border" *ngIf="IsSecurityCheckDone && (isElligibleForApproval || IsReadOnlyAccess)">
+<div class="col-md-12 kendo-grid-buttons remove-space-border" *ngIf="IsSecurityCheckDone && (isElligibleForApproval || IsReadOnlyAccess)" style=" padding-left: 15px !important; padding-right: 15px !important;">
     <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
-                filterable="menu" [navigable]="true" [columnMenu]="true" (dataStateChange)="dataStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)" (save)="saveHandler($event)">
+                filterable="menu" [navigable]="true" [columnMenu]="true" (dataStateChange)="dataStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)" (save)="saveHandler($event)" class="kAlignHeaders" style=" height: calc(100vh - 230px);">
         <ng-template kendoGridToolbarTemplate>
             <button (click)="clearFilter()" class="k-button clearButton">
                 <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS

@@ -3,7 +3,8 @@
 div.overFlowWidget {
     width: auto;
     height: calc(100vh - 12vh) !important;
-    overflow: auto !important 
+    overflow: auto !important;
+    overflow-x: hidden;
 }
 
 div.overFlowWidget>div.row {

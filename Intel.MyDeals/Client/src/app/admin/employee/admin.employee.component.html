@@ -1,10 +1,10 @@
 ﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<div class="empRole">
-    <h2>Employee Role Manager</h2>
+<div class="empRole" style="padding-top: 5px;">
+    <h2 class="heading-employee-actions">Employee Role Manager</h2>
 
     <h5 class="role-heading">Select your User Role</h5>
-    <div class="btn-group btn-group-lg btn-group-toggle" ngbRadioGroup [(ngModel)]="roleTypeId">
-        <label ngbButtonLabel class="btn btn-primary" *ngFor="let toggle of roles">
+    <div class="btn-group btn-group-lg btn-group-toggle toggleLabelEmployee" ngbRadioGroup [(ngModel)]="roleTypeId" style=" height: auto !important;">
+        <label ngbButtonLabel class="btn btn-primary employeeRoleToggle" *ngFor="let toggle of roles">
             <input ngbButton type="radio" [value]="toggle.value">{{ toggle.label }}
         </label>
     </div>
@@ -12,12 +12,12 @@
     <h5 class="role-heading">Select any special purpose bits for your role</h5>
     <div>
         <div><input type="checkbox" name="empIsDeveloper" class="with-font" id="emp_Is_Developer"
-                    [(ngModel)]="isDeveloper" /><label for="emp_Is_Developer">Is A Developer</label></div>
+                    [(ngModel)]="isDeveloper" /><label for="emp_Is_Developer" class="fontWeightBold">Is A Developer</label></div>
         <div><input type="checkbox" name="empIsTester" class="with-font" id="emp_Is_Tester"
-                    [(ngModel)]="isTester" /><label for="emp_Is_Tester">Is A Tester</label></div>
+                    [(ngModel)]="isTester" /><label for="emp_Is_Tester" class="fontWeightBold">Is A Tester</label></div>
         <div><input type="checkbox" name="empIsSuper" class="with-font" id="emp_Is_Super" 
-                    [(ngModel)]="isSuper" /><label for="emp_Is_Super">Is A Super User</label></div>
+                    [(ngModel)]="isSuper" /><label for="emp_Is_Super" class="fontWeightBold">Is A Super User</label></div>
     </div>
 
-    <button (click)="save()" class="btn btn-primary btn-lg">Save This Role</button>
+    <button (click)="save()" class="btn btn-primary btn-lg colors-btn-prime">Save This Role</button>
 </div>

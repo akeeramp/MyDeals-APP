@@ -1016,3 +1016,100 @@ kendo-dialog.fix_close .k-window-actions .k-button {
 #admin-geo-page .k-indicator-container {
     color: #00aeef !important;
 }
+
+kendo-grid.legal-exception-design table tr th .k-cell-inner kendo-grid-filter-menu a.k-grid-filter.k-state-active span.k-icon.k-i-filter {
+    font-size: 20px;
+    color: #000;
+    opacity: .45;
+}
+
+    kendo-grid.legal-exception-design table tr th .k-cell-inner kendo-grid-filter-menu a.k-grid-filter.k-state-active span.k-icon.k-i-filter:hover {
+        color: var(--light-blue);
+        opacity: 1;
+    }
+
+
+/*#legalGrid {
+    height: calc(100vh - 180px) !important
+}
+
+    #legalGrid .k-plus::before, .k-i-plus::before {
+        content: "\e005" !important
+    }
+
+    #legalGrid .k-minus::before, .k-i-minus::before {
+        content: "\e006" !important
+    }
+
+    #legalGrid.k-grid .k-grid-content {
+        overflow: overlay !important;
+    }
+
+    #legalGrid tr td {
+        white-space: nowrap !important;
+        height: 60px !important
+    }*/
+
+.workFlowGrid kendo-textbox.k-textbox .k-input, kendo-combobox.k-widget.k-combobox .k-input {
+    font-size: 12px;
+}
+
+
+.icnBtnDataFix {
+    border-radius: 4px;
+    width: 24px;
+    padding: 2px 5px;
+    margin: 2px 12px 2px 0;
+    cursor: pointer
+}
+
+    .icnBtnDataFix i {
+        color: #ffffff
+    }
+
+    .icnBtnDataFix.icnSkyBtn {
+        background-color: #00AEEF
+    }
+
+        .icnBtnDataFix.icnSkyBtn:hover {
+            background-color: #0071C5
+        }
+
+    .icnBtnDataFix.icnGryBtn {
+        background-color: #bbbbbb
+    }
+
+        .icnBtnDataFix.icnGryBtn:hover {
+            background-color: #cccccc
+        }
+
+.vistexDatePickers .datePickerWidth .k-input {
+    font-size: 12px;
+}
+
+.customVendorsDialogger .k-dialog .k-content {
+    padding: 0;
+}
+
+kendo-dialog.customVendorsDialogger .k-dialog-buttongroup {
+    padding: 0;
+}
+
+    kendo-dialog.customVendorsDialogger .k-dialog-buttongroup button.k-button {
+        border-color: #e4e7eb;
+        padding: 1.3em 0 !important;
+        background-color: #ebebeb;
+        color: black;
+        font-size: 14px;
+    }
+
+.dropDownGrids .k-grid-header .k-grid-filter.k-state-active {
+    color: var(--light-blue);
+    background-color: #ffffff;
+}
+
+.dropDownGrids .k-pager-numbers .k-link.k-state-selected {
+    border-color: var(--light-blue);
+    color: #fff !important;
+    background-color: var(--light-blue) !important;
+}

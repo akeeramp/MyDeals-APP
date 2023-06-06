@@ -1,13 +1,13 @@
 ﻿<!-- <link href="/Client/node_modules/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet" /> -->
 <!-- <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" /> -->
 <!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
-<!-- <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" /> -->
+ <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" /> 
 <div class="row">
-    <div class="col-md-9 k-header-alignment">
+    <div class="col-md-9 k-header-alignment padding-top-20">
         <h3>Unified Deal Reconciliation</h3>
     </div>
     <div class="col-md-3">
-        <button class="btn btn-primary" (click)="OpenBulkUploadUnifyModal()" style="float:right;margin-top:40px; margin-right:41px;">Upload Unified Data</button>
+        <button class="btn btn-primary" (click)="OpenBulkUploadUnifyModal()" style="float:right;margin-top:20px; margin-right:41px;">Upload Unified Data</button>
     </div>
 </div>
 <div class="row" style="display: contents;">
@@ -34,11 +34,11 @@
                         </button>
                     </div>
                     <div class="text-center">
-                        <button id="command-icon" title="Save" class="k-command-icon unifie-edit-style " kendoGridSaveCommand
+                        <button id="command-icon" title="Save" class="k-command-icon" kendoGridSaveCommand
                                 [disabled]="formGroup?.invalid">
                             <span class="k-icon k-i-check k-icon-sm"></span>
                         </button><button id="command-icon" title="Cancel"
-                                         class="k-command-icon unifie-cancel-style" kendoGridCancelCommand>
+                                         class="k-command-icon" kendoGridCancelCommand>
                             <span class="k-icon k-i-cancel-outline k-icon-sm cancel-space-r"></span>
                         </button>
                     </div>
@@ -98,6 +98,6 @@
 <kendo-dialog *ngIf="isWarning" class="endCustomerWarning unifie-window-dialog">
     <p style="margin: 30px; text-align: center;">{{message}}</p>
     <kendo-dialog-actions class="unifie-recon-action">
-        <button class='k-button noRemoveWarning unifie-recon-ok' (click)="cancelWarning()">OK</button>
+        <button class='k-button noRemoveWarning unifie-recon-ok k-buttonUnifiedDealRecon' (click)="cancelWarning()">OK</button>
     </kendo-dialog-actions>
 </kendo-dialog>

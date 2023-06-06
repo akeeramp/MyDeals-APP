@@ -2,13 +2,13 @@
     padding: 5px
 }
 
-#OutputContainer {
+/*#OutputContainer {
     padding-top: 15px !important;
-    height: 60svh;
+    height: 60vh;
     overflow-y: inherit;
     overflow-x: hidden;
     margin-left:-7px;
-}
+}*/
 
 .validaterRules .k-grid-content {
     height: 370px !important
@@ -16,7 +16,7 @@
 
 @media (max-width: 1024px), (max-height: 875px) {
     #OutputContainer {
-        height: 35svh;
+        height: 35vh;
     }
 
     #OutputGrid {
@@ -29,9 +29,9 @@
     }
 }
 
-@media (max-width: 768px) {
+/*@media (max-width: 768px) {
     #OutputContainer {
-        height: 30svh;
+        height: 30vh;
     }
 
     #OutputGrid {
@@ -41,7 +41,7 @@
 
 a {
     text-decoration: underline !important
-}
+}*/
 
 .dataCell {
     padding: 0;

@@ -6,7 +6,7 @@
     font-size: 22px;
     cursor: pointer;
 }
-.btn-default.active:hover {
+/*.btn-default.active:hover {
   color: #fff !important;
   background-color: #367fa9 !important;
   border-color: #00aeef !important;
@@ -15,7 +15,7 @@
   color: #fff !important;
   background-color: #00aeef !important;
   border-color: #367fa9 !important;
-}
+}*/
 #bulkPriceUpdateModalWindow .modal-footer {
   position: fixed;
   bottom: -59px;
@@ -25,14 +25,14 @@
   border: 1px solid #003c71;
   margin-left: -2px;
 }
-#modalBodyDiv .row {
-  margin-left: -5px;
-  width: 700px;
+.admin-bulk-modalbody .row {
+    margin-left: -5px;
+    width: 700px;
 }
-.modal-dialog {
+/*.modal-dialog {
   width: 750px;
   margin-top: 100px;
-}
+}*/
 #modalTitle.modal-title-admin-bulk {
     float: left !important;
     font-size: 28px !important;
@@ -57,20 +57,20 @@
     background-color: #003C71 !important;
     color: #fff !important;
 }
-.notes {
+.notesBulk {
     font-size: 14px;
     margin-left: 10px;
     margin-top: 20px !important;
     padding: 0;
 }
 
-.bluebold {
+/*.bluebold {
   color: #0071c5;
   font-weight: bold;
-}
-.redbold {
-  color: red;
-  font-weight: bold;
+}*/
+.redboldBulk {
+    color: red;
+    font-weight: bold;
 }
 #bulkPriceUpdateModalWindow .modal-header {
   border-bottom: 1px solid #e5e5e5;
@@ -143,9 +143,9 @@
   background-color: #00aeef !important
 }
 
-.spliter-btom-style.k-splitter-flex .k-splitbar {
-  position: relative !important;
-  margin-bottom: -8px !important
+.spliter-btom-styleBulk.k-splitter-flex .k-splitbar {
+    position: relative !important;
+    margin-bottom: -8px !important
 }
 
 #bulkPriceUpdateTable td.error-product {
@@ -217,7 +217,7 @@
   background: rgba(0,174,239,.2) !important;
 }
 
-#disabledCellsError .ok-btn {
+/*#disabledCellsError .ok-btn {
   background-color: #00aeef !important;
 }
 
@@ -236,7 +236,7 @@
 }
 #disabledCellsError .k-widget.k-window.k-dialog{
 width: 320px;
-}
+}*/
 
 #urlLink a{
   color: #0071c5;

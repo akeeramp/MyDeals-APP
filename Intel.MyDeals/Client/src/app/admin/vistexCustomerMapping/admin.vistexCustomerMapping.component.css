@@ -11,25 +11,19 @@
 }
 
 .head-right-shift {
-    padding-top: 20px;
-    padding-left: 14px !important;
-    padding-bottom: 10px
+    padding-top: 25px;
+    padding-left: 15px !important;
+    padding-bottom: 0;
 }
 
 .bottom-s-remove {
     line-height: 1.1
 }
 
-.customer-table-lR {
-    padding-left: 14px !important;
-    padding-right: 5px !important;
-    padding-top: 0 !important
-}
-
-.k-grid.cm-height-table {
+.k-grid.KendoCustomerMapping {
     height: calc(100vh - 205px) !important
 }
 
-.cancel-space-r {
+.cancel-space-CustomerMapping {
     margin-left: -1.14em !important
 }

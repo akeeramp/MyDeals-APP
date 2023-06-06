@@ -1,9 +1,9 @@
-﻿.btn-primary {
+﻿.btnPrimers {
     margin: 5px;
     align-items: center
 }
 
-    .btn-primary[disabled] {
+    .btnPrimers[disabled] {
         background-color: #edeff0 !important;
         color: #7e868b !important;
         border-color: #b1babf !important;
@@ -80,7 +80,6 @@
 
 .k-grid.tt-grids {
     height: calc(100vh - 205px) !important;
-    width: calc(100vh - -998px) !important
 }
 
 #admin-legal-popup .kendo-dialog-message {

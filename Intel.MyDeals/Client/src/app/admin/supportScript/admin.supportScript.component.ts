@@ -7,7 +7,7 @@ import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
 @Component({
     selector: "admin-support-script",
     templateUrl: "Client/src/app/admin/supportScript/admin.supportScript.component.html",
-    styles: [`.opUiElement { width: 95% } .dateRangeLabel { font-weight: bold; } .btnExec { padding-left: 25px; } .input-error { border: red 1px solid; }`]
+    styles: [`.dateRangeLabelSupportScript { font-weight: bold; } .btnExecSupportScript { padding-left: 25px; } `]
 })
 export class adminsupportScriptComponent {
     constructor(private loggersvc: logger,

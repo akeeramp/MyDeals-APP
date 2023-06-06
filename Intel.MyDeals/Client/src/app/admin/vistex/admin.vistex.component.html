@@ -5,7 +5,7 @@
 
 <loading-panel-angular id="adminVistesLoading" class="adminVistesLoadingClass" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
                        [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
-<div class="col-md-12 k-header-alignment">
+<div class="col-md-12 k-header-alignment padding-top-20" style=" padding-left: 25px !important;">
     <h2>Vistex API Call</h2>
     <p style="color: #FC4C02">This screen allow to Test SAP PO API calls</p>
 </div>
@@ -13,7 +13,7 @@
         <div class="col-md-12" style="margin-top: 15px">
             <div class="col-md-1" style="font-size:14px; font-weight:bold">API Name: </div>
             <div class="col-md-5">
-                <kendo-dropdownlist id="comboApiName" class="opUiContainer md" [data]="apiList" textField="API_NM"
+                <kendo-dropdownlist id="comboApiName" class="opUiContainer md vistexComboApiName" [data]="apiList" textField="API_NM"
                                     [defaultItem]="defaultItem" [itemDisabled]="itemDisabled"
                                     valueField="API_CD" [(ngModel)]="selectedApiCD" [valuePrimitive]="true"></kendo-dropdownlist>
                 <button (click)="runApi()" class="btn btn-primary" style="margin-left: 15px">Simulate</button>
@@ -24,7 +24,7 @@
                 <div class="box-header with-border">
                     <h3 class="box-title">Simulation Log</h3>
                     <div class="box-body">
-                        <table class="table no-margin ReportAuditLog tableHeader">
+                        <table class="table no-margin ReportAuditLog tableHeader tableHeaderVistex">
                             <thead>
                                 <tr>
                                     <th style="width:2px"></th>

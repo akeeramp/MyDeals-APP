@@ -2,17 +2,12 @@
     font-size: 12px !important
 }
 
-.k-family {
-    font-family: 'intelicon' !important;
-    font-size: 25px
-}
-
 .header-position-fix {
     padding-top: 50px;
     padding-left: 14px !important
 }
 
-.table-fix-lf {
+.kendo-grid-buttons.table-fix-lf {
     padding-left: 14px !important;
     padding-right: 5px !important;
     padding-top: 0 !important

@@ -1,4 +1,4 @@
-﻿.control-label {
+﻿﻿.col-md-1.control-label-custom {
     text-align: right;
     padding-right: 14px
 }
@@ -9,47 +9,51 @@
     width: 100%
 }
 
-.dealTools {
+.dealToolsDataFix {
     margin-left: 10px
 }
 
-.btn-primary[disabled] {
+.btn-primaryData[disabled] {
     background-color: #edeff0 !important;
     color: #b1babf !important;
     border-color: #b1babf !important
 }
 
-.grid-link-checkbox with-font {
+.grid-link-checkbox.with-font {
     height: 15px;
     width: 15px
 }
 
-.k-dropdown .k-dropdown-wrap {
+/*.k-dropdown .k-dropdown-wrap {
     background-color: #fff !important
-}
+}*/
 
-.AlertMsg {
+.AlertMsgData {
     width: 100px;
     color: black;
     background-color: lightgray;
     border: none
 }
 
-.btn[disabled] {
+/*.btn[disabled] {
     cursor: not-allowed !important
-}
+}*/
 
 #dataFixAttributes .dataValueNumeric {
     font-size: 11px;
     width: 75px
 }
 
-.inputWidth {
+.inputWidthDataFix {
     width: 100%;
     font-size: 11px
 }
 
-#dataFixAttributes table thead th,
+    .inputWidthDataFix .k-input {
+        font-size: 11px !important;
+    }
+
+/*#dataFixAttributes table thead th,
 .col {
     text-align: center;
     font-size: 13px
@@ -58,7 +62,7 @@
 #dataFixAttributes table tbody td,
 .data {
     padding-right: 2px
-}
+}*/
 
 #dataFixAttributes {
     max-height: 250px;
@@ -109,11 +113,11 @@
     width: 100%
 }
 
-.k-animation-container ul {
+/*.k-animation-container ul {
     min-width: 50px !important
-}
+}*/
 
-.filterRow {
+/*.filterRow {
     margin-bottom: 7px
 }
 
@@ -189,28 +193,28 @@
 
 .sm-help I {
     color: #FFA300
-}
+}*/
 
-.divTable {
+.mainDataFix .divTable {
     display: table;
     width: 100%
 }
 
-.divTableRow {
+.mainDataFix .divTableRow {
     display: table-row
 }
 
-.divTableCell,
-.divTableHead {
+.mainDataFix .divTableCell,
+.mainDataFix .divTableHead {
     display: table-cell;
     padding-right: 2px
 }
 
-.divTableBody {
+.mainDataFix .divTableBody {
     display: table-row-group
 }
 
-.kdropdownlist {
+.kdropdownlistDataFix {
     width: 150px
 }
 
@@ -218,7 +222,7 @@
     font-weight: bold
 }
 
-.messageBox {
+.messageBoxDataFix {
     color: #FC4C02;
     font-size: 15px
 }
@@ -229,19 +233,18 @@
     padding-left: 33px
 }
 
-.dataFix {
+.dataFixHeaders {
     padding-left: 15px !important;
-    margin-top: 30px !important
+    /*margin-top: 30px !important*/
 }
 
 .text-alignfix {
-    margin-top: -5px;
-    margin-bottom: -1.2rem;
     line-height: 1.2;
-    font-weight: 500
+    font-weight: 500;
+    padding-top: 15px;
 }
 
-.grid-table-lr {
+.kendo-grid-buttons.grid-table-lr {
     padding-left: 20px !important;
     padding-right: 5px !important
 }
@@ -253,6 +256,18 @@
 
 .fixed-bottom-space {
     margin-bottom: -1.3rem
+}
+
+.dataFixInputCheck {
+    clip: unset !important;
+    width: 13px !important;
+    height: 13px !important;
+    position: relative !important;
+    margin: 4px 0 0 !important;
+}
+
+.addModeScroll.grid-table-lr .k-textbox.form-control {
+    padding: 0;
 }
 
 .incidentNumberCell {

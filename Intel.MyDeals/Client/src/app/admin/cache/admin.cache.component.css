@@ -1,4 +1,74 @@
-﻿#viewResultsContainer{width:700px;height:500px;overflow:auto;margin:0 0 0 20px;-ms-border-radius:4px;border-radius:4px;border:1px solid #666666;background-color:#ffffff;padding:8px}#viewResultsContainer h5{margin-top:0}#viewResults{font-size:9px}.tblCache th{padding:2px 5px;font-size:11px}.tblCache td{padding:2px 5px;font-size:11px}#cacheContainer{margin-top:10px}#cacheList h5{margin-top:0}#cacheList{-ms-border-radius:4px;border-radius:4px;border:1px solid #666666;background-color:#ffffff;padding:8px;overflow:auto}h1{margin-top:10px}.iconLink{cursor:pointer;color:#0071C5}.iconLink:hover{color:#003C71}h2.cache-header{margin-top:30px;margin-bottom:0;font-size:26px}h5.temp-headers{font-weight:500!important;margin-bottom:11px!important}
+﻿#viewResultsContainer {
+    width: 700px;
+    height: 500px;
+    overflow: auto;
+    margin: 0 0 0 20px;
+    -ms-border-radius: 4px;
+    border-radius: 4px;
+    border: 1px solid #666666;
+    background-color: #ffffff;
+    padding: 8px
+}
+
+    #viewResultsContainer h5 {
+        margin-top: 0
+    }
+
+#viewResults {
+    font-size: 9px
+}
+
+.tblCache th {
+    padding: 2px 5px;
+    font-size: 11px
+}
+
+.tblCache td {
+    padding: 2px 5px;
+    font-size: 11px
+}
+
+#cacheContainer {
+    margin-top: 10px
+}
+
+#cacheList h5 {
+    margin-top: 0
+}
+
+#cacheList {
+    -ms-border-radius: 4px;
+    border-radius: 4px;
+    border: 1px solid #666666;
+    background-color: #ffffff;
+    padding: 8px;
+    overflow: auto
+}
+
+/*h1 {
+    margin-top: 10px
+}*/
+
+.iconLink {
+    cursor: pointer;
+    color: #0071C5
+}
+
+    .iconLink:hover {
+        color: #003C71
+    }
+
+h2.cache-header {
+    margin-top: 30px;
+    margin-bottom: 0;
+    font-size: 26px
+}
+
+h5.temp-headers {
+    font-weight: 500 !important;
+    margin-bottom: 11px !important
+}
+
 .k-primary-custom {
     color: #fff;
     border-color: #00aeef;
@@ -8,8 +78,8 @@
     box-shadow: none;
 }
 
-.k-primary-custom:hover {
-   color: #fff;
-   border-color: #0071c5;
-   background-color: #0071c5;
-}
+    .k-primary-custom:hover {
+        color: #fff;
+        border-color: #0071c5;
+        background-color: #0071c5;
+    }

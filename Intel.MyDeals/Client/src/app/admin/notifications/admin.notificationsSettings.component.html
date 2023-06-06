@@ -1,12 +1,12 @@
 ﻿<!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<div class="modal-header modalBlueBody ns-Header notifyModalHeader">
+<div class="modal-header modalBlueBody ns-Header notifyModalHeader" style="z-index: 200">
     <h5 class="modal-title" id="modal-title">
         Notification Settings - {{role}}
-        <img *ngIf="loading" src="/Images/loadingSmall.gif" />
+        <img *ngIf="loading" src="/Images/loadingSmall.gif" class="notifyImg" />
         <i role="button" title="Close" class="intelicon-close-max fr" (click)="close()"></i></h5>
 </div>
-<div class="modal-body modalBlueBody ns-body" id="modal-body" >
+<div class="modal-body modalBlueBody ns-body" id="modal-body" style="z-index: 200">
     <div class="row">
         <div class="col-md-offset-7 col-md-2 text-center" style="padding-left: 56px; line-height:1;">Email</div>
         <div class="col-md-2 text-center" style="padding-left: 54px; line-height: 1;">In Tool</div>
@@ -14,23 +14,23 @@
     <div class="row after-on-off-align">
         <div class="col-md-7">SELECT ALL</div>
         <div class="col-md-2 text-center">
-            <mat-slide-toggle class="toggle-button-custom set-button-width last-toggle set-toggle-align button-color-off change-font-color-off" [(ngModel)]="selectAllDefaults.EMAIL_IND" (change)="selectAll('EMAIL_IND')"
+            <mat-slide-toggle class="changeNotifySettings toggle-button-custom set-button-width last-toggle set-toggle-align button-color-off change-font-color-off" [(ngModel)]="selectAllDefaults.EMAIL_IND" (change)="selectAll('EMAIL_IND')"
                 [color]="color"></mat-slide-toggle>
         </div>
         <div class="col-md-2 text-center">
-            <mat-slide-toggle class="toggle-button-custom set-button-width last-toggle set-toggle-align button-color-off change-font-color-off" [(ngModel)]="selectAllDefaults.IN_TOOL_IND" (change)="selectAll('IN_TOOL_IND')"
+            <mat-slide-toggle class="changeNotifySettings toggle-button-custom set-button-width last-toggle set-toggle-align button-color-off change-font-color-off" [(ngModel)]="selectAllDefaults.IN_TOOL_IND" (change)="selectAll('IN_TOOL_IND')"
                 [color]="color"></mat-slide-toggle>
         </div>
     </div>
-    <hr />
+    <hr style="margin-top: 18px; margin-bottom: 18px"/>
     <div class="row after-on-off-align" *ngFor="let s of subScriptions; let i=index" id="matSlideToggle">
         <div class="col-md-7" title="{{s.NOTIF_DESC}}">{{s.NOTIF_NM}}</div>
         <div class="col-md-2 text-center">
-            <mat-slide-toggle class="toggle-button-custom set-button-width last-toggle set-toggle-align button-color-off change-font-color-off" [checked]="s.EMAIL_IND" (change)="setSubscription( i , $event,'EMAIL_IND' )"
+            <mat-slide-toggle class="changeNotifySettings toggle-button-custom set-button-width last-toggle set-toggle-align button-color-off change-font-color-off" [checked]="s.EMAIL_IND" (change)="setSubscription( i , $event,'EMAIL_IND' )"
                 [color]="color"></mat-slide-toggle>
         </div>
         <div class="col-md-2 text-center">
-            <mat-slide-toggle class="toggle-button-custom set-button-width last-toggle set-toggle-align button-color-off change-font-color-off" [checked]="s.IN_TOOL_IND" (change)="setSubscription( i , $event,'IN_TOOL_IND' )"
+            <mat-slide-toggle class="changeNotifySettings toggle-button-custom set-button-width last-toggle set-toggle-align button-color-off change-font-color-off" [checked]="s.IN_TOOL_IND" (change)="setSubscription( i , $event,'IN_TOOL_IND' )"
                 [color]="color"></mat-slide-toggle>
         </div>
     </div><br />

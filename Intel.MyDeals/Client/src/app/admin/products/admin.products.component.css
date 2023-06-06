@@ -7,7 +7,7 @@
 }
 
 .header_space {
-    padding-left: 30px !important;
+    padding-left: 15px !important;
     padding-top: 20px !important;
 }
 
@@ -16,19 +16,25 @@
     line-height: 1.1;
 }
 
-kendo-grid {
-    height: calc(75vh - 40px - 15px) !important;
+kendo-grid#adminproduct {
+    height: calc(100vh - 230px);
 }
 
-.k-indicator-container .k-link {
+#adminproduct .k-indicator-container .k-link {
     color: #00aeef !important;
 }
 
-.k-touch-action-auto > .text-center {
+#adminproduct .k-touch-action-auto > .text-center {
     text-align-last: initial !important;
     width: 50% !important;
 }
 
 #adminproduct .k-indicator-container {
     color: #00aeef !important;
+}
+
+kendo-grid#adminproduct .k-column-title {
+    white-space: nowrap !important;
+    text-overflow: ellipsis;
+    overflow: hidden !important;
 }

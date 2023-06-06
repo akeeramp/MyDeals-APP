@@ -2,22 +2,22 @@
 <div *ngIf="Rules != undefined" style="margin-top: 0;" class="form-horizontal" autocomplete="off">
     <div class="modal-content" id="ruleModal" style="overflow-y:auto;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none">
         <div class="modal-header modalBlueBody">
-            <h3 id="modalTitle">Rule Details</h3>
-            <i id="btnClose" class="intelicon-close" (click)="close()" title="Close this window"></i>
+            <h3 id="modalTitle" class="ruleOneHeading">Rule Details</h3>
+            <i id="btnClose" class="intelicon-close btnRuleClose" (click)="close()" title="Close this window"></i>
         </div>
-        <div id="RulesDetailsBodyDiv" class="modal-body">
+        <div id="RulesDetailsBodyDivRules" class="modal-body">
             <div id="mainForm" style="margin-top: 10px; max-height:100px" class="form-horizontal bigFont">
-                <div class="col-md-11 notes">
+                <div class="col-md-11 notesRuleDeatilsModal">
                     Use this page to manage the My Deals '<b>Tender Price Rules</b>' auto approval process. Any deal meeting the rules specified will be 'auto approved' when Rule Type = 'Auto Approval' or forced manual approval when Rule Type = 'Exclusion
-                    Rule'. <span class="redbold">&nbsp;Important:</span> Changes made in this tool can potentially impact ALL deals moving through the My Deals application. As a rule owner, you may be held liable for any rules that improperly route deals
+                    Rule'. <span class="redboldRuleDeatilsModal">&nbsp;Important:</span> Changes made in this tool can potentially impact ALL deals moving through the My Deals application. As a rule owner, you may be held liable for any rules that improperly route deals
                     resulting in an inappropriate transaction. <a target="_blank" href="https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Tender-Price-Rules.aspx" title="Intel wiki link for My Deals help">
                         &nbsp;Review training for additional details.
                     </a><br /><br />
                 </div>
-                <div class="col-md-11 notes">
-                    <span class="redbold">NOTE:</span> Price Rules are run against 'Submitted' Tender (ECAP) deals in an
-                    <span class="redbold">hourly BATCH process</span>. Each hour (HH:00) all 'Active' Price Rules will be run against all 'Submitted' ECAP tender deals. It is important to note that Price Rules do not run as deals are created but through
-                    the <span class="redbold">hourly BATCH process.</span><br /><br />
+                <div class="col-md-11 notesRuleDeatilsModal">
+                    <span class="redboldRuleDeatilsModal">NOTE:</span> Price Rules are run against 'Submitted' Tender (ECAP) deals in an
+                    <span class="redboldRuleDeatilsModal">hourly BATCH process</span>. Each hour (HH:00) all 'Active' Price Rules will be run against all 'Submitted' ECAP tender deals. It is important to note that Price Rules do not run as deals are created but through
+                    the <span class="redboldRuleDeatilsModal">hourly BATCH process.</span><br /><br />
                 </div>
                 <div class="col-md-9" style="font-size: 12px; margin: 0; padding: 0; text-align: right;" *ngIf="Rules.Id > 0">
                     Last modified by <span style="color:#00AEEF">{{Rules.ChangedBy}}</span> on <span style="color:#00AEEF">{{Rules.ChangeDateTimeFormat}} PST</span>
@@ -25,7 +25,7 @@
                 <div class="col-md-2" style="font-size: 12px; margin: 0; padding: 0; text-align: right; width:100%">
                 </div>
                 <div class="form-group row col-md-12">
-                    <label class="control-label isRequired col-md-2" autocomplete="off" style="padding-right:20px;">Name:</label>
+                    <label class="control-label isRequired isLabelBefore col-md-2" autocomplete="off" style="padding-right:20px;">Name:</label>
                     <div class="col-md-7">
                         <input class="form-control md ruledet-boxes-style" type="text" [(ngModel)]="Rules.Name" style="width:100%">
                     </div>
@@ -40,7 +40,7 @@
                     </div>
                 </div>
                 <div class="form-group row col-md-12">
-                    <label class="control-label isRequired col-md-2" style="padding-right:20px;">Owner:</label>
+                    <label class="control-label isRequired isLabelBefore col-md-2" style="padding-right:20px;">Owner:</label>
                     <div class="col-md-2">
                         <span style="line-height:35px;" title="{{Rules.OwnerId}}">{{Rules.OwnerName}}</span>
                     </div>
@@ -70,11 +70,11 @@
                     </span>
                 </div>
                 <div class="form-group row col-md-12">
-                    <label class="control-label isRequired col-md-2" style="padding-right:20px;">Start Date:</label>
+                    <label class="control-label isRequired isLabelBefore col-md-2" style="padding-right:20px;">Start Date:</label>
                     <div class="col-md-2">
                         <kendo-datepicker #picker [(ngModel)]="strtDate" calendarType="classic" (valueChange)="UpdateEndDateFromStartDate()"></kendo-datepicker>
                     </div>
-                    <label class="control-label isRequired col-md-2" style="padding-right:20px;">End Date:</label>
+                    <label class="control-label isRequired isLabelBefore col-md-2" style="padding-right:20px;">End Date:</label>
                     <div class="col-md-2">
                         <kendo-datepicker #picker [(ngModel)]="endDt" calendarType="classic"></kendo-datepicker>
                     </div>
@@ -92,9 +92,9 @@
                              class="divTableRow" style="margin-bottom: 10px;">
                             <div class="divTableCell" style="width:75px">
                                 <span class="icnBtn icnSkyBtn" (click)="addRow(i)">
-                                    <i class="intelicon-plus-max mplusminus-style add-plus col-md-6"></i>
+                                    <i class="intelicon-plus-max mplusminus-styleRule add-plus col-md-6"></i>
                                 </span><span class="icnBtn icnGryBtn" (click)="removeRow(i)" *ngIf="i!=0">
-                                    <i class="intelicon-minus-max mplusminus-style add-minus col-md-6"></i>
+                                    <i class="intelicon-minus-max mplusminus-styleRule add-minus col-md-6"></i>
                                 </span>
                             </div>
                             <div class="divTableCell kdropdownlist">
@@ -121,7 +121,7 @@
                                                       [disabled]="i==0"
                                                       (blur)="dataChange(i, dataItem, 'numerictextbox')"></kendo-numerictextbox>
                                 <kendo-dropdownlist *ngIf="dataItem.field == 'VOL_INCR'" class="box_style_dropdwn" [data]="['%', 'unit']"></kendo-dropdownlist>
-                                <button *ngIf="dataItem.field == 'END_DT_PUSH'" class="days-style"><span>Days</span></button>
+                                <button *ngIf="dataItem.field == 'END_DT_PUSH'" class="days-style-Rule"><span>Days</span></button>
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'string' || dataItem.type == 'string_with_in' || dataItem.type == 'string_limited' || dataItem.type == 'autocomplete'">
                                 <kendo-textbox [(ngModel)]="dataItem.value"
@@ -136,7 +136,7 @@
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && dataItem.field == 'QLTR_BID_GEO'">
                                 <kendo-multiselect [disabled]="i==0"
-                                                   class="multi_kedo-_style"
+                                                   class="multi_kendo_style"
                                                    [data]="dataItem.dropDown"
                                                    textField="dropdownName"
                                                    valueField="dropdownName"
@@ -146,7 +146,7 @@
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && dataItem.field == 'CRE_EMP_NAME'">
                                 <kendo-multiselect [disabled]="i==0"
-                                                   class="multi_kedo-_style"
+                                                   class="multi_kendo_style"
                                                    [data]="dataItem.dropDown"
                                                    textField="NAME"
                                                    valueField="EMP_WWID"
@@ -156,7 +156,7 @@
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && (dataItem.field == 'PCSR_NBR' || dataItem.field == 'OP_CD' || dataItem.field == 'DIV_NM' || dataItem.field == 'FMLY_NM' || dataItem.field == 'PRD_CAT_NM')">
                                 <kendo-multiselect [disabled]="i==0"
-                                                   class="multi_kedo-_style"
+                                                   class="multi_kendo_style"
                                                    [data]="dataItem.dropDown"
                                                    textField="value"
                                                    valueField="value"
@@ -166,7 +166,7 @@
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && (dataItem.field == 'HOST_GEO' || dataItem.field == 'GEO_COMBINED')">
                                 <kendo-multiselect [disabled]="i==0"
-                                                   class="multi_kedo-_style"
+                                                   class="multi_kendo_style"
                                                    [data]="dataItem.dropDown"
                                                    [autoClose]="false"
                                                    [(ngModel)]="dataItem.selectedValues"
@@ -174,7 +174,7 @@
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && (dataItem.field == 'PAYOUT_BASED_ON' || dataItem.field == 'MRKT_SEG' || dataItem.field == 'SERVER_DEAL_TYPE')">
                                 <kendo-multiselect [disabled]="i==0"
-                                                   class="multi_kedo-_style"
+                                                   class="multi_kendo_style"
                                                    [data]="dataItem.dropDown"
                                                    textField="DROP_DOWN"
                                                    valueField="DROP_DOWN"
@@ -184,7 +184,7 @@
                             </div>
                             <div class="divTableCell rows-list-style" *ngIf="dataItem.type == 'list' && dataItem.field == 'CUST_NM'">
                                 <kendo-multiselect [disabled]="i==0"
-                                                   class="multi_kedo-_style"
+                                                   class="multi_kendo_style"
                                                    [data]="dataItem.dropDown"
                                                    textField="CUST_NM"
                                                    valueField="CUST_SID"
@@ -229,7 +229,7 @@
                     <button (click)="saveRule('SAVE_AS_DRAFT',false)" class="btn btn-primary" style="margin-left: 15px">Save as Draft</button>
                     <button (click)="saveRule('SUBMIT',true)" class="btn btn-primary" style="margin-left: 15px">Submit</button>
                     <button (click)="close()" class="btn btn-primary" style="margin-left: 15px;">Cancel / Close</button>
-                    <button (click)="runSimulation()" class="btn btn-success" style="margin-left: 15px;" title="Rule must be Saved as Draft to run simulation" [disabled]="Rules.Id == 0">Simulate</button>
+                    <button (click)="runSimulation()" class="btn btn-success btnSuccessRulers" style="margin-left: 15px;" title="Rule must be Saved as Draft to run simulation" [disabled]="Rules.Id == 0">Simulate</button>
                 </div>
             </div>
         </div>
@@ -240,12 +240,12 @@
                 <button class="price-admin-ok">OK</button>
             </kendo-dialog-actions>
             <kendo-dialog-actions *ngIf="retryAction" class="retry-style">
-                <button class="price-rule-retry" (click)="closeAlertVal()">RETRY</button>
-                <button class="price-rule-retry" (click)="closeAlertVal()">CANCEL</button>
+                <button class="price-rule-retry" (click)="closeAlertVal()" style="width: 49% !important;">RETRY</button>
+                <button class="price-rule-retry" (click)="closeAlertVal()" style="width: 49% !important;">CANCEL</button>
             </kendo-dialog-actions>
             <kendo-dialog-actions *ngIf="submitRule" class="retry-style">
-                <button class="price-rule-retry" (click)="closeAlertVal()">CANCEL</button>
-                <button class="price-rule-retry" (click)="closeAlertVal('yes')">YES</button>
+                <button class="price-rule-retry" (click)="closeAlertVal()" style="width: 49% !important;">CANCEL</button>
+                <button class="price-rule-retry" (click)="closeAlertVal('yes')" style="width: 49% !important;">YES</button>
             </kendo-dialog-actions>
         </kendo-dialog>
     </div>

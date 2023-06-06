@@ -1,6 +1,6 @@
 ﻿﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="row" style="display: contents;">
-    <div class="col-md-12 heading-position-fix">
+    <div class="col-md-12 k-header-alignment header-position-fix padding-top-20" style="padding-left: 15px !important;">
         <h3 class="header-bottomsizereduce">UI Dropdown Values</h3>
     </div>
 </div>
@@ -20,13 +20,19 @@
                     class="k-button clearButton"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
             </ng-template>
             <kendo-grid-command-column title="Commands" width="120" [headerClass]="{'headerClass':true}">
-                <ng-template kendoGridCellTemplate let-isNew="isNew"><button id="command-icon"
-                        kendoGridEditCommand><span class="k-icon k-i-edit k-icon-sm space-remove-btw-two"></span></button><button
-                        kendoGridRemoveCommand id="command-icon" class="k-button"><span
-                            class="k-icon k-i-delete k-icon-sm"></span></button><button id="command-icon"
-                        kendoGridSaveCommand [disabled]="formGroup?.invalid"><span
-                            class="k-icon k-i-check k-icon-sm"></span></button><button id="command-icon"
-                        kendoGridCancelCommand><span class="k-icon k-i-cancel-outline k-icon-sm remove-canceloutline"></span></button>
+                <ng-template kendoGridCellTemplate let-isNew="isNew">
+                    <button id="command-icon-first" kendoGridEditCommand>
+                        <span class="k-icon k-i-edit k-icon-sm space-remove-btw-two edited-icon-color"></span>
+                    </button>
+                    <button kendoGridRemoveCommand id="command-icon-first" class="k-button">
+                        <span class="k-icon k-i-delete k-icon-sm edited-icon-color"></span>
+                    </button>
+                    <button id="command-icon-first" kendoGridSaveCommand [disabled]="formGroup?.invalid">
+                        <span class="k-icon k-i-check k-icon-sm"></span>
+                    </button>
+                    <button id="command-icon-first" kendoGridCancelCommand>
+                        <span class="k-icon k-i-cancel-outline k-icon-sm remove-canceloutline"></span>
+                    </button>
                 </ng-template>
             </kendo-grid-command-column>
             <kendo-grid-column field="ACTV_IND" title="Is Active" editor="boolean" width="100" filter="boolean"

@@ -1,4 +1,23 @@
-﻿.header-pos-fix{padding-top:45px!important;padding-left:15px!important}.grid-lr-size{padding-right:0!important;padding-top:10px!important;padding-left:15px!important}.remove-spacedelete{margin-left:.16em!important;margin-right:-1em!important}.removeoutline-space{margin-left:-1.14em!important}
+﻿.header-pos-fix {
+    padding-top: 45px !important;
+    padding-left: 15px !important
+}
+
+.grid-lr-size {
+    padding-right: 0 !important;
+    padding-top: 10px !important;
+    padding-left: 15px !important
+}
+
+.remove-spacedelete {
+    margin-left: .16em !important;
+    margin-right: -1em !important
+}
+
+.removeoutline-space {
+    margin-left: -1.14em !important
+}
+
 .workflow-header-popup {
     margin-top: 15px !important;
     font-size: 28px !important;
@@ -45,6 +64,6 @@ button.workflow-cancel-btn.k-button {
     max-width: 75px;
 }
 
-button.workflow-cancel-btn.k-button:hover {
-    color: #333333 !important
-}
+    button.workflow-cancel-btn.k-button:hover {
+        color: #333333 !important
+    }

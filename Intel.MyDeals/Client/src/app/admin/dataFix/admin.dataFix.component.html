@@ -1,6 +1,6 @@
 ﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<div class="row" style="display: contents;">
-    <div class="col-md-12 dataFix">
+<div class="row mainDataFix" style="display: contents;">
+    <div class="col-md-12 dataFixHeaders">
         <h3 class="text-alignfix">Data Fix</h3>
     </div>
     <div *ngIf="!accessAllowed" class="col-md-12">
@@ -8,7 +8,7 @@
     </div>
     <div *ngIf="accessAllowed">
         <div class="col-md-12">
-            <div class="messageBox col-md-12 set-bottom-left">
+            <div class="messageBoxDataFix col-md-12 set-bottom-left" style="padding: 0 15px 15px;">
                 This screen allows to fix the data quality issues in 'My Deals' system
             </div>
         </div>
@@ -17,7 +17,7 @@
                 <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                             [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
-                            [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)">
+                            [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" class="kAlignHeaders">
                     <ng-template kendoGridToolbarTemplate>
                         <button kendoGridAddCommand class="k-button addButton"
                                 (click)="addNewFix()">
@@ -44,36 +44,36 @@
             <div *ngIf="IsAddMode">
                 <div *ngIf="!IsExpertMode">
                     <div class="form-group row">
-                        <label class="control-label isRequired col-md-1" autocomplete="off">
+                        <label class="control-label-custom isRequired col-md-1" autocomplete="off">
                             Required
                             # :
                         </label>
                         <div class="col-md-6">
-                            <div class="dealTools">
+                            <div class="dealToolsDataFix">
                                 <div style="float:left; width:120px;">
                                     Attributes: <input type="checkbox" id="atrbMan"
-                                                       class='grid-link-checkbox with-font' name="Attributes" value="Attributes"
+                                                       class='grid-link-checkbox with-font dataFixInputCheck' name="Attributes" value="Attributes"
                                                        [(ngModel)]="isAtrbSelected">
                                 </div>
                                 <div style="float:left; width:120px;">
                                     Actions: <input type="checkbox" id="actnMan"
-                                                    class='grid-link-checkbox with-font' name="Actions" value="Actions"
+                                                    class='grid-link-checkbox with-font dataFixInputCheck' name="Actions" value="Actions"
                                                     [(ngModel)]="isActnSelected">
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="control-label isRequired col-md-1" autocomplete="off">
+                        <label class="control-label-custom isRequired col-md-1" autocomplete="off">
                             Incident
                             # :
                         </label>
-                        <div class="col-md-3 dealTools">
+                        <div class="col-md-3">
                             <kendo-textbox style="width:100%" [(ngModel)]="currentDataFix.INCDN_NBR"></kendo-textbox>
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="control-label isRequired col-md-1"
+                        <label class="control-label-custom isRequired col-md-1"
                                style="padding-right:10px">Attributes : </label>
                         <div id="dataFixAttributes" class="col-md-11" style="padding-left:10px">
                             <span *ngIf="!(AttributeSettings.length > 0 && OpDataElements.length > 0 && MyCustomersInfo.length > 0)">Loading attributes..</span>
@@ -95,22 +95,23 @@
                                     <div *ngFor="let dataItem of currentDataFix.DataFixAttributes;let i=index trackBy i"
                                          class="divTableRow">
                                         <div class="divTableCell" style="width:75px">
-                                            <span class="icnBtn icnSkyBtn"
+                                            <span class="icnBtnDataFix icnSkyBtn"
                                                   (click)="addRow('AttrbBuilder',i)">
                                                 <i class="intelicon-plus-max"></i>
-                                            </span><span class="icnBtn icnGryBtn"
+                                            </span>
+                                            <span class="icnBtnDataFix icnGryBtn"
                                                          (click)="removeRow('AttrbBuilder',i)" *ngIf="i!=0">
                                                 <i class="intelicon-minus-max"></i>
                                             </span>
                                         </div>
-                                        <div class="divTableCell kdropdownlist">
+                                        <div class="divTableCell kdropdownlistDataFix">
                                             <kendo-dropdownlist [kendoDropDownFilter]="filterSettings"
                                                                 [valuePrimitive]="true"
                                                                 [data]="OpDataElements" textField="Text" valueField="Value"
                                                                 [(ngModel)]="dataItem.OBJ_TYPE_SID" class="opUiContainer sm abField"
                                                                 style="width:100%"></kendo-dropdownlist>
                                         </div>
-                                        <div class="divTableCell kdropdownlist">
+                                        <div class="divTableCell kdropdownlistDataFix">
                                             <kendo-dropdownlist [kendoDropDownFilter]="filterSettings"
                                                                 [data]="AttributeSettings" textField="Text" [valuePrimitive]="true"
                                                                 [(ngModel)]="dataItem.ATRB_SID" valueField="Value"
@@ -127,7 +128,7 @@
                                         </div>
                                         <div class="divTableCell">
                                             <kendo-numerictextbox [min]="0" format="#"
-                                                                  [(ngModel)]="dataItem.OBJ_SID" class="inputWidth" required></kendo-numerictextbox>
+                                                                  [(ngModel)]="dataItem.OBJ_SID" class="inputWidthDataFix" required></kendo-numerictextbox>
                                         </div>
                                         <div class="divTableCell">
                                             <kendo-textbox class="form-control md dataValue" [(ngModel)]="dataItem.ATRB_VAL"
@@ -143,7 +144,7 @@
                                                                 [valuePrimitive]="true" [(ngModel)]="dataItem.MDX_CD" valueField="Value"
                                                                 class="opUiContainer sm abField"></kendo-dropdownlist>
                                         </div>
-                                        <div class="divTableCell kdropdownlist">
+                                        <div class="divTableCell kdropdownlistDataFix">
                                             <kendo-dropdownlist [kendoDropDownFilter]="filterSettings"
                                                                 [data]="MyCustomersInfo" textField="CUST_NM" [valuePrimitive]="true"
                                                                 [(ngModel)]="dataItem.CUST_MBR_SID" valueField="CUST_SID"
@@ -159,7 +160,7 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="control-label isRequired col-md-1">Actions : </label>
+                        <label class="control-label-custom isRequired col-md-1">Actions : </label>
                         <div class="col-md-11" style="padding-left:10px">
                             <span *ngIf="!(OpDataElements.length > 0 && Actions.length > 0)">Loading actions..</span>
                             <div *ngIf="Actions.length >0 && OpDataElements.length >0">
@@ -178,20 +179,20 @@
                                             <div *ngFor="let dataItem of currentDataFix.DataFixActions;let i=index trackBy i"
                                                  class="divTableRow">
                                                 <div class="divTableCell" style="width:75px">
-                                                    <span class="icnBtn icnSkyBtn"
+                                                    <span class="icnBtnDataFix icnSkyBtn"
                                                           (click)="addRow('ActnBuilder',i)">
                                                         <i class="intelicon-plus-max"></i>
-                                                    </span><span class="icnBtn icnGryBtn" (click)="removeRow('ActnBuilder',i)"
+                                                    </span><span class="icnBtnDataFix icnSkyBtn" (click)="removeRow('ActnBuilder',i)"
                                                                  *ngIf="i!=0"><i class="intelicon-minus-max"></i></span>
                                                 </div>
-                                                <div class="divTableCell kdropdownlist">
+                                                <div class="divTableCell kdropdownlistDataFix">
                                                     <kendo-dropdownlist [kendoDropDownFilter]="filterSettings"
                                                                         [data]="OpDataElements" textField="Text" valueField="Value"
                                                                         [valuePrimitive]="true" [(ngModel)]="dataItem.OBJ_TYPE_SID"
                                                                         class="opUiContainer sm abField" placeholder="Select Object Type"
                                                                         style="width:100%"></kendo-dropdownlist>
                                                 </div>
-                                                <div class="divTableCell kdropdownlist">
+                                                <div class="divTableCell kdropdownlistDataFix">
                                                     <kendo-dropdownlist [kendoDropDownFilter]="filterSettings"
                                                                         [data]="Actions" textField="Text" valueField="Text"
                                                                         [valuePrimitive]="true" [(ngModel)]="dataItem.ACTN_NM"
@@ -216,20 +217,20 @@
                         </div>
                     </div>
                     <div class="form-group row">
-                        <label class="control-label col-md-1" autocomplete="off">
+                        <label class="control-label-custom col-md-1" autocomplete="off">
                             <b>
                                 Message :
                             </b>
                         </label>
-                        <div class="col-md-6 dealTools">
+                        <div class="col-md-6">
                             <kendo-textbox class="form-control md" style="width:100%" [(ngModel)]="currentDataFix.Message">
                             </kendo-textbox>
                         </div>
                         <div class="col-md-4">
                             <button [disabled]="disabled" (click)="SaveFix(true, false)"
-                                    class="btn btn-primary" style="margin-left: 15px">
+                                    class="btn btn-primary btn-primaryData" style="margin-left: 15px">
                                 Execute
-                            </button><button (click)="okDataFix()" class="btn btn-primary" style="margin-left: 15px">
+                            </button><button (click)="okDataFix()" class="btn btn-primary btn-primaryData" style="margin-left: 15px">
                                 Cancel / Close
                             </button>
                         </div>
@@ -238,7 +239,7 @@
                 <div *ngIf="IsExpertMode">
                     <div class="form-group row">
                         <div class="col-md-10">
-                            <div class="messageBox col-md-12 fixed-bottom-space">
+                            <div class="messageBoxDataFix col-md-12 fixed-bottom-space" style="padding:15px;">
                                 Warning: You must know the
                                 correct structure to use for this screen. Only use if you really know what you are doing.
                             </div>
@@ -246,7 +247,7 @@
                     </div>
                     <div class="form-group row">
                         <div class="col-md-10">
-                            <label class="control-label col-md-2" style="text-align: left;">
+                            <label class="control-label-custom col-md-2" style="text-align: left;">
                                 <b>
                                     Enter JSON
                                     Packet :
@@ -258,9 +259,9 @@
                     <div class="form-group row">
                         <div class="col-md-10">
                             <button [disabled]="disabled" (click)="SaveFix(true, true)"
-                                    class="btn btn-primary" style="margin-left: 15px">
+                                    class="btn btn-primary btn-primaryData" style="margin-left: 15px">
                                 Execute
-                            </button><button (click)="cancelExpert()" class="btn btn-primary" style="margin-left: 15px">
+                            </button><button (click)="cancelExpert()" class="btn btn-primary btn-primaryData" style="margin-left: 15px">
                                 Cancel / Close
                             </button>
                         </div>
@@ -275,5 +276,5 @@
     <div *ngFor="let errMsg of requiredFields">
         <div>{{errMsg}}</div>
     </div>
-    <kendo-dialog-actions><button class="AlertMsg" kendoButton (click)="close()">OK </button></kendo-dialog-actions>
+    <kendo-dialog-actions><button class="AlertMsgData" kendoButton (click)="close()">OK </button></kendo-dialog-actions>
 </kendo-dialog>

@@ -1,34 +1,34 @@
 ﻿@import '../kendo_grid.css';
 
-td.error-product {
+﻿.admin-deal-grid td.error-product {
     color: red !important;
     font-weight: bold !important;
 }
 
-td.success-product {
+﻿.admin-deal-grid td.success-product {
     color: green !important;
     font-weight: bold !important;
 }
 
-td.normal-product {
+﻿.admin-deal-grid td.normal-product {
     color: black !important;
     font-weight: normal !important;
 }
 
-td.error-border {
+﻿.admin-deal-grid td.error-border {
     border: 1px solid red !important;
 }
 
-td.error-cell {
+﻿.admin-deal-grid td.error-cell {
     border: solid red 1px !important;
 }
 
-td.warning-product {
+﻿.admin-deal-grid td.warning-product {
     color: orange !important;
     font-weight: bold !important;
 }
 
-td:not(.error-cell).readonly-cell {
+﻿.admin-deal-grid td:not(.error-cell).readonly-cell {
     background-color: rgb(238, 238, 238) !important;
 }
 
@@ -57,7 +57,7 @@ td:not(.error-cell).readonly-cell {
         display: none !important
     }
 
-.clrGreen {
+/*.clrGreen {
     color: #2196f3 !important
 }
 
@@ -119,53 +119,23 @@ td:not(.error-cell).readonly-cell {
 
 .k-tabstrip-wrapper, .k-tabstrip-bottom, .k-spreadsheet-sheets-bar-add {
     display: none
-}
+}*/
 
-.k-button {
+.k-buttonUnifiedDealRecon {
     color: #fff;
     background-color: #0071c5;
     border-color: #0071c5;
     box-shadow: none
 }
 
-    .k-button:hover {
+    .k-buttonUnifiedDealRecon :hover {
         background-color: #00aeef;
         border-color: #00aeef;
         color: #fff;
         box-shadow: none
     }
 
-.tmpltItem {
-    width: 100%
-}
-
-.tmpltIcn {
-    width: 35px
-}
-
-    .tmpltIcn i {
-        font-size: 26px
-    }
-
-.tmpltContract {
-}
-
-.tmpltRole {
-    font-size: 12px
-}
-
-.tmpltPrimary {
-    font-size: 14px;
-    line-height: 1.1em
-}
-
-.tmpltSecondary {
-    font-size: 12px;
-    line-height: 1.1em;
-    opacity: .6
-}
-
-.action_btns {
+.bulkUnifyModalActionBtns {
     margin-bottom: 20px
 }
 
@@ -179,15 +149,11 @@ td:not(.error-cell).readonly-cell {
     margin-left: -2px
 }
 
-kendo-upload-action-buttons {
-    display: none
-}
-
-#modalBodyDiv .row {
+.bulkUnifyModalBody .row {
     margin-left: 20px
 }
 
-.k-selectbox {
+/*.k-selectbox {
     height: 10px;
     margin-bottom: 10px
 }
@@ -202,13 +168,13 @@ kendo-upload-action-buttons {
         color: #b1babf;
         background-color: #edeff0 !important;
         border-color: #b1babf !important
-    }
+    }*/
 
 /*.notes {
     font-size: 14px;
     margin-left: 40px;
     padding: 0
-}*/
+}
 
 .bluebold {
     color: #0071c5;
@@ -238,6 +204,21 @@ kendo-upload-action-buttons {
     margin-top: -15px
 }
 
+div[index="0"] {
+    z-index: 3 !important
+}
+
+.modal-backdrop {
+    display: none !important
+}
+
+*/
+
+.redboldBulkUnifyModal {
+    color: red;
+    font-weight: bold
+}
+
 #endCustomerUnifyModal .modal-body {
     overflow: auto;
     width: 100%;
@@ -259,15 +240,7 @@ kendo-upload-action-buttons {
     color: #ffffff !important
 }
 
-div[index="0"] {
-    z-index: 3 !important
-}
-
-.modal-backdrop {
-    display: none !important
-}
-
-#btnClose {
+.unify-close-btn {
     float: right;
     margin-top: -15px;
     background: transparent;
@@ -276,27 +249,11 @@ div[index="0"] {
     cursor: pointer
 }
 
-.btn-default.active:hover {
-    color: #fff !important;
-    background-color: #367fa9 !important;
-    border-color: #00aeef !important
-}
-
-.btn-default.active {
-    color: #fff !important;
-    background-color: #00AEEF !important;
-    border-color: #367fa9 !important
-}
-
 .floatRight {
     float: right
 }
 
-.ss-loading-overlay {
-    background: transparent !important
-}
-
-#endCustomerWarning .k-button, #endCustomerWarning .k-button:hover {
+/*#endCustomerWarning .k-button, #endCustomerWarning .k-button:hover {
     color: #444 !important;
     border-color: #fafafa;
     background-color: #cccccc !important
@@ -317,28 +274,13 @@ div[index="0"] {
     border-bottom: 1px solid #e5e5e5;
     min-height: 16.5px;
     line-height: 1.5
-}
+}*/
 
-#modal-title {
+#modal-titleBulkUnifyModal {
     font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif
 }
 
-.bluebold {
-    color: #0071c5;
-    font-weight: bold
-}
-
-.redbold {
-    color: red;
-    font-weight: bold
-}
-
-.modal-dialog {
-    width: 750px;
-    margin-top: 100px
-}
-
-#modalBodyDiv .row {
+.bulkUnifyModalBody .row {
     margin-left: 20px
 }
 
@@ -352,7 +294,7 @@ div[index="0"] {
     padding: 0 !important
 }
 
-.k-upload .k-actions {
+.unified-upload-style.k-upload .k-actions {
     display: none
 }
 
@@ -388,10 +330,10 @@ div[index="0"] {
     box-shadow: none !important
 }
 
-.k-button:hover {
+/*.k-button:hover {
     background-color: #00aeef !important;
     border-color: #00aeef !important
-}
+}*/
 
 .big-toggle-custom-class.toggle-button-custom.mat-slide-toggle:not(.mat-checked) .mat-slide-toggle-bar::after {
     content: 'Bulk Unify' !important;
@@ -538,9 +480,9 @@ kendo-upload.unified-upload-style {
     margin-left: -15px !important;
 }
 
-.k-i-file-data::before {
+/*.k-i-file-data::before {
     content: "\e90a" !important
-}
+}*/
 
 button#command-icon.unifie-edit-style {
     color: #000000 !important;

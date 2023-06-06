@@ -4,18 +4,22 @@
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="row">
     <div class="col-md-10 k-header-alignment price-rules-style">
-        <h3>Auto-Approval Rules Administration Screen</h3>
+        <h3 class="ruleOneHeading">Auto-Approval Rules Administration Screen</h3>
         <div class="componentLabel" style="padding-left: 0;">
             <p>This screen allows DA users to create automated approval rules to streamline their work</p>
         </div>
     </div>
-    <div *ngIf="toolKitHidden == false" class="col-md-2 ng-scope help">
-        <h3><a target="_blank" href="https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Tender-Price-Rules.aspx" title="Intel wiki link for help"><i class="intelicon-help-solid"></i></a></h3>
+    <div *ngIf="toolKitHidden == false" class="col-md-2 ng-scope helpRules">
+        <h3>
+            <a style="float: right;" target="_blank" href="https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Tender-Price-Rules.aspx" title="Intel wiki link for help">
+                <i class="intelicon-help-solid" style="color: #3343a4;"></i>
+            </a>
+        </h3>
     </div>
 </div>
 
 <div class="col-md-12 kendo-grid-buttons grid-size-style">
-    <kendo-grid class="runprice-grid-style" [data]="gridData" [loading]="isLoading" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
+    <kendo-grid class="runprice-grid-style ruleKendoGrid" [data]="gridData" [loading]="isLoading" [resizable]="true" [pageSize]="state.take" [skip]="state.skip"
                 [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                 [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
                 [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)"
@@ -34,10 +38,10 @@
                 <span class="intelicon-lab" style="margin:1px"></span><span class="simulate-title-sty">SIMULATE RUNNING RULES</span>
             </button>
             <kendo-grid-spacer></kendo-grid-spacer>
-            <button [disabled]="isLoading" class="k-button button btnMargin">
-                <i id="btnEnlargeText" (click)="isFontSizeChange()" [ngClass]="isTextIncrease? 'intelicon-shrink' : 'intelicon-expand'" title={{isTextFontTitle}}></i>
+            <button [disabled]="isLoading" class="k-button buttonRuleComp btnMargin">
+                <i id="btnEnlargeTextRule" (click)="isFontSizeChange()" [ngClass]="isTextIncrease? 'intelicon-shrink' : 'intelicon-expand'" title={{isTextFontTitle}}></i>
             </button>
-            <button [disabled]="isLoading" class="k-button button">
+            <button [disabled]="isLoading" class="k-button buttonRuleComp">
                 <i id="btnWordWrapControl" (click)="isExpandable()" [ngClass]="isExpand?'intelicon-increase-text-outlined': 'intelicon-decrease-text-outlined'" title={{isExpandTitle}}></i>
             </button>
             <button (click)="refreshGrid()" [disabled]="isLoading" class="k-button clearButton">
@@ -46,8 +50,8 @@
         </ng-template>
         <kendo-grid-command-column width="200" [headerClass]="{'headerClass':true}" [columnMenu]="false">
             <ng-template *ngIf="toolKitHidden == false" kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
-                <div class='fl gridStatusMarker centerText {{dataItem.RuleStage}}' [title]="dataItem.RuleStage? 'Approved' : 'Pending Approval'">{{ stageOneChar(dataItem.RuleStage) }}</div>
-                <div class="rule">
+                <div class='fl gridStatusMarkerRulers centerText {{dataItem.RuleStage}}' [title]="dataItem.RuleStage? 'Approved' : 'Pending Approval'">{{ stageOneChar(dataItem.RuleStage) }}</div>
+                <div class="rule" style="padding-top: 7px; ">
                     <i [title]="dataItem.IsAutomationIncluded ? 'Auto Approval' : 'Exclusion from Automation'" class='rulesGidIcon {{ stageOneCharStatus(dataItem.IsAutomationIncluded) }} dealTools'></i>
                     <i role='button' title='Edit' class='rulesGidIcon intelicon-edit dealTools' (click)="editRule(dataItem.Id,false)"></i>
                     <i role='button' title='Copy' class='rulesGidIcon intelicon-copy-solid dealTools' (click)="copyRule(dataItem.Id)"></i>
@@ -137,7 +141,7 @@
             </kendo-excelexport-column>
         </kendo-grid-excel>
         <ng-template kendoGridDetailTemplate let-dataItem>
-            <kendo-grid [data]="convertToChildGridArray(dataItem)" style="height:fit-content">
+            <kendo-grid [data]="convertToChildGridArray(dataItem)" class="ruleKendoGrid" style="height:fit-content">
                 <kendo-grid-column *ngIf="dataItem.RuleDescription.length > 0" width="200" [headerClass]="{'headerClass':true}" field="RuleDescription" title="Rule Description">
                     <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
                         <div [innerHTML]="dataItem.RuleDescription"></div>

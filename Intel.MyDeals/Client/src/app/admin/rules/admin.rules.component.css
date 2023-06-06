@@ -1,29 +1,14 @@
-﻿.rule_value_desc {
-    font-weight: bold;
-    color: #7d8803
-}
-
-.rule_operator_desc {
-    font-weight: bold;
-    color: #b3b3b3
-}
-
-.rule_attr_desc {
-    font-weight: bold;
-    color: #0071c5
-}
-
-.componentLabel {
+﻿.componentLabel {
     padding: 0 0 0 35px;
     text-align: left;
     color: #FC4C02
 }
 
-h3 i {
+h3.ruleOneHeading i {
     color: #3343a4
 }
 
-h3 a {
+h3.ruleOneHeading a {
     float: right
 }
 
@@ -32,7 +17,7 @@ h3 a {
     overflow: auto;
 }
 
-.help {
+.helpRules {
     padding-top: 50px;
     padding-right: 40px !important
 }
@@ -45,7 +30,7 @@ h3 a {
     color: white
 }
 
-#btnEnlargeText {
+#btnEnlargeTextRule {
     border: 2px solid white;
     font-size: 16px !important;
     padding: 2px;
@@ -56,7 +41,7 @@ h3 a {
     color: white
 }
 
-.button {
+.buttonRuleComp {
     display: inline-block !important;
     width: 28px;
     height: 28px
@@ -96,11 +81,11 @@ h3 a {
     padding-top: 2px !important
 }
 
-td {
+.ruleKendoGrid td {
     vertical-align: top !important
 }
 
-.gridStatusMarker {
+.gridStatusMarkerRulers {
     width: 25px;
     color: #000000;
     background-color: #cccccc;
@@ -112,7 +97,7 @@ td {
     height: 27px
 }
 
-.true {
+/*.true {
     background-color: rgb(196,214,0) !important
 }
 
@@ -152,7 +137,7 @@ td {
 
 .dealTools i:hover {
     color: #003C71
-}
+}*/
 
 .rulesGidIcon {
     font-size: 20px;
@@ -161,30 +146,22 @@ td {
     margin-right: 5px
 }
 
-.k-plus::before, .k-i-plus::before {
+.ruleKendoGrid .k-plus::before, .ruleKendoGrid .k-i-plus::before {
     content: "\e005" !important
 }
 
-.k-minus::before, .k-i-minus::before {
+.ruleKendoGrid .k-minus::before, .ruleKendoGrid .k-i-minus::before {
     content: "\e006" !important
 }
 
-.k-button {
-    cursor: pointer !important
-}
-
-.k-grid-toolbar > .k-grid-add > .k-icon {
+.ruleKendoGrid .k-grid-toolbar > .k-grid-add > .k-icon {
     font-size: 14px !important;
     margin-top: 1px
 }
 
-.k-grid td, .k-grid td div {
+.ruleKendoGrid .k-grid td, .ruleKendoGrid .k-grid td div {
     text-overflow: ellipsis;
     overflow: hidden
-}
-
-a:hover {
-    text-decoration: none
 }
 
 .simulationBtn {
@@ -195,7 +172,7 @@ a:hover {
     text-align: center
 }
 
-.description {
+.descriptionRulesSimulations {
     text-align: right
 }
 
@@ -212,7 +189,7 @@ a:hover {
     color: #000000
 }
 
-#btnClose {
+.btnRuleClose {
     float: right;
     background: transparent;
     padding: 3px;
@@ -220,7 +197,7 @@ a:hover {
     cursor: pointer
 }
 
-.isRequired:before {
+.isRequired.isLabelBefore:before {
     content: "*"
 }
 
@@ -235,25 +212,6 @@ a:hover {
     padding: 0 15px 0 15px !important
 }
 
-.info-container {
-    text-align: center
-}
-
-.info-box-container {
-    border: 1px solid #d7d7d7;
-    border-radius: 6px;
-    padding: 30px;
-    margin: 10px 50px;
-    text-align: left
-}
-
-.filter-container {
-    margin-top: 10px;
-    text-align: right;
-    font-size: 12px;
-    color: #aaaaaa
-}
-
 .dispResults {
     max-height: 350px;
     overflow: auto
@@ -263,21 +221,21 @@ a:hover {
     height: 300px !important
 }
 
-.btn-success {
+.btn-success.btnSuccessRulers {
     color: #000000 !important;
     background-color: #C4D600 !important;
     border-color: #adbd00 !important
 }
 
-.btn-success[disabled] {
-    color: #b1babf !important;
-    background-color: #edeff0 !important;
-    border-color: #b1babf !important
-}
+    .btn-success.btnSuccessRulers[disabled] {
+        color: #b1babf !important;
+        background-color: #edeff0 !important;
+        border-color: #b1babf !important
+    }
 
-.btn-success:hover, .btn-success:focus {
-    color: #0071c5 !important
-}
+    .btn-success.btnSuccessRulers:hover, .btn-success.btnSuccessRulers:focus {
+        color: #0071c5 !important
+    }
 
 kendo-grid.runprice-grid-style {
     height: calc(81vh - 120px) !important
@@ -366,7 +324,7 @@ kendo-grid.runprice-grid-style {
     border-color: #b1babf !important
 }
 
-.k-list .k-item.k-state-selected {
+/*.k-list .k-item.k-state-selected {
     color: #fff !important;
     background-color: #00aeef !important;
     font-size: 12px;
@@ -398,7 +356,7 @@ kendo-grid.runprice-grid-style {
 
 .k-list .k-item:hover {
     background: #ebebeb !important
-}
+}*/
 
 .rule-list-style.k-multiselect .k-multiselect-wrap:hover .k-clear-value {
     visibility: visible !important;
@@ -432,8 +390,8 @@ kendo-grid.runprice-grid-style {
 }
 
 .k-header-alignment.price-rules-style {
-    padding-top: 45px !important;
-    padding-left: 15px !important
+    padding-top: 20px !important;
+    padding-left: 30px !important;
 }
 
 .row.componentLabel {
@@ -627,7 +585,7 @@ kendo-textarea.admin-notes-style.k-textarea {
         border: 2px solid #000000 !important
     }
 
-.intelicon-plus-max.mplusminus-style {
+.intelicon-plus-max.mplusminus-styleRule {
     background: #00aeef !important;
     color: #ffffff !important;
     border-radius: 4px !important;
@@ -640,11 +598,11 @@ kendo-textarea.admin-notes-style.k-textarea {
     margin-right: 12px !important
 }
 
-    .intelicon-plus-max.mplusminus-style:hover {
+    .intelicon-plus-max.mplusminus-styleRule:hover {
         background-color: #0071c5 !important
     }
 
-.intelicon-minus-max.mplusminus-style {
+.intelicon-minus-max.mplusminus-styleRule {
     background-color: #bbbbbb !important;
     color: #ffffff !important;
     border-radius: 4px !important;
@@ -657,7 +615,7 @@ kendo-textarea.admin-notes-style.k-textarea {
     margin-right: 3px !important
 }
 
-    .intelicon-minus-max.mplusminus-style:hover {
+    .intelicon-minus-max.mplusminus-styleRule:hover {
         background-color: #cccccc !important
     }
 
@@ -737,7 +695,7 @@ input.form-control.ruledet-boxes-style {
     margin-left: 5px !important
 }
 
-.dealtype-dropdwn-style.k-dropdown .k-dropdown-wrap:hover, .equalto-dropdwn-style.k-dropdown .k-dropdown-wrap:hover, kendo-textbox.extra-box-style.k-textbox:hover, .box_style_dropdwn.k-dropdown .k-dropdown-wrap:hover kendo-multiselect.multi_kedo-_style.k-multiselect:hover {
+.dealtype-dropdwn-style.k-dropdown .k-dropdown-wrap:hover, .equalto-dropdwn-style.k-dropdown .k-dropdown-wrap:hover, kendo-textbox.extra-box-style.k-textbox:hover, .box_style_dropdwn.k-dropdown .k-dropdown-wrap:hover kendo-multiselect.multi_kendo_style.k-multiselect:hover {
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important
 }
 
@@ -754,7 +712,7 @@ kendo-textbox.extra-box-style.k-textbox {
     box-shadow: none !important
 }
 
-.ecap-combo-style.k-combobox .k-state-focused, .box-style-numeric.k-numerictextbox .k-state-focused .calender-row-style span.k-picker-wrap.k-state-focused, .multi_kedo-_style.k-multiselect.k-state-focused .k-multiselect-wrap, .numerictextbox-style.k-numerictextbox .k-numeric-wrap.k-state-focused {
+.ecap-combo-style.k-combobox .k-state-focused, .box-style-numeric.k-numerictextbox .k-state-focused .calender-row-style span.k-picker-wrap.k-state-focused, .multi_kendo_style.k-multiselect.k-state-focused .k-multiselect-wrap, .numerictextbox-style.k-numerictextbox .k-numeric-wrap.k-state-focused {
     box-shadow: none !important;
     border-color: #f0f0f0 !important
 }
@@ -772,7 +730,7 @@ kendo-textbox.box-style-numeric.k-textbox {
     box-shadow: none !important
 }
 
-.days-style {
+.days-style-Rule {
     position: relative !important;
     left: 385px !important;
     height: 30px !important;
@@ -863,40 +821,40 @@ button.price-rule-retry {
     box-shadow: none !important
 }
 
-td.error-product {
+#RulesDetailsBodyDivRules td.error-product {
     color: red !important;
     font-weight: bold !important
 }
 
-td.success-product {
+#RulesDetailsBodyDivRules td.success-product {
     color: green !important;
     font-weight: bold !important
 }
 
-td.normal-product {
+#RulesDetailsBodyDivRules td.normal-product {
     color: black !important;
     font-weight: normal !important
 }
 
-td.error-border {
+#RulesDetailsBodyDivRules td.error-border {
     border: 1px solid red !important
 }
 
-td.error-cell {
-    background-color: #fc4c02;
+#RulesDetailsBodyDivRules td.error-cell {
+    /*background-color: #fc4c02;*/
     border: solid red 1px !important
 }
 
-td.warning-product {
+#RulesDetailsBodyDivRules td.warning-product {
     color: orange !important;
     font-weight: bold !important
 }
 
-td:not(.error-cell).readonly-cell {
+#RulesDetailsBodyDivRules td:not(.error-cell).readonly-cell {
     background-color: rgb(238,238,238) !important
 }
 
-kendo-multiselect.multi_kedo-_style.k-multiselect {
+kendo-multiselect.multi_kendo_style.k-multiselect {
     border-radius: 3px !important;
     font-size: 10px !important;
     font-weight: 500 !important;
@@ -948,13 +906,25 @@ kendo-dialog-actions.price-rule-dialog-sty:hover {
     background: #00AEEF !important
 }
 
-.k-dialog-wrapper .k-dialog {
+/*.k-dialog-wrapper .k-dialog {
     position: relative !important;
     padding: 0 !important;
     border-left: 0 !important;
     border-right: 0 !important;
     border-bottom: 0 !important;
     border-radius: 0 !important;
+}*/
+
+.rule-details-model-style .mat-dialog-container .colHeader {
+    font-size: 11px;
+    color: #0071c5;
+    font-family: 'Intel Clear';
+    font-weight: 400
+}
+
+.rule-details-model-style .mat-dialog-container td.success-product {
+    color: green !important;
+    font-weight: bold !important;
 }
 
 .text-price-style {
@@ -970,7 +940,7 @@ button.btn.btn-primary.validate-price-rule-style {
     border-radius: 4px !important
 }
 
-.multi_kedo-_style.k-multiselect .k-multiselect-wrap li.k-button {
+.multi_kendo_style.k-multiselect .k-multiselect-wrap li.k-button {
     float: left !important;
     font-size: 10px !important;
     border-radius: 1.071em !important;
@@ -982,22 +952,22 @@ button.btn.btn-primary.validate-price-rule-style {
     box-shadow: none !important
 }
 
-    .multi_kedo-_style.k-multiselect .k-multiselect-wrap li.k-button:hover {
+    .multi_kendo_style.k-multiselect .k-multiselect-wrap li.k-button:hover {
         background-color: #00AEEF !important
     }
 
-.multi_kedo-_style.k-multiselect .k-multiselect-wrap .k-button .k-icon {
+.multi_kendo_style.k-multiselect .k-multiselect-wrap .k-button .k-icon {
     opacity: .6 !important;
     font-size: 12px !important;
     right: -10px !important
 }
 
-.colHeader {
+/*.colHeader {
     font-size: 11px;
     color: #0071c5;
     font-family: 'Intel Clear';
     font-weight: 400
-}
+}*/
 
 .alertHeader {
     color: blue
@@ -1013,55 +983,25 @@ button.btn.btn-primary.validate-price-rule-style {
     border: 1px solid #003c71 !important
 }
 
-.k-selectbox {
-    height: 10px;
-    margin-bottom: 10px
-}
-
-.btn-success {
-    color: #000000;
-    background-color: #C4D600 !important;
-    border-color: #adbd00 !important
-}
-
-    .btn-success[disabled] {
-        color: #b1babf;
-        background-color: #edeff0 !important;
-        border-color: #b1babf !important
-    }
-
-.notes {
+.notesRuleDeatilsModal {
     font-size: 14px;
     margin-left: 40px;
     padding: 0
 }
 
-.bluebold {
-    color: #0071c5;
-    font-weight: bold
-}
-
-.redbold {
+.redboldRuleDeatilsModal {
     color: red;
     font-weight: bold
 }
 
-.modal-dialog {
+/*.modal-dialog {
     width: 90%;
     margin-top: 100px
-}
+}*/
 
-.fontSmall {
-    font-size: 12px !important
-}
-
-.bigSmall {
-    font-size: 15px !important
-}
-
-#modalTitle {
+.ruleOneHeading {
     float: left;
-    margin-top: -15px
+    /*margin-top: -15px*/
 }
 
 #ruleModal .modal-body {
@@ -1086,16 +1026,12 @@ div[index="0"] {
     z-index: 3 !important
 }
 
-.modal-backdrop {
-    display: none !important
-}
-
 div[index="1"] .modal-dialog {
     width: 500px;
     margin-top: 15%
 }
 
-#btnClose {
+#btnRuleClose {
     float: right;
     margin-top: -15px;
     background: transparent;
@@ -1136,7 +1072,7 @@ kendo-dropdownlist.dealtype-dropdwn-style {
     font-size: 13px !important
 }
 
-.multi_kedo-_style span.k-icon.k-clear-value.k-i-close {
+.multi_kendo_style span.k-icon.k-clear-value.k-i-close {
     width: calc(10px + .75rem) !important;
     height: 28px !important;
     flex-shrink: 0 !important;
@@ -1183,6 +1119,8 @@ kendo-datepicker.calender-row-style {
 .k-header-alignment.price-rules-style h3 {
     font-size: 26px;
     margin-bottom: 0;
+    display: block;
+    width: 100%;
 }
 
 .k-header-alignment.price-rules-style p {
@@ -1197,10 +1135,10 @@ kendo-datepicker.calender-row-style {
 .price-rule-spread #spreadsheet table.htCore tr th {
     background: #f0f0f4 !important;
 }
-.intelicon-plus-max.mplusminus-style.add-plus.col-md-6 {
+.intelicon-plus-max.mplusminus-styleRule.add-plus.col-md-6 {
     top: 0 !important;
 }
 
-.intelicon-minus-max.mplusminus-style.add-minus.col-md-6 {
+.intelicon-minus-max.mplusminus-styleRule.add-minus.col-md-6 {
     top: 0 !important;
 }

@@ -1,5 +1,3 @@
-
-
 .empRole {
     margin: 40px
 }
@@ -69,17 +67,37 @@
     cursor: default !important
 }
 
-.btn-group {
-    height: auto !important
+.btn-primary.colors-btn-prime {
+    background-color: #3c8dbc;
+    border-color: #367fa9
 }
 
-.btn-primary:not(:disabled):not(.disabled).active,
-.show > .btn-primary.dropdown-toggle {
+.btn-primary.employeeRoleToggle:not(:disabled):not(.disabled).active,
+.show > .btn-primary.dropdown-toggle.employeeRoleToggle {
     background-color: #004280 !important;
     border-color: #005cbf !important;
 }
 
-.btn-primary:not(:disabled):not(.disabled).active hovor {
-    background-color: #003F6E !important;
-    border-color: #005cbf !important;
+    .btn-primary.employeeRoleToggle:not(:disabled):not(.disabled).active:hover {
+        background-color: #003F6E !important;
+        border-color: #005cbf !important;
+    }
+
+label.fontWeightBold {
+    font-weight: bold;
 }
+
+.toggleLabelEmployee .employeeRoleToggle {
+    margin-left: 1px !important;
+    border-radius: 0 !important;
+}
+
+    .toggleLabelEmployee .employeeRoleToggle:first-child {
+        border-top-left-radius: 0.3rem !important;
+        border-bottom-left-radius: 0.3rem !important;
+    }
+
+    .toggleLabelEmployee .employeeRoleToggle:last-child {
+        border-top-right-radius: 0.3rem !important;
+        border-bottom-right-radius: 0.3rem !important;
+    }

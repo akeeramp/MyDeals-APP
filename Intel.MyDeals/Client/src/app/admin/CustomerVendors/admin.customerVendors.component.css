@@ -1,4 +1,53 @@
-.navbar-fixed-top{top:-26px!important;padding-bottom:0!important;overflow:hidden}a{text-decoration:none!important}.nav-tabs-intel-blocks{padding-left:0!important}.nav-tabs-intel-blocks li a{padding:5px 10px 5px 5px}.mainMenu{background-color:#0071c5!important}.k-grid-header .headerClass{background-color:#e7e7e8;color:#1a3e6f;font-size:14px!important;font-weight:bold}.k-grid-toolbar{background-color:#0071c5}.btn-primary{background-color:#3c8dbc;border-color:#367fa9}.btn-primary:hover,.btn-primary:active,.btn-primary.hover{background-color:#367fa9!important}#command-icon{background-color:unset;color:#424141;border:none}#command-icon.hover{color:deepskyblue;background-color:deeppink}.heading-position-fix{padding-top:50px;padding-left:14px!important;padding-bottom:10px}.header-bottomsizereduce{line-height:1.1}.table-left-rightsizefix{padding-left:14px!important;padding-right:5px!important;padding-top:0!important}.space-remove-btw-two{margin-left:.16em!important;margin-right:-1em!important}.delete-editorspaceremove{margin-left:.16em!important;margin-right:-1em!important}.remove-canceloutline{margin-left:-1.14em!important}
+.customerVendorsTable .k-grid-header .headerClass {
+    background-color: #e7e7e8;
+    color: #1a3e6f;
+    font-size: 12px !important;
+}
+
+.customerVendorsTable .k-grid-toolbar {
+    background-color: #0071c5
+}
+
+#command-icon-first {
+    background-color: unset;
+    color: #424141;
+    border: none
+}
+
+    #command-icon-first:hover {
+        color: deepskyblue;
+    }
+
+.heading-position-fix {
+    padding-top: 50px;
+    padding-left: 14px !important;
+    padding-bottom: 10px
+}
+
+.header-bottomsizereduce {
+    line-height: 1.1
+}
+
+.kendo-grid-buttons.table-left-rightsizefix {
+    padding-left: 14px !important;
+    padding-right: 5px !important;
+    padding-top: 0 !important
+}
+
+.space-remove-btw-two {
+    margin-left: .16em !important;
+    margin-right: -1em !important
+}
+
+.delete-editorspaceremove {
+    margin-left: .16em !important;
+    margin-right: -1em !important
+}
+
+.remove-canceloutline {
+    margin-left: -1.14em !important
+}
+
 .cons-header-popup {
     margin-top: 30px !important;
     margin-bottom: 0 !important;

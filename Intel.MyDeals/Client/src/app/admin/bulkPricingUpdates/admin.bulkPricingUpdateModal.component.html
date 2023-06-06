@@ -14,10 +14,10 @@
          </div>
          <div id="modalBodyDiv" class="modal-body admin-bulk-modalbody" *ngIf="HasBulkUpdateAccess">
              <div id="extractUnify" class="row" *ngIf="(bulkProceUploadValidationSummary.inValidRecords == undefined  || bulkProceUploadValidationSummary.inValidRecords.length <=0)">
-                 <div class="col-md-11 notes ">
-                     <span class="redbold">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Your attachment will upload after clicking the "Upload" button.</span><br /><br />
+                 <div class="col-md-11 notesBulk " style=" margin-left: auto; margin-right: auto;">
+                     <span class="redboldBulk">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Your attachment will upload after clicking the "Upload" button.</span><br /><br />
                  </div>
-                 <div class="form-group row">
+                 <div class="form-group row" style="justify-content: center;">
                      <div class="col-md-11">
                          <kendo-upload id="bulkPrcUpdateFileUpd" [restrictions]="fileUploadOptions.validation" [(ngModel)]="files" name="files"
                                        class="kuploadaction" (success)="successEventHandler($event)" [multiple]="false"
@@ -25,7 +25,7 @@
                                        [saveUrl]="fileUploadOptions.async.saveUrl" [batch]="false" [autoUpload]="false"></kendo-upload>
                      </div>
                  </div>
-                 <div class="form-group row">
+                 <div class="form-group row" style="justify-content: center; padding-bottom: 15px !important;">
                      <div class="col-md-8" id="urlLink">
                          <a class="text-dwnlod-style-admin" download target="_blank" href={{fileURL}}>Click here to download the template</a>
                      </div>

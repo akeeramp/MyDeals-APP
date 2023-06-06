@@ -1,50 +1,144 @@
-﻿ img{margin-left:25px}#notificationModalBody{margin:15px;overflow-x:auto;min-height:300px}.modalBlueBody{background-color:#003C71;color:#ffffff;z-index:200}mat-dialog-container:has(notificationssettingsdialog){padding:0!important}hr{margin-top:18px;margin-bottom:18px}.unread{color:#00AEEF!important;font-weight:bold}.unread{color:#00AEEF!important;font-weight:bold}.set-button-width.mat-slide-toggle.toggle-button-custom .mat-slide-toggle-bar{font-size:20px;line-height:1.0;height:16px!important;border-radius:3px!important;margin:0 auto!important;border:1px solid transparent!important;border-color:#b1babf!important;width:39px!important;position:absolute!important}.last-toggle.mat-slide-toggle.toggle-button-custom .mat-slide-toggle-thumb{width:6px!important;border-radius:3px!important;margin:0 auto!important;border:1px solid transparent!important;border-color:#b1babf!important;background-color:#eee!important;height:16px!important;margin-top:2px!important;padding:0!important;margin-left:-1px!important}.set-toggle-align.toggle-button-custom.mat-slide-toggle.mat-primary.mat-checked .mat-slide-toggle-thumb{margin-left:15px!important}.button-color-off.toggle-button-custom.mat-slide-toggle.mat-primary .mat-slide-toggle-bar{background-color:#C4D600!important}.change-font-color-off.toggle-button-custom.mat-slide-toggle:not(.mat-checked) .mat-slide-toggle-bar::after{left:15px!important;top:-2px!important;color:#fff!important}.searchNotif{color:black;padding-top:0!important;padding-bottom:0!important}.notifier-table-design table tr th,.notifier-table-design table tr td{border:1px solid #bbb}.after-on-off-align .change-font-color-off.toggle-button-custom.mat-slide-toggle:not(.mat-checked) .mat-slide-toggle-bar::after,.after-on-off-align .toggle-button-custom.mat-slide-toggle.mat-checked .mat-slide-toggle-bar::after{top:2px!important}
+﻿img.notifyImg {
+    margin-left: 25px
+}
+
+#notificationModalBody {
+    margin: 15px;
+    overflow-x: auto;
+    min-height: 300px
+}
+
+.modalBlueBody {
+    background-color: #003C71;
+    color: #ffffff;
+    z-index: 200
+}
+
+mat-dialog-container:has(notificationssettingsdialog) {
+    padding: 0 !important
+}
+
+/*hr {
+    margin-top: 18px;
+    margin-bottom: 18px
+}*/
+
+.gridCompNotification .unread {
+    color: #00AEEF !important;
+    font-weight: bold
+}
+
+.set-button-width.mat-slide-toggle.toggle-button-custom .mat-slide-toggle-bar {
+    font-size: 20px;
+    line-height: 1.0;
+    height: 16px !important;
+    border-radius: 3px !important;
+    margin: 0 auto !important;
+    border: 1px solid transparent !important;
+    border-color: #b1babf !important;
+    width: 39px !important;
+    position: absolute !important
+}
+
+.last-toggle.mat-slide-toggle.toggle-button-custom .mat-slide-toggle-thumb {
+    width: 6px !important;
+    border-radius: 3px !important;
+    margin: 0 auto !important;
+    border: 1px solid transparent !important;
+    border-color: #b1babf !important;
+    background-color: #eee !important;
+    height: 16px !important;
+    margin-top: 2px !important;
+    padding: 0 !important;
+    margin-left: -1px !important
+}
+
+.set-toggle-align.toggle-button-custom.mat-slide-toggle.mat-primary.mat-checked .mat-slide-toggle-thumb {
+    margin-left: 15px !important
+}
+
+.button-color-off.toggle-button-custom.mat-slide-toggle.mat-primary .mat-slide-toggle-bar {
+    background-color: #C4D600 !important
+}
+
+.change-font-color-off.toggle-button-custom.mat-slide-toggle:not(.mat-checked) .mat-slide-toggle-bar::after {
+    left: 15px !important;
+    top: -2px !important;
+    color: #fff !important
+}
+
+.searchNotif {
+    color: black;
+    padding-top: 0 !important;
+    padding-bottom: 0 !important
+}
+
+.notifier-table-design table tr th, .notifier-table-design table tr td {
+    border: 1px solid #bbb
+}
+
+.after-on-off-align .change-font-color-off.toggle-button-custom.mat-slide-toggle:not(.mat-checked) .mat-slide-toggle-bar::after, .after-on-off-align .toggle-button-custom.mat-slide-toggle.mat-checked .mat-slide-toggle-bar::after {
+    top: 2px !important
+}
+
 #notificationModalBody a {
     color: #0071c5 !important;
     text-decoration: none !important;
 }
+
 .ns-Header.modal-header {
     display: block !important
 }
+
 .cdk-overlay-container:has(.mat-remove-space),
 .cdk-overlay-container:has(.notificationSetting-popup) {
     background: rgba(0,0,0,.3);
 }
+
 .cdk-global-overlay-wrapper:has(.mat-remove-space),
 .cdk-global-overlay-wrapper:has(.notificationSetting-popup) {
     align-items: flex-start !important;
     margin-top: 100px !important;
 }
+
 .mat-dialog-container .modal-header.notifyModalHeader {
     display: block !important;
     border-radius: 0;
 }
+
 .notifyModalHeader #modal-title {
     font-size: 20px !important;
     font-weight: 500 !important;
     line-height: 1.5 !important;
 }
+
 .row.notifier-table-design.modal-body-data table {
     width: auto !important;
 }
+
 #notificationModalBody .row.modal-body-data {
     margin-left: -15px !important;
     margin-right: -15px !important;
 }
+
 #notificationModalBody a:hover {
     color: #004579 !important;
     text-decoration: underline !important;
 }
+
 .cdk-overlay-pane.notificationSetting-popup {
     width: 900px !important;
 }
+
 .notificationSetting-popup .mat-dialog-container {
     border-radius: 0;
 }
-.toggle-button-custom.mat-slide-toggle.mat-primary .mat-slide-toggle-bar {
+
+.changeNotifySettings.toggle-button-custom.mat-slide-toggle.mat-primary .mat-slide-toggle-bar {
     background-color: #C4D600 !important;
     color: #fff !important;
 }
+
 .notification-popup-style .mat-dialog-container .modal-header {
     padding: 15px !important;
     border-bottom: 1px solid #f4f4f4 !important;

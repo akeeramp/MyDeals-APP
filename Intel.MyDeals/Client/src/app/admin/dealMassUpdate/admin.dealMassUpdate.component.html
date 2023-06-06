@@ -17,7 +17,7 @@
     <div class="row">
         <div class="col-md-6">
             <div class="row">
-                <div class="col-md-12 margin-btn-15">
+                <div class="col-md-12 margin-btn-dmu-15">
                     <label style="width: 180px; vertical-align: top;">Deal Id(s):</label>
                     <kendo-textarea [rows]="4" [cols]="65" placeholder="Multiple deal IDs can be separated with comma."
                                     resizable="both" [(ngModel)]="massUpdateData['DealIds']"
@@ -28,7 +28,7 @@
                 </div>
 
 
-                <div style="padding:10px 0;" class="col-md-12  margin-btn-15">
+                <div style="padding:10px 0;" class="col-md-12  margin-btn-dmu-15">
                     <label style="width: 180px">Field to Update:</label>
                     <kendo-dropdownlist class="k-dropdown-design" [data]="attr" textField="ATRB_LBL" valueField="ATRB_SID"
                                         (valueChange)="atrbChange($event)" [(ngModel)]="massUpdateData['field']"
@@ -39,13 +39,13 @@
                     </kendo-formerror>
                 </div>
 
-                <div class="col-md-12 margin-btn-15" *ngIf="showNumeric">
+                <div class="col-md-12 margin-btn-dmu-15" *ngIf="showNumeric">
                     <label style="width: 180px">New Value:</label>
                     <kendo-numerictextbox [style.width.px]="488" [min]="0" [max]="MaxNumericValue" [autoCorrect]="true"
                                             [decimals]="0" format="#" [(ngModel)]="massUpdateData['numericValue']"  class="k-numberbox-design"></kendo-numerictextbox>
                 </div>
 
-                <div class="col-md-12 margin-btn-15" *ngIf="showTextBox">
+                <div class="col-md-12 margin-btn-dmu-15" *ngIf="showTextBox">
                     <label style="width: 180px">New Text Value: </label>
                     <kendo-textbox [style.width.px]="488" [(ngModel)]="massUpdateData['textValue']"
                                     [ngStyle]="{'border':isError['textValue']?'1px solid red':'','padding':0}" class="k-textbox-design"></kendo-textbox>
@@ -54,7 +54,7 @@
                     </kendo-formerror>
                 </div>
 
-                <div class="col-md-12 margin-btn-15" *ngIf="showDropDown">
+                <div class="col-md-12 margin-btn-dmu-15" *ngIf="showDropDown">
                     <label style="width: 180px">New Dropdown Value: </label>
                     <kendo-dropdownlist style="width:488px;height:fit-content" [data]="attrValues"
                                         textField="ATRB_VAL_TXT" valueField="ATRB_VAL_TXT" [valuePrimitive]="true"
@@ -66,7 +66,7 @@
                     </kendo-formerror>
                 </div>
 
-                <div class="col-md-12 margin-btn-15" *ngIf="showMultiSelect">
+                <div class="col-md-12 margin-btn-dmu-15" *ngIf="showMultiSelect">
                     <label style="width: 180px">New Multiselect Value: </label>
                     <kendo-multiselect style="width: 488px;height:fit-content; padding:0" [data]="attrValues"
                                         textField="ATRB_VAL_TXT" valueField="ATRB_VAL_TXT" [valuePrimitive]="true"

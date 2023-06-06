@@ -2,19 +2,19 @@
 
 <form style="margin-top: 0;" class="form-horizontal" autocomplete="off">
     <loading-panel-angular id="bulkuploadMeetComp" [show]="isBusy" [header]="spinnerMessageHeader" [isShowFunFact]="false"
-        [description]="spinnerMessageDescription" [msgType]="'Info'"></loading-panel-angular>
+        [description]="spinnerMessageDescription" [msgType]="'Info'" class="meetCompLoading"></loading-panel-angular>
 
     <div class="modal-content" id="meetCompModal"
         style="overflow-y:hidden;overflow-x:hidden; border: 1px solid #1a3e6f;border-bottom:none;border-top-left-radius: 0px !important;border-top-right-radius: 0px !important;">
         <div class="custom-header modalBlueBody">
-            <h3 id="modalTitle" style="margin-left:15px;margin-bottom: 0;margin-top:0;">Bulk Upload - Meet Comp</h3>
+            <h3 id="modalTitleBulkUpdateMeetComp" style="margin-left:15px;margin-bottom: 0;margin-top:0;">Bulk Upload - Meet Comp</h3>
             <i id="btnClose" class="intelicon-close bulk-close-icon" (click)="closeWindow()" title="Close this window"></i>
         </div>
-        <div id="modalBodyDiv" class="modal-body" *ngIf="HasBulkUploadAccess">
+        <div id="modalBodyDivBulkUpdateMeetComp" class="modal-body" *ngIf="HasBulkUploadAccess">
             <div id="extractMeetComp" *ngIf="meetComps.length <= 0">
                 <div class="row" style="margin-top: -5px;">
                     <div class="col-md-11 notes-meetcomp">
-                        <span class="redbold">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Duplicate
+                        <span class="redboldBulkUpdateMeetComp">NOTE:</span><span>&nbsp;Format of the file should be ".xlsx". Duplicate
                             entries will be ignored. Your attachment will upload after clicking the "Upload Meet Comp"
                             button.</span><br /><br />
                     </div>
@@ -60,7 +60,7 @@
                 </div>
             </div>
         </div>
-        <div class="col-md-6" *ngIf="!HasBulkUploadAccess">
+        <div class="col-md-6 alterMeetComp" *ngIf="!HasBulkUploadAccess">
             <div class="alert alert-danger">
                 <span>You don't have access to this page. Only DA user is allowed.</span>
             </div>

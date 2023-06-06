@@ -1,1 +1,29 @@
-.form-group{margin-bottom:25px!important}kendo-grid{height:440px}kendo-formerror{margin-left:25%}form{margin-left:35px}.results label{text-decoration:underline;color:#0071c5}.results i{color:red;font-weight:bold}.info{color:#FC4C02}
+.pushDealsToVistexFormGroup {
+    margin-bottom: 25px !important
+}
+
+.pushDealsToVistexKendoGrid {
+    height: 440px
+}
+
+/*.vistexErrorsLogs kendo-formerror {
+    margin-left: 25%
+}
+*/
+.vistexErrorsLogs form {
+    margin-left: 35px
+}
+
+.resultsVistex label {
+    text-decoration: underline;
+    color: #0071c5
+}
+
+.resultsVistex i {
+    color: red;
+    font-weight: bold
+}
+
+.infoPsDeals {
+    color: #FC4C02
+}

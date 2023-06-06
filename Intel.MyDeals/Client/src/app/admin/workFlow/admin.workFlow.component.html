@@ -3,7 +3,7 @@
 <!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="row" style="display: contents;">
-    <div class="col-md-12 k-header-alignment header-correct">
+    <div class="col-md-12 k-header-alignment padding-top-20" style="padding-left: 15px !important; padding-bottom: 15px;">
         <h3 class="header-removebottom">Work Flow</h3>
     </div>
 </div>
@@ -14,7 +14,7 @@
                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
                     filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)"
                     (edit)="editHandler($event)" (remove)="removeHandler($event)" (cancel)="cancelHandler($event)"
-                    (save)="saveHandler($event)" [columnMenu]="true" #workflow_grid>
+                    (save)="saveHandler($event)" [columnMenu]="true" class="workFlowGrid kAlignHeaders" #workflow_grid>
             <ng-template kendoGridToolbarTemplate>
                 <button kendoGridAddCommand class="k-button addButton">
                     <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RECORD
@@ -26,11 +26,11 @@
                     <span class="k-icon k-i-reload k-icon-md"></span>Refresh
                 </button>
             </ng-template>
-            <kendo-grid-command-column title="Commands" width="150" [headerClass]="{'headerClass':true}"
+            <kendo-grid-command-column title="" width="150" [headerClass]="{'headerClass':true}"
                                        [columnMenu]="false">
                 <ng-template kendoGridCellTemplate let-isNew="isNew">
                     <button id="command-icon" class="k-command-icon" kendoGridEditCommand>
-                        <span class="k-icon k-i-edit k-icon-sm remove-space-de"></span>
+                        <span class="k-icon k-i-edit k-icon-sm remove-space-de edited-icon-color"></span>
                     </button><button id="command-icon"
                                      class="k-command-icon" kendoGridSaveCommand [disabled]="formGroup?.invalid">
                         <span class="k-icon k-i-check k-icon-sm"></span>
@@ -38,7 +38,7 @@
                     <button id="command-icon" class="k-command-icon" kendoGridCancelCommand>
                         <span class="k-icon k-i-cancel-outline k-icon-sm remove-spaceoutline"></span>
                     </button><button id="command-icon" class="k-command-icon" kendoGridRemoveCommand>
-                        <span class="k-icon k-i-delete k-icon-sm"></span>
+                        <span class="k-icon k-i-delete k-icon-sm edited-icon-color"></span>
                     </button>
                 </ng-template>
             </kendo-grid-command-column>
@@ -195,7 +195,7 @@
                     </kendo-combobox>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-column field="TRKR_NBR_UPD" width="150" title="Update Tracker" editor="boolean" filter="boolean"
+            <kendo-grid-column field="TRKR_NBR_UPD" width="160" title="Update Tracker" editor="boolean" filter="boolean"
                                [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                     <div class="text-center">
@@ -215,8 +215,8 @@
             <h3 class="kendo-dialog-message confirmationTitle">Delete confirmation</h3>
             <p class="kendo-dialog-message">{{errorMsg}}</p>
             <kendo-dialog-actions class="btns-workflow-valuer">
-                <button class='k-button cancelBtn kendoDialogBtn' (click)="saveCancel()">Cancel</button>
-                <button class='k-button deleteBtn kendoDialogBtn' (click)="deleteConfirmation()">Delete WorkFlow</button>
+                <button class='k-button cancelBtn workflowCancelBtn kendoDialogBtn' (click)="saveCancel()">Cancel</button>
+                <button class='k-button deleteBtn workflowDeleteBtn kendoDialogBtn' (click)="deleteConfirmation()">Delete WorkFlow</button>
             </kendo-dialog-actions>
         </kendo-dialog>
     </div>

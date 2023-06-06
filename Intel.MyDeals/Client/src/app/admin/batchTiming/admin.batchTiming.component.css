@@ -1,21 +1,21 @@
 ﻿@import '../kendo_grid.css';
 
-.head-r-shift {
-    padding-top: 50px;
-    padding-left: 14px !important;
-    padding-bottom: 10px
+﻿.batchTimingComp .head-r-shift {
+    padding-top: 15px !important;
+    padding-left: 35px !important;
+    padding-bottom: 0;
 }
 
-.head-bottom-reduce {
+﻿.batchTimingComp .head-bottom-reduce {
     line-height: 1.1
 }
 
-.batch-table-lf {
+﻿.batchTimingComp .batch-table-lf {
     padding-left: 14px !important;
     padding-right: 5px !important;
     padding-top: 0 !important
 }
 
-.k-grid.grid-height-h {
+.batchTimingComp .k-grid.grid-height-h {
     height: calc(100vh - 191px) !important
 }

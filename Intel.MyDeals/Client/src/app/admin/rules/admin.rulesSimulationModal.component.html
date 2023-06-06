@@ -1,6 +1,6 @@
 ﻿<div class="modal-header modalBlueBody price-run-header">
-    <h3 class="modal-title" id="modalTitle">Simulate Approval Rules Execution</h3>
-    <i id="btnClose" class="intelicon-close" (click)="close()" title="Close this window"></i>
+    <h3 class="modal-title ruleOneHeading" id="modalTitle">Simulate Approval Rules Execution</h3>
+    <i id="btnClose" class="intelicon-close btnRuleClose" (click)="close()" title="Close this window"></i>
 </div>
 <div class="modal-body modalBlueBody price-run-body" id="modal-body">
     <div class="row">
@@ -13,7 +13,7 @@
         <label class="myLabel col-md-2">Deals List:</label>
         <div class="col-md-9">
             <kendo-textbox [(ngModel)]="dealsList" class="textBoxWidth k-textbox"></kendo-textbox><br />
-            <span class="description">Enter deal numbers as a comma seperated list</span>
+            <span class="descriptionRulesSimulations">Enter deal numbers as a comma seperated list</span>
         </div>
     </div>
     <div class="row">
@@ -22,7 +22,7 @@
             <kendo-multiselect class="rule-list-style" #cmbmulti placeholder="Select rules to test..." [data]="Rules"
                                textField="Name" valueField="Id" [valuePrimitive]="true"
                                id="multiselect" [(ngModel)]="selectedIds"></kendo-multiselect>
-            <span class="description">All selected rules will be run regardless of thier Approval Status or Rules Status</span>
+            <span class="descriptionRulesSimulations">All selected rules will be run regardless of thier Approval Status or Rules Status</span>
         </div>
     </div>
     <div class="row">
@@ -31,7 +31,7 @@
                         [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                         [groupable]="false"
                         [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)"
-                        class="dispResults">
+                        class="dispResults ruleKendoGrid">
                 <kendo-grid-column width="120" [headerClass]="{'headerClass':true}" field="WIP_DEAL_SID" title="Deal #" filterable=false>
                 </kendo-grid-column>
                 <kendo-grid-column [headerClass]="{'headerClass':true}" field="APRV_RULES" title="Matching Approval Rules">
@@ -57,7 +57,7 @@
             <button class="btn btn-default simulationBtn simbtnstyle" type="button" (click)="resetForm()">Reset Form</button>
         </div>
         <div class="col-md-4 simulationBtnTxt">
-            <button class="btn btn-success simulationBtn" type="button" (click)="runSimulation()">Run Simulation Now</button>
+            <button class="btn btn-success simulationBtn btnSuccessRulers" type="button" (click)="runSimulation()">Run Simulation Now</button>
         </div>
     </div>
     <kendo-dialog *ngIf="isAlert" (close)="cancelAlert()" class="k-dialog-popup-design width-changing-dialog" [width]="480">

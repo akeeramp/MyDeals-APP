@@ -13,10 +13,10 @@
         <button (click)="processData()" class="btn btn-primary" style="float: right;">Process Deal Updates</button>
     </div>
     <div class="col-md-12">
-        <span class="redbold">NOTE:</span><span>&nbsp;Please upload maximum of 100 records. Deal Dates are in the format of MM/DD/YYYY (e.g. 12/31/2022) </span><br /><br />
+        <span class="redboldBulk">NOTE:</span><span>&nbsp;Please upload maximum of 100 records. Deal Dates are in the format of MM/DD/YYYY (e.g. 12/31/2022) </span><br /><br />
     </div>
     <div class="col-md-12">
-        <kendo-splitter orientation="vertical" class="spliter-btom-style" style="height: 450px; overflow: auto; " id="tableSpliter">
+        <kendo-splitter orientation="vertical" class="spliter-btom-styleBulk" style="height: 450px; overflow: auto; " id="tableSpliter">
             <kendo-splitter-pane><hot-table id="bulkPriceUpdateTable" [hotId]="hotId" [settings]="hotSettings" class="all-spread"></hot-table></kendo-splitter-pane>
         </kendo-splitter>
     </div>

@@ -866,7 +866,8 @@ kendo-grid-filter-menu-container .k-filter-menu .k-dropdown .k-dropdown-wrap {
 }
 
 .dateclass.k-datepicker kendo-dateinput {
-    background: transparent
+    background: transparent;
+    font-size: 12px !important;
 }
 
 .dateboxborder input:focus-within,
@@ -1009,8 +1010,8 @@ kendo-treeview.k-widget.k-treeview.fiend-tree ul li kendo-checkbox .k-checkbox {
 }
 
 .loadpublish publish-tender loading-panel-angular .ss-loading-panel {
-    margin-top: 150px !important;
-    margin-left: 347px !important;
+    /*margin-top: 150px !important;
+    margin-left: 347px !important;*/
 }
 
 .cc-pop-up-footers {
@@ -1323,6 +1324,8 @@ kendo-window#OvrLp.k-wind-design {
     font-weight: 600 !important;
     text-transform: capitalize;
     color: #1a3e6f !important;
+    white-space: nowrap !important;
+    overflow: hidden !important;
 }
 
 
@@ -1377,7 +1380,7 @@ kendo-window#OvrLp.k-wind-design {
 
 .contract-toggle.k-switch-off .k-switch-handle {
     background-color: #eeeeee !important;
-    top: 0px !important;
+    top: -2px !important;
     width: 10px !important;
     height: 20px !important;
     left: -2.2px !important;
@@ -2180,4 +2183,159 @@ kendo-datepicker.createContractDatepicker .k-input {
     }
 kendo-dialog.backdate-popup .k-window-content {
     padding: 0 !important;
+}
+
+.kAlignHeaders .k-grid-header .headerClass {
+    background-color: #e7e7e8 !important;
+    color: #1a3e6f !important;
+    font-size: 14px !important;
+    font-weight: 600 !important;
+    border-right-color: #c4cfd4 !important;
+    border-left-color: #c4cfd4 !important;
+    vertical-align: bottom;
+    font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif !important;
+}
+
+    .kAlignHeaders .k-grid-header .headerClass span.k-icon.k-i-filter {
+        font-size: 20px !important;
+        color: #000 !important;
+        opacity: .45;
+    }
+
+.kAlignHeaders .k-grid-header .k-grid-filter.k-state-active {
+    background-color: #fff;
+}
+
+.kAlignHeaders .k-grid-header .headerClass span.k-icon.k-i-filter:hover {
+    color: #00aeef !important;
+    opacity: 1;
+}
+
+.edited-icon-color {
+    font-size: 20px !important;
+    color: #000 !important;
+    opacity: .45;
+}
+
+.kAlignHeaders tr.k-grid-edit-row td {
+    border-bottom: 1px solid #0089bc !important;
+}
+
+kendo-grid.commandHeader .headerClass:first-child {
+    font-size: 12px !important;
+    font-weight: 400 !important;
+}
+
+kendo-grid.changedragcolor .k-indicator-container {
+    color: var(--light-blue);
+}
+
+kendo-grid.tt-product-cat.legal-exception-design.kAlignHeaders.k-widget.k-grid table th .k-column-title {
+    width: 100%;
+    overflow: hidden !important;
+    white-space: nowrap !important;
+}
+
+kendo-tabstrip.tabs-coll.pricingTableKendoTabstrip > .k-tabstrip-items-wrapper > .k-tabstrip-items li {
+    color: #ffffff !important;
+    background-color: #00AEEF !important;
+    font-size: 15px !important;
+    margin-right: 5px !important;
+}
+
+    kendo-tabstrip.tabs-coll.pricingTableKendoTabstrip > .k-tabstrip-items-wrapper > .k-tabstrip-items li.k-state-active,
+    kendo-tabstrip.tabs-coll.pricingTableKendoTabstrip > .k-tabstrip-items-wrapper > .k-tabstrip-items li:hover {
+        background-color: #003c71 !important;
+    }
+
+.mpublishgrid.k-grid td .dealCell .vert-center,
+.filter-alignment-fixes kendo-grid .k-grid-aria-root kendo-grid-list table tbody tr td .isReadOnlyCell .vert-center {
+    top: 0 !important;
+    transform: none !important;
+}
+
+.mpublishgrid.k-grid td deal-editor-cell#DC_ID .dealCell > div {
+    margin-top: 0 !important;
+}
+
+kendo-datepicker.date-dashboard-search .k-dateinput .k-input {
+    font-size: 12px !important;
+}
+
+.allStuffContractDetails #contractContainerWrapper {
+    padding-top: 46px !important;
+}
+
+.rule_attr_desc {
+    font-weight: bold;
+    color: #0071c5;
+}
+
+.rule_operator_desc {
+    font-weight: bold;
+    color: #b3b3b3;
+}
+
+.rule_value_desc {
+    font-weight: bold;
+    color: #7d8803;
+}
+
+.k-grid th, .k-grid td {
+    padding: 0.5rem 0.5rem;
+}
+
+kendo-dialog.fixing-product-kits .k-dialog-buttongroup {
+    padding: 0;
+}
+
+    kendo-dialog.fixing-product-kits .k-dialog-buttongroup button.k-button {
+        padding: 1.3em 0 !important;
+    }
+
+        kendo-dialog.fixing-product-kits .k-dialog-buttongroup button.k-button:hover {
+            border-color: #ebebeb !important;
+            background-color: #ebebeb !important;
+        }
+
+.meetCompTable .k-cell-inner > .k-link {
+    padding: 0.5rem 0.5rem;
+}
+
+
+mat-button-toggle-group.mat-toggle-employee-role .btn-primary.colors-btn-prime {
+    margin-right: 1px !important;
+    padding: 10px 16px;
+    border-radius: 0;
+}
+
+    mat-button-toggle-group.mat-toggle-employee-role .btn-primary.colors-btn-prime:first-child {
+        border-bottom-left-radius: 2px;
+        border-top-left-radius: 2px;
+    }
+
+    mat-button-toggle-group.mat-toggle-employee-role .btn-primary.colors-btn-prime:last-child {
+        border-bottom-right-radius: 2px;
+        border-top-right-radius: 2px;
+    }
+
+    mat-button-toggle-group.mat-toggle-employee-role .btn-primary.colors-btn-prime .mat-button-toggle-label-content {
+        padding: 0;
+        font-size: 19px;
+        line-height: 1.33333;
+        font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    }
+
+.kendo-grid-buttons.padding-right-35 {
+    padding-right: 35px !important;
+}
+
+.k-header-alignment.padding-top-20 {
+    padding-top: 20px !important;
+}
+
+.rpl_statusMultiselect .k-multiselect-wrap .k-button {
+    border-radius: 1.071em;
+    padding: 0 5px;
+    font-size: 11px;
 }

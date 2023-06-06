@@ -4,10 +4,10 @@
     cursor: pointer
 }
 
-.cust {
+/*.cust {
     padding: 0 4px;
     color: #CCCCCC
-}
+}*/
 
 .vert-clickable {
     padding: 0 4px;
@@ -15,57 +15,57 @@
     cursor: pointer
 }
 
-.vert {
+/*.vert {
     padding: 0 4px;
     color: #CCCCCC
-}
+}*/
 
 .filter-col {
     font-size: 26px;
     color: #C4D600
 }
 
-.align-center {
+.alignCenterManageEmployee {
     text-align: center !important
 }
 
-.k-button {
+.buttonManageEmployee {
     font-weight: 500
 }
 
-.k-button:hover {
-    border-radius: 0
-}
+    .buttonManageEmployee :hover {
+        border-radius: 0
+    }
 
-.k-grid td {
+.ManageKendoGrid td {
     border-width: 0 !important;
     border-style: none !important;
     padding-left: 15px
 }
 
-.k-dialog.k-alert .k-content,
-.k-dialog.k-confirm .k-content {
+.manageDialogEmployee.k-dialog.k-alert .k-content,
+.manageDialogEmployee.k-dialog.k-confirm .k-content {
     padding: 2.4em
 }
 
-.k-dialog-wrapper .k-dialog {
+.manageDialogEmployee .k-dialog-wrapper .k-dialog {
     border: none
 }
 
-.kendo-alrt-btn {
+.kendo-alrt-btn-ManageEmployee {
     padding: 5px 90px 5px 180px;
     width: 100%
 }
 
-.kendo-alrt-btn:hover {
-    cursor: pointer
-}
+    .kendo-alrt-btn-ManageEmployee:hover {
+        cursor: pointer
+    }
 
-span.k-icon.k-i-file-excel {
+.excelDesigns span.k-icon.k-i-file-excel {
     font-size: 32px
 }
 
-.my_sidebar {
+/*.my_sidebar {
     padding: 40px;
     background-color: #eeeeee
 }
@@ -76,18 +76,18 @@ span.k-icon.k-i-file-excel {
 
 .nm {
     color: #0071C5
-}
+}*/
 
-.k-window-titlebar.k-dialog-titlebar.k-header {
+.manageDialogEmployee .k-window-titlebar.k-dialog-titlebar.k-header {
     display: none
 }
 
-.k-widget.k-dialog.k-window.k-alert .k-content {
+.manageDialogEmployee .k-content {
     background-color: #003C71;
     color: #ffffff
 }
 
-.excelText {
+/*.excelText {
     line-height: 1.2em;
     font-size: 12px;
     float: right
@@ -95,7 +95,7 @@ span.k-icon.k-i-file-excel {
 
 .excelText span {
     text-align: left
-}
+}*/
 
 .selCustomers {
     margin-bottom: 330px !important;
@@ -118,7 +118,7 @@ span.k-icon.k-i-file-excel {
     padding: 4px 0
 }
 
-.info-container {
+/*.info-container {
     text-align: center
 }
 
@@ -135,8 +135,8 @@ span.k-icon.k-i-file-excel {
     text-align: right;
     font-size: 12px;
     color: #aaaaaa
-}
+}*/
 
-kendo-grid {
+kendo-grid.ManageKendoGrid {
     height: calc(100vh - 250px) !important;
 }

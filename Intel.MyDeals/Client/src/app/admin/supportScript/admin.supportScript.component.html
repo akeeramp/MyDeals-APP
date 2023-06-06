@@ -3,13 +3,13 @@
 <!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div  [formGroup]="supportScriptDataForm">
-    <div style="margin-top:75px;">
+    <div style="margin-top: 25px;">
         <h2 class="col-md-12">Missing COST filler</h2>
         <p style="margin-left: 15px;">Use the tool below to fill or extend COST gaps in the tool</p>
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="col-md-2 dateRangeLabel">
+            <div class="col-md-2 dateRangeLabelSupportScript">
                 Select Start Year Quarter:
             </div>
             <div class="col-md-2">
@@ -34,7 +34,7 @@
     <br />
     <div class="row">
         <div class="col-md-12">
-            <div class="col-md-2 dateRangeLabel">
+            <div class="col-md-2 dateRangeLabelSupportScript">
                 Select END Year Quarter:
             </div>
             <div class="col-md-2">
@@ -54,7 +54,7 @@
     <br />
     <div class="row">
         <div class="col-md-12">
-            <div class="col-md-2 font-weight-bold dateRangeLabel">
+            <div class="col-md-2 font-weight-bold dateRangeLabelSupportScript">
                 Enter Level4 Product Id(s):
             </div>
             <div class="col-md-5">
@@ -71,7 +71,7 @@
     <br />
     <div class="row">
         <div class="col-md-12">
-            <div class="col-md-2 font-weight-bold dateRangeLabel">
+            <div class="col-md-2 font-weight-bold dateRangeLabelSupportScript">
                 Fill NULL Cost ? :
             </div>
             <div class="col-md-9">
@@ -84,9 +84,9 @@
     </div>
     <div class="row">
         <div class="col-md-12">
-            <div class="col-md-2 font-weight-bold dateRangeLabel">
+            <div class="col-md-2 font-weight-bold dateRangeLabelSupportScript">
             </div>
-            <div class="col-md-2 btnExec">
+            <div class="col-md-2 btnExecSupportScript">
                 <div>
                     <button class="btn btn-primary" type="button"
                             (click)="executeCostFiller()">
@@ -101,9 +101,9 @@
     <br />
     <div class="row">
         <div class="col-md-12">
-            <div class="col-md-2 font-weight-bold dateRangeLabel">
+            <div class="col-md-2 font-weight-bold dateRangeLabelSupportScript">
             </div>
-            <div class="col-md-2 btnExec">
+            <div class="col-md-2 btnExecSupportScript">
                 <div>
                     <button class="btn btn-primary" type="button"
                             (click)="executePostTest()">

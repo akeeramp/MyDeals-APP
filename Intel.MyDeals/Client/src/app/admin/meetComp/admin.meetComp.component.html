@@ -2,34 +2,34 @@
 <!-- <link href="/Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css" rel="stylesheet" /> -->
 <!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<loading-panel-angular [show]="isBusy" [header]="'Meet Comp...'" [isShowFunFact]="false" [description]="'Please wait we are fetching Meet Comp Data...'" [msgType]="'Info'"></loading-panel-angular>
+<loading-panel-angular [show]="isBusy" [header]="'Meet Comp...'" [isShowFunFact]="false" [description]="'Please wait we are fetching Meet Comp Data...'" [msgType]="'Info'" class="meetCompLoading"></loading-panel-angular>
 <div class="col-md-12">
     <div class="col-md-9">
-        <h2 style="margin-top:15px!important;">Meet Comp </h2>
+        <h2 class="headMeetComps">Meet Comp </h2>
     </div>
     <div class="col-md-3" *ngIf="HasBulkUploadAccess"><button (click)="OpenBulkUploadMeetCompModal()" class="btn btn-primary" style="float: right; margin-top: 15px">Upload Meet Comp</button></div>
 </div>
-<div class="col-md-12" *ngIf="isAccess==false">
+<div class="col-md-12 alterMeetComp" *ngIf="isAccess==false">
     <div class="alert alert-danger">{{isAccessMessage}}</div>
 </div>
 <div class="fl col-md-12" style="padding-top: 15px;">
     <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Customer:</div>
-    <kendo-combobox [data]="customers" [(ngModel)]="selectedCustomerID" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" [kendoDropDownFilter]="filterSettings" class="opUiContainer md" (valueChange)="custValueChange($event)" textField="CUST_NM" valueField="CUST_SID" [ngClass]="{'errorCode': isCustomerMissing==true}"
+    <kendo-combobox [data]="customers" [(ngModel)]="selectedCustomerID" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" [kendoDropDownFilter]="filterSettings" class="optMeetComp opUiContainer md" (valueChange)="custValueChange($event)" textField="CUST_NM" valueField="CUST_SID" [ngClass]="{'errorCode': isCustomerMissing==true}"
         placeholder="Select a Customer..." style="width: 230px; float: left; height: 35px;"></kendo-combobox>
     <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Product Vertical:</div>
-    <kendo-combobox [data]="prodCats" [(ngModel)]="selectedProdCatName" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" [kendoDropDownFilter]="filterSettings" class="opUiContainer md" (valueChange)="prodCatValueChange($event)" textField="PRD_CAT_NM" valueField="PRD_CAT_NM" [ngClass]="{'errorCode': isCatMissing==true}"
+    <kendo-combobox [data]="prodCats" [(ngModel)]="selectedProdCatName" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" [kendoDropDownFilter]="filterSettings" class="optMeetComp opUiContainer md" (valueChange)="prodCatValueChange($event)" textField="PRD_CAT_NM" valueField="PRD_CAT_NM" [ngClass]="{'errorCode': isCatMissing==true}"
         placeholder="Select a Product Vertical..." style="width: 230px; float: left; height: 35px;"></kendo-combobox>
     <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Brand Name:</div>
-    <kendo-combobox [data]="brands" [(ngModel)]="selectedBrandName" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" [kendoDropDownFilter]="filterSettings" [disabled]="disabled" class="opUiContainer md" (valueChange)="brandNameValueChange($event)" textField="BRND_NM" valueField="BRND_NM"
+    <kendo-combobox [data]="brands" [(ngModel)]="selectedBrandName" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" [kendoDropDownFilter]="filterSettings" [disabled]="disabled" class="optMeetComp opUiContainer md" (valueChange)="brandNameValueChange($event)" textField="BRND_NM" valueField="BRND_NM"
         [ngClass]="{'errorCode': isBrandMissing==true}" placeholder="Select a Brand Name..." style="width: 230px; float: left; height: 35px;"></kendo-combobox>
     <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Product Name:</div>
-    <kendo-multiselect [data]="products" [(ngModel)]="selectedProdName" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" [kendoDropDownFilter]="filterSettings" class="opUiContainer md" (valueChange)="prodNameValueChange($event)" [autoClose]="false" textField="HIER_VAL_NM" valueField="HIER_VAL_NM"
+    <kendo-multiselect [data]="products" [(ngModel)]="selectedProdName" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" [kendoDropDownFilter]="filterSettings" class="optMultiSelectMeetComp opUiContainer md" (valueChange)="prodNameValueChange($event)" [autoClose]="false" textField="HIER_VAL_NM" valueField="HIER_VAL_NM"
         placeholder="All Product(s) selected..." style="width: 240px; float: left; height: auto;"></kendo-multiselect><button class="btn btn-sm btn-skyblue-sm fl" (click)="fetchMeetCompData()" type="button" title="Get Meet Comp" style="margin-left: 20px; background-color: #e4e7eb;"><i class="fa fa-refresh fa-fw iconRunPct"
             style="font-size: 20px"></i></button>
 </div>
-<div class="col-md-12 kendo-grid-buttons" style="padding-top: 20px !important;">
+<div class="col-md-12 kendo-grid-buttons MeetCompGridsAll" style="padding-top: 20px !important;">
     <kendo-grid [data]="gridData" filterable="menu" [scrollable]="true" [sortable]="true" [navigable]="true" [columnMenu]="{sort:true}" [resizable]="true" [reorderable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter"
-        [group]="state.group" [groupable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" class="pro-meetComp" (dataStateChange)="dataStateChange($event)" style="height: calc(100vh - 240px);">
+        [group]="state.group" [groupable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" class="pro-meetComp kAlignHeaders" (dataStateChange)="dataStateChange($event)" style="height: calc(100vh - 240px);">
         <ng-template kendoGridToolbarTemplate><button (click)="clearFilter()" class="k-button clearButton"><span
                     class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS </button>
             <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()" class="k-button clearButton"><span

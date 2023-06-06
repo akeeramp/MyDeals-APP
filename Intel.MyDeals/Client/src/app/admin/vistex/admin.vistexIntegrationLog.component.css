@@ -1,1 +1,71 @@
-.ss-loading-panel{margin-top:6%;margin-left:37%}.k-combobox{width:210px}.k-dropdown-wrap k-state-default,.k-input{height:32px}.datePickerWidth{width:115px}.rmv-lft-rght-pdng{padding-left:0;padding-right:0}.mrgn-txt-color{margin:5px 5px 0 15px;color:#aaaaaa}.float-wdth{float:right;width:56%}.kendo-dlg-action{background-color:#fafafa!important;border-color:#fafafa!important}.kendo-dlg-action:hover{background-color:lightgrey!important;cursor:pointer}.kendo-alrt-btn{padding:10px;font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif!important;font-size:15px;text-align:center}.kendoAlert{padding:18px!important;text-align:center;font-size:15px;font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif!important}.k-grid td{border-width:0!important}.ss-loading-panel.ss-Info{margin-top:200px!important}
+.vistexIntegLogLoader .ss-loading-panel {
+    margin-top: 6%;
+    margin-left: 37%
+}
+
+.vistexIntegrationCombox.k-combobox {
+    width: 210px
+}
+
+.vistexIntegrationCombox .k-dropdown-wrap k-state-default, .rmv-lft-rght-pdng .k-input {
+    height: 32px
+}
+
+/*.datePickerWidth {
+    width: 115px
+}*/
+
+.rmv-lft-rght-pdng {
+    padding-left: 0;
+    padding-right: 0
+}
+
+.mrgn-txt-color {
+    margin: 5px 5px 0 15px;
+    color: #aaaaaa
+}
+
+.float-wdth {
+    float: right;
+    width: 56%
+}
+
+.kendo-dlg-action {
+    background-color: #fafafa !important;
+    border-color: #fafafa !important
+}
+
+    .kendo-dlg-action:hover {
+        background-color: lightgrey !important;
+        cursor: pointer
+    }
+
+.vistexOkIntegrationLog {
+    padding: 10px;
+    font-family: Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif !important;
+    font-size: 15px;
+    text-align: center
+}
+
+.kendoAlertVIL {
+    padding: 18px !important;
+    text-align: center;
+    font-size: 15px;
+    font-family: Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif !important
+}
+
+.KendoVistexLog.k-grid td {
+    border-width: 0 !important
+}
+
+.vistexIntegLogLoader .ss-loading-panel.ss-Info {
+    margin-top: 200px !important
+}
+
+kendo-grid.KendoVistexLog table tr td a.k-icon.k-i-plus:before {
+    content: "\e005" !important
+}
+
+kendo-grid.KendoVistexLog table tr td a.k-icon.k-i-minus:before {
+    content: "\e006" !important
+}

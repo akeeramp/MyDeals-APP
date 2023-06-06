@@ -6,7 +6,7 @@
 <div [hidden]="isLoading=='true'" style="margin:20px;">
     <div class="fl" style="width:100%">
         <div class="col-md-3" style="margin-left:-15px">
-            <h2>{{title}}</h2>
+            <h2 class="headingOpLog">{{title}}</h2>
         </div>
         <div class="col-md-5"></div>
         <div class="col-md-4 flex-arrive"><button (click)="refreshAllLog()" ui-auto="refreshAllLog" id="refreshAllLog" class="k-primary fr margin10 fr-method" style="margin-left:10px; margin-top:20px;">Reload</button>
@@ -21,16 +21,16 @@
         </div>
     </div>
     <p style="font-size: 10px;">The Log Viewer will show Log captured in temp folder. </p>
-    <div id="cacheContainer" resize-containers>
-        <div id="cacheList" class="col-md-3" style="height:auto !important">
+    <div id="cacheContainerOpLog" resize-containers>
+        <div id="cacheListOpLog" class="col-md-3" style="height:auto !important">
             <h5>Log Files </h5>
-            <table class="tblCache" ui-auto="tblLog">
+            <table class="tblCacheOpLog" ui-auto="tblLog">
                 <tr>
                     <th class="text-left">File Name</th>
                     <th class="text-right">Created Date</th>
                 </tr>
                 <tr *ngFor="let data of opLogData | orderBy: 'creationDate':true">
-                    <td id="lbl{{data.fileName}}" title="{{data.fileName}}" style="width:250px"><a role="button" (click)='getDetailsOpaqueLog(data)'>{{data.fileName | slice : 0:40}}</a></td>
+                    <td id="lbl{{data.fileName}}" title="{{data.fileName}}" style="width:250px"><a class="anchorOpLog" role="button" (click)='getDetailsOpaqueLog(data)'>{{data.fileName | slice : 0:40}}</a></td>
                     <td id="lbl{{data.creationDate}}" title="{{data.modifiedDate}}" style="width:200px" class="text-right">{{getDateFormat(data.creationDate) | date:'yyyy-MM-dd'}}</td>
                 </tr>
             </table>

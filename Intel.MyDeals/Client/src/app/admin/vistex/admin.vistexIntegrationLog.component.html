@@ -5,7 +5,7 @@
 
 <div class="col-md-12 rmv-lft-rght-pdng">
     <div class="col-md-5" style="margin-top: 30px;">
-        <h2>Integration Logs</h2>
+        <h2 style="font-size: 26px; margin-bottom: 0; ">Integration Logs</h2>
         <p style="color: #FC4C02">This screen shows the data to be sent to the down stream application Vistex</p>
     </div>
     <div class="col-md-7 float-wdth" style="margin-top:35px;">
@@ -19,7 +19,7 @@
 <div class="col-md-12 rmv-lft-rght-pdng">
     <div class="col-md-7 float-wdth" style="display:inline-block;">
         <div class="col-md-10">
-            <div class="fr">
+            <div class="fr vistexDatePickers">
                 <kendo-datepicker #picker [(value)]="startDate" calendarType="classic" [(ngModel)]="startDate" class="datePickerWidth">
                 </kendo-datepicker>
                 -
@@ -32,22 +32,22 @@
                 Data</button></div>
     </div>
     <div class="another-press" style="margin-left: 20px;display:inline-block">
-        <kendo-combobox class="fr opUiContainer md" [data]="requestTypeList" [kendoDropDownFilter]="filterSettings" textField="RQST_NAME" valueField="RQST_TYPE" [(ngModel)]="selectedRequestType" (valueChange)="onRequestTypeChange($event)" style="width: 220px;height:33px;font-size: 5px;"></kendo-combobox>
+        <kendo-combobox class="fr opUiContainer md vistexIntegrationCombox" [data]="requestTypeList" [kendoDropDownFilter]="filterSettings" textField="RQST_NAME" valueField="RQST_TYPE" [(ngModel)]="selectedRequestType" (valueChange)="onRequestTypeChange($event)" style="width: 220px;height:33px;font-size: 5px;"></kendo-combobox>
         <div class="fr mrgn-txt-color" style="width: 100px;">
             Request Type:
         </div>
     </div>
 </div>
 <kendo-dialog *ngIf="showKendoAlert" (close)="closeKendoAlert()" [height]="150" [width]="350">
-    <div class="kendoAlert">{{kendoAlertMsg}}<b>{{kendoBoldMsg}}</b></div>
+    <div class="kendoAlert kendoAlertVIL">{{kendoAlertMsg}}<b>{{kendoBoldMsg}}</b></div>
     <kendo-dialog-actions class="kendo-dlg-action">
-        <div kendoButton (click)="closeKendoAlert()" class="kendo-alrt-btn">OK</div>
+        <div kendoButton (click)="closeKendoAlert()" class="kendo-alrt-btn vistexOkIntegrationLog">OK</div>
     </kendo-dialog-actions>
 </kendo-dialog>
-<loading-panel-angular [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription" [msgType]="'Info'" [isShowFunFact]="true">
+<loading-panel-angular class="vistexIntegLogLoader" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription" [msgType]="'Info'" [isShowFunFact]="true">
 </loading-panel-angular>
-<div class="col-md-12" style="margin-top: 20px;">
-    <kendo-grid [data]="gridData" [skip]="state.skip" [height]="450" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}"
+<div class="col-md-12" style="margin-top: 10px;">
+    <kendo-grid class="KendoVistexLog kAlignHeaders" [data]="gridData" [skip]="state.skip" [height]="450" [sortable]="true" [sort]="state.sort" [pageSize]="state.take" [group]="state.group" [navigable]="true" [resizable]="true" [pageable]="{type:'numeric',pageSizes: pageSizes,info:true,refresh:true}"
                 [groupable]="false" [reorderable]="true" (dataStateChange)="dataStateChange($event)" [filter]="state.filter" filterable="menu" [columnMenu]="{sort:true}" (edit)="editHandler($event)" (cancel)="cancelHandler($event)" (save)="saveHandler($event)">
         <ng-template kendoGridToolbarTemplate>
             <button (click)="clearFilter()" class="k-button clearButton">
@@ -60,7 +60,7 @@
             <ng-template kendoGridCellTemplate let-isNew="isNew">
                 <div class="text-center">
                     <button id="command-icon" class="k-command-icon" kendoGridEditCommand>
-                        <span class="k-icon k-i-edit k-icon-sm"></span>
+                        <span class="k-icon k-i-edit k-icon-sm edited-icon-color"></span>
                     </button>
                 </div>
                 <div class="text-center" style="margin-left: -4px;">
@@ -106,7 +106,7 @@
                 </multicheck-filter>
             </ng-template>
             <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
-                <kendo-combobox [data]="VistexStatuses" [formControl]="formGroup.get('RQST_STS')"></kendo-combobox>
+                <kendo-combobox [data]="VistexStatuses" [formControl]="formGroup.get('RQST_STS')" class="vistexIntegrationCombox"></kendo-combobox>
             </ng-template>
         </kendo-grid-column>
         <kendo-grid-column field="ERR_MSG" title="Message" width="300px" [headerClass]="{'headerClass':true}">

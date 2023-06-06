@@ -3,13 +3,13 @@
 <!-- <link href="/Client/node_modules/@angular/material/prebuilt-themes/indigo-pink.css" rel="stylesheet" /> -->
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="row">
-    <div class="col-md-12 k-header-alignment">
+    <div class="col-md-12 k-header-alignment padding-top-20">
         <h3>Unified Customer Admin</h3>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-12 kendo-grid-buttons">
-        <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+    <div class="col-md-12 kendo-grid-buttons padding-right-35">
+        <kendo-grid class="kAlignHeaders commandHeader" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                     [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
                     filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)"
@@ -30,7 +30,7 @@
                 <ng-template kendoGridCellTemplate let-isNew="isNew">
                     <div class="text-center">
                         <button id="command-icon" class="k-command-icon" kendoGridEditCommand>
-                            <span class="k-icon k-i-edit k-icon-sm"></span>
+                            <span class="k-icon k-i-edit k-icon-sm edited-icon-color"></span>
                         </button>
                     </div>
                     <div class="text-center">
@@ -129,7 +129,7 @@
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-multiselect #rplStsCdDropDown [data]="distinctRplCd" [autoClose]="false"
-                                       [formControl]="formGroup.get('RPL_STS_CD')" style="width: 170px;"></kendo-multiselect>
+                                       [formControl]="formGroup.get('RPL_STS_CD')" style="width: 170px;" class="rpl_statusMultiselect"></kendo-multiselect>
                 </ng-template>
             </kendo-grid-column>
         </kendo-grid>

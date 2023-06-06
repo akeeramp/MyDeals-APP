@@ -1,6 +1,6 @@
 ﻿﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="row" style="display: contents;">
-    <div class="col-md-12 k-header-alignment header-pos-fix">
+    <div class="col-md-12 k-header-alignment padding-top-20" style=" padding-left: 15px !important;">
         <h3>Work Flow Stage</h3>
     </div>
 </div>
@@ -11,7 +11,7 @@
             [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
             filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)"
             (edit)="editHandler($event)" (remove)="removeHandler($event)" (cancel)="cancelHandler($event)"
-            (save)="saveHandler($event)" [columnMenu]="true" class="boxsize">
+            (save)="saveHandler($event)" [columnMenu]="true" class="boxsize kAlignHeaders">
             <ng-template kendoGridToolbarTemplate>
                 <!--Hiding DD functionality as its not working as expected, issues in DB-->
                 <button kendoGridAddCommand class="k-button addButton">
@@ -21,17 +21,17 @@
                 <kendo-grid-spacer></kendo-grid-spacer>
                 <button (click)="refreshGrid()" class="k-button clearButton"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
             </ng-template>
-            <kendo-grid-command-column title="Commands" width="150" [headerClass]="{'headerClass':true}"
+            <kendo-grid-command-column title="" width="150" [headerClass]="{'headerClass':true}"
                 [columnMenu]="false">
                 <ng-template kendoGridCellTemplate let-isNew="isNew"><button id="command-icon" class="k-command-icon"
-                        kendoGridEditCommand><span class="k-icon k-i-edit k-icon-sm remove-spacedelete"></span></button><button
+                        kendoGridEditCommand><span class="k-icon k-i-edit k-icon-sm remove-spacedelete edited-icon-color"></span></button><button
                         id="command-icon" class="k-command-icon" kendoGridSaveCommand
                         [disabled]="formGroup?.invalid"><span class="k-icon k-i-check k-icon-sm"></span></button><button
                         id="command-icon" class="k-command-icon" kendoGridCancelCommand><span
                             class="k-icon k-i-cancel-outline k-icon-sm"></span></button>
                             <!--Hiding DELETE functionality as its not working as expected, issues in DB-->
                             <button id="command-icon" class="k-command-icon" kendoGridRemoveCommand><span
-                            class="k-icon k-i-delete k-icon-sm"></span></button></ng-template>
+                            class="k-icon k-i-delete k-icon-sm edited-icon-color"></span></button></ng-template>
             </kendo-grid-command-column>
             <kendo-grid-column field="WFSTG_MBR_SID" title="ID" width="100" [headerClass]="{'headerClass':true}"
                 [editable]="false">

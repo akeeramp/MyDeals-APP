@@ -62,16 +62,16 @@
                             <span class="intelicon-search"></span>
                         </button>
                         <button *ngIf="dataItem.DEALS_USED_IN_EXCPT == '' || dataItem.DEALS_USED_IN_EXCPT == null" type="button" class="legaliexgridbuttons intelicon-edit" title='Edit' (click)="openEditExceptionDialog(dataItem)"></button>
-                        <button *ngIf="dataItem.DEALS_USED_IN_EXCPT != '' && dataItem.DEALS_USED_IN_EXCPT != null" type="button" class="legaliexgridbuttons intelicon-no-access noaccessex" title='Edit' (click)="openEditExceptionDialog(dataItem)"></button>
+                        <button *ngIf="dataItem.DEALS_USED_IN_EXCPT != '' && dataItem.DEALS_USED_IN_EXCPT != null" type="button" class="legaliexgridbuttons intelicon-no-access noAccessPointer" title='Edit' (click)="openEditExceptionDialog(dataItem)"></button>
                         <button type="button" [ngClass]="{'applyopacity': dataItem.DEALS_USED_IN_EXCPT == '' || dataItem.DEALS_USED_IN_EXCPT == null}" class="legaliexgridbuttons intelicon-reports-outlined" title='List of deals applied to this Exception' (click)="openDealListExceptionDialog(dataItem)"></button>
-                        <button type="button" [ngClass]="{'applyopacity': dataItem.DEALS_USED_IN_EXCPT != '' && dataItem.DEALS_USED_IN_EXCPT != null}" class="legaliexgridbuttons intelicon-trash-solid dealTools" title='Only exception not applied to a deal can be Deleted' (click)="DeleteException(dataItem,rowIndex)"></button>
+                        <button type="button" [ngClass]="{'applyopacity': dataItem.DEALS_USED_IN_EXCPT != '' && dataItem.DEALS_USED_IN_EXCPT != null}" class="legaliexgridbuttons intelicon-trash-solid dealToolsLegalExc" title='Only exception not applied to a deal can be Deleted' (click)="DeleteException(dataItem,rowIndex)"></button>
                     </div>
                 </ng-template>
 
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="120" field="ACTV_IND" filter="boolean">
                 <ng-template kendoGridCellTemplate let-dataItem>
-                    <mat-slide-toggle class="toggle-button-custom toggle-align-grid gridCheckboxAlign mat-slideDisable-Custom" [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
+                    <mat-slide-toggle class="toggle-button-custom MatToggleSlideLegal toggle-align-grid gridCheckboxAlign mat-slideDisable-Custom" [color]="color" [checked]="dataItem.ACTV_IND" disabled></mat-slide-toggle>
                 </ng-template>
                 <ng-template kendoGridHeaderTemplate>
                     <div class='isRequired leagalgridheader'>Active </div>
@@ -81,7 +81,7 @@
           
             <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="110" field="IS_DSBL" filter="boolean">
                 <ng-template kendoGridCellTemplate let-dataItem >
-                    <mat-slide-toggle class="toggle-button-custom toggle-align-grid gridCheckboxAlign mat-slideDisable-Custom" [color]="color" [checked]="dataItem.IS_DSBL" disabled></mat-slide-toggle>
+                    <mat-slide-toggle class="toggle-button-custom MatToggleSlideLegal toggle-align-grid gridCheckboxAlign mat-slideDisable-Custom" [color]="color" [checked]="dataItem.IS_DSBL" disabled></mat-slide-toggle>
                 </ng-template>
                 <ng-template kendoGridHeaderTemplate>
                     <div class='isRequired leagalgridheader'>Hidden </div>
@@ -306,7 +306,7 @@
                             (dataStateChange)="childDataStateChange($event)">
                     <kendo-grid-command-column width="50" [headerClass]="{'headerClass':true}" [columnMenu]="false">
                         <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
-                            <div class='dealTools' style="text-align: center;"><input type='checkbox' class='grid-link-checkbox with-font' id='lnkChk' [(ngModel)]='dataItem.IS_SELECTED' style='height: 17px;width: 17px; border: 2px solid;' (click)='selectItemChildGrid($event, dataItem)' /> </div>
+                            <div class='dealToolsLegalExc' style="text-align: center;"><input type='checkbox' class='grid-link-checkbox with-font' id='lnkChk' [(ngModel)]='dataItem.IS_SELECTED' style='height: 17px;width: 17px; border: 2px solid;' (click)='selectItemChildGrid($event, dataItem)' /> </div>
                         </ng-template>
                     </kendo-grid-command-column>
                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="VER_NBR" title="Version No" width="100">
@@ -360,7 +360,7 @@
 
     <div class="viewExceptionheader">
         View Exception Details
-        <i id="btnClose" class="intelicon-close float" (click)="closeViewException()" title="Close this window"></i>
+        <i id="btnClose" class="intelicon-close floatRightLegal" (click)="closeViewException()" title="Close this window"></i>
     </div>
     <admin-view-exceptions [exdetails]="initExdetails" [childhidden]="childhidden"></admin-view-exceptions>
 </div>

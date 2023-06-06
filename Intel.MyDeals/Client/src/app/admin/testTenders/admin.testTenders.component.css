@@ -1,1 +1,22 @@
-﻿ .testTesndersdiv{overflow-x:hidden;overflow-y:auto}#TestTesndersdiv{overflow-x:hidden;overflow-y:auto}.dateRangeLabel{font-weight:bold}.btnExec{padding-left:25px}.alignwidth{height:2.694em!important;width:100%!important}
+﻿.testTesndersdiv {
+    overflow-x: hidden;
+    overflow-y: auto
+}
+
+#TestTesndersdiv {
+    overflow-x: hidden;
+    overflow-y: auto
+}
+
+.dateRangeLabelTestTendors {
+    font-weight: bold
+}
+
+.btnExecTestTendors {
+    padding-left: 25px
+}
+
+.alignwidth {
+    height: 2.694em !important;
+    width: 100% !important
+}

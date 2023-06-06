@@ -1,1 +1,49 @@
-﻿.header-correct{padding-top:50px;padding-left:14px!important;padding-bottom:10px}.header-removebottom{line-height:1.1}.remove-space-lR{padding-left:14px!important;padding-right:5px!important;padding-top:0!important}.remove-space-de{margin-left:.16em!important;margin-right:-1em!important}.remove-spaceoutline{margin-left:-1.14em!important}.disabledObjSetTypeDropdown{pointer-events:none;opacity:.7}.confirmationTitle{padding:15px;border-bottom:1px solid #e5e5e5;border-bottom-color:#f4f4f4;font-size:28px;text-align:left}.cancelBtn{color:black}.deleteBtn{background-color:#3c8dbc!important}.kendoDialogBtn{border-radius:3px!important}
+﻿﻿.k-header-alignment.header-correct {
+    padding-top: 50px;
+    padding-left: 14px !important;
+    padding-bottom: 10px
+}
+
+.header-removebottom {
+    line-height: 1.1
+}
+
+.kendo-grid-buttons.remove-space-lR {
+    padding-left: 14px !important;
+    padding-right: 5px !important;
+    padding-top: 0 !important
+}
+
+.remove-space-de {
+    margin-left: .16em !important;
+    margin-right: -1em !important
+}
+
+.remove-spaceoutline {
+    margin-left: -1.14em !important
+}
+
+.disabledObjSetTypeDropdown {
+    pointer-events: none;
+    opacity: .7
+}
+
+.confirmationTitle {
+    padding: 15px;
+    border-bottom: 1px solid #e5e5e5;
+    border-bottom-color: #f4f4f4;
+    font-size: 28px;
+    text-align: left
+}
+
+.workflowCancelBtn {
+    color: black
+}
+
+.workflowDeleteBtn {
+    background-color: #3c8dbc !important
+}
+
+.kendoDialogBtn {
+    border-radius: 3px !important
+}
