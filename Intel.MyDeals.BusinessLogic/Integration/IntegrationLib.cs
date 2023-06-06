@@ -155,7 +155,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (myDealsData[OpDataElementType.CNTRCT].Actions.Any() && !saveResponse.Keys.Any())
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[currQuote].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed DB Call, ProcessSalesForceContractInformation"));
+                workRecordDataFields.recordDetails.quote.quoteLine[currQuote].errorMessages.Add(AppendError(700, "Mydeals applicaton error.  Please contact My Deals Support", "Failed DB Call, ProcessSalesForceContractInformation"));
             }
 
             foreach (var objKey in saveResponse.Keys)
@@ -248,7 +248,7 @@ namespace Intel.MyDeals.BusinessLogic
                 else
                 {
                     //Error Handling CODE for CAP Missing
-                    productErrorResponse.Add(AppendError(703, "Product error: CAP not Available error for EPM Id [" + epmId + "]. Please contact L2 Support", "CAP not found"));
+                    productErrorResponse.Add(AppendError(703, "Product error: CAP not Available error for EPM Id [" + epmId + "].  Please contact My Deals Support", "CAP not found"));
                 }
             }
             else
@@ -256,12 +256,12 @@ namespace Intel.MyDeals.BusinessLogic
                 //Error Handling CODE Product Not FOUND
                 if (result == null || result.Count == 0)
                 {
-                    productErrorResponse.Add(AppendError(702, "Product error: No products found for EPM Id [" + epmId + "]. Please contact L2 Support", "No valid products found"));
+                    productErrorResponse.Add(AppendError(702, "Product error: No products found for EPM Id [" + epmId + "].  Please contact My Deals Support", "No valid products found"));
                 }
                 else
                 {
                     string products_List = String.Join(",", result.Select(c => c.PRD_MBR_SID));
-                    productErrorResponse.Add(AppendError(702, "Product error: EPM Id [" + epmId + "] matched multiple product Id's [" + products_List + "]. Please contact L2 Support", "Multiple product Id's matched"));
+                    productErrorResponse.Add(AppendError(702, "Product error: EPM Id [" + epmId + "] matched multiple product Id's [" + products_List + "].  Please contact My Deals Support", "Multiple product Id's matched"));
                 }
             }
 
@@ -511,7 +511,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (productLookupObj?.MydlPdctName == String.Empty || productLookupObj?.PdctNbrSid == 0)
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: EPM ID lookup in My Deals found No valid product matches for EPM Id [" + epmId + "]. Please contact My Deals Support", "My Deals Product EMP ID found no matching products"));
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: EPM ID lookup in My Deals found No valid product matches for EPM Id [" + epmId + "].  Please contact My Deals Support", "My Deals Product EMP ID found no matching products"));
                 return initWipId; // Bail out - no products matched
             }
 
@@ -659,7 +659,7 @@ namespace Intel.MyDeals.BusinessLogic
             string defSettlementPartner = (defArSettlementLvl == "Cash") ? requestedCustomerInfo.DFLT_SETTLEMENT_PARTNER : "";
             if (defArSettlementLvl == "Cash" && defSettlementPartner == "") // No Settlement Partner is set, exit gracefully...
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(707, "Cash Settlement Level requires Settlement Partner to be defined for " + requestedCustomerInfo.CUST_NM + ".  Contact Mydeals Support", "Invalid Customer Setup"));
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(707, "Cash Settlement Level requires Settlement Partner to be defined for " + requestedCustomerInfo.CUST_NM + ".  Please contact My Deals Support", "Invalid Customer Setup"));
                 return initWipId;
             }
 
@@ -898,7 +898,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (myDealsData[OpDataElementType.WIP_DEAL].Actions.Any() && !saveResponse.Keys.Any())
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed DB Call, ProcessSalesForceDealInformation"));
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(700, "Mydeals applicaton error.  Please contact My Deals Support", "Failed DB Call, ProcessSalesForceDealInformation"));
             }
 
             int contPsId = initPsId;
@@ -1032,7 +1032,7 @@ namespace Intel.MyDeals.BusinessLogic
                 if ((custCimId == null || custCimId == "") || custId == 0) // Need to have a working customer for this request and failed, skip!
                 {
                     if (custCimId == null) custCimId = "null";
-                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(701, "Customer error: Unable to find the customer with CIMId {" + custCimId + "}. Contact Mydeals Support Invalid Customer", "Invalid Customer"));
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(701, "Customer error: Unable to find the customer with CIMId {" + custCimId + "}.  Please contact My Deals Support for Invalid Customer", "Invalid Customer"));
                     executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, 0, dealId);
                     continue;
                 }
@@ -1040,7 +1040,7 @@ namespace Intel.MyDeals.BusinessLogic
                 List<TendersSFIDCheck> sfToMydlIds = _jmsDataLib.FetchDealsFromSfiDs(salesForceIdCntrct, salesForceIdDeal, custId);
                 if (sfToMydlIds == null)
                 {
-                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed DB Call, SF ID lookup Error"));
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error.  Please contact My Deals Support", "Failed DB Call, SF ID lookup Error"));
                     executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, -1, dealId);
                     continue; // we had error on lookup, skip to next to process
                 }
@@ -1051,7 +1051,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                     if (sfToMydlIds == null)
                     {
-                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed DB Call, SF ID lookup Error"));
+                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error.  Please contact My Deals Support", "Failed DB Call, SF ID lookup Error"));
                         executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, -1, dealId);
                         continue; // we had error on lookup, skip to next to process
                     }
@@ -1066,7 +1066,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                 if (folioId <= 0)  // Needed to create a new Folio for this request and failed, skip!
                 {
-                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed to create the Tender Folio"));
+                    workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error.  Please contact My Deals Support", "Failed to create the Tender Folio"));
                     executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
                     continue;
                 }
@@ -1183,7 +1183,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (myDealsData[OpDataElementType.WIP_DEAL].Actions.Any() && !saveResponse.Keys.Any())
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed DB Call, ProcessDeleteRequest"));
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(700, "Mydeals applicaton error.  Please contact My Deals Support", "Failed DB Call, ProcessDeleteRequest"));
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
                 return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
             }
@@ -1615,7 +1615,7 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (myDealsData[OpDataElementType.WIP_DEAL].Actions.Any() && !saveResponse.Keys.Any())
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed DB Call, ProcessUpdateRequest"));
+                workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages.Add(AppendError(700, "Mydeals applicaton error.  Please contact My Deals Support", "Failed DB Call, ProcessUpdateRequest"));
                 executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[recordId].errorMessages, folioId, dealId);
                 return executionResponse; //Pre-emptive continue, but since this is relocated outside of loop..
             }
@@ -1913,7 +1913,7 @@ namespace Intel.MyDeals.BusinessLogic
 
                     if (!saveResponse.Keys.Any())
                     {
-                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Failed DB Call, ProcessStageUpdateRequest"));
+                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error.  Please contact My Deals Support", "Failed DB Call, ProcessStageUpdateRequest"));
                         executionResponse += dumpErrorMessages(workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages, folioId, dealId);
                         continue;
                     }
@@ -1956,7 +1956,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     for (int i = 0; i < workRecordDataFields.recordDetails.quote.quoteLine.Count(); i++)
                     {
-                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error. Contact Mydeals L2 Support", "Passed action code [" + requestType + "] is not valid"));
+                        workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(700, "Mydeals applicaton error.  Please contact My Deals Support", "Passed action code [" + requestType + "] is not valid"));
                     }
                     goodOperationFlag = false;
                 }
