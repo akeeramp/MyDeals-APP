@@ -18,7 +18,7 @@
                 <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()"
                     class="k-button clearButton"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
             </ng-template>
-            <kendo-grid-command-column title="Commands" width="150" [headerClass]="{'headerClass':true}">
+            <kendo-grid-command-column title="" width="150" [headerClass]="{'headerClass':true}">
                 <ng-template kendoGridCellTemplate let-isNew="isNew">
                     <div class="text-center">
                         <button id="command-icon" class="k-command-icon" kendoGridEditCommand>

@@ -42,7 +42,7 @@ app-header {
     display: initial;
 }
 
-.padding-design-horizontal {
+.padding-design-horizontal-advanced, .padding-design-horizontal-tenderDashboard {
     display: block;
     max-width: 95vw;
     margin: 0 auto;

@@ -6,7 +6,7 @@
             <kendo-textbox class="searchResultInpt margin-btn-15" [clearButton]="true" [(ngModel)]="searchText" (keypress)="txtEnterPressed($event)"></kendo-textbox>
             <div class="copper-btns margin-btn-15">
                 <mat-button-toggle-group name="fontStyle" aria-label="Font Style" class="customBtn">
-                    <mat-button-toggle class="btn btn-primary comp-customize-btn" *ngFor="let toggle of opTypes" [checked]="opType==toggle.value" value="{{toggle.value}}" (change)="onOpTypeChange(toggle.value)">{{toggle.label}} </mat-button-toggle>
+                    <mat-button-toggle class="btn btn-primary globalSearchResultsBtnPrimary" *ngFor="let toggle of opTypes" [checked]="opType==toggle.value" value="{{toggle.value}}" (change)="onOpTypeChange(toggle.value)">{{toggle.label}} </mat-button-toggle>
                 </mat-button-toggle-group>
             </div>
         </div>
@@ -24,7 +24,7 @@
                         <p class="no-items">No contracts found.</p>
                     </div>
                     <div *ngIf="objTypes['CNTRCT'].result.length>0">
-                        <mat-list>
+                        <mat-list class="matResultListSearch">
                             <div *ngFor="let item of objTypes['CNTRCT'].result">
                                 <mat-list-item>
                                     <div (click)="gotoOBJ(item,'CNTRCT')">
@@ -55,7 +55,7 @@
                         <p class="no-items">No pricing strategies found.</p>
                     </div>
                     <div *ngIf="objTypes['PRC_ST'].result.length>0">
-                        <mat-list>
+                        <mat-list class="matResultListSearch">
                             <div *ngFor="let item of objTypes['PRC_ST'].result">
                                 <mat-list-item>
                                     <div (click)="gotoOBJ(item,'PRC_ST')">
@@ -85,7 +85,7 @@
                         <p class="no-items">No pricing tables found.</p>
                     </div>
                     <div *ngIf="objTypes['PRC_TBL'].result.length>0">
-                        <mat-list>
+                        <mat-list class="matResultListSearch">
                             <div *ngFor="let item of objTypes['PRC_TBL'].result">
                                 <mat-list-item>
                                     <div (click)="gotoOBJ(item,'PRC_TBL')">
@@ -115,7 +115,7 @@
                         <p class="no-items">No deals found.</p>
                     </div>
                     <div *ngIf="objTypes['WIP_DEAL'].result.length>0">
-                        <mat-list>
+                        <mat-list class="matResultListSearch">
                             <div *ngFor="let item of objTypes['WIP_DEAL'].result">
                                 <mat-list-item>
                                     <div>

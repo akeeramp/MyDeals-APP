@@ -10,8 +10,8 @@
         <i class="intelicon-down"></i> Show Tender Search Options
     </span>
 </div>
-<div id="horizontal-search" class="padding-design-horizontal">
-    <div id="search-info-container" [hidden]="!showSearchFilters">
+<div id="horizontal-search-tenderDashboard" class="padding-design-horizontal-tenderDashboard">
+    <div id="search-info-container-tenderDashboard" [hidden]="!showSearchFilters">
         <div class="row search-container">
             <div class="col-md-5 left-inner-container" style="padding-bottom:0px !important;">
                 <app-search [title]="title" [titleText]="searchTitle"></app-search>
@@ -30,10 +30,10 @@
     </div>
 </div>
 
-<kendo-dialog *ngIf="isSearchFailed" id="searchFailure" class="k-dialog-popup-design admin-dialog-full-style">
+<kendo-dialog *ngIf="isSearchFailed" id="searchFailure" class="k-dialog-popup-design admin-dialog-full-style-tender">
     <p>{{errorMsg}}</p>
-    <kendo-dialog-actions class="admin-tender-action">
-        <button class='k-button ok_admin_btn' (click)="closeAction()">OK</button>
+    <kendo-dialog-actions class="admin-tender-action-tender">
+        <button class='k-button ok_admin_btn-tender' (click)="closeAction()">OK</button>
     </kendo-dialog-actions>
 </kendo-dialog>
 <kendo-dialog *ngIf="isActionWarning">

@@ -23,7 +23,7 @@
     cursor: pointer
 }
 
-.k-window-title {
+.kendoWindow kendo-window-titlebar .k-window-title {
     right: 1.143em !important;
     left: 1.143em !important;
     padding: 7px !important;
@@ -32,24 +32,24 @@
     font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif
 }
 
-.closeBtn {
+/*.closeBtn {
     padding-top: .45em !important;
     opacity: .7
-}
+}*/
 
-.k-button-icon {
+.kendoWindow .k-button-icon {
     padding-top: .45em !important
 }
 
-.k-window-titlebar {
+.kendoWindow .k-window-titlebar {
     background-color: #0071c5 !important;
     color: #fff !important;
     margin-top: -40px !important
 }
 
-.dashboard-header {
+/*.dashboard-header {
     margin-top: 48px !important
-}
+}*/
 
 kendo-window-titlebar.kendo-titlebar-custom {
     padding: 3px 15px;
