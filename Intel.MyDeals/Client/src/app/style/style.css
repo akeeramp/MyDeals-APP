@@ -2339,3 +2339,8 @@ mat-button-toggle-group.mat-toggle-employee-role .btn-primary.colors-btn-prime {
     padding: 0 5px;
     font-size: 11px;
 }
+
+.workFlowGrid table tr td, .WFStages table tr td {
+    border-color: transparent;
+    padding: 0.5rem 1rem;
+}

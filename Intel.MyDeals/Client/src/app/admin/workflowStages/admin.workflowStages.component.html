@@ -11,7 +11,7 @@
             [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
             filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)"
             (edit)="editHandler($event)" (remove)="removeHandler($event)" (cancel)="cancelHandler($event)"
-            (save)="saveHandler($event)" [columnMenu]="true" class="boxsize kAlignHeaders">
+            (save)="saveHandler($event)" [columnMenu]="true" class="boxsize kAlignHeaders WFStages">
             <ng-template kendoGridToolbarTemplate>
                 <!--Hiding DD functionality as its not working as expected, issues in DB-->
                 <button kendoGridAddCommand class="k-button addButton">

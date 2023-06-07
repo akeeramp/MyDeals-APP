@@ -9,7 +9,7 @@
             <h2 class="headingOpLog">{{title}}</h2>
         </div>
         <div class="col-md-5"></div>
-        <div class="col-md-4 flex-arrive"><button (click)="refreshAllLog()" ui-auto="refreshAllLog" id="refreshAllLog" class="k-primary fr margin10 fr-method" style="margin-left:10px; margin-top:20px;">Reload</button>
+        <div class="col-md-4 flex-arrive" style=" float: right;"><button (click)="refreshAllLog()" ui-auto="refreshAllLog" id="refreshAllLog" class="k-primary fr margin10 fr-method" style="margin-left:10px; margin-top:20px;">Reload</button>
             <kendo-dialog *ngIf="dateRangeInvalid" [minWidth]="250" [width]="510">
                 <p style="margin: 30px; text-align: center;">Please Check Dates. Log can be fetched for maximum 30 days... </p>
                 <kendo-dialog-actions class="padding_ok"><button class="fix_ok" kendoButton (click)="close()">OK</button></kendo-dialog-actions>
