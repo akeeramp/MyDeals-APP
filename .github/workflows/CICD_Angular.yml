@@ -3,7 +3,7 @@ on:
   push:
     branches: [development,RC_*]
 env:
-  SERVER: DEV
+  SERVER: CIN
   NUGET_PATH: C:\NuGet\nuget.exe
   MSBUILD_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\msbuild.exe
   CINR_DEPLOY_PATH: \\HF2CINMYDLW01.amr.corp.intel.com\MyDeals
@@ -52,12 +52,12 @@ jobs:
 
        - name:  Remove Client Zip
          run: |
-           ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.CINR_DEPLOY_SERVER}}'
+           ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.SERVER}}'
        - name:  Copy Client Zip
          run: |
-           ./scripts/deploy_env.ps1 'CopyZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.CINR_DEPLOY_PATH}}'
+           ./scripts/deploy_env.ps1 'CopyZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.SERVER}}'
        - name:  Deploy Client App
          run: |
-           ./scripts/deploy_env.ps1 'DeployENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.CINR_DEPLOY_SERVER}}'
+           ./scripts/deploy_env.ps1 'DeployENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.SERVER}}'
   
  
