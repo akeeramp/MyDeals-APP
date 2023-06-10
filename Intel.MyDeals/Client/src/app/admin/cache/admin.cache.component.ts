@@ -8,7 +8,7 @@ import { cacheService } from "./admin.cache.service";
     templateUrl: "Client/src/app/admin/cache/admin.cache.component.html",
     styleUrls: ['Client/src/app/admin/cache/admin.cache.component.css']
 })
-
+//Dev-Testing-PR
 export class CacheComponent {
     constructor(private cacheSvc: cacheService,private loggerSvc:logger) { }
 
