@@ -25,14 +25,14 @@
             <div class='fl md-icon-disabled rotate-270' *ngIf="(this.editable === true) && (!dataItem._parentCnt || dataItem._parentCnt > 1 && (dataItem.HAS_TRACKER === '1' && (dataItem.WF_STG_CD === 'Draft' || dataItem.WF_STG_CD === 'Cancelled')))">
                 <i class="intelicon-org-chart" style="font-size: 20px !important; color: #e7e7e8;" title="You cannot split this group while it is being re-dealed."></i>
             </div>
-            <kendo-dialog *ngIf="openSplitDialog" (close)="closeDialogs()" [maxWidth]="485" class="artho-css k-dialog-popup-design">
-                <div class="kendoAlert" style="padding: 2.4em;">
-                    <h4 class="k-dialog-heading-four">Would you like to split the group?</h4>
+            <kendo-dialog *ngIf="openSplitDialog" (close)="closeDialogs()" [maxWidth]="485" class="toolsartho-css k-dialog-popup-design">
+                <div class="dealToolsKendoAlert" style="padding: 2.4em;">
+                    <h4 class="k-dialog-heading-four h4Style">Would you like to split the group?</h4>
                     <p>This will allow you to make changes in the Deal Editor.<br />Please note a new Row ID will be assigned for your reference.
                 </div>
-                <kendo-dialog-actions class="kendoAction new-custom-deal-tools">
-                    <button kendoButton (click)="split()" class="kendoBtn okBtn ok-btn-pop-up line-height-unset">OK</button>
-                    <button kendoButton (click)="closeDialogs()" class="kendoBtn cancelBtn cancel-btn-pop-up line-height-unset">CANCEL</button>
+                <kendo-dialog-actions class="kendoAction deal-custom-deal-tools">
+                    <button kendoButton (click)="split()" class="toolsOkBtn kendoBtn okBtn ok-btn-pop-up line-height-unset">OK</button>
+                    <button kendoButton (click)="closeDialogs()" class="toolsCancelBtn kendoBtn cancelBtn cancel-btn-pop-up line-height-unset">CANCEL</button>
                 </kendo-dialog-actions>
             </kendo-dialog>
         </div>
@@ -45,10 +45,10 @@
             <div class='fl md-icon' *ngIf="!!dataItem.NOTES && dataItem.NOTES !== ''">
                 <i class='intelicon-discussion-solid' style="font-size: 20px !important; cursor: pointer; color: #003C71;" title="{{dataItem.NOTES}}" *ngIf="!openNotesDialog" (click)="openNotes()"></i>
             </div>
-            <kendo-dialog class="artho-css" *ngIf="openNotesDialog" (close)="closeDialogs()" [width]="500" [height]="350">
+            <kendo-dialog class="toolsartho-css" *ngIf="openNotesDialog" (close)="closeDialogs()" [width]="500" [height]="350">
                 <div class="notesContent">
                     <div class="notesText">Deal Comments:</div>
-                    <textarea [(ngModel)]="notes"></textarea>
+                    <textarea class="textAreaDesigns" [(ngModel)]="notes"></textarea>
                 </div>
                 <kendo-dialog-actions style="padding: 0px;">
                     <div kendoButton class="k-button supplier-changes" (click)="saveNotes()">OK</div>
@@ -88,17 +88,17 @@
             <i *ngIf="!!dataItem._actionsPS && !!dataItem._actionsPS.Cancel && dataItem._actionsPS.Cancel && dataItem.WF_STG_CD !== 'Cancelled' && dataItem.TRKR_NBR.hasOwnProperty('20___0') && dataItem.IN_REDEAL !== '1' && dataItem.PROGRAM_PAYMENT === 'Backend'" class='intelicon-no-access' style="font-size: 20px !important; cursor: pointer;"
                title="Click to Cancel this deal" (click)="openCancelDialog()"></i>
             <kendo-dialog *ngIf="alertDelete" (close)="closeDialogs()" [maxWidth]="440" [height]="245">
-                <div class="kendoAlert" style="padding: 2.4em;">
-                    <h4 style="margin-top: 22px !important; font-size: 24px !important;">Unable to Delete</h4>
+                <div class="dealToolsKendoAlert" style="padding: 2.4em;">
+                    <h4 class="h4Style" style="margin-top: 22px !important; font-size: 24px !important;">Unable to Delete</h4>
                     <p>You cannot delete multiple deals as a single operation.<br>Please uncheck all deals before trying to delete deals.</p>
                 </div>
                 <kendo-dialog-actions style=" padding: 0;">
-                    <div kendoButton class="k-button cancelDelete" (click)="closeDialogs()">OK</div>
+                    <div kendoButton class="k-button cancelDelete toolsCancelDelete" (click)="closeDialogs()">OK</div>
                 </kendo-dialog-actions>
             </kendo-dialog>
-            <kendo-dialog *ngIf="confirmDelete" (close)="closeDialogs()" [maxWidth]="572" class="artho-css k-dialog-popup-design">
+            <kendo-dialog *ngIf="confirmDelete" (close)="closeDialogs()" [maxWidth]="572" class="toolsartho-css k-dialog-popup-design">
                 <div style="padding: 2.4em; font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif;">
-                    <h4 class="k-dialog-heading-four">Are you sure that you want to delete this deal?</h4>
+                    <h4 class="k-dialog-heading-four h4Style">Are you sure that you want to delete this deal?</h4>
                     <p>This will also remove the deal from the Pricing Editor.</p>
                 </div>
                 <kendo-dialog-actions style="padding: 0; display: block !important; ">
@@ -107,17 +107,17 @@
                 </kendo-dialog-actions>
             </kendo-dialog>
             <kendo-dialog *ngIf="alertCancel" (close)="closeDialogs()" [maxWidth]="440" [height]="245">
-                <div class="kendoAlert" style="padding: 2.4em;">
-                    <h4 style="margin-top: 22px !important; font-size: 24px !important;">Unable to Cancel</h4>
+                <div class="dealToolsKendoAlert" style="padding: 2.4em;">
+                    <h4 class="h4Style" style="margin-top: 22px !important; font-size: 24px !important;">Unable to Cancel</h4>
                     <p>You cannot cancel multiple deals as a single operation.<br>Please uncheck all deals before trying to cancel deals.</p>
                 </div>
                 <kendo-dialog-actions style=" padding: 0;">
                     <div kendoButton class="k-button cancelDelete" (click)="closeDialogs()">OK</div>
                 </kendo-dialog-actions>
             </kendo-dialog>
-            <kendo-dialog *ngIf="confirmCancel" (close)="closeDialogs()" [maxWidth]="572" class="artho-css k-dialog-popup-design">
+            <kendo-dialog *ngIf="confirmCancel" (close)="closeDialogs()" [maxWidth]="572" class="toolsartho-css k-dialog-popup-design">
                 <div style="padding: 2.4em; font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif;">
-                    <h4 style="margin-top: 22px !important; font-size: 24px !important; margin-bottom: 11px !important;">Are you sure that you want to cancel this deal?</h4>
+                    <h4 class="h4Style" style="margin-top: 22px !important; font-size: 24px !important; margin-bottom: 11px !important;">Are you sure that you want to cancel this deal?</h4>
                     <p>This will set the deal stage to Cancelled.</p>
                 </div>
                 <kendo-dialog-actions style="padding: 0; display: block !important; ">
@@ -131,16 +131,16 @@
                class='fa fa-undo' style="font-size: 20px !important; cursor: pointer;" title="Click to Rollback this deal" (click)="openRollBackDialog()"></i>
             <kendo-dialog *ngIf="alertRollback" (close)="closeDialogs()" [maxWidth]="440" [height]="245">
                 <div style="padding: 2.4em;">
-                    <h4 style="margin-top: 22px !important; font-size: 24px !important;">Unable to Rollback</h4>
+                    <h4 class="h4Style" style="margin-top: 22px !important; font-size: 24px !important;">Unable to Rollback</h4>
                     <p>You cannot rollback multiple deals as a single operation.<br>Please uncheck all deals before trying to rollback deals.</p>
                 </div>
                 <kendo-dialog-actions style=" padding: 0;">
                     <div kendoButton class="k-button cancelDelete" (click)="closeDialogs()">OK</div>
                 </kendo-dialog-actions>
             </kendo-dialog>
-            <kendo-dialog *ngIf="confirmRollback" (close)="closeDialogs()" [maxWidth]="685" class="artho-css k-dialog-popup-design">
+            <kendo-dialog *ngIf="confirmRollback" (close)="closeDialogs()" [maxWidth]="685" class="toolsartho-css k-dialog-popup-design">
                 <div style="padding: 2.4em; font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif;">
-                    <h4 style="margin-top: 22px !important; font-size: 24px !important; margin-bottom: 11px !important;">Would you like to undo this deals current re-deal action?</h4>
+                    <h4 class="h4Style" style="margin-top: 22px !important; font-size: 24px !important; margin-bottom: 11px !important;">Would you like to undo this deals current re-deal action?</h4>
                     <p>This will remove the deal edits from the Pricing Editor also.</p>
                 </div>
                 <kendo-dialog-actions style="padding: 0; display: block !important; ">
@@ -157,8 +157,8 @@
         <div class='fl md-icon' *ngIf="(dataItem._parentCnt === undefined || dataItem._parentCnt <= 1) && getHoldValue(dataItem) !== 'NoShowHold' && isTenderContract == false && getHoldVisibility(dataItem) == false">
             <i [ngClass]='getHoldIcon(dataItem)' [ngStyle]="getHoldStyle(dataItem)" title="{{getHoldTitle(dataItem)}}" style="font-size: 20px !important;" (click)="clkHoldIcon(dataItem)" *ngIf="!openHoldDialog && !openUnHoldDialog"></i>
             <kendo-dialog class="dt-on-hold k-dialog-popup-design" *ngIf="openHoldDialog" (close)="closeDialogs()" [maxWidth]="572">
-                <div class="kendoAlert" style="padding: 2.4em; font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif;">
-                    <h4 style="margin-top: 22px !important; font-size: 24px !important; margin-bottom: 11px !important;">Would you like to place the {{dealTxt}} on hold?</h4>
+                <div class="dealToolsKendoAlert" style="padding: 2.4em; font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif;">
+                    <h4 class="h4Style" style="margin-top: 22px !important; font-size: 24px !important; margin-bottom: 11px !important;">Would you like to place the {{dealTxt}} on hold?</h4>
                     <p>This will keep the {{dealTxt}} in the Pricing Table, but it will not get promoted to active or get a tracker number for payment.</p>
                 </div>
                 <kendo-dialog-actions style="padding: 0; display: block !important; ">
@@ -167,8 +167,8 @@
                 </kendo-dialog-actions>
             </kendo-dialog>
             <kendo-dialog class="dt-on-hold k-dialog-popup-design" *ngIf="openUnHoldDialog" (close)="closeDialogs()" [maxWidth]="572">
-                <div class="kendoAlert" style="padding: 2.4em; font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif;">
-                    <h4 style="margin-top: 22px !important; font-size: 24px !important; margin-bottom: 11px !important;">Would you like to take the {{dealTxt}} off hold?</h4>
+                <div class="dealToolsKendoAlert" style="padding: 2.4em; font-family:Intel Clear,Helvetica Neue,Helvetica,Arial,sans-serif;">
+                    <h4 class="h4Style" style="margin-top: 22px !important; font-size: 24px !important; margin-bottom: 11px !important;">Would you like to take the {{dealTxt}} off hold?</h4>
                     <p>This will enable the {{dealTxt}} in the Pricing Table and will enable it to get approved.</p>
                 </div>
                 <kendo-dialog-actions style="padding: 0; display: block !important; ">

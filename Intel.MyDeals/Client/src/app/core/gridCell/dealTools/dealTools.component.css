@@ -2,7 +2,7 @@
     border-radius: 0 !important
 }
 
-h4 {
+.h4Style {
     font-size: 24px;
     font-family: 'Intel Clear'
 }
@@ -25,17 +25,17 @@ h4 {
     cursor: pointer
 }
 
-.kendoAlert {
+.dealToolsKendoAlert {
     white-space: normal !important
 }
 
-.okBtn {
+.toolsOkBtn {
     color: #ffffff !important;
     width: 50% !important;
     background-color: #00AEEF !important
 }
 
-.cancelBtn {
+.toolsCancelBtn {
     width: 50% !important;
     color: #444444 !important;
     border-color: #fafafa !important;
@@ -57,7 +57,7 @@ h4 {
     margin-bottom: 5px
 }
 
-textarea {
+textarea.textAreaDesigns {
     resize: both !important;
     width: 440px;
     height: 200px
@@ -102,13 +102,13 @@ textarea {
         background-color: #0071C5 !important
     }
 
-.cancelDelete {
+.toolsCancelDelete {
     color: #444444 !important;
     border-color: #fafafa !important;
     background-color: #fafafa !important
 }
 
-    .cancelDelete:hover {
+    .toolsCancelDelete:hover {
         color: #444444 !important;
         border-color: #ebebeb !important;
         background-color: #ebebeb !important
@@ -125,27 +125,27 @@ textarea {
     min-width: 750px
 }
 
-.dealTools .md-icon {
+.custom-deal-tools .md-icon {
     padding: 4px 0 0 5px
 }
 
-    .dealTools .md-icon i {
+    .custom-deal-tools .md-icon i {
         color: #00AEEF
     }
 
-        .dealTools .md-icon i:hover {
+        .custom-deal-tools .md-icon i:hover {
             color: #003C71 !important
         }
 
-.dealTools .md-icon-disabled {
+.custom-deal-tools .md-icon-disabled {
     padding: 4px 2px 0 1px
 }
 
-    .dealTools .md-icon-disabled i {
+    .custom-deal-tools .md-icon-disabled i {
         color: #00AEEF
     }
 
-.dealTools input[type=radio].with-font, .dealTools input[type=checkbox].with-font {
+.custom-deal-tools input[type=radio].with-font, .custom-deal-tools input[type=checkbox].with-font {
     border: 0;
     clip: rect(0 0 0 0);
     height: 1px;
@@ -156,7 +156,7 @@ textarea {
     width: 1px
 }
 
-    .dealTools input[type=radio].with-font + label:before, .dealTools input[type=checkbox].with-font + label:before {
+    .custom-deal-tools input[type=radio].with-font + label:before, .custom-deal-tools input[type=checkbox].with-font + label:before {
         font-family: FontAwesome;
         display: inline-block;
         content: "\f096";
@@ -166,17 +166,17 @@ textarea {
         margin-left: 10px
     }
 
-    .dealTools input[type=radio].with-font:hover + label:before, .dealTools input[type=checkbox].with-font:hover + label:before {
+    .custom-deal-tools input[type=radio].with-font:hover + label:before, .custom-deal-tools input[type=checkbox].with-font:hover + label:before {
         color: #003C71;
         cursor: pointer
     }
 
-    .dealTools input[type=radio].with-font.disabled + label:before, .dealTools input[type=checkbox].with-font.disabled + label:before {
+    .custom-deal-tools input[type=radio].with-font.disabled + label:before, .custom-deal-tools input[type=checkbox].with-font.disabled + label:before {
         color: #cccccc;
         cursor: default
     }
 
-    .dealTools input[type=radio].with-font:checked + label:before, .dealTools input[type=checkbox].with-font:checked + label:before {
+    .custom-deal-tools input[type=radio].with-font:checked + label:before, .custom-deal-tools input[type=checkbox].with-font:checked + label:before {
         content: "\f046";
         font-size: 20px;
         letter-spacing: 5px;
@@ -184,17 +184,17 @@ textarea {
         margin-left: 10px
     }
 
-    .dealTools input[type=radio].with-font:focus + label:before, .dealTools input[type=checkbox].with-font:focus + label:before {
+    .custom-deal-tools input[type=radio].with-font:focus + label:before, .custom-deal-tools input[type=checkbox].with-font:focus + label:before {
         font-weight: bold;
         color: #00AEEF
     }
 
-    .dealTools input[type=radio].with-font:checked:focus + label:before, .dealTools input[type=checkbox].with-font:checked:focus + label:before {
+    .custom-deal-tools input[type=radio].with-font:checked:focus + label:before, .custom-deal-tools input[type=checkbox].with-font:checked:focus + label:before {
         font-weight: bold;
         color: #C4D600
     }
 
-#notesDialog {
+/*#notesDialog {
     width: 100%;
     height: 100%;
     padding: 0
@@ -234,7 +234,7 @@ textarea {
         font-size: 12px;
         padding: 10px 20px
     }
-
+    */
 .custom-deal-tools .rotate90 {
     -ms-transform: rotate(90deg);
     -webkit-transform: rotate(90deg);
@@ -250,127 +250,127 @@ textarea {
     margin-top: -23px
 }
 
-.dealTools {
+.custom-deal-tools {
     line-height: 1.8em;
     height: 100% !important;
     width: 100%
 }
 
-    .dealTools .gridStatusMarker {
+    .custom-deal-tools .gridStatusMarker {
         font-family: arial
     }
 
-    .dealTools a {
+    .custom-deal-tools a {
         text-decoration: none
     }
 
-    .dealTools i:hover {
+    .custom-deal-tools i:hover {
         color: #003C71
     }
 
-.gridStatusMarker {
-    height: 100% !important;
-    width: 20px !important;
-    color: #000000;
-    background-color: #cccccc;
-    font-size: 14px;
-    font-weight: 600;
-    padding: 6px 2px 6px 7px !important;
-    text-align: center
-}
-
-    .gridStatusMarker.Working {
+    .custom-deal-tools .gridStatusMarker {
+        height: 100% !important;
+        width: 20px !important;
         color: #000000;
-        background-color: #FFA300
+        background-color: #cccccc;
+        font-size: 14px;
+        font-weight: 600;
+        padding: 6px 2px 6px 7px !important;
+        text-align: center
     }
 
-    .gridStatusMarker.Active {
-        color: #000000;
-        background-color: #C4D600
-    }
-
-    .gridStatusMarker.Cancelled {
-        color: #000000;
-        background-color: #cccccc
-    }
-
-.dealTools .md-icon {
-    padding: 4px 0 0 5px
-}
-
-    .dealTools .md-icon i {
-        color: #00AEEF
-    }
-
-        .dealTools .md-icon i:hover {
-            color: #003C71 !important
+        .custom-deal-tools .gridStatusMarker.Working {
+            color: #000000;
+            background-color: #FFA300
         }
 
-.dealTools .md-icon-disabled {
-    padding: 4px 2px 0 1px
-}
+        .custom-deal-tools .gridStatusMarker.Active {
+            color: #000000;
+            background-color: #C4D600
+        }
 
-    .dealTools .md-icon-disabled i {
-        color: #00AEEF
+        .custom-deal-tools .gridStatusMarker.Cancelled {
+            color: #000000;
+            background-color: #cccccc
+        }
+
+    .custom-deal-tools .md-icon {
+        padding: 4px 0 0 5px
     }
 
-.dealTools input[type=radio].with-font, .dealTools input[type=checkbox].with-font {
-    border: 0;
-    clip: rect(0 0 0 0);
-    height: 1px;
-    margin: -1px;
-    overflow: hidden;
-    padding: 0;
-    position: absolute;
-    width: 1px
-}
+        .custom-deal-tools .md-icon i {
+            color: #00AEEF
+        }
 
-    .dealTools input[type=radio].with-font + label:before, .dealTools input[type=checkbox].with-font + label:before {
-        font-family: FontAwesome;
-        display: inline-block;
-        content: "\f096";
-        font-size: 20px;
-        letter-spacing: 10px;
-        color: #00AEEF;
-        margin-left: 10px
+            .custom-deal-tools .md-icon i:hover {
+                color: #003C71 !important
+            }
+
+    .custom-deal-tools .md-icon-disabled {
+        padding: 4px 2px 0 1px
     }
 
-    .dealTools input[type=radio].with-font:hover + label:before, .dealTools input[type=checkbox].with-font:hover + label:before {
-        color: #003C71;
-        cursor: pointer
+        .custom-deal-tools .md-icon-disabled i {
+            color: #00AEEF
+        }
+
+    .custom-deal-tools input[type=radio].with-font, .dealTools input[type=checkbox].with-font {
+        border: 0;
+        clip: rect(0 0 0 0);
+        height: 1px;
+        margin: -1px;
+        overflow: hidden;
+        padding: 0;
+        position: absolute;
+        width: 1px
     }
 
-    .dealTools input[type=radio].with-font.disabled + label:before, .dealTools input[type=checkbox].with-font.disabled + label:before {
-        color: #cccccc;
-        cursor: default
-    }
+        .custom-deal-tools input[type=radio].with-font + label:before, .custom-deal-tools input[type=checkbox].with-font + label:before {
+            font-family: FontAwesome;
+            display: inline-block;
+            content: "\f096";
+            font-size: 20px;
+            letter-spacing: 10px;
+            color: #00AEEF;
+            margin-left: 10px
+        }
 
-    .dealTools input[type=radio].with-font:checked + label:before, .dealTools input[type=checkbox].with-font:checked + label:before {
-        content: "\f046";
-        font-size: 20px;
-        letter-spacing: 5px;
-        color: #C4D600;
-        margin-left: 10px
-    }
+        .custom-deal-tools input[type=radio].with-font:hover + label:before, .custom-deal-tools input[type=checkbox].with-font:hover + label:before {
+            color: #003C71;
+            cursor: pointer
+        }
 
-    .dealTools input[type=radio].with-font:focus + label:before, .dealTools input[type=checkbox].with-font:focus + label:before {
-        font-weight: bold;
-        color: #00AEEF
-    }
+        .custom-deal-tools input[type=radio].with-font.disabled + label:before, .custom-deal-tools input[type=checkbox].with-font.disabled + label:before {
+            color: #cccccc;
+            cursor: default
+        }
 
-    .dealTools input[type=radio].with-font:checked:focus + label:before, .dealTools input[type=checkbox].with-font:checked:focus + label:before {
-        font-weight: bold;
-        color: #C4D600
-    }
+        .custom-deal-tools input[type=radio].with-font:checked + label:before, .custom-deal-tools input[type=checkbox].with-font:checked + label:before {
+            content: "\f046";
+            font-size: 20px;
+            letter-spacing: 5px;
+            color: #C4D600;
+            margin-left: 10px
+        }
 
-.delete-attach-icon {
+        .custom-deal-tools input[type=radio].with-font:focus + label:before, .custom-deal-tools input[type=checkbox].with-font:focus + label:before {
+            font-weight: bold;
+            color: #00AEEF
+        }
+
+        .custom-deal-tools input[type=radio].with-font:checked:focus + label:before, .custom-deal-tools input[type=checkbox].with-font:checked:focus + label:before {
+            font-weight: bold;
+            color: #C4D600
+        }
+
+/*.delete-attach-icon {
     font-size: 16px;
     cursor: pointer
 }
 
     .delete-attach-icon:hover {
         text-decoration: none
-    }
+    }*/
 
 .tools-parent {
     display: flex;
@@ -386,7 +386,7 @@ textarea {
     margin-bottom: 0
 }
 
-.grid-status.fl.gridStatusMarker {
+.custom-deal-tools .grid-status.fl.gridStatusMarker {
     padding: 0 !important;
     min-width: 24px;
     height: 32px !important;
@@ -397,23 +397,23 @@ textarea {
     margin-bottom: 5px
 }
 
-.custom-deal-tools .k-button.supplier-changes {
+#dealEditorTab .custom-deal-tools .k-button.supplier-changes {
     background: #00AEEF !important
 }
 
-    .custom-deal-tools .k-button.supplier-changes:hover {
+    #dealEditorTab .custom-deal-tools .k-button.supplier-changes:hover {
         background: #0071c5 !important
     }
 
-kendo-dialog.artho-css .k-window {
+kendo-dialog.toolsartho-css .k-window {
     border: none
 }
 
-kendo-dialog.artho-css .k-dialog-buttongroup {
+kendo-dialog.toolsartho-css .k-dialog-buttongroup {
     border-radius: 0 !important
 }
 
-.new-custom-deal-tools .kendoBtn {
+.deal-custom-deal-tools .kendoBtn {
     padding: 1.3em 0 !important;
     border-radius: 0 !important;
     border-bottom: 0 !important;
@@ -424,19 +424,19 @@ kendo-dialog.artho-css .k-dialog-buttongroup {
     text-transform: uppercase
 }
 
-    .new-custom-deal-tools .kendoBtn:first-child {
+    .deal-custom-deal-tools .kendoBtn:first-child {
         background: #00AEEF !important
     }
 
-        .new-custom-deal-tools .kendoBtn:first-child:hover {
+        .deal-custom-deal-tools .kendoBtn:first-child:hover {
             background-color: #0071c5 !important
         }
 
-    .new-custom-deal-tools .kendoBtn:last-child {
+    .deal-custom-deal-tools .kendoBtn:last-child {
         background-color: #fafafa !important
     }
 
-        .new-custom-deal-tools .kendoBtn:last-child:hover {
+        .deal-custom-deal-tools .kendoBtn:last-child:hover {
             background-color: #ebebeb !important
         }
 
@@ -462,8 +462,8 @@ kendo-dialog.artho-css .k-dialog-buttongroup {
     border-color: rgba(0,0,0,.2);
     box-shadow: 1px 1px 7px 1px rgba(128,128,128,.2);
     background-color: #fff;
-    left: 691px !important;
-    top: 350px !important;
+    /*left: 691px !important;
+    top: 350px !important;*/
     position: fixed !important
 }
 
@@ -472,23 +472,23 @@ kendo-dialog.artho-css .k-dialog-buttongroup {
         left: 0 !important;
     }
 
-.k-window-title.arrow-window-title {
+.searchingStage .k-window-title.arrow-window-title {
     position: relative !important;
     padding: 5px 15px !important;
     left: 0 !important
 }
 
-.close-icon {
+.searchingStage .close-icon {
     color: #e5e5e5db !important;
     left: 0 !important;
     padding-top: 5px !important
 }
 
-    .close-icon .k-icon:hover {
+    .searchingStage .close-icon .k-icon:hover {
         color: #ffffff !important
     }
 
-    .close-icon:hover {
+    .searchingStage .close-icon:hover {
         color: #ffffff !important;
         background: none !important
     }
@@ -501,13 +501,13 @@ kendo-dialog.dt-on-hold .k-window {
         border-radius: 0
     }
 
-.myLoader[_ngcontent-prg-c14] {
+/*.myLoader[_ngcontent-prg-c14] {
     min-height: 200px;
     width: 320px;
     position: absolute;
     left: 45%;
     top: 200px
-}
+}*/
 
 .custom-deal-tools .k-dialog-popup-design .k-window kendo-dialog-actions .cancel-btn-pop-up {
     margin-left: 0px;

@@ -59,7 +59,7 @@ div.overFlowWidget>div.row {
     cursor: pointer !important
 }
 
-.k-dateinput {
+.date-dashboard .k-dateinput {
     font-size: 12px !important
 }
 
@@ -141,9 +141,9 @@ gridster-item.attr-li-7 .k-grid-table-wrap {
     padding: 0 !important
 }
 
-.k-upload .k-dropzone .k-dropzone-hint {
+/*.k-upload .k-dropzone .k-dropzone-hint {
     visibility: collapse !important
-}
+}*/
 
 .dashboard-kendo-window {
     z-index: 10001 !important
@@ -266,7 +266,7 @@ button.warn-custom:hover {
     text-decoration: none
 }
 
-.contract-correction-upload.k-upload .k-upload-files .k-upload-action {
+/*.contract-correction-upload.k-upload .k-upload-files .k-upload-action {
     border: none !important;
     background-color: transparent !important;
     padding: 0px !important;
@@ -277,7 +277,7 @@ button.warn-custom:hover {
     border-top: 0px !important;
     border-right: 0px !important;
     border-left: 0px !important;
-}
+}*/
 
 .add-widget-link:hover {
     color: #004579;

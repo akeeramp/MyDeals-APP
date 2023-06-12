@@ -124,7 +124,8 @@ div#copyCntrctDlg .ss-loading-overlay {
     font-weight: bold !important
 }
 
-.navbar-default .navbar-nav > li.close-icons > a:hover, .navbar-default .navbar-nav > li.close-icons > a:focus {
+.cc-popup-load .navbar-default .navbar-nav > li.close-icons > a:hover, 
+.cc-popup-load .navbar-default .navbar-nav > li.close-icons > a:focus {
     background-color: transparent
 }
 

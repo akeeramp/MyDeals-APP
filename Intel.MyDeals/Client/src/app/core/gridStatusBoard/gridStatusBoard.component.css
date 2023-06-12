@@ -1,4 +1,4 @@
-﻿.dashboard-grid.k-grid .k-grid-content td {
+﻿﻿.dashboard-grid.k-grid .k-grid-content td {
     padding: 0;
     height: 34px;
     border-bottom: 1px solid #efefef !important
@@ -84,43 +84,43 @@
     padding: 0 0 5px 5px
 }
 
-.left-pane-widget .inner {
-    height: fit-content;
-    border-top: 1px solid #e6e6e6;
-    border-left: 1px solid #e6e6e6;
-    border-bottom: 1px solid #e6e6e6;
-    padding: 5px 0
-}
+    .left-pane-widget .inner {
+        height: fit-content;
+        border-top: 1px solid #e6e6e6;
+        border-left: 1px solid #e6e6e6;
+        border-bottom: 1px solid #e6e6e6;
+        padding: 5px 0
+    }
 
-.left-pane-widget .stgLnk {
-    font-size: 16px;
-    margin: 0;
-    padding: 8px 0;
-    background-color: #ffffff;
-    padding-left: 8px;
-    cursor: pointer
-}
+    .left-pane-widget .stgLnk {
+        font-size: 16px;
+        margin: 0;
+        padding: 8px 0;
+        background-color: #ffffff;
+        padding-left: 8px;
+        cursor: pointer
+    }
 
-.left-pane-widget .stgLnk i {
-    color: #aaaaaa
-}
+        .left-pane-widget .stgLnk i {
+            color: #aaaaaa
+        }
 
-.left-pane-widget .stgLnk:hover {
-    background-color: #f5f5f5
-}
+        .left-pane-widget .stgLnk:hover {
+            background-color: #f5f5f5
+        }
 
-.left-pane-widget .stgLnk.active {
-    background-color: #00AEEF;
-    color: #ffffff
-}
+        .left-pane-widget .stgLnk.active {
+            background-color: #00AEEF;
+            color: #ffffff
+        }
 
-.left-pane-widget .stgLnk.active i {
-    color: #ffffff
-}
+            .left-pane-widget .stgLnk.active i {
+                color: #ffffff
+            }
 
-.left-pane-widget .stgLnkBox {
-    margin-top: 15px
-}
+    .left-pane-widget .stgLnkBox {
+        margin-top: 15px
+    }
 
 .inner h6 {
     margin-top: 6px;
@@ -135,12 +135,12 @@
     width: 100%
 }
 
-.center-pane-widget .inner {
-    height: 100%
-}
+    .center-pane-widget .inner {
+        height: 100%
+    }
 
 .opUiContainer.dashboard .k-grid-header, .opUiContainer.dashboard .k-grid-header .k-header, .opUiContainer.dashboard .k-pager-wrap, .opUiContainer.dashboard .k-pager-numbers .k-state-selected, .opUiContainer.dashboard .k-grid-footer, .opUiContainer.dashboard .k-grid-footer td, .opUiContainer.dashboard .k-scheduler-header, .opUiContainer.dashboard .km-pane-wrapper .k-grid-header .k-header {
-    background-color: #E7E7E8;
+    background-color: #fafafa
 }
 
 .stgLnkBox .badge {
@@ -164,55 +164,55 @@
     color: #ffffff !important
 }
 
-.k-grid .intelicon-favorite-rating-solid {
+.dashboard-grid.k-grid .intelicon-favorite-rating-solid {
     font-size: 22px;
     color: #ddd
 }
 
-.k-grid .intelicon-favorite-rating-solid.active {
-    font-size: 22px;
-    color: #0071C5
-}
+    .dashboard-grid.k-grid .intelicon-favorite-rating-solid.active {
+        font-size: 22px;
+        color: #0071C5
+    }
 
-.status {
+.dashboard-grid .status {
     font-weight: 600;
     text-align: center
 }
 
-.Complete {
+.dashboard-grid .Complete {
     background-color: #C4D600
 }
 
-.InComplete {
+.dashboard-grid .InComplete {
     background-color: #f3D54E
 }
 
-.Tender {
+.dashboard-grid .Tender {
     background-color: #a2dce8
 }
 
-.Contract {
+.dashboard-grid .Contract {
     background-color: #c6c6c6
 }
 
-.intelicon-favorite-rating-solid-active {
+.horizontal-widget .intelicon-favorite-rating-solid-active {
     font-size: 22px;
     color: #0071C5
 }
 
-.intelicon-favorite-rating-solid {
+.horizontal-widget .intelicon-favorite-rating-solid {
     font-size: 16px;
     color: #ddd
 }
 
-.headerClass {
+.horizontal-widget .headerClass {
     background-color: #e7e7e8;
     color: #1a3e6f;
     font-size: 14px !important;
     font-weight: bold
 }
 
-.gridCell {
+.horizontal-widget .gridCell {
     padding: 0 6px 0 6px !important;
     border-style: none !important
 }
@@ -224,15 +224,15 @@
     text-decoration: none !important
 }
 
-.k-grid-content > .k-grid-table-wrap > .k-grid-table {
+.horizontal-widget .k-grid-content > .k-grid-table-wrap > .k-grid-table {
     padding: 0 !important
 }
 
-.k-widget .k-icon.k-i-expand, .k-widget .k-icon.k-i-collapse {
+.horizontal-widget .k-widget .k-icon.k-i-expand, .horizontal-widget .k-widget .k-icon.k-i-collapse {
     cursor: pointer !important
 }
 
-.k-i-plus, .k-i-minus {
+.horizontal-widget .k-i-plus, .horizontal-widget .k-i-minus {
     opacity: .45;
     font-size: 20px !important;
     color: #000 !important;
@@ -240,33 +240,38 @@
     border-radius: 50%
 }
 
-.k-i-plus:focus, .k-i-minus:focus, .k-i-plus:active, .k-i-minus:active, .k-i-plus:focus-visible, .k-i-minus:focus-visible {
-    outline: 5px auto -webkit-focus-ring-color !important;
-    outline-offset: -10px
-}
+    .horizontal-widget .k-i-plus:focus,
+    .horizontal-widget .k-i-minus:focus,
+    .horizontal-widget .k-i-plus:active,
+    .horizontal-widget .k-i-minus:active,
+    .horizontal-widget .k-i-plus:focus-visible,
+    .horizontal-widget .k-i-minus:focus-visible {
+        outline: 5px auto -webkit-focus-ring-color !important;
+        outline-offset: -10px
+    }
 
-.k-i-plus:before, .k-plus:before {
-    content: "" !important
-}
+    .horizontal-widget .k-i-plus:before, .horizontal-widget .k-plus:before {
+        content: "" !important
+    }
 
-.k-i-minus:before, .k-minus:before {
-    content: "" !important
-}
+    .horizontal-widget .k-i-minus:before, .horizontal-widget .k-minus:before {
+        content: "" !important
+    }
 
-.k-pager-numbers .k-link.k-state-selected {
+.horizontal-widget .k-pager-numbers .k-link.k-state-selected {
     border-color: #0071c5;
     background-color: #0071c5 !important
 }
 
-.k-grid td {
+.horizontal-widget .k-grid td {
     padding: 0;
-    height: 50px;
+    /*height: 50px;*/
     color: #1a3e6f;
     font-weight: 500;
     font-size: 14px
 }
 
-.k-link {
+.horizontal-widget .k-link {
     font-size: 13px !important
 }
 
@@ -275,6 +280,17 @@
     font-weight: 600 !important;
     color: rgb(26,62,111) !important
 }
+
+.highlightsty-title .k-icon.k-i-filter {
+    font-size: 20px !important;
+    color: #000 !important;
+    opacity: .45 !important
+}
+
+    .highlightsty-title .k-icon.k-i-filter:hover {
+        color: #00aeef !important;
+        opacity: 1 !important
+    }
 
 @media screen and (max-height:680px) {
     .left-pane-widget {
@@ -310,4 +326,9 @@
     font-family: 'Intel Clear','Arial';
     overflow: hidden !important;
     white-space: nowrap !important;
+}
+
+.highlightsty-title .k-grid-header .k-grid-filter.k-state-active {
+    background-color: #fff !important;
+    color: #ffffff !important;
 }

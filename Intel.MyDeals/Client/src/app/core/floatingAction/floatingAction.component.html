@@ -1,8 +1,8 @@
-﻿<div cdkDrag class="row center" (cdkDragStarted)="start()" (cdkDragEnded)="drop()" style="margin-left:30px">
+﻿<div cdkDrag class="row center floaterActions" (cdkDragStarted)="start()" (cdkDragEnded)="drop()" style="margin-left:30px">
     <div cdkDragHandle class="col-sm-1 actionIcon" (click)="toggle()" style="background-color: #00aeef">
         <i class="fa fa-bolt" title="Quick Actions" style="font-weight:600;"></i>
     </div>
-    <div class="col-sm-2" id="myMenu" *ngFor="let item of menuList; let i=index;">
+    <div class="col-sm-2 floaterMenuLists" id="myMenu" *ngFor="let item of menuList; let i=index;">
         <div class="actionItem design-spacing-circle" *ngIf="item.status =='open'" ngClass="item-{{i}}" (click)="onActionClick(item.actionName)" title="{{item.actionName}}">
             {{item.actionName[0]}}
         </div>

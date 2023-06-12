@@ -34,7 +34,7 @@
                     <span class="caret"></span>
                     <span class="sr-only">Toggle Dropdown</span>
                 </button>
-                <ul class="dropdown-menu menu-container tender-li-dropdwn" role="menu">
+                <ul class="dropdown-menu attributeMenu-container menu-container tender-li-dropdwn" role="menu">
                     <li (click)="saveRule()"><a>Save Rule(s)</a></li>
                     <li (click)="saveAsRule()"><a>Save Rule(s) As...</a></li>
                     <li (click)="clearRule()"><a>Clear Rule(s)</a></li>
@@ -57,12 +57,12 @@
     </div>
 </div>
 
-<div class="filterContainer" style="width:100%">
-    <div *ngFor="let dataItem of attributes;let i=index trackBy i" class="filterRow">
+<div class="attributeFilterContainer" style="width:100%">
+    <div *ngFor="let dataItem of attributes;let i=index trackBy i" class="attributeFilterRow">
 
-        <span class="first-icon-search-opt-section icnBtn icnSkyBtn" (click)="addRow(i)"><i class="intelicon-plus-max  mplusminus-style"></i></span>
+        <span class="first-icon-search-opt-section icnBtn icnSkyBtn" (click)="addRow(i)"><i class="intelicon-plus-max  mplusminus-styleRule attributePlusStyle"></i></span>
 
-        <span class="second-icon-search-opt-section icnBtn icnGryBtn" (click)="removeRow(dataItem, i)" *ngIf="cat=='TenderDealSearch' ? i!=0 : (cat!='TenderDealSearch')"><i class="intelicon-minus-max mplusminus-style"></i></span>
+        <span class="second-icon-search-opt-section icnBtn icnGryBtn" (click)="removeRow(dataItem, i)" *ngIf="cat=='TenderDealSearch' ? i!=0 : (cat!='TenderDealSearch')"><i class="intelicon-minus-max mplusminus-styleRule attributMinusStyle"></i></span>
 
         <span class="first-search-opt-section">
             <kendo-dropdownlist [data]="availableAttrs"

@@ -157,7 +157,7 @@
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-4 vfkd-align-fix">
+                                <div class="col-md-4 vfkd-align-fix" style="position: relative; padding-left: 15px; padding-right: 15px">
                                     <div class="info-box bg-{{x.COLOR}}" *ngFor="let x of ReportDealType | slice :0:5 ">
                                         <span class="info-box-icon"><i class="fa fa-circle-o text-white"></i></span>
                                         <div class="info-box-content-lower">
@@ -188,7 +188,7 @@
                                         </div>
                                         <div class="box-body">
                                             <div class="table-responsive" style="height:430px">
-                                                <table class="table no-margin ReportAuditLog tableHeader" *ngIf="reportLogView==false">
+                                                <table class="table no-margin ReportAuditLog tableHeader tableHeaderReporting" *ngIf="reportLogView==false">
                                                     <thead>
                                                         <tr>
                                                             <th>Report Name</th>
@@ -210,7 +210,7 @@
                                                         </tr>
                                                     </tbody>
                                                 </table>
-                                                <table class="table no-margin ReportAuditLog tableHeader" *ngIf="reportLogView==true">
+                                                <table class="table no-margin ReportAuditLog tableHeader tableHeaderReporting" *ngIf="reportLogView==true">
                                                     <thead>
                                                         <tr>
                                                             <th style="width:2px"></th>
@@ -231,7 +231,7 @@
                                                             <td>{{x.TOTAL_REPORT_TIME_TAKEN}}</td>
                                                         </tr>
                                                     </tbody>
-                                                </table><a *ngIf="ReportLogDeatils.length > 10 && reportLogView == true" (click)="showAll(numberOfRecrods)" class="showMore" title={{btnText}}>
+                                                </table><a *ngIf="ReportLogDeatils.length > 10 && reportLogView == true" (click)="showAll(numberOfRecrods)" class="showMoreCult" title={{btnText}}>
                                                     {{btnText}} <i *ngIf="btnText=='Show more '"
                                                                    class="intelicon-down"></i><i *ngIf="btnText=='Show less '"
                                                                                                  class="intelicon-up"></i>

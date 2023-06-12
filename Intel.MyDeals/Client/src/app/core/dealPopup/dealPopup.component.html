@@ -50,19 +50,19 @@
                             <a href="">#{{data.DC_ID}}</a>
                         </div>
                         <div class="deal deal-icons">
-                            <div class="textCircle textCircle-appear valid_{{ data.PASSED_VALIDATION }}" title="{{data.OBJ_SET_TYPE_CD}}">
+                            <div class="dealPopupTextCircle  textCircle-appear valid_{{ data.PASSED_VALIDATION }}" title="{{data.OBJ_SET_TYPE_CD}}">
                                 {{ data.OBJ_SET_TYPE_CD  }}
                             </div>
-                            <div class="textCircle" *ngIf="CAN_VIEW_MEET_COMP" [ngStyle]="getColorMct(data.MEETCOMP_TEST_RESULT)" title="Meet Comp Test: {{ data.MEETCOMP_TEST_RESULT || 'Not Run Yet' }}">
+                            <div class="dealPopupTextCircle " *ngIf="CAN_VIEW_MEET_COMP" [ngStyle]="getColorMct(data.MEETCOMP_TEST_RESULT)" title="Meet Comp Test: {{ data.MEETCOMP_TEST_RESULT || 'Not Run Yet' }}">
                                 <i class="fa fa-tablet"></i>
                             </div>
-                            <div class="textCircle" *ngIf="CAN_VIEW_COST_TEST" [ngStyle]="getColorPct(data.COST_TEST_RESULT)" title="Price Cost Test: {{ data.COST_TEST_RESULT || 'Not Run Yet' }}">
+                            <div class="dealPopupTextCircle " *ngIf="CAN_VIEW_COST_TEST" [ngStyle]="getColorPct(data.COST_TEST_RESULT)" title="Price Cost Test: {{ data.COST_TEST_RESULT || 'Not Run Yet' }}">
                                 <i class="fa fa-usd"></i>
                             </div>
-                            <div class="textCircle" [ngStyle]="getStageBgColorStyle(data.WF_STG_CD)" title="Stage: {{ data.WF_STG_CD }}">
+                            <div class="dealPopupTextCircle " [ngStyle]="getStageBgColorStyle(data.WF_STG_CD)" title="Stage: {{ data.WF_STG_CD }}">
                                 <i class="fa fa-map-marker"></i>
                             </div>
-                            <div class="textCircle valid_{{ data.HAS_TRACKER }}" title="{{ getTrackerTitle() }}">
+                            <div class="dealPopupTextCircle  valid_{{ data.HAS_TRACKER }}" title="{{ getTrackerTitle() }}">
                                 <i class="fa fa-paw"></i>
                             </div>
                         </div>

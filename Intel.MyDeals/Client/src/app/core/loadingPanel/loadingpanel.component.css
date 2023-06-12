@@ -11,6 +11,6 @@
     white-space: normal;
 }
 
-.spinner > div {
+.spinner.LoaderSpinner > div {
     margin-left: 3px;
 }

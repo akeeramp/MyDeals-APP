@@ -2,7 +2,7 @@
     font-size: 13px
 }
 
-.filterInfo {
+/*.filterInfo {
     width: 450px;
     background: rgba(0,0,0,.69);
     border: 2px solid #8c8c8c;
@@ -11,9 +11,9 @@
     height: 120px;
     color: #fff;
     padding: 5px
-}
+}*/
 
-.showMore {
+.showMoreCult {
     padding: 3px;
     background: #2196f3;
     float: left;
@@ -22,38 +22,38 @@
     color: #FFF
 }
 
-.tableHeader > thead:first-child > tr:first-child > th {
+.tableHeaderReporting > thead:first-child > tr:first-child > th {
     background: #FFFFFF;
     border-right: 1px solid #f2f2f2;
     border-bottom: 3px solid #2196F3
 }
 
-.tableHeader {
+.tableHeaderReporting {
     border: 1px solid #f2f2f2
 }
 
-.mainBodyStyle {
+/*.mainBodyStyle {
     position: absolute;
     top: 84px;
     bottom: 15px;
     left: 0;
     right: 0;
     overflow: scroll !important
-}
+}*/
 
 div.overFlowDash {
     width: auto;
     height: auto !important
 }
 
-.k-chart-tooltip-wrapper .k-animation-container {
+/*.k-chart-tooltip-wrapper .k-animation-container {
     position: absolute !important;
     top: 0 !important;
     width: 100px;
     border: red solid 2px;
     background-color: yellow;
     color: blue
-}
+}*/
 
 .kendocontainer {
     width: 100%;

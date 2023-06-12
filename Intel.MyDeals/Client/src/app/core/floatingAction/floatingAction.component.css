@@ -5,7 +5,7 @@
     z-index: 100;
 }
 
-.menu {
+/*.menu {
     width: 40px;
     height: 40px;
 }
@@ -14,11 +14,12 @@
     width: 300px;
     height: 10px;
     top: 60px;
-}
+}*/
 
 .actionIcon {
     top: 0px;
-    width: 115px !important;
+    min-width: 40px;
+    width: 40px !important;
     height: 40px !important;
     background-color: white;
     -moz-border-radius: 50%;
@@ -27,11 +28,9 @@
     cursor: pointer;
     text-align: center;
     line-height: 40px;
-    right:5px;
+    right: 5px;
 }
- 
-  
- 
+
 .actionItem {
     left: 10px;
     top: 0px;
@@ -48,46 +47,41 @@
     line-height: 40px;
 }
 
-
-
-
 .item-0 {
     animation-delay: .2s;
     visibility: visible;
     background-color: #24B9F1;
-    left: -14px !important;
-    position: relative !important;
 }
+
 .item-1 {
     animation-delay: .4s;
     visibility: visible;
     background-color: #4DC8F1;
-    left: -52px !important;
-    position: relative !important;
 }
+
 .item-2 {
     animation-delay: .8s;
     visibility: visible;
     background-color: #6CCBF1;
-    left: -87px !important;
-    position: relative !important;
 }
+
 .item-3 {
     animation-delay: 1s;
     visibility: visible;
     background-color: #89D4F1;
-    left: -125px !important;
-    position: relative !important
 }
+
 .item-4 {
     animation-delay: 1.2s;
     background-color: #A1DBF1;
-    left: -160px !important;
-    position: relative !important;
 }
-
 
 .design-spacing-circle {
     margin-left: 5px;
     margin-right: 5px;
+}
+
+.floaterActions .floaterMenuLists {
+    padding-right: 0;
+    padding-left: 0px;
 }

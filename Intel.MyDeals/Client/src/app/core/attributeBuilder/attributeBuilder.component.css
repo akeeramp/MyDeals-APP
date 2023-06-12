@@ -1,8 +1,8 @@
 ﻿@import '../../style/attributeBuilder.css';
 
-#ruleDropDownList_listbox li {
+/*#ruleDropDownList_listbox li {
     float: left
-}
+}*/
 
 .textTitle {
     float: left;
@@ -38,20 +38,20 @@
     color: #0071C5 !important
 }
 
-#ruleDropDownList_listbox {
+/*#ruleDropDownList_listbox {
     min-width: 165px !important
 }
 
 .k-animation-container UL {
     min-width: 165px !important
-}
+}*/
 
-.filterContainer {
+.attributeFilterContainer {
     height: 120px;
     overflow: auto;
 }
 
-.filterRow {
+.attributeFilterRow {
     margin-bottom: 7px;
     display: flex;
     align-items: flex-start;
@@ -60,13 +60,10 @@
     position: relative;
 }
 
-    .filterRow .k-dropdown {
+    .attributeFilterRow .k-dropdown {
         border: 1px solid #e5e5e5;
         border-radius: 3px;
     }
-.btn-def {
-    margin: 0 0 0 15px;
-}
 
 .curRule {
     color: #0071C5;
@@ -79,11 +76,11 @@
     margin-left: 8px;
 }
 
-.menu-container li a {
+.attributeMenu-container li a {
     cursor: pointer;
 }
 
-.sm-help {
+/*.sm-help {
     font-size: 11px;
     color: #666666;
     line-height: 1.1em;
@@ -91,7 +88,7 @@
 
     .sm-help I {
         color: #FFA300;
-    }
+    }*/
 .ok_saverule-btn-align {
     width: 100% !important;
     position: relative !important;
@@ -283,7 +280,7 @@ button.fr.btn.btn-sm.btn-skyblue.btn-primary.run-rule-btnsty:hover {
 }
 
 
-.kendo-dropdownlist.tender-droplist-style.k-dropdown {
+/*.kendo-dropdownlist.tender-droplist-style.k-dropdown {
     float: right !important;
     top: -50px !important;
     right: 30px !important;
@@ -310,7 +307,8 @@ kendo-dropdownlist.tender-droplist-style.k-dropdown:focus-within {
     background-color: #cecece1f !important;
     color: #727578 !important;
     opacity: 0.7 !important;
-}
+}*/
+
 .search_cust_heading {
     margin-left: 70px;
     font-size: 14px;
@@ -360,7 +358,7 @@ kendo-dropdownlist.tender-equalto-style {
     left: 0 !important
 }
 
-kendo-combobox.tender_ecap_combo_style.k-combobox.k-combobox-clearable {
+/*kendo-combobox.tender_ecap_combo_style.k-combobox.k-combobox-clearable {
     border-radius: 3px !important;
     font-size: 10px !important;
     font-weight: 500 !important;
@@ -391,7 +389,7 @@ kendo-combobox.tender_ecap_combo_style.k-combobox.k-combobox-clearable {
     cursor: pointer !important;
     opacity: .5 !important;
     font-size: 13px !important
-}
+}*/
 
 kendo-textbox.tender-extra-box-style {
     border: 1px solid #d6d6d6 !important;
@@ -414,15 +412,15 @@ kendo-textbox.tender-extra-box-style.k-textbox:hover,
     position: relative !important;
     font-size: 10px !important;
 }
-.tender_ecap_combo_style.k-combobox .k-state-focused {
+/*.tender_ecap_combo_style.k-combobox .k-state-focused {
     box-shadow: none !important;
     border-color: #e5e5e5 !important
 }
 kendo-combobox.tender_ecap_combo_style.k-combobox.k-combobox-clearable:hover,
 kendo-combobox.tender_ecap_combo_style.k-combobox.k-combobox-clearable:focus-within{
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%) !important;
-}
-.intelicon-plus-max.mplusminus-style {
+}*/
+.attributePlusStyle {
     background: #00aeef !important;
     color: #ffffff !important;
     border-radius: 4px !important;
@@ -435,11 +433,11 @@ kendo-combobox.tender_ecap_combo_style.k-combobox.k-combobox-clearable:focus-wit
     top: 8px !important;
 }
 
-.intelicon-plus-max.mplusminus-style:hover {
-    background-color: #0071c5 !important
-}
+    .attributePlusStyle:hover {
+        background-color: #0071c5 !important
+    }
 
-.intelicon-minus-max.mplusminus-style {
+.attributMinusStyle {
     background-color: #bbbbbb !important;
     color: #ffffff !important;
     border-radius: 4px !important;
@@ -453,9 +451,10 @@ kendo-combobox.tender_ecap_combo_style.k-combobox.k-combobox-clearable:focus-wit
     position: relative;
 }
 
-.intelicon-minus-max.mplusminus-style:hover {
-    background-color: #cccccc !important
-}
+    .attributMinusStyle:hover {
+        background-color: #cccccc !important
+    }
+
 kendo-dropdownlist.opUiContainer.sm.tender_ecap_multi_style.k-dropdown {
     border: 1px solid #e5e5e5 !important;
     border-radius: 3px !important;
@@ -636,6 +635,7 @@ kendo-datepicker.k-custom-dater {
         color: var(--light-blue);
         background-color: #e4e7eb;
     }
+
 .tender-extra-box-style input {
     color: #000 !important;
     font-size: 12px !important;

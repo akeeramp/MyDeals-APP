@@ -1,1 +1,76 @@
-.btn-primary{background-color:#3c8dbc!important;border-color:#367fa9!important}.mat-button-toggle-checked.mat-button-toggle-appearance-standard{color:#fff!important;background-color:#004280!important}.mat-button-toggle-checked.mat-button-toggle-appearance-standard:hover{background-color:#004280!important;border-right-color:#fff!important;border-bottom-color:#004280!important;border-top-color:#004280!important;border-left-color:#004280!important}.k-window-title{right:1.143em!important;left:1.143em!important;padding:7px!important;font-size:1.2em!important}.k-button-icon{left:0!important;padding-top:0!important}.k-window-titlebar{background-color:#0071c5!important;color:#fff!important}.comp-parent mat-button-toggle-group{border:none}mat-button-toggle.comp-customize-btn{border-radius:0!important;padding:5px 10px;font-size:13px;line-height:1.5;color:#fff;border-right-color:#fff!important;margin-right:0!important;font-family:"Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif}mat-button-toggle.comp-customize-btn:hover{border-right-color:#fff!important}mat-button-toggle.comp-customize-btn button span{padding:0!important;line-height:1.33333!important}.comp-parent mat-button-toggle.comp-customize-btn:first-child{border-top-left-radius:3px!important;border-bottom-left-radius:3px!important}.comp-parent mat-button-toggle.comp-customize-btn:last-child{border-top-right-radius:3px!important;border-bottom-right-radius:3px!important}.gridster-item-content .contractSearchBox{border-color:#e6e6e6!important;box-shadow:none!important;border-radius:0;font-size:12px;font-family:"Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif}
+/*.searchContractParentAll .gridster-item-content .btn-primary {
+    background-color: #3c8dbc !important;
+    border-color: #367fa9 !important
+}*/
+
+.searchContractParentAll .mat-button-toggle-checked.mat-button-toggle-appearance-standard {
+    color: #fff !important;
+    background-color: #004280 !important
+}
+
+    .searchContractParentAll .mat-button-toggle-checked.mat-button-toggle-appearance-standard:hover {
+        background-color: #004280 !important;
+        border-right-color: #fff !important;
+        border-bottom-color: #004280 !important;
+        border-top-color: #004280 !important;
+        border-left-color: #004280 !important
+    }
+
+.searchContractParentAll .gridster-item-content .k-window-title {
+    right: 1.143em !important;
+    left: 1.143em !important;
+    padding: 7px !important;
+    font-size: 1.2em !important
+}
+
+.searchContractParentAll .gridster-item-content .k-button-icon {
+    left: 0 !important;
+    padding-top: 0 !important
+}
+
+.searchContractParentAll .gridster-item-content .k-window-titlebar {
+    background-color: #0071c5 !important;
+    color: #fff !important
+}
+
+.comp-parent mat-button-toggle-group {
+    border: none
+}
+
+.comp-parent mat-button-toggle.comp-customize-btn {
+    border-radius: 0 !important;
+    padding: 5px 10px;
+    font-size: 13px;
+    line-height: 1.5;
+    color: #fff;
+    border-right-color: #fff !important;
+    margin-right: 0 !important;
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif
+}
+
+    .comp-parent mat-button-toggle.comp-customize-btn:hover {
+        border-right-color: #fff !important
+    }
+
+    .comp-parent mat-button-toggle.comp-customize-btn button span {
+        padding: 0 !important;
+        line-height: 1.33333 !important
+    }
+
+    .comp-parent mat-button-toggle.comp-customize-btn:first-child {
+        border-top-left-radius: 3px !important;
+        border-bottom-left-radius: 3px !important
+    }
+
+    .comp-parent mat-button-toggle.comp-customize-btn:last-child {
+        border-top-right-radius: 3px !important;
+        border-bottom-right-radius: 3px !important
+    }
+
+.searchContractParentAll .gridster-item-content .contractSearchBox {
+    border-color: #e6e6e6 !important;
+    box-shadow: none !important;
+    border-radius: 0;
+    font-size: 12px;
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif
+}

@@ -47,7 +47,7 @@
     padding: 10px !important;
     height: fit-content !important;
 }
-.search-container {
+.search-containerAct {
     padding: 0px;
 }
 
@@ -89,17 +89,22 @@
     width: 125px;
 }
 
-kendo-datepicker.date-dashboard.date_tender_style {
+kendo-datepicker.date-dashboard-search.date_tender_style {
     width: 125px !important;
     font-weight: 500 !important;
     position: relative !important;
 }
 
-kendo-datepicker.date-dashboard.datepick_style.k-datepicker {
+kendo-datepicker.date-dashboard-search.datepick_style.k-datepicker {
     position: relative !important;
     width: 125px !important;
     font-weight: 500 !important;
 }
+
+kendo-datepicker.date-dashboard-search .k-dateinput .k-input {
+    font-size: 12px !important
+}
+
 .ktender_custstyle.k-multiselect .k-multiselect-wrap {
     border-radius: 0 !important;
     border-color: #f0f0f0 !important;

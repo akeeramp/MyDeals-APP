@@ -1,4 +1,4 @@
-﻿h5 {
+﻿﻿.h5Style {
     font-weight: 500 !important;
     font-size: 20px !important
 }
@@ -15,7 +15,7 @@
     margin-right: 5px
 }
 
-#btnEnlargeText {
+#btnEnlargeTextTimeline {
     float: right;
     background: transparent;
     border: 1px solid #00aeef;
@@ -39,68 +39,66 @@
     border-color: #F3D54E
 }
 
-#btnEnlargeText:hover {
+#btnEnlargeTextTimeline:hover {
     border-color: #F3D54E
 }
 
-.active {
+/*.active {
     border-color: #00aeef
 }
-
 .inactive {
     border-color: rgb(196,214,0)
 }
-
 .excelText {
     line-height: 1.2em;
     font-size: 12px;
     float: right
 }
-
     .excelText span {
         text-align: left
     }
-
 .modal-content {
     background: #003c71;
     resize: horizontal;
     min-width: 750px
 }
-
 .modalBlueBody {
     background-color: #003C71;
     color: #ffffff
 }
-
 .modal-lg {
     min-width: 90% !important;
     max-height: calc(100% - 40px) !important
 }
-
 .modal-body {
     height: calc(100% - 100px) !important;
     min-height: 200px
+}*/
+
+#dealTimeLine .k-grid-content {
+    max-height: 490px;
+    /*min-height: 250px*/
 }
 
-.modal-header {
+/*.new-spacing {
     border-radius: 0 !important
 }
-
-.k-grid-content {
+*/
+#dealTimeLine .k-grid-content {
     min-width: 500px;
-    overflow: scroll
+    /*overflow: scroll*/
 }
 
-.k-i-file-excel {
+#dealTimeLine .k-i-file-excel {
     margin-top: -6px
 }
 
-.excelText {
+/*.excelText {
     margin-top: -5px;
     font-size: 15px
-}
+}*/
 
-.excelBtn {
+.metho-comp {
     height: 25px !important;
     color: #444 !important;
     line-height: 0 !important;
@@ -110,13 +108,13 @@
     display: inline-block !important
 }
 
-    .excelBtn:hover {
+    .metho-comp:hover {
         color: #444 !important;
         border-color: #ebebeb !important;
         background-color: #ebebeb !important
     }
 
-.intelicon-decrease-text-outlined > .opUiContainer.sm.k-grid td {
+.intelicon-decrease-text-outlined > .common-messages .opUiContainer.sm.k-grid td {
     font-size: 10px !important;
     height: 20px !important
 }
@@ -125,7 +123,7 @@
     white-space: normal !important
 }
 
-.cellCustomClass {
+#dealTimeLine .cellCustomClass {
     text-align: center !important
 }
 
@@ -134,14 +132,17 @@
     border-bottom: 1px solid #e5e5e5 !important;
     min-height: 16.5px;
     background-color: #003C71;
-    color: #ffffff
+    color: #ffffff;
+    border-radius: 0 !important
 }
 
 .common-messages {
     position: relative !important;
     padding: 15px !important;
     background-color: #003C71;
-    color: #ffffff
+    color: #ffffff;
+    height: calc(100% - 100px) !important;
+    min-height: 200px;
 }
 
 button.excelBtn.metho-comp {
@@ -159,6 +160,7 @@ button.excelBtn.metho-comp {
 
 .common-messages .opUiContainer.md.k-grid kendo-grid-list tbody tr td {
     border: none !important;
+    padding: 0.5rem 0.5rem !important;
     border-bottom: .5px solid lightgrey !important
 }
 
@@ -170,8 +172,13 @@ button.excelBtn.metho-comp {
 }
 
 .common-messages .opUiContainer.md.k-grid.k-widget .k-grid-header table thead th {
-    background-color: #f9f9f9 !important
+    background-color: #f9f9f9 !important;
+    padding: 0.5rem 0.5rem !important;
 }
+
+    .common-messages .opUiContainer.md.k-grid.k-widget .k-grid-header table thead th span.k-link {
+        padding: 0.5rem 0.5rem !important;
+    }
 
 .k-grid-toolbar > .excelBtn.metho-comp.k-button {
     height: 25px
