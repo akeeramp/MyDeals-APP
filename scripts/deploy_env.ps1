@@ -79,7 +79,15 @@ try {
         else{
            $pw = convertto-securestring -AsPlainText -Force -String "$PWD";
             $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "$USN",$pw; 
-            & Invoke-Command -computername  $result.DEPLOY_SERVER -credential $cred -ScriptBlock {if (Test-Path "D:\WebSites\MyDeals\Client.zip") {Remove-Item -Path "D:\WebSites\MyDeals\Client.zip"}};
+            if($SERVER -eq 'DAY1'){
+                & Invoke-Command -computername  $result.DEPLOY_SERVER -credential $cred -ScriptBlock {if (Test-Path "D:\WebSites\MyDealsDay1\Client.zip") {Remove-Item -Path "D:\WebSites\MyDealsDay1\Client.zip"}};
+            }
+            elseif($SERVER -eq 'EUT'){
+                & Invoke-Command -computername  $result.DEPLOY_SERVER -credential $cred -ScriptBlock {if (Test-Path "D:\WebSites\MyDealsEUT\Client.zip") {Remove-Item -Path "D:\WebSites\MyDealsEUT\Client.zip"}};
+            }
+            else{
+                & Invoke-Command -computername  $result.DEPLOY_SERVER -credential $cred -ScriptBlock {if (Test-Path "D:\WebSites\MyDeals\Client.zip") {Remove-Item -Path "D:\WebSites\MyDeals\Client.zip"}};
+            }
         }
    }
    elseif ($Operation -eq 'CopyZipENV' ){
@@ -103,8 +111,18 @@ try {
             $pw = convertto-securestring -AsPlainText -Force -String "$PWD";
             $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "$USN",$pw; 
             & Invoke-Command -computername $result.DEPLOY_SERVER -credential $cred -ScriptBlock { param($pool)
-              Remove-Item "D:\WebSites\MyDeals\Client\*" -Force -Recurse;
-              Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDeals\Client.zip", "D:\WebSites\MyDeals\Client\");
+             if($SERVER -eq 'DAY1') {
+                Remove-Item "D:\WebSites\MyDealsDay1\Client\*" -Force -Recurse;
+                Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDealsDay1\Client.zip", "D:\WebSites\MyDealsDay1\Client\");
+             }
+             elseif($SERVER -eq 'EUT'){
+                Remove-Item "D:\WebSites\MyDealsEUT\Client\*" -Force -Recurse;
+                Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDealsEUT\Client.zip", "D:\WebSites\MyDealsEUT\Client\");
+             }
+             else{
+                Remove-Item "D:\WebSites\MyDeals\Client\*" -Force -Recurse;
+                Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDeals\Client.zip", "D:\WebSites\MyDeals\Client\");
+             }
               Restart-WebAppPool -Name  $pool
           } -Argumentlist $pool
      }

@@ -12,6 +12,7 @@ on:
           - 'DEV'
           - 'ITT'
           - 'DAY1'
+          - 'EUT'
           - 'UTT1'
           - 'UTT2'
           - 'CONS1'

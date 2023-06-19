@@ -2332,6 +2332,10 @@
     <!--Transform Dev config-->
     <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\Dev\" />
     <TransformXml Source="Web.config" Transform="Web.dev.config" Destination="$(WebProjectOutputDir)\EnvConfig\Dev\Web.config" />
+     <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\EUT\" />
+    <TransformXml Source="Web.config" Transform="Web.eut.config" Destination="$(WebProjectOutputDir)\EnvConfig\EUT\Web.config" />
+    <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\Day1\" />
+    <TransformXml Source="Web.config" Transform="Web.day1.config" Destination="$(WebProjectOutputDir)\EnvConfig\Day1\Web.config" />
     <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\itt\" />
     <TransformXml Source="Web.config" Transform="Web.itt.config" Destination="$(WebProjectOutputDir)\EnvConfig\itt\Web.config" />
     <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\utt\" />
