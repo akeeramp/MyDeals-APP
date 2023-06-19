@@ -10697,4 +10697,51 @@ namespace Intel.MyDeals.Entities {
 	
 	} // End of class DealReconInvalidRecords
 
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.
+    /// on MITTALMO-MOBL
+    /// by mittalmo
+    /// at 6/16/2023 12:07:51 PM
+    ///</summary>
+
+    [DataContract]
+    public partial class HealthCheckData
+    {
+
+        [DataMember]
+        public System.String DETAILS { set; get; }
+
+
+        [DataMember]
+        public System.String RESPONSE { set; get; }
+
+
+        [DataMember]
+        public System.String STATUS { set; get; }
+
+
+        /*
+        private static List<HealthCheckData> HealthCheckDataFromReader(SqlDataReader rdr){
+        // This helper method is template generated.
+        // Refer to that template for details to modify this code.
+
+        var ret = new List<HealthCheckData>();
+        int IDX_DETAILS = DB.GetReaderOrdinal(rdr, "DETAILS");
+        int IDX_RESPONSE = DB.GetReaderOrdinal(rdr, "RESPONSE");
+        int IDX_STATUS = DB.GetReaderOrdinal(rdr, "STATUS");
+
+        while (rdr.Read()){
+        ret.Add(new HealthCheckData {
+        DETAILS = (IDX_DETAILS < 0 || rdr.IsDBNull(IDX_DETAILS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DETAILS),
+        RESPONSE = (IDX_RESPONSE < 0 || rdr.IsDBNull(IDX_RESPONSE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RESPONSE),
+        STATUS = (IDX_STATUS < 0 || rdr.IsDBNull(IDX_STATUS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_STATUS)
+        });
+        } // while
+        return ret;
+        }
+        */
+
+    } // End of class HealthCheckData
+
 }

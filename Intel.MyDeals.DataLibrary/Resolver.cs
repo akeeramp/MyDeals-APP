@@ -50,6 +50,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<ICustomerVendorsDataLib, CustomerVendorsDataLib>();
             registerService.RegisterType<IPrimeCustomersDataLib, PrimeCustomersDataLib>();
             registerService.RegisterType<IConsumptionCountryDataLib, ConsumptionCountryDataLib>();
+            registerService.RegisterType<IHealthCheckDataLib, HealthCheckDataLib>();
         }
     }
 }

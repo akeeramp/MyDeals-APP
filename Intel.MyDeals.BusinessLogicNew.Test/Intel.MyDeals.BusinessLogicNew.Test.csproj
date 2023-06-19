@@ -108,6 +108,7 @@
     <Compile Include="FilesLibTest.cs" />
     <Compile Include="FunFactLibTest.cs" />
     <Compile Include="GeosLibTest.cs" />
+    <Compile Include="HealthCheckLibTest.cs" />
     <Compile Include="IntegrationLibTest.cs" />
     <Compile Include="LoggingLibTest.cs" />
     <Compile Include="ManualEngineLibTest.cs" />

@@ -2718,7 +2718,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 				StoredProdedureName = "[dbo].[PR_MYDL_CNSMPTN_CTRY]";
 			}
 		}
-
+		
 		///<summary>
 		/// ID: 1614784960
 		/// Modified: 4/26/2022 4:40:02 AM
@@ -17175,8 +17175,20 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 
         }
 
-    
-}
+        ///<summary>
+        /// ID: 7163271
+        /// Modified: 6/13/2023 2:12:58 AM
+        /// Parameters: 0
+        ///</summary>
+        public partial class PR_MYDL_HEALTH_CHCK : SP
+        {
+            public PR_MYDL_HEALTH_CHCK()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_HEALTH_CHCK]";
+            }
+        }
+    }
 
 
 }

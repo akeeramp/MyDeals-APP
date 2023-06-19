@@ -1,20 +1,41 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using Intel.MyDeals.Entities;
+using Intel.MyDeals.IBusinessLogic;
 using System.Net;
-using System.Net.Http;
 using System.Web.Http;
+using System.Web.Http.Results;
 
 namespace Intel.MyDeals.Controllers.API
 {
     [RoutePrefix("api/HealthCheck")]
-    public class HealthCheckController : ApiController
+    public class HealthCheckController : BaseApiController
     {
+        private readonly IHealthCheckLib _healthCheckLib;
+
+        public HealthCheckController(IHealthCheckLib healthCheckLib)
+        {
+            _healthCheckLib = healthCheckLib;
+        }
+        
         [Route("getstatus")]
         [HttpGet]
         public string GetHealthCheckStatus()
+        {            
+            return "200 OK";
+        }
+
+        [Route("getDbStatus")]
+        [HttpGet]
+        public NegotiatedContentResult<HealthCheckData> GetDbHealthCheckStatus()
         {
-            return "API Response Status Code: 200 OK";
+            var res = _healthCheckLib.GetDbHealthCheckStatus();
+            if (res[0].STATUS == "Pass")
+            {
+                return Content(HttpStatusCode.OK, res[0]);
+            }
+            else
+            {
+                return Content(HttpStatusCode.InternalServerError, res[0]);
+            }
         }
     }
 }

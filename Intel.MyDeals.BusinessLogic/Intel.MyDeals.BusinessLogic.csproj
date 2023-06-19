@@ -129,6 +129,7 @@
     <Compile Include="EcapTracker\EcapTrackerLib.cs" />
     <Compile Include="Employees\EmployeeHelpers.cs" />
     <Compile Include="Files\FilesLib.cs" />
+    <Compile Include="HealthCheck\HealthCheckLib.cs" />
     <Compile Include="Integration\IntegrationLib.cs" />
     <Compile Include="MeetComp\MeetCompLib.cs" />
     <Compile Include="ManualEngine\ManualEngineLib.cs" />

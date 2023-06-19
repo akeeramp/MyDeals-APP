@@ -57,6 +57,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<ICustomerVendorsLib, CustomerVendorsLib>();
             registerService.RegisterType<IPrimeCustomersLib, PrimeCustomersLib>();
             registerService.RegisterType<IConsumptionCountryLib, ConsumptionCountryLib>();
+            registerService.RegisterType<IHealthCheckLib, HealthCheckLib>();
         }
     }
 }
