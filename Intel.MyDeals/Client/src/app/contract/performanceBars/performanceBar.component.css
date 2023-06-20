@@ -1,4 +1,4 @@
-#perfMs {
+/*#perfMs {
     position: absolute;
     bottom: 30px;
     right: 10px;
@@ -7,9 +7,9 @@
     font-size: 10px;
     margin-top: 5px;
     z-index: 1000;
-}
+}*/
 
-#perfLegend {
+.performanceBarFour #perfLegend {
     position: absolute;
     bottom: 3px;
     right: 1px;
@@ -19,7 +19,7 @@
     color: #666666;
 }
 
-#perfDetails {
+.performanceBarFour #perfDetails {
     position: absolute;
     bottom: 50px;
     right: 10px;
@@ -29,67 +29,67 @@
     background-color: #ffffff;
 }
 
-    #perfDetails th {
+    .performanceBarFour #perfDetails th {
         padding: 2px 4px;
         color: #0071C5;
     }
 
-    #perfDetails.closePerf {
+    .performanceBarFour #perfDetails.closePerf {
         color: #cccccc;
         font-size: 16px;
         cursor: pointer;
     }
 
-.closePerf:hover {
+.performanceBarFour .closePerf:hover {
     color: #FC4C02;
 }
 
-.legKey {
+.performanceBarFour .legKey {
     width: 10px;
     height: 10px;
     border: 1px solid #bebebe;
 }
 
-.legData {
+.performanceBarFour .legData {
     margin-left: 4px;
     margin-right: 10px;
     margin-top: -2px;
 }
 
-.showMore {
+.performanceBarFour .showMore {
     font-size: 18px;
     color: #00AEEF;
     cursor: pointer;
 }
 
-td {
+.performanceBarFour .performanceBarTable td {
     padding: 2px 4px;
     color: #333333;
 }
 
-.closePerf {
+.performanceBarFour .closePerf {
     color: #cccccc;
     font-size: 16px;
     cursor: pointer;
 }
 
-    .closePerf:hover {
+    .performanceBarFour .closePerf:hover {
         color: #FC4C02;
     }
 
-.legKey {
+.performanceBarFour .legKey {
     width: 10px;
     height: 10px;
     border: 1px solid #bebebe;
 }
 
-.legData {
+.performanceBarFour .legData {
     margin-left: 4px;
     margin-right: 10px;
     margin-top: -2px;
 }
 
-.showMore {
+.performanceBarFour .showMore {
     font-size: 18px;
     color: #00AEEF;
     cursor: pointer;

@@ -1,22 +1,69 @@
-.hidden {
+.allDealsLoader .spinner {
+    margin: 10px auto;
+    width: 50px;
+    height: 30px;
+    text-align: center;
+    font-size: 10px
+}
+
+    .allDealsLoader .spinner > div {
+        background-color: #0071C5;
+        height: 100%;
+        width: 6px;
+        display: inline-block;
+        -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+        animation: sk-stretchdelay 1.2s infinite ease-in-out
+    }
+
+    .allDealsLoader .spinner .rect2 {
+        -webkit-animation-delay: -1.1s;
+        animation-delay: -1.1s
+    }
+
+    .allDealsLoader .spinner .rect3 {
+        -webkit-animation-delay: -1.0s;
+        animation-delay: -1.0s
+    }
+
+    .allDealsLoader .spinner .rect4 {
+        -webkit-animation-delay: -.9s;
+        animation-delay: -.9s
+    }
+
+    .allDealsLoader .spinner .rect5 {
+        -webkit-animation-delay: -.8s;
+        animation-delay: -.8s
+    }
+
+.allDealsLoader .ss-icon-lg {
+    font-size: 4em;
+    -webkit-animation: sk-zoom .3s 1 ease-in;
+    animation: sk-zoom .3s 1 ease-in
+}
+
+.allDealsLoader .sky-blue {
+    color: var(--light-blue)
+}
+
+.allDealsParent .hidden {
     visibility: hidden
 }
 
-.visible {
+.allDealsParent .visible {
     visibility: visible
 }
 
-.intelicon-protection-solid {
+.allDealsParent .intelicon-protection-solid {
     font-size: 20px
 }
 
-.dropdown {
+.allDealsParent .dropdown {
     position: relative;
     display: inline-block;
     cursor: pointer
 }
 
-.dropdown-content {
+.allDealsParent .dropdown-content {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
@@ -32,7 +79,7 @@
     cursor: pointer
 }
 
-    .dropdown-content ul li {
+    .allDealsParent .dropdown-content ul li {
         color: var(--light-blue);
         padding: 8px 0;
         text-decoration: none;
@@ -40,75 +87,75 @@
         cursor: pointer
     }
 
-        .dropdown-content ul li:hover {
+        .allDealsParent .dropdown-content ul li:hover {
             background-color: #f1f1f1;
             cursor: pointer
         }
 
-.dropdown:hover .dropdown-content {
+.allDealsParent .dropdown:hover .dropdown-content {
     display: block;
     color: var(--light-blue);
     cursor: pointer
 }
 
-.dropdown:hover .dropbtn {
+.allDealsParent .dropdown:hover .dropbtn {
     background-color: #0071c5;
     color: none;
     color: #fdfdfd;
     cursor: pointer
 }
 
-a {
+.allDealsParent a {
     text-decoration: none !important;
     background-color: transparent !important
 }
 
-.dealTag {
+.allDealsParent .dealTag {
     top: 62px !important;
     right: 20px !important;
     color: #003C71 !important;
     font-weight: 600
 }
 
-.wrapView {
+.allDealsParent .wrapView {
     white-space: normal !important;
     height: 100% !important
 }
 
-.normalView {
+.allDealsParent .normalView {
     white-space: nowrap !important;
     height: auto !important
 }
 
-.k-dialog .k-content {
+.allDealsParent .k-dialog .k-content {
     margin-top: 0 !important
 }
 
-.k-cell-inner > .k-link {
+.allDealsParent .k-cell-inner > .k-link {
     white-space: normal !important
 }
 
-.k-grid th, .k-grid td {
+.allDealsParent .k-grid th, .allDealsParent .k-grid td {
     font-size: 12px !important
 }
 
-.k-dialog .k-dialog-title, .k-dialog .k-window-title {
+.allDealsParent .k-dialog .k-dialog-title, .allDealsParent .k-dialog .k-window-title {
     display: none !important
 }
 
-.k-dialog .k-content {
+.allDealsParent .k-dialog .k-content {
     margin-top: -30px
 }
 
-table td {
+/*.allDealsParent table td {
     border: 0 solid #ccc
-}
+}*/
 
-.k-tabstrip-wrapper {
+.allDealsParent .k-tabstrip-wrapper {
     border-bottom: 0 solid #eeeeee
 }
 
-.k-grid-content-locked .k-grouping-row td {
+.allDealsParent .k-grid-content-locked .k-grouping-row td {
     border-bottom: 1px solid #e5e5e5;
     border-top: 0 solid transparent;
     border-left: 0 solid transparent;
@@ -149,26 +196,26 @@ table td {
         color: var(--light-blue) !important
     }
 
-kendo-tabstrip.diff-all-deals {
+.allDealsParent kendo-tabstrip.diff-all-deals {
     margin-top: 32px;
     padding-left: 20px;
     padding-right: 20px
 }
 
-    kendo-tabstrip.diff-all-deals .k-tabstrip-items-wrapper {
+    .allDealsParent kendo-tabstrip.diff-all-deals .k-tabstrip-items-wrapper {
         background: #E7E7E8;
         position: relative;
         width: 100%
     }
 
-.app-filler {
+.allDealsParent .app-filler {
     position: relative;
     width: 100%;
     padding-left: 0;
     padding-right: 0
 }
 
-.new-fixes-poly {
+.allDealsParent .new-fixes-poly {
     position: absolute;
     left: auto;
     top: 0;
@@ -180,19 +227,19 @@ kendo-tabstrip.diff-all-deals {
     width: 100%
 }
 
-.aligner-inputs {
+.allDealsParent .aligner-inputs {
     width: 270px;
     font-size: 16px;
     padding-left: 0
 }
 
-    .aligner-inputs input {
+    .allDealsParent .aligner-inputs input {
         width: 100%;
         margin: 0;
         border: none
     }
 
-    .aligner-inputs i {
+    .allDealsParent .aligner-inputs i {
         height: 100%;
         font-size: 18px;
         color: var(--light-blue);
@@ -203,7 +250,7 @@ kendo-tabstrip.diff-all-deals {
         background: #f9f9f9
     }
 
-.new-rows {
+.allDealsParent .new-rows {
     margin-left: 0 !important;
     margin-right: 0 !important;
     padding-top: 15px;
@@ -212,58 +259,58 @@ kendo-tabstrip.diff-all-deals {
     position: relative
 }
 
-.oppo-grids {
+.allDealsParent .oppo-grids {
     width: 100% !important;
     padding: 0 !important;
     padding-top: 10px !important
 }
 
-.positon-deal-tag {
+.allDealsParent .positon-deal-tag {
     top: 11px !important
 }
 
-.rowHeight {
+.allDealsParent .rowHeight {
     height: 36px !important;
     padding: 2px 0 0 1px;
     border-bottom: .01px solid rgba(0,0,0,.05)
 }
 
-.rowDetailHeight {
+.allDealsParent .rowDetailHeight {
     border-bottom: .01px solid rgba(0,0,0,.05);
     padding: 2px 0 0 1px !important;
     line-height: 4
 }
 
-.densityRow {
+.allDealsParent .densityRow {
     border: .1px solid lightgrey;
     padding: 2px 0 0 1px;
     text-align: right
 }
 
-.densityPadding {
+.allDealsParent .densityPadding {
     padding: 0 4px !important
 }
 
-.densityRatePadding {
+.allDealsParent .densityRatePadding {
     padding: 0 15px !important
 }
 
-.rowRightBorder {
+.allDealsParent .rowRightBorder {
     border-right: .1px solid lightgrey
 }
 
-.rowBorder {
+.allDealsParent .rowBorder {
     border: .1px solid lightgrey
 }
 
-.rowValueHeight {
+.allDealsParent .rowValueHeight {
     height: 37px !important;
     font-size: 12px !important;
     text-align: left !important;
     overflow: hidden
 }
 
-.tierHeader {
+.allDealsParent .tierHeader {
     padding: 0 4px;
     font-weight: 400;
     text-transform: uppercase;
@@ -282,7 +329,7 @@ kendo-tabstrip.diff-all-deals {
     padding: 0 !important
 }
 
-.tierBorder {
+.allDealsParent .tierBorder {
     border-bottom: 2px solid #0071C5
 }
 
@@ -290,11 +337,11 @@ kendo-tabstrip.diff-all-deals {
     margin-right: 0 !important
 }
 
-.lastcolstyle {
+.allDealsParent .lastcolstyle {
     font-size: 10px !important;
 }
 
-.kendo-grid-buttons.mgridsizefix {
+.allDealsParent .kendo-grid-buttons.mgridsizefix {
     position: relative !important;
     padding-top: 20px !important;
     width: 100% !important;
@@ -302,66 +349,19 @@ kendo-tabstrip.diff-all-deals {
     padding-right: 0 !important
 }
 
-.all_deal_grid_cell deal-editor-cell .isReadOnlyCell {
+.allDealsParent .all_deal_grid_cell deal-editor-cell .isReadOnlyCell {
     background: none !important
 }
 
-.redfont {
+.allDealsParent .redfont {
     color: #FC4C02 !important
 }
 
-.spinner {
-    margin: 10px auto;
-    width: 50px;
-    height: 30px;
-    text-align: center;
-    font-size: 10px
-}
-
-    .spinner > div {
-        background-color: #0071C5;
-        height: 100%;
-        width: 6px;
-        display: inline-block;
-        -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
-        animation: sk-stretchdelay 1.2s infinite ease-in-out
-    }
-
-    .spinner .rect2 {
-        -webkit-animation-delay: -1.1s;
-        animation-delay: -1.1s
-    }
-
-    .spinner .rect3 {
-        -webkit-animation-delay: -1.0s;
-        animation-delay: -1.0s
-    }
-
-    .spinner .rect4 {
-        -webkit-animation-delay: -.9s;
-        animation-delay: -.9s
-    }
-
-    .spinner .rect5 {
-        -webkit-animation-delay: -.8s;
-        animation-delay: -.8s
-    }
-
-.ss-icon-lg {
-    font-size: 4em;
-    -webkit-animation: sk-zoom .3s 1 ease-in;
-    animation: sk-zoom .3s 1 ease-in
-}
-
-.sky-blue {
-    color: var(--light-blue)
-}
-
-.k-grid.deals_grid_h {
+.allDealsParent .k-grid.deals_grid_h {
     height: calc(100vh - 250px) !important
 }
 
-#excel_DropDown.show {
+.allDealsParent #excel_DropDown.show {
     transform: none !important;
     font-size: 13px !important;
     color: #777 !important;
@@ -370,7 +370,7 @@ kendo-tabstrip.diff-all-deals {
     top: 44px !important
 }
 
-.toggleSelect.manage-deals-word {
+.allDealsParent .toggleSelect.manage-deals-word {
     background-color: #eeeeee !important;
 }
 
@@ -403,6 +403,7 @@ kendo-tabstrip.diff-all-deals {
     .allDealsOvrLap mat-dialog-container .k-window {
         min-height: auto !important;
     }
+
 .all_deal_grid_cell .dealsIcon-dealcell .class_date.dealCell.uiControlDiv {
     display: flex !important;
     align-items: center !important;
@@ -413,6 +414,7 @@ kendo-tabstrip.diff-all-deals {
     top: 0% !important;
     transform: translateY(0%) !important;
 }
+
 .uiControlDiv.trackingNumParent.tracker-number-class {
     top: 0% !important;
     transform: translateY(100%) !important;
@@ -421,6 +423,11 @@ kendo-tabstrip.diff-all-deals {
     padding:0px !important;
     left:-5px !important
 }
+
 #allDeals .vert-center.ng-binding.wordWrapTransform {
     transform: translateY(0%) !important;
+}
+
+kendo-grid#allDeals .bigIcon {
+    font-size: 20px;
 }

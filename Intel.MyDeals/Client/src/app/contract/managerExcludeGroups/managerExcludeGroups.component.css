@@ -2,40 +2,40 @@
     display: inline
 }
 
-.dealTag {
+#GroupExclusionTab .dealTag {
     width: 100%;
     text-align: right
 }
 
-.ssToolbarBtn.btn-save, .ssToolbarBtn {
+.manageExcludeGroupParent .ssToolbarBtn.btn-save, .manageExcludeGroupParent .ssToolbarBtn {
     background-color: transparent
 }
 
-    .ssToolbarBtn.btn-save table tr td span.text {
+    .manageExcludeGroupParent .ssToolbarBtn.btn-save table tr td span.text {
         font-size: 14px !important;
         font-weight: 600;
         line-height: 1em
     }
 
-    .ssToolbarBtn.btn-save:hover {
+    .manageExcludeGroupParent .ssToolbarBtn.btn-save:hover {
         background-color: #f2f2f2
     }
 
-    .ssToolbarBtn.btn-save.notdirty {
+    .manageExcludeGroupParent .ssToolbarBtn.btn-save.notdirty {
         cursor: not-allowed
     }
 
-        .ssToolbarBtn.btn-save.notdirty table tr td span.text {
+        .manageExcludeGroupParent .ssToolbarBtn.btn-save.notdirty table tr td span.text {
             font-size: 11px !important;
             font-weight: 400 !important;
             line-height: 1.25em !important
         }
 
-        .ssToolbarBtn.btn-save.notdirty table tr td, .ssToolbarBtn.notdirty table tr td i {
+        .manageExcludeGroupParent .ssToolbarBtn.btn-save.notdirty table tr td, .ssToolbarBtn.notdirty table tr td i {
             color: #ababab !important
         }
 
-        .ssToolbarBtn.btn-save.notdirty:hover {
+        .manageExcludeGroupParent .ssToolbarBtn.btn-save.notdirty:hover {
             background-color: transparent
         }
 
@@ -70,7 +70,7 @@
     border: 1px solid rgba(230,230,230,.40)
 }
 
-.txtOff {
+/*.txtOff {
     text-align: right !important;
     padding-right: 3px
 }
@@ -130,7 +130,7 @@ input:checked + .slider:before {
     -ms-transform: translateX(26px);
     transform: translateX(26px);
     background-color: #ffffff
-}
+}*/
 
 #ExcldGrid.k-grid {
     height: calc(85vh - 250px) !important;
@@ -138,7 +138,7 @@ input:checked + .slider:before {
     width: 100%
 }
 
-.k-grid .k-alt {
+.group-Excl-grid.k-grid .k-alt {
     background-color: #ffffff
 }
 
@@ -162,7 +162,7 @@ input:checked + .slider:before {
     background-color: #00AEEF
 }
 
-.checkbox-custom + .checkbox-custom-label:before {
+/*.checkbox-custom + .checkbox-custom-label:before {
     content: '';
     background: #fff;
     border: 1.5px solid #eee;
@@ -190,9 +190,9 @@ input:checked + .slider:before {
     height: auto !important;
     margin-top: 200px !important;
     margin-left: 40% !important
-}
+}*/
 
-.contractHeaderGrpExclusion {
+/*.contractHeaderGrpExclusion {
     word-wrap: break-word
 }
 
@@ -322,21 +322,17 @@ input:checked + .slider:before {
 
 .checkbox-custom:hover + .checkbox-custom-label:before {
     border: 1.5px solid #01AEEF
-}
+}*/
 
-.k-grid-content {
-    display: flex
-}
-
-.opUiContainer.md.k-grid td {
+.exclude-filter-style .opUiContainer.md.k-grid td {
     white-space: nowrap !important
 }
 
-.childGrid > .k-grid-content {
+.exclude-filter-style .childGrid > .k-grid-content {
     height: auto !important
 }
 
-tr.blue, tr.k-alt.blue {
+/*tr.blue, tr.k-alt.blue {
     background-color: #B9D6E5 !important
 }
 
@@ -350,16 +346,16 @@ tr.grey, tr.k-alt.grey {
 
 .k-grid tbody tr.grey:hover {
     background-color: #AEAEAE !important
-}
+}*/
 
-.medIcon {
+.group-Excl-grid .medIcon {
     font-size: 18px
 }
 
 .cola-pick {
     position: relative;
     width: 100%;
-    padding: 0
+    padding: 0 !important;
 }
 
 .luna-css {
@@ -392,14 +388,14 @@ tr.grey, tr.k-alt.grey {
     display: inline-block
 }
 
-.aligner-inputs {
+.manageExcludeGroupParent .aligner-inputs {
     width: 270px !important;
     font-size: 16px !important;
     padding-left: 0 !important;
     margin-right: 8px !important
 }
 
-    .aligner-inputs i {
+    .manageExcludeGroupParent .aligner-inputs i {
         height: 100%;
         font-size: 18px;
         color: #00AEEF;
@@ -410,7 +406,7 @@ tr.grey, tr.k-alt.grey {
         background: #f9f9f9
     }
 
-    .aligner-inputs input {
+    .manageExcludeGroupParent .aligner-inputs input {
         width: 100%;
         margin: 0;
         border: none
@@ -490,7 +486,7 @@ tr.grey, tr.k-alt.grey {
         background: #f9f9f9 !important
     }
 
-#excelDropDownMenu.show {
+#excelDropDownMenuExcludeGroup.show {
     transform: none !important;
     font-size: 13px !important;
     color: #777 !important;
@@ -518,7 +514,7 @@ kendo-dialog-actions.popup-dialog {
     padding: 10px !important
 }
 
-.toggleSelect {
+.manageExcludeGroupParent .toggleSelect {
     background-color: #eeeeee !important
 }
 
@@ -544,11 +540,11 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-
     background: white
 }
 
-.ss-loading-panel.ss-Info {
+/*.ss-loading-panel.ss-Info {
     height: auto;
     margin-top: 20px !important;
     margin-left: 0 !important
-}
+}*/
 
 .grouping_grid_h {
     height: calc(100vh - 233px) !important
@@ -598,8 +594,6 @@ kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu a.k-
     margin-right: auto;
     height: auto !important
 }
-
-
 
 .height-auto-child {
     height: auto !important
@@ -695,12 +689,12 @@ kendo-grid.exclude-filter-style kendo-grid-list table tr td.k-detail-cell table 
     overflow: overlay !important
 }
 
-.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
+/*.cdk-overlay-backdrop.cdk-overlay-backdrop-showing {
     opacity: 1;
     pointer-events: none;
-}
+}*/
 
-.spinner {
+.excludeGroupLoadingSpinners .spinner {
     margin: 10px auto;
     width: 50px;
     height: 30px;
@@ -708,7 +702,7 @@ kendo-grid.exclude-filter-style kendo-grid-list table tr td.k-detail-cell table 
     font-size: 10px
 }
 
-    .spinner > div {
+    .excludeGroupLoadingSpinners .spinner > div {
         background-color: #0071C5;
         height: 100%;
         width: 6px;
@@ -717,32 +711,40 @@ kendo-grid.exclude-filter-style kendo-grid-list table tr td.k-detail-cell table 
         animation: sk-stretchdelay 1.2s infinite ease-in-out
     }
 
-    .spinner .rect2 {
+    .excludeGroupLoadingSpinners .spinner .rect2 {
         -webkit-animation-delay: -1.1s;
         animation-delay: -1.1s
     }
 
-    .spinner .rect3 {
+    .excludeGroupLoadingSpinners .spinner .rect3 {
         -webkit-animation-delay: -1.0s;
         animation-delay: -1.0s
     }
 
-    .spinner .rect4 {
+    .excludeGroupLoadingSpinners .spinner .rect4 {
         -webkit-animation-delay: -.9s;
         animation-delay: -.9s
     }
 
-    .spinner .rect5 {
+    .excludeGroupLoadingSpinners .spinner .rect5 {
         -webkit-animation-delay: -.8s;
         animation-delay: -.8s
     }
 
-.ss-icon-lg {
+.excludeGroupLoadingSpinners .ss-icon-lg {
     font-size: 4em;
     -webkit-animation: sk-zoom .3s 1 ease-in;
     animation: sk-zoom .3s 1 ease-in
 }
 
-.sky-blue {
+.excludeGroupLoadingSpinners .sky-blue {
     color: var(--light-blue)
 }
+
+kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu .k-state-active > .k-i-filter {
+    color: #00AEEF !important;
+}
+
+    kendo-grid.group-Excl-grid table tr th .k-cell-inner kendo-grid-filter-menu .k-state-active > .k-i-filter:hover {
+        color: #0071C5 !important
+    }

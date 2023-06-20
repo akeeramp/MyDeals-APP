@@ -26,10 +26,10 @@
                     <div class="textCenterAlign" [ngClass]="{'col-md-5 bigWidth': isAdmin, 'col-md-4 smallWidth': !isAdmin}">
                         <label class="appro-label">End Customer</label>
                     </div>
-                    <div [ngClass]="{'col-md-3': isAny, 'col-md-4': !isAny, 'biggerWidth textCenterAlign' :(isAny && isAdmin), 'smallWidth textCenterAlign': (isAny && !isAdmin), 'bigWidth textRightAlign leftMargin':(!isAny && isAdmin),'mediumWidth textRightAlign': (!isAny && !isAdmin) }">
+                    <div [ngClass]="{'col-md-3': isAny, 'col-md-4': !isAny, 'biggerWidth textCenterAlign' :(isAny && isAdmin), 'smallWidth textCenterAlign': (isAny && !isAdmin), 'bigWidth textRightAlignEnd leftMargin':(!isAny && isAdmin),'mediumWidth textRightAlignEnd': (!isAny && !isAdmin) }">
                         <label class="appro-label">Country/Region</label>
                     </div>
-                    <div class="col-md-1 leftZeroPadding textRightAlign floatRight" *ngIf="END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'">
+                    <div class="col-md-1 leftZeroPadding textRightAlignEnd floatRight" *ngIf="END_CUST_OBJ[0].END_CUSTOMER_RETAIL != null && END_CUST_OBJ[0].END_CUSTOMER_RETAIL != undefined && END_CUST_OBJ[0].END_CUSTOMER_RETAIL.toUpperCase() == 'ANY'">
                         <label class="appro-label">Exclude</label>
                     </div>
                 </div>
@@ -108,8 +108,8 @@
     <br />
     <br />
     <br />
-    <div class="row">
-        <div class="col-md-12">
+    <div class="row rowEndedCustomer" style="margin: 0;">
+        <div class="col-md-12" style="padding: 0;">
             <div class="col-md-7">
                 <button class="btn btn-primary" id="ClearEndCustomer" [disabled]="endCustomerRetailPopUpModal.clearEndCustomerDisabled == true" (click)="remove()">Clear End Customer</button>&nbsp;
                 <button class="btn btn-warning btn-styCancel" type="button" (click)="cancel()">Cancel</button>

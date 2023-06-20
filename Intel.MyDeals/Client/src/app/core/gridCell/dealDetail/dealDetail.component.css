@@ -31,9 +31,9 @@
         text-overflow: ellipsis
     }
 
-/*#dealDtl {
+#dealDtl {
     padding-left: 5px
-}*/
+}
 
 a.dealHoverLink:hover {
     color: #1a3e6f !important;

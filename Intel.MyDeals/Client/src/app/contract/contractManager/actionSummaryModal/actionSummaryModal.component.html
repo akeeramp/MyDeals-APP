@@ -3,7 +3,7 @@
 </div>
 <div class="modal-body modalBlueBody summary-action-body" id="modal-body">
 
-    <div class="errMsg" *ngIf="showErrMsg">
+    <div class="errMsgActionSummary" *ngIf="showErrMsg">
         <i class="intelicon-information-solid"></i> Please make sure you review Meet Comp on the left navigation before proceeding.
     </div>
     <div class="draftMsg">
@@ -26,7 +26,7 @@
         </div>
         <div class="col-md-6">
             <div>
-                <button class="btn btn-primary full-width fsubmitbtn" type="button" (click)="ok()">Submit</button>
+                <button class="btn btn-primary full-width fsubmitbtn btnPrimarySummary" type="button" (click)="ok()">Submit</button>
             </div>
         </div>
     </div>

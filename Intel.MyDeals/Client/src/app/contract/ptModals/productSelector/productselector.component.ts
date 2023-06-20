@@ -172,7 +172,7 @@ export class ProductSelectorComponent {
 
                 }]
             },
-            panelClass: 'product-breakout-modal'
+            panelClass: 'product-breakout-modal-selector'
         });
     }
     cancel(): void {

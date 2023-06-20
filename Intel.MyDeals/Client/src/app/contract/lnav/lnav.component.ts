@@ -709,7 +709,7 @@ export class lnavComponent {
         };
         this.autoFillData = autofillData;
         const dialogRef = this.dialog.open(AutoFillComponent, {
-            height: '750px',
+            height: 'auto',
             width: '1500px',
             data: autofillData,
             panelClass: ['dialog-side-panel', 'autofiller-pop-ups'],

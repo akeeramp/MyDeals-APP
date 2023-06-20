@@ -458,15 +458,15 @@
     cursor: pointer
 }
 
-.deallink {
+.meet-conduct .deallink {
     color: #0071C5 !important
 }
 
-.deallink:hover {
-    text-decoration: underline !important;
-    cursor: pointer !important;
-    color: #004579 !important
-}
+    .meet-conduct .deallink:hover {
+        text-decoration: underline !important;
+        cursor: pointer !important;
+        color: #004579 !important
+    }
 
 .meet-conduct .secondary-btn:hover {
     background-color: #ebebeb
@@ -493,20 +493,20 @@
     color: #ffffff !important
 }
 
-.either-pin kendo-grid kendo-grid-list .k-icon {
+.either-pin.meetEitherPins kendo-grid kendo-grid-list .k-icon {
     padding-top: 8px !important;
     font-size: 14px !important
 }
 
-.either-pin kendo-grid kendo-grid-list .k-icon.k-i-plus:before {
-    content: "\e005" !important
-}
+    .either-pin.meetEitherPins kendo-grid kendo-grid-list .k-icon.k-i-plus:before {
+        content: "\e005" !important
+    }
 
-.either-pin kendo-grid kendo-grid-list .k-icon.k-i-minus:before {
-    content: "\e001" !important
-}
+    .either-pin.meetEitherPins kendo-grid kendo-grid-list .k-icon.k-i-minus:before {
+        content: "\e001" !important
+    }
 
-.all-labels {
+.meetEitherPins .all-labels {
     font-weight: bold !important
 }
 
@@ -521,7 +521,7 @@
     margin-top: 150px !important
 }
 
-.either-pin kendo-grid kendo-grid-list .k-icon.k-i-more-vertical {
+.either-pin.meetEitherPins kendo-grid kendo-grid-list .k-icon.k-i-more-vertical {
     font-size: 14px !important
 }
 
@@ -551,7 +551,7 @@
     color: #c1c1c1
 }
 
-.helpBtn {
+.meet-conduct .helpBtn {
     margin-top: 4px
 }
 
@@ -581,7 +581,7 @@
     background-color: #ebebeb !important
 }
 
-.k-combobox .k-clear-value {
+.meet-conduct .k-combobox .k-clear-value {
     width: calc(13px + .75rem) !important;
     height: 1.5rem !important
 }

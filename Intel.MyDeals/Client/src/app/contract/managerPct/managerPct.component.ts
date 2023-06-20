@@ -205,7 +205,7 @@ export class managerPctComponent {
     openExcludeDealGroupModal(dataItem) {
         const dialogRef = this.dialog.open(excludeDealGroupModalDialog, {
             width: "90%",
-            panelClass: 'post-dialog-container',
+            panelClass: 'post-dialog-container-exclude',
             maxWidth: "auto",
             data: {
                 cellCurrValues: dataItem,

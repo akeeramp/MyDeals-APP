@@ -604,7 +604,7 @@ kendo-grid.icon-changes table tr td.k-detail-cell table tr td a.k-plus:focus:bef
 }
 
 kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper {
-    padding-left: 10px;
+    margin-left: 10px;
     margin-top: 4px
 }
 
@@ -1647,14 +1647,14 @@ button.contract-correction-upload.k-button.k-button-flat.k-button-flat-base.k-bu
 }
 
 #OvrLp kendo-grid.overDealChecking.k-grid .k-grid-table-wrap table tbody tr td {
-    padding: 2px 5px !important;
-    white-space: normal !important;
-    color: rgb(26, 62, 111) !important;
-    font-family: "Intel Clear", Arial;
-    font-size: 10px !important;
     border-left: none;
     border-right: 1px solid #e6e6e6;
-    border: none !important
+    border: none !important;
+    color: #000 !important;
+    font-family: Intel Clear,Arial;
+    font-size: 12px !important;
+    padding: 2px 5px !important;
+    white-space: normal !important;
 }
 
 #OvrLp kendo-grid.overDealChecking.k-grid .k-grid-table-wrap table tbody tr td:first-child {
@@ -2343,4 +2343,138 @@ mat-button-toggle-group.mat-toggle-employee-role .btn-primary.colors-btn-prime {
 .workFlowGrid table tr td, .WFStages table tr td {
     border-color: transparent;
     padding: 0.5rem 1rem;
+}
+
+kendo-tabstrip#priceTableDealEdit > .k-tabstrip-items-wrapper > .k-tabstrip-items > .k-item {
+    color: #ffffff !important;
+    background-color: #00AEEF !important;
+}
+
+    kendo-tabstrip#priceTableDealEdit > .k-tabstrip-items-wrapper > .k-tabstrip-items > .k-item.k-state-active {
+        margin-right: 5px !important;
+        color: #FFFFFF !important;
+        background-color: #003C71 !important;
+    }
+
+kendo-editor#color_c_button .k-dialog-wrapper .k-dialog {
+    border-color: #0071c5;
+}
+
+    kendo-editor#color_c_button .k-dialog-wrapper .k-dialog .k-dialog-titlebar .k-window-actions .k-button {
+        background: transparent !important;
+        color: #fff !important;
+        opacity: 1;
+        border-radius: 50%;
+    }
+
+    kendo-editor#color_c_button .k-dialog-wrapper .k-dialog .k-editor-dialog {
+        padding: 0;
+    }
+
+        kendo-editor#color_c_button .k-dialog-wrapper .k-dialog .k-editor-dialog .k-edit-form-container {
+            padding: 0;
+        }
+
+    kendo-editor#color_c_button .k-dialog-wrapper .k-dialog kendo-dialog-actions.k-dialog-buttongroup {
+        padding: 0;
+    }
+
+    kendo-editor#color_c_button .k-dialog-wrapper .k-dialog kendo-dialog-actions.k-dialog-buttongroup {
+        clear: both;
+        background-color: #fafafa;
+        /* text-align: right; */
+        border-style: solid;
+        position: relative;
+        padding: 0.6em;
+        justify-content: end;
+    }
+
+        kendo-editor#color_c_button .k-dialog-wrapper .k-dialog kendo-dialog-actions.k-dialog-buttongroup button:first-child {
+            background-color: #fafafa;
+            border-color: #fafafa;
+            box-shadow: none;
+            color: #444;
+            max-width: 85px;
+            width: 85px;
+            opacity: 1;
+            text-transform: uppercase;
+            font-size: 14px;
+            font-weight: 600;
+            height: 35px;
+        }
+
+        kendo-editor#color_c_button .k-dialog-wrapper .k-dialog kendo-dialog-actions.k-dialog-buttongroup button:last-child {
+            color: #00aeef !important;
+            background-color: #fafafa;
+            border-color: #fafafa;
+            box-shadow: none;
+            width: 85px;
+            opacity: 1;
+            max-width: 85px;
+            text-transform: uppercase;
+            font-size: 14px;
+            font-weight: 600;
+            height: 35px;
+        }
+
+button.warn-custom {
+    background-color: #f39c12;
+    border-color: #e08e0b;
+    color: #0071c5
+}
+
+    button.warn-custom:hover {
+        background-color: #e08e0b;
+        color: #0071c5;
+        border-color: #b1babf !important
+    }
+
+﻿#dealDtl .dealDetail {
+    line-height: 1.3em;
+    height: 100% !important
+}
+
+    ﻿#dealDtl .dealDetail .dates {
+        font-size: 10px;
+        font-family: arial;
+        color: #FFA300
+    }
+
+    ﻿#dealDtl .dealDetail .id {
+        font-size: 11px;
+        color: #0071C5;
+        margin-right: 6px
+    }
+
+    ﻿#dealDtl .dealDetail .dealDetailContainer {
+        background-color: #ffffff;
+        margin-left: 5px;
+        padding: 0 4px
+    }
+
+    ﻿#dealDtl .dealDetail .prd {
+        line-height: 1em;
+        color: #aaa;
+        font-size: 11px;
+        font-style: italic;
+        overflow: hidden;
+        white-space: nowrap;
+        text-overflow: ellipsis
+    }
+
+/*#dealDtl {
+    padding-left: 5px
+}*/
+
+a.dealHoverLink:hover {
+    color: #1a3e6f !important;
+    text-decoration: underline !important
+}
+
+i.intelicon-protection-solid.icon_colourfix.validf_Dirty {
+    color: #fc4c02 !important;
+}
+
+i.intelicon-protection-solid.icon_colourfix.validf_Complete {
+    color: #c4d600 !important;
 }

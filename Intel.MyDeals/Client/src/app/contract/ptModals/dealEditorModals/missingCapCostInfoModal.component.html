@@ -6,7 +6,7 @@
     <button type="button" class="intelicon-close-max" (click)="cancel()" aria-label="Close" style=" border: none; background: none;">
     </button>
 </div>
-<div class="modal-body" style="padding:0">
+<div class="modal-body dealEditorModalPopUp" style="padding:0">
     <div *ngIf="!isLoading">
         <kendo-grid class="grid_text_filter" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                     [sort]="state.sort" [filter]="state.filter" [sortable]="true"

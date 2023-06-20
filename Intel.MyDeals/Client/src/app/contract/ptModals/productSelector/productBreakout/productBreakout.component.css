@@ -1,1 +1,70 @@
-.modal-content{background-color:#1a3e6f!important;overflow-y:auto;overflow-x:hidden;border-left:none;border-right:none}.capProdHeader{color:white;font-size:26px}.capModalCloseIcon{color:white;font-size:32px;padding-top:0;padding-left:20px;margin-top:-8px}.capModalCloseIcon>.intelicon-close-max{position:relative}.capbreakout.modal-header{border-bottom:none;padding-bottom:0;justify-content:space-evenly}.capbreakout.modal-header>.row{width:-webkit-fill-available!important}.capbreakout.modal-header>.row>.col-8{width:66.66666667%!important}.capbreakout.modal-header>.row>.col-4{width:33.33333333%!important}.cap-modal-window,.modal-dialog{width:70%;margin-left:auto;margin-right:auto}.capbreakout.modal-body{padding-top:2px;padding-bottom:0;min-height:calc(40vh);max-height:calc(40vh);overflow-y:auto}.capbreakout.kendoGridHeight{height:calc(40vh - 50px)}.excelText{line-height:1.2em;font-size:12px;float:right}.excelText span{text-align:left}
+.modal-content.modalProductBreakOut {
+    background-color: #1a3e6f !important;
+    overflow-y: auto;
+    overflow-x: hidden;
+    border-left: none;
+    border-right: none
+}
+
+.capProdHeader {
+    color: white;
+    font-size: 26px
+}
+
+.capModalCloseIcon {
+    color: white;
+    font-size: 32px;
+    padding-top: 0;
+    padding-left: 20px;
+    margin-top: -8px
+}
+
+    .capModalCloseIcon > .intelicon-close-max {
+        position: relative
+    }
+
+.capbreakout.modal-header {
+    border-bottom: none;
+    padding-bottom: 0;
+    justify-content: space-evenly
+}
+
+    .capbreakout.modal-header > .row {
+        width: -webkit-fill-available !important
+    }
+
+        .capbreakout.modal-header > .row > .col-8 {
+            width: 66.66666667% !important
+        }
+
+        .capbreakout.modal-header > .row > .col-4 {
+            width: 33.33333333% !important
+        }
+
+.cap-modal-window, .modal-dialog {
+    width: 70%;
+    margin-left: auto;
+    margin-right: auto
+}
+
+.capbreakout.modal-body {
+    padding-top: 2px;
+    padding-bottom: 0;
+    min-height: calc(40vh);
+    max-height: calc(40vh);
+    overflow-y: auto
+}
+
+.capbreakout.kendoGridHeight {
+    height: calc(40vh - 50px)
+}
+
+.excelText {
+    line-height: 1.2em;
+    font-size: 12px;
+    float: right
+}
+
+    .excelText span {
+        text-align: left
+    }

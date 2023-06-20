@@ -249,18 +249,6 @@ gridster-item.attr-li-7 kendo-grid.k-widget.k-grid table thead tr th .k-link:hov
     }
 }
 
-button.warn-custom {
-    background-color: #f39c12;
-    border-color: #e08e0b;
-    color: #0071c5
-}
-
-button.warn-custom:hover {
-    background-color: #e08e0b;
-    color: #0071c5;
-    border-color: #b1babf !important
-}
-
 .add-widget-link {
     color: #0071c5;
     text-decoration: none

@@ -383,9 +383,9 @@
     content: "\e005" !important
 }
 
-.either-pin kendo-grid kendo-grid-list .k-icon.k-i-minus:before {
-    content: "\e001" !important
-}
+    .new-view .either-pin kendo-grid kendo-grid-list .k-icon.k-i-minus:before {
+        content: "\e001" !important
+    }
 
 .boxSave {
     background-color: #C4D600 !important;
@@ -408,7 +408,7 @@
     transition: hidden 0s, opacity 1s linear !important
 }
 
-.switch {
+#pctChild .switch {
     position: relative;
     display: block;
     width: 60px;
@@ -421,7 +421,7 @@
     box-sizing: content-box
 }
 
-.switch-input {
+#pctChild .switch-input {
     position: absolute;
     top: 0;
     left: 0;
@@ -429,7 +429,7 @@
     box-sizing: content-box
 }
 
-.switch-label {
+#pctChild .switch-label {
     position: relative;
     display: block;
     height: inherit;
@@ -441,48 +441,48 @@
     box-sizing: content-box
 }
 
-.switch-label:before,
-.switch-label:after {
-    position: absolute;
-    top: 50%;
-    margin-top: -.5em;
-    line-height: 1;
-    -webkit-transition: inherit;
-    -moz-transition: inherit;
-    -o-transition: inherit;
-    transition: inherit;
-    box-sizing: content-box
-}
+    #pctChild .switch-label:before,
+    #pctChild .switch-label:after {
+        position: absolute;
+        top: 50%;
+        margin-top: -.5em;
+        line-height: 1;
+        -webkit-transition: inherit;
+        -moz-transition: inherit;
+        -o-transition: inherit;
+        transition: inherit;
+        box-sizing: content-box
+    }
 
-.switch-label:before {
-    content: attr(data-off);
-    right: 11px;
-    color: #aaaaaa;
-    text-shadow: 0 1px rgba(255, 255, 255, .5)
-}
+    #pctChild .switch-label:before {
+        content: attr(data-off);
+        right: 11px;
+        color: #aaaaaa;
+        text-shadow: 0 1px rgba(255, 255, 255, .5)
+    }
 
-.switch-label:after {
-    content: attr(data-on);
-    left: 11px;
-    color: #FFFFFF;
-    text-shadow: 0 1px rgba(0, 0, 0, .2);
-    opacity: 0
-}
+    #pctChild .switch-label:after {
+        content: attr(data-on);
+        left: 11px;
+        color: #FFFFFF;
+        text-shadow: 0 1px rgba(0, 0, 0, .2);
+        opacity: 0
+    }
 
-.switch-input:checked~.switch-label {
+#pctChild .switch-input:checked ~ .switch-label {
     background: #00aeef;
     box-shadow: inset 0 1px 2px rgba(0, 0, 0, .15), inset 0 0 3px rgba(0, 0, 0, .2)
 }
 
-.switch-input:checked~.switch-label:before {
-    opacity: 0
-}
+    #pctChild .switch-input:checked ~ .switch-label:before {
+        opacity: 0
+    }
 
-.switch-input:checked~.switch-label:after {
-    opacity: 1
-}
+    #pctChild .switch-input:checked ~ .switch-label:after {
+        opacity: 1
+    }
 
-.switch-handle {
+#pctChild .switch-handle {
     position: absolute;
     top: 1px;
     left: 4px;
@@ -494,27 +494,27 @@
     box-shadow: 1px 1px 5px rgba(0, 0, 0, .2)
 }
 
-.switch-handle:before {
-    content: "";
-    position: absolute;
-    top: 50%;
-    left: 50%;
-    margin: -6px 0 0 -6px;
-    width: 12px;
-    height: 12px;
-    background: linear-gradient(to bottom, #eeeeee, #FFFFFF);
-    background-image: -webkit-linear-gradient(top, #eeeeee, #FFFFFF);
-    border-radius: 6px;
-    box-shadow: inset 0 1px rgba(0, 0, 0, .02)
-}
+    #pctChild .switch-handle:before {
+        content: "";
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        margin: -6px 0 0 -6px;
+        width: 12px;
+        height: 12px;
+        background: linear-gradient(to bottom, #eeeeee, #FFFFFF);
+        background-image: -webkit-linear-gradient(top, #eeeeee, #FFFFFF);
+        border-radius: 6px;
+        box-shadow: inset 0 1px rgba(0, 0, 0, .02)
+    }
 
-.switch-input:checked~.switch-handle {
+#pctChild .switch-input:checked ~ .switch-handle {
     left: 40px;
     box-shadow: -1px 1px 5px rgba(0, 0, 0, .2)
 }
 
-.switch-label,
-.switch-handle {
+#pctChild .switch-label,
+#pctChild .switch-handle {
     transition: All .3s ease;
     -webkit-transition: All .3s ease;
     -moz-transition: All .3s ease;
@@ -579,33 +579,33 @@ kendo-grid#pctChild table tr td .cell-information {
     color: #ffffff !important
 }
 
-.btn_color_fix.btn-primary {
+.multiplePricingDialog .btn_color_fix.btn-primary {
     background-color: #00AEEF !important
 }
 
-.btn_color_fix.btn-primary:hover {
-    background-color: #3c8dbc !important
-}
+    .multiplePricingDialog .btn_color_fix.btn-primary:hover {
+        background-color: #3c8dbc !important
+    }
 
-.cancel_color_fix.btn-warning {
+.multiplePricingDialog .cancel_color_fix.btn-warning {
     background-color: rgb(243, 156, 18) !important
 }
 
-.cancel_color_fix.btn-warning:hover {
-    background-color: rgb(224, 142, 11) !important
-}
+    .multiplePricingDialog .cancel_color_fix.btn-warning:hover {
+        background-color: rgb(224, 142, 11) !important
+    }
 
 .modalBlueBody {
     background-color: #003C71 !important;
     color: #ffffff !important
 }
 
-.btn-full {
+.multiplePricingDialog .btn-full {
     margin: 5px 0 !important;
     width: 100% !important
 }
 
-.post-dialog-container .mat-dialog-container {
+.post-dialog-container-exclude .mat-dialog-container {
     background-color: none;
     box-shadow: none;
     padding: 0 !important;
@@ -615,11 +615,11 @@ kendo-grid#pctChild table tr td .cell-information {
     width: 1900px !important
 }
 
-.post-dialog-container .mat-dialog-container exclude-deal-group-modal-dialog .modal-content {
-    padding: 25px;
-}
+    .post-dialog-container-exclude .mat-dialog-container exclude-deal-group-modal-dialog .modal-content {
+        padding: 25px;
+    }
 
-.loading-design-custom.k-i-loading {
+.pctManagerTempt .loading-design-custom.k-i-loading {
     position: relative;
     top: 0;
     left: 0;
@@ -661,7 +661,7 @@ kendo-tabstrip.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li {
     border-right: 0 !important;
 }
 
-kendo-tabstrip.new-allDeals .k-tabstrip-items-wrapper ul li.k-state-active {
+kendo-tabstrip.new-allDeals.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li.k-state-active {
     border: 1px solid transparent !important;
     border-bottom: 0 !important;
     border-color: #b1babf !important;

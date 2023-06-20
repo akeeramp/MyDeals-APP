@@ -1,1 +1,17 @@
-.gridPopover{height:100%;cursor:pointer}.product-breakout-modal{width:70vw!important}.product-breakout-modal>mat-dialog-container{background-color:#1a3e6f!important;padding:0!important}.product-breakout-modal mat-dialog-container product-breakout .modal-content{box-shadow:none}
+.gridPopover {
+    height: 100%;
+    cursor: pointer
+}
+
+.product-breakout-modal-gridPopOver {
+    width: 70vw !important
+}
+
+    .product-breakout-modal-gridPopOver > mat-dialog-container {
+        background-color: #1a3e6f !important;
+        padding: 0 !important
+    }
+
+    .product-breakout-modal-gridPopOver mat-dialog-container product-breakout .modal-content {
+        box-shadow: none
+    }

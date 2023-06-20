@@ -361,14 +361,14 @@
         <i class="fa fa-line-chart nav-icn" aria-hidden="true"></i>
     </div>
 </div>
-<kendo-dialog *ngIf="isDeletePT" (close)="isDeletePricingTable(false)" class="k-dialog-popup-design deleteptstyle" >
+<kendo-dialog *ngIf="isDeletePT" (close)="isDeletePricingTable(false)" class="k-dialog-popup-design deleteptstyle lnavDialogPopUp" >
     <p class="dialogmsg">Are you sure that you want to delete this Pricing Table?</p>
     <kendo-dialog-actions>
         <button class='k-button ok-btn-pop-up' (click)="isDeletePricingTable(true)" themeColor="primary">OK</button>
         <button class='k-button cancel-btn-pop-up' (click)="isDeletePricingTable(false)">CANCEL</button>
     </kendo-dialog-actions>
 </kendo-dialog>
-<kendo-dialog *ngIf="isDeletePs" (close)="isDeletePricingStrategy(false)" class="k-dialog-popup-design deleteptstyle" >
+<kendo-dialog *ngIf="isDeletePs" (close)="isDeletePricingStrategy(false)" class="k-dialog-popup-design deleteptstyle lnavDialogPopUp" >
     <p class="dialogmsg">Are you sure that you want to delete this Pricing Strategy?</p>
     <kendo-dialog-actions>
         <button class='k-button ok-btn-pop-up' (click)="isDeletePricingStrategy(true)" themeColor="primary">OK</button>

@@ -1,153 +1,154 @@
 ﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-
-<loading-panel-angular [show]="isSpinnerLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription">
-</loading-panel-angular>
-<div *ngIf="pricingTableData == undefined">
-    <div class="container-fluid editor101">
-        <div class="col-md-11" style="text-align: center;padding-top: 60px;">
-            <h4>Tender Folio Editor 101</h4>
-        </div>
-        <div class="col-md-5">
-            <div class="pnl">
-                <div class="head">Contract Navigator Menu Actions</div>
-                <div class="body">
-                    <div class="fl icon">
-                        <div><i class="intelicon-save-outlined"></i></div>
-                        <div>
-                            <p>Save</p>
-                        </div>
-                    </div>
-                    <div class="fl icon" *ngIf="C_ADD_PRICING_STRATEGY">
-                        <div><i class="intelicon-plus-max"></i></div>
-                        <div>
-                            <p>Add test</p>
-                        </div>
-                    </div>
-                    <div class="fl icon">
-                        <div><i class="intelicon-plus-max"></i></div>
-                        <div>
-                            <p>Add Pricing Strategy</p>
-                        </div>
-                    </div>
-                    <div class="fl icon">
-                        <div><i class="intelicon-search"></i></div>
-                        <div>
-                            <p>Search Contract</p>
-                        </div>
-                    </div>
-                    <div class="fl icon">
-                        <div><i class="intelicon-fast-forward"></i></div>
-                        <div>
-                            <p>Expand/ Minimize</p>
-                        </div>
-                    </div>
-                    <div class="fl icon">
-                        <div><i class="intelicon-shrink flip-horizontal"></i></div>
-                        <div>
-                            <p>Show/Hide Panel</p>
-                        </div>
-                    </div>
-                    <div class="clearboth"></div>
-                </div>
+<div class="tenderManagerParent">
+    <loading-panel-angular [show]="isSpinnerLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription">
+    </loading-panel-angular>
+    <div *ngIf="pricingTableData == undefined">
+        <div class="container-fluid editor101">
+            <div class="col-md-11" style="text-align: center;padding-top: 60px;">
+                <h4>Tender Folio Editor 101</h4>
             </div>
-            <div class="pnl">
-                <div class="head">Navigator Menus</div>
-                <div class="body">
-                    <div style="padding-left: 20px; padding-top: 5px;">
-                        <p>Click for access to the menus for both test & test management</p><img src="/images/learning101menu_v2.png" alt="Learning Menu Image" style="margin-bottom: 5px;height: 100%; width: 100%" />
-                        <p><span style="color: #FC4C02;">**</span>Please note menus will display actions based off of role type &/or rules </p>
+            <div class="col-md-5">
+                <div class="pnl">
+                    <div class="head">Contract Navigator Menu Actions</div>
+                    <div class="body">
+                        <div class="fl icon">
+                            <div><i class="intelicon-save-outlined"></i></div>
+                            <div>
+                                <p>Save</p>
+                            </div>
+                        </div>
+                        <div class="fl icon" *ngIf="C_ADD_PRICING_STRATEGY">
+                            <div><i class="intelicon-plus-max"></i></div>
+                            <div>
+                                <p>Add test</p>
+                            </div>
+                        </div>
+                        <div class="fl icon">
+                            <div><i class="intelicon-plus-max"></i></div>
+                            <div>
+                                <p>Add Pricing Strategy</p>
+                            </div>
+                        </div>
+                        <div class="fl icon">
+                            <div><i class="intelicon-search"></i></div>
+                            <div>
+                                <p>Search Contract</p>
+                            </div>
+                        </div>
+                        <div class="fl icon">
+                            <div><i class="intelicon-fast-forward"></i></div>
+                            <div>
+                                <p>Expand/ Minimize</p>
+                            </div>
+                        </div>
+                        <div class="fl icon">
+                            <div><i class="intelicon-shrink flip-horizontal"></i></div>
+                            <div>
+                                <p>Show/Hide Panel</p>
+                            </div>
+                        </div>
+                        <div class="clearboth"></div>
                     </div>
                 </div>
+                <div class="pnl">
+                    <div class="head">Navigator Menus</div>
+                    <div class="body">
+                        <div style="padding-left: 20px; padding-top: 5px;">
+                            <p>Click for access to the menus for both test & test management</p><img src="/images/learning101menu_v2.png" alt="Learning Menu Image" style="margin-bottom: 5px;height: 100%; width: 100%" />
+                            <p><span style="color: #FC4C02;">**</span>Please note menus will display actions based off of role type &/or rules </p>
+                        </div>
+                    </div>
+                </div>
             </div>
+            <div class="col-md-6"><img src="/images/instructions.png" alt="Customer Contract Anatony Image" style="margin-top: 10px;height: 100%; width: 100%" /></div>
         </div>
-        <div class="col-md-6"><img src="/images/instructions.png" alt="Customer Contract Anatony Image" style="margin-top: 10px;height: 100%; width: 100%" /></div>
     </div>
-</div>
-<div *ngIf="pricingTableData != undefined" class="pricing-strategy-status-bar fl" style="position: absolute; margin-left: -5px; left: 0px;">
-    <div class="valid_{{pricingTableData.PRC_ST[0].PASSED_VALIDATION}}" style="padding: 5px 8px;float:left">
-        <span class="contractHeaderId">#{{ contractData.DC_ID }} </span>
-        <span>{{contractData.Customer.CUST_NM}}: </span>
-        <span>{{contractData.TITLE}}</span>	&nbsp;&nbsp;
+    <div *ngIf="pricingTableData != undefined" class="pricing-strategy-status-bar fl" style="position: absolute; margin-left: -5px; left: 0px;">
+        <div class="valid_{{pricingTableData.PRC_ST[0].PASSED_VALIDATION}}" style="padding: 5px 8px;float:left">
+            <span class="contractHeaderId">#{{ contractData.DC_ID }} </span>
+            <span>{{contractData.Customer.CUST_NM}}: </span>
+            <span>{{contractData.TITLE}}</span>	&nbsp;&nbsp;
+        </div>
+        <button class="ng-scope btn btn-primary deleteContract delcontracticon" (click)="deleteContract()" title='Delete Contract'>
+            <i class="intelicon-trash-outlined deleteIcon" style="margin-left: 4px;font-size: 16px;" title='Delete Contract'></i>&nbsp;
+        </button>
     </div>
-    <button class="ng-scope btn btn-primary deleteContract delcontracticon" (click)="deleteContract()" title='Delete Contract'>
-        <i class="intelicon-trash-outlined deleteIcon" style="margin-left: 4px;font-size: 16px;" title='Delete Contract'></i>&nbsp;
-    </button>
-</div>
 
-<div class="pricing-strategy-status-bar fr" style="padding-right: 0px;" *ngIf="pricingTableData != undefined">
-    <div class="valid_{{pricingTableData.PRC_ST[0].PASSED_VALIDATION}}" style="padding: 5px 8px;"><span style="opacity: 0.5;">TENDER SHEET:</span> {{ pricingTableData.PRC_ST[0].WF_STG_CD }}</div>
-</div>
-<div class="row wizard" [ngStyle]="{'width': getWidth(isDeveloper || isTester), 'padding-top': getPadding(isDeveloper || isTester) }" *ngIf="pricingTableData != undefined">
-    <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel first" [ngClass]="{'complete': isValidateTTE() == true }">
-            <a id="tenderWidPTR" (click)="tenderWidgetPathManager('backToPricingTable', 'PTR')">
-                <span class="badge wizard-step" [ngStyle]="selectedTab == 'PTR'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': '#00AEEF', 'color': '#ffffff'}">1</span>
+    <div class="pricing-strategy-status-bar fr" style="padding-right: 0px;" *ngIf="pricingTableData != undefined">
+        <div class="valid_{{pricingTableData.PRC_ST[0].PASSED_VALIDATION}}" style="padding: 5px 8px;"><span style="opacity: 0.5;">TENDER SHEET:</span> {{ pricingTableData.PRC_ST[0].WF_STG_CD }}</div>
+    </div>
+    <div class="row wizard" [ngStyle]="{'width': getWidth(isDeveloper || isTester), 'padding-top': getPadding(isDeveloper || isTester) }" *ngIf="pricingTableData != undefined">
+        <div class="col-xs-3 col-md-3">
+            <div class="wizard-panel first" [ngClass]="{'complete': isValidateTTE() == true }">
+                <a id="tenderWidPTR" (click)="tenderWidgetPathManager('backToPricingTable', 'PTR')">
+                    <span class="badge wizard-step" [ngStyle]="selectedTab == 'PTR'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': '#00AEEF', 'color': '#ffffff'}">1</span>
+                </a>
+            </div>
+            <a (click)="tenderWidgetPathManager('backToPricingTable', 'PTR')">
+                <div class="wizard-step-text step-into">
+                    <h4><i [hidden]="currentTAB != 'PTR'" class="intelicon-arrow-forward-right "></i> &nbsp;Tender Table Editor</h4>
+                    <p>Adhoc Tender Table Editor Manager</p>
+                </div>
             </a>
         </div>
-        <a (click)="tenderWidgetPathManager('backToPricingTable', 'PTR')">
-            <div class="wizard-step-text step-into">
-                <h4><i [hidden]="currentTAB != 'PTR'" class="intelicon-arrow-forward-right "></i> &nbsp;Tender Table Editor</h4>
-                <p>Adhoc Tender Table Editor Manager</p>
+        <div class="col-xs-3 col-md-3">
+            <div class="wizard-panel second" [ngClass]="{'complete': isValidateDE() == true}">
+                <span id="tenderWidDE" class="badge wizard-step" [ngStyle]="selectedTab == 'DE'?{'background-color': '#0071c5', 'color':'#FBD737'} : {}" (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': !pt_passed_validation}">2</span>
             </div>
-        </a>
-    </div>
-    <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel second" [ngClass]="{'complete': isValidateDE() == true}">
-            <span id="tenderWidDE" class="badge wizard-step" [ngStyle]="selectedTab == 'DE'?{'background-color': '#0071c5', 'color':'#FBD737'} : {}" (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': !pt_passed_validation}">2</span>
+            <a (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': !pt_passed_validation}">
+                <div class="wizard-step-text step-into">
+                    <h4><i [hidden]="currentTAB != 'DE'" class="intelicon-arrow-forward-right "></i> &nbsp; Deal Editor</h4>
+                    <p>Adhoc Tender Deal Editor Manager</p>
+                </div>
+            </a>
         </div>
-        <a (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': !pt_passed_validation}">
-            <div class="wizard-step-text step-into">
-                <h4><i [hidden]="currentTAB != 'DE'" class="intelicon-arrow-forward-right "></i> &nbsp; Deal Editor</h4>
-                <p>Adhoc Tender Deal Editor Manager</p>
+        <div class="col-xs-3 col-md-3">
+            <div class="wizard-panel third" [ngClass]="{'complete': isValidateMC() == true}">
+                <span id="tenderWidMC" class="badge wizard-step" (click)="tenderWidgetPathManager('', 'MC')" [ngStyle]="selectedTab == 'MC'?{'background-color': '#0071c5', 'color':'#FBD737'} : {}" [ngClass]="{'isDisabledDE': !pt_passed_validation}">3</span>
             </div>
-        </a>
-    </div>
-    <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel third" [ngClass]="{'complete': isValidateMC() == true}">
-            <span id="tenderWidMC" class="badge wizard-step" (click)="tenderWidgetPathManager('', 'MC')" [ngStyle]="selectedTab == 'MC'?{'background-color': '#0071c5', 'color':'#FBD737'} : {}" [ngClass]="{'isDisabledDE': !pt_passed_validation}">3</span>
+            <a (click)="tenderWidgetPathManager('', 'MC')" [ngClass]="{'isDisabledDE':!pt_passed_validation}">
+                <div class="wizard-step-text step-into">
+                    <h4><i [hidden]="currentTAB != 'MC'" class="intelicon-arrow-forward-right "></i> &nbsp; Meet Comp</h4>
+                    <p>Tender Meet Comp Manager</p>
+                </div>
+            </a>
         </div>
-        <a (click)="tenderWidgetPathManager('', 'MC')" [ngClass]="{'isDisabledDE':!pt_passed_validation}">
-            <div class="wizard-step-text step-into">
-                <h4><i [hidden]="currentTAB != 'MC'" class="intelicon-arrow-forward-right "></i> &nbsp; Meet Comp</h4>
-                <p>Tender Meet Comp Manager</p>
+        <div class="col-xs-3 col-md-3">
+            <div class="wizard-panel last publishToolTip" [ngClass]="{'complete':selectedTab == 'PD'}">
+                <span id="tenderWidPD" class="badge wizard-step" [ngStyle]="selectedTab == 'PD'?{'background-color': '#0071c5', 'color':'#FBD737'} : {}" (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabledDE': isValidateMC() == false}">4</span>
+                <span kendoTooltip class="left helpset opElementHelpIcon intelicon-information-outlined" style="margin-left: 4px;" title="Publishing will separate the deals entered in the table below so that they can be individually approved." position="left" [tooltipWidth]="300"></span>
             </div>
-        </a>
-    </div>
-    <div class="col-xs-3 col-md-3">
-        <div class="wizard-panel last publishToolTip" [ngClass]="{'complete':selectedTab == 'PD'}">
-            <span id="tenderWidPD" class="badge wizard-step" [ngStyle]="selectedTab == 'PD'?{'background-color': '#0071c5', 'color':'#FBD737'} : {}" (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabledDE': isValidateMC() == false}">4</span>
-            <span kendoTooltip class="left helpset opElementHelpIcon intelicon-information-outlined" style="margin-left: 4px;" title="Publishing will separate the deals entered in the table below so that they can be individually approved." position="left" [tooltipWidth]="300"></span>
+            <a (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabledDE':isValidateMC() == false}">
+                <div class="wizard-step-text step-into">
+                    <h4><i [hidden]="currentTAB != 'PD'" class="intelicon-arrow-forward-right"></i> &nbsp; Publish Adhoc Deal</h4>
+                    <p>Converting into individual deals.</p>
+                </div>
+            </a>
         </div>
-        <a (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabledDE':isValidateMC() == false}">
-            <div class="wizard-step-text step-into">
-                <h4><i [hidden]="currentTAB != 'PD'" class="intelicon-arrow-forward-right"></i> &nbsp; Publish Adhoc Deal</h4>
-                <p>Converting into individual deals.</p>
-            </div>
-        </a>
     </div>
+    <div *ngIf="isTester || isDeveloper" [hidden]="!drawChart" class="managingPerformanceBars">
+        <performance-bars [type]="perfModel"></performance-bars>
+    </div>
+    <div *ngIf="selectedTab == 'PTR' && !isLoading  && pricingTableData != undefined" class="col-md-12 parent-one loaderPTE tenderPTEsection">
+        <pricing-table-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate" (warn)="isWarning" (tmDirec)="redirectingFn($event)">
+        </pricing-table-editor>
+    </div>
+    <div *ngIf="selectedTab == 'DE'" class="col-md-12 loaderDE loading-dealer-editors" style="border: 2px solid #bcbcbc;">
+        <deal-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [in_Search_Text]="searchText" [contractData]="contractData" [UItemplate]="UItemplate" (perfComp)="perfCompFn($event)" (addPerfTimes)="addPerfTimes($event)" (tmDirec)="redirectingFn($event)">
+        </deal-editor>
+    </div>
+    <div *ngIf="selectedTab == 'MC'" class="col-md-12 loaderMeet meet-comp-tenders" style="border: 2px solid #bcbcbc;">
+        <meet-comp-contract class="tender-meet-comp-width" [objSid]="contractData.DC_ID" [isTender]="contractData.IS_TENDER" [isAdhoc]="'1'" [objTypeId]="'1'" [cId]="c_Id" [pageNm]="'WIDGET'" (tmDirec)="redirectingFn($event)" (contractRefresh)="refreshContract($event)">
+        </meet-comp-contract>
+    </div>
+    <div *ngIf="selectedTab == 'PD'" class="col-md-12 loadpublish">
+        <publish-tender [pricingTableData]="pricingTableData"></publish-tender>
+    </div>
+    <kendo-dialog *ngIf="isDialogVisible" class="k-dialog-popup-design" (close)="close()" [width]="440">
+        <p style="text-align: center;">Are you sure you would like to Delete this Contract ? </p>
+        <kendo-dialog-actions class="tender-del-style">
+            <button class="ok-btn-pop-up" kendoButton (click)="deleteRecord()">OK</button>
+            <button class="cancel-btn-pop-up" kendoButton (click)="close()"> CANCEL </button>
+        </kendo-dialog-actions>
+    </kendo-dialog>
 </div>
-<div *ngIf="isTester || isDeveloper" [hidden]="!drawChart" class="managingPerformanceBars">
-    <performance-bars [type]="perfModel"></performance-bars>
-</div>
-<div *ngIf="selectedTab == 'PTR' && !isLoading  && pricingTableData != undefined" class="col-md-12 parent-one loaderPTE tenderPTEsection">
-    <pricing-table-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate" (warn)="isWarning" (tmDirec)="redirectingFn($event)">
-    </pricing-table-editor>
-</div>
-<div *ngIf="selectedTab == 'DE'" class="col-md-12 loaderDE loading-dealer-editors" style="border: 2px solid #bcbcbc;">
-    <deal-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [in_Search_Text]="searchText" [contractData]="contractData" [UItemplate]="UItemplate" (perfComp)="perfCompFn($event)" (addPerfTimes)="addPerfTimes($event)" (tmDirec)="redirectingFn($event)">
-    </deal-editor>
-</div>
-<div *ngIf="selectedTab == 'MC'" class="col-md-12 loaderMeet meet-comp-tenders" style="border: 2px solid #bcbcbc;">
-    <meet-comp-contract class="tender-meet-comp-width" [objSid]="contractData.DC_ID" [isTender]="contractData.IS_TENDER" [isAdhoc]="'1'" [objTypeId]="'1'" [cId]="c_Id" [pageNm]="'WIDGET'" (tmDirec)="redirectingFn($event)" (contractRefresh)="refreshContract($event)">
-    </meet-comp-contract>
-</div>
-<div *ngIf="selectedTab == 'PD'" class="col-md-12 loadpublish">
-    <publish-tender [pricingTableData]="pricingTableData"></publish-tender>
-</div>
-<kendo-dialog *ngIf="isDialogVisible" class="k-dialog-popup-design" (close)="close()" [width]="440">
-    <p style="text-align: center;">Are you sure you would like to Delete this Contract ? </p>
-    <kendo-dialog-actions class="tender-del-style">
-        <button class="ok-btn-pop-up" kendoButton (click)="deleteRecord()">OK</button>
-        <button class="cancel-btn-pop-up" kendoButton (click)="close()"> CANCEL </button>
-    </kendo-dialog-actions>
-</kendo-dialog>

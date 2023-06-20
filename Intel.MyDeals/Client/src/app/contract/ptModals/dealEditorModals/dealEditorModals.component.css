@@ -1,84 +1,84 @@
 ﻿@import '../../../admin/kendo_grid.css';
 
-.mat-dialog-container {
+/*.mat-dialog-container {
     overflow: initial;
-}
+}*/
 
-.endCustomerRowStyle {
+#endCustomermodalBody .endCustomerRowStyle {
     padding-left: 5px;
     padding-bottom: 15px;
     text-align: center
 }
 
-.colStyle {
+#endCustomermodalBody .colStyle {
     text-align: center;
     padding-left: 0;
     width: 90px !important;
     white-space: nowrap;
 }
 
-.rplColStyle {
+#endCustomermodalBody .rplColStyle {
     text-align: left;
     padding-left: 3px;
     width: 100px !important;
     white-space: nowrap
 }
 
-.rightZeroPadding {
+#endCustomermodalBody .rightZeroPadding {
     padding-right: 0
 }
 
-.leftZeroPadding {
+#endCustomermodalBody .leftZeroPadding {
     padding-left: 0
 }
 
-.biggerWidth {
+#endCustomermodalBody .biggerWidth {
     width: 350px !important
 }
 
-.bigWidth {
+#endCustomermodalBody .bigWidth {
     width: 300px !important
 }
 
-.mediumWidth {
+#endCustomermodalBody .mediumWidth {
     width: 280px !important
 }
 
-.smallWidth {
+#endCustomermodalBody .smallWidth {
     width: 270px !important
 }
 
-.textCenterAlign {
+#endCustomermodalBody .textCenterAlign {
     text-align: center
 }
 
-.textRightAlign {
+#endCustomermodalBody .textRightAlignEnd {
     text-align: right
 }
 
-.textLeftAlign {
+#endCustomermodalBody .textLeftAlign {
     text-align: left
 }
 
-.leftMargin {
+#endCustomermodalBody .leftMargin {
     margin-left: 30px
 }
 
-.modal-body .opUiElement {
+.modal-body.dealEditorModalPopUp .opUiElement {
     width: 100%
 }
 
-.modal-body {
+.modal-body.dealEditorModalPopUp {
     max-height: 500px;
     overflow: auto;
     padding: 0 !important
 }
 
-.modal-dialog {
+/*.modal-dialog {
     width: 1000px !important
-}
+}*/
 
-.filterRow {
+#endCustomermodalBody .filterRow {
     margin-bottom: 7px
 }
 
@@ -132,12 +132,12 @@
     padding-left: 150px !important
 }
 
-.ss-loading-panel {
+/*.ss-loading-panel {
     margin-top: 15%;
     margin-left: 37%
-}
+}*/
 
-.appro-label {
+#endCustomermodalBody .appro-label {
     font-weight: bold !important;
     display: inline-block !important;
     font-size: 15px
@@ -155,18 +155,18 @@
     width: 300px !important;
 }
 
-.btn-primary.disabled,
-.btn-primary.disabled:hover,
-.btn-primary.disabled:focus,
-.btn-primary.disabled.focus,
-.btn-primary.disabled:active,
-.btn-primary.disabled.active,
-.btn-primary[disabled],
-.btn-primary[disabled]:hover,
-.btn-primary[disabled]:focus,
-.btn-primary[disabled].focus,
-.btn-primary[disabled]:active,
-.btn-primary[disabled].active,
+.rowEndedCustomer .btn-primary.disabled,
+.rowEndedCustomer .btn-primary.disabled:hover,
+.rowEndedCustomer .btn-primary.disabled:focus,
+.rowEndedCustomer .btn-primary.disabled.focus,
+.rowEndedCustomer .btn-primary.disabled:active,
+.rowEndedCustomer .btn-primary.disabled.active,
+.rowEndedCustomer .btn-primary[disabled],
+.rowEndedCustomer .btn-primary[disabled]:hover,
+.rowEndedCustomer .btn-primary[disabled]:focus,
+.rowEndedCustomer .btn-primary[disabled].focus,
+.rowEndedCustomer .btn-primary[disabled]:active,
+.rowEndedCustomer .btn-primary[disabled].active,
 fieldset[disabled] .btn-primary,
 fieldset[disabled] .btn-primary:hover,
 fieldset[disabled] .btn-primary:focus,
@@ -178,7 +178,7 @@ fieldset[disabled] .btn-primary.active {
     border-color: #b1babf !important
 }
 
-.floatRight {
+#endCustomermodalBody .floatRight {
     float: right
 }
 
@@ -200,7 +200,9 @@ fieldset[disabled] .btn-primary.active {
 }
 
 #endCustomermodalBody {
-    padding: 15px !important
+    padding: 15px !important;
+    max-height: 500px;
+    overflow: auto;
 }
 
 #endCustomerModalHeader {
@@ -283,7 +285,7 @@ button.btn.endCusbtn-style[disabled] {
     font-size: larger
 }
 
-.myLoader {
+#EndCustomerLoading .myLoader {
     min-height: 200px;
     width: 320px;
     position: absolute;
@@ -291,6 +293,6 @@ button.btn.endCusbtn-style[disabled] {
     top: 30% !important;
 }
 
-.modal-body kendo-grid {
+/*.modal-body kendo-grid {
     width: -webkit-fill-available;
-}
+}*/

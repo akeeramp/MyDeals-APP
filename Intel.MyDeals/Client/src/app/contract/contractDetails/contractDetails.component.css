@@ -174,7 +174,7 @@
 }
 
 .new-bus-contract .contract-detail-form {
-    padding-bottom: 85px !important
+    padding-bottom: 95px !important
 }
 
 .new-bus-contract .display {
@@ -294,7 +294,7 @@
     font-weight: normal !important
 }
 
-button.okmissingcode.k-button {
+/*button.okmissingcode.k-button {
     background-color: #d3d3d3d4 !important;
     color: #000000 !important;
     font-family: 'Intel Clear' !important;
@@ -308,7 +308,7 @@ button.okmissingcode.k-button:hover {
 
 .okmissingcode {
     height: 73px !important
-}
+}*/
 
 p.codesize {
     text-align: center !important;
@@ -319,12 +319,12 @@ p.codesize {
     padding: 0 !important
 }
 
-p.boxsize {
+p.boxSizeContractDetails {
     padding: 37px;
     margin-bottom: 0 !important
 }
 
-.c2aborder.k-textbox {
+/*.c2aborder.k-textbox {
     border-color: #ced4da8c !important;
     background-color: #ffffff !important;
     width: 100%;
@@ -333,7 +333,7 @@ p.boxsize {
 
 .c2aborder.k-textbox:hover {
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%) !important
-}
+}*/
 
 .myinfoclass {
     width: 92% !important;
@@ -359,10 +359,10 @@ kendo-datepicker.dateclass:focus-within {
     box-shadow: none
 }
 
-.c2aborder.k-textbox:focus-within {
+/*.c2aborder.k-textbox:focus-within {
     border-color: #f0f0f0 !important;
     box-shadow: 0 2px 6px rgb(0 0 0 /20%), 0 2px 3px rgb(0 0 0 / 5%) !important
-}
+}*/
 
 .division-text {
     font-size: 14px

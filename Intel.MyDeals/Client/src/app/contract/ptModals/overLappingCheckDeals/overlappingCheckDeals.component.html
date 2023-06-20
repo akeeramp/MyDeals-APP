@@ -96,7 +96,7 @@
                                        [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
                 </ng-template>
                 <ng-template kendoGridCellTemplate let-dataItem="dataItem">
-                    <a (click)="openDealEditor(dataItem)" class="text-center" style="padding-left: 5px;">
+                    <a (click)="openDealEditor(dataItem)" class="text-center" style="padding-left: 5px; color: #0071c5;">
                         {{dataItem.OVLP_DEAL_OBJ_SID}}
                     </a>
                 </ng-template>
@@ -210,8 +210,8 @@
         <div>
             Please go to <b>Deal Editor</b>; <b>edit</b> and <b>re-validate</b> your deal to avoid overlapping with other deals.
         </div>
-        <kendo-dialog-actions class="dialog-button-style">
-            <button kendoButton (click)="closeKendoAlert()" class="kendo-alrt-btn"><span>OK</span></button>
+        <kendo-dialog-actions class="dialog-button-style-overLapping">
+            <button kendoButton (click)="closeKendoAlert()" class="kendo-alrt-btn okAlteringOverlapDeals"><span>OK</span></button>
         </kendo-dialog-actions>
     </kendo-dialog>
 </div>

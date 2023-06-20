@@ -1,70 +1,67 @@
-﻿.editor101 {
+﻿.tenderManagerParent .editor101 {
     height: 100%;
     overflow: auto !important
 }
 
-.editor101 h4 {
-    margin-top: 0;
-    color: #0071C5
-}
+    .tenderManagerParent .editor101 h4 {
+        margin-top: 0;
+        color: #0071C5
+    }
 
-.editor101 .pnl {
-    margin: 10px 10px;
-    border: 1px solid #e7e7e8
-}
+    .tenderManagerParent .editor101 .pnl {
+        margin: 10px 10px;
+        border: 1px solid #e7e7e8
+    }
 
-.editor101 .head {
-    border-bottom: 1px solid #e7e7e8;
-    background-color: #e7e7e8;
-    padding: 6px;
-    font-size: 16px;
-    color: #0071C5;
-    font-weight: 600
-}
+    .tenderManagerParent .editor101 .head {
+        border-bottom: 1px solid #e7e7e8;
+        background-color: #e7e7e8;
+        padding: 6px;
+        font-size: 16px;
+        color: #0071C5;
+        font-weight: 600
+    }
 
-.editor101 .body {
-    padding: 5px
-}
+    .tenderManagerParent .editor101 .body {
+        padding: 5px
+    }
 
-.editor101 .icon {
-    text-align: center;
-    margin: 5px 7px;
-    width: 70px
-}
+    .tenderManagerParent .editor101 .icon {
+        text-align: center;
+        margin: 5px 7px;
+        width: 70px
+    }
 
-.editor101 .icon i {
-    color: #00AEEF;
-    font-size: 30px
-}
+        .tenderManagerParent .editor101 .icon i {
+            color: #00AEEF;
+            font-size: 30px
+        }
 
-.editor101 .icon i.inverse {
-    color: #ffffff;
-    font-size: 30px;
-    background-color: #00AEEF;
-    border-radius: 4px;
-    padding: 4px
-}
+            .tenderManagerParent .editor101 .icon i.inverse {
+                color: #ffffff;
+                font-size: 30px;
+                background-color: #00AEEF;
+                border-radius: 4px;
+                padding: 4px
+            }
 
-.editor101 .icon div {
-    font-weight: 600
-}
+        .tenderManagerParent .editor101 .icon div {
+            font-weight: 600
+        }
 
-.editor101 .icon p {
-    margin: 6px 0
-}
+        .tenderManagerParent .editor101 .icon p {
+            margin: 6px 0
+        }
 
-#tenderWidPD,
-#tenderWidDE,
-#tenderWidMC,
-#tenderWidPTR {
+#tenderWidPD, #tenderWidDE, #tenderWidMC, #tenderWidPTR {
     cursor: pointer !important
 }
 
-.k-master-row>td {
+/*.tenderManagerParent .k-master-row > td {
     border-top: 2px solid #b1babf !important
-}
+}*/
 
-.pricing-strategy-status-bar {
+.tenderManagerParent .pricing-strategy-status-bar {
     color: #000000;
     padding: 1px 0 0 6px;
     font-size: 10px;
@@ -73,11 +70,11 @@
     height: 16px
 }
 
-.contractHeaderId {
+.tenderManagerParent .contractHeaderId {
     color: #00aeef !important
 }
 
-.deleteContract.delcontracticon {
+.tenderManagerParent .deleteContract.delcontracticon {
     cursor: pointer !important;
     font-size: 14px !important;
     float: right !important;
@@ -90,64 +87,64 @@
     border-radius: 0 !important
 }
 
-.valid_Dirty {
+.tenderManagerParent .valid_Dirty {
     background: #e8eaec
 }
 
-.valid_Complete {
+.tenderManagerParent .valid_Complete {
     background: #C4D600
 }
 
-.fr {
+.tenderManagerParent .fr {
     margin-left: auto;
     height: max-content
 }
 
-.intelicon-search {
+/*.tenderManagerParent .intelicon-search {
     width: 248px !important
 }
 
-.k-tabstrip .k-tabstrip-items .k-link {
+.tenderManagerParent .k-tabstrip .k-tabstrip-items .k-link {
     padding: 0 !important
-}
+}*/
 
-.activeBtn {
+.tenderManagerParent .activeBtn {
     background-color: #0071c5;
     color: #FBD737
 }
 
-.complete {
+.tenderManagerParent .complete {
     color: #fff;
     border-top-color: #00aeef
 }
 
-.isDisabled {
+.tenderManagerParent .isDisabled {
     pointer-events: none;
     color: currentColor !important;
     opacity: .5;
     text-decoration: none
 }
 
-.isDisabledDE {
+.tenderManagerParent .isDisabledDE {
     color: currentColor !important;
     opacity: .5;
     text-decoration: none
 }
 
-.parent-one {
+.tenderManagerParent .parent-one {
     padding-left: 0;
     padding-right: 0
 }
 
-.step-into h4 {
+.tenderManagerParent .step-into h4 {
     cursor: pointer
 }
 
-.step-into p {
+.tenderManagerParent .step-into p {
     cursor: pointer
 }
 
-.step-into:hover {
+.tenderManagerParent .step-into:hover {
     text-decoration: underline
 }
 
@@ -159,7 +156,7 @@
     z-index: 1
 }
 
-.deleteContract.delcontracticon:hover {
+.tenderManagerParent .deleteContract.delcontracticon:hover {
     color: #ffa500 !important;
     border-color: transparent !important
 }
@@ -173,7 +170,7 @@ kendo-dialog-actions.tender-del-style.k-dialog-buttongroup {
     width: 438px !important
 }
 
-button.k-button.tender-okbtn {
+/*button.k-button.tender-okbtn {
     font-family: 'Intel Clear' !important;
     font-size: 15px !important;
     background: #00aeef !important;
@@ -182,11 +179,11 @@ button.k-button.tender-okbtn {
     font-weight: normal !important
 }
 
-button.k-button.tender-okbtn:hover {
-    color: #fff !important;
-    border-color: #0071c5 !important;
-    background-color: #0071c5 !important
-}
+    button.k-button.tender-okbtn:hover {
+        color: #fff !important;
+        border-color: #0071c5 !important;
+        background-color: #0071c5 !important
+    }
 
 button.k-button.tender-cancelbtn {
     font-family: 'Intel Clear' !important;
@@ -196,11 +193,11 @@ button.k-button.tender-cancelbtn {
     color: #444444 !important
 }
 
-button.k-button.tender-cancelbtn:hover {
-    color: #444 !important;
-    border-color: #ebebeb !important;
-    background-color: #ebebeb !important
-}
+    button.k-button.tender-cancelbtn:hover {
+        color: #444 !important;
+        border-color: #ebebeb !important;
+        background-color: #ebebeb !important
+    }
 
 p.tender-del-head-style {
     font-family: 'Intel Clear' !important;
@@ -208,11 +205,10 @@ p.tender-del-head-style {
     text-align: center !important;
     padding-top: 20px !important;
     color: #444 !important
-}
-
-.performanceBar {
+}*/
+/*.performanceBar {
     position: relative;
     left: 87% !important;
     width: 400px !important;
     bottom: 79px !important;
-}
+}*/

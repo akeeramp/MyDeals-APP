@@ -1,59 +1,59 @@
-.editor101 {
+.pricingTableParent .editor101 {
     height: 100%;
     overflow: auto !important
 }
 
-.editor101 h4 {
-    margin-top: 0;
-    color: #0071C5
-}
+    .pricingTableParent .editor101 h4 {
+        margin-top: 0;
+        color: #0071C5
+    }
 
-.editor101 .pnl {
-    margin: 10px 10px;
-    border: 1px solid #e7e7e8
-}
+    .pricingTableParent .editor101 .pnl {
+        margin: 10px 10px;
+        border: 1px solid #e7e7e8
+    }
 
-.editor101 .head {
-    border-bottom: 1px solid #e7e7e8;
-    background-color: #e7e7e8;
-    padding: 6px;
-    font-size: 16px;
-    color: #0071C5;
-    font-weight: 600
-}
+    .pricingTableParent .editor101 .head {
+        border-bottom: 1px solid #e7e7e8;
+        background-color: #e7e7e8;
+        padding: 6px;
+        font-size: 16px;
+        color: #0071C5;
+        font-weight: 600
+    }
 
-.editor101 .body {
-    padding: 5px
-}
+    .pricingTableParent .editor101 .body {
+        padding: 5px
+    }
 
-.editor101 .icon {
-    text-align: center;
-    margin: 5px 7px;
-    width: 70px
-}
+    .pricingTableParent .editor101 .icon {
+        text-align: center;
+        margin: 5px 7px;
+        width: 70px
+    }
 
-.editor101 .icon i {
-    color: #00AEEF;
-    font-size: 30px
-}
+        .pricingTableParent .editor101 .icon i {
+            color: #00AEEF;
+            font-size: 30px
+        }
 
-.editor101 .icon i.inverse {
-    color: #ffffff;
-    font-size: 30px;
-    background-color: #00AEEF;
-    border-radius: 4px;
-    padding: 4px
-}
+            .pricingTableParent .editor101 .icon i.inverse {
+                color: #ffffff;
+                font-size: 30px;
+                background-color: #00AEEF;
+                border-radius: 4px;
+                padding: 4px
+            }
 
-.editor101 .icon div {
-    font-weight: 600
-}
+        .pricingTableParent .editor101 .icon div {
+            font-weight: 600
+        }
 
-.editor101 .icon p {
-    margin: 6px 0
-}
+        .pricingTableParent .editor101 .icon p {
+            margin: 6px 0
+        }
 
-#left-pane {
+.pricingTableParent #left-pane {
     height: auto;
     float: left;
     overflow: auto;
@@ -63,7 +63,7 @@
     background-color: #ffffff !important
 }
 
-#contractHeader {
+.pricingTableParent #contractHeader {
     height: 62px !important;
     margin-top: 0 !important;
     font-size: 14px;
@@ -72,7 +72,7 @@
     font-style: normal
 }
 
-.pricing-strategy-status-bar {
+.pricingTableParent .pricing-strategy-status-bar {
     color: #000000;
     font-size: 10px;
     font-family: arial;
@@ -80,55 +80,55 @@
     height: 16px
 }
 
-#contractContainerWrapper {
-    height: calc(100% - 95px);
+.pricingTableParent #contractContainerWrapper {
+    height: 100%;
     padding: 0 0 0 0 !important;
     -webkit-box-sizing: border-box;
     -moz-box-sizing: border-box;
     box-sizing: border-box
 }
 
-#contractContainer {
+.pricingTableParent #contractContainer {
     height: 100%;
     padding: 0;
     overflow: hidden;
     width: 100%
 }
 
-.fntLg {
+.pricingTableParent .fntLg {
     font-family: 'Intel Clear';
     font-weight: 200;
     font-style: normal;
     font-size: 16px
 }
 
-.textCircleMd {
+.pricingTableParent .textCircleMd {
     border-radius: 50%;
     width: 20px;
     height: 20px;
     padding: 4px;
     color: #003C71;
     text-align: center;
-    font: 12px Arial, sans-serif;
+    font: 12px Arial,sans-serif;
     font-weight: bold;
     margin: 1px 6px 0 2px
 }
 
-.valid_Complete {
+.pricingTableParent .valid_Complete {
     background: #C4D600
 }
 
-b {
+.pricingTableParent b {
     font-weight: bold !important
 }
 
-.isHybridIdentHeader,
-.isHybridIdentHeader_Complete,
-.isHybridIdentHeader_Finalizing,
-.isHybridIdentHeader_Valid,
-.isHybridIdentHeader_Dirty,
-.isHybridIdentHeader_0,
-.isHybridIdentHeader_ {
+.pricingTableParent .isHybridIdentHeader,
+.pricingTableParent .isHybridIdentHeader_Complete,
+.pricingTableParent .isHybridIdentHeader_Finalizing,
+.pricingTableParent .isHybridIdentHeader_Valid,
+.pricingTableParent .isHybridIdentHeader_Dirty,
+.pricingTableParent .isHybridIdentHeader_0,
+.pricingTableParent .isHybridIdentHeader_ {
     font-size: 11px;
     font-weight: bold;
     color: blue;
@@ -137,13 +137,13 @@ b {
     margin-top: -25px;
 }
 
-.k-tabstrip-items .k-item {
+.pricingTableParent .k-tabstrip-items .k-item {
     margin-right: 0 !important;
-    font-size: 15px !important;
+    font-size: 14px !important;
     font-weight: 400 !important
 }
 
-.variable-plus {
+.pricingTableParent .variable-plus {
     padding-left: 10px;
     padding-top: 2px
 }
@@ -160,14 +160,14 @@ b {
     border: none !important;
 }
 
-.noData-kendo-dialog button.btn.btn-primary.k-button:focus {
-    outline: 0 !important
-}
+    .noData-kendo-dialog button.btn.btn-primary.k-button:focus {
+        outline: 0 !important
+    }
 
-.noData-kendo-dialog button.btn.btn-primary.k-button:hover {
-    background-color: #ebebeb !important;
-    color: #444;
-}
+    .noData-kendo-dialog button.btn.btn-primary.k-button:hover {
+        background-color: #ebebeb !important;
+        color: #444;
+    }
 
 kendo-dialog-actions.noData-kendo-dialog.k-dialog-buttongroup.k-actions.k-actions-stretched {
     padding: 0 !important;

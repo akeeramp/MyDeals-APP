@@ -3,7 +3,7 @@
 
 <loading-panel-angular id="PTRLoading" class="ptrLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
                        [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
-<div class="container-fluid overflow" style="border: 2px solid #bcbcbc; margin-top: 0px !important;">
+<div class="container-fluid overflow contain-pte" style="border: 2px solid #bcbcbc; margin-top: 0px !important;">
     <div class="row">
         <div class="col">
 
@@ -105,7 +105,7 @@
     </div>
     <div class="row">
         <div class="col">
-            <kendo-splitter class="spliter-btom-style" orientation="vertical" style="height: calc(100vh - 280px); padding-left: 10px;">
+            <kendo-splitter class="spliter-btom-style" orientation="vertical" style="height: calc(100vh - 275px); padding-left: 10px;">
                 <kendo-splitter-pane><hot-table [hotId]="hotId" [settings]="hotSettings" class="all-spread pricing_table_celltext"></hot-table></kendo-splitter-pane>
                 <kendo-splitter-pane [(size)]="showDiscount">
                     <div style="overflow: hidden;" class="wide noborder">

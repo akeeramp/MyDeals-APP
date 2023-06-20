@@ -1,4 +1,116 @@
-.draftMsg{font-size:14px;padding:8px 4px}.errMsg{color:#FC4C02;background-color:#ffffff;margin:8px;font-size:13px;padding:2px 8px}.yel{color:#f3D54E}.full-width{width:100%}.btn-primary{background-color:#00AEEF}.modalBlueBody{background-color:#003C71;color:#ffffff}input[type=radio].with-font,input[type=checkbox].with-font{border:0;clip:rect(0 0 0 0);height:1px;margin:-1px;overflow:hidden;padding:0;position:absolute;width:1px}input[type=radio].with-font + label:before,input[type=checkbox].with-font + label:before{font-family:FontAwesome;display:inline-block;content:"\f096";font-size:20px;letter-spacing:10px;color:#00AEEF;margin-left:10px}input[type=radio].with-font:hover + label:before,input[type=checkbox].with-font:hover + label:before{color:#003C71;cursor:pointer}input[type=radio].with-font.disabled + label:before,input[type=checkbox].with-font.disabled + label:before{color:#cccccc;cursor:default}input[type=radio].with-font:checked + label:before,input[type=checkbox].with-font:checked + label:before{content:"\f046";font-size:20px;letter-spacing:5px;color:#C4D600;margin-left:10px}input[type=radio].with-font:focus + label:before,input[type=checkbox].with-font:focus + label:before{font-weight:bold;color:#C4D600}#gridActionSummary.k-grid td{padding-left:6px}.summary-pop-up .mat-dialog-container{padding:0!important}.fclosebtn.btn-default{background-color:#f4f4f4!important;color:#444!important;border-color:#ddd!important;width:95%!important}.fclosebtn.btn-default:hover{color:#0071c5!important;border-color:#b1babf!important;background-color:#e7e7e7!important}.fsubmitbtn.btn-primary{background-color:#00AEEF!important;color:#ffffff!important;width:96%!important;margin-left:9px!important}.fsubmitbtn.btn-primary:hover{color:#ffffff!important;border-color:#00aeef!important;background-color:#0071c5!important}.summary-pop-up .summary-action-body{padding:15px!important}.summary-pop-up .summary-action-head{padding:15px!important;border-bottom:1px solid #fff!important}
+.draftMsg {
+    font-size: 14px;
+    padding: 8px 4px
+}
+
+.errMsgActionSummary {
+    color: #FC4C02;
+    background-color: #ffffff;
+    margin: 8px;
+    font-size: 13px;
+    padding: 2px 8px
+}
+
+.full-width {
+    width: 100%
+}
+
+.btn-primary.btnPrimarySummary {
+    background-color: #00AEEF
+}
+
+.modalBlueBody {
+    background-color: #003C71;
+    color: #ffffff
+}
+
+/*input[type=radio].with-font, input[type=checkbox].with-font {
+    border: 0;
+    clip: rect(0 0 0 0);
+    height: 1px;
+    margin: -1px;
+    overflow: hidden;
+    padding: 0;
+    position: absolute;
+    width: 1px
+}
+
+    input[type=radio].with-font + label:before, input[type=checkbox].with-font + label:before {
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f096";
+        font-size: 20px;
+        letter-spacing: 10px;
+        color: #00AEEF;
+        margin-left: 10px
+    }
+
+    input[type=radio].with-font:hover + label:before, input[type=checkbox].with-font:hover + label:before {
+        color: #003C71;
+        cursor: pointer
+    }
+
+    input[type=radio].with-font.disabled + label:before, input[type=checkbox].with-font.disabled + label:before {
+        color: #cccccc;
+        cursor: default
+    }
+
+    input[type=radio].with-font:checked + label:before, input[type=checkbox].with-font:checked + label:before {
+        content: "\f046";
+        font-size: 20px;
+        letter-spacing: 5px;
+        color: #C4D600;
+        margin-left: 10px
+    }
+
+    input[type=radio].with-font:focus + label:before, input[type=checkbox].with-font:focus + label:before {
+        font-weight: bold;
+        color: #C4D600
+    }*/
+
+#gridActionSummary.k-grid td {
+    padding-left: 6px
+}
+
+.summary-pop-up .mat-dialog-container {
+    padding: 0 !important
+}
+
+.fclosebtn.btn-default {
+    background-color: #f4f4f4 !important;
+    color: #444 !important;
+    border-color: #ddd !important;
+    width: 95% !important
+}
+
+    .fclosebtn.btn-default:hover {
+        color: #0071c5 !important;
+        border-color: #b1babf !important;
+        background-color: #e7e7e7 !important
+    }
+
+.fsubmitbtn.btn-primary {
+    background-color: #00AEEF !important;
+    color: #ffffff !important;
+    width: 96% !important;
+    margin-left: 9px !important
+}
+
+    .fsubmitbtn.btn-primary:hover {
+        color: #ffffff !important;
+        border-color: #00aeef !important;
+        background-color: #0071c5 !important
+    }
+
+.summary-pop-up .summary-action-body {
+    padding: 15px !important
+}
+
+.summary-pop-up .summary-action-head {
+    padding: 15px !important;
+    border-bottom: 1px solid #fff !important
+}
+
 #gridActionSummary .k-grid-content {
     /*height: 200px*/
     overflow: auto;

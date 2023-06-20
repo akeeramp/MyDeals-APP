@@ -3,7 +3,7 @@
 <loading-panel-angular [show]="isLoading" [header]="spinnerMessageHeader" [isShowFunFact]="isBusyShowFunFact"
                        [description]="spinnerMessageDescription" [msgType]="msgType"></loading-panel-angular>
 
-<div id="horizontal" [ngClass]="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}" style="position: relative; top: -20px;">
+<div id="horizontal" [ngClass]="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}" class="pricingTableParent" style="position: relative; top: -20px;">
     <div id="center-pane" class="fr" [ngClass]="{'overFlowHidden': isTenderContract==true}">
         <div id="contractContainerWrapper">
             <div id="contractContainer" class="fullHeight new-property">
@@ -37,7 +37,7 @@
                                 <div class="clearboth"></div>
                             </div>
                         </div>
-                        <kendo-tabstrip (tabSelect)="onTabSelect($event)" class="tabs-coll">
+                        <kendo-tabstrip (tabSelect)="onTabSelect($event)" class="tabs-coll pricingTableKendoTabstrip" id="priceTableDealEdit">
                             <kendo-tabstrip-tab title="Pricing Table Editor" [selected]="isPTETab==true">
                                 <ng-template kendoTabContent>
                                     <div *ngIf="isPTETab">
@@ -135,7 +135,7 @@
                 <div *ngIf="selLnav=='groupExclusionDiv'" class="few-oracle-css">
                     <manager-exclude-groups (modelChange)="loadModel($event)" [contractData]="contractData" [UItemplate]="UItemplate" [groupTab]="selLnav" [showPCT]="isShowPCT"></manager-exclude-groups>
                 </div>
-                <div *ngIf="selLnav=='contractDetailsDiv'" class="few-oracle-css">
+                <div *ngIf="selLnav=='contractDetailsDiv'" class="few-oracle-css allStuffContractDetails">
                     <contract-details [C_ID]="contractData?.DC_ID"></contract-details>
                 </div>
                 <div *ngIf="selLnav=='historyDiv'" class="few-oracle-css">
@@ -153,7 +153,7 @@
                 <div *ngIf="selLnav=='pctDiv'" class="few-oracle-css">
                     <manager-pct [contractData]="contractData" [UItemplate]="UItemplate" [tab]="selLnav" (refreshedContractData)="refreshContractData($event)" (modelChange)="loadModel($event)"></manager-pct>
                 </div>
-                <div *ngIf="selLnav=='ViewContractDetails'" class="few-oracle-css">
+                <div *ngIf="selLnav=='ViewContractDetails'" class="few-oracle-css allStuffContractDetails">
                     <contract-details [C_ID]="contractData?.DC_ID"></contract-details>
                 </div>
             </div>

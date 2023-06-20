@@ -1,43 +1,42 @@
-
-.lblSelected label span {
+.productCorrectParent .lblSelected label span {
     color: white !important;
 }
 
-.productpath > li > span {
+.productCorrectParent .productpath > li > span {
     color: #0071c5;
     background: transparent !important;
     border-color: transparent !important;
     font-size: 13px;
 }
 
-.lblFilterProd > span {
+.productCorrectParent .lblFilterProd > span {
     font-size: 12px !important;
     font-weight: 600 !important;
     color: #00AEEF !important;
 }
 
-.lblSelected {
+.productCorrectParent .lblSelected {
     background: rgba(2, 173, 255, 1);
 }
 
-.lblNotSelected {
+.productCorrectParent .lblNotSelected {
     background: none;
 }
 
-.lblFilterProd:before {
+.productCorrectParent .lblFilterProd:before {
     color: transparent !important;
     width: 0px !important;
 }
 
-.btnInclude {
+.productCorrectParent .btnInclude {
     border-left: 4px solid #003C71;
 }
 
-.btnExclude {
+.productCorrectParent .btnExclude {
     border-left: 4px solid #FC4C02;
 }
 
-.gridStatusMarker {
+.productCorrectParent .gridStatusMarker {
     height: 100%;
     width: 4px;
     font-size: 14px;
@@ -45,31 +44,31 @@
     text-align: center;
 }
 
-.false {
+.productCorrectParent .false {
     background-color: #003C71 !important;
     color: #ffffff !important;
 }
 
-.true {
+.productCorrectParent .true {
     background-color: #FC4C02 !important;
     color: #ffffff !important;
 }
 
-.includeCircle {
+.productCorrectParent .includeCircle {
     background: #1a3e6f;
     border-radius: 50%;
     padding: 2px;
     color: #ffffff;
 }
 
-.excludeCircle {
+.productCorrectParent .excludeCircle {
     background: #FC4C02;
     border-radius: 50%;
     padding: 2px;
     color: #ffffff;
 }
 
-.badge.upperBadge {
+.productCorrectParent .badge.upperBadge {
     font-size: 12px !important;
     padding: 2px 4px;
     background-color: #fff;
@@ -80,7 +79,7 @@
     margin-top: -3px !important;
 }
 
-.newProd {
+.productCorrectParent .newProd {
     font-size: 11px;
     color: #0071C5;
     padding-left: 5px;
@@ -88,29 +87,28 @@
 }
 
 
-.lnavFilter {
+.productCorrectParent .lnavFilter {
     background-color: #e7e7e8;
     height: calc(87vh - 260px) !important;
     padding: 4px;
-    overflow-y: auto;
-    overflow-x: hidden;
+    overflow: auto;
     font-family: 'Intel Clear', 'Arial';
 }
 
-.filterGrp {
+.productCorrectParent .filterGrp {
     font-family: arial;
     font-weight: 600;
     font-size: 11px;
     margin: 5px 5px 5px 10px;
 }
 
-.filterTitle {
+.productCorrectParent .filterTitle {
     margin: 5px;
     font-size: 20px;
     color: #aeaeae;
 }
 
-.filterTitleUnderline {
+.productCorrectParent .filterTitleUnderline {
     margin: 5px;
     font-size: 15px;
     color: #1a3e6f;
@@ -118,34 +116,34 @@
     font-weight: bold;
 }
 
-.filterGrp .filterContainer {
+.productCorrectParent .filterGrp .filterContainer {
     font-weight: 200;
     margin-bottom: 20px;
 }
 
-    .filterGrp .filterContainer label {
+    .productCorrectParent .filterGrp .filterContainer label {
         font-weight: 200;
         margin-left: 5px;
         cursor: pointer;
     }
 
-.filterGrp .srchContainer {
+.productCorrectParent .filterGrp .srchContainer {
     margin: 3px 0 0 15px;
     cursor: pointer;
     line-height: 1em;
 }
 
-    .filterGrp .srchContainer:hover i {
+    .productCorrectParent .filterGrp .srchContainer:hover i {
         color: #003C71;
     }
 
-    .filterGrp .srchContainer i {
+    .productCorrectParent .filterGrp .srchContainer i {
         color: #00AEEF;
         font-size: 14px;
         margin-right: 5px;
     }
 
-.allDone {
+.productCorrectParent .allDone {
     background-color: #ffffff;
     border-radius: 4px;
     margin: 10px 0 0 0;
@@ -153,25 +151,25 @@
     text-align: center;
 }
 
-    .allDone i {
+    .productCorrectParent .allDone i {
         font-size: 60px;
         color: #C4D600;
         margin-right: 25px;
     }
 
-.done-title.correct-title-done {
+.productCorrectParent .done-title.correct-title-done {
     font-size: 30px !important;
     position: relative !important;
     margin-left: 117px !important
 }
 
-.done-body.corrector-body-title {
+.productCorrectParent .done-body.corrector-body-title {
     font-size: 12px !important;
     position: relative !important;
     margin-left: 115px !important;
 }
 
-.done-confirm.done-confirm-corrector {
+.productCorrectParent .done-confirm.done-confirm-corrector {
     font-size: 16px !important;
     text-align: center !important;
     width: 100% !important;
@@ -180,68 +178,68 @@
 }
 
 
-.headerMsg {
+.productCorrectParent .headerMsg {
     margin-top: 6px;
     font-size: 18px;
     color: #ffffff;
 }
 
-.subHeaderMsg {
+.productCorrectParent .subHeaderMsg {
     margin: 0 0 4px 0;
     font-size: 18px;
     color: #ffffff;
 }
 
-    .subHeaderMsg a {
+    .productCorrectParent .subHeaderMsg a {
         color: #00AEEF;
         text-decoration: underline;
         cursor: pointer;
     }
 
-        .subHeaderMsg a:hover {
+        .productCorrectParent .subHeaderMsg a:hover {
             color: #f3D54E;
         }
 
-.subHeaderNavContainer {
+.productCorrectParent .subHeaderNavContainer {
     color: #003C71;
     background-color: #f4f4f4;
     font-size: 16px;
     border-radius: 4px;
     width: 100%;
     height: auto;
-    display:flex;
+    display: flex;
 }
 
-.miniNav {
+.productCorrectParent .miniNav {
     padding: 0 15px;
     margin-right: 10px;
     border-right: 2px solid #d4d4d4;
     font-weight: 600;
 }
 
-    .miniNav button {
+    .productCorrectParent .miniNav button {
         width: 60px;
     }
 
-        .miniNav button[disabled], .miniNav button[disabled]:hover {
+        .productCorrectParent .miniNav button[disabled], .productCorrectParent .miniNav button[disabled]:hover {
             color: #737b7e;
             background-color: #d9d9d9 !important;
             cursor: not-allowed;
         }
 
-.miniProdNav {
+.productCorrectParent .miniProdNav {
     padding: 0 15px;
     margin-right: 10px;
     font-weight: 600;
 }
 
-.mini-right {
+.productCorrectParent .mini-right {
     overflow: hidden;
     height: auto;
-    flex:1;
+    flex: 1;
 }
 
-.mini-left {
+.productCorrectParent .mini-left {
     float: left;
     width: 175px;
     min-width: 175px;
@@ -250,23 +248,23 @@
     padding-bottom: 5px;
 }
 
-.yellow {
+.productCorrectParent .yellow {
     color: #f3D54E;
 }
 
-.skyblue {
+.productCorrectParent .skyblue {
     color: #00AEEF;
 }
 
-.pl10 {
+.productCorrectParent .pl10 {
     padding-left: 10px;
 }
 
-.or {
+.productCorrectParent .or {
     padding: 0 10px;
 }
 
-.lnk {
+.productCorrectParent .lnk {
     cursor: pointer;
     color: #ffffff;
     border-radius: 4px;
@@ -274,19 +272,19 @@
     padding: 0 5px;
 }
 
-    .lnk:hover {
+    .productCorrectParent .lnk:hover {
         background-color: #0071C5;
     }
 
-.grpDesc {
+.productCorrectParent .grpDesc {
     color: #666666;
 }
 
-.prodCorrector-grid.k-grid .k-grouping-row td p {
+.productCorrectParent .prodCorrector-grid.k-grid .k-grouping-row td p {
     padding: 5px;
 }
 
-.suggestedProd {
+.productCorrectParent .suggestedProd {
     border: 1px solid rgba(190, 163, 163, 0.12);
     padding: 5px;
     background: #1a3e6f;
@@ -294,89 +292,89 @@
     margin-bottom: 10px;
 }
 
-.suggestionClose {
+.productCorrectParent .suggestionClose {
     color: yellow !important;
     padding: 0px !important;
 }
 
 
-.prodCorrectorHeader {
+.productCorrectParent .prodCorrectorHeader {
     border-bottom: 1px solid #ffffff;
     margin-left: 0px;
     margin-right: 0px;
-    width:100% !important;
+    width: 100% !important;
 }
 
-.rowNavigation {
+.productCorrectParent .rowNavigation {
     color: yellow;
     font-size: 28px;
 }
 
-.prodText {
+.productCorrectParent .prodText {
     color: white;
     font-size: 32px;
 }
 
 @media (max-width: 1000px) {
-    .prodText {
+    .productCorrectParent .prodText {
         font-size: 26px;
     }
 }
 
 @media (max-width: 900px) {
-    .prodText {
+    .productCorrectParent .prodText {
         font-size: 22px;
     }
 
-    .subHeaderMsg {
+    .productCorrectParent .subHeaderMsg {
         font-size: 15px;
     }
 }
 
-.rowNavPanel {
+.productCorrectParent .rowNavPanel {
     color: white;
     font-size: 28px;
     padding-top: 12px;
     padding-left: 20px;
 }
 
-.marginRight {
+.productCorrectParent .marginRight {
     margin-right: 10px;
 }
 
 
-.addedProduct {
+.productCorrectParent .addedProduct {
     padding-left: 15px;
     padding-right: 15px;
     margin-bottom: 15px;
 }
 
-.insertAtRowsText {
+.productCorrectParent .insertAtRowsText {
     color: white;
     font-weight: 400 !important;
     font-style: normal;
     font-size: 19px;
 }
 
-.prodHeader {
+.productCorrectParent .prodHeader {
     color: white;
     font-size: 32px;
 }
 
-.breadCrumbWrapper {
+.productCorrectParent .breadCrumbWrapper {
     padding-left: 10px;
     padding-right: 10px;
     font-size: 21px;
 }
 
-.modalCloseIcon {
+.productCorrectParent .modalCloseIcon {
     color: white;
     font-size: 32px;
     padding-top: 12px;
     padding-left: 20px;
 }
 
-.productpath {
+.productCorrectParent .productpath {
     margin: 0;
     padding: 4px 0;
     background-color: transparent;
@@ -384,61 +382,59 @@
     line-height: 0.2em;
 }
 
-    .productpath.breadcrumb > li + li:before {
+    .productCorrectParent .productpath.breadcrumb > li + li:before {
         padding: 0 5px 0 0;
         content: ",";
         font-size: 16px;
         text-align: justify;
     }
 
-    .productpath.breadcrumb > li + li div {
+    .productCorrectParent .productpath.breadcrumb > li + li div {
         padding-left: 10px;
     }
 
-    .productpath.breadcrumb {
+    .productCorrectParent .productpath.breadcrumb {
         padding: 0px;
         margin-bottom: 0px;
         /*padding-bottom: 10px;*/ padding-bottom: 0px;
         padding-left: 5px;
     }
 
-span.prdAnchor {
+.productCorrectParent span.prdAnchor {
     color: #003C71;
 }
 
-    span.prdAnchor.Warning {
+    .productCorrectParent span.prdAnchor.Warning {
         color: #FFA300;
         cursor: pointer;
     }
 
-    span.prdAnchor.Issue {
+    .productCorrectParent span.prdAnchor.Issue {
         color: #FC4C02;
         cursor: pointer;
     }
 
-    span.prdAnchor.Good {
+    .productCorrectParent span.prdAnchor.Good {
         color: #9bc600;
     }
 
-    span.prdAnchor:hover {
+    .productCorrectParent span.prdAnchor:hover {
         text-decoration: none;
         color: #01AEEF;
     }
 
-.strike .prdAnchor {
+.productCorrectParent .strike .prdAnchor {
     text-decoration: line-through !important;
     cursor: pointer;
     text-decoration-color: #0071c5 !important;
     color: #FC4C02 !important;
 }
 
-    .strike span {
-        color: #01AEEF;
-    }
+.productCorrectParent .strike span {
+    color: #01AEEF;
+}
 
-
-
-.drillDown.btn-group button {
+.productCorrectParent .drillDown.btn-group button {
     background-color: #01AEEF;
     border-left: none;
     border-top: none;
@@ -451,44 +447,44 @@ span.prdAnchor {
     overflow: hidden;
 }
 
-.drillDown {
+.productCorrectParent .drillDown {
     background-color: #01AEEF;
 }
 
-    .drillDown.btn-group {
+    .productCorrectParent .drillDown.btn-group {
         padding-top: 3px;
         padding-bottom: 3px;
     }
 
-        .drillDown.btn-group.btn {
+        .productCorrectParent .drillDown.btn-group.btn {
             white-space: normal !important;
             word-wrap: break-word;
         }
 
-        .drillDown.btn-group button:not(:last-child) {
+        .productCorrectParent .drillDown.btn-group button:not(:last-child) {
             border-right: none; /* Prevent double borders */
         }
 
-        .drillDown.btn-group button.noborder {
+        .productCorrectParent .drillDown.btn-group button.noborder {
             border-right: none;
         }
 
         /* Add a background color on hover */
-        .drillDown.btn-group button:hover {
+        .productCorrectParent .drillDown.btn-group button:hover {
             background-color: #01AEEF;
             color: #1a3e6f;
         }
 
-        .drillDown.btn-group button:focus, .button:active {
+        .productCorrectParent .drillDown.btn-group button:focus, .button:active {
             outline: none !important;
             background-color: #01AEEF;
         }
 
-.noLeftBorder {
+.productCorrectParent .noLeftBorder {
     border-left: none !important;
 }
 
-.prodDrillDownLarge {
+.productCorrectParent .prodDrillDownLarge {
     background-color: #01AEEF;
     border-bottom: 2px solid #1a3e6f;
     border-left: 1px solid #ffffff;
@@ -497,90 +493,90 @@ span.prdAnchor {
     text-align: center;
 }
 
-    .prodDrillDownLarge p {
+    .productCorrectParent .prodDrillDownLarge p {
         font-size: 13px;
         margin-top: 11px;
         color: #fff;
     }
 
-        .prodDrillDownLarge p:hover {
+        .productCorrectParent .prodDrillDownLarge p:hover {
             color: #1a3e6f;
         }
 
-.prodSelected.ui-select-multiple.ui-select-bootstrap {
+.productCorrectParent .prodSelected.ui-select-multiple.ui-select-bootstrap {
     min-height: 100px !important;
     max-height: 100px !important;
     overflow-y: auto;
     overflow-x: hidden;
 }
 
-#invalidProdGrid, #suggestionProdGrid {
+.productCorrectParent #invalidProdGrid, .productCorrectParent #suggestionProdGrid {
     height: calc(87vh - 400px) !important;
     overflow: auto;
 }
 
-.err-Search {
+.productCorrectParent .err-Search {
     color: #FF6E77;
     font-size: 12px !important;
     padding-left: 1px !important;
     padding-top: 2px !important;
 }
 
-.prdBtn {
+.productCorrectParent .prdBtn {
     font-size: 13px;
 }
 
-.padding-tb-0 {
+.productCorrectParent .padding-tb-0 {
     padding: 0 5px;
 }
 
-.prdBtn.btn-primary {
+.productCorrectParent .prdBtn.btn-primary {
     background-color: #01AEEF !important;
 }
 
-        .prdBtn.btn-primary:hover {
-            background-color: #01AEEF;
-            color: #1a3e6f;
-        }
+    .productCorrectParent .prdBtn.btn-primary:hover {
+        background-color: #01AEEF;
+        color: #1a3e6f;
+    }
 
-        .prdBtn.btn-primary:focus, .btn-primary:active {
-            outline: none !important;
-            background-color: #01AEEF;
-        }
+    .productCorrectParent .prdBtn.btn-primary:focus, .productCorrectParent .btn-primary:active {
+        outline: none !important;
+        background-color: #01AEEF;
+    }
 
-.prodCorrector.modal-body {
+.productCorrectParent .prodCorrector.modal-body {
     padding-top: 2px;
     padding-bottom: 0;
-    min-height: calc(90vh - 145px);
-    max-height: calc(90vh - 160px); 
+    min-height: calc(90vh - 167px);
+    max-height: calc(90vh - 160px);
 }
 
 
-.prodCorrector.kendoGridHeight {
+.productCorrectParent .prodCorrector.kendoGridHeight {
     height: calc(87vh - 270px);
 }
 
-.prdCorrector-modal-window, .modal-dialog {
+.productCorrectParent .prdCorrector-modal-window {
     width: 95%;
     margin-left: auto;
     margin-right: auto;
 }
 
-.prodCorrector-grid.k-grid td {
+.productCorrectParent .prodCorrector-grid.k-grid td {
     white-space: nowrap;
     color: #000000;
 }
 
-.grpTitle {
+.productCorrectParent .grpTitle {
     font-size: 14px;
     font-weight: 600;
 }
 
-.pr10 {
-    padding-right:10px;
+.productCorrectParent .pr10 {
+    padding-right: 10px;
 }
 
-input[type=checkbox].with-font {
+.productCorrectParent input[type=checkbox].with-font {
     border: 0;
     clip: rect(0 0 0 0);
     height: 1px;
@@ -591,7 +587,7 @@ input[type=checkbox].with-font {
     width: 1px;
 }
 
-    input[type=checkbox].with-font + label:before {
+    .productCorrectParent input[type=checkbox].with-font + label:before {
         font-family: FontAwesome;
         display: inline-block;
         content: "\f096";
@@ -603,26 +599,26 @@ input[type=checkbox].with-font {
         vertical-align: middle;
     }
 
-    input[type=checkbox].with-font.ckSm + label:before {
+    .productCorrectParent input[type=checkbox].with-font.ckSm + label:before {
         font-size: 16px;
     }
 
-    input[type=checkbox].with-font:hover + label:before {
+    .productCorrectParent input[type=checkbox].with-font:hover + label:before {
         color: #003C71;
         cursor: pointer;
     }
 
-    input[type=checkbox].with-font[disabled]:hover + label:before {
+    .productCorrectParent input[type=checkbox].with-font[disabled]:hover + label:before {
         color: red;
         cursor: no-drop;
     }
 
-    input[type=checkbox].with-font.disabled + label:before {
+    .productCorrectParent input[type=checkbox].with-font.disabled + label:before {
         color: #cccccc;
         cursor: default;
     }
 
-    input[type=checkbox].with-font:checked + label:before {
+    .productCorrectParent input[type=checkbox].with-font:checked + label:before {
         content: "\f046";
         font-size: 22px;
         letter-spacing: 5px;
@@ -631,20 +627,20 @@ input[type=checkbox].with-font {
         vertical-align: middle;
     }
 
-    input[type=checkbox].with-font.ckSm:checked + label:before {
+    .productCorrectParent input[type=checkbox].with-font.ckSm:checked + label:before {
         font-size: 16px;
     }
 
-    input[type=checkbox].with-font:focus + label:before {
+    .productCorrectParent input[type=checkbox].with-font:focus + label:before {
         font-weight: bold;
     }
 
-.breadcrumb .close {
+.productCorrectParent .breadcrumb .close {
     float: right;
     font-size: 21px;
 }
 
-.removeProduct {
+.productCorrectParent .removeProduct {
     font-size: 12.5px;
     cursor: pointer;
     font-weight: bold;
@@ -654,24 +650,24 @@ input[type=checkbox].with-font {
     opacity: 0.5;
 }
 
-.breadcrumb .btn-default {
+.productCorrectParent .breadcrumb .btn-default {
     font-weight: 600;
 }
 
-tr.ng-star-inserted.hide-row {
+.productCorrectParent tr.ng-star-inserted.hide-row {
     display: none;
 }
 
-.kendopcorbtn:hover {
+.productCorrectParent .kendopcorbtn:hover {
     border-color: #007bff;
     color: #ffffff;
     background-color: #007bff !important;
 }
 
-.PctreeViewNodes {
+.productCorrectParent .PctreeViewNodes {
     color: #00aeef;
     font-weight: 600;
-    cursor:pointer;
+    cursor: pointer;
 }
 
 ::ng-deep #productcorrectorgrid .k-grid thead {
@@ -707,7 +703,7 @@ tr.ng-star-inserted.hide-row {
 }
 
 .height-auto-fix {
-    height: auto!important;
+    height: auto !important;
 }
 
 .assign-inline-block {
@@ -716,11 +712,12 @@ tr.ng-star-inserted.hide-row {
     display: inline-block;
 }
 
-.span-closer {
+.productCorrectParent .span-closer {
     font-size: 17px;
     font-family: 'Intel Clear';
     line-height: 1;
 }
+
 button.btn.btn-xs.btn-primary.prdBtn.product-correct-nextbtn,
 button.btn.btn-xs.btn-primary.prdBtn.product-corrector-backbtn {
     background-color: #01AEEF !important;
@@ -731,11 +728,11 @@ button.btn.btn-xs.btn-primary.prdBtn.product-corrector-backbtn {
     padding: 1px 5px !important;
 }
 
-button.btn.btn-xs.btn-primary.prdBtn.product-correct-nextbtn:hover,
-button.btn.btn-xs.btn-primary.prdBtn.product-corrector-backbtn:hover {
-    background-color: #01AEEF !important;
-    color: #1a3e6f !important;
-}
+    button.btn.btn-xs.btn-primary.prdBtn.product-correct-nextbtn:hover,
+    button.btn.btn-xs.btn-primary.prdBtn.product-corrector-backbtn:hover {
+        background-color: #01AEEF !important;
+        color: #1a3e6f !important;
+    }
 
 button.btn.btn-primary.btn-xs.prdBtn.product-corrector-backbtn[disabled],
 button.btn.btn-primary.btn-xs.prdBtn.product-correct-nextbtn[disabled] {
@@ -761,10 +758,10 @@ button.btn.btn-primary.prdBtn.saveclose-correctorbtn {
     width: 220px !important
 }
 
-button.btn.btn-primary.prdBtn.saveclose-correctorbtn:hover {
-    background-color: #01AEEF !important;
-    color: #1a3e6f !important;
-}
+    button.btn.btn-primary.prdBtn.saveclose-correctorbtn:hover {
+        background-color: #01AEEF !important;
+        color: #1a3e6f !important;
+    }
 
 button.btn.btn-default.prdBtn.cancel-correctorbtn {
     background-color: #f4f4f4 !important;
@@ -773,22 +770,23 @@ button.btn.btn-default.prdBtn.cancel-correctorbtn {
     width: 73px !important
 }
 
-button.btn.btn-default.prdBtn.cancel-correctorbtn:hover {
-    background-color: rgb(231, 231, 231) !important;
-    color: rgb(0, 113, 197) !important;
-}
-.product-breakout-modal .capbreakout.modal-header {
+    button.btn.btn-default.prdBtn.cancel-correctorbtn:hover {
+        background-color: rgb(231, 231, 231) !important;
+        color: rgb(0, 113, 197) !important;
+    }
+
+.product-breakout-modal-Corrector .capbreakout.modal-header {
     padding: 15px !important;
     padding-bottom: 0 !important
 }
 
-.product-breakout-modal .capbreakout.modal-body {
+.product-breakout-modal-Corrector .capbreakout.modal-body {
     padding: 15px !important;
     padding-top: 2px !important;
     padding-bottom: 0 !important
 }
 
-.product-breakout-modal .mat-dialog-container {
+.product-breakout-modal-Corrector .mat-dialog-container {
     padding: 0 !important;
     margin-left: auto !important;
     margin-right: auto !important;
@@ -799,13 +797,13 @@ button.btn.btn-default.prdBtn.cancel-correctorbtn:hover {
     position: relative !important;
 }
 
-.product-breakout-modal .capModalCloseIcon {
+.product-breakout-modal-Corrector .capModalCloseIcon {
     font-size: 26px !important;
     margin-top: 0 !important;
     padding-right: 5px !important
 }
 
-.product-breakout-modal .k-grid-toolbar {
+.product-breakout-modal-Corrector .k-grid-toolbar {
     padding: 17px 20px 5px 20px !important;
 }
 
@@ -813,7 +811,7 @@ button.btn.btn-default.prdBtn.cancel-correctorbtn:hover {
     height: 70px !important;
 }
 
-.product-breakout-modal .excelText {
+.product-breakout-modal-Corrector .excelText {
     font-size: 12px !important;
     box-shadow: none !important;
     margin-left: -16px;
@@ -823,11 +821,11 @@ button.btn.btn-default.prdBtn.cancel-correctorbtn:hover {
     border-radius: 0 !important;
 }
 
-.product-breakout-modal .excelText:hover {
-    background-color: #37a4cd7a !important
-}
+    .product-breakout-modal-Corrector .excelText:hover {
+        background-color: #37a4cd7a !important
+    }
 
-.product-breakout-modal .k-icon.k-i-file-excel {
+.product-breakout-modal-Corrector .k-icon.k-i-file-excel {
     margin-top: -30px !important;
     padding-left: 17px !important;
     font-size: 25px !important
@@ -837,20 +835,20 @@ button.btn.btn-default.prdBtn.cancel-correctorbtn:hover {
     padding-left: 15px !important
 }
 
-.product-breakout-modal .excelbtn-style {
+.product-breakout-modal-Corrector .excelbtn-style {
     margin-bottom: -30px !important;
     margin-left: -32px;
     text-align: center !important;
 }
 
-.product-breakout-modal .headerClass {
+.product-breakout-modal-Corrector .headerClass {
     padding-left: 1.286em !important;
     border-left-color: #c4cfd4 !important;
     padding: .786em .6em;
     font-weight: bold !important
 }
 
-.product-breakout-modal .k-touch-action-auto {
+.product-breakout-modal-Corrector .k-touch-action-auto {
     border-right: 0 !important;
     border-bottom: 0 !important;
     border: 0;
@@ -861,11 +859,11 @@ button.btn.btn-default.prdBtn.cancel-correctorbtn:hover {
     font-size: 12px !important
 }
 
-.product-breakout-modal mat-dialog-container product-breakout .modal-content {
+.product-breakout-modal-Corrector mat-dialog-container product-breakout .modal-content {
     box-shadow: none
 }
 
-#closePopover {
+#closePopoverCorrector {
     text-align: end !important;
 }
 
@@ -873,10 +871,11 @@ button.btn.btn-default.prdBtn.cancel-correctorbtn:hover {
     background-color: transparent !important
 }
 
-.product-selector-font-align {
+.productCorrectParent .product-selector-font-align {
     text-align: center;
     font-weight: normal;
 }
+
 .col-md-8.product-correct-done {
     text-align: center !important;
     padding-bottom: 160px !important;

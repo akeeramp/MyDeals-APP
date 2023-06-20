@@ -122,7 +122,7 @@
                                 </tr>
                             </table>
                             <div [ngClass]="{'show': isTenderDashboard, 'collapse': !isTenderDashboard}" id="sumWipGrid_{{pt.DC_ID}}" [hidden]="refreshPage && !isTenderDashboard">
-                                <div style="margin-left: 0">
+                                <div class="pctManagerTempt" style="margin-left: 0">
                                     <div class="opUiContainer md dashboard">
                                         <div id='detailGrid_{{pt.DC_ID}}'
                                              class='opUiContainer md dashboard sumGridOptionsExpand oppo-grids new-now-wrap physics-css either-pin'>
@@ -420,7 +420,7 @@
             </div>
         </div>
     </div>
-    <kendo-dialog class="cm-pop-up blue-popup-design" *ngIf="showMultipleDialog">
+    <kendo-dialog class="cm-pop-up blue-popup-design multiplePricingDialog" *ngIf="showMultipleDialog">
         <div class="modal-header modalBlueBody">
             <h5 class="modal-title" id="modal-title">Multiple Pricing Tables</h5>
         </div>

@@ -1,4 +1,4 @@
-<div class="product-selector modal-content">
+<div class="product-selector modal-content productSelectorParent">
     <div class="prodSelector modal-header header-PS">
         <div class="row" style="width:100%">
             <div class="col-md-4 col-sm-4 col-xs-4">
@@ -24,13 +24,15 @@
         </div>
 
         <!-- kendo breadcrumb implementation this is not exact breadcrumb but making in the similar way -->
-        <div class="row breadCrumbWrapper">
-            <ul class="productSelectorpath breadcrumb">
-                <li><a class="prdAnchor" (click)="selectPath(0)">{{drillDownPrd}}</a></li>
-                <ng-container *ngFor="let p of selectedPathParts | unique:'name'; let index=index">
-                    <li *ngIf="p.name != 'NA' || p.path.startsWith('CPU SvrWS NA')"><a class="prdAnchor" (click)="selectPath(index + 1)">{{p.name}}</a></li>
-                </ng-container>
-            </ul>
+        <div class="row breadCrumbWrapper" style="width: 100%;">
+            <div class="col-md-12">
+                <ul class="productSelectorpath breadcrumb">
+                    <li><a class="prdAnchor" (click)="selectPath(0)">{{drillDownPrd}}</a></li>
+                    <ng-container *ngFor="let p of selectedPathParts | unique:'name'; let index=index">
+                        <li *ngIf="p.name != 'NA' || p.path.startsWith('CPU SvrWS NA')"><a class="prdAnchor" (click)="selectPath(index + 1)">{{p.name}}</a></li>
+                    </ng-container>
+                </ul>
+            </div>
         </div>
     </div>
     <div style="">
@@ -102,7 +104,7 @@
                                                         <ng-template #popoverContent>
                                                             <div class="popover-content " >
                                                                 <div class="row">
-                                                                    <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
+                                                                    <a id="closePopoverSelector" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                                                                 </div>
                                                                 <div class="row">
                                                                     <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
@@ -217,7 +219,7 @@
                                     <ng-template #popoverContent>
                                         <div class="popover-content product_selector_m">
                                             <div class="row" style="flex-direction:row-reverse">
-                                                <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
+                                                <a id="closePopoverSelector" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                                             </div>
                                             <div class="row">
                                                 <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
@@ -481,7 +483,7 @@
                                             <ng-template #popoverContent>
                                                 <div class="popover-content product_selector_m">
                                                     <div class="row" style="flex-direction:row-reverse">
-                                                        <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
+                                                        <a id="closePopoverSelector" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                                                     </div>
                                                     <div class="row">
                                                         <grid-popover [popOver]="popOver" [columnTypes]="column.field" [currentPricingTableRow]="pricingTableRow" [productMemberSId]="dataItem.PRD_MBR_SID" [priceCondition]="column.field"></grid-popover>
@@ -545,10 +547,10 @@
                     </span>
                     <trashcan title="Clear excluded products" class="fr" (click)="clearProducts('E')"></trashcan>
                 </div>
-                <div *ngIf="!excludeMode" class="row" style="display: contents;">
-                    <div [ngClass]="{'col-md-6':enableMultipleSelection, 'paddingRight15': !enableMultipleSelection}" style="text-align: left; width: -webkit-fill-available;">
+                <div *ngIf="!excludeMode" class="row">
+                    <div [ngClass]="{'col-md-6':enableMultipleSelection, 'col-md-12': !enableMultipleSelection}" style="text-align: left; width: -webkit-fill-available;">
                         <span [ngClass]="{'paddingLeft15': !enableMultipleSelection}">
-                            <span [ngClass]="{'paddingLeftNone':enableMultipleSelection}" class="text-left textProdSelector" style=" margin: -14px !important;">
+                            <span [ngClass]="{'paddingLeftNone':enableMultipleSelection}" class="text-left textProdSelector">
                                 Selected Products
                                 <span [ngClass]="{'animate':animateInclude}" class="arcAnimate ani-mate">
                                     <small role="button">&nbsp;({{addedProducts.length}})</small>
@@ -559,7 +561,7 @@
                     </div>
                     <div *ngIf="enableMultipleSelection" class="col-md-6 multiple-selector">
                         <span>
-                            <span class="paddingRightNone text-left textProdSelector"  style="margin: -15px !important;">
+                            <span class="paddingRightNone text-left textProdSelector">
                                 Excluded Products
                                 <span class="arcAnimate text-shift-left ani-mate" style="margin-right: 0 !important;">
                                     <small role="button">&nbsp;({{excludedProducts.length}})</small>
@@ -614,7 +616,7 @@
             </div>
         </div>
     </div>
-    <kendo-dialog *ngIf="isAlert" (close)="closeDialog()" class="alterAlertMsg">
+    <kendo-dialog class="fixing-product-kits" *ngIf="isAlert" (close)="closeDialog()" class="alterAlertMsg">
         <p  [innerHTML]="alertMsg" style="text-align: center; margin-bottom: 0;">
         </p>
         <kendo-dialog-actions style="padding: 0;">

@@ -1,23 +1,23 @@
-td.error-product {
+.contain-pte td.error-product {
     color: rgb(252, 76, 2) !important;
     font-weight: bold !important
 }
 
-td.success-product {
+.contain-pte td.success-product {
     color: rgb(155, 198, 0) !important;
     font-weight: bold !important
 }
 
-td.normal-product {
+.contain-pte td.normal-product {
     color: black !important;
     font-weight: normal !important
 }
 
-td.error-border {
+.contain-pte td.error-border {
     border: 1px solid red !important
 }
 
-td.error-cell {
+.contain-pte td.error-cell {
     background-color: #fc4c02;
     color: white !important;
     border: solid #e34402 1px !important
@@ -28,7 +28,7 @@ td:not(.error-cell).readonly-cell {
     border-color: rgb(221, 221, 221)
 }
 
-.k-item.k-state-active {
+.contain-pte .k-item.k-state-active {
     border-top: 1px solid #0071C5 !important;
     border-left: 1px solid #0071C5 !important;
     border-right: 1px solid #0071C5 !important;
@@ -38,7 +38,7 @@ td:not(.error-cell).readonly-cell {
     cursor: default !important
 }
 
-.k-tabstrip-items .k-item {
+.contain-pte .k-tabstrip-items .k-item {
     margin-right: 0 !important;
     font-size: 15px !important;
     font-weight: 400 !important
@@ -78,7 +78,7 @@ td:not(.error-cell).readonly-cell {
     border-top-color: red
 }
 
-.ssToolbarBtn {
+.contain-pte .ssToolbarBtn {
     background-color: #ffffff !important;
     border-radius: 0;
     color: #1A3E6F;
@@ -88,31 +88,205 @@ td:not(.error-cell).readonly-cell {
     padding: 3px 10px
 }
 
-.ssToolbarBtn:hover {
-    background-color: #f2f2f2 !important;
-    color: #0071c5 !important
-}
+    .contain-pte .ssToolbarBtn:hover {
+        background-color: #f2f2f2 !important;
+        color: #0071c5 !important
+    }
 
-.dirty {
+    .contain-pte .ssToolbarBtn.btn-save,
+    .contain-pte .ssToolbarBtn {
+        background-color: transparent !important
+    }
+
+    .ssToolbarBtn.btn-save.dirty:hover {
+        background-color: #f2f2f2 !important
+    }
+
+.contain-pte .dirty {
     color: #00AEEF !important
 }
 
-.notDirty {
+.contain-pte .notDirty {
     font-weight: lighter !important;
     color: #ababab !important;
     cursor: not-allowed !important
 }
 
-.ssToolbarBtn.btn-save,
-.ssToolbarBtn {
-    background-color: transparent !important
+.contain-pte .k-i-indent-decrease::before {
+    content: "\e616";
+    color: #00AEEF
 }
 
-.ssToolbarBtn.btn-save.dirty:hover {
-    background-color: #f2f2f2 !important
+.contain-pte .k-i-indent-increase::before {
+    content: "\e615";
+    color: #00AEEF
 }
 
-.ptekendo kendo-editor .k-editor-content {
+.contain-pte .k-i-list-ordered::before {
+    content: "\e613";
+    color: #00AEEF
+}
+
+.contain-pte .k-i-list-unordered::before {
+    content: "\e614";
+    color: #00AEEF
+}
+
+.contain-pte .k-i-align-right::before {
+    content: "\e61f";
+    color: #00AEEF
+}
+
+.contain-pte .k-i-align-center::before {
+    content: "\e61e";
+    color: #00AEEF
+}
+
+.contain-pte .k-i-align-left::before {
+    content: "\e61d";
+    color: #00AEEF
+}
+
+.contain-pte .k-i-underline::before {
+    content: "\e603";
+    color: #00AEEF
+}
+
+.contain-pte .k-i-italic::before {
+    content: "\e602";
+    color: #00AEEF
+}
+
+.contain-pte .k-i-bold::before {
+    content: "\e601";
+    color: #00AEEF
+}
+
+i.fa.fa-floppy-o.skyBlue.floppy-icon-style.notDirty {
+    font-weight: lighter !important;
+    color: #7f7878 !important;
+    cursor: not-allowed !important;
+    font-size: 30px !important
+}
+
+
+i.fa.undo-redo-style.notDirty {
+    font-size: 23px !important;
+    margin-top: 2px !important;
+    color: #939598 !important
+}
+
+i.fa.fa-floppy-o.floppy-icon-style.dirty {
+    color: #00aeef !important;
+    font-weight: normal !important
+}
+
+i.fa.undo-redo-style.dirty {
+    font-size: 23px !important;
+    margin-top: 2px !important;
+    color: #00aeef !important
+}
+
+.handsontableInputHolder.ht_clone_master textarea {
+    border-color: #00aeef;
+    outline: none;
+    border-width: 2px
+}
+
+.fs-search {
+    font-size: 16px
+}
+
+.htCustCellEditor:hover,
+.htCustCellEditor:focus {
+    background-color: #00aeef !important
+}
+
+.contain-pte .intelicon-help:hover {
+    color: #0071c5;
+    background: none !important
+}
+
+
+/* no need to change */
+.spliter-btom-style.k-splitter-flex .k-splitbar {
+    position: relative !important;
+    margin-bottom: -8px !important
+}
+
+
+#show-hide-editor-style.k-toolbar .k-button-group .k-button {
+    align-self: center !important;
+    background: #d3d3d300 !important;
+    border: none !important;
+    color: #00aeef !important
+}
+
+#show-hide-editor-style.k-toolbar .k-button-group .k-button:hover {
+    background: #ebebeb !important;
+    color: #444 !important
+}
+
+#show-hide-editor-style.k-toolbar .k-button-group .k-button.k-state-selected {
+    box-shadow: none !important;
+    background-color: #dbdbdb !important;
+    border-color: #dbdbdb !important
+}
+
+#show-hide-editor-style .k-dropdown .k-dropdown-wrap {
+    border-color: #eaeef2 !important;
+    color: #212529 !important;
+    background-color: #ffffff !important
+}
+
+#show-hide-editor-style .k-colorpicker .k-picker-wrap {
+    border-color: #eaeef2 !important;
+    color: #212529 !important;
+    background-color: #ffffff !important
+}
+
+.pricing_table_celltext .handsontable td.htNoWrap {
+    white-space: nowrap;
+    text-align: left !important
+}
+
+.pricing_table_celltext .handsontable td.listbox.htDimmed.current.highlight:hover {
+    background: #00aeef !important;
+    color: #ffffff !important
+}
+
+.pricing_table_celltext .handsontable td.listbox.htDimmed:hover {
+    background: #ebebeb !important;
+    color: #444444 !important
+}
+
+@keyframes slide {
+    from {
+        transform: translateY(-110%)
+    }
+
+    to {
+        transform: translateY(0%)
+    }
+}
+
+.dialog-side-panel {
+    position: fixed !important;
+    top: 10px;
+    animation: slide .5s forwards;
+    animation-delay: 0s
+}
+
+button td.button-intel {
+    font-family: 'Intel Clear';
+    font-size: 11px;
+    padding-left: 5px;
+    text-align: left;
+    color: #00AEEF;
+}
+
+/* new changes */
+.ptekendo.kendo-editor .k-editor-content {
     z-index: 1;
     height: 220px
 }
@@ -121,65 +295,200 @@ td:not(.error-cell).readonly-cell {
     height: 590px !important
 }
 
-.k-i-indent-decrease::before {
-    content: "\e616";
-    color: #00AEEF
+.pteDealsOvrLap mat-dialog-container {
+    padding: 0;
 }
 
-.k-i-indent-increase::before {
-    content: "\e615";
-    color: #00AEEF
+.ptrLoading > .ss-loading-overlay > .myLoader {
+    left: 40% !important
 }
 
-.k-i-list-ordered::before {
-    content: "\e613";
-    color: #00AEEF
+.ptrLoading .ss-loading-overlay {
+    left: 0 !important
 }
 
-.k-i-list-unordered::before {
-    content: "\e614";
-    color: #00AEEF
+.ptrLoading .ss-loading-panel.ss-Info {
+    height: auto !important;
+    margin-top: 20px !important;
+    margin-left: 0 !important
 }
 
-.k-i-align-right::before {
-    content: "\e61f";
-    color: #00AEEF
+.ptevalidopoup .k-window-content {
+    padding: 0 !important
 }
 
-.k-i-align-center::before {
-    content: "\e61e";
-    color: #00AEEF
+.ptevalidopoup .k-window {
+    border-radius: 0
 }
 
-.k-i-align-left::before {
-    content: "\e61d";
-    color: #00AEEF
+kendo-dialog.ptevalidopoup.valid-out-pop-ups .k-window.k-dialog {
+    border: none;
+    border-radius: 0
 }
 
-.k-i-underline::before {
-    content: "\e603";
-    color: #00AEEF
+kendo-dialog-actions.pteokbtnstyle {
+    padding: 0 !important;
+    gap: 0
 }
 
-.k-i-italic::before {
-    content: "\e602";
-    color: #00AEEF
+.k-button.new-k-button {
+    background: #00aeef !important;
+    color: #ffffff !important;
+    padding: 20px 10px
 }
 
-.k-i-bold::before {
-    content: "\e601";
-    color: #00AEEF
+    .k-button.new-k-button:hover {
+        background: #0071c5 !important;
+        color: #ffffff !important
+    }
+
+.k-button.new-c-button {
+    background: #ffffff !important;
+    padding: 20px 10px
 }
 
-.all-spread #spreadsheet {
-    width: 100% !important;
-    z-index: 1;
-    height: 100% !important
+    .k-button.new-c-button:hover {
+        background: #ebebeb !important;
+        color: #444 !important
+    }
+
+kendo-dialog-actions.pteokbtnstyle.alter-btns-ok {
+    border-radius: 0 !important
+}
+
+    kendo-dialog-actions.pteokbtnstyle.alter-btns-ok button.mykbtnstyles {
+        color: #444 !important;
+        border-color: #fafafa !important;
+        background-color: #fafafa !important;
+        padding: 1.5em 0;
+        border-radius: 0 !important;
+        border-bottom: 0;
+        box-shadow: none;
+        height: auto !important
+    }
+
+        kendo-dialog-actions.pteokbtnstyle.alter-btns-ok button.mykbtnstyles:hover {
+            color: #444 !important;
+            border-color: #ebebeb !important;
+            background-color: #ebebeb !important
+        }
+
+button.k-button.mykbtnstyles {
+    height: 55px !IMPORTANT
+}
+
+
+button.k-button.mykbtnstyles {
+    color: #444 !important;
+    border-color: #fafafa !important;
+    background: #dededd !important
+}
+
+    button.k-button.mykbtnstyles:hover {
+        color: #444 !important;
+        background: #ebebeb !important;
+        border-color: #fafafa !important
+    }
+
+.product-selector-dialog > mat-dialog-container {
+    background-color: #1a3e6f !important;
+    padding: 0 !important
+}
+
+.multi-select-pte .mat-dialog-container {
+    box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%), 0 24px 38px 3px rgb(0 0 0 / 14%), 0 9px 46px 8px rgb(0 0 0 / 12%) !important;
+    background: #fff !important;
+    color: rgba(0, 0, 0, .87) !important;
+    border-radius: 0 !important;
+    overflow: hidden !important;
+    height: fit-content !important;
+    padding: 15px;
+}
+
+.geo_multi_style .k-multiselect .k-multiselect-wrap li.k-button {
+    float: left !important;
+    color: #444 !important;
+    font-size: 15px !important;
+    border: none !important;
+    border-radius: 1.071em !important;
+    margin: 3px -3px 3px 3px !important;
+    padding: 0 .6em 0 .857em !important;
+    line-height: 1.86em !important;
+    background: #fafafa !important;
+    font-family: 'Intel Clear' !important;
+    text-transform: uppercase !important;
+    font-weight: 500 !important
+}
+
+.geo_multi_style .mat-dialog-container {
+    box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%), 0 24px 38px 3px rgb(0 0 0 / 14%), 0 9px 46px 8px rgb(0 0 0 / 12%) !important;
+    background: #fff !important;
+    color: rgba(0, 0, 0, .87) !important;
+    border-radius: 0 !important
+}
+
+.geo_multi_style .k-multiselect .k-multiselect-wrap li.k-button:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important
+}
+
+.geo_multi_style .k-multiselect .k-multiselect-wrap:hover .k-clear-value {
+    visibility: visible !important;
+    background: lightgray !important;
+    border-radius: 15px !important;
+    font-size: 13px !important;
+    width: 15px !important;
+    height: 15px !important;
+    top: 10px !important;
+    right: 5px !important;
+    color: #000 !important;
+    opacity: 1 !important
+}
+
+.geo_multi_style .k-multiselect .k-multiselect-wrap .k-button .k-icon:hover {
+    opacity: 1 !important;
+    color: #000 !important
+}
+
+.geo_multi_style .k-multiselect .k-multiselect-wrap .k-clear-value {
+    visibility: hidden !important;
+    position: absolute !important;
+    top: 0 !important;
+    right: 0 !important
+}
+
+.geo_multi_style kendo-multiselect.fiend-all.k-multiselect.ng-valid.ng-dirty.ng-touched {
+    border-bottom: 2px solid #0071C5 !important
+}
+
+kendo-multiselect.fiend-all.k-widget.k-multiselect.ng-dirty {
+    border-bottom: 2px solid #0071c5
+}
+
+.geo_multi_style .k-multiselect .k-multiselect-wrap {
+    border-radius: 0 !important;
+    border-color: #ebebeb !important;
+    color: #495057 !important;
+    background-color: #ffffff !important
+}
+
+.cdk-overlay-container:has(.multi_select_style) ~ kendo-popup .k-list .k-item.k-state-focused.k-state-selected,
+.cdk-overlay-container:has(.geo_multi_style) ~ kendo-popup .k-list .k-item.k-state-focused.k-state-selected {
+    background-color: var(--light-blue) !important;
+    color: #fff !important
 }
 
 .mat-dialog-container {
     background: #fff;
     color: rgba(0, 0, 0, .87)
+}
+
+
+.all-spread #spreadsheet {
+    width: 100% !important;
+    z-index: 1;
+    height: 100% !important
 }
 
 .parent-one.loaderPTE pricing-table-editor loading-panel-angular .ss-loading-overlay {
@@ -202,6 +511,10 @@ kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li.k-state-disabled {
     pointer-events: none !important
 }
 
+kendo-tabstrip.tabs-coll {
+    width: 100%
+}
+
 #spreadsheet .wtHolder {
     height: 100% !important
 }
@@ -210,77 +523,13 @@ kendo-tabstrip.tabs-coll .k-tabstrip-items-wrapper ul li.k-state-disabled {
     height: 100%
 }
 
-kendo-tabstrip.tabs-coll {
-    width: 100%
+#spreadsheet .wtBorder.current {
+    background-color: #00aeef !important
 }
 
-.ptrLoading>.ss-loading-overlay>.myLoader {
-    left: 50% !important
-}
-
-.ptrLoading .ss-loading-overlay {
-    left: 0 !important
-}
-
-.ptrLoading .ss-loading-panel.ss-Info {
-    height: auto !important;
-    margin-top: 20px !important;
-    margin-left: 0 !important
-}
-
-kendo-dialog-actions.pteokbtnstyle {
-    padding: 0 !important;
-    gap: 0
-}
-
-button.k-button.mykbtnstyles {
-    height: 55px !IMPORTANT
-}
-
-.ptevalidopoup .k-window-content {
-    padding: 0 !important
-}
-
-button.k-button.mykbtnstyles {
-    color: #444 !important;
-    border-color: #fafafa !important;
-    background: #dededd !important
-}
-
-button.k-button.mykbtnstyles:hover {
-    color: #444 !important;
-    background: #ebebeb !important;
-    border-color: #fafafa !important
-}
-
-.k-button.new-k-button {
-    background: #00aeef !important;
-    color: #ffffff !important;
-    padding: 20px 10px
-}
-
-.k-button.new-k-button:hover {
-    background: #0071c5 !important;
-    color: #ffffff !important
-}
-
-.k-button.new-c-button {
-    background: #ffffff !important;
-    padding: 20px 10px
-}
-
-.k-button.new-c-button:hover {
-    background: #ebebeb !important;
-    color: #444 !important
-}
-
-.ptevalidopoup .k-window {
-    border-radius: 0
-}
-
-kendo-dialog.ptevalidopoup.valid-out-pop-ups .k-window.k-dialog {
-    border: none;
-    border-radius: 0
+.markt-segmet-style .mat-dialog-content {
+    padding: 15px !important;
+    margin-top: -10px !important
 }
 
 .text-para-color {
@@ -288,32 +537,6 @@ kendo-dialog.ptevalidopoup.valid-out-pop-ups .k-window.k-dialog {
     text-align: center;
     margin-bottom: 0;
     color: #444
-}
-
-kendo-dialog-actions.pteokbtnstyle.alter-btns-ok {
-    border-radius: 0 !important
-}
-
-kendo-dialog-actions.pteokbtnstyle.alter-btns-ok button.mykbtnstyles {
-    color: #444 !important;
-    border-color: #fafafa !important;
-    background-color: #fafafa !important;
-    padding: 1.5em 0;
-    border-radius: 0 !important;
-    border-bottom: 0;
-    box-shadow: none;
-    height: auto !important
-}
-
-kendo-dialog-actions.pteokbtnstyle.alter-btns-ok button.mykbtnstyles:hover {
-    color: #444 !important;
-    border-color: #ebebeb !important;
-    background-color: #ebebeb !important
-}
-
-.product-selector-dialog>mat-dialog-container {
-    background-color: #1a3e6f !important;
-    padding: 0 !important
 }
 
 .btn-disable-style[disabled] {
@@ -324,13 +547,6 @@ kendo-dialog-actions.pteokbtnstyle.alter-btns-ok button.mykbtnstyles:hover {
     border-color: #b1babf !important;
     font-weight: lighter !important;
     border: none !important
-}
-
-i.fa.fa-floppy-o.skyBlue.floppy-icon-style.notDirty {
-    font-weight: lighter !important;
-    color: #7f7878 !important;
-    cursor: not-allowed !important;
-    font-size: 30px !important
 }
 
 .save-validate-txtstyle.text.notDirty {
@@ -344,17 +560,6 @@ i.fa.fa-floppy-o.skyBlue.floppy-icon-style.notDirty {
     text-align: left !important
 }
 
-i.fa.undo-redo-style.notDirty {
-    font-size: 23px !important;
-    margin-top: 2px !important;
-    color: #939598 !important
-}
-
-i.fa.fa-floppy-o.floppy-icon-style.dirty {
-    color: #00aeef !important;
-    font-weight: normal !important
-}
-
 span.text.save-validate-txtstyle.dirty {
     color: #00aeef !important;
     position: relative !important;
@@ -366,41 +571,8 @@ span.text.save-validate-txtstyle.dirty {
     text-align: left !important
 }
 
-i.fa.undo-redo-style.dirty {
-    font-size: 23px !important;
-    margin-top: 2px !important;
-    color: #00aeef !important
-}
-
-#spreadsheet .wtBorder.current {
-    background-color: #00aeef !important
-}
-
-.handsontableInputHolder.ht_clone_master textarea {
-    border-color: #00aeef;
-    outline: none;
-    border-width: 2px
-}
-
-.fs-search {
-    font-size: 16px
-}
-
-.htCustCellEditor:hover,
-.htCustCellEditor:focus {
-    background-color: #00aeef !important
-}
-
-.intelicon-help:hover {
-    color: #0071c5;
-    background: none !important
-}
-
-.spliter-btom-style.k-splitter-flex .k-splitbar {
-    position: relative !important;
-    margin-bottom: -8px !important
-}
-
+/*
+    
 .oo-lapping-style .k-grid-filter .k-icon.k-i-filter {
     color: #00AEEF !important;
     opacity: 1;
@@ -515,50 +687,6 @@ i.fa.undo-redo-style.dirty {
     padding: 10px !important
 }
 
-#show-hide-editor-style.k-toolbar .k-button-group .k-button {
-    align-self: center !important;
-    background: #d3d3d300 !important;
-    border: none !important;
-    color: #00aeef !important
-}
-
-#show-hide-editor-style.k-toolbar .k-button-group .k-button:hover {
-    background: #ebebeb !important;
-    color: #444 !important
-}
-
-#show-hide-editor-style.k-toolbar .k-button-group .k-button.k-state-selected {
-    box-shadow: none !important;
-    background-color: #dbdbdb !important;
-    border-color: #dbdbdb !important
-}
-
-#show-hide-editor-style .k-dropdown .k-dropdown-wrap {
-    border-color: #eaeef2 !important;
-    color: #212529 !important;
-    background-color: #ffffff !important
-}
-
-#show-hide-editor-style .k-colorpicker .k-picker-wrap {
-    border-color: #eaeef2 !important;
-    color: #212529 !important;
-    background-color: #ffffff !important
-}
-
-.multi-select-pte .mat-dialog-container {
-    box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%), 0 24px 38px 3px rgb(0 0 0 / 14%), 0 9px 46px 8px rgb(0 0 0 / 12%) !important;
-    background: #fff !important;
-    color: rgba(0, 0, 0, .87) !important;
-    border-radius: 0 !important;
-    overflow: hidden !important;
-    height: fit-content !important
-}
-
-.markt-segmet-style .mat-dialog-content {
-    padding: 15px !important;
-    margin-top: -10px !important
-}
-
 .oo-lapping-style .k-grid-header .headerClass {
     border-left-color: #c4cfd4 !important
 }
@@ -569,119 +697,4 @@ i.fa.undo-redo-style.dirty {
     padding: 4px !important
 }
 
-.geo_multi_style .k-multiselect .k-multiselect-wrap li.k-button {
-    float: left !important;
-    color: #444 !important;
-    font-size: 15px !important;
-    border: none !important;
-    border-radius: 1.071em !important;
-    margin: 3px -3px 3px 3px !important;
-    padding: 0 .6em 0 .857em !important;
-    line-height: 1.86em !important;
-    background: #fafafa !important;
-    font-family: 'Intel Clear' !important;
-    text-transform: uppercase !important;
-    font-weight: 500 !important
-}
-
-.geo_multi_style .mat-dialog-container {
-    box-shadow: 0 11px 15px -7px rgb(0 0 0 / 20%), 0 24px 38px 3px rgb(0 0 0 / 14%), 0 9px 46px 8px rgb(0 0 0 / 12%) !important;
-    background: #fff !important;
-    color: rgba(0, 0, 0, .87) !important;
-    border-radius: 0 !important
-}
-
-.geo_multi_style .k-multiselect .k-multiselect-wrap li.k-button:hover {
-    color: #444 !important;
-    border-color: #ebebeb !important;
-    background-color: #ebebeb !important
-}
-
-.geo_multi_style .k-multiselect .k-multiselect-wrap:hover .k-clear-value {
-    visibility: visible !important;
-    background: lightgray !important;
-    border-radius: 15px !important;
-    font-size: 13px !important;
-    width: 15px !important;
-    height: 15px !important;
-    top: 10px !important;
-    right: 5px !important;
-    color: #000 !important;
-    opacity: 1 !important
-}
-
-.geo_multi_style .k-multiselect .k-multiselect-wrap .k-button .k-icon:hover {
-    opacity: 1 !important;
-    color: #000 !important
-}
-
-.geo_multi_style .k-multiselect .k-multiselect-wrap .k-clear-value {
-    visibility: hidden !important;
-    position: absolute !important;
-    top: 0 !important;
-    right: 0 !important
-}
-
-.geo_multi_style kendo-multiselect.fiend-all.k-multiselect.ng-valid.ng-dirty.ng-touched {
-    border-bottom: 2px solid #0071C5 !important
-}
-
-.geo_multi_style .k-multiselect .k-multiselect-wrap {
-    border-radius: 0 !important;
-    border-color: #ebebeb !important;
-    color: #495057 !important;
-    background-color: #ffffff !important
-}
-
-kendo-multiselect.fiend-all.k-widget.k-multiselect.ng-dirty {
-    border-bottom: 2px solid #0071c5
-}
-
-.pricing_table_celltext .handsontable td.htNoWrap {
-    white-space: nowrap;
-    text-align: left !important
-}
-
-.pricing_table_celltext .handsontable td.listbox.htDimmed.current.highlight:hover {
-    background: #00aeef !important;
-    color: #ffffff !important
-}
-
-.pricing_table_celltext .handsontable td.listbox.htDimmed:hover {
-    background: #ebebeb !important;
-    color: #444444 !important
-}
-
-.cdk-overlay-container:has(.multi_select_style)~kendo-popup .k-list .k-item.k-state-focused.k-state-selected,
-.cdk-overlay-container:has(.geo_multi_style)~kendo-popup .k-list .k-item.k-state-focused.k-state-selected {
-    background-color: var(--light-blue) !important;
-    color: #fff !important
-}
-
-@keyframes slide {
-    from {
-        transform: translateY(-110%)
-    }
-
-    to {
-        transform: translateY(0%)
-    }
-}
-
-.dialog-side-panel {
-    position: fixed !important;
-    top: 10;
-    animation: slide .5s forwards;
-    animation-delay: 0s
-}
-
-button td.button-intel {
-    font-family: 'Intel Clear';
-    font-size: 11px;
-    padding-left: 5px;
-    text-align: left;
-    color: #00AEEF;
-}
-.pteDealsOvrLap mat-dialog-container {
-    padding: 0;
-}
+*/

@@ -7,30 +7,31 @@
 
 .af-setting-fixes .buttongroup-btn {
     padding-top: 7px !important;
-    padding-bottom: 7px !important
-}
-
-.af-setting-fixes .buttongroup-btn {
+    padding-bottom: 7px !important;
     border-bottom: transparent
 }
 
-.opUiContainer.md .opUiLabel.buttonGroupLabel {
+/*.af-setting-fixes .buttongroup-btn {
+    border-bottom: transparent
+}
+*/
+/*.opUiContainer.md .opUiLabel.buttonGroupLabel {
     font-size: 13px !important
-}
+}*/
 
-.af-setting-fixes .msPopup {
+/*.af-setting-fixes .msPopup {
     max-height: 200px
-}
+}*/
 
 .af-setting-fixes .autofill-header-title {
-    color: #1a3e6f;
+   /* color: #1a3e6f;*/
     font-size: 24px !important;
-    text-align: center
+    /*text-align: center*/
 }
 
-.af-setting-fixes .minPadding {
+/*.af-setting-fixes .minPadding {
     padding: 2px
-}
+}*/
 
 .af-setting-fixes .autoFillOverarchingTitle {
     color: darkslategray;
@@ -47,10 +48,10 @@
     padding-top: 15px !important
 }
 
-.opUiContainer.md .opUiLabel {
+/*.opUiContainer.md .opUiLabel {
     font-size: 13px !important;
     width: 203px
-}
+}*/
 
 .af-setting-fixes .mattogglebutton.matbutton {
     color: #fff;
@@ -176,7 +177,7 @@
     padding-bottom: 3px
 }
 
-.af-setting-fixes .label {
+.af-setting-fixes .autofillrow .label {
     margin-top: 6px;
     /*margin-left: -6px*/
 }
@@ -190,14 +191,14 @@
     border-bottom: 2px solid #0071c5 !important
 }
 
-.k-numerictextbox .k-numeric-wrap {
+/*.k-numerictextbox .k-numeric-wrap {
     width: 146px !important;
     height: 33px !important
-}
+}*/
 
-.af-setting-fixes #mat-button-toggle-98-button .mattogglebutton .mat-button-toggle-button {
+/*.af-setting-fixes #mat-button-toggle-98-button .mattogglebutton .mat-button-toggle-button {
     margin-left: -14px !important
-}
+}*/
 
 .af-setting-fixes .mattogglebutton .mat-button-toggle-group-appearance-standard {
     margin-left: 5px !important;
@@ -219,7 +220,7 @@
     margin-top: 0
 }
 
-.af-setting-fixes .md .intel.titleclass {
+/*.af-setting-fixes .md .intel.titleclass {
     float: right;
     margin: -19px;
     padding-right: 41px;
@@ -227,7 +228,7 @@
     font-weight: bold;
     font-family: 'Intel Clear';
     font-size: 13px
-}
+}*/
 
 .af-setting-fixes .mattogglebutton .mat-button-toggle {
     margin-right: 4px !important
@@ -264,13 +265,13 @@
     padding-left: 30px !important
 }
 */
-.af-setting-fixes.autoFillSetting.totalcontent.modal-content {
+/*.af-setting-fixes.autoFillSetting.totalcontent.modal-content {
     padding: 20px
-}
+}*/
 
-.cdk-overlay-pane {
+/*.cdk-overlay-pane {
     height: auto !important
-}
+}*/
 
 #autoLoading .ss-loading-overlay .myLoader {
     left: 40% !important
@@ -301,16 +302,17 @@
     padding: 0 .6em 0 .857em !important;
     line-height: 1.86em !important;
     background: #fafafa !important;
-    font-family: 'Intel Clear' !important
+    font-family: 'Intel Clear' !important;
+    text-transform: uppercase;
 }
 
-.market-select-style.k-multiselect .k-multiselect-wrap li.k-button:hover {
+ .market-select-style.k-multiselect .k-multiselect-wrap li.k-button:hover {
     color: #444 !important;
     border-color: #ebebeb !important;
     background-color: #ebebeb !important
 }
 
-.market-select-style.k-multiselect .k-multiselect-wrap .k-clear-value {
+ .market-select-style.k-multiselect .k-multiselect-wrap .k-clear-value {
     visibility: hidden !important
 }
 
@@ -320,7 +322,7 @@
 }
 
 .market-select-style.k-multiselect .k-multiselect-wrap,
-.market-select-style.k-multiselect.k-state-focused>.k-multiselect-wrap {
+.market-select-style.k-multiselect.k-state-focused > .k-multiselect-wrap {
     border-color: #ced4da !important;
     color: #495057 !important;
     box-shadow: none !important;
@@ -356,17 +358,17 @@
     margin-right: auto;
 }
 
-div.md.intel {
+.af-setting-fixes div.md.intel {
     width: -webkit-fill-available;
 }
 
-.row-Autofill-Customize {
+.af-setting-fixes .row-Autofill-Customize {
     width: 100%;
     margin-left: 0;
     margin-right: 0;
 }
 
-.btnsAutofillers {
+.af-setting-fixes .btnsAutofillers {
     display: flex;
     align-items: center;
     justify-content: start;
@@ -376,4 +378,9 @@ div.md.intel {
 .af-setting-fixes .btnsAutofillers button {
     margin-left: 5px !important;
     margin-right: 5px !important;
+}
+
+kendo-numerictextbox.autoFillSettingsNumDes.k-numberbox-design input.k-input {
+    font-weight: 600;
+    font-size: 13px;
 }

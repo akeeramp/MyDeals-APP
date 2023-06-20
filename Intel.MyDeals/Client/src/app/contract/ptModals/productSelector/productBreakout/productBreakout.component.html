@@ -1,4 +1,4 @@
-<div class="modal-content" moveablemodal>
+<div class="modal-content modalProductBreakOut" moveablemodal>
     <div class="capbreakout modal-header">
         <div class="row">
             <div class="col-8">
@@ -19,7 +19,7 @@
         <kendo-grid class="md capbreakout kendoGridHeight {{ productData[0].priceCondition }}-capBreak" id="breakOutGrid" [data]="dataSource" [loading]="isLoading"
                     [skip]="state.skip" [sortable]="false" [sort]="state.sort" [groupable]="false">
             <ng-template kendoGridToolbarTemplate>
-                <button type="button" kendoGridExcelCommand icon="file-excel" class="excelText"><span class="excelbtn-style">EXCEL<br /> EXPORT</span></button>
+                <button type="button" kendoGridExcelCommand icon="file-excel" class="excelText excel_btn"><span class="excelbtn-style">EXCEL<br /> EXPORT</span></button>
             </ng-template>
 
             <ng-template ngFor [ngForOf]="gridOptions.columns" let-column>

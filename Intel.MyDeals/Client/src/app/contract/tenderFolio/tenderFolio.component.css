@@ -10,7 +10,7 @@
     margin-top: -55px
 }
 
-.cdk-overlay-pane, .tender-folio-dialog {
+.cdk-overlay-pane.tender-folio-dialog {
     height: auto !important
 }
 
@@ -275,7 +275,7 @@
     box-shadow: 0 2px 6px rgb(0 0 0 /20%),0 2px 3px rgb(0 0 0 / 5%) !important
 }
 
-.folioloader .ss-loading-overlay {
+/*.folioloader .ss-loading-overlay {
     width: 100%;
     margin-left: auto;
     margin-right: auto;
@@ -283,7 +283,7 @@
     top: 93px;
     left: 0;
     background: rgb(255 255 255 / 42%)
-}
+}*/
 
 .tender-modals kendo-combobox.combobox.mycombox.k-combobox.k-combobox.ng-dirty {
     border-bottom: 2px solid #0071c5 !important
@@ -357,6 +357,6 @@ kendo-multiselect.style-both-clas.divineo-one .k-multiselect-wrap kendo-taglist 
         font-size: 14px
     }
 
-.myLoader {
+.folioLoaderTender .myLoader {
     left: auto !important;
 }

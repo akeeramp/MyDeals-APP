@@ -1,9 +1,9 @@
 <loading-panel-angular id="autoLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription" [msgType]="msgType"></loading-panel-angular>
 <div class="container-fluid overflow autoFillSetting af-setting-fixes" [hidden]="isLoading && isInitial">
     <div class="modal-content headingcontent totalcontent">
-        <div class="autofill-settings modal-header autofillhead">
-            <div class="row" style="width:100%">
-                <div class="col">
+        <div class="autofill-settings modal-header autofillhead" style=" padding: 0; width: 100%; position: relative;">
+            <div class="row" style="width: 100%; position: relative; margin: 0;">
+                <div class="col" style=" width: 100%; padding: 0;">
                     <div class="cursorArea autofillHeader">
                         <p class="autofill-header-title">{{autofillData.DEALTYPE_DISPLAY}} {{rebateTypeTitle}} Autofill Settings</p>
                         <p class="autofill-header-tip" style="font-size: 18px !important">Use the selections below to auto-populate your deal table, you may also overwrite the autofill selections made here in the grid</p>
@@ -95,7 +95,7 @@
                                 </div>
                                 <div class="col-md-6" style="margin-top:-5px;width: 168px!important">
                                     <div>
-                                        <kendo-numerictextbox [(ngModel)]="autofillData.DEFAULT.REBATE_OA_MAX_VOL.value" [min]="0" [max]="2147483647" [autoCorrect]="true" class="k-numberbox-design">
+                                        <kendo-numerictextbox [(ngModel)]="autofillData.DEFAULT.REBATE_OA_MAX_VOL.value" [min]="0" [max]="2147483647" [autoCorrect]="true" class="k-numberbox-design autoFillSettingsNumDes">
                                             <a style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 13px !important; color: #1a3e6f;"></a>
                                         </kendo-numerictextbox>
                                         <kendo-formerror><a style="color: #ff6e77; font-family:'Intel Clear'; font-size: 11px !important; font-weight:bold !important;width:168px !important">{{opValidMsg}}</a></kendo-formerror>
@@ -112,7 +112,7 @@
                                 </div>
                                 <div class="col-md-6" style="margin-top:-5px;width: 168px!important">
                                     <div>
-                                        <kendo-numerictextbox [(ngModel)]="autofillData.DEFAULT.REBATE_OA_MAX_AMT.value" [min]="0" [autoCorrect]="true" format="n2" class="k-numberbox-design">
+                                        <kendo-numerictextbox [(ngModel)]="autofillData.DEFAULT.REBATE_OA_MAX_AMT.value" [min]="0" [autoCorrect]="true" format="n2" class="k-numberbox-design autoFillSettingsNumDes">
                                             <a style="font-family: 'Intel Clear'; font-weight: bold !important; font-size: 13px !important; color: #1a3e6f;"></a>
                                         </kendo-numerictextbox>
                                     </div>

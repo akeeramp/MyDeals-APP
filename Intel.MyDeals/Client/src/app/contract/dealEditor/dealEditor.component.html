@@ -118,7 +118,7 @@
                             </tr>
                         </table>
                     </button>
-                    <div id="columnoptionclick" class="dropdown-menu" style=" background-color: white; font-family: 'Intel Clear'; font-size: 13px;">
+                    <div id="columnoptionclick" class="dropdown-menu dealEditorDropDownMenu" style=" background-color: white; font-family: 'Intel Clear'; font-size: 13px;">
                         <div class="mycol-style">
                             <div>
                                 <span class="k-textbox searchbox">
@@ -127,7 +127,7 @@
                                 </span>
                             </div>
                             <div style="max-height: 230px; overflow: auto; margin-top: 4px; margin-right: 10px; height: auto; ">
-                                <div class="backclass" *ngFor="let item of wipTemplate.columns | filter:columnSearchFilter | orderBy: 'title'">
+                                <div class="backclass newBackClass" *ngFor="let item of wipTemplate.columns | filter:columnSearchFilter | orderBy: 'title'">
                                     &nbsp;&nbsp;<input type='checkbox' [checked]="iscolumnchecked(item.field)" id="colChk{{item.field}}" (click)="onColumnChange(item)" />&nbsp;
                                     <label for="colChk{{item.field}}">
                                         <span [innerHTML]="item.title | sanitizeHtml"></span>
@@ -224,7 +224,7 @@
                             [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true" [virtualColumns]="true"
                             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" (cellClose)="cellCloseHandler($event)"
                             filterable="menu" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)" (filterChange)="filterChange($event)"
-                            class="opUiContainer dashboard op-grid k-grid k-widgetGr k-reorderable k-editable k-grid-lockedcolumns md"
+                            class="opUiContainer dashboard op-grid k-grid k-widgetGr k-reorderable k-editable k-grid-lockedcolumns md opDealEditorGrids"
                             [ngClass]="{ 'enableWrapping': wrapEnabled, 'disableWrapping': !wrapEnabled }" data-role="grid">
                     <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" field="{{column.field}}"
                                        [locked]="column.locked == true" width="{{ (column.field == 'CAP_STRT_DT' || column.field == 'CAP_END_DT' || column.field == 'YCS2_START_DT' || column.field == 'YCS2_END_DT' ) ? column.width + 30 : (column.field == 'START_DT' || column.field == 'END_DT') ? column.width + 15 : column.width }}" [filterable]="column.filterable" [sortable]="column.sortable">
@@ -255,7 +255,7 @@
             <kendo-dialog *ngIf="isWarning" id="warning" (close)="Close()" class="the-comp-de ok-button-color-change" style="width: 41%; left: 505.062px;">
                 <p class="kendo-dialog-message deal-extend-popup">{{message}}</p>
                 <kendo-dialog-actions>
-                    <button *ngIf="!isDatesOverlap" class='k-button first-child-btn' style="font-size: 15px; font-weight: 400; color: #444 !important;" (click)="Close()">OK</button>
+                    <button *ngIf="!isDatesOverlap" class='k-button first-child-btn' style="font-size: 15px; font-weight: 400; color: #fff !important;" (click)="Close()">OK</button>
                     <button *ngIf="isDatesOverlap" class='k-button first-child-btn extend-dealpopup' (click)="SaveDealData()">OK</button>
                     <button *ngIf="isDatesOverlap" class='k-button last-child-btn cancel-extend-deal' (click)="Close()">CANCEL</button>
                 </kendo-dialog-actions>

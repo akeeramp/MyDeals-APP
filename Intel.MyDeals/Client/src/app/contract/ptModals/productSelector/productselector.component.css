@@ -1,71 +1,71 @@
-.marginRight {
+.productSelectorParent .marginRight {
     margin-right: 10px
 }
 
-.prodSelectorSearch {
+.productSelectorParent .prodSelectorSearch {
     padding-top: 9px;
     overflow: hidden
 }
 
-.prodSelectorSearch .prod-autocomplete {
-    padding-top: 0;
-    padding-bottom: 0;
-    width: 400px !important
-}
+    .productSelectorParent .prodSelectorSearch .prod-autocomplete {
+        padding-top: 0;
+        padding-bottom: 0;
+        width: 400px !important
+    }
 
 @media (max-width:1100px) {
-    .prodSelectorSearch .prod-autocomplete {
+    .productSelectorParent .prodSelectorSearch .prod-autocomplete {
         width: 240px !important
     }
 }
 
 @media (max-width:800px) {
-    .prodSelectorSearch .prod-autocomplete {
+    .productSelectorParent .prodSelectorSearch .prod-autocomplete {
         width: 180px !important
     }
 }
 
-.k-pager-info {
+.productSelectorParent .k-pager-info {
     display: block !important
 }
 
-.textProdSelector {
+.productSelectorParent .textProdSelector {
     font-size: 21px;
     color: white
 }
 
-.insertAtRowsText {
+.productSelectorParent .insertAtRowsText {
     color: white;
     font-size: 16px;
     text-align: right;
     padding-top: 20px
 }
 
-.prodHeader {
+.productSelectorParent .prodHeader {
     color: white;
     font-size: 26px
 }
 
 @media (max-width:1100px) {
-    .prodHeader {
+    .productSelectorParent .prodHeader {
         font-size: 20px;
         padding-top: 8px
     }
 }
 
 @media (max-width:800px) {
-    .prodHeader {
+    .productSelectorParent .prodHeader {
         font-size: 18px;
         padding-top: 8px
     }
 }
 
-.breadCrumbWrapper {
+.productSelectorParent .breadCrumbWrapper {
     padding-right: 10px;
     font-size: 21px
 }
 
-.modalCloseIcon {
+.productSelectorParent .modalCloseIcon {
     color: white;
     font-size: 32px;
     padding-top: 0;
@@ -73,21 +73,21 @@
     margin-top: -8px
 }
 
-.productSelectorpath.breadcrumb>li+li:before {
+.productSelectorParent .productSelectorpath.breadcrumb > li + li:before {
     padding: 0 5px;
     color: white;
     content: ">";
     font-size: 16px
 }
 
-.productSelectorpath.breadcrumb {
+.productSelectorParent .productSelectorpath.breadcrumb {
     color: white;
     background-color: #1a3e6f;
-    padding-left: 23px;
+    padding-left: 10px;
     margin-bottom: 0
 }
 
-.prodDrillDownLarge .drillDown.input-group span.input-group-addon {
+.productSelectorParent .prodDrillDownLarge .drillDown.input-group span.input-group-addon {
     width: 20%;
     height: 24px;
     position: absolute;
@@ -97,36 +97,36 @@
     top: 10px
 }
 
-.prodDrillDownLarge .drillDown.input-group p {
+.productSelectorParent .prodDrillDownLarge .drillDown.input-group p {
     margin-left: 10px !important;
     margin-right: 10px !important;
     width: 100%
 }
 
-a.prdAnchor {
+.productSelectorParent a.prdAnchor {
     color: white;
     cursor: pointer
 }
 
-a.prdAnchor:hover {
-    color: #01AEEF;
-    text-decoration: none;
-    cursor: pointer
-}
+    .productSelectorParent a.prdAnchor:hover {
+        color: #01AEEF;
+        text-decoration: none;
+        cursor: pointer
+    }
 
-.productSelector.Warning {
+.productSelectorParent .productSelector.Warning {
     color: #FFA300
 }
 
-.heirSelected {
+.productSelectorParent .heirSelected {
     color: #01AEEF
 }
 
-.productSelector.Issue {
+.productSelectorParent .productSelector.Issue {
     color: #FC4C02
 }
 
-.drillDown.btn-group button {
+.productSelectorParent .drillDown.btn-group button {
     background-color: #01AEEF !important;
     border-left: none !important;
     border-top: none !important;
@@ -139,54 +139,53 @@ a.prdAnchor:hover {
     overflow: hidden
 }
 
-.drillDown {
+.productSelectorParent .drillDown {
     background-color: #01AEEF
 }
 
-.drillDown.btn-group {
-    padding-top: 3px;
-    padding-bottom: 3px;
-    height: 100% !important
-}
+    .productSelectorParent .drillDown.btn-group {
+        padding-top: 3px;
+        padding-bottom: 3px;
+        height: 100% !important
+    }
 
-.drillDown btn-group btn-group-justified prod-sel-btn {
-    float: none;
-    width: 100%;
-    vertical-align: middle;
-    border-collapse: separate;
-    height: 100% !important;
-    padding: 6px 12px
-}
+    .productSelectorParent .drillDown btn-group btn-group-justified prod-sel-btn {
+        float: none;
+        width: 100%;
+        vertical-align: middle;
+        border-collapse: separate;
+        height: 100% !important;
+        padding: 6px 12px
+    }
 
-.drillDown.btn-group.btn {
-    white-space: normal !important;
-    word-wrap: break-word
-}
+    .productSelectorParent .drillDown.btn-group.btn {
+        white-space: normal !important;
+        word-wrap: break-word
+    }
 
-.drillDown.btn-group button:not(:last-child) {
-    border-right: none
-}
+    .productSelectorParent .drillDown.btn-group button:not(:last-child) {
+        border-right: none
+    }
 
-.drillDown.btn-group button.noborder {
-    border-right: none !important
-}
+    .productSelectorParent .drillDown.btn-group button.noborder {
+        border-right: none !important
+    }
 
-.drillDown.btn-group button:hover {
-    background-color: #01AEEF !important;
-    color: #1a3e6f !important
-}
+    .productSelectorParent .drillDown.btn-group button:hover {
+        background-color: #01AEEF !important;
+        color: #1a3e6f !important
+    }
 
-.drillDown.btn-group button:focus,
-.button:active {
-    outline: none !important;
-    background-color: #01AEEF
-}
+    .productSelectorParent .drillDown.btn-group button:focus, .button:active {
+        outline: none !important;
+        background-color: #01AEEF
+    }
 
-.noLeftBorder {
+.productSelectorParent .noLeftBorder {
     border-left: none !important
 }
 
-.prodDrillDownLarge {
+.productSelectorParent .prodDrillDownLarge {
     background-color: #01AEEF;
     border-bottom: 2px solid #1a3e6f;
     border-left: 1px solid #ffffff;
@@ -195,74 +194,105 @@ a.prdAnchor:hover {
     text-align: center
 }
 
-.prodDrillDownLarge p {
-    font-size: 13px;
-    color: #fff;
-    text-overflow: ellipsis;
-    overflow: hidden;
-    white-space: nowrap;
-    text-align: center;
-    margin: 0 !important;
-    width: 100%;
-    padding: 11px 15px 1rem 15px
-}
+    .productSelectorParent .prodDrillDownLarge p {
+        font-size: 13px;
+        color: #fff;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: center;
+        margin: 0 !important;
+        width: 100%;
+        padding: 11px 15px 1rem 15px
+    }
 
-.prodDrillDownLarge p:hover {
-    color: #1a3e6f
-}
+        .productSelectorParent .prodDrillDownLarge p:hover {
+            color: #1a3e6f
+        }
 
-.prodSelected.ui-select-multiple.ui-select-bootstrap {
+.productSelectorParent .prodSelected.ui-select-multiple.ui-select-bootstrap {
     min-height: 100px !important;
     max-height: 100px !important;
     overflow-y: auto;
     overflow-x: hidden
 }
 
-.err-Search {
+.productSelectorParent .err-Search {
     color: #FF6E77;
     font-size: 12px !important;
     padding-left: 1px !important;
     padding-top: 2px !important
 }
 
-.prdBtn {
+.productSelectorParent .prdBtn {
     font-size: 13px
 }
 
 @media (max-width:1300px) {
-    .prdBtn {
+    .productSelectorParent .prdBtn {
         padding: 6px
     }
 }
 
-.prdBtn.btn-primary {
+.productSelectorParent .prdBtn.btn-primary {
     background-color: #01AEEF !important
 }
 
-.prdBtn.btn-primary:hover {
-    background-color: #01AEEF;
-    color: #1a3e6f
-}
+    .productSelectorParent .prdBtn.btn-primary:hover {
+        background-color: #01AEEF;
+        color: #1a3e6f
+    }
 
-.prdBtn.btn-primary:focus,
-.btn-primary:active {
-    outline: none !important;
-    background-color: #01AEEF
-}
+    .productSelectorParent .prdBtn.btn-primary:focus, .btn-primary:active {
+        outline: none !important;
+        background-color: #01AEEF
+    }
 
-.prodSelected .btn-primary:focus,
-.btn-primary:hover {
+.productSelectorParent .prodSelected .btn-primary:focus, .productSelectorParent .btn-primary:hover {
     color: #fff;
     background-color: #01AEEF
 }
 
-.prodSelector .miniProdNav {
+.productSelectorParent .prodSelector .leftNavFilter {
+    background-color: #e7e7e8;
+    height: calc(100vh - 473px) !important;
+    padding: 4px;
+    overflow-y: auto;
+    overflow-x: hidden;
+    font-family: 'Intel Clear','Arial'
+}
+
+.productSelectorParent .leftNavFilter kendo-treeview ul li span {
+    background-color: transparent !important;
+    color: #00AEEF !important
+}
+
+    .productSelectorParent .leftNavFilter kendo-treeview ul li span.k-in.k-state-selected {
+        background-color: rgba(2,173,255,1) !important;
+        color: #fff !important
+    }
+
+    .productSelectorParent .leftNavFilter kendo-treeview ul li span.k-in.k-state-focused {
+        box-shadow: none !important
+    }
+
+    .productSelectorParent .leftNavFilter kendo-treeview ul li span span.badge.upperBadge {
+        font-size: 10px;
+        padding: 2px 4px;
+        background-color: #fff !important;
+        color: #00AEEF !important;
+        vertical-align: text-top;
+        font-weight: 600;
+        margin-left: 6px
+    }
+
+.productSelectorParent .prodSelector .miniProdNav {
     padding: 0 15px;
     margin-right: 10px;
     font-weight: 600
 }
 
-.filterTitleUnderline {
+.productSelectorParent .filterTitleUnderline {
     margin: 5px;
     font-size: 15px;
     color: #1a3e6f;
@@ -270,58 +300,58 @@ a.prdAnchor:hover {
     font-weight: bold
 }
 
-.lblSelected label span {
+.productSelectorParent .lblSelected label span {
     color: white !important
 }
 
-.lblSelected {
-    background: rgba(2, 173, 255, 1)
+.productSelectorParent .lblSelected {
+    background: rgba(2,173,255,1)
 }
 
-.lblNotSelected {
+.productSelectorParent .lblNotSelected {
     background: none
 }
 
-.prodSelector .filterGrp {
+.productSelectorParent .prodSelector .filterGrp {
     font-family: arial;
     font-weight: 600;
     font-size: 11px;
     margin: 5px 5px 5px 10px
 }
 
-.prodSelector .filterGrp .filterContainer {
-    font-weight: 200;
-    margin-bottom: 20px
-}
+    .productSelectorParent .prodSelector .filterGrp .filterContainer {
+        font-weight: 200;
+        margin-bottom: 20px
+    }
 
-.prodSelector .filterGrp .filterContainer label {
-    font-weight: 200;
-    margin-left: 5px;
-    cursor: pointer
-}
+        .productSelectorParent .prodSelector .filterGrp .filterContainer label {
+            font-weight: 200;
+            margin-left: 5px;
+            cursor: pointer
+        }
 
-.prodSelector .filterGrp .srchContainer {
-    margin: 3px 0 0 15px;
-    cursor: pointer;
-    line-height: 1em
-}
+    .productSelectorParent .prodSelector .filterGrp .srchContainer {
+        margin: 3px 0 0 15px;
+        cursor: pointer;
+        line-height: 1em
+    }
 
-.prodSelector .filterGrp .srchContainer:hover i {
-    color: #003C71
-}
+        .productSelectorParent .prodSelector .filterGrp .srchContainer:hover i {
+            color: #003C71
+        }
 
-.prodSelector.filterGrp .srchContainer i {
-    color: #00AEEF;
-    font-size: 14px;
-    margin-right: 5px
-}
+        .productSelectorParent .prodSelector.filterGrp .srchContainer i {
+            color: #00AEEF;
+            font-size: 14px;
+            margin-right: 5px
+        }
 
-.prodSelector.modal-header {
+.productSelectorParent .prodSelector.modal-header {
     border-bottom: none;
     padding-bottom: 0
 }
 
-.prodSelector.modal-body {
+.productSelectorParent .prodSelector.modal-body {
     padding: 20px;
     padding-bottom: 0;
     min-height: 180px;
@@ -332,7 +362,7 @@ a.prdAnchor:hover {
     overflow-x: hidden
 }
 
-.dealTools.check-center {
+.productSelectorParent .dealTools.check-center {
     display: flex;
     align-items: center;
     justify-content: center;
@@ -340,51 +370,49 @@ a.prdAnchor:hover {
     width: 100%
 }
 
-kendo-grid.select-suggest-pop-up {
+.productSelectorParent kendo-grid.select-suggest-pop-up {
     height: 250px
 }
 
-.height-100 {
+.productSelectorParent .height-100 {
     height: 100% !important
 }
 
-.prodSelector .productSuggestion .k-grid-content {
+.productSelectorParent .prodSelector .productSuggestion .k-grid-content {
     height: calc(85vh - 500px);
     min-height: 180px;
     max-height: calc(85vh - 500px)
 }
 
-#productSuggestion.k-grid-content {
+.productSelectorParent #productSuggestion.k-grid-content {
     height: calc(85vh - 480px);
     min-height: 600px;
     max-height: calc(85vh - 385px)
 }
 
-.prdSelector-modal-window,
-.modal-dialog {
+/*.productSelectorParent .prdSelector-modal-window, .productSelectorParent .modal-dialog {
     width: 95%;
     margin-left: auto;
     margin-right: auto
-}
+}*/
 
-.checkbox-custom {
+.productSelectorParent .checkbox-custom {
     opacity: 0;
     position: absolute
 }
 
-.checkbox-custom,
-.checkbox-custom-label {
+.productSelectorParent .checkbox-custom, .productSelectorParent .checkbox-custom-label {
     display: inline-block;
     vertical-align: middle;
     margin: 5px;
     cursor: pointer
 }
 
-.checkbox-custom-label {
+.productSelectorParent .checkbox-custom-label {
     position: relative
 }
 
-.checkbox-custom+.checkbox-custom-label:before {
+.productSelectorParent .checkbox-custom + .checkbox-custom-label:before {
     background: #fff;
     border: 1.5px solid #eee;
     border-radius: 4px;
@@ -396,28 +424,28 @@ kendo-grid.select-suggest-pop-up {
     text-align: center
 }
 
-.checkbox-custom:checked+.checkbox-custom-label:before {
+.productSelectorParent .checkbox-custom:checked + .checkbox-custom-label:before {
     background: #01AEEF
 }
 
-.checkbox-custom:hover+.checkbox-custom-label:before {
+.productSelectorParent .checkbox-custom:hover + .checkbox-custom-label:before {
     border: 1.5px solid #01AEEF
 }
 
-.drillDown .checkbox-custom:checked+.checkbox-custom-label:before {
+.productSelectorParent .drillDown .checkbox-custom:checked + .checkbox-custom-label:before {
     background: #01AEEF;
     border: 1.5px solid #797979
 }
 
-.drillDown .checkbox-custom+.checkbox-custom-label:before {
+.productSelectorParent .drillDown .checkbox-custom + .checkbox-custom-label:before {
     border-radius: 2px
 }
 
-.drillDown .checkbox-custom:checked+.checkbox-custom-label:before {
+.productSelectorParent .drillDown .checkbox-custom:checked + .checkbox-custom-label:before {
     background: #797979
 }
 
-.prodDrillDownLarge .drillDown {
+.productSelectorParent .prodDrillDownLarge .drillDown {
     background: initial !important;
     align-items: center;
     justify-content: center;
@@ -428,55 +456,55 @@ kendo-grid.select-suggest-pop-up {
     display: flex
 }
 
-.checkbox-custom[disabled]:hover+.checkbox-custom-label[disabled]:before {
+.productSelectorParent .checkbox-custom[disabled]:hover + .checkbox-custom-label[disabled]:before {
     border: 1.5px solid red;
     cursor: no-drop
 }
 
-.prodSelector-grid.k-grid td {
+.productSelectorParent .prodSelector-grid.k-grid td {
     white-space: nowrap;
     color: #000000
 }
 
-.prodSelector .grpTitle {
+.productSelectorParent .prodSelector .grpTitle {
     font-size: 16px;
     font-weight: 600
 }
 
-.productSuggestion-grid.k-grid td {
+.productSelectorParent .productSuggestion-grid.k-grid td {
     white-space: nowrap
 }
 
-.prodSelector-grid.k-grid tr.k-alt {
+.productSelectorParent .prodSelector-grid.k-grid tr.k-alt {
     background-color: #fff
 }
 
-.prodSelector-grid.k-grid tr {
+.productSelectorParent .prodSelector-grid.k-grid tr {
     background-color: #fff
 }
 
-.prodSelector-grid.k-grid .k-grid-header th.k-header {
+.productSelectorParent .prodSelector-grid.k-grid .k-grid-header th.k-header {
     vertical-align: middle
 }
 
-.productSelector.searchTemplate {
+.productSelectorParent .productSelector.searchTemplate {
     border-bottom: 1px solid #ddd
 }
 
-.selector.popover {
+.productSelectorParent .selector.popover {
     font-size: 12px
 }
 
-span.productSelector.prdAnchor.Good {
+.productSelectorParent span.productSelector.prdAnchor.Good {
     color: #9bc600
 }
 
-span.productSelector.prdAnchor:hover {
+.productSelectorParent span.productSelector.prdAnchor:hover {
     text-decoration: none;
     color: #01AEEF
 }
 
-.productSelector.subHeaderNavContainer {
+.productSelectorParent .productSelector.subHeaderNavContainer {
     color: #003C71;
     background-color: #f4f4f4;
     font-size: 16px;
@@ -485,10 +513,9 @@ span.productSelector.prdAnchor:hover {
     margin: 0 8px 0 0;
     width: 100%;
     height: 100%
-    /*height: calc(100vh - 471px);*/
 }
 
-input[type=checkbox].with-sm-font {
+.productSelectorParent input[type=checkbox].with-sm-font {
     border: 0;
     clip: rect(0 0 0 0);
     height: 1px;
@@ -499,59 +526,59 @@ input[type=checkbox].with-sm-font {
     width: 1px
 }
 
-input[type=checkbox].with-sm-font+label:before {
-    font-family: FontAwesome;
-    display: inline-block;
-    content: "\f096";
-    font-size: 18px;
-    color: #39c600;
-    margin-left: 10px;
-    margin-top: 2px;
-    margin-bottom: 0 !important;
-    vertical-align: middle;
-    height: 13px;
-    width: 14px;
-    border-radius: 3px;
-    background: #fff
-}
+    .productSelectorParent input[type=checkbox].with-sm-font + label:before {
+        font-family: FontAwesome;
+        display: inline-block;
+        content: "\f096";
+        font-size: 18px;
+        color: #39c600;
+        margin-left: 10px;
+        margin-top: 2px;
+        margin-bottom: 0 !important;
+        vertical-align: middle;
+        height: 13px;
+        width: 14px;
+        border-radius: 3px;
+        background: #fff
+    }
 
-input[type=checkbox].with-sm-font:hover+label:before {
-    color: #9bc600;
-    cursor: pointer
-}
+    .productSelectorParent input[type=checkbox].with-sm-font:hover + label:before {
+        color: #9bc600;
+        cursor: pointer
+    }
 
-input[type=checkbox].with-sm-font.disabled+label:before {
-    color: #cccccc;
-    cursor: default
-}
+    .productSelectorParent input[type=checkbox].with-sm-font.disabled + label:before {
+        color: #cccccc;
+        cursor: default
+    }
 
-input[type=checkbox].with-sm-font:checked+label:before {
-    content: "\f046";
-    font-size: 18px;
-    margin-left: 10px;
-    margin-top: 2px;
-    vertical-align: middle
-}
+    .productSelectorParent input[type=checkbox].with-sm-font:checked + label:before {
+        content: "\f046";
+        font-size: 18px;
+        margin-left: 10px;
+        margin-top: 2px;
+        vertical-align: middle
+    }
 
-input[type=checkbox].with-sm-font.ckSm:checked+label:before {
-    font-size: 16px
-}
+    .productSelectorParent input[type=checkbox].with-sm-font.ckSm:checked + label:before {
+        font-size: 16px
+    }
 
-input[type=checkbox].with-sm-font:focus+label:before {
-    font-weight: bold
-}
+    .productSelectorParent input[type=checkbox].with-sm-font:focus + label:before {
+        font-weight: bold
+    }
 
-.prodSelectorSearch .input-group-addon {
+.productSelectorParent .prodSelectorSearch .input-group-addon {
     background-color: #01AEEF;
     border: 1px solid #01AEEF
 }
 
-.prodSelectorSearch .input-group-addon input[type=checkbox] {
-    margin-top: 2px;
-    width: 20px
-}
+    .productSelectorParent .prodSelectorSearch .input-group-addon input[type=checkbox] {
+        margin-top: 2px;
+        width: 20px
+    }
 
-.drillDown .input-group-addon {
+.productSelectorParent .drillDown .input-group-addon {
     padding: 10px 0 0 10px;
     font-size: 15px;
     font-weight: normal;
@@ -562,25 +589,25 @@ input[type=checkbox].with-sm-font:focus+label:before {
     border: none
 }
 
-.paddingLeftNone {
-   /* padding-left: 0 !important;*/
+/*.productSelectorParent .paddingLeftNone {
+    padding-left: 0 !important;
     padding-right: 15px !important
 }
 
-.paddingRightNone {
-   /* padding-right: 0 !important;*/
+.productSelectorParent .paddingRightNone {
+    padding-right: 0 !important;
     padding-left: 15px !important
-}
-
-/*.paddingRight15 {
-    padding-right: 15px !important
 }*/
 
-.arcAnimate.ani-mate {
+.productSelectorParent .paddingRight15 {
+    padding-right: 15px !important
+}
+
+.productSelectorParent .arcAnimate.ani-mate {
     width: auto
 }
 
-.arcAnimate {
+.productSelectorParent .arcAnimate {
     width: 60%;
     display: inline-block
 }
@@ -592,12 +619,12 @@ input[type=checkbox].with-sm-font:focus+label:before {
     margin-top: 30px !important
 }
 
-.modal-content {
+.productSelectorParent.modal-content {
     border-radius: 0 !important;
     border: 0 !important
 }
 
-.isSoftWarnCell {
+.productSelectorParent .isSoftWarnCell {
     background-color: #f3d54e !important;
     text-align: center;
     justify-content: center;
@@ -606,7 +633,7 @@ input[type=checkbox].with-sm-font:focus+label:before {
     color: #444
 }
 
-.product-selector {
+.productSelectorParent.product-selector {
     height: 88vh;
     background-color: #1a3e6f;
     overflow-y: auto;
@@ -615,7 +642,7 @@ input[type=checkbox].with-sm-font:focus+label:before {
     border-right: 1px solid #1a3e6f !important
 }
 
-.product-list {
+.productSelectorParent .product-list {
     margin: 0 3px 3px 0;
     background-color: #f4f4f4;
     color: #444;
@@ -630,19 +657,18 @@ input[type=checkbox].with-sm-font:focus+label:before {
     float: left !important
 }
 
-.k-grid a {
+.productSelectorParent .k-grid a {
     color: #0071c5 !important;
     cursor: pointer
 }
 
-.k-grid a:hover,
-a:focus {
-    color: #004579;
-    text-decoration: none !important;
-    cursor: pointer
-}
+    .productSelectorParent .k-grid a:hover, .productSelectorParent a:focus {
+        color: #004579;
+        text-decoration: none !important;
+        cursor: pointer
+    }
 
-.btn-primary.disabled-save[disabled] {
+.productSelectorParent .btn-primary.disabled-save[disabled] {
     background-color: #01AEEF !important;
     color: #b1babf !important;
     border-color: #b1babf !important;
@@ -650,31 +676,31 @@ a:focus {
     pointer-events: all !important
 }
 
-kendo-grid.raid-style {
+.productSelectorParent kendo-grid.raid-style {
     height: 278px
 }
 
-.th-check-box {
+.productSelectorParent .th-check-box {
     height: 13px !important;
     width: 13px !important;
     position: relative !important;
     margin: 0 !important
 }
 
-.product-breakout-modal {
+.product-breakout-modal-selector {
     width: 70vw !important
 }
 
-.product-breakout-modal>mat-dialog-container {
-    background-color: #1a3e6f !important;
-    padding: 0 !important
-}
+    .product-breakout-modal-selector > mat-dialog-container {
+        background-color: #1a3e6f !important;
+        /*padding: 0 !important*/
+    }
 
-.product-breakout-modal mat-dialog-container product-breakout .modal-content {
-    box-shadow: none
-}
+    .product-breakout-modal-selector mat-dialog-container product-breakout .modal-content {
+        box-shadow: none
+    }
 
-#PTRLoading .ss-loading-overlay .myLoader {
+/*#PTRLoading .ss-loading-overlay .myLoader {
     left: 40% !important;
     top: 35% !important
 }
@@ -683,7 +709,7 @@ kendo-grid.raid-style {
     opacity: 1;
     top: 0;
     left: 0
-}
+}*/
 
 .header-PS {
     padding-left: 15px;
@@ -699,8 +725,7 @@ kendo-grid.raid-style {
     background-color: transparent !important
 }
 
-
-.CAPYCS2CellContent {
+.productSelectorParent .CAPYCS2CellContent {
     padding: 2px 4px;
     border: 1px solid transparent;
     min-height: 16px;
@@ -710,11 +735,11 @@ kendo-grid.raid-style {
     cursor: pointer;
 }
 
-.CAPYCS2CellContent.accurate-height {
-    height: 25px;
-}
+    .productSelectorParent .CAPYCS2CellContent.accurate-height {
+        height: 25px;
+    }
 
-.another-possible {
+.productSelectorParent .another-possible {
     line-height: 1
 }
 
@@ -725,7 +750,24 @@ kendo-grid.raid-style {
     top: -1px !important
 }
 
-#closePopover {
+#prodGrid .k-grid td {
+    border-width: 0 !important;
+    padding: 0;
+    height: 50px;
+    color: #1a3e6f;
+    font-family: 'Intel Clear','Arial';
+    font-weight: 500
+}
+
+    #prodGrid .k-grid td, #prodGrid .k-grid td div, #prodGrid .k-grid td span {
+        white-space: nowrap !important;
+        text-overflow: ellipsis;
+        overflow: hidden;
+        position: relative;
+        width: 100%
+    }
+
+#closePopoverSelector {
     text-align: end !important;
 }
 
@@ -752,15 +794,15 @@ kendo-grid.raid-style {
     opacity: 1
 }
 
-/*.clear-shift-style {
+.clear-shift-style {
     margin-right: 16px !important
-}*/
+}
 
 .text-shift-left {
     margin-right: 83px !important
 }
 
-.product-selector-font-align {
+.productSelectorParent .product-selector-font-align {
     text-align: center;
     font-weight: normal
 }
@@ -790,37 +832,37 @@ kendo-grid.raid-style {
     display: flex
 }
 
-/*.cus-them-padding {
+.cus-them-padding {
     padding: 20px
-}*/
+}
 
-.lblFilterProd {
+.productSelectorParent .lblFilterProd {
     font-weight: 600 !important;
     color: #00AEEF !important;
     cursor: pointer
 }
 
-.k-treeview .k-in {
+.productSelectorParent .k-treeview .k-in {
     cursor: pointer;
     font-weight: 700 !important;
     width: 100%
 }
 
 #prodGrid kendo-grid.raid-style.proselector-raid-style {
-    height: calc(90vh - 385px);
+    height: calc(100vh - 440px);
 }
 
 .declaringProdGrid {
     height: 100%;
 }
 
-.declaringProdGrid kendo-grid.select-suggest-pop-up {
-    height: calc(100vh - 474px) !important;
-    overflow: auto;
-    position: relative;
-    top: -21px;
-    margin-bottom: -42px;
-}
+    .declaringProdGrid kendo-grid.select-suggest-pop-up {
+        height: calc(100vh - 474px) !important;
+        overflow: auto;
+        position: relative;
+        top: -21px;
+        margin-bottom: -42px;
+    }
 
 @media screen and (max-height:700px) {
     .ps-v-modal-footer {
@@ -832,11 +874,11 @@ kendo-grid.raid-style {
         display: block
     }
 
-    .productSelector.Issue {
+    .productSelectorParent .productSelector.Issue {
         font-size: 14px
     }
 
-    .prodSelector.modal-body {
+    .productSelectorParent .prodSelector.modal-body {
         height: 280px !important;
     }
 
@@ -844,7 +886,6 @@ kendo-grid.raid-style {
         height: 276px !important;
     }
 }
-
 /*.prodSelector.modal-body.prodFull-height-fix {
     height: 100% !important;
     overflow-y: hidden;
@@ -852,9 +893,6 @@ kendo-grid.raid-style {
 
 .popover-content.product_selector_m {
     max-width: 614px !important;
-}
-.paddingLeft15 {
-    margin-left: 15px;
 }
 
 button.btn-primary.btnPrimes.ng-star-inserted {
@@ -871,4 +909,26 @@ kendo-dialog.alterAlertMsg .k-window {
 
     kendo-dialog.alterAlertMsg .k-window kendo-dialog-actions {
         padding: 0;
+    }
+
+kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner .k-link .k-column-title {
+    text-transform: capitalize;
+    color: #1a3e6f;
+    font-size: 12px !important;
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-weight: 600;
+    white-space: nowrap !important;
+    overflow: hidden !important
+}
+
+kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner .k-link:hover {
+    background: transparent !important
+}
+
+kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-filter-menu .k-grid-filter span.k-icon.k-i-filter {
+    color: #808080
+}
+
+    kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-filter-menu .k-grid-filter span.k-icon.k-i-filter:hover {
+        color: #00aeef !important
     }

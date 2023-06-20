@@ -13,13 +13,13 @@
     border-top: 1px solid #555 !important
 }
 
-.CTgrid_lR {
+.kendo-grid-buttons.CTgrid_lR {
     padding-left: 20px !important;
     padding-right: 3px !important;
     padding-top: 8px !important
 }
 
-.k-grid.CH_height {
+.k-grid.contract-history-style.CH_height {
     height: calc(100vh - 250px) !important;
     overflow-y: scroll !important;
 }

@@ -58,7 +58,7 @@
     left:0!important;
 }
 
-.loading-dealer-editors kendo-tabstrip#dealEditorTab .k-content {
+.loading-dealer-editors kendo-tabstrip#dealEditorTab > .k-content {
     padding: 0;
     border-color: transparent;
 }

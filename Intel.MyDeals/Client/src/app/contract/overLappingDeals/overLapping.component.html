@@ -2,7 +2,7 @@
 <div class="row">
     <div class="col-md-12" style="height: 35px"></div>
 </div>
-<div class="row">
+<div class="row overlappingRows">
     <div class="col-md-12" style="padding-left: 35px;">
         <div class="row">
             <div class="col-md-9">
@@ -233,7 +233,7 @@
             Please go to <b>Deal Editor</b>; <b>edit</b> and <b>re-validate</b> your deal to avoid overlapping with other deals.
         </div>
         <kendo-dialog-actions class="dialog-button-style">
-            <button kendoButton (click)="closeKendoAlert()" class="kendo-alrt-btn"><span>OK</span></button>
+            <button kendoButton (click)="closeKendoAlert()" class="kendo-alrt-btn validatingKendoEditors"><span>OK</span></button>
         </kendo-dialog-actions>
     </kendo-dialog>
 </div>

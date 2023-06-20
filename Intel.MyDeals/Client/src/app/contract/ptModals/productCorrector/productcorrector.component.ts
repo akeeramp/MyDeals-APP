@@ -832,7 +832,7 @@ export class ProductCorrectorComponent {
         };
         const data = { name: 'Product Selector', source: 'Product Corrector', selVal: dataItem, contractData: this.data.contractData, curPricingTable: this.data.curPricingTable, curRow: [pricingTableRow] };
         const dialogRefe = this.dialogService.open(ProductSelectorComponent, {
-            height: "85vh",
+            height: "88vh",
             maxWidth: "90vw",
             width: "6000px",
             data: data,
@@ -1133,7 +1133,7 @@ export class ProductCorrectorComponent {
                 columnTypes: priceCondition,
                 productData: productData
             },
-            panelClass: 'product-breakout-modal'
+            panelClass: 'product-breakout-modal-Corrector'
         });
     }
 

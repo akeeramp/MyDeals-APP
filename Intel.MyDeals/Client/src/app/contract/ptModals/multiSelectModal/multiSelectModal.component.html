@@ -1,8 +1,8 @@
-<div [ngClass]="{'targetGeoModal': isTgrRgn}">
+<div [ngClass]="{'targetGeoModal': isTgrRgn}" class="multiSelectModalParent">
     <div class="modal-header upper-model-header" *ngIf="!isTgrRgn">
         <h3 class="modal-title" id="modal-title">{{disTitle}}</h3>
     </div>
-    <div class="container-fluid overflow modal-body all-wheat markt-segmet-style">
+    <div class="container-fluid overflow modal-body all-wheat markt-segmet-style" style="padding: 0 !important;">
         <div *ngIf="!isTgrRgn">
             <div *ngIf="isEmptyList">
                 <span *ngIf="!msg" style="color:red;">
@@ -42,14 +42,14 @@
                                     (checkedKeysChange)="onSelectionChange($event)">
                     </kendo-treeview>
                 </div>
-                <div mat-dialog-content *ngIf="ismrktSeg">
+                <div mat-dialog-content *ngIf="ismrktSeg" style=" padding: 0 !important; margin-top: 0 !important;">
                     <kendo-multiselect class="mrkt-seg-multi border_bottom_c" [(ngModel)]="multSlctMkgValues" (open)="$event.preventDefault()" [autoClose]="true" [allowCustom]="false" (valueChange)="onMarkSegChange($event)" placeholder="Click to select..."></kendo-multiselect>
                     <kendo-treeview class="check_box_colour" [nodes]="marketSeglist" textField="DROP_DOWN" [children]="fetchChildren" [hasChildren]="hasChildren" kendoTreeViewCheckable [(checkedKeys)]="mkgvalues" checkBy="DROP_DOWN" [isChecked]="isMkgChecked" (checkedKeysChange)="onMktgValueChange($event)">
                     </kendo-treeview>
                 </div>
             </div>
         </div>
-        <br />
+
         <div class="row justify-content-end" *ngIf="!isTgrRgn">
             <div class="col-md-12">
                 <div mat-dialog-actions class="col-md-7" *ngIf="multiSelectPopUpModal.enableSelectAll || multiSelectPopUpModal.enableDeselectAll">

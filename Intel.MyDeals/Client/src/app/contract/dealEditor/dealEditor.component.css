@@ -8,6 +8,21 @@ kendo-grid#dealEditor {
     border-bottom: 1px solid #e6e6e6;
 }
 
+﻿#DELoading .ss-loading-overlay .myLoader {
+    left: 50% !important;
+    top: 10% !important
+}
+
+#DELoading .ss-loading-panel.ss-Info {
+    height: auto !important;
+    margin-top: 20px !important;
+    margin-left: 0 !important
+}
+
+#DELoading .ss-loading-overlay {
+    left: 0 !important
+}
+
 #ExcludeAuto {
     display: flex;
     justify-content: center
@@ -44,9 +59,9 @@ kendo-grid#dealEditor {
     margin: 5px 0 0 5px
 }
 
-.k-grid-content tr {
+/*.k-grid-content tr {
     background-color: white
-}
+}*/
 
 #dealEditor tr {
     background-color: white !important
@@ -85,7 +100,7 @@ kendo-grid#dealEditor {
     border-bottom: .01px solid rgba(0, 0, 0, .05)
 }
 
-.op-grid.k-grid .uiControlDiv.msgClassStyles {
+.opDealEditorGrids.k-grid .uiControlDiv.msgClassStyles {
     /* height: 40px; */
     /* min-height: 40px; */
     margin: 0;
@@ -98,7 +113,7 @@ kendo-grid#dealEditor {
     flex-direction: column
 }
 
-.op-grid.k-grid .uiControlDiv.isSoftWarnCell.capInfoWrapper {
+.opDealEditorGrids.k-grid .uiControlDiv.isSoftWarnCell.capInfoWrapper {
     /* height: 40px; */
     margin: 0;
     line-height: 1 !important;
@@ -179,7 +194,7 @@ kendo-grid#dealEditor {
     margin: 1px 0 0 0px !important;
 }
 
-tr:last-child>td {
+#dealEditorTab tr:last-child > td {
     border-bottom-width: 1px !important
 }
 
@@ -238,7 +253,7 @@ tr:last-child>td {
     width: 10%
 }
 
-.text {
+#dealEditorTab .text {
     display: inline-flex;
     padding: 0 5px;
     font-size: 11px !important;
@@ -312,7 +327,7 @@ tr:last-child>td {
     font-size: 18px !important
 }
 
-.opUiContainer.md [class^="intelicon-"].bigIcon {
+.one-check.deHeaderFilt-hover.oppo-grids .opUiContainer.md [class^="intelicon-"].bigIcon {
     font-size: 20px !important
 }
 
@@ -328,21 +343,21 @@ tr:last-child>td {
     overflow: hidden
 }
 
-.k-pager-wrap {
+/*.k-pager-wrap {
     background-color: #ffffff
-}
+}*/
 
-.op-grid .k-pager-wrap {
+.opDealEditorGrids .k-pager-wrap {
     border-left: 0 solid transparent;
     border-right: 0 solid transparent;
     border-bottom: 0 solid transparent
 }
 
-.k-webkit .k-pager-wrap {
+/*.k-webkit .k-pager-wrap {
     min-height: 2.56em
-}
+}*/
 
-.op-grid.k-grid {
+.opDealEditorGrids.k-grid {
     width: 100% !important;
     border-left: 0 solid transparent;
     border-right: 0 solid transparent;
@@ -351,37 +366,37 @@ tr:last-child>td {
     border-left: 1px solid #e6e6e6
 }
 
-.opUiContainer.md {
+.opDealEditorGrids.opUiContainer.md {
     font-size: 12px
 }
 
-.k-grid {
+#dealEditorTab .k-grid {
     box-shadow: none;
     position: relative;
     zoom: 1
 }
 
-.k-grid-lockedcolumns {
+#dealEditorTab .k-grid-lockedcolumns {
     white-space: nowrap
 }
 
-.k-grid-content-locked+.k-grid-content {
+#dealEditorTab .k-grid-content-locked + .k-grid-content {
     display: inline-block;
     vertical-align: top
 }
 
-.k-grid-content {
+#dealEditorTab .k-grid-content {
     zoom: 1
 }
 
-.op-grid.k-grid .uiControlDiv {
+.opDealEditorGrids.k-grid .uiControlDiv {
     line-height: 2 !important;
     margin-bottom: 0 !important;
     margin-top: 0 !important;
     padding: 4px 8px !important
 }
 
-.op-grid .uiControlDiv {
+.opDealEditorGrids .uiControlDiv {
     padding: 0 !important;
     min-height: 100%
 }
@@ -403,50 +418,50 @@ tr:last-child>td {
     color: #00AEEF
 }
 
-.ng-binding {
+#dealEditorTab .ng-binding {
     padding-left: 4px
 }
 
-.opUiContainer.md.k-grid td {
+#dealEditorTab .opUiContainer.md.k-grid td {
     border-right: .5px solid lightgrey !important;
     border-bottom: .5px solid lightgrey !important
 }
 
-.k-grid td.k-state-focused,
-.k-grid th.k-state-focused,
-.k-grid th:focus,
-.k-grid .k-master-row>td:focus,
-.k-grid .k-grouping-row>td:focus,
-.k-grid .k-detail-row>td:focus,
-.k-grid .readOnlyCell>td:focus,
-.k-grid .k-detail-row>td:focus {
+#dealEditorTab .k-grid td.k-state-focused,
+#dealEditorTab .k-grid th.k-state-focused,
+#dealEditorTab .k-grid th:focus,
+#dealEditorTab .k-grid .k-master-row > td:focus,
+#dealEditorTab .k-grid .k-grouping-row > td:focus,
+#dealEditorTab .k-grid .k-detail-row > td:focus,
+#dealEditorTab .k-grid .readOnlyCell > td:focus,
+#dealEditorTab .k-grid .k-detail-row > td:focus {
     box-shadow: inset 0 0 0 1px #00aeef !important
 }
 
-.k-grid td.k-state-focused,
-.k-grid th.k-state-focused,
-.k-grid th:focus:hover,
-.k-grid .k-master-row>td:focus:hover,
-.k-grid .k-grouping-row>td:focus:hover,
-.k-grid .k-detail-row>td:focus:hover,
-.k-grid .readOnlyCell>td:focus:hover,
-.k-grid .k-detail-row>td:focus:hover {
+#dealEditorTab .k-grid td.k-state-focused,
+#dealEditorTab .k-grid th.k-state-focused,
+#dealEditorTab .k-grid th:focus:hover,
+#dealEditorTab .k-grid .k-master-row > td:focus:hover,
+#dealEditorTab .k-grid .k-grouping-row > td:focus:hover,
+#dealEditorTab .k-grid .k-detail-row > td:focus:hover,
+#dealEditorTab .k-grid .readOnlyCell > td:focus:hover,
+#dealEditorTab .k-grid .k-detail-row > td:focus:hover {
     box-shadow: inset 0 0 0 1px #003C71 !important
 }
 
-.dealTools {
+/*.dealTools {
     margin-top: 0 !important
-}
+}*/
 
-.gridStatusMarker {
+#dealEditorTab .gridStatusMarker {
     height: 35px !important;
     width: 20px !important;
     padding: 0 !important
 }
 
-.gridStatusMarker.Active {
-    line-height: 2
-}
+    #dealEditorTab .gridStatusMarker.Active {
+        line-height: 2
+    }
 
 .dealDetail .dealDetailContainer {
     line-height: 2
@@ -457,7 +472,7 @@ tr:last-child>td {
     height: 35px !important
 }
 
-k-state-focused .k-touch-action-auto .k-grid-edit-cell {
+#dealEditorTab .k-state-focused .k-touch-action-auto .k-grid-edit-cell {
     background-color: rgba(0, 0, 0, 0) !important
 }
 
@@ -468,19 +483,19 @@ k-state-focused .k-touch-action-auto .k-grid-edit-cell {
     display: inline-block
 }
 
-.op-grid.k-grid .k-grid-header .k-header .k-link {
+.opDealEditorGrids.op-grid.k-grid .k-grid-header .k-header .k-link {
     font-weight: 600
 }
 
-.intelicon-protection-solid {
+#dealEditorTab .intelicon-protection-solid {
     font-size: 20px
 }
 
-.op-grid.k-grid .k-grid-header th.k-header {
+.opDealEditorGrids.op-grid.k-grid .k-grid-header th.k-header {
     vertical-align: top
 }
 
-.k-state-disabled {
+#dealEditorTab .k-state-disabled {
     opacity: 1 !important
 }
 
@@ -493,38 +508,38 @@ k-state-focused .k-touch-action-auto .k-grid-edit-cell {
     width: 100% !important
 }
 
-.dirty {
+#dealEditorTab .dirty {
     font-weight: bolder !important;
     color: #00AEEF !important
 }
 
-.notDirty {
+#dealEditorTab .notDirty {
     font-weight: lighter !important;
     color: #ababab !important;
     cursor: not-allowed !important
 }
 
-.text {
+#dealEditorTab .text {
     font-size: 14px !important;
     font-weight: 600;
     line-height: 1em
 }
 
-.k-tabstrip-items .k-item {
+#dealEditorTab .k-tabstrip-items .k-item {
     margin-right: 0 !important
 }
 
-.intelicon-pin-outlined:hover {
+#dealEditorTab .intelicon-pin-outlined:hover {
     font-size: 19px;
     background-color: #00aeef;
     color: #fff !important
 }
 
-.intelicon-close:hover {
+#dealEditorTab .intelicon-close:hover {
     color: #ff0000 !important
 }
 
-tr:last-child>td {
+#dealEditorTab tr:last-child > td {
     border-bottom-width: 0 !important
 }
 
@@ -540,30 +555,30 @@ tr:last-child>td {
     padding-left: 1.286em !important
 }
 
-.k-grid .k-grid-header-locked,
-.k-grid .k-grid-content-locked,
-.k-grid .k-grid-header-locked .k-header,
-.k-grid .k-grid-content-locked td {
+#dealEditorTab .k-grid .k-grid-header-locked,
+#dealEditorTab .k-grid .k-grid-content-locked,
+#dealEditorTab .k-grid .k-grid-header-locked .k-header,
+#dealEditorTab .k-grid .k-grid-content-locked td {
     border-color: #ccc !important
 }
 
-.k-grid .k-grid-header-locked,
-.k-grid .k-grid-content-locked,
-.k-grid .k-grid-header-locked .k-header,
-.k-grid .k-grid-content-locked td {
-    border-color: #ccc !important
-}
+    #dealEditorTab .k-grid .k-grid-header-locked,
+    #dealEditorTab .k-grid .k-grid-content-locked,
+    #dealEditorTab .k-grid .k-grid-header-locked .k-header,
+    #dealEditorTab .k-grid .k-grid-content-locked td {
+        border-color: #ccc !important
+    }
 
 #dealEditor.op-grid.k-grid tr:hover {
     background-color: #ecf8fb !important
 }
 
-.k-grid .k-grid-content-locked .k-state-hover td,
-.k-grid .k-grid-content-locked tr:hover td {
+#dealEditorTab .k-grid .k-grid-content-locked .k-state-hover td,
+#dealEditorTab .k-grid .k-grid-content-locked tr:hover td {
     background-color: #ecf8fb !important
 }
 
-.k-cell-inner>.k-link:hover {
+#dealEditorTab .k-cell-inner > .k-link:hover {
     background: none !important;
     color: #1a3e6f !important
 }
@@ -580,40 +595,40 @@ tr:last-child>td {
     color: #003c71 !important
 }
 
-.k-grid .k-detail-row .k-detail-cell {
+#dealEditorTab .k-grid .k-detail-row .k-detail-cell {
     padding-top: 0;
     padding-bottom: 5px
 }
 
-.opUiContainer.md [class^="intelicon-"]:not(intelicon-protection-solid) {
+#dealEditorTab .opUiContainer.md [class^="intelicon-"]:not(intelicon-protection-solid) {
     font-size: 14px;
     color: #00AEEF
 }
 
-.opUiContainer.md .opElementHelpIcon,
-.opUiContainer.md [class*=" intelicon-"] {
+#dealEditorTab .opUiContainer.md .opElementHelpIcon,
+#dealEditorTab .opUiContainer.md [class*=" intelicon-"] {
     font-size: 20px !important
 }
 
-.k-grid td.k-state-focused,
-.k-grid th.k-state-focused,
-.k-grid th:focus:hover,
-.k-grid .k-master-row>td:focus:hover,
-.k-grid .k-grouping-row>td:focus:hover,
-.k-grid .k-detail-row>td:focus:hover,
-.k-grid .readOnlyCell>td:focus:hover,
-.k-grid .k-detail-row>td:focus:hover {
+#dealEditorTab .k-grid td.k-state-focused,
+#dealEditorTab .k-grid th.k-state-focused,
+#dealEditorTab .k-grid th:focus:hover,
+#dealEditorTab .k-grid .k-master-row > td:focus:hover,
+#dealEditorTab .k-grid .k-grouping-row > td:focus:hover,
+#dealEditorTab .k-grid .k-detail-row > td:focus:hover,
+#dealEditorTab .k-grid .readOnlyCell > td:focus:hover,
+#dealEditorTab .k-grid .k-detail-row > td:focus:hover {
     box-shadow: inset 0 0 0 1px #00aeef !important
 }
 
-.k-grid td.k-state-focused,
-.k-grid th.k-state-focused,
-.k-grid th:focus,
-.k-grid .k-master-row>td:focus,
-.k-grid .k-grouping-row>td:focus,
-.k-grid .k-detail-row>td:focus,
-.k-grid .readOnlyCell>td:focus,
-.k-grid .k-detail-row>td:focus {
+#dealEditorTab .k-grid td.k-state-focused,
+#dealEditorTab .k-grid th.k-state-focused,
+#dealEditorTab .k-grid th:focus,
+#dealEditorTab .k-grid .k-master-row > td:focus,
+#dealEditorTab .k-grid .k-grouping-row > td:focus,
+#dealEditorTab .k-grid .k-detail-row > td:focus,
+#dealEditorTab .k-grid .readOnlyCell > td:focus,
+#dealEditorTab .k-grid .k-detail-row > td:focus {
     box-shadow: inset 0 0 0 1px #00aeef !important
 }
 
@@ -643,16 +658,16 @@ tr:last-child>td {
     margin-right: 0 !important
 }
 
-kendo-grid-string-filter-menu .k-dropdown .k-dropdown-wrap,
-kendo-grid-string-filter-menu .k-dropdowntree .k-dropdown-wrap {
+#dealEditorTab kendo-grid-string-filter-menu .k-dropdown .k-dropdown-wrap,
+#dealEditorTab kendo-grid-string-filter-menu .k-dropdowntree .k-dropdown-wrap {
     width: 85% !important
 }
 
-.redfont {
+#dealEditorTab .redfont {
     color: #fc4c02
 }
 
-.op-grid.k-grid .k-grid-header .k-header {
+.opDealEditorGrids.k-grid .k-grid-header .k-header {
     white-space: normal
 }
 
@@ -665,13 +680,13 @@ kendo-grid-string-filter-menu .k-dropdowntree .k-dropdown-wrap {
     top: 44px !important
 }
 
-.k-filter-menu .k-multiselect-wrap,
-.k-filter-menu .k-dropdown .k-dropdown-wrap {
+#dealEditorTab .k-filter-menu .k-multiselect-wrap,
+#dealEditorTab .k-filter-menu .k-dropdown .k-dropdown-wrap {
     width: 90% !important;
     left: -15px !important
 }
 
-.k-filter-menu .k-multiselect li {
+#dealEditorTab .k-filter-menu .k-multiselect li {
     padding: 1px !important
 }
 
@@ -702,12 +717,12 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li {
 
 kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:last-child {
     position: absolute;
-    right: 15px
+    right: 2px
 }
 
 kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:nth-last-child(2) {
     position: absolute;
-    right: 60px;
+    right: 45px;
     border: none !important;
     border-bottom-width: 1px !important;
     border-top: 1px solid #ffffff !important
@@ -732,13 +747,13 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:nth-last-child(2) {
     margin-left: 6px
 }
 
-.dropdown {
+#dealEditorTab .dropdown {
     position: relative;
     display: inline-block;
     cursor: pointer
 }
 
-.dropdown-content {
+#dealEditorTab .dropdown-content {
     display: none;
     position: absolute;
     background-color: #f9f9f9;
@@ -754,33 +769,33 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:nth-last-child(2) {
     cursor: pointer
 }
 
-.dropdown-content ul li {
-    color: #00AEEF;
-    padding: 8px 0;
-    text-decoration: none;
+    #dealEditorTab .dropdown-content ul li {
+        color: #00AEEF;
+        padding: 8px 0;
+        text-decoration: none;
+        display: block;
+        cursor: pointer
+    }
+
+        #dealEditorTab .dropdown-content ul li:hover {
+            background-color: #f1f1f1;
+            cursor: pointer
+        }
+
+#dealEditorTab .dropdown:hover .dropdown-content {
     display: block;
-    cursor: pointer
-}
-
-.dropdown-content ul li:hover {
-    background-color: #f1f1f1;
-    cursor: pointer
-}
-
-.dropdown:hover .dropdown-content {
-    display: block;
     color: #00AEEF;
     cursor: pointer
 }
 
-.dropdown:hover .dropbtn {
+#dealEditorTab .dropdown:hover .dropbtn {
     background-color: #1891ee !important;
     color: none;
     color: #fdfdfd !important;
     cursor: pointer
 }
 
-.dropbtn {
+#dealEditorTab .dropbtn {
     background-color: #04AA6D;
     color: white;
     padding: 16px;
@@ -791,7 +806,7 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:nth-last-child(2) {
 
 #myInput {
     box-sizing: border-box;
-    background-image: url('searchicon.png');
+    /*background-image: url('searchicon.png');*/
     background-position: 14px 12px;
     background-repeat: no-repeat;
     font-size: 16px;
@@ -804,7 +819,7 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:nth-last-child(2) {
     outline: 3px solid #ddd
 }
 
-.backclass:hover {
+.newBackClass:hover {
     background-color: #f1f1f1;
     cursor: pointer
 }
@@ -817,12 +832,12 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:nth-last-child(2) {
     background-color: #E7E7E8
 }
 
-.k-textbox.form-control {
+#dealEditorTab .k-textbox.form-control {
     padding: 1.375rem .75rem
 }
 
-.k-dialog .k-button,
-.k-dialog .k-toolbar .k-button {
+#dealEditorTab .k-dialog .k-button,
+#dealEditorTab .k-dialog .k-toolbar .k-button {
     padding: 1.375rem .75rem;
     line-height: 1.143em !important;
     background: #0071c5 !important
@@ -873,25 +888,25 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:nth-last-child(2) {
     cursor: pointer
 }
 
-.dropdown:hover .hover-effect {
+#dealEditorTab .dropdown:hover .hover-effect {
     background-color: #1891ee;
     color: #ffffff !important;
     cursor: pointer
 }
 
-.hover-effect:hover {
+#dealEditorTab .hover-effect:hover {
     background-color: #1891ee;
     color: #ffffff !important;
     cursor: pointer
 }
 
-.k-textbox.design:hover {
+#dealEditorTab .k-textbox.design:hover {
     background-color: #fff;
     border-color: #f5f5f5;
     box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%)
 }
 
-.mycol-style {
+#dealEditorTab .mycol-style {
     width: 311.514px !important;
     overflow-y: hidden !important;
     margin-top: 5px !important;
@@ -904,7 +919,7 @@ kendo-tabstrip.width-fixes .k-tabstrip-items-wrapper ul li:nth-last-child(2) {
     padding-top: 6px !important
 }
 
-.searchbox {
+#dealEditorTab .searchbox {
     width: 94% !important;
     margin-left: 7px !important;
     height: 32px !important;
@@ -1023,11 +1038,6 @@ ngb-tooltip-window .tooltip-inner {
     line-height: 1
 }
 
-#DELoading .ss-loading-overlay .myLoader {
-    left: 50% !important;
-    top: 10% !important
-}
-
 kendo-tabstrip.tabs-coll {
     width: 100%
 }
@@ -1038,16 +1048,6 @@ kendo-tabstrip.tabs-coll {
 
 .mybotdialog .k-content.k-window-content.k-dialog-content {
     padding: 15px !important
-}
-
-#DELoading .ss-loading-panel.ss-Info {
-    height: auto !important;
-    margin-top: 20px !important;
-    margin-left: 0 !important
-}
-
-#DELoading .ss-loading-overlay {
-    left: 0 !important
 }
 
 .multiselect-scroll-style.cdk-overlay-pane {
@@ -1063,20 +1063,20 @@ kendo-dialog-actions.add-tab-style.k-dialog-buttongroup {
 
 }
 
-button.k-button.add-tab-okbtn {
+#dealEditorTab button.k-button.add-tab-okbtn {
     font-family: 'Intel Clear' !important;
     font-size: 15px !important;
     background: #00aeef !important;
     padding: 1.375rem .75rem !important
 }
 
-button.k-button.add-tab-okbtn:hover {
-    color: #fff !important;
-    border-color: #0071c5 !important;
-    background-color: #0071c5 !important
-}
+    #dealEditorTab button.k-button.add-tab-okbtn:hover {
+        color: #fff !important;
+        border-color: #0071c5 !important;
+        background-color: #0071c5 !important
+    }
 
-button.k-button.add-tab-cancelbtn {
+#dealEditorTab button.k-button.add-tab-cancelbtn {
     font-family: 'Intel Clear' !important;
     font-size: 15px !important;
     background: #fafafa !important;
@@ -1084,21 +1084,21 @@ button.k-button.add-tab-cancelbtn {
     color: #444444 !important
 }
 
-button.k-button.add-tab-cancelbtn:hover {
-    color: #444 !important;
-    border-color: #ebebeb !important;
-    background-color: #ebebeb !important
-}
+    #dealEditorTab button.k-button.add-tab-cancelbtn:hover {
+        color: #444 !important;
+        border-color: #ebebeb !important;
+        background-color: #ebebeb !important
+    }
 
 .tab-name-style {
-    padding: 1.2em 1.2em .6em 1.2em;
+    /*padding: 1.2em 1.2em .6em 1.2em;*/
     font-size: 15px !important;
     font-family: 'Intel Clear' !important
 }
 
 .add-tab-textbox-style.k-textbox {
-    margin-left: 12px !important;
-    margin-bottom: 20px !important;
+    /*margin-left: 12px !important;
+    margin-bottom: 20px !important;*/
     box-shadow: none !important;
     width: 205px !important;
     border-color: #e6e6e6 !important
@@ -1123,7 +1123,7 @@ button.k-button.add-tab-cancelbtn:hover {
     padding: 2px 10px 3px 10px
 }
 
-#columnoptionclick.show {
+#columnoptionclick.dealEditorDropDownMenu.show {
     transform: none !important;
     font-size: 13px !important;
     color: #777 !important;
@@ -1183,7 +1183,7 @@ button.k-button.add-tab-cancelbtn:hover {
     height: 85px
 }
 
-.k-list .k-item.k-state-focused.k-state-selected {
+#dealEditorTab .k-list .k-item.k-state-focused.k-state-selected {
     background-color: var(--light-blue) !important;
     color: #ffffff !important;
 }
@@ -1298,7 +1298,7 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:
     border: 0
 }
 
-dropdown-filter.de-dropdwn-styl kendo-dropdownlist.drop-cus-filtersty.k-widget.k-dropdown {
+#dealEditorTab dropdown-filter.de-dropdwn-styl kendo-dropdownlist.drop-cus-filtersty.k-widget.k-dropdown {
     width: 225px !important
 }
 
@@ -1594,4 +1594,39 @@ kendo-grid#dealEditor .k-grid-header-wrap {
 
 kendo-datepicker#dealDatePicker .k-input, kendo-grid#dealEditor .k-input {
     font-size: 12px;
+}
+
+.dealToolHeaders:before {
+    content: '' !important;
+}
+
+.dealToolHeadersInput {
+    height: 13px !important;
+    width: 13px !important;
+    border: 1px solid rgb(133, 133, 133) !important;
+    clip: unset !important;
+}
+
+#dealEditorTab .k-dialog .k-button.cancel-btn-pop-up {
+    border-color: #fafafa !important;
+    background-color: #fafafa !important;
+    color: #212529 !important;
+}
+
+#dealEditorTab .k-dialog .k-button.ok-btn-pop-up {
+    border-color: var(--light-blue) !important;
+    background-color: var(--light-blue) !important;
+    color: #fff !important;
+}
+
+#dealEditorTab .k-dialog .k-button.cancel-btn-pop-up:hover {
+    color: #444 !important;
+    border-color: #ebebeb !important;
+    background-color: #ebebeb !important;
+}
+
+#dealEditorTab .k-dialog .k-button.ok-btn-pop-up:hover {
+    color: #fff !important;
+    border-color: #0071c5 !important;
+    background-color: #0071c5 !important;
 }
