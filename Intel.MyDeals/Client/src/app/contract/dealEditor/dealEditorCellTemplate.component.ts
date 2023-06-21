@@ -248,7 +248,6 @@ export class dealEditorCellTemplateComponent {
         if (data === undefined || data === null) return "";
         var dataDscnt = passedData["DSCNT_PER_LN"] != undefined ? parseFloat(passedData["DSCNT_PER_LN"][dimkey]) : 0;
         return new CurrencyPipe('en-us').transform(parseFloat(passedData["QTY"][dimkey]) * dataDscnt, 'USD', 'symbol', '1.2-2');
-        //return GridUtil.uiTotalDiscountPerLineControlWrapper(passedData, dimkey);
     }
     getResultSingleIcon(passedData, field) {
         let parent = document.getElementById(field + "_" + passedData.DC_ID);
@@ -280,10 +279,10 @@ export class dealEditorCellTemplateComponent {
         return false;
     }
     hasVertical(data) {
-        TenderDashboardGridUtil.hasVertical(data);
+        return TenderDashboardGridUtil.hasVertical(data);
     }
     stgFullTitleChar(passedData) {
-        GridUtil.stgFullTitleChar(passedData);
+       return GridUtil.stgFullTitleChar(passedData);
     }
     fieldVal(passedData, field, dimKey) {
         return (dimKey !== '')
@@ -379,7 +378,6 @@ export class dealEditorCellTemplateComponent {
             passedData[endDt] = {};
         if (!passedData[endDt][dimKey])
             passedData[endDt][dimKey] = "";
-        //return GridUtil.uiMoneyDatesControlWrapper(passedData, field, startDt, endDt, dimKey)
     }
     getProductSid(dimProduct, dimKey) {
         return GridUtil.getProductMbrSid(dimProduct, dimKey);
