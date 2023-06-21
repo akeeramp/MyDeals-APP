@@ -243,7 +243,8 @@ export class pricingTableEditorComponent {
                             let excludedPrdct = [];
                             let sysPrd = {};
                             this.allOperations = [];
-                            if (result.splitProducts) {
+                            if (result.splitProducts) { 
+                                 let PTR = [];
                                 each(result.validateSelectedProducts, (item, idx) => {
                                     if (!item[0].EXCLUDE) {
                                         cntrctPrdct = [];
@@ -255,16 +256,15 @@ export class pricingTableEditorComponent {
                                                 result.validateSelectedProducts[idx].indx = result.validateSelectedProducts[idx - 1].indx
                                                     + result.validateSelectedProducts[idx - 1].items.length;
                                             }
-                                        }
-                                        let PTR = [];
+                                        }                                      
                                         VM.dirty = true;//for enabling save&Validate button when a product is added from productSelector
-                                        PTR.push({ row: this.selRow, prop: 'PTR_USER_PRD', old: this.hot.getDataAtRowProp(this.selRow, 'PTR_USER_PRD'), new: cntrctPrdct.toString() });
-                                        this.selRow = this.selRow + VM.curPricingTable.NUM_OF_TIERS;
                                         let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct.toString() };
+                                        PTR.push({ row: this.selRow, prop: 'PTR_USER_PRD', old: this.hot.getDataAtRowProp(this.selRow, 'PTR_USER_PRD'), new: cntrctPrdct.toString() ,operation:operation});
+                                        this.selRow = this.selRow + VM.curPricingTable.NUM_OF_TIERS;
                                         this.allOperations.push(operation);
-                                        PTE_CellChange_Util.autoFillCellOnProd(PTR, VM.curPricingTable, VM.contractData, VM.pricingTableTemplates, VM.columns, operation);
                                     }
                                 });
+                                PTE_CellChange_Util.autoFillCellOnProd(PTR, VM.curPricingTable, VM.contractData, VM.pricingTableTemplates, VM.columns);
                             }
                             else {
                                 each(result.validateSelectedProducts, (item) => {
@@ -454,12 +454,10 @@ export class pricingTableEditorComponent {
                 if(changes){
                     //using => operator to-call-parent-function-from-callback-function
                     //loading screen changes are moved to the top to  make better performance
-                    this.pteLoaderPopUp(source);
+                    this.pteLoaderPopUp(changes,source);
                     setTimeout(() => {
                         this.afterCellChange(changes, source);
-                        this.pteLoaderPopUp(source);
                     },0);
-                   
                 }
             }
             catch(ex){
@@ -514,14 +512,13 @@ export class pricingTableEditorComponent {
     public redoEnable: boolean = false;
     public redoCount = 0;
     
-    pteLoaderPopUp(source){
-        if(source && source == 'edit' || source == 'CopyPaste.paste' || source == 'Autofill.fill'){
+    pteLoaderPopUp(changes,source){
+        if(!this.isLoading && changes && changes.length>1 && source && source == 'edit' || source == 'CopyPaste.paste' || source == 'Autofill.fill'){
             this.spinnerMessageHeader = 'Loading...';
             this.spinnerMessageDescription = 'Loading the Table Editor';
             this.isLoading=true;
         }
-        
-         if(source && source=='stop-loader'){
+         if(this.isLoading && source && source=='stop-loader'){
             this.isLoading=false;
         }
     }
@@ -770,7 +767,11 @@ export class pricingTableEditorComponent {
             if (PTR && PTR.length > 0) {
                 this.undoEnable = false;
                 this.undoCount -= 1;
-                PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns);
+                let failure=PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns);
+                if(failure){
+                    this.loggerService.error('Something went wrong please upload with lesser number of records', "Some opertation failure");
+                    this.isLoading=false;
+                }
             }
             if (perPro && perPro.length > 0) {
                 if(this.hotTable.getDataAtRowProp(perPro[0].row, 'AR_SETTLEMENT_LVL') != '' && this.hotTable.getDataAtRowProp(perPro[0].row, 'RESET_VOLS_ON_PERIOD') != '')
@@ -885,17 +886,12 @@ export class pricingTableEditorComponent {
                 this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_INVLD_PRD', '', 'no-edit');
             }
             //to make sure to trigger translate API call.(Product validation)
-            each(PTE_Config_Util.flushSysPrdFields, (item) => {
-                const modifiedDetails = where(changes, { prop: item });
-                if (modifiedDetails && modifiedDetails.length > 0)
-                    each(modifiedDetails, (modItem) => {
-                        this.hotTable.setDataAtRowProp(modItem.row, 'PTR_SYS_PRD', '', 'no-edit');
-                    })
-            })
+             PTE_CellChange_Util.setPTRSYStoEmpty(changes);
+
             const isEnable = this.hotTable.isEmptyRow(0);
             this.enableDeTab.emit({ isEnableDeTab: !isEnable, enableDeTabInfmIcon: this.isDeTabInfmIconReqd });
             //to stop loader
-            this.hotTable.setDataAtRowProp(0,'DC_ID',this.hotTable.getDataAtRowProp(0,'DC_ID'),'stop-loader');
+            this.pteLoaderPopUp(changes,'stop-loader');
         }
     }
 
@@ -1642,6 +1638,7 @@ export class pricingTableEditorComponent {
                 let excludedPrdct = [];
                 let sysPrd = {};
                 if (result.splitProducts) {
+                    let PTR = [];
                     each(result.validateSelectedProducts, (item, idx) => {
                         if (!item[0].EXCLUDE) {
                             cntrctPrdct = [];
@@ -1653,14 +1650,13 @@ export class pricingTableEditorComponent {
                                     result.validateSelectedProducts[idx].indx = result.validateSelectedProducts[idx - 1].indx
                                         + result.validateSelectedProducts[idx - 1].items.length;
                                 }
-                            }
-                            let PTR = [];
+                            }                           
                             this.dirty = true;//for enabling save&Validate button when a product is added from productSelector
-                            PTR.push({ row: PTE_CellChange_Util.returnEmptyRow(), prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(result.validateSelectedProducts[idx].indx, 'PTR_USER_PRD'), new: cntrctPrdct.toString() });
                             let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct.toString() };
-                            PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, operation);
+                            PTR.push({ row: PTE_CellChange_Util.returnEmptyRow(), prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(result.validateSelectedProducts[idx].indx, 'PTR_USER_PRD'), new: cntrctPrdct.toString() ,operation:operation});
                         }
                     });
+                    PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns);
                 }
                 else {
                     each(result.validateSelectedProducts, (item) => {

@@ -53,7 +53,9 @@ export class PTE_CellChange_Util {
             }
             else if (val.prop == 'DC_ID') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-                hotTable.setDataAtRowProp(row, val.prop, ROW_ID, 'no-edit');
+                //hotTable.setDataAtRowProp(row, val.prop, ROW_ID, 'no-edit');
+                 let updateDCID:[string,string,number,string]=[row.toString(),val.prop,ROW_ID,'no-edit'];
+                 updateRows.push(updateDCID);
             }
             else if (val.prop == 'TIER_NBR') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
@@ -136,15 +138,15 @@ export class PTE_CellChange_Util {
                     updateRows.push(obj);
                 }
                 else {
-                  // this.hotTable.setDataAtRowProp(row, val.prop, rowData[`${val.prop}`], 'no-edit');
-                    currentString = row + ',' + val.prop + ',' + rowData[`${val.prop}`] + ',' + 'no-edit';
-                    updateRows.push(currentString.split(','));
+                   this.hotTable.setDataAtRowProp(row, val.prop, rowData[`${val.prop}`], 'no-edit');
+                    // currentString = row + ',' + val.prop + ',' + rowData[`${val.prop}`] + ',' + 'no-edit';
+                    // updateRows.push(currentString.split(','));
                 }
             }
             else {
                 //the condition in this logic is to avoid server side issue when sending data as null
-                 this.hotTable.setDataAtRowProp(row, val.prop, rowData[`${val.prop}`] == null ? '' : rowData[`${val.prop}`], 'no-edit');
-                // currentString = row + ',' + val.prop + ',' + rowData[`${val.prop}`] == null ? '' : rowData[`${val.prop}`] + ',' + 'no-edit';
+              this.hotTable.setDataAtRowProp(row, val.prop, rowData[`${val.prop}`] == null ? '' : rowData[`${val.prop}`], 'no-edit');
+                // currentString = row + ',' + val.prop + ',' + (rowData[`${val.prop}`] == null ? '' : rowData[`${val.prop}`]) + ',' + 'no-edit';
                 // updateRows.push(currentString.split(','));
             }
         }
@@ -325,7 +327,9 @@ export class PTE_CellChange_Util {
                 updateRows.push(obj);
             }
             else if (val.prop == 'DC_ID') {
-                hotTable.setDataAtRowProp(row, val.prop, ROW_ID, 'no-edit');
+               // hotTable.setDataAtRowProp(row, val.prop, ROW_ID, 'no-edit');
+                 let updateDCID:[string,string,number,string]=[row.toString(),val.prop,ROW_ID,'no-edit'];
+                 updateRows.push(updateDCID);
             }
             else if (val.prop == 'PRD_BCKT') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
@@ -431,6 +435,16 @@ export class PTE_CellChange_Util {
                     let prodIndex = 0;
                     //KIT Deal will not allow more than 10 rows
                     let prdlen=prods.length>10?PTE_Config_Util.maxKITproducts:prods.length;
+                    let rownumber=selrow;
+                    let dcids=[];
+                    each(prods,()=>{
+                        let updateDCID:[number,string,number,string];
+                        updateDCID=[rownumber,'DC_ID',ROW_ID,'no-edit'];
+                        dcids.push(updateDCID);
+                        rownumber++;
+                     })
+
+                     this.hotTable.setDataAtRowProp(dcids, 'no-edit');
                     for (let i = selrow; i < prdlen + selrow; i++) {
                         this.addUpdateRowOnchangeKIT(this.hotTable, columns, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex], DataOfRow[prodIndex], operation);
                         prodIndex++;
@@ -460,16 +474,11 @@ export class PTE_CellChange_Util {
             //for length greater than 1 it will either copy or autofill so first cleaning those records since its prod the length can be predicted so deleting full
             this.hotTable.alter('remove_row', items[0].row, PTE_Config_Util.girdMaxRows, 'no-edit');
             //identify the empty row and the next empty row will be the consecutive one
-            let empRow = this.returnEmptyRow();
-           let ROW_ID = -100-empRow;
-           let NumberOfProducts=PTE_Config_Util.maxNoofproducts;
-           NumberOfProducts=NumberOfProducts-20>0?NumberOfProducts-20:20;
-           let itemslist=new List(items);
-            for (let i = 0; i < itemslist.Count(); i = i + NumberOfProducts) {
-                let first50 = itemslist.Skip(i).Take(NumberOfProducts).ToArray();
-                let updateitems = [];
+             let empRow = this.returnEmptyRow();
+             let ROW_ID = -100-empRow;
+             let updateitems = [];
              let mergCells=[];
-                each(first50, (cellItem) => {
+                each(items, (cellItem) => {
                     //let ROW_ID = this.rowDCID();
                     //add num of tier rows the logic will be based on autofill value
                     let prods = uniq(cellItem.new.split(',')), prodIndex = 0;
@@ -494,9 +503,7 @@ export class PTE_CellChange_Util {
                         this.hotTable.setDataAtRowProp(updateitems, 'no-edit');
                     });
                 }
-            }
         }
-        
     }
     static autoFillCellonProdVol(items: Array<any>, curPricingTable: any, contractData: any, pricingTableTemplates: any, columns: any[], operation?: any) {
         let updateRows = [];
@@ -505,6 +512,9 @@ export class PTE_CellChange_Util {
         //The effort for autofill for one change and mulitple changes are little different
         if (items && items.length == 1) {
             let selrow = items[0].row;
+            if(items[0].operation && items[0].operation!=undefined && items[0].operation.operation=='prodsel'){
+                operation=items[0].operation;
+            }
             //check if there is already a merge/change avaialble
             if (!this.isAlreadyChange(selrow)) {
                 //identify the empty row and add it there
@@ -575,35 +585,34 @@ export class PTE_CellChange_Util {
             //identify the empty row and the next empty row will be the consecutive one
             let empRow = this.returnEmptyRow();
             let ROW_ID = -100-empRow;
-            const NumberOfProducts=PTE_Config_Util.maxNoofproducts;
-            let itemslist=new List(items);
-            for (let i = 0; i < itemslist.Count(); i = i + NumberOfProducts) {
-                let first50 = itemslist.Skip(i).Take(NumberOfProducts).ToArray();
-                let updateitems = [];
-                let mergCells=[];
-                each(first50, (cellItem) => {
-                    //let ROW_ID = this.rowDCID(); 
-                    //add num of tier rows the logic will be based on autofill value
-                    let tier = 1;
-                    for (let i = empRow; i < parseInt(curPricingTable.NUM_OF_TIERS) + empRow; i++) {
-                        this.addUpdateRowOnchange(this.hotTable, columns, i, cellItem, ROW_ID, updateitems, curPricingTable, contractData, NUM_OF_TIERS, tier, operation);
-                        tier++;
-                    }
-                    ROW_ID--;
-                    //calling the merge cells optionfor tier 
-                    mergCells= this.getMergeCellsOnEdit(empRow, parseInt(curPricingTable.NUM_OF_TIERS), pricingTableTemplates);
-                    //the next empty row will be previus empty row + num of tiers;
-                    empRow = empRow + parseInt(curPricingTable.NUM_OF_TIERS);
-                });
-
-                this.hotTable.updateSettings({ mergeCells: mergCells });
-                if (updateitems && updateitems.length > 0) {
-                    //appending everything togather batch function will improve the performace
-                    this.hotTable.batch(() => {
-                        this.hotTable.setDataAtRowProp(updateitems, 'no-edit');
-                    });
-
+            let updateitems = [];
+            let mergCells=[];
+            each(items, (cellItem) => {
+                //let ROW_ID = this.rowDCID(); 
+                //add num of tier rows the logic will be based on autofill value
+                if(items[0].operation && items[0].operation!=undefined && cellItem.operation.operation=='prodsel'){
+                    operation=cellItem.operation;
+                    let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
+                this.hotTable.setCellMeta(empRow, PTR_col_ind, 'className', 'success-product');
                 }
+                let tier = 1;
+                for (let i = empRow; i < parseInt(curPricingTable.NUM_OF_TIERS) + empRow; i++) {
+                    this.addUpdateRowOnchange(this.hotTable, columns, i, cellItem, ROW_ID, updateitems, curPricingTable, contractData, NUM_OF_TIERS, tier, operation);
+                    tier++;
+                }
+                ROW_ID--;
+                //calling the merge cells optionfor tier 
+                mergCells= this.getMergeCellsOnEdit(empRow, parseInt(curPricingTable.NUM_OF_TIERS), pricingTableTemplates);
+                //the next empty row will be previus empty row + num of tiers;
+                empRow = empRow + parseInt(curPricingTable.NUM_OF_TIERS);
+            });
+
+            this.hotTable.updateSettings({ mergeCells: mergCells });
+            if (updateitems && updateitems.length > 0) {
+                //appending everything togather batch function will improve the performace
+                this.hotTable.batch(() => {
+                    this.hotTable.setDataAtRowProp(updateitems, 'no-edit');
+                });
             }
         }
         
@@ -629,107 +638,114 @@ export class PTE_CellChange_Util {
                 this.autoFillCellonProdDensity(items, curPricingTable, contractData, pricingTableTemplates, columns, operation);
             }
             else {                
-                let updateRows = [];
-                //The effort for autofill for one change and mulitple changes are little different
-                if (items && items.length == 1) {
-                    const selrow = items[0].row;
-                    //check if there is already a merge/change avaialble
-                    if (!this.isAlreadyChange(selrow)) {
-                        //identify the empty row and add it there
-                        let empRow = this.returnEmptyRow();
-                        let ROW_ID = -100-empRow;//this.rowDCID();// will be replace with some other logic
-                        //first deleting the row this will help if the empty row and selected row doest match
-                        this.hotTable.alter('remove_row', selrow, 1, 'no-edit');
-                        //this line of code is to mak sure we modify the product background color to sucess
-                        if (operation && operation.operation) {
-                            let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
-                            this.hotTable.setCellMeta(empRow, PTR_col_ind, 'className', 'success-product');
-                        }
-                        this.addUpdateRowOnchange(this.hotTable, columns, empRow, items[0], ROW_ID, updateRows, curPricingTable, contractData, 0, 1, operation);
-                    }
-                    else {
-                        //this line of code is to mak sure we modify the product background color to sucess
-                        if (operation && operation.operation) {
-                            let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
-                            this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'success-product');
-                        }
-                        //identify if the changes are coming from prod selector or corrector
-                        if (operation && operation.operation && operation.PTR_SYS_PRD) {
-                            this.hotTable.setDataAtRowProp(selrow, 'PTR_USER_PRD', items[0].new, 'no-edit');
-                            this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', operation.PTR_SYS_PRD, 'no-edit');
-                        }
-                        if (operation && operation.operation && operation.PRD_EXCLDS) {
-                            this.hotTable.setDataAtRowProp(selrow, 'PTR_USER_PRD', items[0].new, 'no-edit');
-                            this.hotTable.setDataAtRowProp(selrow, 'PRD_EXCLDS', operation.PRD_EXCLDS, 'no-edit');
-                        }
-                        else {
-                            //this will rever the produc color back to empty
-                            if (items[0].old != items[0].new && (operation == undefined || operation == null)) {
-                                let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
-                                this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'normal-product');
+                this.autofillCellOnProdECAPPgm(items, curPricingTable, contractData, pricingTableTemplates, columns, operation);
+            }
+            return null;
+        }
+        catch (ex) {
+            console.error(ex);
+            return ex;
+        }
+    } 
 
-                                //This will make sure to hit translate API
-                                this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', '', 'no-edit');
-                                this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_INVLD_PRD', '', 'no-edit');
-                            }
-                            if (operation && operation.operation && operation.PRD_EXCLDS != undefined && operation.PRD_EXCLDS == "") {
-                                let PTR_EXCLUDE_col_ind = findIndex(columns, { data: 'PRD_EXCLDS' });
-                                if (PTR_EXCLUDE_col_ind != -1) {
-                                    this.hotTable.setDataAtRowProp(selrow, 'PRD_EXCLDS', '', 'no-edit');
-                                    this.hotTable.setCellMeta(selrow, PTR_EXCLUDE_col_ind, 'className', 'normal-product');
-                                }
-                            }
-                        }
-                    }
-
-                    if (updateRows && updateRows.length > 0) {
-                        //appending everything togather batch function will improve the performace
-                        this.hotTable.batch(() => {
-                            this.hotTable.setDataAtRowProp(updateRows, 'no-edit');
-                        });
-                      
-                    }
+    static autofillCellOnProdECAPPgm(items: Array<any>, curPricingTable: any, contractData: any, pricingTableTemplates: any, columns: any[], operation?: any){
+        let updateRows = [];
+        //The effort for autofill for one change and mulitple changes are little different
+        if (items && items.length == 1) {
+            const selrow = items[0].row;
+            if(items[0].operation && items[0].operation!=undefined && items[0].operation.operation=='prodsel'){
+                operation=items[0].operation;
+            }
+            //check if there is already a merge/change avaialble
+            if (!this.isAlreadyChange(selrow)) {
+                //identify the empty row and add it there
+                let empRow = this.returnEmptyRow();
+                let ROW_ID = -100-empRow;//this.rowDCID();// will be replace with some other logic
+                //first deleting the row this will help if the empty row and selected row doest match
+                this.hotTable.alter('remove_row', selrow, 1, 'no-edit');
+                //this line of code is to mak sure we modify the product background color to sucess
+                if (operation && operation.operation) {
+                    let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
+                    this.hotTable.setCellMeta(empRow, PTR_col_ind, 'className', 'success-product');
+                }                    
+                this.addUpdateRowOnchange(this.hotTable, columns, empRow, items[0], ROW_ID, updateRows, curPricingTable, contractData, 0, 1, operation);
+            }
+            else {
+                //this line of code is to mak sure we modify the product background color to sucess
+                if (operation && operation.operation) {
+                    let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
+                    this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'success-product');
+                }
+                //identify if the changes are coming from prod selector or corrector
+                if (operation && operation.operation && operation.PTR_SYS_PRD) {
+                    this.hotTable.setDataAtRowProp(selrow, 'PTR_USER_PRD', items[0].new, 'no-edit');
+                    this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', operation.PTR_SYS_PRD, 'no-edit');
+                }
+                if (operation && operation.operation && operation.PRD_EXCLDS) {
+                    this.hotTable.setDataAtRowProp(selrow, 'PTR_USER_PRD', items[0].new, 'no-edit');
+                    this.hotTable.setDataAtRowProp(selrow, 'PRD_EXCLDS', operation.PRD_EXCLDS, 'no-edit');
                 }
                 else {
-                    //for length greater than 1 it will eithr copy or autofill so first cleaning those recorsds
-                    if (curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD == 'VOL_TIER') {
-                        this.hotTable.alter('remove_row', items[0].row, items.length * parseInt(curPricingTable.NUM_OF_TIERS), 'no-edit');
-                    }
-                    else {
-                        this.hotTable.alter('remove_row', items[0].row, items.length, 'no-edit');
-                    }
+                    //this will rever the produc color back to empty
+                    if (items[0].old != items[0].new && (operation == undefined || operation == null)) {
+                        let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
+                        this.hotTable.setCellMeta(selrow, PTR_col_ind, 'className', 'normal-product');
 
-                    
-
-                    //identify the empty row and the next empty row will be the consecutive one
-                    let empRow = this.returnEmptyRow();
-                    let ROW_ID = -100-empRow;
-                    const NumberOfProducts=PTE_Config_Util.maxNoofproducts;
-                    let itemslist=new List(items);
-                    for (let i = 0; i < itemslist.Count(); i = i + NumberOfProducts) {
-                        let updateItems=[];
-                        let first50 = itemslist.Skip(i).Take(NumberOfProducts).ToArray();
-                        each(first50, (cellItem) => {
-                            // ROW_ID = this.rowDCID();//random(250); // will be replace with some other logic
-                            this.addUpdateRowOnchange(this.hotTable, columns, empRow, cellItem, ROW_ID, updateItems, curPricingTable, contractData, 0, 1, operation);
-                            empRow++;
-                            ROW_ID--;
-                        });
-                        if (updateItems && updateItems.length > 0) {
-                            //appending everything togather batch function will improve the performace
-                            this.hotTable.batch(() => {
-                                this.hotTable.setDataAtRowProp(updateItems, 'no-edit');
-                            });
-                          
+                        //This will make sure to hit translate API
+                        this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_PRD', '', 'no-edit');
+                        this.hotTable.setDataAtRowProp(selrow, 'PTR_SYS_INVLD_PRD', '', 'no-edit');
+                    }
+                    if (operation && operation.operation && operation.PRD_EXCLDS != undefined && operation.PRD_EXCLDS == "") {
+                        let PTR_EXCLUDE_col_ind = findIndex(columns, { data: 'PRD_EXCLDS' });
+                        if (PTR_EXCLUDE_col_ind != -1) {
+                            this.hotTable.setDataAtRowProp(selrow, 'PRD_EXCLDS', '', 'no-edit');
+                            this.hotTable.setCellMeta(selrow, PTR_EXCLUDE_col_ind, 'className', 'normal-product');
                         }
                     }
                 }
             }
+
+            if (updateRows && updateRows.length > 0) {
+                //appending everything togather batch function will improve the performace
+                this.hotTable.batch(() => {
+                    this.hotTable.setDataAtRowProp(updateRows, 'no-edit');
+                });
+              
+            }
         }
-        catch (ex) {
-            console.error(ex);
+        else {
+            //for length greater than 1 it will eithr copy or autofill so first cleaning those recorsds
+            if (curPricingTable.OBJ_SET_TYPE_CD && curPricingTable.OBJ_SET_TYPE_CD == 'VOL_TIER') {
+                this.hotTable.alter('remove_row', items[0].row, items.length * parseInt(curPricingTable.NUM_OF_TIERS), 'no-edit');
+            }
+            else {
+                this.hotTable.alter('remove_row', items[0].row, items.length, 'no-edit');
+            }
+            //identify the empty row and the next empty row will be the consecutive one
+            let empRow = this.returnEmptyRow();
+            let ROW_ID = -100-empRow;
+            let updateItems=[];
+            each(items, (cellItem:any) => {
+                // ROW_ID = this.rowDCID();//random(250); // will be replace with some other logic
+                if(items[0].operation && items[0].operation!=undefined && cellItem.operation.operation=='prodsel'){
+                    operation=cellItem.operation;
+                    let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
+                this.hotTable.setCellMeta(empRow, PTR_col_ind, 'className', 'success-product');
+                }
+                this.addUpdateRowOnchange(this.hotTable, columns, empRow, cellItem, ROW_ID, updateItems, curPricingTable, contractData, 0, 1, operation);
+                empRow++;
+                ROW_ID--;
+            });
+        
+            if (updateItems && updateItems.length > 0) {
+                //appending everything togather batch function will improve the performace
+                this.hotTable.batch(() => {
+                    this.hotTable.setDataAtRowProp(updateItems, 'no-edit');
+                });
+                
+            }
         }
-    } 
+    }
 
     static addUpdateRowOnchangeDensity(hotTable: Handsontable, row: number, cellItem: any, ROW_ID: number, updateRows: Array<any>, curPricingTable: any, contractData: any, numoftier: number, tier?: number, operation?: any) {
         //make the selected row PTR_USER_PRD empty if its not the empty row
@@ -739,10 +755,15 @@ export class PTE_CellChange_Util {
                 //update PTR_USER_PRD with entered value
                 //this exclussivlt because for  products can be with comma seperate values
                 hotTable.setDataAtRowProp(row, 'PTR_USER_PRD', cellItem.new, 'no-edit');
+                //currentString = row + ',' + val.prop;
+                //const obj=currentString.split(',').concat(cellItem.new,'no-edit');
+                //updateRows.push(obj);
             }
             else if (val.prop == 'DC_ID') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
-                hotTable.setDataAtRowProp(row, val.prop, ROW_ID, 'no-edit');
+                //hotTable.setDataAtRowProp(row, val.prop, ROW_ID, 'no-edit');
+                let updateDCID:[string,string,number,string]=[row.toString(),val.prop,ROW_ID,'no-edit'];
+                 updateRows.push(updateDCID);
             }
             else if (val.prop == 'TIER_NBR') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after dlete can give duplicate index
@@ -811,6 +832,9 @@ export class PTE_CellChange_Util {
         //The effort for autofill for one change and mulitple changes are little different
         if (items && items.length == 1) {
             let selrow = items[0].row;
+            if(items[0].operation && items[0].operation!=undefined && items[0].operation.operation=='prodsel'){
+                operation=items[0].operation;
+            }
             if (!this.isAlreadyChange(selrow)) {
                 //identify the empty row and add it there
                 let empRow = this.returnEmptyRow();
@@ -875,41 +899,39 @@ export class PTE_CellChange_Util {
             //identify the empty row and the next empty row will be the consecutive one
             let empRow = this.returnEmptyRow();
             let ROW_ID = -100-empRow;
-            const NumberOfProducts=PTE_Config_Util.maxNoofproducts;
-            let itemslist=new List(items);
-            for (let i = 0; i < itemslist.Count(); i = i + NumberOfProducts) {
-                let first50 = itemslist.Skip(i).Take(NumberOfProducts).ToArray();
-                let updateitems = [];
-                let mergCells=[];
-                each(first50, (cellItem) => {
-                    // let ROW_ID = this.rowDCID();
-                    //add num of tier rows the logic will be based on autofill value
-                    let tier = 1;
-                    for (let i = empRow; i < numOfRows + empRow; i++) {
-                        for (let j = 0; j < pivotDensity; j++) {
-                            this.addUpdateRowOnchangeDensity(this.hotTable, i, cellItem, ROW_ID, updateitems, curPricingTable, contractData, NUM_OF_TIERS, tier, operation);
-                            i++
-                        }
-                        i = i - 1;
-                        tier++;
-                    }
-                    ROW_ID--;
-                    //calling the merge cells optionfor tier 
-                    mergCells=  this.getMergeCellsOnEditDensity(empRow, NUM_OF_TIERS, pivotDensity, numOfRows, pricingTableTemplates);
-                    //the next empty row will be previus empty row + num of tiers;
-                    empRow = empRow + numOfRows;
-                });
-                this.hotTable.updateSettings({ mergeCells: mergCells });
-                if (updateitems && updateitems.length > 0) {
-                    //appending everything togather batch function will improve the performace
-                    this.hotTable.batch(() => {
-                        this.hotTable.setDataAtRowProp(updateitems, 'no-edit');
-                    });
+            let updateitems = [];
+            let mergCells=[];
+            each(items, (cellItem) => {
+                // let ROW_ID = this.rowDCID();
+                //add num of tier rows the logic will be based on autofill value
+                if(items[0].operation && items[0].operation!=undefined && cellItem.operation.operation=='prodsel'){
+                    operation=cellItem.operation;
+                    let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
+                this.hotTable.setCellMeta(empRow, PTR_col_ind, 'className', 'success-product');
                 }
+                let tier = 1;
+                for (let i = empRow; i < numOfRows + empRow; i++) {
+                    for (let j = 0; j < pivotDensity; j++) {
+                        this.addUpdateRowOnchangeDensity(this.hotTable, i, cellItem, ROW_ID, updateitems, curPricingTable, contractData, NUM_OF_TIERS, tier, operation);
+                        i++
+                    }
+                    i = i - 1;
+                    tier++;
+                }
+                ROW_ID--;
+                //calling the merge cells optionfor tier 
+                mergCells=  this.getMergeCellsOnEditDensity(empRow, NUM_OF_TIERS, pivotDensity, numOfRows, pricingTableTemplates);
+                //the next empty row will be previus empty row + num of tiers;
+                empRow = empRow + numOfRows;
+            });
+            this.hotTable.updateSettings({ mergeCells: mergCells });
+            if (updateitems && updateitems.length > 0) {
+                //appending everything togather batch function will improve the performace
+                this.hotTable.batch(() => {
+                    this.hotTable.setDataAtRowProp(updateitems, 'no-edit');
+                });
             }
-           
         } 
-       
     }
 
     /* Prod selector autofill changes functions ends here */
@@ -1577,6 +1599,24 @@ export class PTE_CellChange_Util {
     static defaultVolVal(items: Array<any>, columns: any[], curPricingTable: any){
         if(items[0].new=='' || items[0].new==null ){
             this.hotTable.setDataAtRowProp(items[0].row, 'STRT_VOL', 0, 'no-edit');
+        }
+    }
+    static setPTRSYStoEmpty(changes: Array<any>){
+        if(changes && changes.length>0){
+            let PTRPRDModify=[];
+            each(PTE_Config_Util.flushSysPrdFields, (item) => {
+                const modifiedDetails = where(changes, { prop: item });
+                if (modifiedDetails && modifiedDetails.length > 0)
+                    each(modifiedDetails, (modItem) => {
+                        let cString = modItem.row + ',' + 'PTR_SYS_PRD' + ',' + '' + ',' + 'no-edit';
+                        PTRPRDModify.push(cString.split(','));
+                    })
+            });
+            if(PTRPRDModify && PTRPRDModify.length>0){
+                this.hotTable.batch(() => {
+                    this.hotTable.setDataAtRowProp(PTRPRDModify, 'no-edit');
+                });
+            }
         }
     }
 }

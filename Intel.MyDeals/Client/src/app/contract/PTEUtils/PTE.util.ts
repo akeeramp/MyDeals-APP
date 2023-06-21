@@ -31,7 +31,6 @@ export class PTEUtil {
             width: item.width,
             readOnly:false
         }
-
         /* Type & Format */
         if (!isUndefined(templateColumnFields[item.field].type)) {
             const itemField = templateColumnFields[item.field].type;
@@ -65,13 +64,15 @@ export class PTEUtil {
                         culture: 'en-US'
                     }
                 }
-            } else if (itemField === 'percent') {
+            }
+            else if (itemField === 'percent') {
                 currentColumnConfig.type = 'numeric';
                 currentColumnConfig.numericFormat = {
                     pattern: '0,0.00',
                     culture: 'en-US'
                 }
-            } else if (itemField === 'date') {
+            }
+            else if (itemField === 'date') {
                 currentColumnConfig.type = 'date';
                 currentColumnConfig.dateFormat = this.defaultDateFormat;
                 currentColumnConfig.datePickerConfig = this.defaultDatePickerConfig;

@@ -399,19 +399,6 @@ export class dealEditorComponent {
             if (args.dataItem != undefined) {
                 PTE_Common_Util.parseCellValues(args.column.field, args.dataItem);
             }
-            //need to be revisited this logic for virtual scroll click handler-----------------------------
-            if (args.dataItem.OBJ_SET_TYPE_CD == 'ECAP' || args.dataItem.OBJ_SET_TYPE_CD == 'KIT') {
-                if (args.column.field == "REBATE_DEAL_ID" || args.column.field == "LAST_TRKR_START_DT_CHK")
-                    if (this.selectedTab.toLowerCase() == "all" || this.selectedTab.toLowerCase() == this.allTabRename.toLowerCase()) args.column.leafIndex += 3;
-                    else args.column.leafIndex += 2;
-            } else if (args.column.field == "REBATE_DEAL_ID" || args.column.field == "LAST_TRKR_START_DT_CHK" || args.column.field == "USER_MAX_RPU" || args.column.field == "USER_AVG_RPU" || args.column.field == "RPU_OVERRIDE_CMNT") {
-                if (args.dataItem.OBJ_SET_TYPE_CD == 'ECAP' || args.dataItem.OBJ_SET_TYPE_CD == 'REV_TIER' || args.dataItem.OBJ_SET_TYPE_CD == 'DENSITY' || args.dataItem.OBJ_SET_TYPE_CD == 'KIT') {
-                    if (this.selectedTab.toLowerCase() == "all" || this.selectedTab.toLowerCase() == this.allTabRename.toLowerCase()) args.column.leafIndex += 2;
-                    else args.column.leafIndex += 1;
-                }
-            }
-            //-------------------------------------------------------------------------------------------------
-
             if (!args.isEdited && args.column.field !== 'MISSING_CAP_COST_INFO' && args.column.field !== "details" && args.column.field !== "tools" && args.column.field !== "PRD_BCKT" && args.column.field !== "CUST_MBR_SID" && args.column.field !== "CAP_INFO" && args.column.field !== "YCS2_INFO" && args.column.field !== "COMPETITIVE_PRICE" && args.column.field !== "COMP_SKU" &&
                 args.column.field !== "BACKEND_REBATE" && args.column.field !== "AUTO_APPROVE_RULE_INFO" && args.column.field !== "CAP_KIT" && args.column.field !== "PRIMARY_OR_SECONDARY" && args.column.field !== "KIT_REBATE_BUNDLE_DISCOUNT" &&
                 args.column.field !== "TOTAL_CR_DB_PERC" && args.column.field !== "TOTAL_DSCNT_PR_LN" && args.column.field !== "KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE" && !(args.dataItem._behaviors != undefined &&
@@ -419,7 +406,7 @@ export class dealEditorComponent {
                 //to handle on-click action on kendogrid cells
                 args.sender.editCell(
                     args.rowIndex,
-                    args.column.isLocked || args.column.field == "EXCLUDE_AUTOMATION" ? args.columnIndex : args.column.leafIndex
+                    args.columnIndex
                 );
                 if (args.column.field == "SYS_PRICE_POINT") {
                     this.openSystemPriceModal(args.dataItem);

@@ -1,5 +1,4 @@
-﻿import { GridUtil } from "./grid.util";
-import { PTE_Common_Util } from "./PTEUtils/PTE_Common_util";
+﻿import { PTE_Common_Util } from "./PTEUtils/PTE_Common_util";
 
 export class TenderDashboardGridUtil {
     static findOne(haystack, arr) {
@@ -31,18 +30,8 @@ export class TenderDashboardGridUtil {
     static getBidActions = function (data) {
         if (data.BID_ACTNS === undefined || data._actionsPS === undefined) return "";
 
-        var ar = data["WF_STG_CD"];
         var prntWfStg = data["PS_WF_STG_CD"];
         var salesForceId = data["SALESFORCE_ID"];
-
-        if (ar !== undefined && ar !== null && ar === "no access") {
-            return "<div class='noaccess'>no access</div>";
-        }
-
-        if (!this.hasVertical(data)) {
-            return "<div class='noaccess'>no vertical access</div>";
-        }
-
         var bidActns = this.getBidActionsList(data);
         data["orig_WF_STG_CD"] = data.WF_STG_CD;
         data.BID_ACTNS = bidActns;
@@ -60,10 +49,6 @@ export class TenderDashboardGridUtil {
             delete actions["Revise"];
             delete data._actionsPS["Revise"];
         }
-        // if contract is not published
-        if (data._contractPublished !== undefined && data._contractPublished === 0) {
-            return "<div class='noaccess' style='text-align: center; width: 100%;' title='Deals have not been published from Folio.'>Folio <a href='/contract#/manager/" + data._contractId + "' target='_blank'>" + data._contractId + "</a><div class='non-action-gray' style='color: #aaaaaa;'>(<i>Not Actionable</i>)</div></div>";
-        }
         var numActions = 0;
         for (var k in actions) {
             if (actions.hasOwnProperty(k)) {
@@ -72,24 +57,10 @@ export class TenderDashboardGridUtil {
                 }
             }
         }
-
-        //If cancelled, no actions avalable
-        if (data.WF_STG_CD == "Cancelled") {
-            return "<div class='action_style' is-editable='true' style='text-align: center; width: 100%;'>" + data.WF_STG_CD + "<div class='non-action-gray' style='color: #aaaaaa;' title='This deal is cancelled.'>(<i class='action_style'>Not Actionable</i>)</div></div>";
-        }
-        if (bidActns.length == 0) {
-            if (numActions === 0) {
-                //no actions available to this user for this deal
-                return "<div class='action_style' is-editable='true' style='text-align: center; width: 100%;'>" + GridUtil.stgFullTitleChar(data) + "<div class='non-action-gray' style='color: #aaaaaa;' title='No Actions available.'>(<i class='action_style'>Not Actionable</i>)</div></div>";
-            } else {
-                return "<div class='action_style' is-editable='true' style='text-align: center; width: 100%;'>Action</div>";
-            }
-        } else {
-            //Bid Action = Won will have one listed action so no point allowing user to change it
-            if (bidActns.length === 1) return "<div class='action_style' is-editable='true' style='text-align: center; width: 100%;'>" + data.WF_STG_CD + "<div class='non-action-gray' style='color: #aaaaaa;' title='This deal is already marked as Won.'>(<i class='action_style'>Not Actionable</i>)</div></div>";
-            //all other cases is bid action size 2 or 3, aka Lost/Offer.
-            return "<div is-editable='true' style='text-align: center; width: 100%;'>" + data.WF_STG_CD + "</div>"
-        }
+        return {
+            'bidActns': bidActns,
+            'numActions': numActions
+        };
     }
 
     static getBidActionsList = function (data) {
@@ -120,14 +91,5 @@ export class TenderDashboardGridUtil {
             bidActns = data.BID_ACTNS;
         }
         return bidActns;
-    }
-
-    static uiReadonlyFolioWrapper = function (passedData, field) {
-        var tmplt = '<div id="folioCell" class="uiControlDiv isReadOnlyCell">';
-        tmplt += ' <a href="/contract#/manager/' + passedData[field] + '" target="_blank"">';
-        tmplt += '    <div class="ng-binding vert-center">' + passedData[field] +'</div>';
-        tmplt += '  </a>';
-        tmplt += '</div>';
-        return tmplt;
     }
 }

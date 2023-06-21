@@ -1630,3 +1630,41 @@ kendo-datepicker#dealDatePicker .k-input, kendo-grid#dealEditor .k-input {
     border-color: #0071c5 !important;
     background-color: #0071c5 !important;
 }
+}
+i.iConFont.intelicon-help-solid {
+    color: #F3D54E !important
+}
+
+i.iConFont.intelicon-help-outlined {
+    color: rgb(243, 213, 78) !important
+}
+
+i.iConFont.intelicon-passed-completed-solid {
+    color: #c4d600 !important;
+}
+
+i.iConFont.intelicon-information-solid {
+    color: rgb(204, 204, 204) !important;
+}
+
+i.iConFont.intelicon-alert-solid {
+    color: rgb(252, 76, 2) !important;
+}
+.err-bit.class-date-fix {
+    margin: 0px !important;
+    position: absolute !important;
+    top: 0px !important;
+    z-index: 1 !important;
+}
+.err-bit.ratebrkout-fix-class.ng-star-inserted {
+    position: absolute !important;
+    top: 0px !important;
+}
+.err-bit.ratebrkout-fix-den-class.ng-star-inserted {
+    position: absolute !important;
+    left: 0px !important;
+}
+span.ng-binding.dataPadding.rate-value-fix {
+    position: relative !important;
+    padding-right: 20px !important;
+}

@@ -174,7 +174,32 @@
     </kendo-dropdownlist>
 </div>
 <div *ngIf="in_Field_Name == 'tender_actions' && bidActnsDropdownData.length == 0">
-    <div id='cb_actn_{{in_DataItem.DC_ID}}' [innerHTML]="getBidActions(in_DataItem)"></div>
+    <div id='cb_actn_{{in_DataItem.DC_ID}}'>
+        <div *ngIf="in_DataItem['WF_STG_CD'] !== undefined && in_DataItem['WF_STG_CD'] !== null && in_DataItem['WF_STG_CD'] === 'no access'; else first" class='noaccess'>no access</div>
+        <ng-template #first>
+            <div *ngIf="!hasVertical(in_DataItem); else second" class='noaccess'>no vertical access</div>
+        </ng-template>
+        <ng-template #second>
+            <div *ngIf="in_DataItem._contractPublished !== undefined && in_DataItem._contractPublished === 0; else third" class='noaccess' style='text-align: center; width: 100%;' title='Deals have not been published from Folio.'>Folio <a href='/contract#/manager/{{in_DataItem._contractId}}' target='_blank'>{{in_DataItem._contractId}}</a><div class='non-action-gray' style='color: #aaaaaa;'>(<i>Not Actionable</i>)</div></div>
+        </ng-template>
+        <ng-template #third>
+            <div *ngIf="in_DataItem.WF_STG_CD == 'Cancelled'; else forth" class='action_style' is-editable='true' style='text-align: center; width: 100%;'>{{in_DataItem.WF_STG_CD}}<div class='non-action-gray' style='color: #aaaaaa;' title='This deal is cancelled.'>(<i class='action_style'>Not Actionable</i>)</div></div>
+        </ng-template>
+        <ng-template #forth>
+            <div *ngIf="getBidActions(in_DataItem)['bidActns'].length == 0; else fifth">
+                <div *ngIf="getBidActions(in_DataItem)['numActions'] == 0; else innerFirst" class='action_style' is-editable='true' style='text-align: center; width: 100%;'>{{stgFullTitleChar(in_DataItem)}}<div class='non-action-gray' style='color: #aaaaaa;' title='No Actions available.'>(<i class='action_style'>Not Actionable</i>)</div></div>
+                <ng-template #innerFirst>
+                    <div class='action_style' is-editable='true' style='text-align: center; width: 100%;'>Action</div>
+                </ng-template>
+            </div>
+        </ng-template>
+        <ng-template #fifth>
+            <div *ngIf="getBidActions(in_DataItem)['bidActns'].length == 1; else sixth" class='action_style' is-editable='true' style='text-align: center; width: 100%;'>{{in_DataItem.WF_STG_CD}}<div class='non-action-gray' style='color: #aaaaaa;' title='This deal is already marked as Won.'>(<i class='action_style'>Not Actionable</i>)</div></div>
+        </ng-template>
+        <ng-template #sixth>
+            <div is-editable='true' style='text-align: center; width: 100%;'>{{in_DataItem.WF_STG_CD}}</div>
+        </ng-template>
+    </div>
 </div>
 <div *ngIf="in_Field_Name == 'QLTR_BID_GEO'">
     <kendo-multiselect [data]="dropDowResponse[in_Field_Name]"

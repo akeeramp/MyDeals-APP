@@ -6,6 +6,7 @@ import { each } from 'underscore';
 import { TooltipDirective } from "@progress/kendo-angular-tooltip";
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
 import { TenderDashboardGridUtil } from '../tenderDashboardGrid.util';
+import { GridUtil } from '../grid.util'
 
 @Component({
     selector: 'deal-editor-edit',
@@ -233,6 +234,12 @@ export class dealEditorEditTemplateComponent {
             }
           
         })
+    }
+    hasVertical(data) {
+        TenderDashboardGridUtil.hasVertical(data);
+    }
+    stgFullTitleChar(passedData) {
+        GridUtil.stgFullTitleChar(passedData);
     }
     convertToLowerCase(value) {
         if (typeof value !== 'number')

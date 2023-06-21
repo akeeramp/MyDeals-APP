@@ -17,7 +17,6 @@ import { each } from 'underscore';
     encapsulation: ViewEncapsulation.None
 })
 export class dealEditorCellTemplateComponent {
-
     constructor(private loggerService: logger,
             public dialogService: MatDialog,
             private decimalPipe: DecimalPipe,
@@ -84,7 +83,7 @@ export class dealEditorCellTemplateComponent {
         this.refresh_Contract_Data.emit(eventData);
     }
 
-    uiControlWrapper(passedData, field, format) {
+    uiControlWrapper(passedData, field) {
         let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
         if (field == "VOLUME" || field == "CONSUMPTION_LOOKBACK_PERIOD" || field == "FRCST_VOL" ||
             field == "CREDIT_VOLUME" || field == "DEBIT_VOLUME" || field == "REBATE_OA_MAX_VOL") {
@@ -104,15 +103,7 @@ export class dealEditorCellTemplateComponent {
                 else if (data[field] != null && data[field] != "") data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
             }
         }
-        return GridUtil.uiControlWrapper(data, field, format);
-    }
-
-    uiControlDealWrapper(passedData, field) {
-        return GridUtil.uiControlDealWrapper(passedData, field);
-    }
-
-    uiCustomerControlWrapper(passedData, field) {
-        return GridUtil.uiCustomerControlWrapper(passedData, field);
+        return data;
     }
 
     keyArray(data: any) {
@@ -144,49 +135,51 @@ export class dealEditorCellTemplateComponent {
                 data[field][this.ecapDimKey] = !Number.isNaN(Number(data[field][this.ecapDimKey])) ? this.currencyPipe.transform(data[field][this.ecapDimKey], 'USD', 'symbol', '1.2-2') : data[field][this.ecapDimKey];
             dim = this.ecapDimKey;
         }
-        return GridUtil.uiDimControlWrapper(data, field, dim);
+        return { 'data': data, 'field': field, 'dim': dim };
+    }
+    getClassNm(passedData, field) {
+        var classNm = "";
+        if (passedData != undefined && passedData._behaviors != undefined) {
+            if (passedData._behaviors.isHidden != undefined && passedData._behaviors.isHidden[field])
+                classNm += " isHiddenCell";
+            if (passedData._behaviors.isReadOnly != undefined && passedData._behaviors.isReadOnly[field])
+                classNm += " isReadOnlyCell";
+            if (passedData._behaviors.isRequired != undefined && passedData._behaviors.isRequired[field])
+                classNm += " isRequiredCell";
+            if (passedData._behaviors.isError != undefined && passedData._behaviors.isError[field])
+                classNm += " isErrorCell";
+            if (passedData._behaviors.isSaved != undefined && passedData._behaviors.isSaved[field])
+                classNm += " isSavedCell";
+            if (passedData._behaviors.isDirty != undefined && passedData._behaviors.isDirty[field])
+                classNm += " isDirtyCell";
+        }
+        return classNm.replace(" isRequiredCell", "");
+    }
+    getMissingCostCapTitle(in_DataItem) {
+        return GridUtil.getMissingCostCapTitle(in_DataItem);
     }
 
-    getMissingCostCapIcon(passedData) {
-        return GridUtil.getMissingCostCapIcon(passedData);
+    getPercData(passedData) {
+        return GridUtil.getPercData(passedData);
     }
 
-    uiPositiveDimControlWrapper(passedData, field) {
-        try {
-            let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
-            let value = data[field];
-            if(value){
-                const sortedKeys = Object.keys(value).sort();
-                for (const index in sortedKeys) {
-                    const dimKey = sortedKeys[index];
-                    if (data[field][dimKey] !== undefined && data[field][dimKey] !== null && data[field][dimKey] !== "") {
-                        if (field == "ECAP_PRICE" || field == "DSCNT_PER_LN" || (field == "CAP" && data[field][dimKey] != "No CAP") || (field == "YCS2_PRC_IRBT" && data[field][dimKey] != "No YCS2")) {
-                            data[field][dimKey] = this.currencyPipe.transform(data[field][dimKey], 'USD', 'symbol', '1.2-2');
-                        }
-                    }
-                    else if (field == "QTY") {
-                        data[field][dimKey] = this.decimalPipe.transform(data[field][dimKey], "1.0-0");
-                    }
-                    else if ((field == "CAP_STRT_DT" || field == "CAP_END_DT" || field == "YCS2_START_DT" || field == "YCS2_END_DT") && (data[field][dimKey] != undefined && data[field][dimKey] != null && data[field][dimKey] != "")) {
-                        if (data[field][dimKey] == "Invalid date") data[field][dimKey] = "";
-                        else data[field][dimKey] = this.datePipe.transform(data[field][dimKey], "MM/dd/yyyy");
-                    }
-                }
-                return GridUtil.uiPositiveDimControlWrapper(data, field);
-            }
-            else{
-                return '';
-            }
-        }
-        catch(ex){
-            console.error('uiPositiveDimControlWrapper::execption',ex);
-        }
-     
+    numberWithCommas(data) {
+        return GridUtil.numberWithCommas(data);
+    }
+
+    applySoftWarnings(passedData, field) {
+        return GridUtil.applySoftWarnings(passedData, field);
+    }
+
+    applySoftWarningsClass(finalMsg) {
+        return GridUtil.applySoftWarningsClass(finalMsg);
     }
 
     uiValidationErrorDetail(passedData) {
         return GridUtil.uiValidationErrorDetail(passedData);
     }
+
+
 
     uiControlScheduleWrapper(passedData) {
         let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
@@ -233,66 +226,32 @@ export class dealEditorCellTemplateComponent {
         }
         return GridUtil.uiControlScheduleWrapperDensity(data);
     }
-
-    uiReadonlyControlWrapper(passedData, field) {
-        return GridUtil.uiReadonlyControlWrapper(passedData, field);
-    }
-    uiDimTrkrControlWrapper(passedData) {
-        return GridUtil.uiDimTrkrControlWrapper(passedData);
-    }
-    uiStartDateWrapper(passedData, field) {
-        let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
-        if (field == "START_DT" || field == "LAST_REDEAL_DT") {
-            if (data[field] != undefined) {
-                if (data[field] == "Invalid date") data[field] = "";
-                else if (data[field] != null && data[field] != "") data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
-            }
-        }
-        return GridUtil.uiStartDateWrapper(data, field);
-    }
-    uiControlEndDateWrapper(passedData, field) {
-        let data = JSON.parse(JSON.stringify(passedData)) as typeof passedData;
-        if (field == "END_DT" || field == "OEM_PLTFRM_LNCH_DT" || field == "OEM_PLTFRM_EOL_DT") {
-            if (data[field] != undefined) {
-                if (data[field] == "Invalid date") data[field] = "";
-                else if (data[field] != null && data[field] != "") data[field] = this.datePipe.transform(data[field], "MM/dd/yyyy");
-            }
-        }
-        return GridUtil.uiControlEndDateWrapper(data, field);
+    getResultSingleIconNm(result) {
+        return GridUtil.getResultSingleIconNm(result);
     }
     uiBoolControlWrapper(passedData, field) {
         return GridUtil.uiBoolControlWrapper(passedData, field);
     }
-    uiProductDimControlWrapper(passedData, type) {
-        return GridUtil.uiProductDimControlWrapper(passedData, type);
-    }
-    uiProductControlWrapper(passedData) {
-        return GridUtil.uiProductControlWrapper(passedData);
-    }
-    uiParentControlWrapper(passedData) {
-        return GridUtil.uiParentControlWrapper(passedData);
-    }
-    uiMultiselectArrayControlWrapper(passedData, field) {
-        return GridUtil.uiMultiselectArrayControlWrapper(passedData, field);
-    }
-    uiPrimarySecondaryDimControlWrapper(passedData) {
-        return GridUtil.uiPrimarySecondaryDimControlWrapper(passedData);
+    uiProductDimControlWrapper(passedData) {
+        return passedData["TITLE"].split(',');
     }
     uiKitCalculatedValuesControlWrapper(passedData, kitType, column) {
-        let value = this.currencyPipe.transform(PTE_Load_Util.kitCalculatedValues(passedData, kitType, column), 'USD', 'symbol', '1.2-2');
-        return GridUtil.uiKitCalculatedValuesControlWrapper(passedData, kitType, value);
+        return this.currencyPipe.transform(PTE_Load_Util.kitCalculatedValues(passedData, kitType, column), 'USD', 'symbol', '1.2-2');
     }
     uiControlBackEndRebateWrapper(passedData) {
         let dim = this.in_Deal_Type == "KIT" ? this.kitEcapdim : this.ecapDimKey;
-        let value = typeof PTE_Load_Util.calcBackEndRebate(passedData, this.in_Deal_Type, "ECAP_PRICE", dim) == 'number' ? this.currencyPipe.transform(PTE_Load_Util.calcBackEndRebate(passedData, this.in_Deal_Type, "ECAP_PRICE", dim), 'USD', 'symbol', '1.2-2') : '';
-        return GridUtil.uiControlBackEndRebateWrapper(value);
+        return typeof PTE_Load_Util.calcBackEndRebate(passedData, this.in_Deal_Type, "ECAP_PRICE", dim) == 'number' ? this.currencyPipe.transform(PTE_Load_Util.calcBackEndRebate(passedData, this.in_Deal_Type, "ECAP_PRICE", dim), 'USD', 'symbol', '1.2-2') : '';
     }
-    uiTotalDiscountPerLineControlWrapper(passedData) {
-        return GridUtil.uiTotalDiscountPerLineControlWrapper(passedData);
+    uiTotalDiscountPerLineControlWrapper(passedData, dimkey) {
+        var data = passedData["QTY"];   //TODO: replace with TIER_NBR or PRD_DRAWING_ORD?  ECAP works as each dim must have one but there is likely a more formal way of iterating the tiers - are QTY and dscnt_per_line required columns?
+
+        if (data === undefined || data === null) return "";
+        var dataDscnt = passedData["DSCNT_PER_LN"] != undefined ? parseFloat(passedData["DSCNT_PER_LN"][dimkey]) : 0;
+        return new CurrencyPipe('en-us').transform(parseFloat(passedData["QTY"][dimkey]) * dataDscnt, 'USD', 'symbol', '1.2-2');
+        //return GridUtil.uiTotalDiscountPerLineControlWrapper(passedData, dimkey);
     }
     getResultSingleIcon(passedData, field) {
         let parent = document.getElementById(field + "_" + passedData.DC_ID);
-        parent.innerHTML = GridUtil.getResultSingleIcon(passedData, field);
         let child = parent.getElementsByTagName('i');
         if (child != undefined && child.length == 1)
             child[0].style.color = this.getColorStyle(passedData[field]);
@@ -300,12 +259,6 @@ export class dealEditorCellTemplateComponent {
     }
     getColorStyle = function (result) {
         return PTE_Load_Util.getColorPct(result);
-    }
-    uiCrDbPercWrapper(passedData) {
-        return GridUtil.uiCrDbPercWrapper(passedData);
-    }
-    getFormatedDim(passedData) {
-        return GridUtil.getFormatedDim(passedData, 'TempCOMP_SKU', '20___0');
     }
     isReadonlyCell(passedData, field) {
         if (passedData._behaviors != undefined && passedData._behaviors.isReadOnly != undefined && passedData._behaviors.isReadOnly[field] != undefined)
@@ -326,6 +279,76 @@ export class dealEditorCellTemplateComponent {
         }
         return false;
     }
+    hasVertical(data) {
+        TenderDashboardGridUtil.hasVertical(data);
+    }
+    stgFullTitleChar(passedData) {
+        GridUtil.stgFullTitleChar(passedData);
+    }
+    fieldVal(passedData, field, dimKey) {
+        return (dimKey !== '')
+            ? !!passedData[field] && !!passedData[field][dimKey] ? passedData[field][dimKey] : ''
+            : !!passedData[field] && !!passedData[field] ? passedData[field] : '';
+    }
+
+    startVal(passedData, startDt, dimKey) {
+        return (dimKey !== '')
+            ? !!passedData[startDt] && !!passedData[startDt][dimKey] ? passedData[startDt][dimKey] : ''
+            : !!passedData[startDt] && !!passedData[startDt] ? passedData[startDt] : '';
+    }
+    checkingMsg(passedData, field, startDt, dimKey) {
+        const cap = (dimKey !== "")
+            ? !!passedData[startDt] && !!passedData.CAP[dimKey] ? parseFloat(passedData.CAP[dimKey].toString().replace(/,|$/g, '')) : ""
+            : !!passedData[startDt] && !!passedData.CAP ? parseFloat(passedData.CAP.toString().replace(/,|$/g, '')) : "";
+        const ecap = (dimKey !== "")
+            ? !!passedData[startDt] && !!passedData.ECAP_PRICE[dimKey] ? parseFloat(passedData.ECAP_PRICE[dimKey].toString().replace(/,|$/g, '')) : ""
+            : !!passedData[startDt] && !!passedData.ECAP_PRICE ? parseFloat(passedData.ECAP_PRICE.toString().replace(/,|$/g, '')) : "";
+        if (ecap > cap) {
+            const dsplCap = cap === "" ? "No CAP" : cap;
+            const dsplEcap = ecap === "" ? "No ECAP" : ecap;
+            return {
+                'msg': "ECAP $" + dsplEcap + " is greater than the CAP $" + dsplCap + "",
+                'msgClass': "isSoftWarnCell"
+            }
+        }
+        if (this.fieldVal(passedData, field, dimKey) !== "" && this.fieldVal(passedData, field, dimKey).indexOf("-") > -1) {
+            return {
+                'msg': "CAP price " + this.fieldVal(passedData, field, dimKey) + " cannot be a range.",
+                'msgClass': "isSoftWarnCell"
+            }
+        }
+        return {
+            'msg': '',
+            'msgClass': ""
+        }
+
+    }
+    currencyCap(passedData, field, key) {
+        return new CurrencyPipe('en-us').transform(parseFloat(passedData[field][key]), 'USD', 'symbol', '1.2-2')
+    }
+    densityBands(passedData) {
+        let data = parseInt(passedData.NUM_OF_DENSITY);
+        let band = []
+        for (let i = 1; i <= data; i++) {
+            band.push(i);
+        }
+        return band;
+    }
+    checkIndex(passedData, field) {
+        let keys = this.key(passedData, field);
+        for (let i = 0; i < keys.length; i++)
+            if (passedData[field].hasOwnProperty(keys[i]) && keys[i].indexOf('___') >= 0 && keys[i].indexOf('_____') < 0) return true;
+        return false;
+    }
+    key(passedData, field) {
+        if (field == 'TIER_NBR') return Object.keys(passedData.TIER_NBR);
+        else if (field == 'TOTAL_DSCNT_PR_LN') return Object.keys(passedData["QTY"]).sort();
+        else if (field == 'PRIMARY_OR_SECONDARY') return Object.keys(passedData["ECAP_PRICE"]).sort();
+        else if (field == 'TRKR_NBR') return Object.keys(passedData["TRKR_NBR"]).sort();
+        else if (field == 'DENSITY_BAND') return Object.keys(passedData["DENSITY_BAND"]);
+        else if (field == 'DENSITY_RATE') return Object.keys(passedData["DENSITY_RATE"]);
+        else if (typeof passedData[field] == 'object') return Object.keys(passedData[field]);
+    }
     isHiddenCell(passedData, field) {
         if (passedData._behaviors != undefined && passedData._behaviors.isHidden != undefined && passedData._behaviors.isHidden[field] != undefined)
             return true;
@@ -341,8 +364,22 @@ export class dealEditorCellTemplateComponent {
             return true;
         return false;
     }
-    uiMoneyDatesControlWrapper(passedData, field, startDt, endDt, dimKey) {        
-        return GridUtil.uiMoneyDatesControlWrapper(passedData, field, startDt, endDt, dimKey)
+    uiMoneyDatesControlWrapper(passedData, field, startDt, endDt, dimKey) {
+        if (!dimKey) dimKey = '';
+        if (dimKey !== '' && !!passedData[field]) {
+            if (passedData[field][dimKey] !== undefined) passedData[field][dimKey] = passedData[field][dimKey].replace(/$|,/g, '');
+        } else {
+            if (passedData[field] !== undefined) passedData[field] = passedData[field].replace(/$|,/g, '');
+        }
+        if (!passedData[startDt])
+            passedData[startDt] = {};
+        if (!passedData[startDt][dimKey])
+            passedData[startDt][dimKey] = "";
+        if (!passedData[endDt])
+            passedData[endDt] = {};
+        if (!passedData[endDt][dimKey])
+            passedData[endDt][dimKey] = "";
+        //return GridUtil.uiMoneyDatesControlWrapper(passedData, field, startDt, endDt, dimKey)
     }
     getProductSid(dimProduct, dimKey) {
         return GridUtil.getProductMbrSid(dimProduct, dimKey);
@@ -353,13 +390,10 @@ export class dealEditorCellTemplateComponent {
     removeDeletedRowData(event) {
         this.removeDeletedRow.emit(event);
     }
-    uiReadonlyFolioWrapper(data, field) {
-        return TenderDashboardGridUtil.uiReadonlyFolioWrapper(data, field)
-    }
     ngOnInit() {
         if (!this.in_Is_Tender_Dashboard)//if not Tender Dashboard Screen, take salesforce Id from contract data
             this.in_DataItem.SALESFORCE_ID = this.contract_Data.SALESFORCE_ID;
-        this.fields= (this.in_Deal_Type === 'VOL_TIER' || this.in_Deal_Type === 'FLEX') ? PTE_Config_Util.volTierFields : this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : PTE_Config_Util.densityFields;
+        this.fields = this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : this.in_Deal_Type === 'DENSITY' ? PTE_Config_Util.densityFields : PTE_Config_Util.volTierFields;
         this.YCS2modifier = this.in_Field_Name === "YCS2_INFO" ? "_PRC_IRBT" : "";
         this.fieldModifier = this.in_Field_Name === "CAP_INFO" ? "CAP" : this.in_Field_Name === "YCS2_INFO" ? "YCS2" : "";
         this.fieldText = (this.in_Field_Name === "CAP_INFO" || this.in_Field_Name === "YCS2_INFO") ? this.fieldModifier + "_STRT_DT" : "";

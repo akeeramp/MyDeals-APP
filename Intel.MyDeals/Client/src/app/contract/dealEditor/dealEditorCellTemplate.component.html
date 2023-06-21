@@ -2,11 +2,11 @@
     <div class="input-checkbox-rel">
         <input type='checkbox' [(ngModel)]="in_DataItem.isExclSel" />
         <label title="Exclude from Price Approval Rules"></label>
-        </div>
     </div>
+</div>
 <div *ngIf="in_Field_Name === 'tools'" class="dealCell">
-    <deal-tools-angular [dataItem]='in_DataItem' [in_Is_Tender_Dashboard]="in_Is_Tender_Dashboard" [isSplitEnabled]='true' [isFileAttachmentEnabled]='true' 
-                        [isHistoryEnabled]='true' [isCommentEnabled]='true' [isEditable]='true' 
+    <deal-tools-angular [dataItem]='in_DataItem' [in_Is_Tender_Dashboard]="in_Is_Tender_Dashboard" [isSplitEnabled]='true' [isFileAttachmentEnabled]='true'
+                        [isHistoryEnabled]='true' [isCommentEnabled]='true' [isEditable]='true'
                         [isQuoteLetterEnabled]='true' [isDeleteEnabled]='true' [gridData]="grid_Data" [contractData]="contract_Data" [gridResult]="in_DataSet"
                         (iconSaveUpdate)="updateIcon($event)" (refreshContract)="refreshContractData($event)" (reloadFn)="reload($event)" (removeDeletedRow)="removeDeletedRowData($event)">
     </deal-tools-angular>
@@ -14,53 +14,328 @@
 <div *ngIf="in_Field_Name === 'details'">
     <deal-details-angular style="height:100% !important" [dealDetail]='in_DataItem'></deal-details-angular>
 </div>
-<div *ngIf="in_Field_Name === 'tender_actions'">
-    <div id='cb_actn_{{in_DataItem.DC_ID}}' [innerHTML]="getBidActions(in_DataItem)" style="text-align:center"></div>
-</div>
-<div *ngIf="in_Template.includes('gridUtils.uiControlWrapper')" [innerHTML]="uiControlWrapper(in_DataItem, in_Field_Name, '')|sanitizeHtml"
-     class="dealCell" [ngClass]="{'isReadOnlyCell': isReadonlyCell(in_DataItem, in_Field_Name), 'isDirtyCell': isDirtyCell(in_DataItem,in_Field_Name), 'isErrorCell': isErrorCell(in_DataItem,in_Field_Name)}">
-</div>
-<div *ngIf="in_Template.includes('gridUtils.uiPositiveDimControlWrapper')" [innerHTML]="uiPositiveDimControlWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" class="dealCell">
+
+<!----------------------------------------------------------------------------------------------------------------------------------uiControlWrapper(in_DataItem, in_Field_Name)---->
+
+<div *ngIf="in_Template.includes('gridUtils.uiControlWrapper')" class="dealCell" [ngClass]="{'isReadOnlyCell': isReadonlyCell(in_DataItem, in_Field_Name), 'isDirtyCell': isDirtyCell(in_DataItem,in_Field_Name), 'isErrorCell': isErrorCell(in_DataItem,in_Field_Name)}">
+    <div *ngIf="in_DataItem['PAYOUT_BASED_ON'] != undefined && in_DataItem['PAYOUT_BASED_ON'] == 'Billings' && (in_Field_Name == 'REBATE_BILLING_START' || in_Field_Name == 'REBATE_BILLING_END')">
+        <div class="err-bit" *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" kendoTooltip title={{in_DataItem._behaviors.validMsg[in_Field_Name]}}></div>
+        <div class="uiControlDiv vert-center"></div>
+    </div>
+    <div *ngIf="in_Field_Name == 'NUM_OF_TIERS' && in_DataItem['OBJ_SET_TYPE_CD'] == 'DENSITY'">
+        <div class="err-bit" *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" kendoTooltip title={{in_DataItem._behaviors.validMsg[in_Field_Name]}}></div>
+        <div class="ng-binding vert-center">{{(uiControlWrapper(in_DataItem, in_Field_Name)['NUM_OF_TIERS'] / uiControlWrapper(in_DataItem, in_Field_Name)['NUM_OF_DENSITY'])}}</div>
+    </div>
+    <div *ngIf="in_Field_Name == 'CREDIT_AMT'">
+        <div class="err-bit" *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" kendoTooltip title={{in_DataItem._behaviors.validMsg[in_Field_Name]}}></div>
+        <div class="uiControlDiv creditcolor" [ngClass]="getClassNm(in_DataItem, in_Field_Name)">
+            <div *ngIf="in_DataItem['CREDIT_AMT'] != undefined && in_DataItem['CREDIT_AMT'] != 0" class="ng-binding vert-center">{{uiControlWrapper(in_DataItem, in_Field_Name)[in_Field_Name]}}</div>
+        </div>
+    </div>
+    <div *ngIf="(in_Field_Name == 'REBATE_BILLING_START' || in_Field_Name == 'REBATE_BILLING_END') && in_DataItem[in_Field_Name] != 'Invalid date'" [ngClass]="applySoftWarnings(in_DataItem, in_Field_Name) != '' ? 'isSoftWarnCell' : ''" title="{{applySoftWarnings(in_DataItem, in_Field_Name)}}" class="ng-binding vert-center wordWrapTransform">{{uiControlWrapper(in_DataItem, in_Field_Name)[in_Field_Name] | date:'MM/dd/yyy'}}</div>
+    <div class="err-bit" *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" kendoTooltip position="bottom" title={{in_DataItem._behaviors.validMsg[in_Field_Name]}}></div>
+    <div *ngIf="in_DataItem[in_Field_Name] != undefined && in_DataItem[in_Field_Name] != null && in_Field_Name !== 'REBATE_BILLING_START' && in_Field_Name !== 'REBATE_BILLING_END'"
+         [ngClass]="applySoftWarnings(in_DataItem, in_Field_Name) != '' ? 'isSoftWarnCell' : ''" title="{{applySoftWarnings(in_DataItem, in_Field_Name)}}" class="ng-binding vert-center wordWrapTransform">
+        {{uiControlWrapper(in_DataItem, in_Field_Name)[in_Field_Name]}}
+    </div>
 </div>
 <div *ngIf="in_Field_Name == 'DC_ID'" id="DC_ID" class="dealCell" style="align-items: center; display: flex; "
      [ngClass]="{'isReadOnlyCell': isReadonlyCell(in_DataItem, in_Field_Name), 'isDirtyCell': isDirtyCell(in_DataItem,in_Field_Name), 'isErrorCell': isErrorCell(in_DataItem,in_Field_Name)}">
     <div class="err-bit" *ngIf="in_DataItem._behaviors && in_DataItem._behaviors.isError && in_DataItem._behaviors.isError[in_Field_Name]" kendoTooltip title={{in_DataItem._behaviors.validMsg[in_Field_Name]}}></div>
     <deal-popup-icon [dealId]="in_DataItem.DC_ID"></deal-popup-icon>
-    <div style="margin-top: 20px;" [innerHTML]="uiControlDealWrapper(in_DataItem, in_Field_Name)|sanitizeHtml">
+    <div style="margin-top: 20px;">
+        <div class="ng-binding vert-center">
+            <span style="padding-left: 0px;" *ngIf="in_DataItem[in_Field_Name] && in_DataItem[in_Field_Name] != null">
+                {{in_DataItem[in_Field_Name]}}
+            </span>
+        </div>
     </div>
 </div>
-<div *ngIf="in_Field_Name == 'CUST_MBR_SID'" [innerHTML]="uiCustomerControlWrapper(in_DataItem, in_Field_Name, '')|sanitizeHtml" class="dealCell">
+<div *ngIf="in_Field_Name == 'CUST_MBR_SID'" class="dealCell">
+    <div class="err-bit" kendoTooltip *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" title="' + in_DataItem._behaviors.validMsg[field] + '"></div>
+    <div class="uiControlDiv isReadOnlyCell">
+        <div class="ng-binding vert-center" *ngIf="(in_DataItem['CUST_ACCNT_DIV'] === undefined || in_DataItem['CUST_ACCNT_DIV'] === '') &&
+        (in_DataItem.Customer != undefined && in_DataItem.Customer != null && in_DataItem.Customer != '') &&
+        (in_DataItem.Customer.CUST_NM != undefined && in_DataItem.Customer.CUST_NM != null && in_DataItem.Customer.CUST_NM != '')">{{in_DataItem.Customer.CUST_NM}}</div>
+        <div class="ng-binding vert-center" *ngIf="in_DataItem['CUST_ACCNT_DIV'] !== undefined && in_DataItem['CUST_ACCNT_DIV'] !== ''">{{in_DataItem["CUST_ACCNT_DIV"]}}</div>
+    </div>
 </div>
-<div class="{{in_Field_Name}} dealCell" *ngIf="(in_Field_Name == 'ECAP_PRICE' && in_Deal_Type == 'ECAP') || in_Field_Name == 'KIT_ECAP' || in_Field_Name == 'SUBKIT_ECAP' || in_Field_Name == 'COMPETITIVE_PRICE' || in_Field_Name == 'CAP_KIT' || in_Field_Name == 'YCS2_KIT'" [innerHTML]="uiDimControlWrapper(in_DataItem, in_Field_Name)"
-     [ngClass]="{'isReadOnlyCell': (isReadonlyCell(in_DataItem, in_Field_Name) || (in_Field_Name == 'COMPETITIVE_PRICE' || in_Field_Name == 'CAP_KIT')), 'isDirtyCell': isDirtyCell(in_DataItem,in_Field_Name), 'isErrorCell': isErrorCell(in_DataItem,in_Field_Name)}">
+<div *ngIf="in_Template.includes('gridUtils.uiReadonlyControlWrapper')" class="dealCell">
+    <!--[innerHTML]="uiReadonlyControlWrapper(in_DataItem, in_Field_Name)|sanitizeHtml"-->
+    <div class="uiControlDiv isReadOnlyCell">
+        <div class="ng-binding vert-center" *ngIf="in_DataItem[in_Field_Name] && in_DataItem[in_Field_Name] != null && in_DataItem[in_Field_Name] != 'CNTRCT_OBJ_SID'">{{in_DataItem[in_Field_Name]}}</div>
+        <div class="ng-binding vert-center gridCellSpan" title="FolioID">{{in_DataItem[in_Field_Name]}}</div>
+    </div>
 </div>
-<div *ngIf="in_Field_Name == 'PASSED_VALIDATION'" [innerHTML]="uiValidationErrorDetail(in_DataItem)|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'VOL_TIER' || in_Deal_Type == 'REV_TIER' || in_Deal_Type == 'FLEX')" [innerHTML]="uiControlScheduleWrapper(in_DataItem)|sanitizeHtml" class="breakoutColumn tier"></div>
-<div *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'DENSITY')" [innerHTML]="uiControlScheduleWrapperDensity(in_DataItem)|sanitizeHtml" class="breakoutColumn dealCell tier breakout-column"></div>
-<div *ngIf="in_Template.includes('gridUtils.uiReadonlyControlWrapper')" [innerHTML]="uiReadonlyControlWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Template.includes('gridUtils.uiReadonlyFolioWrapper')" [innerHTML]="uiReadonlyFolioWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'TRKR_NBR'" [innerHTML]="uiDimTrkrControlWrapper(in_DataItem)|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'START_DT' || in_Field_Name == 'LAST_REDEAL_DT'" class="dealCell dealsIcon-dealcell" [innerHTML]="uiStartDateWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" style="top:45% !important"></div>
-<div *ngIf="in_Field_Name == 'END_DT' || in_Field_Name == 'OEM_PLTFRM_LNCH_DT' || in_Field_Name == 'OEM_PLTFRM_EOL_DT'" class="dealCell" [innerHTML]="uiControlEndDateWrapper(in_DataItem, in_Field_Name)|sanitizeHtml"></div>
+<div *ngIf="in_Template.includes('gridUtils.uiReadonlyFolioWrapper')" class="dealCell">
+    <div id="folioCell" class="uiControlDiv isReadOnlyCell">
+        <a href="/contract#/manager/{{in_DataItem[in_Field_Name]}}" target="_blank">
+            <div class="ng-binding vert-center">{{in_DataItem[in_Field_Name]}}</div>
+        </a>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'START_DT' || in_Field_Name == 'LAST_REDEAL_DT'" class="dealCell dealsIcon-dealcell" style="top:45% !important">
+    <!--[innerHTML]="uiStartDateWrapper(in_DataItem, in_Field_Name)|sanitizeHtml"-->
+    <div class="err-bit class-date-fix" *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" kendoTooltip title={{in_DataItem._behaviors.validMsg[in_Field_Name]}}></div>
+    <div title="{{applySoftWarnings(in_DataItem, in_Field_Name)}}" class="uiControlDiv dealCell class_date {{getClassNm(in_DataItem, in_Field_Name)}}" [ngClass]="applySoftWarnings(in_DataItem, in_Field_Name) != '' ? 'isSoftWarnCell' : ''">
+        <div class="ng-binding vert-center" style="padding-left:0px !important;white-space:nowrap">
+            <span class="vert-center" *ngIf="(in_DataItem.PROGRAM_PAYMENT === undefined ? false : in_DataItem.PROGRAM_PAYMENT.indexOf('Frontend') !== -1) && (in_DataItem.WF_STG_CD === undefined ? false : in_DataItem.WF_STG_CD.indexOf('Draft') !== -1)" style="top: 20% !important">
+                <i class="intelicon-information dateWrapper" title="If the deal start date is in the past, the deal start date will change to the date when the deal becomes active."></i>
+            </span>
+            <span *ngIf="(in_DataItem[in_Field_Name] != undefined && in_DataItem[in_Field_Name] != null && in_DataItem[in_Field_Name] != 'Invalid date')"
+                  class="ng-binding vert-center alert-divider" style="display:contents">
+                {{in_DataItem[in_Field_Name] | date: 'MM/dd/yyyy'}}
+            </span>
+        </div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'END_DT' || in_Field_Name == 'OEM_PLTFRM_LNCH_DT' || in_Field_Name == 'OEM_PLTFRM_EOL_DT'" class="dealCell">
+    <div class="err-bit class-date-fix" *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" kendoTooltip title={{in_DataItem._behaviors.validMsg[in_Field_Name]}}></div>
+    <div title="{{applySoftWarnings(in_DataItem, in_Field_Name)}}" class="uiControlDiv dealCell defence-read-cell {{getClassNm(in_DataItem, in_Field_Name)}}" [ngClass]="applySoftWarnings(in_DataItem, in_Field_Name) != '' ? 'isSoftWarnCell' : ''">
+        <div *ngIf="in_DataItem[in_Field_Name] != undefined && in_DataItem[in_Field_Name] != null" class="ng-binding vert-center" [ngClass]="{'redfont':in_DataItem.EXPIRE_FLG == '1'}" style="padding-left: 10px !important;">{{in_DataItem[in_Field_Name] | date: 'MM/dd/yyyy'}}</div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'EXPIRE_FLG'" class="dealCell">
+    <div class="uiControlDiv isReadOnlyCell">
+        <div *ngIf="in_DataItem[in_Field_Name]!= undefined && in_DataItem[in_Field_Name] != null" class="ng-binding vert-center">{{uiBoolControlWrapper(in_DataItem, in_Field_Name)}}</div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'WF_STG_CD'" style="height: 100% !important;">
+    <div class="uiControlDiv isReadOnlyCell">
+        <div class="ng-binding vert-center">{{stgFullTitleChar(in_DataItem)}}</div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'PRD_BCKT'" class="dealCell">
+    <div class="col-md-12">
+        <div *ngFor="let item of uiProductDimControlWrapper(in_DataItem)" class="col-md-12 rowHeight">
+            <div class="textRightAlign isReadOnlyCell" style="border-bottom: 0.01px solid rgba(0, 0, 0, .05);">
+                <span class="ng-binding dataPadding gridCellSpan" id="tdsCol">{{item}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'PRD_BCKT_SUBKIT'" class="dealCell">
+    <div *ngIf="in_DataItem.HAS_SUBKIT == '1'; else noSubkit" class="col-md-12">
+        <div *ngFor="let item of uiProductDimControlWrapper(in_DataItem); first as isFirst">
+            <div *ngIf="first; else rest" class="col-md-12 rowHeight">
+                <div class="textRightAlign isReadOnlyCell">
+                    <span class="ng-binding dataPadding gridCellSpan" id="tdsCol">{{item}}</span>'
+                </div>
+            </div>
+            <ng-template #rest>
+                <div class="col-md-12 rowHeight">
+                    <div class="textRightAlign isReadOnlyCell">
+                        <span class="dataPadding"></span>
+                    </div>
+                </div>
+            </ng-template>
+        </div>
+    </div>
+    <ng-template #noSubkit>
+        <div class="uiControlDiv isReadOnlyCell">
+            <div class="ng-binding vert-center">No Sub KIT</div>
+        </div>
+    </ng-template>
+</div>
+<div *ngIf="in_Field_Name == 'TITLE'" style="height: 100% !important;">
+    <div class="uiControlDiv isReadOnlyCell">
+        <div class="ng-binding vert-center gridCellSpan" title="{{in_DataItem.TITLE}}">{{in_DataItem.TITLE}}</div>
+
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'DEAL_SOLD_TO_ID'" class="dealCell">
+    <div class="err-bit" *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" kendoTooltip title={{in_DataItem._behaviors.validMsg[in_Field_Name]}}></div>
+    <div class="uiControlDiv msgClassStyles {{getClassNm(in_DataItem, in_Field_Name)}}">
+        <div *ngIf="in_DataItem[in_Field_Name] != undefined && in_DataItem[in_Field_Name] != null" class="ng-binding vert-center">{{in_DataItem[in_Field_Name]}}</div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'KIT_REBATE_BUNDLE_DISCOUNT'" class="dealCell">
+    <div class="uiControlDiv isReadOnlyCell">
+        <div *ngIf="uiKitCalculatedValuesControlWrapper(in_DataItem, 'kit', 'rebateBundle') == null" class="ng-binding vert-center"></div>
+        <div *ngIf="uiKitCalculatedValuesControlWrapper(in_DataItem, 'kit', 'rebateBundle') != null" class="ng-binding vert-center">{{uiKitCalculatedValuesControlWrapper(in_DataItem, 'kit', 'rebateBundle')}}</div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'SUBKIT_REBATE_BUNDLE_DISCOUNT'" class="dealCell">
+    <div class="uiControlDiv isReadOnlyCell">
+        <div *ngIf="in_DataItem.HAS_SUBKIT == '0'" class="vert-center">No Sub KIT</div>
+        <div *ngIf="in_DataItem.HAS_SUBKIT != '0' && uiKitCalculatedValuesControlWrapper(in_DataItem, 'subkit', 'rebateBundle') == null" class="ng-binding vert-center"></div>
+        <div *ngIf="in_DataItem.HAS_SUBKIT != '0' && uiKitCalculatedValuesControlWrapper(in_DataItem, 'subkit', 'rebateBundle') != null" class="ng-binding vert-center">{{uiKitCalculatedValuesControlWrapper(in_DataItem, 'subkit', 'rebateBundle')}}</div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE'" class="dealCell">
+    <div class="uiControlDiv isReadOnlyCell">
+        <div *ngIf="uiKitCalculatedValuesControlWrapper(in_DataItem, 'kit', 'sumTD') == null" class="ng-binding vert-center"></div>
+        <div *ngIf="uiKitCalculatedValuesControlWrapper(in_DataItem, 'kit', 'sumTD') != null" class="ng-binding vert-center">{{uiKitCalculatedValuesControlWrapper(in_DataItem, 'kit', 'sumTD')}}</div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'SUBKIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE'" class="dealCell">
+    <div class="uiControlDiv isReadOnlyCell">
+        <div *ngIf="in_DataItem.HAS_SUBKIT == '0'" class="vert-center">No Sub KIT</div>
+        <div *ngIf="in_DataItem.HAS_SUBKIT != '0' && uiKitCalculatedValuesControlWrapper(in_DataItem, 'subkit', 'sumTD') == null" class="ng-binding vert-center"></div>
+        <div *ngIf="in_DataItem.HAS_SUBKIT != '0' && uiKitCalculatedValuesControlWrapper(in_DataItem, 'subkit', 'sumTD') != null" class="ng-binding vert-center">{{uiKitCalculatedValuesControlWrapper(in_DataItem, 'subkit', 'sumTD')}}</div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'MISSING_CAP_COST_INFO'" class="dealCell">
+    <div *ngIf="getMissingCostCapTitle(in_DataItem) == ''" class="uiControlDiv isReadOnlyCell"></div>
+    <div *ngIf="getMissingCostCapTitle(in_DataItem) != ''" class="text-center uiControlDiv isReadOnlyCell">
+        <div class="vert-center">
+            <i class="intelicon-help-solid bigIcon missingCapStyle" title="{{getMissingCostCapTitle(in_DataItem)}}"></i>
+        </div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'BACKEND_REBATE'" class="dealCell">
+    <div class="uiControlDiv isReadOnlyCell">
+        <div class="ng-binding vert-center">{{uiControlBackEndRebateWrapper(in_DataItem)}}</div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'TOTAL_CR_DB_PERC'" class="dealCell">
+    <div class="uiControlDiv isReadOnlyCell">
+        <div class="ng-binding vert-center">
+            <div *ngIf="getPercData(in_DataItem).vol != 999999999" class="progress creditDebitAlignmentStyle" style="margin-bottom: 2px; background-color:#edeff0 !important; ">
+                <div class="progress-bar" role="progressbar" value="getPercData(in_DataItem).perc" min="0" max="100"></div>
+            </div>
+            <div *ngIf="getPercData(in_DataItem).vol != 999999999" class="progressBarTextSize"> {{numberWithCommas(getPercData(in_DataItem).numerator)}} out of {{numberWithCommas(getPercData(in_DataItem).vol)}}</div>
+            <div *ngIf="getPercData(in_DataItem).vol == 999999999">{{numberWithCommas(getPercData(in_DataItem).numerator)}}</div>
+        </div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'MEETCOMP_TEST_RESULT' || in_Field_Name == 'COST_TEST_RESULT'" [id]="in_Field_Name + '_' + in_DataItem['DC_ID']" class="dealCell">
+    <div class="dealCell">
+        <div *ngIf="in_Field_Name == 'MEETCOMP_TEST_RESULT' || in_Field_Name == 'COST_TEST_RESULT'" [id]="in_Field_Name + '_' + in_DataItem['DC_ID']" class="dealCell">
+            <div class="dealCell">
+                <div *ngIf="in_Field_Name === 'MEETCOMP_TEST_RESULT'" class="text-center uiControlDiv isReadOnlyCell cursorStyle">
+                    <div class="vert-center"><i class="iConFont {{getResultSingleIconNm(in_DataItem[in_Field_Name])}}" title="{{getResultSingleIconNm(in_DataItem[in_Field_Name]) == 'intelicon-help-outlined' ? 'Not Run Yet' : in_DataItem[in_Field_Name]}}"></i></div>
+                </div>
+                <div *ngIf="(usrRole === 'DA' || usrRole === 'GA' && isSuper || usrRole === 'SA' ||usrRole === 'Legal')" class="text-center uiControlDiv isReadOnlyCell cursorStyle">
+                    <div class="vert-center"></div> <i class="iConFont {{getResultSingleIconNm(in_DataItem[in_Field_Name])}}" title="{{getResultSingleIconNm(in_DataItem[in_Field_Name]) == 'intelicon-help-outlined' ? 'Not Run Yet' : in_DataItem[in_Field_Name]}}"></i>
+                </div>
+                <div class="text-center uiControlDiv isReadOnlyCell"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'VOL_TIER' || in_Deal_Type == 'REV_TIER' || in_Deal_Type == 'FLEX')" class="breakoutColumn tier">
+    <div class="col-md-12">
+        <div class="col-md-12 rowHeight">
+            <div *ngFor="let field of uiControlScheduleWrapper(in_DataItem)">
+                <div *ngIf="field.title === 'Tier'" class="col-md-3 tierHeader">{{field.title}}</div>
+                <div *ngIf="field.title === 'INCENTIVE_RATE'" class="col-md-3 tierHeader tierBorder lastcolstyle" id="incentiveRate">{{field.title}}</div>
+                <div *ngIf="field.title != 'INCENTIVE_RATE' && field.title != 'Tier'" class="col-md-3 tierHeader tierBorder lastcolstyle">{{field.title}}</div>
+            </div>
+        </div>
+        <div *ngFor="let tier of key(in_DataItem, in_Field_Name)" class="col-md-12 rowHeight">
+            <div *ngFor="let field of uiControlScheduleWrapper(in_DataItem)">
+                <div style="height:35px;padding: 0 0 !important;text-align: right !important; position: relative; " class="col-md-3 rowValueHeight rowRightBorder textRightAlign {{getClassNm(in_DataItem, field.field)}}">
+                    <div *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[field.field] != undefined && in_DataItem._behaviors.isError[field.field + '_' + tier] != undefined" class="err-bit" kendoTooltip title="{{in_DataItem._behaviors.validMsg[field.field + '_' + tier] ? in_DataItem._behaviors.validMsg[field.field + '_' + tier] : ''}}"></div>
+                    <span *ngIf="in_DataItem[field.field] && in_DataItem[field.field][tier] != undefined && in_DataItem[field.field][tier] != null" class="ng-binding dataPadding">{{in_DataItem[field.field][tier]}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'PASSED_VALIDATION'" class="dealCell">
+    <div class='uiControlDiv isReadOnlyCell'>
+        <div class='vert-center'>
+            <i class='valid-icon iConFont validf_{{in_DataItem.PASSED_VALIDATION}}' [ngClass]="in_DataItem.PASSED_VALIDATION === undefined && in_DataItem.PASSED_VALIDATION === '' ? 'intelicon-protection-solid' : in_DataItem.PASSED_VALIDATION == 'Complete' ? 'intelicon-protection-checked-verified-solid' : 'intelicon-alert-solid'" title='{{uiValidationErrorDetail(in_DataItem)}}'></i>
+        </div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'TOTAL_DSCNT_PR_LN'" class="dealCell">
+    <div class="col-md-12">
+        <div *ngFor="let item of key(in_DataItem, in_Field_Name)" class="col-md-12 rowHeight">
+            <div class="textRightAlign isReadOnlyCell" style="border-bottom: 0.01px solid rgba(0, 0, 0, .05);">
+                <span class="ng-binding dataPadding" id="tdsCol">{{uiTotalDiscountPerLineControlWrapper(in_DataItem, item)}}</span>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'PRIMARY_OR_SECONDARY'" class="dealCell">
+    <div class="col-md-12">
+        <div *ngFor="let item of key(in_DataItem, in_Field_Name); index as i">
+            <div *ngIf="in_DataItem['ECAP_PRICE'].hasOwnProperty(item) && item.indexOf('___') >= 0 && item.indexOf('_____') < 0" class="col-md-12 rowHeight">
+                <div class="textRightAlign isReadOnlyCell" style="border-bottom: 0.01px solid rgba(0, 0, 0, .05);">
+                    <span *ngIf="i == 0" class="ng-binding dataPadding" id="tdsCol">P</span>
+                    <span *ngIf="i != 0" class="ng-binding dataPadding" id="tdsCol">S</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'TRKR_NBR'" class="dealCell">
+    <div *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name] != undefined" class="err-bit" kendoTooltip title="' + in_DataItem._behaviors.validMsg[field] + '"></div>
+    <div class="uiControlDiv trackingNumParent tracker-number-class {{getClassNm(in_DataItem, in_Field_Name)}}">
+        <div class="vert-center">
+            <div *ngIf="in_DataItem[in_Field_Name]['20_____2'] != null && in_DataItem[in_Field_Name]['20_____2'] != undefined" class="ng-binding">{{in_DataItem[in_Field_Name]['20_____2']}}</div>
+            <div *ngIf="in_DataItem[in_Field_Name]['20_____1'] != null && in_DataItem[in_Field_Name]['20_____1'] != undefined" class="ng-binding">{{in_DataItem[in_Field_Name]['20_____1']}}</div>
+            <div *ngFor="let item of key(in_DataItem, in_Field_Name)">
+                <div *ngIf="in_DataItem[in_Field_Name].hasOwnProperty(item) && item.indexOf('___')>= 0 && item.indexOf('_____') < 0 && in_DataItem[in_Field_Name][item] != undefined && in_DataItem[in_Field_Name][item] != null" class="ng-binding vert-center">{{in_DataItem[in_Field_Name][item]}}</div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="in_Field_Name == 'TIER_NBR' && (in_Deal_Type == 'DENSITY')" class="breakoutColumn dealCell tier breakout-column">
+    <div class="row">
+        <div class="col-md-12 rowHeight">
+            <div *ngFor="let field of uiControlScheduleWrapperDensity(in_DataItem)">
+                <div *ngIf="field.title === 'Tier'" class="col-md-2 tierHeader">{{field.title}}</div>
+                <div *ngIf="field.title === 'Band' || field.title === 'Rate'" class="col-md-3 tierHeader tierBorder">{{field.title}}</div>
+                <div *ngIf="field.title !== 'Band' && field.title !== 'Rate' && field.title !== 'Tier'" class="col-md-2 tierHeader tierBorder">{{field.title}}</div>
+            </div>
+        </div>
+        <div *ngFor="let dim of key(in_DataItem, in_Field_Name); index as i" class="col-md-12 densityRow density-rate-class">
+            <div *ngFor="let field of uiControlScheduleWrapperDensity(in_DataItem)">
+                <div *ngIf="field.field == 'DENSITY_BAND' || field.field == 'DENSITY_RATE'" class="col-md-3 densityPadding">
+                    <div>
+                        <div *ngFor="let bands of densityBands(in_DataItem)" class="col-md-12 densityRow">
+                            <div *ngIf="field.field == 'DENSITY_BAND'" class="col-md-12 {{getClassNm(in_DataItem, field.field)}}">
+                                <div *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[field.field + '_' + key(in_DataItem, 'DENSITY_BAND')[i]] != undefined && in_DataItem._behaviors.isError[field.field + '_' + key(in_DataItem, 'DENSITY_BAND')[i]]" class="err-bit ratebrkout-fix-den-class" kendoTooltip title="{{in_DataItem._behaviors.validMsg[field.field + '_' + key(in_DataItem, 'DENSITY_BAND')[i]]}}"></div>
+                                <span *ngIf="in_DataItem[field.field] && in_DataItem[field.field][key(in_DataItem, 'DENSITY_BAND')[i]] != undefined && in_DataItem[field.field][key(in_DataItem, 'DENSITY_BAND')[i]] != null" class="ng-binding dataPadding">{{in_DataItem[field.field][key(in_DataItem, 'DENSITY_BAND')[i]]}}</span>
+                            </div>
+                            <div *ngIf="field.field == 'DENSITY_RATE'" class="col-md-12 {{getClassNm(in_DataItem, field.field)}}">
+                                <div *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[field.field + '_' + key(in_DataItem, 'DENSITY_RATE')[i]] != undefined && in_DataItem._behaviors.isError[field.field + '_' + key(in_DataItem, 'DENSITY_RATE')[i]]"
+                                     class="err-bit ratebrkout-fix-class" kendoTooltip title="{{in_DataItem._behaviors.validMsg[field.field + '_' + key(in_DataItem, 'DENSITY_RATE')[i]]}}"></div>
+                                <span *ngIf="in_DataItem[field.field][key(in_DataItem, 'DENSITY_RATE')[i]] != undefined && in_DataItem[field.field][key(in_DataItem, 'DENSITY_RATE')[i]] != null" class="ng-binding dataPadding rate-value-fix">${{in_DataItem[field.field][key(in_DataItem, 'DENSITY_RATE')[i]]}}</span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="field.field != 'DENSITY_BAND' && field.field != 'DENSITY_RATE'" class="col-md-2 {{getClassNm(in_DataItem, field.field)}}">
+                    <div *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[field.field + '_' + dim] != undefined && in_DataItem._behaviors.isError[field.field + '_' + dim]" class="err-bit ratebrkout-fix-den-class" kendoTooltip title="{{in_DataItem._behaviors.validMsg[field.field + '_' + dim]}}"></div>
+                    <span *ngIf="in_DataItem[field.field][dim] != undefined && in_DataItem[field.field][dim] != null" class="ng-binding dataPadding">{{in_DataItem[field.field][dim]}}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div *ngIf="in_Template.includes('gridUtils.uiPositiveDimControlWrapper')" class="dealCell">
+    <div *ngIf="checkIndex(in_DataItem, in_Field_Name)" class="col-md-12">
+        <div *ngFor="let dimkey of key(in_DataItem, in_Field_Name)">
+            <div *ngIf="in_DataItem[in_Field_Name].hasOwnProperty(dimkey) && dimkey.indexOf('___') >= 0 && dimkey.indexOf('_____') < 0" class="col-md-12 rowHeight">
+                <div *ngIf="in_Field_Name !='ECAP_PRICE' && in_Field_Name !='DSCNT_PER_LN'; else block" class="kitRowValue kitSideLine {{getClassNm(in_DataItem, in_Field_Name)}}" style="border-bottom: 0.01px solid rgba(0, 0, 0, .05);">
+                    <div *ngIf="in_DataItem._behaviors !=undefined && in_DataItem._behaviors.isError !=undefined && in_DataItem._behaviors.isError[in_Field_Name] !=undefined && in_DataItem._behaviors.isError[in_Field_Name + '_' + dimkey] !=undefined && in_DataItem._behaviors.isError[in_Field_Name + '_' + dimkey]" class="err-bit" kendoTooltip title="{{in_DataItem._behaviors.validMsg[in_Field_Name + '_' + dimkey]}}"></div>
+                    <span *ngIf="in_DataItem[in_Field_Name][dimkey] !=undefined && in_DataItem[in_Field_Name][dimkey] !=null && in_DataItem[in_Field_Name][dimkey] !='No YCS2' && in_DataItem[in_Field_Name][dimkey] !='No CAP'" class="ng-binding dataPadding" id="capYcs2Col">{{in_DataItem[in_Field_Name][dimkey]}}</span>
+                </div>
+                <ng-template #block>
+                    <div class="kitRowValue kitSideLine {{getClassNm(in_DataItem, in_Field_Name)}}">
+                        <div *ngIf="in_DataItem._behaviors !=undefined && in_DataItem._behaviors.isError !=undefined && in_DataItem._behaviors.isError[in_Field_Name] !=undefined && in_DataItem._behaviors.isError[in_Field_Name + '_' + dimkey] !=undefined && in_DataItem._behaviors.isError[in_Field_Name + '_' + dimkey]" class="err-bit" kendoTooltip title="{{in_DataItem._behaviors.validMsg[in_Field_Name + '_' + dimkey]}}"></div>
+                        <span *ngIf="in_DataItem[in_Field_Name][dimkey] !=undefined && in_DataItem[in_Field_Name][dimkey] !=null && in_DataItem[in_Field_Name][dimkey] !='No YCS2' && in_DataItem[in_Field_Name][dimkey] !='No CAP'" class="ng-binding dataPadding" id="capYcs2Col">{{in_DataItem[in_Field_Name][dimkey]}}</span>
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="!checkIndex(in_DataItem, in_Field_Name)" class="dealCell {{getClassNm(in_DataItem, in_Field_Name)}}">
+        <div class="err-bit" kendoTooltip title="{{in_DataItem._behaviors.validMsg[in_Field_Name]}}"></div>
+        <div class="ng-binding vert-center">{{in_DataItem[in_Field_Name]['20___0']}}</div>
+    </div>
+</div>
 <div *ngIf="in_Field_Name == 'COMP_SKU'" class="uiControlDiv isReadOnlyCell">
     <div class="dealCell">
-        <div class="vert-center" classesreqd [innerHTML]="getFormatedDim(in_DataItem)|sanitizeHtml"></div>
+        <div class="vert-center" classesreqd *ngIf="in_DataItem['TempCOMP_SKU'] != undefined && in_DataItem['TempCOMP_SKU']['20___0'] != undefined">
+            {{in_DataItem['TempCOMP_SKU']['20___0']}}
+        </div>
     </div>
 </div>
-<div *ngIf="in_Field_Name == 'EXPIRE_FLG'" [innerHTML]="uiBoolControlWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'WF_STG_CD'" style="height: 100% !important;" [innerHTML]="uiParentControlWrapper(in_DataItem)|sanitizeHtml"></div>
-<div *ngIf="in_Field_Name == 'PRD_BCKT'" [innerHTML]="uiProductDimControlWrapper(in_DataItem, 'kit')|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'PRD_BCKT_SUBKIT'" [innerHTML]="uiProductDimControlWrapper(in_DataItem, 'subkit')|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'TITLE'" style="height: 100% !important;" [innerHTML]="uiProductControlWrapper(in_DataItem)|sanitizeHtml"></div>
-<div *ngIf="in_Field_Name == 'DEAL_SOLD_TO_ID'" [innerHTML]="uiMultiselectArrayControlWrapper(in_DataItem, in_Field_Name)|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'PRIMARY_OR_SECONDARY'" [innerHTML]="uiPrimarySecondaryDimControlWrapper(in_DataItem)|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'KIT_REBATE_BUNDLE_DISCOUNT'" [innerHTML]="uiKitCalculatedValuesControlWrapper(in_DataItem, 'kit', 'rebateBundle')|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'SUBKIT_REBATE_BUNDLE_DISCOUNT'" [innerHTML]="uiKitCalculatedValuesControlWrapper(in_DataItem, 'subkit', 'rebateBundle')|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'BACKEND_REBATE'" [innerHTML]="uiControlBackEndRebateWrapper(in_DataItem)|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'TOTAL_DSCNT_PR_LN'" [innerHTML]="uiTotalDiscountPerLineControlWrapper(in_DataItem)|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE'" [innerHTML]="uiKitCalculatedValuesControlWrapper(in_DataItem, 'kit', 'sumTD')|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'SUBKIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE'" [innerHTML]="uiKitCalculatedValuesControlWrapper(in_DataItem, 'subkit', 'sumTD')|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'TOTAL_CR_DB_PERC'" [innerHTML]="uiCrDbPercWrapper(in_DataItem)|sanitizeHtml" class="dealCell"></div>
 <div *ngIf="in_Field_Name == 'CAP_INFO'" class="dealCell dealerCAPinfo">
     <div *ngIf="in_DataItem['ECAP_PRICE'] != undefined && in_DataItem['ECAP_PRICE'] != null">
         <div class="col-md-12">
@@ -79,15 +354,47 @@
                     </ng-template>
 
                     <!-- Cell Content -->
-                    <div class="rowHeight CAPYCS2CellContent " #popOver="ngbPopover" [ngbPopover]="popoverContent" placement="bottom" (click)="popOver.close()" >
+                    <div class="rowHeight CAPYCS2CellContent " #popOver="ngbPopover" [ngbPopover]="popoverContent" placement="bottom" (click)="popOver.close()">
                         <!-- CAP Info cell design -->
                         <div class="textRightAlign" [ngClass]="{'isHiddenCell': isHiddenCell(in_DataItem, fieldModifier),
-                                                                'isRequiredCell' : isRequiredCell(in_DataItem, fieldModifier),
-                                                                'isReadOnlyCell': isReadonlyCell(in_DataItem, fieldModifier),
-                                                                'isDirtyCell': isDirtyCell(in_DataItem, fieldModifier),
-                                                                'isErrorCell': isErrorCell(in_DataItem, fieldModifier),
-                                                                'isSavedCell': isSavedCell(in_DataItem, fieldModifier)}">
-                            <div [innerHTML]="uiMoneyDatesControlWrapper(in_DataItem, fieldModifier + YCS2modifier, fieldText, fieldModifier + '_END_DT', key) | sanitizeHtml"></div>
+                                                    'isRequiredCell' : isRequiredCell(in_DataItem, fieldModifier),
+                                                    'isReadOnlyCell': isReadonlyCell(in_DataItem, fieldModifier),
+                                                    'isDirtyCell': isDirtyCell(in_DataItem, fieldModifier),
+                                                    'isErrorCell': isErrorCell(in_DataItem, fieldModifier),
+                                                    'isSavedCell': isSavedCell(in_DataItem, fieldModifier)}">
+                            <!--<div [innerHTML]="uiMoneyDatesControlWrapper(in_DataItem, fieldModifier + YCS2modifier, fieldText, fieldModifier + '_END_DT', key) | sanitizeHtml"></div>-->
+                            <div>
+                                {{uiMoneyDatesControlWrapper(in_DataItem, fieldModifier + YCS2modifier, fieldText, fieldModifier + '_END_DT', key)}}
+                                <div *ngIf="fieldModifier === 'CAP' && fieldVal(in_DataItem, 'CAP', key) === 'No CAP'" class="uiControlDiv isSoftWarnCell capInfoWrapper">
+                                    <div class="capLineStyle">No CAP</div>
+                                    <div *ngIf="startVal(in_DataItem, fieldText, key) !== '' && startVal(in_DataItem, fieldText, key) !== '01/01/1900'">
+                                        <div>Availability:<span class="ng-binding">{{in_DataItem[fieldText][key]}}</span></div>
+                                    </div>
+                                </div>
+                                <div *ngIf="in_DataItem != undefined && in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" class="err-bit" kendoTooltip title="{{in_DataItem._behaviors.validMsg[in_Field_Name]}}"></div>
+                                <div *ngIf="checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msgClass'] == 'isSoftWarnCell' && checkingMsg(in_DataItem,  fieldModifier + YCS2modifier, fieldText, key)['msg'] != '' && fieldVal(in_DataItem, 'CAP', key) !== 'No CAP'" class="uiControlDiv msgClassStyles {{checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msgClass']}}" title="{{checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msg']}}">
+                                    <div>
+                                        <span *ngIf="fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key) !== '' && fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key).indexOf('-') > -1; else elseBlock" class="ng-binding boldFont" id="tdsCol">{{in_DataItem[ fieldModifier + YCS2modifier][key]}}</span>
+                                        <ng-template #elseBlock>
+                                            <span class="ng-binding boldFont">{{currencyCap(in_DataItem, fieldModifier + YCS2modifier, key)}}</span>
+                                        </ng-template>
+                                    </div>
+                                    <div>
+                                        <span class="ng-binding" id="tdsCol">{{in_DataItem[fieldText][key]}}</span> - <span class="ng-binding" id="tdsCol">{{ in_DataItem[fieldModifier + '_END_DT'][key] }}</span>
+                                    </div>
+                                </div>
+                                <div *ngIf="checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msgClass'] != 'isSoftWarnCell' && checkingMsg(in_DataItem,  fieldModifier + YCS2modifier, fieldText, key)['msg'] == '' && fieldVal(in_DataItem, 'CAP', key) !== 'No CAP'" class="uiControlDiv msgClassStyles {{checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msgClass']}} {{getClassNm(in_DataItem,  fieldModifier + YCS2modifier)}}">
+                                    <div>
+                                        <span *ngIf="fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key) !== '' && fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key).indexOf('-') > -1; else elseBlock" class="ng-binding boldFont" id="tdsCol">{{in_DataItem[ fieldModifier + YCS2modifier][key]}}</span>
+                                        <ng-template #elseBlock>
+                                            <span class="ng-binding boldFont">{{currencyCap(in_DataItem, fieldModifier + YCS2modifier, key)}}</span>
+                                        </ng-template>
+                                    </div>
+                                    <div *ngIf="in_DataItem[fieldText] && in_DataItem[fieldText][key]">
+                                        <span class="ng-binding" id="tdsCol">{{in_DataItem[fieldText][key]}}</span> - <span class="ng-binding" id="tdsCol">{{in_DataItem[fieldModifier + '_END_DT'][key]}}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -104,12 +411,44 @@
                     <div class="rowHeight CAPYCS2CellContent">
                         <!-- YCS2 Info cell design -->
                         <div class="textRightAlign" [ngClass]="{'isHiddenCell': isHiddenCell(in_DataItem, fieldModifier),
-                                                                'isRequiredCell' : isRequiredCell(in_DataItem, fieldModifier),
-                                                                'isReadOnlyCell': isReadonlyCell(in_DataItem, fieldModifier),
-                                                                'isDirtyCell': isDirtyCell(in_DataItem, fieldModifier),
-                                                                'isErrorCell': isErrorCell(in_DataItem, fieldModifier),
-                                                                'isSavedCell': isSavedCell(in_DataItem, fieldModifier)}">
-                            <div [innerHTML]="uiMoneyDatesControlWrapper(in_DataItem, fieldModifier + YCS2modifier, fieldText, fieldModifier + '_END_DT', key) | sanitizeHtml"></div>
+                                                    'isRequiredCell' : isRequiredCell(in_DataItem, fieldModifier),
+                                                    'isReadOnlyCell': isReadonlyCell(in_DataItem, fieldModifier),
+                                                    'isDirtyCell': isDirtyCell(in_DataItem, fieldModifier),
+                                                    'isErrorCell': isErrorCell(in_DataItem, fieldModifier),
+                                                    'isSavedCell': isSavedCell(in_DataItem, fieldModifier)}">
+                            <!--<div [innerHTML]="uiMoneyDatesControlWrapper(in_DataItem, fieldModifier + YCS2modifier, fieldText, fieldModifier + '_END_DT', key) | sanitizeHtml"></div>-->
+                            <div>
+                                {{uiMoneyDatesControlWrapper(in_DataItem, fieldModifier + YCS2modifier, fieldText, fieldModifier + '_END_DT', key)}}
+                                <div *ngIf="(fieldModifier + YCS2modifier) === 'YCS2_PRC_IRBT' && fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key) === 'No YCS2'" class="uiControlDiv isSoftWarnCell capInfoWrapper">
+                                    <div class="capLineStyle">No YCS2</div>
+                                    <div *ngIf="startVal(in_DataItem, fieldText, key) !== '' && startVal(in_DataItem, fieldText, key) !== '01/01/1900'">
+                                        Availability:<span class="ng-binding">{{in_DataItem[fieldText][key]}}</span>
+                                    </div>
+                                </div>
+                                <div *ngIf="in_DataItem != undefined && in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" class="err-bit" kendoTooltip title="{{in_DataItem._behaviors.validMsg[in_Field_Name]}}"></div>
+                                <div *ngIf="checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msgClass'] == 'isSoftWarnCell' && checkingMsg(in_DataItem,  fieldModifier + YCS2modifier, fieldText, key)['msg'] != '' && fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key) !== 'No YCS2'" class="uiControlDiv msgClassStyles {{checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msgClass']}}" title="{{checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msg']}}">
+                                    <div>
+                                        <span *ngIf="fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key) !== '' && fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key).indexOf('-') > -1; else elseBlock" class="ng-binding boldFont" id="tdsCol">{{in_DataItem[ fieldModifier + YCS2modifier][key]}}</span>
+                                        <ng-template #elseBlock>
+                                            <span class="ng-binding boldFont">{{currencyCap(in_DataItem, fieldModifier + YCS2modifier, key)}}</span>
+                                        </ng-template>
+                                    </div>
+                                    <div>
+                                        <span class="ng-binding" id="tdsCol">{{in_DataItem[fieldText][key]}}</span> - <span class="ng-binding" id="tdsCol">{{ in_DataItem[fieldModifier + '_END_DT'][key] }}</span>
+                                    </div>
+                                </div>
+                                <div *ngIf="checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msgClass'] != 'isSoftWarnCell' && checkingMsg(in_DataItem,  fieldModifier + YCS2modifier, fieldText, key)['msg'] == '' &&  fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key) !== 'No YCS2'" class="uiControlDiv msgClassStyles {{checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msgClass']}} {{getClassNm(in_DataItem,  fieldModifier + YCS2modifier)}}">
+                                    <div>
+                                        <span *ngIf="fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key) !== '' && fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key).indexOf('-') > -1; else elseBlock" class="ng-binding boldFont" id="tdsCol">{{in_DataItem[ fieldModifier + YCS2modifier][key]}}</span>
+                                        <ng-template #elseBlock>
+                                            <span class="ng-binding boldFont">{{currencyCap(in_DataItem, fieldModifier + YCS2modifier, key)}}</span>
+                                        </ng-template>
+                                    </div>
+                                    <div *ngIf="in_DataItem[fieldText] && in_DataItem[fieldText][key]">
+                                        <span class="ng-binding" id="tdsCol">{{in_DataItem[fieldText][key]}}</span> - <span class="ng-binding" id="tdsCol">{{in_DataItem[fieldModifier + '_END_DT'][key]}}</span>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -117,21 +456,67 @@
         </div>
     </div>
 </div>
-<div *ngIf="in_Field_Name == 'MISSING_CAP_COST_INFO'" [innerHTML]="getMissingCostCapIcon(in_DataItem)|sanitizeHtml" class="dealCell"></div>
-<div *ngIf="in_Field_Name == 'MEETCOMP_TEST_RESULT' || in_Field_Name == 'COST_TEST_RESULT'" [id]="in_Field_Name + '_' + in_DataItem['DC_ID']" class="dealCell">
-    <div [innerHTML]="getResultSingleIcon(in_DataItem, in_Field_Name)|sanitizeHtml" class="dealCell"></div>
+<div class="{{in_Field_Name}} dealCell" *ngIf="(in_Field_Name == 'ECAP_PRICE' && in_Deal_Type == 'ECAP') || in_Field_Name == 'KIT_ECAP' || in_Field_Name == 'SUBKIT_ECAP' || in_Field_Name == 'COMPETITIVE_PRICE' || in_Field_Name == 'CAP_KIT' || in_Field_Name == 'YCS2_KIT'"
+     [ngClass]="{'isReadOnlyCell': (isReadonlyCell(in_DataItem, in_Field_Name) || (in_Field_Name == 'COMPETITIVE_PRICE' || in_Field_Name == 'CAP_KIT')), 'isDirtyCell': isDirtyCell(in_DataItem,in_Field_Name), 'isErrorCell': isErrorCell(in_DataItem,in_Field_Name)}">
+    <div *ngIf="uiDimControlWrapper(in_DataItem, in_Field_Name)['dim'] === '20_____2' && uiDimControlWrapper(in_DataItem, in_Field_Name)['data'].HAS_SUBKIT === '0'; else bBlock" class="uiControlDiv isReadOnlyCell">
+        <div class="vert-center">No Sub KIT</div>
+    </div>
+    <ng-template #bBlock>
+        <div class="dealCell {{getClassNm(in_DataItem, in_Field_Name)}}">
+            <div *ngIf="(uiDimControlWrapper(in_DataItem, in_Field_Name)['dim'] == '20_____2' || uiDimControlWrapper(in_DataItem, in_Field_Name)['dim'] == '20_____1') && uiDimControlWrapper(in_DataItem, in_Field_Name)['field'] == 'ECAP_PRICE'; else cBlock">
+                <div *ngIf="uiDimControlWrapper(in_DataItem, in_Field_Name)['data']._behaviors != undefined && uiDimControlWrapper(in_DataItem, in_Field_Name)['data']._behaviors.isError != undefined && uiDimControlWrapper(in_DataItem, in_Field_Name)['data']._behaviors.isError[uiDimControlWrapper(in_DataItem, in_Field_Name)['field'] + '_____' + uiDimControlWrapper(in_DataItem, in_Field_Name)['dim']]" class="err-bit" kendoTooltip title="{{uiDimControlWrapper(in_DataItem, in_Field_Name)['data']._behaviors.validMsg[uiDimControlWrapper(in_DataItem, in_Field_Name)['field'] + '_____' + uiDimControlWrapper(in_DataItem, in_Field_Name)['dim']]}}"></div>
+            </div>
+            <ng-template #cBlock>
+                <div *ngIf="uiDimControlWrapper(in_DataItem, in_Field_Name)['data']._behaviors != undefined && uiDimControlWrapper(in_DataItem, in_Field_Name)['data']._behaviors.isError != undefined && uiDimControlWrapper(in_DataItem, in_Field_Name)['data']._behaviors.isError[uiDimControlWrapper(in_DataItem, in_Field_Name)['field']]" class="err-bit" kendoTooltip title="{{uiDimControlWrapper(in_DataItem, in_Field_Name)['data']._behaviors.validMsg[uiDimControlWrapper(in_DataItem, in_Field_Name)['field']]}}"></div>
+            </ng-template>
+
+
+            <div *ngIf="uiDimControlWrapper(in_DataItem, in_Field_Name)['data'][uiDimControlWrapper(in_DataItem, in_Field_Name)['field']] != undefined && uiDimControlWrapper(in_DataItem, in_Field_Name)['data'][uiDimControlWrapper(in_DataItem, in_Field_Name)['field']][uiDimControlWrapper(in_DataItem, in_Field_Name)['dim']] != undefined && uiDimControlWrapper(in_DataItem, in_Field_Name)['data'][uiDimControlWrapper(in_DataItem, in_Field_Name)['field']][uiDimControlWrapper(in_DataItem, in_Field_Name)['dim']] != null" class="ng-binding vert-center">{{uiDimControlWrapper(in_DataItem, in_Field_Name)['data'][uiDimControlWrapper(in_DataItem, in_Field_Name)['field']][uiDimControlWrapper(in_DataItem, in_Field_Name)['dim']]}}</div>
+        </div>
+    </ng-template>
 </div>
+<div *ngIf="in_Field_Name === 'tender_actions'">
+    <div id='cb_actn_{{in_DataItem.DC_ID}}' style="text-align:center">
+        <div *ngIf="in_DataItem['WF_STG_CD'] !== undefined && in_DataItem['WF_STG_CD'] !== null && in_DataItem['WF_STG_CD'] === 'no access'; else first" class='noaccess'>no access</div>
+        <ng-template #first>
+            <div *ngIf="!hasVertical(in_DataItem); else second" class='noaccess'>no vertical access</div>
+        </ng-template>
+        <ng-template #second>
+            <div *ngIf="in_DataItem._contractPublished !== undefined && in_DataItem._contractPublished === 0; else third" class='noaccess' style='text-align: center; width: 100%;' title='Deals have not been published from Folio.'>Folio <a href='/contract#/manager/{{in_DataItem._contractId}}' target='_blank'>{{in_DataItem._contractId}}</a><div class='non-action-gray' style='color: #aaaaaa;'>(<i>Not Actionable</i>)</div></div>
+        </ng-template>
+        <ng-template #third>
+            <div *ngIf="in_DataItem.WF_STG_CD == 'Cancelled'; else forth" class='action_style' is-editable='true' style='text-align: center; width: 100%;'>{{in_DataItem.WF_STG_CD}}<div class='non-action-gray' style='color: #aaaaaa;' title='This deal is cancelled.'>(<i class='action_style'>Not Actionable</i>)</div></div>
+        </ng-template>
+        <ng-template #forth>
+            <div *ngIf="getBidActions(in_DataItem)['bidActns'].length == 0; else fifth">
+                <div *ngIf="getBidActions(in_DataItem)['numActions'] == 0; else innerFirst" class='action_style' is-editable='true' style='text-align: center; width: 100%;'>{{stgFullTitleChar(in_DataItem)}}<div class='non-action-gray' style='color: #aaaaaa;' title='No Actions available.'>(<i class='action_style'>Not Actionable</i>)</div></div>
+                <ng-template #innerFirst>
+                    <div class='action_style' is-editable='true' style='text-align: center; width: 100%;'>Action</div>
+                </ng-template>
+            </div>
+        </ng-template>
+        <ng-template #fifth>
+            <div *ngIf="getBidActions(in_DataItem)['bidActns'].length == 1; else sixth" class='action_style' is-editable='true' style='text-align: center; width: 100%;'>{{in_DataItem.WF_STG_CD}}<div class='non-action-gray' style='color: #aaaaaa;' title='This deal is already marked as Won.'>(<i class='action_style'>Not Actionable</i>)</div></div>
+        </ng-template>
+        <ng-template #sixth>
+            <div is-editable='true' style='text-align: center; width: 100%;'>{{in_DataItem.WF_STG_CD}}</div>
+        </ng-template>
+    </div>
+</div>
+
+<!-------------------------------------------------------------------------------------------------------------------------------------->
+
 <div *ngIf="in_Field_Name != 'DC_ID' && in_Field_Name != 'ECAP_PRICE' && in_Field_Name !== 'CUST_MBR_SID' && in_Field_Name !== 'KIT_ECAP' && in_Field_Name !== 'SUBKIT_ECAP'
-                             && in_Field_Name != 'tools' && in_Field_Name != 'details' && in_Field_Name != 'PASSED_VALIDATION'
-                             && !in_Template.includes('gridUtils.uiControlWrapper') && !in_Template.includes('gridUtils.uiPositiveDimControlWrapper')
-                             && in_Field_Name !== 'TIER_NBR' && in_Field_Name !== 'COMP_SKU'
-     && !in_Template.includes('gridUtils.uiReadonlyControlWrapper') && !in_Template.includes('gridUtils.uiReadonlyFolioWrapper') && in_Field_Name !== 'TRKR_NBR' && in_Field_Name !== 'COMPETITIVE_PRICE'
-     && in_Field_Name != 'START_DT' && in_Field_Name != 'LAST_REDEAL_DT' && in_Field_Name !== 'END_DT' && in_Field_Name !== 'OEM_PLTFRM_LNCH_DT' && in_Field_Name !== 'OEM_PLTFRM_EOL_DT'
-     && in_Field_Name !== 'EXPIRE_FLG' && in_Field_Name !== 'WF_STG_CD' && in_Field_Name !== 'PRD_BCKT' && in_Field_Name !== 'PRD_BCKT_SUBKIT' && in_Field_Name !== 'TITLE'
-     && in_Field_Name !== 'DEAL_SOLD_TO_ID' && in_Field_Name !== 'PRIMARY_OR_SECONDARY' && in_Field_Name !== 'KIT_REBATE_BUNDLE_DISCOUNT'
-     && in_Field_Name !== 'SUBKIT_REBATE_BUNDLE_DISCOUNT' && in_Field_Name !== 'BACKEND_REBATE' && in_Field_Name !== 'TOTAL_DSCNT_PR_LN'
-     && in_Field_Name !== 'CAP_KIT' && in_Field_Name !== 'YCS2_KIT' && in_Field_Name !== 'KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE' && in_Field_Name !== 'SUBKIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE'
-     && in_Field_Name !== 'TOTAL_CR_DB_PERC' && in_Field_Name !== 'MEETCOMP_TEST_RESULT' && in_Field_Name !== 'COST_TEST_RESULT' && in_Field_Name !== 'CAP_INFO'
-     && in_Field_Name !== 'YCS2_INFO' && in_Field_Name !== 'MISSING_CAP_COST_INFO' && in_Field_Name !== 'tender_actions'" [innerHTML]="in_Template|sanitizeHtml"
-    class="uiControlDiv wrap readOnlyCell dealCell">
+                    && in_Field_Name != 'tools' && in_Field_Name != 'details' && in_Field_Name != 'PASSED_VALIDATION'
+                    && !in_Template.includes('gridUtils.uiControlWrapper') && !in_Template.includes('gridUtils.uiPositiveDimControlWrapper')
+                    && in_Field_Name !== 'TIER_NBR' && in_Field_Name !== 'COMP_SKU'
+        && !in_Template.includes('gridUtils.uiReadonlyControlWrapper') && !in_Template.includes('gridUtils.uiReadonlyFolioWrapper') && in_Field_Name !== 'TRKR_NBR' && in_Field_Name !== 'COMPETITIVE_PRICE'
+        && in_Field_Name != 'START_DT' && in_Field_Name != 'LAST_REDEAL_DT' && in_Field_Name !== 'END_DT' && in_Field_Name !== 'OEM_PLTFRM_LNCH_DT' && in_Field_Name !== 'OEM_PLTFRM_EOL_DT'
+        && in_Field_Name !== 'EXPIRE_FLG' && in_Field_Name !== 'WF_STG_CD' && in_Field_Name !== 'PRD_BCKT' && in_Field_Name !== 'PRD_BCKT_SUBKIT' && in_Field_Name !== 'TITLE'
+        && in_Field_Name !== 'DEAL_SOLD_TO_ID' && in_Field_Name !== 'PRIMARY_OR_SECONDARY' && in_Field_Name !== 'KIT_REBATE_BUNDLE_DISCOUNT'
+        && in_Field_Name !== 'SUBKIT_REBATE_BUNDLE_DISCOUNT' && in_Field_Name !== 'BACKEND_REBATE' && in_Field_Name !== 'TOTAL_DSCNT_PR_LN'
+        && in_Field_Name !== 'CAP_KIT' && in_Field_Name !== 'YCS2_KIT' && in_Field_Name !== 'KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE' && in_Field_Name !== 'SUBKIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE'
+        && in_Field_Name !== 'TOTAL_CR_DB_PERC' && in_Field_Name !== 'MEETCOMP_TEST_RESULT' && in_Field_Name !== 'COST_TEST_RESULT' && in_Field_Name !== 'CAP_INFO'
+        && in_Field_Name !== 'YCS2_INFO' && in_Field_Name !== 'MISSING_CAP_COST_INFO' && in_Field_Name !== 'tender_actions'" [innerHTML]="in_Template|sanitizeHtml"
+     class="uiControlDiv wrap readOnlyCell dealCell">
 </div>
