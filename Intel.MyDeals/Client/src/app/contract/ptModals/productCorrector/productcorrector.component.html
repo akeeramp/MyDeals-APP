@@ -22,7 +22,7 @@
                 </span>
             </div>
         </div>
-        <div class="prodCorrector modal-body">
+        <div class="prodCorrector modal-body" [ngClass]="{'allDoneModalBody': allDone}">
             <div class="row subHeaderMsg">
                 <div class="col" style="padding: 0;">
                     Please select option(s) below to move into the valid products box or use the <span class="skyblue">Product Selector</span>
@@ -368,7 +368,7 @@
 
             </div>
 
-            <div class="row alldonediv" *ngIf="allDone" style="background-color: white;margin-top:10px;">
+            <div class="row alldonediv" *ngIf="allDone" style="background-color: white; margin-top: 10px !important; margin: 0;">
                 <div class="col-md-2">
 
                 </div>
@@ -390,11 +390,11 @@
                 </div>
             </div>
         </div>
-        <div class="modal-footer" style="border:none">
+        <div class="modal-footer" style="border:none" *ngIf="!allDone">
             <div class="col-md-1 col-md-offset-5">
                 <img *ngIf="isLoading" src="/Images/loadingSmall.gif" alt="loader image"/>
             </div>
-            <div *ngIf="!allDone" class="col-md-6" style="margin-top: 10px;margin-bottom: 10px;">
+            <div class="col-md-6" style="margin-top: 10px;margin-bottom: 10px;">
                 <button class="btn btn-primary prdBtn" (click)="saveProducts()" style="float: right; margin-left: 5px;">Save and Close</button>
                 <button class="btn btn-default prdBtn" (click)="onNoClick()" style="margin-right:2px;float:right">Cancel</button>
             </div>

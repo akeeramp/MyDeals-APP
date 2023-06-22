@@ -659,9 +659,9 @@
 }
 
 .productCorrectParent .kendopcorbtn:hover {
-    border-color: #007bff;
+    border-color: #0071c5;
     color: #ffffff;
-    background-color: #007bff !important;
+    background-color: #0071c5 !important;
 }
 
 .productCorrectParent .PctreeViewNodes {
@@ -881,4 +881,8 @@ button.btn.btn-default.prdBtn.cancel-correctorbtn {
     padding-bottom: 160px !important;
     padding-right: 115px !important;
     padding-top: 63px !important;
+}
+
+.productCorrectParent .prodCorrector.modal-body.allDoneModalBody {
+    min-height: calc(90vh - 115px) !important;
 }

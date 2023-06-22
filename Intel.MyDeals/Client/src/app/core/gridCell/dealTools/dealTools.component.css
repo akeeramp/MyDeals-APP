@@ -397,11 +397,11 @@ textarea.textAreaDesigns {
     margin-bottom: 5px
 }
 
-#dealEditorTab .custom-deal-tools .k-button.supplier-changes {
+.custom-deal-tools .k-button.supplier-changes {
     background: #00AEEF !important
 }
 
-    #dealEditorTab .custom-deal-tools .k-button.supplier-changes:hover {
+    .custom-deal-tools .k-button.supplier-changes:hover {
         background: #0071c5 !important
     }
 

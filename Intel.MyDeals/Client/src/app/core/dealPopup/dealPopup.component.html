@@ -242,7 +242,7 @@
                         <input  class="round-border-search"  (input)="onFilter($event)"  placeholder="search..." />
                     </div>
 
-                    <kendo-grid [data]="searchgridData" [resizable]="true" [group]="group" style="height:{{searchHeight}}px"
+                    <kendo-grid [data]="searchgridData" [resizable]="true" [group]="group" [height]="searchHeight"
                                 [sort]="searchstate.sort" [sortable]="true" class="micro-grid" (dataStateChange)="dataSearchStateChange($event)">
 
                         <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="75" field="key" title="Property">
