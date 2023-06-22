@@ -340,13 +340,14 @@ export class dealEditorCellTemplateComponent {
         return false;
     }
     key(passedData, field) {
-        if (field == 'TIER_NBR') return Object.keys(passedData.TIER_NBR);
-        else if (field == 'TOTAL_DSCNT_PR_LN') return Object.keys(passedData["QTY"]).sort();
-        else if (field == 'PRIMARY_OR_SECONDARY') return Object.keys(passedData["ECAP_PRICE"]).sort();
-        else if (field == 'TRKR_NBR') return Object.keys(passedData["TRKR_NBR"]).sort();
-        else if (field == 'DENSITY_BAND') return Object.keys(passedData["DENSITY_BAND"]);
-        else if (field == 'DENSITY_RATE') return Object.keys(passedData["DENSITY_RATE"]);
-        else if (typeof passedData[field] == 'object') return Object.keys(passedData[field]);
+        if (field == 'TIER_NBR' && passedData[field]) return Object.keys(passedData.TIER_NBR);
+        else if (field == 'TOTAL_DSCNT_PR_LN' && passedData[field] && typeof passedData[field] == 'object') return Object.keys(passedData["QTY"]).sort();
+        else if (field == 'PRIMARY_OR_SECONDARY' && passedData[field] && typeof passedData[field] == 'object') return Object.keys(passedData["ECAP_PRICE"]).sort();
+        else if (field == 'TRKR_NBR' && passedData[field] && typeof passedData[field] == 'object') return Object.keys(passedData["TRKR_NBR"]).sort();
+        else if (field == 'DENSITY_BAND' && passedData[field] && typeof passedData[field] == 'object') return Object.keys(passedData["DENSITY_BAND"]);
+        else if (field == 'DENSITY_RATE' && passedData[field] && typeof passedData[field] == 'object') return Object.keys(passedData["DENSITY_RATE"]);
+        else if (passedData[field] && typeof passedData[field] == 'object') return Object.keys(passedData[field]);
+        else return [];
     }
     isHiddenCell(passedData, field) {
         if (passedData._behaviors != undefined && passedData._behaviors.isHidden != undefined && passedData._behaviors.isHidden[field] != undefined)

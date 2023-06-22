@@ -1,7 +1,7 @@
 ﻿<div *ngIf="in_Field_Name === 'EXCLUDE_AUTOMATION' && !in_Is_Tender_Dashboard" id="ExcludeAuto">
     <div class="input-checkbox-rel">
-        <input type='checkbox' [(ngModel)]="in_DataItem.isExclSel" />
-        <label title="Exclude from Price Approval Rules"></label>
+        <input id="exclAuto" type='checkbox' [(ngModel)]="in_DataItem.isExclSel" />
+        <label for="exclAuto" title="Exclude from Price Approval Rules"></label>
     </div>
 </div>
 <div *ngIf="in_Field_Name === 'tools'" class="dealCell">
@@ -52,7 +52,7 @@
     </div>
 </div>
 <div *ngIf="in_Field_Name == 'CUST_MBR_SID'" class="dealCell">
-    <div class="err-bit" kendoTooltip *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" title="' + in_DataItem._behaviors.validMsg[field] + '"></div>
+    <div class="err-bit" kendoTooltip *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" title="{{in_DataItem._behaviors.validMsg[in_Field_Name]}}"></div>
     <div class="uiControlDiv isReadOnlyCell">
         <div class="ng-binding vert-center" *ngIf="(in_DataItem['CUST_ACCNT_DIV'] === undefined || in_DataItem['CUST_ACCNT_DIV'] === '') &&
         (in_DataItem.Customer != undefined && in_DataItem.Customer != null && in_DataItem.Customer != '') &&
@@ -199,9 +199,9 @@
         </div>
     </div>
 </div>
-<div *ngIf="in_Field_Name == 'MEETCOMP_TEST_RESULT' || in_Field_Name == 'COST_TEST_RESULT'" [id]="in_Field_Name + '_' + in_DataItem['DC_ID']" class="dealCell">
+<div *ngIf="in_Field_Name == 'MEETCOMP_TEST_RESULT' || in_Field_Name == 'COST_TEST_RESULT'" id="in_Field_Name + '_' + in_DataItem['DC_ID']" class="dealCell">
     <div class="dealCell">
-        <div *ngIf="in_Field_Name == 'MEETCOMP_TEST_RESULT' || in_Field_Name == 'COST_TEST_RESULT'" [id]="in_Field_Name + '_' + in_DataItem['DC_ID']" class="dealCell">
+        <div *ngIf="in_Field_Name == 'MEETCOMP_TEST_RESULT' || in_Field_Name == 'COST_TEST_RESULT'" id="in_Field_Name + '_' + in_DataItem['DC_ID']" class="dealCell">
             <div class="dealCell">
                 <div *ngIf="in_Field_Name === 'MEETCOMP_TEST_RESULT'" class="text-center uiControlDiv isReadOnlyCell cursorStyle">
                     <div class="vert-center"><i class="iConFont {{getResultSingleIconNm(in_DataItem[in_Field_Name])}}" title="{{getResultSingleIconNm(in_DataItem[in_Field_Name]) == 'intelicon-help-outlined' ? 'Not Run Yet' : in_DataItem[in_Field_Name]}}"></i></div>
@@ -262,11 +262,11 @@
     </div>
 </div>
 <div *ngIf="in_Field_Name == 'TRKR_NBR'" class="dealCell">
-    <div *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name] != undefined" class="err-bit" kendoTooltip title="' + in_DataItem._behaviors.validMsg[field] + '"></div>
+    <div *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name] != undefined" class="err-bit" kendoTooltip title="{{in_DataItem._behaviors.validMsg[in_Field_Name]}}"></div>
     <div class="uiControlDiv trackingNumParent tracker-number-class {{getClassNm(in_DataItem, in_Field_Name)}}">
         <div class="vert-center">
-            <div *ngIf="in_DataItem[in_Field_Name]['20_____2'] != null && in_DataItem[in_Field_Name]['20_____2'] != undefined" class="ng-binding">{{in_DataItem[in_Field_Name]['20_____2']}}</div>
-            <div *ngIf="in_DataItem[in_Field_Name]['20_____1'] != null && in_DataItem[in_Field_Name]['20_____1'] != undefined" class="ng-binding">{{in_DataItem[in_Field_Name]['20_____1']}}</div>
+            <div *ngIf=" in_DataItem[in_Field_Name] && in_DataItem[in_Field_Name]['20_____2'] != undefined && in_DataItem[in_Field_Name]['20_____2'] != null " class="ng-binding">{{in_DataItem[in_Field_Name]['20_____2']}}</div>
+            <div *ngIf=" in_DataItem[in_Field_Name] && in_DataItem[in_Field_Name]['20_____1'] != undefined && in_DataItem[in_Field_Name]['20_____1'] != null" class="ng-binding">{{in_DataItem[in_Field_Name]['20_____1']}}</div>
             <div *ngFor="let item of key(in_DataItem, in_Field_Name)">
                 <div *ngIf="in_DataItem[in_Field_Name].hasOwnProperty(item) && item.indexOf('___')>= 0 && item.indexOf('_____') < 0 && in_DataItem[in_Field_Name][item] != undefined && in_DataItem[in_Field_Name][item] != null" class="ng-binding vert-center">{{in_DataItem[in_Field_Name][item]}}</div>
             </div>
@@ -325,8 +325,8 @@
         </div>
     </div>
     <div *ngIf="!checkIndex(in_DataItem, in_Field_Name)" class="dealCell {{getClassNm(in_DataItem, in_Field_Name)}}">
-        <div class="err-bit" kendoTooltip title="{{in_DataItem._behaviors.validMsg[in_Field_Name]}}"></div>
-        <div class="ng-binding vert-center">{{in_DataItem[in_Field_Name]['20___0']}}</div>
+        <div *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" class="err-bit" kendoTooltip title="{{in_DataItem._behaviors.validMsg[in_Field_Name]}}"></div>
+        <div *ngIf="in_DataItem[in_Field_Name] && in_DataItem[in_Field_Name]['20___0'] != undefined && in_DataItem[in_Field_Name]['20___0'] != null" class="ng-binding vert-center">{{in_DataItem[in_Field_Name]['20___0']}}</div>
     </div>
 </div>
 <div *ngIf="in_Field_Name == 'COMP_SKU'" class="uiControlDiv isReadOnlyCell">
