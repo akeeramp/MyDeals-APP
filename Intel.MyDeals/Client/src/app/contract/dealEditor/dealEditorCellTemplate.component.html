@@ -51,7 +51,7 @@
         </div>
     </div>
 </div>
-<div *ngIf="in_Field_Name == 'CUST_MBR_SID'" class="dealCell">
+<div *ngIf="in_Field_Name == 'CUST_MBR_SID' || in_Field_Name == 'CUST_NM'" class="dealCell">
     <div class="err-bit" kendoTooltip *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" title="{{in_DataItem._behaviors.validMsg[in_Field_Name]}}"></div>
     <div class="uiControlDiv isReadOnlyCell">
         <div class="ng-binding vert-center" *ngIf="(in_DataItem['CUST_ACCNT_DIV'] === undefined || in_DataItem['CUST_ACCNT_DIV'] === '') &&
@@ -510,7 +510,7 @@
                     && in_Field_Name != 'tools' && in_Field_Name != 'details' && in_Field_Name != 'PASSED_VALIDATION'
                     && !in_Template.includes('gridUtils.uiControlWrapper') && !in_Template.includes('gridUtils.uiPositiveDimControlWrapper')
                     && in_Field_Name !== 'TIER_NBR' && in_Field_Name !== 'COMP_SKU'
-        && !in_Template.includes('gridUtils.uiReadonlyControlWrapper') && !in_Template.includes('gridUtils.uiReadonlyFolioWrapper') && in_Field_Name !== 'TRKR_NBR' && in_Field_Name !== 'COMPETITIVE_PRICE'
+        && !in_Template.includes('gridUtils.uiReadonlyControlWrapper') && !in_Template.includes('gridUtils.uiReadonlyFolioWrapper') && in_Field_Name != 'CUST_NM' && in_Field_Name !== 'TRKR_NBR' && in_Field_Name !== 'COMPETITIVE_PRICE'
         && in_Field_Name != 'START_DT' && in_Field_Name != 'LAST_REDEAL_DT' && in_Field_Name !== 'END_DT' && in_Field_Name !== 'OEM_PLTFRM_LNCH_DT' && in_Field_Name !== 'OEM_PLTFRM_EOL_DT'
         && in_Field_Name !== 'EXPIRE_FLG' && in_Field_Name !== 'WF_STG_CD' && in_Field_Name !== 'PRD_BCKT' && in_Field_Name !== 'PRD_BCKT_SUBKIT' && in_Field_Name !== 'TITLE'
         && in_Field_Name !== 'DEAL_SOLD_TO_ID' && in_Field_Name !== 'PRIMARY_OR_SECONDARY' && in_Field_Name !== 'KIT_REBATE_BUNDLE_DISCOUNT'
