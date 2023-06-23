@@ -118,6 +118,6 @@ kendo-multiselect.border_bottom_c {
 }
 
 .border_box_fix {
-    box-shadow: 2px 2px 7px #000 !important;
+    box-shadow: 4px 4px 4px 0px #000 !important;
     padding-right: 3px !important;
 }

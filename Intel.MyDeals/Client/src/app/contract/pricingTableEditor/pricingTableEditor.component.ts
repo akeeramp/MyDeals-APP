@@ -1718,7 +1718,7 @@ export class pricingTableEditorComponent {
         this.isLoading=true;    
         this.setBusy("Updating Products", "Please wait while processing.", "info", true);
         const dialogRef = this.dialog.open(ProductCorrectorComponent, {
-            height: '92vh',
+            height: 'auto',
             maxWidth: "90vw",
             width: '6500px',
             data: data, 

@@ -548,7 +548,7 @@
     padding-top: 2px;
     padding-bottom: 0;
     min-height: calc(90vh - 167px);
-    max-height: calc(90vh - 160px);
+    max-height: calc(90vh - 135px);
 }
 
 
@@ -878,11 +878,11 @@ button.btn.btn-default.prdBtn.cancel-correctorbtn {
 
 .col-md-8.product-correct-done {
     text-align: center !important;
-    padding-bottom: 160px !important;
+    padding-bottom: 90px !important;
     padding-right: 115px !important;
     padding-top: 63px !important;
 }
 
 .productCorrectParent .prodCorrector.modal-body.allDoneModalBody {
-    min-height: calc(90vh - 115px) !important;
+    min-height: calc(90vh - 105px) !important;
 }
