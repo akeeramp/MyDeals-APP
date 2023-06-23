@@ -1,59 +1,59 @@
 ﻿﻿.meetCompLoading .ss-loading-panel.ss-Info {
-    height: auto !important;
+  height: auto !important;
 }
 
 h2.headMeetComps {
-    font-size: 26px !important;
-    margin-top: 15px !important;
+  font-size: 26px !important;
+  margin-top: 15px !important;
 }
 
 .alterMeetComp .alert.alert-danger {
-    border-top-width: 3px;
-    border-color: #d73925;
-    padding: 15px !important;
+  border-top-width: 3px;
+  border-color: #d73925;
+  padding: 15px !important;
 }
 
 .optMeetComp.errorCode {
-    border: 1px solid red !important;
+  border: 1px solid red !important;
 }
 
 .optMeetComp span.k-dropdown-wrap {
-    font-size: 12px !important;
-    border-radius: unset !important;
+  font-size: 12px !important;
+  border-radius: unset !important;
 }
 
 .optMultiSelectMeetComp .k-multiselect-wrap.k-floatwrap {
-    border-top-color: #0071c5 !important;
-    border-bottom-color: #0071c5 !important;
-    border-radius: unset !important;
-    height: fit-content;
+  border-top-color: #0071c5 !important;
+  border-bottom-color: #0071c5 !important;
+  border-radius: unset !important;
+  height: fit-content;
 }
 
 .optMultiSelectMeetComp.k-multiselect .k-multiselect-wrap li.k-button {
-    border-radius: 1.071em;
-    margin: 3px 0 3px 3px;
-    color: #444;
-    border-color: #fafafa;
-    background-color: #fafafa;
-    font-size: small;
+  border-radius: 1.071em;
+  margin: 3px 0 3px 3px;
+  color: #444;
+  border-color: #fafafa;
+  background-color: #fafafa;
+  font-size: small;
 }
 
 .MeetCompGridsAll .k-switch-off .k-switch-container {
-    border-color: #b1babf !important;
-    background-color: #b1babf !important;
+  border-color: #b1babf !important;
+  background-color: #b1babf !important;
 }
 
 .MeetCompGridsAll .k-switch-off .k-switch-handle {
-    background-color: white !important;
+  background-color: white !important;
 }
 
 .MeetCompGridsAll .k-switch-on .k-switch-container {
-    border-color: #0071c5 !important;
-    background-color: #0071c5 !important;
+  border-color: #0071c5 !important;
+  background-color: #0071c5 !important;
 }
 
 .MeetCompGridsAll span.k-column-title {
-    white-space: nowrap !important;
+  white-space: nowrap !important;
 }
 
 kendo-grid.pro-meetComp.k-widget.k-grid table tr th span.k-cell-inner .k-link {
@@ -69,9 +69,7 @@ kendo-grid.pro-meetComp.k-widget.k-grid table tr th span.k-cell-inner .k-link {
   font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
-kendo-grid.pro-meetComp.k-widget.k-grid
-  kendo-grid-group-panel
-  .k-indicator-container {
+kendo-grid.pro-meetComp.k-widget.k-grid kendo-grid-group-panel .k-indicator-container {
   background-color: #fff;
   color: #00aeef;
 }
@@ -89,65 +87,65 @@ kendo-grid.pro-meetComp.k-widget.k-grid
 }
 
 #meetCompFileUpd .k-file-name {
-    font-weight: normal !important;
-    font-size: 15px !important;
-    font-family: 'Intel Clear' !important;
-    color: #444 !important;
+  font-weight: normal !important;
+  font-size: 15px !important;
+  font-family: 'Intel Clear' !important;
+  color: #444 !important;
 }
 
 #saveImportBtn.btn[disabled] {
-    background-color: #edeff0 !important;
-    color: #b1babf !important;
-    border-color: #b1babf !important;
-    cursor: not-allowed !important;
-    pointer-events: all !important;
+  background-color: #edeff0 !important;
+  color: #b1babf !important;
+  border-color: #b1babf !important;
+  cursor: not-allowed !important;
+  pointer-events: all !important;
 }
 
 #saveImportBtn.btn[disabled]:hover {
-    background-color: #edeff0 !important;
-    color: #b1babf !important;
-    border-color: #b1babf !important;
-    cursor: not-allowed !important;
-    pointer-events: all !important;
+  background-color: #edeff0 !important;
+  color: #b1babf !important;
+  border-color: #b1babf !important;
+  cursor: not-allowed !important;
+  pointer-events: all !important;
 }
 
 button#saveImportBtn.saveimported-databtn:hover {
-    background-color: #367fa9 !important;
-    border-color: #00aeef !important;
+  background-color: #367fa9 !important;
+  border-color: #00aeef !important;
 }
 
 #saveImportBtn {
-    color: #fff !important;
-    background-color: #3c8dbc !important;
+  color: #fff !important;
+  background-color: #3c8dbc !important;
 }
 
 #meetCompModal .modal-footer {
-    bottom: -59px;
-    width: 100%;
-    background: #E7E7E8;
-    height: 60px;
-    float: left;
-    border: 0.5px solid #003c71;
+  bottom: -59px;
+  width: 100%;
+  background: #E7E7E8;
+  height: 60px;
+  float: left;
+  border: 0.5px solid #003c71;
 }
 
 #modalBodyDivBulkUpdateMeetComp .row {
-    margin-left: -5px;
-    width: 733px;
+  margin-left: -5px;
+  width: 733px;
 }
 
 .notes {
   font-size: 14px;
   padding: 0;
-  
+
 }
 
 .redboldBulkUpdateMeetComp {
-    color: red;
-    font-weight: bold;
+  color: red;
+  font-weight: bold;
 }
 
 #modalTitleBulkUpdateMeetComp {
-    float: left;
+  float: left;
 }
 
 #meetCompModal .modal-body {
@@ -198,8 +196,7 @@ button#saveImportBtn.saveimported-databtn:hover {
   visibility: hidden;
 }
 
-#meetCompFileUpd
-  kendo-upload-action-buttons.k-actions.k-actions-end.ng-star-inserted {
+#meetCompFileUpd kendo-upload-action-buttons.k-actions.k-actions-end.ng-star-inserted {
   height: 0;
 }
 
@@ -220,12 +217,12 @@ button#saveImportBtn.saveimported-databtn:hover {
 }
 */
 #btnClose.bulk-close-icon {
-    float: right !important;
-    margin-top: 0px !important;
-    background: transparent;
-    padding: 3px !important;
-    font-size: 22px !important;
-    cursor: pointer !important;
+  float: right !important;
+  margin-top: 0px !important;
+  background: transparent;
+  padding: 3px !important;
+  font-size: 22px !important;
+  cursor: pointer !important;
 }
 
 .kendo-alrt-btn {
@@ -239,8 +236,8 @@ button#saveImportBtn.saveimported-databtn:hover {
   padding: 0 !important;
   position: relative;
   margin-top: -150px;
-  border-radius:0px !important;
-  overflow:hidden !important;
+  border-radius: 0px !important;
+  overflow: hidden !important;
   margin-right: 30px !important;
 }
 
@@ -275,11 +272,11 @@ button#saveImportBtn.saveimported-databtn:hover {
 }
 
 #confirmationMsg {
-    width: 400px;
-    white-space: normal;
-    align-items: center;
-    left: 776px;
-    top: 85px;
+  width: 400px;
+  white-space: normal;
+  align-items: center;
+  left: 776px;
+  top: 85px;
 }
 
 #meetCompExcel th {
@@ -301,140 +298,143 @@ button#saveImportBtn.saveimported-databtn:hover {
   border-top-color: #d73925 !important;
 }
 
-kendo-popup
-  kendo-grid-columnmenu-container
-  kendo-grid-columnmenu-sort
-  kendo-grid-columnmenu-item
-  .k-columnmenu-item.k-state-selected {
+kendo-popup kendo-grid-columnmenu-container kendo-grid-columnmenu-sort kendo-grid-columnmenu-item .k-columnmenu-item.k-state-selected {
   background-color: #0071c5 !important;
   color: #fff !important;
   border-color: #0071c5 !important;
 }
 
- #meetCompModal .custom-header{ 
-    display: flex;
-    flex-shrink: 0;
-    align-items: center;
-    justify-content: space-between;
-    padding: 10px;
+#meetCompModal .custom-header {
+  display: flex;
+  flex-shrink: 0;
+  align-items: center;
+  justify-content: space-between;
+  padding: 10px;
 }
 
-#meetCompurlLink a{
+#meetCompurlLink a {
   color: #0071c5;
 }
 
 kendo-dialog-actions.bulky-btn-style.k-dialog-buttongroup.k-actions.k-actions-stretched {
-    gap: 0;
-    padding: 0;
-    border-radius: 0;
+  gap: 0;
+  padding: 0;
+  border-radius: 0;
 }
 
 kendo-dialog-actions.bulky-btn-style.k-dialog-buttongroup.k-actions.k-actions-stretched .k-button {
-    color: #ffffff;
-    padding: 1.5em 0;
-    font-size: 15px;
-    font-weight: 500;
-    font-family: 'Intel Clear';
+  color: #ffffff;
+  padding: 1.5em 0;
+  font-size: 15px;
+  font-weight: 500;
+  font-family: 'Intel Clear';
 }
 
 button.bulky-ok-btn.k-button {
-    background-color: #00aeef !important;
+  background-color: #00aeef !important;
 }
 
 button.bulky-ok-btn.k-button:hover {
-    background: #00aeef !important;
+  background: #00aeef !important;
 }
 
 button.bulky-cancel-btn.k-button {
-    background: #0071c5 !important;
+  background: #0071c5 !important;
 }
 
 button.bulky-cancel-btn.k-button:hover {
-    background: #00aeef !important;
+  background: #00aeef !important;
 }
 
 #confirmationMsg .k-content.k-window-content.k-dialog-content {
-    padding: 2.4em !important;
+  padding: 2.4em !important;
 }
 
 #confirmationMsg .bulky-paragraph {
-    font-size: 15px;
-    font-family: 'Intel Clear';
-    color: #444444;
-    margin-bottom: 0 !important;
-    min-width: 350px;
+  font-size: 15px;
+  font-family: 'Intel Clear';
+  color: #444444;
+  margin-bottom: 0 !important;
+  min-width: 350px;
 }
 
 #meetCompAlert .k-widget.k-window.k-dialog,
 #confirmationMsg .k-widget.k-window.k-dialog {
-    width: auto !important;
+  width: auto !important;
 }
 
 .text-dwnlod-style-bulkupload {
-    color: #0071c5 !important;
-    text-decoration: none !important;
-    margin-left: 0px !important;
-    margin-left:5px !important
+  color: #0071c5 !important;
+  text-decoration: none !important;
+  margin-left: 0px !important;
+  margin-left: 5px !important
 }
 
 .text-dwnlod-style-bulkupload:hover {
-    color: #004579 !important;
-    text-decoration: underline !important
+  color: #004579 !important;
+  text-decoration: underline !important
 }
 
 #meetCompAlert.k-dialog-wrapper .k-dialog {
-    position: relative !important;
-    border-bottom: 0px !important;
-    border-left: 0px !important;
-    border-right: 0px !important;
-    border-radius: 0px !important;
-    min-width: 265px !important;
-    text-align: center !important;
+  position: relative !important;
+  border-bottom: 0px !important;
+  border-left: 0px !important;
+  border-right: 0px !important;
+  border-radius: 0px !important;
+  min-width: 265px !important;
+  text-align: center !important;
 }
 
-.notes-meetcomp{
-    margin-left: 5px !important
+.notes-meetcomp {
+  margin-left: 5px !important
 }
 
 .meetcomp-upload.k-upload .k-progressbar {
-    position: absolute !important;
-    bottom: 0.5rem !important;
-    width: calc(100% - 0rem) !important;
-    margin-left: -16px !important;
+  position: absolute !important;
+  bottom: 0.5rem !important;
+  width: calc(100% - 0rem) !important;
+  margin-left: -16px !important;
 }
 
 kendo-upload#meetCompFileUpd.meetcomp-upload {
-    overflow: hidden !important;
-    margin-left:5px !important
+  overflow: hidden !important;
+  margin-left: 5px !important
 }
 
 #confirmationMsg.k-dialog-wrapper .k-dialog {
-    border-bottom: 0px !important;
-    border-left: 0px !important;
-    border-right: 0px !important;
-    text-align:left !important;
-    border-radius:0 !important
+  border-bottom: 0px !important;
+  border-left: 0px !important;
+  border-right: 0px !important;
+  text-align: left !important;
+  border-radius: 0 !important
 }
 
 kendo-splitter.admin-meetcomp-splitter.k-widget.k-splitter.k-splitter-flex.k-splitter-vertical {
-    border-color: #dee2e6 !important;
-    color: #212529 !important;
-    background-color: #ffffff !important;
-    width: 100% !important;
-    margin: 10px 0 !important;
-    overflow: scroll !important;
-    border-left: 0px !important;
-    position: relative !important;
+  border-color: #dee2e6 !important;
+  color: #212529 !important;
+  background-color: #ffffff !important;
+  width: 100% !important;
+  margin: 10px 0 !important;
+  overflow: scroll !important;
+  border-left: 0px !important;
+  position: relative !important;
 }
 
 .meet-comp-filterheight ul {
-    list-style-type: none !important;
-    padding-left: 0 !important;
-    padding-right: 12px !important;
-    position: relative !important;
-    overflow: auto !important;
-    overflow-x: hidden !important;
-    white-space: nowrap !important;
-    /*max-height: 150px !important;*/
-    margin-bottom: 5px !important;
+  list-style-type: none !important;
+  padding-left: 0 !important;
+  padding-right: 12px !important;
+  position: relative !important;
+  overflow: auto !important;
+  overflow-x: hidden !important;
+  white-space: nowrap !important;
+  /*max-height: 150px !important;*/
+  margin-bottom: 5px !important;
+}
+
+/* Fix for overflow filter menus */
+kendo-popup:has(kendo-grid-columnmenu-chooser div.k-columnmenu-item[aria-expanded="true"]),
+kendo-popup:has(kendo-grid-columnmenu-filter div.k-columnmenu-item[aria-expanded="true"]) {
+  top: unset !important;
+	bottom: 10px !important;
 }
