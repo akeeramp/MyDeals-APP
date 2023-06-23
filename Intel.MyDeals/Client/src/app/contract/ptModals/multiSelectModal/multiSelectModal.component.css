@@ -87,9 +87,9 @@ button.btn.btn-warning.cancel-mrkt-seg {
         color: #0071c5 !important
     }
 
-.modal-body.all-wheat {
+/*.modal-body.all-wheat {
     padding: 0 !important
-}
+}*/
 
 kendo-multiselect.border_bottom_c {
     border-bottom: 2px solid #0071c5 !important;
