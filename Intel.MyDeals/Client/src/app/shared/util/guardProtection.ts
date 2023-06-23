@@ -29,26 +29,29 @@ export class authGuard implements CanActivate {
 
         role = bit.length > 0 ? (role + '-' + bit) : role;
         role = prefix.length > 0 ? prefix + ' ' + role : role;
-        
-        if (guardConfig.guardSettings[route.routeConfig.path][role] == undefined) {
+
+        let path = route.routeConfig.path;
+        path = route.queryParams.manageType && route.queryParams.manageType == 'pctDiv' ? path + `?loadtype=${route.queryParams.loadtype}&manageType=${route.queryParams.manageType}` : path;
+
+        if (guardConfig.guardSettings[path][role] == undefined) {
             //checking for special conditions
             if (role.includes('T')) {
-                if (guardConfig.guardSettings[route.routeConfig.path][(<any>window).usrRole.toUpperCase() + '-T']) return true;
+                if (guardConfig.guardSettings[path][(<any>window).usrRole.toUpperCase() + '-T']) return true;
             }
             if (role.includes('D')) {
-                if (guardConfig.guardSettings[route.routeConfig.path][(<any>window).usrRole.toUpperCase() + '-D']) return true;
+                if (guardConfig.guardSettings[path][(<any>window).usrRole.toUpperCase() + '-D']) return true;
             }
             if (role.includes('B')) {
-                if (guardConfig.guardSettings[route.routeConfig.path][(<any>window).usrRole.toUpperCase() + '-B']) return true;
+                if (guardConfig.guardSettings[path][(<any>window).usrRole.toUpperCase() + '-B']) return true;
             }
             if (role.includes('Super')) {
-                if (guardConfig.guardSettings[route.routeConfig.path][(<any>window).usrRole.toUpperCase() + '-Super']) return true;
+                if (guardConfig.guardSettings[path][(<any>window).usrRole.toUpperCase() + '-Super']) return true;
             }
             if (role.includes('Account')) {
-                if (guardConfig.guardSettings[route.routeConfig.path]['Account ' + (<any>window).usrRole.toUpperCase()]) return true;
+                if (guardConfig.guardSettings[path]['Account ' + (<any>window).usrRole.toUpperCase()]) return true;
             }
             else window.location.href = window.location.origin + '/Dashboard#/portal';
-        } else if (guardConfig.guardSettings[route.routeConfig.path][role] != undefined && guardConfig.guardSettings[route.routeConfig.path][role])
+        } else if (guardConfig.guardSettings[path][role] != undefined && guardConfig.guardSettings[path][role])
             return true;
         else
             window.location.href = window.location.origin + '/Dashboard#/portal';
