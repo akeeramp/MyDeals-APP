@@ -469,7 +469,7 @@ export class pricingTableEditorComponent {
         afterDocumentKeyDown: (event) => {
             this.afterDocumentKeyDown(event);
         },
-        licenseKey: "470b6-15eca-ea440-24021-aa526",
+        licenseKey: "ad331-b00d1-50514-e403f-15422",
     };
     private columns: Array<Handsontable.ColumnSettings> = [];
     private hotRegisterer = new HotTableRegisterer();

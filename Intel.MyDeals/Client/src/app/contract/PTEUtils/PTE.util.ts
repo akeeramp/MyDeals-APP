@@ -18,7 +18,7 @@ export class PTEUtil {
         firstDay: 1,
         showWeekNumber: true,
         numberOfMonths: 1,
-        licenseKey: '470b6-15eca-ea440-24021-aa526',
+        licenseKey: 'ad331-b00d1-50514-e403f-15422',
     };
    
     static generateHandsontableColumn(isTenderContract:any,
