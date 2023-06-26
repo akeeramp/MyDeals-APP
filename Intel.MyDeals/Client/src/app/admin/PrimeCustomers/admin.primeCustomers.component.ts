@@ -3,22 +3,14 @@ import { primeCustomerService } from "./admin.primeCustomers.service";
 import { Component, ViewChild } from "@angular/core";
 import { PrimeCust_Map } from "./admin.primeCustomers.model";
 import { ThemePalette } from "@angular/material/core";
-import {
-    GridDataResult,
-    DataStateChangeEvent,
-    PageSizeItem,
-} from "@progress/kendo-angular-grid";
-import {
-    process,
-    State,
-    distinct
-} from "@progress/kendo-data-query";
+import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { sortBy, uniq, pluck } from 'underscore';
 
 @Component({
-    selector: "admin-prime-customers",
-    templateUrl: "Client/src/app/admin/PrimeCustomers/admin.primeCustomers.component.html"
+    selector: 'admin-prime-customers',
+    templateUrl: 'Client/src/app/admin/PrimeCustomers/admin.primeCustomers.component.html',
 })
 export class adminPrimeCustomersComponent {
     constructor(private primeCustSvc: primeCustomerService, private loggerSvc: logger) { }
@@ -67,22 +59,10 @@ export class adminPrimeCustomersComponent {
         },
     };
     private pageSizes: PageSizeItem[] = [
-        {
-            text: "10",
-            value: 10
-        },
-        {
-            text: "25",
-            value: 25
-        },
-        {
-            text: "50",
-            value: 50
-        },
-        {
-            text: "100",
-            value: 100
-        }
+        { text: "10", value: 10 },
+        { text: "25", value: 25 },
+        { text: "50", value: 50 },
+        { text: "100", value: 100 }
     ];
 
     distinctPrimitive(fieldName: string): any {
@@ -241,8 +221,7 @@ export class adminPrimeCustomersComponent {
             this.isRplStsDdEditable = false;
             this.insertUpdateOperation(this.rowIndex, this.isNew, this.primeCust_map);
             this.isDialogVisible = false;
-        }
-        else {
+        } else {
             this.isDialogVisible = false;
         }
     }
@@ -256,12 +235,10 @@ export class adminPrimeCustomersComponent {
         this.isRplStsDdEditable = false;
     }
 
-
     IsValidCombination(model: any) {
         let retCond = false;
         const isPrimeIdexist = this.gridResult.filter(x => x.PRIM_CUST_ID === parseInt(model.PRIM_CUST_ID));
         
-
         this.gridResult.map(
             (x)=> {
                 const x_Prim_Cust_Nm = (x.PRIM_CUST_NM ? x.PRIM_CUST_NM.toLowerCase().trim() : '');
@@ -273,8 +250,7 @@ export class adminPrimeCustomersComponent {
                     if (!this.errorMsg.includes("Invalid Character identified in Unified Customer Name. Please remove it and Save."))
                         this.errorMsg.push("Invalid Character identified in Unified Customer Name. Please remove it and Save.");
                     retCond = true;
-                }
-                else if (isPrimeIdexist.length >= 1 && model.PRIM_SID !== x.PRIM_SID) {
+                } else if (isPrimeIdexist.length >= 1 && model.PRIM_SID !== x.PRIM_SID) {
                     if (x.PRIM_CUST_ID == model.PRIM_CUST_ID && x_Prim_Cust_Nm !== model_Cust_Nm && model_Cust_Nm != "" && model_Cust_Nm != null && x.IS_ACTV == true) {
                         if (!this.errorMsg.includes("Unified ID \"" + model.PRIM_CUST_ID + "\" is associated with \"" + x.PRIM_CUST_NM + "\" Unified Customer is active"))
                             this.errorMsg.push("Unified ID \"" + model.PRIM_CUST_ID + "\" is associated with \"" + x.PRIM_CUST_NM + "\" Unified Customer is active");
@@ -289,8 +265,7 @@ export class adminPrimeCustomersComponent {
                         if (!this.errorMsg.includes("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists"))
                             this.errorMsg.push("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists");
                         retCond = true;
-                    }
-                    else if (x.PRIM_CUST_ID == model.PRIM_CUST_ID && x_Prim_Cust_Nm == model_Cust_Nm && x.PRIM_LVL_ID != model.PRIM_LVL_ID && x.PRIM_CUST_CTRY == model.PRIM_CUST_CTRY && x.IS_ACTV) {
+                    } else if (x.PRIM_CUST_ID == model.PRIM_CUST_ID && x_Prim_Cust_Nm == model_Cust_Nm && x.PRIM_LVL_ID != model.PRIM_LVL_ID && x.PRIM_CUST_CTRY == model.PRIM_CUST_CTRY && x.IS_ACTV) {
                         if (!this.errorMsg.includes("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists in active status"))
                             this.errorMsg.push("This combination of Unified Id \"" + model.PRIM_CUST_ID + "\" , Unified Customer Name \"" + model.PRIM_CUST_NM + "\" and Unified Customer Country \"" + model.PRIM_CUST_CTRY + "\" already exists in active status");
                         retCond = true;
@@ -300,8 +275,7 @@ export class adminPrimeCustomersComponent {
                             this.errorMsg.push("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active");
                         retCond = true;
                     }
-                }
-                else if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && isPrimeIdexist.length < 1 && x.PRIM_SID !== model.PRIM_SID && model.PRIM_CUST_ID != null && model.PRIM_CUST_ID != "" && x.IS_ACTV) {
+                } else if (x.PRIM_CUST_ID !== model.PRIM_CUST_ID && x_Prim_Cust_Nm === model_Cust_Nm && isPrimeIdexist.length < 1 && x.PRIM_SID !== model.PRIM_SID && model.PRIM_CUST_ID != null && model.PRIM_CUST_ID != "" && x.IS_ACTV) {
                     if (!this.errorMsg.includes("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active"))
                             this.errorMsg.push("\"" + x.PRIM_CUST_NM + "\" Unified Customer Name is already associated with Unified ID \"" + x.PRIM_CUST_ID + "\" is active");
                     retCond = true;
@@ -316,8 +290,7 @@ export class adminPrimeCustomersComponent {
         if (model.PRIM_CUST_NM == null || model.PRIM_CUST_NM == '') {
             this.errorMsg.push("Please Provide Valid Unified Customer Name");
             retCond = true;
-        }
-        else if (model.PRIM_CUST_NM.length > 65) {
+        } else if (model.PRIM_CUST_NM.length > 65) {
             this.errorMsg.push("Unified Customer Name Length should not be greater than 65 characters");
             retCond = true;
         }
@@ -401,9 +374,7 @@ export class adminPrimeCustomersComponent {
                     this.primeCust_map = primeCust_map;
                     this.rowIndex = rowIndex;
                     this.errorMessage = "There may be a chance of deals associated with this combination.\n Are you sure want to deactivate this combination ?";
-                }
-                else {
-                    this.isUnifiedIdEditable = false;
+                } else { this.isUnifiedIdEditable = false;
                     this.isPrimCustNmEditable = false;
                     this.isPrimLvlIdEditable = false;
                     this.isPrimCustCtryEditable = false;
@@ -411,8 +382,7 @@ export class adminPrimeCustomersComponent {
                     this.insertUpdateOperation(rowIndex, isNew, primeCust_map);
                 }
                 sender.closeRow(rowIndex);
-            }
-            else {
+            } else {
                 this.isDialogVisible = true;
                 this.cancelConfirm = false;
             }
