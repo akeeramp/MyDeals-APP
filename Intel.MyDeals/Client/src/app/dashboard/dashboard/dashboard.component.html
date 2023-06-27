@@ -45,19 +45,16 @@
         <div class="row">
             <div id="height-grids" class="sum-fixes">
                 <gridster [options]="options" class="another-parent" id="parentID">
-                    <gridster-item [item]="item" *ngFor="let item of dashboard; let indx = index" class="attr-li-{{item.id}} few-grid-find">
+                    <gridster-item [item]="item" *ngFor="let item of dashboard; let indx = index" class="few-grid-find">
                         <div class="widgetFull">
                             <div class="row widgetHeader">
                                 <div class="col-md-10">
-                                    <span>{{item.name}}</span>
+                                    <span>{{ item.name }}</span>
                                 </div>
                                 <div class="col-md-2 widgetHeaderBtns">
                                     <a [hidden]="!item.canRefresh" class="btn-icons" (click)="refreshWidget(item)" title="Refresh Widget"><i class="intelicon-refresh"></i></a>
-                                    <a [hidden]="!item.canSetting" (click)="openWidgetSettings(indx)" class="btn-icons" title="Widget Settings"><i class="intelicon-settings-solid"></i></a>
-                                    <a (click)="removeItem($event, item)" (touchstart)="removeItem($event, item)" class="btn-icons" title="Remove widget">
-                                        <i class="intelicon-trash-outlined"></i>
-                                    </a>
-
+                                    <a [hidden]="!item.canSetting" class="btn-icons" (click)="openWidgetSettings(indx)" title="Widget Settings"><i class="intelicon-settings-solid"></i></a>
+                                    <a class="btn-icons" (click)="removeItem($event, item)" (touchstart)="removeItem($event, item)" title="Remove widget"> <i class="intelicon-trash-outlined"></i></a>
                                 </div>
                             </div>
                             <div class="row">
@@ -71,6 +68,7 @@
             </div>
         </div>
     </div>
+
     <div [hidden]="dashboard.length > 0">
         <p style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size:16px; margin-bottom:30px">No widgets are being shown.</p>
         <p style="position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-size:16px; margin-top:30px"><a style="cursor:pointer" class="add-widget-link" (click)="openPopUp()">Click to add a widget</a></p>

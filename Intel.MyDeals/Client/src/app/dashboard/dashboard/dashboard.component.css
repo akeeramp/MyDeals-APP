@@ -31,7 +31,7 @@ div.overFlowWidget>div.row {
 }
 
 .widgetFull {
-    height: 100% !important;
+    height: -webkit-fill-available;
     border-radius: 3px
 }
 
@@ -65,24 +65,6 @@ div.overFlowWidget>div.row {
 
 gridster {
     background: white !important
-}
-
-
-
-gridster-item.attr-li-6,
-gridster-item.attr-li-8,
-gridster-item.attr-li-9,
-gridster-item.attr-li-10 {
-    height: 255px !important;
-    min-height: 200px
-}
-
-gridster-item.attr-li-7 {
-    height: 570px !important
-}
-
-gridster-item.attr-li-7 .k-grid-table-wrap {
-    height: 435px
 }
 
 .sum-fixes {
@@ -165,11 +147,6 @@ gridster-item.attr-li-7 .k-grid-table-wrap {
     z-index: -1
 }
 
-gridster-item.attr-li-7 kendo-grid.k-widget.k-grid table thead tr th .k-link:hover {
-    background: transparent !important
-}
-
-
 @media screen and (max-height:650px) {
     .btn-ttl {
         font-size: 15px !important
@@ -182,49 +159,6 @@ gridster-item.attr-li-7 kendo-grid.k-widget.k-grid table thead tr th .k-link:hov
     .sum-fixes {
         height: 78vh
     }
-
-    gridster-item.attr-li-6,
-    gridster-item.attr-li-8,
-    gridster-item.attr-li-9,
-    gridster-item.attr-li-10 {
-        height: 221px !important;
-        min-height: 200px
-    }
-
-    gridster-item.attr-li-7 {
-        height: 470px !important
-    }
-
-    gridster-item.attr-li-7 .left-pane-widget .stgLnk {
-        font-size: 14px
-    }
-
-    gridster-item.attr-li-7 .left-pane-widget .stgLnk .badge {
-        font-size: 11px !important
-    }
-
-    gridster-item.attr-li-6 .first-component .fl.icon-parent i {
-        font-size: 30px !important;
-        width: 31px
-    }
-
-    gridster-item.attr-li-6 .text-detail {
-        margin-left: 40px
-    }
-
-    gridster-item.attr-li-6 .custom-padding {
-        padding: 15px 0 0 10px
-    }
-
-    gridster-item.attr-li-7 .left-pane-widget .stgLnkBox {
-        margin-top: 10px
-    }
-}
-
-@media screen and (max-height:600px) {
-    gridster-item.attr-li-7 {
-        height: 450px !important
-    }
 }
 
 @media screen and (max-height:550px) {
@@ -234,18 +168,6 @@ gridster-item.attr-li-7 kendo-grid.k-widget.k-grid table thead tr th .k-link:hov
 
     .sum-fixes {
         height: 75vh
-    }
-
-    gridster-item.attr-li-6,
-    gridster-item.attr-li-8,
-    gridster-item.attr-li-9,
-    gridster-item.attr-li-10 {
-        height: 204px !important;
-        min-height: 200px
-    }
-
-    gridster-item.attr-li-7 {
-        height: 427px !important
     }
 }
 
@@ -272,12 +194,12 @@ gridster-item.attr-li-7 kendo-grid.k-widget.k-grid table thead tr th .k-link:hov
     text-decoration: underline !important
 }
 
-gridster-item.attr-li-7 .k-grid-table-wrap contract-status-board-angular .k-grid-table-wrap {
-    height: auto !important;
-}
-
 .changedragcolor.k-grid .k-indicator-container {
     margin: -0.375rem 0 !important;
     padding: 0.375rem 0 !important;
     color: #00aeef !important;
+}
+
+app-dashboard-widget kendo-grid div.k-grid-aria-root {
+    height: calc(85vh - 150px);
 }

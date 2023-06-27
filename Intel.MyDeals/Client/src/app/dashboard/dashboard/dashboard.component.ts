@@ -1,21 +1,32 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DisplayGrid, GridsterConfig, GridsterItem, GridType, CompactType } from 'angular-gridster2';
 import { MatDialog } from '@angular/material/dialog';
+import { findWhere, isNull, isEmpty, isUndefined } from 'underscore';
+import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
+
 import { addWidgetComponent } from "../addWidget/addWidget.component";
 import { widgetSettingsComponent } from "../widgetSettings/widgetSettings.component";
+import { GlobalSearchResultsComponent } from "../../advanceSearch/globalSearchResults/globalSearchResults.component";
+
 import { configWidgets, configLayouts } from "../widget.config";
-import { findWhere, each } from 'underscore';
 import { MomentService } from "../../shared/moment/moment.service";
 import { contractStatusWidgetService } from '../contractStatusWidget.service';
-import { GlobalSearchResultsComponent } from "../../advanceSearch/globalSearchResults/globalSearchResults.component";
 import { userPreferencesService } from "../../shared/services/userPreferences.service";
 import { logger } from "../../shared/logger/logger";
-import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import { SecurityService } from "../../shared/services/security.service";
 
 interface Item {
     text: string;
     value: number;
+}
+
+export const DASHBOARD_CONSTANTS = {
+    CLASS_Z_INDEX_ZERO: 'z-index-zero',
+    CLASS_FEW_GRID_FIND: 'few-grid-find',
+    CLASS_SUM_FIXES: 'sum-fixes',
+    CLASS_SIM_FIXES_PLUS: 'sum-fixes-plus',
+    ID_HEIGHT_GRIDS: '#height-grids',
+    ID_GRID_PARENT: 'parentID'
 }
 
 @Component({
@@ -27,10 +38,10 @@ interface Item {
 })
 export class DashboardComponent implements OnInit {
     constructor(protected dialog: MatDialog,
-                protected cntrctWdgtSvc: contractStatusWidgetService,
-                protected usrPrfrncssvc: userPreferencesService,
-                protected loggerSvc: logger,
-                private securitySVC: SecurityService,
+                protected contractWidgetService: contractStatusWidgetService,
+                protected userPreferencesService: userPreferencesService,
+                protected loggerService: logger,
+                private securityService: SecurityService,
                 private momentService: MomentService) {}
     dashboard: GridsterItem[];
     resizeEvent: EventEmitter<GridsterItem> = new EventEmitter<GridsterItem>();
@@ -43,46 +54,21 @@ export class DashboardComponent implements OnInit {
     private searchText = "";
     private opType = "ALL";
     private windowOpened = false;
-    private windowTop = 130; windowLeft = 300; windowWidth = 950; windowHeight = 500; windowMinWidth = 100;
+    private windowTop = 130;
+    private windowLeft = 300;
+    private windowWidth = 950;
+    private windowHeight = 500;
+    private windowMinWidth = 100;
     private searchDialogVisible = false;
     private selectedDashboardId;
     private isLoading = false;
 
-    public custData: any;
-    public selectedCustNames: Item[];
+    public customerData: any;
+    public selectedCustomerNames: Item[];
     public selectedCustomerIds = [];
     public includeTenders = true;
     public savedWidgetSettings;
-    options: GridsterConfig = {
-        gridType: GridType.Fit,
-        allowMultiLayer: true,
-        compactType: CompactType.CompactLeftAndUp,
-        displayGrid: DisplayGrid.Always,
-        pushItems: false,
-        swap: true,
-        margin: 5,
-        maxCols: 20,
-        swapWhileDragging: false,
-        draggable: {
-            enabled: true,
-            stop: (e, ui, $widget) => {
-                this.saveWidgetPositions(ui, 'size');
-            }
-
-        },
-        resizable: {
-            enabled: true,
-            stop: (e, ui, $widget) => {
-                this.saveWidgetPositions(ui, 'position');
-            }
-
-        },
-        itemResizeCallback: (item) => {
-            // update DB with new size
-            // send the update to widgets
-            this.resizeEvent.emit(item);
-        }
-    }
+    options: GridsterConfig;
 
     public filterSettings: DropDownFilterSettings = {
         caseSensitive: false,
@@ -108,8 +94,7 @@ export class DashboardComponent implements OnInit {
     onDateChange(value, dateChanged) {
         if (dateChanged == "startDateChange") {
             window.localStorage.startDateValue = value;
-        }
-        else if (dateChanged == "endDateChange") {
+        } else if (dateChanged == "endDateChange") {
             window.localStorage.endDateValue = value;
         }
     }
@@ -155,22 +140,22 @@ export class DashboardComponent implements OnInit {
         });
     }
 
-
     refreshWidget(item: any) {
         //Refresh logic of gridstatusboard is migrated and handled here
         if (item.type === "contractstatus") {
-            this.cntrctWdgtSvc.isRefresh.next(true);
+            this.contractWidgetService.isRefresh.next(true);
         }
     }
+
     refreshAllWidgets() {
         this.refreshtoDashboardDefault();
         // Loop through all current (visible) widgets and if the widget has a canRefresh enabled, refresh it.
         for (let i = 0; i < this.dashboard.length; i++) {
-            if (this.dashboard[i]["canRefresh"] == true)
+            if (this.dashboard[i]["canRefresh"] == true) {
                 this.refreshWidget(this.dashboard[i]);
+            }
         }
     }
-
 
     refreshtoDashboardDefault() {
         window.localStorage.startDateValue = this.startDateValue;
@@ -179,9 +164,10 @@ export class DashboardComponent implements OnInit {
     }
 
     async getSavedWidgetSettings(key, useSavedWidgetSettings) {
-        let response:any = await this.usrPrfrncssvc.getActions("Dashboard", "Widgets").toPromise().catch((err) => {
-            this.loggerSvc.error("Unable to get Widget Data","Error",err);
+        let response: any = await this.userPreferencesService.getActions("Dashboard", "Widgets").toPromise().catch((err) => {
+            this.loggerService.error("Unable to get Widget Data","Error",err);
         });
+
         if (response && response.length > 0) {
             const savedWidgetSettingsForSpecifiedRole = findWhere(response, { PRFR_KEY: "1" });
             if (savedWidgetSettingsForSpecifiedRole) {
@@ -192,15 +178,14 @@ export class DashboardComponent implements OnInit {
     }
 
     async saveLayout() {
-        await this.usrPrfrncssvc.updateActions("Dashboard", "Widgets", this.selectedDashboardId,
-            this.dashboard).toPromise().catch((error) => {
-                    this.loggerSvc.error("Unable to update User Preferences.", error, error.statusText);
-                });
+        await this.userPreferencesService.updateActions("Dashboard", "Widgets", this.selectedDashboardId, this.dashboard).toPromise().catch((error) => {
+            this.loggerService.error("Unable to update User Preferences.", error, error.statusText);
+        });
     }
     // this function is triggered from gridStatusBoard.component.ts 'onFavChange'
     favContractChanged(favContractIds) {
         for (let i = 0; i < this.dashboard.length; i++) {
-            if (!!this.dashboard[i].subConfig && this.dashboard[i].subConfig.favContractIds !== undefined) {
+            if (!!this.dashboard[i].subConfig && !isUndefined(this.dashboard[i].subConfig.favContractIds)) {
                 this.dashboard[i].subConfig.favContractIds = favContractIds;
             }
         }
@@ -209,7 +194,7 @@ export class DashboardComponent implements OnInit {
     // this function is triggered from gridStatusBoard.Component.ts 'clkFilter()'
     gridFilterChanged(gridFilter) {
         for (let i = 0; i < this.dashboard.length; i++) {
-            if (!!this.dashboard[i].subConfig && this.dashboard[i].subConfig.gridFilter !== undefined) {
+            if (!!this.dashboard[i].subConfig && !isUndefined(this.dashboard[i].subConfig.favContractIds)) {
                 this.dashboard[i].subConfig.gridFilter = gridFilter;
             }
         }
@@ -217,44 +202,44 @@ export class DashboardComponent implements OnInit {
     }
 
     initDashboard(key, useSavedWidgetSettings) {
-
         if (useSavedWidgetSettings && this.savedWidgetSettings.length > 0) {
             for (let i = 0; i < this.savedWidgetSettings.length; i++) {
-                let widgetdet = findWhere(configWidgets, { id: this.savedWidgetSettings[i].id });
-                if (widgetdet) {
-                    const widget = JSON.parse(JSON.stringify(widgetdet))
+                let idWidgetSettings = findWhere(configWidgets, { id: this.savedWidgetSettings[i].id });
+                if (idWidgetSettings) {
+                    const widget = JSON.parse(JSON.stringify(idWidgetSettings))
                     widget.name = this.savedWidgetSettings[i].name;
                     widget.size = this.savedWidgetSettings[i].size;
                     widget.position = this.savedWidgetSettings[i].position;
+
                     if (widget.subConfig) {
                         widget.subConfig = this.savedWidgetSettings[i].subConfig;
                     }
+
                     if (widget.widgetConfig) {
                         widget.widgetConfig = this.savedWidgetSettings[i].widgetConfig;
                     }
-                    if (widget.position == null) {
+
+                    if (isNull(widget.position)) {
                         this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: null, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: null, rows: null, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
-                    }
-                    else {
+                    } else {
                         this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: { cols: widget.position.cols, rows: widget.position.cols }, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
                     }
+
                     this.options.api.optionsChanged();
                 }
             }
-        }
-        else {
+        } else {
             let defaultLayout = findWhere(configLayouts, { id: key });
             if (defaultLayout) {
                 const defLayout = JSON.parse(JSON.stringify(defaultLayout));
-                const defWidget = defLayout.widgets;
-                for (let i = 0; i < defWidget.length; i++) {
-                    let widgetdet = findWhere(configWidgets, { id: defWidget[i].id });
-                    if (widgetdet) {
-                        const widget = JSON.parse(JSON.stringify(widgetdet))
-                        if (widget.position == null) {
+                const defWidgets = defLayout.widgets;
+                for (let i = 0; i < defWidgets.length; i++) {
+                    let idWidgetSettings = findWhere(configWidgets, { id: defWidgets[i].id });
+                    if (idWidgetSettings) {
+                        const widget = JSON.parse(JSON.stringify(idWidgetSettings))
+                        if (isNull(widget.position)) {
                             this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: null, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: null, rows: null, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
-                        }
-                        else {
+                        } else {
                             this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: { cols: widget.position.cols, rows: widget.position.cols }, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
                         }
                         this.options.api.optionsChanged();
@@ -278,21 +263,20 @@ export class DashboardComponent implements OnInit {
     enterPressed(event: any, searchText: any) {
         this.searchText = searchText;
         //KeyCode 13 is 'Enter'
-        if (event.keyCode === 13 && this.searchText != "") {
+        if (event.keyCode === 13 && !isEmpty(this.searchText)) {
             //opening kendo window
             this.onOpChange('ALL', searchText);
             this.setWindowWidth();
             this.windowOpened = true;
         }
-        if (event.keyCode === 13 && this.searchText == "") {
+        if (event.keyCode === 13 && isEmpty(this.searchText)) {
             this.searchDialogVisible = true;
         }
     }
     setWindowWidth() {
         if (this.opType == "ALL") {
             this.windowWidth = 1000;
-        }
-        else {
+        } else {
             this.windowWidth = 600;
         }
     }
@@ -311,7 +295,7 @@ export class DashboardComponent implements OnInit {
     }
     onOpChange(opType: string, searchText: string) {
         this.searchText = searchText;
-        if (this.searchText != "") {
+        if (!isEmpty(this.searchText)) {
             //opening kendo window
             this.opType = opType;
             this.setWindowWidth();
@@ -319,10 +303,10 @@ export class DashboardComponent implements OnInit {
             if (this.GlobalSearchResults) {
                 this.GlobalSearchResults.onOpTypeChange(this.opType);
                 this.windowOpened = true;
-            }else{
+            } else {
                 this.windowOpened = true;
             }
-        }else{
+        } else {
             this.searchDialogVisible = true;
         }
     }
@@ -342,8 +326,7 @@ export class DashboardComponent implements OnInit {
                         this.dashboard[i].position = { cols: item.cols, rows: item.rows };
                         this.dashboard[i].cols = item.cols;
                         this.dashboard[i].rows = item.rows;
-                    }
-                    else if (field === 'size') {
+                    } else if (field === 'size') {
                         this.dashboard[i].size = { x: item.x, y: item.y };
                         this.dashboard[i].x = item.x;
                         this.dashboard[i].y = item.y;
@@ -356,78 +339,106 @@ export class DashboardComponent implements OnInit {
 
     //********************* search widget functions*************************
     ngOnInit(): void {
+        // Angular-Gridster2 Config
+        this.options = {
+            gridType: GridType.Fit,
+            allowMultiLayer: true,
+            compactType: CompactType.CompactLeftAndUp,
+            displayGrid: DisplayGrid.Always,
+            pushItems: false,
+            swap: true,
+            margin: 5,
+            maxCols: 20,
+            swapWhileDragging: false,
+            draggable: {
+                enabled: true,
+                stop: (e, ui, $widget) => {
+                    this.saveWidgetPositions(ui, 'size');
+                }
+            },
+            resizable: {
+                enabled: true,
+                stop: (e, ui, $widget) => {
+                    this.saveWidgetPositions(ui, 'position');
+                }
+            },
+            itemResizeCallback: (item) => {
+                // update DB with new size
+                // send the update to widgets
+                this.resizeEvent.emit(item);
+            }
+        }
+
         document.title = "Dashboard - My Deals";
-        this.selectedCustNames = window.localStorage.selectedCustNames ? JSON.parse(window.localStorage.selectedCustNames) : [];
+        this.selectedCustomerNames = window.localStorage.selectedCustNames ? JSON.parse(window.localStorage.selectedCustNames) : [];
         this.startDateValue = window.localStorage.startDateValue ? new Date(window.localStorage.startDateValue) : this.startDateValue;
         this.endDateValue = window.localStorage.endDateValue ? new Date(window.localStorage.endDateValue) : this.endDateValue;
         this.addWidgetByKey('1', true);
         window.localStorage.selectedDashboardId = "1";
         this.selectedDashboardId = window.localStorage.selectedDashboardId ? window.localStorage.selectedDashboardId : "1";
 
-
-        this.cntrctWdgtSvc.getCustomerDropdowns()
+        this.contractWidgetService.getCustomerDropdowns()
             .subscribe((response: Array<any>) => {
-                if(response && response.length>0){
-                    this.custData = response;
+                if(response && response.length > 0){
+                    this.customerData = response;
+                } else {
+                    this.loggerService.error("No result found.", 'Error');
                 }
-                else{
-                    this.loggerSvc.error("No result found.", 'Error');
-                }
-            }, function (error) {
-                this.loggerSvc.error("Unable to get Dropdown Customers.", error, error.statusText);
+            }, (error) => {
+                this.loggerService.error("Unable to get Dropdown Customers.", error, error.statusText);
             });
     }
 
     navAddClass() {
-        var zIndexZero = $("body");
-        var textIndex = zIndexZero.hasClass("z-index-zero")
+        const zIndexZeroComponent = $("body");
+        const textIndex = zIndexZeroComponent.hasClass(DASHBOARD_CONSTANTS.CLASS_Z_INDEX_ZERO);
         if (textIndex) {
-            zIndexZero.removeClass("z-index-zero");
+            zIndexZeroComponent.removeClass(DASHBOARD_CONSTANTS.CLASS_Z_INDEX_ZERO);
         } else {
-            zIndexZero.addClass("z-index-zero");
+            zIndexZeroComponent.addClass(DASHBOARD_CONSTANTS.CLASS_Z_INDEX_ZERO);
         } 
     }
 
     navRemoveClass() {
-        $("body").removeClass("z-index-zero");
+        $("body").removeClass(DASHBOARD_CONSTANTS.CLASS_Z_INDEX_ZERO);
     }
 
     gridValsPlus() {
-        var parent = document.getElementById("parentID");
-        var nodesSameClass = parent.getElementsByClassName("few-grid-find");
-        var testnodesSameClass = nodesSameClass.length + 1;
+        const parent = document.getElementById(DASHBOARD_CONSTANTS.ID_GRID_PARENT);
+        const nodesSameClass = parent.getElementsByClassName(DASHBOARD_CONSTANTS.CLASS_FEW_GRID_FIND);
+        const testnodesSameClass = nodesSameClass.length + 1;
         if (testnodesSameClass > 3) {
-            $("#height-grids").removeClass("sum-fixes");
-            $("#height-grids").addClass("sum-fixes-plus");
+            $(DASHBOARD_CONSTANTS.ID_HEIGHT_GRIDS).removeClass(DASHBOARD_CONSTANTS.CLASS_SUM_FIXES);
+            $(DASHBOARD_CONSTANTS.ID_HEIGHT_GRIDS).addClass(DASHBOARD_CONSTANTS.CLASS_SIM_FIXES_PLUS);
         } else {
-            $("#height-grids").addClass("sum-fixes");
-            $("#height-grids").removeClass("sum-fixes-plus");
+            $(DASHBOARD_CONSTANTS.ID_HEIGHT_GRIDS).addClass(DASHBOARD_CONSTANTS.CLASS_SUM_FIXES);
+            $(DASHBOARD_CONSTANTS.ID_HEIGHT_GRIDS).removeClass(DASHBOARD_CONSTANTS.CLASS_SIM_FIXES_PLUS);
         }
     }
 
     gridValsMinus() {
-        var parentMin = document.getElementById("parentID");
-        var nodesSameClassMin = parentMin.getElementsByClassName("few-grid-find");
-        var testnodesSameClassMin = nodesSameClassMin.length - 1;
+        const parentMin = document.getElementById(DASHBOARD_CONSTANTS.ID_GRID_PARENT);
+        const nodesSameClassMin = parentMin.getElementsByClassName(DASHBOARD_CONSTANTS.CLASS_FEW_GRID_FIND);
+        const testnodesSameClassMin = nodesSameClassMin.length - 1;
         if (testnodesSameClassMin > 3) {
-            $("#height-grids").removeClass("sum-fixes");
-            $("#height-grids").addClass("sum-fixes-plus");
+            $(DASHBOARD_CONSTANTS.ID_HEIGHT_GRIDS).removeClass(DASHBOARD_CONSTANTS.CLASS_SUM_FIXES);
+            $(DASHBOARD_CONSTANTS.ID_HEIGHT_GRIDS).addClass(DASHBOARD_CONSTANTS.CLASS_SIM_FIXES_PLUS);
         } else {
-            $("#height-grids").addClass("sum-fixes");
-            $("#height-grids").removeClass("sum-fixes-plus");
+            $(DASHBOARD_CONSTANTS.ID_HEIGHT_GRIDS).addClass(DASHBOARD_CONSTANTS.CLASS_SUM_FIXES);
+            $(DASHBOARD_CONSTANTS.ID_HEIGHT_GRIDS).removeClass(DASHBOARD_CONSTANTS.CLASS_SIM_FIXES_PLUS);
         }
     }
 
     gridValsCheck() {
-        var parentCheck = document.getElementById("parentID");
-        var nodesSameClassCheck = parentCheck.getElementsByClassName("few-grid-find");
-        var testnodesSameClassCheck = nodesSameClassCheck.length;
+        const parentCheck = document.getElementById(DASHBOARD_CONSTANTS.ID_GRID_PARENT);
+        const nodesSameClassCheck = parentCheck.getElementsByClassName(DASHBOARD_CONSTANTS.CLASS_FEW_GRID_FIND);
+        const testnodesSameClassCheck = nodesSameClassCheck.length;
         if (testnodesSameClassCheck > 3) {
-            $("#height-grids").removeClass("sum-fixes");
-            $("#height-grids").addClass("sum-fixes-plus");
+            $(DASHBOARD_CONSTANTS.ID_HEIGHT_GRIDS).removeClass(DASHBOARD_CONSTANTS.CLASS_SUM_FIXES);
+            $(DASHBOARD_CONSTANTS.ID_HEIGHT_GRIDS).addClass(DASHBOARD_CONSTANTS.CLASS_SIM_FIXES_PLUS);
         } else {
-            $("#height-grids").addClass("sum-fixes");
-            $("#height-grids").removeClass("sum-fixes-plus");
+            $(DASHBOARD_CONSTANTS.ID_HEIGHT_GRIDS).addClass(DASHBOARD_CONSTANTS.CLASS_SUM_FIXES);
+            $(DASHBOARD_CONSTANTS.ID_HEIGHT_GRIDS).removeClass(DASHBOARD_CONSTANTS.CLASS_SIM_FIXES_PLUS);
         }
     }
 }

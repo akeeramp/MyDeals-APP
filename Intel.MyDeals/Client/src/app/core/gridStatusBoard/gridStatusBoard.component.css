@@ -76,7 +76,7 @@
 }
 
 .left-pane-widget {
-    height: 526px;
+    /* height: 526px; */
     float: left;
     overflow-y: auto;
     width: 180px;

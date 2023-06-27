@@ -1,6 +1,6 @@
-<div style="height:100%">
-    <div style="height:100%" class="row">
-        <div style="height:100%" class="col-md-12">
+<div>
+    <div class="row">
+        <div class="col-md-12">
             <app-widget-dealdesk [custIds]="custIds" [startDt]="startDt" [endDt]="endDt" [widget]="widget" [resizeEvent]="resizeEvent" *ngIf="widget.type === 'contractstatus'"></app-widget-dealdesk>
             <app-widget-newcontract [widget]="widget" [startDt]="startDt" [endDt]="endDt" [resizeEvent]="resizeEvent" [custIds]="custIds" *ngIf="widget.type === 'newcontract'"></app-widget-newcontract>
             <app-widget-opencontract [widget]="widget" [resizeEvent]="resizeEvent" *ngIf="widget.type === 'opencontracts'"></app-widget-opencontract>

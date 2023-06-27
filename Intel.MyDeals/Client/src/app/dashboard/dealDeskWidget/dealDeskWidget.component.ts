@@ -62,9 +62,9 @@ export class DealDeskWidgetComponent implements OnInit, OnDestroy, OnChanges {
     }
 
     gridValsCheck() {
-        var parentCheck = document.getElementById("parentID");
-        var nodesSameClassCheck = parentCheck.getElementsByClassName("few-grid-find");
-        var testnodesSameClassCheck = nodesSameClassCheck.length;
+        const parentCheck = document.getElementById("parentID");
+        const nodesSameClassCheck = parentCheck.getElementsByClassName("few-grid-find");
+        const testnodesSameClassCheck = nodesSameClassCheck.length;
         if (testnodesSameClassCheck > 3) {
             $("#height-grids").removeClass("sum-fixes");
             $("#height-grids").addClass("sum-fixes-plus");
