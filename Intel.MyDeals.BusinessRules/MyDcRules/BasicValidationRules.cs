@@ -1216,6 +1216,14 @@ namespace Intel.MyDeals.BusinessRules
 
                 new MyOpRule
                 {
+                    Title="Bypass Validation Errors",
+                    ActionRule = MyDcActions.BypassValidationErrors,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL_ROW, OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnSave, MyRulesTrigger.OnValidate }
+                },
+
+                new MyOpRule
+                {
                     Title="Check for Major Change by adding Pricing Table",
                     ActionRule = MyDcActions.MajorChangeAddPtCheck,
                     InObjType = new List<OpDataElementType> { OpDataElementType.PRC_TBL },

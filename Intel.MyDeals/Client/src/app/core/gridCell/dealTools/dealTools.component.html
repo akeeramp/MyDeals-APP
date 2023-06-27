@@ -12,9 +12,13 @@
             <label for="lnkChk_{{dataItem.DC_PARENT_ID}}" title="Check to apply changes to all checked rows"></label>
         </div>
         <!-- SalesForce Checkbox Disabled icon except for DA users -->
-        <div class='fl md-icon' *ngIf="(isSalesForceDeal && (dataItem.WF_STG_CD === 'Offer' || dataItem.WF_STG_CD === 'Lost' || dataItem.WF_STG_CD === 'Won')) 
+        <div class='fl md-icon' *ngIf="(isSalesForceDeal && (dataItem.WF_STG_CD === 'Offer' || dataItem.WF_STG_CD === 'Lost' || dataItem.WF_STG_CD === 'Won'))
                || dataItem.WF_STG_CD === 'Cancelled'">
             <i class="intelicon-minus-max" title="Check to apply changes to all checked rows IS DISABLED for IQR deals" style="font-size: 20px !important; padding: 0 8px 0 3px"></i>
+        </div>
+
+        <div *ngIf="dataItem.SDS_DEAL_RULES_OVERRIDE !== '0'">
+            <i class="intelicon-priority-flag-outlined" title="SDS Override Applied" style="font-size: 20px !important; color: #ff0000;"></i>
         </div>
 
         <!-- Split group icon -->

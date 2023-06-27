@@ -1,7 +1,7 @@
 ﻿
 /*
-File Updated: 2/17/2022 3:49:58 PM
-On: MHTIPPIN-MOBL
+File Updated: 6/23/2023 5:40:41 PM
+On: MHTIPPIN-MOBL1
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
 using System;
@@ -2523,6 +2523,15 @@ namespace Intel.MyDeals.Entities {
 		public const string SBS_NM = "SBS_NM";
 
 		///<summary>
+		/// DIM_SID: 3
+		/// DIM_CD: DEAL
+		/// ATRB_SID: 104
+		/// TGT_COL_TYPE: INT
+		/// DOT_NET_DATA_TYPE: System.Int32
+		///</summary>
+		public const string SDS_DEAL_RULES_OVERRIDE = "SDS_DEAL_RULES_OVERRIDE";
+
+		///<summary>
 		/// DIM_SID: 50
 		/// DIM_CD: SECUR
 		/// ATRB_SID: 5040
@@ -3094,12 +3103,14 @@ namespace Intel.MyDeals.Entities {
 		public const string NUMBER_2018WW31_OTS = "2018WW31_OTS";
 		public const string ADMIN_MESSAGE = "ADMIN_MESSAGE";
 		public const string AGS_PROVISIONING_MAILING_SUPPORT_LIST = "AGS_PROVISIONING_MAILING_SUPPORT_LIST";
+		public const string ANGULAR_ENABLED = "ANGULAR_ENABLED";
 		public const string BATCH_IGNR_DEALS = "BATCH_IGNR_DEALS";
 		public const string BATCH_LOG = "BATCH_LOG";
 		public const string BATCH_STATUS = "BATCH_STATUS";
 		public const string BKUP_EXPIRE_DAYS = "BKUP_EXPIRE_DAYS";
 		public const string BKUP_NOTIFY_DAYS = "BKUP_NOTIFY_DAYS";
 		public const string BLLG_TENDER_CUTOVER_DEAL = "BLLG_TENDER_CUTOVER_DEAL";
+		public const string BULK_PRICE_ADMINS_LIST = "BULK_PRICE_ADMINS_LIST";
 		public const string CAP_MSP_CUTOFF_DAYS_BTCH = "CAP_MSP_CUTOFF_DAYS_BTCH";
 		public const string CHNL_CUST_FLTR = "CHNL_CUST_FLTR";
 		public const string CNSMPTN_LD = "CNSMPTN_LD";
@@ -3127,6 +3138,7 @@ namespace Intel.MyDeals.Entities {
 		public const string ESDR_STAGE_IMPORT_X_DAYS = "ESDR_STAGE_IMPORT_X_DAYS";
 		public const string ESDR_STAGE_PURGE_AFTER_X_DAYS = "ESDR_STAGE_PURGE_AFTER_X_DAYS";
 		public const string EXPIRE_CUTOFF_DAYS = "EXPIRE_CUTOFF_DAYS";
+		public const string HARD_EXPIRE_DEALS_AFTER_X_DAYS = "HARD_EXPIRE_DEALS_AFTER_X_DAYS";
 		public const string HRCDS_LINKED_SERVER_CONS = "HRCDS_LINKED_SERVER_CONS";
 		public const string HRCDS_LINKED_SERVER_PERF = "HRCDS_LINKED_SERVER_PERF";
 		public const string HRCDS_LINKED_SERVER_PROD = "HRCDS_LINKED_SERVER_PROD";
@@ -3161,12 +3173,17 @@ namespace Intel.MyDeals.Entities {
 		public const string PRC_RULE_READ_ACCESS = "PRC_RULE_READ_ACCESS";
 		public const string PRD_CST_TST_ATRB_MIGRATION = "PRD_CST_TST_ATRB_MIGRATION";
 		public const string PREPROD_USERS_LIST = "PREPROD_USERS_LIST";
+		public const string PRF_MRG_EMP_ID = "PRF_MRG_EMP_ID";
+		public const string PRFS_BKUP_TBL_DELETE_FLAG = "PRFS_BKUP_TBL_DELETE_FLAG";
 		public const string PRODUCT_SELECTION_LEVEL = "PRODUCT_SELECTION_LEVEL";
 		public const string PROGRAM_MIGRATION = "PROGRAM_MIGRATION";
+		public const string QSPEC_MM_LIST = "QSPEC_MM_LIST";
 		public const string RECYCLE_CACHE_COUNT_NODE1 = "RECYCLE_CACHE_COUNT_NODE1";
 		public const string RECYCLE_CACHE_COUNT_NODE2 = "RECYCLE_CACHE_COUNT_NODE2";
 		public const string ROLLBACK_MIGRATION = "ROLLBACK_MIGRATION";
+		public const string RPT_MSTR_LOG_DAYS = "RPT_MSTR_LOG_DAYS";
 		public const string SAP_JMS_PROD_EMAIL_DIST = "SAP_JMS_PROD_EMAIL_DIST";
+		public const string SDS_OVERRIDE_DEAL_VALIDATION_ADMINS = "SDS_OVERRIDE_DEAL_VALIDATION_ADMINS";
 		public const string SSD_PRD_CAT_LIST = "SSD_PRD_CAT_LIST";
 		public const string SSPEC_PRD_TYPES = "SSPEC_PRD_TYPES";
 		public const string TENDER_ECAP_KIT_MIGRATION = "TENDER_ECAP_KIT_MIGRATION";

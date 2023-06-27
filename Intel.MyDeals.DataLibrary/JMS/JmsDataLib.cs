@@ -453,7 +453,6 @@ namespace Intel.MyDeals.DataLibrary
             OpLog.Log("JMS - Publishing Claim Data Tenders");
             responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: PublishClaimDataToSfTenders - Initiated ") + Environment.NewLine);
             
-            bool sendSuccess = false;
             //Get APIGEE Token to send Payload
             string accessToken = GetApiGeeToken();
             if (accessToken.Length > 0)
@@ -493,7 +492,6 @@ namespace Intel.MyDeals.DataLibrary
                         //Logging
                         if (ApiGeeResponse.IsSuccess.ToLower() == "true")
                         {
-                            //sendSuccess = true;
                             if(((HttpWebResponse)response).StatusDescription.ToLower() == "ok" || ((HttpWebResponse)response).StatusDescription.ToLower() == "accepted")
                             { responseObj.BatchStatus = "PROCESSED";
                                 responseObj.BatchMessage = "Tender Claim Data published";
@@ -519,7 +517,6 @@ namespace Intel.MyDeals.DataLibrary
                 }
             }
 
-            //return sendSuccess;
             return responseObj;
         }
 

@@ -126,7 +126,7 @@ textarea.textAreaDesigns {
 }
 
 .custom-deal-tools .md-icon {
-    padding: 4px 0 0 5px
+    padding: 4px 0 0 3px
 }
 
     .custom-deal-tools .md-icon i {
@@ -138,7 +138,7 @@ textarea.textAreaDesigns {
         }
 
 .custom-deal-tools .md-icon-disabled {
-    padding: 4px 2px 0 1px
+    padding: 4px 2px 0 -1px
 }
 
     .custom-deal-tools .md-icon-disabled i {
@@ -292,26 +292,6 @@ textarea.textAreaDesigns {
         .custom-deal-tools .gridStatusMarker.Cancelled {
             color: #000000;
             background-color: #cccccc
-        }
-
-    .custom-deal-tools .md-icon {
-        padding: 4px 0 0 5px
-    }
-
-        .custom-deal-tools .md-icon i {
-            color: #00AEEF
-        }
-
-            .custom-deal-tools .md-icon i:hover {
-                color: #003C71 !important
-            }
-
-    .custom-deal-tools .md-icon-disabled {
-        padding: 4px 2px 0 1px
-    }
-
-        .custom-deal-tools .md-icon-disabled i {
-            color: #00AEEF
         }
 
     .custom-deal-tools input[type=radio].with-font, .dealTools input[type=checkbox].with-font {

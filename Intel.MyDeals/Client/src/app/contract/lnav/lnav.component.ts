@@ -7,7 +7,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { AutoFillComponent } from "../ptModals/autofillsettings/autofillsettings.component";
 import { RenameTitleComponent } from "../ptModals/renameTitle/renameTitle.component";
 import { contractDetailsService } from "../contractDetails/contractDetails.service";
-import { Component, Input, Output, EventEmitter, ViewEncapsulation } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewEncapsulation, ChangeDetectorRef } from "@angular/core";
 import { ActivatedRoute, Router } from "@angular/router";
 
 export interface contractIds {
@@ -28,7 +28,7 @@ export interface contractIds {
 })
 export class lnavComponent {
     constructor(private loggerSvc: logger, private lnavSvc: lnavService, private headerSvc: headerService, private contractDetailsSvc: contractDetailsService,
-        private dialog: MatDialog, private router: Router, private route: ActivatedRoute) {}
+        private dialog: MatDialog, private router: Router, private route: ActivatedRoute, private changeDetector: ChangeDetectorRef) {}
     @Input() contractId: number;
     @Input() contractData;
     @Input() UItemplate;
@@ -961,6 +961,7 @@ export class lnavComponent {
         this.lnavSvc.lnavHieight.subscribe(res => {
             this.contractId_Map = { ...res, ps_index: 0, pt_index: 0 };
             (<any>$(`#sumPSdata_${this.contractId_Map.ps_id}`)).collapse('show');
+            this.changeDetector.detectChanges();
         }, err => {
             this.loggerSvc.error("lnavSvc::lnavHieight**********", err);
         });

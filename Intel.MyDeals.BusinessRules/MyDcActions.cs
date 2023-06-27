@@ -11,7 +11,7 @@ using Newtonsoft.Json;
 using AttributeCollection = Intel.MyDeals.Entities.AttributeCollection;
 using Newtonsoft.Json.Linq;
 using Dejavu.Calendar;
-using System.Diagnostics.Eventing.Reader;
+using System.Collections;
 
 namespace Intel.MyDeals.BusinessRules
 {
@@ -2087,6 +2087,8 @@ namespace Intel.MyDeals.BusinessRules
                             : $"{atrb.ATRB_LBL} changed from {de.OrigAtrbValue} to {de.AtrbValue}"); // Any other normal value change
                 }
                 r.Dc.AddTimelineComment(reason + string.Join(", ", reasonDetails));
+
+                r.Dc.SetAtrb(AttributeCodes.SDS_DEAL_RULES_OVERRIDE, "0"); // Pull out any SDS rules upon re-deal event - this might force fast track into full track
             }
         }
 
@@ -2250,6 +2252,8 @@ namespace Intel.MyDeals.BusinessRules
                         State = OpDataElementState.Modified
                     });
                 }
+
+                r.Dc.SetAtrb(AttributeCodes.SDS_DEAL_RULES_OVERRIDE, "0"); // Pull out any SDS rules upon re-deal event from actives
             }
 
             // Locate and set Parent PS Attributes
@@ -2831,7 +2835,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement atrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.DSCNT_PER_LN.ToString()).FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
 
             decimal subkitEcap = 0; // SUBKIT ECAP = tier of "-2"
-            decimal subkitStandaloneSum = 0; // SUBKIT Standalone Sum = sum of Primary and Secondary1 Ecaps
+            decimal subkitStandaloneSum = 0; // SUBKIT Standalone Sum = sum of Primary and S1 Ecaps
             decimal totalDiscountsSum = 0;
 
             // Get SUBKIT ecap sum
@@ -2840,7 +2844,7 @@ namespace Intel.MyDeals.BusinessRules
                 if (tieredObj.DimKey.Count > 0)
                 {
                     int tier = tieredObj.DimKey.FirstOrDefault().AtrbItemId;
-                    if (tier == -2 || tier == 0 || tier == 1)   // subkit OR primary OR secondary1
+                    if (tier == -2 || tier == 0 || tier == 1)   // subkit OR primary OR s1
                     {
                         IOpDataElement ecapPrice = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.ECAP_PRICE.ToString() && de.DimKey.FirstOrDefault().AtrbItemId == tier).FirstOrDefault();
                         IOpDataElement qty = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.QTY.ToString() && de.DimKey.FirstOrDefault().AtrbItemId == tier).FirstOrDefault();
@@ -2866,7 +2870,7 @@ namespace Intel.MyDeals.BusinessRules
                         }
                         else
                         {
-                            // Any other tier, namely Primary and Secondary1
+                            // Any other tier, namely Primary and S1
                             subkitStandaloneSum += qtySafeParse * ecapPriceSafeParse;
 
                             // Calcuate total discount per line
@@ -2878,8 +2882,8 @@ namespace Intel.MyDeals.BusinessRules
             // SUBKIT ECAP must = (sum of total dicount per line * Qty ) of subkit eligible products BUT ONLY if there is a subkit rebate and only if total discount per line values is > 0
             if (totalDiscountsSum > 0 && subkitStandaloneSum != subkitEcap && subkitStandaloneSum - subkitEcap != totalDiscountsSum)
             {
-                AddTierValidationMessage(atrbWithValidation, "Sub KIT Rebate must be equal to Sub KIT sum of total discount per line or zero.", 0);     //Assumption: Subkit Consists of Primary and Secondary1 Products
-                AddTierValidationMessage(atrbWithValidation, "Sub KIT Rebate must be equal to Sub KIT sum of total discount per line or zero.", 1);     //Assumption: Subkit Consists of Primary and Secondary1 Products
+                AddTierValidationMessage(atrbWithValidation, "Sub KIT Rebate must be equal to Sub KIT sum of total discount per line or zero.", 0);     //Assumption: Subkit Consists of Primary and S1 Products
+                AddTierValidationMessage(atrbWithValidation, "Sub KIT Rebate must be equal to Sub KIT sum of total discount per line or zero.", 1);     //Assumption: Subkit Consists of Primary and S1 Products
             }
         }
 
@@ -3164,8 +3168,8 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement atrbWithValidation = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.QTY.ToString()).FirstOrDefault(); // We need to pick only one of the tiered attributes to set validation on, else we'd keep overriding the message value per tier
 
             ProdMappings items = null;
-            int numOfL1s = 0;
-            int numOfL2s = 0;
+            //int numOfL1s = 0;
+            //int numOfL2s = 0;
 
             try
             {
@@ -3807,7 +3811,51 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
-            public static void ValidateTierEcap(params object[] args)
+        public static void BypassValidationErrors(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string SdsOverrideValue = r.Dc.GetDataElementValue(AttributeCodes.SDS_DEAL_RULES_OVERRIDE);
+
+            if (SdsOverrideValue == "" || SdsOverrideValue == "0") return;
+
+            int indx = 0;
+            int ValuesKey = Int32.Parse(SdsOverrideValue);
+
+            List<string> SearchItems = new List<string>();
+
+            List<string> SkipErrorPatterns = new List<string> {
+                "Deal End Date cannot exceed 20 years beyond the Deal Start Date",
+                "End volume must be greater than start volume",
+                "Start volume must be greater than previous tier start volume",
+                "At least one rate must be greater than 0",
+                "ECAP Price must be a positive number"
+            };
+
+            //int testVal = 13;
+
+            BitArray valueKeyBits = new BitArray(new int[] { ValuesKey });
+            foreach (bool bit in valueKeyBits)
+            {
+                if (bit)
+                {
+                    SearchItems.Add(SkipErrorPatterns[indx]);
+                }
+                indx++;
+            }
+
+            // Change out below with SearchItems instead of SkipErrorPatterns
+            foreach (IOpDataElement de in r.Dc.GetDataElementsWhere(d => !string.IsNullOrEmpty(d.ValidationMessage)))
+            {
+                if (SkipErrorPatterns.Any(s => de.ValidationMessage.Contains(s)))
+                {
+                    de.ValidationMessage = string.Empty;
+                }
+            }
+        }
+
+        public static void ValidateTierEcap(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;

@@ -1,6 +1,6 @@
 ﻿
 /*
-File Updated: 12/16/2022 8:34:31 PM
+File Updated: 6/23/2023 5:39:45 PM
 On: MHTIPPIN-MOBL1
 From: FM7DFROAPP01.amr.corp.intel.com, MYDEALS
 */
@@ -1805,7 +1805,7 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute END_DT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "END_DT",
-			ATRB_DESC = "Deal End Date",
+			ATRB_DESC = "Deal end date",
 			ATRB_LBL = "Deal End Date",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3320,
@@ -1937,14 +1937,14 @@ namespace Intel.MyDeals.Entities {
 			ATRB_LBL = "Deal expiration flag",
 			ATRB_MAX_LEN = 1,
 			ATRB_SID = 3676,
-			DATA_TYPE_CD = "BIT",
+			DATA_TYPE_CD = "INT",
 			DIM_CD = "DEAL",
 			DIM_SID = 3,
-			DOT_NET_DATA_TYPE = "System.Boolean",
-			FRMT_MSK = "{0}",
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
 			MJR_MNR_CHG = "MINOR",
 			TGT_COL_TYPE = "INT",
-			UI_TYPE_CD = "DataGrid"
+			UI_TYPE_CD = "CheckBox"
 		};
 		public static MyDealsAttribute EXPIRE_YCS2 = new MyDealsAttribute()
 		{
@@ -4458,6 +4458,22 @@ namespace Intel.MyDeals.Entities {
 			TGT_COL_TYPE = "VARCHAR",
 			UI_TYPE_CD = default(System.String)
 		};
+		public static MyDealsAttribute SDS_DEAL_RULES_OVERRIDE = new MyDealsAttribute()
+		{
+			ATRB_COL_NM = "SDS_DEAL_RULES_OVERRIDE",
+			ATRB_DESC = "SDS Flag to Force Deal Validation Override",
+			ATRB_LBL = "SDS Override",
+			ATRB_MAX_LEN = 10,
+			ATRB_SID = 104,
+			DATA_TYPE_CD = "INT",
+			DIM_CD = "DEAL",
+			DIM_SID = 3,
+			DOT_NET_DATA_TYPE = "System.Int32",
+			FRMT_MSK = "{0:d}",
+			MJR_MNR_CHG = "MINOR",
+			TGT_COL_TYPE = "INT",
+			UI_TYPE_CD = "Label"
+		};
 		public static MyDealsAttribute SECURITY_ACCOUNT_ROLE_ASGN = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "SECURITY_ACCOUNT_ROLE_ASGN",
@@ -4637,7 +4653,7 @@ namespace Intel.MyDeals.Entities {
 		public static MyDealsAttribute START_DT = new MyDealsAttribute()
 		{
 			ATRB_COL_NM = "START_DT",
-			ATRB_DESC = "Deal Start Date",
+			ATRB_DESC = "Deal start date",
 			ATRB_LBL = "Deal Start Date",
 			ATRB_MAX_LEN = 0,
 			ATRB_SID = 3319,
