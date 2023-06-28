@@ -38,8 +38,7 @@ export class systemPricePointModalComponent {
     ngOnInit() {
         this.operator = { id: 1, name: '<=' };
         if (this.data.cellCurrValues !== "" && this.data.cellCurrValues !== undefined) {
-            var splitValue = this.data.cellCurrValues;
-            this.price = parseFloat(splitValue);
+            this.price = parseFloat(this.data.cellCurrValues.split('$')[1]);
         }
         this.label = this.data.label;
     }
