@@ -439,6 +439,11 @@ p.dialogmsg-advance-kendo {
     font-size: 15px !important;
 }
 
+.k-grid-content, .k-grid-content-locked, .k-pager-wrap {
+    white-space: normal;
+    word-break: break-all !important;
+}
+
 #advance-kendo-excel-popup .k-content.k-window-content.k-dialog-content {
     padding: 0px !important;
 }

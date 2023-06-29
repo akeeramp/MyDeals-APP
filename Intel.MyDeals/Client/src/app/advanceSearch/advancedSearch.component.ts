@@ -110,10 +110,12 @@ export class AdvancedSearchComponent implements OnInit {
         );
         this.wrapEnabled = !this.wrapEnabled;
         var newVal = this.wrapEnabled ? "normal" : "nowrap";
+        var newBrk = this.wrapEnabled ? "break-all" : "nowrap";
         var newH = this.wrapEnabled ? "100%" : "auto";
-        elements.forEach((item) => {
+        elements.forEach((item) => { 
             item.style.setProperty('white-space', newVal);
             item.style.setProperty("height", newH);
+            item.style.setProperty('word-break', newBrk);
         });
         this.grid?.autoFitColumn(2);
     }
