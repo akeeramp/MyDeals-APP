@@ -441,7 +441,7 @@ p.dialogmsg-advance-kendo {
 
 .k-grid-content, .k-grid-content-locked, .k-pager-wrap {
     white-space: normal;
-    word-break: break-all !important;
+    word-break: break-word !important;
 }
 
 #advance-kendo-excel-popup .k-content.k-window-content.k-dialog-content {
