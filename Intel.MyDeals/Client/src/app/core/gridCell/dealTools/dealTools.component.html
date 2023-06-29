@@ -17,7 +17,7 @@
             <i class="intelicon-minus-max" title="Check to apply changes to all checked rows IS DISABLED for IQR deals" style="font-size: 20px !important; padding: 0 8px 0 3px"></i>
         </div>
 
-        <div *ngIf="dataItem.SDS_DEAL_RULES_OVERRIDE !== '0'">
+        <div *ngIf="dataItem.SDS_DEAL_RULES_OVERRIDE !== '' && dataItem.SDS_DEAL_RULES_OVERRIDE > 0">
             <i class="intelicon-priority-flag-outlined" title="SDS Override Applied" style="font-size: 20px !important; color: #ff0000;"></i>
         </div>
 

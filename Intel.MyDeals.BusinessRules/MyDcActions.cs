@@ -12,6 +12,10 @@ using AttributeCollection = Intel.MyDeals.Entities.AttributeCollection;
 using Newtonsoft.Json.Linq;
 using Dejavu.Calendar;
 using System.Collections;
+using Intel.MyDeals.Entities.deal;
+using Kendo.Mvc.UI;
+using static Intel.MyDeals.Entities.TenderTransferRootObject.RecordDetails.Quote.QuoteLine;
+using System.Diagnostics;
 
 namespace Intel.MyDeals.BusinessRules
 {
@@ -3827,10 +3831,12 @@ namespace Intel.MyDeals.BusinessRules
 
             List<string> SkipErrorPatterns = new List<string> {
                 "Deal End Date cannot exceed 20 years beyond the Deal Start Date",
-                "End volume must be greater than start volume",
-                "Start volume must be greater than previous tier start volume",
-                "At least one rate must be greater than 0",
-                "ECAP Price must be a positive number"
+                "or 180 days prior to the Deal Start Date",
+                "Billing Start Date cannot be backdated beyond 1 year prior to the Deal Start Date",
+                "For draining products, the end date is limited to 2 Intel Calendar Years from deal start date",
+                "ECAP Price must be a positive number.",
+                "End Date is limited to 1 Intel Calendar Year from",
+                "Below are the valid vertical combinations allowed in My Deals"
             };
 
             //int testVal = 13;
@@ -3848,7 +3854,8 @@ namespace Intel.MyDeals.BusinessRules
             // Change out below with SearchItems instead of SkipErrorPatterns
             foreach (IOpDataElement de in r.Dc.GetDataElementsWhere(d => !string.IsNullOrEmpty(d.ValidationMessage)))
             {
-                if (SkipErrorPatterns.Any(s => de.ValidationMessage.Contains(s)))
+                //if (SkipErrorPatterns.Any(s => de.ValidationMessage.Contains(s)))
+                if (SearchItems.Any(s => de.ValidationMessage.Contains(s)))
                 {
                     de.ValidationMessage = string.Empty;
                 }
