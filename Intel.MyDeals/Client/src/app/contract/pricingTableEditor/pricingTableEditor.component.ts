@@ -1,7 +1,7 @@
 ﻿import { Component, Input, Output, EventEmitter, NgZone } from '@angular/core';
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
-import { each, uniq, filter, map, where, pluck, findWhere, findIndex, findLastIndex, reject, contains, find, values, keys } from 'underscore';
+import { each, uniq, filter, map, where, pluck, findWhere, findIndex, findLastIndex, reject, contains, find, values, keys, unique } from 'underscore';
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
 import { logger } from '../../shared/logger/logger';
@@ -339,6 +339,11 @@ export class pricingTableEditorComponent {
                                             }
                                         }
                                     }
+                                }
+
+                                if (this.field == 'REBATE_TYPE') {
+                                    let ptrow = { row: this.selRow, prop: this.field, old: this.hot.getDataAtRowProp(this.selRow, this.field), new: result?.toString() };
+                                    PTE_CellChange_Util.checkfn(ptrow, VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable);
                                 }
 
                                 if(this.field='GEO_COMBINED'){
@@ -781,13 +786,14 @@ export class pricingTableEditorComponent {
                     this.setDeafultARSettlementAndRestPeriod(perPro);
                 }
             }
-            if (AR && AR.length > 0) {
+            if (AR && AR.length > 0 && AR[0].new !=AR[0].old) 
+            {
                 if (this.hotTable.getDataAtRowProp(AR[0].row, 'PERIOD_PROFILE') != '' && this.hotTable.getDataAtRowProp(AR[0].row, 'RESET_VOLS_ON_PERIOD') != '') {
                     PTE_CellChange_Util.autoFillARSet(AR, this.contractData, this.curPricingTable,this.custCellEditor);
                 }else{
                     this.setDeafultARSettlementAndRestPeriod(AR);
                 }
-            }
+            }            
             if(geo && geo.length>0){
                 let isvalidGeo=true
                 let geolist=geo[0].new && geo[0].new != null ? geo[0].new.split(','): '';
@@ -814,6 +820,13 @@ export class pricingTableEditorComponent {
             }
             if(restprd && restprd.length>0){
                 this.setDeafultARSettlementAndRestPeriod(restprd);
+            }
+
+            if (rebateType && rebateType.length > 0 && rebateType[0].new != rebateType[0].old) {
+                each(rebateType, rebattype => {
+                    let ptrow = { row: rebattype.row, prop: rebattype.prop, old: this.hotTable.getDataAtRowProp(rebattype.row, rebattype.prop), new: rebattype.new.toString() };
+                    PTE_CellChange_Util.checkfn(ptrow, this.curPricingTable, this.columns, '', this.contractData, this.custCellEditor, this.newPricingTable);
+                })
             }
             //KIT on change events
             if (KIT_ECAP && KIT_ECAP.length > 0) {
@@ -907,9 +920,9 @@ export class pricingTableEditorComponent {
                  for (let i = 0; i < PTRCount; i++) {
                      if (!this.hotTable.isEmptyRow(i)) {
                          let ptrows = [];
-                         ptrows.push({ row: i, prop: field, old: this.hotTable.getDataAtRowProp(i, field), new: '' });
-                        // PTE_CellChange_Util.autoFillARSet(ptrows, this.contractData, this.curPricingTable, this.custCellEditor);
-                         if (this.hotTable.getDataAtRowProp(i, 'PERIOD_PROFILE') == '' && this.hotTable.getDataAtRowProp(selrow, 'RESET_VOLS_ON_PERIOD') == '') {
+                         ptrows.push({ row: i, prop: field, old: this.hotTable.getDataAtRowProp(i, field), new: obj[0].new});
+                         PTE_CellChange_Util.autoFillARSet(ptrows, this.contractData, this.curPricingTable, this.custCellEditor);
+                         if (this.hotTable.getDataAtRowProp(i, 'PERIOD_PROFILE') == '' && (this.hotTable.getDataAtRowProp(selrow, 'RESET_VOLS_ON_PERIOD') == ''||this.hotTable.getDataAtRowProp(selrow, 'RESET_VOLS_ON_PERIOD') == null)) {
                              PTE_CellChange_Util.checkfn(ptrows[0], this.curPricingTable, this.columns, '', this.contractData, this.custCellEditor, this.newPricingTable)
                          }
                      }else{
@@ -1102,7 +1115,9 @@ export class pricingTableEditorComponent {
             //this condition means all rows are non DC_ID rows so that no need to hit API
             if (nonSavedRows.length > 0 && nonSavedRows.length == delRows.length) {
                 //multiple delete at the sametime this will avoid issues of deleting one by one
-                this.hotTable.alter('remove_row', delRows[0].row, delRows.length, 'no-edit');
+                //making as unique rows to avoid multiple deletions happens
+                const rowstoDel=  unique(delRows, 'row');
+                this.hotTable.alter('remove_row', delRows[0].row, rowstoDel.length, 'no-edit');
                 this.getMergeCellsOnDelete();
                 this.multiRowDelete = [];
                 this.isDeletePTR = false;
@@ -1361,6 +1376,8 @@ export class pricingTableEditorComponent {
                 if (data.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0)
                     PTE_Save_Util.saveWarningDetails(data, this.savedResponseWarning);
             }
+            //making as empty after save deletion logic will work 
+            this.transformResults['Data']=null;
             //this will help to reload the page with errors when we update
             await this.loadPTE();
             if (deleteDCIDs == undefined) {
@@ -1846,6 +1863,18 @@ export class pricingTableEditorComponent {
                                         delete this.curRow[0].delPTR_SYS_PRD
                                     }
                                 }
+                            }
+                        }
+                        else
+                        {
+                            let deletedProds = savedResult.deletedProducts;
+                            if (deletedProds && deletedProds.length > 0) {
+                                let deletedRowIdList = distinct(deletedProds, 'DC_ID').map(item => item['DC_ID']);
+                                each(deletedRowIdList, (rowId) => {
+                                    let deletedProd = deletedProds.filter(x => x.DC_ID == rowId);
+                                    rowProdCorrectordat = PTE_CellChange_Util.getOperationProdCorr(undefined, deletedProd, products);
+                                    PTE_CellChange_Util.autoFillCellOnProd(rowProdCorrectordat[0], this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, rowProdCorrectordat[1]);
+                                })
                             }
                         }
                     }

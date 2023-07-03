@@ -1156,6 +1156,13 @@ export class PTE_CellChange_Util {
                         }
                     }
                 }
+                if(item.prop=='REBATE_TYPE'  && item.new!='NRE ACCRUAL' && this.hotTable.getDataAtRowProp(item.row, 'PERIOD_PROFILE') == ''){
+                    if(ptDefaults["_defaultAtrbs"]!=undefined){
+                    this.delReadOnlyBehaviours("PERIOD_PROFILE",item);
+                    let prdPfvalue = curPricingTable["PERIOD_PROFILE"] ? curPricingTable["PERIOD_PROFILE"] : ptDefaults["_defaultAtrbs"]["PERIOD_PROFILE"].value
+                    this.hotTable.setDataAtRowProp(item.row, 'PERIOD_PROFILE',prdPfvalue.toString(), 'no-edit');
+                    }
+                }
             }
         }
         this.hotTable.render()
