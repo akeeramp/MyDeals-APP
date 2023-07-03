@@ -50,11 +50,11 @@ export class authGuard implements CanActivate {
             if (role.includes('Account')) {
                 if (guardConfig.guardSettings[path]['Account ' + (<any>window).usrRole.toUpperCase()]) return true;
             }
-            else window.location.href = window.location.origin + '/Dashboard#/portal';
+            else window.location.href = 'Dashboard#/portal';
         } else if (guardConfig.guardSettings[path][role] != undefined && guardConfig.guardSettings[path][role])
             return true;
         else
-            window.location.href = window.location.origin + '/Dashboard#/portal';
+            window.location.href = 'Dashboard#/portal';
 
     }
 
