@@ -10,8 +10,8 @@ import { logger } from "../logger/logger";
     styleUrls: ['Client/src/app/shared/search/search.component.css'],
 })
 export class SearchComponent {
-    private startDateValue: Date = new Date(this.momentService.moment().subtract(6, 'months').format("MM/DD/YYYY"));
-    private endDateValue: Date = new Date(this.momentService.moment().add(6, 'months').format("MM/DD/YYYY"));
+    private startDateValue: Date;
+    private endDateValue: Date;
     private showSearchFilters: boolean = true;
     private showGrid: boolean = false;
     public fruits: Array<string> = ['Apple', 'Orange', 'Banana'];
@@ -34,8 +34,8 @@ export class SearchComponent {
     ngOnInit(): void {
         this.showSearchFilters = false;
         this.selectedCustNames = window.localStorage.selectedCustNames ? JSON.parse(window.localStorage.selectedCustNames) : [];
-        this.startDateValue = window.localStorage.startDateValue ? new Date(window.localStorage.startDateValue) : this.startDateValue;
-        this.endDateValue = window.localStorage.endDateValue ? new Date(window.localStorage.endDateValue) : this.endDateValue;
+        this.startDateValue = window.localStorage.startDateValue && window.localStorage.startDateValue != "null" ? new Date(window.localStorage.startDateValue) : new Date(this.momentService.moment().subtract(6, 'months').format("MM/DD/YYYY"));
+        this.endDateValue = window.localStorage.endDateValue && window.localStorage.endDateValue != "null" ? new Date(window.localStorage.endDateValue) : new Date(this.momentService.moment().add(6, 'months').format("MM/DD/YYYY"));
 
 
         this.cntrctWdgtSvc.getCustomerDropdowns()
