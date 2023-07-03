@@ -47,6 +47,7 @@ export class allDealsComponent {
     public templates: any;
     private type = "numeric";
     private info = true;
+    private isLoadingKendo = false;
     private gridResult = [];
     private gridData: GridDataResult;
     public exportFileName: string;
@@ -83,18 +84,6 @@ export class allDealsComponent {
         {
             text: "50",
             value: 50
-        },
-        {
-            text: "100",
-            value: 100
-        },
-        {
-            text: "250",
-            value: 250
-        },
-        {
-            text: "500",
-            value: 500
         }
     ];
     private excelColumns = {
@@ -197,6 +186,8 @@ export class allDealsComponent {
     }
     onTabSelect(e: SelectEvent) {
         e.preventDefault();
+        this.isLoadingKendo = true;
+        this.gridData.data = [];
         this.selectedTab = e.title;
         this.searchFilter = "";
         let group = this.groups.filter(x => x.name == this.selectedTab);
@@ -271,8 +262,13 @@ export class allDealsComponent {
 
     }
     dataStateChange(state: DataStateChangeEvent): void {
+        this.isLoadingKendo = true;
+        this.gridData.data = [];
         this.state = state;
-        this.gridData = process(this.gridResult, this.state);
+        setTimeout(() => {
+            this.gridData = process(this.gridResult, this.state);
+            this.isLoadingKendo = false;
+        }, 0);
     }
     clearFilter() {
         this.state.filter = {
@@ -321,7 +317,6 @@ export class allDealsComponent {
                     return { Text: item[fieldName].toString(), Value: item[fieldName] }
             else return { Text: '', Value: '' };
         });
-
     }
     filterColumnbyGroup(groupName: string) {
         let group = this.groups.filter(x => x.name == groupName);
@@ -419,7 +414,10 @@ export class allDealsComponent {
                 filters: [{ field: "OBJ_SET_TYPE_CD", operator: "eq", value: this.dealType }]
             };
         }
-        this.gridData = process(deals, this.state);
+        setTimeout(() => {
+            this.gridData = process(deals, this.state);
+            this.isLoadingKendo = false;
+        }, 0);
     }
     cellClickHandler(args: CellClickEvent): void {
         if (args.column.field == "TITLE") {
