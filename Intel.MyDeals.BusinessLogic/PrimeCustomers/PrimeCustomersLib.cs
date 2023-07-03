@@ -10,6 +10,7 @@ using Newtonsoft.Json;
 using Intel.Opaque;
 using System.Configuration;
 using System.IO;
+using System.Data;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -631,6 +632,123 @@ namespace Intel.MyDeals.BusinessLogic
         public List<DealReconInvalidRecords> updateDealRecon(List<DealRecon> lstDealRecons)
         {
             return _primeCustomersDataLib.updateDealRecon(lstDealRecons);
+        }
+        public string ResubmissionDeals(string dealId, string endCustomerData)
+        {
+            DataTable dealData = new DataTable();
+            List<UCDResponse> ucdResponse = new List<UCDResponse>();
+            int responseCount = 0;
+            string success = "false";
+            try
+            {
+                dealData = _primeCustomersDataLib.ResubmissionDeals(dealId, endCustomerData);
+                if (dealData.Rows.Count == 0)
+                {
+                    success = "Deal ID or End Customer Name/Country is incorrect";
+                }
+                else
+                {
+                    foreach (DataRow dr in dealData.Rows)
+                    {
+                        var UCDReqDataList = new UCDRequest
+                        {
+                            accountRequests = new List<UCDRequest.AccountRequests>()
+                        };
+                        var UCDReqData = new UCDRequest.AccountRequests
+                        {
+                            addresses = new List<UCDRequest.AccountRequests.Addresses>(),
+                            accountrequestreferences = new List<UCDRequest.AccountRequests.AccountRequestReferences>()
+                        };
+                        List<string> County = new List<string>();
+                        County.Add(dr[4].ToString());
+                        UCDReqData.Name = dr[5].ToString();
+                        UCDReqData.CustomerAggregationTypeCode = "UNFD_CTRY_CUST";
+                        UCDReqData.CustomerProcessEngagmentCode = "DIR_PRC_EXCPT";
+                        UCDReqData.RequesterName = dr[1].ToString();
+                        UCDReqData.RequesterWWID = dr[2].ToString();
+                        UCDReqData.RequesterEmail = dr[3].ToString();
+                        var newAddressess = new UCDRequest.AccountRequests.Addresses
+                        {
+
+                            CountryName = dr[4].ToString()
+                        };
+                        UCDReqData.addresses.Add(newAddressess);
+                        var newAccountRequestReferences = new UCDRequest.AccountRequests.AccountRequestReferences
+                        {
+                            Name = "MyDeals",
+                            Value = dr[0].ToString()
+                        };
+                        UCDReqData.accountrequestreferences.Add(newAccountRequestReferences);
+                        UCDReqDataList.accountRequests.Add(UCDReqData);
+                        String UCDJson = JsonConvert.SerializeObject(UCDReqData, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+                        _primeCustomersDataLib.SaveUcdRequestData(dr[5].ToString(), dr[4].ToString(),
+                           Convert.ToInt32(dr[0].ToString()), UCDJson, null, null, "API_Retrigger_Request_Sent");
+
+                        String UCDReqJson = JsonConvert.SerializeObject(UCDReqDataList, new JsonSerializerSettings { NullValueHandling = NullValueHandling.Ignore });
+
+                        ucdResponse = _jmsDataLib.SendRplUCDRequest(UCDReqJson);
+                        responseCount = responseCount + ucdResponse.Count;
+                        if (ucdResponse.Count > 0)
+                        {
+                            foreach (UCDResponse Response in ucdResponse)
+                            {
+                                string UCDJsonResponse = JsonConvert.SerializeObject(Response);
+                                if (Response.status.ToLower() == "success")
+                                {
+                                    if ((Response.data.Name != null && Response.data.Name != "") &&
+                                      (Response.data.CountryName != null && Response.data.CountryName != "") && Convert.ToInt32(dr[0]) != 0)
+                                    {
+                                        _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
+                                        Convert.ToInt32(dr[0]), null, UCDJsonResponse, Response.data.AccountId, "API_Retrigger_accountid_received");
+                                        success = "true";
+
+                                    }
+                                    else
+                                    {
+                                        OpLogPerf.Log("UCD - Error in saving AMQ response");
+                                        success = "false";
+                                    }
+                                    success = "true";
+                                    OpLogPerf.Log("UCD - AMQ response success ");
+                                }
+                                else if (Response.errormessage.ToLower() == "duplicate account" && Response.data.DuplicateAccountRecordType.ToLower() == "requested account")
+                                {
+                                    if ((Response.data.Name != null && Response.data.Name != "") &&
+                                     (Response.data.CountryName != null && Response.data.CountryName != "") && Convert.ToInt32(dr[0]) != 0)
+                                    {
+                                        _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
+                                    Convert.ToInt32(dr[0]), null, UCDJsonResponse, Response.data.DuplicateAccountId, "API_Retrigger_accountid_received");
+
+                                    }
+                                    success = "true";
+                                    OpLogPerf.Log("UCD - AMQ response success ");
+                                }
+                                else
+                                {
+                                    OpLogPerf.Log("UCD - Error in AMQ response: " + Response.errormessage);
+                                    success = "false";
+                                    _primeCustomersDataLib.SaveUcdRequestData(Response.data.Name, Response.data.CountryName,
+                                   Convert.ToInt32(dr[0]), null, UCDJsonResponse, null, "API_processing_Error");
+                                }
+                            }
+                        }
+                        else
+                        {
+                            OpLogPerf.Log("UCD - Publish to ACM ERROR ");
+                            //When no response received for API request sent to UCD,below call is to Update the record with API_processing_Error status in the UCD log table
+                            success = "false";
+                            _primeCustomersDataLib.SaveUcdRequestData(dr[5].ToString(), dr[4].ToString(),
+                             Convert.ToInt32(dr[0]), null, null, null, "API_processing_Error");
+                        }
+                    }
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log("UCD - ERROR: " + ex);
+            }
+            return success;
         }
     }
 }

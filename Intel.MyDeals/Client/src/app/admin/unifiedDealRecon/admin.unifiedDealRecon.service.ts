@@ -91,5 +91,10 @@ export class unifiedDealReconService {
         return this.httpClient.post(apiUrl, lstDealRecon);
 
     }
+    public ResubmissionDeals(dealId,endCustomerData): Observable<any> {
+        const apiUrl: string = this.apiBaseUrl + 'ResubmissionDeals/' + dealId;
+        const headers = { 'content-type': 'application/json' };
+        return this.httpClient.post(apiUrl, JSON.stringify(endCustomerData), { 'headers': headers });
+    }
 
 }

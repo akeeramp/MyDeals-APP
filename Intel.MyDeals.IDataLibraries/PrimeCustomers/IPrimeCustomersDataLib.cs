@@ -41,5 +41,8 @@ namespace Intel.MyDeals.IDataLibrary
         List<DealReconInvalidRecords> updateDealRecon(List<DealRecon> lstDealRecon);
 
         DataTable InsertPrimedCustomerData(string endCustomerRetail, string endCustomerCountry, string primCustomerName, int primCustomerId, int primCustomerLvlId, string rplStatusCode, int empWWID);
+
+        DataTable ResubmissionDeals(string dealId, string endCustomerData);
+
     }
 }

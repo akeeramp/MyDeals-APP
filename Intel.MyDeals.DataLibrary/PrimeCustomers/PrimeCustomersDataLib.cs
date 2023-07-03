@@ -721,5 +721,24 @@ namespace Intel.MyDeals.DataLibrary
             }
 
         }
+        public DataTable ResubmissionDeals(string dealId, string endCustomerData)
+        {
+            try
+            {
+                var cmd = new Procs.dbo.PR_MYDL_UCD_RETRIGGER()
+                {
+                    in_deal_id = dealId,
+                    in_end_cust_data = endCustomerData
+
+                };
+
+                return DataAccess.ExecuteDataTable(cmd);
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                return null;
+            }
+        }
     }
 }

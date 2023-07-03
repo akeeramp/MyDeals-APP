@@ -6,6 +6,7 @@ using Moq;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Data;
 
 namespace Intel.MyDeals.BusinessLogicNew.Test
 {
@@ -151,5 +152,14 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             var result = new PrimeCustomersLib(mockIPrimeCustomersDataLib.Object, mockIDataCollectionsDataLib.Object, mockIIntegrationLib.Object, mockIJmsDataLib.Object).RetryUCDRequest();
             Assert.IsFalse(result);
         }//RetryUCDRequest() - this is internally calling UnPrimeDealsLogs() fxn for return True testcase, will pick that TC later
+        [Test,
+           TestCase("Deal Id", "End Customer Object")]
+        public void ResubmissionDeals_ShouldReturnNotNull(string dealId, string endCustObj)
+        {
+            DataTable mockData = new DataTable();
+            mockIPrimeCustomersDataLib.Setup(x => x.ResubmissionDeals(It.IsAny<string>(), It.IsAny<string>())).Returns(mockData);
+            var result = new PrimeCustomersLib(mockIPrimeCustomersDataLib.Object, mockIDataCollectionsDataLib.Object, mockIIntegrationLib.Object, mockIJmsDataLib.Object).ResubmissionDeals(dealId, endCustObj);
+            Assert.IsNotNull(result);
+        }
     }
 }

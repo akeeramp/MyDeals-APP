@@ -34,5 +34,7 @@ namespace Intel.MyDeals.IBusinessLogic
         List<RplStatusCode> GetRplStatusCodes();
 
         List<DealReconInvalidRecords> updateDealRecon(List<DealRecon> lstDealRecon);
+
+        string ResubmissionDeals(string dealId, string endCustomerData);
     }
 }

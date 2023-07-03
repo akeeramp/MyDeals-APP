@@ -1,4 +1,4 @@
-<?xml version="1.0" encoding="utf-8"?>
+﻿<?xml version="1.0" encoding="utf-8"?>
 <Project ToolsVersion="14.0" DefaultTargets="Build" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <Import Project="$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props" Condition="Exists('$(MSBuildExtensionsPath32)\Microsoft\VisualStudio\v$(VisualStudioVersion)\TypeScript\Microsoft.TypeScript.Default.props')" />
   <Import Project="$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props" Condition="Exists('$(MSBuildExtensionsPath)\$(MSBuildToolsVersion)\Microsoft.Common.props')" />
@@ -551,6 +551,7 @@
     <Content Include="Client\src\app\admin\testTenders\admin.testTenders.component.html" />
     <Content Include="Client\src\app\admin\supportScript\admin.supportScript.component.html" />
     <Content Include="Client\src\app\admin\unifiedDealRecon\admin.bulkUnifyModal.component.html" />
+    <Content Include="Client\src\app\admin\unifiedDealRecon\admin.retriggerUnifyModal.component.html" />
     <Content Include="Client\src\app\admin\unifiedDealRecon\admin.unifiedDealRecon.component.css" />
     <Content Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.component.css" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.component.ts" />
@@ -585,6 +586,7 @@
     <TypeScriptCompile Include="Client\src\app\admin\supportScript\admin.supportScript.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\supportScript\admin.supportScript.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\unifiedDealRecon\admin.bulkUnifyModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\unifiedDealRecon\admin.retriggerUnifyModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\unifiedDealRecon\admin.unifiedDealRecon.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\unifiedDealRecon\admin.unifiedDealRecon.model.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\unifiedDealRecon\admin.unifiedDealRecon.service.ts" />
@@ -606,40 +608,33 @@
     <Content Include="Client\src\app\advanceSearch\advancedSearch.component.html" />
     <Content Include="Client\src\app\advanceSearch\globalSearch\globalSearch.component.css" />
     <Content Include="Client\src\app\advanceSearch\globalSearch\globalSearch.component.html" />
-
-
     <TypeScriptCompile Include="Client\src\appModules\admin\admin-util.module.ts" />
     <TypeScriptCompile Include="Client\src\appModules\admin\app.admin.module.ts" />
     <TypeScriptCompile Include="Client\src\appModules\admin\app.route-admin.component.ts" />
     <TypeScriptCompile Include="Client\src\appModules\admin\main-admin.ts" />
     <TypeScriptCompile Include="Client\src\appModules\admin\main-admin-prod.ts" />
-
     <TypeScriptCompile Include="Client\src\appModules\advancesearch\advance-util.module.ts" />
     <TypeScriptCompile Include="Client\src\appModules\advancesearch\app.advance.module.ts" />
     <TypeScriptCompile Include="Client\src\appModules\advancesearch\app.route-advance.component.ts" />
     <TypeScriptCompile Include="Client\src\appModules\advancesearch\main-advance.ts" />
     <TypeScriptCompile Include="Client\src\appModules\advancesearch\main-advance-prod.ts" />
-
     <TypeScriptCompile Include="Client\src\appModules\contract\contract-util.module.ts" />
     <TypeScriptCompile Include="Client\src\appModules\contract\app.contract.module.ts" />
     <TypeScriptCompile Include="Client\src\appModules\contract\app.route-contract.component.ts" />
     <TypeScriptCompile Include="Client\src\appModules\contract\main-contract.ts" />
     <TypeScriptCompile Include="Client\src\appModules\contract\main-contract-prod.ts" />
-
     <TypeScriptCompile Include="Client\src\appModules\dashboard\dashboard-util.module.ts" />
     <TypeScriptCompile Include="Client\src\appModules\dashboard\app.dashboard.module.ts" />
     <TypeScriptCompile Include="Client\src\appModules\dashboard\app.route-dashboard.component.ts" />
     <TypeScriptCompile Include="Client\src\appModules\dashboard\main-dashboard.ts" />
     <TypeScriptCompile Include="Client\src\appModules\dashboard\main-dashboard-prod.ts" />
-
     <TypeScriptCompile Include="Client\src\appModules\reporting\report-util.module.ts" />
     <TypeScriptCompile Include="Client\src\appModules\reporting\app.report.module.ts" />
     <TypeScriptCompile Include="Client\src\appModules\reporting\app.route-report.component.ts" />
     <TypeScriptCompile Include="Client\src\appModules\reporting\main-report.ts" />
     <TypeScriptCompile Include="Client\src\appModules\reporting\main-report-prod.ts" />
-	<TypeScriptCompile Include="Client\src\app\shared\util\guardConfig.util.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\util\guardConfig.util.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\util\guardProtection.ts" />
-
     <TypeScriptCompile Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\vistex\admin.vistexIntegrationLog.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\vistex\admin.vistexProfiseeAPI.component.ts" />
@@ -2333,7 +2328,7 @@
     <!--Transform Dev config-->
     <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\Dev\" />
     <TransformXml Source="Web.config" Transform="Web.dev.config" Destination="$(WebProjectOutputDir)\EnvConfig\Dev\Web.config" />
-     <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\EUT\" />
+    <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\EUT\" />
     <TransformXml Source="Web.config" Transform="Web.eut.config" Destination="$(WebProjectOutputDir)\EnvConfig\EUT\Web.config" />
     <MakeDir Directories="$(WebProjectOutputDir)\EnvConfig\Day1\" />
     <TransformXml Source="Web.config" Transform="Web.day1.config" Destination="$(WebProjectOutputDir)\EnvConfig\Day1\Web.config" />

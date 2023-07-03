@@ -14146,39 +14146,30 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 				StoredProdedureName = "[dbo].[PR_MYDL_UCD_RETRIGGER]";
 			}
 
-			///<summary>
-			/// DataType: nvarchar(200)
-			/// Mode: IN
-			/// Max Length: 200
-			///</summary>
-			[SQLParameterAttribute(1, "ParameterDirection.Input", 200, false)]
-			public String in_deal_id {
-				set { SetParmeter("in_deal_id", value); }
-				get { return (String)GetParameter("in_deal_id"); }
-			}
-
-			///<summary>
-			/// DataType: varchar(200)
-			/// Mode: IN
-			/// Max Length: 200
-			///</summary>
-			[SQLParameterAttribute(2, "ParameterDirection.Input", 200, false)]
-			public String in_cust_nm {
-				set { SetParmeter("in_cust_nm", value); }
-				get { return (String)GetParameter("in_cust_nm"); }
-			}
-
-			///<summary>
-			/// DataType: varchar(100)
-			/// Mode: IN
-			/// Max Length: 100
-			///</summary>
-			[SQLParameterAttribute(3, "ParameterDirection.Input", 100, false)]
-			public String in_cust_ctry {
-				set { SetParmeter("in_cust_ctry", value); }
-				get { return (String)GetParameter("in_cust_ctry"); }
-			}
-		}
+            ///<summary>
+            /// DataType: nvarchar(200)
+            /// Mode: IN
+            /// Max Length: 200
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 200, false)]
+            public String in_deal_id
+            {
+                set { SetParmeter("in_deal_id", value); }
+                get { return (String)GetParameter("in_deal_id"); }
+            }
+            ///<summary>
+            /// DataType: varchar(200)
+            /// Mode: IN
+            /// Max Length: 200
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 200, false)]
+            public String in_end_cust_data
+            {
+                set { SetParmeter("in_end_cust_data", value); }
+                get { return (String)GetParameter("in_end_cust_data"); }
+            }
+            
+        }
 
 		///<summary>
 		/// ID: 1081770911

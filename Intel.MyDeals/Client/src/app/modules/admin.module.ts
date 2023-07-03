@@ -49,6 +49,7 @@ import { adminDownloadExceptionscomponent } from '../admin/legalException/admin.
 import { BulkUploadMeetCompModalComponent } from '../admin/meetComp/admin.bulkUploadMeetCompModal.component';
 import { adminUnifiedDealReconComponent } from '../admin/unifiedDealRecon/admin.UnifiedDealRecon.component';
 import { bulkUnifyModalComponent } from '../admin/unifiedDealRecon/admin.bulkUnifyModal.component';
+import { retriggerUnifyModalComponent } from '../admin/unifiedDealRecon/admin.retriggerUnifyModal.component';
 import { adminsecurityEngineComponent } from '../admin/securityEngine/admin.securityEngine.component';
 import { BulkPricingUpdatesComponent } from '../admin/bulkPricingUpdates/admin.bulkPricingUpdates.component';
 import { BulkPricingUpdateModalComponent } from '../admin/bulkPricingUpdates/admin.bulkPricingUpdateModal.component';
@@ -112,5 +113,6 @@ export let adminComponents =[
     BulkPricingUpdatesComponent,
     BulkPricingUpdateModalComponent,
     adminMydealsSupportComponent,
-    adminVistexProfiseeApiComponent
+    adminVistexProfiseeApiComponent,
+    retriggerUnifyModalComponent
 ]

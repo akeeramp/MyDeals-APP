@@ -5,6 +5,7 @@ import { endCustomerRetailModalComponent } from "../../contract/ptModals/dealEdi
 import { Unified_Deal_Recon } from "./admin.unifiedDealRecon.model";
 import { MatDialog } from '@angular/material/dialog';
 import { bulkUnifyModalComponent } from "./admin.bulkUnifyModal.component";
+import { retriggerUnifyModalComponent } from "./admin.retriggerUnifyModal.component";
 import {
     GridDataResult,
     DataStateChangeEvent,
@@ -36,6 +37,7 @@ export class adminUnifiedDealReconComponent {
     private errorMsg: string[] = [];
     private isCombExists = false;
     public editAccess = true;
+    private retrigger = ((<any>window).isCustomerAdmin || (<any>window).usrRole == "SA" || (<any>window).isDeveloper) ? true : false;
     private isNew: boolean;
     public dataItems: any;
     public OBJ_SID: any;
@@ -268,6 +270,13 @@ export class adminUnifiedDealReconComponent {
 
     ngOnInit() {
         this.loadDealReconciliation();
+    }
+    OpenRetriggerUnifyModal() {
+        const dialogRef = this.dialog.open(retriggerUnifyModalComponent, {
+            height: 'auto',
+            panelClass: 'unified-bulk-popup'
+
+        });
     }
 
 }

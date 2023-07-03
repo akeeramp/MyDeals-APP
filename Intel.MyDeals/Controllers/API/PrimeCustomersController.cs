@@ -6,6 +6,7 @@ using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.Helpers;
 using System.Net.Http;
 using System;
+using System.Runtime.InteropServices;
 
 
 namespace Intel.MyDeals.Controllers.API
@@ -155,6 +156,14 @@ namespace Intel.MyDeals.Controllers.API
         public IEnumerable<DealReconInvalidRecords> updateDealRecon(List<DealRecon> lstDealRecon)
         {
             return _primeCustomersLib.updateDealRecon(lstDealRecon);
+        }
+        [Authorize]
+        [HttpPost]
+        [Route("ResubmissionDeals/{dealId}")]
+        public string ResubmissionDeals(string dealId, [FromBody] object endcustomerdata)
+        {
+            return SafeExecutor(() => _primeCustomersLib.ResubmissionDeals(dealId, endcustomerdata.ToString()),
+                  $"Unable to Resubmitt");
         }
     }
 }
