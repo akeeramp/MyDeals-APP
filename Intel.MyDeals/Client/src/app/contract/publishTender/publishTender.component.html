@@ -16,7 +16,7 @@
                 </div>
 
                 <div>
-                    <button class="btn btn-primary prdBtn pbl-tnder-btn" (click)="publishTenderDeal()" style="font-size: 16px;">YES, Please Publish Tender Deals</button>
+                    <button *ngIf="isPublishEnabled" class="btn btn-primary prdBtn pbl-tnder-btn" (click)="publishTenderDeal()" style="font-size: 16px;">YES, Please Publish Tender Deals</button>
                     <button class="btn btn-primary prdBtn pbl-tnder-btn" (click)="refreshGrid()" style="font-size: 16px; margin-left: 5px !important;"><span kendoTooltip title="Refresh" position="top" class="k-icon k-i-reload k-icon-sm"></span></button>
                 </div>
                 <div class="showMCTag" *ngIf="showMCTag">Meet Comp Status: <div class='textRunIcon readOnlyCell' style="padding-left: 5px;float:right"><i class='intelicon-information-solid notApplicableIcon' title='Meet comp is not applicable for the Products selected in the Tender Table editor' style='font-size:20px !important'></i></div></div>

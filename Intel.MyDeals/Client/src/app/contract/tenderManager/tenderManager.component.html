@@ -69,7 +69,7 @@
             <span>{{contractData.Customer.CUST_NM}}: </span>
             <span>{{contractData.TITLE}}</span>	&nbsp;&nbsp;
         </div>
-        <button class="ng-scope btn btn-primary deleteContract delcontracticon" (click)="deleteContract()" title='Delete Contract'>
+        <button *ngIf="isButtonEnabled" class="ng-scope btn btn-primary deleteContract delcontracticon" (click)="deleteContract()" title='Delete Contract'>
             <i class="intelicon-trash-outlined deleteIcon" style="margin-left: 4px;font-size: 16px;" title='Delete Contract'></i>&nbsp;
         </button>
     </div>
@@ -142,7 +142,7 @@
         </meet-comp-contract>
     </div>
     <div *ngIf="selectedTab == 'PD'" class="col-md-12 loadpublish">
-        <publish-tender [pricingTableData]="pricingTableData"></publish-tender>
+        <publish-tender [isPublishEnabled]="isButtonEnabled" [pricingTableData]="pricingTableData"></publish-tender>
     </div>
     <kendo-dialog *ngIf="isDialogVisible" class="k-dialog-popup-design" (close)="close()" [width]="440">
         <p style="text-align: center;">Are you sure you would like to Delete this Contract ? </p>

@@ -51,7 +51,9 @@ export class tenderManagerComponent {
     public pt_passed_validation: boolean;
     public compMissingFlag: any;
     private searchText: any = "";
-    isredirect=false;
+    isredirect = false;
+    isButtonEnabled = (<any>window).usrRole === 'RA' || (<any>window).usrRole === 'Legal' || (<any>window).usrRole === 'CBA' || (<any>window).usrRole === 'DA' || ((<any>window).isBulkPriceAdmin && (<any>window).usrRole === 'SA') || (<any>window).isCustomerAdmin ? false : true;
+
     async loadAllContractDetails(): Promise<void> {
         let response = await this.pricingTableSvc.readContract(this.c_Id).toPromise().catch((err) => {
             this.loggerSvc.error('loadAllContractDetails::readContract:: service', err);

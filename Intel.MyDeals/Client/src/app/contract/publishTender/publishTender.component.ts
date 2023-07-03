@@ -28,7 +28,8 @@ export class publishTenderComponent {
                 protected dialog: MatDialog,
                 private route: ActivatedRoute,
                 private momentService: MomentService) {}
-    @Input() private pricingTableData:any;//using in html
+    @Input() private pricingTableData: any;//using in html
+    @Input() public isPublishEnabled;
     public c_Id: any = '';
     public showMCTag = false;
     public spinnerMessageHeader: string;
