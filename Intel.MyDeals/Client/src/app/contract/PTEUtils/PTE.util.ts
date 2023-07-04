@@ -412,14 +412,16 @@ export class PTEUtil {
                 });
                 if (Includeproducts.length !== 0) {
                     let contDerivedUserInput = uniq(Includeproducts, 'HIER_VAL_NM');
-                    if (Includeproducts.length === 1 && contDerivedUserInput[0].DERIVED_USR_INPUT.trim().toLowerCase() == contDerivedUserInput[0].HIER_NM_HASH.trim().toLowerCase()) {
-                        contractProducts = contDerivedUserInput[0].HIER_VAL_NM;
-                    } else {
-                        contractProducts = contDerivedUserInput.length == 1 ? PTE_Common_Util.getFullNameOfProduct(contDerivedUserInput[0], contDerivedUserInput[0].DERIVED_USR_INPUT) : contDerivedUserInput[0].DERIVED_USR_INPUT;
-                    }
-                    if (contractProducts !== "") {
-                        input.contractProducts = input.contractProducts === "" ? contractProducts : input.contractProducts + "," + contractProducts;
-                    }
+                    each(contDerivedUserInput ,(inputcontract)=>{
+                        if (Includeproducts.length === 1 && inputcontract.DERIVED_USR_INPUT.trim().toLowerCase() == inputcontract.HIER_NM_HASH.trim().toLowerCase()) {
+                            contractProducts = inputcontract.HIER_VAL_NM;
+                        } else {
+                            contractProducts = contDerivedUserInput.length == 1 ? PTE_Common_Util.getFullNameOfProduct(inputcontract, inputcontract.DERIVED_USR_INPUT) : inputcontract.DERIVED_USR_INPUT;
+                        }
+                        if (contractProducts !== "") {
+                            input.contractProducts = input.contractProducts === "" ? contractProducts : input.contractProducts + "," + contractProducts;
+                        }
+                    })
                 }
 
                 // Exclude Products

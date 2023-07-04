@@ -346,7 +346,7 @@ export class pricingTableEditorComponent {
                                     PTE_CellChange_Util.checkfn(ptrow, VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable);
                                 }
 
-                                if(this.field='GEO_COMBINED'){
+                                if(this.field == 'GEO_COMBINED'){
                                     const col = findIndex(VM.columns, { data: this.field });
                                     this.hot.setCellMetaObject(this.selRow,col,{ 'className': '', comment: { value: '' } });
                                     this.hot.render();

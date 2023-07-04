@@ -103,8 +103,10 @@ import { MomentService } from "../../../shared/moment/moment.service";
 		}
     }
 	onKeyDown(event) {
-		if (event.keyCode == 13) {
-			this.onSave();
+		if (this.isValidDate) {
+			if (event.keyCode == 13) {
+				this.onSave();
+			}
 		}
 	}
     onSave(){
