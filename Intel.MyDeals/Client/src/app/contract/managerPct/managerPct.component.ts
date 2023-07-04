@@ -308,8 +308,9 @@ export class managerPctComponent {
         return false;
     }
 
-    executePctViaBtn() {
-        this.executePct();
+    async executePctViaBtn() {
+        await this.executePct();
+        await this.loadPctDetails();
     }
     async executePct() {
         this.isRunning = true;
@@ -319,8 +320,6 @@ export class managerPctComponent {
             this.loggerSvc.error("Could not run Cost Test for contract " + this.contractId, err);
         });
         this.isRunning = false;
-        await this.loadPctDetails();
-        
     }
     refreshGrid(){
         this.refreshPage = true;
@@ -370,22 +369,22 @@ export class managerPctComponent {
         window.open('https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Price-Cost-Test.aspx', '_blank');
     }
 
-    onTabSelect(event: any) {
+    async onTabSelect(event: any) {
         this.gridDataSet = {};
+        let data = JSON.parse(JSON.stringify(this.contractData));
         this.selectedTab = event.index;
         if (this.isTenderDashboard && event.index == 1)//PCT screen of Tender Dashboard have only two tabs (All, Grouping Exclusions)
             this.selectedTab = 5;
-        this.headerSvc.getUserDetails().subscribe(res => {
-            this.usrRole = res.UserToken.Role.RoleTypeCd;
-            (<any>window).usrRole = this.usrRole;
-
-            if (this.isSuper) {
-                this.superPrefix = "Super";
-                this.extraUserPrivsDetail.push("Super User");
-            }
-        },(err)=>{
+        let res = await this.headerSvc.getUserDetails().toPromise().catch((err) => {
             this.loggerSvc.error("Unable to get user role details","Error",err);
         });
+        this.usrRole = res.UserToken.Role.RoleTypeCd;
+        (<any>window).usrRole = this.usrRole;
+
+        if (this.isSuper) {
+            this.superPrefix = "Super";
+            this.extraUserPrivsDetail.push("Super User");
+        }
         if (this.selectedTab == 5) {
             event.preventDefault();
             if (!this.isTenderDashboard)
@@ -399,13 +398,13 @@ export class managerPctComponent {
         }
         this.selTab(event.title);
         if (this.pctFilter != "") {
-            this.pricingStrategyFilter = this.contractData?.PRC_ST.filter(x => x.COST_TEST_RESULT == this.pctFilter);
-            this.pricingStrategyFilter.forEach((item) => {
+            this.pricingStrategyFilter = data?.PRC_ST.filter(x => x.COST_TEST_RESULT == this.pctFilter);
+            each(this.pricingStrategyFilter, item => {
                 item.PRC_TBL = item.PRC_TBL.filter(x => x.COST_TEST_RESULT == this.pctFilter);
-            })
+            });
         }
         else {
-            this.pricingStrategyFilter = this.contractData?.PRC_ST;
+            this.pricingStrategyFilter = data?.PRC_ST;
         }
     }
     openGroupExclusionModal() {
