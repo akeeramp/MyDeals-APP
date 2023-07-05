@@ -1009,6 +1009,10 @@ kendo-treeview.k-widget.k-treeview.fiend-tree ul li kendo-checkbox .k-checkbox {
     left: 0;
 }
 
+loading-panel-angular.loadpublish .myLoader {
+    left: 42%;
+}
+
 .loadpublish publish-tender loading-panel-angular .ss-loading-panel {
     /*margin-top: 150px !important;
     margin-left: 347px !important;*/
@@ -2478,3 +2482,24 @@ i.intelicon-protection-solid.icon_colourfix.validf_Dirty {
 i.intelicon-protection-solid.icon_colourfix.validf_Complete {
     color: #c4d600 !important;
 }
+
+.product-breakout-modal-selector {
+    width: 70vw !important
+}
+
+    .product-breakout-modal-selector > mat-dialog-container {
+        background-color: #1a3e6f !important;
+        padding: 0 !important
+    }
+
+    .product-breakout-modal-selector mat-dialog-container product-breakout .modal-content {
+        box-shadow: none
+    }
+
+#breakOutGrid .excelText {
+    height: 45px !important;
+}
+
+    #breakOutGrid .excelText.k-button:focus {
+        box-shadow: none;
+    }

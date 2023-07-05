@@ -374,7 +374,11 @@
     background: transparent;
     border-color: transparent;
     padding-left: 0;
-    color: #003c71
+    color: #003c71;
+    text-overflow: ellipsis;
+    overflow: hidden;
+    display: block;
+    width: 100%;
 }
 
     .contractIdBtn:hover {

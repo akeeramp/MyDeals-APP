@@ -687,19 +687,6 @@
     margin: 0 !important
 }
 
-.product-breakout-modal-selector {
-    width: 70vw !important
-}
-
-    .product-breakout-modal-selector > mat-dialog-container {
-        background-color: #1a3e6f !important;
-        /*padding: 0 !important*/
-    }
-
-    .product-breakout-modal-selector mat-dialog-container product-breakout .modal-content {
-        box-shadow: none
-    }
-
 /*#PTRLoading .ss-loading-overlay .myLoader {
     left: 40% !important;
     top: 35% !important

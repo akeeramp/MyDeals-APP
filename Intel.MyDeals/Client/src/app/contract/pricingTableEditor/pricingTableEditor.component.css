@@ -300,11 +300,14 @@ button td.button-intel {
 }
 
 .ptrLoading > .ss-loading-overlay > .myLoader {
-    left: 40% !important
+    left: 42% !important
 }
 
 .ptrLoading .ss-loading-overlay {
-    left: 0 !important
+    left: 0 !important;
+    top: 88px !important;
+    width: 100%;
+    position: fixed;
 }
 
 .ptrLoading .ss-loading-panel.ss-Info {

@@ -1324,9 +1324,6 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:
     padding-left: 15px !important
 }
 
-#breakOutGrid .excelText {
-    height: 70px
-}
 
 .product-breakout-modal .k-icon.k-i-file-excel {
     margin-top: -30px !important;
