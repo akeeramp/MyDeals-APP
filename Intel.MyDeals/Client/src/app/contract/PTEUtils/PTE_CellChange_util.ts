@@ -392,6 +392,7 @@ export class PTE_CellChange_Util {
             const selrow = items[0].row;
             //to identify the uniq records
             let prods =uniq(items[0].new.split(','));
+            prods= prods.splice(0,10);
             items[0].new=prods.toString();
             if (!this.isAlreadyChange(selrow)) {
                 //identify the empty row and add it there
@@ -482,6 +483,7 @@ export class PTE_CellChange_Util {
                     //let ROW_ID = this.rowDCID();
                     //add num of tier rows the logic will be based on autofill value
                     let prods = uniq(cellItem.new.split(',')), prodIndex = 0;
+                    prods= prods.splice(0,10);
                     //to identify the uniq records
                     cellItem.new = prods.toString();
                     //KIT Deal will not allow more than 10 rows
