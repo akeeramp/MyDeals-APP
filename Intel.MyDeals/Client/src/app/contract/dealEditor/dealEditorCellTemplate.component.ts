@@ -52,6 +52,8 @@ export class dealEditorCellTemplateComponent {
     private YCS2modifier: string;
     private fieldModifier: string;
     private fieldText: string;
+    private usrRole = (<any>window).usrRole;
+    private isSuper = (<any>window).isSuper;
 
     private openModal(columnTypes: string, currentPricingTableRow, productMemberSId, priceCondition) {
         // Open Modal with data
