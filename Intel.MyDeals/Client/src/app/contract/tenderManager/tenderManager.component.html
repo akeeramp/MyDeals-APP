@@ -2,6 +2,20 @@
 <div class="tenderManagerParent">
     <loading-panel-angular [show]="isSpinnerLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription">
     </loading-panel-angular>
+    <div   class="pricing-strategy-status-bar fl" style="position: absolute; margin-left: -5px; left: 0px;">
+        <div  [ngClass]="{'valid_Complete': ispricingTableDPASSED_VALIDATION=='valid_Complete', 'valid_Dirty':ispricingTableDPASSED_VALIDATION=='valid_Dirty'}" *ngIf="contractData!= undefined" style="padding: 5px 8px;float:left;">
+            <span class="contractHeaderId">#{{ contractData.DC_ID }} </span>
+            <span>{{contractData.Customer.CUST_NM}}: </span>
+            <span>{{contractData.TITLE}}</span>	&nbsp;&nbsp;
+        </div>
+        <button *ngIf="isButtonEnabled" class="ng-scope btn btn-primary deleteContract delcontracticon" (click)="deleteContract()" title='Delete Contract'>
+            <i class="intelicon-trash-outlined deleteIcon" style="margin-left: 4px;font-size: 16px;" title='Delete Contract'></i>&nbsp;
+        </button>
+    </div>
+    <div class="pricing-strategy-status-bar fr" style="padding-right: 0px;" >
+        <div [ngClass]="{'valid_Complete': ispricingTableDPASSED_VALIDATION=='valid_Complete', 'valid_Dirty':ispricingTableDPASSED_VALIDATION=='valid_Dirty'}" style="padding: 5px 8px;"><span style="opacity: 0.5;">TENDER SHEET:</span>
+            <span *ngIf="pricingTableData != undefined"> {{ pricingTableData.PRC_ST[0].WF_STG_CD }} </span></div>
+    </div>
     <div *ngIf="pricingTableData == undefined">
         <div class="container-fluid editor101">
             <div class="col-md-11" style="text-align: center;padding-top: 60px;">
@@ -63,20 +77,7 @@
             <div class="col-md-6"><img src="/images/instructions.png" alt="Customer Contract Anatony Image" style="margin-top: 10px;height: 100%; width: 100%" /></div>
         </div>
     </div>
-    <div *ngIf="pricingTableData != undefined" class="pricing-strategy-status-bar fl" style="position: absolute; margin-left: -5px; left: 0px;">
-        <div class="valid_{{pricingTableData.PRC_ST[0].PASSED_VALIDATION}}" style="padding: 5px 8px;float:left">
-            <span class="contractHeaderId">#{{ contractData.DC_ID }} </span>
-            <span>{{contractData.Customer.CUST_NM}}: </span>
-            <span>{{contractData.TITLE}}</span>	&nbsp;&nbsp;
-        </div>
-        <button *ngIf="isButtonEnabled" class="ng-scope btn btn-primary deleteContract delcontracticon" (click)="deleteContract()" title='Delete Contract'>
-            <i class="intelicon-trash-outlined deleteIcon" style="margin-left: 4px;font-size: 16px;" title='Delete Contract'></i>&nbsp;
-        </button>
-    </div>
-
-    <div class="pricing-strategy-status-bar fr" style="padding-right: 0px;" *ngIf="pricingTableData != undefined">
-        <div class="valid_{{pricingTableData.PRC_ST[0].PASSED_VALIDATION}}" style="padding: 5px 8px;"><span style="opacity: 0.5;">TENDER SHEET:</span> {{ pricingTableData.PRC_ST[0].WF_STG_CD }}</div>
-    </div>
+ 
     <div class="row wizard" [ngStyle]="{'width': getWidth(isDeveloper || isTester), 'padding-top': getPadding(isDeveloper || isTester) }" *ngIf="pricingTableData != undefined">
         <div class="col-xs-3 col-md-3">
             <div class="wizard-panel first" [ngClass]="{'complete': isValidateTTE() == true }">

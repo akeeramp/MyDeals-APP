@@ -51,6 +51,7 @@ export class tenderManagerComponent {
     public pt_passed_validation: boolean;
     public compMissingFlag: any;
     private searchText: any = "";
+    private ispricingTableDPASSED_VALIDATION='valid_Complete';
     isredirect = false;
     isButtonEnabled = (<any>window).usrRole === 'RA' || (<any>window).usrRole === 'Legal' || (<any>window).usrRole === 'CBA' || (<any>window).usrRole === 'DA' || ((<any>window).isBulkPriceAdmin && (<any>window).usrRole === 'SA') || (<any>window).isCustomerAdmin ? false : true;
 
@@ -85,7 +86,7 @@ export class tenderManagerComponent {
                 this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
                     this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
                 });
-
+                this.ispricingTableDPASSED_VALIDATION= 'valid_'+this.pricingTableData.PRC_ST[0].PASSED_VALIDATION;
                 this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
                 let passed = this.pricingTableData.PRC_TBL_ROW.filter(x => x.PASSED_VALIDATION == "Complete");
                 let compFlag = this.pricingTableData.PRC_TBL_ROW.filter(x => x.COMP_MISSING_FLG == "0");
