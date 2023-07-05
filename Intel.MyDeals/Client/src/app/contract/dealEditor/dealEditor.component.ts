@@ -35,8 +35,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     styleUrls: ['Client/src/app/contract/dealEditor/dealEditor.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class dealEditorComponent {
-    
+export class dealEditorComponent { 
 
     constructor(private pteService: pricingTableEditorService,
                 private contractDetailsSvc: contractDetailsService,
@@ -61,7 +60,8 @@ export class dealEditorComponent {
     @ViewChild(GridComponent) private grid: GridComponent;
     @Output() perfComp = new EventEmitter;
     @Output() addPerfTimes = new EventEmitter;
-    @Output() refreshedContractData = new EventEmitter;
+    @Output() refreshedContractData = new EventEmitter();
+    @Output() contractDataRefresh = new EventEmitter();
     @Output() tmDirec = new EventEmitter();
     @Output() deTabInfmIconUpdate = new EventEmitter();
     @Output() pteRedir = new EventEmitter();
@@ -131,6 +131,7 @@ export class dealEditorComponent {
     private isInitialLoad = true;
     public allTabRename = '';
     private datesModified = false;
+    public emitContractData: any = null;
     private dealId: any;
     public perfBar = {
         action: '',
@@ -1245,6 +1246,7 @@ export class dealEditorComponent {
                 this.loggerService.error('contract data read error.....', err);
                 this.isLoading = false;
             });
+        this.emitContractData = response && response.length > 0 ? response[0] : this.contractData;
         this.contractData = PTE_Common_Util.initContract(this.UItemplate, response[0]);
         this.contractData.CUST_ACCNT_DIV_UI = "";
         // if the current strategy was changed, update it
@@ -1255,6 +1257,11 @@ export class dealEditorComponent {
             }
         }
         this.refreshedContractData.emit({ contractData: this.contractData, PS_Passed_validation: this.curPricingStrategy.PASSED_VALIDATION, PT_Passed_validation: this.curPricingTable.PASSED_VALIDATION });
+        if (this.isTenderContract) {
+            if (this.emitContractData && this.emitContractData != null) {
+                this.contractDataRefresh.emit(this.emitContractData);
+            }
+        }
     }
 
     filterDealData(event) {

@@ -531,7 +531,7 @@ export class endCustomerRetailModalComponent {
                 }
             }
         }
-        if (endCustomer.length > 60) {
+        if (endCustomer && endCustomer.length > 60) {
             this.ChangeErrorFlag = true;
             this.validateFlag = true;
             if (field != undefined && field != null) {

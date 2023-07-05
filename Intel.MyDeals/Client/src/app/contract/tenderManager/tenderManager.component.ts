@@ -102,23 +102,35 @@ export class tenderManagerComponent {
                 }
                 else {
                     if(this.isredirect==false){
-                    this.selectedTab = 'PTR';
-                    this.currentTAB = 'PTR';
-                    const cid = this.route.snapshot.paramMap.get('cid');
-                    if (this.route.snapshot.queryParams.loadtype==undefined)
-                    {
-                          //it will update the url on page reload persist the selected state
-                    const urlTree = this.router.createUrlTree(['/tendermanager', cid]);
-                    this.router.navigateByUrl(urlTree + '?loadtype=PTR');
+                        this.selectedTab = 'PTR';
+                        this.currentTAB = 'PTR';
+                        const cid = this.route.snapshot.paramMap.get('cid');
+                        if (this.route.snapshot.queryParams.loadtype==undefined){
+                            //it will update the url on page reload persist the selected state
+                            const urlTree = this.router.createUrlTree(['/tendermanager', cid]);
+                            this.router.navigateByUrl(urlTree + '?loadtype=PTR');
+                        }
                     }
                 }
-            }
                 if(!!this.route.snapshot.queryParams.loadtype){
-                      //it will update the url on page reload persist the selected state
-                this.currentTAB=this.route.snapshot.queryParams.loadtype;
-                this.selectedTab=this.currentTAB;
+                    //it will update the url on page reload persist the selected state
+                    if (this.route.snapshot.queryParams.loadtype == 'DE') {
+                        if (this.isPTRPartiallyComplete()) {
+                            this.currentTAB = this.route.snapshot.queryParams.loadtype;
+                            this.selectedTab = this.currentTAB;
+                        }
+                    } else if (this.route.snapshot.queryParams.loadtype == 'MC') {
+                        if (this.isValidateDE()) {
+                            this.currentTAB = this.route.snapshot.queryParams.loadtype;
+                            this.selectedTab = this.currentTAB;
+                        }
+                    } else if (this.route.snapshot.queryParams.loadtype == 'PD') {
+                        if (this.isValidateMC()) {
+                            this.currentTAB = this.route.snapshot.queryParams.loadtype;
+                            this.selectedTab = this.currentTAB;
+                        }
+                    }
                 }
-
             }
             else{
                 this.loggerSvc.error("Something went wrong. Please contact Admin","Error");
@@ -127,7 +139,7 @@ export class tenderManagerComponent {
         else{
             this.loggerSvc.error("No result found","Error");
         }
-         this.isLoading = false;
+        this.isLoading = false;
     }
 
     refreshContract(data: any) {
@@ -155,6 +167,10 @@ export class tenderManagerComponent {
         this.perfComp.addPerfTime("Update Contract And CurPricing Table", perfData);
     }
 
+    contractDataRefresh(data) {
+        this.contractData = data;
+    }
+
     isValidateTTE() {
         if (this.isPTRPartiallyComplete()) {
             if (this.deComp != undefined) {
@@ -174,13 +190,13 @@ export class tenderManagerComponent {
     }
 
     isValidateDE() {
-        if (this.pt_passed_validation && this.isPTRPartiallyComplete() == true) {
+        if (this.pt_passed_validation && this.contractData.PASSED_VALIDATION == 'Complete' && this.isPTRPartiallyComplete() == true) {
             return true;
         } else return false;
     }
 
     isValidateMC() {
-        if (this.pt_passed_validation && this.compMissingFlag && this.isPTRPartiallyComplete()) {
+        if (this.isValidateDE() && this.compMissingFlag) {
             return true;
         } else return false;
     }
@@ -234,7 +250,7 @@ export class tenderManagerComponent {
             if (this.gotoPD == 'PD' && this.compMissingFlag) await this.redirectingFn('PD');
             this.gotoPD = '';
         }
-          //it will update the url on page reload persist the selected state
+        //it will update the url on page reload persist the selected state
         const cid = this.route.snapshot.paramMap.get('cid');
         const urlTree = this.router.createUrlTree(['/tendermanager', cid]);
         this.router.navigateByUrl(urlTree + '?loadtype='+this.currentTAB);
@@ -288,14 +304,12 @@ export class tenderManagerComponent {
                     await this.pteComp.validatePricingTableProducts();
                     if (this.pt_passed_validation) {
                         setTimeout(() => {//waiting for the api call to complete in redirectingFn()
-                            if (this.pt_passed_validation) {
-                                this.redirectingFn('PTR');//even after editing if pass validation is complete then after save it will remain in PTE
-                            }
+                            this.redirectingFn('PTR');//even after editing if pass validation is complete then after save it will remain in PTE
                         }, 3000);
-                    } 
+                    }
                 } else {
                     if (this.dirtyItems.length == 0 && this.isPTREmpty == false) {
-                        if (!this.pt_passed_validation) {
+                        if (!this.isValidateDE()) {
                             await this.redirectingFn('DE');// if selected tab is MC and pass validation not complete then redirect to DE
                         } else {
                             await this.redirectingFn(selectedTab);// if selected tab is MC and pass validation is complete then redirect to MC
@@ -305,11 +319,11 @@ export class tenderManagerComponent {
             } else if (this.currentTAB == 'DE') {
                 if (this.deComp.dirty) {
                     await this.deComp.SaveDeal();
-                    if (this.pt_passed_validation) {
+                    if (this.isValidateDE()) {
                         await this.redirectingFn(selectedTab);// if DE is edited and on save if pass validation is complete redirect to MC
                     }
                 } else {
-                    if (this.pt_passed_validation) {
+                    if (this.isValidateDE()) {
                         await this.redirectingFn(selectedTab);//if DE has no change and pass validation is complete redirect to MC
                     }
                 }
@@ -340,7 +354,7 @@ export class tenderManagerComponent {
                                 this.gotoPD = 'PD';
                                 await this.redirectingFn('MC');// if pass validation is complete & meetcomp data is available & meet comp is not run redirects to MC
                             }else {
-                                if (this.compMissingFlag) {
+                                if (this.isValidateMC()) {
                                     await this.redirectingFn(selectedTab);  // if pass validation is complete & meetcomp data is not available or meet comp run redirects to PD
                                 }
                             }
@@ -350,20 +364,20 @@ export class tenderManagerComponent {
             } else if (this.currentTAB == 'DE') {
                 if (this.deComp.dirty) {
                     await this.deComp.SaveDeal();
-                    if (this.pt_passed_validation) {
+                    if (this.isValidateDE()) {
                         if (!this.compMissingFlag) {
                             //clicked on PD when compMissingFlag is true
                             this.gotoPD = 'PD';
                             await this.redirectingFn('MC');// if pass validation is complete & meetcomp data is available & meet comp is not run redirects to MC
-                        }else {
+                        } else {
                             if (this.compMissingFlag) {
                                 await this.redirectingFn(selectedTab);// if pass validation is complete & meetcomp data is not available or meet comp run redirects to PD
                             }
                         }
                     }
-                    
+
                 }else {
-                    if (this.pt_passed_validation) {
+                    if (this.isValidateDE()) {
                         if (!this.compMissingFlag) {
                             //clicked on PD when compMissingFlag is true
                             this.gotoPD = 'PD';
@@ -384,7 +398,7 @@ export class tenderManagerComponent {
                 this.loggerSvc.error("Meet Comp is not passed. You can not Publish this deal yet.", 'error');
             }
         }
-          //it will update the url on page reload persist the selected state
+        //it will update the url on page reload persist the selected state
         const cid = this.route.snapshot.paramMap.get('cid');
         const urlTree = this.router.createUrlTree(['/tendermanager', cid]);
         this.router.navigateByUrl(urlTree + '?loadtype='+this.currentTAB);
@@ -419,7 +433,7 @@ export class tenderManagerComponent {
     }
 
     async deleteContract() {
-        this.isDialogVisible = true;        
+        this.isDialogVisible = true;
     }
 
     close() {
@@ -453,12 +467,12 @@ export class tenderManagerComponent {
             }
             else {
                 if (!isNaN(cid) && cid>0)
-                this.c_Id = cid;
+                    this.c_Id = cid;
                 this.searchText = "";
             }
             this.loadAllContractDetails();
         }
-        catch(ex){
+        catch (ex) {
             this.loggerSvc.error('Something went wrong', 'Error');
             console.error('TenderManager::ngOnInit::',ex);
         }
@@ -474,7 +488,7 @@ export class tenderManagerComponent {
         each(loaders, item => {
             item.setAttribute('style', 'display:none');
         })
-       // document.getElementsByClassName('loading-screen')[0]?.setAttribute('style', 'display:none');
+        // document.getElementsByClassName('loading-screen')[0]?.setAttribute('style', 'display:none');
         const divLoader = document.getElementsByClassName('jumbotron')
         if (divLoader && divLoader.length > 0) {
             each(divLoader, div => {
