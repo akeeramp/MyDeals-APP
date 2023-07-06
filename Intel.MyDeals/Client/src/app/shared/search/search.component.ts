@@ -56,11 +56,13 @@ export class SearchComponent {
     }
 
     onDateChange(value, dateChanged) {
-        if (dateChanged == "startDateChange") {
-            window.localStorage.startDateValue = value;
-        }
-        else if (dateChanged == "endDateChange") {
-            window.localStorage.endDateValue = value;
+        if (value && value != null && value != '') {
+            if (dateChanged == "startDateChange") {
+                window.localStorage.startDateValue = value;
+            }
+            else if (dateChanged == "endDateChange") {
+                window.localStorage.endDateValue = value;
+            }
         }
     }
 }

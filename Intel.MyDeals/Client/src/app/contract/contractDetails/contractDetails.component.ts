@@ -87,6 +87,7 @@ export class contractDetailsComponent {
     private spinnerMessageHeader: string = "Contract Details";
     private spinnerMessageDescription: string = "Contract Details Loading..";
     private isBusyShowFunFact: boolean = true;
+    private backdatereasonsdropdownlist:any=null;
     isNotesDisabled = (<any>window).usrRole === 'RA' || (<any>window).usrRole === 'Legal' || (<any>window).usrRole === 'CBA' || ((<any>window).isBulkPriceAdmin && (<any>window).usrRole === 'SA') || (<any>window).isCustomerAdmin ? false : true;
     isRoleDisabled = (<any>window).usrRole === 'CBA' || (<any>window).usrRole === 'RA';
     private state: State = {

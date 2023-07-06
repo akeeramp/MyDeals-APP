@@ -61,7 +61,7 @@ export class ExcelExport {
                 var dim = "10___" + numTiers;
                 var vals = [];
                 for (var f = 0; f < fields.length; f++) {
-                    var val = passedData[fields[f].field][dim];
+                    var val = passedData[fields[f].field] ? passedData[fields[f].field][dim] : '';
                     if (val !== "Unlimited") {
                         val = ExcelExport.getFormattedData(val, fields[f].format);
                     }

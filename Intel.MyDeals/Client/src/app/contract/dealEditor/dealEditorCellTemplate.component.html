@@ -203,13 +203,17 @@
     <div class="dealCell">
         <div *ngIf="in_Field_Name == 'MEETCOMP_TEST_RESULT' || in_Field_Name == 'COST_TEST_RESULT'" id="{{in_Field_Name + '_' + in_DataItem['DC_ID']}}" class="dealCell">
             <div class="dealCell">
-                <div *ngIf="in_Field_Name === 'MEETCOMP_TEST_RESULT'" class="text-center uiControlDiv isReadOnlyCell cursorStyle">
+                <div *ngIf="in_Field_Name === 'MEETCOMP_TEST_RESULT'; else elseEnable" class="text-center uiControlDiv isReadOnlyCell cursorStyle">
                     <div class="vert-center"><i class="iConFont {{getResultSingleIconNm(in_DataItem[in_Field_Name])}}" title="{{getResultSingleIconNm(in_DataItem[in_Field_Name]) == 'intelicon-help-outlined' ? 'Not Run Yet' : in_DataItem[in_Field_Name]}}"></i></div>
                 </div>
-                <div *ngIf="(usrRole === 'DA' || usrRole === 'GA' && isSuper || usrRole === 'SA' ||usrRole === 'Legal')" class="text-center uiControlDiv isReadOnlyCell cursorStyle">
-                    <div class="vert-center"><i class="iConFont {{getResultSingleIconNm(in_DataItem[in_Field_Name])}}" title="{{getResultSingleIconNm(in_DataItem[in_Field_Name]) == 'intelicon-help-outlined' ? 'Not Run Yet' : in_DataItem[in_Field_Name]}}"></i></div> 
-                </div>
-                <div class="text-center uiControlDiv isReadOnlyCell"></div>
+                <ng-template #elseEnable>
+                    <div *ngIf="(usrRole === 'DA' || usrRole === 'GA' && isSuper || usrRole === 'SA' ||usrRole === 'Legal'); else elseInside " class="text-center uiControlDiv isReadOnlyCell cursorStyle">
+                        <div class="vert-center"><i class="iConFont {{getResultSingleIconNm(in_DataItem[in_Field_Name])}}" title="{{getResultSingleIconNm(in_DataItem[in_Field_Name]) == 'intelicon-help-outlined' ? 'Not Run Yet' : in_DataItem[in_Field_Name]}}"></i></div>
+                    </div>
+                    <ng-template #elseInside>
+                        <div class="text-center uiControlDiv isReadOnlyCell"></div>
+                    </ng-template>
+                </ng-template>
             </div>
         </div>
     </div>

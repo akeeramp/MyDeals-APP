@@ -46,7 +46,7 @@ export class CustomDropDownFilterComponent implements AfterViewInit {
             logic: 'or'
         });
         if (this.value != undefined && this.value != null && this.value.length > 0) {
-            const valuesel = this.data.filter(x => x.Value == this.value[0]);
+            const valuesel = this.field == 'OBJ_SET_TYPE_CD' || this.field == 'WF_STG_CD' ? this.data.filter(x => x.Value == this.value[0]) : this.field == 'Customer_NM' ? this.data.filter(x => x.CUST_NM == this.value[0]) : this.data.filter(x => x.DROP_DOWN == this.value[0]);
             this.selectedValue = valuesel[0];
         }
     }
@@ -55,7 +55,7 @@ export class CustomDropDownFilterComponent implements AfterViewInit {
         this.currentData = this.data;
         this.value = this.currentFilter.filters.map((f: FilterDescriptor) => f.value);
         if (this.value != undefined && this.value != null && this.value.length > 0) {
-            const valuesel = this.data.filter(x => x.Value == this.value[0]);
+            const valuesel = this.field == 'OBJ_SET_TYPE_CD' || this.field == 'WF_STG_CD' ? this.data.filter(x => x.Value == this.value[0]) : this.field == 'Customer_NM' ? this.data.filter(x => x.CUST_NM == this.value[0]) : this.data.filter(x => x.DROP_DOWN == this.value[0]);
             this.selectedValue = valuesel[0];
         }
     }

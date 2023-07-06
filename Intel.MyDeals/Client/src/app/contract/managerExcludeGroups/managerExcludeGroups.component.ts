@@ -246,7 +246,7 @@ export class managerExcludeGroupsComponent {
                 colWidths.push({ autoWidth: true });
             }
         });
-        this.generateExcel(grid, rows, colWidths);
+        this.generateExcel(grid, rows, colWidths, true);
     }
     exportToExcelCustomColumns(grid: GridComponent) {
         let colWidths: any[] = [];
@@ -269,12 +269,12 @@ export class managerExcludeGroupsComponent {
             }
 
         });
-        this.generateExcel(grid, rows, colWidths)
+        this.generateExcel(grid, rows, colWidths);
     }
 
-    generateExcel(grid: GridComponent, rows: any, colWidths: any[]) {
+    generateExcel(grid: GridComponent, rows: any, colWidths: any[], exportAll: boolean = false) {
         let cells: any[] = [];
-        grid.data = JSON.parse(JSON.stringify(this.gridData.data));
+        grid.data = exportAll ? this.gridResult : JSON.parse(JSON.stringify(this.gridData.data));
         each(grid.data, (dataItem) => {
             cells = [];
             dataItem['ECAP_PRICE'] = this.getFormatedDim(dataItem, 'ECAP_PRICE', '20___0', 'currency');
