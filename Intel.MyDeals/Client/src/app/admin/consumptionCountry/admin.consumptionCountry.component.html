@@ -61,10 +61,10 @@
                 </ng-template>
             </kendo-grid-column>
         </kendo-grid>
-        <kendo-dialog title="Please Fix" *ngIf="isCombExists" (close)="saveConfirmation()">
-            <p *ngFor="let item of errorMsg" [innerHTML]="item" class="kendo-dialog-message" style="text-align: left;">
+        <kendo-dialog *ngIf="isCombExists" (close)="saveConfirmation()" class="consumptionCountryErrorPopup">
+            <p *ngFor="let item of errorMsg" [innerHTML]="item" class="kendo-dialog-message" style="text-align: left;margin: 10px;">
             </p>
-            <kendo-dialog-actions><button class='k-button' (click)="saveConfirmation()">OK</button>
+            <kendo-dialog-actions><button class='k-button btnsOK' (click)="saveConfirmation()">OK</button>
             </kendo-dialog-actions>
         </kendo-dialog>
     </div>

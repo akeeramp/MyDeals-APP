@@ -101,3 +101,7 @@ div.overFlowDash {
     height: calc(100vh - 100px);
     background-color: #ECF0F5;
 }
+
+#reportScopeID.wrapper {
+    overflow-y: auto !important
+}

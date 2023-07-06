@@ -214,8 +214,13 @@ i.cn-close-panel {
 }
 
     .cn-panel a {
-        text-decoration: none
+        text-decoration: none;
+        color: #0071c5;
     }
+
+        .cn-panel a:hover, .cn-panel a:focus {
+            color: #004579;
+        }
 
 /*.cn-panel-large {
     height: 360px
@@ -944,7 +949,7 @@ i.cn-close-panel {
 }
 
 .csstransforms .searchDivgrid {
-    height: 340px
+    height: 328px
 }
 
 .accural_remove_1 .k-chart-surface svg g g g text {

@@ -432,7 +432,7 @@
                             </ng-container>
                         </div>
                     </div>
-                    <div *ngIf="showSearchResults" id="prodGrid">
+                    <div *ngIf="showSearchResults" id="prodGrid" class="prodSelector opUiContainer md prodSelector-grid k-grid kendoGridHeight">
                         <kendo-grid class="raid-style" [data]="gridData" [loading]="isGridLoading" [pageSize]="state.take" [skip]="state.skip" [filter]="state.filter" filterable="menu" [sortable]="true" [sort]="state.sort" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
                             [resizable]="true" (dataStateChange)="dataStateChange($event)">
                             <kendo-grid-column width="65px" [columnMenu]="false">
@@ -511,9 +511,9 @@
                                     <div *ngIf="column.field == 'YCS2'">
                                         <ng-template kendoGridCellTemplate let-dataItem>
                                             <!-- Cell Content -->
-                                            <div class="CAPYCS2CellContent" (click)="openCAPBreakOut(dataItem, 'YCS2')">
+                                            <div class="CAPYCS2CellContent bg-yellow-remove" (click)="openCAPBreakOut(dataItem, 'YCS2')">
                                                 <!-- YCS2 Info cell design -->
-                                                <div [class.isSoftWarnCell]="dataItem.YCS2.includes('No')" [class.uiControlDiv]="dataItem.YCS2.includes('No')" style="text-align: center;">
+                                                <div [class.isSoftWarnCell]="dataItem.YCS2.includes('No')" [class.uiControlDiv]="dataItem.YCS2.includes('No')" style="text-align: center;" class="product-selector-font-align">
                                                     {{ dataItem.YCS2 }}
                                                 </div>
                                             </div>

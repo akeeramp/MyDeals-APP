@@ -379,6 +379,7 @@
     overflow: hidden;
     display: block;
     width: 100%;
+    text-align: left;
 }
 
     .contractIdBtn:hover {

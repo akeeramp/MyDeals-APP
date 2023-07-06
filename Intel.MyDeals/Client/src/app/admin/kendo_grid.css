@@ -1113,3 +1113,31 @@ kendo-dialog.customVendorsDialogger .k-dialog-buttongroup {
     color: #fff !important;
     background-color: var(--light-blue) !important;
 }
+
+.consumptionCountryErrorPopup .k-window.k-dialog {
+    border-radius: 0;
+}
+
+    .consumptionCountryErrorPopup .k-window.k-dialog kendo-dialog-actions.k-dialog-buttongroup {
+        padding: 0;
+    }
+
+button.k-button.btnsOK {
+    color: #444;
+    display: inline-block;
+    padding: 1.5em 0;
+    border-radius: 0;
+    border-bottom: 0;
+    box-shadow: none;
+    font-size: 14px;
+}
+
+button.k-button.btnsOK:hover {
+    border-color: #ebebeb;
+    background-color: #ebebeb;
+}
+
+button.k-button.btnsOK:focus {
+    background-color: #dbdbdb;
+    border-color: #dbdbdb;
+}
