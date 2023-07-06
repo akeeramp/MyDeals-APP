@@ -2503,3 +2503,13 @@ i.intelicon-protection-solid.icon_colourfix.validf_Complete {
     #breakOutGrid .excelText.k-button:focus {
         box-shadow: none;
     }
+    .acceptanceNotRequired kendo-switch.contract-toggle{
+        cursor: not-allowed!important;
+    }
+        
+    .acceptanceNotRequired kendo-switch.contract-toggle .k-switch-label-off {
+        white-space: nowrap;
+        left:14px!important;
+        font-size: 12px;
+    }
+    

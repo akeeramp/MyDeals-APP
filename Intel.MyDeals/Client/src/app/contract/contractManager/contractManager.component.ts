@@ -113,6 +113,7 @@ export class contractManagerComponent {
     public msgType: any;
     public perfModel = 'Contract_Manager'
     public isBusyShowFunFact: any;
+    public offLabelName = 'Accepted';
     // Allowed extensions for the attachments field
     myRestrictions: FileRestrictions = {
         allowedExtensions: ["doc", "xls", "txt", "bmp", "jpg", "pdf", "ppt", "zip", "xlsx", "docx", "pptx", "odt", "ods", "ott", "sxw", "sxc", "png", "7z", "xps"],
@@ -1188,6 +1189,7 @@ export class contractManagerComponent {
             this.contractId= this.contractData.DC_ID;
             this.lastRun = this.contractData.LAST_COST_TEST_RUN;
             this.custAccptButton = this.contractData.CUST_ACCPT;
+            this.offLabelName = ((this.contractData.CUST_ACCPT).toLowerCase()) != 'pending' ? this.contractData.CUST_ACCPT : this.offLabelName;
             each(this.contractData.PRC_ST, (prcSt) => {
                 each(prcSt.PRC_TBL, (prcTbl) => {
                     this.state[prcTbl.DC_ID] = {
