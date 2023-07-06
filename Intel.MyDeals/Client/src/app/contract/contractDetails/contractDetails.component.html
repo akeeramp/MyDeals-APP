@@ -219,7 +219,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-11 blockdisplay">
-                                        <div>
+                                        <div *ngIf="!isRoleDisabled">
                                             <span class="f1 opUiLabel opUiLableWidth label-color">
                                                 <span *ngIf="contractData?.IsAttachmentRequired" class="isReqField">
                                                     *
@@ -232,7 +232,7 @@
                                                 Contract button.
                                             </span>
                                         </div>
-                                        <div class="col-md-11 blockdisplay" style="padding-left:0px">
+                                        <div *ngIf="!isRoleDisabled" class="col-md-11 blockdisplay" style="padding-left:0px">
                                             <kendo-upload [saveUrl]="uploadSaveUrl" [batch]="true"
                                                           [restrictions]="myRestrictions" (success)="successEventHandler()" (select)="onFileSelect()" (remove)="onFileRemove()" (error)="onFileUploadError()" (complete)="onFileUploadComplete()"
                                                           (upload)="uploadEventHandler($event)" [autoUpload]="false" [(ngModel)]="files" name="files" class="kuploadaction" [required]="contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID && isSubmitted && (C2A_DATA_C2A_ID==undefined || C2A_DATA_C2A_ID=='')"></kendo-upload>
@@ -245,10 +245,10 @@
                                             </kendo-formerror>
                                         </div>
                                         <div class="col-md-11 blockdisplay" *ngIf="!isNewContract">
-                                            <div class="panel panel-default" *ngIf="attachmentCount && attachmentCount>0">
-                                                <div class="panel-heading" style="font-size:14px; font-weight:bold">File Attachment Details <span *ngIf="attachmentCount > 0 && initComplete" class="badge">{{attachmentCount}}</span></div>
+                                            <div class="panel panel-default" *ngIf="(attachmentCount && attachmentCount>0) || isRoleDisabled">
+                                                <div class="panel-heading" style="font-size:14px; font-weight:bold">File Attachment Details <span *ngIf="attachmentCount > 0 && initComplete && !isRoleDisabled" class="badge">{{attachmentCount}}</span></div>
                                                 <div class="panel-body">
-                                                    <div *ngIf="!(attachmentCount <= 0 || !initComplete)" class="oppo-grids physics-css">
+                                                    <div *ngIf="!(attachmentCount <= 0 || !initComplete || isRoleDisabled)" class="oppo-grids physics-css">
                                                         <kendo-grid id="fileAttachmentGrid" [data]="gridData" [navigable]="true" [loading]="isLoading" [skip]="state.skip"
                                                                     [sort]="state.sort" [sortable]="true" [reorderable]="true" [resizable]="true"
                                                                     (dataStateChange)="dataStateChange($event)" class="file-attachment-contract">
@@ -273,15 +273,22 @@
                                                             </kendo-grid-column>
                                                         </kendo-grid>
                                                     </div>
-                                                    <div *ngIf="!(attachmentCount != 0 || !initComplete)" style="height:80px;">
-                                                        <p style="margin-top:5px">This contract has no attachments.</p>
+                                                    <div *ngIf="!isRoleDisabled; else elseEnable">
+                                                        <div *ngIf="!(attachmentCount != 0 || !initComplete)" style="height:80px;">
+                                                            <p style="margin-top:5px">This contract has no attachments.</p>
+                                                        </div>
+                                                        <div *ngIf="!initComplete" style="height:80px;">
+                                                            <p style="margin-top:5px"><i>Retrieving attachments...</i></p>
+                                                        </div>
+                                                        <div *ngIf="!(attachmentCount >= 0)" style="height:80px; color:red">
+                                                            <p style="margin-top:5px">Unable to retrieve attachments!</p>
+                                                        </div>
                                                     </div>
-                                                    <div *ngIf="!initComplete" style="height:80px;">
-                                                        <p style="margin-top:5px"><i>Retrieving attachments...</i></p>
-                                                    </div>
-                                                    <div *ngIf="!(attachmentCount >= 0)" style="height:80px; color:red">
-                                                        <p style="margin-top:5px">Unable to retrieve attachments!</p>
-                                                    </div>
+                                                    <ng-template #elseEnable>
+                                                        <div style="height:80px;">
+                                                            <p style="margin-top:5px">You donot have permission to view attachments.</p>
+                                                        </div>
+                                                    </ng-template>
                                                 </div>
                                             </div>
                                         </div>
@@ -311,7 +318,7 @@
                                         <h6 class="myadjust noBottemBorder">Notes</h6>
                                     </div>
                                     <div class="col-md-11">
-                                        <kendo-textarea style="margin-top: 5px; border-radius: 5px; width: 100%; padding-right: 0px; box-shadow: none; border-color: #e7e7e7; " resizable="vertical"
+                                        <kendo-textarea [disabled]="!isNotesDisabled" style="margin-top: 5px; border-radius: 5px; width: 100%; padding-right: 0px; box-shadow: none; border-color: #e7e7e7; " resizable="vertical"
                                                         [rows]="4" [(ngModel)]="NOTES" name="NOTES"></kendo-textarea>
                                     </div>
                                 </div>

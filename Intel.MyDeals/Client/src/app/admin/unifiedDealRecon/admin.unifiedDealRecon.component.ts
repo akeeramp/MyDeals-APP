@@ -81,11 +81,6 @@ export class adminUnifiedDealReconComponent {
         if ((<any>window).usrRole == "RA" && !(<any>window).isDeveloper) {
             this.editAccess = false;
         }
-        //Developer can see the Screen..
-        if (!(<any>window).isCustomerAdmin && (<any>window).usrRole != "SA" && (<any>window).usrRole != "RA" && (<any>window).usrRole != "GA" && !(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        }
-        else {
             this.unifiedDealReconSvc.getUnmappedPrimeCustomerDeals().subscribe((result: Array<any>) => {
                 this.isLoading = false;
                 this.gridResult = result;
@@ -93,7 +88,6 @@ export class adminUnifiedDealReconComponent {
             }, (error) => {
                 this.loggerSvc.error('UnMappedPrimeCustomerDeal service', error);
             });
-        }
     }
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
