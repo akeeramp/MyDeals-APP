@@ -174,7 +174,7 @@
                     <kendo-grid-column width="65px" [columnMenu]="false">
                         <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
                             <div class='dealTools all-checkbox-center'>
-                                <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="toggleSelectAll($event, gridData.data)">
+                                <input type='checkbox' class='grid-link-checkbox with-font th-check-box' (click)="toggleSelectAll($event, gridFullData)">
                             </div>
                         </ng-template>
                         <ng-template kendoGridCellTemplate let-dataItem>

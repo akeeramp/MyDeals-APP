@@ -81,6 +81,7 @@ export class ProductSelectorComponent {
     private selRowIssuesKeys: any[] = [];
     private searchProcessed = false;
     private excludeProductMessage = "";
+    private gridFullData: any[] = [];
     private state: State = {
         skip: 0,
         take: 25,
@@ -454,7 +455,7 @@ export class ProductSelectorComponent {
         this.showTree = true;
         this.items = [];
         //setting empty grid first
-        this.gridResult = [];
+        this.gridResult = this.gridFullData = [];
         this.gridData = process(this.gridResult, this.state);
 
         let data = {
@@ -490,7 +491,7 @@ export class ProductSelectorComponent {
                     x['parentSelected'] = item.selected;
                     return x;
                 });
-                this.gridResult = ProdSel_Util.sortBySelectionLevelColumn(this.gridResult, selectionLevel);
+                this.gridResult = this.gridFullData =  ProdSel_Util.sortBySelectionLevelColumn(this.gridResult, selectionLevel);
                 this.toggleColumnsWhenEmpty(this.gridResult, 'prodGrid');
                 this.gridData = process(this.gridResult, this.state);
             }
@@ -1410,6 +1411,9 @@ export class ProductSelectorComponent {
         else {
             this.state = state;
             this.gridData = process(this.gridResult, this.state);
+            state.take = this.gridData.total;
+            let data = process(this.gridResult, state);
+            this.gridFullData = data.data;
         }
     }
 
