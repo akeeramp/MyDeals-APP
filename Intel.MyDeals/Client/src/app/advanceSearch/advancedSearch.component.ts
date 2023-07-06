@@ -424,6 +424,11 @@ export class AdvancedSearchComponent implements OnInit {
         this.setBusy('', '');
     }
 
+    //on click of delete button of current rule
+    onDeleteRule(data) {
+        this.ruleToRun = data;
+    }
+
     //on dropdown rules click of 'Select saved Rules'
     onRuleSelect(data) {
         this.attrBuilder.onRuleSelect(data);

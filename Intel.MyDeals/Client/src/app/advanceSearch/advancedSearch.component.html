@@ -15,7 +15,7 @@
                 <app-search [title]="title" [titleText]="searchTitle"></app-search>
             </div>
             <div class="col-md-7 right-inner-container">
-                <attribute-builder-angular (rulesemit)="onSaveRule($event)" [attributeSource]="attributeList" [operatorSource]="operatorList" [types2operatorSource]="type2OperatorList" [cat]="cat" [subcat]="subcat" (invokeSearchDatasource)="invokeSearchDatasource($event)" (removeLoadingPanel)="removeLoadingPanel()"></attribute-builder-angular>
+                <attribute-builder-angular (emitDeleteRule) ="onDeleteRule($event)" (rulesemit)="onSaveRule($event)" [attributeSource]="attributeList" [operatorSource]="operatorList" [types2operatorSource]="type2OperatorList" [cat]="cat" [subcat]="subcat" (invokeSearchDatasource)="invokeSearchDatasource($event)" (removeLoadingPanel)="removeLoadingPanel()"></attribute-builder-angular>
             </div>
         </div>
     </div>

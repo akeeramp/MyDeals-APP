@@ -25,6 +25,7 @@ export class AttributeBuilder implements OnInit {
     @Output() invokeSearchDatasource = new EventEmitter();
     @Output() removeLoadingPanel = new EventEmitter();
     @Output() rulesemit = new EventEmitter();
+    @Output() emitDeleteRule = new EventEmitter();
     @Output() clearSearchResult = new EventEmitter();//For Tender Dashboard, to clear search result if runrules action got triggered
     public availableAttrs = [];
     public availAtrField = [];
@@ -559,6 +560,7 @@ export class AttributeBuilder implements OnInit {
                         this.clearRule();
                     }
                     this.rulesemit.emit(this.rules);
+                    this.emitDeleteRule.emit(this.ruleToRun);
                 }
         }
 

@@ -26,9 +26,8 @@ export class openContractWidgetComponent implements OnInit, OnDestroy {
       this.contractToolTip.open();
     }
     else{
-      this.contractToolTip.close();
-      if(!isNaN(parseInt(this.contractId)))
-      document.location.href = "/Contract#/manager/" + this.contractId;
+      this.contractToolTip.close(); 
+        document.location.href = "/Contract#/manager/" + this.contractId;
     }
   }
 
