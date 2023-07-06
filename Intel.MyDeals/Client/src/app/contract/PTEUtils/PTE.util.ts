@@ -667,10 +667,12 @@ export class PTEUtil {
                                     const currProduct = newContractProdArr[(a - r)]; // NOTE: this asssumes we swapped the PTR_USER_PRD to the re-ordered product list already
                                     for (var d = 0; d < PTE_Config_Util.kitDimAtrbs.length; d++) {
                                         if (PTE_Config_Util.kitDimAtrbs[d] == "TIER_NBR") { continue; }
-                                        // Check for undefined..Extra product might have been from user input translated e.g., 7230(F) ==> 7230F,7230
-                                        if (orignalUnswappedDataDict[PTE_Helper_Util.formatStringForDictKey(currProduct)] !== undefined) {
-                                            data[a][PTE_Config_Util.kitDimAtrbs[d]] = orignalUnswappedDataDict[PTE_Helper_Util.formatStringForDictKey(currProduct)][PTE_Config_Util.kitDimAtrbs[d]];
-                                            PTE_CellChange_Util.updatePrdColumns(a, PTE_Config_Util.kitDimAtrbs[d], data[a][PTE_Config_Util.kitDimAtrbs[d]]);
+                                        if (data[a] != undefined) {
+                                            // Check for undefined..Extra product might have been from user input translated e.g., 7230(F) ==> 7230F,7230
+                                            if (orignalUnswappedDataDict[PTE_Helper_Util.formatStringForDictKey(currProduct)] !== undefined) {
+                                                data[a][PTE_Config_Util.kitDimAtrbs[d]] = orignalUnswappedDataDict[PTE_Helper_Util.formatStringForDictKey(currProduct)][PTE_Config_Util.kitDimAtrbs[d]];
+                                                PTE_CellChange_Util.updatePrdColumns(a, PTE_Config_Util.kitDimAtrbs[d], data[a][PTE_Config_Util.kitDimAtrbs[d]]);
+                                            }
                                         }
                                     }
                                 }

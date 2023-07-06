@@ -9,8 +9,7 @@ import { AttributeBuilder } from '../core/attributeBuilder/attributeBuilder.comp
 import { process, State, FilterDescriptor, CompositeFilterDescriptor } from "@progress/kendo-data-query";
 import { GridUtil } from '../contract/grid.util';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, FilterService } from "@progress/kendo-angular-grid";
-import { PTE_Common_Util } from "../contract/PTEUtils/PTE_Common_util";
-
+import { each } from 'underscore';
 @Component({
     selector: 'app-advanced-search',
     templateUrl: 'Client/src/app/advanceSearch/advancedSearch.component.html',
@@ -66,6 +65,7 @@ export class AdvancedSearchComponent implements OnInit {
             logic: "and",
             filters: [],
         },
+        sort: [],
     };
     private pageSizes: PageSizeItem[] = [
         {
@@ -138,6 +138,7 @@ export class AdvancedSearchComponent implements OnInit {
             this.gridData.data = data.data;
             this.gridData.total = this.totalCount;
         }
+       this.searchDeals();
     }
 
 
@@ -355,6 +356,18 @@ export class AdvancedSearchComponent implements OnInit {
                 }
             })
         }
+        let sortby = this.state.sort;
+        if( sortby && sortby.sort && sortby.sort.length>0){
+            each(sortby,(sortitem)=>{
+                searchText +='&$orderby='+sortitem.field;
+                if(sortitem.dir==undefined || sortitem.dir==null){
+                    searchText += ' asc';
+                }else{
+                    searchText += ' '+sortitem.dir; 
+                }
+            })
+        }
+        
 
         let result: any = await this.advancedSearchSvc.getSearchList(startDate, endDate, searchText).toPromise().catch((err) => {
             this.isLoading = false;
@@ -380,7 +393,7 @@ export class AdvancedSearchComponent implements OnInit {
                 })
             })
             this.totalCount = result.Count;
-            if (exportVal) {
+             if (exportVal) {
                 exportVal = false;
                 this.exportData = result.Items;
             } else {

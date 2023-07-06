@@ -824,7 +824,8 @@ export class pricingTableEditorComponent {
 
             if (rebateType && rebateType.length > 0 && rebateType[0].new != rebateType[0].old) {
                 each(rebateType, rebattype => {
-                    let ptrow = { row: rebattype.row, prop: rebattype.prop, old: this.hotTable.getDataAtRowProp(rebattype.row, rebattype.prop), new: rebattype.new.toString() };
+                    //rebattype.new? null check should be added to avoid console error
+                    let ptrow = { row: rebattype.row, prop: rebattype.prop, old: this.hotTable.getDataAtRowProp(rebattype.row, rebattype.prop), new: rebattype.new?.toString() };
                     PTE_CellChange_Util.checkfn(ptrow, this.curPricingTable, this.columns, '', this.contractData, this.custCellEditor, this.newPricingTable);
                 })
             }

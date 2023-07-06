@@ -87,6 +87,7 @@ export class contractDetailsComponent {
     private spinnerMessageHeader: string = "Contract Details";
     private spinnerMessageDescription: string = "Contract Details Loading..";
     private isBusyShowFunFact: boolean = true;
+    private backdatereasonsdropdownlist:any;
     private state: State = {
         skip: 0,
         take: 25,
@@ -998,6 +999,7 @@ export class contractDetailsComponent {
                     this.dropDownsData['BACK_DATE_RSN'] = BACK_DATE_RSN;
                     this.dropDownsData['CONTRACT_TYPE'] = CONTRACT_TYPE;
                     this.dropDownsData['CUST_ACCPT'] = CUST_ACCPT;
+                    this.backdatereasonsdropdownlist=BACK_DATE_RSN;
                     // below lines of code is to set default value for contract type dropdown.
                     this.CONTRACT_TYPE = CONTRACT_TYPE[0];
                     const conrtType = this.route.snapshot.url.find(x => x.path == 'copycid');
@@ -1068,7 +1070,7 @@ export class contractDetailsComponent {
                                         this.updateDataOnCustomerChange(this.Customer);
                                     }
                                     //loader disable
-                                    this.isLoading=false;
+                                    this.isLoading=false;                                 
                                 },(err)=>{
                                     this.loggerSvc.error("Unable to fetch template data","Error",err);
                                     //loader disable
@@ -1097,6 +1099,7 @@ export class contractDetailsComponent {
                                     this.getFileAttachmentDetails(this.c_Id);
                                      //loader disable
                                      this.isLoading=false;
+                                     this.checkbackdate();
                                 },(err)=>{
                                     this.loggerSvc.error("unable to fetch contract data","Error",err);
                                      //loader disable
@@ -1115,6 +1118,14 @@ export class contractDetailsComponent {
         } catch (ex) {
             this.loggerSvc.error('Something went wrong', 'Error');
             console.error('ContractDetails::ngOnInit::',ex);
+        }
+    }
+
+    checkbackdate(){
+        if (this.momentService.moment(this.contractData.START_DT).isBefore(this.today) &&  (this.contractData.BACK_DATE_RSN!='' || this.contractData.BACK_DATE_RSN!=undefined)) {
+            this.isBackDate = true;
+            this.dropDownsData['BACK_DATE_RSN']=this.backdatereasonsdropdownlist;
+            this.BACK_DATE_RSN=this.backdatereasonsdropdownlist.find(x=>x.DROP_DOWN==this.contractData.BACK_DATE_RSN);
         }
     }
 

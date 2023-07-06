@@ -104,7 +104,7 @@ export class BulkPricingUpdatesComponent  {
                 'delete': {
                     name: 'Delete',
                     hidden: () => {
-                        return ((this.hotTable.getSelectedLast()[0] > 0 && this.hotTable.getSelectedLast()[1] > 0));
+                        return ((this.hotTable.getSelectedLast()[0] >=-1 && this.hotTable.getSelectedLast()[1] !=-1));
                     }
 
                 },
@@ -120,7 +120,7 @@ export class BulkPricingUpdatesComponent  {
                         this.hotTable.render();
                     },
                     hidden: () => {
-                        return ((this.hotTable.getSelectedLast()[0] > 0 && this.hotTable.getSelectedLast()[1] > 0));
+                        return ((this.hotTable.getSelectedLast()[0] >=-1 && this.hotTable.getSelectedLast()[1] !=-1));
                     }
                 },
             }
