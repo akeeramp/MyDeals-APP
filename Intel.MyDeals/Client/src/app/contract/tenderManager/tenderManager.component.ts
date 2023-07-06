@@ -64,7 +64,7 @@ export class tenderManagerComponent {
             if (this.contractData.TENDER_PUBLISHED == '1') {
                 var dealType = this.contractData.PRC_ST[0].PRC_TBL[0].OBJ_SET_TYPE_CD;
                 var dealID = this.contractData.DC_ID;
-                if(this.searchText=='' || this.searchText==null){
+                if(this.searchText=='' || this.searchText==null || this.searchText == "PT"){
                     this.isredirect=true;
                     document.location.href = "AdvancedSearch#/tenderDashboard?DealType=" + dealType + "&FolioId=" + dealID + "&search=true";
                 } else if (this.searchText == "PS") {
