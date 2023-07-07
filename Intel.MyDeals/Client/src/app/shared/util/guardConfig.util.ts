@@ -78,6 +78,13 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false,
             "Account SA": false
         },
         "customers": {
@@ -114,7 +121,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": true
+            "Account SA": true,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "CustomerVendors": {
             "SA": true,
@@ -150,7 +164,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": true
+            "Account SA": true,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "opLog": {
             "SA": false,
@@ -186,7 +207,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "batchTiming": {
             "SA": false,
@@ -222,7 +250,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "VistexCustomerMapping": {
             "SA": true,
@@ -258,7 +293,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": true
+            "Account SA": true,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "UnifiedCustomerAdmin": {
             "SA": true,
@@ -294,7 +336,14 @@
             "RA-T": true,
             "RA-Super": true,
             "SA-B": true,
-            "Account SA": true
+            "Account SA": true,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": true
         },
         "UnifiedDealRecon": {
             "SA": true,
@@ -330,7 +379,14 @@
             "RA-T": true,
             "RA-Super": true,
             "SA-B": true,
-            "Account SA": true
+            "Account SA": true,
+            "DA-B": false,
+            "GA-B": true,
+            "FSE-B": true,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": true
         },
         "adminGeo": {
             "SA": true,
@@ -366,7 +422,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "productCategories": {
             "SA": true,
@@ -402,7 +465,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "constants": {
             "SA": false,
@@ -438,7 +508,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "productAlias": {
             "SA": true,
@@ -474,7 +551,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "products": {
             "SA": true,
@@ -510,7 +594,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "funfact": {
             "SA": true,
@@ -546,7 +637,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "securityengine": {
             "SA": false,
@@ -582,7 +680,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "dealTypes": {
             "SA": false,
@@ -618,7 +723,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "dataquality": {
             "SA": true,
@@ -654,7 +766,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "quoteLetter": {
             "SA": true,
@@ -690,7 +809,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": true,
+            "CBA-B": false,
+            "RA-B": false
         },
         "ruleOwner": {
             "SA": false,
@@ -726,7 +852,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": true,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "workflowStages": {
             "SA": false,
@@ -762,7 +895,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "workFlow": {
             "SA": false,
@@ -798,7 +938,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "dropdowns": {
             "SA": true,
@@ -834,7 +981,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": true
+            "Account SA": true,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": true,
+            "CBA-B": true,
+            "RA-B": false
         },
         "consumptionCountry": {
             "SA": true,
@@ -870,7 +1024,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": true
+            "Account SA": true,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": true,
+            "CBA-B": true,
+            "RA-B": true
         },
         "pushDealstoVistex": {
             "SA": false,
@@ -906,7 +1067,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "vistexTestApi": {
             "SA": false,
@@ -942,7 +1110,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "icostproducts": {
             "SA": true,
@@ -978,7 +1153,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": true,
+            "CBA-B": false,
+            "RA-B": false
         },
         "notifications": {
             "SA": true,
@@ -1014,7 +1196,14 @@
             "RA-T": true,
             "RA-Super": true,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": true,
+            "FSE-B": true,
+            "FINANCE-B": false,
+            "LEGAL-B": true,
+            "CBA-B": true,
+            "RA-B": true
         },
         "dealmassupdate": {
             "SA": false,
@@ -1050,7 +1239,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "validateVistexR3Checks": {
             "SA": false,
@@ -1086,7 +1282,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "manageEmployee": {
             "SA": true,
@@ -1122,7 +1325,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": true
+            "Account SA": true,
+            "DA-B": true,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": true,
+            "CBA-B": true,
+            "RA-B": true
         },
         "rules/:rid": {
             "SA": true,
@@ -1158,7 +1368,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": true,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "rules": {
             "SA": true,
@@ -1194,7 +1411,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": true,
+            "GA-B": true,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "dataFix": {
             "SA": false,
@@ -1230,7 +1454,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "vistex": {
             "SA": false,
@@ -1266,7 +1497,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "meetComp": {
             "SA": true,
@@ -1302,7 +1540,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": true,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "testTenders": {
             "SA": false,
@@ -1338,7 +1583,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "supportScript": {
             "SA": false,
@@ -1374,7 +1626,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
         "legalException": {
             "SA": true,
@@ -1410,7 +1669,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": true,
+            "CBA-B": false,
+            "RA-B": false
         },
         "bulkPricingUpdate": {
             "SA": false,
@@ -1446,7 +1712,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": true,
+            "CBA-B": true,
+            "RA-B": false
         },
         "MyDealsSupport": {
             "SA": true,
@@ -1482,7 +1755,14 @@
             "RA-T": true,
             "RA-Super": true,
             "SA-B": true,
-            "Account SA": true
+            "Account SA": true,
+            "DA-B": true,
+            "GA-B": true,
+            "FSE-B": true,
+            "FINANCE-B": true,
+            "LEGAL-B": true,
+            "CBA-B": true,
+            "RA-B": true
         },
         "vistexProfiseeApi": {
             "SA": false,
@@ -1518,7 +1798,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+            "Account SA": false,
+            "DA-B": false,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": false,
+            "CBA-B": false,
+            "RA-B": false
         },
 
          //ADVANCED SEARCH ROUTE GUARDS
@@ -1556,7 +1843,14 @@
              "RA-T": true,
              "RA-Super": true,
              "SA-B": true,
-             "Account SA": true
+             "Account SA": true,
+             "DA-B": true,
+             "GA-B": true,
+             "FSE-B": true,
+             "FINANCE-B": true,
+             "LEGAL-B": true,
+             "CBA-B": true,
+             "RA-B": true
          },
          "gotoDeal/:cidgotoPs/:cid": {
              "SA": true,
@@ -1592,7 +1886,14 @@
              "RA-T": true,
              "RA-Super": true,
              "SA-B": true,
-             "Account SA": true
+             "Account SA": true,
+             "DA-B": true,
+             "GA-B": true,
+             "FSE-B": true,
+             "FINANCE-B": true,
+             "LEGAL-B": true,
+             "CBA-B": true,
+             "RA-B": true
          },
          "advanceSearch": {
              "SA": true,
@@ -1628,7 +1929,14 @@
              "RA-T": true,
              "RA-Super": true,
              "SA-B": true,
-             "Account SA": true
+             "Account SA": true,
+             "DA-B": true,
+             "GA-B": true,
+             "FSE-B": true,
+             "FINANCE-B": true,
+             "LEGAL-B": true,
+             "CBA-B": true,
+             "RA-B": true
          },
          "tenderDashboard": {
              "SA": true,
@@ -1664,7 +1972,14 @@
              "RA-T": true,
              "RA-Super": true,
              "SA-B": true,
-             "Account SA": true
+             "Account SA": true,
+             "DA-B": true,
+             "GA-B": true,
+             "FSE-B": true,
+             "FINANCE-B": true,
+             "LEGAL-B": true,
+             "CBA-B": true,
+             "RA-B": true
          },
  
          //CONTRACT ROUTE GUARDS
@@ -1702,7 +2017,14 @@
              "RA-T": true,
              "RA-Super": true,
              "SA-B": false,
-             "Account SA": false
+             "Account SA": false,
+             "DA-B": true,
+             "GA-B": true,
+             "FSE-B": true,
+             "FINANCE-B": true,
+             "LEGAL-B": true,
+             "CBA-B": true,
+             "RA-B": true
          },
          "contractdetails/:cid": {
             "SA": false,
@@ -1738,7 +2060,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+             "Account SA": false,
+             "DA-B": true,
+             "GA-B": true,
+             "FSE-B": true,
+             "FINANCE-B": true,
+             "LEGAL-B": true,
+             "CBA-B": true,
+             "RA-B": true,
          },
          "contractdetails/copycid/:cid": {
             "SA": false,
@@ -1774,7 +2103,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": false,
-            "Account SA": false
+             "Account SA": false,
+             "DA-B": true,
+             "GA-B": true,
+             "FSE-B": true,
+             "FINANCE-B": true,
+             "LEGAL-B": true,
+             "CBA-B": true,
+             "RA-B": true
          },
          "manager/:cid": {
              "SA": true,
@@ -1810,7 +2146,14 @@
              "RA-T": true,
              "RA-Super": true,
              "SA-B": true,
-             "Account SA": true
+             "Account SA": true,
+             "DA-B": true,
+             "GA-B": true,
+             "FSE-B": true,
+             "FINANCE-B": true,
+             "LEGAL-B": true,
+             "CBA-B": true,
+             "RA-B": true
          },
          "manager/:type/:cid/:PSID/:PTID/:DealID": {
              "SA": true,
@@ -1846,7 +2189,14 @@
              "RA-T": true,
              "RA-Super": true,
              "SA-B": true,
-             "Account SA": true
+             "Account SA": true,
+             "DA-B": true,
+             "GA-B": true,
+             "FSE-B": true,
+             "FINANCE-B": true,
+             "LEGAL-B": true,
+             "CBA-B": true,
+             "RA-B": true
          },
          "contractmanager/:type/:cid/:PSID/:PTID/:DealID": {
              "SA": true,
@@ -1882,7 +2232,14 @@
              "RA-T": true,
              "RA-Super": true,
              "SA-B": true,
-             "Account SA": true
+             "Account SA": true,
+             "DA-B": true,
+             "GA-B": true,
+             "FSE-B": true,
+             "FINANCE-B": true,
+             "LEGAL-B": true,
+             "CBA-B": true,
+             "RA-B": true
         },
         "contractmanager/:type/:cid/:PSID/:PTID/:DealID?loadtype=Manage&manageType=pctDiv": {
             "SA": true,
@@ -1918,7 +2275,14 @@
             "RA-T": false,
             "RA-Super": false,
             "SA-B": true,
-            "Account SA": true
+            "Account SA": true,
+            "DA-B": true,
+            "GA-B": false,
+            "FSE-B": false,
+            "FINANCE-B": false,
+            "LEGAL-B": true,
+            "CBA-B": false,
+            "RA-B": false
         },
          "tendermanager/:cid": {
              "SA": true,
@@ -1954,7 +2318,14 @@
              "RA-T": true,
              "RA-Super": true,
              "SA-B": true,
-             "Account SA": true
+             "Account SA": true,
+             "DA-B": true,
+             "GA-B": true,
+             "FSE-B": true,
+             "FINANCE-B": true,
+             "LEGAL-B": true,
+             "CBA-B": true,
+             "RA-B": true
          },
  
          //REPORTING ROUTE GUARDS
@@ -1992,7 +2363,14 @@
              "RA-T": true,
              "RA-Super": true,
              "SA-B": true,
-             "Account SA": true
+             "Account SA": true,
+             "DA-B": true,
+             "GA-B": true,
+             "FSE-B": true,
+             "FINANCE-B": true,
+             "LEGAL-B": true,
+             "CBA-B": true,
+             "RA-B": true
          }
     }
 }
