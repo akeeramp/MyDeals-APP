@@ -229,11 +229,15 @@ span.caret.down_add_style {
 }
 
 #admin-advance-grid a.k-grid-filter {
-    position: relative !important;
-    top: 0px !important;
-    right: -10px !important;
+    position: absolute !important;
+    bottom: 0px !important;
+    right: 0px !important;
     color: #010101 !important;
 }
+
+    #admin-advance-grid a.k-grid-filter.k-state-active {
+        background-color: #e7e7e8 !important;
+    }
 
 #admin-advance-grid a.k-grid-filter:hover {
     color: #00AEEF !important;
@@ -252,6 +256,11 @@ span.caret.down_add_style {
 #admin-advance-grid span.k-column-title {
     color: #1a3e6f !important;
     font-weight: 200 !important;
+    max-width: 88px;
+}
+
+#admin-advance-grid .k-column-resizer {
+    z-index: 999;
 }
 
 span.advance_grid_class.diff-font-style.k-column-title {
@@ -374,7 +383,10 @@ kendo-numerictextbox.advance-numerictextbox-style.k-widget.k-numerictextbox:focu
 
 .click-adv.advSearch {
     cursor: pointer !important;
-    color: #00AEEF !important
+    color: #00AEEF !important;
+    overflow: hidden !important;
+    text-overflow: ellipsis !important;
+    display: block !important;
 }
 
 .alignDeal {

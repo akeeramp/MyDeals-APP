@@ -292,7 +292,7 @@ button td.button-intel {
 }
 
 .ptekendo.k-editor {
-    height: 590px !important
+    height: 100% !important
 }
 
 .pteDealsOvrLap mat-dialog-container {

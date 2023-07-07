@@ -290,9 +290,10 @@ a {
     padding: 5px 10px !important
 }
 
-.nav-tabs-intel-blocks.nav li a:hover {
-    border-color: #0071C5 !important
-}
+    .nav-tabs-intel-blocks.nav li a:hover {
+        border-color: #0071C5 !important;
+        background-color: #003c71 !important;
+    }
 
 .nav.nav-tabs-intel-blocks li ul li a {
     background-color: transparent !important;
