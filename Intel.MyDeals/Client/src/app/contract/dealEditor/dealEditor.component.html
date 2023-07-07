@@ -12,7 +12,7 @@
         </ng-template>
         <ng-template kendoTabContent>
             <div id="ToolDeBtn" class="flex-container" style="display:flex">
-                <button id="SaveDeBtn" class="btn btn-sm btn-save tool-hover btn-disable-style-DE" ssToolbarBtn (click)="SaveDeal()" [disabled]="!dirty">
+                <button id="SaveDeBtn" class="btn btn-sm btn-save tool-hover btn-disable-style-DE" ssToolbarBtn (click)="SaveDeal()" [disabled]="isDirty()">
                     <i class="fa fa-floppy-o skyBlue floppy-icon-style-DE" aria-hidden="true" style="font-size: 30px;" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}"></i>
                     <span class="text save-validate-txtstyle-DE" [ngClass]="{'dirty' : dirty,'notDirty' : !(dirty)}">
                         Save & Validate

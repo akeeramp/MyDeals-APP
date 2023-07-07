@@ -265,6 +265,14 @@ export class dealEditorComponent {
             this.setBusy("", "", "", false);
     }
 
+    isDirty() {
+        for (let i = 0; this.gridResult.length; i++) {
+            if (this.gridResult[i]._dirty) this.dirty = true;
+            break;
+        }
+        return this.dirty ? false : true;
+    }
+
     async getWipDealData() {
         let response: any = await this.pteService.readPricingTable(this.in_Pt_Id).toPromise().catch((err) => {
             this.loggerService.error('dealEditorComponent::readPricingTable::readTemplates:: service', err);
