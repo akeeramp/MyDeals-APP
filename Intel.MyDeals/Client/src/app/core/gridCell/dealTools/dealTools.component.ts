@@ -572,9 +572,12 @@ export class dealToolsComponent{
                 }
                 this.setBusy("Rollback Successful", "Rollback of the Pricing Table Row and Deal", "Success","");
                 setTimeout(() => {
-                    this.setBusy("", "", "","");
+                    this.isBusy = false;
                 }, 4000);
-                this.refreshContract.emit(true);
+                setTimeout(() => {
+                    this.refreshContract.emit(true);
+                }, 4000);
+                
             }, (response)=> {
                 this.loggerSvc.error("Could not Rollback the Pricing Table " + dcId, response, response.statusText);
                 this.setBusy("", "", "","");
