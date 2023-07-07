@@ -113,7 +113,7 @@
                     <span class="switch-handle"></span> 
                 </label>
             </span>
-            <div class="boxSave" [ngClass]="{'showReason': dataItem.saved, 'hideReason': !dataItem.saved}">SAVED</div>
+            <div class="boxSave" [ngClass]="{'showReason': dataItem.saved, 'hideReason': !dataItem.saved, 'savePosition': (dataItem.PRC_CST_TST_STS !== 'NA' && hasNoPermission !== true && dataItem._readonly !== true) }">SAVED</div>
             </div>
         </ng-template>
     </kendo-grid-column>

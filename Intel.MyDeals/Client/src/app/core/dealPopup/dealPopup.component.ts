@@ -225,7 +225,7 @@ export class dealPopupComponent {
 
                 }
             }
-            
+            this.openSearch();
             this.helpTip = 0;
         }, () => { 
             this.loggersvc.warn("Unable to locate Deal # '" + this.dealId + "'", "No Deal");
@@ -268,6 +268,7 @@ export class dealPopupComponent {
         this.pieData = [];
         this.scheduleData = [];
         this.loadPopupdata(sel);
+
     }
 
 

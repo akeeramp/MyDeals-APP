@@ -408,6 +408,11 @@
     transition: hidden 0s, opacity 1s linear !important
 }
 
+.savePosition {
+    position: relative;
+    top:-20px;
+}
+
 #pctChild .switch {
     position: relative;
     display: block;
