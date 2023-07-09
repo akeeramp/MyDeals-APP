@@ -148,6 +148,8 @@ export class AdvancedSearchComponent implements OnInit {
         if (filter && filter.filters && filter.filters.length > 0) {
             filter.filters.forEach((item: CompositeFilterDescriptor) => {
                 if (item && item.filters && item.filters.length > 0) {
+                    let filtersarr: any[] = item.filters;
+                    this.custFilter = filtersarr.findIndex(x => x.field == 'Customer_NM') > -1 ? this.custFilter : [];
                     item.filters.forEach((fltrItem: FilterDescriptor) => {
                         let column = fltrItem.field.toString();
                         let arrayData: any;
@@ -168,7 +170,7 @@ export class AdvancedSearchComponent implements OnInit {
                     })
                 }
             })
-        }
+        } else this.custFilter = [];
         await this.searchDeals();
         //if Date assigned to string value - converting to kendo date format
         if (filter && filter.filters && filter.filters.length > 0) {
@@ -181,10 +183,11 @@ export class AdvancedSearchComponent implements OnInit {
                         } else if ((column == 'CAP' || column == 'ECAP_PRICE' || column == 'STRT_VOL' || column == 'END_VOL' || column == 'RATE' || column == 'TRKR_NBR')) {
                             //let fiel: any = fltrItem.field
                             fltrItem.field = fltrItem.field + '_VAL';
-                        } else
+                        } else {
                             if (column == 'Customer/CUST_NM') {
                                 fltrItem.field = 'Customer_NM';
                             }
+                        }
                     })
                 }
             })
@@ -259,6 +262,7 @@ export class AdvancedSearchComponent implements OnInit {
             this.state.sort = [];
             this.state.group = [];
             this.state.skip = 0;
+            this.custFilter = [];
             this.searchDeals();
         } else {
             this.state.filter = {
@@ -268,6 +272,7 @@ export class AdvancedSearchComponent implements OnInit {
             this.state.sort = [];
             this.state.group = [];
             this.state.skip = 0;
+            this.custFilter = [];
         }
     }
 
