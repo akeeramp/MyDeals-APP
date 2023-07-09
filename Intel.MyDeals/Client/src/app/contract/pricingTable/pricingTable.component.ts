@@ -121,6 +121,16 @@ export class pricingTableComponent {
     addPerfTimes(perfData) {
         this.perfComp.addPerfTime("Update Contract And CurPricing Table", perfData);
     }
+    openHistoryTab(event) {
+        if (event.Model == 'historyDiv') {
+            this.isDETab = false; this.isPTETab = false;
+            const urlTree = this.router.createUrlTree(['/contractmanager', 'CNTRCT', event.C_ID, 0, 0, 0]);
+            this.router.navigateByUrl(urlTree + '?loadtype=Manage&manageType=historyDiv');
+            this.selectedTab = 2;
+            this.selLnav = 'historyDiv';
+            this.selectNavMenu = 'historyDiv';
+        }
+    }
 
     async loadModel(contractModel: contractIds, isRedirect: boolean = false) {
         this.selectedTab = 0;

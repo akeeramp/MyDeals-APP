@@ -154,7 +154,7 @@
                     <manager-pct [contractData]="contractData" [UItemplate]="UItemplate" [tab]="selLnav" (refreshedContractData)="refreshContractData($event)" (modelChange)="loadModel($event)"></manager-pct>
                 </div>
                 <div *ngIf="selLnav=='ViewContractDetails'" class="few-oracle-css allStuffContractDetails">
-                    <contract-details [C_ID]="contractData?.DC_ID"></contract-details>
+                    <contract-details (openHistoryTab)="openHistoryTab($event)" [C_ID]="contractData?.DC_ID"></contract-details>
                 </div>
             </div>
         </div>

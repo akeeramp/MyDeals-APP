@@ -1,4 +1,4 @@
-﻿import { Component, Input } from "@angular/core";
+﻿import { Component, Input, Output, EventEmitter } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { contractDetailsService } from "./contractDetails.service";
 import { FormGroup } from "@angular/forms";
@@ -87,7 +87,8 @@ export class contractDetailsComponent {
     private spinnerMessageHeader: string = "Contract Details";
     private spinnerMessageDescription: string = "Contract Details Loading..";
     private isBusyShowFunFact: boolean = true;
-    private backdatereasonsdropdownlist:any=null;
+    private backdatereasonsdropdownlist: any = null;
+    @Output() openHistoryTab: EventEmitter<object> = new EventEmitter<object>();
     isNotesDisabled = (<any>window).usrRole === 'RA' || (<any>window).usrRole === 'Legal' || (<any>window).usrRole === 'CBA' || ((<any>window).isBulkPriceAdmin && (<any>window).usrRole === 'SA') || (<any>window).isCustomerAdmin ? false : true;
     isRoleDisabled = (<any>window).usrRole === 'CBA' || (<any>window).usrRole === 'RA';
     private state: State = {
@@ -1129,6 +1130,14 @@ export class contractDetailsComponent {
             this.dropDownsData['BACK_DATE_RSN']=this.backdatereasonsdropdownlist;
             this.BACK_DATE_RSN=this.backdatereasonsdropdownlist.find(x=>x.DROP_DOWN==this.contractData.BACK_DATE_RSN);
         }
+    }
+
+    goToHistory() {
+        const contractDetails_Map = {
+            Model: 'historyDiv',
+            C_ID: this.C_ID
+        };
+        this.openHistoryTab.emit(contractDetails_Map);
     }
 
     ngAfterViewInit() {
