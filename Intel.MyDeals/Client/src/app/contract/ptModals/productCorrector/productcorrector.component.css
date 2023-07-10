@@ -883,3 +883,13 @@ button.btn.btn-default.prdBtn.cancel-correctorbtn {
 .productCorrectParent .prodCorrector.modal-body.allDoneModalBody {
     min-height: calc(90vh - 105px) !important;
 }
+
+::ng-deep .filtertreeview .k-treeview .k-in.k-state-selected{
+    background: transparent !important;
+    cursor: pointer;
+}
+
+::ng-deep .filtertreeview .k-treeview .k-in {
+    background: #00aeef !important;
+    cursor: pointer;
+}

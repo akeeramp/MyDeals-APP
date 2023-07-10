@@ -77,7 +77,7 @@
                     <div class="row" style="margin:0;">
                         <div class="col" style="padding: 0;">
                             <p class='filterTitleUnderline' *ngIf="curRowIssues.length > 0">Filter by product</p>
-                            <kendo-treeview class="lblFilterProd PctreeViewNodes lblFilterProdCorrect" [nodes]="curRowIssues" [(selectedKeys)]="issueRowKeys" textField="name" [hasChildren]="false" selectBy="value" [kendoTreeViewSelectable]="selection" (selectionChange)="clickFilter($event,'USR_INPUT')">
+                            <kendo-treeview class="lblFilterProd PctreeViewNodes lblFilterProdCorrect filtertreeview" [ngClass]="{ 'filtertreeview k-treeview k-state-selected': dataFilter.length!=0 ,'filtertreeview .k-treeview .k-in':  dataFilter.length==0 }" [nodes]="curRowIssues" [(selectedKeys)]="issueRowKeys" textField="name" [hasChildren]="false" selectBy="value" [kendoTreeViewSelectable]="selection" (selectionChange)="clickFilter($event,'USR_INPUT')">
                                 <ng-template kendoTreeViewNodeTemplate let-dataItem>
                                     {{ dataItem.name }}
                                     <span class="badge upperBadge big-label" *ngIf="dataItem.cnt>0">{{dataItem.cnt}}</span>
@@ -89,14 +89,14 @@
                     <div class="row" style="margin:0;" *ngIf="curRowLvl.length>1">
                         <div class="col" style="padding: 0;">
                             <p class="filterTitleUnderline">Filter by product level</p>
-                            <kendo-treeview class="lblFilterProd PctreeViewNodes lblFilterProdCorrect" [nodes]="curRowLvl" [(selectedKeys)]="issueRowKeys" textField="name" [hasChildren]="false" selectBy="value" [kendoTreeViewSelectable]="selection" (selectionChange)="clickFilter($event,'PRD_ATRB_SID')">
+                            <kendo-treeview class="lblFilterProd PctreeViewNodes lblFilterProdCorrect filtertreeview" [ngClass]="{ 'filtertreeview k-treeview k-state-selected': dataFilter.length!=0 ,'filtertreeview .k-treeview .k-in':  dataFilter.length==0 }" [nodes]="curRowLvl" [(selectedKeys)]="issueRowKeys" textField="name" [hasChildren]="false" selectBy="value" [kendoTreeViewSelectable]="selection" (selectionChange)="clickFilter($event,'PRD_ATRB_SID')">
                             </kendo-treeview>
                         </div>
                     </div>
                     <div class="row" style="margin:0;" *ngIf="curRowCategories.length>1">
                         <div class="col" style="padding: 0;">
                             <p class="filterTitleUnderline">Filter by product vertical</p>
-                            <kendo-treeview class="lblFilterProd PctreeViewNodes lblFilterProdCorrect" [nodes]="curRowCategories" [(selectedKeys)]="issueRowKeys" textField="name" [hasChildren]="false" selectBy="value" [kendoTreeViewSelectable]="selection" (selectionChange)="clickFilter($event,'PRD_CAT_NM')">
+                            <kendo-treeview class="lblFilterProd PctreeViewNodes lblFilterProdCorrect filtertreeview" [ngClass]="{ 'filtertreeview k-treeview k-state-selected': dataFilter.length!=0 ,'filtertreeview .k-treeview .k-in':  dataFilter.length==0 }" [nodes]="curRowCategories" [(selectedKeys)]="issueRowKeys" textField="name" [hasChildren]="false" selectBy="value" [kendoTreeViewSelectable]="selection" (selectionChange)="clickFilter($event,'PRD_CAT_NM')">
                             </kendo-treeview>
                         </div>
                     </div>

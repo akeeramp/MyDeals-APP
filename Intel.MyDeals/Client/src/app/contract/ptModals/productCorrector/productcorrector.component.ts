@@ -982,6 +982,8 @@ export class ProductCorrectorComponent {
         const indx = this.curRowIndx + 1;
         if (indx > this.numIssueRows) return false;
         this.selectRow(indx);
+        this.dataFilter=[];
+        this.applyFilterAndGrouping();
         return true;
     }
 
@@ -989,6 +991,8 @@ export class ProductCorrectorComponent {
         const indx = this.curRowIndx - 1;
         if (indx < 1) return false;
         this.selectRow(indx);
+        this.dataFilter=[];
+        this.applyFilterAndGrouping();
         return true;
     }
     cancel() {
