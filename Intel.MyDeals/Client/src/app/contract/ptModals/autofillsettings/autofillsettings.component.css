@@ -331,7 +331,7 @@
 
 .geo-desc {
     position: absolute;
-    top: 60px !important;
+    /*top: 60px !important;*/
     left: 34px
 }
 

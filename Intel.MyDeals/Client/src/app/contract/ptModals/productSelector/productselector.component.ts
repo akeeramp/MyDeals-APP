@@ -1410,10 +1410,12 @@ export class ProductSelectorComponent {
         }
         else {
             this.state = state;
+            let temp = this.state.take
             this.gridData = process(this.gridResult, this.state);
             state.take = this.gridData.total;
             let data = process(this.gridResult, state);
             this.gridFullData = data.data;
+            this.state.take = temp
         }
     }
 
