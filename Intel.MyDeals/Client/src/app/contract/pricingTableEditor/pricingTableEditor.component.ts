@@ -863,7 +863,6 @@ export class pricingTableEditorComponent {
                     this.createNewPrcObt(this.curPricingTable);
                     PTE_CellChange_Util.checkfn(changes[0], this.curPricingTable, this.columns,'',this.contractData,this.custCellEditor,this.newPricingTable);
                 }
-                    
             }
             //for multi tier there can be more tiers to delete so moving the logic after all change 
             if (this.multiRowDelete && this.multiRowDelete.length > 0 && this.isDeletePTR) {
