@@ -49,9 +49,6 @@ export class dealEditorCellTemplateComponent {
     private subKitEcapDim = "20_____2";
     private dim = "10___";
     private fields: any;
-    private YCS2modifier: string;
-    private fieldModifier: string;
-    private fieldText: string;
     private usrRole = (<any>window).usrRole;
     private isSuper = (<any>window).isSuper;
 
@@ -324,9 +321,6 @@ export class dealEditorCellTemplateComponent {
         }
 
     }
-    currencyCap(passedData, field, key) {
-        return new CurrencyPipe('en-us').transform(parseFloat(passedData[field][key]), 'USD', 'symbol', '1.2-2')
-    }
     densityBands(passedData) {
         let data = parseInt(passedData.NUM_OF_DENSITY);
         let band = []
@@ -395,9 +389,6 @@ export class dealEditorCellTemplateComponent {
         if (!this.in_Is_Tender_Dashboard)//if not Tender Dashboard Screen, take salesforce Id from contract data
             this.in_DataItem.SALESFORCE_ID = this.contract_Data.SALESFORCE_ID;
         this.fields = this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : this.in_Deal_Type === 'DENSITY' ? PTE_Config_Util.densityFields : PTE_Config_Util.volTierFields;
-        this.YCS2modifier = this.in_Field_Name === "YCS2_INFO" ? "_PRC_IRBT" : "";
-        this.fieldModifier = this.in_Field_Name === "CAP_INFO" ? "CAP" : this.in_Field_Name === "YCS2_INFO" ? "YCS2" : "";
-        this.fieldText = (this.in_Field_Name === "CAP_INFO" || this.in_Field_Name === "YCS2_INFO") ? this.fieldModifier + "_STRT_DT" : "";
     }
 
 }

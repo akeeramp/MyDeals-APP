@@ -322,7 +322,7 @@
                 <ng-template #block>
                     <div class="kitRowValue kitSideLine {{getClassNm(in_DataItem, in_Field_Name)}}">
                         <div *ngIf="in_DataItem._behaviors !=undefined && in_DataItem._behaviors.isError !=undefined && in_DataItem._behaviors.isError[in_Field_Name] !=undefined && in_DataItem._behaviors.isError[in_Field_Name + '_' + dimkey] !=undefined && in_DataItem._behaviors.isError[in_Field_Name + '_' + dimkey]" class="err-bit" kendoTooltip title="{{in_DataItem._behaviors.validMsg[in_Field_Name + '_' + dimkey]}}"></div>
-                        <span *ngIf="in_DataItem[in_Field_Name][dimkey] !=undefined && in_DataItem[in_Field_Name][dimkey] !=null && in_DataItem[in_Field_Name][dimkey] !='No YCS2' && in_DataItem[in_Field_Name][dimkey] !='No CAP'" class="ng-binding dataPadding" id="capYcs2Col">{{in_DataItem[in_Field_Name][dimkey]}}</span>
+                        <span *ngIf="in_DataItem[in_Field_Name][dimkey] !=undefined && in_DataItem[in_Field_Name][dimkey] !=null && in_DataItem[in_Field_Name][dimkey] !='No YCS2' && in_DataItem[in_Field_Name][dimkey] !='No CAP'" class="ng-binding dataPadding" id="capYcs2Col">{{in_DataItem[in_Field_Name][dimkey] | currency}}</span>
                     </div>
                 </ng-template>
             </div>
@@ -344,7 +344,7 @@
     <div *ngIf="in_DataItem['ECAP_PRICE'] != undefined && in_DataItem['ECAP_PRICE'] != null">
         <div class="col-md-12">
             <div *ngFor="let key Of keyArray(in_DataItem['ECAP_PRICE']); let i = index">
-                <div *ngIf="key.indexOf('___') >= 0 && key.indexOf('_____') < 0" (click)="openModal(fieldModifier, in_DataItem, getProductSid(in_DataItem.PRODUCT_FILTER, key),fieldModifier)">
+                <div *ngIf="key.indexOf('___') >= 0 && key.indexOf('_____') < 0" (click)="openModal('CAP', in_DataItem, getProductSid(in_DataItem.PRODUCT_FILTER, key),'CAP')">
                     <!-- Popover Template -->
                     <ng-template #popoverContent>
                         <div class="container">
@@ -352,7 +352,7 @@
                                 <a id="closePopover" role="button" (click)="popOver.close()"><i class="intelicon-close-max"></i></a>
                             </div>
                             <div *ngIf="popOver" class="row">
-                                <grid-popover [popOver]="popOver" [columnTypes]="fieldModifier" [currentPricingTableRow]="in_DataItem" [productMemberSId]="getProductSid(in_DataItem.PRODUCT_FILTER, key)" [priceCondition]="fieldModifier"></grid-popover>
+                                <grid-popover [popOver]="popOver" [columnTypes]="'CAP'" [currentPricingTableRow]="in_DataItem" [productMemberSId]="getProductSid(in_DataItem.PRODUCT_FILTER, key)" [priceCondition]="'CAP'"></grid-popover>
                             </div>
                         </div>
                     </ng-template>
@@ -360,42 +360,31 @@
                     <!-- Cell Content -->
                     <div class="rowHeight CAPYCS2CellContent " #popOver="ngbPopover" [ngbPopover]="popoverContent" placement="bottom" (click)="popOver.close()">
                         <!-- CAP Info cell design -->
-                        <div class="textRightAlign" [ngClass]="{'isHiddenCell': isHiddenCell(in_DataItem, fieldModifier),
-                                                    'isRequiredCell' : isRequiredCell(in_DataItem, fieldModifier),
-                                                    'isReadOnlyCell': isReadonlyCell(in_DataItem, fieldModifier),
-                                                    'isDirtyCell': isDirtyCell(in_DataItem, fieldModifier),
-                                                    'isErrorCell': isErrorCell(in_DataItem, fieldModifier),
-                                                    'isSavedCell': isSavedCell(in_DataItem, fieldModifier)}">
-                            <!--<div [innerHTML]="uiMoneyDatesControlWrapper(in_DataItem, fieldModifier + YCS2modifier, fieldText, fieldModifier + '_END_DT', key) | sanitizeHtml"></div>-->
+                        <div class="textRightAlign" [ngClass]="{'isHiddenCell': isHiddenCell(in_DataItem, 'CAP'),
+                                                    'isRequiredCell' : isRequiredCell(in_DataItem, 'CAP'),
+                                                    'isReadOnlyCell': isReadonlyCell(in_DataItem, 'CAP'),
+                                                    'isDirtyCell': isDirtyCell(in_DataItem, 'CAP'),
+                                                    'isErrorCell': isErrorCell(in_DataItem, 'CAP'),
+                                                    'isSavedCell': isSavedCell(in_DataItem, 'CAP')}">
+                            <!--<div [innerHTML]="uiMoneyDatesControlWrapper(in_DataItem, fieldModifier + YCS2modifier, 'CAP_STRT_DT', fieldModifier + '_END_DT', key) | sanitizeHtml"></div>-->
                             <div>
-                                {{uiMoneyDatesControlWrapper(in_DataItem, fieldModifier + YCS2modifier, fieldText, fieldModifier + '_END_DT', key)}}
-                                <div *ngIf="fieldModifier === 'CAP' && fieldVal(in_DataItem, 'CAP', key) === 'No CAP'" class="uiControlDiv isSoftWarnCell capInfoWrapper">
+                                {{uiMoneyDatesControlWrapper(in_DataItem, 'CAP', 'CAP_STRT_DT', 'CAP_END_DT', key)}}
+                                <div *ngIf="fieldVal(in_DataItem, 'CAP', key) === 'No CAP'" class="uiControlDiv isSoftWarnCell capInfoWrapper">
                                     <div class="capLineStyle">No CAP</div>
-                                    <div *ngIf="startVal(in_DataItem, fieldText, key) !== '' && startVal(in_DataItem, fieldText, key) !== '01/01/1900'">
-                                        <div>Availability:<span class="ng-binding">{{in_DataItem[fieldText][key]}}</span></div>
+                                    <div *ngIf="startVal(in_DataItem, 'CAP_STRT_DT', key) !== '' && startVal(in_DataItem, 'CAP_STRT_DT', key) !== '01/01/1900'">
+                                        <div>Availability:<span class="ng-binding">{{in_DataItem['CAP_STRT_DT'][key]}}</span></div>
                                     </div>
                                 </div>
                                 <div *ngIf="in_DataItem != undefined && in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" class="err-bit" kendoTooltip title="{{in_DataItem._behaviors.validMsg[in_Field_Name]}}"></div>
-                                <div *ngIf="checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msgClass'] == 'isSoftWarnCell' && checkingMsg(in_DataItem,  fieldModifier + YCS2modifier, fieldText, key)['msg'] != '' && fieldVal(in_DataItem, 'CAP', key) !== 'No CAP'" class="uiControlDiv msgClassStyles {{checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msgClass']}}" title="{{checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msg']}}">
+                                <div *ngIf="fieldVal(in_DataItem, 'CAP', key) !== 'No CAP'" class="uiControlDiv msgClassStyles {{checkingMsg(in_DataItem, 'CAP', 'CAP_STRT_DT', key)['msgClass']}} {{checkingMsg(in_DataItem, 'CAP', 'CAP_STRT_DT', key)['msgClass'] != 'isSoftWarnCell' ? getClassNm(in_DataItem,  'CAP') : ''}}" title="{{checkingMsg(in_DataItem, 'CAP', 'CAP_STRT_DT', key)['msg'] != '' ? checkingMsg(in_DataItem, 'CAP', 'CAP_STRT_DT', key)['msg'] : ''}}">
                                     <div>
-                                        <span *ngIf="fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key) !== '' && fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key).indexOf('-') > -1; else elseBlock" class="ng-binding boldFont" id="tdsCol">{{in_DataItem[ fieldModifier + YCS2modifier][key]}}</span>
+                                        <span *ngIf="fieldVal(in_DataItem, ('CAP'), key) !== '' && fieldVal(in_DataItem, ('CAP'), key).indexOf('-') > -1; else elseBlock" class="ng-binding boldFont" id="tdsCol">{{in_DataItem['CAP'][key]}}</span>
                                         <ng-template #elseBlock>
-                                            <span class="ng-binding boldFont">{{currencyCap(in_DataItem, fieldModifier + YCS2modifier, key)}}</span>
+                                            <span class="ng-binding boldFont">{{in_DataItem['CAP'][key] | currency}}</span>
                                         </ng-template>
                                     </div>
                                     <div>
-                                        <span class="ng-binding" id="tdsCol">{{in_DataItem[fieldText][key]}}</span> - <span class="ng-binding" id="tdsCol">{{ in_DataItem[fieldModifier + '_END_DT'][key] }}</span>
-                                    </div>
-                                </div>
-                                <div *ngIf="checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msgClass'] != 'isSoftWarnCell' && checkingMsg(in_DataItem,  fieldModifier + YCS2modifier, fieldText, key)['msg'] == '' && fieldVal(in_DataItem, 'CAP', key) !== 'No CAP'" class="uiControlDiv msgClassStyles {{checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msgClass']}} {{getClassNm(in_DataItem,  fieldModifier + YCS2modifier)}}">
-                                    <div>
-                                        <span *ngIf="fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key) !== '' && fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key).indexOf('-') > -1; else elseBlock" class="ng-binding boldFont" id="tdsCol">{{in_DataItem[ fieldModifier + YCS2modifier][key]}}</span>
-                                        <ng-template #elseBlock>
-                                            <span class="ng-binding boldFont">{{currencyCap(in_DataItem, fieldModifier + YCS2modifier, key)}}</span>
-                                        </ng-template>
-                                    </div>
-                                    <div *ngIf="in_DataItem[fieldText] && in_DataItem[fieldText][key]">
-                                        <span class="ng-binding" id="tdsCol">{{in_DataItem[fieldText][key]}}</span> - <span class="ng-binding" id="tdsCol">{{in_DataItem[fieldModifier + '_END_DT'][key]}}</span>
+                                        <span class="ng-binding" id="tdsCol">{{in_DataItem['CAP_STRT_DT'][key]}}</span> - <span class="ng-binding" id="tdsCol">{{ in_DataItem['CAP_END_DT'][key] }}</span>
                                     </div>
                                 </div>
                             </div>
@@ -410,46 +399,35 @@
     <div *ngIf="in_DataItem['ECAP_PRICE'] != undefined && in_DataItem['ECAP_PRICE'] != null">
         <div class="col-md-12">
             <div *ngFor="let key Of keyArray(in_DataItem['ECAP_PRICE']); let i = index">
-                <div *ngIf="key.indexOf('___') >= 0 && key.indexOf('_____') < 0" (click)="openModal(fieldModifier, in_DataItem, getProductSid(in_DataItem.PRODUCT_FILTER, key), fieldModifier)">
+                <div *ngIf="key.indexOf('___') >= 0 && key.indexOf('_____') < 0" (click)="openModal('YCS2', in_DataItem, getProductSid(in_DataItem.PRODUCT_FILTER, key), 'YCS2')">
                     <!-- Cell Content -->
                     <div class="rowHeight CAPYCS2CellContent">
                         <!-- YCS2 Info cell design -->
-                        <div class="textRightAlign" [ngClass]="{'isHiddenCell': isHiddenCell(in_DataItem, fieldModifier),
-                                                    'isRequiredCell' : isRequiredCell(in_DataItem, fieldModifier),
-                                                    'isReadOnlyCell': isReadonlyCell(in_DataItem, fieldModifier),
-                                                    'isDirtyCell': isDirtyCell(in_DataItem, fieldModifier),
-                                                    'isErrorCell': isErrorCell(in_DataItem, fieldModifier),
-                                                    'isSavedCell': isSavedCell(in_DataItem, fieldModifier)}">
-                            <!--<div [innerHTML]="uiMoneyDatesControlWrapper(in_DataItem, fieldModifier + YCS2modifier, fieldText, fieldModifier + '_END_DT', key) | sanitizeHtml"></div>-->
+                        <div class="textRightAlign" [ngClass]="{'isHiddenCell': isHiddenCell(in_DataItem, 'YCS2'),
+                                                    'isRequiredCell' : isRequiredCell(in_DataItem, 'YCS2'),
+                                                    'isReadOnlyCell': isReadonlyCell(in_DataItem, 'YCS2'),
+                                                    'isDirtyCell': isDirtyCell(in_DataItem, 'YCS2'),
+                                                    'isErrorCell': isErrorCell(in_DataItem, 'YCS2'),
+                                                    'isSavedCell': isSavedCell(in_DataItem, 'YCS2')}">
+                            <!--<div [innerHTML]="uiMoneyDatesControlWrapper(in_DataItem, 'YCS2_PRC_IRBT', YCS2_START_DT, YCS2_END_DT, key) | sanitizeHtml"></div>-->
                             <div>
-                                {{uiMoneyDatesControlWrapper(in_DataItem, fieldModifier + YCS2modifier, fieldText, fieldModifier + '_END_DT', key)}}
-                                <div *ngIf="(fieldModifier + YCS2modifier) === 'YCS2_PRC_IRBT' && fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key) === 'No YCS2'" class="uiControlDiv isSoftWarnCell capInfoWrapper">
+                                {{uiMoneyDatesControlWrapper(in_DataItem, 'YCS2_PRC_IRBT', 'YCS2_START_DT', 'YCS2_END_DT', key)}}
+                                <div *ngIf="fieldVal(in_DataItem, 'YCS2_PRC_IRBT', key) === 'No YCS2'" class="uiControlDiv isSoftWarnCell capInfoWrapper">
                                     <div class="capLineStyle">No YCS2</div>
-                                    <div *ngIf="startVal(in_DataItem, fieldText, key) !== '' && startVal(in_DataItem, fieldText, key) !== '01/01/1900'">
-                                        Availability:<span class="ng-binding">{{in_DataItem[fieldText][key]}}</span>
+                                    <div *ngIf="startVal(in_DataItem, 'YCS2_START_DT', key) !== '' && startVal(in_DataItem, 'YCS2_START_DT', key) !== '01/01/1900'">
+                                        Availability:<span class="ng-binding">{{in_DataItem['YCS2_START_DT'][key]}}</span>
                                     </div>
                                 </div>
                                 <div *ngIf="in_DataItem != undefined && in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[in_Field_Name]" class="err-bit" kendoTooltip title="{{in_DataItem._behaviors.validMsg[in_Field_Name]}}"></div>
-                                <div *ngIf="checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msgClass'] == 'isSoftWarnCell' && checkingMsg(in_DataItem,  fieldModifier + YCS2modifier, fieldText, key)['msg'] != '' && fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key) !== 'No YCS2'" class="uiControlDiv msgClassStyles {{checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msgClass']}}" title="{{checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msg']}}">
+                                <div *ngIf="fieldVal(in_DataItem, ('YCS2_PRC_IRBT'), key) !== 'No YCS2'" class="uiControlDiv msgClassStyles {{checkingMsg(in_DataItem, 'YCS2_PRC_IRBT', 'YCS2_START_DT', key)['msgClass']}} {{checkingMsg(in_DataItem, 'YCS2_PRC_IRBT', YCS2_START_DT, key)['msgClass'] !== 'isSoftWarnCell' ? getClassNm(in_DataItem,  'YCS2_PRC_IRBT') : ''}}" title="{{checkingMsg(in_DataItem, 'YCS2_PRC_IRBT', 'YCS2_START_DT', key)['msg'] != '' ? checkingMsg(in_DataItem, 'YCS2_PRC_IRBT', 'YCS2_START_DT', key)['msg'] : ''}}">
                                     <div>
-                                        <span *ngIf="fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key) !== '' && fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key).indexOf('-') > -1; else elseBlock" class="ng-binding boldFont" id="tdsCol">{{in_DataItem[ fieldModifier + YCS2modifier][key]}}</span>
+                                        <span *ngIf="fieldVal(in_DataItem, ('YCS2_PRC_IRBT'), key) !== '' && fieldVal(in_DataItem, ('YCS2_PRC_IRBT'), key).indexOf('-') > -1; else elseBlock" class="ng-binding boldFont" id="tdsCol">{{in_DataItem[ 'YCS2_PRC_IRBT'][key]}}</span>
                                         <ng-template #elseBlock>
-                                            <span class="ng-binding boldFont">{{currencyCap(in_DataItem, fieldModifier + YCS2modifier, key)}}</span>
+                                            <span class="ng-binding boldFont">{{in_DataItem['YCS2_PRC_IRBT'][key] | currency}}</span>
                                         </ng-template>
                                     </div>
                                     <div>
-                                        <span class="ng-binding" id="tdsCol">{{in_DataItem[fieldText][key]}}</span> - <span class="ng-binding" id="tdsCol">{{ in_DataItem[fieldModifier + '_END_DT'][key] }}</span>
-                                    </div>
-                                </div>
-                                <div *ngIf="checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msgClass'] != 'isSoftWarnCell' && checkingMsg(in_DataItem,  fieldModifier + YCS2modifier, fieldText, key)['msg'] == '' &&  fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key) !== 'No YCS2'" class="uiControlDiv msgClassStyles {{checkingMsg(in_DataItem, fieldModifier + YCS2modifier, fieldText, key)['msgClass']}} {{getClassNm(in_DataItem,  fieldModifier + YCS2modifier)}}">
-                                    <div>
-                                        <span *ngIf="fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key) !== '' && fieldVal(in_DataItem, (fieldModifier + YCS2modifier), key).indexOf('-') > -1; else elseBlock" class="ng-binding boldFont" id="tdsCol">{{in_DataItem[ fieldModifier + YCS2modifier][key]}}</span>
-                                        <ng-template #elseBlock>
-                                            <span class="ng-binding boldFont">{{currencyCap(in_DataItem, fieldModifier + YCS2modifier, key)}}</span>
-                                        </ng-template>
-                                    </div>
-                                    <div *ngIf="in_DataItem[fieldText] && in_DataItem[fieldText][key]">
-                                        <span class="ng-binding" id="tdsCol">{{in_DataItem[fieldText][key]}}</span> - <span class="ng-binding" id="tdsCol">{{in_DataItem[fieldModifier + '_END_DT'][key]}}</span>
+                                        <span class="ng-binding" id="tdsCol">{{in_DataItem['YCS2_START_DT'][key]}}</span> - <span class="ng-binding" id="tdsCol">{{in_DataItem['YCS2_END_DT'][key]}}</span>
                                     </div>
                                 </div>
                             </div>
