@@ -1,9 +1,11 @@
 ﻿import { Component, Input, Output, EventEmitter, NgZone } from '@angular/core';
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
-import { each, uniq, filter, map, where, pluck, findWhere, findIndex, findLastIndex, reject, contains, find, values, keys, unique } from 'underscore';
+import { each, uniq, filter, map, where, pluck, findWhere, findIndex, findLastIndex, reject, contains, find, values, keys, unique, includes, isUndefined, isEmpty, isNull } from 'underscore';
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
+import { distinct } from '@progress/kendo-data-query';
+
 import { logger } from '../../shared/logger/logger';
 import { pricingTableEditorService } from './pricingTableEditor.service'
 import { lnavService } from '../lnav/lnav.service';
@@ -29,7 +31,6 @@ import { Tender_Util } from '../PTEUtils/Tender_util';
 import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 import { FlexOverlappingCheckComponent } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.component';
-import { distinct } from '@progress/kendo-data-query';
 import { dropDownModalComponent } from '../ptModals/dropDownModal/dropDownModal.component';
 
 @Component({
@@ -39,93 +40,110 @@ import { dropDownModalComponent } from '../ptModals/dropDownModal/dropDownModal.
 export class pricingTableEditorComponent {
 
     constructor(private pteService: pricingTableEditorService,
-        private productSelectorService: productSelectorService,
-        private loggerService: logger,
-        private lnavService: lnavService,
-        private flexoverLappingCheckDealsService: flexoverLappingcheckDealService,
-        private contractDetailsService: contractDetailsService, private ngZone: NgZone,
-        protected dialog: MatDialog) {
+                private productSelectorService: productSelectorService,
+                private loggerService: logger,
+                private lnavService: lnavService,
+                private flexoverLappingCheckDealsService: flexoverLappingcheckDealService,
+                private contractDetailsService: contractDetailsService, private ngZone: NgZone,
+                protected dialog: MatDialog) {
         /*  custom cell editor logic starts here*/
         let VM = this;
         this.custCellEditor = class custSelectEditor extends Handsontable.editors.TextEditor {
             public TEXTAREA: any;
-            public BUTTON: any;
-            public buttonStyle: any;
+            public BUTTON: HTMLButtonElement;
             public TEXTAREA_PARENT: any;
             public textareaStyle: any
             public textareaParentStyle: any
-            public hot: Handsontable.Core;
-            public instance: any;
             public selectOptions: any;
             private selRow = 0;
             private selCol = 0;
             private field: any = '';
             private source: any = '';
             private allOperations = [];
+
             constructor(hotInstance: any) {
                 super(hotInstance);
             }
+
             prepare(row: number, col: number, prop: string | number, TD: HTMLTableCellElement, originalValue: any, cellProperties: Handsontable.CellProperties): void {
                 super.prepare(row, col, prop, TD, originalValue, cellProperties);
                 this.selCol = col;
                 this.selRow = row;
                 this.field = prop;
                 this.source = cellProperties.source ? cellProperties.source : '';
+
+                this.setButtonIconType();
             }
+
             createElements() {
                 super.createElements();
                 this.createCellButton();
                 this.TEXTAREA.className = 'htCustTxt';
                 this.TEXTAREA_PARENT.appendChild(this.BUTTON);
             }
-            createCellButton() {
+
+            private createCellButton() {
                 this.BUTTON = document.createElement('button');
-                this.BUTTON.id = "btnCustSelctor";
-                this.buttonStyle = this.BUTTON.style;
+                this.BUTTON.id = 'btnCustSelctor';
                 this.BUTTON.className = 'btn btn-sm btn-primary py-0 htCustCellEditor';
-                this.BUTTON.innerHTML = '<i class="intelicon-search fs-search"></i>';
-                this.BUTTON.addEventListener('mousedown', (event: any) => {
+
+                this.BUTTON.addEventListener('mousedown', (event) => {
                     event.stopImmediatePropagation();
                     event.preventDefault();
                     this.openPopUp();
                 });
             }
+
+            private setButtonIconType() {
+                const DATE_BUTTON_FIELDS = ['START_DT', 'END_DT', 'OEM_PLTFRM_LNCH_DT', 'OEM_PLTFRM_EOL_DT'];
+                const SEARCH_BUTTON_FIELDS = ['PTR_USER_PRD'];
+
+                if (includes(SEARCH_BUTTON_FIELDS, this.field)) {
+                    this.BUTTON.innerHTML = '<i class="intelicon-search"></i>';
+                } else if (includes(DATE_BUTTON_FIELDS, this.field)) {
+                    this.BUTTON.innerHTML = '<i class="intelicon-calendar"></i>';
+                } else {
+                    this.BUTTON.innerHTML = '<i class="intelicon-check"></i>';
+                }
+            }
+
             async openPopUp() {
                 VM.curRow = [];
-                let selVal = this.hot.getDataAtCell(this.selRow, this.selCol);
-                if (this.field == 'PAYOUT_BASED_ON' || this.field == 'PERIOD_PROFILE' || this.field == 'RESET_VOLS_ON_PERIOD'
-                    || this.field == 'AR_SETTLEMENT_LVL' || this.field == 'REBATE_TYPE' || this.field == 'PROD_INCLDS'
-                    || this.field == 'SETTLEMENT_PARTNER' || this.field == 'SERVER_DEAL_TYPE' || this.field == 'PROGRAM_PAYMENT') {
-                    if (!this.source.includes(selVal))
-                        selVal = '';
+                let selVal = this.instance.getDataAtCell(this.selRow, this.selCol);
+
+                const FIELDS_RESET_SELECTED_VALUE = ['PAYOUT_BASED_ON', 'PERIOD_PROFILE', 'RESET_VOLS_ON_PERIOD', 'AR_SETTLEMENT_LVL', 'REBATE_TYPE', 'PROD_INCLDS', 'SETTLEMENT_PARTNER', 'SERVER_DEAL_TYPE', 'PROGRAM_PAYMENT'];
+                if (includes(FIELDS_RESET_SELECTED_VALUE, this.field) && !this.source.includes(selVal)) {
+                    selVal = '';
                 }
+
                 let modalComponent: any = null,
                     name: string = '',
                     height: string = '',
                     width: string = '650px',
                     data = {},
-                    panelClass: string = "";
+                    panelClass: string = '';
+
                 if (this.field && this.field == 'PTR_USER_PRD') {
                     modalComponent = ProductSelectorComponent;
-                    name = "Product Selector";
-                    width = "5500px";
-                    panelClass = "product-selector-dialog";
+                    name = 'Product Selector';
+                    width = '5500px';
+                    panelClass = 'product-selector-dialog';
                     let obj = {};
-                    each(this.hot.getCellMetaAtRow(this.selRow), (val) => {
+                    each(this.instance.getCellMetaAtRow(this.selRow), (val) => {
                         if (val.prop) {
-                            obj[val.prop] = this.hot.getDataAtRowProp(this.selRow, val.prop.toString()) != null ? this.hot.getDataAtRowProp(this.selRow, val.prop.toString()) : null;
+                            obj[val.prop] = this.instance.getDataAtRowProp(this.selRow, val.prop.toString());
                         }
                     });
                     VM.curRow.push(obj);
-
-                    if (VM.curRow[0]['PTR_SYS_PRD'] == "" || VM.isExcludePrdChange) {
+        
+                    if (isEmpty(VM.curRow[0]['PTR_SYS_PRD']) || VM.isExcludePrdChange) {
                         await VM.validateOnlyProducts('onOpenSelector', VM.curRow);
                         if (VM.curRow[0].isOpenCorrector) {
                             delete VM.curRow[0].isOpenCorrector;
-
+        
                             if (VM.curRow[0] && VM.curRow[0].delPTR_SYS_PRD) {
                                 VM.curRow[0]['PTR_SYS_PRD'] = ""
-                                this.hot.setDataAtRowProp(this.selRow, 'PTR_SYS_PRD', '', 'no-edit');
+                                this.instance.setDataAtRowProp(this.selRow, 'PTR_SYS_PRD', '', 'no-edit');
                                 delete VM.curRow[0].delPTR_SYS_PRD;
                             }
                             VM.curRow = [];
@@ -133,257 +151,246 @@ export class pricingTableEditorComponent {
                         }
                     }
                     data = { name: name, source: this.source, selVal: selVal, contractData: VM.contractData, curPricingTable: VM.curPricingTable, curRow: VM.curRow };
-                }
-                else if (this.field && this.field == 'PAYOUT_BASED_ON') {
+                } else if (this.field && this.field == 'PAYOUT_BASED_ON') {
                     modalComponent = dropDownModalComponent
                     name = "Select Payout Based On *";
                     width = '600px';
                     data = { name: name, source: this.source, selVal: selVal };
-                }
-                else if (this.field && this.field == 'PERIOD_PROFILE') {
+                } else if (this.field && this.field == 'PERIOD_PROFILE') {
                     modalComponent = dropDownModalComponent
                     name = "Select Period Profile";
                     width = '600px';
                     data = { name: name, source: this.source, selVal: selVal };
-                }
-                else if (this.field && this.field == 'RESET_VOLS_ON_PERIOD') {
+                } else if (this.field && this.field == 'RESET_VOLS_ON_PERIOD') {
                     modalComponent = dropDownModalComponent
                     name = "Select Reset Per Period";
                     width = '600px';
                     data = { name: name, source: this.source, selVal: selVal };
-                }
-                else if (this.field && this.field == 'AR_SETTLEMENT_LVL') {
+                } else if (this.field && this.field == 'AR_SETTLEMENT_LVL') {
                     modalComponent = dropDownModalComponent
                     name = "Select Settlement Level";
                     width = '600px';
                     data = { name: name, source: this.source, selVal: selVal };
-                }
-                else if (this.field && this.field == 'REBATE_TYPE') {
+                } else if (this.field && this.field == 'REBATE_TYPE') {
                     modalComponent = dropDownModalComponent
                     name = "Select Rebate Type *";
                     width = '600px';
                     data = { name: name, source: this.source, selVal: selVal };
-                }
-                else if (this.field && this.field == 'PROD_INCLDS') {
+                } else if (this.field && this.field == 'PROD_INCLDS') {
                     modalComponent = dropDownModalComponent
                     name = "Select Media *";
                     width = '600px';
                     data = { name: name, source: this.source, selVal: selVal };
-                }
-                else if (this.field && this.field == 'SETTLEMENT_PARTNER') {
+                } else if (this.field && this.field == 'SETTLEMENT_PARTNER') {
                     modalComponent = dropDownModalComponent
                     name = "Select Settlement Partner";
                     width = '600px';
                     data = { name: name, source: this.source, selVal: selVal };
-                }
-                else if (this.field && this.field == 'SERVER_DEAL_TYPE') {
+                } else if (this.field && this.field == 'SERVER_DEAL_TYPE') {
                     modalComponent = dropDownModalComponent
                     name = "Select Server Deal Type";
                     width = '600px';
                     data = { name: name, source: this.source, selVal: selVal };
-                }
-                else if (this.field && this.field == 'PROGRAM_PAYMENT') {
+                } else if (this.field && this.field == 'PROGRAM_PAYMENT') {
                     modalComponent = dropDownModalComponent
                     name = "Select Program Payment *";
                     width = '600px';
                     data = { name: name, source: this.source, selVal: selVal };
-                }
-                else if (this.field && this.field == 'GEO_COMBINED') {
+                } else if (this.field && this.field == 'GEO_COMBINED') {
                     modalComponent = GeoSelectorComponent
                     panelClass = 'multi_select_style'
                     name = "Select Geo *";
                     data = { name: name, source: this.source, selVal: selVal };
-                }
-                else if (this.field && this.field == 'CUST_ACCNT_DIV') {
+                } else if (this.field && this.field == 'CUST_ACCNT_DIV') {
                     modalComponent = GeoSelectorComponent
                     panelClass = 'multi_select_style'
                     name = "Customer Account Divisions";
                     data = { name: name, source: this.source, selVal: selVal };
-                }
-                else if (this.field && this.field == 'QLTR_BID_GEO') {
+                } else if (this.field && this.field == 'QLTR_BID_GEO') {
                     modalComponent = GeoSelectorComponent;
                     panelClass = 'geo_multi_style',
                         name = "Select Bid Geo";
                     data = { name: name, source: this.source, selVal: selVal };
-                }
-                else if(this.field && this.field == 'MRKT_SEG'){
+                } else if(this.field && this.field == 'MRKT_SEG'){
                     modalComponent = multiSelectModalComponent;
                     panelClass = 'multi-select-pte',
                     height = "auto"
                     width = "700px";
                     name = this.field;
                     data = { colName: name, items: { 'data': this.source }, cellCurrValues: selVal };
-                }
-                else {
-                    const contractStartDate = VM.contractData["START_DT"];
-                    const contractEndDate = VM.contractData["END_DT"];
-                    const isConsumption = this.hot.getDataAtRowProp(this.selRow, "PAYOUT_BASED_ON") === "Consumption";
-                    const isOEM = this.field === "OEM_PLTFRM_LNCH_DT" || this.field === "OEM_PLTFRM_EOL_DT";
+                } else {
+                    const CONTRACT_START_DATE = VM.contractData["START_DT"];
+                    const CONTRACT_END_DATE = VM.contractData["END_DT"];
+                    const IS_CONSUMPTION = this.instance.getDataAtRowProp(this.selRow, "PAYOUT_BASED_ON") === "Consumption";
+                    const IS_OEM = this.field === "OEM_PLTFRM_LNCH_DT" || this.field === "OEM_PLTFRM_EOL_DT";
                     modalComponent = kendoCalendarComponent;
-                    height = "auto"
-                    width = "600px";
+                    height = 'auto';
+                    width = '600px';
                     name = this.field;
-                    data = { colName: name, items: { 'data': this.source }, cellCurrValues: selVal, contractStartDate: contractStartDate, contractEndDate: contractEndDate, isConsumption: isConsumption, isOEM: isOEM, contractIsTender: VM.isTenderContract };
-                    panelClass = "date-calendar-pop-up";
+                    data = { colName: name, items: { data: this.source }, cellCurrValues: selVal, contractStartDate: CONTRACT_START_DATE, contractEndDate: CONTRACT_END_DATE, isConsumption: IS_CONSUMPTION, isOEM: IS_OEM, contractIsTender: VM.isTenderContract };
+                    panelClass = 'date-calendar-pop-up';
                 }
                 VM.editorOpened = true;
+
                 //this zone is implemented for pte dialogs double click event problem
                 ngZone.run(async () => {
-                const dialogRef = dialog.open(modalComponent, {
-                    height: height,
-                    width: width,
-                    data: data,
-                    panelClass: panelClass
-                });
-                await dialogRef.afterClosed().toPromise().then(result => {
-                    if (result != undefined) {
-                        if (this.field && this.field == 'PTR_USER_PRD') {//here there is no handonstable source specify bcz we need to do autofill
-                            VM.isLoading = true;
-                            let cntrctPrdct = [];
-                            let excludedPrdct = [];
-                            let sysPrd = {};
-                            this.allOperations = [];
-                            if (result.splitProducts) { 
-                                 let PTR = [];
-                                each(result.validateSelectedProducts, (item, idx) => {
-                                    if (!item[0].EXCLUDE) {
-                                        cntrctPrdct = [];
-                                        sysPrd = {};
-                                        cntrctPrdct.push(item[0].HIER_VAL_NM);
-                                        sysPrd[item[0].DERIVED_USR_INPUT] = item;
-                                        if (VM.curPricingTable.OBJ_SET_TYPE_CD && VM.curPricingTable.OBJ_SET_TYPE_CD == 'KIT') {
-                                            if (idx != 0) {
-                                                result.validateSelectedProducts[idx].indx = result.validateSelectedProducts[idx - 1].indx
-                                                    + result.validateSelectedProducts[idx - 1].items.length;
-                                            }
-                                        }                                      
-                                        VM.dirty = true;//for enabling save&Validate button when a product is added from productSelector
-                                        let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct.toString() };
-                                        PTR.push({ row: this.selRow, prop: 'PTR_USER_PRD', old: this.hot.getDataAtRowProp(this.selRow, 'PTR_USER_PRD'), new: cntrctPrdct.toString() ,operation:operation});
-                                        this.selRow = this.selRow + VM.curPricingTable.NUM_OF_TIERS;
-                                        this.allOperations.push(operation);
-                                    }
-                                });
-                                PTE_CellChange_Util.autoFillCellOnProd(PTR, VM.curPricingTable, VM.contractData, VM.pricingTableTemplates, VM.columns);
-                            }
-                            else {
-                                each(result.validateSelectedProducts, (item) => {
-                                    if (!item[0].EXCLUDE) {
-                                        cntrctPrdct.push(item[0].HIER_VAL_NM)
-                                    }
-                                    else if (item[0].EXCLUDE && !result.splitProducts) {
-                                        excludedPrdct.push(item[0].HIER_VAL_NM);
-                                    }
-                                    sysPrd[item[0].DERIVED_USR_INPUT] = item;
-                                });
-                                let PTR = [];
-                                VM.dirty = true;//for enabling save&Validate button when a product is added from productSelector
-                                PTR.push({ row: this.selRow, prop: 'PTR_USER_PRD', old: this.hot.getDataAtRowProp(this.selRow, 'PTR_USER_PRD'), new: cntrctPrdct.toString() });
-                                let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct.toString() };
-                                this.allOperations.push(operation);
-                                PTE_CellChange_Util.autoFillCellOnProd(PTR, VM.curPricingTable, VM.contractData, VM.pricingTableTemplates, VM.columns, operation);
-                            }
-                        }
-                        else {
-                            VM.dirty = true;
-                            if (this.field && selVal != result?.toString && result !== '' && result !== null &&
-                                (this.field == 'CUST_ACCNT_DIV' || this.field == "GEO_COMBINED" || this.field == 'START_DT' || this.field == 'END_DT' || this.field == 'PAYOUT_BASED_ON' || this.field == 'PERIOD_PROFILE' || this.field == 'RESET_VOLS_ON_PERIOD' || this.field == 'AR_SETTLEMENT_LVL'
-                                    || this.field == 'REBATE_TYPE' || this.field == 'PROD_INCLDS' || this.field == 'SETTLEMENT_PARTNER' || this.field == 'MRKT_SEG' || this.field == 'PROGRAM_PAYMENT' || this.field === "OEM_PLTFRM_LNCH_DT" || this.field === "OEM_PLTFRM_EOL_DT")) {
-                                //VM.dirty = true;
-                                VM.removeCellComments(this.selRow, this.field);
-                                let PTR = [];
-                                if (this.field == 'PROGRAM_PAYMENT') {
-                                    PTR.push({ row: this.selRow, prop: this.field, old: this.hot.getDataAtRowProp(this.selRow, this.field), new: result?.toString() });
-                                    VM.createNewPrcObt(VM.curPricingTable);
-                                    PTE_CellChange_Util.pgChgfn(PTR, VM.columns, VM.curPricingTable, VM.contractData, VM.custCellEditor, VM.newPricingTable);
-                                }
-                                if ((this.field == 'RESET_VOLS_ON_PERIOD' || this.field == 'AR_SETTLEMENT_LVL' || this.field == 'PERIOD_PROFILE')) {
-                                    VM.createNewPrcObt(VM.curPricingTable);
-                                    let PTRCount = this.hot.countRows();
-                                    if (this.field == 'AR_SETTLEMENT_LVL') {
-                                        let ptrow = [];
-                                        ptrow.push({ row: this.selRow, prop: this.field, old: this.hot.getDataAtRowProp(this.selRow, this.field), new: result?.toString() });
-                                        PTE_CellChange_Util.autoFillARSet(ptrow, VM.contractData, VM.curPricingTable, VM.custCellEditor);
-                                        for (let i = 0; i < PTRCount; i++) {
-                                            if (!this.hot.isEmptyRow(i)) {
-                                                let ptrows = [];
-                                                ptrows.push({ row: i, prop: this.field, old: this.hot.getDataAtRowProp(i, this.field), new: result?.toString() });
-                                                if (this.hot.getDataAtRowProp(i, 'PERIOD_PROFILE') == '' && this.hot.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD') == '') {
-                                                    PTE_CellChange_Util.checkfn(ptrows[0], VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable)
+                    const DIALOG_REF = dialog.open(modalComponent, {
+                        height: height,
+                        width: width,
+                        data: data,
+                        panelClass: panelClass
+                    });
+
+                    await DIALOG_REF.afterClosed().toPromise().then(result => {
+                        if (!isUndefined(result)) {
+                            if (this.field && this.field == 'PTR_USER_PRD') {//here there is no handonstable source specify bcz we need to do autofill
+                                VM.isLoading = true;
+                                let contractProducts = [];
+                                let excludedProducts = [];
+                                let sysPrd = {};
+                                this.allOperations = [];
+                                if (result.splitProducts) { 
+                                    let PTR = [];
+                                    each(result.validateSelectedProducts, (item, idx) => {
+                                        if (!item[0].EXCLUDE) {
+                                            contractProducts = [];
+                                            sysPrd = {};
+                                            contractProducts.push(item[0].HIER_VAL_NM);
+                                            sysPrd[item[0].DERIVED_USR_INPUT] = item;
+                                            if (VM.curPricingTable.OBJ_SET_TYPE_CD && VM.curPricingTable.OBJ_SET_TYPE_CD == 'KIT') {
+                                                if (idx != 0) {
+                                                    result.validateSelectedProducts[idx].indx = result.validateSelectedProducts[idx - 1].indx
+                                                        + result.validateSelectedProducts[idx - 1].items.length;
                                                 }
-                                            }else{
-                                                break;
+                                            }                                      
+                                            VM.dirty = true;//for enabling save&Validate button when a product is added from productSelector
+                                            let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedProducts.toString() };
+                                            PTR.push({ row: this.selRow, prop: 'PTR_USER_PRD', old: this.instance.getDataAtRowProp(this.selRow, 'PTR_USER_PRD'), new: contractProducts.toString() ,operation:operation});
+                                            this.selRow = this.selRow + VM.curPricingTable.NUM_OF_TIERS;
+                                            this.allOperations.push(operation);
+                                        }
+                                    });
+                                    PTE_CellChange_Util.autoFillCellOnProd(PTR, VM.curPricingTable, VM.contractData, VM.pricingTableTemplates, VM.columns);
+                                } else {
+                                    each(result.validateSelectedProducts, (item) => {
+                                        if (!item[0].EXCLUDE) {
+                                            contractProducts.push(item[0].HIER_VAL_NM)
+                                        } else if (item[0].EXCLUDE && !result.splitProducts) {
+                                            excludedProducts.push(item[0].HIER_VAL_NM);
+                                        }
+                                        sysPrd[item[0].DERIVED_USR_INPUT] = item;
+                                    });
+                                    let PTR = [];
+                                    VM.dirty = true;//for enabling save&Validate button when a product is added from productSelector
+                                    PTR.push({ row: this.selRow, prop: 'PTR_USER_PRD', old: this.instance.getDataAtRowProp(this.selRow, 'PTR_USER_PRD'), new: contractProducts.toString() });
+                                    let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedProducts.toString() };
+                                    this.allOperations.push(operation);
+                                    PTE_CellChange_Util.autoFillCellOnProd(PTR, VM.curPricingTable, VM.contractData, VM.pricingTableTemplates, VM.columns, operation);
+                                }
+                            } else {
+                                VM.dirty = true;
+                                if (this.field && selVal != result?.toString && !isEmpty(result) && !isNull(result) &&
+                                    (this.field == 'CUST_ACCNT_DIV' || this.field == "GEO_COMBINED" || this.field == 'START_DT' || this.field == 'END_DT' || this.field == 'PAYOUT_BASED_ON' || this.field == 'PERIOD_PROFILE' || this.field == 'RESET_VOLS_ON_PERIOD' || this.field == 'AR_SETTLEMENT_LVL'
+                                        || this.field == 'REBATE_TYPE' || this.field == 'PROD_INCLDS' || this.field == 'SETTLEMENT_PARTNER' || this.field == 'MRKT_SEG' || this.field == 'PROGRAM_PAYMENT' || this.field === "OEM_PLTFRM_LNCH_DT" || this.field === "OEM_PLTFRM_EOL_DT")) {
+                                    //VM.dirty = true;
+                                    VM.removeCellComments(this.selRow, this.field);
+                                    let PTR = [];
+                                    if (this.field == 'PROGRAM_PAYMENT') {
+                                        PTR.push({ row: this.selRow, prop: this.field, old: this.instance.getDataAtRowProp(this.selRow, this.field), new: result?.toString() });
+                                        VM.createNewPrcObt(VM.curPricingTable);
+                                        PTE_CellChange_Util.pgChgfn(PTR, VM.columns, VM.curPricingTable, VM.contractData, VM.custCellEditor, VM.newPricingTable);
+                                    }
+
+                                    if ((this.field == 'RESET_VOLS_ON_PERIOD' || this.field == 'AR_SETTLEMENT_LVL' || this.field == 'PERIOD_PROFILE')) {
+                                        VM.createNewPrcObt(VM.curPricingTable);
+                                        let PTRCount = this.instance.countRows();
+                                        if (this.field == 'AR_SETTLEMENT_LVL') {
+                                            let ptrow = [];
+                                            ptrow.push({ row: this.selRow, prop: this.field, old: this.instance.getDataAtRowProp(this.selRow, this.field), new: result?.toString() });
+                                            PTE_CellChange_Util.autoFillARSet(ptrow, VM.contractData, VM.curPricingTable, VM.custCellEditor);
+                                            for (let i = 0; i < PTRCount; i++) {
+                                                if (!this.instance.isEmptyRow(i)) {
+                                                    let ptrows = [];
+                                                    ptrows.push({ row: i, prop: this.field, old: this.instance.getDataAtRowProp(i, this.field), new: result?.toString() });
+                                                    if (isEmpty(this.instance.getDataAtRowProp(i, 'PERIOD_PROFILE')) && isEmpty(this.instance.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD'))) {
+                                                        PTE_CellChange_Util.checkfn(ptrows[0], VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable)
+                                                    }
+                                                } else {
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        if (this.field == 'PERIOD_PROFILE' && isEmpty(this.instance.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL')) && isEmpty(this.instance.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD'))) {
+                                            for (let i = 0; i < PTRCount; i++) {
+                                                if (!this.instance.isEmptyRow(i)) {
+                                                    let ptrows = [];
+                                                    ptrows.push({ row: i, prop: this.field, old: this.instance.getDataAtRowProp(i, this.field), new: result?.toString() });
+                                                    PTE_CellChange_Util.checkfn(ptrows[0], VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable);
+                                                } else {
+                                                    break;
+                                                }
+                                            }
+                                        }
+
+                                        if (this.field == 'RESET_VOLS_ON_PERIOD' && isEmpty(this.instance.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL')) && isEmpty(this.instance.getDataAtRowProp(this.selRow, 'PERIOD_PROFILE'))) {
+                                            for (let i = 0; i < PTRCount; i++) {
+                                                if (!this.instance.isEmptyRow(i)) {
+                                                    let ptrows = [];
+                                                    ptrows.push({ row: i, prop: this.field, old: this.instance.getDataAtRowProp(i, this.field), new: result?.toString() });
+                                                    PTE_CellChange_Util.checkfn(ptrows[0], VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable)
+                                                } else {
+                                                    break;
+                                                }
                                             }
                                         }
                                     }
-                                    if (this.field == 'PERIOD_PROFILE' && this.hot.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL') == '' && this.hot.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD') == '') {
-                                        for (let i = 0; i < PTRCount; i++) {
-                                            if (!this.hot.isEmptyRow(i)) {
-                                                let ptrows = [];
-                                                ptrows.push({ row: i, prop: this.field, old: this.hot.getDataAtRowProp(i, this.field), new: result?.toString() });
-                                                PTE_CellChange_Util.checkfn(ptrows[0], VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable);
-
-                                            }else{
-                                                break;
-                                            }
-                                        }
+            
+                                    if (this.field == 'REBATE_TYPE') {
+                                        let ptrow = { row: this.selRow, prop: this.field, old: this.instance.getDataAtRowProp(this.selRow, this.field), new: result?.toString() };
+                                        PTE_CellChange_Util.checkfn(ptrow, VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable);
                                     }
-                                    if (this.field == 'RESET_VOLS_ON_PERIOD' && this.hot.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL') == '' && this.hot.getDataAtRowProp(this.selRow, 'PERIOD_PROFILE') == '') {
-                                        for (let i = 0; i < PTRCount; i++) {
-                                            if (!this.hot.isEmptyRow(i)) {
-                                                let ptrows = [];
-                                                ptrows.push({ row: i, prop: this.field, old: this.hot.getDataAtRowProp(i, this.field), new: result?.toString() });
-                                                PTE_CellChange_Util.checkfn(ptrows[0], VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable)
-                                            }else{
-                                                break;
-                                            }
-                                        }
+            
+                                    if(this.field == 'GEO_COMBINED'){
+                                        const COL = findIndex(VM.columns, { data: this.field });
+                                        this.instance.setCellMetaObject(this.selRow,COL,{ className: '', comment: { value: '' } });
+                                        this.instance.render();
                                     }
                                 }
-
-                                if (this.field == 'REBATE_TYPE') {
-                                    let ptrow = { row: this.selRow, prop: this.field, old: this.hot.getDataAtRowProp(this.selRow, this.field), new: result?.toString() };
-                                    PTE_CellChange_Util.checkfn(ptrow, VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable);
-                                }
-
-                                if(this.field == 'GEO_COMBINED'){
-                                    const col = findIndex(VM.columns, { data: this.field });
-                                    this.hot.setCellMetaObject(this.selRow,col,{ 'className': '', comment: { value: '' } });
-                                    this.hot.render();
-                                }
+                                this.instance.setDataAtCell(this.selRow, this.selCol, result?.toString(), 'no-edit');
                             }
-                            this.hot.setDataAtCell(this.selRow, this.selCol, result?.toString(), 'no-edit');
-                        }
-                        VM.editorOpened = false;
-                        setTimeout(() => {
-                            VM.isLoading = false;
-                            if (VM.curPricingTable.OBJ_SET_TYPE_CD && VM.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
-                                if (this.allOperations.length > 0) {
-                                    for (let i = 0; i < this.allOperations.length; i++) {
-                                        let denBandData = PTE_CellChange_Util.validateDensityBand(this.selRow, VM.columns, VM.curPricingTable, this.allOperations[i], '', false, VM.validMisProd);
-                                        VM.validMisProd = denBandData.validMisProds;
-                                        VM.generateHandsonTable(denBandData.finalPTR);
+
+                            VM.editorOpened = false;
+                            setTimeout(() => {
+                                VM.isLoading = false;
+                                if (VM.curPricingTable.OBJ_SET_TYPE_CD && VM.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
+                                    if (this.allOperations.length > 0) {
+                                        for (let i = 0; i < this.allOperations.length; i++) {
+                                            let densityBandData = PTE_CellChange_Util.validateDensityBand(this.selRow, VM.columns, VM.curPricingTable, this.allOperations[i], '', false, VM.validMisProd);
+                                            VM.validMisProd = densityBandData.validMisProds;
+                                            VM.generateHandsonTable(densityBandData.finalPTR);
+                                        }
                                     }
                                 }
-                            }
-                        }, 2000);
-
+                            }, 2000);
+            
                             if (VM.curRow[0] && VM.curRow[0].delPTR_SYS_PRD) {
                                 delete VM.curRow[0].delPTR_SYS_PRD
                             }
                         } else {
-                            let curRow = PTE_CellChange_Util.returnEmptyRow();
-                            let prd = this.hot.getDataAtRowProp(this.selRow, 'PTR_USER_PRD')
-                            if (this.field && this.field == 'PTR_USER_PRD' && (curRow == 0 || this.selRow == 0) && (prd == null || prd == '' || prd == undefined) ) {
+                            let currentRow = PTE_CellChange_Util.returnEmptyRow();
+                            let product = this.instance.getDataAtRowProp(this.selRow, 'PTR_USER_PRD')
+                            if (this.field && this.field == 'PTR_USER_PRD' && (isEmpty(currentRow) || isEmpty(this.selRow)) && (isNull(product) || isEmpty(product) || isUndefined(product)) ) {
                                 VM.enableDeTab.emit({ isEnableDeTab: false, enableDeTabInfmIcon: false });
                                 return [];
                             }
                         }
                     });
-                })
+                });
+
                 if (VM.curRow[0] && VM.curRow[0].delPTR_SYS_PRD) {
-                    VM.curRow[0]['PTR_SYS_PRD'] = ""
-                    this.hot.setDataAtRowProp(this.selRow, 'PTR_SYS_PRD', '', 'no-edit');
+                    VM.curRow[0]['PTR_SYS_PRD'] = "";
+                    this.instance.setDataAtRowProp(this.selRow, 'PTR_SYS_PRD', '', 'no-edit');
                     delete VM.curRow[0].delPTR_SYS_PRD;
                 }
                 VM.curRow = [];
@@ -467,7 +474,7 @@ export class pricingTableEditorComponent {
             }
             catch(ex){
                 this.loggerService.error('Something went wrong', 'Error');
-                console.error('PTE::afterChange::',ex);
+                console.error('PTE::afterChange::', ex);
             }
 
         },
