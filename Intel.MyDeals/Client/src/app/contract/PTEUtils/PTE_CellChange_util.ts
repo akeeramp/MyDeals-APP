@@ -1016,14 +1016,14 @@ export class PTE_CellChange_Util {
     }
 
     static RateChgfn(items: Array<any>, columns: any[], curPricingTable: any) {
-        each(items, item => {
+        each(items, (item) => {
             const RATE_CHG_ITEMS = ['DENSITY_RATE', 'ECAP_PRICE', 'VOLUME', 'INCENTIVE_RATE', 'TOTAL_DOLLAR_AMOUNT', 'RATE', 'ADJ_ECAP_UNIT', 'MAX_PAYOUT', 'FRCST_VOL'];
             if ((item.prop) && includes(RATE_CHG_ITEMS, item.prop)) {
                 let val = parseFloat(this.hotTable.getDataAtRowProp(item.row, item.prop).toString().replace(/[$,]/g, ""));
                 if (!isNaN(val) && (val != 0)) {
                     const MATH_TRUNC_ITEMS = ['FRCST_VOL', 'VOLUME'];
                     if (includes(MATH_TRUNC_ITEMS, item.prop)) {
-                        this.hotTable.setDataAtRowProp(item.row, item.prop, Math.trunc(val), 'no-edit');
+                        this.hotTable.setDataAtRowProp(item.row, item.prop, Math.round(val), 'no-edit');
                     } else {
                         this.hotTable.setDataAtRowProp(item.row, item.prop, val, 'no-edit');
                     }
@@ -1038,7 +1038,7 @@ export class PTE_CellChange_Util {
         });
     }
 
-    static pgChgfn(items: Array<any>, columns: any[], curPricingTable: any,contractData?,cellEditor?,ptDefaults?) {
+    static pgChgfn(items: Array<any>, columns: any[], curPricingTable: any, contractData?, cellEditor?, ptDefaults?) {
         let OBJ_SET_TYPE_CD = curPricingTable.OBJ_SET_TYPE_CD;
         if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'ECAP') {
             each(items, item => {
@@ -1050,7 +1050,7 @@ export class PTE_CellChange_Util {
         }
     }
 
-    static delReadOnlyBehaviours(field,items){
+    static delReadOnlyBehaviours(field, items){
         // For Deleting the readonly behaviour which is added while save & validate
         if (!isUndefined(this.hotTable.getDataAtRowProp(items.row, '_behaviors')) && !isNull(this.hotTable.getDataAtRowProp(items.row, '_behaviors'))) {
             let behaviors = this.hotTable.getDataAtRowProp(items.row, '_behaviors');
