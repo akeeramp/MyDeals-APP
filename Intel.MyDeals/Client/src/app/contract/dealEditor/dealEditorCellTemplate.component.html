@@ -231,7 +231,12 @@
             <div *ngFor="let field of uiControlScheduleWrapper(in_DataItem)">
                 <div style="height:35px;padding: 0 0 !important;text-align: right !important; position: relative; " class="col-md-3 rowValueHeight rowRightBorder textRightAlign {{getClassNm(in_DataItem, field.field)}}">
                     <div *ngIf="in_DataItem._behaviors != undefined && in_DataItem._behaviors.isError != undefined && in_DataItem._behaviors.isError[field.field] != undefined && in_DataItem._behaviors.isError[field.field + '_' + tier] != undefined" class="err-bit" kendoTooltip title="{{in_DataItem._behaviors.validMsg[field.field + '_' + tier] ? in_DataItem._behaviors.validMsg[field.field + '_' + tier] : ''}}"></div>
-                    <span *ngIf="in_DataItem[field.field] && in_DataItem[field.field][tier] != undefined && in_DataItem[field.field][tier] != null" class="ng-binding dataPadding">{{in_DataItem[field.field][tier]}}</span>
+                    <div *ngIf="in_DataItem[field.field] && in_DataItem[field.field][tier] != undefined && in_DataItem[field.field][tier] != null">
+                        <span *ngIf="field.field == 'RATE' || field.field == 'STRT_REV' || field.field == 'END_REV'; else elseEnableTier" class="ng-binding dataPadding">{{in_DataItem[field.field][tier] | currency}}</span>
+                        <ng-template #elseEnableTier>
+                            <span class="ng-binding dataPadding">{{in_DataItem[field.field][tier]}}</span>
+                        </ng-template>
+                    </div>
                 </div>
             </div>
         </div>
@@ -315,11 +320,11 @@
     <div *ngIf="checkIndex(in_DataItem, in_Field_Name)" class="col-md-12">
         <div *ngFor="let dimkey of key(in_DataItem, in_Field_Name)">
             <div *ngIf="in_DataItem[in_Field_Name].hasOwnProperty(dimkey) && dimkey.indexOf('___') >= 0 && dimkey.indexOf('_____') < 0" class="col-md-12 rowHeight">
-                <div *ngIf="in_Field_Name !='ECAP_PRICE' && in_Field_Name !='DSCNT_PER_LN'; else block" class="kitRowValue kitSideLine {{getClassNm(in_DataItem, in_Field_Name)}}" style="border-bottom: 0.01px solid rgba(0, 0, 0, .05);">
+                <div *ngIf="in_Field_Name !='ECAP_PRICE' && in_Field_Name !='DSCNT_PER_LN' && in_Field_Name != 'CAP' && in_Field_Name != 'YCS2_PRC_IRBT'; else elseEnableblock" class="kitRowValue kitSideLine {{getClassNm(in_DataItem, in_Field_Name)}}" style="border-bottom: 0.01px solid rgba(0, 0, 0, .05);">
                     <div *ngIf="in_DataItem._behaviors !=undefined && in_DataItem._behaviors.isError !=undefined && in_DataItem._behaviors.isError[in_Field_Name] !=undefined && in_DataItem._behaviors.isError[in_Field_Name + '_' + dimkey] !=undefined && in_DataItem._behaviors.isError[in_Field_Name + '_' + dimkey]" class="err-bit" kendoTooltip title="{{in_DataItem._behaviors.validMsg[in_Field_Name + '_' + dimkey]}}"></div>
                     <span *ngIf="in_DataItem[in_Field_Name][dimkey] !=undefined && in_DataItem[in_Field_Name][dimkey] !=null && in_DataItem[in_Field_Name][dimkey] !='No YCS2' && in_DataItem[in_Field_Name][dimkey] !='No CAP'" class="ng-binding dataPadding" id="capYcs2Col">{{in_DataItem[in_Field_Name][dimkey]}}</span>
                 </div>
-                <ng-template #block>
+                <ng-template #elseEnableblock>
                     <div class="kitRowValue kitSideLine {{getClassNm(in_DataItem, in_Field_Name)}}">
                         <div *ngIf="in_DataItem._behaviors !=undefined && in_DataItem._behaviors.isError !=undefined && in_DataItem._behaviors.isError[in_Field_Name] !=undefined && in_DataItem._behaviors.isError[in_Field_Name + '_' + dimkey] !=undefined && in_DataItem._behaviors.isError[in_Field_Name + '_' + dimkey]" class="err-bit" kendoTooltip title="{{in_DataItem._behaviors.validMsg[in_Field_Name + '_' + dimkey]}}"></div>
                         <span *ngIf="in_DataItem[in_Field_Name][dimkey] !=undefined && in_DataItem[in_Field_Name][dimkey] !=null && in_DataItem[in_Field_Name][dimkey] !='No YCS2' && in_DataItem[in_Field_Name][dimkey] !='No CAP'" class="ng-binding dataPadding" id="capYcs2Col">{{in_DataItem[in_Field_Name][dimkey] | currency}}</span>

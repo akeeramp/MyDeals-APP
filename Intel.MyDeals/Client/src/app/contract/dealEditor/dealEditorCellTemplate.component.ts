@@ -337,7 +337,7 @@ export class dealEditorCellTemplateComponent {
     }
     key(passedData, field) {
         if (field == 'TIER_NBR' && passedData[field]) return Object.keys(passedData.TIER_NBR);
-        else if (field == 'TOTAL_DSCNT_PR_LN' && passedData[field] && typeof passedData[field] == 'object') return Object.keys(passedData["QTY"]).sort();
+        else if (field == 'TOTAL_DSCNT_PR_LN' && passedData["QTY"] && typeof passedData["QTY"] == 'object') return Object.keys(passedData["QTY"]).sort();
         else if (field == 'PRIMARY_OR_SECONDARY' && passedData["ECAP_PRICE"] && typeof passedData["ECAP_PRICE"] == 'object') return Object.keys(passedData["ECAP_PRICE"]).sort();
         else if (field == 'TRKR_NBR' && passedData[field] && typeof passedData[field] == 'object') return Object.keys(passedData["TRKR_NBR"]).sort();
         else if (field == 'DENSITY_BAND' && passedData[field] && typeof passedData[field] == 'object') return Object.keys(passedData["DENSITY_BAND"]);
