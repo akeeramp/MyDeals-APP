@@ -80,7 +80,7 @@ export class dealEditorComponent {
     private isAddDialog: boolean = false;
     private isrenameDialog: boolean = false;
     public DeAddtab = "";
-    public columnSearchFilter;
+    public columnSearchFilter:string = '';
     public defaultColumnOrderArr;
     public savingDeal: boolean = false;
     public curGroup;
@@ -190,6 +190,13 @@ export class dealEditorComponent {
                 }
             });
         }
+    }
+
+    columnOptionsFilter() {
+        if (this.columnSearchFilter == '')
+            return this.wipTemplate.columns;
+        else
+            return this.wipTemplate.columns.filter(x => x.title.toLowerCase().includes(this.columnSearchFilter.toLowerCase()));
     }
 
     distinctPrimitive(): any {

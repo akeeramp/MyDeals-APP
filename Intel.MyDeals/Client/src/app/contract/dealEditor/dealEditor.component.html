@@ -127,7 +127,7 @@
                                 </span>
                             </div>
                             <div style="max-height: 230px; overflow: auto; margin-top: 4px; margin-right: 10px; height: auto; ">
-                                <div class="backclass newBackClass" *ngFor="let item of wipTemplate.columns | filter:columnSearchFilter | orderBy: 'title'">
+                                <div class="backclass newBackClass" *ngFor="let item of columnOptionsFilter() | orderBy: 'title'">
                                     &nbsp;&nbsp;<input type='checkbox' [checked]="iscolumnchecked(item.field)" id="colChk{{item.field}}" (click)="onColumnChange(item)" />&nbsp;
                                     <label for="colChk{{item.field}}">
                                         <span [innerHTML]="item.title | sanitizeHtml"></span>
