@@ -17,7 +17,7 @@ import { adminFunFactComponent } from "./admin/funFact/admin.funFact.component";
 import { geoComponent } from "./admin/geo/admin.geo.component";
 import { iCostProductsComponent } from "./admin/iCostProducts/admin.iCostProducts.component";
 import { adminlegalExceptionComponent } from "./admin/legalException/admin.legalException.component";
-import { meetCompComponent } from "./admin/meetComp/admin.meetComp.component";
+import { MeetCompComponent } from "./admin/meetComp/admin.meetComp.component";
 import { adminNotificationsComponent } from "./admin/notifications/admin.notifications.component";
 import { OpLogComponent } from "./admin/oplog/admin.oplog.component";
 import { adminPrimeCustomersComponent } from "./admin/PrimeCustomers/admin.primeCustomers.component";
@@ -97,7 +97,7 @@ export const routes: Routes = [
     { path: 'rules', component: adminRulesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'dataFix', component: adminDataFixComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'vistex', component: adminVistexIntegrationLogComponent, data: { title: 'Dashboard', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
-    { path: 'meetComp', component: meetCompComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
+    { path: 'meetComp', component: MeetCompComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'testTenders', component: adminTestTendersComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'supportScript', component: adminsupportScriptComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'legalException', component: adminlegalExceptionComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },

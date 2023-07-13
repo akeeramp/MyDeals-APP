@@ -1,24 +1,27 @@
 ﻿import { Component, ViewEncapsulation } from "@angular/core";
-import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
-import { meetCompService } from './admin.meetComp.service';
-import { where, pluck, each } from 'underscore';
+import { where, pluck, each, isEmpty, isNull, isUndefined } from 'underscore';
 import { ThemePalette } from "@angular/material/core";
 import { DatePipe } from "@angular/common";
-import { BulkUploadMeetCompModalComponent } from './admin.bulkUploadMeetCompModal.component';
 import { MatDialog } from '@angular/material/dialog';
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 
+import { logger } from "../../shared/logger/logger";
+import { meetCompService } from './admin.meetComp.service';
+import { BulkUploadMeetCompModalComponent } from './admin.bulkUploadMeetCompModal.component';
+
 @Component({
-    selector: "admin-meetcomp",
-    templateUrl: "Client/src/app/admin/meetComp/admin.meetComp.component.html",
+    selector: 'admin-meetcomp',
+    templateUrl: 'Client/src/app/admin/meetComp/admin.meetComp.component.html',
     styleUrls: ['Client/src/app/admin/meetComp/admin.meetComp.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-
-export class meetCompComponent {
-    constructor(private meetCompSvc: meetCompService, public datepipe: DatePipe, private loggerSvc: logger, protected dialog: MatDialog) { }
+export class MeetCompComponent {
+    constructor(private meetCompService: meetCompService,
+                private loggerService: logger,
+                public datepipe: DatePipe,
+                protected dialog: MatDialog) { }
     private HasBulkUploadAccess = (<any>window).usrRole == "DA";
     private isAccess = true;
     private isAccessMessage: string;
@@ -51,23 +54,11 @@ export class meetCompComponent {
             filters: [],
         }
     }
-    private pageSizes: PageSizeItem[] = [
-        {
-            text: "10",
-            value: 10,
-        },
-        {
-            text: "25",
-            value: 25,
-        },
-        {
-            text: "50",
-            value: 50,
-        },
-        {
-            text: "100",
-            value: 100,
-        }
+    private readonly pageSizes: PageSizeItem[] = [
+        { text: "10", value: 10 },
+        { text: "25", value: 25 },
+        { text: "50", value: 50 },
+        { text: "100", value: 100 }
     ];
 
     public filterSettings: DropDownFilterSettings = {
@@ -98,13 +89,13 @@ export class meetCompComponent {
             return this.filteredData[fieldName];
         }
         return this.gridResult;
-        
     }
     loadMeetCompPage() {
         //Developer can see the Screen..
         if ((<any>window).usrRole != 'SA' && !(<any>window).isDeveloper && (<any>window).usrRole != 'DA' && (<any>window).usrRole != 'Legal' && ((<any>window).usrRole != 'GA' && !(<any>window).isSuper)) {
             document.location.href = "/Dashboard#/portal";
         }
+
         if (!((<any>window).usrRole == 'SA' || (<any>window).usrRole == 'DA' || (<any>window).usrRole == 'Legal' || ((<any>window).usrRole == 'GA' && (<any>window).isSuper))) {
             this.isAccess = false;
             this.isAccessMessage = 'You don\'t have access to view this page. Only SuperGA, DA, Legal, or SA users are allowed.';
@@ -115,11 +106,10 @@ export class meetCompComponent {
             width: '797px',
             disableClose: false,
             panelClass: 'meetcomp-custom',
-    
         });
     }
     custDropdowns() {
-        this.meetCompSvc.getCustomerDropdowns().subscribe(res => {
+        this.meetCompService.getCustomerDropdowns().subscribe(res => {
             if (res) {
                 const obj = {
                     'CUST_NM': 'ALL CUSTOMER',
@@ -129,40 +119,38 @@ export class meetCompComponent {
                 this.customers = res;
                 this.getCustomerDIMData(-1);
             }
-        }, function (response) {
-            this.loggerSvc.error("Unable to get Meet Comp Data [Customers].", response, response.statusText);
+        }, (response) => {
+            this.loggerService.error("Unable to get Meet Comp Data [Customers].", response, response.statusText);
         });
     }
     getCustomerDIMData(val) {
-        const cid = val;
+        const CID = val;
         this.isBusy = true;
-        this.meetCompSvc.getMeetCompDIMData(cid, 'DIM').subscribe(res => {
+        this.meetCompService.getMeetCompDIMData(CID, 'DIM').subscribe(res => {
             this.meetCompDIMMasterData = res;
-            if (this.meetCompDIMMasterData.length > 0) {
+            if (!isEmpty(this.meetCompDIMMasterData)) {
                 this.prodCats = this.meetCompProdCatName();
             }
             this.isBusy = false;
-        }, function (response) {
-            this.loggerSvc.error("Unable to get Meet Comp Data [DIM Data].", response, response.statusText);
+        }, (response) => {
+            this.loggerService.error("Unable to get Meet Comp Data [DIM Data].", response, response.statusText);
         });
     }
     custValueChange(value) {
         if ((value > 0) || (value == -1)) {
             this.selectedCustomerID = value;
             this.getCustomerDIMData(this.selectedCustomerID);
-        }
-        else {
+        } else {
             this.selectedCustomerID = '';
         }
         this.reset();
     }
     meetCompProdCatName() {
         if (this.selectedCustomerID > -1) {
-            const result = where(this.meetCompDIMMasterData, x => { x.CUST_MBR_SID == this.selectedCustomerID });
-            const res = pluck(result, 'PRD_CAT_NM' )
+            const RESULT = where(this.meetCompDIMMasterData, x => { x.CUST_MBR_SID == this.selectedCustomerID });
+            const res = pluck(RESULT, 'PRD_CAT_NM');
             return distinct(res);
-        }
-        else if (this.selectedCustomerID == -1) {
+        } else if (this.selectedCustomerID == -1) {
             const res = pluck(this.meetCompDIMMasterData, 'PRD_CAT_NM')
             return distinct(res);
         }
@@ -171,70 +159,61 @@ export class meetCompComponent {
         if (value) {
             this.selectedProdCatName = value;
             this.brands = this.meetCompBrandName();
-        }
-        else {
+        } else {
             this.selectedProdCatName = '';
         }
     }
     meetCompBrandName() {
         if (this.selectedCustomerID > -1) {
-            const res = this.meetCompDIMMasterData.filter(x=>
+            const RES = this.meetCompDIMMasterData.filter(x=>
                 (x.PRD_CAT_NM == this.selectedProdCatName && x.CUST_MBR_SID == this.selectedCustomerID)
             );
-            const brandsArr = pluck(res, 'BRND_NM');
-            const brandName = distinct(brandsArr);
-            if (brandName.length == 1 && brandName[0] == 'NA') {
+            const BRANDS = pluck(RES, 'BRND_NM');
+            const BRAND_NAME = distinct(BRANDS);
+            if (BRAND_NAME.length == 1 && BRAND_NAME[0] == 'NA') {
                 this.disabled = true;
-                this.selectedBrandName = brandName[0];
+                this.selectedBrandName = BRAND_NAME[0];
                 this.products = this.meetCompProdName();
-            }
-            else {
+            } else {
                 this.selectedBrandName = '';
                 this.disabled = false;
             }
-            return brandName;
-        }
-        else if (this.selectedCustomerID == -1) {
-            const res = this.meetCompDIMMasterData.filter(x =>
+            return BRAND_NAME;
+        } else if (this.selectedCustomerID == -1) {
+            const RES = this.meetCompDIMMasterData.filter(x =>
                 (x.PRD_CAT_NM == this.selectedProdCatName)
             );
-            const brandsArr = pluck(res, 'BRND_NM');
-            const brandName = distinct(brandsArr);
-            if (brandName.length == 1 && brandName[0]== 'NA') {
+            const BRANDS = pluck(RES, 'BRND_NM');
+            const BRAND_NAME = distinct(BRANDS);
+            if (BRAND_NAME.length == 1 && BRAND_NAME[0]== 'NA') {
                 this.disabled = true;
-                this.selectedBrandName = brandName[0];
+                this.selectedBrandName = BRAND_NAME[0];
                 this.products = this.meetCompProdName();
-            }
-            else {
+            } else {
                 this.selectedBrandName = '';
                 this.disabled = false;
             }
-            return brandName;
+            return BRAND_NAME;
         }
     }
     brandNameValueChange(value) {
         if (value) {
             this.selectedBrandName = value;
             this.products=this.meetCompProdName();
-        }
-        else {
+        } else {
             this.selectedBrandName = '';
         }
     }
     meetCompProdName() {
         if (this.selectedCustomerID > -1) {
             const res = this.meetCompDIMMasterData.filter(x =>
-            (x.PRD_CAT_NM == this.selectedProdCatName && x.CUST_MBR_SID == this.selectedCustomerID &&
-                x.BRND_NM == this.selectedBrandName)
-            );
+                (x.PRD_CAT_NM == this.selectedProdCatName && x.CUST_MBR_SID == this.selectedCustomerID && x.BRND_NM == this.selectedBrandName));
             const prodName = pluck(res, 'HIER_VAL_NM');
             this.selectedProdName = '';
             return distinct(prodName);
-        }
-        else if (this.selectedCustomerID == -1) {
+        } else if (this.selectedCustomerID == -1) {
             const res = this.meetCompDIMMasterData.filter(x =>
-                (x.PRD_CAT_NM == this.selectedProdCatName && x.BRND_NM == this.selectedBrandName)
-            );
+                    (x.PRD_CAT_NM == this.selectedProdCatName && x.BRND_NM == this.selectedBrandName));
             const prodName = pluck(res, 'HIER_VAL_NM');
             this.selectedProdName = '';
             return distinct(prodName);
@@ -255,40 +234,38 @@ export class meetCompComponent {
         if (this.selectedBrandName) {
             this.isBrandMissing = false;
         }
-        if (this.selectedCustomerID == '' || this.selectedCustomerID == null || this.selectedCustomerID == undefined) {
+
+        if (isEmpty(this.selectedCustomerID) || isNull(this.selectedCustomerID) || isUndefined(this.selectedCustomerID)) {
             this.resetGrid();
-            this.loggerSvc.warn('Not a valid Customer', '');
+            this.loggerService.warn('Not a valid Customer', '');
             this.isCustomerMissing = true;
-        }
-        else if (this.selectedProdCatName == '' || this.selectedProdCatName == null || this.selectedProdCatName == undefined) {
+        } else if (isEmpty(this.selectedProdCatName) || isNull(this.selectedProdCatName) || isUndefined(this.selectedProdCatName)) {
             this.resetGrid();
-            this.loggerSvc.warn('Not a valid Product Vertical', '');
+            this.loggerService.warn('Not a valid Product Vertical', '');
             this.isCatMissing = true;
-        }
-        else if (this.selectedBrandName == '' || this.selectedBrandName == null || this.selectedBrandName == undefined) {
+        } else if (isEmpty(this.selectedBrandName) || isNull(this.selectedBrandName) || isUndefined(this.selectedBrandName)) {
             this.resetGrid();
-            this.loggerSvc.warn('Not a valid Brand Name', '');
+            this.loggerService.warn('Not a valid Brand Name', '');
             this.isBrandMissing = true;
-        }
-        else {
+        } else {
             this.isBusy = true;//grid data doesn't showup while landing the page, so no need of loader.
             let value = this.selectedProdName;
-            if (value.length == 0) {
+            if (isEmpty(value)) {
                 value = -1;
             }
-            const meetCompSearch = {
+            const MEET_COMP_SEARCH = {
                 "cid": this.selectedCustomerID,
                 "PRD_CAT_NM": this.selectedProdCatName,
                 "BRND_NM": this.selectedBrandName,
                 "HIER_VAL_NM": value.toString()
             };
-            this.meetCompSvc.getMeetCompData(meetCompSearch).subscribe((response: Array<any>) => {
-                each(response, item => {
+            this.meetCompService.getMeetCompData(MEET_COMP_SEARCH).subscribe((response: Array<any>) => {
+                each(response, (item) => {
                     item['CHG_DTM'] = this.datepipe.transform(new Date(item['CHG_DTM']), 'M/d/yyyy');
                     item['CRE_DTM'] = this.datepipe.transform(new Date(item['CRE_DTM']), 'M/d/yyyy');
                     item['CHG_DTM'] = new Date(item['CHG_DTM']);
                     item['CRE_DTM'] = new Date(item['CRE_DTM']);
-                })
+                });
                 this.gridResult = response;
                 //setting filterdata
                 this.filteredData['CUST_NM'] = distinct(this.gridResult, 'CUST_NM').map(item => item['CUST_NM']);
@@ -300,7 +277,7 @@ export class meetCompComponent {
                 this.isBusy = false;
                 this.gridData = process(this.gridResult, this.state);
             }, (error) => {
-                this.loggerSvc.error("Unable to get Meet Comp Data [MC Data].", '', 'meetCompComponent::fetchMeetCompData::' + JSON.stringify(error));
+                this.loggerService.error("Unable to get Meet Comp Data [MC Data].", '', 'meetCompComponent::fetchMeetCompData::' + JSON.stringify(error));
             });
         }
     }
@@ -318,17 +295,16 @@ export class meetCompComponent {
     //Activate/Deactivate Meet Comp Record
     gridSelectItem(dataItem, event) {
         this.isBusy = true;
-        this.meetCompSvc.activateDeactivateMeetComp(dataItem.MEET_COMP_SID, dataItem.ACTV_IND).subscribe(res => {
+        this.meetCompService.activateDeactivateMeetComp(dataItem.MEET_COMP_SID, dataItem.ACTV_IND).subscribe(res => {
             if (res[0].MEET_COMP_SID > 0) {
                 this.fetchMeetCompData();
-            }
-            else {
+            } else {
                 this.isBusy = false;
-                this.loggerSvc.error("Activate Deactivate Meet Comp failed.",'');
+                this.loggerService.error("Activate Deactivate Meet Comp failed.",'');
             }
-        }, function (response) {
+        }, (response) => {
             this.isBusy = false;
-            this.loggerSvc.error("Activate Deactivate Meet Comp failed.", response, response.statusText);
+            this.loggerService.error("Activate Deactivate Meet Comp failed.", response, response.statusText);
         });
     }
     ngOnInit() {

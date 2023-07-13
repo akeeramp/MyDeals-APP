@@ -438,3 +438,8 @@ kendo-popup:has(kendo-grid-columnmenu-filter div.k-columnmenu-item[aria-expanded
   top: unset !important;
 	bottom: 10px !important;
 }
+
+.k-multiselect-wrap.k-floatwrap {
+  overflow-y: scroll;
+  height: 55px !important;
+}

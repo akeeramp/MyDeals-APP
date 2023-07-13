@@ -32,7 +32,7 @@ import { dealMassUpdateComponent } from '../admin/dealMassUpdate/admin.dealMassU
 import { ValidateVistexR3ChecksComponent } from '../admin/validateVistexR3Checks/admin.validateVistexR3Checks.component';
 import { manageEmployeeComponent } from '../admin/employee/admin.manageEmployee.component';
 import { ManageEmployeeModalComponent } from "../admin/employee/admin.manageEmployeeModal.component";
-import { meetCompComponent } from "../admin/meetComp/admin.meetComp.component";
+import { MeetCompComponent } from "../admin/meetComp/admin.meetComp.component";
 import { adminRulesComponent } from '../admin/rules/admin.rules.component';
 import { RulesSimulationModalComponent } from '../admin/rules/admin.rulesSimulationModal.component';
 import { RuleDetailsModalComponent } from '../admin/rules/admin.ruleDetailsModal.component';
@@ -93,7 +93,7 @@ export let adminComponents =[
     ValidateVistexR3ChecksComponent,
     manageEmployeeComponent,
     ManageEmployeeModalComponent,
-    meetCompComponent,
+    MeetCompComponent,
     adminRulesComponent,
     RulesSimulationModalComponent,
     RuleDetailsModalComponent,

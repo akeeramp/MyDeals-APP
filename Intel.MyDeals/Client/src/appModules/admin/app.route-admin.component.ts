@@ -19,7 +19,7 @@ import { adminFunFactComponent } from "../../app/admin/funFact/admin.funFact.com
 import { geoComponent } from "../../app/admin/geo/admin.geo.component";
 import { iCostProductsComponent } from "../../app/admin/iCostProducts/admin.iCostProducts.component";
 import { adminlegalExceptionComponent } from "../../app/admin/legalException/admin.legalException.component";
-import { meetCompComponent } from "../../app/admin/meetComp/admin.meetComp.component";
+import { MeetCompComponent } from "../../app/admin/meetComp/admin.meetComp.component";
 import { adminNotificationsComponent } from "../../app/admin/notifications/admin.notifications.component";
 import { OpLogComponent } from "../../app/admin/oplog/admin.oplog.component";
 import { adminPrimeCustomersComponent } from "../../app/admin/PrimeCustomers/admin.primeCustomers.component";
@@ -86,7 +86,7 @@ export const routesAdmin: Routes = [
     { path: 'rules', component: adminRulesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'dataFix', component: adminDataFixComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'vistex', component: adminVistexIntegrationLogComponent, data: { title: 'Dashboard', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
-    { path: 'meetComp', component: meetCompComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
+    { path: 'meetComp', component: MeetCompComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'testTenders', component: adminTestTendersComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'supportScript', component: adminsupportScriptComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'legalException', component: adminlegalExceptionComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },

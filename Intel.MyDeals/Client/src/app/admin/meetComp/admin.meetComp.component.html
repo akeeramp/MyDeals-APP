@@ -9,7 +9,7 @@
 <div class="col-md-12 alterMeetComp" *ngIf="isAccess==false">
     <div class="alert alert-danger">{{isAccessMessage}}</div>
 </div>
-<div class="fl col-md-12" style="padding-top: 15px;">
+<div class="fl col-md-12" style="padding-top: 15px; height: 50px">
     <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Customer:</div>
     <kendo-combobox [data]="customers" [(ngModel)]="selectedCustomerID" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" [kendoDropDownFilter]="filterSettings" class="optMeetComp opUiContainer md" (valueChange)="custValueChange($event)" textField="CUST_NM" valueField="CUST_SID" [ngClass]="{'errorCode': isCustomerMissing==true}"
         placeholder="Select a Customer..." style="width: 230px; float: left; height: 35px;"></kendo-combobox>
@@ -21,10 +21,11 @@
         [ngClass]="{'errorCode': isBrandMissing==true}" placeholder="Select a Brand Name..." style="width: 230px; float: left; height: 35px;"></kendo-combobox>
     <div class="fl" style="margin: 5px 5px 0 15px; color: #aaaaaa;">Product Name:</div>
     <kendo-multiselect [data]="products" [(ngModel)]="selectedProdName" [ngModelOptions]="{standalone: true}" [valuePrimitive]="true" [kendoDropDownFilter]="filterSettings" class="optMultiSelectMeetComp opUiContainer md" (valueChange)="prodNameValueChange($event)" [autoClose]="false" textField="HIER_VAL_NM" valueField="HIER_VAL_NM"
-        placeholder="All Product(s) selected..." style="width: 240px; float: left; height: auto;"></kendo-multiselect><button class="btn btn-sm btn-skyblue-sm fl" (click)="fetchMeetCompData()" type="button" title="Get Meet Comp" style="margin-left: 20px; background-color: #e4e7eb;"><i class="fa fa-refresh fa-fw iconRunPct"
-            style="font-size: 20px"></i></button>
+        placeholder="All Product(s) selected..." style="width: 240px; float: left; height: auto;"></kendo-multiselect>
+    <button class="btn btn-sm btn-skyblue-sm fl" (click)="fetchMeetCompData()" type="button" title="Get Meet Comp" style="margin-left: 20px; background-color: #e4e7eb;"><i class="fa fa-refresh fa-fw iconRunPct"
+        style="font-size: 20px"></i></button>
 </div>
-<div class="col-md-12 kendo-grid-buttons MeetCompGridsAll" style="padding-top: 20px !important;">
+<div class="col-md-12 kendo-grid-buttons MeetCompGridsAll" style="padding-top: 25px !important;">
     <kendo-grid [data]="gridData" filterable="menu" [scrollable]="true" [sortable]="true" [navigable]="true" [columnMenu]="{sort:true}" [resizable]="true" [reorderable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter"
         [group]="state.group" [groupable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" class="pro-meetComp kAlignHeaders" (dataStateChange)="dataStateChange($event)" style="height: calc(100vh - 240px);">
         <ng-template kendoGridToolbarTemplate><button (click)="clearFilter()" class="k-button clearButton"><span
