@@ -89,7 +89,7 @@ export class contractDetailsComponent {
     private isBusyShowFunFact: boolean = true;
     private backdatereasonsdropdownlist: any = null;
     @Output() openHistoryTab: EventEmitter<object> = new EventEmitter<object>();
-    isNotesDisabled = (<any>window).usrRole === 'RA' || (<any>window).usrRole === 'Legal' || (<any>window).usrRole === 'CBA' || ((<any>window).isBulkPriceAdmin && (<any>window).usrRole === 'SA') || (<any>window).isCustomerAdmin ? false : true;
+    isNotesDisabled = (<any>window).usrRole === 'SA' || (<any>window).usrRole === 'RA' || (<any>window).usrRole === 'Finance' || (<any>window).usrRole === 'Legal' || (<any>window).usrRole === 'CBA' || ((<any>window).isBulkPriceAdmin && (<any>window).usrRole === 'SA') || (<any>window).isCustomerAdmin ? false : true;
     isRoleDisabled = (<any>window).usrRole === 'CBA' || (<any>window).usrRole === 'RA';
     private state: State = {
         skip: 0,
