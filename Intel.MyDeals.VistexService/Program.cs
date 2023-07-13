@@ -5,14 +5,13 @@ using System.Threading;
 using System.Threading.Tasks;
 using System.Linq;
 
-
 namespace Intel.MyDeals.VistexService
 {
     public partial class Program
     {
 
         #region Properties
-        private static bool _debugMode;
+        //private static bool _debugMode;
         private const int ErrorReturn = 1;
         private const int SuccessReturn = 0;
         public static bool IsProd = true; // default to true
@@ -257,7 +256,6 @@ namespace Intel.MyDeals.VistexService
                         input.CopyTo(output);
                     }
                 }
-
             }
 
             if (File.Exists(_logFile))
@@ -283,9 +281,7 @@ namespace Intel.MyDeals.VistexService
                     File.Move(file.FullName, Path.Combine(LogArchive, file.Name));
                 }
             }
-
         }
-
 
         private static void PressAnyKeyToContinue()
         {
@@ -310,11 +306,11 @@ namespace Intel.MyDeals.VistexService
 
             Console.WriteLine("Trying to connect to service...");
 
-            const string MSK = @"
-==============================================================================
-{0}
-==============================================================================
-";
+//            const string MSK = @"
+//==============================================================================
+//{0}
+//==============================================================================
+//";
             //if (ConnectToService(true))
             //{
             //}
@@ -323,7 +319,6 @@ namespace Intel.MyDeals.VistexService
             //    Console.WriteLine(MSK, "ERROR! Failed to connect to service.  Ensure service is running and settings are correct.");
             //}
         }
-
 
     }
 }

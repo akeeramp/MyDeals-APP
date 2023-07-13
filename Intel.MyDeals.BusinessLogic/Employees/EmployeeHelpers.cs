@@ -4,14 +4,13 @@ using System.Net;
 using System.Net.Mail;
 using Intel.MyDeals.DataLibrary;
 using Intel.MyDeals.Entities;
-using Intel.MyDeals.IBusinessLogic;
 using Intel.Opaque.Utilities.Server;
 
 namespace Intel.MyDeals.BusinessLogic.Employees
 {
     public static class EmployeeHelpers
     {
-        private static readonly IConstantsLookupsLib _constantsLookupsLib;
+        //private static readonly IConstantsLookupsLib _constantsLookupsLib;
 
         public static void SendEmailMessageOfNewCustomers(EmployeeEmailCustomers data)
         {
@@ -38,7 +37,6 @@ namespace Intel.MyDeals.BusinessLogic.Employees
             }
             toDistinctList.AddRange(toList.Select(s => s.Trim()).Distinct());
 
-
             string env = OpLog.GetEnv();
 
             if (env != "PROD")
@@ -63,7 +61,7 @@ namespace Intel.MyDeals.BusinessLogic.Employees
             if (env != "PROD")
             {
                 message.CC.Add(OpUserStack.MyOpUserToken.Usr.Email != null ? OpUserStack.MyOpUserToken.Usr.Email : "michael.h.tipping@intel.com"); // Testing incomplete token safety net
-        }
+            }
 
             using (var client = new SmtpClient())
             {
@@ -76,11 +74,9 @@ namespace Intel.MyDeals.BusinessLogic.Employees
                 client.Host = "smtpauth.intel.com";
                 client.Port = 587;
                 client.Send(message);
-
             }
 
             new CacheLib().ClearCache("_getMyCustomers");
-
         }
     }
 }

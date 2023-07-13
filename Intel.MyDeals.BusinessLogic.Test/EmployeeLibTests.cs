@@ -11,7 +11,7 @@ namespace Intel.MyDeals.BusinessLogic.Test
     [TestFixture]
     public class EmployeeLibTests
     {
-        private readonly OpUserToken _opUserToken = null;
+        //private readonly OpUserToken _opUserToken = null;
         private OpUserToken PersonalizedOpUserToken { get; set; }
 
         [OneTimeSetUp]

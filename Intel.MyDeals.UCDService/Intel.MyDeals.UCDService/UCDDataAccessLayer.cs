@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Configuration;
@@ -14,7 +12,6 @@ namespace Intel.MyDeals.UCDService
     {
         private static string APIbaseUrl = GetAppSetting("MyDealsService");
         private static string UnifiedController = "/api/PrimeCustomers/";
-
 
         private static HttpClient MyDealsClient
         {
@@ -58,12 +55,10 @@ namespace Intel.MyDeals.UCDService
             }
             catch (Exception ex)
             {
-
+                System.Diagnostics.Debug.WriteLine(ex);
             }
 
-
            return ret;
-
         }
         public static async Task<String> PushUcdAMQResponse(string res)
         {
@@ -82,14 +77,11 @@ namespace Intel.MyDeals.UCDService
             }
             catch(Exception ex)
             {
-                
+                System.Diagnostics.Debug.WriteLine(ex);
             }
 
-
             return ret;
-                 
         }
     }
-
 
 }

@@ -942,15 +942,18 @@ namespace Intel.MyDeals.BusinessLogic
         {
             // Generate Security Token for this set of records
             string idsid = workRecordDataFields.recordDetails.quote.quoteLine[currentRecordId].Wwid; //11911244
-            OpUserToken opUserToken = new OpUserToken { Usr = { Idsid = idsid } };
-            UserSetting tempLookupSetting = new EmployeeDataLib().GetUserSettings(opUserToken);
+            OpUserToken opUserToken = null;
 
-            if (opUserToken.Usr.Idsid != null && ((opUserToken.Usr.WWID == 0 || opUserToken.Usr.Idsid == "") && requestType == "UpdateStatus")) // User not in system, try generic
+            if (requestType != "UpdateStatus")
             {
-                opUserToken = new OpUserToken { Usr = { Idsid = "90000054" } }; // Use the Dummy GA role in this case for approvals only
-                tempLookupSetting = new EmployeeDataLib().GetUserSettings(opUserToken);
-                workRecordDataFields.recordDetails.quote.quoteLine[currentRecordId].errorMessages.Add(AppendError(800, "Warning: Using IQR Faceless Account for Approval because User [" + idsid + "] is not presently a user in My Deals", "Using IQR Faceless Account"));
+                opUserToken = new OpUserToken { Usr = { Idsid = idsid } };
             }
+            else // requestType == "UpdateStatus" - TWC3119-679 - Use generic user for status updates always
+            {
+                opUserToken = new OpUserToken { Usr = { Idsid = "90000054" } }; // Use the Dummy GA (dmyGA) role in this case for approvals only
+                //workRecordDataFields.recordDetails.quote.quoteLine[currentRecordId].errorMessages.Add(AppendError(800, "Warning: Using IQR Faceless Account for Approval because User [" + idsid + "] is not presently a user in My Deals", "Using IQR Faceless Account"));
+            }
+            UserSetting tempLookupSetting = new EmployeeDataLib().GetUserSettings(opUserToken);
 
             if (opUserToken.Usr.Idsid != null) // Bad user lookup
             {

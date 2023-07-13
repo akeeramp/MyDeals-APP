@@ -1,18 +1,10 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Text;
-//using TIBCO.EMS;
-using System.Net.Security;
-using System.Security.Cryptography;
-using System.Security.Cryptography.X509Certificates;
-
 //using Spring.Messaging.Nms;
 //using Spring.Messaging.Nms.Listener;
 //using Spring.Messaging.Nms.Core;
 using Apache.NMS;
 using Apache.NMS.ActiveMQ;
-using Apache.NMS.ActiveMQ.Commands;
 using Intel.Opaque.Utilities.Server;
 using System.Threading.Tasks;
 using System.IO;
@@ -37,18 +29,14 @@ namespace Intel.MyDeals.UCDService
         
         public void RetryRequest()
         {
-           
             Task<bool> res =RetryUCDRequest();
-            res.Wait();
-             
+            res.Wait(); 
         }
+
         public void Run(string brokerURI, string userName, string password, string queueName)
         {
-
-
             try
             {
-
                 string providerUrl = modifyURLForCertIgnore(brokerURI);
 
                 ConnectionFactory queueFactory = new ConnectionFactory(providerUrl);
@@ -116,11 +104,10 @@ namespace Intel.MyDeals.UCDService
                 }
 
             }
-            catch (Exception e)
+            catch (Exception ex)
             {
-                logReponseMessage("Exception in csMsgConsumer: "  + e.Message);
+                logReponseMessage("Exception in csMsgConsumer: "  + ex.Message);
             }
-
         }
 
         private static async Task<string> sendAMCResponse(string response)
@@ -217,11 +204,9 @@ namespace Intel.MyDeals.UCDService
             }
             catch (Exception ex)
             {
-
+                logReponseMessage("Exception in csMsgConsumer: " + ex.Message);
             }
-
         }
-
 
     }
 }

@@ -33,9 +33,9 @@ namespace Intel.MyDeals.DataLibrary
         private string vistexCNSPApi;
         private Dictionary<string, string> vistexEnvs;
 
-        private IConnection connection;
-        private ISession session;
-        private IQueue destination;
+        //private IConnection connection;
+        //private ISession session;
+        //private IQueue destination;
 
         // This is all communications to our DB as well as SAP
         public VistexServiceDataLib()
