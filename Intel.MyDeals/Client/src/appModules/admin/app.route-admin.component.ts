@@ -42,10 +42,12 @@ import { adminWorkFlowComponent } from "../../app/admin/workFlow/admin.workFlow.
 import { adminWorkflowStagesComponent } from "../../app/admin/workflowStages/admin.workflowStages.component";
 import { adminMydealsSupportComponent } from '../../app/admin/mydealssupport/admin.mydealssupport.component';
 import { adminVistexProfiseeApiComponent } from '../../app/admin/vistex/admin.vistexProfiseeAPI.component';
+import { sdsDealOverridesComponent } from "../../app/admin/sdsDealOverrides/admin.sdsDealOverrides.component";
 
 
 //added for security check
 import { SecurityResolver } from "../../app/shared/security.resolve";
+
 
 export const routesAdmin: Routes = [
     //Admin routes
@@ -91,4 +93,5 @@ export const routesAdmin: Routes = [
     { path: 'bulkPricingUpdate', component: BulkPricingUpdatesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'MyDealsSupport', component: adminMydealsSupportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'vistexProfiseeApi', component: adminVistexProfiseeApiComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
+    { path: 'sdsDealOverrides', component: sdsDealOverridesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
 ];

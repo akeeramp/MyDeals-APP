@@ -1,0 +1,83 @@
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<div class="deal-mass-update">
+
+    <div class="row col-md-12 dealer-mass-heading">
+        <h2 title="Because 'Jen' said...">SDS Deal Overrides</h2>
+    </div>
+
+    <div class="row col-md-12">
+
+        <!-- This is the left pane -->
+        <div class="col-md-6">
+            <p style="color: #FC4C02">Use this tool to override the rules either for <b><u>Deal(s)</u></b> or
+                <b><u>Pricing Table Row(s)</u></b>. These IDs cannot be mixed.
+            </p>
+
+            <div class="row">
+                <div class="col-md-12  margin-btn-dmu-15">
+                    <label style="width: 180px">Level:</label>
+                    <kendo-dropdownlist [data]="attr" [(ngModel)]="SelectedLevel" style="width: 200px"></kendo-dropdownlist>
+                </div>
+                <div class="col-md-12 margin-btn-dmu-15">
+                    <label style="width: 180px; vertical-align: top;">Object Id(s):</label>
+
+                    <kendo-textarea [rows]="2" [cols]="40" placeholder="Multiple IDs can be separated with comma."
+                        resizable="both" [(ngModel)]="sdsDealOverridesData"></kendo-textarea>
+                </div>
+            </div>
+
+            <div id="grid">
+                <a style="text-decoration:underline !important; width:200px; padding:inherit; color: #0071c5;"><b>Number
+                        of available Rules:</b></a>
+                {{ruleCount['all']}}
+                <kendo-grid class="gridCompNotification kAlignHeaders" style="height: 200px" [data]="gridRules"
+                    [selectable]="{ checkboxOnly: true}" kendoGridSelectBy="RULE_ID" [(selectedKeys)]="selectionIDs">
+                    <kendo-grid-checkbox-column field="RULE_NM" width="20" [headerClass]="{'headerClass':true}"
+                        showSelectAll="true">
+                    </kendo-grid-checkbox-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="RULE_ID" title="Rule Id"
+                        width="75px"></kendo-grid-column>
+                    <kendo-grid-column [headerClass]="{'headerClass':true}" field="RULE_NM" title="Rule Name"
+                        width="200px"></kendo-grid-column>
+                </kendo-grid>
+            </div>
+
+            <div class="col-md-12" style="margin-top: 10px;">
+                <span style="padding-left: 15px; ">
+                    <button class="btn btn-primary" style="margin-left: 10px;" (click)="applyRules()">Apply
+                        Rules</button>
+                    <button class="btn btn-primary" style="margin-left: 10px;" (click)="getActiveReport()">Run Active
+                        Report</button>
+                    <button class="btn btn-primary" style="margin-left: 10px;" (click)="getHistoryReport()">Run History
+                        Report</button>
+                </span>
+            </div>
+
+        </div>
+
+        <!-- This is the right pane -->
+        <div class="col-md-6">
+            <p class="all-para-warn" style="color: #FC4C02"><b><i
+                        class="intelicon-alert-solid icon-lg"></i>ATTENTION:</b> The override is only
+                applied to Draft and Pending deals. </p>
+
+            <div>
+                <a style="text-decoration:underline !important; width:200px; padding:inherit; color: #0071c5;"><b>
+                        {{resultType}}
+                        returned results:</b></a>
+                {{resultCount['all']}}
+                <kendo-grid [data]="gridReturns" class="gridCompNotification kAlignHeaders" [sort]="sort"
+                    [sortable]="true" (sortChange)="dataStateChangeReturns($event)">
+                    <kendo-grid-column *ngFor="let item of ColumnHeader" field="{{ item.FIELD }}"
+                        title="{{ item.TITLE }}" [headerClass]="{'headerClass':true}">
+                        <ng-template kendoGridCellTemplate let-dataItem>
+                            {{dataItem[item.FIELD]}}
+                        </ng-template>
+
+                    </kendo-grid-column>
+                </kendo-grid>
+            </div>
+        </div>
+
+    </div>
+</div>

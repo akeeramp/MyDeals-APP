@@ -179,6 +179,7 @@
     <Compile Include="RetailPullData.cs" />
     <Compile Include="SaveAndValidatePacket.cs" />
     <Compile Include="SavePacket.cs" />
+    <Compile Include="SdsDealOverride.cs" />
     <Compile Include="SearchFilter.cs" />
     <Compile Include="SearchPacket.cs" />
     <Compile Include="SearchParams.cs" />

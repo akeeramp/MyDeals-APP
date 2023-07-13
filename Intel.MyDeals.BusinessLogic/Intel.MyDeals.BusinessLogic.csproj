@@ -168,6 +168,7 @@
     <Compile Include="Search\SearchLib.cs" />
     <Compile Include="Search\SearchTools.cs" />
     <Compile Include="Security Attributes\SecurityAttributesLib.cs" />
+    <Compile Include="SdsDealOverride\SdsDealOverrideLib.cs" />
     <Compile Include="Tenders\TendersLib.cs" />
     <Compile Include="TestHarness\TestHarnessLib.cs" />
     <Compile Include="Timeline\TimelineLib.cs" />

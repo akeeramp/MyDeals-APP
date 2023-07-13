@@ -276,6 +276,7 @@
     <Compile Include="Controllers\API\PrimeCustomersController.cs" />
     <Compile Include="Controllers\API\PushDealstoVistexController.cs" />
     <Compile Include="Controllers\API\SharedServiceController.cs" />
+    <Compile Include="Controllers\API\SdsDealOverrideController.cs" />
     <Compile Include="Controllers\API\ValidateVistexR3ChecksController.cs" />
     <Compile Include="Controllers\API\VistexCustomerMappingsController.cs" />
     <Compile Include="Controllers\AdminController.cs" />
