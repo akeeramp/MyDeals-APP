@@ -1085,7 +1085,7 @@ export class contractDetailsComponent {
                                 .readContract(this.C_ID)
                                 .subscribe((response: Array<any>) => {
                                     this.contractData = response[0];
-                                    this.C_DELETE_ATTACHMENTS = this.contractDetailsSvc.chkDealRules("C_DELETE_ATTACHMENTS", (<any>window).usrRole, null, null, this.contractData.WF_STG_CD);
+                                    this.C_DELETE_ATTACHMENTS = this.contractDetailsSvc.chkDealRules("C_DELETE_ATTACHMENTS", (<any>window).usrRole, null, null, "Incomplete");
                                     if(this.contractData["IS_TENDER"] == '0'){
                                         this.isTenderContract = false;
                                     } else {
