@@ -174,7 +174,7 @@
                     </div>
                 </div>
 
-                <kendo-dialog *ngIf="isAddDialog" id="Adddialog" >
+                <kendo-dialog *ngIf="isAddDialog" id="Adddialog" class="Tabfix" >
                     <p class="tab-name-style">Tab name:</p>
                     <input type="text" [(ngModel)]="DeAddtab" class="k-textbox add-tab-textbox-style" />
                     <kendo-dialog-actions class="add-tab-style">
@@ -183,7 +183,7 @@
                     </kendo-dialog-actions>
                 </kendo-dialog>
 
-                <kendo-dialog *ngIf="isrenameDialog" id="renamedialog" >
+                <kendo-dialog *ngIf="isrenameDialog" id="renamedialog" class="Tabfix">
                     <p class="tab-name-style">Tab name:</p>
                     <input type="text" [(ngModel)]="Derenametab" class="k-textbox add-tab-textbox-style" />
                     <kendo-dialog-actions class="add-tab-style">

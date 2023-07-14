@@ -1664,3 +1664,9 @@ span.ng-binding.dataPadding.rate-value-fix {
     position: relative !important;
     padding-right: 20px !important;
 }
+.Tabfix .k-content.k-window-content.k-dialog-content {
+    border-bottom-left-radius: 2px;
+    border-bottom-right-radius: 2px;
+    margin: 0;
+    padding: 1.8em 1em !important;
+}
