@@ -23,6 +23,10 @@
     background-color: #003C71;
     color: #ffffff
 }
+.sub-txt-fix {
+    font-size: 20px !important;
+    font-weight: 500 !important;
+}
 
 /*input[type=radio].with-font, input[type=checkbox].with-font {
     border: 0;
@@ -80,7 +84,7 @@
     background-color: #f4f4f4 !important;
     color: #444 !important;
     border-color: #ddd !important;
-    width: 95% !important
+    width: 100% !important
 }
 
     .fclosebtn.btn-default:hover {
@@ -92,9 +96,8 @@
 .fsubmitbtn.btn-primary {
     background-color: #00AEEF !important;
     color: #ffffff !important;
-    width: 96% !important;
-    margin-left: 9px !important
-}
+    width: 100% !important;
+    }
 
     .fsubmitbtn.btn-primary:hover {
         color: #ffffff !important;
