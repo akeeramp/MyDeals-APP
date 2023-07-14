@@ -235,7 +235,7 @@ export class MeetCompComponent {
             this.isBrandMissing = false;
         }
 
-        if (isEmpty(this.selectedCustomerID) || isNull(this.selectedCustomerID) || isUndefined(this.selectedCustomerID)) {
+        if (this.selectedCustomerID == '' || isNull(this.selectedCustomerID) || isUndefined(this.selectedCustomerID)) {
             this.resetGrid();
             this.loggerService.warn('Not a valid Customer', '');
             this.isCustomerMissing = true;
