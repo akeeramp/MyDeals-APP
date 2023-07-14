@@ -1410,12 +1410,17 @@ export class ProductSelectorComponent {
         }
         else {
             this.state = state;
-            let temp = this.state.take
+            let temp = {
+                take: this.state.take,
+                skip: this.state.skip
+            }
             this.gridData = process(this.gridResult, this.state);
             state.take = this.gridData.total;
+            state.skip = 0;
             let data = process(this.gridResult, state);
             this.gridFullData = data.data;
-            this.state.take = temp
+            this.state.take = temp.take;
+            this.state.skip = temp.skip
         }
     }
 
