@@ -442,16 +442,22 @@ export class allDealsComponent {
     exportToExcelCustomColumns() {
         GridUtil.dsToExcel(this.columns, this.gridData.data, "Deal Editor Export");
     }
-    openOverlappingDealCheck() {
-        let data = {
-            "contractData": this.contractData,
-            "currPt": this.contractData,
+
+    openOverlapDealCheck() {
+        const DATA = {
+            contractData: this.contractData,
+            currPt: this.contractData,
         }
-        const dialogRef = this.dialog.open(OverlappingCheckComponent, {
-            data: data,
+
+        const DIALOG_REF = this.dialog.open(OverlappingCheckComponent, {
+            data: DATA,
             panelClass: 'allDealsOvrLap',
+            disableClose: true
         });
-        dialogRef.afterClosed().subscribe(result => { });
+
+        DIALOG_REF.afterClosed().subscribe(result => { 
+            //
+        });
     }
     
     toggleWrap = function () {

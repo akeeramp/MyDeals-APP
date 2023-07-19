@@ -134,17 +134,23 @@ export class overLappingDealsComponent {
         };
         this.gridData = process(this.gridResult, this.state);
     }
-    openOverLappingDealCheck() {
-        let data = {
-            "contractData": this.contractData,
-            "currPt": this.contractData,
-            "srcScrn": "overLapping"
+
+    openOverlapDealCheck() {
+        const DATA = {
+            contractData: this.contractData,
+            currPt: this.contractData,
+            srcScrn: "overLapping"
         }
-        const dialogRef = this.dialog.open(OverlappingCheckComponent, {
-            data: data,
+
+        const DIALOG_REF = this.dialog.open(OverlappingCheckComponent, {
+            data: DATA,
             panelClass: 'overlapOvrLap',
+            disableClose: true
         });
-        dialogRef.afterClosed().subscribe(result => { });
+
+        DIALOG_REF.afterClosed().subscribe(result => { 
+            //
+        });
     }
 
     closeKendoAlert() {

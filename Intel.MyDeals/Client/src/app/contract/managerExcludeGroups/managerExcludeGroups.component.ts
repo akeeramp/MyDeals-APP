@@ -308,17 +308,24 @@ export class managerExcludeGroupsComponent {
             saveAs(dataUrl, 'MyDealsSearchResults.xlsx');
         });
     }
-    openOverlappingDealCheck() {
-        let data = {
-            "contractData": this.contractData,
-            "currPt": this.contractData,
+
+    openOverlapDealCheck() {
+        const DATA = {
+            contractData: this.contractData,
+            currPt: this.contractData,
         }
-        const dialogRef = this.dialog.open(OverlappingCheckComponent, {
-            data: data,
+
+        const DIALOG_REF = this.dialog.open(OverlappingCheckComponent, {
+            data: DATA,
             panelClass: 'manageExclGroupOvrLap',
+            disableClose: true
         });
-        dialogRef.afterClosed().subscribe(result => { });
+
+        DIALOG_REF.afterClosed().subscribe(result => { 
+            //
+        });
     }
+
     toggleWrap() {
         var getToggle = $(".grids-manager-table td");
         this.wrapEnabled = !this.wrapEnabled;

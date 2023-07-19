@@ -1039,7 +1039,7 @@ export class contractManagerComponent {
                     this.checkPctMctPriorToActioning(data)
                 }
                 else {//If PS having overlapping deals, open Overlapping deals popup
-                    this.openOverLappingDealCheck(response.Data);
+                    this.openOverlapDealCheck(response.Data);
                     this.setBusy("", "", "", false);
                 }
             }
@@ -1050,16 +1050,21 @@ export class contractManagerComponent {
             
     }
 
-    openOverLappingDealCheck(response) {
-        const data = {
-            "contractData": this.contractData,
-            "currPt": this.contractData,
-            "responseData": response
+    openOverlapDealCheck(response) {
+        const DATA = {
+            contractData: this.contractData,
+            currPt: this.contractData,
+            responseData: response
         }
-        const dialogRef = this.dialog.open(OverlappingCheckComponent, {
-            data: data
+
+        const DIALOG_REF = this.dialog.open(OverlappingCheckComponent, {
+            data: DATA,
+            disableClose: true
         });
-        dialogRef.afterClosed().subscribe(result => { });
+
+        DIALOG_REF.afterClosed().subscribe(result => { 
+            //
+        });
     }
 
     async checkPctMctPriorToActioning(data) {// To Run MCT/PCT to update the status

@@ -1913,16 +1913,21 @@ export class pricingTableEditorComponent {
         });
     }
 
-    openOverLappingDealCheck() {
-        let data = {
-            "contractData": this.contractData,
-            "currPt": this.curPricingTable,
+    openOverlapDealCheck() {
+        const DATA = {
+            contractData: this.contractData,
+            currPt: this.curPricingTable,
         }
-        const dialogRef = this.dialog.open(OverlappingCheckComponent, {
-            data: data,
+
+        const DIALOG_REF = this.dialog.open(OverlappingCheckComponent, {
+            data: DATA,
             panelClass: 'pteDealsOvrLap',
+            disableClose: true
         });
-        dialogRef.afterClosed().subscribe(result => { });
+
+        DIALOG_REF.afterClosed().subscribe(result => { 
+            //
+        });
     }
 
     flexOverlappingDealCheck() {
