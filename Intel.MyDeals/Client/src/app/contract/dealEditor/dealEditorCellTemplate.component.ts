@@ -261,6 +261,10 @@ export class dealEditorCellTemplateComponent {
     isReadonlyCell(passedData, field) {
         if (passedData._behaviors != undefined && passedData._behaviors.isReadOnly != undefined && passedData._behaviors.isReadOnly[field] != undefined)
             return true;
+        else if (field == "KIT_ECAP") {
+            if (passedData._behaviors != undefined && passedData._behaviors.isReadOnly != undefined && passedData._behaviors.isReadOnly["ECAP_PRICE"] != undefined)
+                return true;
+        }
         return false;
     }
     isDirtyCell(passedData, field) {

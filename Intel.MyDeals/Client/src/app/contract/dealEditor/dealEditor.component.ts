@@ -415,6 +415,9 @@ export class dealEditorComponent {
             if (args.dataItem != undefined) {
                 PTE_Common_Util.parseCellValues(args.column.field, args.dataItem);
             }
+            if (args.column.field == "KIT_ECAP") {
+                args.column.field = "ECAP_PRICE";
+            }
             if (!args.isEdited && args.column.field !== 'MISSING_CAP_COST_INFO' && args.column.field !== "details" && args.column.field !== "tools" && args.column.field !== "PRD_BCKT" && args.column.field !== "CUST_MBR_SID" && args.column.field !== "CAP_INFO" && args.column.field !== "YCS2_INFO" && args.column.field !== "COMPETITIVE_PRICE" && args.column.field !== "COMP_SKU" &&
                 args.column.field !== "BACKEND_REBATE" && args.column.field !== "AUTO_APPROVE_RULE_INFO" && args.column.field !== "CAP_KIT" && args.column.field !== "PRIMARY_OR_SECONDARY" && args.column.field !== "KIT_REBATE_BUNDLE_DISCOUNT" &&
                 args.column.field !== "TOTAL_CR_DB_PERC" && args.column.field !== "TOTAL_DSCNT_PR_LN" && args.column.field !== "KIT_SUM_OF_TOTAL_DISCOUNT_PER_LINE" && !(args.dataItem._behaviors != undefined &&
