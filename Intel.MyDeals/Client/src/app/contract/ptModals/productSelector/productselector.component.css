@@ -919,3 +919,6 @@ kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-f
     kendo-grid.raid-style.k-widget.k-grid table tr th span.k-cell-inner kendo-grid-filter-menu .k-grid-filter span.k-icon.k-i-filter:hover {
         color: #00aeef !important
     }
+.product-selected-color {
+    background-color: #3c8dbc !important
+}

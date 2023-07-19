@@ -576,7 +576,7 @@
                         <div contenteditable="false" class="prodSelected text-left" style="background-color:white; height:100px; width:100%; overflow:hidden auto; padding:5px;">
                             <span *ngFor="let item of addedProducts">
                                 <span (click)="showSingleProductHierarchy(item)" class="product-list"
-                                      [ngClass]="{'text-danger': isValidCapDetails(item)}" title="{{isValidCapDetails(item, true)}}">
+                                      [ngClass]="{'text-danger': isValidCapDetails(item),'product-selected-color':selectedProductcolor == item.HIER_NM_HASH}" title="{{isValidCapDetails(item, true)}}">
                                     {{item.HIER_VAL_NM}} &nbsp;
                                     <button (click)="removeProduct(item, 'add')" style="border:none;padding:0;height:0"> ×</button>
                                 </span>

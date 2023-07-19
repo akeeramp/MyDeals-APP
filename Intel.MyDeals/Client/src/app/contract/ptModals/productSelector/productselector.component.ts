@@ -64,6 +64,7 @@ export class ProductSelectorComponent {
     private productSelectionLevelsAttributes: Array<any> = [];
     private items: Array<any> = [];
     private gridResult: Array<any> = [];
+    private selectedProductcolor: any;
     private productDetails: any;
     private crossVertical = {
         'productCombination1': ["DT", "Mb", "SvrWS", "EIA CPU"],
@@ -739,6 +740,7 @@ export class ProductSelectorComponent {
         return this.filteredGridData;
     }
     showSingleProductHierarchy(product) {
+        this.selectedProductcolor = product.HIER_NM_HASH;
         let data = {
             "searchHash": product.HIER_NM_HASH,
             "startDate": this.momentService.moment(this.pricingTableRow.START_DT).format("l"),
