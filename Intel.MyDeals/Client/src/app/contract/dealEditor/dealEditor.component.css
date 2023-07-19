@@ -1670,3 +1670,33 @@ span.ng-binding.dataPadding.rate-value-fix {
     margin: 0;
     padding: 1.8em 1em !important;
 }
+.multiselect-scroll-style .mat-dialog-container {
+    padding: 6px !important;
+}
+#dealEditorTab .k-dialog .k-button.okbtnfix {
+    background: #00AEEF !important;
+}
+
+    #dealEditorTab .k-dialog .k-button.okbtnfix:hover {
+        background-color: #0071c5 !important;
+    }
+
+#dealEditorTab .k-dialog .k-button.extend-dealpopup {
+    background-color: #00aeef !important;
+}
+
+    #dealEditorTab .k-dialog .k-button.extend-dealpopup:hover {
+        background-color: #0071c5 !important;
+    }
+
+#dealEditorTab .k-dialog .k-button.cancel-extend-deal {
+    background-color: #fafafa !important;
+    border-color: #fafafa !important;
+    color: #444 !important;
+}
+
+    #dealEditorTab .k-dialog .k-button.cancel-extend-deal:hover {
+        color: #444 !important;
+        border-color: #ebebeb !important;
+        background-color: #ebebeb !important;
+    }

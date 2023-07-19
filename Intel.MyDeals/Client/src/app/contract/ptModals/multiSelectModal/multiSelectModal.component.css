@@ -121,3 +121,25 @@ kendo-multiselect.border_bottom_c {
     box-shadow: 4px 4px 4px 0px #000 !important;
     padding-right: 3px !important;
 }
+.target-region-picker {
+    padding-top: 1px !important;
+
+}
+.rgnmodalCloseIcon {
+    margin-left: 76px !important;
+}
+.TSGPfix {
+    margin: 0px -24px 1px !important;
+}
+.btn-primary.save_closefix {
+    background-color: #00aeef !important;
+    color: #fff !important;
+    cursor: pointer !important;
+    font-size: 14px !important;
+    padding: 4px !important;
+    text-transform: uppercase !important;
+}
+.btn-primary.save_closefix:hover {
+        background-color: #0071c5 !important;
+        border-color: #0071c5 !important;
+}

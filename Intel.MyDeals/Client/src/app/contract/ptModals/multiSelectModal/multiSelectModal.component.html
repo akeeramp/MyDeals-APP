@@ -16,7 +16,7 @@
         <div *ngIf="isTgrRgn">
             <div class="target-region-picker modal-header">
                 <div class="cursorArea col-md-10 trgtRgnHeader">
-                    <p class="">Target Sales Geo Picker</p>
+                    <p class="TSGPfix">Target Sales Geo Picker</p>
                 </div>
                 <span class="rgnmodalCloseIcon fr">
                     <i role="button" title="Close" class="intelicon-close-max" (click)="onNoClick()"></i>
@@ -64,7 +64,7 @@
         </div>
         <div *ngIf="isTgrRgn">
             <div mat-dialog-actions class="fr" style="width:100%">
-                <button mat-button (click)="onSave()" cdkFocusInitial class="btn btn-primary" style="width:100%">Save & Close</button>
+                <button mat-button (click)="onSave()" cdkFocusInitial class="btn btn-primary save_closefix" style="width:100%">Save & Close</button>
             </div>
         </div>
     </div>

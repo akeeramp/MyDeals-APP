@@ -652,7 +652,7 @@ export class dealEditorComponent {
         }
         const dialogRef = this.dialog.open(multiSelectModalComponent, {
             panelClass: 'multiselect-scroll-style',
-            width: "800px",
+            width: "600px",
             data: {
                 cellCurrValues: value,
                 items: {
