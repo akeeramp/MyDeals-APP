@@ -605,3 +605,6 @@ i.intelicon-vertical-menu.blue_b_fix {
 div.mainMenuContainer {
     width: 102%;
 }*/
+ul.contract-submenu-dropdwn.dropdown-menu.show {
+    transform: translate3d(0px, 0px, 0px) !important;
+}

@@ -259,21 +259,21 @@
                 <i class="fa fa-list-alt nav-icn" aria-hidden="true"></i>
                 <i class="fa fa-angle-right nav-extra" aria-hidden="true"></i>
             </a>
-            <ul class="dropdown-menu" role="menu" style="margin: -40px 0 0 40px;">
+            <ul class="dropdown-menu contract-submenu-dropdwn" role="menu" style="margin: -40px 0 0 40px;">
                 <li role="presentation">
-                    <a ui-sref="contract.summary" ui-sref-opts="{reload: true}"><div>Approval View</div></a>
+                    <a (click)="toggleLnav();loadModel('approvalDiv')"><div>Approval View</div></a>
                 </li>
                 <li role="presentation">
-                    <a ui-sref="contract.details" ui-sref-opts="{reload: true}"><div>Contract Details</div></a>
+                    <a (click)="toggleLnav();loadContractDetails('ViewContractDetails')"><div>Contract Details</div></a>
                 </li>
                 <li role="presentation" *ngIf="CAN_VIEW_COST_TEST">
-                    <a ui-sref="contract.pct" ui-sref-opts="{reload: true}">Price Cost Test</a>
+                    <a (click)="toggleLnav();loadModel('pctDiv')">Price Cost Test</a>
                 </li>
                 <li role="presentation" *ngIf="CAN_VIEW_EXPORT">
-                    <a ui-sref="contract.export" ui-sref-opts="{reload: true}"><div>Contract Review</div></a>
+                    <a (click)="toggleLnav();loadModel('contractReviewDiv')"><div>Contract Review</div></a>
                 </li>
                 <li role="presentation" *ngIf="CAN_VIEW_ALL_DEALS">
-                    <a ui-sref="contract.deals" ui-sref-opts="{reload: true}"><div>Deals Review</div></a>
+                    <a (click)="toggleLnav();loadModel('dealReviewDiv')"><div>Deals Review</div></a>
                 </li>
             </ul>
         </div>
@@ -296,21 +296,21 @@
                 <i class="fa fa-list-alt nav-icn" aria-hidden="true"></i>
                 <i class="fa fa-angle-right nav-extra" aria-hidden="true"></i>
             </a>
-            <ul class="dropdown-menu" role="menu" style="margin: -40px 0 0 40px;">
+            <ul class="dropdown-menu contract-submenu-dropdwn" role="menu" style="margin: -40px 0 0 40px;">
                 <li role="presentation">
-                    <a ui-sref="contract.summary" ui-sref-opts="{reload: true}"><div>Approval View</div></a>
+                    <a (click)="toggleLnav();loadModel('approvalDiv')"><div>Approval View</div></a>
                 </li>
                 <li role="presentation">
-                    <a ui-sref="contract.details" ui-sref-opts="{reload: true}"><div>Contract Details</div></a>
+                    <a (click)="toggleLnav();loadContractDetails('ViewContractDetails')"><div>Contract Details</div></a>
                 </li>
                 <li role="presentation" *ngIf="CAN_VIEW_COST_TEST">
-                    <a ui-sref="contract.pct" ui-sref-opts="{reload: true}">Price Cost Test</a>
+                    <a (click)="toggleLnav();loadModel('pctDiv')">Price Cost Test</a>
                 </li>
                 <li role="presentation" *ngIf="CAN_VIEW_EXPORT">
-                    <a ui-sref="contract.export" ui-sref-opts="{reload: true}"><div>Contract Review</div></a>
+                    <a (click)="toggleLnav();loadModel('contractReviewDiv')"><div>Contract Review</div></a>
                 </li>
                 <li role="presentation" *ngIf="CAN_VIEW_ALL_DEALS">
-                    <a ui-sref="contract.deals" ui-sref-opts="{reload: true}"><div>Deals Review</div></a>
+                    <a (click)="toggleLnav();loadModel('dealReviewDiv')"><div>Deals Review</div></a>
                 </li>
             </ul>
         </div>
@@ -333,23 +333,23 @@
                 <i class="fa fa-list-alt nav-icn" aria-hidden="true"></i>
                 <i class="fa fa-angle-right nav-extra" aria-hidden="true"></i>
             </a>
-            <ul class="dropdown-menu" role="menu" style="margin: -40px 0 0 40px;">
+            <ul class="dropdown-menu contract-submenu-dropdwn" role="menu" style="margin: -40px 0 0 40px;">
                 <li role="presentation">
-                    <a ui-sref="contract.summary" ui-sref-opts="{reload: true}"><div>Approval View</div></a>
+                    <a (click)="toggleLnav();loadModel('approvalDiv')"><div>Approval View</div></a>
                 </li>
                 <li role="presentation">
-                    <a ui-sref="contract.details" ui-sref-opts="{reload: true}"><div>Contract Details</div></a>
+                    <a (click)="toggleLnav();loadContractDetails('ViewContractDetails')"><div>Contract Details</div></a>
                 </li>
                 <li role="presentation" *ngIf="CAN_VIEW_COST_TEST">
-                    <a ui-sref="contract.pct" ui-sref-opts="{reload: true}">Price Cost Test</a>
+                    <a (click)="toggleLnav();loadModel('pctDiv')">Price Cost Test</a>
                 </li>
                 <li role="presentation" *ngIf="CAN_VIEW_EXPORT">
-                    <a ui-sref="contract.export" ui-sref-opts="{reload: true}"><div>Contract Review</div></a>
+                    <a (click)="toggleLnav();loadModel('contractReviewDiv')"><div>Contract Review</div></a>
                 </li>
                 <li role="presentation" *ngIf="CAN_VIEW_ALL_DEALS">
-                    <a ui-sref="contract.deals" ui-sref-opts="{reload: true}"><div>Deals Review</div></a>
+                    <a (click)="toggleLnav();loadModel('dealReviewDiv')"><div>Deals Review</div></a>
                 </li>
-            </ul>
+             </ul>
         </div>
     </div>
 
