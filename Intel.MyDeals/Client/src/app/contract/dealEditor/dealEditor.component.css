@@ -390,7 +390,7 @@ kendo-grid#dealEditor {
 }
 
 .opDealEditorGrids.k-grid .uiControlDiv {
-    line-height: 2 !important;
+   /* line-height: 2 !important;*/
     margin-bottom: 0 !important;
     margin-top: 0 !important;
     padding: 4px 8px !important
