@@ -540,6 +540,8 @@
     <Content Include="Client\src\app\admin\products\admin.products.component.html" />
     <Content Include="Client\src\app\admin\pushDealstoVistex\admin.pushDealstoVistex.component.css" />
     <Content Include="Client\src\app\admin\pushDealstoVistex\admin.pushDealstoVistex.component.html" />
+    <Content Include="Client\src\app\admin\quoteLetter\admin.quoteLetterRegeneration.component.css" />
+    <Content Include="Client\src\app\admin\quoteLetter\admin.quoteLetterRegeneration.component.html" />
     <Content Include="Client\src\app\admin\quoteLetter\admin.quoteLetter.component.css" />
     <Content Include="Client\src\app\admin\ruleOwner\admin.ruleOwner.component.html" />
     <Content Include="Client\src\app\admin\rules\admin.ruleDetailsModal.component.html" />
@@ -575,6 +577,7 @@
     <TypeScriptCompile Include="Client\src\app\admin\meetComp\admin.meetComp.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\meetComp\admin.meetComp.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\mydealssupport\admin.mydealssupport.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\quoteLetter\admin.quoteLetterRegeneration.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.ruleDetailsModal_Config.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.ruleDetailsModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.rules.component.ts" />

@@ -1,0 +1,54 @@
+﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+
+
+<div class="col-md-12 k-header-alignment padding-top-20" style=" padding-left: 25px !important;">
+    <h2>Quote Letter Regeneration</h2>
+</div>
+<div>
+    <div *ngIf="!validateDealId" style=" padding-left:8%">
+        <span style="color:red;">
+            <label class="appro-label">Please enter only numbers separated by ‘,’</label>
+        </span>
+    </div>
+    <div class="col-md-6" style="margin-top: 15px">
+        <label for="dealId" style="width: 15%; padding-left: 2%"><span style="color:red">*</span><strong>Deal ID:</strong></label>
+        <kendo-textarea style="width:50%"  [rows]="1" resizable="vertical" id="dealId" [ngClass]="validateDealId ? 'validDealId': 'invalidDealId'" placeholder="Deal ID" [(ngModel)]="dealId" (keyup)="validateDealID()" required></kendo-textarea>
+        <button (click)="submit()" class="btn btn-primary" style="margin-left: 15px">GENERATE QUOTE</button>
+    </div>
+</div>
+    <div class="col-md-12" style="margin-top:5px; margin-bottom:5px" [hidden]="!responseData.length>0">
+        <div class="box box">
+            <div class="box-header with-border">
+                <div class="box-body">
+                    <kendo-grid [sort]="state.sort" [filter]="state.filter" [loading]="isLoading" [sortable]="true" [pageSize]="state.take" [skip]="state.skip"
+                                [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
+                                filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" [data]="gridData">
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="ObjectSid" title="DEAL ID"
+                                           [editable]="false">
+                        </kendo-grid-column>
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="ObjectTypeId" title="DEAL TYPE"
+                                           [editable]="false">
+                        </kendo-grid-column>
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="RebateType" title="REBATE TYPE"
+                                           [editable]="false">
+                        </kendo-grid-column>
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="Status" title="STATUS"
+                                           [editable]="false">
+                        </kendo-grid-column>
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" [sortable]="false"
+                                           [filterable]="none" title="">
+                            <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                                <div>
+                                    <a href="/api/QuoteLetter/GetDealQuoteLetter/{{dataItem.CustomerSid}}/5/{{dataItem.ObjectSid}}/0"
+                                       title="Download">Download Quote Letter
+                                        
+                                    </a>
+                                </div>
+                            </ng-template>
+                        </kendo-grid-column>
+                    </kendo-grid>
+                </div>
+            </div>
+        </div>
+    </div>
+    

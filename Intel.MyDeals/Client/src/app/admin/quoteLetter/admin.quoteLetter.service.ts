@@ -27,4 +27,8 @@ export class quoteLetterService {
         const apiUrl: string = this.apiBaseUrl + 'GetDealQuoteLetterPreview';
         return this.httpClient.post(apiUrl, template, { responseType: 'blob', observe: "response" })
     }
+    public regenerateQuoteLetter(dealId) {
+        const apiUrl: string = this.apiBaseUrl + 'RegenerateQuoteLetter/' + dealId;
+        return this.httpClient.get(apiUrl);
+    }
 }

@@ -56,6 +56,7 @@ import { BulkPricingUpdateModalComponent } from '../admin/bulkPricingUpdates/adm
 import { adminMydealsSupportComponent } from '../admin/mydealssupport/admin.mydealssupport.component';
 import { adminVistexProfiseeApiComponent } from '../admin/vistex/admin.vistexProfiseeAPI.component';
 import { sdsDealOverridesComponent } from '../admin/sdsDealOverrides/admin.sdsDealOverrides.component';
+import { QuoteLetterRegenerationComponent } from "../admin/quoteLetter/admin.quoteLetterRegeneration.component";
 
 export let adminComponents =[
     EmployeeComponent,
@@ -116,5 +117,6 @@ export let adminComponents =[
     adminMydealsSupportComponent,
     adminVistexProfiseeApiComponent,
     retriggerUnifyModalComponent,
-    sdsDealOverridesComponent
+    sdsDealOverridesComponent,
+    QuoteLetterRegenerationComponent
 ]

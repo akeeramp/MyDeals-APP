@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Runtime.Serialization;
 
 namespace Intel.MyDeals.Entities
 {
@@ -20,5 +21,20 @@ namespace Intel.MyDeals.Entities
         public string ObjectSid { set; get; }
         public QuoteLetterContentInfo ContentInfo { get; set; }
         public QuoteLetterTemplateInfo TemplateInfo { get; set; }       
+    }
+
+    public class DownloadQuoteLetterData
+    {
+        [DataMember]
+        public string ObjectTypeId { set; get; }
+        [DataMember]
+        public string ObjectSid { set; get; }
+        [DataMember]
+        public string RebateType { set; get; }
+        [DataMember]
+        public string Status { set; get; }
+
+        [DataMember]
+        public string CustomerSid { set; get; }
     }
 }

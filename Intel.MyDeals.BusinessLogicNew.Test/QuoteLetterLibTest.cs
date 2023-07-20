@@ -8,6 +8,7 @@ using NUnit.Core;
 using NUnit.Framework;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.Diagnostics.Contracts;
 using System.Runtime.CompilerServices;
 
@@ -118,7 +119,13 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             var result = new QuoteLetterLib(mockQuoteLetterDataLib.Object).GetDealQuoteLetter(quoteLetterDealData, headerInfo, bodyInfo, forceRegenerateQuoteLetter, contractToken);
             Assert.IsNotNull(result);
         }
-
+        public void RegenerateQuoteLetter_ShouldReturnNotNull(string dealId)
+        {
+            List<DownloadQuoteLetterData> mockData = new List<DownloadQuoteLetterData>();
+            mockQuoteLetterDataLib.Setup(x => x.RegenerateQuoteLetter(It.IsAny<string>())).Returns(mockData);
+            var result = new QuoteLetterLib(mockQuoteLetterDataLib.Object).RegenerateQuoteLetter(dealId);
+            Assert.IsNotNull(result);
+        }
         public List<AdminQuoteLetter> AdminGetTemplatesMockData()
         {
             var data = new List<AdminQuoteLetter>()

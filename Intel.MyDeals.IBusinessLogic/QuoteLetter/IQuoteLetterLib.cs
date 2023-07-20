@@ -10,5 +10,6 @@ namespace Intel.MyDeals.IBusinessLogic
 
         QuoteLetterFile GetDealQuoteLetter(QuoteLetterData quoteLetterDealInfo, string headerInfo, string bodyInfo, bool forceRegenerateQuoteLetter, ContractToken contractToken);
 
+        List<DownloadQuoteLetterData> RegenerateQuoteLetter(string dealId);
     }
 }

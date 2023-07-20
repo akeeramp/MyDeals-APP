@@ -5,6 +5,7 @@ using Intel.Opaque;
 using Intel.Opaque.DBAccess;
 using System;
 using System.Collections.Generic;
+using System.Data;
 using System.IO;
 using System.Linq;
 using System.Text;
@@ -390,6 +391,40 @@ namespace Intel.MyDeals.DataLibrary
                 {
                 }
                 return true;
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+        }
+
+        public List<DownloadQuoteLetterData> RegenerateQuoteLetter(string dealId)
+        {
+            List<DownloadQuoteLetterData> downloadQuoteLetterDatas = new List<DownloadQuoteLetterData>();
+            
+            try
+            {
+                Procs.dbo.PR_MYDL_GEN_QUOTE_LTTR cmd = new Procs.dbo.PR_MYDL_GEN_QUOTE_LTTR
+                {
+                    in_deal_id_list = dealId
+                };
+                DataTable dtquoteletterdata= DataAccess.ExecuteDataTable(cmd);
+                if(dtquoteletterdata != null && dtquoteletterdata.Rows.Count!=0)
+                {
+                    foreach(DataRow dr in  dtquoteletterdata.Rows )
+                    {
+                        DownloadQuoteLetterData downloadQuoteLetterData = new DownloadQuoteLetterData();
+                        downloadQuoteLetterData.ObjectSid = dr[0].ToString();
+                        downloadQuoteLetterData.CustomerSid = dr[1].ToString();
+                        downloadQuoteLetterData.ObjectTypeId = dr[3].ToString();
+                        downloadQuoteLetterData.RebateType = dr[2].ToString();
+                        downloadQuoteLetterData.Status = dr[4].ToString();
+                        downloadQuoteLetterDatas.Add(downloadQuoteLetterData);
+                    }
+                }
+                return downloadQuoteLetterDatas;
+                
             }
             catch (Exception ex)
             {

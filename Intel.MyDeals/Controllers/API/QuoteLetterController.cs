@@ -8,6 +8,8 @@ using System.IO;
 using System.Net.Http.Headers;
 using System;
 using System.Text.RegularExpressions;
+using System.Runtime.InteropServices;
+using System.Web.UI;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -116,6 +118,17 @@ namespace Intel.MyDeals.Controllers.API
                 .AdminSaveTemplate(template)
                 , $"AdminSaveTemplate failed"
             );
+        }
+        [Authorize]
+        [HttpGet]
+        [Route("RegenerateQuoteLetter/{dealId}")]
+        public IEnumerable<DownloadQuoteLetterData> RegenerateQuoteLetter(string dealId)
+        {
+            
+            return SafeExecutor(() => _quoteLetterLib
+                 .RegenerateQuoteLetter(dealId)
+                 , $"Quote Letter Regeneration failed"
+             );
         }
     }
 }

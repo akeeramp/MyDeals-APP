@@ -1,0 +1,31 @@
+﻿.textarea-disabled {
+    opacity: .25
+}
+
+.minWidthBtnLg {
+    min-width: 190px
+}
+
+    .minWidthBtnLg:disabled {
+        background-color: #edeff0 !important;
+        color: #b1babf !important;
+        border-color: #b1babf !important
+    }
+
+.quoteLetterSection {
+    margin-top: 18px !important;
+    margin-left: 20px !important
+}
+
+.k-editor-box {
+    width: 100%;
+    height: 250px
+}
+.validDealId {
+    border-color: LightGray !important;
+}
+
+.invalidDealId {
+    border-color: red !important;
+}
+

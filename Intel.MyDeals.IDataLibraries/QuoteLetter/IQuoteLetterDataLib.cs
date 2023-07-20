@@ -9,5 +9,6 @@ namespace Intel.MyDeals.IDataLibrary
         AdminQuoteLetter AdminSaveTemplate(AdminQuoteLetter template);
 
         QuoteLetterFile GetDealQuoteLetter(QuoteLetterData quoteLetterDealInfo, string headerInfo, string bodyInfo, bool forceRegenerateQuoteLetter, ContractToken contractToken);
+        List<DownloadQuoteLetterData> RegenerateQuoteLetter(string dealId);
     }
 }

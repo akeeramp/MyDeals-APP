@@ -42,7 +42,10 @@ namespace Intel.MyDeals.BusinessLogic
         {
             return _quoteLetterDataLib.GetDealQuoteLetter(quoteLetterDealData, headerInfo, bodyInfo, forceRegenerateQuoteLetter, contractToken);
         }
-        
+        public List<DownloadQuoteLetterData> RegenerateQuoteLetter(string dealId)
+        {
+            return _quoteLetterDataLib.RegenerateQuoteLetter(dealId);
+        }
 
     }
 
