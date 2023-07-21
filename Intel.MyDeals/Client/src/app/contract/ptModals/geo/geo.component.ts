@@ -19,6 +19,7 @@ export interface DialogData {
     private isBlend:boolean=false;
     private isBidGeo: boolean = false;
     private isCustDiv: boolean = false;
+    private geoMarkArr: Array<string> = [];
     constructor(
       public dialogRef: MatDialogRef<GeoSelectorComponent>,
       @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -58,6 +59,20 @@ export interface DialogData {
         else{
           this.value=this.data.selVal? this.data.selVal.split(','): [];
         }
+
+        let valTmps = this.value;
+        let tmps = this.listItems;
+        for (var i = 0; i < valTmps.length; i++) {
+            let valTmp = valTmps[i];
+            for (var j = 0; j < tmps.length; j++) {
+                let tmp = tmps[j];
+                if (tmp == valTmp) {
+                    this.geoMarkArr.push(valTmp);
+                    this.value = this.geoMarkArr;
+                }
+            }
+        }
+        
     }
     onNoClick(): void {
       this.dialogRef.close();

@@ -46,6 +46,7 @@ export class multiSelectModalComponent {
     private multiCheckedKeys: any[] = [];
     private mkgvalues: Array<string> = [];
     private multSlctMkgValues: Array<string> = [];
+    private multiSelectMkgArr: Array<string> = [];
     private marketSeglist: any = [];
 
     fetchChildren(node: any): Observable<any[]> {
@@ -357,7 +358,34 @@ export class multiSelectModalComponent {
                     });
                 }
             }
-            this.multSlctMkgValues = this.mkgvalues;
+            
+            let cellMarketVal = this.mkgvalues;
+            let tmps = this.modalData.items.data;
+
+            for (var i = 0; i < cellMarketVal.length; i++) {
+                let cellMarket = cellMarketVal[i];
+                for (var tmp of tmps) {
+                    let tmpDropDown = tmp.DROP_DOWN;
+                    if (tmpDropDown == cellMarket) {
+                        this.multiSelectMkgArr.push(cellMarket);
+                        this.multSlctMkgValues = this.multiSelectMkgArr;
+                    }
+                    if (tmp.items != null) {
+                        let valueAssign = tmp.items;
+                        for (var values of valueAssign) {
+                            let tmpDropDownVal = values.DROP_DOWN;
+                            if (tmpDropDownVal == cellMarket) {
+                                this.multiSelectMkgArr.push(cellMarket);
+                                this.multSlctMkgValues = this.multiSelectMkgArr;
+                            }
+                        }
+                    }
+                }
+            }
+            
+
+            //this.multSlctMkgValues = this.mkgvalues;
+
             each(this.marketSeglist, (key) => {
                 if (key.items != undefined && key.items != null && key.items.length > 0) {
                     this.parentKeys.push(key.DROP_DOWN);
