@@ -63,7 +63,7 @@ export class PTEUtil {
                     }
 
                     // TWC3119-682 - Currency cells have a max numeric value
-                    const MAX_VALUE = 1000000000000; // API max value is 1E23, but setting to 1E12 (1 trillion) as absolute max value
+                    const MAX_VALUE = 1000000000; // API max value is 1E23, set to 1E9
                     currentColumnConfig.validator = (value, callback) => {
                         if (value > MAX_VALUE) {
                             callback(false);
