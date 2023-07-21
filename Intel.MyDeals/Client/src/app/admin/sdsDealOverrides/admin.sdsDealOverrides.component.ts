@@ -6,6 +6,7 @@ import { ThemePalette } from '@angular/material/core';
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { sdsDealOverridesService } from "./admin.sdsDealOverrides.service";
+import { constantsService } from "../constants/admin.constants.service";
 
 @Component({
     selector: "sds-deal-overrides",
@@ -14,7 +15,7 @@ import { sdsDealOverridesService } from "./admin.sdsDealOverrides.service";
 })
 
 export class sdsDealOverridesComponent {
-    constructor(private sdsDealOverridesSVC: sdsDealOverridesService, private loggerSvc: logger) { }
+    constructor(private sdsDealOverridesSVC: sdsDealOverridesService, private loggerSvc: logger, private constantsService: constantsService) { }
     private color: ThemePalette = "primary";
     private attr = ['Pricing Table Row', 'Deal'];
     private gridReturnsOrig = [];
@@ -25,7 +26,6 @@ export class sdsDealOverridesComponent {
     private sdsDealOverridesData = "";
     private resultCount: any = {};
     private ruleCount: any = {};
-    /*private ruleValue: any = {};*/
     private resultType = "";
 
     public sort: SortDescriptor[] = [
@@ -55,6 +55,20 @@ export class sdsDealOverridesComponent {
         //}
     };
 
+    accessAllowed = false; // Default to false to prevent unauthorized users
+    private validWWID: string;
+
+    checkPageAcess() {
+        this.constantsService.getConstantsByName("SDS_OVERRIDE_DEAL_VALIDATION_ADMINS").subscribe((data) => {
+            if (data) {
+                this.validWWID = data.CNST_VAL_TXT === "NA" ? "" : data.CNST_VAL_TXT;
+                this.accessAllowed = this.validWWID.indexOf((<any>window).usrDupWwid) > -1 ? true : false;
+            }
+        }, (error) => {
+            this.loggerSvc.error("SDS Admin Page: Unable to get Access Control List from Constant SDS_OVERRIDE_DEAL_VALIDATION_ADMINS", error)
+        });
+    }
+
     dataStateChangeReturns(sort: SortDescriptor[]): void {
         this.sort = sort;
         this.gridReturns = { data: orderBy(this.gridReturnsOrig, this.sort), total: this.gridReturnsOrig.length };
@@ -68,7 +82,6 @@ export class sdsDealOverridesComponent {
             this.sdsDealOverridesSVC.getRules().subscribe((result: Array<any>) => {
                 this.gridRules = result;
                 this.ruleCount['all'] = result.length;
-                /*this.ruleValue = "0";*/
             }, (error) => {
                 this.loggerSvc.error('Error in loading SDS override rules', error);
             });
@@ -165,5 +178,6 @@ export class sdsDealOverridesComponent {
 
     ngOnInit() {
         this.loadRules();
+        this.checkPageAcess();
     }
 }

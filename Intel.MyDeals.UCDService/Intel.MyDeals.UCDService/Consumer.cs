@@ -10,6 +10,7 @@ using System.Threading.Tasks;
 using System.IO;
 using System.Configuration;
 using System.Threading;
+using System.Diagnostics;
 
 namespace Intel.MyDeals.UCDService
 {
@@ -106,7 +107,8 @@ namespace Intel.MyDeals.UCDService
             }
             catch (Exception ex)
             {
-                logReponseMessage("Exception in csMsgConsumer: "  + ex.Message);
+                logReponseMessage("Exception in csMsgConsumer: "  + ex.Message); // My deals normal logger
+                EventLog.WriteEntry("Mydeals", "Exception in csMsgConsumer: " + ex.Message); // Supposedly as approved checkmarx event logger
             }
         }
 
@@ -204,7 +206,8 @@ namespace Intel.MyDeals.UCDService
             }
             catch (Exception ex)
             {
-                logReponseMessage("Exception in csMsgConsumer: " + ex.Message);
+                logReponseMessage("Exception in csMsgConsumer: " + ex.Message); // My deals normal logger
+                EventLog.WriteEntry("Mydeals", "Exception in csMsgConsumer: " + ex.Message); // Supposedly as approved checkmarx event logger
             }
         }
 
