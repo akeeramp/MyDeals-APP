@@ -1,6 +1,6 @@
 ﻿import { Component, ViewEncapsulation, Input, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
-import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service';
+import { PricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service';
 import { logger } from "../../shared/logger/logger";
 import { userPreferencesService } from "../../shared/services/userPreferences.service";
 import { List } from 'linqts';
@@ -56,7 +56,7 @@ export class AttributeBuilder implements OnInit {
     private runRuleReqd:boolean = false;
     @ViewChild("list") list;
     
-    constructor(private pteService: pricingTableEditorService, private loggerSvc: logger, protected usrPrfrncssvc: userPreferencesService,) {}
+    constructor(private pteService: PricingTableEditorService, private loggerSvc: logger, protected usrPrfrncssvc: userPreferencesService,) {}
     loadMyRules() {
         this.usrPrfrncssvc.getActions(this.cat, this.subcat).subscribe((data: any) => {
             this.myRules = [];

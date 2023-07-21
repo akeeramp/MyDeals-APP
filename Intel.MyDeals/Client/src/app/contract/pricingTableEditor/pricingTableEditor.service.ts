@@ -5,45 +5,50 @@ import { BehaviorSubject, Observable } from 'rxjs';
 @Injectable({
     providedIn: 'root'
 })
-export class pricingTableEditorService {
+export class PricingTableEditorService {
 
     constructor(private httpClient: HttpClient) { }
+
     public autoFillData = new BehaviorSubject({});
-    private apiBasePricingTableUrl = "/api/PricingTables/v1/";
-    private apiBaseContractUrl = "/api/Contracts/v1/";
-    private apiBasePrimeCustomerUrl = "api/PrimeCustomers/";  
-    private apiBaseDealProductsUrl = "api/Products/GetDealProducts/";
+    private readonly apiBasePricingTableUrl = "/api/PricingTables/v1/";
+    private readonly apiBaseContractUrl = "/api/Contracts/v1/";
+    private readonly apiBasePrimeCustomerUrl = "api/PrimeCustomers/";  
+    private readonly apiBaseDealProductsUrl = "api/Products/GetDealProducts/";
+
     public readPricingTable(id): Observable<any> {
         const apiUrl: string = this.apiBasePricingTableUrl + 'GetFullNestedPricingTable/' + id;
         return this.httpClient.get(apiUrl);
     }
+
     public readDropdownEndpoint(lookupUrl: string) {
         const apiUrl: string = lookupUrl;
         return this.httpClient.get(apiUrl);
     }
+
     public validateEndCustomer(endCustObj: any): Observable<any> {
         const apiUrl: string = this.apiBasePrimeCustomerUrl + "ValidateEndCustomer";
         const headers = { 'content-type': 'application/json' };
         return this.httpClient.post(apiUrl, JSON.stringify(endCustObj), { 'headers': headers });
     }
-    public getDropDownResult(lookupUrl: string){
-        return this.httpClient.get(lookupUrl);    
-    }
-    public updateContractAndCurPricingTable(custId:number, contractId:number, data:any, forceValidation:boolean, forcePublish:boolean, delPtr:boolean){
+
+    public updateContractAndCurrentPricingTable(custId:number, contractId:number, data:any, forceValidation:boolean, forcePublish:boolean, delPtr:boolean){
         if (forceValidation && forcePublish) {
             return this.httpClient.post(this.apiBaseContractUrl + "SaveAndValidateAndPublishContractAndPricingTable/" + custId + '/' + contractId + '/' + delPtr, data);
         } 
     }
-    public UnPrimeDealsLogs(dealId, endCustData): Observable<any> {
+
+    public unPrimeDealsLogs(dealId, endCustData): Observable<any> {
         const apiUrl: string = this.apiBasePrimeCustomerUrl + "UnPrimeDealsLogs/" + dealId;
         const headers = { 'content-type': 'application/json' };
         return this.httpClient.post(apiUrl, JSON.stringify(endCustData), { 'headers': headers });
     }
+
     public updateAtrbValue(custId, contractId, data): Observable<any> {
         const apiUrl: string = this.apiBaseContractUrl + 'UpdateAtrbValue/' + custId + '/' + contractId;
         return this.httpClient.post(apiUrl, data);
     }
-    public GetDealProducts(DC_ID: number, CUST_MBR_SID: string) {
+
+    public getDealProducts(DC_ID: number, CUST_MBR_SID: string) {
         const apiUrl: string = this.apiBaseDealProductsUrl + DC_ID + '/5/' + CUST_MBR_SID ;
         return this.httpClient.get(apiUrl);
     }

@@ -1,7 +1,7 @@
 ﻿import { logger } from "../../../shared/logger/logger";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { Component, ViewEncapsulation, Inject } from "@angular/core";
-import { pricingTableEditorService } from "../../pricingTableEditor/pricingTableEditor.service"
+import { PricingTableEditorService } from "../../pricingTableEditor/pricingTableEditor.service"
 import { each } from 'underscore';
 
 @Component({
@@ -12,7 +12,7 @@ import { each } from 'underscore';
 })
 export class endCustomerRetailModalComponent {
     constructor(private loggerSvc: logger, private dialogRef: MatDialogRef<endCustomerRetailModalComponent>,
-        @Inject(MAT_DIALOG_DATA) public data, private pteService: pricingTableEditorService) {
+        @Inject(MAT_DIALOG_DATA) public data, private pteService: PricingTableEditorService) {
         dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG
     }
     private isLoading = false;
@@ -661,7 +661,7 @@ export class endCustomerRetailModalComponent {
         this.isLoading = true;
         this.spinnerMessageHeader = "Saving.."
         this.spinnerMessageDescription = "Saving the End Customer/Retail information."
-        let response = await this.pteService.UnPrimeDealsLogs(this.data.item.dealId, JSON.stringify(this.END_CUST_OBJ.filter(x => x.PRIMED_CUST_NM.toUpperCase() != "ANY"))).toPromise().catch((error) => {
+        let response = await this.pteService.unPrimeDealsLogs(this.data.item.dealId, JSON.stringify(this.END_CUST_OBJ.filter(x => x.PRIMED_CUST_NM.toUpperCase() != "ANY"))).toPromise().catch((error) => {
             this.loggerSvc.error('Unable to process UCD request.', error);
             this.saveEndcustomerData();
         });

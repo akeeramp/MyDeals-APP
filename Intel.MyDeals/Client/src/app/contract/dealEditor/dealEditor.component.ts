@@ -7,7 +7,7 @@ import { opGridTemplate } from "../../core/angular.constants"
 import { SelectEvent } from "@progress/kendo-angular-layout";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent, CellCloseEvent, GridComponent } from "@progress/kendo-angular-grid";
 import { process, State, distinct, FilterDescriptor, CompositeFilterDescriptor } from "@progress/kendo-data-query";
-import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
+import { PricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
 import { DatePipe } from '@angular/common';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util';
 import { PTE_Load_Util } from '../PTEUtils/PTE_Load_util';
@@ -37,7 +37,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 })
 export class dealEditorComponent { 
 
-    constructor(private pteService: pricingTableEditorService,
+    constructor(private pteService: PricingTableEditorService,
                 private contractDetailsSvc: contractDetailsService,
                 private loggerService: logger,
                 private datePipe: DatePipe,
@@ -1119,7 +1119,7 @@ export class dealEditorComponent {
                 this.setPerfBarDetails('setInitialDetails', "Update Contract And CurPricing Table", "MT", false, false);
                 this.perfComp.emit(this.perfBar);
             }
-            let response: any = await this.pteService.updateContractAndCurPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).toPromise().catch((err) => {
+            let response: any = await this.pteService.updateContractAndCurrentPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).toPromise().catch((err) => {
                 this.loggerService.error("dealEditorComponent::saveUpdateDEAPI::", err);
                 this.isDataLoading = false;
             });

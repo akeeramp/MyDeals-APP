@@ -4,7 +4,7 @@ import { logger } from "../../shared/logger/logger";
 import { pricingTableservice } from "./pricingTable.service";
 import { SelectEvent } from "@progress/kendo-angular-layout";
 import { templatesService } from "../../shared/services/templates.service";
-import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
+import { PricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
 import { lnavService } from "../lnav/lnav.service";
 import { dealEditorComponent } from "../dealEditor/dealEditor.component"
 import { pricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
@@ -29,7 +29,7 @@ export interface contractIds {
 export class pricingTableComponent {
     public drawChart: boolean;
     constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: templatesService,
-        private pteService: pricingTableEditorService, private lnavSvc: lnavService, private route: ActivatedRoute, private router: Router) {}
+        private pteService: PricingTableEditorService, private lnavSvc: lnavService, private route: ActivatedRoute, private router: Router) {}
     @ViewChild(pricingTableEditorComponent) private pteComp: pricingTableEditorComponent;
     @ViewChild(performanceBarsComponent) public perfComp: performanceBarsComponent;
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;

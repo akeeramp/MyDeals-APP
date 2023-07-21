@@ -22,18 +22,18 @@ export class PTEUtil {
     };
    
     static generateHandsontableColumn(isTenderContract:any,
-        dropdownResponses: any[],
-        templateColumnFields: PRC_TBL_Model_Field[],
-        item: PRC_TBL_Model_Column,
-        ): Handsontable.ColumnSettings {
+                                      dropdownResponses: any[],
+                                      templateColumnFields: PRC_TBL_Model_Field[],
+                                      item: PRC_TBL_Model_Column): Handsontable.ColumnSettings {
         let currentColumnConfig: Handsontable.ColumnSettings = {
             data: item.field,
             width: item.width,
             readOnly:false
         }
+
         /* Type & Format */
         if (!isUndefined(templateColumnFields[item.field].type)) {
-            const itemField = templateColumnFields[item.field].type;
+            const ITEM_FIELD = templateColumnFields[item.field].type;
 
             if (item.field == "END_VOL" || item.field == "END_PB" || item.field === 'STRT_VOL') {
                 currentColumnConfig.type = 'numeric';
@@ -44,57 +44,58 @@ export class PTEUtil {
                 if (item.field == "END_VOL" || item.field == "END_PB") {
                     currentColumnConfig.validator = this.EndValueValidator;
                 }
-            }
-            else if (item.field == "VOLUME") {
+            } else if (item.field == "VOLUME") {
                 currentColumnConfig.type = 'text';
-            }
-            else if (itemField === 'number') {
+            } else if (ITEM_FIELD === 'number') {
                 currentColumnConfig.type = 'numeric';
 
                 // Formatting
-                const cellFormat: string = templateColumnFields[item.field].format;
-                if (cellFormat && cellFormat.toLowerCase().includes('0:d')) { // Decimalized
+                const CELL_FORMAT: string = templateColumnFields[item.field].format;
+                if (CELL_FORMAT && CELL_FORMAT.toLowerCase().includes('0:d')) { // Decimalized
                     currentColumnConfig.numericFormat = {
                         pattern: '0,00',
                         culture: 'en-US'
                     }
-                } else if (cellFormat && cellFormat.toLowerCase().includes('0:c')) { // Currency
+                } else if (CELL_FORMAT && CELL_FORMAT.toLowerCase().includes('0:c')) { // Currency
                     currentColumnConfig.numericFormat = {
                         pattern: '$0,0.00',
                         culture: 'en-US'
                     }
+
+                    // TWC3119-682 - Currency cells have a max numeric value
+                    const MAX_VALUE = 1000000000000; // API max value is 1E23, but setting to 1E12 (1 trillion) as absolute max value
+                    currentColumnConfig.validator = (value, callback) => {
+                        if (value > MAX_VALUE) {
+                            callback(false);
+                        } else {
+                            callback(true);
+                        }
+                    }
                 }
-            }
-            else if (itemField === 'percent') {
+            } else if (ITEM_FIELD === 'percent') {
                 currentColumnConfig.type = 'numeric';
                 currentColumnConfig.numericFormat = {
                     pattern: '0,0.00',
                     culture: 'en-US'
                 }
-            }
-            else if (itemField === 'date') {
+            } else if (ITEM_FIELD === 'date') {
                 currentColumnConfig.type = 'date';
                 currentColumnConfig.dateFormat = this.defaultDateFormat;
                 currentColumnConfig.datePickerConfig = this.defaultDatePickerConfig;
                 currentColumnConfig.correctFormat = true
-            } 
-            else if (templateColumnFields[item.field].uiType &&(templateColumnFields[item.field].uiType=='DROPDOWN' ||  templateColumnFields[item.field].uiType=='MULTISELECT' ||  templateColumnFields[item.field].uiType=='EMBEDDEDMULTISELECT')) {
+            }  else if (templateColumnFields[item.field].uiType &&(templateColumnFields[item.field].uiType=='DROPDOWN' ||  templateColumnFields[item.field].uiType=='MULTISELECT' ||  templateColumnFields[item.field].uiType=='EMBEDDEDMULTISELECT')) {
                 currentColumnConfig.type = 'dropdown';
                 if (item.lookupUrl) {
                     // for tender, PAYOUT_BASED_ON  must not have Billings
-                    if(item.field=='PAYOUT_BASED_ON' && isTenderContract){
+                    if (item.field=='PAYOUT_BASED_ON' && isTenderContract) {
                         currentColumnConfig.source=reject(pluck(dropdownResponses[`${item.field}`],`${item.lookupValue}`),itm=>{ return itm =='Billings'});
-                    }
-                    //market segment has items which has child so we need to pass the full object
-                    else if(item.field=='MRKT_SEG'){
+                    } else if(item.field=='MRKT_SEG'){    // market segment has items which has child so we need to pass the full object
                         currentColumnConfig.source=dropdownResponses[`${item.field}`];
-                    }else{
+                    } else {
                         currentColumnConfig.source=pluck(dropdownResponses[`${item.field}`],`${item.lookupValue}`);
                     }
-                    
                 }
-            }
-            else {
+            } else {
                 currentColumnConfig.type = 'text';
             }
         }
@@ -107,10 +108,12 @@ export class PTEUtil {
                 // WIP: Comparsion Function
             }
         }
+
         /* Editable or not */
         if(!templateColumnFields[`${item.field}`].editable){
             currentColumnConfig.readOnly=true;
         }
+
         return currentColumnConfig;
     }
    

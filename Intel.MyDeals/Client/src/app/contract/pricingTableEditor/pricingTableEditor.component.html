@@ -84,7 +84,7 @@
                     </tr>
                 </table>
             </button>
-            <button class="btn btn-sm ssToolbarBtn" *ngIf="C_ADD_PRICING_TABLE" (click)="openAutoFill()" title="View autofill defaults,when changing values only new items entered in the grid will reflect updates.">
+            <button class="btn btn-sm ssToolbarBtn" *ngIf="C_ADD_PRICING_TABLE" (click)="openAutofill()" title="View autofill defaults,when changing values only new items entered in the grid will reflect updates.">
                 <table>
                     <tr>
                         <td>
@@ -196,11 +196,11 @@
         <button kendoButton class="new-c-button cancel-btn-pop-up" (click)="closeDialog('No')">CANCEL</button>
     </kendo-dialog-actions>
 </kendo-dialog>
-<kendo-dialog *ngIf="isCustDivNull" (close)="custdivnull(false)" class="k-dialog-popup-design">
+<kendo-dialog *ngIf="isCustDivNull" (close)="custDivNull(false)" class="k-dialog-popup-design">
     <p style="text-align: center;">The division is blank. Do you intend for this deal to apply to all divisions ?</p>
     <kendo-dialog-actions>
-        <button class='k-button ok-btn-pop-up' (click)="custdivnull(true)">OK</button>
-        <button class='k-button cancel-btn-pop-up' (click)="custdivnull(false)">CANCEL</button>
+        <button class='k-button ok-btn-pop-up' (click)="custDivNull(true)">OK</button>
+        <button class='k-button cancel-btn-pop-up' (click)="custDivNull(false)">CANCEL</button>
     </kendo-dialog-actions>
 </kendo-dialog>
 <kendo-dialog *ngIf="validationMessage" class="ptevalidopoup valid-out-pop-ups k-dialog-popup-design">

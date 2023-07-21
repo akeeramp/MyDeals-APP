@@ -8,7 +8,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { dealTimelineComponent } from '../dealTimelineModal/dealTimelineModal.component';
 import { fileAttachmentComponent } from '../fileAttachmentModal/fileAttachmentModal.component';
 import { distinct } from "@progress/kendo-data-query";
-import { pricingTableEditorService } from "../../../contract/pricingTableEditor/pricingTableEditor.service";
+import { PricingTableEditorService } from "../../../contract/pricingTableEditor/pricingTableEditor.service";
 
 @Component({
     providers: [dealToolsService],
@@ -19,7 +19,7 @@ import { pricingTableEditorService } from "../../../contract/pricingTableEditor/
 })
 export class dealToolsComponent{
     
-    constructor(private dataService: dealToolsService, private loggerSvc: logger, protected dialog: MatDialog, private pteService: pricingTableEditorService) {}
+    constructor(private dataService: dealToolsService, private loggerSvc: logger, protected dialog: MatDialog, private pteService: PricingTableEditorService) {}
     @Input() dataItem;
     @Input() gridData;
     @Input() contractData;

@@ -1,4 +1,4 @@
-﻿import { Component, Input, Output, EventEmitter, NgZone } from '@angular/core';
+﻿import { Component, Input, Output, EventEmitter, NgZone, OnInit, AfterViewInit } from '@angular/core';
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
 import { each, uniq, filter, map, where, pluck, findWhere, findIndex, findLastIndex, reject, contains, find, values, keys, unique, includes, isUndefined, isEmpty, isNull } from 'underscore';
@@ -7,7 +7,7 @@ import { forkJoin } from 'rxjs';
 import { distinct } from '@progress/kendo-data-query';
 
 import { logger } from '../../shared/logger/logger';
-import { pricingTableEditorService } from './pricingTableEditor.service'
+import { PricingTableEditorService } from './pricingTableEditor.service'
 import { lnavService } from '../lnav/lnav.service';
 import { productSelectorService } from '../../shared/services/productSelector.service';
 import { flexoverLappingcheckDealService } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.service'
@@ -37,9 +37,9 @@ import { dropDownModalComponent } from '../ptModals/dropDownModal/dropDownModal.
     selector: 'pricing-table-editor',
     templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html'
 })
-export class pricingTableEditorComponent {
+export class pricingTableEditorComponent implements OnInit, AfterViewInit {
 
-    constructor(private pteService: pricingTableEditorService,
+    constructor(private pteService: PricingTableEditorService,
                 private productSelectorService: productSelectorService,
                 private loggerService: logger,
                 private lnavService: lnavService,
@@ -463,26 +463,50 @@ export class pricingTableEditorComponent {
         afterChange: (changes, source) => {
             try{
                 //the data is coing as null in case of source is loadData 
-                if(changes){
+                if (changes) {
                     //using => operator to-call-parent-function-from-callback-function
                     //loading screen changes are moved to the top to  make better performance
-                    this.pteLoaderPopUp(changes,source);
+                    this.pteLoaderPopUp(changes, source);
                     setTimeout(() => {
                         this.afterCellChange(changes, source);
                     },0);
                 }
-            }
-            catch(ex){
+            } catch(ex){
                 this.loggerService.error('Something went wrong', 'Error');
                 console.error('PTE::afterChange::', ex);
             }
+        },
+        afterValidate: (isValid, value, row, prop, source) => {
+            this.currencyValidatorMessageHandler(isValid, row, prop);
+            // // TWC3119-682 - Currency cells have a max numeric value
+            // const COLUMN_DEFINITION: PRC_TBL_Model_Field = this.pricingTableTemplates.model.fields[prop];
+            // if (!(isUndefined(COLUMN_DEFINITION.type) && isUndefined(COLUMN_DEFINITION.format))) {
+            //     const CELL_TYPE: string = COLUMN_DEFINITION.type;
+            //     const CELL_FORMAT: string = COLUMN_DEFINITION.format;
 
+            //     if (CELL_TYPE === 'number' && CELL_FORMAT.toLowerCase().includes('0:c')) {
+            //         const COLUMN = this.hotTable.propToCol(prop);
+
+            //         const COMMENT_PLUGIN = this.hotTable.getPlugin('comments'); // WIP: Can probably call this outside to make more efficient
+
+            //         if (!isValid) {
+            //             COMMENT_PLUGIN.updateCommentMeta(row, COLUMN, {
+            //                 value: 'Not a valid number (too large).',
+            //                 readOnly: true
+            //             });
+            //             COMMENT_PLUGIN.showAtCell(row, COLUMN);
+            //         } else {
+            //             COMMENT_PLUGIN.removeCommentAtCell(row, COLUMN, true);
+            //         }
+            //     }
+            // }
         },
         afterDocumentKeyDown: (event) => {
             this.afterDocumentKeyDown(event);
         },
         licenseKey: "ad331-b00d1-50514-e403f-15422",
     };
+
     private columns: Array<Handsontable.ColumnSettings> = [];
     private hotRegisterer = new HotTableRegisterer();
     private hotTable: Handsontable;
@@ -530,7 +554,8 @@ export class pricingTableEditorComponent {
             this.spinnerMessageDescription = 'Loading the Table Editor';
             this.isLoading=true;
         }
-         if(this.isLoading && source && source=='stop-loader'){
+
+        if(this.isLoading && source && source=='stop-loader'){
             this.isLoading=false;
         }
     }
@@ -1183,21 +1208,21 @@ export class pricingTableEditorComponent {
             if (item && item.uiType && (item.uiType == 'DROPDOWN' || item.uiType == 'MULTISELECT') && item.opLookupUrl && item.opLookupUrl != '' && (dropObjs[`${key}`] == null || dropObjs[`${key}`] == undefined)) {
                 if (key == 'SETTLEMENT_PARTNER') {
                     //calling  settlement partner seperatly
-                    dropObjs['SETTLEMENT_PARTNER'] = this.pteService.getDropDownResult(item.opLookupUrl + '/' + this.contractData.Customer.CUST_SID);
+                    dropObjs['SETTLEMENT_PARTNER'] = this.pteService.readDropdownEndpoint(item.opLookupUrl + '/' + this.contractData.Customer.CUST_SID);
                 }
                 else if (key == 'PERIOD_PROFILE') {
                     //calling  PERIOD_PROFILE 
-                    dropObjs['PERIOD_PROFILE'] = this.pteService.getDropDownResult(item.opLookupUrl + this.contractData.Customer.CUST_SID);
+                    dropObjs['PERIOD_PROFILE'] = this.pteService.readDropdownEndpoint(item.opLookupUrl + this.contractData.Customer.CUST_SID);
                 }
                 else if (key == 'CUST_ACCNT_DIV') {
                     //calling  Customer Divisions
-                    dropObjs['CUST_ACCNT_DIV'] = this.pteService.getDropDownResult(item.opLookupUrl + '/' + this.contractData.Customer.CUST_SID);
+                    dropObjs['CUST_ACCNT_DIV'] = this.pteService.readDropdownEndpoint(item.opLookupUrl + '/' + this.contractData.Customer.CUST_SID);
                 }
                 else if (key == 'ORIG_ECAP_TRKR_NBR') {
                     console.log('no valid URL Need to check');
                 }
                 else {
-                    dropObjs[`${key}`] = this.pteService.getDropDownResult(item.opLookupUrl);
+                    dropObjs[`${key}`] = this.pteService.readDropdownEndpoint(item.opLookupUrl);
                 }
             }
         })
@@ -1244,7 +1269,7 @@ export class pricingTableEditorComponent {
         }
 
     }
-    custdivnull(act: boolean) {
+    custDivNull(act: boolean) {
         if (act == true) {
             this.isCustDivNull = false;
             this.ValidateAndSavePTE(true);
@@ -1365,7 +1390,7 @@ export class pricingTableEditorComponent {
             this.setBusy("Deleting...", "Deleting the Table row", "Info", true);
         else
             this.setBusy("Saving your data...", "Please wait as we save your information", "Info", true);
-        let result = await this.pteService.updateContractAndCurPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).toPromise().catch((error) => {
+        let result = await this.pteService.updateContractAndCurrentPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).toPromise().catch((error) => {
             this.loggerService.error("Something went wrong", 'Error');
             console.error("pricingTableEditorComponent::saveUpdatePTEAPI::", error);
         });
@@ -1436,9 +1461,9 @@ export class pricingTableEditorComponent {
         //validate Products for non-deleted records, if any product is invalid it will stop deletion as well
         const isValidProd = await this.validateOnlyProducts('onSave', undefined, deleteDCIDs);
         if (isValidProd != undefined)
-            await this.saveandValidate(isValidProd, deleteDCIDs);
+            await this.saveAndValidate(isValidProd, deleteDCIDs);
     }
-    async saveandValidate(isValidProd, deleteDCIDs?) {
+    async saveAndValidate(isValidProd, deleteDCIDs?) {
         //Handsonetable loading taking some time so putting this logic for loader
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
         //removing the deleted record from PTR
@@ -1476,7 +1501,7 @@ export class pricingTableEditorComponent {
                 PTR = PTR.filter(x => x.DC_ID != delId);
             })
         }
-        let translateResult = await this.ValidateProducts(PTR, false, true, null);
+        let translateResult = await this.validateProducts(PTR, false, true, null);
         let updatedPTRObj: any = null;
         if (translateResult && translateResult['Data']) {
             let prdValResult = PTEUtil.isValidForProdCorrector(translateResult['Data']);
@@ -1582,7 +1607,7 @@ export class pricingTableEditorComponent {
     async resetValidationMessage() {
         this.validationMessage = false;
     }
-    async ValidateProducts(currentPricingTableRowData, publishWipDeals, saveOnContinue, currentRowNumber) {
+    async validateProducts(currentPricingTableRowData, publishWipDeals, saveOnContinue, currentRowNumber) {
         let hasProductDependencyErr = false;
         hasProductDependencyErr = PTEUtil.hasProductDependency(currentPricingTableRowData, this.productValidationDependencies, hasProductDependencyErr);
         if (hasProductDependencyErr) {
@@ -1610,11 +1635,9 @@ export class pricingTableEditorComponent {
         });
 
         // Products invalid JSON data present in the row
-        let invalidProductJSONRows = pricingTableRowData.filter(function (x) {
-
+        let invalidProductJSONRows = pricingTableRowData.filter((x) => {
             return (x.PTR_SYS_INVLD_PRD != null && x.PTR_SYS_INVLD_PRD != "");
         });
-
 
         // Products that needs server side attention
         if (translationInputToSend.length > 0) {
@@ -1902,7 +1925,7 @@ export class pricingTableEditorComponent {
                     setTimeout(async () => {//wait until PTE updation completes
                         await this.productOrdering();
                         if (action == 'onSave')
-                            await this.saveandValidate(true, deletedDCID);
+                            await this.saveAndValidate(true, deletedDCID);
                     }, 100);
                     this.setBusy("", "", "", false);
                 }
@@ -1942,7 +1965,7 @@ export class pricingTableEditorComponent {
         });
         dialogRef.afterClosed().subscribe(result => { });
     }
-    createNewPrcObt (pt){ 
+    createNewPrcObt(pt) { 
         if (pt != null) {
             this.newPricingTable = pt;
             const  ptTemplate  = this.UItemplate.ModelTemplates.PRC_TBL[pt.OBJ_SET_TYPE_CD];
@@ -1953,7 +1976,7 @@ export class pricingTableEditorComponent {
             this.newPricingTable["_defaultAtrbs"] = lnavUtil.updateNPTDefaultValues(pt, ptTemplate.defaultAtrbs, customer);
         }
     }
-    openAutoFill() {
+    openAutofill() {
         let  custId, isVistex
         let pt = this.curPricingTable;
         this.createNewPrcObt(pt);
@@ -2023,6 +2046,38 @@ export class pricingTableEditorComponent {
             });
         }
     }
+
+    // TWC3119-682 - Currency cells have a max numeric value
+    private currencyValidatorMessageHandler(isValid: boolean, rowNumber: number, field: string | number) {
+        const COLUMN_DEFINITION: PRC_TBL_Model_Field = this.pricingTableTemplates.model.fields[field];
+        if (!(isUndefined(COLUMN_DEFINITION.type) && isUndefined(COLUMN_DEFINITION.format))) {
+            const CELL_TYPE: string = COLUMN_DEFINITION.type;
+            const CELL_FORMAT: string = COLUMN_DEFINITION.format;
+
+            if (CELL_TYPE === 'number' && CELL_FORMAT.toLowerCase().includes('0:c')) {
+                const COLUMN_NUMBER = this.hotTable.propToCol(field);
+
+                const COMMENT_PLUGIN = this.hotTable.getPlugin('comments'); // WIP: Can probably call this outside to make more efficient
+
+                if (!isValid) {
+                    COMMENT_PLUGIN.updateCommentMeta(rowNumber, COLUMN_NUMBER, {
+                        value: 'Not a valid number (too large).',
+                        readOnly: true
+                    });
+                    COMMENT_PLUGIN.showAtCell(rowNumber, COLUMN_NUMBER);
+                } else {
+                    COMMENT_PLUGIN.removeCommentAtCell(rowNumber, COLUMN_NUMBER, true);
+                }
+            }
+        }
+    }
+
+    hoverPTE() {
+        $(".pricing_table_celltext .handsontable .ht_clone_inline_start .wtHolder table.htCore tr td.error-cell").hover(function () {
+            $(".htCommentsContainer .htComments").toggleClass("commentHover");
+        });
+    }
+
     ngOnInit() {
         this.isTenderContract = Tender_Util.tenderTableLoad(this.contractData);
         //code for autofill change to accordingly change values
@@ -2032,11 +2087,7 @@ export class pricingTableEditorComponent {
         this.autoFillData = res;
         this.loadPTE();
     }
-    hoverPTE() {
-        $(".pricing_table_celltext .handsontable .ht_clone_inline_start .wtHolder table.htCore tr td.error-cell").hover(function () {
-            $(".htCommentsContainer .htComments").toggleClass("commentHover");
-        });
-    }
+
     ngAfterViewInit() {
         //loading after the View init from there onwards we can reuse the hotTable instance
         this.hotTable = this.hotRegisterer.getInstance(this.hotId);

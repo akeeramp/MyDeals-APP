@@ -2,7 +2,7 @@
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog"; 
 import { State, process } from "@progress/kendo-data-query";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid"; 
-import { pricingTableEditorService } from "../../pricingTableEditor/pricingTableEditor.service";
+import { PricingTableEditorService } from "../../pricingTableEditor/pricingTableEditor.service";
 import { logger } from "../../../shared/logger/logger";
 @Component({
     selector: "missing-cap-cost-info",
@@ -11,7 +11,7 @@ import { logger } from "../../../shared/logger/logger";
  })
 export class missingCapCostInfoModalComponent {
     constructor(public dialogRef: MatDialogRef<missingCapCostInfoModalComponent>, private loggerSvc: logger,
-        @Inject(MAT_DIALOG_DATA) public data, private pteService: pricingTableEditorService) { }
+        @Inject(MAT_DIALOG_DATA) public data, private pteService: PricingTableEditorService) { }
     hasPermissionPrice: boolean;
     public fileName: string; 
     isLoading: boolean;
@@ -53,7 +53,7 @@ export class missingCapCostInfoModalComponent {
         this.isLoading = true;
         const userVerticals = (<any>window).usrVerticals.split(",");
         this.fileName = "Deal " + this.data.DC_ID + " Missing CAP / Cost Products.xlsx";
-        this.pteService.GetDealProducts(this.data.DC_ID, this.data.CUST_MBR_SID).subscribe((response: any) => {
+        this.pteService.getDealProducts(this.data.DC_ID, this.data.CUST_MBR_SID).subscribe((response: any) => {
             if (response != null && response != undefined) {
                 this.gridResult = response;
                 this.isLoading = false;

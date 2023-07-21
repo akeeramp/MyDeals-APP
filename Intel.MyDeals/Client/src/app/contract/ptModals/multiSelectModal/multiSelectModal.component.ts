@@ -4,7 +4,7 @@ import { each, indexOf, map, clone } from 'underscore';
 import { Observable, of } from "rxjs";
 import { logger } from "../../../shared/logger/logger";
 import { CheckedState, CheckableSettings } from "@progress/kendo-angular-treeview";
-import { pricingTableEditorService } from "../../pricingTableEditor/pricingTableEditor.service"
+import { PricingTableEditorService } from "../../pricingTableEditor/pricingTableEditor.service"
 
 @Component({
     selector: "multi-select-modal",
@@ -16,7 +16,7 @@ export class multiSelectModalComponent {
 
     constructor(private loggerSvc: logger,
         public dialogRef: MatDialogRef<multiSelectModalComponent>,
-        @Inject(MAT_DIALOG_DATA) public modalData, private pteService: pricingTableEditorService
+        @Inject(MAT_DIALOG_DATA) public modalData, private pteService: PricingTableEditorService
     ) {
         dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG  
     }
@@ -93,7 +93,7 @@ export class multiSelectModalComponent {
         return false;
     }
     getModalData() {
-        this.pteService.getDropDownResult(this.multiSelectPopUpModal.opLookupUrl).subscribe((response: any) => {
+        this.pteService.readDropdownEndpoint(this.multiSelectPopUpModal.opLookupUrl).subscribe((response: any) => {
             if (response != null && response != undefined && response.length > 0) {
                 this.multiSelectData = response;
                 each(this.multiSelectData, row => {
@@ -165,7 +165,7 @@ export class multiSelectModalComponent {
     }
     getNonCorpData() {
         let opLookUpURL = "/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP";
-        this.pteService.getDropDownResult(opLookUpURL).subscribe((response: any) => {
+        this.pteService.readDropdownEndpoint(opLookUpURL).subscribe((response: any) => {
             if (response != null && response != undefined && response.length > 0) {
                 this.nonCorpMarketSeg = response;
             }

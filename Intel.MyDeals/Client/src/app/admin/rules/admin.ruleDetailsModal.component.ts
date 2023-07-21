@@ -9,7 +9,7 @@ import { GridDataResult } from "@progress/kendo-angular-grid";
 import Handsontable from 'handsontable/base';
 import { registerAllModules } from 'handsontable/registry';
 import { HotTableRegisterer } from '@handsontable/angular';
-import { pricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
+import { PricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
 
 registerAllModules();
 
@@ -48,7 +48,7 @@ export class RuleDetailsModalComponent {
 
     constructor(public dialogRef: MatDialogRef<RuleDetailsModalComponent>,
                 @Inject(MAT_DIALOG_DATA) public data, 
-                private pteService: pricingTableEditorService,
+                private pteService: PricingTableEditorService,
                 private adminRulesSvc: adminRulesService,
                 private loggerSvc: logger) { }
     public dealsList = "";
