@@ -418,7 +418,7 @@
                             <div>
                                 {{uiMoneyDatesControlWrapper(in_DataItem, 'YCS2_PRC_IRBT', 'YCS2_START_DT', 'YCS2_END_DT', key)}}
                                 <div *ngIf="fieldVal(in_DataItem, 'YCS2_PRC_IRBT', key) === 'No YCS2'" class="uiControlDiv isSoftWarnCell capInfoWrapper">
-                                    <div class="capLineStyle">No YCS2</div>
+                                    <div class="capLineStyle No_ycs2fix">No YCS2</div>
                                     <div *ngIf="startVal(in_DataItem, 'YCS2_START_DT', key) !== '' && startVal(in_DataItem, 'YCS2_START_DT', key) !== '01/01/1900'">
                                         Availability:<span class="ng-binding">{{in_DataItem['YCS2_START_DT'][key]}}</span>
                                     </div>

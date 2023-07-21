@@ -66,3 +66,18 @@
 .filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th .k-cell-inner kendo-grid-filter-menu a .k-i-filter {
     background-color: transparent !important;
 }
+#pubOpGrid .rowHeight {
+     height: auto !important;
+    padding: 2px 0 0 1px;
+    border-bottom: .01px solid rgba(0, 0, 0, .05)
+}
+#pubOpGrid .kitRowValue.kitSideLine {
+    padding: 7px 4px !important;
+    height: auto !important;
+}
+#pubOpGrid .uiControlDiv .capLineStyle.No_ycs2fix {
+    padding: 12px 2px !important;
+}
+#pubOpGrid .textRightAlign.isReadOnlyCell {
+    padding: 13px 0 0 1px;
+}
