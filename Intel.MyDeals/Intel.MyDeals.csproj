@@ -2203,6 +2203,9 @@
     <TypeScriptCompile Include="Client\src\app\shared\footer\footer.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\footer\footer.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\header\header.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\header\header.component.ts" />
+    <Content Include="Client\src\app\shared\header\header.component.css" />
+    <Content Include="Client\src\app\shared\header\header.component.html" />
     <TypeScriptCompile Include="Client\src\app\shared\kendo\customDateFilter.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\kendo\customDropDownFilter.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\kendo\multichecker.component.ts" />

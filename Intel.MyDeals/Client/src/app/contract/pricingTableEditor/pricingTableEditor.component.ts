@@ -1596,7 +1596,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
             }
         }
         else {
-            if (action != 'onSave') {
+            if (action != 'onSave' && action != 'onOpenSelector') {
                 this.validationMessage = true;
             }
             this.isLoading = false;
