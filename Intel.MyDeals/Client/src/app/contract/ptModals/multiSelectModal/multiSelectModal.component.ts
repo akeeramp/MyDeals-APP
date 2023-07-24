@@ -47,6 +47,7 @@ export class multiSelectModalComponent {
     private mkgvalues: Array<string> = [];
     private multSlctMkgValues: Array<string> = [];
     private multiSelectMkgArr: Array<string> = [];
+    private multiSelectMkgArrChange: Array<string> = [];
     private marketSeglist: any = [];
 
     fetchChildren(node: any): Observable<any[]> {
@@ -254,6 +255,31 @@ export class multiSelectModalComponent {
                     })
                 }
                 this.multSlctMkgValues = clone(this.mkgvalues);
+                let cellMarketVal = this.multSlctMkgValues;
+                let tmps = this.modalData.items.data;
+                this.multiSelectMkgArrChange = [];
+                for (var i = 0; i < cellMarketVal.length; i++) {
+                    let cellMarket = cellMarketVal[i];
+                    for (var tmp of tmps) {
+                        let tmpDropDown = tmp.DROP_DOWN;
+                        if (tmpDropDown == cellMarket) {
+                            let tmpCellMarket = cellMarket;
+                            this.multiSelectMkgArrChange.push(tmpCellMarket);
+                            this.multSlctMkgValues = this.multiSelectMkgArrChange;
+                        }
+                        if (tmp.items != null) {
+                            let valueAssign = tmp.items;
+                            for (var values of valueAssign) {
+                                let tmpDropDownVal = values.DROP_DOWN;
+                                if (tmpDropDownVal == cellMarket) {
+                                    let tmpCellMarket = cellMarket;
+                                    this.multiSelectMkgArrChange.push(tmpCellMarket);
+                                    this.multSlctMkgValues = this.multiSelectMkgArrChange;
+                                }
+                            }
+                        }
+                    }
+                }
                 let nonCorpIdx = indexOf(this.multSlctMkgValues, "NON Corp");
                 if (nonCorpIdx != -1) {
                     this.multSlctMkgValues.splice(nonCorpIdx, 1);

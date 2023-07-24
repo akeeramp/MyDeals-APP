@@ -20,6 +20,8 @@ export interface DialogData {
     private isBidGeo: boolean = false;
     private isCustDiv: boolean = false;
     private geoMarkArr: Array<string> = [];
+    private newEmptyArr: Array<string> = [];
+
     constructor(
       public dialogRef: MatDialogRef<GeoSelectorComponent>,
       @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -62,6 +64,7 @@ export interface DialogData {
 
         let valTmps = this.value;
         let tmps = this.listItems;
+        this.value = this.newEmptyArr;
         for (var i = 0; i < valTmps.length; i++) {
             let valTmp = valTmps[i];
             for (var j = 0; j < tmps.length; j++) {
