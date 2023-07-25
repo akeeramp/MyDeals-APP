@@ -1,4 +1,4 @@
-import { countBy, each, uniq, filter, map, where, sortBy, pluck, findWhere, indexOf, findIndex, find, keys, compact, without, isEqual, union, first, isNull, isEmpty, isUndefined, includes } from 'underscore';
+import { countBy, each, uniq, filter, map, where, sortBy, pluck, findWhere, indexOf, findIndex, find, keys, compact, without, isEqual, union, first, isNull, isUndefined, includes } from 'underscore';
 import Handsontable from 'handsontable';
 
 import { StaticMomentService } from "../../shared/moment/moment.service";
@@ -218,7 +218,7 @@ export class PTE_CellChange_Util {
                 updateRows.push(obj);
             } else if (val.prop == 'ECAP_PRICE') {
                 let ecapPrice = this.hotTable.getDataAtRowProp(row, 'ECAP_PRICE');
-                if (isNull(ecapPrice) || isEmpty(ecapPrice))
+                if (isNull(ecapPrice) || ecapPrice == '')
                    // this.hotTable.setDataAtRowProp(row, val.prop, '0.00', 'no-edit');
                     currentString = row + ',' + val.prop + ',' + '0.00' + ',' + 'no-edit';
                     updateRows.push(currentString.split(','));
@@ -1061,7 +1061,7 @@ export class PTE_CellChange_Util {
     static checkfn(item: any, curPricingTable: any,columns:any[],value?,contractData?,cellEditor?,ptDefaults?) {
         if (item!=null) {
             const val = value ? value : this.hotTable.getDataAtRowProp(item.row, 'PROGRAM_PAYMENT');
-            if (!isUndefined(val) && !isNull(val) && !isEmpty(val) && val.toLowerCase() !== 'backend') {
+            if (!isUndefined(val) && !isNull(val) && val !== '' && val.toLowerCase() !== 'backend') {
                 if(findWhere(columns,{data:'PERIOD_PROFILE'}) !=undefined && findWhere(columns,{data:'PERIOD_PROFILE'}) !=null){
                     this.hotTable.setDataAtRowProp(item.row, 'PERIOD_PROFILE', '', 'no-edit');
                 }
@@ -1155,7 +1155,7 @@ export class PTE_CellChange_Util {
             each(items, item => {
                 if (item.prop && item.prop == 'END_REV') {
                     let val = this.hotTable.getDataAtRowProp(item.row, 'END_REV');
-                    if(isNull(val) || isEmpty(val)){
+                    if(isNull(val) || val == ''){
                         val=0;
                     }
                     val= parseFloat(val.toString().replace(/[$,]/g, ''));
@@ -1183,7 +1183,7 @@ export class PTE_CellChange_Util {
                     }
                 } else if (item.prop && item.prop == 'STRT_REV') {
                     let val = this.hotTable.getDataAtRowProp(item.row, 'STRT_REV');
-                    if (isNull(val) || isEmpty(val)) {
+                    if (isNull(val) || val == '') {
                         val = 0;
                     }
 
@@ -1237,7 +1237,7 @@ export class PTE_CellChange_Util {
     
     static perProfDefault(items: Array<any>, curPricingTable:any) {
         each(items, (item) => {
-            if ((item.new && isEmpty(item.new)) || isNull(item.new)){
+            if ((item.new && item.new == '') || isNull(item.new)){
                 this.hotTable.setDataAtRowProp(item.row, item.prop,curPricingTable[`${item.prop}`] , 'no-edit');
             }
         });
@@ -1247,7 +1247,7 @@ export class PTE_CellChange_Util {
         try {
             each(items, (item) => {
                 const colSPIdx = findWhere(this.hotTable.getCellMetaAtRow(item.row), { prop: 'SETTLEMENT_PARTNER' }).col;
-                if ((item.new && isEmpty(item.new)) || isNull(item.new)){
+                if ((item.new && item.new == '') || isNull(item.new)){
                     if(curPricingTable && curPricingTable[`${item.prop}`] && curPricingTable[`${item.prop}`].toLowerCase()=='cash'){
                         this.autoFillOnCash(item,contractData,colSPIdx,cellEditor);
                     } else {
@@ -1286,7 +1286,7 @@ export class PTE_CellChange_Util {
     /* AR settlement change ends here */
     static dateChange(items: Array<any>, colName: string, contractData) {
         each(items, (item) => { 
-            if (isUndefined(item.new) || isNull(item.new) || isEmpty(item.new) || !(StaticMomentService.moment(item.new, "MM/DD/YYYY", true).isValid() || StaticMomentService.moment(item.new, "M/D/YYYY", true).isValid()) || StaticMomentService.moment(item.new).toString() === "Invalid date" || StaticMomentService.moment(item.new).format("MM/DD/YYYY") === "12/30/1899") {
+            if (isUndefined(item.new) || isNull(item.new) || item.new == '' || !(StaticMomentService.moment(item.new, "MM/DD/YYYY", true).isValid() || StaticMomentService.moment(item.new, "M/D/YYYY", true).isValid()) || StaticMomentService.moment(item.new).toString() === "Invalid date" || StaticMomentService.moment(item.new).format("MM/DD/YYYY") === "12/30/1899") {
                 if (colName == 'OEM_PLTFRM_LNCH_DT' || colName == 'OEM_PLTFRM_EOL_DT') {
                     this.hotTable.setDataAtRowProp(item.row, colName, '', 'no-edit');
                 } else {

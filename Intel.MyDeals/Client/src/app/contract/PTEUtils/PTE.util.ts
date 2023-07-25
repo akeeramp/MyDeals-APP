@@ -1,6 +1,7 @@
 import { each, uniq, sortBy, pluck, findWhere, findIndex, reject, find, keys, isUndefined } from 'underscore';
-import {  PRC_TBL_Model_Column, PRC_TBL_Model_Field } from '../pricingTableEditor/handsontable.interface';
 import Handsontable from 'handsontable';
+
+import {  PRC_TBL_Model_Column, PRC_TBL_Model_Field } from '../pricingTableEditor/handsontable.interface';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util'
 import { StaticMomentService } from "../../shared/moment/moment.service";
 import { PTE_Helper_Util } from './PTE_Helper_util';

@@ -1,7 +1,7 @@
 ﻿import { Component, Input, Output, EventEmitter, NgZone, OnInit, AfterViewInit } from '@angular/core';
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
-import { each, uniq, filter, map, where, pluck, findWhere, findIndex, findLastIndex, reject, contains, find, values, keys, unique, includes, isUndefined, isEmpty, isNull } from 'underscore';
+import { each, uniq, filter, map, where, pluck, findWhere, findIndex, findLastIndex, reject, contains, find, values, keys, unique, includes, isUndefined, isNull } from 'underscore';
 import { MatDialog } from '@angular/material/dialog';
 import { forkJoin } from 'rxjs';
 import { distinct } from '@progress/kendo-data-query';
@@ -136,7 +136,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                     });
                     VM.curRow.push(obj);
         
-                    if (isEmpty(VM.curRow[0]['PTR_SYS_PRD']) || VM.isExcludePrdChange) {
+                    if (VM.curRow[0]['PTR_SYS_PRD'] == '' || VM.isExcludePrdChange) {
                         await VM.validateOnlyProducts('onOpenSelector', VM.curRow);
                         if (VM.curRow[0].isOpenCorrector) {
                             delete VM.curRow[0].isOpenCorrector;
@@ -289,7 +289,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                                 }
                             } else {
                                 VM.dirty = true;
-                                if (this.field && selVal != result?.toString && !isEmpty(result) && !isNull(result) &&
+                                if (this.field && selVal != result?.toString && result == '' && !isNull(result) &&
                                     (this.field == 'CUST_ACCNT_DIV' || this.field == "GEO_COMBINED" || this.field == 'START_DT' || this.field == 'END_DT' || this.field == 'PAYOUT_BASED_ON' || this.field == 'PERIOD_PROFILE' || this.field == 'RESET_VOLS_ON_PERIOD' || this.field == 'AR_SETTLEMENT_LVL'
                                         || this.field == 'REBATE_TYPE' || this.field == 'PROD_INCLDS' || this.field == 'SETTLEMENT_PARTNER' || this.field == 'MRKT_SEG' || this.field == 'PROGRAM_PAYMENT' || this.field === "OEM_PLTFRM_LNCH_DT" || this.field === "OEM_PLTFRM_EOL_DT")) {
                                     //VM.dirty = true;
@@ -312,7 +312,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                                                 if (!this.instance.isEmptyRow(i)) {
                                                     let ptrows = [];
                                                     ptrows.push({ row: i, prop: this.field, old: this.instance.getDataAtRowProp(i, this.field), new: result?.toString() });
-                                                    if (isEmpty(this.instance.getDataAtRowProp(i, 'PERIOD_PROFILE')) && isEmpty(this.instance.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD'))) {
+                                                    if (this.instance.getDataAtRowProp(i, 'PERIOD_PROFILE') == '' && this.instance.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD') == '') {
                                                         PTE_CellChange_Util.checkfn(ptrows[0], VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable)
                                                     }
                                                 } else {
@@ -321,7 +321,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                                             }
                                         }
 
-                                        if (this.field == 'PERIOD_PROFILE' && isEmpty(this.instance.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL')) && isEmpty(this.instance.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD'))) {
+                                        if (this.field == 'PERIOD_PROFILE' && this.instance.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL') == '' && this.instance.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD') == '') {
                                             for (let i = 0; i < PTRCount; i++) {
                                                 if (!this.instance.isEmptyRow(i)) {
                                                     let ptrows = [];
@@ -333,7 +333,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                                             }
                                         }
 
-                                        if (this.field == 'RESET_VOLS_ON_PERIOD' && isEmpty(this.instance.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL')) && isEmpty(this.instance.getDataAtRowProp(this.selRow, 'PERIOD_PROFILE'))) {
+                                        if (this.field == 'RESET_VOLS_ON_PERIOD' && this.instance.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL') == '' && this.instance.getDataAtRowProp(this.selRow, 'PERIOD_PROFILE') == '') {
                                             for (let i = 0; i < PTRCount; i++) {
                                                 if (!this.instance.isEmptyRow(i)) {
                                                     let ptrows = [];
@@ -380,7 +380,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                         } else {
                             let currentRow = PTE_CellChange_Util.returnEmptyRow();
                             let product = this.instance.getDataAtRowProp(this.selRow, 'PTR_USER_PRD')
-                            if (this.field && this.field == 'PTR_USER_PRD' && (isEmpty(currentRow) || isEmpty(this.selRow)) && (isNull(product) || isEmpty(product) || isUndefined(product)) ) {
+                            if (this.field && this.field == 'PTR_USER_PRD' && (currentRow == 0 || this.selRow == 0) && (isNull(product) || product == '' || isUndefined(product)) ) {
                                 VM.enableDeTab.emit({ isEnableDeTab: false, enableDeTabInfmIcon: false });
                                 return [];
                             }
