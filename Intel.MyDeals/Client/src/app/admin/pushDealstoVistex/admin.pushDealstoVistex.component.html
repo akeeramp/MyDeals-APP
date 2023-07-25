@@ -36,15 +36,22 @@
         </form>
     </div>
     <div class="col-md-6" *ngIf="showResults">
-        <div class="row">
+        <div class="row" style="padding-right: 20px;">
             <div class="results resultsVistex"><label><b>Results:</b></label> Deals Processed:{{UpdCnt.all}}, <i>Errors:{{UpdCnt.error}}</i>,
                 Successful Updated:{{UpdCnt.success}} </div>
-            <kendo-grid [data]="gridData" [resizable]="true" [sortable]="true" [sort]="state.sort"
-                (dataStateChange)="dataStateChange($event)" class="pushDealsToVistexKendoGrid">
+            <kendo-grid [data]="gridData" [resizable]="true" [sortable]="true" [sort]="state.sort" (dataStateChange)="dataStateChange($event)" class="pushDealsToVistexKendoGrid">
+                <ng-template kendoGridToolbarTemplate>
+                    <!--Nothing on left side of grid header-->
+                    <kendo-grid-spacer></kendo-grid-spacer>
+                    <button type="button" kendoGridExcelCommand icon="file-excel">
+                        EXPORT TO EXCEL
+                    </button>
+                </ng-template>
                 <kendo-grid-column title="Deal Id" field="DEAL_ID" [headerClass]="{'headerClass':true}">
                 </kendo-grid-column>
                 <kendo-grid-column title="Results" field="UPD_MSG" [headerClass]="{'headerClass':true}">
                 </kendo-grid-column>
+                <kendo-grid-excel fileName="MyDealsPushedToVistexResults.xlsx"></kendo-grid-excel>
             </kendo-grid>
         </div>
     </div>

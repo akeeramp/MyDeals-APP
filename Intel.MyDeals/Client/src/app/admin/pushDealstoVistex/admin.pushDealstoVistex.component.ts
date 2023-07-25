@@ -6,6 +6,8 @@ import { GridDataResult, DataStateChangeEvent} from "@progress/kendo-angular-gri
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { ActivatedRoute } from "@angular/router";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: "admin-push-dealsto-vistex",
