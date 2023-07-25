@@ -8,6 +8,8 @@ import { HotTableRegisterer } from '@handsontable/angular';
 import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
 import { unifiedDealReconService } from './admin.unifiedDealRecon.service';
 import { each } from 'underscore';
+import { FormGroup, FormControl, Validators } from "@angular/forms";
+
 
 @Component({
     selector: "retrigger-UCD",
@@ -25,6 +27,11 @@ export class retriggerUnifyModalComponent {
     private END_CUST_OBJ: any;
     private isAlert: boolean = false;
     private alertMsg: string = ''
+    private isError: boolean = false;
+    private isErrorEndCustomer: boolean = false;
+    private isErrorEndCustCountry: boolean = false;
+    private validateDealId: boolean = true;
+    public formGroup: FormGroup;
     loadDetails() {
         this.unifiedDealReconSvc.getCountries().subscribe((response) => {
             this.endCustCountries = this.countries = response.map(x => x.CTRY_NM);
@@ -37,29 +44,42 @@ export class retriggerUnifyModalComponent {
         this.endCustCountries = event != '' ? this.countries.filter(x => x.toLowerCase().includes(event.toLowerCase())) : this.countries;
     }
 
-    submit() {
+    submit(retriggerFormData) {
+
+        Object.keys(retriggerFormData.controls).forEach(key => {
+            retriggerFormData.controls[key].markAsTouched();
+
+        });
+
+
+        if (this.dealId == "" || this.endCustomer == "" || this.endCustCountry == "") {
+            this.isError = true;
+        }
+
         this.END_CUST_OBJ = {
             "END_CUSTOMER": this.endCustomer,
             "END_CUSTOMER_COUNTRY": this.endCustCountry
         }
-        this.unifiedDealReconSvc.ResubmissionDeals(this.dealId, this.END_CUST_OBJ).subscribe((response) => {
-            let result: any = response;
-            if (result.toString() == "true") {
-                this.alertMsg = "Re-Submission Successfull";
-            }
-            else if (result.toString() == "false") {
-                this.alertMsg = "Re-Submission Failed";
-            }
-            else {
-                this.alertMsg = result.toString();
-            }
-            this.isAlert = true;
+        if (this.isError == false && this.validateDealId == true) {
+            this.unifiedDealReconSvc.ResubmissionDeals(this.dealId, this.END_CUST_OBJ).subscribe((response) => {
+                let result: any = response;
+                if (result.toString() == "true") {
+                    this.alertMsg = "Re-Submission Successfull";
+                }
+                else if (result.toString() == "false") {
+                    this.alertMsg = "Re-Submission Failed";
+                }
+                else {
+                    this.alertMsg = result.toString();
+                }
+                this.isAlert = true;
 
-        },
-        (error) => {
-            this.alertMsg = "Re-Submission Failed";
-            this.isAlert = true;
-        });
+            },
+                (error) => {
+                    this.alertMsg = "Re-Submission Failed";
+                    this.isAlert = true;
+                });
+        }
     }
 
     closeWindow() {
@@ -67,11 +87,46 @@ export class retriggerUnifyModalComponent {
     }
 
     ngOnInit() {
+        this.formGroup = new FormGroup({
+            
+            DEAL_ID: new FormControl("", Validators.required),
+            END_CUSTOMER: new FormControl("", Validators.required),
+            END_CUSTOMER_COUNTRY: new FormControl(
+                "",
+                Validators.compose([
+                    Validators.required,
+                    Validators.pattern("^[0-9]+(,[0-9]+)*$")
+                    
+                ]))
+           
+        });
         this.loadDetails();
     }
     closeAlert() {
         this.isAlert = false;
         if (this.alertMsg == "Re-Submission Successfull") this.closeWindow();
+    }
+    validateEndCustomer() {
+
+        if (this.endCustomer == "") {
+            this.isErrorEndCustomer = true;
+        }
+        else {
+            this.isErrorEndCustomer = false;
+        }
+    }
+
+    validateDealID() {
+        this.isError = false;
+        let exactMatch = new RegExp("^[0-9]+(,[0-9]+)*$");
+
+        if (!exactMatch.test(this.dealId)) {
+            this.validateDealId = false;
+        }
+        else {
+            this.validateDealId = true;
+        }
+
     }
 
 }
