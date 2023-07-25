@@ -13,7 +13,7 @@
     <div class="col-md-6" style="margin-top: 15px">
         <label for="dealId" style="width: 15%; padding-left: 2%"><span style="color:red">*</span><strong>Deal ID:</strong></label>
         <kendo-textarea style="width:50%"  [rows]="4" [cols]="65" resizable="vertical" id="dealId" [ngClass]="validateDealId ? 'validDealId': 'invalidDealId'" placeholder="Deal ID" [(ngModel)]="dealId" (keyup)="validateDealID()" required></kendo-textarea>
-        <button (click)="submit()" class="btn btn-primary" style="margin-left: 15px">GENERATE QUOTE</button>
+        <button (click)="submit()" class="btn btn-primary" style="margin-left: 5px">GENERATE QUOTE</button>
     </div>
 </div>
     <div class="col-md-12" style="margin-top:5px; margin-bottom:5px" [hidden]="!responseData.length>0">
