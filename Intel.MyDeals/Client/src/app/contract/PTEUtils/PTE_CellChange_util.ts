@@ -1,4 +1,4 @@
-import { countBy, each, uniq, filter, map, where, sortBy, pluck, findWhere, indexOf, findIndex, find, keys, compact, without, isEqual, union, first, isNull, isUndefined, includes } from 'underscore';
+import { countBy, each, uniq, filter, map, where, sortBy, pluck, findWhere, indexOf, findIndex, find, keys, compact, without, isEqual, union, first, isNull, isUndefined, includes, isNumber } from 'underscore';
 import Handsontable from 'handsontable';
 
 import { StaticMomentService } from "../../shared/moment/moment.service";
@@ -1016,19 +1016,23 @@ export class PTE_CellChange_Util {
     }
 
     static RateChgfn(items: Array<any>, columns: any[], curPricingTable: any) {
-        each(items, (item) => {
+        each(items, item => {
+            const VOLUME_COLUMNS = ['FRCST_VOL', 'VOLUME'];
             const RATE_CHG_ITEMS = ['DENSITY_RATE', 'ECAP_PRICE', 'VOLUME', 'INCENTIVE_RATE', 'TOTAL_DOLLAR_AMOUNT', 'RATE', 'ADJ_ECAP_UNIT', 'MAX_PAYOUT', 'FRCST_VOL'];
             if ((item.prop) && includes(RATE_CHG_ITEMS, item.prop)) {
-                let val = parseFloat(this.hotTable.getDataAtRowProp(item.row, item.prop).toString().replace(/[$,]/g, ""));
-                if (!isNaN(val) && (val != 0)) {
-                    const MATH_TRUNC_ITEMS = ['FRCST_VOL', 'VOLUME'];
-                    if (includes(MATH_TRUNC_ITEMS, item.prop)) {
-                        this.hotTable.setDataAtRowProp(item.row, item.prop, Math.round(val), 'no-edit');
+                let val = this.hotTable.getDataAtRowProp(item.row, item.prop);
+                if (isNull(val) || val == '') {
+                    if (includes(VOLUME_COLUMNS, item.prop)) {
+                        val = '';
                     } else {
-                        this.hotTable.setDataAtRowProp(item.row, item.prop, val, 'no-edit');
+                        val = 0.00;
                     }
+                }
+                val = parseFloat(val.toString().replace(/[$,]/g, ""));
+                if (!isNaN(val) && isNumber(val)) {
+                    this.hotTable.setDataAtRowProp(item.row, item.prop, val, 'no-edit');
                 } else {
-                    if (item.prop == 'FRCST_VOL' || item.prop == 'VOLUME') {
+                    if (includes(VOLUME_COLUMNS, item.prop)) {
                         this.hotTable.setDataAtRowProp(item.row, item.prop, '', 'no-edit');
                     } else {
                         this.hotTable.setDataAtRowProp(item.row, item.prop, '0.00', 'no-edit');
