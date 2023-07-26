@@ -329,6 +329,13 @@ export class PTE_Save_Util {
                 item['END_CUSTOMER_RETAIL'] = pteData ? pteData[ind] ['END_CUSTOMER_RETAIL'] : '';
                 item['END_CUST_OBJ'] = pteData ? pteData[ind] ['END_CUST_OBJ'] : ''
             }
+            // below condition is to remove CONSUMPTION_CUST_RPT_GEO and CONSUMPTION_COUNTRY_REGION for existing record from payload to make the behaviour similar to prod-ltm
+            if (item.PAYOUT_BASED_ON == "Consumption") {
+                if (item.DC_ID > 0) {
+                    delete item['CONSUMPTION_CUST_RPT_GEO'];
+                    delete item['CONSUMPTION_COUNTRY_REGION'];
+                }
+            }
         });
     }
 
