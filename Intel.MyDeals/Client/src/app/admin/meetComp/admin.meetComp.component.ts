@@ -128,7 +128,7 @@ export class MeetCompComponent {
         this.isBusy = true;
         this.meetCompService.getMeetCompDIMData(CID, 'DIM').subscribe(res => {
             this.meetCompDIMMasterData = res;
-            if (!isEmpty(this.meetCompDIMMasterData)) {
+            if (this.meetCompDIMMasterData.length > 0) {
                 this.prodCats = this.meetCompProdCatName();
             }
             this.isBusy = false;
@@ -235,22 +235,22 @@ export class MeetCompComponent {
             this.isBrandMissing = false;
         }
 
-        if (this.selectedCustomerID == '' || isNull(this.selectedCustomerID) || isUndefined(this.selectedCustomerID)) {
+        if (this.selectedCustomerID == '' || this.selectedCustomerID == null || this.selectedCustomerID == undefined) {
             this.resetGrid();
             this.loggerService.warn('Not a valid Customer', '');
             this.isCustomerMissing = true;
-        } else if (isEmpty(this.selectedProdCatName) || isNull(this.selectedProdCatName) || isUndefined(this.selectedProdCatName)) {
+        } else if (this.selectedProdCatName == '' || this.selectedProdCatName == null || this.selectedProdCatName == undefined) {
             this.resetGrid();
             this.loggerService.warn('Not a valid Product Vertical', '');
             this.isCatMissing = true;
-        } else if (isEmpty(this.selectedBrandName) || isNull(this.selectedBrandName) || isUndefined(this.selectedBrandName)) {
+        } else if (this.selectedBrandName == '' || this.selectedBrandName == null || this.selectedBrandName == undefined) {
             this.resetGrid();
             this.loggerService.warn('Not a valid Brand Name', '');
             this.isBrandMissing = true;
         } else {
             this.isBusy = true;//grid data doesn't showup while landing the page, so no need of loader.
             let value = this.selectedProdName;
-            if (isEmpty(value)) {
+            if (value.length == 0) {
                 value = -1;
             }
             const MEET_COMP_SEARCH = {

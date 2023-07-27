@@ -242,7 +242,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                     });
 
                     await DIALOG_REF.afterClosed().toPromise().then(result => {
-                        if (!isUndefined(result)) {
+                        if (result != undefined) {
                             if (this.field && this.field == 'PTR_USER_PRD') {//here there is no handonstable source specify bcz we need to do autofill
                                 VM.isLoading = true;
                                 let contractProducts = [];
@@ -289,7 +289,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                                 }
                             } else {
                                 VM.dirty = true;
-                                if (this.field && selVal != result?.toString && result == '' && !isNull(result) &&
+                                if (this.field && selVal != result?.toString && result == '' && result != null &&
                                     (this.field == 'CUST_ACCNT_DIV' || this.field == "GEO_COMBINED" || this.field == 'START_DT' || this.field == 'END_DT' || this.field == 'PAYOUT_BASED_ON' || this.field == 'PERIOD_PROFILE' || this.field == 'RESET_VOLS_ON_PERIOD' || this.field == 'AR_SETTLEMENT_LVL'
                                         || this.field == 'REBATE_TYPE' || this.field == 'PROD_INCLDS' || this.field == 'SETTLEMENT_PARTNER' || this.field == 'MRKT_SEG' || this.field == 'PROGRAM_PAYMENT' || this.field === "OEM_PLTFRM_LNCH_DT" || this.field === "OEM_PLTFRM_EOL_DT")) {
                                     //VM.dirty = true;
@@ -380,7 +380,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                         } else {
                             let currentRow = PTE_CellChange_Util.returnEmptyRow();
                             let product = this.instance.getDataAtRowProp(this.selRow, 'PTR_USER_PRD')
-                            if (this.field && this.field == 'PTR_USER_PRD' && (currentRow == 0 || this.selRow == 0) && (isNull(product) || product == '' || isUndefined(product)) ) {
+                            if (this.field && this.field == 'PTR_USER_PRD' && (currentRow == 0 || this.selRow == 0) && (product == null || product == '' || product == undefined) ) {
                                 VM.enableDeTab.emit({ isEnableDeTab: false, enableDeTabInfmIcon: false });
                                 return [];
                             }
@@ -480,7 +480,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
             this.currencyValidatorMessageHandler(isValid, row, prop);
             // // TWC3119-682 - Currency cells have a max numeric value
             // const COLUMN_DEFINITION: PRC_TBL_Model_Field = this.pricingTableTemplates.model.fields[prop];
-            // if (!(isUndefined(COLUMN_DEFINITION.type) && isUndefined(COLUMN_DEFINITION.format))) {
+            // if (!(COLUMN_DEFINITION.type == undefined && COLUMN_DEFINITION.format == undefined)) {
             //     const CELL_TYPE: string = COLUMN_DEFINITION.type;
             //     const CELL_FORMAT: string = COLUMN_DEFINITION.format;
 
@@ -2050,7 +2050,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
     // TWC3119-682 - Currency cells have a max numeric value
     private currencyValidatorMessageHandler(isValid: boolean, rowNumber: number, field: string | number) {
         const COLUMN_DEFINITION: PRC_TBL_Model_Field = this.pricingTableTemplates.model.fields[field];
-        if (!(isUndefined(COLUMN_DEFINITION.type) && isUndefined(COLUMN_DEFINITION.format))) {
+        if (COLUMN_DEFINITION.type != undefined && COLUMN_DEFINITION.format != undefined) {
             const CELL_TYPE: string = COLUMN_DEFINITION.type;
             const CELL_FORMAT: string = COLUMN_DEFINITION.format;
 

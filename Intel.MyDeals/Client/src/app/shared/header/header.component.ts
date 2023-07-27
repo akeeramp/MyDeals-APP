@@ -58,7 +58,7 @@ export class HeaderComponent {
 
     getExtraUserPrivs(): Array<string> {
         const extraUserPrivs = (<any> window).extraUserPrivs;
-        if (!isUndefined(extraUserPrivs)) {
+        if (extraUserPrivs != undefined) {
             return extraUserPrivs;
         }
         return [];
@@ -66,7 +66,7 @@ export class HeaderComponent {
 
     getExtraUserPrivsDetail(): Array<string> {
         const extraUserPrivsDetail = (<any> window).extraUserPrivsDetail;
-        if (!isUndefined(extraUserPrivsDetail)) {
+        if (extraUserPrivsDetail != undefined) {
             return extraUserPrivsDetail;
         }
         return [];

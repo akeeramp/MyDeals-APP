@@ -46,11 +46,13 @@ export class dealPopupDockComponent  {
         if (window.navigator.userAgent.indexOf("Chrome") < 0) this.isEnabled = false;
         this.ids = JSON.parse(this.storage.getItem('dealPopupDockData'));
 
-        if (isUndefined(this.ids) || isNull(this.ids)) {
+        if (this.ids == undefined || this.ids == null) {
             this.ids = [];
         }
         this.recent = JSON.parse(this.storage.getItem('dealPopupDockRecentData'));
-        if (isUndefined(this.recent) || isNull(this.recent)) this.recent = [];
+        if (this.recent == undefined || this.recent == null) {
+            this.recent = []
+        }
     }
      
     save() {
@@ -64,7 +66,9 @@ export class dealPopupDockComponent  {
     } 
 
     addIdBase(id, top, left, isOpen) {
-        if (isUndefined(isOpen)) isOpen = false;
+        if (isOpen == undefined) {
+            isOpen = false
+        }
 
         let found = false;
         for (let i = 0; i < this.ids.length; i++) {

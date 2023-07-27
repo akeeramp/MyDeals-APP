@@ -185,7 +185,7 @@ export class DashboardComponent implements OnInit {
     // this function is triggered from gridStatusBoard.component.ts 'onFavChange'
     favContractChanged(favContractIds) {
         for (let i = 0; i < this.dashboard.length; i++) {
-            if (!!this.dashboard[i].subConfig && !isUndefined(this.dashboard[i].subConfig.favContractIds)) {
+            if (!!this.dashboard[i].subConfig && this.dashboard[i].subConfig.favContractIds != undefined) {
                 this.dashboard[i].subConfig.favContractIds = favContractIds;
             }
         }
@@ -194,7 +194,7 @@ export class DashboardComponent implements OnInit {
     // this function is triggered from gridStatusBoard.Component.ts 'clkFilter()'
     gridFilterChanged(gridFilter) {
         for (let i = 0; i < this.dashboard.length; i++) {
-            if (!!this.dashboard[i].subConfig && !isUndefined(this.dashboard[i].subConfig.favContractIds)) {
+            if (!!this.dashboard[i].subConfig && this.dashboard[i].subConfig.favContractIds != undefined) {
                 this.dashboard[i].subConfig.gridFilter = gridFilter;
             }
         }
@@ -219,7 +219,7 @@ export class DashboardComponent implements OnInit {
                         widget.widgetConfig = this.savedWidgetSettings[i].widgetConfig;
                     }
 
-                    if (isNull(widget.position)) {
+                    if (widget.position == null) {
                         this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: null, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: null, rows: null, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
                     } else {
                         this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: { cols: widget.position.cols, rows: widget.position.cols }, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
@@ -237,7 +237,7 @@ export class DashboardComponent implements OnInit {
                     let idWidgetSettings = findWhere(configWidgets, { id: defWidgets[i].id });
                     if (idWidgetSettings) {
                         const widget = JSON.parse(JSON.stringify(idWidgetSettings))
-                        if (isNull(widget.position)) {
+                        if (widget.position == null) {
                             this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: null, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: null, rows: null, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
                         } else {
                             this.dashboard.push({ id: widget.id, size: { x: widget.size.x, y: widget.size.y }, position: { cols: widget.position.cols, rows: widget.position.cols }, name: widget.name, desc: widget.desc, icon: widget.icon, type: widget.type, cols: widget.position.cols, rows: widget.position.rows, y: widget.size.y, x: widget.size.x, canRefresh: widget.canRefresh, canSetting: widget.canChangeSettings, isAdded: widget.isAdded, template: widget.template, subConfig: widget.subConfig, widgetConfig: widget.widgetConfig });
@@ -263,14 +263,15 @@ export class DashboardComponent implements OnInit {
     enterPressed(event: any, searchText: any) {
         this.searchText = searchText;
         //KeyCode 13 is 'Enter'
-        if (event.keyCode === 13 && !isEmpty(this.searchText)) {
-            //opening kendo window
-            this.onOpChange('ALL', searchText);
-            this.setWindowWidth();
-            this.windowOpened = true;
-        }
-        if (event.keyCode === 13 && isEmpty(this.searchText)) {
-            this.searchDialogVisible = true;
+        if (event.keyCode === 13) {
+            if (this.searchText == "") {
+                this.searchDialogVisible = true;
+            } else {
+                //opening kendo window
+                this.onOpChange('ALL', searchText);
+                this.setWindowWidth();
+                this.windowOpened = true;
+            }
         }
     }
     setWindowWidth() {
@@ -295,7 +296,7 @@ export class DashboardComponent implements OnInit {
     }
     onOpChange(opType: string, searchText: string) {
         this.searchText = searchText;
-        if (!isEmpty(this.searchText)) {
+        if (this.searchText != "") {
             //opening kendo window
             this.opType = opType;
             this.setWindowWidth();

@@ -88,7 +88,7 @@ export class OverlappingCheckComponent implements OnInit {
         this.isRevalidate = false;
         this.isDealEndDateChange = false;
         this.isReqChange = false;
-        if (!isUndefined(value) && !isNull(value) && value != '') {
+        if (value != undefined && value != null && value != '') {
             const GROUP_ROW = filter(this.gridResult, { 'WIP_DEAL_OBJ_SID': value, 'PROGRAM_PAYMENT': 'Frontend YCS2' });
 
             if (GROUP_ROW.length > 1) {
@@ -140,7 +140,7 @@ export class OverlappingCheckComponent implements OnInit {
         each(splitData, item => {
             const DATA = parseInt(item);
             const DEAL_INFO = filter(this.ovlpData, { 'WIP_DEAL_OBJ_SID': DATA, 'WF_STG_CD': "Draft", OVLP_CD: "SELF_OVLP" });
-            if (!isUndefined(DEAL_INFO) && !isNull(DEAL_INFO) && !isEmpty(DEAL_INFO)) {
+            if (DEAL_INFO != undefined && DEAL_INFO != null && DEAL_INFO.length > 0) {
                 startDate = DEAL_INFO[0].START_DT;
                 endDate = DEAL_INFO[0].END_DT;
             }
@@ -153,7 +153,7 @@ export class OverlappingCheckComponent implements OnInit {
         this.isLoading = true;
         this.overLappingCheckDealsSvc.updateOverlappingDeals(data, YCS2_OVERLAP_OVERRIDE).subscribe((result: any) => {
             this.isLoading = false;
-            if (!isEmpty(result[0].PRICING_TABLES)) {
+            if (result[0].PRICING_TABLES > 0) {
                 if (YCS2_OVERLAP_OVERRIDE === 'N') {
                     for (let j = 0; j < data.length; j++) {
                         this.ovlpErrorCount.push(parseInt(data[j]));
@@ -212,7 +212,7 @@ export class OverlappingCheckComponent implements OnInit {
     acceptSelectAll() {
         const SELECTED_IDS = filter(this.gridResult, { 'IS_SEL': true, 'PROGRAM_PAYMENT': 'Frontend YCS2' });
         const DISTINCT_IDS = distinct(SELECTED_IDS, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
-        if (!isEmpty(SELECTED_IDS)) {
+        if (SELECTED_IDS.length > 0) {
             this.acceptOverlap(DISTINCT_IDS.toString(), 'Y');
         } else {
             this.loggerService.error('Select An overlap with an Active or Draft deal', 'OverLap');
@@ -226,7 +226,7 @@ export class OverlappingCheckComponent implements OnInit {
             this.ovlpData = this.prepareGridData(this.responseData);
             this.ovlpErrorCount = distinct(this.responseData, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
             this.gridResult = this.ovlpData;
-            if (isEmpty(this.gridResult)) {
+            if (this.gridResult.length == 0) {
                 this.isNoDealsFound = true;
             } else {
                 this.isNoDealsFound = false;
@@ -242,7 +242,7 @@ export class OverlappingCheckComponent implements OnInit {
                 this.ovlpData = this.prepareGridData(result.Data);
                 this.ovlpErrorCount = distinct(result.Data, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
                 this.gridResult = this.ovlpData;
-                if (isEmpty(this.gridResult)) {
+                if (this.gridResult.length == 0) {
                     this.isNoDealsFound = true;
                 } else {
                     this.isNoDealsFound = false;
@@ -299,7 +299,7 @@ export class OverlappingCheckComponent implements OnInit {
             this.ovlpData = this.prepareGridData(result.Data);
             this.ovlpErrorCount = distinct(result.Data, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
             this.gridResult = result.Data;
-            if (isEmpty(this.gridResult)) {
+            if (this.gridResult.length == 0) {
                 this.isNoDealsFound = true;
             } else {
                 this.isNoDealsFound = false;
@@ -334,7 +334,7 @@ export class OverlappingCheckComponent implements OnInit {
     }
 
     ngOnInit() {
-        if (isUndefined(this.curPricingTable)) {
+        if (this.curPricingTable == undefined) {
             this.curPricingTable = this.data.currPt;
             this.contractData = this.data.contractData;
             this.responseData = this.data.responseData;

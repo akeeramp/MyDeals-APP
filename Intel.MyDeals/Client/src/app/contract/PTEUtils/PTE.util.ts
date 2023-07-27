@@ -33,7 +33,7 @@ export class PTEUtil {
         }
 
         /* Type & Format */
-        if (!isUndefined(templateColumnFields[item.field].type)) {
+        if (templateColumnFields[item.field].type != null) {
             const ITEM_FIELD = templateColumnFields[item.field].type;
 
             if (item.field == "END_VOL" || item.field == "END_PB" || item.field === 'STRT_VOL') {
