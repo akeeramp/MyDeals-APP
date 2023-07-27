@@ -24,6 +24,7 @@ export class AutoFillComponent {
     private geoValues: Array<string> = [];
     private geos: Array<string> = [];
     private isBlend: boolean = false;
+    private payoutBasedOnMessage: string = "";
     private marketSeglist: any = [];
     private nonCorpMarketSeg: any = [];
     private mkgvalues: Array<string> = [];
@@ -101,6 +102,7 @@ export class AutoFillComponent {
         }
         return false;
     }
+
     async getAllDropdownValues() {
         let dropObjs = {};
         each(this.autofillData.DEFAULT, (val, key) => {
@@ -121,6 +123,7 @@ export class AutoFillComponent {
         });
         return result;
     }
+
     OnGeoChange(elem: string, val: Array<string>) {
         this.geos = val;
         this.geoValues = val;        
@@ -139,6 +142,7 @@ export class AutoFillComponent {
         }
 
     }
+
     updateBlend(elem: string) {
         if (this.isBlend) {
             this.geos = this.convertToBlend(this.geos);
@@ -239,6 +243,7 @@ export class AutoFillComponent {
     onNoClick(): void {
         this.dialogRef.close();
     }
+
     onSave() {
         this.isInitial = false;
         this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.validMsg = this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.validMsg = "";
@@ -374,6 +379,7 @@ export class AutoFillComponent {
             })
         }
     }
+
     isUIDisable(elem: string, val: string) {
         var dealType = this.dealType;
         var rowType = dealType == 'FLEX' ? this.autofillData.DEFAULT.FLEX_ROW_TYPE.value : true;
@@ -420,9 +426,11 @@ export class AutoFillComponent {
             return false;
         }
     }
+
     hasChildren(node: any): boolean {
         return node.items && node.items.length > 0;
     }
+
     fetchChildren(node: any): Observable<any[]> {
         // returns the items collection of the parent node as children
         return of(node.items);
@@ -485,10 +493,14 @@ export class AutoFillComponent {
         else {
             this.mkgvalues = mkgvalue;
         }
+
+        this.ConditionalInfoMessages('REBATE_TYPE', this.autofillData.DEFAULT['REBATE_TYPE'].value.toUpperCase());
+
         this.multSlctMkgValues = this.mkgvalues;
         this.isLoading = false;
         this.setBusy("", "", "", false);
     }
+
     onAutoChange(elem: string, val: string) {
         if (elem == "PAYOUT_BASED_ON" && val == "Consumption") {
             this.autofillData.DEFAULT['PROGRAM_PAYMENT'].value = "Backend";
@@ -497,10 +509,26 @@ export class AutoFillComponent {
             this.autofillData.DEFAULT['PAYOUT_BASED_ON'].value = "Billings";
         }
         this.autofillData.DEFAULT[`${elem}`].value = val;
+
+        this.ConditionalInfoMessages(elem, val.toUpperCase());
     }
+
+    ConditionalInfoMessages(elmntName, elmntVal) {
+        // This function needs to manually set the global label for any given control that it is effecting
+        if (elmntName == 'REBATE_TYPE') { // Rebates can update consumption based on info labels
+            if (elmntVal.indexOf("MDF/NRE ACCRUAL") > -1) { 
+                this.payoutBasedOnMessage = "Rebate Type selection of 'Accrual' will result in Payout Based On equal to accruals in Vistex";
+            }
+            else { 
+                this.payoutBasedOnMessage = "";
+            }
+        }
+    }
+
     OnTierChange(elem: string, val: string) {
         this.autofillData.DEFAULT[`${elem}`].value = val;
     }
+
     ngOnInit() {
         try {
             this.rebateTypeTitle = this.autofillData.ISTENDER ? "Tender Table" : "Pricing Table";

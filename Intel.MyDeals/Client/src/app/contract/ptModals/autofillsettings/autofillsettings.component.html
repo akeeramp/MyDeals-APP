@@ -22,6 +22,7 @@
                                     <h5 class="headstyle">
                                         <span *ngIf="item.value.label == 'Number of Tiers'" class="alter-star">*</span>{{item.value.label}}
                                         <span *ngIf="isMultipleGeosSelected && item.key == 'GEO_COMBINED'" class="geo-desc">** This will create a deal for each geo in the same line unless you select to blend. For Hybrid it is not allowed without BLEND. </span>
+                                        <span *ngIf="(item.key == 'PAYOUT_BASED_ON')" class="pbo-alert-label">{{payoutBasedOnMessage}}</span>
                                     </h5>
                                     <span *ngIf="(item.key == 'GEO_COMBINED')" class="geo-style-text">
                                         <input type="checkbox" [(ngModel)]="isBlend" (change)="updateBlend(item.key)" /> Blend Geos

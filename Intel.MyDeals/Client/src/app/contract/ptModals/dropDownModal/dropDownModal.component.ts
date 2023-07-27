@@ -16,6 +16,7 @@ export class dropDownModalComponent {
     private listItems: Array<string> = [];
     private value: string = "";
     private errMsg: boolean = false;
+    private infoMsg: string = "";
     constructor(
         public dialogRef: MatDialogRef<dropDownModalComponent>,
         @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -26,14 +27,29 @@ export class dropDownModalComponent {
         result = this.value != null ? this.value.toString() : '';
         this.dialogRef.close(result);
     }
+
+    checkInfoMessages(dlgTitle, dlgValue) {
+        // Standard place to put information updates for this type of dialog if needed
+        // TO DO: would be nice to drive this off of element title instead of dialog title
+        this.infoMsg = "";
+        if (dlgTitle == "Select Rebate Type *" && dlgValue == "MDF/NRE ACCRUAL") {
+            this.infoMsg = "Rebate Type selection of 'Accrual' will result in Payout Based On equal to accruals in Vistex";
+        }
+    }
+
     ngOnInit() {
         this.listItems = this.data.source;
         this.value = this.data.selVal ? this.data.selVal : null;
-        if (this.listItems.length == 0) {
+        this.checkInfoMessages(this.data.name, this.data.selVal); // Post information updates if needed
+        if (this.listItems.length == 0) { // Post errors if needed
             this.errMsg = true;
         }
-        
     }
+
+    onDropChange(value: any) { // Post information updates if needed
+        this.checkInfoMessages(this.data.name, value);
+    }
+
     onNoClick(): void {
         this.dialogRef.close();
     }

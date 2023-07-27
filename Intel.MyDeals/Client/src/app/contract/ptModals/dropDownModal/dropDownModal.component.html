@@ -8,8 +8,9 @@
             <div class="col">
                 <p *ngIf="errMsg" style="padding-top: 1em; color:red">There are no values set up for this customer/drop down.  Please contact a system admin to update proper values.</p>
                 <div id="comboDD" mat-dialog-content class="geoHead" *ngIf="listItems" style="padding-top:25px">
-                    <kendo-dropdownlist class="text-color-multi-tag divineo-one" [data]="listItems" [(ngModel)]="value" placeholder="Click to select..." style="width:60%"></kendo-dropdownlist>
+                    <kendo-dropdownlist class="text-color-multi-tag divineo-one" [data]="listItems" [(ngModel)]="value" (selectionChange)="onDropChange($event)" placeholder="Click to select..." style="width:60%"></kendo-dropdownlist>
                 </div>
+                <p style="padding-top: 1em; color:blue">{{this.infoMsg}}</p>
             </div>
         </div>
 
