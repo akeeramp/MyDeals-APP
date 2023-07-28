@@ -131,7 +131,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                     let obj = {};
                     each(this.instance.getCellMetaAtRow(this.selRow), (val) => {
                         if (val.prop) {
-                            obj[val.prop] = this.instance.getDataAtRowProp(this.selRow, val.prop.toString());
+                            obj[val.prop] = this.instance.getDataAtRowProp(this.selRow, val.prop.toString()) != null ? this.instance.getDataAtRowProp(this.selRow, val.prop.toString()) : null;
                         }
                     });
                     VM.curRow.push(obj);
@@ -240,32 +240,30 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                         data: data,
                         panelClass: panelClass
                     });
-
-                    await DIALOG_REF.afterClosed().toPromise().then(result => {
+                    await DIALOG_REF.afterClosed().toPromise().then((result) => {
                         if (result != undefined) {
                             if (this.field && this.field == 'PTR_USER_PRD') {//here there is no handonstable source specify bcz we need to do autofill
                                 VM.isLoading = true;
-                                let contractProducts = [];
-                                let excludedProducts = [];
+                                let contractProduct = [];
+                                let excludeProduct = [];
                                 let sysPrd = {};
                                 this.allOperations = [];
                                 if (result.splitProducts) { 
-                                    let PTR = [];
+                                     let PTR = [];
                                     each(result.validateSelectedProducts, (item, idx) => {
                                         if (!item[0].EXCLUDE) {
-                                            contractProducts = [];
+                                            contractProduct = [];
                                             sysPrd = {};
-                                            contractProducts.push(item[0].HIER_VAL_NM);
+                                            contractProduct.push(item[0].HIER_VAL_NM);
                                             sysPrd[item[0].DERIVED_USR_INPUT] = item;
                                             if (VM.curPricingTable.OBJ_SET_TYPE_CD && VM.curPricingTable.OBJ_SET_TYPE_CD == 'KIT') {
                                                 if (idx != 0) {
-                                                    result.validateSelectedProducts[idx].indx = result.validateSelectedProducts[idx - 1].indx
-                                                        + result.validateSelectedProducts[idx - 1].items.length;
+                                                    result.validateSelectedProducts[idx].indx = result.validateSelectedProducts[idx - 1].indx + result.validateSelectedProducts[idx - 1].items.length;
                                                 }
                                             }                                      
                                             VM.dirty = true;//for enabling save&Validate button when a product is added from productSelector
-                                            let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedProducts.toString() };
-                                            PTR.push({ row: this.selRow, prop: 'PTR_USER_PRD', old: this.instance.getDataAtRowProp(this.selRow, 'PTR_USER_PRD'), new: contractProducts.toString() ,operation:operation});
+                                            let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludeProduct.toString() };
+                                            PTR.push({ row: this.selRow, prop: 'PTR_USER_PRD', old: this.instance.getDataAtRowProp(this.selRow, 'PTR_USER_PRD'), new: contractProduct.toString() ,operation:operation });
                                             this.selRow = this.selRow + VM.curPricingTable.NUM_OF_TIERS;
                                             this.allOperations.push(operation);
                                         }
@@ -274,22 +272,23 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                                 } else {
                                     each(result.validateSelectedProducts, (item) => {
                                         if (!item[0].EXCLUDE) {
-                                            contractProducts.push(item[0].HIER_VAL_NM)
+                                            contractProduct.push(item[0].HIER_VAL_NM)
                                         } else if (item[0].EXCLUDE && !result.splitProducts) {
-                                            excludedProducts.push(item[0].HIER_VAL_NM);
+                                            excludeProduct.push(item[0].HIER_VAL_NM);
                                         }
+
                                         sysPrd[item[0].DERIVED_USR_INPUT] = item;
                                     });
-                                    let PTR = [];
+                                    let ptRows = [];
                                     VM.dirty = true;//for enabling save&Validate button when a product is added from productSelector
-                                    PTR.push({ row: this.selRow, prop: 'PTR_USER_PRD', old: this.instance.getDataAtRowProp(this.selRow, 'PTR_USER_PRD'), new: contractProducts.toString() });
-                                    let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedProducts.toString() };
+                                    ptRows.push({ row: this.selRow, prop: 'PTR_USER_PRD', old: this.instance.getDataAtRowProp(this.selRow, 'PTR_USER_PRD'), new: contractProduct.toString() });
+                                    let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludeProduct.toString() };
                                     this.allOperations.push(operation);
-                                    PTE_CellChange_Util.autoFillCellOnProd(PTR, VM.curPricingTable, VM.contractData, VM.pricingTableTemplates, VM.columns, operation);
+                                    PTE_CellChange_Util.autoFillCellOnProd(ptRows, VM.curPricingTable, VM.contractData, VM.pricingTableTemplates, VM.columns, operation);
                                 }
                             } else {
                                 VM.dirty = true;
-                                if (this.field && selVal != result?.toString && result == '' && result != null &&
+                                if (this.field && selVal != result?.toString && result !== '' && result !== null &&
                                     (this.field == 'CUST_ACCNT_DIV' || this.field == "GEO_COMBINED" || this.field == 'START_DT' || this.field == 'END_DT' || this.field == 'PAYOUT_BASED_ON' || this.field == 'PERIOD_PROFILE' || this.field == 'RESET_VOLS_ON_PERIOD' || this.field == 'AR_SETTLEMENT_LVL'
                                         || this.field == 'REBATE_TYPE' || this.field == 'PROD_INCLDS' || this.field == 'SETTLEMENT_PARTNER' || this.field == 'MRKT_SEG' || this.field == 'PROGRAM_PAYMENT' || this.field === "OEM_PLTFRM_LNCH_DT" || this.field === "OEM_PLTFRM_EOL_DT")) {
                                     //VM.dirty = true;
@@ -300,20 +299,19 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                                         VM.createNewPrcObt(VM.curPricingTable);
                                         PTE_CellChange_Util.pgChgfn(PTR, VM.columns, VM.curPricingTable, VM.contractData, VM.custCellEditor, VM.newPricingTable);
                                     }
-
                                     if ((this.field == 'RESET_VOLS_ON_PERIOD' || this.field == 'AR_SETTLEMENT_LVL' || this.field == 'PERIOD_PROFILE')) {
                                         VM.createNewPrcObt(VM.curPricingTable);
-                                        let PTRCount = this.instance.countRows();
+                                        let ptRowCount = this.instance.countRows();
                                         if (this.field == 'AR_SETTLEMENT_LVL') {
-                                            let ptrow = [];
-                                            ptrow.push({ row: this.selRow, prop: this.field, old: this.instance.getDataAtRowProp(this.selRow, this.field), new: result?.toString() });
-                                            PTE_CellChange_Util.autoFillARSet(ptrow, VM.contractData, VM.curPricingTable, VM.custCellEditor);
-                                            for (let i = 0; i < PTRCount; i++) {
+                                            let ptRow = [];
+                                            ptRow.push({ row: this.selRow, prop: this.field, old: this.instance.getDataAtRowProp(this.selRow, this.field), new: result?.toString() });
+                                            PTE_CellChange_Util.autoFillARSet(ptRow, VM.contractData, VM.curPricingTable, VM.custCellEditor);
+                                            for (let i = 0; i < ptRowCount; i++) {
                                                 if (!this.instance.isEmptyRow(i)) {
-                                                    let ptrows = [];
-                                                    ptrows.push({ row: i, prop: this.field, old: this.instance.getDataAtRowProp(i, this.field), new: result?.toString() });
+                                                    let ptRows = [];
+                                                    ptRows.push({ row: i, prop: this.field, old: this.instance.getDataAtRowProp(i, this.field), new: result?.toString() });
                                                     if (this.instance.getDataAtRowProp(i, 'PERIOD_PROFILE') == '' && this.instance.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD') == '') {
-                                                        PTE_CellChange_Util.checkfn(ptrows[0], VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable)
+                                                        PTE_CellChange_Util.checkfn(ptRows[0], VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable)
                                                     }
                                                 } else {
                                                     break;
@@ -322,11 +320,11 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                                         }
 
                                         if (this.field == 'PERIOD_PROFILE' && this.instance.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL') == '' && this.instance.getDataAtRowProp(this.selRow, 'RESET_VOLS_ON_PERIOD') == '') {
-                                            for (let i = 0; i < PTRCount; i++) {
+                                            for (let i = 0; i < ptRowCount; i++) {
                                                 if (!this.instance.isEmptyRow(i)) {
-                                                    let ptrows = [];
-                                                    ptrows.push({ row: i, prop: this.field, old: this.instance.getDataAtRowProp(i, this.field), new: result?.toString() });
-                                                    PTE_CellChange_Util.checkfn(ptrows[0], VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable);
+                                                    let ptRows = [];
+                                                    ptRows.push({ row: i, prop: this.field, old: this.instance.getDataAtRowProp(i, this.field), new: result?.toString() });
+                                                    PTE_CellChange_Util.checkfn(ptRows[0], VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable);
                                                 } else {
                                                     break;
                                                 }
@@ -334,7 +332,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                                         }
 
                                         if (this.field == 'RESET_VOLS_ON_PERIOD' && this.instance.getDataAtRowProp(this.selRow, 'AR_SETTLEMENT_LVL') == '' && this.instance.getDataAtRowProp(this.selRow, 'PERIOD_PROFILE') == '') {
-                                            for (let i = 0; i < PTRCount; i++) {
+                                            for (let i = 0; i < ptRowCount; i++) {
                                                 if (!this.instance.isEmptyRow(i)) {
                                                     let ptrows = [];
                                                     ptrows.push({ row: i, prop: this.field, old: this.instance.getDataAtRowProp(i, this.field), new: result?.toString() });
@@ -345,18 +343,19 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                                             }
                                         }
                                     }
-            
+    
                                     if (this.field == 'REBATE_TYPE') {
                                         let ptrow = { row: this.selRow, prop: this.field, old: this.instance.getDataAtRowProp(this.selRow, this.field), new: result?.toString() };
                                         PTE_CellChange_Util.checkfn(ptrow, VM.curPricingTable, VM.columns, '', VM.contractData, VM.custCellEditor, VM.newPricingTable);
                                     }
-            
+    
                                     if(this.field == 'GEO_COMBINED'){
-                                        const COL = findIndex(VM.columns, { data: this.field });
-                                        this.instance.setCellMetaObject(this.selRow,COL,{ className: '', comment: { value: '' } });
+                                        const col = findIndex(VM.columns, { data: this.field });
+                                        this.instance.setCellMetaObject(this.selRow,col,{ 'className': '', comment: { value: '' } });
                                         this.instance.render();
                                     }
                                 }
+
                                 this.instance.setDataAtCell(this.selRow, this.selCol, result?.toString(), 'no-edit');
                             }
 
@@ -373,14 +372,14 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                                     }
                                 }
                             }, 2000);
-            
+    
                             if (VM.curRow[0] && VM.curRow[0].delPTR_SYS_PRD) {
                                 delete VM.curRow[0].delPTR_SYS_PRD
                             }
                         } else {
-                            let currentRow = PTE_CellChange_Util.returnEmptyRow();
-                            let product = this.instance.getDataAtRowProp(this.selRow, 'PTR_USER_PRD')
-                            if (this.field && this.field == 'PTR_USER_PRD' && (currentRow == 0 || this.selRow == 0) && (product == null || product == '' || product == undefined) ) {
+                            let curRow = PTE_CellChange_Util.returnEmptyRow();
+                            let prd = this.instance.getDataAtRowProp(this.selRow, 'PTR_USER_PRD')
+                            if (this.field && this.field == 'PTR_USER_PRD' && (curRow == 0 || this.selRow == 0) && (prd == null || prd == '' || prd == undefined) ) {
                                 VM.enableDeTab.emit({ isEnableDeTab: false, enableDeTabInfmIcon: false });
                                 return [];
                             }
@@ -478,28 +477,6 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
         },
         afterValidate: (isValid, value, row, prop, source) => {
             this.currencyValidatorMessageHandler(isValid, row, prop);
-            // // TWC3119-682 - Currency cells have a max numeric value
-            // const COLUMN_DEFINITION: PRC_TBL_Model_Field = this.pricingTableTemplates.model.fields[prop];
-            // if (!(COLUMN_DEFINITION.type == undefined && COLUMN_DEFINITION.format == undefined)) {
-            //     const CELL_TYPE: string = COLUMN_DEFINITION.type;
-            //     const CELL_FORMAT: string = COLUMN_DEFINITION.format;
-
-            //     if (CELL_TYPE === 'number' && CELL_FORMAT.toLowerCase().includes('0:c')) {
-            //         const COLUMN = this.hotTable.propToCol(prop);
-
-            //         const COMMENT_PLUGIN = this.hotTable.getPlugin('comments'); // WIP: Can probably call this outside to make more efficient
-
-            //         if (!isValid) {
-            //             COMMENT_PLUGIN.updateCommentMeta(row, COLUMN, {
-            //                 value: 'Not a valid number (too large).',
-            //                 readOnly: true
-            //             });
-            //             COMMENT_PLUGIN.showAtCell(row, COLUMN);
-            //         } else {
-            //             COMMENT_PLUGIN.removeCommentAtCell(row, COLUMN, true);
-            //         }
-            //     }
-            // }
         },
         afterDocumentKeyDown: (event) => {
             this.afterDocumentKeyDown(event);
@@ -1273,8 +1250,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
         if (act == true) {
             this.isCustDivNull = false;
             this.ValidateAndSavePTE(true);
-        }
-        else {
+        } else {
             this.isCustDivNull = false;
         }
     }
@@ -1977,7 +1953,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
         }
     }
     openAutofill() {
-        let  custId, isVistex
+        let custId, isVistex
         let pt = this.curPricingTable;
         this.createNewPrcObt(pt);
         if (this.contractData != null && this.contractData.Customer.VISTEX_CUST_FLAG != null && this.contractData.Customer.VISTEX_CUST_FLAG != undefined

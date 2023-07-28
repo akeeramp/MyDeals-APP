@@ -88,9 +88,9 @@ export class PTEUtil {
                 currentColumnConfig.type = 'dropdown';
                 if (item.lookupUrl) {
                     // for tender, PAYOUT_BASED_ON  must not have Billings
-                    if (item.field=='PAYOUT_BASED_ON' && isTenderContract) {
+                    if (item.field == 'PAYOUT_BASED_ON' && isTenderContract) {
                         currentColumnConfig.source=reject(pluck(dropdownResponses[`${item.field}`],`${item.lookupValue}`),itm=>{ return itm =='Billings'});
-                    } else if(item.field=='MRKT_SEG'){    // market segment has items which has child so we need to pass the full object
+                    } else if(item.field == 'MRKT_SEG') {    // market segment has items which has child so we need to pass the full object
                         currentColumnConfig.source=dropdownResponses[`${item.field}`];
                     } else {
                         currentColumnConfig.source=pluck(dropdownResponses[`${item.field}`],`${item.lookupValue}`);
