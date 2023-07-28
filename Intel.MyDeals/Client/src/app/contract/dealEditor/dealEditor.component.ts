@@ -14,7 +14,7 @@ import { PTE_Load_Util } from '../PTEUtils/PTE_Load_util';
 import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 import { Tender_Util } from '../PTEUtils/Tender_util';
-import { forkJoin } from 'rxjs';
+import { BehaviorSubject, forkJoin } from 'rxjs';
 import { systemPricePointModalComponent } from "../ptModals/dealEditorModals/systemPricePointModal.component"
 import { endCustomerRetailModalComponent } from "../ptModals/dealEditorModals/endCustomerRetailModal.component"
 import { multiSelectModalComponent } from "../ptModals/multiSelectModal/multiSelectModal.component"
@@ -57,7 +57,7 @@ export class dealEditorComponent {
     @Input() in_Is_Tender_Dashboard: boolean = false;// it will recieve true when DE used in TenderDashboard Screen
     @Input() in_Search_Results: any = [];
     @Input() in_Deal_Type: string = "";
-    @ViewChild(GridComponent) private grid: GridComponent;
+    @ViewChild('dealEditor') private grid: GridComponent;
     @Output() perfComp = new EventEmitter;
     @Output() addPerfTimes = new EventEmitter;
     @Output() refreshedContractData = new EventEmitter();
@@ -102,7 +102,7 @@ export class dealEditorComponent {
     private ecapDimKey = "20___0";
     private kitEcapdim = "20_____1";
     private dim = "10___";
-    public gridResult = [];
+    private _gridResult: BehaviorSubject<any[]> = new BehaviorSubject([]);
     private gridData: GridDataResult;
     public isLoading = false;
     private isTenderContract = false;
@@ -150,18 +150,9 @@ export class dealEditorComponent {
         },
     };
     private pageSizes: PageSizeItem[] = [
-        {
-            text: "10",
-            value: 10
-        },
-        {
-            text: "25",
-            value: 25
-        },
-        {
-            text: "50",
-            value: 50
-        }
+        { text: "10", value: 10 },
+        { text: "25", value: 25 },
+        { text: "50", value: 50 }
     ];
     private filteringData: any[] = [];
     filterChange(filter: any): void {
@@ -272,14 +263,6 @@ export class dealEditorComponent {
             this.setBusy("", "", "", false);
     }
 
-    isDirty() {
-        for (let i = 0; this.gridResult.length; i++) {
-            if (this.gridResult[i]._dirty) this.dirty = true;
-            break;
-        }
-        return this.dirty ? false : true;
-    }
-
     async getWipDealData() {
         let response: any = await this.pteService.readPricingTable(this.in_Pt_Id).toPromise().catch((err) => {
             this.loggerService.error('dealEditorComponent::readPricingTable::readTemplates:: service', err);
@@ -371,8 +354,26 @@ export class dealEditorComponent {
     }
 
     refreshGrid() {
+        /**
+         * TWC3119-702 - Emulate the ESC key to prevent an unsubscribed variable issue that causes
+         * the whole grid to be disabled, it might be a bug with the version of Kendo Grid we are using;
+         * since refreshGrid() is called on a force reload, the changes are discarded so this will not 
+         * interfere with data
+         */
+        setTimeout(() => {
+            this.emulateEscapeKeyPress();
+        }, 300);
+
         this.isInitialLoad = false;
         this.initialization();
+    }
+
+    private emulateEscapeKeyPress() {
+        const keyboardEvent = new KeyboardEvent('keydown', {
+            key: 'Escape'
+        });
+
+        document.dispatchEvent(keyboardEvent);
     }
 
     onClose(name: string) {
@@ -692,7 +693,7 @@ export class dealEditorComponent {
         this.isrenameDialog = true
     }
 
-    renametabdata() {
+    renameTabData() {
         if (this.Derenametab === "" || this.Derenametab.toLowerCase() == "overlapping") return;
         each(this.groups, group => {
             if (group.name == this.selectedTab) {
@@ -774,7 +775,6 @@ export class dealEditorComponent {
     }
 
     addToTab(data) {
-        
         this.groups.push({ "name": data, "order": 50, "numErrors": 0, "isTabHidden": false });
         this.groups = this.groups.sort((a, b) => (a.order > b.order) ? 1 : -1);
         // Add Tools
@@ -1089,8 +1089,7 @@ export class dealEditorComponent {
             this.gridData = process(this.gridResult, this.state);
             this.isDataLoading = false;
             this.setBusy("", "", "", false);
-        }
-        else {
+        } else {
             var cashObj = this.gridResult.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
             if (cashObj && cashObj.length > 0) {
                 if (this.VendorDropDownResult != null && this.VendorDropDownResult != undefined && this.VendorDropDownResult.length > 0) {
@@ -1203,11 +1202,11 @@ export class dealEditorComponent {
     setWarningDetails() {        
         PTE_Common_Util.setWarningFields(this.gridResult, this.curPricingTable);
         PTE_Common_Util.clearBadegCnt(this.groups);
-        for (var i = 0; i < this.gridResult.length; i++) {
+        for (let i = 0; i < this.gridResult.length; i++) {
             if (this.gridResult[i] != null) {
-                var keys = Object.keys(this.gridResult[i]._behaviors.isError);
+                let keys = Object.keys(this.gridResult[i]._behaviors.isError);
                 let tierAtrbAdded = false;
-                for (var key in keys) {
+                for (let key in keys) {
                     if (PTE_Config_Util.tierAtrbs.indexOf(keys[key]) >= 0 && this.gridResult[i].NUM_OF_TIERS != undefined && !tierAtrbAdded) {
                         this.gridResult[i]._behaviors.isError["TIER_NBR"] = true;
                         PTE_Common_Util.increaseBadgeCnt("TIER_NBR", this.groups, this.templates, this.allTabRename);
@@ -1306,7 +1305,7 @@ export class dealEditorComponent {
                                     field: item,
                                     operator: item == 'DC_ID' ? "eq" : "contains",
                                     value: this.searchFilter
-                                })
+                                });
                         });
                         if (filters.length == 0) filters = [
                             {
@@ -1486,13 +1485,34 @@ export class dealEditorComponent {
             this.isRunning = false;
     }
     sendEmail(){
-       
         this.emailData.emit(this.gridData.data.filter(x => x.isLinked == true));
-        
     }
     
     ngOnInit() {
         this.isInitialLoad = true;
         this.initialization();
+
+        this._gridResult.subscribe((data) => {
+            this.dirty = this.getDirtyFromGridResult(data);
+        });
     }
+
+    private getDirtyFromGridResult(data) {
+        data.forEach((gridRowItem) => {
+            if (gridRowItem._dirty) {
+                return true;
+            }
+        });
+
+        return false;
+    }
+
+    public get gridResult(): any[] {
+        return this._gridResult.value;
+    }
+
+    private set gridResult(data: any[]) {
+        this._gridResult.next(data);
+    } 
+
 }
