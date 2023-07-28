@@ -293,11 +293,10 @@
 }
 
 .pbo-alert-label {
-    font-size: 13px !important;
-/*    float: left !important;*/
+    font-size: 11px !important;
     margin: 0 0 0 10px !important;
-    font-weight: bold !important;
-    color: #0066FF !important;
+    font-weight: 200 !important;
+    color: #fc4c02 !important;
 }
 
 .market-select-style.k-multiselect .k-multiselect-wrap li.k-button {

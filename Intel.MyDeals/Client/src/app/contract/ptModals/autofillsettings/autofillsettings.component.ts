@@ -516,10 +516,13 @@ export class AutoFillComponent {
     ConditionalInfoMessages(elmntName, elmntVal) {
         // This function needs to manually set the global label for any given control that it is effecting
         if (elmntName == 'REBATE_TYPE') { // Rebates can update consumption based on info labels
-            if (elmntVal.indexOf("MDF/NRE ACCRUAL") > -1) { 
-                this.payoutBasedOnMessage = "Rebate Type selection of 'Accrual' will result in Payout Based On equal to accruals in Vistex";
+            //var applicableRebateTypes: string[];
+            var applicableRebateTypes = ["MDF ACCRUAL", "NRE ACCRUAL", "MDF/NRE ACCRUAL"];
+
+            if (applicableRebateTypes.indexOf(elmntVal) !== -1) {
+                this.payoutBasedOnMessage = "** 'Rebate Type Selection of Accrual' will result in Payout based upon accruals earned via Billings or Consumption";
             }
-            else { 
+            else {
                 this.payoutBasedOnMessage = "";
             }
         }

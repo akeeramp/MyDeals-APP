@@ -32,8 +32,10 @@ export class dropDownModalComponent {
         // Standard place to put information updates for this type of dialog if needed
         // TO DO: would be nice to drive this off of element title instead of dialog title
         this.infoMsg = "";
-        if (dlgTitle == "Select Rebate Type *" && dlgValue == "MDF/NRE ACCRUAL") {
-            this.infoMsg = "Rebate Type selection of 'Accrual' will result in Payout Based On equal to accruals in Vistex";
+        var applicableRebateTypes: string[];
+        applicableRebateTypes = ["MDF ACCRUAL", "NRE ACCRUAL", "MDF/NRE ACCRUAL"];
+        if (dlgTitle == "Select Rebate Type *" && applicableRebateTypes.indexOf(dlgValue) !== -1) {
+            this.infoMsg = "Note: 'Rebate Type Selection of Accrual' will result in Payout based upon accruals earned via Billings or Consumption";
         }
     }
 
