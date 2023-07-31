@@ -652,13 +652,22 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
     }
 
     pteLoaderPopUp(changes, source) {
-        if (!this.isLoading && changes && changes.length > 1 && source && source == 'edit' || source == 'CopyPaste.paste' || source == 'Autofill.fill') {
+        if (!this.isLoading && changes && changes.length > 1 && source && (source == 'edit' || source == 'CopyPaste.paste' || source == 'Autofill.fill')) {
             this.spinnerMessageHeader = 'Loading...';
             this.spinnerMessageDescription = 'Loading the Table Editor';
             this.isLoading = true;
         }
         if (this.isLoading && source && source == 'stop-loader') {
             this.isLoading = false;
+        }
+         //exclusivly for KIT incase of edit existing its give more time for operation to complete so adding extra loadin time
+         if(!this.isLoading && source=='no-edit' && this.curPricingTable['OBJ_SET_TYPE_CD'] && this.curPricingTable['OBJ_SET_TYPE_CD']=='KIT'){
+            this.spinnerMessageHeader = 'Loading...';
+            this.spinnerMessageDescription = 'Loading the Table Editor';
+            this.isLoading = true;
+            setTimeout(() => {
+                this.isLoading = false;
+            }, 0);
         }
     }
     setBusy(msg, detail, msgType, showFunFact) {

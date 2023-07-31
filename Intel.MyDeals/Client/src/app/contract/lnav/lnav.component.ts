@@ -153,7 +153,7 @@ export class lnavComponent {
         };
         this.selectedModel = model;
           //it will update the url on page reload persist the selected state
-        if(this.route.snapshot.queryParams.loadtype== 'Manage' || this.route.snapshot.queryParams.loadtype !== 'Manage'){
+        if(this.route.snapshot.queryParams.loadtype== 'Manage'){
         const type=this.route.snapshot.paramMap.get('type');
         const cid=this.route.snapshot.paramMap.get('cid');
         const psid=this.route.snapshot.paramMap.get('PSID');

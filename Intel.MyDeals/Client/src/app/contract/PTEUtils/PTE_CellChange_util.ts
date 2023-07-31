@@ -1152,6 +1152,17 @@ export class PTE_CellChange_Util {
                     }
                 }
             }
+            if(item.prop=='ECAP_PRICE'){
+                let val = this.hotTable.getDataAtRowProp(item.row, item.prop);
+                const col = findIndex(columns, { data: item.prop});
+                if (!isNaN(val) && isNumber(val) && val >1000000000 ) {
+                    this.hotTable.setCellMetaObject(item.row, col, { 'className': 'error-product', comment: { value: 'Not a valid number (too large).' } });
+                    this.hotTable.render();
+                }else{
+                    this.hotTable.setCellMetaObject(item.row, col, { 'className': '', comment: { value: '' } });
+                    this.hotTable.render();
+                }
+            }
         });
     }
 
