@@ -64,14 +64,14 @@ export class PTEUtil {
                     }
 
                     // TWC3119-682 - Currency cells have a max numeric value
-                    const MAX_VALUE = 1000000000; // API max value is 1E23, set to 1E9
-                    currentColumnConfig.validator = (value, callback) => {
-                        if (value > MAX_VALUE) {
-                            callback(false);
-                        } else {
-                            callback(true);
-                        }
-                    }
+                    // const MAX_VALUE = 1000000000; // API max value is 1E23, set to 1E9
+                    // currentColumnConfig.validator = (value, callback) => {
+                    //     if (value > MAX_VALUE) {
+                    //         callback(false);
+                    //     } else {
+                    //         callback(true);
+                    //     }
+                    // }
                 }
             } else if (ITEM_FIELD === 'percent') {
                 currentColumnConfig.type = 'numeric';
