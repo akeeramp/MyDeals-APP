@@ -606,7 +606,7 @@
                 </div>
                 <br />
                 <div class="form-inline insertAtRowsText" style="margin-top:-30px;display:inline-block">
-                    <span *ngIf="enableSplitProducts && this.data.source != 'Product Corrector'">
+                    <span *ngIf="enableSplitProducts && this.data.source != 'Product Corrector' && (this.data.selVal==''|| this.data.selVal==null)">
                         <input id="separateProduct" class="checkbox-custom" [(ngModel)]="splitProducts" name="separateroducts" type="checkbox">
                         <label for="separateProduct" class="checkbox-custom-label label-allowers" style="padding-bottom:5px;margin-top:0px;">&nbsp;Separate product in rows</label>
                     </span>
