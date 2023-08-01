@@ -32,7 +32,7 @@
                         <kendo-grid-column [headerClass]="{'headerClass':true}" field="RebateType" title="REBATE TYPE"
                                            [editable]="false">
                         </kendo-grid-column>
-                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="Status" title="STATUS"
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="DealStage" title="STATUS"
                                            [editable]="false">
                         </kendo-grid-column>
                         <kendo-grid-column [headerClass]="{'headerClass':true}" [sortable]="false"
@@ -40,8 +40,9 @@
                             <ng-template kendoGridCellTemplate let-dataItem="dataItem">
                                 <div>
                                     <a href="/api/QuoteLetter/GetDealQuoteLetter/{{dataItem.CustomerSid}}/5/{{dataItem.ObjectSid}}/0"
-                                       title="Download">Download Quote Letter
-                                        
+                                       title="Download">
+                                        {{dataItem.Status}}
+
                                     </a>
                                 </div>
                             </ng-template>

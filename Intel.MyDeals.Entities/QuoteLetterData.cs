@@ -36,5 +36,8 @@ namespace Intel.MyDeals.Entities
 
         [DataMember]
         public string CustomerSid { set; get; }
+
+        [DataMember]
+        public string DealStage { set; get; }
     }
 }
