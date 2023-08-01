@@ -308,6 +308,9 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_OVLP_ADDITIVE = DB.GetReaderOrdinal(rdr, "OVLP_ADDITIVE");
                     int IDX_OVLP_CNSMPTN_RSN = DB.GetReaderOrdinal(rdr, "OVLP_CNSMPTN_RSN");
                     int IDX_OVLP_CNTRCT_NM = DB.GetReaderOrdinal(rdr, "OVLP_CNTRCT_NM");
+                    int IDX_OVLP_CONSUMPTION_COUNTRY_REGION = DB.GetReaderOrdinal(rdr, "OVLP_CONSUMPTION_COUNTRY_REGION");
+                    int IDX_OVLP_CONSUMPTION_CUST_PLATFORM = DB.GetReaderOrdinal(rdr, "OVLP_CONSUMPTION_CUST_PLATFORM");
+                    int IDX_OVLP_CONSUMPTION_SYS_CONFIG = DB.GetReaderOrdinal(rdr, "OVLP_CONSUMPTION_SYS_CONFIG");
                     int IDX_OVLP_DEAL_DESC = DB.GetReaderOrdinal(rdr, "OVLP_DEAL_DESC");
                     int IDX_OVLP_DEAL_END_DT = DB.GetReaderOrdinal(rdr, "OVLP_DEAL_END_DT");
                     int IDX_OVLP_DEAL_ID = DB.GetReaderOrdinal(rdr, "OVLP_DEAL_ID");
@@ -318,6 +321,7 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_OVLP_MKT_SEG = DB.GetReaderOrdinal(rdr, "OVLP_MKT_SEG");
                     int IDX_OVLP_OEM_PLTFRM_EOL_DT = DB.GetReaderOrdinal(rdr, "OVLP_OEM_PLTFRM_EOL_DT");
                     int IDX_OVLP_OEM_PLTFRM_LNCH_DT = DB.GetReaderOrdinal(rdr, "OVLP_OEM_PLTFRM_LNCH_DT");
+                    int IDX_OVLP_PTR_USER_PRD = DB.GetReaderOrdinal(rdr, "OVLP_PTR_USER_PRD");
                     int IDX_OVLP_REBT_TYPE = DB.GetReaderOrdinal(rdr, "OVLP_REBT_TYPE");
                     int IDX_OVLP_WF_STG_CD = DB.GetReaderOrdinal(rdr, "OVLP_WF_STG_CD");
                     int IDX_WIP_DEAL_OBJ_SID = DB.GetReaderOrdinal(rdr, "WIP_DEAL_OBJ_SID");
@@ -331,6 +335,9 @@ namespace Intel.MyDeals.DataLibrary
                             OVLP_ADDITIVE = (IDX_OVLP_ADDITIVE < 0 || rdr.IsDBNull(IDX_OVLP_ADDITIVE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_ADDITIVE),
                             OVLP_CNSMPTN_RSN = (IDX_OVLP_CNSMPTN_RSN < 0 || rdr.IsDBNull(IDX_OVLP_CNSMPTN_RSN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_CNSMPTN_RSN),
                             OVLP_CNTRCT_NM = (IDX_OVLP_CNTRCT_NM < 0 || rdr.IsDBNull(IDX_OVLP_CNTRCT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_CNTRCT_NM),
+                            OVLP_CONSUMPTION_COUNTRY_REGION = (IDX_OVLP_CONSUMPTION_COUNTRY_REGION < 0 || rdr.IsDBNull(IDX_OVLP_CONSUMPTION_COUNTRY_REGION)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_CONSUMPTION_COUNTRY_REGION),
+                            OVLP_CONSUMPTION_CUST_PLATFORM = (IDX_OVLP_CONSUMPTION_CUST_PLATFORM < 0 || rdr.IsDBNull(IDX_OVLP_CONSUMPTION_CUST_PLATFORM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_CONSUMPTION_CUST_PLATFORM),
+                            OVLP_CONSUMPTION_SYS_CONFIG = (IDX_OVLP_CONSUMPTION_SYS_CONFIG < 0 || rdr.IsDBNull(IDX_OVLP_CONSUMPTION_SYS_CONFIG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_CONSUMPTION_SYS_CONFIG),
                             OVLP_DEAL_DESC = (IDX_OVLP_DEAL_DESC < 0 || rdr.IsDBNull(IDX_OVLP_DEAL_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_DEAL_DESC),
                             OVLP_DEAL_END_DT = (IDX_OVLP_DEAL_END_DT < 0 || rdr.IsDBNull(IDX_OVLP_DEAL_END_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OVLP_DEAL_END_DT),
                             OVLP_DEAL_ID = (IDX_OVLP_DEAL_ID < 0 || rdr.IsDBNull(IDX_OVLP_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OVLP_DEAL_ID),
@@ -341,6 +348,7 @@ namespace Intel.MyDeals.DataLibrary
                             OVLP_MKT_SEG = (IDX_OVLP_MKT_SEG < 0 || rdr.IsDBNull(IDX_OVLP_MKT_SEG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_MKT_SEG),
                             OVLP_OEM_PLTFRM_EOL_DT = (IDX_OVLP_OEM_PLTFRM_EOL_DT < 0 || rdr.IsDBNull(IDX_OVLP_OEM_PLTFRM_EOL_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OVLP_OEM_PLTFRM_EOL_DT),
                             OVLP_OEM_PLTFRM_LNCH_DT = (IDX_OVLP_OEM_PLTFRM_LNCH_DT < 0 || rdr.IsDBNull(IDX_OVLP_OEM_PLTFRM_LNCH_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OVLP_OEM_PLTFRM_LNCH_DT),
+                            OVLP_PTR_USER_PRD = (IDX_OVLP_PTR_USER_PRD < 0 || rdr.IsDBNull(IDX_OVLP_PTR_USER_PRD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_PTR_USER_PRD),
                             OVLP_REBT_TYPE = (IDX_OVLP_REBT_TYPE < 0 || rdr.IsDBNull(IDX_OVLP_REBT_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_REBT_TYPE),
                             OVLP_WF_STG_CD = (IDX_OVLP_WF_STG_CD < 0 || rdr.IsDBNull(IDX_OVLP_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OVLP_WF_STG_CD),
                             WIP_DEAL_OBJ_SID = (IDX_WIP_DEAL_OBJ_SID < 0 || rdr.IsDBNull(IDX_WIP_DEAL_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_WIP_DEAL_OBJ_SID)

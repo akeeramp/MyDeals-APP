@@ -787,7 +787,10 @@ namespace Intel.MyDeals.BusinessLogic
                     Attributes.ECAP_PRICE.ATRB_SID,
                     Attributes.DEAL_DESC.ATRB_SID,
                     Attributes.CONSUMPTION_REASON.ATRB_SID,
-                    Attributes.CONSUMPTION_REASON_CMNT.ATRB_SID
+                    Attributes.CONSUMPTION_REASON_CMNT.ATRB_SID,
+                    Attributes.CONSUMPTION_CUST_PLATFORM.ATRB_SID,
+                    Attributes.CONSUMPTION_SYS_CONFIG.ATRB_SID,
+                    Attributes.CONSUMPTION_COUNTRY_REGION.ATRB_SID
                 });
 
             //// Get all the products in a collection base on the PRODUCT_FILTER

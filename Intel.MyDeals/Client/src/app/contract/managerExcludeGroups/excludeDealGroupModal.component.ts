@@ -169,12 +169,14 @@ export class excludeDealGroupModalDialog {
                 : (row["ECAP_PRICE"]["20___0"] === undefined || row["ECAP_PRICE"]["20___0"] === null)
                     ? row["ECAP_PRICE"]
                     : row["ECAP_PRICE"]["20___0"];
-            var cntrctTtl = row["REBT_TYPE"] && row["REBT_TYPE"] == "TENDER" ? "Product: " + (row["PRODUCT"]) : row["TITLE"] ? "Product: " + (row["TITLE"]) : "Product: " + (row["PRODUCT"]);
+            var cntrctTtl = row["REBT_TYPE"] && row["REBT_TYPE"] == "TENDER" ? "My Deals Product: " + (row["PRODUCT"]) : row["TITLE"] ? "My Deals Product: " + (row["TITLE"]) : "My Deals Product: " + (row["PRODUCT"]);
+            var mydealTtl = row["REBT_TYPE"] && row["REBT_TYPE"] == "TENDER" ? (row["PRODUCT"]) : row["PTR_USER_PRD"] ? (row["PTR_USER_PRD"]) : (row["PRODUCT"]);
             let a = {};
             a["OVLP_DEAL_ID"] = row["DC_ID"] === undefined || row["DC_ID"] === "" ? row["DEAL_ID"] : row["DC_ID"]
             a["OVLP_DEAL_TYPE"] = row['OBJ_SET_TYPE_CD']
             a["OVLP_REBT_TYPE"] = row["REBATE_TYPE"] === undefined || row["REBATE_TYPE"] == "" ? row["REBT_TYPE"] : row["REBATE_TYPE"]
             a["OVLP_CNTRCT_NM"] = cntrctTtl
+            a["OVLP_PTR_USER_PRD"] = mydealTtl
             a["OVLP_WF_STG_CD"] = this.pctGroupDealsView ? row["WF_STG_CD"] : row["DSPL_WF_STG_CD"]
             a["OVLP_DEAL_END_DT"] = this.pctGroupDealsView ? row["DEAL_END_DT"] : row["END_DT"]
             a["OVLP_DEAL_STRT_DT"] = this.pctGroupDealsView ? row["DEAL_STRT_DT"] : row["START_DT"]
@@ -184,6 +186,9 @@ export class excludeDealGroupModalDialog {
             a["OVLP_MAX_RPU"] = row["MAX_RPU"]
             a["OVLP_MKT_SEG"] = row["MRKT_SEG"]
             a["OVLP_CNSMPTN_RSN"] = this.pctGroupDealsView ? row["CNSMPTN_RSN"] : row["CONSUMPTION_REASON"]
+            a["OVLP_CONSUMPTION_CUST_PLATFORM"] = row["CONSUMPTION_CUST_PLATFORM"]
+            a["OVLP_CONSUMPTION_SYS_CONFIG"] = row["CONSUMPTION_SYS_CONFIG"]
+            a["OVLP_CONSUMPTION_COUNTRY_REGION"] = row["CONSUMPTION_COUNTRY_REGION"]
             this.gridResult.push(a);
 
         }
