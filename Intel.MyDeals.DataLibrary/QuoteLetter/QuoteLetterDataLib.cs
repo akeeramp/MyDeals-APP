@@ -420,7 +420,7 @@ namespace Intel.MyDeals.DataLibrary
                         downloadQuoteLetterData.ObjectTypeId = dr[3].ToString();
                         downloadQuoteLetterData.RebateType = dr[2].ToString();
                         downloadQuoteLetterData.DealStage = dr[4].ToString();
-                        downloadQuoteLetterData.Status = (dr[5].ToString().ToUpper()=="SKIPPED"|| dr[3].ToString().ToUpper()=="FLEX") ? "": "Download Quote Letter";
+                        downloadQuoteLetterData.Status = ((dr[5].ToString().ToUpper() != "SKIPPED") && (dr[3].ToString().ToUpper() == "KIT" || dr[3].ToString().ToUpper() == "ECAP")) ? "Download Quote Letter" : "";
                         downloadQuoteLetterDatas.Add(downloadQuoteLetterData);
                     }
                 }
