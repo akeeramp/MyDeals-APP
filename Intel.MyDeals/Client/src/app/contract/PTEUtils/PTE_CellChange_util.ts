@@ -353,12 +353,13 @@ export class PTE_CellChange_Util {
             if (mergCells && mergCells.length > 0) {
                 this.hotTable.updateSettings({ mergeCells: mergCells });
             }
-        }
+        } 
     }
 
     static autoFillCellonProdKit(items: Array<any>, curPricingTable: any, contractData: any, pricingTableTemplates: any, columns: any[], operation?: any) {
-        let updateRows = [];
+        
         if (items && items.length == 1) {
+            let updateRows = [];
             const selrow = items[0].row;
             items[0].new=  items[0].new.toString().replace(/,(\s+)?$/, '');
             //to identify the uniq records
@@ -386,6 +387,117 @@ export class PTE_CellChange_Util {
                 //calling the merge cells option based of number of products
                 this.getMergeCellsOnEditKit(false, empRow, prdlen, pricingTableTemplates);
             } else {
+                if (items[0].old != items[0].new) {
+                    //get the DC_ID of selected row
+                    let ROW_ID = this.hotTable.getDataAtRowProp(selrow, 'DC_ID');
+                    //the row can be insert or delete to get that we are removing and adding the rows
+                    let DataOfRow = filter(PTE_Common_Util.getPTEGenerate(columns, curPricingTable), itm => { return itm.DC_ID == ROW_ID });
+                    updateRows=  this.kitexistingItemsUpdate(items, curPricingTable, contractData, pricingTableTemplates, columns, operation);
+
+                    //logic to calculate rebate price on product change in KIT and assign to DataROw so that it will assign in addUpdateRowOnchangeKIT
+                    DataOfRow[0]['TEMP_KIT_REBATE'] = this.kitEcapChangeOnProd(items[0], DataOfRow.slice(0, items[0].new.split(',').length));
+                    let PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
+                    let DCIDS = pluck(PTR, 'DC_ID');
+                    let countOfDCID = countBy(pluck(PTR, 'DC_ID'))
+                    let iterObj = [];
+                    //calling the merge cells options numb of products ans setting mergcells to null first since we are doing all togather
+                    each(uniq(DCIDS), DCID => {
+                        if (DCID && DCID != '') {
+                            iterObj.push({ DCID: DCID, leng: countOfDCID[`${DCID}`], indx: indexOf(DCIDS, DCID) })
+                        }
+                    });
+                    this.getMergeCellsOnEditKit(true, 1, 1, pricingTableTemplates, iterObj);
+                }
+            }
+
+            if (updateRows && updateRows.length > 0) {
+                //appending everything together batch function will improve the performace
+                this.hotTable.batch(() => {
+                    this.hotTable.setDataAtRowProp(updateRows, 'no-edit');
+                });
+            }
+        }
+        //in case of copy paste or autofill
+        else {
+            let updateitems = [];
+            let iterObj = [];
+            //first we need to make sure the changes are existing or newly added appending DC_ID for existing records this will hep with product slector logic
+            each(items, (itm) => {
+                itm['DC_ID'] = this.hotTable.getDataAtRowProp(itm.row, 'DC_ID');
+            })
+            //this logic for when we copy paste in existing rows
+            let existItems = filter(items, (itm) => { return (itm.DC_ID != null || itm.DC_ID != undefined) });
+            each(existItems, (itm, idx) => {
+                let updateditems=[];
+                if (idx == 0) {
+                    updateditems= this.kitexistingItemsUpdate([itm], curPricingTable, contractData, pricingTableTemplates, columns, operation);
+                    items = reject(items, { DC_ID: itm.DC_ID });
+                }
+                else {
+                    //here onwrds the index get change so we need to make sure its in the right index
+                    let PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
+                    itm.row = findIndex(PTR, { DC_ID: itm.DC_ID })
+                    updateditems=  this.kitexistingItemsUpdate([itm], curPricingTable, contractData, pricingTableTemplates, columns, operation);
+                    items = reject(items, { DC_ID: itm.DC_ID });
+                }
+                updateitems= updateitems.concat(updateditems);
+            })
+            //only modify if we have new data to paste
+            if (items && items.length > 0) {
+                //identify the empty row and the next empty row will be the consecutive one
+                let empRow = this.returnEmptyRow();
+                //after checking any existing modification when comes to copy  we need to reassign index of all items
+                each(items, (itm, idx) => {
+                    itm.row = empRow + idx;
+                })
+                //for length greater than 1 it will either copy or autofill so first cleaning those records since its prod the length can be predicted so deleting full
+                this.hotTable.alter('remove_row', items[0].row, PTE_Config_Util.girdMaxRows, 'no-edit');
+                let ROW_ID = -100 - empRow; 
+                each(items, (cellItem) => {
+                    //let ROW_ID = this.rowDCID();
+                    cellItem.new= cellItem.new.toString().replace(/,(\s+)?$/, '');
+                    //add num of tier rows the logic will be based on autofill value
+                    let prods = uniq(cellItem.new.split(',')), prodIndex = 0;
+                    //to identify the uniq records
+                    cellItem.new = prods.toString();
+                    //KIT Deal will not allow more than 10 rows
+                    let prdlen = prods.length > 10 ? PTE_Config_Util.maxKITproducts : prods.length;
+                    for (let i = empRow; i < prdlen + empRow; i++) {
+                        this.addUpdateRowOnchangeKIT(this.hotTable, columns, i, cellItem, ROW_ID, updateitems, curPricingTable, contractData, prods[prodIndex], null, operation);
+                        prodIndex++;
+                    }
+                    iterObj.push({ DCID: ROW_ID, leng: prdlen, indx: empRow })
+                    ROW_ID--;
+                    empRow = empRow + prdlen;
+                });
+            }
+            let PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
+            let DCIDS = pluck(PTR, 'DC_ID');
+            let countOfDCID = countBy(pluck(PTR, 'DC_ID'))
+            //calling the merge cells options numb of products ans setting mergcells to null first since we are doing all togather
+            each(uniq(DCIDS), DCID => {
+                if (DCID && DCID != '') {
+                    iterObj.push({ DCID: DCID, leng: countOfDCID[`${DCID}`], indx: indexOf(DCIDS, DCID) })
+                }
+            });
+            this.getMergeCellsOnEditKit(true, 1, 1, pricingTableTemplates, iterObj);
+            if (updateitems && updateitems.length > 0) {
+                //appending everything together batch function will improve the performace
+                this.hotTable.batch(() => {
+                    this.hotTable.setDataAtRowProp(updateitems, 'no-edit');
+                });                   
+            }
+        }
+    }
+
+   static kitexistingItemsUpdate(items: Array<any>, curPricingTable: any, contractData: any, pricingTableTemplates: any, columns: any[], operation?: any){
+            let updateRows =[];
+            const selrow = items[0].row;
+            items[0].new=  items[0].new.toString().replace(/,(\s+)?$/, '');
+            //to identify the uniq records
+            let prods = uniq(items[0].new.split(','));
+            items[0].new = prods.toString();
+            if (this.isAlreadyChange(selrow)) {
                 if (items[0].old != items[0].new) {
                     //get the DC_ID of selected row
                     let ROW_ID = this.hotTable.getDataAtRowProp(selrow, 'DC_ID');
@@ -420,92 +532,11 @@ export class PTE_CellChange_Util {
                         this.addUpdateRowOnchangeKIT(this.hotTable, columns, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex], DataOfRow[prodIndex], operation);
                         prodIndex++;
                     }
-                    //logic to calculate rebate price on product change in KIT and assign to DataROw so that it will assign in addUpdateRowOnchangeKIT
-                    DataOfRow[0]['TEMP_KIT_REBATE'] = this.kitEcapChangeOnProd(items[0], DataOfRow.slice(0, items[0].new.split(',').length));
-                    let PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
-                    let DCIDS = pluck(PTR, 'DC_ID');
-                    let countOfDCID = countBy(pluck(PTR, 'DC_ID'))
-                    let iterObj = [];
-                    //calling the merge cells options numb of products ans setting mergcells to null first since we are doing all togather
-                    each(uniq(DCIDS), DCID => {
-                        if (DCID && DCID != '') {
-                            iterObj.push({ DCID: DCID, leng: countOfDCID[`${DCID}`], indx: indexOf(DCIDS, DCID) })
-                        }
-                    });
-                    this.getMergeCellsOnEditKit(true, 1, 1, pricingTableTemplates, iterObj);
-                }
+                  }
             }
-
-            if (updateRows && updateRows.length > 0) {
-                //appending everything together batch function will improve the performace
-                this.hotTable.batch(() => {
-                    this.hotTable.setDataAtRowProp(updateRows, 'no-edit');
-                });
-            }
-        }
-        //in case of copy paste or autofill
-        else {
-            //first we need to make sure the changes are existing or newly added appending DC_ID for existing records this will hep with product slector logic
-            each(items, (itm) => {
-                itm['DC_ID'] = this.hotTable.getDataAtRowProp(itm.row, 'DC_ID');
-            })
-            //this logic for when we copy paste in existing rows
-            let existItems = filter(items, (itm) => { return (itm.DC_ID != null || itm.DC_ID != undefined) });
-            each(existItems, (itm, idx) => {
-                if (idx == 0) {
-                    this.autoFillCellonProdKit([itm], curPricingTable, contractData, pricingTableTemplates, columns, operation);
-                    items = reject(items, { DC_ID: itm.DC_ID });
-                }
-                else {
-                    //here onwrds the index get change so we need to make sure its in the right index
-                    let PTR = PTE_Common_Util.getPTEGenerate(columns, curPricingTable);
-                    itm.row = findIndex(PTR, { DC_ID: itm.DC_ID })
-                    this.autoFillCellonProdKit([itm], curPricingTable, contractData, pricingTableTemplates, columns, operation);
-                    items = reject(items, { DC_ID: itm.DC_ID });
-                }
-            })
-            //only modify if we have new data to paste
-            if (items && items.length > 0) {
-                //identify the empty row and the next empty row will be the consecutive one
-                let empRow = this.returnEmptyRow();
-                //after checking any existing modification when comes to copy  we need to reassign index of all items
-                each(items, (itm, idx) => {
-                    itm.row = empRow + idx;
-                })
-                //for length greater than 1 it will either copy or autofill so first cleaning those records since its prod the length can be predicted so deleting full
-                this.hotTable.alter('remove_row', items[0].row, PTE_Config_Util.girdMaxRows, 'no-edit');
-                let ROW_ID = -100 - empRow;
-                let updateitems = [];
-                let mergCells = [];
-                each(items, (cellItem) => {
-                    //let ROW_ID = this.rowDCID();
-                    cellItem.new= cellItem.new.toString().replace(/,(\s+)?$/, '');
-                    //add num of tier rows the logic will be based on autofill value
-                    let prods = uniq(cellItem.new.split(',')), prodIndex = 0;
-                    //to identify the uniq records
-                    cellItem.new = prods.toString();
-                    //KIT Deal will not allow more than 10 rows
-                    let prdlen = prods.length > 10 ? PTE_Config_Util.maxKITproducts : prods.length;
-                    for (let i = empRow; i < prdlen + empRow; i++) {
-                        this.addUpdateRowOnchangeKIT(this.hotTable, columns, i, cellItem, ROW_ID, updateitems, curPricingTable, contractData, prods[prodIndex], null, operation);
-                        prodIndex++;
-                    }
-                    ROW_ID--;
-                    //calling the merge cells optionfor tier 
-                    mergCells.push(this.getMergeCellsOnEdit(empRow, prdlen, pricingTableTemplates));
-                    //the next empty row will be previus empty row + num of tiers;
-                    empRow = empRow + prdlen;
-                });
-                this.hotTable.updateSettings({ mergeCells: flatten(mergCells) });
-                if (updateitems && updateitems.length > 0) {
-                    //appending everything together batch function will improve the performace
-                    this.hotTable.batch(() => {
-                        this.hotTable.setDataAtRowProp(updateitems, 'no-edit');
-                    });                   
-                }
-            }
-        }
+            return updateRows;
     }
+
     static autoFillCellonProdVol(items: Array<any>, curPricingTable: any, contractData: any, pricingTableTemplates: any, columns: any[], operation?: any) {
         let updateRows = [];
         //the numbe of tiers has to take from autofill for now taken from PT
