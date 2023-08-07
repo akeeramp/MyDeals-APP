@@ -48,11 +48,14 @@ export class PTE_Save_Util {
         }
         let invalidFlexDate = PTE_Validation_Util.validateFlexDate(PTR, curPricingTable, undefined);
         // Check if the rows have duplicate products
+        const isFlexPs = curPricingTable.OBJ_SET_TYPE_CD != undefined && curPricingTable.OBJ_SET_TYPE_CD == "FLEX";
         const isHybridPS = curPricingStrategy.IS_HYBRID_PRC_STRAT != undefined && curPricingStrategy.IS_HYBRID_PRC_STRAT == "1";
+        const duplicateFlexRows = isFlexPs ? PTE_Validation_Util.hasDuplicateProduct(PTR) : {};
         const duplicateProductRows = isHybridPS ? PTE_Validation_Util.hasDuplicateProduct(PTR) : {};
         let hasTender, hasNonTender = false;
         //bydefault setting an error can help to avoid any missing scenario bcz of is dirty flag
         let errDeals = [0];
+        let errDealsFlex = [0];
         let dictRebateType = [];
         let dictPayoutBasedon = [];
         let dictCustDivision = [];
@@ -66,6 +69,7 @@ export class PTE_Save_Util {
         for (let s = 0; s < PTR.length; s++) {
             if (PTR[s]["_dirty"] !== undefined && PTR[s]["_dirty"] === true) errDeals.push(s);
             if (duplicateProductRows["duplicateProductDCIds"] !== undefined && duplicateProductRows.duplicateProductDCIds[PTR[s].DC_ID] !== undefined) errDeals.push(s);
+            if (duplicateFlexRows["duplicateProductDCIds"] !== undefined && duplicateFlexRows.duplicateProductDCIds[PTR[s].DC_ID] !== undefined) errDealsFlex.push(s);
             if ((curPricingTable.OBJ_SET_TYPE_CD !== "KIT" && curPricingTable.OBJ_SET_TYPE_CD !== "VOL_TIER"
                 && curPricingTable.OBJ_SET_TYPE_CD !== "FLEX") || PTR[s].TIER_NBR == "1") {
                 errDeals.push(s);
@@ -123,6 +127,39 @@ export class PTE_Save_Util {
                 }
             }
         }
+
+        //verify flex validations for duplicate products
+
+        if (errDealsFlex.length > 0) {
+            for (let t = 0; t < errDealsFlex.length; t++) {
+                const el = PTR[errDealsFlex[t]];
+                const splitProd = el.PTR_USER_PRD.split(',');
+                if (curPricingTable.OBJ_SET_TYPE_CD == "FLEX") {
+                    //getting flex rowType values
+                    for (let tmpProd = 0; tmpProd < PTR.length; tmpProd++) {
+                        if (el.DC_ID != PTR[tmpProd].DC_ID) {
+                            let compareFirstProduct1 = PTR[tmpProd].PTR_USER_PRD;
+                            compareFirstProduct1 = compareFirstProduct1.split(',');
+
+                            let productCompareAll = splitProd.filter((val) => {
+                                return compareFirstProduct1.includes(val)
+                            });
+
+                            if ((el.FLEX_ROW_TYPE == PTR[tmpProd].FLEX_ROW_TYPE) && (productCompareAll.length > 0)) {
+                                if (PTR[tmpProd].START_DT >= el.START_DT && PTR[tmpProd].END_DT <= el.END_DT) {
+                                    if (isFlexPs && duplicateFlexRows.duplicateProductDCIds[el.DC_ID] !== undefined) {
+                                        el._behaviors.isError["PTR_USER_PRD"] = true;
+                                        el._behaviors.validMsg["PTR_USER_PRD"] = "Cannot have duplicate product(s). Product(s): " +
+                                            duplicateFlexRows.duplicateProductDCIds[el.DC_ID].OverlapProduct + " are duplicated within rows " + duplicateFlexRows.duplicateProductDCIds[el.DC_ID].OverlapDCID + ". Please check the date range overlap.";
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
         each(PTR, (item) => {
             //defaulting the behaviours object
             PTE_Common_Util.setBehaviors(item);
