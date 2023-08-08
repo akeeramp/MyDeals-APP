@@ -134,9 +134,15 @@ export class sdsDealOverridesComponent {
                     let ReturnData = JSON.parse(result.toString());
                     this.ColumnHeader = ReturnData.COLUMNS;
                     let ColumnData = ReturnData.DATA;
-                    this.gridReturnsOrig = ColumnData;
-                    this.gridReturns = { data: orderBy(this.gridReturnsOrig, this.sort), total: this.gridReturnsOrig.length };
-                    this.resultCount['all'] = ReturnData.DATA.length;
+                    if (ColumnData != undefined) {
+                        this.gridReturnsOrig = ColumnData;
+                        this.gridReturns = { data: orderBy(this.gridReturnsOrig, this.sort), total: this.gridReturnsOrig.length };
+                        this.resultCount['all'] = ReturnData.DATA.length;
+                    }
+                    else {
+                        this.gridReturnsOrig = this.gridReturns = null; // Unsets Grid data
+                        this.resultCount['all'] = 0;
+                    }
                     this.resultType = "Apply Rules";
                 }, error => {
                     this.loggerSvc.error("Unable to get the result.", error);
@@ -151,9 +157,15 @@ export class sdsDealOverridesComponent {
             let ReturnData = JSON.parse(result.toString());
             this.ColumnHeader = ReturnData.COLUMNS;
             let ColumnData = ReturnData.DATA;
-            this.gridReturnsOrig = ColumnData;
-            this.gridReturns = { data: orderBy(this.gridReturnsOrig, this.sort), total: this.gridReturnsOrig.length };
-            this.resultCount['all'] = ReturnData.DATA.length;
+            if (ColumnData != undefined) {
+                this.gridReturnsOrig = ColumnData;
+                this.gridReturns = { data: orderBy(this.gridReturnsOrig, this.sort), total: this.gridReturnsOrig.length };
+                this.resultCount['all'] = ReturnData.DATA.length;
+            }
+            else {
+                this.gridReturnsOrig = this.gridReturns = null; // Unsets Grid data
+                this.resultCount['all'] = 0;
+            }
             this.resultType = "Active Report";
         }, error => {
             this.loggerSvc.error("Unable to pull SDS Active Report.", error);
@@ -166,9 +178,15 @@ export class sdsDealOverridesComponent {
             let ReturnData = JSON.parse(result.toString());
             this.ColumnHeader = ReturnData.COLUMNS;
             let ColumnData = ReturnData.DATA;
-            this.gridReturnsOrig = ColumnData;
-            this.gridReturns = { data: orderBy(this.gridReturnsOrig, this.sort), total: this.gridReturnsOrig.length };
-            this.resultCount['all'] = ReturnData.DATA.length;
+            if (ColumnData != undefined) {
+                this.gridReturnsOrig = ColumnData;
+                this.gridReturns = { data: orderBy(this.gridReturnsOrig, this.sort), total: this.gridReturnsOrig.length };
+                this.resultCount['all'] = ReturnData.DATA.length;
+            }
+            else {
+                this.gridReturnsOrig = this.gridReturns = null; // Unsets Grid data
+                this.resultCount['all'] = 0;
+            }
             this.resultType = "History Report";
         }, error => {
             this.loggerSvc.error("Unable to pull SDS Historical Report.", error);
