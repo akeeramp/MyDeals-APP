@@ -30,7 +30,11 @@
                 <div class="row oppo-grids new-now-wrap" style="margin: 0px;width:100%">
                     <kendo-grid class="exclude-filter-style view_popup_height icon-changes" [data]="gridData" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                                 [groupable]="false" [group]="state.group" filterable="menu" [navigable]="true"  [resizable]="true"
-                                (dataStateChange)="dataStateChange($event)" style="height: calc(100vh - 400px); width:100%; line-height:10px;" [isDetailExpanded]="expandInStockProducts">
+                                (dataStateChange)="dataStateChange($event)" style="height: calc(100vh - 400px); width:100%; line-height:10px;"
+                                [isDetailExpanded]="expandInStockProducts" (excelExport)="onExcelExport($event)">
+                        <ng-template kendoGridToolbarTemplate>
+                            <button type="button" kendoGridExcelCommand ><span class="k-icon k-i-file-excel"></span>Export to Excel</button>
+                        </ng-template>
                         <kendo-grid-column [headerClass]="{'headerClass':true}" [width]="35">
                             <ng-template kendoGridHeaderTemplate>
                                 <input type="checkbox"
@@ -86,12 +90,14 @@
                         </kendo-grid-column>
                         <kendo-grid-column title="Market Segment" field="OVLP_MKT_SEG" [headerClass]="{'headerClass':true}"
                                            [width]="140"></kendo-grid-column>
+
                         <kendo-grid-column title="Consumption Customer Platform" field="OVLP_CONSUMPTION_CUST_PLATFORM"
                                            [headerClass]="{'headerClass':true}" [width]="140"></kendo-grid-column>
                         <kendo-grid-column title="Consumption System configuration" field="OVLP_CONSUMPTION_SYS_CONFIG"
                                            [headerClass]="{'headerClass':true}" [width]="140"></kendo-grid-column>
                         <kendo-grid-column title="Consumption Country/Region" field="OVLP_CONSUMPTION_COUNTRY_REGION"
                                            [headerClass]="{'headerClass':true}" [width]="140"></kendo-grid-column>
+
                         <kendo-grid-column title="Consumption Reason" field="OVLP_CNSMPTN_RSN"
                                            [headerClass]="{'headerClass':true}" [width]="180" [hidden]="pctGroupDealsView"></kendo-grid-column>
                         <kendo-grid-column title="Consumption Reason" field="OVLP_CNSMPTN_RSN"
@@ -148,12 +154,14 @@
                                             </kendo-grid-column>
                                             <kendo-grid-column title="Market Segment" field="OVLP_MKT_SEG"
                                                                [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
+
                                             <kendo-grid-column title="Consumption Customer Platform" field="OVLP_CONSUMPTION_CUST_PLATFORM"
                                                                [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
                                             <kendo-grid-column title="Consumption System configuration" field="OVLP_CONSUMPTION_SYS_CONFIG"
                                                                [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
                                             <kendo-grid-column title="Consumption Country/Region" field="OVLP_CONSUMPTION_COUNTRY_REGION"
                                                                [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
+
                                             <kendo-grid-column title="Consumption Reason" field="OVLP_CNSMPTN_RSN"
                                                                [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
                                         </kendo-grid>
@@ -161,6 +169,7 @@
                                 </kendo-grid>
                             </div>
                         </ng-template>
+                        <kendo-grid-excel fileName="ExcludeDealGroup.xlsx" [fetchData]="allData"></kendo-grid-excel>
                     </kendo-grid>
                 </div>
 

@@ -2,12 +2,15 @@
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { managerExcludeGroupsService } from './managerExcludeGroups.service';
 import { logger } from "../../shared/logger/logger";
-import { DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
+import { DataStateChangeEvent, ExcelExportEvent, GridDataResult, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from "@angular/material/core";
 import { RowClassArgs, RowArgs } from "@progress/kendo-angular-grid";
 import { MomentService } from "../../shared/moment/moment.service";
-import { sortBy, isString } from 'underscore';
+import { sortBy } from 'underscore';
+import * as saveAs from 'file-saver';
+import { Workbook } from '@progress/kendo-angular-excel-export';
+import { Observable, zip } from 'rxjs';
 
 @Component({
     selector: "exclude-deal-group-modal-dialog",
@@ -52,6 +55,8 @@ export class excludeDealGroupModalDialog {
     private OVLP_DEAL_ID: Array<any>;
     @Output() public selectAllData: EventEmitter<void> = new EventEmitter()
 
+    private readonly childGroup1Title = 'Deals below are included as part of the Cost Test';
+
     private state: State = {
         skip: 0,
         group: [],
@@ -60,7 +65,7 @@ export class excludeDealGroupModalDialog {
             logic: "and",
         }
     }
-    public gridData: any;
+    public gridData: GridDataResult;
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
@@ -94,7 +99,7 @@ export class excludeDealGroupModalDialog {
     public expandInStockProducts({ dataItem }: RowArgs): boolean {
         return true;
     }
-    public expandedDetailKeys: any[] = ['Deals below are included as part of the Cost Test', 'Deals shown in grey overlap but are NOT included as part of the Cost Test'];
+    public expandedDetailKeys: any[] = [this.childGroup1Title, 'Deals shown in grey overlap but are NOT included as part of the Cost Test'];
 
     public expandDetailsBy = (dataItem: any): number => {
         return dataItem.data;
@@ -162,35 +167,34 @@ export class excludeDealGroupModalDialog {
         }
         this.dealId = this.dataItem.cellCurrValues?.DC_ID ? this.dataItem.cellCurrValues.DC_ID : this.dataItem.cellCurrValues.DEAL_ID;
         this.dealArray.push(this.dataItem.cellCurrValues);
-        var gdata = JSON.parse(JSON.stringify(this.dealArray));
-        for (let row of gdata) {
-            var ecap = row["ECAP_PRICE"] === undefined || row["ECAP_PRICE"] === null
+        let groupData = JSON.parse(JSON.stringify(this.dealArray));
+        for (let row of groupData) {
+            let ecap = row["ECAP_PRICE"] === undefined || row["ECAP_PRICE"] === null
                 ? ""
                 : (row["ECAP_PRICE"]["20___0"] === undefined || row["ECAP_PRICE"]["20___0"] === null)
                     ? row["ECAP_PRICE"]
                     : row["ECAP_PRICE"]["20___0"];
-            var cntrctTtl = row["REBT_TYPE"] && row["REBT_TYPE"] == "TENDER" ? "My Deals Product: " + (row["PRODUCT"]) : row["TITLE"] ? "My Deals Product: " + (row["TITLE"]) : "My Deals Product: " + (row["PRODUCT"]);
-            var mydealTtl = row["REBT_TYPE"] && row["REBT_TYPE"] == "TENDER" ? (row["PRODUCT"]) : row["PTR_USER_PRD"] ? (row["PTR_USER_PRD"]) : (row["PRODUCT"]);
+            let contractTitle = row["REBT_TYPE"] && row["REBT_TYPE"] == "TENDER" ? "My Deals Product: " + (row["PRODUCT"]) : row["TITLE"] ? "My Deals Product: " + (row["TITLE"]) : "My Deals Product: " + (row["PRODUCT"]);
+            let mydealTitle = row["REBT_TYPE"] && row["REBT_TYPE"] == "TENDER" ? (row["PRODUCT"]) : row["PTR_USER_PRD"] ? (row["PTR_USER_PRD"]) : (row["PRODUCT"]);
             let a = {};
-            a["OVLP_DEAL_ID"] = row["DC_ID"] === undefined || row["DC_ID"] === "" ? row["DEAL_ID"] : row["DC_ID"]
-            a["OVLP_DEAL_TYPE"] = row['OBJ_SET_TYPE_CD']
-            a["OVLP_REBT_TYPE"] = row["REBATE_TYPE"] === undefined || row["REBATE_TYPE"] == "" ? row["REBT_TYPE"] : row["REBATE_TYPE"]
-            a["OVLP_CNTRCT_NM"] = cntrctTtl
-            a["OVLP_PTR_USER_PRD"] = mydealTtl
-            a["OVLP_WF_STG_CD"] = this.pctGroupDealsView ? row["WF_STG_CD"] : row["DSPL_WF_STG_CD"]
-            a["OVLP_DEAL_END_DT"] = this.pctGroupDealsView ? row["DEAL_END_DT"] : row["END_DT"]
-            a["OVLP_DEAL_STRT_DT"] = this.pctGroupDealsView ? row["DEAL_STRT_DT"] : row["START_DT"]
-            a["OVLP_ADDITIVE"] = this.pctGroupDealsView ? row["ADDITIVE"] : row["DEAL_COMB_TYPE"]
-            a["OVLP_DEAL_DESC"] = row["DEAL_DESC"]
+            a["OVLP_DEAL_ID"] = row["DC_ID"] === undefined || row["DC_ID"] === "" ? row["DEAL_ID"] : row["DC_ID"];
+            a["OVLP_DEAL_TYPE"] = row['OBJ_SET_TYPE_CD'];
+            a["OVLP_REBT_TYPE"] = row["REBATE_TYPE"] === undefined || row["REBATE_TYPE"] == "" ? row["REBT_TYPE"] : row["REBATE_TYPE"];
+            a["OVLP_CNTRCT_NM"] = contractTitle;
+            a["OVLP_PTR_USER_PRD"] = mydealTitle;
+            a["OVLP_WF_STG_CD"] = this.pctGroupDealsView ? row["WF_STG_CD"] : row["DSPL_WF_STG_CD"];
+            a["OVLP_DEAL_END_DT"] = this.pctGroupDealsView ? row["DEAL_END_DT"] : row["END_DT"];
+            a["OVLP_DEAL_STRT_DT"] = this.pctGroupDealsView ? row["DEAL_STRT_DT"] : row["START_DT"];
+            a["OVLP_ADDITIVE"] = this.pctGroupDealsView ? row["ADDITIVE"] : row["DEAL_COMB_TYPE"];
+            a["OVLP_DEAL_DESC"] = row["DEAL_DESC"];
             a["OVLP_ECAP_PRC"] = row["REBT_TYPE"] && row["REBT_TYPE"] == "TENDER" ? row["ECAP_PRC"] : Number(ecap);
-            a["OVLP_MAX_RPU"] = row["MAX_RPU"]
-            a["OVLP_MKT_SEG"] = row["MRKT_SEG"]
-            a["OVLP_CNSMPTN_RSN"] = this.pctGroupDealsView ? row["CNSMPTN_RSN"] : row["CONSUMPTION_REASON"]
-            a["OVLP_CONSUMPTION_CUST_PLATFORM"] = row["CONSUMPTION_CUST_PLATFORM"]
-            a["OVLP_CONSUMPTION_SYS_CONFIG"] = row["CONSUMPTION_SYS_CONFIG"]
-            a["OVLP_CONSUMPTION_COUNTRY_REGION"] = row["CONSUMPTION_COUNTRY_REGION"]
+            a["OVLP_MAX_RPU"] = row["MAX_RPU"];
+            a["OVLP_MKT_SEG"] = row["MRKT_SEG"];
+            a["OVLP_CNSMPTN_RSN"] = this.pctGroupDealsView ? row["CNSMPTN_RSN"] : row["CONSUMPTION_REASON"];
+            a["OVLP_CONSUMPTION_CUST_PLATFORM"] = row["CONSUMPTION_CUST_PLATFORM"];
+            a["OVLP_CONSUMPTION_SYS_CONFIG"] = row["CONSUMPTION_SYS_CONFIG"];
+            a["OVLP_CONSUMPTION_COUNTRY_REGION"] = row["CONSUMPTION_COUNTRY_REGION"];
             this.gridResult.push(a);
-
         }
         this.gridData = process(this.gridResult, this.state);
         this.managerExcludeGrpSvc.getExcludeGroupDetails(this.dealId).subscribe((result: any) => {
@@ -206,9 +210,9 @@ export class excludeDealGroupModalDialog {
                 }
             }
 
-            for (var i = 0; i < this.childGridResult.length; i++) {
-                var exChk = this.childGridResult[i]["EXCLD_DEAL_FLAG"];
-                var cstChk =this.childGridResult[i]["CST_MCP_DEAL_FLAG"];
+            for (let i = 0; i < this.childGridResult.length; i++) {
+                let exChk = this.childGridResult[i]["EXCLD_DEAL_FLAG"];
+                let cstChk =this.childGridResult[i]["CST_MCP_DEAL_FLAG"];
                 if (this.childGridResult[i]["SELF_OVLP"] !== 1) {
                     if (cstChk === 1 || (cstChk === 0 && exChk === 1)) {
                         this.childGridResult[i]["GRP_BY"] = 1;
@@ -231,7 +235,7 @@ export class excludeDealGroupModalDialog {
             this.childGridData2 = this.childGridData.data.filter(x => x.GRP_BY === 2);
             if (this.childGridData1.length > 0) {
                 this.isData = true;
-                this.childGrid[0] = [{ data: 'Deals below are included as part of the Cost Test' }];
+                this.childGrid[0] = [{ data: this.childGroup1Title }];
             }
             if (this.childGridData2.length > 0) {
                 this.isData = true;
@@ -271,7 +275,7 @@ export class excludeDealGroupModalDialog {
             //checking for data included in PCT
             if (this.childGridData1.length > 0) {
                 this.isData = true;
-                this.childGrid[0] = [{ data: 'Deals below are included as part of the Cost Test' }];
+                this.childGrid[0] = [{ data: this.childGroup1Title }];
             }
             //checking for data not included in pct
             if (this.childGridData2.length > 0) {
@@ -286,7 +290,7 @@ export class excludeDealGroupModalDialog {
             this.childGridData1 = this.childGridData.data.filter(x => x.GRP_BY === 1 && x.EXCLD_DEAL_FLAG === 1);
             if (this.childGridData1.length > 0) {
                 this.isData = true;
-                this.childGrid[0] = [{ data: 'Deals below are included as part of the Cost Test' }];
+                this.childGrid[0] = [{ data: this.childGroup1Title }];
             }
             else {
                 this.isData = false;
@@ -295,10 +299,9 @@ export class excludeDealGroupModalDialog {
     }
 
     convertToChildData(dataItem) {
-        if (dataItem.data == 'Deals below are included as part of the Cost Test') {
+        if (dataItem.data == this.childGroup1Title) {
             return this.childGridData1;
-        }
-        else {
+        } else {
             return this.childGridData2;
         }
     }
@@ -325,6 +328,53 @@ export class excludeDealGroupModalDialog {
             return "Cannot edit when deal is in Sumbitted, Pending, Active, Offer or Won stages."
         return ""
     }
+
+    public onExcelExport(args: ExcelExportEvent): void {
+        args.preventDefault();
+        this.loading = true;
+
+        const workbook = args.workbook;
+        const workbookRows = workbook.sheets[0].rows;
+
+        const headerBackgroundColour = workbookRows[0].cells[0].background;
+        const headerTextColour = workbookRows[0].cells[0].color;
+
+        if (this.isSelected) {   // Then include child row data
+            // Included Group
+            this.childGrid.forEach(childRow => {
+                workbookRows.push({ cells: [Object.assign({ value: childRow[0].data, colSpan: workbook.sheets[0].columns.length, type: 'header', background: headerBackgroundColour, color: headerTextColour })]});
+
+                if (childRow[0].data == this.childGroup1Title) {
+                    this.spliceChildGridDataIntoWorkbook(workbookRows, this.childGridData1);
+                } else {
+                    this.spliceChildGridDataIntoWorkbook(workbookRows, this.childGridData2);
+                }
+            });
+        }
+
+        new Workbook(workbook).toDataURL().then((dataUrl: string) => {
+            saveAs(dataUrl, 'ExcludeDealGroup.xlsx');
+            this.loading =  false;
+        });
+    }
+
+    private spliceChildGridDataIntoWorkbook(workbookRows, childGridData) {
+        childGridData.forEach(childGridRow => {
+            workbookRows.splice(workbookRows.length + 1, 0, { cells: this.generateChildRowData(childGridRow), type: 'data' });
+        });
+    }
+
+    private generateChildRowData(childGridRowRaw) {
+        const definedRows = ['OVLP_DEAL_ID', 'OVLP_DEAL_TYPE', 'OVLP_REBT_TYPE', 'OVLP_CNTRCT_NM', 'OVLP_PTR_USER_PRD', 'OVLP_WF_STG_CD', 'OVLP_DEAL_STRT_DT', 'OVLP_DEAL_END_DT', 'OVLP_ADDITIVE', 'OVLP_DEAL_DESC', 'OVLP_ECAP_PRC', 'OVLP_MAX_RPU', 'OVLP_MKT_SEG', 'OVLP_CONSUMPTION_CUST_PLATFORM', 'OVLP_CONSUMPTION_SYS_CONFIG', 'OVLP_CONSUMPTION_COUNTRY_REGION', 'OVLP_CNSMPTN_RSN'];
+
+        let processedWorkbookRow = [];
+        definedRows.forEach(rowField => {
+            processedWorkbookRow.push({ value: childGridRowRaw[rowField] });
+        });
+
+        return processedWorkbookRow;
+    }
+
     ngOnInit() {
         this.loadExcludeDealGroupModel();
     }

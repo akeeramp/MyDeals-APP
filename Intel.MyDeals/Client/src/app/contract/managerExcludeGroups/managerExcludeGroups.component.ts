@@ -122,6 +122,16 @@ export class managerExcludeGroupsComponent {
                 this.gridResult = result.WIP_DEAL.filter(x => x.DC_ID == this.WIP_ID);
             else
                 this.gridResult = result.WIP_DEAL
+
+            //TWC3119-693 Remove the Cancelled/Lost deals
+            for (let i = 0; i < this.gridResult.length; i++) {
+                const item = this.gridResult[i];
+                console.log(item["WF_STG_CD"]);
+                if (item["WF_STG_CD"] === "Cancelled" || item["WF_STG_CD"] === "Lost") {
+                    this.gridResult.splice(i, 1);
+                }
+            }
+
             for (let d = 0; d < this.gridResult.length; d++) {
                 const item = this.gridResult[d];
                 if (item["DEAL_GRP_EXCLDS"] === undefined || item["DEAL_GRP_EXCLDS"] === null) item["DEAL_GRP_EXCLDS"] = "";
@@ -143,7 +153,6 @@ export class managerExcludeGroupsComponent {
             this.loggerSvc.error('Customer service', error);
             this.isLoading = false;
         });
-
     }
 
     dataStateChange(state: DataStateChangeEvent): void {

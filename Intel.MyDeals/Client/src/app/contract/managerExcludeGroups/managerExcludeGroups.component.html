@@ -231,6 +231,7 @@
                             <span>{{getFormatedDim(dataItem,'MAX_RPU','20___0','currency')}}</span>
                         </ng-template>
                     </kendo-grid-column>
+
                     <kendo-grid-column title="Consumption Customer Platform" field="CONSUMPTION_CUST_PLATFORM"
                         [headerClass]="{'headerClass':true}" [width]="160">
                     </kendo-grid-column>
@@ -240,6 +241,7 @@
                     <kendo-grid-column title="Consumption Country/Region" field="CONSUMPTION_COUNTRY_REGION"
                         [headerClass]="{'headerClass':true}" [width]="160">
                     </kendo-grid-column>
+
                     <kendo-grid-column title="Consumption Reason" field="CONSUMPTION_REASON"
                                        [headerClass]="{'headerClass':true}" [width]="160">
                         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
@@ -260,5 +262,4 @@
             </div>
         </div>
     </div>
-
 </div>
