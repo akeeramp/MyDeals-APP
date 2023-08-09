@@ -1174,7 +1174,11 @@ export class PTE_CellChange_Util {
                 }
                 val = parseFloat(val.toString().replace(/[$,]/g, ""));
                 if (!isNaN(val) && isNumber(val)) {
-                    this.hotTable.setDataAtRowProp(item.row, item.prop, val, 'no-edit');
+                    if (includes(VOLUME_COLUMNS, item.prop)) {
+                        this.hotTable.setDataAtRowProp(item.row, item.prop, Math.round(val), 'no-edit');
+                    } else {
+                        this.hotTable.setDataAtRowProp(item.row, item.prop, val, 'no-edit');
+                    }
                 } else {
                     if (includes(VOLUME_COLUMNS, item.prop)) {
                         this.hotTable.setDataAtRowProp(item.row, item.prop, '', 'no-edit');
