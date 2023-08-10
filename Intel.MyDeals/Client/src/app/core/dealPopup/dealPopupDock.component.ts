@@ -184,7 +184,7 @@ export class dealPopupDockComponent  {
     cascadeAll() {
         const OFFSET = 25;
         const INIT_X = 75;
-        const INIT_Y = 30;
+        const INIT_Y = 120;
         for (let i = 0; i < this.ids.length; i++) {
           const item = this.ids[i]; 
             const LEFT = INIT_X + (i * OFFSET);
@@ -222,7 +222,7 @@ export class dealPopupDockComponent  {
         const OFFSET_X = 300;
         const OFFSET_Y = 120;
         const INIT_X = 75;
-        const INIT_Y = 15;
+        const INIT_Y = 90;
         const DOCUMENT_WIDTH = this.screenWidth - 800;
         let r = 0;
         let c = 0;

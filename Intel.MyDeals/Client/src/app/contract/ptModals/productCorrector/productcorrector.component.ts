@@ -267,9 +267,13 @@ export class ProductCorrectorComponent {
         var noOfValidItem = (this.isTender == '1' && this.DEAL_TYPE.toLowerCase() == 'ecap') ? 1 : 10; //Added Tender ECAP Rules
         var validProducts = this.curRowProds.filter(x => x.status === 'Good').length;
 
-        var resolvedProducts = this.curRowProds.reduce((accumulator, current) => {
-            if (current.status === 'Issue')
+        var resolvedProducts = this.curRowProds.reduce((accumulator, current) => {  
+            if (accumulator == undefined) {
+                accumulator = 0;
+            }
+            if (current.status === 'Issue') {
                 return accumulator + current.matchName.length;
+            }
         },0);
         if (parseInt(resolvedProducts) + validProducts >= noOfValidItem) {
             this.loggerService.error("You have too many products! You may have up to " + noOfValidItem + " product(s).","");
