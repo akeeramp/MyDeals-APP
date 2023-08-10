@@ -123,14 +123,8 @@ export class managerExcludeGroupsComponent {
             else
                 this.gridResult = result.WIP_DEAL
 
-            //TWC3119-693 Remove the Cancelled/Lost deals
-            for (let i = 0; i < this.gridResult.length; i++) {
-                const item = this.gridResult[i];
-                console.log(item["WF_STG_CD"]);
-                if (item["WF_STG_CD"] === "Cancelled" || item["WF_STG_CD"] === "Lost") {
-                    this.gridResult.splice(i, 1);
-                }
-            }
+            //TWC3119-693/TWC3119-706 Remove the Cancelled/Lost deals
+            this.gridResult = this.gridResult.filter(x => x.WF_STG_CD != 'Cancelled' && x.WF_STG_CD != 'Lost');
 
             for (let d = 0; d < this.gridResult.length; d++) {
                 const item = this.gridResult[d];
