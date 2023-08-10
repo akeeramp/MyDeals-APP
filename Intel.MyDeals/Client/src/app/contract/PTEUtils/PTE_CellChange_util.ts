@@ -312,11 +312,15 @@ export class PTE_CellChange_Util {
                 //update PTR_USER_PRD with random value if we use row index values while adding after delete can give duplicate index
                 currentString = row + ',' + val.prop + ',' + '1' + ',' + 'no-edit';
                 updateRows.push(currentString.split(','));
-            } else if ((val.prop == 'ECAP_PRICE' || val.prop == 'DSCNT_PER_LN' || val.prop == 'TEMP_TOTAL_DSCNT_PER_LN') && ((rowData==null) || (rowData==undefined) || rowData.PRD_BCKT !== product)) {
+            } else if ((val.prop == 'ECAP_PRICE' || val.prop == 'DSCNT_PER_LN' || val.prop == 'TEMP_TOTAL_DSCNT_PER_LN')) {
+                // update ecap price to 0 if user edits/copy & paste the products in existing rows
                 currentString = row + ',' + val.prop + ',' + '0' + ',' + 'no-edit';
                 updateRows.push(currentString.split(','));
             } else if ((val.prop == 'ECAP_PRICE_____20_____1' || val.prop == 'TEMP_KIT_REBATE') && rowData == null) {
                 currentString = row + ',' + val.prop + ',' + '0' + ',' + 'no-edit';
+                updateRows.push(currentString.split(','));
+            } else if (val.prop == 'PTR_SYS_INVLD_PRD'){
+                currentString = row + ',' + val.prop + ',' + '' + ',' + 'no-edit';
                 updateRows.push(currentString.split(','));
             } else {
                 this.addUpdateRowOnchangeCommon(row, val, updateRows, curPricingTable, contractData, rowData, operation, cellItem);
@@ -532,6 +536,8 @@ export class PTE_CellChange_Util {
                         this.addUpdateRowOnchangeKIT(this.hotTable, columns, i, items[0], ROW_ID, updateRows, curPricingTable, contractData, prods[prodIndex], DataOfRow[prodIndex], operation);
                         prodIndex++;
                     }
+                    // In case of editing/copy & paste in  existing rows ecap price will be updated to 0 and net kit price remains same. Calculating and pushing KIT Rebate to update rows -->  KIT-Rebate =  [ecap price(i.e. 0)- net kit price]
+                    updateRows.push([selrow,'TEMP_KIT_REBATE',(0-parseFloat(DataOfRow[0]['ECAP_PRICE_____20_____1'])),'no-edit']);
                   }
             }
             return updateRows;
@@ -641,6 +647,9 @@ export class PTE_CellChange_Util {
                         currentString = itm.row + ',' + 'PTR_USER_PRD';
                         const obj = currentString.split(',').concat(itm.new, 'no-edit');
                         updateitems.push(obj);
+                        currentString = itm.row + ',' + 'PTR_SYS_INVLD_PRD';
+                        const obj2 = currentString.split(',').concat('', 'no-edit');
+                        updateitems.push(obj2);
                     }
                     items = reject(items, { DC_ID: itm.DC_ID });
                 })
@@ -967,17 +976,30 @@ export class PTE_CellChange_Util {
                 each(existItems, (itm) => {
                     //here onwrds the index get change so we need to make sure its in the right index
                     let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
-                    let rowtiers = parseInt(this.hotTable.getDataAtRowProp(itm.row, "TIER_NBR"));
+                    let rowtiers = 1;
+                    //  Density for saved rows getting num_of_tiers = tiers * density, for non saved rows num_of_tiers = tiers
+                    if (itm.DC_ID > 0) {
+                        rowtiers = parseInt(this.hotTable.getDataAtRowProp(itm.row, "NUM_OF_TIERS"));
+                    } else {
+                        let DenNUM_OF_TIERS = parseInt(this.hotTable.getDataAtRowProp(itm.row, "NUM_OF_TIERS"));
+                        if (isNaN(DenNUM_OF_TIERS)) {
+                            DenNUM_OF_TIERS = curPricingTable.NUM_OF_TIERS;
+                        }
+                        let DenpivotDensity = parseInt(this.hotTable.getDataAtRowProp(itm.row, "NUM_OF_DENSITY"));
+                        if (isNaN(DenpivotDensity)) {
+                            DenpivotDensity = curPricingTable.NUM_OF_DENSITY;
+                        }
+                        rowtiers = DenNUM_OF_TIERS * DenpivotDensity;
+                    }
                     this.hotTable.setCellMeta(itm.row, PTR_col_ind, 'className', 'normal-product');
                     let currentString = '';
                     for (let i = 0; i < rowtiers; i++) {
-                        for (let j = 0; j < pivotDensity; j++) {
-                            currentString = itm.row + ',' + 'PTR_USER_PRD';
-                            const obj = currentString.split(',').concat(itm.new, 'no-edit');
-                            updateitems.push(obj);
-                            i++;
-                        }
-                        i = i - 1;
+                        currentString = (itm.row+i) + ',' + 'PTR_USER_PRD';
+                        const obj = currentString.split(',').concat(itm.new, 'no-edit');
+                        updateitems.push(obj);
+                        currentString = (itm.row+i) + ',' + 'PTR_SYS_INVLD_PRD';
+                        const obj2 = currentString.split(',').concat('', 'no-edit');
+                        updateitems.push(obj2);
                     }
                     items = reject(items, { DC_ID: itm.DC_ID });
                 })
