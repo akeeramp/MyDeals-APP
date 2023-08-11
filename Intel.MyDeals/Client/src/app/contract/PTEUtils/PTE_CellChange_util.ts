@@ -1741,6 +1741,65 @@ export class PTE_CellChange_Util {
             this.hotTable.setDataAtRowProp(items[0].row, 'STRT_VOL', 0, 'no-edit');
         }
     }
+    
+    static checkinputvalueisvalid(changes, columns,dropdownResponses){
+            each(changes, obj => {
+                if (obj.prop == 'QLTR_BID_GEO' || obj.prop == 'MRKT_SEG') {
+                    let isvalid = true;
+                    let list = obj.new && obj.new != null ? obj.new.split(',') : '';
+                    const col = findIndex(columns, { data: obj.prop });
+                    if(list=="" && obj.prop != 'QLTR_BID_GEO'){
+                        isvalid = false;
+                    }
+                    each(list, name => {
+                        name = name.replace(/[\[\]']+/g, '');
+                        let isvalidtype = null;
+                        let comment = ''
+                        if (obj.prop == 'QLTR_BID_GEO') {
+                            isvalidtype = dropdownResponses.QLTR_BID_GEO.find(x => x.dropdownName == name);
+                            comment = 'is not valid Bid Geo';
+                        } else if (obj.prop == 'MRKT_SEG') {
+                            isvalidtype = dropdownResponses.MRKT_SEG.find(x => x.DROP_DOWN == name);
+                            comment = 'is not valid Market Segment';
+                        }
+                        if (isvalidtype == undefined) {
+                            isvalid = false;
+                            this.hotTable.setCellMetaObject(obj.row, col, { 'className': 'error-border', comment: { value: comment } });
+                            this.hotTable.setDataAtRowProp(obj.row, obj.prop, '', 'no-edit');
+                            this.hotTable.render();
+                            return;
+                        }
+                    })
+                    if (isvalid) {
+                            this.hotTable.setCellMetaObject(obj.row, col, { 'className': '', comment: { value: '' } });
+                            this.hotTable.render();
+                    }
+                }
+                if (obj.prop == 'PAYOUT_BASED_ON' || obj.prop == 'PROD_INCLDS') {
+                    const col = findIndex(columns, { data: obj.prop });
+                    let isvalid = null;
+                    let comment = '';
+                    if (obj.prop == 'PAYOUT_BASED_ON') {
+                        isvalid = dropdownResponses.PAYOUT_BASED_ON.find(x => x.DROP_DOWN == obj.new);
+                        comment = 'is not valid Payout Based On';
+                    }
+                    else if (obj.prop == 'PROD_INCLDS') {
+                        isvalid = dropdownResponses.PROD_INCLDS.find(x => x.DROP_DOWN == obj.new);
+                        comment = 'is not valid Media';
+                    }
+                    if (isvalid == undefined) {
+                        this.hotTable.setCellMetaObject(obj.row, col, { 'className': 'error-border', comment: { value: comment } });
+                        this.hotTable.setDataAtRowProp(obj.row, obj.prop, '', 'no-edit');
+                        this.hotTable.render();
+                    } else {
+                        this.hotTable.setCellMetaObject(obj.row, col, { 'className': '', comment: { value: '' } });
+                        this.hotTable.render();
+                    }
+                }
+            })
+        
+    }
+
 
     static setPTRSYStoEmpty(changes: Array<any>) {
         if (changes && changes.length > 0) {

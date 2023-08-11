@@ -910,8 +910,12 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
             // settlement level and period profile set to default value on delete
             const perPro = where(changes, { prop: 'PERIOD_PROFILE' });
             const restprd = where(changes, { prop: 'RESET_VOLS_ON_PERIOD' });
-            const geo = where(changes, { prop: 'GEO_COMBINED' });
-            //here we are using if conditions because at a time multiple changes can happen
+            const geo=where(changes, { prop: 'GEO_COMBINED' });
+            const bidgeo=where(changes, { prop: 'QLTR_BID_GEO' });
+            const mrktseg=where(changes, { prop: 'MRKT_SEG' });
+            const media=where(changes, { prop: 'PROD_INCLDS' });
+            const payoutbasedon=where(changes, { prop: 'PAYOUT_BASED_ON' });
+            //here we are using if conditions because at a time multiple changes can happen 
             if (PTR && PTR.length > 0) {
                 this.undoEnable = false;
                 this.undoCount -= 1;
@@ -962,13 +966,8 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
             if (restprd && restprd.length > 0) {
                 this.setDeafultARSettlementAndRestPeriod(restprd);
             }
-
-            if (rebateType && rebateType.length > 0 && rebateType[0].new != rebateType[0].old) {
-                each(rebateType, rebattype => {
-                    //rebattype.new? null check should be added to avoid console error
-                    let ptrow = { row: rebattype.row, prop: rebattype.prop, old: this.hotTable.getDataAtRowProp(rebattype.row, rebattype.prop), new: rebattype.new?.toString() };
-                    PTE_CellChange_Util.checkfn(ptrow, this.curPricingTable, this.columns, '', this.contractData, this.custCellEditor, this.newPricingTable);
-                })
+            if (bidgeo.length>0 ||mrktseg.length>0 ||payoutbasedon.length>0 || media.length>0) {
+                PTE_CellChange_Util.checkinputvalueisvalid(changes,this.columns,this.dropdownResponses);
             }
             //KIT on change events
             if (KIT_ECAP && KIT_ECAP.length > 0) {
