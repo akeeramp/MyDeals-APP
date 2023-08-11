@@ -27,11 +27,10 @@
                         <mat-list class="matResultListSearch">
                             <div *ngFor="let item of objTypes['CNTRCT'].result">
                                 <mat-list-item>
-                                    <div (click)="gotoOBJ(item,'CNTRCT')">
+                                    <div (click)="gotoObject(item,'CNTRCT')">
                                         <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}:&nbsp;<span style="font-weight: normal; color: #666666;">{{item.CUST_ACCNT_DIV}}</span></div>
                                         <div class="search-result-item">{{item.TITLE}}</div>
                                     </div>
-
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
                             </div>
@@ -58,7 +57,7 @@
                         <mat-list class="matResultListSearch">
                             <div *ngFor="let item of objTypes['PRC_ST'].result">
                                 <mat-list-item>
-                                    <div (click)="gotoOBJ(item,'PRC_ST')">
+                                    <div (click)="gotoObject(item,'PRC_ST')">
                                         <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}<span style="font-weight: normal; color: #666666;">{{item.CUST_ACCNT_DIV}}</span></div>
                                         <div class="search-result-item">{{item.TITLE}}</div>
                                     </div>
@@ -88,7 +87,7 @@
                         <mat-list class="matResultListSearch">
                             <div *ngFor="let item of objTypes['PRC_TBL'].result">
                                 <mat-list-item>
-                                    <div (click)="gotoOBJ(item,'PRC_TBL')">
+                                    <div (click)="gotoObject(item,'PRC_TBL')">
                                         <div style="font-weight: bold; color: #003C71;">#{{item.DC_ID}}<span style="font-weight: normal; color: #666666;">{{item.CUST_ACCNT_DIV}}</span></div>
                                         <div class="search-result-item">{{item.TITLE}}</div>
                                     </div>
@@ -121,9 +120,9 @@
                                     <div>
                                         <div style="display:flex">
                                             <deal-popup-icon [dealId]="item.DC_ID"></deal-popup-icon>
-                                            <div  (click)="gotoOBJ(item,'WIP_DEAL')" style="font-weight: bold; color: #003C71;margin-top:0px">#{{item.DC_ID}}</div>
+                                            <div  (click)="gotoObject(item,'WIP_DEAL')" style="font-weight: bold; color: #003C71;margin-top:0px">#{{item.DC_ID}}</div>
                                         </div>
-                                        <div style="margin-top: -10px; margin-left: 25px;" class="search-result-item" (click)="gotoOBJ(item,'WIP_DEAL')">{{item.TITLE}}</div>
+                                        <div style="margin-top: -10px; margin-left: 25px;" class="search-result-item" (click)="gotoObject(item,'WIP_DEAL')">{{item.TITLE}}</div>
                                     </div>
                                 </mat-list-item>
                                 <mat-divider></mat-divider>
