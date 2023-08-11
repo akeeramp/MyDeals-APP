@@ -1,6 +1,6 @@
 //import { contractComponent } from "../contract/contract.component";
 import { contractDetailsComponent } from "../contract/contractDetails/contractDetails.component";
-import { lnavComponent } from "../contract/lnav/lnav.component";
+import { LnavComponent } from "../contract/lnav/lnav.component";
 import { pricingTableComponent } from "../contract/pricingTable/pricingTable.component";
 import { pricingTableEditorComponent } from "../contract/pricingTableEditor/pricingTableEditor.component";
 import { TenderFolioComponent } from "../contract/tenderFolio/tenderFolio.component"
@@ -50,7 +50,7 @@ import { goToComponent } from "../contract/goTo.component";
 
 export let contractComponents = [
     contractDetailsComponent,
-    lnavComponent,
+    LnavComponent,
     pricingTableComponent,
     pricingTableEditorComponent,
     TenderFolioComponent,

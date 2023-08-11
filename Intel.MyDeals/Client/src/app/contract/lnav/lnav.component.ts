@@ -1,14 +1,16 @@
 ﻿import { each } from 'underscore';
+import { MatDialog } from '@angular/material/dialog';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation, ChangeDetectorRef, ElementRef, ViewChild, OnInit, OnChanges, AfterViewInit } from "@angular/core";
+import { ActivatedRoute, Router } from "@angular/router";
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+
 import { lnavService } from "../lnav/lnav.service";
 import { logger } from "../../shared/logger/logger";
 import { lnavUtil } from '../lnav.util';
 import { headerService } from "../../shared/header/header.service";
-import { MatDialog } from '@angular/material/dialog';
 import { AutoFillComponent } from "../ptModals/autofillsettings/autofillsettings.component";
 import { RenameTitleComponent } from "../ptModals/renameTitle/renameTitle.component";
 import { contractDetailsService } from "../contractDetails/contractDetails.service";
-import { Component, Input, Output, EventEmitter, ViewEncapsulation, ChangeDetectorRef } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
 
 export interface contractIds {
     Model: string;
@@ -26,9 +28,16 @@ export interface contractIds {
     styleUrls: ['Client/src/app/contract/lnav/lnav.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class lnavComponent {
-    constructor(private loggerSvc: logger, private lnavSvc: lnavService, private headerSvc: headerService, private contractDetailsSvc: contractDetailsService,
-        private dialog: MatDialog, private router: Router, private route: ActivatedRoute, private changeDetector: ChangeDetectorRef) {}
+export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
+    constructor(private loggerService: logger,
+                private lnavService: lnavService,
+                private headerService: headerService,
+                private contractDetailsService: contractDetailsService,
+                private dialog: MatDialog,
+                private router: Router,
+                private route: ActivatedRoute,
+                private changeDetector: ChangeDetectorRef) {}
+
     @Input() contractId: number;
     @Input() contractData;
     @Input() UItemplate;
@@ -50,11 +59,11 @@ export class lnavComponent {
     public container: any;
     public strategyTreeCollapseAll = true; isCollapsed = false; isSearchHidden = false; isSummaryHidden = true;
     isAddStrategyBtnHidden = true;
-    private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
-    private CAN_VIEW_MEET_COMP: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
+    private CAN_VIEW_COST_TEST: boolean = this.lnavService.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
+    private CAN_VIEW_MEET_COMP: boolean = this.lnavService.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
     private CAN_VIEW_EXPORT = true;
     private CAN_VIEW_ALL_DEALS = true;
-    private C_ADD_PRICING_STRATEGY: boolean = this.lnavSvc.chkDealRules('C_ADD_PRICING_STRATEGY', (<any>window).usrRole, null, null, null);
+    private C_ADD_PRICING_STRATEGY: boolean = this.lnavService.chkDealRules('C_ADD_PRICING_STRATEGY', (<any>window).usrRole, null, null, null);
     private usrRole = (<any>window).usrRole;
     private isSuper = true;
     private superPrefix = "";
@@ -83,6 +92,11 @@ export class lnavComponent {
     private lnavSelectedPS: any = {};
     private isDeletePT: boolean = false;
     private isDeletePs: boolean = false;
+
+    @ViewChild('pricingStrategyStartTooltipTarget') pricingStrategyStartTooltip: NgbTooltip;
+    private showPricingStrategyTooltip() {
+        this.pricingStrategyStartTooltip.open();
+    }
 
     setBusy(msg, detail, msgType, showFunFact) {
         setTimeout(() => {
@@ -154,16 +168,16 @@ export class lnavComponent {
         this.selectedModel = model;
           //it will update the url on page reload persist the selected state
         if(this.route.snapshot.queryParams.loadtype== 'Manage'){
-        const type=this.route.snapshot.paramMap.get('type');
-        const cid=this.route.snapshot.paramMap.get('cid');
-        const psid=this.route.snapshot.paramMap.get('PSID');
-        const ptid=this.route.snapshot.paramMap.get('PTID');
-        const dealid=this.route.snapshot.paramMap.get('DealID');
-        const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
-        this.router.navigateByUrl(urlTree+'?loadtype=Manage&&manageType='+model );
+            const type=this.route.snapshot.paramMap.get('type');
+            const cid=this.route.snapshot.paramMap.get('cid');
+            const psid=this.route.snapshot.paramMap.get('PSID');
+            const ptid=this.route.snapshot.paramMap.get('PTID');
+            const dealid=this.route.snapshot.paramMap.get('DealID');
+            const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
+            this.router.navigateByUrl(urlTree+'?loadtype=Manage&&manageType='+model );
         }
         setTimeout(() => {
-         this.modelChange.emit(contractId_Map);
+            this.modelChange.emit(contractId_Map);
         }, 100);
     }
     // **** PRICING STRATEGY Methods ****
@@ -241,28 +255,28 @@ export class lnavComponent {
             this.newStrategy.IS_HYBRID_PRC_STRAT = ps.IS_HYBRID_PRC_STRAT == "1" ? true : false;
         }
 
-        this.lnavSvc.createPricingStrategy(custId, contractId, ps).subscribe((response: any) => {
+        this.lnavService.createPricingStrategy(custId, contractId, ps).subscribe((response: any) => {
             if (this.contractData.PRC_ST === undefined) this.contractData.PRC_ST = [];
             ps.DC_ID = response.PRC_ST[1].DC_ID;
             this.contractData.PRC_ST.push(ps);
             this.showAddPricingTable(ps);
-            this.loggerSvc.success("Save Successful", "Added Pricing Strategy");
+            this.loggerService.success("Save Successful", "Added Pricing Strategy");
             this.newStrategy.TITLE = "";
             //this condition need to revisit will check later
             this.newStrategy.IS_HYBRID_PRC_STRAT = ps.IS_HYBRID_PRC_STRAT == "1" ? true : false;
             this.curPricingStrategy = ps;
             this.curPricingStrategyId = ps.DC_ID;
-            this.contractDetailsSvc.readContract(contractId).subscribe((response: Array<any>) => {
+            this.contractDetailsService.readContract(contractId).subscribe((response: Array<any>) => {
                 this.contractData = response[0];
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             }, (err) => {
-                this.loggerSvc.error("Unable to get contract data", "Error", err);
+                this.loggerService.error("Unable to get contract data", "Error", err);
             });
             this.isLoading = false;
             this.setBusy("", "", "", false);
         }, (err) => {
-            this.loggerSvc.error("Unable to create pricing strategy", "Error", err);
+            this.loggerService.error("Unable to create pricing strategy", "Error", err);
             this.isLoading = false;
         })
         //expand pricing strategy after creation.
@@ -272,12 +286,12 @@ export class lnavComponent {
     }
 
     refreshContractData(cId) {
-        this.contractDetailsSvc
+        this.contractDetailsService
             .readContract(cId)
             .subscribe((response: Array<any>) => {
                 this.contractData = response[0];
             }, (err) => {
-                this.loggerSvc.error("Unable to get contract data", "Error", err);
+                this.loggerService.error("Unable to get contract data", "Error", err);
             });
     }
     // **** PRICING TABLE Methods ****
@@ -355,7 +369,7 @@ export class lnavComponent {
         this.setBusy("Adding...", "Adding the Pricing Table", "Info", true);
         const pt = this.UItemplate["ObjectTemplates"].PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];
         if (!pt) {
-            this.loggerSvc.error("Could not create the Pricing Table.", "Error");
+            this.loggerService.error("Could not create the Pricing Table.", "Error");
             this.isLoading = false;
             this.setBusy("", "", "", false);
             return;
@@ -379,20 +393,20 @@ export class lnavComponent {
                 }
             }
         }
-        this.lnavSvc.createPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, pt).subscribe((response: any) => {
+        this.lnavService.createPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, pt).subscribe((response: any) => {
             pt.DC_ID = response.PRC_TBL[1].DC_ID;
-            this.contractDetailsSvc.readContract(this.contractData.DC_ID).subscribe((response: Array<any>) => {
+            this.contractDetailsService.readContract(this.contractData.DC_ID).subscribe((response: Array<any>) => {
                 this.contractData = response[0];
                 this.loadPTE(pt.DC_PARENT_ID, pt.DC_ID, 0, 0);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             }, (err) => {
-                this.loggerSvc.error("Unable to get contract data", "Error", err);
+                this.loggerService.error("Unable to get contract data", "Error", err);
             });
             this.isLoading = false;
             this.setBusy("", "", "", false);
         }, (err) => {
-            this.loggerSvc.error("Unable to create pricing table", "Error", err);
+            this.loggerService.error("Unable to create pricing table", "Error", err);
             this.isLoading = false;
         })
     }
@@ -495,26 +509,26 @@ export class lnavComponent {
             item.TITLE += " (copy)";
         }
         if (isPs == true) {
-            this.lnavSvc.copyPricingStrategy(custId, contractId, id, item).subscribe((response: any) => {
-                this.loggerSvc.success("Copied the " + objType + ".", "Copy Successful");
+            this.lnavService.copyPricingStrategy(custId, contractId, id, item).subscribe((response: any) => {
+                this.loggerService.success("Copied the " + objType + ".", "Copy Successful");
                 this.refreshContractData(contractId);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             }, (err) => {
-                this.loggerSvc.error("Could not copy the " + objType + ".", err, err.statusText);
+                this.loggerService.error("Could not copy the " + objType + ".", err, err.statusText);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             });
 
         }
         else {
-            this.lnavSvc.copyPricingTable(custId, contractId, id, item).subscribe((response: any) => {
-                this.loggerSvc.success("Copied the " + objType + ".", "Copy Successful");
+            this.lnavService.copyPricingTable(custId, contractId, id, item).subscribe((response: any) => {
+                this.loggerService.success("Copied the " + objType + ".", "Copy Successful");
                 this.refreshContractData(contractId);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             }, (err) => {
-                this.loggerSvc.error("Could not copy the " + objType + ".", err, err.statusText);
+                this.loggerService.error("Could not copy the " + objType + ".", err, err.statusText);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             });
@@ -558,16 +572,16 @@ export class lnavComponent {
             this.setBusy("Deleting...", "Deleting the Pricing Strategy", "Info", false);
             const custId = this.contractData.CUST_MBR_SID;
             const contractId = this.contractData.DC_ID
-            this.lnavSvc.deletePricingStrategy(custId, contractId, this.lnavSelectedPS).subscribe((response: any) => {
+            this.lnavService.deletePricingStrategy(custId, contractId, this.lnavSelectedPS).subscribe((response: any) => {
                 this.unmarkCurPricingStrategyIf(this.lnavSelectedPS.DC_ID);
                 this.unmarkCurPricingTableIf(this.lnavSelectedPS.DC_ID);
                 this.contractData.PRC_ST.splice(this.contractData.PRC_ST.indexOf(this.lnavSelectedPS), 1);
-                this.loggerSvc.success("Delete Successful", "Deleted the Pricing Strategy");
+                this.loggerService.success("Delete Successful", "Deleted the Pricing Strategy");
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
                 this.lnavSelectedPS = {};
             }, (err) => {
-                this.loggerSvc.error("Could not delete Pricing Strategy" + this.lnavSelectedPS.DC_ID, err, err.statusText);
+                this.loggerService.error("Could not delete Pricing Strategy" + this.lnavSelectedPS.DC_ID, err, err.statusText);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             });
@@ -584,17 +598,17 @@ export class lnavComponent {
             this.setBusy("Deleting...", "Deleting the Pricing Table", "Info", false);
             const custId = this.contractData.CUST_MBR_SID;
             const contractId = this.contractData.DC_ID;
-            this.lnavSvc.deletePricingTable(custId, contractId, this.lnavSelectedPT).subscribe((response: any) => {
+            this.lnavService.deletePricingTable(custId, contractId, this.lnavSelectedPT).subscribe((response: any) => {
                 this.ptDelId = this.lnavSelectedPT.DC_ID;
                 this.unmarkCurPricingTableIf(this.lnavSelectedPS.DC_ID);
                 this.lnavSelectedPS.PRC_TBL.splice(this.lnavSelectedPS.PRC_TBL.indexOf(this.lnavSelectedPT), 1);
-                this.loggerSvc.success("Delete Successful", "Deleted the Pricing Table");
+                this.loggerService.success("Delete Successful", "Deleted the Pricing Table");
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
                 this.lnavSelectedPS = {};
                 this.lnavSelectedPT = {};
             }), err => {
-                this.loggerSvc.error("Could not delete Pricing Table" + this.lnavSelectedPT.DC_ID, err, err.statusText);
+                this.loggerService.error("Could not delete Pricing Table" + this.lnavSelectedPT.DC_ID, err, err.statusText);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             };
@@ -721,11 +735,11 @@ export class lnavComponent {
                 this.autoFillData = result;
                 if (pt == null) {
                     this.newPricingTable = this.autoFillData["newPt"];
-                    this.contractDetailsSvc.readContract(this.contractData.DC_ID).subscribe((response: Array<any>) => {
+                    this.contractDetailsService.readContract(this.contractData.DC_ID).subscribe((response: Array<any>) => {
                         this.contractData = response[0];
                         this.loadPTE(this.newPricingTable.DC_PARENT_ID, this.newPricingTable.DC_ID, 0, 0);
                     }, (err) => {
-                        this.loggerSvc.error("Unable to get contract data", "Error", err);
+                        this.loggerService.error("Unable to get contract data", "Error", err);
                     });
                     this.hideAddPricingTable();
                 }
@@ -780,7 +794,7 @@ export class lnavComponent {
         const psid=this.route.snapshot.paramMap.get('PSID');
         const ptid=this.route.snapshot.paramMap.get('PTID');
         const dealid=this.route.snapshot.paramMap.get('DealID');
-        this.headerSvc.getUserDetails().subscribe(res => {
+        this.headerService.getUserDetails().subscribe(res => {
             this.usrRole = res.UserToken.Role.RoleTypeCd;
             (<any>window).usrRole = this.usrRole;
 
@@ -789,7 +803,7 @@ export class lnavComponent {
                 this.extraUserPrivsDetail.push("Super User");
             }
         }, (err) => {
-            this.loggerSvc.error("Unable to get user role data", "Error", err);
+            this.loggerService.error("Unable to get user role data", "Error", err);
         });
         if (event.title == "Deal Entry") {
               //it will update the url on page reload persist the selected state
@@ -829,7 +843,7 @@ export class lnavComponent {
     toggleLnav(src: string) {
         this.isLnavHidden['isLnavHid'] = !this.isLnavHidden['isLnavHid'];
         this.isLnavHidden['source'] = src;
-        this.lnavSvc.isLnavHidden.next(this.isLnavHidden);
+        this.lnavService.isLnavHidden.next(this.isLnavHidden);
     }
     
     toggleStrategyTree() {
@@ -925,17 +939,17 @@ export class lnavComponent {
                 }
             }
             //code for autofill change to accordingly change values
-            this.lnavSvc.autoFillData.subscribe(res => {
+            this.lnavService.autoFillData.subscribe(res => {
                 this.autoFillData = res;
             }, err => {
-                this.loggerSvc.error("lnavSvc::isAutoFillChange**********", err);
+                this.loggerService.error("lnavSvc::isAutoFillChange**********", err);
             });
             if(this.route.snapshot.queryParams.loadtype=='Manage'){
                this.selectedModel= this.route.snapshot.queryParams.manageType;
             }
         }
         catch (ex) {
-            this.loggerSvc.error('Something went wrong', 'Error');
+            this.loggerService.error('Something went wrong', 'Error');
             console.error('LNAV::ngOnInit::', ex);
         }
 
@@ -957,13 +971,19 @@ export class lnavComponent {
       }
     }
     ngAfterViewInit() {
+        if (this.contractData && (this.contractData.PRC_ST == undefined || this.contractData.PRC_ST.length == 0)) {
+            if (this.C_ADD_PRICING_STRATEGY) {
+                this.showPricingStrategyTooltip();
+            }
+        }
+
         //This will help to highlight the selectd PT incase of search result landing directly to PT. The logic can apply only once the page is rendered
-        this.lnavSvc.lnavHieight.subscribe(res => {
+        this.lnavService.lnavHieight.subscribe(res => {
             this.contractId_Map = { ...res, ps_index: 0, pt_index: 0 };
             (<any>$(`#sumPSdata_${this.contractId_Map.ps_id}`)).collapse('show');
             this.changeDetector.detectChanges();
         }, err => {
-            this.loggerSvc.error("lnavSvc::lnavHieight**********", err);
+            this.loggerService.error("lnavSvc::lnavHieight**********", err);
         });
     }
 }
