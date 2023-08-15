@@ -1,7 +1,8 @@
-﻿import { each } from 'underscore';
+﻿/* eslint-disable @typescript-eslint/no-inferrable-types */
+import { each } from 'underscore';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, Input, Output, EventEmitter, ViewEncapsulation, ChangeDetectorRef, ElementRef, ViewChild, OnInit, OnChanges, AfterViewInit } from "@angular/core";
-import { ActivatedRoute, Router } from "@angular/router";
+import { Component, Input, Output, EventEmitter, ViewEncapsulation, ChangeDetectorRef, ViewChild, OnInit, OnChanges, AfterViewInit } from '@angular/core';
+import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 import { lnavService } from "../lnav/lnav.service";
@@ -29,6 +30,7 @@ export interface contractIds {
     encapsulation: ViewEncapsulation.None
 })
 export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
+
     constructor(private loggerService: logger,
                 private lnavService: lnavService,
                 private headerService: headerService,
@@ -42,7 +44,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
     @Input() contractData;
     @Input() UItemplate;
     @Input() changedTab: number = 0;
-    @Input() selectNavMenu:any;
+    @Input() selectNavMenu: any;
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
 
     public query = "";
@@ -127,7 +129,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
         });
     }
     //Output Emitter to load the Pricing table data
-    loadPTE(psId, ptId, ps_index: number, pt_index: number) {
+    loadPte(psId, ptId, ps_index: number, pt_index: number) {
         const contractId_Map: contractIds = {
             Model: 'PTE',
             ps_id: psId,
@@ -169,12 +171,12 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
           //it will update the url on page reload persist the selected state
         if(this.route.snapshot.queryParams.loadtype== 'Manage'){
             const type=this.route.snapshot.paramMap.get('type');
-            const cid=this.route.snapshot.paramMap.get('cid');
-            const psid=this.route.snapshot.paramMap.get('PSID');
-            const ptid=this.route.snapshot.paramMap.get('PTID');
-            const dealid=this.route.snapshot.paramMap.get('DealID');
-            const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
-            this.router.navigateByUrl(urlTree+'?loadtype=Manage&&manageType='+model );
+            const cId=this.route.snapshot.paramMap.get('cid');
+            const psId=this.route.snapshot.paramMap.get('PSID');
+            const ptId=this.route.snapshot.paramMap.get('PTID');
+            const dealId=this.route.snapshot.paramMap.get('DealID');
+            const urlTree = this.router.createUrlTree(['/contractmanager', type, cId, psId, ptId, dealId ]);
+            this.router.navigateByUrl(urlTree + '?loadtype=Manage&&manageType=' + model);
         }
         setTimeout(() => {
             this.modelChange.emit(contractId_Map);
@@ -397,7 +399,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
             pt.DC_ID = response.PRC_TBL[1].DC_ID;
             this.contractDetailsService.readContract(this.contractData.DC_ID).subscribe((response: Array<any>) => {
                 this.contractData = response[0];
-                this.loadPTE(pt.DC_PARENT_ID, pt.DC_ID, 0, 0);
+                this.loadPte(pt.DC_PARENT_ID, pt.DC_ID, 0, 0);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             }, (err) => {
@@ -415,14 +417,14 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
         this.newPricingTable = this.UItemplate.ObjectTemplates.PRC_TBL.ECAP;
         this.newPricingTable["OBJ_SET_TYPE_CD"] = "";
     }
-    unmarkCurPricingStrategyIf = function (id) {
+    unmarkCurPricingStrategyId = function (id) {
         if (this.curPricingStrategyId === id) {
             this.curPricingStrategy = {};
             this.curPricingStrategyId = 0;
             this.openDealEntryTab("PTE");
         }
     }
-    unmarkCurPricingTableIf = function (id) {
+    unmarkCurPricingTableId = function (id) {
         if (this.curPricingTableId > 0 &&
             this.curPricingTable !== null &&
             this.curPricingStrategy.DC_ID === id) {
@@ -477,7 +479,6 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     copyObj(objType, objTypes, id, isPs) {
-
         this.isLoading = true;
         this.setBusy("Copying...", "Copying the " + objType, "Info", true);
 
@@ -565,6 +566,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
         this.lnavSelectedPS = ps;
         this.isDeletePs = true;
     }
+
     isDeletePricingStrategy(isDelPS: boolean) {
         if (isDelPS) {
             this.isDeletePs = false;
@@ -573,20 +575,21 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
             const custId = this.contractData.CUST_MBR_SID;
             const contractId = this.contractData.DC_ID
             this.lnavService.deletePricingStrategy(custId, contractId, this.lnavSelectedPS).subscribe((response: any) => {
-                this.unmarkCurPricingStrategyIf(this.lnavSelectedPS.DC_ID);
-                this.unmarkCurPricingTableIf(this.lnavSelectedPS.DC_ID);
+                this.unmarkCurPricingStrategyId(this.lnavSelectedPS.DC_ID);
+                this.unmarkCurPricingTableId(this.lnavSelectedPS.DC_ID);
                 this.contractData.PRC_ST.splice(this.contractData.PRC_ST.indexOf(this.lnavSelectedPS), 1);
                 this.loggerService.success("Delete Successful", "Deleted the Pricing Strategy");
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
                 this.lnavSelectedPS = {};
+
+                this.checkPsListAndDisplayTooltip(true);
             }, (err) => {
                 this.loggerService.error("Could not delete Pricing Strategy" + this.lnavSelectedPS.DC_ID, err, err.statusText);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             });
-        }
-        else {
+        } else {
             this.isDeletePs = false;
         }
     }
@@ -600,7 +603,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
             const contractId = this.contractData.DC_ID;
             this.lnavService.deletePricingTable(custId, contractId, this.lnavSelectedPT).subscribe((response: any) => {
                 this.ptDelId = this.lnavSelectedPT.DC_ID;
-                this.unmarkCurPricingTableIf(this.lnavSelectedPS.DC_ID);
+                this.unmarkCurPricingTableId(this.lnavSelectedPS.DC_ID);
                 this.lnavSelectedPS.PRC_TBL.splice(this.lnavSelectedPS.PRC_TBL.indexOf(this.lnavSelectedPT), 1);
                 this.loggerService.success("Delete Successful", "Deleted the Pricing Table");
                 this.isLoading = false;
@@ -612,11 +615,9 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             };
-        }
-        else {
+        } else {
             this.isDeletePT = false;
         }
-
     }
 
     deletePricingTable(ps, pt) {
@@ -648,7 +649,6 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
             default:
                 break;
         }
-
     }
 
     onSelectPsMenu(event: any, ps: any): void {
@@ -737,7 +737,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
                     this.newPricingTable = this.autoFillData["newPt"];
                     this.contractDetailsService.readContract(this.contractData.DC_ID).subscribe((response: Array<any>) => {
                         this.contractData = response[0];
-                        this.loadPTE(this.newPricingTable.DC_PARENT_ID, this.newPricingTable.DC_ID, 0, 0);
+                        this.loadPte(this.newPricingTable.DC_PARENT_ID, this.newPricingTable.DC_ID, 0, 0);
                     }, (err) => {
                         this.loggerService.error("Unable to get contract data", "Error", err);
                     });
@@ -790,10 +790,10 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
     onTabSelect(event: any) {
         this.selectedTab = event.index;
         const type=this.route.snapshot.paramMap.get('type');
-        const cid=this.route.snapshot.paramMap.get('cid');
-        const psid=this.route.snapshot.paramMap.get('PSID');
-        const ptid=this.route.snapshot.paramMap.get('PTID');
-        const dealid=this.route.snapshot.paramMap.get('DealID');
+        const cId=this.route.snapshot.paramMap.get('cid');
+        const psId=this.route.snapshot.paramMap.get('PSID');
+        const ptId=this.route.snapshot.paramMap.get('PTID');
+        const dealId=this.route.snapshot.paramMap.get('DealID');
         this.headerService.getUserDetails().subscribe(res => {
             this.usrRole = res.UserToken.Role.RoleTypeCd;
             (<any>window).usrRole = this.usrRole;
@@ -807,16 +807,15 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
         });
         if (event.title == "Deal Entry") {
               //it will update the url on page reload persist the selected state
-            const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
+            const urlTree = this.router.createUrlTree(['/contractmanager', type, cId, psId, ptId, dealId ]);
             this.router.navigateByUrl(urlTree);
             setTimeout(() => {
                 this.loadModel('PTE');
             }, 100);
-            
         }
         else if (event.title == "Meet Comp") {
               //it will update the url on page reload persist the selected state
-            const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
+            const urlTree = this.router.createUrlTree(['/contractmanager', type, cId, psId, ptId, dealId ]);
             this.router.navigateByUrl(urlTree+'?loadtype=MeetComp' );
              setTimeout(() => {
                 this.loadModel('MeetComp');
@@ -824,7 +823,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
         }
         else if (event.title == "Manage") {
               //it will update the url on page reload persist the selected state
-            const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
+            const urlTree = this.router.createUrlTree(['/contractmanager', type, cId, psId, ptId, dealId ]);
             this.router.navigateByUrl(urlTree+'?loadtype=Manage' );
             setTimeout(() => {
                 this.loadModel('Manage');
@@ -925,65 +924,92 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
         });
         return isNeedMCT;
     }
+
+    private readonly dealEntryTabId: number = 0;
+    private checkPsListAndDisplayTooltip(toggleStrategyField = false) {
+        if (this.selectedTab == this.dealEntryTabId && this.isAddPricingStrategyState()) {
+            if (toggleStrategyField) {
+                this.toggleAddStrategy();
+            }
+
+            this.showPricingStrategyTooltip();
+        }
+    }
+
+    private isAddPricingStrategyState(): boolean {
+        if (this.contractData && (this.contractData.PRC_ST == undefined || this.contractData.PRC_ST.length == 0)) {
+            if (this.C_ADD_PRICING_STRATEGY) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
     ngOnInit() {
         try {
-            this.newStrategy = this.UItemplate["ObjectTemplates"]?.PRC_ST.ALL_TYPES;
+            this.newStrategy = this.UItemplate.ObjectTemplates?.PRC_ST.ALL_TYPES;
             this.newPricingTable = this.UItemplate.ObjectTemplates.PRC_TBL.ECAP;
             this.newStrategy.IS_HYBRID_PRC_STRAT = false;
             this.contractData?.PRC_ST?.map((x, i) => {
                 this.isPSExpanded[i] = true
             });
-            if (this.contractData && (this.contractData.PRC_ST == undefined || this.contractData.PRC_ST.length == 0)) {
-                if (this.C_ADD_PRICING_STRATEGY) {
-                    this.toggleAddStrategy();
-                }
+
+            if (this.isAddPricingStrategyState()) {
+                this.toggleAddStrategy();
             }
+
             //code for autofill change to accordingly change values
             this.lnavService.autoFillData.subscribe(res => {
                 this.autoFillData = res;
             }, err => {
                 this.loggerService.error("lnavSvc::isAutoFillChange**********", err);
             });
-            if(this.route.snapshot.queryParams.loadtype=='Manage'){
+
+            if (this.route.snapshot.queryParams.loadtype == 'Manage') {
                this.selectedModel= this.route.snapshot.queryParams.manageType;
             }
-        }
-        catch (ex) {
+        } catch (ex) {
             this.loggerService.error('Something went wrong', 'Error');
             console.error('LNAV::ngOnInit::', ex);
         }
+    }
 
-    }
     ngOnChanges() {
-        this.selectedTab=this.changedTab;
-        if(!!this.selectNavMenu && this.selectNavMenu!=''){
-            this.selectedModel=this.selectNavMenu;
-              //it will update the url on page reload persist the selected state
-        if(this.route.snapshot.queryParams.loadtype=='Manage'){
-            const type=this.route.snapshot.paramMap.get('type');
-            const cid=this.route.snapshot.paramMap.get('cid');
-            const psid=this.route.snapshot.paramMap.get('PSID');
-            const ptid=this.route.snapshot.paramMap.get('PTID');
-            const dealid=this.route.snapshot.paramMap.get('DealID');
-            const urlTree = this.router.createUrlTree(['/contractmanager', type, cid, psid, ptid, dealid ]);
-            this.router.navigateByUrl(urlTree+'?loadtype=Manage&&manageType='+this.selectNavMenu );
-         }
-      }
-    }
-    ngAfterViewInit() {
-        if (this.contractData && (this.contractData.PRC_ST == undefined || this.contractData.PRC_ST.length == 0)) {
-            if (this.C_ADD_PRICING_STRATEGY) {
-                this.showPricingStrategyTooltip();
+        this.selectedTab = this.changedTab;
+
+        if (this.selectedTab == this.dealEntryTabId && this.isAddPricingStrategyState()) {
+            this.toggleAddStrategy();
+        }
+
+        if (!!this.selectNavMenu && this.selectNavMenu != '') {
+            this.selectedModel = this.selectNavMenu;
+
+            //it will update the url on page reload persist the selected state
+            if(this.route.snapshot.queryParams.loadtype=='Manage'){
+                const type = this.route.snapshot.paramMap.get('type');
+                const cId = this.route.snapshot.paramMap.get('cid');
+                const psId = this.route.snapshot.paramMap.get('PSID');
+                const ptId = this.route.snapshot.paramMap.get('PTID');
+                const dealId = this.route.snapshot.paramMap.get('DealID');
+                const urlTree = this.router.createUrlTree(['/contractmanager', type, cId, psId, ptId, dealId]);
+
+                this.router.navigateByUrl(urlTree + '?loadtype=Manage&&manageType=' + this.selectNavMenu);
             }
         }
+    }
+
+    ngAfterViewInit() {
+        this.checkPsListAndDisplayTooltip(true);
 
         //This will help to highlight the selectd PT incase of search result landing directly to PT. The logic can apply only once the page is rendered
         this.lnavService.lnavHieight.subscribe(res => {
             this.contractId_Map = { ...res, ps_index: 0, pt_index: 0 };
-            (<any>$(`#sumPSdata_${this.contractId_Map.ps_id}`)).collapse('show');
+            (<any> $(`#sumPSdata_${ this.contractId_Map.ps_id }`)).collapse('show');
             this.changeDetector.detectChanges();
         }, err => {
             this.loggerService.error("lnavSvc::lnavHieight**********", err);
         });
     }
+
 }

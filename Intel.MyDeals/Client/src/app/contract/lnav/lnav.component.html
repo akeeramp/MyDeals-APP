@@ -11,6 +11,7 @@
             </div>
         </div>
     </div>
+
     <div class="lnavMenuContainer mainMenuContainer">
         <kendo-tabstrip (tabSelect)="onTabSelect($event)" class="gaming-tab" style="background-color: #ffffff !important;">
             <kendo-tabstrip-tab title="Deal Entry" class="flowBtn" [selected]="selectedTab == 0">
@@ -49,10 +50,8 @@
                                     <div class="bgBlueContainer" [ngClass]="{isErrorWrapper: newStrategy._behaviors.isError.TITLE}">
                                         <input type="text" class="k-textbox fl" placeholder="" style="width: 224px !important; color: black;" maxlength="250" id="inptPrcTitle"
                                                [(ngModel)]="newStrategy.TITLE" [ngClass]="{isError: newStrategy._behaviors.isError.TITLE}" (keydown.enter)="customAddPsValidate()"
-                                               #pricingStrategyStartTooltipTarget="ngbTooltip"
-                                               ngbTooltip="Start by adding a Pricing Strategy"
-                                               triggers="manual"
-                                               [autoClose]="false" />
+                                               #pricingStrategyStartTooltipTarget="ngbTooltip" ngbTooltip="Start by adding a Pricing Strategy" tooltipClass="pricing-strategy-input-tooltip"
+                                               placement="top" triggers="manual" [autoClose]="false" />
                                         <button class="btn btn-sm btn-primary lnavaddbtnstyle" type="submit" [disabled]="isAddStrategyBtnHidden" (click)="customAddPsValidate()">
                                             Add
                                         </button>
@@ -76,9 +75,9 @@
                                     <div class="ptLnavtmpltContainer" style="border:red;">
                                         <div style="color: #F3D54E;">{{ newPricingTable._behaviors.validMsg.OBJ_SET_TYPE_CD }}</div>
                                         <div *ngFor="let DealType of PtDealTypes">
-                                            <div class="fl circleWithText" (click)="selectPtTemplateIcon(DealType)" [ngClass]="{active:DealType._custom._active}">
-                                                <div class="fl textCircle blueBg" style="font-size: 10px;">{{ DealType._custom.ltr}}</div>
-                                                <div class="fl textName" style="font-size: 12px;">{{ removeBlanks(DealType.name)}}</div>
+                                            <div class="fl circleWithText" (click)="selectPtTemplateIcon(DealType)" [ngClass]="{ active: DealType._custom._active }">
+                                                <div class="fl textCircle blueBg" style="font-size: 10px;">{{ DealType._custom.ltr }}</div>
+                                                <div class="fl textName" style="font-size: 12px;">{{ removeBlanks(DealType.name) }}</div>
                                                 <div class="clearboth"></div>
                                             </div>
                                         </div>
@@ -131,7 +130,7 @@
                                                 <div *ngFor="let pt of ps.PRC_TBL | filter:query; let ptIndex = index;" class="lnavPricingTableContainer">
                                                     <div id="lnavPt_{{ pt.DC_ID}}" class="ptNav" [ngClass]="{active: contractId_Map.pt_id == pt.DC_ID}">
                                                         <div class="fl textCircle{{ pt.WIP_WORK_FLG === '1' ? '_NeedsWork': ''}} valid_{{ pt.PASSED_VALIDATION }}" title="{{ (pt.PASSED_VALIDATION === 'Dirty' ? 'Validation Errors' : pt.PASSED_VALIDATION) || 'Not validated yet' }}{{pt.WIP_WORK_FLG === '1' ? ' - Some deals still require attention': ''}}">{{ pt.OBJ_SET_TYPE_CD | slice:0:1 }}</div>
-                                                        <div class="fl" style="margin: 0 8px;" [ngClass]="{active: contractId_Map.pt_id == pt.DC_ID}" (click)="loadPTE(ps.DC_ID,pt.DC_ID,psIndex,ptIndex)">
+                                                        <div class="fl" style="margin: 0 8px;" [ngClass]="{active: contractId_Map.pt_id == pt.DC_ID}" (click)="loadPte(ps.DC_ID,pt.DC_ID,psIndex,ptIndex)">
                                                             <div class="compactWidths" *ngIf="pt.PASSED_VALIDATION !== 'Complete' && pt.PASSED_VALIDATION !== 'Finalizing'" (click)="hideAddPricingTable(); isAddStrategyHidden=true" style="width: 201px;">
                                                                 {{ pt.TITLE }}
                                                             </div>
@@ -161,6 +160,7 @@
                     </div>
                 </ng-template>
             </kendo-tabstrip-tab>
+
             <kendo-tabstrip-tab  [selected]="selectedTab == 1" [disabled]="enableFlowBtn()" title="Meet Comp" class="center-tabstrip">
                 <ng-template kendoTabTitle>
                     <i *ngIf="needMct()" id="meetCompIcon" class="intelicon-information-outlined font-med" title="Meet Comp needs to be reviewed" style="color: yellow;">&nbsp;</i>
@@ -193,6 +193,7 @@
                     </div>
                 </ng-template>
             </kendo-tabstrip-tab>
+
             <kendo-tabstrip-tab title="Manage" [selected]="selectedTab == 2" [disabled]="enableFlowBtn()">
                 <ng-template kendoTabContent>
                     <div class="lnavContainer">
@@ -242,11 +243,9 @@
 <div class="navIconLnk-small-wrapper" *ngIf="isLnavHidden.isLnavHid">
     <div class="navIconLnk-small-wrapper navIconLnk-small-wrapper-child" *ngIf="isLnavHidden.source == 'PT'">
         <div class="contract-status-bar stage_{{ contractData.WF_STG_CD }}"></div>
-
         <div class="navIconLnk" title="Show Panel" (click)="toggleLnav('PT')">
             <i class="intelicon-expand"></i>
         </div>
-
         <div class="navIconLnk" *ngIf="C_ADD_PRICING_STRATEGY" title="Add {{psTitle}}" (click)="toggleLnav();toggleAddStrategy()">
             <i class="intelicon-plus-max"></i>
         </div>
@@ -286,7 +285,6 @@
 
     <div class="navIconLnk-small-wrapper navIconLnk-small-wrapper-child" *ngIf="isLnavHidden.source == 'MC'">
         <div class="contract-status-bar stage_{{ contractData.WF_STG_CD }}"></div>
-
         <div class="navIconLnk" title="Show Panel" (click)="toggleLnav('MC')">
             <i class="intelicon-expand"></i>
         </div>
@@ -323,7 +321,6 @@
 
     <div class="navIconLnk-small-wrapper navIconLnk-small-wrapper-child" *ngIf="isLnavHidden.source == 'MN'">
         <div class="contract-status-bar stage_{{ contractData.WF_STG_CD }}"></div>
-
         <div class="navIconLnk" title="Show Panel" (click)="toggleLnav()">
             <i class="intelicon-expand"></i>
         </div>
