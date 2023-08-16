@@ -1098,10 +1098,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
             isRequired = true;
         if ((changes[0].new == null || changes[0].new == '' || changes[0].new == undefined) && this.pricingTableTemplates['model']['fields'][changes[0].prop].nullable == false && isRequired) {
             const colSPIdx = findIndex(this.columns, { data: changes[0].prop });
-            this.cellComments.push({ row: changes[0].row, col: colSPIdx, comment: { value: 'This field is required', readOnly: true }, className: 'error-border' });
-            this.hotTable.updateSettings({
-                cell: this.cellComments
-            });
+            this.hotTable.setCellMetaObject(changes[0].row, colSPIdx, { 'className': 'error-border', comment: { value: 'This field is required' } });
             this.hotTable.render();
         } else {
             this.removeCellComments(changes[0].row, changes[0].prop)
