@@ -1080,6 +1080,7 @@ export class PTE_CellChange_Util {
                     const val = PTE_Load_Util.calculateTotalDsctPerLine(this.hotTable.getDataAtRowProp(item.row, 'DSCNT_PER_LN'), this.hotTable.getDataAtRowProp(item.row, 'QTY'))
                     this.hotTable.setDataAtRowProp(item.row, 'TEMP_TOTAL_DSCNT_PER_LN', val, 'no-edit');
                     if (item.prop && item.prop == 'QTY') {
+                        this.hotTable.setDataAtRowProp(item.row, 'QTY', Math.round(item.new), 'no-edit');
                         this.kitEcapPriceChange([item], columns, curPricingTable);
                     }
                 })
