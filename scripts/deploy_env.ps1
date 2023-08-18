@@ -153,6 +153,9 @@ try {
             }
         }
     }
+    elseif ($Operation -eq 'build_commit_list' ){
+        node C:\automation_newman\buildNotification.js $SERVER;
+    }
 }
 catch {
     # Get the current error
