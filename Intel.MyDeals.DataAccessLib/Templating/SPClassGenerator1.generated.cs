@@ -16525,28 +16525,7 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 				set { SetParmeter("in_deal_list", value); }
 				get { return (SqlTableValueParameterBase)GetParameter("in_deal_list"); }
 			}
-
-			///<summary>
-			/// DataType: int
-			/// Mode: IN
-			///</summary>
-			[SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
-			public Int32 action {
-				set { SetParmeter("action", value); }
-				get { return (Int32)GetParameter("action"); }
-			}
-
-			///<summary>
-			/// DataType: varchar(100)
-			/// Mode: IN
-			/// Max Length: 100
-			///</summary>
-			[SQLParameterAttribute(3, "ParameterDirection.Input", 100, false)]
-			public String cust_nm {
-				set { SetParmeter("cust_nm", value); }
-				get { return (String)GetParameter("cust_nm"); }
-			}
-		}
+	}
 
 		///<summary>
 		/// ID: 216387840

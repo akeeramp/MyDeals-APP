@@ -16,14 +16,12 @@ namespace Intel.MyDeals.DataLibrary
         {
 			var CutoverResults = new List<R3CutoverResponse>();
 			var CutoverPassedDeals = new List<R3CutoverResponsePassedDeals>();
-			//@in_deal_list = @OBJ_IDS, @action = 10, @cust_nm = 'Dell'
+			//@in_deal_list = @OBJ_IDS
 			try
             {
                 using (var rdr = DataAccess.ExecuteReader(new Procs.dbo.PR_R3_CUT_OVER_VALIDATION
                 {
-                    in_deal_list = new type_int_list(dealIds.ToArray()),
-                    action = action,
-                    cust_nm = custName
+                    in_deal_list = new type_int_list(dealIds.ToArray())
                 }))
                 {
 					int IDX_Limit = DB.GetReaderOrdinal(rdr, "$ Limit");

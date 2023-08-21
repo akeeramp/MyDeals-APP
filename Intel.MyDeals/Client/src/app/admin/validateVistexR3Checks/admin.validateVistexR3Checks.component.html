@@ -7,10 +7,7 @@
     </div>
     <div class="container-fluid">
         <div class="col-md-5 pull-left input-field">
-            <label class="opUiLabel vistex-zero-Padding">Customer : </label>
-            <kendo-dropdownlist [(ngModel)]="SelectedCustId" style="width: calc(100% - 160px) !important; " class="vistex-zero-Padding"
-                                [data]="ActiveCustomers" textField="CUST_NM" valueField="CUST_NM" [valuePrimitive]="true">
-            </kendo-dropdownlist><br /><br /><label class="opUiLabel" style="vertical-align: top;">Deal Id(s) : </label>
+            <label class="opUiLabel" style="vertical-align: top;">Deal Id(s) : </label>
             <kendo-textarea class="local-Padding validTextAreaVistexCheck" [(ngModel)]="DealstoSend" [cols]="58" [rows]="4" resizable="both"
                             placeholder="Multiple deal IDs can be separated with comma."></kendo-textarea>
             <div class="err-Control" style="padding-left:160px !important;" *ngIf="isDealIdError">
@@ -18,12 +15,6 @@
                 Deal Ids
             </div>
             <br/><br/>
-            <div class="fl opUiLabel ng-binding">Mode to run : </div>            
-            <div style="overflow: hidden; width: calc(100% - 160px);">
-                <kendo-combobox id="comboApiName" class="fl opUiElement" [data]="apiList" textField="OPT_LBL"
-                                valueField="OPT_ID" placeholder="Select a Running Mode..." [valuePrimitive]="false"
-                                [(ngModel)]="selectedApiID" style="width: 100% !important; "></kendo-combobox>
-            </div>
         </div>
         <div class="col-md-5 pull-left input-field">
             <div class="validProps">
@@ -32,8 +23,8 @@
                 </div>
                 <div ng-if="ShowResults == true" style="overflow: hidden;">
                     <span style="margin-top:10px; " *ngIf=" ShowResults==true ">
-                        <a style="color: #0071c5 !important; text-decoration: underline !important;"><b>Results:</b></a>
-                        Deals Validated for Vistex Push:{{UpdCnt.sent}}, <i style=" color:darkblue; ">Errors Returned / Deals not found:{{UpdCnt.returned}}</i>
+                        <a style="color: #0071c5 !important; text-decoration: underline !important;"><b>Results:</b></a><br/>
+                        Total number of deals validated:<font style="color: red;font-weight: bold;">{{UpdCnt.sent}}</font> <br/>Total number of deals with error:<font style="color: red;font-weight: bold;">{{UpdCnt.returned}}</font>
                     </span>
                 </div>
             </div>
@@ -62,7 +53,7 @@
                         <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS
                     </button>
                     <button type="button" kendoGridExcelCommand icon="file-excel">
-                        EXPORT ERROR DEALS TO EXCEL
+                        EXPORT DEALS TO EXCEL
                     </button>
                     <button (click)="refreshGrid()" class="k-button clearButton" style=" margin-left: auto;"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
                 </ng-template>

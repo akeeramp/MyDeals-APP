@@ -30,21 +30,8 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
     private VstxCustFlag = 1;
     private ShowColumns = [];
 
-    private apiList = [{ OPT_ID: 1, OPT_LBL: "1.  Deal Stage" },
-    { OPT_ID: 2, OPT_LBL: "2.  Lookback Period" },
-    { OPT_ID: 3, OPT_LBL: "3.  AR Settlement Level" },
-    { OPT_ID: 4, OPT_LBL: "4.  End Customer" },
-    { OPT_ID: 5, OPT_LBL: "5.  Reset Per Period" },
-    { OPT_ID: 6, OPT_LBL: "6.  Period Profile" },
-    { OPT_ID: 7, OPT_LBL: "7.  AR Settlement Level 2" },
-    { OPT_ID: 8, OPT_LBL: "8.  Settlement Partner" },
-    { OPT_ID: 9, OPT_LBL: "9.  Send To Vistex" },
-    { OPT_ID: 10, OPT_LBL: "10. All Attributes Report" }];
-
-    private selectedApiID = { OPT_ID: 10, OPT_LBL: "10. All Attributes Report" };
     private DealstoSend = "";
     private RegxDealIds = "[0-9,]+$";
-    private SelectedCustId;
     private ActiveCustomers;
     private isDealIdError = false;
     public gridData: GridDataResult;
@@ -140,7 +127,6 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
     }
 
     ValidateForVistexR3() {
-        let isValidMode = true;
         let sentDeals = 0;
         //removing extra spaces and commas from deal Ids(DealstoSend) string
         if (this.DealstoSend != undefined) {
@@ -149,31 +135,20 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
                 this.DealstoSend = this.DealstoSend.replace(/,+$/g, "");
             }
             //Finding total Deal Ids present in DealstoSend string
-            sentDeals = this.DealstoSend.split(',').length;
+            //sentDeals = this.DealstoSend.split(',').length;
         }
 
         // Check that all fields have data before sending
         this.isDealIdError = !this.ValidateDealIDs();
 
-        if (this.selectedApiID == undefined) {
-            isValidMode = false;
-        }
-
         // All fields are populated, send the request
-        if (!this.isDealIdError && isValidMode) {
+        if (!this.isDealIdError) {
             const data = {
-                "DEAL_IDS": this.DealstoSend,
-                "VSTX_CUST_FLAG": this.VstxCustFlag,
-                "MODE": this.selectedApiID.OPT_ID,
-                "CUST": any
-            };
-            if (this.SelectedCustId == undefined) {
-                data.CUST = null;
-            } else {
-                data.CUST = this.SelectedCustId;
-            }
+                "DEAL_IDS": this.DealstoSend
+             };
             this.vldtVstxR3ChkSvc.getVistexCustomersMapList(data).subscribe(response => {
                 this.Results = response.R3CutoverResponses;
+                sentDeals = this.Results.length;
                 this.GoodToSendResults = response.R3CutoverResponsePassedDeals;
                 let goodToSendDealIds = pluck(this.GoodToSendResults, 'Deal_Id');
                 this.GoodToSendDealIds = goodToSendDealIds.toString();
@@ -182,14 +157,12 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
                 this.UpdCnt.returned = (this.UpdCnt.sent - goodToSendDealIds.length);;
                 this.gridData = process(this.Results, this.state);
                 this.ShowResults = true;
-                this.GetActiveColumns(this.selectedApiID.OPT_ID);
+  
+                this.GetActiveColumns();
                 this.loggerSvc.success("Please Check The Results.");
             }, (error) => {
                 this.loggerSvc.error('Unable to Send deal(s) to Vistex', '', 'validateVistexR3ChecksComponent::getVistexCustomersMapList::' + JSON.stringify(error));
             });
-        } else if (!isValidMode) {
-            this.ShowResults = false;
-            this.loggerSvc.warn("Please select a valid mode", "Warning");
         } else {
             this.ShowResults = false;
             this.loggerSvc.warn("Please fix validation errors", "Warning");
@@ -200,39 +173,9 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
         window.open("#pushDealstoVistex?r3ValidDeals=" + this.GoodToSendDealIds, "_blank");
     }
 
-    GetActiveColumns(runMode) {
+    GetActiveColumns() {
         this.ShowColumns = ["Deal_Id"];
-        if (runMode === 1) {
-            this.ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "Deal_Stage", "Deal_Type", "Pricing_Strategy_Stage", "COMMENTS"]; //"LAST_TRACKER_NUMBER" is 2nd from last
-        }
-        if (runMode === 2) {
-            this.ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "Look_Back_Period_Months", "Payout_Based_On", "AR_Settlement_Level", "COMMENTS"];
-        }
-        if (runMode === 3) {
-            this.ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "AR_Settlement_Level", "COMMENTS"];
-        }
-        if (runMode === 4) {
-            this.ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "End_Customer_Retailer", "End_Customer", "End_Customer_Country", "Unified_Customer_ID", "Is_a_Unified_Cust", "COMMENTS"];
-        }
-        if (runMode === 5) {
-            this.ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "Reset_Per_Period", "COMMENTS"];
-        }
-        if (runMode === 6) {
-            this.ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "Period_Profile", "COMMENTS"];
-        }
-        if (runMode === 7) {
-            this.ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "AR_Settlement_Level", "COMMENTS"];
-        }
-        if (runMode === 8) {
-            this.ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "AR_Settlement_Level", "Settlement_Partner", "COMMENTS"];
-        }
-        if (runMode === 9) {
-            this.ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "Send_To_Vistex", "COMMENTS"];
-        }
-        else if (runMode === 10) {
-            this.ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "Customer_Division", "Vertical", "Deal_Stage", "Pricing_Strategy_Stage", "Expire_Deal_Flag", "Deal_Start_Date", "Deal_End_Date", "Payout_Based_On", "Program_Payment", "Additive_Standalone", "End_Customer_Retailer", "Request_Date", "Requested_by", "Request_Quarter", "Division_Approved_Date", "Division_Approver", "Geo_Approver", "Market_Segment", "Deal_Description", "Ceiling_Limit_End_Volume_for_VT", "Limit", "Consumption_Reason", "Consumption_Reason_Comment", "Period_Profile", "AR_Settlement_Level", "Look_Back_Period_Months", "Consumption_Customer_Platform", "Consumption_Customer_Segment", "Consumption_Customer_Reported_Geo", "End_Customer", "End_Customer_Country", "Unified_Customer_ID", "Is_a_Unified_Cust", "Project_Name", "System_Price_Point", "System_Configuration", "Settlement_Partner", "Reset_Per_Period", "Send_To_Vistex", "COMMENTS"];
-        }
-
+        this.ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "Customer_Division", "Vertical", "Deal_Stage", "Pricing_Strategy_Stage", "Expire_Deal_Flag", "Deal_Start_Date", "Deal_End_Date", "Payout_Based_On", "Program_Payment", "Additive_Standalone", "End_Customer_Retailer", "Request_Date", "Requested_by", "Request_Quarter", "Division_Approved_Date", "Division_Approver", "Geo_Approver", "Market_Segment", "Deal_Description", "Ceiling_Limit_End_Volume_for_VT", "Limit", "Consumption_Reason", "Consumption_Reason_Comment", "Period_Profile", "AR_Settlement_Level", "Look_Back_Period_Months", "Consumption_Customer_Platform", "Consumption_Customer_Segment", "Consumption_Customer_Reported_Geo", "End_Customer", "End_Customer_Country", "Unified_Customer_ID", "Is_a_Unified_Cust", "Project_Name", "System_Price_Point", "System_Configuration", "Settlement_Partner", "Reset_Per_Period", "Send_To_Vistex", "COMMENTS"];
     }
 
     //To send data to DSA Outbound table 
