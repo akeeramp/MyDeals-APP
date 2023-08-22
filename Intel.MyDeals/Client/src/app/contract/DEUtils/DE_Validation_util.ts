@@ -32,7 +32,7 @@ export class DE_Validation_Util {
                 item["RPU_OVERRIDE_CMNT"] = "";
             }
             if ((curPricingStrategy.WF_STG_CD.toString().toUpperCase() == "APPROVED" || Object.keys(item.TRKR_NBR).length > 0) && !isTenderContract) {
-                if (item.CONSUMPTION_LOOKBACK_PERIOD < lookBackPeriod[item.DC_ID]) {
+                if (parseInt(item.CONSUMPTION_LOOKBACK_PERIOD) < parseInt(lookBackPeriod[item.DC_ID])) {
                     item._behaviors.isError['CONSUMPTION_LOOKBACK_PERIOD'] = true;
                     item._behaviors.validMsg['CONSUMPTION_LOOKBACK_PERIOD'] = "Lookback Period can only be increased after approval";
                     isShowStopperError = true;
