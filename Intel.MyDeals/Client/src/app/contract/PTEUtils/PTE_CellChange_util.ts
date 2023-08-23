@@ -1759,7 +1759,9 @@ export class PTE_CellChange_Util {
                         if (obj.prop == 'QLTR_BID_GEO') {
                             isvalidtype = dropdownResponses.QLTR_BID_GEO.find(x => x.dropdownName == name);
                         } else if (obj.prop == 'MRKT_SEG') {
-                            isvalidtype = dropdownResponses.MRKT_SEG.find(x => x.DROP_DOWN == name);
+                            //here we are checking for market segment and embeded list in market segment
+                            isvalidtype = dropdownResponses.MRKT_SEG.find(x => x.DROP_DOWN == name)==undefined?dropdownResponses.MRKT_SEG.find(x => x.items  != null).items.find(y => y.DROP_DOWN == name):
+                            dropdownResponses.MRKT_SEG.find(x => x.DROP_DOWN == name);
                         }
                         if (isvalidtype == undefined) {
                             isvalid = false;
