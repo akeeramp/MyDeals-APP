@@ -1,7 +1,7 @@
 ﻿<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 
-<loading-panel-angular id="CNTTRLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
+<loading-panel-angular class="contractDetailsLoader" id="CNTTRLoading" style="z-index:500;" [show]="isLoading" [header]="spinnerMessageHeader"
                        [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
 
 <div id="horizontal" [ngClass]="{'collapsed': true, 'expanded': false, 'hideLnav': true}" class="new-bus-contract">
