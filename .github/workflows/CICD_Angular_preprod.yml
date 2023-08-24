@@ -109,7 +109,7 @@ jobs:
        - name: Email Build Commit list
          if: ${{ github.event.inputs.Send_Build_Commits }} == 'yes'
          run: |
-            ./scripts/deploy_env.ps1 'build_commit_list' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{ github.event.inputs.ENV }}'
+            ./scripts/deploy_env.ps1 'build_commit_list' '${{ github.event.inputs.Send_Build_Commits }}' '${{ secrets.PWD }}' '${{ github.event.inputs.ENV }}'
 
   Deploy_Latest:
     if: (github.repository == 'intel-innersource/applications.web.mydeals.webui') && (github.event.inputs.Move_Latest == 'yes')
@@ -130,4 +130,4 @@ jobs:
        - name: Email Build Commit list
          if: ${{ github.event.inputs.Send_Build_Commits }} == 'yes'
          run: |
-            C:\Abhilash\deploy_env.ps1 'build_commit_list' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{ github.event.inputs.ENV }}'
+            C:\Abhilash\deploy_env.ps1 'build_commit_list' '${{  github.event.inputs.Send_Build_Commits }}' '${{ secrets.PWD }}' '${{ github.event.inputs.ENV }}'
