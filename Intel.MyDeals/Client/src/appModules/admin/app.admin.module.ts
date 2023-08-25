@@ -45,7 +45,7 @@ import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { MomentService, StaticMomentService } from '../../app/shared/moment/moment.service';
 
 //*********************admin components *********************
-import { adminComponents } from '../../app/modules/admin.module';
+import { AdminComponents } from '../../app/modules/admin.module';
 //*********************dashboard components *********************
 //pipe module
 import { MainPipe } from '../../app/modules/pipe.module';
@@ -135,13 +135,13 @@ registerAllModules();
     ],
     declarations: [
         AppRootComponent,
-        adminComponents,
+        AdminComponents,
         AdminUtilComponents
 
     ],
     entryComponents:[
         AppRootComponent,
-        adminComponents,
+        AdminComponents,
         AdminUtilComponents
     ],
 })

@@ -1,5 +1,5 @@
 import { EmployeeComponent } from '../admin/employee/admin.employee.component';
-import { CacheComponent } from '../admin/cache/admin.cache.component';
+import { AdminCacheComponent } from '../admin/cache/admin.cache.component';
 import { adminCustomerComponent } from '../admin/customer/admin.customer.component';
 import { adminCustomerVendorsComponent } from '../admin/CustomerVendors/admin.customerVendors.component';
 import { OpLogComponent } from '../admin/oplog/admin.oplog.component';
@@ -58,9 +58,9 @@ import { adminVistexProfiseeApiComponent } from '../admin/vistex/admin.vistexPro
 import { sdsDealOverridesComponent } from '../admin/sdsDealOverrides/admin.sdsDealOverrides.component';
 import { QuoteLetterRegenerationComponent } from "../admin/quoteLetter/admin.quoteLetterRegeneration.component";
 
-export let adminComponents =[
+export const AdminComponents =[
     EmployeeComponent,
-    CacheComponent,
+    AdminCacheComponent,
     adminCustomerComponent,
     adminCustomerVendorsComponent,
     OpLogComponent,

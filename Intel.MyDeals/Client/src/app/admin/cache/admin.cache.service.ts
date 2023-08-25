@@ -1,81 +1,84 @@
-﻿import { Injectable } from "@angular/core";
+﻿import { Injectable } from '@angular/core';
 import { HttpClient, HttpParams } from '@angular/common/http';
-import { Observable } from "rxjs";
+import { Observable } from 'rxjs';
 
 @Injectable({
     providedIn: 'root'
 })
+export class AdminCacheService {
 
-export class cacheService {
-    public apiBaseUrl = "api/Cache/v1/";
+    public readonly API_URL_CACHE = "api/Cache/v1/";
+
     constructor(private httpClient: HttpClient) { }
-    public getStaticCacheStatus(): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'GetCacheStatus';
+
+    public getStaticCacheStatus(): Observable<unknown> {
+        const apiUrl: string = this.API_URL_CACHE + 'GetCacheStatus';
         const param = new HttpParams();
         param.set('cache', 'false');
         return this.httpClient.get(apiUrl, { params: param });
     }
 
-    public clearStaticCache(): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'GetCacheClear';
+    public clearStaticCache(): Observable<unknown> {
+        const apiUrl: string = this.API_URL_CACHE + 'GetCacheClear';
         const param = new HttpParams();
         param.set('cache', 'false');
         return this.httpClient.get(apiUrl, { params: param });
     }
 
-    public reloadAllStaticCache(): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'GetCacheReload';
+    public reloadAllStaticCache(): Observable<unknown> {
+        const apiUrl: string = this.API_URL_CACHE + 'GetCacheReload';
         const param = new HttpParams();
         param.set('cache', 'false');
         return this.httpClient.get(apiUrl, { params: param });
     }
 
-    public loadStaticCacheByName(data): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'GetCacheLoad/' + data.CacheName;
+    public loadStaticCacheByName(data): Observable<boolean> {
+        const apiUrl: string = this.API_URL_CACHE + 'GetCacheLoad/' + data.CacheName;
+        const param = new HttpParams();
+        param.set('cache', 'false');
+        return this.httpClient.get(apiUrl, { params: param }) as Observable<boolean>;
+    }
+
+    public clearStaticCacheByName(data): Observable<unknown> {
+        const apiUrl: string = this.API_URL_CACHE + 'GetCacheClear/' + data.CacheName;
         const param = new HttpParams();
         param.set('cache', 'false');
         return this.httpClient.get(apiUrl, { params: param });
     }
 
-    public clearStaticCacheByName(data): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'GetCacheClear/' + data.CacheName;
+    public viewStaticCacheByName(data): Observable<unknown> {
+        const apiUrl: string = this.API_URL_CACHE + 'GetCacheView/' + data.CacheName;
         const param = new HttpParams();
         param.set('cache', 'false');
         return this.httpClient.get(apiUrl, { params: param });
     }
 
-    public viewStaticCacheByName(data): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'GetCacheView/' + data.CacheName;
+    public getApiCacheStatus(): Observable<unknown> {
+        const apiUrl: string = this.API_URL_CACHE + 'GetApiCacheStatus';
         const param = new HttpParams();
         param.set('cache', 'false');
         return this.httpClient.get(apiUrl, { params: param });
     }
 
-    public getApiCacheStatus(): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'GetApiCacheStatus';
+    public clearApiCache(): Observable<unknown> {
+        const apiUrl: string = this.API_URL_CACHE + 'GetApiCacheClear';
         const param = new HttpParams();
         param.set('cache', 'false');
         return this.httpClient.get(apiUrl, { params: param });
     }
 
-    public clearApiCache(): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'GetApiCacheClear';
-        const param = new HttpParams();
-        param.set('cache', 'false');
-        return this.httpClient.get(apiUrl, { params: param });
-    }
-
-    public clearApiCacheByName(data): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'ClearApiCache';
+    public clearApiCacheByName(data): Observable<unknown> {
+        const apiUrl: string = this.API_URL_CACHE + 'ClearApiCache';
         const param = new HttpParams();
         param.set('cache', data);
         return this.httpClient.get(apiUrl, { params: param });
     }
 
-    public getSessionComparisonHash(): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'GetSessionComparisonHash';
+    public getSessionComparisonHash(): Observable<unknown> {
+        const apiUrl: string = this.API_URL_CACHE + 'GetSessionComparisonHash';
         const param = new HttpParams();
         param.set('cache','false' );
         return this.httpClient.get(apiUrl, { params: param });
     }
+
 }

@@ -10,9 +10,9 @@
     padding: 8px
 }
 
-    #viewResultsContainer h5 {
-        margin-top: 0
-    }
+#viewResultsContainer h5 {
+    margin-top: 0
+}
 
 #viewResults {
     font-size: 9px
@@ -54,9 +54,9 @@
     color: #0071C5
 }
 
-    .iconLink:hover {
-        color: #003C71
-    }
+.iconLink:hover {
+    color: #003C71
+}
 
 h2.cache-header {
     margin-top: 30px;
@@ -78,8 +78,8 @@ h5.temp-headers {
     box-shadow: none;
 }
 
-    .k-primary-custom:hover {
-        color: #fff;
-        border-color: #0071c5;
-        background-color: #0071c5;
-    }
+.k-primary-custom:hover {
+    color: #fff;
+    border-color: #0071c5;
+    background-color: #0071c5;
+}

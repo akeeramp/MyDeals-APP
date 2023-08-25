@@ -120,16 +120,29 @@ namespace Intel.MyDeals.DataLibrary
             FieldInfo field = typeof(DataCollections).GetField(fieldName, BindingFlags.Static | BindingFlags.NonPublic);
             if (field == null) return false;
 
-            // clear value first
+            // Clear value first
             field.SetValue(null, null);
 
-            // get public load
-            string methodName = char.ToUpper(fieldName[1]) + fieldName.Substring(2);
+            // Get public load
+            string methodName = fieldName;
+            if (fieldName[0] == '_')
+            {
+                methodName = char.ToUpper(fieldName[1]) + fieldName.Substring(2);
+            }
             var method = typeof(DataCollections).GetMethod(methodName, BindingFlags.Static | BindingFlags.Public);
 
             if (method == null) return false;
 
-            method.Invoke(null, null);
+            /* TWC3119-724: Admin Cache Manager - Internal Server Error
+                `_getProductSelectorWrapperDensity` does not accept generic null values since the earliest date in C# is 01/01/0001
+                while MSSQL can only accept 01/01/1753, thus it hung this function when it invoked the function because that exception
+                was not handled */
+            if (fieldName.Contains("_getProductSelectorWrapperDensity"))
+            {
+                method.Invoke(null, new object[] { new DateTime(2000, 01, 01, 00, 00, 00), new DateTime(2000, 01, 01, 00, 00, 00), "" });
+            } else {
+                method.Invoke(null, null);
+            }
             return true;
         }
 

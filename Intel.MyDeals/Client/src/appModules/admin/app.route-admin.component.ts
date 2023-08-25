@@ -3,7 +3,7 @@ import { authGuard } from "./../../app/shared/util/guardProtection";
  //admins routes
 import { batchTimingComponent } from "../../app/admin/batchTiming/admin.batchTiming.component";
 import { BulkPricingUpdatesComponent } from "../../app/admin/bulkPricingUpdates/admin.bulkPricingUpdates.component";
-import { CacheComponent } from "../../app/admin/cache/admin.cache.component";
+import { AdminCacheComponent } from "../../app/admin/cache/admin.cache.component";
 import { ConstantsComponent } from "../../app/admin/constants/admin.constants.component";
 import { adminConsumptionCountryComponent } from "../../app/admin/consumptionCountry/admin.consumptionCountry.component";
 import { adminCustomerComponent } from "../../app/admin/customer/admin.customer.component";
@@ -53,7 +53,7 @@ import { SecurityResolver } from "../../app/shared/security.resolve";
 export const routesAdmin: Routes = [
     //Admin routes
     { path: 'adminemployeedashboard', component: EmployeeComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
-    { path: 'admincache', component: CacheComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
+    { path: 'admincache', component: AdminCacheComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'customers', component: adminCustomerComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'CustomerVendors', component: adminCustomerVendorsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'opLog', component: OpLogComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },

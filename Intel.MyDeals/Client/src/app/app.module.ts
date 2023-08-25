@@ -54,7 +54,7 @@ import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 import { MomentService, StaticMomentService } from './shared/moment/moment.service';
 
 //*********************admin components *********************
-import { adminComponents } from './modules/admin.module';
+import { AdminComponents } from './modules/admin.module';
 //*********************dashboard components *********************
 import { dashboardComponents } from './modules/dashboard.module';
 //*********************advance search components *********************
@@ -110,7 +110,6 @@ import { HeaderComponent } from './shared/header/header.component';
         EditorModule,
         LayoutModule,
         MenusModule,
-        DateInputsModule,
         NgPipesModule,
         OrderModule,
         GridsterModule,
@@ -147,7 +146,7 @@ import { HeaderComponent } from './shared/header/header.component';
         AppRootComponent,
         ReportingComponent,
         sharedComponents,
-        adminComponents,
+        AdminComponents,
         coreComponents,
         dashboardComponents,
         advanceSearchComponents,
@@ -157,7 +156,7 @@ import { HeaderComponent } from './shared/header/header.component';
         AppRootComponent,
         ReportingComponent,
         sharedComponents,
-        adminComponents,
+        AdminComponents,
         coreComponents,
         dashboardComponents,
         advanceSearchComponents,

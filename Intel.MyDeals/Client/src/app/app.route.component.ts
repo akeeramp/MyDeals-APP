@@ -1,7 +1,7 @@
 ﻿import { Routes } from "@angular/router";
 import { batchTimingComponent } from "./admin/batchTiming/admin.batchTiming.component";
 import { BulkPricingUpdatesComponent } from "./admin/bulkPricingUpdates/admin.bulkPricingUpdates.component";
-import { CacheComponent } from "./admin/cache/admin.cache.component";
+import { AdminCacheComponent } from "./admin/cache/admin.cache.component";
 import { ConstantsComponent } from "./admin/constants/admin.constants.component";
 import { adminConsumptionCountryComponent } from "./admin/consumptionCountry/admin.consumptionCountry.component";
 import { adminCustomerComponent } from "./admin/customer/admin.customer.component";
@@ -63,7 +63,7 @@ export const routes: Routes = [
     { path: 'mydashboard', component: DashboardComponent, data: { title: 'Dashboard', BaseHref: 'Dashboard' }, resolve: { security: SecurityResolver } },
     { path: 'portal', component: DashboardComponent, data: { title: 'Dashboard', BaseHref: 'Dashboard' }, resolve: { security: SecurityResolver } },
     { path: 'adminemployeedashboard', component: EmployeeComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
-    { path: 'admincache', component: CacheComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
+    { path: 'admincache', component: AdminCacheComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'customers', component: adminCustomerComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'CustomerVendors', component: adminCustomerVendorsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'opLog', component: OpLogComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
