@@ -273,6 +273,8 @@ export class ProductCorrectorComponent {
             }
             if (current.status === 'Issue') {
                 return accumulator + current.matchName.length;
+            } else {
+                return 0;
             }
         },0);
         if (parseInt(resolvedProducts) + validProducts >= noOfValidItem) {
