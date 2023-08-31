@@ -1655,6 +1655,7 @@ i.iConFont.intelicon-alert-solid {
 .err-bit.ratebrkout-fix-class.ng-star-inserted {
     position: absolute !important;
     top: 0px !important;
+    z-index: 9;
 }
 .err-bit.ratebrkout-fix-den-class.ng-star-inserted {
     position: absolute !important;
