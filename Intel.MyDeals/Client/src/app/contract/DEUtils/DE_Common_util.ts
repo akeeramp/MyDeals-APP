@@ -166,7 +166,8 @@ export class DE_Common_Util {
         if ((field == "ECAP_PRICE" || field == "DSCNT_PER_LN") && dataItem.OBJ_SET_TYPE_CD == "KIT") {
             var tiers = dataItem[field];
             for (var key in tiers) {
-                dataItem[field][key] = dataItem[field][key].toString();
+                if (dataItem[field][key] != null)
+                    dataItem[field][key] = Number(dataItem[field][key]);
             }
         }
     }
