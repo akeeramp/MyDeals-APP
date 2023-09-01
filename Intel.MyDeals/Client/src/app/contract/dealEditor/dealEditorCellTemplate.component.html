@@ -192,7 +192,7 @@
     <div class="uiControlDiv isReadOnlyCell">
         <div class="ng-binding vert-center">
             <div *ngIf="getPercData(in_DataItem).vol != 999999999" class="progress creditDebitAlignmentStyle" style="margin-bottom: 2px; background-color:#edeff0 !important; ">
-                <div class="progress-bar" role="progressbar" value="getPercData(in_DataItem).perc" min="0" max="100"></div>
+                <progress class="progress-bar colorChangesProgress" role="progressbar" value="{{getPercData(in_DataItem).perc}}" min="0" max="100" style="width:100%"></progress>
             </div>
             <div *ngIf="getPercData(in_DataItem).vol != 999999999" class="progressBarTextSize"> {{numberWithCommas(getPercData(in_DataItem).numerator)}} out of {{numberWithCommas(getPercData(in_DataItem).vol)}}</div>
             <div *ngIf="getPercData(in_DataItem).vol == 999999999">{{numberWithCommas(getPercData(in_DataItem).numerator)}}</div>

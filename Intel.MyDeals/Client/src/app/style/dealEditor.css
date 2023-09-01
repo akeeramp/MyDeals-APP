@@ -66,3 +66,11 @@
 .loading-dealer-editors {
     padding: 0 5px;
 }
+
+progress.progress-bar.colorChangesProgress::-webkit-progress-bar {
+    background-color: #edeff0;
+}
+
+progress.progress-bar.colorChangesProgress::-webkit-progress-value {
+    background-color: #0071c5;
+}

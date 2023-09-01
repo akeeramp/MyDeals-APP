@@ -2517,4 +2517,7 @@ i.intelicon-protection-solid.icon_colourfix.validf_Complete {
         left:14px!important;
         font-size: 12px;
     }
-    
+
+#Adddialog {
+    z-index: 10002;
+}
