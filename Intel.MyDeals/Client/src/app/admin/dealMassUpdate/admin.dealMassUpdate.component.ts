@@ -199,7 +199,7 @@ export class dealMassUpdateComponent {
         if (this.massUpdateData.field.ATRB_LBL == "System Price Point") {
             if (this.massUpdateData.textValue != undefined && this.massUpdateData.textValue != null && this.massUpdateData.textValue != "") {
                 let values = this.massUpdateData.textValue;
-                if (values) {
+                if (values && !(parseFloat(values) > 1000000.00)) {
                     if (parseFloat(values) <= 0.00) {
                         this.massUpdateData.textValue = 0.01;
                     }

@@ -875,8 +875,10 @@ export class ProductCorrectorComponent {
             this.removeExclude = true;
         else
             this.removeExclude = false;
-        this.prdNm = prdNm.toString();
-        this.prodRemoveConfirm = true;        
+        if (prdNm != null) {
+            this.prdNm = prdNm.toString();
+        }
+        this.prodRemoveConfirm = true;       
     }
     closePrdRemoveDialogs(){
         this.prodRemoveConfirm = false;
