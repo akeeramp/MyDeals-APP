@@ -915,6 +915,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
             const mrktseg=where(changes, { prop: 'MRKT_SEG' });
             const media=where(changes, { prop: 'PROD_INCLDS' });
             const payoutbasedon=where(changes, { prop: 'PAYOUT_BASED_ON' });
+            const forcast=where(changes, { prop: 'FRCST_VOL' });
             //here we are using if conditions because at a time multiple changes can happen 
             if (PTR && PTR.length > 0) {
                 this.undoEnable = false;
@@ -1008,6 +1009,12 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
             if (this.multiRowDelete && this.multiRowDelete.length > 0 && this.isDeletePTR) {
                 this.deleteRow(this.multiRowDelete);
             }
+
+            if (forcast && forcast.length > 0) {
+                //making the start vol val to zero incase empty
+                PTE_CellChange_Util.forcastevaluechange(forcast, this.columns);
+            }
+
             if (startVol && startVol.length > 0) {
                 //making the start vol val to zero incase empty
                 PTE_CellChange_Util.defaultVolVal(startVol, this.columns, this.curPricingTable);
