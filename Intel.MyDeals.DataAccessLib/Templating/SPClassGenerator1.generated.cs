@@ -2504,12 +2504,71 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			}
 		}
 
-		///<summary>
-		/// ID: 1337159909
-		/// Modified: 6/2/2021 12:22:44 PM
-		/// Parameters: 1
-		///</summary>
-		public partial class PR_MYDL_AUTO_APRV_DEALS : SP {
+        ///<summary>
+        /// ID: 643689541
+        /// Modified: 8/21/2023 11:51:08 AM
+        /// Parameters: 4
+        ///</summary>
+        public partial class PR_MYDL_AUDIT_DB : SP
+        {
+            public PR_MYDL_AUDIT_DB()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_AUDIT_DB]";
+            }
+
+            ///<summary>
+            /// DataType: varchar(20)
+            /// Mode: IN
+            /// Max Length: 20
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 20, false)]
+            public String MODE
+            {
+                set { SetParmeter("MODE", value); }
+                get { return (String)GetParameter("MODE"); }
+            }
+
+            ///<summary>
+            /// DataType: varchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", -1, false)]
+            public String DATA
+            {
+                set { SetParmeter("DATA", value); }
+                get { return (String)GetParameter("DATA"); }
+            }
+
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 0, false)]
+            public Boolean FORCE_RE_MAP
+            {
+                set { SetParmeter("FORCE_RE_MAP", value); }
+                get { return (Boolean)GetParameter("FORCE_RE_MAP"); }
+            }
+
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(4, "ParameterDirection.Input", 0, false)]
+            public Boolean RETURN_JSON
+            {
+                set { SetParmeter("RETURN_JSON", value); }
+                get { return (Boolean)GetParameter("RETURN_JSON"); }
+            }
+        }
+
+        ///<summary>
+        /// ID: 1337159909
+        /// Modified: 6/2/2021 12:22:44 PM
+        /// Parameters: 1
+        ///</summary>
+        public partial class PR_MYDL_AUTO_APRV_DEALS : SP {
 			public PR_MYDL_AUTO_APRV_DEALS() {
 				DatabaseName = "MyDeals";
 				StoredProdedureName = "[dbo].[PR_MYDL_AUTO_APRV_DEALS]";

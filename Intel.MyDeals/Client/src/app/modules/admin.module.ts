@@ -56,7 +56,11 @@ import { BulkPricingUpdateModalComponent } from '../admin/bulkPricingUpdates/adm
 import { adminMydealsSupportComponent } from '../admin/mydealssupport/admin.mydealssupport.component';
 import { adminVistexProfiseeApiComponent } from '../admin/vistex/admin.vistexProfiseeAPI.component';
 import { sdsDealOverridesComponent } from '../admin/sdsDealOverrides/admin.sdsDealOverrides.component';
+import { dbAuditToolsComponent } from '../admin/dbAuditTools/admin.dbAuditTools.component';
+import { DbAuditToolsViewModalComponent } from '../admin/dbAuditTools/admin.dbAuditToolsViewModal.component';
+import { DbAuditToolsCompareModalComponent } from '../admin/dbAuditTools/admin.dbAuditToolsCompareModal.component';
 import { QuoteLetterRegenerationComponent } from "../admin/quoteLetter/admin.quoteLetterRegeneration.component";
+import { MonacoEditorComponent } from '../shared/monacoCustomEditor/monacoCustomEditor.component';
 
 export const AdminComponents =[
     EmployeeComponent,
@@ -118,5 +122,9 @@ export const AdminComponents =[
     adminVistexProfiseeApiComponent,
     retriggerUnifyModalComponent,
     sdsDealOverridesComponent,
+    dbAuditToolsComponent,
+    DbAuditToolsViewModalComponent,
+    DbAuditToolsCompareModalComponent,
+    MonacoEditorComponent,
     QuoteLetterRegenerationComponent
 ]

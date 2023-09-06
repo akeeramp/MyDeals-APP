@@ -1,0 +1,20 @@
+﻿<div class="modal-header dbAuditToolmodalBody">
+    <h3 class="modal-title ruleOneHeading" id="modalTitle">
+        <i class="intelicon-search icon-ttl"></i>Display text for {{ envName }}: {{ procName }}
+    </h3>
+    <i id="btnClose" class="intelicon-close btnRuleClose" (click)="close()" title="Close this window"></i>
+</div>
+<div class="dbAuditToolmodalBody" id="modal-body">
+    <div class="row">
+        <kendo-textarea class="dbAuditTextArea" id="objTextArea" [(ngModel)]="myTextarea" placeholder="Loading object text here:" 
+                        [rows]="20" [readonly]="true" >
+        </kendo-textarea>
+    </div>
+    <div class="modal-footer">
+        <span style="float: right;">
+            <button class="btn btn-primary" (click)="close()">
+                Close Window
+            </button>
+        </span>
+    </div>
+</div>

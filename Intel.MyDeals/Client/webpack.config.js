@@ -5,6 +5,7 @@ const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 //const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MinifyHtmlWebpackPlugin = require('minify-html-webpack-plugin');
+const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
 
 module.exports = env => {
     const mode = env.mode;
@@ -36,7 +37,7 @@ module.exports = env => {
             },
             plugins: [
                 new MiniCssExtractPlugin(),
-                //new BundleAnalyzerPlugin()
+                new MonacoWebpackPlugin(),
             ],
             optimization: {
                 minimize: true,
@@ -64,9 +65,13 @@ module.exports = env => {
                         loader: "ts-loader",
                         exclude: /node_modules/
                     },
-                      {
+                    {
                         test: /\.css$/,
-                        use: [ MiniCssExtractPlugin.loader, 'css-loader' ]
+                        use: [MiniCssExtractPlugin.loader, 'css-loader']
+                    },
+                    {
+                        test: /\.ttf$/,
+                        use: ['file-loader'],
                     }
                 ]
             },
@@ -138,6 +143,7 @@ module.exports = env => {
             },
             plugins: [
                 new MiniCssExtractPlugin(),
+                new MonacoWebpackPlugin(),
                 new MinifyHtmlWebpackPlugin({
                     src: './src/app/',
                     dest: './src/app/',

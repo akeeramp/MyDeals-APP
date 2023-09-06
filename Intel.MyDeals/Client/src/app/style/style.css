@@ -11,6 +11,7 @@
 @import '~bootstrap-switch/dist/css/bootstrap3/bootstrap-switch.min.css';
 @import '~@angular/material/prebuilt-themes/indigo-pink.css';
 @import '../../../node_modules/ngx-toastr/toastr.css';
+@import '~monaco-editor/min/vs/editor/editor.main.css';
 @import './common.css';
 @import './kendo-custom.css';
 @import '~handsontable/dist/handsontable.full.min.css';

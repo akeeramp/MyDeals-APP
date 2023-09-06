@@ -1,0 +1,109 @@
+﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<div class="db_audit_tool">
+
+    <div class="row col-md-12 k-header-alignment heading-position-fix padding-top-20">
+        <h3 header-bottomsizereduce>DB Audit Tools</h3>
+    </div>
+
+    <div *ngIf="!accessAllowed" class="col-md-12">
+        <h3><font style="color: red;"><i class="intelicon-alert-solid icon-lg" style="margin-right: 10px;"></i> Access Warning</font>: This is a Restricted page. Your current rights do not allow access.</h3>
+        If you require access, please contact the My Deals Development team for guidance.
+    </div>
+    <div *ngIf="accessAllowed">
+
+        <div class="row col-md-12">
+
+            <!-- This is the left pane -->
+            <div class="col-md-4">
+                <p class="all-para-warn">
+                    Use this tool to conduct Audits of DB objects across environments.  Select the environments you need, then the objects.
+                    <b>Objects listed are from your current base environment (<u>{{ baseEnvName }}</u>)</b>.
+                </p>
+
+                <div class="row">
+                    <div class="col-md-12 margin-btn-dmu-15">
+                        <label style="width: 180px"><b>Environments:</b></label>
+                        <kendo-multiselect 
+                                           [data]="envsDataFinal" 
+                                           [(ngModel)]="selectedEnvValues" 
+                                           textField="ENV_NM" 
+                                           valueField="ENV_NM" 
+                                           value-primitive="false" 
+                                           [autoClose]="false"
+                                           [checkboxes]="true"
+                                           style="width: 100%">
+                        </kendo-multiselect>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div class="col-md-12 margin-btn-dmu-15">
+                        <br />
+                        <label style="width: 200px"><b>Current Environment Objects:</b></label>
+                        <kendo-multiselecttree kendoMultiSelectTreeExpandable
+                                               [kendoMultiSelectTreeHierarchyBinding]="objsDataFinal"
+                                               [textField]="['categoryName', 'DB_OBJ']"
+                                               [valueField]="['categoryName', 'DB_OBJ']"
+                                               childrenField="subCategories"
+                                               [(ngModel)]="selectedObjValues"
+                                               [valuePrimitive]="false"
+                                               [dataItems]="dataItems"
+                                               [valueDepth]="valueDepth"
+                                               [expandedKeys]="['0']"
+                                               style="width: 100%; max-height: 300px !important; overflow: auto !important;">
+                        </kendo-multiselecttree>
+                    </div>
+                </div>
+
+                <div class="col-md-12" style="margin-top: 10px; text-align: center; ">
+                    <span>
+                        <button class="btn btn-primary" style="margin: 0 20px 0 20px;" (click)="runDbAuditNow()">
+                            Run DB Audit
+                        </button>
+                    </span>
+                </div>
+
+            </div>
+
+            <!-- This is the right pane -->
+            <div class="col-md-8">
+                <p class="all-para-warn">
+                    <b>
+                        <i class="intelicon-alert-solid icon-lg"></i>ATTENTION:
+                    </b> Simplified ID numbers are listed below.  If a row contains different ID numbers, the objects have different 
+                    signatures.  Clicking on the signatures button will pull text for that object back.  Clicking on the object name
+                    will bring up comparison tools to view changes.
+                </p>
+
+                <div>
+                    <font style="font-weight:bold">Returned results: </font>
+                    <kendo-grid [data]="gridReturns" class="gridCompNotification kAlignHeaders" [sort]="sort"
+                                [sortable]="true" (sortChange)="dataStateChangeReturns($event)" [resizable]="true">
+                        <kendo-grid-column *ngFor="let item of ColumnHeader" field="{{ item }}"
+                                           title="{{ item }}" [headerClass]="{'headerClass':true}">
+                            <ng-template kendoGridCellTemplate let-dataItem>
+
+                                <span *ngIf="item=='DB_OBJ'">
+                                    <i class="intelicon-search-stack-solid icon-btns" (click)="performComparison(dataItem[item])"></i>
+                                    {{dataItem[item]}}
+                                </span>
+                                <!--<button *ngIf="item=='DB_OBJ'" (click)="performComparison(dataItem[item])">{{dataItem[item]}}</button>-->
+
+                                <span *ngIf="item=='DB_TYPE'">{{dataItem[item]}}</span>
+
+                                <span *ngIf="item!=='DB_OBJ' && item!=='DB_TYPE'">
+                                    <i class="intelicon-search icon-btns" (click)="GetBodyData(dataItem['DB_OBJ'], item)"></i>
+                                    Ver. {{dataItem[item]}}
+                                </span>
+                                <!--<button *ngIf="item!=='DB_OBJ' && item!=='DB_TYPE'" (click)="GetBodyData(dataItem['DB_OBJ'], item)">Ver. {{dataItem[item]}}</button>-->
+                                <!--Add no button condition for "0" values-->
+                            </ng-template>
+                        </kendo-grid-column>
+                    </kendo-grid>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+</div>

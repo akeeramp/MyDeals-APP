@@ -86,6 +86,7 @@
     <Compile Include="CostTestDetails.cs" />
     <Compile Include="DashboardFilter.cs" />
     <Compile Include="DataFix.cs" />
+    <Compile Include="DbAuditTools.cs" />
     <Compile Include="DcPath.cs" />
     <Compile Include="DcPathTitle.cs" />
     <Compile Include="DealIdEcJsonDetails.cs" />

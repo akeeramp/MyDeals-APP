@@ -60,6 +60,7 @@
     <Compile Include="Data Collections\IDataCollectionsDataLib.cs" />
     <Compile Include="DataFix\IDataFixDataLib.cs" />
     <Compile Include="DataQuality\IDataQualityDataLib.cs" />
+    <Compile Include="DbAuditTools\IDbAuditToolsDataLib.cs" />
     <Compile Include="DealMassUpdate\IDealMassUpdateDataLib.cs" />
     <Compile Include="EcapTracker\IEcapTrackerDataLib.cs" />
     <Compile Include="Employees\IEmployeeDataLib.cs" />

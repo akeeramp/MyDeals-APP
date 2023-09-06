@@ -6,12 +6,8 @@ using Intel.Opaque;
 using Intel.Opaque.DBAccess;
 using Procs = Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals;
 using Intel.MyDeals.IDataLibrary;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.Text;
 using Newtonsoft.Json;
-using System.Runtime.Serialization;
 using System.Data;
-using Intel.MyDeals.Entities.deal;
-using OfficeOpenXml.FormulaParsing.Excel.Functions.DateTime;
 
 namespace Intel.MyDeals.DataLibrary
 {

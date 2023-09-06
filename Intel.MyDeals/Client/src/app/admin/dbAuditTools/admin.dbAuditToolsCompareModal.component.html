@@ -1,0 +1,79 @@
+﻿<script src="assets/monaco/min/vs/loader.js"></script>
+<div class="modal-header dbAuditToolmodalBody">
+    <h3 class="modal-title ruleOneHeading" id="modalTitle">
+        <i class="intelicon-search-stack-solid icon-ttl"></i>Compare text for {{ procName }}
+    </h3>
+    <i id="btnClose" class="intelicon-close btnRuleClose" (click)="close()" title="Close this window"></i>
+</div>
+
+<div *ngIf="numEnvs == 1">
+    <!-- Choose envs to compare -->
+    <div style="background-color: white;">
+        <p class="all-para-warn" style="color: #FC4C02">
+            <b><i class="intelicon-alert-solid icon-lg"></i>ATTENTION:</b>
+            You need more then 1 environment to run comparison mode.  Showing text for single environment only.
+        </p>
+    </div>
+    <div class="row row-spacer">
+        <kendo-textarea class="dbAuditTextArea" id="objTextAreaSingle" [(ngModel)]="myTextareaSingle" placeholder="Loading object text here:"
+                        [rows]="20" [readonly]="true">
+        </kendo-textarea>
+    </div>
+</div>
+
+<div *ngIf="numEnvs != 1">
+    <!-- Choose envs to compare -->
+    <div class="row-fullwidth">
+        <span style="float: left; width: 100%;">
+            <span style="float: left; padding-left: 10px; width: 150px;">
+                <font style="font-weight: bold;">Environments :&nbsp;</font>
+            </span>
+            <span>
+                <kendo-buttongroup>
+                    <button *ngFor="let button of buttonEnvs"
+                            kendoButton
+                            [toggleable]="true"
+                            [selected]="button.selected"
+                            (selectedChange)="selectedChange($event, button)">
+                        <span>
+                            {{ button.text }}
+                        </span>
+                    </button>
+                </kendo-buttongroup>
+            </span>
+            <br />
+            <label style="float: left; padding-left: 10px; margin-bottom: -10px;">
+                <input type="checkbox" (change)="changeInline($event.target.checked)"> Inline Diff
+            </label>
+        </span>
+        <span style="float: right; margin-right: 10px;">
+            <button class="btn btn-primary" (click)="fetchData()">
+                Compare these two now
+            </button>
+        </span>
+    </div>
+
+    <!--<div>
+        <kendo-textarea class="dbAuditCompTextArea" id="objTextAreaLeft" [(ngModel)]="myTextareaLeft" placeholder="Loading Left object text here:"
+                        [rows]="5" [readonly]="true">
+        </kendo-textarea>
+        <kendo-textarea class="dbAuditCompTextArea" id="objTextAreaRight" [(ngModel)]="myTextareaRight" placeholder="Loading Right object text here:"
+                        [rows]="5" [readonly]="true">
+        </kendo-textarea>
+    </div>-->
+    <div style="height:400px; padding: 0px 5px 21px 5px;">
+        <div style="height: 20px; width:100%;">
+            <font style="float: left; font-weight: bolder; color:white; font-size: 16px;">{{myLeftLabel}}&nbsp;&nbsp;<div *ngIf="myLeftLabel != ''" class="box red"></div></font>
+            <font style="float: right; font-weight: bolder; color: white; font-size: 16px; "><div *ngIf="myRightLabel != ''" class="box green"></div>&nbsp;&nbsp;{{myRightLabel}}</font>
+        </div>
+        <monaco-editor [leftModelCode]="myTextareaLeft" [rightModelCode]="myTextareaRight" [isSideBySide]="isSideBySide"></monaco-editor>
+    </div>
+</div>
+
+<div class="modal-footer">
+    <span style="float: right;">
+        <button class="btn btn-primary" (click)="close()">
+            Close Window
+        </button>
+    </span>
+</div>

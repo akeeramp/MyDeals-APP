@@ -1,0 +1,107 @@
+﻿p.all-para-warn {
+    margin: 5px 0 5px 20px;
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+    font-size: 15px;
+    line-height: 1.5;
+    color: #FC4C02
+}
+
+.kendo-grid-header {
+    padding-right: 17px !important
+}
+
+.k-button:hover {
+    border-radius: 0.25rem;
+    border-style: solid;
+    border-width: 1px;
+}
+
+.dbAuditTool-custom .mat-dialog-container {
+    padding: 0 !important;
+    position: relative;
+    border-radius: 0px !important;
+    overflow: hidden !important;
+    margin-right: 30px !important;
+    background-color: #003c71;
+    color: #fff
+}
+
+.dbAuditToolmodalBody .dbAuditTool-custom {
+    background-color: #003c71;
+    color: #fff;
+    margin: 0, 20px, 0, 20px;
+}
+
+.dbAuditTextArea {
+    margin-left: 20px;
+    width: 97%;
+    border: 1px solid;
+}
+
+.dbAuditCompTextArea {
+    margin-left: 8px;
+    width: 49%;
+    border: 1px solid;
+}
+
+.dbAuditTextArea .k-input {
+    text-wrap: nowrap !important;
+    overflow: auto !important;
+}
+
+.objTextAreaSingle {
+    margin: 10px 0 0 0;
+}
+
+.row-spacer {
+    margin-top: 5px;
+}
+
+.row-fullwidth {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-align: end;
+    align-items: center;
+    -ms-flex-pack: end;
+    /*justify-content: flex-end;*/
+    padding: 10px 0px 15px 0px;
+    border-top: 1px solid #e9ecef;
+}
+
+.k-button {
+    margin: 0 5px 0 5px !important;
+    height: 25px;
+}
+
+monaco-editor .editor .monaco-editor div.margin:first-of-type {
+    transform: translate3d(-6px, -10px, 0px) !important;
+}
+
+.icon-btns {
+    font-size: 18px;
+    color: #0071c5;
+    cursor: pointer;
+    padding-right: 5px;
+}
+
+.icon-ttl {
+    padding-right: 5px;
+}
+
+.box {
+    height: 16px;
+    width: 20px;
+    border: 1px solid #003c71;
+    clear: both;
+    margin-top: 3px;
+}
+
+.red {
+    background-color: #FFA3A2;
+    float: right;
+}
+
+.green {
+    background-color: #D7E7B2;
+    float: left;
+}

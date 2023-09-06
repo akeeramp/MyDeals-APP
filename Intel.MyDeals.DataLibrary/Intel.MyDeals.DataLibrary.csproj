@@ -114,6 +114,7 @@
     <Compile Include="Dashboard\DashboardDataLib.cs" />
     <Compile Include="DataFix\DataFixDataLib.cs" />
     <Compile Include="DataQuality\DataQualityDataLib.cs" />
+    <Compile Include="DbAuditTools\DbAuditToolsDataLib.cs" />
     <Compile Include="DealMassUpdate\DealMassUpdateDataLib.cs" />
     <Compile Include="EcapTracker\EcapTrackerDataLib.cs" />
     <Compile Include="HealthCheck\HealthCheckDataLib.cs" />

@@ -248,6 +248,7 @@
     <Folder Include="ViewModels\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\DataQuality\" />
+    <Folder Include="Views\DbAuditTools\" />
     <Folder Include="Views\Email\" />
     <Folder Include="Views\FileUpload\" />
     <Folder Include="Views\Timeline\" />
@@ -269,6 +270,7 @@
     <Compile Include="Controllers\API\ConsumptionCountryController.cs" />
     <Compile Include="Controllers\API\CustomerVendorsController.cs" />
     <Compile Include="Controllers\API\DataFixController.cs" />
+    <Compile Include="Controllers\API\DbAuditToolsController.cs" />
     <Compile Include="Controllers\API\DealMassUpdateController.cs" />
     <Compile Include="Controllers\API\DownStreamController.cs" />
     <Compile Include="Controllers\API\HealthCheckController.cs" />
@@ -494,7 +496,15 @@
     <Content Include="Client\src\app\admin\dataQuality\admin.dataQuality.component.css" />
     <TypeScriptCompile Include="Client\src\app\admin\dataFix\admin.dataFix.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\dataFix\admin.dataFix.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\dbAuditTools\admin.dbAuditTools.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\dbAuditTools\admin.dbAuditTools.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\dbAuditTools\admin.dbAuditToolsCompareModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\dbAuditTools\admin.dbAuditToolsViewModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.component.ts" />
+    <Content Include="Client\src\app\admin\dbAuditTools\admin.dbAuditTools.component.css" />
+    <Content Include="Client\src\app\admin\dbAuditTools\admin.dbAuditTools.component.html" />
+    <Content Include="Client\src\app\admin\dbAuditTools\admin.dbAuditToolsCompareModal.component.html" />
+    <Content Include="Client\src\app\admin\dbAuditTools\admin.dbAuditToolsViewModal.component.html" />
     <Content Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.component.css" />
     <Content Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.component.html" />
     <TypeScriptCompile Include="Client\src\app\admin\dealMassUpdate\admin.dealMassUpdate.service.ts" />
@@ -548,6 +558,8 @@
     <Content Include="Client\src\app\admin\rules\admin.rules.component.css" />
     <Content Include="Client\src\app\admin\rules\admin.rules.component.html" />
     <Content Include="Client\src\app\admin\rules\admin.rulesSimulationModal.component.html" />
+    <Content Include="Client\src\app\admin\sdsDealOverrides\admin.sdsDealOverrides.component.css" />
+    <Content Include="Client\src\app\admin\sdsDealOverrides\admin.sdsDealOverrides.component.html" />
     <Content Include="Client\src\app\admin\securityEngine\admin.securityEngine.component.css" />
     <Content Include="Client\src\app\admin\securityEngine\admin.securityEngine.component.html" />
     <Content Include="Client\src\app\admin\testTenders\admin.testTenders.component.css" />
@@ -583,6 +595,8 @@
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.rules.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.rules.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.rulesSimulationModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\sdsDealOverrides\admin.sdsDealOverrides.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\sdsDealOverrides\admin.sdsDealOverrides.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\securityEngine\admin.securityEngine.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\securityEngine\admin.securityEngine.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\testTenders\admin.testTenders.component.ts" />
@@ -637,6 +651,8 @@
     <TypeScriptCompile Include="Client\src\appModules\reporting\app.route-report.component.ts" />
     <TypeScriptCompile Include="Client\src\appModules\reporting\main-report.ts" />
     <TypeScriptCompile Include="Client\src\appModules\reporting\main-report-prod.ts" />
+    <TypeScriptCompile Include="Client\src\app\contract\ptModals\dropDownModal\dropDownModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\monacoCustomEditor\monacoCustomEditor.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\util\guardConfig.util.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\util\guardProtection.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.service.ts" />
@@ -703,6 +719,8 @@
     <Content Include="Client\src\app\contract\ptModals\dealEditorModals\systemPricePointModal.component.html" />
     <Content Include="Client\src\app\contract\ptModals\dealProductsModal\dealProductsModal.component.css" />
     <Content Include="Client\src\app\contract\ptModals\dealProductsModal\dealProductsModal.component.html" />
+    <Content Include="Client\src\app\contract\ptModals\dropDownModal\dropDownModal.component.css" />
+    <Content Include="Client\src\app\contract\ptModals\dropDownModal\dropDownModal.component.html" />
     <Content Include="Client\src\app\contract\ptModals\flexOverlappingDealsCheck\flexOverlappingDealsCheck.component.html" />
     <Content Include="Client\src\app\contract\ptModals\geo\geo.component.html" />
     <Content Include="Client\src\app\contract\ptModals\geo\geo.component.css" />

@@ -48,8 +48,9 @@ import { DashboardComponent } from "./dashboard/dashboard/dashboard.component";
 import { ReportingComponent } from "./reporting/reporting.component";
 import { globalRouteComponent } from "./shared/globalroute/globalroute.component";
 import { adminMydealsSupportComponent } from './admin/mydealssupport/admin.mydealssupport.component';
-import { adminVistexProfiseeApiComponent } from './admin/vistex/admin.vistexProfiseeAPI.component'
+import { adminVistexProfiseeApiComponent } from './admin/vistex/admin.vistexProfiseeAPI.component';
 import { sdsDealOverridesComponent } from "./admin/sdsDealOverrides/admin.sdsDealOverrides.component";
+import { dbAuditToolsComponent } from "./admin/dbAuditTools/admin.dbAuditTools.component";
 
 //added for security check
 import { SecurityResolver } from "./shared/security.resolve";
@@ -113,4 +114,5 @@ export const routes: Routes = [
     { path: 'MyDealsSupport', component: adminMydealsSupportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'vistexProfiseeApi', component: adminVistexProfiseeApiComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'sdsDealOverrides', component: sdsDealOverridesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
+    { path: 'dbAuditTools', component: dbAuditToolsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
 ];

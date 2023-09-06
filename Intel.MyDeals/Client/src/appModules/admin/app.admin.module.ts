@@ -40,6 +40,7 @@ import { EditorModule } from "@progress/kendo-angular-editor";
 import { LayoutModule } from "@progress/kendo-angular-layout";
 import { MenusModule } from '@progress/kendo-angular-menu';
 import { UploadModule } from '@progress/kendo-angular-upload';
+import { ButtonsModule } from "@progress/kendo-angular-buttons";
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 // Moment Injection
 import { MomentService, StaticMomentService } from '../../app/shared/moment/moment.service';
@@ -107,6 +108,7 @@ registerAllModules();
         OrderModule,
         GridsterModule,
         UploadModule,
+        ButtonsModule,
         DragDropModule,
         ScrollingModule,
         MainPipe,
