@@ -42,7 +42,7 @@
                         <font style="font-weight:bold">Value of Rules: </font>
                         {{ruleValue}}
                     </span>-->
-                    <kendo-grid class="gridCompNotification kAlignHeaders" style="height: 325px" [data]="gridRules"
+                    <kendo-grid class="gridCompNotification kAlignHeaders SDC_resolution"  [data]="gridRules"
                                 [selectable]="{ checkboxOnly: true}" kendoGridSelectBy="RULE_ID" [(selectedKeys)]="selectionIDs">
                         <kendo-grid-checkbox-column field="RULE_NM" width="15" [headerClass]="{'headerClass':true}" showSelectAll="true">
                         </kendo-grid-checkbox-column>

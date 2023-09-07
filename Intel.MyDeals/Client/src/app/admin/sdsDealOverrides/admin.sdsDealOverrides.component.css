@@ -22,3 +22,6 @@ p.all-para-warn {
     border-style: solid;
     border-width: 1px;
 }
+.SDC_resolution {
+    height: calc(100vh - 530px) !important;
+}
