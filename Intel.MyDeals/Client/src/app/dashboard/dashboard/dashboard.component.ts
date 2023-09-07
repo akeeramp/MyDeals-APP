@@ -63,8 +63,8 @@ export class DashboardComponent implements OnInit {
     private selectedDashboardId;
     private isLoading = false;
 
-    public customerData: any;
-    public selectedCustomerNames: Item[];
+    public custData: any;
+    public selectedCustNames: Item[];
     public selectedCustomerIds = [];
     public includeTenders = true;
     public savedWidgetSettings;
@@ -194,7 +194,7 @@ export class DashboardComponent implements OnInit {
     // this function is triggered from gridStatusBoard.Component.ts 'clkFilter()'
     gridFilterChanged(gridFilter) {
         for (let i = 0; i < this.dashboard.length; i++) {
-            if (!!this.dashboard[i].subConfig && this.dashboard[i].subConfig.favContractIds != undefined) {
+            if (!!this.dashboard[i].subConfig && this.dashboard[i].subConfig.gridFilter != undefined) {
                 this.dashboard[i].subConfig.gridFilter = gridFilter;
             }
         }
@@ -371,7 +371,7 @@ export class DashboardComponent implements OnInit {
         }
 
         document.title = "Dashboard - My Deals";
-        this.selectedCustomerNames = window.localStorage.selectedCustNames ? JSON.parse(window.localStorage.selectedCustNames) : [];
+        this.selectedCustNames = window.localStorage.selectedCustNames ? JSON.parse(window.localStorage.selectedCustNames) : [];
         this.startDateValue = window.localStorage.startDateValue ? new Date(window.localStorage.startDateValue) : this.startDateValue;
         this.endDateValue = window.localStorage.endDateValue ? new Date(window.localStorage.endDateValue) : this.endDateValue;
         this.addWidgetByKey('1', true);
@@ -381,7 +381,7 @@ export class DashboardComponent implements OnInit {
         this.contractWidgetService.getCustomerDropdowns()
             .subscribe((response: Array<any>) => {
                 if(response && response.length > 0){
-                    this.customerData = response;
+                    this.custData = response;
                 } else {
                     this.loggerService.error("No result found.", 'Error');
                 }
