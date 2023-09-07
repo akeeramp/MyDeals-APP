@@ -141,7 +141,7 @@ export class AttributeBuilder implements OnInit {
     sleepAndResetDDL(title?) {
         if (title) {
             this.ruleToRun = this.rules.filter(x => x.title === title)[0];
-            this.currentRule = title;
+            this.currentRule = "";
             this.currentRuleColumns = this.ruleToRun.columns;
         }
         else {
@@ -523,6 +523,7 @@ export class AttributeBuilder implements OnInit {
             if (this.rules[itmCnt].title == dataItem.title) {
                 this.rules[itmCnt]["default"] = !this.rules[itmCnt]["default"];
                 selectionType = !this.rules[itmCnt]["default"];
+                this.ruleToRun = '';
             }
             else {
                 this.rules[itmCnt]["default"] = false;
