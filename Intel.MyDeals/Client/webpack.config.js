@@ -1,11 +1,14 @@
+/* eslint-disable @typescript-eslint/no-var-requires, no-undef */
 const path = require('path');
 const webpack = require('webpack');
 const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
-//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 const MinifyHtmlWebpackPlugin = require('minify-html-webpack-plugin');
 const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
+
+// For analyzing build, should remain commented unless needed
+//const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
 module.exports = env => {
     const mode = env.mode;
@@ -17,7 +20,7 @@ module.exports = env => {
                 dashboard: "./src/appModules/dashboard/main-dashboard.ts",
                 admin: "./src/appModules/admin/main-admin.ts",
                 advance: "./src/appModules/advancesearch/main-advance.ts",
-                report:"./src/appModules/reporting/main-report.ts",
+                report: "./src/appModules/reporting/main-report.ts",
                 globalStyle: './src/app/style/style.css',
             },
             cache: {
@@ -77,7 +80,7 @@ module.exports = env => {
             },
             //this will help to avoid sourcemap issue for chrome devtool to load
             devtool: "eval-cheap-source-map"
-        }
+        };
     } else {
         return {
             mode: 'production',
@@ -86,7 +89,7 @@ module.exports = env => {
                 dashboard: "./src/appModules/dashboard/main-dashboard-prod.ts",
                 admin: "./src/appModules/admin/main-admin-prod.ts",
                 advance: "./src/appModules/advancesearch/main-advance-prod.ts",
-                report:"./src/appModules/reporting/main-report-prod.ts",
+                report: "./src/appModules/reporting/main-report-prod.ts",
                 globalStyle: './src/app/style/style.css',
             },
             watch: false,
@@ -147,13 +150,13 @@ module.exports = env => {
                 new MinifyHtmlWebpackPlugin({
                     src: './src/app/',
                     dest: './src/app/',
-                    ignoreFileNameRegex:/\.[tj]sx?$/,
+                    ignoreFileNameRegex: /\.[tj]sx?$/,
                     rules: {
-                        caseSensitive:true,
+                        caseSensitive: true,
                         collapseWhitespace: true,
                         removeComments: true,
-                        continueOnParseError:true,
-                        minifyCSS:true
+                        continueOnParseError: true,
+                        minifyCSS: true
                     }
                 })
             ],
@@ -165,10 +168,13 @@ module.exports = env => {
                         exclude: /node_modules/
                     }, {
                         test: /\.css$/,
-                        use: [ MiniCssExtractPlugin.loader, 'css-loader' ]
+                        use: [MiniCssExtractPlugin.loader, 'css-loader']
+                    }, {
+                        test: /\.ttf$/,
+                        use: ['file-loader'],
                     }
                 ]
             }
-        }
+        };
     }
 };

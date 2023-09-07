@@ -1,28 +1,37 @@
 {
-  "compilerOptions": {
-    "baseUrl": "",
-    "declaration": false,
-    "emitDecoratorMetadata": true,
-    "experimentalDecorators": true,
-    "lib": ["es6", "dom"],
-    "mapRoot": "./",
-    "module": "es6",
-    "moduleResolution": "node",
-    "outDir": "../dist/out-tsc",
-    "sourceMap": true,
-    "target": "es5",
-    "types": ["node", "jquery"],
-    "typeRoots": [
-      "../node_modules/@types"
+    "compilerOptions": {
+        "baseUrl": "",
+        "declaration": false,
+        "emitDecoratorMetadata": true,
+        "experimentalDecorators": true,
+        "lib": [
+            "ES2018",
+            "dom"
+        ],
+        "mapRoot": "./",
+        "module": "ES2020",
+        "moduleResolution": "node",
+        "outDir": "../dist/out-tsc",
+        "sourceMap": true,
+        "target": "ES2017",
+        "types": [
+            "angular",
+            "file-saver",
+            "jquery",
+            "node",
+            "underscore"
+        ],
+        "typeRoots": [
+            "node_modules/@types"
+        ],
+        "forceConsistentCasingInFileNames": false
+    },
+    "exclude": [
+        "node_modules",
+        "wwwroot",
+        "temp"
     ],
-    "forceConsistentCasingInFileNames": false
-  },
-  "exclude": [
-    "node_modules",
-    "wwwroot",
-    "temp"
-  ],
-  "angularCompilerOptions": {
-    "strictTemplates": true
-  }
+    "angularCompilerOptions": {
+        "strictTemplates": true
+    }
 }

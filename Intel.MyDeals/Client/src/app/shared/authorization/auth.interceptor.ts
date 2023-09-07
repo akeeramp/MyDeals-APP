@@ -1,6 +1,6 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs/Observable';
+import { Observable } from "rxjs";
 import { AuthService } from './auth.service';
 import { finalize } from "rxjs/operators";
 import { LoadingSpinnerService } from '../loadingSpinner/loadingspinner.service';

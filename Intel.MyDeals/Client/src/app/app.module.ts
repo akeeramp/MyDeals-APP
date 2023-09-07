@@ -37,7 +37,7 @@ import { coreComponents } from './modules/core.module';
 //kendo components
 import { ChartsModule } from '@progress/kendo-angular-charts';
 import { TooltipModule } from '@progress/kendo-angular-tooltip';
-import { PopupModule, POPUP_CONTAINER } from '@progress/kendo-angular-popup';
+import { POPUP_CONTAINER } from '@progress/kendo-angular-popup';
 import { GridModule, ExcelModule } from '@progress/kendo-angular-grid';
 import { DialogModule, WindowModule } from '@progress/kendo-angular-dialog';
 import { DropDownListModule, DropDownsModule } from "@progress/kendo-angular-dropdowns";
@@ -52,7 +52,6 @@ import { TreeViewModule } from "@progress/kendo-angular-treeview";
 import { DecimalPipe, CurrencyPipe, DatePipe } from '@angular/common';
 // Moment Injection
 import { MomentService, StaticMomentService } from './shared/moment/moment.service';
-
 //*********************admin components *********************
 import { AdminComponents } from './modules/admin.module';
 //*********************dashboard components *********************
@@ -174,5 +173,5 @@ export class AppModule {
         appRef.bootstrap(AdminBannerComponent);
         appRef.bootstrap(dealPopupDockComponent);
         appRef.bootstrap(GlobalSearchComponent);
-      }
+    }
 }
