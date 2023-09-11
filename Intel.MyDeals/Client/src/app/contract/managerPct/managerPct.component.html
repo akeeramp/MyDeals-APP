@@ -323,7 +323,7 @@
                                                     </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Cost Test Analysis Override" [filterable]="true" field="COST_TEST_OVRRD_FLG"
-                                                                   [headerClass]="{'headerClass':true}" [width]="150"
+                                                                   [headerClass]="{'headerClass':true}" [width]="250"
                                                                    [hidden]="hasNoPermissionOvr" *ngIf="!isHidden(pt.DC_ID, 'COST_TEST_OVRRD_FLG')">
                                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                                         <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
@@ -332,7 +332,7 @@
                                                     </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Cost Test Analysis Override Comments" [filterable]="true" field="COST_TEST_OVRRD_CMT"
-                                                                   [headerClass]="{'headerClass':true}" [width]="150"
+                                                                   [headerClass]="{'headerClass':true}" [width]="250"
                                                                    [hidden]="hasNoPermissionOvr" *ngIf="!isHidden(pt.DC_ID, 'COST_TEST_OVRRD_CMT')">
                                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                                         <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>

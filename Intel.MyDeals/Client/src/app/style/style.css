@@ -2502,3 +2502,7 @@ i.intelicon-protection-solid.icon_colourfix.validf_Complete {
 #Adddialog {
     z-index: 10002;
 }
+
+kendo-dialog#renamedialog {
+    z-index: 10002;
+}
