@@ -29,6 +29,7 @@ export class GridPopoverComponent implements OnInit {
     @Input() private currentPricingTableRow;    // Required
     @Input() private productMemberSId;  // Required
     @Input() private priceCondition;    // Required
+    @Input() private data?: any = {};
     private productData;
 
     private openModal() {
@@ -65,15 +66,28 @@ export class GridPopoverComponent implements OnInit {
                 columns: this.columnTypes == "CAP" ? this.capColumns : this.ycs2Columns
             };
 
-            this.productData = [{
-                'CUST_MBR_SID': this.currentPricingTableRow.CUST_MBR_SID,
-                'PRD_MBR_SID': this.productMemberSId,
-                'GEO_MBR_SID': this.currentPricingTableRow.GEO_COMBINED,
-                'DEAL_STRT_DT': this.currentPricingTableRow.START_DT,
-                'DEAL_END_DT': this.currentPricingTableRow.END_DT,
-                'getAvailable': 'N',
-                'priceCondition': this.priceCondition
-            }];
+            if (!!this.data && this.data!=null && this.data["IsProductCorrector"]) {
+                this.productData = [{
+                    'CUST_MBR_SID': this.data.contractData.CUST_MBR_SID,
+                    'PRD_MBR_SID': this.productMemberSId,
+                    'GEO_MBR_SID': this.data.curPricingTable.GEO_COMBINED,
+                    'DEAL_STRT_DT': this.currentPricingTableRow.DEAL_STRT_DT,
+                    'DEAL_END_DT': this.currentPricingTableRow.DEAL_END_DT,
+                    'getAvailable': 'N',
+                    'priceCondition': this.priceCondition
+                }];
+            }
+            else {
+                this.productData = [{
+                    'CUST_MBR_SID': this.currentPricingTableRow.CUST_MBR_SID,
+                    'PRD_MBR_SID': this.productMemberSId,
+                    'GEO_MBR_SID': this.currentPricingTableRow.GEO_COMBINED,
+                    'DEAL_STRT_DT': this.currentPricingTableRow.START_DT,
+                    'DEAL_END_DT': this.currentPricingTableRow.END_DT,
+                    'getAvailable': 'N',
+                    'priceCondition': this.priceCondition
+                }];
+            }
         }
     }
 

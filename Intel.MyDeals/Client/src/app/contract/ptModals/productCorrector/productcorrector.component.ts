@@ -1183,6 +1183,8 @@ export class ProductCorrectorComponent {
         this.initProducts();
         this.selectRow(1);
         this.isLoading = false;
+        //To display popover data
+        this.data["IsProductCorrector"] = true;
 
     }
 }
