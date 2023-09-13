@@ -1,5 +1,5 @@
 ﻿<div *ngIf="in_Field_Name == 'DEAL_DESC' || in_Field_Name == 'TERMS' || in_Field_Name == 'QLTR_PROJECT' || in_Field_Name == 'RPU_OVERRIDE_CMNT' || in_Field_Name == 'CONSUMPTION_REASON_CMNT' || in_Field_Name == 'QUOTE_LN_ID'">
-    <kendo-textbox (valueChange)="valueChange(in_DataItem, in_Field_Name)" [ngModel]="in_DataItem[in_Field_Name]"
+    <kendo-textbox (valueChange)="valueChange(in_DataItem, in_Field_Name)" [ngModel]="in_DataItem[in_Field_Name] ? in_DataItem[in_Field_Name] : ''  "
                    (ngModelChange)="in_DataItem[in_Field_Name] = $event" class="k-textbox-design">
     </kendo-textbox>
 </div>
