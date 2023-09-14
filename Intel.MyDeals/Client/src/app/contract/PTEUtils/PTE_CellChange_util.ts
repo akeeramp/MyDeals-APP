@@ -1494,7 +1494,14 @@ export class PTE_CellChange_Util {
 
     static excludeProdChanges(items: Array<any>, columns: Array<any>) {
         //when pasting multiple products from excel in 1 cell it should be comma deliminated
-        items.forEach((item) => { if (item.new.includes('\n')) item.new = item.new.split('\n').join(','); })
+        items.forEach((item) => {
+            if (item.new != null) {
+                if (item.new.includes('\n')) {
+                    item.new = item.new.split('\n').join(',');
+                }
+            }
+        })
+
         let updateRows = [];
         const PTR_Exccol_ind = findIndex(columns, { data: 'PRD_EXCLDS' });
         const PTR_Inccol_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
