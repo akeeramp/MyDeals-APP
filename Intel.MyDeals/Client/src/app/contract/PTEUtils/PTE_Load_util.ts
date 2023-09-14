@@ -803,7 +803,7 @@ export class PTE_Load_Util {
     static bindWarningDetails(data, savedWarningDetails) {
         each(savedWarningDetails, (warning) => {
             each(data, (dataItem) => {
-                if (dataItem.DC_ID == warning.DC_ID) {
+                if (dataItem.DC_ID == warning.DC_ID || dataItem.DC_ID==warning.savedDcid) {
                     if (!dataItem.warningMessages)
                         dataItem.warningMessages = {};
                     dataItem.warningMessages = warning.warningMessages;

@@ -379,13 +379,18 @@ export class PTE_Save_Util {
     static saveWarningDetails(data, savedResponseWarning) {
         let index = 0;
         each(data, (dataItem) => {
+            let modifiedDcid=0;
+            if(!!data[0]._actions && dataItem.DC_ID<0){
+                modifiedDcid=data[0]._actions.find(x=>x.Action=='ID_CHANGE' && x.DcID==dataItem.DC_ID)!=null? data[0]._actions.find(x=>x.Action=='ID_CHANGE' && x.DcID==dataItem.DC_ID).AltID:0;
+            }
             if (dataItem.warningMessages && dataItem.warningMessages.length > 0
                 && dataItem._behaviors['isError'] && dataItem._behaviors['validMsg']) {
                 savedResponseWarning[index++] = {
                     DC_ID: dataItem.DC_ID,
                     warningMessages: dataItem.warningMessages,
                     errors: dataItem._behaviors['isError'],
-                    validMsg: dataItem._behaviors['validMsg']
+                    validMsg: dataItem._behaviors['validMsg'],
+                    savedDcid:modifiedDcid
                 };
             }
         })
