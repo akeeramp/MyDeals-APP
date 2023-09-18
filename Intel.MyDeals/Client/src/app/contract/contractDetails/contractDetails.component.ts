@@ -1125,7 +1125,7 @@ export class contractDetailsComponent {
     }
 
     checkbackdate(){
-        if (this.momentService.moment(this.contractData.START_DT).isBefore(this.today) &&  (this.contractData.BACK_DATE_RSN!='' || this.contractData.BACK_DATE_RSN!=undefined)) {
+        if (this.momentService.moment(this.contractData.START_DT).isBefore(this.today) && (this.contractData.BACK_DATE_RSN != '' && this.contractData.BACK_DATE_RSN != undefined)) {
             this.isBackDate = true;
             this.dropDownsData['BACK_DATE_RSN']=this.backdatereasonsdropdownlist;
             this.BACK_DATE_RSN=this.backdatereasonsdropdownlist.find(x=>x.DROP_DOWN==this.contractData.BACK_DATE_RSN);
