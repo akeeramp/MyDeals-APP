@@ -64,7 +64,7 @@
     <!--[innerHTML]="uiReadonlyControlWrapper(in_DataItem, in_Field_Name)|sanitizeHtml"-->
     <div class="uiControlDiv isReadOnlyCell">
         <div class="ng-binding vert-center" *ngIf="in_DataItem[in_Field_Name] && in_DataItem[in_Field_Name] != null && in_DataItem[in_Field_Name] != 'CNTRCT_OBJ_SID'">{{in_DataItem[in_Field_Name]}}</div>
-        <div class="ng-binding vert-center gridCellSpan" title="FolioID">{{in_DataItem[in_Field_Name]}}</div>
+        <!--<div class="ng-binding vert-center gridCellSpan" title="FolioID">{{in_DataItem[in_Field_Name]}}</div>-->
     </div>
 </div>
 <div *ngIf="in_Template.includes('gridUtils.uiReadonlyFolioWrapper')" class="dealCell">
