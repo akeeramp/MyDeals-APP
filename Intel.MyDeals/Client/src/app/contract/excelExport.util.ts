@@ -152,7 +152,11 @@ export class ExcelExport {
             if (passedData[field] !== undefined) {
                 var val = passedData[field][dim];
                 if (val != 'No YCS2') val = ExcelExport.getFormattedData(val, format);
-                tmplt += val + '\n';
+                if (passedData.OBJ_SET_TYPE_CD == "KIT") {
+                    tmplt += val + '\n';
+                } else {
+                    tmplt += val;
+                }
             }
         }
         return tmplt;
@@ -172,7 +176,11 @@ export class ExcelExport {
                 if (val !== "Unlimited" || val != "No YCS2") {
                     val = ExcelExport.getFormattedData(val, format);
                 }
-                tmplt += val + '\n';
+                if (passedData.OBJ_SET_TYPE_CD == "KIT") {
+                    tmplt += val + '\n';
+                } else {
+                    tmplt += val;
+                }
             }
         }
 
