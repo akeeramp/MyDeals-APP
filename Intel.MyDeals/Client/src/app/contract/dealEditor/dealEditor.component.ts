@@ -1,6 +1,6 @@
 ﻿import { Component, Input, ViewEncapsulation, ViewChild, Output, EventEmitter } from '@angular/core';
 import { logger } from '../../shared/logger/logger';
-import { each } from 'underscore';
+import { each, uniq } from 'underscore';
 import { MomentService } from "../../shared/moment/moment.service";
 import { MatDialog } from '@angular/material/dialog';
 import { opGridTemplate } from "../../core/angular.constants"
@@ -96,6 +96,7 @@ export class dealEditorComponent {
     public columns: any = [];
     public templates: any;
     public selectedTab: any;
+    public pinnedColumns: any = [];
     public voltLength;
     private isBusyShowFunFact: boolean = true;
     private numSoftWarn = 0;
@@ -342,6 +343,10 @@ export class dealEditorComponent {
             }
             else
                 this.filterColumnbyGroup(this.selectedTab);
+
+            this.columns = this.columns.concat(this.pinnedColumns);
+            this.columns = uniq(this.columns);
+
         } else {
             this.refreshGrid();
         }
@@ -406,7 +411,34 @@ export class dealEditorComponent {
                     }
                 }
             })
+
+            return this.columns;
         }
+    }
+
+    onPin(e, title) {
+
+        let columnsGroup = this.filterColumnbyGroup(title);
+
+        let selectedID = e.currentTarget.id;
+
+        let elem = document.getElementById(selectedID)
+
+        let isMainPresent = elem.classList.contains("passBlue");
+
+        if (isMainPresent == false) {
+            elem.classList.add("passBlue");
+            this.pinnedColumns = this.pinnedColumns.concat(columnsGroup);
+        } else {
+            elem.classList.remove("passBlue");
+            for (let i = 0; i < columnsGroup.length; i++) {
+                this.pinnedColumns.splice(this.pinnedColumns.findIndex(a => a.field == columnsGroup[i].field), 1)
+            }
+        }
+
+        this.columns = this.columns.concat(this.pinnedColumns);
+        this.columns = uniq(this.columns);
+
     }
 
     cellClickHandler(args: CellClickEvent): void {

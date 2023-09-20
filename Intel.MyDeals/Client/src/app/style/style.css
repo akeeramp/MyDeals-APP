@@ -2506,3 +2506,12 @@ i.intelicon-protection-solid.icon_colourfix.validf_Complete {
 kendo-dialog#renamedialog {
     z-index: 10002;
 }
+
+.passBlue i.intelicon-pin-outlined {
+    color: #fff !important;
+    background: #003c71 !important;
+}
+
+    .passBlue i.intelicon-pin-outlined:hover, .passBlue i.intelicon-pin-outlined:focus {
+        background: #00aeef !important;
+    }
