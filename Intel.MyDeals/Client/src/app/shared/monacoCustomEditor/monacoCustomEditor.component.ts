@@ -1,5 +1,5 @@
 ﻿import { Component, ElementRef, Input, OnInit, ViewChild } from '@angular/core';
-import * as monaco from 'monaco-editor';
+import { editor } from 'monaco-editor/esm/vs/editor/editor.api';
 
 @Component({
     selector: 'monaco-editor',
@@ -13,9 +13,9 @@ import * as monaco from 'monaco-editor';
 export class MonacoEditorComponent implements OnInit {
     @ViewChild('editorContainer', { static: true }) _editorContainer!: ElementRef;
   
-    codeEditorInstance!: monaco.editor.IStandaloneDiffEditor;
-    leftModel: monaco.editor.ITextModel;
-    rightModel: monaco.editor.ITextModel;
+    codeEditorInstance!: editor.IStandaloneDiffEditor;
+    leftModel: editor.ITextModel;
+    rightModel: editor.ITextModel;
 
     @Input() leftModelCode: string = '';
     @Input() rightModelCode: string = '';
@@ -39,9 +39,9 @@ export class MonacoEditorComponent implements OnInit {
     }
 
     private updateEditorModels() {
-        this.codeEditorInstance = monaco.editor.createDiffEditor(this._editorContainer.nativeElement, this.defaultOptions);
-        this.leftModel = monaco.editor.createModel(this.leftModelCode, this.defaultLanguage);
-        this.rightModel = monaco.editor.createModel(this.rightModelCode, this.defaultLanguage);
+        this.codeEditorInstance = editor.createDiffEditor(this._editorContainer.nativeElement, this.defaultOptions);
+        this.leftModel = editor.createModel(this.leftModelCode, this.defaultLanguage);
+        this.rightModel = editor.createModel(this.rightModelCode, this.defaultLanguage);
         this.codeEditorInstance.setModel({ original: this.leftModel, modified: this.rightModel });
     }
 

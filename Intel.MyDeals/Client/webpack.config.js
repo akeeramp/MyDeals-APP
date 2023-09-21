@@ -5,8 +5,6 @@ const TerserPlugin = require('terser-webpack-plugin');
 const MiniCssExtractPlugin = require("mini-css-extract-plugin");
 const CssMinimizerPlugin = require("css-minimizer-webpack-plugin");
 const MinifyHtmlWebpackPlugin = require('minify-html-webpack-plugin');
-const MonacoWebpackPlugin = require('monaco-editor-webpack-plugin');
-
 // For analyzing build, should remain commented unless needed
 //const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
 
@@ -40,7 +38,6 @@ module.exports = env => {
             },
             plugins: [
                 new MiniCssExtractPlugin(),
-                new MonacoWebpackPlugin(),
             ],
             optimization: {
                 minimize: true,
@@ -71,10 +68,6 @@ module.exports = env => {
                     {
                         test: /\.css$/,
                         use: [MiniCssExtractPlugin.loader, 'css-loader']
-                    },
-                    {
-                        test: /\.ttf$/,
-                        use: ['file-loader'],
                     }
                 ]
             },
@@ -146,7 +139,6 @@ module.exports = env => {
             },
             plugins: [
                 new MiniCssExtractPlugin(),
-                new MonacoWebpackPlugin(),
                 new MinifyHtmlWebpackPlugin({
                     src: './src/app/',
                     dest: './src/app/',
@@ -169,9 +161,6 @@ module.exports = env => {
                     }, {
                         test: /\.css$/,
                         use: [MiniCssExtractPlugin.loader, 'css-loader']
-                    }, {
-                        test: /\.ttf$/,
-                        use: ['file-loader'],
                     }
                 ]
             }

@@ -97,7 +97,6 @@
         "file-loader": "^6.2.0",
         "mini-css-extract-plugin": "2.7.6",
         "minify-html-webpack-plugin": "^1.1.7",
-        "monaco-editor-webpack-plugin": "^7.1.0",
         "rimraf": "^4.4.1",
         "style-loader": "3.3.3",
         "terser-webpack-plugin": "5.3.9",
