@@ -350,7 +350,7 @@
                                         </div>
                                     </ng-template>
                                     <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup" let-column="column">
-                                        <kendo-combobox class="contract-details-customer align-text-combo-box" #custDropDown *ngIf="canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG == 'Y' && dataItem.COMP_SKU.length !== 0" [data]="meetCompPrcDropdownData" [kendoDropDownFilter]="filterSettings" textField="COMP_PRC" valueField="COMP_PRC"
+                                        <kendo-combobox class="contract-details-customer align-text-combo-box" #custDropDown *ngIf="canUpdateMeetCompSKUPriceBench && dataItem.MEET_COMP_UPD_FLG == 'Y' && dataItem.COMP_SKU.length !== 0" [(ngModel)]="selectedMeetCompPrc" [data]="meetCompPrcDropdownData" [kendoDropDownFilter]="filterSettings" textField="COMP_PRC" valueField="COMP_PRC"
                                                         placeholder="Select Comp Price" [allowCustom]="true" [valueNormalizer]="valueNormalizerCompPrc" (valueChange)="onCompPriceChange($event,dataItem)"></kendo-combobox>
                                     </ng-template>
                                 </kendo-grid-column>
