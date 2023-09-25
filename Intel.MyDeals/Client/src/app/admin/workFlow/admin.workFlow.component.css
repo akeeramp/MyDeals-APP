@@ -47,3 +47,6 @@
 .kendoDialogBtn {
     border-radius: 3px !important
 }
+.workFlowGrid button#command-icon {
+    box-shadow: none !important;
+}
