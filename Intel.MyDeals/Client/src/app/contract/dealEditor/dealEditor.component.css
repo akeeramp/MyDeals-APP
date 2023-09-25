@@ -1313,7 +1313,8 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:
 #capYcs2Col,
 #tdsCol {
     position: relative;
-    top: 25%
+    top: 25%;
+    display:flex;
 }
 
 .fullHeight {
