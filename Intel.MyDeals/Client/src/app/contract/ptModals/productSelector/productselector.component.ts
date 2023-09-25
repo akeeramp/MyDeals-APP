@@ -739,6 +739,33 @@ export class ProductSelectorComponent {
             });
         return this.filteredGridData;
     }
+    
+    showAutocorrectedSuggestions(userInput) {
+        this.isLoadingSearchProducts = true;
+        let prodData = {
+            USR_INPUT: userInput,
+            EXCLUDE: "",
+            FILTER: this.pricingTableRow.PROD_INCLDS,
+            START_DATE: this.pricingTableRow.START_DT,
+            END_DATE: this.pricingTableRow.END_DT,
+            GEO_COMBINED: this.pricingTableRow.GEO_COMBINED,
+            PROGRAM_PAYMENT: this.pricingTableRow.PROGRAM_PAYMENT,
+        };
+        this.prodSelService.GetSuggestions(prodData, this.pricingTableRow.CUST_MBR_SID,  this.dealType).subscribe( (response) => {
+            this.suggestedProducts = response;
+            this.disableSelection = (response.length > 0 && !!response[0] && !!response[0].WITHOUT_FILTER) ? response[0].WITHOUT_FILTER : false; 
+            this.showSuggestions = true;
+            if (response.length > 0) {
+                this.isLoadingSearchProducts = false;
+                this.filteredGridData = process(this.suggestedProducts, this.filteredState);
+                this.initSuggestionGrid();
+            }
+        }, function (response) {
+            this.logger.error("Unable to get auto-corrected product suggestions.", response, response.statusText);
+            this.isLoadingSearchProducts = false;
+        });
+    }
+
     showSingleProductHierarchy(product) {
         this.selectedProductcolor = product.HIER_NM_HASH;
         let data = {
@@ -1446,13 +1473,15 @@ export class ProductSelectorComponent {
             this.searchProduct();
         }
     }
+
+   
     ngOnInit() {
         this.isLoadingSearchProducts = true;
         this.loadPTSelctor();
         this.getProductSelection();
          if (this.data.selVal !== '' && this.data.source == 'Product Corrector') {
              this.userInput = this.data.selVal;
-             this.searchProduct();
+            this.showAutocorrectedSuggestions(this.userInput)
          }
             
     }

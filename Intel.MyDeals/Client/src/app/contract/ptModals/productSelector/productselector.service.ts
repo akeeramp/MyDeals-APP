@@ -24,6 +24,11 @@ export class productSelectorService {
         return this.httpClient.post(apiUrl, products);
     }
 
+    public GetSuggestions(products, CUST_CD, dealType): Observable<any> {
+        const apiUrl: string = this.apiBaseUrl + 'GetSuggestions/' + CUST_CD + '/' + dealType;
+        return this.httpClient.post(apiUrl, products);
+    }
+
     public GetProductCAPYCS2Data(getAvailable, priceCondition, data): Observable<any> {
         const apiUrl = `${this.apiBaseUrl}GetProductCAPYCS2Data/${getAvailable}/${priceCondition}`;
         return this.httpClient.post(apiUrl, data);
