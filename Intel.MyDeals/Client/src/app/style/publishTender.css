@@ -81,3 +81,13 @@
 #pubOpGrid .textRightAlign.isReadOnlyCell {
     padding: 13px 0 0 1px;
 }
+
+.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th .k-cell-inner kendo-grid-filter-menu a.k-grid-filter.k-state-active .k-i-filter {
+    background-color: #fff !important;
+    padding: 10px;
+    color: #01aeef !important;
+}
+
+.filter-alignment-fixes kendo-grid .k-grid-aria-root .k-grid-header table thead th .k-cell-inner kendo-grid-filter-menu a.k-grid-filter.k-state-active:hover .k-i-filter {
+    color: #0071C5 !important;
+}

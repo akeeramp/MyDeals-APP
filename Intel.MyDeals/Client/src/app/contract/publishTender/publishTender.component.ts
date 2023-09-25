@@ -310,6 +310,9 @@ export class publishTenderComponent {
                 let StgVal = item.WF_STG_CD === "Draft" ? item.PS_WF_STG_CD : item.WF_STG_CD;
                 return { Text: StgVal, Value: item[fieldName] };
             }
+            if (fieldName == 'ECAP_PRICE') {
+                return { Text: item.ECAP_PRICE['20___0'], Value: item[fieldName] };
+            }
             if (fieldName == 'CUST_MBR_SID') {
                 return { Text: item.Customer.CUST_NM, Value: item[fieldName] };
             }

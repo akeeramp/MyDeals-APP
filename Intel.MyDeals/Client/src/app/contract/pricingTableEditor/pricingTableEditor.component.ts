@@ -1541,32 +1541,34 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
     async validatePricingTableProducts(deleteDCIDs?) {
         let currentPricingTableRowData = this.newPTR.filter(x => x.DC_ID != null);
         let hasProductDependencyErr = false;
-        hasProductDependencyErr = PTEUtil.hasProductDependency(currentPricingTableRowData, this.productValidationDependencies, hasProductDependencyErr);
-        if (hasProductDependencyErr) {
-            // if errors are present this will terminate and save will not go forward
-            this.isLoading = true;
-            this.setBusy("Not saved. Please fix errors.", "Please fix the errors so we can properly validate your products", "Error", true);
-            setTimeout(() => {
-                this.isLoading = false;
-                this.setBusy("", "", "", false);
-            }, 5000);
-            this.loggerService.warn('Mandatory validations failure.', 'Warning');
-            return;
-        }
-        if (this.kitMergeDeleteDCIDs && this.kitMergeDeleteDCIDs.length > 0) {// if any rows got deleted because while merging the rows
-            if (!deleteDCIDs)
-                deleteDCIDs = this.kitMergeDeleteDCIDs;
-            else {
-                each(this.kitMergeDeleteDCIDs, (delId) => {
-                    deleteDCIDs.push(delId);
-                })
+        if (currentPricingTableRowData && currentPricingTableRowData.length > 0) {
+            hasProductDependencyErr = PTEUtil.hasProductDependency(currentPricingTableRowData, this.productValidationDependencies, hasProductDependencyErr);
+            if (hasProductDependencyErr) {
+                // if errors are present this will terminate and save will not go forward
+                this.isLoading = true;
+                this.setBusy("Not saved. Please fix errors.", "Please fix the errors so we can properly validate your products", "Error", true);
+                setTimeout(() => {
+                    this.isLoading = false;
+                    this.setBusy("", "", "", false);
+                }, 5000);
+                this.loggerService.warn('Mandatory validations failure.', 'Warning');
+                return;
             }
-            this.kitMergeDeleteDCIDs = [];
+            if (this.kitMergeDeleteDCIDs && this.kitMergeDeleteDCIDs.length > 0) {// if any rows got deleted because while merging the rows
+                if (!deleteDCIDs)
+                    deleteDCIDs = this.kitMergeDeleteDCIDs;
+                else {
+                    each(this.kitMergeDeleteDCIDs, (delId) => {
+                        deleteDCIDs.push(delId);
+                    })
+                }
+                this.kitMergeDeleteDCIDs = [];
+            }
+            //validate Products for non-deleted records, if any product is invalid it will stop deletion as well
+            const isValidProd = await this.validateOnlyProducts('onSave', undefined, deleteDCIDs);
+            if (isValidProd != undefined)
+                await this.saveAndValidate(isValidProd, deleteDCIDs);
         }
-        //validate Products for non-deleted records, if any product is invalid it will stop deletion as well
-        const isValidProd = await this.validateOnlyProducts('onSave', undefined, deleteDCIDs);
-        if (isValidProd != undefined)
-            await this.saveAndValidate(isValidProd, deleteDCIDs);
     }
     async saveAndValidate(isValidProd, deleteDCIDs?) {
         //Handsonetable loading taking some time so putting this logic for loader
