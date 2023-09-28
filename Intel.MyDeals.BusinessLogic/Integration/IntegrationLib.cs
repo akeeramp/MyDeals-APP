@@ -418,6 +418,9 @@ namespace Intel.MyDeals.BusinessLogic
             DateTime dealEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ApprovedEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             DateTime billingStartDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[currentRec].BillingStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             DateTime billingEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[currentRec].BillingEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
+            string consumptionCustomerPlatform = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ConsumptionCustomerPlatform;
+            string consumptionCountryRegion = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ConsumptionCountryRegion;
+            string consumptionReportedSalesGeo = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ConsumptionReportedSalesGeo;
             string terms = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].AdditionalTandC;
             string excludeAutomationFlag = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ExcludeAutomation ? "Yes" : "No";
             string quoteLineId = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Name;
@@ -546,6 +549,12 @@ namespace Intel.MyDeals.BusinessLogic
                 dealType == "" || groupType == "" || marketSegment == "")
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(714, "Deal Error: failed to create the Tender Deal due to missing expected fields {Fields}", "Missing expected fields"));
+                return initWipId;
+            }
+            // Can only have 1, UI controlled rule preventing both from being entered, abort if both are filled out on Create
+            if (consumptionCountryRegion != null && consumptionReportedSalesGeo != null)
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(715, "Deal Error: failed to create the Tender Deal due to Consumption Country Region and Consumption Reported Sales Geo both being filled out.  You are allowed one or the other, not both.", "Consumption Region and Sales both filled out"));
                 return initWipId;
             }
 
@@ -839,6 +848,9 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.PROGRAM_PAYMENT), "Backend");
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.REBATE_BILLING_START), billingStartDate.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.REBATE_BILLING_END), billingEndDate.ToString("MM/dd/yyyy"));
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.CONSUMPTION_CUST_PLATFORM), consumptionCustomerPlatform);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.CONSUMPTION_COUNTRY_REGION), consumptionCountryRegion);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.CONSUMPTION_CUST_RPT_GEO), consumptionReportedSalesGeo);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.DEAL_COMB_TYPE), groupType);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.CONSUMPTION_LOOKBACK_PERIOD), lookbackDefaultVal.ToString());
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.CAP_STRT_DT), singleProduct?.CAP_START ?? DateTime.Now.ToString("MM/dd/yyyy")); // From PTR_SYS_PRD single Product
@@ -1436,6 +1448,19 @@ namespace Intel.MyDeals.BusinessLogic
 
             DateTime billingEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[i].BillingEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.REBATE_BILLING_END), billingEndDate.ToString("MM/dd/yyyy"));
+
+            string consumptionCustomerPlatform = workRecordDataFields.recordDetails.quote.quoteLine[i].ConsumptionCustomerPlatform;
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.CONSUMPTION_CUST_PLATFORM), consumptionCustomerPlatform == null ? "" : consumptionCustomerPlatform);
+
+            string consumptionCountryRegion = workRecordDataFields.recordDetails.quote.quoteLine[i].ConsumptionCountryRegion;
+            string consumptionReportedSalesGeo = workRecordDataFields.recordDetails.quote.quoteLine[i].ConsumptionReportedSalesGeo;
+            // Can only have 1, UI controlled rule preventing both from being entered, warn if both are filled out on update
+            if (consumptionCountryRegion != null && consumptionReportedSalesGeo != null)
+            {
+                workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(715, "Deal Error: failed to update the Tender Deal due to Consumption Country Region and Consumption Reported Sales Geo both being filled out.  You are allowed one or the other, not both.", "Consumption Region and Sales both filled out"));
+            }
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.CONSUMPTION_COUNTRY_REGION), consumptionCountryRegion == null ? "": consumptionCountryRegion);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.CONSUMPTION_CUST_RPT_GEO), consumptionReportedSalesGeo == null ? "" : consumptionReportedSalesGeo);
 
             // Add this in if IQR decides that they need to update this field prior to it having a tracker only.
             //string HasTracker = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.HAS_TRACKER);

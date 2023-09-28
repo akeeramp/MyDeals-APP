@@ -300,6 +300,9 @@ namespace Intel.MyDeals.Entities
                     public string BackdateReason { get; set; }
                     public string BillingStartDate { get; set; }
                     public string BillingEndDate { get; set; }
+                    public string ConsumptionCustomerPlatform { get; set; }
+                    public string ConsumptionCountryRegion { get; set; }
+                    public string ConsumptionReportedSalesGeo { get; set; }
                     public string ApprovedQuantity { get; set; }
                     public string ApprovedECAPPrice { get; set; }
                     public string AdditionalTandC { get; set; }
