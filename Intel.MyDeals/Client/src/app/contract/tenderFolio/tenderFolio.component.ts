@@ -1,7 +1,7 @@
 import { Component, Inject, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TenderFolioService } from '../tenderFolio/tenderFolio.service';
-import { templatesService } from "../../shared/services/templates.service";
+import { TemplatesService } from "../../shared/services/templates.service";
 import { logger } from '../../shared/logger/logger'
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import { MomentService } from "../../shared/moment/moment.service";
@@ -20,7 +20,7 @@ export class TenderFolioComponent {
                 @Inject(MAT_DIALOG_DATA) public data,
                 private dataService: TenderFolioService,
                 private loggerSvc: logger,
-                private templatesSvc: templatesService,
+                private templatesSvc: TemplatesService,
                 private momentService: MomentService) { }
 
     private isLoading = true;

@@ -11,7 +11,7 @@ import { PricingTableEditorService } from './pricingTableEditor.service'
 import { lnavService } from '../lnav/lnav.service';
 import { productSelectorService } from '../../shared/services/productSelector.service';
 import { flexoverLappingcheckDealService } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.service'
-import { contractDetailsService } from "../contractDetails/contractDetails.service"
+import { ContractDetailsService } from "../contractDetails/contractDetails.service"
 import { PRC_TBL_Model_Attributes, PRC_TBL_Model_Column, PRC_TBL_Model_Field, sheetObj } from './handsontable.interface';
 import { PTEUtil } from '../PTEUtils/PTE.util';
 import { ProductSelectorComponent } from '../ptModals/productSelector/productselector.component';
@@ -44,7 +44,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                 private loggerService: logger,
                 private lnavService: lnavService,
                 private flexoverLappingCheckDealsService: flexoverLappingcheckDealService,
-                private contractDetailsService: contractDetailsService, private ngZone: NgZone,
+                private contractDetailsService: ContractDetailsService, private ngZone: NgZone,
                 protected dialog: MatDialog) {
         /*  custom cell editor logic starts here*/
         let VM = this;

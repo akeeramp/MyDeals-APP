@@ -129,7 +129,7 @@
                                             end date reason:
                                         </div>
                                         <div class="blockdisplay enddateblock">
-                                            <kendo-dropdownlist [data]="dropDownsData?.NO_END_DT_RSN" textField="DROP_DOWN"
+                                            <kendo-dropdownlist [data]="dropdownFieldsData?.NO_END_DT_RSN" textField="DROP_DOWN"
                                                                 name="NO_END_DT_RSN" valueField="DROP_DOWN" [(ngModel)]="NO_END_DT_RSN" class="inputWidth font-input" #noEndDateRsn [required]="NO_END_DT">
                                             </kendo-dropdownlist>
                                             <kendo-formerror *ngIf="contractDetailsForm.controls.NO_END_DT_RSN?.errors?.required && isSubmitted">
@@ -143,7 +143,7 @@
                                             Date Reason:
                                         </div>
                                         <div class="blockdisplay enddateblock">
-                                            <kendo-dropdownlist [data]="dropDownsData?.BACK_DATE_RSN" textField="DROP_DOWN"
+                                            <kendo-dropdownlist [data]="dropdownFieldsData?.BACK_DATE_RSN" textField="DROP_DOWN"
                                                                 name="BACK_DATE_RSN" #backDateRsn="ngModel" valueField="DROP_DOWN" [(ngModel)]="BACK_DATE_RSN" class="inputWidth font-input backdate_contract_style" [required]="isBackDate">
                                             </kendo-dropdownlist>
                                             <kendo-formerror *ngIf="contractDetailsForm.controls.BACK_DATE_RSN?.errors?.required && isSubmitted">
@@ -155,7 +155,7 @@
                                         <div class="fl opUiLabel" style="width: 160px">
                                             <span *ngIf="contractData?._behaviors?.isRequired?.CONTRACT_TYPE" class="isReqField">*</span>Contract Type:
                                         </div>
-                                        <kendo-dropdownlist [data]="dropDownsData?.CONTRACT_TYPE" textField="DROP_DOWN"
+                                        <kendo-dropdownlist [data]="dropdownFieldsData?.CONTRACT_TYPE" textField="DROP_DOWN"
                                                             valueField="DROP_DOWN" [(ngModel)]="CONTRACT_TYPE" class="inputWidth newbotborder font-input cd-input-bottom" name="CONTRACT_TYPE" required>
                                         </kendo-dropdownlist>
                                     </div>
@@ -174,7 +174,7 @@
                                         </div>
                                     </div>
                                     <div class="col-md-11" style="margin-bottom:20px;margin-top:30px" [ngClass]="{'disabled-section': disableCustAccpt}">
-                                        <div *ngFor="let data of dropDownsData?.CUST_ACCPT; let idx=index">
+                                        <div *ngFor="let data of dropdownFieldsData?.CUST_ACCPT; let idx=index">
                                             <div class="row">
                                                 <div class="col-md-12"
                                                      style="margin-bottom:10px; border-bottom:1px solid #eeeeee"></div>
@@ -206,7 +206,7 @@
                                                   class="isReqField">* </span>C2A Contract #
                                         </div>
                                         <kendo-textbox triggers="manual" class="kendoInput font-input cd-input-bottom k-textbox-design" [clearButton]="true" name="C2A_DATA_C2A_ID" [disabled]="this.contractData?._behaviors?.isReadOnly?.C2A_DATA_C2A_ID"
-                                                       [(ngModel)]="C2A_DATA_C2A_ID" (valueChange)="c2aIDchange($event)" [required]="this.contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID">
+                                                       [(ngModel)]="C2A_DATA_C2A_ID" (valueChange)="c2aIdChange($event)" [required]="this.contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID">
                                         </kendo-textbox>
                                         <kendo-formerror *ngIf="contractDetailsForm.controls.C2A_DATA_C2A_ID?.errors?.required && isSubmitted">
                                             {{isRequiredMsg}}
@@ -233,7 +233,7 @@
                                             </span>
                                         </div>
                                         <div *ngIf="!isRoleDisabled" class="col-md-11 blockdisplay" style="padding-left:0px">
-                                            <kendo-upload [saveUrl]="uploadSaveUrl" [batch]="true"
+                                            <kendo-upload [saveUrl]="URL_FILE_SAVE" [batch]="true"
                                                           [restrictions]="myRestrictions" (success)="successEventHandler()" (select)="onFileSelect()" (remove)="onFileRemove()" (error)="onFileUploadError()" (complete)="onFileUploadComplete()"
                                                           (upload)="uploadEventHandler($event)" [autoUpload]="false" [(ngModel)]="files" name="files" class="kuploadaction" [required]="contractData?._behaviors?.isRequired?.C2A_DATA_C2A_ID && isSubmitted && (C2A_DATA_C2A_ID==undefined || C2A_DATA_C2A_ID=='')"></kendo-upload>
                                             <div *ngIf="selectedCUST_ACCPT !='Pending'" class="description">
@@ -339,7 +339,7 @@
         </div>
     </div>
 </div>
-<kendo-dialog class="contentborder mybuttondialog k-dialog-popup-design backdate-popup" *ngIf="isBackdatepopupopend">
+<kendo-dialog class="contentborder mybuttondialog k-dialog-popup-design backdate-popup" *ngIf="isBackdatePopupOpen">
     <p class="dialogmsg boxSizeContractDetails">
         You have Selected a date in the past which means the dates you will enter will be considered
         backdated

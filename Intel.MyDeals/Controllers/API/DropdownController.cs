@@ -126,6 +126,15 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetDropdownOnlyAllCustomers/{atrbCd}")]
+        public IEnumerable<BasicDropdown> GetDropdownOnlyAllCustomers(string atrbCd)
+        {
+            return SafeExecutor(() => _dropdownLib.GetDropdownOnlyAllCustomers(atrbCd)
+                , $"Unable to get Dropdowns for {atrbCd}"
+            );
+        }
+
+        [Authorize]
         [Route("GetFilteredRebateTypes/{isTender}/{dealtypeCd}")]
         public IEnumerable<BasicDropdown> GetFilteredRebateTypes(bool isTender, string dealtypeCd)
         {

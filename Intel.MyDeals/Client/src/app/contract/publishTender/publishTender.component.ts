@@ -4,7 +4,7 @@ import { logger } from "../../shared/logger/logger";
 import { publishTenderService } from './publishTender.service'
 import { pricingTableservice } from "../pricingTable/pricingTable.service";
 import { allDealsService } from "../allDeals/allDeals.service";
-import { templatesService } from "../../shared/services/templates.service";
+import { TemplatesService } from "../../shared/services/templates.service";
 import { PTE_Config_Util } from "../PTEUtils/PTE_Config_util";
 import { DataStateChangeEvent, GridDataResult, PageSizeItem, CellClickEvent } from '@progress/kendo-angular-grid';
 import { distinct, process, State } from '@progress/kendo-data-query';
@@ -23,7 +23,7 @@ export class publishTenderComponent {
     constructor(private pricingTableSvc: pricingTableservice,
                 private publishtenderService: publishTenderService,
                 private allDealsSvc: allDealsService,
-                private templatesSvc: templatesService,
+                private templatesSvc: TemplatesService,
                 private loggerSvc: logger,
                 protected dialog: MatDialog,
                 private route: ActivatedRoute,

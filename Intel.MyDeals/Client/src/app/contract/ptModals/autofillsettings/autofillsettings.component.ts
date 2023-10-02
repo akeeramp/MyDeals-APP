@@ -5,7 +5,7 @@ import { forkJoin, Observable, of } from 'rxjs';
 import { autoFillService } from "../autofillsettings/autofillsetting.service";
 import { logger } from '../../../shared/logger/logger';
 import { CheckedState } from "@progress/kendo-angular-treeview";
-import { templatesService } from "../../../shared/services/templates.service";
+import { TemplatesService } from "../../../shared/services/templates.service";
 
 @Component({
     selector: "autofill-selector",
@@ -44,7 +44,7 @@ export class AutoFillComponent {
     public UItemplate: any;
 
     constructor(private autoSvc: autoFillService,
-                private loggerSvc: logger, private templatesSvc: templatesService,
+                private loggerSvc: logger, private templatesSvc: TemplatesService,
                 public dialogRef: MatDialogRef<AutoFillComponent>,
                 @Inject(MAT_DIALOG_DATA) public autofillData: any) {
         dialogRef.disableClose = true; // prevents pop up from closing when user clicks outside of the MATDIALOG  

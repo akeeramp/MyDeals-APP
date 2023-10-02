@@ -5,7 +5,7 @@ import { MomentService } from "../../shared/moment/moment.service";
 import { logger } from "../../shared/logger/logger";
 import { tenderDashboardService } from "./tenderDashboard.service";
 import { TenderDashboardConfig } from '../tenderDashboard/tenderDashboard_config'
-import { templatesService } from "../../shared/services/templates.service";
+import { TemplatesService } from "../../shared/services/templates.service";
 import { each } from 'underscore';
 import { GridUtil } from "../../contract/grid.util";
 import { TenderDashboardGridUtil } from "../../contract/tenderDashboardGrid.util";
@@ -75,7 +75,7 @@ export class TenderDashboardComponent implements OnInit {
     constructor(protected cntrctWdgtSvc: contractStatusWidgetService,
                 protected loggerSvc: logger,
                 protected tenderDashboardSvc: tenderDashboardService,
-                private templatesSvc: templatesService,
+                private templatesSvc: TemplatesService,
                 protected dialog: MatDialog,
                 private constantsService: constantsService,
                 private momentService: MomentService) { }

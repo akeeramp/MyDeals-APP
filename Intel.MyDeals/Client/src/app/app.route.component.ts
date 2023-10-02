@@ -41,7 +41,7 @@ import { adminWorkflowStagesComponent } from "./admin/workflowStages/admin.workf
 import { AdvancedSearchComponent } from "./advanceSearch/advancedSearch.component";
 import { goToComponent } from "./contract/goTo.component";
 import { TenderDashboardComponent } from "./advanceSearch/tenderDashboard/tenderDashboard.component";
-import { contractDetailsComponent } from "./contract/contractDetails/contractDetails.component";
+import { ContractDetailsComponent } from "./contract/contractDetails/contractDetails.component";
 import { pricingTableComponent } from "./contract/pricingTable/pricingTable.component";
 import { tenderManagerComponent } from "./contract/tenderManager/tenderManager.component";
 import { DashboardComponent } from "./dashboard/dashboard/dashboard.component";
@@ -105,8 +105,8 @@ export const routes: Routes = [
     { path: 'bulkPricingUpdate', component: BulkPricingUpdatesComponent, data: { title: 'Admin', BaseHref: 'Admin', resolve: { security: SecurityResolver } } },
     { path: 'gotoPs/:cid', component: goToComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'gotoDeal/:cid', component: goToComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
-    { path: 'contractdetails/:cid', component: contractDetailsComponent, data: { title: 'Dashboard', BaseHref: 'Contract' }, resolve: { security: SecurityResolver } },
-    { path: 'contractdetails/copycid/:cid', component: contractDetailsComponent, data: { title: 'Dashboard', BaseHref: 'Contract' }, resolve: { security: SecurityResolver } },
+    { path: 'contractdetails/:cid', component: ContractDetailsComponent, data: { title: 'Dashboard', BaseHref: 'Contract' }, resolve: { security: SecurityResolver } },
+    { path: 'contractdetails/copycid/:cid', component: ContractDetailsComponent, data: { title: 'Dashboard', BaseHref: 'Contract' }, resolve: { security: SecurityResolver } },
     { path: 'manager/:cid', component: globalRouteComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, },
     { path: 'manager/:type/:cid/:PSID/:PTID/:DealID', component: globalRouteComponent, resolve: { security: SecurityResolver }, data: { title: 'Admin', BaseHref: 'Admin' } },
     { path: 'contractmanager/:type/:cid/:PSID/:PTID/:DealID', component: pricingTableComponent, data: { title: 'Contract', BaseHref: 'Contract' }, resolve: { security: SecurityResolver } },

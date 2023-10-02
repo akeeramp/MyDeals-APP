@@ -1,88 +1,104 @@
 ﻿import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
 import { Observable } from "rxjs";
+
 import { SecurityService } from "../../shared/services/security.service"
 
 @Injectable({
     providedIn: 'root'
 })
+export class ContractDetailsService {
 
-export class contractDetailsService {
-    public apiBaseUrl = "api/Customers/";
-    public apiBaseContractUrl = "/api/Contracts/v1/";
-    public apiBaseCustomerCalenderUrl = "api/CustomerCalendar/";
-    public dropDownApiUrl = "/api/Dropdown/";
-    public timeLineApiUrl = "api/Timeline/";
-    private fileApiUrl = "/api/FileAttachments/";
-    constructor(private httpClient: HttpClient, private securityService: SecurityService) { }
+    private readonly API_URL_CUSTOMERS = "api/Customers/";
+    private readonly API_URL_CONTRACTS = "/api/Contracts/v1/";
+    private readonly API_URL_CUSTOMER_CALENDAR = "api/CustomerCalendar/";
+    private readonly API_URL_DROPDOWN = "/api/Dropdown/";
+    private readonly API_URL_TIMELINE = "api/Timeline/";
+    private readonly API_URL_FILE_ATTACHMENTS = "/api/FileAttachments/";
+
+    constructor(private httpClient: HttpClient,
+                private securityService: SecurityService) { }
 
     public readContract(id) {
         // NOTE: Don't get angular-cached data b/c it needs latest data for the $state.go to work correctly in the contact.controller.js' createPricingTable()
-        const apiUrl: string = this.apiBaseContractUrl + 'GetUpperContract/' + id;
+        const apiUrl: string = this.API_URL_CONTRACTS + 'GetUpperContract/' + id;
         return this.httpClient.get(apiUrl);
     }
 
-    public GetMyCustomerNames(): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + "GetMyCustomerNames";
+    public getMyCustomerNames(): Observable<any> {
+        const apiUrl: string = this.API_URL_CUSTOMERS + "GetMyCustomerNames";
         return this.httpClient.get(apiUrl);
     }
 
     public getMyCustomerDivsByCustNmSid(custId): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + "GetMyCustomerDivsByCustNmSid/" + custId;
+        const apiUrl: string = this.API_URL_CUSTOMERS + "GetMyCustomerDivsByCustNmSid/" + custId;
         return this.httpClient.get(apiUrl);
     }
 
     public isDuplicateContractTitle(dcId, title) {
-        const apiUrl: string = this.apiBaseContractUrl + 'IsDuplicateContractTitle/' + dcId;
+        const apiUrl: string = this.API_URL_CONTRACTS + 'IsDuplicateContractTitle/' + dcId;
         return this.httpClient.post(apiUrl, [title]);
     }
 
     public createContract(custId, contractId, contracts): Observable<any> {
-        const apiUrl: string = this.apiBaseContractUrl + 'SaveContract/' + custId + '/' + contractId;
+        const apiUrl: string = this.API_URL_CONTRACTS + 'SaveContract/' + custId + '/' + contractId;
         return this.httpClient.post(apiUrl, [contracts]);
     }
 
     getCustomerCalendar(custMbrSid, dayInQuarter, quater, year) {
         const dto = { 'CustomerMemberSid': custMbrSid, "DayInQuarter": dayInQuarter, "QuarterNo": quater, "Year": year };
-        const apiUrl: string = this.apiBaseCustomerCalenderUrl + 'GetCustomerQuarterDetails';
+        const apiUrl: string = this.API_URL_CUSTOMER_CALENDAR + 'GetCustomerQuarterDetails';
         return this.httpClient.post(apiUrl, dto);
     }
 
-    getVendorDropDown(atrbcd) {
-        const apiUrl: string = this.dropDownApiUrl + 'GetDropdowns/' + atrbcd;
+    getVendorDropdown(atrbCd) {
+        const apiUrl: string = this.API_URL_DROPDOWN + 'GetDropdowns/' + atrbCd;
+        return this.httpClient.get(apiUrl);
+    }
+
+    getDropdownsWithCustomerId(atrbCd: string, custId: string | number) {
+        const apiUrl = `${ this.API_URL_DROPDOWN }GetDropdownsWithCustomerId/${ atrbCd }/${ custId }`;
+        return this.httpClient.get(apiUrl);
+    }
+
+    getDropdownOnlyAllCustomers(atrbCd: string) {
+        const apiUrl = `${ this.API_URL_DROPDOWN }GetDropdownOnlyAllCustomers/${ atrbCd }`;
         return this.httpClient.get(apiUrl);
     }
 
     readCopyContract(id) {
-        const apiUrl: string = this.apiBaseContractUrl + 'GetUpperContract/' + id;
+        const apiUrl: string = this.API_URL_CONTRACTS + 'GetUpperContract/' + id;
         return this.httpClient.get(apiUrl);
     }
 
     copyContract(custId, contractId, srcContractId, ct) {
-        const apiUrl: string = this.apiBaseContractUrl + 'CopyContract/' + custId + '/' + contractId + '/' + srcContractId;
+        const apiUrl: string = this.API_URL_CONTRACTS + 'CopyContract/' + custId + '/' + contractId + '/' + srcContractId;
         return this.httpClient.post(apiUrl, [ct]);
     }
 
-    public GetObjTimelineDetails(contractDetailId, objTypeIds, objTypeSId): Observable<any> {
+    public getObjTimelineDetails(contractDetailId, objTypeIds, objTypeSId): Observable<any> {
         const rbody = { 'objSid': contractDetailId, "objTypeIds": objTypeIds, "objTypeSid": objTypeSId };
-        const apiTimeLineUrl: string = this.timeLineApiUrl + "GetObjTimelineDetails";
+        const apiTimeLineUrl: string = this.API_URL_TIMELINE + "GetObjTimelineDetails";
         return this.httpClient.post(apiTimeLineUrl, rbody);
     }
+
     deleteContract(custId, contractId) {
-        const apiDeleteContractUrl = this.apiBaseContractUrl + 'DeleteContract/' + custId + '/' + contractId;
+        const apiDeleteContractUrl = this.API_URL_CONTRACTS + 'DeleteContract/' + custId + '/' + contractId;
         return this.httpClient.get(apiDeleteContractUrl);
     }
+
     getFileAttachments(custId, ctrctId) {
-        const url = this.fileApiUrl + "Get/" + custId + "/1/" + ctrctId + "/CNTRCT";
+        const url = this.API_URL_FILE_ATTACHMENTS + "Get/" + custId + "/1/" + ctrctId + "/CNTRCT";
         return this.httpClient.get(url);
     }
 
     deleteAttachment(custId, objTypeSid, objSid, fileSid) {
-        const url = this.fileApiUrl + "Delete/" + custId + "/" + objTypeSid + "/" + objSid + "/" + fileSid + "/CNTRCT";
+        const url = this.API_URL_FILE_ATTACHMENTS + "Delete/" + custId + "/" + objTypeSid + "/" + objSid + "/" + fileSid + "/CNTRCT";
         return this.httpClient.post(url, objTypeSid);
     }
 
-    chkDealRules(action, role, itemType, itemSetType, stage): boolean {
+    checkDealRules(action, role, itemType, itemSetType, stage): boolean {
         return this.securityService.chkDealRules(action, role, itemType, itemSetType, stage);
     }
+
 }

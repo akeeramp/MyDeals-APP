@@ -18,7 +18,7 @@ import { BehaviorSubject, forkJoin } from 'rxjs';
 import { systemPricePointModalComponent } from "../ptModals/dealEditorModals/systemPricePointModal.component"
 import { endCustomerRetailModalComponent } from "../ptModals/dealEditorModals/endCustomerRetailModal.component"
 import { multiSelectModalComponent } from "../ptModals/multiSelectModal/multiSelectModal.component"
-import { contractDetailsService } from "../contractDetails/contractDetails.service"
+import { ContractDetailsService } from "../contractDetails/contractDetails.service"
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 import { dealProductsModalComponent } from "../ptModals/dealProductsModal/dealProductsModal.component";
 import { missingCapCostInfoModalComponent } from '../ptModals/dealEditorModals/missingCapCostInfoModal.component';
@@ -38,7 +38,7 @@ import { ActivatedRoute, Router } from '@angular/router';
 export class dealEditorComponent { 
 
     constructor(private pteService: PricingTableEditorService,
-                private contractDetailsSvc: contractDetailsService,
+                private contractDetailsSvc: ContractDetailsService,
                 private loggerService: logger,
                 private datePipe: DatePipe,
                 protected dialog: MatDialog,

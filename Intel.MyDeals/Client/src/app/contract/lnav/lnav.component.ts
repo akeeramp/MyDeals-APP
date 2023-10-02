@@ -11,7 +11,7 @@ import { lnavUtil } from '../lnav.util';
 import { headerService } from "../../shared/header/header.service";
 import { AutoFillComponent } from "../ptModals/autofillsettings/autofillsettings.component";
 import { RenameTitleComponent } from "../ptModals/renameTitle/renameTitle.component";
-import { contractDetailsService } from "../contractDetails/contractDetails.service";
+import { ContractDetailsService } from "../contractDetails/contractDetails.service";
 
 export interface contractIds {
     Model: string;
@@ -34,7 +34,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
     constructor(private loggerService: logger,
                 private lnavService: lnavService,
                 private headerService: headerService,
-                private contractDetailsService: contractDetailsService,
+                private contractDetailsService: ContractDetailsService,
                 private dialog: MatDialog,
                 private router: Router,
                 private route: ActivatedRoute,

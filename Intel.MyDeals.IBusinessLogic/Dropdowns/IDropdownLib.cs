@@ -27,6 +27,8 @@ namespace Intel.MyDeals.IBusinessLogic
 
         IEnumerable<BasicDropdown> GetDropdownsByCustomerOnlyId(string atrbCd, int custId);
 
+        IEnumerable<BasicDropdown> GetDropdownOnlyAllCustomers(string atrbCd);
+
         DropdownHierarchy[] GetDropdownHierarchy(string prnt);
 
         DropdownHierarchy[] GetGeoDropdownHierarchy(string prnt);

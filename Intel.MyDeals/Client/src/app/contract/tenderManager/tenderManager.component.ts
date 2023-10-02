@@ -2,8 +2,8 @@
 import { logger } from "../../shared/logger/logger";
 import { pricingTableservice } from "../pricingTable/pricingTable.service";
 import { PricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
-import { templatesService } from "../../shared/services/templates.service";
-import { contractDetailsService } from "../contractDetails/contractDetails.service";
+import { TemplatesService } from "../../shared/services/templates.service";
+import { ContractDetailsService } from "../contractDetails/contractDetails.service";
 import { dealEditorComponent } from "../dealEditor/dealEditor.component"
 import { pricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
 import { each } from 'underscore';
@@ -22,8 +22,8 @@ export class tenderManagerComponent {
     isDeveloper: any;
     isTester: any;
     drawChart: boolean;
-    constructor(private pteService: PricingTableEditorService, private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private contractDetailsSvc: contractDetailsService,
-        private templatesSvc: templatesService, private route: ActivatedRoute, private router: Router) {
+    constructor(private pteService: PricingTableEditorService, private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private contractDetailsSvc: ContractDetailsService,
+        private templatesSvc: TemplatesService, private route: ActivatedRoute, private router: Router) {
         $('body').addClass('added-tender');
     }
     public c_Id: any = '';

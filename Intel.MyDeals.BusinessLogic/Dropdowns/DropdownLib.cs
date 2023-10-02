@@ -153,6 +153,17 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         /// <summary>
+        /// Get All Simple Dropdowns with grouping of atrbCd and but only for All Customers
+        /// </summary>
+        /// <returns>list of dropdowns</returns>
+        public IEnumerable<BasicDropdown> GetDropdownOnlyAllCustomers(string atrbCd)
+        {
+            atrbCd = atrbCd.ToUpper();
+            return _dataCollectionsDataLib.GetBasicDropdowns().
+                Where(d => d.ATRB_CD.ToUpper() == atrbCd.ToUpper() && (d.CUST_NM.ToUpper() == "ALL CUSTOMERS") && d.ACTV_IND).OrderBy(d => d.DROP_DOWN);
+        }
+
+        /// <summary>
         /// Returns a country dropdown hierarchy object using the provided parent name.
         /// <returns>country dropdown hierarchy</returns>
         public DropdownHierarchy[] GetConsumptionCountryHierarchy(string prnt)

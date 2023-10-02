@@ -1,5 +1,5 @@
 //import { contractComponent } from "../contract/contract.component";
-import { contractDetailsComponent } from "../contract/contractDetails/contractDetails.component";
+import { ContractDetailsComponent } from "../contract/contractDetails/contractDetails.component";
 import { LnavComponent } from "../contract/lnav/lnav.component";
 import { pricingTableComponent } from "../contract/pricingTable/pricingTable.component";
 import { pricingTableEditorComponent } from "../contract/pricingTableEditor/pricingTableEditor.component";
@@ -49,7 +49,7 @@ import { performanceBarsComponent } from "../contract/performanceBars/performanc
 import { goToComponent } from "../contract/goTo.component";
 
 export let contractComponents = [
-    contractDetailsComponent,
+    ContractDetailsComponent,
     LnavComponent,
     pricingTableComponent,
     pricingTableEditorComponent,
