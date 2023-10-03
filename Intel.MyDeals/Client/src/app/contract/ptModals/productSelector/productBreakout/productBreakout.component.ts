@@ -8,8 +8,8 @@ import { productSelectorService } from '../productselector.service';
     selector: 'product-breakout',
     templateUrl: 'Client/src/app/contract/ptModals/productSelector/productBreakout/productBreakout.component.html',
     styleUrls: [
-        'Client/node_modules/bootstrap/dist/css/bootstrap.min.css',
-        'Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css',
+        // 'Client/node_modules/bootstrap/dist/css/bootstrap.min.css',
+        // 'Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css',
         'Client/src/app/admin/kendo_grid.css',
         'Client/src/app/contract/ptModals/productSelector/productBreakout/productBreakout.component.css'
     ],

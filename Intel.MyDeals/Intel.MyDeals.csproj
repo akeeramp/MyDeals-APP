@@ -472,6 +472,8 @@
     <Content Include="Client\Images\security.png" />
     <Content Include="Client\Images\Timeout.png" />
     <Content Include="Client\Images\wires.png" />
+    <Content Include="Client\src\app\app-root.component.css" />
+    <Content Include="Client\src\app\app-root.component.html" />
     <Content Include="Client\src\app\admin\batchTiming\admin.batchTiming.component.css" />
     <Content Include="Client\src\app\admin\batchTiming\admin.batchTiming.component.html" />
     <TypeScriptCompile Include="Client\src\app\admin\batchTiming\admin.batchTiming.service.ts" />
@@ -485,6 +487,7 @@
     <TypeScriptCompile Include="Client\src\app\admin\bulkPricingUpdates\admin.bulkPricingUpdates.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\constants\admin.constants.component.ts" />
     <Content Include="Client\src\app\admin\constants\admin.constants.component.html" />
+    <Content Include="Client\src\app\admin\constants\admin.constants.component.css" />
     <TypeScriptCompile Include="Client\src\app\admin\constants\admin.constants.service.ts" />
     <Content Include="Client\src\app\admin\consumptionCountry\admin.consumptionCountry.component.html" />
     <Content Include="Client\src\app\admin\CustomerVendors\admin.customerVendors.component.html" />
@@ -748,6 +751,8 @@
     <Content Include="Client\src\app\contract\tenderFolio\tenderFolio.component.html" />
     <Content Include="Client\src\app\contract\tenderManager\tenderManager.component.css" />
     <Content Include="Client\src\app\contract\tenderManager\tenderManager.component.html" />
+    <Content Include="Client\src\app\core\loadingPanel\loadingpanel.component.css" />
+    <Content Include="Client\src\app\core\loadingPanel\loadingpanel.component.html" />
     <Content Include="Client\src\app\core\adminBanner\adminBanner.component.css" />
     <Content Include="Client\src\app\core\adminBanner\adminBanner.component.html" />
     <Content Include="Client\src\app\core\attributeBuilder\attributeBuilder.component.css" />
@@ -789,6 +794,7 @@
     <Content Include="Client\src\app\dashboard\recentURL\recentsUrlWidget.component.css" />
     <Content Include="Client\src\app\dashboard\recentURL\recentsUrlWidget.component.html" />
     <Content Include="Client\src\app\dashboard\widgetSettings\widgetSettings.component.html" />
+     <Content Include="Client\src\app\dashboard\widgetSettings\widgetSettings.component.css" />
     <Content Include="Client\src\app\dashboard\searchContract\searchContractWidget.component.css" />
     <Content Include="Client\src\app\dashboard\searchContract\searchContractWidget.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.html" />
@@ -807,8 +813,16 @@
     <Content Include="Client\src\app\style\productCorrector.css" />
     <Content Include="Client\src\app\style\publishTender.css" />
     <Content Include="Client\src\app\style\style.css" />
+    <!-- <Content Include="Client\src\dist\admin.js" />
+    <Content Include="Client\src\dist\advance.js" />
+    <Content Include="Client\src\dist\contract.js" />
+    <Content Include="Client\src\dist\dashboard.js" />
     <Content Include="Client\src\dist\globalStyle.js" />
     <Content Include="Client\src\dist\globalStyle.css" />
+    <Content Include="Client\src\dist\report.js" />
+    <Content Include="Client\src\dist\1e59d2330b4c6deb84b3.ttf" />
+    <Content Include="Client\src\dist\20fd1704ea223900efa9.woff2" />
+    <Content Include="Client\src\dist\f691f37e57f04c152e23.woff" /> -->
     <Content Include="Client\webpack.config.js" />
     <Content Include="Content\bootstrap-grid.css" />
     <Content Include="Content\bootstrap-grid.min.css" />

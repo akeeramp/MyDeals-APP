@@ -34,8 +34,12 @@ try {
               EXIT 1
           }
       else {
-      $config=$result.config
+       $config=$result.config;
+       $ClientPath='\Client\src\dist';
+       $ClienLocation=$result.DEPLOY_PATH+$ClientPath;
       & robocopy output/_PublishedWebsites/Intel.MyDeals $result.DEPLOY_PATH /e /MT /copyall /secfix ;
+      if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
+        & robocopy Intel.MyDeals/Client/src/dist $ClienLocation /e /MT /copyall /secfix ;
       if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
       & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/$config $result.DEPLOY_PATH Web.Config /MT /copyall /secfix;
       if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
@@ -111,18 +115,18 @@ try {
             $pw = convertto-securestring -AsPlainText -Force -String "$PWD";
             $cred = new-object -typename System.Management.Automation.PSCredential -argumentlist "$USN",$pw; 
             & Invoke-Command -computername $result.DEPLOY_SERVER -credential $cred -ScriptBlock { param($pool)
-             if($SERVER -eq 'DAY1') {
-                Remove-Item "D:\WebSites\MyDealsDay1\Client\*" -Force -Recurse;
-                Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDealsDay1\Client.zip", "D:\WebSites\MyDealsDay1\Client\");
-             }
-             elseif($SERVER -eq 'EUT'){
-                Remove-Item "D:\WebSites\MyDealsEUT\Client\*" -Force -Recurse;
-                Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDealsEUT\Client.zip", "D:\WebSites\MyDealsEUT\Client\");
-             }
-             else{
-                Remove-Item "D:\WebSites\MyDeals\Client\*" -Force -Recurse;
-                Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDeals\Client.zip", "D:\WebSites\MyDeals\Client\");
-             }
+            #  if($SERVER -eq 'DAY1') {
+            #     Remove-Item "D:\WebSites\MyDealsDay1\Client\*" -Force -Recurse;
+            #     Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDealsDay1\Client.zip", "D:\WebSites\MyDealsDay1\Client\");
+            #  }
+            #  elseif($SERVER -eq 'EUT'){
+            #     Remove-Item "D:\WebSites\MyDealsEUT\Client\*" -Force -Recurse;
+            #     Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDealsEUT\Client.zip", "D:\WebSites\MyDealsEUT\Client\");
+            #  }
+            #  else{
+            #     Remove-Item "D:\WebSites\MyDeals\Client\*" -Force -Recurse;
+            #     Add-Type -assembly "system.io.compression.filesystem";[io.compression.zipfile]::ExtractToDirectory("D:\WebSites\MyDeals\Client.zip", "D:\WebSites\MyDeals\Client\");
+            #  }
               Restart-WebAppPool -Name  $pool
           } -Argumentlist $pool
      }
@@ -136,7 +140,9 @@ try {
         else{
             & robocopy output/_PublishedWebsites/Intel.MyDeals 'C:\mydeals_latest_angular'  /e /MT /copyall /secfix ;
              if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
-            & Copy-Item "C:\ClientZip\Client.zip" 'C:\mydeals_latest_angular' -Force;
+                & robocopy Intel.MyDeals/Client/src/dist 'C:\mydeals_latest_angular\Client\src\dist' /e /MT /copyall /secfix ;
+             if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
+            #  & Copy-Item "C:\ClientZip\Client.zip" 'C:\mydeals_latest_angular' -Force;
         }
     }
      elseif ($Operation -eq 'copy_latest_prodENV' ){
@@ -149,7 +155,9 @@ try {
             if($SERVER -eq 'CIAR') {
              & robocopy output/_PublishedWebsites/Intel.MyDeals 'C:\mydeals_ciar_latest_angular'  /e /MT /copyall /secfix ;
              if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
-            & Copy-Item "C:\ClientZip\Client.zip" 'C:\mydeals_ciar_latest_angular' -Force;
+                & robocopy Intel.MyDeals/Client/src/dist 'C:\mydeals_ciar_latest_angular\Client\src\dist' /e /MT /copyall /secfix ;
+             if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
+            # & Copy-Item "C:\ClientZip\Client.zip" 'C:\mydeals_ciar_latest_angular' -Force;
             }
         }
     }

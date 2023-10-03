@@ -88,18 +88,18 @@ jobs:
     environment:
       name: ${{ github.event.inputs.ENV }}
     steps:
-       - name:  Generate Client Zip Module  
-         run: |
-           ./scripts/build_env.ps1 'ClientZip' '${{github.event.inputs.ENV}}' '${{github.workspace}}'
+      #  - name:  Generate Client Zip Module  
+      #    run: |
+      #      ./scripts/build_env.ps1 'ClientZip' '${{github.event.inputs.ENV}}' '${{github.workspace}}'
        - name:  Move Publish Site 
          run: |
            ./scripts/deploy_env.ps1 'MovePublishENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
-       - name:  Remove Client Zip 
-         run: |
-           ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
-       - name:  Copy Client Zip 
-         run: |
-           ./scripts/deploy_env.ps1 'CopyZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+      #  - name:  Remove Client Zip 
+      #    run: |
+      #      ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+      #  - name:  Copy Client Zip 
+      #    run: |
+      #      ./scripts/deploy_env.ps1 'CopyZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
        - name:  Deploy Client App 
          run: |
            ./scripts/deploy_env.ps1 'DeployENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
@@ -118,9 +118,9 @@ jobs:
     environment:
       name: ${{ github.event.inputs.ENV }}
     steps:
-       - name:  Remove Client Zip 
-         run: |
-           C:\Abhilash\deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
+      #  - name:  Remove Client Zip 
+      #    run: |
+      #      C:\Abhilash\deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'
        - name:  Move Publish Site 
          run: |
            C:\Abhilash\deploy_env.ps1 'MovePublish_latest' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{github.event.inputs.ENV}}'

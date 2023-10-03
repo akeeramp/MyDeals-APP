@@ -11,9 +11,9 @@ import { NgbPopover } from '@ng-bootstrap/ng-bootstrap';
     selector: 'grid-popover [popOver] [columnTypes] [currentPricingTableRow] [productMemberSId] [priceCondition]',
     templateUrl: 'Client/src/app/contract/ptModals/productSelector/gridPopover/gridPopover.component.html',
     styleUrls: [
-        'Client/node_modules/bootstrap/dist/css/bootstrap.min.css',
+        //'Client/node_modules/bootstrap/dist/css/bootstrap.min.css',
         'Client/src/app/admin/kendo_grid.css',
-        'Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css',
+        //'Client/node_modules/@progress/kendo-theme-bootstrap/dist/all.css',
         'Client/src/app/contract/ptModals/productSelector/gridPopover/gridPopover.component.css'
     ]
 })

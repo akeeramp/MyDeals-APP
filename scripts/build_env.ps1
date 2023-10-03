@@ -23,8 +23,12 @@ try {
         & $PATH .\Intel.MyDeals.BusinessLogicNew.Test\Intel.MyDeals.BusinessLogicNew.Test.csproj /t:rebuild -restore /p:Configuration=Debug
     }
     elseif ($Operation -eq 'MovePublish' ){
+       $ClientPath='\Client\src\dist';
+       $ClienLocation=$PATH+$ClientPath;
      & robocopy output/_PublishedWebsites/Intel.MyDeals $PATH /e /MT /copyall /secfix ;
      if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
+      & robocopy Intel.MyDeals/Client/src/dist $ClienLocation /e /MT /copyall /secfix ;
+      if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
      & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/DEV $PATH Web.Config /MT /copyall /secfix;
      if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
     }

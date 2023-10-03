@@ -46,16 +46,16 @@ jobs:
        - name:  Move Publish Site 
          run: |
            ./scripts/build_env.ps1 'MovePublish' '${{env.CINR_DEPLOY_PATH}}' '${{github.workspace}}'
-       - name:  Generate Client Zip Module
-         run: |
-           ./scripts/build_env.ps1 'ClientZip' '${{env.CINR_DEPLOY_PATH}}' '${{github.workspace}}'
+      #  - name:  Generate Client Zip Module
+      #    run: |
+      #      ./scripts/build_env.ps1 'ClientZip' '${{env.CINR_DEPLOY_PATH}}' '${{github.workspace}}'
 
-       - name:  Remove Client Zip
-         run: |
-           ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.SERVER}}'
-       - name:  Copy Client Zip
-         run: |
-           ./scripts/deploy_env.ps1 'CopyZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.SERVER}}'
+      #  - name:  Remove Client Zip
+      #    run: |
+      #      ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.SERVER}}'
+      #  - name:  Copy Client Zip
+      #    run: |
+      #      ./scripts/deploy_env.ps1 'CopyZipENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.SERVER}}'
        - name:  Deploy Client App
          run: |
            ./scripts/deploy_env.ps1 'DeployENV' '${{ secrets.USN }}' '${{ secrets.PWD }}' '${{env.SERVER}}'
