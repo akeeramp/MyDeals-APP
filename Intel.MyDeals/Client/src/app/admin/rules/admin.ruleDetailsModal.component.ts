@@ -10,6 +10,7 @@ import Handsontable from 'handsontable/base';
 import { registerAllModules } from 'handsontable/registry';
 import { HotTableRegisterer } from '@handsontable/angular';
 import { PricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
+import { MomentService } from "../../shared/moment/moment.service";
 
 registerAllModules();
 
@@ -50,7 +51,8 @@ export class RuleDetailsModalComponent {
                 @Inject(MAT_DIALOG_DATA) public data, 
                 private pteService: PricingTableEditorService,
                 private adminRulesSvc: adminRulesService,
-                private loggerSvc: logger) { }
+        private loggerSvc: logger,
+        private momentService: MomentService) { }
     public dealsList = "";
     public selectedIds = [];
     public availAtrField = [];
@@ -905,8 +907,8 @@ export class RuleDetailsModalComponent {
                     Name: this.Rules.Name,
                     IsActive: this.Rules.IsActive == true ? false : true,
                     IsAutomationIncluded: this.Rules.IsAutomationIncluded,
-                    StartDate: this.strtDate,
-                    EndDate: this.endDt,
+                    StartDate: this.momentService.moment(this.strtDate).format("MM/DD/YYYY"),
+                    EndDate: this.momentService.moment(this.endDt).format("MM/DD/YYYY"),
                     RuleStage: this.Rules.RuleStage == true ? false : true,
                     Notes: this.Rules.Notes,
                     Criterias: { Rules: this.criteria, BlanketDiscount: [{ value: this.Rules.IsAutomationIncluded ? this.BlanketDiscountPercentage : "", valueType: { value: "%" } }, { value: this.Rules.IsAutomationIncluded ? this.BlanketDiscountDollor : "", valueType: { value: "$" } }] },
