@@ -1260,22 +1260,26 @@ export class dealEditorComponent {
             let column = this.wipTemplate.columns.filter(x => x.field == item);
             if (column && column.length > 0 && column[0].lookupUrl && column[0].lookupUrl != '') {
                 let url = "";
-                if (item == "COUNTRY")
+                if (item == "COUNTRY") {
                     url = "/api/PrimeCustomers/GetCountries";
-                else if (item == "PERIOD_PROFILE" && !this.in_Is_Tender_Dashboard)// always not editable in TenderDashboard
+                } else if (item == "PERIOD_PROFILE" && !this.in_Is_Tender_Dashboard) { // always not editable in TenderDashboard
                     url = column[0].lookupUrl + this.contractData.CUST_MBR_SID;
-                else if (item == "SETTLEMENT_PARTNER" && !this.in_Is_Tender_Dashboard)// always not editable in TenderDashboard
+                } else if (item == "SETTLEMENT_PARTNER" && !this.in_Is_Tender_Dashboard) { // always not editable in TenderDashboard
                     url = column[0].lookupUrl + "/" + this.contractData.CUST_MBR_SID;
-                else
+                } else if (item == "BACK_DATE_RSN") {
+                    url = column[0].lookupUrl + "/" + this.contractData.CUST_MBR_SID;
+                } else {
                     url = column[0].lookupUrl;
+                }
                 if (!(this.in_Is_Tender_Dashboard && (item == "PERIOD_PROFILE" || item == "SETTLEMENT_PARTNER")))
                 dropObjs[`${item}`] = this.pteService.readDropdownEndpoint(url);
             }
-            else if (item == 'EXPIRE_FLG')
+            else if (item == 'EXPIRE_FLG') {
                 dropObjs[`${item}`] = [
                     { text: "Yes", value: "1" },
                     { text: "No", value: "0" }
                 ]
+            }
         });
         let result = await forkJoin(dropObjs).toPromise().catch((err) => {
             this.loggerService.error('pricingTableEditorComponent::getAllDrowdownValues::service', err);

@@ -2668,7 +2668,7 @@ namespace Intel.MyDeals.DataLibrary
                 IsFilterable = true,
                 IsSortable = true,
                 Template = "#=gridUtils.uiControlWrapper(data, 'BACK_DATE_RSN')#",
-                LookupUrl = "/api/Dropdown/GetDropdowns/BACK_DATE_RSN",
+                LookupUrl = "/api/Dropdown/GetDropdownsWithCustomerId/BACK_DATE_RSN",
                 LookupText = "DROP_DOWN",
                 LookupValue = "DROP_DOWN"
             });
