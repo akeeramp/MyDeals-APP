@@ -1267,7 +1267,17 @@ export class dealEditorComponent {
                 } else if (item == "SETTLEMENT_PARTNER" && !this.in_Is_Tender_Dashboard) { // always not editable in TenderDashboard
                     url = column[0].lookupUrl + "/" + this.contractData.CUST_MBR_SID;
                 } else if (item == "BACK_DATE_RSN") {
-                    url = column[0].lookupUrl + "/" + this.contractData.CUST_MBR_SID;
+                    /**
+                     * TWC3119-747
+                     * In Tender Deal Editor, multiple Customers can be loaded at the same time, dropdowns are loaded only once for
+                     * the whole Deal Editor, so will only load dropdown for Backdate Reasons labeled for All Customers; otherwise
+                     * load Endpoint URL from dropdown API
+                     */
+                    if (this.in_Is_Tender_Dashboard) {
+                        url = '/api/Dropdown/GetDropdownOnlyAllCustomers/BACK_DATE_RSN';
+                    } else {
+                        url = column[0].lookupUrl + "/" + this.contractData.CUST_MBR_SID;
+                    }
                 } else {
                     url = column[0].lookupUrl;
                 }
