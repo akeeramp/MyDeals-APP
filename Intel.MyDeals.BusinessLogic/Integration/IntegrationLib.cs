@@ -443,6 +443,7 @@ namespace Intel.MyDeals.BusinessLogic
             string productFamilyName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.Family == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.Family;
             string processorNumber = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.ProcessorNumber == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.ProcessorNumber;
             string dealPdctName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.DealProductName == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.DealProductName;
+            string dealMtrlIdName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.MaterialID == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.MaterialID;
             //variable to hold the Selected product name
             string productData = "";
             #region Product Check and translation
@@ -467,7 +468,8 @@ namespace Intel.MyDeals.BusinessLogic
             //if IQR deals created other than processor,SSD-family level,[PMem,Ethernet] products at Deal product name level and Server products at Processor level throw error.
             if (!((productType.ToLower() == "ssd" && productLevel.ToLower() == "family")
                 || ((productType.ToLower() == "ethernet" || productType.ToLower() == "pmem") && productLevel.ToLower() == "dealproductname")
-                || ((productType.ToLower() == "server" || productType.ToLower() == "client") && productLevel.ToLower() == "processor")))
+                || ((productType.ToLower() == "server" || productType.ToLower() == "client") && productLevel.ToLower() == "processor")
+                || ((productType.ToLower() == "ethernet") && productLevel.ToLower() == "materialid")))
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: Deal cannot be created for Product Type [" + productType + "] and Product Level [" + productLevel + "].  Acceptable Product [Type]/[Level] patterns are: [SSD]/[Family] or [Ethernet|Pmem]/[dealproductname] or [Server|Client]/[processor].", "Deal cannot be created for the selected Product type/level combination"));
                 return initWipId; // Bail out - Invalid Product level/ Product Type selected
@@ -485,6 +487,10 @@ namespace Intel.MyDeals.BusinessLogic
                 else if ((productType.ToLower() == "server" || productType.ToLower() == "client") && productLevel.ToLower() == "processor")
                 {
                     productData = processorNumber;
+                }
+                else if (productType.ToLower() == "ethernet" && productEpmId == null && productLevel.ToLower() == "materialid")
+                {
+                    productData = dealMtrlIdName;
                 }
             }
             // Use the MyTranslatedProduct function and expect null if no product is matched
@@ -510,6 +516,7 @@ namespace Intel.MyDeals.BusinessLogic
                 }
                 return initWipId; // Bail out - Required product data is not provided to proceed further
             }
+
             ProductEpmObject productLookupObj = _jmsDataLib.FetchProdFromProcessorEpmMap(epmId, productType, productLevel, productData);
 
             if (productLookupObj?.MydlPdctName == String.Empty || productLookupObj?.PdctNbrSid == 0)

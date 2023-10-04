@@ -330,8 +330,8 @@ namespace Intel.MyDeals.Entities
                         public string ProductLevel { get; set; }
                         public string Family { get; set; }
                         public string DealProductName { get; set; }
-                        //public string MaterialID { get; set; }
                         public string ProcessorNumber { get; set; }
+                        public string MaterialID { get; set; }
                     }
 
                     public class CompetitorProduct
