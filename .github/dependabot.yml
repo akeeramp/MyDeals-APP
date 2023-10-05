@@ -6,6 +6,8 @@ updates:
           schedule:
                 interval: "weekly"
                 timezone: "America/Los_Angeles"
+          commit-message:
+                prefix: "npm dependency: "
           ignore:
                 - dependency-name: "*"
                   update-types: ["version-update:semver-major"]
@@ -63,6 +65,8 @@ updates:
           schedule:
                 interval: "weekly"
                 timezone: "America/Los_Angeles"
+          commit-message:
+                prefix: "NuGet dependency: "
           pull-request-branch-name:
                 separator: "-"
           labels:

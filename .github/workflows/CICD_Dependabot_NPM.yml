@@ -1,0 +1,22 @@
+name: Dependabot- NPM / Yarn - Angular build
+on:
+    pull_request:
+        branches: [development]
+        types:
+            - opened
+        paths:
+            - '**/package.json'
+            - '**/yarn.lock'
+jobs:
+    Build-Angular:
+        if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
+        runs-on: [self-hosted, mydeals-runner01]
+        steps:
+            - name: NPM Install 
+              run: |
+                ./scripts/build_env.ps1 'NPMInstall' 'path' '${{ github.workspace }}'
+            - name: NPM Build
+              run: |
+                ./scripts/build_env.ps1 'NPMBuild' 'path' '${{ github.workspace }}'
+              env:
+                KENDO_UI_LICENSE: ${{ secrets.KENDO_UI_LICENSE }}

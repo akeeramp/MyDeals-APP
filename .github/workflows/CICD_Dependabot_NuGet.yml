@@ -1,0 +1,38 @@
+name: Dependabot - NuGet - MSBuild build
+on:
+    pull_request:
+        branches: [development]
+        types:
+            - opened
+        paths:
+            - '**/packages.config'
+env:
+    NUGET_PATH: C:\NuGet\nuget.exe
+    MSBUILD_PATH: C:\Program Files (x86)\Microsoft Visual Studio\2019\BuildTools\MSBuild\Current\Bin\msbuild.exe
+jobs:
+    Restore-packages:
+        if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
+        runs-on: [self-hosted, mydeals-runner01]
+        steps:
+            - name: Checkout Directory
+              uses: actions/checkout@master
+            - name: Restore NUGET Packages
+              run: |
+                echo "RUN NUGET Packages script at ${{ env.NUGET_PATH }}"
+                ./scripts/build_env.ps1 'nuget' '${{ env.NUGET_PATH }}' '${{ github.workspace }}'
+    Build-Angular:
+        if: github.repository == 'intel-innersource/applications.web.mydeals.webui'
+        runs-on: [self-hosted, mydeals-runner01]
+        needs: Restore-packages
+        steps:
+            - name: NPM Install 
+              run: |
+                ./scripts/build_env.ps1 'NPMInstall' 'path' '${{ github.workspace }}'
+            - name: NPM Build
+              run: |
+                ./scripts/build_env.ps1 'NPMBuild' 'path' '${{ github.workspace }}'
+              env:
+                KENDO_UI_LICENSE: ${{ secrets.KENDO_UI_LICENSE }}
+            - name: MS build publish
+              run: |
+                ./scripts/build_env.ps1 'MSBuild' '${{ env.MSBUILD_PATH }}' '${{ github.workspace }}'
