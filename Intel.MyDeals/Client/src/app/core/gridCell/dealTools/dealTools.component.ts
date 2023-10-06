@@ -58,6 +58,7 @@ export class dealToolsComponent{
     public confirmRollback: boolean = false;
     public openHoldDialog: boolean = false;
     public openUnHoldDialog: boolean = false;
+    public gridDataTmp: any = [];
     public dealTxt;
     public notes;
     public isModified: boolean = false;
@@ -305,6 +306,14 @@ export class dealToolsComponent{
         if (this.dataItem?.NOTES !== this.notes) {
             this.dataItem.NOTES = this.notes;
             this.saveCell("NOTES");
+            /* Storing the deal note value for the particular deal */
+            for (let i = 0; i < this.gridDataTmp.length; i++) {
+                if (this.gridDataTmp[i].DC_ID == this.dataItem.DC_ID) {
+                    this.gridDataTmp[i]['isdirty'] = true;
+                    this.gridDataTmp[i].NOTES = this.dataItem.NOTES
+                }
+            }
+
             if (this.isManageTab) {
                 this.setBusy("Saving", "Please wait while your information is being saved.", "", "");
 
@@ -727,5 +736,17 @@ export class dealToolsComponent{
     }
     ngOnChanges() {
         this.loadDealTools();
+        /* After deleting other deals, if the remaining deal notes have value, they should remain */
+        for (let i = 0; i < this.gridDataTmp.length; i++) {
+            if (this.gridDataTmp[i]['isdirty'] == true) {
+                this.dataItem.NOTES = this.gridDataTmp[i].NOTES
+            }
+        }
+    }
+    ngOnInit() {
+        this.gridDataTmp = JSON.parse(JSON.stringify(this.gridData));
+        for (let i = 0; i < this.gridDataTmp.length; i++) {
+            this.gridDataTmp[i]['isdirty'] = false;
+        }
     }
 }
