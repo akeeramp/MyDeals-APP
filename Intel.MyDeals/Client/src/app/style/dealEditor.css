@@ -74,3 +74,7 @@ progress.progress-bar.colorChangesProgress::-webkit-progress-bar {
 progress.progress-bar.colorChangesProgress::-webkit-progress-value {
     background-color: #0071c5;
 }
+
+#dealEditorTab .k-grid-content table tbody tr td:first-child .vert-center {
+    display: none;
+}
