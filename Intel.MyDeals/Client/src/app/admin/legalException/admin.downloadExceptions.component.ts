@@ -28,11 +28,10 @@ export class adminDownloadExceptionscomponent {
         for (var j = 0; j < this.legalExceptionData.length; j++) {
             arr.push(this.legalExceptionData[j]['MYDL_PCT_LGL_EXCPT_SID']);
         }
-        var pctExceptionList = arr.join();
         var chkPreviousVersion = this.chkData['PreviousVersion'];
         var chkDealList = this.chkData['DealList'];
-        if (pctExceptionList != "") {
-            this.adminlegalExceptionSvc.getDownloadLegalException(pctExceptionList, chkPreviousVersion, chkDealList).subscribe((response: any) => {
+        if (arr.length > 0 ) {
+            this.adminlegalExceptionSvc.getDownloadLegalException(arr, chkPreviousVersion, chkDealList).subscribe((response: any) => {
                 if (response && response.length > 0) {
                     GridUtil.dsToExcelLegalException(this.legalExceptionColumns, response, "Legal Exception Export.xlsx", false, chkDealList);
                     this.dialogRef.close();

@@ -39,8 +39,9 @@ export class adminlegalExceptionService {
     }
 
     public getDownloadLegalException(exceptionSid, chkPreviousVersion, chkDealList) {
-        const apiUrl: string = this.apiBaseUrl + 'GetDownloadLegalException' + "/" + exceptionSid + "/" + chkPreviousVersion + "/" + chkDealList;
-        return this.httpClient.get(apiUrl);
+        const headers = { 'content-type': 'application/json' };
+        const apiUrl: string = this.apiBaseUrl + 'GetDownloadLegalException' + "/" + chkPreviousVersion + "/" + chkDealList;
+        return this.httpClient.post(apiUrl,exceptionSid, { 'headers': headers });
     }
 
 }
