@@ -7,7 +7,7 @@ updates:
                 interval: "weekly"
                 timezone: "America/Los_Angeles"
           commit-message:
-                prefix: "npm dependency: "
+                prefix: "TWC3119-0000: npm dependency - "
           ignore:
                 - dependency-name: "*"
                   update-types: ["version-update:semver-major"]
@@ -66,7 +66,7 @@ updates:
                 interval: "weekly"
                 timezone: "America/Los_Angeles"
           commit-message:
-                prefix: "NuGet dependency: "
+                prefix: "TWC3119-0000: NuGet dependency - "
           pull-request-branch-name:
                 separator: "-"
           labels:
