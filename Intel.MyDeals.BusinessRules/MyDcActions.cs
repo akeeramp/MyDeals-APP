@@ -1933,17 +1933,22 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            string dcEnStr = r.Dc.GetDataElementValue(AttributeCodes.END_DT);
-            DateTime dcEn = DateTime.Parse(dcEnStr);
+            IOpDataElement deEndDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
+            DateTime deEndDateVal;
+            if (!DateTime.TryParse(deEndDate.AtrbValue.ToString(), out deEndDateVal))
+            {
+                deEndDate.AddMessage("Date format is not recognized.");
+                return;
+            }
 
             string isExpired = r.Dc.GetDataElementValue(AttributeCodes.EXPIRE_FLG);
 
-            if (dcEn > DateTime.Now.Date && isExpired == "1") // If there is an expired flag, reset it if it is set
+            if (deEndDateVal > DateTime.Now.Date && isExpired == "1") // If there is an expired flag, reset it if it is set
             {
                 r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "0", "Deal is no longer expired");
             }
 
-            if (dcEn < DateTime.Now.Date && (isExpired == "0" || isExpired == "")) // If there is an expired flag, reset it if it is set
+            if (deEndDateVal < DateTime.Now.Date && (isExpired == "0" || isExpired == "")) // If there is an expired flag, reset it if it is set
             {
                 r.Dc.SetAtrb(AttributeCodes.EXPIRE_FLG, "1", "Deal is now expired");
             }
@@ -2674,7 +2679,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement endDate = r.Dc.GetDataElement(AttributeCodes.END_DT);
             List<OpDataElement> otherChangeElements = r.Dc.DataElements.Where(d => d.HasValueChanged == true).Select(d => d).ToList();
 
-            if (endDate.OrigAtrbValue.ToString() == string.Empty) return; // In initial create, this rule can be bypassed because there isn't an Original Value in DE
+            if (endDate == null || endDate.OrigAtrbValue.ToString() == string.Empty) return; // In initial create, this rule can be bypassed because there isn't an Original Value in DE
 
             DateTime newEndDate = DateTime.Parse(endDate.AtrbValue.ToString());
             DateTime originalEndDate = DateTime.Parse(endDate.OrigAtrbValue.ToString());
@@ -3511,6 +3516,8 @@ namespace Intel.MyDeals.BusinessRules
             if (!(flexRowType == "Draining" || hybridType == "1")) return; // This is a draining side only rule
 
             IOpDataElement firstTierStartVol = r.Dc.GetDataElementsWhere(de => de.AtrbCd == AttributeCodes.STRT_VOL && de.DimKey.HashPairs == "10:1").FirstOrDefault();
+
+            if (firstTierStartVol == null) return; // Some cases appear to be missing this value, so ignore check due to missing data
 
             decimal safeParse = 0;
             bool isNumber = Decimal.TryParse(firstTierStartVol.AtrbValue.ToString(), out safeParse);
