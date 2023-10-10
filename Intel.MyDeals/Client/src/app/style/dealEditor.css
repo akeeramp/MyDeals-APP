@@ -75,6 +75,7 @@ progress.progress-bar.colorChangesProgress::-webkit-progress-value {
     background-color: #0071c5;
 }
 
-#dealEditorTab .k-grid-content table tbody tr td:first-child .vert-center {
+.added-tender .selectedTabAll .k-grid-content table tbody tr td:first-child .vert-center,
+#horizontal-search-tenderDashboard .selectedTabAll .k-grid-content table tbody tr td:first-child .vert-center {
     display: none;
 }

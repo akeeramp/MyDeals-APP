@@ -1,7 +1,7 @@
 ﻿<link href="/Client/src/app/style/dealEditor.css" rel="stylesheet" />
 <loading-panel-angular id="DELoading" style="z-index:500;" [show]="isDataLoading" [header]="spinnerMessageHeader"
                        [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
-<kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event);" id="dealEditorTab" class="width-fixes new-allDeals fs-increase" style="min-height:400px;">
+<kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event);" id="dealEditorTab" class="width-fixes new-allDeals fs-increase" [ngClass]="{'selectedTabAll' : selectedTab ==='All'}" style="min-height:400px;">
     <kendo-tabstrip-tab *ngFor="let data of groups;" title="{{data.name}}" [selected]="selectedTab === data.name" [cssClass]="data.isTabHidden? 'hidden' : 'visible'">
         <ng-template kendoTabTitle>
             <span (click)="onPin($event, data.name)" attr.id="selected{{data.order}}"><i *ngIf="data.name !== 'CAP Info' && data.name !== 'All' && data.name !== allTabRename" class="intelicon-pin-outlined" style="color: #00aeef; border-radius: 15px; font-size:16px; padding: 3px;" title="Pin tab so it always shows in the grid"></i></span>&nbsp;
