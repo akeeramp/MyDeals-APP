@@ -525,7 +525,14 @@ namespace Intel.MyDeals.BusinessLogic
 
             if (productLookupObj?.MydlPdctName == String.Empty || productLookupObj?.PdctNbrSid == 0)
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: EPM ID lookup in My Deals found No valid product matches for EPM Id [" + epmId + "].  Please contact My Deals Support", "My Deals Product EMP ID found no matching products"));
+                if (productLevel.ToLower() == "materialid") // MTRL not found path
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: Material ID lookup in My Deals found No valid product matches for Material Id [" + productData + "].  Please contact My Deals Support", "My Deals Product Material ID found no matching products"));
+                }
+                else // Normal products path
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: EPM ID lookup in My Deals found No valid product matches for EPM Id [" + epmId + "].  Please contact My Deals Support", "My Deals Product EMP ID found no matching products"));
+                }
                 return initWipId; // Bail out - no products matched
             }
 
