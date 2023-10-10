@@ -14,7 +14,6 @@ namespace Intel.MyDeals
                 "~/Scripts/jquery-3.3.1.min.js",
                 "~/Scripts/Angular/1.8.0/angular.min.js",
                 "~/Scripts/kendo/2017.R1/jszip.min.js",
-                "~/Scripts/kendo/2017.R1/kendo.all.min.js",
                 "~/Scripts/kendo/kendo.aspnetmvc.min.js",
                 "~/Scripts/moment.min.js",
                  "~/Scripts/moment-timezone.js",
