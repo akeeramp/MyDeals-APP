@@ -198,21 +198,22 @@ export class PTE_Load_Util {
                     else {
                         //only if there is error
                         if (val) {
-                            let isExist = false;
-                            each(item.warningMessages, (val) => {
-                                let warnings = val.split(':');
-                                each(item._behaviors.validMsg, (value, key) => {
-                                    let isfound = warnings.find(x => x.trim() == value.trim());
-                                    if (!!isfound && isfound != null) {
-                                        cellComments.push({ row: rowInd, col: 0, comment: { value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'error-cell' });
-                                        isExist = true;
-                                    }
-                                })
-                            })
-                            if(!isExist) {
+                            //commenting for now will fix nre period profile later 
+                            // let isExist = false;
+                            // each(item.warningMessages, (val) => {
+                            //     let warnings = val.split(':');
+                            //     each(item._behaviors.validMsg, (value, key) => {
+                            //         let isfound = warnings.find(x => x.trim() == value.trim());
+                            //         if (!!isfound && isfound != null) {
+                            //             cellComments.push({ row: rowInd, col: 0, comment: { value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'error-cell' });
+                            //             isExist = true;
+                            //         }
+                            //     })
+                            // })
+                           // if(!isExist) {
                             cellComments.push({ row: rowInd, col: colInd, comment: { value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'error-border' });
                             msg += columns[colInd].title + ": " + item._behaviors.validMsg[`${key}`];
-                            }
+                          //  }
                         }
                     }
                 });
