@@ -510,9 +510,13 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: Needed 'ProcessorNumber' is missing from Product Details Section in IQR JSON package, please correct", "Please Provide ProcessorNumber in Required Product details"));
                 }
+                else if (productLevel.ToLower() == "materialid")
+                {
+                    workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: Needed 'MaterialID' is missing from Product Details Section in IQR JSON package, please correct", "Please Provide MaterialID in Required Product details"));
+                }
                 else
                 {
-                    workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: 'Product Level' doesn't match and of the following [family|dealproductname|processor], please correct", "Please Provide an approved 'Product Level' value in Product details"));
+                    workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: 'Product Level' doesn't match and of the following [family|dealproductname|processor|materialid], please correct", "Please Provide an approved 'Product Level' value in Product details"));
                 }
                 return initWipId; // Bail out - Required product data is not provided to proceed further
             }
