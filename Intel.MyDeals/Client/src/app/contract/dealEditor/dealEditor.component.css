@@ -101,16 +101,13 @@ kendo-grid#dealEditor {
 }
 
 .opDealEditorGrids.k-grid .uiControlDiv.msgClassStyles {
-    /* height: 40px; */
-    /* min-height: 40px; */
     margin: 0;
     line-height: 1 !important;
-    margin-top: 1px !important;
-    margin-bottom: 1px !important;
     display: flex;
     align-items: center;
     justify-content: center;
-    flex-direction: column
+    flex-direction: column;
+    min-height: 47px;
 }
 
 .opDealEditorGrids.k-grid .uiControlDiv.isSoftWarnCell.capInfoWrapper {
@@ -1310,11 +1307,15 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:
     background-color: #ed1c24 !important
 }
 
-#capYcs2Col,
-#tdsCol {
+#capYcs2Col {
     position: relative;
     top: 25%;
     display:flex;
+}
+
+#tdsCol {
+    position: relative;
+    top: 25%;
 }
 
 .fullHeight {
