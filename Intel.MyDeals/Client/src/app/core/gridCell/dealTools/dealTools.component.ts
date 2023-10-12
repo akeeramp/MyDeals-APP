@@ -64,7 +64,7 @@ export class dealToolsComponent{
     public isModified: boolean = false;
     private objTypeSid;
     private windowOpened = false;
-    private windowTop = 350; windowLeft = 350; windowWidth = 620; windowHeight = 500; windowMinWidth = 100;
+    private windowTop = 320; windowLeft = 670; windowWidth = 620; windowHeight = 500; windowMinWidth = 100;
     messages: any;
     private fileItems = {
         "NoPerm": {

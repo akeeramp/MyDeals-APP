@@ -444,7 +444,8 @@ kendo-dialog.toolsartho-css .k-dialog-buttongroup {
     background-color: #fff;
     /*left: 691px !important;
     top: 350px !important;*/
-    position: fixed !important
+    position: fixed !important; 
+    z-index: 10000 !important;
 }
 
     .searchingStage.k-window.k-window-maximized {
