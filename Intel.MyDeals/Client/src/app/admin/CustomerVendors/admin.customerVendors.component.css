@@ -11,7 +11,8 @@
 #command-icon-first {
     background-color: unset;
     color: #424141;
-    border: none
+    border: none;
+    box-shadow:none;
 }
 
     #command-icon-first:hover {
