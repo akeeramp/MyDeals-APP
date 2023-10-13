@@ -1399,6 +1399,8 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
     }
     async ValidateAndSavePTE(isValidProd, deleteDCIDs?) {
         if (isValidProd) {
+            this.isLoading = true;
+            this.setBusy("Updating Products", "Please wait while processing.", "info", true);
             //Handsonetable loading taking some time so putting this logic for loader
             let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
             //removing the deleted records from PTR
@@ -1599,15 +1601,18 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
     }
     async validateOnlyProducts(action: string, curRow?, deleteDCIDs?) {
         //loader
+        this.isLoading = true;
+        this.setBusy("Updating Products", "Please wait while processing.", "info", true);
         let isPrdValid: any = null;
         //generate PTE
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
-        //removing the deleted record from PTR
-        if (deleteDCIDs && deleteDCIDs.length > 0) {
-            each(deleteDCIDs, (delId) => {
-                PTR = PTR.filter(x => x.DC_ID != delId);
-            })
-        }
+        let oldPTR=JSON.parse(JSON.stringify(PTR));
+        //removed because of products getting shuffled in deal editor
+        // if (deleteDCIDs && deleteDCIDs.length > 0) {
+        //     each(deleteDCIDs, (delId) => {
+        //         PTR = PTR.filter(x => x.DC_ID != delId);
+        //     })
+        // }
         let translateResult = await this.validateProducts(PTR, false, true, null);
         let updatedPTRObj: any = null;
         if (translateResult && translateResult['Data']) {
@@ -1657,18 +1662,37 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
 
             if (contains(prdValResult, '1')) {
                 // Product corrector if invalid products
-                this.isLoading = false;
+                this.isLoading=false;
                 if ((action == 'onOpenSelector' && translateResult['Data'] &&
                     ((translateResult['Data'].DuplicateProducts && translateResult['Data'].DuplicateProducts[curRow[0].DC_ID]) ||
                         (translateResult['Data'].InValidProducts && translateResult['Data'].InValidProducts[curRow[0].DC_ID]))) ||
                     action != 'onOpenSelector') {
-                    await this.openProductCorrector(translateResult['Data'], action, deleteDCIDs)
+                    await this.openProductCorrector(translateResult['Data'], action, deleteDCIDs);
+                     this.isLoading=true;
+                     this.setBusy("Updating Products", "Please wait while processing.", "info", true);
                     if (curRow) {
                         curRow[0].isOpenCorrector = true;
                     }
                 }
                 if (action == 'onSave') {
                     this.showErrorMsg = false;
+                    if (deleteDCIDs && deleteDCIDs.length > 0) {
+                        //setting PTR_SYS_INVLD_PRD while deleting of products
+                        for (let key in this.transformResults.Data.ProdctTransformResults) {
+                        if (this.transformResults.Data.InValidProducts[key]["I"].length !== 0 || this.transformResults.Data.InValidProducts[key]["E"].length !== 0 || !!this.transformResults.Data.DuplicateProducts[key]) {
+                            let invalidJSON = {
+                                'ProdctTransformResults': this.transformResults.Data.ProdctTransformResults[key],
+                                'InValidProducts': this.transformResults.Data.InValidProducts[key], 'DuplicateProducts': this.transformResults.Data.DuplicateProducts[key]
+                            }
+                            oldPTR.forEach((itm,indx) => {
+                                if(itm.DC_ID==key){
+                                 PTE_CellChange_Util.updatePrdColumns(indx, 'PTR_SYS_INVLD_PRD', JSON.stringify(invalidJSON));
+                                }
+                            });
+                        } 
+                    }
+                     return true;
+                    }
                 }
             }
             else {
@@ -1709,6 +1733,8 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
             this.isLoading = false;
             return true;
         }
+        this.isLoading=false;
+        this.setBusy("", "", "", false);
     }
 
     async resetValidationMessage() {
