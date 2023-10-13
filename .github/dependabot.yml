@@ -10,13 +10,17 @@ updates:
                 prefix: "TWC3119-0000: npm dependency - "
           ignore:
                 - dependency-name: "*"
-                  update-types: ["version-update:semver-major"]
+                  update-types: ["version-update:semver-major","version-update:semver-minor"]
                 - dependency-name: "bootstrap*"
-                  update-types: ["version-update:semver-minor"]
+                  update-types: ["version-update:semver-major","version-update:semver-minor"]
                 - dependency-name: "*handsontable*"
-                  update-types: ["version-update:semver-minor"]
+                  update-types: ["version-update:semver-major","version-update:semver-minor"]
                 - dependency-name: "@progress/*"
-                  update-types: ["version-update:semver-minor"]
+                  update-types: ["version-update:semver-major","version-update:semver-minor"]
+                - dependency-name: "@angular/*"
+                  update-types: ["version-update:semver-major","version-update:semver-minor"]
+                - dependency-name: "@types/*"
+                  update-types: ["version-update:semver-major","version-update:semver-minor"]
           pull-request-branch-name:
                 separator: "-"
           versioning-strategy: increase-if-necessary
