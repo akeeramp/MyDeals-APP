@@ -21,6 +21,7 @@ namespace Intel.MyDeals.BusinessLogic
     {
         private readonly IJmsDataLib _jmsDataLib; // change out later to IntegrationDataLib
         private readonly IOpDataCollectorLib _dataCollectorLib;
+        private readonly IDropdownDataLib _dropdownDataLib;
         private readonly IPrimeCustomersDataLib _primeCustomerLib;
         private List<int> UserTokenErrorCodes = new List<int> { 704, 705 }; // Known abort messages for User Token Security
 
@@ -384,6 +385,32 @@ namespace Intel.MyDeals.BusinessLogic
             return newErrorMessage;
         }
 
+        private string GatherConsumptionContries(string regions, string countries)
+        {
+            string returnVal = "";
+            DropdownLib ddValues = new DropdownLib();
+            DropdownHierarchy[] consumptionCountryHierarchy = ddValues.GetConsumptionCountryHierarchy("2");
+
+            // Convert Regions to Countries
+            string[] selectedRegions = regions.Split(',')
+                .Select(x => x.Trim())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .ToArray();
+            var regionCountriesArry = consumptionCountryHierarchy
+                .Where(a => a.ATRB_LKUP_DESC == "GEO" && selectedRegions.Contains(a.DROP_DOWN))
+                .SelectMany(a => a.items).ToList();
+
+            string[] selectedCountries = countries.Split(',')
+                .Select(x => x.Trim())
+                .Where(x => !string.IsNullOrWhiteSpace(x))
+                .ToArray();
+
+            string[] finalArry = selectedCountries.Union(regionCountriesArry.Select(a => a.DROP_DOWN).ToArray()).ToArray();
+            returnVal = string.Join(",", finalArry);
+
+            return returnVal;
+        }
+
         private static int ToInt32(string value)
         {
             return value == null ? 0 : int.Parse(value, (IFormatProvider)CultureInfo.CurrentCulture);
@@ -419,7 +446,8 @@ namespace Intel.MyDeals.BusinessLogic
             DateTime billingStartDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[currentRec].BillingStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             DateTime billingEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[currentRec].BillingEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             string consumptionCustomerPlatform = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ConsumptionCustomerPlatform;
-            string consumptionCountryRegion = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ConsumptionCountryRegion;
+            string consumptionRegion = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ConsumptionRegion;
+            string consumptionCountry = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ConsumptionCountry;
             string consumptionReportedSalesGeo = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ConsumptionReportedSalesGeo;
             string terms = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].AdditionalTandC;
             string excludeAutomationFlag = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ExcludeAutomation ? "Yes" : "No";
@@ -444,6 +472,7 @@ namespace Intel.MyDeals.BusinessLogic
             string processorNumber = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.ProcessorNumber == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.ProcessorNumber;
             string dealPdctName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.DealProductName == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.DealProductName;
             string dealMtrlIdName = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.MaterialID == null ? "" : workRecordDataFields.recordDetails.quote.quoteLine[currentRec].product.MaterialID;
+
             //variable to hold the Selected product name
             string productData = "";
             #region Product Check and translation
@@ -569,10 +598,13 @@ namespace Intel.MyDeals.BusinessLogic
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(714, "Deal Error: failed to create the Tender Deal due to missing expected fields {Fields}", "Missing expected fields"));
                 return initWipId;
             }
+
+            // Calculate ConsumptionCountryRegion Values from consumptionRegion and consumptionCountry
+            string consumptionCountryRegion = GatherConsumptionContries(consumptionRegion, consumptionCountry);
             // Can only have 1, UI controlled rule preventing both from being entered, abort if both are filled out on Create
             if (consumptionCountryRegion != null && consumptionReportedSalesGeo != null)
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(715, "Deal Error: failed to create the Tender Deal due to Consumption Country Region and Consumption Reported Sales Geo both being filled out.  You are allowed one or the other, not both.", "Consumption Region and Sales both filled out"));
+                workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(715, "Deal Error: failed to create the Tender Deal due to Consumption Country/Region and Consumption Reported Sales Geo both being filled out.  You are allowed one or the other, not both.", "Consumption Region and Sales both filled out"));
                 return initWipId;
             }
 
@@ -1470,12 +1502,14 @@ namespace Intel.MyDeals.BusinessLogic
             string consumptionCustomerPlatform = workRecordDataFields.recordDetails.quote.quoteLine[i].ConsumptionCustomerPlatform;
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.CONSUMPTION_CUST_PLATFORM), consumptionCustomerPlatform == null ? "" : consumptionCustomerPlatform);
 
-            string consumptionCountryRegion = workRecordDataFields.recordDetails.quote.quoteLine[i].ConsumptionCountryRegion;
+            string consumptionRegion = workRecordDataFields.recordDetails.quote.quoteLine[i].ConsumptionRegion;
+            string consumptionCountry = workRecordDataFields.recordDetails.quote.quoteLine[i].ConsumptionCountry;
+            string consumptionCountryRegion = GatherConsumptionContries(consumptionRegion, consumptionCountry);
             string consumptionReportedSalesGeo = workRecordDataFields.recordDetails.quote.quoteLine[i].ConsumptionReportedSalesGeo;
             // Can only have 1, UI controlled rule preventing both from being entered, warn if both are filled out on update
             if (consumptionCountryRegion != null && consumptionReportedSalesGeo != null)
             {
-                workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(715, "Deal Error: failed to update the Tender Deal due to Consumption Country Region and Consumption Reported Sales Geo both being filled out.  You are allowed one or the other, not both.", "Consumption Region and Sales both filled out"));
+                workRecordDataFields.recordDetails.quote.quoteLine[i].errorMessages.Add(AppendError(715, "Deal Error: failed to update the Tender Deal due to Consumption Country/Region and Consumption Reported Sales Geo both being filled out.  You are allowed one or the other, not both.", "Consumption Region and Sales both filled out"));
             }
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.CONSUMPTION_COUNTRY_REGION), consumptionCountryRegion == null ? "": consumptionCountryRegion);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.CONSUMPTION_CUST_RPT_GEO), consumptionReportedSalesGeo == null ? "" : consumptionReportedSalesGeo);
