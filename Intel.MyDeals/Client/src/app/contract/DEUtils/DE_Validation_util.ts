@@ -82,13 +82,7 @@ export class DE_Validation_Util {
                 isShowStopperError = true;
             }
 
-            // Remove after validation error supressing rollback is corrected
-            if (StaticMomentService.moment(item["REBATE_BILLING_END"]).isAfter(StaticMomentService.moment(item["END_DT"])) && item["PAYOUT_BASED_ON"].toUpperCase() === "CONSUMPTION") {
-                item._behaviors.isError['REBATE_BILLING_END'] = true;
-                item._behaviors.validMsg['REBATE_BILLING_END'] = "The Billing End Date must be on or earlier than the Deal End Date.";
-                isShowStopperError = true;
-            }
-
+            
             if (item["END_CUSTOMER_RETAIL"] != undefined && item["END_CUSTOMER_RETAIL"] != null) { // && isTenderFlag == "1"
                 if (item._behaviors.isError['END_CUSTOMER_RETAIL']) {
                     isShowStopperError = true;
