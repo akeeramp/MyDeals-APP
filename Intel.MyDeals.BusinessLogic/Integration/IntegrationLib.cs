@@ -406,7 +406,7 @@ namespace Intel.MyDeals.BusinessLogic
                 .ToArray();
 
             string[] finalArry = selectedCountries.Union(regionCountriesArry.Select(a => a.DROP_DOWN).ToArray()).ToArray();
-            returnVal = string.Join(",", finalArry);
+            returnVal = string.Join("|", finalArry);
 
             return returnVal;
         }
