@@ -392,18 +392,26 @@ namespace Intel.MyDeals.BusinessLogic
             DropdownHierarchy[] consumptionCountryHierarchy = ddValues.GetConsumptionCountryHierarchy("2");
 
             // Convert Regions to Countries
-            string[] selectedRegions = regions.Split(',')
-                .Select(x => x.Trim())
-                .Where(x => !string.IsNullOrWhiteSpace(x))
-                .ToArray();
+            string[] selectedRegions = new string[] { };
+
+            if (regions != null) {
+                selectedRegions = regions.Split(',')
+                    .Select(x => x.Trim())
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .ToArray();
+            }
+
             var regionCountriesArry = consumptionCountryHierarchy
                 .Where(a => a.ATRB_LKUP_DESC == "GEO" && selectedRegions.Contains(a.DROP_DOWN))
                 .SelectMany(a => a.items).ToList();
 
-            string[] selectedCountries = countries.Split(',')
-                .Select(x => x.Trim())
-                .Where(x => !string.IsNullOrWhiteSpace(x))
-                .ToArray();
+            string[] selectedCountries = new string[] { };
+            if (countries != null) { 
+                selectedCountries = countries.Split(',')
+                    .Select(x => x.Trim())
+                    .Where(x => !string.IsNullOrWhiteSpace(x))
+                    .ToArray();
+            }
 
             string[] finalArry = selectedCountries.Union(regionCountriesArry.Select(a => a.DROP_DOWN).ToArray()).ToArray();
             returnVal = string.Join("|", finalArry);
