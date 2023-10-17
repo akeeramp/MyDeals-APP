@@ -27,42 +27,9 @@ updates:
           labels:
                 - "dependencies"
           groups:
-                angular:
+                dev-dependencies:
                     patterns:
-                        - ^@angular/.*
-                        - ^@angular-builders/.*
-                types:
-                    patterns:
-                        - ^@types/.*
-                eslint:
-                    patterns:
-                        - ^@typescript-eslint/.*
-                        - ^eslint$
-                webpack:
-                    patterns:
-                        - ^webpack$
-                        - ^webpack-.*
-                kendo:
-                    patterns:
-                        - ^@progress/.*
-                handsontable:
-                    patterns:
-                        - ^@handsontable/.*
-                        - ^handsontable$
-                bootstrap:
-                    patterns:
-                        - ^bootstrap.*
-                        - ^@ng-bootstrap/.*
-                        - ^popper.js$
-                moment:
-                    patterns:
-                        - ^moment-.*
-                angular-dependencies:
-                    patterns:
-                        - ^zone.js$
-                        - ^rxjs$
-                        - ^core-js$
-
+                        - "*"  
         - package-ecosystem: "nuget"
           directory: "/"
           open-pull-requests-limit: 2

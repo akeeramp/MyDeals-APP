@@ -5,21 +5,18 @@
         "emitDecoratorMetadata": true,
         "experimentalDecorators": true,
         "lib": [
-            "ES2018",
+            "es6",
             "dom"
         ],
         "mapRoot": "./",
-        "module": "ES2020",
+        "module": "ES6",
         "moduleResolution": "node",
         "outDir": "../dist/out-tsc",
         "sourceMap": true,
-        "target": "ES2017",
+        "target": "ES5",
         "types": [
-            "angular",
-            "file-saver",
             "jquery",
             "node",
-            "underscore"
         ],
         "typeRoots": [
             "node_modules/@types"

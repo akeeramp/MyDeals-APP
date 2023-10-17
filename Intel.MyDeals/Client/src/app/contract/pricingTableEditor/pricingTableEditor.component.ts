@@ -1399,8 +1399,6 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
     }
     async ValidateAndSavePTE(isValidProd, deleteDCIDs?) {
         if (isValidProd) {
-            this.isLoading = true;
-            this.setBusy("Updating Products", "Please wait while processing.", "info", true);
             //Handsonetable loading taking some time so putting this logic for loader
             let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
             //removing the deleted records from PTR
@@ -1600,9 +1598,6 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
         }
     }
     async validateOnlyProducts(action: string, curRow?, deleteDCIDs?) {
-        //loader
-        this.isLoading = true;
-        this.setBusy("Updating Products", "Please wait while processing.", "info", true);
         let isPrdValid: any = null;
         //generate PTE
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
@@ -1668,8 +1663,6 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
                         (translateResult['Data'].InValidProducts && translateResult['Data'].InValidProducts[curRow[0].DC_ID]))) ||
                     action != 'onOpenSelector') {
                     await this.openProductCorrector(translateResult['Data'], action, deleteDCIDs);
-                     this.isLoading=true;
-                     this.setBusy("Updating Products", "Please wait while processing.", "info", true);
                     if (curRow) {
                         curRow[0].isOpenCorrector = true;
                     }
@@ -1733,8 +1726,6 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
             this.isLoading = false;
             return true;
         }
-        this.isLoading=false;
-        this.setBusy("", "", "", false);
     }
 
     async resetValidationMessage() {
