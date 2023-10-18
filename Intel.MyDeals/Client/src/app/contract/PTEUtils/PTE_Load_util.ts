@@ -185,7 +185,8 @@ export class PTE_Load_Util {
                             //this logic is to handle incase a product is success but still there are error binding but we need to maintain the success color but give message
                             if (val == true && item._behaviors.validMsg[`${key}`] && (item._behaviors.validMsg[`${key}`] != 'Invalid Product')) {
                                 let cellMeta = this.hotTable.getCellMeta(rowInd, colInd);
-                                if (cellMeta && cellMeta.className && cellMeta.className.toString().match('success-product')  && item._behaviors.validMsg["".concat(key)].trim() !="Product select has some invalid products.") {
+                                if (cellMeta && cellMeta.className && cellMeta.className.toString().match('success-product')  && 
+                                ( item._behaviors.validMsg["".concat(key)].trim() !="Product select has some invalid products."  && item._behaviors.validMsg["".concat(key)].trim()!="Product select has some invalid products. Please ensure you are using SSD products for Density deals." )) {
                                     cellComments.push({ row: rowInd, col: colInd, comment: { value: item._behaviors.validMsg[`${key}`], readOnly: true }, className: 'success-product error-border' });
                                 }
                                 else {
