@@ -17,7 +17,7 @@
         <kendo-grid-column [headerClass]="{'headerClass':true}" width="80px" title="Stage" field="OVLP_WF_STG_CD"></kendo-grid-column>
         <kendo-grid-column [headerClass]="{'headerClass':true}"  width="120px" title="Deal Description" field="OVLP_DEAL_DESC"></kendo-grid-column>
         <kendo-grid-column [headerClass]="{'headerClass':true}" width="120px" title="ECAP" field="OVLP_ECAP_PRC" format="{0:c}"></kendo-grid-column>
-        <kendo-grid-column [headerClass]="{'headerClass':true}" width="120px" title="Max RPU" field="OVLP_MAX_RPU" format="{0:c}"></kendo-grid-column>
+        <kendo-grid-column [headerClass]="{'headerClass':true}" width="120px" title="Max RPU" field="OVLP_MAX_RPU" filter="numeric" format="{0:c}"></kendo-grid-column>
         <kendo-grid-column [headerClass]="{'headerClass':true}" width="80px" title="Start Date" field="OVLP_DEAL_STRT_DT">
             <ng-template kendoGridCellTemplate let-dataItem>
                 {{dataItem.OVLP_DEAL_STRT_DT | date: 'M/d/yyyy'}}

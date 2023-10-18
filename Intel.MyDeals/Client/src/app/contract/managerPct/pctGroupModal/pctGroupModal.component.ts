@@ -57,6 +57,11 @@ export class pctGroupModal {
             this.gridData = process(this.gridResult, this.state);
         }
 
+            document.getElementsByTagName('body')[0].classList.add('pctModalBodyFilter');
+        }
+        ngOnDestroy() {
+            document.getElementsByTagName('body')[0].classList.remove('pctModalBodyFilter');
+
     }
 
     dataStateChange(state: DataStateChangeEvent): void {

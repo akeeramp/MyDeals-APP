@@ -95,3 +95,6 @@ kendo-grid.container-pct table tr th a.k-grid-filter.k-state-active {
 .container-pct table tr td {
     word-break: break-word;
 }
+.pctModalBodyFilter .k-animation-container-shown kendo-grid-filter-menu-container kendo-grid-numeric-filter-menu kendo-dropdownlist {
+    margin: 5px 0 !important;
+}
