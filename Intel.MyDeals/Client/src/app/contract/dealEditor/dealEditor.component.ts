@@ -1521,7 +1521,8 @@ export class dealEditorComponent {
         this.bidActionsUpdated.emit(event);
     }
     copyDeals() {
-        this.tenderCopyDeals.emit(this.gridData.data);
+        /* Changing the value from grid data to grid result to accommodate the pagination */
+        this.tenderCopyDeals.emit(this.gridResult);
     }
     executePctViaBtn() {
         this.isRunning = true;

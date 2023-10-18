@@ -98,7 +98,7 @@
                                             [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
                                             filterable="menu" [navigable]="true" [resizable]="true" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)">
                                     <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" field="{{column.field}}" title="{{column.title}}"
-                                                       width="{{column.width}}" [filterable]="column.filterable">
+                                                       width="{{column.title == 'Rate Breakout' ? '370' : column.width}}" [filterable]="column.filterable">
                                         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                                                      let-filterService="filterService">
                                             <multicheck-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value"
