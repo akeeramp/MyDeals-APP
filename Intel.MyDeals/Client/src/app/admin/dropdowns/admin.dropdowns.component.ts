@@ -37,6 +37,7 @@ export class dropdownsComponent {
     private deleteItem: string;
     private deleteATRB_CDItem: string;
     private deleteDROP_DOWNItem: string;
+    private deleteDropdownData: any;
     private isModelvalid = false;
     private errorMsg = "";
     private isDialogVisible = false;
@@ -298,6 +299,7 @@ export class dropdownsComponent {
             ATRB_SID: new FormControl(),
             CUST_NM: new FormControl(this.distinctCustomerName[0], Validators.required),
             CUST_MBR_SID: new FormControl(),
+            CUST_CIM_ID: new FormControl(),
             DROP_DOWN: new FormControl("", Validators.required),
             ATRB_LKUP_DESC: new FormControl(""),
             ATRB_LKUP_TTIP: new FormControl(""),
@@ -322,6 +324,7 @@ export class dropdownsComponent {
             ATRB_SID: new FormControl(dataItem.ATRB_SID),
             CUST_NM: new FormControl({ value: dataItem.CUST_NM, disabled: true }),
             CUST_MBR_SID: new FormControl(dataItem.CUST_MBR_SID),
+            CUST_CIM_ID: new FormControl(dataItem.CUST_CIM_ID),
             DROP_DOWN: new FormControl({ value: dataItem.DROP_DOWN, disabled: true }),
             ATRB_LKUP_DESC: new FormControl(dataItem.ATRB_LKUP_DESC),
             ATRB_LKUP_TTIP: new FormControl(dataItem.ATRB_LKUP_TTIP),
@@ -403,6 +406,7 @@ export class dropdownsComponent {
     }
 
     removeHandler({ dataItem }) {
+        this.deleteDropdownData = dataItem;
         this.deleteItem = dataItem.ATRB_LKUP_SID;
         this.deleteATRB_CDItem = dataItem.ATRB_CD;
         this.deleteDROP_DOWNItem = dataItem.DROP_DOWN;
@@ -445,7 +449,7 @@ export class dropdownsComponent {
 
     deleteRecord() {
         this.isDialogVisible = false;
-        this.dropdownSvc.deleteBasicDropdowns(this.deleteItem)
+        this.dropdownSvc.deleteBasicDropdowns(this.deleteDropdownData)
             .subscribe(
                 () => {
                     if (this.deleteATRB_CDItem == "MRKT_SEG_COMBINED") {

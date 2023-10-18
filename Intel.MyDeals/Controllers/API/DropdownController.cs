@@ -4,18 +4,24 @@ using System.Web.Http;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.Helpers;
+using static Intel.MyDeals.Entities.IqrTransferComsumptionData.RecordDetails;
+using Newtonsoft.Json;
+using Intel.MyDeals.IDataLibrary;
 
 namespace Intel.MyDeals.Controllers.API
 {
+
     [RoutePrefix("api/Dropdown")]
     public class DropdownController : BaseApiController
 	{
 		private readonly IDropdownLib _dropdownLib;
+        private readonly IJmsDataLib _jmsDataLib;
 
-		public DropdownController(IDropdownLib dropdownLib)
+        public DropdownController(IDropdownLib dropdownLib, IJmsDataLib jmsDataLib)
 		{
 			_dropdownLib = dropdownLib;
-		}
+            _jmsDataLib = jmsDataLib;
+        }
 
         [Authorize]
         [Route("GetBasicDropdowns")]
@@ -228,9 +234,14 @@ namespace Intel.MyDeals.Controllers.API
         [Route("UpdateBasicDropdowns")]
         public BasicDropdown UpdateBasicDropdowns(BasicDropdown data)
         {
-            return SafeExecutor(() => _dropdownLib.ManageBasicDropdowns(data, CrudModes.Update)
+            BasicDropdown retData = SafeExecutor(() => _dropdownLib.ManageBasicDropdowns(data, CrudModes.Update)
                 , $"Unable to update basic dropdown"
             );
+
+            // Do IQR updates here
+            UpdateIqrValues(retData, CrudModes.Update.ToString());
+
+            return retData;
         }
 
         //[Authorize]
@@ -239,19 +250,32 @@ namespace Intel.MyDeals.Controllers.API
         [Route("InsertBasicDropdowns")]
         public BasicDropdown InsertBasicDropdowns(BasicDropdown data)
         {
-            return SafeExecutor(() => _dropdownLib.ManageBasicDropdowns(data, CrudModes.Insert)
+            BasicDropdown retData = SafeExecutor(() => _dropdownLib.ManageBasicDropdowns(data, CrudModes.Insert)
                 , $"Unable to insert basic dropdown"
             );
+
+            // Do IQR updates here
+            UpdateIqrValues(retData, CrudModes.Insert.ToString());
+
+            return retData;
         }
 
-        [HttpDelete]
+        [HttpPut]
         [AntiForgeryValidate]
-        [Route("DeleteBasicDropdowns/{id}")]
-        public bool DeleteBasicDropdowns(int id)
+        [Route("DeleteBasicDropdowns")]
+        public bool DeleteBasicDropdowns(BasicDropdown data)
         {
-            return SafeExecutor(() => _dropdownLib.DeleteBasicDropdowns(id)
+            int id = data.ATRB_LKUP_SID;
+            bool results = SafeExecutor(() => _dropdownLib.DeleteBasicDropdowns(id)
                 , $"Unable to delete basic dropdown"
             );
+
+            if (results) // if the delete was successful, send to IQR
+            {
+                UpdateIqrValues(data, CrudModes.Delete.ToString());
+            }
+
+            return results;
 		}
 
         //// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
@@ -341,6 +365,115 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get Dropdowns for {atrbCd}"
             );
         }
+
+        #region IQR Dropdown additions
+        private void UpdateIqrValues(BasicDropdown data, string mode)
+        {
+            // If no CIM ID and customer is not all customers, don't bother and bail, not an IQR customer
+            if (data == null || (data.CUST_CIM_ID == "" && data.CUST_MBR_SID != 1)) return;
+
+            List<string> IqrDropdownAtrbs = new List<string>() {
+                AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                AttributeCodes.CONSUMPTION_CUST_PLATFORM
+            };
+
+            // Make the update package and send it to outbound Tenders queue
+            if (IqrDropdownAtrbs.Contains(data.ATRB_CD))
+            {
+                IqrTransferComsumptionData jsonData = new IqrTransferComsumptionData();
+                jsonData.header = new IqrTransferComsumptionData.Header();
+                jsonData.header.xid = "00000000-0000-0000-0000-000000000000";
+                jsonData.header.target_system = "Tender";
+                jsonData.header.source_system = "MyDeals";
+                jsonData.header.action = "UpdateDropdowns";
+
+                jsonData.recordDetails = new IqrTransferComsumptionData.RecordDetails();
+                jsonData.recordDetails.consumptionData = new List<ConsumptionData>();
+                ConsumptionData body = new ConsumptionData();
+                body.ConsumptionType = data.ATRB_CD;
+                body.Value = data.DROP_DOWN;
+                body.IsActive = data.ACTV_IND;
+                body.Mode = mode;
+                body.CIMId = data.CUST_CIM_ID != "" ? data.CUST_CIM_ID : "0";
+
+                jsonData.recordDetails.consumptionData.Add(body);
+
+                List<int> deadIdList = new List<int>() { 0 };
+
+                // Insert into the stage table here - one update item (0 id as dummy item)
+                _jmsDataLib.SaveTendersDataToStage("TENDER_DEALS_RESPONSE", deadIdList, JsonConvert.SerializeObject(jsonData, Formatting.None));
+            }
+        }
+
+        [Authorize]
+        [Route("FetchSalesForceDropdownData/{atrbCd}/")]
+        [HttpGet]
+        public string FetchSalesForceDropdownData(string atrbCd)
+        {
+            string returnData = "";
+            int recordCount = 0;
+            List<string> IqrDropdownAtrbs = new List<string>() {
+                AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
+                AttributeCodes.CONSUMPTION_CUST_PLATFORM
+            };
+
+            // Make the update package and send it to outbound Tenders queue
+            if (IqrDropdownAtrbs.Contains(atrbCd))
+            {
+                // calling inactives to get IQR fully up to date with all of our actions except for deletion, no way to chase that.
+                IEnumerable<BasicDropdown> blah = SafeExecutor(() => _dropdownLib.GetDropdownsWithInactives(atrbCd)
+                    , $"Unable to get Dropdowns for {atrbCd}"
+                );
+
+                IqrTransferComsumptionData jsonData = new IqrTransferComsumptionData();
+                jsonData.header = new IqrTransferComsumptionData.Header();
+                jsonData.header.xid = "00000000-0000-0000-0000-000000000000";
+                jsonData.header.target_system = "Tender";
+                jsonData.header.source_system = "MyDeals";
+                jsonData.header.action = "UpdateDropdowns";
+
+                jsonData.recordDetails = new IqrTransferComsumptionData.RecordDetails();
+                jsonData.recordDetails.consumptionData = new List<ConsumptionData>();
+
+                foreach (BasicDropdown dropdown in blah)
+                {
+                    if (dropdown.CUST_MBR_SID == 1 || dropdown.CUST_CIM_ID != "")
+                    {
+                        jsonData.recordDetails.consumptionData.Add(
+                            new ConsumptionData()
+                            {
+                                ConsumptionType = dropdown.ATRB_CD,
+                                Value = dropdown.DROP_DOWN,
+                                IsActive = dropdown.ACTV_IND,
+                                // Assuming select in this case.
+                                Mode = CrudModes.Select.ToString(),
+                                CIMId = dropdown.CUST_CIM_ID != "" ? dropdown.CUST_CIM_ID : "0"
+                            });
+                        recordCount++;
+                    }
+                }
+
+                List<int> deadIdList = new List<int>() { 0 };
+
+                if (recordCount > 0)
+                {
+                    // Insert into the stage table here - one update item (0 id as dummy item)
+                    _jmsDataLib.SaveTendersDataToStage("TENDER_DEALS_RESPONSE", deadIdList, JsonConvert.SerializeObject(jsonData, Formatting.None));
+                    returnData = "There are " + recordCount.ToString() + " records for attribute " + atrbCd + " staged for send to IQR.";
+                }
+                else
+                {
+                    returnData = "There are no existing records for attribute " + atrbCd + " to be staged for send to IQR.";
+                }
+            }
+            else
+            {
+                returnData = "Attribute " + atrbCd + " data will not be sent to IQR as they do not currently consume this data.";
+            }
+
+            return returnData;
+        }
+        #endregion IQR Dropdown additions
 
     }
 }

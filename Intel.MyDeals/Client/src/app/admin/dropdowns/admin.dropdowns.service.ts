@@ -63,9 +63,9 @@ export class dropdownService {
         return this.httpClient.put(apiUrl, dropdown);
     }
 
-    public deleteBasicDropdowns(id): Observable<any> {
-        const apiUrl = this.apiBaseUrl + 'DeleteBasicDropdowns/' + id;
-        return this.httpClient.delete(apiUrl);
+    public deleteBasicDropdowns(dropdown): Observable<any> {
+        const apiUrl = this.apiBaseUrl + 'DeleteBasicDropdowns';
+        return this.httpClient.put(apiUrl, dropdown);
     }
 
     public insertBasicDropdowns(id): Observable<any> {

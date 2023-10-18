@@ -414,6 +414,40 @@ namespace Intel.MyDeals.Entities
     }
     #endregion Tenders XID and other Search Objects
 
+    #region Tenders Consumption Values Objects
+    public class IqrTransferComsumptionData
+    {
+        [JsonProperty("Header")]
+        public Header header { get; set; }
+
+        [JsonProperty("RecordDetails")]
+        public RecordDetails recordDetails { get; set; }
+
+        public class Header
+        {
+            public string xid { get; set; }
+            public string target_system { get; set; }
+            public string source_system { get; set; }
+            public string action { get; set; }
+        }
+
+        public class RecordDetails
+        {
+            [JsonProperty("ConsumptionData")]
+            public List<ConsumptionData> consumptionData { get; set; }
+
+            public class ConsumptionData
+            {
+                public string CIMId { get; set; }
+                public string ConsumptionType { get; set; }
+                public string Value { get; set; }
+                public string Mode { get; set; }
+                public bool IsActive { get; set; }
+            }
+        }
+    }
+    #endregion Tenders Consumption Values Objects
+
     // Support Objects
 
     #region Vistex/Tenders Support Classes
