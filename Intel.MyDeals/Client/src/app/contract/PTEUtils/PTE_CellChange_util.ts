@@ -1485,9 +1485,11 @@ export class PTE_CellChange_Util {
 
     static forcastevaluechange(items: Array<any>, columns: Array<any>){
         each(items, (item) => {
-            item.new = parseFloat(item.new.toString().replace(/[$,]/g, ""));
-            if (item.new >999999999)  {
-                this.hotTable.setDataAtRowProp(item.row, item.prop, '999999999', 'no-edit');
+            if (item.new != null) {
+                item.new = parseFloat(item.new.toString().replace(/[$,]/g, ""));
+                if (item.new > 999999999) {
+                    this.hotTable.setDataAtRowProp(item.row, item.prop, '999999999', 'no-edit');
+                }
             }
         })
     }
