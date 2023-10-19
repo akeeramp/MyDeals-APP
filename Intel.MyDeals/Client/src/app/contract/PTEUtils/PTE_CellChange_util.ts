@@ -1280,7 +1280,7 @@ export class PTE_CellChange_Util {
                         this.delReadOnlyBehaviours("AR_SETTLEMENT_LVL", item);
                         let arSVal = curPricingTable["AR_SETTLEMENT_LVL"] ? curPricingTable["AR_SETTLEMENT_LVL"] : ptDefaults["_defaultAtrbs"]["AR_SETTLEMENT_LVL"].value
                         this.hotTable.setDataAtRowProp(item.row, 'AR_SETTLEMENT_LVL', arSVal.toString(), 'no-edit');
-                        if (curPricingTable && arSVal && (arSVal.toLowerCase() == 'cash' && item.prop != 'AR_SETTLEMENT_LVL')) {
+                        if (curPricingTable && arSVal && (arSVal.toLowerCase() == 'cash' && item.prop == 'AR_SETTLEMENT_LVL')) {
                             let colSPIdx = findWhere(this.hotTable.getCellMetaAtRow(item.row), { prop: 'SETTLEMENT_PARTNER' }).col;
                             this.autoFillOnCash(item, contractData, colSPIdx, cellEditor);
                         }

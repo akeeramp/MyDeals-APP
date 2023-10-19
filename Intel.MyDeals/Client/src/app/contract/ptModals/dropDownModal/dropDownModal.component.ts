@@ -15,6 +15,7 @@ export interface DialogData {
 export class dropDownModalComponent {
     private listItems: Array<string> = [];
     private value: string = "";
+    public valCheck: string = '';
     private errMsg: boolean = false;
     private infoMsg: string = "";
     constructor(
@@ -25,7 +26,12 @@ export class dropDownModalComponent {
     onSave() {
         let result = '';
         result = this.value != null ? this.value.toString() : '';
-        this.dialogRef.close(result);
+        this.valCheck = this.data.selVal;
+        if (this.valCheck === result) {
+            this.dialogRef.close();
+        } else {
+            this.dialogRef.close(result);
+        }
     }
 
     checkInfoMessages(dlgTitle, dlgValue) {
