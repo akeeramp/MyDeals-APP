@@ -2168,7 +2168,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 5,
                 AtrbCd = "BACKEND_REBATE",
-                Label = "Backend Rebate",
+                Label = "Rebate",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP },
                 Width = 130,
@@ -2182,7 +2182,7 @@ namespace Intel.MyDeals.DataLibrary
             {
                 Id = 5,
                 AtrbCd = "BACKEND_REBATE",
-                Label = "Backend Rebate",
+                Label = "Rebate",
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.KIT },
                 Width = 130,
