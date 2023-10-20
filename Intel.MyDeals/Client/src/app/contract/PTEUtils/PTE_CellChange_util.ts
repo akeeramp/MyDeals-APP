@@ -1077,6 +1077,9 @@ export class PTE_CellChange_Util {
             const OBJ_SET_TYPE_CD = curPricingTable.OBJ_SET_TYPE_CD;
             if (OBJ_SET_TYPE_CD && OBJ_SET_TYPE_CD == 'KIT') {
                 each(items, item => {
+                    if (item.prop && item.prop == 'DSCNT_PER_LN' && isNaN(item.new) && !isNumber((item.new))){
+                        this.hotTable.setDataAtRowProp(item.row, item.prop, '0.00', 'no-edit');
+                    }
                     const val = PTE_Load_Util.calculateTotalDsctPerLine(this.hotTable.getDataAtRowProp(item.row, 'DSCNT_PER_LN'), this.hotTable.getDataAtRowProp(item.row, 'QTY'))
                     this.hotTable.setDataAtRowProp(item.row, 'TEMP_TOTAL_DSCNT_PER_LN', val, 'no-edit');
                     if (item.prop && item.prop == 'QTY') {
