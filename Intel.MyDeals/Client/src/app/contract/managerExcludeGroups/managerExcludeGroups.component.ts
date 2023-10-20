@@ -1,7 +1,7 @@
 ﻿import { Component, Input, ViewEncapsulation, Output, EventEmitter } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { DataStateChangeEvent, SelectAllCheckboxState, CellClickEvent, PageSizeItem, GridComponent} from "@progress/kendo-angular-grid";
-import { distinct, process, State } from "@progress/kendo-data-query";
+import { CompositeFilterDescriptor, distinct, FilterDescriptor, process, State } from "@progress/kendo-data-query";
 import { managerExcludeGroupsService } from "./managerExcludeGroups.service";
 import { ThemePalette } from "@angular/material/core";
 import { lnavService } from "../lnav/lnav.service";
@@ -9,7 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { excludeDealGroupModalDialog } from "./excludeDealGroupModal.component"
 import { GridUtil } from "../grid.util"
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
-import { each } from 'underscore';
+import { each, uniq } from 'underscore';
 import { saveAs } from '@progress/kendo-file-saver';
 import { Workbook } from '@progress/kendo-angular-excel-export';
 
@@ -71,6 +71,7 @@ export class managerExcludeGroupsComponent {
     private loadMessage: string = "Loading Deals";
     dirty: boolean;
     pctFilterEnabled: boolean = false;
+    public Ecap_Filter_Array: any = [];
     private state: State = {
         skip: 0,
         take: 25,
@@ -132,7 +133,11 @@ export class managerExcludeGroupsComponent {
                 if (item["DEAL_GRP_CMNT"] === undefined || item["DEAL_GRP_CMNT"] === null) item["DEAL_GRP_CMNT"] = "";
                 item["DSPL_WF_STG_CD"] = GridUtil.stgFullTitleChar(item);
                 item["TITLE"] = item["TITLE"].replace(/,/g, ", ");
+                if (item["ECAP_PRICE"] != undefined || item["ECAP_PRICE"] != null) {
+                    this.Ecap_Filter_Array.push({ Text: item["ECAP_PRICE"]["20___0"], Value: item["ECAP_PRICE"]["20___0"] });
+                }
             }
+            this.Ecap_Filter_Array=uniq(this.Ecap_Filter_Array,'Value');
             this.gridResultMaster = this.gridResult;
             this.displayDealTypes();
             this.gridData = process(this.gridResult, this.state);
@@ -147,6 +152,40 @@ export class managerExcludeGroupsComponent {
             this.loggerSvc.error('Customer service', error);
             this.isLoading = false;
         });
+    }
+
+    filterChange(filter: any): void {
+        this.gridData = process(this.gridResult, this.state);
+        if (filter && filter.filters && filter.filters.length > 0) {
+            filter.filters.forEach((item: CompositeFilterDescriptor) => {
+                let arrayData = [];
+                if (item && item.filters && item.filters.length > 0) {
+                    item.filters.forEach((fltrItem: FilterDescriptor) => {
+                        let column = fltrItem.field.toString();
+                        
+                        each(this.gridResult, (eachData) => {
+                            if (eachData[column] != undefined) {
+                                let keys = Object.keys(eachData[column]);
+                                let isexists = false;
+                                each(keys, key => {
+                                    if (fltrItem.value != undefined && fltrItem.value != null) {
+                                        if (fltrItem.value != undefined && fltrItem.value != null && eachData[column][key] == fltrItem.value.toString()){
+                                            fltrItem.operator = "isnotnull";
+                                            isexists = true;
+                                        }
+                                    }
+                                })
+                                if (isexists)
+                                    arrayData.push(eachData);
+                            }
+                        })
+                        if (arrayData.length > 0) {
+                            this.gridData = process(arrayData, this.state);
+                        }
+                    })
+                }
+            });
+        }
     }
 
     dataStateChange(state: DataStateChangeEvent): void {

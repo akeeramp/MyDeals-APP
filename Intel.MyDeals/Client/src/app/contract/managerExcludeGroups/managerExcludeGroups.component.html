@@ -151,7 +151,7 @@
                             [sort]="state.sort" [filter]="state.filter" [sortable]="true"  [resizable]="true"
                             [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
                             filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)"
-                            (cellClick)="cellClickHandler($event)" class="group-Excl-grid grouping_grid_h grids-manager-table">
+                            (cellClick)="cellClickHandler($event)"  (filterChange)="filterChange($event)" class="group-Excl-grid grouping_grid_h grids-manager-table">
                     <kendo-grid-column title="Deal #" field="DC_ID" [headerClass]="{'headerClass':true}" [width]="120">
                     </kendo-grid-column>
                     <kendo-grid-column title="Rebate Type" field="REBT_TYPE" [headerClass]="{'headerClass':true}" hidden="hidden">
@@ -224,6 +224,10 @@
                             <span>
                                 {{getFormatedDim(dataItem, 'ECAP_PRICE','20___0','currency')}}
                             </span>
+                        </ng-template>
+                        <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService" let-dataItem>
+                            <dropDown-filter class="de-dropdwn-styl" [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value" operator="isnotnull"
+                                             [filterService]="filterService" [data]="Ecap_Filter_Array"></dropDown-filter>                            
                         </ng-template>
                     </kendo-grid-column>
                     <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}" [width]="120">
