@@ -39,6 +39,9 @@ export interface DialogData {
        }
       }
       else if (this.isCustDiv) {
+          if (this.value.length > 0) {
+              this.value = this.value.sort();
+          }
           result = this.value.join('/');
       }
       else{

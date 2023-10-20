@@ -2210,6 +2210,14 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
         });
         this.autoFillData = res;
         this.loadPTE();
+        if (this.contractData) {
+            if (this.contractData["CUST_ACCNT_DIV"] != undefined && this.contractData["CUST_ACCNT_DIV"] != null) {
+                let divisonArray = [];
+                divisonArray = this.contractData["CUST_ACCNT_DIV"].split("/");
+                divisonArray = divisonArray.sort();
+                this.contractData["CUST_ACCNT_DIV"] = divisonArray.join("/");
+            }
+        }
     }
 
     ngAfterViewInit() {
