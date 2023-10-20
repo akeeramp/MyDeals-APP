@@ -1,4 +1,4 @@
-﻿import { pluck, where, each } from 'underscore';
+﻿import { pluck, where, each, uniq } from 'underscore';
 import { Component, Input } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { publishTenderService } from './publishTender.service'
@@ -7,7 +7,7 @@ import { allDealsService } from "../allDeals/allDeals.service";
 import { TemplatesService } from "../../shared/services/templates.service";
 import { PTE_Config_Util } from "../PTEUtils/PTE_Config_util";
 import { DataStateChangeEvent, GridDataResult, PageSizeItem, CellClickEvent } from '@progress/kendo-angular-grid';
-import { distinct, process, State } from '@progress/kendo-data-query';
+import { CompositeFilterDescriptor, distinct, FilterDescriptor, process, State } from "@progress/kendo-data-query";
 import { MatDialog } from '@angular/material/dialog';
 import { dealProductsModalComponent } from '../ptModals/dealProductsModal/dealProductsModal.component';
 import { DE_Load_Util } from '../DEUtils/DE_Load_util';
@@ -38,6 +38,7 @@ export class publishTenderComponent {
     public isDataLoading: boolean = false;
     public exlusionList = [];
     public contractData: any = {};
+    public Ecap_Filter_Array: any = [];
     private wipOptions = {};
     private wipData = [];
     private gridData: GridDataResult;
@@ -75,6 +76,40 @@ export class publishTenderComponent {
             value: 100
         }
     ];
+
+    filterChange(filter: any): void {
+        this.gridData = process(this.wipData, this.state);
+        if (filter && filter.filters && filter.filters.length > 0) {
+            filter.filters.forEach((item: CompositeFilterDescriptor) => {
+                let arrayData = [];
+                if (item && item.filters && item.filters.length > 0) {
+                    item.filters.forEach((fltrItem: FilterDescriptor) => {
+                        let column = fltrItem.field.toString();
+
+                        each(this.wipData, (eachData) => {
+                            if (eachData[column] != undefined) {
+                                let keys = Object.keys(eachData[column]);
+                                let isexists = false;
+                                each(keys, key => {
+                                    if (fltrItem.value != undefined && fltrItem.value != null) {
+                                        if (fltrItem.value != undefined && fltrItem.value != null && eachData[column][key] == fltrItem.value.toString()) {
+                                            fltrItem.operator = "isnotnull";
+                                            isexists = true;
+                                        }
+                                    }
+                                })
+                                if (isexists)
+                                    arrayData.push(eachData);
+                            }
+                        })
+                        if (arrayData.length > 0) {
+                            this.gridData = process(arrayData, this.state);
+                        }
+                    })
+                }
+            });
+        }
+    }
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
@@ -269,6 +304,14 @@ export class publishTenderComponent {
                 }
             }
             this.wipData = data;
+
+            for (let d = 0; d < this.wipData.length; d++) {
+                const item = this.wipData[d];
+                if (item["ECAP_PRICE"] != undefined || item["ECAP_PRICE"] != null) {
+                    this.Ecap_Filter_Array.push({ Text: item["ECAP_PRICE"]["20___0"], Value: item["ECAP_PRICE"]["20___0"] });
+                }
+            }
+            this.Ecap_Filter_Array = uniq(this.Ecap_Filter_Array, 'Value');
             //maping the result with exlude deal
             each(this.wipData, itm => {Object.assign(itm, {isExclSel:false})});
             this.gridData = process(this.wipData, this.state);

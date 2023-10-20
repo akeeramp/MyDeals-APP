@@ -29,7 +29,7 @@
         <kendo-grid [navigable]="true" [data]="gridData" class="mpublishgrid" [loading]="isDataLoading" [pageSize]="state.take" [skip]="state.skip"
                     [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true"
                     [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" style="height: calc(100vh - 350px);"
-                    filterable="menu" (cellClick)="cellClickHandler($event)" (dataStateChange)="dataStateChange($event)">
+                    filterable="menu" (cellClick)="cellClickHandler($event)" (dataStateChange)="dataStateChange($event)" (filterChange)="filterChange($event)">
             <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of wipOptions.columns" field="{{column.field}}"
                                [hidden]="column.hidden" [width]="column.width+30" [style]="{'white-space': 'nowrap'}" [filterable]="column.filterable">
                 <ng-template kendoGridHeaderTemplate>
@@ -39,7 +39,8 @@
                     <deal-editor-cell [id]="column.field" [in_Field_Name]="column.field" [in_Template]="column.template" [in_Deal_Type]="OBJ_SET_TYPE_CD" [in_DataItem]="dataItem" [contract_Data]="contractData" [grid_Data]="gridData.data"></deal-editor-cell>
                 </ng-template>
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                    <multicheck-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" textField="Text" valueField="Value" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                    <multicheck-filter *ngIf="column.field != 'ECAP_PRICE'" [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" textField="Text" valueField="Value" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                    <dropDown-filter *ngIf="column.field == 'ECAP_PRICE'" class="de-dropdwn-styl" [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value" operator="isnotnull" [filterService]="filterService" [data]="Ecap_Filter_Array"></dropDown-filter>
                 </ng-template>
             </kendo-grid-column>
         </kendo-grid>
