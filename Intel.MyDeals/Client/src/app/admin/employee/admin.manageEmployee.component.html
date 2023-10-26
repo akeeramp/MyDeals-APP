@@ -1,6 +1,6 @@
 ﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="row">
-    <div class="col-md-12" style="padding-top: 20px !important; padding-left: 35px !important;">
+    <div class="col-md-12" style="padding-left: 30px; padding-top: 24px">
         <h3 style="font-size: 28px;">User Accounts Administration</h3>
     </div>
     <div class="col-md-6" style="text-align: left; padding-left: 35px; width: 100%;">
@@ -10,21 +10,21 @@
 <div class="row">
     <div class="col-md-12 kendo-grid-buttons">
         <kendo-grid class="ManageKendoGrid kAlignHeaders" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
-            [sort]="state.sort" [filter]="state.filter" [sortable]="true" [resizable]="true"
-            [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" filterable="menu"
-            (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)">
+                    [sort]="state.sort" [filter]="state.filter" [sortable]="true" [resizable]="true"
+                    [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" filterable="menu"
+                    (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)">
             <ng-template kendoGridToolbarTemplate>
                 <button (click)="clearFilter()" class="k-button clearButton buttonManageEmployee">
                     <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>
-                    CLEAR FILTERS 
-                </button>
-                <button [disabled]="isLoading" type="button" kendoGridExcelCommand icon="file-excel" class="excelDesigns">
-                    EXPORT TO EXCEL
+                    Clear Filters
                 </button>
                 <kendo-grid-spacer></kendo-grid-spacer>
+                <button [disabled]="isLoading" type="button" kendoGridExcelCommand icon="file-excel" class="excelDesigns">
+                    Export to Excel
+                </button>
                 <button (click)="refreshGrid()" class="k-button clearButton buttonManageEmployee">
                     <span class="k-icon k-i-reload k-icon-md"></span>
-                    Refresh 
+                    Refresh
                 </button>
             </ng-template>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="EMP_WWID" title="WWID" width="100px">
@@ -32,62 +32,70 @@
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="FULL_NAME" title="Name" width="100px">
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="USR_ROLE" title="Roles" width="100px"
-                [editable]="false">
+                               [editable]="false">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                    let-filterService="filterService">
+                             let-filterService="filterService">
                     <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                        [filterService]="filterService" [data]="Roles" [operator]="operator"></multicheck-filter>
+                                       [filterService]="filterService" [data]="Roles" [operator]="operator"></multicheck-filter>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="USR_GEOS" title="Geos" width="100px">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                    let-filterService="filterService">
+                             let-filterService="filterService">
                     <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                        [filterService]="filterService" [data]="Geos" [operator]="operator"></multicheck-filter>
+                                       [filterService]="filterService" [data]="Geos" [operator]="operator"></multicheck-filter>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="USR_CUST" title="Customers" width="250px">
                 <ng-template kendoGridCellTemplate let-dataItem>
                     <div [innerHTML]="dataItem.CUST_CONTENT" *ngIf="dataItem.CUST_CLICKABLE==true"
-                        (click)='openEmployeeCustomers(dataItem)'></div>
+                         (click)='openEmployeeCustomers(dataItem)'></div>
                     <div [innerHTML]="dataItem.CUST_CONTENT" *ngIf="dataItem.CUST_CLICKABLE==false"></div>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="USR_VERTS" title="Verticals" width="200px">
                 <ng-template kendoGridCellTemplate let-dataItem>
                     <div [innerHTML]="dataItem.VERT_CONTENT" *ngIf="dataItem.VERT_CLICKABLE==true"
-                        (click)='openEmployeeVerticals(dataItem)'></div>
+                         (click)='openEmployeeVerticals(dataItem)'></div>
                     <div [innerHTML]="dataItem.VERT_CONTENT" *ngIf="dataItem.VERT_CLICKABLE==false"></div>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="ACTV_IND" title="Active" width="100px"
-                editor="boolean" filter="boolean" class="alignCenterManageEmployee">
-                <ng-template kendoGridCellTemplate let-dataItem="dataItem"><i *ngIf="dataItem.ACTV_IND"
-                        class='intelicon-passed-completed-solid filter-col'></i></ng-template>
+                               editor="boolean" filter="boolean" class="alignCenterManageEmployee">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <i *ngIf="dataItem.ACTV_IND"
+                       class='intelicon-passed-completed-solid filter-col'></i>
+                </ng-template>
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="IS_SUPER" title="Super" width="100px"
-                editor="boolean" filter="boolean" class="alignCenterManageEmployee">
-                <ng-template kendoGridCellTemplate let-dataItem="dataItem"><i *ngIf="dataItem.IS_SUPER"
-                        class='intelicon-passed-completed-solid filter-col'></i></ng-template>
+                               editor="boolean" filter="boolean" class="alignCenterManageEmployee">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <i *ngIf="dataItem.IS_SUPER"
+                       class='intelicon-passed-completed-solid filter-col'></i>
+                </ng-template>
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="IS_DEVELOPER" title="Developer" width="100px"
-                editor="boolean" filter="boolean" class="alignCenterManageEmployee">
-                <ng-template kendoGridCellTemplate let-dataItem="dataItem"><i *ngIf="dataItem.IS_DEVELOPER"
-                        class='intelicon-passed-completed-solid filter-col'></i></ng-template>
+                               editor="boolean" filter="boolean" class="alignCenterManageEmployee">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <i *ngIf="dataItem.IS_DEVELOPER"
+                       class='intelicon-passed-completed-solid filter-col'></i>
+                </ng-template>
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="IS_TESTER" title="Tester" width="100px"
-                editor="boolean" filter="boolean" class="alignCenterManageEmployee">
-                <ng-template kendoGridCellTemplate let-dataItem="dataItem"><i *ngIf="dataItem.IS_TESTER"
-                        class='intelicon-passed-completed-solid filter-col'></i></ng-template>
+                               editor="boolean" filter="boolean" class="alignCenterManageEmployee">
+                <ng-template kendoGridCellTemplate let-dataItem="dataItem">
+                    <i *ngIf="dataItem.IS_TESTER"
+                       class='intelicon-passed-completed-solid filter-col'></i>
+                </ng-template>
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="LST_MOD_BY" title="Last Mod By" width="100px"
-                [filterable]="false" class="alignCenterManageEmployee"></kendo-grid-column>
+                               [filterable]="false" class="alignCenterManageEmployee"></kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="LST_MOD_DT" title="Last Mod Date"
-                width="100px" [filterable]="false" class="alignCenterManageEmployee"></kendo-grid-column>
-            <kendo-grid-excel fileName="MyDealsSearchResults.xlsx" [fetchData]="allData">
+                               width="100px" [filterable]="false" class="alignCenterManageEmployee"></kendo-grid-column>
+            <kendo-grid-excel fileName="MyDealsEmployees.xlsx" [fetchData]="allData">
                 <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
-                    title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
-                    [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
+                                          title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
+                                          [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
             </kendo-grid-excel>
         </kendo-grid>
         <div class="k-widget k-dialog k-window k-alert manageDialogEmployee" *ngIf="showKendoAlert">

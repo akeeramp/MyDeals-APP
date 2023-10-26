@@ -38,10 +38,6 @@ export class adminDealTypesComponent {
     };
     public pageSizes: PageSizeItem[] = [
         {
-            text: "10",
-            value: 10,
-        },
-        {
             text: "25",
             value: 25,
         },

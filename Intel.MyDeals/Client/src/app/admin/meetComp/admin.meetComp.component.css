@@ -56,17 +56,22 @@ h2.headMeetComps {
   white-space: nowrap !important;
 }
 
+kendo-grid.pro-meetComp {
+	height: calc(100vh - 280px) !important;
+	margin-right: 10px;
+}
+
 kendo-grid.pro-meetComp.k-widget.k-grid table tr th span.k-cell-inner .k-link {
-  width: 100%;
-  display: block;
-  overflow: hidden;
-  white-space: nowrap;
-  text-overflow: ellipsis;
-  font-size: 14px;
-  font-weight: 600;
-  text-transform: capitalize;
-  color: #1a3e6f;
-  font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
+	width: 100%;
+	display: block;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+	font-size: 14px;
+	font-weight: 600;
+	text-transform: capitalize;
+	color: #1a3e6f;
+	font-family: "Intel Clear", "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
 
 kendo-grid.pro-meetComp.k-widget.k-grid kendo-grid-group-panel .k-indicator-container {

@@ -1,9 +1,8 @@
 ﻿/* @import '../kendo_grid.css'; */
 
-.header_fix {
-    padding-top: 50px;
-    padding-left: 14px !important;
-    padding-bottom: 10px
+.k-grid.KendoProductAliasInfo {
+    height: calc(100vh - 200px) !important;
+    margin-right: 10px;
 }
 
 .grid_box_size {

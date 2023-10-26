@@ -1,6 +1,6 @@
-﻿.header-pos-fix {
-    padding-top: 45px !important;
-    padding-left: 15px !important
+﻿.k-grid.KendoWorkflowStagesInfo {
+    height: calc(100vh - 200px) !important;
+    margin-right: 10px;
 }
 
 .grid-lr-size {

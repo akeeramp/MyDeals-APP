@@ -34,7 +34,7 @@
 
 ﻿
 .k-grid.cm-height-table {
-    height: calc(100vh - 205px) !important;
+    height: calc(100vh - 200px) !important;
     width: calc(100% - -50px) !important;
     left: -24px !important
 }

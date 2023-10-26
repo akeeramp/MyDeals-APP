@@ -62,10 +62,6 @@ export class adminWorkflowStagesComponent {
     };
     public pageSizes: PageSizeItem[] = [
         {
-            text: "10",
-            value: 10,
-        },
-        {
             text: "25",
             value: 25,
         },
@@ -77,6 +73,10 @@ export class adminWorkflowStagesComponent {
             text: "100",
             value: 100,
         },
+        {
+            text: "All",
+            value: "all"
+        }
     ];
 
     public gridData: GridDataResult;

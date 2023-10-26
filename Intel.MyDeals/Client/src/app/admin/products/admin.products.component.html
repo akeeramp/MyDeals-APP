@@ -1,7 +1,7 @@
 ﻿<link href="/Client/src/app/admin/products/admin.products.component.css" rel="stylesheet" />
-<div class="row" style="display: contents;">
-    <div class="col-md-12 header_space">
-        <h3 class="header-positionfix">Products</h3>
+<div class="row">
+    <div class="col-md-12"  style="padding-left: 30px; padding-top: 24px">
+        <h3>Products</h3>
     </div>
     <div class="col-md-12">
         <div class="messageBox col-md-12" [ngClass]="{'mb-warning': true}">
@@ -9,15 +9,18 @@
         </div>
     </div>
     <div class="col-md-12 kendo-grid-buttons box_size">
-        <kendo-grid class="changedragcolor kAlignHeaders" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" 
+        <kendo-grid class="KendoProductsInfo changedragcolor kAlignHeaders" [data]="gridData" [loading]="isLoading" [pageSize]="state.take"
                     [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                     [pageable]="{ type:type, pageSizes: pageSizes, info:info, refresh:true }" [groupable]="true"
                     [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" id="adminproduct">
             <ng-template kendoGridToolbarTemplate>
                 <button (click)="clearFilter()" class="k-button clearButton">
-                    <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS
+                    <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filters
                 </button>
                 <kendo-grid-spacer></kendo-grid-spacer>
+                <button type="button" kendoGridExcelCommand>
+                    <span class="k-icon k-i-file-excel k-icon-md"></span>Export to Excel
+                </button>
                 <button (click)="refreshGrid()" class="k-button clearButton">
                     <span class="k-icon k-i-reload k-icon-md"></span>Refresh
                 </button>
@@ -47,6 +50,7 @@
                     </div>
                 </ng-template>
             </kendo-grid-column>
+            <kendo-grid-excel fileName="MyDealsProducts.xlsx"></kendo-grid-excel>
         </kendo-grid>
     </div>
 </div>

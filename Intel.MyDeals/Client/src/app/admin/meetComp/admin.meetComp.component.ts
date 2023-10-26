@@ -6,7 +6,6 @@ import { ThemePalette } from "@angular/material/core";
 import { DatePipe } from "@angular/common";
 import { MatDialog } from '@angular/material/dialog';
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
-
 import { logger } from "../../shared/logger/logger";
 import { meetCompService } from './admin.meetComp.service';
 import { BulkUploadMeetCompModalComponent } from './admin.bulkUploadMeetCompModal.component';
@@ -47,7 +46,7 @@ export class MeetCompComponent {
     private bulkUploadModal: boolean = false;
     private state: State = {
         skip: 0,
-        take: 10,
+        take: 25,
         group: [],
         filter: {
             logic: "and",
@@ -55,10 +54,11 @@ export class MeetCompComponent {
         }
     }
     private readonly pageSizes: PageSizeItem[] = [
-        { text: "10", value: 10 },
         { text: "25", value: 25 },
         { text: "50", value: 50 },
-        { text: "100", value: 100 }
+        { text: "100", value: 100 },
+        { text: "250", value: 250 },
+        { text: "1000", value: 1000 }
     ];
 
     public filterSettings: DropDownFilterSettings = {

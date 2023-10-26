@@ -9,6 +9,7 @@ import { ThemePalette } from '@angular/material/core';
 @Component({
     selector: "admin-geo",
     templateUrl: "Client/src/app/admin/geo/admin.geo.component.html",
+    styleUrls: ['Client/src/app/admin/geo/admin.geo.component.css']
 })
 
 export class geoComponent {
@@ -32,10 +33,6 @@ export class geoComponent {
     };
     private pageSizes: PageSizeItem[] = [
         {
-            text: "10",
-            value: 10
-        },
-        {
             text: "25",
             value: 25
         },
@@ -46,6 +43,14 @@ export class geoComponent {
         {
             text: "100",
             value: 100
+        },
+        {
+            text: "250",
+            value: 250
+        },
+        {
+            text: "All",
+            value: "all"
         }
     ];
 

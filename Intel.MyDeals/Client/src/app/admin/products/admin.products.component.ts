@@ -8,7 +8,7 @@ import { ThemePalette } from '@angular/material/core';
 @Component({
     selector: 'admin-products',
     templateUrl: 'Client/src/app/admin/products/admin.products.component.html',
-    // styleUrls: ['Client/src/app/admin/products/admin.products.component.css']
+    styleUrls: ['Client/src/app/admin/products/admin.products.component.css']
 })
 export class adminProductsComponent {
     constructor(private productsSvc: productsService, private loggerSvc: logger) { }
@@ -30,10 +30,11 @@ export class adminProductsComponent {
         },
     };
     private pageSizes: PageSizeItem[] = [
-        { text: "10", value: 10 },
         { text: "25", value: 25 },
         { text: "50", value: 50 },
-        { text: "100", value: 100 }
+        { text: "100", value: 100 },
+        { text: "250", value: 250 },
+        { text: "1000", value: 1000 }
     ];
 
     loadProducts() {

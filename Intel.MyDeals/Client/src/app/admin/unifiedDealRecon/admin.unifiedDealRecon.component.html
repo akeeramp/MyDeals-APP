@@ -1,6 +1,6 @@
 ﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" /> 
 <div class="row">
-    <div class="col-md-9 k-header-alignment padding-top-20">
+    <div class="col-md-9" style="padding-left: 30px; padding-top: 24px">
         <h3>Unified Deal Reconciliation</h3>
     </div>
     <div class="col-md-3">
@@ -17,11 +17,14 @@
                     (edit)="editHandler($event)" (cancel)="cancelHandler($event)" (save)="saveHandler($event)">
             <ng-template kendoGridToolbarTemplate>
                 <button (click)="clearFilter()" class="k-button clearButton filter-clear-text">
-                    <span class="k-icon intelicon-cancel-filter-solid k-icon-md  k-family unifie-clear-filter"></span><span class="unifie-clear-text">CLEAR FILTERS</span>
+                    <span class="k-icon intelicon-cancel-filter-solid k-icon-md  k-family unifie-clear-filter"></span><span class="unifie-clear-text">Clear Filters</span>
                 </button>
                 <kendo-grid-spacer></kendo-grid-spacer>
-                <button (click)="refreshGrid()" class="k-button clearButton filter-clear-text">
-                    <span class="k-icon k-i-reload refresh-clear-filter k-icon-md"></span><span class="unifie-clear-text">Refresh</span>
+                <button type="button" kendoGridExcelCommand>
+                    <span class="k-icon k-i-file-excel k-icon-md"></span>Export to Excel
+                </button>
+                <button (click)="refreshGrid()" class="k-button clearButton">
+                    <span class="k-icon k-i-reload k-icon-md"></span>Refresh
                 </button>
             </ng-template>
             <kendo-grid-command-column width="100" *ngIf="editAccess" [headerClass]="{'headerClass':true}" [columnMenu]="false">
@@ -90,6 +93,7 @@
                     <kendo-textbox [formControl]="formGroup.get('EMP_WWID')" [clearButton]="true"></kendo-textbox>
                 </ng-template>
             </kendo-grid-column>
+            <kendo-grid-excel fileName="MyDealsUnifiedRecon.xlsx"></kendo-grid-excel>
         </kendo-grid>
     </div>
 </div>

@@ -4,3 +4,8 @@ kendo-popup:has(kendo-grid-columnmenu-filter div.k-columnmenu-item[aria-expanded
     top: unset !important;
     bottom: 10px !important;
 }
+
+.k-grid.KendoUnifiedCustomerInfo {
+    height: calc(100vh - 200px) !important;
+    margin-right: 10px;
+}

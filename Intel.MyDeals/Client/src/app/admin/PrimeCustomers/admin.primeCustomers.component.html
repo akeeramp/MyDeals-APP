@@ -1,13 +1,13 @@
 ﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <link href="/Client/src/app/admin/PrimeCustomers/admin.primeCustomers.component.css" rel="stylesheet" />
 <div class="row">
-    <div class="col-md-12 k-header-alignment padding-top-20">
+    <div class="col-md-12" style="padding-left: 30px; padding-top: 24px">
         <h3>Unified Customer Admin</h3>
     </div>
 </div>
 <div class="row">
-    <div class="col-md-12 kendo-grid-buttons padding-right-35">
-        <kendo-grid class="kAlignHeaders commandHeader" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
+    <div class="col-md-12 kendo-grid-buttons admin-table-header">
+        <kendo-grid class="KendoUnifiedCustomerInfo kAlignHeaders commandHeader" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                     [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
                     filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)"
@@ -16,12 +16,17 @@
             <ng-template kendoGridToolbarTemplate>
                 <button kendoGridAddCommand class="k-button addButton"
                         *ngIf="editAccess">
-                    <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RECORD
+                    <span class="k-icon k-i-plus-outline k-icon-md"></span>Add New Record
                 </button><button (click)="clearFilter()" class="k-button clearButton">
-                    <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS
+                    <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filters
                 </button>
                 <kendo-grid-spacer></kendo-grid-spacer>
-                <button (click)="refreshGrid()" class="k-button clearButton"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
+                <button type="button" kendoGridExcelCommand>
+                    <span class="k-icon k-i-file-excel k-icon-md"></span>Export to Excel
+                </button>
+                <button (click)="refreshGrid()" class="k-button clearButton">
+                    <span class="k-icon k-i-reload k-icon-md"></span>Refresh
+                </button>
             </ng-template>
             <kendo-grid-command-column title="Commands" width="60" *ngIf="editAccess"
                                        [headerClass]="{'headerClass':true}" [columnMenu]="false">
@@ -130,6 +135,7 @@
                                        [formControl]="formGroup.get('RPL_STS_CD')" style="width: 170px;" class="rpl_statusMultiselect"></kendo-multiselect>
                 </ng-template>
             </kendo-grid-column>
+            <kendo-grid-excel fileName="MyDealsUnifiedCustomers.xlsx"></kendo-grid-excel>
         </kendo-grid>
         <kendo-dialog *ngIf="isDialogVisible" (close)="saveCancel()" class="deactivatePopUp">
             <p class="kendo-dialog-message" style="white-space: pre-wrap; text-align: left; margin: 15px;">{{errorMessage}}</p>

@@ -11,6 +11,7 @@ import { sortBy, uniq, pluck } from 'underscore';
 @Component({
     selector: 'admin-prime-customers',
     templateUrl: 'Client/src/app/admin/PrimeCustomers/admin.primeCustomers.component.html',
+    styleUrls: ['Client/src/app/admin/PrimeCustomers/admin.primeCustomers.component.css']
 })
 export class adminPrimeCustomersComponent {
     constructor(private primeCustSvc: primeCustomerService, private loggerSvc: logger) { }
@@ -59,10 +60,11 @@ export class adminPrimeCustomersComponent {
         },
     };
     private pageSizes: PageSizeItem[] = [
-        { text: "10", value: 10 },
         { text: "25", value: 25 },
         { text: "50", value: 50 },
-        { text: "100", value: 100 }
+        { text: "100", value: 100 },
+        { text: "250", value: 250 },
+        { text: "1000", value: 1000 }
     ];
 
     distinctPrimitive(fieldName: string): any {

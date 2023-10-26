@@ -8,6 +8,16 @@
     background-color: #0071c5
 }
 
+.k-grid.customerVendorsTable {
+    height: calc(100vh - 200px) !important;
+    margin-right: 10px;
+}
+
+.k-grid.customerDropdownsTable {
+    height: calc(100vh - 180px) !important;
+    margin-right: 10px;
+}
+
 #command-icon-first {
     background-color: unset;
     color: #424141;

@@ -42,10 +42,6 @@ export class adminFunFactComponent {
     };
     public pageSizes: PageSizeItem[] = [
         {
-            text: "10",
-            value: 10
-        },
-        {
             text: "25",
             value: 25
         },
@@ -56,6 +52,14 @@ export class adminFunFactComponent {
         {
             text: "100",
             value: 100
+        },
+        {
+            text: "250",
+            value: 250
+        },
+        {
+            text: "All",
+            value: "all"
         }
     ];
 

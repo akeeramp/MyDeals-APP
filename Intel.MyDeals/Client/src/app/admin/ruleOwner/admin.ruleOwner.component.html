@@ -11,9 +11,12 @@
                 filterable="menu" [navigable]="true" [columnMenu]="true" (dataStateChange)="dataStateChange($event)" (edit)="editHandler($event)" (cancel)="cancelHandler($event)" (save)="saveHandler($event)" class="kAlignHeaders" style=" height: calc(100vh - 230px);">
         <ng-template kendoGridToolbarTemplate>
             <button (click)="clearFilter()" class="k-button clearButton">
-                <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS
+                <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filters
             </button>
             <kendo-grid-spacer></kendo-grid-spacer>
+            <button type="button" kendoGridExcelCommand>
+                <span class="k-icon k-i-file-excel k-icon-md"></span>Export to Excel
+            </button>
             <button (click)="refreshGrid()" class="k-button clearButton"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
         </ng-template>
         <kendo-grid-command-column title="" width="70" [headerClass]="{'headerClass':true}" [columnMenu]="false">
@@ -43,5 +46,6 @@
                 </kendo-combobox>
             </ng-template>
         </kendo-grid-column>
+        <kendo-grid-excel fileName="MyDealsRulesOwnership.xlsx"></kendo-grid-excel>
     </kendo-grid>
 </div>

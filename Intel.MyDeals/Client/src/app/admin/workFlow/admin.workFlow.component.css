@@ -50,3 +50,8 @@
 .workFlowGrid button#command-icon {
     box-shadow: none !important;
 }
+
+.k-grid.workFlowGrid {
+    height: calc(100vh - 200px) !important;
+    margin-right: 10px;
+}

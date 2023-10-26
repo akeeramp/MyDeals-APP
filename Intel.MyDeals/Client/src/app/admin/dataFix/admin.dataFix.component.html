@@ -1,6 +1,6 @@
 ﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="row mainDataFix" style="display: contents;">
-    <div class="col-md-12 dataFixHeaders">
+    <div class="col-md-12" style="padding-left: 15px; padding-top: 10px">
         <h3 class="text-alignfix">Data Fix</h3>
     </div>
     <div *ngIf="!accessAllowed" class="col-md-12">
@@ -17,16 +17,20 @@
                 <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                             [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
-                            [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" class="kAlignHeaders">
+                            [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" 
+                            class="KendoDQInfo changedragcolor kAlignHeaders">
                     <ng-template kendoGridToolbarTemplate>
                         <button kendoGridAddCommand class="k-button addButton"
                                 (click)="addNewFix()">
-                            <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW DATA FIX
+                            <span class="k-icon k-i-plus-outline k-icon-md"></span>Add New Data Fix
                         </button><button kendoGridAddCommand class="k-button addButton" (click)="addNewFixExpert()">
-                            <span class="k-icon k-i-plus-outline k-icon-md"></span>EXPERT MODE
+                            <span class="k-icon k-i-plus-outline k-icon-md"></span>Expert Mode
                         </button>
-                        <kendo-grid-spacer></kendo-grid-spacer><button (click)="refreshGrid()"
-                                                                       class="k-button clearButton">
+                        <kendo-grid-spacer></kendo-grid-spacer>
+                        <button type="button" kendoGridExcelCommand>
+                            <span class="k-icon k-i-file-excel k-icon-md"></span>Export to Excel
+                        </button>
+                        <button (click)="refreshGrid()" class="k-button clearButton">
                             <span class="k-icon k-i-reload k-icon-md"></span>Refresh
                         </button>
                     </ng-template>
@@ -39,6 +43,7 @@
                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="INCDN_STS" title="Incident Status"></kendo-grid-column>
                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="CRE_EMP_NM" title="Created By"></kendo-grid-column>
                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="CRE_DTM" title="Created On"></kendo-grid-column>
+                    <kendo-grid-excel fileName="MyDealsDataFixes.xlsx"></kendo-grid-excel>
                 </kendo-grid>
             </div>
             <div *ngIf="IsAddMode">

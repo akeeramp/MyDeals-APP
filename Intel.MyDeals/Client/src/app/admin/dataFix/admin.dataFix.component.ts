@@ -46,10 +46,11 @@ export class adminDataFixComponent {
         },
     };
     public pageSizes: PageSizeItem[] = [
-        { text: "10", value: 10, },
         { text: "25", value: 25, },
         { text: "50", value: 50, },
         { text: "100", value: 100, },
+        { text: "250", value: 250, },
+        { text: "1000", value: 1000, }
     ];
 
     public gridData: GridDataResult;

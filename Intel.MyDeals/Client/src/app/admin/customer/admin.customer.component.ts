@@ -9,6 +9,7 @@ import { ThemePalette } from '@angular/material/core';
 @Component({
     selector: "admin-customer",
     templateUrl: "Client/src/app/admin/customer/admin.customer.component.html",
+    styleUrls: ['Client/src/app/admin/customer/admin.customer.component.css']
 })
 
 export class adminCustomerComponent {
@@ -32,10 +33,6 @@ export class adminCustomerComponent {
     };
     private pageSizes: PageSizeItem[] = [
         {
-            text: "10",
-            value: 10
-        },
-        {
             text: "25",
             value: 25
         },
@@ -46,6 +43,14 @@ export class adminCustomerComponent {
         {
             text: "100",
             value: 100
+        },
+        {
+            text: "250",
+            value: 250
+        },
+        {
+            text: "All",
+            value: "all",
         }
     ];
 

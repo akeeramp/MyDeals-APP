@@ -1,23 +1,14 @@
 ﻿@import '../kendo_grid.css';
 
+.k-grid.KendoProductsInfo {
+    height: calc(100vh - 250px) !important;
+    margin-right: 10px;
+}
+
 .box_size {
     padding-left: 14px !important;
     padding-right: 5px !important;
     padding-top: 0 !important
-}
-
-.header_space {
-    padding-left: 15px !important;
-    padding-top: 20px !important;
-}
-
-.header-positionfix {
-    margin-bottom: 0;
-    line-height: 1.1;
-}
-
-kendo-grid#adminproduct {
-    height: calc(100vh - 230px);
 }
 
 #adminproduct .k-indicator-container .k-link {

@@ -81,6 +81,10 @@ h3.ruleOneHeading a {
     padding-top: 2px !important
 }
 
+.k-grid.ruleKendoGrid {
+    height: calc(100vh - 200px) !important;
+    margin-right: 10px;
+}
 .ruleKendoGrid td {
     vertical-align: top !important
 }

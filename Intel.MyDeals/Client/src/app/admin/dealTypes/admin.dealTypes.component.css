@@ -3,3 +3,8 @@
     padding-right: 25px !important;
     width: 100% !important;
 }
+
+.k-grid.KendoDealTypeInfo {
+    height: calc(100vh - 220px) !important;
+    margin-right: 10px;
+}

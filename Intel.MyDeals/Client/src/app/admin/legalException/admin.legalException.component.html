@@ -13,22 +13,22 @@
 
             <ng-template kendoGridToolbarTemplate>
                 <button *ngIf="editAccess" kendoButton (click)="openCreateExceptionDialog()" class="k-button k-button-icontext legalheader-align" style="border:unset !important;">
-                    <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RECORD
+                    <span class="k-icon k-i-plus-outline k-icon-md"></span>Add New Record
                 </button>
                 <button (click)="clearFilter()" class="k-button k-button-icontext legalheader-align" style="border:unset !important;">
-                    <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTER
+                    <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filter
                 </button>
                 <button (click)="openCompareExceptionDialog()" class="k-button k-button-icontext legalheader-align" style="border:unset !important;">
-                    <span class="k-icon intelicon-related k-icon-md k-family"></span>COMPARE
+                    <span class="k-icon intelicon-related k-icon-md k-family"></span>Compare
                 </button>
                 <button *ngIf="editAccess" (click)="openCreateAmendmentExceptionDialog()" class="k-button k-button-icontext legalheader-align" style="border:unset !important;">
-                    <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD AMENDMENT
+                    <span class="k-icon k-i-plus-outline k-icon-md"></span>Add Amendment
                 </button>
                 <button *ngIf="editAccess" (click)="download()" class="k-button k-button-icontext legalheader-align" style="border:unset !important;">
-                    <span class="intelicon-ms-excel-outlined k-icon-md k-family"></span>DOWNLOAD
+                    <span class="intelicon-ms-excel-outlined k-icon-md k-family"></span>Export to Excel
                 </button>
                 <button (click)="refreshGrid()" class="k-button k-button-icontext legalheader-align" style="border:unset !important;">
-                    <span class="k-icon k-i-reload k-icon-md"></span>REFRESH
+                    <span class="k-icon k-i-reload k-icon-md"></span>Refresh
                 </button>
                 <button (click)="Hideshow()" class="k-button k-button-icontext legalheader-align show-float-icon" style="border:unset !important;">
                     <span class="intelicon-show-results-outlined" title="Show Additional Column"></span>

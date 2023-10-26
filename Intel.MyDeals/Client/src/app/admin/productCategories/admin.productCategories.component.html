@@ -1,9 +1,6 @@
 ﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="row">
-	<div class="col-md-12" style="height: 20px"></div>
-</div>
-<div class="row" style="display: contents;">
-	<div class="col-md-12 headProductCategories" style="padding-left: 15px;">
+	<div class="col-md-12" style="padding-left: 30px; padding-top: 24px">
 		<h3 class="heading-alignOnproduct">Product Vertical Rules</h3>
 	</div>
 	<div class="col-md-12">
@@ -12,7 +9,7 @@
 			Please be aware of potential impacts to live deals & downstream partners before making changes to existing data.
 		</div>
 	</div>
-	<div class="col-md-12 kendo-grid-buttons spread_size">
+	<div class="col-md-12 kendo-grid-buttons">
 		
 		<kendo-grid class="tt-product-cat legal-exception-design kAlignHeaders" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
 					[sort]="state.sort" [filter]="state.filter" [sortable]="true"
@@ -21,9 +18,12 @@
 					(cancel)="cancelHandler($event)" (save)="saveHandler($event)" [resizable]="true">
 			<ng-template kendoGridToolbarTemplate>
 				<button (click)="clearFilter()" class="k-button clearButton">
-					<span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS
+					<span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filters
 				</button>
 				<kendo-grid-spacer></kendo-grid-spacer>
+				<button type="button" kendoGridExcelCommand>
+					<span class="k-icon k-i-file-excel k-icon-md"></span>Export to Excel
+				</button>
 				<button (click)="refreshGrid()" class="k-button clearButton">
 					<span class="k-icon k-i-reload k-icon-md"></span>Refresh
 				</button>
@@ -100,7 +100,7 @@
 				</ng-template>
 				<ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
 					<kendo-textbox ngbTooltip="Deal Product Type is required when row is active." (mouseover)="openTooltip()"
-					(mouseout)="closeTooltip()"
+								   (mouseout)="closeTooltip()"
 								   tooltipClass="toolTipReq redColorTooltip" placement="bottom" container="body" triggers="manual"
 								   #dealPdctTooltip="ngbTooltip" [autoClose]="false" [formControl]="formGroup.get('DEAL_PRD_TYPE')"
 								   [clearButton]="true"></kendo-textbox>
@@ -114,7 +114,7 @@
 				</ng-template>
 				<ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
 					<kendo-textbox ngbTooltip="Product Vertical is required when row is active." (mouseover)="productVerticalTooltipOpen()"
-					(mouseout)="productVerticalTooltipClose()"
+								   (mouseout)="productVerticalTooltipClose()"
 								   tooltipClass="toolTipReq redColorTooltip" placement="bottom" container="body" triggers="manual"
 								   #pdctVerticalTooltip="ngbTooltip" [autoClose]="false"
 								   [formControl]="formGroup.get('PRD_CAT_NM')" [clearButton]="true"></kendo-textbox>
@@ -139,6 +139,7 @@
 					{{dataItem.CHG_DTM | date: 'M/d/yyyy h:mm a'}}
 				</ng-template>
 			</kendo-grid-column>
+			<kendo-grid-excel fileName="MyDealsProductVerticals.xlsx"></kendo-grid-excel>
 		</kendo-grid>
 	</div>
 </div>

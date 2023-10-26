@@ -1,6 +1,6 @@
 ﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <loading-panel-angular [show]="isBusy" [header]="'Meet Comp...'" [isShowFunFact]="false" [description]="'Please wait we are fetching Meet Comp Data...'" [msgType]="'Info'" class="meetCompLoading"></loading-panel-angular>
-<div class="col-md-12">
+<div class="col-md-12" style="padding-top: 10px">
     <div class="col-md-9">
         <h2 class="headMeetComps">Meet Comp</h2>
     </div>
@@ -33,13 +33,20 @@
     <button class="btn btn-sm btn-skyblue-sm fl" (click)="fetchMeetCompData()" type="button" title="Get Meet Comp" style="margin-left: 20px; background-color: #e4e7eb;"><i class="fa fa-refresh fa-fw iconRunPct"
         style="font-size: 20px"></i></button>
 </div>
-<div class="col-md-12 kendo-grid-buttons MeetCompGridsAll" style="padding-top: 15px !important;">
+<div class="col-md-12 MeetCompGridsAll" style="padding-top: 15px !important;">
     <kendo-grid [data]="gridData" filterable="menu" [scrollable]="true" [sortable]="true" [navigable]="true" [columnMenu]="{sort:true}" [resizable]="true" [reorderable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter"
-        [group]="state.group" [groupable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" class="pro-meetComp kAlignHeaders" (dataStateChange)="dataStateChange($event)" style="height: calc(90vh - 240px);">
-        <ng-template kendoGridToolbarTemplate><button (click)="clearFilter()" class="k-button clearButton"><span
-                     class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS </button>
+                [group]="state.group" [groupable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" class="pro-meetComp kAlignHeaders" (dataStateChange)="dataStateChange($event)" style="height: calc(90vh - 240px);">
+        <ng-template kendoGridToolbarTemplate>
+            <button (click)="clearFilter()" class="k-button clearButton">
+                <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filters
+            </button>
             <kendo-grid-spacer></kendo-grid-spacer>
-            <button (click)="refreshGrid()" class="k-button clearButton"><span class="k-icon k-i-reload k-icon-md"></span>Refresh </button>
+            <button type="button" kendoGridExcelCommand>
+                <span class="k-icon k-i-file-excel k-icon-md"></span>Export to Excel
+            </button>
+            <button (click)="refreshGrid()" class="k-button clearButton">
+                <span class="k-icon k-i-reload k-icon-md"></span>Refresh
+            </button>
         </ng-template>
         <kendo-grid-column [headerClass]="{'headerClass':true}" field="CUST_NM" title="Customer">
             <ng-template kendoGridHeaderTemplate let-column let-columnIndex="columnIndex">
@@ -129,5 +136,6 @@
                 <kendo-grid-date-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false" operator="eq"></kendo-grid-date-filter-menu>
             </ng-template>
         </kendo-grid-column>
+        <kendo-grid-excel fileName="MyDealsMeetComp.xlsx"></kendo-grid-excel>
     </kendo-grid>
 </div>

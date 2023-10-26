@@ -474,6 +474,7 @@
     <Content Include="Client\Images\security.png" />
     <Content Include="Client\Images\Timeout.png" />
     <Content Include="Client\Images\wires.png" />
+    <Content Include="Client\src\app\admin\customer\admin.customer.component.css" />
     <Content Include="Client\src\app\app-root.component.css" />
     <Content Include="Client\src\app\app-root.component.html" />
     <Content Include="Client\src\app\admin\batchTiming\admin.batchTiming.component.css" />

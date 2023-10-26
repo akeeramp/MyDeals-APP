@@ -1,6 +1,6 @@
 ﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="form-inline">
-    <div class="col-md-12 k-header-alignment k-allign header-align">
+    <div class="col-md-12" style="padding-left: 30px; padding-top: 24px">
         <h3 class="remove-space-btw">Legal Classification</h3>
     </div>
     <p class="paragraph-align">Use the tool below to control what products will be cost tested and at what level.</p>
@@ -23,14 +23,17 @@
                                 <span class="intelicon-plus-outlined"></span>&nbsp;Add new record
                             </button>
                             <button class="btn btn-primary small k-custom-edit k-grid-customEdit btnPrimers"
-                                             [disabled]="isButtonDisabled" (click)="updateItem()">
+                                    [disabled]="isButtonDisabled" (click)="updateItem()">
                                 <span class="intelicon-compose"></span>Edit
                             </button>
                             <button class="btn btn-primary small k-custom-delete k-grid-customDelete btnPrimers"
-                                             [disabled]="isButtonDisabled" (click)="deleteItemConfirmation()">
+                                    [disabled]="isButtonDisabled" (click)="deleteItemConfirmation()">
                                 <span class="intelicon-close-max"></span>Delete
                             </button>
                             <kendo-grid-spacer></kendo-grid-spacer>
+                            <button type="button" kendoGridExcelCommand>
+                                <span class="k-icon k-i-file-excel k-icon-md"></span>Export to Excel
+                            </button>
                             <button (click)="refreshGrid()" class="k-button clearButton">
                                 <span class="k-icon k-i-reload k-icon-md"></span>Refresh
                             </button>
@@ -100,6 +103,7 @@
                                 </kendo-textbox>
                             </ng-template>
                         </kendo-grid-column>
+                        <kendo-grid-excel fileName="MyDealsLegalClassifications.xlsx"></kendo-grid-excel>
                     </kendo-grid>
                     <kendo-dialog *ngIf="isDeleteClick" id="admin-legal-popup">
                         <h3 class="kendo-dialog-message">Delete confirmation</h3>

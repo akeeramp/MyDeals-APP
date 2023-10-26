@@ -1,21 +1,9 @@
-﻿/* @import '../kendo_grid.css'; */
-
-/*.headProductCategories {
-    padding-left: 14px;
-    margin-top: -10px
-}*/
-
-.kendo-grid-buttons.spread_size {
-    padding-left: 14px !important;
-    padding-right: 5px !important;
-    padding-top: 0 !important
-}
-
-.heading-alignOnproduct {
+﻿.heading-alignOnproduct {
     margin-bottom: 0;
     line-height: 1.1
 }
 
 .tt-product-cat {
-    height: calc(100vh - 220px) !important
+    height: calc(100vh - 240px) !important;
+    margin-right: 10px;
 }

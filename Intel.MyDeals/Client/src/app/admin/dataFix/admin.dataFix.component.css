@@ -1,4 +1,9 @@
-﻿﻿.col-md-1.control-label-custom {
+﻿.k-grid.KendoDQInfo {
+    height: calc(100vh - 220px) !important;
+    margin-right: 10px;
+}
+
+﻿.col-md-1.control-label-custom {
     text-align: right;
     padding-right: 14px
 }

@@ -23,16 +23,16 @@
                 [ngClass]="isTextIncrease? 'opUiContainer md k-grid k-widget' : 'opUiContainer sm k-grid k-widget'">
         <ng-template kendoGridToolbarTemplate>
             <button *ngIf="toolKitHidden == false" [disabled]="isLoading" kendoGridAddCommand class="k-button addButton" (click)="addNewRule()">
-                <span class="k-icon k-i-plus-outline k-icon-md"></span><span class="simulate-title-sty">ADD NEW RULE</span>
+                <span class="k-icon k-i-plus-outline k-icon-md"></span><span class="simulate-title-sty">Add New Rule</span>
             </button>
             <button *ngIf="toolKitHidden == false && rid != 0" [disabled]="isLoading" class="k-button addButton" (click)="removeFilter()">
-                <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>REMOVE FILTER
+                <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Remove Filter
             </button>
             <button *ngIf="toolKitHidden == false" [disabled]="isLoading" class="k-button" kendoGridExcelCommand icon="file-excel">
-                <span class="simulate-title-sty">EXPORT TO EXCEL</span>
+                <span class="simulate-title-sty">Export to Excel</span>
             </button>
             <button class="k-button" [disabled]="isLoading" (click)="openMessage('test')">
-                <span class="intelicon-lab" style="margin:1px"></span><span class="simulate-title-sty">SIMULATE RUNNING RULES</span>
+                <span class="intelicon-lab" style="margin:1px"></span><span class="simulate-title-sty">Simulate Running Rules</span>
             </button>
             <kendo-grid-spacer></kendo-grid-spacer>
             <button [disabled]="isLoading" class="k-button buttonRuleComp btnMargin">
