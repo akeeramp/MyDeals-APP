@@ -230,7 +230,12 @@ export class PTE_CellChange_Util {
                 let cellVal = PTE_CellChange_Util.getValueForCurrentRow(updateRows, operation, row, val.prop, cellItem);
                 currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, cellVal, 'no-edit');
                 updateRows.push(currentString.split(','));
-            } else {
+            } 
+            else if (val.prop == 'REBATE_OA_MAX_AMT' && curPricingTable.OBJ_SET_TYPE_CD == "FLEX" && curPricingTable.FLEX_ROW_TYPE == "Draining") {
+                    let colSPIdx = findWhere(this.hotTable.getCellMetaAtRow(row), { prop: 'REBATE_OA_MAX_AMT' }).col;
+                    this.hotTable.setCellMeta(row, colSPIdx, 'className', 'readonly-cell');
+            }
+            else {
                 if (val.prop) {
                     //this will be autofill defaults value 
                     let cellVal = curPricingTable[`${val.prop}`] ? curPricingTable[`${val.prop}`] : '';

@@ -1,7 +1,7 @@
 import { Component, Input, ViewEncapsulation } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent } from "@progress/kendo-angular-grid";
-import { process, State, distinct } from "@progress/kendo-data-query";
+import { process, State, distinct, CompositeFilterDescriptor, FilterDescriptor } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
@@ -12,7 +12,7 @@ import { MatDialog } from "@angular/material/dialog";
 import { GridUtil } from "../grid.util";
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
 import { dealProductsModalComponent } from "../ptModals/dealProductsModal/dealProductsModal.component";
-import { each } from 'underscore';
+import { each, uniq } from 'underscore';
 import { PTE_Common_Util } from "../PTEUtils/PTE_Common_util";
 import { MomentService } from "../../shared/moment/moment.service";
 
@@ -55,6 +55,7 @@ export class allDealsComponent {
     private curPricingTable: any = {};
     private dealType: string;
     wrapEnabled = false;
+    Ecap_Filter_Array :any =[];
     public dealTypes: any = [
         { dealType: "ECAP", name: "ECAP" },
         { dealType: "FLEX", name: "FLEX" },
@@ -248,7 +249,11 @@ export class allDealsComponent {
             this.displayDealTypes();
             this.gridResult.forEach((item) => {
                 item.CNTRCT_OBJ_SID = item.CNTRCT_OBJ_SID != undefined ? item.CNTRCT_OBJ_SID : '';
-            })
+                if (item["ECAP_PRICE"] != undefined || item["ECAP_PRICE"] != null) {
+                    this.Ecap_Filter_Array.push({ Text: item["ECAP_PRICE"]["20___0"], Value: item["ECAP_PRICE"]["20___0"] });
+                }
+            });
+            this.Ecap_Filter_Array=uniq(this.Ecap_Filter_Array,'Value');
             this.gridData = process(this.gridResult, this.state);
             this.loadDealTypestab(data);
             setTimeout(()=>{
@@ -265,10 +270,8 @@ export class allDealsComponent {
         this.isLoadingKendo = true;
         this.gridData.data = [];
         this.state = state;
-        setTimeout(() => {
-            this.gridData = process(this.gridResult, this.state);
-            this.isLoadingKendo = false;
-        }, 0);
+        this.gridData = process(this.gridResult, this.state);
+        this.isLoadingKendo = false;
     }
     clearFilter() {
         this.state.filter = {
@@ -418,6 +421,39 @@ export class allDealsComponent {
             this.gridData = process(deals, this.state);
             this.isLoadingKendo = false;
         }, 0);
+    }
+    filterChange(filter: any): void {
+        this.gridData = process(this.gridResult, this.state);
+        if (filter && filter.filters && filter.filters.length > 0) {
+            filter.filters.forEach((item: CompositeFilterDescriptor) => {
+                let arrayData = [];
+                if (item && item.filters && item.filters.length > 0) {
+                    item.filters.forEach((fltrItem: FilterDescriptor) => {
+                        let column = fltrItem.field.toString();
+                        
+                        each(this.gridResult, (eachData) => {
+                            if (eachData[column] != undefined) {
+                                let keys = Object.keys(eachData[column]);
+                                let isexists = false;
+                                each(keys, key => {
+                                    if (fltrItem.value != undefined && fltrItem.value != null) {
+                                        if (fltrItem.value != undefined && fltrItem.value != null && eachData[column]['20___0'] == fltrItem.value.toString()){
+                                            fltrItem.operator = "isnotnull";
+                                            isexists = true;
+                                        }
+                                    }
+                                })
+                                if (isexists)
+                                    arrayData.push(eachData);
+                            }
+                        })
+                        if (arrayData.length > 0) {
+                            this.gridData = process(arrayData, this.state);
+                        }
+                    })
+                }
+            });
+        }
     }
     cellClickHandler(args: CellClickEvent): void {
         if (args.column.field == "TITLE") {

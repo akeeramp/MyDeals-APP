@@ -169,7 +169,8 @@ export class managerExcludeGroupsComponent {
                                 let isexists = false;
                                 each(keys, key => {
                                     if (fltrItem.value != undefined && fltrItem.value != null) {
-                                        if (fltrItem.value != undefined && fltrItem.value != null && eachData[column][key] == fltrItem.value.toString()){
+                                        // 9999999999 is range value as per DB
+                                        if (fltrItem.value != undefined && fltrItem.value != null && eachData[column]['20___0'] == fltrItem.value.toString()){
                                             fltrItem.operator = "isnotnull";
                                             isexists = true;
                                         }
