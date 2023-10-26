@@ -1837,6 +1837,7 @@
     <Content Include="Client\package.json" />
     <Content Include="Client\tsconfig.json" />
     <Content Include="Client\yarn.lock" />
+    <Content Include="Client\src\app\admin\geo\admin.geo.component.css" />
     <Content Include="Client\src\app\admin\geo\admin.geo.component.html" />
     <Content Include="Client\src\app\dashboard\addWidget\addWidget.component.css" />
     <Content Include="Client\Images\docs\MyDeal UI MT Architecture 50.pdf" />
