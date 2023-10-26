@@ -49,12 +49,12 @@ import { ReportingComponent } from "./reporting/reporting.component";
 import { globalRouteComponent } from "./shared/globalroute/globalroute.component";
 import { adminMydealsSupportComponent } from './admin/mydealssupport/admin.mydealssupport.component';
 import { adminVistexProfiseeApiComponent } from './admin/vistex/admin.vistexProfiseeAPI.component';
+import { AsyncProcedureJobsComponent } from "./admin/asyncProcedureJobs/admin.asyncProcedureJobs.component";
 import { sdsDealOverridesComponent } from "./admin/sdsDealOverrides/admin.sdsDealOverrides.component";
 import { dbAuditToolsComponent } from "./admin/dbAuditTools/admin.dbAuditTools.component";
 
 //added for security check
 import { SecurityResolver } from "./shared/security.resolve";
-
 
 export const routes: Routes = [
     { path: '', redirectTo: '/portal', pathMatch: 'full', data: { title: 'Dashboard', BaseHref: 'Dashboard' }, resolve: { security: SecurityResolver } },
@@ -113,6 +113,7 @@ export const routes: Routes = [
     { path: 'tendermanager/:cid', component: tenderManagerComponent, data: { title: 'Dashboard', BaseHref: 'Contract' }, resolve: { security: SecurityResolver } },
     { path: 'MyDealsSupport', component: adminMydealsSupportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'vistexProfiseeApi', component: adminVistexProfiseeApiComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
+    { path: 'asyncProcedureJobs', component: AsyncProcedureJobsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'sdsDealOverrides', component: sdsDealOverridesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'dbAuditTools', component: dbAuditToolsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
 ];

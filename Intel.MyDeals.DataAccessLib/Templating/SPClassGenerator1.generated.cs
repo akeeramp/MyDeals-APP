@@ -2482,12 +2482,49 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			}
 		}
 
-		///<summary>
-		/// ID: 973246522
-		/// Modified: 7/13/2018 1:53:36 AM
-		/// Parameters: 1
-		///</summary>
-		public partial class PR_MYDL_ATRB_VAL_PCT : SP {
+        ///<summary>
+        /// ID: 1909790061
+        /// Modified: 10/20/2023 10:51:55 AM
+        /// Parameters: 2
+        ///</summary>
+        public partial class PR_MYDL_ASYNC_TRIGGERS : SP
+        {
+            public PR_MYDL_ASYNC_TRIGGERS()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_ASYNC_TRIGGERS]";
+            }
+
+            ///<summary>
+            /// DataType: nvarchar(100)
+            /// Mode: IN
+            /// Max Length: 100
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 100, false)]
+            public String PROC_NAME
+            {
+                set { SetParmeter("PROC_NAME", value); }
+                get { return (String)GetParameter("PROC_NAME"); }
+            }
+
+            ///<summary>
+            /// DataType: nvarchar
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", -1, false)]
+            public String PROC_DATA
+            {
+                set { SetParmeter("PROC_DATA", value); }
+                get { return (String)GetParameter("PROC_DATA"); }
+            }
+        }
+
+        ///<summary>
+        /// ID: 973246522
+        /// Modified: 7/13/2018 1:53:36 AM
+        /// Parameters: 1
+        ///</summary>
+        public partial class PR_MYDL_ATRB_VAL_PCT : SP {
 			public PR_MYDL_ATRB_VAL_PCT() {
 				DatabaseName = "MyDeals";
 				StoredProdedureName = "[dbo].[PR_MYDL_ATRB_VAL_PCT]";

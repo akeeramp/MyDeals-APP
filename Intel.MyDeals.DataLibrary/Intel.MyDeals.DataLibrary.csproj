@@ -105,6 +105,7 @@
     <Compile Include="Admins\ConstantsAdminDataLib.cs" />
     <Compile Include="Admins\MarketOpsAdminDataLib.cs" />
     <Compile Include="Admins\VistexAdminDataLib.cs" />
+    <Compile Include="AsyncProcTrigger\AsyncProcTriggerDataLib.cs" />
     <Compile Include="AtrbMaps\AtrbMapDataLib.cs" />
     <Compile Include="CapMsp\CapMspDataLib.cs" />
     <Compile Include="Constants Lookups\ConstantLookupDataLib.cs" />

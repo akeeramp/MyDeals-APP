@@ -1,0 +1,37 @@
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<div class="async-procedure-jobs">
+    <div class="col-md-12 mass-heading">
+        <h2>Async Procedure Jobs</h2>
+    </div>
+
+    <div *ngIf="!accessAllowed" class="col-md-12">
+        <h3><font style="color: red;"><i class="intelicon-alert-solid icon-lg" style="margin-right: 10px;"></i> Access Warning</font>: This is a Restricted page. Your current rights do not allow access.</h3>
+        If you require access, please contact the My Deals Development team for guidance.
+    </div>
+
+    <div *ngIf="accessAllowed" class="col-md-12">
+        <kendo-grid class="enableWrapping kAlignHeaders" id="admin-async-procedure-grid" [data]="gridData" [loading]="isLoading" [sort]="state.sort" (sortChange)="sortChange($event)" [filter]="state.filter" [sortable]="true" [resizable]="true">
+            <ng-template kendoGridToolbarTemplate>
+                <button (click)="createProcedureJob()" class="k-button clearButton"><span class="k-icon k-i-plus-outline k-icon-md"></span>Create New Async Action</button>
+                <kendo-grid-spacer></kendo-grid-spacer>
+                <button (click)="refreshGrid()" class="k-button clearButton"><span class="k-icon k-i-reload k-icon-md"></span>Refresh</button>
+            </ng-template>
+            <kendo-grid-column field="ASYNC_SID" title="ID" [headerClass]="{'headerClass':true}" width="60"></kendo-grid-column>
+            <kendo-grid-column field="STATE_TOKEN" title="State" [headerClass]="{'headerClass':true}" width="90"></kendo-grid-column>
+            <kendo-grid-column field="PROC_NAME" title="Action Name" [headerClass]="{'headerClass':true}"></kendo-grid-column>
+            <kendo-grid-column field="PROC_DATA" title="Passed Data" [headerClass]="{'headerClass':true}"></kendo-grid-column>
+            <kendo-grid-column field="STATE" title="Status" [headerClass]="{'headerClass':true}" width="90"></kendo-grid-column>
+            <kendo-grid-column field="START_TIME" title="Start Time" [headerClass]="{'headerClass':true}" width="200">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <span *ngIf="dataItem.START_TIME != '1/1/1900'">{{ dataItem.START_TIME }}</span>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="END_TIME" title="End Time" [headerClass]="{'headerClass':true}" width="200">
+                <ng-template kendoGridCellTemplate let-dataItem>
+                    <span *ngIf="dataItem.END_TIME != '1/1/1900'">{{ dataItem.END_TIME }}</span>
+                </ng-template>
+            </kendo-grid-column>
+            <kendo-grid-column field="DURATION" title="Execution Duration" [headerClass]="{'headerClass':true}" width="140"></kendo-grid-column>
+        </kendo-grid>
+    </div>
+</div>

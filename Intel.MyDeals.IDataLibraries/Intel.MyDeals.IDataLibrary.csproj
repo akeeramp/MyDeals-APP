@@ -51,6 +51,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AsyncProcTrigger\IAsyncProcTriggerDataLib.cs" />
     <Compile Include="Constants Lookups\IConstantLookupDataLib.cs" />
     <Compile Include="ConsumptionCountry\IConsumptionCountryDataLib.cs" />
     <Compile Include="CostTest\ICostTestDataLib.cs" />

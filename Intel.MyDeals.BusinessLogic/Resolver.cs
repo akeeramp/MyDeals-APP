@@ -59,6 +59,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<IPrimeCustomersLib, PrimeCustomersLib>();
             registerService.RegisterType<IConsumptionCountryLib, ConsumptionCountryLib>();
             registerService.RegisterType<IHealthCheckLib, HealthCheckLib>();
+            registerService.RegisterType<IAsyncProcTriggerLib, AsyncProcTriggerLib>();
             registerService.RegisterType<ISdsDealOverrideLib, SdsDealOverrideLib>();
             registerService.RegisterType<IDbAuditToolsLib, DbAuditToolsLib>();
         }

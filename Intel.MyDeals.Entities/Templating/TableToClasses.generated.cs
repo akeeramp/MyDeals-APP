@@ -10786,4 +10786,80 @@ namespace Intel.MyDeals.Entities {
 	
 	} // End of class HealthCheckData
 
+		///<summary>
+	/// Class created via template - Do Not Modify!
+	/// To modify this code, re-execute the template, or extend as partial.
+	/// on JLOPEZRE-MOBL1
+	/// by jlopezre
+	/// at 10/20/2023 11:16:55 AM
+	///</summary>
+	
+	[DataContract]
+	public partial class AsyncProcTrigger {
+	
+	[DataMember]
+	public System.Int32 ASYNC_SID {set;get;}
+	
+	
+	[DataMember]
+	public System.String DURATION {set;get;}
+	
+	
+	[DataMember]
+	public System.DateTime END_TIME {set;get;}
+	
+	
+	[DataMember]
+	public System.String PROC_DATA {set;get;}
+	
+	
+	[DataMember]
+	public System.String PROC_NAME {set;get;}
+	
+	
+	[DataMember]
+	public System.DateTime START_TIME {set;get;}
+	
+	
+	[DataMember]
+	public System.String STATE {set;get;}
+	
+	
+	[DataMember]
+	public System.Int32 STATE_TOKEN {set;get;}
+	
+	
+	/*
+	private static List<AsyncProcTrigger> AsyncProcTriggerFromReader(SqlDataReader rdr){
+	// This helper method is template generated.
+	// Refer to that template for details to modify this code.
+	
+	var ret = new List<AsyncProcTrigger>();
+	int IDX_ASYNC_SID = DB.GetReaderOrdinal(rdr, "ASYNC_SID");
+	int IDX_DURATION = DB.GetReaderOrdinal(rdr, "DURATION");
+	int IDX_END_TIME = DB.GetReaderOrdinal(rdr, "END_TIME");
+	int IDX_PROC_DATA = DB.GetReaderOrdinal(rdr, "PROC_DATA");
+	int IDX_PROC_NAME = DB.GetReaderOrdinal(rdr, "PROC_NAME");
+	int IDX_START_TIME = DB.GetReaderOrdinal(rdr, "START_TIME");
+	int IDX_STATE = DB.GetReaderOrdinal(rdr, "STATE");
+	int IDX_STATE_TOKEN = DB.GetReaderOrdinal(rdr, "STATE_TOKEN");
+	
+	while (rdr.Read()){
+	ret.Add(new AsyncProcTrigger {
+	ASYNC_SID = (IDX_ASYNC_SID < 0 || rdr.IsDBNull(IDX_ASYNC_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ASYNC_SID),
+	DURATION = (IDX_DURATION < 0 || rdr.IsDBNull(IDX_DURATION)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DURATION),
+	END_TIME = (IDX_END_TIME < 0 || rdr.IsDBNull(IDX_END_TIME)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_END_TIME),
+	PROC_DATA = (IDX_PROC_DATA < 0 || rdr.IsDBNull(IDX_PROC_DATA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PROC_DATA),
+	PROC_NAME = (IDX_PROC_NAME < 0 || rdr.IsDBNull(IDX_PROC_NAME)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PROC_NAME),
+	START_TIME = (IDX_START_TIME < 0 || rdr.IsDBNull(IDX_START_TIME)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_START_TIME),
+	STATE = (IDX_STATE < 0 || rdr.IsDBNull(IDX_STATE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_STATE),
+	STATE_TOKEN = (IDX_STATE_TOKEN < 0 || rdr.IsDBNull(IDX_STATE_TOKEN)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_STATE_TOKEN)
+	});
+	} // while
+	return ret;
+	}
+	*/
+	
+	} // End of class AsyncProcTrigger
+
 }

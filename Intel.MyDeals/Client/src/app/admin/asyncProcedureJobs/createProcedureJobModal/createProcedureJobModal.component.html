@@ -1,0 +1,26 @@
+<div class="panelDivHeader">Create New Async Action<i id="btnClose" class="intelicon-close floatRight" (click)="close()" title="Close this window"></i></div>
+
+<form [formGroup]="formData" (ngSubmit)="onSubmit()">
+    <div class="row" style="padding-bottom: 10px; padding-top: 10px;">
+        <span class="col-md-2">
+            <label for="commandName">Action Name</label>
+        </span>
+        <span class="col-md-10">
+            <input id="commandName" type="text" formControlName="PROC_NAME" maxlength="100" minlength="1" required>
+        </span>
+    </div>
+
+    <div class="row">
+        <span class="col-md-2">
+            <label for="commandData">Passed Data</label>
+        </span>
+        <span class="col-md-10">
+            <textarea id="commandData" formControlName="PROC_DATA" minlength="1" required></textarea>
+        </span>
+    </div>
+
+    <div class="row">
+        <button class="btn btn-primary" type="button" (click)="close()">Cancel</button>
+        <button class="btn btn-primary" type="submit" [disabled]="!formData.valid" [ngClass]="{ 'disabled': !formData.valid }">Save</button>    
+    </div>
+</form>

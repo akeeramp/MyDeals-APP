@@ -246,6 +246,7 @@
     <Folder Include="App_Data\" />
     <Folder Include="Helper Functions\" />
     <Folder Include="ViewModels\" />
+    <Folder Include="Views\AsyncProcTrigger\" />
     <Folder Include="Views\Base\" />
     <Folder Include="Views\DataQuality\" />
     <Folder Include="Views\DbAuditTools\" />
@@ -266,6 +267,7 @@
     <Compile Include="Classes\JsonNetResult.cs" />
     <Compile Include="Classes\SimpleKeyPropValue.cs" />
     <Compile Include="Classes\SimpleKeyValue.cs" />
+    <Compile Include="Controllers\API\AsyncProcTriggerController.cs" />
     <Compile Include="Controllers\API\BulkPriceUpdatesController.cs" />
     <Compile Include="Controllers\API\ConsumptionCountryController.cs" />
     <Compile Include="Controllers\API\CustomerVendorsController.cs" />
@@ -794,7 +796,7 @@
     <Content Include="Client\src\app\dashboard\recentURL\recentsUrlWidget.component.css" />
     <Content Include="Client\src\app\dashboard\recentURL\recentsUrlWidget.component.html" />
     <Content Include="Client\src\app\dashboard\widgetSettings\widgetSettings.component.html" />
-     <Content Include="Client\src\app\dashboard\widgetSettings\widgetSettings.component.css" />
+    <Content Include="Client\src\app\dashboard\widgetSettings\widgetSettings.component.css" />
     <Content Include="Client\src\app\dashboard\searchContract\searchContractWidget.component.css" />
     <Content Include="Client\src\app\dashboard\searchContract\searchContractWidget.component.html" />
     <Content Include="Client\src\app\reporting\reporting.component.html" />

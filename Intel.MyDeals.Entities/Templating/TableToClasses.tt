@@ -567,6 +567,11 @@ using System.Collections.Generic;
 	ds.Tables[0].TableName = "HealthCheckData";
 	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
 
+	// Async Proc Trigger
+	ds = dbobjects.ExecuteDataSet("EXEC [dbo].[PR_MYDL_ASYNC_TRIGGERS] NULL, NULL;");
+	ds.Tables[0].TableName = "AsyncProcTrigger";
+	WriteLine(ScriptTools.DataTableToClass(ds.Tables[0], false));
+
 	PopIndent();
 	WriteLine("}"); // End NameSpace
 

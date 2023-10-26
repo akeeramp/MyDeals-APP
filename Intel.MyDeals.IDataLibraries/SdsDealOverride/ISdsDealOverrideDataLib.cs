@@ -13,5 +13,3 @@ namespace Intel.MyDeals.IDataLibrary
 
     }
 }
-
-

@@ -55,6 +55,8 @@ import { BulkPricingUpdatesComponent } from '../admin/bulkPricingUpdates/admin.b
 import { BulkPricingUpdateModalComponent } from '../admin/bulkPricingUpdates/admin.bulkPricingUpdateModal.component';
 import { adminMydealsSupportComponent } from '../admin/mydealssupport/admin.mydealssupport.component';
 import { adminVistexProfiseeApiComponent } from '../admin/vistex/admin.vistexProfiseeAPI.component';
+import { AsyncProcedureJobsComponent } from '../admin/asyncProcedureJobs/admin.asyncProcedureJobs.component';
+import { CreateProcedureJobModalComponent } from '../admin/asyncProcedureJobs/createProcedureJobModal/createProcedureJobModal.component';
 import { sdsDealOverridesComponent } from '../admin/sdsDealOverrides/admin.sdsDealOverrides.component';
 import { dbAuditToolsComponent } from '../admin/dbAuditTools/admin.dbAuditTools.component';
 import { DbAuditToolsViewModalComponent } from '../admin/dbAuditTools/admin.dbAuditToolsViewModal.component';
@@ -121,6 +123,8 @@ export const AdminComponents =[
     adminMydealsSupportComponent,
     adminVistexProfiseeApiComponent,
     retriggerUnifyModalComponent,
+    AsyncProcedureJobsComponent,
+    CreateProcedureJobModalComponent,
     sdsDealOverridesComponent,
     dbAuditToolsComponent,
     DbAuditToolsViewModalComponent,
