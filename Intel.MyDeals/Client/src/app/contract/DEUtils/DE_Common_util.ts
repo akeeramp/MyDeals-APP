@@ -52,7 +52,11 @@ export class DE_Common_Util {
             field == "USER_MAX_RPU" || field == "USER_AVG_RPU" || field == "ADJ_ECAP_UNIT"
             || field == "MAX_PAYOUT" || field == "REBATE_OA_MAX_AMT") {
             if (dataItem[field] != undefined && dataItem[field] != null && !Number.isNaN(Number(dataItem[field])) && dataItem[field] != "")
-                dataItem[field] = parseInt(dataItem[field]);
+                if (field == "VOLUME") {
+                    dataItem[field] = Math.round(dataItem[field]);
+                }
+                else
+                    dataItem[field] = parseInt(dataItem[field]);
             else
                 dataItem[field] = "";
         }
@@ -129,12 +133,17 @@ export class DE_Common_Util {
             field == "USER_MAX_RPU" || field == "USER_AVG_RPU" || field == "TOTAL_DOLLAR_AMOUNT" || field == "ADJ_ECAP_UNIT"
             || field == "MAX_PAYOUT" || field == "REBATE_OA_MAX_AMT") {
             if (dataItem[field] != undefined && dataItem[field] != null && dataItem[field] != "" && !Number.isNaN(Number(dataItem[field])))
-                dataItem[field] = dataItem[field].toString();
+                if (field == "VOLUME") {
+                    dataItem[field] = Math.round(dataItem[field]).toString();
+                }
+                else {
+                    dataItem[field] = dataItem[field].toString();
+                }
             else if (dataItem[field] === 0)
                 dataItem[field] = "0";
             else
                 dataItem[field] = "";
-        }      
+        }
         if (field == "TIER_NBR") {
             var tiers = dataItem.TIER_NBR;
             for (var key in tiers) {
