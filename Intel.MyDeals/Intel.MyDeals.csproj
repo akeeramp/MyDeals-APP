@@ -563,6 +563,10 @@
     <Content Include="Client\src\app\admin\rules\admin.rules.component.css" />
     <Content Include="Client\src\app\admin\rules\admin.rules.component.html" />
     <Content Include="Client\src\app\admin\rules\admin.rulesSimulationModal.component.html" />
+    <Content Include="Client\src\app\admin\asyncProcedureJobs\admin.asyncProcedureJobs.component.css" />
+    <Content Include="Client\src\app\admin\asyncProcedureJobs\admin.asyncProcedureJobs.component.html" />
+    <Content Include="Client\src\app\admin\asyncProcedureJobs\createProcedureJobModal\createProcedureJobModal.component.css" />
+    <Content Include="Client\src\app\admin\asyncProcedureJobs\createProcedureJobModal\createProcedureJobModal.component.html" />
     <Content Include="Client\src\app\admin\sdsDealOverrides\admin.sdsDealOverrides.component.css" />
     <Content Include="Client\src\app\admin\sdsDealOverrides\admin.sdsDealOverrides.component.html" />
     <Content Include="Client\src\app\admin\securityEngine\admin.securityEngine.component.css" />
@@ -600,6 +604,10 @@
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.rules.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.rules.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\rules\admin.rulesSimulationModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\asyncProcedureJobs\admin.asyncProcedureJobs.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\asyncProcedureJobs\admin.asyncProcedureJobs.models.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\asyncProcedureJobs\admin.asyncProcedureJobs.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\asyncProcedureJobs\createProcedureJobModal\createProcedureJobModal.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\sdsDealOverrides\admin.sdsDealOverrides.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\sdsDealOverrides\admin.sdsDealOverrides.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\securityEngine\admin.securityEngine.component.ts" />
