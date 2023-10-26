@@ -209,8 +209,7 @@ export class PTEUtil {
                                 data._behaviors.isError['PTR_USER_PRD'] = true;
                                 data._behaviors.validMsg['PTR_USER_PRD'] = 'Invalid product';
                             }
-                        
-                            if (val.E && val.E.length > 0 && find(val['E'], (test) => { return data.PTR_USER_PRD.includes(test) })) {
+                            if (val.E && val.E.length > 0 && find(val['E'], (test) => { return data.PRD_EXCLDS.includes(test) })) {
                                 data._behaviors.isError['PRD_EXCLDS'] = true;
                                 data._behaviors.validMsg['PRD_EXCLDS'] = 'Invalid product';
                             }
