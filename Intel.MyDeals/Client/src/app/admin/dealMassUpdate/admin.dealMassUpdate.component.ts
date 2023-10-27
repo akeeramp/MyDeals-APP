@@ -3,16 +3,17 @@ import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
-import { dealMassUpdateService } from "./admin.dealMassUpdate.service";
+import { DealMassUpdateService } from "./admin.dealMassUpdate.service";
 
 @Component({
     selector: "deal-mass-update",
     templateUrl: "Client/src/app/admin/dealMassUpdate/admin.dealMassUpdate.component.html",
     styleUrls: ['Client/src/app/admin/dealMassUpdate/admin.dealMassUpdate.component.css'],
 })
+export class DealMassUpdateComponent {
 
-export class dealMassUpdateComponent {
-    constructor(private dealMassUpdateSvc: dealMassUpdateService, private loggerSvc: logger) { }
+    constructor(private dealMassUpdateService: DealMassUpdateService,
+                private loggerService: logger) { }
 
     private color: ThemePalette = "primary";
     private attr = [];
@@ -50,16 +51,14 @@ export class dealMassUpdateComponent {
         this.massUpdateData.field = null;
         this.massUpdateData.textValue = null;
 
-        this.dealMassUpdateSvc.GetUpdateAttributes(0)
-            .subscribe((result: Array<any>) => {
-                this.attr = result
-            }, (error) => {
-                this.loggerSvc.error('Unable to get Attribute List', '', 'dealMassUpdateComponent::GetUpdateAttributes::' + JSON.stringify(error));
-            });
-
+        this.dealMassUpdateService.GetUpdateAttributes(0).subscribe((result: Array<any>) => {
+            this.attr = result
+        }, (error) => {
+            this.loggerService.error('Unable to get Attribute List', '', 'DealMassUpdateComponent::GetUpdateAttributes::' + JSON.stringify(error));
+        });
     }
 
-    atrbChange(value) {
+    attributeChange(value) {
         //Resetting error messages
         this.isError = {};
         this.errorMsg = {};
@@ -77,38 +76,29 @@ export class dealMassUpdateComponent {
 
             if (this.NumericIdTo1.includes(value.ATRB_SID)) {
                 this.MaxNumericValue = 1;
-            }
-            else if (this.NumericIdTo24.includes(value.ATRB_SID)) {
+            } else if (this.NumericIdTo24.includes(value.ATRB_SID)) {
                 this.MaxNumericValue = 24;
-            }
-            else {
+            } else {
                 this.MaxNumericValue = 999999999;
             }
-        }
-        else {
-
-            this.dealMassUpdateSvc.GetUpdateAttributes(value.ATRB_SID)
+        } else {
+            this.dealMassUpdateService.GetUpdateAttributes(value.ATRB_SID)
                 .subscribe((result: Array<any>) => {
                     this.attrValues = result;
                 }, (error) => {
-                    this.loggerSvc.error('Unable to get Attribute List', '', 'dealMassUpdateComponent::atrbChange::' + JSON.stringify(error));
+                    this.loggerService.error('Unable to get Attribute List', '', 'DealMassUpdateComponent::attributeChange::' + JSON.stringify(error));
                 });
-
             if (this.TextBoxAtrbIds.includes(value.ATRB_SID)) {
                 this.showNumeric = this.showMultiSelect = this.showDropDown = false;
                 this.showTextBox = true;
-            }
-            else if (this.SingleValueDropdownAtrbIds.includes(value.ATRB_SID)) {
+            } else if (this.SingleValueDropdownAtrbIds.includes(value.ATRB_SID)) {
                 this.showNumeric = this.showMultiSelect = this.showTextBox = false;
                 this.showDropDown = true;
-            }
-            else {
+            } else {
                 this.showNumeric = this.showDropDown = this.showTextBox = false;
                 this.showMultiSelect = true;
             }
-
         }
-
     }
 
     updateValues() {
@@ -117,96 +107,107 @@ export class dealMassUpdateComponent {
         this.errorMsg = {};
         this.validateData();
 
-
         if (this.isDataValid) {
-
             const finalData = {
                 "DEAL_IDS": this.massUpdateData.DealIds,
                 "ATRB_SID": this.massUpdateData.field.ATRB_SID,
                 "SEND_VSTX_FLG": this.massUpdateData.sendVistexFlag
             }
+
             if (this.showMultiSelect) {
                 finalData["UPD_VAL"] = (this.massUpdateData.multiSelectValue).join(",")
-            }
-            else if (this.showDropDown) {
+            } else if (this.showDropDown) {
                 finalData["UPD_VAL"] = this.massUpdateData.dropdownValue
-            }
-            else if (this.showNumeric) {
+            } else if (this.showNumeric) {
                 finalData["UPD_VAL"] = this.massUpdateData.numericValue
-            }
-            else if (this.showTextBox) {
+            } else if (this.showTextBox) {
                 finalData["UPD_VAL"] = this.massUpdateData.textValue
             }
 
-            this.dealMassUpdateSvc.UpdateDealsAttrbValue(finalData)
-                .subscribe((result: Array<any>) => {
-            this.updateResponse = result;
-            this.gridResult = process(result, this.state);
-            this.resultCount['all'] = result.length;
-            this.resultCount['success'] = result.filter(i => i.ERR_FLAG == 0).length;
-            this.resultCount['error'] = result.filter(i => i.ERR_FLAG == 1).length;
+            this.dealMassUpdateService.UpdateDealsAttrbValue(finalData).subscribe((result: Array<any>) => {
+                this.updateResponse = result;
+                this.gridResult = process(result, this.state);
+                this.resultCount['all'] = result.length;
+                this.resultCount['success'] = result.filter(i => i.ERR_FLAG == 0).length;
+                this.resultCount['error'] = result.filter(i => i.ERR_FLAG == 1).length;
 
-            this.showResults = true;
+                this.showResults = true;
 
-            this.loggerSvc.success("Please Check The Results.");
-                }, (error) => {
-                    this.loggerSvc.error('Unable to Update deal(s)', '', 'dealMassUpdateComponent::updateValues::' + JSON.stringify(error));
+                this.loggerService.success("Please Check The Results.");
+            }, (error) => {
+                this.loggerService.error('Unable to Update deal(s)', '', 'DealMassUpdateComponent::updateValues::' + JSON.stringify(error));
             });
-        }
-        else {
-            this.loggerSvc.warn('Please fix validation errors', 'Warning');
+        } else {
+            this.loggerService.warn('Please fix validation errors', 'Warning');
         }
     }
 
     validateData() {
         this.isDataValid = true;
-        const reg = new RegExp(/^[0-9,]+$/);
 
-        //Validate Deals Ids
+        // Validate Deals IDs
         if (this.massUpdateData.DealIds != undefined) {
             this.massUpdateData.DealIds = this.massUpdateData.DealIds.replace(/\s/g, "");
             if (this.massUpdateData.DealIds.slice(-1) == ',') {
                 this.massUpdateData.DealIds = this.massUpdateData.DealIds.replace(/,+$/g, "");
             }
         }
-        if (this.massUpdateData.DealIds == undefined || this.massUpdateData.DealIds == '' || !reg.test(this.massUpdateData.DealIds)) {
+        const REGEX_RULE_DEAL_ID = /^[0-9,]+$/;
+        if (this.massUpdateData.DealIds == undefined || this.massUpdateData.DealIds == '' || !REGEX_RULE_DEAL_ID.test(this.massUpdateData.DealIds)) {
             this.isError["Deal_Ids"] = true;
             this.errorMsg["Deal_Ids"] = "Please enter valid Deal Ids";
             this.isDataValid = false;
         }
 
-        //Validate "Field to Update"/Attribute list dropdown 
+        // Validate "Field to Update"/Attribute list dropdown 
         if (!this.massUpdateData.field) {
             this.isError["field"] = true;
             this.errorMsg["field"] = "Please Select Valid Attribute";
             this.isDataValid = false;
         }
 
-        //Validate dropdown Value
+        // Validate dropdown Value
         if (this.showDropDown && !this.massUpdateData.dropdownValue) {
             this.isError["dropdownValue"] = true;
             this.errorMsg["dropdownValue"] = "Please Select Valid Values";
             this.isDataValid = false;
         }
 
-        //Validate multiselect Value
+        // Validate multiselect Value
         if (this.showMultiSelect && !this.massUpdateData.multiSelectValue) {
             this.isError["multiSelectValue"] = true;
             this.errorMsg["multiSelectValue"] = "Please Select Valid Values";
             this.isDataValid = false;
         }
 
-        if (this.massUpdateData.field.ATRB_LBL == "System Price Point") {
-            if (this.massUpdateData.textValue != undefined && this.massUpdateData.textValue != null && this.massUpdateData.textValue != "") {
-                let values = this.massUpdateData.textValue;
-                if (values && !(parseFloat(values) > 1000000.00)) {
-                    if (parseFloat(values) <= 0.00) {
+        if (this.massUpdateData.textValue != undefined && this.massUpdateData.textValue != null && this.massUpdateData.textValue != "") {
+            if (this.massUpdateData.field.ATRB_LBL == "System Price Point") {
+                const value = this.massUpdateData.textValue;
+                if (value && !(parseFloat(value) > 1000000.00)) {
+                    if (parseFloat(value) <= 0.00) {
                         this.massUpdateData.textValue = 0.01;
                     }
-                }
-                else {
+                } else {
                     this.isError["textValue"] = true;
                     this.errorMsg["textValue"] = "Please Enter Valid Value. Valid Range: <=$0.01 - <=$1,000,000";
+                    this.isDataValid = false;
+                }
+            }
+    
+            if (this.massUpdateData.field.ATRB_LBL == "Unified Customer ID") {
+                const REGEX_RULE_UP_TO_TEN_DIGITS = /^[0-9]{10}$/;   // 10 digit number
+                if (!REGEX_RULE_UP_TO_TEN_DIGITS.test(this.massUpdateData.textValue)) {
+                    this.isError["textValue"] = true;
+                    this.errorMsg["textValue"] = "Please Enter Valid Value. Customer IDs are a 10 digit value";
+                    this.isDataValid = false;
+                }
+            }
+
+            if (this.massUpdateData.field.ATRB_LBL == "Unified Customer Name") {
+                const REGEX_RULE_ALPHANUMERIC = /^[a-zA-Z0-9\s]*$/;  // Alphanumeric only
+                if (!REGEX_RULE_ALPHANUMERIC.test(this.massUpdateData.textValue)) {
+                    this.isError["textValue"] = true;
+                    this.errorMsg["textValue"] = "Please Enter Valid Value. Alphanumeric values only, no special characters";
                     this.isDataValid = false;
                 }
             }
@@ -221,4 +222,5 @@ export class dealMassUpdateComponent {
     ngOnInit() {
         this.loadAttributes();
     }
+
 }

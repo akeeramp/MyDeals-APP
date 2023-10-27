@@ -20,19 +20,18 @@
                                     resizable="both" [(ngModel)]="massUpdateData['DealIds']"
                                     [ngStyle]="{'border-color':isError['Deal_Ids']?'red':''}" class="kendo-textarea-custom"></kendo-textarea>
                     <kendo-formerror style="padding-left: 180px" *ngIf="isError['Deal_Ids']">
-                        {{errorMsg['Deal_Ids']}}
+                        {{ errorMsg['Deal_Ids'] }}
                     </kendo-formerror>
                 </div>
 
-
-                <div style="padding:10px 0;" class="col-md-12  margin-btn-dmu-15">
-                    <label style="width: 180px">Field to Update:</label>
+                <div class="col-md-12 margin-btn-dmu-15">
+                    <label style="width: 180px; vertical-align: top;">Field to Update:</label>
                     <kendo-dropdownlist class="k-dropdown-design" [data]="attr" textField="ATRB_LBL" valueField="ATRB_SID"
-                                        (valueChange)="atrbChange($event)" [(ngModel)]="massUpdateData['field']"
+                                        (valueChange)="attributeChange($event)" [(ngModel)]="massUpdateData['field']"
                                         [ngStyle]="{'border':isError['field']?'1px solid red':'','width': '490px','padding':0}">
                     </kendo-dropdownlist>
                     <kendo-formerror style="padding-left: 180px" *ngIf="isError['field']">
-                        {{errorMsg['field']}}
+                        {{ errorMsg['field'] }}
                     </kendo-formerror>
                 </div>
 
@@ -47,7 +46,7 @@
                     <kendo-textbox [style.width.px]="488" [(ngModel)]="massUpdateData['textValue']"
                                     [ngStyle]="{'border':isError['textValue']?'1px solid red':'','padding':0}" class="k-textbox-design"></kendo-textbox>
                     <kendo-formerror style="padding-left: 180px" *ngIf="isError['textValue']">
-                        {{errorMsg['textValue']}}
+                        {{ errorMsg['textValue'] }}
                     </kendo-formerror>
                 </div>
 
@@ -59,7 +58,7 @@
                                         [ngStyle]="{'border':isError['dropdownValue']?'1px solid red':'','padding':0}" class="k-dropdown-design">
                     </kendo-dropdownlist>
                     <kendo-formerror style="padding-left: 180px" *ngIf="isError['dropdownValue']">
-                        {{errorMsg['dropdownValue']}}
+                        {{ errorMsg['dropdownValue'] }}
                     </kendo-formerror>
                 </div>
 
@@ -70,7 +69,7 @@
                                         [(ngModel)]="massUpdateData['multiSelectValue']"
                                         [ngStyle]="{'border':isError['multiSelectValue']?'1px solid red':''}" class="divineo-one x-btn-visible"></kendo-multiselect>
                     <kendo-formerror style="padding-left: 180px" *ngIf="isError['multiSelectValue']">
-                        {{errorMsg['multiSelectValue']}}
+                        {{ errorMsg['multiSelectValue'] }}
                     </kendo-formerror>
                 </div>
 
@@ -80,8 +79,7 @@
                             <b>Update Vistex Staging Table.*</b>
                         </div>
                         <div class="update-vistex">
-                            <mat-slide-toggle class="toggle-button-custom" [color]="color" [(ngModel)]="massUpdateData['sendVistexFlag']">
-                            </mat-slide-toggle>
+                            <mat-slide-toggle class="toggle-button-custom" [color]="color" [(ngModel)]="massUpdateData['sendVistexFlag']"></mat-slide-toggle>
                         </div>
                     </div>
                     <div class="content-vistex-update">
@@ -91,8 +89,6 @@
                         </p>
                     </div>
                 </div>
-                    
-
             </div>
             <div class="col-md-12 mt-md-2"></div>
             <div class="col-md-12">
@@ -116,8 +112,7 @@
                                            width="75px"></kendo-grid-column>
                         <kendo-grid-column [headerClass]="{'headerClass':true}" field="ATRB_DESC" title="Field"
                                            width="200px"></kendo-grid-column>
-                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="UPD_MSG" title="Results">
-                        </kendo-grid-column>
+                        <kendo-grid-column [headerClass]="{'headerClass':true}" field="UPD_MSG" title="Results"></kendo-grid-column>
                     </kendo-grid>
                 </div>
             </div>

@@ -10,7 +10,7 @@ import { adminCustomerComponent } from "../../app/admin/customer/admin.customer.
 import { adminCustomerVendorsComponent } from "../../app/admin/CustomerVendors/admin.customerVendors.component";
 import { adminDataFixComponent } from "../../app/admin/dataFix/admin.dataFix.component";
 import { admindataQualityComponent } from "../../app/admin/dataQuality/admin.dataQuality.component";
-import { dealMassUpdateComponent } from "../../app/admin/dealMassUpdate/admin.dealMassUpdate.component";
+import { DealMassUpdateComponent } from "../../app/admin/dealMassUpdate/admin.dealMassUpdate.component";
 import { adminDealTypesComponent } from "../../app/admin/dealTypes/admin.dealTypes.component";
 import { dropdownsComponent } from "../../app/admin/dropdowns/admin.dropdowns.component";
 import { EmployeeComponent } from "../../app/admin/employee/admin.employee.component";
@@ -82,7 +82,7 @@ export const routesAdmin: Routes = [
     { path: 'vistexTestApi', component: adminVistexComponent, data: { title: 'Dashboard', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'icostproducts', component: iCostProductsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'notifications', component: adminNotificationsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
-    { path: 'dealmassupdate', component: dealMassUpdateComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
+    { path: 'dealmassupdate', component: DealMassUpdateComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'validateVistexR3Checks', component: ValidateVistexR3ChecksComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'manageEmployee', component: manageEmployeeComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'rules/:rid', component: adminRulesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },

@@ -8,7 +8,7 @@ import { adminCustomerComponent } from "./admin/customer/admin.customer.componen
 import { adminCustomerVendorsComponent } from "./admin/CustomerVendors/admin.customerVendors.component";
 import { adminDataFixComponent } from "./admin/dataFix/admin.dataFix.component";
 import { admindataQualityComponent } from "./admin/dataQuality/admin.dataQuality.component";
-import { dealMassUpdateComponent } from "./admin/dealMassUpdate/admin.dealMassUpdate.component";
+import { DealMassUpdateComponent } from "./admin/dealMassUpdate/admin.dealMassUpdate.component";
 import { adminDealTypesComponent } from "./admin/dealTypes/admin.dealTypes.component";
 import { dropdownsComponent } from "./admin/dropdowns/admin.dropdowns.component";
 import { EmployeeComponent } from "./admin/employee/admin.employee.component";
@@ -91,7 +91,7 @@ export const routes: Routes = [
     { path: 'vistexTestApi', component: adminVistexComponent, data: { title: 'Dashboard', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'icostproducts', component: iCostProductsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'notifications', component: adminNotificationsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
-    { path: 'dealmassupdate', component: dealMassUpdateComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
+    { path: 'dealmassupdate', component: DealMassUpdateComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'validateVistexR3Checks', component: ValidateVistexR3ChecksComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'manageEmployee', component: manageEmployeeComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'rules/:rid', component: adminRulesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
