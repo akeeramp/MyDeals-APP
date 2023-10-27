@@ -24,6 +24,7 @@ namespace Intel.MyDeals.BusinessLogic
         private readonly IDropdownDataLib _dropdownDataLib;
         private readonly IPrimeCustomersDataLib _primeCustomerLib;
         private List<int> UserTokenErrorCodes = new List<int> { 704, 705 }; // Known abort messages for User Token Security
+        public Boolean isBatchProcessing = false;
 
         public IntegrationLib(IJmsDataLib jmsDataLib, IOpDataCollectorLib dataCollectorLib, IPrimeCustomersDataLib primeCustomerLib)
         {
@@ -36,11 +37,21 @@ namespace Intel.MyDeals.BusinessLogic
         {
             var task = new Task(() =>
             {
-                Thread.Sleep(1000);
+                Task.Delay(1000);
                 string dummyVal = ExecuteSalesForceTenderData(myGuid);
+                CheckPendingBatches();
             });
+            if (!task.IsCompleted)
+            {
+                task.Start();
+            }
+        }
 
-            task.Start();
+        public void CheckPendingBatches()
+        {
+            Guid workId = Guid.Empty;
+            ExecuteSalesForceTenderData(workId);
+            isBatchProcessing = false;
         }
 
         public Guid SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket)
@@ -53,9 +64,10 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Insert into the stage table here - one deal item (-100 id as new item), one deal data object
             myGuid = _jmsDataLib.SaveTendersDataToStage("TENDER_DEALS", deadIdList, jsonData);
-
-            TestAsyncProcess(myGuid);
-
+            if (!isBatchProcessing)
+            {
+                TestAsyncProcess(myGuid);
+            }
             return myGuid;
         }
 
