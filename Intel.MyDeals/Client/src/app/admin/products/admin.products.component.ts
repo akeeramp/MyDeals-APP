@@ -4,6 +4,8 @@ import { productsService } from "./admin.products.service";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: 'admin-products',
@@ -11,7 +13,9 @@ import { ThemePalette } from '@angular/material/core';
     styleUrls: ['Client/src/app/admin/products/admin.products.component.css']
 })
 export class adminProductsComponent {
-    constructor(private productsSvc: productsService, private loggerSvc: logger) { }
+    constructor(private productsSvc: productsService, private loggerSvc: logger) {
+        this.allData = this.allData.bind(this);
+    }
     private isLoading = true;
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
@@ -36,6 +40,22 @@ export class adminProductsComponent {
         { text: "250", value: 250 },
         { text: "1000", value: 1000 }
     ];
+
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        const result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+
+        return result;
+    }
 
     loadProducts() {
         //Developer can see the Screen..

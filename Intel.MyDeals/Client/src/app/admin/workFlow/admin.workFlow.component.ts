@@ -16,6 +16,9 @@ import {
     distinct,
 } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+
 @Component({
     selector: "admin-work-flow",
     templateUrl: "Client/src/app/admin/workFlow/admin.workFlow.component.html",
@@ -23,7 +26,9 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 })
 
 export class adminWorkFlowComponent {
-    constructor(private workflowSvc: workflowService, private loggerSvc: logger) { }
+    constructor(private workflowSvc: workflowService, private loggerSvc: logger) {
+        this.allData = this.allData.bind(this);
+    }
 
     @ViewChild('ROLE_TIER_NM_DdlTooltip', { static: false }) ROLE_TIER_NM_DdlTooltip: NgbTooltip;
     @ViewChild('OBJ_TYPE_DdlTooltip', { static: false }) OBJ_TYPE_DdlTooltip: NgbTooltip;
@@ -85,6 +90,22 @@ export class adminWorkFlowComponent {
 
     distinctPrimitive(fieldName: string): any {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
+    }
+
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        const result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+
+        return result;
     }
 
     clearFilter() {

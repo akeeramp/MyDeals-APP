@@ -15,6 +15,8 @@ import {
     distinct,
 } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: "dropdowns",
@@ -25,7 +27,9 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 export class dropdownsComponent {
 
     //Constructor - unloading the AngularJS stylesheet 
-    constructor(private dropdownSvc: dropdownService, private loggerSvc: logger) { }
+    constructor(private dropdownSvc: dropdownService, private loggerSvc: logger) {
+        this.allData = this.allData.bind(this);
+    }
 
     @ViewChild("dealtypeDropDown") private dealtypeDdl;
     @ViewChild("attributeDropDown") private atrbDdl;
@@ -122,6 +126,22 @@ export class dropdownsComponent {
 
 
     //Functions
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        const result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+
+        return result;
+    }
+
     async getDealtypeDataSource() {
         this.DealTypeData = await this.dropdownSvc.getDealTypesDropdowns(true).toPromise().catch((error) => {
             this.loggerSvc.error("Unable to get Deal Type Dropdowns.", error, error.statusText);

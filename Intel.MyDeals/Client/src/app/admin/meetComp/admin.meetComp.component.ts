@@ -9,6 +9,8 @@ import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import { logger } from "../../shared/logger/logger";
 import { meetCompService } from './admin.meetComp.service';
 import { BulkUploadMeetCompModalComponent } from './admin.bulkUploadMeetCompModal.component';
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: 'admin-meetcomp',
@@ -20,7 +22,9 @@ export class MeetCompComponent {
     constructor(private meetCompService: meetCompService,
                 private loggerService: logger,
                 public datepipe: DatePipe,
-                protected dialog: MatDialog) { }
+        protected dialog: MatDialog) {
+        this.allData = this.allData.bind(this);
+    }
     private HasBulkUploadAccess = (<any>window).usrRole == "DA";
     private isAccess = true;
     private isAccessMessage: string;
@@ -66,10 +70,27 @@ export class MeetCompComponent {
         operator: "startsWith",
     };
 
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        const result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+
+        return result;
+    }
+
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
         this.gridData = process(this.gridResult, this.state);
     }
+
     clearFilter() {
         this.state.filter = {
             logic: "and",
@@ -77,6 +98,7 @@ export class MeetCompComponent {
         };
         this.gridData = process(this.gridResult, this.state);
     }
+
     refreshGrid() {
         this.state.filter = {
             logic: "and",
@@ -84,12 +106,14 @@ export class MeetCompComponent {
         };
         this.gridData = process(this.gridResult, this.state);
     }
+
     distinctPrimitive(fieldName: string): any {
         if (this.gridResult.length > 0 && this.filteredData[fieldName]) {
             return this.filteredData[fieldName];
         }
         return this.gridResult;
     }
+
     loadMeetCompPage() {
         //Developer can see the Screen..
         if ((<any>window).usrRole != 'SA' && !(<any>window).isDeveloper && (<any>window).usrRole != 'DA' && (<any>window).usrRole != 'Legal' && ((<any>window).usrRole != 'GA' && !(<any>window).isSuper)) {
@@ -101,6 +125,7 @@ export class MeetCompComponent {
             this.isAccessMessage = 'You don\'t have access to view this page. Only SuperGA, DA, Legal, or SA users are allowed.';
         }
     }
+
     OpenBulkUploadMeetCompModal() {
         this.dialog.open(BulkUploadMeetCompModalComponent, {
             width: '797px',
@@ -108,6 +133,7 @@ export class MeetCompComponent {
             panelClass: 'meetcomp-custom',
         });
     }
+
     custDropdowns() {
         this.meetCompService.getCustomerDropdowns().subscribe(res => {
             if (res) {
@@ -123,6 +149,7 @@ export class MeetCompComponent {
             this.loggerService.error("Unable to get Meet Comp Data [Customers].", response, response.statusText);
         });
     }
+
     getCustomerDIMData(val) {
         const CID = val;
         this.isBusy = true;
@@ -136,6 +163,7 @@ export class MeetCompComponent {
             this.loggerService.error("Unable to get Meet Comp Data [DIM Data].", response, response.statusText);
         });
     }
+
     custValueChange(value) {
         if ((value > 0) || (value == -1)) {
             this.selectedCustomerID = value;
@@ -145,6 +173,7 @@ export class MeetCompComponent {
         }
         this.reset();
     }
+
     meetCompProdCatName() {
         if (this.selectedCustomerID > -1) {
             const RESULT = where(this.meetCompDIMMasterData, x => { x.CUST_MBR_SID == this.selectedCustomerID });
@@ -155,6 +184,7 @@ export class MeetCompComponent {
             return distinct(res);
         }
     }
+
     prodCatValueChange(value) {
         if (value) {
             this.selectedProdCatName = value;
@@ -163,6 +193,7 @@ export class MeetCompComponent {
             this.selectedProdCatName = '';
         }
     }
+
     meetCompBrandName() {
         if (this.selectedCustomerID > -1) {
             const RES = this.meetCompDIMMasterData.filter(x=>
@@ -196,6 +227,7 @@ export class MeetCompComponent {
             return BRAND_NAME;
         }
     }
+
     brandNameValueChange(value) {
         if (value) {
             this.selectedBrandName = value;
@@ -204,6 +236,7 @@ export class MeetCompComponent {
             this.selectedBrandName = '';
         }
     }
+
     meetCompProdName() {
         if (this.selectedCustomerID > -1) {
             const res = this.meetCompDIMMasterData.filter(x =>
@@ -219,11 +252,13 @@ export class MeetCompComponent {
             return distinct(prodName);
         }
     }
+
     prodNameValueChange(value) {
         if (value) {
             this.selectedProdName = value;
         }
     }
+
     fetchMeetCompData() {
         if (this.selectedCustomerID > 0 || this.selectedCustomerID == -1) {
             this.isCustomerMissing = false;
@@ -281,10 +316,12 @@ export class MeetCompComponent {
             });
         }
     }
+
     resetGrid() {
         this.gridResult = [];
         this.gridData = process(this.gridResult, this.state);
     }
+
     reset() {
         this.selectedProdCatName = '';
         this.selectedBrandName = '';
@@ -292,6 +329,7 @@ export class MeetCompComponent {
         this.gridResult = [];
         this.gridData = process(this.gridResult, this.state);
     }
+
     //Activate/Deactivate Meet Comp Record
     gridSelectItem(dataItem, event) {
         this.isBusy = true;
@@ -307,6 +345,7 @@ export class MeetCompComponent {
             this.loggerService.error("Activate Deactivate Meet Comp failed.", response, response.statusText);
         });
     }
+
     ngOnInit() {
         this.loadMeetCompPage();
         this.custDropdowns();

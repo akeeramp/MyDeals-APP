@@ -6,6 +6,8 @@ import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: 'constants',
@@ -13,7 +15,9 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
     styleUrls: ['Client/src/app/admin/constants/admin.constants.component.css']
 })
 export class ConstantsComponent {
-    constructor(private constantsSvc: constantsService, private loggerSvc: logger) { }
+    constructor(private constantsSvc: constantsService, private loggerSvc: logger) {
+        this.allData = this.allData.bind(this);
+    }
     private isLoading = true;
     private dataSource: any;
     private gridOptions: any;
@@ -48,10 +52,6 @@ export class ConstantsComponent {
     };
     public pageSizes: PageSizeItem[] = [
         {
-            text: "10",
-            value: 10,
-        },
-        {
             text: "25",
             value: 25,
         },
@@ -63,11 +63,37 @@ export class ConstantsComponent {
             text: "100",
             value: 100,
         },
+        {
+            text: "250",
+            value: 250
+        },
+        {
+            text: "All",
+            value: "all",
+        }
     ];
+
     public gridData: GridDataResult;
     distinctPrimitive(fieldName: string): any {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
     }
+
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        const result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+
+        return result;
+    }
+
     clearFilter() {
         this.state.filter = {
             logic: "and",
@@ -75,6 +101,7 @@ export class ConstantsComponent {
         };
         this.gridData = process(this.gridResult, this.state);
     }
+
     loadConstants() {
         if (!(<any>window).isDeveloper) {
             document.location.href = "/Dashboard#/portal";
@@ -98,21 +125,25 @@ export class ConstantsComponent {
                 )
         }
     }
+
     updateBannerMessage(constant) {
         if (constant.CNST_NM == 'ADMIN_MESSAGE') {
             this.adminBannerMessage = constant.CNST_VAL_TXT == 'NA'
                 ? "" : constant.CNST_VAL_TXT;
         }
     }
+
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
         this.gridData = process(this.gridResult, this.state);
     }
+
     closeEditor(grid, rowIndex = this.editedRowIndex) {
         grid.closeRow(rowIndex);
         this.editedRowIndex = undefined;
         this.formGroup = undefined;
     }
+
     addHandler({ sender }) {
         this.closeEditor(sender);
         this.isCnstNmEditable = true;
@@ -129,6 +160,7 @@ export class ConstantsComponent {
 
         sender.addRow(this.formGroup);
     }
+
     editHandler({ sender, rowIndex, dataItem }) {
         this.closeEditor(sender);
         this.isFormChange = false;
@@ -145,13 +177,16 @@ export class ConstantsComponent {
         this.editedRowIndex = rowIndex;
         sender.editRow(rowIndex, this.formGroup);
     }
+
     removeHandler({ dataItem }) {
         this.deleteItem = dataItem;
         this.isDialogVisible = true;
     }
+
     close() {
         this.isDialogVisible = false;
     }
+
     deleteRecord() {
         this.isDialogVisible = false;
         this.constantsSvc.deleteConstants(this.deleteItem)
@@ -168,10 +203,12 @@ export class ConstantsComponent {
                 }
             )
     }
+
     cancelHandler({ sender, rowIndex }) {
         this.closeEditor(sender, rowIndex);
         this.isCnstNmEditable = false;
     }
+
     saveHandler({ sender, rowIndex, formGroup, isNew, dataItem }) {
         this.isCnstNmEditable = false;
         const cnst_map: Cnst_Map = formGroup.value;
@@ -217,6 +254,7 @@ export class ConstantsComponent {
         }
         sender.closeRow(rowIndex);
     }
+
     refreshGrid() {
         this.isLoading = true;
         this.state.filter = {
@@ -225,6 +263,7 @@ export class ConstantsComponent {
         };
         this.loadConstants()
     }
+
     ngOnInit() {
         this.loadConstants()
     }

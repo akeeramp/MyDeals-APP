@@ -1,6 +1,6 @@
 ﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />﻿
-<div class="row" style="display: contents;">
-    <div class="col-md-12 k-header-alignment heading-position-fix padding-top-20">
+<div class="row" >
+    <div class="col-md-12" style="padding-left: 30px; padding-top: 24px">
         <h3 class="header-bottomsizereduce">Constants</h3>
     </div>
 </div>
@@ -11,14 +11,17 @@
                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
                     filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)"
                     (edit)="editHandler($event)" (cancel)="cancelHandler($event)" (save)="saveHandler($event)"
-                    (remove)="removeHandler($event)" [columnMenu]="true">
+                    (remove)="removeHandler($event)" [columnMenu]="true" (excelExport)="onExcelExport($event)">
             <ng-template kendoGridToolbarTemplate>
                 <button kendoGridAddCommand class="k-button addButton">
-                    <span class="k-icon k-i-plus-outline k-icon-md"></span>ADD NEW RECORD
+                    <span class="k-icon k-i-plus-outline k-icon-md"></span>Add New Record
                 </button><button (click)="clearFilter()" class="k-button clearButton">
-                    <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS
+                    <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filters
                 </button>
                 <kendo-grid-spacer></kendo-grid-spacer>
+                <button type="button" kendoGridExcelCommand>
+                    <span class="k-icon k-i-file-excel k-icon-md"></span>Export to Excel
+                </button>
                 <button (click)="refreshGrid()"
                         class="k-button clearButton">
                     <span class="k-icon k-i-reload k-icon-md"></span>Refresh
@@ -93,6 +96,11 @@
                     </div>
                 </ng-template>
             </kendo-grid-column>
+            <kendo-grid-excel fileName="MyDealsConstants.xlsx" [fetchData]="allData">
+                <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
+                                          title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
+                                          [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
+            </kendo-grid-excel>
         </kendo-grid>
         <kendo-dialog *ngIf="isDialogVisible" (close)="close()" [width]="600" class="cons-delete-ppup">
             <h2 class="cons-header-popup">Delete Confirmation</h2>

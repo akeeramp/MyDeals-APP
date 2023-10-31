@@ -4,6 +4,8 @@ import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup } from "@angular/forms";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: "admin-deal-types",
@@ -11,7 +13,9 @@ import { FormGroup } from "@angular/forms";
     styleUrls: ['Client/src/app/admin/dealTypes/admin.dealTypes.component.css']
 })
 export class adminDealTypesComponent {
-    constructor(private dealTypesSvc: dealTypesService) { }
+    constructor(private dealTypesSvc: dealTypesService) {
+        this.allData = this.allData.bind(this);
+    }
     private isLoading = true;
     private errorMsg = "";
     private dataSource;
@@ -55,6 +59,22 @@ export class adminDealTypesComponent {
 
     distinctPrimitive(fieldName: string) {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
+    }
+
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        const result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+
+        return result;
     }
 
     clearFilter() {

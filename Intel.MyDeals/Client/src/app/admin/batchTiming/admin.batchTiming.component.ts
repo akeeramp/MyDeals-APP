@@ -4,6 +4,8 @@ import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/ke
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { batchTimingService } from "./admin.batchTiming.service";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: 'batch-timing',
@@ -11,7 +13,9 @@ import { batchTimingService } from "./admin.batchTiming.service";
     styleUrls: ['Client/src/app/admin/batchTiming/admin.batchTiming.component.css']
 })
 export class batchTimingComponent {
-    constructor(private batchTimingSvc: batchTimingService, private loggerSvc: logger) { }
+    constructor(private batchTimingSvc: batchTimingService, private loggerSvc: logger) {
+        this.allData = this.allData.bind(this);
+    }
 
     // Variables
     private isLoading = true;
@@ -33,10 +37,6 @@ export class batchTimingComponent {
     };
     private pageSizes: PageSizeItem[] = [
         {
-            text: "10",
-            value: 10
-        },
-        {
             text: "25",
             value: 25
         },
@@ -47,8 +47,28 @@ export class batchTimingComponent {
         {
             text: "100",
             value: 100
+        },
+        {
+            text: "All",
+            value: "all",
         }
     ];
+
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        const result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+
+        return result;
+    }
 
     loadBatchTiming() {
         if (!(<any>window).isDeveloper) {

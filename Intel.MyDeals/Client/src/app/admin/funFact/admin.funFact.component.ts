@@ -7,6 +7,8 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Fun_Facts } from './admin.funFact.model';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { process, State, distinct } from "@progress/kendo-data-query";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: 'admin-fun-fact',
@@ -14,7 +16,9 @@ import { process, State, distinct } from "@progress/kendo-data-query";
     styleUrls: ['Client/src/app/admin/funFact/admin.funFact.component.css']
 })
 export class adminFunFactComponent {
-    constructor(private funFactSvc: funFactService, private loggerSvc: logger) { }
+    constructor(private funFactSvc: funFactService, private loggerSvc: logger) {
+        this.allData = this.allData.bind(this);
+    }
     private isLoading = true;
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
@@ -77,6 +81,22 @@ export class adminFunFactComponent {
             this.insertUpdateOperation(rowIndex, isNew, fun_facts);
             sender.closeRow(rowIndex);
         }
+    }
+
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        const result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+
+        return result;
     }
 
     insertUpdateOperation(rowIndex, isNew, fun_facts) {

@@ -18,7 +18,7 @@
                             [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="false"
                             [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" 
-                            class="KendoDQInfo changedragcolor kAlignHeaders">
+                            class="KendoDQInfo changedragcolor kAlignHeaders" (excelExport)="onExcelExport($event)">
                     <ng-template kendoGridToolbarTemplate>
                         <button kendoGridAddCommand class="k-button addButton"
                                 (click)="addNewFix()">
@@ -43,7 +43,10 @@
                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="INCDN_STS" title="Incident Status"></kendo-grid-column>
                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="CRE_EMP_NM" title="Created By"></kendo-grid-column>
                     <kendo-grid-column [headerClass]="{'headerClass':true}" field="CRE_DTM" title="Created On"></kendo-grid-column>
-                    <kendo-grid-excel fileName="MyDealsDataFixes.xlsx"></kendo-grid-excel>
+                    <kendo-grid-excel fileName="MyDealsDataFixes.xlsx" [fetchData]="allData">
+                <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
+                                          title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
+                                          [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>></kendo-grid-excel>
                 </kendo-grid>
             </div>
             <div *ngIf="IsAddMode">

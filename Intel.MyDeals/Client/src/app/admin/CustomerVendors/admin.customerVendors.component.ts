@@ -15,6 +15,8 @@ import {
     distinct
 } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: "admin-vendors-customer",
@@ -22,7 +24,9 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
     styleUrls: ['Client/src/app/admin/CustomerVendors/admin.customerVendors.component.css']
 })
 export class adminCustomerVendorsComponent {
-    constructor(private customerVendSvc: customerVendorService, private loggerSvc: logger) { }
+    constructor(private customerVendSvc: customerVendorService, private loggerSvc: logger) {
+        this.allData = this.allData.bind(this);
+    }
     @ViewChild("catDropDown") private catDdl;
     @ViewChild("custDropDown") private custDdl;
     @ViewChild("countDropDown") private countDdl;
@@ -102,6 +106,22 @@ export class adminCustomerVendorsComponent {
             return sortBy(uniq(pluck(this.gridResult, fieldName)));
         }
         return uniq(pluck(this.gridResult, fieldName));
+    }
+
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        const result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+
+        return result;
     }
 
     clearFilter() {

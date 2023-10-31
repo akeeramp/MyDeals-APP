@@ -17,6 +17,8 @@ import {
     distinct
 } from "@progress/kendo-data-query";
 import { FormGroup, FormControl } from "@angular/forms";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: "admin-unified-dealrecon",
@@ -25,7 +27,9 @@ import { FormGroup, FormControl } from "@angular/forms";
 })
 export class adminUnifiedDealReconComponent {
 
-    constructor(private unifiedDealReconSvc: unifiedDealReconService, private loggerSvc: logger, protected dialog: MatDialog) { }
+    constructor(private unifiedDealReconSvc: unifiedDealReconService, private loggerSvc: logger, protected dialog: MatDialog) {
+        this.allData = this.allData.bind(this);
+    }
 
     private isLoading = true;
     private gridResult: Array<any>;
@@ -79,6 +83,22 @@ export class adminUnifiedDealReconComponent {
 
     distinctPrimitive(fieldName: string): any {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
+    }
+
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        const result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+
+        return result;
     }
 
     loadDealReconciliation() {

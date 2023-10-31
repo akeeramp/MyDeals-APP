@@ -34,8 +34,11 @@
         style="font-size: 20px"></i></button>
 </div>
 <div class="col-md-12 MeetCompGridsAll" style="padding-top: 15px !important;">
-    <kendo-grid [data]="gridData" filterable="menu" [scrollable]="true" [sortable]="true" [navigable]="true" [columnMenu]="{sort:true}" [resizable]="true" [reorderable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter"
-                [group]="state.group" [groupable]="true" [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" class="pro-meetComp kAlignHeaders" (dataStateChange)="dataStateChange($event)" style="height: calc(90vh - 240px);">
+    <kendo-grid [data]="gridData" filterable="menu" [scrollable]="true" [sortable]="true" [navigable]="true" [columnMenu]="{sort:true}" 
+                [resizable]="true" [reorderable]="true" [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" 
+                [filter]="state.filter" [group]="state.group" [groupable]="true" (excelExport)="onExcelExport($event)"
+                [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" class="pro-meetComp kAlignHeaders" 
+                (dataStateChange)="dataStateChange($event)" style="height: calc(90vh - 240px);">
         <ng-template kendoGridToolbarTemplate>
             <button (click)="clearFilter()" class="k-button clearButton">
                 <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filters
@@ -136,6 +139,10 @@
                 <kendo-grid-date-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false" operator="eq"></kendo-grid-date-filter-menu>
             </ng-template>
         </kendo-grid-column>
-        <kendo-grid-excel fileName="MyDealsMeetComp.xlsx"></kendo-grid-excel>
+        <kendo-grid-excel fileName="MyDealsMeetComp.xlsx" [fetchData]="allData">
+                <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
+                                          title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
+                                          [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
+        </kendo-grid-excel>
     </kendo-grid>
 </div>

@@ -6,6 +6,8 @@ import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/ke
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { forkJoin } from "rxjs";
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: 'admin-data-fix',
@@ -14,7 +16,9 @@ import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 })
 export class adminDataFixComponent {
     constructor(private dataFixSvc: dataFixService, 
-                private loggerSvc: logger) { }
+        private loggerSvc: logger) {
+        this.allData = this.allData.bind(this);
+    }
 
     private isLoading = true;
     private color: ThemePalette = "primary";
@@ -64,6 +68,22 @@ export class adminDataFixComponent {
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
         this.gridData = process(this.gridResult, this.state);
+    }
+
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        const result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+
+        return result;
     }
 
     loadDataFix() {

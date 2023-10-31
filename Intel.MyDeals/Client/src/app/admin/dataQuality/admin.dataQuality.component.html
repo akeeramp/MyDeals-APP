@@ -6,10 +6,11 @@
 </div>
 <div class="row" style="display: contents;">
     <div class="col-md-12 kendo-grid-buttons table-fix-lf">
-        <kendo-grid class="KendoDQInfo grid_height kAlignHeaders" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
-                    [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+        <kendo-grid class="KendoDQInfo grid_height kAlignHeaders" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" 
+                    [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
-                    filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" [columnMenu]="true">
+                    filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" [columnMenu]="true"
+                    (excelExport)="onExcelExport($event)">
             <ng-template kendoGridToolbarTemplate>
                 <button (click)="clearFilter()" class="k-button clearButton">
                     <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filters
@@ -36,7 +37,11 @@
             </kendo-grid-column>
             <kendo-grid-column [headerClass]="{'headerClass':true}" field="DQ_USE_CASE_DSC" title="Description">
             </kendo-grid-column>
-            <kendo-grid-excel fileName="MyDealsDQReports.xlsx"></kendo-grid-excel>
+            <kendo-grid-excel fileName="MyDealsDQReports.xlsx" [fetchData]="allData">
+                <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
+                                          title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
+                                          [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>>
+            </kendo-grid-excel>
         </kendo-grid>
     </div>
 </div>

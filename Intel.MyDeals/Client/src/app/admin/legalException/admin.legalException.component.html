@@ -6,10 +6,10 @@
     <div style="margin-bottom: 30px;">
         <kendo-grid [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip" id="legalGrid"
                     [sort]="state.sort" [filter]="state.filter" [sortable]="true"
-                    [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}"
-                    [resizable]="true"
+                    [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [resizable]="true"
                     [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)"
-                    [kendoGridExpandDetailsBy]="expandDetailsBy" [(expandedDetailKeys)]="expandedDetailKeys" (detailExpand)="detailExpand($event)" class="legal-exception-design">
+                    [kendoGridExpandDetailsBy]="expandDetailsBy" [(expandedDetailKeys)]="expandedDetailKeys" 
+                    (detailExpand)="detailExpand($event)" class="legal-exception-design">
 
             <ng-template kendoGridToolbarTemplate>
                 <button *ngIf="editAccess" kendoButton (click)="openCreateExceptionDialog()" class="k-button k-button-icontext legalheader-align" style="border:unset !important;">

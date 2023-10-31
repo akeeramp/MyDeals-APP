@@ -1,7 +1,7 @@
 ﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" /> 
 <div class="batchTimingComp">
     <div class="row">
-        <div class="col-md-12 k-header-alignment head-r-shift padding-top-20">
+        <div class="col-md-12" style="padding-left: 30px; padding-top: 24px">
             <h3 class="head-bottom-reduce">Batch Job Details</h3>
         </div>
     </div>
@@ -10,12 +10,15 @@
             <kendo-grid class="grid-height-h text-colour-change kAlignHeaders" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
                         [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                         [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" [groupable]="true"
-                        [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)">
+                        [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" (excelExport)="onExcelExport($event)">
                 <ng-template kendoGridToolbarTemplate>
                     <button (click)="clearFilter()" class="k-button clearButton">
-                        <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>CLEAR FILTERS
+                        <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filters
                     </button>
                     <kendo-grid-spacer></kendo-grid-spacer>
+                    <button type="button" kendoGridExcelCommand>
+                        <span class="k-icon k-i-file-excel k-icon-md"></span>Export to Excel
+                    </button>
                     <button (click)="refreshGrid()" class="k-button clearButton">
                         <span class="k-icon k-i-reload k-icon-md"></span>Refresh
                     </button>
@@ -32,6 +35,11 @@
                                    title="Batch Job Last Execution Date" width="200"></kendo-grid-column>
                 <kendo-grid-column [headerClass]="{'headerClass':true}" field="ERR_MSG" title="Error Message" width="200">
                 </kendo-grid-column>
+                <kendo-grid-excel fileName="MyDealsBatchTimings.xlsx" [fetchData]="allData">
+                    <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
+                                              title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
+                                              [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
+                </kendo-grid-excel>
             </kendo-grid>
         </div>
     </div>

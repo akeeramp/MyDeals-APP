@@ -6,12 +6,12 @@
 </div>
 <div class="row" style="display: contents;">
     <div class="col-md-12 kendo-grid-buttons table-left-rightsizefix">
-        <kendo-grid class="customerDropdownsTable grid-heightsize filterDesignComp" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
-                    [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+        <kendo-grid class="customerDropdownsTable grid-heightsize filterDesignComp" [data]="gridData" [loading]="isLoading" 
+                    [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
                     filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)"
                     (edit)="editHandler($event)" (cancel)="cancelHandler($event)" (save)="saveHandler($event)"
-                    (remove)="removeHandler($event)">
+                    (remove)="removeHandler($event)" (excelExport)="onExcelExport($event)">
             <ng-template kendoGridToolbarTemplate>
                 <button kendoGridAddCommand class="k-button addButton">
                     <span class="k-icon k-i-plus-outline k-icon-md" style="font-size:24px;"></span>Add New Record
@@ -117,7 +117,11 @@
                     <kendo-textbox [formControl]="formGroup.get('ATRB_LKUP_TTIP')"></kendo-textbox>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-excel fileName="MyDealsDropdowns.xlsx"></kendo-grid-excel>
+            <kendo-grid-excel fileName="MyDealsDropdowns.xlsx" [fetchData]="allData">
+                <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
+                                          title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
+                                          [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
+            </kendo-grid-excel>
         </kendo-grid>
         <kendo-dialog class="deleted-popups" *ngIf="isDialogVisible" (close)="close()" [width]="600">
             <h2>Delete Confirmation</h2>

@@ -15,6 +15,8 @@ import {
     distinct,
 } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: "rule-owner",
@@ -23,7 +25,9 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 })
 
 export class RuleOwnerComponent {
-    constructor(private ruleOwnerSvc: ruleOwnerService, private loggerSvc: logger, private constantsSvc: constantsService) { }
+    constructor(private ruleOwnerSvc: ruleOwnerService, private loggerSvc: logger, private constantsSvc: constantsService) {
+        this.allData = this.allData.bind(this);
+    }
 
     @ViewChild("ownerNameDropDown") private ownerDdl;
     public filterSettings: DropDownFilterSettings = {
@@ -79,6 +83,22 @@ export class RuleOwnerComponent {
     ];
 
     public gridData: GridDataResult;
+
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        const result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+
+        return result;
+    }
 
     clearFilter() {
         this.state.filter = {

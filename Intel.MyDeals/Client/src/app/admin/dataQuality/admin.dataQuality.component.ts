@@ -4,6 +4,8 @@ import { dataQualityService } from "./admin.dataQuality.service";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: 'admin-dataquality',
@@ -11,7 +13,9 @@ import { ThemePalette } from '@angular/material/core';
     styleUrls: ['Client/src/app/admin/dataQuality/admin.dataQuality.component.css']
 })
 export class admindataQualityComponent {
-    constructor(private dataQualitySvc: dataQualityService, private loggerSvc: logger) { }
+    constructor(private dataQualitySvc: dataQualityService, private loggerSvc: logger) {
+        this.allData = this.allData.bind(this);
+    }
     private isLoading = true;
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
@@ -47,6 +51,22 @@ export class admindataQualityComponent {
             value: "all"
         }
     ];
+
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        const result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+
+        return result;
+    }
 
     loadDataQualityUseCases() {
         //Developer can see the Screen..

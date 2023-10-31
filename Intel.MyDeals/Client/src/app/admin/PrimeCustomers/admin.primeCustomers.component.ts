@@ -7,6 +7,8 @@ import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/ke
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { sortBy, uniq, pluck } from 'underscore';
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: 'admin-prime-customers',
@@ -14,7 +16,9 @@ import { sortBy, uniq, pluck } from 'underscore';
     styleUrls: ['Client/src/app/admin/PrimeCustomers/admin.primeCustomers.component.css']
 })
 export class adminPrimeCustomersComponent {
-    constructor(private primeCustSvc: primeCustomerService, private loggerSvc: logger) { }
+    constructor(private primeCustSvc: primeCustomerService, private loggerSvc: logger) {
+        this.allData = this.allData.bind(this);
+    }
 
     @ViewChild("primeCustDropDown") private primeCustDdl;
     @ViewChild("primeCustNmDropDown") private primeCustNmDdl;
@@ -73,6 +77,22 @@ export class adminPrimeCustomersComponent {
         } else if (fieldName == 'PRIM_CUST_CTRY') {
             return sortBy(uniq(pluck(this.gridResult, fieldName)));
         } else return uniq(pluck(this.gridResult, fieldName));
+    }
+
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        const result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+
+        return result;
     }
 
     loadPrimeCustomer() {

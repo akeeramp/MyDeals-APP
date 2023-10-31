@@ -6,11 +6,11 @@
 </div>
 <div class="row" style="display: contents;">
     <div class="col-md-12 kendo-grid-buttons table-l-r">
-        <kendo-grid class="size-height-inc kAlignHeaders" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
-                    [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+        <kendo-grid class="size-height-inc kAlignHeaders" [data]="gridData" [loading]="isLoading" [pageSize]="state.take" 
+                    [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" filterable="menu" [navigable]="true"
                     (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)" (edit)="editHandler($event)"
-                    (cancel)="cancelHandler($event)" (save)="saveHandler($event)">
+                    (cancel)="cancelHandler($event)" (save)="saveHandler($event)" (excelExport)="onExcelExport($event)">
             <ng-template kendoGridToolbarTemplate>
                 <button kendoGridAddCommand class="k-button addButton">
                     <span class="k-icon k-i-plus-outline k-icon-md"></span>Add New Record
@@ -119,7 +119,11 @@
                     </div>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-excel fileName="MyDealsFunFacts.xlsx"></kendo-grid-excel>
+            <kendo-grid-excel fileName="MyDealsFunFacts.xlsx" [fetchData]="allData">
+                <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
+                                          title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
+                                          [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
+            </kendo-grid-excel>
         </kendo-grid>
     </div>
 </div>

@@ -11,7 +11,8 @@
                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
                     filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)"
                     (edit)="editHandler($event)" (remove)="removeHandler($event)" (cancel)="cancelHandler($event)"
-                    (save)="saveHandler($event)" [columnMenu]="true" class="workFlowGrid kAlignHeaders" #workflow_grid>
+                    (save)="saveHandler($event)" [columnMenu]="true" (excelExport)="onExcelExport($event)"
+                    class="workFlowGrid kAlignHeaders" #workflow_grid>
             <ng-template kendoGridToolbarTemplate>
                 <button kendoGridAddCommand class="k-button addButton">
                     <span class="k-icon k-i-plus-outline k-icon-md"></span>Add New Record
@@ -210,7 +211,11 @@
                     </div>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-excel fileName="MyDealsWorkflows.xlsx"></kendo-grid-excel>
+            <kendo-grid-excel fileName="MyDealsWorkflows.xlsx" [fetchData]="allData">
+                <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
+                                          title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
+                                          [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
+            </kendo-grid-excel>
         </kendo-grid>
         <kendo-dialog *ngIf="isDialogVisible" class="workflow-delete-popup">
             <h3 class="kendo-dialog-message confirmationTitle">Delete confirmation</h3>

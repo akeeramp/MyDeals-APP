@@ -12,7 +12,7 @@
                     [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
                     filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)" (add)="addHandler($event)"
                     (edit)="editHandler($event)" (cancel)="cancelHandler($event)" (save)="saveHandler($event)"
-                    [columnMenu]="true">
+                    [columnMenu]="true" (excelExport)="onExcelExport($event)">
             <ng-template kendoGridToolbarTemplate>
                 <button kendoGridAddCommand class="k-button addButton"
                         *ngIf="editAccess">
@@ -135,7 +135,11 @@
                                        [formControl]="formGroup.get('RPL_STS_CD')" style="width: 170px;" class="rpl_statusMultiselect"></kendo-multiselect>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-excel fileName="MyDealsUnifiedCustomers.xlsx"></kendo-grid-excel>
+            <kendo-grid-excel fileName="MyDealsUnifiedCustomers.xlsx" [fetchData]="allData">
+                <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
+                                          title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
+                                          [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
+            </kendo-grid-excel>
         </kendo-grid>
         <kendo-dialog *ngIf="isDialogVisible" (close)="saveCancel()" class="deactivatePopUp">
             <p class="kendo-dialog-message" style="white-space: pre-wrap; text-align: left; margin: 15px;">{{errorMessage}}</p>

@@ -9,10 +9,11 @@
         </div>
     </div>
     <div class="col-md-12 kendo-grid-buttons box_size">
-        <kendo-grid class="KendoProductsInfo changedragcolor kAlignHeaders" [data]="gridData" [loading]="isLoading" [pageSize]="state.take"
-                    [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
+        <kendo-grid class="KendoProductsInfo changedragcolor kAlignHeaders" [data]="gridData" [loading]="isLoading" 
+                    [pageSize]="state.take" [skip]="state.skip" [sort]="state.sort" [filter]="state.filter" [sortable]="true"
                     [pageable]="{ type:type, pageSizes: pageSizes, info:info, refresh:true }" [groupable]="true"
-                    [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" id="adminproduct">
+                    [group]="state.group" filterable="menu" (dataStateChange)="dataStateChange($event)" 
+                    (excelExport)="onExcelExport($event)" id="adminproduct">
             <ng-template kendoGridToolbarTemplate>
                 <button (click)="clearFilter()" class="k-button clearButton">
                     <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family"></span>Clear Filters
@@ -50,7 +51,11 @@
                     </div>
                 </ng-template>
             </kendo-grid-column>
-            <kendo-grid-excel fileName="MyDealsProducts.xlsx"></kendo-grid-excel>
+            <kendo-grid-excel fileName="MyDealsProducts.xlsx" [fetchData]="allData">
+                <kendo-excelexport-column *ngFor="let item of excelColumns | keyvalue : returnZero" field="{{item.key}}"
+                                          title="{{item.value}}" [width]="150" [cellOptions]="cellOptions"
+                                          [headerCellOptions]="headerCellOptions"></kendo-excelexport-column>
+            </kendo-grid-excel>
         </kendo-grid>
     </div>
 </div>

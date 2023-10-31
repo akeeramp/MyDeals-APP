@@ -6,6 +6,8 @@ import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: 'admin-vistex-customer-mapping',
@@ -13,7 +15,9 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
     styleUrls: ['Client/src/app/admin/vistexcustomermapping/admin.vistexCustomerMapping.component.css']
 })
 export class adminVistexCustomerMappingComponent {
-    constructor(private customerMapSvc: vistexCustomerMappingService, private loggerSvc: logger) { }
+    constructor(private customerMapSvc: vistexCustomerMappingService, private loggerSvc: logger) {
+        this.allData = this.allData.bind(this);
+    }
     @ViewChild("profileDropDown") private profileDdl;
     @ViewChild("tenderDropDown") private tenderDdl;
     @ViewChild("nonTenderDropDown") private nonTenderDdl;
@@ -81,6 +85,22 @@ export class adminVistexCustomerMappingComponent {
 
     distinctPrimitive(fieldName: string) {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);
+    }
+
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        const result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+
+        return result;
     }
 
     clearFilter() {

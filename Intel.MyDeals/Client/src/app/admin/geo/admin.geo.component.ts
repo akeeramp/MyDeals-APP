@@ -4,7 +4,8 @@ import { geoService } from "./admin.geo.service";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
-
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: "admin-geo",
@@ -13,7 +14,9 @@ import { ThemePalette } from '@angular/material/core';
 })
 
 export class geoComponent {
-    constructor(private geoSvc: geoService, private loggerSvc: logger) { }
+    constructor(private geoSvc: geoService, private loggerSvc: logger) {
+        this.allData = this.allData.bind(this);
+    }
     private isLoading = true;
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
@@ -68,6 +71,22 @@ export class geoComponent {
                 this.loggerSvc.error('Geo service', error);
             });
         }
+    }
+
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        const result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+
+        return result;
     }
 
     dataStateChange(state: DataStateChangeEvent): void {

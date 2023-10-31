@@ -9,6 +9,8 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Product_categories } from "./admin.productCategories.model";
 import { each } from 'underscore';
 import { DatePipe } from "@angular/common";
+import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
 @Component({
     selector: 'admin-product-categories',
@@ -16,7 +18,9 @@ import { DatePipe } from "@angular/common";
     styleUrls: ['Client/src/app/admin/productCategories/admin.productCategories.component.css']
 })
 export class adminProductCategoriesComponent {
-    constructor(private productCategorySvc: productCategoryService, public datepipe: DatePipe, private loggerSvc: logger) { }
+    constructor(private productCategorySvc: productCategoryService, public datepipe: DatePipe, private loggerSvc: logger) {
+        this.allData = this.allData.bind(this);
+    }
     private isLoading = true;
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
@@ -67,6 +71,22 @@ export class adminProductCategoriesComponent {
             value: "all"
         }
     ];
+
+    public onExcelExport(e: ExcelExportEvent): void {
+        e.workbook.sheets[0].title = "Users Export";
+    }
+
+    public allData(): ExcelExportData {
+        const excelState: any = {};
+        Object.assign(excelState, this.state)
+        excelState.take = this.gridResult.length;
+
+        const result: ExcelExportData = {
+            data: process(this.gridResult, excelState).data,
+        };
+
+        return result;
+    }
 
     clearFilter() {
         this.state.filter = {
