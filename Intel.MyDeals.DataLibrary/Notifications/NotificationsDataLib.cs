@@ -12,6 +12,7 @@ using System.Net.Http.Headers;
 using System.Configuration;
 using System.Threading.Tasks;
 using Intel.Opaque.Utilities.Server;
+using System.Net;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -428,6 +429,7 @@ namespace Intel.MyDeals.DataLibrary
                 client.DefaultRequestHeaders.Accept.Clear();
                 client.DefaultRequestHeaders.Accept.Add(
                     new MediaTypeWithQualityHeaderValue("application/json"));
+                System.Net.ServicePointManager.SecurityProtocol = SecurityProtocolType.Tls12;
                 return client;
             }
         }
