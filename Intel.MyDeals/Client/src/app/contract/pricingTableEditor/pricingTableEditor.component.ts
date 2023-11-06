@@ -1254,8 +1254,12 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
             if (nonSavedRows.length > 0 && nonSavedRows.length == delRows.length) {
                 //multiple delete at the sametime this will avoid issues of deleting one by one
                 //making as unique rows to avoid multiple deletions happens
-                const rowstoDel=  unique(delRows, 'row');
-                this.hotTable.alter('remove_row', delRows[0].row, rowstoDel.length, 'no-edit');
+                const rowstoDel = unique(delRows, 'row');
+                let deleteArray = [];
+                each(rowstoDel, (rows) => {
+                    deleteArray.push([rows.row, 1]);
+                });
+                this.hotTable.alter('remove_row', deleteArray);
                 this.getMergeCellsOnDelete();
                 this.multiRowDelete = [];
                 this.isDeletePTR = false;
