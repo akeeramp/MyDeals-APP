@@ -1,4 +1,4 @@
-import { Component, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, NgZone, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { each, indexOf, map, clone } from 'underscore';
 import { forkJoin, Observable, of } from 'rxjs';
@@ -45,7 +45,7 @@ export class AutoFillComponent {
 
     constructor(private autoSvc: autoFillService,
                 private loggerSvc: logger, private templatesSvc: TemplatesService,
-                public dialogRef: MatDialogRef<AutoFillComponent>,
+                public dialogRef: MatDialogRef<AutoFillComponent>, private ngZone: NgZone,
                 @Inject(MAT_DIALOG_DATA) public autofillData: any) {
         dialogRef.disableClose = true; // prevents pop up from closing when user clicks outside of the MATDIALOG  
     }
@@ -245,6 +245,7 @@ export class AutoFillComponent {
     }
 
     onSave() {
+        this.ngZone.run(async () => {
         this.isInitial = false;
         this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.validMsg = this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.validMsg = "";
         this.autofillData.DEFAULT.REBATE_OA_MAX_AMT.isError = this.autofillData.DEFAULT.REBATE_OA_MAX_VOL.isError = false;
@@ -291,6 +292,7 @@ export class AutoFillComponent {
                 this.editPricingTable();
             }
         }
+       })
     }
 
     editPricingTable() {
