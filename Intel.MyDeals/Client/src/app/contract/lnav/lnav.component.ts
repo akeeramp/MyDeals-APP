@@ -930,9 +930,9 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
         if (this.selectedTab == this.dealEntryTabId && this.isAddPricingStrategyState()) {
             if (toggleStrategyField) {
                 this.toggleAddStrategy();
-            }
 
-            this.showPricingStrategyTooltip();
+                this.showPricingStrategyTooltip();
+            }
         }
     }
 

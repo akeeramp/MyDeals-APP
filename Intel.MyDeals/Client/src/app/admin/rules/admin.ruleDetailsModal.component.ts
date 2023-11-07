@@ -155,7 +155,7 @@ export class RuleDetailsModalComponent {
         });
 
         let result = await forkJoin(values).toPromise().catch((err) => {
-            this.loggerSvc.error('pricingTableEditorComponent::getAllDrowdownValues::service', err);
+            this.loggerSvc.error('PricingTableEditorComponent::getAllDrowdownValues::service', err);
         });
         if (result != undefined) {
             this.dropdownresponses = result;

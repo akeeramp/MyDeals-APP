@@ -7,7 +7,7 @@ import { TemplatesService } from "../../shared/services/templates.service";
 import { PricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
 import { lnavService } from "../lnav/lnav.service";
 import { dealEditorComponent } from "../dealEditor/dealEditor.component"
-import { pricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
+import { PricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
 import { performanceBarsComponent } from '../performanceBars/performanceBar.component';
 import { ActivatedRoute, Router } from '@angular/router';
 
@@ -30,7 +30,7 @@ export class pricingTableComponent {
     public drawChart: boolean;
     constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: TemplatesService,
         private pteService: PricingTableEditorService, private lnavSvc: lnavService, private route: ActivatedRoute, private router: Router) {}
-    @ViewChild(pricingTableEditorComponent) private pteComp: pricingTableEditorComponent;
+    @ViewChild(PricingTableEditorComponent) private pteComp: PricingTableEditorComponent;
     @ViewChild(performanceBarsComponent) public perfComp: performanceBarsComponent;
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
     public curPricingStrategy = {};

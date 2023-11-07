@@ -1292,7 +1292,7 @@ export class dealEditorComponent {
             }
         });
         let result = await forkJoin(dropObjs).toPromise().catch((err) => {
-            this.loggerService.error('pricingTableEditorComponent::getAllDrowdownValues::service', err);
+            this.loggerService.error('PricingTableEditorComponent::getAllDrowdownValues::service', err);
         });
         if (result != undefined) {
             if (result["SETTLEMENT_PARTNER"] != undefined) {

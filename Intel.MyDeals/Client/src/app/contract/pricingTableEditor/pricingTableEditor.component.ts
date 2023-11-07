@@ -1,10 +1,13 @@
-﻿import { Component, Input, Output, EventEmitter, NgZone, OnInit, AfterViewInit } from '@angular/core';
+﻿/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-inferrable-types */
+import { Component, Input, Output, EventEmitter, NgZone, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
-import { each, uniq, filter, map, where, pluck, findWhere, findIndex, findLastIndex, reject, contains, find, values, keys, unique, includes, isUndefined, isNull } from 'underscore';
+import { each, uniq, filter, map, where, pluck, findWhere, findIndex, findLastIndex, reject, contains, find, values, keys, unique, includes, isEmpty } from 'underscore';
 import { MatDialog } from '@angular/material/dialog';
-import { forkJoin } from 'rxjs';
+import { BehaviorSubject, Observable, forkJoin } from 'rxjs';
 import { distinct } from '@progress/kendo-data-query';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 import { logger } from '../../shared/logger/logger';
 import { PricingTableEditorService } from './pricingTableEditor.service'
@@ -32,19 +35,21 @@ import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 import { FlexOverlappingCheckComponent } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.component';
 import { dropDownModalComponent } from '../ptModals/dropDownModal/dropDownModal.component';
+import { RowObject } from 'handsontable/common';
 
 @Component({
     selector: 'pricing-table-editor',
     templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html'
 })
-export class pricingTableEditorComponent implements OnInit, AfterViewInit {
+export class PricingTableEditorComponent implements OnInit, AfterViewInit {
 
     constructor(private pteService: PricingTableEditorService,
                 private productSelectorService: productSelectorService,
                 private loggerService: logger,
                 private lnavService: lnavService,
-                private flexoverLappingCheckDealsService: flexoverLappingcheckDealService,
-                private contractDetailsService: ContractDetailsService, private ngZone: NgZone,
+                private flexOverlappingCheckDealService: flexoverLappingcheckDealService,
+                private contractDetailsService: ContractDetailsService,
+                private ngZone: NgZone,
                 protected dialog: MatDialog) {
         /*  custom cell editor logic starts here*/
         let VM = this;
@@ -406,6 +411,19 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
     @Output() tmDirec = new EventEmitter();
     @Output() enableDeTab = new EventEmitter();
     @Output() refreshedContractData = new EventEmitter;
+
+    /*For loading variable */
+    private _isLoading: BehaviorSubject<boolean> = new BehaviorSubject(false);
+    private get isLoading$(): Observable<boolean> {
+        return this._isLoading.asObservable();
+    }
+    public get isLoading(): boolean {
+        return this._isLoading.value;
+    }
+    private set isLoading(updatedValue: boolean) {
+        this._isLoading.next(updatedValue);
+    }
+
     private isDeTabInfmIconReqd: boolean = false;
     private savedResponseWarning: any[] = [];
     public fontData: any[] = [
@@ -422,8 +440,6 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
     private isCustDivNull: boolean = false;
     private validationMessage: boolean = false;
     private curRow = [];
-    /*For loading variable */
-    private isLoading: boolean = false;
     private msgType: string = "";
     private spinnerMessageHeader: string = "";
     private spinnerMessageDescription: string = "";
@@ -761,7 +777,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
     async getPTRDetails() {
         let response = await this.pteService.readPricingTable(this.in_Pt_Id).toPromise().catch((err) => {
             this.loggerService.error('Something went wrong.', 'error');
-            console.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service::', err);
+            console.error('PricingTableEditorComponent::readPricingTable::readTemplates:: service::', err);
         });
 
         if (response && response.PRC_TBL_ROW && response.PRC_TBL_ROW.length > 0) {
@@ -1339,7 +1355,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
 
         let result = await forkJoin(dropObjs).toPromise().catch((err) => {
             this.loggerService.error('Something went wrong', 'Error');
-            console.error('pricingTableEditorComponent::getAllDrowdownValues::service', err)
+            console.error('PricingTableEditorComponent::getAllDrowdownValues::service', err)
         });
         return result;
     }
@@ -1417,7 +1433,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
             if (PTR && PTR.length > 0) {
                 let flexReqData = PTE_Common_Util.getOverlapFlexProducts(this.curPricingTable, PTR);
                 if (flexReqData != undefined) {
-                    this.overlapFlexResult = await this.flexoverLappingCheckDealsService.GetProductOVLPValidation(flexReqData).toPromise();
+                    this.overlapFlexResult = await this.flexOverlappingCheckDealService.GetProductOVLPValidation(flexReqData).toPromise();
                 }
                 //Checking for UI errors
                 finalPTR = PTE_Save_Util.validatePTE(PTR, this.curPricingStrategy, this.curPricingTable, this.contractData, this.overlapFlexResult, this.validMisProd);
@@ -1501,7 +1517,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
             this.setBusy("Saving your data...", "Please wait as we save your information", "Info", true);
         let result = await this.pteService.updateContractAndCurrentPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).toPromise().catch((error) => {
             this.loggerService.error("Something went wrong", 'Error');
-            console.error("pricingTableEditorComponent::saveUpdatePTEAPI::", error);
+            console.error("PricingTableEditorComponent::saveUpdatePTEAPI::", error);
         });
         this.undoEnable = false;
         if (result) {
@@ -1537,7 +1553,7 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
         }
         else {
             this.loggerService.error("Something went wrong", 'Error');
-            console.error("pricingTableEditorComponent::saveUpdatePTEAPI::", 'error');
+            console.error("PricingTableEditorComponent::saveUpdatePTEAPI::", 'error');
         }
         this.isLoading = false;
 
@@ -2206,6 +2222,44 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
         });
     }
 
+    // Attributes for first contract product cell in new contract 
+    @ViewChild('addProductTooltipTarget') private addProductTooltip: NgbTooltip;
+    private showAddProductTooltip(): void {
+        this.addProductTooltip.open();
+    }
+
+    private appendAddProductTooltip(): void {
+        if (this.isRowDataEmpty(this.hotTable.getDataAtRow(0))) {
+            const CONTRACT_PRODUCT_HEADER = 'Contract Product *';
+            const contractProductColumnIndex = this.returnColumnIndexForHeader(CONTRACT_PRODUCT_HEADER);
+            if (contractProductColumnIndex != -1) {
+                const firstContractProductCell = document.querySelector('.handsontable tbody tr').querySelectorAll('td')[contractProductColumnIndex];
+                const tooltipElement = document.querySelector('div.ignore-pointer-event');
+
+                if (firstContractProductCell != null && tooltipElement != null) {
+                    firstContractProductCell.appendChild(tooltipElement);
+                }    
+            }
+        }
+    }
+
+    private returnColumnIndexForHeader(headerText: string): number {
+        const headerTitles: string[] = Array.from(document.querySelectorAll('.handsontable table.htCore span.colHeader > span')).map((element) => {
+            return element.textContent;
+        });
+
+        return headerTitles.indexOf(headerText);
+    }
+
+    private isRowDataEmpty(rowData: any[]): boolean {
+        const uniqueCellData = new Set(rowData);
+        if (uniqueCellData.size == 1 && (uniqueCellData[0] == '' || uniqueCellData[0] == null || uniqueCellData[0] == undefined)) {
+            return true;
+        }
+
+        return false;
+    }
+
     ngOnInit() {
         this.isTenderContract = Tender_Util.tenderTableLoad(this.contractData);
         //code for autofill change to accordingly change values
@@ -2225,12 +2279,22 @@ export class pricingTableEditorComponent implements OnInit, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        //loading after the View init from there onwards we can reuse the hotTable instance
+        // loading after the View init from there onwards we can reuse the hotTable instance
         this.hotTable = this.hotRegisterer.getInstance(this.hotId);
-        // loading PTE cell util  with hotTable instance for direct use of hotTable within the class
+
+        // loading PTE cell util with hotTable instance for direct use of hotTable within the class
         new PTE_CellChange_Util(this.hotTable);
         new PTE_Common_Util(this.hotTable);
         new PTE_Load_Util(this.hotTable);
+
+        this.isLoading$.subscribe((isLoading: boolean) => {
+            if (!isLoading) {
+                setTimeout(() => {  // Timeout is for loading animation to finish closing
+                    this.appendAddProductTooltip();
+                    this.showAddProductTooltip();    
+                }, 300);
+            }
+        });
     }
 
 }

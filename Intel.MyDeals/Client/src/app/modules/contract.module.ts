@@ -2,7 +2,7 @@
 import { ContractDetailsComponent } from "../contract/contractDetails/contractDetails.component";
 import { LnavComponent } from "../contract/lnav/lnav.component";
 import { pricingTableComponent } from "../contract/pricingTable/pricingTable.component";
-import { pricingTableEditorComponent } from "../contract/pricingTableEditor/pricingTableEditor.component";
+import { PricingTableEditorComponent } from "../contract/pricingTableEditor/pricingTableEditor.component";
 import { TenderFolioComponent } from "../contract/tenderFolio/tenderFolio.component"
 import { tenderManagerComponent } from "../contract/tenderManager/tenderManager.component"
 import { publishTenderComponent } from "../contract/publishTender/publishTender.component"
@@ -52,7 +52,7 @@ export let contractComponents = [
     ContractDetailsComponent,
     LnavComponent,
     pricingTableComponent,
-    pricingTableEditorComponent,
+    PricingTableEditorComponent,
     TenderFolioComponent,
     tenderManagerComponent,
     publishTenderComponent,

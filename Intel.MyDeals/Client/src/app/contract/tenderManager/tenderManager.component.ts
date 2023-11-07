@@ -5,7 +5,7 @@ import { PricingTableEditorService } from '../../contract/pricingTableEditor/pri
 import { TemplatesService } from "../../shared/services/templates.service";
 import { ContractDetailsService } from "../contractDetails/contractDetails.service";
 import { dealEditorComponent } from "../dealEditor/dealEditor.component"
-import { pricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
+import { PricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
 import { each } from 'underscore';
 import { performanceBarsComponent } from "../performanceBars/performanceBar.component";
 import { ActivatedRoute, Router } from "@angular/router";
@@ -16,7 +16,7 @@ import { ActivatedRoute, Router } from "@angular/router";
     styleUrls: ["Client/src/app/contract/tenderManager/tenderManager.component.css"]
 })
 export class tenderManagerComponent {
-    @ViewChild(pricingTableEditorComponent) private pteComp: pricingTableEditorComponent;
+    @ViewChild(PricingTableEditorComponent) private pteComp: PricingTableEditorComponent;
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
     @ViewChild(performanceBarsComponent) public perfComp: performanceBarsComponent;
     isDeveloper: any;
@@ -84,7 +84,7 @@ export class tenderManagerComponent {
                 });
                 this.UItemplate = result;
                 this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
-                    this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
+                    this.loggerSvc.error('PricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
                 });
                 this.ispricingTableDPASSED_VALIDATION= 'valid_'+this.pricingTableData.PRC_ST[0].PASSED_VALIDATION;
                 this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
@@ -210,7 +210,7 @@ export class tenderManagerComponent {
         if (tab != '' && tab != 'Delete') {
             //Redirects to selected tab
             this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
-                this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
+                this.loggerSvc.error('PricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
             });
             this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
             let passed = this.pricingTableData.PRC_TBL_ROW.filter(x => x.PASSED_VALIDATION == "Complete");
@@ -222,7 +222,7 @@ export class tenderManagerComponent {
         } else if (tab == 'Delete') {
             //Redirect to DE when TTE has passed validations
             this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
-                this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
+                this.loggerSvc.error('PricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
             });
             this.isPTREmpty = this.pricingTableData.PRC_TBL_ROW.length > 0 ? false : true;
             let passed = this.pricingTableData.PRC_TBL_ROW.filter(x => x.PASSED_VALIDATION == "Complete");
@@ -234,7 +234,7 @@ export class tenderManagerComponent {
         else {
             //Refresh the data
             this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
-                this.loggerSvc.error('pricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
+                this.loggerSvc.error('PricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
             });
             //checking passed validation
             let passed = this.pricingTableData.PRC_TBL_ROW.filter(x => x.PASSED_VALIDATION == "Complete");
