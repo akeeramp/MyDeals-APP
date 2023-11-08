@@ -135,7 +135,8 @@ export class adminUnifiedDealReconComponent {
             OBJ_SID: new FormControl({ value: dataItem.OBJ_SID, disabled: true }),
             END_CUSTOMER_RETAIL: new FormControl({ value: dataItem.END_CUSTOMER_RETAIL, disabled: true }),
             END_CUSTOMER_COUNTRY: new FormControl({ value: dataItem.END_CUSTOMER_COUNTRY, disabled: true }),
-            EMP_WWID: new FormControl(dataItem.EMP_WWID)
+            EMP_WWID: new FormControl(dataItem.EMP_WWID),
+            UNIFIED_STATUS: new FormControl(dataItem.UNIFIED_STATUS)
         });
         this.formGroup.valueChanges.subscribe(x => {
             this.isFormChange = true;

@@ -9563,39 +9563,40 @@ namespace Intel.MyDeals.Entities {
 	
 	[DataMember]
 	public System.String TITLE {set;get;}
-	
-	
-	/*
-	private static List<UnPrimeDeals> UnPrimeDealsFromReader(SqlDataReader rdr){
-	// This helper method is template generated.
-	// Refer to that template for details to modify this code.
-	
-	var ret = new List<UnPrimeDeals>();
-	int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
-	int IDX_CNTRCT_OBJ_SID = DB.GetReaderOrdinal(rdr, "CNTRCT_OBJ_SID");
-	int IDX_EMP_WWID = DB.GetReaderOrdinal(rdr, "EMP_WWID");
-	int IDX_END_CUST_OBJ = DB.GetReaderOrdinal(rdr, "END_CUST_OBJ");
-	int IDX_END_CUSTOMER_COUNTRY = DB.GetReaderOrdinal(rdr, "END_CUSTOMER_COUNTRY");
-	int IDX_END_CUSTOMER_RETAIL = DB.GetReaderOrdinal(rdr, "END_CUSTOMER_RETAIL");
-	int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
-	int IDX_TITLE = DB.GetReaderOrdinal(rdr, "TITLE");
-	
-	while (rdr.Read()){
-	ret.Add(new UnPrimeDeals {
-	CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
-	CNTRCT_OBJ_SID = (IDX_CNTRCT_OBJ_SID < 0 || rdr.IsDBNull(IDX_CNTRCT_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNTRCT_OBJ_SID),
-	EMP_WWID = (IDX_EMP_WWID < 0 || rdr.IsDBNull(IDX_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_EMP_WWID),
-	END_CUST_OBJ = (IDX_END_CUST_OBJ < 0 || rdr.IsDBNull(IDX_END_CUST_OBJ)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_OBJ),
-	END_CUSTOMER_COUNTRY = (IDX_END_CUSTOMER_COUNTRY < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_COUNTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_COUNTRY),
-	END_CUSTOMER_RETAIL = (IDX_END_CUSTOMER_RETAIL < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_RETAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_RETAIL),
-	OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
-	TITLE = (IDX_TITLE < 0 || rdr.IsDBNull(IDX_TITLE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TITLE)
-	});
-	} // while
-	return ret;
-	}
-	*/
-	
+
+	[DataMember]
+	public String UNIFIED_STATUS { get; set; }
+		/*
+		private static List<UnPrimeDeals> UnPrimeDealsFromReader(SqlDataReader rdr){
+		// This helper method is template generated.
+		// Refer to that template for details to modify this code.
+
+		var ret = new List<UnPrimeDeals>();
+		int IDX_CHG_DTM = DB.GetReaderOrdinal(rdr, "CHG_DTM");
+		int IDX_CNTRCT_OBJ_SID = DB.GetReaderOrdinal(rdr, "CNTRCT_OBJ_SID");
+		int IDX_EMP_WWID = DB.GetReaderOrdinal(rdr, "EMP_WWID");
+		int IDX_END_CUST_OBJ = DB.GetReaderOrdinal(rdr, "END_CUST_OBJ");
+		int IDX_END_CUSTOMER_COUNTRY = DB.GetReaderOrdinal(rdr, "END_CUSTOMER_COUNTRY");
+		int IDX_END_CUSTOMER_RETAIL = DB.GetReaderOrdinal(rdr, "END_CUSTOMER_RETAIL");
+		int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
+		int IDX_TITLE = DB.GetReaderOrdinal(rdr, "TITLE");
+
+		while (rdr.Read()){
+		ret.Add(new UnPrimeDeals {
+		CHG_DTM = (IDX_CHG_DTM < 0 || rdr.IsDBNull(IDX_CHG_DTM)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_CHG_DTM),
+		CNTRCT_OBJ_SID = (IDX_CNTRCT_OBJ_SID < 0 || rdr.IsDBNull(IDX_CNTRCT_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNTRCT_OBJ_SID),
+		EMP_WWID = (IDX_EMP_WWID < 0 || rdr.IsDBNull(IDX_EMP_WWID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_EMP_WWID),
+		END_CUST_OBJ = (IDX_END_CUST_OBJ < 0 || rdr.IsDBNull(IDX_END_CUST_OBJ)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_OBJ),
+		END_CUSTOMER_COUNTRY = (IDX_END_CUSTOMER_COUNTRY < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_COUNTRY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_COUNTRY),
+		END_CUSTOMER_RETAIL = (IDX_END_CUSTOMER_RETAIL < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_RETAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_RETAIL),
+		OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
+		TITLE = (IDX_TITLE < 0 || rdr.IsDBNull(IDX_TITLE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TITLE)
+		});
+		} // while
+		return ret;
+		}
+		*/
+
 	} // End of class UnPrimeDeals
 
 	///<summary>
