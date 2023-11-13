@@ -12,7 +12,7 @@
     <div id="search-info-container-advanced" [hidden]="!showSearchFilters">
         <div class="row search-container-advanced">
             <div class="col-md-5 left-inner-container">
-                <app-search [title]="title" [titleText]="searchTitle"></app-search>
+                <app-search [title]="title" [titleText]="searchTitle" (isDirty)="isSearchDirty($event)"></app-search>
             </div>
             <div class="col-md-7 right-inner-container">
                 <attribute-builder-angular (emitDeleteRule) ="onDeleteRule($event)" (rulesemit)="onSaveRule($event)" [attributeSource]="attributeList" [operatorSource]="operatorList" [types2operatorSource]="type2OperatorList" [cat]="cat" [subcat]="subcat" (invokeSearchDatasource)="invokeSearchDatasource($event)" (removeLoadingPanel)="removeLoadingPanel()"></attribute-builder-angular>

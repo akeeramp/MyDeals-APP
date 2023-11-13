@@ -18,14 +18,15 @@ import {
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
-
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Observable } from "rxjs";
 @Component({
     selector: "admin-work-flow",
     templateUrl: "Client/src/app/admin/workFlow/admin.workFlow.component.html",
     styleUrls: ['Client/src/app/admin/workFlow/admin.workFlow.component.css']
 })
 
-export class adminWorkFlowComponent {
+export class adminWorkFlowComponent implements PendingChangesGuard {
     constructor(private workflowSvc: workflowService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
@@ -37,7 +38,7 @@ export class adminWorkFlowComponent {
     @ViewChild('WFSTG_CD_SRC_DdlTooltip', { static: false }) WFSTG_CD_SRC_DdlTooltip: NgbTooltip;
     @ViewChild('WFSTG_CD_DEST_DdlTooltip', { static: false }) WFSTG_CD_DEST_DdlTooltip: NgbTooltip;
     @ViewChild('workflow_grid') grid: GridComponent;
-
+    isDirty = false;
     private isLoading = true;
     private errorMsg = ""
     private color: ThemePalette = "primary";
@@ -165,6 +166,7 @@ export class adminWorkFlowComponent {
     }
 
     addHandler({ sender }) {
+        this.isDirty=true;
         this.closeEditor(sender);
         this.formGroup = new FormGroup({
             WF_SID: new FormControl(),
@@ -191,6 +193,7 @@ export class adminWorkFlowComponent {
     }
 
     editHandler({ sender, rowIndex, dataItem }) {
+        this.isDirty=true;
         this.closeEditor(sender);
         this.isFormChange = false;
         this.formGroup = new FormGroup({
@@ -267,6 +270,7 @@ export class adminWorkFlowComponent {
         }
         //check the Form Change
         else if (this.isFormChange) {
+            this.isDirty=false;
             this.isDialogVisible = false;
 
             if (isNew) {
@@ -326,6 +330,10 @@ export class adminWorkFlowComponent {
         (data.WFSTG_ACTN_SID.value == "" || data.WFSTG_ACTN_SID.value == null) ? this.WFSTG_ACTN_NM_DdlTooltip.open() : this.WFSTG_ACTN_NM_DdlTooltip.close();
         (data.WFSTG_MBR_SID.value == "" || data.WFSTG_MBR_SID.value == null) ? this.WFSTG_CD_SRC_DdlTooltip.open() : this.WFSTG_CD_SRC_DdlTooltip.close();
         (data.WFSTG_DEST_MBR_SID.value == "" || data.WFSTG_DEST_MBR_SID.value == null) ? this.WFSTG_CD_DEST_DdlTooltip.open() : this.WFSTG_CD_DEST_DdlTooltip.close();
+    } 
+    
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
     }
 
     ngOnInit() {

@@ -3,18 +3,20 @@ import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
-import { DealMassUpdateService } from "./admin.dealMassUpdate.service";
+import { DealMassUpdateService } from "./admin.dealMassUpdate.service";  
+import { Observable } from "rxjs";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 
 @Component({
     selector: "deal-mass-update",
     templateUrl: "Client/src/app/admin/dealMassUpdate/admin.dealMassUpdate.component.html",
     styleUrls: ['Client/src/app/admin/dealMassUpdate/admin.dealMassUpdate.component.css'],
 })
-export class DealMassUpdateComponent {
+export class DealMassUpdateComponent implements PendingChangesGuard {
 
     constructor(private dealMassUpdateService: DealMassUpdateService,
                 private loggerService: logger) { }
-
+    isDirty = false;
     private color: ThemePalette = "primary";
     private attr = [];
     private attrValues = [];
@@ -59,6 +61,7 @@ export class DealMassUpdateComponent {
     }
 
     attributeChange(value) {
+        this.isDirty = true;
         //Resetting error messages
         this.isError = {};
         this.errorMsg = {};
@@ -125,6 +128,7 @@ export class DealMassUpdateComponent {
             }
 
             this.dealMassUpdateService.UpdateDealsAttrbValue(finalData).subscribe((result: Array<any>) => {
+                this.isDirty = false;
                 this.updateResponse = result;
                 this.gridResult = process(result, this.state);
                 this.resultCount['all'] = result.length;
@@ -217,6 +221,14 @@ export class DealMassUpdateComponent {
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
         this.gridResult = process(this.updateResponse, this.state);
+    }
+
+    textchange(){
+        this.isDirty=true;
+    }
+
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
     }
 
     ngOnInit() {

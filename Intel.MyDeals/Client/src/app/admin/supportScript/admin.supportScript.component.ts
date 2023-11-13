@@ -3,20 +3,21 @@ import { logger } from "../../shared/logger/logger";
 import { adminsupportScriptService } from "./admin.supportScript.service"
 import { MomentService } from "../../shared/moment/moment.service";
 import { FormBuilder, FormControl, FormGroup } from "@angular/forms";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "admin-support-script",
     templateUrl: "Client/src/app/admin/supportScript/admin.supportScript.component.html",
     styles: [`.dateRangeLabelSupportScript { font-weight: bold; } .btnExecSupportScript { padding-left: 25px; } `]
 })
-export class adminsupportScriptComponent {
-    constructor(private loggersvc: logger,
-                private adminsupportscriptsvc: adminsupportScriptService,
-                private formBuilder: FormBuilder,
-                private momentService: MomentService) {
+
+export class adminsupportScriptComponent implements PendingChangesGuard{
+
+    constructor(private loggersvc: logger, private adminsupportscriptsvc: adminsupportScriptService, private formBuilder: FormBuilder, private momentService: MomentService) {
         this.intializesupportScriptDataForm();
     }
-     
+    isDirty = false;
     public titleErrorMsg: string;
     public errorNotes: string; 
     
@@ -92,6 +93,7 @@ export class adminsupportScriptComponent {
 
     executeCostFiller() {
         if (this.validate()) {
+            this.isDirty=false;
             let startYearQuarter = this.supportScriptDataForm.get("START_YR").value + "0" + this.supportScriptDataForm.get("START_QTR").value;
             let endYearQuarter = this.supportScriptDataForm.get("END_YR").value + "0" + this.supportScriptDataForm.get("END_QTR").value;
             this.adminsupportscriptsvc.ExecuteCostGapFiller(startYearQuarter, endYearQuarter,
@@ -105,6 +107,7 @@ export class adminsupportScriptComponent {
     }
 
     executePostTest() {
+        this.isDirty=false;
         const jsonDataPacket = "{\"header\": {\"source_system\": \"pricing_tenders\",\"target_system\": \"mydeals\",\"action\": \"create\",\"xid\": \"152547827hdhdh\"},\"recordDetails\": {\"SBQQ__Quote__c\": {\"Id\": \"50130000000X14c\",\"Name\": \"Q-02446\",\"Pricing_Folio_ID_Nm__c\": \"\",\"SBQQ__Account__c\": {\"Id\": \"50130000000X14c\",\"Name\": \"Dell\",\"Core_CIM_ID__c\": \"\"},\"Pricing_Deal_Type_Nm__c\": \"ECAP\",\"Pricing_Customer_Nm__c\": \"Facebook\",\"Pricing_Project_Name_Nm__c\": \"FMH\",\"Pricing_ShipmentStDate_Dt__c\": \"02/28/2019\",\"Pricing_ShipmentEndDate_Dt__c\": \"02/28/2019\",\"Pricing_Server_Deal_Type_Nm__c\": \"HPC\",\"Pricing_Region_Nm__c\": \"EMEA\",\"SBQQ__QuoteLine__c\": [{\"Id\": \"001i000001AWbWu\",\"Name\": \"QL-0200061\",\"Pricing_Deal_RFQ_Status_Nm__c\": \"\",\"Pricing_ECAP_Price__c\": \"100\",\"Pricing_Meet_Comp_Price_Amt__c\": \"90\",\"Pricing_Unit_Qty__c\": \"300\",\"Pricing_Deal_RFQ_Id__c\": \"543212\",\"Pricing_Status_Nm__c\": \"\",\"SBQQ__Product__c\": {\"Id\": \"001i000001AWbWu\",\"Name\": \"Intel® Xeon® Processor E7-8870 v4\",\"Core_Product_Name_EPM_ID__c\": \"192283\"},\"Pricing_Competetor_Product__c\": {\"Id\": \"\",\"Name\": \"\"},\"Pricing_Performance_Metric__c\": [{\"Id\": \"001i000001AWbWu\",\"Name\": \"PM-000010\",\"Pricing_Performance_Metric_Nm__c\": \"SpecInt\",\"Pricing_Intel_SKU_Performance_Nbr__c\": \"10\",\"Pricing_Comp_SKU_Performance_Nbr__c\": \"9\",\"Pricing_Weighting_Pct__c\": \"100\"}]}],\"Pricing_Comments__c\": [{\"Id\": \"\",\"Name\": \"\",\"Pricing_Question__c\": \"\",\"Pricing_Answer__c\": \"\"}]}}}";
         this.adminsupportscriptsvc.ExecutePostTest(jsonDataPacket).subscribe((response: any) => {
             this.loggersvc.success("Post Test executed succesfully");
@@ -113,6 +116,17 @@ export class adminsupportScriptComponent {
             
         };
     }
+    
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
+    }
 
-    ngOnInit() { }    
+
+    ngOnInit() {
+        this.supportScriptDataForm.valueChanges.subscribe(x=>{
+            this.isDirty=true;
+        })
+ 
+    }
+     
 }

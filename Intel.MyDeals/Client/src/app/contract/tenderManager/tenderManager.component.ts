@@ -9,13 +9,14 @@ import { PricingTableEditorComponent } from '../../contract/pricingTableEditor/p
 import { each } from 'underscore';
 import { performanceBarsComponent } from "../performanceBars/performanceBar.component";
 import { ActivatedRoute, Router } from "@angular/router";
-
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Observable } from "rxjs";
 @Component({
     selector: "tender-manager",
     templateUrl: "Client/src/app/contract/tenderManager/tenderManager.component.html",
     styleUrls: ["Client/src/app/contract/tenderManager/tenderManager.component.css"]
 })
-export class tenderManagerComponent {
+export class tenderManagerComponent implements PendingChangesGuard {
     @ViewChild(PricingTableEditorComponent) private pteComp: PricingTableEditorComponent;
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
     @ViewChild(performanceBarsComponent) public perfComp: performanceBarsComponent;
@@ -51,6 +52,7 @@ export class tenderManagerComponent {
     public pt_passed_validation: boolean;
     public compMissingFlag: any;
     private searchText: any = "";
+    private isDirty = false;
     private ispricingTableDPASSED_VALIDATION='valid_Complete';
     isredirect = false;
     isButtonEnabled = (<any>window).usrRole === 'RA' || (<any>window).usrRole === 'Legal' || (<any>window).usrRole === 'CBA' || (<any>window).usrRole === 'DA' || ((<any>window).isBulkPriceAdmin && (<any>window).usrRole === 'SA') || (<any>window).isCustomerAdmin ? false : true;
@@ -144,6 +146,10 @@ export class tenderManagerComponent {
 
     refreshContract(data: any) {
         this.contractData = data;
+    }
+
+    meetcompIsDirty(data: any) {
+        this.isDirty = data;
     }
 
     perfCompFn(data) {
@@ -457,6 +463,7 @@ export class tenderManagerComponent {
 
     ngOnInit() {
         try {
+            this.isDirty=false;
             document.title = "Contract - My Deals";
             this.isDeveloper = (<any>window).isDeveloper;
             this.isTester = (<any>window).isTester;
@@ -498,4 +505,20 @@ export class tenderManagerComponent {
         //this functionality will disable anything of .net ifloading to stop when dashboard landing to this page
         document.getElementById('mainBody')?.setAttribute('style', 'display:none');
     }
+     
+     canDeactivate(): Observable<boolean> | boolean { 
+         if (this.currentTAB == 'PTR') {
+             if ((this.pteComp && this.pteComp.dirty) || this.dirtyItems.length > 0) {
+                 this.isDirty = true;
+             }
+         }
+        if(this.currentTAB=='DE'){
+            this.isDirty= this.deComp.dirty;
+        }
+        if(this.currentTAB=='MC'){
+            return !this.isDirty;
+        }
+        return !this.isDirty;
+     }
+
 }

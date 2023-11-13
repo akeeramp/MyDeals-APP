@@ -8,13 +8,15 @@ import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Observable } from "rxjs";
 
 @Component({
     selector: 'admin-vistex-customer-mapping',
     templateUrl: 'Client/src/app/admin/vistexCustomerMapping/admin.vistexCustomerMapping.component.html',
     styleUrls: ['Client/src/app/admin/vistexcustomermapping/admin.vistexCustomerMapping.component.css']
 })
-export class adminVistexCustomerMappingComponent {
+export class adminVistexCustomerMappingComponent implements PendingChangesGuard {
     constructor(private customerMapSvc: vistexCustomerMappingService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
@@ -23,7 +25,7 @@ export class adminVistexCustomerMappingComponent {
     @ViewChild("nonTenderDropDown") private nonTenderDdl;
     @ViewChild("settleDropDown") private settleDdl;
     @ViewChild("custRptGeoDropDown") private custGeoDdl;
-
+    isDirty = false;
     private isLoading = true;
     private errorMsg: string[] = [];
     private isCombExists = false;
@@ -199,6 +201,7 @@ export class adminVistexCustomerMappingComponent {
     }
 
     editHandler({ sender, rowIndex, dataItem }) {
+        this.isDirty=true;
         this.closeEditor(sender);
         this.isFormChange = false;
         this.formGroup = new FormGroup({
@@ -237,11 +240,13 @@ export class adminVistexCustomerMappingComponent {
         }
         //check the combination exists
         if (this.isFormChange) {
+
             this.isCombExists = this.IsValidCustomerMapping(cust_map);
             if (!this.isCombExists) {
                 this.isLoading = true;
                 this.customerMapSvc.UpdateVistexCustomer(cust_map).subscribe(
                     () => {
+                        this.isDirty=true;
                         this.gridResult[rowIndex] = cust_map;
                         this.gridResult.push(cust_map);
                         this.loadCustomerMapping();
@@ -263,6 +268,10 @@ export class adminVistexCustomerMappingComponent {
             filters: [],
         };
         this.loadCustomerMapping()
+    }
+    
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
     }
 
     ngOnInit() {

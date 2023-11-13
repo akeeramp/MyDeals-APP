@@ -1,4 +1,6 @@
 ﻿import { Component } from "@angular/core";
+import { Observable } from "rxjs";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { logger } from "../../shared/logger/logger";
 import { employeeService } from './admin.employee.service';
 
@@ -7,16 +9,17 @@ import { employeeService } from './admin.employee.service';
     templateUrl: 'Client/src/app/admin/employee/admin.employee.component.html',
     styleUrls: ['Client/src/app/admin/employee/admin.employee.component.css']
 })
-export class EmployeeComponent {
-    constructor(private employeeSvc: employeeService,
-                private loggerSvc:logger) { }
+
+export class EmployeeComponent implements PendingChangesGuard{
+
+    constructor(private employeeSvc: employeeService,private loggerSvc:logger) { }
 
     protected roleTypeId = (<any>window).usrRoleId;
     private isDeveloper = (<any>window).isDeveloper;
     private isTester = (<any>window).isTester;
     private isSuper = (<any>window).isSuper;
     private roles: Array<any>;
-
+    isDirty = false;
     save() {
         const data = {
             "roleTypeId": this.roleTypeId,
@@ -26,12 +29,18 @@ export class EmployeeComponent {
         }
         this.employeeSvc.setEmployees(data)
             .subscribe(() => {
+                this.isDirty=false;
                 this.loggerSvc.success("Role was changed", "Done");
                 (<any>window).clearSessionData('/error/ResetMyCache');
                 document.location.href = "/error/ResetMyCache";
             }, err => {
                 this.loggerSvc.error("Unable to set User Roles.", err);
             });
+    }
+
+    
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
     }
 
     ngOnInit() {

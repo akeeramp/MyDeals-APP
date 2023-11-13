@@ -1,12 +1,12 @@
 ﻿/* eslint-disable @typescript-eslint/no-inferrable-types */
 import { DatePipe } from '@angular/common';
-import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit } from "@angular/core";
-import { FormGroup } from "@angular/forms";
+import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, ViewChild } from "@angular/core";
+import { FormGroup, NgForm } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
-import { forkJoin } from "rxjs";
+import { Observable, forkJoin } from "rxjs";
 import { each, isEmpty, isNull, isUndefined } from 'underscore';
 
 import { logger } from "../../shared/logger/logger";
@@ -14,14 +14,15 @@ import { ContractDetailsService } from "./contractDetails.service";
 import { TemplatesService } from "../../shared/services/templates.service";
 import { MomentService } from "../../shared/moment/moment.service";
 import { GridUtil } from "../grid.util";
-import { NewContractWidgetService } from "../../dashboard/newContractWidget/newContractWidget.service"
+import { NewContractWidgetService } from "../../dashboard/newContractWidget/newContractWidget.service"; 
+import { PendingChangesGuard } from 'src/app/shared/util/gaurdprotectionDeactivate';
 
 @Component({
     selector: 'contract-details',
     templateUrl: 'Client/src/app/contract/contractDetails/contractDetails.component.html',
     styleUrls: ['Client/src/app/contract/contractDetails/contractDetails.component.css'],
 })
-export class ContractDetailsComponent implements OnInit, AfterViewInit {
+export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingChangesGuard {
 
     contractType: string;
     disableCustomer: boolean = false;
@@ -93,6 +94,8 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit {
     private spinnerMessageHeader: string = "Contract Details";
     private spinnerMessageDescription: string = "Contract Details Loading..";
     private isBusyShowFunFact: boolean = true;
+    private isDirty = false;
+    @ViewChild('contractDetailsForm', { static: true }) ngForm: NgForm;
     private backdateReasonsDropdownList: any = null;
     @Output() openHistoryTab: EventEmitter<object> = new EventEmitter<object>();
     isNotesDisabled = (<any>window).usrRole === 'SA' || (<any>window).usrRole === 'RA' || (<any>window).usrRole === 'Finance' || (<any>window).usrRole === 'Legal' || (<any>window).usrRole === 'CBA' || ((<any>window).isBulkPriceAdmin && (<any>window).usrRole === 'SA') || (<any>window).isCustomerAdmin ? false : true;
@@ -438,6 +441,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit {
 
     saveContract() {
         try{
+            this.isDirty=false;
             // Contract Data
             this.isLoading = true;
             this.setBusy("Saving Contract", "Saving the Contract Information", "info", true);
@@ -983,14 +987,6 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit {
         this.openHistoryTab.emit(contractDetails_Map);
     }
 
-    checkBackdate() {
-        if (this.momentService.moment(this.contractData.START_DT).isBefore(this.today) && (this.contractData.BACK_DATE_RSN != '' && this.contractData.BACK_DATE_RSN != undefined)) {
-            this.isBackDate = true;
-            this.dropdownFieldsData['BACK_DATE_RSN'] = this.backdateReasonsDropdownList;
-            this.BACK_DATE_RSN = this.backdateReasonsDropdownList.find(x => x.DROP_DOWN == this.contractData.BACK_DATE_RSN);
-        }
-    }
-
     private updateBackdateReasonDropdownData(custId?: string | number) {
         if (!(custId == null || custId == undefined)) {
             this.contractDetailsService.getDropdownsWithCustomerId('BACK_DATE_RSN', custId).subscribe((result: unknown[]) => {
@@ -1122,7 +1118,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit {
                                     this.updateBackdateReasonDropdownData(this.contractData["CUST_MBR_SID"]);
 
                                     this.isLoading = false;
-                                    this.checkBackdate();
+                                    this.checkbackdate();
                                 }, (err) => {
                                     this.loggerService.error("unable to fetch contract data", "Error", err);
                                     this.isLoading = false;
@@ -1140,6 +1136,18 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit {
             this.loggerService.error('Something went wrong', 'Error');
             console.error('ContractDetails::ngOnInit::',ex);
         }
+        this.ngForm.form.valueChanges.subscribe(x => {
+            if (x.Customer != undefined)
+                this.isDirty = true;
+        });
+    }
+
+    checkbackdate(){
+        if (this.momentService.moment(this.contractData.START_DT).isBefore(this.today) &&  (this.contractData.BACK_DATE_RSN!='' || this.contractData.BACK_DATE_RSN!=undefined)) {
+            this.isBackDate = true;
+            this.dropdownFieldsData['BACK_DATE_RSN']=this.backdateReasonsDropdownList;
+            this.BACK_DATE_RSN=this.backdateReasonsDropdownList.find(x=>x.DROP_DOWN==this.contractData.BACK_DATE_RSN);
+        }
     }
 
     ngAfterViewInit() {
@@ -1153,6 +1161,9 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit {
         }
         //this functionality will disable anything of .net ifloading to stop when dashboard landing to this page
         document.getElementById('mainBody')?.setAttribute('style', 'display:none');
+    }
+    canDeactivate(): Observable<boolean> | boolean {  
+       return !this.isDirty;
     }
 
 }

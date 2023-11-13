@@ -83,6 +83,7 @@ export class contractManagerComponent {
     @Output() refreshedContractData = new EventEmitter<any>();
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
     @ViewChild(performanceBarsComponent) public perfComp: performanceBarsComponent;
+    @Output() isDirty = new EventEmitter<any>();
     public isLoading = false;
     private dirty = false;
     userRole = ""; canEmailIcon = true;
@@ -230,6 +231,7 @@ export class contractManagerComponent {
     }
 
     onCheckboxChange(checkBoxType, event, data) {
+        this.isDirty.emit(true);
         if (!event.currentTarget.checked) {
             this[checkBoxType] = false;
         }
@@ -561,6 +563,7 @@ export class contractManagerComponent {
                 return item[fieldName].toString()}});
     }
     clkAllRow(e, checkBoxType) {
+        this.isDirty.emit(true);
         const isItemChecked = e.currentTarget.checked;
         this.emailCheck = {}; 
         this.reviseCheck = {};

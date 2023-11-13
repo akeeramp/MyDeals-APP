@@ -21,6 +21,8 @@ import { RulesSimulationModalComponent } from '../../admin/rules/admin.rulesSimu
 import { RuleDetailsModalComponent } from '../../admin/rules/admin.ruleDetailsModal.component';
 import { List } from "linqts";
 import { ActivatedRoute, Router } from "@angular/router";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "admin-rules",
@@ -28,15 +30,16 @@ import { ActivatedRoute, Router } from "@angular/router";
     styleUrls: ['Client/src/app/admin/rules/admin.rules.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class adminRulesComponent {
+export class adminRulesComponent implements PendingChangesGuard{
     childGridResult: any;
     childGridData: any;
     RuleConfig: any;
+
     constructor(private adminRulesSvc: adminRulesService, private loggerSvc: logger, private constantSvc: constantsService, public dialog: MatDialog,
         private router: Router, private route: ActivatedRoute) { 
         this.allData = this.allData.bind(this);
     }
-
+    isDirty = false;
     public rule = {};
     public Rules: Array<any> = [];
     //public rid = rid;
@@ -420,6 +423,7 @@ export class adminRulesComponent {
     }
 
     openMessage({ dataItem }) {
+        this.isDirty=true;
         const dialogRef = this.dialog.open(RulesSimulationModalComponent, {
             width: "900px",
             panelClass: 'admin-simulate-style',
@@ -463,6 +467,7 @@ export class adminRulesComponent {
         )}
 
     openRuleDetailsModal(dataItem) {
+        this.isDirty=true;
         const dialogRef = this.dialog.open(RuleDetailsModalComponent, {
             width: "1800px",
             panelClass: 'rule-details-model-style',
@@ -496,5 +501,8 @@ export class adminRulesComponent {
         this.router.onSameUrlNavigation = 'reload';
         this.router.navigate(['/rules']);
         this.gridData = process(this.gridResult, this.state);
+    }
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
     }
 }

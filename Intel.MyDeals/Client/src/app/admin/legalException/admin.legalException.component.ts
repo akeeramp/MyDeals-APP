@@ -13,13 +13,16 @@ import { GridUtil } from "../../contract/grid.util";
 import { DatePipe, formatDate } from '@angular/common';
 import { adminDownloadExceptionscomponent } from "./admin.downloadExceptions.component"
 import { adminviewDealListcomponent } from "./admin.viewDealList.component";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "admin-legal-exception",
     templateUrl: "Client/src/app/admin/legalException/admin.legalException.component.html",
     styleUrls: ['Client/src/app/admin/legalException/admin.legalException.component.css']
 })
-export class adminlegalExceptionComponent {
+
+export class adminlegalExceptionComponent implements PendingChangesGuard{
     public isVirtual = true;
     public gridData: GridDataResult;
     public data: unknown[];
@@ -39,6 +42,7 @@ export class adminlegalExceptionComponent {
     childhidden = false;
     public editAccess: any;
     colexpand = 6;
+    isDirty=false;
 
     public state: State = {
         skip: 0,
@@ -171,10 +175,11 @@ export class adminlegalExceptionComponent {
         });
 
         dialogRef.afterClosed().subscribe((returnVal) => {
-
+            this.isDirty=true;
             if (returnVal != undefined && returnVal != "close") {
                  this.savedateformate(returnVal);
-                this.adminlegalExceptionSrv.createLegalException(returnVal).subscribe((result: any) => { 
+                this.adminlegalExceptionSrv.createLegalException(returnVal).subscribe((result: any) => {
+                    this.isDirty=false; 
                     this.gridResult.push(result);
                     this.gridData = process(this.gridResult, this.state);
                     this.loggersvc.success('Legal Exception added.');
@@ -406,6 +411,7 @@ export class adminlegalExceptionComponent {
     }
 
     checkeditems(item) {
+        this.isDirty=true;
         if (item.IS_SELECTED) {
             item.IS_SELECTED = false;
         }else
@@ -414,6 +420,7 @@ export class adminlegalExceptionComponent {
 
     allExceptionsSelected = false;
     selectAllExceptionsChange(e): void {
+        this.isDirty=true;
          if (e.target.checked) {
             this.allExceptionsSelected = true;
              for (let i = 0; i < this.gridResult.length; i++) {
@@ -550,6 +557,10 @@ export class adminlegalExceptionComponent {
         };
     }
 
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
+    }
+    
     ngOnInit() {
         this.initExdetails = this. intializeformdata();
         this.loadlegalException();

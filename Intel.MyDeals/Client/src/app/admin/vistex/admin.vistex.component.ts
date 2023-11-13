@@ -1,17 +1,22 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { dsaService } from "./admin.vistex.service";
 import { Component } from "@angular/core";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { MomentService } from "../../shared/moment/moment.service"; 
+import { Observable } from "rxjs";
 
 @Component({
     selector: "admin-vistex",
     templateUrl: "Client/src/app/admin/vistex/admin.vistex.component.html",
     styleUrls: ['Client/src/app/admin/vistex/admin.vistex.component.css']
 })
-export class adminVistexComponent {
+
+export class adminVistexComponent implements PendingChangesGuard{
+
     constructor(private loggerSvc: logger, private dsaService: dsaService, private momentService: MomentService) { }
 
     //Declaration Part
+    isDirty = false;
     private spinnerMessageHeader = "Test your API";
     private spinnerMessageDescription = "Please wait while we are running your API..";
     private isBusyShowFunFact = true;
@@ -77,6 +82,7 @@ export class adminVistexComponent {
 
         this.dsaService.callAPI(this.apiPair[this.selectedApiCD], mode).subscribe((result: any) => {
             this.isLoading = false;
+            this.isDirty=false;
             if (this.selectedApiCD == "R" || this.selectedApiCD == "T") {
                 if (result) {
                     this.loggerSvc.success('Transaction was successful...');
@@ -103,6 +109,12 @@ export class adminVistexComponent {
         }
     }
 
+    valuechange(){
+        this.isDirty=true;
+    }
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
+    }
     ngOnInit() {
         this.loadVistexTestApi();
     }

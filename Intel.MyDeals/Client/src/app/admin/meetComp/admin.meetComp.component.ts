@@ -6,9 +6,12 @@ import { ThemePalette } from "@angular/material/core";
 import { DatePipe } from "@angular/common";
 import { MatDialog } from '@angular/material/dialog';
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+
 import { logger } from "../../shared/logger/logger";
 import { meetCompService } from './admin.meetComp.service';
 import { BulkUploadMeetCompModalComponent } from './admin.bulkUploadMeetCompModal.component';
+import { Observable } from "rxjs";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 
@@ -18,7 +21,7 @@ import { ExcelExportEvent } from "@progress/kendo-angular-grid";
     styleUrls: ['Client/src/app/admin/meetComp/admin.meetComp.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class MeetCompComponent {
+export class MeetCompComponent implements PendingChangesGuard {
     constructor(private meetCompService: meetCompService,
                 private loggerService: logger,
                 public datepipe: DatePipe,
@@ -26,6 +29,7 @@ export class MeetCompComponent {
         this.allData = this.allData.bind(this);
     }
     private HasBulkUploadAccess = (<any>window).usrRole == "DA";
+    isDirty = false;
     private isAccess = true;
     private isAccessMessage: string;
     private customers;
@@ -165,6 +169,7 @@ export class MeetCompComponent {
     }
 
     custValueChange(value) {
+        this.isDirty=true;
         if ((value > 0) || (value == -1)) {
             this.selectedCustomerID = value;
             this.getCustomerDIMData(this.selectedCustomerID);
@@ -186,6 +191,7 @@ export class MeetCompComponent {
     }
 
     prodCatValueChange(value) {
+        this.isDirty=true
         if (value) {
             this.selectedProdCatName = value;
             this.brands = this.meetCompBrandName();
@@ -229,6 +235,7 @@ export class MeetCompComponent {
     }
 
     brandNameValueChange(value) {
+        this.isDirty=true;
         if (value) {
             this.selectedBrandName = value;
             this.products=this.meetCompProdName();
@@ -254,6 +261,7 @@ export class MeetCompComponent {
     }
 
     prodNameValueChange(value) {
+        this.isDirty=true;
         if (value) {
             this.selectedProdName = value;
         }
@@ -345,7 +353,9 @@ export class MeetCompComponent {
             this.loggerService.error("Activate Deactivate Meet Comp failed.", response, response.statusText);
         });
     }
-
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
+    }
     ngOnInit() {
         this.loadMeetCompPage();
         this.custDropdowns();

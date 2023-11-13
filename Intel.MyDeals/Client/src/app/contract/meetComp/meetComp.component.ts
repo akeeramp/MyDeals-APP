@@ -34,6 +34,7 @@ export class meetCompContractComponent implements OnInit {
     @Output() tmDirec = new EventEmitter();
     @Output() contractRefresh = new EventEmitter();
     @Output() refreshMCTData = new EventEmitter();
+    @Output() isDirty = new EventEmitter();
     constructor(private loggerSvc: logger,
                 private meetCompSvc: meetCompContractService,
                 private formBuilder: FormBuilder,
@@ -226,6 +227,7 @@ export class meetCompContractComponent implements OnInit {
             }
         }
         if (!args.isEdited) {
+           
             args.sender.editCell(
                 args.rowIndex,
                 args.columnIndex,
@@ -335,6 +337,7 @@ export class meetCompContractComponent implements OnInit {
 
     //Triggered on click of checkbox on grid
     selectProdIDS(selectedID, event) {
+        this.isDirty.emit(true);
         const isSelected = event.target.checked;
         if (this.state.filter.filters.length > 0) {
             //UPDATE Selected Filter ROWS
@@ -532,6 +535,7 @@ export class meetCompContractComponent implements OnInit {
     }
     onCompSkuChange(val: any, dataItem: any) {
         if (val != undefined && val.RW_NM != undefined) {
+            this.isDirty.emit(true);
             const selectedIndx = val.RW_NM;
             this.selectedCustomerText = (val.COMP_SKU).trim();
             this.selectedCust = dataItem.CUST_NM_SID;
@@ -1055,15 +1059,18 @@ export class meetCompContractComponent implements OnInit {
                 }
             });
             if (this.tempUpdatedList.length > 0) {
+                this.isDirty.emit(false);
                 this.popUpMessage = this.getMeetCompPopupMessage();
                 if (this.popUpMessage != null) {
                     this.showPopup = true;
                 }
                 else {
+                    
                     await this.updateMeetComp();
                 }
             }
             else if (this.tempUpdatedList.length == 0 && this.isAdhoc == 1) {
+                this.isDirty.emit(false);
                 await this.forceRunMeetComp();
             }
         }

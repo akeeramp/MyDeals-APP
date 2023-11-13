@@ -53,6 +53,7 @@ export class managerPctComponent {
     @Input() WIP_ID: any;
     @Output() refreshedContractData = new EventEmitter<any>();
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
+    @Output() isDirty = new EventEmitter<any>();
     private spinnerMessageHeader = "Complete"; 
     private spinnerMessageDescription = "Reloading the page now.";
     public isPctLoading = false;
@@ -453,6 +454,7 @@ export class managerPctComponent {
     }
 
     selectAllIDs(event, ptId) {
+        this.isDirty.emit(true);
         this.is_Deal_Tools_Checked[ptId] = event.target.checked;
         for (let i = 0; i < this.gridDataSet[ptId].data.length; i++) {
             this.gridDataSet[ptId].data[i].isLinked = event.target.checked;

@@ -17,14 +17,17 @@ import { MatDialog } from '@angular/material/dialog';
 import { contractStatusWidgetService } from "../../dashboard/contractStatusWidget.service";
 import { emailModal } from "../../contract/contractManager/emailModal/emailModal.component";
 import { constantsService } from "../../admin/constants/admin.constants.service";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Observable } from "rxjs";
 
 @Component({
     selector: 'app-tender-dashboard',
     templateUrl: 'Client/src/app/advanceSearch/tenderDashboard/tenderDashboard.component.html',
     styleUrls: ['Client/src/app/advanceSearch/tenderdashboard/tenderDashboard.component.css'],
     encapsulation: ViewEncapsulation.None
-})
-export class TenderDashboardComponent implements OnInit {
+})    
+
+export class TenderDashboardComponent implements OnInit,PendingChangesGuard {
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
     private startDateValue: Date = new Date(this.momentService.moment().subtract(6, 'months').format("MM/DD/YYYY"));
     private endDateValue: Date = new Date(this.momentService.moment().add(6, 'months').format("MM/DD/YYYY"));
@@ -72,6 +75,7 @@ export class TenderDashboardComponent implements OnInit {
     private runSearch: boolean = false;
     private approveDeals: boolean = false;
     private entireDataDeleted: boolean = false;
+    private isDirty = false;
     constructor(protected cntrctWdgtSvc: contractStatusWidgetService,
                 protected loggerSvc: logger,
                 protected tenderDashboardSvc: tenderDashboardService,
@@ -939,6 +943,10 @@ export class TenderDashboardComponent implements OnInit {
     clearSearchResult(event) {
         this.searchResults = [];
     }
+    isSearchDirty(data){
+        if(!!data)
+        this.isDirty=data;
+    }
     ngOnInit(): void {
         this.setBusy("Loading...", "Please wait while we are loading...", "info", true);
         this.showSearchFilters = true;
@@ -1016,5 +1024,12 @@ export class TenderDashboardComponent implements OnInit {
                 source: null
             })
         }
+    }
+
+    canDeactivate(): Observable<boolean> | boolean { 
+        if(!!this.deComp && this.deComp.dirty){
+            this.isDirty=true;
+        }
+       return !this.isDirty;
     }
 }

@@ -9,6 +9,8 @@ import {sheetObj} from '../../contract/pricingTableEditor/handsontable.interface
 import { bulkPricingUpdatesService } from './admin.bulkPricingUpdates.service';
 import { MomentService } from "../../shared/moment/moment.service";
 import { ContextMenu } from 'handsontable/plugins';
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Observable } from "rxjs";
 
 @Component({
   selector: 'admin-bulk-pricing-updates',
@@ -16,7 +18,7 @@ import { ContextMenu } from 'handsontable/plugins';
   styleUrls: ['Client/src/app/admin/bulkPricingUpdates/admin.bulkPricingUpdates.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class BulkPricingUpdatesComponent  {
+export class BulkPricingUpdatesComponent implements PendingChangesGuard {
   constructor(private loggerSvc: logger,
               protected dialog: MatDialog,
               private bulkPrcSvc: bulkPricingUpdatesService,
@@ -53,6 +55,7 @@ export class BulkPricingUpdatesComponent  {
     cellComments = [];
     nestedHeaders: [string[], string[]] = [[], []];
     cxtPaste: boolean = false;
+    isDirty=false;
 
     private hotSettings: Handsontable.GridSettings = {
         wordWrap: true,
@@ -175,6 +178,7 @@ export class BulkPricingUpdatesComponent  {
 
         dialogRef.afterClosed().subscribe((data) => {
             this.cellComments = [];
+            this.isDirty = true;
         if (data.length > 0) {
             if (data.length > 100) {
                 this.loggerSvc.warn("The excel contains more than 100 records.Only first 100 records will be processed.", "");
@@ -467,17 +471,22 @@ export class BulkPricingUpdatesComponent  {
         },1000)
     }
 
-    ngOnInit(){
-        ExcelColumnsConfig.bulkPriceUpdatesColHeaders.forEach ( (header,ind) => {
-            this.nestedHeaders[0].push(`<span style="font-family: 'Intel Clear';
-            font-weight: 400;
-            font-size: 11px;
-            color: #0071c5;
-            ;">${sheetObj[ind]}</span>`);
-            this.nestedHeaders[1].push(`<span style="font-size: 13px;
-            color: rgb(0, 16, 113);
-            font-weight: bold;
-            font-family: 'Intel Clear'; opacity: .7">${header}</span>`);
-        });
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
     }
+
+ngOnInit(){
+    ExcelColumnsConfig.bulkPriceUpdatesColHeaders.forEach ( (header,ind) => {
+        this.nestedHeaders[0].push(`<span style="font-family: 'Intel Clear';
+        font-weight: 400;
+        font-size: 11px;
+        color: #0071c5;
+        ;">${sheetObj[ind]}</span>`);
+        this.nestedHeaders[1].push(`<span style="font-size: 13px;
+        color: rgb(0, 16, 113);
+        font-weight: bold;
+        font-family: 'Intel Clear'; opacity: .7">${header}</span>`);
+   
+    })
+}
 }

@@ -9,6 +9,11 @@ import { AttributeBuilder } from '../core/attributeBuilder/attributeBuilder.comp
 import { process, State, FilterDescriptor, CompositeFilterDescriptor } from "@progress/kendo-data-query";
 import { GridUtil } from '../contract/grid.util';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, FilterService } from "@progress/kendo-angular-grid";
+
+import { PTE_Common_Util } from "../contract/PTEUtils/PTE_Common_util";
+import { PendingChangesGuard } from "../shared/util/gaurdprotectionDeactivate";
+import { Observable } from "rxjs";
+
 import { each } from 'underscore';
 @Component({
     selector: 'app-advanced-search',
@@ -16,7 +21,7 @@ import { each } from 'underscore';
     styleUrls: ['Client/src/app/advanceSearch/advancedSearch.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class AdvancedSearchComponent implements OnInit {
+export class AdvancedSearchComponent implements OnInit, PendingChangesGuard {
     private startDateValue: Date = new Date(this.momentService.moment().subtract(6, 'months').format("MM/DD/YYYY"));
     private endDateValue: Date = new Date(this.momentService.moment().add(6, 'months').format("MM/DD/YYYY"));
     private showSearchFilters: boolean = true;
@@ -56,6 +61,7 @@ export class AdvancedSearchComponent implements OnInit {
     public msgType: any;
     public isBusyShowFunFact: any;
     public columnSearchFilter: string = '';
+    private isDirty=false;
     private state: State = {
         skip: 0,
         take: 25,
@@ -539,6 +545,15 @@ export class AdvancedSearchComponent implements OnInit {
                 window.open(url, '_blank');
             }
         }
+    }
+
+    isSearchDirty(data){
+        if(!!data)
+        this.isDirty=data;
+    }
+
+    canDeactivate(): Observable<boolean> | boolean { 
+       return !this.isDirty;
     }
 
     ngOnInit(): void {

@@ -14,6 +14,8 @@ import {
     State,
     distinct,
 } from "@progress/kendo-data-query";
+import { Observable } from "rxjs";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 
 
 @Component({
@@ -23,9 +25,10 @@ import {
 })
 
 @Injectable()
-export class iCostProductsComponent {
-    constructor(private iCostProductSvc: iCostProductService, private loggerSvc: logger) { }
+export class iCostProductsComponent implements PendingChangesGuard{
 
+    constructor(private iCostProductSvc: iCostProductService, private loggerSvc: logger) { }
+    isDirty = false;
     public validationMessage = "";
     public isRuleInvalid = false;
     public manageRules = false;
@@ -133,6 +136,7 @@ export class iCostProductsComponent {
             this.isRuleInvalid = false;
             return;
         }
+        this.isDirty=false;
 
         this.pctRule.JSON_TXT = JSON.stringify(this.filter);
         const conditionOutput = this.computed(this.filter.group)
@@ -228,6 +232,7 @@ export class iCostProductsComponent {
     }
 
     prdTypeChange(value: any) {
+        this.isDirty=true;
         this.selectedVertical = '';
         this.origProductVertical=this.ProductVertical = this.ProductType.filter(obj => {
             if (obj.PRD_TYPE_SID == value) {
@@ -243,6 +248,7 @@ export class iCostProductsComponent {
     }
 
     verticalChange(value: any) {
+        this.isDirty=true;
         this.selectedVertical = value;
         if (value) {
             this.getProductAttributeValues(value);
@@ -298,12 +304,14 @@ export class iCostProductsComponent {
     }
 
     editClick({ dataItem }) {
+        this.isDirty=true;
         this.isButtonDisabled = false;
         Object.assign(this.editItemData, dataItem)
         Object.assign(this.deleteItemData, dataItem)
     }
 
     updateItem() {
+        this.isDirty=false;
         this.EditMode = true;
         Object.assign(this.pctRule, this.editItemData)
         this.filter = this.pctRule.JSON_TXT === "" ? this.filter : JSON.parse(this.pctRule.JSON_TXT);
@@ -403,6 +411,11 @@ export class iCostProductsComponent {
             )
         }
     }
+    
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
+    }
+
 
     ngOnInit() {
         this.loadLegalClassification();

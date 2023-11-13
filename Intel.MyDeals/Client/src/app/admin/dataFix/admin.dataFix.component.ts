@@ -4,22 +4,24 @@ import { Component } from "@angular/core";
 import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
-import { forkJoin } from "rxjs";
+import { forkJoin, Observable } from "rxjs";
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 
 @Component({
     selector: 'admin-data-fix',
     templateUrl: 'Client/src/app/admin/dataFix/admin.dataFix.component.html',
     styleUrls: ['Client/src/app/admin/dataFix/admin.dataFix.component.css']
 })
-export class adminDataFixComponent {
+export class adminDataFixComponent implements PendingChangesGuard {
     constructor(private dataFixSvc: dataFixService, 
         private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
-
+ 
+    isDirty = false;
     private isLoading = true;
     private color: ThemePalette = "primary";
     OpDataElements = [];
@@ -103,6 +105,7 @@ export class adminDataFixComponent {
     }
 
     addNewFix() {
+        this.isDirty=true;
         this.currentDataFix = {
             INCDN_NBR: "", DataFixAttributes: [{
                 OBJ_TYPE_SID: "",
@@ -127,6 +130,7 @@ export class adminDataFixComponent {
     }
 
     addNewFixExpert() {
+        this.isDirty=true;
         this.currentDataFix = { INCDN_NBR: "", DataFixAttributes: [], DataFixActions: [], Message: "" };
         this.IsAddMode = true;
         this.IsExpertMode = true;
@@ -174,6 +178,7 @@ export class adminDataFixComponent {
         if (isExpert) {
             this.disabled = true;
             if (this.IsValidJSONString(this.JsonMessage)) {
+                this.isDirty=false;
                 this.saveNewDataFix(JSON.parse(this.JsonMessage), isExecute);
             } else {
                 alert("String is not valid JSON");
@@ -210,6 +215,7 @@ export class adminDataFixComponent {
             if (this.requiredFields.length > 0) {
                 this.validationError = true;
             } else {
+                this.isDirty=false;
                 this.disabled = true;
                 this.validationError = false;
                 this.saveNewDataFix(this.currentDataFix, isExecute);
@@ -289,5 +295,9 @@ export class adminDataFixComponent {
             else this.currentDataFix.DataFixAttributes.splice(index, 1);
 
         }
+    }
+
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
     }
 }

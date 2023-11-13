@@ -5,6 +5,8 @@ import { logger } from "../../shared/logger/logger";
 import { ValidateVistexR3ChecksService } from './admin.validateVistexR3Checks.service';
 import { any, pluck } from 'underscore';
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "validate-vistex-checks",
@@ -13,12 +15,13 @@ import { ExcelExportData } from "@progress/kendo-angular-excel-export";
     encapsulation: ViewEncapsulation.None
 })
 
-export class ValidateVistexR3ChecksComponent implements OnInit {
+export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGuard{
+
 
     constructor(public vldtVstxR3ChkSvc: ValidateVistexR3ChecksService, private loggerSvc: logger) {
        this.allData = this.allData.bind(this);
     }
-
+    isDirty = false;
     private accessAllowed = true;
     private isLoading = true;
     private Results = [];
@@ -147,6 +150,7 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
                 "DEAL_IDS": this.DealstoSend
              };
             this.vldtVstxR3ChkSvc.getVistexCustomersMapList(data).subscribe(response => {
+                this.isDirty=false;
                 this.Results = response.R3CutoverResponses;
                 sentDeals = this.Results.length;
                 this.GoodToSendResults = response.R3CutoverResponsePassedDeals;
@@ -188,6 +192,21 @@ export class ValidateVistexR3ChecksComponent implements OnInit {
         this.gridData = process(this.Results, this.state);
     }
 
+    valueChange() {
+        this.isDirty = true;
+    }
+
+    combovalueChange(){
+        this.isDirty = true;
+    }
+
+    textChange(){
+        this.isDirty = true;
+    }
+    
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
+    }
     private gridColumns = [
         {
             field: "Deal_Id",

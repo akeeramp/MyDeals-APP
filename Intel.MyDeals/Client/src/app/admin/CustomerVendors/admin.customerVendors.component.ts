@@ -17,13 +17,15 @@ import {
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { Observable } from "rxjs";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 
 @Component({
     selector: "admin-vendors-customer",
     templateUrl: "Client/src/app/admin/CustomerVendors/admin.customerVendors.component.html",
     styleUrls: ['Client/src/app/admin/CustomerVendors/admin.customerVendors.component.css']
 })
-export class adminCustomerVendorsComponent {
+export class adminCustomerVendorsComponent implements PendingChangesGuard {
     constructor(private customerVendSvc: customerVendorService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
@@ -31,7 +33,7 @@ export class adminCustomerVendorsComponent {
     @ViewChild("custDropDown") private custDdl;
     @ViewChild("countDropDown") private countDdl;
     @ViewChild("partDropDown") private partDdl;
-
+    isDirty = false;
     private isLoading = true;
     private errorMsg = "";
     private isCombExists = false;
@@ -272,6 +274,7 @@ export class adminCustomerVendorsComponent {
     }
 
     addHandler({ sender }) {
+        this.isDirty=true;
         this.closeEditor(sender);
         this.formGroup = new FormGroup({
             ACTV_IND: new FormControl(true, Validators.required),
@@ -302,6 +305,7 @@ export class adminCustomerVendorsComponent {
     }
 
     editHandler({ sender, rowIndex, dataItem }) {
+        this.isDirty=true;
         this.closeEditor(sender);
         this.isFormChange = false;
         this.formGroup = new FormGroup({
@@ -349,6 +353,7 @@ export class adminCustomerVendorsComponent {
         if (this.isFormChange) {
             this.isCombExists = this.IsValidCombination(cust_map, isNew);
             if (!this.isCombExists) {
+                this.isDirty=false;
                 if (isNew) {
                     this.isLoading = true;
                     this.customerVendSvc.insertCustomerVendor(cust_map).subscribe(
@@ -392,6 +397,10 @@ export class adminCustomerVendorsComponent {
         this.loadCustomerVendors()
     }
 
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
+    }
+    
     ngOnInit() {
         this.getCustomersDataSource();
         this.getVendorsInfoDropdown();

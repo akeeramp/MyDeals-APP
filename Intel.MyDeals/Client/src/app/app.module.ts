@@ -30,6 +30,8 @@ import { HotTableModule } from '@handsontable/angular';
 import { sharedComponents } from './modules/shared.module';
 //Authentication purpose for token
 import { AuthInterceptor } from './shared/authorization/auth.interceptor';
+//Gaurdian for protection rule
+import { PendingChangesGuard } from './shared/util/gaurdprotectionDeactivate';
 //reporting component
 import { ReportingComponent } from './reporting/reporting.component';
 //core component
@@ -139,7 +141,8 @@ import { HeaderComponent } from './shared/header/header.component';
         broadCastService,
         SecurityResolver,
         MomentService,
-        StaticMomentService
+        StaticMomentService,
+        PendingChangesGuard
     ],
     declarations: [
         AppRootComponent,

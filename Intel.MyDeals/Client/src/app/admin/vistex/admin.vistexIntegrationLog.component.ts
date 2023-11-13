@@ -6,17 +6,21 @@ import { MomentService } from "../../shared/moment/moment.service";
 import { GridDataResult,DataStateChangeEvent,PageSizeItem} from "@progress/kendo-angular-grid";
 import { process,State,distinct} from "@progress/kendo-data-query";
 import { FormGroup, FormControl } from "@angular/forms";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { each } from 'underscore';
+import { Observable } from "rxjs";
 @Component({
     selector: "vistex-integration-log",
     templateUrl: 'Client/src/app/admin/vistex/admin.vistexIntegrationLog.component.html',
     styleUrls: ['Client/src/app/admin/vistex/admin.vistexIntegrationLog.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class adminVistexIntegrationLogComponent implements OnInit {
+
+export class adminVistexIntegrationLogComponent implements OnInit, PendingChangesGuard {
+
 
     constructor(private loggerSvc: logger, private dsaService: dsaService, private momentService: MomentService) { }
-
+    isDirty = false;
     private requestTypeList =  [];
     private selectedRequestType = {RQST_TYPE : "VISTEX_DEALS",
                             RQST_NAME: "VISTEX DEALS"};
@@ -101,7 +105,8 @@ export class adminVistexIntegrationLogComponent implements OnInit {
         this.gridData = process(this.gridResult, this.state);
     }
 
-    getData(){
+    getData() {
+        this.isDirty = true;
         this.startDate = new Date(this.momentService.moment(this.startDate).format("MM/DD/YYYY"));
         this.endDate = new Date(this.momentService.moment(this.endDate).format("MM/DD/YYYY"));            
                     
@@ -159,6 +164,7 @@ export class adminVistexIntegrationLogComponent implements OnInit {
         });
         this.formGroup.valueChanges.subscribe(() => {     
             this.isFormChange = true;
+            this.isDirty=true;
         });
         this.editedRowData = dataItem;
         this.editedRowIndex = rowIndex;
@@ -236,6 +242,7 @@ export class adminVistexIntegrationLogComponent implements OnInit {
             "rqstSid": rqstSid 
         }
         this.dsaService.updateVistexStatusNew(postDataObj).subscribe( (response)=> {
+            this.isDirty=false;
             if (response == strTransantionId) {
                 each(this.gridResult.filter(x => x.RQST_SID === rqstSid), function (dataItem) {
                     dataItem.ERR_MSG = errMsg == null ? '' : errMsg;
@@ -257,6 +264,7 @@ export class adminVistexIntegrationLogComponent implements OnInit {
     }
 
     onRequestTypeChange(value){
+        this.isDirty=true;
         if (value == undefined || value == null || value == ""){return;}
         this.selectedRequestType = value;
         this.closeEditor(this.senderGrid, this.rowIndexValue);
@@ -282,5 +290,9 @@ export class adminVistexIntegrationLogComponent implements OnInit {
         caseSensitive: false,
         operator: "contains",
     };
+    
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
+    }
 
 }

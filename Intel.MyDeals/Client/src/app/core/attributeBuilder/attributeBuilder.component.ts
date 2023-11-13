@@ -27,6 +27,7 @@ export class AttributeBuilder implements OnInit {
     @Output() rulesemit = new EventEmitter();
     @Output() emitDeleteRule = new EventEmitter();
     @Output() clearSearchResult = new EventEmitter();//For Tender Dashboard, to clear search result if runrules action got triggered
+    @Output() isDirty = new EventEmitter();
     public availableAttrs = [];
     public availAtrField = [];
     public attributes: any = [];
@@ -117,6 +118,7 @@ export class AttributeBuilder implements OnInit {
         });
     }
     async onRuleSelect(dataItem) {
+        this.isDirty.emit(true);
         if (dataItem && !this.isDefaultChange && !this.isDeleteRule) {
             await this.updateRules(dataItem.rule);
             this.runRule();
@@ -311,6 +313,7 @@ export class AttributeBuilder implements OnInit {
         else return false;
     }
     async valueChange(dataItem, index, action?: any) {
+        this.isDirty.emit(true);
         this.enableTextbox[index] = false;
         let ops = this.availableType2Operator.filter(x => x.type === dataItem.type).length > 0 ? this.availableType2Operator.filter(x => x.type === dataItem.type)[0].operator : ''
         let opvalues = [];
@@ -364,6 +367,7 @@ export class AttributeBuilder implements OnInit {
     }
 
     dataChange(idx, dataItem, selector, data?) {
+        this.isDirty.emit(true);
         this.attributes[idx].values = [];
         if (selector == 'operator') {
             this.attributes[idx].operator = dataItem.selectedOperator.operator;
@@ -401,7 +405,8 @@ export class AttributeBuilder implements OnInit {
         }
      }
 
-    dataChangeMulti(data, i, dataItem, selector) {        
+    dataChangeMulti(data, i, dataItem, selector) {
+        this.isDirty.emit(true);       
         this.attributes[i].values = [];
         this.attributes[i].value = '';
         data.forEach((item) => {
@@ -416,7 +421,7 @@ export class AttributeBuilder implements OnInit {
     saveRule() {
         let rulesData = this.generateCurrentRule();
         if (!this.validateRules()) return;
-
+        this.isDirty.emit(false);
         if (this.currentRule === "") {
             this.runRuleReqd = true;
             this.saveAsRule();

@@ -8,6 +8,8 @@ import { ThemePalette } from '@angular/material/core';
 import { ActivatedRoute } from "@angular/router";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "admin-push-dealsto-vistex",
@@ -15,8 +17,10 @@ import { ExcelExportEvent } from "@progress/kendo-angular-grid";
     styleUrls: ['Client/src/app/admin/pushDealstoVistex/admin.pushDealstoVistex.component.css']
 })
 
-export class adminPushDealsToVistexComponent {
+export class adminPushDealsToVistexComponent implements PendingChangesGuard{
+
     constructor(private loggerSvc: logger, private pushDealstoVistexSvc: pushDealsToVistexService, private formBuilder: FormBuilder, private route: ActivatedRoute) { }
+    isDirty = false;
     private color: ThemePalette = 'primary';
     private pushDealsToVistexForm: FormGroup;
     private loadMessage = "Admin Customer Loading..";
@@ -51,6 +55,7 @@ export class adminPushDealsToVistexComponent {
             return;
         }
         this.pushDealstoVistexSvc.PushDealstoVistex(this.pushDealsToVistexForm.value).subscribe(result => {
+            this.isDirty=false;
             this.Results = result;
             this.showResults = true;
             this.UpdCnt.all = this.Results.length;
@@ -74,6 +79,9 @@ export class adminPushDealsToVistexComponent {
         this.state = state;
         this.gridData = process(this.Results, this.state);
     }
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
+    }
     ngOnInit() {
         this.securityCheck();
         //this is useful when validateVistexR3Checks screen redirects to this 'Push Deals to Vistex' page
@@ -83,5 +91,9 @@ export class adminPushDealsToVistexComponent {
             DEAL_IDS: [dealIdString, Validators.required],
             VSTX_CUST_FLAG:true
         });
+
+        this.pushDealsToVistexForm.valueChanges.subscribe(x=>{
+            this.isDirty=true;
+        })
     }
 }

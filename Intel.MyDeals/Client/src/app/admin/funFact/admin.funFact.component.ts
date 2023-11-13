@@ -6,16 +6,18 @@ import { ThemePalette } from '@angular/material/core';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Fun_Facts } from './admin.funFact.model';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { Observable } from "rxjs";
 
 @Component({
     selector: 'admin-fun-fact',
     templateUrl: 'Client/src/app/admin/funFact/admin.funFact.component.html',
     styleUrls: ['Client/src/app/admin/funFact/admin.funFact.component.css']
 })
-export class adminFunFactComponent {
+export class adminFunFactComponent implements PendingChangesGuard {
     constructor(private funFactSvc: funFactService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
@@ -29,7 +31,7 @@ export class adminFunFactComponent {
     public formGroup: FormGroup;
     public isFormChange = false;
     private editedRowIndex: number;
-    private isNew: boolean; rowIndex: number; isDataValid = false;
+    private isNew: boolean; rowIndex: number; isDataValid = false; isDirty=false;
     @ViewChild('funFactTooltip', { static: false }) funFactTooltip: NgbTooltip;
     @ViewChild('headerTooltip', { static: false }) headerTooltip: NgbTooltip;
     @ViewChild('fontAwesomeTooltip', { static: false }) fontAwesomeTooltip: NgbTooltip;
@@ -78,6 +80,7 @@ export class adminFunFactComponent {
             this.toolTipvalidationMsgs(this.formGroup.controls,isNew);
         }
         else if (this.isFormChange) {
+            this.isDirty=false
             this.insertUpdateOperation(rowIndex, isNew, fun_facts);
             sender.closeRow(rowIndex);
         }
@@ -188,6 +191,7 @@ export class adminFunFactComponent {
         this.formGroup = undefined;
     }
     addHandler({ sender }) {
+        this.isDirty=true;
         //if there are any filters or sorting applied on the grid, at this scenario if users try to add new record,
         //then the below line of code clears all the filters and sorting applied so that the newly added data is visible in the first page.
         //if no filters/sorting applied then newly added record will be shown in whatever page user is in
@@ -212,6 +216,7 @@ export class adminFunFactComponent {
         sender.addRow(this.formGroup);
     }
     editHandler({ sender, rowIndex, dataItem }) {
+        this.isDirty=true
         this.closeEditor(sender);
         this.isFormChange = false;
         this.formGroup = new FormGroup({
@@ -246,6 +251,11 @@ export class adminFunFactComponent {
     cancelHandler({ sender, rowIndex }) {
         this.closeEditor(sender, rowIndex);
     }
+    
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
+    }
+
     ngOnInit() {
         this.loadFunFacts();
     }

@@ -17,7 +17,7 @@
                 <div class="col-md-12 margin-btn-dmu-15">
                     <label style="width: 180px; vertical-align: top;">Deal Id(s):</label>
                     <kendo-textarea [rows]="4" [cols]="65" placeholder="Multiple deal IDs can be separated with comma."
-                                    resizable="both" [(ngModel)]="massUpdateData['DealIds']"
+                                    resizable="both" [(ngModel)]="massUpdateData['DealIds']" (valueChange)="textchange()"
                                     [ngStyle]="{'border-color':isError['Deal_Ids']?'red':''}" class="kendo-textarea-custom"></kendo-textarea>
                     <kendo-formerror style="padding-left: 180px" *ngIf="isError['Deal_Ids']">
                         {{ errorMsg['Deal_Ids'] }}

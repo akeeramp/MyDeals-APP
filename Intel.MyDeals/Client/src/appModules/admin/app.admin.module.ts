@@ -67,6 +67,7 @@ import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loading
 import { POPUP_CONTAINER } from '@progress/kendo-angular-popup';
 import { registerAllModules } from 'handsontable/registry';
 import { AdminUtilComponents } from './admin-util.module';
+import { PendingChangesGuard } from "./../../app/shared/util/gaurdprotectionDeactivate";
 
 // register Handsontable's modules
 registerAllModules();
@@ -133,7 +134,8 @@ registerAllModules();
         broadCastService,
         SecurityResolver,
         MomentService,
-        StaticMomentService
+        StaticMomentService,
+        PendingChangesGuard
     ],
     declarations: [
         AppRootComponent,

@@ -8,6 +8,8 @@ import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { DomSanitizer } from '@angular/platform-browser';
 import { MatDialog } from '@angular/material/dialog';
 import { ManageEmployeeModalComponent } from './admin.manageEmployeeModal.component';
+import { Observable } from "rxjs";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 
 @Component({
     selector: 'manage-employee',
@@ -15,11 +17,13 @@ import { ManageEmployeeModalComponent } from './admin.manageEmployeeModal.compon
     styleUrls: ['Client/src/app/admin/employee/admin.manageEmployee.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class manageEmployeeComponent {
+
+export class manageEmployeeComponent implements PendingChangesGuard{
+
     constructor(private manageEmployeeSvc: manageEmployeeService, private loggerSvc: logger, private sanitizer: DomSanitizer, protected dialog: MatDialog) {
         this.allData = this.allData.bind(this);
     }
-
+    isDirty = false;
     private Roles: Array<string> = ["CBA", "DA", "Finance", "FSE", "GA", "Legal", "RA", "SA", "MyDeals SA", "Net ASP SA", "Rebate Forecast SA", "WRAP SA"];
     private Geos: Array<string> = ["APAC", "ASMO", "EMEA", "IJKK", "PRC", "Worldwide"];
 
@@ -141,6 +145,7 @@ export class manageEmployeeComponent {
     }
 
     openEmployeeCustomers(dataItem) {
+        this.isDirty=true;
         const geosArray = dataItem["USR_GEOS"].split(', ');
         let modal_body;
         this.manageEmployeeSvc.getCustomersFromGeos(geosArray.join())
@@ -162,6 +167,7 @@ export class manageEmployeeComponent {
                 });
                 dialogRef.afterClosed().subscribe(result => {
                     if (result) {
+                        this.isDirty=false
                         dataItem["USR_CUST"] = result;
                         dataItem["CUST_CONTENT"] = this.customersFormatting(dataItem, 'USR_CUST', 'USR_ROLE', 'USR_GEOS')['data'];
                         this.showKendoAlert = true;
@@ -172,6 +178,7 @@ export class manageEmployeeComponent {
             });
     }
     openEmployeeVerticals(dataItem) {
+        this.isDirty=true;
         this.manageEmployeeSvc.getProductCategoriesWithAll()
             .subscribe(response => {
                 const selectedIds = [];
@@ -190,6 +197,7 @@ export class manageEmployeeComponent {
                 });
                 dialogRef.afterClosed().subscribe(result => {
                     if (result) {
+                        this.isDirty=false;
                         dataItem.USR_VERTS = result;
                         dataItem["USR_VERTS"] = result;
                         dataItem["VERT_CONTENT"] = this.verticalsFormatting(dataItem, 'USR_VERTS', 'USR_ROLE', 'USR_GEOS')['data'];
@@ -298,6 +306,10 @@ export class manageEmployeeComponent {
             }, (error) => {
                 this.loggerSvc.error('Unable to get User Data.', '', 'manageEmployeeComponent::loadEmployeeData::' + JSON.stringify(error));
             });
+    }
+
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
     }
 
     ngOnInit() { 

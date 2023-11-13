@@ -17,13 +17,15 @@ import {
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { Observable } from "rxjs";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 
 @Component({
     selector: "admin-workflow-stages",
     templateUrl: "Client/src/app/admin/workflowStages/admin.workflowStages.component.html",
     styleUrls: ['Client/src/app/admin/workflowStages/admin.workflowStages.component.css']
 })
-export class adminWorkflowStagesComponent {
+export class adminWorkflowStagesComponent implements PendingChangesGuard {
     constructor(private workflowStageSvc: workflowStagesService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
@@ -33,7 +35,7 @@ export class adminWorkflowStagesComponent {
     @ViewChild('WFSTG_NMTooltip', { static: false }) WFSTG_NMTooltip: NgbTooltip;
     @ViewChild('WFSTG_DESCTooltip', { static: false }) WFSTG_DESCTooltip: NgbTooltip;
     @ViewChild('WFSTG_ORDTooltip', { static: false }) WFSTG_ORDTooltip: NgbTooltip;
-
+    isDirty = false;
     private isLoading = true;
     private errorMsg = "";
     private dataSource: any;
@@ -185,6 +187,7 @@ export class adminWorkflowStagesComponent {
     }
 
     addHandler({ sender }) {
+        this.isDirty=true;
         this.closeEditor(sender);
         this.formGroup = new FormGroup({
             WFSTG_NM: new FormControl("", Validators.required),
@@ -202,6 +205,7 @@ export class adminWorkflowStagesComponent {
     }
 
     editHandler({ sender, rowIndex, dataItem }) {
+        this.isDirty=true;
         this.closeEditor(sender);
         this.isFormChange = false;
         this.formGroup = new FormGroup({
@@ -265,6 +269,7 @@ export class adminWorkflowStagesComponent {
         }
         //check the Form Change
         else if (this.isFormChange) {
+            this.isDirty=false;
             this.isDialogVisible = false;
 
             if (isNew) {
@@ -319,6 +324,10 @@ export class adminWorkflowStagesComponent {
         (data.WFSTG_LOC.value == "") ? this.wfStgLocDdlTooltip.open() : this.wfStgLocDdlTooltip.close();
     }
 
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
+    }
+    
     ngOnInit() {
         this.loadWorkflowStages();
     }

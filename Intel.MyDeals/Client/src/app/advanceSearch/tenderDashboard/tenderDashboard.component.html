@@ -14,11 +14,11 @@
     <div id="search-info-container-tenderDashboard" [hidden]="!showSearchFilters">
         <div class="row search-container">
             <div class="col-md-5 left-inner-container" style="padding-bottom:0px !important;">
-                <app-search [title]="title" [titleText]="searchTitle"></app-search>
+                <app-search [title]="title" [titleText]="searchTitle" (isDirty)="isSearchDirty($event)"></app-search>
             </div>
             <div class="col-md-7 right-inner-container">
                 <attribute-builder-angular [attributeSource]="attributeList" [operatorSource]="operatorList" [types2operatorSource]="type2OperatorList" [cat]="cat" [subcat]="subcat" [runSearch]="runSearch" 
-                                           [customSettings]="customSettings" (invokeSearchDatasource)="invokeSearchDatasource($event)" (removeLoadingPanel)="removeLoadingPanel($event)" (clearSearchResult)="clearSearchResult($event)"></attribute-builder-angular>
+                                           [customSettings]="customSettings" (invokeSearchDatasource)="invokeSearchDatasource($event)" (removeLoadingPanel)="removeLoadingPanel($event)" (clearSearchResult)="clearSearchResult($event)" (isDirty)="isSearchDirty($event)"></attribute-builder-angular>
             </div>
         </div>
     </div>

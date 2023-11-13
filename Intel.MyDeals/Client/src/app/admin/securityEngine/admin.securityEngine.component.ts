@@ -4,15 +4,20 @@ import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-gr
 import { process, State } from "@progress/kendo-data-query";
 import { SecurityEngineService } from "./admin.securityEngine.service";
 import { SelectEvent } from "@progress/kendo-angular-layout";
+
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { sortBy } from 'underscore';
+import { Observable } from "rxjs";
 
 @Component({
     selector: "admin-security-engine",
     templateUrl: "Client/src/app/admin/securityEngine/admin.securityEngine.component.html",
     styleUrls: ['Client/src/app/admin/securityEngine/admin.securityEngine.component.css']
 })
-export class adminsecurityEngineComponent {
+export class adminsecurityEngineComponent implements PendingChangesGuard{
+
     constructor(private SecurityEnginesvc: SecurityEngineService, private loggerSvc: logger) { }
+    isDirty = false;
     public isGridLoading = false;
     public isShowMainContent = false;
     public currentDisplayAction = [];
@@ -99,6 +104,7 @@ export class adminsecurityEngineComponent {
     }
 
     objtypeChange(value) {
+        this.isDirty=true;
         this.isshowdetails = false
         this.selectedIds = [];
         this.selectedStages = [];
@@ -116,6 +122,7 @@ export class adminsecurityEngineComponent {
     }
 
     objtypeRoleChange(value) {
+        this.isDirty=true;
         this.isshowdetails = false
     }
 
@@ -281,6 +288,7 @@ export class adminsecurityEngineComponent {
             //Display Action
             this.currentDisplayAction = this.attrActionNameDS;
         }
+        this.isDirty=false;
         this.generateGrid()
 
         setTimeout(() => {
@@ -698,6 +706,10 @@ export class adminsecurityEngineComponent {
         };
         var val = convertBase(hex).from(16).to(2);
         return (base + val).slice(-1 * base.length);
+    }
+    
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
     }
 
     ngOnInit() {

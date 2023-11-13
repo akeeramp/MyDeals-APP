@@ -60,6 +60,7 @@ import { GlobalSearchComponent } from '../../app/advanceSearch/globalSearch/glob
 import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingspinner.component';
 import { ContractUtilComponents } from './contract-util.module';
 import { registerAllModules } from 'handsontable/registry';
+import { PendingChangesGuard } from '../../app/shared/util/gaurdprotectionDeactivate';
 
 // register Handsontable's modules
 registerAllModules();
@@ -122,7 +123,8 @@ registerAllModules();
         broadCastService,
         SecurityResolver,
         MomentService,
-        StaticMomentService
+        StaticMomentService,
+        PendingChangesGuard
     ],
     declarations: [
         AppRootComponent,

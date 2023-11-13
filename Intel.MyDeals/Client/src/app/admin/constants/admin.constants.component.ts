@@ -8,13 +8,15 @@ import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Observable } from "rxjs";
 
 @Component({
     selector: 'constants',
     templateUrl: 'Client/src/app/admin/constants/admin.constants.component.html',
     styleUrls: ['Client/src/app/admin/constants/admin.constants.component.css']
 })
-export class ConstantsComponent {
+export class ConstantsComponent implements PendingChangesGuard {
     constructor(private constantsSvc: constantsService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
@@ -23,7 +25,7 @@ export class ConstantsComponent {
     private gridOptions: any;
     private allowCustom = true;
     private color: ThemePalette = "primary";
-
+    isDirty = false;
     public gridResult: Array<any>;
     public type = "numeric";
     public info = true;
@@ -145,6 +147,7 @@ export class ConstantsComponent {
     }
 
     addHandler({ sender }) {
+        this.isDirty=true;
         this.closeEditor(sender);
         this.isCnstNmEditable = true;
         this.formGroup = new FormGroup({
@@ -162,6 +165,7 @@ export class ConstantsComponent {
     }
 
     editHandler({ sender, rowIndex, dataItem }) {
+        this.isDirty=true;
         this.closeEditor(sender);
         this.isFormChange = false;
         this.formGroup = new FormGroup({
@@ -221,6 +225,7 @@ export class ConstantsComponent {
             cnst_map.CNST_SID = filteredCnst[0].CNST_SID;
         }
         if (this.isFormChange) {
+            this.isDirty=false;
             if (isNew) {
                 this.isLoading = true;
                 this.constantsSvc.insertConstants(cnst_map).subscribe(() => {
@@ -262,6 +267,10 @@ export class ConstantsComponent {
             filters: [],
         };
         this.loadConstants()
+    }
+
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
     }
 
     ngOnInit() {

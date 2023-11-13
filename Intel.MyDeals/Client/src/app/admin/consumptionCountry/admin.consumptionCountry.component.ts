@@ -14,17 +14,19 @@ import {
     distinct,
 } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "admin-consumption-country",
     templateUrl: "Client/src/app/admin/consumptionCountry/admin.consumptionCountry.component.html"
 })
 export class adminConsumptionCountryComponent {
+
     constructor(private consumptionCountrySvc: consumptionCountryService, private loggerSvc: logger) { }
 
     @ViewChild("CNSMPTN_CTRY_NM_DropDown") private CNSMPTN_CTRY_NM_Ddl;
     @ViewChild("GEO_NM_DropDown") private GEO_NM_DropDownDdl;
-
+    isDirty = false;
     private isLoading = true;
     private dataSource: any;
     private gridOptions: any;
@@ -164,6 +166,7 @@ export class adminConsumptionCountryComponent {
     }
 
     addHandler({ sender }) {
+        this.isDirty=true;
         this.closeEditor(sender);
         this.formGroup = new FormGroup({
             GEO_NM: new FormControl("", Validators.required),
@@ -177,6 +180,7 @@ export class adminConsumptionCountryComponent {
     }
 
     editHandler({ sender, rowIndex, dataItem }) {
+        this.isDirty=true;
         this.closeEditor(sender);
         this.isFormChange = false;
         this.formGroup = new FormGroup({
@@ -237,6 +241,7 @@ export class adminConsumptionCountryComponent {
                     );
                 }
             }
+            this.isDirty=false;
         }
         sender.closeRow(rowIndex);
     }
@@ -248,6 +253,10 @@ export class adminConsumptionCountryComponent {
             filters: [],
         };
         this.loadConsumptionCountry();
+    }
+    
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
     }
 
     ngOnInit() {

@@ -1,4 +1,4 @@
-﻿import { Component, Input } from "@angular/core";
+﻿import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { Item } from "@progress/kendo-angular-charts/dist/es2015/common/collection.service";
 import { MomentService } from "../../shared/moment/moment.service";
 import { contractStatusWidgetService } from "../../dashboard/contractStatusWidget.service";
@@ -23,10 +23,11 @@ export class SearchComponent {
     public ps_Id: number = 0;
     public pt_Id: number = 0;
     public searchText: string = "";
-    public contractData: [];
+    public contractData: []; 
 
     @Input() title: string = " ";
     @Input() titleText: string = " ";
+    @Output() isDirty = new EventEmitter();
 
     constructor(protected cntrctWdgtSvc: contractStatusWidgetService,
                 protected loggerSvc: logger,
@@ -52,10 +53,12 @@ export class SearchComponent {
     }
 
     onCustomerChange(custData) {
+        this.isDirty.emit(true);
         window.localStorage.selectedCustNames = JSON.stringify(custData);
     }
 
     onDateChange(value, dateChanged) {
+        this.isDirty.emit(true);
         if (value && value != null && value != '') {
             if (dateChanged == "startDateChange") {
                 window.localStorage.startDateValue = value;

@@ -2,6 +2,8 @@
 import { quoteLetterService } from "./admin.quoteLetter.service";
 import { Component } from "@angular/core";
 import { saveAs } from 'file-saver';
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "quote-letter",
@@ -9,10 +11,12 @@ import { saveAs } from 'file-saver';
     styleUrls: ['Client/src/app/admin/quoteLetter/admin.quoteLetter.component.css']
 })
 
-export class QuoteLetterComponent {
+export class QuoteLetterComponent implements PendingChangesGuard{
+
     constructor(private quoteLetterSvc: quoteLetterService, private loggerSvc: logger) { }
 
     //created for Angular loader
+    isDirty = false;
     public isLoading = 'true';
     public loadMessage = "Quote Letter is Loading ...";
     public moduleName = "Quote Letter Dashboard";
@@ -54,6 +58,7 @@ export class QuoteLetterComponent {
     }
 
     onTemplateChange(selectedItem) {
+        this.isDirty=true;
         this.headerInfo = selectedItem.HDR_INFO;
         this.bodyInfo = selectedItem.BODY_INFO;
     }
@@ -95,6 +100,10 @@ export class QuoteLetterComponent {
            
     }  
 
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
+    }
+    
     ngOnInit() {
         this.loadAdminTemplate();
     }

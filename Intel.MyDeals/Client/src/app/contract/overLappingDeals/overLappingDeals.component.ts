@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, EventEmitter, Input, Output } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
@@ -21,6 +21,7 @@ export class overLappingDealsComponent {
     }
     @Input() contractData: any;
     @Input() UItemplate: any;
+    @Output() isDirty = new EventEmitter();8
     private isLoading = true;
     private loadMessage = "Looking for Overlapping Deals";
     private type = "numeric";
@@ -158,6 +159,7 @@ export class overLappingDealsComponent {
     }
 
     selectAllOvlp(value) {
+        this.isDirty.emit(true);
         this.isSelectAll = !value;
         each(this.gridResult, item => {
             if (item.PROGRAM_PAYMENT == "Frontend YCS2") {
@@ -167,6 +169,7 @@ export class overLappingDealsComponent {
     }
 
     acceptSelectAll() {
+        this.isDirty.emit(true);
         var selectedIDS = filter(this.gridResult, { 'IS_SEL': true, 'PROGRAM_PAYMENT': 'Frontend YCS2' });
         var ids = distinct(selectedIDS, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
         if (selectedIDS.length > 0) {
@@ -226,6 +229,7 @@ export class overLappingDealsComponent {
     }
 
     selectCheckBox(value) {
+        this.isDirty.emit(true);
         each(this.gridResult, item => {
             if (item.WIP_DEAL_OBJ_SID == value && item.PROGRAM_PAYMENT == "Frontend YCS2") {
                 item.IS_SEL = !item.IS_SEL;
@@ -238,6 +242,7 @@ export class overLappingDealsComponent {
     }
 
     acceptOvlp(WIP_DEAL_OBJ_SID, YCS2_OVERLAP_OVERRIDE) {
+        this.isDirty.emit(false);
         var tempdata = this.ovlpData;
         var START_DT = '';
         var END_DT = '';

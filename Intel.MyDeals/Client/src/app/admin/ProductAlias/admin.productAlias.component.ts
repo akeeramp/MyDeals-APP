@@ -6,19 +6,22 @@ import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { Observable } from "rxjs";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 
 @Component({
     selector: 'admin-product-alias',
     templateUrl: 'Client/src/app/admin/productAlias/admin.productAlias.component.html',
     styleUrls: ['Client/src/app/admin/productAlias/admin.productAlias.component.css']
 })
-export class adminProductAliasComponent {
+export class adminProductAliasComponent implements PendingChangesGuard{
+
     constructor(private productAliasSvc: productAliasService, private loggerSvc: logger) { }
     @ViewChild("catDropDown") private catDdl;
     @ViewChild("custDropDown") private custDdl;
     @ViewChild("countDropDown") private countDdl;
     @ViewChild("partDropDown") private partDdl;
-
+    isDirty = false;
     private isLoading = true;
     private errorMsg = "";
     private dataSource;
@@ -134,6 +137,7 @@ export class adminProductAliasComponent {
     }
 
     addHandler({ sender }) {
+        this.isDirty=true;
         this.closeEditor(sender);
         this.formGroup = new FormGroup({
             PRD_NM: new FormControl("", Validators.required),
@@ -147,6 +151,7 @@ export class adminProductAliasComponent {
     }
 
     editHandler({ sender, rowIndex, dataItem }) {
+        this.isDirty=true;
         this.closeEditor(sender);
         this.isFormChange = false;
         this.formGroup = new FormGroup({
@@ -246,6 +251,7 @@ export class adminProductAliasComponent {
         if (this.isFormChange) {
             this.isCombExists = this.IsValidCombination(product_map, isNew);
             if (!this.isCombExists) {
+                this.isDirty=false;
                 this.insertUpdateOperation(rowIndex, isNew, product_map);
             }
             else {
@@ -264,6 +270,10 @@ export class adminProductAliasComponent {
             filters: [],
         };
         this.loadProductAlias()
+    }
+    
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
     }
 
     ngOnInit() {

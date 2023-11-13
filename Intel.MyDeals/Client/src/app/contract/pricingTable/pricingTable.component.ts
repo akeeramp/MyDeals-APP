@@ -10,6 +10,8 @@ import { dealEditorComponent } from "../dealEditor/dealEditor.component"
 import { PricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
 import { performanceBarsComponent } from '../performanceBars/performanceBar.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { PendingChangesGuard } from 'src/app/shared/util/gaurdprotectionDeactivate';
+import { Observable } from 'rxjs';
 
 export interface contractIds {
     Model: string;
@@ -26,7 +28,8 @@ export interface contractIds {
     templateUrl: "Client/src/app/contract/pricingTable/pricingTable.component.html",
     styleUrls: ['Client/src/app/contract/pricingTable/pricingTable.component.css']
 })
-export class pricingTableComponent {
+
+export class pricingTableComponent implements PendingChangesGuard {
     public drawChart: boolean;
     constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: TemplatesService,
         private pteService: PricingTableEditorService, private lnavSvc: lnavService, private route: ActivatedRoute, private router: Router) {}
@@ -67,6 +70,7 @@ export class pricingTableComponent {
     public enablePerfChart:boolean = (<any>window).isDeveloper || (<any>window).isTester;
     public loadtype="";
     public selectNavMenu:any;
+    private isDirty=false;
 
     public searchedContractData = {
         Model: "",
@@ -466,6 +470,22 @@ export class pricingTableComponent {
         }
         //this functionality will disable anything of .net ifloading to stop when dashboard landing to this page
         document.getElementById('mainBody')?.setAttribute('style', 'display:none');
+    }
+
+    isFormDirty(data){
+        if(!!data){
+            this.isDirty=data;
+        }
+    }
+
+    canDeactivate(): Observable<boolean> | boolean { 
+        if(!!this.deComp && this.deComp.dirty){
+            this.isDirty=true;
+        }
+        if ((this.pteComp && this.pteComp.dirty) ) {
+            this.isDirty = true;
+        }
+       return !this.isDirty;
     }
 
 }

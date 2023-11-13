@@ -19,18 +19,20 @@ import {
 import { FormGroup, FormControl } from "@angular/forms";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "admin-unified-dealrecon",
     templateUrl: "Client/src/app/admin/unifiedDealRecon/admin.unifiedDealRecon.component.html",
     styleUrls: ['Client/src/app/admin/unifiedDealRecon/admin.unifiedDealRecon.component.css']
 })
-export class adminUnifiedDealReconComponent {
+export class adminUnifiedDealReconComponent implements PendingChangesGuard {
 
     constructor(private unifiedDealReconSvc: unifiedDealReconService, private loggerSvc: logger, protected dialog: MatDialog) {
         this.allData = this.allData.bind(this);
     }
-
+    private isDirty = false;
     private isLoading = true;
     private gridResult: Array<any>;
     private gridData: GridDataResult;
@@ -126,6 +128,7 @@ export class adminUnifiedDealReconComponent {
     }
 
     editHandler({ sender, rowIndex, dataItem }) {
+        this.isDirty=true;
         this.openEndCustomerModal(dataItem, sender, rowIndex)
         this.closeEditor(sender);
         this.isFormChange = false;
@@ -236,6 +239,7 @@ export class adminUnifiedDealReconComponent {
         if (this.dataItems && this.dataItems.IS_PRIME) {
             this.unifiedDealReconSvc.UpdateUnPrimeDeals(dataItem.OBJ_SID, this.dataItems).subscribe(
                 (response) => {
+                    this.isDirty=false;
                     sender.closeRow(rowIndex);
                     this.refreshGrid();
                     this.loggerSvc.success("Unified Deal Recon updated.");
@@ -286,6 +290,10 @@ export class adminUnifiedDealReconComponent {
             filters: [],
         };
         this.loadDealReconciliation();
+    }
+     
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
     }
 
     ngOnInit() {

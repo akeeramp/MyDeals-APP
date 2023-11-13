@@ -17,6 +17,8 @@ import {
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { Observable } from "rxjs";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 
 @Component({
     selector: "dropdowns",
@@ -24,7 +26,8 @@ import { ExcelExportEvent } from "@progress/kendo-angular-grid";
     styleUrls: ['Client/src/app/admin/CustomerVendors/admin.customerVendors.component.css']
 })
 
-export class dropdownsComponent {
+export class dropdownsComponent implements PendingChangesGuard{
+
 
     //Constructor - unloading the AngularJS stylesheet 
     constructor(private dropdownSvc: dropdownService, private loggerSvc: logger) {
@@ -36,6 +39,7 @@ export class dropdownsComponent {
     @ViewChild("custDropDown") private custDdl;
 
     //Private Varibales
+    isDirty = false;
     private isLoading = true;
     private editedRowIndex: number;
     private deleteItem: string;
@@ -314,6 +318,7 @@ export class dropdownsComponent {
 
     //Events called via html : Starts
     addHandler({ sender }) {
+        this.isDirty=true;
         this.closeEditor(sender);
         this.formGroup = new FormGroup({
             ACTV_IND: new FormControl(false, Validators.required),
@@ -338,6 +343,7 @@ export class dropdownsComponent {
     }
 
     editHandler({ sender, rowIndex, dataItem }) {
+        this.isDirty=true;
         this.closeEditor(sender);
         this.isFormChange = false;
         this.formGroup = new FormGroup({
@@ -425,6 +431,7 @@ export class dropdownsComponent {
                     );
                 }
             }
+            this.isDirty=false;
         }
         sender.closeRow(rowIndex);
     }
@@ -469,7 +476,9 @@ export class dropdownsComponent {
     close() {
         this.isDialogVisible = false;
     }
-
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
+    }
 
     deleteRecord() {
         this.isDialogVisible = false;

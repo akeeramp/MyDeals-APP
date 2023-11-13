@@ -6,16 +6,18 @@ import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { sortBy, uniq, pluck } from 'underscore';
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { Observable } from "rxjs";
 
 @Component({
     selector: 'admin-prime-customers',
     templateUrl: 'Client/src/app/admin/PrimeCustomers/admin.primeCustomers.component.html',
     styleUrls: ['Client/src/app/admin/PrimeCustomers/admin.primeCustomers.component.css']
 })
-export class adminPrimeCustomersComponent {
+export class adminPrimeCustomersComponent implements PendingChangesGuard {
     constructor(private primeCustSvc: primeCustomerService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
@@ -26,7 +28,7 @@ export class adminPrimeCustomersComponent {
     @ViewChild("ctryCustNmDropDown") private ctryCustNmDdl;
     @ViewChild("primeCtryDropDown") private primeCtryDdl;
     @ViewChild("rplStsCdDropDown") private rplStsCdDdl;
-
+    isDirty = false;
     private isLoading = true;
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
@@ -127,6 +129,7 @@ export class adminPrimeCustomersComponent {
     }
 
     addHandler({ sender }) {
+        this.isDirty=true;
         this.closeEditor(sender);
         this.isUnifiedIdEditable = true;
         this.isPrimCustNmEditable = true;
@@ -161,6 +164,7 @@ export class adminPrimeCustomersComponent {
     }
 
     editHandler({ sender, rowIndex, dataItem }) {
+        this.isDirty=true;
         this.isRplStsDdEditable = true;
         this.closeEditor(sender);
         this.isFormChange = false;
@@ -331,6 +335,7 @@ export class adminPrimeCustomersComponent {
     }
 
     insertUpdateOperation(rowIndex, isNew, primeCust_map) {
+        this.isDirty=false;
         if (!this.isCombExists) {
             if (isNew) {
                 this.isLoading = true;
@@ -419,6 +424,10 @@ export class adminPrimeCustomersComponent {
             filters: [],
         };
         this.loadPrimeCustomer();
+    }
+    
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
     }
 
     ngOnInit() {

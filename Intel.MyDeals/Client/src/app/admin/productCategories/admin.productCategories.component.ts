@@ -11,13 +11,15 @@ import { each } from 'underscore';
 import { DatePipe } from "@angular/common";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { Observable } from "rxjs";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 
 @Component({
     selector: 'admin-product-categories',
     templateUrl: 'Client/src/app/admin/productCategories/admin.productCategories.component.html',
     styleUrls: ['Client/src/app/admin/productCategories/admin.productCategories.component.css']
 })
-export class adminProductCategoriesComponent {
+export class adminProductCategoriesComponent implements PendingChangesGuard {
     constructor(private productCategorySvc: productCategoryService, public datepipe: DatePipe, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
@@ -35,6 +37,7 @@ export class adminProductCategoriesComponent {
     private isDataValid = false;
     private focusFiledld = false;
     private focusFiledProductVertical = false;
+    isDirty=false;
 
     @ViewChild('dealPdctTooltip', { static: false }) dealPdctTooltip: NgbTooltip;
     @ViewChild('pdctVerticalTooltip', { static: false }) pdctVerticalTooltip: NgbTooltip;
@@ -130,6 +133,7 @@ export class adminProductCategoriesComponent {
     }
 
     editHandler({ sender, rowIndex, dataItem }) {
+        this.isDirty=true;
         this.closeEditor(sender);
         this.isFormChange = false;
         this.formGroup = new FormGroup({
@@ -178,6 +182,7 @@ export class adminProductCategoriesComponent {
             this.toolTipvalidationMsgs(this.formGroup.controls);
         }
         else if (this.isFormChange) {
+            this.isDirty=false;
             this.isLoading = true;
             this.productCategorySvc.updateCategory(product_categories).subscribe(
                 result => {
@@ -215,6 +220,10 @@ export class adminProductCategoriesComponent {
         this.formGroup.markAllAsTouched();
         (data.PRD_CAT_NM.value == "" && data.ACTV_IND.value) ? this.pdctVerticalTooltip.open() : this.pdctVerticalTooltip.close();
         (data.DEAL_PRD_TYPE.value == "" && data.ACTV_IND.value) ? this.dealPdctTooltip.open() : this.dealPdctTooltip.close();
+    }
+
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
     }
 
     ngOnInit() {
