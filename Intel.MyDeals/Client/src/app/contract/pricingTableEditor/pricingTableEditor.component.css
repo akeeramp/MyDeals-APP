@@ -702,20 +702,6 @@ span.text.save-validate-txtstyle.dirty {
 
 */
 
-/* .pte-product-input-tooltip .tooltip-inner {
-    background-color: transparent !important;
-    border-color: transparent !important;
-    width: 150px;
-    opacity: 100%;
-    font-size: 18px;
-    color: #003c71;
-}
-
-.pte-product-input-tooltip .arrow::before {
-    color: #003c71;
-    border-bottom-color: #003c71;
-} */
-
 /* Pass pointer event to element behind element using this class */
 .ignore-pointer-event {
     pointer-events: none !important;

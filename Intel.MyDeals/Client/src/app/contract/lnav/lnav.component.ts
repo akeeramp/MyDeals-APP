@@ -38,7 +38,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
                 private dialog: MatDialog,
                 private router: Router,
                 private route: ActivatedRoute,
-                private changeDetector: ChangeDetectorRef) {}
+                private changeDetectorRef: ChangeDetectorRef) {}
 
     @Input() contractId: number;
     @Input() contractData;
@@ -578,7 +578,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
                 this.setBusy("", "", "", false);
                 this.lnavSelectedPS = {};
 
-                this.checkPsListAndDisplayTooltip(true);
+                this.pricingStrategyInputHandler();
             }, (err) => {
                 this.loggerService.error("Could not delete Pricing Strategy" + this.lnavSelectedPS.DC_ID, err, err.statusText);
                 this.isLoading = false;
@@ -666,7 +666,6 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
             default:
                 break;
         }
-
     }
     openAutoFill(ps, pt) {
         let ptTemplate;
@@ -911,46 +910,51 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
     }
     needMct = function () {
         if (!this.contractData.PRC_ST || this.contractData.PRC_ST.length === 0) return false;
-        let isNeedMCT = false;
+        let isNeedMct = false;
         each(this.contractData.PRC_ST, (item) => {
             if (item.COMP_MISSING_FLG !== "" && (item.COMP_MISSING_FLG === "1" || item.COMP_MISSING_FLG === 1)) {
-                isNeedMCT = true;
+                isNeedMct = true;
             }
         });
-        return isNeedMCT;
+        return isNeedMct;
     }
 
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
-    @ViewChild('pricingStrategyStartTooltipTarget') pricingStrategyStartTooltip: NgbTooltip;
+    private isPricingStrategyEmpty(): boolean {
+        // Can return 'false' if contractData variable is empty
+        return (this.contractData && (this.contractData.PRC_ST == undefined || this.contractData.PRC_ST == null || this.contractData.PRC_ST.length == 0));
+    }
+    private isAddPricingStrategyState(): boolean {
+        return (this.isPricingStrategyEmpty() && this.C_ADD_PRICING_STRATEGY);
+    }
+
+    @ViewChild('pricingStrategyTooltipTarget', { static: false }) pricingStrategyStartTooltip: NgbTooltip;
+    private isPricingStrategyTooltipEnabled = false;
+    private updatePricingStrategyEnabledFlag() {
+        this.isPricingStrategyTooltipEnabled = this.isAddPricingStrategyState();
+
+        if (this.isPricingStrategyTooltipEnabled && this.pricingStrategyStartTooltip == undefined) {
+            this.changeDetectorRef.detectChanges();
+        }
+    }
     private showPricingStrategyTooltip() {
-        this.pricingStrategyStartTooltip.open();
+        if (this.isPricingStrategyTooltipEnabled) {
+            this.pricingStrategyStartTooltip.open();
+        }
     }
 
     private readonly ID_DEAL_ENTRY_TAB: number = 0;
-    private isPricingStrategyTooltipEnabled = false;
-    private checkPsListAndDisplayTooltip(toggleStrategyField = false) {
+    private triggerAddStrategyToggle() {
         if (this.selectedTab == this.ID_DEAL_ENTRY_TAB && this.isAddPricingStrategyState()) {
-            if (toggleStrategyField) {
-                this.toggleAddStrategy();
-            }
-
-            this.isPricingStrategyTooltipEnabled = true;
-            this.showPricingStrategyTooltip();
-        } else {
-            this.isPricingStrategyTooltipEnabled = false;
+            this.toggleAddStrategy();
         }
     }
 
-    private isAddPricingStrategyState(): boolean {
-        if (this.contractData && (this.contractData.PRC_ST == undefined || this.contractData.PRC_ST.length == 0)) {
-            if (this.C_ADD_PRICING_STRATEGY) {
-                return true;
-            }
-        }
-
-        return false;
+    private pricingStrategyInputHandler() {
+        this.updatePricingStrategyEnabledFlag();
+        this.triggerAddStrategyToggle();
+        this.showPricingStrategyTooltip();
     }
-    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+
     ngOnInit() {
         try {
             this.newStrategy = this.UItemplate.ObjectTemplates?.PRC_ST.ALL_TYPES;
@@ -960,9 +964,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
                 this.isPSExpanded[i] = true
             });
 
-            if (this.isAddPricingStrategyState()) {
-                this.toggleAddStrategy();
-            }
+            this.pricingStrategyInputHandler()
 
             //code for autofill change to accordingly change values
             this.lnavService.autoFillData.subscribe(res => {
@@ -983,15 +985,13 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
     ngOnChanges() {
         this.selectedTab = this.changedTab;
 
-        if (this.selectedTab == this.ID_DEAL_ENTRY_TAB && this.isAddPricingStrategyState()) {
-            this.toggleAddStrategy();
-        }
+        this.pricingStrategyInputHandler();
 
         if (!!this.selectNavMenu && this.selectNavMenu != '') {
             this.selectedModel = this.selectNavMenu;
 
             //it will update the url on page reload persist the selected state
-            if(this.route.snapshot.queryParams.loadtype=='Manage'){
+            if (this.route.snapshot.queryParams.loadtype == 'Manage') {
                 const type = this.route.snapshot.paramMap.get('type');
                 const cId = this.route.snapshot.paramMap.get('cid');
                 const psId = this.route.snapshot.paramMap.get('PSID');
@@ -1005,15 +1005,16 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        this.checkPsListAndDisplayTooltip(true);
+        // this.checkPsListAndDisplayTooltip(true);
+        this.pricingStrategyInputHandler();
 
-        //This will help to highlight the selectd PT incase of search result landing directly to PT. The logic can apply only once the page is rendered
-        this.lnavService.lnavHieight.subscribe(res => {
+        //This will help to highlight the selected Pricing Table incase of search result landing directly to PT. The logic can apply only once the page is rendered
+        this.lnavService.lnavHighlight.subscribe(res => {
             this.contractId_Map = { ...res, ps_index: 0, pt_index: 0 };
             (<any> $(`#sumPSdata_${ this.contractId_Map.ps_id }`)).collapse('show');
-            this.changeDetector.detectChanges();
+            this.changeDetectorRef.detectChanges();
         }, err => {
-            this.loggerService.error("lnavSvc::lnavHieight**********", err);
+            this.loggerService.error("lnavService::lnavHighlight**********", err);
         });
     }
 

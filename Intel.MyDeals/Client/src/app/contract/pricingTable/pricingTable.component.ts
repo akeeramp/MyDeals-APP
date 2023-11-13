@@ -155,7 +155,7 @@ export class pricingTableComponent implements PendingChangesGuard {
         }
         if (this.selLnav == 'PTE' && (this.loadtype !="MeetComp" && this.loadtype !="Manage")) {
             //highligh the selected lnav PT in case request coming fom search result for PTE.
-            this.lnavSvc.lnavHieight.next(contractModel);
+            this.lnavSvc.lnavHighlight.next(contractModel);
             if (contractModel.ps_id != 0 && contractModel.pt_id != 0) {
                 this.isPTEEnable = true;
                 this.isDETab = false;

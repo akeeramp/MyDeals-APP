@@ -1,27 +1,28 @@
 ﻿import { Injectable } from "@angular/core";
 import { HttpClient } from '@angular/common/http';
-import { SecurityService } from "../../shared/services/security.service"
 import { BehaviorSubject } from 'rxjs';
+
+import { SecurityService } from "../../shared/services/security.service"
 
 @Injectable({
     providedIn: 'root'
 })
-
 export class lnavService {
-    constructor(private httpClient: HttpClient, private securityService: SecurityService) { }
+
+    constructor(private httpClient: HttpClient,
+                private securityService: SecurityService) { }
 
     public apiBaseContractUrl = "/api/Contracts/v1/";
     public apiBasePricingStrategyUrl = "/api/PricingStrategies/v1/";
     public apiBasePricingTableUrl = "/api/PricingTables/v1/";
     public isLnavHidden = new BehaviorSubject({ isLnavHid: false, source: 'PT' });
     public autoFillData = new BehaviorSubject({});
-    public lnavHieight = new BehaviorSubject({ Model: 'PTE', C_ID: 0, ps_id: 0, pt_id: 0, contractData: {} });
+    public lnavHighlight = new BehaviorSubject({ Model: 'PTE', C_ID: 0, ps_id: 0, pt_id: 0, contractData: {} });
 
     // #### PRICING STRATEGY CRUD ####  
     public createPricingStrategy(custId, contractId, ps) {
         const apiUrl: string = this.apiBasePricingStrategyUrl + 'SavePricingStrategy/' + custId + '/' + contractId;
         return this.httpClient.post(apiUrl, [ps]);
-
     }
 
     // #### PRICING TABLE CRUD ####
@@ -54,6 +55,6 @@ export class lnavService {
     public copyPricingTable(custId, contractId, srcId, pt) {
         const apiUrl: string = this.apiBasePricingTableUrl + 'CopyPricingTable/' + custId + '/' + contractId + '/' + srcId;
         return this.httpClient.post(apiUrl, [pt]);
-
     }
+
 }

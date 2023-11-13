@@ -48,13 +48,17 @@
                                     <div class="fl ptLnavTitle ">Enter Pricing Strategy Name</div>
                                     <div class="clearboth"></div>
                                     <div class="bgBlueContainer" [ngClass]="{isErrorWrapper: newStrategy._behaviors.isError.TITLE}">
+                                        <!-- NOTE: If modifying this Input field, make sure both are configured identically. It is the same field but one contains the NgbTooltip attributes
+                                            and will only display when there are no PSs avaliable -->
                                         <input type="text" class="k-textbox fl" placeholder="" style="width: 224px !important; color: black;" maxlength="250" id="inptPrcTitle"
                                                [(ngModel)]="newStrategy.TITLE" [ngClass]="{isError: newStrategy._behaviors.isError.TITLE}" (keydown.enter)="customAddPsValidate()"
-                                               #pricingStrategyStartTooltipTarget="ngbTooltip" ngbTooltip="Start by adding a Pricing Strategy" tooltipClass="pricing-strategy-input-tooltip"
-                                               placement="top" triggers="manual" [autoClose]="false" [disableTooltip]="isPricingStrategyTooltipEnabled"/>
-                                        <button class="btn btn-sm btn-primary lnavaddbtnstyle" type="submit" [disabled]="isAddStrategyBtnHidden" (click)="customAddPsValidate()">
-                                            Add
-                                        </button>
+                                               *ngIf="!isPricingStrategyTooltipEnabled" />
+                                        <input type="text" class="k-textbox fl" placeholder="" style="width: 224px !important; color: black;" maxlength="250" id="inptPrcTitle"
+                                               [(ngModel)]="newStrategy.TITLE" [ngClass]="{isError: newStrategy._behaviors.isError.TITLE}" (keydown.enter)="customAddPsValidate()" 
+                                               *ngIf="isPricingStrategyTooltipEnabled" #pricingStrategyTooltipTarget="ngbTooltip" ngbTooltip="Start by adding a Pricing Strategy"
+                                               tooltipClass="pricing-strategy-input-tooltip" placement="top" triggers="manual" [autoClose]="false" />
+
+                                        <button class="btn btn-sm btn-primary lnavaddbtnstyle" type="submit" [disabled]="isAddStrategyBtnHidden" (click)="customAddPsValidate()">Add</button>
                                         <div class="fl ptLnavSubTitle">Create Agreement at Pricing Strategy</div>
                                         <input type="checkbox" id="inptPrcHybridCheck" [(ngModel)]="newStrategy.IS_HYBRID_PRC_STRAT" style="margin-top: 15px; height: 16px; width: 16px;" />
                                         <div class="clearboth"></div>
