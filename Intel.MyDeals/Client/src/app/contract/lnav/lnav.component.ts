@@ -95,11 +95,6 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
     private isDeletePT: boolean = false;
     private isDeletePs: boolean = false;
 
-    @ViewChild('pricingStrategyStartTooltipTarget') pricingStrategyStartTooltip: NgbTooltip;
-    private showPricingStrategyTooltip() {
-        this.pricingStrategyStartTooltip.open();
-    }
-
     setBusy(msg, detail, msgType, showFunFact) {
         setTimeout(() => {
             const newState = msg != undefined && msg !== "";
@@ -925,14 +920,24 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
         return isNeedMCT;
     }
 
-    private readonly dealEntryTabId: number = 0;
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+    @ViewChild('pricingStrategyStartTooltipTarget') pricingStrategyStartTooltip: NgbTooltip;
+    private showPricingStrategyTooltip() {
+        this.pricingStrategyStartTooltip.open();
+    }
+
+    private readonly ID_DEAL_ENTRY_TAB: number = 0;
+    private isPricingStrategyTooltipEnabled = false;
     private checkPsListAndDisplayTooltip(toggleStrategyField = false) {
-        if (this.selectedTab == this.dealEntryTabId && this.isAddPricingStrategyState()) {
+        if (this.selectedTab == this.ID_DEAL_ENTRY_TAB && this.isAddPricingStrategyState()) {
             if (toggleStrategyField) {
                 this.toggleAddStrategy();
-
-                this.showPricingStrategyTooltip();
             }
+
+            this.isPricingStrategyTooltipEnabled = true;
+            this.showPricingStrategyTooltip();
+        } else {
+            this.isPricingStrategyTooltipEnabled = false;
         }
     }
 
@@ -945,7 +950,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
 
         return false;
     }
-
+    // ////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
     ngOnInit() {
         try {
             this.newStrategy = this.UItemplate.ObjectTemplates?.PRC_ST.ALL_TYPES;
@@ -978,7 +983,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
     ngOnChanges() {
         this.selectedTab = this.changedTab;
 
-        if (this.selectedTab == this.dealEntryTabId && this.isAddPricingStrategyState()) {
+        if (this.selectedTab == this.ID_DEAL_ENTRY_TAB && this.isAddPricingStrategyState()) {
             this.toggleAddStrategy();
         }
 
