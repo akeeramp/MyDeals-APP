@@ -505,7 +505,7 @@ namespace Intel.MyDeals.BusinessLogic
             if (!((productType.ToLower() == "ssd" && productLevel.ToLower() == "family")
                 || ((productType.ToLower() == "ethernet" || productType.ToLower() == "pmem") && productLevel.ToLower() == "dealproductname")
                 || ((productType.ToLower() == "server" || productType.ToLower() == "client") && productLevel.ToLower() == "processor")
-                || ((productType.ToLower() == "ethernet") && productLevel.ToLower() == "materialid")))
+                || productLevel.ToLower() == "materialid"))
             {
                 workRecordDataFields.recordDetails.quote.quoteLine[currentRec].errorMessages.Add(AppendError(702, "Product error: Deal cannot be created for Product Type [" + productType + "] and Product Level [" + productLevel + "].  Acceptable Product [Type]/[Level] patterns are: [SSD]/[Family] or [Ethernet|Pmem]/[dealproductname] or [Server|Client]/[processor].", "Deal cannot be created for the selected Product type/level combination"));
                 return initWipId; // Bail out - Invalid Product level/ Product Type selected
@@ -524,7 +524,7 @@ namespace Intel.MyDeals.BusinessLogic
                 {
                     productData = processorNumber;
                 }
-                else if (productType.ToLower() == "ethernet" && productEpmId == null && productLevel.ToLower() == "materialid")
+                else if (productEpmId == null && productLevel.ToLower() == "materialid")
                 {
                     productData = dealMtrlIdName;
                 }
