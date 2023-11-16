@@ -955,6 +955,38 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
         this.showPricingStrategyTooltip();
     }
 
+    private get isPsTitleBehaviorErrorState(): boolean {
+        if (this.newStrategy != undefined && this.newStrategy._behaviors != undefined && this.newStrategy._behaviors.isError != undefined && this.newStrategy._behaviors.isError.TITLE != undefined) {
+            return this.newStrategy._behaviors.isError.TITLE as boolean;
+        }
+
+        return false;
+    }
+
+    private get getPsTitleBehaviorValidMessage(): string {
+        if (this.newStrategy != undefined && this.newStrategy._behaviors != undefined && this.newStrategy._behaviors.validMsg != undefined && this.newStrategy._behaviors.validMsg.TITLE  != undefined) {
+            return this.newStrategy._behaviors.validMsg.TITLE as string;
+        }
+
+        return '';
+    }
+
+    private get getPtTitleBehaviorValidMessage(): string {
+        if (this.newPricingTable != undefined && this.newPricingTable._behaviors != undefined && this.newPricingTable._behaviors.validMsg != undefined && this.newPricingTable._behaviors.validMsg.TITLE  != undefined) {
+            return this.newPricingTable._behaviors.validMsg.TITLE as string;
+        }
+
+        return '';
+    }
+
+    private get getPtObjectSetTypeCodeBehaviorValidMessage(): string {
+        if (this.newPricingTable != undefined && this.newPricingTable._behaviors != undefined && this.newPricingTable._behaviors.validMsg != undefined && this.newPricingTable._behaviors.validMsg.OBJ_SET_TYPE_CD  != undefined) {
+            return this.newPricingTable._behaviors.validMsg.OBJ_SET_TYPE_CD as string;
+        }
+
+        return '';
+    }
+
     ngOnInit() {
         try {
             this.newStrategy = this.UItemplate.ObjectTemplates?.PRC_ST.ALL_TYPES;
@@ -1005,7 +1037,6 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
     }
 
     ngAfterViewInit() {
-        // this.checkPsListAndDisplayTooltip(true);
         this.pricingStrategyInputHandler();
 
         //This will help to highlight the selected Pricing Table incase of search result landing directly to PT. The logic can apply only once the page is rendered

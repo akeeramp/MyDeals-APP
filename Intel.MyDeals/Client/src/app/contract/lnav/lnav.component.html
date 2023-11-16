@@ -1,4 +1,4 @@
-﻿<div *ngIf="contractData !=null && !isLnavHidden.isLnavHid" id="lnavContainerWrapper" style="padding-top:112px;height:100vh!important;width:100% !important">
+﻿<div *ngIf="contractData != null && !isLnavHidden.isLnavHid" id="lnavContainerWrapper" style="padding-top:112px; height:100vh!important; width:100% !important">
     <div id="lnavHeader">
         <div>
             <div class="contract-status-bar"></div>
@@ -47,14 +47,14 @@
                                 <div class="scaleTopAnim lnavMenuOption" style="padding: 10px;" [hidden]="isAddStrategyHidden">
                                     <div class="fl ptLnavTitle ">Enter Pricing Strategy Name</div>
                                     <div class="clearboth"></div>
-                                    <div class="bgBlueContainer" [ngClass]="{isErrorWrapper: newStrategy._behaviors.isError.TITLE}">
+                                    <div class="bgBlueContainer" [ngClass]="{isErrorWrapper: isPsTitleBehaviorErrorState}">
                                         <!-- NOTE: If modifying this Input field, make sure both are configured identically. It is the same field but one contains the NgbTooltip attributes
                                             and will only display when there are no PSs avaliable -->
                                         <input type="text" class="k-textbox fl" placeholder="" style="width: 224px !important; color: black;" maxlength="250" id="inptPrcTitle"
-                                               [(ngModel)]="newStrategy.TITLE" [ngClass]="{isError: newStrategy._behaviors.isError.TITLE}" (keydown.enter)="customAddPsValidate()"
+                                               [(ngModel)]="newStrategy.TITLE" [ngClass]="{isError: isPsTitleBehaviorErrorState}" (keydown.enter)="customAddPsValidate()"
                                                *ngIf="!isPricingStrategyTooltipEnabled" />
                                         <input type="text" class="k-textbox fl" placeholder="" style="width: 224px !important; color: black;" maxlength="250" id="inptPrcTitle"
-                                               [(ngModel)]="newStrategy.TITLE" [ngClass]="{isError: newStrategy._behaviors.isError.TITLE}" (keydown.enter)="customAddPsValidate()" 
+                                               [(ngModel)]="newStrategy.TITLE" [ngClass]="{isError: isPsTitleBehaviorErrorState}" (keydown.enter)="customAddPsValidate()" 
                                                *ngIf="isPricingStrategyTooltipEnabled" #pricingStrategyTooltipTarget="ngbTooltip" ngbTooltip="Start by adding a Pricing Strategy"
                                                tooltipClass="pricing-strategy-input-tooltip" placement="top" triggers="manual" [autoClose]="false" />
 
@@ -62,7 +62,7 @@
                                         <div class="fl ptLnavSubTitle">Create Agreement at Pricing Strategy</div>
                                         <input type="checkbox" id="inptPrcHybridCheck" [(ngModel)]="newStrategy.IS_HYBRID_PRC_STRAT" style="margin-top: 15px; height: 16px; width: 16px;" />
                                         <div class="clearboth"></div>
-                                        <div style="color: #F3D54E;">{{ newStrategy._behaviors.validMsg.TITLE }}</div>
+                                        <div style="color: #F3D54E;">{{ getPsTitleBehaviorValidMessage }}</div>
                                     </div>
                                 </div>
                             </div>
@@ -73,11 +73,11 @@
                                     <input type="text" class="k-textbox fl" placeholder="" style="width: 276px;
                                            color: black; border-bottom: 3px solid #f3d54e;" maxlength="250" id="inptPtTitle" [(ngModel)]="ptTITLE" />
                                     <div class="clearboth"></div>
-                                    <div style="color: #F3D54E;">{{ newPricingTable._behaviors.validMsg.TITLE }}</div>
+                                    <div style="color: #F3D54E;">{{ getPtTitleBehaviorValidMessage }}</div>
                                     <div class="ptLnavTitle">Select Pricing Table Deal Type </div>
                                     <div style="color: #FF6E77;">{{ objTypeCdMessage }}</div>
                                     <div class="ptLnavtmpltContainer" style="border:red;">
-                                        <div style="color: #F3D54E;">{{ newPricingTable._behaviors.validMsg.OBJ_SET_TYPE_CD }}</div>
+                                        <div style="color: #F3D54E;">{{ getPtObjectSetTypeCodeBehaviorValidMessage }}</div>
                                         <div *ngFor="let DealType of PtDealTypes">
                                             <div class="fl circleWithText" (click)="selectPtTemplateIcon(DealType)" [ngClass]="{ active: DealType._custom._active }">
                                                 <div class="fl textCircle blueBg" style="font-size: 10px;">{{ DealType._custom.ltr }}</div>
