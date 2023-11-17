@@ -6,4 +6,5 @@
     public END_CUSTOMER_COUNTRY: string;
     public EMP_WWID: string;
     public UNIFIED_STATUS: string;
+    public UNIFIED_REASON: string;
 }

@@ -9566,7 +9566,9 @@ namespace Intel.MyDeals.Entities {
 
 	[DataMember]
 	public String UNIFIED_STATUS { get; set; }
-		/*
+    [DataMember]
+    public String UNIFIED_REASON { get; set; }
+        /*
 		private static List<UnPrimeDeals> UnPrimeDealsFromReader(SqlDataReader rdr){
 		// This helper method is template generated.
 		// Refer to that template for details to modify this code.
@@ -9597,7 +9599,7 @@ namespace Intel.MyDeals.Entities {
 		}
 		*/
 
-	} // End of class UnPrimeDeals
+    } // End of class UnPrimeDeals
 
 	///<summary>
 	/// Class created via template - Do Not Modify!

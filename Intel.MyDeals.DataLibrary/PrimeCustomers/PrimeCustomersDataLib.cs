@@ -143,7 +143,8 @@ namespace Intel.MyDeals.DataLibrary
                     int IDX_END_CUSTOMER_RETAIL = DB.GetReaderOrdinal(rdr, "END_CUSTOMER_RETAIL");
                     int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
                     int IDX_TITLE = DB.GetReaderOrdinal(rdr, "TITLE");
-                    int IDX_STATUS = DB.GetReaderOrdinal(rdr, "Status/Reason");
+                    int IDX_STATUS = DB.GetReaderOrdinal(rdr, "Status");
+                    int IDX_REASON = DB.GetReaderOrdinal(rdr, "Reason");
 
                     while (rdr.Read())
                     {
@@ -157,7 +158,8 @@ namespace Intel.MyDeals.DataLibrary
                             END_CUSTOMER_RETAIL = (IDX_END_CUSTOMER_RETAIL < 0 || rdr.IsDBNull(IDX_END_CUSTOMER_RETAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUSTOMER_RETAIL),
                             OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
                             TITLE = (IDX_TITLE < 0 || rdr.IsDBNull(IDX_TITLE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TITLE),
-                            UNIFIED_STATUS = (IDX_STATUS < 0 || rdr.IsDBNull(IDX_STATUS)) ? String.Empty : rdr.GetFieldValue<String>(IDX_STATUS)
+                            UNIFIED_STATUS = (IDX_STATUS < 0 || rdr.IsDBNull(IDX_STATUS)) ? String.Empty : rdr.GetFieldValue<String>(IDX_STATUS),
+                            UNIFIED_REASON = (IDX_REASON < 0 || rdr.IsDBNull(IDX_REASON)) ? String.Empty : rdr.GetFieldValue<String>(IDX_REASON)
                         });
                     }
                 }

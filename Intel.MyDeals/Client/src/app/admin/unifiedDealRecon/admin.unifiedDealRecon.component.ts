@@ -139,7 +139,8 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard {
             END_CUSTOMER_RETAIL: new FormControl({ value: dataItem.END_CUSTOMER_RETAIL, disabled: true }),
             END_CUSTOMER_COUNTRY: new FormControl({ value: dataItem.END_CUSTOMER_COUNTRY, disabled: true }),
             EMP_WWID: new FormControl(dataItem.EMP_WWID),
-            UNIFIED_STATUS: new FormControl(dataItem.UNIFIED_STATUS)
+            UNIFIED_STATUS: new FormControl(dataItem.UNIFIED_STATUS),
+            UNIFIED_REASON: new FormControl(dataItem.UNIFIED_REASON)
         });
         this.formGroup.valueChanges.subscribe(x => {
             this.isFormChange = true;
