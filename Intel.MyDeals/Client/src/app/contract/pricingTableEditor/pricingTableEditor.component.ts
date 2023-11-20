@@ -3,7 +3,7 @@
 import { Component, Input, Output, EventEmitter, NgZone, OnInit, AfterViewInit, ViewChild } from '@angular/core';
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
-import { each, uniq, filter, map, where, pluck, findWhere, findIndex, findLastIndex, reject, contains, find, values, keys, unique, includes, isEmpty } from 'underscore';
+import { each, uniq, filter, map, where, pluck, findWhere, findIndex, findLastIndex, reject, contains, find, values, keys, unique, includes } from 'underscore';
 import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, Observable, forkJoin } from 'rxjs';
 import { distinct } from '@progress/kendo-data-query';
@@ -35,7 +35,6 @@ import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 import { FlexOverlappingCheckComponent } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.component';
 import { dropDownModalComponent } from '../ptModals/dropDownModal/dropDownModal.component';
-import { RowObject } from 'handsontable/common';
 
 @Component({
     selector: 'pricing-table-editor',
@@ -884,7 +883,6 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
                     const obj = { row: item[0], prop: item[1], old: item[2], new: item[3] };
                     uniqchanges.push(obj);
                 }
-
             });
             return uniqchanges;
         }
@@ -1060,20 +1058,19 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
 
             const isEnable = this.hotTable.isEmptyRow(0);
             this.enableDeTab.emit({ isEnableDeTab: !isEnable, enableDeTabInfmIcon: this.isDeTabInfmIconReqd });
-        //to stop loader
-        this.pteLoaderPopUp(changes,'stop-loader');
+            //to stop loader
+            this.pteLoaderPopUp(changes,'stop-loader');
         }
     }
 
     setDeafultARSettlementAndRestPeriod(obj){
-                let field= obj[0].prop;
-                let selrow=obj[0].row;
-        if (obj[0].new != '' ) {
+        let field= obj[0].prop;
+        let selrow=obj[0].row;
+        if (obj[0].new != '') {
              this.createNewPrcObt(this.curPricingTable);
              let PTRCount = this.hotTable.countRows();
             
              if (field == 'AR_SETTLEMENT_LVL') {
-
                 for (let i = 0; i < PTRCount; i++) {
                     if (!this.hotTable.isEmptyRow(i)) {
                         let ptrows = [];
@@ -1132,14 +1129,13 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
         const col = findIndex(this.columns, { data: prop });
         const cellMeta = this.hotTable.getCellMeta(row, col);
         this.cellComments.find( (cmnt,ind) => {
-            if (ind < this.cellComments.length){
-            if (cmnt.row == row && cmnt.col == col ) {
-                this.cellComments.splice(ind,1)
+            if (ind < this.cellComments.length) {
+                if (cmnt.row == row && cmnt.col == col ) {
+                    this.cellComments.splice(ind,1)
                 }
             }
         })
         if (cellMeta && cellMeta.className && cellMeta.className.toString().match('error-border')) {
-            
             this.hotTable.setCellMetaObject(row,col,{ 'className': '', comment: { value: '' } });
             this.hotTable.render();
         }
@@ -1393,7 +1389,6 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
             this.loggerService.error('Something went wrong.', 'Error');
             console.error('DEAL_EDITOR::ngOnInit::', ex);
         }
-
     }
     custDivNull(act: boolean) {
         if (act == true) {
@@ -1556,7 +1551,6 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
             console.error("PricingTableEditorComponent::saveUpdatePTEAPI::", 'error');
         }
         this.isLoading = false;
-
     }
     async validatePricingTableProducts(deleteDCIDs?) {
         let currentPricingTableRowData = this.newPTR.filter(x => x.DC_ID != null);
@@ -2225,11 +2219,13 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
     // Attributes for first contract product cell in new contract 
     @ViewChild('addProductTooltipTarget') private addProductTooltip: NgbTooltip;
     private showAddProductTooltip(): void {
-        this.addProductTooltip.open();
+        if (!this.hotTable.isDestroyed) {
+            this.addProductTooltip.open();
+        }
     }
 
     private appendAddProductTooltip(): void {
-        if (this.isRowDataEmpty(this.hotTable.getDataAtRow(0))) {
+        if (!this.hotTable.isDestroyed && this.isRowDataEmpty(this.hotTable.getDataAtRow(0))) {
             const CONTRACT_PRODUCT_HEADER = 'Contract Product *';
             const contractProductColumnIndex = this.returnColumnIndexForHeader(CONTRACT_PRODUCT_HEADER);
             if (contractProductColumnIndex != -1) {
@@ -2287,12 +2283,17 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
         new PTE_Common_Util(this.hotTable);
         new PTE_Load_Util(this.hotTable);
 
-        this.isLoading$.subscribe((isLoading: boolean) => {
+        const loadingSubscription = this.isLoading$.subscribe((isLoading: boolean) => {
             if (!isLoading) {
-                setTimeout(() => {  // Timeout is for loading animation to finish closing
-                    this.appendAddProductTooltip();
-                    this.showAddProductTooltip();    
-                }, 300);
+                if (!this.hotTable.isDestroyed) {
+                    setTimeout(() => {  // Timeout is for loading animation to finish closing
+                        this.appendAddProductTooltip();
+                        this.showAddProductTooltip();    
+                    }, 300);
+                } else {
+                    loadingSubscription.closed = true;
+                    loadingSubscription.unsubscribe();
+                }
             }
         });
     }
