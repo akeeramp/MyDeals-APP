@@ -45,7 +45,7 @@ import { notificationDockComponent } from '../../app/core/notification/notificat
 import { AdminBannerComponent } from '../../app/core/adminBanner/adminBanner.component';
 import { dealPopupDockComponent } from '../../app/core/dealPopup/dealPopupDock.component';
 import { GlobalSearchComponent } from '../../app/advanceSearch/globalSearch/globalSearch.component';
-import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingspinner.component';
+import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingSpinner.component';
 import { POPUP_CONTAINER } from '@progress/kendo-angular-popup';
 
 @NgModule({

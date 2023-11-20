@@ -1,18 +1,18 @@
 import { HttpEvent, HttpHandler, HttpInterceptor, HttpRequest } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import { Observable } from "rxjs";
-import { AuthService } from './auth.service';
 import { finalize } from "rxjs/operators";
-import { LoadingSpinnerService } from '../loadingSpinner/loadingspinner.service';
+
+import { AuthService } from './auth.service';
+import { LoadingSpinnerService } from '../loadingSpinner/loadingSpinner.service';
 
 @Injectable()
 export class AuthInterceptor implements HttpInterceptor {
 
-  constructor(protected loadingSVC:LoadingSpinnerService){
+  constructor(protected loadingSpinnerService:LoadingSpinnerService){ }
 
-  }
   intercept(req: HttpRequest<any>, next: HttpHandler): Observable<HttpEvent<any>> {
-    this.loadingSVC.isLoading.next(true);
+    this.loadingSpinnerService.isLoading.next(true);
     req = req.clone({
       setHeaders: {
         'ReqVerToken': `${AuthService.getToken()}`
@@ -20,7 +20,8 @@ export class AuthInterceptor implements HttpInterceptor {
     });
  
     return next.handle(req).pipe(finalize(() =>{
-      this.loadingSVC.isLoading.next(false);
+      this.loadingSpinnerService.isLoading.next(false);
     }));
   }
+
 }

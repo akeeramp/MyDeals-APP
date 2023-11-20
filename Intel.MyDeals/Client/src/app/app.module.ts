@@ -71,7 +71,7 @@ import { routes } from './app.route.component';
 import { SecurityResolver } from './shared/security.resolve';
 import { AppRootComponent } from './app-root.component';
 import { FooterComponent } from './shared/footer/footer.component';
-import { LoadingSpinnerComponent } from './shared/loadingSpinner/loadingspinner.component';
+import { LoadingSpinnerComponent } from './shared/loadingSpinner/loadingSpinner.component';
 import { notificationDockComponent } from './core/notification/notificationDock.component';
 import { AdminBannerComponent } from './core/adminBanner/adminBanner.component';
 import { dealPopupDockComponent } from './core/dealPopup/dealPopupDock.component';

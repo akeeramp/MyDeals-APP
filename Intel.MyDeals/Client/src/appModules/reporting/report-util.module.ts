@@ -1,5 +1,4 @@
-import { LoadingPanelComponent } from '../../app/core/loadingPanel/loadingpanel.component';
-import { LoaderComponent } from '../../app/shared/loader/loader.component';
+import { LoadingPanelComponent } from '../../app/core/loadingPanel/loadingPanel.component';
 import { MultiCheckFilterComponent } from "../../app/shared/kendo/multichecker.component";
 import { CustomDateFilterComponent } from '../../app/shared/kendo/customDateFilter.component';
 
@@ -13,13 +12,12 @@ import { dealPopupComponent } from '../../app/core/dealPopup/dealPopup.component
 import { dealPopupDockComponent } from '../../app/core/dealPopup/dealPopupDock.component';
 import { HeaderComponent } from '../../app/shared/header/header.component';
 import { PingComponent } from '../../app/core/ping/ping.component';
-import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingspinner.component';
+import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingSpinner.component';
 import { notificationsSettingsDialog } from '../../app/admin/notifications/admin.notificationsSettings.component';
 import { notificationsModalDialog } from '../../app/admin/notifications/admin.notificationsModal.component'
 
 export let ReportUtilComponents = [ 
     LoadingPanelComponent,
-    LoaderComponent,
     MultiCheckFilterComponent,
     CustomDateFilterComponent,
     notificationDockComponent,

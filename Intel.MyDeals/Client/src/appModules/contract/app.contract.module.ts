@@ -57,7 +57,7 @@ import { AdminBannerComponent } from '../../app/core/adminBanner/adminBanner.com
 import { dealPopupDockComponent } from '../../app/core/dealPopup/dealPopupDock.component';
 import { ScrollingModule } from '@angular/cdk/scrolling';
 import { GlobalSearchComponent } from '../../app/advanceSearch/globalSearch/globalSearch.component';
-import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingspinner.component';
+import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingSpinner.component';
 import { ContractUtilComponents } from './contract-util.module';
 import { registerAllModules } from 'handsontable/registry';
 import { PendingChangesGuard } from '../../app/shared/util/gaurdprotectionDeactivate';

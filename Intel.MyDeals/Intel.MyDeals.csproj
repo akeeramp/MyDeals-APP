@@ -762,8 +762,8 @@
     <Content Include="Client\src\app\contract\tenderFolio\tenderFolio.component.html" />
     <Content Include="Client\src\app\contract\tenderManager\tenderManager.component.css" />
     <Content Include="Client\src\app\contract\tenderManager\tenderManager.component.html" />
-    <Content Include="Client\src\app\core\loadingPanel\loadingpanel.component.css" />
-    <Content Include="Client\src\app\core\loadingPanel\loadingpanel.component.html" />
+    <Content Include="Client\src\app\core\loadingPanel\loadingPanel.component.css" />
+    <Content Include="Client\src\app\core\loadingPanel\loadingPanel.component.html" />
     <Content Include="Client\src\app\core\adminBanner\adminBanner.component.css" />
     <Content Include="Client\src\app\core\adminBanner\adminBanner.component.html" />
     <Content Include="Client\src\app\core\attributeBuilder\attributeBuilder.component.css" />
@@ -812,7 +812,7 @@
     <Content Include="Client\src\app\reporting\reporting.component.css" />
     <Content Include="Client\src\app\shared\footer\footer.component.css" />
     <Content Include="Client\src\app\shared\footer\footer.component.html" />
-    <Content Include="Client\src\app\shared\loadingSpinner\loadingspinner.component.html" />
+    <Content Include="Client\src\app\shared\loadingSpinner\loadingSpinner.component.html" />
     <Content Include="Client\src\app\shared\search\search.component.css" />
     <Content Include="Client\src\app\shared\search\search.component.html" />
     <Content Include="Client\src\app\advanceSearch\tenderDashboard\tenderDashboard.component.css" />
@@ -2199,9 +2199,9 @@
     <TypeScriptCompile Include="Client\src\app\core\notification\notificationDock.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\ping\ping.component.ts" />
     <TypeScriptCompile Include="Client\src\app\core\trashcan\trashcan.component.ts" />
-    <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.component.ts" />
-    <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.component.html" />
-    <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.component.css" />
+    <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingPanel.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingPanel.component.html" />
+    <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingPanel.component.css" />
     <TypeScriptCompile Include="Client\src\app\core\loadingPanel\loadingpanel.service.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\addWidget\addWidget.component.ts" />
     <TypeScriptCompile Include="Client\src\app\dashboard\contractStatusWidget.service.ts" />
@@ -2240,9 +2240,8 @@
     <TypeScriptCompile Include="Client\src\app\shared\kendo\customDateFilter.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\kendo\customDropDownFilter.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\kendo\multichecker.component.ts" />
-    <TypeScriptCompile Include="Client\src\app\shared\loader\loader.component.ts" />
-    <TypeScriptCompile Include="Client\src\app\shared\loadingSpinner\loadingspinner.component.ts" />
-    <TypeScriptCompile Include="Client\src\app\shared\loadingSpinner\loadingspinner.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\loadingSpinner\loadingSpinner.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\loadingSpinner\loadingSpinner.service.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\logger\logger.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\search\search.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\security.resolve.ts" />

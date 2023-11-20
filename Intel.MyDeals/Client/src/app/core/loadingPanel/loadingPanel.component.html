@@ -1,5 +1,5 @@
 <div *ngIf="show" class="ss-loading-overlay">
-    <div class="myLoader ss-loading-panel ss-{{msgType}}" style="text-align: center; margin: 15px auto;">
+    <div class="myLoader ss-loading-panel ss-{{ msgType }}" style="text-align: center; margin: 15px auto;">
         <div *ngIf="msgType !='Success' && msgType !='Error'" class="spinner LoaderSpinner">
             <div class="rect1"></div>
             <div class="rect2"></div>
@@ -11,14 +11,13 @@
             <i class="intelicon-passed-completed-solid sky-blue"></i>
         </div>
         <div class="ss-icon-lg" *ngIf="msgType=='Error'"><i class="intelicon-alert-solid red"></i></div>
-        <h2>{{header}}</h2>
-        <p>{{description}} </p>
+        <h2>{{ header }}</h2>
+        <p>{{ description }} </p>
         <div *ngIf="isFunFactEnabled && currFunFact" class="ss-funfact-container">
             <p class="col-md-12 ss-funfact-title ss-funfact-title ng-binding">
-                <i class="fa {{ funFactIcon}} ss-funfact-icon"></i>{{ funFactTitle}}
+                <i class="fa {{ funFactIcon }} ss-funfact-icon"></i>{{ funFactTitle }}
             </p>
-            <div class="col-md-12 ss-funfact-description" style="text-align: left; white-space: pre-line;">{{ funFactDesc}} </div>
+            <div class="col-md-12 ss-funfact-description" style="text-align: left; white-space: pre-line;">{{ funFactDesc }} </div>
         </div>
     </div>
 </div>
-

@@ -1,7 +1,6 @@
-import { LoadingPanelComponent } from '../../app/core/loadingPanel/loadingpanel.component';
+import { LoadingPanelComponent } from '../../app/core/loadingPanel/loadingPanel.component';
 import { dealDetailsComponent } from '../../app/core/gridCell/dealDetail/dealDetail.component';
 import { dealToolsComponent } from '../../app/core/gridCell/dealTools/dealTools.component';
-import { LoaderComponent } from '../../app/shared/loader/loader.component';
 import { MultiCheckFilterComponent } from "../../app/shared/kendo/multichecker.component";
 import { CustomDateFilterComponent } from '../../app/shared/kendo/customDateFilter.component';
 import { iconMctPctComponent } from '../../app/core/gridCell/iconMctPct/iconMctPct.component';
@@ -13,7 +12,7 @@ import { GlobalSearchComponent } from '../../app/advanceSearch/globalSearch/glob
 import { GlobalSearchResultsComponent } from '../../app/advanceSearch/globalSearchResults/globalSearchResults.component';
 import { FooterComponent } from '../../app/shared/footer/footer.component';
 import { dealPopupIconComponent } from '../../app/core/dealPopup/dealPopupIcon.component';
-import {LoadingSpinnerComponent} from '../../app/shared/loadingSpinner/loadingspinner.component';
+import {LoadingSpinnerComponent} from '../../app/shared/loadingSpinner/loadingSpinner.component';
 import { dealPopupComponent } from '../../app/core/dealPopup/dealPopup.component';
 import { dealPopupDockComponent } from '../../app/core/dealPopup/dealPopupDock.component';
 import { globalRouteComponent } from "../../app/shared/globalroute/globalroute.component";
@@ -32,7 +31,6 @@ export let ContractUtilComponents = [
     dealDetailsComponent,
     dealToolsComponent,
     messageBoardModal,
-    LoaderComponent,
     MultiCheckFilterComponent,
     CustomDateFilterComponent,
     iconMctPctComponent,

@@ -1,11 +1,12 @@
-import { Component } from "@angular/core";
-import { LoadingSpinnerService } from "./loadingspinner.service";
-import { logger } from "../logger/logger";
+import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
 import { contains, first } from 'underscore';
+
+import { LoadingSpinnerService } from "./loadingSpinner.service";
+import { logger } from "../logger/logger";
 
 @Component({
   selector: 'app-loader',
-  templateUrl: 'Client/src/app/shared/loadingSpinner/loadingspinner.component.html',
+  templateUrl: 'Client/src/app/shared/loadingSpinner/loadingSpinner.component.html',
     styles: [`
       #saving-bar {
         position: absolute;
@@ -30,28 +31,15 @@ import { contains, first } from 'underscore';
         text-transform: uppercase;
       }`]
 })
-export class LoadingSpinnerComponent {
-  private isLoading = true;
-  private dontAddTheseInRecents = "portal";
-  private recents: Array<any> = [];
-  private distinctURL: Array<any> = [];
+export class LoadingSpinnerComponent implements OnInit {
 
-  constructor(private loaderSvc: LoadingSpinnerService,
-              private loggerSVC: logger) {
-    this.loaderSvc.isLoading.subscribe(
-      res => {
-        this.isLoading = res;
-        /* moved the below logic from adminBanner to track url changes from here and add it to the recent visited links */
-        this.setRecentURLs();
-      },
-      err => {
-        this.loggerSVC.error(
-          "LoadingSpinnerComponent::loaderSvc**********",
-          err
-        );
-      }
-    );
-  }
+  private isLoading = true;
+  private recents: Array<any> = [];
+
+  constructor(private loadingSpinnerService: LoadingSpinnerService,
+              private loggerService: logger,
+              private changeDetectorRef: ChangeDetectorRef) { }
+
   setRecentURLs() {
     const recentsUrls = localStorage.getItem("recentsURLs");
     if (recentsUrls != null && recentsUrls != undefined) {
@@ -67,5 +55,17 @@ export class LoadingSpinnerComponent {
     } else {
       localStorage.setItem("recentsURLs", window.location.href);
     }
-  } 
+  }
+
+  ngOnInit(): void {
+    this.loadingSpinnerService.isLoading.subscribe((res) => {
+      this.isLoading = res;
+      this.changeDetectorRef.detectChanges();
+      /* moved the below logic from adminBanner to track url changes from here and add it to the recent visited links */
+      this.setRecentURLs();
+    }, (err) => {
+      this.loggerService.error("LoadingSpinnerComponent::loaderSvc**********", err);
+    });
+  }
+
 }

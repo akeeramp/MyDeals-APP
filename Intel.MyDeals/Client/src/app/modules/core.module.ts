@@ -1,6 +1,6 @@
 ﻿import { PingComponent } from '../core/ping/ping.component';
 import { TrashcanComponent } from '../core/trashcan/trashcan.component';
-import { LoadingPanelComponent } from '../core/loadingPanel/loadingpanel.component';
+import { LoadingPanelComponent } from '../core/loadingPanel/loadingPanel.component';
 import { notificationDockComponent } from '../core/notification/notificationDock.component';
 import { iconMctPctComponent } from '../../app/core/gridCell/iconMctPct/iconMctPct.component';
 import { gridStatusBoardComponent } from '../core/gridStatusBoard/gridStatusBoard.component';

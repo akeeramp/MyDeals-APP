@@ -1,4 +1,4 @@
-import { LoadingPanelComponent } from '../../app/core/loadingPanel/loadingpanel.component';
+import { LoadingPanelComponent } from '../../app/core/loadingPanel/loadingPanel.component';
 import { MultiCheckFilterComponent } from "../../app/shared/kendo/multichecker.component";
 import { CustomDateFilterComponent } from '../../app/shared/kendo/customDateFilter.component';
 
@@ -8,7 +8,7 @@ import { GlobalSearchComponent } from '../../app/advanceSearch/globalSearch/glob
 import { GlobalSearchResultsComponent } from '../../app/advanceSearch/globalSearchResults/globalSearchResults.component';
 import { FooterComponent } from '../../app/shared/footer/footer.component';
 import { dealPopupIconComponent } from '../../app/core/dealPopup/dealPopupIcon.component';
-import {LoadingSpinnerComponent} from '../../app/shared/loadingSpinner/loadingspinner.component';
+import {LoadingSpinnerComponent} from '../../app/shared/loadingSpinner/loadingSpinner.component';
 import { dealPopupComponent } from '../../app/core/dealPopup/dealPopup.component';
 import { dealPopupDockComponent } from '../../app/core/dealPopup/dealPopupDock.component';
 import { HeaderComponent } from '../../app/shared/header/header.component';
