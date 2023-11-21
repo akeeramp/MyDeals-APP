@@ -17,8 +17,10 @@ import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loading
 import { endCustomerRetailModalComponent } from '../../app/contract/ptModals/dealEditorModals/endCustomerRetailModal.component'
 import { notificationsSettingsDialog } from '../../app/admin/notifications/admin.notificationsSettings.component';
 import { notificationsModalDialog } from '../../app/admin/notifications/admin.notificationsModal.component'
+import { LoaderComponent } from '../../app/shared/loader/loader.component';
 
-export let AdminUtilComponents = [ 
+export let AdminUtilComponents = [
+    LoaderComponent,
     LoadingPanelComponent,
     MultiCheckFilterComponent,
     CustomDateFilterComponent,

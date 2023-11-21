@@ -6,8 +6,10 @@ import { CustomDropDownFilterComponent } from '../shared/kendo/customDropDownFil
 import { globalRouteComponent } from '../shared/globalroute/globalroute.component';
 import { SearchComponent } from '../shared/search/search.component';
 import { HeaderComponent } from '../shared/header/header.component';
+import { LoaderComponent } from "../shared/loader/loader.component";
 
-export let sharedComponents =[
+export let sharedComponents = [
+    LoaderComponent,
     MultiCheckFilterComponent,
     CustomDateFilterComponent,
     HeaderComponent,

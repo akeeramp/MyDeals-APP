@@ -22,8 +22,10 @@ import { TenderFolioComponent } from '../../app/contract/tenderFolio/tenderFolio
 import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingSpinner.component';
 import { notificationsSettingsDialog } from '../../app/admin/notifications/admin.notificationsSettings.component';
 import { notificationsModalDialog } from '../../app/admin/notifications/admin.notificationsModal.component'
+import { LoaderComponent } from '../../app/shared/loader/loader.component';
 
-export let DashboardUtilComponents = [ 
+export let DashboardUtilComponents = [
+    LoaderComponent,
     LoadingPanelComponent,
     gridStatusBoardComponent,
     contractStatusBoardComponent,

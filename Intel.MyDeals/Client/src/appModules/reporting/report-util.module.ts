@@ -15,8 +15,10 @@ import { PingComponent } from '../../app/core/ping/ping.component';
 import { LoadingSpinnerComponent } from '../../app/shared/loadingSpinner/loadingSpinner.component';
 import { notificationsSettingsDialog } from '../../app/admin/notifications/admin.notificationsSettings.component';
 import { notificationsModalDialog } from '../../app/admin/notifications/admin.notificationsModal.component'
+import { LoaderComponent } from '../../app/shared/loader/loader.component';
 
-export let ReportUtilComponents = [ 
+export let ReportUtilComponents = [
+    LoaderComponent,
     LoadingPanelComponent,
     MultiCheckFilterComponent,
     CustomDateFilterComponent,
