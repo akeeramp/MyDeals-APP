@@ -128,6 +128,8 @@ export class AdvancedSearchComponent implements OnInit, PendingChangesGuard {
 
     //pagination - load searchDeals on next click, if records > 500
     dataStateChange(state: DataStateChangeEvent): void {
+        let isFilter = true
+        if (state.filter && state.filter.filters && state.filter.filters.length > 0) { isFilter = false }
         this.state.take = state.take;
         this.state.skip = state.skip;
         this.state.filter = state.filter != undefined ? state.filter : this.state.filter;
@@ -144,7 +146,8 @@ export class AdvancedSearchComponent implements OnInit, PendingChangesGuard {
             this.gridData.data = data.data;
             this.gridData.total = this.totalCount;
         }
-       this.searchDeals();
+        if (isFilter)
+        this.searchDeals();
     }
 
 
@@ -370,7 +373,21 @@ export class AdvancedSearchComponent implements OnInit, PendingChangesGuard {
         let sortby = this.state.sort;
         if( sortby && sortby.sort && sortby.sort.length>0){
             each(sortby,(sortitem)=>{
-                searchText +='&$orderby='+sortitem.field;
+                if (sortitem.field != null) {
+                    let column = sortitem.field;
+                    let validCol = column.substr(column.length - 4)
+                    if (validCol == '_VAL') {
+                        searchText += '&$orderby=' + column.slice(0, -4);
+                    }
+                    else if (sortitem.field == 'Customer_NM') {
+                        column = sortitem.field
+                        column = 'CUST_NM'
+                        searchText += '&$orderby=' + column
+                    }
+                    else
+                        searchText += '&$orderby=' + sortitem.field;
+
+                }
                 if(sortitem.dir==undefined || sortitem.dir==null){
                     searchText += ' asc';
                 }else{
