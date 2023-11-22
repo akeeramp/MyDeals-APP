@@ -21,7 +21,7 @@ import { each } from 'underscore';
     styleUrls: ['Client/src/app/advanceSearch/advancedSearch.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class AdvancedSearchComponent implements OnInit, PendingChangesGuard {
+export class AdvancedSearchComponent implements OnInit{
     private startDateValue: Date = new Date(this.momentService.moment().subtract(6, 'months').format("MM/DD/YYYY"));
     private endDateValue: Date = new Date(this.momentService.moment().add(6, 'months').format("MM/DD/YYYY"));
     private showSearchFilters: boolean = true;
@@ -569,9 +569,6 @@ export class AdvancedSearchComponent implements OnInit, PendingChangesGuard {
         this.isDirty=data;
     }
 
-    canDeactivate(): Observable<boolean> | boolean { 
-       return !this.isDirty;
-    }
 
     ngOnInit(): void {
         this.setBusy("Loading...", "Please wait while we are loading...", "info", true);

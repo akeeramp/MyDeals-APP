@@ -27,7 +27,7 @@ import { Observable } from "rxjs";
     encapsulation: ViewEncapsulation.None
 })    
 
-export class TenderDashboardComponent implements OnInit,PendingChangesGuard {
+export class TenderDashboardComponent implements OnInit {
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
     private startDateValue: Date = new Date(this.momentService.moment().subtract(6, 'months').format("MM/DD/YYYY"));
     private endDateValue: Date = new Date(this.momentService.moment().add(6, 'months').format("MM/DD/YYYY"));
@@ -75,8 +75,7 @@ export class TenderDashboardComponent implements OnInit,PendingChangesGuard {
     private runSearch: boolean = false;
     private approveDeals: boolean = false;
     private entireDataDeleted: boolean = false;
-    private isDirty = false;
-    constructor(protected cntrctWdgtSvc: contractStatusWidgetService,
+     constructor(protected cntrctWdgtSvc: contractStatusWidgetService,
                 protected loggerSvc: logger,
                 protected tenderDashboardSvc: tenderDashboardService,
                 private templatesSvc: TemplatesService,
@@ -943,10 +942,7 @@ export class TenderDashboardComponent implements OnInit,PendingChangesGuard {
     clearSearchResult(event) {
         this.searchResults = [];
     }
-    isSearchDirty(data){
-        if(!!data)
-        this.isDirty=data;
-    }
+    
     ngOnInit(): void {
         this.setBusy("Loading...", "Please wait while we are loading...", "info", true);
         this.showSearchFilters = true;
@@ -1026,10 +1022,4 @@ export class TenderDashboardComponent implements OnInit,PendingChangesGuard {
         }
     }
 
-    canDeactivate(): Observable<boolean> | boolean { 
-        if(!!this.deComp && this.deComp.dirty){
-            this.isDirty=true;
-        }
-       return !this.isDirty;
-    }
 }

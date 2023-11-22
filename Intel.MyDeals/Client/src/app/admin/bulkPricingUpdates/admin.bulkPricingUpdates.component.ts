@@ -203,6 +203,7 @@ export class BulkPricingUpdatesComponent implements PendingChangesGuard {
 
     ValidateDateColumns (priceData) {
         var DealDate;
+        this.isDirty=true;
             priceData.forEach( (pdata) => {
             DealDate = this.momentService.moment(pdata.DealStartDate).format("MM/DD/YYYY");
             if (this.momentService.moment(DealDate, "MM/DD/YYYY", true).isValid())

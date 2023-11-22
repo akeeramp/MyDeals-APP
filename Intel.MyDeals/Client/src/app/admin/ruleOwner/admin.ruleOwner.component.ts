@@ -17,6 +17,8 @@ import {
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { Observable } from "rxjs";
+import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 
 @Component({
     selector: "rule-owner",
@@ -24,7 +26,7 @@ import { ExcelExportEvent } from "@progress/kendo-angular-grid";
     styleUrls: ['Client/src/app/admin/cache/admin.cache.component.css']
 })
 
-export class RuleOwnerComponent {
+export class RuleOwnerComponent implements PendingChangesGuard {
     constructor(private ruleOwnerSvc: ruleOwnerService, private loggerSvc: logger, private constantsSvc: constantsService) {
         this.allData = this.allData.bind(this);
     }
@@ -52,6 +54,7 @@ export class RuleOwnerComponent {
     public formGroup: FormGroup;
     public isFormChange = false;
     private editedRowIndex: number;
+    isDirty=false;
 
     public state: State = {
         skip: 0,
@@ -124,6 +127,7 @@ export class RuleOwnerComponent {
     }
 
     editHandler({ sender, rowIndex, dataItem }) {
+       this.isDirty=true;
         this.closeEditor(sender);
         this.isFormChange = false;
         this.formGroup = new FormGroup({
@@ -158,6 +162,7 @@ export class RuleOwnerComponent {
                 this.isLoading = false;
             });
         }
+        this.isDirty=false;
         sender.closeRow(rowIndex);
     }
 
@@ -255,6 +260,10 @@ export class RuleOwnerComponent {
         },(err)=>{
             this.loggerSvc.error("Unable to get constants by name","Error",err);
         });
+    }
+
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
     }
 
     ngOnInit() {

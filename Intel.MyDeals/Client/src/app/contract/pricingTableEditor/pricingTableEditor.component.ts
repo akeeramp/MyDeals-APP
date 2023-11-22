@@ -459,6 +459,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
     private lastEditedKitName: any;
     private prdPastObj: any = [];
     private isPRDPaste = false;
+    isDirty=false;
     // To get the selected row and col for product selector
     private multiRowDelete: Array<any> = [];
     // Handsontable Variables basic hottable structure
@@ -901,6 +902,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
             changes = this.identfyUniqChanges(changes, source);
             if (changes.length > 0 && changes[0].old != changes[0].new) {
                 this.dirty = true;
+                this.isDirty=true;
                 this.undoEnable = true;
                 this.undoCount += 1;
             }
@@ -1516,6 +1518,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
         });
         this.undoEnable = false;
         if (result) {
+            this.isDirty=false;
             this.savedResponseWarning = [];
             await this.refreshContractData(this.in_Ps_Id, this.in_Pt_Id);
             if (this.isTenderContract && deleteDCIDs && deleteDCIDs.length > 0) {
@@ -1837,6 +1840,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
                                 }
                             }                           
                             this.dirty = true;//for enabling save&Validate button when a product is added from productSelector
+                            this.isDirty=true;
                             let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct.toString() };
                             PTR.push({ row: PTE_CellChange_Util.returnEmptyRow(), prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(result.validateSelectedProducts[idx].indx, 'PTR_USER_PRD'), new: cntrctPrdct.toString() ,operation:operation});
                         }
@@ -1856,6 +1860,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
                     let PTR = [];
                     emptyRow = PTE_CellChange_Util.returnEmptyRow();
                     this.dirty = true;//for enabling save&Validate button when a product is added from productSelector
+                    this.isDirty=true;
                     PTR.push({ row: PTE_CellChange_Util.returnEmptyRow(), prop: 'PTR_USER_PRD', old: this.hotTable.getDataAtRowProp(PTE_CellChange_Util.returnEmptyRow(), 'PTR_USER_PRD'), new: cntrctPrdct.toString() });
                     emptyRow = emptyRow + VM.curPricingTable.NUM_OF_TIERS;
                     let operation = { operation: 'prodsel', PTR_SYS_PRD: JSON.stringify(sysPrd), PRD_EXCLDS: excludedPrdct.toString() };

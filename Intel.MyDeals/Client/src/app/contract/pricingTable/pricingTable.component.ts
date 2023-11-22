@@ -479,10 +479,10 @@ export class pricingTableComponent implements PendingChangesGuard {
     }
 
     canDeactivate(): Observable<boolean> | boolean { 
-        if(!!this.deComp && this.deComp.dirty){
-            this.isDirty=true;
-        }
-        if ((this.pteComp && this.pteComp.dirty) ) {
+        // if(!!this.deComp && this.deComp.dirty){
+        //     this.isDirty=true;
+        // }
+        if ((this.pteComp && this.pteComp.isDirty) ) {
             this.isDirty = true;
         }
        return !this.isDirty;

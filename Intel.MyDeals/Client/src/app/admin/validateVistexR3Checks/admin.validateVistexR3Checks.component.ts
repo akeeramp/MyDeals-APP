@@ -182,6 +182,10 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
         this.ShowColumns = ["Deal_Id", "Customer_Name", "Geo", "Deal_Type", "Rebate_Type", "Customer_Division", "Vertical", "Deal_Stage", "Pricing_Strategy_Stage", "Expire_Deal_Flag", "Deal_Start_Date", "Deal_End_Date", "Payout_Based_On", "Program_Payment", "Additive_Standalone", "End_Customer_Retailer", "Request_Date", "Requested_by", "Request_Quarter", "Division_Approved_Date", "Division_Approver", "Geo_Approver", "Market_Segment", "Deal_Description", "Ceiling_Limit_End_Volume_for_VT", "Limit", "Consumption_Reason", "Consumption_Reason_Comment", "Period_Profile", "AR_Settlement_Level", "Look_Back_Period_Months", "Consumption_Customer_Platform", "Consumption_Customer_Segment", "Consumption_Customer_Reported_Geo", "End_Customer", "End_Customer_Country", "Unified_Customer_ID", "Is_a_Unified_Cust", "Project_Name", "System_Price_Point", "System_Configuration", "Settlement_Partner", "Reset_Per_Period", "Send_To_Vistex", "COMMENTS"];
     }
 
+    txtEnterPressed(event: any) {
+        this.isDirty=true;
+    }
+
     //To send data to DSA Outbound table 
     toggleType(currentState) {
         this.VstxCustFlag = currentState;
@@ -199,11 +203,7 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
     combovalueChange(){
         this.isDirty = true;
     }
-
-    textChange(){
-        this.isDirty = true;
-    }
-    
+ 
     canDeactivate(): Observable<boolean> | boolean {
         return !this.isDirty;
     }

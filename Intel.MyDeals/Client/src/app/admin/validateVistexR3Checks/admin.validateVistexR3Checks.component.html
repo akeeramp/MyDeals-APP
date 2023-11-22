@@ -8,7 +8,7 @@
     <div class="container-fluid">
         <div class="col-md-5 pull-left input-field">
             <label class="opUiLabel" style="vertical-align: top;">Deal Id(s) : </label>
-            <kendo-textarea class="local-Padding validTextAreaVistexCheck" [(ngModel)]="DealstoSend" [cols]="58" [rows]="4" resizable="both"
+            <kendo-textarea class="local-Padding validTextAreaVistexCheck" [(ngModel)]="DealstoSend" [cols]="58" [rows]="4" resizable="both" (keypress)="txtEnterPressed($event)"
                             placeholder="Multiple deal IDs can be separated with comma."></kendo-textarea>
             <div class="err-Control" style="padding-left:160px !important;" *ngIf="isDealIdError">
                 Please enter valid

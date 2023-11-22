@@ -1,7 +1,9 @@
-﻿import { logger } from "../../shared/logger/logger";
+﻿import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { logger } from "../../shared/logger/logger";
 import { admintestTendersService } from "./admin.testTenders.service";
 import { Component, ViewEncapsulation } from "@angular/core";
 import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms";
+import { Observable } from "rxjs";
 
 @Component({
     selector: "admin-test-tenders",
@@ -9,13 +11,13 @@ import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms"
     styleUrls: ['Client/src/app/admin/testTenders/admin.testTenders.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class adminTestTendersComponent {
+export class adminTestTendersComponent implements PendingChangesGuard{
     constructor(private loggerSvc: logger, private admintestTendersService: admintestTendersService, private formBuilder: FormBuilder,) {}
 
 
     private admintestTendersForm: FormGroup;
     private dateValue: Date;
-
+    isDirty = false;
     //get method for easy access to the form fields.
     get formData() { return this.admintestTendersForm.controls; }
 
@@ -90,6 +92,7 @@ export class adminTestTendersComponent {
         this.admintestTendersService.ExecutePostTest(jsonDataPacket).subscribe(res => {
 
             if (res) {
+                this.isDirty=false;
                 this.loggerSvc.success("Post Test executed succesfully");
             }
         },);
@@ -112,6 +115,11 @@ export class adminTestTendersComponent {
            
 
         });
-       
+        this.admintestTendersForm.valueChanges.subscribe((x) => {
+          this.isDirty=true;
+          });
+    }
+    canDeactivate(): Observable<boolean> | boolean {
+        return !this.isDirty;
     }
 }

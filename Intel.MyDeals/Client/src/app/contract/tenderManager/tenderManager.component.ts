@@ -16,7 +16,7 @@ import { Observable } from "rxjs";
     templateUrl: "Client/src/app/contract/tenderManager/tenderManager.component.html",
     styleUrls: ["Client/src/app/contract/tenderManager/tenderManager.component.css"]
 })
-export class tenderManagerComponent implements PendingChangesGuard {
+export class tenderManagerComponent  {
     @ViewChild(PricingTableEditorComponent) private pteComp: PricingTableEditorComponent;
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
     @ViewChild(performanceBarsComponent) public perfComp: performanceBarsComponent;
@@ -52,7 +52,6 @@ export class tenderManagerComponent implements PendingChangesGuard {
     public pt_passed_validation: boolean;
     public compMissingFlag: any;
     private searchText: any = "";
-    private isDirty = false;
     private ispricingTableDPASSED_VALIDATION='valid_Complete';
     isredirect = false;
     isButtonEnabled = (<any>window).usrRole === 'RA' || (<any>window).usrRole === 'Legal' || (<any>window).usrRole === 'CBA' || (<any>window).usrRole === 'DA' || ((<any>window).isBulkPriceAdmin && (<any>window).usrRole === 'SA') || (<any>window).isCustomerAdmin ? false : true;
@@ -146,10 +145,6 @@ export class tenderManagerComponent implements PendingChangesGuard {
 
     refreshContract(data: any) {
         this.contractData = data;
-    }
-
-    meetcompIsDirty(data: any) {
-        this.isDirty = data;
     }
 
     perfCompFn(data) {
@@ -463,7 +458,6 @@ export class tenderManagerComponent implements PendingChangesGuard {
 
     ngOnInit() {
         try {
-            this.isDirty=false;
             document.title = "Contract - My Deals";
             this.isDeveloper = (<any>window).isDeveloper;
             this.isTester = (<any>window).isTester;
@@ -506,19 +500,4 @@ export class tenderManagerComponent implements PendingChangesGuard {
         document.getElementById('mainBody')?.setAttribute('style', 'display:none');
     }
      
-     canDeactivate(): Observable<boolean> | boolean { 
-         if (this.currentTAB == 'PTR') {
-             if ((this.pteComp && this.pteComp.dirty) || this.dirtyItems.length > 0) {
-                 this.isDirty = true;
-             }
-         }
-        if(this.currentTAB=='DE'){
-            this.isDirty= this.deComp.dirty;
-        }
-        if(this.currentTAB=='MC'){
-            return !this.isDirty;
-        }
-        return !this.isDirty;
-     }
-
 }
