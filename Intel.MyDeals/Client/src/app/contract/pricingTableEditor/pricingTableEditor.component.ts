@@ -1003,6 +1003,12 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
                     this.isKitDialog = true;
                 }
             }
+            if(rebateType && rebateType.length >0){
+                each(changes,(item)=>{
+                    PTE_CellChange_Util.checkfn(item, this.curPricingTable, this.columns, '', this.contractData, this.custCellEditor, this.newPricingTable);
+
+                })
+            }
             if (tierChg && tierChg.length > 0) {
                 PTE_CellChange_Util.tierChange(tierChg, this.columns, this.curPricingTable);
             }
