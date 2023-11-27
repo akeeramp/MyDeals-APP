@@ -361,8 +361,23 @@ export class AdvancedSearchComponent implements OnInit{
             filter.filters.forEach((item: CompositeFilterDescriptor, ind) => {
                 if (item && item.filters && item.filters.length > 0) {
                     item.filters.forEach((fltrItem: FilterDescriptor) => {
+                        let column = fltrItem.field.toString();
                         searchText += ind == 0 && filter.filters.length > 1 ? '(' : '';
-                        if (fltrItem.operator == 'contains') searchText += "substringof(" + "'" + fltrItem.value + "'," + fltrItem.field + ")";
+                        if (column == 'Customer_NM') {
+                            fltrItem.field = 'Customer/CUST_NM';
+                        }
+                        let validCol = column.substr(column.length - 4)
+
+                        if (fltrItem.operator == 'contains') {
+                            if (validCol == '_VAL') {
+                                searchText += "substringof(" + "'" + fltrItem.value + "'," + column.slice(0, -4) + ")"
+                            }
+                            else
+                                searchText += "substringof(" + "'" + fltrItem.value + "'," + fltrItem.field + ")"
+                        }
+                        else if (validCol == '_VAL') {
+                            searchText += column.slice(0, -4) + ' ' + fltrItem.operator + " '" + fltrItem.value + "'"
+                        }
                         else searchText += fltrItem.field + ' ' + fltrItem.operator + " '" + fltrItem.value + "'"
                         searchText += filter.filters.length != (ind + 1) && filter.filters.length > 1 ? ' and ' : '';
                         searchText += filter.filters.length == (ind + 1) && filter.filters.length > 1 ? ')' : '';
