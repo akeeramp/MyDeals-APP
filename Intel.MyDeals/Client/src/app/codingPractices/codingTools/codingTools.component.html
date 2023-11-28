@@ -1,0 +1,324 @@
+﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" /> 
+<app-breadcrumbs [list_breadcrumbs]="list_breadcrumbs" (selectedBreadCrumb)="responseLnav($event)"></app-breadcrumbs>
+
+<div class="layout-cp-inner-page">
+    <div class="grid-one" [ngStyle]="isVisible?{'min-width': '200px'}:{'min-width': 'auto'}">
+        <div *ngIf="isVisible" id="tocCollapse" class="w100" style="cursor: pointer; text-align: right; font-size: 10px;">
+            TOC <i (click)="Toggle()" class="intelicon-left-previous"></i>
+            <app-coding-practices-leftNav [left_nav]="left_nav" [keySelected]='keySelected' (selectedLink)="responseLnav($event)"></app-coding-practices-leftNav>
+        </div>
+        <div id="tocExpand" *ngIf="!isVisible" (click)="Toggle()" class="intelicon-up rotateIcon"><span class="font-cp">TOC</span> </div>
+    </div>
+        <div class="grid-two">
+
+            <div class="codingToolsBody">
+                <div id="introduction">
+                    <h1><img src="/Images/docs/icon-code-tools.png" height="80" /> Coding tools</h1>
+                    <p>
+                        This is a growing collection of tools and practices used on MyDeals.  If you come up with a reusable component of BKM, put it here!
+                    </p>
+
+
+                <h5 class="headingCT-five"><a (click)='navigateToSelectedLink({ text: "Error handling", url:"#errorHandling", bool: "errorHandling" },"1")' class="anchorChanges">Error handling</a></h5>
+                <p>
+                    Error handling comes in various degrees... some of which are DB error handling, MT error handling, UI error handling, Application level error handling. 
+                    What this does NOT cover is form validation or control validation. 
+                    <br />
+                    <a (click)='navigateToSelectedLink({ text: "Error handling", url:"#errorHandling", bool: "errorHandling" },"1")' class="anchorChanges">Click Here for specific Error Handling examples</a>
+                </p>
+                <img src="/Images/docs/errorhandling.png" style="margin: 10px 0 10px 25px;" />
+
+                <p>
+                    <a href="/Images/docs/MyDeals Error Handling Design Doc.pdf" target="_blank" class="anchorChanges">
+                        <div style="padding: 20px 5px 0 5px; text-align: left;">
+                            <img src="/Images/docs/errorhandlingdesign.png" />
+                        </div>
+                        Click to view a larger version of the Error Handling Design.
+                    </a>
+                </p>
+
+                <h5 class="headingCT-five"><a (click)='navigateToSelectedLink({ text: "Logging", url:"#logging", bool: "logging" },"3")' class="anchorChanges">Logging</a></h5>
+                <p>
+                    Logging also comes in various dgrees... some of which are DB, MT and UI logging.  There is local storage logging, in-memory logging and longterm storage logging.
+                </p>
+                <img src="/Images/docs/logging.png" style="margin: 10px 0 10px 25px;" />
+
+                    <br /><br /><br />
+                </div>
+
+                <div id="errorHandling">
+                    <h1><img src="/Images/docs/icon-code-tools.png" height="80" /> Error handling</h1>
+                    <p>
+                        Error handling comes in various degrees... some of which are DB error handling, MT error handling, UI error handling, Application level error handling.
+                        What this does NOT cover is form validation or control validation.
+                    </p>
+                    <img src="/Images/docs/errorhandling.png" style="margin: 10px 0 10px 25px;" />
+
+                <h3>Error Handling Examples</h3>
+                <p>
+                    See Views\CodingPractices\ErrorHandling.cshtml, app\core\core.module.js, Global.asax.cs, and Controllers\API\DevTestsController.cs to follow example flows
+                </p>
+                <h4>Javascript Exceptions</h4>
+                <a class="btn btn-danger btnAnchorDanger" (click)="undefinedAngularRoute()">
+                    Undefined Angular Route
+                </a>
+                <a class="btn btn-danger btnAnchorDanger" (click)="undefinedJSFunction()">
+                    Undefined JS Function
+                </a>
+                <a class="btn btn-danger btnAnchorDanger">
+                    Unresponsive API Call
+                </a>
+                <p>
+                    Unhandled JS exceptions will be dealt with by the global js exception handler. 
+                    <br />
+                    Unhandled Angular exceptions will be dealt with by the global blocks.exception provider.
+                    <br />
+                    When developing ajax calls to the api, make sure to call op.handleError which will include an error toast and log the failure inside each ajax failure result promise.
+                </p>
+    <pre class="preCustom">
+        JS Ajax Call:
+        {{ajaxData}}
+    </pre>
+
+                <h4>C# Exceptions</h4>
+                <a class="btn btn-danger btnAnchorDanger">
+                    404 Page Not Found
+                </a>
+                <a class="btn btn-danger btnAnchorDanger">
+                    405 Not Supported
+                </a>
+                <a class="btn btn-danger btnAnchorDanger" (click)="exceptionsStoredProcedure()">
+                    Exception in C# API Controller
+                </a>
+                <a class="btn btn-danger btnAnchorDanger" (click)="exceptionsStoredProcedure()">
+                    Exception in C# BusinessLogic
+                </a>
+                <p>
+                    Critical show-stopping errors will be handled by the ErrorController and the Global.asax.  This will generally redirect to an Error page.
+                    <br />
+                    Other exceptions encountered should be caught and handled with OpLogPerf.Log(ex) before returning a less descriptive failure for the client side to consume. 
+                    <br />
+                    If the exception occurs in an API Controller, make sure you are returning HttpResponseException instead. 
+                </p>
+    <pre class="preCustom">
+        General C# Code:
+        {{CSharpException}}
+    </pre>
+    <pre class="preCustom">
+        API Controller C# Code:
+        [Route("api/DevTests/GetSQLException")]
+        {{GetSQLException}}
+    </pre>
+                
+                <h4>SQL Exceptions</h4>
+                <a class="btn btn-danger btnAnchorDanger" (click)="exceptionsStoredProcedure()">
+                    Exception in Stored Procedure
+                </a>
+                <p>
+                    Exceptions will generally be handled at the Data Access level where, once encountered, they are to be logged and propagated upwards.  
+                    <br />
+                    When catching exceptions in C#, make sure to call OpLogPerf.Log(ex).  When catching exceptions in SQL, make sure to call PR_CUSTOM_ERR_MSG.
+                    <br />
+                    When creating SPs or Data Access code, make sure to catch and log potential exceptions.
+                </p>
+    <pre class="preCustom">
+        Data Library C#:
+        {{ExampleSQLException}}
+    </pre>
+    <pre class="preCustom">
+        SQL Exception Handling:
+        BEGIN
+            SET NOCOUNT ON 
+            BEGIN TRY   
+                ...
+            END TRY 
+            BEGIN CATCH 
+                EXEC dbo.PR_CUSTOM_ERRMSG  
+            END CATCH
+        END
+    </pre>
+
+                    <br />
+
+                    <h3>Error Handling Design Document</h3>
+                    <p>
+                        <a href="/Images/docs/MyDeals Error Handling Design Doc.pdf" target="_blank">
+                            <div style="padding: 20px 5px 0 5px; text-align: left;">
+                                <img src="/Images/docs/errorhandlingdesign.png" />
+                            </div>
+                            Click to view a larger version of the Error Handling Design.
+                        </a>
+                    </p>
+
+                    <br /><br /><br />
+                </div>
+
+                <div id="codeReviews">
+                    <h1><img src="/Images/docs/icon-code-tools.png" height="80" /> Code Reviews</h1>
+
+                    <h5>UI Code Reviews in My Deals</h5>
+                    <p>
+                        You can request a code reviews within Visual Studio both before or after check-in. The following documentation is for Visual Studio 2015.
+                    </p>
+
+                    <div class="stepByStep">
+                        How to UI Request Code Review before check-in
+                    </div>
+                    <p>
+                        Please see Microsoft's <a href="https://www.visualstudio.com/en-us/docs/tfvc/get-code-reviewed-vs"> Visual Studio code review tutorial</a>
+                    </p>
+                    <div class="stepByStep">
+                        How to create a UI Code Review for an old changeset
+                    </div>
+                    <p>
+                        If you just checked in, then Visual Studio should should give you a link to the changeset id directly after check-in
+                        , which you can use to follow the same process as above to request review.
+                        Else, if you would like to request review of an older changeset, follow these steps:
+
+                    </p>
+                    <ol>
+                        <li>
+                            In your solution explorer, right click any file and select "Source Control" > "View History". This should take you to a new window
+                        </li>
+                        <li>
+                            In this new window, replace the Source location with  C:\Users\[YOUR_USERNAME_HERE]\[YOUR_MYDEALS_PATH_HERE].
+                            For example, C:\Users\jajaung\MyDeals\STG\MyDeals_Release\UI\main\Intel.MyDeals.
+                            The screen should now show all the changsets made on the entire project
+                        </li>
+                        <li>
+                            Find the changeset you want a review on. Right click that changeset and select "Request Review"
+                        </li>
+                        <img src="/Images/docs/codeReviewHistory.png" />
+                        <li>
+                            Follow Microsoft's <a href="https://www.visualstudio.com/en-us/docs/tfvc/get-code-reviewed-vs"> Visual Studio code review tutorial </a>
+                            for steps on how to submit your code review
+                        </li>
+                    </ol>
+                    <br /><br /><br />
+                </div>
+
+                <div id="logging">
+                    <h1><img src="/Images/docs/icon-code-tools.png" height="80" /> Logging</h1>
+                    <p>
+                        Logging also comes in various dgrees... some of which are DB, MT and UI logging.  There is local storage logging, in-memory logging and longterm storage logging.
+                    </p>
+                    <img src="/Images/docs/logging.png" style="margin: 10px 0 10px 25px;" />
+
+                    <h5>Logging in My Deals</h5>
+                    <p>
+                        There are projects outside of My Deals where commonly used features are being developed intended for all of BOS applications. We will consume some of these tools, one of which is logging.
+                        So, in My deals, we will implement a rudamentary logging feature that can easily be swapped out for the new tool when it is ready.
+                        With that in mind, please make sure you follow the logging practices.
+                    </p>
+
+                    <div class="stepByStep">
+                        Database Logging
+                    </div>
+                    <p>
+                        This section needs to be defined by the Database developers.
+                    </p>
+
+                    <div class="stepByStep">
+                        Middle Tier Logging
+                    </div>
+                    <p>
+                        In the Middle Tier, we use the logging class <b>OpLogPerf</b> in the <i>Intel.MyDeals.Opaque</i> project. Call the <b>Log()</b> function to log an event.
+                        The middle tier will automatically log the SP name and paramters of successful calls to the database IF you use DataAccess.ExecuteDataSet() to call the db,
+                        so there is no need to call the log again unless you have other information to log. Log writers are turned off and on via the string passed in the global.asx.
+                    </p>
+                    <p>The following are the types of log writers that can be turned on:</p>
+                    <ul>
+                        <li>
+                            <b>FILE</b> - Logs to a txt file on the server. Default file location is under C:\Windows\TEMP\. File name will be prefixed with "FileLogPerf".  By default the db log writer will write 100 logs to a file at a time.*
+                        </li>
+                        <li>
+                            <b>DB</b> - Logs on the db. By default the db log writer will send 30 logs up to the db at a time.*
+                        </li>
+                        <li>
+                            <b>DEBUG</b> - Logs using System.Diagnostics.Debug.WriteLine()
+                        </li>
+                        <li>
+                            <b>EVENTLOG</b>	- Logs to the server's Windows Event Log under the EventLog "Opaque". (Remote to server, click Start menu > "Administrative Tools" > "Event Viewer" > "Windows Logs" > "Opaque")
+                        </li>
+                        <li>
+                            <b>EMAIL</b> - Sends logs to a list of emails as a file attachment.*
+                        </li>
+                        <li>
+                            <b>EMAILEX</b> - Emails exceptions and other logs categorized as LogCategory.Error to a list of emails.
+                        </li>
+                    </ul>
+                    <p style="font-size: 0.8em;">
+                        * Note that log writers that queue logs and bulk write to their writers are not foolproof. If the server or application rudely crashes, then chances are the most recent x logs queued to be written to the db have been lost.
+                    </p>
+
+                <div class="note">
+                    <strong>Note:</strong> Here are some examples of calling <b>LogEvent</b>.
+                </div>
+                <div class="noteBody">
+    <pre class="preCustom">        
+        OpLogPerf.Log("Page loaded");  // This will default to a message with an information LogCategory.				
+        OpLog.LogEvent("Stored Procedure Timed Out", LogCategory.Warning); // Logging with specified LogCategory. LogCategories to choose from are Information, Warning, and Error 
+        OpLogPerf.Log(Ex); // Logging an exception
+    </pre>
+                    </div>
+                    <br /><br /><br />
+                </div>
+
+                <div id="unitTesting">
+                    <h1><img src="/Images/docs/icon-code-tools.png" height="80" /> Unit Testing</h1>
+                    <p>
+                        Unit testing can be done using many different tools and based on the application's infrastructure.
+                    </p>
+                    <img src="/Images/docs/unittesting.png" style="margin: 10px 0 10px 25px;" />
+
+                    <h5>Unit Testing in My Deals</h5>
+                    <p>
+                        As part of the DevOps initiative, automated testing will be performed against unit test cases.
+                        This will NOT cover unit testings. This section is outside the DevOps automated logging.
+                        My Deals will focus on writing unit test cases in the Middle Tier layers.
+                    </p>
+
+                    <div class="stepByStep">
+                        Middle Tier Unit Testing
+                    </div>
+                    <p>
+                        My Deals will use the built in unit testing tools provided by Visual Studio. There are many on-line instructions and examples on how to write unit tests. I will documents a simple case as a starting point.
+                    </p>
+
+                    <ol>
+                        <li>
+                            Ensure there is a Unit Test Project that mirrors the project you are testing.
+                            For example. if you are writing unit test cases against the <i>Intel.MyDeals.BusinessLogic</i> project, make sure there is a <i>Intel.MyDeals.BusinessLogic.Test</i> project.
+                            If the project doesn't exist, go ahead and create one.<br />
+                            <img src="/Images/docs/fileunittest.png" style="margin: 10px 0;" />
+                        </li>
+                        <li>
+                            Enter your Unit Test in organized classes. As the project gets bigger, more and more unit tests will be needed. Please break them out into seperate classes as needed.<br />
+                            <div class="note">
+                                <strong>Sample:</strong> Here is a sample unit test case written for the BusinessLogic project around OpUserTokens.
+                            </div>
+                            <div class="noteBody">
+                                <img src="/Images/docs/sampleunittests.png" style="margin: 10px 0;" />
+                            </div>
+                        </li>
+                        <li>
+                            <b>Please ensure all unit tests pass prior to checking in your code!</b>
+                        </li>
+                    </ol>
+
+
+                    <div class="stepByStep">
+                        Client Unit Testing
+                    </div>
+                    <p>
+                        In the client layer, the DevOps automated testing uses a UI based recording tool. This tool might suffice the needs for unit testing.
+                        After we learn more about this process, we will make a decision on how to handle client-side unit testing.
+                    </p>
+
+
+                    <br /><br /><br />
+                </div>
+
+            </div>
+        </div>
+    </div>

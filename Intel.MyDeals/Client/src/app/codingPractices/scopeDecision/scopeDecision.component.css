@@ -1,0 +1,129 @@
+﻿.layout-cp-inner-page {
+    display: flex;
+    position: relative;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 10px 10px;
+}
+
+.grid-one {
+    height: calc(100vh - 147px);
+    min-width: 200px;
+    width:30px;
+    overflow-y: auto;
+    overflow-x:hidden;
+}
+
+.grid-two {
+    overflow-y: auto;
+    height: calc(100vh - 147px);
+    position: relative;
+    padding: 0 20px 0 20px !important;
+    width:100% !important
+}
+
+.countSpan{
+    vertical-align: top; 
+    color: #fdc362; 
+    font-weight: bold; 
+    margin-left: 5px;
+}
+
+.icon-fs{
+    font-size: 30px;
+}
+
+.scope-view {
+    position: relative;
+    width: 100%;
+}
+
+.lineHeightCustom{
+    font-size: 14px;
+    line-height: 1.2;
+}
+
+.listWidth{
+    padding: 2px 5px; 
+    color: #4b98dc; 
+    width: 70px; 
+    text-align: center;
+    float: left;
+    margin-right: 10px;
+}
+
+.designPathText{
+    border: 1px solid #cccccc; 
+    background-color: #f5f5f5; 
+    border-radius: 6px; 
+    margin: 6px 2px; 
+    padding: 2px; font-size: 9px; text-align: center;
+}
+
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px
+}
+
+*::-webkit-scrollbar-track {
+    background-color: #e8eaec
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #00aeef !important;
+    border-radius: 5px
+}
+
+p.scopeTableTitle {
+    margin: 0;
+    padding: 0;
+    font-size: 11px;
+    line-height: 1em;
+    font-weight: bold;
+    color: #1a3e6f;
+    font-family: 'Intel Clear','Arial';
+}
+
+p.scopeTableDesc {
+    margin: 0;
+    padding: 0;
+    font-size: 9px;
+    color: #aaaaaa;
+    line-height: 1em;
+    font-family: arial;
+    font-family: 'Intel Clear','Arial';
+}
+
+button.exportExcel {
+    color: #fff;
+    background-color: #0071c5;
+    border-color: #0071c5;
+    box-shadow: none;
+    font-size: 18px;
+    border: none;
+    line-height: 1.143em;
+    padding: 9px 14px;
+    display: flex;
+    align-items: center;
+    justify-content: flex-start;
+    font-family: 'Intel Clear','Arial';
+}
+button.exportExcel:hover {
+    background-color: #008bd1;
+    border-color: #008bd1;
+}
+
+
+.text-x-design{
+    color: #1a3e6f;
+    font-family: 'Intel Clear','Arial';
+    font-weight: 500;
+    font-size: 10px;
+
+}
+
+.tableScope .k-icon-md {
+    font-size: 25px;
+    padding-right: 10px;
+}

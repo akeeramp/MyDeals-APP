@@ -354,6 +354,11 @@
   </ItemGroup>
   <ItemGroup>
     <TypeScriptCompile Remove="Client\node_modules\**" />
+    <TypeScriptCompile Include="Client\src\appModules\codingPractices\app.codingPractices.module.ts" />
+    <TypeScriptCompile Include="Client\src\appModules\codingPractices\app.route-codingPractices.component.ts" />
+    <TypeScriptCompile Include="Client\src\appModules\codingPractices\codingPractices-util.module.ts" />
+    <TypeScriptCompile Include="Client\src\appModules\codingPractices\main-codingPractices-prod.ts" />
+    <TypeScriptCompile Include="Client\src\appModules\codingPractices\main-codingPractices.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\batchTiming\admin.batchTiming.component.ts" />
     <Content Include="Client\Images\032.gif" />
     <Content Include="Client\Images\check-checked.png" />
@@ -665,10 +670,21 @@
     <TypeScriptCompile Include="Client\src\appModules\reporting\app.route-report.component.ts" />
     <TypeScriptCompile Include="Client\src\appModules\reporting\main-report.ts" />
     <TypeScriptCompile Include="Client\src\appModules\reporting\main-report-prod.ts" />
+    <TypeScriptCompile Include="Client\src\app\codingPractices\businessProcess\businessProcess.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\codingPractices\cicdPipeline\cicdPipeline.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\codingPractices\codeQuality\codeQuality.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\codingPractices\codingPractices.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\codingPractices\codingTools\codingTools.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\codingPractices\projectFlow\projectFlow.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\codingPractices\scopeDecision\scopeDecision.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\codingPractices\shared\breadcrumbs\breadcrumbs.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\codingPractices\shared\codingPracticesLeftNav\codingPracticesLeftNav.component.ts" />
     <TypeScriptCompile Include="Client\src\app\contract\ptModals\dropDownModal\dropDownModal.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\modules\codingPractices.module.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\monacoCustomEditor\monacoCustomEditor.component.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\util\guardConfig.util.ts" />
     <TypeScriptCompile Include="Client\src\app\shared\util\guardProtection.ts" />
+    <TypeScriptCompile Include="Client\src\app\shared\util\gaurdprotectionDeactivate.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\vistex\admin.vistexIntegrationLog.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\vistex\admin.vistexProfiseeAPI.component.ts" />
@@ -680,6 +696,23 @@
     <Content Include="Client\src\app\advanceSearch\globalSearchResults\globalSearchResults.component.css" />
     <Content Include="Client\src\app\advanceSearch\globalSearchResults\globalSearchResults.component.html" />
     <Content Include="Client\src\app\advanceSearch\globalSearchResults\globalSearchResults.service.ts" />
+    <Content Include="Client\src\app\codingPractices\businessProcess\businessProcess.component.css" />
+    <Content Include="Client\src\app\codingPractices\businessProcess\businessProcess.component.html" />
+    <Content Include="Client\src\app\codingPractices\cicdPipeline\cicdPipeline.component.css" />
+    <Content Include="Client\src\app\codingPractices\cicdPipeline\cicdPipeline.component.html" />
+    <Content Include="Client\src\app\codingPractices\codeQuality\codeQuality.component.css" />
+    <Content Include="Client\src\app\codingPractices\codeQuality\codeQuality.component.html" />
+    <Content Include="Client\src\app\codingPractices\codingPractices.component.html" />
+    <Content Include="Client\src\app\codingPractices\codingTools\codingTools.component.css" />
+    <Content Include="Client\src\app\codingPractices\codingTools\codingTools.component.html" />
+    <Content Include="Client\src\app\codingPractices\projectFlow\projectFlow.component.css" />
+    <Content Include="Client\src\app\codingPractices\projectFlow\projectFlow.component.html" />
+    <Content Include="Client\src\app\codingPractices\scopeDecision\scopeDecision.component.css" />
+    <Content Include="Client\src\app\codingPractices\scopeDecision\scopeDecision.component.html" />
+    <Content Include="Client\src\app\codingPractices\shared\breadcrumbs\breadcrumbs.component.css" />
+    <Content Include="Client\src\app\codingPractices\shared\breadcrumbs\breadcrumbs.component.html" />
+    <Content Include="Client\src\app\codingPractices\shared\codingPracticesLeftNav\codingPracticesLeftNav.component.css" />
+    <Content Include="Client\src\app\codingPractices\shared\codingPracticesLeftNav\codingPracticesLeftNav.component.html" />
     <Content Include="Client\src\app\contract\allDeals\allDeals.component.css" />
     <Content Include="Client\src\app\contract\allDeals\allDeals.component.html" />
     <Content Include="Client\src\app\contract\contractDetails\contractDetails.component.css" />
@@ -1844,6 +1877,7 @@
     <Content Include="Client\Images\docs\MyDeals Error Handling Design Doc.pdf" />
     <Content Include="Client\Images\helpicons.psd" />
     <Content Include="Client\src\app\admin\unifiedDealRecon\admin.unifiedDealRecon.component.html" />
+    <Content Include="Client\src\app\codingPractices\codingPractices.component.css" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
     <Content Include="Scripts\intcAnalytics.js" />

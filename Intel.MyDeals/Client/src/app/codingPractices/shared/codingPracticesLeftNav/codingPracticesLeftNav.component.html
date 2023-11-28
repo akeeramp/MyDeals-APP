@@ -1,0 +1,11 @@
+﻿<kendo-treeview
+class="cp-leftnav-treeview"
+[nodes]="data"
+textField="text"
+[hasChildren]="hasChildren"
+[children]="fetchChildren"
+kendoTreeViewSelectable
+[(selectedKeys)]="selectedKeys"
+(selectionChange)="onSelectionChange($event)"
+>
+</kendo-treeview>

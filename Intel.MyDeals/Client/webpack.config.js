@@ -19,6 +19,7 @@ module.exports = env => {
                 admin: "./src/appModules/admin/main-admin.ts",
                 advance: "./src/appModules/advancesearch/main-advance.ts",
                 report: "./src/appModules/reporting/main-report.ts",
+                codingPractices: "./src/appModules/codingPractices/main-codingPractices.ts",
                 globalStyle: './src/app/style/style.css',
             },
             cache: {
@@ -83,6 +84,7 @@ module.exports = env => {
                 admin: "./src/appModules/admin/main-admin-prod.ts",
                 advance: "./src/appModules/advancesearch/main-advance-prod.ts",
                 report: "./src/appModules/reporting/main-report-prod.ts",
+                codingPractices: "./src/appModules/codingPractices/main-codingPractices.ts",
                 globalStyle: './src/app/style/style.css',
             },
             watch: false,

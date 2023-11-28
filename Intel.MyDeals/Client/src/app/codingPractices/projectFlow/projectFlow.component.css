@@ -1,0 +1,63 @@
+﻿.layout-cp-inner-page {
+    display: flex;
+    position: relative;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 10px 10px;
+}
+
+.grid-one {
+    height: calc(100vh - 147px);
+    min-width: 200px;
+    width: 40px;
+    overflow-y: auto;
+    overflow-x: hidden;
+}
+
+.grid-two {
+    overflow-y: auto;
+    height: calc(100vh - 147px);
+    position: relative;
+    padding: 0 20px 0 20px;
+}
+*::-webkit-scrollbar {
+    width: 10px;
+    height: 10px
+}
+
+*::-webkit-scrollbar-track {
+    background-color: #e8eaec
+}
+
+*::-webkit-scrollbar-thumb {
+    background-color: #00aeef !important;
+    border-radius: 5px
+}
+
+.btnDesignFlows{
+    background-color: #3c8dbc;
+    border-color: #367fa9;
+}
+
+.btn-primary.btnDesignFlows:hover, .btn-primary.btnDesignFlows:active {
+    background-color: #367fa9;
+}
+
+.btn-primary.btnDesignFlows:focus{
+    color: #fff;
+    background-color: #00aeef;
+    border-color: #00aeef;
+}
+
+.projectFlowAnchorDesign a {
+    color: #0071c5;
+    text-decoration: none;
+    cursor: pointer;
+}
+
+.projectFlowAnchorDesign a:hover,
+.projectFlowAnchorDesign a:focus {
+    color: #004579;
+    text-decoration: underline!important;
+}

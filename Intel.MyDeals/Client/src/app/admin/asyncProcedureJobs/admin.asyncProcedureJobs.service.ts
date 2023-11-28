@@ -1,6 +1,6 @@
 import { HttpClient } from "@angular/common/http";
 import { Injectable } from "@angular/core";
-import { Observable } from "rxjs-compat";
+import { Observable } from "rxjs";
 
 import { AsyncProcTrigger, CreateAsyncProcTriggerData } from "./admin.asyncProcedureJobs.models";
 

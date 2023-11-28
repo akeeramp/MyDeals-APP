@@ -1,0 +1,13 @@
+﻿.cp-leftnav-treeview {
+    font-size: 11px !important;
+    color: #222222 !important;
+    white-space: initial;
+    text-align: left;
+    top: 13px;
+    position: relative;
+    right: 5px;
+    font-family: "Intel Clear","Helvetica Neue",Helvetica,Arial,sans-serif;
+}
+.cp-leftnav-treeview.k-treeview .k-item, .cp-leftnav-treeview.k-treeview-item {
+    padding: 0px 0px 0px 8px !important;
+}

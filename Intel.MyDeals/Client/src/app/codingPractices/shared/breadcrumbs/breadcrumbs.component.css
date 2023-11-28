@@ -1,0 +1,14 @@
+﻿kendo-breadcrumb.breadCrumbs-design {
+    font-size: 12px;
+    font-weight: 400;
+}
+
+kendo-breadcrumb.breadCrumbs-design li span {
+    margin-right: 0;
+    color: #0071c5;
+    text-decoration: none;
+}
+
+kendo-breadcrumb.breadCrumbs-design li span.k-i-chevron-right.k-breadcrumb-delimiter-icon {
+    color: #111;
+}

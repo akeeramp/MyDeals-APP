@@ -55,8 +55,16 @@ import { dbAuditToolsComponent } from "./admin/dbAuditTools/admin.dbAuditTools.c
 
 //added for security check
 import { SecurityResolver } from "./shared/security.resolve";
+import { CodingPracticesComponent } from "./codingPractices/codingPractices.component";
+import { BusinessProcessComponent } from "./codingPractices/businessProcess/businessProcess.component";
+import { CicdPipelineComponent } from "./codingPractices/cicdPipeline/cicdPipeline.component";
+import { CodeQualityComponent } from "./codingPractices/codeQuality/codeQuality.component";
+import { CodingToolsComponent } from "./codingPractices/codingTools/codingTools.component";
+import { ProjectFlowComponent } from "./codingPractices/projectFlow/projectFlow.component";
+import { ScopeDecisionComponent } from "./codingPractices/scopeDecision/scopeDecision.component";
 //added protection rule before leaving a page
 import { PendingChangesGuard } from "./shared/util/gaurdprotectionDeactivate";
+
 
 export const routes: Routes = [
     { path: '', redirectTo: '/portal', pathMatch: 'full', data: { title: 'Dashboard', BaseHref: 'Dashboard' }, resolve: { security: SecurityResolver } ,canDeactivate:[PendingChangesGuard]},
@@ -118,4 +126,11 @@ export const routes: Routes = [
     { path: 'asyncProcedureJobs', component: AsyncProcedureJobsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'sdsDealOverrides', component: sdsDealOverridesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'dbAuditTools', component: dbAuditToolsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
-];
+    { path: 'Home', component: CodingPracticesComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver } },
+    { path: 'BusinessDesign', component: BusinessProcessComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver } },
+    { path: 'CodingTools', component: CodingToolsComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver } },
+    { path: 'CodeQuality', component: CodeQualityComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver } },
+    { path: 'Project', component: ProjectFlowComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver } },
+    { path: 'Flows', component: ScopeDecisionComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver } },
+    { path: 'CiCdPipeline', component: CicdPipelineComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver } },
+  ];

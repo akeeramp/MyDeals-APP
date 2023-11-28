@@ -1,0 +1,434 @@
+﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" /> 
+<app-breadcrumbs [list_breadcrumbs]="list_breadcrumbs" (selectedBreadCrumb)="loadSelected($event)"></app-breadcrumbs>
+
+<div class="layout-cp-inner-page">
+    <div class="grid-one" [ngStyle]="!isVisible?{'min-width': '200px'}:{'min-width': 'auto'}">
+        <div *ngIf="!isVisible" id="tocCollapse" class="w100" style="cursor: pointer; text-align: right; font-size: 10px;">
+            TOC <i (click)="Toggle()" class="intelicon-left-previous"></i>
+            <app-coding-practices-leftNav [left_nav]="left_nav" (selectedLink)="loadSelected($event)"></app-coding-practices-leftNav>
+        </div>
+        <div id="tocExpand" *ngIf="isVisible" (click)="Toggle()" class="intelicon-up rotateIcon"><span class="font-cp">TOC</span> </div>
+    </div>
+        <div class="grid-two" id="scopeDecision">
+            <div style="margin: 10px;">
+                <h1>My Deals scope decision</h1>
+
+                <div class="sectionScopeDecision">
+                    <h3>Business Process Injection Points</h3>
+                    <p>
+                        I came up with 14 different points in the Business Flow where there are opportunities for My Deals to inject value to the process.
+                        The small <span style="color: #fdc362;">yellow number</span> represents how many different ways this injection can be handled.
+                    </p>
+
+                    <div style="border: 0 solid transparent; background-color: transparent; margin: 30px 0" class="k-widget k-listview scope-view">
+                        <div class="listWidth">
+                            <div>
+                                <i class="fa fa-money icon-fs" aria-hidden="true"></i>
+                                <span class="countSpan">2</span>
+                            </div>
+                            <div class="lineHeightCustom">Pricing Tables</div>
+                        </div>
+
+                        <div class="listWidth">
+                            <div>
+                                <i class="fa fa-table icon-fs" aria-hidden="true"></i>
+                                <span class="countSpan">3</span>
+                            </div>
+                            <div class="lineHeightCustom">Pricing Table Association</div>
+                        </div>
+
+                        <div class="listWidth">
+                            <div>
+                                <i class="fa fa-exchange icon-fs" aria-hidden="true"></i>
+                                <span class="countSpan">3</span>
+                            </div>
+                            <div class="lineHeightCustom">Overlapping Deals</div>
+                        </div>
+
+                        <div class="listWidth">
+                            <div>
+                                <i class="fa fa-laptop icon-fs" aria-hidden="true"></i>
+                                <span class="countSpan">3</span>
+                            </div>
+                            <div class="lineHeightCustom">Meet Comp Test</div>
+                        </div>
+
+                        <div class="listWidth">
+                            <div>
+                                <i class="fa fa-usd icon-fs" aria-hidden="true"></i>
+                                <span class="countSpan">3</span>
+                            </div>
+                            <div class="lineHeightCustom">Pricing Cost Test</div>
+                        </div>
+
+                        <div class="listWidth">
+                            <div>
+                                <i class="fa fa-legal icon-fs" aria-hidden="true"></i>
+                                <span class="countSpan">2</span>
+                            </div>
+                            <div class="lineHeightCustom">Term and Conditions</div>
+                        </div>
+
+                        <div class="listWidth">
+                            <div>
+                                <i class="fa fa-certificate icon-fs" aria-hidden="true"></i>
+                                <span class="countSpan">2</span>
+                            </div>
+                            <div class="lineHeightCustom">Contract</div>
+                        </div>
+
+                        <div class="listWidth">
+                            <div>
+                                <i class="fa fa-check-square-o icon-fs" aria-hidden="true"></i>
+                                <span class="countSpan">2</span>
+                            </div>
+                            <div class="lineHeightCustom">Deal Validation</div>
+                        </div>
+
+                        <div class="listWidth">
+                            <div>
+                                <i class="fa fa-file icon-fs" aria-hidden="true"></i>
+                                <span class="countSpan">2</span>
+                            </div>
+                            <div class="lineHeightCustom">Deal Entry</div>
+                        </div>
+
+                        <div class="listWidth">
+                            <div>
+                                <i class="fa fa-sort-numeric-asc icon-fs" aria-hidden="true"></i>
+                                <span class="countSpan">2</span>
+                            </div>
+                            <div class="lineHeightCustom">Contract Versions</div>
+                        </div>
+
+                        <div class="listWidth">
+                            <div>
+                                <i class="fa fa-refresh icon-fs" aria-hidden="true"></i>
+                                <span class="countSpan">2</span>
+                            </div>
+                            <div class="lineHeightCustom">Contract Approval</div>
+                        </div>
+
+                        <div class="listWidth">
+                            <div>
+                                <i class="fa fa-random icon-fs" aria-hidden="true"></i>
+                                <span class="countSpan">2</span>
+                            </div>
+                            <div class="lineHeightCustom">Deal Approval</div>
+                        </div>
+
+                        <div class="listWidth">
+                            <div>
+                                <i class="fa fa-users icon-fs" aria-hidden="true"></i>
+                                <span class="countSpan">2</span>
+                            </div>
+                            <div class="lineHeightCustom">Customer Acceptance (C2A)</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="clearboth"></div>
+
+                <div class="sectionScopeDecision">
+                    <h3 style="margin-top: 25px;">Design Permutations</h3>
+                    <p>
+                        Based on the Injection points and how many different ways to design each injection, it is possible to calculate all paths.
+                    </p>
+                    <div style="border: 0 solid transparent; background-color: transparent; margin: 30px 0" class="k-widget k-listview">
+                        <div style="padding: 2px 5px; color: #4b98dc; width: 50px; text-align: center;" class="fl">
+                            <div style="font-size: 36px; font-weight: bold;">2</div>
+                            <div style="font-size: 9px;">Pricing Tables</div>
+                        </div>
+                        <div style="padding: 10px 0; color: #4b98dc; text-align: center;" class="fl">
+                            <div style="font-size: 24px; font-weight: bold;">x</div>
+                        </div>
+
+                        <div style="padding: 2px 5px; color: #4b98dc; width: 50px; text-align: center;" class="fl">
+                            <div style="font-size: 36px; font-weight: bold;">3</div>
+                            <div style="font-size: 9px;">Pricing Table Association</div>
+                        </div>
+                        <div style="padding: 10px 0; color: #4b98dc; text-align: center;" class="fl">
+                            <div style="font-size: 24px; font-weight: bold;">x</div>
+                        </div>
+
+                        <div style="padding: 2px 5px; color: #4b98dc; width: 50px; text-align: center;" class="fl">
+                            <div style="font-size: 36px; font-weight: bold;">3</div>
+                            <div style="font-size: 9px;">Overlapping Deals</div>
+                        </div>
+                        <div style="padding: 10px 0; color: #4b98dc; text-align: center;" class="fl">
+                            <div style="font-size: 24px; font-weight: bold;">x</div>
+                        </div>
+
+                        <div style="padding: 2px 5px; color: #4b98dc; width: 50px; text-align: center;" class="fl">
+                            <div style="font-size: 36px; font-weight: bold;">3</div>
+                            <div style="font-size: 9px;">Meet Comp Test</div>
+                        </div>
+                        <div style="padding: 10px 0; color: #4b98dc; text-align: center;" class="fl">
+                            <div style="font-size: 24px; font-weight: bold;">x</div>
+                        </div>
+
+                        <div style="padding: 2px 5px; color: #4b98dc; width: 50px; text-align: center;" class="fl">
+                            <div style="font-size: 36px; font-weight: bold;">3</div>
+                            <div style="font-size: 9px;">Pricing Cost Test</div>
+                        </div>
+                        <div style="padding: 10px 0; color: #4b98dc; text-align: center;" class="fl">
+                            <div style="font-size: 24px; font-weight: bold;">x</div>
+                        </div>
+
+                        <div style="padding: 2px 5px; color: #4b98dc; width: 50px; text-align: center;" class="fl">
+                            <div style="font-size: 36px; font-weight: bold;">2</div>
+                            <div style="font-size: 9px;">Term and Conditions</div>
+                        </div>
+                        <div style="padding: 10px 0; color: #4b98dc; text-align: center;" class="fl">
+                            <div style="font-size: 24px; font-weight: bold;">x</div>
+                        </div>
+
+                        <div style="padding: 2px 5px; color: #4b98dc; width: 50px; text-align: center;" class="fl">
+                            <div style="font-size: 36px; font-weight: bold;">2</div>
+                            <div style="font-size: 9px;">Contract</div>
+                        </div>
+                        <div style="padding: 10px 0; color: #4b98dc; text-align: center;" class="fl">
+                            <div style="font-size: 24px; font-weight: bold;">x</div>
+                        </div>
+
+                        <div style="padding: 2px 5px; color: #4b98dc; width: 50px; text-align: center;" class="fl">
+                            <div style="font-size: 36px; font-weight: bold;">2</div>
+                            <div style="font-size: 9px;">Deal Validation</div>
+                        </div>
+                        <div style="padding: 10px 0; color: #4b98dc; text-align: center;" class="fl">
+                            <div style="font-size: 24px; font-weight: bold;">x</div>
+                        </div>
+
+                        <div style="padding: 2px 5px; color: #4b98dc; width: 50px; text-align: center;" class="fl">
+                            <div style="font-size: 36px; font-weight: bold;">2</div>
+                            <div style="font-size: 9px;">Deal Entry</div>
+                        </div>
+                        <div style="padding: 10px 0; color: #4b98dc; text-align: center;" class="fl">
+                            <div style="font-size: 24px; font-weight: bold;">x</div>
+                        </div>
+
+                        <div style="padding: 2px 5px; color: #4b98dc; width: 50px; text-align: center;" class="fl">
+                            <div style="font-size: 36px; font-weight: bold;">2</div>
+                            <div style="font-size: 9px;">Contract Versions</div>
+                        </div>
+                        <div style="padding: 10px 0; color: #4b98dc; text-align: center;" class="fl">
+                            <div style="font-size: 24px; font-weight: bold;">x</div>
+                        </div>
+
+                        <div style="padding: 2px 5px; color: #4b98dc; width: 50px; text-align: center;" class="fl">
+                            <div style="font-size: 36px; font-weight: bold;">2</div>
+                            <div style="font-size: 9px;">Contract Approval</div>
+                        </div>
+                        <div style="padding: 10px 0; color: #4b98dc; text-align: center;" class="fl">
+                            <div style="font-size: 24px; font-weight: bold;">x</div>
+                        </div>
+
+                        <div style="padding: 2px 5px; color: #4b98dc; width: 50px; text-align: center;" class="fl">
+                            <div style="font-size: 36px; font-weight: bold;">2</div>
+                            <div style="font-size: 9px;">Deal Approval</div>
+                        </div>
+                        <div style="padding: 10px 0; color: #4b98dc; text-align: center;" class="fl">
+                            <div style="font-size: 24px; font-weight: bold;">x</div>
+                        </div>
+
+                        <div style="padding: 2px 5px; color: #4b98dc; width: 50px; text-align: center;" class="fl">
+                            <div style="font-size: 36px; font-weight: bold;">2</div>
+                            <div style="font-size: 9px;">Customer Acceptance (C2A)</div>
+                        </div>
+                        <div style="padding: 10px 0; color: #4b98dc; text-align: center;" class="fl">
+                            <div style="font-size: 24px; font-weight: bold;">=</div>
+                        </div>
+
+                        <div style="padding: 2px 5px; color: #4b98dc; text-align: center;" class="fl">
+                            <div style="font-size: 36px; font-weight: bold; color: #fdc362;">41472</div>
+                            <div style="font-size: 9px;">Total Possibilities</div>
+                        </div>
+
+                    </div>
+                </div>
+
+                <div class="clearboth"></div>
+
+                <div class="sectionScopeDecision">
+                    <h3 style="margin-top: 25px;">Design Weighting</h3>
+                    <p>
+                        Since all the possible permutations of the Designs are far too many to pursue, I assigned weight criteria and weight values to each criteria.  Then I assigned values to each of the Business Injection Points.
+                    </p>
+                    
+                    <kendo-grid class="tableScope" [kendoGridBinding]="dataTable" [group]="group" filterable="menu" style="width: 1170px; height: auto !important; ">
+                        <ng-template kendoGridToolbarTemplate>
+                            <button type="button" class="exportExcel" kendoGridExcelCommand>
+                                <span class="k-icon k-i-file-excel k-icon-md"></span>EXPORT TO EXCEL
+                            </button>
+                        </ng-template>
+                        <kendo-grid-column field="group" [hidden]="true">
+                            <ng-template kendoGridGroupHeaderTemplate let-group="group">
+                                <span>
+                                    {{ group.value }}
+                                </span>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="title" title="Title" [width]="300">
+                            <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
+                                <kendo-grid-string-filter-cell [column]="column" [filter]="filter" operator="startswith">
+                                    <kendo-filter-startswith-operator></kendo-filter-startswith-operator>
+                                    <kendo-filter-eq-operator></kendo-filter-eq-operator>
+                                </kendo-grid-string-filter-cell>
+                            </ng-template>
+                            <ng-template kendoGridCellTemplate let-column>
+                                <p class="scopeTableTitle">{{ column.title }}</p>
+                                <p class="scopeTableDesc">{{ column.desc }}</p>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="perf" title="Performance Gain" [width]="140">
+                            <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
+                                <kendo-grid-string-filter-cell [column]="column" [filter]="filter" operator="startswith">
+                                    <kendo-filter-startswith-operator></kendo-filter-startswith-operator>
+                                    <kendo-filter-eq-operator></kendo-filter-eq-operator>
+                                </kendo-grid-string-filter-cell>
+                            </ng-template>
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <span class="text-x-design">{{calcIcons(dataItem.perf)}}</span>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="integ" title="Data Integrity" [width]="130">
+                            <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
+                                <kendo-grid-string-filter-cell [column]="column"
+                                                               [filter]="filter"
+                                                               operator="startswith">
+                                    <kendo-filter-startswith-operator></kendo-filter-startswith-operator>
+                                    <kendo-filter-eq-operator></kendo-filter-eq-operator>
+                                </kendo-grid-string-filter-cell>
+                            </ng-template>
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <span class="text-x-design">{{calcIcons(dataItem.integ)}}</span>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="size" title="Ease of Implementation" [width]="180">
+                            <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
+                                <kendo-grid-string-filter-cell [column]="column"
+                                                               [filter]="filter"
+                                                               operator="startswith">
+                                    <kendo-filter-startswith-operator></kendo-filter-startswith-operator>
+                                    <kendo-filter-eq-operator></kendo-filter-eq-operator>
+                                </kendo-grid-string-filter-cell>
+                            </ng-template>
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <span class="text-x-design">{{calcIcons(dataItem.size)}}</span>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="roi" title="Business ROI" [width]="130">
+                            <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
+                                <kendo-grid-string-filter-cell [column]="column"
+                                                               [filter]="filter"
+                                                               operator="startswith">
+                                    <kendo-filter-startswith-operator></kendo-filter-startswith-operator>
+                                    <kendo-filter-eq-operator></kendo-filter-eq-operator>
+                                </kendo-grid-string-filter-cell>
+                            </ng-template>
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <span class="text-x-design">{{calcIcons(dataItem.roi)}}</span>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-column field="ux" title="User Experience" [width]="130">
+                            <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
+                                <kendo-grid-string-filter-cell [column]="column"
+                                                               [filter]="filter"
+                                                               operator="startswith">
+                                    <kendo-filter-startswith-operator></kendo-filter-startswith-operator>
+                                    <kendo-filter-eq-operator></kendo-filter-eq-operator>
+                                </kendo-grid-string-filter-cell>
+                            </ng-template>
+                            <ng-template kendoGridCellTemplate let-dataItem>
+                                <span class="text-x-design">{{calcIcons(dataItem.ux)}}</span>
+                            </ng-template>
+                        </kendo-grid-column>
+                        <kendo-grid-excel fileName="Export.xlsx">
+                        </kendo-grid-excel>
+                    </kendo-grid>
+                </div>
+
+                <div class="clearboth"></div>
+                <div class="sectionScopeDecision">
+                    <h3 style="margin-top: 25px;">Top 10 Design Paths</h3>
+                    <p>
+                        Based on the weighting values, I calculated the top 10 Design Patterns.
+                    </p>
+                    <div style="border: 0 solid transparent; background-color: transparent; margin: 30px 0" class="k-widget k-listview">
+
+                        <div class="fl designPathText" *ngFor="let design of dataDesignPath.slice(0,13)">
+                            <div style="font-weight: bold;">{{design.name}}</div>
+                            <div>{{design.type}}</div>
+                        </div>
+
+                        <div class="clearboth"></div>
+
+                        <div class="fl designPathText" *ngFor="let design of dataDesignPath.slice(13,26)">
+                            <div style="font-weight: bold;">{{design.name}}</div>
+                            <div>{{design.type}}</div>
+                        </div>
+
+                        <div class="clearboth"></div>
+
+                        <div class="fl designPathText" *ngFor="let design of dataDesignPath.slice(26,39)">
+                            <div style="font-weight: bold;">{{design.name}}</div>
+                            <div>{{design.type}}</div>
+                        </div>
+
+                        <div class="clearboth"></div>
+
+                        <div class="fl designPathText" *ngFor="let design of dataDesignPath.slice(39,52)">
+                            <div style="font-weight: bold;">{{design.name}}</div>
+                            <div>{{design.type}}</div>
+                        </div>
+
+                        <div class="clearboth"></div>
+
+                        <div class="fl designPathText" *ngFor="let design of dataDesignPath.slice(52,65)">
+                            <div style="font-weight: bold;">{{design.name}}</div>
+                            <div>{{design.type}}</div>
+                        </div>
+
+                        <div class="clearboth"></div>
+
+                        <div class="fl designPathText" *ngFor="let design of dataDesignPath.slice(65,78)">
+                            <div style="font-weight: bold;">{{design.name}}</div>
+                            <div>{{design.type}}</div>
+                        </div>
+
+                        <div class="clearboth"></div>
+
+                        <div class="fl designPathText" *ngFor="let design of dataDesignPath.slice(78,91)">
+                            <div style="font-weight: bold;">{{design.name}}</div>
+                            <div>{{design.type}}</div>
+                        </div>
+
+                        <div class="clearboth"></div>
+
+                        <div class="fl designPathText" *ngFor="let design of dataDesignPath.slice(91,104)">
+                            <div style="font-weight: bold;">{{design.name}}</div>
+                            <div>{{design.type}}</div>
+                        </div>
+
+                        <div class="clearboth"></div>
+
+                        <div class="fl designPathText" *ngFor="let design of dataDesignPath.slice(104,117)">
+                            <div style="font-weight: bold;">{{design.name}}</div>
+                            <div>{{design.type}}</div>
+                        </div>
+
+                        <div class="clearboth"></div>
+
+                        <div class="fl designPathText" *ngFor="let design of dataDesignPath.slice(117,130)">
+                            <div style="font-weight: bold;">{{design.name}}</div>
+                            <div>{{design.type}}</div>
+                        </div>
+
+                        <div class="clearboth"></div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    

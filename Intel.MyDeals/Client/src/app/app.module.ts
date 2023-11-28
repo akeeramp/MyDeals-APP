@@ -62,6 +62,8 @@ import { dashboardComponents } from './modules/dashboard.module';
 import { advanceSearchComponents } from './modules/advanceSearch.module';
 //*********************Contract components *********************
 import { contractComponents } from './modules/contract.module';
+//*********************CodingPractices components *********************
+import { codingPracticesComponents } from './modules/codingPractices.module';
 //pipe module
 import { MainPipe } from './modules/pipe.module';
 import { broadCastService } from './core/dealPopup/broadcast.service';
