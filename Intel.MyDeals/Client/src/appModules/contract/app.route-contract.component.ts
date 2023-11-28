@@ -17,6 +17,6 @@ export const routesContract: Routes = [
     { path: 'contractdetails/copycid/:cid', component: ContractDetailsComponent, data: { title: 'Contract', BaseHref: 'Contract' }, resolve: { security: SecurityResolver }, canActivate: [authGuard],canDeactivate:[PendingChangesGuard] },
     { path: 'manager/:cid', component: globalRouteComponent, data: { title: 'Contract', BaseHref: 'Contract' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'manager/:type/:cid/:PSID/:PTID/:DealID', component: globalRouteComponent, resolve: { security: SecurityResolver }, data: { title: 'Contract', BaseHref: 'Contract' }, canActivate: [authGuard] },
-    { path: 'contractmanager/:type/:cid/:PSID/:PTID/:DealID', component: pricingTableComponent, data: { title: 'Contract', BaseHref: 'Contract' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] ,canDeactivate:[PendingChangesGuard]},
+    { path: 'contractmanager/:type/:cid/:PSID/:PTID/:DealID', component: pricingTableComponent, data: { title: 'Contract', BaseHref: 'Contract' }, resolve: { security: SecurityResolver }, canActivate: [authGuard]},
     { path: 'tendermanager/:cid', component: tenderManagerComponent, data: { title: 'Contract', BaseHref: 'Contract' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
 ];

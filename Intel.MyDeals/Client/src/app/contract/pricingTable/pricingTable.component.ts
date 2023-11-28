@@ -10,8 +10,6 @@ import { dealEditorComponent } from "../dealEditor/dealEditor.component"
 import { PricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
 import { performanceBarsComponent } from '../performanceBars/performanceBar.component';
 import { ActivatedRoute, Router } from '@angular/router';
-import { PendingChangesGuard } from 'src/app/shared/util/gaurdprotectionDeactivate';
-import { Observable } from 'rxjs';
 
 export interface contractIds {
     Model: string;
@@ -29,7 +27,7 @@ export interface contractIds {
     styleUrls: ['Client/src/app/contract/pricingTable/pricingTable.component.css']
 })
 
-export class pricingTableComponent implements PendingChangesGuard {
+export class pricingTableComponent {
     public drawChart: boolean;
     constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: TemplatesService,
         private pteService: PricingTableEditorService, private lnavSvc: lnavService, private route: ActivatedRoute, private router: Router) {}
@@ -477,15 +475,5 @@ export class pricingTableComponent implements PendingChangesGuard {
             this.isDirty=data;
         }
     }
-
-    canDeactivate(): Observable<boolean> | boolean { 
-        // if(!!this.deComp && this.deComp.dirty){
-        //     this.isDirty=true;
-        // }
-        if ((this.pteComp && this.pteComp.isDirty) ) {
-            this.isDirty = true;
-        }
-       return !this.isDirty;
-    }
-
+ 
 }
