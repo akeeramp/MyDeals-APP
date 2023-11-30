@@ -415,6 +415,11 @@ namespace Intel.MyDeals.BusinessLogic
             string[] finalArry = selectedCountries.Union(regionCountriesArry.Select(a => a.DROP_DOWN).ToArray()).ToArray();
             returnVal = string.Join("|", finalArry);
 
+            if (returnVal == string.Empty)
+            {
+                return null;
+            }
+
             return returnVal;
         }
 
