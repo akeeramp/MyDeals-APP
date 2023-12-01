@@ -127,16 +127,18 @@ export class RuleOwnerComponent implements PendingChangesGuard {
     }
 
     editHandler({ sender, rowIndex, dataItem }) {
-       this.isDirty=true;
         this.closeEditor(sender);
         this.isFormChange = false;
         this.formGroup = new FormGroup({
             Name: new FormControl({ value: dataItem.Name, disabled: true }, Validators.required),
             OwnerName: new FormControl(dataItem.OwnerName, Validators.required),
         });
-        this.formGroup.valueChanges.subscribe(() => {
-            this.isFormChange = true;
-        });
+        this.formGroup.valueChanges.subscribe((x) => {
+            if(x.OwnerName !=undefined && x.OwnerName.NAME !=undefined){
+             this.isFormChange = true;
+             this.isDirty=true;
+            }
+         });
         this.editedRowIndex = rowIndex;
         sender.editRow(rowIndex, this.formGroup);
         this.selectedOwner = { "EMP_WWID": dataItem.OwnerId };
