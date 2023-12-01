@@ -647,6 +647,7 @@ export class ProductCorrectorComponent {
                 if (!!this.ProductCorrectorData.DuplicateProducts[this.curRowId][lookup]) {
                     if (this.ProductCorrectorData.DuplicateProducts[this.curRowId][lookup].length == 1) {
                         this.removeAndFilter(item.name);
+                        event.target.checked = false;
                     }
                 }
             }
