@@ -61,3 +61,19 @@
     color: #004579;
     text-decoration: underline!important;
 }
+
+.panelAccord .panel-title a {
+    color: #111!important;
+}
+
+.panelAccord .panel-title a .fr,
+.panelAccord .panel-title a .fr a {
+    color: #0071c5!important;
+}
+
+.panelAccord .panel-title a .fr:hover,
+.panelAccord .panel-title a .fr a:hover
+.panelAccord .panel-title a .fr:focus,
+.panelAccord .panel-title a .fr a:focus {
+    color: #004579!important;
+}

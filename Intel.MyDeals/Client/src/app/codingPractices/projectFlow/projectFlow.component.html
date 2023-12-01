@@ -1196,7 +1196,7 @@
                 <i class="intelicon-task"></i>Step by Step
             </div>
         
-            <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+            <div class="panel-group panelAccord" id="accordion" role="tablist" aria-multiselectable="true">
                 
                 <div class="panel panel-default">
                     <div class="panel-heading" role="tab" id="headingOne">
@@ -1569,7 +1569,12 @@
                         <div class="panel-body">
                             <div style="padding: 15px;">
                                 <h1>Sample Constants Display</h1>
-                                <div id="grid"></div>
+                                <kendo-grid class="tableScope flowTableAlignment" [data]="constantsData" filterable="menu" style="height: auto!important;">
+                                    <kendo-grid-column field="name" title="Name"> </kendo-grid-column>
+                                    <kendo-grid-column field="description" title="Description">
+                                    </kendo-grid-column>
+                                    <kendo-grid-column field="value" title="Value"> </kendo-grid-column>
+                                  </kendo-grid>
                                 <br />
                             </div>
                         </div>

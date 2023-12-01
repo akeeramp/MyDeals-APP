@@ -280,7 +280,7 @@
                                 <p class="scopeTableDesc">{{ column.desc }}</p>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="perf" title="Performance Gain" [width]="140">
+                        <kendo-grid-column field="perf" title="Performance Gain" [width]="140" filter="numeric">
                             <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
                                 <kendo-grid-string-filter-cell [column]="column" [filter]="filter" operator="startswith">
                                     <kendo-filter-startswith-operator></kendo-filter-startswith-operator>
@@ -291,7 +291,7 @@
                                 <span class="text-x-design">{{calcIcons(dataItem.perf)}}</span>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="integ" title="Data Integrity" [width]="130">
+                        <kendo-grid-column field="integ" title="Data Integrity" [width]="130" filter="numeric">
                             <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
                                 <kendo-grid-string-filter-cell [column]="column"
                                                                [filter]="filter"
@@ -304,7 +304,7 @@
                                 <span class="text-x-design">{{calcIcons(dataItem.integ)}}</span>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="size" title="Ease of Implementation" [width]="180">
+                        <kendo-grid-column field="size" title="Ease of Implementation" [width]="180" filter="numeric">
                             <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
                                 <kendo-grid-string-filter-cell [column]="column"
                                                                [filter]="filter"
@@ -317,7 +317,7 @@
                                 <span class="text-x-design">{{calcIcons(dataItem.size)}}</span>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="roi" title="Business ROI" [width]="130">
+                        <kendo-grid-column field="roi" title="Business ROI" [width]="130" filter="numeric">
                             <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
                                 <kendo-grid-string-filter-cell [column]="column"
                                                                [filter]="filter"
@@ -330,7 +330,7 @@
                                 <span class="text-x-design">{{calcIcons(dataItem.roi)}}</span>
                             </ng-template>
                         </kendo-grid-column>
-                        <kendo-grid-column field="ux" title="User Experience" [width]="130">
+                        <kendo-grid-column field="ux" title="User Experience" [width]="130" filter="numeric">
                             <ng-template kendoGridFilterCellTemplate let-filter let-column="column">
                                 <kendo-grid-string-filter-cell [column]="column"
                                                                [filter]="filter"

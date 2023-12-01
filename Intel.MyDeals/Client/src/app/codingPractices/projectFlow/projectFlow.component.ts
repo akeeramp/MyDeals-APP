@@ -736,7 +736,30 @@ $(document).ready(function() {
         ]
     });
 });
-</script>`
+</script>`;
+
+    constantsData = [
+        { name: "DB_LOGGING", description: "Logging", value: '<log MsgSrc="DB"> <DaysToDeleteOldData>0</DaysToDeleteOldData> <DaysScheduleToRun>1</DaysScheduleToRun> <LastRunDate>2016-11-03</LastRunDate> <IsActive>1</IsActive> </log> <log MsgSrc = "UI_LOG"> <DaysToDeleteOldData>0</DaysToDeleteOldData> <DaysScheduleToRun>1</DaysScheduleToRun> <LastRunDate>2016-11-03</LastRunDate> <IsActive>1</IsActive> </log>' },
+        { name: "BATCH_LOG", description: "META-DATA FOR BATCH CLEAN-UP OF BATCH LOGGING TABLE", value: '<log NUM_DAYS_TO_DELETE="1" NUM_DAYS_TO_RUN="1" LST_RUN_DT="2016-11-09"/>'},
+        { name: "iCOST_PRODUCTS", description: "Will get icost data for the mentioned productVerticals in CNST_VAL_TXT.", value: "3, 4, 5, 7502, 7503, 7507, 7, 8,7516,7517,7518" },
+        { name: "ICOST_HIST_LOG_DAYS", description: "Days to keep ICOST import history logging details.", value: "455" },
+        { name: "ICOST_ERROR_LOG_DAYS", description: "Days to keep ICOST error logging details.", value: "180" },
+        { name: "ICOST_ERROR_CONTACTS_MYDL", description: "Contacts to send emails to for iCost errors (Separator is ;)", value: "icost.dba@intel.com;michael.h.tipping@intel.com;rohit.tandon@intel.com;Mitusha.Rani@intel.com;melissa.chyo@intel.com;harpreet1.kaur@intel.com" },
+        { name: "CUTOFF_DATE", description: "CUTOFF_DATE", value: "2018-07-12" },
+        { name: "MISC_MM_LIST", description: "List of misc mtrl_id to bring in during product refresh batch", value: "IGNORMM" },
+        { name: "SSPEC_PRD_TYPES", description: "SSPEC_PRD_TYPES", value: "CPU,CS" },
+        { name: "EIA_DIV_NM", description: "EIA Division Name", value: "EdgeP&LDiv" },
+        { name: "COST_TEST_TYPES", description: "This is will list the Cost test types and Order of execution", value: "L1:1~L2:2~Exempt:3" },
+        { name: "LOCKED_OUT_ROLES", description: "Roles locked out, like during a release.", value: "" },
+        { name: "CSL_WWID_EXCEPTIONS", description: "WWID that can never be locked out", value: "10505693,10548414,10602441,10634789,10529497,10651232" },
+        { name: "PRODUCT_SELECTION_LEVEL", description: "This Constant will hold the possible product selection levels", value: "Processor_Nbr:7006~Level4:7007~MM:7008" },
+        { name: "CHNL_CUST_FLTR", description: "To filter only the direct customers	", value: "Direct" },
+        { name: "LAST_BTCH_RUN", description: "To save the last batch run datetime", value: "Nov 28 2023 12:58AM" },
+        { name: "CAP_MSP_CUTOFF_DAYS_BTCH", description: "CAP/MSP Refresh Cutoff days for DM Batch", value: "7" },
+        { name: "PCT_LGL_EXCPT_ROLES", description: "WWID that can access CostTest Legal Exception Admin Screen", value: "11583238,11579289" },
+        { name: "TRKR_GEN_CUTOFF", description: "Cutover date for new tracker generation logic", value: "7/13/2018" },
+        { name: "EXPIRE_CUTOFF_DAYS", description: "Number of Days after deal end date to expire the deal", value: "1" }
+    ];
 
     loadSelected(dataItem){
         this.selectedItem = dataItem.bool;
@@ -860,7 +883,7 @@ $(document).ready(function() {
         if (dataItem.bool == 'presentationAngularViews' || dataItem.bool == 'presentationCallWebApi'|| dataItem.bool == 'presentationWebApi' || dataItem.bool == 'presentationMvcController' ) {
             this.list_breadcrumbs = [{ text: "Coding practices", url: "Home", bool: 'home'},
            { text: "Project setup and logic flow", url: "#Introduction" , bool: 'introduction' },
-                { text: "Intel.MyDeals.Introduction", url: "#myDeals" , bool: 'myDeals'  },
+                { text: "Intel.MyDeals", url: "#myDeals" , bool: 'myDeals'  },
                 { text: dataItem.text, url: "javascript:void(0)" , bool: dataItem.bool }
         ]
         this.keySelected = sKey;

@@ -2732,7 +2732,6 @@ kendo-breadcrumb.breadCrumbs-design li:last-child .k-breadcrumb-link:focus {
 
 .cp-leftnav-treeview.k-treeview .k-in:before {
     font-family: 'intelicon';
-    speak: none;
     font-style: normal;
     font-weight: normal;
     font-variant: normal;
@@ -2747,4 +2746,17 @@ kendo-breadcrumb.breadCrumbs-design li:last-child .k-breadcrumb-link:focus {
 
 .cp-leftnav-treeview.k-treeview ul ul .k-in:before {
     content: '' !important;
+}
+
+kendo-grid.tableScope.flowTableAlignment table tr td {
+    font-size: 10px;
+    padding: 0 4px;
+}
+
+kendo-grid.tableScope.flowTableAlignment table tr {
+    height: 51px;
+}
+
+kendo-popup.k-animation-container>.k-popup kendo-grid-filter-menu-container kendo-grid-numeric-filter-menu kendo-dropdownlist {
+    margin: 5px 0 0;
 }
