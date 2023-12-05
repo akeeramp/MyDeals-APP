@@ -135,6 +135,10 @@ export class pricingTableComponent {
     }
 
     async loadModel(contractModel: contractIds, isRedirect: boolean = false) {
+        let isconfirm=await this.canDeactivate();
+        if(isconfirm){
+            return
+        }
         this.selectedTab = 0;
         const type=this.route.snapshot.paramMap.get('type');
         const cid=this.route.snapshot.paramMap.get('cid');
@@ -475,5 +479,14 @@ export class pricingTableComponent {
             this.isDirty=data;
         }
     }
- 
+
+    async canDeactivate() { 
+        let isconfirm=false;
+        if ((this.pteComp && this.pteComp.isDirty) || (!!this.deComp && this.deComp.dirty)) {
+            this.isDirty = true;
+            isconfirm= confirm("WARNING: You have unsaved changes. Press Cancel to go back and save these changes, or OK to lose these changes.");
+            return !isconfirm;
+        }
+       return isconfirm;
+    }
 }
