@@ -316,14 +316,15 @@ namespace Intel.MyDeals.DataLibrary
 
         }
 
-        public EndCustomerObject FetchEndCustomerMap(string endCustName, string endCustCountry)
+        public EndCustomerObject FetchEndCustomerMap(string endCustName, string endCustCountry, string primedCustomerL1Id)
         {
             EndCustomerObject retObj = new EndCustomerObject();
 
             var cmd = new Procs.dbo.PR_MYDL_PRIM_VAL()
             {
                 in_end_cust_nm = endCustName,
-                in_end_cust_ctry = endCustCountry
+                in_end_cust_ctry = endCustCountry,
+                in_prim_cust_id = primedCustomerL1Id
             };
 
             try
@@ -701,7 +702,7 @@ namespace Intel.MyDeals.DataLibrary
             }
             return ret;
         }
-        public DataTable InsertPrimedCustomerData(string endCustomerRetail, string endCustomerCountry, string primCustomerName, int primCustomerId, int primCustomerLvlId, string rplStatusCode, int empWWID)
+        public DataTable InsertPrimedCustomerData(string endCustomerRetail, string endCustomerCountry, string primCustomerName, int primCustomerId, int primCustomerLvlId, string rplStatusCode, string UnifiedEndCustomerLvl2Name, int empWWID)
         {
             try
             {
@@ -710,6 +711,7 @@ namespace Intel.MyDeals.DataLibrary
                     in_end_cust_retail = endCustomerRetail,
                     in_cust_ctry = endCustomerCountry,
                     in_cust_nm = primCustomerName,
+                    in_lvl2_nm = UnifiedEndCustomerLvl2Name,
                     in_cust_id = primCustomerId,
                     in_cust_lvl_id = primCustomerLvlId,
                     in_rpl_sts_cd = rplStatusCode,

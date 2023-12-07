@@ -22,7 +22,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         void sendMail(string primeCustomerName, string primeCustomerCountry, string primeCustID, int dealId);
 
-        EndCustomerObject FetchEndCustomerMap(string endCustName, string endCustCountry);
+        EndCustomerObject FetchEndCustomerMap(string endCustName, string endCustCountry, string primedCustomerL1Id);
 
         List<EndCustomer> ValidateEndCustomer(string endCustObj);
 
@@ -40,8 +40,7 @@ namespace Intel.MyDeals.IDataLibrary
 
         List<DealReconInvalidRecords> updateDealRecon(List<DealRecon> lstDealRecon);
 
-        DataTable InsertPrimedCustomerData(string endCustomerRetail, string endCustomerCountry, string primCustomerName, int primCustomerId, int primCustomerLvlId, string rplStatusCode, int empWWID);
-
+        DataTable InsertPrimedCustomerData(string endCustomerRetail, string endCustomerCountry, string primCustomerName, int primCustomerId, int primCustomerLvlId, string rplStatusCode, string UnifiedEndCustomerLvl2Name, int empWWID);
         DataTable ResubmissionDeals(string dealId, string endCustomerData);
 
     }

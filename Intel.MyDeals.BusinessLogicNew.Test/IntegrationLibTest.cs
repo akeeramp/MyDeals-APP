@@ -226,7 +226,7 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             TestCase(7365,"salesFrcId","lenovo","America")]
         public void UpdateUnifiedEndCustomer_callsVoidMethodsProperly(int CntrctId, string saleForceId, string primeCustomerName, string primeCustomerCountry)
         {
-            mockPrimeCustomerLib.Setup(x=>x.FetchEndCustomerMap(It.IsAny<string>(),It.IsAny<string>())).Returns(new EndCustomerObject());
+            mockPrimeCustomerLib.Setup(x=>x.FetchEndCustomerMap(It.IsAny<string>(),It.IsAny<string>(), It.IsAny<string>())).Returns(new EndCustomerObject());
             mockJmsDataLib.Setup(x=>x.SaveTendersDataToStage(It.Is<string>(r=> r == "TENDER_DEALS_RESPONSE"),It.IsAny<List<int>>(),It.IsAny<string>())).Returns(Guid.NewGuid());
             mockJmsDataLib.Setup(x => x.PublishBackToSfTenders(It.IsAny<string>())).Returns(true);
             mockJmsDataLib.Setup(x => x.UpdateTendersStage(It.IsAny<Guid>(), It.Is<string>(r=> r == "PO_Processing_Complete"), It.IsAny<List<int>>())).Verifiable();

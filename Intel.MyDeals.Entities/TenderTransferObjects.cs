@@ -250,6 +250,7 @@ namespace Intel.MyDeals.Entities
                 public string DealType { get; set; }
                 public string EndCustomer { get; set; }
                 public string EndCustomerCountry { get; set; }
+                public string UnifiedGlobalEndCustomer { get; set; }
                 public string UnifiedEndCustomer { get; set; }
                 public string UnifiedEndCustomerId { get; set; }
                 public string UnifiedCountryEndCustomerId { get; set; }
