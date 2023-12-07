@@ -642,15 +642,7 @@ export class ProductCorrectorComponent {
                     item.IS_SEL = true;
                 }
             });
-
-            if (!!this.ProductCorrectorData.DuplicateProducts[this.curRowId]) {
-                if (!!this.ProductCorrectorData.DuplicateProducts[this.curRowId][lookup]) {
-                    if (this.ProductCorrectorData.DuplicateProducts[this.curRowId][lookup].length == 1) {
-                        this.removeAndFilter(item.name);
-                        event.target.checked = false;
-                    }
-                }
-            }
+            
         }
         else {
             //Item deleted from the selected List
@@ -722,13 +714,6 @@ export class ProductCorrectorComponent {
         let allMatched = true;
         for (let m = 0; m < this.curRowProds.length; m++) {
             if (this.curRowProds[m].matchName.length == 0 && this.curRowProds[m].status === "Issue") allMatched = false;
-        }
-
-        if (allMatched && this.curRowIndx <= this.numIssueRows) {
-            if (!this.nextAvailRow()) {
-                // no more work to do
-                this.allDone = true;
-            }
         }
     }
     clkPrdUsrNm(dataItem) {
@@ -975,16 +960,6 @@ export class ProductCorrectorComponent {
         this.isExcludeProd = this.curRowProds.filter(x => x.exclude == "E").length > 0;
         this.selectRow(this.curRowIndx);
         this.closePrdRemoveDialogs();
-    }
-
-    nextAvailRow() {
-        for (var r = 0; r < this.issueRowKeys.length; r++) {
-            this.selectRow(r + 1);
-            if (!this.curRowDone) {
-                return true;
-            }
-        }
-        return false;
     }
 
     nextRow() {
