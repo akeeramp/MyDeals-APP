@@ -50,7 +50,7 @@
                             </ng-template>
                         </ng-template>
                     </kendo-grid-column>
-                    <kendo-grid-column field="PRD_CAT_NM" title="Vertical" width="100" [headerClass]="{'headerClass':true}">
+                    <kendo-grid-column field="PRD_CAT_NM" title="Vertical" width="130" [headerClass]="{'headerClass':true}">
                         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                             <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(column.field)">
                             </multicheck-filter>

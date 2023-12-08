@@ -23,3 +23,7 @@
 .remove-space-cancel {
     margin-left: -1.14em !important
 }
+
+.remove-focus-hightlight:focus {
+    box-shadow: none !important;
+}
