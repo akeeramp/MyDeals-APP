@@ -62,15 +62,68 @@
             </li>
             <li class="dropdown">
                 <a class="btn btn-primary mainMenu primary-one" id="dLabel" role="button" href="/page.html" data-toggle="dropdown" data-target="#" title="Administrative Tools"><i class="intelicon-settings-solid"></i><span class="hidden-xs"> Admin</span> <i class="intelicon-down"></i></a>
-
                 <ul class="dropdown-menu multi-level scaleTopAnim" role="menu" aria-labelledby="dropdownMenu">
+
                     <li class="dropdown-submenu" *ngIf="isDeveloper()">
-                        <a tabindex="-1">DSA</a>
+                        <a tabindex="-1">Dev Tools</a>
                         <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="Admin#/vistexTestApi">Test API</a></li>
-                            <li><a href="Admin#/vistexProfiseeApi">Profisee Migration </a></li>
-                            <li><a href="Admin#/vistex">Integration Logs</a></li>
-							<li><a href="Admin#/quoteLetterRegeneration">Quote Letter Regeneration</a></li>
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1">DSA</a>
+                                <ul class="dropdown-menu" style="width: 250px;">
+                                    <li><a href="Admin#/vistexTestApi">Test API</a></li>
+                                    <li><a href="Admin#/vistexProfiseeApi">Profisee Migration </a></li>
+                                    <li><a href="Admin#/vistex">Integration Logs</a></li>
+                                    <li><a href="Admin#/quoteLetterRegeneration">Quote Letter Regeneration</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1">Monitoring</a>
+                                <ul class="dropdown-menu" style="width: 250px;">
+                                    <li><a href="Admin#/asyncProcedureJobs">Async Proc Jobs</a></li>
+                                    <li><a href="Admin#/batchTiming">Batch Job Details</a></li>
+                                    <li><a href="Admin#/admincache">Cache Manager</a></li>
+                                    <li><a href="Admin#/constants">Constants</a></li>
+                                    <li><a href="Admin#/dbAuditTools">DB Audit Tools</a></li>
+                                    <li><a href="Admin#/opLog">Log Viewer</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1">Admin Tools</a>
+                                <ul class="dropdown-menu" style="width: 250px;">
+                                    <li>
+                                        <a href="Admin#/supportScript">Support Scripts</a>
+                                    </li>
+                                    <li>
+                                        <a href="Admin#/testTenders">Test Tenders Data</a>
+                                    </li>
+                                    <li>
+                                        <a href="Admin#/dealmassupdate">Deal Mass Update</a>
+                                    </li>
+                                    <li>
+                                        <a href="Admin#/validateVistexR3Checks">Validate Deals for Vistex Push</a>
+                                    </li>
+                                    <li>
+                                        <a href="Admin#/pushDealstoVistex">Push Deals to Vistex</a>
+                                    </li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1">Security Attributes</a>
+                                <ul class="dropdown-menu" style="width: 250px;">
+                                    <li><a href="Admin#/securityengine">Security Engine</a></li>
+                                    <li><a href="Admin#/dealTypes">Deal Types</a></li>
+                                </ul>
+                            </li>
+                            <li class="dropdown-submenu">
+                                <a tabindex="-1">WorkFlow</a>
+                                <ul class="dropdown-menu" style="width: 250px;">
+                                    <li><a href="Admin#/workFlow">WorkFlow</a></li>
+                                    <li><a href="Admin#/workflowStages">WorkFlow Stages</a></li>
+                                </ul>
+                            </li>
+                            <li>
+                                <a href="Admin#/dataFix">Data Fix</a>
+                            </li>
                         </ul>
                     </li>
 
@@ -117,21 +170,9 @@
                     <li class="dropdown-submenu" *ngIf="isDeveloper()">
                         <a tabindex="-1">Super User Tools</a>
                         <ul class="dropdown-menu" style="width: 250px;">
-                            <li *ngIf="isDeveloper()">
+                            <li>
                                 <a href="Admin#/sdsDealOverrides">SDS Deal Overrides</a>
                             </li>
-                        </ul>
-                    </li>
-
-                    <li class="dropdown-submenu" *ngIf="isDeveloper()">
-                        <a tabindex="-1">Monitoring</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="Admin#/asyncProcedureJobs">Async Proc Jobs</a></li>
-                            <li><a href="Admin#/batchTiming">Batch Job Details</a></li>
-                            <li><a href="Admin#/admincache">Cache Manager</a></li>
-                            <li><a href="Admin#/constants">Constants</a></li>
-                            <li><a href="Admin#/dbAuditTools">DB Audit Tools</a></li>
-                            <li><a href="Admin#/opLog">Log Viewer</a></li>
                         </ul>
                     </li>
 
@@ -205,44 +246,9 @@
                         <a href="Admin#/dataquality">Data Quality (DQ)</a>
                     </li>
 
-                    <li *ngIf="isDeveloper()">
-                        <a href="Admin#/dataFix">Data Fix</a>
-                    </li>
-
-                    <li class="dropdown-submenu" *ngIf="isDeveloper()">
-                        <a tabindex="-1">Security Attributes</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="Admin#/securityengine">Security Engine</a></li>
-                            <li><a href="Admin#/dealTypes">Deal Types</a></li>
-                        </ul>
-                    </li>
-        
-                    <li class="dropdown-submenu" *ngIf="isDeveloper()">
-                        <a tabindex="-1">WorkFlow</a>
-                        <ul class="dropdown-menu" style="width: 250px;">
-                            <li><a href="Admin#/workFlow">WorkFlow</a></li>
-                            <li><a href="Admin#/workflowStages">WorkFlow Stages</a></li>
-                        </ul>
-                    </li>
-
                     <li class="dropdown-submenu" *ngIf="isRealSA() || isDeveloper() || isCustomerAdmin()">
                         <a tabindex="-1">Admin Tools</a>
                         <ul class="dropdown-menu" style="width: 250px;">
-                            <li *ngIf="isDeveloper()">
-                                <a href="Admin#/supportScript">Support Scripts</a>
-                            </li>
-                            <li *ngIf="isDeveloper()">
-                                <a href="Admin#/testTenders">Test Tenders Data</a>
-                            </li>
-                            <li *ngIf="isDeveloper()">
-                                <a href="Admin#/dealmassupdate">Deal Mass Update</a>
-                            </li>
-                            <li *ngIf="isDeveloper()">
-                                <a href="Admin#/validateVistexR3Checks">Validate Deals for Vistex Push</a>
-                            </li>
-                            <li *ngIf="isDeveloper()">
-                                <a href="Admin#/pushDealstoVistex">Push Deals to Vistex</a>
-                            </li>
                             <li *ngIf="isBulkPriceAdmin() || isDeveloper()">
                                 <a href="Admin#/bulkPricingUpdate">Bulk Pricing Updates</a>
                             </li>
