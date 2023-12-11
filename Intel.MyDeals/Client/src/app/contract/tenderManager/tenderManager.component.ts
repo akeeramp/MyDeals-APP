@@ -1,4 +1,7 @@
-﻿import { Component, ViewChild } from "@angular/core";
+﻿import { AfterViewInit, Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
+import { each } from 'underscore';
+import { ActivatedRoute, Router } from "@angular/router";
+
 import { logger } from "../../shared/logger/logger";
 import { pricingTableservice } from "../pricingTable/pricingTable.service";
 import { PricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
@@ -6,25 +9,28 @@ import { TemplatesService } from "../../shared/services/templates.service";
 import { ContractDetailsService } from "../contractDetails/contractDetails.service";
 import { dealEditorComponent } from "../dealEditor/dealEditor.component"
 import { PricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
-import { each } from 'underscore';
 import { performanceBarsComponent } from "../performanceBars/performanceBar.component";
-import { ActivatedRoute, Router } from "@angular/router";
-import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
-import { Observable } from "rxjs";
+
 @Component({
     selector: "tender-manager",
     templateUrl: "Client/src/app/contract/tenderManager/tenderManager.component.html",
     styleUrls: ["Client/src/app/contract/tenderManager/tenderManager.component.css"]
 })
-export class tenderManagerComponent  {
+export class TenderManagerComponent implements OnInit, OnDestroy, AfterViewInit {
+
     @ViewChild(PricingTableEditorComponent) private pteComp: PricingTableEditorComponent;
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
     @ViewChild(performanceBarsComponent) public perfComp: performanceBarsComponent;
     isDeveloper: any;
     isTester: any;
     drawChart: boolean;
-    constructor(private pteService: PricingTableEditorService, private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private contractDetailsSvc: ContractDetailsService,
-        private templatesSvc: TemplatesService, private route: ActivatedRoute, private router: Router) {
+    constructor(private pteService: PricingTableEditorService,
+                private loggerSvc: logger,
+                private pricingTableSvc: pricingTableservice,
+                private contractDetailsSvc: ContractDetailsService,
+                private templatesSvc: TemplatesService,
+                private route: ActivatedRoute,
+                private router: Router) {
         $('body').addClass('added-tender');
     }
     public c_Id: any = '';
@@ -54,12 +60,18 @@ export class tenderManagerComponent  {
     private searchText: any = "";
     private ispricingTableDPASSED_VALIDATION='valid_Complete';
     isredirect = false;
-    isButtonEnabled = (<any>window).usrRole === 'RA' || (<any>window).usrRole === 'Legal' || (<any>window).usrRole === 'CBA' || (<any>window).usrRole === 'DA' || ((<any>window).isBulkPriceAdmin && (<any>window).usrRole === 'SA') || (<any>window).isCustomerAdmin ? false : true;
+    isButtonEnabled = (<any>window).usrRole === 'RA' ||
+                      (<any>window).usrRole === 'Legal' ||
+                      (<any>window).usrRole === 'CBA' ||
+                      (<any>window).usrRole === 'DA' ||
+                      ((<any>window).isBulkPriceAdmin && (<any>window).usrRole === 'SA') ||
+                      ((<any>window).isCustomerAdmin ? false : true);
 
     async loadAllContractDetails(): Promise<void> {
         let response = await this.pricingTableSvc.readContract(this.c_Id).toPromise().catch((err) => {
             this.loggerSvc.error('loadAllContractDetails::readContract:: service', err);
-        })
+        });
+
         if(response && Array.isArray(response) && response.length>0){
             this.contractData = response[0];
             if (this.contractData.TENDER_PUBLISHED == '1') {
@@ -76,8 +88,10 @@ export class tenderManagerComponent  {
                     document.location.href = "AdvancedSearch#/tenderDashboard?DealType=" + dealType + "&deal=" + this.searchText + "&search=true";
                 }
             }
-            if (response[0].IS_TENDER && response[0].IS_TENDER == 0) window.location.href = "Contract#/contractmanager/CNTRCT/" + this.c_Id + '/0/0/0';
-            else if(this.contractData && this.contractData.PRC_ST && this.contractData.PRC_ST.length>0){
+
+            if (response[0].IS_TENDER && response[0].IS_TENDER == 0) {
+                window.location.href = "Contract#/contractmanager/CNTRCT/" + this.c_Id + '/0/0/0';
+            } else if(this.contractData && this.contractData.PRC_ST && this.contractData.PRC_ST.length>0) {
                 this.ps_Id = this.contractData.PRC_ST[0].DC_ID;
                 this.pt_Id = this.contractData.PRC_ST[0].PRC_TBL[0].DC_ID;
                 let result = await this.templatesSvc.readTemplates().toPromise().catch((err) => {
@@ -100,8 +114,7 @@ export class tenderManagerComponent  {
                     const urlTree = this.router.createUrlTree(['/tendermanager', cid]);
                     //it will update the url on page reload persist the selected state
                     this.router.navigateByUrl(urlTree + '?loadtype=DE');
-                }
-                else {
+                } else {
                     if(this.isredirect==false){
                         this.selectedTab = 'PTR';
                         this.currentTAB = 'PTR';
@@ -113,6 +126,7 @@ export class tenderManagerComponent  {
                         }
                     }
                 }
+
                 if(!!this.route.snapshot.queryParams.loadtype){
                     //it will update the url on page reload persist the selected state
                     if (this.route.snapshot.queryParams.loadtype == 'DE') {
@@ -132,12 +146,10 @@ export class tenderManagerComponent  {
                         }
                     }
                 }
-            }
-            else{
+            } else {
                 this.loggerSvc.error("Something went wrong. Please contact Admin","Error");
             }
-        }
-        else{
+        } else {
             this.loggerSvc.error("No result found","Error");
         }
         this.isLoading = false;
@@ -151,17 +163,14 @@ export class tenderManagerComponent  {
         this.drawChart = false;
         if (data.action == 'setInitialDetails') {
             this.perfComp.setInitialDetails(data.title, data.label, data.initial);
-        }
-        else if (data.action == 'setFinalDetails') {
+        } else if (data.action == 'setFinalDetails') {
             this.perfComp.setFinalDetails(data.title, data.label, data.final);
-        }
-        else if (data.action == 'mark') {
+        } else if (data.action == 'mark') {
             this.perfComp.mark(data.title);
-        }
-        else {
+        } else {
             this.perfComp.generatechart(true)
             this.drawChart = true;
-        };
+        }
     }
 
     addPerfTimes(perfData) {
@@ -207,6 +216,7 @@ export class tenderManagerComponent  {
         if (data === undefined || data === null || data.PRC_TBL_ROW === undefined || data.PRC_TBL_ROW.length === 0) return false;
         return true
     }
+
     async redirectingFn(tab) {
         if (tab != '' && tab != 'Delete') {
             //Redirects to selected tab
@@ -231,8 +241,7 @@ export class tenderManagerComponent  {
             if (this.pt_passed_validation) {
                 await this.redirectingFn('DE')
             }
-        }
-        else {
+        } else {
             //Refresh the data
             this.pricingTableData = await this.pteService.readPricingTable(this.pt_Id).toPromise().catch((err) => {
                 this.loggerSvc.error('PricingTableEditorComponent::readPricingTable::readTemplates:: service', err);
@@ -257,6 +266,16 @@ export class tenderManagerComponent  {
         this.router.navigateByUrl(urlTree + '?loadtype='+this.currentTAB);
     }
 
+    private isTabSwitchLockActive = false;  // Prevents multiple tab selection
+    async triggerTenderWidgetPathManager(_actionName, selectedTab) {
+        if (!this.isTabSwitchLockActive) {
+            this.isTabSwitchLockActive = true;
+
+            await this.tenderWidgetPathManager(_actionName, selectedTab);
+
+            this.isTabSwitchLockActive = false;
+        }
+    }
     async tenderWidgetPathManager(_actionName, selectedTab) {
         if (this.currentTAB == 'PTR' && selectedTab != 'PTR') {
             //checking for dirty items inside TTE
@@ -264,8 +283,9 @@ export class tenderManagerComponent  {
         }
 
         if (selectedTab == 'PTR') {
-            if (this.currentTAB == 'PTR') { }//if selected tab and current tab are same no change
-            else if (this.currentTAB == 'DE') {
+            if (this.currentTAB == 'PTR') {
+                //if selected tab and current tab are same no change
+            } else if (this.currentTAB == 'DE') {
                 if (this.deComp.dirty) {
                     //if we are editing in DE then we will save data and proceed to PTE
                     await this.deComp.SaveDeal();
@@ -278,9 +298,7 @@ export class tenderManagerComponent  {
             } else if (this.currentTAB == 'PD') {// from PD simple redirection to PTE
                 await this.redirectingFn(selectedTab);
             }
-        }
-
-        else if (selectedTab == 'DE') {
+        } else if (selectedTab == 'DE') {
             if (this.currentTAB == 'PTR') {
                 if (this.pteComp.dirty || this.dirtyItems.length > 0) {//if we are editing in TTE then we will save data and proceed to DE
                     await this.pteComp.validatePricingTableProducts();
@@ -289,7 +307,8 @@ export class tenderManagerComponent  {
                         await this.redirectingFn(selectedTab);
                     }
                 }
-            } else if (this.currentTAB == 'DE') {//if selected tab and current tab are same no change
+            } else if (this.currentTAB == 'DE') {
+                //if selected tab and current tab are same no change
             } else if (this.currentTAB == 'MC') {// from MC simple redirection to DE
                 await this.redirectingFn(selectedTab);
             } else if (this.currentTAB == 'PD') {// from PD simple redirection to DE
@@ -297,9 +316,7 @@ export class tenderManagerComponent  {
             } else {
                 this.loggerSvc.error('Validate all your product(s) to open Deal Editor.', 'error');
             }
-        }
-
-        else if (selectedTab == 'MC') {
+        } else if (selectedTab == 'MC') {
             if (this.currentTAB == 'PTR') {
                 if (this.pteComp.dirty || this.dirtyItems.length > 0) {//if we are editing in TTE or there is error in TTE then we will save data and proceed to DE
                     await this.pteComp.validatePricingTableProducts();
@@ -328,15 +345,14 @@ export class tenderManagerComponent  {
                         await this.redirectingFn(selectedTab);//if DE has no change and pass validation is complete redirect to MC
                     }
                 }
-            } else if (this.currentTAB == 'MC') {//no change
+            } else if (this.currentTAB == 'MC') {
+                //no change
             } else if (this.currentTAB == 'PD') {
                 await this.redirectingFn(selectedTab);// redirects to MC
-            }else{
+            } else {
                 this.loggerSvc.error('Validate all your product(s) to open Meet Comp.', 'error');
             }
-        }
-
-        else if (selectedTab == 'PD') {
+        } else if (selectedTab == 'PD') {
             if (this.currentTAB == 'PTR') {
                 if (this.pteComp.dirty || this.dirtyItems.length > 0) {
                     await this.pteComp.validatePricingTableProducts();
@@ -354,7 +370,7 @@ export class tenderManagerComponent  {
                                 //clicked on PD when compMissingFlag is true
                                 this.gotoPD = 'PD';
                                 await this.redirectingFn('MC');// if pass validation is complete & meetcomp data is available & meet comp is not run redirects to MC
-                            }else {
+                            } else {
                                 if (this.isValidateMC()) {
                                     await this.redirectingFn(selectedTab);  // if pass validation is complete & meetcomp data is not available or meet comp run redirects to PD
                                 }
@@ -376,8 +392,7 @@ export class tenderManagerComponent  {
                             }
                         }
                     }
-
-                }else {
+                } else {
                     if (this.isValidateDE()) {
                         if (!this.compMissingFlag) {
                             //clicked on PD when compMissingFlag is true
@@ -394,11 +409,13 @@ export class tenderManagerComponent  {
                 if (this.compMissingFlag) {
                     await this.redirectingFn(selectedTab);//if meetcomp is run atleast once redirects to PD
                 }
-            } else if (this.currentTAB == 'PD') {}//no change
-            else {
+            } else if (this.currentTAB == 'PD') {
+                //no change
+            } else {
                 this.loggerSvc.error("Meet Comp is not passed. You can not Publish this deal yet.", 'error');
             }
         }
+
         //it will update the url on page reload persist the selected state
         const cid = this.route.snapshot.paramMap.get('cid');
         const urlTree = this.router.createUrlTree(['/tendermanager', cid]);
@@ -421,14 +438,13 @@ export class tenderManagerComponent  {
         if (this.pricingTableData !== undefined && this.pricingTableData.PRC_TBL_ROW !== undefined && this.pricingTableData.PRC_TBL_ROW.length > 0) {
             this.dirtyItems = this.pricingTableData.PRC_TBL_ROW.filter(x => x.warningMessages.length > 0);
             if (this.dirtyItems.length > 0 || (this.pteComp && (this.pteComp.dirty || this.pteComp.dirtyItems))) isPtrDirty = true;
-        }
-        else {
+        } else {
             isPtrDirty = true;
         }
+
         if (!isPtrDirty && !rootScopeDirty) {
             return true;
-        }
-        else {
+        } else {
             return false;
         }
     }
@@ -465,15 +481,13 @@ export class tenderManagerComponent  {
             if (!!this.route.snapshot.queryParams.searchTxt) {//If Global search happens for tender deal ID
                 this.c_Id = cid;// Number(url[url.length - 1].substring(0, url[url.length - 1].indexOf('?')));
                 this.searchText = this.route.snapshot.queryParams.searchTxt;
-            }
-            else {
+            } else {
                 if (!isNaN(cid) && cid>0)
                     this.c_Id = cid;
                 this.searchText = "";
             }
             this.loadAllContractDetails();
-        }
-        catch (ex) {
+        } catch (ex) {
             this.loggerSvc.error('Something went wrong', 'Error');
             console.error('TenderManager::ngOnInit::',ex);
         }
@@ -499,5 +513,5 @@ export class tenderManagerComponent  {
         //this functionality will disable anything of .net ifloading to stop when dashboard landing to this page
         document.getElementById('mainBody')?.setAttribute('style', 'display:none');
     }
-     
+
 }

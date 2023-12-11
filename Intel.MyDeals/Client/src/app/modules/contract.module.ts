@@ -4,7 +4,7 @@ import { LnavComponent } from "../contract/lnav/lnav.component";
 import { pricingTableComponent } from "../contract/pricingTable/pricingTable.component";
 import { PricingTableEditorComponent } from "../contract/pricingTableEditor/pricingTableEditor.component";
 import { TenderFolioComponent } from "../contract/tenderFolio/tenderFolio.component"
-import { tenderManagerComponent } from "../contract/tenderManager/tenderManager.component"
+import { TenderManagerComponent } from "../contract/tenderManager/tenderManager.component"
 import { publishTenderComponent } from "../contract/publishTender/publishTender.component"
 import { ProductSelectorComponent } from "../contract/ptModals/productSelector/productselector.component";
 import { GeoSelectorComponent } from "../contract/ptModals/geo/geo.component";
@@ -54,7 +54,7 @@ export let contractComponents = [
     pricingTableComponent,
     PricingTableEditorComponent,
     TenderFolioComponent,
-    tenderManagerComponent,
+    TenderManagerComponent,
     publishTenderComponent,
     ProductSelectorComponent,
     GeoSelectorComponent,

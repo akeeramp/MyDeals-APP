@@ -43,7 +43,7 @@ import { goToComponent } from "./contract/goTo.component";
 import { TenderDashboardComponent } from "./advanceSearch/tenderDashboard/tenderDashboard.component";
 import { ContractDetailsComponent } from "./contract/contractDetails/contractDetails.component";
 import { pricingTableComponent } from "./contract/pricingTable/pricingTable.component";
-import { tenderManagerComponent } from "./contract/tenderManager/tenderManager.component";
+import { TenderManagerComponent } from "./contract/tenderManager/tenderManager.component";
 import { DashboardComponent } from "./dashboard/dashboard/dashboard.component";
 import { ReportingComponent } from "./reporting/reporting.component";
 import { globalRouteComponent } from "./shared/globalroute/globalroute.component";
@@ -120,7 +120,7 @@ export const routes: Routes = [
     { path: 'manager/:cid', component: globalRouteComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, },
     { path: 'manager/:type/:cid/:PSID/:PTID/:DealID', component: globalRouteComponent, resolve: { security: SecurityResolver }, data: { title: 'Admin', BaseHref: 'Admin' } },
     { path: 'contractmanager/:type/:cid/:PSID/:PTID/:DealID', component: pricingTableComponent, data: { title: 'Contract', BaseHref: 'Contract' }, resolve: { security: SecurityResolver } },
-    { path: 'tendermanager/:cid', component: tenderManagerComponent, data: { title: 'Dashboard', BaseHref: 'Contract' }, resolve: { security: SecurityResolver } },
+    { path: 'tendermanager/:cid', component: TenderManagerComponent, data: { title: 'Dashboard', BaseHref: 'Contract' }, resolve: { security: SecurityResolver } },
     { path: 'MyDealsSupport', component: adminMydealsSupportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'vistexProfiseeApi', component: adminVistexProfiseeApiComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'asyncProcedureJobs', component: AsyncProcedureJobsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },

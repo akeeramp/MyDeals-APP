@@ -1,9 +1,8 @@
 ﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="tenderManagerParent">
-    <loading-panel-angular [show]="isSpinnerLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription">
-    </loading-panel-angular>
-    <div   class="pricing-strategy-status-bar fl" style="position: absolute; margin-left: -5px; left: 0px;">
-        <div  [ngClass]="{'valid_Complete': ispricingTableDPASSED_VALIDATION=='valid_Complete', 'valid_Dirty':ispricingTableDPASSED_VALIDATION=='valid_Dirty'}" *ngIf="contractData!= undefined" style="padding: 5px 8px;float:left;">
+    <loading-panel-angular [show]="isSpinnerLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>
+    <div class="pricing-strategy-status-bar fl" style="position: absolute; margin-left: -5px; left: 0px;">
+        <div [ngClass]="{'valid_Complete': ispricingTableDPASSED_VALIDATION=='valid_Complete', 'valid_Dirty':ispricingTableDPASSED_VALIDATION=='valid_Dirty'}" *ngIf="contractData!= undefined" style="padding: 5px 8px;float:left;">
             <span class="contractHeaderId">#{{ contractData.DC_ID }} </span>
             <span>{{contractData.Customer.CUST_NM}}: </span>
             <span>{{contractData.TITLE}}</span>	&nbsp;&nbsp;
@@ -13,8 +12,10 @@
         </button>
     </div>
     <div class="pricing-strategy-status-bar fr" style="padding-right: 0px;" >
-        <div [ngClass]="{'valid_Complete': ispricingTableDPASSED_VALIDATION=='valid_Complete', 'valid_Dirty':ispricingTableDPASSED_VALIDATION=='valid_Dirty'}" style="padding: 5px 8px;"><span style="opacity: 0.5;">TENDER SHEET:</span>
-            <span *ngIf="pricingTableData != undefined"> {{ pricingTableData.PRC_ST[0].WF_STG_CD }} </span></div>
+        <div [ngClass]="{'valid_Complete': ispricingTableDPASSED_VALIDATION=='valid_Complete', 'valid_Dirty':ispricingTableDPASSED_VALIDATION=='valid_Dirty'}" style="padding: 5px 8px;">
+            <span style="opacity: 0.5;">TENDER SHEET:</span>
+            <span *ngIf="pricingTableData != undefined"> {{ pricingTableData.PRC_ST[0].WF_STG_CD }} </span>
+        </div>
     </div>
     <div *ngIf="pricingTableData == undefined">
         <div class="container-fluid editor101">
@@ -77,15 +78,14 @@
             <div class="col-md-6"><img src="/images/instructions.png" alt="Customer Contract Anatony Image" style="margin-top: 10px;height: 100%; width: 100%" /></div>
         </div>
     </div>
- 
-    <div class="row wizard" [ngStyle]="{'width': getWidth(isDeveloper || isTester), 'padding-top': getPadding(isDeveloper || isTester) }" *ngIf="pricingTableData != undefined">
+    <div class="row wizard" [ngStyle]="{'width': getWidth(isDeveloper || isTester), 'padding-top': getPadding(isDeveloper || isTester)}" *ngIf="pricingTableData != undefined">
         <div class="col-xs-3 col-md-3">
             <div class="wizard-panel first" [ngClass]="{'complete': isValidateTTE() == true }">
-                <a id="tenderWidPTR" (click)="tenderWidgetPathManager('backToPricingTable', 'PTR')">
+                <a id="tenderWidPTR" (click)="triggerTenderWidgetPathManager('backToPricingTable', 'PTR')" [ngClass]="{'loadingLockDisable': isTabSwitchLockActive}">
                     <span class="badge wizard-step" [ngStyle]="selectedTab == 'PTR'?{'background-color': '#0071c5', 'color':'#FBD737'} : {'background-color': '#00AEEF', 'color': '#ffffff'}">1</span>
                 </a>
             </div>
-            <a (click)="tenderWidgetPathManager('backToPricingTable', 'PTR')">
+            <a (click)="triggerTenderWidgetPathManager('backToPricingTable', 'PTR')" [ngClass]="{'loadingLockDisable': isTabSwitchLockActive}">
                 <div class="wizard-step-text step-into">
                     <h4><i [hidden]="currentTAB != 'PTR'" class="intelicon-arrow-forward-right "></i> &nbsp;Tender Table Editor</h4>
                     <p>Adhoc Tender Table Editor Manager</p>
@@ -94,9 +94,9 @@
         </div>
         <div class="col-xs-3 col-md-3">
             <div class="wizard-panel second" [ngClass]="{'complete': isValidateDE() == true}">
-                <span id="tenderWidDE" class="badge wizard-step" [ngStyle]="selectedTab == 'DE'?{'background-color': '#0071c5', 'color':'#FBD737'} : {}" (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': !pt_passed_validation}">2</span>
+                <span id="tenderWidDE" class="badge wizard-step" [ngStyle]="selectedTab == 'DE'?{'background-color': '#0071c5', 'color':'#FBD737'} : {}" (click)="triggerTenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': !pt_passed_validation, 'loadingLockDisable': isTabSwitchLockActive}">2</span>
             </div>
-            <a (click)="tenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': !pt_passed_validation}">
+            <a (click)="triggerTenderWidgetPathManager('publishWipDealsFromTab', 'DE')" [ngClass]="{'isDisabledDE': !pt_passed_validation, 'loadingLockDisable': isTabSwitchLockActive}">
                 <div class="wizard-step-text step-into">
                     <h4><i [hidden]="currentTAB != 'DE'" class="intelicon-arrow-forward-right "></i> &nbsp; Deal Editor</h4>
                     <p>Adhoc Tender Deal Editor Manager</p>
@@ -105,9 +105,9 @@
         </div>
         <div class="col-xs-3 col-md-3">
             <div class="wizard-panel third" [ngClass]="{'complete': isValidateMC() == true}">
-                <span id="tenderWidMC" class="badge wizard-step" (click)="tenderWidgetPathManager('', 'MC')" [ngStyle]="selectedTab == 'MC'?{'background-color': '#0071c5', 'color':'#FBD737'} : {}" [ngClass]="{'isDisabledDE': !pt_passed_validation}">3</span>
+                <span id="tenderWidMC" class="badge wizard-step" (click)="triggerTenderWidgetPathManager('', 'MC')" [ngStyle]="selectedTab == 'MC'?{'background-color': '#0071c5', 'color':'#FBD737'} : {}" [ngClass]="{'isDisabledDE': !pt_passed_validation, 'loadingLockDisable': isTabSwitchLockActive}">3</span>
             </div>
-            <a (click)="tenderWidgetPathManager('', 'MC')" [ngClass]="{'isDisabledDE':!pt_passed_validation}">
+            <a (click)="triggerTenderWidgetPathManager('', 'MC')" [ngClass]="{'isDisabledDE':!pt_passed_validation, 'loadingLockDisable': isTabSwitchLockActive}">
                 <div class="wizard-step-text step-into">
                     <h4><i [hidden]="currentTAB != 'MC'" class="intelicon-arrow-forward-right "></i> &nbsp; Meet Comp</h4>
                     <p>Tender Meet Comp Manager</p>
@@ -116,10 +116,10 @@
         </div>
         <div class="col-xs-3 col-md-3">
             <div class="wizard-panel last publishToolTip" [ngClass]="{'complete':selectedTab == 'PD'}">
-                <span id="tenderWidPD" class="badge wizard-step" [ngStyle]="selectedTab == 'PD'?{'background-color': '#0071c5', 'color':'#FBD737'} : {}" (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabledDE': isValidateMC() == false}">4</span>
+                <span id="tenderWidPD" class="badge wizard-step" [ngStyle]="selectedTab == 'PD'?{'background-color': '#0071c5', 'color':'#FBD737'} : {}" (click)="triggerTenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabledDE': isValidateMC() == false, 'loadingLockDisable': isTabSwitchLockActive}">4</span>
                 <span kendoTooltip class="left helpset opElementHelpIcon intelicon-information-outlined" style="margin-left: 4px;" title="Publishing will separate the deals entered in the table below so that they can be individually approved." position="left" [tooltipWidth]="300"></span>
             </div>
-            <a (click)="tenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabledDE':isValidateMC() == false}">
+            <a (click)="triggerTenderWidgetPathManager('', 'PD')" [ngClass]="{'isDisabledDE':isValidateMC() == false, 'loadingLockDisable': isTabSwitchLockActive}">
                 <div class="wizard-step-text step-into">
                     <h4><i [hidden]="currentTAB != 'PD'" class="intelicon-arrow-forward-right"></i> &nbsp; Publish Adhoc Deal</h4>
                     <p>Converting into individual deals.</p>
@@ -131,16 +131,13 @@
         <performance-bars [type]="perfModel"></performance-bars>
     </div>
     <div *ngIf="selectedTab == 'PTR' && !isLoading  && pricingTableData != undefined" class="col-md-12 parent-one loaderPTE tenderPTEsection">
-        <pricing-table-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate" (warn)="isWarning" (tmDirec)="redirectingFn($event)">
-        </pricing-table-editor>
+        <pricing-table-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [contractData]="contractData" [UItemplate]="UItemplate" (warn)="isWarning" (tmDirec)="redirectingFn($event)"></pricing-table-editor>
     </div>
     <div *ngIf="selectedTab == 'DE'" class="col-md-12 loaderDE loading-dealer-editors" style="border: 2px solid #bcbcbc;">
-        <deal-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [in_Search_Text]="searchText" [contractData]="contractData" [UItemplate]="UItemplate" (perfComp)="perfCompFn($event)" (contractDataRefresh)="contractDataRefresh($event)" (addPerfTimes)="addPerfTimes($event)" (tmDirec)="redirectingFn($event)">
-        </deal-editor>
+        <deal-editor [in_Cid]="c_Id" [in_Ps_Id]="ps_Id" [in_Pt_Id]="pt_Id" [in_Search_Text]="searchText" [contractData]="contractData" [UItemplate]="UItemplate" (perfComp)="perfCompFn($event)" (contractDataRefresh)="contractDataRefresh($event)" (addPerfTimes)="addPerfTimes($event)" (tmDirec)="redirectingFn($event)"></deal-editor>
     </div>
     <div *ngIf="selectedTab == 'MC'" class="col-md-12 loaderMeet meet-comp-tenders" style="border: 2px solid #bcbcbc;">
-        <meet-comp-contract class="tender-meet-comp-width" [objSid]="contractData.DC_ID" [isTender]="contractData.IS_TENDER" [isAdhoc]="'1'" [objTypeId]="'1'" [cId]="c_Id" [pageNm]="'WIDGET'" (tmDirec)="redirectingFn($event)" (contractRefresh)="refreshContract($event)">
-        </meet-comp-contract>
+        <meet-comp-contract class="tender-meet-comp-width" [objSid]="contractData.DC_ID" [isTender]="contractData.IS_TENDER" [isAdhoc]="'1'" [objTypeId]="'1'" [cId]="c_Id" [pageNm]="'WIDGET'" (tmDirec)="redirectingFn($event)" (contractRefresh)="refreshContract($event)"></meet-comp-contract>
     </div>
     <div *ngIf="selectedTab == 'PD'" class="col-md-12 loadpublish">
         <publish-tender [isPublishEnabled]="isButtonEnabled" [pricingTableData]="pricingTableData"></publish-tender>
