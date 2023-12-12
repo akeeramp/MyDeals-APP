@@ -23,7 +23,7 @@
             </ng-template>
 
             <ng-template ngFor [ngForOf]="gridOptions.columns" let-column>
-                <kendo-grid-column [headerClass]="{'headerClass': true}" field="{{ column.field }}" title="{{ column.title }}" width="{{column.width}}">
+                <kendo-grid-column [headerClass]="{'headerClass': true}" field="{{ column.field }}" title="{{ column.title }}" [width]="column.title == 'Date Range' ? '220px': column.title == 'Deal Product Name' ? '185px' : 'auto'">
                     <ng-template kendoGridCellTemplate let-isNew="isNew" let-dataItem="dataItem">
                         <div *ngIf="column.field == 'CAP_PRC_COND'">
                             <input type="checkbox" style="margin-top:2px;" disabled [checked]="dataItem.CAP_PRC_COND == 'YCP1'" />
