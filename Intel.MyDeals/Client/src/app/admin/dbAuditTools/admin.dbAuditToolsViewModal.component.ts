@@ -34,7 +34,7 @@ export class DbAuditToolsViewModalComponent {
     ngOnInit() {
         let b = 1;
         this.dbAuditToolsSVC.GetObjText(this.jsonData).subscribe((result: Array<any>) => {
-            let ReturnData = JSON.parse(result.toString()).DATA.sort((a, b) => (a.LineNbr - b.LineNbr));
+            let ReturnData = (JSON.parse(result.toString()).DATA as any[]).sort((a, b) => (a.LineNbr - b.LineNbr));
             let tempTextareaData = "";
             for (let LineNbr in ReturnData) {
                 tempTextareaData = tempTextareaData.concat(ReturnData[LineNbr].LineText);

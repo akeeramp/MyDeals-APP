@@ -401,7 +401,7 @@ namespace Intel.MyDeals.Controllers.API
                 List<int> deadIdList = new List<int>() { 0 };
 
                 // Insert into the stage table here - one update item (0 id as dummy item)
-                _jmsDataLib.SaveTendersDataToStage("TENDER_DEALS_RESPONSE", deadIdList, JsonConvert.SerializeObject(jsonData, Formatting.None));
+                _jmsDataLib.SaveTendersDataToStage("IQR_CONSUMPTION_DATA", deadIdList, JsonConvert.SerializeObject(jsonData, Formatting.None));
             }
         }
 
@@ -458,7 +458,7 @@ namespace Intel.MyDeals.Controllers.API
                 if (recordCount > 0)
                 {
                     // Insert into the stage table here - one update item (0 id as dummy item)
-                    _jmsDataLib.SaveTendersDataToStage("TENDER_DEALS_RESPONSE", deadIdList, JsonConvert.SerializeObject(jsonData, Formatting.None));
+                    _jmsDataLib.SaveTendersDataToStage("IQR_CONSUMPTION_DATA", deadIdList, JsonConvert.SerializeObject(jsonData, Formatting.None));
                     returnData = "There are " + recordCount.ToString() + " records for attribute " + atrbCd + " staged for send to IQR.";
                 }
                 else

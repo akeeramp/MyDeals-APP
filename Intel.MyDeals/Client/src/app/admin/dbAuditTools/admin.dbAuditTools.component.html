@@ -78,7 +78,7 @@
                 <div>
                     <font style="font-weight:bold">Returned results: </font>
                     <kendo-grid [data]="gridReturns" class="gridCompNotification kAlignHeaders" [sort]="sort"
-                                [sortable]="true" (sortChange)="dataStateChangeReturns($event)" [resizable]="true">
+                                [sortable]="true" [resizable]="true">
                         <kendo-grid-column *ngFor="let item of ColumnHeader" field="{{ item }}"
                                            title="{{ item }}" [headerClass]="{'headerClass':true}">
                             <ng-template kendoGridCellTemplate let-dataItem>
