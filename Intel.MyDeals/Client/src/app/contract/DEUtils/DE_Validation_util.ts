@@ -230,24 +230,25 @@ export class DE_Validation_Util {
         for (var i = 0; i < data.length; i++) {
             if (data[i]._dirty) {
                 this.dataConversion(data, templates);
-                if (data[i]["END_CUSTOMER_RETAIL"] != undefined && data[i]["END_CUSTOMER_RETAIL"] != null) {// && isTenderFlag == "1"
-                    if (data[i]["END_CUSTOMER_RETAIL"].length > 60) {
-                        if (data[i]._behaviors !== null && data[i]._behaviors !== undefined) {
-                            if (!data[i]._behaviors.isError) data[i]._behaviors.isError = {};
-                            if (!data[i]._behaviors.validMsg) data[i]._behaviors.validMsg = {};
-                            data[i]._behaviors.isError['END_CUSTOMER_RETAIL'] = true;
-                            data[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'] = "End Customer text can not be longer than 60 Characters";
-                            isShowStopperError = true;
-                        }
-                    }
-                    else {
-                        if (data[i]._behaviors.isError['END_CUSTOMER_RETAIL']) {
-                            delete data[i]._behaviors.isError['END_CUSTOMER_RETAIL'];
-                            delete data[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'];
-                        }
-                        data[i]["END_CUSTOMER_RETAIL"] = data[i]["END_CUSTOMER_RETAIL"].toString();
-                    }
-                }
+                //Not sure what outer part of this is doing, so leaving it and only removing the specific rule
+                //if (data[i]["END_CUSTOMER_RETAIL"] != undefined && data[i]["END_CUSTOMER_RETAIL"] != null) {// && isTenderFlag == "1"
+                //    if (data[i]["END_CUSTOMER_RETAIL"].length > 60) {
+                //        if (data[i]._behaviors !== null && data[i]._behaviors !== undefined) {
+                //            if (!data[i]._behaviors.isError) data[i]._behaviors.isError = {};
+                //            if (!data[i]._behaviors.validMsg) data[i]._behaviors.validMsg = {};
+                //            data[i]._behaviors.isError['END_CUSTOMER_RETAIL'] = true;
+                //            data[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'] = "End Customer text can not be longer than 60 Characters";
+                //            isShowStopperError = true;
+                //        }
+                //    }
+                //    else {
+                //        if (data[i]._behaviors.isError['END_CUSTOMER_RETAIL']) {
+                //            delete data[i]._behaviors.isError['END_CUSTOMER_RETAIL'];
+                //            delete data[i]._behaviors.validMsg['END_CUSTOMER_RETAIL'];
+                //        }
+                //        data[i]["END_CUSTOMER_RETAIL"] = data[i]["END_CUSTOMER_RETAIL"].toString();
+                //    }
+                //}
             }
         }
         return isShowStopperError;

@@ -1284,6 +1284,25 @@ namespace Intel.MyDeals.BusinessRules
             }
         }
 
+        public static void CheckEndCustLengths(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            IOpDataElement deEndCustomerRetail = r.Dc.GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL);
+            string txtEndCustomerRetail = r.Dc.GetDataElementValue(AttributeCodes.END_CUSTOMER_RETAIL);
+            var endCustObj = r.Dc.GetDataElementValue(AttributeCodes.END_CUST_OBJ);
+            if (endCustObj == "" || txtEndCustomerRetail == "") return;
+
+            List<EndCustomer> endCustJsonObj = JsonConvert.DeserializeObject<List<EndCustomer>>(endCustObj);
+            string[] EndCustomerElements = endCustJsonObj.Where(c => c.END_CUSTOMER_RETAIL.Length > 60).Select(c => c.END_CUSTOMER_RETAIL).ToArray();
+
+            if (EndCustomerElements.Length > 0)
+            {
+                deEndCustomerRetail.AddMessage("End Customers must be 60 characters or less.  Please fix [" + String.Join("],[", EndCustomerElements) + "]");
+            }
+        }
+
         public static void DisableForVistexHybrid(params object[] args)
         {
             MyOpRuleCore r = new MyOpRuleCore(args);

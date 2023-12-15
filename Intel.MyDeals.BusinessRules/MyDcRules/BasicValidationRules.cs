@@ -414,7 +414,14 @@ namespace Intel.MyDeals.BusinessRules
                     }
                 },
 
-               
+                new MyOpRule
+                {
+                    Title="Validate End Customers for <= 60 chars",
+                    ActionRule = MyDcActions.CheckEndCustLengths,
+                    InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
+                    Triggers = new List<MyRulesTrigger> { MyRulesTrigger.OnValidate }
+                },
+
                 new MyOpRule
                 {
                     //US 53204 - 8 - On add date-If Market segment is Consumer retail or ALL, then default to current quarter first date, other wise Blank. user can edit.
