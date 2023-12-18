@@ -1,9 +1,11 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { contractHistoryService } from "./contractHistory.service";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 
 @Component({
@@ -12,10 +14,12 @@ import { contractHistoryService } from "./contractHistory.service";
     styleUrls: ['Client/src/app/contract/contractHistory/contractHistory.component.css']
 })
 
-export class contractHistoryComponent {
+export class contractHistoryComponent implements OnDestroy{
     constructor(private contractHistorySvc: contractHistoryService, private loggerSvc: logger) {}
     @Input() contractData: any;
     @Input() UItemplate: any;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private isLoading = true;
     private loadMessage = "Loading Contract History";
     private type = "numeric";
@@ -56,7 +60,7 @@ export class contractHistoryComponent {
         const objTypeSid = 1;
         const contractId = this.contractData.DC_ID;
         const objTypeIds = [1, 2, 3, 4, 5];
-        this.contractHistorySvc.getTimelineDetails(contractId,objTypeIds, objTypeSid).subscribe((result: Array<any>) => {
+        this.contractHistorySvc.getTimelineDetails(contractId,objTypeIds, objTypeSid).pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
             this.isLoading = false;
             this.gridResult = result;
             this.gridData = process(this.gridResult, this.state);
@@ -84,5 +88,10 @@ export class contractHistoryComponent {
         this.loadContractHistory();
     }
 
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 }
 

@@ -1,10 +1,12 @@
-import { Component,Inject, ViewEncapsulation } from '@angular/core';
+import { Component,Inject, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { DataStateChangeEvent, GridDataResult, PageSizeItem } from "@progress/kendo-angular-grid";
 import { logger } from "../../../shared/logger/logger";
 import { managerPctservice } from "../managerPct.service";
 import { MomentService } from "../../../shared/moment/moment.service";
 import { process, State } from "@progress/kendo-data-query";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: "pct-override-reason-dialog",
@@ -14,12 +16,14 @@ import { process, State } from "@progress/kendo-data-query";
     //To override the default css for the mat dialog and remove the extra padding then encapsulation should be set to none 
     encapsulation: ViewEncapsulation.None
 })
-export class pctOverrideReasonModal {
+export class pctOverrideReasonModal implements OnDestroy {
     constructor(public dialogRef: MatDialogRef<pctOverrideReasonModal>,
                 @Inject(MAT_DIALOG_DATA) public data,
                 private managePctSvc: managerPctservice,
                 private loggerSvc: logger,
                 private momentService: MomentService) {}
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private state: State = {
         skip: 0,
         take: 25,
@@ -69,7 +73,7 @@ export class pctOverrideReasonModal {
     }
     getLegalExceptionsPctDetails(date){
         const formatedDate = this.momentService.moment(date).format("MM-DD-YYYY");
-        this.managePctSvc.GetLegalExceptionsPct(formatedDate).subscribe(
+        this.managePctSvc.GetLegalExceptionsPct(formatedDate).pipe(takeUntil(this.destroy$)).subscribe(
             (response) => {
                 for (var i = response.length - 1; i >= 0; i -= 1) {
                     response[i]["isSelected"] = this.curData.indexOf(response[i]["MYDL_PCT_LGL_EXCPT_SID"].toString()) >= 0;
@@ -118,7 +122,7 @@ export class pctOverrideReasonModal {
                 "CST_OVRRD_FLG": 1,
                 "CST_OVRRD_RSN": this.dataItem.COST_TEST_OVRRD_CMT
             };
-            this.managePctSvc.setPctOverride(newItem).subscribe(
+            this.managePctSvc.setPctOverride(newItem).pipe(takeUntil(this.destroy$)).subscribe(
                 (response) => {
 
                 },
@@ -135,5 +139,11 @@ export class pctOverrideReasonModal {
         
    toggleSee() {
       this.seeMore = !this.seeMore;
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

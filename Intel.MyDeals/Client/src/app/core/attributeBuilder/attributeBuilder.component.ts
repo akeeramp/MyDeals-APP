@@ -1,4 +1,4 @@
-﻿import { Component, ViewEncapsulation, Input, OnInit, EventEmitter, Output, ViewChild } from '@angular/core';
+﻿import { Component, ViewEncapsulation, Input, OnInit, EventEmitter, Output, ViewChild, OnDestroy } from '@angular/core';
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import { PricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service';
 import { logger } from "../../shared/logger/logger";
@@ -6,6 +6,8 @@ import { userPreferencesService } from "../../shared/services/userPreferences.se
 import { List } from 'linqts';
 import { forkJoin } from 'rxjs';
 import { each, isArray } from 'underscore';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "attribute-builder-angular",
@@ -14,7 +16,7 @@ import { each, isArray } from 'underscore';
     encapsulation: ViewEncapsulation.None
 
 })
-export class AttributeBuilder implements OnInit {
+export class AttributeBuilder implements OnInit, OnDestroy {
     @Input() attributeSource: any;
     @Input() operatorSource: any;
     @Input() types2operatorSource: any;
@@ -55,11 +57,13 @@ export class AttributeBuilder implements OnInit {
     private isDefaultChange: boolean = false;
     private isDeleteRule: boolean = false;
     private runRuleReqd:boolean = false;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     @ViewChild("list") list;
     
     constructor(private pteService: PricingTableEditorService, private loggerSvc: logger, protected usrPrfrncssvc: userPreferencesService,) {}
     loadMyRules() {
-        this.usrPrfrncssvc.getActions(this.cat, this.subcat).subscribe((data: any) => {
+        this.usrPrfrncssvc.getActions(this.cat, this.subcat).pipe(takeUntil(this.destroy$)).pipe(takeUntil(this.destroy$)).subscribe((data: any) => {
             this.myRules = [];
             if (data.length > 0) {
                 for (var r = 0; r < data.length; r++) {
@@ -437,7 +441,7 @@ export class AttributeBuilder implements OnInit {
                 }
             })
         }
-        this.usrPrfrncssvc.updateActions(this.cat, this.subcat, "Rules", this.myRules).subscribe((response: any) => {
+        this.usrPrfrncssvc.updateActions(this.cat, this.subcat, "Rules", this.myRules).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
             this.loggerSvc.success("The search rule saved.");
             this.rules = this.myRules;
             this.rulesemit.emit(this.rules);
@@ -510,7 +514,7 @@ export class AttributeBuilder implements OnInit {
             this.loggerSvc.warn('Please provide proper search key', 'Warning');
             return;
         }
-        this.usrPrfrncssvc.updateActions(this.cat, this.subcat, "CustomSearch", ruleslist).subscribe((response: any) => {
+        this.usrPrfrncssvc.updateActions(this.cat, this.subcat, "CustomSearch", ruleslist).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
             if (response) {
                 var runRule = {
                     rule: this.attributes
@@ -535,6 +539,7 @@ export class AttributeBuilder implements OnInit {
             }
         }       
         this.usrPrfrncssvc.updateActions(this.cat, this.subcat, "Rules", this.rules)
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response) =>{
                 if (selectionType == false) {
                     this.loggerSvc.success("The rule saved as Default", "Saved");
@@ -571,6 +576,7 @@ export class AttributeBuilder implements OnInit {
         }
 
         this.usrPrfrncssvc.updateActions(this.cat, this.subcat, "Rules", this.rules)
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response) => {
                 this.loggerSvc.success("Rule was removed", "Saved");
             },
@@ -642,5 +648,10 @@ export class AttributeBuilder implements OnInit {
         if (this.runSearch)
             this.defaultSelection = false;
         this.loadDefaultAttributes();
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

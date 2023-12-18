@@ -1,13 +1,16 @@
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, OnDestroy } from "@angular/core";
 import { broadCastService } from "../../core/dealPopup/broadcast.service";
 import { GlobalSearchResultsComponent } from "../globalSearchResults/globalSearchResults.component";
-
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 @Component({
   selector: 'global-search-angular',
   templateUrl: 'Client/src/app/advanceSearch/globalSearch/globalSearch.component.html',
   styleUrls:['Client/src/app/advanceSearch/globalSearch/globalSearch.component.css']
 })
-export class GlobalSearchComponent  {
+export class GlobalSearchComponent implements OnDestroy {
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     //for calling Child function from Parent
     @ViewChild(GlobalSearchResultsComponent) GlobalSearchResults: GlobalSearchResultsComponent; 
     private searchText = "";
@@ -78,7 +81,7 @@ export class GlobalSearchComponent  {
     }
 
     ngOnInit() {
-        this.broadcastService.on("contractSearch").subscribe(event => {
+        this.broadcastService.on("contractSearch").pipe(takeUntil(this.destroy$)).subscribe(event => {
             this.searchText = event.payload.searchText;
             this.opType = event.payload.opType;
 
@@ -88,5 +91,11 @@ export class GlobalSearchComponent  {
                 this.enterPressed(event.payload.event);
             }
         });
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

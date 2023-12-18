@@ -1,14 +1,15 @@
-﻿import { Component, Input, Output, EventEmitter } from "@angular/core";
+﻿import { Component, Input, Output, EventEmitter, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, SelectAllCheckboxState, CellClickEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { managerPctservice } from "./managerPct.service";
 import { ThemePalette } from "@angular/material/core";
 import { lnavService } from "../lnav/lnav.service";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { MatDialog } from "@angular/material/dialog";
 import { pctOverrideReasonModal } from "./pctOverrideReasonModal/pctOverrideReasonModal.component";
 import { pctGroupModal } from "./pctGroupModal/pctGroupModal.component";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "pct-child-grid",
@@ -16,10 +17,12 @@ import { pctGroupModal } from "./pctGroupModal/pctGroupModal.component";
     styleUrls: ['Client/src/app/contract/managerPct/managerPct.component.css']
 })
 
-export class pctChildGridComponent {
+export class pctChildGridComponent implements OnDestroy{
     constructor(private loggerSvc: logger,protected dialog: MatDialog,  private managerPctSvc: managerPctservice, private lnavSvc: lnavService) {
 
     }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     //public view: Observable<GridDataResult>;
     public isLoading: boolean;
     public skip = 0;
@@ -86,7 +89,7 @@ export class pctChildGridComponent {
             "CST_OVRRD_FLG": 0,
             "CST_OVRRD_RSN": ""
         };
-    this.managerPctSvc.setPctOverride(newItem).subscribe(
+    this.managerPctSvc.setPctOverride(newItem).pipe(takeUntil(this.destroy$)).subscribe(
         (response) => {
             dataItem.saved = true;
             setTimeout(()=>{
@@ -220,5 +223,10 @@ export class pctChildGridComponent {
         })
         this.gridResult = this.parent.filter(x => x.DEAL_ID == this.child.DEAL_ID);
         this.gridData = process(this.gridResult, this.childState);
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

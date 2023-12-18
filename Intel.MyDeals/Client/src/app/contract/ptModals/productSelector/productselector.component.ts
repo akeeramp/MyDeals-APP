@@ -1,4 +1,4 @@
-import { Component, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { MatDialog, MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, SelectAllCheckboxState } from '@progress/kendo-angular-grid';
 import { distinct, process, State } from '@progress/kendo-data-query';
@@ -13,6 +13,8 @@ import { logger } from '../../../shared/logger/logger';
 import { gridCol, ProdSel_Util } from './prodSel_Util';
 import { PTE_Common_Util } from '../../PTEUtils/PTE_Common_util';
 import { ProductBreakoutComponent } from './productBreakout/productBreakout.component';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'product-selector',
@@ -20,7 +22,7 @@ import { ProductBreakoutComponent } from './productBreakout/productBreakout.comp
     styleUrls: ['Client/src/app/contract/ptModals/productSelector/productselector.component.css'],
     encapsulation: ViewEncapsulation.Emulated
 })
-export class ProductSelectorComponent {
+export class ProductSelectorComponent implements OnDestroy {
 
     constructor(public dialogRef: MatDialogRef<ProductSelectorComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: any,
@@ -83,6 +85,7 @@ export class ProductSelectorComponent {
     private searchProcessed = false;
     private excludeProductMessage = "";
     private gridFullData: any[] = [];
+    private readonly destroy$ = new Subject();
     private state: State = {
         skip: 0,
         take: 25,
@@ -188,7 +191,9 @@ export class ProductSelectorComponent {
             startDate: this.pricingTableRow.START_DT, endDate: this.pricingTableRow.END_DT,
             mediaCode: this.pricingTableRow.PROD_INCLDS, dealType: this.pricingTableRow.OBJ_SET_TYPE_CD
         };
-        this.prodSelService.GetProductSelectorWrapper(dtoDateRange).subscribe((result: any) => {
+        this.prodSelService.GetProductSelectorWrapper(dtoDateRange)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((result: any) => {
             if (this.pricingTableRow.OBJ_SET_TYPE_CD == "DENSITY") {
                 let res = [];
                 for (let i = 0; i < result.ProductSelectionLevels.length; i++) {
@@ -477,7 +482,9 @@ export class ProductSelectorComponent {
             data.drillDownFilter4 = (!!!item.drillDownFilter4 && item.drillDownFilter4 == "") ? null : item.drillDownFilter4,
                 data.drillDownFilter5 = (!!!item.drillDownFilter5 && item.drillDownFilter5 == "") ? null : item.drillDownFilter5
         }
-        this.prodSelService.GetProductSelectionResults(data).subscribe((response) => {
+        this.prodSelService.GetProductSelectionResults(data)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response) => {
             this.isGridLoading = false;
             if (response.length == 1 && response[0].HIER_VAL_NM == 'NA') {
                 //if the processor number is NA, send GDM values to filter out L4 data
@@ -564,7 +571,9 @@ export class ProductSelectorComponent {
             "mediaCd": this.pricingTableRow.PROD_INCLDS,
             "dealType": this.dealType
         }
-        this.prodSelService.GetProductSelectionResults(data).subscribe(response => {
+        this.prodSelService.GetProductSelectionResults(data)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(response => {
             let rst = response.map((x) => {
                 x['selected'] = ProdSel_Util.productExists(item, x.PRD_MBR_SID, this.excludeMode, this.excludedProducts, this.addedProducts, this.enableMultipleSelection);
                 x['parentSelected'] = item.selected;
@@ -699,6 +708,7 @@ export class ProductSelectorComponent {
         }];
 
         await this.prodSelService.GetProductDetails(data, this.pricingTableRow.CUST_MBR_SID, this.dealType)
+        .pipe(takeUntil(this.destroy$))
             .subscribe(response => {
                 this.selectPath(0, true);
                 this.disableSelection = (response.length > 0 && !!response[0] && !!response[0].WITHOUT_FILTER) ? response[0].WITHOUT_FILTER : false; //"Nand (SSD)", "DCG Client SSD", "DCG DC SSD"
@@ -751,7 +761,9 @@ export class ProductSelectorComponent {
             GEO_COMBINED: this.pricingTableRow.GEO_COMBINED,
             PROGRAM_PAYMENT: this.pricingTableRow.PROGRAM_PAYMENT,
         };
-        this.prodSelService.GetSuggestions(prodData, this.pricingTableRow.CUST_MBR_SID,  this.dealType).subscribe( (response) => {
+        this.prodSelService.GetSuggestions(prodData, this.pricingTableRow.CUST_MBR_SID,  this.dealType)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe( (response) => {
             this.suggestedProducts = response;
             this.disableSelection = (response.length > 0 && !!response[0] && !!response[0].WITHOUT_FILTER) ? response[0].WITHOUT_FILTER : false; 
             this.showSuggestions = true;
@@ -781,7 +793,9 @@ export class ProductSelectorComponent {
             "dealType": this.dealType
         }
 
-        this.prodSelService.GetProductSelectionResults(data).subscribe(response => {
+        this.prodSelService.GetProductSelectionResults(data)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe(response => {
             this.processProducts(response);
         }, error => {
             this.loggerService.error("Unable to get products.", error);
@@ -833,7 +847,9 @@ export class ProductSelectorComponent {
                 endDate: this.pricingTableRow.END_DT,
                 getWithFilters: true
             };
-            this.prodSelService.GetSearchString(dto).subscribe(response => {
+            this.prodSelService.GetSearchString(dto)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(response => {
                 this.productOptions = response;
                 this.isLoadingSearchProducts = false;
             }, error => {
@@ -1233,7 +1249,9 @@ export class ProductSelectorComponent {
             // Send 1 if EPM_NM
         }];
 
-        this.prodSelService.GetProductDetails(data, this.pricingTableRow.CUST_MBR_SID, "ECAP").subscribe((response) => {
+        this.prodSelService.GetProductDetails(data, this.pricingTableRow.CUST_MBR_SID, "ECAP")
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response) => {
             this.productDetails = response;
             let data = this.productDetails.filter((item, pos) => {
                 return data.findIndex((val) => val['PRD_MBR_SID'] === item.PRD_MBR_SID) == pos
@@ -1485,4 +1503,9 @@ export class ProductSelectorComponent {
          }
             
     }
+     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+     ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+      }
 }

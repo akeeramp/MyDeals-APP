@@ -1,9 +1,11 @@
 ﻿import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { logger } from "../../shared/logger/logger";
 import { admintestTendersService } from "./admin.testTenders.service";
-import { Component, ViewEncapsulation } from "@angular/core";
+import { Component, ViewEncapsulation, OnDestroy } from "@angular/core";
 import { FormGroup, FormControl, Validators, FormBuilder } from "@angular/forms";
 import { Observable } from "rxjs";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "admin-test-tenders",
@@ -11,12 +13,14 @@ import { Observable } from "rxjs";
     styleUrls: ['Client/src/app/admin/testTenders/admin.testTenders.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class adminTestTendersComponent implements PendingChangesGuard{
+export class adminTestTendersComponent implements PendingChangesGuard, OnDestroy{
     constructor(private loggerSvc: logger, private admintestTendersService: admintestTendersService, private formBuilder: FormBuilder,) {}
 
 
     private admintestTendersForm: FormGroup;
     private dateValue: Date;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     isDirty = false;
     //get method for easy access to the form fields.
     get formData() { return this.admintestTendersForm.controls; }
@@ -89,7 +93,7 @@ export class adminTestTendersComponent implements PendingChangesGuard{
             }
         }
         var jsonDataPacket = JSON.stringify(JsonObj);
-        this.admintestTendersService.ExecutePostTest(jsonDataPacket).subscribe(res => {
+        this.admintestTendersService.ExecutePostTest(jsonDataPacket).pipe(takeUntil(this.destroy$)).subscribe(res => {
 
             if (res) {
                 this.isDirty=false;
@@ -121,5 +125,10 @@ export class adminTestTendersComponent implements PendingChangesGuard{
     }
     canDeactivate(): Observable<boolean> | boolean {
         return !this.isDirty;
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

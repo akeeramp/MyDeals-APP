@@ -1,4 +1,4 @@
-﻿import { Component, ViewEncapsulation } from "@angular/core";
+﻿import { Component, ViewEncapsulation, OnDestroy } from "@angular/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { where, pluck, each, isEmpty, isNull, isUndefined } from 'underscore';
@@ -7,6 +7,8 @@ import { DatePipe } from "@angular/common";
 import { MatDialog } from '@angular/material/dialog';
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 import { logger } from "../../shared/logger/logger";
 import { meetCompService } from './admin.meetComp.service';
@@ -21,13 +23,15 @@ import { ExcelExportEvent } from "@progress/kendo-angular-grid";
     styleUrls: ['Client/src/app/admin/meetComp/admin.meetComp.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class MeetCompComponent implements PendingChangesGuard {
+export class MeetCompComponent implements PendingChangesGuard, OnDestroy {
     constructor(private meetCompService: meetCompService,
                 private loggerService: logger,
                 public datepipe: DatePipe,
         protected dialog: MatDialog) {
         this.allData = this.allData.bind(this);
     }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private HasBulkUploadAccess = (<any>window).usrRole == "DA";
     isDirty = false;
     private isAccess = true;
@@ -139,7 +143,8 @@ export class MeetCompComponent implements PendingChangesGuard {
     }
 
     custDropdowns() {
-        this.meetCompService.getCustomerDropdowns().subscribe(res => {
+        this.meetCompService.getCustomerDropdowns()
+            .pipe(takeUntil(this.destroy$)).subscribe(res => {
             if (res) {
                 const obj = {
                     'CUST_NM': 'ALL CUSTOMER',
@@ -359,5 +364,10 @@ export class MeetCompComponent implements PendingChangesGuard {
     ngOnInit() {
         this.loadMeetCompPage();
         this.custDropdowns();
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

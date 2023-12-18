@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, EventEmitter, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
+import { ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DisplayGrid, GridsterConfig, GridsterItem, GridType, CompactType } from 'angular-gridster2';
 import { MatDialog } from '@angular/material/dialog';
 import { findWhere, isNull, isEmpty, isUndefined } from 'underscore';
@@ -14,6 +14,8 @@ import { contractStatusWidgetService } from '../contractStatusWidget.service';
 import { userPreferencesService } from "../../shared/services/userPreferences.service";
 import { logger } from "../../shared/logger/logger";
 import { SecurityService } from "../../shared/services/security.service";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 interface Item {
     text: string;
@@ -36,7 +38,7 @@ export const DASHBOARD_CONSTANTS = {
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None
 })
-export class DashboardComponent implements OnInit {
+export class DashboardComponent implements OnInit,OnDestroy  {
     constructor(protected dialog: MatDialog,
                 protected contractWidgetService: contractStatusWidgetService,
                 protected userPreferencesService: userPreferencesService,
@@ -68,6 +70,7 @@ export class DashboardComponent implements OnInit {
     public selectedCustomerIds = [];
     public includeTenders = true;
     public savedWidgetSettings;
+    private readonly destroy$ = new Subject();
     options: GridsterConfig;
 
     public filterSettings: DropDownFilterSettings = {
@@ -379,6 +382,7 @@ export class DashboardComponent implements OnInit {
         this.selectedDashboardId = window.localStorage.selectedDashboardId ? window.localStorage.selectedDashboardId : "1";
 
         this.contractWidgetService.getCustomerDropdowns()
+        .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 if(response && response.length > 0){
                     this.custData = response;
@@ -442,4 +446,9 @@ export class DashboardComponent implements OnInit {
             $(DASHBOARD_CONSTANTS.ID_HEIGHT_GRIDS).removeClass(DASHBOARD_CONSTANTS.CLASS_SIM_FIXES_PLUS);
         }
     }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+      }
 }

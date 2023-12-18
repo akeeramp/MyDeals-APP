@@ -1,4 +1,4 @@
-﻿import { Component } from "@angular/core";
+﻿import { Component, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { orderBy, process, SortDescriptor, State } from "@progress/kendo-data-query";
@@ -11,6 +11,8 @@ import { constantsService } from "../constants/admin.constants.service";
 import { DbAuditToolsViewModalComponent } from './admin.dbAuditToolsViewModal.component';
 import { DbAuditToolsCompareModalComponent } from './admin.dbAuditToolsCompareModal.component';
 import { forEach, uniq } from 'underscore';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "db-Audit-Tools",
@@ -18,7 +20,7 @@ import { forEach, uniq } from 'underscore';
     styleUrls: ['Client/src/app/admin/dbAuditTools/admin.dbAuditTools.component.css'],
 })
 
-export class dbAuditToolsComponent {
+export class dbAuditToolsComponent implements OnDestroy {
     constructor(
         private dbAuditToolsSVC: dbAuditToolsService,
         private loggerSvc: logger,
@@ -31,7 +33,8 @@ export class dbAuditToolsComponent {
     private dbAuditObjTextRequest = { ENV_NM: "", ENV_TAG: "", DB_TYPE: "", DB_OBJ: "", DB_DATA: "" };
     private dbAuditCompareRequest = [];
 
-
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     // MIKES
     private envsDataFinal: any[] = []; // Final Envs list used in UI
     private selectedEnvValues: any[] = [];
@@ -78,7 +81,8 @@ export class dbAuditToolsComponent {
     }
 
     loadDBEnvs() {
-        this.dbAuditToolsSVC.getDbEnvs().subscribe((result: Array<any>) => {
+        this.dbAuditToolsSVC.getDbEnvs().pipe(takeUntil(this.destroy$))
+            .subscribe((result: Array<any>) => {
             let ReturnData = JSON.parse(result.toString());
             if (ReturnData.DATA != undefined) {
                 this.envsDataFinal = ReturnData.DATA;
@@ -90,7 +94,8 @@ export class dbAuditToolsComponent {
     }
 
     loadDBObjects() {
-        this.dbAuditToolsSVC.getDbObjs().subscribe((result: Array<any>) => {
+        this.dbAuditToolsSVC.getDbObjs().pipe(takeUntil(this.destroy$))
+            .subscribe((result: Array<any>) => {
             let ReturnData = JSON.parse(result.toString());
             let ColumnData = ReturnData.DATA;
             if (ColumnData != undefined) {
@@ -119,7 +124,8 @@ export class dbAuditToolsComponent {
         this.dbAuditDataPacket.ENVIRONMENTS = this.selectedEnvValues.map(d => { return { "ENV_NM": d.ENV_NM, "ENV_TAG": d.ENV_TAG, "ENV_ORD": d.ENV_ORD } });
         this.dbAuditDataPacket.DB_OBJECTS = this.selectedObjValues.filter(a => a.subCategories == undefined)
 
-        this.dbAuditToolsSVC.GetAuditData(this.dbAuditDataPacket).subscribe((result: Array<any>) => {
+        this.dbAuditToolsSVC.GetAuditData(this.dbAuditDataPacket).pipe(takeUntil(this.destroy$))
+            .subscribe((result: Array<any>) => {
             let ReturnData = JSON.parse(result.toString());
 
             let tempEnvsOrder = ["DB_OBJ", "DB_TYPE"];
@@ -193,5 +199,11 @@ export class dbAuditToolsComponent {
         this.checkPageAcess();
         this.loadDBEnvs();
         this.loadDBObjects();
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

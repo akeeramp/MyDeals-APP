@@ -1,6 +1,6 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Component, ViewEncapsulation, Inject } from "@angular/core";
+import { Component, ViewEncapsulation, Inject, OnDestroy } from "@angular/core";
 import { FileRestrictions } from "@progress/kendo-angular-upload";
 import { ThemePalette } from "@angular/material/core";
 import Handsontable from 'handsontable';
@@ -8,6 +8,8 @@ import { HotTableRegisterer } from '@handsontable/angular';
 import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
 import { unifiedDealReconService } from './admin.unifiedDealRecon.service';
 import { each } from 'underscore';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "bulk-unify-deals",
@@ -15,7 +17,7 @@ import { each } from 'underscore';
     styleUrls: ['Client/src/app/admin/unifiedDealRecon/admin.unifiedDealRecon.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class bulkUnifyModalComponent {
+export class bulkUnifyModalComponent implements OnDestroy {
     SpreadSheetRowsCount: any;
     dealReconValidationSummary: any;
     tableData: any[] = [];
@@ -25,6 +27,8 @@ export class bulkUnifyModalComponent {
         @Inject(MAT_DIALOG_DATA) public data, private unifiedDealSvc: unifiedDealReconService) {
         dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG
     }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     public cellMessages = [];
     private color: ThemePalette = 'primary';
     public isBulkUnify = true;
@@ -366,7 +370,7 @@ export class bulkUnifyModalComponent {
 
     updateDealRecon() {
         //dealrecon updation
-        this.unifiedDealSvc.updateDealRecon(this.dealReconValidationSummary.validRecords).subscribe((response) => {
+        this.unifiedDealSvc.updateDealRecon(this.dealReconValidationSummary.validRecords).pipe(takeUntil(this.destroy$)).subscribe((response) => {
             if (response == null || response.length == 0) {
                 this.isAlert = true;
                 this.alertMsg = "Updated Successfully"
@@ -415,7 +419,7 @@ export class bulkUnifyModalComponent {
             })
             if (data.length > 0) {
                 //validating
-                this.unifiedDealSvc.ValidateUnifyDeals(data).subscribe((response) => {
+                this.unifiedDealSvc.ValidateUnifyDeals(data).pipe(takeUntil(this.destroy$)).subscribe((response) => {
                     this.UnifyValidation = response;
                     this.generateTableData();
                 }, (response) => {
@@ -433,7 +437,7 @@ export class bulkUnifyModalComponent {
                     this.hotTable.setCellMetaObject(rowInd, i, { 'className': 'normal-cell', comment: { value: '' } });
             })
             if (this.tableData.length > 0) {
-                this.unifiedDealSvc.ValidateDealReconRecords(this.dealReconValidationSummary.inValidRecords).subscribe((response) => {
+                this.unifiedDealSvc.ValidateDealReconRecords(this.dealReconValidationSummary.inValidRecords).pipe(takeUntil(this.destroy$)).subscribe((response) => {
                     this.dealReconValidationSummary = response;
                     this.generateTableData();
                 }, (response) => {
@@ -664,7 +668,7 @@ export class bulkUnifyModalComponent {
 
     updateBulkUnify() {
         //updation fn
-        this.unifiedDealSvc.updateBulkUnifyDeals(this.UnifyValidation.ValidUnifyDeals).subscribe((response) => {
+        this.unifiedDealSvc.updateBulkUnifyDeals(this.UnifyValidation.ValidUnifyDeals).pipe(takeUntil(this.destroy$)).subscribe((response) => {
             let data = response;
             this.unifiedVal = data.length;
             let alertMsg;
@@ -785,5 +789,11 @@ export class bulkUnifyModalComponent {
 
     ok() {
         this.dialogRef.close();
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

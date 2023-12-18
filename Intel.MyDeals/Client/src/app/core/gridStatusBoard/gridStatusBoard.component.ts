@@ -1,4 +1,4 @@
-﻿import { Input, Component, ViewChild, OnInit, OnChanges, EventEmitter, Output } from "@angular/core"
+﻿import { Input, Component, ViewChild, OnInit, OnChanges, EventEmitter, Output, OnDestroy } from "@angular/core"
 import { GridComponent, GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { GridStatusBoardService } from "./gridStatusBoard.service";
 import { process, State, distinct } from "@progress/kendo-data-query"; /*GroupDescriptor,*/
@@ -8,13 +8,15 @@ import { DashboardComponent } from "../../dashboard/dashboard/dashboard.componen
 import { contractStatusWidgetService } from '../../dashboard/contractStatusWidget.service';
 import { each, sortBy, uniq, pluck } from 'underscore';
 import { MomentService } from "../../shared/moment/moment.service";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     providers: [GridStatusBoardService, DatePipe],
     selector: "grid-status-board-angular",
     templateUrl: "Client/src/app/core/gridStatusBoard/gridStatusBoard.component.html"
 })
-export class gridStatusBoardComponent implements OnInit, OnChanges {
+export class gridStatusBoardComponent implements OnInit, OnChanges, OnDestroy {
     @ViewChild(GridComponent) grid: GridComponent;
 
     @Input() private custIds: string;
@@ -22,6 +24,8 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
     @Input() private favContractIds: string;
     @Input() private startDt: string;
     @Input() private endDt: string;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
 
     @Output() public isGridLoading: EventEmitter<boolean> = new EventEmitter();
 
@@ -32,7 +36,7 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
                 private cntrctWdgtSvc: contractStatusWidgetService,
                 private momentService: MomentService) {
 
-        this.cntrctWdgtSvc.isRefresh.subscribe(res => {
+        this.cntrctWdgtSvc.isRefresh.pipe(takeUntil(this.destroy$)).subscribe(res => {
             if (res) {
                 this.activeFilter = "fltr_All";
                 this.activekey = "all";
@@ -144,6 +148,7 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
 
         //calling API to fetch the contracts
         this.contractService.getContracts(this.dataforfilter)
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response) => {
                 //Initialising all counts from 0
                 this.contractStageCnt = 0;
@@ -444,5 +449,10 @@ export class gridStatusBoardComponent implements OnInit, OnChanges {
         }
         //update input values and call loadContractData();
         this.loadContractData();
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

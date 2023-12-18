@@ -1,4 +1,4 @@
-﻿import { Component, Input, ViewEncapsulation, Output, EventEmitter } from "@angular/core";
+﻿import { Component, Input, ViewEncapsulation, Output, EventEmitter,OnDestroy } from "@angular/core";
 import { logger } from '../../../shared/logger/logger';
 import { GridUtil } from "../../../contract/grid.util";
 import { DE_Load_Util } from "../../../contract/DEUtils/DE_Load_util";
@@ -9,6 +9,8 @@ import { dealTimelineComponent } from '../dealTimelineModal/dealTimelineModal.co
 import { fileAttachmentComponent } from '../fileAttachmentModal/fileAttachmentModal.component';
 import { distinct } from "@progress/kendo-data-query";
 import { PricingTableEditorService } from "../../../contract/pricingTableEditor/pricingTableEditor.service";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     providers: [dealToolsService],
@@ -17,7 +19,7 @@ import { PricingTableEditorService } from "../../../contract/pricingTableEditor/
     styleUrls: ['Client/src/app/core/gridCell/dealTools/dealTools.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class dealToolsComponent{
+export class dealToolsComponent implements OnDestroy {
     
     constructor(private dataService: dealToolsService, private loggerSvc: logger, protected dialog: MatDialog, private pteService: PricingTableEditorService) {}
     @Input() dataItem;
@@ -66,6 +68,8 @@ export class dealToolsComponent{
     private windowOpened = false;
     private windowTop = 320; windowLeft = 670; windowWidth = 620; windowHeight = 500; windowMinWidth = 100;
     messages: any;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private fileItems = {
         "NoPerm": {
             "icon": "intelicon-attach",
@@ -242,6 +246,7 @@ export class dealToolsComponent{
         this.dataItem._dirty = false;
         // Remove from DB first... then remove from screen
         this.dataService.unGroupPricingTableRow(this.dataItem.CUST_MBR_SID, this.contractData.DC_ID, this.dataItem.DC_PARENT_ID)
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: any) => {
                 if (!!response.Messages[0].MsgType && response.Messages[0].MsgType !== 1) {
                     this.setBusy("Splitting Failed", "Unable to Split the Pricing Table Row", "","");
@@ -533,6 +538,7 @@ export class dealToolsComponent{
             dcId = this.dataItem._contractId;
         }
         this.dataService.actionWipDeal(custId, dcId, this.dataItem, 'Cancel')
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: any) => {
                 setTimeout(() => {
                     this.setBusy("Cancel Successful", "Reloading the Deal", "Success",true);
@@ -571,6 +577,7 @@ export class dealToolsComponent{
         }
         // Remove from DB first... then remove from screen
         this.dataService.rollbackPricingTableRow(this.dataItem.CUST_MBR_SID, dcId, this.dataItem.DC_PARENT_ID)
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: any) => {
                 if (response.MsgType !== 1) {
                     this.setBusy("Rollback Failed", "Unable to Rollback the Pricing Table", "Error","");
@@ -749,5 +756,10 @@ export class dealToolsComponent{
         for (let i = 0; i < this.gridDataTmp.length; i++) {
             this.gridDataTmp[i]['isdirty'] = false;
         }
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

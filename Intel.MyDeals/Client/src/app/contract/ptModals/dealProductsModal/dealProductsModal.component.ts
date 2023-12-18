@@ -1,11 +1,13 @@
 ﻿import { logger } from "../../../shared/logger/logger";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Component, ViewEncapsulation, Inject } from "@angular/core";
+import { Component, ViewEncapsulation, Inject, OnDestroy } from "@angular/core";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { dealProductsService } from "../dealProductsModal/dealProductsModal.service";
 import { each } from 'underscore';
 import { Clipboard } from '@angular/cdk/clipboard';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "deal-products",
@@ -13,7 +15,7 @@ import { Clipboard } from '@angular/cdk/clipboard';
     styleUrls: ['Client/src/app/contract/ptModals/dealProductsModal/dealProductsModal.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class dealProductsModalComponent {
+export class dealProductsModalComponent implements OnDestroy {
     constructor(private loggerSvc: logger, public dialogRef: MatDialogRef<dealProductsModalComponent>,
         @Inject(MAT_DIALOG_DATA) public data, private dpService: dealProductsService, private clipboard: Clipboard) {
         dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG
@@ -22,6 +24,7 @@ export class dealProductsModalComponent {
     private isLoading: boolean = false;
     private gridResult = [];
     private gridData: GridDataResult;
+    private readonly destroy$ = new Subject();
     private state: State = {
         skip: 0,
         take: 25,
@@ -37,7 +40,9 @@ export class dealProductsModalComponent {
     private copyOfData: any;
     private excelFileName: string;
     getProductDetailsFromDealId() {
-        this.dpService.getProductDetailsFromDealId(this.data.dataItem.DC_ID, this.data.dataItem.CUST_MBR_SID).subscribe((response: any) => {
+        this.dpService.getProductDetailsFromDealId(this.data.dataItem.DC_ID, this.data.dataItem.CUST_MBR_SID)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response: any) => {
             if(response && response.length>0){
                 this.copyOfData = response;
                 this.gridResult = response;
@@ -53,7 +58,9 @@ export class dealProductsModalComponent {
         });
     }
     getProductDetailsFromProductId() {
-        this.dpService.getProductDetailsFromProductId(this.prdData).subscribe((response: any) => {
+        this.dpService.getProductDetailsFromProductId(this.prdData)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response: any) => {
             if(response && response.length>0){ 
                 this.gridResult = response;
                 this.gridData = process(this.gridResult, this.state);
@@ -139,4 +146,9 @@ export class dealProductsModalComponent {
         }
      
     }
+     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+     ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+      }
 }

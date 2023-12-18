@@ -1,4 +1,4 @@
-﻿import { Component } from "@angular/core";
+﻿import { Component, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
@@ -6,16 +6,20 @@ import { ThemePalette } from '@angular/material/core';
 import { DealMassUpdateService } from "./admin.dealMassUpdate.service";  
 import { Observable } from "rxjs";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "deal-mass-update",
     templateUrl: "Client/src/app/admin/dealMassUpdate/admin.dealMassUpdate.component.html",
     styleUrls: ['Client/src/app/admin/dealMassUpdate/admin.dealMassUpdate.component.css'],
 })
-export class DealMassUpdateComponent implements PendingChangesGuard {
+export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
 
     constructor(private dealMassUpdateService: DealMassUpdateService,
-                private loggerService: logger) { }
+        private loggerService: logger) { }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     isDirty = false;
     private color: ThemePalette = "primary";
     private attr = [];
@@ -53,7 +57,7 @@ export class DealMassUpdateComponent implements PendingChangesGuard {
         this.massUpdateData.field = null;
         this.massUpdateData.textValue = null;
 
-        this.dealMassUpdateService.GetUpdateAttributes(0).subscribe((result: Array<any>) => {
+        this.dealMassUpdateService.GetUpdateAttributes(0).pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
             this.attr = result
         }, (error) => {
             this.loggerService.error('Unable to get Attribute List', '', 'DealMassUpdateComponent::GetUpdateAttributes::' + JSON.stringify(error));
@@ -86,6 +90,7 @@ export class DealMassUpdateComponent implements PendingChangesGuard {
             }
         } else {
             this.dealMassUpdateService.GetUpdateAttributes(value.ATRB_SID)
+                .pipe(takeUntil(this.destroy$))
                 .subscribe((result: Array<any>) => {
                     this.attrValues = result;
                 }, (error) => {
@@ -127,7 +132,7 @@ export class DealMassUpdateComponent implements PendingChangesGuard {
                 finalData["UPD_VAL"] = this.massUpdateData.textValue
             }
 
-            this.dealMassUpdateService.UpdateDealsAttrbValue(finalData).subscribe((result: Array<any>) => {
+            this.dealMassUpdateService.UpdateDealsAttrbValue(finalData).pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
                 this.isDirty = false;
                 this.updateResponse = result;
                 this.gridResult = process(result, this.state);
@@ -233,6 +238,10 @@ export class DealMassUpdateComponent implements PendingChangesGuard {
 
     ngOnInit() {
         this.loadAttributes();
+    }
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
 }

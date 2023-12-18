@@ -1,7 +1,9 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { dsaService } from "./admin.vistex.service";
 import { constantsService } from "../constants/admin.constants.service";
-import { Component, ViewEncapsulation } from "@angular/core";
+import { Component, ViewEncapsulation, OnDestroy } from "@angular/core";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "admin-vistex-profisee-api",
@@ -10,9 +12,11 @@ import { Component, ViewEncapsulation } from "@angular/core";
     encapsulation: ViewEncapsulation.None
 })
 
-export class adminVistexProfiseeApiComponent {
+export class adminVistexProfiseeApiComponent implements OnDestroy {
     constructor(private loggerSvc: logger, private dsaService: dsaService, private constantsService: constantsService) { }
 
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private customerToSend: string = '';
     private selectedApiID: string='';
     private vistexApiNames = [
@@ -23,7 +27,7 @@ export class adminVistexProfiseeApiComponent {
     private validWWID: string;
 
     checkAcess() {
-        this.constantsService.getConstantsByName("PRF_MRG_EMP_ID").subscribe((data)=> {
+        this.constantsService.getConstantsByName("PRF_MRG_EMP_ID").pipe(takeUntil(this.destroy$)).subscribe((data)=> {
             if (data) {
                 this.validWWID = data.CNST_VAL_TXT === "NA" ? "" : data.CNST_VAL_TXT;
                 this.hasAccess = this.validWWID.indexOf((<any>window).usrDupWwid) > -1 ? true : false;
@@ -37,7 +41,7 @@ export class adminVistexProfiseeApiComponent {
     }
     runProfiseeAPI() {
         if (this.customerToSend != "" && this.customerToSend != null) {
-            this.dsaService.callProfiseeApi(this.customerToSend, this.selectedApiID).subscribe((response) =>{
+            this.dsaService.callProfiseeApi(this.customerToSend, this.selectedApiID).pipe(takeUntil(this.destroy$)).subscribe((response) =>{
                 if (response == true) {
                     this.loggerSvc.success("Customer Migrated to profisee");
                 } else {
@@ -53,5 +57,10 @@ export class adminVistexProfiseeApiComponent {
 
     ngOnInit() {
         this.checkAcess();
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

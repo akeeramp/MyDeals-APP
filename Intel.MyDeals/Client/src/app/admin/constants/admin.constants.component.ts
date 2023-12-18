@@ -1,6 +1,6 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { constantsService } from "./admin.constants.service";
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { Cnst_Map } from './admin.constants.model';
 import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
@@ -10,16 +10,21 @@ import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { Observable } from "rxjs";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: 'constants',
     templateUrl: 'Client/src/app/admin/constants/admin.constants.component.html',
     styleUrls: ['Client/src/app/admin/constants/admin.constants.component.css']
 })
-export class ConstantsComponent implements PendingChangesGuard {
+export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
     constructor(private constantsSvc: constantsService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
+
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private isLoading = true;
     private dataSource: any;
     private gridOptions: any;
@@ -110,6 +115,7 @@ export class ConstantsComponent implements PendingChangesGuard {
         }
         else {
             this.constantsSvc.getConstants()
+                .pipe(takeUntil(this.destroy$))
                 .subscribe(
                     (result: Array<any>) => {
                         this.gridResult = result;
@@ -194,6 +200,7 @@ export class ConstantsComponent implements PendingChangesGuard {
     deleteRecord() {
         this.isDialogVisible = false;
         this.constantsSvc.deleteConstants(this.deleteItem)
+            .pipe(takeUntil(this.destroy$))
             .subscribe(() => {
                     this.refreshGrid();
                     this.loggerSvc.success("Constant Deleted.");
@@ -228,7 +235,8 @@ export class ConstantsComponent implements PendingChangesGuard {
             this.isDirty=false;
             if (isNew) {
                 this.isLoading = true;
-                this.constantsSvc.insertConstants(cnst_map).subscribe(() => {
+                this.constantsSvc.insertConstants(cnst_map).pipe(takeUntil(this.destroy$))
+                    .subscribe(() => {
                         this.gridResult.push(cnst_map);
                         this.updateBannerMessage(cnst_map);
                         this.loadConstants();
@@ -243,7 +251,8 @@ export class ConstantsComponent implements PendingChangesGuard {
             else {
                 this.isLoading = true;
                 this.isEdit = true;
-                this.constantsSvc.updateConstants(cnst_map).subscribe(() => {
+                this.constantsSvc.updateConstants(cnst_map).pipe(takeUntil(this.destroy$))
+                    .subscribe(() => {
                         this.gridResult[rowIndex] = cnst_map;
                         this.gridResult.push(cnst_map);
                         this.loadConstants();
@@ -277,4 +286,9 @@ export class ConstantsComponent implements PendingChangesGuard {
         this.loadConstants()
     }
 
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 }

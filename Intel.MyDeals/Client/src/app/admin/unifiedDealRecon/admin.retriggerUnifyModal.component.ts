@@ -1,6 +1,6 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Component, ViewEncapsulation, Inject } from "@angular/core";
+import { Component, ViewEncapsulation, Inject, OnDestroy } from "@angular/core";
 import { FileRestrictions } from "@progress/kendo-angular-upload";
 import { ThemePalette } from "@angular/material/core";
 import Handsontable from 'handsontable';
@@ -9,7 +9,8 @@ import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
 import { unifiedDealReconService } from './admin.unifiedDealRecon.service';
 import { each } from 'underscore';
 import { FormGroup, FormControl, Validators } from "@angular/forms";
-
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "retrigger-UCD",
@@ -17,8 +18,10 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
     styleUrls: ['Client/src/app/admin/unifiedDealRecon/admin.unifiedDealRecon.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class retriggerUnifyModalComponent {
+export class retriggerUnifyModalComponent implements OnDestroy {
     constructor(public dialogRef: MatDialogRef<retriggerUnifyModalComponent>, private loggerSvc: logger, private unifiedDealReconSvc: unifiedDealReconService) { }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private endCustCountries: any[] = [];
     private countries: any[];
     private dealId: string = '';
@@ -33,7 +36,7 @@ export class retriggerUnifyModalComponent {
     private validateDealId: boolean = true;
     public formGroup: FormGroup;
     loadDetails() {
-        this.unifiedDealReconSvc.getCountries().subscribe((response) => {
+        this.unifiedDealReconSvc.getCountries().pipe(takeUntil(this.destroy$)).subscribe((response) => {
             this.endCustCountries = this.countries = response.map(x => x.CTRY_NM);
         }, (error) => {
             this.loggerSvc.error('Failed to get Data', 'Error', error);
@@ -61,7 +64,7 @@ export class retriggerUnifyModalComponent {
             "END_CUSTOMER_COUNTRY": this.endCustCountry
         }
         if (this.isError == false && this.validateDealId == true) {
-            this.unifiedDealReconSvc.ResubmissionDeals(this.dealId, this.END_CUST_OBJ).subscribe((response) => {
+            this.unifiedDealReconSvc.ResubmissionDeals(this.dealId, this.END_CUST_OBJ).pipe(takeUntil(this.destroy$)).subscribe((response) => {
                 let result: any = response;
                 if (result.toString() == "true") {
                     this.alertMsg = "Re-Submission Successfull";
@@ -127,6 +130,12 @@ export class retriggerUnifyModalComponent {
             this.validateDealId = true;
         }
 
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
 }

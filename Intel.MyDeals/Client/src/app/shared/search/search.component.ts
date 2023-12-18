@@ -1,15 +1,17 @@
-﻿import { Component, EventEmitter, Input, Output } from "@angular/core";
+﻿import { Component, EventEmitter, Input, Output, OnDestroy } from "@angular/core";
 import { Item } from "@progress/kendo-angular-charts/dist/es2015/common/collection.service";
 import { MomentService } from "../../shared/moment/moment.service";
 import { contractStatusWidgetService } from "../../dashboard/contractStatusWidget.service";
 import { logger } from "../logger/logger";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: 'app-search',
     templateUrl: 'Client/src/app/shared/search/search.component.html',
     styleUrls: ['Client/src/app/shared/search/search.component.css'],
 })
-export class SearchComponent {
+export class SearchComponent implements OnDestroy {
     private startDateValue: Date;
     private endDateValue: Date;
     private showSearchFilters: boolean = true;
@@ -28,6 +30,8 @@ export class SearchComponent {
     @Input() title: string = " ";
     @Input() titleText: string = " ";
     @Output() isDirty = new EventEmitter();
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
 
     constructor(protected cntrctWdgtSvc: contractStatusWidgetService,
                 protected loggerSvc: logger,
@@ -40,6 +44,7 @@ export class SearchComponent {
 
 
         this.cntrctWdgtSvc.getCustomerDropdowns()
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 if (response && response.length > 0) {
                     this.custData = response;
@@ -67,5 +72,10 @@ export class SearchComponent {
                 window.localStorage.endDateValue = value;
             }
         }
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

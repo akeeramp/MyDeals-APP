@@ -1,4 +1,4 @@
-import { Component, Input, Output, EventEmitter, ViewChild } from "@angular/core";
+import { Component, Input, Output, EventEmitter, ViewChild, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
 import { distinct,process, State } from "@progress/kendo-data-query";
@@ -14,7 +14,8 @@ import { FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
 import { each }from 'underscore';
 import { performanceBarsComponent } from '../performanceBars/performanceBar.component';
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
-import { Subscription } from "rxjs";
+import { Subject, Subscription } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 export interface contractIds {
     Model: string;
@@ -31,7 +32,7 @@ export interface contractIds {
     templateUrl: "Client/src/app/contract/contractManager/contractManager.component.html",
     styleUrls: ['Client/src/app/contract/contractManager/contractManager.component.css']
 })
-export class contractManagerComponent {
+export class contractManagerComponent implements OnDestroy{
     runIfStaleByHours = 3;
     forceRunValue = true;
     enabledPCT = false;
@@ -84,6 +85,8 @@ export class contractManagerComponent {
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
     @ViewChild(performanceBarsComponent) public perfComp: performanceBarsComponent;
     @Output() isDirty = new EventEmitter<any>();
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     public isLoading = false;
     private dirty = false;
     userRole = ""; canEmailIcon = true;
@@ -639,7 +642,7 @@ export class contractManagerComponent {
         let getWipSummaryApi: Subscription;
         //check whether arrow icon is expanded/collapsed ,only if it is expanded then call API to get the data
         if (this.isPTExpanded[ptDcId]) {
-            getWipSummaryApi = this.contractManagerSvc.getWipSummary(pt.DC_ID).subscribe((response) => {
+            getWipSummaryApi = this.contractManagerSvc.getWipSummary(pt.DC_ID).pipe(takeUntil(this.destroy$)).subscribe((response) => {
                 if (response !== undefined) {
                     for (let i = 0; i < response.length; i++) {
                         if (response[i].WF_STG_CD === "Draft") response[i].WF_STG_CD = response[i].PS_WF_STG_CD;
@@ -1244,5 +1247,11 @@ export class contractManagerComponent {
                 }, 100);
             }
         });
+    }
+
+     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+     ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

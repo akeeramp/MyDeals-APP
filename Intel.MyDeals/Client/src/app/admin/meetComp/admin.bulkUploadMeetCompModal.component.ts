@@ -1,10 +1,13 @@
-import { Component, ViewEncapsulation } from "@angular/core"
+import { Component, ViewEncapsulation, OnDestroy } from "@angular/core"
 import { logger } from "../../shared/logger/logger";
 import { meetCompService } from './admin.meetComp.service';
 import { MatDialogRef } from '@angular/material/dialog';
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
 import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+
 
 @Component({
     selector: "bulkUploadMeetCompModal",
@@ -13,14 +16,15 @@ import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
     encapsulation: ViewEncapsulation.None
 })
 
-export class BulkUploadMeetCompModalComponent {
+export class BulkUploadMeetCompModalComponent implements OnDestroy {
     
     constructor(
         private meetCompSvc: meetCompService,
         private loggerSvc: logger, public dialogRef: MatDialogRef<BulkUploadMeetCompModalComponent>) {
         dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG
     }
-
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     spinnerMessageHeader = "Bulk Upload Meet Comp";
     spinnerMessageDescription = "Please wait while we importing meet comp data..";
     meetComps = [];
@@ -179,7 +183,9 @@ export class BulkUploadMeetCompModalComponent {
         if (this.meetComps.length > 0) {
             this.isBusy = true;
             this.spinnerMessageDescription = "Please wait while validating meet comp data..";
-            this.meetCompSvc.validateMeetComps(this.meetComps).subscribe((response) => {
+            this.meetCompSvc.validateMeetComps(this.meetComps)
+                .pipe(takeUntil(this.destroy$))
+                .subscribe((response) => {
                 this.isBusy = false;
                 this.MeetCompValidation = response;
                 if (response.HasInvalidMeetComp) {
@@ -332,7 +338,9 @@ export class BulkUploadMeetCompModalComponent {
     UploadMeetComps() {
         this.isBusy = true;
         this.spinnerMessageDescription = "Please wait while uploading meet comp data..";
-        this.meetCompSvc.uploadMeetComp(this.MeetCompValidation.ValidatedMeetComps).subscribe((response) => {
+        this.meetCompSvc.uploadMeetComp(this.MeetCompValidation.ValidatedMeetComps)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((response) => {
             this.isBusy = false;
             if (response) {
                 this.loggerSvc.success("Meet comps are uploaded successfully!");
@@ -344,5 +352,10 @@ export class BulkUploadMeetCompModalComponent {
             this.isBusy = false;
             this.loggerSvc.error("Unable to upload meet comps!", "");
         });
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

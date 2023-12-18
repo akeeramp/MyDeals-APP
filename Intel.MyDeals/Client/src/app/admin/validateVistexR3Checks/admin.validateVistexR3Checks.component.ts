@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewEncapsulation } from "@angular/core"
+import { Component, OnInit, ViewEncapsulation, OnDestroy } from "@angular/core"
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query"; /*GroupDescriptor,*/
 import { logger } from "../../shared/logger/logger";
@@ -7,6 +7,9 @@ import { any, pluck } from 'underscore';
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { Observable } from "rxjs";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+
 
 @Component({
     selector: "validate-vistex-checks",
@@ -15,12 +18,14 @@ import { Observable } from "rxjs";
     encapsulation: ViewEncapsulation.None
 })
 
-export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGuard{
+export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGuard, OnDestroy {
 
 
     constructor(public vldtVstxR3ChkSvc: ValidateVistexR3ChecksService, private loggerSvc: logger) {
        this.allData = this.allData.bind(this);
     }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     isDirty = false;
     private accessAllowed = true;
     private isLoading = true;
@@ -92,6 +97,7 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
 
     loadValidateVistexPage() {
         this.vldtVstxR3ChkSvc.getActiveCustomers()
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 this.ActiveCustomers = response;
             });
@@ -149,7 +155,7 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
             const data = {
                 "DEAL_IDS": this.DealstoSend
              };
-            this.vldtVstxR3ChkSvc.getVistexCustomersMapList(data).subscribe(response => {
+            this.vldtVstxR3ChkSvc.getVistexCustomersMapList(data).pipe(takeUntil(this.destroy$)).subscribe(response => {
                 this.isDirty=false;
                 this.Results = response.R3CutoverResponses;
                 sentDeals = this.Results.length;
@@ -275,4 +281,9 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
         { field: "Reset_Per_Period", title: "Reset Per Period", width: "150px", filterable: { multi: true, search: true } },
         { field: "Send_To_Vistex", title: "Send To Vistex", width: "150px", filterable: { multi: true, search: true } }
     ]
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 }

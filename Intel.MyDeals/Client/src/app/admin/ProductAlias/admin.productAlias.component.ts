@@ -1,6 +1,6 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { productAliasService } from "./admin.productAlias.service";
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, OnDestroy } from "@angular/core";
 import { Product_Alias_Map } from "./admin.productAlias.model";
 import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
@@ -8,15 +8,19 @@ import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { Observable } from "rxjs";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: 'admin-product-alias',
     templateUrl: 'Client/src/app/admin/productAlias/admin.productAlias.component.html',
     styleUrls: ['Client/src/app/admin/productAlias/admin.productAlias.component.css']
 })
-export class adminProductAliasComponent implements PendingChangesGuard{
+export class adminProductAliasComponent implements PendingChangesGuard, OnDestroy {
 
     constructor(private productAliasSvc: productAliasService, private loggerSvc: logger) { }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     @ViewChild("catDropDown") private catDdl;
     @ViewChild("custDropDown") private custDdl;
     @ViewChild("countDropDown") private countDdl;
@@ -91,7 +95,7 @@ export class adminProductAliasComponent implements PendingChangesGuard{
             document.location.href = "/Dashboard#/portal";
         } else {
             this.isLoading = true;
-            this.productAliasSvc.GetProductsFromAlias().subscribe(
+            this.productAliasSvc.GetProductsFromAlias().pipe(takeUntil(this.destroy$)).subscribe(
                 (result: Array<any>) => {
                     this.gridResult = result;
                     this.gridData = process(this.gridResult, this.state);
@@ -180,7 +184,7 @@ export class adminProductAliasComponent implements PendingChangesGuard{
     }
 
     deleteOperation() {
-        this.productAliasSvc.DeleteProductAlias(this.product_map).subscribe(
+        this.productAliasSvc.DeleteProductAlias(this.product_map).pipe(takeUntil(this.destroy$)).subscribe(
             () => {
                 this.loadProductAlias();
                 this.loggerSvc.success("Product Alias Deleted.");
@@ -209,7 +213,7 @@ export class adminProductAliasComponent implements PendingChangesGuard{
     insertUpdateOperation(rowIndex, isNew, product_map) {
         if (isNew) {
             this.isLoading = true;
-            this.productAliasSvc.CreateProductAlias(product_map).subscribe(
+            this.productAliasSvc.CreateProductAlias(product_map).pipe(takeUntil(this.destroy$)).subscribe(
                 () => {
                     this.gridResult.push(product_map);
                     this.loadProductAlias();
@@ -225,7 +229,7 @@ export class adminProductAliasComponent implements PendingChangesGuard{
             );
         } else {
             this.isLoading = true;
-            this.productAliasSvc.UpdateProductAlias(product_map).subscribe(
+            this.productAliasSvc.UpdateProductAlias(product_map).pipe(takeUntil(this.destroy$)).subscribe(
                 () => {
                     this.gridResult[rowIndex] = product_map;
                     this.gridResult.push(product_map);
@@ -278,5 +282,10 @@ export class adminProductAliasComponent implements PendingChangesGuard{
 
     ngOnInit() {
         this.loadProductAlias();
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

@@ -1,6 +1,6 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { customerVendorService } from "./admin.customerVendors.service";
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, OnDestroy } from "@angular/core";
 import { Cust_Map } from "./admin.customerVendors.model";
 import { ThemePalette } from "@angular/material/core";
 import { sortBy, uniq, pluck, findWhere, indexOf } from 'underscore';
@@ -17,15 +17,16 @@ import {
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "admin-vendors-customer",
     templateUrl: "Client/src/app/admin/CustomerVendors/admin.customerVendors.component.html",
     styleUrls: ['Client/src/app/admin/CustomerVendors/admin.customerVendors.component.css']
 })
-export class adminCustomerVendorsComponent implements PendingChangesGuard {
+export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDestroy {
     constructor(private customerVendSvc: customerVendorService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
@@ -33,6 +34,8 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard {
     @ViewChild("custDropDown") private custDdl;
     @ViewChild("countDropDown") private countDdl;
     @ViewChild("partDropDown") private partDdl;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     isDirty = false;
     private isLoading = true;
     private errorMsg = "";
@@ -135,6 +138,7 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard {
     }
     getCustomersDataSource() {
         this.customerVendSvc.getCustomerDropdowns()
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 this.custData = response;
                 this.distinctCust = distinct(response, "CUST_NM").map(
@@ -147,7 +151,7 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard {
     }
 
     getVendorsInfoDropdown() {
-        this.customerVendSvc.getVendorsData().subscribe((response: Array<any>) => {
+        this.customerVendSvc.getVendorsData().pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
             this.vendorDetails = response;
             this.distinctPartner = sortBy(distinct(response, "BUSNS_ORG_NM").map(
                 item => item.BUSNS_ORG_NM
@@ -201,7 +205,7 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard {
         ) {
             document.location.href = "/Dashboard#/portal";
         } else {
-            this.customerVendSvc.getCustomerVendors().subscribe(
+            this.customerVendSvc.getCustomerVendors().pipe(takeUntil(this.destroy$)).subscribe(
                 (result: Array<any>) => {
                     this.gridResult = result;
                     this.distinctCountry = distinct(this.gridResult, "CTRY_CD").map(
@@ -297,7 +301,7 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard {
             OBJ_SET_TYPE_SID: new FormControl(0),
             VNDR_ID: new FormControl(0),
         });
-        this.formGroup.valueChanges.subscribe(() => {
+        this.formGroup.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
             this.isFormChange = true;
         });
 
@@ -329,7 +333,7 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard {
             OBJ_SET_TYPE_SID: new FormControl(dataItem.OBJ_SET_TYPE_SID),
             VNDR_ID: new FormControl(dataItem.VNDR_ID),
         });
-        this.formGroup.valueChanges.subscribe(() => {
+        this.formGroup.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
             this.isFormChange = true;
         });
         this.editedRowIndex = rowIndex;
@@ -356,7 +360,7 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard {
                 this.isDirty=false;
                 if (isNew) {
                     this.isLoading = true;
-                    this.customerVendSvc.insertCustomerVendor(cust_map).subscribe(
+                    this.customerVendSvc.insertCustomerVendor(cust_map).pipe(takeUntil(this.destroy$)).subscribe(
                         () => {
                             this.gridResult.push(cust_map);
                             this.loadCustomerVendors();
@@ -370,7 +374,7 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard {
                     );
                 } else {
                     this.isLoading = true;
-                    this.customerVendSvc.updateCustomerVendor(cust_map).subscribe(
+                    this.customerVendSvc.updateCustomerVendor(cust_map).pipe(takeUntil(this.destroy$)).subscribe(
                         () => {
                             this.gridResult[rowIndex] = cust_map;
                             this.gridResult.push(cust_map);
@@ -406,4 +410,11 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard {
         this.getVendorsInfoDropdown();
         this.loadCustomerVendors();
     }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
 }

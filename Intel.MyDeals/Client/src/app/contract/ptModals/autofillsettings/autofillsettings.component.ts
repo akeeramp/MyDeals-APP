@@ -1,11 +1,12 @@
-import { Component, Inject, NgZone, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, NgZone, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { each, indexOf, map, clone } from 'underscore';
-import { forkJoin, Observable, of } from 'rxjs';
+import { forkJoin, Observable, of, Subject } from 'rxjs';
 import { autoFillService } from "../autofillsettings/autofillsetting.service";
 import { logger } from '../../../shared/logger/logger';
 import { CheckedState } from "@progress/kendo-angular-treeview";
 import { TemplatesService } from "../../../shared/services/templates.service";
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: "autofill-selector",
@@ -13,7 +14,7 @@ import { TemplatesService } from "../../../shared/services/templates.service";
     styleUrls: ["Client/src/app/contract/ptModals/autofillsettings/autofillsettings.component.css"],
     encapsulation: ViewEncapsulation.None
 })
-export class AutoFillComponent {
+export class AutoFillComponent implements OnDestroy {
     private dropdownResponses: any = null;
     private isLoading: boolean = false;
     private isInitial: boolean = false;
@@ -42,7 +43,8 @@ export class AutoFillComponent {
     private ptTemplate;
     //UItemplate is to get lnav data
     public UItemplate: any;
-
+    private readonly destroy$ = new Subject();
+    
     constructor(private autoSvc: autoFillService,
                 private loggerSvc: logger, private templatesSvc: TemplatesService,
                 public dialogRef: MatDialogRef<AutoFillComponent>, private ngZone: NgZone,
@@ -312,7 +314,9 @@ export class AutoFillComponent {
             }
         }
 
-        this.autoSvc.updatePricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, pt).subscribe((response: any) => {
+        this.autoSvc.updatePricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, pt)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response: any) => {
             var res = response;            
             this.dialogRef.close(this.autofillData);
             let dealType: any;
@@ -360,7 +364,9 @@ export class AutoFillComponent {
                     }
                 }
             }
-            this.autoSvc.createPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, pt).subscribe((response: any) => {
+            this.autoSvc.createPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, pt)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((response: any) => {
                 pt = response.PRC_TBL[1];
                 this.autofillData.newPt = pt;            
                 this.dialogRef.close(this.autofillData);
@@ -545,4 +551,9 @@ export class AutoFillComponent {
             console.error('Auo_Fill::ngOnInit::', ex);
         }
     }
+     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+     ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+      }
 }

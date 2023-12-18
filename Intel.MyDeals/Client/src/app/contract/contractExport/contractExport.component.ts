@@ -1,10 +1,12 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { PageSizeItem } from "@progress/kendo-angular-grid";
 import {  State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { contractExportService } from "./contractExport.service";
 import { lnavService } from "../lnav/lnav.service";
+import { takeUntil } from "rxjs/operators";
+import { Subject } from "rxjs";
 
 
 @Component({
@@ -13,7 +15,7 @@ import { lnavService } from "../lnav/lnav.service";
     styleUrls: ["Client/src/app/contract/contractExport/contractExport.component.css"]
 })
 
-export class contractExportComponent {
+export class contractExportComponent implements OnDestroy{
     constructor(private contractExportSvc: contractExportService, private loggerSvc: logger, private lnavSvc: lnavService) {
     }
     @Input() contractData: any;
@@ -23,6 +25,8 @@ export class contractExportComponent {
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
     private CAN_VIEW_MEET_COMP: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
 
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private isLoading = true;
     private loadMessage = "Loading Contract Data";
     private type = "numeric";
@@ -61,7 +65,7 @@ export class contractExportComponent {
     loadContractExportData() {
         const cId = this.contractData.DC_ID;
 
-        this.contractExportSvc.getExportContractData(cId).subscribe((result: Array<any>) => {
+        this.contractExportSvc.getExportContractData(cId).pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
             this.loadMessage = "Done";
             this.exportData = result[0];
             setTimeout(()=>{
@@ -110,7 +114,7 @@ export class contractExportComponent {
         if(this.contractData.DC_ID){
             contractDetailId = this.contractData.DC_ID;
 
-        this.contractExportSvc.GetObjTimelineDetails(contractDetailId,objTypeSId, objTypeIds).subscribe((response: Array<any>) => {
+        this.contractExportSvc.GetObjTimelineDetails(contractDetailId,objTypeSId, objTypeIds).pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
             this.timelineData = response;
 
         }, error => {
@@ -125,7 +129,7 @@ export class contractExportComponent {
         let fname ='#'+this.exportData.DC_ID+"-"+ this.exportData.TITLE + ".pdf";
         htmlBody.push(document.getElementById('pdfContent').innerHTML); 
         this.isLoading = true;
-        let blah = this.contractExportSvc.exportAsPDF(htmlBody).subscribe(response => {
+        let blah = this.contractExportSvc.exportAsPDF(htmlBody).pipe(takeUntil(this.destroy$)).subscribe(response => {
             this.isLoading = false;
             let file = new Blob([response], { type: 'application/pdf' });
             let fileURL = URL.createObjectURL(file);
@@ -154,6 +158,12 @@ showHelpTopic() {
             this.loggerSvc.error('Something went wrong', 'Error');
             console.error('Contract_Export::ngOnInit::',ex);
         }
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
 

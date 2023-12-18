@@ -1,6 +1,6 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { productCategoryService } from "./admin.productCategories.service";
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, OnDestroy } from "@angular/core";
 import { ThemePalette } from "@angular/material/core";
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
@@ -13,16 +13,19 @@ import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { Observable } from "rxjs";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: 'admin-product-categories',
     templateUrl: 'Client/src/app/admin/productCategories/admin.productCategories.component.html',
     styleUrls: ['Client/src/app/admin/productCategories/admin.productCategories.component.css']
 })
-export class adminProductCategoriesComponent implements PendingChangesGuard {
+export class adminProductCategoriesComponent implements PendingChangesGuard, OnDestroy {
     constructor(private productCategorySvc: productCategoryService, public datepipe: DatePipe, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
+    private readonly destroy$ = new Subject();
     private isLoading = true;
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
@@ -108,6 +111,7 @@ export class adminProductCategoriesComponent implements PendingChangesGuard {
         }
         else {
             this.productCategorySvc.getCategories()
+                .pipe(takeUntil(this.destroy$))
                 .subscribe((response: Array<any>) => {
                     //as we get the CHG_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
                     each(response, item => {
@@ -184,7 +188,7 @@ export class adminProductCategoriesComponent implements PendingChangesGuard {
         else if (this.isFormChange) {
             this.isDirty=false;
             this.isLoading = true;
-            this.productCategorySvc.updateCategory(product_categories).subscribe(
+            this.productCategorySvc.updateCategory(product_categories).pipe(takeUntil(this.destroy$)).subscribe(
                 result => {
                     //getting the index value of the grid result by comparing the edited row PRD_CAT_MAP_SID to the grid result PRD_CAT_MAP_SID. so that we can update the user edited/modified data to proper grid result index
                     const index = this.gridResult.findIndex(x => product_categories[0].PRD_CAT_MAP_SID == x.PRD_CAT_MAP_SID);
@@ -251,6 +255,10 @@ export class adminProductCategoriesComponent implements PendingChangesGuard {
         this.focusFiledProductVertical = false;
         this.pdctVerticalTooltip.close();
     }
-
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 
 }

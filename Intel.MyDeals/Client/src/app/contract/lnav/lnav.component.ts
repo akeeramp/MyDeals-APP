@@ -1,7 +1,7 @@
 ﻿/* eslint-disable @typescript-eslint/no-inferrable-types */
 import { each } from 'underscore';
 import { MatDialog } from '@angular/material/dialog';
-import { Component, Input, Output, EventEmitter, ViewEncapsulation, ChangeDetectorRef, ViewChild, OnInit, OnChanges, AfterViewInit } from '@angular/core';
+import { Component, Input, Output, EventEmitter, ViewEncapsulation, ChangeDetectorRef, ViewChild, OnInit, OnChanges, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
@@ -12,6 +12,8 @@ import { headerService } from "../../shared/header/header.service";
 import { AutoFillComponent } from "../ptModals/autofillsettings/autofillsettings.component";
 import { RenameTitleComponent } from "../ptModals/renameTitle/renameTitle.component";
 import { ContractDetailsService } from "../contractDetails/contractDetails.service";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 export interface contractIds {
     Model: string;
@@ -29,7 +31,7 @@ export interface contractIds {
     styleUrls: ['Client/src/app/contract/lnav/lnav.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
+export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy  {
 
     constructor(private loggerService: logger,
                 private lnavService: lnavService,
@@ -94,6 +96,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
     private lnavSelectedPS: any = {};
     private isDeletePT: boolean = false;
     private isDeletePs: boolean = false;
+    private readonly destroy$ = new Subject();
 
     setBusy(msg, detail, msgType, showFunFact) {
         setTimeout(() => {
@@ -252,7 +255,9 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
             this.newStrategy.IS_HYBRID_PRC_STRAT = ps.IS_HYBRID_PRC_STRAT == "1" ? true : false;
         }
 
-        this.lnavService.createPricingStrategy(custId, contractId, ps).subscribe((response: any) => {
+        this.lnavService.createPricingStrategy(custId, contractId, ps)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response: any) => {
             if (this.contractData.PRC_ST === undefined) this.contractData.PRC_ST = [];
             ps.DC_ID = response.PRC_ST[1].DC_ID;
             this.contractData.PRC_ST.push(ps);
@@ -263,7 +268,9 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
             this.newStrategy.IS_HYBRID_PRC_STRAT = ps.IS_HYBRID_PRC_STRAT == "1" ? true : false;
             this.curPricingStrategy = ps;
             this.curPricingStrategyId = ps.DC_ID;
-            this.contractDetailsService.readContract(contractId).subscribe((response: Array<any>) => {
+            this.contractDetailsService.readContract(contractId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((response: Array<any>) => {
                 this.contractData = response[0];
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
@@ -285,6 +292,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
     refreshContractData(cId) {
         this.contractDetailsService
             .readContract(cId)
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 this.contractData = response[0];
             }, (err) => {
@@ -390,9 +398,13 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
                 }
             }
         }
-        this.lnavService.createPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, pt).subscribe((response: any) => {
+        this.lnavService.createPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, pt)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response: any) => {
             pt.DC_ID = response.PRC_TBL[1].DC_ID;
-            this.contractDetailsService.readContract(this.contractData.DC_ID).subscribe((response: Array<any>) => {
+            this.contractDetailsService.readContract(this.contractData.DC_ID)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((response: Array<any>) => {
                 this.contractData = response[0];
                 this.loadPte(pt.DC_PARENT_ID, pt.DC_ID, 0, 0);
                 this.isLoading = false;
@@ -505,7 +517,9 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
             item.TITLE += " (copy)";
         }
         if (isPs == true) {
-            this.lnavService.copyPricingStrategy(custId, contractId, id, item).subscribe((response: any) => {
+            this.lnavService.copyPricingStrategy(custId, contractId, id, item)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((response: any) => {
                 this.loggerService.success("Copied the " + objType + ".", "Copy Successful");
                 this.refreshContractData(contractId);
                 this.isLoading = false;
@@ -518,7 +532,9 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
 
         }
         else {
-            this.lnavService.copyPricingTable(custId, contractId, id, item).subscribe((response: any) => {
+            this.lnavService.copyPricingTable(custId, contractId, id, item)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((response: any) => {
                 this.loggerService.success("Copied the " + objType + ".", "Copy Successful");
                 this.refreshContractData(contractId);
                 this.isLoading = false;
@@ -569,7 +585,9 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
             this.setBusy("Deleting...", "Deleting the Pricing Strategy", "Info", false);
             const custId = this.contractData.CUST_MBR_SID;
             const contractId = this.contractData.DC_ID
-            this.lnavService.deletePricingStrategy(custId, contractId, this.lnavSelectedPS).subscribe((response: any) => {
+            this.lnavService.deletePricingStrategy(custId, contractId, this.lnavSelectedPS)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((response: any) => {
                 this.unmarkCurPricingStrategyId(this.lnavSelectedPS.DC_ID);
                 this.unmarkCurPricingTableId(this.lnavSelectedPS.DC_ID);
                 this.contractData.PRC_ST.splice(this.contractData.PRC_ST.indexOf(this.lnavSelectedPS), 1);
@@ -596,7 +614,9 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
             this.setBusy("Deleting...", "Deleting the Pricing Table", "Info", false);
             const custId = this.contractData.CUST_MBR_SID;
             const contractId = this.contractData.DC_ID;
-            this.lnavService.deletePricingTable(custId, contractId, this.lnavSelectedPT).subscribe((response: any) => {
+            this.lnavService.deletePricingTable(custId, contractId, this.lnavSelectedPT)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((response: any) => {
                 this.ptDelId = this.lnavSelectedPT.DC_ID;
                 this.unmarkCurPricingTableId(this.lnavSelectedPS.DC_ID);
                 this.lnavSelectedPS.PRC_TBL.splice(this.lnavSelectedPS.PRC_TBL.indexOf(this.lnavSelectedPT), 1);
@@ -729,7 +749,9 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
                 this.autoFillData = result;
                 if (pt == null) {
                     this.newPricingTable = this.autoFillData["newPt"];
-                    this.contractDetailsService.readContract(this.contractData.DC_ID).subscribe((response: Array<any>) => {
+                    this.contractDetailsService.readContract(this.contractData.DC_ID)
+                    .pipe(takeUntil(this.destroy$))
+                    .subscribe((response: Array<any>) => {
                         this.contractData = response[0];
                         this.loadPte(this.newPricingTable.DC_PARENT_ID, this.newPricingTable.DC_ID, 0, 0);
                     }, (err) => {
@@ -788,7 +810,8 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
         const psId=this.route.snapshot.paramMap.get('PSID');
         const ptId=this.route.snapshot.paramMap.get('PTID');
         const dealId=this.route.snapshot.paramMap.get('DealID');
-        this.headerService.getUserDetails().subscribe(res => {
+        this.headerService.getUserDetails()
+        .pipe(takeUntil(this.destroy$)).subscribe(res => {
             this.usrRole = res.UserToken.Role.RoleTypeCd;
             (<any>window).usrRole = this.usrRole;
 
@@ -999,7 +1022,9 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
             this.pricingStrategyInputHandler()
 
             //code for autofill change to accordingly change values
-            this.lnavService.autoFillData.subscribe(res => {
+            this.lnavService.autoFillData
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(res => {
                 this.autoFillData = res;
             }, err => {
                 this.loggerService.error("lnavSvc::isAutoFillChange**********", err);
@@ -1048,5 +1073,11 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit {
             this.loggerService.error("lnavService::lnavHighlight**********", err);
         });
     }
+
+     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+     ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+      }
 
 }

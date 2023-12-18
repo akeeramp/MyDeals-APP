@@ -1,21 +1,26 @@
 ﻿import { dealTypesService } from "./admin.dealTypes.service";
-import { Component } from "@angular/core";
+import { Component,OnDestroy } from "@angular/core";
 import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
 import { FormGroup } from "@angular/forms";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+
 
 @Component({
     selector: "admin-deal-types",
     templateUrl: "Client/src/app/admin/dealTypes/admin.dealTypes.component.html",
     styleUrls: ['Client/src/app/admin/dealTypes/admin.dealTypes.component.css']
 })
-export class adminDealTypesComponent {
+export class adminDealTypesComponent implements OnDestroy {
     constructor(private dealTypesSvc: dealTypesService) {
         this.allData = this.allData.bind(this);
     }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private isLoading = true;
     private errorMsg = "";
     private dataSource;
@@ -89,7 +94,7 @@ export class adminDealTypesComponent {
         if (!(<any>window).isDeveloper) {
             document.location.href = "/Dashboard#/portal";
         } else {
-            this.dealTypesSvc.getDealTypes().subscribe(
+            this.dealTypesSvc.getDealTypes().pipe(takeUntil(this.destroy$)).subscribe(
                 (result: Array<any>) => {
                     this.gridResult = result;
                     this.gridData = process(this.gridResult, this.state);
@@ -122,6 +127,11 @@ export class adminDealTypesComponent {
 
     ngOnInit() {
         this.loadDealTypes();
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
 }

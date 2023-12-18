@@ -1,6 +1,6 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { dataFixService } from "./admin.dataFix.service";
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
@@ -9,17 +9,21 @@ import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: 'admin-data-fix',
     templateUrl: 'Client/src/app/admin/dataFix/admin.dataFix.component.html',
     styleUrls: ['Client/src/app/admin/dataFix/admin.dataFix.component.css']
 })
-export class adminDataFixComponent implements PendingChangesGuard {
+export class adminDataFixComponent implements PendingChangesGuard, OnDestroy {
     constructor(private dataFixSvc: dataFixService, 
         private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
  
     isDirty = false;
     private isLoading = true;
@@ -93,7 +97,8 @@ export class adminDataFixComponent implements PendingChangesGuard {
             document.location.href = "/Dashboard#/portal";
         } else {
             this.isLoading = true;
-            this.dataFixSvc.getDataFixes().subscribe( (result: Array<any>) => {
+            this.dataFixSvc.getDataFixes().pipe(takeUntil(this.destroy$))
+                .subscribe( (result: Array<any>) => {
                     this.gridResult = result;
                     this.gridData = process(this.gridResult, this.state);
                     this.isLoading = false;
@@ -160,7 +165,8 @@ export class adminDataFixComponent implements PendingChangesGuard {
     }
 
     saveNewDataFix(data, isExecute) {
-        this.dataFixSvc.updateDataFix(data, isExecute).subscribe(
+        this.dataFixSvc.updateDataFix(data, isExecute).pipe(takeUntil(this.destroy$))
+            .subscribe(
             (result) => {
                 if (result.RESULT == "1") {
                     this.isSuccess = true;
@@ -249,7 +255,8 @@ export class adminDataFixComponent implements PendingChangesGuard {
                 OpDataElements: this.dataFixSvc.getOpDataElements(),
                 AttributeSettings: this.dataFixSvc.getDataFixActions(),
                 Actions: this.dataFixSvc.getDataFixActions()
-            }).subscribe(({ MyCustomersInfo, OpDataElements, AttributeSettings, Actions }) => {
+            }).pipe(takeUntil(this.destroy$))
+                .subscribe(({ MyCustomersInfo, OpDataElements, AttributeSettings, Actions }) => {
                 this.MyCustomersInfo = MyCustomersInfo;
                 this.OpDataElements = OpDataElements;
                 this.AttributeSettings = AttributeSettings.filter((x) => x.DdlType === 'ATRB_LIST');
@@ -299,5 +306,11 @@ export class adminDataFixComponent implements PendingChangesGuard {
 
     canDeactivate(): Observable<boolean> | boolean {
         return !this.isDirty;
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

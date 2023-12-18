@@ -1,4 +1,4 @@
-﻿import { Component } from "@angular/core";
+﻿import { Component, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { dataQualityService } from "./admin.dataQuality.service";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
@@ -6,16 +6,20 @@ import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: 'admin-dataquality',
     templateUrl: 'Client/src/app/admin/dataQuality/admin.dataQuality.component.html',
     styleUrls: ['Client/src/app/admin/dataQuality/admin.dataQuality.component.css']
 })
-export class admindataQualityComponent {
+export class admindataQualityComponent implements OnDestroy {
     constructor(private dataQualitySvc: dataQualityService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private isLoading = true;
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
@@ -74,7 +78,8 @@ export class admindataQualityComponent {
             document.location.href = "/Dashboard#/portal";
         }
         else {
-            this.dataQualitySvc.GetDataQualityUseCases().subscribe((result: Array<any>) => {
+            this.dataQualitySvc.GetDataQualityUseCases().pipe(takeUntil(this.destroy$))
+                .subscribe((result: Array<any>) => {
                 this.isLoading = false;
                 this.gridResult = result;
                 this.gridData = process(result, this.state);
@@ -87,7 +92,8 @@ export class admindataQualityComponent {
     //Run DQ
     runDQ(useCase) {
         this.loggerSvc.info('DQ Queued..', '');
-        this.dataQualitySvc.RunDQ(useCase).subscribe(() => {
+        this.dataQualitySvc.RunDQ(useCase).pipe(takeUntil(this.destroy$))
+            .subscribe(() => {
             this.loggerSvc.success("DQ Run completed");
         }, (error) => {
             this.loggerSvc.error('Unable to Run DQ', error.statusText);
@@ -120,4 +126,9 @@ export class admindataQualityComponent {
         this.loadDataQualityUseCases();
     }
 
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 }

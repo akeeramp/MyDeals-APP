@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from "@angular/core";
+import { Component, EventEmitter, Input, OnDestroy, Output } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
@@ -8,6 +8,8 @@ import { overLappingcheckDealService } from "../ptModals/overlappingCheckDeals/o
 import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/overlappingCheckDeals.component";
 import { MatDialog } from "@angular/material/dialog";
 import { each, filter } from 'underscore';
+import { takeUntil } from "rxjs/operators";
+import { Subject } from "rxjs";
 
 @Component({
     selector: "overlapping-deals",
@@ -15,13 +17,15 @@ import { each, filter } from 'underscore';
     styleUrls: ['Client/src/app/contract/overLappingDeals/overLapping.component.css']
 })
 
-export class overLappingDealsComponent {
+export class overLappingDealsComponent implements OnDestroy{
     S_ID: any;
     constructor(private overLappingDealsSvc: overLappingDealsService, private overLappingCheckDealsSvc: overLappingcheckDealService, protected dialog: MatDialog, private loggerSvc: logger) {
     }
     @Input() contractData: any;
     @Input() UItemplate: any;
-    @Output() isDirty = new EventEmitter();8
+    @Output() isDirty = new EventEmitter();
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private isLoading = true;
     private loadMessage = "Looking for Overlapping Deals";
     private type = "numeric";
@@ -81,7 +85,7 @@ export class overLappingDealsComponent {
     }
     getOverlapDetails() {
         this.contractId = this.contractData.DC_ID;
-        this.overLappingDealsSvc.getOverLappingDealsDetails(this.contractId).subscribe((result: any) => {
+        this.overLappingDealsSvc.getOverLappingDealsDetails(this.contractId).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
             this.loadMessage = "Done";
             this.ovlpData = this.prepareGridData(result.Data);
             this.ovlpErrorCount = distinct(result.Data, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
@@ -103,14 +107,14 @@ export class overLappingDealsComponent {
             this.isLoading = false;
             this.loggerSvc.error('OverLapDeals service', error);
         });
-        this.overLappingDealsSvc.readContract(this.contractId).subscribe((response: Array<any>) => {
+        this.overLappingDealsSvc.readContract(this.contractId).pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
             this.contractDetails = response[0];
         },(err)=>{
             this.loggerSvc.error("Unable to get contract data","Error",err);
         });
         this.S_ID = this.contractData.CUST_MBR_SID;
 
-        this.overLappingDealsSvc.getCustomerVendors(this.S_ID).subscribe(
+        this.overLappingDealsSvc.getCustomerVendors(this.S_ID).pipe(takeUntil(this.destroy$)).subscribe(
             (result: Array<any>) => {
                 console.log(result);
             },
@@ -267,7 +271,7 @@ export class overLappingDealsComponent {
 
     updateOverlapping(data, YCS2_OVERLAP_OVERRIDE) {
         this.isLoading = true;
-        this.overLappingCheckDealsSvc.updateOverlappingDeals(data, YCS2_OVERLAP_OVERRIDE).subscribe((result: any) => {
+        this.overLappingCheckDealsSvc.updateOverlappingDeals(data, YCS2_OVERLAP_OVERRIDE).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
             this.isLoading = false;
             if (result[0].PRICING_TABLES > 0) {
                 if (YCS2_OVERLAP_OVERRIDE === 'N') {
@@ -318,6 +322,11 @@ export class overLappingDealsComponent {
         this.getOverlapDetails();
     }
 
+     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+     ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 
 }
 

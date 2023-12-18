@@ -1,7 +1,9 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { iCostProductService } from "./admin.iCostProduct.service";
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { Injectable } from "@angular/core";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 import {
     GridDataResult,
@@ -25,9 +27,12 @@ import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactiva
 })
 
 @Injectable()
-export class iCostProductsComponent implements PendingChangesGuard{
+export class iCostProductsComponent implements PendingChangesGuard, OnDestroy{
 
     constructor(private iCostProductSvc: iCostProductService, private loggerSvc: logger) { }
+
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     isDirty = false;
     public validationMessage = "";
     public isRuleInvalid = false;
@@ -116,6 +121,7 @@ export class iCostProductsComponent implements PendingChangesGuard{
         else {
             this.isLoading = true;
             this.iCostProductSvc.getProductCostTestRules()
+                .pipe(takeUntil(this.destroy$))
                 .subscribe((result: Array<any>) => {
                     this.gridResult = result;
                     this.gridData = process(this.gridResult, this.state);
@@ -144,6 +150,7 @@ export class iCostProductsComponent implements PendingChangesGuard{
 
         if (this.EditMode) {
             this.iCostProductSvc.updatePCTRule(this.pctRule)
+                .pipe(takeUntil(this.destroy$))
                 .subscribe(() => {
                     this.loggerSvc.success("iCostProductsComponent::updatePCTRules::Update successful.");
                     this.cancel();
@@ -155,6 +162,7 @@ export class iCostProductsComponent implements PendingChangesGuard{
         }
         else {
             this.iCostProductSvc.createPCTRules(this.pctRule)
+                .pipe(takeUntil(this.destroy$))
                 .subscribe(() => {
                     this.loggerSvc.success("iCostProductsComponent::createPCTRules::Save successful.");
                     this.cancel();
@@ -287,6 +295,7 @@ export class iCostProductsComponent implements PendingChangesGuard{
             this.filter = { "group": { "operator": "AND", "rules": [] } };
         }
         this.iCostProductSvc.getProductAttributeValues(verticalId)
+            .pipe(takeUntil(this.destroy$))
             .subscribe(response => {
                 for (let i = 0; i < response.length; i++) {
                     response[i]['idx'] = i;
@@ -332,6 +341,7 @@ export class iCostProductsComponent implements PendingChangesGuard{
         this.isLoading = true;
 
         this.iCostProductSvc.deletePCTRule(this.deleteItemData)
+            .pipe(takeUntil(this.destroy$))
             .subscribe(() => {
                 this.isButtonDisabled = true;
                 this.loggerSvc.success("iCostProductsComponent::removeHandler::Delete successful.");
@@ -420,12 +430,19 @@ export class iCostProductsComponent implements PendingChangesGuard{
     ngOnInit() {
         this.loadLegalClassification();
         this.iCostProductSvc.getProductTypeMappings()
+            .pipe(takeUntil(this.destroy$))
             .subscribe(response => {
                 this.ProductType = response;
                 this.origDistinctProductType = this.distinctProductType = distinct(response, 'PRD_TYPE');
             },(err)=>{
                 this.loggerSvc.error("Unable to get product type mappings","Error",err);
             });
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
 }

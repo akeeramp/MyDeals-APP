@@ -1,5 +1,8 @@
-﻿import { Component, HostListener } from "@angular/core"; 
+﻿import { Component, HostListener,OnDestroy } from "@angular/core"; 
 import { isNull, isUndefined } from "underscore";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+
 
 import { AppEvent, broadCastService } from "./broadcast.service";
 import { quickDealConstants } from "../angular.constants";
@@ -8,7 +11,7 @@ import { quickDealConstants } from "../angular.constants";
     selector: 'deal-popup-dock-angular',
     templateUrl: 'Client/src/app/core/dealPopup/dealPopupDock.component.html', 
 })
-export class dealPopupDockComponent  {
+export class dealPopupDockComponent implements OnDestroy {
     ids: any= [];
     recent: any = []; 
     menuOrientation = 'horizontal'; 
@@ -19,7 +22,9 @@ export class dealPopupDockComponent  {
     screenHeight: number;
     screenWidth: number;
     errormsg = "";
-    ismaxDealsOpened= false;
+    ismaxDealsOpened = false;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
 
     constructor(private broadcastService: broadCastService) {
         this.getScreenSize();
@@ -32,10 +37,10 @@ export class dealPopupDockComponent  {
     }
 
     intializedealpopupDock() {
-        this.broadcastService.on("QuickDealToggleDeal").subscribe(event => {
+        this.broadcastService.on("QuickDealToggleDeal").pipe(takeUntil(this.destroy$)).subscribe(event => {
             this.subscribeEvents(event.payload);
         });
-        this.broadcastService.on("QuickDealWidgetClosed").subscribe(event => {
+        this.broadcastService.on("QuickDealWidgetClosed").pipe(takeUntil(this.destroy$)).subscribe(event => {
             this.subscribeEvents(event.payload);
         });
 
@@ -246,5 +251,10 @@ export class dealPopupDockComponent  {
 
     ngOnInit() { 
         this.intializedealpopupDock();
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

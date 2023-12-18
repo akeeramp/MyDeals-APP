@@ -1,4 +1,4 @@
-﻿import { Component } from "@angular/core";
+﻿import { Component, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { customerService } from "./admin.customer.service";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
@@ -6,7 +6,8 @@ import { process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
-import { constant } from "underscore";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "admin-customer",
@@ -14,10 +15,12 @@ import { constant } from "underscore";
     styleUrls: ['Client/src/app/admin/customer/admin.customer.component.css']
 })
 
-export class adminCustomerComponent {
+export class adminCustomerComponent implements OnDestroy {
     constructor(private customerSvc: customerService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private isLoading = true;
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
@@ -80,7 +83,9 @@ export class adminCustomerComponent {
             document.location.href = "/Dashboard#/portal";
         }
         else {
-            this.customerSvc.getCustomers().subscribe((result: Array<any>) => {
+            this.customerSvc.getCustomers()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((result: Array<any>) => {
                 this.isLoading = false;
                 this.gridResult = result;
                 this.gridData = process(result, this.state);
@@ -112,5 +117,10 @@ export class adminCustomerComponent {
     ngOnInit() {
         this.loadCustomer();
     }
+   //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+      }
 
 }

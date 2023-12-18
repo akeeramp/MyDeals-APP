@@ -1,11 +1,11 @@
 ﻿/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-inferrable-types */
-import { Component, Input, Output, EventEmitter, NgZone, OnInit, AfterViewInit, ViewChild } from '@angular/core';
+import { Component, Input, Output, EventEmitter, NgZone, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
 import { each, uniq, filter, map, where, pluck, findWhere, findIndex, findLastIndex, reject, contains, find, values, keys, unique, includes } from 'underscore';
 import { MatDialog } from '@angular/material/dialog';
-import { BehaviorSubject, Observable, forkJoin } from 'rxjs';
+import { BehaviorSubject, Observable, Subject, forkJoin } from 'rxjs';
 import { distinct } from '@progress/kendo-data-query';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
@@ -35,12 +35,13 @@ import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 import { FlexOverlappingCheckComponent } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.component';
 import { dropDownModalComponent } from '../ptModals/dropDownModal/dropDownModal.component';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'pricing-table-editor',
     templateUrl: 'Client/src/app/contract/pricingTableEditor/pricingTableEditor.component.html'
 })
-export class PricingTableEditorComponent implements OnInit, AfterViewInit {
+export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDestroy  {
 
     constructor(private pteService: PricingTableEditorService,
                 private productSelectorService: productSelectorService,
@@ -460,6 +461,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
     private prdPastObj: any = [];
     private isPRDPaste = false;
     isDirty=false;
+    private readonly destroy$ = new Subject();
     // To get the selected row and col for product selector
     private multiRowDelete: Array<any> = [];
     // Handsontable Variables basic hottable structure
@@ -757,7 +759,8 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
                 attribute: "TERMS",
                 value: dataItem["TERMS"]
             };
-            this.pteService.updateAtrbValue(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data).toPromise().catch((err) => {
+            this.pteService.updateAtrbValue(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data)
+            .toPromise().catch((err) => {
                 this.loggerService.error("Error", "Could not save the value.", err);
             });
         }
@@ -775,7 +778,8 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
         this.C_ADD_PRICING_TABLE = this.curPricingStrategy._settings.C_ADD_PRICING_TABLE != undefined ? this.curPricingStrategy._settings.C_ADD_PRICING_TABLE : false;
     }
     async getPTRDetails() {
-        let response = await this.pteService.readPricingTable(this.in_Pt_Id).toPromise().catch((err) => {
+        let response = await this.pteService.readPricingTable(this.in_Pt_Id)
+        .toPromise().catch((err) => {
             this.loggerService.error('Something went wrong.', 'error');
             console.error('PricingTableEditorComponent::readPricingTable::readTemplates:: service::', err);
         });
@@ -1518,7 +1522,8 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
             this.setBusy("Deleting...", "Deleting the Table row", "Info", true);
         else
             this.setBusy("Saving your data...", "Please wait as we save your information", "Info", true);
-        let result = await this.pteService.updateContractAndCurrentPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).toPromise().catch((error) => {
+        let result = await this.pteService.updateContractAndCurrentPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false)
+        .toPromise().catch((error) => {
             this.loggerService.error("Something went wrong", 'Error');
             console.error("PricingTableEditorComponent::saveUpdatePTEAPI::", error);
         });
@@ -1791,7 +1796,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
             // Validate products
             this.isLoading = true;
             this.setBusy("Validating your data...", "Please wait while we validate your information!", "Info", true);
-            let resultdata = await this.productSelectorService.TranslateProducts(translationInputToSend, this.contractData.CUST_MBR_SID, this.curPricingTable.OBJ_SET_TYPE_CD, this.contractData.DC_ID, this.contractData.IS_TENDER) //Once the database is fixed remove the hard coded geo_mbr_sid
+            let resultdata = await this.productSelectorService.TranslateProducts(translationInputToSend, this.contractData.CUST_MBR_SID, this.curPricingTable.OBJ_SET_TYPE_CD, this.contractData.DC_ID, this.contractData.IS_TENDER) //Once the database is fixed remove the hard coded geo_mbr_sid    
                 .toPromise()
                 .catch(error => {
                     this.loggerService.error("Product Translator failure::", error);
@@ -2308,5 +2313,9 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit {
             }
         });
     }
-
+ //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+ ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 }

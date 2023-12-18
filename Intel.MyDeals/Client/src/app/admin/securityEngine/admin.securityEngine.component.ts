@@ -1,4 +1,4 @@
-﻿import { Component } from "@angular/core";
+﻿import { Component,OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
@@ -7,17 +7,20 @@ import { SelectEvent } from "@progress/kendo-angular-layout";
 
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { sortBy } from 'underscore';
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "admin-security-engine",
     templateUrl: "Client/src/app/admin/securityEngine/admin.securityEngine.component.html",
     styleUrls: ['Client/src/app/admin/securityEngine/admin.securityEngine.component.css']
 })
-export class adminsecurityEngineComponent implements PendingChangesGuard{
+export class adminsecurityEngineComponent implements PendingChangesGuard, OnDestroy{
 
     constructor(private SecurityEnginesvc: SecurityEngineService, private loggerSvc: logger) { }
     isDirty = false;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     public isGridLoading = false;
     public isShowMainContent = false;
     public currentDisplayAction = [];
@@ -91,7 +94,7 @@ export class adminsecurityEngineComponent implements PendingChangesGuard{
     }
 
     getSecurityDropdownData() {
-        this.SecurityEnginesvc.getSecurityDropdownData().subscribe((response: Array<any>) => {
+        this.SecurityEnginesvc.getSecurityDropdownData().pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
             this.dropDownDatasource = response;
             this.drilledDowndealtype = this.dropDownDatasource['AdminDealTypes'].filter(x => x.Alias == 'ALL_TYPES');
             this.drilledDownstages = this.dropDownDatasource['WorkFlowStages'].filter(x => x.Second == 'InComplete' || x.Second == 'Complete' || x.Second == 'Cancelled' || x.Second == 'Lost');
@@ -205,7 +208,7 @@ export class adminsecurityEngineComponent implements PendingChangesGuard{
         }
         var mappingList = saveArray.filter(x => x.isModified == true);
 
-        this.SecurityEnginesvc.saveMapping(mappingList).subscribe((response: any) => {
+        this.SecurityEnginesvc.saveMapping(mappingList).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
             this.loggerSvc.success("Update successful.");
             for (var key in this.pendingSaveArray) {
                 if (this.pendingSaveArray.hasOwnProperty(key)) {
@@ -719,14 +722,14 @@ export class adminsecurityEngineComponent implements PendingChangesGuard{
         this.isASTab = true;
         this.getSecurityDropdownData();
 
-        this.SecurityEnginesvc.getObjAtrbs().subscribe((response: Array<any>) => {
+        this.SecurityEnginesvc.getObjAtrbs().pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
             this.GetSelectedDDlist = [];
             this.GetSelectedDDlist = response;
         }, function (error) {
             this.loggerSvc.error("Unable to get Deal Type Attributes.", error, error.statusText);
         });
 
-        this.SecurityEnginesvc.getMasks().subscribe((response: Array<any>) => {
+        this.SecurityEnginesvc.getMasks().pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
             this.processMaskData(response);
         }, function (error) {
             this.loggerSvc.error("Unable to get Security Masks.", error, error.statusText);
@@ -735,5 +738,10 @@ export class adminsecurityEngineComponent implements PendingChangesGuard{
         setTimeout(() => {
             this.isDropdownsLoaded = true;
         }, 200);
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

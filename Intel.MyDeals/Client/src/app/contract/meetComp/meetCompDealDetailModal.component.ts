@@ -1,11 +1,13 @@
 import {MatDialogRef, MAT_DIALOG_DATA} from "@angular/material/dialog";
-import {Component, ViewEncapsulation, OnInit, Inject} from "@angular/core";
+import {Component, ViewEncapsulation, OnInit, Inject, OnDestroy} from "@angular/core";
 import {GridDataResult,DataStateChangeEvent,PageSizeItem} from "@progress/kendo-angular-grid";
 import {process, State} from "@progress/kendo-data-query";
 import {logger} from "../../shared/logger/logger";
 import { meetCompContractService } from "./meetComp.service";
 import { each } from 'underscore';
 import { DatePipe } from "@angular/common";
+import { takeUntil } from "rxjs/operators";
+import { Subject } from "rxjs";
 
 @Component({
   selector: "end-customer-retail",
@@ -13,8 +15,10 @@ import { DatePipe } from "@angular/common";
   styleUrls: [ "Client/src/app/contract/meetComp/meetCompDealDetailModal.component.css"],
   encapsulation: ViewEncapsulation.None
 })
-export class meetCompDealDetailModalComponent implements OnInit {
+export class meetCompDealDetailModalComponent implements OnInit, OnDestroy {
 
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private gridData: GridDataResult;
     private gridResult;
     private state: State = {
@@ -66,7 +70,7 @@ export class meetCompDealDetailModalComponent implements OnInit {
 
     getDealDetails(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE){
         this.isLoading = true;
-        this.meetCompSvc.getDealDetails(DEAL_OBJ_SID,GRP_PRD_SID,DEAL_PRD_TYPE).subscribe( (response:Array<any>)=> {
+        this.meetCompSvc.getDealDetails(DEAL_OBJ_SID,GRP_PRD_SID,DEAL_PRD_TYPE).pipe(takeUntil(this.destroy$)).subscribe( (response:Array<any>)=> {
             this.isLoading = false;
             if (response && response.length > 0) {
                 each(response, item => {
@@ -92,4 +96,9 @@ export class meetCompDealDetailModalComponent implements OnInit {
     ngOnInit(): void {
         this.getDealDetails(this.deal_properties.DEAL_OBJ_SID,this.deal_properties.GRP_PRD_SID,this.deal_properties.DEAL_PRD_TYPE);
     } 
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+      this.destroy$.next();
+      this.destroy$.complete();
+  }
 }

@@ -1,19 +1,23 @@
-﻿import { Component, OnInit } from '@angular/core';
+﻿import { Component, OnInit, OnDestroy } from '@angular/core';
 
 import { utils } from '../../shared/util/util';
 import { logger } from '../../shared/logger/logger';
 import { AdminCacheService } from './admin.cache.service';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: 'cache',
     templateUrl: 'Client/src/app/admin/cache/admin.cache.component.html',
     styleUrls: ['Client/src/app/admin/cache/admin.cache.component.css']
 })
-export class AdminCacheComponent implements OnInit {
+export class AdminCacheComponent implements OnInit, OnDestroy {
 
     constructor(private adminCacheService: AdminCacheService,
                 private loggerService:logger) { }
 
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private readonly TITLE: string = 'Cache Manager';
     private cacheData = [];
     private currentCacheDetails = '';
@@ -23,7 +27,8 @@ export class AdminCacheComponent implements OnInit {
     private apiCacheData;
 
     loadCache() {
-        this.adminCacheService.getStaticCacheStatus().subscribe((res: unknown[]) => {
+        this.adminCacheService.getStaticCacheStatus().pipe(takeUntil(this.destroy$))
+            .subscribe((res: unknown[]) => {
             this.cacheData = res;
             this.defaultStatus();
         }, (err) => {
@@ -34,7 +39,8 @@ export class AdminCacheComponent implements OnInit {
     loadCacheByName(data) {
         data.loading = true;
         this.currentCacheDetails = "";
-        this.adminCacheService.loadStaticCacheByName(data).subscribe((res) => {
+        this.adminCacheService.loadStaticCacheByName(data).pipe(takeUntil(this.destroy$))
+            .subscribe((res) => {
             if (res === true) {
                 this.loadCache();
             } else {
@@ -50,7 +56,8 @@ export class AdminCacheComponent implements OnInit {
     clearCacheByName(data) {
         data.loading = true;
         this.currentCacheDetails = "";
-        this.adminCacheService.clearStaticCacheByName(data).subscribe(() => {
+        this.adminCacheService.clearStaticCacheByName(data).pipe(takeUntil(this.destroy$))
+            .subscribe(() => {
             this.loggerService.success("Deleted successfully", "Done")
             this.loadCache();
         }, (err) =>  {
@@ -62,7 +69,8 @@ export class AdminCacheComponent implements OnInit {
     viewCacheByName(data) {
         data.loading = true;
         this.currentCacheDetails = "";
-        this.adminCacheService.viewStaticCacheByName(data).subscribe((res) => {
+        this.adminCacheService.viewStaticCacheByName(data).pipe(takeUntil(this.destroy$))
+            .subscribe((res) => {
             this.currentCacheDetails = utils.isNull(res) ? "<< no data found >>" : JSON.stringify(res);
             data.loading = false;
         }, () => {
@@ -74,7 +82,8 @@ export class AdminCacheComponent implements OnInit {
     clearAll() {
         console.log("clearall");
         this.resetCache();
-        this.adminCacheService.clearStaticCache().subscribe(() => {
+        this.adminCacheService.clearStaticCache().pipe(takeUntil(this.destroy$))
+            .subscribe(() => {
             this.loggerService.success("Deleted successfully.", "Done");
             this.loadCache();
         }, (e) => {
@@ -86,7 +95,8 @@ export class AdminCacheComponent implements OnInit {
     reloadAll() {
         console.log("reloadAll");
         this.resetCache();
-        this.adminCacheService.reloadAllStaticCache().subscribe(() => {
+        this.adminCacheService.reloadAllStaticCache().pipe(takeUntil(this.destroy$))
+            .subscribe(() => {
             this.loadCache();
         }, (e) => {
             this.loggerService.error("Unable to Load Cache Status", e);
@@ -97,7 +107,8 @@ export class AdminCacheComponent implements OnInit {
     // Load the api cache details
     loadApiCache() {
         this.currentCacheDetails = "";
-        this.adminCacheService.getApiCacheStatus().subscribe((res) => {
+        this.adminCacheService.getApiCacheStatus().pipe(takeUntil(this.destroy$))
+            .subscribe((res) => {
             this.apiCacheData = res;
         }, (err) => {
                 this.loggerService.error("Unable to Load Api Cache Status", err);
@@ -107,7 +118,8 @@ export class AdminCacheComponent implements OnInit {
     // Clear api cache by name
     clearApiCacheByName(data) {
         this.currentCacheDetails = "";
-        this.adminCacheService.clearApiCacheByName(data).subscribe(() => {
+        this.adminCacheService.clearApiCacheByName(data).pipe(takeUntil(this.destroy$))
+            .subscribe(() => {
             this.loadApiCache();
         }, (e) => {
             this.loggerService.error("Unable to clear Api Cache Status", e);
@@ -117,7 +129,8 @@ export class AdminCacheComponent implements OnInit {
     // Clear all api cache
     clearAllApiCache() {
         this.currentCacheDetails = "";
-        this.adminCacheService.clearApiCache().subscribe(() => {
+        this.adminCacheService.clearApiCache().pipe(takeUntil(this.destroy$))
+            .subscribe(() => {
             this.loggerService.success("Api cache cleared successfully", "Done");
             this.loadApiCache();
         }, (e) => {
@@ -155,4 +168,8 @@ export class AdminCacheComponent implements OnInit {
         this.onResize();
     }
 
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 }

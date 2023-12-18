@@ -1,10 +1,12 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Component, Inject, ViewEncapsulation } from "@angular/core"
+import { Component, Inject, ViewEncapsulation, OnDestroy } from "@angular/core"
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
 import { dbAuditToolsService } from "./admin.dbAuditTools.service";
 import { forEach } from 'underscore';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 //export class IButton {
 //    ENV_NM: string;
@@ -14,7 +16,7 @@ import { forEach } from 'underscore';
 //    DB_DATA: string;
 //    selected: boolean = false;
 //}
-export class IButton {
+export class IButton  {
     text: string;
     data: string;
     selected: boolean = false;
@@ -27,7 +29,7 @@ export class IButton {
     encapsulation: ViewEncapsulation.None
 })
 
-export class DbAuditToolsCompareModalComponent {
+export class DbAuditToolsCompareModalComponent implements OnDestroy {
     private jsonData = this.data.selectedDataInfoJson;
     private procName = this.data.selectedProcName;
     private myTextareaLeft = "";
@@ -39,6 +41,8 @@ export class DbAuditToolsCompareModalComponent {
     private numEnvs = 0;
     private buttonEnvs: IButton[] = [];
     private editorOptions = { theme: 'vs-dark', language: 'sql' };
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
 
     constructor(
         private dbAuditToolsSVC: dbAuditToolsService,
@@ -58,7 +62,8 @@ export class DbAuditToolsCompareModalComponent {
 
     singleTextViewOnly() {
         let singleAuditObjTextRequest = this.jsonData[0];
-        this.dbAuditToolsSVC.GetObjText(singleAuditObjTextRequest).subscribe((result: Array<any>) => {
+        this.dbAuditToolsSVC.GetObjText(singleAuditObjTextRequest).pipe(takeUntil(this.destroy$))
+            .subscribe((result: Array<any>) => {
             let ReturnData = JSON.parse(result.toString()).DATA.sort((a, b) => (a.LineNbr - b.LineNbr));
             let tempTextareaData = "";
             for (let LineNbr in ReturnData) {
@@ -91,7 +96,8 @@ export class DbAuditToolsCompareModalComponent {
         else {
             let leftAuditObjTextRequest = selectedItems[0].data;
             this.myLeftLabel = selectedItems[0].text;
-            this.dbAuditToolsSVC.GetObjText(leftAuditObjTextRequest).subscribe((result: Array<any>) => {
+            this.dbAuditToolsSVC.GetObjText(leftAuditObjTextRequest).pipe(takeUntil(this.destroy$))
+                .subscribe((result: Array<any>) => {
                 let ReturnData = JSON.parse(result.toString()).DATA.sort((a, b) => (a.LineNbr - b.LineNbr));
                 let tempTextareaData = "";
                 for (let LineNbr in ReturnData) {
@@ -105,7 +111,8 @@ export class DbAuditToolsCompareModalComponent {
 
             let rightAuditObjTextRequest = selectedItems[1].data;
             this.myRightLabel = selectedItems[1].text;
-            this.dbAuditToolsSVC.GetObjText(rightAuditObjTextRequest).subscribe((result: Array<any>) => {
+            this.dbAuditToolsSVC.GetObjText(rightAuditObjTextRequest).pipe(takeUntil(this.destroy$))
+                .subscribe((result: Array<any>) => {
                 let ReturnData = JSON.parse(result.toString()).DATA.sort((a, b) => (a.LineNbr - b.LineNbr));
                 let tempTextareaData = "";
                 for (let LineNbr in ReturnData) {
@@ -156,6 +163,11 @@ export class DbAuditToolsCompareModalComponent {
             //    this.loggerSvc.error('Error in retreiving DB Object Text for ' + this.procName + ' - ' + this.envName, error);
             //});
         }
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
 }

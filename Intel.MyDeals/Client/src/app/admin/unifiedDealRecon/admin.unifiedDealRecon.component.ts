@@ -1,6 +1,6 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { unifiedDealReconService } from "./admin.unifiedDealRecon.service";
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { endCustomerRetailModalComponent } from "../../contract/ptModals/dealEditorModals/endCustomerRetailModal.component";
 import { Unified_Deal_Recon } from "./admin.unifiedDealRecon.model";
 import { MatDialog } from '@angular/material/dialog';
@@ -20,18 +20,21 @@ import { FormGroup, FormControl } from "@angular/forms";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "admin-unified-dealrecon",
     templateUrl: "Client/src/app/admin/unifiedDealRecon/admin.unifiedDealRecon.component.html",
     styleUrls: ['Client/src/app/admin/unifiedDealRecon/admin.unifiedDealRecon.component.css']
 })
-export class adminUnifiedDealReconComponent implements PendingChangesGuard {
+export class adminUnifiedDealReconComponent implements PendingChangesGuard, OnDestroy {
 
     constructor(private unifiedDealReconSvc: unifiedDealReconService, private loggerSvc: logger, protected dialog: MatDialog) {
         this.allData = this.allData.bind(this);
     }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private isDirty = false;
     private isLoading = true;
     private gridResult: Array<any>;
@@ -108,7 +111,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard {
         if ((<any>window).usrRole == "RA" && !(<any>window).isDeveloper) {
             this.editAccess = false;
         }
-            this.unifiedDealReconSvc.getUnmappedPrimeCustomerDeals().subscribe((result: Array<any>) => {
+        this.unifiedDealReconSvc.getUnmappedPrimeCustomerDeals().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
                 this.isLoading = false;
                 this.gridResult = result;
                 this.gridData = process(result, this.state);
@@ -142,7 +145,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard {
             UNIFIED_STATUS: new FormControl(dataItem.UNIFIED_STATUS),
             UNIFIED_REASON: new FormControl(dataItem.UNIFIED_REASON)
         });
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(x => {
             this.isFormChange = true;
         });
         this.editedRowIndex = rowIndex;
@@ -173,7 +176,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard {
                 }
             }
         });
-        dialogRef.afterClosed().subscribe((endCustomerData) => {
+        dialogRef.afterClosed().pipe(takeUntil(this.destroy$)).subscribe((endCustomerData) => {
             if (endCustomerData) {
                 this.isLoading = true;
                 this.dataItems = {
@@ -188,7 +191,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard {
                 if (endCustomerData.IS_PRIME) {
                     sender.closeRow(rowIndex);
                     const cust_map: Unified_Deal_Recon = this.formGroup.getRawValue();
-                    this.unifiedDealReconSvc.UpdateUnPrimeDeals(dataItem.OBJ_SID, this.dataItems).subscribe((response) => {
+                    this.unifiedDealReconSvc.UpdateUnPrimeDeals(dataItem.OBJ_SID, this.dataItems).pipe(takeUntil(this.destroy$)).subscribe((response) => {
                         if (response) {
                             this.message = "Deal End Customer Unified successfully";
                         }
@@ -238,7 +241,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard {
         const cust_map: Unified_Deal_Recon = formGroup.getRawValue();
         this.errorMsg = [];
         if (this.dataItems && this.dataItems.IS_PRIME) {
-            this.unifiedDealReconSvc.UpdateUnPrimeDeals(dataItem.OBJ_SID, this.dataItems).subscribe(
+            this.unifiedDealReconSvc.UpdateUnPrimeDeals(dataItem.OBJ_SID, this.dataItems).pipe(takeUntil(this.destroy$)).subscribe(
                 (response) => {
                     this.isDirty=false;
                     sender.closeRow(rowIndex);
@@ -256,7 +259,7 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard {
 
     endCustSave(encustData, OBJ_SID) {
         const cust_map: Unified_Deal_Recon = this.formGroup.getRawValue();
-        this.unifiedDealReconSvc.UpdateUnPrimeDeals(OBJ_SID, encustData).subscribe(
+        this.unifiedDealReconSvc.UpdateUnPrimeDeals(OBJ_SID, encustData).pipe(takeUntil(this.destroy$)).subscribe(
             (response) => {
                 if (response) {
                     this.message = "Deal End Customer Unified successfully";
@@ -307,5 +310,9 @@ export class adminUnifiedDealReconComponent implements PendingChangesGuard {
 
         });
     }
-
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 }

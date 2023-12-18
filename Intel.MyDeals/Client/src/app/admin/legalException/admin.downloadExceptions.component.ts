@@ -1,9 +1,11 @@
 ﻿import { logger } from "../../shared/logger/logger";
-import { Component, Inject, ViewEncapsulation } from "@angular/core";
+import { Component, Inject, ViewEncapsulation, OnDestroy } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { adminlegalExceptionService } from "./admin.legalException.service";
 import { GridUtil } from "../../contract/grid.util";
 import { ExcelColumnsConfig } from "../ExcelColumnsconfig.util";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "admin-download-exceptions",
@@ -12,12 +14,14 @@ import { ExcelColumnsConfig } from "../ExcelColumnsconfig.util";
     encapsulation: ViewEncapsulation.None
 })
 
-export class adminDownloadExceptionscomponent {
+export class adminDownloadExceptionscomponent implements OnDestroy {
     constructor(public dialogRef: MatDialogRef<adminDownloadExceptionscomponent>
         , private logger: logger
         , private adminlegalExceptionSvc: adminlegalExceptionService,
         @Inject(MAT_DIALOG_DATA) public data) {        
     }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
 
     private legalExceptionData: any;
     private legalExceptionColumns = ExcelColumnsConfig.legalExceptionExcelColumns;
@@ -31,7 +35,8 @@ export class adminDownloadExceptionscomponent {
         var chkPreviousVersion = this.chkData['PreviousVersion'];
         var chkDealList = this.chkData['DealList'];
         if (arr.length > 0 ) {
-            this.adminlegalExceptionSvc.getDownloadLegalException(arr, chkPreviousVersion, chkDealList).subscribe((response: any) => {
+            this.adminlegalExceptionSvc.getDownloadLegalException(arr, chkPreviousVersion, chkDealList).pipe(takeUntil(this.destroy$))
+                .subscribe((response: any) => {
                 if (response && response.length > 0) {
                     GridUtil.dsToExcelLegalException(this.legalExceptionColumns, response, "Legal Exception Export.xlsx", false, chkDealList);
                     this.dialogRef.close();
@@ -51,5 +56,11 @@ export class adminDownloadExceptionscomponent {
     ngOnInit() {
         this.legalExceptionData = this.data.dataItem;
         this.chkData = { PreviousVersion: false, DealList: false };
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

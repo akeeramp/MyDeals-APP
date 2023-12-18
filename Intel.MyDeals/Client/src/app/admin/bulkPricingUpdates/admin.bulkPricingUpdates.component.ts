@@ -1,4 +1,4 @@
-import { Component, ViewEncapsulation } from "@angular/core"
+import { Component, ViewEncapsulation,OnDestroy } from "@angular/core"
 import { logger } from "../../shared/logger/logger";
 import  Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
@@ -11,6 +11,8 @@ import { MomentService } from "../../shared/moment/moment.service";
 import { ContextMenu } from 'handsontable/plugins';
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { Observable } from "rxjs";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   selector: 'admin-bulk-pricing-updates',
@@ -18,12 +20,13 @@ import { Observable } from "rxjs";
   styleUrls: ['Client/src/app/admin/bulkPricingUpdates/admin.bulkPricingUpdates.component.css'],
   encapsulation: ViewEncapsulation.None
 })
-export class BulkPricingUpdatesComponent implements PendingChangesGuard {
+export class BulkPricingUpdatesComponent implements PendingChangesGuard, OnDestroy {
   constructor(private loggerSvc: logger,
               protected dialog: MatDialog,
               private bulkPrcSvc: bulkPricingUpdatesService,
               private momentService: MomentService) {}
-
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private hotRegisterer = new HotTableRegisterer();
     private hotTable: Handsontable;
     private hotId = "prcSpreadsheet";
@@ -283,6 +286,7 @@ export class BulkPricingUpdatesComponent implements PendingChangesGuard {
             
             let data = { "BulkPriceUpdateRecord" : tempData};
             this.bulkPrcSvc.UpdatePriceRecord(data)
+                .pipe(takeUntil(this.destroy$))
                 .subscribe( (response) => {
                     this.isLoading = false;
                     this.cellComments = [];
@@ -489,5 +493,10 @@ ngOnInit(){
         font-family: 'Intel Clear'; opacity: .7">${header}</span>`);
    
     })
-}
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 }

@@ -1,19 +1,22 @@
 /* eslint-disable no-useless-escape */
-import { Component, EventEmitter, Input, Output, ChangeDetectorRef } from "@angular/core";
+import { Component, EventEmitter, Input, Output, ChangeDetectorRef, OnDestroy } from "@angular/core";
 import { globalSearchResultsService } from "./globalSearchResults.service";
 import { logger } from "../../shared/logger/logger";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   selector: 'global-search-results-angular',
   templateUrl: 'Client/src/app/advanceSearch/globalSearchResults/globalSearchResults.component.html',
   styleUrls:['Client/src/app/advanceSearch/globalSearchResults/globalSearchResults.component.css']
 })
-export class GlobalSearchResultsComponent {
+export class GlobalSearchResultsComponent implements OnDestroy {
 
     constructor(protected globalSearchService: globalSearchResultsService,
                 private loggerService: logger,
                 private ref: ChangeDetectorRef) {}
-
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     //these are input coming from gloablsearch component
     @Input() searchText = "";
     response: any
@@ -42,7 +45,7 @@ export class GlobalSearchResultsComponent {
         this.objTypes[type].viewMore = false;
 
         const sanitizedSearchText: string = this.searchText.replace(/[^a-zA-Z0-9\(\)\-\_\@ ]/g, '');  // Allow rule: alphanumeric, space, -, _, @, (, )
-        this.globalSearchService.getObjectType(sanitizedSearchText, this.resultTake, type).subscribe((result) => {
+        this.globalSearchService.getObjectType(sanitizedSearchText, this.resultTake, type).pipe(takeUntil(this.destroy$)).subscribe((result) => {
             this.objTypes[type].result = result;
             this.objTypes[type].loading = false;
             //this method is added for UI to render proper. without this line the UI databinding is not happening from dashboard search screen but it will work fine for header search
@@ -127,7 +130,7 @@ export class GlobalSearchResultsComponent {
 
     getIds(dcId, parentDcId, opType = "") {
         this.isLoading = true;
-        this.globalSearchService.getContractIDDetails(dcId, opType).subscribe((res) => {
+        this.globalSearchService.getContractIDDetails(dcId, opType).pipe(takeUntil(this.destroy$)).subscribe((res) => {
                 this.isLoading = false;
                 if (res) {
                     this.response = res;
@@ -153,5 +156,10 @@ export class GlobalSearchResultsComponent {
     ngOnInit() {
         this.getObjectTypeResult(this.opType);
     }
-   
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 }

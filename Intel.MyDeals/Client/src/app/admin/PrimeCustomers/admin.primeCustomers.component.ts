@@ -1,6 +1,6 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { primeCustomerService } from "./admin.primeCustomers.service";
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, OnDestroy } from "@angular/core";
 import { PrimeCust_Map } from "./admin.primeCustomers.model";
 import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
@@ -10,18 +10,20 @@ import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactiva
 import { sortBy, uniq, pluck } from 'underscore';
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: 'admin-prime-customers',
     templateUrl: 'Client/src/app/admin/PrimeCustomers/admin.primeCustomers.component.html',
     styleUrls: ['Client/src/app/admin/PrimeCustomers/admin.primeCustomers.component.css']
 })
-export class adminPrimeCustomersComponent implements PendingChangesGuard {
+export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDestroy {
     constructor(private primeCustSvc: primeCustomerService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
-
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     @ViewChild("primeCustDropDown") private primeCustDdl;
     @ViewChild("primeCustNmDropDown") private primeCustNmDdl;
     @ViewChild("ctryCustDropDown") private ctryCustDdl;
@@ -107,7 +109,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard {
             document.location.href = "/Dashboard#/portal";
         }
         else {
-            this.primeCustSvc.GetPrimeCustomerDetails().subscribe((result: Array<any>) => {
+            this.primeCustSvc.GetPrimeCustomerDetails().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
                 this.isLoading = false;
                 this.gridResult = result;
                 this.gridData = process(result, this.state);
@@ -155,7 +157,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard {
             RPL_STS_CD: new FormControl({ value: "", disabled: true }),
 
         });
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(x => {
             this.isFormChange = true;
             this.saveAction = x.IS_ACTV == false ? "InActive" : "Active";
         });
@@ -178,7 +180,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard {
             PRIM_CUST_CTRY: new FormControl({ value: dataItem.PRIM_CUST_CTRY, disabled: true }),
             RPL_STS_CD: new FormControl(dataItem.RPL_STS_CD.split(",").filter(x => x != ''))
         });
-        this.formGroup.valueChanges.subscribe(x => {
+        this.formGroup.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(x => {
             this.isFormChange = true;
             this.saveAction = x.IS_ACTV == false ? "InActive" : "Active";
         });
@@ -197,6 +199,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard {
     //API connections
     getPrimeCustomersDataSource() {
         this.primeCustSvc.getPrimeCustomers()
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 this.distinctPrimeCustNm = distinct(response, "Value").map(
                     item => item.Value
@@ -209,6 +212,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard {
             });
 
         this.primeCustSvc.getRplStatusCodes()
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 this.distinctRplCd = distinct(response, "RPL_STS_CD").map(
                     item => item.RPL_STS_CD
@@ -217,6 +221,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard {
                     this.loggerSvc.error("Unable to get RPL status code.", response, response.statusText);
             });
         this.primeCustSvc.getCountries()
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 this.distinctprimeCtry = distinct(response, "CTRY_NM").map(
                     item => item.CTRY_NM
@@ -339,7 +344,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard {
         if (!this.isCombExists) {
             if (isNew) {
                 this.isLoading = true;
-                this.primeCustSvc.SetPrimeCustomers(primeCust_map).subscribe(
+                this.primeCustSvc.SetPrimeCustomers(primeCust_map).pipe(takeUntil(this.destroy$)).subscribe(
                     () => {
                         this.gridResult.push(primeCust_map);
                         this.loadPrimeCustomer();
@@ -352,7 +357,7 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard {
                 );
             } else {
                 this.isLoading = true;
-                this.primeCustSvc.UpdatePrimeCustomer(primeCust_map).subscribe(
+                this.primeCustSvc.UpdatePrimeCustomer(primeCust_map).pipe(takeUntil(this.destroy$)).subscribe(
                     () => {
                         this.gridResult[rowIndex] = primeCust_map;
                         this.gridResult.push(primeCust_map);
@@ -432,6 +437,12 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard {
 
     ngOnInit() {
         this.loadPrimeCustomer();
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
 }

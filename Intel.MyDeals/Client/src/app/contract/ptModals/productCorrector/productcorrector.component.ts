@@ -1,4 +1,4 @@
-import { Component, Inject, ViewChild } from '@angular/core';
+import { Component, Inject, OnDestroy, ViewChild } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, GridComponent } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
@@ -13,13 +13,14 @@ import { List } from 'linqts';
 import { PTEUtil } from '../../PTEUtils/PTE.util';
 import { MomentService } from "../../../shared/moment/moment.service";
 import { ProductBreakoutComponent } from '../productSelector/productBreakout/productBreakout.component';
+import { Subject } from 'rxjs';
 
 @Component({
     selector: 'product-corrector',
     templateUrl: 'Client/src/app/contract/ptModals/productCorrector/productcorrector.component.html',
     styleUrls: ['Client/src/app/contract/ptModals/productCorrector/productcorrector.component.css']
 })
-export class ProductCorrectorComponent {
+export class ProductCorrectorComponent implements OnDestroy{
     constructor(public dialogRef: MatDialogRef<ProductCorrectorComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: any,
                 private loggerService: logger,
@@ -76,6 +77,7 @@ export class ProductCorrectorComponent {
     private curRowExcludeProd: any[];
     private deletedProductDetails: any[] = [];
     public selection: SelectableSettings = { mode: "multiple" };
+    private readonly destroy$ = new Subject();
     public rowCallback = (args) => ({
         'hide-row': (args.dataItem.PRD_MBR_SID == 0)
     });
@@ -1163,4 +1165,9 @@ export class ProductCorrectorComponent {
         this.data["IsProductCorrector"] = true;
 
     }
+     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+     ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+      }
 }

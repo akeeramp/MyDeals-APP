@@ -1,4 +1,4 @@
-import { Component, Input, ViewEncapsulation } from "@angular/core";
+import { Component, Input, OnDestroy, ViewEncapsulation } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, CellClickEvent } from "@progress/kendo-angular-grid";
 import { process, State, distinct, CompositeFilterDescriptor, FilterDescriptor } from "@progress/kendo-data-query";
@@ -15,6 +15,8 @@ import { dealProductsModalComponent } from "../ptModals/dealProductsModal/dealPr
 import { each, uniq } from 'underscore';
 import { PTE_Common_Util } from "../PTEUtils/PTE_Common_util";
 import { MomentService } from "../../shared/moment/moment.service";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "all-deals",
@@ -22,7 +24,7 @@ import { MomentService } from "../../shared/moment/moment.service";
     styleUrls: ["Client/src/app/contract/allDeals/allDeals.component.css"],
     encapsulation: ViewEncapsulation.None
 })
-export class allDealsComponent {
+export class allDealsComponent implements OnDestroy {
     allColumns: any[];
     constructor(private allDealsSvc: allDealsService,
                 private loggerSvc: logger,
@@ -36,6 +38,8 @@ export class allDealsComponent {
     dealCnt = 0;
     private CAN_VIEW_COST_TEST: boolean = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
 
+   //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private isLoading = true;
     private loadMessage: string = "Loading Deals";
     private isTenderContract = false;
@@ -236,7 +240,7 @@ export class allDealsComponent {
     loadAllDealsData() {
         let data: any;
         const cId = this.contractData.DC_ID;
-        this.allDealsSvc.readWipFromContract(cId).subscribe((result: any) => {
+        this.allDealsSvc.readWipFromContract(cId).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
             this.loadMessage = "Drawing Grid";
             this.gridResult = result.WIP_DEAL;
             this.gridResult?.map((x, i) => {
@@ -546,5 +550,11 @@ export class allDealsComponent {
             this.loggerSvc.error('Something went wrong', 'Error');
             console.error('AllDeals::ngOnInit::',ex);
         }
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

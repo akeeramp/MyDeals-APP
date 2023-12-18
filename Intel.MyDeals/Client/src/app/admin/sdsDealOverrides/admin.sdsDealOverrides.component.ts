@@ -1,4 +1,4 @@
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { orderBy, process, SortDescriptor, State } from "@progress/kendo-data-query";
@@ -7,6 +7,8 @@ import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { sdsDealOverridesService } from "./admin.sdsDealOverrides.service";
 import { constantsService } from "../constants/admin.constants.service";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "sds-deal-overrides",
@@ -14,8 +16,10 @@ import { constantsService } from "../constants/admin.constants.service";
     styleUrls: ['Client/src/app/admin/sdsDealOverrides/admin.sdsDealOverrides.component.css'],
 })
 
-export class sdsDealOverridesComponent {
+export class sdsDealOverridesComponent implements OnDestroy {
     constructor(private sdsDealOverridesSVC: sdsDealOverridesService, private loggerSvc: logger, private constantsService: constantsService) { }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private color: ThemePalette = "primary";
     private attr = ['Pricing Table Row', 'Deal'];
     private gridReturnsOrig = [];
@@ -59,7 +63,7 @@ export class sdsDealOverridesComponent {
     private validWWID: string;
 
     checkPageAcess() {
-        this.constantsService.getConstantsByName("SDS_OVERRIDE_DEAL_VALIDATION_ADMINS").subscribe((data) => {
+        this.constantsService.getConstantsByName("SDS_OVERRIDE_DEAL_VALIDATION_ADMINS").pipe(takeUntil(this.destroy$)).subscribe((data) => {
             if (data) {
                 this.validWWID = data.CNST_VAL_TXT === "NA" ? "" : data.CNST_VAL_TXT;
                 this.accessAllowed = this.validWWID.indexOf((<any>window).usrDupWwid) > -1 ? true : false;
@@ -79,7 +83,7 @@ export class sdsDealOverridesComponent {
             document.location.href = "/Dashboard#/portal";
         }
         else {
-            this.sdsDealOverridesSVC.getRules().subscribe((result: Array<any>) => {
+            this.sdsDealOverridesSVC.getRules().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
                 this.gridRules = result;
                 this.ruleCount['all'] = result.length;
             }, (error) => {
@@ -130,7 +134,7 @@ export class sdsDealOverridesComponent {
                 this.sdsRuleData.OBJECT_IDS = this.sdsDealOverridesData.replace(/\s+/g, '');
                 this.sdsRuleData.RULE_ID = passedValue;
 
-                this.sdsDealOverridesSVC.SaveSdsDealOverrides(this.sdsRuleData).subscribe((result: Array<any>) => {
+                this.sdsDealOverridesSVC.SaveSdsDealOverrides(this.sdsRuleData).pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
                     let ReturnData = JSON.parse(result.toString());
                     this.ColumnHeader = ReturnData.COLUMNS;
                     let ColumnData = ReturnData.DATA;
@@ -153,7 +157,7 @@ export class sdsDealOverridesComponent {
     }
 
     getActiveReport() {
-        this.sdsDealOverridesSVC.SdsGetActiveOverrides().subscribe((result: Array<any>) => {
+        this.sdsDealOverridesSVC.SdsGetActiveOverrides().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
             let ReturnData = JSON.parse(result.toString());
             this.ColumnHeader = ReturnData.COLUMNS;
             let ColumnData = ReturnData.DATA;
@@ -174,7 +178,7 @@ export class sdsDealOverridesComponent {
     }
 
     getHistoryReport() {
-        this.sdsDealOverridesSVC.SdsGetHistoryOverrides().subscribe((result: Array<any>) => {
+        this.sdsDealOverridesSVC.SdsGetHistoryOverrides().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
             let ReturnData = JSON.parse(result.toString());
             this.ColumnHeader = ReturnData.COLUMNS;
             let ColumnData = ReturnData.DATA;
@@ -197,5 +201,10 @@ export class sdsDealOverridesComponent {
     ngOnInit() {
         this.loadRules();
         this.checkPageAcess();
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

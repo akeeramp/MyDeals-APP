@@ -1,6 +1,8 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { opLogService } from "./admin.oplog.service";
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "op-log",
@@ -8,7 +10,7 @@ import { Component } from "@angular/core";
     styleUrls: ['Client/src/app/admin/oplog/admin.oplog.component.css']
 })
 
-export class OpLogComponent {
+export class OpLogComponent implements OnDestroy {
     constructor(private opLogSvc: opLogService, private loggerSvc: logger) { }
 
     private title = "Opaque Log Watcher";
@@ -21,6 +23,8 @@ export class OpLogComponent {
     private endDate: Date = this.stDate;
     private dateRangeInvalid = false;
 
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     //created for Angular loader
     public isLoading = 'true';
     public loadMessage = "Log Viewer is Loading ...";
@@ -43,6 +47,7 @@ export class OpLogComponent {
                 'endDate': endDate
             }
             this.opLogSvc.getOpaqueLog(logDate)
+                .pipe(takeUntil(this.destroy$))
                 .subscribe(response => {
                     this.opLogData = response;
                 }, err => {
@@ -54,6 +59,7 @@ export class OpLogComponent {
     getDetailsOpaqueLog (data) {
         this.logDetails = '';
         this.opLogSvc.getDetailsOpaqueLog(data.fileName.substring(0, data.fileName.length - 4))
+            .pipe(takeUntil(this.destroy$))
             .subscribe( response => {
                 const entityMap = {
                     "&": "&amp;",
@@ -93,5 +99,10 @@ export class OpLogComponent {
 
     close() {
         this.dateRangeInvalid = false;
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

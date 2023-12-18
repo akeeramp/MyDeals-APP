@@ -1,7 +1,7 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { workflowService } from "./admin.workFlow.service";
 import { Work_Flow_Map } from "./admin.workflow.model";
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild,OnDestroy } from "@angular/core";
 import { ThemePalette } from "@angular/material/core";
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import {
@@ -19,14 +19,15 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 @Component({
     selector: "admin-work-flow",
     templateUrl: "Client/src/app/admin/workFlow/admin.workFlow.component.html",
     styleUrls: ['Client/src/app/admin/workFlow/admin.workFlow.component.css']
 })
 
-export class adminWorkFlowComponent implements PendingChangesGuard {
+export class adminWorkFlowComponent implements PendingChangesGuard, OnDestroy{
     constructor(private workflowSvc: workflowService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
@@ -39,6 +40,8 @@ export class adminWorkFlowComponent implements PendingChangesGuard {
     @ViewChild('WFSTG_CD_DEST_DdlTooltip', { static: false }) WFSTG_CD_DEST_DdlTooltip: NgbTooltip;
     @ViewChild('workflow_grid') grid: GridComponent;
     isDirty = false;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private isLoading = true;
     private errorMsg = ""
     private color: ThemePalette = "primary";
@@ -122,7 +125,7 @@ export class adminWorkFlowComponent implements PendingChangesGuard {
             document.location.href = "/Dashboard#/portal";
         } else {
             this.isLoading = true;
-            this.workflowSvc.GetWorkFlowItems().subscribe(
+            this.workflowSvc.GetWorkFlowItems().pipe(takeUntil(this.destroy$)).subscribe(
                 (result: Array<any>) => {
                     this.gridResult = result;
                     this.gridData = process(this.gridResult, this.state);
@@ -142,6 +145,7 @@ export class adminWorkFlowComponent implements PendingChangesGuard {
 
     loadDDLValues() {
         this.workflowSvc.GetDropDownValues()
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 this.distinctRoleTierNm = response.filter(x => x.COL_NM == "ROLE_TIER_NM");
                 this.distinctObjType = response.filter(x => x.COL_NM == "OBJ_TYPE");
@@ -235,7 +239,7 @@ export class adminWorkFlowComponent implements PendingChangesGuard {
     }
 
     deleteOperation() {
-        this.workflowSvc.DeleteWorkflow(this.Work_Flow_Map).subscribe(
+        this.workflowSvc.DeleteWorkflow(this.Work_Flow_Map).pipe(takeUntil(this.destroy$)).subscribe(
             () => {
                 this.loadWorkflow();
                 this.loggerSvc.success("Workflow Deleted.");
@@ -275,7 +279,7 @@ export class adminWorkFlowComponent implements PendingChangesGuard {
 
             if (isNew) {
                 this.isLoading = true;
-                this.workflowSvc.SetWorkFlows(Work_Flow_Map).subscribe(
+                this.workflowSvc.SetWorkFlows(Work_Flow_Map).pipe(takeUntil(this.destroy$)).subscribe(
                     () => {
                         this.gridResult.push(Work_Flow_Map);
                         this.loadWorkflow();
@@ -289,7 +293,7 @@ export class adminWorkFlowComponent implements PendingChangesGuard {
                 );
             } else {
                 this.isLoading = true;
-                this.workflowSvc.UpdateWorkflow(Work_Flow_Map).subscribe(
+                this.workflowSvc.UpdateWorkflow(Work_Flow_Map).pipe(takeUntil(this.destroy$)).subscribe(
                     () => {
                         this.gridResult[rowIndex] = Work_Flow_Map;
                         this.gridResult.push(Work_Flow_Map);
@@ -338,5 +342,10 @@ export class adminWorkFlowComponent implements PendingChangesGuard {
 
     ngOnInit() {
         this.loadWorkflow();
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

@@ -1,9 +1,10 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { quoteLetterService } from "./admin.quoteLetter.service";
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { saveAs } from 'file-saver';
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "quote-letter",
@@ -11,7 +12,7 @@ import { Observable } from "rxjs";
     styleUrls: ['Client/src/app/admin/quoteLetter/admin.quoteLetter.component.css']
 })
 
-export class QuoteLetterComponent implements PendingChangesGuard{
+export class QuoteLetterComponent implements PendingChangesGuard, OnDestroy {
 
     constructor(private quoteLetterSvc: quoteLetterService, private loggerSvc: logger) { }
 
@@ -21,6 +22,8 @@ export class QuoteLetterComponent implements PendingChangesGuard{
     public loadMessage = "Quote Letter is Loading ...";
     public moduleName = "Quote Letter Dashboard";
 
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private menuItems: Array<any> = [];
     private menuItemsTemplate: Array<any> = [];
     private isDropdownsLoaded = false;
@@ -35,6 +38,7 @@ export class QuoteLetterComponent implements PendingChangesGuard{
         }
         else {
             this.quoteLetterSvc.adminGetTemplates()
+                .pipe(takeUntil(this.destroy$))
                 .subscribe(response => {
                     this.menuItems = [];
                     for (let d = 0; d < response.length; d++) {
@@ -67,6 +71,7 @@ export class QuoteLetterComponent implements PendingChangesGuard{
         this.selectedTemplate.HDR_INFO = this.headerInfo;
         this.selectedTemplate.BODY_INFO = this.bodyInfo;
         this.quoteLetterSvc.adminSaveTemplate(this.selectedTemplate)
+            .pipe(takeUntil(this.destroy$))
             .subscribe(() => {
                 let selectedItemIndex;
                 // Sync this.menuItems w/ the changes that were just saved, then rebind the templates combobox.
@@ -87,6 +92,7 @@ export class QuoteLetterComponent implements PendingChangesGuard{
         this.selectedTemplate.HDR_INFO = this.headerInfo;
         this.selectedTemplate.BODY_INFO = this.bodyInfo;
         this.quoteLetterSvc.adminPreviewQuoteLetterTemplate(this.selectedTemplate)
+            .pipe(takeUntil(this.destroy$))
             .subscribe(response => {
                 const contentDisposition = response.headers.get('content-disposition');
                 const filename = contentDisposition.split(';')[1].split('filename')[1].split('=')[1].trim();
@@ -106,5 +112,10 @@ export class QuoteLetterComponent implements PendingChangesGuard{
     
     ngOnInit() {
         this.loadAdminTemplate();
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

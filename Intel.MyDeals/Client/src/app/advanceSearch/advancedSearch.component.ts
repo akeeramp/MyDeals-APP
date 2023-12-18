@@ -1,4 +1,4 @@
-﻿import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
+﻿import { Component, OnInit, ViewEncapsulation, ViewChild, OnDestroy } from "@angular/core";
 import { MomentService } from "../shared/moment/moment.service";
 import { contractStatusWidgetService } from "../dashboard/contractStatusWidget.service";
 import { logger } from "../shared/logger/logger";
@@ -12,8 +12,8 @@ import { GridDataResult, DataStateChangeEvent, PageSizeItem, FilterService } fro
 
 import { PTE_Common_Util } from "../contract/PTEUtils/PTE_Common_util";
 import { PendingChangesGuard } from "../shared/util/gaurdprotectionDeactivate";
-import { Observable } from "rxjs";
-
+import { Observable, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import { each } from 'underscore';
 @Component({
     selector: 'app-advanced-search',
@@ -21,7 +21,11 @@ import { each } from 'underscore';
     styleUrls: ['Client/src/app/advanceSearch/advancedSearch.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class AdvancedSearchComponent implements OnInit{
+
+export class AdvancedSearchComponent implements OnInit, OnDestroy {
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
+
     private startDateValue: Date = new Date(this.momentService.moment().subtract(6, 'months').format("MM/DD/YYYY"));
     private endDateValue: Date = new Date(this.momentService.moment().add(6, 'months').format("MM/DD/YYYY"));
     private showSearchFilters: boolean = true;
@@ -594,6 +598,7 @@ export class AdvancedSearchComponent implements OnInit{
         this.endDateValue = window.localStorage.endDateValue ? new Date(window.localStorage.endDateValue) : this.endDateValue;
         this.columnsDisp = this.columns;
         this.cntrctWdgtSvc.getCustomerDropdowns()
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 if (response && response.length > 0) {
                     this.custData = response;
@@ -604,5 +609,11 @@ export class AdvancedSearchComponent implements OnInit{
             }, function (error) {
                 this.loggerSvc.error("Unable to get Dropdown Customers.", error, error.statusText);
             });
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

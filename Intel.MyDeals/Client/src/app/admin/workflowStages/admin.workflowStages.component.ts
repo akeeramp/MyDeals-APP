@@ -1,6 +1,6 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { workflowStagesService } from "./admin.workflowStages.service";
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, OnDestroy } from "@angular/core";
 import { Workflow_Stages_Map } from "./admin.workflowStages.model";
 import { ThemePalette } from "@angular/material/core";
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
@@ -17,15 +17,16 @@ import {
 import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
-import { Observable } from "rxjs";
+import { Observable,Subject } from "rxjs";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "admin-workflow-stages",
     templateUrl: "Client/src/app/admin/workflowStages/admin.workflowStages.component.html",
     styleUrls: ['Client/src/app/admin/workflowStages/admin.workflowStages.component.css']
 })
-export class adminWorkflowStagesComponent implements PendingChangesGuard {
+export class adminWorkflowStagesComponent implements PendingChangesGuard, OnDestroy {
     constructor(private workflowStageSvc: workflowStagesService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
@@ -36,6 +37,8 @@ export class adminWorkflowStagesComponent implements PendingChangesGuard {
     @ViewChild('WFSTG_DESCTooltip', { static: false }) WFSTG_DESCTooltip: NgbTooltip;
     @ViewChild('WFSTG_ORDTooltip', { static: false }) WFSTG_ORDTooltip: NgbTooltip;
     isDirty = false;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private isLoading = true;
     private errorMsg = "";
     private dataSource: any;
@@ -120,7 +123,7 @@ export class adminWorkflowStagesComponent implements PendingChangesGuard {
             document.location.href = "/Dashboard#/portal";
         } else {
             this.isLoading = true;
-            this.workflowStageSvc.GetWorkFlowStages().subscribe(
+            this.workflowStageSvc.GetWorkFlowStages().pipe(takeUntil(this.destroy$)).subscribe(
                 (result: Array<any>) => {
                     for (let i = 0; i < result.length; i++) {
                         result[i]['WFSTG_ORD'] = Number(result[i]['WFSTG_ORD'])
@@ -145,6 +148,7 @@ export class adminWorkflowStagesComponent implements PendingChangesGuard {
     //Populate Role Tier & Location
     loadDDLValues() {
         this.workflowStageSvc.GetWFStgDDLValues()
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 this.distinctRoleTierNm = response.filter(x => x.COL_NM == "ROLE_TIER_NM").map(item => item.Value);
                 this.distinctWfStgLoc = response.filter(x => x.COL_NM == "WFSTG_LOC").map(item => item.Value);
@@ -158,7 +162,7 @@ export class adminWorkflowStagesComponent implements PendingChangesGuard {
             document.location.href = "/Dashboard#/portal";
         } else {
             this.isLoading = true;
-            this.workflowStageSvc.GetWFStgDDLValues().subscribe(
+            this.workflowStageSvc.GetWFStgDDLValues().pipe(takeUntil(this.destroy$)).subscribe(
                 (result: Array<any>) => {
                     this.gridResult = result;
                     this.gridData = process(this.gridResult, this.state);
@@ -236,7 +240,7 @@ export class adminWorkflowStagesComponent implements PendingChangesGuard {
     }
 
     deleteOperation() {
-        this.workflowStageSvc.DeleteWorkflowStages(this.wkflwStg_map).subscribe(
+        this.workflowStageSvc.DeleteWorkflowStages(this.wkflwStg_map).pipe(takeUntil(this.destroy$)).subscribe(
             () => {
                 this.loadWorkflowStages();
                 this.loggerSvc.success("Workflow Stage Deleted.");
@@ -274,7 +278,7 @@ export class adminWorkflowStagesComponent implements PendingChangesGuard {
 
             if (isNew) {
                 this.isLoading = true;
-                this.workflowStageSvc.SetWorkflowStages(wkflwStg_map).subscribe(
+                this.workflowStageSvc.SetWorkflowStages(wkflwStg_map).pipe(takeUntil(this.destroy$)).subscribe(
                     () => {
                         this.gridResult.push(wkflwStg_map);
                         this.loadWorkflowStages();
@@ -288,7 +292,7 @@ export class adminWorkflowStagesComponent implements PendingChangesGuard {
                 );
             } else {
                 this.isLoading = true;
-                this.workflowStageSvc.UpdateWorkflowStages(wkflwStg_map).subscribe(
+                this.workflowStageSvc.UpdateWorkflowStages(wkflwStg_map).pipe(takeUntil(this.destroy$)).subscribe(
                     () => {
                         this.gridResult[rowIndex] = wkflwStg_map;
                         this.gridResult.push(wkflwStg_map);
@@ -331,4 +335,10 @@ export class adminWorkflowStagesComponent implements PendingChangesGuard {
     ngOnInit() {
         this.loadWorkflowStages();
     }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
 }

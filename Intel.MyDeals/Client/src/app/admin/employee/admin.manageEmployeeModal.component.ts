@@ -1,7 +1,9 @@
-﻿import { Component, Inject, ViewEncapsulation } from "@angular/core"
+﻿import { Component, Inject, ViewEncapsulation, OnDestroy } from "@angular/core"
 import { logger } from "../../shared/logger/logger";
 import { manageEmployeeService } from "./admin.manageEmployee.service";
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     providers: [manageEmployeeService],
@@ -11,14 +13,15 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
     encapsulation: ViewEncapsulation.None
 })
 
-export class ManageEmployeeModalComponent {
+export class ManageEmployeeModalComponent implements OnDestroy {
 
     constructor(public dialogRef: MatDialogRef<ManageEmployeeModalComponent>,
         @Inject(MAT_DIALOG_DATA) public data, 
         private loggerSvc: logger, private manageEmployeeSvc: manageEmployeeService) {
 
     }
-
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private lastName = this.data.dataItem.LST_NM;
     private firstName = this.data.dataItem.FRST_NM;
     private title = this.data.title;
@@ -120,6 +123,7 @@ export class ManageEmployeeModalComponent {
 
         if (this.isCustModal) {
             this.manageEmployeeSvc.setEmployeeData(editData)
+                .pipe(takeUntil(this.destroy$))
                 .subscribe(() => {
                     if (saveNames.length === 0) {
                         saveNames.push("[Please Add Customers]");
@@ -132,6 +136,7 @@ export class ManageEmployeeModalComponent {
         }
         else {
             this.manageEmployeeSvc.setEmployeeVerticalData(editData)
+                .pipe(takeUntil(this.destroy$))
                 .subscribe( () => {
                     if (saveNames.length === 0) {
                         saveNames.push("[Please Add Products]");
@@ -164,5 +169,9 @@ export class ManageEmployeeModalComponent {
             this.getProductOptions();
         }
     }
-
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    } 
 }

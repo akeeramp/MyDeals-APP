@@ -1,7 +1,7 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { adminRulesService } from "./admin.rules.service";
 import { constantsService } from "../constants/admin.constants.service";
-import { Component, ViewEncapsulation } from "@angular/core";
+import { Component, ViewEncapsulation, OnDestroy } from "@angular/core";
 import { ThemePalette } from "@angular/material/core";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
@@ -23,6 +23,8 @@ import { List } from "linqts";
 import { ActivatedRoute, Router } from "@angular/router";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { Observable } from "rxjs";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "admin-rules",
@@ -30,7 +32,7 @@ import { Observable } from "rxjs";
     styleUrls: ['Client/src/app/admin/rules/admin.rules.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class adminRulesComponent implements PendingChangesGuard{
+export class adminRulesComponent implements PendingChangesGuard, OnDestroy{
     childGridResult: any;
     childGridData: any;
     RuleConfig: any;
@@ -39,6 +41,8 @@ export class adminRulesComponent implements PendingChangesGuard{
         private router: Router, private route: ActivatedRoute) { 
         this.allData = this.allData.bind(this);
     }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     isDirty = false;
     public rule = {};
     public Rules: Array<any> = [];
@@ -242,7 +246,8 @@ export class adminRulesComponent implements PendingChangesGuard{
     deleteConfirmation() {
         this.isDeletion = false;
         this.isLoading = true;
-        this.adminRulesSvc.deletePriceRule(this.deletionId).subscribe(
+        this.adminRulesSvc.deletePriceRule(this.deletionId).pipe(takeUntil(this.destroy$))
+            .subscribe(
             (result: number) => {
                 this.gridResult = this.gridResult.filter(x => x.Id != result);
                 this.gridData = process(this.gridResult, this.state);
@@ -271,7 +276,8 @@ export class adminRulesComponent implements PendingChangesGuard{
             if (this.rid != 0) this.editRule(this.rid, false);
         }
         if ((<any>window).usrRole != 'DA' && (<any>window).usrRole != 'SA') {
-            this.constantSvc.getConstantsByName("PRC_RULE_READ_ACCESS").subscribe(
+            this.constantSvc.getConstantsByName("PRC_RULE_READ_ACCESS").pipe(takeUntil(this.destroy$))
+                .subscribe(
                 (result: any) => {
                     if (!!result.data) {
                         var prcAccess = result.data.CNST_VAL_TXT === "NA" ? "" : result.data.CNST_VAL_TXT;
@@ -315,7 +321,8 @@ export class adminRulesComponent implements PendingChangesGuard{
                 } break;
             }
             this.isLoading = true;
-            this.adminRulesSvc.updatePriceRule(priceRuleCriteria, strActionName).subscribe((response) => {
+            this.adminRulesSvc.updatePriceRule(priceRuleCriteria, strActionName).pipe(takeUntil(this.destroy$))
+                .subscribe((response) => {
                 if (response.Id > 0) {
                     this.gridResult.filter(x => x.Id == response.Id)[0].ChangedBy = response.ChangedBy;
                     this.gridResult.filter(x => x.Id == response.Id)[0].ChangeDateTime = response.ChangeDateTime;
@@ -448,7 +455,8 @@ export class adminRulesComponent implements PendingChangesGuard{
     }
 
     copyRule(id) {
-        this.adminRulesSvc.copyPriceRule(id).subscribe(
+        this.adminRulesSvc.copyPriceRule(id).pipe(takeUntil(this.destroy$))
+            .subscribe(
             (response: any) => {
                 if (response > 0) {
                     this.editRule(response, true);
@@ -504,5 +512,11 @@ export class adminRulesComponent implements PendingChangesGuard{
     }
     canDeactivate(): Observable<boolean> | boolean {
         return !this.isDirty;
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

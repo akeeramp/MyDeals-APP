@@ -1,4 +1,4 @@
-﻿import {  Component } from "@angular/core";
+﻿import {  Component, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { MomentService } from "../../shared/moment/moment.service";
 import { DataStateChangeEvent, GridDataResult, PageSizeItem } from "@progress/kendo-angular-grid";
@@ -15,6 +15,8 @@ import { adminDownloadExceptionscomponent } from "./admin.downloadExceptions.com
 import { adminviewDealListcomponent } from "./admin.viewDealList.component";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { Observable } from "rxjs";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "admin-legal-exception",
@@ -22,7 +24,7 @@ import { Observable } from "rxjs";
     styleUrls: ['Client/src/app/admin/legalException/admin.legalException.component.css']
 })
 
-export class adminlegalExceptionComponent implements PendingChangesGuard{
+export class adminlegalExceptionComponent implements PendingChangesGuard, OnDestroy{
     public isVirtual = true;
     public gridData: GridDataResult;
     public data: unknown[];
@@ -42,7 +44,9 @@ export class adminlegalExceptionComponent implements PendingChangesGuard{
     childhidden = false;
     public editAccess: any;
     colexpand = 6;
-    isDirty=false;
+    isDirty = false;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
 
     public state: State = {
         skip: 0,
@@ -94,7 +98,8 @@ export class adminlegalExceptionComponent implements PendingChangesGuard{
         }
         this.editAccess = ((<any>window).usrRole == "Legal" || (<any>window).isDeveloper) ? true : false;
          
-            this.adminlegalExceptionSrv.getLegalExceptions().subscribe((result: Array<any>) => {
+        this.adminlegalExceptionSrv.getLegalExceptions().pipe(takeUntil(this.destroy$))
+            .subscribe((result: Array<any>) => {
                 this.isLoading = false;
                 if (result.length > 0) {
                     for (let i = 0; i < result.length; i++) {
@@ -178,7 +183,8 @@ export class adminlegalExceptionComponent implements PendingChangesGuard{
             this.isDirty=true;
             if (returnVal != undefined && returnVal != "close") {
                  this.savedateformate(returnVal);
-                this.adminlegalExceptionSrv.createLegalException(returnVal).subscribe((result: any) => {
+                this.adminlegalExceptionSrv.createLegalException(returnVal).pipe(takeUntil(this.destroy$))
+                    .subscribe((result: any) => {
                     this.isDirty=false; 
                     this.gridResult.push(result);
                     this.gridData = process(this.gridResult, this.state);
@@ -211,7 +217,8 @@ export class adminlegalExceptionComponent implements PendingChangesGuard{
 
 
                 if (returnVal != undefined && returnVal != "close") {
-                    this.adminlegalExceptionSrv.updateLegalException(returnVal).subscribe((result: Array<any>) => {
+                    this.adminlegalExceptionSrv.updateLegalException(returnVal).pipe(takeUntil(this.destroy$))
+                        .subscribe((result: Array<any>) => {
                         this.loggersvc.success("Legal Exception was successfully updated.");
                     }, (error) => {
                         this.loggersvc.error('Unable to update Legal exception.', error);
@@ -267,7 +274,8 @@ export class adminlegalExceptionComponent implements PendingChangesGuard{
                                 const today = new Date();
                                 returnVal.VER_NBR = returnVal.VER_NBR + 1;
                                 returnVal.VER_CRE_DTM = this.momentService.moment(today).format("l");
-                                this.adminlegalExceptionSrv.updateLegalException(returnVal).subscribe((result: Array<any>) => {
+                                this.adminlegalExceptionSrv.updateLegalException(returnVal).pipe(takeUntil(this.destroy$))
+                                    .subscribe((result: Array<any>) => {
                                     this.loggersvc.success('Legal Exception added.');
                                 }, (error) => {
                                     this.loggersvc.error('Unable to update Legal exception.', error);
@@ -392,7 +400,8 @@ export class adminlegalExceptionComponent implements PendingChangesGuard{
             dialogRef.afterClosed().subscribe((returnVal) => {
                 if (returnVal == "delete") {
                     this.savedateformate(item);
-                    this.adminlegalExceptionSrv.deleteLegalException(item).subscribe((result: Array<any>) => { 
+                    this.adminlegalExceptionSrv.deleteLegalException(item).pipe(takeUntil(this.destroy$))
+                        .subscribe((result: Array<any>) => { 
                         this.gridResult.splice(index, 1);
                         this.gridData =   process(this.gridResult, this.state);
                         this.loggersvc.success("Legal Exception Deleted.");
@@ -465,7 +474,8 @@ export class adminlegalExceptionComponent implements PendingChangesGuard{
     };
 
     childGrid(dataitem) {
-        this.adminlegalExceptionSrv.getVersionDetailsPCTExceptions(dataitem.MYDL_PCT_LGL_EXCPT_SID, 1).subscribe((result: any) => {
+        this.adminlegalExceptionSrv.getVersionDetailsPCTExceptions(dataitem.MYDL_PCT_LGL_EXCPT_SID, 1).pipe(takeUntil(this.destroy$))
+            .subscribe((result: any) => {
             this.expandedDetailKeys = [dataitem.MYDL_PCT_LGL_EXCPT_SID];
             if (result && result.length > 0) {
                 this.filterDataChildGrid = result;
@@ -565,4 +575,10 @@ export class adminlegalExceptionComponent implements PendingChangesGuard{
         this.initExdetails = this. intializeformdata();
         this.loadlegalException();
     }  
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 }

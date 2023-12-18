@@ -1,9 +1,10 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { dsaService } from "./admin.vistex.service";
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { MomentService } from "../../shared/moment/moment.service"; 
-import { Observable } from "rxjs";
+import { Observable,Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "admin-vistex",
@@ -11,12 +12,14 @@ import { Observable } from "rxjs";
     styleUrls: ['Client/src/app/admin/vistex/admin.vistex.component.css']
 })
 
-export class adminVistexComponent implements PendingChangesGuard{
+export class adminVistexComponent implements PendingChangesGuard,OnDestroy{
 
     constructor(private loggerSvc: logger, private dsaService: dsaService, private momentService: MomentService) { }
 
     //Declaration Part
     isDirty = false;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private spinnerMessageHeader = "Test your API";
     private spinnerMessageDescription = "Please wait while we are running your API..";
     private isBusyShowFunFact = true;
@@ -80,7 +83,7 @@ export class adminVistexComponent implements PendingChangesGuard{
         this.isLoading = true;
         const startTime = this.momentService.moment(new Date()).format('YYYY-MM-DD HH:mm:ss UTC');
 
-        this.dsaService.callAPI(this.apiPair[this.selectedApiCD], mode).subscribe((result: any) => {
+        this.dsaService.callAPI(this.apiPair[this.selectedApiCD], mode).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
             this.isLoading = false;
             this.isDirty=false;
             if (this.selectedApiCD == "R" || this.selectedApiCD == "T") {
@@ -117,5 +120,10 @@ export class adminVistexComponent implements PendingChangesGuard{
     }
     ngOnInit() {
         this.loadVistexTestApi();
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

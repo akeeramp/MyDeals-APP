@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, OnDestroy } from "@angular/core";
 import { contains } from "underscore";
 import { GridDataResult } from "@progress/kendo-angular-grid";
 import { SortDescriptor, State, orderBy, process } from "@progress/kendo-data-query";
@@ -8,13 +8,15 @@ import { AsyncProcedureJobsService } from "./admin.asyncProcedureJobs.service";
 import { AsyncProcTrigger, CreateAsyncProcTriggerData } from "./admin.asyncProcedureJobs.models";
 import { logger } from "../../shared/logger/logger";
 import { CreateProcedureJobModalComponent } from "./createProcedureJobModal/createProcedureJobModal.component";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: 'async-procedure-jobs',
     templateUrl: 'Client/src/app/admin/asyncProcedureJobs/admin.asyncProcedureJobs.component.html',
     styleUrls: ['Client/src/app/admin/asyncProcedureJobs/admin.asyncProcedureJobs.component.css']
 })
-export class AsyncProcedureJobsComponent implements OnInit {
+export class AsyncProcedureJobsComponent implements OnInit, OnDestroy {
 
     private readonly DEFAULT_STATE_CONFIG: State = {
         skip: 0,
@@ -27,6 +29,8 @@ export class AsyncProcedureJobsComponent implements OnInit {
                 private dialog: MatDialog,
                 private loggerService: logger) { }
 
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private gridData: GridDataResult;
     private isLoading = false;
     private state: State = this.DEFAULT_STATE_CONFIG;
@@ -51,7 +55,8 @@ export class AsyncProcedureJobsComponent implements OnInit {
     }
 
     getAsyncProcedureJobs() {
-        this.asyncProcedureJobsService.getGetAsyncProcTriggers().subscribe((result: AsyncProcTrigger[]) => {
+        this.asyncProcedureJobsService.getGetAsyncProcTriggers().pipe(takeUntil(this.destroy$))
+            .subscribe((result: AsyncProcTrigger[]) => {
             this.updateGridData(result);
         }, (error) => {
             this.loggerService.error('Unable to load Async Procedure Jobs', '', `AsyncProcedureJobsComponent: getAsyncProcJobs(): ${ JSON.stringify(error) }`);
@@ -61,7 +66,8 @@ export class AsyncProcedureJobsComponent implements OnInit {
 
     saveAsyncProcedureJobToQueue(data: CreateAsyncProcTriggerData) {
         if (data && data.PROC_NAME != '' && data.PROC_DATA != '') {
-            this.asyncProcedureJobsService.saveAsyncProcTrigger(data).subscribe((result: AsyncProcTrigger[]) => {
+            this.asyncProcedureJobsService.saveAsyncProcTrigger(data).pipe(takeUntil(this.destroy$))
+                .subscribe((result: AsyncProcTrigger[]) => {
                 this.loggerService.success('Added record, refreshing grid data...');
                 this.updateGridData(result);
             }, (error) => {
@@ -97,6 +103,12 @@ export class AsyncProcedureJobsComponent implements OnInit {
         if (this.accessAllowed) {
             this.getAsyncProcedureJobs();
         }
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
 }

@@ -1,8 +1,10 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { consumptionCountryService } from "./admin.consumptionCountry.service";
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, OnDestroy } from "@angular/core";
 import { consumption_Country_Map } from "./admin.consumptionCountry.model";
 import { ThemePalette } from "@angular/material/core";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import {
     GridDataResult,
     DataStateChangeEvent,
@@ -20,12 +22,14 @@ import { Observable } from "rxjs";
     selector: "admin-consumption-country",
     templateUrl: "Client/src/app/admin/consumptionCountry/admin.consumptionCountry.component.html"
 })
-export class adminConsumptionCountryComponent {
+export class adminConsumptionCountryComponent implements OnDestroy {
 
     constructor(private consumptionCountrySvc: consumptionCountryService, private loggerSvc: logger) { }
 
     @ViewChild("CNSMPTN_CTRY_NM_DropDown") private CNSMPTN_CTRY_NM_Ddl;
     @ViewChild("GEO_NM_DropDown") private GEO_NM_DropDownDdl;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     isDirty = false;
     private isLoading = true;
     private dataSource: any;
@@ -93,7 +97,9 @@ export class adminConsumptionCountryComponent {
         if (!((<any>window).usrRole === 'SA' || (<any>window).isDeveloper || (<any>window).isCustomerAdmin)) {
             document.location.href = "/Dashboard#/portal";
         } else {
-            this.consumptionCountrySvc.getConsumptionCountry().subscribe(
+            this.consumptionCountrySvc.getConsumptionCountry()
+                .pipe(takeUntil(this.destroy$))
+                .subscribe(
                 (result: Array<any>) => {
                     this.gridResult = result;
                     this.gridData = process(this.gridResult, this.state);
@@ -115,6 +121,7 @@ export class adminConsumptionCountryComponent {
     InitiateDropDowns(formGroup: any) {
 
         this.consumptionCountrySvc.getDropdown()
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 this.Geo = response;
                 this.GeoData = response.filter(x => x.dropdownName).map(item => item.dropdownName);
@@ -122,7 +129,7 @@ export class adminConsumptionCountryComponent {
                 this.loggerSvc.error("Unable to get Geo.", response, response.statusText);
             });
 
-        this.consumptionCountrySvc.getCountryList()
+        this.consumptionCountrySvc.getCountryList().pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 this.Countries = response;
                 this.countriesData = response.filter(x => x.CTRY_NM).map(item => item.CTRY_NM);
@@ -226,7 +233,7 @@ export class adminConsumptionCountryComponent {
                     );
                 } else {
                     this.isLoading = true;
-                    this.consumptionCountrySvc.updateConsumptionCountry(consumption_Ctry_Map).subscribe(
+                    this.consumptionCountrySvc.updateConsumptionCountry(consumption_Ctry_Map).pipe(takeUntil(this.destroy$)).subscribe(
                         () => {
                             this.gridResult[rowIndex] = consumption_Ctry_Map;
                             this.gridResult.push(consumption_Ctry_Map);
@@ -261,5 +268,9 @@ export class adminConsumptionCountryComponent {
 
     ngOnInit() {
         this.loadConsumptionCountry();
+    }
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

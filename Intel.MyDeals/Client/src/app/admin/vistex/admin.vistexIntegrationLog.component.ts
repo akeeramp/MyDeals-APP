@@ -8,7 +8,8 @@ import { process,State,distinct} from "@progress/kendo-data-query";
 import { FormGroup, FormControl } from "@angular/forms";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { each } from 'underscore';
-import { Observable } from "rxjs";
+import { Observable,Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 @Component({
     selector: "vistex-integration-log",
     templateUrl: 'Client/src/app/admin/vistex/admin.vistexIntegrationLog.component.html',
@@ -16,11 +17,13 @@ import { Observable } from "rxjs";
     encapsulation: ViewEncapsulation.None
 })
 
-export class adminVistexIntegrationLogComponent implements OnInit, PendingChangesGuard {
+export class adminVistexIntegrationLogComponent implements OnInit, PendingChangesGuard, OnDestroy {
 
 
     constructor(private loggerSvc: logger, private dsaService: dsaService, private momentService: MomentService) { }
     isDirty = false;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private requestTypeList =  [];
     private selectedRequestType = {RQST_TYPE : "VISTEX_DEALS",
                             RQST_NAME: "VISTEX DEALS"};
@@ -80,7 +83,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
             document.location.href = "/Dashboard#/portal";
         }
 
-        this.dsaService.getRequestTypeList().subscribe(response => {
+        this.dsaService.getRequestTypeList().pipe(takeUntil(this.destroy$)).subscribe(response => {
             this.requestTypeList = response;
         },function (err) {
             this.loggerSvc.error("Error in getting Request Types",err,err.statusText)
@@ -123,7 +126,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
                 "StartDate": this.momentService.moment(this.startDate).format("MM/DD/YYYY") ,
                 "EndDate": this.momentService.moment(this.endDate).format("MM/DD/YYYY")
             }
-            this.dsaService.getVistexLogs(postData).subscribe((response)=> {
+            this.dsaService.getVistexLogs(postData).pipe(takeUntil(this.destroy$)).subscribe((response)=> {
                 this.gridResult = response;
                 this.gridData = process(this.gridResult,this.state);
                 this.isLoading = false;
@@ -131,7 +134,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
                 this.loggerSvc.error("Operation failed",err,err.statusText)
             });
 
-            this.dsaService.getVistexStatuses().subscribe( (response)=> {
+            this.dsaService.getVistexStatuses().pipe(takeUntil(this.destroy$)).subscribe( (response)=> {
                 this.VistexStatuses = response;
             }, function (err) {
                 this.loggerSvc.error("Unable to get statuses of vistex",err,err.statusText);
@@ -197,7 +200,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
             dealIdsArray = dealIdsArray.filter(x => x.trim() != "");
             if (dealIdsArray.length > 0) {
                 this.isLoading = true;
-                this.dsaService.sendVistexData(dealIdsArray).subscribe((response)=> {
+                this.dsaService.sendVistexData(dealIdsArray).pipe(takeUntil(this.destroy$)).subscribe((response)=> {
                     if (response.data.length > 0) {
                         this.gridResult = response.data;
                         this.gridData = process(this.gridResult,this.state);
@@ -241,7 +244,7 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
             "strErrorMessage" : errMsg,
             "rqstSid": rqstSid 
         }
-        this.dsaService.updateVistexStatusNew(postDataObj).subscribe( (response)=> {
+        this.dsaService.updateVistexStatusNew(postDataObj).pipe(takeUntil(this.destroy$)).subscribe( (response)=> {
             this.isDirty=false;
             if (response == strTransantionId) {
                 each(this.gridResult.filter(x => x.RQST_SID === rqstSid), function (dataItem) {
@@ -293,6 +296,11 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
     
     canDeactivate(): Observable<boolean> | boolean {
         return !this.isDirty;
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
 }

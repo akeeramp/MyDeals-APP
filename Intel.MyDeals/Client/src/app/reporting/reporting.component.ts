@@ -1,14 +1,16 @@
-import {Component,ViewChild, ViewContainerRef } from "@angular/core";
+import {Component,OnDestroy,ViewChild, ViewContainerRef } from "@angular/core";
 import {logger} from "../shared/logger/logger";
 import {reportingService} from "./reporting.service";
 import {List} from "linqts";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   selector: "reporting-dashboard",
     templateUrl: "Client/src/app/reporting/reporting.component.html",
     styleUrls: ['Client/src/app/reporting/reporting.component.css']
 })
-export class ReportingComponent {
+export class ReportingComponent implements OnDestroy{
     constructor(private reportingSvc: reportingService,private loggerSvc:logger) { }
   //created for Angular loader
   public isLoading: string = 'true';
@@ -19,7 +21,7 @@ export class ReportingComponent {
  public chartPieeSeriesObj:any=null;
  public chartPieSeriesObj:any=null;
  public chartSeriesObj:any=null;
-
+ private readonly destroy$ = new Subject();
   private chartPieeObj:any ={
     title: {
         position: "bottom",
@@ -207,7 +209,8 @@ export class ReportingComponent {
   }
   loadReportDashboard() {
     let vm = this;
-    this.reportingSvc.getReportData().subscribe(response => {
+    this.reportingSvc.getReportData()
+    .pipe(takeUntil(this.destroy$)).subscribe(response => {
         //loader stops
         vm.isLoading = 'false';
         //variable assignment
@@ -373,5 +376,11 @@ export class ReportingComponent {
   ngOnInit() {
     this.loadReportDashboard();
   }
+
+//destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+ngOnDestroy() {
+  this.destroy$.next();
+  this.destroy$.complete();
+}
 
 }

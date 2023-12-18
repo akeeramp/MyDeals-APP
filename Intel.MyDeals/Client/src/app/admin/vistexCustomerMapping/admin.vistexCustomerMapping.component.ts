@@ -1,6 +1,6 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { vistexCustomerMappingService } from "./admin.vistexCustomerMapping.service";
-import { Component, ViewChild } from "@angular/core";
+import { Component, ViewChild, OnDestroy } from "@angular/core";
 import { Vistex_Cust_Map } from "./admin.vistexCustomerMapping.model";
 import { ThemePalette } from "@angular/material/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
@@ -9,14 +9,15 @@ import { FormGroup, FormControl, Validators } from "@angular/forms";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: 'admin-vistex-customer-mapping',
     templateUrl: 'Client/src/app/admin/vistexCustomerMapping/admin.vistexCustomerMapping.component.html',
     styleUrls: ['Client/src/app/admin/vistexcustomermapping/admin.vistexCustomerMapping.component.css']
 })
-export class adminVistexCustomerMappingComponent implements PendingChangesGuard {
+export class adminVistexCustomerMappingComponent implements PendingChangesGuard, OnDestroy {
     constructor(private customerMapSvc: vistexCustomerMappingService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
@@ -25,6 +26,8 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard 
     @ViewChild("nonTenderDropDown") private nonTenderDdl;
     @ViewChild("settleDropDown") private settleDdl;
     @ViewChild("custRptGeoDropDown") private custGeoDdl;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     isDirty = false;
     private isLoading = true;
     private errorMsg: string[] = [];
@@ -115,6 +118,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard 
 
     InitiateDropDowns(formGroup) {
         this.customerMapSvc.getDropdown('GetDropdowns/PERIOD_PROFILE')
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 this.PeriodProfile = response;
                 this.PeriodProfileData = response.filter(x => x.CUST_MBR_SID == formGroup.value.CUST_MBR_SID || x.CUST_MBR_SID == 1).map(item => item.DROP_DOWN);
@@ -122,6 +126,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard 
                 this.loggerSvc.error("Unable to get period profile.", response, response.statusText);
             });
         this.customerMapSvc.getDropdown('GetDropdownsWithInactives/AR_SETTLEMENT_LVL')
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 this.ARSettlementLevel = response.map(item => item.DROP_DOWN);
                 this.TenderARSettlementLevel = response.filter(x => x.ACTV_IND == true).map(item => item.DROP_DOWN);
@@ -131,6 +136,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard 
                 this.loggerSvc.error("Unable to get Settlement Levels.", response, response.statusText);
             });
         this.customerMapSvc.getVendorDropDown('GetCustomerVendors/0')
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 this.SettlementPartnerData = response.filter(x => x.CUST_MBR_SID == formGroup.value.CUST_MBR_SID && x.ACTV_IND == true);
                 this.SettlementPartner = distinct(this.SettlementPartnerData, "BUSNS_ORG_NM").map(
@@ -145,7 +151,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard 
             document.location.href = "/Dashboard#/portal";
         } else {
             this.isLoading = true;
-            this.customerMapSvc.getVistexCustomersMapList().subscribe(
+            this.customerMapSvc.getVistexCustomersMapList().pipe(takeUntil(this.destroy$)).subscribe(
                 (result: Array<any>) => {
                     this.gridResult = result;
                     this.gridData = process(this.gridResult, this.state);
@@ -218,7 +224,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard 
             DFLT_SETTLEMENT_PARTNER: new FormControl(dataItem.DFLT_SETTLEMENT_PARTNER),
         });
         this.InitiateDropDowns(this.formGroup);
-        this.formGroup.valueChanges.subscribe(() => {
+        this.formGroup.valueChanges.pipe(takeUntil(this.destroy$)).subscribe(() => {
             this.isFormChange = true;
         });
         this.editedRowIndex = rowIndex;
@@ -244,7 +250,7 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard 
             this.isCombExists = this.IsValidCustomerMapping(cust_map);
             if (!this.isCombExists) {
                 this.isLoading = true;
-                this.customerMapSvc.UpdateVistexCustomer(cust_map).subscribe(
+                this.customerMapSvc.UpdateVistexCustomer(cust_map).pipe(takeUntil(this.destroy$)).subscribe(
                     () => {
                         this.isDirty=true;
                         this.gridResult[rowIndex] = cust_map;
@@ -276,5 +282,11 @@ export class adminVistexCustomerMappingComponent implements PendingChangesGuard 
 
     ngOnInit() {
         this.loadCustomerMapping();
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

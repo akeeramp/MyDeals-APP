@@ -1,12 +1,14 @@
 ﻿import { logger } from "../../../shared/logger/logger";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Component, ViewEncapsulation, Inject } from "@angular/core";
+import { Component, ViewEncapsulation, Inject, OnDestroy } from "@angular/core";
 import { GridDataResult, DataStateChangeEvent} from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { dealToolsService } from "../dealTools/dealTools.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { MomentService } from "../../../shared/moment/moment.service";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "deal-timeline-modal",
@@ -14,7 +16,7 @@ import { MomentService } from "../../../shared/moment/moment.service";
     styleUrls: ['Client/src/app/core/gridCell/dealTimelineModal/dealTimelineModal.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class dealTimelineComponent {
+export class dealTimelineComponent implements OnDestroy {
     constructor(private dealToolsSvc: dealToolsService,
                 private loggerSvc: logger,
                 public dialogRef: MatDialogRef<dealTimelineComponent>,
@@ -24,6 +26,8 @@ export class dealTimelineComponent {
     }
     private dcId = this.data.item.objSid;
     private loading = true;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     public isTextIncrease = true;
     public isTextFontTitle = "Click to Decrease Text";
     public isExpand = true;
@@ -49,7 +53,7 @@ export class dealTimelineComponent {
         this.gridData = process(this.gridResult, this.state);
     }
     loadTimeline() {
-        this.dealToolsSvc.getTimlelineDs(this.data.item).subscribe(response => {
+        this.dealToolsSvc.getTimlelineDs(this.data.item).pipe(takeUntil(this.destroy$)).subscribe(response => {
             for (let d = 0; d < response.length; d++) {
                 response[d]["user"] = response[d]["FRST_NM"] + " " + response[d]["LST_NM"] + " (" + response[d]["USR_ROLES"] + ") (" + response[d]["CHG_EMP_WWID"] + ")";
                 response[d]["ATRB_VAL"] = response[d]["ATRB_VAL"].replace(/; /g, '<br/>');
@@ -114,5 +118,10 @@ export class dealTimelineComponent {
     }
     ngOnInit() {
         this.loadTimeline();
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

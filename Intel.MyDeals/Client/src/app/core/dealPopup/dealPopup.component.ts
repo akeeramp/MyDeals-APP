@@ -1,4 +1,4 @@
-﻿import { ChangeDetectorRef, Component, Input } from "@angular/core";
+﻿import { ChangeDetectorRef, Component, Input, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger"; 
 import { dealPopupService } from "./dealPopup.service";
 import { colorDictionary, opGridTemplate } from "../angular.constants";
@@ -9,12 +9,14 @@ import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-gr
 import { process, State } from "@progress/kendo-data-query";
 import { lnavService } from "../../contract/lnav/lnav.service"; 
 import { each, sortBy } from 'underscore';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "deal-popup",
     templateUrl: "Client/src/app/core/dealPopup/dealPopup.component.html", 
 })
-export class dealPopupComponent {
+export class dealPopupComponent implements OnDestroy {
     @Input() dealId: any;
     @Input() initLeft: any;
     @Input() initTop: any;
@@ -55,7 +57,8 @@ export class dealPopupComponent {
     private propertiesgridData: GridDataResult;
     private searchgridData: GridDataResult;
     private schedulegridData: GridDataResult;
-   
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();   
     propertiesInclude = ["RATE", "DENSITY_RATE", "STRT_VOL", "END_VOL", "STRT_REV", "END_REV", "STRT_PB", "END_PB"];
     propertiesExclude = ["PASSED_VALIDATION", "DC_PARENT_ID", "TIER_NBR"];
 
@@ -96,7 +99,7 @@ export class dealPopupComponent {
         this.CAN_VIEW_COST_TEST = this.lnavSvc.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
         this.CAN_VIEW_MEET_COMP = this.lnavSvc.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null);
             
-        this.dealPopupsvc.getWipDealById(this.dealId).subscribe((result: any) => {
+        this.dealPopupsvc.getWipDealById(this.dealId).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
             if (result.Data === null) {
                 this.loggersvc.warn("Unable to locate Deal # '" + this.dealId + "'", "No Deal");
                 this.closeNav();
@@ -320,7 +323,7 @@ export class dealPopupComponent {
           objTypeSid: 5,
           objTypeIds: [5]
         }
-        this.dealPopupsvc.getTimelineDetails(pstdata).subscribe((result: Array<any>) => {
+        this.dealPopupsvc.getTimelineDetails(pstdata).pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
             this.timelineLoaded = true;
             for (let d = 0; d < result.length; d++) {
                 result[d].user = result[d].FRST_NM + " " + result[d].LST_NM;
@@ -349,7 +352,7 @@ export class dealPopupComponent {
             PrdIds: prdIds
         }
         
-        this.dealPopupsvc.getProductsByIds(productdata).subscribe((result: any) => {
+        this.dealPopupsvc.getProductsByIds(productdata).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
             this.productsLoaded = true;
             
             this.productsgridData = process(result, this.state);
@@ -393,11 +396,11 @@ export class dealPopupComponent {
     }
 
     QuickDealOpenPanel() {
-        this.brdcstservice.on("QuickDealClosePanel").subscribe(() => {
+        this.brdcstservice.on("QuickDealClosePanel").pipe(takeUntil(this.destroy$)).subscribe(() => {
             this.closePanel();
         });
 
-        this.brdcstservice.on("QuickDealShowPanel").subscribe(() => {
+        this.brdcstservice.on("QuickDealShowPanel").pipe(takeUntil(this.destroy$)).subscribe(() => {
             this.displayPanel();
         });
     }
@@ -547,5 +550,10 @@ export class dealPopupComponent {
     ngOnInit() {
         this.loadPopupdata(this.sel);
        this. QuickDealOpenPanel();
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

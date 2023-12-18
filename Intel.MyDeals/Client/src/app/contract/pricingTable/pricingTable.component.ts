@@ -1,5 +1,5 @@
 ﻿import { each, filter } from 'underscore';
-import { Component, ViewChild } from "@angular/core";
+import { Component, OnDestroy, ViewChild } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { pricingTableservice } from "./pricingTable.service";
 import { SelectEvent } from "@progress/kendo-angular-layout";
@@ -10,6 +10,8 @@ import { dealEditorComponent } from "../dealEditor/dealEditor.component"
 import { PricingTableEditorComponent } from '../../contract/pricingTableEditor/pricingTableEditor.component'
 import { performanceBarsComponent } from '../performanceBars/performanceBar.component';
 import { ActivatedRoute, Router } from '@angular/router';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 export interface contractIds {
     Model: string;
@@ -27,7 +29,7 @@ export interface contractIds {
     styleUrls: ['Client/src/app/contract/pricingTable/pricingTable.component.css']
 })
 
-export class pricingTableComponent {
+export class pricingTableComponent implements OnDestroy  {
     public drawChart: boolean;
     constructor(private loggerSvc: logger, private pricingTableSvc: pricingTableservice, private templatesSvc: TemplatesService,
         private pteService: PricingTableEditorService, private lnavSvc: lnavService, private route: ActivatedRoute, private router: Router) {}
@@ -69,6 +71,7 @@ export class pricingTableComponent {
     public loadtype="";
     public selectNavMenu:any;
     private isDirty=false;
+    private readonly destroy$ = new Subject();
 
     public searchedContractData = {
         Model: "",
@@ -334,7 +337,8 @@ export class pricingTableComponent {
     async loadAllContractDetails(IDS=[]) {
         this.isLoading = true;
         this.setBusy("Loading...", "Loading data please wait", "Info", true);
-        const response: any = await this.pricingTableSvc.readContract(this.c_Id).toPromise().catch((err) => {
+        const response: any = await this.pricingTableSvc.readContract(this.c_Id)
+        .toPromise().catch((err) => {
             this.isLoading = false;
             this.loggerSvc.error("Error", "not able to load contract details", err);
         });
@@ -367,7 +371,9 @@ export class pricingTableComponent {
     loadTemplateDetails(IDS, contractData) {
         this.isLoading = true;
         this.setBusy("Loading...", "Loading data please wait", "Info", true);
-        this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
+        this.templatesSvc.readTemplates()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response: Array<any>) => {
             this.UItemplate = response;
             this.isLNavEnable = true;
             if (IDS.length > 1) {
@@ -489,4 +495,9 @@ export class pricingTableComponent {
         }
        return isconfirm;
     }
+     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+     ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+      }
 }

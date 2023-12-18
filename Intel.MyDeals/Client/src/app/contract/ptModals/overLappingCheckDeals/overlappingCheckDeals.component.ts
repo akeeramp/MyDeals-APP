@@ -2,19 +2,21 @@
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
-import { Component, Inject, Input, OnInit } from "@angular/core";
+import { Component, Inject, Input, OnDestroy, OnInit } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material/dialog";
 import { each, filter, isEmpty, isNull, isUndefined } from 'underscore';
 
 import { logger } from "../../../shared/logger/logger";
 import { overLappingcheckDealService } from "./overlappingCheckDeals.service";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: 'overlapping-check-deal',
     templateUrl: 'Client/src/app/contract/ptModals/overlappingCheckDeals/overlappingCheckDeals.component.html',
     styleUrls: ['Client/src/app/contract/ptModals/overlappingCheckDeals/overlappingCheckDeals.component.css'],
 })
-export class OverlappingCheckComponent implements OnInit {
+export class OverlappingCheckComponent implements OnInit, OnDestroy  {
 
     S_ID: any;
 
@@ -49,6 +51,7 @@ export class OverlappingCheckComponent implements OnInit {
     private is_selected: boolean = false;
     private isNoDealsFound: boolean = false;
     private title: string = "Overlapping Deals";
+    private readonly destroy$ = new Subject();
     private state: State = {
         skip: 0,
         take: 50,
@@ -151,7 +154,9 @@ export class OverlappingCheckComponent implements OnInit {
 
     updateOverlapping(data, YCS2_OVERLAP_OVERRIDE) {
         this.isLoading = true;
-        this.overLappingCheckDealsSvc.updateOverlappingDeals(data, YCS2_OVERLAP_OVERRIDE).subscribe((result: any) => {
+        this.overLappingCheckDealsSvc.updateOverlappingDeals(data, YCS2_OVERLAP_OVERRIDE)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((result: any) => {
             this.isLoading = false;
             if (result[0].PRICING_TABLES > 0) {
                 if (YCS2_OVERLAP_OVERRIDE === 'N') {
@@ -236,7 +241,9 @@ export class OverlappingCheckComponent implements OnInit {
             this.gridData = process(this.gridResult, this.state);
             this.isLoading = false;
         } else {
-            this.overLappingCheckDealsSvc.getOverLappingCheckDealsDetails(this.pricingId).subscribe((result: any) => {
+            this.overLappingCheckDealsSvc.getOverLappingCheckDealsDetails(this.pricingId)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((result: any) => {
                 this.isLoading = false;
                 this.title = "Overlapping Deals";
                 this.ovlpData = this.prepareGridData(result.Data);
@@ -256,14 +263,18 @@ export class OverlappingCheckComponent implements OnInit {
             });
         }
 
-        this.overLappingCheckDealsSvc.readContract(this.pricingId).subscribe((response: Array<any>) => {
+        this.overLappingCheckDealsSvc.readContract(this.pricingId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response: Array<any>) => {
             this.contractDetails = response[0];
         },(error)=>{
             this.loggerService.error("Unable to get contract data","Error",error);
         });
 
         this.S_ID = this.contractData.CUST_MBR_SID;
-        this.overLappingCheckDealsSvc.getCustomerVendors(this.S_ID).subscribe((result: Array<any>) => {
+        this.overLappingCheckDealsSvc.getCustomerVendors(this.S_ID)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((result: Array<any>) => {
             // 
         }, (error) => {
                 this.loggerService.error(
@@ -294,7 +305,9 @@ export class OverlappingCheckComponent implements OnInit {
 
     getOverlapDetails() {
         this.pricingId = this.contractData.DC_ID;
-        this.overLappingCheckDealsSvc.getOverLappingDealsDetails(this.pricingId).subscribe((result: any) => {
+        this.overLappingCheckDealsSvc.getOverLappingDealsDetails(this.pricingId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((result: any) => {
             this.loadMessage = "Done";
             this.ovlpData = this.prepareGridData(result.Data);
             this.ovlpErrorCount = distinct(result.Data, "WIP_DEAL_OBJ_SID").map(item => item["WIP_DEAL_OBJ_SID"]);
@@ -315,14 +328,18 @@ export class OverlappingCheckComponent implements OnInit {
             this.isLoading = false;
             this.loggerService.error('OverLapDeals service', error);
         });
-        this.overLappingCheckDealsSvc.readContract(this.pricingId).subscribe((response: Array<any>) => {
+        this.overLappingCheckDealsSvc.readContract(this.pricingId)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((response: Array<any>) => {
             this.contractDetails = response[0];
         }, (error) => {
             this.loggerService.error("Unable to get contract data", "Error", error);
         });
         this.S_ID = this.contractData.CUST_MBR_SID;
 
-        this.overLappingCheckDealsSvc.getCustomerVendors(this.S_ID).subscribe((result: Array<any>) => {
+        this.overLappingCheckDealsSvc.getCustomerVendors(this.S_ID)
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((result: Array<any>) => {
             //
         }, (response) => {
             this.loggerService.error(
@@ -376,5 +393,12 @@ export class OverlappingCheckComponent implements OnInit {
             this.left = POSITION_RIGHT;
         }
     }
+
+     
+ //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+ ngOnDestroy() {
+    this.destroy$.next();
+    this.destroy$.complete();
+  }
 
 }

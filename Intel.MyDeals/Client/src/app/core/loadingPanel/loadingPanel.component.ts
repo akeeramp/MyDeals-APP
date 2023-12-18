@@ -1,6 +1,8 @@
 /* eslint-disable @typescript-eslint/no-inferrable-types */
-import { Input, Component, OnInit } from "@angular/core";
+import { Input, Component, OnInit, OnDestroy } from "@angular/core";
 import { each, sample } from 'underscore';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 import { FunFact, LoadingPanelService } from "./loadingPanel.service";
 import { logger } from "../../shared/logger/logger";
@@ -16,7 +18,7 @@ export interface FunFactDefined {
   templateUrl: 'Client/src/app/core/loadingPanel/loadingPanel.component.html',
   styleUrls:['Client/src/app/core/loadingPanel/loadingPanel.component.css']
 })
-export class LoadingPanelComponent implements OnInit {
+export class LoadingPanelComponent implements OnInit, OnDestroy {
 
   constructor(private loadingPanelService: LoadingPanelService,
               private loggerService: logger) {}
@@ -32,11 +34,13 @@ export class LoadingPanelComponent implements OnInit {
   private funFactDesc = "";
   private funFactIcon = "";
   private isFunFactEnabled = true;
-  private currFunFact: FunFactDefined = null;
+    private currFunFact: FunFactDefined = null;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
 
   getRandomFact() {
     if (this.funfactsList == null || this.funfactsList.length == 0) {
-      this.loadingPanelService.GetActiveFunfacts().subscribe((result: FunFact[]) => {
+        this.loadingPanelService.GetActiveFunfacts().pipe(takeUntil(this.destroy$)).subscribe((result: FunFact[]) => {
         if (result && result.length == 0) {
           this.isFunFactEnabled = false;
         } else {
@@ -75,5 +79,9 @@ export class LoadingPanelComponent implements OnInit {
       }
     }
   }
-
+   //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 }

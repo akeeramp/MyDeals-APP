@@ -1,5 +1,5 @@
 ﻿import { logger } from "../../shared/logger/logger";
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
 import { FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { pushDealsToVistexService } from "./admin.pushDealstoVistex.service";
 import { GridDataResult, DataStateChangeEvent} from "@progress/kendo-angular-grid";
@@ -10,6 +10,8 @@ import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { Observable } from "rxjs";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "admin-push-dealsto-vistex",
@@ -17,10 +19,12 @@ import { Observable } from "rxjs";
     styleUrls: ['Client/src/app/admin/pushDealstoVistex/admin.pushDealstoVistex.component.css']
 })
 
-export class adminPushDealsToVistexComponent implements PendingChangesGuard{
+export class adminPushDealsToVistexComponent implements PendingChangesGuard, OnDestroy{
 
     constructor(private loggerSvc: logger, private pushDealstoVistexSvc: pushDealsToVistexService, private formBuilder: FormBuilder, private route: ActivatedRoute) { }
     isDirty = false;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private color: ThemePalette = 'primary';
     private pushDealsToVistexForm: FormGroup;
     private loadMessage = "Admin Customer Loading..";
@@ -54,7 +58,7 @@ export class adminPushDealsToVistexComponent implements PendingChangesGuard{
             this.loggerSvc.warn("Please fix validation errors","Validation error");
             return;
         }
-        this.pushDealstoVistexSvc.PushDealstoVistex(this.pushDealsToVistexForm.value).subscribe(result => {
+        this.pushDealstoVistexSvc.PushDealstoVistex(this.pushDealsToVistexForm.value).pipe(takeUntil(this.destroy$)).subscribe(result => {
             this.isDirty=false;
             this.Results = result;
             this.showResults = true;
@@ -95,5 +99,10 @@ export class adminPushDealsToVistexComponent implements PendingChangesGuard{
         this.pushDealsToVistexForm.valueChanges.subscribe(x=>{
             this.isDirty=true;
         })
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

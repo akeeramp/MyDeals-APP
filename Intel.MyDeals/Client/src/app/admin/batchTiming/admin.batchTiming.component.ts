@@ -1,4 +1,4 @@
-﻿import { Component } from "@angular/core";
+﻿import { Component, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
@@ -6,18 +6,22 @@ import { ThemePalette } from '@angular/material/core';
 import { batchTimingService } from "./admin.batchTiming.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: 'batch-timing',
     templateUrl: 'Client/src/app/admin/batchTiming/admin.batchTiming.component.html',
     styleUrls: ['Client/src/app/admin/batchTiming/admin.batchTiming.component.css']
 })
-export class batchTimingComponent {
+export class batchTimingComponent implements OnDestroy {
     constructor(private batchTimingSvc: batchTimingService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
 
     // Variables
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private isLoading = true;
     private loadMessage = "Batch Job Details Loading..";
     private type = "numeric";
@@ -76,6 +80,7 @@ export class batchTimingComponent {
         }
         else {
             this.batchTimingSvc.getBatchJobTiming('BTCH_JOB_DTL')
+                .pipe(takeUntil(this.destroy$))
                 .subscribe((result: Array<any>) => {
                     this.isLoading = false;
                     this.gridResult = result;
@@ -106,6 +111,7 @@ export class batchTimingComponent {
             filters: [],
         };
         this.batchTimingSvc.getBatchJobTiming('BTCH_JOB_DTL')
+            .pipe(takeUntil(this.destroy$))
             .subscribe((result: Array<any>) => {
             this.isLoading = false;
             this.gridResult = result;
@@ -120,4 +126,9 @@ export class batchTimingComponent {
         this.loadBatchTiming();
     }
 
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 }

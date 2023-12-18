@@ -1,4 +1,4 @@
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State, distinct } from "@progress/kendo-data-query";
@@ -6,6 +6,8 @@ import { ThemePalette } from '@angular/material/core';
 import { missingCAPService } from "./missingCAP.service";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "missing-cap",
@@ -13,12 +15,14 @@ import { ExcelExportEvent } from "@progress/kendo-angular-grid";
     styleUrls: ["Client/src/app/contract/missingCAP/missingCAP.component.css"]
 })
 
-export class missingCAPComponent {
+export class missingCAPComponent implements OnDestroy{
     constructor(private missingCapSvc: missingCAPService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
     @Input() contractData: any;
     @Input() UItemplate: any;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private isLoading = true;
     private loadMessage = "Loading Missing CAP/Cost Deal Products";
     private type = "numeric";
@@ -90,7 +94,7 @@ export class missingCAPComponent {
     loadDealProducts() {
         const sId = this.contractData.CUST_MBR_SID;
         const cId = this.contractData.DC_ID;
-        this.missingCapSvc.getDealProducts(cId,sId).subscribe((result: Array<any>) => {
+        this.missingCapSvc.getDealProducts(cId,sId).pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
             this.loadMessage = "Done";
             this.gridResult = result;
             this.gridData = process(this.gridResult, this.state);
@@ -132,6 +136,12 @@ export class missingCAPComponent {
     ngOnInit() {
         this.exportFileName = "Contract " + String(this.contractData.DC_ID) + " Missing CAP/Cost Products.xlsx";
         this.loadDealProducts();
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
 }

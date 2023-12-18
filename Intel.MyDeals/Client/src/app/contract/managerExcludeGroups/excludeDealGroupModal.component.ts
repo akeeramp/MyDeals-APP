@@ -1,4 +1,4 @@
-﻿import { Component, EventEmitter, Inject, Output, ViewEncapsulation } from '@angular/core';
+﻿import { Component, EventEmitter, Inject, OnDestroy, Output, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { managerExcludeGroupsService } from './managerExcludeGroups.service';
 import { logger } from "../../shared/logger/logger";
@@ -10,7 +10,8 @@ import { MomentService } from "../../shared/moment/moment.service";
 import { sortBy } from 'underscore';
 import * as saveAs from 'file-saver';
 import { Workbook } from '@progress/kendo-angular-excel-export';
-import { Observable, zip } from 'rxjs';
+import { Observable, Subject, zip } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: "exclude-deal-group-modal-dialog",
@@ -20,7 +21,7 @@ import { Observable, zip } from 'rxjs';
     //To override the default css for the mat dialog and remove the extra padding then encapsulation should be set to none 
     encapsulation: ViewEncapsulation.None
 })
-export class excludeDealGroupModalDialog {
+export class excludeDealGroupModalDialog implements OnDestroy{
     pctGroupDealsView: boolean = false;
     showKendoAlert: boolean;
     titleText: string;
@@ -31,6 +32,8 @@ export class excludeDealGroupModalDialog {
                 private managerExcludeGrpSvc: managerExcludeGroupsService,
                 private loggerSvc: logger,
                 private momentService: MomentService) {}
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private isSelected: boolean = true;
     private role = (<any>window).usrRole;
     private wwid = (<any>window).usrWwid;
@@ -197,7 +200,7 @@ export class excludeDealGroupModalDialog {
             this.gridResult.push(a);
         }
         this.gridData = process(this.gridResult, this.state);
-        this.managerExcludeGrpSvc.getExcludeGroupDetails(this.dealId).subscribe((result: any) => {
+        this.managerExcludeGrpSvc.getExcludeGroupDetails(this.dealId).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
             this.isLoading = false;;
             this.childGridResult = result;
             if (this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != undefined && this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != null && this.dataItem.cellCurrValues.DEAL_GRP_EXCLDS != '') {
@@ -377,5 +380,11 @@ export class excludeDealGroupModalDialog {
 
     ngOnInit() {
         this.loadExcludeDealGroupModel();
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

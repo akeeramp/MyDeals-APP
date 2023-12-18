@@ -1,8 +1,10 @@
-﻿import { Component, EventEmitter, Input, OnInit, Output } from "@angular/core";
+﻿import { Component, EventEmitter, Input, OnInit, Output, OnDestroy } from "@angular/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { ContractStatusBoardService } from "./contractStatusBoard.service";
 import { logger } from "../../shared/logger/logger";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "contract-status-board-angular",
@@ -10,14 +12,15 @@ import { logger } from "../../shared/logger/logger";
     templateUrl: "Client/src/app/core/gridStatusBoard/contractStatusBoard.component.html"
 })
 
-export class contractStatusBoardComponent implements OnInit {
+export class contractStatusBoardComponent implements OnInit, OnDestroy {
     
     // The contract for which details are displayed
     @Input() public contractObjSid: any;
      //To load angular Contract Manager from deal desk change value to false, will be removed once contract manager migration is done
     @Input() angularEnabled:boolean=false;
     @Output() public isCntrctDtlLoaded :EventEmitter<boolean> = new EventEmitter();
-
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private gridData: GridDataResult;
     private gridResult: Array<any>;
     private isLoaded = false;
@@ -65,6 +68,7 @@ export class contractStatusBoardComponent implements OnInit {
         this.isLoaded = false;
         this.isCntrctDtlLoaded.emit(false);
         this.contractDetailsService.readContractStatus(this.contractObjSid)
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response) => {
 
                 this.contractId = this.contractObjSid;
@@ -147,5 +151,10 @@ export class contractStatusBoardComponent implements OnInit {
     }
     public ngOnInit(): void {
         this.getContractDataSource();
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

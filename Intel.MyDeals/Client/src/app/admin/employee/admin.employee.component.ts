@@ -1,8 +1,10 @@
-﻿import { Component } from "@angular/core";
+﻿import { Component, OnDestroy } from "@angular/core";
 import { Observable } from "rxjs";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { logger } from "../../shared/logger/logger";
 import { employeeService } from './admin.employee.service';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: 'employee-dashboard',
@@ -10,10 +12,11 @@ import { employeeService } from './admin.employee.service';
     styleUrls: ['Client/src/app/admin/employee/admin.employee.component.css']
 })
 
-export class EmployeeComponent implements PendingChangesGuard{
+export class EmployeeComponent implements PendingChangesGuard,OnDestroy {
 
     constructor(private employeeSvc: employeeService,private loggerSvc:logger) { }
-
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     protected roleTypeId = (<any>window).usrRoleId;
     private isDeveloper = (<any>window).isDeveloper;
     private isTester = (<any>window).isTester;
@@ -28,6 +31,7 @@ export class EmployeeComponent implements PendingChangesGuard{
             "isSuper": this.isSuper ? 1 : 0
         }
         this.employeeSvc.setEmployees(data)
+            .pipe(takeUntil(this.destroy$))
             .subscribe(() => {
                 this.isDirty=false;
                 this.loggerSvc.success("Role was changed", "Done");
@@ -54,5 +58,10 @@ export class EmployeeComponent implements PendingChangesGuard{
             { value: 2, label: "CBA" },
             { value: 8, label: "RA" }
         ]
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

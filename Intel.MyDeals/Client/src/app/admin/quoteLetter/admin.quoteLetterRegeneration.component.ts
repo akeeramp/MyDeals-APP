@@ -1,6 +1,8 @@
 ﻿import { logger } from "../../shared/logger/logger";
 import { quoteLetterService } from "./admin.quoteLetter.service";
-import { Component } from "@angular/core";
+import { Component, OnDestroy } from "@angular/core";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import {
     GridDataResult,
     DataStateChangeEvent,
@@ -20,8 +22,10 @@ import {
 
 })
 
-export class QuoteLetterRegenerationComponent {
+export class QuoteLetterRegenerationComponent implements OnDestroy{
     constructor(private quoteLetterSvc: quoteLetterService, private loggerSvc: logger) { }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private gridResult: Array<any>;
     private gridData: GridDataResult;
     private responseData = [];
@@ -48,7 +52,7 @@ export class QuoteLetterRegenerationComponent {
         
         if (this.validateDealId && this.dealId != '') {
             this.isLoading = true;
-            this.quoteLetterSvc.regenerateQuoteLetter(this.dealId).subscribe((result: any) => {
+            this.quoteLetterSvc.regenerateQuoteLetter(this.dealId).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
 
                 if (result) {
                     this.isLoading = false;
@@ -81,4 +85,10 @@ export class QuoteLetterRegenerationComponent {
             this.validateDealId = true;
         }
     }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
+
 }

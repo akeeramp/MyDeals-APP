@@ -1,4 +1,4 @@
-﻿import { Component, Input, ViewEncapsulation, Output, EventEmitter } from "@angular/core";
+﻿import { Component, Input, ViewEncapsulation, Output, EventEmitter, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { DataStateChangeEvent, SelectAllCheckboxState, CellClickEvent, PageSizeItem, GridComponent} from "@progress/kendo-angular-grid";
 import { CompositeFilterDescriptor, distinct, FilterDescriptor, process, State } from "@progress/kendo-data-query";
@@ -12,6 +12,8 @@ import { OverlappingCheckComponent } from "../ptModals/overlappingCheckDeals/ove
 import { each, uniq } from 'underscore';
 import { saveAs } from '@progress/kendo-file-saver';
 import { Workbook } from '@progress/kendo-angular-excel-export';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 export interface contractIds {
     Model: string;
@@ -30,7 +32,7 @@ export interface contractIds {
     encapsulation: ViewEncapsulation.None
 })
 
-export class managerExcludeGroupsComponent {
+export class managerExcludeGroupsComponent implements OnDestroy {
     spinnerMessageHeader: any;
     spinnerMessageDescription: any;
     msgType: any;
@@ -39,6 +41,9 @@ export class managerExcludeGroupsComponent {
     constructor(private loggerSvc: logger, private managerExcludeGrpSvc: managerExcludeGroupsService, private lnavSvc: lnavService, protected dialog: MatDialog) {
 
     }
+    
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     public isLoading: boolean;
     private color: ThemePalette = 'primary';
     PCTResultView = false;
@@ -116,7 +121,7 @@ export class managerExcludeGroupsComponent {
 
     loadExcludeGroups() {
         this.isLoading = true;
-        this.managerExcludeGrpSvc.readWipExclusionFromContract(this.contractData.DC_ID).subscribe((result: any) => {
+        this.managerExcludeGrpSvc.readWipExclusionFromContract(this.contractData.DC_ID).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
             this.loadMessage = 'Gathering Deals';
             this.dirty = false;
             if (this.isTenderDashboard)//Tender Dashboard Group Exclusion needs to display data of correponding deal ID not all
@@ -236,10 +241,10 @@ export class managerExcludeGroupsComponent {
         const dirtyRecords = this.gridResult.filter(x => x._dirty == true);
         if (dirtyRecords.length != 0) {
             this.isLoading = true;
-            this.managerExcludeGrpSvc.updateWipDeals(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, dirtyRecords).subscribe((result: any) => {
+            this.managerExcludeGrpSvc.updateWipDeals(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, dirtyRecords).pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
                 this.gridResult = result;
                 this.gridData = process(this.gridResult, this.state);
-                this.managerExcludeGrpSvc.runPctContract(this.contractData.DC_ID).subscribe((res) => {
+                this.managerExcludeGrpSvc.runPctContract(this.contractData.DC_ID.pipe(takeUntil(this.destroy$))).subscribe((res) => {
                     this.loadExcludeGroups();
                 }, (err) => {
                     this.loggerSvc.error('Could not run Cost Test in Exclude Groups for contract', err);
@@ -420,5 +425,11 @@ export class managerExcludeGroupsComponent {
     ngOnInit() {
         this.userRole = (<any>window).usrRole;
         this.loadExcludeGroups();
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

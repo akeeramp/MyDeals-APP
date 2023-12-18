@@ -1,4 +1,4 @@
-﻿import { Component, EventEmitter, Input, Output, ViewEncapsulation } from "@angular/core";
+﻿import { Component, EventEmitter, Input, OnDestroy, Output, ViewEncapsulation } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { DataStateChangeEvent, CellClickEvent, CellCloseEvent } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
@@ -12,6 +12,8 @@ import { excludeDealGroupModalDialog } from "../managerExcludeGroups/excludeDeal
 import { MatDialog } from "@angular/material/dialog";
 import { each } from 'underscore';
 import { tenderGroupExclusionModalComponent } from "../ptModals/tenderDashboardModals/tenderGroupExclusionModal.component";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 export interface contractIds {
     Model: string;
@@ -29,7 +31,7 @@ export interface contractIds {
     styleUrls: ['Client/src/app/contract/managerPct/managerPct.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class managerPctComponent {
+export class managerPctComponent implements OnDestroy{
     isRunning: boolean;
     contractId: string;
     lastRun: any;
@@ -54,6 +56,8 @@ export class managerPctComponent {
     @Output() refreshedContractData = new EventEmitter<any>();
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
     @Output() isDirty = new EventEmitter<any>();
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private spinnerMessageHeader = "Complete"; 
     private spinnerMessageDescription = "Reloading the page now.";
     public isPctLoading = false;
@@ -123,7 +127,7 @@ export class managerPctComponent {
         const ptDcId = pt.DC_ID;
         //check whether arrow icon is expanded/collapsed ,only if it is expanded then call API to get the data
         if (this.isPTExpanded[ptDcId]) {
-            this.managerPctSvc.getPctDetails(pt.DC_ID).subscribe(
+            this.managerPctSvc.getPctDetails(pt.DC_ID).pipe(takeUntil(this.destroy$)).subscribe(
                 (response) => {
                     if (response !== undefined) {
                         this.CostTestGroupDetails[pt.DC_ID] = response["CostTestGroupDetailItems"];
@@ -565,5 +569,10 @@ export class managerPctComponent {
     }
     goToNavManagePCT(dataItem) {
         window.open(`/Contract#/gotoDeal/${dataItem.DEAL_ID}`, '_blank')
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

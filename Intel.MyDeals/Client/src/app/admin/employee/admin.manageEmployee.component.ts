@@ -1,4 +1,4 @@
-﻿import { Component, ViewEncapsulation } from "@angular/core"
+﻿import { Component, ViewEncapsulation, OnDestroy } from "@angular/core"
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query"; /*GroupDescriptor,*/
 import { logger } from "../../shared/logger/logger";
@@ -10,6 +10,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { ManageEmployeeModalComponent } from './admin.manageEmployeeModal.component';
 import { Observable } from "rxjs";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: 'manage-employee',
@@ -18,11 +20,13 @@ import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactiva
     encapsulation: ViewEncapsulation.None
 })
 
-export class manageEmployeeComponent implements PendingChangesGuard{
+export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
 
     constructor(private manageEmployeeSvc: manageEmployeeService, private loggerSvc: logger, private sanitizer: DomSanitizer, protected dialog: MatDialog) {
         this.allData = this.allData.bind(this);
     }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     isDirty = false;
     private Roles: Array<string> = ["CBA", "DA", "Finance", "FSE", "GA", "Legal", "RA", "SA", "MyDeals SA", "Net ASP SA", "Rebate Forecast SA", "WRAP SA"];
     private Geos: Array<string> = ["APAC", "ASMO", "EMEA", "IJKK", "PRC", "Worldwide"];
@@ -149,6 +153,7 @@ export class manageEmployeeComponent implements PendingChangesGuard{
         const geosArray = dataItem["USR_GEOS"].split(', ');
         let modal_body;
         this.manageEmployeeSvc.getCustomersFromGeos(geosArray.join())
+            .pipe(takeUntil(this.destroy$))
             .subscribe(response => {
                 modal_body = response;
                 const selectedIds = [];
@@ -180,6 +185,7 @@ export class manageEmployeeComponent implements PendingChangesGuard{
     openEmployeeVerticals(dataItem) {
         this.isDirty=true;
         this.manageEmployeeSvc.getProductCategoriesWithAll()
+            .pipe(takeUntil(this.destroy$))
             .subscribe(response => {
                 const selectedIds = [];
                 const modal_body = response;
@@ -286,6 +292,7 @@ export class manageEmployeeComponent implements PendingChangesGuard{
             document.location.href = "/Dashboard#/portal";
         }
         this.manageEmployeeSvc.getEmployeeData()
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 this.gridResult = response;
                 for (let i = 0; i < this.gridResult.length; i++) {
@@ -314,5 +321,10 @@ export class manageEmployeeComponent implements PendingChangesGuard{
 
     ngOnInit() { 
         this.loadEmployeeData();
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

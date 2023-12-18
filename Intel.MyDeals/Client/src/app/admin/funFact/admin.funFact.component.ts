@@ -1,4 +1,4 @@
-﻿import { Component, ViewChild  } from "@angular/core";
+﻿import { Component, ViewChild, OnDestroy  } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { funFactService } from "./admin.funFact.service";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
@@ -11,16 +11,20 @@ import { process, State, distinct } from "@progress/kendo-data-query";
 import { ExcelExportData } from "@progress/kendo-angular-excel-export";
 import { ExcelExportEvent } from "@progress/kendo-angular-grid";
 import { Observable } from "rxjs";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: 'admin-fun-fact',
     templateUrl: 'Client/src/app/admin/funFact/admin.funFact.component.html',
     styleUrls: ['Client/src/app/admin/funFact/admin.funFact.component.css']
 })
-export class adminFunFactComponent implements PendingChangesGuard {
+export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
     constructor(private funFactSvc: funFactService, private loggerSvc: logger) {
         this.allData = this.allData.bind(this);
     }
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private isLoading = true;
     private loadMessage = "Admin Customer Loading..";
     private type = "numeric";
@@ -105,7 +109,8 @@ export class adminFunFactComponent implements PendingChangesGuard {
     insertUpdateOperation(rowIndex, isNew, fun_facts) {
             if (isNew) {
                 this.isLoading = true;
-                this.funFactSvc.setFunfact(fun_facts).subscribe(
+                this.funFactSvc.setFunfact(fun_facts).pipe(takeUntil(this.destroy$))
+                    .subscribe(
                     result => {
                         //TO show the new saved record at whatever page currently selected by the user
                         //if already any filters or sorting is applied to the grid then those filters/sorting will get cleared when user try to add a new record and newly added record will be shown in first page in that case
@@ -121,7 +126,8 @@ export class adminFunFactComponent implements PendingChangesGuard {
                 );
             } else {
                 this.isLoading = true;
-                this.funFactSvc.updateFunFact(fun_facts).subscribe(
+                this.funFactSvc.updateFunFact(fun_facts).pipe(takeUntil(this.destroy$))
+                    .subscribe(
                     result => {
                         //getting the index value of the grid result by comparing the edited row FACT_SID to the grid result FACT_SID. so that we can update the user edited/modified data to proper grid result index
                         const index = this.gridResult.findIndex(x => fun_facts.FACT_SID == x.FACT_SID);  
@@ -143,7 +149,8 @@ export class adminFunFactComponent implements PendingChangesGuard {
             document.location.href = "/Dashboard#/portal";
         }
         else {
-            this.funFactSvc.getFunFactItems().subscribe((result: Array<any>) => {
+            this.funFactSvc.getFunFactItems().pipe(takeUntil(this.destroy$))
+                .subscribe((result: Array<any>) => {
                 this.isLoading = false;
                 this.gridResult = result;
                 this.gridData = process(result, this.state);
@@ -207,7 +214,8 @@ export class adminFunFactComponent implements PendingChangesGuard {
             FACT_SRC: new FormControl(""),
             ACTV_IND: new FormControl(false)
         });
-        this.formGroup.valueChanges.subscribe(() => {
+        this.formGroup.valueChanges
+            .subscribe(() => {
             this.isFormChange = true;
             // sending isNew as true for the toolTipvalidationMsgs function as it is add action
             this.toolTipvalidationMsgs(this.formGroup.controls,true);
@@ -227,7 +235,8 @@ export class adminFunFactComponent implements PendingChangesGuard {
             FACT_SRC: new FormControl(dataItem.FACT_SRC),
             ACTV_IND: new FormControl(dataItem.ACTV_IND)
         });
-        this.formGroup.valueChanges.subscribe(() => {
+        this.formGroup.valueChanges
+            .subscribe(() => {
             this.isFormChange = true;
             this.toolTipvalidationMsgs(this.formGroup.controls);
         });
@@ -258,6 +267,12 @@ export class adminFunFactComponent implements PendingChangesGuard {
 
     ngOnInit() {
         this.loadFunFacts();
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
 }

@@ -1,5 +1,5 @@
 ﻿import { formatDate } from "@angular/common";
-import { Component, OnInit, ViewEncapsulation, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewEncapsulation, ViewChild, OnDestroy } from "@angular/core";
 import { Item } from "@progress/kendo-angular-charts/dist/es2015/common/collection.service";
 import { MomentService } from "../../shared/moment/moment.service";
 import { logger } from "../../shared/logger/logger";
@@ -18,7 +18,8 @@ import { contractStatusWidgetService } from "../../dashboard/contractStatusWidge
 import { emailModal } from "../../contract/contractManager/emailModal/emailModal.component";
 import { constantsService } from "../../admin/constants/admin.constants.service";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
-import { Observable } from "rxjs";
+import { Observable, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: 'app-tender-dashboard',
@@ -27,7 +28,9 @@ import { Observable } from "rxjs";
     encapsulation: ViewEncapsulation.None
 })    
 
-export class TenderDashboardComponent implements OnInit {
+export class TenderDashboardComponent implements OnInit, OnDestroy {
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
     private startDateValue: Date = new Date(this.momentService.moment().subtract(6, 'months').format("MM/DD/YYYY"));
     private endDateValue: Date = new Date(this.momentService.moment().add(6, 'months').format("MM/DD/YYYY"));
@@ -97,6 +100,7 @@ export class TenderDashboardComponent implements OnInit {
         const formattedEndDate = formatDate(endDate, format, locale);
         const customerName = JSON.parse(JSON.stringify(this.selectedCustNames))[0]['CUST_NM'];
         this.tenderDashboardSvc.getCustomerDetails(formattedStartDate, formattedEndDate, customerName == undefined ? "Apple Computer" : customerName)
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 if (response) {
                     alert(response);
@@ -195,7 +199,7 @@ export class TenderDashboardComponent implements OnInit {
     refreshGridRows(wip_ids, wip_data) {
         if (wip_data == null) {
             //if no provided wip data, then we need to go to the middle tier and get it ourselves.
-            this.tenderDashboardSvc.getTendersByIds(wip_ids.join()).subscribe( (results)=> {
+            this.tenderDashboardSvc.getTendersByIds(wip_ids.join()).pipe(takeUntil(this.destroy$)).subscribe( (results)=> {
                     this.refreshGridRowsHelper(wip_ids, results);
                 },
                 (error) =>{
@@ -259,7 +263,7 @@ export class TenderDashboardComponent implements OnInit {
             }
         }
         else {
-            this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
+            this.templatesSvc.readTemplates().pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
                 if (response)
                     this.templates = response;
                     this.addCustomToTemplates();
@@ -271,7 +275,7 @@ export class TenderDashboardComponent implements OnInit {
     }
     searchTenderDeals(st, en, searchText, take) {
         this.searchResults = [];//clear out the previuos search results if any
-        this.tenderDashboardSvc.searchTender(st, en, searchText).subscribe((response: any) => {
+        this.tenderDashboardSvc.searchTender(st, en, searchText).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
             this.setBusy("", "");
             if ((<any>window).usrRole === 'DA' && (<any>window).usrVerticals.length > 0) {
                 let userVerticals = (<any>window).usrVerticals.split(',');
@@ -587,7 +591,7 @@ export class TenderDashboardComponent implements OnInit {
             if (selectedItem.length > 0) {
                 this.deComp.isRunning = true;
                 this.setBusy("Running", "Price Cost Test and Meet Comp Test.", "Info", true);
-                this.tenderDashboardSvc.runBulkPctPricingStrategy(selectedItem).subscribe((data) => {
+                this.tenderDashboardSvc.runBulkPctPricingStrategy(selectedItem).pipe(takeUntil(this.destroy$)).subscribe((data) => {
                     this.deComp.isRunning = false;
                     this.actionTenderDeals(this.tenders);
                 });
@@ -620,7 +624,7 @@ export class TenderDashboardComponent implements OnInit {
     }
     actionTenderDeals(tenders) {
         this.setBusy("Updating Tender Deals...", "Please wait as we update the Tender Deals!");
-        this.tenderDashboardSvc.actionTenderDeals(tenders, this.changedActionValue).subscribe((results) =>{
+        this.tenderDashboardSvc.actionTenderDeals(tenders, this.changedActionValue).pipe(takeUntil(this.destroy$)).subscribe((results) =>{
             var msgArray = results["Data"].Messages;
             var errorMessages = [];
             for (var dsIndex = 0; dsIndex < this.searchResults.length; dsIndex++) {
@@ -732,7 +736,7 @@ export class TenderDashboardComponent implements OnInit {
                     contractData: this.contractData
                 }
             });
-            dialogRef.afterClosed().subscribe(result => {
+            dialogRef.afterClosed().pipe(takeUntil(this.destroy$)).subscribe(result => {
                 if (result) {
                     window.location.href = "Contract#/tendermanager/" + result;
                 }
@@ -741,6 +745,7 @@ export class TenderDashboardComponent implements OnInit {
     }
     getCustomerData() {
         this.cntrctWdgtSvc.getCustomerDropdowns()
+            .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 if (response && response.length > 0) {
                     this.custData = response;
@@ -753,7 +758,7 @@ export class TenderDashboardComponent implements OnInit {
             });
     }
     getMaxRecordCount(varName: string) {
-        this.constantsService.getConstantsByName(varName).subscribe((response) => {
+        this.constantsService.getConstantsByName(varName).pipe(takeUntil(this.destroy$)).subscribe((response) => {
             if (response) {
                 this.maxRecordCount = response;
             }
@@ -773,7 +778,7 @@ export class TenderDashboardComponent implements OnInit {
             }
             if (selectedItem.length > 0) {
                 this.setBusy("Running", "Price Cost Test and Meet Comp Test.", "Info", true);
-                this.tenderDashboardSvc.runBulkPctPricingStrategy(selectedItem).subscribe((result)=> {
+                this.tenderDashboardSvc.runBulkPctPricingStrategy(selectedItem).pipe(takeUntil(this.destroy$)).subscribe((result)=> {
                     this.setBusy("Complete", "Reloading the page now.", "Success");
                     this.deComp.isRunning = false;
                     this.refreshGridRows(selectedDeals, null);
@@ -895,7 +900,7 @@ export class TenderDashboardComponent implements OnInit {
                 cellCurrValues: dataItem
             }
         });
-        dialogRef.afterClosed().subscribe((returnVal) => {
+        dialogRef.afterClosed().pipe(takeUntil(this.destroy$)).subscribe((returnVal) => {
         });
     }
 
@@ -953,7 +958,7 @@ export class TenderDashboardComponent implements OnInit {
         this.getCustomerData();
         this.getMaxRecordCount('TENDER_SEARCH_MAX_VALUE')
         if (this.templates.length == 0) {
-            this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
+            this.templatesSvc.readTemplates().pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
                 if (response)
                     this.templates = response;
             }, (err) => {
@@ -1020,6 +1025,12 @@ export class TenderDashboardComponent implements OnInit {
                 source: null
             })
         }
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
 }

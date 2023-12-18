@@ -1,12 +1,15 @@
 ﻿import { logger } from "../../../shared/logger/logger";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Component, ViewEncapsulation, Inject } from "@angular/core";
+import { Component, ViewEncapsulation, Inject, OnDestroy } from "@angular/core";
 import { dealToolsService } from "../dealTools/dealTools.service";
 import { FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
 import { GridUtil } from "../../../contract/grid.util";
 import { DatePipe } from '@angular/common';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+
 
 @Component({
     selector: "file-attachment-modal",
@@ -15,7 +18,7 @@ import { DatePipe } from '@angular/common';
     encapsulation: ViewEncapsulation.None
 })
 
-export class fileAttachmentComponent {
+export class fileAttachmentComponent implements OnDestroy {
     constructor(private dealToolsSvc: dealToolsService, private loggerSvc: logger, private datePipe: DatePipe, public dialogRef: MatDialogRef<fileAttachmentComponent>, @Inject(MAT_DIALOG_DATA) public data) {}
     public dataItem = this.data.dataItem;
     public C_ADD_ATTACHMENTS: boolean = this.dealToolsSvc.chkDealRules('C_ADD_ATTACHMENTS', (<any>window).usrRole, null, null, null);
@@ -30,6 +33,8 @@ export class fileAttachmentComponent {
     public uploadErrorCount = 0;
     public uploadSuccessCount = 0;
     private gridResult = [];
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private gridData: GridDataResult;
     private state: State = {
         skip: 0,
@@ -88,7 +93,7 @@ export class fileAttachmentComponent {
     deleteAttachmentActions(action: boolean) {
         if (action == true) {
             this.dealToolsSvc.deleteAttachment(this.deleteAttachmentParams.custMbrSid, this.deleteAttachmentParams.objTypeSid, this.deleteAttachmentParams.objSid,
-                this.deleteAttachmentParams.fileDataSid).subscribe((response: any) => {
+                this.deleteAttachmentParams.fileDataSid).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
                     this.isDeleteAttachment = false;
                     this.loggerSvc.success("Successfully deleted attachment.", "Delete successful");
                     this.loadAttachments();
@@ -107,7 +112,7 @@ export class fileAttachmentComponent {
     }
     loadAttachments() {
         this.isLoading = true;
-        this.dealToolsSvc.getAttachments(this.dataItem.CUST_MBR_SID, this.dataItem.DC_ID, this.dataItem.dc_type).subscribe(response => {
+        this.dealToolsSvc.getAttachments(this.dataItem.CUST_MBR_SID, this.dataItem.DC_ID, this.dataItem.dc_type).pipe(takeUntil(this.destroy$)).subscribe(response => {
             if (response != undefined && response != null) {
                     this.gridResult = response;
                     this.gridData = process(this.gridResult, this.state);
@@ -127,5 +132,10 @@ export class fileAttachmentComponent {
     }
     ngOnInit() {
         this.loadAttachments();
+    }
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

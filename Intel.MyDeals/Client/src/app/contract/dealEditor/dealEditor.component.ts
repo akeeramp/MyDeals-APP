@@ -1,4 +1,4 @@
-﻿import { Component, Input, ViewEncapsulation, ViewChild, Output, EventEmitter } from '@angular/core';
+﻿import { Component, Input, ViewEncapsulation, ViewChild, Output, EventEmitter, OnDestroy } from '@angular/core';
 import { logger } from '../../shared/logger/logger';
 import { each, uniq } from 'underscore';
 import { MomentService } from "../../shared/moment/moment.service";
@@ -14,7 +14,7 @@ import { PTE_Load_Util } from '../PTEUtils/PTE_Load_util';
 import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
 import { PTE_Config_Util } from '../PTEUtils/PTE_Config_util';
 import { Tender_Util } from '../PTEUtils/Tender_util';
-import { BehaviorSubject, forkJoin } from 'rxjs';
+import { BehaviorSubject, Subject, forkJoin } from 'rxjs';
 import { systemPricePointModalComponent } from "../ptModals/dealEditorModals/systemPricePointModal.component"
 import { endCustomerRetailModalComponent } from "../ptModals/dealEditorModals/endCustomerRetailModal.component"
 import { multiSelectModalComponent } from "../ptModals/multiSelectModal/multiSelectModal.component"
@@ -28,6 +28,7 @@ import { dealEditorService } from "../dealEditor/dealEditor.service";
 import { tenderMCTPCTModalComponent } from '../ptModals/tenderDashboardModals/tenderMCTPCTModal.component';
 import { SecurityService } from "../../shared/services/security.service"
 import { ActivatedRoute, Router } from '@angular/router';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'deal-editor',
@@ -35,7 +36,7 @@ import { ActivatedRoute, Router } from '@angular/router';
     styleUrls: ['Client/src/app/contract/dealEditor/dealEditor.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class dealEditorComponent { 
+export class dealEditorComponent implements OnDestroy{ 
 
     constructor(private pteService: PricingTableEditorService,
                 private contractDetailsSvc: ContractDetailsService,
@@ -74,6 +75,9 @@ export class dealEditorComponent {
     @Output() refreshGridData = new EventEmitter();
     @Output() removeDeletedRow = new EventEmitter();
     @Output() loadPTEditor = new EventEmitter();
+
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private isWarning: boolean = false;
     private message: string = "";
     public dirty = false;
@@ -751,7 +755,7 @@ export class dealEditorComponent {
         if (confirm("Are you sure that you want to clear/reset this layout?")) {
             this.isDataLoading = true;
             this.setBusy("Clearing...", "Clearing the current Layout", "Info", false);
-            this.DESvc.clearAction(this.opName, "CustomLayoutFor" + this.curPricingTable.OBJ_SET_TYPE_CD).subscribe((response: any) => {
+            this.DESvc.clearAction(this.opName, "CustomLayoutFor" + this.curPricingTable.OBJ_SET_TYPE_CD).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
                 this.isDataLoading = false;
                 this.setBusy("", "", "", false);
             }), err => {
@@ -865,7 +869,7 @@ export class dealEditorComponent {
         this.setBusy("Custom...", "Loading the current Layout", "Info", false);
 
         reportError = typeof reportError === 'undefined' ? true : reportError;
-        this.DESvc.getActions(this.opName, "CustomLayoutFor" + this.curPricingTable.OBJ_SET_TYPE_CD).subscribe((response: any) => {
+        this.DESvc.getActions(this.opName, "CustomLayoutFor" + this.curPricingTable.OBJ_SET_TYPE_CD).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
             if (response && response.length > 0) {
                 this.applyCustomLayoutToGrid(response);
                 this.selectedTab = this.groups[0].name;
@@ -1542,6 +1546,12 @@ export class dealEditorComponent {
         this._gridResult.subscribe((data) => {
             this.dirty = this.getDirtyFromGridResult(data);
         });
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
     private getDirtyFromGridResult(data) {

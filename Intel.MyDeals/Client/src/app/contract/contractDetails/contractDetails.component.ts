@@ -1,12 +1,12 @@
 ﻿/* eslint-disable @typescript-eslint/no-inferrable-types */
 import { DatePipe } from '@angular/common';
-import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, ViewChild } from "@angular/core";
+import { Component, Input, Output, EventEmitter, OnInit, AfterViewInit, ViewChild, OnDestroy } from "@angular/core";
 import { FormGroup, NgForm } from "@angular/forms";
 import { ActivatedRoute } from "@angular/router";
 import { FileRestrictions, UploadEvent } from "@progress/kendo-angular-upload";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
-import { Observable, forkJoin } from "rxjs";
+import { Observable, Subject, forkJoin } from "rxjs";
 import { each, isEmpty, isNull, isUndefined } from 'underscore';
 
 import { logger } from "../../shared/logger/logger";
@@ -16,13 +16,14 @@ import { MomentService } from "../../shared/moment/moment.service";
 import { GridUtil } from "../grid.util";
 import { NewContractWidgetService } from "../../dashboard/newContractWidget/newContractWidget.service"; 
 import { PendingChangesGuard } from 'src/app/shared/util/gaurdprotectionDeactivate';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'contract-details',
     templateUrl: 'Client/src/app/contract/contractDetails/contractDetails.component.html',
     styleUrls: ['Client/src/app/contract/contractDetails/contractDetails.component.css'],
 })
-export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingChangesGuard {
+export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingChangesGuard,OnDestroy {
 
     contractType: string;
     disableCustomer: boolean = false;
@@ -38,6 +39,9 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
                 private route: ActivatedRoute) { }
 
     @Input() C_ID: number;
+
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     private Customer;
     CUST_NM_DIV: any = []; CUST_NM; TITLE = ""; files = []; START_DT; START_QTR; START_YR; END_DT; END_QTR; END_YR; NO_END_DT = false; NO_END_DT_RSN; isSubmitted = false; NOTES = "";
     BACK_DATE_RSN; CONTRACT_TYPE;
@@ -239,7 +243,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
         if (title === "") return;
         this.disableSave = true;
         const dcID = this.contractData["DC_ID"] == -100 ? 0 : this.contractData["DC_ID"]
-        this.contractDetailsService.isDuplicateContractTitle(dcID, title)
+        this.contractDetailsService.isDuplicateContractTitle(dcID, title).pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {
                 if (response) {
                     this.disableSave=true;
@@ -258,7 +262,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
     //Get Customer Divisions
     updateCorpDivision(custID) {
         if (custID === "" || custID == null) return;
-        this.contractDetailsService.getMyCustomerDivsByCustNmSid(custID).subscribe(
+        this.contractDetailsService.getMyCustomerDivsByCustNmSid(custID).pipe(takeUntil(this.destroy$)).subscribe(
             (response: Array<any>) => {
                 this.Customer_Divs = response.filter(x => x.CUST_LVL_SID == 2003);
                 //for filtering purpose
@@ -452,7 +456,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
             }
             if (ct["DC_ID"] <= 0) ct["DC_ID"] = this.uid;
             this.contractDetailsService
-                .createContract(this.contractData["CUST_MBR_SID"], this.contractId, ct)
+                .createContract(this.contractData["CUST_MBR_SID"], this.contractId, ct).pipe(takeUntil(this.destroy$))
                 .subscribe((response: any) => {
                     //this condition is to handle fresh cration
                     if (response.CNTRCT && response.CNTRCT.length > 1) {
@@ -525,7 +529,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
         if (this.C_ID) {
             contractDetailId = this.C_ID;
 
-            this.contractDetailsService.getObjTimelineDetails(contractDetailId, objTypeIds, objTypeSId).subscribe((response: Array<any>) => {
+            this.contractDetailsService.getObjTimelineDetails(contractDetailId, objTypeIds, objTypeSId).pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
                 this.TimeLineDetails = response;
                 if (response.length > 5) {
                     this.isShowBtn = true;
@@ -557,7 +561,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
         }
         if (isValidDataPresent) {
             this.isLoading = true;
-            this.contractDetailsService.getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue)
+            this.contractDetailsService.getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue).pipe(takeUntil(this.destroy$))
                 .subscribe((response: any) => {
                     if (changeEvent == "START_QTR" || changeEvent == "START_YR" || changeEvent == "START_DT") {
                         this.START_QTR = response?.QTR_NBR;
@@ -609,7 +613,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
         }
         if (isValidDataPresent) {
             this.isLoading = true;
-            this.contractDetailsService.getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue)
+            this.contractDetailsService.getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue).pipe(takeUntil(this.destroy$))
                 .subscribe((response: any) => {
                     this.isLoading = false;
                     if (response != null) {
@@ -772,7 +776,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
         const ct = this.contractData;
         if (ct.DC_ID <= 0) ct.DC_ID = this.uid--; // check for NEW contract
         this.contractDetailsService.copyContract(this.contractData["CUST_MBR_SID"], this.contractData.DC_ID, this.copyContractData.DC_ID, ct)
-            .subscribe((response: any) => {
+        .pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
                 if (response.CNTRCT && response.CNTRCT.length > 0) {
                     let idCheck = response.CNTRCT.length == 2 ? response.CNTRCT[1]?.DC_ID : response.CNTRCT[0]?.DC_ID;
                     if (idCheck <= 0) {
@@ -810,7 +814,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
             const contractId = this.contractData.DC_ID;
             this.isLoading = true;
             this.setBusy("Deleting...", "Deleting the Contract", "Info", false);
-            this.contractDetailsService.deleteContract(custId, contractId).subscribe((response: any) => {
+            this.contractDetailsService.deleteContract(custId, contractId).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
                 this.setBusy("Delete Successful", "Deleted the Contract","Success",false);
                 window.location.href = '/Dashboard#/portal';
             }), err => {
@@ -868,7 +872,8 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
             this.isNewContract = true;
         } else {
             this.isNewContract = false;
-            this.contractDetailsService.getFileAttachments(this.contractData.CUST_MBR_SID, this.contractData.DC_ID).subscribe((response: any) => {
+            this.contractDetailsService.getFileAttachments(this.contractData.CUST_MBR_SID, this.contractData.DC_ID)
+            .pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
                 if (response != undefined && response != null) {
                     this.attachmentsDataSource = response;
                     this.gridData = process(this.attachmentsDataSource, this.state);
@@ -891,7 +896,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
     deleteAttachmentActions(act: boolean) {
         if (act == true) {
             this.contractDetailsService.deleteAttachment(this.deleteAttachmentParams.custMbrSid, this.deleteAttachmentParams.objTypeSid, this.deleteAttachmentParams.objSid,
-                this.deleteAttachmentParams.fileDataSid).subscribe((response: any) => {
+                this.deleteAttachmentParams.fileDataSid).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
                     this.isDeleteAttachment = false;
                     this.loggerService.success("Successfully deleted attachment.", "Delete successful");
                     this.getFileAttachmentDetails(this.deleteAttachmentParams.objSid);
@@ -989,12 +994,12 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
 
     private updateBackdateReasonDropdownData(custId?: string | number) {
         if (!(custId == null || custId == undefined)) {
-            this.contractDetailsService.getDropdownsWithCustomerId('BACK_DATE_RSN', custId).subscribe((result: unknown[]) => {
+            this.contractDetailsService.getDropdownsWithCustomerId('BACK_DATE_RSN', custId).pipe(takeUntil(this.destroy$)).subscribe((result: unknown[]) => {
                 this.backdateReasonsDropdownList = result;
                 this.dropdownFieldsData['BACK_DATE_RSN'] = result;
             });
         } else {
-            this.contractDetailsService.getDropdownOnlyAllCustomers('BACK_DATE_RSN').subscribe((result: unknown[]) => {
+            this.contractDetailsService.getDropdownOnlyAllCustomers('BACK_DATE_RSN').pipe(takeUntil(this.destroy$)).subscribe((result: unknown[]) => {
                 this.backdateReasonsDropdownList = result;
                 this.dropdownFieldsData['BACK_DATE_RSN'] = result;
             });
@@ -1005,7 +1010,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
         try {
             this.isLoading = true;
             //loading customer data and dropdowns Data
-            this.contractDetailsService.getMyCustomerNames().subscribe((response: Array<any>) => {
+            this.contractDetailsService.getMyCustomerNames().pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
                 forkJoin({
                     NO_END_DT_RSN: this.contractDetailsService.getVendorDropdown('NO_END_DT_RSN'),
                     BACK_DATE_RSN: this.contractDetailsService.getDropdownOnlyAllCustomers('BACK_DATE_RSN'),
@@ -1030,7 +1035,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
                             this.templateData = response;
                             this.contractData = this.initContract();
                             this.contractDetailsService
-                                .readCopyContract(this.c_Id)
+                                .readCopyContract(this.c_Id).pipe(takeUntil(this.destroy$))
                                 .subscribe(async (response: Array<any>) => {
                                     this.copyContractData = response[0];
                                     this.contractData.TITLE = this.TITLE = this.copyContractData.TITLE + " (copy)";
@@ -1078,7 +1083,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
                     if (this.isCopyContract == false) {
                         //conditions for new contract
                         if (this.c_Id <= 0) {
-                            this.templatesService.readTemplates().subscribe((response: Array<any>) => {
+                            this.templatesService.readTemplates().pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
                                 this.templateData = response;
                                 this.contractData = this.initContract();
                                 this.loadContractDetails();
@@ -1097,7 +1102,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
                             });
                         } else { //condition for existing contract
                             this.contractDetailsService
-                                .readContract(this.C_ID)
+                                .readContract(this.C_ID).pipe(takeUntil(this.destroy$))
                                 .subscribe((response: Array<any>) => {
                                     this.contractData = response[0];
                                     this.C_DELETE_ATTACHMENTS = this.contractDetailsService.checkDealRules("C_DELETE_ATTACHMENTS", (<any>window).usrRole, null, null, "Incomplete");
@@ -1166,4 +1171,9 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
        return !this.isDirty;
     }
 
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 }

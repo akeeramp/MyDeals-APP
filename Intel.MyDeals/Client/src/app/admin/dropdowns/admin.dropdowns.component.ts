@@ -1,9 +1,11 @@
-﻿import { Component, ViewChild } from "@angular/core";
+﻿import { Component, ViewChild,OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { dropdownService } from './admin.dropdowns.service';
 import { ui_dropdown } from "./admin.dropdowns.model";
 import { ThemePalette } from "@angular/material/core";
 import { indexOf, filter } from 'underscore';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import {
     GridDataResult,
     DataStateChangeEvent,
@@ -26,7 +28,7 @@ import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactiva
     styleUrls: ['Client/src/app/admin/CustomerVendors/admin.customerVendors.component.css']
 })
 
-export class dropdownsComponent implements PendingChangesGuard{
+export class dropdownsComponent implements PendingChangesGuard, OnDestroy{
 
 
     //Constructor - unloading the AngularJS stylesheet 
@@ -38,6 +40,8 @@ export class dropdownsComponent implements PendingChangesGuard{
     @ViewChild("attributeDropDown") private atrbDdl;
     @ViewChild("custDropDown") private custDdl;
 
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     //Private Varibales
     isDirty = false;
     private isLoading = true;
@@ -401,7 +405,7 @@ export class dropdownsComponent implements PendingChangesGuard{
             if (this.isModelvalid) {
                 if (isNew) {
                     this.isLoading = true;
-                    this.dropdownSvc.insertBasicDropdowns(ui_dropdown).subscribe(
+                    this.dropdownSvc.insertBasicDropdowns(ui_dropdown).pipe(takeUntil(this.destroy$)).subscribe(
                         result => {
                             this.selectedInheritanceGroup = "";
                             if (result.ATRB_CD == "MRKT_SEG_COMBINED") {
@@ -418,7 +422,7 @@ export class dropdownsComponent implements PendingChangesGuard{
                     );
                 } else {
                     this.isLoading = true;
-                    this.dropdownSvc.updateBasicDropdowns(ui_dropdown).subscribe(
+                    this.dropdownSvc.updateBasicDropdowns(ui_dropdown).pipe(takeUntil(this.destroy$)).subscribe(
                         () => {
                             this.gridResult[rowIndex] = ui_dropdown;
                             this.gridResult.push(ui_dropdown);
@@ -483,6 +487,7 @@ export class dropdownsComponent implements PendingChangesGuard{
     deleteRecord() {
         this.isDialogVisible = false;
         this.dropdownSvc.deleteBasicDropdowns(this.deleteDropdownData)
+            .pipe(takeUntil(this.destroy$))
             .subscribe(
                 () => {
                     if (this.deleteATRB_CDItem == "MRKT_SEG_COMBINED") {
@@ -504,5 +509,11 @@ export class dropdownsComponent implements PendingChangesGuard{
             )
     }
     // UI button click ends
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 }
 
