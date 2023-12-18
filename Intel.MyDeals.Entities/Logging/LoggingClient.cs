@@ -87,38 +87,7 @@ namespace Intel.MyDeals.Entities.Logging
                 return client;
             }
         }
-
-        public static void SetCLFLogs()
-        {
-            if (_cLFUrl == string.Empty || _cLFToken == string.Empty || _env == string.Empty)
-            {
-                Configuration rootWebConfig = System.Web.Configuration.WebConfigurationManager.OpenWebConfiguration("/Intel.MyDeals");
-                _cLFUrl = rootWebConfig.AppSettings.Settings["CLFUrl"].Value;
-                _cLFToken = rootWebConfig.AppSettings.Settings["CLFToken"].Value;
-                _env = rootWebConfig.AppSettings.Settings["Environment"].Value;
-            }
-        }
-
-        /// <summary>
-        /// Construct CLF client
-        /// </summary>
-        private static HttpClient CLFClient
-        {
-            get
-            {
-                HttpClientHandler handler = new HttpClientHandler();
-                HttpClient client = new HttpClient(handler)
-                {
-                    BaseAddress = new Uri(_cLFUrl)
-                };
-                client.DefaultRequestHeaders.Authorization = new AuthenticationHeaderValue("Bearer", _cLFToken);
-                client.DefaultRequestHeaders.Accept.Clear();
-                client.DefaultRequestHeaders.Accept.Add(
-                    new MediaTypeWithQualityHeaderValue("application/json"));
-                return client;
-            }
-        }
-
+       
         /// <summary>
         /// Upload to CLF
         /// </summary>
@@ -129,8 +98,6 @@ namespace Intel.MyDeals.Entities.Logging
             {
                 Messages = OpSerializeHelper.ToJsonString(messages, true),
             });
-
-            Task.Run(() => UploadToCLF(messages));
         }
 
         /// <summary>
@@ -140,7 +107,7 @@ namespace Intel.MyDeals.Entities.Logging
         /// <returns></returns>
         public static List<CLFLogItem> ConvertToCLFEntity(IEnumerable<DbLogPerfMessage> messages)
         {
-            SetCLFLogs();
+             
             var clfLogItem = new List<CLFLogItem>();
             var sessionId = Guid.NewGuid().ToString();
             foreach (var message in messages)
@@ -172,24 +139,6 @@ namespace Intel.MyDeals.Entities.Logging
             return clfLogItem;
         }
 
-        /// <summary>
-        ///
-        /// </summary>
-        /// <param name="messages"></param>
-        public static void UploadToCLF(IEnumerable<DbLogPerfMessage> messages)
-        {
-            try
-            {
-                var clf = ConvertToCLFEntity(messages);
-                // Do not log for local env
-                if (_env.Equals("local", StringComparison.InvariantCultureIgnoreCase)) return;
-                CLFClient.PostAsJsonAsync("/Logger/SaveLogs", clf);
-            }
-            catch (Exception ex)
-            {
-                //eat the exception if CLF is failing..
-                Debug.WriteLine("CLF error " + ex.Message);
-            }
-        }
+        
     }
 }
