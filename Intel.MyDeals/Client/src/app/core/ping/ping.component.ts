@@ -1,6 +1,8 @@
-﻿import { Component } from "@angular/core";
+﻿import { Component, OnDestroy } from "@angular/core";
 import { pingService } from '../core.shared.service';
 import { logger } from "../../shared/logger/logger";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector:'ping',
@@ -9,13 +11,15 @@ import { logger } from "../../shared/logger/logger";
     styles: [`.ping-net.high {color: #FC4C02;} .ping-net.med {color: #ffda24;}.ping-net.low {color: #76d600; }.ping-net.none { color: #cccccc;} .batch-running {color: #f3d54e;margin- right: 20px;}`]
 })
 
-export class PingComponent {
+export class PingComponent implements OnDestroy {
     constructor(private pingSvc: pingService,private loggerSvc:logger) { }
 
     public pingTime: any = null;
     public batchInProgress = false;
     public pingCycle = 60000;
     public pingValues: Array<number> = [];
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
 
     ngOnInit() {
         this.ping();
@@ -23,7 +27,7 @@ export class PingComponent {
 
     ping() {
         this.pingHost();
-        this.pingSvc.getBatchStatus()
+        this.pingSvc.getBatchStatus().pipe(takeUntil(this.destroy$))
             .subscribe(output => {
                 this.batchInProgress = false;
                 if (output.CNST_VAL_TXT !== undefined && output.CNST_VAL_TXT.toUpperCase() !== "COMPLETED") {
@@ -36,7 +40,7 @@ export class PingComponent {
 
     pingHost() {
         const ping: Date = new Date();
-        this.pingSvc.pingHost()
+        this.pingSvc.pingHost().pipe(takeUntil(this.destroy$))
             .subscribe(() => {
                 this.pingTime = <any>new Date() - <any>ping;
                 this.pingValues.push(this.pingTime);
@@ -58,6 +62,11 @@ export class PingComponent {
             return "med";
         }
         return "high";                   
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }
 

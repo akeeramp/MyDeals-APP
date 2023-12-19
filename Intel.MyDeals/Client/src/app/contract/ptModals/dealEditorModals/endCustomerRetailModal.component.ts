@@ -1,8 +1,10 @@
 ﻿import { logger } from "../../../shared/logger/logger";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
-import { Component, ViewEncapsulation, Inject } from "@angular/core";
+import { Component, ViewEncapsulation, Inject, OnDestroy } from "@angular/core";
 import { PricingTableEditorService } from "../../pricingTableEditor/pricingTableEditor.service"
 import { each } from 'underscore';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: 'end-customer-retail',
@@ -10,7 +12,7 @@ import { each } from 'underscore';
     styleUrls: ['Client/src/app/contract/ptModals/dealEditorModals/dealEditorModals.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class endCustomerRetailModalComponent {
+export class endCustomerRetailModalComponent implements OnDestroy {
     constructor(private loggerSvc: logger, private dialogRef: MatDialogRef<endCustomerRetailModalComponent>,
         @Inject(MAT_DIALOG_DATA) public data, private pteService: PricingTableEditorService) {
         dialogRef.disableClose = true;// prevents pop up from closing when user clicks outside of the MATDIALOG
@@ -42,6 +44,8 @@ export class endCustomerRetailModalComponent {
     private isWarning = false;
     private message: any;
     public virtual: any = { itemHeight: 28 };
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
 
     addRow(e) {
         this.validateFlag = true;
@@ -83,7 +87,7 @@ export class endCustomerRetailModalComponent {
     }
 
     getEndCustomerRetailDetails() {
-        this.pteService.readDropdownEndpoint(this.data.item.retailLookUpUrl).subscribe((response: any) => {
+        this.pteService.readDropdownEndpoint(this.data.item.retailLookUpUrl).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
             if (response != null && response != undefined) {
                 this.endCustOptions = response;
                 this.endCustOptionsWithOutAny = response.filter(x => x.Value.toUpperCase() !== "ANY");
@@ -96,7 +100,7 @@ export class endCustomerRetailModalComponent {
     }
 
     getCountry() {
-        this.pteService.readDropdownEndpoint(this.data.item.countryLookUpUrl).subscribe((response: any) => {
+        this.pteService.readDropdownEndpoint(this.data.item.countryLookUpUrl).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
             if (response != null && response != undefined)
                 this.countries = response;
         }, error => {
@@ -298,7 +302,7 @@ export class endCustomerRetailModalComponent {
         });
 
         if (!this.isError) {
-            this.pteService.validateEndCustomer(JSON.stringify(this.END_CUST_OBJ)).subscribe((res: any) => {
+            this.pteService.validateEndCustomer(JSON.stringify(this.END_CUST_OBJ)).pipe(takeUntil(this.destroy$)).subscribe((res: any) => {
                 this.END_CUST_OBJ = res;
                 this.validateFlag = false;
                 var i = 0;
@@ -744,5 +748,10 @@ export class endCustomerRetailModalComponent {
         this.getEndCustomerRetailDetails();
         this.getCountry();
         this.isLoading = true;
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

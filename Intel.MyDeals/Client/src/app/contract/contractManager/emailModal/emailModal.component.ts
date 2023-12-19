@@ -1,8 +1,10 @@
-import { Component, Inject,  ViewEncapsulation } from '@angular/core';
+import { Component, Inject,  OnDestroy,  ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { contractManagerservice } from "../contractManager.service";
 import { logger } from "../../../shared/logger/logger";
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "email-dialog",
@@ -13,11 +15,13 @@ import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
     encapsulation: ViewEncapsulation.None
 })
 
-export class emailModal {
+export class emailModal implements OnDestroy{
     allEmployeeProfiles: any;
     emailBody: any;
     emailSubject: any;
     headerInfo: any;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
     constructor(public dialogRef: MatDialogRef<emailModal>, @Inject(MAT_DIALOG_DATA) public data, private contractManagerSvc: contractManagerservice, private loggerSvc: logger) {
     }
         public dataItem ;
@@ -36,7 +40,7 @@ export class emailModal {
             }
         }   
         getUserProfileData(role){
-            this.contractManagerSvc.getEmployeeProfile().subscribe((result: any) => {
+            this.contractManagerSvc.getEmployeeProfile().pipe(takeUntil(this.destroy$)).subscribe((result: any) => {
                 this.allEmployeeProfiles = result;
                 this.applyRoleClass(role);
                 this.selectRole(role);
@@ -78,7 +82,7 @@ export class emailModal {
                 From: this.dataItem.from,
                 To: to
             };
-            this.contractManagerSvc.emailNotification(dataItemBody).subscribe((response: any) => {
+            this.contractManagerSvc.emailNotification(dataItemBody).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
                 this.dialogRef.close();
             }, (error) => {
                 //while subscribing its returning httpResponse.So, for now checking response with succuss code. (server side code changes needed in future)
@@ -88,5 +92,9 @@ export class emailModal {
         }
         close(){
             this.dialogRef.close();
-        }
+    }
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 }

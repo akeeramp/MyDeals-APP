@@ -1,4 +1,4 @@
-import { Component, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, OnDestroy, ViewEncapsulation } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { TenderFolioService } from '../tenderFolio/tenderFolio.service';
 import { TemplatesService } from "../../shared/services/templates.service";
@@ -6,6 +6,8 @@ import { logger } from '../../shared/logger/logger'
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import { MomentService } from "../../shared/moment/moment.service";
 import { each } from 'underscore';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     providers: [TenderFolioService],
@@ -14,7 +16,7 @@ import { each } from 'underscore';
     styleUrls: ["Client/src/app/contract/tenderFolio/tenderFolio.component.css"],
     encapsulation: ViewEncapsulation.None
 })
-export class TenderFolioComponent {
+export class TenderFolioComponent implements OnDestroy {
 
     constructor(public dialogRef: MatDialogRef<TenderFolioComponent>,
                 @Inject(MAT_DIALOG_DATA) public data,
@@ -47,6 +49,9 @@ export class TenderFolioComponent {
     public spinnerMessageDescription = "Please wait while we load your Tender Folio.";
     private isCopyTender: boolean = false;
     private showCopyAlert: boolean = false;
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
+
     dismissPopup(): void {
         this.dialogRef.close();
     }
@@ -103,7 +108,7 @@ export class TenderFolioComponent {
         title = title.trim();
         if (title === "") return;
         //passing -100 in place of this.contractData.DC_ID
-        this.dataService.isDuplicateContractTitle(-100, title).subscribe((response) => {
+        this.dataService.isDuplicateContractTitle(-100, title).pipe(takeUntil(this.destroy$)).subscribe((response) => {
             if (response) {
                 this.isTitleError = true;
                 this.titleErrorMsg = "This contract name already exists in another contract.";
@@ -118,7 +123,7 @@ export class TenderFolioComponent {
         });
     }
     getCustomerDivisions(){
-        this.dataService.getCustDivBySID(this.custSIDObj.CUST_SID)
+        this.dataService.getCustDivBySID(this.custSIDObj.CUST_SID).pipe(takeUntil(this.destroy$))
         .subscribe(res => {
             if (res) {
                 res = res.filter(data => data.CUST_LVL_SID === 2003);
@@ -147,7 +152,7 @@ export class TenderFolioComponent {
         }
     }
     getAllCustomers() {
-        this.dataService.getCustomerDropdowns().subscribe(res => {
+        this.dataService.getCustomerDropdowns().pipe(takeUntil(this.destroy$)).subscribe(res => {
             if (res) {
                 this.Customers = res;
                 this.isCustDiv = false;
@@ -215,7 +220,7 @@ export class TenderFolioComponent {
             "Errors": {}
         }
         this.isLoading = true;
-        this.dataService.createTenderContract(ct["CUST_MBR_SID"], ct["DC_ID"], data).subscribe((response) => {
+        this.dataService.createTenderContract(ct["CUST_MBR_SID"], ct["DC_ID"], data).pipe(takeUntil(this.destroy$)).subscribe((response) => {
             if (response.CNTRCT && response.CNTRCT.length > 0) {
                 this.isLoading = false;
                 //Redirecting to newContractWidget,handle & call saveContractTender() function of contractDetail page from there
@@ -350,7 +355,7 @@ export class TenderFolioComponent {
 
         this.data.contractData["OBJ_SET_TYPE_CD_target"] = objSetTypeCd;
         if (ct[0].DC_ID <= 0) ct[0].DC_ID = this.uid--;
-        this.dataService.copyTenderFolioContract(ct, this.data.copyItems.join()).subscribe((data) => {
+        this.dataService.copyTenderFolioContract(ct, this.data.copyItems.join()).pipe(takeUntil(this.destroy$)).subscribe((data) => {
             if (data === undefined || data['CNTRCT'].length < 2) {
                 this.showCopyAlert = true;
                     return;
@@ -384,7 +389,7 @@ export class TenderFolioComponent {
         const isDate = null;
         const qtrValue = "4";
         const yearValue = new Date().getFullYear();
-        this.dataService.getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue).subscribe((response: Array<any>) => {
+        this.dataService.getCustomerCalendar(customerMemberSid, isDate, qtrValue, yearValue).pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
             if (this.momentService.moment(response["QTR_END"]) < this.momentService.moment(new Date())) {
                 response["QTR_END"] = this.momentService.moment(response["QTR_END"]).add(365, 'days').format('l');
             }
@@ -436,7 +441,7 @@ export class TenderFolioComponent {
         this.isSpinnerLoading = true;
         this.getAllCustomers();
         this.isCopyTender = this.data.copyItems && this.data.copyItems.length > 0 ? true : false;
-        this.templatesSvc.readTemplates().subscribe((response: Array<any>) => {
+        this.templatesSvc.readTemplates().pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
             this.templateData = response;
             this.contractData = this.templateData["ObjectTemplates"].CNTRCT.ALL_TYPES;
             this.newPricingTable = this.templateData.ObjectTemplates.PRC_TBL.ECAP;
@@ -454,5 +459,10 @@ export class TenderFolioComponent {
             this.isSpinnerLoading = false;
             this.loggerSvc.error("Unable to get Template Data", "Error", err);
         })
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

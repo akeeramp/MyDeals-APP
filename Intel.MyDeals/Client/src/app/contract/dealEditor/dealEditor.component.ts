@@ -1543,7 +1543,7 @@ export class dealEditorComponent implements OnDestroy{
         this.isInitialLoad = true;
         this.initialization();
 
-        this._gridResult.subscribe((data) => {
+        this._gridResult.pipe(takeUntil(this.destroy$)).subscribe((data) => {
             this.dirty = this.getDirtyFromGridResult(data);
         });
     }
@@ -1552,6 +1552,7 @@ export class dealEditorComponent implements OnDestroy{
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
+        this._gridResult.complete();
     }
 
     private getDirtyFromGridResult(data) {

@@ -4,9 +4,8 @@ import { PricingTableEditorService } from '../../contract/pricingTableEditor/pri
 import { logger } from "../../shared/logger/logger";
 import { userPreferencesService } from "../../shared/services/userPreferences.service";
 import { List } from 'linqts';
-import { forkJoin } from 'rxjs';
+import { forkJoin, Subject } from 'rxjs';
 import { each, isArray } from 'underscore';
-import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
 @Component({
@@ -63,7 +62,7 @@ export class AttributeBuilder implements OnInit, OnDestroy {
     
     constructor(private pteService: PricingTableEditorService, private loggerSvc: logger, protected usrPrfrncssvc: userPreferencesService,) {}
     loadMyRules() {
-        this.usrPrfrncssvc.getActions(this.cat, this.subcat).pipe(takeUntil(this.destroy$)).pipe(takeUntil(this.destroy$)).subscribe((data: any) => {
+        this.usrPrfrncssvc.getActions(this.cat, this.subcat).pipe(takeUntil(this.destroy$)).subscribe((data: any) => {
             this.myRules = [];
             if (data.length > 0) {
                 for (var r = 0; r < data.length; r++) {

@@ -453,7 +453,7 @@ export class pricingTableComponent implements OnDestroy  {
         try {
             document.title = "Contract - My Deals"; 
             this.fetchDetailsfromURL()
-            this.lnavSvc.isLnavHidden.subscribe((isLnavHidden: any) => {
+            this.lnavSvc.isLnavHidden.pipe(takeUntil(this.destroy$)).subscribe((isLnavHidden: any) => {
                 this.isLnavHidden = isLnavHidden?.isLnavHid;
             });
         }

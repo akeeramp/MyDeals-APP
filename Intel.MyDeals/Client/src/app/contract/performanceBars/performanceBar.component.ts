@@ -2,6 +2,8 @@ import { Component, Input } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { contractManagerservice } from "../contractManager/contractManager.service";
 import { GridUtil } from "../grid.util";
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: "performance-bars",
@@ -28,6 +30,7 @@ export class performanceBarsComponent {
     public marks = [];
     public tempMarkArray = [];
     public tempMarks: any = {};
+    private readonly destroy$ = new Subject();
 
     private barChartObj:any={
         legend: {
@@ -195,7 +198,7 @@ export class performanceBarsComponent {
                 taskMs: item.data[0]
             });
         }
-        this.contractManagerSvc.loggingPerfomanceTimes(logData).subscribe((res) => {}, (err) => {
+        this.contractManagerSvc.loggingPerfomanceTimes(logData).pipe(takeUntil(this.destroy$)).subscribe((res) => {}, (err) => {
             this.loggerSvc.error("perfomanceTimes error " , err);
         });
         this.totTimesValue = totTimes;
@@ -219,5 +222,9 @@ export class performanceBarsComponent {
     showFixedValues(value){
         let returnValue = (value /1000).toFixed(4)+'s';
         return returnValue;
+    }
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

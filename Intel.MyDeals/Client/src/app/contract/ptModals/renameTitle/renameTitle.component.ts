@@ -1,7 +1,9 @@
-﻿import { Component, Inject } from '@angular/core';
+﻿import { Component, Inject, OnDestroy } from '@angular/core';
 import { logger } from '../../../shared/logger/logger';
 import { renameTitleService } from '../renameTitle/renameTitle.service';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "rename-title",
@@ -9,7 +11,7 @@ import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
     styleUrls: ['Client/src/app/contract/ptModals/renameTitle/renameTitle.component.css'],
 })
 
-export class RenameTitleComponent {
+export class RenameTitleComponent implements OnDestroy{
     constructor(
         private reNmSvc: renameTitleService,
         private loggerSvc: logger,
@@ -21,6 +23,8 @@ export class RenameTitleComponent {
     private TITLE: string = "";
     private hideErrMsg: boolean = true;
     private errMsg: string = "";
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
 
     onCancel(): void {
         this.dialogRef.close();
@@ -40,7 +44,7 @@ export class RenameTitleComponent {
         };
         const custId = this.renameData.contractData.CUST_MBR_SID;
         const contractId = this.renameData.contractData.DC_ID
-        this.reNmSvc.updateAtrbValue(custId, contractId, data).subscribe((response: any) => {
+        this.reNmSvc.updateAtrbValue(custId, contractId, data).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
             this.loggerSvc.success("Done", "Save Complete.");
             this.dialogRef.close(this.TITLE);
         }), err => {
@@ -53,4 +57,8 @@ export class RenameTitleComponent {
         this.TITLE = this.renameData.data.TITLE;
     }
 
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 }

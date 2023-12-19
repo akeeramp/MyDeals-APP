@@ -1,10 +1,12 @@
-import { Component, Inject, ViewEncapsulation } from '@angular/core';
+import { Component, Inject, ViewEncapsulation, OnDestroy } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
 import { each, indexOf, map, clone } from 'underscore';
-import { Observable, of } from "rxjs";
+import { Observable, of, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 import { logger } from "../../../shared/logger/logger";
 import { CheckedState, CheckableSettings } from "@progress/kendo-angular-treeview";
-import { PricingTableEditorService } from "../../pricingTableEditor/pricingTableEditor.service"
+import { PricingTableEditorService } from "../../pricingTableEditor/pricingTableEditor.service";
+
 
 @Component({
     selector: "multi-select-modal",
@@ -12,7 +14,7 @@ import { PricingTableEditorService } from "../../pricingTableEditor/pricingTable
     styleUrls: ['Client/src/app/contract/ptModals/multiSelectModal/multiSelectModal.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class multiSelectModalComponent {
+export class multiSelectModalComponent implements OnDestroy {
 
     constructor(private loggerSvc: logger,
         public dialogRef: MatDialogRef<multiSelectModalComponent>,
@@ -49,6 +51,8 @@ export class multiSelectModalComponent {
     private multiSelectMkgArr: Array<string> = [];
     private multiSelectMkgArrChange: Array<string> = [];
     private marketSeglist: any = [];
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
 
     fetchChildren(node: any): Observable<any[]> {
         // returns the items collection of the parent node as children
@@ -94,7 +98,7 @@ export class multiSelectModalComponent {
         return false;
     }
     getModalData() {
-        this.pteService.readDropdownEndpoint(this.multiSelectPopUpModal.opLookupUrl).subscribe((response: any) => {
+        this.pteService.readDropdownEndpoint(this.multiSelectPopUpModal.opLookupUrl).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
             if (response != null && response != undefined && response.length > 0) {
                 this.multiSelectData = response;
                 each(this.multiSelectData, row => {
@@ -166,7 +170,7 @@ export class multiSelectModalComponent {
     }
     getNonCorpData() {
         let opLookUpURL = "/api/Dropdown/GetDropdowns/MRKT_SEG_NON_CORP";
-        this.pteService.readDropdownEndpoint(opLookUpURL).subscribe((response: any) => {
+        this.pteService.readDropdownEndpoint(opLookUpURL).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
             if (response != null && response != undefined && response.length > 0) {
                 this.nonCorpMarketSeg = response;
             }
@@ -424,6 +428,11 @@ export class multiSelectModalComponent {
             this.getModalData();
         }
         this.key = this.multiSelectPopUpModal.opLookupText;
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }
 

@@ -1065,7 +1065,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
         this.pricingStrategyInputHandler();
 
         //This will help to highlight the selected Pricing Table incase of search result landing directly to PT. The logic can apply only once the page is rendered
-        this.lnavService.lnavHighlight.subscribe(res => {
+        this.lnavService.lnavHighlight.pipe(takeUntil(this.destroy$)).subscribe(res => {
             this.contractId_Map = { ...res, ps_index: 0, pt_index: 0 };
             (<any> $(`#sumPSdata_${ this.contractId_Map.ps_id }`)).collapse('show');
             this.changeDetectorRef.detectChanges();

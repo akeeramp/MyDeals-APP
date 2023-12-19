@@ -1,5 +1,5 @@
 ﻿import { pluck, where, each, uniq } from 'underscore';
-import { Component, Input } from "@angular/core";
+import { Component, Input, OnDestroy } from "@angular/core";
 import { logger } from "../../shared/logger/logger";
 import { publishTenderService } from './publishTender.service'
 import { pricingTableservice } from "../pricingTable/pricingTable.service";
@@ -13,13 +13,15 @@ import { dealProductsModalComponent } from '../ptModals/dealProductsModal/dealPr
 import { DE_Load_Util } from '../DEUtils/DE_Load_util';
 import { MomentService } from "../../shared/moment/moment.service";
 import { ActivatedRoute } from '@angular/router';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
     selector: "publish-tender",
     templateUrl: "Client/src/app/contract/publishTender/publishTender.component.html",
     styleUrls: ["Client/src/app/contract/publishTender/publishTender.component.css"]
 })
-export class publishTenderComponent {
+export class publishTenderComponent implements OnDestroy{
     constructor(private pricingTableSvc: pricingTableservice,
                 private publishtenderService: publishTenderService,
                 private allDealsSvc: allDealsService,
@@ -45,7 +47,9 @@ export class publishTenderComponent {
     private loading: boolean = false;
     private opGridTemplate = PTE_Config_Util.opGridTemplate;
     private templates: Array<any> = [];
-    private OBJ_SET_TYPE_CD:string="Tender";
+    private OBJ_SET_TYPE_CD: string = "Tender";
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
 
     private state: State = {
         skip: 0,
@@ -121,7 +125,7 @@ export class publishTenderComponent {
         this.spinnerMessageHeader="Publishing deals";
         this.spinnerMessageDescription="Converting into individual deals. Then we will redirect you to Tender Dashboard.";
         this.exlusionList=pluck(where(this.gridData.data,{isExclSel:true}),'DC_ID');
-        this.publishtenderService.publishTenderDeals(this.contractData[0].DC_ID, this.exlusionList).subscribe((response) => {
+        this.publishtenderService.publishTenderDeals(this.contractData[0].DC_ID, this.exlusionList).pipe(takeUntil(this.destroy$)).subscribe((response) => {
             if (response) {
                 this.setBusy("Published deals Successfully", "Redirecting to Tender Dashboard", "Success");
                 this.isDataLoading = false;
@@ -373,7 +377,7 @@ export class publishTenderComponent {
     refreshGrid() {
         this.OBJ_SET_TYPE_CD = this.pricingTableData.PRC_TBL_ROW[0].OBJ_SET_TYPE_CD;
         //set templates data        
-        this.templatesSvc.readTemplates().subscribe(response => {
+        this.templatesSvc.readTemplates().pipe(takeUntil(this.destroy$)).subscribe(response => {
             this.templates = response; this.initTender();
         }, err => {
             this.loggerSvc.error("Error", "Publishing deals Loading failed. Contact Administrator.", err);
@@ -389,12 +393,16 @@ export class publishTenderComponent {
         this.setBusy("Loading Deals...", "Please wait we are fetching WIP Deals...", "");
         this.spinnerMessageDescription = "Loading Deals";
         //set templates data
-        this.templatesSvc.readTemplates()
+        this.templatesSvc.readTemplates().pipe(takeUntil(this.destroy$))
             .subscribe(response => {
                 this.templates = response;
                 this.initTender();
             },err=>{
                 this.loggerSvc.error("Error", "Publishing deals Loading failed. Contact Administrator.",err);
             });  
+    }
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

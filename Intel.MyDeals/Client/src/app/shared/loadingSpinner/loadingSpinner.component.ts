@@ -1,8 +1,10 @@
-import { ChangeDetectorRef, Component, OnInit } from "@angular/core";
+import { ChangeDetectorRef, Component, OnDestroy, OnInit } from "@angular/core";
 import { contains, first } from 'underscore';
 
 import { LoadingSpinnerService } from "./loadingSpinner.service";
 import { logger } from "../logger/logger";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 @Component({
   selector: 'app-loader',
@@ -31,10 +33,12 @@ import { logger } from "../logger/logger";
         text-transform: uppercase;
       }`]
 })
-export class LoadingSpinnerComponent implements OnInit {
+export class LoadingSpinnerComponent implements OnInit, OnDestroy {
 
   private isLoading = true;
-  private recents: Array<any> = [];
+    private recents: Array<any> = [];
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
 
   constructor(private loadingSpinnerService: LoadingSpinnerService,
               private loggerService: logger,
@@ -58,7 +62,7 @@ export class LoadingSpinnerComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    this.loadingSpinnerService.isLoading.subscribe((res) => {
+      this.loadingSpinnerService.isLoading.pipe(takeUntil(this.destroy$)).subscribe((res) => {
       this.isLoading = res;
       this.changeDetectorRef.detectChanges();
       /* moved the below logic from adminBanner to track url changes from here and add it to the recent visited links */
@@ -66,6 +70,11 @@ export class LoadingSpinnerComponent implements OnInit {
     }, (err) => {
       this.loggerService.error("LoadingSpinnerComponent::loaderSvc**********", err);
     });
-  }
+   }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+    }
 
 }

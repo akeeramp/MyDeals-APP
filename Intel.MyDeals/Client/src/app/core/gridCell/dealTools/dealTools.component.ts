@@ -713,7 +713,7 @@ export class dealToolsComponent implements OnDestroy {
         this.openHoldDialog = false;
         this.openUnHoldDialog = false;
         this.setBusy("Updating Deals", "Updating hold status of Deals.", "", "");
-        this.dataService.actionWipDeals(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, dealIdsObj)
+        this.dataService.actionWipDeals(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, dealIdsObj).pipe(takeUntil(this.destroy$))
             .subscribe((response: any) => {
                 
                 if (response) {

@@ -1,15 +1,17 @@
-﻿import { Component, Inject } from "@angular/core";
+﻿import { Component, Inject, OnDestroy } from "@angular/core";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog"; 
 import { State, process } from "@progress/kendo-data-query";
 import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid"; 
 import { PricingTableEditorService } from "../../pricingTableEditor/pricingTableEditor.service";
 import { logger } from "../../../shared/logger/logger";
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 @Component({
     selector: "missing-cap-cost-info",
     templateUrl: "Client/src/app/contract/ptModals/dealEditorModals/missingCapCostInfoModal.component.html",
     styleUrls: ['Client/src/app/contract/ptModals/dealEditorModals/dealEditorModals.component.css'],
- })
-export class missingCapCostInfoModalComponent {
+})
+export class missingCapCostInfoModalComponent implements OnDestroy{
     constructor(public dialogRef: MatDialogRef<missingCapCostInfoModalComponent>, private loggerSvc: logger,
         @Inject(MAT_DIALOG_DATA) public data, private pteService: PricingTableEditorService) { }
     hasPermissionPrice: boolean;
@@ -27,6 +29,9 @@ export class missingCapCostInfoModalComponent {
             filters: [],
         },
     };    
+    //RXJS subject for takeuntil
+    private readonly destroy$ = new Subject();
+
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
         this.gridData = process(this.gridResult, this.state);
@@ -53,7 +58,7 @@ export class missingCapCostInfoModalComponent {
         this.isLoading = true;
         const userVerticals = (<any>window).usrVerticals.split(",");
         this.fileName = "Deal " + this.data.DC_ID + " Missing CAP / Cost Products.xlsx";
-        this.pteService.getDealProducts(this.data.DC_ID, this.data.CUST_MBR_SID).subscribe((response: any) => {
+        this.pteService.getDealProducts(this.data.DC_ID, this.data.CUST_MBR_SID).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
             if (response != null && response != undefined) {
                 this.gridResult = response;
                 this.isLoading = false;
@@ -84,5 +89,10 @@ export class missingCapCostInfoModalComponent {
 
     ngOnInit() {
        this.loaddata();
+    }
+
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 }

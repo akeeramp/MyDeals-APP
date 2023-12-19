@@ -1016,7 +1016,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
                     BACK_DATE_RSN: this.contractDetailsService.getDropdownOnlyAllCustomers('BACK_DATE_RSN'),
                     CONTRACT_TYPE: this.contractDetailsService.getVendorDropdown('CONTRACT_TYPE'),
                     CUST_ACCPT: this.contractDetailsService.getVendorDropdown('CUST_ACCPT'),
-                }).subscribe(({ NO_END_DT_RSN, BACK_DATE_RSN, CONTRACT_TYPE, CUST_ACCPT }) => {
+                }).pipe(takeUntil(this.destroy$)).subscribe(({ NO_END_DT_RSN, BACK_DATE_RSN, CONTRACT_TYPE, CUST_ACCPT }) => {
                     this.Customers = response;
                     //setting for filtering purpose
                     this.CustomersFilterData = this.Customers;
@@ -1031,7 +1031,7 @@ export class ContractDetailsComponent implements OnInit, AfterViewInit, PendingC
                     if (!!conrtType && conrtType.path =='copycid') {
                         this.c_Id = parseInt(this.route.snapshot.paramMap.get('cid'));
                         this.isCopyContract = true;
-                        this.templatesService.readTemplates().subscribe((response: Array<any>) => {
+                        this.templatesService.readTemplates().pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
                             this.templateData = response;
                             this.contractData = this.initContract();
                             this.contractDetailsService

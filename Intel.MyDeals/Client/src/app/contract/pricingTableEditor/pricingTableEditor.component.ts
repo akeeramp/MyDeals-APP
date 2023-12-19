@@ -2317,5 +2317,6 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
  ngOnDestroy() {
     this.destroy$.next();
     this.destroy$.complete();
+    this._isLoading.complete();
   }
 }
