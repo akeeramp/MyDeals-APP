@@ -62,6 +62,16 @@ namespace Intel.MyDeals.BusinessLogic
                         else
                             responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: PublishClaimDataToSfTenders - Failed while publishing Claim Data to APIGEE ") + Environment.NewLine);
                     }
+                    else if (runMode == "N")
+                    {
+                        responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: PublishConsumptionDataToSfTenders - Initiated ") + Environment.NewLine);
+                        //responseObj = _jmsDataLib.PublishClaimDataToSfTenders(jsonData, responseObj, runMode);
+                        responseObj = sendDataToIQR(jsonData, responseObj, dataRecords, runMode);
+                        if (responseObj.BatchStatus == "PROCESSED")
+                            responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: PublishConsumptionDataToSfTenders - Success ") + Environment.NewLine);
+                        else
+                            responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: PublishConsumptionDataToSfTenders - Failed while publishing Consumption Data to APIGEE ") + Environment.NewLine);
+                    }
                     else
                     {
                         responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Initiated ") + Environment.NewLine);
@@ -69,7 +79,7 @@ namespace Intel.MyDeals.BusinessLogic
                         responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Success ") + Environment.NewLine);
                     }
                     //responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : responseObj.BatchName;
-                    responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : runMode == "L" ? "IQR_CLM_DATA" : responseObj.BatchName;
+                    responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : runMode == "L" ? "IQR_CLM_DATA" : runMode == "N" ? "IQR_CONSUMPTION_DATA" : responseObj.BatchName;
                     //obj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: sendDealdataToSapPo - Success ") + Environment.NewLine);
 
                     jsonData = "";
@@ -77,7 +87,7 @@ namespace Intel.MyDeals.BusinessLogic
                 else
                 {
                     //responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : "VISTEX_DEALS";
-                    responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : runMode == "L" ? "IQR_CLAIM_DATA" : "VISTEX_DEALS";
+                    responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : runMode == "L" ? "IQR_CLAIM_DATA" : runMode == "N" ? "IQR_CONSUMPTION_DATA" : "VISTEX_DEALS";
                     responseObj.BatchId = "0";
                     responseObj.BatchMessage = "No data to be Uploaded";
                     responseObj.BatchStatus = "PROCESSED";
@@ -88,7 +98,7 @@ namespace Intel.MyDeals.BusinessLogic
             catch (Exception ex)
             {
                 //responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : "DEALS";
-                responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : runMode == "L" ? "IQR_CLAIM_DATA" : "DEALS";
+                responseObj.BatchName = runMode == "M" ? "CNSMPTN_LD" : runMode == "L" ? "IQR_CLAIM_DATA" : runMode == "N" ? "IQR_CONSUMPTION_DATA" : "DEALS";
                 responseObj.BatchId = "-1";
                 responseObj.BatchMessage = "Exception: " + ex.Message + "\n" + "Innerexception: " + ex.InnerException;
                 responseObj.BatchStatus = "Exception";
@@ -106,15 +116,28 @@ namespace Intel.MyDeals.BusinessLogic
                 Guid BatchId = dataRecords[0].BatchId;
                 string header = "";
                 string footer = "";
+                var finalJSON = "";
 
-                header = "{\"Header\":{\"xid\":\""+BatchId+ "\",\"target_system\":\"Tender\",\"source_system\":\"MyDeals\",\"action\":\"UpdateClaims\"},";
                 //Footer item
                 //footer = "}";
 
-                var finalJSON = header + jsonData.Remove(0,1) + footer;
                 responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: ConnectSAPPOandResponse - Initiated ") + Environment.NewLine);
+
                 //Sending to SAP PO  
-                responseObj = _jmsDataLib.PublishClaimDataToSfTenders(finalJSON, responseObj, runMode);
+                if (runMode == "N")
+                {
+                    var s = JsonConvert.DeserializeObject<IqrTransferComsumptionData>(jsonData);
+                    s.header.xid = BatchId.ToString();
+                    finalJSON = JsonConvert.SerializeObject(s);
+                    responseObj = _jmsDataLib.PublishConsumptionDataToSfTenders(finalJSON, responseObj, runMode);
+                }
+                else
+                {
+                    header = "{\"Header\":{\"xid\":\"" + BatchId + "\",\"target_system\":\"Tender\",\"source_system\":\"MyDeals\",\"action\":\"UpdateClaims\"},";
+                    finalJSON = header + jsonData.Remove(0, 1) + footer;
+                    responseObj = _jmsDataLib.PublishClaimDataToSfTenders(finalJSON, responseObj, runMode);
+                }
+
                 responseObj.BatchId = BatchId.ToString();
                 responseObj.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Business Layer - GetVistexDealOutBoundData: ConnectSAPPOandResponse - Success ") + Environment.NewLine);
                 SetVistexDealOutBoundStageV(BatchId, responseObj.BatchStatus == "PROCESSED" ? "PO_Processing_Complete" : "Pending", responseObj.BatchMessage);

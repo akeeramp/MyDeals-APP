@@ -7,6 +7,8 @@ using Intel.MyDeals.Helpers;
 using static Intel.MyDeals.Entities.IqrTransferComsumptionData.RecordDetails;
 using Newtonsoft.Json;
 using Intel.MyDeals.IDataLibrary;
+using Intel.Opaque;
+using System;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -16,11 +18,13 @@ namespace Intel.MyDeals.Controllers.API
 	{
 		private readonly IDropdownLib _dropdownLib;
         private readonly IJmsDataLib _jmsDataLib;
+        private readonly IVistexServiceLib _vistexServiceLib;
 
-        public DropdownController(IDropdownLib dropdownLib, IJmsDataLib jmsDataLib)
+        public DropdownController(IDropdownLib dropdownLib, IJmsDataLib jmsDataLib, IVistexServiceLib vistexServiceLib)
 		{
 			_dropdownLib = dropdownLib;
             _jmsDataLib = jmsDataLib;
+            _vistexServiceLib = vistexServiceLib;
         }
 
         [Authorize]
@@ -401,7 +405,11 @@ namespace Intel.MyDeals.Controllers.API
                 List<int> deadIdList = new List<int>() { 0 };
 
                 // Insert into the stage table here - one update item (0 id as dummy item)
-                _jmsDataLib.SaveTendersDataToStage("IQR_CONSUMPTION_DATA", deadIdList, JsonConvert.SerializeObject(jsonData, Formatting.None));
+                var responseGuid = _jmsDataLib.SaveTendersDataToStage("IQR_CONSUMPTION_DATA", deadIdList, JsonConvert.SerializeObject(jsonData, Formatting.None));
+                if (responseGuid != null)
+                {
+                    SendIQRConsumptionData("IQR_CONSUMPTION_DATA", "N");
+                }
             }
         }
 
@@ -458,8 +466,12 @@ namespace Intel.MyDeals.Controllers.API
                 if (recordCount > 0)
                 {
                     // Insert into the stage table here - one update item (0 id as dummy item)
-                    _jmsDataLib.SaveTendersDataToStage("IQR_CONSUMPTION_DATA", deadIdList, JsonConvert.SerializeObject(jsonData, Formatting.None));
-                    returnData = "There are " + recordCount.ToString() + " records for attribute " + atrbCd + " staged for send to IQR.";
+                    var responseGuid = _jmsDataLib.SaveTendersDataToStage("IQR_CONSUMPTION_DATA", deadIdList, JsonConvert.SerializeObject(jsonData, Formatting.None));
+                    if (responseGuid != null)
+                    {
+                        SendIQRConsumptionData("IQR_CONSUMPTION_DATA", "N");
+                        returnData = "There are " + recordCount.ToString() + " records for attribute " + atrbCd + " staged for send to IQR.";
+                    }
                 }
                 else
                 {
@@ -472,6 +484,51 @@ namespace Intel.MyDeals.Controllers.API
             }
 
             return returnData;
+        }
+
+        public VistexDFDataResponseObject SendIQRConsumptionData(string packetType, string runMode)
+        {
+            VistexDFDataResponseObject responseObject = new VistexDFDataResponseObject();
+            responseObject.MessageLog = new List<string>();
+            try
+            {
+                responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Controller - GetVistexDealOutBoundData - Called") + Environment.NewLine);
+                responseObject = _vistexServiceLib.GetVistexDealOutBoundData(packetType, runMode, responseObject);
+                responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Controller - GetVistexDealOutBoundData - Success") + Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                responseObject.BatchMessage = "Exception: " + ex.Message + "\n" + "Innerexception: " + ex.InnerException;
+                responseObject.BatchStatus = "Exception";
+                responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, ex.Message) + Environment.NewLine);
+                OpLogPerf.Log($"Thrown from: VistexServiceController - DEALS - Vistex SAP PO Error: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace}", LogCategory.Error);
+            }
+            return responseObject;
+        }
+
+
+        //This API call is for to Push consumption data , if any failure happend while sending the payload to IQR 
+        [Authorize]
+        [Route("SendIQRConsumptionDataManual/{packetType}/{runMode}")] //VTX_OBJ: CLAIM DATA
+        [HttpPost]
+        public VistexDFDataResponseObject SendIQRConsumptionDataManual(string packetType, string runMode)
+        {
+            VistexDFDataResponseObject responseObject = new VistexDFDataResponseObject();
+            responseObject.MessageLog = new List<string>();
+            try
+            {
+                responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Controller - GetVistexDealOutBoundData - Called") + Environment.NewLine);
+                responseObject = _vistexServiceLib.GetVistexDealOutBoundData(packetType, runMode, responseObject);
+                responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, "Controller - GetVistexDealOutBoundData - Success") + Environment.NewLine);
+            }
+            catch (Exception ex)
+            {
+                responseObject.BatchMessage = "Exception: " + ex.Message + "\n" + "Innerexception: " + ex.InnerException;
+                responseObject.BatchStatus = "Exception";
+                responseObject.MessageLog.Add(String.Format("{0:HH:mm:ss.fff} @ {1}", DateTime.Now, ex.Message) + Environment.NewLine);
+                OpLogPerf.Log($"Thrown from: VistexServiceController - DEALS - Vistex SAP PO Error: {ex.Message}|Innerexception: {ex.InnerException} | Stack Trace{ex.StackTrace}", LogCategory.Error);
+            }
+            return responseObject;
         }
         #endregion IQR Dropdown additions
 

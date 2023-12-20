@@ -30,6 +30,8 @@ namespace Intel.MyDeals.IDataLibrary
         bool PublishBackToSfTenders(string data);
         VistexDFDataResponseObject PublishClaimDataToSfTenders(string data, VistexDFDataResponseObject responseObj, string runMode);
 
+        VistexDFDataResponseObject PublishConsumptionDataToSfTenders(string data, VistexDFDataResponseObject responseObj, string runMode);
+
         bool ReTriggerMulePacket(string xid);
 
         void Publish(string brokerURI, string userName, string queueName, List<string> data);
