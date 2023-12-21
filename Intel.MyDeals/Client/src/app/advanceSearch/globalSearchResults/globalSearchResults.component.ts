@@ -106,7 +106,7 @@ export class GlobalSearchResultsComponent implements OnDestroy {
     gotoObject(item: any, opType: string) {
         $("body").removeClass("z-index-zero");
         let dcId = item.DC_ID
-        this.isWindowOpen.emit(false);
+       
 
         if (dcId <= 0) {
             this.loggerService.error("Unable to locate the Pricing Strategy.", "error")
@@ -115,6 +115,7 @@ export class GlobalSearchResultsComponent implements OnDestroy {
 
         if (opType == 'CNTRCT') {
             window.location.href = "Contract#/manager/CNTRCT/" + dcId + "/0/0/0";
+            this.isWindowOpen.emit(false);
         } else if (opType == 'PRC_ST' || opType == 'PRC_TBL' || opType == 'WIP_DEAL') {
             //calling this function because to navigate to the PS we need contract data,PS ID and PT ID -- in the item we dont have PT ID for opType ->PS so hitting API to get data
             //in case of WIp deal click on the global search results we need contract id ,PS and PT ID to navigate to respective deal so calling this function to hit the api to get the details
@@ -139,6 +140,7 @@ export class GlobalSearchResultsComponent implements OnDestroy {
                     else if (opType == "PRC_ST")
                         window.location.href = "Contract#/gotoPs/" + this.response.PricingStrategyId;
                     else window.location.href = "Contract#/manager/PT/" + this.response.ContractId + "/" + parentDcId + "/" + dcId + "/0";
+                    this.isWindowOpen.emit(false);
                 }
             }, (error) => {
                 this.loggerService.error("GlobalSearchResultsComponent::getContractIDDetails::Unable to get Contract Data", error);
