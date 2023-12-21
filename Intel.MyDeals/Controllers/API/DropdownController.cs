@@ -396,7 +396,14 @@ namespace Intel.MyDeals.Controllers.API
                 ConsumptionData body = new ConsumptionData();
                 body.ConsumptionType = data.ATRB_CD;
                 body.Value = data.DROP_DOWN;
-                body.IsActive = data.ACTV_IND;
+                if (data.ACTV_IND)
+                {
+                    body.IsActive = "1";
+                }
+                else
+                {
+                    body.IsActive = "0";
+                }
                 body.Mode = mode;
                 body.CIMId = data.CUST_CIM_ID != "" ? data.CUST_CIM_ID : "0";
 
@@ -452,7 +459,7 @@ namespace Intel.MyDeals.Controllers.API
                             {
                                 ConsumptionType = dropdown.ATRB_CD,
                                 Value = dropdown.DROP_DOWN,
-                                IsActive = dropdown.ACTV_IND,
+                                IsActive = dropdown.ACTV_IND == true ? "1" : dropdown.ACTV_IND == false ? "0" : "0",
                                 // Assuming select in this case.
                                 Mode = CrudModes.Select.ToString(),
                                 CIMId = dropdown.CUST_CIM_ID != "" ? dropdown.CUST_CIM_ID : "0"

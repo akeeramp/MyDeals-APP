@@ -443,7 +443,7 @@ namespace Intel.MyDeals.Entities
                 public string ConsumptionType { get; set; }
                 public string Value { get; set; }
                 public string Mode { get; set; }
-                public bool IsActive { get; set; }
+                public string IsActive { get; set; }
             }
         }
     }
