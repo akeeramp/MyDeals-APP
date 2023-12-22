@@ -447,7 +447,7 @@ namespace Intel.MyDeals.BusinessLogic
             string customer = null;
             string gaWwid = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].Wwid;
             string endCustomer = workRecordDataFields.recordDetails.quote.EndCustomer;
-            string unifiedEndCustomer = workRecordDataFields.recordDetails.quote.UnifiedGlobalEndCustomer == null ? "" : workRecordDataFields.recordDetails.quote.UnifiedGlobalEndCustomer;
+            string unifiedEndCustomer = workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName == null ? workRecordDataFields.recordDetails.quote.UnifiedEndCustomer : workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName;
             string endCustomerCountry = workRecordDataFields.recordDetails.quote.EndCustomerCountry;
             bool isUnifiedEndCustomer = workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer;
             string projectName = workRecordDataFields.recordDetails.quote.ProjectName.ToUpper();
@@ -647,8 +647,8 @@ namespace Intel.MyDeals.BusinessLogic
                         DataTable primedCustomerData = new DataTable();
                         try
                         {
-                            string UnifiedEndCustomerLvl2Name = (workRecordDataFields.recordDetails.quote.UnifiedEndCustomer != null && workRecordDataFields.recordDetails.quote.UnifiedEndCustomer != "") ? workRecordDataFields.recordDetails.quote.UnifiedEndCustomer : workRecordDataFields.recordDetails.quote.UnifiedGlobalEndCustomer.ToString();
-                            primedCustomerData = _primeCustomerLib.InsertPrimedCustomerData(customer, workRecordDataFields.recordDetails.quote.EndCustomerCountry, workRecordDataFields.recordDetails.quote.UnifiedGlobalEndCustomer, Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId), Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId), workRecordDataFields.recordDetails.quote.ComplianceWatchList, UnifiedEndCustomerLvl2Name, 99999999);
+                            string UnifiedEndCustomerLvl2Name = (workRecordDataFields.recordDetails.quote.UnifiedEndCustomer != null && workRecordDataFields.recordDetails.quote.UnifiedEndCustomer != "") ? workRecordDataFields.recordDetails.quote.UnifiedEndCustomer : workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName.ToString();
+                            primedCustomerData = _primeCustomerLib.InsertPrimedCustomerData(customer, workRecordDataFields.recordDetails.quote.EndCustomerCountry, workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName, Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId), Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId), workRecordDataFields.recordDetails.quote.ComplianceWatchList, UnifiedEndCustomerLvl2Name, 99999999);
                         }
                         catch
                         {
@@ -1383,7 +1383,7 @@ namespace Intel.MyDeals.BusinessLogic
             // Update End Customer
             string endCustomer = workRecordDataFields.recordDetails.quote.EndCustomer;
             string endCustomerCountry = workRecordDataFields.recordDetails.quote.EndCustomerCountry;
-            string unifiedEndCustomer = workRecordDataFields.recordDetails.quote.UnifiedGlobalEndCustomer == null ? "" : workRecordDataFields.recordDetails.quote.UnifiedGlobalEndCustomer;
+            string unifiedEndCustomer = workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName == null ? workRecordDataFields.recordDetails.quote.UnifiedEndCustomer : workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName;
             string isMyDealsUnified = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.IS_PRIMED_CUST);
             string primedCustID = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_ID);
             string primedCustNM = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_NM);
@@ -1405,9 +1405,9 @@ namespace Intel.MyDeals.BusinessLogic
                         DataTable primedCustomerData = new DataTable();
                         try
                         {
-                            string UnifiedEndCustomerLvl2Name = (workRecordDataFields.recordDetails.quote.UnifiedEndCustomer != null && workRecordDataFields.recordDetails.quote.UnifiedEndCustomer != "") ? workRecordDataFields.recordDetails.quote.UnifiedEndCustomer : workRecordDataFields.recordDetails.quote.UnifiedGlobalEndCustomer.ToString();
+                            string UnifiedEndCustomerLvl2Name = (workRecordDataFields.recordDetails.quote.UnifiedEndCustomer != null && workRecordDataFields.recordDetails.quote.UnifiedEndCustomer != "") ? workRecordDataFields.recordDetails.quote.UnifiedEndCustomer : workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName.ToString();
 
-                            primedCustomerData = _primeCustomerLib.InsertPrimedCustomerData(customer, workRecordDataFields.recordDetails.quote.EndCustomerCountry, workRecordDataFields.recordDetails.quote.UnifiedGlobalEndCustomer, Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId), Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId), workRecordDataFields.recordDetails.quote.ComplianceWatchList, UnifiedEndCustomerLvl2Name, 99999999);
+                            primedCustomerData = _primeCustomerLib.InsertPrimedCustomerData(customer, workRecordDataFields.recordDetails.quote.EndCustomerCountry, workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName, Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId), Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId), workRecordDataFields.recordDetails.quote.ComplianceWatchList, UnifiedEndCustomerLvl2Name, 99999999);
                         }
                         catch
                         {
@@ -1476,14 +1476,14 @@ namespace Intel.MyDeals.BusinessLogic
                     workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer = isPrimedCustomer == "1" ? true : false;
                     workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId = primedCustomerL1Id == "" ? null : primedCustomerL1Id;
                     workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId = primedCustomerL2Id;
-                    workRecordDataFields.recordDetails.quote.UnifiedGlobalEndCustomer = primedCustName;
+                    workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName = primedCustName;
                 }
                 else
                 {
                     workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer = isIQRUnified;
                     workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId = primedCustID;
                     workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId = primedCtryId;
-                    workRecordDataFields.recordDetails.quote.UnifiedGlobalEndCustomer = primedCustNM;
+                    workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName = primedCustNM;
 
                 }
             }
@@ -1839,7 +1839,7 @@ namespace Intel.MyDeals.BusinessLogic
                 string endCustomer = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.END_CUSTOMER_RETAIL);
                 string endCustomerCountry = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.PRIMED_CUST_CNTRY);
                 string isMyDealsUnified = myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElementValue(AttributeCodes.IS_PRIMED_CUST);
-                string unifiedEndCustomer = workRecordDataFields.recordDetails.quote.UnifiedGlobalEndCustomer==null?"" : workRecordDataFields.recordDetails.quote.UnifiedGlobalEndCustomer;
+                string unifiedEndCustomer = workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName == null? workRecordDataFields.recordDetails.quote.UnifiedEndCustomer : workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName;
                 string IQRprimedCustomerL1Id = workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId;
                 string IQRRPLStatusCode = workRecordDataFields.recordDetails.quote.ComplianceWatchList;
                 string endCustomerObject = null;
@@ -1877,9 +1877,9 @@ namespace Intel.MyDeals.BusinessLogic
                                 DataTable primedCustomerData = new DataTable();
                                 try
                                 {
-                                    string UnifiedEndCustomerLvl2Name = (workRecordDataFields.recordDetails.quote.UnifiedEndCustomer != null && workRecordDataFields.recordDetails.quote.UnifiedEndCustomer != "") ? workRecordDataFields.recordDetails.quote.UnifiedEndCustomer : workRecordDataFields.recordDetails.quote.UnifiedGlobalEndCustomer.ToString();
+                                    string UnifiedEndCustomerLvl2Name = (workRecordDataFields.recordDetails.quote.UnifiedEndCustomer != null && workRecordDataFields.recordDetails.quote.UnifiedEndCustomer != "") ? workRecordDataFields.recordDetails.quote.UnifiedEndCustomer : workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName.ToString();
 
-                                    primedCustomerData = _primeCustomerLib.InsertPrimedCustomerData(endCustomer, workRecordDataFields.recordDetails.quote.EndCustomerCountry, workRecordDataFields.recordDetails.quote.UnifiedGlobalEndCustomer, Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId), Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId), workRecordDataFields.recordDetails.quote.ComplianceWatchList, UnifiedEndCustomerLvl2Name, 99999999);
+                                    primedCustomerData = _primeCustomerLib.InsertPrimedCustomerData(endCustomer, workRecordDataFields.recordDetails.quote.EndCustomerCountry, workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName, Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId), Convert.ToInt32(workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId), workRecordDataFields.recordDetails.quote.ComplianceWatchList, UnifiedEndCustomerLvl2Name, 99999999);
                                 }
                                 catch
                                 {
@@ -1898,7 +1898,7 @@ namespace Intel.MyDeals.BusinessLogic
                                         PRIMED_CUST_ID = workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId,
                                         RPL_STS_CD = workRecordDataFields.recordDetails.quote.ComplianceWatchList,
                                         IS_RPL = "0",
-                                        PRIMED_CUST_NM = workRecordDataFields.recordDetails.quote.UnifiedGlobalEndCustomer
+                                        PRIMED_CUST_NM = workRecordDataFields.recordDetails.quote.UnifiedEndCustomerGlobalName
                                     });
 
 
