@@ -138,6 +138,7 @@ export class dealEditorComponent implements OnDestroy{
     private datesModified = false;
     public emitContractData: any = null;
     private dealId: any;
+    public fieldCols: any = [];
     public perfBar = {
         action: '',
         title: '',
@@ -343,10 +344,10 @@ export class dealEditorComponent implements OnDestroy{
             if (group[0].isTabHidden) {
                 var tabs = this.groups.filter(x => x.isTabHidden === false);
                 this.selectedTab = tabs[0].name;
-                this.filterColumnbyGroup(this.selectedTab);
+                this.filterColumnbyGroup(this.selectedTab, this.fieldCols);
             }
             else
-                this.filterColumnbyGroup(this.selectedTab);
+                this.filterColumnbyGroup(this.selectedTab, this.fieldCols);
 
             this.columns = this.columns.concat(this.pinnedColumns);
             this.columns = uniq(this.columns);
@@ -399,7 +400,7 @@ export class dealEditorComponent implements OnDestroy{
         }, 0);
     }
 
-    filterColumnbyGroup(groupName: string) {
+    filterColumnbyGroup(groupName: string, fieldChecked?) {
         this.columns = [];
         if (this.groups.filter(x => x.name == groupName).length > 0) {
             each(this.wipTemplate.columns, column => {
@@ -416,9 +417,31 @@ export class dealEditorComponent implements OnDestroy{
                 }
             })
 
+            if (fieldChecked && groupName.toLowerCase() == "all") {
+                if (fieldChecked.length > 0) {
+                    let columnNew = this.columns.filter(column => {
+                        return fieldChecked.indexOf(column.field) === -1
+                    });
+                    this.filterColumnNew(groupName, columnNew);
+                }
+            }
+            
             return this.columns;
         }
     }
+
+    filterColumnNew(groupName: string, columnNew) {
+        this.columns = [];
+        each(columnNew, column => {
+            if (groupName.toLowerCase() == "all" || groupName.toLowerCase() == this.allTabRename.toLowerCase()) {
+                if (this.templates[column.field] === undefined && (column.width === undefined || column.width == '0')) {
+                    column.width = 1;
+                }
+                this.columns.push(column);
+            }
+        })
+    }
+
 
     onPin(e, title) {
 
@@ -951,7 +974,27 @@ export class dealEditorComponent implements OnDestroy{
                 }
             }
         }
-        this.filterColumnbyGroup(this.selectedTab)
+
+        if (this.selectedTab == 'All') {
+            let fieldColumns = val.field;
+            let columnFields = this.fieldCols;
+            if (fieldColumns) {
+                if (columnFields.length != 0) {
+                    let duplicates = [];
+                    this.fieldCols.push(fieldColumns);
+                    columnFields.forEach(function (value, index, array) {
+                        if (array.indexOf(value, index + 1) !== -1
+                            && duplicates.indexOf(value) === -1) {
+                            duplicates.push(value);
+                        }
+                    });
+                    this.fieldCols = this.fieldCols.filter(val => !duplicates.includes(val));
+                } else {
+                    this.fieldCols.push(fieldColumns);
+                }
+            }
+        }
+        this.filterColumnbyGroup(this.selectedTab, this.fieldCols)
     }
 
     CloseAdd() {
