@@ -57,7 +57,7 @@ import { adminMydealsSupportComponent } from '../admin/mydealssupport/admin.myde
 import { adminVistexProfiseeApiComponent } from '../admin/vistex/admin.vistexProfiseeAPI.component';
 import { AsyncProcedureJobsComponent } from '../admin/asyncProcedureJobs/admin.asyncProcedureJobs.component';
 import { CreateProcedureJobModalComponent } from '../admin/asyncProcedureJobs/createProcedureJobModal/createProcedureJobModal.component';
-import { sdsDealOverridesComponent } from '../admin/sdsDealOverrides/admin.sdsDealOverrides.component';
+import { SdsDealOverridesComponent } from '../admin/sdsDealOverrides/admin.sdsDealOverrides.component';
 import { dbAuditToolsComponent } from '../admin/dbAuditTools/admin.dbAuditTools.component';
 import { DbAuditToolsViewModalComponent } from '../admin/dbAuditTools/admin.dbAuditToolsViewModal.component';
 import { DbAuditToolsCompareModalComponent } from '../admin/dbAuditTools/admin.dbAuditToolsCompareModal.component';
@@ -125,7 +125,7 @@ export const AdminComponents =[
     retriggerUnifyModalComponent,
     AsyncProcedureJobsComponent,
     CreateProcedureJobModalComponent,
-    sdsDealOverridesComponent,
+    SdsDealOverridesComponent,
     dbAuditToolsComponent,
     DbAuditToolsViewModalComponent,
     DbAuditToolsCompareModalComponent,

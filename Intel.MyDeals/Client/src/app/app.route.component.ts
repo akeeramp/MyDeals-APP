@@ -50,7 +50,7 @@ import { globalRouteComponent } from "./shared/globalroute/globalroute.component
 import { adminMydealsSupportComponent } from './admin/mydealssupport/admin.mydealssupport.component';
 import { adminVistexProfiseeApiComponent } from './admin/vistex/admin.vistexProfiseeAPI.component';
 import { AsyncProcedureJobsComponent } from "./admin/asyncProcedureJobs/admin.asyncProcedureJobs.component";
-import { sdsDealOverridesComponent } from "./admin/sdsDealOverrides/admin.sdsDealOverrides.component";
+import { SdsDealOverridesComponent } from "./admin/sdsDealOverrides/admin.sdsDealOverrides.component";
 import { dbAuditToolsComponent } from "./admin/dbAuditTools/admin.dbAuditTools.component";
 
 //added for security check
@@ -124,7 +124,7 @@ export const routes: Routes = [
     { path: 'MyDealsSupport', component: adminMydealsSupportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'vistexProfiseeApi', component: adminVistexProfiseeApiComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'asyncProcedureJobs', component: AsyncProcedureJobsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
-    { path: 'sdsDealOverrides', component: sdsDealOverridesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
+    { path: 'sdsDealOverrides', component: SdsDealOverridesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'dbAuditTools', component: dbAuditToolsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'Home', component: CodingPracticesComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver } },
     { path: 'BusinessDesign', component: BusinessProcessComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver } },

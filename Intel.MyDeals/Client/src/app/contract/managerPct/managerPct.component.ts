@@ -5,7 +5,7 @@ import { distinct, process, State } from "@progress/kendo-data-query";
 import { managerPctservice } from "./managerPct.service";
 import { ThemePalette } from "@angular/material/core";
 import { lnavService } from "../lnav/lnav.service";
-import { headerService } from "../../shared/header/header.service";
+import { HeaderService } from "../../shared/header/header.service";
 import { contractManagerservice } from "../contractManager/contractManager.service";
 import { MomentService } from "../../shared/moment/moment.service";
 import { excludeDealGroupModalDialog } from "../managerExcludeGroups/excludeDealGroupModal.component";
@@ -41,7 +41,7 @@ export class managerPctComponent implements OnDestroy{
                 private contractManagerSvc:contractManagerservice,
                 private managerPctSvc: managerPctservice,
                 private lnavSvc: lnavService,
-                private headerSvc: headerService,
+                private headerSvc: HeaderService,
                 private momentService: MomentService) {}
     //public view: GridDataResult;
     public isLoading: boolean;

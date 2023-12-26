@@ -1,6 +1,6 @@
 import { Component } from "@angular/core";
+
 import { logger } from "../logger/logger";
-import { isUndefined } from 'underscore';
 
 @Component({
     selector: 'app-header',
@@ -8,8 +8,10 @@ import { isUndefined } from 'underscore';
     styleUrls: ['Client/src/app/shared/header/header.component.css']
 })
 export class HeaderComponent {
-    constructor(private loggerSVC: logger) { }
-    private environment: string = (<any> window).env;
+
+    constructor(private loggerService: logger) { }
+
+    private readonly ENVIRONMENT: string = (<any> window).env;
 
     getSuperPrefix(): string {
         return (<any> window).superPrefix;
@@ -77,19 +79,25 @@ export class HeaderComponent {
     }
 
     isProduction(): boolean {
-        return this.environment.includes('PROD');
+        return this.ENVIRONMENT.includes('PROD');
     }
 
     isEnvironmentKnown(): boolean {
-        return !this.environment.includes('UNKNOWN');
+        return !this.ENVIRONMENT.includes('UNKNOWN');
     }
 
     isDeveloper(): boolean {
         return (<any> window).isDeveloper;
     }
 
+    // SA Role but not a Customer Admin (Middleteir logic)
     isRealSA(): boolean {
         return (<any> window).isRealSA;
+    }
+
+    // Different from isRealSA() because isAnySA() will return true for any type of SA while isRealSA() will only return true if is SA and NOT a Customer Admin
+    isAnySA(): boolean {
+        return this.isRealSA() || this.getUserRole() == 'SA';
     }
 
     isReportingUser(): boolean {
@@ -121,4 +129,5 @@ export class HeaderComponent {
         const allowedUserRole = ['DA', 'Legal'];    // All SA users allowed
         return (this.isRealSA() || this.isDeveloper() || allowedUserRole.includes(this.getUserRole()) || (this.getUserRole() == 'GA' && this.isSuper()));
     }
+
 }

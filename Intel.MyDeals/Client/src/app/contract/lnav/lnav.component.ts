@@ -8,7 +8,7 @@ import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 import { lnavService } from "../lnav/lnav.service";
 import { logger } from "../../shared/logger/logger";
 import { lnavUtil } from '../lnav.util';
-import { headerService } from "../../shared/header/header.service";
+import { HeaderService } from "../../shared/header/header.service";
 import { AutoFillComponent } from "../ptModals/autofillsettings/autofillsettings.component";
 import { RenameTitleComponent } from "../ptModals/renameTitle/renameTitle.component";
 import { ContractDetailsService } from "../contractDetails/contractDetails.service";
@@ -35,7 +35,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
 
     constructor(private loggerService: logger,
                 private lnavService: lnavService,
-                private headerService: headerService,
+                private headerService: HeaderService,
                 private contractDetailsService: ContractDetailsService,
                 private dialog: MatDialog,
                 private router: Router,

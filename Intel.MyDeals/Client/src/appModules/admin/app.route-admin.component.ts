@@ -44,14 +44,12 @@ import { adminWorkflowStagesComponent } from "../../app/admin/workflowStages/adm
 import { adminMydealsSupportComponent } from '../../app/admin/mydealssupport/admin.mydealssupport.component';
 import { adminVistexProfiseeApiComponent } from '../../app/admin/vistex/admin.vistexProfiseeAPI.component';
 import { AsyncProcedureJobsComponent } from "../../app/admin/asyncProcedureJobs/admin.asyncProcedureJobs.component";
-import { sdsDealOverridesComponent } from "../../app/admin/sdsDealOverrides/admin.sdsDealOverrides.component";
+import { SdsDealOverridesComponent } from "../../app/admin/sdsDealOverrides/admin.sdsDealOverrides.component";
 import { dbAuditToolsComponent } from "../../app/admin/dbAuditTools/admin.dbAuditTools.component";
 import { QuoteLetterRegenerationComponent } from "../../app/admin/quoteLetter/admin.quoteLetterRegeneration.component";
 
-
 //added for security check
 import { SecurityResolver } from "../../app/shared/security.resolve";
-
 
 export const routesAdmin: Routes = [
     //Admin routes
@@ -98,7 +96,7 @@ export const routesAdmin: Routes = [
     { path: 'MyDealsSupport', component: adminMydealsSupportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'vistexProfiseeApi', component: adminVistexProfiseeApiComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'asyncProcedureJobs', component: AsyncProcedureJobsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
-    { path: 'sdsDealOverrides', component: sdsDealOverridesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
+    { path: 'sdsDealOverrides', component: SdsDealOverridesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'dbAuditTools', component: dbAuditToolsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'quoteLetterRegeneration', component: QuoteLetterRegenerationComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard]}
 ];

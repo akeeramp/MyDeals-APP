@@ -74,7 +74,7 @@ export class dbAuditToolsComponent implements OnDestroy {
 
     accessAllowed = true; // Default to false to prevent unauthorized users
 
-    checkPageAcess() {
+    checkPageAccess() {
         if (!(<any>window).isDeveloper) {
             this.accessAllowed = false;
         }
@@ -196,7 +196,7 @@ export class dbAuditToolsComponent implements OnDestroy {
     }
 
     ngOnInit() {
-        this.checkPageAcess();
+        this.checkPageAccess();
         this.loadDBEnvs();
         this.loadDBObjects();
     }

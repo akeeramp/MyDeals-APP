@@ -5,11 +5,11 @@ import { Observable } from "rxjs";
 @Injectable({
     providedIn: 'root'
 })
-
-export class sdsDealOverridesService {
+export class SdsDealOverridesService {
 
     constructor(private httpClient: HttpClient) { }
-    public apiBaseUrl = "api/SdsDealOverride/";
+
+    private readonly API_URL_SDS_DEAL_OVERRIDE = "api/SdsDealOverride/";
 
     public service: any = {
         getRules: this.getRules,
@@ -19,22 +19,22 @@ export class sdsDealOverridesService {
     }
 
     public getRules():Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'GetSdsDealOverrideRules';
+        const apiUrl: string = this.API_URL_SDS_DEAL_OVERRIDE + 'GetSdsDealOverrideRules';
         return this.httpClient.get(apiUrl);
     }
 
     public SaveSdsDealOverrides(data): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'SaveSdsDealOverrides';
+        const apiUrl: string = this.API_URL_SDS_DEAL_OVERRIDE + 'SaveSdsDealOverrides';
         return this.httpClient.post(apiUrl,data);
     }
 
     public SdsGetActiveOverrides(): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'SdsGetActiveOverrides';
+        const apiUrl: string = this.API_URL_SDS_DEAL_OVERRIDE + 'SdsGetActiveOverrides';
         return this.httpClient.get(apiUrl);
     }
 
     public SdsGetHistoryOverrides(): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'SdsGetHistoryOverrides';
+        const apiUrl: string = this.API_URL_SDS_DEAL_OVERRIDE + 'SdsGetHistoryOverrides';
         return this.httpClient.get(apiUrl);
     }
 

@@ -1,25 +1,28 @@
-import { Component, OnDestroy } from "@angular/core";
-import { logger } from "../../shared/logger/logger";
-import { GridDataResult, DataStateChangeEvent } from "@progress/kendo-angular-grid";
-import { orderBy, process, SortDescriptor, State } from "@progress/kendo-data-query";
+import { Component, OnDestroy, OnInit } from "@angular/core";
+import { GridDataResult } from "@progress/kendo-angular-grid";
+import { orderBy, SortDescriptor, State } from "@progress/kendo-data-query";
 import { ThemePalette } from '@angular/material/core';
-import { ExcelExportData } from "@progress/kendo-angular-excel-export";
-import { ExcelExportEvent } from "@progress/kendo-angular-grid";
-import { sdsDealOverridesService } from "./admin.sdsDealOverrides.service";
-import { constantsService } from "../constants/admin.constants.service";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+
+import { logger } from "../../shared/logger/logger";
+import { SdsDealOverridesService } from "./admin.sdsDealOverrides.service";
+import { constantsService } from "../constants/admin.constants.service";
 
 @Component({
     selector: "sds-deal-overrides",
     templateUrl: "Client/src/app/admin/sdsDealOverrides/admin.sdsDealOverrides.component.html",
     styleUrls: ['Client/src/app/admin/sdsDealOverrides/admin.sdsDealOverrides.component.css'],
 })
+export class SdsDealOverridesComponent implements OnInit, OnDestroy {
 
-export class sdsDealOverridesComponent implements OnDestroy {
-    constructor(private sdsDealOverridesSVC: sdsDealOverridesService, private loggerSvc: logger, private constantsService: constantsService) { }
+    constructor(private sdsDealOverridesService: SdsDealOverridesService,
+                private loggerService: logger,
+                private constantsService: constantsService) { }
+
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
+
     private color: ThemePalette = "primary";
     private attr = ['Pricing Table Row', 'Deal'];
     private gridReturnsOrig = [];
@@ -43,33 +46,21 @@ export class sdsDealOverridesComponent implements OnDestroy {
     public selectionIDs = [];
     public myGridData: GridDataResult;
     private myGridResult: Array<any>;
-    public state: State = {
-        //skip: 0,
-        //take: 25,
-        //group: [],
-        //filter: {
-        //    logic: "and",
-        //    filters: [
-        //        {
-        //            field: "ACTV_IND",
-        //            operator: "eq",
-        //            value: true
-        //        },
-        //    ],
-        //}
-    };
+    public state: State = {};
 
     accessAllowed = false; // Default to false to prevent unauthorized users
-    private validWWID: string;
+    private validWwid: string;
 
-    checkPageAcess() {
-        this.constantsService.getConstantsByName("SDS_OVERRIDE_DEAL_VALIDATION_ADMINS").pipe(takeUntil(this.destroy$)).subscribe((data) => {
+    checkPageAccess() {
+        this.constantsService.getConstantsByName('SDS_OVERRIDE_DEAL_VALIDATION_ADMINS').subscribe((data) => {
             if (data) {
-                this.validWWID = data.CNST_VAL_TXT === "NA" ? "" : data.CNST_VAL_TXT;
-                this.accessAllowed = this.validWWID.indexOf((<any>window).usrDupWwid) > -1 ? true : false;
+                this.validWwid = data.CNST_VAL_TXT === "NA" ? "" : data.CNST_VAL_TXT;
+                this.accessAllowed = this.validWwid.indexOf((<any>window).usrDupWwid) > -1 ? true : false;
+            } else {
+                this.loggerService.error("SDS Admin Page: Unable to get Access Control List from Constant SDS_OVERRIDE_DEAL_VALIDATION_ADMINS", null);
             }
         }, (error) => {
-            this.loggerSvc.error("SDS Admin Page: Unable to get Access Control List from Constant SDS_OVERRIDE_DEAL_VALIDATION_ADMINS", error)
+            this.loggerService.error("SDS Admin Page: Unable to get Access Control List from Constant SDS_OVERRIDE_DEAL_VALIDATION_ADMINS", error);
         });
     }
 
@@ -78,16 +69,27 @@ export class sdsDealOverridesComponent implements OnDestroy {
         this.gridReturns = { data: orderBy(this.gridReturnsOrig, this.sort), total: this.gridReturnsOrig.length };
     }
 
+    /**
+     * TWC3119-822 - Current rules are:
+     *      - Must be Real SA
+     *      - Must be a Developer, Super User, or a Bulk Price Admin (-D, -S, or -B)
+     */
+    private get validUser(): boolean {
+        const IS_VALID_SUBROLE = (<any> window).isDeveloper || (<any> window).isSuper || (<any> window).isBulkPriceAdmin;
+        const IS_REAL_SA = (<any> window).isRealSA;
+
+        return IS_REAL_SA && IS_VALID_SUBROLE;
+    }
+
     loadRules() {
-        if (!(<any>window).isDeveloper) {
+        if (!this.validUser) {
             document.location.href = "/Dashboard#/portal";
-        }
-        else {
-            this.sdsDealOverridesSVC.getRules().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
+        } else {
+            this.sdsDealOverridesService.getRules().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
                 this.gridRules = result;
                 this.ruleCount['all'] = result.length;
             }, (error) => {
-                this.loggerSvc.error('Error in loading SDS override rules', error);
+                this.loggerService.error('Error in loading SDS override rules', error);
             });
         }
     }
@@ -104,29 +106,29 @@ export class sdsDealOverridesComponent implements OnDestroy {
     }
 
     applyRules() {
-        var _objEnterd = false;
+        let _objEnterd = false;
         if (this.selectionIDs.length == 0) {
             if (!confirm("You have selected no Rules. This action will clear existing rules from your selected objects. Do you want to continue?")) {
                 return;
             }
         }
+
         if (this.sdsDealOverridesData.length == 0) {
             alert("No Object Id is entered. Please enter at least one Object Id!");
-        }
-        else {
-            var idsArr = this.sdsDealOverridesData.split(',');
-            for (var i = 0; i < idsArr.length; i++) {
+        } else {
+            let idsArr = this.sdsDealOverridesData.split(',');
+            for (let i = 0; i < idsArr.length; i++) {
                 if (isNaN(Number(idsArr[i].trim().replace(/\s+/g, '')))) {
                     alert("The Id: " + idsArr[i] + " is not a number, please fix!");
                     _objEnterd = false;
                     break;
-                }
-                else {
+                } else {
                     _objEnterd = true;
                 }
             }
+
             if (_objEnterd) {
-                var ruleJsonString = JSON.stringify(this.selectionIDs);
+                let ruleJsonString = JSON.stringify(this.selectionIDs);
                 const myObj = JSON.parse(ruleJsonString);
                 let passedValue = this.bitshift(myObj);
                 //alert("Data to Process: Level=" + this.SelectedLevel + ", Selected Objects=" + this.sdsDealOverridesData.replace(/\s+/g, '') + ", Passed Value=" + passedValue);
@@ -134,7 +136,7 @@ export class sdsDealOverridesComponent implements OnDestroy {
                 this.sdsRuleData.OBJECT_IDS = this.sdsDealOverridesData.replace(/\s+/g, '');
                 this.sdsRuleData.RULE_ID = passedValue;
 
-                this.sdsDealOverridesSVC.SaveSdsDealOverrides(this.sdsRuleData).pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
+                this.sdsDealOverridesService.SaveSdsDealOverrides(this.sdsRuleData).pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
                     let ReturnData = JSON.parse(result.toString());
                     this.ColumnHeader = ReturnData.COLUMNS;
                     let ColumnData = ReturnData.DATA;
@@ -142,22 +144,20 @@ export class sdsDealOverridesComponent implements OnDestroy {
                         this.gridReturnsOrig = ColumnData;
                         this.gridReturns = { data: orderBy(this.gridReturnsOrig, this.sort), total: this.gridReturnsOrig.length };
                         this.resultCount['all'] = ReturnData.DATA.length;
-                    }
-                    else {
+                    } else {
                         this.gridReturnsOrig = this.gridReturns = null; // Unsets Grid data
                         this.resultCount['all'] = 0;
                     }
                     this.resultType = "Apply Rules";
-                }, error => {
-                    this.loggerSvc.error("Unable to get the result.", error);
-                }
-                );
+                }, (error) => {
+                    this.loggerService.error("Unable to get the result.", error);
+                });
             }
         }
     }
 
     getActiveReport() {
-        this.sdsDealOverridesSVC.SdsGetActiveOverrides().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
+        this.sdsDealOverridesService.SdsGetActiveOverrides().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
             let ReturnData = JSON.parse(result.toString());
             this.ColumnHeader = ReturnData.COLUMNS;
             let ColumnData = ReturnData.DATA;
@@ -165,20 +165,18 @@ export class sdsDealOverridesComponent implements OnDestroy {
                 this.gridReturnsOrig = ColumnData;
                 this.gridReturns = { data: orderBy(this.gridReturnsOrig, this.sort), total: this.gridReturnsOrig.length };
                 this.resultCount['all'] = ReturnData.DATA.length;
-            }
-            else {
+            } else {
                 this.gridReturnsOrig = this.gridReturns = null; // Unsets Grid data
                 this.resultCount['all'] = 0;
             }
             this.resultType = "Active Report";
-        }, error => {
-            this.loggerSvc.error("Unable to pull SDS Active Report.", error);
-        }
-        );
+        }, (error) => {
+            this.loggerService.error("Unable to pull SDS Active Report.", error);
+        });
     }
 
     getHistoryReport() {
-        this.sdsDealOverridesSVC.SdsGetHistoryOverrides().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
+        this.sdsDealOverridesService.SdsGetHistoryOverrides().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
             let ReturnData = JSON.parse(result.toString());
             this.ColumnHeader = ReturnData.COLUMNS;
             let ColumnData = ReturnData.DATA;
@@ -186,25 +184,25 @@ export class sdsDealOverridesComponent implements OnDestroy {
                 this.gridReturnsOrig = ColumnData;
                 this.gridReturns = { data: orderBy(this.gridReturnsOrig, this.sort), total: this.gridReturnsOrig.length };
                 this.resultCount['all'] = ReturnData.DATA.length;
-            }
-            else {
+            } else {
                 this.gridReturnsOrig = this.gridReturns = null; // Unsets Grid data
                 this.resultCount['all'] = 0;
             }
             this.resultType = "History Report";
-        }, error => {
-            this.loggerSvc.error("Unable to pull SDS Historical Report.", error);
-        }
-        );
+        }, (error) => {
+            this.loggerService.error("Unable to pull SDS Historical Report.", error);
+        });
     }
 
     ngOnInit() {
         this.loadRules();
-        this.checkPageAcess();
+        this.checkPageAccess();
     }
+
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
     }
+
 }
