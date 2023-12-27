@@ -867,7 +867,37 @@ namespace Intel.MyDeals.DataLibrary
 
             return myGuid;
         }
+        public bool CheckProcessedIQRDeals(Guid batchId, bool callRequestType)
+        {
+            bool checkForBatchId = false;
 
+            try
+            {
+                var cmd = new Procs.dbo.PR_MYDL_IQR_DLS_PRCSS()
+                {
+                    in_guid = batchId,
+                    in_callRequestType = callRequestType
+                };
+
+                using (var ret = DataAccess.ExecuteReader(cmd))
+                {
+                    int IDX_RESULT = DB.GetReaderOrdinal(ret, "RESULT");
+
+                    while (ret.Read())
+                    {
+                        checkForBatchId = ret.GetFieldValue<bool>(IDX_RESULT);
+                    }
+
+                }
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+
+            return checkForBatchId;
+        }
         public List<TenderTransferObject> FetchTendersStagedData(string dataType, Guid specificRecord)
         {
             Guid myGuid = Guid.Empty;

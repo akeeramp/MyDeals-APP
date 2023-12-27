@@ -36,11 +36,33 @@ namespace Intel.MyDeals.BusinessLogic
         {
             var task = new Task(() =>
             {
-                Thread.Sleep(1000);
+                Task.Delay(1000);
                 string dummyVal = ExecuteSalesForceTenderData(myGuid);
+                _jmsDataLib.CheckProcessedIQRDeals(myGuid, false);
+                CheckPendingBatches();
             });
-
             task.Start();
+        }
+
+        public string CheckPendingBatches()
+        {
+            string executionResponse = string.Empty;
+            Guid workId = Guid.Empty;
+            List<TenderTransferObject> tenderStagedWorkRecords = _jmsDataLib.FetchTendersStagedData("TENDER_DEALS", workId);
+            if (tenderStagedWorkRecords.Count > 0)
+            {
+                foreach (TenderTransferObject workRecord in tenderStagedWorkRecords.OrderBy(a => a.RqstSid))
+                {
+                    var result = _jmsDataLib.CheckProcessedIQRDeals(workRecord.BtchId, true);
+                    if (result)
+                    {
+                        string dummyVal = ExecuteSalesForceTenderData(workRecord.BtchId);
+                        _jmsDataLib.CheckProcessedIQRDeals(workRecord.BtchId, false);
+                        executionResponse += dummyVal;
+                    }
+                }
+            }
+            return executionResponse;
         }
 
         public Guid SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket)
@@ -53,7 +75,12 @@ namespace Intel.MyDeals.BusinessLogic
 
             // Insert into the stage table here - one deal item (-100 id as new item), one deal data object
             myGuid = _jmsDataLib.SaveTendersDataToStage("TENDER_DEALS", deadIdList, jsonData);
-            TestAsyncProcess(myGuid);
+
+            var result = _jmsDataLib.CheckProcessedIQRDeals(myGuid, true);
+            if (result)
+            {
+                TestAsyncProcess(myGuid);
+            }
 
             return myGuid;
         }

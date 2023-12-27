@@ -58,5 +58,7 @@ namespace Intel.MyDeals.IDataLibrary
         List<UCDResponse> SendRplUCDRequest(string data);
 
         DuplicateAccResponse SendRplUCDDuplicateRequest(string data);
+
+        bool CheckProcessedIQRDeals(Guid batchId, bool callRequestType);
     }
 }

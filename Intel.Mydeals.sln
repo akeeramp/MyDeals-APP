@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-# Visual Studio Version 16
-VisualStudioVersion = 16.0.30104.148
+# Visual Studio Version 17
+VisualStudioVersion = 17.6.33829.357
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Intel MyDeals 1 Data Access Layer", "Intel MyDeals 1 Data Access Layer", "{A18EE0E6-6970-447C-94BD-B363F7D2C433}"
 EndProject
@@ -99,6 +99,8 @@ EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.UCDService", "Intel.MyDeals.UCDService\Intel.MyDeals.UCDService\Intel.MyDeals.UCDService.csproj", "{D9B313CC-9EA7-4D2A-B373-C1DFB8CCA5AF}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.BusinessLogicNew.Test", "Intel.MyDeals.BusinessLogicNew.Test\Intel.MyDeals.BusinessLogicNew.Test.csproj", "{EC175928-7ED6-480E-94AF-4B578F074045}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Intel.MyDeals.IQRService", "Intel.MyDeals.IQRService\Intel.MyDeals.IQRService.csproj", "{0AD8AB44-584D-461D-908C-D48FE5F1A003}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -405,6 +407,20 @@ Global
 		{EC175928-7ED6-480E-94AF-4B578F074045}.perf|Any CPU.Build.0 = Debug|Any CPU
 		{EC175928-7ED6-480E-94AF-4B578F074045}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{EC175928-7ED6-480E-94AF-4B578F074045}.Release|Any CPU.Build.0 = Release|Any CPU
+		{0AD8AB44-584D-461D-908C-D48FE5F1A003}.day1|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AD8AB44-584D-461D-908C-D48FE5F1A003}.day1|Any CPU.Build.0 = Debug|Any CPU
+		{0AD8AB44-584D-461D-908C-D48FE5F1A003}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AD8AB44-584D-461D-908C-D48FE5F1A003}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{0AD8AB44-584D-461D-908C-D48FE5F1A003}.dev|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AD8AB44-584D-461D-908C-D48FE5F1A003}.dev|Any CPU.Build.0 = Debug|Any CPU
+		{0AD8AB44-584D-461D-908C-D48FE5F1A003}.eut|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AD8AB44-584D-461D-908C-D48FE5F1A003}.eut|Any CPU.Build.0 = Debug|Any CPU
+		{0AD8AB44-584D-461D-908C-D48FE5F1A003}.itt|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AD8AB44-584D-461D-908C-D48FE5F1A003}.itt|Any CPU.Build.0 = Debug|Any CPU
+		{0AD8AB44-584D-461D-908C-D48FE5F1A003}.perf|Any CPU.ActiveCfg = Debug|Any CPU
+		{0AD8AB44-584D-461D-908C-D48FE5F1A003}.perf|Any CPU.Build.0 = Debug|Any CPU
+		{0AD8AB44-584D-461D-908C-D48FE5F1A003}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{0AD8AB44-584D-461D-908C-D48FE5F1A003}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -429,6 +445,7 @@ Global
 		{CD5EE68C-88BB-4372-8B9D-F824C0E66933} = {5376498F-F788-4B34-A51E-BEC1B8A05DD3}
 		{D9B313CC-9EA7-4D2A-B373-C1DFB8CCA5AF} = {5376498F-F788-4B34-A51E-BEC1B8A05DD3}
 		{EC175928-7ED6-480E-94AF-4B578F074045} = {DDE77E6E-C875-4373-AD6A-402E63A065EC}
+		{0AD8AB44-584D-461D-908C-D48FE5F1A003} = {5376498F-F788-4B34-A51E-BEC1B8A05DD3}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {F0833D76-D2F9-40D0-B013-ACB43C34A35D}

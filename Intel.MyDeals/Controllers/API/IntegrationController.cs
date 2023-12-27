@@ -71,6 +71,16 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("ExecuteBatchWiseSalesForceTenderData")]
+        [HttpGet]
+        public string ExecuteBatchWiseSalesForceTenderData()
+        {
+            return SafeExecutor(() => _integrationLib.CheckPendingBatches()
+                , "Unable to process Salesforce Tender deals Bulk Mode from Batch Job"
+            );
+        }
+
+        [Authorize]
         [Route("ExecuteSalesForceTenderData/{workId}/")]
         [HttpGet]
         public string ExecuteSalesForceTenderData(Guid workId)

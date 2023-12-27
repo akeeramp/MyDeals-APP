@@ -5,6 +5,7 @@ namespace Intel.MyDeals.IBusinessLogic
 {
     public interface IIntegrationLib
     {
+        string CheckPendingBatches();
 
         void TestAsyncProcess(Guid myGuid);
 

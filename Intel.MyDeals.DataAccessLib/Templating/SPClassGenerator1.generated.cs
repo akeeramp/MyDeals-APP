@@ -7280,13 +7280,49 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 				get { return (DateTime)GetParameter("in_log_dtm"); }
 			}
 		}
+        ///<summary>
+        /// ID: 1054835020
+        /// Modified: 2023-12-11 6:35:32 PM
+        /// Parameters: 2
+        ///</summary>
+        public partial class PR_MYDL_IQR_DLS_PRCSS : SP
+        {
+            public PR_MYDL_IQR_DLS_PRCSS()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_IQR_DLS_PRCSS]";
+            }
 
-		///<summary>
-		/// ID: 714485624
-		/// Modified: 10/23/2018 9:20:17 PM
-		/// Parameters: 0
-		///</summary>
-		public partial class PR_MYDL_JMS_DEAL_GRPS_PRCSS : SP {
+            ///<summary>
+            /// DataType: uniqueidentifier
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 0, false)]
+            public Guid in_guid
+            {
+                set { SetParmeter("in_guid", value); }
+                get { return (Guid)GetParameter("in_guid"); }
+            }
+
+            ///<summary>
+            /// DataType: bit
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public Boolean in_callRequestType
+            {
+                set { SetParmeter("in_callRequestType", value); }
+                get { return (Boolean)GetParameter("in_callRequestType"); }
+            }
+        }
+
+
+        ///<summary>
+        /// ID: 714485624
+        /// Modified: 10/23/2018 9:20:17 PM
+        /// Parameters: 0
+        ///</summary>
+        public partial class PR_MYDL_JMS_DEAL_GRPS_PRCSS : SP {
 			public PR_MYDL_JMS_DEAL_GRPS_PRCSS() {
 				DatabaseName = "MyDeals";
 				StoredProdedureName = "[dbo].[PR_MYDL_JMS_DEAL_GRPS_PRCSS]";
