@@ -357,7 +357,7 @@ namespace Intel.MyDeals.BusinessLogic
                 //FYI, if meetCompDetails length is 0 and try to UpdateMeetCompProductDetails then it throws an exception 
                 if (meetCompDetails.Count > 0)
                 {
-                    meetCompResult = _meetCompLib.UpdateMeetCompProductDetails(strategyId, OpDataElementType.PRC_ST.ToId(), mcu);
+                    meetCompResult = _meetCompLib.UpdateMeetCompProductDetails(strategyId, OpDataElementType.PRC_ST.ToId(), mcu, false);
 
                     if (meetCompResult == null || meetCompResult.Count == 0) // 0 records returned for product dimension not being set correctly causing mismatch meet comp save result
                     {

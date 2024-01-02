@@ -80,9 +80,9 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
         {
             var meetCompDataLibMock = new Mock<IMeetCompDataLib>();
             List<MeetCompResult> lstMeetCompRes = getProductDetails(CNTRCT_OBJ_SID);
-            meetCompDataLibMock.Setup(x => x.UpdateMeetCompProductDetails(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<List<MeetCompUpdate>>()))
+            meetCompDataLibMock.Setup(x => x.UpdateMeetCompProductDetails(It.IsAny<int>(), It.IsAny<int>(), It.IsAny<List<MeetCompUpdate>>(), false))
                 .Returns(lstMeetCompRes);
-            var res = new MeetCompLib(meetCompDataLibMock.Object).UpdateMeetCompProductDetails(CNTRCT_OBJ_SID, OBJ_TYPE_ID, mcu);
+            var res = new MeetCompLib(meetCompDataLibMock.Object).UpdateMeetCompProductDetails(CNTRCT_OBJ_SID, OBJ_TYPE_ID, mcu, false);
             Assert.NotNull(res);
         }
 

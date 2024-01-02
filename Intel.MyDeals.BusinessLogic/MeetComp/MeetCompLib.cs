@@ -153,9 +153,9 @@ namespace Intel.MyDeals.BusinessLogic
         /// </summary>
         /// <param name="CNTRCT_OBJ_SID"></param>
         /// <returns></returns>
-        public List<MeetCompResult> UpdateMeetCompProductDetails(int CNTRCT_OBJ_SID, int OBJ_TYPE_ID, List<MeetCompUpdate> mcu)
+        public List<MeetCompResult> UpdateMeetCompProductDetails(int CNTRCT_OBJ_SID, int OBJ_TYPE_ID, List<MeetCompUpdate> mcu, bool isUI)
         {
-            var data = _meetCompCollectorLib.UpdateMeetCompProductDetails(CNTRCT_OBJ_SID, OBJ_TYPE_ID, mcu);
+            var data = _meetCompCollectorLib.UpdateMeetCompProductDetails(CNTRCT_OBJ_SID, OBJ_TYPE_ID, mcu, isUI);
 
             // Update also does a get operation, thus apply rules here
             dynamic[] dynData = data.Cast<dynamic>().ToArray();

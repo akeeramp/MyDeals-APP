@@ -14440,7 +14440,14 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 				set { SetParmeter("var_meet_comp", value); }
 				get { return (SqlTableValueParameterBase)GetParameter("var_meet_comp"); }
 			}
-		}
+
+            [SQLParameterAttribute(6, "ParameterDirection.Input", 1, false)]
+            public String IQR_FLAG
+            {
+                set { SetParmeter("IQR_FLAG", value); }
+                get { return (String)GetParameter("IQR_FLAG"); }
+            }
+        }
 
 		///<summary>
 		/// ID: 1113771025
