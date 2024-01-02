@@ -234,6 +234,8 @@ export class PTE_CellChange_Util {
             else if (val.prop == 'REBATE_OA_MAX_AMT' && curPricingTable.OBJ_SET_TYPE_CD == "FLEX" && curPricingTable.FLEX_ROW_TYPE == "Draining") {
                     let colSPIdx = findWhere(this.hotTable.getCellMetaAtRow(row), { prop: 'REBATE_OA_MAX_AMT' }).col;
                     this.hotTable.setCellMeta(row, colSPIdx, 'className', 'readonly-cell');
+                    this.hotTable.setCellMeta(row, colSPIdx, 'editor', false);                    
+                    this.hotTable.render();
             }
             else {
                 if (val.prop) {
