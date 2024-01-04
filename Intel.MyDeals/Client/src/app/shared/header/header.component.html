@@ -13,7 +13,7 @@
                         <div style="font-size: 14px; color: white; font-weight: bold; padding-left: 10px; padding-right: 10px; padding-bottom:5px;padding-top:5px; background-color: #00B1F1; display: inline-block">
                             Google Chrome Required <img src="/images/ChromeIcon.png" alt="Google Chrome Icon Image" style="width: 24px; height: 24px; margin-left: 10px">
                             <div *ngIf="!isProduction()">
-                                <span class="pre-prod-environment">Pre-Production Environment: {{ environment }}</span>
+                                <span class="pre-prod-environment">Pre-Production Environment: {{ ENVIRONMENT }}</span>
                             </div>
                         </div>
                     </div>
@@ -167,7 +167,7 @@
                         <a href="Admin#/adminemployeedashboard">Set Your Role (Pre-prod Only)</a>
                     </li>
 
-                    <li class="dropdown-submenu" *ngIf="isRealSA()">
+                    <li class="dropdown-submenu">
                         <a tabindex="-1">Super User Tools</a>
                         <ul class="dropdown-menu" style="width: 250px;">
                             <li>
@@ -270,7 +270,7 @@
                         </ul>
                     </li>
 
-                    <li *ngIf="this.environment == 'LOCAL' && getUserWwid() == 10548414">
+                    <li *ngIf="ENVIRONMENT == 'LOCAL' && getUserWwid() == 10548414">
                         <a href="Admin#/MyDealsManual?topic=intro">My Deals Manual</a>
                     </li>
                 </ul>

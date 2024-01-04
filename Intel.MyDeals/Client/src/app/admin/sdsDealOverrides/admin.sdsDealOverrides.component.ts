@@ -51,6 +51,15 @@ export class SdsDealOverridesComponent implements OnInit, OnDestroy {
     accessAllowed = false; // Default to false to prevent unauthorized users
     private validWwid: string;
 
+    loadRules() {
+        this.sdsDealOverridesService.getRules().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
+            this.gridRules = result;
+            this.ruleCount['all'] = result.length;
+        }, (error) => {
+            this.loggerService.error('Error in loading SDS override rules', error);
+        });
+    }
+
     checkPageAccess() {
         this.constantsService.getConstantsByName('SDS_OVERRIDE_DEAL_VALIDATION_ADMINS').subscribe((data) => {
             if (data) {
@@ -67,31 +76,6 @@ export class SdsDealOverridesComponent implements OnInit, OnDestroy {
     dataStateChangeReturns(sort: SortDescriptor[]): void {
         this.sort = sort;
         this.gridReturns = { data: orderBy(this.gridReturnsOrig, this.sort), total: this.gridReturnsOrig.length };
-    }
-
-    /**
-     * TWC3119-822 - Current rules are:
-     *      - Must be Real SA
-     *      - Must be a Developer, Super User, or a Bulk Price Admin (-D, -S, or -B)
-     */
-    private get validUser(): boolean {
-        const IS_VALID_SUBROLE = (<any> window).isDeveloper || (<any> window).isSuper || (<any> window).isBulkPriceAdmin;
-        const IS_REAL_SA = (<any> window).isRealSA;
-
-        return IS_REAL_SA && IS_VALID_SUBROLE;
-    }
-
-    loadRules() {
-        if (!this.validUser) {
-            document.location.href = "/Dashboard#/portal";
-        } else {
-            this.sdsDealOverridesService.getRules().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
-                this.gridRules = result;
-                this.ruleCount['all'] = result.length;
-            }, (error) => {
-                this.loggerService.error('Error in loading SDS override rules', error);
-            });
-        }
     }
 
     bitshift(inpArry) {
