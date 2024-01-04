@@ -239,14 +239,17 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit {
                 x.CUST_NM.toString().toUpperCase().trim() === model.CUST_NM.toString().toUpperCase().trim()
         );
 
+        if (model.DROP_DOWN.indexOf(',') > -1) {
+            this.loggerService.warn(model.ATRB_CD + " values can not have embedded commas (,).", "Validation Error");
+            this.errorMsg = model.ATRB_CD + " values can not have embedded commas (,).";
+            IS_MODEL_VALID = false;
+        }
+
+
         if (this.COMP_ATRB_SIDS.indexOf(model.ATRB_SID) > -1) {
             if (model.DROP_DOWN.length > 40) {
                 this.loggerService.warn(model.ATRB_CD + " values can not be more than 40 characters long.", "Validation Error");
                 this.errorMsg = model.ATRB_CD + " values can not be more than 40 characters long.";
-                IS_MODEL_VALID = false;
-            } else if (model.DROP_DOWN.indexOf(',') > -1) {
-                this.loggerService.warn(model.ATRB_CD + " values can not have embedded commas (,).", "Validation Error");
-                this.errorMsg = model.ATRB_CD + " values can not have embedded commas (,).";
                 IS_MODEL_VALID = false;
             }
         }
