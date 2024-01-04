@@ -2760,3 +2760,45 @@ kendo-grid.tableScope.flowTableAlignment table tr {
 kendo-popup.k-animation-container>.k-popup kendo-grid-filter-menu-container kendo-grid-numeric-filter-menu kendo-dropdownlist {
     margin: 5px 0 0;
 }
+
+kendo-dialog.meetCompInvalidPrice .k-window {
+    width: 320px;
+    border: 0;
+}
+
+kendo-dialog.meetCompInvalidPrice .k-window kendo-dialog-titlebar {
+    padding: 10px 1rem;
+}
+
+kendo-dialog.meetCompInvalidPrice .k-window kendo-dialog-titlebar .k-dialog-close {
+    background: transparent !important;
+    border-radius: 50%;
+    height: 20px !important;
+    width: 20px !important;
+    opacity: 0.8;
+}
+
+kendo-dialog.meetCompInvalidPrice .k-window kendo-dialog-titlebar .k-dialog-close:hover {
+    background-color: #008bd1 !important;
+    border-color: #008bd1 !important;
+    opacity: 1 !important;
+}
+
+kendo-dialog.meetCompInvalidPrice .k-window kendo-dialog-titlebar .k-dialog-close:hover .k-icon {
+    color: #fff !important;
+}
+
+kendo-dialog.meetCompInvalidPrice .k-window .k-content {
+    padding: 1rem !important;
+}
+
+kendo-dialog.meetCompInvalidPrice .k-window kendo-dialog-actions {
+    padding: 1em;
+    border-top: 1px solid #e6e6e6 !important;
+    justify-content: flex-end;
+}
+
+kendo-dialog.meetCompInvalidPrice .k-window kendo-dialog-actions button {
+    max-width: 85px !important;
+    font-size: 16px;
+}

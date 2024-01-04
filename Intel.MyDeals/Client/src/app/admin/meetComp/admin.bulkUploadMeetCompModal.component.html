@@ -79,8 +79,8 @@
         <button kendoButton (click)="closeConfirmation()" themeColor="primary" class="bulky-cancel-btn">CANCEL</button>
     </kendo-dialog-actions>
 </kendo-dialog>
-<kendo-dialog (close)="closePriceAlert('close')" *ngIf="isInvalidPrice" title="Invalid Price" >
-    <p [innerHTML]='priceMsg'></p>
+<kendo-dialog (close)="closePriceAlert('close')" *ngIf="isInvalidPrice" title="Invalid Price" class="meetCompInvalidPrice">
+    <p class="mb-0" [innerHTML]='priceMsg'></p>
     <kendo-dialog-actions >
         <button kendoButton (click)="closePriceAlert('')" id="invalidPrcMsg">RETRY</button>
         <button kendoButton (click)="closePriceAlert('close')" id="invalidPrcMsg">CANCEL</button>
