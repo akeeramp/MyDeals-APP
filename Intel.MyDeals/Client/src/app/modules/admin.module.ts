@@ -19,8 +19,7 @@ import { QuoteLetterComponent } from '../admin/quoteLetter/admin.quoteLetter.com
 import { RuleOwnerComponent } from '../admin/ruleOwner/admin.RuleOwner.component';
 import { adminWorkflowStagesComponent } from '../admin/workflowStages/admin.workflowStages.component';
 import { adminWorkFlowComponent } from '../admin/workFlow/admin.workFlow.component';
-import { AdminDropdownsComponent } from '../admin/dropdowns/admin.dropdowns.component';
-import { DropdownBulkUploadDialogComponent } from '../admin/dropdowns/dropdownBulkUploadDialog/admin.dropdowns.bulkUploadDialog.component';
+import { dropdownsComponent } from '../admin/dropdowns/admin.dropdowns.component';
 import { adminConsumptionCountryComponent } from '../admin/consumptionCountry/admin.consumptionCountry.component';
 import { adminPushDealsToVistexComponent } from '../admin/pushDealstoVistex/admin.pushDealstoVistex.component';
 import { adminVistexComponent } from '../admin/vistex/admin.vistex.component';
@@ -89,8 +88,7 @@ export const AdminComponents =[
     adminWorkFlowComponent,
     adminPushDealsToVistexComponent,
     adminWorkFlowComponent,
-    AdminDropdownsComponent,
-    DropdownBulkUploadDialogComponent,
+    dropdownsComponent,
     adminConsumptionCountryComponent,
     adminVistexComponent,
     pctQueryBuilderComponent,

@@ -5,19 +5,21 @@ import { Observable } from "rxjs";
 @Injectable({
     providedIn: 'root'
 })
-export class DropdownService {
 
-    private readonly API_URL_DROPDOWN = "api/Dropdown/";
-    private readonly API_URL_CUSTOMER_VENDOR = "api/CustomerVendor/";
+export class dropdownService {
+    public apiBaseUrl = "api/Dropdown/";
+    public customerVendorApiBaseUrl = "api/CustomerVendor/";
 
-    constructor(private httpClient: HttpClient) { }
+    constructor(private httpClient: HttpClient) {
+
+    }
 
     public getBasicDropdowns(isForceReGet): Observable<any> {
         let isGetViaAngularCache = true;
         if (isForceReGet) {
             isGetViaAngularCache = false;
         }
-        const apiUrl = this.API_URL_DROPDOWN + 'GetBasicDropdowns';
+        const apiUrl = this.apiBaseUrl + 'GetBasicDropdowns';
         const param = new HttpParams();
         param.set('cache', isGetViaAngularCache.toString());
         return this.httpClient.get(apiUrl, { params: param });
@@ -28,7 +30,7 @@ export class DropdownService {
         if (isForceReGet) {
             isGetViaAngularCache = false;
         }
-        const apiUrl = this.API_URL_DROPDOWN + 'GetDealTypesDropdowns';
+        const apiUrl = this.apiBaseUrl + 'GetDealTypesDropdowns';
         const param = new HttpParams();
         param.set('cache', isGetViaAngularCache.toString());
         return this.httpClient.get(apiUrl, { params: param });
@@ -39,7 +41,7 @@ export class DropdownService {
         if (isForceReGet) {
             isGetViaAngularCache = false;
         }
-        const apiUrl = this.API_URL_DROPDOWN + 'GetDropdownGroups';
+        const apiUrl = this.apiBaseUrl + 'GetDropdownGroups';
         const param = new HttpParams();
         param.set('cache', isGetViaAngularCache.toString());
         return this.httpClient.get(apiUrl, { params: param });
@@ -50,25 +52,25 @@ export class DropdownService {
         if (isForceReGet) {
             isGetViaAngularCache = false;
         }
-        const apiUrl = this.API_URL_DROPDOWN + 'GetCustomersList';
+        const apiUrl = this.apiBaseUrl + 'GetCustomersList';
         const param = new HttpParams();
         param.set('cache', isGetViaAngularCache.toString());
         return this.httpClient.get(apiUrl, { params: param });
     }
 
     public updateBasicDropdowns(dropdown): Observable<any> {
-        const apiUrl = this.API_URL_DROPDOWN + 'UpdateBasicDropdowns';
+        const apiUrl = this.apiBaseUrl + 'UpdateBasicDropdowns';
         return this.httpClient.put(apiUrl, dropdown);
     }
 
     public deleteBasicDropdowns(dropdown): Observable<any> {
-        const apiUrl = this.API_URL_DROPDOWN + 'DeleteBasicDropdowns';
+        const apiUrl = this.apiBaseUrl + 'DeleteBasicDropdowns';
         return this.httpClient.put(apiUrl, dropdown);
     }
 
     public insertBasicDropdowns(id): Observable<any> {
-        const apiUrl = this.API_URL_DROPDOWN + 'InsertBasicDropdowns';
+        const apiUrl = this.apiBaseUrl + 'InsertBasicDropdowns';
         return this.httpClient.post(apiUrl, id);
     }
-
 }
+
