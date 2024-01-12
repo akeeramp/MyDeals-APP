@@ -61,10 +61,14 @@ export class SdsDealOverridesComponent implements OnInit, OnDestroy {
     }
 
     checkPageAccess() {
+        const IS_REAL_SA = (<any> window).isRealSA as boolean;
+
         this.constantsService.getConstantsByName('SDS_OVERRIDE_DEAL_VALIDATION_ADMINS').subscribe((data) => {
             if (data) {
                 this.validWwid = data.CNST_VAL_TXT === "NA" ? "" : data.CNST_VAL_TXT;
-                this.accessAllowed = this.validWwid.indexOf((<any>window).usrDupWwid) > -1 ? true : false;
+
+                // TWC3119-840: To open SDS Admin page, user must be an SA and have their WWID in the Constants value
+                this.accessAllowed = IS_REAL_SA && (this.validWwid.indexOf((<any>window).usrDupWwid) > -1 ? true : false);
             } else {
                 this.loggerService.error("SDS Admin Page: Unable to get Access Control List from Constant SDS_OVERRIDE_DEAL_VALIDATION_ADMINS", null);
             }
@@ -179,8 +183,8 @@ export class SdsDealOverridesComponent implements OnInit, OnDestroy {
     }
 
     ngOnInit() {
-        this.loadRules();
         this.checkPageAccess();
+        this.loadRules();
     }
 
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
