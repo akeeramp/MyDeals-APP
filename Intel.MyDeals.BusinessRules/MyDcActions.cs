@@ -1289,6 +1289,8 @@ namespace Intel.MyDeals.BusinessRules
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
+            if (r.Dc.HasTracker()) return; // If it has a tracker, bypass this rule
+
             IOpDataElement deEndCustomerRetail = r.Dc.GetDataElement(AttributeCodes.END_CUSTOMER_RETAIL);
             string txtEndCustomerRetail = r.Dc.GetDataElementValue(AttributeCodes.END_CUSTOMER_RETAIL);
             var endCustObj = r.Dc.GetDataElementValue(AttributeCodes.END_CUST_OBJ);
