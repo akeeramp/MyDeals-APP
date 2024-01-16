@@ -1922,7 +1922,7 @@ namespace Intel.MyDeals.BusinessLogic
                                         PRIMED_CUST_CNTRY = workRecordDataFields.recordDetails.quote.EndCustomerCountry,
                                         IS_EXCLUDE = "0",
                                         IS_PRIMED_CUST = "1",
-                                        PRIMED_CUST_ID = workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId,
+                                        PRIMED_CUST_ID = IQRprimedCustomerL1Id,
                                         RPL_STS_CD = workRecordDataFields.recordDetails.quote.ComplianceWatchList,
                                         IS_RPL = "0",
                                         PRIMED_CUST_NM = unifiedEndCustomer
