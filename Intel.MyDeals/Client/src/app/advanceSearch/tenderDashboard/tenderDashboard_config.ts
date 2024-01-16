@@ -113,7 +113,7 @@
             },
             {
                 "type": "string",
-                "operator": ["LIKE", "=", "!="]
+                "operator": ["=", "LIKE", "!="]
             },
             {
                 "type": "string_with_in",

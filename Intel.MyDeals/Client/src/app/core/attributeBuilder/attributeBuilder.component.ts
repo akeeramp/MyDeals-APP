@@ -370,12 +370,11 @@ export class AttributeBuilder implements OnInit, OnDestroy {
     }
 
     dataChange(idx, dataItem, selector, data?) {
-        this.isDirty.emit(true);
-        this.attributes[idx].values = [];
+        this.isDirty.emit(true);        
         if (selector == 'operator') {
             this.attributes[idx].operator = dataItem.selectedOperator.operator;
-            dataItem.value = ''
-            this.attributes[idx].values = [];
+            //dataItem.value = ''
+            //this.attributes[idx].values = [];
             this.enableTextbox[idx] = false;
             if (this.attributes[idx].operator == 'IN') {
                 this.enableTextbox[idx] = true;
@@ -398,7 +397,8 @@ export class AttributeBuilder implements OnInit, OnDestroy {
         } else {
             this.attributes[idx].value = data
         }
-        if (data != undefined && data != null && data != '') {
+        if (data != undefined && data != null && data != '' && selector != 'operator') {
+            this.attributes[idx].values = [];
             if (Array.isArray(data)) {
                 data.forEach((item) => {
                     this.attributes[idx].values.push(item);
@@ -409,13 +409,13 @@ export class AttributeBuilder implements OnInit, OnDestroy {
      }
 
     dataChangeMulti(data, i, dataItem, selector) {
-        this.isDirty.emit(true);       
+        this.isDirty.emit(true);
         this.attributes[i].values = [];
         this.attributes[i].value = '';
         data.forEach((item) => {
             this.attributes[i].values.push(item);
-            this.attributes[i].value = this.attributes[i].values;
         })
+        this.attributes[i].value = this.attributes[i].values;
     }
     public filterSettings: DropDownFilterSettings = {
         caseSensitive: false,
