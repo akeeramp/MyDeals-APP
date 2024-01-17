@@ -61,14 +61,12 @@ export class SdsDealOverridesComponent implements OnInit, OnDestroy {
     }
 
     checkPageAccess() {
-        const IS_REAL_SA = (<any> window).isRealSA as boolean;
-
         this.constantsService.getConstantsByName('SDS_OVERRIDE_DEAL_VALIDATION_ADMINS').subscribe((data) => {
             if (data) {
                 this.validWwid = data.CNST_VAL_TXT === "NA" ? "" : data.CNST_VAL_TXT;
 
                 // TWC3119-840: To open SDS Admin page, user must be an SA and have their WWID in the Constants value
-                this.accessAllowed = IS_REAL_SA && (this.validWwid.indexOf((<any>window).usrDupWwid) > -1 ? true : false);
+                this.accessAllowed = this.validWwid.indexOf((<any>window).usrDupWwid) > -1 ? true : false;
             } else {
                 this.loggerService.error("SDS Admin Page: Unable to get Access Control List from Constant SDS_OVERRIDE_DEAL_VALIDATION_ADMINS", null);
             }

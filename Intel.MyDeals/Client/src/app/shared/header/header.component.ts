@@ -130,10 +130,4 @@ export class HeaderComponent {
         return (this.isRealSA() || this.isDeveloper() || allowedUserRole.includes(this.getUserRole()) || (this.getUserRole() == 'GA' && this.isSuper()));
     }
 
-    // TWC3119-840: To view SDS menu option, must be an SA OR GA-S
-    isValidSdsUser(): boolean {
-        const IS_GA_SUPERUSER = this.isSuper() && this.getUserRole() == 'GA';
-        return this.isRealSA() || IS_GA_SUPERUSER;
-    }
-
 }

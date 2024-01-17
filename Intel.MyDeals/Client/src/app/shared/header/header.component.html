@@ -167,7 +167,7 @@
                         <a href="Admin#/adminemployeedashboard">Set Your Role (Pre-prod Only)</a>
                     </li>
 
-                    <li class="dropdown-submenu" *ngIf="isValidSdsUser()">
+                    <li class="dropdown-submenu" *ngIf="isRealSA() || isDeveloper()">
                         <a tabindex="-1">Super User Tools</a>
                         <ul class="dropdown-menu" style="width: 250px;">
                             <li>
