@@ -32,6 +32,8 @@ export class dsaService {
             apiUrl = this.vistexApiBase + apiName + '/IQR_CLM_DATA/' + runMode;
         } else if (runMode == "R" || runMode == "T") {
             apiUrl = this.tenderApiBase + apiName;
+        } else if (runMode == "N") {
+            apiUrl = this.vistexApiBase + apiName + '/IQR_CONSUMPTION_DATA/' + runMode;
         }
         else {
             apiUrl = this.vistexApiBase + apiName + '/' + runMode;

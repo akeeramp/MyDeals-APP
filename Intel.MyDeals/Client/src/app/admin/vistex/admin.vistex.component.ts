@@ -36,7 +36,8 @@ export class adminVistexComponent implements PendingChangesGuard,OnDestroy{
         { API_ID: 7, API_NM: "Prod Vertical Failed", API_CD: "F" },
         { API_ID: 7, API_NM: "Consumption Data", API_CD: "M" },
         { API_ID: 8, API_NM: "Claim Data", API_CD: "L" },
-        { API_ID: 9, API_NM: "Tender Deals", API_CD: "T" }
+        { API_ID: 9, API_NM: "Tender Deals", API_CD: "T" },
+        { API_ID: 10, API_NM: "IQR Consumption Data", API_CD: "N" }
     ];
 
     public defaultItem = { API_ID: null, API_NM: "Select an API..." };
@@ -61,7 +62,8 @@ export class adminVistexComponent implements PendingChangesGuard,OnDestroy{
         "F": 'GetVistexDealOutBoundData',
         "M": 'GetVistexDealOutBoundData',
         "L": 'GetVistexDealOutBoundData',
-        "T": 'ExecuteSalesForceTenderData'
+        "T": 'ExecuteSalesForceTenderData',
+        "N": 'GetVistexDealOutBoundData'
     };
 
     vistexApiNameChange(value) {
