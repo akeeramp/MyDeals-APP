@@ -457,7 +457,7 @@ export class AttributeBuilder implements OnInit, OnDestroy {
         // global search check is allowed
         if (this.isGlobal()) return true;
 
-        var invalidRows = this.attributes.filter(x => x.field === "" || x.operator === "" || x.value === "")
+        var invalidRows = this.attributes.filter(x => x.field === "" || x.operator === "" || x.value === "" || x.value.length == 0)
         if (invalidRows.length > 0) {
             this.isDialogVisible = true;
             return false;
