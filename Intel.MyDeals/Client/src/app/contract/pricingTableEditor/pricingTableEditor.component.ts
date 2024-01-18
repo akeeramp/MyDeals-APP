@@ -961,28 +961,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 }
             }
             if (geo && geo.length > 0) {
-                let isvalidGeo = true
-                let geolist = geo[0].new && geo[0].new != null ? geo[0].new.split(',') : '';
-                const col = findIndex(this.columns, { data: geo[0].prop });
-                each(geolist, geoname => {
-                    geoname = geoname.replace(/[\[\]']+/g, '');
-                    const geoprest = this.dropdownResponses.GEO_COMBINED.find(x => x.dropdownName == geoname);
-                    if (geoprest == undefined) {
-                        isvalidGeo = false;
-                        const invalidname = geoname + ' is not valid Geo'
-                        this.hotTable.setCellMetaObject(geo[0].row, col, { 'className': 'error-product', comment: { value: invalidname } });
-                        this.hotTable.render();
-                    }
-                });
-
-                if (!isvalidGeo) {
-                    this.hotTable.setDataAtRowProp(geo[0].row, geo[0].prop, '', 'no-edit');
-                } else {
-                    if (geolist != '') {
-                        this.hotTable.setCellMetaObject(geo[0].row, col, { 'className': '', comment: { value: '' } });
-                        this.hotTable.render();
-                    }
-                }
+                PTE_CellChange_Util.geoInputValidationCheck(geo,this.columns,this.dropdownResponses);
             }
             if (restprd && restprd.length > 0) {
                 this.setDeafultARSettlementAndRestPeriod(restprd);

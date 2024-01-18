@@ -1304,6 +1304,21 @@ export class PTE_CellChange_Util {
                     }
                 }
             }
+            if(item.prop =='PROGRAM_PAYMENT'  || item.prop == 'REBATE_TYPE'){
+                const propvalue= this.hotTable.getDataAtRowProp(item.row, item.prop);
+                if(propvalue==null){
+                 const invalidname = 'This field is required';
+                 let colSPIdx = findWhere(this.hotTable.getCellMetaAtRow(item.row), { prop: item.prop }).col;
+                 this.hotTable.setCellMetaObject(item.row, colSPIdx, { 'className': 'error-product error-border', comment: { value: invalidname } });
+                 this.hotTable.render();
+                }
+                else
+                {
+                 let colSPIdx = findWhere(this.hotTable.getCellMetaAtRow(item.row), { prop: item.prop }).col;
+                 this.hotTable.setCellMetaObject(item.row, colSPIdx, { 'className': '', comment: { value: '' } });
+                 this.hotTable.render();
+                }
+             }
         }
         this.hotTable.render()
     }
@@ -1802,6 +1817,11 @@ export class PTE_CellChange_Util {
                             return;
                         }
                     })
+                    if(list=="" && obj.prop == 'MRKT_SEG'){
+                        this.hotTable.setCellMetaObject(obj.row, col, { 'className': 'error-border', comment: { value: 'This field is required' } });
+                        this.hotTable.setDataAtRowProp(obj.row, obj.prop, '', 'no-edit');
+                        this.hotTable.render();
+                    }
                     if (isvalid) {
                             this.hotTable.setCellMetaObject(obj.row, col, { 'className': '', comment: { value: '' } });
                             this.hotTable.render();
@@ -1828,6 +1848,40 @@ export class PTE_CellChange_Util {
                 }
             })
         
+    }
+
+    static geoInputValidationCheck(changes, columns,dropdownResponses){
+        let isvalidGeo = true
+        each(changes, (item) => {
+            let geolist = item.new && item.new != null ? item.new.split(',') : '';
+            const col = findIndex(columns, { data: item.prop });
+            each(geolist, geoname => {
+                geoname = geoname.replace(/[\[\]']+/g, '');
+                const geoprest = dropdownResponses.GEO_COMBINED.find(x => x.dropdownName == geoname);
+                if (geoprest == undefined) {
+                    isvalidGeo = false;
+                    const invalidname = geoname + ' is not valid Geo'
+                    this.hotTable.setCellMetaObject(item.row, col, { 'className': 'error-product', comment: { value: invalidname } });
+                    this.hotTable.render();
+                }
+            });
+
+            if (geolist == '') {
+                isvalidGeo = false;
+                const invalidname = 'This field is required';
+                this.hotTable.setCellMetaObject(item.row, col, { 'className': 'error-product error-border', comment: { value: invalidname } });
+                this.hotTable.render();
+            }
+
+            if (!isvalidGeo) {
+                this.hotTable.setDataAtRowProp(item.row, item.prop, '', 'no-edit');
+            } else {
+                if (geolist != '') {
+                    this.hotTable.setCellMetaObject(item.row, col, { 'className': '', comment: { value: '' } });
+                    this.hotTable.render();
+                }
+            }
+        })
     }
 
 
