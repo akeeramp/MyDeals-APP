@@ -1916,7 +1916,8 @@
             "CBA-B": true,
             "RA-B": true
         },
-        "vistexProfiseeApi": {
+        //Commenting vistexProfiseeApi as this page access is based on WWID in constants PRF_MRG_EMP_ID
+        /*"vistexProfiseeApi": {
             "SA": false,
             "SA-D": true,
             "SA-T": false,
@@ -1958,7 +1959,7 @@
             "LEGAL-B": false,
             "CBA-B": false,
             "RA-B": false
-        },
+        },*/
 
          //ADVANCED SEARCH ROUTE GUARDS
          "gotoPs/:cid": {
