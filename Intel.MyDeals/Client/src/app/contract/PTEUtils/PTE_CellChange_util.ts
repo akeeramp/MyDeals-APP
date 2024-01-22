@@ -175,6 +175,13 @@ export class PTE_CellChange_Util {
                 }
                 updateData.push('no-edit');
                 updateRows.push(updateData);
+                if ((curPricingTable[`AR_SETTLEMENT_LVL`] && curPricingTable[`AR_SETTLEMENT_LVL`].toLowerCase() != 'cash')){
+                let colSPIdx = findWhere(this.hotTable.getCellMetaAtRow(row), { prop: 'SETTLEMENT_PARTNER' }).col;
+                    this.hotTable.setCellMeta(row, colSPIdx, 'className', 'readonly-cell');
+                    this.hotTable.setCellMeta(row, colSPIdx, 'editor', false);                    
+                    this.hotTable.render();
+                }
+
             } else if (val.prop == 'START_DT') {
                 //update PTR_USER_PRD with random value if we use row index values while adding after delete can give duplicate index
                 currentString = PTE_CellChange_Util.generateUpdateRowString(row, val.prop, StaticMomentService.moment(contractData.START_DT).format("MM/DD/YYYY"), 'no-edit');
