@@ -1431,7 +1431,8 @@ kendo-dialog.ok-button-color-change kendo-dialog-actions button.first-child-btn:
 }
 
 #DC_ID .err-bit {
-    margin: -45px 0 0 1px !important
+    margin: -45px 0 0 1px !important;
+    top:44px
 }
 
 #closePopover {
