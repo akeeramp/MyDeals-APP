@@ -90,6 +90,7 @@ export class ProductCorrectorComponent implements OnDestroy{
     private duplicateData: any;
     private isDuplicate = false;
     selectedProducts: any = [];
+    private rowsCorrected = [];
 
     private state: State = {
         skip: 0,
@@ -717,6 +718,13 @@ export class ProductCorrectorComponent implements OnDestroy{
         for (let m = 0; m < this.curRowProds.length; m++) {
             if (this.curRowProds[m].matchName.length == 0 && this.curRowProds[m].status === "Issue") allMatched = false;
         }
+        if (allMatched && this.rowsCorrected.indexOf(this.curRowId) < 0) {
+            this.rowsCorrected.push(this.curRowId);
+        }
+        if (allMatched && this.rowsCorrected.length == this.issueRowKeys.length) {
+            this.allDone = true;
+        }
+
     }
     clkPrdUsrNm(dataItem) {
         if (dataItem.status === "Good") return;
