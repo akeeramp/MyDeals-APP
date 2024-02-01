@@ -183,7 +183,8 @@ export class endCustomerRetailModalComponent implements OnDestroy {
                     }
                 }
             }
-            else if (ecValues[i].length > 60) {
+            else if (ecValues[i].length > 60 && this.endCustOptionsWithOutAny.filter(e => e.Value === ecValues[i]).length == 0) {
+                // Length > 60 and not found in current dropdowns values list, i.e., user entered new value
                 rowError = true;
                 this.isError = true;
                 if (endCustField != undefined && endCustField != null) {
@@ -535,7 +536,8 @@ export class endCustomerRetailModalComponent implements OnDestroy {
                 }
             }
         }
-        if (endCustomer && endCustomer.length > 60) {
+        if (endCustomer && endCustomer.length > 60 && this.endCustOptionsWithOutAny.filter(e => e.Value === endCustomer).length == 0) {
+            // Length > 60 and not found in current dropdowns values list, i.e., user entered new value
             this.ChangeErrorFlag = true;
             this.validateFlag = true;
             if (field != undefined && field != null) {
