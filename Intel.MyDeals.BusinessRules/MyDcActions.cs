@@ -1300,7 +1300,22 @@ namespace Intel.MyDeals.BusinessRules
 
             if (EndCustomerElements.Length > 0)
             {
-                deEndCustomerRetail.AddMessage("End Customers must be 60 characters or less.  Please fix [" + String.Join("],[", EndCustomerElements) + "]");
+                List<string> UserEnteredEndCustomers = new List<string> { };
+
+                List<PrimeCustomers> primedCustomersObjectsList = DataCollections.GetPrimeCustomers(); // Get list of customers
+                foreach (string i in EndCustomerElements)
+                {
+                    if (primedCustomersObjectsList.FindIndex(e => e.PRIM_CUST_NM == i) < 0)
+                    {
+                        UserEnteredEndCustomers.Add(i);
+                    }
+                }
+
+                if (UserEnteredEndCustomers.Count() > 0)
+                {
+                    deEndCustomerRetail.AddMessage("End Customers must be 60 characters or less.  Please fix [" + UserEnteredEndCustomers.Aggregate((i, j) => i + "],[" + j) + "]");
+                    //items.Aggregate((i, j) => i + delimiter + j)  -- + String.Join("],[", EndCustomerElements) +
+                }
             }
         }
 

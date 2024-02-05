@@ -785,6 +785,16 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
-        private static List<Countires> _countries;        
+        private static List<Countires> _countries;
+
+        public static List<PrimeCustomers> GetPrimeCustomers()
+        {
+            lock (LOCK_OBJECT ?? new object())
+            {
+                return _primeCusts ?? (_primeCusts = new PrimeCustomersDataLib().GetPrimeCustomers());
+            }
+        }
+
+        private static List<PrimeCustomers> _primeCusts;
     }
 }
