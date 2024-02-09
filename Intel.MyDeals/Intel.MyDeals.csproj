@@ -432,6 +432,7 @@
     <Content Include="Client\Images\docs\logging.png" />
     <Content Include="Client\Images\docs\mct.png" />
     <Content Include="Client\Images\docs\meetcomp.png" />
+    <Content Include="Client\Images\docs\meetcomptest.png" />
     <Content Include="Client\Images\docs\mvc.png" />
     <Content Include="Client\Images\docs\MyDeals Project Logic.png" />
     <Content Include="Client\Images\docs\overlapping.png" />
@@ -1589,6 +1590,7 @@
     <Content Include="Images\docs\logging.png" />
     <Content Include="Images\docs\mct.png" />
     <Content Include="Images\docs\meetcomp.png" />
+    <Content Include="Images\docs\meetcomptest.png" />
     <Content Include="Images\docs\mvc.png" />
     <Content Include="Images\docs\MyDeals Project Logic.png" />
     <Content Include="Images\docs\overlapping.png" />
@@ -1615,6 +1617,15 @@
     <Content Include="Images\docs\validation.png" />
     <Content Include="Images\docs\versions.png" />
     <Content Include="Images\docs\webapi.png" />
+    <Content Include="Images\docs\DealStage1.png" />
+    <Content Include="Images\docs\PS4.png" />
+    <Content Include="Images\docs\PS6.png" />
+    <Content Include="Images\docs\PT1.png" />
+    <Content Include="Images\docs\VoltierAutoFill.png" />
+    <Content Include="Images\docs\Approval1.png" />
+    <Content Include="Images\docs\Approval2.png" />
+    <Content Include="Images\docs\C2Aid.png" />
+    <Content Include="Images\docs\C2Aid1.png" />
     <Content Include="Images\edit.png" />
     <Content Include="Images\Error.png" />
     <Content Include="Images\ChromeIcon.png" />

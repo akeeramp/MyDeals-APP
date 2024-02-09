@@ -9,14 +9,14 @@
         </div>
         <div id="tocExpand" *ngIf="!isVisible" (click)="Toggle()" class="intelicon-up rotateIcon"><span class="font-cp">TOC</span> </div>
     </div>
-     <div class="grid-two">
+    <div class="grid-two">
         <div id="Introduction">
             <h1 style="margin-top: 20px !important; font-size: 36px;">Business Process and Abstract Design</h1>
             <h3 style="margin-top: 20px !important;">High Level Business Process</h3>
             <p>
                 At a high level, the purpose of My Deals is to track and manage the negotiation of Intel rebates to external world-wide customers.
                 Negotiation with the customer starts at a product-by-product Pricing Strategy.
-                Once these Pricing Strategies pass Meet Comp, Pricing Cost Test and the proper approval channels, rebate deals are created under 1 of 4 different Deal Types: ECAP, Program, Volume Tier and KITs.
+                Once these Pricing Strategies pass Meet Comp, Pricing Cost Test and the proper approval channels, rebate deals are created under 1 of 9 different Deal Types: ECAP, Program, Voltier, KIT, Flex, Revtier, Density, Hybrid ECAP, Hybrid Voltier.
                 The rebate deals are then matched at the invoice level by Downstream Applications.
             </p>
             <div style="text-align: center;">
@@ -110,15 +110,26 @@
             <p>
                 FSE, BMT and MMBP user roles negotiate Quarterly or Yearly Rebate Strategies in an offline Excel Spreadsheet.
                 Most negotiations take months to complete while others must be completed withing 24 hours.
-                The Rebate Strategies vary by customer and user with the potential of having hundreds of different Excel Formats.
+                The Rebate Strategies vary by customer and user with the potential of having hundreds of different Excel Formats.<br />
+                <b>Note: </b>MMBP is DA, BMT is GA.
             </p>
             <p>
                 Typical tasks include grouping products together, comparing potential rebates to the Floor Price and running analytics to help in the decicion making process.
-                All negotiations must both be coordinated with the customer as well as Intel's Geo and Division user base.
+                All negotiations must both be coordinated with the customer as well as Intel's Geo and Division user base.                
             </p>
             <div>
                 <img src="/images/docs/rebatestrategies.png" style="margin-top: 10px;" />
             </div>
+            <p>
+                In order to create a new Pricing Strategies either click the + on the Navigator Menu or from the current strategy or table if previously entered.
+            </p>
+            <div>
+                <img class="img-style-cp" src="/images/docs/PS1.png" />
+                <img class="img-style-cp" src="/images/docs/PS4.png" />
+                <img class="img-style-cp" src="/images/docs/PS6.png" />
+            </div>
+            <div><span class="btn-ttl-coding" (click)="showRebateContractInfoLink()">Click here</span> for more details on <b>Rebate Strategies</b>.</div>
+
         </div>
 
         <div id="pricingStrategies">
@@ -157,6 +168,17 @@
             <div>
                 <img src="/images/docs/pricingassoc.png" style="margin-top: 10px;" />
             </div>
+            <p>After adding the rebate type, you will be navigated to the handsonable pricing table template where you can add the products.</p>
+            <div>
+                <img src="/images/docs/PT1.png" style="margin-top: 10px;height: 319px; width: 780px" />
+            </div>
+            <div><span class="btn-ttl-coding" (click)="showPricingTableInfo()">Click here</span> for more details on <b>Pricing Table</b>.</div>&nbsp; &nbsp;
+            <p>An autofill default screen can be viewed after you choose a specific rebate type, those autofill values are popuplated in the handsonable table. Later default values can be altered in the pricing table editor.</p>
+            <div>
+                <img src="/images/docs/VoltierAutoFill.png" style="margin-top: 10px;height:305px" />
+            </div>
+            <div><span class="btn-ttl-coding" (click)="showAutofillInfo()">Click here</span> for more details on <b>Autofill Defaults</b>.</div>
+
         </div>
 
 
@@ -190,7 +212,8 @@
             <div class="scope in-scope">IN SCOPE</div>
             <p>
                 FSE, BMT and MMBP user roles negotiate the Rebate Strategy.
-                The system must track who and when the Rebate Strategy was approved for SOX compliance.
+                The system must track who and when the Rebate Strategy was approved for SOX compliance.<br/>
+                <b>Note: </b>MMBP is DA, BMT is GA.
             </p>
             <div>
                 <img src="/images/docs/approval.png" style="margin-top: 10px;" />
@@ -233,11 +256,13 @@
                 Overlapping deals are defined by deals that overlap in time with the same products in such a way that it is possible for the customers to get multiple rebates for the same product.
                 The overlapping rules should be managable from an admin screen.
             </p>
+            <p>Overlapping deals have same customer, product, overlapping deal dates & End Customer.</p>
             <div>
                 <img src="/images/docs/overlapping.png" style="margin-top: 10px;" />
             </div>
         </div>
-
+        <div><span class="btn-ttl-coding" (click)="showOverlapInfoLink()">Click here</span> for more details on <b>Overlapping Deals</b>.</div>
+       
         <div id="meetCompTest">
             <h4 style="margin-top: 25px;">Meet Comp Test</h4>
             <div style="margin-bottom: 15px;">
@@ -264,6 +289,11 @@
             <div>
                 <img src="/images/docs/meetcomp.png" style="margin-top: 10px;" />
             </div>
+            <p>The Meet Comp Test screen shows the Meet Comp results at both the deal and the product level.</p>
+            <div>
+                <img src="/images/docs/meetcomptest.png" style="margin-top: 10px; height: 313px" />
+            </div>
+            <div><span class="btn-ttl-coding" (click)="showMeetCompData()">Click here</span> for more details on <b>MeetComp Test</b>.</div>
         </div>
 
         <div id="pricingCostTest">
@@ -293,7 +323,7 @@
             <div>
                 <img src="/images/docs/costtest.png" style="margin-top: 10px;" />
             </div>
-
+            <div><span class="btn-ttl-coding" (click)="showPriceCostTest()">Click here</span> for more details on <b>Price Cost Test</b>.</div>
         </div>
 
         <div id="termAndConditions">
@@ -333,6 +363,14 @@
             <div>
                 <img src="/images/docs/contract.png" style="margin-top: 10px;" />
             </div>
+            <p>
+                Creating a brand new contract is simple. Set your role to GA or FSE, Click on the Create a MyDeals Contract below and you will be brought to the Contract Details page.
+            </p>
+            <div>
+                <img src="/Images/docs/createContract.png" style="margin-top: 10px;" />
+            </div>
+            <div><span class="btn-ttl-coding" (click)="showContractDetailsInfo()">Click here</span> for more details on <b>Contract</b>.</div>
+
         </div>
         <div id="customerAcceptance">
             <h4 style="margin-top: 25px;">Customer Acceptance</h4>
@@ -346,11 +384,16 @@
             <div class="scope out-of-scope">OUT OF SCOPE</div>
             <p>
                 Customers formally agree to the Pricing Strategies in the form of a Contract created outside of My Deals.
-                The Rebate Strategies are presented to the custer using C2a, DocuSign or SharePoint.
+                The Rebate Strategies are presented to the customer using C2a, DocuSign or SharePoint.
                 At this time, the expectation is to remain outside of My Deals, but in the future, this should be integrated into the tool as an automated step.
             </p>
             <div>
                 <img src="/images/docs/chooses.png" style="margin-top: 10px;" />
+            </div>
+            <p>For moving a deal from Pending to Approval, it is mandatory to provide C2a Contract #.</p>
+            <div>
+                <img src="/images/docs/C2Aid.png" style="margin-top: 10px; margin-right: 6px;"/>
+                <img src="/images/docs/C2Aid1.png" style="margin-top: 10px;" />
             </div>
         </div>
         <div id="dealEntry">
@@ -367,9 +410,10 @@
             </div>
             <div class="scope in-scope">IN SCOPE</div>
             <p>
-                Deal entry should be started AFTER MMbp approves, passes Cost Test, passes MeetComp, passes Legal and the Customer accepted the Contract.
+                Deal entry should be started after MMBP approves, passes Cost Test, passes MeetComp, passes Legal and the Customer accepted the Contract.
                 At this time, deals should be autocreated based on the Pricing Table Associations and Pricing Table Templates.
-                Since the deals have already been approved in the form of Pricing Tables, the deals can go directly to the HOLD_WAITING or ACTIVE stage depending on the type of deal.
+                Since the deals have already been approved in the form of Pricing Tables, the deals can go directly to the HOLD or ACTIVE stage depending on the type of deal.<br/>
+                <b>Note: </b>MMBP is DA.
             </p>
             <div>
                 <img src="/images/docs/dealentry.png" style="margin-top: 10px;" />
@@ -388,10 +432,21 @@
             <div class="scope in-scope">IN SCOPE</div>
             <p>
                 Since Rebate Strategies are already approved and when deals are created they go to an accepted state, the Deal Approval is limited.
-                Deals can move through various stages such as HOLD_WAITING, ACTIVE, EXPIRED, CUSTOMER_DECLINED and CANCELLED.
+                Deals can move through various stages such as DRAFT, REQUESTED, HOLD, OFFER, WON, LOST, CANCELLED, SUBMITTED, PENDING and APPROVED/ACTIVE.
             </p>
             <div>
                 <img src="/images/docs/dealapproval.png" style="margin-top: 10px;" />
+            </div>
+            <p><b>Note: </b>MMBP is DA, BMT is GA.</p>
+            <p>
+                You are able to select all (entire contract) or some of the pricing strategies for sending for approval.
+                Customer Acceptance will determine the deal status after approvals have been made.
+                When selecting as Customer Accepted if you have not entered a C2A ID#, or attached a copy or URL of the accepted contract you will prompted to enter this information.
+                The deals will not go active until this information has been provided.
+            </p>
+            <div>
+                <img src="/images/docs/Approval1.png" style="margin-top: 10px; height: 110px" />
+                <div><img src="/images/docs/Approval2.png" style="margin-top: 10px; height: 313px" /></div>
             </div>
         </div>
         <div id="dataModelObject">
@@ -454,14 +509,20 @@
 
             <h4>Deal Types</h4>
             <p>
-                Currently, all Pricing Strategies resolve into Rebate Deals. These Rebate Deals will be consumed by only 4 Deal Types:
+                Currently, all Pricing Strategies resolve into Rebate Deals. These Rebate Deals will be consumed by only 9 Deal Types:
             </p>
             <ul>
                 <li>ECAP</li>
-                <li>Vol Tier</li>
+                <li>Voltier</li>
                 <li>Program</li>
                 <li>KIT</li>
+                <li>Flex</li>
+                <li>Revtier</li>
+                <li>Density</li>
+                <li>Hybrid ECAP</li>
+                <li>Hybrid Voltier</li>
             </ul>
+            <div><span class="btn-ttl-coding" (click)="showMyDealsTypesLink()">Click here</span> for more details on <b>Deal types</b>.</div>
             <p>
                 Based on the Deal Type, the structure of the deal will be different. Some things that will be altered on the deal:
             </p>
@@ -477,32 +538,36 @@
                 Currently, the Roles Types:
             </p>
             <ul>
-                <li>FSE</li>
-                <li>BMT</li>
-                <li>RA</li>
+                <li>SA</li>
+                <li>DA</li>
                 <li>GA</li>
-                <li>MMBP</li>
+                <li>FSE</li>
                 <li>FINANCE</li>
-                <li>CBA</li>
                 <li>LEGAL</li>
+                <li>CBA</li>
+                <li>RA</li>
             </ul>
-
-            <h4>Stages</h4>
-            <p>
-                Workflows approve and reject Rebate Strategies and Deals through stages.
-                Currently, the Stages:
-            </p>
-            <ul>
-                <li>Requested</li>
-                <li>Submitted</li>
-                <li>Final_Approval</li>
-                <li>Hold_Waiting</li>
-                <li>Active</li>
-                <li>Cancelled</li>
-                <li>Expired</li>
-                <li>Customer_Declined</li>
-            </ul>
-
+            <div>
+                <h4>Stages</h4>
+                <p>
+                    Workflows approve and reject Rebate Strategies and Deals through stages.
+                    Currently, the Stages:
+                </p>
+                <ul>
+                    <li>Draft</li>
+                    <li>Requested</li>
+                    <li>Hold</li>
+                    <li>Offer</li>
+                    <li>Won</li>
+                    <li>Lost</li>
+                    <li>Cancelled</li>
+                    <li>Submitted</li>
+                    <li>Pending</li>
+                    <li>Approved/Active</li>
+                </ul>
+                <p>The Deal Editor provides a column called Deal Tools which allows users to make selections, add comments and attachments, delete, and hold.</p>
+                <img src="/Images/docs/DealStage1.png" style="height:295px;margin-top:10px"/>
+            </div>
             <h4>Pricing Table Example</h4>
             <p>
                 Here is an example of a pricing table.

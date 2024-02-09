@@ -6,7 +6,6 @@
     styleUrls: ['Client/src/app/codingPractices/businessProcess/businessProcess.component.css'],
 })
 export class BusinessProcessComponent implements OnInit {
-
     public list_breadcrumbs : any;
     public left_nav : any;
     public isVisible: boolean = true;
@@ -50,6 +49,30 @@ export class BusinessProcessComponent implements OnInit {
         ];
     }
 
+    showContractDetailsInfo() {
+        window.open('https://wiki.ith.intel.com/display/Handbook/Create+Contract', '_blank');
+    }
+    showMyDealsTypesLink() {
+        window.open('https://wiki.ith.intel.com/display/Handbook/Deal+Types', '_blank');
+    }
+    showOverlapInfoLink() {
+        window.open('https://wiki.ith.intel.com/display/Handbook/Overlapping+Deals+Check', '_blank');
+    }
+    showMeetCompData() {
+        window.open('https://wiki.ith.intel.com/display/Handbook/Meet+Comp', '_blank');
+    }
+    showPriceCostTest() {
+        window.open('https://wiki.ith.intel.com/display/Handbook/Cost+Test', '_blank');
+    }
+    showRebateContractInfoLink() {
+        window.open('https://wiki.ith.intel.com/display/Handbook/Contract+Navigator', '_blank');
+    }
+    showPricingTableInfo() {
+        window.open('https://wiki.ith.intel.com/pages/viewpage.action?pageId=1205144854', '_blank');
+    }
+    showAutofillInfo() {
+        window.open('https://wiki.ith.intel.com/display/Handbook/Autofill+Defaults', '_blank');
+    }
     responseLnav(e:any,sKey?){
         this.flagBool = e.bool;
         if(this.flagBool == "Introduction"){
