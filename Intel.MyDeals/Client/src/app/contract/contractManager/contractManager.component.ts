@@ -78,7 +78,7 @@ export class contractManagerComponent implements OnDestroy{
     private color: ThemePalette = 'primary';
     PCTResultView = false;
     public submitModal = false;
-    OtherType = []; isECAP = []; isKIT = []
+    OtherType = []; isECAP = []; isKIT = [];
     @Input() public contractData:any;
     @Input() UItemplate:any;
     @Output() refreshedContractData = new EventEmitter<any>();
@@ -197,18 +197,18 @@ export class contractManagerComponent implements OnDestroy{
     getStageBgColorStyle = function (c) {
         return { backgroundColor: this.getColorStage(c) };
     }
-    getColorStage  (d) {
+    getColorStage(d) {
         if (!d) d = "Draft";
         return this.getColor('stage', d);
     }
-   getColor (k, c) {
+   getColor(k, c) {
         if (colorDictionary[k] !== undefined && colorDictionary[k][c] !== undefined) {
             return colorDictionary[k][c];
         }
         return "#aaaaaa";
     }
 
-    getFormatedDim  (dataItem, field, dim, format) {
+    getFormatedDim(dataItem, field, dim, format) {
         const item = dataItem[field];
         if (item === undefined || item[dim] === undefined) return ""; //return item; // Used to return "undefined" which would show on the UI.
         if (format === "currency") {
@@ -482,32 +482,32 @@ export class contractManagerComponent implements OnDestroy{
             </tr>`
         }
         let valuemsg = `
-        <div style='font-family:sans-serif;'>
-        <p><span style='font-size:20px; color:#00AEEF; font-weight: 600'>My Deals Action Required!</span></p>
-        <p><span style='font-size:18px;'>Pricing Strategies</span></p>
-        <p><span style='font-size: 12px;'>The following list of Pricing Strategies have changed.  Click <strong><span style='color:#00AEEF;font-size: 12px;'>View Pricing Strategy</span></strong> <span style='font-size:12px'>in order to view details in My Deals.</span></span></p>
-        <table style='width:auto; border-collapse: collapse;table-layout: fixed;overflow: auto;'>
-            <thead>
-                <tr>
-                    <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Contract</strong></th>
-                    <th style='text-align: left; width:80px; font-size: 12px; font-family: sans-serif;'><strong>C2A #</strong></th>
-                    <th style='text-align: left; width:100px; font-size: 12px; font-family: sans-serif;'><strong>Strategy #</strong></th>
-                    <th style='text-align: left; width:160px; font-size: 12px; font-family: sans-serif;'><strong>Strategy Name</strong></th>
-                    <th style='text-align: left; width:100px; font-size: 12px; font-family: sans-serif;'><strong>Verticals</strong></th>
-                    <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>New Stage</strong></th>
-                    <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Action</strong></th>
-                </tr>
-            </thead>
-            <tbody>`+itemListRowString+`
-            </tbody>
-        </table>
-  
-        <p><span style='font-size: 11px; color: black; font-weight: bold;'>*Links are optimized for Google Chrome</span></p>
-        <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:${data.from}' style="color: #00a; font-size:14px;">` + data.from +`</a>.</span></p>
-       
-        <p><span style='font-size: 14px; color: red;'><i>**This email was sent from a notification-only address that cannot accept incoming email.  Please do not reply to this message.</i></span></p>
-        </div>
-    `;
+            <div style='font-family:sans-serif;'>
+            <p><span style='font-size:20px; color:#00AEEF; font-weight: 600'>My Deals Action Required!</span></p>
+            <p><span style='font-size:18px;'>Pricing Strategies</span></p>
+            <p><span style='font-size: 12px;'>The following list of Pricing Strategies have changed.  Click <strong><span style='color:#00AEEF;font-size: 12px;'>View Pricing Strategy</span></strong> <span style='font-size:12px'>in order to view details in My Deals.</span></span></p>
+            <table style='width:auto; border-collapse: collapse;table-layout: fixed;overflow: auto;'>
+                <thead>
+                    <tr>
+                        <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Contract</strong></th>
+                        <th style='text-align: left; width:80px; font-size: 12px; font-family: sans-serif;'><strong>C2A #</strong></th>
+                        <th style='text-align: left; width:100px; font-size: 12px; font-family: sans-serif;'><strong>Strategy #</strong></th>
+                        <th style='text-align: left; width:160px; font-size: 12px; font-family: sans-serif;'><strong>Strategy Name</strong></th>
+                        <th style='text-align: left; width:100px; font-size: 12px; font-family: sans-serif;'><strong>Verticals</strong></th>
+                        <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>New Stage</strong></th>
+                        <th style='text-align: left; width:200px; font-size: 12px; font-family: sans-serif;'><strong>Action</strong></th>
+                    </tr>
+                </thead>
+                <tbody>`+itemListRowString+`
+                </tbody>
+            </table>
+    
+            <p><span style='font-size: 11px; color: black; font-weight: bold;'>*Links are optimized for Google Chrome</span></p>
+            <p><span style='font-size: 14px;'><b>Please respond to: </b> <a href='mailto:${data.from}' style="color: #00a; font-size:14px;">` + data.from +`</a>.</span></p>
+        
+            <p><span style='font-size: 14px; color: red;'><i>**This email was sent from a notification-only address that cannot accept incoming email.  Please do not reply to this message.</i></span></p>
+            </div>
+        `;
         var dataItem = {
             from: "mydeals.notification@intel.com",
             to: "",
@@ -648,10 +648,18 @@ export class contractManagerComponent implements OnDestroy{
                         if (response[i].WF_STG_CD === "Draft") response[i].WF_STG_CD = response[i].PS_WF_STG_CD;
                         if (response[i].WF_STG_CD === "Hold") response[i].PASSED_VALIDATION = "Complete";
                         if (response[i].OBJ_SET_TYPE_CD == "ECAP") {
-                            this.isECAP[ptDcId] = true; this.OtherType[ptDcId] = false; this.isKIT[ptDcId] = false
+                            this.isECAP[ptDcId] = true;
+                            this.OtherType[ptDcId] = false;
+                            this.isKIT[ptDcId] = false
+                        } else if (response[i].OBJ_SET_TYPE_CD == "KIT") {
+                            this.isECAP[ptDcId] = false;
+                            this.OtherType[ptDcId] = false;
+                            this.isKIT[ptDcId] = true
+                        } else {
+                            this.OtherType[ptDcId] = true;
+                            this.isECAP[ptDcId] = false;
+                            this.isKIT[ptDcId] = false
                         }
-                        else if (response[i].OBJ_SET_TYPE_CD == "KIT") { this.isECAP[ptDcId] = false; this.OtherType[ptDcId] = false; this.isKIT[ptDcId] = true }
-                        else { this.OtherType[ptDcId] = true; this.isECAP[ptDcId] = false; this.isKIT[ptDcId] = false }
                     }
                     this.allPTEData =response;
                     this.isPTEToolsOpen.push(this.allPTEData);
@@ -1191,36 +1199,6 @@ export class contractManagerComponent implements OnDestroy{
         }
     }
 
-    ngOnInit() {
-        try {
-            this.userRole = (<any>window).usrRole;
-            this.isDeveloper = (<any>window).isDeveloper;
-            this.isTester = (<any>window).isTester;
-            this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
-            this.contractId= this.contractData.DC_ID;
-            this.lastRun = this.contractData.LAST_COST_TEST_RUN;
-            this.custAccptButton = this.contractData.CUST_ACCPT;
-            this.offLabelName = ((this.contractData.CUST_ACCPT).toLowerCase()) != 'pending' ? this.contractData.CUST_ACCPT : this.offLabelName;
-            each(this.contractData.PRC_ST, (prcSt) => {
-                each(prcSt.PRC_TBL, (prcTbl) => {
-                    this.state[prcTbl.DC_ID] = {
-                        skip: 0,
-                        group: [],
-                        // Initial filter descriptor
-                        filter: {
-                            logic: "and",
-                            filters: [],
-                        },
-                    };
-                })
-            })
-            this.loadDetails();
-        }
-        catch(ex){
-            this.loggerSvc.error('Something went wrong', 'Error');
-            console.error('ContractManager::ngOnInit::',ex);
-        }
-    }
     setBusy(msg, detail, msgType, showFunFact) {
         setTimeout(() => {
             const newState = msg != undefined && msg !== "";
@@ -1249,8 +1227,58 @@ export class contractManagerComponent implements OnDestroy{
         });
     }
 
-     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-     ngOnDestroy() {
+    private isDa(): boolean {
+        return this.userRole.includes('DA');
+    }
+
+    private isProgram(OBJ_SET_TYPE_CD: string): boolean {
+        return OBJ_SET_TYPE_CD.toLowerCase().includes('program');
+    }
+
+    private isFlex(OBJ_SET_TYPE_CD: string): boolean {
+        return OBJ_SET_TYPE_CD.toLowerCase().includes('flex');
+    }
+
+    private isFlexRowTypeHidden(OBJ_SET_TYPE_CD: string): boolean {
+        return !(this.isFlex(OBJ_SET_TYPE_CD) && this.isDa())
+    }
+
+    private isProgramDollarHidden(OBJ_SET_TYPE_CD: string): boolean {
+        return !(this.isProgram(OBJ_SET_TYPE_CD) && this.isDa())
+    }
+
+    ngOnInit() {
+        try {
+            this.userRole = (<any>window).usrRole;
+            this.isDeveloper = (<any>window).isDeveloper;
+            this.isTester = (<any>window).isTester;
+            this.PCTResultView = ((<any>window).usrRole === 'GA' && (<any>window).isSuper);
+            this.contractId= this.contractData.DC_ID;
+            this.lastRun = this.contractData.LAST_COST_TEST_RUN;
+            this.custAccptButton = this.contractData.CUST_ACCPT;
+            this.offLabelName = ((this.contractData.CUST_ACCPT).toLowerCase()) != 'pending' ? this.contractData.CUST_ACCPT : this.offLabelName;
+            each(this.contractData.PRC_ST, (prcSt) => {
+                each(prcSt.PRC_TBL, (prcTbl) => {
+                    this.state[prcTbl.DC_ID] = {
+                        skip: 0,
+                        group: [],
+                        // Initial filter descriptor
+                        filter: {
+                            logic: "and",
+                            filters: [],
+                        },
+                    };
+                })
+            })
+            this.loadDetails();
+        } catch(ex) {
+            this.loggerSvc.error('Something went wrong', 'Error');
+            console.error('ContractManager::ngOnInit::',ex);
+        }
+    }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
     }

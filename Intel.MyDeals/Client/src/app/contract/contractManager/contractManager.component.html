@@ -83,7 +83,6 @@
                                     <div>This Pricing Strategy contains multiple Pricing Tables.Please select which Pricing</div>
                                     <p style="text-align: left;"> Table you would like to view:</p>
 
-
                                     <div style="margin: 20px 0; max-height: 190px; overflow: auto; padding: 5px;">
                                         <div *ngFor="let pte of pteTableData">
                                             <button class="btn btn-primary btn-full btn_color_fix" type="button" (click)="pickPt(pte)">{{pte.DC_ID}} - {{pte.TITLE}}</button>
@@ -99,7 +98,6 @@
                                     </div>
                                 </div>
                             </kendo-dialog>
-
                             <kendo-dialog *ngIf="showPendingWarning" class="dialogPending contract_manager_dialog" [width]="500" [height]="300">
                                 <div class="wrn-red corrrection-text" style="text-align: left;"><i class="intelicon-information-solid"></i> Correction Required</div>
                                 <div *ngIf="showPendingInfo">
@@ -125,7 +123,6 @@
                                             Cancel
                                         </button>
                                     </div>
-                                      
                                 </div>
                                 <div *ngIf="showPendingFile">
                                     <div class="contract_manage_uploadscreen">
@@ -147,8 +144,7 @@
                                                       (upload)="uploadEventHandler($event)"
                                                       (success)="successEventHandler()"
                                                       [(ngModel)]="files"
-                                                      (error)="onFileUploadError()">
-                                        </kendo-upload>
+                                                      (error)="onFileUploadError()"></kendo-upload>
                                     </div>
                                     <div style="text-align: center;">
                                         <button class="btn btn-sm btn-grey contract_correction_backbtn" type="button" 
@@ -180,7 +176,7 @@
                                             </span>
                                         </p>
                                         <p style="color: yellow; font-size: 14px;text-align: left; ">Please note, values longer than 18 characters will be truncated in Vistex.  Characters (like semicolons) not supported by Vistex will also be removed.</p>
-</div>
+                                    </div>
                                     <div style="text-align: center;">
                                         <button class="btn btn-sm btn-grey c2a-back-btnstyle" type="button" (click)="showPending('showPendingInfo')" style="margin: 0 10px -30px 10px; width: 110px;">
                                             << Back
@@ -228,7 +224,6 @@
                             {{lastRunDisplay('Price Cost Test')}}
                         </div>
                     </td>
-
                     <td *ngIf="CAN_VIEW_MEET_COMP" style="width: 160px; text-align: center;">
                         <span *ngIf="enabledPCT">
                             <button class="btn btn-sm btn-skyblue-sm fl"
@@ -242,7 +237,6 @@
                         <div class="btnLastRu" style="font-size: 9px; color: #00AEEF; line-height:0.01em;" [ngStyle]="{' margin-left' : enabledPCT? '0px':'30px'}">
                             {{lastRunDisplay('Meet Comp Test')}}
                         </div>
-
                     </td>
                 </tr>
             </table>
@@ -278,8 +272,7 @@
                                 </div>
                             </td>
                             <td style="width: 50px; text-align: center;">
-                                <i class="intelicon-protection-checked-verified-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION==='Complete'" title="{{ps.PASSED_VALIDATION}}"></i><i class="intelicon-protection-checked-verified-solid bigIcon validf_{{ps.PASSED_VALIDATION}}"
-                                                                                                                                                                                                                 *ngIf="ps.PASSED_VALIDATION==='Finalizing'" title="{{ps.PASSED_VALIDATION}}"></i><i class="intelicon-protection-checked-verified-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION==='Valid'" title="{{ps.PASSED_VALIDATION}}"></i>
+                                <i class="intelicon-protection-checked-verified-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION==='Complete'" title="{{ps.PASSED_VALIDATION}}"></i><i class="intelicon-protection-checked-verified-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION==='Finalizing'" title="{{ps.PASSED_VALIDATION}}"></i><i class="intelicon-protection-checked-verified-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION==='Valid'" title="{{ps.PASSED_VALIDATION}}"></i>
                                 <i class="intelicon-alert-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION==='Dirty'" title="{{ (ps.PASSED_VALIDATION==='Dirty' ? 'Validation Errors: Fix in Deal Editor' : ps.PASSED_VALIDATION) || 'Not validated yet'}}"></i>
                                 <i class="intelicon-protection-solid bigIcon validf_{{ps.PASSED_VALIDATION}}" *ngIf="ps.PASSED_VALIDATION !=='Valid' && ps.PASSED_VALIDATION !=='Dirty' && ps.PASSED_VALIDATION !=='Complete' && ps.PASSED_VALIDATION !=='Finalizing'" title="{{ps.PASSED_VALIDATION || 'Not validated yet'}}"></i>
                             </td>
@@ -318,8 +311,7 @@
                                         <div [textContent]="pt.TITLE" class="bold linkable" title="Click to open the Pricing Table in the Contract Editor" (click)="openPTE(ps.DC_PARENT_ID, ps.DC_ID, pt.DC_ID)"></div>
                                     </td>
                                     <td style="width: 160px; text-align: center;" *ngIf="userRole=='GA'">
-                                        <i *ngIf="pt.CAP_MISSING_FLG !=='0' && pt.COST_MISSING_FLG !=='0'" style="color:#c4d600" class="intelicon-passed-completed-solid medIcon"></i><i *ngIf="pt.CAP_MISSING_FLG==='1' || pt.COST_MISSING_FLG==='1'" style="color:#f3d54e"
-                                                                                                                                                                                         title="{{getmissingCapCostTitle(pt)}}" class="intelicon-help-solid medIcon"></i>
+                                        <i *ngIf="pt.CAP_MISSING_FLG !=='0' && pt.COST_MISSING_FLG !=='0'" style="color:#c4d600" class="intelicon-passed-completed-solid medIcon"></i><i *ngIf="pt.CAP_MISSING_FLG==='1' || pt.COST_MISSING_FLG==='1'" style="color:#f3d54e" title="{{getmissingCapCostTitle(pt)}}" class="intelicon-help-solid medIcon"></i>
                                     </td>
                                     <td class="medIcon" style="width: 160px; text-align: center;" *ngIf="ps?._settings?.CAN_VIEW_COST_TEST || PCTResultView">
                                         <a class="lnkIcon" [ngClass]="{'noPointer': !CAN_EDIT_COST_TEST}">
@@ -340,8 +332,8 @@
                                             <span *ngIf="gridDataSet[pt.DC_ID]==undefined" class="k-i-loading loading-design-custom">
                                                 <span style="margin-left: 6em; font-size:10px;">Loading.....</span>
                                             </span>
-                                            <kendo-grid id="manageFilterStyle" class="approval-tables" *ngIf="state[pt.DC_ID].filter != undefined && gridDataSet[pt.DC_ID]!=undefined" [data]="gridDataSet[pt.DC_ID]"  [resizable]="true" [filter]="state[pt.DC_ID].filter" [sortable]="true"
-                                                        filterable="menu" (dataStateChange)="dataStateChange($event, pt.DC_ID)" style="height:fit-content;max-height:470px">
+                                            <kendo-grid id="manageFilterStyle" class="approval-tables" *ngIf="state[pt.DC_ID].filter != undefined && gridDataSet[pt.DC_ID]!=undefined" [data]="gridDataSet[pt.DC_ID]"
+                                                        [resizable]="true" [filter]="state[pt.DC_ID].filter" [sortable]="true" filterable="menu" (dataStateChange)="dataStateChange($event, pt.DC_ID)" style="height:fit-content;max-height:470px">
                                                 <kendo-grid-column title="Tools" field="NOTES" [headerClass]="{'headerClass':true}" [width]="200" [locked]="true" [filterable]="false" [sortable]="false">
                                                     <ng-template kendoGridHeaderTemplate>
                                                         <div>
@@ -383,6 +375,11 @@
                                                                            [filterService]="filterService" [data]="filteringData[pt.DC_ID][column.field]"></multicheck-filter>
                                                     </ng-template>
                                                 </kendo-grid-column>
+                                                <kendo-grid-column title="Row Type" field="FLEX_ROW_TYPE" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="isFlexRowTypeHidden(pt.OBJ_SET_TYPE_CD)" filterable="false">
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        {{ dataItem.FLEX_ROW_TYPE }}
+                                                    </ng-template>
+                                                </kendo-grid-column>
                                                 <kendo-grid-column title="Deal Start/End" field="START_DT" [headerClass]="{'headerClass':true}" [width]="175">
                                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                                                                  let-filterService="filterService">
@@ -408,6 +405,11 @@
                                                                            [filterService]="filterService" [data]="filteringData[pt.DC_ID][column.field]"></multicheck-filter>
                                                     </ng-template>
                                                 </kendo-grid-column>
+                                                <kendo-grid-column title="Program Dollar" field="TOTAL_DOLLAR_AMOUNT" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="isProgramDollarHidden(pt.OBJ_SET_TYPE_CD)" filterable="false">
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        {{ dataItem.TOTAL_DOLLAR_AMOUNT | number: '1.2-2' }}
+                                                    </ng-template>
+                                                </kendo-grid-column>
                                                 <kendo-grid-column title="KIT CAP" field="CAP_KIT" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!isKIT[pt.DC_ID]" filterable="false">
                                                     <ng-template kendoGridCellTemplate let-dataItem>
                                                         <span>
@@ -424,7 +426,6 @@
                                                             {{getFormatedDim(dataItem, 'CAP', '20___0', 'currency')}}
                                                         </span>
                                                     </ng-template>
-
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="ECAP" field="ECAP_PRICE" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!isECAP[pt.DC_ID]" filterable="false">
                                                     <ng-template kendoGridCellTemplate let-dataItem><span>{{ getFormatedDim(dataItem, 'ECAP_PRICE', '20___0','currency')}}</span></ng-template>
