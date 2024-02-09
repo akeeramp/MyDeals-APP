@@ -22,17 +22,19 @@
         </div>
         <div class="custom-padding">
             <div class="fl icon-parent"><i class="intelicon-copy-solid text-warning"></i></div>
-            <div class="fl btn-mock" (click)="openCopyCntrctDlg()" *ngIf="C_CREATE_CONTRACT">
-                <div class="btn-ttl">{{copyContractText}}</div>
+            <div class="fl btn-mock" (click)="openCopyCntrctDlg()" *ngIf="C_CREATE_CONTRACT && areDatesValid">
+                <div class="btn-ttl">{{ copyContractText }}</div>
             </div>
-            <div class="fl btn-mock-no-click" *ngIf="!C_CREATE_CONTRACT">
-                <div class="btn-ttl">{{copyContractText}}</div>
+            <div class="fl btn-mock-no-click" *ngIf="!C_CREATE_CONTRACT && areDatesValid">
+                <div class="btn-ttl">{{ copyContractText }}</div>
+            </div>
+            <div class="fl btn-mock-no-click" *ngIf="C_CREATE_CONTRACT && !areDatesValid">
+                <div class="btn-ttl">{{ copyContractText }}</div>
             </div>
             <div class="clearboth"></div>
-            <div class="btn-desc text-detail" *ngIf="C_CREATE_CONTRACT">Or, create a My Deals contract from an existing one
-            </div>
-            <div class="btn-desc text-detail" *ngIf="!C_CREATE_CONTRACT">You <b>do not</b> have access to Create Contracts
-            </div>
+            <div class="btn-desc text-detail" *ngIf="C_CREATE_CONTRACT">Or, create a My Deals contract from an existing one</div>
+            <div class="btn-desc text-detail" *ngIf="!C_CREATE_CONTRACT">You <b>do not</b> have access to Create Contracts</div>
+            <div class="btn-desc text-detail" *ngIf="C_CREATE_CONTRACT && !areDatesValid" style="color: red;">Date range is invalid, please update to enable Copy Contract</div>
         </div>
         <div class="custom-padding">
             <div class="fl icon-parent"><i class="fa fa-book text-warning"></i></div>

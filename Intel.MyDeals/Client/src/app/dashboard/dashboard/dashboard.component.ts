@@ -1,21 +1,22 @@
 import { ChangeDetectionStrategy, Component, EventEmitter, OnDestroy, OnInit, Output, ViewChild, ViewEncapsulation } from '@angular/core';
 import { DisplayGrid, GridsterConfig, GridsterItem, GridType, CompactType } from 'angular-gridster2';
 import { MatDialog } from '@angular/material/dialog';
-import { findWhere, isNull, isEmpty, isUndefined } from 'underscore';
+import { findWhere } from 'underscore';
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
+import { Subject, of } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
+import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
 
 import { addWidgetComponent } from "../addWidget/addWidget.component";
 import { widgetSettingsComponent } from "../widgetSettings/widgetSettings.component";
 import { GlobalSearchResultsComponent } from "../../advanceSearch/globalSearchResults/globalSearchResults.component";
-
 import { configWidgets, configLayouts } from "../widget.config";
 import { MomentService } from "../../shared/moment/moment.service";
 import { contractStatusWidgetService } from '../contractStatusWidget.service';
 import { userPreferencesService } from "../../shared/services/userPreferences.service";
 import { logger } from "../../shared/logger/logger";
 import { SecurityService } from "../../shared/services/security.service";
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
+import { Observable } from 'rxjs-compat';
 
 interface Item {
     text: string;
@@ -38,7 +39,8 @@ export const DASHBOARD_CONSTANTS = {
     changeDetection: ChangeDetectionStrategy.OnPush,
     encapsulation: ViewEncapsulation.None
 })
-export class DashboardComponent implements OnInit,OnDestroy  {
+export class DashboardComponent implements OnInit, OnDestroy {
+
     constructor(protected dialog: MatDialog,
                 protected contractWidgetService: contractStatusWidgetService,
                 protected userPreferencesService: userPreferencesService,
@@ -50,6 +52,8 @@ export class DashboardComponent implements OnInit,OnDestroy  {
     @ViewChild(GlobalSearchResultsComponent) GlobalSearchResults: GlobalSearchResultsComponent;
     @Output() refreshEvent = new EventEmitter<any>();
 
+    private MIN_VALID_DATE: Date = new Date(1753, 1, 1);  // SQL Limit
+    private MAX_VALID_DATE: Date = new Date(9999, 12, 31);  // SQL Limit
     private startDateValue: Date = new Date(this.momentService.moment().subtract(6, 'months').format("MM/DD/YYYY"));
     private endDateValue: Date = new Date(this.momentService.moment().add(6, 'months').format("MM/DD/YYYY"));
     //using for kendo-window  search option
@@ -94,11 +98,73 @@ export class DashboardComponent implements OnInit,OnDestroy  {
         window.localStorage.selectedCustNames = JSON.stringify(custData);
     }
 
-    onDateChange(value, dateChanged) {
-        if (dateChanged == "startDateChange") {
-            window.localStorage.startDateValue = value;
-        } else if (dateChanged == "endDateChange") {
-            window.localStorage.endDateValue = value;
+    private isDateValid(dateToValidate: Date): boolean {
+        if (dateToValidate == null || dateToValidate.toString().includes('Invalid') || dateToValidate < this.MIN_VALID_DATE || dateToValidate > this.MAX_VALID_DATE) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    @ViewChild('startDateTooltipTarget', { static: false }) startDateTooltip: NgbTooltip;
+    @ViewChild('endDateTooltipTarget', { static: false }) endDateTooltip: NgbTooltip;
+    private readonly TOOLTIP_MESSAGE_INVALID_DATE = 'Invalid Date';
+    private readonly TOOLTIP_MESSAGE_END_DATE_BEFORE_START_DATE = 'The End Date cannot be before the Start Date';
+
+    private openStartDateTooltip(message: string) {
+        this.startDateTooltip.ngbTooltip = message;
+        this.startDateTooltip.open();
+    }
+
+    private closeStartDateTooltip() {
+        this.startDateTooltip.ngbTooltip = '';
+        this.startDateTooltip.close();
+    }
+
+    private openEndDateTooltip(message: string) {
+        this.endDateTooltip.ngbTooltip = message;
+        this.endDateTooltip.open();
+    }
+
+    private closeEndDateTooltip() {
+        this.endDateTooltip.ngbTooltip = '';
+        this.endDateTooltip.close();
+    }
+
+    // Triggers a tooltip message if the End Date is before the Start Date (an invalid state)
+    private endDateTooltipHandler() {
+        if (this.isDateValid(this.startDateValue) && this.isDateValid(this.endDateValue)) {
+            if (this.endDateValue < this.startDateValue) {
+                this.openEndDateTooltip(this.TOOLTIP_MESSAGE_END_DATE_BEFORE_START_DATE)
+            } else {    // Valid state
+                if (this.endDateTooltip.ngbTooltip == this.TOOLTIP_MESSAGE_END_DATE_BEFORE_START_DATE) {
+                    this.closeEndDateTooltip();
+                }
+            }
+        }
+    }
+
+    onDateChange(value: Date, dateChanged: string) {
+        // If valid date, then save to local storage
+        if (this.isDateValid(value)) {
+            if (dateChanged == "startDateChange") {
+                window.localStorage.startDateValue = value; // To be persistent between sessions
+                this.closeStartDateTooltip();
+            } else if (dateChanged == "endDateChange") {
+                window.localStorage.endDateValue = value; // To be persistent between sessions
+                this.closeEndDateTooltip();
+            }
+
+            // In this order, other components that use the start/end date values where END < START could still hang, may need to reorder logic steps
+            setTimeout(() => {
+                this.endDateTooltipHandler();
+            }, 500);
+        } else {
+            if (dateChanged == "startDateChange") {
+                this.openStartDateTooltip(this.TOOLTIP_MESSAGE_INVALID_DATE);
+            } else if (dateChanged == "endDateChange") {
+                this.openEndDateTooltip(this.TOOLTIP_MESSAGE_INVALID_DATE);
+            }
         }
     }
 
@@ -116,7 +182,6 @@ export class DashboardComponent implements OnInit,OnDestroy  {
                 }
             }
         });
-
     }
 
     openPopUp() {
@@ -446,9 +511,11 @@ export class DashboardComponent implements OnInit,OnDestroy  {
             $(DASHBOARD_CONSTANTS.ID_HEIGHT_GRIDS).removeClass(DASHBOARD_CONSTANTS.CLASS_SIM_FIXES_PLUS);
         }
     }
+
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
-      }
+    }
+
 }

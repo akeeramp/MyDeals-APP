@@ -28,14 +28,30 @@ export class DealDeskWidgetComponent implements OnInit, OnDestroy, OnChanges {
     public isLoading = true;
     resizeSub: Subscription;
 
+    private MIN_VALID_DATE: Date = new Date(1753, 1, 1);  // SQL Limit
+    private MAX_VALID_DATE: Date = new Date(9999, 12, 31);  // SQL Limit
+    private isDateValid(dateToValidate: Date): boolean {
+        if (dateToValidate == null || dateToValidate.toString().includes('Invalid') || dateToValidate < this.MIN_VALID_DATE || dateToValidate > this.MAX_VALID_DATE) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+
     ngOnChanges(changes: SimpleChanges): void {
         if (!!changes.startDt && changes.startDt.currentValue !== undefined) {
-            this.startDate = this.momentService.moment(changes.startDt.currentValue).format("MM/DD/YYYY");
-            this.isLoading = true
+            const CHANGE_START_DATE = new Date(changes.startDt.currentValue);
+            if (this.isDateValid(CHANGE_START_DATE)) {
+                this.startDate = this.momentService.moment(changes.startDt.currentValue).format("MM/DD/YYYY");
+                this.isLoading = true
+            }
         }
         if (!!changes.endDt && changes.endDt.currentValue !== undefined) {
-            this.endDate = this.momentService.moment(changes.endDt.currentValue).format("MM/DD/YYYY");
-            this.isLoading = true;
+            const CHANGE_END_DATE = new Date(changes.endDt.currentValue);
+            if (this.isDateValid(CHANGE_END_DATE)) {
+                this.endDate = this.momentService.moment(changes.endDt.currentValue).format("MM/DD/YYYY");
+                this.isLoading = true;
+            }
         }
         if (!!changes.custIds && changes.custIds.currentValue !== undefined) {
             const myCustIds = changes.custIds.currentValue.map(function (obj) {

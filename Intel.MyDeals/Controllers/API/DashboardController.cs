@@ -6,6 +6,8 @@ using Intel.MyDeals.App;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IBusinessLogic;
 using Intel.MyDeals.Helpers;
+using System.Web;
+using System.Net.Http;
 
 namespace Intel.MyDeals.Controllers.API
 {
@@ -26,7 +28,22 @@ namespace Intel.MyDeals.Controllers.API
         [AntiForgeryValidate]
         public List<DashboardContractSummary> GetDashboardContractSummary([FromBody] DashboardFilter data)
         {
-            if (data.CustomerIds == null || !data.CustomerIds.Any() || data.CustomerIds[0] == 0) data.CustomerIds = AppLib.GetMyCustomers(OpUserStack.MyOpUserToken).CustomerInfo.Select(c => c.CUST_SID).ToList();
+            if (data.CustomerIds == null || !data.CustomerIds.Any() || data.CustomerIds[0] == 0)
+            {
+                data.CustomerIds = AppLib.GetMyCustomers(OpUserStack.MyOpUserToken).CustomerInfo.Select(c => c.CUST_SID).ToList();
+            }
+
+            // TWC3119-850: Throw exception when a out of range date is passed
+            var SQL_MIN_VALID_DATE = new DateTime(1753, 1, 1);
+            var SQL_MAX_VALID_DATE = new DateTime(9999, 12, 31);
+            if (data.StartDate < SQL_MIN_VALID_DATE || data.EndDate < SQL_MIN_VALID_DATE || data.StartDate > SQL_MAX_VALID_DATE || data.EndDate > SQL_MAX_VALID_DATE)
+            {
+                throw new HttpResponseException(new HttpResponseMessage(System.Net.HttpStatusCode.BadRequest)
+                {
+                    Content = new StringContent("Date(s) are outside of the valid SQL range 1/1/1753 to 12/31/9999")
+                });
+            }
+
             return SafeExecutor(() => Temp(data)
                 , $"Unable to get Contracts Status"
             );
@@ -61,6 +78,5 @@ namespace Intel.MyDeals.Controllers.API
                 , $"Unable to get Pricing Table {id}"
             );
         }
-
     }
 }

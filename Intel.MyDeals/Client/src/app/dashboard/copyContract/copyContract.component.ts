@@ -1,13 +1,14 @@
 ﻿import { Component, Inject, ViewEncapsulation,OnDestroy } from "@angular/core";
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material/dialog';
-import { GridStatusBoardService } from "../../core/gridStatusBoard/gridStatusBoard.service";
-import { logger } from "../../shared/logger/logger";
 import { DataStateChangeEvent, GridDataResult } from "@progress/kendo-angular-grid";
 import { process, State } from "@progress/kendo-data-query";
-import { MomentService } from "../../shared/moment/moment.service";
-import { contractStatusWidgetService } from '../contractStatusWidget.service';
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+
+import { GridStatusBoardService } from "../../core/gridStatusBoard/gridStatusBoard.service";
+import { logger } from "../../shared/logger/logger";
+import { MomentService } from "../../shared/moment/moment.service";
+import { contractStatusWidgetService } from '../contractStatusWidget.service';
 
 export interface DialogData {
     startDate: string;
@@ -23,6 +24,7 @@ export interface DialogData {
     encapsulation: ViewEncapsulation.None
 })
 export class CopyContractComponent implements OnDestroy {
+
     constructor(public dialogRef: MatDialogRef<CopyContractComponent>,
                 private loggerSvc: logger,
                 @Inject(MAT_DIALOG_DATA) public data: DialogData,
@@ -111,18 +113,19 @@ export class CopyContractComponent implements OnDestroy {
             "EndDate": this.copyCntrctEndDate,
             "DontIncludeTenders": this.includeTenders
         }
-        this.dataService.getContracts(postData)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(response => {
-                this.copyCntrctList = response;
-                this.gridData = process(this.copyCntrctList, this.state);
-                this.orgGridData = process(this.copyCntrctList, this.state);
-                //this.isCopyCntrctListLoaded = true;
-                this.copyLoading = false;
-            }, (error) => {
-                this.loggerSvc.error("copyContract::ngOnInit::Unable to GetDashboardContractSummary.", error);
+        this.dataService.getContracts(postData).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+            this.copyCntrctList = response;
+            this.gridData = process(this.copyCntrctList, this.state);
+            this.orgGridData = process(this.copyCntrctList, this.state);
+            //this.isCopyCntrctListLoaded = true;
+            this.copyLoading = false;
+        }, (error) => {
+            if (error.status == 400) {
+                this.loggerSvc.error(`copyContract::ngOnInit::Unable to GetDashboardContractSummary:: ${ error.error }`, error);
+            } else {
+                this.loggerSvc.error("copyContract::ngOnInit::Unable to GetDashboardContractSummary", error);
             }
-            );
+        });
 
         this.copyCntrctSelectedItem = {};
         this.isCreateDisabled = true;
@@ -131,9 +134,11 @@ export class CopyContractComponent implements OnDestroy {
     ngOnInit(): void {
         this.loadCopyContract();
     }
+
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
     }
+
 }

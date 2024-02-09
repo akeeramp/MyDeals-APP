@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, OnDestroy, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { GridsterItem } from 'angular-gridster2';
-import { NewContractWidgetService } from "./newContractWidget.service"
 import { MatDialog } from '@angular/material/dialog';
+
+import { NewContractWidgetService } from "./newContractWidget.service"
 import { CopyContractComponent } from '../copyContract/copyContract.component';
 import { TenderFolioComponent } from "../../contract/tenderFolio/tenderFolio.component";
 
@@ -12,6 +13,7 @@ import { TenderFolioComponent } from "../../contract/tenderFolio/tenderFolio.com
     styleUrls: ["Client/src/app/dashboard/newContractWidget/newContractWidget.component.css"]
 })
 export class NewContractWidgetComponent implements OnInit, OnDestroy {
+
     @Input() widget;
     @Input() resizeEvent: EventEmitter<GridsterItem>;
     @Input() private startDt: string;
@@ -27,10 +29,8 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
     copyContractText = 'Copy a My Deals Contract';
     createTenderFolioText = 'Create a Customer Tender Folio';
 
-     constructor(private newContractWidgetService: NewContractWidgetService, protected dialog: MatDialog) {
-        
-    }
-
+    constructor(private newContractWidgetService: NewContractWidgetService,
+                protected dialog: MatDialog) { }
 
     openTenderFolioDialog() {
         //Tender folio component needs to be called and opened from here as a modal
@@ -51,6 +51,22 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
             }
         });
     }
+
+    private MIN_VALID_DATE: Date = new Date(1753, 1, 1);  // SQL Limit
+    private MAX_VALID_DATE: Date = new Date(9999, 12, 31);  // SQL Limit
+    private isDateValid(dateToValidate: Date): boolean {
+        if (dateToValidate == null || dateToValidate.toString().includes('Invalid') || dateToValidate < this.MIN_VALID_DATE || dateToValidate > this.MAX_VALID_DATE) {
+            return false;
+        } else {
+            return true;
+        }
+    }
+    // Checks that dates are valid on their own and that they are in the right order (Start <= End)
+    private get areDatesValid(): boolean {
+        const START_DATE = new Date(this.startDt);
+        const END_DATE = new Date(this.endDt);
+        return this.isDateValid(START_DATE) && this.isDateValid(END_DATE) && (START_DATE <= END_DATE);
+    }
     openCopyCntrctDlg() {
         const dialogref = this.dialog.open(CopyContractComponent, {
             width: "800px",
@@ -68,6 +84,7 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     goToCreateContract(){
         const selectedCustomerValue  = (this.custIds && this.custIds.length > 0) ? this.custIds[0] : undefined;
         /*=> Emitting "value/undefined" both since the behavioursubject's getvalue() method holds the last emitted value.
@@ -76,6 +93,7 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
         this.newContractWidgetService.selectedCustomer.next(selectedCustomerValue);
         window.location.href = "Contract#/contractdetails/0";
     }
+
     ngOnInit(): void {
         this.resizeSub = this.resizeEvent.subscribe((widget) => {
             if (widget === this.widget) { // or check id , type or whatever you have there
@@ -83,7 +101,9 @@ export class NewContractWidgetComponent implements OnInit, OnDestroy {
             }
         });
     }
+
     ngOnDestroy(): void {
         this.resizeSub.unsubscribe();
     }
+
 }

@@ -5,13 +5,13 @@ import { Observable } from 'rxjs';
 @Injectable()
 export class GridStatusBoardService {
 
-    public apiBaseUrl = "api/Dashboard/";
+    public readonly API_URL_DASHBOARD = "api/Dashboard/";
 
-    constructor(private httpClient: HttpClient) {
-    }
+    constructor(private httpClient: HttpClient) {}
 
     public getContracts(data): Observable<any> {
-        const apiUrl: string = this.apiBaseUrl + 'GetDashboardContractSummary';
+        const apiUrl: string = this.API_URL_DASHBOARD + 'GetDashboardContractSummary';
         return this.httpClient.post(apiUrl, data);
     }
+
 }

@@ -19,9 +19,39 @@
 
             <div class="fr">
                 <div class="fr">
-                    <kendo-datepicker class="date-dashboard" #picker [(value)]="startDateValue" calendarType="classic" [(ngModel)]="startDateValue" (valueChange)="onDateChange($event,'startDateChange')" style="width: min-content; min-width:125px !important; font-weight:500;"></kendo-datepicker>
+                    <kendo-datepicker class="date-dashboard"
+                                      #picker
+                                      #startDatePicker="ngModel"
+                                      [(value)]="startDateValue"
+                                      calendarType="classic"
+                                      [min]="MIN_VALID_DATE"
+                                      [max]="MAX_VALID_DATE"
+                                      [(ngModel)]="startDateValue"
+                                      (valueChange)="onDateChange($event,'startDateChange')"
+                                      style="width: min-content; min-width:125px !important; font-weight:500;"
+                                      ngbTooltip=""
+                                      #startDateTooltipTarget="ngbTooltip"
+                                      tooltipClass="date-picker-tooltip"
+                                      placement="bottom"
+                                      triggers="manual"
+                                      [autoClose]="false"></kendo-datepicker>
                     -
-                    <kendo-datepicker class="date-dashboard" #picker [(value)]="endDateValue" calendarType="classic" [(ngModel)]="endDateValue" (valueChange)="onDateChange($event,'endDateChange')" style="width: min-content; min-width:125px !important; font-weight: 500;"></kendo-datepicker>
+                    <kendo-datepicker class="date-dashboard"
+                                      #picker
+                                      #endDatePicker="ngModel"
+                                      [(value)]="endDateValue"
+                                      calendarType="classic"
+                                      [min]="MIN_VALID_DATE"
+                                      [max]="MAX_VALID_DATE"
+                                      [(ngModel)]="endDateValue"
+                                      (valueChange)="onDateChange($event,'endDateChange')"
+                                      style="width: min-content; min-width:125px !important; font-weight: 500;"
+                                      ngbTooltip=""
+                                      #endDateTooltipTarget="ngbTooltip"
+                                      tooltipClass="date-picker-tooltip"
+                                      placement="bottom"
+                                      triggers="manual"
+                                      [autoClose]="false"></kendo-datepicker>
                 </div>
                 <div class="fr" style="margin: 5px 5px 0 15px; color: #aaaaaa; font-size: 14px;">Date Range:</div>
 
@@ -80,7 +110,7 @@
         <div class="k-window-title windowTitle">Search Results </div>
         <button kendoWindowCloseAction class="closeBtn" (click)="navRemoveClass()"></button>
     </kendo-window-titlebar>
-     <global-search-results-angular [searchText]="searchText" [opType]="opType" (getWindowWidth)="getWindowWidth($event)" (isWindowOpen)="isWindowOpen($event)"></global-search-results-angular>
+    <global-search-results-angular [searchText]="searchText" [opType]="opType" (getWindowWidth)="getWindowWidth($event)" (isWindowOpen)="isWindowOpen($event)"></global-search-results-angular>
 </kendo-window>
 <kendo-dialog class="global-popup-style" *ngIf="searchDialogVisible" (close)="closeDialog()" [minWidth]="250" [width]="450">
     <p class="dashboard-title-style">Please enter one of the following:<br /><br />1) Contract / Pricing Strategy / Pricing Table Name or Number <br />2) Deal Number. </p>

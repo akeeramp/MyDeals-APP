@@ -41,12 +41,9 @@
             </ng-template>
             <kendo-grid-column field="CNTRCT_OBJ_SID" title="Contract ID" width="35"
                                [headerClass]="{'headerClass':true}"></kendo-grid-column>
-            <kendo-grid-column field="TITLE" title="Contract Title" width="140" [headerClass]="{'headerClass':true}">
-            </kendo-grid-column>
-            <kendo-grid-column field="STRT_DTM" title="Start Date" width="50" [headerClass]="{'headerClass':true}">
-            </kendo-grid-column>
-            <kendo-grid-column field="END_DTM" title="End Date" width="50" [headerClass]="{'headerClass':true}">
-            </kendo-grid-column>
+            <kendo-grid-column field="TITLE" title="Contract Title" width="140" [headerClass]="{'headerClass':true}"></kendo-grid-column>
+            <kendo-grid-column field="STRT_DTM" title="Start Date" width="50" [headerClass]="{'headerClass':true}"></kendo-grid-column>
+            <kendo-grid-column field="END_DTM" title="End Date" width="50" [headerClass]="{'headerClass':true}"></kendo-grid-column>
         </kendo-grid>
     </div>
     <kendo-dialog-actions class="cc-pop-up-footers">
@@ -60,6 +57,5 @@
             </button>
         </div>
     </kendo-dialog-actions>
-    <loading-panel-angular [show]="copyLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription">
-    </loading-panel-angular>
+    <loading-panel-angular [show]="copyLoading" [header]="spinnerMessageHeader" [description]="spinnerMessageDescription"></loading-panel-angular>
 </div>

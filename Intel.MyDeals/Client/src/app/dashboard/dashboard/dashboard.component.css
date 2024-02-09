@@ -203,3 +203,9 @@ gridster {
 app-dashboard-widget kendo-grid div.k-grid-aria-root {
     height: calc(85vh - 150px);
 }
+
+.date-picker-tooltip .tooltip-inner {
+    opacity: 90%;
+    font-size: 18px;
+    color: #f3d54e;
+}
