@@ -10,7 +10,7 @@ import { adminDataFixComponent } from "./admin/dataFix/admin.dataFix.component";
 import { admindataQualityComponent } from "./admin/dataQuality/admin.dataQuality.component";
 import { DealMassUpdateComponent } from "./admin/dealMassUpdate/admin.dealMassUpdate.component";
 import { adminDealTypesComponent } from "./admin/dealTypes/admin.dealTypes.component";
-import { dropdownsComponent } from "./admin/dropdowns/admin.dropdowns.component";
+import { AdminDropdownsComponent } from "./admin/dropdowns/admin.dropdowns.component";
 import { EmployeeComponent } from "./admin/employee/admin.employee.component";
 import { manageEmployeeComponent } from "./admin/employee/admin.manageEmployee.component";
 import { adminFunFactComponent } from "./admin/funFact/admin.funFact.component";
@@ -95,7 +95,7 @@ export const routes: Routes = [
     { path: 'ruleOwner', component: RuleOwnerComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },
     { path: 'workflowStages', component: adminWorkflowStagesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } ,canDeactivate:[PendingChangesGuard]},
     { path: 'workFlow', component: adminWorkFlowComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } ,canDeactivate:[PendingChangesGuard]},
-    { path: 'dropdowns', component: dropdownsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } ,canDeactivate:[PendingChangesGuard]},
+    { path: 'dropdowns', component: AdminDropdownsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } ,canDeactivate:[PendingChangesGuard]},
     { path: 'consumptionCountry', component: adminConsumptionCountryComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver },canDeactivate:[PendingChangesGuard]  },
     { path: 'pushDealstoVistex', component: adminPushDealsToVistexComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver },canDeactivate:[PendingChangesGuard] },
     { path: 'vistexTestApi', component: adminVistexComponent, data: { title: 'Dashboard', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } ,canDeactivate:[PendingChangesGuard]},

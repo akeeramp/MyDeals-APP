@@ -15,8 +15,12 @@
             <ng-template kendoGridToolbarTemplate>
                 <button kendoGridAddCommand class="k-button addButton">
                     <span class="k-icon k-i-plus-outline k-icon-md" style="font-size:24px;"></span>Add New Record
-                </button><button (click)="clearFilter()" class="k-button clearButton">
+                </button>
+                <button (click)="clearFilter()" class="k-button clearButton">
                     <span class="k-icon intelicon-cancel-filter-solid k-icon-md k-family" style="font-size:24px;"></span>Clear Filters
+                </button>
+                <button (click)="openBulkUploadDialog()" class="k-button" *ngIf="isDeveloperFlag">
+                    <span class="k-icon intelicon-upload-solid k-icon-md k-family" style="font-size:24px;"></span>Bulk Upload Records
                 </button>
                 <kendo-grid-spacer></kendo-grid-spacer>
                 <button type="button" kendoGridExcelCommand>
