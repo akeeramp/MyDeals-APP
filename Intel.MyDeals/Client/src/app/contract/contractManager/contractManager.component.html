@@ -375,7 +375,7 @@
                                                                            [filterService]="filterService" [data]="filteringData[pt.DC_ID][column.field]"></multicheck-filter>
                                                     </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="Row Type" field="FLEX_ROW_TYPE" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="isFlexRowTypeHidden(pt.OBJ_SET_TYPE_CD)" filterable="false">
+                                                <kendo-grid-column title="Row Type" field="FLEX_ROW_TYPE" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="isFlexRowTypeHidden(pt.OBJ_SET_TYPE_CD)">
                                                     <ng-template kendoGridCellTemplate let-dataItem>
                                                         {{ dataItem.FLEX_ROW_TYPE }}
                                                     </ng-template>
@@ -403,11 +403,6 @@
                                                                  let-filterService="filterService">
                                                         <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
                                                                            [filterService]="filterService" [data]="filteringData[pt.DC_ID][column.field]"></multicheck-filter>
-                                                    </ng-template>
-                                                </kendo-grid-column>
-                                                <kendo-grid-column title="Program Dollar" field="TOTAL_DOLLAR_AMOUNT" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="isProgramDollarHidden(pt.OBJ_SET_TYPE_CD)" filterable="false">
-                                                    <ng-template kendoGridCellTemplate let-dataItem>
-                                                        {{ dataItem.TOTAL_DOLLAR_AMOUNT | number: '1.2-2' }}
                                                     </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="KIT CAP" field="CAP_KIT" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="!isKIT[pt.DC_ID]" filterable="false">
@@ -463,7 +458,16 @@
                                                                            [filterService]="filterService" [data]="filteringData[pt.DC_ID][column.field]"></multicheck-filter>
                                                     </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}" [width]="120" [hidden]="!OtherType[pt.DC_ID]"></kendo-grid-column>
+                                                <kendo-grid-column title="Program $" field="TOTAL_DOLLAR_AMOUNT" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="isProgramDollarHidden(pt.OBJ_SET_TYPE_CD)">
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        {{ dataItem.TOTAL_DOLLAR_AMOUNT | currency }}
+                                                    </ng-template>
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}" [width]="120" [hidden]="!OtherType[pt.DC_ID]">
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        {{ dataItem.MAX_RPU | currency }}
+                                                    </ng-template>
+                                                </kendo-grid-column>
                                                 <kendo-grid-column title="Ceiling Volume" field="VOLUME" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="OtherType[pt.DC_ID]">
                                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                                                                  let-filterService="filterService">
