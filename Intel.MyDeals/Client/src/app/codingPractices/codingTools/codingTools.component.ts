@@ -1,6 +1,8 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { logger } from '../../shared/logger/logger';
 import { Router } from '@angular/router';
+import { CodingToolsService } from './codingTools.service';
+
 @Component({
     selector: 'app-code-tools',
     templateUrl: 'Client/src/app/codingPractices/codingTools/codingTools.component.html',
@@ -13,15 +15,9 @@ export class CodingToolsComponent implements OnInit {
     public flagBool: string;
     public isVisible: boolean = true;
     public keySelected: any = '0';
+    public posts: any[];
 
-    ajaxData = `function sqlExceptionExample() {
-            op.ajaxGetAsync("/api/DevTests/GetSQLException", function (data) {
-                //success: manipulate your success case data here
-            }, function (result) {
-                //failure: manipulate your failure case data here
-                op.handleError(result, 'Could not get X data.');
-            });
-        }`;
+    ajaxData = `this.loggerService.error("Javascript has encountered a problem.", "Something went wrong!")`;
 
     CSharpException = `public string CSharpException()
         {
@@ -77,7 +73,9 @@ export class CodingToolsComponent implements OnInit {
             ...
         }`;
 
-    constructor(private loggerService: logger, private router: Router) { 
+    constructor(private loggerService: logger,
+        private router: Router,
+        private codingToolsService: CodingToolsService    ) { 
         this.extraTools();
     }
 
@@ -126,6 +124,12 @@ export class CodingToolsComponent implements OnInit {
 
     undefinedJSFunction(){
         this.loggerService.error("Javascript has encountered a problem.", "Something went wrong!")
+    }
+
+    noApiFunction() {
+        this.codingToolsService.nonExistent().subscribe((data: any[]) => {
+            this.posts = data;
+        });
     }
 
     exceptionsStoredProcedure(){

@@ -67,3 +67,43 @@ pre.preCustom {
     background-color: transparent;
     border: 0 solid transparent;
 }
+
+.image-two-slide {
+    display: flex;
+    justify-content: start;
+    align-items: start;
+    width: 100%;
+    position: relative;
+}
+
+.image-one-slide {
+    margin-right: 5px;
+}
+
+.image-second-slide {
+    margin-left: 5px;
+}
+
+.image-one-slide img {
+    width: 490px;
+}
+
+.image-second-slide img {
+    width: 775px;
+}
+
+a.anchorCodingTools {
+    color: #0071c5 !important;
+    cursor: pointer !important;
+    overflow: hidden !important;
+    text-decoration: underline !important;
+}
+
+.approved-img-section {
+    display: flex;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    position: relative;
+    flex-direction: column;
+}

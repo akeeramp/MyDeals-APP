@@ -405,6 +405,7 @@
     <Content Include="Client\Images\docs\constantDataLibProj.png" />
     <Content Include="Client\Images\docs\contract.png" />
     <Content Include="Client\Images\docs\costtest.png" />
+    <Content Include="Client\Images\docs\console-log-error.png" />
     <Content Include="Client\Images\docs\datalibInterfaceCreation.png" />
     <Content Include="Client\Images\docs\datalibproj.png" />
     <Content Include="Client\Images\docs\datalibResolver.png" />
@@ -451,6 +452,8 @@
     <Content Include="Client\Images\docs\SPClassGenerator.png" />
     <Content Include="Client\Images\docs\SPClassGeneratorResults.png" />
     <Content Include="Client\Images\docs\SPClassGeneratorVerify.png" />
+    <Content Include="Client\Images\docs\squash-merge-ui.png" />
+    <Content Include="Client\Images\docs\submit-review-ui.png" />
     <Content Include="Client\Images\docs\TableToClass.png" />
     <Content Include="Client\Images\docs\TableToClassResults.png" />
     <Content Include="Client\Images\docs\terms.png" />
@@ -679,6 +682,7 @@
     <TypeScriptCompile Include="Client\src\app\codingPractices\codeQuality\codeQuality.component.ts" />
     <TypeScriptCompile Include="Client\src\app\codingPractices\codingPractices.component.ts" />
     <TypeScriptCompile Include="Client\src\app\codingPractices\codingTools\codingTools.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\codingPractices\codingTools\codingTools.service.ts" />
     <TypeScriptCompile Include="Client\src\app\codingPractices\projectFlow\projectFlow.component.ts" />
     <TypeScriptCompile Include="Client\src\app\codingPractices\scopeDecision\scopeDecision.component.ts" />
     <TypeScriptCompile Include="Client\src\app\codingPractices\shared\breadcrumbs\breadcrumbs.component.ts" />

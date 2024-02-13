@@ -14,34 +14,34 @@
             <div class="codingToolsBody">
                 <div id="introduction">
                     <h1><img src="/Images/docs/icon-code-tools.png" height="80" /> Coding tools</h1>
+                    
                     <p>
                         This is a growing collection of tools and practices used on MyDeals.  If you come up with a reusable component of BKM, put it here!
                     </p>
 
+                    <h5 class="headingCT-five"><a (click)='navigateToSelectedLink({ text: "Error handling", url:"#errorHandling", bool: "errorHandling" },"1")' class="anchorChanges">Error handling</a></h5>
+                    <p>
+                        Error handling comes in various degrees... some of which are DB error handling, MT error handling, UI error handling, Application level error handling.
+                        What this does NOT cover is form validation or control validation.
+                        <br />
+                        <a (click)='navigateToSelectedLink({ text: "Error handling", url:"#errorHandling", bool: "errorHandling" },"1")' class="anchorChanges">Click Here for specific Error Handling examples</a>
+                    </p>
+                    <img src="/Images/docs/errorhandling.png" style="margin: 10px 0 10px 25px;" />
 
-                <h5 class="headingCT-five"><a (click)='navigateToSelectedLink({ text: "Error handling", url:"#errorHandling", bool: "errorHandling" },"1")' class="anchorChanges">Error handling</a></h5>
-                <p>
-                    Error handling comes in various degrees... some of which are DB error handling, MT error handling, UI error handling, Application level error handling. 
-                    What this does NOT cover is form validation or control validation. 
-                    <br />
-                    <a (click)='navigateToSelectedLink({ text: "Error handling", url:"#errorHandling", bool: "errorHandling" },"1")' class="anchorChanges">Click Here for specific Error Handling examples</a>
-                </p>
-                <img src="/Images/docs/errorhandling.png" style="margin: 10px 0 10px 25px;" />
+                    <p>
+                        <a href="/Images/docs/MyDeals Error Handling Design Doc.pdf" target="_blank" class="anchorChanges">
+                            <div style="padding: 20px 5px 0 5px; text-align: left;">
+                                <img src="/Images/docs/errorhandlingdesign.png" />
+                            </div>
+                            Click to view a larger version of the Error Handling Design.
+                        </a>
+                    </p>
 
-                <p>
-                    <a href="/Images/docs/MyDeals Error Handling Design Doc.pdf" target="_blank" class="anchorChanges">
-                        <div style="padding: 20px 5px 0 5px; text-align: left;">
-                            <img src="/Images/docs/errorhandlingdesign.png" />
-                        </div>
-                        Click to view a larger version of the Error Handling Design.
-                    </a>
-                </p>
-
-                <h5 class="headingCT-five"><a (click)='navigateToSelectedLink({ text: "Logging", url:"#logging", bool: "logging" },"3")' class="anchorChanges">Logging</a></h5>
-                <p>
-                    Logging also comes in various dgrees... some of which are DB, MT and UI logging.  There is local storage logging, in-memory logging and longterm storage logging.
-                </p>
-                <img src="/Images/docs/logging.png" style="margin: 10px 0 10px 25px;" />
+                    <h5 class="headingCT-five"><a (click)='navigateToSelectedLink({ text: "Logging", url:"#logging", bool: "logging" },"3")' class="anchorChanges">Logging</a></h5>
+                    <p>
+                        Logging also comes in various dgrees... some of which are DB, MT and UI logging.  There is local storage logging, in-memory logging and longterm storage logging.
+                    </p>
+                    <img src="/Images/docs/logging.png" style="margin: 10px 0 10px 25px;" />
 
                     <br /><br /><br />
                 </div>
@@ -59,26 +59,34 @@
                     See Views\CodingPractices\ErrorHandling.cshtml, app\core\core.module.js, Global.asax.cs, and Controllers\API\DevTestsController.cs to follow example flows
                 </p>
                 <h4>Javascript Exceptions</h4>
-                <a class="btn btn-danger btnAnchorDanger" (click)="undefinedAngularRoute()">
+                <!--<a class="btn btn-danger btnAnchorDanger" (click)="undefinedAngularRoute()">
                     Undefined Angular Route
-                </a>
+                </a>-->
                 <a class="btn btn-danger btnAnchorDanger" (click)="undefinedJSFunction()">
                     Undefined JS Function
                 </a>
-                <a class="btn btn-danger btnAnchorDanger">
+                <a class="btn btn-danger btnAnchorDanger" (click)="noApiFunction()">
                     Unresponsive API Call
                 </a>
                 <p>
-                    Unhandled JS exceptions will be dealt with by the global js exception handler. 
+                    Unhandled JS exceptions will be dealt with by the global js exception handler.
                     <br />
                     Unhandled Angular exceptions will be dealt with by the global blocks.exception provider.
                     <br />
-                    When developing ajax calls to the api, make sure to call op.handleError which will include an error toast and log the failure inside each ajax failure result promise.
+                    The logger service is used for showing success or error messages in the UI and console logs as well.
+                    <!--<br />
+    When developing ajax calls to the api, make sure to call op.handleError which will include an error toast and log the failure inside each ajax failure result promise.-->
                 </p>
     <pre class="preCustom">
-        JS Ajax Call:
+        Logger Service Call:
         {{ajaxData}}
     </pre>
+                <p class="mb-0">Sample screenshot for the logger service error and console log error</p>
+                <div class="error-handled-img">
+                    <img src="/Images/docs/Logger-error.png" style=" margin-bottom: 15px; width: 250px;" />
+                    <img src="/Client/Images/docs/console-log-error.png" style=" margin-bottom: 15px; margin-left: 10px; width: 500px;" />
+                </div>
+                <br />
 
                 <h4>C# Exceptions</h4>
                 <a class="btn btn-danger btnAnchorDanger">
@@ -158,43 +166,60 @@
 
                     <h5>UI Code Reviews in My Deals</h5>
                     <p>
-                        You can request a code reviews within Visual Studio both before or after check-in. The following documentation is for Visual Studio 2015.
+                        You can request a code reviews within Visual Studio both before or after check-in. The following documentation is for Visual Studio 2022.
                     </p>
 
                     <div class="stepByStep">
-                        How to UI Request Code Review before check-in
+                        How to Code Review for UI & DB Pull Requests
                     </div>
                     <p>
                         Please see Microsoft's <a href="https://www.visualstudio.com/en-us/docs/tfvc/get-code-reviewed-vs"> Visual Studio code review tutorial</a>
                     </p>
-                    <div class="stepByStep">
-                        How to create a UI Code Review for an old changeset
-                    </div>
-                    <p>
-                        If you just checked in, then Visual Studio should should give you a link to the changeset id directly after check-in
-                        , which you can use to follow the same process as above to request review.
-                        Else, if you would like to request review of an older changeset, follow these steps:
-
-                    </p>
+                    <p>You have to follow few steps for the code reviews</p>
                     <ol>
                         <li>
-                            In your solution explorer, right click any file and select "Source Control" > "View History". This should take you to a new window
+                            After pushing the commits, if it is UI changes commit visit the <a href="https://github.com/intel-innersource/applications.web.mydeals.webui" target="_blank">GITHUB (webui)</a>
+                            or DB changes commit visit the <a href="https://github.com/intel-innersource/applications.web.mydeals.database" target="_blank">GITHUB (database)</a>.
                         </li>
                         <li>
-                            In this new window, replace the Source location with  C:\Users\[YOUR_USERNAME_HERE]\[YOUR_MYDEALS_PATH_HERE].
-                            For example, C:\Users\jajaung\MyDeals\STG\MyDeals_Release\UI\main\Intel.MyDeals.
-                            The screen should now show all the changsets made on the entire project
+                            Click compare and pull the request.<br />
+                            <img src="/Images/docs/GitHub1.png" style="width: 850px;" /><br /><br />
                         </li>
                         <li>
-                            Find the changeset you want a review on. Right click that changeset and select "Request Review"
+                            Go to the pull request tab.<br />
+                            <img src="/Images/docs/GitHub2.png" style="width: 850px;" /><br /><br />
                         </li>
-                        <img src="/Images/docs/codeReviewHistory.png" />
                         <li>
-                            Follow Microsoft's <a href="https://www.visualstudio.com/en-us/docs/tfvc/get-code-reviewed-vs"> Visual Studio code review tutorial </a>
-                            for steps on how to submit your code review
+                            Check the commit and pull request title need to be in this format TWCXXXX-XXX : commit message (Example - TWC3167-7875: Coding tools module text changes).<br />
+                            <img src="/Images/docs/GitHub4.png" style="width: 850px;" /><br /><br />
+                        </li>
+                        <li>And click the create pull request button.</li>
+                        <li>
+                            There will be 2 checkpoints:<br/>
+                            <ol>
+                                <li>Mocked NUnit is a process used in unit testing when the unit being tested has external dependencies.</li>
+                                <li>
+                                    Sonar Check is a static code analysis tool that scans your code and tries to detect flaws, bugs, and security vulnerabilities.<br />
+                                    <img src="/Images/docs/GitHub3.png" style="width: 850px;" /><br /><br />
+                                </li>
+                            </ol>
+                        </li>
+                        <li>
+                            After completing the checkpoints, share the PR link with the code reviewer (Tech Lead).  
+                        </li>
+                        <li>
+                            Then, the code reviewer will review the code changes and will squash and merge the PR into the base branch.
+                            <div class="approved-img-section">
+                                <img src="/Client/Images/docs/submit-review-ui.png" style="width: 850px;" />
+                                <img src="/Client/Images/docs/squash-merge-ui.png" style="width: 850px;" />
+                            </div>
                         </li>
                     </ol>
+
+                    <p><a href="https://intel.sharepoint.com/:w:/r/sites/MyDealsTeam/Shared%20Documents/General/DevelopmentGuides/Gitlab_Basic_mydeals.docx?d=w188f5e38878d43da988d3a9cbd247bcc&csf=1&web=1&e=X7kyhe" target="_blank" class="anchorCodingTools">Click here</a> for more details on <b>Code Reviews</b>.</p>
+
                     <br /><br /><br />
+
                 </div>
 
                 <div id="logging">
@@ -251,16 +276,29 @@
                         * Note that log writers that queue logs and bulk write to their writers are not foolproof. If the server or application rudely crashes, then chances are the most recent x logs queued to be written to the db have been lost.
                     </p>
 
-                <div class="note">
-                    <strong>Note:</strong> Here are some examples of calling <b>LogEvent</b>.
-                </div>
-                <div class="noteBody">
-    <pre class="preCustom">        
+                    <div class="note">
+                        <strong>Note:</strong> Here are some examples of calling <b>LogEvent</b>.
+                    </div>
+                    <div class="noteBody">
+                        <pre class="preCustom">        
         OpLogPerf.Log("Page loaded");  // This will default to a message with an information LogCategory.				
         OpLog.LogEvent("Stored Procedure Timed Out", LogCategory.Warning); // Logging with specified LogCategory. LogCategories to choose from are Information, Warning, and Error 
         OpLogPerf.Log(Ex); // Logging an exception
     </pre>
                     </div>
+                    <br />
+                    <h5>ECK logging</h5>
+                    <ul>
+                        <li>Once the NAS drive is ready need to start and engagement with Enterprise ECK details are available in this wiki​</li>
+                        <li>Once the engagement is completed, they will create a dedicated project for us with dedicated AGS access and storage.​</li>
+                        <li>Once all these done, we can install our Logstash instance and update the Config which will point the right files  to right index and can filter from Kibana UI​</li>
+                    </ul>
+                    <div class="image-two-slide">
+                        <div class="image-one-slide"><img src="/Images/docs/ECK-1.png" /></div>
+                        <div class="image-second-slide"><img src="/Images/docs/ECK-2.png" /></div>
+                    </div>
+                    <br />
+                    <p><a href="https://intel.sharepoint.com/:p:/r/sites/MyDealsTeam/Shared%20Documents/General/Cloud/CaaS%20migration%20strategy.pptx?d=wcb7032069570497797ca43454e6915be&csf=1&web=1&e=TDAucP" target="_blank" class="anchorCodingTools">Click here</a> for more details on <b>Logging</b>.</p>
                     <br /><br /><br />
                 </div>
 
