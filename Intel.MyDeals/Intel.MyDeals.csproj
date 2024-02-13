@@ -383,6 +383,7 @@
     <Content Include="Client\Images\docs\angularFeatureStructure.png" />
     <Content Include="Client\Images\docs\angularFolderStructure.png" />
     <Content Include="Client\Images\docs\approval.png" />
+    <Content Include="Client\Images\docs\Business-rules.png" />
     <Content Include="Client\Images\docs\buildclass.png" />
     <Content Include="Client\Images\docs\buildcustomcode.png" />
     <Content Include="Client\Images\docs\buildprocclass.png" />
@@ -411,6 +412,9 @@
     <Content Include="Client\Images\docs\datalibResolver.png" />
     <Content Include="Client\Images\docs\dataobjects.png" />
     <Content Include="Client\Images\docs\db2c.png" />
+    <Content Include="Client\Images\docs\API-Controller.png" />
+    <Content Include="Client\Images\docs\Add-api.png" />
+    <Content Include="Client\Images\docs\FunFactsCS.png" />
     <Content Include="Client\Images\docs\dealapproval.png" />
     <Content Include="Client\Images\docs\dealentry.png" />
     <Content Include="Client\Images\docs\errorhandling.png" />
@@ -449,6 +453,7 @@
     <Content Include="Client\Images\docs\rebatestrategies.png" />
     <Content Include="Client\Images\docs\samplecodesp.png" />
     <Content Include="Client\Images\docs\sampleunittests.png" />
+    <Content Include="Client\Images\docs\Controller-1.png" />
     <Content Include="Client\Images\docs\SPClassGenerator.png" />
     <Content Include="Client\Images\docs\SPClassGeneratorResults.png" />
     <Content Include="Client\Images\docs\SPClassGeneratorVerify.png" />
@@ -471,6 +476,10 @@
     <Content Include="Client\Images\intel-logo-white-max.png" />
     <Content Include="Client\Images\intelMyDeals.png" />
     <Content Include="Client\Images\intelsm.png" />
+    <Content Include="Client\Images\docs\Client-folder1.png" />
+    <Content Include="Client\Images\docs\admin-ts-file.png" />
+    <Content Include="Client\Images\docs\Ang-component.png" />
+    <Content Include="Client\Images\docs\Admin-ag-files.png" />
     <Content Include="Client\Images\kendo_icons_intel.png" />
     <Content Include="Client\Images\learning101menu.png" />
     <Content Include="Client\Images\learning101menu_v2.png" />
@@ -684,6 +693,7 @@
     <TypeScriptCompile Include="Client\src\app\codingPractices\codingTools\codingTools.component.ts" />
     <TypeScriptCompile Include="Client\src\app\codingPractices\codingTools\codingTools.service.ts" />
     <TypeScriptCompile Include="Client\src\app\codingPractices\projectFlow\projectFlow.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\codingPractices\projectFlow\projectFlow.service.ts" />
     <TypeScriptCompile Include="Client\src\app\codingPractices\scopeDecision\scopeDecision.component.ts" />
     <TypeScriptCompile Include="Client\src\app\codingPractices\shared\breadcrumbs\breadcrumbs.component.ts" />
     <TypeScriptCompile Include="Client\src\app\codingPractices\shared\codingPracticesLeftNav\codingPracticesLeftNav.component.ts" />

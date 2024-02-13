@@ -53,16 +53,6 @@
     background-color: #C4D600;
     color: #000000;
 }
-.btn-ttl-coding {
-    color: #0071c5 !important;
-    cursor: pointer !important;
-    overflow: hidden !important;
-    text-decoration: underline !important;
-}
-.btn-ttl-coding:hover {
-    color: #0071c5 !important;
-    text-decoration: underline !important;
-}
 .img-style-cp {
     margin-top: 10px;
     height: 253px;

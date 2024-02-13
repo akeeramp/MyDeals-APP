@@ -1,5 +1,7 @@
 ﻿import { Component, OnInit } from '@angular/core';
 import { Router, NavigationExtras } from '@angular/router';
+import { logger } from '../../shared/logger/logger';
+import { ProjectFlowService } from './projectFlow.service';
 
 @Component({
     selector: 'app-project-flow',
@@ -9,14 +11,18 @@ import { Router, NavigationExtras } from '@angular/router';
 export class ProjectFlowComponent implements OnInit {
 
     public list_breadcrumbs : any;
-    public proLnav: any[]
+    public proLnav: any[];
+    public isErrorVisible: boolean = false;
     public left_nav : any;
     public selectedItem: any = 'introduction';
     public keySelected: any = '0';
     public isVisible: boolean = true;
     loggerService: any;
+    public dataHealthApi: any = [];
+    public reasonData: string = "";
+
     
-    constructor(private router: Router) { }
+    constructor(private router: Router, private testingAPISvc: ProjectFlowService, private loggerSvc: logger) { }
 
     baseText = `{BASE}`;
 
@@ -41,7 +47,7 @@ export class ProjectFlowComponent implements OnInit {
         private static List<ToolConstants> _getToolConstants;`;
 
     public controllerForOthers = ` 
-    public class OthersController : Controller
+ public class OthersController : Controller
     {
         OpCore op = OpAppConfig.Init();  // Initialize MyDeal's Opaque
 
@@ -462,49 +468,41 @@ export class ProjectFlowComponent implements OnInit {
     }`
 
     public generatedConstants = `
-    <div style="margin: 15px;">
-    <h1>Sample Constants Display</h1>
-    <div id="grid"></div>
-    </div>
-    <script>
-        $(document).ready(function() {
-            $("#grid").kendoGrid({
-                dataSource: {
-                    type: "json",
-                    transport: {
-                        read: "/api/AdminConstants/v1/GetConstants"
+    import { logger } from "../../shared/logger/logger";
+    import { constantsService } from "./admin.constants.service";
+    import { Component } from "@angular/core";
+    import { Observable } from "rxjs";
+    @Component({
+    selector: 'constants',
+    templateUrl: 'Client/src/app/admin/constants/admin.constants.component.html',
+    styleUrls: ['Client/src/app/admin/constants/admin.constants.component.css']
+    })
+     export class ConstantsComponent {
+     constructor(private constantsSvc: constantsService, private loggerSvc: logger) { }
+
+     public gridResult: Array<any>;
+
+     loadConstants() {
+        if (!(<any>window).isDeveloper) {
+            document.location.href = "/Dashboard#/portal";
+        }
+        else {
+            this.constantsSvc.getConstants().subscribe(
+                    (result: Array<any>) => {
+                        this.gridResult = result;
                     },
-                    schema: {
-                        model: {
-                            fields: {
-                                CNST_NM: { type: "string" },
-                                CNST_DESC: { type: "string" },
-                                CNST_VAL_TXT: { type: "string" }
-                            }
-                        }
-                    },
-                    pageSize: 20
-                },
-                height: 250,
-                filterable: true,
-                sortable: true,
-                pageable: true,
-                columns: [
-                    {
-                        field: "CNST_NM",
-                        title: "Name"
-                    },
-                    {
-                        field: "CNST_DESC",
-                        title: "Description"
-                    }, {
-                        field: "CNST_VAL_TXT",
-                        title: "Value"
+                    function (response) {
+                        this.loggerSvc.error(
+                            "Unable to get Constants Data.",
+                            response,
+                            response.statusText
+                        );
                     }
-                ]
-            });
-        });
-    </script>`
+                )
+        }
+    }
+}
+`
 
 public showConstants = ` 
 @{
@@ -513,32 +511,23 @@ public showConstants = `
 <h2>Constants</h2>
 `
 
-public baseAppModule = `
-(function () {
-    'use strict';
-        angular.module('app', [
-            /*
-             * Order is not important. Angular makes a
-             * pass to register all of the modules listed
-             * and then when app.dashboard tries to use app.data,
-             * its components are available.
-             */
-            /*
-             * Everybody has access to these.
-             * We could place these under every feature area,
-             * but this is easier to maintain.
-             */
-            'app.core',
-            /*
-             * Feature areas
-             */
-            'app.admin', //Admin module
-            'app.costtest',
-            'app.dashboard',
-            'app.securityAttributes'
-    ]);
-    })()
-`
+    public baseAppModuleCode = `
+import { NgModule }      from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { AppComponent }  from './app.component';
+import { codingPracticesComponents } from '../../app/modules/codingPractices.module';  // respective admin component import path added
+import { AdminComponents } from '../../app/modules/admin.module';
+
+@NgModule({
+  imports:      [ BrowserModule ],
+  declarations: [
+  AppComponent,                        //angular default component
+  AdminComponents                      //newly created component
+  codingPracticesComponents            //newly created component
+],
+  bootstrap:    [ AppComponent ]
+})
+export class AppModule { }`
 
 public blockModule = `
 (function() {
@@ -694,49 +683,84 @@ public generatedStoredProcedure = `
         */
         } // End of class PingResults`
 
-public generatedSP =    `<div style="margin: 15px;">
-<h1>Sample Constants Display</h1>
-<div id="grid"></div>
-</div>
-<script>
-$(document).ready(function() {
-    $("#grid").kendoGrid({
-        dataSource: {
-            type: "json",
-            transport: {
-                read: "/api/AdminConstants/v1/GetConstants"
-            },
-            schema: {
-                model: {
-                    fields: {
-                        CNST_NM: { type: "string" },
-                        CNST_DESC: { type: "string" },
-                        CNST_VAL_TXT: { type: "string" }
-                    }
-                }
-            },
-            pageSize: 20
-        },
-        height: 250,
-        filterable: true,
-        sortable: true,
-        pageable: true,
-        columns: [
-            {
-                field: "CNST_NM",
-                title: "Name"
-            },
-            {
-                field: "CNST_DESC",
-                title: "Description"
-            }, {
-                field: "CNST_VAL_TXT",
-                title: "Value"
-            }
-        ]
-    });
-});
-</script>`;
+
+
+   public appModuleEg = `
+
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+import { HttpClientModule } from '@angular/common/http';
+
+@NgModule({
+  imports: [
+    BrowserModule,
+    // import HttpClientModule after BrowserModule.
+    HttpClientModule,
+  ],
+  declarations: [
+    AppComponent,
+  ],
+  bootstrap: [ AppComponent ]
+})
+export class AppModule {}
+`;
+    public serviceodeEx = `
+
+import { Injectable } from "@angular/core";
+import { HttpClient } from '@angular/common/http';
+import { Observable } from 'rxjs';
+
+@Injectable({
+    providedIn: 'root'
+})
+
+export class funFactService {
+    public apiBaseUrl = "api/Funfact/";
+
+    constructor(private httpClient: HttpClient) {
+    }
+
+    public getFunFactItems(): Observable<any> {
+        const apiUrl: string = this.apiBaseUrl + 'GetFunfactItems';
+        return this.httpClient.get(apiUrl);
+    }
+
+    public updateFunFact(data: any): Observable<any> {
+        const apiUrl: string = this.apiBaseUrl + 'UpdateFunfact';
+        return this.httpClient.post(apiUrl, data);
+    }
+
+}
+`;
+    public subscribeCodeEx = `
+
+import { Component} from "@angular/core";
+import { funFactService } from "./admin.funFact.service";
+import { Observable } from "rxjs";
+
+@Component({
+    selector: 'admin-fun-fact',
+    templateUrl: 'Client/src/app/admin/funFact/admin.funFact.component.html',
+    styleUrls: ['Client/src/app/admin/funFact/admin.funFact.component.css']
+})
+export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
+    constructor(private funFactSvc: funFactService, private loggerSvc: logger) { }
+
+ private gridResult: Array<any>;
+
+//method to load the funfacts which is subscribing the service getFunFactsItems() 
+ loadFunFacts() {
+        else {
+            this.funFactSvc.getFunFactItems().subscribe((result: Array<any>) => {
+                this.gridResult = result;
+            }, (error) => {
+                    this.loggerSvc.error('Unable to get Fun Fact.', error);
+            });
+        }
+    }
+`;
+   
+
 
     constantsData = [
         { name: "DB_LOGGING", description: "Logging", value: '<log MsgSrc="DB"> <DaysToDeleteOldData>0</DaysToDeleteOldData> <DaysScheduleToRun>1</DaysScheduleToRun> <LastRunDate>2016-11-03</LastRunDate> <IsActive>1</IsActive> </log> <log MsgSrc = "UI_LOG"> <DaysToDeleteOldData>0</DaysToDeleteOldData> <DaysScheduleToRun>1</DaysScheduleToRun> <LastRunDate>2016-11-03</LastRunDate> <IsActive>1</IsActive> </log>' },
@@ -914,9 +938,6 @@ $(document).ready(function() {
         this.changeBreadCrumb(dataItem,sKey);
     }
 
-    testApi(){
-        //this.loggerService.error("500: Internal Server Error (But dont tell users the error code, this is just an example)", "Something went wrong!")
-    }
         
     ngOnInit(): void {
         this.list_breadcrumbs = [
@@ -992,10 +1013,9 @@ $(document).ready(function() {
                 bool: 'myDeals' ,
                 items: [
                     { text: "Introduction", url: '#myDeals' , bool: 'myDeals'},
-                    { text: "Create a MVC Controller", url: '#presentationMvcController' , bool: 'presentationMvcController'},
-                    { text: "Creating Web APIs", url: '#presentationWebApi' , bool: 'presentationWebApi'},
-                    { text: "Calling Web APIs", url: '#presentationCallWebApi' , bool: 'presentationCallWebApi'},
-                    { text: "Creating Angular Views", url: '#presentationAngularViews' , bool: 'presentationAngularViews'}
+                    { text: "Creating API Controller", url: '#presentationWebApi', bool: 'presentationWebApi' },
+                    { text: "Calling Web APIs", url: '#presentationCallWebApi', bool: 'presentationCallWebApi'},
+                    { text: "Creating Angular Component", url: '#presentationAngularViews', bool: 'presentationAngularViews'}
                 ]
             },
             { 
@@ -1020,4 +1040,9 @@ $(document).ready(function() {
         this.isVisible = !this.isVisible
     }
 
+    testApi() {
+        this.testingAPISvc.getTestApi().subscribe((result) => this.dataHealthApi = result);
+        this.reasonData = (this.dataHealthApi.DETAILS);
+        this.isErrorVisible = true;
+    }
 }

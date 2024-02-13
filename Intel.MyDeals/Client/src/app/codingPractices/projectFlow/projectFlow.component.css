@@ -77,3 +77,8 @@
 .panelAccord .panel-title a .fr a:focus {
     color: #004579!important;
 }
+.heading-projectup {
+    position: relative;
+    left: 53px;
+    bottom: 60px;
+}

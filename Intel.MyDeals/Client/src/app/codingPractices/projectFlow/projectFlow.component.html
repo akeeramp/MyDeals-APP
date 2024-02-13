@@ -1,4 +1,4 @@
-﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" /> 
+﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <app-breadcrumbs [list_breadcrumbs]="list_breadcrumbs" (selectedBreadCrumb)="loadSelected($event)"></app-breadcrumbs>
 
 <div class="layout-cp-inner-page">
@@ -20,8 +20,7 @@
                 <img src="/Images/docs/MyDeals Project Logic.png" />
             </div>
             <p>
-                The My Deals project is a Visual Studio project backed by TFS source control.
-                The technologies consist of MS SQL 2014, C# .NET, T4 Templating, MVC, Web API, JQuery, Kendo UI, Angular and HTML5.
+                The My Deals project is a Visual Studio project backed by GitHub source control.The technologies consist of MS SQL 2019, C# .NET 4.8 , T4 Templating, MVC, Web API, Kendo UI 2021.3.1207, Handsontable 12.1.3, Typescript 5.0.3, Angular 12.2.17 and HTML5.<br />
                 This document will demonstate how data will logically flow through the technology as well as common practices that can be re-used for quicker and more reliable coding.
             </p>
 
@@ -78,7 +77,7 @@
                 <tr style="border-bottom: 1px solid #dddddd;">
                     <td style="padding: 15px; text-align: center;">
                         <a href="javascript:void(0);" (click)="navigateToSelectedLink({ url: '#dataLibrary', bool: 'dataLibrary'})">
-                  
+
                             <img src="/Images/docs/icon-data-library.png" height="60" />
                             <div style="font-size: 10px;">Intel.MyDeals.DataLibrary</div>
                         </a>
@@ -160,30 +159,30 @@
                 To include a newly created stored procedure into the My Deals project, you simply need to have compile the <strong>SPClassGenerator.tt</strong> T4 Template. To do this follow these steps:<br/>
                 <img src="/Images/docs/db2c.png" style="margin: 10px 0 10px 25px;" />
             </p>
-                <div class="stepByStep">
-                    <i class="intelicon-task"></i>Step by Step
-                </div>
+            <div class="stepByStep">
+                <i class="intelicon-task"></i>Step by Step
+            </div>
 
-                <ol>
-                    <li>
-                        Open the <strong>SPClassGenerator.tt</strong> file in the <i>Intel.MyDeals.DataAccessLib</i> project.<br/>
-                        <img src="/Images/docs/datalibproj.png" style="margin: 10px 0;"/>
-                    </li>
-                    <li>
-                        <strong>Do not change this file!!!</strong> All you need to do is save the file and it will compile the T4 template and generate the C# code.
-                    </li>
-                    <li>
-                        Verify your stored procedure is locate in the generated code. To do this, expand the <strong>SPClassGenerator.tt</strong> file and open the <strong>SPClassGenerator1.generated.cs</strong> and search for your stored procedure.<br/>
-                        <img src="/Images/docs/SPClassGeneratorResults.png" style="margin: 10px 0;"/><br/>
+            <ol>
+                <li>
+                    Open the <strong>SPClassGenerator.tt</strong> file in the <i>Intel.MyDeals.DataAccessLib</i> project.<br/>
+                    <img src="/Images/docs/datalibproj.png" style="margin: 10px 0;"/>
+                </li>
+                <li>
+                    <strong>Do not change this file!!!</strong> All you need to do is save the file and it will compile the T4 template and generate the C# code.
+                </li>
+                <li>
+                    Verify your stored procedure is locate in the generated code. To do this, expand the <strong>SPClassGenerator.tt</strong> file and open the <strong>SPClassGenerator1.generated.cs</strong> and search for your stored procedure.<br/>
+                    <img src="/Images/docs/SPClassGeneratorResults.png" style="margin: 10px 0;"/><br/>
 
-                        <div class="note"><strong>Note:</strong> Here is an example of what code is generated for a store procedure:
-                        </div>
-                        <div class="noteBody">
-                            <img src="/Images/docs/SPClassGeneratorVerify.png" style="margin: 10px 0;"/>
-                        </div>
-                    </li>
-                </ol>
-            
+                    <div class="note"><strong>Note:</strong> Here is an example of what code is generated for a store procedure:
+                    </div>
+                    <div class="noteBody">
+                        <img src="/Images/docs/SPClassGeneratorVerify.png" style="margin: 10px 0;"/>
+                    </div>
+                </li>
+            </ol>
+
             <br /><br /><br />
         </div>
         <div id="entities">
@@ -245,50 +244,50 @@
 
         </div>
         <div id="sharedCSfromProc">
-        <h1><img src="/Images/docs/icon-entity.png" height="60" />Creating a shared class from a procedure</h1>
-        <p>
-            There are many times where a stored procedure is needed to transport data.
-            The best was to handle this is to create custom classes to match 1:1 the structured results.
-            My Deals uses T4 templates to help automate this process.
-        </p>
-        <img src="/Images/docs/buildprocedurecode.png" style="margin: 10px 0 10px 25px;" />
+            <h1><img src="/Images/docs/icon-entity.png" height="60" />Creating a shared class from a procedure</h1>
+            <p>
+                There are many times where a stored procedure is needed to transport data.
+                The best was to handle this is to create custom classes to match 1:1 the structured results.
+                My Deals uses T4 templates to help automate this process.
+            </p>
+            <img src="/Images/docs/buildprocedurecode.png" style="margin: 10px 0 10px 25px;" />
 
-        <div class="stepByStep">
-            <i class="intelicon-task"></i>Step by Step
-        </div>
+            <div class="stepByStep">
+                <i class="intelicon-task"></i>Step by Step
+            </div>
 
-        <p>
-            To use the T4 templates to auto generate shared classes from a procedure, follow these steps:
-        </p>
-        <ol>
-            <li>
-                Open the <strong>TableToClasses.tt</strong> file in the <i>Intel.MyDeals.Entities</i> project.<br />
-                <img src="/Images/docs/TableToClass.png" style="margin: 10px 0;" />
-            </li>
-            <li>
-                Enter a call to the stored procedure and declare the name of the class that will be generated.
-                The stored procedue must be executable, so if parameters are required to run the procedure, please apply them.
+            <p>
+                To use the T4 templates to auto generate shared classes from a procedure, follow these steps:
+            </p>
+            <ol>
+                <li>
+                    Open the <strong>TableToClasses.tt</strong> file in the <i>Intel.MyDeals.Entities</i> project.<br />
+                    <img src="/Images/docs/TableToClass.png" style="margin: 10px 0;" />
+                </li>
+                <li>
+                    Enter a call to the stored procedure and declare the name of the class that will be generated.
+                    The stored procedue must be executable, so if parameters are required to run the procedure, please apply them.
 
-                <div class="note"><strong>Note:</strong> It will actually execute the procedure, so try to make the return dataset minimal for better performance.</div>
-                <div class="noteBody">
-                    In this example, the <i>db.PR_PING_DB</i> procedure is being called with no parameters. The results will create a class called <B>PingResults</B>.<br/>
-                    <img src="/images/docs/samplecodesp.png" style="margin: 10px 0;"/><br/>
-                </div>
-            </li>
-            <li>
-                Sometimes there are errors generating the classes. This can be because the entered stored procedure call had some mistakes or the generation timed out.
-                Verify the generated code has no errors. To do this, expand the <strong>TableToClasses.tt</strong> file and open the <strong>TableToClasses.generated.cs</strong>.<br />
-                <img src="/Images/docs/TableToClassResults.png" style="margin: 10px 0;" /><br />
+                    <div class="note"><strong>Note:</strong> It will actually execute the procedure, so try to make the return dataset minimal for better performance.</div>
+                    <div class="noteBody">
+                        In this example, the <i>db.PR_PING_DB</i> procedure is being called with no parameters. The results will create a class called <B>PingResults</B>.<br/>
+                        <img src="/images/docs/samplecodesp.png" style="margin: 10px 0;"/><br/>
+                    </div>
+                </li>
+                <li>
+                    Sometimes there are errors generating the classes. This can be because the entered stored procedure call had some mistakes or the generation timed out.
+                    Verify the generated code has no errors. To do this, expand the <strong>TableToClasses.tt</strong> file and open the <strong>TableToClasses.generated.cs</strong>.<br />
+                    <img src="/Images/docs/TableToClassResults.png" style="margin: 10px 0;" /><br />
 
-                <div class="note"><strong>Note:</strong> Here is an example of what code is generated for a store procedure:</div>
-                <div class="noteBody">
-    <pre class="preCustom">
+                    <div class="note"><strong>Note:</strong> Here is an example of what code is generated for a store procedure:</div>
+                    <div class="noteBody">
+                        <pre class="preCustom">
         {{generatedStoredProcedure}}   
-    </pre> 
+    </pre>
 
-                </div>
-            </li>
-        </ol>
+                    </div>
+                </li>
+            </ol>
 
         </div>
         <div id="dataLibrary" >
@@ -296,36 +295,36 @@
             <p>
                 Layer dedicated to making all database calls as well as data caching repository for performance.
             </p>
-        
+
             <h3>Coding Practices</h3>
             <p>
                 The following coding practices for the Data Library layer consist mainly of functions that gather data from the database or send requests to the database.
             </p>
-        
-        
+
+
             <h5><a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Calling a stored procedure', url: '#callingSP' , bool: 'callingSP'},'3_1')">Calling a stored procedure</a></h5>
             <p>
                 Since all communication to the database is handled though stored procedures, it is important to understand how to call a stored procedure from My Deals.
             </p>
             <img src="/Images/docs/callproc.png" style="margin: 10px 0 10px 25px;" />
             <p>For more info, see the <a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Calling a stored procedure', url: '#callingSP' , bool: 'callingSP'},'3_1')">Calling a stored procedure</a> section</p>
-        
-        
+
+
             <h5><a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Creating a data cache', url: '#createDataCache' , bool: 'createDataCache'},'3_2')">Creating a data cache</a></h5>
             <p>
                 When dealing with common large data, it is prudent to cache the data from the database into the middle tier.
             </p>
             <img src="/Images/docs/cache_create_intro.png" style="margin: 10px 0 10px 25px;" />
             <p>For more info, see the <a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Creating a data cache', url: '#createDataCache' , bool: 'createDataCache'},'3_2')">Creating a data cache</a> section</p>
-        
-        
+
+
             <h5><a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Managing cached data', url: '#manageCachedData' , bool: 'manageCachedData'},'3_3')">Managing cached data</a></h5>
             <p>
-                When dealing with data caches, it is sometimes necessary to clear or repopulate the cache.  
+                When dealing with data caches, it is sometimes necessary to clear or repopulate the cache.
             </p>
             <img src="/Images/docs/cache_manager.png" style="margin: 10px 0 10px 25px;" />
             <p>For more info, see the <a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Managing cached data', url: '#manageCachedData' , bool: 'manageCachedData'},'3_3')">Managing cached data</a> section</p>
-        
+
             <br /><br /><br />
         </div>
         <div id="callingSP">
@@ -333,11 +332,11 @@
             <p>
                 Since all communication to the database is handled though stored procedures, it is important to understand how to call a stored procedure from My Deals.<br />
                 <img src="/Images/docs/callproc.png" style="margin: 10px 0 10px 25px;" />
-        
+
                 <div class="stepByStep">
                     <i class="intelicon-task"></i>Step by Step
                 </div>
-        
+
                 <ol>
                     <li>
                         <i class="intelicon-checklist-outlined" style="font-size: 20px;"></i>Ensure you have included the <strong>stored procedure</strong> into My Deals. If you are unsure how to do this, please refer to the <a href="javascript:void(0); " (click)="navigateToSelectedLink({ text: 'Consume a stored procedure', url: '#consumeSP' , bool: 'consumeSP'}, '1_1')">Consume a stored procedure</a> section.
@@ -351,25 +350,25 @@
                     </li>
                     <li>
                         Add a call to the stored procedure. Some procedures return data and others simply execute an action.<br />
-        
+
                         <div class="note"><strong>Note:</strong> Here is an example of a store procedure that returns data:</div>
-                         <div class="noteBody">
-    <pre class="preCustom">
+                        <div class="noteBody">
+                            <pre class="preCustom">
         {{returnDataFromSP}}
     </pre>
-                        </div> 
-        
+                        </div>
+
                         <div class="alert alert-info" role="alert">
                             <strong>Quick Tip!</strong> For procedures that return data, most of the code needed is already generated from the <strong>TableToClass.generated.cs</strong> file. Feel free to cut and paste from there... I do!
                             For more info, see the <a href="javascript:void(0);">Creating a shared class from a procedure</a> section.
                         </div>
-        
-                        <div class="note"><strong>Note:</strong> Here is an example of a store procedure that just performs an action:</div> 
-                         <div class="noteBody">
-    <pre class="preCustom">
+
+                        <div class="note"><strong>Note:</strong> Here is an example of a store procedure that just performs an action:</div>
+                        <div class="noteBody">
+                            <pre class="preCustom">
         {{storedProcForAction}}
     </pre>
-                        </div> 
+                        </div>
                     </li>
                     <li>
                         Extract the public methods which you want to expose to Business Layer, create the appropriate folder in the <i>Intel.MyDeals.IDataLibrary</i>.
@@ -386,18 +385,18 @@
                         <img src="/Images/docs/datalibResolver.png" style="margin: 10px 0 10px 25px;" />
                         <div class="note">
                             <strong>Note:</strong> Here is an example, for registering ConstantLookupDataLib with IConstantLookupDataLib.
-                        </div> 
-                         <div class="noteBody">
-    <pre class="preCustom">
+                        </div>
+                        <div class="noteBody">
+                            <pre class="preCustom">
         {{iConstlookupData}}
     </pre>
-                        </div> 
+                        </div>
                     </li>
                 </ol>
-            <!-- </p> -->
-        
-            <br /><br /><br />
-        </div> 
+                <!-- </p> -->
+
+                <br /><br /><br />
+        </div>
         <div id="createDataCache">
             <h1><img src="/Images/docs/icon-data-library.png" height="60" />Creating a data cache</h1>
             <p>
@@ -406,11 +405,11 @@
             <p>
                 <br />
                 <img src="/Images/docs/cache_create_intro.png" style="margin: 10px 0 10px 25px;" />
-        
+
                 <div class="stepByStep">
                     <i class="intelicon-task"></i>Step by Step
                 </div>
-        
+
                 <ol>
                     <li>
                         <i class="intelicon-checklist-outlined" style="font-size: 20px;"></i>Ensure you have included the <strong>stored procedure</strong> into My Deals. If you are unsure how to do this, please refer to the <a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Consume a stored procedure', url: '#consumeSP' , bool: 'consumeSP'}, '1_1')">Consume a stored procedure</a> section.
@@ -435,7 +434,7 @@
                             Determine the <i>BASE</i> for the cache. This will be the name of the class that needs to be cached. For example, if the class to be cached is <b>ToolConstants</b> then the <i>BASE</i> is <b>ToolConstants</b>.
                             This is important as all the instructions will refer to replacing the <i>BASE</i>.
                         </div>
-        
+
                         <div class="alert alert-info" role="alert">
                             <strong>Important!</strong>
                             Determine the <i>BASE_DATA_LIB</i> for the <i>BASE</i>. This will be the name of the DataLibrary object and method.
@@ -444,105 +443,105 @@
                         </div>
                     </li>
                     <li>
-            <p>
-                Create the call to populate the cache <b>IF</b> the private version is not populates.
-            </p>
-            <p>
-                To do this, you need to know some important information:
-            </p>
-            <ul>
-                <li><i>BASE</i>: Name of the class.</li>
-                <li><i>BASE_DATA_LIB</i>: Name of the BASE data library call (where the stored procedure is exposed).</li>
-            </ul>
-            <div class="note">
-                <strong>Template:</strong> Here is a template to follow (remember to substitute <i style="font-size: 12px;">{{baseText}}</i> and <i style="font-size: 12px;">{{baseTestDataLib}}</i>):
-            </div>
-            <div class="noteBody">
-    <pre class="preCustom">
+                        <p>
+                            Create the call to populate the cache <b>IF</b> the private version is not populates.
+                        </p>
+                        <p>
+                            To do this, you need to know some important information:
+                        </p>
+                        <ul>
+                            <li><i>BASE</i>: Name of the class.</li>
+                            <li><i>BASE_DATA_LIB</i>: Name of the BASE data library call (where the stored procedure is exposed).</li>
+                        </ul>
+                        <div class="note">
+                            <strong>Template:</strong> Here is a template to follow (remember to substitute <i style="font-size: 12px;">{{baseText}}</i> and <i style="font-size: 12px;">{{baseTestDataLib}}</i>):
+                        </div>
+                        <div class="noteBody">
+                            <pre class="preCustom">
         {{baseCode}}
     </pre>
-            </div>
-            <div class="note">
-                <strong>Note:</strong> Here is an example where the <i style="font-size: 12px;">BASE</i> is <b>ToolConstants</b>:
-            </div>
-            <div class="noteBody">
-    <pre class="preCustom">
+                        </div>
+                        <div class="note">
+                            <strong>Note:</strong> Here is an example where the <i style="font-size: 12px;">BASE</i> is <b>ToolConstants</b>:
+                        </div>
+                        <div class="noteBody">
+                            <pre class="preCustom">
         {{staticList}}
     </pre>
-            </div>
-             </li>
-            <li>
-                <div>
-                    <p>
-                        To expose the Datacollection static class methods to Business layer write a wrapper method inside <b>DataCollectionsDataLib</b>,
-                        which will call the DataCollection static method. Extract the method signature into IDataCollectionsDataLib interface.
-                    </p>
-                    <i>IDataCollectionsDataLib is already registered with DataCollectionsDataLib type, thus no entry required in <b>Resolver.cs</b></i>
-                </div>
-                <div class="note">
-                    <strong>Note:</strong> Here is an example!
-                </div> 
-                <div class="noteBody">
-    <pre class="preCustom">
+                        </div>
+                    </li>
+                    <li>
+                        <div>
+                            <p>
+                                To expose the Datacollection static class methods to Business layer write a wrapper method inside <b>DataCollectionsDataLib</b>,
+                                which will call the DataCollection static method. Extract the method signature into IDataCollectionsDataLib interface.
+                            </p>
+                            <i>IDataCollectionsDataLib is already registered with DataCollectionsDataLib type, thus no entry required in <b>Resolver.cs</b></i>
+                        </div>
+                        <div class="note">
+                            <strong>Note:</strong> Here is an example!
+                        </div>
+                        <div class="noteBody">
+                            <pre class="preCustom">
         {{dataLibWrapperClass}}
     </pre>
-                </div> 
-             </li>
-            </ol>
-            <br /><br /><br />
-        </div> 
+                        </div>
+                    </li>
+                </ol>
+                <br /><br /><br />
+        </div>
         <div id="manageCachedData">
             <h1><img src="/Images/docs/icon-data-library.png" height="60" />Managing cached data</h1>
             <p>
                 When dealing with data caches, it is sometimes necessary to clear or repopulate the cache.  To do this, use the Cache Manager.
             </p>
             <br />
-                <img src="/Images/docs/cache_manager.png" style="margin: 10px 0 10px 25px;" />
-        
-                <div class="stepByStep">
-                    <i class="intelicon-task"></i>Cache Manager
-                </div>
+            <img src="/Images/docs/cache_manager.png" style="margin: 10px 0 10px 25px;" />
+
+            <div class="stepByStep">
+                <i class="intelicon-task"></i>Cache Manager
+            </div>
             <ol>
                 <li>
                     Open the Cache Manager. At the time this was written, the url is <b>/Admin/Cache</b>.
                 </li>
                 <li>
-                    In the <b>Cache Status</b> section, all the available data caches will be listed. 
+                    In the <b>Cache Status</b> section, all the available data caches will be listed.
                     Actions can be preformed on an individual data cache with the icons that appear next to the data cache name or actions can be performed on the entire data cache list using the buttons that appear below the list.<br/>
                     <img src="/Images/docs/cachestatus.png" style="margin-top: 15px;"/>.
                 </li>
             </ol>
-        
+
             <br /><br /><br />
-        </div> 
+        </div>
         <div id="businessLogic">
             <h1><img src="/Images/docs/icon-bus-logic.png" height="60" />Intel.MyDeals.BusinessLogic</h1>
             <p>
                 Layer dedicated to hold the business logic for My Deals.  Most of the logic for the application should reside in this layer.  There should be NO database access from this layer.
             </p>
-        
+
             <h3>Coding Practices</h3>
             <p>
                 The following coding practices for the Business Logic layer is intended to be where most of the business logic is located.  Except for database calls and metadata driven business logic, all other business logic belongs here.
             </p>
-        
-        
+
+
             <h5><a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Business logic layout', url: '#businessLogicLayout' , bool: 'businessLogicLayout'},'4_1')">Business logic layout</a></h5>
             <p>
                 Since this layer will hold most of the code, we need to make sure we keep it structured in an easy to manage layout. This layout needs to match the <i>Intel.MyDeals.DataLibrary</i> folder structure.
             </p>
             <img src="/Images/docs/callproc.png" style="margin: 10px 0 10px 25px;" />
             <p>For more info, see the <a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Business logic layout', url: '#businessLogicLayout' , bool: 'businessLogicLayout'},'4_1')">Business logic layout</a> section</p>
-        
-        
+
+
             <h5><a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Business logic scope', url: '#businessLogicScope' , bool: 'businessLogicScope'},'4_2')">Business logic scope</a></h5>
             <p>
                 Want to know what belongs in this project?  Let's look at the scope of this project to understand what really goes here.
             </p>
             <img src="/Images/docs/cache_create_intro.png" style="margin: 10px 0 10px 25px;" />
             <p>For more info, see the <a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Business logic scope', url: '#businessLogicScope' , bool: 'businessLogicScope'},'4_2')">Business logic scope</a> section</p>
-        
-        
+
+
             <br /><br /><br />
         </div>
         <div id="businessLogicLayout">
@@ -551,19 +550,19 @@
                 Since this layer will hold most of the code, we need to make sure we keep it structured in an easy to manage layout. This layout needs to match the <i>Intel.MyDeals.DataLibrary</i> folder structure.<br />
                 <img src="/Images/docs/busloglayout.png" style="margin: 10px 0 10px 25px;" />
             </p>
-        
+
             <div class="stepByStep">
                 <i class="intelicon-task"></i>Step by Step
             </div>
-        
+
             <ol>
                 <li>
-                    Open the <i>Intel.MyDeals.BusinessLogic</i> project. Notice all the folders. These should match what is in the <i>Intel.MyDeals.DataLibrary</i> project. 
+                    Open the <i>Intel.MyDeals.BusinessLogic</i> project. Notice all the folders. These should match what is in the <i>Intel.MyDeals.DataLibrary</i> project.
                     If you need a new folder, make sure you add a matching folder in both projects.<br />
                     <img src="/Images/docs/businesslogiclayout.png" style="margin: 10px 0;" />
                 </li>
             </ol>
-        
+
             <br /><br /><br />
         </div>
         <div id="businessLogicScope">
@@ -573,13 +572,13 @@
                 <img src="/Images/docs/buslogscope.png" style="margin: 10px 0 10px 25px;" />
             </p>
             <p>
-                
+
             </p>
-        
+
             <div class="stepByStep">
                 <i class="intelicon-plus-solid" style="color: #C4D600;"></i>What is in scope
             </div>
-        
+
             <ol>
                 <li>
                     Logic around object interaction.  For example, prior to a deal save, deal validation must occur.
@@ -594,11 +593,11 @@
                     ...
                 </li>
             </ol>
-        
+
             <div class="stepByStep">
                 <i class="intelicon-minus-solid" style="color: #ED1C24;"></i>What is out of scope
             </div>
-        
+
             <ol>
                 <li>
                     Any metadata driven business rules.  Business rules belong in the <a href="javascript:void(0);" (click)="navigateToSelectedLink({ url: '#businessRules', bool: 'businessRules'})">Intel.MyDeals.BusinessRules</a> project.
@@ -613,7 +612,7 @@
                     ...
                 </li>
             </ol>
-        
+
             <br /><br /><br />
         </div>
         <div id="businessLogicFunction">
@@ -622,11 +621,11 @@
                 The business layer will end up holding most of the code.  Business logic functions simply represent code blocks of business logic stored in the business layer.<br/>
                 <img src="/Images/docs/buslogfunc.png" style="margin: 10px 0 10px 25px;" />
             </p>
-        
+
             <div class="stepByStep">
                 <i class="intelicon-task"></i>Step by Step
             </div>
-        
+
             <ol>
                 <li>
                     Open the <i>Intel.MyDeals.BusinessLogic</i> project. Notice all the folders. These should match what is in the <i>Intel.MyDeals.DataLibrary</i> project.
@@ -636,15 +635,15 @@
                 <li>
                     Add your business function here.  Keep in mind the code segments should be rather small and coded in a way it can efficiently be used by automated testing.<br />
                     <div class="note"><strong>Note:</strong> Here is an example of a business logic function:</div>
-                     <div class="noteBody">
-    <pre class="preCustom">
+                    <div class="noteBody">
+                        <pre class="preCustom">
         {{businessLogicFunction}}
     </pre>
-                    </div> 
+                    </div>
                 </li>
             </ol>
-        
-        
+
+
             <br /><br /><br />
         </div>
         <div id="businessLogicCallProcedure">
@@ -653,11 +652,11 @@
                 Actually... you <b>CANNOT</b> call a stored procedure from the Business Logic layer.  Instead, a Data Library function must be called which will in turn call the stored procedure.
                 <img src="/Images/docs/buslogproc.png" style="margin: 10px 0 10px 25px;" />
             </p>
-        
+
             <div class="stepByStep">
                 <i class="intelicon-task"></i>Step by Step
             </div>
-        
+
             <ol>
                 <li>
                     Open the <i>Intel.MyDeals.BusinessLogic</i> project. Notice all the folders. These should match what is in the <i>Intel.MyDeals.DataLibrary</i> project.
@@ -668,11 +667,11 @@
                     Add your business function here.  Keep in mind the code segments should be rather small and coded in a way it can efficiently be used by automated testing.
                     <p>To mock the DataLib during unit testing, inject dependency via constructor.</p>
                     <div class="note"><strong>Note:</strong> Here is an example of a business logic function:</div>
-                     <div class="noteBody">
-    <pre class="preCustom">
+                    <div class="noteBody">
+                        <pre class="preCustom">
         {{businessLgcFndataColDataLib}}
     </pre>
-                    </div> 
+                    </div>
                 </li>
                 <li>
                     Extract the public methods which you want to expose to Api Layer, create the appropriate folder in the <i>Intel.MyDeals.IBusinessLogic</i>.
@@ -684,20 +683,20 @@
                     </div>
                 </li>
                 <li>
-                        In the <i>Resolver.cs</i> file register the interface with implementing class in the container.
+                    In the <i>Resolver.cs</i> file register the interface with implementing class in the container.
                     <br />
                     <img src="/Images/docs/libResolver.png" style="margin: 10px 0 10px 25px;" />
                     <div class="note">
                         <strong>Note:</strong> Here is an example, for registering ConstantLookupLib with IConstantLookupLib.
                     </div>
-                     <div class="noteBody">
-    <pre class="preCustom">
+                    <div class="noteBody">
+                        <pre class="preCustom">
         {{iConstlookupData}}
     </pre>
-                    </div> 
+                    </div>
                 </li>
             </ol>
-        
+
             <br /><br /><br />
         </div>
         <div id="businessLogicCallCache">
@@ -706,11 +705,11 @@
                 Instead of calling a stored procedure every time, there are cases where caching the data is more efficient.
                 <img src="/Images/docs/buslogcache.png" style="margin: 10px 0 10px 25px;" />
             </p>
-        
+
             <div class="stepByStep">
                 <i class="intelicon-task"></i>Step by Step
             </div>
-        
+
             <ol>
                 <li>
                     Open the <i>Intel.MyDeals.BusinessLogic</i> project. Notice all the folders. These should match what is in the <i>Intel.MyDeals.DataLibrary</i> project.
@@ -720,47 +719,43 @@
                 <li>
                     Add your business function here.  Keep in mind the code segments should be rather small and coded in a way it can efficiently be used by automated testing.<br />
                     <div class="note"><strong>Note:</strong> Here is an example of a business logic function calling the DataCollectionsDataLib <b>cache</b> instead of the procedure(ConstantLookupDataLib). <b>DataCollectionsDataLib</b> calls <b>DataCollections</b> static methods.</div>
-                     <div class="noteBody">
-    <pre class="preCustom">
+                    <div class="noteBody">
+                        <pre class="preCustom">
         {{businessLgcFndataColDataLib}}
     </pre>
-                    </div> 
+                    </div>
                 </li>
             </ol>
-        
-        
+
+
             <br /><br /><br />
         </div>
         <div id="businessRules">
             <h1><img src="/Images/docs/incon-bus-rules.png" height="60" />Intel.MyDeals.BusinessRules</h1>
             <p>
-                Layer dedicated to hold the business rules and validation.  These should be driven completely off MetaData.
+                Layer dedicated to hold the business rules and validation. These should be driven completely off MetaData. Below is the folder structure.
             </p>
-        
-            <p>
-                <b>This section is currently empty becuase the design has not been completed yet.</b>
-            </p>
+            <div><img src="\Images\docs\Business-rules.png" style="height:400px" /></div>
             <br /><br /><br />
         </div>
-        <div id="app">
+        <div id="app" style="height: auto;">
             <h1><img src="/Images/docs/icon-app-layer.png" height="60" /> Intel.MyDeals.App</h1>
             <p>
                 Layer dedicated to housing Application specific information such as Application View Model, Application Library, and Application Settings.
             </p>
-        
-            <br /><br /><br />
+
         </div>
         <div id="myDeals">
             <h1><img src="/Images/docs/icon-presentation.png" height="60" /> Intel.MyDeals</h1>
             <p>
                 Layer to hold all database connection libraries. These are the tools used by the <a href="javascript:void(0);" (click)="navigateToSelectedLink({ url: '#dataLibrary', bool: 'dataLibrary'})">Data Libraries</a> to access the Database via <a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Consume a stored procedure', url: '#consumeSP' , bool: 'consumeSP'}, '1_1')">Stored Procedures</a>.
             </p>
-        
+
             <h3>Coding Practices</h3>
             <p>
-                The following coding practices for the Data Access layer consist mainly of consuming Stored Procedures that will be used by the<a href="javascript:void(0);" (click)="navigateToSelectedLink({ url: '#dataLibrary', bool: 'dataLibrary'})">Data Libraries</a>.
+                The following coding practices for the Data Access layer consist mainly of consuming Stored Procedures that will be used by the <a href="javascript:void(0);" (click)="navigateToSelectedLink({ url: '#dataLibrary', bool: 'dataLibrary'})">Data Libraries</a>.
             </p>
-        
+
             <h5><a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Create a MVC Controller', url: '#presentationMvcController' , bool: 'presentationMvcController'},'7_1')">Create a MVC Controller</a></h5>
             <p>
                 To include a newly created stored procedure into the My Deals project, you simply need to have compile the <strong>SPClassGenerator.tt</strong> T4 Template.
@@ -769,21 +764,21 @@
             The controller is responsible for intercepting the HTTP request and communicating with the <b>Model</b> and the <b>View</b>.<br />
             <img src="/Images/docs/mvc.png" style="margin: 10px 0 10px 25px;"/>
             <p>For more info, see the <a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Create a MVC Controller', url: '#presentationMvcController' , bool: 'presentationMvcController'}, '7_1')">Create a MVC Controller</a> section</p>
-        
+
             <br /><br /><br />
         </div>
         <div id="presentationMvcController">
             <h1><img src="/Images/docs/icon-presentation.png" height="60" />Create a MVC Controller</h1>
             <p>
-                MVC Controllers rely on routing from the URL to pick which controller to instanciate. 
+                MVC Controllers rely on routing from the URL to pick which controller to instanciate.
                 The controller is responsible for intercepting the HTTP request and communicating with the <b>Model</b> and the <b>View</b>.<br/>
                 <img src="/Images/docs/mvc.png" style="margin: 10px 0;" />
             </p>
-        
+
             <div class="stepByStep">
                 <i class="intelicon-task"></i>Step by Step
             </div>
-        
+
             <ol>
                 <li>
                     Open the <i>Intel.MyDeals</i> project and find the <b>Controllers</b> folder. <br />
@@ -802,57 +797,32 @@
                     <div class="note"><strong>Note:</strong> Here is an example of a controller for <b>Others</b>.
                     </div>
                     <div class="noteBody">
-    <pre class="preCustom">        
+                        <pre class="preCustom">        
         {{controllerForOthers}}
     </pre>
                     </div>
                 </li>
-                <li>
-                    Create the client <b>Razor View</b>. Right click on the <b>View()</b> call in the controller and select <b>Add View...</b>.<br />
-                    <img src="/Images/docs/addViewMenu.png" style="margin: 10px 0;" />
-                </li>
-                <li>
-                    Select MVC View.<br />
-                    <img src="/Images/docs/addScaffoldView.png" style="margin: 10px 0;" />
-                </li>
-                <li>
-                    Apply view details including the view name.  Your setting should look similar to the below image.<br />
-                    <img src="/Images/docs/addView.png" style="margin: 10px 0;" />
-                </li>
-                <li>
-                    Start populating the <b>View</b> contents.<br />
-                    <div class="note">
-                        <strong>Note:</strong> Here is an example of a view created for <b>Constants</b>.
-                    </div>
-                    <div class="noteBody">
-    <pre class="preCustom">        
-        {{showConstants}}
-    </pre>
-                    </div>
-                </li>
-                
-        
             </ol>
             <br /><br /><br />
         </div>
         <div id="presentationWebApi">
-            <h1><img src="/Images/docs/icon-presentation.png" height="60" />Creating Web APIs</h1>
+            <h1><img src="/Images/docs/icon-presentation.png" height="60" />Creating API Controller</h1>
             <p>
                 Web API is a framework that makes it easy to build HTTP services that reach a broad range of clients, including browsers and mobile devices.
                 Web API is an ideal platform for building RESTful applications on the .NET Framework.<br/>
                 <img src="/Images/docs/webapi.png" style="margin: 10px 0;"/>
             </p>
-        
+
             <p>
                 In My Deals, we will keep our Web APIs clean. This means the Web API should only have code to handle errors in the API calls.
                 Any other logic should exist in the <b>Business Logic</b> layer and be called from the Web API.
                 This will allow the business logic to be re-used by other API calls, MVC controllers or shared libraries.
             </p>
-        
+
             <div class="stepByStep">
                 <i class="intelicon-task"></i>Step by Step
             </div>
-        
+
             <ol>
                 <li>
                     Open the <i>Intel.MyDeals</i> project and find the <b>Controllers</b> folder. Then locate the <b>API</b> folder<br />
@@ -872,67 +842,32 @@
                 </li>
                 <li>
                     After the API controller is created, the appropriate Opaque calls and My Deals calls need to be added.<br />
-        
+
                     <div class="alert alert-info" role="alert" style="margin-top: 10px;">
                         <strong>Route Tip!</strong> Web APIs will default to use the global router mapping defined for the application, but by proving a <b>[Route]</b> a specific URL address can be mapped to your Web API.
                     </div>
-        
+
                     <div class="note">
                         <strong>Note:</strong> Here is an example of an API controller for <b>Constants</b> called <i style="font-size: 12px;">GetConstants</i>.
                     </div>
                     <div class="noteBody">
-    <pre class="preCustom">
+                        <pre class="preCustom">
         {{calledConstants}}
     </pre>
                     </div>
                 </li>
                 <li>
-                    Want to try it out? <button class="btn btn-primary btnDesignFlows" type="button" (click)="testApi()" style="margin-left: 25px;">Test API</button>
-                    <div id="resultsTestApi"></div>
+                    Want to try it out? <button class="btn btn-primary btnDesignFlows" type="button" (click)="testApi()" style="margin-left: 25px;">HealthCheck API</button>
+                    <div id="resultsTestApi">
+                        <div *ngIf="isErrorVisible">
+                            <div>{{reasonData}}</div>
+                            </div>
+                        </div>
                 </li>
-            </ol>
-            <br /><br /><br />
-            <br /><br /><br />
-        </div>
-        
-        
-        <!-- <script>
-            function testApi() {
-                showMsg("Calling API <img src='/images/032.gif'/>");
-                op.ajaxGetAsync("/api/DevTests/GetDBTest", function (data) {
-                    var msg = "";
-        
-                    if (data["ERROR"] !== undefined) {
-                        msg = "<h6>Results</h6>";
-                        msg += "<div class='results'>";
-                        msg += "<div><span class='err'>" + data["ERROR"] + "</div>";
-                        msg += "<div>";
-        
-                    } else {
-                        msg = "<h6>Results</h6>";
-                        msg += "<div class='results'>";
-                        msg += "<div><span class='lbl'>DB Local Time:</span> " + data["DB Local Time"] + "</div>";
-                        msg += "<div><span class='lbl'>DB Server:</span> " + data["DB Server"] + "</div>";
-                        msg += "<div><span class='lbl'>DB UTC Time:</span> " + data["DB UTC Time"] + "</div>";
-                        msg += "<div>";
-        
-                    }
-        
-                    showMsg(msg);
-        
-                }, function (result) {
-                    var msg = "<h6>Results</h6>";
-                    msg += "<div class='results'>";
-                    msg += "<div><span class='err'>Failed Test!!!</div>";
-                    msg += "<div>";
-                    showMsg(msg);
-                });
-            }
-        
-            function showMsg(msg) {
-                $("#resultsTestApi").html(msg);
-            }
-        </script> -->
+        </ol>
+        <br /><br /><br />
+    </div>
+
         <div id="presentationCallWebApi">
             <h1><img src="/Images/docs/icon-presentation.png" height="60" />Calling a Web API</h1>
             <p>
@@ -947,116 +882,58 @@
                 This description is just one of many ways to call a Web API.
                 Over time, as more common patterns form, feel free to document them here.
             </p>
-        
+            <p>Here are the steps to make API calls in Angular.</p>
             <div class="stepByStep">
                 <i class="intelicon-task"></i>Step by Step
             </div>
-        
-            <ol>
-                <li>
-                    <i class="intelicon-checklist-outlined" style="font-size: 20px;"></i>Ensure you have created the <strong>MVC Controller</strong>. 
-                    If you are unsure how to do this, please refer to the <a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Create a MVC Controller', url: '#presentationMvcController' , bool: 'presentationMvcController'},'7_1')">Create an MVC Controller</a> section.
-                </li>
-                <li>
-                    <i class="intelicon-checklist-outlined" style="font-size: 20px;"></i>Ensure you have created the <strong>Web API</strong>. 
-                    If you are unsure how to do this, please refer to the <a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Creating Web APIs', url: '#presentationWebApi' , bool: 'presentationWebApi'},'7_2')">Creating Web APIs</a> section.
-                </li>
-                <li>
-                    Open the appropriate <b>View</b> from the <b>Views</b> folder in the <i>Intel.MyDeals</i> project.
-                </li>
-                <li>
-                    For this example, a Kendo Grid control is populated by a datasource referencing the <b>/api/AdminConstants/v1/GetConstants</b> API.<br/>
-        
-                    <div class="note">
-                        <strong>Note:</strong> Here is an example of what code is generated for a store procedure:
-                    </div>
-                    <div class="noteBody">
-    <pre class="preCustom">
-        {{generatedSP}}
-    </pre>
-                    </div>
-        
-                </li>
-                <li>
-                    <p>
-                        Here is real time result of the above code:
-                    </p>
-                    <div style="border: 1px solid #eeeeee; padding: 15px;">
-                        <h1>Sample Constants Display</h1>
-                        <div id="grid"></div>
-                        <br/>
-                    </div>
-                </li>
-            </ol>
-        
-                <br />
-                <br />
-                <br />
+            <p>Step 1 : Import the HttpClient Module in your app.module.ts file. <br /></p>
+            <div class="note"><strong>Note:</strong> Here is an example</div>
+            <div class="noteBody">
+                <pre class="preCustom">
+                 {{appModuleEg}}
+                </pre>
+            </div>
+            <p>Step 2 : Create new service to handle HTTP requests, can create methods to handle different types of requests (GET, POST, PUT, DELETE etc). <br /></p>
+            <div class="note"><strong>Note:</strong> Here is an example</div>
+            <div class="noteBody">
+                <pre class="preCustom">
+               {{serviceodeEx}}
+               </pre>
+            </div>
+            <p>Step 3 : We need to inject the API Service into our component where we want to use, the service class should be added to the constructor of your compoenent. <br /></p>
+            <p>Step 4 : Use the methods defined in the service to make API calls, in the below we are using getFunFactItems() method to render unique funFacts everytime from get service call.</p>
+            <div class="note"><strong>Note:</strong> Here is an example</div>
+            <div class="noteBody">
+                <pre class="preCustom">
+               {{subscribeCodeEx}}
+              </pre>
+            </div>
         </div>
-        
-         <script>
-            $(document).ready(function() {
-                $("#grid").kendoGrid({
-                    dataSource: {
-                        type: "json",
-                        transport: {
-                            read: "/api/AdminConstants/v1/GetConstants"
-                        },
-                        schema: {
-                            model: {
-                                fields: {
-                                    CNST_NM: { type: "string" },
-                                    CNST_DESC: { type: "string" },
-                                    CNST_VAL_TXT: { type: "string" }
-                                }
-                            }
-                        },
-                        pageSize: 20
-                    },
-                    height: 250,
-                    filterable: true,
-                    sortable: true,
-                    pageable: true,
-                    columns: [
-                        {
-                            field: "CNST_NM",
-                            title: "Name"
-                        },
-                        {
-                            field: "CNST_DESC",
-                            title: "Description"
-                        }, {
-                            field: "CNST_VAL_TXT",
-                            title: "Value"
-                        }
-                    ]
-                });
-            });
-        </script> 
         <div id="presentationAngularViews">
-            <h1><img style="height:70px" src="/Images/docs/angular.png" />Creating Angular Views</h1>
-            <p>
-                The presentation layer of My Deals will be a Multi SPA Angular JS + MVC, because a single SPA can become huge and tough to maintain. Refer the UI/MT architecture diagram below to understand the structuring of the SPA's across
+            <img style="height:70px;position: relative; right: 35px;" src="/Images/docs/angular.png" /><h1 class="heading-projectup">Creating Angular Component</h1>
+            <div>
+                <p style="position:relative;bottom:20px">
+                    The first and topmost layer of My deals application is the presentation layer which is build using Angular 12 framework, where users can interact with the UI. For creating an angular component Angular CLI is generally used. Open terminal and type the command, ng generate component component-name, (example: ng g c admin). The naming convention followed is component name is suffixed with respective files like admin.component.ts , admin.component.html. Please refer the below image. <br />
+                    Note: .specs.ts file is used for unit testing of the application (can be added later when required).
+                </p>
                 <br />
-                <a href="/Images/docs/MyDeal UI MT Architecture 50.pdf" target="_blank">
-                    <div style="padding: 20px 5px 0 5px; text-align: left;">
-                        <img src="/Images/docs/ui_mt_architecture.png" />
-                    </div>
-                    Click to view a larger version of the architecture.
-                </a>
-            </p>
+                <div style="padding: 20px 5px 0 5px; text-align: left;">
+                    <img src="\Client\Images\docs\Ang-component.png" />
+                    <img src="\Client\Images\docs\Admin-ag-files.png" style="padding: 20px;" />
+                    <img src="\Client\Images\docs\admin-ts-file.png" />
+                </div>
+            </div>
+
             <p>
-                In My Deals, the web client has different SPA modules. Each module resides inside a cshtml page for example Admin, Cost Test, Dashboard,
-                Reporting and Contract (these might change in future). As no compile time errors thrown from javascript its extremely important to follow the
+                In My Deals, the web client has different SPA modules. Each module resides inside a html page for example Admin, Cost Test, Dashboard,
+                Reporting and Contract. As no compile time errors thrown from javascript its extremely important to follow the
                 standard guidelines while adding angular views for easy maintenance, debugging and re usability.
+                when you load the application for the first time, not all the pages from the server will be rendered.
+                It's only index.html that loads when you load the application. Since only a single page is loaded it is called SPA.
             </p>
             <h4>My Deals Angular app Structure</h4>
-            <p>
-                All the angular file will be added in a standard defined structure, javascript and html files
-                will be added to app folder instead of Scripts and Views folder of MVC. This structure enables to open
-                and work in all of the related files for a feature. Group files as per the feature not as per there type.
-            </p>
-            <img src="/Images/docs/angularFolderStructure.png" />
+            <p>Under Intel.MyDeals, angular project files are placed in the client folder. The key project files where the source code is written is located in the app/directory inside the src folder. Main component is the app component/root component and app component has serveral nested root componenets like admin, contract, coding practices etc.</p>
+            <img src="\client\Images\docs\Client-folder1.png" style="height:450px;width: 245px;" />
             <p>
                 This structure will follows the LIFT guidelines
                 <ol>
@@ -1065,14 +942,15 @@
                     <li>Flat structure as long as we can</li>
                     <li>Try to stay DRY (Don't Repeat Yourself)</li>
                 </ol>
-            <!-- </p> -->
+                <!-- </p> -->
             <p>
                 The application has a base module app, other modules will be bootstrapped with the base module.
+                The @NgModule decorator indentifies AppModule as an angular module class and the @NgModule takes metadata object that tells angular how to complie and launch the MyDeals application, you need to declare any newly created components in declarations section of app.module.ts file as shown below.
             </p>
             <div class="note"><strong>Note:</strong> Here is an example</div>
             <div class="noteBody">
-    <pre class="preCustom">
-        {{baseAppModule}}
+                <pre class="preCustom">
+        {{baseAppModuleCode}}
     </pre>
             </div>
             <p>
@@ -1082,558 +960,464 @@
             </p>
             <div class="note"><strong>Note:</strong> Here is an example</div>
             <div class="noteBody">
-    <pre class="preCustom">
+                <pre class="preCustom">
         {{blockModule}}
     </pre>
             </div>
-            <p>Follow below steps to a register a new SPA and add angular views to it</p>
-            <div class="stepByStep">
-                <i class="intelicon-task"></i>Step by Step
+            <div><a href="https://intel.sharepoint.com/:w:/r/sites/MyDealsTeam/Shared%20Documents/General/Angular/Option3_development_steps.docx?d=w673d3c128a3347a1ba2636c62b2af84f&csf=1&web=1&e=1nAml0" target="_blank" class="btn-ttl-coding">Click here</a> for more details on <b>Angular Project Setup.</b></div>
+            <div id="examples">
+                <h1><img src="/Images/docs/examples.png" height="60" />Examples</h1>
+                <p>
+                    Here are some examples of some common tasks
+                </p>
+
+                <h5><a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Managing data from a procedure with cache', url: '#dataFromProcWithCache' , bool: 'dataFromProcWithCache'},'8_1')">Managing data from a procedure with cache</a></h5>
+                <p>
+                    This example shows how to manage data returned from a procedure using the cache manager.
+                </p>
+
+                <h5><a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Managing data from an api with cache output', url: '#dataFromApiWithCache' , bool: 'dataFromApiWithCache'}, '8_2')">Managing data from an api with cache output</a></h5>
+                <p>
+                    This example shows how to manage cache returned from an api
+                </p>
+
+                <br /><br /><br />
             </div>
-        
-            <ol>
-                <li>
-                    <i class="intelicon-checklist-outlined" style="font-size: 20px;"></i>Ensure you have created the <strong>MVC Controller</strong>.
-                    If you are unsure how to do this, please refer to the <a href="javascript:void(0); " (click)="navigateToSelectedLink({ text: 'Create a MVC Controller', url: '#presentationMvcController' , bool: 'presentationMvcController'},'7_1')">Create an MVC Controller</a> section. Add <strong>AdminController</strong>.
-                </li>
-                <li>
-                    <i class="intelicon-checklist-outlined" style="font-size: 20px;"></i>Ensure you have created the <strong>Web API</strong>.
-                    If you are unsure how to do this, please refer to the <a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Creating Web APIs', url: '#presentationWebApi' , bool: 'presentationWebApi'},'7_2')">Creating Web APIs</a> section.
-                    Create corresponding api for the SPA.
-                </li>
-                <li>Open the Index.cshtml under Views/Admin folder. Add <strong>ui-view</strong> to the div. All the views under this SPA will be injected inside this div.</li>
-                <li>
-                    Register the admin module, make sure that each file has only one component defined,
-                    do not define controller and module in the same file.
-                    <div class="note"><strong>Note:</strong> Here is an example</div>
-                    <div class="noteBody">
-    <pre class="preCustom">
-        {{registerModule}}
-    </pre>
-                    </div>
-                </li>
-                <li>
-                    <p>Register the routes for the module, inside admin module we have two features, cache manager and constants. Add the corresponding routes.</p>
-                    <p><i><b>Note</b> We are using controller As syntax to avoid confusion with $scope variable, when we have nested controllers.</i></p>
-                    <div class="note"><strong>Note:</strong> Here is an example</div>
-                     <div class="noteBody">
-    <pre class="preCustom">
-        {{routerRegister}}
-    </pre>
-                    </div> 
-                </li>
-                <li>
-                    Add a javascript file and declare a controller name it as <strong>admin.constants.controller.js</strong>, which will interact with the service and html.
-                    Controller should not contain any DOM manipulation logic, however it can have the ng-if, ng-hide/show logic.
-                    A logger service will be injected for logging and exception handling activities and corresponding constantsService is injected.
-                    To know more about logging and error handling specifics refer to <a (click)='navigateCodingTools({ text: "Error handling", url:"#errorHandling", bool: "errorHandling" })'>Error Handling</a>,
-                    <a (click)='navigateCodingTools({ text: "Logging", url:"#logging", bool: "logging" })'>Logging</a> sections.
-                    <div class="note"><strong>Note:</strong> Here is an example</div>
-                    <div class="noteBody">
-    <pre class="preCustom">
-        {{errorHandling}}
-    </pre>
-                    </div>
-                </li>
-                <li>
-                    Create a new javascript file factory/service <strong>constants.service.js</strong>to the services folder under the SPA' so that these are reused across the module.
-                    Only services will be grouped by there type rest all the files are grouped as per the feature.
-                    <div class="note"><strong>Note:</strong> Here is an example</div>
-                    <div class="noteBody">
-    <pre class="preCustom">
-        {{serviceCalls}}
-    </pre>
-                    </div>
-                </li>
-                <li>
-                    Create html view for this route under the feature folder <strong>admin.html</strong>. The html is binded to all the public variables inside controller.
-                    <i><strong>Note:</strong> All public variable starts with "vm." as we are using <strong>controller As</strong> syntax in the routing</i>
-                </li>
-                <li>
-                    Bootstrap all the javascript files and bundle them in App_Start/BundleConfig.cs
-                </li>
-                <li>
-                    After following all the steps the folder structure should look like as below.
-                    Similar folder structure should be followed for other modules and features
-                </li>
-            </ol>
-            <div style="padding: 20px 5px 0 5px; text-align: left;">
-                <img src="/Images/docs/angularFeatureStructure.png" />
-            </div>
-            <br />
-            <br />
-            <br />
-        </div>
-        <div id="examples" >
-            <h1><img src="/Images/docs/examples.png" height="60" />Examples</h1>
-            <p>
-                Here are some examples of some common tasks
-            </p>
-        
-            <h5><a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Managing data from a procedure with cache', url: '#dataFromProcWithCache' , bool: 'dataFromProcWithCache'},'8_1')">Managing data from a procedure with cache</a></h5>
-            <p>
-                This example shows how to manage data returned from a procedure using the cache manager.
-            </p>
-        
-            <h5><a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Managing data from an api with cache output', url: '#dataFromApiWithCache' , bool: 'dataFromApiWithCache'}, '8_2')">Managing data from an api with cache output</a></h5>
-            <p>
-                This example shows how to manage cache returned from an api
-            </p>
-        
-            <br /><br /><br />
-        </div>
-        <div id="dataFromProcWithCache" >
-            <h1><img src="/Images/docs/examples.png" height="60" />Managing data from a procedure with cache</h1>
-            <p>
-                This example show how to manage data returned from a procedure using the cache manager.
-            </p>
-            <p>
-                Take for instance we have a Constanst table in the database and a procedure called <b>[dbo].[PR_GET_CONSTANTS]</b> to retrieve the data. 
-                Our task is to make this data freely available in code without having to make many calls to the DB.  So, this means we need to cache to results.  Here is how that is done.
-            </p>
-        
-            <div class="stepByStep">
-                <i class="intelicon-task"></i>Step by Step
-            </div>
-        
-            <div class="panel-group panelAccord" id="accordion" role="tablist" aria-multiselectable="true">
-                
-                <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingOne">
-                        <h4 class="panel-title" style="font-size: 14px;">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
-                                <i class="intelicon-right-next"></i>
-                                First we need to make sure the procedure is exposed to the project.
-                                <div class="fr">
-                                    (<a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Consume a stored procedure', url: '#consumeSP' , bool: 'consumeSP'},'1_1')">Consume a stored procedure</a>)
-                                </div>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
-                        <div class="panel-body">
-                            <ol>
-                                <li>
-                                    Open the <strong>SPClassGenerator.tt</strong> file in the <i>Intel.MyDeals.DataAccessLib</i> project.<br/>
-                                    <img src="/Images/docs/datalibproj.png" style="margin: 10px 0;"/>
-                                </li>
-                                <li>
-                                    <strong>Do not change this file!!!</strong> All you need to do is save the file and it will compile the T4 template and generate the C# code.
-                                </li>
-                                <li>
-                                    Verify your stored procedure is locate in the generated code. To do this, expand the <strong>SPClassGenerator.tt</strong> file and open the <strong>SPClassGenerator1.generated.cs</strong> and search for your stored procedure.<br/>
-                                    <img src="/Images/docs/SPClassGeneratorResults.png" style="margin: 10px 0;"/><br/>
-        
-                                    <div class="note">
-                                        <strong>Note:</strong> Here is an example of what code is generated for a store procedure:
-                                    </div>
-                                    <div class="noteBody">
-                                        <img src="/Images/docs/ex_proc_results.png" style="margin: 10px 0;"/>
-                                    </div>
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
+            <div id="dataFromProcWithCache" >
+                <h1><img src="/Images/docs/examples.png" height="60" />Managing data from a procedure with cache</h1>
+                <p>
+                    This example show how to manage data returned from a procedure using the cache manager.
+                </p>
+                <p>
+                    Take for instance we have a Constanst table in the database and a procedure called <b>[dbo].[PR_GET_CONSTANTS]</b> to retrieve the data.
+                    Our task is to make this data freely available in code without having to make many calls to the DB.  So, this means we need to cache to results.  Here is how that is done.
+                </p>
+
+                <div class="stepByStep">
+                    <i class="intelicon-task"></i>Step by Step
                 </div>
-        
-                <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingTwo">
-                        <h4 class="panel-title" style="font-size: 14px;">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
-                                <i class="intelicon-right-next"></i>
-                                Next we need to create a class to hold the returned data from the procedue.
-                                <div class="fr">
-                                    (<a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Creating a shared class from a procedure', url: '#sharedCSfromProc' , bool: 'sharedCSfromProc'},'2_2')">Creating a shared class from a procedure</a>)
-                                </div>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
-                        <div class="panel-body">
-                            <ol>
-                                <li>
-                                    Open the <strong>TableToClasses.tt</strong> file in the <i>Intel.MyDeals.Entities</i> project.<br/>
-                                    <img src="/Images/docs/TableToClass.png" style="margin: 10px 0;"/>
-                                </li>
-                                <li>
-                                    Enter a call to the stored procedure and declare the name of the class that will be generated.
-                                    The stored procedue must be executable, so if parameters are required to run the procedure, please apply them.
-        
-                                    <div class="note"><strong>Note:</strong> It will actually execute the procedure, so try to make the return dataset minimal for better performance.
+
+                <div class="panel-group panelAccord" id="accordion" role="tablist" aria-multiselectable="true">
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingOne">
+                            <h4 class="panel-title" style="font-size: 14px;">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseOne" aria-expanded="false" aria-controls="collapseOne">
+                                    <i class="intelicon-right-next"></i>
+                                    First we need to make sure the procedure is exposed to the project.
+                                    <div class="fr">
+                                        (<a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Consume a stored procedure', url: '#consumeSP' , bool: 'consumeSP'},'1_1')">Consume a stored procedure</a>)
                                     </div>
-                                    <div class="noteBody">
-                                        In this example, the <i>dbo.PR_GET_CONSTANTS</i> procedure is being called with no parameters. The results will create a class called <B>ToolConstants</B>.<br/>
-                                        <img src="/images/docs/ex_code_class.png" style="margin: 10px 0;"/><br/>
-                                    </div>
-                                </li>
-                                <li>
-                                    Sometimes there are errors generating the classes. This can be because the entered stored procedure call had some mistakes or the generation timed out.
-                                    Verify the generated code has no errors. To do this, expand the <strong>TableToClasses.tt</strong> file and open the <strong>TableToClasses.generated.cs</strong>.<br/>
-                                    <img src="/Images/docs/TableToClassResults.png" style="margin: 10px 0;"/><br/>
-        
-                                    <div class="note"><strong>Note:</strong> Here is an example of what code is generated for a store procedure:
-                                    </div>
-                                    <div class="noteBody">
-    <pre class="preCustom">
-        {{generateSC}}
-    </pre>
-                                    </div>
-                                </li>
-                            </ol>
+                                </a>
+                            </h4>
                         </div>
-                    </div>
-                </div>
-        
-                <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingThree">
-                        <h4 class="panel-title" style="font-size: 14px;">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
-                                <i class="intelicon-right-next"></i>
-                                Next we need to call the stored procedure.
-                                <div class="fr">
-                                    (<a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Calling a stored procedure', url: '#callingSP' , bool: 'callingSP'},'3_1')">Calling a stored procedure</a>)
-                                </div>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
-                        <div class="panel-body">
-                            <ol>
-                                <li>
-                                    Locate the <b>Constants Lookups</b> folder in the <i>Intel.MyDeals.DataLibrary</i> project.
-                                    We want to open the <b>ConstantLookupDataLib.cs</b> file.<br />
-                                    <img src="/Images/docs/datalibproj.png" style="margin: 10px 0;" />
-                                </li>
-                                <li>
-                                    Now we need to add the procedure call.  Look at the generated output from the T4 Template for examples.<br />
-        
-                                    <div class="note">
-                                        <strong>Note:</strong> Here is the <b>PR_GET_CONSTANTS</b> store procedure call:
-                                    </div>
-                                    <div class="noteBody">
-    <pre class="preCustom">
-        {{getConstantsSP}}
-    </pre>
-                                    </div>
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-        
-                <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingFour">
-                        <h4 class="panel-title" style="font-size: 14px;">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
-                                <i class="intelicon-right-next"></i>
-                                Now we can creating a data cache.
-                                <div class="fr">
-                                    (<a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Creating a data cache', url: '#createDataCache' , bool: 'createDataCache'},'3_2')">Creating a data cache</a>)
-                                </div>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
-                        <div class="panel-body">
-                            <ol>
-                                <li>
-                                    Locate the <b>Data Collections</b> folder in the <i>Intel.MyDeals.DataLibrary</i> project.
-                                    Open the <b>DataCollections.cs</b> file.<br />
-                                    <img src="/Images/docs/projDataCollections.png" style="margin: 10px 0;" />
-                                </li>
-                                <li>
-                                    <p>
-                                        Create the call to populate the cache <b>IF</b> the private version is not populates.
-                                    </p>
-                                    <p>
-                                        To do this, you need to know some important information:
-                                        <ul>
-                                            <li><i>BASE</i>: Name of the class. For us it is <b>ToolConstants</b></li>
-                                            <li><i>BASE_DATA_LIB</i>: Name of the BASE data library call (where the stored procedure is exposed).  For us it is <b>ConstantLookupDataLib().GetToolConstants()</b></li>
-                                        </ul>
-                                    <!-- </p> -->
-                                    <div class="note">
-                                        <strong>Code:</strong> Now we add the following code.
-                                    </div>
-                                    <div class="noteBody">
-    <pre class="preCustom">
-        {{populateCache}}
-    </pre>
-                                    </div>
-        
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-        
-                <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingFive">
-                        <h4 class="panel-title" style="font-size: 14px;">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
-                                <i class="intelicon-right-next"></i>
-                                Create a business logic function to call the cache.
-                                <div class="fr">
-                                    (<a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Call from data cache', url: '#businessLogicCallCache' , bool: 'businessLogicCallCache'},'5_5')">Call from data cache</a>)
-                                </div>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
-                        <div class="panel-body">
-                            <ol>
-                                <li>
-                                    Open the <b>ConstantsLookupsLib.cs</b> from the <b>Constants Lookups</b> folder in the <i>Intel.MyDeals.BusinessLogic</i> project.<br/>
-                                    <img src="/Images/docs/constantDataLibProj.png" style="margin: 10px 0;" />
-                                </li>
-                                <li>
-                                    Next we will create a business logic function that calls the <b>cached</b> function instead of calling the Constants DataLibary function directly.<br />
-                                    <div class="note"><strong>Note:</strong> We need to call the <b>DataCollections.GetToolConstants</b> function which will return the cache version if applicable.</div>
-                                    <div class="noteBody">
-    <pre class="preCustom">        
-        {{cacheFunctionCall}}
-    </pre>
-                                    </div>
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-        
-                <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingSix">
-                        <h4 class="panel-title" style="font-size: 14px;">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSix" aria-expanded="false" aria-controls="collapseSix">
-                                <i class="intelicon-right-next"></i>
-                                Create a Web API to call our cached business function.
-                                <div class="fr">
-                                    (<a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Creating Web APIs', url: '#presentationWebApi' , bool: 'presentationWebApi'},'7_2')">Creating Web APIs</a>)
-                                </div>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
-                        <div class="panel-body">
-                            <ol>
-                                <li>
-                                    Open the <i>Intel.MyDeals</i> project and find the <b>Controllers</b> folder. Then locate the <b>API</b> folder<br />
-                                    <img src="/Images/docs/projControllerAPI.png" style="margin: 10px 0;" />
-                                </li>
-                                <li>
-                                    Add a new API Controller. To do this, right click on the <b>Controllers</b> folder and select <b>Add</b> -> <b>Controller</b>.<br />
-                                    <img src="/Images/docs/addApiController.png" style="margin: 10px 0;" />
-                                </li>
-                                <li>
-                                    Select the type of Controller. In the popup dialog, select <b>Web API 2 Controller - Empty</b>.<br />
-                                    <img src="/Images/docs/addScaffoldAPI.png" style="margin: 10px 0;" />
-                                </li>
-                                <li>
-                                    Enter the name of the Web API controller as <b>ConstantsController</b>.<br />
-                                    <img src="/Images/docs/addApicontrollerDialog.png" style="margin: 10px 0;" />
-                                </li>
-                                <li>
-                                    After the API controller is created, enter the following.<br />
-        
-                                    <div class="note">
-                                        <strong>Code:</strong> Your code should look something like this.
-                                    </div>
-                                    <div class="noteBody">
-    <pre class="preCustom">        
-        {{sampleCodeForCreateWebAPI}}
-    </pre>
-                                    </div>
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-        
-                <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingSeven">
-                        <h4 class="panel-title" style="font-size: 14px;">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
-                                <i class="intelicon-right-next"></i>
-                                Next we need to create a MVC controller.
-                                <div class="fr">
-                                    (<a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Create a MVC Controller', url: '#presentationMvcController' , bool: 'presentationMvcController'},'7_1')">Create an MVC Controller</a>)
-                                </div>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
-                        <div class="panel-body">
-                            <ol>
-                                <li>
-                                    Open the <i>Intel.MyDeals</i> project and find the <b>Controllers</b> folder. <br />
-                                    <img src="/Images/docs/projController.png" style="margin: 10px 0;" />
-                                </li>
-                                <li>
-                                    Add a new MVC Controller. To do this, right click on the <b>Controllers</b> folder and select <b>Add</b> -> <b>Controller</b>.<br />
-                                    <img src="/Images/docs/addController.png" style="margin: 10px 0;" />
-                                </li>
-                                <li>
-                                    Select the type of Controller. In the popup dialog, select <b>MVC Controller</b>.<br />
-                                    <img src="/Images/docs/addScaffold.png" style="margin: 10px 0;" />
-                                </li>
-                                <li>
-                                    After the controller is created, add the following code.<br />
-                                    <div class="note">
-                                        <strong>Note:</strong> Here is the code for the controller <b>Constants</b>.
-                                    </div>
-                                    <div class="noteBody">
-    <pre class="preCustom">        
-        {{codeForControllerCreation}}
-    </pre>
-                                    </div>
-                                </li>
-                                <li>
-                                    Create the client <b>Razor View</b>. Right click on the <b>View()</b> call in the controller and select <b>Add View...</b>.<br />
-                                    <img src="/Images/docs/addViewMenu.png" style="margin: 10px 0;" />
-                                </li>
-                                <li>
-                                    Select MVC View.<br />
-                                    <img src="/Images/docs/addScaffoldView.png" style="margin: 10px 0;" />
-                                </li>
-                                <li>
-                                    Apply view details including the view name of <b>Constants</b>.  Your setting should look similar to the below image.<br />
-                                    <img src="/Images/docs/addView.png" style="margin: 10px 0;" />
-                                </li>
-                                <li>
-                                    Now you should have a blank <b>View</b> with the below contents.<br />
-                                    <div class="note">
-                                        <strong>Note:</strong> Here is he default view created for <b>Constants</b>.
-                                    </div>
-                                    <div class="noteBody">
-    <pre class="preCustom">        
-        {{showConstants}}
-    </pre>
-                                    </div>
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-        
-                <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingEight">
-                        <h4 class="panel-title" style="font-size: 14px;">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
-                                <i class="intelicon-right-next"></i>
-                                Finally we can create a UI page to simply display our results.
-                                <div class="fr">
-                                    (<a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Calling Web APIs', url: '#presentationCallWebApi' , bool: 'presentationCallWebApi'})">Calling a Web API</a>)
-                                </div>
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseEight" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingEight">
-                        <div class="panel-body">
-                            <ol>
-                                <li>
-                                    Open the <b>Constants</b> view from the <b>Views</b> folder in the <i>Intel.MyDeals</i> project.
-                                </li>
-                                <li>
-                                    <p>
-                                        For this example, a Kendo Grid control is populated by a datasource referencing the <b>/api/AdminConstants/v1/GetConstants</b> API.<br />
-                                    </p>
-        
-                                    <div class="alert alert-info" role="alert">
-                                        <strong>Note!</strong> In My Deals, the web client can use many different design techniques to call a Web API service.
-                                        This description is just one of many ways to call a Web API.
-                                    </div>
-        
-                                    <div class="note">
-                                        <strong>Note:</strong> Here is an example of what code is generated for a store procedure:
-                                    </div>
-                                    <div class="noteBody">
-    <pre class="preCustom">
-        {{generatedConstants}}
-    </pre>
-                                    </div>
-                                </li>
-                            </ol>
-                        </div>
-                    </div>
-                </div>
-        
-                <div class="panel panel-default">
-                    <div class="panel-heading" role="tab" id="headingNine">
-                        <h4 class="panel-title" style="font-size: 14px;">
-                            <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
-                                <i class="intelicon-right-next"></i>
-                                That's it.  Now take a look at the results.
-                            </a>
-                        </h4>
-                    </div>
-                    <div id="collapseNine" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingNine">
-                        <div class="panel-body">
-                            <div style="padding: 15px;">
-                                <h1>Sample Constants Display</h1>
-                                <kendo-grid class="tableScope flowTableAlignment" [data]="constantsData" filterable="menu" style="height: auto!important;">
-                                    <kendo-grid-column field="name" title="Name"> </kendo-grid-column>
-                                    <kendo-grid-column field="description" title="Description">
-                                    </kendo-grid-column>
-                                    <kendo-grid-column field="value" title="Value"> </kendo-grid-column>
-                                  </kendo-grid>
-                                <br />
+                        <div id="collapseOne" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingOne">
+                            <div class="panel-body">
+                                <ol>
+                                    <li>
+                                        Open the <strong>SPClassGenerator.tt</strong> file in the <i>Intel.MyDeals.DataAccessLib</i> project.<br />
+                                        <img src="/Images/docs/datalibproj.png" style="margin: 10px 0;"/>
+                                    </li>
+                                    <li>
+                                        <strong>Do not change this file!!!</strong> All you need to do is save the file and it will compile the T4 template and generate the C# code.
+                                    </li>
+                                    <li>
+                                        Verify your stored procedure is locate in the generated code. To do this, expand the <strong>SPClassGenerator.tt</strong> file and open the <strong>SPClassGenerator1.generated.cs</strong> and search for your stored procedure.<br />
+                                        <img src="/Images/docs/SPClassGeneratorResults.png" style="margin: 10px 0;"/><br/>
+
+                                        <div class="note">
+                                            <strong>Note:</strong> Here is an example of what code is generated for a store procedure:
+                                        </div>
+                                        <div class="noteBody">
+                                            <img src="/Images/docs/ex_proc_results.png" style="margin: 10px 0;"/>
+                                        </div>
+                                    </li>
+                                </ol>
                             </div>
                         </div>
                     </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingTwo">
+                            <h4 class="panel-title" style="font-size: 14px;">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseTwo" aria-expanded="false" aria-controls="collapseTwo">
+                                    <i class="intelicon-right-next"></i>
+                                    Next we need to create a class to hold the returned data from the procedue.
+                                    <div class="fr">
+                                        (<a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Creating a shared class from a procedure', url: '#sharedCSfromProc' , bool: 'sharedCSfromProc'},'2_2')">Creating a shared class from a procedure</a>)
+                                    </div>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseTwo" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingTwo">
+                            <div class="panel-body">
+                                <ol>
+                                    <li>
+                                        Open the <strong>TableToClasses.tt</strong> file in the <i>Intel.MyDeals.Entities</i> project.<br />
+                                        <img src="/Images/docs/TableToClass.png" style="margin: 10px 0;" />
+                                    </li>
+                                    <li>
+                                        Enter a call to the stored procedure and declare the name of the class that will be generated.
+                                        The stored procedue must be executable, so if parameters are required to run the procedure, please apply them.
+
+                                        <div class="note">
+                                            <strong>Note:</strong> It will actually execute the procedure, so try to make the return dataset minimal for better performance.
+                                        </div>
+                                        <div class="noteBody">
+                                            In this example, the <i>dbo.PR_GET_CONSTANTS</i> procedure is being called with no parameters. The results will create a class called <B>ToolConstants</B>.<br />
+                                            <img src="/images/docs/ex_code_class.png" style="margin: 10px 0;" /><br />
+                                        </div>
+                                    </li>
+                                    <li>
+                                        Sometimes there are errors generating the classes. This can be because the entered stored procedure call had some mistakes or the generation timed out.
+                                        Verify the generated code has no errors. To do this, expand the <strong>TableToClasses.tt</strong> file and open the <strong>TableToClasses.generated.cs</strong>.<br />
+                                        <img src="/Images/docs/TableToClassResults.png" style="margin: 10px 0;" /><br />
+
+                                        <div class="note">
+                                            <strong>Note:</strong> Here is an example of what code is generated for a store procedure:
+                                        </div>
+                                        <div class="noteBody">
+                                            <pre class="preCustom">
+        {{generateSC}}
+    </pre>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingThree">
+                            <h4 class="panel-title" style="font-size: 14px;">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseThree" aria-expanded="false" aria-controls="collapseThree">
+                                    <i class="intelicon-right-next"></i>
+                                    Next we need to call the stored procedure.
+                                    <div class="fr">
+                                        (<a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Calling a stored procedure', url: '#callingSP' , bool: 'callingSP'},'3_1')">Calling a stored procedure</a>)
+                                    </div>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseThree" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingThree">
+                            <div class="panel-body">
+                                <ol>
+                                    <li>
+                                        Locate the <b>Constants Lookups</b> folder in the <i>Intel.MyDeals.DataLibrary</i> project.
+                                        We want to open the <b>ConstantLookupDataLib.cs</b> file.<br />
+                                        <img src="/Images/docs/datalibproj.png" style="margin: 10px 0;" />
+                                    </li>
+                                    <li>
+                                        Now we need to add the procedure call.  Look at the generated output from the T4 Template for examples.<br />
+
+                                        <div class="note">
+                                            <strong>Note:</strong> Here is the <b>PR_GET_CONSTANTS</b> store procedure call:
+                                        </div>
+                                        <div class="noteBody">
+                                            <pre class="preCustom">
+        {{getConstantsSP}}
+    </pre>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingFour">
+                            <h4 class="panel-title" style="font-size: 14px;">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFour" aria-expanded="false" aria-controls="collapseFour">
+                                    <i class="intelicon-right-next"></i>
+                                    Now we can creating a data cache.
+                                    <div class="fr">
+                                        (<a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Creating a data cache', url: '#createDataCache' , bool: 'createDataCache'},'3_2')">Creating a data cache</a>)
+                                    </div>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseFour" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFour">
+                            <div class="panel-body">
+                                <ol>
+                                    <li>
+                                        Locate the <b>Data Collections</b> folder in the <i>Intel.MyDeals.DataLibrary</i> project.
+                                        Open the <b>DataCollections.cs</b> file.<br />
+                                        <img src="/Images/docs/projDataCollections.png" style="margin: 10px 0;" />
+                                    </li>
+                                    <li>
+                                        <p>
+                                            Create the call to populate the cache <b>IF</b> the private version is not populates.
+                                        </p>
+                                        <p>
+                                            To do this, you need to know some important information:
+                                            <ul>
+                                                <li><i>BASE</i>: Name of the class. For us it is <b>ToolConstants</b></li>
+                                                <li><i>BASE_DATA_LIB</i>: Name of the BASE data library call (where the stored procedure is exposed).  For us it is <b>ConstantLookupDataLib().GetToolConstants()</b></li>
+                                            </ul>
+                                            <!-- </p> -->
+                                            <div class="note">
+                                                <strong>Code:</strong> Now we add the following code.
+                                            </div>
+                                            <div class="noteBody">
+                                                <pre class="preCustom">
+        {{populateCache}}
+    </pre>
+                                            </div>
+
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingFive">
+                            <h4 class="panel-title" style="font-size: 14px;">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseFive" aria-expanded="false" aria-controls="collapseFive">
+                                    <i class="intelicon-right-next"></i>
+                                    Create a business logic function to call the cache.
+                                    <div class="fr">
+                                        (<a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Call from data cache', url: '#businessLogicCallCache' , bool: 'businessLogicCallCache'},'5_5')">Call from data cache</a>)
+                                    </div>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseFive" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingFive">
+                            <div class="panel-body">
+                                <ol>
+                                    <li>
+                                        Open the <b>ConstantsLookupsLib.cs</b> from the <b>Constants Lookups</b> folder in the <i>Intel.MyDeals.BusinessLogic</i> project.<br />
+                                        <img src="/Images/docs/constantDataLibProj.png" style="margin: 10px 0;" />
+                                    </li>
+                                    <li>
+                                        Next we will create a business logic function that calls the <b>cached</b> function instead of calling the Constants DataLibary function directly.<br />
+                                        <div class="note"><strong>Note:</strong> We need to call the <b>DataCollections.GetToolConstants</b> function which will return the cache version if applicable.</div>
+                                        <div class="noteBody">
+                                            <pre class="preCustom">        
+        {{cacheFunctionCall}}
+    </pre>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div id="collapseSix" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSix">
+                            <div class="panel-body">
+                                <ol>
+                                    <li>
+                                        Open the <i>Intel.MyDeals</i> project and find the <b>Controllers</b> folder. Then locate the <b>API</b> folder<br />
+                                        <img src="/Images/docs/projControllerAPI.png" style="margin: 10px 0;" />
+                                    </li>
+                                    <li>
+                                        Add a new API Controller. To do this, right click on the <b>Controllers</b> folder and select <b>Add</b> -> <b>Controller</b>.<br />
+                                        <img src="/Images/docs/addApiController.png" style="margin: 10px 0;" />
+                                    </li>
+                                    <li>
+                                        Select the type of Controller. In the popup dialog, select <b>Web API 2 Controller - Empty</b>.<br />
+                                        <img src="/Images/docs/addScaffoldAPI.png" style="margin: 10px 0;" />
+                                    </li>
+                                    <li>
+                                        Enter the name of the Web API controller as <b>ConstantsController</b>.<br />
+                                        <img src="/Images/docs/addApicontrollerDialog.png" style="margin: 10px 0;" />
+                                    </li>
+                                    <li>
+                                        After the API controller is created, enter the following.<br />
+
+                                        <div class="note">
+                                            <strong>Code:</strong> Your code should look something like this.
+                                        </div>
+                                        <div class="noteBody">
+                                            <pre class="preCustom">        
+        {{sampleCodeForCreateWebAPI}}
+    </pre>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingSeven">
+                            <h4 class="panel-title" style="font-size: 14px;">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseSeven" aria-expanded="false" aria-controls="collapseSeven">
+                                    <i class="intelicon-right-next"></i>
+                                    Next we need to create an API controller.
+                                    <div class="fr">
+                                        (<a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Creating Web APIs', url: '#presentationWebApi' , bool: 'presentationWebApi'},'7_1')">Create an API Controller</a>)
+                                    </div>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseSeven" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingSeven">
+                            <div class="panel-body">
+                                <ol>
+                                    <li>
+                                        Open the <i>Intel.MyDeals</i> project and find the <b>Controllers</b> folder. Then locate the <b>API</b> folder<br />
+                                        <img src="/Images/docs/projControllerAPI.png" style="margin: 10px 0;" />
+                                    </li>
+                                    <li>
+                                        Add a new API Controller. To do this, right click on the <b>Controllers</b> folder and select <b>Add</b> -> <b>Controller</b>.<br />
+                                        <img src="/Images/docs/addApiController.png" style="margin: 10px 0;" />
+                                    </li>
+                                    <li>
+                                        Select the type of Controller. In the popup dialog, select <b>Web API 2 Controller - Empty</b>.<br />
+                                        <img src="/Images/docs/addScaffoldAPI.png" style="margin: 10px 0;" />
+                                    </li>
+                                    <li>
+                                        Enter the name of the Web API controller. In the popup dialog, enter the controller name but make sure to leave <b>Controller</b> at the end of the name.<br />
+                                        <img src="/Images/docs/addApicontrollerDialog.png" style="margin: 10px 0;" />
+                                    </li>
+                                    <li>
+                                        After the API controller is created, the appropriate Opaque calls and My Deals calls need to be added.<br />
+
+                                        <div class="alert alert-info" role="alert" style="margin-top: 10px;">
+                                            <strong>Route Tip!</strong> Web APIs will default to use the global router mapping defined for the application, but by proving a <b>[Route]</b> a specific URL address can be mapped to your Web API.
+                                        </div>
+
+                                        <div class="note">
+                                            <strong>Note:</strong> Here is an example of an API controller for <b>Constants</b> called <i style="font-size: 12px;">GetConstants</i>.
+                                        </div>
+                                        <div class="noteBody">
+                                            <pre class="preCustom">{{calledConstants}}</pre>
+                                        </div>
+                                    </li>
+                                    <li>
+                                        Want to try it out? <button class="btn btn-primary btnDesignFlows" type="button" (click)="testApi()" style="margin-left: 25px;">HealthCheck API</button>
+                                                            <div id="resultsTestApi">
+                                                                <div *ngIf="isErrorVisible">
+                                                                    <div>{{reasonData}}</div>
+                                                                </div>
+                                                            </div>
+                                    </li>
+                                 </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingEight">
+                            <h4 class="panel-title" style="font-size: 14px;">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseEight" aria-expanded="false" aria-controls="collapseEight">
+                                    <i class="intelicon-right-next"></i>
+                                    Finally we can create a UI page to simply display our results.
+                                    <div class="fr">
+                                        (<a href="javascript:void(0);" (click)="navigateToSelectedLink({ text: 'Calling Web APIs', url: '#presentationCallWebApi' , bool: 'presentationCallWebApi'})">Calling a Web API</a>)
+                                    </div>
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseEight" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingEight">
+                            <div class="panel-body">
+                                <ol>
+                                    <li>
+                                        Open the <b>constants</b> component from the <b>admin</b> folder under the path <b>Intel.MyDeals\Client\src\app\admin\constants\</b>.
+                                    </li>
+                                    <li>
+                                        <p>
+                                            For this example, a Kendo Grid control is populated by a datasource referencing the <b>/api/AdminConstants/v1/GetConstants</b> API.<br />
+                                        </p>
+
+                                        <div class="alert alert-info" role="alert">
+                                            <strong>Note!</strong> In My Deals, the web client can use many different design techniques to call a Web API service.
+                                            This description is just one of many ways to call a Web API.
+                                        </div>
+
+                                        <div class="note">
+                                            <strong>Note:</strong> Here is an example of what code is generated for a store procedure:
+                                        </div>
+                                        <div class="noteBody">
+                                            <pre class="preCustom">
+{{generatedConstants}}
+</pre>
+                                        </div>
+                                    </li>
+                                </ol>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="panel panel-default">
+                        <div class="panel-heading" role="tab" id="headingNine">
+                            <h4 class="panel-title" style="font-size: 14px;">
+                                <a class="collapsed" role="button" data-toggle="collapse" data-parent="#accordion" href="#collapseNine" aria-expanded="false" aria-controls="collapseNine">
+                                    <i class="intelicon-right-next"></i>
+                                    That's it.  Now take a look at the results.
+                                </a>
+                            </h4>
+                        </div>
+                        <div id="collapseNine" class="panel-collapse collapse" role="tabpanel" aria-labelledby="headingNine">
+                            <div class="panel-body">
+                                <div style="padding: 15px;">
+                                    <h1>Sample Constants Display</h1>
+                                    <kendo-grid class="tableScope flowTableAlignment" [data]="constantsData" filterable="menu" style="height: auto!important;">
+                                        <kendo-grid-column field="name" title="Name"> </kendo-grid-column>
+                                        <kendo-grid-column field="description" title="Description">
+                                        </kendo-grid-column>
+                                        <kendo-grid-column field="value" title="Value"> </kendo-grid-column>
+                                    </kendo-grid>
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
                 </div>
-        
+
+                <br /><br /><br />
+
             </div>
-        
-            <br/><br/><br/>
-        
-        </div>
-        <div id="dataFromApiWithCache">
-            <h1><img src="/Images/docs/examples.png" height="60" />Managing data from a procedure with cache</h1>
-            <p>
-                This example shows how to manage cache returned from an api.
-            </p>
-            <p>
-                When we want to cache any of the Api results, inform the client about the cached results and manage the cached data at api level, we can use the cache output.
-            </p>
-        
-            <div class="stepByStep">
-                <i class="intelicon-task"></i>Step by Step
+            <div id="dataFromApiWithCache">
+                <h1><img src="/Images/docs/examples.png" height="60" />Managing data from a procedure with cache</h1>
+                <p>
+                    This example shows how to manage cache returned from an api.
+                </p>
+                <p>
+                    When we want to cache any of the Api results, inform the client about the cached results and manage the cached data at api level, we can use the cache output.
+                </p>
+
+                <div class="stepByStep">
+                    <i class="intelicon-task"></i>Step by Step
+                </div>
+
+                <ol>
+                    <li>
+                        Add CacheOutput attribute on the controller or action you want to cache the results.<br />
+                        <div class="note"><strong>Note:</strong> Here is an example</div>
+                        <div class="noteBody">
+                            <pre class="preCustom">
+                     {{cacheOutput}}
+                     </pre>
+                        </div>
+                    </li>
+                    <li>
+                        Invalidate the cache on at controller level or action level<br />
+                        <p>  Decorating the controller with [AutoInvalidateCacheOutput] will automatically flush all cached GET data from this controller after a successfull POST/PUT/DELETE request.</p>
+                        <div class="note"><strong>Note:</strong> Here is an example</div>
+                        <div class="noteBody">
+                            <pre class="preCustom">
+                     {{AutoInvalidateCacheOutput}}
+                     </pre>
+                        </div>
+                        <p> Invalidation on action level is similar - done through attributes</p>
+                        <div class="note"><strong>Note:</strong> Here is an example</div>
+                        <div class="noteBody">
+
+                            <pre class="preCustom">
+                     {{throughAttributes}}
+                     </pre>
+
+                        </div>
+                    </li>
+                </ol>
+
+
+                <br /><br /><br />
             </div>
-        
-            <ol>
-                <li>
-                    Add CacheOutput attribute on the controller or action you want to cache the results.<br />
-                    <div class="note"><strong>Note:</strong> Here is an example</div>
-                    <div class="noteBody">
-    <pre class="preCustom">
-        {{cacheOutput}}
-    </pre>
-                    </div>
-                </li>
-                <li>
-                    Invalidate the cache on at controller level or action level<br />
-                    <p>  Decorating the controller with [AutoInvalidateCacheOutput] will automatically flush all cached GET data from this controller after a successfull POST/PUT/DELETE request.</p>
-                    <div class="note"><strong>Note:</strong> Here is an example</div>
-                    <div class="noteBody">
-    <pre class="preCustom">
-        {{AutoInvalidateCacheOutput}}
-    </pre>
-                    </div>
-                    <p> Invalidation on action level is similar - done through attributes</p>
-                    <div class="note"><strong>Note:</strong> Here is an example</div>
-                    <div class="noteBody">
-                        
-    <pre class="preCustom">
-        {{throughAttributes}}
-    </pre>
-                       
-                    </div>
-                </li>
-            </ol>
-        
-        
-            <br /><br /><br />
         </div>
     </div>
-</div>
 
 
