@@ -328,7 +328,7 @@
                             Ensure there is a Unit Test Project that mirrors the project you are testing.
                             For example. if you are writing unit test cases against the <i>Intel.MyDeals.BusinessLogic</i> project, make sure there is a <i>Intel.MyDeals.BusinessLogic.Test</i> project.
                             If the project doesn't exist, go ahead and create one.<br />
-                            <img src="/Images/docs/fileunittest.png" style="margin: 10px 0;" />
+                            <img src="\Client\Images\docs\newUnitTesting.png" style="margin: 10px 0;" />
                         </li>
                         <li>
                             Enter your Unit Test in organized classes. As the project gets bigger, more and more unit tests will be needed. Please break them out into seperate classes as needed.<br />
@@ -336,27 +336,121 @@
                                 <strong>Sample:</strong> Here is a sample unit test case written for the BusinessLogic project around OpUserTokens.
                             </div>
                             <div class="noteBody">
-                                <img src="/Images/docs/sampleunittests.png" style="margin: 10px 0;" />
+                                <img src="\Client\Images\docs\newSampleUnitTest.png" style="margin: 10px 0;" />
                             </div>
                         </li>
                         <li>
-                            <b>Please ensure all unit tests pass prior to checking in your code!</b>
+                            In Visual Studio go to Test -> Test Explorer (This will open the Test Explorer view). Right click and Run the specific test case or Run All Tests by clicking the green Run button. <br/>
+                            <img src="\Client\Images\docs\RunAllTestCases.png" style="margin: 10px 0; height: 200px;" />
+                        </li>
+                        <li>
+                            <b>Please ensure all unit tests pass prior to checking in your code!</b> <br/>
+                            <img src="\Client\Images\docs\passedTests-BeforeRaisingPR.png" style="margin: 10px 0;height: 400px;" />
+                        </li>
+                        <li>
+                            And also ensure all the Nunit and sonar checks pass when you raise a pull request in the Git Hub.<br/>
+                            <img src="\Client\Images\docs\gitHub-sonarchecks.png" style="margin: 10px 0;height: 500px;" />
                         </li>
                     </ol>
-
-
-                    <div class="stepByStep">
-                        Client Unit Testing
-                    </div>
                     <p>
-                        In the client layer, the DevOps automated testing uses a UI based recording tool. This tool might suffice the needs for unit testing.
-                        After we learn more about this process, we will make a decision on how to handle client-side unit testing.
+                       <a href="https://intel.sharepoint.com/:w:/r/sites/MyDealsTeam/Shared%20Documents/General/Automation/NUnit/NUNIT%20Testing%20for%20MyDeals%20-%20Developer%20Guide.docx?d=wbbdcd6ab1f5d40bfb60e51252fb702e8&csf=1&web=1&e=Sb8Zwa" target="_blank" class="anchorCodingTools">
+                        Click Here
+                       </a> for more information related to <b>Unit Testing</b>.
                     </p>
-
-
                     <br /><br /><br />
                 </div>
-
+                <div id="debugging">
+                    <h1><img src="/Images/docs/icon-code-tools.png" height="80" /> Debugging </h1>
+                </div>
+                <div class="stepByStep">
+                    Angular Debugging
+                </div>
+                <h4>Debug Angular Application in Chrome</h4>
+                <ol>
+                    <li>
+                        Run the Angular application in Google Chrome. Then right-click on the page and select "Inspect" or press "[F12]" to open the DevTools. Go to the "Sources" tab and press [Ctrl]+[P] to search for a TS file to debug. Otherwise, we can manually locate the file from webpack section. <br />
+                    <img src="/Images/docs/fileSearch-DevTools.png" style="height: 200px;margin: 10px 0 10px 0;" />
+                    </li>
+                    <li>
+                        Open the file and set a breakpoint in the code by clicking on the line number where we want to pause the execution.<br />
+                        <img src="/Images/docs/breakpointInChrome.png" style="height: 400px;margin: 10px 0 10px 0;"/>
+                    </li>
+                    <li>Refresh the page or trigger the action that causes the breakpoint to be hit. The execution will pause at the breakpoint, and we will be able to inspect the values of variables, evaluate expressions, and step through the code.</li>
+                        <img src="/Images/docs/chromeDebugger.png" style="height: 400px;margin: 10px 0 10px 0;"/>
+                </ol>
+               <div class="stepByStep">
+                    C# Debugging
+                </div>
+                <p>
+                    Follow the below steps to debug C# with Visual Studio                
+                </p>
+                <ol>
+                    <li>
+                        Put a break point in the required method. <br/>
+                        <img src="Client\Images\docs\breakpoint-cs.png"  style="height: 400px; margin: 10px 0 10px 0;"/>
+                    </li>
+                    <li>
+                        Run the code: Click on IIS Express(Google Chrome) button on the top of the visual Studio. <br/>
+                        <img src="Client\Images\docs\runButton-cs.png"  style="width: 950px; margin: 10px 0 10px 0;"/>
+                    </li>
+                    <li>
+                        Trigger required action it will pause the application at the breakpoint and we will be able to inspect the values of variables, evaluate expressions, and step through the code.<br/>
+                        <img src="/Images/docs/pauseApplicationAtBreakpoint.png" style="height: 400px; margin: 10px 0 10px 0;"/>
+                    </li>
+                </ol>
+                <div class="stepByStep">
+                     Debugging a Stored Procedure
+                </div>
+                <p>
+                    In My Deals we debug the Stored Procedures by executing the required block of Stored Procedure. </p>
+                    <ol>
+                        <li>In the below image executing the stored procedure with an incorrect datatype and it outputs the respective error <br /> 
+                            <img src="Client\Images\docs\SPError.png"  alt="SPError.png"  style="height: 400px; margin: 10px 0 10px 0;"/><br />
+                        </li>
+                        <li> By knowing the error from above output, re-executing the stored procedure with correct datatype as the input and it executes successfully <br/>
+                            <img src="Client\Images\docs\ResolveSPError.png"  alt="ResolveSPError.png"  style="height: 400px; margin: 10px 0 10px 0;"/>
+                        </li>
+                    </ol>
+                <br /><br />
+                <h4>Error Stack Trace</h4>
+                <p>Here is an example for debugging. </p>
+                <ol>
+                    <li>
+                       From the below image, an error toast message coming up while filtering a value from the grid.<br/>
+                       <img src="Client\Images\docs\ErrorExample.png" alt="errorImg" style="height: 400px; margin: 10px 0 10px 0;"/> <br/>
+                    </li>
+                    <li>We can find the information related to the error in the dev tools console. <br />
+                        <img src="Client\Images\docs\DevTool-Console-error.png"  alt="DevTool-Console-error.png"  style="height: 400px; margin: 10px 0 10px 0;"/>
+                    </li>
+                    <li>
+                        In the above image  the error(500 - Internal Server Error) states that it's from an API.
+                    </li>
+                    <li>
+                        Put a breakpoint for that API in the related methods.<br/>
+                        <img src="Client\Images\docs\ErrorInController.png"  alt="ErrorInController"  style="height: 450px; margin: 10px 0 10px 0;"/> <br/>
+                        <img src="Client\Images\docs\ErrorInService.png" alt="ErrorInService"  style="height: 450px; margin: 10px 0 10px 0;"/>
+                    </li>
+                    <li>
+                        From the above images it shows that error is from the stored procedure.Execute the stored procedure for more details. <br/>
+                    <img src="Client\Images\docs\ErrorInDB.png" alt="ErrorInDB"  style="height: 300px; margin: 10px 0 10px 0;"/> <br/>
+                    </li>
+                    <li>
+                        Make necessary changes as per SP execution to resolve the issue.
+                    </li>
+                </ol>
+                <br/>
+                <h4>Error Logs</h4>
+                <p>
+                   In My Deals application , logs are sending to DB_ERR_LOG, BTCH_LD_LOG and UI_LOG tables.</p>
+                   <p><b>DB LOGS :</b> <br/>
+                    <img src="Client\Images\docs\DBLogs.png" alt="DBLogs"  style="height: 400px; margin: 10px 10px 10px 0;"/> </p>
+                    <p><b>Batch LOGS :</b> <br/>
+                        <img src="Client\Images\docs\Batch_Log.png" alt="UILogs" style="height: 400px; margin: 10px 10px 10px 0;"/> <br/>
+                    </p>
+                    <p><b>UI LOGS :</b> <br/>
+                    <img src="Client\Images\docs\UILogs.png" alt="UILogs" style="height: 400px; margin: 10px 10px 10px 0;"/> <br/>
+                </p>
+                
             </div>
         </div>
     </div>

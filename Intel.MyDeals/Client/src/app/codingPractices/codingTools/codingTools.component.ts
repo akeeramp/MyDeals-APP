@@ -113,7 +113,14 @@ export class CodingToolsComponent implements OnInit {
                 { text: "Coding tools", url: "CodingTools" },
                 { text: "Unit Testing", url: "javascript:void(0)" }
             ];
+        } else if(this.flagBool == "debugging"){
+            this.list_breadcrumbs = [
+                { text: "Coding practices", url: "Home" },
+                { text: "Coding tools", url: "CodingTools" },
+                { text: "Debugging", url: "javascript:void(0)" }
+            ];
         }
+
         const url = document.querySelector(e.url);
         url.scrollIntoView({ behavior: 'smooth', block: 'start'});
     }
@@ -149,7 +156,8 @@ export class CodingToolsComponent implements OnInit {
             { text: "Error handling", url:'#errorHandling', bool: "errorHandling" },
             { text: "Code Reviews", url:'#codeReviews', bool: "codeReviews" },
             { text: "Logging", url:'#logging', bool: "logging" },
-            { text: "Unit Testing", url:'#unitTesting', bool: "unitTesting" }
+            { text: "Unit Testing", url:'#unitTesting', bool: "unitTesting" },
+            { text: "Debugging", url:'#debugging', bool: "debugging" }
         ];
     }
 
