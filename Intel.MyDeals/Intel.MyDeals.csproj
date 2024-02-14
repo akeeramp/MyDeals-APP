@@ -422,6 +422,8 @@
     <Content Include="Client\Images\docs\dealapproval.png" />
     <Content Include="Client\Images\docs\dealentry.png" />
     <Content Include="Client\Images\docs\DevTool-Console-error.png" />
+    <Content Include="Client\Images\docs\ECK-1.png" />
+    <Content Include="Client\Images\docs\ECK-2.png" />
     <Content Include="Client\Images\docs\errorhandling.png" />
     <Content Include="Client\Images\docs\errorhandlingdesign.png" />
     <Content Include="Client\Images\docs\ErrorInController.png" />
@@ -431,6 +433,13 @@
     <Content Include="Client\Images\docs\ex_code_class.png" />
     <Content Include="Client\Images\docs\ex_proc_results.png" />
     <Content Include="Client\Images\docs\fileunittest.png" />
+    <Content Include="Client\Images\docs\GitHub1.png" />
+    <Content Include="Client\Images\docs\GitHub2.png" />
+    <Content Include="Client\Images\docs\GitHub3.png" />
+    <Content Include="Client\Images\docs\GitHub4.png" />
+    <Content Include="Client\Images\docs\GitHub5.png" />
+    <Content Include="Client\Images\docs\GitHub6.png" />
+    <Content Include="Client\Images\docs\GitHub7.png" />
     <Content Include="Client\Images\docs\gitHub-sonarchecks.png" />
     <Content Include="Client\Images\docs\highlevelflow.png" />
     <Content Include="Client\Images\docs\icon-app-layer.png" />
@@ -444,6 +453,7 @@
     <Content Include="Client\Images\docs\libinterface.png" />
     <Content Include="Client\Images\docs\libResolver.png" />
     <Content Include="Client\Images\docs\logging.png" />
+    <Content Include="Client\Images\docs\Logger-error.png" />
     <Content Include="Client\Images\docs\mct.png" />
     <Content Include="Client\Images\docs\meetcomp.png" />
     <Content Include="Client\Images\docs\meetcomptest.png" />
