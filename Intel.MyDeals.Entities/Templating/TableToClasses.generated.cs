@@ -5603,295 +5603,308 @@ namespace Intel.MyDeals.Entities {
 	
 	} // End of class UserPreferences
 
-	///<summary>
-	/// Class created via template - Do Not Modify!
-	/// To modify this code, re-execute the template, or extend as partial.
-	/// on MHTIPPIN-MOBL1
-	/// by mhtippin
-	/// at 10/17/2023 3:47:54 PM
-	///</summary>
-	
-	[DataContract]
-	public partial class CostTestDetailItem {
-	
-	[DataMember]
-	public System.String ADDITIVE {set;get;}
-	
-	
-	[DataMember]
-	public System.Decimal AVG_RPU {set;get;}
-	
-	
-	[DataMember]
-	public System.Decimal CAP {set;get;}
-	
-	
-	[DataMember]
-	public System.String CNSMPTN_RSN {set;get;}
-	
-	
-	[DataMember]
-	public System.String COST_TEST_OVRRD_CMT {set;get;}
-	
-	
-	[DataMember]
-	public System.String COST_TEST_OVRRD_FLG {set;get;}
-	
-	
-	[DataMember]
-	public System.String CST_TYPE {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 CUST_NM_SID {set;get;}
-	
-	
-	[DataMember]
-	public System.String DEAL_DESC {set;get;}
-	
-	
-	[DataMember]
-	public System.DateTime DEAL_END_DT {set;get;}
-	
-	
-	[DataMember]
-	public System.String DEAL_GRP_CMNT {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 DEAL_ID {set;get;}
-	
-	
-	[DataMember]
-	public System.Int64 DEAL_PRD_RNK {set;get;}
-	
-	
-	[DataMember]
-	public System.DateTime DEAL_STRT_DT {set;get;}
-	
-	
-	[DataMember]
-	public System.Decimal ECAP_FLR {set;get;}
-	
-	
-	[DataMember]
-	public System.Decimal ECAP_PRC {set;get;}
-	
-	
-	[DataMember]
-	public System.String GEO {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 GRP_DEALS {set;get;}
-	
-	
-	[DataMember]
-	public System.String INCMPL_COST_TEST_RSN {set;get;}
-	
-	
-	[DataMember]
-	public System.DateTime LAST_COST_TEST_RUN {set;get;}
-	
-	
-	[DataMember]
-	public System.String LNP_FRMULA {set;get;}
-	
-	
-	[DataMember]
-	public System.Decimal LOW_NET_PRC {set;get;}
-	
-	
-	[DataMember]
-	public System.Decimal MAX_RPU {set;get;}
-	
-	
-	[DataMember]
-	public System.String MKT_SEG {set;get;}
-	
-	
-	[DataMember]
-	public System.String OBJ_PATH_HASH {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 OBJ_TYPE_SID {set;get;}
-	
-	
-	[DataMember]
-	public System.DateTime OEM_PLTFRM_EOL_DT {set;get;}
-	
-	
-	[DataMember]
-	public System.DateTime OEM_PLTFRM_LNCH_DT {set;get;}
-	
-	
-	[DataMember]
-	public System.String PCSR_NBR {set;get;}
-	
-	
-	[DataMember]
-	public System.String PRC_CST_TST_STS {set;get;}
-	
-	
-	[DataMember]
-	public System.Decimal PRD_COST {set;get;}
-	
-	
-	[DataMember]
-	public System.String PRD_MBR_SIDS {set;get;}
-	
-	
-	[DataMember]
-	public System.String PRODUCT {set;get;}
-	
-	
-	[DataMember]
-	public System.String PROG_PMT {set;get;}
-	
-	
-	[DataMember]
-	public System.String PYOUT_BASE_ON {set;get;}
-	
-	
-	[DataMember]
-	public System.DateTime REBATE_BILLING_END {set;get;}
-	
-	
-	[DataMember]
-	public System.DateTime REBATE_BILLING_START {set;get;}
-	
-	
-	[DataMember]
-	public System.String REBT_TYPE {set;get;}
-	
-	
-	[DataMember]
-	public System.String RTL_CYC_NM {set;get;}
-	
-	
-	[DataMember]
-	public System.Decimal RTL_PULL_DLR {set;get;}
-	
-	
-	[DataMember]
-	public System.String WF_STG_CD {set;get;}
-	
-	
-	[DataMember]
-	public System.Decimal YCS2 {set;get;}
-	
-	
-	/*
-	private static List<CostTestDetailItem> CostTestDetailItemFromReader(SqlDataReader rdr){
-	// This helper method is template generated.
-	// Refer to that template for details to modify this code.
-	
-	var ret = new List<CostTestDetailItem>();
-	int IDX_ADDITIVE = DB.GetReaderOrdinal(rdr, "ADDITIVE");
-	int IDX_AVG_RPU = DB.GetReaderOrdinal(rdr, "AVG_RPU");
-	int IDX_CAP = DB.GetReaderOrdinal(rdr, "CAP");
-	int IDX_CNSMPTN_RSN = DB.GetReaderOrdinal(rdr, "CNSMPTN_RSN");
-	int IDX_COST_TEST_OVRRD_CMT = DB.GetReaderOrdinal(rdr, "COST_TEST_OVRRD_CMT");
-	int IDX_COST_TEST_OVRRD_FLG = DB.GetReaderOrdinal(rdr, "COST_TEST_OVRRD_FLG");
-	int IDX_CST_TYPE = DB.GetReaderOrdinal(rdr, "CST_TYPE");
-	int IDX_CUST_NM_SID = DB.GetReaderOrdinal(rdr, "CUST_NM_SID");
-	int IDX_DEAL_DESC = DB.GetReaderOrdinal(rdr, "DEAL_DESC");
-	int IDX_DEAL_END_DT = DB.GetReaderOrdinal(rdr, "DEAL_END_DT");
-	int IDX_DEAL_GRP_CMNT = DB.GetReaderOrdinal(rdr, "DEAL_GRP_CMNT");
-	int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
-	int IDX_DEAL_PRD_RNK = DB.GetReaderOrdinal(rdr, "DEAL_PRD_RNK");
-	int IDX_DEAL_STRT_DT = DB.GetReaderOrdinal(rdr, "DEAL_STRT_DT");
-	int IDX_ECAP_FLR = DB.GetReaderOrdinal(rdr, "ECAP_FLR");
-	int IDX_ECAP_PRC = DB.GetReaderOrdinal(rdr, "ECAP_PRC");
-	int IDX_GEO = DB.GetReaderOrdinal(rdr, "GEO");
-	int IDX_GRP_DEALS = DB.GetReaderOrdinal(rdr, "GRP_DEALS");
-	int IDX_INCMPL_COST_TEST_RSN = DB.GetReaderOrdinal(rdr, "INCMPL_COST_TEST_RSN");
-	int IDX_LAST_COST_TEST_RUN = DB.GetReaderOrdinal(rdr, "LAST_COST_TEST_RUN");
-	int IDX_LNP_FRMULA = DB.GetReaderOrdinal(rdr, "LNP_FRMULA");
-	int IDX_LOW_NET_PRC = DB.GetReaderOrdinal(rdr, "LOW_NET_PRC");
-	int IDX_MAX_RPU = DB.GetReaderOrdinal(rdr, "MAX_RPU");
-	int IDX_MKT_SEG = DB.GetReaderOrdinal(rdr, "MKT_SEG");
-	int IDX_OBJ_PATH_HASH = DB.GetReaderOrdinal(rdr, "OBJ_PATH_HASH");
-	int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
-	int IDX_OEM_PLTFRM_EOL_DT = DB.GetReaderOrdinal(rdr, "OEM_PLTFRM_EOL_DT");
-	int IDX_OEM_PLTFRM_LNCH_DT = DB.GetReaderOrdinal(rdr, "OEM_PLTFRM_LNCH_DT");
-	int IDX_PCSR_NBR = DB.GetReaderOrdinal(rdr, "PCSR_NBR");
-	int IDX_PRC_CST_TST_STS = DB.GetReaderOrdinal(rdr, "PRC_CST_TST_STS");
-	int IDX_PRD_COST = DB.GetReaderOrdinal(rdr, "PRD_COST");
-	int IDX_PRD_MBR_SIDS = DB.GetReaderOrdinal(rdr, "PRD_MBR_SIDS");
-	int IDX_PRODUCT = DB.GetReaderOrdinal(rdr, "PRODUCT");
-	int IDX_PROG_PMT = DB.GetReaderOrdinal(rdr, "PROG_PMT");
-	int IDX_PYOUT_BASE_ON = DB.GetReaderOrdinal(rdr, "PYOUT_BASE_ON");
-	int IDX_REBATE_BILLING_END = DB.GetReaderOrdinal(rdr, "REBATE_BILLING_END");
-	int IDX_REBATE_BILLING_START = DB.GetReaderOrdinal(rdr, "REBATE_BILLING_START");
-	int IDX_REBT_TYPE = DB.GetReaderOrdinal(rdr, "REBT_TYPE");
-	int IDX_RTL_CYC_NM = DB.GetReaderOrdinal(rdr, "RTL_CYC_NM");
-	int IDX_RTL_PULL_DLR = DB.GetReaderOrdinal(rdr, "RTL_PULL_DLR");
-	int IDX_WF_STG_CD = DB.GetReaderOrdinal(rdr, "WF_STG_CD");
-	int IDX_YCS2 = DB.GetReaderOrdinal(rdr, "YCS2");
-	
-	while (rdr.Read()){
-	ret.Add(new CostTestDetailItem {
-	ADDITIVE = (IDX_ADDITIVE < 0 || rdr.IsDBNull(IDX_ADDITIVE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ADDITIVE),
-	AVG_RPU = (IDX_AVG_RPU < 0 || rdr.IsDBNull(IDX_AVG_RPU)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_AVG_RPU),
-	CAP = (IDX_CAP < 0 || rdr.IsDBNull(IDX_CAP)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_CAP),
-	CNSMPTN_RSN = (IDX_CNSMPTN_RSN < 0 || rdr.IsDBNull(IDX_CNSMPTN_RSN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNSMPTN_RSN),
-	COST_TEST_OVRRD_CMT = (IDX_COST_TEST_OVRRD_CMT < 0 || rdr.IsDBNull(IDX_COST_TEST_OVRRD_CMT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COST_TEST_OVRRD_CMT),
-	COST_TEST_OVRRD_FLG = (IDX_COST_TEST_OVRRD_FLG < 0 || rdr.IsDBNull(IDX_COST_TEST_OVRRD_FLG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COST_TEST_OVRRD_FLG),
-	CST_TYPE = (IDX_CST_TYPE < 0 || rdr.IsDBNull(IDX_CST_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CST_TYPE),
-	CUST_NM_SID = (IDX_CUST_NM_SID < 0 || rdr.IsDBNull(IDX_CUST_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_NM_SID),
-	DEAL_DESC = (IDX_DEAL_DESC < 0 || rdr.IsDBNull(IDX_DEAL_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_DESC),
-	DEAL_END_DT = (IDX_DEAL_END_DT < 0 || rdr.IsDBNull(IDX_DEAL_END_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_DEAL_END_DT),
-	DEAL_GRP_CMNT = (IDX_DEAL_GRP_CMNT < 0 || rdr.IsDBNull(IDX_DEAL_GRP_CMNT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_GRP_CMNT),
-	DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
-	DEAL_PRD_RNK = (IDX_DEAL_PRD_RNK < 0 || rdr.IsDBNull(IDX_DEAL_PRD_RNK)) ? default(System.Int64) : rdr.GetFieldValue<System.Int64>(IDX_DEAL_PRD_RNK),
-	DEAL_STRT_DT = (IDX_DEAL_STRT_DT < 0 || rdr.IsDBNull(IDX_DEAL_STRT_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_DEAL_STRT_DT),
-	ECAP_FLR = (IDX_ECAP_FLR < 0 || rdr.IsDBNull(IDX_ECAP_FLR)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_FLR),
-	ECAP_PRC = (IDX_ECAP_PRC < 0 || rdr.IsDBNull(IDX_ECAP_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_PRC),
-	GEO = (IDX_GEO < 0 || rdr.IsDBNull(IDX_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO),
-	GRP_DEALS = (IDX_GRP_DEALS < 0 || rdr.IsDBNull(IDX_GRP_DEALS)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_GRP_DEALS),
-	INCMPL_COST_TEST_RSN = (IDX_INCMPL_COST_TEST_RSN < 0 || rdr.IsDBNull(IDX_INCMPL_COST_TEST_RSN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_INCMPL_COST_TEST_RSN),
-	LAST_COST_TEST_RUN = (IDX_LAST_COST_TEST_RUN < 0 || rdr.IsDBNull(IDX_LAST_COST_TEST_RUN)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_LAST_COST_TEST_RUN),
-	LNP_FRMULA = (IDX_LNP_FRMULA < 0 || rdr.IsDBNull(IDX_LNP_FRMULA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_LNP_FRMULA),
-	LOW_NET_PRC = (IDX_LOW_NET_PRC < 0 || rdr.IsDBNull(IDX_LOW_NET_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_LOW_NET_PRC),
-	MAX_RPU = (IDX_MAX_RPU < 0 || rdr.IsDBNull(IDX_MAX_RPU)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_MAX_RPU),
-	MKT_SEG = (IDX_MKT_SEG < 0 || rdr.IsDBNull(IDX_MKT_SEG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MKT_SEG),
-	OBJ_PATH_HASH = (IDX_OBJ_PATH_HASH < 0 || rdr.IsDBNull(IDX_OBJ_PATH_HASH)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_PATH_HASH),
-	OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
-	OEM_PLTFRM_EOL_DT = (IDX_OEM_PLTFRM_EOL_DT < 0 || rdr.IsDBNull(IDX_OEM_PLTFRM_EOL_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OEM_PLTFRM_EOL_DT),
-	OEM_PLTFRM_LNCH_DT = (IDX_OEM_PLTFRM_LNCH_DT < 0 || rdr.IsDBNull(IDX_OEM_PLTFRM_LNCH_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OEM_PLTFRM_LNCH_DT),
-	PCSR_NBR = (IDX_PCSR_NBR < 0 || rdr.IsDBNull(IDX_PCSR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCSR_NBR),
-	PRC_CST_TST_STS = (IDX_PRC_CST_TST_STS < 0 || rdr.IsDBNull(IDX_PRC_CST_TST_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRC_CST_TST_STS),
-	PRD_COST = (IDX_PRD_COST < 0 || rdr.IsDBNull(IDX_PRD_COST)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_PRD_COST),
-	PRD_MBR_SIDS = (IDX_PRD_MBR_SIDS < 0 || rdr.IsDBNull(IDX_PRD_MBR_SIDS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_MBR_SIDS),
-	PRODUCT = (IDX_PRODUCT < 0 || rdr.IsDBNull(IDX_PRODUCT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRODUCT),
-	PROG_PMT = (IDX_PROG_PMT < 0 || rdr.IsDBNull(IDX_PROG_PMT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PROG_PMT),
-	PYOUT_BASE_ON = (IDX_PYOUT_BASE_ON < 0 || rdr.IsDBNull(IDX_PYOUT_BASE_ON)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PYOUT_BASE_ON),
-	REBATE_BILLING_END = (IDX_REBATE_BILLING_END < 0 || rdr.IsDBNull(IDX_REBATE_BILLING_END)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_REBATE_BILLING_END),
-	REBATE_BILLING_START = (IDX_REBATE_BILLING_START < 0 || rdr.IsDBNull(IDX_REBATE_BILLING_START)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_REBATE_BILLING_START),
-	REBT_TYPE = (IDX_REBT_TYPE < 0 || rdr.IsDBNull(IDX_REBT_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_REBT_TYPE),
-	RTL_CYC_NM = (IDX_RTL_CYC_NM < 0 || rdr.IsDBNull(IDX_RTL_CYC_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RTL_CYC_NM),
-	RTL_PULL_DLR = (IDX_RTL_PULL_DLR < 0 || rdr.IsDBNull(IDX_RTL_PULL_DLR)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_RTL_PULL_DLR),
-	WF_STG_CD = (IDX_WF_STG_CD < 0 || rdr.IsDBNull(IDX_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_STG_CD),
-	YCS2 = (IDX_YCS2 < 0 || rdr.IsDBNull(IDX_YCS2)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_YCS2)
-	});
-	} // while
-	return ret;
-	}
-	*/
-	
-	} // End of class CostTestDetailItem
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.
+    /// on JLOPEZRE-MOBL1
+    /// by jlopezre
+    /// at 02/15/2024 11:00:41 AM
+    ///</summary>
 
-	///<summary>
-	/// Class created via template - Do Not Modify!
-	/// To modify this code, re-execute the template, or extend as partial.
-	/// on MHTIPPIN-MOBL1
-	/// by mhtippin
-	/// at 10/17/2023 3:47:54 PM
-	///</summary>
-	
-	[DataContract]
+    [DataContract]
+    public partial class CostTestDetailItem
+    {
+
+        [DataMember]
+        public System.String ADDITIVE { set; get; }
+
+
+        [DataMember]
+        public System.Decimal AVG_RPU { set; get; }
+
+
+        [DataMember]
+        public System.Decimal CAP { set; get; }
+
+
+        [DataMember]
+        public System.String CNSMPTN_RSN { set; get; }
+
+
+        [DataMember]
+        public System.String COST_TEST_OVRRD_CMT { set; get; }
+
+
+        [DataMember]
+        public System.String COST_TEST_OVRRD_FLG { set; get; }
+
+
+        [DataMember]
+        public System.String CST_TYPE { set; get; }
+
+
+        [DataMember]
+        public System.Int32 CUST_NM_SID { set; get; }
+
+
+        [DataMember]
+        public System.String DEAL_DESC { set; get; }
+
+
+        [DataMember]
+        public System.DateTime DEAL_END_DT { set; get; }
+
+
+        [DataMember]
+        public System.String DEAL_GRP_CMNT { set; get; }
+
+
+        [DataMember]
+        public System.Int32 DEAL_ID { set; get; }
+
+
+        [DataMember]
+        public System.Int64 DEAL_PRD_RNK { set; get; }
+
+
+        [DataMember]
+        public System.DateTime DEAL_STRT_DT { set; get; }
+
+
+        [DataMember]
+        public System.Decimal ECAP_FLR { set; get; }
+
+
+        [DataMember]
+        public System.Decimal ECAP_PRC { set; get; }
+
+
+        [DataMember]
+        public System.String FLEX_ROW_TYPE { set; get; }
+
+
+        [DataMember]
+        public System.String GEO { set; get; }
+
+
+        [DataMember]
+        public System.Int32 GRP_DEALS { set; get; }
+
+
+        [DataMember]
+        public System.String INCMPL_COST_TEST_RSN { set; get; }
+
+
+        [DataMember]
+        public System.DateTime LAST_COST_TEST_RUN { set; get; }
+
+
+        [DataMember]
+        public System.String LNP_FRMULA { set; get; }
+
+
+        [DataMember]
+        public System.Decimal LOW_NET_PRC { set; get; }
+
+
+        [DataMember]
+        public System.Decimal MAX_RPU { set; get; }
+
+
+        [DataMember]
+        public System.String MKT_SEG { set; get; }
+
+
+        [DataMember]
+        public System.String OBJ_PATH_HASH { set; get; }
+
+
+        [DataMember]
+        public System.Int32 OBJ_TYPE_SID { set; get; }
+
+
+        [DataMember]
+        public System.DateTime OEM_PLTFRM_EOL_DT { set; get; }
+
+
+        [DataMember]
+        public System.DateTime OEM_PLTFRM_LNCH_DT { set; get; }
+
+
+        [DataMember]
+        public System.String PCSR_NBR { set; get; }
+
+
+        [DataMember]
+        public System.String PRC_CST_TST_STS { set; get; }
+
+
+        [DataMember]
+        public System.Decimal PRD_COST { set; get; }
+
+
+        [DataMember]
+        public System.String PRD_MBR_SIDS { set; get; }
+
+
+        [DataMember]
+        public System.String PRODUCT { set; get; }
+
+
+        [DataMember]
+        public System.String PROG_PMT { set; get; }
+
+
+        [DataMember]
+        public System.String PYOUT_BASE_ON { set; get; }
+
+
+        [DataMember]
+        public System.DateTime REBATE_BILLING_END { set; get; }
+
+
+        [DataMember]
+        public System.DateTime REBATE_BILLING_START { set; get; }
+
+
+        [DataMember]
+        public System.String REBT_TYPE { set; get; }
+
+
+        [DataMember]
+        public System.String RTL_CYC_NM { set; get; }
+
+
+        [DataMember]
+        public System.Decimal RTL_PULL_DLR { set; get; }
+
+
+        [DataMember]
+        public System.String TOTAL_DOLLAR_AMOUNT { set; get; }
+
+
+        [DataMember]
+        public System.String WF_STG_CD { set; get; }
+
+
+        [DataMember]
+        public System.Decimal YCS2 { set; get; }
+
+
+        /*
+        private static List<CostTestDetailItem> CostTestDetailItemFromReader(SqlDataReader rdr){
+        // This helper method is template generated.
+        // Refer to that template for details to modify this code.
+
+        var ret = new List<CostTestDetailItem>();
+        int IDX_ADDITIVE = DB.GetReaderOrdinal(rdr, "ADDITIVE");
+        int IDX_AVG_RPU = DB.GetReaderOrdinal(rdr, "AVG_RPU");
+        int IDX_CAP = DB.GetReaderOrdinal(rdr, "CAP");
+        int IDX_CNSMPTN_RSN = DB.GetReaderOrdinal(rdr, "CNSMPTN_RSN");
+        int IDX_COST_TEST_OVRRD_CMT = DB.GetReaderOrdinal(rdr, "COST_TEST_OVRRD_CMT");
+        int IDX_COST_TEST_OVRRD_FLG = DB.GetReaderOrdinal(rdr, "COST_TEST_OVRRD_FLG");
+        int IDX_CST_TYPE = DB.GetReaderOrdinal(rdr, "CST_TYPE");
+        int IDX_CUST_NM_SID = DB.GetReaderOrdinal(rdr, "CUST_NM_SID");
+        int IDX_DEAL_DESC = DB.GetReaderOrdinal(rdr, "DEAL_DESC");
+        int IDX_DEAL_END_DT = DB.GetReaderOrdinal(rdr, "DEAL_END_DT");
+        int IDX_DEAL_GRP_CMNT = DB.GetReaderOrdinal(rdr, "DEAL_GRP_CMNT");
+        int IDX_DEAL_ID = DB.GetReaderOrdinal(rdr, "DEAL_ID");
+        int IDX_DEAL_PRD_RNK = DB.GetReaderOrdinal(rdr, "DEAL_PRD_RNK");
+        int IDX_DEAL_STRT_DT = DB.GetReaderOrdinal(rdr, "DEAL_STRT_DT");
+        int IDX_ECAP_FLR = DB.GetReaderOrdinal(rdr, "ECAP_FLR");
+        int IDX_ECAP_PRC = DB.GetReaderOrdinal(rdr, "ECAP_PRC");
+        int IDX_FLEX_ROW_TYPE = DB.GetReaderOrdinal(rdr, "FLEX_ROW_TYPE");
+        int IDX_GEO = DB.GetReaderOrdinal(rdr, "GEO");
+        int IDX_GRP_DEALS = DB.GetReaderOrdinal(rdr, "GRP_DEALS");
+        int IDX_INCMPL_COST_TEST_RSN = DB.GetReaderOrdinal(rdr, "INCMPL_COST_TEST_RSN");
+        int IDX_LAST_COST_TEST_RUN = DB.GetReaderOrdinal(rdr, "LAST_COST_TEST_RUN");
+        int IDX_LNP_FRMULA = DB.GetReaderOrdinal(rdr, "LNP_FRMULA");
+        int IDX_LOW_NET_PRC = DB.GetReaderOrdinal(rdr, "LOW_NET_PRC");
+        int IDX_MAX_RPU = DB.GetReaderOrdinal(rdr, "MAX_RPU");
+        int IDX_MKT_SEG = DB.GetReaderOrdinal(rdr, "MKT_SEG");
+        int IDX_OBJ_PATH_HASH = DB.GetReaderOrdinal(rdr, "OBJ_PATH_HASH");
+        int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
+        int IDX_OEM_PLTFRM_EOL_DT = DB.GetReaderOrdinal(rdr, "OEM_PLTFRM_EOL_DT");
+        int IDX_OEM_PLTFRM_LNCH_DT = DB.GetReaderOrdinal(rdr, "OEM_PLTFRM_LNCH_DT");
+        int IDX_PCSR_NBR = DB.GetReaderOrdinal(rdr, "PCSR_NBR");
+        int IDX_PRC_CST_TST_STS = DB.GetReaderOrdinal(rdr, "PRC_CST_TST_STS");
+        int IDX_PRD_COST = DB.GetReaderOrdinal(rdr, "PRD_COST");
+        int IDX_PRD_MBR_SIDS = DB.GetReaderOrdinal(rdr, "PRD_MBR_SIDS");
+        int IDX_PRODUCT = DB.GetReaderOrdinal(rdr, "PRODUCT");
+        int IDX_PROG_PMT = DB.GetReaderOrdinal(rdr, "PROG_PMT");
+        int IDX_PYOUT_BASE_ON = DB.GetReaderOrdinal(rdr, "PYOUT_BASE_ON");
+        int IDX_REBATE_BILLING_END = DB.GetReaderOrdinal(rdr, "REBATE_BILLING_END");
+        int IDX_REBATE_BILLING_START = DB.GetReaderOrdinal(rdr, "REBATE_BILLING_START");
+        int IDX_REBT_TYPE = DB.GetReaderOrdinal(rdr, "REBT_TYPE");
+        int IDX_RTL_CYC_NM = DB.GetReaderOrdinal(rdr, "RTL_CYC_NM");
+        int IDX_RTL_PULL_DLR = DB.GetReaderOrdinal(rdr, "RTL_PULL_DLR");
+        int IDX_TOTAL_DOLLAR_AMOUNT = DB.GetReaderOrdinal(rdr, "TOTAL_DOLLAR_AMOUNT");
+        int IDX_WF_STG_CD = DB.GetReaderOrdinal(rdr, "WF_STG_CD");
+        int IDX_YCS2 = DB.GetReaderOrdinal(rdr, "YCS2");
+
+        while (rdr.Read()){
+        ret.Add(new CostTestDetailItem {
+        ADDITIVE = (IDX_ADDITIVE < 0 || rdr.IsDBNull(IDX_ADDITIVE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_ADDITIVE),
+        AVG_RPU = (IDX_AVG_RPU < 0 || rdr.IsDBNull(IDX_AVG_RPU)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_AVG_RPU),
+        CAP = (IDX_CAP < 0 || rdr.IsDBNull(IDX_CAP)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_CAP),
+        CNSMPTN_RSN = (IDX_CNSMPTN_RSN < 0 || rdr.IsDBNull(IDX_CNSMPTN_RSN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CNSMPTN_RSN),
+        COST_TEST_OVRRD_CMT = (IDX_COST_TEST_OVRRD_CMT < 0 || rdr.IsDBNull(IDX_COST_TEST_OVRRD_CMT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COST_TEST_OVRRD_CMT),
+        COST_TEST_OVRRD_FLG = (IDX_COST_TEST_OVRRD_FLG < 0 || rdr.IsDBNull(IDX_COST_TEST_OVRRD_FLG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COST_TEST_OVRRD_FLG),
+        CST_TYPE = (IDX_CST_TYPE < 0 || rdr.IsDBNull(IDX_CST_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_CST_TYPE),
+        CUST_NM_SID = (IDX_CUST_NM_SID < 0 || rdr.IsDBNull(IDX_CUST_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_NM_SID),
+        DEAL_DESC = (IDX_DEAL_DESC < 0 || rdr.IsDBNull(IDX_DEAL_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_DESC),
+        DEAL_END_DT = (IDX_DEAL_END_DT < 0 || rdr.IsDBNull(IDX_DEAL_END_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_DEAL_END_DT),
+        DEAL_GRP_CMNT = (IDX_DEAL_GRP_CMNT < 0 || rdr.IsDBNull(IDX_DEAL_GRP_CMNT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_GRP_CMNT),
+        DEAL_ID = (IDX_DEAL_ID < 0 || rdr.IsDBNull(IDX_DEAL_ID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_DEAL_ID),
+        DEAL_PRD_RNK = (IDX_DEAL_PRD_RNK < 0 || rdr.IsDBNull(IDX_DEAL_PRD_RNK)) ? default(System.Int64) : rdr.GetFieldValue<System.Int64>(IDX_DEAL_PRD_RNK),
+        DEAL_STRT_DT = (IDX_DEAL_STRT_DT < 0 || rdr.IsDBNull(IDX_DEAL_STRT_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_DEAL_STRT_DT),
+        ECAP_FLR = (IDX_ECAP_FLR < 0 || rdr.IsDBNull(IDX_ECAP_FLR)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_FLR),
+        ECAP_PRC = (IDX_ECAP_PRC < 0 || rdr.IsDBNull(IDX_ECAP_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_PRC),
+        FLEX_ROW_TYPE = (IDX_FLEX_ROW_TYPE < 0 || rdr.IsDBNull(IDX_FLEX_ROW_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FLEX_ROW_TYPE),
+        GEO = (IDX_GEO < 0 || rdr.IsDBNull(IDX_GEO)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GEO),
+        GRP_DEALS = (IDX_GRP_DEALS < 0 || rdr.IsDBNull(IDX_GRP_DEALS)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_GRP_DEALS),
+        INCMPL_COST_TEST_RSN = (IDX_INCMPL_COST_TEST_RSN < 0 || rdr.IsDBNull(IDX_INCMPL_COST_TEST_RSN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_INCMPL_COST_TEST_RSN),
+        LAST_COST_TEST_RUN = (IDX_LAST_COST_TEST_RUN < 0 || rdr.IsDBNull(IDX_LAST_COST_TEST_RUN)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_LAST_COST_TEST_RUN),
+        LNP_FRMULA = (IDX_LNP_FRMULA < 0 || rdr.IsDBNull(IDX_LNP_FRMULA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_LNP_FRMULA),
+        LOW_NET_PRC = (IDX_LOW_NET_PRC < 0 || rdr.IsDBNull(IDX_LOW_NET_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_LOW_NET_PRC),
+        MAX_RPU = (IDX_MAX_RPU < 0 || rdr.IsDBNull(IDX_MAX_RPU)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_MAX_RPU),
+        MKT_SEG = (IDX_MKT_SEG < 0 || rdr.IsDBNull(IDX_MKT_SEG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MKT_SEG),
+        OBJ_PATH_HASH = (IDX_OBJ_PATH_HASH < 0 || rdr.IsDBNull(IDX_OBJ_PATH_HASH)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_PATH_HASH),
+        OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID),
+        OEM_PLTFRM_EOL_DT = (IDX_OEM_PLTFRM_EOL_DT < 0 || rdr.IsDBNull(IDX_OEM_PLTFRM_EOL_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OEM_PLTFRM_EOL_DT),
+        OEM_PLTFRM_LNCH_DT = (IDX_OEM_PLTFRM_LNCH_DT < 0 || rdr.IsDBNull(IDX_OEM_PLTFRM_LNCH_DT)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_OEM_PLTFRM_LNCH_DT),
+        PCSR_NBR = (IDX_PCSR_NBR < 0 || rdr.IsDBNull(IDX_PCSR_NBR)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PCSR_NBR),
+        PRC_CST_TST_STS = (IDX_PRC_CST_TST_STS < 0 || rdr.IsDBNull(IDX_PRC_CST_TST_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRC_CST_TST_STS),
+        PRD_COST = (IDX_PRD_COST < 0 || rdr.IsDBNull(IDX_PRD_COST)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_PRD_COST),
+        PRD_MBR_SIDS = (IDX_PRD_MBR_SIDS < 0 || rdr.IsDBNull(IDX_PRD_MBR_SIDS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_MBR_SIDS),
+        PRODUCT = (IDX_PRODUCT < 0 || rdr.IsDBNull(IDX_PRODUCT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRODUCT),
+        PROG_PMT = (IDX_PROG_PMT < 0 || rdr.IsDBNull(IDX_PROG_PMT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PROG_PMT),
+        PYOUT_BASE_ON = (IDX_PYOUT_BASE_ON < 0 || rdr.IsDBNull(IDX_PYOUT_BASE_ON)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PYOUT_BASE_ON),
+        REBATE_BILLING_END = (IDX_REBATE_BILLING_END < 0 || rdr.IsDBNull(IDX_REBATE_BILLING_END)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_REBATE_BILLING_END),
+        REBATE_BILLING_START = (IDX_REBATE_BILLING_START < 0 || rdr.IsDBNull(IDX_REBATE_BILLING_START)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_REBATE_BILLING_START),
+        REBT_TYPE = (IDX_REBT_TYPE < 0 || rdr.IsDBNull(IDX_REBT_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_REBT_TYPE),
+        RTL_CYC_NM = (IDX_RTL_CYC_NM < 0 || rdr.IsDBNull(IDX_RTL_CYC_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_RTL_CYC_NM),
+        RTL_PULL_DLR = (IDX_RTL_PULL_DLR < 0 || rdr.IsDBNull(IDX_RTL_PULL_DLR)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_RTL_PULL_DLR),
+        TOTAL_DOLLAR_AMOUNT = (IDX_TOTAL_DOLLAR_AMOUNT < 0 || rdr.IsDBNull(IDX_TOTAL_DOLLAR_AMOUNT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TOTAL_DOLLAR_AMOUNT),
+        WF_STG_CD = (IDX_WF_STG_CD < 0 || rdr.IsDBNull(IDX_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_STG_CD),
+        YCS2 = (IDX_YCS2 < 0 || rdr.IsDBNull(IDX_YCS2)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_YCS2)
+        });
+        } // while
+        return ret;
+        }
+        */
+
+    } // End of class CostTestDetailItem
+
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.
+    /// on MHTIPPIN-MOBL1
+    /// by mhtippin
+    /// at 10/17/2023 3:47:54 PM
+    ///</summary>
+
+    [DataContract]
 	public partial class CostTestGroupDetailItem {
 	
 	[DataMember]
@@ -6031,73 +6044,74 @@ namespace Intel.MyDeals.Entities {
 	
 	} // End of class CostTestGroupDetailItem
 
-	///<summary>
-	/// Class created via template - Do Not Modify!
-	/// To modify this code, re-execute the template, or extend as partial.
-	/// on MHTIPPIN-MOBL1
-	/// by mhtippin
-	/// at 10/17/2023 3:47:54 PM
-	///</summary>
-	
-	[DataContract]
-	public partial class PctMctResult {
-	
-	[DataMember]
-	public System.String COMP_NULL {set;get;}
-	
-	
-	[DataMember]
-	public System.String COST_TEST_RESULT {set;get;}
-	
-	
-	[DataMember]
-	public System.String MEETCOMP_TEST_RESULT {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 OBJ_SID {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 OBJ_TYPE_SID {set;get;}
-	
-	
-	/*
-	private static List<PctMctResult> PctMctResultFromReader(SqlDataReader rdr){
-	// This helper method is template generated.
-	// Refer to that template for details to modify this code.
-	
-	var ret = new List<PctMctResult>();
-	int IDX_COMP_NULL = DB.GetReaderOrdinal(rdr, "COMP_NULL");
-	int IDX_COST_TEST_RESULT = DB.GetReaderOrdinal(rdr, "COST_TEST_RESULT");
-	int IDX_MEETCOMP_TEST_RESULT = DB.GetReaderOrdinal(rdr, "MEETCOMP_TEST_RESULT");
-	int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
-	int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
-	
-	while (rdr.Read()){
-	ret.Add(new PctMctResult {
-	COMP_NULL = (IDX_COMP_NULL < 0 || rdr.IsDBNull(IDX_COMP_NULL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COMP_NULL),
-	COST_TEST_RESULT = (IDX_COST_TEST_RESULT < 0 || rdr.IsDBNull(IDX_COST_TEST_RESULT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COST_TEST_RESULT),
-	MEETCOMP_TEST_RESULT = (IDX_MEETCOMP_TEST_RESULT < 0 || rdr.IsDBNull(IDX_MEETCOMP_TEST_RESULT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEETCOMP_TEST_RESULT),
-	OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
-	OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID)
-	});
-	} // while
-	return ret;
-	}
-	*/
-	
-	} // End of class PctMctResult
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.
+    /// on JLOPEZRE-MOBL1
+    /// by jlopezre
+    /// at 02/15/2024 11:00:41 AM
+    ///</summary>
 
-	///<summary>
-	/// Class created via template - Do Not Modify!
-	/// To modify this code, re-execute the template, or extend as partial.
-	/// on MHTIPPIN-MOBL1
-	/// by mhtippin
-	/// at 10/17/2023 3:47:54 PM
-	///</summary>
-	
-	[DataContract]
+    [DataContract]
+    public partial class PctMctResult
+    {
+
+        [DataMember]
+        public System.String COMP_NULL { set; get; }
+
+
+        [DataMember]
+        public System.String COST_TEST_RESULT { set; get; }
+
+
+        [DataMember]
+        public System.String MEETCOMP_TEST_RESULT { set; get; }
+
+
+        [DataMember]
+        public System.Int32 OBJ_SID { set; get; }
+
+
+        [DataMember]
+        public System.Int32 OBJ_TYPE_SID { set; get; }
+
+
+        /*
+        private static List<PctMctResult> PctMctResultFromReader(SqlDataReader rdr){
+        // This helper method is template generated.
+        // Refer to that template for details to modify this code.
+
+        var ret = new List<PctMctResult>();
+        int IDX_COMP_NULL = DB.GetReaderOrdinal(rdr, "COMP_NULL");
+        int IDX_COST_TEST_RESULT = DB.GetReaderOrdinal(rdr, "COST_TEST_RESULT");
+        int IDX_MEETCOMP_TEST_RESULT = DB.GetReaderOrdinal(rdr, "MEETCOMP_TEST_RESULT");
+        int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
+        int IDX_OBJ_TYPE_SID = DB.GetReaderOrdinal(rdr, "OBJ_TYPE_SID");
+
+        while (rdr.Read()){
+        ret.Add(new PctMctResult {
+        COMP_NULL = (IDX_COMP_NULL < 0 || rdr.IsDBNull(IDX_COMP_NULL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COMP_NULL),
+        COST_TEST_RESULT = (IDX_COST_TEST_RESULT < 0 || rdr.IsDBNull(IDX_COST_TEST_RESULT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COST_TEST_RESULT),
+        MEETCOMP_TEST_RESULT = (IDX_MEETCOMP_TEST_RESULT < 0 || rdr.IsDBNull(IDX_MEETCOMP_TEST_RESULT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEETCOMP_TEST_RESULT),
+        OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_SID),
+        OBJ_TYPE_SID = (IDX_OBJ_TYPE_SID < 0 || rdr.IsDBNull(IDX_OBJ_TYPE_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_OBJ_TYPE_SID)
+        });
+        } // while
+        return ret;
+        }
+        */
+
+    } // End of class PctMctResult
+
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.
+    /// on MHTIPPIN-MOBL1
+    /// by mhtippin
+    /// at 10/17/2023 3:47:54 PM
+    ///</summary>
+
+    [DataContract]
 	public partial class DealsWithAttachments {
 	
 	[DataMember]
@@ -6283,259 +6297,272 @@ namespace Intel.MyDeals.Entities {
 	
 	} // End of class OverlappingDeal
 
-	///<summary>
-	/// Class created via template - Do Not Modify!
-	/// To modify this code, re-execute the template, or extend as partial.
-	/// on MHTIPPIN-MOBL1
-	/// by mhtippin
-	/// at 10/17/2023 3:47:55 PM
-	///</summary>
-	
-	[DataContract]
-	public partial class MeetCompResult {
-	
-	[DataMember]
-	public System.String BRND_FMLY {set;get;}
-	
-	
-	[DataMember]
-	public System.Decimal CAP {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 CNTRCT_OBJ_SID {set;get;}
-	
-	
-	[DataMember]
-	public System.Decimal COMP_BNCH {set;get;}
-	
-	
-	[DataMember]
-	public System.String COMP_OVRRD_FLG {set;get;}
-	
-	
-	[DataMember]
-	public System.String COMP_OVRRD_RSN {set;get;}
-	
-	
-	[DataMember]
-	public System.Decimal COMP_PRC {set;get;}
-	
-	
-	[DataMember]
-	public System.String COMP_SKU {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 CUST_NM_SID {set;get;}
-	
-	
-	[DataMember]
-	public System.String DEAL_DESC {set;get;}
-	
-	
-	[DataMember]
-	public System.String DEAL_OBJ_SID {set;get;}
-	
-	
-	[DataMember]
-	public System.String DEAL_PRD_TYPE {set;get;}
-	
-	
-	[DataMember]
-	public System.String DEAL_STATUS {set;get;}
-	
-	
-	[DataMember]
-	public System.String DEFAULT_FLAG {set;get;}
-	
-	
-	[DataMember]
-	public System.Decimal ECAP_PRC {set;get;}
-	
-	
-	[DataMember]
-	public System.String END_CUST_RETAIL {set;get;}
-	
-	
-	[DataMember]
-	public System.String GRP {set;get;}
-	
-	
-	[DataMember]
-	public System.String GRP_PRD_NM {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 GRP_PRD_SID {set;get;}
-	
-	
-	[DataMember]
-	public System.Decimal IA_BNCH {set;get;}
-	
-	
-	[DataMember]
-	public System.String MC_AVG_RPU {set;get;}
-	
-	
-	[DataMember]
-	public System.DateTime MC_LAST_RUN {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 MC_NULL {set;get;}
-	
-	
-	[DataMember]
-	public System.String MEET_COMP_ANALYSIS {set;get;}
-	
-	
-	[DataMember]
-	public System.String MEET_COMP_FRMULA {set;get;}
-	
-	
-	[DataMember]
-	public System.String MEET_COMP_OVERRIDE_UPD_FLG {set;get;}
-	
-	
-	[DataMember]
-	public System.String MEET_COMP_STS {set;get;}
-	
-	
-	[DataMember]
-	public System.String MEET_COMP_UPD_FLG {set;get;}
-	
-	
-	[DataMember]
-	public System.String OBJ_SET_TYPE {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 PRC_ST_OBJ_SID {set;get;}
-	
-	
-	[DataMember]
-	public System.Int32 PRC_TBL_OBJ_SID {set;get;}
-	
-	
-	[DataMember]
-	public System.String PRD_CAT_NM {set;get;}
-	
-	
-	[DataMember]
-	public System.String PS_STATUS {set;get;}
-	
-	
-	[DataMember]
-	public System.Int64 RW_NM {set;get;}
-	
-	
-	[DataMember]
-	public System.String WF_STG_CD {set;get;}
-	
-	
-	[DataMember]
-	public System.Decimal YCS2 {set;get;}
-	
-	
-	/*
-	private static List<MeetCompResult> MeetCompResultFromReader(SqlDataReader rdr){
-	// This helper method is template generated.
-	// Refer to that template for details to modify this code.
-	
-	var ret = new List<MeetCompResult>();
-	int IDX_BRND_FMLY = DB.GetReaderOrdinal(rdr, "BRND_FMLY");
-	int IDX_CAP = DB.GetReaderOrdinal(rdr, "CAP");
-	int IDX_CNTRCT_OBJ_SID = DB.GetReaderOrdinal(rdr, "CNTRCT_OBJ_SID");
-	int IDX_COMP_BNCH = DB.GetReaderOrdinal(rdr, "COMP_BNCH");
-	int IDX_COMP_OVRRD_FLG = DB.GetReaderOrdinal(rdr, "COMP_OVRRD_FLG");
-	int IDX_COMP_OVRRD_RSN = DB.GetReaderOrdinal(rdr, "COMP_OVRRD_RSN");
-	int IDX_COMP_PRC = DB.GetReaderOrdinal(rdr, "COMP_PRC");
-	int IDX_COMP_SKU = DB.GetReaderOrdinal(rdr, "COMP_SKU");
-	int IDX_CUST_NM_SID = DB.GetReaderOrdinal(rdr, "CUST_NM_SID");
-	int IDX_DEAL_DESC = DB.GetReaderOrdinal(rdr, "DEAL_DESC");
-	int IDX_DEAL_OBJ_SID = DB.GetReaderOrdinal(rdr, "DEAL_OBJ_SID");
-	int IDX_DEAL_PRD_TYPE = DB.GetReaderOrdinal(rdr, "DEAL_PRD_TYPE");
-	int IDX_DEAL_STATUS = DB.GetReaderOrdinal(rdr, "DEAL_STATUS");
-	int IDX_DEFAULT_FLAG = DB.GetReaderOrdinal(rdr, "DEFAULT_FLAG");
-	int IDX_ECAP_PRC = DB.GetReaderOrdinal(rdr, "ECAP_PRC");
-	int IDX_END_CUST_RETAIL = DB.GetReaderOrdinal(rdr, "END_CUST_RETAIL");
-	int IDX_GRP = DB.GetReaderOrdinal(rdr, "GRP");
-	int IDX_GRP_PRD_NM = DB.GetReaderOrdinal(rdr, "GRP_PRD_NM");
-	int IDX_GRP_PRD_SID = DB.GetReaderOrdinal(rdr, "GRP_PRD_SID");
-	int IDX_IA_BNCH = DB.GetReaderOrdinal(rdr, "IA_BNCH");
-	int IDX_MC_AVG_RPU = DB.GetReaderOrdinal(rdr, "MC_AVG_RPU");
-	int IDX_MC_LAST_RUN = DB.GetReaderOrdinal(rdr, "MC_LAST_RUN");
-	int IDX_MC_NULL = DB.GetReaderOrdinal(rdr, "MC_NULL");
-	int IDX_MEET_COMP_ANALYSIS = DB.GetReaderOrdinal(rdr, "MEET_COMP_ANALYSIS");
-	int IDX_MEET_COMP_FRMULA = DB.GetReaderOrdinal(rdr, "MEET_COMP_FRMULA");
-	int IDX_MEET_COMP_OVERRIDE_UPD_FLG = DB.GetReaderOrdinal(rdr, "MEET_COMP_OVERRIDE_UPD_FLG");
-	int IDX_MEET_COMP_STS = DB.GetReaderOrdinal(rdr, "MEET_COMP_STS");
-	int IDX_MEET_COMP_UPD_FLG = DB.GetReaderOrdinal(rdr, "MEET_COMP_UPD_FLG");
-	int IDX_OBJ_SET_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE");
-	int IDX_PRC_ST_OBJ_SID = DB.GetReaderOrdinal(rdr, "PRC_ST_OBJ_SID");
-	int IDX_PRC_TBL_OBJ_SID = DB.GetReaderOrdinal(rdr, "PRC_TBL_OBJ_SID");
-	int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
-	int IDX_PS_STATUS = DB.GetReaderOrdinal(rdr, "PS_STATUS");
-	int IDX_RW_NM = DB.GetReaderOrdinal(rdr, "RW_NM");
-	int IDX_WF_STG_CD = DB.GetReaderOrdinal(rdr, "WF_STG_CD");
-	int IDX_YCS2 = DB.GetReaderOrdinal(rdr, "YCS2");
-	
-	while (rdr.Read()){
-	ret.Add(new MeetCompResult {
-	BRND_FMLY = (IDX_BRND_FMLY < 0 || rdr.IsDBNull(IDX_BRND_FMLY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BRND_FMLY),
-	CAP = (IDX_CAP < 0 || rdr.IsDBNull(IDX_CAP)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_CAP),
-	CNTRCT_OBJ_SID = (IDX_CNTRCT_OBJ_SID < 0 || rdr.IsDBNull(IDX_CNTRCT_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNTRCT_OBJ_SID),
-	COMP_BNCH = (IDX_COMP_BNCH < 0 || rdr.IsDBNull(IDX_COMP_BNCH)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_COMP_BNCH),
-	COMP_OVRRD_FLG = (IDX_COMP_OVRRD_FLG < 0 || rdr.IsDBNull(IDX_COMP_OVRRD_FLG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COMP_OVRRD_FLG),
-	COMP_OVRRD_RSN = (IDX_COMP_OVRRD_RSN < 0 || rdr.IsDBNull(IDX_COMP_OVRRD_RSN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COMP_OVRRD_RSN),
-	COMP_PRC = (IDX_COMP_PRC < 0 || rdr.IsDBNull(IDX_COMP_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_COMP_PRC),
-	COMP_SKU = (IDX_COMP_SKU < 0 || rdr.IsDBNull(IDX_COMP_SKU)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COMP_SKU),
-	CUST_NM_SID = (IDX_CUST_NM_SID < 0 || rdr.IsDBNull(IDX_CUST_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_NM_SID),
-	DEAL_DESC = (IDX_DEAL_DESC < 0 || rdr.IsDBNull(IDX_DEAL_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_DESC),
-	DEAL_OBJ_SID = (IDX_DEAL_OBJ_SID < 0 || rdr.IsDBNull(IDX_DEAL_OBJ_SID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_OBJ_SID),
-	DEAL_PRD_TYPE = (IDX_DEAL_PRD_TYPE < 0 || rdr.IsDBNull(IDX_DEAL_PRD_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_TYPE),
-	DEAL_STATUS = (IDX_DEAL_STATUS < 0 || rdr.IsDBNull(IDX_DEAL_STATUS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_STATUS),
-	DEFAULT_FLAG = (IDX_DEFAULT_FLAG < 0 || rdr.IsDBNull(IDX_DEFAULT_FLAG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEFAULT_FLAG),
-	ECAP_PRC = (IDX_ECAP_PRC < 0 || rdr.IsDBNull(IDX_ECAP_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_PRC),
-	END_CUST_RETAIL = (IDX_END_CUST_RETAIL < 0 || rdr.IsDBNull(IDX_END_CUST_RETAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_RETAIL),
-	GRP = (IDX_GRP < 0 || rdr.IsDBNull(IDX_GRP)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GRP),
-	GRP_PRD_NM = (IDX_GRP_PRD_NM < 0 || rdr.IsDBNull(IDX_GRP_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GRP_PRD_NM),
-	GRP_PRD_SID = (IDX_GRP_PRD_SID < 0 || rdr.IsDBNull(IDX_GRP_PRD_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_GRP_PRD_SID),
-	IA_BNCH = (IDX_IA_BNCH < 0 || rdr.IsDBNull(IDX_IA_BNCH)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_IA_BNCH),
-	MC_AVG_RPU = (IDX_MC_AVG_RPU < 0 || rdr.IsDBNull(IDX_MC_AVG_RPU)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MC_AVG_RPU),
-	MC_LAST_RUN = (IDX_MC_LAST_RUN < 0 || rdr.IsDBNull(IDX_MC_LAST_RUN)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_MC_LAST_RUN),
-	MC_NULL = (IDX_MC_NULL < 0 || rdr.IsDBNull(IDX_MC_NULL)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_MC_NULL),
-	MEET_COMP_ANALYSIS = (IDX_MEET_COMP_ANALYSIS < 0 || rdr.IsDBNull(IDX_MEET_COMP_ANALYSIS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_ANALYSIS),
-	MEET_COMP_FRMULA = (IDX_MEET_COMP_FRMULA < 0 || rdr.IsDBNull(IDX_MEET_COMP_FRMULA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_FRMULA),
-	MEET_COMP_OVERRIDE_UPD_FLG = (IDX_MEET_COMP_OVERRIDE_UPD_FLG < 0 || rdr.IsDBNull(IDX_MEET_COMP_OVERRIDE_UPD_FLG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_OVERRIDE_UPD_FLG),
-	MEET_COMP_STS = (IDX_MEET_COMP_STS < 0 || rdr.IsDBNull(IDX_MEET_COMP_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_STS),
-	MEET_COMP_UPD_FLG = (IDX_MEET_COMP_UPD_FLG < 0 || rdr.IsDBNull(IDX_MEET_COMP_UPD_FLG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_UPD_FLG),
-	OBJ_SET_TYPE = (IDX_OBJ_SET_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE),
-	PRC_ST_OBJ_SID = (IDX_PRC_ST_OBJ_SID < 0 || rdr.IsDBNull(IDX_PRC_ST_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRC_ST_OBJ_SID),
-	PRC_TBL_OBJ_SID = (IDX_PRC_TBL_OBJ_SID < 0 || rdr.IsDBNull(IDX_PRC_TBL_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRC_TBL_OBJ_SID),
-	PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM),
-	PS_STATUS = (IDX_PS_STATUS < 0 || rdr.IsDBNull(IDX_PS_STATUS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PS_STATUS),
-	RW_NM = (IDX_RW_NM < 0 || rdr.IsDBNull(IDX_RW_NM)) ? default(System.Int64) : rdr.GetFieldValue<System.Int64>(IDX_RW_NM),
-	WF_STG_CD = (IDX_WF_STG_CD < 0 || rdr.IsDBNull(IDX_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_STG_CD),
-	YCS2 = (IDX_YCS2 < 0 || rdr.IsDBNull(IDX_YCS2)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_YCS2)
-	});
-	} // while
-	return ret;
-	}
-	*/
-	
-	} // End of class MeetCompResult
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.
+    /// on JLOPEZRE-MOBL1
+    /// by jlopezre
+    /// at 02/15/2024 11:00:42 AM
+    ///</summary>
 
-	///<summary>
-	/// Class created via template - Do Not Modify!
-	/// To modify this code, re-execute the template, or extend as partial.
-	/// on MHTIPPIN-MOBL1
-	/// by mhtippin
-	/// at 10/17/2023 3:47:56 PM
-	///</summary>
-	
-	[DataContract]
+    [DataContract]
+    public partial class MeetCompResult
+    {
+
+        [DataMember]
+        public System.String BRND_FMLY { set; get; }
+
+
+        [DataMember]
+        public System.Decimal CAP { set; get; }
+
+
+        [DataMember]
+        public System.Int32 CNTRCT_OBJ_SID { set; get; }
+
+
+        [DataMember]
+        public System.Decimal COMP_BNCH { set; get; }
+
+
+        [DataMember]
+        public System.String COMP_OVRRD_FLG { set; get; }
+
+
+        [DataMember]
+        public System.String COMP_OVRRD_RSN { set; get; }
+
+
+        [DataMember]
+        public System.Decimal COMP_PRC { set; get; }
+
+
+        [DataMember]
+        public System.String COMP_SKU { set; get; }
+
+
+        [DataMember]
+        public System.Int32 CUST_NM_SID { set; get; }
+
+
+        [DataMember]
+        public System.String DEAL_DESC { set; get; }
+
+
+        [DataMember]
+        public System.String DEAL_OBJ_SID { set; get; }
+
+
+        [DataMember]
+        public System.String DEAL_PRD_TYPE { set; get; }
+
+
+        [DataMember]
+        public System.String DEAL_STATUS { set; get; }
+
+
+        [DataMember]
+        public System.String DEFAULT_FLAG { set; get; }
+
+
+        [DataMember]
+        public System.Decimal ECAP_PRC { set; get; }
+
+
+        [DataMember]
+        public System.String END_CUST_RETAIL { set; get; }
+
+
+        [DataMember]
+        public System.String FLEX_ROW_TYPE { set; get; }
+
+
+        [DataMember]
+        public System.String GRP { set; get; }
+
+
+        [DataMember]
+        public System.String GRP_PRD_NM { set; get; }
+
+
+        [DataMember]
+        public System.Int32 GRP_PRD_SID { set; get; }
+
+
+        [DataMember]
+        public System.Decimal IA_BNCH { set; get; }
+
+
+        [DataMember]
+        public System.String MC_AVG_RPU { set; get; }
+
+
+        [DataMember]
+        public System.DateTime MC_LAST_RUN { set; get; }
+
+
+        [DataMember]
+        public System.Int32 MC_NULL { set; get; }
+
+
+        [DataMember]
+        public System.String MEET_COMP_ANALYSIS { set; get; }
+
+
+        [DataMember]
+        public System.String MEET_COMP_FRMULA { set; get; }
+
+
+        [DataMember]
+        public System.String MEET_COMP_OVERRIDE_UPD_FLG { set; get; }
+
+
+        [DataMember]
+        public System.String MEET_COMP_STS { set; get; }
+
+
+        [DataMember]
+        public System.String MEET_COMP_UPD_FLG { set; get; }
+
+
+        [DataMember]
+        public System.String OBJ_SET_TYPE { set; get; }
+
+
+        [DataMember]
+        public System.Int32 PRC_ST_OBJ_SID { set; get; }
+
+
+        [DataMember]
+        public System.Int32 PRC_TBL_OBJ_SID { set; get; }
+
+
+        [DataMember]
+        public System.String PRD_CAT_NM { set; get; }
+
+
+        [DataMember]
+        public System.String PS_STATUS { set; get; }
+
+
+        [DataMember]
+        public System.Int64 RW_NM { set; get; }
+
+
+        [DataMember]
+        public System.String TOTAL_DOLLAR_AMOUNT { set; get; }
+
+
+        [DataMember]
+        public System.String WF_STG_CD { set; get; }
+
+
+        [DataMember]
+        public System.Decimal YCS2 { set; get; }
+
+
+        /*
+        private static List<MeetCompResult> MeetCompResultFromReader(SqlDataReader rdr){
+        // This helper method is template generated.
+        // Refer to that template for details to modify this code.
+
+        var ret = new List<MeetCompResult>();
+        int IDX_BRND_FMLY = DB.GetReaderOrdinal(rdr, "BRND_FMLY");
+        int IDX_CAP = DB.GetReaderOrdinal(rdr, "CAP");
+        int IDX_CNTRCT_OBJ_SID = DB.GetReaderOrdinal(rdr, "CNTRCT_OBJ_SID");
+        int IDX_COMP_BNCH = DB.GetReaderOrdinal(rdr, "COMP_BNCH");
+        int IDX_COMP_OVRRD_FLG = DB.GetReaderOrdinal(rdr, "COMP_OVRRD_FLG");
+        int IDX_COMP_OVRRD_RSN = DB.GetReaderOrdinal(rdr, "COMP_OVRRD_RSN");
+        int IDX_COMP_PRC = DB.GetReaderOrdinal(rdr, "COMP_PRC");
+        int IDX_COMP_SKU = DB.GetReaderOrdinal(rdr, "COMP_SKU");
+        int IDX_CUST_NM_SID = DB.GetReaderOrdinal(rdr, "CUST_NM_SID");
+        int IDX_DEAL_DESC = DB.GetReaderOrdinal(rdr, "DEAL_DESC");
+        int IDX_DEAL_OBJ_SID = DB.GetReaderOrdinal(rdr, "DEAL_OBJ_SID");
+        int IDX_DEAL_PRD_TYPE = DB.GetReaderOrdinal(rdr, "DEAL_PRD_TYPE");
+        int IDX_DEAL_STATUS = DB.GetReaderOrdinal(rdr, "DEAL_STATUS");
+        int IDX_DEFAULT_FLAG = DB.GetReaderOrdinal(rdr, "DEFAULT_FLAG");
+        int IDX_ECAP_PRC = DB.GetReaderOrdinal(rdr, "ECAP_PRC");
+        int IDX_END_CUST_RETAIL = DB.GetReaderOrdinal(rdr, "END_CUST_RETAIL");
+        int IDX_FLEX_ROW_TYPE = DB.GetReaderOrdinal(rdr, "FLEX_ROW_TYPE");
+        int IDX_GRP = DB.GetReaderOrdinal(rdr, "GRP");
+        int IDX_GRP_PRD_NM = DB.GetReaderOrdinal(rdr, "GRP_PRD_NM");
+        int IDX_GRP_PRD_SID = DB.GetReaderOrdinal(rdr, "GRP_PRD_SID");
+        int IDX_IA_BNCH = DB.GetReaderOrdinal(rdr, "IA_BNCH");
+        int IDX_MC_AVG_RPU = DB.GetReaderOrdinal(rdr, "MC_AVG_RPU");
+        int IDX_MC_LAST_RUN = DB.GetReaderOrdinal(rdr, "MC_LAST_RUN");
+        int IDX_MC_NULL = DB.GetReaderOrdinal(rdr, "MC_NULL");
+        int IDX_MEET_COMP_ANALYSIS = DB.GetReaderOrdinal(rdr, "MEET_COMP_ANALYSIS");
+        int IDX_MEET_COMP_FRMULA = DB.GetReaderOrdinal(rdr, "MEET_COMP_FRMULA");
+        int IDX_MEET_COMP_OVERRIDE_UPD_FLG = DB.GetReaderOrdinal(rdr, "MEET_COMP_OVERRIDE_UPD_FLG");
+        int IDX_MEET_COMP_STS = DB.GetReaderOrdinal(rdr, "MEET_COMP_STS");
+        int IDX_MEET_COMP_UPD_FLG = DB.GetReaderOrdinal(rdr, "MEET_COMP_UPD_FLG");
+        int IDX_OBJ_SET_TYPE = DB.GetReaderOrdinal(rdr, "OBJ_SET_TYPE");
+        int IDX_PRC_ST_OBJ_SID = DB.GetReaderOrdinal(rdr, "PRC_ST_OBJ_SID");
+        int IDX_PRC_TBL_OBJ_SID = DB.GetReaderOrdinal(rdr, "PRC_TBL_OBJ_SID");
+        int IDX_PRD_CAT_NM = DB.GetReaderOrdinal(rdr, "PRD_CAT_NM");
+        int IDX_PS_STATUS = DB.GetReaderOrdinal(rdr, "PS_STATUS");
+        int IDX_RW_NM = DB.GetReaderOrdinal(rdr, "RW_NM");
+        int IDX_TOTAL_DOLLAR_AMOUNT = DB.GetReaderOrdinal(rdr, "TOTAL_DOLLAR_AMOUNT");
+        int IDX_WF_STG_CD = DB.GetReaderOrdinal(rdr, "WF_STG_CD");
+        int IDX_YCS2 = DB.GetReaderOrdinal(rdr, "YCS2");
+
+        while (rdr.Read()){
+        ret.Add(new MeetCompResult {
+        BRND_FMLY = (IDX_BRND_FMLY < 0 || rdr.IsDBNull(IDX_BRND_FMLY)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_BRND_FMLY),
+        CAP = (IDX_CAP < 0 || rdr.IsDBNull(IDX_CAP)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_CAP),
+        CNTRCT_OBJ_SID = (IDX_CNTRCT_OBJ_SID < 0 || rdr.IsDBNull(IDX_CNTRCT_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CNTRCT_OBJ_SID),
+        COMP_BNCH = (IDX_COMP_BNCH < 0 || rdr.IsDBNull(IDX_COMP_BNCH)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_COMP_BNCH),
+        COMP_OVRRD_FLG = (IDX_COMP_OVRRD_FLG < 0 || rdr.IsDBNull(IDX_COMP_OVRRD_FLG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COMP_OVRRD_FLG),
+        COMP_OVRRD_RSN = (IDX_COMP_OVRRD_RSN < 0 || rdr.IsDBNull(IDX_COMP_OVRRD_RSN)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COMP_OVRRD_RSN),
+        COMP_PRC = (IDX_COMP_PRC < 0 || rdr.IsDBNull(IDX_COMP_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_COMP_PRC),
+        COMP_SKU = (IDX_COMP_SKU < 0 || rdr.IsDBNull(IDX_COMP_SKU)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_COMP_SKU),
+        CUST_NM_SID = (IDX_CUST_NM_SID < 0 || rdr.IsDBNull(IDX_CUST_NM_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_CUST_NM_SID),
+        DEAL_DESC = (IDX_DEAL_DESC < 0 || rdr.IsDBNull(IDX_DEAL_DESC)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_DESC),
+        DEAL_OBJ_SID = (IDX_DEAL_OBJ_SID < 0 || rdr.IsDBNull(IDX_DEAL_OBJ_SID)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_OBJ_SID),
+        DEAL_PRD_TYPE = (IDX_DEAL_PRD_TYPE < 0 || rdr.IsDBNull(IDX_DEAL_PRD_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_PRD_TYPE),
+        DEAL_STATUS = (IDX_DEAL_STATUS < 0 || rdr.IsDBNull(IDX_DEAL_STATUS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEAL_STATUS),
+        DEFAULT_FLAG = (IDX_DEFAULT_FLAG < 0 || rdr.IsDBNull(IDX_DEFAULT_FLAG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_DEFAULT_FLAG),
+        ECAP_PRC = (IDX_ECAP_PRC < 0 || rdr.IsDBNull(IDX_ECAP_PRC)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_ECAP_PRC),
+        END_CUST_RETAIL = (IDX_END_CUST_RETAIL < 0 || rdr.IsDBNull(IDX_END_CUST_RETAIL)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_END_CUST_RETAIL),
+        FLEX_ROW_TYPE = (IDX_FLEX_ROW_TYPE < 0 || rdr.IsDBNull(IDX_FLEX_ROW_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_FLEX_ROW_TYPE),
+        GRP = (IDX_GRP < 0 || rdr.IsDBNull(IDX_GRP)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GRP),
+        GRP_PRD_NM = (IDX_GRP_PRD_NM < 0 || rdr.IsDBNull(IDX_GRP_PRD_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_GRP_PRD_NM),
+        GRP_PRD_SID = (IDX_GRP_PRD_SID < 0 || rdr.IsDBNull(IDX_GRP_PRD_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_GRP_PRD_SID),
+        IA_BNCH = (IDX_IA_BNCH < 0 || rdr.IsDBNull(IDX_IA_BNCH)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_IA_BNCH),
+        MC_AVG_RPU = (IDX_MC_AVG_RPU < 0 || rdr.IsDBNull(IDX_MC_AVG_RPU)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MC_AVG_RPU),
+        MC_LAST_RUN = (IDX_MC_LAST_RUN < 0 || rdr.IsDBNull(IDX_MC_LAST_RUN)) ? default(System.DateTime) : rdr.GetFieldValue<System.DateTime>(IDX_MC_LAST_RUN),
+        MC_NULL = (IDX_MC_NULL < 0 || rdr.IsDBNull(IDX_MC_NULL)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_MC_NULL),
+        MEET_COMP_ANALYSIS = (IDX_MEET_COMP_ANALYSIS < 0 || rdr.IsDBNull(IDX_MEET_COMP_ANALYSIS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_ANALYSIS),
+        MEET_COMP_FRMULA = (IDX_MEET_COMP_FRMULA < 0 || rdr.IsDBNull(IDX_MEET_COMP_FRMULA)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_FRMULA),
+        MEET_COMP_OVERRIDE_UPD_FLG = (IDX_MEET_COMP_OVERRIDE_UPD_FLG < 0 || rdr.IsDBNull(IDX_MEET_COMP_OVERRIDE_UPD_FLG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_OVERRIDE_UPD_FLG),
+        MEET_COMP_STS = (IDX_MEET_COMP_STS < 0 || rdr.IsDBNull(IDX_MEET_COMP_STS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_STS),
+        MEET_COMP_UPD_FLG = (IDX_MEET_COMP_UPD_FLG < 0 || rdr.IsDBNull(IDX_MEET_COMP_UPD_FLG)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_MEET_COMP_UPD_FLG),
+        OBJ_SET_TYPE = (IDX_OBJ_SET_TYPE < 0 || rdr.IsDBNull(IDX_OBJ_SET_TYPE)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_OBJ_SET_TYPE),
+        PRC_ST_OBJ_SID = (IDX_PRC_ST_OBJ_SID < 0 || rdr.IsDBNull(IDX_PRC_ST_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRC_ST_OBJ_SID),
+        PRC_TBL_OBJ_SID = (IDX_PRC_TBL_OBJ_SID < 0 || rdr.IsDBNull(IDX_PRC_TBL_OBJ_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_PRC_TBL_OBJ_SID),
+        PRD_CAT_NM = (IDX_PRD_CAT_NM < 0 || rdr.IsDBNull(IDX_PRD_CAT_NM)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PRD_CAT_NM),
+        PS_STATUS = (IDX_PS_STATUS < 0 || rdr.IsDBNull(IDX_PS_STATUS)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_PS_STATUS),
+        RW_NM = (IDX_RW_NM < 0 || rdr.IsDBNull(IDX_RW_NM)) ? default(System.Int64) : rdr.GetFieldValue<System.Int64>(IDX_RW_NM),
+        TOTAL_DOLLAR_AMOUNT = (IDX_TOTAL_DOLLAR_AMOUNT < 0 || rdr.IsDBNull(IDX_TOTAL_DOLLAR_AMOUNT)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_TOTAL_DOLLAR_AMOUNT),
+        WF_STG_CD = (IDX_WF_STG_CD < 0 || rdr.IsDBNull(IDX_WF_STG_CD)) ? String.Empty : rdr.GetFieldValue<System.String>(IDX_WF_STG_CD),
+        YCS2 = (IDX_YCS2 < 0 || rdr.IsDBNull(IDX_YCS2)) ? default(System.Decimal) : rdr.GetFieldValue<System.Decimal>(IDX_YCS2)
+        });
+        } // while
+        return ret;
+        }
+        */
+
+    } // End of class MeetCompResult
+
+    ///<summary>
+    /// Class created via template - Do Not Modify!
+    /// To modify this code, re-execute the template, or extend as partial.
+    /// on MHTIPPIN-MOBL1
+    /// by mhtippin
+    /// at 10/17/2023 3:47:56 PM
+    ///</summary>
+
+    [DataContract]
 	public partial class DealDeatils {
 	
 	[DataMember]

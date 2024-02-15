@@ -305,6 +305,13 @@
                                         </div>
                                     </ng-template>
                                 </kendo-grid-column>
+                                <kendo-grid-column field="FLEX_ROW_TYPE" title="Row Type" width="120" [headerClass]="{'headerClass':true}">
+                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                        <div class="readOnlyCell" [hidden]="isFlexRowTypeHidden(dataItem.OBJ_SET_TYPE)">
+                                            {{ dataItem.FLEX_ROW_TYPE }}
+                                        </div>
+                                    </ng-template>
+                                </kendo-grid-column>
                                 <kendo-grid-column field="DEAL_DESC" title="Deal Description" width="140" [headerClass]="{'headerClass':true}">
                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                         <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitiveChild(column.field, dataItem)">
@@ -366,6 +373,13 @@
                                                 ${{dataItem.CAP}}
                                             </div>
                                         </ng-template>
+                                    </ng-template>
+                                </kendo-grid-column>
+                                <kendo-grid-column field="TOTAL_DOLLAR_AMOUNT" title="Program $" width="120" [headerClass]="{'headerClass':true}">
+                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                        <div class="readOnlyCell" [hidden]="isProgramDollarHidden(dataItem.OBJ_SET_TYPE)">
+                                            {{ dataItem.TOTAL_DOLLAR_AMOUNT | currency }}
+                                        </div>
                                     </ng-template>
                                 </kendo-grid-column>
                                 <kendo-grid-column field="IA_BNCH" title="IA Bench" width="112" [headerClass]="{'headerClass':true}">

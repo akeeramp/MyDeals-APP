@@ -177,7 +177,11 @@
                                                             <a style="margin-top: 5px;" (click)="goToNavManagePCT(dataItem)" title="Click to go to Deal Editor"><span class="hyperunderline">{{dataItem.DEAL_ID}}</span></a>
                                                         </div>
                                                     </ng-template>
-
+                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Row Type" field="FLEX_ROW_TYPE" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="isFlexRowTypeHidden(pt.OBJ_SET_TYPE_CD)">
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        {{ dataItem.FLEX_ROW_TYPE }}
+                                                    </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="My Deals Product" [filterable]="true" field="PRODUCT"
                                                                    [headerClass]="{'headerClass':true}" [width]="170" *ngIf="!isHidden(pt.DC_ID, 'PRODUCT')">
@@ -234,12 +238,18 @@
                                                         <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
                                                     </ng-template>
                                                 </kendo-grid-column>
+                                                <kendo-grid-column title="Program $" field="TOTAL_DOLLAR_AMOUNT" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="isProgramDollarHidden(pt.OBJ_SET_TYPE_CD)">
+                                                    <ng-template kendoGridCellTemplate let-dataItem>
+                                                        {{ dataItem.TOTAL_DOLLAR_AMOUNT | currency }}
+                                                    </ng-template>
+                                                </kendo-grid-column>
                                                 <kendo-grid-column title="Max RPU" [headerClass]="{'headerClass':true}" [filterable]="true" field="MAX_RPU"
                                                                    [width]="100" [hidden]="!hasPermissionPrice" *ngIf="!isHidden(pt.DC_ID, 'MAX_RPU')">
                                                     <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
                                                         <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter" [filterService]="filterService" [data]="distinctPrimitive(pt.DC_ID, column.field)"></multicheck-filter>
                                                     </ng-template>
                                                     <ng-template kendoGridCellTemplate let-dataItem hidden="hidden">
+                                                        {{ dataItem.MAX_RPU | currency }}
                                                     </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="OEM Platform Launch Date" [width]="180" [filterable]="true"

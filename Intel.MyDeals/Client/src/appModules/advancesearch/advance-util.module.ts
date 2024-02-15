@@ -34,8 +34,8 @@ import { managerExcludeGroupsComponent } from '../../app/contract/managerExclude
 import { pctGroupModal } from '../../app/contract/managerPct/pctGroupModal/pctGroupModal.component';
 import { meetCompDealDetailModalComponent } from '../../app/contract/meetComp/meetCompDealDetailModal.component';
 import { pctOverrideReasonModal } from '../../app/contract/managerPct/pctOverrideReasonModal/pctOverrideReasonModal.component';
-import { meetCompContractComponent } from '../../app/contract/meetComp/meetComp.component';
-import { managerPctComponent } from '../../app/contract/managerPct/managerPct.component';
+import { MeetCompContractComponent } from '../../app/contract/meetComp/meetComp.component';
+import { ManagerPctComponent } from '../../app/contract/managerPct/managerPct.component';
 import { iconMctPctComponent } from '../../app/core/gridCell/iconMctPct/iconMctPct.component';
 import { pctChildGridComponent } from '../../app/contract/managerPct/pctChildGrid.component';
 import { missingCapCostInfoModalComponent } from '../../app/contract/ptModals/dealEditorModals/missingCapCostInfoModal.component';
@@ -86,8 +86,8 @@ export let AdvanceUtilComponents = [
     pctGroupModal,
     meetCompDealDetailModalComponent,
     pctOverrideReasonModal,
-    meetCompContractComponent,
-    managerPctComponent,
+    MeetCompContractComponent,
+    ManagerPctComponent,
     iconMctPctComponent,
     pctChildGridComponent,
     missingCapCostInfoModalComponent,

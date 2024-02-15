@@ -1240,11 +1240,11 @@ export class contractManagerComponent implements OnDestroy{
     }
 
     private isFlexRowTypeHidden(OBJ_SET_TYPE_CD: string): boolean {
-        return !(this.isFlex(OBJ_SET_TYPE_CD) && this.isDa())
+        return !(this.isFlex(OBJ_SET_TYPE_CD));
     }
 
     private isProgramDollarHidden(OBJ_SET_TYPE_CD: string): boolean {
-        return !(this.isProgram(OBJ_SET_TYPE_CD) && this.isDa())
+        return !(this.isProgram(OBJ_SET_TYPE_CD));
     }
 
     ngOnInit() {

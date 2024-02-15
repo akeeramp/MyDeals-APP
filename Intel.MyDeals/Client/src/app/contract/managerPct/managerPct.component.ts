@@ -1,19 +1,20 @@
-﻿import { Component, EventEmitter, Input, OnDestroy, Output, ViewEncapsulation } from "@angular/core";
-import { logger } from "../../shared/logger/logger";
+﻿import { Component, EventEmitter, Input, OnDestroy, OnInit, Output, ViewEncapsulation } from "@angular/core";
 import { DataStateChangeEvent, CellClickEvent, CellCloseEvent } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
-import { managerPctservice } from "./managerPct.service";
 import { ThemePalette } from "@angular/material/core";
+import { MatDialog } from "@angular/material/dialog";
+import { each } from 'underscore';
+import { Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
+
+import { logger } from "../../shared/logger/logger";
+import { managerPctservice } from "./managerPct.service";
 import { lnavService } from "../lnav/lnav.service";
 import { HeaderService } from "../../shared/header/header.service";
 import { contractManagerservice } from "../contractManager/contractManager.service";
 import { MomentService } from "../../shared/moment/moment.service";
 import { excludeDealGroupModalDialog } from "../managerExcludeGroups/excludeDealGroupModal.component";
-import { MatDialog } from "@angular/material/dialog";
-import { each } from 'underscore';
 import { tenderGroupExclusionModalComponent } from "../ptModals/tenderDashboardModals/tenderGroupExclusionModal.component";
-import { Subject } from "rxjs";
-import { takeUntil } from "rxjs/operators";
 
 export interface contractIds {
     Model: string;
@@ -31,11 +32,13 @@ export interface contractIds {
     styleUrls: ['Client/src/app/contract/managerPct/managerPct.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class managerPctComponent implements OnDestroy{
+export class ManagerPctComponent implements OnInit, OnDestroy {
+
     isRunning: boolean;
     contractId: string;
     lastRun: any;
     refreshPage: boolean;
+
     constructor(private loggerSvc: logger,
                 protected dialog: MatDialog,
                 private contractManagerSvc:contractManagerservice,
@@ -43,6 +46,7 @@ export class managerPctComponent implements OnDestroy{
                 private lnavSvc: lnavService,
                 private headerSvc: HeaderService,
                 private momentService: MomentService) {}
+
     //public view: GridDataResult;
     public isLoading: boolean;
     private color: ThemePalette = 'primary';
@@ -178,7 +182,6 @@ export class managerPctComponent implements OnDestroy{
                 }
             )
         }
-
     }
 
     dataStateChange(state: DataStateChangeEvent,id): void {
@@ -192,7 +195,7 @@ export class managerPctComponent implements OnDestroy{
                 if (data && data.length > 0) {
                     this.gridDataSet[id].data.push(item);
                 }
-            })
+            });
         }
     }
 
@@ -265,7 +268,6 @@ export class managerPctComponent implements OnDestroy{
             return value + " is saved";
 
         if (this.lastRun) {
-
             // Get local time in UTC
             var currentTime = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
             var localTime = this.momentService.moment(currentTime).format("MM/DD/YY HH:mm:ss");
@@ -295,7 +297,6 @@ export class managerPctComponent implements OnDestroy{
             }
 
             return "Last Run: " + Math.round(dsplNum) + dsplMsg;
-
         } else {
             // never ran
             this.needToRunPct = this.runIfStaleByHours > 0;
@@ -359,7 +360,7 @@ export class managerPctComponent implements OnDestroy{
                         x.PRC_TBL.forEach((y) => { this.isPTExpanded[y.DC_ID] = true; this.togglePt(y); });
                     }
                 }
-            })
+            });
         }
         this.isPctLoading = false;
         if (this.pctFilter != "") {
@@ -425,7 +426,7 @@ export class managerPctComponent implements OnDestroy{
             }
         });
         dialogRef.afterClosed().subscribe((returnVal) => {
-
+            //
         });
     }
     swapUnderscore(str) {
@@ -508,7 +509,6 @@ export class managerPctComponent implements OnDestroy{
             this.showMultipleDialog = false;
             this.ptId = prc_tbl[0].DC_ID;
             window.location.href = "Contract#/manager/PT/" + this.parent_dcId + "/" + this.psId + "/" + this.ptId + "/0";
-
         }
     }
     pickPt(pte) {
@@ -540,6 +540,26 @@ export class managerPctComponent implements OnDestroy{
         if (this.enabledPCT)
             setTimeout(() => { this.executePct(); }, 0)
     }
+    goToNavManagePCT(dataItem) {
+        window.open(`/Contract#/gotoDeal/${dataItem.DEAL_ID}`, '_blank')
+    }
+
+    private isProgram(OBJ_SET_TYPE_CD: string): boolean {
+        return OBJ_SET_TYPE_CD.toLowerCase().includes('program');
+    }
+
+    private isFlex(OBJ_SET_TYPE_CD: string): boolean {
+        return OBJ_SET_TYPE_CD.toLowerCase().includes('flex');
+    }
+
+    private isFlexRowTypeHidden(OBJ_SET_TYPE_CD: string): boolean {
+        return !(this.isFlex(OBJ_SET_TYPE_CD));
+    }
+
+    private isProgramDollarHidden(OBJ_SET_TYPE_CD: string): boolean {
+        return !(this.isProgram(OBJ_SET_TYPE_CD));
+    }
+
     ngOnInit() {
         if(this.tab === 'groupExclusionDiv'){
             this.selectedTab = 5;
@@ -559,20 +579,19 @@ export class managerPctComponent implements OnDestroy{
                     }
                 }
                 this.is_Deal_Tools_Checked[prcTbl.DC_ID] = false;
-            })           
-        })
+            });
+        });
         this.pricingStrategyFilter = this.contractData?.PRC_ST;
         if (this.isTenderDashboard) {//If PCT screen triggered from Tender Dashboard, all datas needs to be expanded
             this.isAllCollapsed = false;
         }
         this.loadPct();
     }
-    goToNavManagePCT(dataItem) {
-        window.open(`/Contract#/gotoDeal/${dataItem.DEAL_ID}`, '_blank')
-    }
+
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
     }
+
 }

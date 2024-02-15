@@ -1,21 +1,22 @@
-import { logger } from "../../shared/logger/logger";
-import { Component, Input, OnInit, ViewEncapsulation, Output, EventEmitter } from "@angular/core";
+import { Component, Input, OnInit, ViewEncapsulation, Output, EventEmitter, OnChanges } from "@angular/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, SelectAllCheckboxState, CellClickEvent, CellCloseEvent } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
-import { meetCompContractService } from "./meetComp.service";
 import { DropDownFilterSettings } from "@progress/kendo-angular-dropdowns";
 import { FormBuilder, FormGroup } from "@angular/forms";
 import { Keys } from "@progress/kendo-angular-common";
 import { List } from "linqts";
 import { Observable } from "rxjs";
 import { map } from "rxjs/operators";
+import { MatDialog } from "@angular/material/dialog";
+import { sortBy } from 'underscore';
+
+import { logger } from "../../shared/logger/logger";
+import { meetCompContractService } from "./meetComp.service";
 import { GridUtil } from "../grid.util"
 import { MeetCompContractUtil } from "./meetComp_util"
 import { MomentService } from "../../shared/moment/moment.service";
-import { MatDialog } from "@angular/material/dialog";
 import { meetCompDealDetailModalComponent } from "./meetCompDealDetailModal.component"
 import { pricingTableservice } from "../pricingTable/pricingTable.service";
-import { sortBy } from 'underscore';
 
 @Component({
     selector: "meet-comp-contract",
@@ -23,7 +24,8 @@ import { sortBy } from 'underscore';
     styleUrls: ["Client/src/app/contract/meetComp/meetComp.component.css"],
     encapsulation: ViewEncapsulation.None,
 })
-export class meetCompContractComponent implements OnInit {
+export class MeetCompContractComponent implements OnInit, OnChanges {
+
     @Input() private isTender;
     @Input() private objSid;
     @Input() private isAdhoc;
@@ -35,6 +37,7 @@ export class meetCompContractComponent implements OnInit {
     @Output() contractRefresh = new EventEmitter();
     @Output() refreshMCTData = new EventEmitter();
     @Output() isDirty = new EventEmitter();
+
     constructor(private loggerSvc: logger,
                 private meetCompSvc: meetCompContractService,
                 private formBuilder: FormBuilder,
@@ -227,7 +230,6 @@ export class meetCompContractComponent implements OnInit {
             }
         }
         if (!args.isEdited) {
-           
             args.sender.editCell(
                 args.rowIndex,
                 args.columnIndex,
@@ -600,7 +602,6 @@ export class meetCompContractComponent implements OnInit {
                 this.selectedMeetCompSku = this.meetCompSkuDropdownData[sku_ind];
                 var prc_ind = this.meetCompPrcDropdownData.findIndex(ind => ind['COMP_PRC'] == dataItem.COMP_PRC)
                 this.selectedMeetCompPrc = this.meetCompPrcDropdownData[prc_ind];
-
             }
         }
     }
@@ -1200,6 +1201,23 @@ export class meetCompContractComponent implements OnInit {
     closeShowAlert() {
         this.showAlert = false;
     }
+
+    private isProgram(OBJ_SET_TYPE_CD: string): boolean {
+        return OBJ_SET_TYPE_CD.toLowerCase().includes('program');
+    }
+
+    private isFlex(OBJ_SET_TYPE_CD: string): boolean {
+        return OBJ_SET_TYPE_CD.toLowerCase().includes('flex');
+    }
+
+    private isFlexRowTypeHidden(OBJ_SET_TYPE_CD: string): boolean {
+        return !(this.isFlex(OBJ_SET_TYPE_CD));
+    }
+
+    private isProgramDollarHidden(OBJ_SET_TYPE_CD: string): boolean {
+        return !(this.isProgram(OBJ_SET_TYPE_CD));
+    }
+
     ngOnChanges() {
         if (!!this.objSid) {
             this.initialLoad = true;
@@ -1221,4 +1239,5 @@ export class meetCompContractComponent implements OnInit {
             console.error('MeetComp::ngOnInit::', ex);
         }
     }
+
 }
