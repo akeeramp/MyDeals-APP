@@ -1,5 +1,4 @@
-﻿/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-inferrable-types */
+﻿/* eslint-disable @typescript-eslint/no-unused-vars, @typescript-eslint/no-inferrable-types */
 import { Component, Input, Output, EventEmitter, NgZone, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
@@ -35,7 +34,6 @@ import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 import { FlexOverlappingCheckComponent } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.component';
 import { dropDownModalComponent } from '../ptModals/dropDownModal/dropDownModal.component';
-import { takeUntil } from 'rxjs/operators';
 
 @Component({
     selector: 'pricing-table-editor',
@@ -460,7 +458,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
     private lastEditedKitName: any;
     private prdPastObj: any = [];
     private isPRDPaste = false;
-    isDirty=false;
+    isDirty = false;
     private readonly destroy$ = new Subject();
     // To get the selected row and col for product selector
     private multiRowDelete: Array<any> = [];
@@ -482,9 +480,8 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         beforePaste: (data, coords) => {
             //Correct the object while copy pasting the data
             if (this.isPRDPaste && data && data.length > 0) {
-                this.prdPastObj = this.getcpdata(data, coords);
-            }
-            else {
+                this.prdPastObj = this.getCpData(data, coords);
+            } else {
                 this.prdPastObj = [];
             }
         },
@@ -492,8 +489,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             if (prop && pro2 && prop == pro2 && (pro2 == 'PTR_USER_PRD' || pro2 == 'PRD_EXCLDS')) {
                 this.selectedProperty = pro2;
                 this.isPRDPaste = true;
-            }
-            else {
+            } else {
                 this.isPRDPaste = null;
             }
         },
@@ -511,8 +507,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                         this.afterCellChange(changes, source);
                     }, 0);
                 }
-            }
-            catch (ex) {
+            } catch (ex) {
                 this.loggerService.error('Something went wrong', 'Error');
                 console.error('PTE::afterChange::', ex);
             }
@@ -589,7 +584,8 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
     public redoEnable: boolean = false;
     public redoCount = 0;
     public selectedProperty = '';
-    getcpdata(data, coords) {
+
+    getCpData(data, coords) {
         let startindex = coords[0].startRow;
         let numOfTiers;
         let property = this.selectedProperty;
@@ -665,7 +661,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             let obj = [currindex, property, oldvalue, item.toString()];
             uniqcpchanges.push(obj);
             currindex = currindex + numOfTiers;
-        })
+        });
         return uniqcpchanges;
     }
 
@@ -678,8 +674,8 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         if (this.isLoading && source && source == 'stop-loader') {
             this.isLoading = false;
         }
-         //exclusivly for KIT incase of edit existing its give more time for operation to complete so adding extra loadin time
-         if(!this.isLoading && source=='no-edit' && this.curPricingTable['OBJ_SET_TYPE_CD'] && this.curPricingTable['OBJ_SET_TYPE_CD']=='KIT'){
+        //exclusivly for KIT incase of edit existing its give more time for operation to complete so adding extra loadin time
+        if(!this.isLoading && source=='no-edit' && this.curPricingTable['OBJ_SET_TYPE_CD'] && this.curPricingTable['OBJ_SET_TYPE_CD']=='KIT'){
             this.spinnerMessageHeader = 'Loading...';
             this.spinnerMessageDescription = 'Loading the Table Editor';
             this.isLoading = true;
@@ -688,6 +684,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             }, 0);
         }
     }
+
     setBusy(msg, detail, msgType, showFunFact) {
         setTimeout(() => {
             const newState = msg != undefined && msg !== "";
@@ -723,6 +720,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             this.isDeletePTR = true;
         }
     }
+
     async closeDialog(act: string) {
         if (act == 'No') {
             //setting back the values back to handsonetables
@@ -730,17 +728,18 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 this.hotTable.setDataAtRowProp(item.row, 'PTR_USER_PRD', item.old, 'no-edit');
             });
             this.isDialogOpen = false;
-        }
-        else {
+        } else {
             this.isDialogOpen = false;
             await this.deletePTR();
         }
         this.multiRowDelete = [];
         this.isDeletePTR = false;
     }
+
     toggleShowHideDiscount() {
         this.showDiscount = this.showDiscount == '0%' ? '45%' : '0%';
     }
+
     chgTerms() {
         //function must trigger only after stop typing
         let objThis = this;
@@ -760,11 +759,12 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 value: dataItem["TERMS"]
             };
             this.pteService.updateAtrbValue(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data)
-            .toPromise().catch((err) => {
-                this.loggerService.error("Error", "Could not save the value.", err);
-            });
+                .toPromise().catch((err) => {
+                    this.loggerService.error("Error", "Could not save the value.", err);
+                });
         }
     }
+
     getTemplateDetails() {
         // Get the Contract and Current Pricing Strategy Data
         this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
@@ -777,7 +777,8 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         this.C_EDIT_PRODUCT = this.curPricingStrategy._settings.C_EDIT_PRODUCT != undefined ? this.curPricingStrategy._settings.C_EDIT_PRODUCT : false;
         this.C_ADD_PRICING_TABLE = this.curPricingStrategy._settings.C_ADD_PRICING_TABLE != undefined ? this.curPricingStrategy._settings.C_ADD_PRICING_TABLE : false;
     }
-    async getPTRDetails() {
+
+    async getPtrDetails() {
         let response = await this.pteService.readPricingTable(this.in_Pt_Id)
         .toPromise().catch((err) => {
             this.loggerService.error('Something went wrong.', 'error');
@@ -801,11 +802,13 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             return [];
         }
     }
+
     getMergeCellsOnDelete() {
         const PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
         const mergCells = PTE_Load_Util.getMergeCells(PTR, this.pricingTableTemplates.columns, this.curPricingTable);
         this.hotTable.updateSettings({ mergeCells: mergCells });
     }
+
     generateHandsonTable(PTR: any) {
         //this is the code which is create columns according to Handson from API
         let nestedHeaders: [string[], string[]] = [[], []];
@@ -863,6 +866,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             this.hoverPTE();
         }
     }
+
     //functions to identify cell change
     identfyUniqChanges(changes: Array<any>, source: any): Array<any> {
         //for tier when drag/paste PTR_USER_PRD changes are based on num of tier and those many rows will come as changes but we need that as uniq change
@@ -874,8 +878,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                     if (item[3] != null && item[3] != '') {
                         const obj = { row: item[0], prop: item[1], old: item[2], new: item[3] };
                         uniqchanges.push(obj);
-                    }
-                    else {
+                    } else {
                         // in case of copy paste and Autofill the empty rows based on tier will come but that doesnt mean they are to delete
                         if (source == 'edit' && item[2] != null) {
                             //if no value in PTR_USER_PRD its to delete since its looping for tier logic adding in to an array and finally deleting
@@ -883,22 +886,22 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                             this.multiRowDelete.push({ row: item[0], old: item[2] })
                         }
                     }
-                }
-                else {
+                } else {
                     const obj = { row: item[0], prop: item[1], old: item[2], new: item[3] };
                     uniqchanges.push(obj);
                 }
             });
             return uniqchanges;
-        }
-        else {
+        } else {
             return [];
         }
     }
+
     isSaveEnabled() {
         if (this.dirty == true || this.dirtyItems == true) return true;
         else return false;
     }
+
     afterCellChange(changes: Array<any>, source: any) { // Fired after one or more cells has been changed. The changes are triggered in any situation when the value is entered using an editor or changed using API (e.q setDataAtCell).so we are calling only if there is a change in cell
         if (source == 'edit' || source == 'CopyPaste.paste' || source == 'Autofill.fill') {
             // Changes will track all the cells changing if we are doing copy paste of multiple cells
@@ -1058,10 +1061,10 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         let field= obj[0].prop;
         let selrow=obj[0].row;
         if (obj[0].new != '') {
-             this.createNewPrcObt(this.curPricingTable);
-             let PTRCount = this.hotTable.countRows();
-            
-             if (field == 'AR_SETTLEMENT_LVL') {
+            this.createNewPrcObt(this.curPricingTable);
+            let PTRCount = this.hotTable.countRows();
+        
+            if (field == 'AR_SETTLEMENT_LVL') {
                 for (let i = 0; i < PTRCount; i++) {
                     if (!this.hotTable.isEmptyRow(i)) {
                         let ptrows = [];
@@ -1075,18 +1078,19 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                     }
                 }
             }
+
             if (field == 'PERIOD_PROFILE' && this.hotTable.getDataAtRowProp(selrow, 'AR_SETTLEMENT_LVL') == '' && this.hotTable.getDataAtRowProp(selrow, 'RESET_VOLS_ON_PERIOD') == '') {
                 for (let i = 0; i < PTRCount; i++) {
                     if (!this.hotTable.isEmptyRow(i)) {
                         let ptrows = [];
                         ptrows.push({ row: i, prop: field, old: this.hotTable.getDataAtRowProp(i, field), new: '' });
                         PTE_CellChange_Util.checkfn(ptrows[0], this.curPricingTable, this.columns, '', this.contractData, this.custCellEditor, this.newPricingTable);
-
                     } else {
                         break;
                     }
                 }
             }
+
             if (field == 'RESET_VOLS_ON_PERIOD' && this.hotTable.getDataAtRowProp(selrow, 'AR_SETTLEMENT_LVL') == '' && this.hotTable.getDataAtRowProp(selrow, 'PERIOD_PROFILE') == '') {
                 for (let i = 0; i < PTRCount; i++) {
                     if (!this.hotTable.isEmptyRow(i)) {
@@ -1116,35 +1120,43 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         }
     }
 
-    removeCellComments(row,prop){
+    removeCellComments(row, prop) {
         const col = findIndex(this.columns, { data: prop });
         const cellMeta = this.hotTable.getCellMeta(row, col);
-        this.cellComments.find( (cmnt,ind) => {
+        this.cellComments.find((cmnt, ind) => {
             if (ind < this.cellComments.length) {
-                if (cmnt.row == row && cmnt.col == col ) {
-                    this.cellComments.splice(ind,1)
+                if (cmnt.row == row && cmnt.col == col) {
+                    this.cellComments.splice(ind, 1)
                 }
             }
-        })
+        });
         if (cellMeta && cellMeta.className && cellMeta.className.toString().match('error-border')) {
-            this.hotTable.setCellMetaObject(row,col,{ 'className': '', comment: { value: '' } });
+            this.hotTable.setCellMetaObject(row, col, {
+                'className': '',
+                comment: {
+                    value: ''
+                }
+            });
             this.hotTable.render();
         }
     }
+
     async deletePTR() {
         this.isLoading = true;
         this.setBusy("Deleting...", "Deleting the Table row", "Info", true);
 
         let delDCIDs = [];
-        each(this.multiRowDelete, item => {
+        each(this.multiRowDelete, (item) => {
             delDCIDs.push(this.hotTable.getDataAtRowProp(item.row, 'DC_ID'));
         });
         //calling the below method to validate the non-deleted records and if no client side validations then it will proceed for deletion
         this.validatePricingTableProducts(delDCIDs);
     }
+
     showHelpTopic() {
         window.open('https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Pricing-Table-Editor.aspx', '_blank');
     }
+
     closeKitDialog() {
         //close kitdialog closes the kendo dialog and clear the kit name cell
         PTE_CellChange_Util.closeKitDialog(this.kitNameObj, this.columns, this.curPricingTable,this.lastEditedKitName);
@@ -1156,6 +1168,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             this.isKitDialog = true;
         }
     }
+
     mergeKitDeal() {
         this.setBusy("Reloading...", "Table Editor Reloading please wait", "Info", true);
         this.isKitDialog = false;
@@ -1213,6 +1226,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             this.setBusy("", "", "", false);
         }, 0);
     }
+
     deleteRow(rows: Array<any>, isProdCorrectorDeletion?): void {
         try {
             let delRows = [];
@@ -1297,11 +1311,11 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                     this.multiRowDelete = reject(this.multiRowDelete, itm => { return contains(pluck(savedRow, 'row'), itm.row) });
                 })
             }
-        }
-        catch (ex) {
+        } catch (ex) {
             this.loggerService.error('deleteRow::', ex);
         }
     }
+
     async getAllDrowdownValues() {
         let dropObjs = {};
         each(this.pricingTableTemplates.defaultAtrbs, (val, key) => {
@@ -1346,41 +1360,47 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         });
         return result;
     }
+
     async loadPTE() {
         try {
             this.isLoading = true;
             this.overlapFlexResult = [];
+
             if (this.savedResponseWarning.length > 0){
                 this.setBusy("Saved with warnings", "Didn't pass Validation", "Warning", true);
             } else {
                 this.setBusy("Loading...", "Loading the Table Editor", "Info", true);
             }
             
-            let PTR = await this.getPTRDetails();
+            let PTR = await this.getPtrDetails();
             //to avoid losing warning details which comes only during save action
             if (this.savedResponseWarning && this.savedResponseWarning.length > 0) {
                 PTE_Load_Util.bindWarningDetails(PTR, this.savedResponseWarning);
                 this.dirty = PTR.filter(x => x.warningMessages !== undefined && x.warningMessages.length > 0).length > 0 ? true : false;
             }
+
             //this is to make sure the saved record prod color are success by default
             PTR = PTE_Load_Util.setPrdColor(PTR);
             this.getTemplateDetails();
+
             if (Object.keys(this.dropdownResponses).length ==0) {
                 this.dropdownResponses = await this.getAllDrowdownValues();
             }
+
             if (this.dropdownResponses["SETTLEMENT_PARTNER"] != undefined) {
                 this.VendorDropDownResult = this.dropdownResponses["SETTLEMENT_PARTNER"];
             }
+
             //this is only while loading we need , need to modify as progress
             PTR = PTE_Load_Util.pivotData(PTR, this.isTenderContract, this.curPricingTable, this.kitDimAtrbs);
             this.generateHandsonTable(PTR);
             this.isLoading = false;
-        }
-        catch (ex) {
+        } catch (ex) {
             this.loggerService.error('Something went wrong.', 'Error');
             console.error('DEAL_EDITOR::ngOnInit::', ex);
         }
     }
+
     custDivNull(act: boolean) {
         if (act == true) {
             this.isCustDivNull = false;
@@ -1389,6 +1409,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             this.isCustDivNull = false;
         }
     }
+
     undoPTE() {
         this.hotTable.undo();
         this.redoEnable = true;
@@ -1396,6 +1417,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         this.redoCount += 1;
         if (this.undoCount == 0) this.undoEnable = false;
     }
+
     redoPTE() {
         this.hotTable.redo();
         this.redoCount -= 1;
@@ -1403,6 +1425,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         if (this.redoCount == 0) this.redoEnable = false;
         if (this.undoCount > 0) this.undoEnable = true;
     }
+
     async ValidateAndSavePTE(isValidProd, deleteDCIDs?) {
         if (isValidProd) {
             //Handsonetable loading taking some time so putting this logic for loader
@@ -1431,8 +1454,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 this.generateHandsonTable(finalPTR);
                 this.loggerService.warn('Mandatory validations failure.', 'Warning');
                 this.setBusy("", "", "", false);
-            }
-            else {
+            } else {
                 //it will update cashObj for non-deleted records
                 if (finalPTR && finalPTR.length > 0) {
                     const cashObj = finalPTR.filter(ob => ob.AR_SETTLEMENT_LVL && ob.AR_SETTLEMENT_LVL.toLowerCase() == 'cash' && ob.PROGRAM_PAYMENT && ob.PROGRAM_PAYMENT.toLowerCase() == 'backend');
@@ -1452,13 +1474,13 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 this.undoEnable = false;
                 await this.saveEntireContractRoot(finalPTR, deleteDCIDs);
             }
-        }
-        else {
+        } else {
             if (this.showErrorMsg != false) {
                 this.loggerService.error('All products are not valid', 'Products are not valid');
             }
         }
     }
+
     async saveEntireContractRoot(finalPTR: Array<any>, deleteDCIDs?) {
         if (finalPTR && finalPTR.length > 0) {//to check is there any records exists in PTE(not all records got deleted) 
             //this logic is mainly for tier dealtypes to convert the PTR to savbale JSON
@@ -1484,8 +1506,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 "Errors": {},
                 "PtrDelIds": deleteDCIDs
             }
-        }
-        else {//If action is only save not deletion
+        } else {//If action is only save not deletion
             data = {
                 "Contract": [],
                 "PricingStrategy": [],
@@ -1497,12 +1518,12 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             }
         }
         this.isLoading = true;
-        if (deleteDCIDs && deleteDCIDs.length > 0)
+        if (deleteDCIDs && deleteDCIDs.length > 0) {
             this.setBusy("Deleting...", "Deleting the Table row", "Info", true);
-        else
+        } else {
             this.setBusy("Saving your data...", "Please wait as we save your information", "Info", true);
-        let result = await this.pteService.updateContractAndCurrentPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false)
-        .toPromise().catch((error) => {
+        }
+        let result = await this.pteService.updateContractAndCurrentPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, data, true, true, false).toPromise().catch((error) => {
             this.loggerService.error("Something went wrong", 'Error');
             console.error("PricingTableEditorComponent::saveUpdatePTEAPI::", error);
         });
@@ -1538,14 +1559,14 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 }
                 this.warnings = false;
             }
-        }
-        else {
+        } else {
             this.loggerService.error("Something went wrong", 'Error');
             console.error("PricingTableEditorComponent::saveUpdatePTEAPI::", 'error');
         }
         this.isLoading = false;
     }
-    async validatePricingTableProducts(deleteDCIDs?) {
+
+    async validatePricingTableProducts(deleteDcIds?) {
         let currentPricingTableRowData = this.newPTR.filter(x => x.DC_ID != null);
         let hasProductDependencyErr = false;
         if (currentPricingTableRowData && currentPricingTableRowData.length > 0) {
@@ -1562,21 +1583,23 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 return;
             }
             if (this.kitMergeDeleteDCIDs && this.kitMergeDeleteDCIDs.length > 0) {// if any rows got deleted because while merging the rows
-                if (!deleteDCIDs)
-                    deleteDCIDs = this.kitMergeDeleteDCIDs;
-                else {
+                if (!deleteDcIds) {
+                    deleteDcIds = this.kitMergeDeleteDCIDs;
+                } else {
                     each(this.kitMergeDeleteDCIDs, (delId) => {
-                        deleteDCIDs.push(delId);
+                        deleteDcIds.push(delId);
                     })
                 }
                 this.kitMergeDeleteDCIDs = [];
             }
             //validate Products for non-deleted records, if any product is invalid it will stop deletion as well
-            const isValidProd = await this.validateOnlyProducts('onSave', undefined, deleteDCIDs);
-            if (isValidProd != undefined)
-                await this.saveAndValidate(isValidProd, deleteDCIDs);
+            const isValidProd = await this.validateOnlyProducts('onSave', undefined, deleteDcIds);
+            if (isValidProd != undefined) {
+                await this.saveAndValidate(isValidProd, deleteDcIds);
+            }
         }
     }
+
     async saveAndValidate(isValidProd, deleteDCIDs?) {
         //Handsonetable loading taking some time so putting this logic for loader
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
@@ -1584,31 +1607,30 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         if (deleteDCIDs && deleteDCIDs.length > 0) {
             each(deleteDCIDs, (delId) => {
                 PTR = PTR.filter(x => x.DC_ID != delId);
-            })
+            });
         }
         const multiGeoWithoutBlend = PTE_Validation_Util.validateMultiGeoForHybrid(PTR, this.curPricingStrategy.IS_HYBRID_PRC_STRAT);
         if (multiGeoWithoutBlend != "0") {
             if (multiGeoWithoutBlend == "1") {
                 this.loggerService.error('Multiple GEO Selection not allowed without BLEND', 'error');
                 isValidProd = false;
-            }
-            else if (multiGeoWithoutBlend == "2") {
+            } else if (multiGeoWithoutBlend == "2") {
                 this.loggerService.error('Duplicate Product(s) are not allowed in same PS.', 'error');
                 isValidProd = false;
             }
-        }
-        else {
+        } else {
             this.isCustDivNull = this.contractData.CUST_ACCNT_DIV == '' ? false : PTE_Helper_Util.isCustDivisonNull(PTR);
             if (!this.isCustDivNull) {
                 await this.ValidateAndSavePTE(isValidProd, deleteDCIDs);
             }
         }
     }
+
     async validateOnlyProducts(action: string, curRow?, deleteDCIDs?) {
         let isPrdValid: any = null;
         //generate PTE
         let PTR = PTE_Common_Util.getPTEGenerate(this.columns, this.curPricingTable);
-        let oldPTR=JSON.parse(JSON.stringify(PTR));
+        let oldPTR = JSON.parse(JSON.stringify(PTR));
         //removed because of products getting shuffled in deal editor
         // if (deleteDCIDs && deleteDCIDs.length > 0) {
         //     each(deleteDCIDs, (delId) => {
@@ -1620,9 +1642,11 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         if (translateResult && translateResult['Data']) {
             let prdValResult = PTEUtil.isValidForProdCorrector(translateResult['Data']);
             updatedPTRObj = PTEUtil.cookProducts(translateResult['Data'], PTR);
+
             //code to bind the cook result of success or failure
             let PTR_col_ind = findIndex(this.columns, { data: 'PTR_USER_PRD' });
             let PTR_EXCL_col_ind = findIndex(this.columns, { data: 'PRD_EXCLDS' });
+
             each(updatedPTRObj.rowData, (data, idx) => {
                 this.hotTable.setDataAtRowProp(idx, 'PTR_SYS_PRD', data.PTR_SYS_PRD, 'no-edit');
                 if (curRow && data.DC_ID == curRow[0]['DC_ID']) {
@@ -1637,22 +1661,19 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 if (data && data._behaviors && data._behaviors.isError) {
                     if (!data._behaviors.isError['PTR_USER_PRD'] && data.PTR_SYS_INVLD_PRD == "" && data.PTR_SYS_PRD != "") {
                         this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'success-product');
-                    }
-                    else {
+                    } else {
                         this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'error-product');
                     }
+
                     this.hotTable.render();
                 }
 
                 // Do not update the cell value if exclude product is invalid/NULL
-                if (this.curPricingTable.OBJ_SET_TYPE_CD != 'KIT' && this.curPricingTable.OBJ_SET_TYPE_CD != 'ECAP'
-                    && data.PRD_EXCLDS != null && data.PRD_EXCLDS != "") {
-
+                if (this.curPricingTable.OBJ_SET_TYPE_CD != 'KIT' && this.curPricingTable.OBJ_SET_TYPE_CD != 'ECAP' && data.PRD_EXCLDS != null && data.PRD_EXCLDS != "") {
                     if (data && data._behaviors && data._behaviors.isError) {
                         if (!data._behaviors.isError['PRD_EXCLDS'] && data.PTR_SYS_INVLD_PRD == "" && data.PTR_SYS_PRD != "") {
                             this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'success-product');
-                        }
-                        else {
+                        } else {
                             this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'error-product');
                             this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'error-product');
                         }
@@ -1660,7 +1681,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                         this.hotTable.render();
                     }
                 }
-            })
+            });
 
             if (contains(prdValResult, '1')) {
                 // Product corrector if invalid products
@@ -1674,28 +1695,29 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                         curRow[0].isOpenCorrector = true;
                     }
                 }
+
                 if (action == 'onSave') {
                     this.showErrorMsg = false;
                     if (deleteDCIDs && deleteDCIDs.length > 0) {
                         //setting PTR_SYS_INVLD_PRD while deleting of products
                         for (let key in this.transformResults.Data.ProdctTransformResults) {
-                        if (this.transformResults.Data.InValidProducts[key]["I"].length !== 0 || this.transformResults.Data.InValidProducts[key]["E"].length !== 0 || !!this.transformResults.Data.DuplicateProducts[key]) {
-                            let invalidJSON = {
-                                'ProdctTransformResults': this.transformResults.Data.ProdctTransformResults[key],
-                                'InValidProducts': this.transformResults.Data.InValidProducts[key], 'DuplicateProducts': this.transformResults.Data.DuplicateProducts[key]
-                            }
-                            oldPTR.forEach((itm,indx) => {
-                                if(itm.DC_ID==key){
-                                 PTE_CellChange_Util.updatePrdColumns(indx, 'PTR_SYS_INVLD_PRD', JSON.stringify(invalidJSON));
+                            if (this.transformResults.Data.InValidProducts[key]["I"].length !== 0 || this.transformResults.Data.InValidProducts[key]["E"].length !== 0 || !!this.transformResults.Data.DuplicateProducts[key]) {
+                                let invalidJSON = {
+                                    'ProdctTransformResults': this.transformResults.Data.ProdctTransformResults[key],
+                                    'InValidProducts': this.transformResults.Data.InValidProducts[key], 'DuplicateProducts': this.transformResults.Data.DuplicateProducts[key]
                                 }
-                            });
-                        } 
-                    }
-                     return true;
+                                oldPTR.forEach((itm, indx) => {
+                                    if (itm.DC_ID == key) {
+                                        PTE_CellChange_Util.updatePrdColumns(indx, 'PTR_SYS_INVLD_PRD', JSON.stringify(invalidJSON));
+                                    }
+                                });
+                            } 
+                        }
+
+                        return true;
                     }
                 }
-            }
-            else {
+            } else {
                 if (this.curPricingTable.OBJ_SET_TYPE_CD == 'DENSITY') {
                     each(updatedPTRObj.rowData, (data, idx) => {
                         this.hotTable.setDataAtRowProp(idx, 'PTR_USER_PRD', data.PTR_USER_PRD, 'no-edit')
@@ -1705,6 +1727,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                     this.validMisProd = denBandData.validMisProds;
                     this.generateHandsonTable(denBandData.finalPTR);
                 }
+
                 if (action == 'onSave') {
                     await this.productOrdering();
                     //since the errors are binding from cook products check for any error
@@ -1716,17 +1739,16 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                     this.isLoading = false;
                     //the result can have both valid and invalid so any failure it should fail to save
                     return isPrdValid != null ? false : true;
-                }
-                else {
+                } else {
                     if (action != 'onOpenSelector') {
                         this.validationMessage = true;
                     }
                     this.isLoading = false;
                 }
+
                 await this.productOrdering();
             }
-        }
-        else {
+        } else {
             if (action != 'onSave' && action != 'onOpenSelector') {
                 this.validationMessage = true;
             }
@@ -1738,6 +1760,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
     async resetValidationMessage() {
         this.validationMessage = false;
     }
+
     async validateProducts(currentPricingTableRowData, publishWipDeals, saveOnContinue, currentRowNumber) {
         let hasProductDependencyErr = false;
         hasProductDependencyErr = PTEUtil.hasProductDependency(currentPricingTableRowData, this.productValidationDependencies, hasProductDependencyErr);
@@ -1759,7 +1782,6 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         });
 
         let pricingTableRowData = currentPricingTableRowData.filter((x) => {
-
             return ((x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
                 ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
                 || (this.curPricingTable.OBJ_SET_TYPE_CD == "KIT") || (this.isExcludePrdChange);
@@ -1783,8 +1805,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             if (resultdata) {
                 this.transformResults['Data'] = PTE_Validation_Util.buildTranslatorOutputObjectproductCorroctor(invalidProductJSONRows, resultdata['Data'], currentPricingTableRowData);
             }
-        }
-        else if (invalidProductJSONRows && invalidProductJSONRows.length > 0) {
+        } else if (invalidProductJSONRows && invalidProductJSONRows.length > 0) {
             this.transformResults['Data'] = PTE_Validation_Util.buildTranslatorOutputObjectproductCorroctor(invalidProductJSONRows, this.transformResults['Data'], currentPricingTableRowData);
         }
         this.isLoading = false;
@@ -1796,7 +1817,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             height: string = '',
             width: string = '650px',
             data = {};
-         modalComponent = ProductSelectorComponent;
+        modalComponent = ProductSelectorComponent;
         name = "Product Selector";
         width = "5500px";
         let VM = this;
@@ -1836,8 +1857,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                         }
                     });
                     PTE_CellChange_Util.autoFillCellOnProd(PTR, this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns);
-                }
-                else {
+                } else {
                     each(result.validateSelectedProducts, (item) => {
                         if (!item[0].EXCLUDE) {
                             cntrctPrdct.push(item[0].HIER_VAL_NM)
@@ -1847,6 +1867,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                         }
                         sysPrd[item[0].DERIVED_USR_INPUT] = item;
                     });
+
                     let PTR = [];
                     emptyRow = PTE_CellChange_Util.returnEmptyRow();
                     this.dirty = true;//for enabling save&Validate button when a product is added from productSelector
@@ -1944,8 +1965,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                                         deletedDCID = [];
                                     deletedDCID.push(r)
                                 }
-                            }
-                            else {
+                            } else {
                                 let selProd = savedResult.selectedProducts.filter(x => x.DCID == key)[0];
                                 let deletedProds = savedResult.deletedProducts;
                                 if (selProd) {
@@ -1992,8 +2012,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                                     //     this.setBusy("", "", "", false);
                                     // }, 2000);
 
-                                }
-                                else if (deletedProds && deletedProds.length > 0) {
+                                } else if (deletedProds && deletedProds.length > 0) {
                                     let deletedRowIdList = distinct(deletedProds, 'DC_ID').map(item => item['DC_ID']);
                                     each(deletedRowIdList, (rowId) => {
                                         let deletedProd = deletedProds.filter(x => x.DC_ID == rowId);
@@ -2020,16 +2039,13 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                                         return obj['className'];
                                     });
 
-
                                     if (this.curRow[0].delPTR_SYS_PRD &&
                                         (includeClass[0] != 'error-product' && excludeClass[0] != 'error-product')) {
                                         delete this.curRow[0].delPTR_SYS_PRD
                                     }
                                 }
                             }
-                        }
-                        else
-                        {
+                        } else {
                             let deletedProds = savedResult.deletedProducts;
                             if (deletedProds && deletedProds.length > 0) {
                                 let deletedRowIdList = distinct(deletedProds, 'DC_ID').map(item => item['DC_ID']);
@@ -2037,11 +2053,10 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                                     let deletedProd = deletedProds.filter(x => x.DC_ID == rowId);
                                     rowProdCorrectordat = PTE_CellChange_Util.getOperationProdCorr(undefined, deletedProd, products);
                                     PTE_CellChange_Util.autoFillCellOnProd(rowProdCorrectordat[0], this.curPricingTable, this.contractData, this.pricingTableTemplates, this.columns, rowProdCorrectordat[1]);
-                                })
+                                });
                             }
                         }
                     }
-
                 }
                 if (this.multiRowDelete.length > 0) {
                     this.deleteRow(this.multiRowDelete, true);
@@ -2052,8 +2067,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                     setTimeout(() => {
                         this.setBusy("", "", "", false);
                     }, 100);
-                }
-                else {
+                } else {
                     this.setBusy("Updating Products", "Please wait while processing.", "info", true);
                     setTimeout(async () => {//wait until PTE updation completes
                         await this.productOrdering();
@@ -2062,7 +2076,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                     }, 100);
                     this.setBusy("", "", "", false);
                 }
-            }else{
+            } else {
                 this.isLoading=false;    
                 this.setBusy("", "", "", false);
             }
@@ -2098,6 +2112,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         });
         dialogRef.afterClosed().subscribe(result => { });
     }
+
     createNewPrcObt(pt) { 
         if (pt != null) {
             this.newPricingTable = pt;
@@ -2109,6 +2124,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             this.newPricingTable["_defaultAtrbs"] = lnavUtil.updateNPTDefaultValues(pt, ptTemplate.defaultAtrbs, customer);
         }
     }
+
     openAutofill() {
         let custId, isVistex
         let pt = this.curPricingTable;
@@ -2189,7 +2205,6 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
 
             if (CELL_TYPE === 'number' && CELL_FORMAT.toLowerCase().includes('0:c')) {
                 const COLUMN_NUMBER = this.hotTable.propToCol(field);
-
                 const COMMENT_PLUGIN = this.hotTable.getPlugin('comments'); // WIP: Can probably call this outside to make more efficient
 
                 if (!isValid) {
@@ -2281,9 +2296,9 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         const loadingSubscription = this.isLoading$.subscribe((isLoading: boolean) => {
             if (!isLoading) {
                 if (!this.hotTable.isDestroyed) {
-                    setTimeout(() => {  // Timeout is for loading animation to finish closing
+                    setTimeout(() => { // Timeout is for loading animation to finish closing
                         this.appendAddProductTooltip();
-                        this.showAddProductTooltip();    
+                        this.showAddProductTooltip();
                     }, 300);
                 } else {
                     loadingSubscription.closed = true;
@@ -2292,10 +2307,12 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
             }
         });
     }
- //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
- ngOnDestroy() {
-    this.destroy$.next();
-    this.destroy$.complete();
-    this._isLoading.complete();
-  }
+
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
+        this.destroy$.next();
+        this.destroy$.complete();
+        this._isLoading.complete();
+    }
+
 }

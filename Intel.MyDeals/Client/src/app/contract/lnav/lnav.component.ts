@@ -4,6 +4,8 @@ import { MatDialog } from '@angular/material/dialog';
 import { Component, Input, Output, EventEmitter, ViewEncapsulation, ChangeDetectorRef, ViewChild, OnInit, OnChanges, AfterViewInit, OnDestroy } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { NgbTooltip } from '@ng-bootstrap/ng-bootstrap';
+import { Subject } from 'rxjs';
+import { takeUntil } from 'rxjs/operators';
 
 import { lnavService } from "../lnav/lnav.service";
 import { logger } from "../../shared/logger/logger";
@@ -12,8 +14,6 @@ import { HeaderService } from "../../shared/header/header.service";
 import { AutoFillComponent } from "../ptModals/autofillsettings/autofillsettings.component";
 import { RenameTitleComponent } from "../ptModals/renameTitle/renameTitle.component";
 import { ContractDetailsService } from "../contractDetails/contractDetails.service";
-import { Subject } from 'rxjs';
-import { takeUntil } from 'rxjs/operators';
 
 export interface contractIds {
     Model: string;
@@ -31,7 +31,7 @@ export interface contractIds {
     styleUrls: ['Client/src/app/contract/lnav/lnav.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy  {
+export class LnavComponent implements OnInit, OnChanges, AfterViewInit, OnDestroy {
 
     constructor(private loggerService: logger,
                 private lnavService: lnavService,
@@ -49,6 +49,9 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
     @Input() selectNavMenu: any;
     @Output() modelChange: EventEmitter<any> = new EventEmitter<any>();
 
+    private readonly ORIG_USR_ROLE = (<any>window).usrRole;
+    private usrRole = (<any>window).usrRole;
+
     public query = "";
     public newStrategy: any = {};
     public PtDealTypes;
@@ -63,12 +66,11 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
     public container: any;
     public strategyTreeCollapseAll = true; isCollapsed = false; isSearchHidden = false; isSummaryHidden = true;
     isAddStrategyBtnHidden = true;
-    private CAN_VIEW_COST_TEST: boolean = this.lnavService.chkDealRules('CAN_VIEW_COST_TEST', (<any>window).usrRole, null, null, null) || ((<any>window).usrRole === "GA" && (<any>window).isSuper); // Can view the pass/fail
-    private CAN_VIEW_MEET_COMP: boolean = this.lnavService.chkDealRules('CAN_VIEW_MEET_COMP', (<any>window).usrRole, null, null, null) && ((<any>window).usrRole !== "FSE"); // Can view meetcomp pass fail
+    private CAN_VIEW_COST_TEST: boolean = this.lnavService.chkDealRules('CAN_VIEW_COST_TEST', this.ORIG_USR_ROLE, null, null, null) || (this.ORIG_USR_ROLE === "GA" && (<any>window).isSuper); // Can view the pass/fail
+    private CAN_VIEW_MEET_COMP: boolean = this.lnavService.chkDealRules('CAN_VIEW_MEET_COMP', this.ORIG_USR_ROLE, null, null, null) && (this.ORIG_USR_ROLE !== "FSE"); // Can view meetcomp pass fail
     private CAN_VIEW_EXPORT = true;
     private CAN_VIEW_ALL_DEALS = true;
-    private C_ADD_PRICING_STRATEGY: boolean = this.lnavService.chkDealRules('C_ADD_PRICING_STRATEGY', (<any>window).usrRole, null, null, null);
-    private usrRole = (<any>window).usrRole;
+    private C_ADD_PRICING_STRATEGY: boolean = this.lnavService.chkDealRules('C_ADD_PRICING_STRATEGY', this.ORIG_USR_ROLE, null, null, null);
     private isSuper = true;
     private superPrefix = "";
     private extraUserPrivsDetail: Array<string> = [];
@@ -126,6 +128,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
             }
         });
     }
+
     //Output Emitter to load the Pricing table data
     loadPte(psId, ptId, ps_index: number, pt_index: number) {
         const contractId_Map: contractIds = {
@@ -137,24 +140,27 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
             C_ID: this.contractId,
             contractData: this.contractData
         };
+
         let curPs = this.contractData?.PRC_ST?.filter(x => x.DC_ID == psId);
         if (curPs && curPs.length == 1) {
             this.curPricingStrategy = curPs[0];
         }
+
         let curPt = this.curPricingStrategy?.PRC_TBL?.filter(x => x.DC_ID == ptId);
         if (curPt && curPt.length == 1) {
             this.curPricingTable = curPt[0];
         }
+
         this.curPricingStrategyId = psId;
         this.curPricingTableId = ptId;
         //its just update the URl when we reload  it will land on same page last selected pricing strategies 
         const urlTree = this.router.createUrlTree(['/contractmanager', this.route.snapshot.paramMap.get('type'), this.route.snapshot.paramMap.get('cid'), psId, ptId, 0]);
-        this.router.navigateByUrl(urlTree); 
-         setTimeout(() => {            
-        this.modelChange.emit(contractId_Map);
+        this.router.navigateByUrl(urlTree);
+        setTimeout(() => {
+            this.modelChange.emit(contractId_Map);
         }, 100);
-       
     }
+
     loadModel(model: string) {
         const contractId_Map: contractIds = {
             Model: model,
@@ -166,57 +172,62 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
             contractData: this.contractData
         };
         this.selectedModel = model;
-          //it will update the url on page reload persist the selected state
-        if(this.route.snapshot.queryParams.loadtype== 'Manage'){
-            const type=this.route.snapshot.paramMap.get('type');
-            const cId=this.route.snapshot.paramMap.get('cid');
-            const psId=this.route.snapshot.paramMap.get('PSID');
-            const ptId=this.route.snapshot.paramMap.get('PTID');
-            const dealId=this.route.snapshot.paramMap.get('DealID');
-            const urlTree = this.router.createUrlTree(['/contractmanager', type, cId, psId, ptId, dealId ]);
+
+        //it will update the url on page reload persist the selected state
+        if (this.route.snapshot.queryParams.loadtype == 'Manage') {
+            const type = this.route.snapshot.paramMap.get('type');
+            const cId = this.route.snapshot.paramMap.get('cid');
+            const psId = this.route.snapshot.paramMap.get('PSID');
+            const ptId = this.route.snapshot.paramMap.get('PTID');
+            const dealId = this.route.snapshot.paramMap.get('DealID');
+            const urlTree = this.router.createUrlTree(['/contractmanager', type, cId, psId, ptId, dealId]);
             this.router.navigateByUrl(urlTree + '?loadtype=Manage&&manageType=' + model);
         }
+
         setTimeout(() => {
             this.modelChange.emit(contractId_Map);
         }, 100);
     }
+
     // **** PRICING STRATEGY Methods ****
     toggleAddStrategy() {
         this.isAddStrategyHidden = !this.isAddStrategyHidden;
         this.isAddStrategyBtnHidden = !this.isAddStrategyBtnHidden;
         this.isSearchHidden = false;
+
         if (this.isAddStrategyHidden == false) {
             this.isAddPricingTableHidden = true;
         }
     }
+
     customAddPsValidate() {
         let isvalid = true;
         this.isAddStrategyBtnHidden = true;
-        const values = this.newStrategy;
 
+        const values = this.newStrategy;
         // Clear all values
-        each(values,
-            function (value, key) {
-                values._behaviors.validMsg[key] = "";
-                values._behaviors.isError[key] = false;
-            });
+        each(values, (value, key) => {
+            values._behaviors.validMsg[key] = "";
+            values._behaviors.isError[key] = false;
+        });
+
         // Check required
-        each(values,
-            function (value, key) {
-                if (key[0] !== '_' &&
-                    !Array.isArray(value) &&
-                    (value === undefined || value === null || (typeof (value) === "string" && value.trim() === "")) &&
-                    values._behaviors.isRequired[key] === true) {
-                    values._behaviors.validMsg[key] = "* field is required";
-                    values._behaviors.isError[key] = true;
-                    isvalid = false;
-                }
-            });
+        each(values, (value, key) => {
+            if (key[0] !== '_' &&
+                !Array.isArray(value) &&
+                (value === undefined || value === null || (typeof (value) === "string" && value.trim() === "")) &&
+                values._behaviors.isRequired[key] === true) {
+                values._behaviors.validMsg[key] = "* field is required";
+                values._behaviors.isError[key] = true;
+                isvalid = false;
+            }
+        });
 
         // Check unique name
         if (this.contractData.PRC_ST === undefined) {
             this.contractData.PRC_ST = [];
         }
+
         var isUnique = lnavUtil.IsUniqueInList(this.contractData.PRC_ST, this.newStrategy["TITLE"], "TITLE", false);
         if (!isUnique) {
             this.newStrategy._behaviors.validMsg["TITLE"] = "* must have unique name within contract";
@@ -230,12 +241,14 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
             this.newStrategy._behaviors.isError["TITLE"] = true;
             isvalid = false;
         }
+
         if (isvalid) {
             this.addPricingStrategy();
         } else {
             this.isAddStrategyBtnHidden = false;
         }
     }
+
     addPricingStrategy() {
         this.isLoading = true;
         this.setBusy("Saving...", "Saving the Pricing Strategy", "Info", true);
@@ -247,6 +260,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
         ps.DC_PARENT_ID = ct.DC_ID;
         ps.PRC_TBL = [];
         ps.TITLE = this.newStrategy.TITLE;
+
         if (this.newStrategy.IS_HYBRID_PRC_STRAT) {
             ps.IS_HYBRID_PRC_STRAT = "1";
         }
@@ -255,9 +269,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
             this.newStrategy.IS_HYBRID_PRC_STRAT = ps.IS_HYBRID_PRC_STRAT == "1" ? true : false;
         }
 
-        this.lnavService.createPricingStrategy(custId, contractId, ps)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((response: any) => {
+        this.lnavService.createPricingStrategy(custId, contractId, ps).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
             if (this.contractData.PRC_ST === undefined) this.contractData.PRC_ST = [];
             ps.DC_ID = response.PRC_ST[1].DC_ID;
             this.contractData.PRC_ST.push(ps);
@@ -282,7 +294,8 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
         }, (err) => {
             this.loggerService.error("Unable to create pricing strategy", "Error", err);
             this.isLoading = false;
-        })
+        });
+
         //expand pricing strategy after creation.
         if (this.contractData && this.contractData.PRC_ST && this.contractData.PRC_ST.length > 0) {
             this.isPSExpanded[this.contractData.PRC_ST.length] = true;
@@ -299,53 +312,54 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
                 this.loggerService.error("Unable to get contract data", "Error", err);
             });
     }
+
     // **** PRICING TABLE Methods ****
     clearPtTemplateIcons() {
-        each(this.PtDealTypes,
-            function (value) {
-                value._custom._active = false;
-            });
+        each(this.PtDealTypes, (value) => {
+            value._custom._active = false;
+        });
     }
+
     customAddPtValidate() {
         let isValid = true;
         this.newPricingTable["TITLE"] = this.ptTITLE;
         const values = this.newPricingTable;
+
         isValid = this.isValidPt(values);
         if (isValid) {
             this.openAutoFill(null, null);
         }
     }
+
     isValidPt(values) {
         let isValid = true;
         // Clear all values
-        each(values,
-            function (value, key) {
-                if (values._behaviors.validMsg[key]) {
-                    values._behaviors.validMsg[key] = "";
-                    values._behaviors.isError[key] = false;
-                }
-            });
+        each(values, (value, key) => {
+            if (values._behaviors.validMsg[key]) {
+                values._behaviors.validMsg[key] = "";
+                values._behaviors.isError[key] = false;
+            }
+        });
 
         //// Check required
-        each(values,
-            function (value, key) {
-                if (key[0] !== '_' &&
-                    !Array.isArray(value) &&
-                    (!isNaN(value) || value === undefined || value === null || (typeof (value) === "string" && value.trim() === "")) &&
-                    values._behaviors.isRequired[key] === true) {
-                    values._behaviors.validMsg[key] = "* field is required";
-                    values._behaviors.isError[key] = true;
-                    isValid = false;
-                }
-            });
+        each(values, (value, key) => {
+            if (key[0] !== '_' &&
+                !Array.isArray(value) &&
+                (!isNaN(value) || value === undefined || value === null || (typeof (value) === "string" && value.trim() === "")) &&
+                values._behaviors.isRequired[key] === true) {
+                values._behaviors.validMsg[key] = "* field is required";
+                values._behaviors.isError[key] = true;
+                isValid = false;
+            }
+        });
 
         // Check unique name within ps
         if (!!this.curPricingStrategy) {
             if (this.curPricingStrategy.PRC_TBL === undefined) {
                 this.curPricingStrategy.PRC_TBL = [];
             }
-            var isUnique = lnavUtil.IsUniqueInList(this.curPricingStrategy.PRC_TBL, this.newPricingTable["TITLE"], "TITLE", false);
 
+            var isUnique = lnavUtil.IsUniqueInList(this.curPricingStrategy.PRC_TBL, this.newPricingTable["TITLE"], "TITLE", false);
             if (!isUnique) {
                 this.newPricingTable._behaviors.validMsg["TITLE"] = "* must have unique name within strategy";
                 this.newPricingTable._behaviors.isError["TITLE"] = true;
@@ -369,9 +383,11 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
 
         return isValid;
     }
+
     addPricingTable() {
         this.isLoading = true;
         this.setBusy("Adding...", "Adding the Pricing Table", "Info", true);
+
         const pt = this.UItemplate["ObjectTemplates"].PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];
         if (!pt) {
             this.loggerService.error("Could not create the Pricing Table.", "Error");
@@ -379,6 +395,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
             this.setBusy("", "", "", false);
             return;
         }
+
         pt.DC_ID = -100;
         pt.DC_PARENT_ID = this.curPricingStrategy.DC_ID;
         pt.OBJ_SET_TYPE_CD = this.newPricingTable.OBJ_SET_TYPE_CD;
@@ -398,13 +415,10 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
                 }
             }
         }
-        this.lnavService.createPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, pt)
-        .pipe(takeUntil(this.destroy$))
-        .subscribe((response: any) => {
+
+        this.lnavService.createPricingTable(this.contractData.CUST_MBR_SID, this.contractData.DC_ID, pt).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
             pt.DC_ID = response.PRC_TBL[1].DC_ID;
-            this.contractDetailsService.readContract(this.contractData.DC_ID)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((response: Array<any>) => {
+            this.contractDetailsService.readContract(this.contractData.DC_ID).pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
                 this.contractData = response[0];
                 this.loadPte(pt.DC_PARENT_ID, pt.DC_ID, 0, 0);
                 this.isLoading = false;
@@ -419,11 +433,13 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
             this.isLoading = false;
         })
     }
+
     clearNptTemplate() {
         this.currentPricingTable = null;
         this.newPricingTable = this.UItemplate.ObjectTemplates.PRC_TBL.ECAP;
         this.newPricingTable["OBJ_SET_TYPE_CD"] = "";
     }
+
     unmarkCurPricingStrategyId = function (id) {
         if (this.curPricingStrategyId === id) {
             this.curPricingStrategy = {};
@@ -431,6 +447,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
             this.openDealEntryTab("PTE");
         }
     }
+
     unmarkCurPricingTableId = function (id) {
         if (this.curPricingTableId > 0 &&
             this.curPricingTable !== null &&
@@ -454,13 +471,16 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
         this.PtDealTypes = null;
         this.clearNptTemplate();
         this.curPricingStrategy = ps;
+
         if (this.curPricingStrategy["TITLE"] && this.curPricingStrategy["TITLE"] != "" && !this.curPricingStrategy['PRC_TBL'] || this.curPricingStrategy['PRC_TBL'].length == 0) {
             this.ptTITLE = this.curPricingStrategy["TITLE"];
-        }
-        else
+        } else {
             this.ptTITLE = "";
+        }
+
         let isHybridDeal = (Number(this.curPricingStrategy.IS_HYBRID_PRC_STRAT) == 1 ? true : false);
         this.PtDealTypes = lnavUtil.filterDealTypes(this.UItemplate, isHybridDeal);
+
         if (!!this.curPricingStrategy && !this.curPricingStrategy.PRC_TBL) {
             // default Pricing Table title to Pricing Strategy title
             this.newPricingTable.TITLE = this.curPricingStrategy.TITLE;
@@ -475,12 +495,14 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
             this.newPricingTable.TITLE = defTitle;
         }
     }
+
     copyPricingStrategy(ps) {
         this.copyObj("Pricing Strategy", this.contractData.PRC_ST, ps.DC_ID, true);
         if (this.contractData && this.contractData.PRC_ST && this.contractData.PRC_ST.length > 0) {
             this.isPSExpanded[this.contractData.PRC_ST.length] = true;
         }
     }
+
     copyPricingTable = function (ps, pt) {
         this.copyObj("Pricing Table", ps.PRC_TBL, pt.DC_ID, false);
     }
@@ -506,20 +528,21 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
             this.setBusy("", "", "", false);
             return;
         }
+
         item.DC_ID = this.uid--;
         item.HAS_TRACKER = "0";
         item.COST_TEST_RESULT = "Not Run Yet";
         item.MEETCOMP_TEST_RESULT = "Not Run Yet";
         const custId = this.contractData.CUST_MBR_SID;
-        const contractId = this.contractData.DC_ID
+        const contractId = this.contractData.DC_ID;
+
         // define new TITLE
         while (titles.indexOf(item.TITLE) >= 0) {
             item.TITLE += " (copy)";
         }
+
         if (isPs == true) {
-            this.lnavService.copyPricingStrategy(custId, contractId, id, item)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((response: any) => {
+            this.lnavService.copyPricingStrategy(custId, contractId, id, item).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
                 this.loggerService.success("Copied the " + objType + ".", "Copy Successful");
                 this.refreshContractData(contractId);
                 this.isLoading = false;
@@ -529,12 +552,8 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             });
-
-        }
-        else {
-            this.lnavService.copyPricingTable(custId, contractId, id, item)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((response: any) => {
+        } else {
+            this.lnavService.copyPricingTable(custId, contractId, id, item).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
                 this.loggerService.success("Copied the " + objType + ".", "Copy Successful");
                 this.refreshContractData(contractId);
                 this.isLoading = false;
@@ -544,9 +563,9 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
             });
-
         }
     }
+
     editPricingTableName(pt) {
         this.openRenameTitle(pt, "Pricing Table");
     }
@@ -554,19 +573,22 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
     editPricingStrategyName(ps) {
         this.openRenameTitle(ps, "Pricing Strategy");
     }
+
     openRenameTitle(data, title) {
         let renameData = {
             "contractData": this.contractData,
             "data": data,
             "mode": title
         };
+
         const dialogRef = this.dialog.open(RenameTitleComponent, {
             height: 'auto',
             width: '600px',
             data: renameData,
             panelClass: 'rename-pte-comp'
         });
-        dialogRef.afterClosed().subscribe(result => {
+
+        dialogRef.afterClosed().subscribe((result) => {
             if (result) {
                 data.TITLE = result;
             }
@@ -585,9 +607,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
             this.setBusy("Deleting...", "Deleting the Pricing Strategy", "Info", false);
             const custId = this.contractData.CUST_MBR_SID;
             const contractId = this.contractData.DC_ID
-            this.lnavService.deletePricingStrategy(custId, contractId, this.lnavSelectedPS)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((response: any) => {
+            this.lnavService.deletePricingStrategy(custId, contractId, this.lnavSelectedPS).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
                 this.unmarkCurPricingStrategyId(this.lnavSelectedPS.DC_ID);
                 this.unmarkCurPricingTableId(this.lnavSelectedPS.DC_ID);
                 this.contractData.PRC_ST.splice(this.contractData.PRC_ST.indexOf(this.lnavSelectedPS), 1);
@@ -614,9 +634,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
             this.setBusy("Deleting...", "Deleting the Pricing Table", "Info", false);
             const custId = this.contractData.CUST_MBR_SID;
             const contractId = this.contractData.DC_ID;
-            this.lnavService.deletePricingTable(custId, contractId, this.lnavSelectedPT)
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((response: any) => {
+            this.lnavService.deletePricingTable(custId, contractId, this.lnavSelectedPT).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
                 this.ptDelId = this.lnavSelectedPT.DC_ID;
                 this.unmarkCurPricingTableId(this.lnavSelectedPS.DC_ID);
                 this.lnavSelectedPS.PRC_TBL.splice(this.lnavSelectedPS.PRC_TBL.indexOf(this.lnavSelectedPT), 1);
@@ -625,7 +643,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
                 this.setBusy("", "", "", false);
                 this.lnavSelectedPS = {};
                 this.lnavSelectedPT = {};
-            }), err => {
+            }), (err) => {
                 this.loggerService.error("Could not delete Pricing Table" + this.lnavSelectedPT.DC_ID, err, err.statusText);
                 this.isLoading = false;
                 this.setBusy("", "", "", false);
@@ -640,6 +658,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
         this.lnavSelectedPT = pt;
         this.isDeletePT = true;
     }
+
     onSelectPtMenu(event: any, ps: any, pt: any): void {
         //Number eventIndex = parseInt(event.index);
         switch (event.item?.text) {
@@ -687,12 +706,14 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
                 break;
         }
     }
+
     openAutoFill(ps, pt) {
         let ptTemplate;
         let isVistexHybrid;
         if (ps != null) {
             this.curPricingStrategy = ps;
         }
+
         if (pt != null) {
             this.curPricingTable = pt;
             this.newPricingTable = pt;
@@ -702,25 +723,24 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
             this.newPricingTable["_defaultAtrbs"] = ptTemplate.defaultAtrbs;
             this.newPricingTable["OBJ_SET_TYPE_CD"] = pt.OBJ_SET_TYPE_CD;
             this.newPricingTable["_defaultAtrbs"] = lnavUtil.updateNPTDefaultValues(pt, ptTemplate.defaultAtrbs, customer);
-        }
-        else {
+        } else {
             ptTemplate = this.UItemplate.ModelTemplates.PRC_TBL[this.newPricingTable.OBJ_SET_TYPE_CD];
             this.newPricingTable["_extraAtrbs"] = ptTemplate.extraAtrbs;
             this.newPricingTable["_defaultAtrbs"] = ptTemplate.defaultAtrbs;
             this.newPricingTable = lnavUtil.setDefaultAttributes(this.newPricingTable, this.isTenderContract, pt, this.contractData);
         }
+
         if (this.contractData != null) { // Moved down due to normal items missing customer level fields in some cases.
             this.custId = this.contractData.CUST_MBR_SID;
         }
+
         if (ps == null) {
             if (this.curPricingStrategy.IS_HYBRID_PRC_STRAT === true) {
                 isVistexHybrid = this.curPricingStrategy.IS_HYBRID_PRC_STRAT
-            }
-            else {
+            } else {
                 isVistexHybrid = (this.curPricingStrategy.IS_HYBRID_PRC_STRAT === "1" ? true : false);
             }
-        }
-        else {
+        } else {
             isVistexHybrid = (ps.IS_HYBRID_PRC_STRAT === "1" ? true : false);
         }
 
@@ -749,9 +769,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
                 this.autoFillData = result;
                 if (pt == null) {
                     this.newPricingTable = this.autoFillData["newPt"];
-                    this.contractDetailsService.readContract(this.contractData.DC_ID)
-                    .pipe(takeUntil(this.destroy$))
-                    .subscribe((response: Array<any>) => {
+                    this.contractDetailsService.readContract(this.contractData.DC_ID).pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
                         this.contractData = response[0];
                         this.loadPte(this.newPricingTable.DC_PARENT_ID, this.newPricingTable.DC_ID, 0, 0);
                     }, (err) => {
@@ -763,6 +781,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
             }
         });
     }
+
     selectPtTemplateIcon(DealType) {
         let isValid = true;
         this.clearPtTemplateIcons();
@@ -781,11 +800,11 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
         isValid = this.isValidPt(values);
         if (isValid) {
             this.openAutoFill(null, null);
-        }
-        else {
+        } else {
             this.clearPtTemplateIcons();
         }
     }
+
     hideAddPricingTable() {
         this.isAddPricingTableHidden = true;
         this.isAddStrategyHidden = true;
@@ -793,6 +812,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
         this.isSearchHidden = false;
         this.clearPtTemplateIcons();
     }
+
     //Help navigation
     showHelpTopicMeetComp() {
         window.open('https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Meet-Comp.aspx', '_blank'); 
@@ -803,6 +823,7 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
     showHelpTopicContract() {
         window.open('https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Deal-Manager.aspx', '_blank'); 
     }
+
     onTabSelect(event: any) {
         this.selectedTab = event.index;
         const type=this.route.snapshot.paramMap.get('type');
@@ -810,8 +831,8 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
         const psId=this.route.snapshot.paramMap.get('PSID');
         const ptId=this.route.snapshot.paramMap.get('PTID');
         const dealId=this.route.snapshot.paramMap.get('DealID');
-        this.headerService.getUserDetails()
-        .pipe(takeUntil(this.destroy$)).subscribe(res => {
+
+        this.headerService.getUserDetails().pipe(takeUntil(this.destroy$)).subscribe((res) => {
             this.usrRole = res.UserToken.Role.RoleTypeCd;
             (<any>window).usrRole = this.usrRole;
 
@@ -822,46 +843,50 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
         }, (err) => {
             this.loggerService.error("Unable to get user role data", "Error", err);
         });
+
         if (event.title == "Deal Entry") {
-              //it will update the url on page reload persist the selected state
-            const urlTree = this.router.createUrlTree(['/contractmanager', type, cId, psId, ptId, dealId ]);
+            //it will update the url on page reload persist the selected state
+            const urlTree = this.router.createUrlTree(['/contractmanager', type, cId, psId, ptId, dealId]);
             this.router.navigateByUrl(urlTree);
             setTimeout(() => {
                 this.loadModel('PTE');
             }, 100);
-        }
-        else if (event.title == "Meet Comp") {
-              //it will update the url on page reload persist the selected state
-            const urlTree = this.router.createUrlTree(['/contractmanager', type, cId, psId, ptId, dealId ]);
-            this.router.navigateByUrl(urlTree+'?loadtype=MeetComp' );
-             setTimeout(() => {
+        } else if (event.title == "Meet Comp") {
+            //it will update the url on page reload persist the selected state
+            const urlTree = this.router.createUrlTree(['/contractmanager', type, cId, psId, ptId, dealId]);
+            this.router.navigateByUrl(urlTree + '?loadtype=MeetComp');
+            setTimeout(() => {
                 this.loadModel('MeetComp');
             }, 100);
-        }
-        else if (event.title == "Manage") {
-              //it will update the url on page reload persist the selected state
-            const urlTree = this.router.createUrlTree(['/contractmanager', type, cId, psId, ptId, dealId ]);
-            this.router.navigateByUrl(urlTree+'?loadtype=Manage' );
+        } else if (event.title == "Manage") {
+            //it will update the url on page reload persist the selected state
+            const urlTree = this.router.createUrlTree(['/contractmanager', type, cId, psId, ptId, dealId]);
+            this.router.navigateByUrl(urlTree + '?loadtype=Manage');
             setTimeout(() => {
                 this.loadModel('Manage');
             }, 100);
-         }
+        }
     }
+
     openDealEntryTab(model: string) {
         this.selectedTab = 0;
         this.loadContractDetails(model);
     }
+
     openMeetCompTab() {
         this.selectedTab = 1;
         this.loadModel('MeetComp');
     }
+
     // **** LEFT NAVIGATION Methods ****    
     toggleLnav(src: string) {
         this.isLnavHidden['isLnavHid'] = !this.isLnavHidden['isLnavHid'];
         this.isLnavHidden['source'] = src;
         this.lnavService.isLnavHidden.next(this.isLnavHidden);
+
+        this.changeDetectorRef.markForCheck();
     }
-    
+
     toggleStrategyTree() {
         if (this.strategyTreeCollapseAll == true) {
             this.contractData?.PRC_ST.map((x, i) => {
@@ -874,15 +899,18 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
         }
         this.strategyTreeCollapseAll = !this.strategyTreeCollapseAll;
     }
+
     isExistingContract() {
         return this.contractData.DC_ID > 0;
     }
+
     toggleSearch() {
         this.isSearchHidden = !this.isSearchHidden;
         this.isAddStrategyHidden = true;
         this.isAddStrategyBtnHidden = true;
         this.isAddPricingTableHidden = true;
     }
+
     //LNAv flow Mini
     gotoDealEntry() {
         //we reset any PS/PT/WIP specific information to remove unnecessary highlights or headers - perhaps this should be kept in the $scope.goto function instead?
@@ -895,11 +923,13 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
         this.selectedTab = 0;
         this.goto('Deal Entry', 'PTE');
     }
+
     gotoCompliance() {
         if (!lnavUtil.enableFlowBtn(this.contractData)) return;
         this.selectedTab = 1;
         this.goto('Compliance', 'MeetComp');
     }
+
     gotoManage() {
         if (!lnavUtil.enableFlowBtn(this.contractData)) return;
         this.isAddPricingTableHidden = true;
@@ -908,13 +938,16 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
         this.isSearchHidden = false;
         this.goto('Manage', 'contract.summary');
     }
+
     goto(mode, val) {
         this.flowMode = mode;
         this.loadModel(val);
     }
+
     removeBlanks(val) {
         return val.replace(/_/g, '');
     }
+
     loadContractDetails(model: string) {
         this.selectedTab = 0;
         const contractDetails_Map: contractIds = {
@@ -928,9 +961,11 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
         };
         this.modelChange.emit(contractDetails_Map);
     }
+
     enableFlowBtn() {
         return (lnavUtil.enableFlowBtn(this.contractData) == false) ? true : false;
     }
+
     needMct = function () {
         if (!this.contractData.PRC_ST || this.contractData.PRC_ST.length === 0) return false;
         let isNeedMct = false;
@@ -1019,14 +1054,12 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
                 this.isPSExpanded[i] = true
             });
 
-            this.pricingStrategyInputHandler()
+            this.pricingStrategyInputHandler();
 
             //code for autofill change to accordingly change values
-            this.lnavService.autoFillData
-            .pipe(takeUntil(this.destroy$))
-            .subscribe(res => {
+            this.lnavService.autoFillData.pipe(takeUntil(this.destroy$)).subscribe((res) => {
                 this.autoFillData = res;
-            }, err => {
+            }, (err) => {
                 this.loggerService.error("lnavSvc::isAutoFillChange**********", err);
             });
 
@@ -1074,10 +1107,10 @@ export class LnavComponent implements OnInit, OnChanges, AfterViewInit,OnDestroy
         });
     }
 
-     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
-     ngOnDestroy() {
+    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();
-      }
+    }
 
 }

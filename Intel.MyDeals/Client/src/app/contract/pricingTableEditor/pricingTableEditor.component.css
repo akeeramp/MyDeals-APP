@@ -519,11 +519,12 @@ kendo-tabstrip.tabs-coll {
 }
 
 #spreadsheet .wtHolder {
-    height: 100% !important
+    height: 100% !important;
+    width: -webkit-fill-available !important;
 }
 
 #spreadsheet .ht_master.handsontable {
-    height: 100%
+    height: 100%;
 }
 
 #spreadsheet .wtBorder.current {
