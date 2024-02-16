@@ -12,7 +12,24 @@ export class HeaderComponent {
     constructor(private loggerService: logger) { }
 
     private readonly ENVIRONMENT: string = (<any> window).env;
+    browserName: string;
 
+    ngOnInit() {
+        if ((navigator.userAgent.indexOf("Opera") || navigator.userAgent.indexOf('OPR')) != -1) {
+            this.browserName = 'OPERA';
+        } else if (navigator.userAgent.indexOf("Edg") != -1) {
+            this.browserName = 'EDGE';
+        } else if (navigator.userAgent.indexOf("Chrome") != -1) {
+            this.browserName = 'CHROME';
+        } else if (navigator.userAgent.indexOf("Safari") != -1) {
+            this.browserName = 'SAFARI';
+        } else if (navigator.userAgent.indexOf("Firefox") != -1) {
+            this.browserName = 'FIREFOX';
+        } else {
+            this.browserName = 'UNKNOWN';
+        }
+    }
+    
     getSuperPrefix(): string {
         return (<any> window).superPrefix;
     }
