@@ -832,7 +832,7 @@ export class ProductCorrectorComponent implements OnDestroy{
             'productExists': isProductExists,
             'isExcludeProduct': isExcludeProduct
         };
-        const data = { name: 'Product Selector', source: 'Product Corrector', selVal: dataItem, contractData: this.data.contractData, curPricingTable: this.data.curPricingTable, curRow: [pricingTableRow] };
+        const data = { name: 'Product Selector', source: 'Product Corrector', selVal: '', contractData: this.data.contractData, curPricingTable: this.data.curPricingTable, curRow: [pricingTableRow] };
         const dialogRefe = this.dialogService.open(ProductSelectorComponent, {
             height: "88vh",
             maxWidth: "90vw",
