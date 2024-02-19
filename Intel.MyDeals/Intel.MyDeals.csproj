@@ -385,6 +385,7 @@
     <Content Include="Client\Images\docs\approval.png" />
     <Content Include="Client\Images\docs\Batch_Log.png" />
     <Content Include="Client\Images\docs\breakpoint-cs.png" />
+    <Content Include="Client\Images\docs\breakpointInChrome.png" />
     <Content Include="Client\Images\docs\chromeDebugger.png" />
     <Content Include="Client\Images\docs\DBLogs.png" />
     <Content Include="Client\Images\docs\Business-rules.png" />
@@ -419,6 +420,7 @@
     <Content Include="Client\Images\docs\API-Controller.png" />
     <Content Include="Client\Images\docs\Add-api.png" />
     <Content Include="Client\Images\docs\FunFactsCS.png" />
+    <Content Include="Client\Images\docs\fileSearch-DevTools.png" />
     <Content Include="Client\Images\docs\dealapproval.png" />
     <Content Include="Client\Images\docs\dealentry.png" />
     <Content Include="Client\Images\docs\DevTool-Console-error.png" />
@@ -479,6 +481,7 @@
     <Content Include="Client\Images\docs\ErrorExample.png" />
     <Content Include="Client\Images\docs\samplecodesp.png" />
     <Content Include="Client\Images\docs\sampleunittests.png" />
+    <Content Include="Client\Images\docs\SPError.png" />
     <Content Include="Client\Images\docs\Controller-1.png" />
     <Content Include="Client\Images\docs\SPClassGenerator.png" />
     <Content Include="Client\Images\docs\SPClassGeneratorResults.png" />
@@ -1634,6 +1637,7 @@
     <Content Include="Images\docs\MyDeals Project Logic.png" />
     <Content Include="Images\docs\overlapping.png" />
     <Content Include="Images\docs\path.png" />
+    <Content Include="Client\Images\docs\pauseApplicationAtBreakpoint.png" />
     <Content Include="Images\docs\pct.png" />
     <Content Include="Images\docs\pricingassoc.png" />
     <Content Include="Images\docs\pricingstrategy.png" />
