@@ -2813,3 +2813,47 @@ kendo-dialog.meetCompInvalidPrice .k-window kendo-dialog-actions button {
     color: #0071c5 !important;
     text-decoration: underline !important;
 }
+
+.note-ui-cicd {
+    max-width: 940px;
+    border: 1px solid #f3e9ba;
+    padding: 20px;
+    border-radius: 15px;
+    background-color: #f3e9ba;
+    box-shadow: 8px 6px 10px 0px #f3e9ba80;
+    margin-bottom: 15px;
+}
+
+p.firstNoteHeading {
+    color: #cc8f00;
+    font-size: 18px;
+    font-weight: 600;
+    text-decoration: underline;
+    margin-bottom: 5px;
+}
+
+p.firstNoteDesc {
+    margin-bottom: 0;
+    color: #cc8f00;
+}
+
+ul.firstNoteList li {
+    color: #cc8f00;
+    margin-bottom: 0;
+    font-size: 14px;
+}
+
+ul.firstNoteList {
+    margin-bottom: 0;
+}
+
+ul.firstNoteList li a.anchorPipeline {
+    color: #cc8f00 !important;
+    font-weight: 700;
+    font-style: italic;
+}
+
+i.icon-color-pipe {
+    color: #0071c5;
+    font-size: 28px;
+}
