@@ -502,8 +502,8 @@
     <Content Include="Client\Images\docs\ui-cicd-pipline-9.png" />
     <Content Include="Client\Images\docs\ui-cicd-pipline-10.png" />
     <Content Include="Client\Images\docs\ui-cicd-pipline-11.png" />
-    <Content Include="Client\Images\docs\ui-cicd-pipline-12.png" />
-    <Content Include="Client\Images\docs\ui-cicd-pipline-13.png" />
+    <Content Include="Client\Images\docs\ui-cicd-pipeline-12.png" />
+    <Content Include="Client\Images\docs\ui-cicd-pipeline-13.png" />
     <Content Include="Client\Images\docs\unittesting.png" />
     <Content Include="Client\Images\docs\validation.png" />
     <Content Include="Client\Images\docs\versions.png" />
