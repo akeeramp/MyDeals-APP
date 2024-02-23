@@ -396,7 +396,7 @@
     <Content Include="Client\Images\docs\Cloning-vs.png" />
     <Content Include="Client\Images\docs\Clone-repo-image.png" />
     <Content Include="Client\Images\docs\sln-loaded1-vs.png" />
-    <Content Include="Client\Images\docs\Sln-loaded2.png" />
+    <Content Include="Client\Images\docs\sln-loaded2.png" />
     <Content Include="Client\Images\docs\addScaffoldView.png" />
     <Content Include="Client\Images\docs\addView.png" />
     <Content Include="Client\Images\docs\addViewMenu.png" />
