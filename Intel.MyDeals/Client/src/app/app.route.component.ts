@@ -62,6 +62,7 @@ import { CodeQualityComponent } from "./codingPractices/codeQuality/codeQuality.
 import { CodingToolsComponent } from "./codingPractices/codingTools/codingTools.component";
 import { ProjectFlowComponent } from "./codingPractices/projectFlow/projectFlow.component";
 import { ScopeDecisionComponent } from "./codingPractices/scopeDecision/scopeDecision.component";
+import { GettingStartedForDevComponent } from "./codingPractices/gettingStartedForDev/gettingStartedForDev.component";
 //added protection rule before leaving a page
 import { PendingChangesGuard } from "./shared/util/gaurdprotectionDeactivate";
 
@@ -133,4 +134,5 @@ export const routes: Routes = [
     { path: 'Project', component: ProjectFlowComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver } },
     { path: 'Flows', component: ScopeDecisionComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver } },
     { path: 'CiCdPipeline', component: CicdPipelineComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver } },
+    { path: 'GettingStartedForDeveloper', component: GettingStartedForDevComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver } },
   ];

@@ -12,6 +12,7 @@ import { BusinessProcessComponent } from "../../app/codingPractices/businessProc
 import { CodingToolsComponent } from "../../app/codingPractices/codingTools/codingTools.component";
 import { CodeQualityComponent } from "../../app/codingPractices/codeQuality/codeQuality.component";
 import { ScopeDecisionComponent } from "../../app/codingPractices/scopeDecision/scopeDecision.component";
+import { GettingStartedForDevComponent } from "../../app/codingPractices/gettingStartedForDev/gettingStartedForDev.component";
 
 
 export const routesCodingPractices: Routes = [
@@ -21,5 +22,6 @@ export const routesCodingPractices: Routes = [
     { path: 'CodeQuality', component: CodeQualityComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'Project', component: ProjectFlowComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver },canActivate: [authGuard]},
     { path: 'Flows', component: ScopeDecisionComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
-    { path: 'CiCdPipeline', component: CicdPipelineComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver }, canActivate: [authGuard]},
+    { path: 'CiCdPipeline', component: CicdPipelineComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
+    { path: 'GettingStartedForDeveloper', component: GettingStartedForDevComponent, data: { title: 'CodingPractices', BaseHref: 'CodingPractices' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] }
     ];

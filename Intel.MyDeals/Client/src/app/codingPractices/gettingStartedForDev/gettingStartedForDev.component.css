@@ -1,0 +1,39 @@
+﻿.layout-cp-inner-page {
+    display: flex;
+    position: relative;
+    align-items: flex-start;
+    justify-content: flex-start;
+    width: 100%;
+    padding: 10px 10px;
+}
+.intelicon-developer-outlined:before {
+    content: "\eb39";
+    font-family: 'Intelicon';
+    color: #0071c5;
+    font-size: 28px;
+}
+.intelicon-accessibility:before {
+    content: "\eb08";
+    font-family: 'Intelicon';
+    color: #0071c5;
+    font-size: 28px;
+}
+.intelicon-database-outlined:before {
+    content: "\eb1c";
+    font-family: 'Intelicon';
+    color: #0071c5;
+    font-size: 28px;
+}
+.intelicon-link:before {
+    content: "\e959";
+    font-family: 'Intelicon';
+    color: #0071c5;
+    font-size: 28px;
+}
+.grid-two {
+    overflow-y: auto;
+    height: calc(100vh - 147px);
+    position: relative;
+    padding: 0 20px 0 20px;
+    overflow-x:hidden
+}

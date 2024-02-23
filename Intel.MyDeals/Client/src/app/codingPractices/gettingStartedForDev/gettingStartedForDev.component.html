@@ -1,0 +1,179 @@
+﻿<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+<app-breadcrumbs [list_breadcrumbs]="list_breadcrumbs" (selectedBreadCrumb)="responseLnav($event)"></app-breadcrumbs>
+
+<div class="layout-cp-inner-page">
+    <div class="grid-one" [ngStyle]="isVisible?{'min-width': '200px'}:{'min-width': 'auto'}">
+        <div *ngIf="isVisible" id="tocCollapse" class="w100" style="cursor: pointer; text-align: right; font-size: 10px;">
+            TOC <i (click)="Toggle()" class="intelicon-left-previous"></i>
+            <app-coding-practices-leftNav [left_nav]="left_nav" (selectedLink)="responseLnav($event)"></app-coding-practices-leftNav>
+        </div>
+        <div id="togExpand" *ngIf="!isVisible" (click)="Toggle()" class="intelicon-up rotateIcon"><span class="font-cp">TOC</span> </div>
+    </div>
+    <div class="grid-two">
+        <div id="getAccess">
+            <h1 style="margin-top: 20px !important; font-size: 36px; font-family: 'Intel Clear' !important;"> Getting Started For Developer</h1>
+            <p>This document help developers to understand MyDeals onboarding process.</p>
+        </div>
+        <div id="scopeBusinessProcess">
+            <h3 style="margin-top: 30px; font-family: 'Intel Clear' !important;" class="intelicon-accessibility"> How to get Access ?</h3>
+            <p>To access MyDeals application, a developer should raise AGS requests.</p>
+
+
+            <div id="myAGS">
+                <ol>
+                    <li>
+                        <a href="https://ags.intel.com/identityiq/home.jsf" target="_blank" class="btn-ttl-coding">Click here </a> to request access from Intel <b>Access Governance system</b>, on click you will be navigated to the home page as shown.
+                        <div>
+                            <img src="\Client\Images\docs\AGS-Home.png" style="width:65%" />
+
+                        </div>
+                    </li>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <li>
+                        <a href="https://ags.intel.com/identityiq/accessRequest/accessRequest.jsf#/accessRequestSelf/add" target="_blank" class="btn-ttl-coding">Click here </a> to <b>Request Access For Myself</b>, on click you will be directly navigated to the search access page as shown below.
+                        <div>
+                            <img src="\Client\Images\docs\Request-access.png" style="width:65%" /> <br /><br /><br />
+                            <img src="\Client\Images\docs\search-access.png" style="width:65%" />
+                        </div>
+                    </li>
+                    &nbsp;&nbsp;&nbsp;&nbsp;
+                    <li>
+                        <p>Type <b>MYDEALS SOx RO DATABASEACCESS on AD-COR</b> and search, select the checkbox and request for access.</p>
+                        <div>
+                            <img src="\Client\Images\docs\github-image-role.png" style="width:65%" />
+                        </div>
+                    </li>
+                </ol>
+            </div>
+            <div>
+                <div>
+                    <p> To access MyDeals application, developer should apply below AGS roles.</p>
+                    <ol>
+                        <li>MYDEALS SOx RO DATABASEACCESS on AD-CORP</li>
+                        <li>Common Architecture Database - RDMS CA Developer</li>
+                        <li>Common Architecture Database - RDMS Prod Read</li>
+                        <li>Common Architecture Database - RDMS CA Developer Role DEV</li>
+                        <li>Intel Cloud Hosting - Intel Cloud Application Platform - Internal - Production</li>
+                        <li>DevTools - - BOS Platform Operation - Project Developer</li>
+                        <li>Common Architecture Database - RDMS Release User DEV</li>
+                    </ol>
+                </div>
+                <p> To access MyDeals GITHUB, developer should apply below AGS roles.</p>
+                <div>
+                    <ol>
+                        <li>1Source Github User</li>
+                        <li>1Source Github Collab User on AZAD-CORP</li>
+                        <li>MyDeals Github Developer</li>
+                    </ol>
+                    <div><a href=" https://1source.intel.com/onboard" target="_blank" class="btn-ttl-coding">Click here </a> for <b>Github SetUp</b>.</div>
+                </div>
+                <p>Note: Refer AGS Requests section to apply for above roles. Once all the requests are approved it takes approx 24 hours to reflect in the system.</p>
+            </div>
+
+
+            <div id="projectClone">
+                <div><h3 style="margin-top: 30px; font-family: 'Intel Clear' !important;"> Local Project Setup </h3></div>
+                <p>After all AGS requests are approved then developer can setup the code in local system.</p>
+                <div>
+                    <a href="https://intel-my.sharepoint.com/:w:/r/personal/arun_s_kannambadam_intel_com/Documents/Dev%20Onboarding%20Doc.docx?d=w8208589238b141a895dc8b71c7e35a10&csf=1&web=1&e=01Ofn3" target="_blank" class="btn-ttl-coding">Click here </a>to install the prerequisites under Local Environment setup. <br /><br />
+                </div>
+                <div>
+                    <ol>
+                        <li>
+                            <a href="https://github.com/intel-innersource/applications.web.mydeals.webui" target="_blank" class="btn-ttl-coding">Click here </a> to open GitHub.
+                            <p>On click of the above link developer will be nagivated to the github where UI source code can be cloned by copying the URL.</p>
+                            <div>
+                                <img src="\Client\Images\docs\UI-GitHub.png" style="width:660px;padding:10px" />
+                                <img src="\Client\Images\docs\code-clone.png" style="width: 330px; margin-top: 10px; padding: 10px" />
+                            </div>
+                        </li>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <li>
+                            <p>Open Visual Studio IDE and click on clone a repository, paste the URL and click on clone as shown below.</p>
+                            <div>
+                                <img src="\Client\Images\docs\Clone-repo-image.png" style="width: 30%; margin-top: 10px; padding: 10px" />
+                                <img src="\Client\Images\docs\Cloning-vs.png" style="width: 30%; margin-top: 10px; padding: 10px" />
+                            </div>
+                        </li>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <li>
+                            <p>Once the cloning is successfully completed the developer can see the .sln files, select Intel.Mydeals.sln</p>
+                            <div>
+                                <img src="\Client\Images\docs\sln-loaded2.png" style="width: 20%; margin-top: 10px;padding: 10px;" />
+                                <img src="\Client\Images\docs\Sln-loaded1.png" style="width: 20%; margin-top: 10px;padding:10px" />
+                            </div>
+                        </li>
+                        &nbsp;&nbsp;&nbsp;&nbsp;
+                        <li>
+                            <p>Right click on Intel.Mydeals and select <b>Set as StartUp Project</b> and open the terminal in client folder then run the command <b>npm run build</b>. After successful build, run the application from visual studio.</p>
+                            <div>
+                                <img src="\Client\Images\docs\startup-2.png" style="width: 30%; margin-top: 10px;padding: 10px;" />
+                                <img src="\Client\Images\docs\build-terminal.png" style="width:600px;padding:10px" />
+                                <img src="\Client\Images\docs\startup-1.png" style="width: 20%; margin-top: 10px;padding:10px" />
+                            </div>
+                          
+                        </li>
+
+
+                    </ol>
+                </div>
+
+            </div>
+
+        </div>
+
+        <div id="onboardingProcessForDB">
+            <h3 style="margin-top: 30px; font-family: 'Intel Clear' !important;" class="intelicon-database-outlined">Onboarding process for DB</h3>
+            <ol>
+                <li>
+                    Type <b>Common Architecture Database - RDMS Release User DEV</b> and search, select the checkbox and request for access.<br />
+                    <img src="Client/Images/docs/RDBMS-Dev-Role.png" style="width: 850px" /> <br /><br />
+                </li>
+                <li>Download and install the SSMS (Sql Server Management Studio).</li>
+                <li>Open the SSMS, select the required fields and connect with database.</li>
+                <li>
+                    Dev Sever connection string: FM7DFROAPP01.amr.corp.intel.com <br /> Note: For other pre-prod and prod server connection strings, please reach out to your respective Tech Leads.
+                    <div>
+                        <img src="Client/Images/docs/DB-Connect.png" style="width: 655px;padding:10px" />
+                        <img src="Client/Images/docs/DB-Table.png" style="width: 629px;padding:10px" />
+                    </div>
+                </li>
+                &nbsp;&nbsp;
+                <li>
+                    <div>
+                        <a href="https://github.com/intel-innersource/applications.web.mydeals.database" target="_blank" class="btn-ttl-coding">Click here</a> to open GitHub.<br /> On click of the above link developer will be nagivated to the github where DB source code can be cloned by copying the URL.
+                        <div>
+                            <img src="Client/Images/docs/DB-GitHub.png" style="width:660px; padding: 10px" />
+                            <img src="Client/Images/docs/Code-db-clone.png" style="width: 330px; padding: 10px" />
+                        </div>
+                    </div>
+                </li>
+                <li>
+                    Once the cloning is successfully completed the developer can see the folder view.
+                    <div>
+                        <img src="Client/Images/docs/DB-repo.png" style="width: 30%; margin-top: 10px; padding: 10px " />
+                        <img src="Client/Images/docs/db-folder-view.png" style="width: 20%; margin-top: 10px; padding: 10px;" />
+                    </div>
+                </li>
+
+            </ol>
+        </div>
+        <div id="ktDocs">
+            <h3 style="margin-top: 30px; font-family: 'Intel Clear' !important;" class="intelicon-link">KT docs and links</h3>
+            <div>
+                <ol>
+                    <li><a href="https://intel.sharepoint.com/:f:/r/sites/EBPDealSettlementsandAccruals/Shared%20Documents/MyDeals_Transition/Training%20Videos?csf=1&web=1&e=aPNLAV" target="_blank" class="btn-ttl-coding">Click here</a> to view MyDeals application UI.</li>
+                    <li><a href="https://intel.sharepoint.com/:f:/r/sites/MyDealsTeam/Shared%20Documents/General/DB_KT?csf=1&web=1&e=FNZE5P" target="_blank" class="btn-ttl-coding">Click here</a> to view MyDeals application DB.</li>
+                    <li><a href="https://intel.sharepoint.com/:f:/r/sites/MyDealsTeam/Shared%20Documents/General/UI%20WALK-THROUGH%20BY%20SAURAV%20KUNDU?csf=1&web=1&e=OWpVXc" target="_blank" class="btn-ttl-coding">Click here</a> to view MyDeals application System Design/Fundamentals.</li>
+                    <li><a href="https://intel.sharepoint.com/:f:/r/sites/MyDealsTeam/Shared%20Documents/General/KTBR%20-%20Deal%20Makers?csf=1&web=1&e=4SZBFY" target="_blank" class="btn-ttl-coding">Click here</a> to view MyDeals application KTBR.</li>
+                    <li><a href="https://intel.sharepoint.com/:f:/r/sites/MyDealsTeam/Shared%20Documents/General/My_Deals_Validation%20Rules?csf=1&web=1&e=Sepdru" target="_blank" class="btn-ttl-coding">Click here</a> to view MyDeals application Validation Rules.</li>
+                </ol>
+                <div><a href="https://intel.sharepoint.com/:p:/r/sites/ScrumTroopersAPT/Shared%20Documents/General/KT/MyDeals%20Reverse%20KT%20-%20Arun.pptx?d=wb90b3d39159d4debb9878bd550d959e8&csf=1&web=1&e=elu0O7" target="_blank" class="btn-ttl-coding">Click here</a> for more details.</div><br />
+            </div>
+        </div>
+
+
+
+
+    </div>
+</div>
