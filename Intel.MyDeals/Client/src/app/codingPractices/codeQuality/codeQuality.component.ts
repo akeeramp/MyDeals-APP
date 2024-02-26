@@ -13,10 +13,10 @@ export class CodeQualityComponent implements OnInit {
     public proLnav: any[]
     public left_nav: any;
     public isVisible: boolean = true;
+    public flagBool: string;
+    public keySelected: any = '0';
 
-    loadSelected(dataItem){
-        
-    }
+
 
     ngOnInit(): void {
         this.list_breadcrumbs = [
@@ -27,9 +27,59 @@ export class CodeQualityComponent implements OnInit {
 
         this.left_nav = [
             { text: "Introduction", url:'#codeQuality', bool: "codeQuality" },
-        ];
+            { text: "Unit Testing", url:'#unitTest', bool: "unitTest" },
+            { text: "SonarQube", url:'#sonarScan', bool: "sonarScan" },
+            { text: "Checkmarx", url:'#checkmarx', bool: "checkmarx" },
+            { text: "Spectral Scan", url:'#spectralScan', bool: "spectralScan" },
+            
+        ]
     }
     Toggle() {
         this.isVisible = !this.isVisible
+    }
+
+    navigateToSelectedLink(dataItem,sKey?){
+        const url = document.querySelector(dataItem.url);
+        url.scrollIntoView({ behavior: 'smooth', block: 'start'});
+        this.responseLnav(dataItem,sKey);
+    }
+
+    responseLnav(e:any,sKey?){
+        this.flagBool = e.bool;
+        if(this.flagBool == "codeQuality"){
+            this.list_breadcrumbs = [
+                { text: "Coding practices", url: "Home" },
+                { text: "MyDeals Code Quality Standards", url: "CodeQuality" },
+                { text: "Introduction", url: "javascript:void(0)" }
+            ];
+        } else if(this.flagBool == "unitTest"){
+            this.list_breadcrumbs = [
+                { text: "Coding practices", url: "Home" },
+                { text: "MyDeals Code Quality Standards", url: "CodeQuality" },
+                { text: "Unit Testing", url: "javascript:void(0)" }
+            ];
+            this.keySelected = sKey;
+        } else if(this.flagBool == "sonarScan"){
+            this.list_breadcrumbs = [
+                { text: "Coding practices", url: "Home" },
+                { text: "MyDeals Code Quality Standards", url: "CodeQuality" },
+                { text: "SonarQube", url: "javascript:void(0)" }
+            ];
+        }  else if ( this.flagBool == 'spectralScan'){
+            this.list_breadcrumbs = [
+                { text: "Coding practices", url: "Home" },
+                { text: "MyDeals Code Quality Standards", url: "CodeQuality" },
+                { text: "Spectral Scan", url: "javascript:void(0)" }
+            ];
+        } else if ( this.flagBool == 'checkmarx'){
+            this.list_breadcrumbs = [
+                { text: "Coding practices", url: "Home" },
+                { text: "MyDeals Code Quality Standards", url: "CodeQuality" },
+                { text: "Checkmarx", url: "javascript:void(0)" }
+            ];
+        }
+
+        const url = document.querySelector(e.url);
+        url.scrollIntoView({ behavior: 'smooth', block: 'start'});
     }
 }
