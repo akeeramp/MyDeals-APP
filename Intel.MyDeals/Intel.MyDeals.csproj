@@ -414,8 +414,8 @@
     <Content Include="Client\Images\docs\sonar_severity.png" />
     <Content Include="Client\Images\docs\nUnit_check.png" />
     <Content Include="Client\Images\docs\nUnit_gitHub.png" />
-    <Content Include="\Client\Images\docs\allChecks-passed.png" />
-    <Content Include="\Client\Images\docs\spectralScanResult.png" />
+    <Content Include="Client\Images\docs\allChecks-passed.png" />
+    <Content Include="Client\Images\docs\spectralScanResult.png" />
     <Content Include="Client\Images\docs\DBLogs.png" />
     <Content Include="Client\Images\docs\Business-rules.png" />
     <Content Include="Client\Images\docs\buildclass.png" />
@@ -448,7 +448,7 @@
     <Content Include="Client\Images\docs\db2c.png" />
     <Content Include="Client\Images\docs\API-Controller.png" />
     <Content Include="Client\Images\docs\Add-api.png" />
-    <Content Include="\Client\Images\docs\DevelopmentAndDeployment.jpg" />
+    <Content Include="Client\Images\docs\DevelopmentAndDeployment.jpg" />
     <Content Include="Client\Images\docs\FunFactsCS.png" />
     <Content Include="Client\Images\docs\fileSearch-DevTools.png" />
     <Content Include="Client\Images\docs\dealapproval.png" />
