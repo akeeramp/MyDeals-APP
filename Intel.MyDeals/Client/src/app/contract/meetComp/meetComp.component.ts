@@ -77,12 +77,8 @@ export class MeetCompContractComponent implements OnInit, OnChanges {
     public meetCompSkuDropdownData = [];
     public meetCompPrcDropdownData = [];
     public compOverrideDropdownData = [
-        {
-            "COMP_OVRRD_FLG": "Yes"
-        },
-        {
-            "COMP_OVRRD_FLG": "No"
-        }
+        { "COMP_OVRRD_FLG": "Yes" },
+        { "COMP_OVRRD_FLG": "No" }
     ];
     public defaultCompOverrideItem = { "COMP_OVRRD_FLG": "Select Override" }
     public totalApiEntries = 0;
@@ -132,22 +128,10 @@ export class MeetCompContractComponent implements OnInit, OnChanges {
         }
     };
     private pageSizes: PageSizeItem[] = [
-        {
-            text: "10",
-            value: 10,
-        },
-        {
-            text: "25",
-            value: 25,
-        },
-        {
-            text: "50",
-            value: 50,
-        },
-        {
-            text: "100",
-            value: 100,
-        }
+        { text: "10", value: 10 },
+        { text: "25", value: 25 },
+        { text: "50", value: 50 },
+        { text: "100", value: 100 }
     ];
 
     dataStateChange(state: DataStateChangeEvent): void {
@@ -1202,6 +1186,18 @@ export class MeetCompContractComponent implements OnInit, OnChanges {
         this.showAlert = false;
     }
 
+    private isDa(): boolean {
+        return this.usrRole.includes('DA');
+    }
+
+    private isGa(): boolean {
+        return this.usrRole.includes('GA');
+    }
+
+    private isFse(): boolean {
+        return this.usrRole.includes('FSE');
+    }
+
     private isProgram(OBJ_SET_TYPE_CD: string): boolean {
         return OBJ_SET_TYPE_CD.toLowerCase().includes('program');
     }
@@ -1211,11 +1207,11 @@ export class MeetCompContractComponent implements OnInit, OnChanges {
     }
 
     private isFlexRowTypeHidden(OBJ_SET_TYPE_CD: string): boolean {
-        return !(this.isFlex(OBJ_SET_TYPE_CD));
+        return !(this.isFlex(OBJ_SET_TYPE_CD) && (this.isDa() || this.isGa() || this.isFse()));
     }
 
     private isProgramDollarHidden(OBJ_SET_TYPE_CD: string): boolean {
-        return !(this.isProgram(OBJ_SET_TYPE_CD));
+        return !(this.isProgram(OBJ_SET_TYPE_CD) && (this.isDa() || this.isGa() || this.isFse()));
     }
 
     ngOnChanges() {
@@ -1233,8 +1229,7 @@ export class MeetCompContractComponent implements OnInit, OnChanges {
                 this.setBusy("Running Meet Comp...", "Please wait running Meet Comp...");
                 this.lastMeetCompRunCalc();
             }
-        }
-        catch (ex) {
+        } catch (ex) {
             this.loggerSvc.error('Something went wrong', 'Error');
             console.error('MeetComp::ngOnInit::', ex);
         }

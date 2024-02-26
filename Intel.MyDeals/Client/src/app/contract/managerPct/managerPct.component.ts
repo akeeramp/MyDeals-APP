@@ -544,6 +544,18 @@ export class ManagerPctComponent implements OnInit, OnDestroy {
         window.open(`/Contract#/gotoDeal/${dataItem.DEAL_ID}`, '_blank')
     }
 
+    private isDa(): boolean {
+        return this.userRole.includes('DA');
+    }
+
+    private isGa(): boolean {
+        return this.userRole.includes('GA');
+    }
+
+    private isFse(): boolean {
+        return this.userRole.includes('FSE');
+    }
+
     private isProgram(OBJ_SET_TYPE_CD: string): boolean {
         return OBJ_SET_TYPE_CD.toLowerCase().includes('program');
     }
@@ -553,11 +565,11 @@ export class ManagerPctComponent implements OnInit, OnDestroy {
     }
 
     private isFlexRowTypeHidden(OBJ_SET_TYPE_CD: string): boolean {
-        return !(this.isFlex(OBJ_SET_TYPE_CD));
+        return !(this.isFlex(OBJ_SET_TYPE_CD) && (this.isDa() || this.isGa() || this.isFse()));
     }
 
     private isProgramDollarHidden(OBJ_SET_TYPE_CD: string): boolean {
-        return !(this.isProgram(OBJ_SET_TYPE_CD));
+        return !(this.isProgram(OBJ_SET_TYPE_CD) && (this.isDa() || this.isGa() || this.isFse()));
     }
 
     ngOnInit() {

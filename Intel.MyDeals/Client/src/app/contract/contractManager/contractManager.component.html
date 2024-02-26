@@ -458,7 +458,12 @@
                                                                            [filterService]="filterService" [data]="filteringData[pt.DC_ID][column.field]"></multicheck-filter>
                                                     </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="Program $" field="TOTAL_DOLLAR_AMOUNT" [headerClass]="{'headerClass':true}" [width]="100" [hidden]="isProgramDollarHidden(pt.OBJ_SET_TYPE_CD)">
+                                                <kendo-grid-column title="Program $" field="TOTAL_DOLLAR_AMOUNT" [headerClass]="{'headerClass':true}" [width]="120" [hidden]="isProgramDollarHidden(pt.OBJ_SET_TYPE_CD)">
+                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
+                                                    let-filterService="filterService">
+                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
+                                                                           [filterService]="filterService" [data]="filteringData[pt.DC_ID][column.field]"></multicheck-filter>
+                                                    </ng-template>
                                                     <ng-template kendoGridCellTemplate let-dataItem>
                                                         {{ dataItem.TOTAL_DOLLAR_AMOUNT | currency }}
                                                     </ng-template>
@@ -503,8 +508,7 @@
                                                                            [filterService]="filterService" [data]="filteringData[pt.DC_ID][column.field]"></multicheck-filter>
                                                     </ng-template>
                                                 </kendo-grid-column>
-                                                <kendo-grid-column title="Attachments" field="HAS_ATTACHED_FILES" [headerClass]="{'headerClass':true}" [width]="120">
-                                                </kendo-grid-column>
+                                                <kendo-grid-column title="Attachments" field="HAS_ATTACHED_FILES" [headerClass]="{'headerClass':true}" [width]="120"></kendo-grid-column>
                                             </kendo-grid>
                                         </div>
                                     </div>

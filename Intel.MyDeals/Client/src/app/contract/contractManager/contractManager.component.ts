@@ -634,12 +634,12 @@ export class contractManagerComponent implements OnDestroy{
         return tmplt;
     }
 
-
     togglePt(pt) {
         const ptDcId = pt.DC_ID;
         this.isPTExpanded[pt.DC_ID] = !this.isPTExpanded[pt.DC_ID];
         this.isGridLoading = true;
         let getWipSummaryApi: Subscription;
+
         //check whether arrow icon is expanded/collapsed ,only if it is expanded then call API to get the data
         if (this.isPTExpanded[ptDcId]) {
             getWipSummaryApi = this.contractManagerSvc.getWipSummary(pt.DC_ID).pipe(takeUntil(this.destroy$)).subscribe((response) => {
@@ -661,33 +661,34 @@ export class contractManagerComponent implements OnDestroy{
                             this.isKIT[ptDcId] = false
                         }
                     }
-                    this.allPTEData =response;
+
+                    this.allPTEData = response;
                     this.isPTEToolsOpen.push(this.allPTEData);
                     this.gridDataSet[pt.DC_ID] = response;
-                    this.grid_Result= this.gridDataSet[pt.DC_ID];
-                    var filterableColumns = ['DC_ID','OBJ_SET_TYPE_CD',"START_DT", "TITLE",
-                    "REBATE_TYPE","COST_TEST_RESULT","MEETCOMP_TEST_RESULT","MAX_RPU", "END_CUSTOMER_RETAIL" ,"DEAL_DESC",
-                    "WF_STG_CD","EXPIRE_FLG",'VOLUME'];
-                    this.filteringData[ptDcId]=[];
+                    this.grid_Result = this.gridDataSet[pt.DC_ID];
+                    const FILTERABLE_COLUMNS = ['DC_ID', 'OBJ_SET_TYPE_CD', "START_DT", "TITLE", "REBATE_TYPE", "COST_TEST_RESULT", "MEETCOMP_TEST_RESULT", "TOTAL_DOLLAR_AMOUNT", "MAX_RPU", "END_CUSTOMER_RETAIL", "DEAL_DESC", "WF_STG_CD", "EXPIRE_FLG", 'VOLUME'];
+                    this.filteringData[ptDcId] = [];
 
-                    for(let i=0; i<filterableColumns.length;i++){
-                        this.distinctPrimitive(filterableColumns[i],ptDcId);
+                    for (let i = 0; i < FILTERABLE_COLUMNS.length; i++) {
+                        this.distinctPrimitive(FILTERABLE_COLUMNS[i], ptDcId);
                     }
                     this.gridData[pt.DC_ID] = process(this.gridDataSet[pt.DC_ID], this.state[pt.DC_ID]);
                     this.isGridLoading = false;
                 }
-                
             }, (error) => {
                 this.loggerSvc.error('Get WIP Summary service', error);
                 this.isLoading = false;
-            })
+            });
         } else if (!this.isPTExpanded[ptDcId]) {
-            if (getWipSummaryApi && !getWipSummaryApi.closed)
+            if (getWipSummaryApi && !getWipSummaryApi.closed) {
                 getWipSummaryApi.unsubscribe();
+            }
+
             this.isGridLoading = false;
             this.isPTEToolsOpen.pop();
         }
     }
+
     dataStateChange(state: DataStateChangeEvent, id): void {
         this.state[id] = state;
         let data =  process(this.gridData[id].data,  this.state[id]);
@@ -748,7 +749,6 @@ export class contractManagerComponent implements OnDestroy{
             return value + " is saved";
 
         if (this.lastRun) {
-
             // Get local time in UTC
             var currentTime = new Date().toLocaleString('en-US', { timeZone: 'America/Los_Angeles' });
             var localTime = this.momentService.moment(currentTime).format("MM/DD/YYYY HH:mm:ss");
@@ -1231,6 +1231,14 @@ export class contractManagerComponent implements OnDestroy{
         return this.userRole.includes('DA');
     }
 
+    private isGa(): boolean {
+        return this.userRole.includes('GA');
+    }
+
+    private isFse(): boolean {
+        return this.userRole.includes('FSE');
+    }
+
     private isProgram(OBJ_SET_TYPE_CD: string): boolean {
         return OBJ_SET_TYPE_CD.toLowerCase().includes('program');
     }
@@ -1240,11 +1248,11 @@ export class contractManagerComponent implements OnDestroy{
     }
 
     private isFlexRowTypeHidden(OBJ_SET_TYPE_CD: string): boolean {
-        return !(this.isFlex(OBJ_SET_TYPE_CD));
+        return !(this.isFlex(OBJ_SET_TYPE_CD) && (this.isDa() || this.isGa() || this.isFse()));
     }
 
     private isProgramDollarHidden(OBJ_SET_TYPE_CD: string): boolean {
-        return !(this.isProgram(OBJ_SET_TYPE_CD));
+        return !(this.isProgram(OBJ_SET_TYPE_CD) && (this.isDa() || this.isGa() || this.isFse()));
     }
 
     ngOnInit() {
