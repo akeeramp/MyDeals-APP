@@ -459,16 +459,41 @@
                                                     </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Program $" field="TOTAL_DOLLAR_AMOUNT" [headerClass]="{'headerClass':true}" [width]="120" [hidden]="isProgramDollarHidden(pt.OBJ_SET_TYPE_CD)">
-                                                    <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                                                    let-filterService="filterService">
-                                                        <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                                                           [filterService]="filterService" [data]="filteringData[pt.DC_ID][column.field]"></multicheck-filter>
+                                                    <ng-template kendoGridFilterMenuTemplate let-filter let-column="column" let-filterService="filterService">
+                                                        <!-- 
+                                                            TWC3119-875: Disabled the Equals operator
+                                                            -----------------------------------------
+                                                            There is an issue in Kendo grid with decimalized numbers where the 'Is equal to' filter does not return any values,
+                                                            the best we can do in the mean time is to use the 'Contains' filter, which isn't ideal, but we either need to create
+                                                            a custom filter operator (which seems it's probably not supported by Kendo Grid) or to see if an updated version of 
+                                                            Kendo Grid fixes this issue; All other numerical operators work correctly
+                                                         -->
+                                                        <kendo-grid-numeric-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" operator="contains">
+                                                            <kendo-filter-contains-operator></kendo-filter-contains-operator>
+                                                            <!-- <kendo-filter-eq-operator></kendo-filter-eq-operator> -->
+                                                            <kendo-filter-neq-operator></kendo-filter-neq-operator>
+                                                            <kendo-filter-gte-operator></kendo-filter-gte-operator>
+                                                            <kendo-filter-gt-operator></kendo-filter-gt-operator>
+                                                            <kendo-filter-lte-operator></kendo-filter-lte-operator>
+                                                            <kendo-filter-lt-operator></kendo-filter-lt-operator>
+                                                        </kendo-grid-numeric-filter-menu>
                                                     </ng-template>
                                                     <ng-template kendoGridCellTemplate let-dataItem>
                                                         {{ dataItem.TOTAL_DOLLAR_AMOUNT | currency }}
                                                     </ng-template>
                                                 </kendo-grid-column>
                                                 <kendo-grid-column title="Max RPU" field="MAX_RPU" [headerClass]="{'headerClass':true}" [width]="120" [hidden]="!OtherType[pt.DC_ID]">
+                                                    <ng-template kendoGridFilterMenuTemplate let-filter let-column="column" let-filterService="filterService">
+                                                        <kendo-grid-numeric-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" operator="contains">
+                                                            <kendo-filter-contains-operator></kendo-filter-contains-operator>
+                                                            <!-- <kendo-filter-eq-operator></kendo-filter-eq-operator> -->
+                                                            <kendo-filter-neq-operator></kendo-filter-neq-operator>
+                                                            <kendo-filter-gte-operator></kendo-filter-gte-operator>
+                                                            <kendo-filter-gt-operator></kendo-filter-gt-operator>
+                                                            <kendo-filter-lte-operator></kendo-filter-lte-operator>
+                                                            <kendo-filter-lt-operator></kendo-filter-lt-operator>
+                                                        </kendo-grid-numeric-filter-menu>
+                                                    </ng-template>
                                                     <ng-template kendoGridCellTemplate let-dataItem>
                                                         {{ dataItem.MAX_RPU | currency }}
                                                     </ng-template>

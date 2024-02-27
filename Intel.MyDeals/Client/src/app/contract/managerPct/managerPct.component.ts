@@ -150,8 +150,7 @@ export class ManagerPctComponent implements OnInit, OnDestroy {
                             }
                             if (!rollupPCTStatus[this.gridData[i].DEAL_ID]) {
                                 rollupPCTStatus[this.gridData[i].DEAL_ID] = this.gridData[i]["PRC_CST_TST_STS"];
-                            }
-                            else {
+                            } else {
                                 if (pct === "Fail") {
                                     rollupPCTStatus[this.gridData[i].DEAL_ID] = "Fail";
                                 } else if (pct === "InComplete" && rollupPCTStatus[this.gridData[i].DEAL_ID] !== "Fail") {
@@ -161,8 +160,9 @@ export class ManagerPctComponent implements OnInit, OnDestroy {
                                 }
                             }
                             let _actions = this.contractData?.PRC_ST.filter(x => x.DC_ID == pt.DC_PARENT_ID).map(y => y._actions);
-                            if (_actions)
+                            if (_actions) {
                                 this.gridData[i]["_actionsPS"] = _actions[0];
+                            }
                         }
                         this.parentGridData[pt.DC_ID] = JSON.parse(JSON.stringify(this.gridData));
                         this.parentGridResult[pt.DC_ID] = JSON.parse(JSON.stringify(this.parentGridData[pt.DC_ID]));
@@ -544,16 +544,8 @@ export class ManagerPctComponent implements OnInit, OnDestroy {
         window.open(`/Contract#/gotoDeal/${dataItem.DEAL_ID}`, '_blank')
     }
 
-    private isDa(): boolean {
-        return this.userRole.includes('DA');
-    }
-
-    private isGa(): boolean {
-        return this.userRole.includes('GA');
-    }
-
-    private isFse(): boolean {
-        return this.userRole.includes('FSE');
+    private isUserRoleEligibleForProgramDollarAndFlexRowType(): boolean {
+        return (this.userRole.includes('DA') || this.userRole.includes('GA') || this.userRole.includes('FSE'));
     }
 
     private isProgram(OBJ_SET_TYPE_CD: string): boolean {
@@ -565,11 +557,11 @@ export class ManagerPctComponent implements OnInit, OnDestroy {
     }
 
     private isFlexRowTypeHidden(OBJ_SET_TYPE_CD: string): boolean {
-        return !(this.isFlex(OBJ_SET_TYPE_CD) && (this.isDa() || this.isGa() || this.isFse()));
+        return !(this.isFlex(OBJ_SET_TYPE_CD) && this.isUserRoleEligibleForProgramDollarAndFlexRowType());
     }
 
     private isProgramDollarHidden(OBJ_SET_TYPE_CD: string): boolean {
-        return !(this.isProgram(OBJ_SET_TYPE_CD) && (this.isDa() || this.isGa() || this.isFse()));
+        return !(this.isProgram(OBJ_SET_TYPE_CD) && this.isUserRoleEligibleForProgramDollarAndFlexRowType());
     }
 
     ngOnInit() {

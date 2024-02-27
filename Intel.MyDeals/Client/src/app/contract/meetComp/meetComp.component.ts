@@ -1186,16 +1186,8 @@ export class MeetCompContractComponent implements OnInit, OnChanges {
         this.showAlert = false;
     }
 
-    private isDa(): boolean {
-        return this.usrRole.includes('DA');
-    }
-
-    private isGa(): boolean {
-        return this.usrRole.includes('GA');
-    }
-
-    private isFse(): boolean {
-        return this.usrRole.includes('FSE');
+    private isUserRoleEligibleForProgramDollarAndFlexRowType(): boolean {
+        return (this.usrRole.includes('DA') || this.usrRole.includes('GA') || this.usrRole.includes('FSE'));
     }
 
     private isProgram(OBJ_SET_TYPE_CD: string): boolean {
@@ -1207,11 +1199,11 @@ export class MeetCompContractComponent implements OnInit, OnChanges {
     }
 
     private isFlexRowTypeHidden(OBJ_SET_TYPE_CD: string): boolean {
-        return !(this.isFlex(OBJ_SET_TYPE_CD) && (this.isDa() || this.isGa() || this.isFse()));
+        return !(this.isFlex(OBJ_SET_TYPE_CD) && this.isUserRoleEligibleForProgramDollarAndFlexRowType());
     }
 
     private isProgramDollarHidden(OBJ_SET_TYPE_CD: string): boolean {
-        return !(this.isProgram(OBJ_SET_TYPE_CD) && (this.isDa() || this.isGa() || this.isFse()));
+        return !(this.isProgram(OBJ_SET_TYPE_CD) && this.isUserRoleEligibleForProgramDollarAndFlexRowType());
     }
 
     ngOnChanges() {
