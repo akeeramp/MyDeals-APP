@@ -594,7 +594,7 @@ export class ProductSelectorComponent implements OnDestroy {
     }
     isValidProductCombination(existingProdTypes, newProductType) {
         let isValid = true;
-        if (this.dealType == 'FLEX') {
+        if (this.dealType == 'FLEX' || this.dealType == 'VOL_TIER' || this.dealType == 'PROGRAM' || this.dealType == 'REV_TIER') {
             return true;
         }
         let selfCheck = newProductType == undefined;

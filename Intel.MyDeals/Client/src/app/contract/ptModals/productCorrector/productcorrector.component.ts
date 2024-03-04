@@ -245,7 +245,7 @@ export class ProductCorrectorComponent implements OnDestroy{
     }
     isValidProductCombination(existingProdTypes, newProductType) {
         var isValid = true;
-        if (this.DEAL_TYPE == 'FLEX') {
+        if (this.DEAL_TYPE == 'FLEX' || this.DEAL_TYPE == 'VOL_TIER' || this.DEAL_TYPE == 'PROGRAM' || this.DEAL_TYPE == 'REV_TIER') {
             return true;
         }
         var selfCheck = newProductType == undefined;
