@@ -2,7 +2,7 @@
 import { Component, Input, Output, EventEmitter, NgZone, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
-import { each, uniq, filter, map, where, pluck, findWhere, findIndex, findLastIndex, reject, contains, find, values, keys, unique, includes } from 'underscore';
+import { each, uniq, filter, map, where, pluck, findWhere, findIndex, findLastIndex, reject, contains, find, values, keys, unique, includes, findKey } from 'underscore';
 import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, Observable, Subject, forkJoin } from 'rxjs';
 import { distinct } from '@progress/kendo-data-query';
@@ -1659,10 +1659,15 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 }
 
                 if (data && data._behaviors && data._behaviors.isError) {
-                    if (!data._behaviors.isError['PTR_USER_PRD'] && data.PTR_SYS_INVLD_PRD == "" && data.PTR_SYS_PRD != "") {
+                    if (!data._behaviors.isError['PTR_USER_PRD'] && data.PTR_SYS_INVLD_PRD == "" && data.PTR_SYS_PRD != "" && translateResult['Data'].InValidProducts.hasOwnProperty(data.DC_ID) == false) {
                         this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'success-product');
                     } else {
-                        this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'error-product');
+                        if (translateResult['Data'].InValidProducts[data.DC_ID]["I"].length == 0) {
+                            this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'success-product');
+                        }
+                        else {
+                            this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'error-product');
+                        }
                     }
 
                     this.hotTable.render();
@@ -1671,11 +1676,15 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 // Do not update the cell value if exclude product is invalid/NULL
                 if (this.curPricingTable.OBJ_SET_TYPE_CD != 'KIT' && this.curPricingTable.OBJ_SET_TYPE_CD != 'ECAP' && data.PRD_EXCLDS != null && data.PRD_EXCLDS != "") {
                     if (data && data._behaviors && data._behaviors.isError) {
-                        if (!data._behaviors.isError['PRD_EXCLDS'] && data.PTR_SYS_INVLD_PRD == "" && data.PTR_SYS_PRD != "") {
-                            this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'success-product');
+                        if (!data._behaviors.isError['PRD_EXCLDS'] && data.PTR_SYS_INVLD_PRD == "" && data.PTR_SYS_PRD != "" && translateResult['Data'].InValidProducts.hasOwnProperty(data.DC_ID) == false) {
+                                this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'success-product');
                         } else {
-                            this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'error-product');
-                            this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'error-product');
+                            if (translateResult['Data'].InValidProducts[data.DC_ID]["E"].length == 0) {
+                                this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'success-product');
+                            }
+                            else {
+                                this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'error-product');
+                            } 
                         }
                         //setcellmeta will not render the color by default either you should make some proprty change of render
                         this.hotTable.render();
