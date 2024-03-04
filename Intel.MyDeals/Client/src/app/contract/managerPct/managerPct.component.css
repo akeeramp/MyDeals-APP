@@ -768,17 +768,17 @@ kendo-tabstrip.new-allDeals.manage-pct-tabstrip .k-tabstrip-items-wrapper ul li.
 }
 
 .new-view#sum-wrapper {
-    height: calc(98vh - 185px) !important;
+    height:calc(100vh - 180px) !important;
 }
 
 @media (max-width: 1125px) {
     .new-view#sum-wrapper {
-        height: calc(98vh - 215px) !important;
+        height: calc(100vh - 215px) !important;
     }
 }
 
 @media (max-width: 800px) {
     .new-view#sum-wrapper {
-        height: calc(98vh - 245px) !important;
+        height: calc(100vh - 245px) !important;
     }
 }

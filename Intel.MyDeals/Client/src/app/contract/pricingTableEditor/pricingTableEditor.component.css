@@ -527,6 +527,18 @@ kendo-tabstrip.tabs-coll {
     height: 100%;
 }
 
+@media (max-width: 1160px) {
+    #spreadsheet .ht_master.handsontable {
+        height: calc(100% - 30px);
+    }
+}
+
+@media (max-width: 790px) {
+    #spreadsheet .ht_master.handsontable {
+        height: calc(100% - 40px);
+    }
+}
+
 #spreadsheet .wtBorder.current {
     background-color: #00aeef !important
 }

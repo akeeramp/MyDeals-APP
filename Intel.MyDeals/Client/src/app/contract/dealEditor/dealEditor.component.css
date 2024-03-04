@@ -1,14 +1,15 @@
-﻿/*kendo-grid {
-    width: 320px;
-    height: calc(100vh - 350px);
-}*/
-
-kendo-grid#dealEditor {
+﻿kendo-grid#dealEditor {
     height: calc(100vh - 315px);
     border-bottom: 1px solid #e6e6e6;
 }
 
-﻿#DELoading .ss-loading-overlay .myLoader {
+@media (max-width: 1160px) {
+    kendo-grid#dealEditor {
+        height: calc(100vh - 355px);
+    }
+}
+
+#DELoading .ss-loading-overlay .myLoader {
     left: 50% !important;
     top: 10% !important
 }

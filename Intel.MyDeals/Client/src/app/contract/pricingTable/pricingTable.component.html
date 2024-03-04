@@ -3,7 +3,7 @@
 <loading-panel-angular [show]="isLoading" [header]="spinnerMessageHeader" [isShowFunFact]="isBusyShowFunFact"
                        [description]="spinnerMessageDescription" [msgType]="msgType"></loading-panel-angular>
 
-<div id="horizontal" [ngClass]="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}" class="pricingTableParent" style="position: relative; top: -20px;">
+<div id="horizontal" [ngClass]="{'collapsed': isLnavHidden, 'expanded': !isLnavHidden}" class="pricingTableParent">
     <div id="center-pane" class="fr" [ngClass]="{'overFlowHidden': isTenderContract==true}">
         <div id="contractContainerWrapper">
             <div id="contractContainer" class="fullHeight new-property">

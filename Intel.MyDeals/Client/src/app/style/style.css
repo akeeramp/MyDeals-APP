@@ -23,6 +23,13 @@
 /* Intel IT */
 /* @import '../../../../css/it-mlaf.min.css';    Need to resolve an issue for missing images/fonts when adding to bundle, in the meantime, it should be included in the project's BundleConfig */
 
+/* Variables */
+:root {
+    /* Used in `#horizontal.expanded:has(.contractManagerPlus)` */
+    --top-single-row-nav: 85px;
+    --top-double-row-nav: 115px;
+}
+
 app-header {
     display: initial;
 }
@@ -1776,8 +1783,26 @@ kendo-window.flexOverlapProducts {
 
 #horizontal.expanded:has(.contractManagerPlus) {
     position: fixed;
-    top: 93px;
+    top: var(--top-single-row-nav);
     width: 80.5%;
+}
+
+@media (max-width: 1160px) {
+    #horizontal.expanded:has(.contractManagerPlus) {
+        top: var(--top-double-row-nav);
+    }
+}
+
+@media (max-width: 767px) {
+    #horizontal.expanded:has(.contractManagerPlus) {
+        top: var(--top-single-row-nav);
+    }
+}
+
+@media (max-width: 740px) {
+    #horizontal.expanded:has(.contractManagerPlus) {
+        top: var(--top-double-row-nav);
+    }
 }
 
 #horizontal.expanded .few-oracle-css:has(.contractManagerPlus) {

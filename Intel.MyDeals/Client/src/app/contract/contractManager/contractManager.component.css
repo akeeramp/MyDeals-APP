@@ -6,7 +6,8 @@
     height: auto !important
 }
 
-.contractManagerPlus .k-grid th, .contractManagerPlus .k-grid td {
+.contractManagerPlus .k-grid th,
+.contractManagerPlus .k-grid td {
     font-size: 12px !important
 }
 
@@ -47,8 +48,33 @@
 }
 
 .contractManagerPlus #sum-container {
-    height: 80%;
-    overflow: auto
+    height: 78vh;
+    /* min-width: 800px; */
+    overflow: auto;
+}
+
+@media (max-width: 1555px) {
+    .contractManagerPlus #sum-container {
+        width: calc(100% - 50px);
+    }
+}
+
+@media (max-width: 1280px) {
+    .contractManagerPlus #sum-container {
+        width: calc(100% - 60px);
+    }
+}
+
+@media (max-width: 1170px) {
+    .contractManagerPlus #sum-container {
+        width: 90%;
+    }
+}
+
+@media (max-width: 730px) {
+    .contractManagerPlus #sum-container {
+        height: 67vh;
+    }
 }
 
 .contractManagerPlus .opUiContainer.k-grid .k-grid-filter .k-icon.k-i-filter {
@@ -56,9 +82,9 @@
     opacity: 1
 }
 
-    .contractManagerPlus .opUiContainer.k-grid .k-grid-filter .k-icon.k-i-filter:hover {
-        color: #0071c5 !important
-    }
+.contractManagerPlus .opUiContainer.k-grid .k-grid-filter .k-icon.k-i-filter:hover {
+    color: #0071c5 !important
+}
 
 /*.md-icon {
     padding: 4px 2px 0 5px
@@ -109,13 +135,14 @@
     color: #000000;
     font-weight: 400;
     background: #fdfdfd;
-    background: -moz-linear-gradient(top,#fdfdfd 0%,#d9d9d9 100%);
-    background: -webkit-linear-gradient(top,#fdfdfd 0%,#d9d9d9 100%);
-    background: linear-gradient(to bottom,#fdfdfd 0%,#d9d9d9 100%);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdfdfd',endColorstr='#d9d9d9',GradientType=0)
+    background: -moz-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
+    background: -webkit-linear-gradient(top, #fdfdfd 0%, #d9d9d9 100%);
+    background: linear-gradient(to bottom, #fdfdfd 0%, #d9d9d9 100%);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdfdfd', endColorstr='#d9d9d9', GradientType=0)
 }
 
-.contractManagerPlus .opUiContainer.k-grid .k-pager-wrap, .contractManagerPlus .opUiContainer.k-grid .k-pager-numbers .k-state-selected {
+.contractManagerPlus .opUiContainer.k-grid .k-pager-wrap,
+.contractManagerPlus .opUiContainer.k-grid .k-pager-numbers .k-state-selected {
     background-color: #ffffff
 }
 
@@ -144,16 +171,16 @@
     text-transform: capitalize
 }
 
-    .contractManagerPlus .btn-skyblue:hover {
-        background-color: #0071c5 !important;
-        border: 1px solid #0071c5 !important;
-        color: #ffffff !important
-    }
+.contractManagerPlus .btn-skyblue:hover {
+    background-color: #0071c5 !important;
+    border: 1px solid #0071c5 !important;
+    color: #ffffff !important
+}
 
-    .contractManagerPlus .btn-skyblue i {
-        font-size: 20px;
-        margin-right: 6px
-    }
+.contractManagerPlus .btn-skyblue i {
+    font-size: 20px;
+    margin-right: 6px
+}
 
 .contractManagerPlus .btn-skyblue-sm {
     background-color: #00aeef;
@@ -163,17 +190,17 @@
     padding: 2px !important
 }
 
-    .contractManagerPlus .btn-skyblue-sm:hover {
-        background-color: #0071c5 !important;
-        border: 1px solid #0071c5 !important;
-        color: #ffffff !important
-    }
+.contractManagerPlus .btn-skyblue-sm:hover {
+    background-color: #0071c5 !important;
+    border: 1px solid #0071c5 !important;
+    color: #ffffff !important
+}
 
-    .contractManagerPlus .btn-skyblue-sm i {
-        font-size: 20px;
-        margin: 0;
-        padding: 0
-    }
+.contractManagerPlus .btn-skyblue-sm i {
+    font-size: 20px;
+    margin: 0;
+    padding: 0
+}
 
 .contractManagerPlus .btn-grey {
     background-color: #e4e9ea;
@@ -182,16 +209,16 @@
     border-radius: 4px
 }
 
-    .contractManagerPlus .btn-grey:hover {
-        background-color: #00aeef;
-        border: 1px solid #00aeef;
-        color: #ffffff
-    }
+.contractManagerPlus .btn-grey:hover {
+    background-color: #00aeef;
+    border: 1px solid #00aeef;
+    color: #ffffff
+}
 
-    .contractManagerPlus .btn-grey i {
-        font-size: 20px;
-        margin-right: 6px
-    }
+.contractManagerPlus .btn-grey i {
+    font-size: 20px;
+    margin-right: 6px
+}
 
 .contractManagerPlus .btn-negative {
     background-color: #fc4c02;
@@ -200,16 +227,16 @@
     border-radius: 4px
 }
 
-    .contractManagerPlus .btn-negative:hover {
-        background-color: #ffa300;
-        border: 1px solid #ffa300;
-        color: #ffffff
-    }
+.contractManagerPlus .btn-negative:hover {
+    background-color: #ffa300;
+    border: 1px solid #ffa300;
+    color: #ffffff
+}
 
-    .contractManagerPlus .btn-negative i {
-        font-size: 20px;
-        margin-right: 6px
-    }
+.contractManagerPlus .btn-negative i {
+    font-size: 20px;
+    margin-right: 6px
+}
 
 .contractManagerPlus .chevron {
     color: #00aeef;
@@ -254,7 +281,7 @@
     font-size: 14px;
     font-family: "Intel Clear";
     background: #f8f8f8;
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdfdfd',endColorstr='#d9d9d9',GradientType=0)
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#fdfdfd', endColorstr='#d9d9d9', GradientType=0)
 }
 
 .contractManagerPlus .sum-main-body .tbl-header {
@@ -285,9 +312,9 @@
     cursor: pointer
 }
 
-    .contractManagerPlus .linkable:hover {
-        color: #003c71 !important
-    }
+.contractManagerPlus .linkable:hover {
+    color: #003c71 !important
+}
 
 .contractManagerPlus .sum-main-body label {
     margin-bottom: 0
@@ -297,12 +324,13 @@
     text-align: center
 }
 
-    .contractManagerPlus .sum-main-body .stage div {
-        margin: 0 10px;
-        padding: 4px 4px
-    }
+.contractManagerPlus .sum-main-body .stage div {
+    margin: 0 10px;
+    padding: 4px 4px
+}
 
-.contractManagerPlus input[type="radio"].with-font, .contractManagerPlus input[type="checkbox"].with-font {
+.contractManagerPlus input[type="radio"].with-font,
+.contractManagerPlus input[type="checkbox"].with-font {
     border: 0;
     clip: rect(0 0 0 0);
     height: 1px;
@@ -335,7 +363,8 @@
     left: 4px !important;
 }
 
-.contractManagerPlus input[type="radio"].with-font + label:before, .contractManagerPlus input[type="checkbox"].with-font + label:before {
+.contractManagerPlus input[type="radio"].with-font+label:before,
+.contractManagerPlus input[type="checkbox"].with-font+label:before {
     font-family: FontAwesome;
     display: inline-block;
     content: "\f096";
@@ -345,17 +374,20 @@
     margin-left: 10px
 }
 
-.contractManagerPlus input[type="radio"].with-font:hover + label:before, .contractManagerPlus input[type="checkbox"].with-font:hover + label:before {
+.contractManagerPlus input[type="radio"].with-font:hover+label:before,
+.contractManagerPlus input[type="checkbox"].with-font:hover+label:before {
     color: #003c71;
     cursor: pointer
 }
 
-.contractManagerPlus input[type="radio"].with-font.disabled + label:before, .contractManagerPlus input[type="checkbox"].with-font.disabled + label:before {
+.contractManagerPlus input[type="radio"].with-font.disabled+label:before,
+.contractManagerPlus input[type="checkbox"].with-font.disabled+label:before {
     color: #cccccc;
     cursor: default
 }
 
-.contractManagerPlus input[type="radio"].with-font:checked + label:before, .contractManagerPlus input[type="checkbox"].with-font:checked + label:before {
+.contractManagerPlus input[type="radio"].with-font:checked+label:before,
+.contractManagerPlus input[type="checkbox"].with-font:checked+label:before {
     content: "\f046";
     font-size: 20px;
     letter-spacing: 5px;
@@ -363,7 +395,8 @@
     margin-left: 10px
 }
 
-.contractManagerPlus input[type="radio"].with-font:focus + label:before, .contractManagerPlus input[type="checkbox"].with-font:focus + label:before {
+.contractManagerPlus input[type="radio"].with-font:focus+label:before,
+.contractManagerPlus input[type="checkbox"].with-font:focus+label:before {
     font-weight: bold;
     color: #c4d600
 }
@@ -403,7 +436,11 @@
     font-weight: 400 !important
 }
 
-.isHybridIdent_Finalizing, .isHybridIdent_Valid, .isHybridIdent_Dirty, .isHybridIdent_0, .isHybridIdent_ {
+.isHybridIdent_Finalizing,
+.isHybridIdent_Valid,
+.isHybridIdent_Dirty,
+.isHybridIdent_0,
+.isHybridIdent_ {
     font-size: 10px;
     font-weight: bold;
     color: white;
@@ -422,15 +459,15 @@
     background-color: #ffffff
 }
 
-    .contractManagerPlus #perfDetails th {
-        padding: 2px 4px;
-        color: #0071c5
-    }
+.contractManagerPlus #perfDetails th {
+    padding: 2px 4px;
+    color: #0071c5
+}
 
-    .contractManagerPlus #perfDetails td {
-        padding: 2px 4px;
-        color: #333333
-    }
+.contractManagerPlus #perfDetails td {
+    padding: 2px 4px;
+    color: #333333
+}
 
 .contractManagerPlus .close-icon {
     color: #e5e5e5db !important;
@@ -438,14 +475,14 @@
     padding-top: 5px !important
 }
 
-    .contractManagerPlus .close-icon .k-icon:hover {
-        color: #ffffff !important
-    }
+.contractManagerPlus .close-icon .k-icon:hover {
+    color: #ffffff !important
+}
 
-    .contractManagerPlus .close-icon:hover {
-        color: #ffffff !important;
-        background: none !important
-    }
+.contractManagerPlus .close-icon:hover {
+    color: #ffffff !important;
+    background: none !important
+}
 
 .contractManagerPlus .k-window-title.arrow-window-title {
     position: relative !important;
@@ -482,9 +519,9 @@
     height: 310px !important
 }
 
-    .dialogPending.k-content p {
-        font-size: 14px !important
-    }
+.dialogPending.k-content p {
+    font-size: 14px !important
+}
 
 .wrn-red.corrrection-text {
     background-color: #fc3741 !important;
@@ -534,9 +571,9 @@
     flex-direction: column
 }
 
-    .all-fixes-label label {
-        margin-bottom: 0
-    }
+.all-fixes-label label {
+    margin-bottom: 0
+}
 
 .temp-btns {
     position: relative;
@@ -580,27 +617,27 @@ button.btn.btn-sm.btn-skyblue.view-complex-two {
 .contractManagerPlus .k-textbox.design:hover {
     background-color: #fff;
     border-color: #f5f5f5;
-    box-shadow: 0 2px 6px rgb(0 0 0 / 20%),0 2px 3px rgb(0 0 0 / 5%)
+    box-shadow: 0 2px 6px rgb(0 0 0 / 20%), 0 2px 3px rgb(0 0 0 / 5%)
 }
 
 .wistyle.k-window {
-    border-color: rgba(0,0,0,.2);
-    box-shadow: 1px 1px 7px 1px rgba(128,128,128,.2);
+    border-color: rgba(0, 0, 0, .2);
+    box-shadow: 1px 1px 7px 1px rgba(128, 128, 128, .2);
     background-color: #fff;
     left: 50px;
     top: 170px;
     z-index: 10007 !important;
 }
 
-    .wistyle.k-window.k-window-maximized {
-        border-color: rgba(0,0,0,.2);
-        box-shadow: 1px 1px 7px 1px rgba(128,128,128,.2);
-        background-color: #fff;
-        width: 1920px !important;
-        top: 40px !important;
-        left: 0;
-        z-index: 10007 !important;
-    }
+.wistyle.k-window.k-window-maximized {
+    border-color: rgba(0, 0, 0, .2);
+    box-shadow: 1px 1px 7px 1px rgba(128, 128, 128, .2);
+    background-color: #fff;
+    width: 1920px !important;
+    top: 40px !important;
+    left: 0;
+    z-index: 10007 !important;
+}
 
 /*.mybotdialog .k-dialog-buttongroup {
     border-color: #dee2e6;
@@ -632,17 +669,17 @@ button.contract-popup-okbtn.k-button {
     background-color: #00aeef !important
 }
 
-    .contractManagerPlus .btn_color_fix.btn-primary:hover {
-        background-color: #3c8dbc !important
-    }
-
-.contractManagerPlus .cancel_color_fix.btn-warning {
-    background-color: rgb(243,156,18) !important
+.contractManagerPlus .btn_color_fix.btn-primary:hover {
+    background-color: #3c8dbc !important
 }
 
-    .contractManagerPlus .cancel_color_fix.btn-warning:hover {
-        background-color: rgb(224,142,11) !important
-    }
+.contractManagerPlus .cancel_color_fix.btn-warning {
+    background-color: rgb(243, 156, 18) !important
+}
+
+.contractManagerPlus .cancel_color_fix.btn-warning:hover {
+    background-color: rgb(224, 142, 11) !important
+}
 
 .contractManagerPlus .loading-design-custom.k-i-loading {
     position: relative;
@@ -681,11 +718,11 @@ kendo-switch.contract-toggle {
     height: 275px !important;
 }
 
-    .contract_manage_correction p {
-        font-size: 14px !important;
-        font-family: 'Intel Clear' !important;
-        font-weight: 400 !important
-    }
+.contract_manage_correction p {
+    font-size: 14px !important;
+    font-family: 'Intel Clear' !important;
+    font-weight: 400 !important
+}
 
 button.btn.btn-sm.btn-skyblue.contract_manager_file {
     margin: 0 20px -30px 20px !important;
@@ -695,11 +732,11 @@ button.btn.btn-sm.btn-skyblue.contract_manager_file {
     font-family: 'Intel Clear' !important;
 }
 
-    button.btn.btn-sm.btn-skyblue.contract_manager_file:hover {
-        background-color: #0071C5 !important;
-        border: 1px solid #0071C5 !important;
-        color: #ffffff !important;
-    }
+button.btn.btn-sm.btn-skyblue.contract_manager_file:hover {
+    background-color: #0071C5 !important;
+    border: 1px solid #0071C5 !important;
+    color: #ffffff !important;
+}
 
 button.btn.btn-sm.btn-grey.contract_correction_cancel {
     margin: -124px 10px -30px 10px !important;
@@ -722,11 +759,11 @@ button.btn.btn-sm.btn-grey.contract_correction_backbtn {
     left: 23px !important;
 }
 
-    button.btn.btn-sm.btn-grey.contract_correction_backbtn:hover {
-        background-color: #00AEEF !important;
-        border: 1px solid #00AEEF !important;
-        color: #ffffff !important;
-    }
+button.btn.btn-sm.btn-grey.contract_correction_backbtn:hover {
+    background-color: #00AEEF !important;
+    border: 1px solid #00AEEF !important;
+    color: #ffffff !important;
+}
 
 button.btn.btn-sm.btn-grey.contract_correction_cancel:hover {
     background-color: #00AEEF !important;
@@ -747,11 +784,11 @@ button.btn.btn-sm.btn-skyblue.contract_done_btn {
     border-radius: 4px !important;
 }
 
-    button.btn.btn-sm.btn-skyblue.contract_done_btn:hover {
-        background-color: #0071C5 !important;
-        border: 1px solid #0071C5 !important;
-        color: #ffffff !important;
-    }
+button.btn.btn-sm.btn-skyblue.contract_done_btn:hover {
+    background-color: #0071C5 !important;
+    border: 1px solid #0071C5 !important;
+    color: #ffffff !important;
+}
 
 .f1.opUiLabel.opUiLableWidth.attachment_text_style {
     font-size: 13px !important;
@@ -782,11 +819,11 @@ button.btn.btn-sm.btn-grey.c2a-back-btnstyle {
     left: 23px !important;
 }
 
-    button.btn.btn-sm.btn-grey.c2a-back-btnstyle:hover {
-        background-color: #00AEEF !important;
-        border: 1px solid #00AEEF !important;
-        color: #ffffff !important;
-    }
+button.btn.btn-sm.btn-grey.c2a-back-btnstyle:hover {
+    background-color: #00AEEF !important;
+    border: 1px solid #00AEEF !important;
+    color: #ffffff !important;
+}
 
 .c2a-popup-style p {
     font-size: 14px !important;
@@ -809,11 +846,11 @@ button.btn.btn-sm.btn-grey.c2a-back-btnstyle {
     height: 30px !important
 }
 
-    .c2a-popup-style button.btn.btn-skyblue:hover {
-        background-color: #0071C5 !important;
-        border: 1px solid #0071C5 !important;
-        color: #ffffff !important;
-    }
+.c2a-popup-style button.btn.btn-skyblue:hover {
+    background-color: #0071C5 !important;
+    border: 1px solid #0071C5 !important;
+    color: #ffffff !important;
+}
 
 .opElementHelpIcon.contract-tooltip-style {
     font-size: 18px !important;
@@ -834,11 +871,11 @@ button.btn.btn-sm.btn-grey.c2a-back-btnstyle {
     height: max-content !important;
 }
 
-    .contract_manage_uploadscreen p {
-        font-size: 14px !important;
-        font-family: 'Intel Clear' !important;
-        font-weight: 400 !important
-    }
+.contract_manage_uploadscreen p {
+    font-size: 14px !important;
+    font-family: 'Intel Clear' !important;
+    font-weight: 400 !important
+}
 
 .contractManagerPlus .contract-correction-upload.k-upload .k-upload-status {
     color: #666666 !important;
@@ -860,34 +897,34 @@ button.btn.btn-sm.btn-grey.c2a-back-btnstyle {
     font-size: 10px
 }
 
-    .contractManagerSpinner .spinner > div {
-        background-color: #0071C5;
-        height: 100%;
-        width: 6px;
-        display: inline-block;
-        -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
-        animation: sk-stretchdelay 1.2s infinite ease-in-out
-    }
+.contractManagerSpinner .spinner>div {
+    background-color: #0071C5;
+    height: 100%;
+    width: 6px;
+    display: inline-block;
+    -webkit-animation: sk-stretchdelay 1.2s infinite ease-in-out;
+    animation: sk-stretchdelay 1.2s infinite ease-in-out
+}
 
-    .contractManagerSpinner .spinner .rect2 {
-        -webkit-animation-delay: -1.1s;
-        animation-delay: -1.1s
-    }
+.contractManagerSpinner .spinner .rect2 {
+    -webkit-animation-delay: -1.1s;
+    animation-delay: -1.1s
+}
 
-    .contractManagerSpinner .spinner .rect3 {
-        -webkit-animation-delay: -1.0s;
-        animation-delay: -1.0s
-    }
+.contractManagerSpinner .spinner .rect3 {
+    -webkit-animation-delay: -1.0s;
+    animation-delay: -1.0s
+}
 
-    .contractManagerSpinner .spinner .rect4 {
-        -webkit-animation-delay: -.9s;
-        animation-delay: -.9s
-    }
+.contractManagerSpinner .spinner .rect4 {
+    -webkit-animation-delay: -.9s;
+    animation-delay: -.9s
+}
 
-    .contractManagerSpinner .spinner .rect5 {
-        -webkit-animation-delay: -.8s;
-        animation-delay: -.8s
-    }
+.contractManagerSpinner .spinner .rect5 {
+    -webkit-animation-delay: -.8s;
+    animation-delay: -.8s
+}
 
 .contractManagerSpinner .ss-icon-lg {
     font-size: 4em;
