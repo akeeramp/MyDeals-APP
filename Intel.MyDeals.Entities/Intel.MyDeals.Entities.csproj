@@ -81,7 +81,6 @@
     <Compile Include="AtrbSaveItem.cs" />
     <Compile Include="AttributeCollection.cs" />
     <Compile Include="BulkPriceUpdate.cs" />
-    <Compile Include="CLFLogItem.cs" />
     <Compile Include="ContractToken.cs" />
     <Compile Include="CostTestDataItem.cs" />
     <Compile Include="CostTestDetails.cs" />

@@ -99,46 +99,5 @@ namespace Intel.MyDeals.Entities.Logging
                 Messages = OpSerializeHelper.ToJsonString(messages, true),
             });
         }
-
-        /// <summary>
-        ///Convert DbPerfLog to CLF
-        /// </summary>
-        /// <param name="messages"></param>
-        /// <returns></returns>
-        public static List<CLFLogItem> ConvertToCLFEntity(IEnumerable<DbLogPerfMessage> messages)
-        {
-             
-            var clfLogItem = new List<CLFLogItem>();
-            var sessionId = Guid.NewGuid().ToString();
-            foreach (var message in messages)
-            {
-                var clf = new CLFLogItem();
-                clf.DBName = "MyDeals";
-                clf.StartTime = message.STRT_DTM;
-                clf.EndTime = message.END_DTM;
-                clf.LogCategory = message.MSG_SRC;
-                clf.LogType = message.ERR_MSG ? "ERROR" : "INFO";
-                clf.ServerMachineName = message.CLNT_MCHN_NM;
-                clf.ServerMachineIP = message.CLNT_MCHN_NM;
-                clf.MachineAccount = "rdmscdms";
-                clf.SessionId = sessionId;
-                clf.StepName = message.MTHD;
-                clf.SchemaName = string.Empty;
-                clf.StepDetail = message.MSG;
-                clf.Custom = new CustomLog
-                {
-                    str_MyDeals_Step = message.STEP,
-                    str_MyDeals_Environment = _env,
-                    int_MyDeals_RecordCount = message.REC_CNT,
-                    str_MyDeals_LogDateTime = DateTime.Now,
-                    int_MyDeals_ThreadId = message.THRD_ID,
-                    str_MyDeals_UserName = message.LGN_NM,
-                };
-                clfLogItem.Add(clf);
-            }
-            return clfLogItem;
-        }
-
-        
     }
 }
