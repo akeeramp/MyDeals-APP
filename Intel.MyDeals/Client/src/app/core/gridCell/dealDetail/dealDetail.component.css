@@ -3,33 +3,33 @@
     height: 100% !important
 }
 
-    ﻿#dealDtl .dealDetail .dates {
-        font-size: 10px;
-        font-family: arial;
-        color: #FFA300
-    }
+#dealDtl .dealDetail .dates {
+    font-size: 10px;
+    font-family: arial;
+    color: #FFA300
+}
 
-    ﻿#dealDtl .dealDetail .id {
-        font-size: 11px;
-        color: #0071C5;
-        margin-right: 6px
-    }
+#dealDtl .dealDetail .id {
+    font-size: 11px;
+    color: #0071C5;
+    margin-right: 6px
+}
 
-    ﻿#dealDtl .dealDetail .dealDetailContainer {
-        background-color: #ffffff;
-        margin-left: 5px;
-        padding: 0 4px
-    }
+#dealDtl .dealDetail .dealDetailContainer {
+    background-color: #ffffff;
+    margin-left: 5px;
+    padding: 0 4px
+}
 
-    ﻿#dealDtl .dealDetail .prd {
-        line-height: 1em;
-        color: #aaa;
-        font-size: 11px;
-        font-style: italic;
-        overflow: hidden;
-        white-space: nowrap;
-        text-overflow: ellipsis
-    }
+#dealDtl .dealDetail .prd {
+    line-height: 1em;
+    color: #aaa;
+    font-size: 11px;
+    font-style: italic;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis
+}
 
 #dealDtl {
     padding-left: 5px

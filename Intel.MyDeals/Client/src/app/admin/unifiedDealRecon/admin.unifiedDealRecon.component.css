@@ -1,38 +1,37 @@
 ﻿@import '../kendo_grid.css';
 
-﻿.admin-deal-grid td.error-product {
+.admin-deal-grid td.error-product {
     color: red !important;
     font-weight: bold !important;
 }
 
-﻿.admin-deal-grid td.success-product {
+.admin-deal-grid td.success-product {
     color: green !important;
     font-weight: bold !important;
 }
 
-﻿.admin-deal-grid td.normal-product {
+.admin-deal-grid td.normal-product {
     color: black !important;
     font-weight: normal !important;
 }
 
-﻿.admin-deal-grid td.error-border {
+.admin-deal-grid td.error-border {
     border: 1px solid red !important;
 }
 
-﻿.admin-deal-grid td.error-cell {
+.admin-deal-grid td.error-cell {
     border: solid red 1px !important;
 }
 
-﻿.admin-deal-grid td.warning-product {
+.admin-deal-grid td.warning-product {
     color: orange !important;
     font-weight: bold !important;
 }
 
-﻿.admin-deal-grid td:not(.error-cell).readonly-cell {
+.admin-deal-grid td:not(.error-cell).readonly-cell {
     background-color: rgb(238, 238, 238) !important;
 }
 
-﻿
 .k-grid.cm-height-table {
     height: calc(100vh - 200px) !important;
     width: calc(100% - -50px) !important;

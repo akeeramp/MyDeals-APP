@@ -10,7 +10,12 @@
 }
 
 .btn-mock-no-click {
-    text-align: left
+    text-align: left;
+    cursor: not-allowed;
+}
+
+.btn-mock-no-click .btn-ttl {
+    color: gray !important;
 }
 
 .btn-mock:hover .btn-ttl {
