@@ -2258,7 +2258,7 @@ namespace Intel.MyDeals.BusinessLogic
             lpCap.Add(pCap);
 
             //var opt = pl.GetCAPForProduct(PdctNbrSid, custId, geoCombined, dealStartDate, dealEndDate);
-            List<ProductCAPYCS2> opt = pl.GetProductCAPYCS2Data(lpCap, "N", "CAP");
+            List<ProductCAPYCS2> opt = pl.GetProductCAPYCS2Data(lpCap, "N", "CAP_PA");
 
             string returnData = JsonConvert.SerializeObject(opt, Formatting.None);
             if (opt.Count < 1) return "ERROR: No Records Returned";
