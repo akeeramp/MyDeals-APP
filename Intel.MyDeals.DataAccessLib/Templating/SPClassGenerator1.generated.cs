@@ -406,13 +406,37 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 				get { return (Boolean)GetParameter("debug"); }
 			}
 		}
+        ///<summary>
+        /// ID: 1223883627
+        /// Modified: 2024-02-29 2:48:27 PM
+        /// Parameters: 1
+        ///</summary>
+        public partial class PR_AGS_PROVISION_USER_TO_PREPROD : SP
+        {
+            public PR_AGS_PROVISION_USER_TO_PREPROD()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_AGS_PROVISION_USER_TO_PREPROD]";
+            }
 
-		///<summary>
-		/// ID: 301244128
-		/// Modified: 7/13/2018 1:53:10 AM
-		/// Parameters: 3
-		///</summary>
-		public partial class PR_AGS_PROVISION_VERTICALS : SP {
+            ///<summary>
+            /// DataType: varchar(50)
+            /// Mode: IN
+            /// Max Length: 50
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 50, false)]
+            public String Idsid
+            {
+                set { SetParmeter("Idsid", value); }
+                get { return (String)GetParameter("Idsid"); }
+            }
+        }
+        ///<summary>
+        /// ID: 301244128
+        /// Modified: 7/13/2018 1:53:10 AM
+        /// Parameters: 3
+        ///</summary>
+        public partial class PR_AGS_PROVISION_VERTICALS : SP {
 			public PR_AGS_PROVISION_VERTICALS() {
 				DatabaseName = "MyDeals";
 				StoredProdedureName = "[dbo].[PR_AGS_PROVISION_VERTICALS]";

@@ -1,6 +1,8 @@
 ﻿@model HandleErrorInfo
+@using Intel.MyDeals.App;
 @{
     Layout = "~/Views/Shared/_LayoutBlank.cshtml";
+    var env = AppLib.GetEnvironment();
 }
 
 <div class="noaccess-header">
@@ -14,6 +16,10 @@
     <div class="row">
         <h1>It appears you do not have access to an app in the My Deals Suite...</h1>
         <h2>To gain access please visit <a href="http://ags.intel.com">AGS</a> and select one of the described roles below.</h2>
+        @if (env.ToUpper() != "PROD")
+        {
+            <h2><span class="access-imp">*</span>To grant yourself pre-production access right now, Please click <a href="@Url.Action("Index","UIAccess")">here</a>.</h2>
+        }
     </div>
 
     <div class="row">
@@ -236,5 +242,10 @@
         font-style: normal;
         color: #606060;
         margin: 3px 10px 5px 20px;
+    }
+
+    .access-imp {
+        color: red;
+        font-size: x-large;
     }
 </style>

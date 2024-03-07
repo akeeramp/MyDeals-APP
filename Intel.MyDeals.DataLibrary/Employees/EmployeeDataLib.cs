@@ -412,5 +412,26 @@ namespace Intel.MyDeals.DataLibrary
             }
         }
 
+        public void getSelfGrantUIAccess(string Idsid)
+        {
+            try
+            {
+                var cmd = new Procs.dbo.PR_AGS_PROVISION_USER_TO_PREPROD()
+                {
+                    Idsid = Idsid
+                };
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+
+                }
+            }
+
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                throw;
+            }
+        }
+
     }
 }

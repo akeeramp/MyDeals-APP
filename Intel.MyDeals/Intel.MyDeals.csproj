@@ -343,6 +343,7 @@
     <Compile Include="Controllers\OthersController.cs" />
     <Compile Include="Controllers\TestCasesController.cs" />
     <Compile Include="Controllers\ToolManual.cs" />
+    <Compile Include="Controllers\UIAccessController.cs" />
     <Compile Include="Global.asax.cs">
       <DependentUpon>Global.asax</DependentUpon>
     </Compile>
@@ -381,9 +382,9 @@
     <Content Include="Client\Images\docs\search-access.png" />
     <Content Include="Client\Images\docs\github-source.png" />
     <Content Include="Client\Images\docs\github-page.png" />
-   <Content Include="Client\Images\docs\db-folder-view.png" />
-   <Content Include="Client\Images\docs\DB-repo.png" />
-   <Content Include="Client\Images\docs\build-terminal.png" />
+    <Content Include="Client\Images\docs\db-folder-view.png" />
+    <Content Include="Client\Images\docs\DB-repo.png" />
+    <Content Include="Client\Images\docs\build-terminal.png" />
     <Content Include="Client\Images\docs\code-clone.png" />
     <Content Include="Client\Images\docs\DB-GitHub.png" />
     <Content Include="Client\Images\docs\Code-db-clone.png" />

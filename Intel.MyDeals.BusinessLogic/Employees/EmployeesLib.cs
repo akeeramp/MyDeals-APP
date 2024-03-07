@@ -31,6 +31,12 @@ namespace Intel.MyDeals.BusinessLogic
             return new OpMsg("Role has been set");
         }
 
+        public OpMsg getSelfGrantUIAccess(string Idsid)
+        {
+            new EmployeeDataLib().getSelfGrantUIAccess(Idsid);
+            return new OpMsg("UI Access execution done");
+        }
+
         public List<ManageUsersInfo> GetManageUserData(int wwid)
         {
             //return new EmployeeDataLib().GetManageUserData(wwid).Where(e => e.ACTV_IND).OrderBy(e => e.LST_NM).ToList()

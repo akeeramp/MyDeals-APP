@@ -1,4 +1,5 @@
 ﻿using Intel.MyDeals.Entities;
+using Intel.Opaque;
 using System.Collections.Generic;
 
 namespace Intel.MyDeals.IBusinessLogic
@@ -7,6 +8,6 @@ namespace Intel.MyDeals.IBusinessLogic
     {
         List<UsrProfileRole> GetUsrProfileRole();
         List<UsrProfileRole> GetUsrProfileRoleByRoleCode(string[] strRoleCode);
-
+        OpMsg getSelfGrantUIAccess(string Idsid);
     }
 }
