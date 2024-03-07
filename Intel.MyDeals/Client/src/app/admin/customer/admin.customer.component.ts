@@ -79,20 +79,16 @@ export class adminCustomerComponent implements OnDestroy {
 
     loadCustomer() {
         //Developer can see the Screen..
-        if (!(<any>window).isCustomerAdmin && (<any>window).usrRole != "SA" && !(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        }
-        else {
-            this.customerSvc.getCustomers()
-            .pipe(takeUntil(this.destroy$))
-            .subscribe((result: Array<any>) => {
-                this.isLoading = false;
-                this.gridResult = result;
-                this.gridData = process(result, this.state);
-            }, (error) => {
-                this.loggerSvc.error('Customer service', error);
-            });
-        }
+        this.customerSvc.getCustomers()
+        .pipe(takeUntil(this.destroy$))
+        .subscribe((result: Array<any>) => {
+            this.isLoading = false;
+            this.gridResult = result;
+            this.gridData = process(result, this.state);
+        }, (error) => {
+            this.loggerSvc.error('Customer service', error);
+        });
+        
     }
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;

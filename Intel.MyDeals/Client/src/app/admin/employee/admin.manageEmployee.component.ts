@@ -288,9 +288,6 @@ export class manageEmployeeComponent implements PendingChangesGuard,OnDestroy {
     }
 
     loadEmployeeData() {
-        if (!(<any>window).isCustomerAdmin && (<any>window).usrRole != 'DA' && (<any>window).usrRole != 'SA' && !(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        }
         this.manageEmployeeSvc.getEmployeeData()
             .pipe(takeUntil(this.destroy$))
             .subscribe((response: Array<any>) => {

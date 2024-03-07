@@ -161,30 +161,25 @@ export class adminRulesComponent implements PendingChangesGuard, OnDestroy{
         sender.closeRow(rowIndex);
     }
     async loadRules() {
-        if ((<any>window).usrRole != 'GA' && (<any>window).usrRole != 'DA' && (<any>window).usrRole != 'SA' && !(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
+        if ((<any>window).usrRole == 'DA' || (<any>window).usrRole == 'SA') {
+            this.toolKitHidden = false;
+        } else {
+            this.toolKitHidden = true;
         }
-        else {
-            if ((<any>window).usrRole == 'DA' || (<any>window).usrRole == 'SA') {
-                this.toolKitHidden = false;
-            } else {
-                this.toolKitHidden = true;
-            }
-            this.isLoading = true;
-            this.gridResult = await this.adminRulesSvc.getPriceRules(0, "GET_RULES").toPromise().catch((error) => {
-                this.loggerSvc.error(
-                    "Unable to get Price Rules.",
-                    error,
-                    error.statusText
-                );
-            }
+        this.isLoading = true;
+        this.gridResult = await this.adminRulesSvc.getPriceRules(0, "GET_RULES").toPromise().catch((error) => {
+            this.loggerSvc.error(
+                "Unable to get Price Rules.",
+                error,
+                error.statusText
             );
-            this.gridResult.forEach((row) => {
-                Object.assign(row, { isElligibleForApproval: this.isElligibleForApproval })
-            })
-            this.gridData = process(this.gridResult, this.state);
-            this.isLoading = false;
         }
+        );
+        this.gridResult.forEach((row) => {
+            Object.assign(row, { isElligibleForApproval: this.isElligibleForApproval })
+        })
+        this.gridData = process(this.gridResult, this.state);
+        this.isLoading = false;
     }
 
     convertToChildGridArray(parentDataItem) {

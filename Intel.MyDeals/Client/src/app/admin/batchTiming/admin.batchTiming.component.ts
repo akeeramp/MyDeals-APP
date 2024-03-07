@@ -75,20 +75,15 @@ export class batchTimingComponent implements OnDestroy {
     }
 
     loadBatchTiming() {
-        if (!(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        }
-        else {
-            this.batchTimingSvc.getBatchJobTiming('BTCH_JOB_DTL')
-                .pipe(takeUntil(this.destroy$))
-                .subscribe((result: Array<any>) => {
-                    this.isLoading = false;
-                    this.gridResult = result;
-                    this.gridData = process(result, this.state);
-                }, (error) => {
-                    this.loggerSvc.error('Batch Timing service', error);
-                });
-        }
+        this.batchTimingSvc.getBatchJobTiming('BTCH_JOB_DTL')
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((result: Array<any>) => {
+                this.isLoading = false;
+                this.gridResult = result;
+                this.gridData = process(result, this.state);
+            }, (error) => {
+                this.loggerSvc.error('Batch Timing service', error);
+            });
     }
 
     dataStateChange(state: DataStateChangeEvent): void {

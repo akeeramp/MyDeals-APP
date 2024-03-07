@@ -124,9 +124,6 @@ export class MeetCompComponent implements PendingChangesGuard, OnDestroy {
 
     loadMeetCompPage() {
         //Developer can see the Screen..
-        if ((<any>window).usrRole != 'SA' && !(<any>window).isDeveloper && (<any>window).usrRole != 'DA' && (<any>window).usrRole != 'Legal' && ((<any>window).usrRole != 'GA' && !(<any>window).isSuper)) {
-            document.location.href = "/Dashboard#/portal";
-        }
 
         if (!((<any>window).usrRole == 'SA' || (<any>window).usrRole == 'DA' || (<any>window).usrRole == 'Legal' || ((<any>window).usrRole == 'GA' && (<any>window).isSuper))) {
             this.isAccess = false;

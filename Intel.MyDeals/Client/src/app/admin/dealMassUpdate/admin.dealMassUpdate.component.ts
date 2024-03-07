@@ -48,9 +48,6 @@ export class DealMassUpdateComponent implements PendingChangesGuard, OnDestroy {
     };
 
     loadAttributes() {
-        if (!(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        }
         //Setting ngModel values to null initially
         this.massUpdateData.sendVistexFlag = false;
         this.massUpdateData.DealIds = null;

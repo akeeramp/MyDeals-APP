@@ -119,29 +119,25 @@ export class adminWorkflowStagesComponent implements PendingChangesGuard, OnDest
     }
 
     loadWorkflowStages() {
-        if (!((<any>window).isDeveloper)) {
-            document.location.href = "/Dashboard#/portal";
-        } else {
-            this.isLoading = true;
-            this.workflowStageSvc.GetWorkFlowStages().pipe(takeUntil(this.destroy$)).subscribe(
-                (result: Array<any>) => {
-                    for (let i = 0; i < result.length; i++) {
-                        result[i]['WFSTG_ORD'] = Number(result[i]['WFSTG_ORD'])
-                    }
-                    this.gridResult = result;
-                    this.gridData = process(this.gridResult, this.state);
-                    this.loadDDLValues();
-                    this.isLoading = false;
-                },
-                function (response) {
-                    this.loggerSvc.error(
-                        "Unable to get Work Flow Stages.",
-                        response,
-                        response.statusText
-                    );
+        this.isLoading = true;
+        this.workflowStageSvc.GetWorkFlowStages().pipe(takeUntil(this.destroy$)).subscribe(
+            (result: Array<any>) => {
+                for (let i = 0; i < result.length; i++) {
+                    result[i]['WFSTG_ORD'] = Number(result[i]['WFSTG_ORD'])
                 }
-            );
-        }
+                this.gridResult = result;
+                this.gridData = process(this.gridResult, this.state);
+                this.loadDDLValues();
+                this.isLoading = false;
+            },
+            function (response) {
+                this.loggerSvc.error(
+                    "Unable to get Work Flow Stages.",
+                    response,
+                    response.statusText
+                );
+            }
+        );
     }
 
     //Master DropDown List populate method

@@ -106,26 +106,21 @@ export class adminProductCategoriesComponent implements PendingChangesGuard, OnD
         this.gridData = process(this.gridResult, this.state);
     }
     loadproductCategoriesData() {
-        if ((<any>window).usrRole != "SA" && !(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        }
-        else {
-            this.productCategorySvc.getCategories()
-                .pipe(takeUntil(this.destroy$))
-                .subscribe((response: Array<any>) => {
-                    //as we get the CHG_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
-                    each(response, item => {
-                        item['CHG_DTM'] = this.datepipe.transform(new Date(item['CHG_DTM']), 'M/d/yyyy');
-                        item['CHG_DTM'] = new Date(item['CHG_DTM']);
-                    })
+        this.productCategorySvc.getCategories()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((response: Array<any>) => {
+                //as we get the CHG_DTM value as string in the response, converting into date data type and assigning it to grid result so that date filter works properly
+                each(response, item => {
+                    item['CHG_DTM'] = this.datepipe.transform(new Date(item['CHG_DTM']), 'M/d/yyyy');
+                    item['CHG_DTM'] = new Date(item['CHG_DTM']);
+                })
 
-                    this.gridResult = response;
-                    this.gridData = process(this.gridResult, this.state);
-                    this.isLoading = false;
-                }, function (response) {
-                    this.loggerSvc.error("Unable to get Products.", response, response.statusText);
-                });
-        }
+                this.gridResult = response;
+                this.gridData = process(this.gridResult, this.state);
+                this.isLoading = false;
+            }, function (response) {
+                this.loggerSvc.error("Unable to get Products.", response, response.statusText);
+            });
     }
     distinctPrimitive(fieldName: string): any {
         return distinct(this.gridResult, fieldName).map(item => item[fieldName]);

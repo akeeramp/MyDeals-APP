@@ -74,19 +74,14 @@ export class admindataQualityComponent implements OnDestroy {
 
     loadDataQualityUseCases() {
         //Developer can see the Screen..
-        if (!(<any>window).isCustomerAdmin && (<any>window).usrRole != "SA" && !(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        }
-        else {
-            this.dataQualitySvc.GetDataQualityUseCases().pipe(takeUntil(this.destroy$))
-                .subscribe((result: Array<any>) => {
-                this.isLoading = false;
-                this.gridResult = result;
-                this.gridData = process(result, this.state);
-            }, (error) => {
-                this.loggerSvc.error('Unable to get Data Quality UseCases', error);
-            });
-        }
+        this.dataQualitySvc.GetDataQualityUseCases().pipe(takeUntil(this.destroy$))
+            .subscribe((result: Array<any>) => {
+            this.isLoading = false;
+            this.gridResult = result;
+            this.gridData = process(result, this.state);
+        }, (error) => {
+            this.loggerSvc.error('Unable to get Data Quality UseCases', error);
+        });   
     }
 
     //Run DQ

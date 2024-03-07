@@ -91,24 +91,20 @@ export class adminDealTypesComponent implements OnDestroy {
     }
 
     loadDealTypes() {
-        if (!(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        } else {
-            this.dealTypesSvc.getDealTypes().pipe(takeUntil(this.destroy$)).subscribe(
-                (result: Array<any>) => {
-                    this.gridResult = result;
-                    this.gridData = process(this.gridResult, this.state);
-                    this.isLoading = false;
-                },
-                function (response) {
-                    this.loggerSvc.error(
-                        "Unable to get Deal Types.",
-                        response,
-                        response.statusText
-                    );
-                }
-            );
-        }
+        this.dealTypesSvc.getDealTypes().pipe(takeUntil(this.destroy$)).subscribe(
+            (result: Array<any>) => {
+                this.gridResult = result;
+                this.gridData = process(this.gridResult, this.state);
+                this.isLoading = false;
+            },
+            function (response) {
+                this.loggerSvc.error(
+                    "Unable to get Deal Types.",
+                    response,
+                    response.statusText
+                );
+            }
+        );
     }
 
     dataStateChange(state: DataStateChangeEvent): void {

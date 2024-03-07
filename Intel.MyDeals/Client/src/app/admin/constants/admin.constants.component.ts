@@ -110,28 +110,23 @@ export class ConstantsComponent implements PendingChangesGuard, OnDestroy {
     }
 
     loadConstants() {
-        if (!(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        }
-        else {
-            this.constantsSvc.getConstants()
-                .pipe(takeUntil(this.destroy$))
-                .subscribe(
-                    (result: Array<any>) => {
-                        this.gridResult = result;
-                        this.constData = result;
-                        this.gridData = process(this.gridResult, this.state);
-                        this.isLoading = false;
-                    },
-                    function (response) {
-                        this.loggerSvc.error(
-                            "Unable to get Constants Data.",
-                            response,
-                            response.statusText
-                        );
-                    }
-                )
-        }
+        this.constantsSvc.getConstants()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(
+                (result: Array<any>) => {
+                    this.gridResult = result;
+                    this.constData = result;
+                    this.gridData = process(this.gridResult, this.state);
+                    this.isLoading = false;
+                },
+                function (response) {
+                    this.loggerSvc.error(
+                        "Unable to get Constants Data.",
+                        response,
+                        response.statusText
+                    );
+                }
+            ) 
     }
 
     updateBannerMessage(constant) {

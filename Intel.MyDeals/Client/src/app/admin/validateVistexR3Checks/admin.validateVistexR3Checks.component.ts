@@ -27,7 +27,7 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
     isDirty = false;
-    private accessAllowed = true;
+    
     private isLoading = true;
     private Results = [];
     private GoodToSendResults = [];
@@ -105,15 +105,9 @@ export class ValidateVistexR3ChecksComponent implements OnInit,PendingChangesGua
     }
 
     ngOnInit(): void {
-        if (!((<any>window).isDeveloper)) {
-            // Prevent invalid user access
-            this.accessAllowed = false;
-            document.location.href = "/Dashboard#/portal";
-            return;
-        }
-        else {
+        
             this.loadValidateVistexPage();
-        }
+        
     }
 
     refreshGrid() {

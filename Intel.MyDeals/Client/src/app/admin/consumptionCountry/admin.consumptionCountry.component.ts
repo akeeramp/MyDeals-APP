@@ -94,27 +94,24 @@ export class adminConsumptionCountryComponent implements OnDestroy {
     }
 
     loadConsumptionCountry() {
-        if (!((<any>window).usrRole === 'SA' || (<any>window).isDeveloper || (<any>window).isCustomerAdmin)) {
-            document.location.href = "/Dashboard#/portal";
-        } else {
-            this.consumptionCountrySvc.getConsumptionCountry()
-                .pipe(takeUntil(this.destroy$))
-                .subscribe(
-                (result: Array<any>) => {
-                    this.gridResult = result;
-                    this.gridData = process(this.gridResult, this.state);
-                    this.InitiateDropDowns(this.formGroup);
-                    this.isLoading = false;
-                },
-                function (response) {
-                    this.loggerSvc.error(
-                        "Unable to get Consumption Countries/Regions.",
-                        response,
-                        response.statusText
-                    );
-                }
-            );
-        }
+        this.consumptionCountrySvc.getConsumptionCountry()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(
+            (result: Array<any>) => {
+                this.gridResult = result;
+                this.gridData = process(this.gridResult, this.state);
+                this.InitiateDropDowns(this.formGroup);
+                this.isLoading = false;
+            },
+            function (response) {
+                this.loggerSvc.error(
+                    "Unable to get Consumption Countries/Regions.",
+                    response,
+                    response.statusText
+                );
+            }
+        );
+        
     }
 
     //get Dropdowns Data

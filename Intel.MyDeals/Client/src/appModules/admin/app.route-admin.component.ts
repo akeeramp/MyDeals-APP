@@ -91,7 +91,7 @@ export const routesAdmin: Routes = [
     { path: 'meetComp', component: MeetCompComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'testTenders', component: adminTestTendersComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] ,canDeactivate:[PendingChangesGuard]},
     { path: 'supportScript', component: adminsupportScriptComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] ,canDeactivate:[PendingChangesGuard]},
-    { path: 'legalException', component: adminlegalExceptionComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canDeactivate:[PendingChangesGuard]},
+    { path: 'legalException', component: adminlegalExceptionComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard], canDeactivate:[PendingChangesGuard]},
     { path: 'bulkPricingUpdate', component: BulkPricingUpdatesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] ,canDeactivate:[PendingChangesGuard]},
     { path: 'MyDealsSupport', component: adminMydealsSupportComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'vistexProfiseeApi', component: adminVistexProfiseeApiComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver } },

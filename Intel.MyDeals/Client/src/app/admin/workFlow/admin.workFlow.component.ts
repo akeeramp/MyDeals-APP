@@ -121,9 +121,6 @@ export class adminWorkFlowComponent implements PendingChangesGuard, OnDestroy{
     }
 
     loadWorkflow() {
-        if (!((<any>window).isDeveloper)) {
-            document.location.href = "/Dashboard#/portal";
-        } else {
             this.isLoading = true;
             this.workflowSvc.GetWorkFlowItems().pipe(takeUntil(this.destroy$)).subscribe(
                 (result: Array<any>) => {
@@ -140,7 +137,6 @@ export class adminWorkFlowComponent implements PendingChangesGuard, OnDestroy{
                     );
                 }
             );
-        }
     }
 
     loadDDLValues() {

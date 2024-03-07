@@ -33,32 +33,27 @@ export class QuoteLetterComponent implements PendingChangesGuard, OnDestroy {
 
     loadAdminTemplate() {
         this.isLoading = 'false';
-        if ((<any>window).usrRole != "Legal" && (<any>window).usrRole != "SA" && !(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        }
-        else {
-            this.quoteLetterSvc.adminGetTemplates()
-                .pipe(takeUntil(this.destroy$))
-                .subscribe(response => {
-                    this.menuItems = [];
-                    for (let d = 0; d < response.length; d++) {
-                        if (response[d]["OBJ_SET_TYPE_CD"] !== "KIT" || response[d]["PROGRAM_PAYMENT"] !== "FRONTEND") {
-                            this.menuItems.push(response[d]);
-                        }
+        this.quoteLetterSvc.adminGetTemplates()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(response => {
+                this.menuItems = [];
+                for (let d = 0; d < response.length; d++) {
+                    if (response[d]["OBJ_SET_TYPE_CD"] !== "KIT" || response[d]["PROGRAM_PAYMENT"] !== "FRONTEND") {
+                        this.menuItems.push(response[d]);
                     }
-
-                    // For all menu items, set MenuText by concat OBJ_SET_TYPE_CD and PROGRAM_PAYMEN .
-                    for (let i = 0; i < this.menuItems.length; i++) {
-                        this.menuItems[i].MenuText = this.menuItems[i].OBJ_SET_TYPE_CD + "-" + this.menuItems[i].PROGRAM_PAYMENT;
-                        this.menuItemsTemplate.push(this.menuItems[i].MenuText);
-                    }
-                    this.isDropdownsLoaded = true;
-
-                }, function (response) {
-                    this.loggerSvc.error("Unable to get template data.", response, response.statusText);
-                });
+                }
+        
+                // For all menu items, set MenuText by concat OBJ_SET_TYPE_CD and PROGRAM_PAYMEN .
+                for (let i = 0; i < this.menuItems.length; i++) {
+                    this.menuItems[i].MenuText = this.menuItems[i].OBJ_SET_TYPE_CD + "-" + this.menuItems[i].PROGRAM_PAYMENT;
+                    this.menuItemsTemplate.push(this.menuItems[i].MenuText);
+                }
+                this.isDropdownsLoaded = true;
+        
+            }, function (response) {
+                this.loggerSvc.error("Unable to get template data.", response, response.statusText);
+            });
             
-        }
     }
 
     onTemplateChange(selectedItem) {

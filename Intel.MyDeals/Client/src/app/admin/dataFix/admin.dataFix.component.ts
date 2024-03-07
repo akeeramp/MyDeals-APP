@@ -93,20 +93,16 @@ export class adminDataFixComponent implements PendingChangesGuard, OnDestroy {
     }
 
     loadDataFix() {
-        if (!((<any>window).isDeveloper)) {
-            document.location.href = "/Dashboard#/portal";
-        } else {
-            this.isLoading = true;
-            this.dataFixSvc.getDataFixes().pipe(takeUntil(this.destroy$))
-                .subscribe( (result: Array<any>) => {
-                    this.gridResult = result;
-                    this.gridData = process(this.gridResult, this.state);
-                    this.isLoading = false;
-            }, error=> {
-                    this.loggerSvc.error( "Unable to get Data Fixes.",error );
-                }
-            );
-        }
+        this.isLoading = true;
+        this.dataFixSvc.getDataFixes().pipe(takeUntil(this.destroy$))
+            .subscribe( (result: Array<any>) => {
+                this.gridResult = result;
+                this.gridData = process(this.gridResult, this.state);
+                this.isLoading = false;
+        }, error=> {
+                this.loggerSvc.error( "Unable to get Data Fixes.",error );
+            }
+        );
     }
 
     addNewFix() {

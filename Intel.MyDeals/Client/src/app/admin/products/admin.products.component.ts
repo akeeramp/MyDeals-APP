@@ -63,17 +63,13 @@ export class adminProductsComponent implements OnDestroy {
 
     loadProducts() {
         //Developer can see the Screen..
-        if (!(<any>window).isCustomerAdmin && (<any>window).usrRole != "SA" && !(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        } else {
-            this.productsSvc.getProducts().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
-                this.isLoading = false;
-                this.gridResult = result;
-                this.gridData = process(result, this.state);
-            }, (error) => {
-                this.loggerSvc.error('Unable to get Products', error);
-            });
-        }
+        this.productsSvc.getProducts().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
+            this.isLoading = false;
+            this.gridResult = result;
+            this.gridData = process(result, this.state);
+        }, (error) => {
+            this.loggerSvc.error('Unable to get Products', error);
+        });
     }
 
     dataStateChange(state: DataStateChangeEvent): void {

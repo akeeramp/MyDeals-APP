@@ -145,19 +145,14 @@ export class adminFunFactComponent implements PendingChangesGuard, OnDestroy {
     }
     
     loadFunFacts() {
-        if (!(<any>window).isCustomerAdmin && (<any>window).usrRole != "SA" && !(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        }
-        else {
-            this.funFactSvc.getFunFactItems().pipe(takeUntil(this.destroy$))
-                .subscribe((result: Array<any>) => {
-                this.isLoading = false;
-                this.gridResult = result;
-                this.gridData = process(result, this.state);
-            }, (error) => {
-                    this.loggerSvc.error('Unable to get Fun Fact.', error);
-            });
-        }
+        this.funFactSvc.getFunFactItems().pipe(takeUntil(this.destroy$))
+            .subscribe((result: Array<any>) => {
+            this.isLoading = false;
+            this.gridResult = result;
+            this.gridData = process(result, this.state);
+        }, (error) => {
+                this.loggerSvc.error('Unable to get Fun Fact.', error);
+        });
     }
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;

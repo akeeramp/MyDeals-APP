@@ -716,9 +716,6 @@ export class adminsecurityEngineComponent implements PendingChangesGuard, OnDest
     }
 
     ngOnInit() {
-        if (!(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        }
         this.isASTab = true;
         this.getSecurityDropdownData();
 

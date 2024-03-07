@@ -108,21 +108,13 @@ export class adminVistexComponent implements PendingChangesGuard,OnDestroy{
     }
 
 
-    loadVistexTestApi() {
-        if (!(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        }
-    }
-
     valuechange(){
         this.isDirty=true;
     }
     canDeactivate(): Observable<boolean> | boolean {
         return !this.isDirty;
     }
-    ngOnInit() {
-        this.loadVistexTestApi();
-    }
+
     //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
     ngOnDestroy() {
         this.destroy$.next();

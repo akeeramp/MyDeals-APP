@@ -38,11 +38,7 @@ export class adminPushDealsToVistexComponent implements PendingChangesGuard, OnD
         // Initial filter descriptor
     };
 
-    securityCheck() {
-        if (!(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        } 
-    }
+    
 
     //get method for easy access to the form fields.
     get formData() { return this.pushDealsToVistexForm.controls; }
@@ -87,7 +83,7 @@ export class adminPushDealsToVistexComponent implements PendingChangesGuard, OnD
         return !this.isDirty;
     }
     ngOnInit() {
-        this.securityCheck();
+        
         //this is useful when validateVistexR3Checks screen redirects to this 'Push Deals to Vistex' page
         const dealIdString = this.bindPathQueryParam();
 

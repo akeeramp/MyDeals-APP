@@ -197,32 +197,24 @@ export class adminCustomerVendorsComponent implements PendingChangesGuard, OnDes
     }
 
     loadCustomerVendors() {
-        if (
-            !(<any>window).isCustomerAdmin &&
-            (<any>window).usrRole != "SA" &&
-            (<any>window).usrRole != "RA" &&
-            !(<any>window).isDeveloper
-        ) {
-            document.location.href = "/Dashboard#/portal";
-        } else {
-            this.customerVendSvc.getCustomerVendors().pipe(takeUntil(this.destroy$)).subscribe(
-                (result: Array<any>) => {
-                    this.gridResult = result;
-                    this.distinctCountry = distinct(this.gridResult, "CTRY_CD").map(
-                        item => item.CTRY_CD
-                    );
-                    this.gridData = process(this.gridResult, this.state);
-                    this.isLoading = (this.vendorDetails && this.custData) ? false : true;
-                },
-                function (response) {
-                    this.loggerSvc.error(
-                        "Unable to get Customer Vendors.",
-                        response,
-                        response.statusText
-                    );
-                }
-            );
-        }
+        this.customerVendSvc.getCustomerVendors().pipe(takeUntil(this.destroy$)).subscribe(
+            (result: Array<any>) => {
+                this.gridResult = result;
+                this.distinctCountry = distinct(this.gridResult, "CTRY_CD").map(
+                    item => item.CTRY_CD
+                );
+                this.gridData = process(this.gridResult, this.state);
+                this.isLoading = (this.vendorDetails && this.custData) ? false : true;
+            },
+            function (response) {
+                this.loggerSvc.error(
+                    "Unable to get Customer Vendors.",
+                    response,
+                    response.statusText
+                );
+            }
+        );
+        
     }
 
     IsValidCombination(model: any, isNew: boolean) {

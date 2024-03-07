@@ -115,25 +115,20 @@ export class iCostProductsComponent implements PendingChangesGuard, OnDestroy{
     }
 
     loadLegalClassification() {
-        if ((<any>window).usrRole != 'Legal' && (<any>window).usrRole != 'SA' && !(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        }
-        else {
-            this.isLoading = true;
-            this.iCostProductSvc.getProductCostTestRules()
-                .pipe(takeUntil(this.destroy$))
-                .subscribe((result: Array<any>) => {
-                    this.gridResult = result;
-                    this.gridData = process(this.gridResult, this.state);
-                    this.isLoading = false;
-                },
-                    function (error) {
-                        this.loggerSvc.error(
-                            "iCostProductsComponent::getProductCostTestRules::",
-                            error
-                        );
-                    });
-        }
+        this.isLoading = true;
+        this.iCostProductSvc.getProductCostTestRules()
+            .pipe(takeUntil(this.destroy$))
+            .subscribe((result: Array<any>) => {
+                this.gridResult = result;
+                this.gridData = process(this.gridResult, this.state);
+                this.isLoading = false;
+            },
+                function (error) {
+                    this.loggerSvc.error(
+                        "iCostProductsComponent::getProductCostTestRules::",
+                        error
+                    );
+                });
     }
 
     savePCTRules() {

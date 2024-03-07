@@ -176,28 +176,24 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit {
         this.COMP_ATRB_SIDS.push(3456, 3457, 3458, 3464, 3454); // Removed [] from this since it was making push value a single value of array
         this.selectedInheritanceGroup = "";
         //let checkRestrictionFlag = false;
-        if (!(<any>window).isCustomerAdmin && (<any>window).usrRole != "SA" && !(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
+        let result: any = await this.dropdownService.getBasicDropdowns(true).toPromise().catch((error) => {
+            this.loggerSvc.error("Unable to get UI Dropdown Values.", error, error.statusText);
+        })
+        this.setNonCorpInheritableValues(result);
+        result = result.filter(ob => ob.ATRB_CD !== "SETTLEMENT_PARTNER");
+        //checkRestrictionFlag = this.checkRestrictions(result);
+        //this to restrict SA users to have only restricted values
+        this.gridResult = result;
+        if (this.checkRestrictionFlag) {
+            this.gridData = process(this.gridResult, this.state);
+            this.isLoading = false;
         } else {
-            let result: any = await this.dropdownService.getBasicDropdowns(true).toPromise().catch((error) => {
-                this.loggerSvc.error("Unable to get UI Dropdown Values.", error, error.statusText);
+            this.gridResult = filter(this.gridResult, (item) => {
+                let id = (item.dropdownID === undefined) ? item.ATRB_SID : item.dropdownID;
+                if (this.restrictedGroupList.includes(id)) return item
             })
-            this.setNonCorpInheritableValues(result);
-            result = result.filter(ob => ob.ATRB_CD !== "SETTLEMENT_PARTNER");
-            //checkRestrictionFlag = this.checkRestrictions(result);
-            //this to restrict SA users to have only restricted values
-            this.gridResult = result;
-            if (this.checkRestrictionFlag) {
-                this.gridData = process(this.gridResult, this.state);
-                this.isLoading = false;
-            } else {
-                this.gridResult = filter(this.gridResult, (item) => {
-                    let id = (item.dropdownID === undefined) ? item.ATRB_SID : item.dropdownID;
-                    if (this.restrictedGroupList.includes(id)) return item
-                })
-                this.gridData = process(this.gridResult, this.state);
-                this.isLoading = false;
-            }
+            this.gridData = process(this.gridResult, this.state);
+            this.isLoading = false;
         }
     }
 

@@ -79,10 +79,6 @@ export class adminVistexIntegrationLogComponent implements OnInit, PendingChange
     private rowIndexValue: number = 0;
 
     ngOnInit(){
-        if (!(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        }
-
         this.dsaService.getRequestTypeList().pipe(takeUntil(this.destroy$)).subscribe(response => {
             this.requestTypeList = response;
         },function (err) {

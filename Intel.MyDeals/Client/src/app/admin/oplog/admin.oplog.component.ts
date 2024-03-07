@@ -37,23 +37,17 @@ export class OpLogComponent implements OnDestroy {
 
     getOpaqueLog(startDate, endDate) {
         this.isLoading = 'false';
-        if (!(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
+        const logDate = {
+            'startDate': startDate,
+            'endDate': endDate
         }
-        else {
-            
-            const logDate = {
-                'startDate': startDate,
-                'endDate': endDate
-            }
-            this.opLogSvc.getOpaqueLog(logDate)
-                .pipe(takeUntil(this.destroy$))
-                .subscribe(response => {
-                    this.opLogData = response;
-                }, err => {
-                    this.loggerSvc.error("Error in getting Opaque Log", err);
-                });
-        }
+        this.opLogSvc.getOpaqueLog(logDate)
+            .pipe(takeUntil(this.destroy$))
+            .subscribe(response => {
+                this.opLogData = response;
+            }, err => {
+                this.loggerSvc.error("Error in getting Opaque Log", err);
+            });
     }
 
     getDetailsOpaqueLog (data) {

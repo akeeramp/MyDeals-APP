@@ -63,18 +63,13 @@ export class geoComponent implements OnDestroy {
 
     loadGeo() {
         //Developer can see the Screen..
-        if (!(<any>window).isCustomerAdmin && (<any>window).usrRole != "SA" && !(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        }
-        else {
-            this.geoSvc.getGeos().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
-                this.isLoading = false;
-                this.gridResult = result;
-                this.gridData = process(result, this.state);
-            }, (error) => {
-                this.loggerSvc.error('Geo service', error);
-            });
-        }
+        this.geoSvc.getGeos().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
+            this.isLoading = false;
+            this.gridResult = result;
+            this.gridData = process(result, this.state);
+        }, (error) => {
+            this.loggerSvc.error('Geo service', error);
+        });
     }
 
     public onExcelExport(e: ExcelExportEvent): void {

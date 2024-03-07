@@ -93,9 +93,6 @@ export class adminlegalExceptionComponent implements PendingChangesGuard, OnDest
                 private momentService: MomentService) { }
 
     loadlegalException() {
-         if ((<any>window).usrRole != 'SA' && !(<any>window).isDeveloper &&  (<any>window).usrRole != 'Legal' ) {
-            document.location.href = "/Dashboard#/portal";
-        }
         this.editAccess = ((<any>window).usrRole == "Legal" || (<any>window).isDeveloper) ? true : false;
          
         this.adminlegalExceptionSrv.getLegalExceptions().pipe(takeUntil(this.destroy$))

@@ -105,19 +105,14 @@ export class adminPrimeCustomersComponent implements PendingChangesGuard, OnDest
             this.editAccess = false;
         }
         //Developer can see the Screen..
-        if (!(<any>window).isCustomerAdmin && (<any>window).usrRole != "SA" && (<any>window).usrRole != "RA" && !(<any>window).isDeveloper) {
-            document.location.href = "/Dashboard#/portal";
-        }
-        else {
-            this.primeCustSvc.GetPrimeCustomerDetails().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
-                this.isLoading = false;
-                this.gridResult = result;
-                this.gridData = process(result, this.state);
-                this.getPrimeCustomersDataSource();
-            }, (error) => {
-                this.loggerSvc.error('Prime Customer service', error);
-            });
-        }
+        this.primeCustSvc.GetPrimeCustomerDetails().pipe(takeUntil(this.destroy$)).subscribe((result: Array<any>) => {
+            this.isLoading = false;
+            this.gridResult = result;
+            this.gridData = process(result, this.state);
+            this.getPrimeCustomersDataSource();
+        }, (error) => {
+            this.loggerSvc.error('Prime Customer service', error);
+        });
     }
     dataStateChange(state: DataStateChangeEvent): void {
         this.state = state;
