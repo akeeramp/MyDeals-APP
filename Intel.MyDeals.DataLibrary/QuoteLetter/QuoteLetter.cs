@@ -1,6 +1,7 @@
 using System;
 using System.Globalization;
 using System.Linq;
+using System.Net.Security;
 using System.Xml.Linq;
 using Intel.MyDeals.Entities;
 
@@ -119,26 +120,27 @@ namespace Intel.MyDeals.DataLibrary
             //xml = "<PARAMETERS><Customer>Hyve Solutions Corp</Customer><EndCustomer></EndCustomer><StartDate>01/01/2021</StartDate><ConsStartDt>12/12/8888</ConsStartDt><ConsEndDt>12/12/9999</ConsEndDt><EndDate>12/31/2021</EndDate><OnAddDate>01/01/2021</OnAddDate><Quantity>999999999</Quantity><ProgramPayment>FRONTEND</ProgramPayment><RebateType>MCP</RebateType><PProdDesc>CD8067303694600</PProdDesc><PProdCat>SvrWS</PProdCat><PECAPPrice>7628</PECAPPrice><KitCheck>N</KitCheck><QltrProject>BlahA</QltrProject><Terms>This Agreement constitutes the entire understanding between Intel and Customer with regard to the topics covered in this Agreement and supersedes all prior agreements, communications, representation and discussions between Intel and Customer (whether written or oral).  Any contrary or conflicting term is rejected.  Any modification or amendment to this Agreement must be in writing and accepted through Intels Click-to-Accept web interface or signed by authorized representatives of both Intel and Customer</Terms><WfStgCd>Pending</WfStgCd><PsWfStgCd>Pending</PsWfStgCd><PayoutBasedOn>Billings</PayoutBasedOn></PARAMETERS>";
             source = XDocument.Parse(xml);
 
-            MainContent.Value = content0.Replace("CUSTOMERNAMEGOESHERE", EscapeSpecialChars(GetValue("Customer")));
-            MainContent1.Value = content1;
+            UpperLegalContent.Value = content0.Replace("CUSTOMERNAMEGOESHERE", EscapeSpecialChars(GetValue("Customer")));
+            LowerLegalContent.Value = content1;
+            NumOfProducts = 10;
 
-            htmlTextBox4.Value = "Deal #" + dealId;
+            DealSectionHeader.Value = "Deal #" + dealId;
             txtEndCustomer.Value = EscapeSpecialChars(GetValue("EndCustomer"));
             txtECAPType.Value = GetValue("RebateType");
             txtQuantity.Value = GetValue("Quantity"); 
             txtProgramPayment.Value = GetValue("ProgramPayment");
-            txtBasedOn.Value = GetValue("PayoutBasedOn");
+            txtPayoutBasedOn.Value = GetValue("PayoutBasedOn");
 
             string stage = GetValue("WfStgCd");
             string psStage = GetValue("PsWfStgCd");
             string tracker = GetValue("PTracker");
-            txtStatus.Value = stage;
-            //txtStatus.Value = tracker == "" ? WorkFlowStages.Offer : WorkFlowStages.Active;
-            //txtStatus.Value = stage == "Draft" ? psStage : stage;
+            txtDealStatus.Value = stage;
+            //txtDealStatus.Value = tracker == "" ? WorkFlowStages.Offer : WorkFlowStages.Active;
+            //txtDealStatus.Value = stage == "Draft" ? psStage : stage;
 
             txtK1Ecap.Value = GetMoneyValue("KECAPPrice");
 
-            if (txtBasedOn.Value == "Consumption") // Remove this block and expise else after Masound's release
+            if (txtPayoutBasedOn.Value == "Consumption") // Remove this block and expise else after Masound's release
             {
                 txtStartDate.Value = GetValue("ConsStartDt");
                 txtEndDate.Value = GetValue("ConsEndDt");
@@ -157,55 +159,77 @@ namespace Intel.MyDeals.DataLibrary
 
             txtP1Ecap.Value = GetMoneyValue("PECAPPrice");
             txtP1ProdName.Value = GetValue("PProdDesc");
+            txtP1FullName.Value = GetValue("PProdEPM");
+            if (txtP1FullName.Value == "") txtP1FullName.Value = "No EPM Product Description Available";
             txtP1ProdSeg.Value = GetValue("PProdCat");
             txtQtyP1.Value = GetValue("PQty");
 
             txtS1Ecap.Value = GetMoneyValue("S1ECAPPrice");
             txtS1ProdName.Value = GetValue("S1ProdDesc");
+            txtS1FullName.Value = GetValue("S1ProdEPM");
+            if (txtS1FullName.Value == "") txtS1FullName.Value = "No EPM Product Description Available";
             txtS1ProdSeg.Value = GetValue("S1ProdCat");
             txtQtyS1.Value = GetValue("S1Qty");
 
             txtS2Ecap.Value = GetMoneyValue("S2ECAPPrice");
             txtS2ProdName.Value = GetValue("S2ProdDesc");
+            txtS2FullName.Value = GetValue("S2ProdEPM");
+            if (txtS2FullName.Value == "") txtS2FullName.Value = "No EPM Product Description Available";
             txtS2ProdSeg.Value = GetValue("S2ProdCat");
             txtQtyS2.Value = GetValue("S2Qty");
 
             txtS3Ecap.Value = GetMoneyValue("S3ECAPPrice");
             txtS3ProdName.Value = GetValue("S3ProdDesc");
+            txtS3FullName.Value = GetValue("S3ProdEPM");
+            if (txtS3FullName.Value == "") txtS3FullName.Value = "No EPM Product Description Available";
             txtS3ProdSeg.Value = GetValue("S3ProdCat");
             txtQtyS3.Value = GetValue("S3Qty");
 
             txtS4Ecap.Value = GetMoneyValue("S4ECAPPrice");
             txtS4ProdName.Value = GetValue("S4ProdDesc");
+            txtS4FullName.Value = GetValue("S4ProdEPM");
+            if (txtS4FullName.Value == "") txtS4FullName.Value = "No EPM Product Description Available";
             txtS4ProdSeg.Value = GetValue("S4ProdCat");
             txtQtyS4.Value = GetValue("S4Qty");
 
             txtS5Ecap.Value = GetMoneyValue("S5ECAPPrice");
             txtS5ProdName.Value = GetValue("S5ProdDesc");
+            txtS5FullName.Value = GetValue("S5ProdEPM");
+            if (txtS5FullName.Value == "") txtS5FullName.Value = "No EPM Product Description Available";
             txtS5ProdSeg.Value = GetValue("S5ProdCat");
             txtQtyS5.Value = GetValue("S5Qty");
 
             txtS6Ecap.Value = GetMoneyValue("S6ECAPPrice");
             txtS6ProdName.Value = GetValue("S6ProdDesc");
+            txtS6FullName.Value = GetValue("S6ProdEPM");
+            if (txtS6FullName.Value == "") txtS6FullName.Value = "No EPM Product Description Available";
             txtS6ProdSeg.Value = GetValue("S6ProdCat");
             txtQtyS6.Value = GetValue("S6Qty");
 
             txtS7Ecap.Value = GetMoneyValue("S7ECAPPrice");
             txtS7ProdName.Value = GetValue("S7ProdDesc");
+            txtS7FullName.Value = GetValue("S7ProdEPM");
+            if (txtS7FullName.Value == "") txtS7FullName.Value = "No EPM Product Description Available";
             txtS7ProdSeg.Value = GetValue("S7ProdCat");
             txtQtyS7.Value = GetValue("S7Qty");
 
             txtS8Ecap.Value = GetMoneyValue("S8ECAPPrice");
             txtS8ProdName.Value = GetValue("S8ProdDesc");
+            txtS8FullName.Value = GetValue("S8ProdEPM");
+            if (txtS8FullName.Value == "") txtS8FullName.Value = "No EPM Product Description Available";
             txtS8ProdSeg.Value = GetValue("S8ProdCat");
             txtQtyS8.Value = GetValue("S8Qty");
 
             txtS9Ecap.Value = GetMoneyValue("S9ECAPPrice");
             txtS9ProdName.Value = GetValue("S9ProdDesc");
+            txtS9FullName.Value = GetValue("S9ProdEPM");
+            if (txtS9FullName.Value == "") txtS9FullName.Value = "No EPM Product Description Available";
             txtS9ProdSeg.Value = GetValue("S9ProdCat");
             txtQtyS9.Value = GetValue("S9Qty");
 
             ttlKitName.Value = "Kit Name: " + GetValue("KitName");
+
+            txtGroupType.Value = GetValue("GroupType");
 
             ////calculate kit discount - Formula: (Sum of Component ECAPs * respective QTYs) - Kit ECAP = Kit Rebate Bundle Discount
             //txtK1DiscEcap.Value = "$0";
@@ -254,15 +278,30 @@ namespace Intel.MyDeals.DataLibrary
                 txtTerms.Visible = false;
             }
 
+            // Hide the block if this isn't a consumption deal
+            if (txtPayoutBasedOn.Value != "Consumption")
+            {
+                //lblConsumptionStartDate.Visible = false;
+                //txtConsumptionStartDate.Visible = false;
+                //lblConsumptionEndDate.Visible = false;
+                //txtConsumptionEndDate.Visible = false;
+                //lblConsEmpty.Visible = false;
+                //txtConsEmpty.Visible = false;
+                txtConsumptionStartDate.Value = "";
+                txtConsumptionEndDate.Value = "";
+            }
+
             if (string.IsNullOrEmpty(txtP1ProdName.Value))
             {
                 lblP1.Visible = false;
                 txtP1Ecap.Visible = false;
                 txtP1ProdName.Visible = false;
+                txtP1FullName.Visible = false;
                 txtP1ProdSeg.Visible = false;
                 txtQtyP1.Visible = false;
                 lblK1.Visible = false;
                 txtK1Ecap.Visible = false;
+                NumOfProducts--;
             }
 
             if (string.IsNullOrEmpty(txtS1ProdName.Value))
@@ -270,22 +309,12 @@ namespace Intel.MyDeals.DataLibrary
                 lblS1.Visible = false;
                 txtS1Ecap.Visible = false;
                 txtS1ProdName.Visible = false;
+                txtS1FullName.Visible = false;
                 txtS1ProdSeg.Visible = false;
                 txtQtyS1.Visible = false;
                 blankKitPriceS1.Visible = false;
                 blankMaxQtyS1.Visible = false;
-            }
-
-            // Hide the block if this isn't a consumption deal
-            if (txtBasedOn.Value != "Consumption")
-            {
-                ttlConsumption.Visible = false;
-                lblConsumptionStartDate.Visible = false;
-                txtConsumptionStartDate.Visible = false;
-                lblConsumptionEndDate.Visible = false;
-                txtConsumptionEndDate.Visible = false;
-                lblConsEmpty.Visible = false;
-                txtConsEmpty.Visible = false;
+                NumOfProducts--;
             }
 
             //// no longer in use now that KIT is a column rather than a row
@@ -318,10 +347,12 @@ namespace Intel.MyDeals.DataLibrary
                 lblS2.Visible = false;
                 txtS2Ecap.Visible = false;
                 txtS2ProdName.Visible = false;
+                txtS2FullName.Visible = false;
                 txtS2ProdSeg.Visible = false;
                 txtQtyS2.Visible = false;
                 blankKitPriceS2.Visible = false;
                 blankMaxQtyS2.Visible = false;
+                NumOfProducts--;
             }
 
             if (string.IsNullOrEmpty(txtS3ProdName.Value))
@@ -329,10 +360,12 @@ namespace Intel.MyDeals.DataLibrary
                 lblS3.Visible = false;
                 txtS3Ecap.Visible = false;
                 txtS3ProdName.Visible = false;
+                txtS3FullName.Visible = false;
                 txtS3ProdSeg.Visible = false;
                 txtQtyS3.Visible = false;
                 blankKitPriceS3.Visible = false;
                 blankMaxQtyS3.Visible = false;
+                NumOfProducts--;
             }
 
             if (string.IsNullOrEmpty(txtS4ProdName.Value))
@@ -340,10 +373,12 @@ namespace Intel.MyDeals.DataLibrary
                 lblS4.Visible = false;
                 txtS4Ecap.Visible = false;
                 txtS4ProdName.Visible = false;
+                txtS4FullName.Visible = false;
                 txtS4ProdSeg.Visible = false;
                 txtQtyS4.Visible = false;
                 blankKitPriceS4.Visible = false;
                 blankMaxQtyS4.Visible = false;
+                NumOfProducts--;
             }
 
             if (string.IsNullOrEmpty(txtS5ProdName.Value))
@@ -351,10 +386,12 @@ namespace Intel.MyDeals.DataLibrary
                 lblS5.Visible = false;
                 txtS5Ecap.Visible = false;
                 txtS5ProdName.Visible = false;
+                txtS5FullName.Visible = false;
                 txtS5ProdSeg.Visible = false;
                 txtQtyS5.Visible = false;
                 blankKitPriceS5.Visible = false;
                 blankMaxQtyS5.Visible = false;
+                NumOfProducts--;
             }
 
             if (string.IsNullOrEmpty(txtS6ProdName.Value))
@@ -362,10 +399,12 @@ namespace Intel.MyDeals.DataLibrary
                 lblS6.Visible = false;
                 txtS6Ecap.Visible = false;
                 txtS6ProdName.Visible = false;
+                txtS6FullName.Visible = false;
                 txtS6ProdSeg.Visible = false;
                 txtQtyS6.Visible = false;
                 blankKitPriceS6.Visible = false;
                 blankMaxQtyS6.Visible = false;
+                NumOfProducts--;
             }
 
             if (string.IsNullOrEmpty(txtS7ProdName.Value))
@@ -373,10 +412,12 @@ namespace Intel.MyDeals.DataLibrary
                 lblS7.Visible = false;
                 txtS7Ecap.Visible = false;
                 txtS7ProdName.Visible = false;
+                txtS7FullName.Visible = false;
                 txtS7ProdSeg.Visible = false;
                 txtQtyS7.Visible = false;
                 blankKitPriceS7.Visible = false;
                 blankMaxQtyS7.Visible = false;
+                NumOfProducts--;
             }
 
             if (string.IsNullOrEmpty(txtS8ProdName.Value))
@@ -384,10 +425,12 @@ namespace Intel.MyDeals.DataLibrary
                 lblS8.Visible = false;
                 txtS8Ecap.Visible = false;
                 txtS8ProdName.Visible = false;
+                txtS8FullName.Visible = false;
                 txtS8ProdSeg.Visible = false;
                 txtQtyS8.Visible = false;
                 blankKitPriceS8.Visible = false;
                 blankMaxQtyS8.Visible = false;
+                NumOfProducts--;
             }
 
             if (string.IsNullOrEmpty(txtS9ProdName.Value))
@@ -395,13 +438,29 @@ namespace Intel.MyDeals.DataLibrary
                 lblS9.Visible = false;
                 txtS9Ecap.Visible = false;
                 txtS9ProdName.Visible = false;
+                txtS9FullName.Visible = false;
                 txtS9ProdSeg.Visible = false;
                 txtQtyS9.Visible = false;
                 blankKitPriceS9.Visible = false;
                 blankMaxQtyS9.Visible = false;
+                NumOfProducts--;
             }
 
+            double CollapseProductsSpace = (10 - NumOfProducts) * .35D;
+            double AdditionalInfoHeader = 5.90D - CollapseProductsSpace;
+            double AdditionalInfoRow1 = 6.10D - CollapseProductsSpace;
+            double AdditionalInfoRow2 = 6.30D - CollapseProductsSpace;
+            double LowerLegalText = 7.10D - CollapseProductsSpace;
+            double Col2Location = 1.25D;
 
+            // Overrides the lower section placement done in QuoteLetter.designer.cs
+            ttlAdditional.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.00D), Telerik.Reporting.Drawing.Unit.Inch(AdditionalInfoHeader));
+            lblProject.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.00D), Telerik.Reporting.Drawing.Unit.Inch(AdditionalInfoRow1));
+            txtProject.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(Col2Location), Telerik.Reporting.Drawing.Unit.Inch(AdditionalInfoRow1));
+            lblTerms.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.00D), Telerik.Reporting.Drawing.Unit.Inch(AdditionalInfoRow2));
+            txtTerms.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(Col2Location), Telerik.Reporting.Drawing.Unit.Inch(AdditionalInfoRow2));
+
+            LowerLegalContent.Location = new Telerik.Reporting.Drawing.PointU(Telerik.Reporting.Drawing.Unit.Inch(0.00D), Telerik.Reporting.Drawing.Unit.Inch(LowerLegalText));
         }
 
         void ProcessData()
@@ -417,7 +476,7 @@ namespace Intel.MyDeals.DataLibrary
                 return;
             }
 
-            MainContent.Value = MainContent.Value.Replace("CUSTOMERNAMEGOESHERE", EscapeSpecialChars(GetStringValue(parameters["Customer"].Value)));
+            UpperLegalContent.Value = UpperLegalContent.Value.Replace("CUSTOMERNAMEGOESHERE", EscapeSpecialChars(GetStringValue(parameters["Customer"].Value)));
 
             txtEndCustomer.Value = EscapeSpecialChars(GetStringValue(parameters["EndCustomer"].Value));
 
@@ -426,8 +485,9 @@ namespace Intel.MyDeals.DataLibrary
             txtECAPType.Value = GetStringValue(parameters["ECAPType"].Value);
             txtQuantity.Value = GetStringValue(parameters["Quantity"].Value);
             txtProgramPayment.Value = GetStringValue(parameters["ProgramPayment"].Value);
-            txtBasedOn.Value = GetStringValue(parameters["PayoutBasedOn"].Value);
+            txtPayoutBasedOn.Value = GetStringValue(parameters["PayoutBasedOn"].Value);
             txtProject.Value = EscapeSpecialChars(GetStringValue(parameters["Project"].Value));
+            txtGroupType.Value = EscapeSpecialChars(GetStringValue(parameters["GroupType"].Value));
             txtTerms.Value = EscapeSpecialChars(GetStringValue(parameters["Terms"].Value));
             txtConsumptionStartDate.Value = GetStringValue(parameters["ConsStartDt"].Value);
             txtConsumptionEndDate.Value = GetStringValue(parameters["ConsEndDt"].Value);
