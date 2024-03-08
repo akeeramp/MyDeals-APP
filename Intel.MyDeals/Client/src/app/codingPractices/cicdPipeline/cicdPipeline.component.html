@@ -13,7 +13,7 @@
 
             <div style="margin: 10px;">
                 <div id="intro">
-                    <h1>My Deals CD/CD Pipeline</h1>
+                    <h1>My Deals CI/CD Pipeline</h1>
                     <p>
                         This is basic information about My Deals CI/CD Pipeline Process.
                     </p>
@@ -166,7 +166,7 @@
 
                         <h6>Pre-PROD</h6>
                         <ul>
-                            <li>Deployment to <b>DEV/ITT</b> server is automated.</li>
+                            <li>Deployment to <b>DEV</b> server is automated.</li>
                             <li>Deployment to all other pre-prods are Manual.</li>
                         </ul>
 
@@ -182,7 +182,7 @@
                             <img src="/Client/Images/docs/GitHub7.png" style="width: 850px;" /><br /><br />
                         </div>
                         <div>
-                            <h6>New branch depolyment to any environment</h6>
+                            <h6>New branch depolyment to any environment (Github UI)</h6>
                             <ul>
                                 <li>
                                     To deploy any other branch to any other environment, follow the below path Github -> Actions -> MyDeals Angular pre-prod manual - > Run workflow <br />
@@ -203,13 +203,28 @@
                                         </li>
                                     </ol>
                                 </li>
-                                <li>This would be used during the regression cycle, where a consolidated report of the defect fixes will be sent.</li>
                                 <li>
                                     <b>Send email for the build commit list:</b><br />
                                     <ol>
                                         <li>Yes means a mail will be triggered to developer list once the deployment completed.</li>
                                         <li>No means there will no mail triggered to developer list once the deployment completes</li>
                                     </ol>
+                                </li>
+                            </ul>
+                        </div>
+                        <div>
+                            <h6>New branch depolyment to any environment (Github DB)</h6>
+                            <ul>
+                                <li>
+                                    To deploy any other branch to any other environment, follow the below path Github -> Actions -> MyDeals DB pre-prod manual - > Run workflow <br />
+                                    <img src="/Client/Images/docs/db-github-2.png" style="width: 850px;" /><br /><br />
+                                </li>
+                                <li>
+                                    From below image, Branch <b>development</b> will be deployed in <b>DEV</b> environment and File is the <b>DB Checklist Path</b>. <br />
+                                    <img src="/Client/Images/docs/db-github-1.png" style="width: 350px;" /><br /><br />
+                                </li>
+                                <li>
+                                    After giving mandatory fields. Click on <b>Run workflow</b>. The build triggers.
                                 </li>
                             </ul>
                         </div>
