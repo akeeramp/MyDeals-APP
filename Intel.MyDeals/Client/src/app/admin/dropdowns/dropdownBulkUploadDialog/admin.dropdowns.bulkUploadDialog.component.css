@@ -2,18 +2,23 @@
     background-color: #003C71;
     color: white;
     font-size: 27px;
-    padding: 0 20px 0 25px
+    padding: 5px 20px 0 25px;
 }
 
 .floatRight {
     float: right;
-    padding-top: 5px;
-    cursor: pointer
+    padding-top: 10px;
+    cursor: pointer;
+}
+
+div.row.floatRight {
+    padding-right: 20px;
+    margin-bottom: -10px;
 }
 
 form,
 div.insertResultsGrid {
-    padding: 10px 20px 0 25px
+    padding: 20px 20px 0 20px;
 }
 
 .mat-slide-toggle .mat-slide-toggle-bar {

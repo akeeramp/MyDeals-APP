@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-inferrable-types */
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnDestroy, OnInit, ViewChild } from "@angular/core";
 import { ThemePalette } from "@angular/material/core";
 import { indexOf, filter } from 'underscore';
 import { GridDataResult, DataStateChangeEvent, PageSizeItem } from "@progress/kendo-angular-grid";
@@ -30,7 +30,7 @@ import { DropdownBulkUploadDialogComponent } from "./dropdownBulkUploadDialog/ad
     templateUrl: "Client/src/app/admin/dropdowns/admin.dropdowns.component.html",
     styleUrls: ['Client/src/app/admin/CustomerVendors/admin.customerVendors.component.css']
 })
-export class AdminDropdownsComponent implements PendingChangesGuard, OnInit {
+export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnDestroy {
 
     constructor(private dropdownService: DropdownService,
                 private loggerSvc: logger,
@@ -44,6 +44,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit {
 
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
+
     //Private Varibales
     isDirty = false;
     private isLoading = true;
@@ -226,7 +227,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit {
         }
     }
 
-    checkModelvalid(model: any, isNew: boolean) {
+    checkModelValid(model: any, isNew: boolean) {
         let IS_MODEL_VALID = true;
         const cond = this.gridResult.filter(
             x => x.OBJ_SET_TYPE_CD.toString().toUpperCase().trim() === model.OBJ_SET_TYPE_CD.toString().toUpperCase().trim() &&
@@ -372,7 +373,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit {
 
         //check the combination exists
         if (this.isFormChange) {
-            this.isModelValid = this.checkModelvalid(ui_dropdown, isNew);
+            this.isModelValid = this.checkModelValid(ui_dropdown, isNew);
             if (this.isModelValid) {
                 if (isNew) {
                     this.isLoading = true;
@@ -498,7 +499,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit {
         this.initialization();
     }
 
-    //destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    // destroy the subject so in this casee all RXJS observable will stop once we move out of the component
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();

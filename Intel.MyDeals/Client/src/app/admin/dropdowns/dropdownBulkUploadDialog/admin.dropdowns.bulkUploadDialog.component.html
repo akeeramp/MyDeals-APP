@@ -1,7 +1,7 @@
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 <div class="panelHeader">Bulk Upload - UI Dropdown<i id="btnClose" class="intelicon-close floatRight" (click)="closeDialog()" title="Close this window"></i></div>
 <form [formGroup]="formData" (ngSubmit)="onSubmit()" *ngIf="!insertTriggered">
-    <div class="col-md-5">
+    <div class="col-md-5 col-sm-12">
         <div class="row" style="padding-bottom: 10px; padding-top: 10px;">
             <span class="col-md-3">
                 <label for="isActive">Is Active</label>
@@ -42,7 +42,7 @@
             </span>
         </div>    
     </div>
-    <div class="col-md-7">
+    <div class="col-md-7 col-sm-12">
         <div class="row">
             <span class="col-md-2">
                 <label for="values">Values<br />(Comma Seperated with no padding)</label>

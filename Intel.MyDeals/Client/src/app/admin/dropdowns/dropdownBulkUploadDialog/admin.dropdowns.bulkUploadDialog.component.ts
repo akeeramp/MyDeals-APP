@@ -1,16 +1,16 @@
-/* eslint-disable @typescript-eslint/no-inferrable-types, prefer-const */
+/* eslint-disable @typescript-eslint/no-inferrable-types, prefer-const, no-useless-escape */
 import { Component, Inject, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { State, process } from "@progress/kendo-data-query";
 import { GridDataResult } from "@progress/kendo-angular-grid";
+import { BehaviorSubject, Observable } from "rxjs";
+import { HttpErrorResponse } from "@angular/common/http";
 
 import { logger } from "../../../shared/logger/logger";
 import { DropdownService } from "../admin.dropdowns.service";
 import { UiDropdownItem, UiDropdownResponseItem } from "../admin.dropdowns.model";
 import { BulkUploadDialogData, ValueProgress, InsertResult, DropdownBaseData } from "./admin.dropdowns.bulkUploadDialog.model";
-import { BehaviorSubject, Observable, of } from "rxjs";
-import { HttpErrorResponse } from "@angular/common/http";
 
 @Component({
     selector: 'dropdown-bulk-upload-dialog',
@@ -30,16 +30,68 @@ export class DropdownBulkUploadDialogComponent implements OnInit {
         this.formData.disable();
     }
 
+    private insertResults: Array<InsertResult> = [];
     private sanitizeCommaSeperatedValues(values: string): string[] {
         const NON_DUPLICATE_SPLIT_VALUES = Array.from(new Set(values.split(/\s*,\s*/g)));
-        const NON_EMPTY_VALUES = NON_DUPLICATE_SPLIT_VALUES.filter((value: string) => {
+
+        const REGEX_REPLACE_TO_SPACE = /(\r\n|\r|\n|\s)/g;
+        const REGEX_WHITESPACE_BEGINNING_OR_ENDING = /(^\s+)|(\s+$)/g;
+        let newLineAndWhitespaceFiltered: string[] = [];
+        for (let value of NON_DUPLICATE_SPLIT_VALUES) {
+            let wipValue = value;
+
+            // Replace new line characters (\r\n, \r, \n) and all whitespaces (\s) with a regular space
+            if (REGEX_REPLACE_TO_SPACE.test(value)) {
+                wipValue = wipValue.replace(REGEX_REPLACE_TO_SPACE, ' ');
+            }
+
+            // Redo removal of whitespaces at the beginning or end of the value since new ones may have been introduced
+            if (REGEX_WHITESPACE_BEGINNING_OR_ENDING.test(value)) {
+                // value = value.replace(REGEX_WHITESPACE_BEGINNING_OR_ENDING, '');
+                wipValue = wipValue.trim();
+            }
+
+            newLineAndWhitespaceFiltered.push(wipValue);
+        }
+        const NON_DUPLICATE_NEW_LINE_AND_WHITESPACE_FILTERED_VALUES = Array.from(new Set(newLineAndWhitespaceFiltered));
+
+        // Remove values that only have spaces
+        const NON_EMPTY_VALUES = NON_DUPLICATE_NEW_LINE_AND_WHITESPACE_FILTERED_VALUES.filter((value: string) => {
             if (value == null || value == undefined || value.match(/^\s*$/g)) {
                 return false;
             }
 
             return true;
         });
-        return NON_EMPTY_VALUES;
+
+        // Remove values that do not adhere to our characterset
+        const REGEX_LATIN_ALPHANUMERIC_AND_SYMBOLS = /^[ a-z0-9!@#$%^&*()\-_=+.\/;'`":™®\\]+$/i;
+        const INVALID_CHARACTERSET_VALUES: Array<string> = [];
+        const VALID_CHARACTERSET_VALUES = NON_EMPTY_VALUES.filter((value: string) => {
+            if (value.match(REGEX_LATIN_ALPHANUMERIC_AND_SYMBOLS)) {
+                return true;
+            }
+
+            INVALID_CHARACTERSET_VALUES.push(value);
+            return false;
+        });
+
+        // Add invalid values to results
+        for (const INVALID_VALUE of INVALID_CHARACTERSET_VALUES) {
+            this.insertResults.push({
+                value: INVALID_VALUE,
+                resultMessage: `Failed: This value contains an unsupported character, the accepted characterset for this field is latin alphanumeric (a-z, A-Z, 0-9) and certain special characters (! @ # $ % ^ & * ( ) - _ = + . / ; ' \` \" : ™ ® \\)`,
+                isSuccess: false
+            });
+        }
+
+        return VALID_CHARACTERSET_VALUES;
+    }
+
+    private indexOfCaseInsensitive(values: string[], compareTo: string): number {
+        return values.findIndex((value: string) => {
+            return compareTo.toUpperCase() === value.toUpperCase();
+        });
     }
 
     private removeAndFlagExistingValues(valueData: ValueProgress, basicDropdownData: UiDropdownResponseItem[]): ValueProgress {
@@ -61,21 +113,21 @@ export class DropdownBulkUploadDialogComponent implements OnInit {
         }).map((dropdownItem) => dropdownItem.DROP_DOWN);
 
         if (MATCHED_MAIN_ATTRIBUTES_DROPDOWN_VALUES.length > 0) {
-            let listOfDuplicates: InsertResult[] = [];
+            let listOfDuplicates: Array<InsertResult> = [];
 
-            MATCHED_MAIN_ATTRIBUTES_DROPDOWN_VALUES.forEach((existingDropdownValue: string) => {
-                // WIP: CHANGE TO LOCALECOMPARE TO AVOID ISSUES W/ CASING // 'xyz'.localeCompare('XyZ', undefined, { sensitivity: 'base' }); // returns 0
-                if (valueData.pendingValid.includes(existingDropdownValue)) {
+            for (let existingDropdownValue of MATCHED_MAIN_ATTRIBUTES_DROPDOWN_VALUES) {
+                const INDEX_MATCH = this.indexOfCaseInsensitive(valueData.pendingValid, existingDropdownValue);
+
+                if (INDEX_MATCH !== -1) {
                     listOfDuplicates.push({
                         value: existingDropdownValue,
                         resultMessage: 'Failed: Existing entry in dropdown table',
                         isSuccess: false
                     });
 
-                    // Remove from prepared list
-                    valueData.pendingValid.splice(valueData.pendingValid.indexOf(existingDropdownValue), 1);
+                    valueData.pendingValid.splice(INDEX_MATCH, 1);
                 }
-            });
+            }
 
             valueData.failedInsertWithMessage = listOfDuplicates;
         }
@@ -89,8 +141,8 @@ export class DropdownBulkUploadDialogComponent implements OnInit {
         })[0].dropdownID;
     }
 
-    private generateDropdownItemsForApi(values: string[]): UiDropdownItem[] {
-        let generatedItems: UiDropdownItem[] = [];
+    private generateDropdownItemsForApi(values: string[]): Array<UiDropdownItem> {
+        let generatedItems: Array<UiDropdownItem> = [];
 
         if (values.length > 0) {
             const ACTV_IND: boolean = this.formData.get('ACTV_IND').value;
@@ -102,10 +154,8 @@ export class DropdownBulkUploadDialogComponent implements OnInit {
             const GROUP_SID = this.getSidFromName(this.data.groupData, GROUP);
             const CUSTOMER_SID = this.getSidFromName(this.data.customerData, CUSTOMER);
 
-            if (DEAL_TYPE_SID == undefined || GROUP_SID == undefined || CUSTOMER_SID ==  undefined) {
-                this.loggerService.error('DropdownBulkUploadDialogComponent: generateDropdownItemsForApi():: Could not get SID required for insert', null);
-            } else {
-                values.forEach((value: string) => {
+            if (DEAL_TYPE_SID !== undefined || GROUP_SID !== undefined || CUSTOMER_SID !== undefined) {
+                for (const value of values) {
                     generatedItems.push({
                         ACTV_IND: ACTV_IND,
                         OBJ_SET_TYPE_CD: DEAL_TYPE,
@@ -119,25 +169,27 @@ export class DropdownBulkUploadDialogComponent implements OnInit {
                         ATRB_LKUP_TTIP: "",
                         ORD: null
                     });
-                });
+                }
+            } else {
+                this.loggerService.error('DropdownBulkUploadDialogComponent: generateDropdownItemsForApi():: Could not get SID required for insert', null);
             }
         }
 
         return generatedItems;
     }
 
-    private valueProgressToInsertResults(valueProgress: ValueProgress, ignorePending: boolean, pendingErrorMessage: string = ''): InsertResult[] {
+    private valueProgressToInsertResults(valueProgress: ValueProgress, ignorePending: boolean, pendingErrorMessage: string = ''): Array<InsertResult> {
         let pendingValues: string[] = valueProgress.pendingValid;
-        let failedDropdownValuesWithMessage: InsertResult[] = valueProgress.failedInsertWithMessage;
+        let failedDropdownValuesWithMessage: Array<InsertResult> = valueProgress.failedInsertWithMessage;
 
         if (!ignorePending && pendingValues.length > 0) {
-            pendingValues.forEach((pendingValue) => {
+            for (const pendingValue of pendingValues) {
                 failedDropdownValuesWithMessage.push({
                     value: pendingValue,
                     resultMessage: pendingErrorMessage,
                     isSuccess: false
                 });
-            });
+            }
         }
 
         return [
@@ -152,7 +204,6 @@ export class DropdownBulkUploadDialogComponent implements OnInit {
         ];
     }
 
-    private insertResults: InsertResult[] = [];
     private insertAllDropdowns(preparedDropdownPayloads: UiDropdownItem[]): Observable<number> {
         let pendingValueCounter = new BehaviorSubject<number>(0);
 
@@ -173,9 +224,6 @@ export class DropdownBulkUploadDialogComponent implements OnInit {
                     resultMessage: `Failed: DropdownBulkUploadDialogComponent: insertBasicDropdown(): Unable to insert Dropdown:: Status ${ (error as HttpErrorResponse).status } ${ (error as HttpErrorResponse).statusText }`,
                     isSuccess: false
                 });
-                console.log('ERROR::');
-                console.log(`typeof(): ${ typeof error }`);
-                console.table(error);
                 pendingValueCounter.next(pendingValueCounter.value + 1);
                 this.loggerService.error("Unable to insert Dropdown.", error);
             });
@@ -198,7 +246,7 @@ export class DropdownBulkUploadDialogComponent implements OnInit {
 
     private handleFailedState(valueProgress: ValueProgress | null, errorStatus: string) {
         if (valueProgress != null) {
-            const currentStatusInsertResults: InsertResult[] = this.valueProgressToInsertResults(valueProgress, false, `Not able to execute: ${ errorStatus }`);
+            const currentStatusInsertResults: Array<InsertResult> = this.valueProgressToInsertResults(valueProgress, false, `Not able to execute: ${ errorStatus }`);
             this.updateGridData(currentStatusInsertResults);
         } else {
             this.updateGridData([]);
@@ -216,17 +264,15 @@ export class DropdownBulkUploadDialogComponent implements OnInit {
 
             if (valueProgress.pendingValid && valueProgress.pendingValid.length > 0) {
                 const BASIC_DROPDOWNS_ERROR = 'Could not load existing UI Dropdown Values to prevent duplicates';
+
                 this.dropdownService.getBasicDropdowns(true).subscribe((BASIC_DROPDOWN_DATA: UiDropdownResponseItem[]) => {
-                    if (BASIC_DROPDOWN_DATA == null || BASIC_DROPDOWN_DATA == undefined) {
-                        this.loggerService.warn(BASIC_DROPDOWNS_ERROR, 'API Error');
-                        this.handleFailedState(valueProgress, `API Error: ${ BASIC_DROPDOWNS_ERROR }`);
-                    } else {
+                    if (BASIC_DROPDOWN_DATA !== null || BASIC_DROPDOWN_DATA !== undefined) {
                         valueProgress = this.removeAndFlagExistingValues(valueProgress, BASIC_DROPDOWN_DATA);
 
                         if (valueProgress != null || valueProgress != undefined) {
                             this.insertResults.push(...valueProgress.failedInsertWithMessage);
 
-                            const GENERATED_DROPDOWN_ITEMS: UiDropdownItem[] = this.generateDropdownItemsForApi(valueProgress.pendingValid);
+                            const GENERATED_DROPDOWN_ITEMS: Array<UiDropdownItem> = this.generateDropdownItemsForApi(valueProgress.pendingValid);
                             this.insertAllDropdowns(GENERATED_DROPDOWN_ITEMS).subscribe((counter: number) => {
                                 if (counter >= GENERATED_DROPDOWN_ITEMS.length) {
                                     this.updateGridData(this.insertResults);
@@ -237,6 +283,9 @@ export class DropdownBulkUploadDialogComponent implements OnInit {
                             this.loggerService.error(NULL_VALUE_PROGRESS, null);
                             this.handleFailedState(null, NULL_VALUE_PROGRESS);
                         }
+                    } else {
+                        this.loggerService.warn(BASIC_DROPDOWNS_ERROR, 'API Error');
+                        this.handleFailedState(valueProgress, `API Error: ${ BASIC_DROPDOWNS_ERROR }`);
                     }
                 }, (error) => {
                     this.loggerService.error(BASIC_DROPDOWNS_ERROR, error, error.statusText);
