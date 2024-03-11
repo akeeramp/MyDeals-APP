@@ -2057,6 +2057,7 @@
     <Content Include="Scripts\Angular\1.8.0\angular-animate.min.js.map" />
     <Content Include="Scripts\Angular\1.8.0\angular-sanitize.min.js.map" />
     <Content Include="Scripts\Angular\1.8.0\angular.min.js.map" />
+    <Content Include="Views\UIAccess\Index.cshtml" />
     <None Include="Web.cinr.config">
       <DependentUpon>Web.config</DependentUpon>
     </None>

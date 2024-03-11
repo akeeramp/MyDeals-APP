@@ -16,13 +16,20 @@ namespace Intel.MyDeals.Controllers
         // GET: UIAccess
         public ActionResult Index()
         {
-            OpCore op = OpAppConfig.Init();
-            string fullUserId = op.Authentication.ContextUserName;
-            string userIdentity = (string.IsNullOrEmpty(fullUserId) ? "" : fullUserId);
-            string[] aId = userIdentity.Split('\\', '/');
-            userIdentity = ((aId.Length == 1) ? aId[0] : aId[aId.Length - 1]).ToUpper();
-            OpMsg msg = _employeeLib.getSelfGrantUIAccess(userIdentity);
-            return RedirectToAction("Index", "Dashboard");            
+            try
+            {
+                OpCore op = OpAppConfig.Init();
+                string fullUserId = op.Authentication.ContextUserName;
+                string userIdentity = (string.IsNullOrEmpty(fullUserId) ? "" : fullUserId);
+                string[] aId = userIdentity.Split('\\', '/');
+                userIdentity = ((aId.Length == 1) ? aId[0] : aId[aId.Length - 1]).ToUpper();
+                OpMsg msg = _employeeLib.getSelfGrantUIAccess(userIdentity);
+                return RedirectToAction("Index", "Dashboard");
+            }
+            catch (System.Exception ex)
+            {
+                return RedirectToAction("Index", "Dashboard");
+            }
         }
     }
 }
