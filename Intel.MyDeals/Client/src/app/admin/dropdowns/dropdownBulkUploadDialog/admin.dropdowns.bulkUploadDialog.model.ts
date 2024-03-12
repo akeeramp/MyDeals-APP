@@ -8,9 +8,9 @@ export interface BulkUploadDialogData {
 }
 
 export class ValueProgress {
-    pendingValid: string[];
-    successfullyInserted: string[];
-    failedInsertWithMessage: InsertResult[];
+    pendingValid: string[] = [];
+    successfullyInserted: string[] = [];
+    failedInsertWithMessage: InsertResult[] = [];
 }
 
 export interface InsertResult {
