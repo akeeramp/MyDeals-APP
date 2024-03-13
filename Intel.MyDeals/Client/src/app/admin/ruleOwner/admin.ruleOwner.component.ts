@@ -248,7 +248,7 @@ export class RuleOwnerComponent implements PendingChangesGuard {
                         if (this.IsReadOnlyAccess) {
                             this.initiateRuleOwners();
                         } else {
-                            window.alert("User does not have access. Press OK to redirect to Dashboard.");
+                            window.alert("User does not have access to the screen. Press OK to redirect to Dashboard.");
                             document.location.href = "/Dashboard#/portal";
                         }
                     } else {

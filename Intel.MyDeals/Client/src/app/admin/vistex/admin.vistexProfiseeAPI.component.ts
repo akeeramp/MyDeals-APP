@@ -32,7 +32,7 @@ export class adminVistexProfiseeApiComponent implements OnDestroy {
                 this.validWWID = data.CNST_VAL_TXT === "NA" ? "" : data.CNST_VAL_TXT;
                 this.hasAccess = this.validWWID.indexOf((<any>window).usrDupWwid) > -1 ? true : false;
                 if (this.hasAccess == false) {
-                    window.alert("User does not have access. Press OK to redirect to Dashboard.");
+                    window.alert("User does not have access to the screen. Press OK to redirect to Dashboard.");
                     document.location.href = "/Dashboard#/portal";
                 }
             }
