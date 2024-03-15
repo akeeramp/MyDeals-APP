@@ -2,7 +2,7 @@
 import { Component, Input, Output, EventEmitter, NgZone, OnInit, AfterViewInit, ViewChild, OnDestroy } from '@angular/core';
 import Handsontable from 'handsontable';
 import { HotTableRegisterer } from '@handsontable/angular';
-import { each, uniq, filter, map, where, pluck, findWhere, findIndex, findLastIndex, reject, contains, find, values, keys, unique, includes, findKey } from 'underscore';
+import { each, uniq, filter, map, where, pluck, findWhere, findIndex, findLastIndex, reject, contains, find, values, keys, unique, includes, object } from 'underscore';
 import { MatDialog } from '@angular/material/dialog';
 import { BehaviorSubject, Observable, Subject, forkJoin } from 'rxjs';
 import { distinct } from '@progress/kendo-data-query';
@@ -1649,6 +1649,9 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
 
             each(updatedPTRObj.rowData, (data, idx) => {
                 this.hotTable.setDataAtRowProp(idx, 'PTR_SYS_PRD', data.PTR_SYS_PRD, 'no-edit');
+                let isInvalid = false;
+                let isDuplicate = false;
+                let isexcludeDuplicate = false;
                 if (curRow && data.DC_ID == curRow[0]['DC_ID']) {
                     curRow[0]['PTR_SYS_PRD'] = data.PTR_SYS_PRD;
 
@@ -1658,28 +1661,37 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                     }
                 }
 
-                if (data && data._behaviors && data._behaviors.isError) {
-                    if (!data._behaviors.isError['PTR_USER_PRD'] && data.PTR_SYS_INVLD_PRD == "" && data.PTR_SYS_PRD != "" && translateResult['Data'].InValidProducts.hasOwnProperty(data.DC_ID) == false) {
-                        this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'success-product');
-                    } else {
-                        if (translateResult['Data'].InValidProducts[data.DC_ID]["I"].length == 0) {
-                            this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'success-product');
+                if (translateResult['Data'].InValidProducts.hasOwnProperty(data.DC_ID) && translateResult['Data'].InValidProducts[data.DC_ID]["I"].length > 0) {
+                    isInvalid = true;
+                }
+
+                if (translateResult['Data'].DuplicateProducts[data.DC_ID] != undefined && Object.keys(translateResult['Data'].DuplicateProducts[data.DC_ID]).length > 0) {
+                    each(translateResult['Data'].DuplicateProducts[data.DC_ID], (item) => {
+                        if (item[0].EXCLUDE) {
+                            isexcludeDuplicate = true;
                         }
                         else {
-                            this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'error-product');
+                            isDuplicate = true;
                         }
+                    })
+                }
+                if (data && data._behaviors && data._behaviors.isError) {
+                    if (!data._behaviors.isError['PTR_USER_PRD'] && data.PTR_SYS_INVLD_PRD == "" && data.PTR_SYS_PRD != "" && !isInvalid && !isDuplicate)
+                    {
+                        this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'success-product');
+                    } else {
+                        this.hotTable.setCellMeta(idx, PTR_col_ind, 'className', 'error-product');
                     }
-
                     this.hotTable.render();
                 }
 
                 // Do not update the cell value if exclude product is invalid/NULL
                 if (this.curPricingTable.OBJ_SET_TYPE_CD != 'KIT' && this.curPricingTable.OBJ_SET_TYPE_CD != 'ECAP' && data.PRD_EXCLDS != null && data.PRD_EXCLDS != "") {
                     if (data && data._behaviors && data._behaviors.isError) {
-                        if (!data._behaviors.isError['PRD_EXCLDS'] && data.PTR_SYS_INVLD_PRD == "" && data.PTR_SYS_PRD != "" && translateResult['Data'].InValidProducts.hasOwnProperty(data.DC_ID) == false) {
+                        if (!data._behaviors.isError['PRD_EXCLDS'] && data.PTR_SYS_INVLD_PRD == "" && data.PTR_SYS_PRD != "" && translateResult['Data'].InValidProducts.hasOwnProperty(data.DC_ID) == false && !isexcludeDuplicate) {
                                 this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'success-product');
                         } else {
-                            if (translateResult['Data'].InValidProducts[data.DC_ID]["E"].length == 0) {
+                            if (translateResult['Data'].InValidProducts[data.DC_ID]["E"].length == 0 && !isexcludeDuplicate) {
                                 this.hotTable.setCellMeta(idx, PTR_EXCL_col_ind, 'className', 'success-product');
                             }
                             else {

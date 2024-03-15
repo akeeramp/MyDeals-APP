@@ -309,10 +309,10 @@ export class PTEUtil {
 
         // Pricing table rows products to be translated
         let pricingTableRowData = currentPricingTableRowData.filter((x) => {
-           
+
             return ((x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
                 ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
-                || (dealType == "KIT") || (isExcludePrdChange);
+                || (dealType == "KIT") || (isExcludePrdChange) || (Object.keys(JSON.parse(x.PTR_SYS_PRD)).length !== x.PTR_USER_PRD.split(',').length);
         });
 
         //find uniq records incase of tier logic
