@@ -18,6 +18,7 @@ namespace Intel.MyDeals.BusinessLogic
             registerService.RegisterType<ICustomerLib, CustomerLib>();
             registerService.RegisterType<IVistexCustomerMappingLib, VistexCustomerMappingLib>();
             registerService.RegisterType<IDealMassUpdateLib, DealMassUpdateLib>();
+            registerService.RegisterType<IExpireYcs2Lib, ExpireYcs2Lib>();
             registerService.RegisterType<IPushDealstoVistexLib, PushDealstoVistexLib>();
             registerService.RegisterType<IValidateVistexR3ChecksLib, ValidateVistexR3ChecksLib>();
             registerService.RegisterType<IDashboardLib, DashboardLib>();

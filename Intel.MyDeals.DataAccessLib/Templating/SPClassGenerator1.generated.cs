@@ -4239,12 +4239,44 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			}
 		}
 
-		///<summary>
-		/// ID: 1293247662
-		/// Modified: 3/23/2022 11:54:17 PM
-		/// Parameters: 2
-		///</summary>
-		public partial class PR_MYDL_GEN_TRKR_NBR : SP {
+        public partial class PR_MYDL_DEAL_EXPIRE_YCS2 : SP
+        {
+            public PR_MYDL_DEAL_EXPIRE_YCS2()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_DEAL_EXPIRE_YCS2]";
+            }
+
+            ///<summary>
+            /// DataType: varchar(5000)
+            /// Mode: IN
+            /// Max Length: 5000
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 5000, false)]
+            public String in_deal_id_list
+            {
+                set { SetParmeter("in_deal_id_list", value); }
+                get { return (String)GetParameter("in_deal_id_list"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(8, "ParameterDirection.Input", 0, false)]
+            public Int32 in_emp_wwid
+            {
+                set { SetParmeter("in_emp_wwid", value); }
+                get { return (Int32)GetParameter("in_emp_wwid"); }
+            }
+        }
+
+        ///<summary>
+        /// ID: 1293247662
+        /// Modified: 3/23/2022 11:54:17 PM
+        /// Parameters: 2
+        ///</summary>
+        public partial class PR_MYDL_GEN_TRKR_NBR : SP {
 			public PR_MYDL_GEN_TRKR_NBR() {
 				DatabaseName = "MyDeals";
 				StoredProdedureName = "[dbo].[PR_MYDL_GEN_TRKR_NBR]";

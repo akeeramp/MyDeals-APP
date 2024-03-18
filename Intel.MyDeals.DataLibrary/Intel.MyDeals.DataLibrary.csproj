@@ -118,6 +118,7 @@
     <Compile Include="DbAuditTools\DbAuditToolsDataLib.cs" />
     <Compile Include="DealMassUpdate\DealMassUpdateDataLib.cs" />
     <Compile Include="EcapTracker\EcapTrackerDataLib.cs" />
+    <Compile Include="ExpireYcs2\ExpireYcs2DataLib.cs" />
     <Compile Include="HealthCheck\HealthCheckDataLib.cs" />
     <Compile Include="MeetComp\MeetCompDataLib.cs" />
     <Compile Include="MyDealsManual\MyDealsManualDataLib.cs" />

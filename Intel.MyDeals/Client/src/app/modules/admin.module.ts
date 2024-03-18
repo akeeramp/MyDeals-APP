@@ -64,6 +64,7 @@ import { DbAuditToolsViewModalComponent } from '../admin/dbAuditTools/admin.dbAu
 import { DbAuditToolsCompareModalComponent } from '../admin/dbAuditTools/admin.dbAuditToolsCompareModal.component';
 import { QuoteLetterRegenerationComponent } from "../admin/quoteLetter/admin.quoteLetterRegeneration.component";
 import { MonacoEditorComponent } from '../shared/monacoCustomEditor/monacoCustomEditor.component';
+import { ExpireYcs2Component } from "../admin/expireYcs2/admin.expireYcs2.component";
 
 export const AdminComponents =[
     EmployeeComponent,
@@ -132,5 +133,6 @@ export const AdminComponents =[
     DbAuditToolsViewModalComponent,
     DbAuditToolsCompareModalComponent,
     MonacoEditorComponent,
-    QuoteLetterRegenerationComponent
+    QuoteLetterRegenerationComponent,
+    ExpireYcs2Component
 ]

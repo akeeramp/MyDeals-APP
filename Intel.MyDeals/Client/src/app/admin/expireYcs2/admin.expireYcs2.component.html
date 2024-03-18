@@ -1,0 +1,37 @@
+<link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
+
+
+<div class="col-md-12 k-header-alignment padding-top-20" style=" padding-left: 25px !important;">
+    <h2>Expire YCS2 Deals</h2>
+</div>
+<div>
+    <div *ngIf="!validateDealId" style=" padding-left:8%">
+        <span style="color:red;">
+            <label class="appro-label">Please enter Deal ID(s) separated by ','</label>
+        </span>
+    </div>
+    <div class="col-md-6" style="margin-top: 15px">
+        <label for="dealId" style="width: 15%; padding-left: 2%"><span style="color:red">*</span><strong>Deal IDs:</strong></label>
+        <kendo-textarea style="width:50%"  [rows]="4" [cols]="65" resizable="vertical" id="dealId" [ngClass]="validateDealId ? 'validDealId': 'invalidDealId'" placeholder="Please enter Deal ID(s) separated by ','" [(ngModel)]="dealId" (keyup)="validateDealID()" required></kendo-textarea>
+        <button (click)="submit()" class="btn btn-primary" style="margin-left: 5px">Submit</button>
+    </div>
+</div>
+    <div class="col-md-12" style="margin-top:5px; margin-bottom:5px" [hidden]="!responseData.length>0">
+        <div class="box box">
+            <div class="box-header with-border">
+                <div class="box-body">
+        <kendo-grid [data]="gridData" [sort]="state.sort" [filter]="state.filter" [loading]="isLoading" [sortable]="true" [pageSize]="state.take" [skip]="state.skip"
+                    [pageable]="{type:type,pageSizes: pageSizes,info:info}" [groupable]="false" [group]="state.group"
+                    filterable="menu" [navigable]="true" (dataStateChange)="dataStateChange($event)">
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="OBJ_SID" title="Deal ID"
+                               [editable]="false"  width="500">
+            </kendo-grid-column>
+            <kendo-grid-column [headerClass]="{'headerClass':true}" field="STATUS" title="Status"
+                               [editable]="false" >
+            </kendo-grid-column>
+        </kendo-grid>
+                </div>
+            </div>
+        </div>
+    </div>
+    

@@ -47,6 +47,7 @@ import { AsyncProcedureJobsComponent } from "../../app/admin/asyncProcedureJobs/
 import { SdsDealOverridesComponent } from "../../app/admin/sdsDealOverrides/admin.sdsDealOverrides.component";
 import { dbAuditToolsComponent } from "../../app/admin/dbAuditTools/admin.dbAuditTools.component";
 import { QuoteLetterRegenerationComponent } from "../../app/admin/quoteLetter/admin.quoteLetterRegeneration.component";
+import { ExpireYcs2Component } from "../../app/admin/expireYcs2/admin.expireYcs2.component";
 
 //added for security check
 import { SecurityResolver } from "../../app/shared/security.resolve";
@@ -98,5 +99,6 @@ export const routesAdmin: Routes = [
     { path: 'asyncProcedureJobs', component: AsyncProcedureJobsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'sdsDealOverrides', component: SdsDealOverridesComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
     { path: 'dbAuditTools', component: dbAuditToolsComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard] },
-    { path: 'quoteLetterRegeneration', component: QuoteLetterRegenerationComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard]}
+    { path: 'quoteLetterRegeneration', component: QuoteLetterRegenerationComponent, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard]},
+    { path: 'expireYcs2', component: ExpireYcs2Component, data: { title: 'Admin', BaseHref: 'Admin' }, resolve: { security: SecurityResolver }, canActivate: [authGuard]}
 ];

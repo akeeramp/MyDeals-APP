@@ -79,6 +79,7 @@
     <Compile Include="DSA\IDsaEngineLib.cs" />
     <Compile Include="EcapTracker\IEcapTrackerLib.cs" />
     <Compile Include="Employees\IEmployeesLib.cs" />
+    <Compile Include="ExpireYcs2\IExpireYcs2Lib.cs" />
     <Compile Include="HealthCheck\IHealthCheckLib.cs" />
     <Compile Include="Integration\IIntegrationLib.cs" />
     <Compile Include="JMS\IJmsLib.cs" />

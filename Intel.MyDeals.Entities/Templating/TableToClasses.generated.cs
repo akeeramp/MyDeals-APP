@@ -10892,4 +10892,35 @@ namespace Intel.MyDeals.Entities {
 	
 	} // End of class AsyncProcTrigger
 
+	///<summary>
+	/// Class created via template - Do Not Modify!
+	/// To modify this code, re-execute the template, or extend as partial.    
+	/// at 03/18/2024 10:33:55 AM
+	///</summary>
+	[DataContract]
+	public partial class DownloadExpireYcs2Data
+	{
+		[DataMember]
+        public System.Int32 OBJ_SID { set; get; }
+        [DataMember]
+        public System.String STATUS { set; get; }
+        /*
+		private static List<DownloadExpireYcs2Data> DownloadExpireYcs2DataFromReader(SqlDataReader rdr){
+		// This helper method is template generated.
+		// Refer to that template for details to modify this code.
+
+		var ret = new List<DownloadExpireYcs2Data>();
+		int IDX_OBJ_SID = DB.GetReaderOrdinal(rdr, "OBJ_SID");
+        int IDX_Status = DB.GetReaderOrdinal(rdr, "STATUS");
+
+		while (rdr.Read()){
+		ret.Add(new DownloadExpireYcs2Data {
+		OBJ_SID = (IDX_OBJ_SID < 0 || rdr.IsDBNull(IDX_OBJ_SID)) ? default(Int32) : rdr.GetFieldValue<Int32>(IDX_OBJ_SID),
+        STATUS = (IDX_Status < 0 || rdr.IsDBNull(IDX_Status)) ? String.Empty : rdr.GetFieldValue<string>(IDX_Status)
+		});
+		} // while
+		return ret;
+		}
+		*/
+    }// End of class DownloadExpireYcs2Data
 }

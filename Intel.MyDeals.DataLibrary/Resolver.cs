@@ -1,4 +1,5 @@
 ﻿using Intel.MyDeals.DependencyResolver;
+using Intel.MyDeals.IDataLibraries;
 using Intel.MyDeals.IDataLibrary;
 using System.ComponentModel.Composition;
 
@@ -15,6 +16,7 @@ namespace Intel.MyDeals.DataLibrary
             registerService.RegisterType<ICustomerDataLib, CustomerDataLib>();
             registerService.RegisterType<IVistexCustomerMappingDataLib, VistexCustomerMappingDataLib>();
             registerService.RegisterType<IDealMassUpdateDataLib, DealMassUpdateDataLib>();
+            registerService.RegisterType<IExpireYcs2DataLib, ExpireYcs2DataLib>();
             registerService.RegisterType<IPushDealstoVistexDataLib, PushDealstoVistexDataLib>();
             registerService.RegisterType<IValidateVistexR3ChecksDataLib, ValidateVistexR3ChecksDataLib>();
             registerService.RegisterType<IVistexServiceDataLib, VistexServiceDataLib>();

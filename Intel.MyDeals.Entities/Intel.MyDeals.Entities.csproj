@@ -102,6 +102,7 @@
     <Compile Include="EmailMessage.cs" />
     <Compile Include="EmployeeCustomers.cs" />
     <Compile Include="EmployeeEmailCustomers.cs" />
+    <Compile Include="ExpireYcs2Data.cs" />
     <Compile Include="Helpers\FixesHelpers.cs" />
     <Compile Include="JMS.cs" />
     <Compile Include="LogPerformanceTime.cs" />

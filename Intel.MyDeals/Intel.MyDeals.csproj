@@ -276,6 +276,7 @@
     <Compile Include="Controllers\API\DbAuditToolsController.cs" />
     <Compile Include="Controllers\API\DealMassUpdateController.cs" />
     <Compile Include="Controllers\API\DownStreamController.cs" />
+    <Compile Include="Controllers\API\ExpireYcs2Controller.cs" />
     <Compile Include="Controllers\API\HealthCheckController.cs" />
     <Compile Include="Controllers\API\IntegrationController.cs" />
     <Compile Include="Controllers\API\PrimeCustomersController.cs" />
@@ -617,6 +618,8 @@
     <Content Include="Client\src\app\admin\dropdowns\dropdownBulkUploadDialog\admin.dropdowns.bulkUploadDialog.component.html" />
     <Content Include="Client\src\app\admin\employee\admin.employee.component.css" />
     <Content Include="Client\src\app\admin\employee\admin.employee.component.html" />
+    <Content Include="Client\src\app\admin\expireYcs2\admin.expireYcs2.component.css" />
+    <Content Include="Client\src\app\admin\expireYcs2\admin.expireYcs2.component.html" />
     <Content Include="Client\src\app\admin\employee\admin.manageEmployee.component.css" />
     <Content Include="Client\src\app\admin\employee\admin.manageEmployee.component.html" />
     <Content Include="Client\src\app\admin\employee\admin.manageEmployeeModal.component.html" />
@@ -679,6 +682,8 @@
     <Content Include="Client\src\app\admin\validateVistexR3Checks\admin.validateVistexR3Checks.component.css" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.component.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.employee.service.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\expireYcs2\admin.expireYcs2.component.ts" />
+    <TypeScriptCompile Include="Client\src\app\admin\expireYcs2\admin.expireYcs2.service.ts" />
     <TypeScriptCompile Include="Client\src\app\admin\employee\admin.manageEmployee.component.ts">
       <SubType>Code</SubType>
     </TypeScriptCompile>
