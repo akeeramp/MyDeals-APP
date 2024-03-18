@@ -1,7 +1,6 @@
 /* Fix for overflow filter menus */
 kendo-popup:has(kendo-grid-columnmenu-chooser div.k-columnmenu-item[aria-expanded="true"]),
 kendo-popup:has(kendo-grid-columnmenu-filter div.k-columnmenu-item[aria-expanded="true"]) {
-    top: unset !important;
     bottom: 10px !important;
 }
 

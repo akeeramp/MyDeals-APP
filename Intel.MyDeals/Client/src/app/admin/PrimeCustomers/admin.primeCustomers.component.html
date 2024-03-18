@@ -64,16 +64,16 @@
                                [headerClass]="{'headerClass':true}" [editable]="false">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
-                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
+                    </kendo-grid-string-filter-menu>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="PRIM_CUST_ID" title="Unified Customer ID" width="100"
                                [headerClass]="{'headerClass':true}" [editable]="isUnifiedIdEditable">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
-                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
+                    </kendo-grid-string-filter-menu>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-textbox #primeCustDropDown [formControl]="formGroup.get('PRIM_CUST_ID')"></kendo-textbox>
@@ -83,8 +83,8 @@
                                [headerClass]="{'headerClass':true}" [editable]="isPrimCustNmEditable">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
-                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
+                    </kendo-grid-string-filter-menu>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-combobox #primeCustNmDropDown [data]="distinctPrimeCustNm" [placeholder]="'Enter Customer Name..'" [virtual]="virtual"
@@ -93,10 +93,9 @@
             </kendo-grid-column>
             <kendo-grid-column field="PRIM_LVL_ID" title="Country Customer ID" width="100"
                                [headerClass]="{'headerClass':true}" [editable]="isPrimLvlIdEditable">
-                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
-                             let-filterService="filterService">
-                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
+                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
+                    </kendo-grid-string-filter-menu>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-textbox #ctryCustDropDown [formControl]="formGroup.get('PRIM_LVL_ID')"></kendo-textbox>
@@ -106,16 +105,16 @@
                                [headerClass]="{'headerClass':true}" [editable]="false">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
-                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
+                    </kendo-grid-string-filter-menu>
                 </ng-template>
             </kendo-grid-column>
             <kendo-grid-column field="PRIM_CUST_CTRY" title="Unified Country" width="100"
                                [headerClass]="{'headerClass':true}" [editable]="isPrimCustCtryEditable">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
-                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
+                    </kendo-grid-string-filter-menu>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-combobox #primeCtryDropDown [data]="distinctprimeCtry" [virtual]="virtual"
@@ -127,8 +126,8 @@
                                [headerClass]="{'headerClass':true}" [editable]="isRplStsDdEditable">
                 <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter"
                              let-filterService="filterService">
-                    <multicheck-filter [isPrimitive]="true" [field]="column.field" [currentFilter]="filter"
-                                       [filterService]="filterService" [data]="distinctPrimitive(column.field)"></multicheck-filter>
+                    <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
+                    </kendo-grid-string-filter-menu>
                 </ng-template>
                 <ng-template kendoGridEditTemplate let-dataItem="dataItem" let-formGroup="formGroup">
                     <kendo-multiselect #rplStsCdDropDown [data]="distinctRplCd" [autoClose]="false"
