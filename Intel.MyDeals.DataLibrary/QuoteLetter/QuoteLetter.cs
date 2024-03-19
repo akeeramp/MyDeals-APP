@@ -1,9 +1,6 @@
 using System;
-using System.Globalization;
 using System.Linq;
-using System.Net.Security;
 using System.Xml.Linq;
-using Intel.MyDeals.Entities;
 
 namespace Intel.MyDeals.DataLibrary
 {
@@ -43,6 +40,15 @@ namespace Intel.MyDeals.DataLibrary
             retVal = retVal.Replace("'", "&apos;");
             retVal = retVal.Replace("\"", "&quot;");
             retVal = retVal.Replace("/", "&#x2F;");
+
+            if (key.Contains("ProdEPM"))
+            {
+                retVal = retVal.Replace(", Tray", "");
+                retVal = retVal.Replace(", T &amp; R", "");
+                retVal = retVal.Replace(", Tape &amp; Reel", "");
+                retVal = retVal.Replace(", Tape", "");
+                retVal = retVal.Replace("Boxed ", ""); // With trailing space
+            }
             return retVal;
         }
         string GetTrackerValue(string key)
