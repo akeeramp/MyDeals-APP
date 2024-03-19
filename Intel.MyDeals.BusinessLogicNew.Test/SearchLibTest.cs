@@ -94,5 +94,18 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
             });
             return searchResults;
         }
+
+        [Test, TestCase("Acer", "1-1-2023", "1-1-2024")]
+        public void GetTenderResultFilter_shouldReturnNotNull(string custName, string st, string en)
+        {
+            var dealData = GetTenderResultFilter();
+            mockSearchDataLib.Setup(x => x.GetTenderResultFilter(It.IsAny<string>(), It.IsAny<string>(), It.IsAny<string>())).Returns(dealData);
+            var result = new SearchLib(mockSearchDataLib.Object, mockTendersDataLib.Object, mockPricingStrategiesDataLib.Object).GetTenderResultFilter(custName,st,en);
+            Assert.NotNull(result);
+        }
+        private string GetTenderResultFilter()
+        {
+            return "[{\"CUST_MBR_SID\":\"Acer\",\"WF_STG_CD\":\"Active,Approved,Cancelled,Complete,Draft,Hold,InComplete,Lost,Offer,Pending,Requested,Submitted,Won\",\"PAYOUT_BASED_ON\":\"Consumption,Billings\",\"MRKT_SEG\":\"All Direct Market Segments,Communications,Consumer Electronics(SPD),Consumer No Pull,Consumer Retail Pull,Corp,Education,Embedded:DSS\",\"PERIOD_PROFILE\":\"Yearly,Bi-Weekly (2 weeks),Quarterly,,cha,cha,p\",\"PROGRAM_PAYMENT\":\"Backend,Frontend XOA3,Frontend YCS2\",\"AR_SETTLEMENT_LVL\":\"Issue Credit to Default Sold To by Region,,Cash\",\"COST_TEST_RESULT\":\"InComplete,NA,Pass\",\"MEETCOMP_TEST_RESULT\":\"InComplete,NA,Pass\",\"PASSED_VALIDATION\":\"Complete,Dirty\"}]";
+        }
     }
 }

@@ -19,8 +19,10 @@ namespace Intel.MyDeals.BusinessLogic
                 [" neq "] = " != ",
                 [" gt "] = " > ",
                 [" ge "] = " >= ",
+                [" gte "] = " >= ",
                 [" lt "] = " < ",
                 [" le "] = " <= ",
+                [" lte "] = " <= ",
             };
 
             // Check for LIKE condition
@@ -36,7 +38,9 @@ namespace Intel.MyDeals.BusinessLogic
                     var vals = arNewFilter.Take(arNewFilter.Count - 1).ToArray();
                     return $"{opDataElementType}_{atrb} IN ('{string.Join("','", vals)}')";
                 }
-                return $"{opDataElementType}_{arNewFilter[1]} LIKE '%{arNewFilter[0].Replace("*", "%")}%'";
+                string atrb1 = arNewFilter[1];
+                string passedAtrb = atrb1 == "DC_ID" ? "OBJ_SID" : atrb1;
+                return $"{opDataElementType}_{passedAtrb} LIKE '%{arNewFilter[0].Replace("*", "%")}%'";
             }
 
             // Check for OPERs
@@ -77,7 +81,8 @@ namespace Intel.MyDeals.BusinessLogic
             if (arSections.Count == 2)
             {
                 string atrb = arSections[0];
-                arSections[1] = arSections[1].Trim().Replace("'", "");
+                //for Dates columns we dont have to remove the string notations
+                arSections[1] = filter.IndexOf("_DT", StringComparison.Ordinal) >= 0 || filter.IndexOf("REBATE_BILLING_START", StringComparison.Ordinal) >= 0 || filter.IndexOf("REBATE_BILLING_END", StringComparison.Ordinal) >= 0 ? arSections[1] : arSections[1].Trim().Replace("'", "");
 
                 // Special case... CAP is a string because of ranges and "NO CAP" be we will treat it in the filter like a number
                 if (atrb != AttributeCodes.CAP)
@@ -120,12 +125,13 @@ namespace Intel.MyDeals.BusinessLogic
             string rtn = string.Join(" and ", arFilterClauses);
 
             // Special columns... When we make the advanced search, need a better way than hard coding this
-            rtn = rtn.Replace("WIP_DEAL_Customer/CUST_NM", "CUST_NM");
+            rtn = rtn.Replace("WIP_DEAL_Customer/CUST_NM", "CUST_NM"); //'WIP_DEAL_DEAL_COMB_TYPE'
             rtn = rtn.Replace("WIP_DEAL_CNTRCT_TITLE", "CNTRCT_TITLE");
             rtn = rtn.Replace("WIP_DEAL_CNTRCT_OBJ_SID", "CNTRCT_OBJ_SID");
             rtn = rtn.Replace("WIP_DEAL_PRC_ST_TITLE", "PRC_ST_TITLE");
+            rtn = rtn.Replace("WIP_DEAL_CUST_MBR_SID", "CUST_MBR_SID");
+            rtn = rtn.Replace("WIP_DEAL_PTR_USER_PRD", "WIP_DEAL_TITLE");
             rtn = rtn.Replace("WIP_DEAL_CNTRCT_C2A_DATA_C2A_ID", "CNTRCT_C2A_DATA_C2A_ID");
-
             return rtn;
         }
 

@@ -516,7 +516,10 @@ export class AttributeBuilder implements OnInit, OnDestroy {
         this.usrPrfrncssvc.updateActions(this.cat, this.subcat, "CustomSearch", ruleslist).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
             if (response) {
                 var runRule = {
-                    rule: this.attributes
+                    rule: this.attributes,
+                    take: 25,
+                    skip: 0,
+                    runrule: true
                 }
                 this.invokeSearchDatasource.emit(runRule)
             }

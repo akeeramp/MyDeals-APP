@@ -17583,7 +17583,49 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 				StoredProdedureName = "[dbo].[PR_ZMIGRATE_USERS]";
 			}
 		}
-	}
+
+        public partial class PR_MYDL_GET_TENDER_FILTER : SP
+        {
+            public PR_MYDL_GET_TENDER_FILTER()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_GET_TENDER_FILTER]";
+            }
+
+            ///<summary>
+            /// DataType: varchar(100)
+            /// Mode: IN
+            /// Max Length: 100
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 100, false)]
+            public String IN_CUST_NM
+            {
+                set { SetParmeter("IN_CUST_NM", value); }
+                get { return (String)GetParameter("IN_CUST_NM"); }
+            }
+
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 100, false)]
+            public Int32 EMP_WWID
+            {
+                set { SetParmeter("EMP_WWID", value); }
+                get { return (Int32)GetParameter("EMP_WWID"); }
+            }
+
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 100, false)]
+            public DateTime STRDATE
+            {
+                set { SetParmeter("STRDATE", value); }
+                get { return (DateTime)GetParameter("STRDATE"); }
+            }
+
+            [SQLParameterAttribute(3, "ParameterDirection.Input", 100, false)]
+            public DateTime ENDDATE
+            {
+                set { SetParmeter("ENDDATE", value); }
+                get { return (DateTime)GetParameter("ENDDATE"); }
+            }
+        }
+    }
 
 
 }

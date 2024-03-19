@@ -1,5 +1,5 @@
 ﻿<link href="/Client/src/app/style/dealEditor.css" rel="stylesheet" />
-<loading-panel-angular id="DELoading" style="z-index:500;" [show]="isDataLoading" [header]="spinnerMessageHeader"
+<loading-panel-angular id="DELoading" style="z-index:500;" [show]="isDataLoading  || columns.length == 0" [header]="spinnerMessageHeader"
                        [description]="spinnerMessageDescription" [isShowFunFact]="isBusyShowFunFact" [msgType]="msgType"></loading-panel-angular>
 <kendo-tabstrip #tabstrip (tabSelect)="onTabSelect($event);" id="dealEditorTab" class="width-fixes new-allDeals fs-increase" [ngClass]="{'selectedTabAll' : selectedTab ==='All'}" style="min-height:400px;">
     <kendo-tabstrip-tab *ngFor="let data of groups;" title="{{data.name}}" [selected]="selectedTab === data.name" [cssClass]="data.isTabHidden? 'hidden' : 'visible'">
@@ -174,7 +174,7 @@
                     </div>
                 </div>
 
-                <kendo-dialog *ngIf="isAddDialog" id="Adddialog" class="Tabfix" >
+                <kendo-dialog *ngIf="isAddDialog" id="Adddialog" class="Tabfix">
                     <p class="tab-name-style">Tab name:</p>
                     <input type="text" [(ngModel)]="DeAddtab" class="k-textbox add-tab-textbox-style" />
                     <kendo-dialog-actions class="add-tab-style">
@@ -212,7 +212,17 @@
                         <tr><td><i class="intelicon-help skyBlue" aria-hidden="true" style="font-size: 30px" (click)="showHelpTopic()"></i></td></tr>
                     </table>
                 </button>&nbsp;&nbsp;
-
+                <button class="btn ssToolbarBtn tool-hover" (click)="clearSearchGrid()" title="Clear all sorting and filtering.">
+                    <table>
+                        <tbody>
+                            <tr>
+                                <td><i class="intelicon-cancel-filter-outlined skyBlue addd_cleargridbtn" style="font-size: 30px" aria-hidden="true"></i></td>
+                                <td class="hidden-sm hidden-xs text_bg"
+                                    style="font-family: 'Intel Clear';font-size:11px; padding-left: 5px; text-align: left; color: #00AEEF;">Clear Grid's<br>Sorting/Filtering</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </button>
                 <span class="k-textbox design" style="width: 255px !important; margin-top: 4px; font-size: 16px;">
                     <i class="intelicon-search" style="font-size:20px; color:#00AEEF; margin-top:3px;"></i>
                     &nbsp;&nbsp;
@@ -229,13 +239,29 @@
                     <kendo-grid-column [headerClass]="{'headerClass':true}" *ngFor="let column of columns" field="{{column.field}}"
                                        [locked]="column.locked == true" width="{{ (column.field == 'CAP_STRT_DT' || column.field == 'CAP_END_DT' || column.field == 'YCS2_START_DT' || column.field == 'YCS2_END_DT' ) ? column.width + 30 : (column.field == 'START_DT' || column.field == 'END_DT') ? column.width + 15 : column.width }}" [filterable]="column.filterable" [sortable]="column.sortable">
                         <ng-template kendoGridFilterMenuTemplate let-column="column" let-filter="filter" let-filterService="filterService">
-                            <div *ngIf="!dropdownFilterColumns.includes(column.field)">
+                            <div *ngIf="!in_Is_Tender_Dashboard && !dropdownFilterColumns.includes(column.field)">
                                 <multicheck-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value"
                                                    [filterService]="filterService" [data]="filteringData[column.field]"></multicheck-filter>
                             </div>
-                            <div *ngIf="dropdownFilterColumns.includes(column.field)">
+                            <div *ngIf="!in_Is_Tender_Dashboard && dropdownFilterColumns.includes(column.field)">
                                 <dropDown-filter class="de-dropdwn-styl" [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value" operator="isnotnull"
                                                  [filterService]="filterService" [data]="filteringData[column.field]"></dropDown-filter>
+                            </div>
+                            <div *ngIf="in_Is_Tender_Dashboard && dropdownFilterColumns.includes(column.field)">
+                                <multicheck-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value"
+                                                   [filterService]="filterService" [data]="getTenderFilter(column.field)"></multicheck-filter>
+                            </div>
+                            <div *ngIf="in_Is_Tender_Dashboard && tenderDatesFilterColumns.includes(column.field)">
+                                <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService">
+                                </date-range-filter>
+                            </div>
+                            <div *ngIf="in_Is_Tender_Dashboard && tenderNumericFilterColumns.includes(column.field)">
+                                <kendo-grid-numeric-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false" [format]="'#########'"></kendo-grid-numeric-filter-menu>
+                            </div>
+                            <div *ngIf="in_Is_Tender_Dashboard && !dropdownFilterColumns.includes(column.field) && !tenderDatesFilterColumns.includes(column.field) && !tenderNumericFilterColumns.includes(column.field)">
+                                <kendo-grid-string-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false">
+                                    <kendo-filter-contains-operator></kendo-filter-contains-operator>
+                                </kendo-grid-string-filter-menu>
                             </div>
                         </ng-template>
                         <ng-template kendoGridHeaderTemplate>

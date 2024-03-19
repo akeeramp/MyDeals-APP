@@ -123,6 +123,16 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
+        [Route("GetTenderResultFilter/{custName}/{st}/{en}")]
+        [HttpGet]
+        public string GetTenderResultFilter(string custName, string st, string en)
+        {
+            return SafeExecutor(() => _searchLib.GetTenderResultFilter(custName, st, en)
+                , "Unable to action the Tenders"
+            );
+        }
+
+        [Authorize]
         [Route("GetTenderList/{st}/{en}/{actv}/{searchText}")]
         [HttpGet]
         public PageResult<OpDataCollectorFlattenedItem> GetTenderList(ODataQueryOptions<CustomerDivision> options, DateTime st, DateTime en, int actv, string searchText)

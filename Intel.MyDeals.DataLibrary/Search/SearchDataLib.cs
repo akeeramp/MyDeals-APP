@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Data;
 using Intel.MyDeals.DataAccessLib;
 using Intel.MyDeals.Entities;
 using Intel.MyDeals.IDataLibrary;
@@ -144,6 +145,29 @@ namespace Intel.MyDeals.DataLibrary
             };
 
             return packet;
+        }
+
+        public string GetTenderResultFilter(string custName, string st, string en)
+        {
+
+            try
+            {
+                Procs.dbo.PR_MYDL_GET_TENDER_FILTER cmd = new Procs.dbo.PR_MYDL_GET_TENDER_FILTER()
+                {
+                    IN_CUST_NM = custName,
+                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID,
+                    STRDATE = Convert.ToDateTime(st),
+                    ENDDATE = Convert.ToDateTime(en)
+                };
+                DataTable dtquoteletterdata = DataAccess.ExecuteDataTable(cmd);
+                return dtquoteletterdata.Rows[0][0].ToString();
+            }
+            catch(Exception ex)
+            {
+
+                return ex.ToString();
+
+            }
         }
     }
 }

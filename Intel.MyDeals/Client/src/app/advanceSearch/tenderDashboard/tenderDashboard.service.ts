@@ -38,4 +38,9 @@ export class tenderDashboardService {
         const apiUrl: string = this.apiBaseCostTestUrl + "RunBulkPctPricingStrategy";
         return this.httpClient.post(apiUrl, psIDS);
     }
+
+    public getTenderFilterData(custName, st, en) {
+        const apiUrl: string = "api/Search/GetTenderResultFilter/" + custName + '/' + st + '/' + en;
+        return this.httpClient.get(apiUrl);
+    }
 }

@@ -6,6 +6,7 @@ import { logger } from "../../shared/logger/logger";
 import { tenderDashboardService } from "./tenderDashboard.service";
 import { TenderDashboardConfig } from '../tenderDashboard/tenderDashboard_config'
 import { TemplatesService } from "../../shared/services/templates.service";
+import { FilterDescriptor, CompositeFilterDescriptor } from "@progress/kendo-data-query";
 import { each } from 'underscore';
 import { GridUtil } from "../../contract/grid.util";
 import { TenderDashboardGridUtil } from "../../contract/tenderDashboardGrid.util";
@@ -18,7 +19,7 @@ import { contractStatusWidgetService } from "../../dashboard/contractStatusWidge
 import { emailModal } from "../../contract/contractManager/emailModal/emailModal.component";
 import { constantsService } from "../../admin/constants/admin.constants.service";
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
-import { Observable, Subject } from "rxjs";
+import { Observable, Subject, forkJoin } from "rxjs";
 import { takeUntil } from "rxjs/operators";
 
 @Component({
@@ -54,13 +55,14 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
     public type2OperatorList = TenderDashboardConfig.operatorSettings.types2operator;
     public cat = 'TenderDealSearch';
     public subcat = 'TenderSearchRules';
-    public ruleData = [];
+    public ruleData:any = {};
     public wipOptions = {};
     public customers = []; 
     public maxRecordCount: any;
     public templates = [];
     private dealType: string = 'ECAP';
     private searchResults: any = [];
+    private searchCount: number = 0;
     private isSearchFailed: boolean = false;
     private errorMsg: string = "";
     private isActionWarning: boolean = false;
@@ -78,6 +80,8 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
     private runSearch: boolean = false;
     private approveDeals: boolean = false;
     private entireDataDeleted: boolean = false;
+
+    public filterData = [];
      constructor(protected cntrctWdgtSvc: contractStatusWidgetService,
                 protected loggerSvc: logger,
                 protected tenderDashboardSvc: tenderDashboardService,
@@ -238,10 +242,13 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
         this.refreshGridRows(args.wipIds, null);
     }
     invokeSearchDatasource(args) {
-        this.ruleData = args.rule;
-
-        if (this.ruleData[0].value == "ECAP" || this.ruleData[0].value == "KIT") {
-            this.dealType = this.ruleData[0].value;
+        this.ruleData = args;
+        if (!this.ruleData.take) {
+            this.ruleData.take = 25;
+            this.ruleData.skip = 0;
+        }
+        if (this.ruleData.rule[0].value == "ECAP" || this.ruleData.rule[0].value == "KIT") {
+            this.dealType = this.ruleData.rule[0].value;
             this.startDateValue = window.localStorage.startDateValue ? new Date(window.localStorage.startDateValue) : this.startDateValue;
             this.endDateValue = window.localStorage.endDateValue ? new Date(window.localStorage.endDateValue) : this.endDateValue;
 
@@ -249,55 +256,142 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
             var en = this.endDateValue;
             var searchUrl = (window.localStorage.selectedCustNames === undefined || window.localStorage.selectedCustNames === "" || window.localStorage.selectedCustNames == '[]') ? "null" : JSON.parse(window.localStorage.selectedCustNames).map(x => x.CUST_NM);
             this.setBusy("Searching...", "Search speed depends on how specific your search options are.", "Info", true);
+            searchUrl = searchUrl + "?$top=" + (args.take - 1) + "&$skip=" + args.skip;
+            if (this.ruleData.filter) {
+                let filter = this.ruleData.filter;
+                if (filter && filter.filters && filter.filters.length > 0) {
+                    searchUrl += '&$filter=';
+                    filter.filters.forEach((item: CompositeFilterDescriptor, ind) => {
+                        if (item && item.filters && item.filters.length > 0) {
+                            item.filters.forEach((fltrItem: FilterDescriptor) => {
+                                if (fltrItem.value != "Select All") {
+                                    let tempDate: string;
+                                    let column = fltrItem.field.toString();
+                                    searchUrl += ind == 0 && filter.filters.length > 1 ? '(' : '';
+                                    if (column == 'CUST_MBR_SID') {
+                                        fltrItem.field = 'Customer/CUST_NM';
+                                    }
+                                    else if (column.includes('_DT') || column == 'REBATE_BILLING_START' || column == 'REBATE_BILLING_END') {
+                                        fltrItem.value = fltrItem.value.toLocaleDateString();
+                                    }
+                                    let validCol = column.substr(column.length - 4)
 
-            var take = 100;
-            if (this.maxRecordCount !== undefined && this.maxRecordCount.CNST_VAL_TXT !== undefined && this.maxRecordCount.CNST_VAL_TXT !== null) {
-                take = Number.parseInt(this.maxRecordCount.CNST_VAL_TXT);
-                take = Number.isInteger(take) ? take : 100;
-                searchUrl = searchUrl + "?$top=" + (take - 1);
-            } else {
-                searchUrl = searchUrl + "?$top=" + (take - 1);
-            }
-            if (this.templates != undefined && this.templates['ModelTemplates'] != undefined && this.templates['ModelTemplates'].WIP_DEAL != undefined) {
-                this.searchTenderDeals(st, en, searchUrl, take);
-            }
-        }
-        else {
-            this.templatesSvc.readTemplates().pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
-                if (response)
-                    this.templates = response;
-                    this.addCustomToTemplates();
-                this.searchTenderDeals(st, en, searchUrl, take);
-            }, (err) => {
-                this.loggerSvc.error("Template Retrieval Failed", "Error", err);
-            });
-        }
-    }
-    searchTenderDeals(st, en, searchText, take) {
-        this.searchResults = [];//clear out the previuos search results if any
-        this.tenderDashboardSvc.searchTender(st, en, searchText).pipe(takeUntil(this.destroy$)).subscribe((response: any) => {
-            this.setBusy("", "");
-            if ((<any>window).usrRole === 'DA' && (<any>window).usrVerticals.length > 0) {
-                let userVerticals = (<any>window).usrVerticals.split(',');
-                for (let i = response.Items.length - 1; i >= 0; i--) {
-                    var dataVerticals = response.data.Items[i].PRODUCT_CATEGORIES.split(",");
-                    if (!TenderDashboardGridUtil.findOne(dataVerticals, userVerticals)) {
-                        response.Items.splice(i, 1);
-                    }
+                                    if (fltrItem.operator == 'contains') {
+                                        if (validCol == '_VAL') {
+                                            searchUrl += "substringof(" + "'" + fltrItem.value + "'," + column.slice(0, -4) + ")"
+                                        }
+                                        else
+                                            searchUrl += "substringof(" + "'" + fltrItem.value + "'," + fltrItem.field + ")"
+                                    }
+                                    else if (validCol == '_VAL') {
+                                        searchUrl += column.slice(0, -4) + ' ' + fltrItem.operator + " '" + fltrItem.value + "'"
+                                    }
+                                    else searchUrl += fltrItem.field + ' ' + fltrItem.operator + " '" + fltrItem.value + "'"
+                                    searchUrl += filter.filters.length != (ind + 1) && filter.filters.length > 1 ? ` ${filter.logic} ` : '';
+                                    searchUrl += filter.filters.length == (ind + 1) && filter.filters.length > 1 ? ')' : '';
+                                    if (column == 'CUST_MBR_SID') {
+                                        fltrItem.field = 'CUST_MBR_SID';
+                                    } else if (column.includes('_DT') || column == 'REBATE_BILLING_START' || column == 'REBATE_BILLING_END') {
+                                        fltrItem.value = new Date(fltrItem.value);
+                                    } else if (column == 'OBJ_SID') {
+                                        fltrItem.field = 'DC_ID';
+                                    }
+                                }
+                            })
+                        }
+                    })
                 }
             }
-            this.searchResults = response.Items;
-            this.entireDataDeleted = false;
-            if (this.searchResults.length == 0) {
-                this.errorMsg = (<any>window).usrRole === "DA" ? "No results found. Try changing your search options or check your product category access." : "No results found. Try changing your search options."
-                this.setBusy("", "");
+            if(this.ruleData.sort){
+                let sortby = this.ruleData.sort;
+                if (sortby && sortby.sort && sortby.sort.length > 0) {
+                    each(sortby, (sortitem) => {
+                        if (sortitem.field != null) {
+                            let column = sortitem.field;
+                            let validCol = column.substr(column.length - 4)
+                            if (validCol == '_VAL') {
+                                searchUrl += '&$orderby=' + column.slice(0, -4);
+                            }
+                            else if (sortitem.field == 'CUST_MBR_SID') {
+                                column = sortitem.field
+                                column = 'CUST_NM'
+                                searchUrl += '&$orderby=' + column
+                            }
+                            else
+                                searchUrl += '&$orderby=' + sortitem.field;
+
+                        }
+                        if (sortitem.dir == undefined || sortitem.dir == null) {
+                            searchUrl += ' asc';
+                        } else {
+                            searchUrl += ' ' + sortitem.dir;
+                        }
+                    })
+                }
+            }
+            if (this.templates != undefined && this.templates['ModelTemplates'] != undefined && this.templates['ModelTemplates'].WIP_DEAL != undefined) {
+                this.searchTenderDeals(st, en, searchUrl);
+            } else {
+                this.templatesSvc.readTemplates().pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
+                    if (response) this.templates = response;
+                    this.addCustomToTemplates();
+                    this.searchTenderDeals(st, en, searchUrl);
+                }, (err) => {
+                    this.loggerSvc.error("Template Retrieval Failed", "Error", err);
+                });
+            }
+        }
+        
+    }
+    async searchTenderDeals(st, en, searchText) { 
+        let getResponse = {};  //object for fork join
+        if (this.ruleData.runrule) {
+            this.searchResults = [];//clear out the previuos search results if any
+            getResponse["filterData"] = this.getFilterData( st, en);
+        }
+        getResponse["searchData"] = this.tenderDashboardSvc.searchTender(st, en, searchText);
+        let result:any = await forkJoin(getResponse).toPromise().catch((err) => {
+            this.setBusy("", "");
+            this.searchResults = [{}];
+            this.errorMsg = this.ruleData.exportAll ? "Export All Failed. Please try again with more specific Search Options." : "Tender Search Failed.  Please try again with more specific Search Options.";
+            this.isSearchFailed = true;
+            this.ruleData.exportAll = this.ruleData.exportAll ? false : this.ruleData.exportAll;
+            console.log('Tender Search Failed');
+        });
+        this.setBusy("", "");
+        if (result && result.searchData) {
+            this.tenderResultProcessing(result.searchData);
+        }
+        if (result && result.filterData && !result.filterData.includes("FormatException")) {
+            this.tenderFilterProcessing(result.filterData);
+        } else if (this.ruleData.runRule) {
+            if (!this.isSearchFailed) {
+                this.errorMsg = "Filter Data Fetching Failed. Try running the rule again.";
                 this.isSearchFailed = true;
             }
-            if (response['Count'] > take) {
-                var info = this.maxRecordCount.CNST_DESC != undefined ? this.maxRecordCount.CNST_DESC : "Your search options returned <b>" + response['Count'] + "</b> deals. Refine your search options"
-                info = info.replace("**", response['Count']);
-                this.loggerSvc.info(info,"");
+        }
+        this.ruleData.runrule = false;
+    }
+    tenderResultProcessing(result) {
+        if ((<any>window).usrRole === 'DA' && (<any>window).usrVerticals.length > 0) {
+            let userVerticals = (<any>window).usrVerticals.split(',');
+            for (let i = result.Items.length - 1; i >= 0; i--) {
+                var dataVerticals = result.data.Items[i].PRODUCT_CATEGORIES.split(",");
+                if (!TenderDashboardGridUtil.findOne(dataVerticals, userVerticals)) {
+                    result.Items.splice(i, 1);
+                }
             }
+        }
+
+        if (result.Items.length == 0) {
+            this.errorMsg = (<any>window).usrRole === "DA" ? "No results found. Try changing your search options or check your product category access." : "No results found. Try changing your search options."
+            this.setBusy("", "");
+            this.searchResults = [{}];
+            this.isSearchFailed = true;
+        } else {
+            this.searchResults = result.Items;
+            this.searchCount = result.Count;
+            this.entireDataDeleted = false;
             for (var w = 0; w < this.searchResults.length; w++) {
                 var item = this.searchResults[w];
                 item["MISSING_CAP_COST_INFO"] = GridUtil.getMissingCostCapTitle(item).split('\n')[0];
@@ -315,19 +409,28 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
                     }
                 }
             }
-        },
-            (error) => {
-                this.isSearchFailed = true;
-                this.setBusy("", "");
-                this.errorMsg = "Tender Search Failed.  Please try again with more specific Search Options.";
-                console.log('Tender Search Failed');
-            });
+        }
+    }
+    tenderFilterProcessing(result) {
+        this.filterData = JSON.parse(result)[0];
+        Object.keys(this.filterData).forEach(key => {
+            let initialVal = this.filterData[key].split(',');
+            let data = [];
+            initialVal.forEach(val => {
+                data.push({ Text: val, Value: val })
+            })
+            this.filterData[key] = data;
+        });
+    }
+    getFilterData(st, en) {
+        let custName = (window.localStorage.selectedCustNames === undefined || window.localStorage.selectedCustNames === "" || window.localStorage.selectedCustNames == '[]') ? "null" : JSON.parse(window.localStorage.selectedCustNames).map(x => x.CUST_NM);
+        return this.tenderDashboardSvc.getTenderFilterData(custName, st.toLocaleDateString('en-US').replaceAll("/", "-"), en.toLocaleDateString('en-US').replaceAll("/", "-"));
     }
     addCustomToTemplates() {
         each(this.templates['ModelTemplates']['PRC_TBL'], (value, key) => {
             value._custom = {
-                    "ltr": value.name[0],
-                    "_active": false
+                "ltr": value.name[0],
+                "_active": false
             };
         })
     }
@@ -757,15 +860,15 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
                 this.loggerSvc.error("Unable to get Dropdown Customers.", error, error.statusText);
             });
     }
-    getMaxRecordCount(varName: string) {
-        this.constantsService.getConstantsByName(varName).pipe(takeUntil(this.destroy$)).subscribe((response) => {
-            if (response) {
-                this.maxRecordCount = response;
-            }
-        }, (error) => {
-            this.loggerSvc.error("TenderDashboard::unable to get Max Value", error);
-        })
-    }
+    //getMaxRecordCount(varName: string) {
+    //    this.constantsService.getConstantsByName(varName).pipe(takeUntil(this.destroy$)).subscribe((response) => {
+    //        if (response) {
+    //            this.maxRecordCount = response;
+    //        }
+    //    }, (error) => {
+    //        this.loggerSvc.error("TenderDashboard::unable to get Max Value", error);
+    //    })
+    //}
     runPCTMCT(data) {
         if (data.length > 0) {
             var selectedItem = [];
@@ -956,7 +1059,7 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
         this.startDateValue = window.localStorage.startDateValue ? new Date(window.localStorage.startDateValue) : this.startDateValue;
         this.endDateValue = window.localStorage.endDateValue ? new Date(window.localStorage.endDateValue) : this.endDateValue;
         this.getCustomerData();
-        this.getMaxRecordCount('TENDER_SEARCH_MAX_VALUE')
+        //this.getMaxRecordCount('TENDER_SEARCH_MAX_VALUE')
         if (this.templates.length == 0) {
             this.templatesSvc.readTemplates().pipe(takeUntil(this.destroy$)).subscribe((response: Array<any>) => {
                 if (response)

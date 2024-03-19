@@ -57,7 +57,10 @@ export class dealEditorComponent implements OnDestroy{
     @Input() UItemplate: any = {};
     @Input() in_Is_Tender_Dashboard: boolean = false;// it will recieve true when DE used in TenderDashboard Screen
     @Input() in_Search_Results: any = [];
+    @Input() in_Search_Count: any = 0;
+    @Input() ruleData: any = {}
     @Input() in_Deal_Type: string = "";
+    @Input() filterData: any = {} ;
     @ViewChild('dealEditor') private grid: GridComponent;
     @Output() perfComp = new EventEmitter;
     @Output() addPerfTimes = new EventEmitter;
@@ -67,6 +70,7 @@ export class dealEditorComponent implements OnDestroy{
     @Output() deTabInfmIconUpdate = new EventEmitter();
     @Output() pteRedir = new EventEmitter();
     @Output() invokeSearchDatasource = new EventEmitter();
+    @Output() invokeSearchData = new EventEmitter();
     @Output() bidActionsUpdated = new EventEmitter();
     @Output() floatActionsUpdated = new EventEmitter();
     @Output() tenderCopyDeals = new EventEmitter();
@@ -125,7 +129,9 @@ export class dealEditorComponent implements OnDestroy{
     private searchFilter: any;
     private wrapEnabled: boolean = false;
     private isExportable: boolean = true;
-    private dropdownFilterColumns = PTE_Config_Util.dropdownFilterColumns
+    private dropdownFilterColumns = [];
+    private tenderDatesFilterColumns = PTE_Config_Util.tenderDashboardDateColumns;
+    private tenderNumericFilterColumns = PTE_Config_Util.tenderDashboardNumericColumns;
     private savedResponseWarning: any[] = [];
     private roleCanCopyDeals = (<any>window).usrRole == 'FSE' || (<any>window).usrRole == 'GA';
     public isRunning: boolean = false;
@@ -158,34 +164,36 @@ export class dealEditorComponent implements OnDestroy{
     private pageSizes: PageSizeItem[] = [
         { text: "10", value: 10 },
         { text: "25", value: 25 },
-        { text: "50", value: 50 }
+        //{ text: "50", value: 50 }
     ];
     private filteringData: any[] = [];
     filterChange(filter: any): void {
         this.state.filter = filter;
-        this.gridData = process(this.gridResult, this.state);
-        if(filter && filter.filters && filter.filters.length>0){
-            filter.filters.forEach((item: CompositeFilterDescriptor) => {
-                let arrayData = [];
-                if(item && item.filters && item.filters.length>0){
-                    item.filters.forEach((fltrItem: FilterDescriptor) => {
-                        let column = fltrItem.field.toString();
-                        if (this.dropdownFilterColumns.includes(column)) {
-                            each(this.gridResult, (eachData) => {
-                                let keys = Object.keys(eachData[column]);
-                                let isexists = false;
-                                each(keys, key => {
-                                    if (eachData[column][key] == fltrItem.value.toString())
-                                        isexists = true;
+        if (!this.in_Is_Tender_Dashboard) {
+            this.gridData = process(this.gridResult, this.state);
+            if (filter && filter.filters && filter.filters.length > 0) {
+                filter.filters.forEach((item: CompositeFilterDescriptor) => {
+                    let arrayData = [];
+                    if (item && item.filters && item.filters.length > 0) {
+                        item.filters.forEach((fltrItem: FilterDescriptor) => {
+                            let column = fltrItem.field.toString();
+                            if (this.dropdownFilterColumns.includes(column)) {
+                                each(this.gridResult, (eachData) => {
+                                    let keys = Object.keys(eachData[column]);
+                                    let isexists = false;
+                                    each(keys, key => {
+                                        if (eachData[column][key] == fltrItem.value.toString())
+                                            isexists = true;
+                                    })
+                                    if (isexists)
+                                        arrayData.push(eachData);
                                 })
-                                if (isexists)
-                                    arrayData.push(eachData);
-                            })
-                            this.gridData = process(arrayData, this.state);
-                        }
-                    })
-                }
-            });
+                                this.gridData = process(arrayData, this.state);
+                            }
+                        })
+                    }
+                });
+            }
         }
     }
 
@@ -239,6 +247,9 @@ export class dealEditorComponent implements OnDestroy{
             }
         });
     }
+    getTenderFilter(field) {
+        return this.filteringData[field];
+    }
 
     async getGroupsAndTemplates() {
         if (this.isInitialLoad) {
@@ -249,24 +260,62 @@ export class dealEditorComponent implements OnDestroy{
             }
             // Get template for the selected WIP_DEAL
             this.wipTemplate = this.UItemplate["ModelTemplates"]["WIP_DEAL"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
+            if (this.in_Is_Tender_Dashboard) {
+                this.wipTemplate.columns.forEach(item => {
+                    if (item.field == "IS_RPL" || item.field == "MISSING_CAP_COST_INFO") {
+                        item.filterable = false;
+                        item.sortable = false;
+                    }
+                })
+            }
 
             PTE_Load_Util.wipTemplateColumnSettings(this.wipTemplate, this.isTenderContract, this.curPricingTable.OBJ_SET_TYPE_CD, this.in_Is_Tender_Dashboard);
             if (this.templates == undefined) this.templates = JSON.parse(JSON.stringify(opGridTemplate.templates[`${this.curPricingTable.OBJ_SET_TYPE_CD}`]));
         }
         if (!this.in_Is_Tender_Dashboard)//if DE not called from Tender Dashboard then we need call the service call to get WIP_DEAL data
             await this.getWipDealData();
-        else {// TenderDashboard will share the search results to display in a grid , no service call required
-            this.gridResult = this.in_Search_Results;
-            this.setWarningDetails();
-            this.applyHideIfAllRules();
-            this.lookBackPeriod = PTE_Load_Util.getLookBackPeriod(this.gridResult);
-            this.gridData = process(this.gridResult, this.state);
-            this.distinctPrimitive();
-        }
         if (this.isInitialLoad)
             this.customLayout(false);
         else 
+            this.getTenderDashboardData();
             this.setBusy("", "", "", false);
+    }
+
+    invokeTenderSearch(state) {
+        this.ruleData.take = state.take,
+        this.ruleData.skip = state.skip
+        this.ruleData.filter = state.filter;
+        this.ruleData.sort = state.sort;
+        this.invokeSearchDatasource.emit(this.ruleData);
+    }
+
+    getTenderDashboardData() {
+        this.gridResult = [];
+        setTimeout(() => {
+            if (Object.keys(this.in_Search_Results[0]).length > 0) {
+                this.gridResult = this.in_Search_Results;
+                if (this.ruleData.exportAll == 1) {
+                    let columns = this.columnOrdering();
+                    GridUtil.dsToExcel(columns, this.gridResult, "Deal Editor Export");
+                    this.ruleData.exportAll = 0;
+                    this.ruleData.take = this.state.take;
+                    this.ruleData.skip = this.state.skip;
+                }
+                this.setWarningDetails();
+                this.applyHideIfAllRules();
+                this.lookBackPeriod = PTE_Load_Util.getLookBackPeriod(this.gridResult);
+                let state = {
+                    take: 25,
+                    skip: 0
+                }
+                this.gridData = process(this.gridResult, state);
+                this.gridData.total = this.in_Search_Count;
+                this.state.take = this.ruleData.take;
+                this.state.skip = this.ruleData.skip;
+                this.filteringData = Object.keys(this.filterData).length > 0 ? this.filterData : {};
+            }
+            this.isLoading = false;
+        }, 0);
     }
 
     async getWipDealData() {
@@ -356,7 +405,22 @@ export class dealEditorComponent implements OnDestroy{
             this.refreshGrid();
         }
         setTimeout(() => {
-            this.gridData = process(this.gridResult, this.state);
+            
+            if (this.in_Is_Tender_Dashboard) {
+                let state: State = {
+                    skip: 0,
+                    take: this.state.take,
+                    group: [],
+                    filter: {
+                        logic: "and",
+                        filters: [],
+                    },
+                };
+                this.gridData = process(this.gridResult, state);
+                this.state.take = this.ruleData.take;
+                this.state.skip = this.ruleData.skip;
+                this.gridData.total = this.in_Search_Count;
+            } else this.gridData = process(this.gridResult, this.state);
             this.isLoading = false;
         },0)
         
@@ -392,12 +456,16 @@ export class dealEditorComponent implements OnDestroy{
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.isLoading = true;
-        this.gridData.data = [];
-        setTimeout(() => {
-            this.state = state;
-            this.gridData = this.gridData.data.length > 0 ? this.gridData : process(this.gridResult, this.state);
-            this.isLoading = false;
-        }, 0);
+        if (this.in_Is_Tender_Dashboard) {
+            this.invokeTenderSearch(state);
+        } else {
+            this.gridData.data = [];
+            setTimeout(() => {
+                this.state = state;
+                this.gridData = this.gridData.data.length > 0 ? this.gridData : process(this.gridResult, this.state);
+                this.isLoading = false;
+            }, 0);
+        }
     }
 
     filterColumnbyGroup(groupName: string, fieldChecked?) {
@@ -1137,7 +1205,7 @@ export class dealEditorComponent implements OnDestroy{
                     "EventSource": 'WIP_DEAL',
                     "Errors": {}
                 }                
-                this.invokeSearchDatasource.emit(data);// invoke Tender Dashboard save api call
+                this.invokeSearchData.emit(data);// invoke Tender Dashboard save api call
                 this.dirty = false;
                 this.setBusy("", "", "", false);
             }
@@ -1391,7 +1459,7 @@ export class dealEditorComponent implements OnDestroy{
                     }
                     else {
                         const cols = ["DC_ID", "WF_STG_CD", "PTR_USER_PRD", "TITLE", "NOTES"];
-                        let filters = []
+                        let filters = [];
                         each(cols, item => {
                             if (this.gridResult.filter(x => x[item].toString().toLowerCase().includes(this.searchFilter.toLowerCase())).length > 0)
                                 filters.push({
@@ -1402,25 +1470,40 @@ export class dealEditorComponent implements OnDestroy{
                         });
                         if (filters.length == 0) filters = [
                             {
-                                field: "DC_ID",
-                                operator: "eq",
-                                value: this.searchFilter
+                                "filters": [{
+                                    field: "DC_ID",
+                                    operator: this.in_Is_Tender_Dashboard ? "contains" : "eq",
+                                    value: this.searchFilter
+                                }],
+                                logic : "or"
                             }, {
-                                field: "WF_STG_CD",
-                                operator: "contains",
-                                value: this.searchFilter
+                                "filters": [{
+                                    field: "WF_STG_CD",
+                                    operator: "contains",
+                                    value: this.searchFilter
+                                }],
+                                logic: "or"
                             }, {
-                                field: "PTR_USER_PRD",
-                                operator: "contains",
-                                value: this.searchFilter
+                                "filters": [{
+                                    field: "PTR_USER_PRD",
+                                    operator: "contains",
+                                    value: this.searchFilter
+                                }],
+                                logic: "or"
                             }, {
-                                field: "TITLE",
-                                operator: "contains",
-                                value: this.searchFilter
+                                "filters": [{
+                                    field: "TITLE",
+                                    operator: "contains",
+                                    value: this.searchFilter
+                                }],
+                                logic: "or"
                             }, {
-                                field: "NOTES",
-                                operator: "contains",
-                                value: this.searchFilter
+                                "filters": [{
+                                    field: "NOTES",
+                                    operator: "contains",
+                                    value: this.searchFilter
+                                }],
+                                logic: "or"
                             }
                         ];
                         this.state.filter = {
@@ -1444,8 +1527,12 @@ export class dealEditorComponent implements OnDestroy{
                 logic: "and",
                 filters: [],
             }
-            this.gridData = process(this.gridResult, this.state);
-            this.isLoading = false;
+            this.searchFilter = "";
+            if (this.in_Is_Tender_Dashboard) this.invokeTenderSearch(this.state);
+            else {
+                this.gridData = process(this.gridResult, this.state);
+                this.isLoading = false;
+            }
         });
     }
     toggleWrap = function () {
@@ -1486,8 +1573,18 @@ export class dealEditorComponent implements OnDestroy{
         return columns;
     }
     exportToExcel() {
-        let columns = this.columnOrdering();
-        GridUtil.dsToExcel(columns, this.gridResult, "Deal Editor Export");
+        
+        
+        if (this.in_Is_Tender_Dashboard) {
+            this.ruleData.exportAll = 1;
+            this.ruleData.take = 1000;
+            this.ruleData.skip = 0;
+            this.invokeSearchDatasource.emit(this.ruleData);
+        }
+        else {
+            let columns = this.columnOrdering();
+            GridUtil.dsToExcel(columns, this.gridResult, "Deal Editor Export");
+        }
     }
     exportToExcelCustomColumns() {
         GridUtil.dsToExcel(this.columns, this.gridData.data, "Deal Editor Export");
@@ -1528,11 +1625,13 @@ export class dealEditorComponent implements OnDestroy{
                 this.curPricingStrategy = PTE_Common_Util.findInArray(this.contractData["PRC_ST"], this.in_Ps_Id);
                 this.curPricingTable = PTE_Common_Util.findInArray(this.curPricingStrategy["PRC_TBL"], this.in_Pt_Id);
                 this.isTenderContract = Tender_Util.tenderTableLoad(this.contractData);
+                this.dropdownFilterColumns = PTE_Config_Util.dropdownFilterColumns;
             }
             else {//Tender Dashboard have all PS and PT deals, so added only common properties
                 this.isTenderContract = true;
-                this.curPricingStrategy = { IS_HYBRID_PRC_STRAT: 0 }
-                this.curPricingTable = { OBJ_SET_TYPE_CD: this.in_Deal_Type }
+                this.curPricingStrategy = { IS_HYBRID_PRC_STRAT: 0 };
+                this.curPricingTable = { OBJ_SET_TYPE_CD: this.in_Deal_Type };
+                this.dropdownFilterColumns = PTE_Config_Util.tenderDashboardDropColumns;
             }
             this.getGroupsAndTemplates();
             if (this.isInitialLoad) {
@@ -1596,6 +1695,13 @@ export class dealEditorComponent implements OnDestroy{
         this.destroy$.next();
         this.destroy$.complete();
         this._gridResult.complete();
+    }
+
+    ngOnChanges() {
+        //add conditions for tender
+        if (this.in_Is_Tender_Dashboard) {
+            this.getTenderDashboardData();
+        }
     }
 
     private getDirtyFromGridResult(data) {

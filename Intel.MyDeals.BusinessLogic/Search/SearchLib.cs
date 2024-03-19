@@ -796,6 +796,12 @@ namespace Intel.MyDeals.BusinessLogic
             return ret;
         }
 
+        public string GetTenderResultFilter(string custName, string st, string en)
+        {
+            
+            return _searchDataLib.GetTenderResultFilter(custName, st, en); ;
+        }
+
         public OpDataCollectorFlattenedList GetGlobalList(SearchParams data, OpDataElementType deType)
         {
             List<int> atrbs = new List<int>

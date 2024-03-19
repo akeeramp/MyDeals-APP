@@ -7,6 +7,8 @@ namespace Intel.MyDeals.IDataLibrary
 	{
 		List<SearchResults> GetSearchResults(string searchText, List<int> custIds);
 
+        string GetTenderResultFilter(string custName, string st, string en);
+
         SearchPacket GetAdvancedSearchResults(string searchCondition, string orderBy, string searchObjTypes, int skip, int take);
 
     }
