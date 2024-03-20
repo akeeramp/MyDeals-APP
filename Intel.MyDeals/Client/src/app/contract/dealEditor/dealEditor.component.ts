@@ -291,6 +291,7 @@ export class dealEditorComponent implements OnDestroy{
 
     getTenderDashboardData() {
         this.gridResult = [];
+        this.ruleData["onTabSelect"] = false;
         setTimeout(() => {
             if (Object.keys(this.in_Search_Results[0]).length > 0) {
                 this.gridResult = this.in_Search_Results;
@@ -416,6 +417,7 @@ export class dealEditorComponent implements OnDestroy{
                         filters: [],
                     },
                 };
+                this.ruleData.onTabSelect = true;
                 this.gridData = process(this.gridResult, state);
                 this.state.take = this.ruleData.take;
                 this.state.skip = this.ruleData.skip;
@@ -456,10 +458,11 @@ export class dealEditorComponent implements OnDestroy{
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.isLoading = true;
-        if (this.in_Is_Tender_Dashboard) {
+        if (this.in_Is_Tender_Dashboard && !this.ruleData.onTabSelect) {
             this.invokeTenderSearch(state);
         } else {
             this.gridData.data = [];
+            this.ruleData.onTabSelect = false;
             setTimeout(() => {
                 this.state = state;
                 this.gridData = this.gridData.data.length > 0 ? this.gridData : process(this.gridResult, this.state);
@@ -1573,8 +1576,6 @@ export class dealEditorComponent implements OnDestroy{
         return columns;
     }
     exportToExcel() {
-        
-        
         if (this.in_Is_Tender_Dashboard) {
             this.ruleData.exportAll = 1;
             this.ruleData.take = 1000;
