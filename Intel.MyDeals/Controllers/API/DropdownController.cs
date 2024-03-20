@@ -264,6 +264,42 @@ namespace Intel.MyDeals.Controllers.API
             return retData;
         }
 
+        [HttpPost]
+        [AntiForgeryValidate]
+        [Route("InsertBulkBasicDropdowns")]
+        public List<BasicDropdown> InsertBulkBasicDropdowns(BasicDropdown[] data)
+        {
+            List<BasicDropdown> results = new List<BasicDropdown>();
+
+            foreach (BasicDropdown dropdownData in data)
+            {
+                try
+                {
+                    results.Add(InsertBasicDropdowns(dropdownData));
+                }
+                catch(Exception ex)
+                {
+                    // Catch the exception to prevent subsequent insertions from failing, UI will compare successes and submitted values to see if there were any that failed
+                }
+            }
+
+            return results;
+        }
+
+        [HttpGet]
+        [Route("RecycleBasicDropdownCache")]
+        public void RecycleBasicDropdownCache()
+        {
+            try
+            {
+                _dropdownLib.RecycleBasicDropdownCache();
+            }
+            catch (Exception ex)
+            {
+                throw new HttpResponseException(System.Net.HttpStatusCode.BadRequest);
+            }
+        }
+
         [HttpPut]
         [AntiForgeryValidate]
         [Route("DeleteBasicDropdowns")]

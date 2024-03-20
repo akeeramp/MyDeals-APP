@@ -154,6 +154,11 @@ namespace Intel.MyDeals.DataLibrary
             return ret.FirstOrDefault();
         }
 
+        public void RecycleBasicDropdownCache()
+        {
+            DataCollections.RecycleCache("_getBasicDropdowns");
+        }
+
         public List<BasicDropdown> ExecuteManageBasicDropdownSP(BasicDropdown dropdown, CrudModes type)
         {
             var ret = new List<BasicDropdown>();

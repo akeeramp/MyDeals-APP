@@ -61,6 +61,6 @@ namespace Intel.MyDeals.IBusinessLogic
         List<Dropdown> GetCustomersDropdown();
 
         List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> dealIds);
-
-	}
+        void RecycleBasicDropdownCache();
+    }
 }

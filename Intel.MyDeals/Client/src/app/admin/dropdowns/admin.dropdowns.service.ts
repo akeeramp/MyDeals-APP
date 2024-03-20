@@ -2,6 +2,8 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from "rxjs";
 
+import { UiDropdownItem, UiDropdownResponseItem } from "./admin.dropdowns.model";
+
 @Injectable({
     providedIn: 'root'
 })
@@ -66,9 +68,19 @@ export class DropdownService {
         return this.httpClient.put(apiUrl, dropdown);
     }
 
-    public insertBasicDropdowns(id): Observable<any> {
+    public insertBasicDropdowns(id: UiDropdownItem): Observable<any> {
         const apiUrl = this.API_URL_DROPDOWN + 'InsertBasicDropdowns';
         return this.httpClient.post(apiUrl, id);
+    }
+
+    public insertBulkBasicDropdowns(id: UiDropdownItem[]): Observable<any> {
+        const apiUrl = this.API_URL_DROPDOWN + 'InsertBulkBasicDropdowns';
+        return this.httpClient.post(apiUrl, id);
+    }
+
+    public recycleBasicDropdownsCache(): Observable<unknown> {
+        const apiUrl = this.API_URL_DROPDOWN + "RecycleBasicDropdownCache";
+        return this.httpClient.get(apiUrl);
     }
 
 }

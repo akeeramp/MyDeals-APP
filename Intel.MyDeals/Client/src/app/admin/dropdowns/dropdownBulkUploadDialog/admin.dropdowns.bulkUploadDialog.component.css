@@ -65,3 +65,8 @@ textarea {
 .failStatus {
     color: orangered;
 }
+
+.specialCharacterText {
+    float: right;
+    padding-right: 15px;
+}

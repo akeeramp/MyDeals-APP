@@ -374,6 +374,14 @@ namespace Intel.MyDeals.BusinessLogic
         }
 
         /// <summary>
+        /// Manually triggers the recycle cache for Basic Dropdowns
+        /// </summary>
+        public void RecycleBasicDropdownCache()
+        {
+            _dropdownDataLib.RecycleBasicDropdownCache();
+        }
+
+        /// <summary>
         /// Deletes a Basic Dropdown
         /// </summary>
         /// <param name="id">The list of changed dropdowns to be updated</param>
