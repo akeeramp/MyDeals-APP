@@ -5,6 +5,6 @@ namespace Intel.MyDeals.IBusinessLogic
 {
     public interface IExpireYcs2Lib
     {
-        List<DownloadExpireYcs2Data> ExpireYcs2(string dealId);
+        List<DownloadExpireYcs2Data> ExpireYcs2(ExpireYcs2Data dealData);
     }
 }

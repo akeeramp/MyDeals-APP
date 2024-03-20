@@ -12,11 +12,15 @@ namespace Intel.MyDeals.BusinessLogicNew.Test
         public Mock<IExpireYcs2DataLib> mockExpireYcs2DataLib = new Mock<IExpireYcs2DataLib>();
         [Test]
         [TestCase("1234,5678")]
-        public void ExpireYcs2_Returns_NotNull(string dealId)
+        public void ExpireYcs2_Returns_NotNull(string dealID)
         {
-            var dealData = ExpireYcs2();
-            mockExpireYcs2DataLib.Setup(x => x.ExpireYcs2(It.IsAny<string>())).Returns(dealData);        
-            var result = new ExpireYcs2Lib(mockExpireYcs2DataLib.Object).ExpireYcs2(dealId);
+            var mockData = ExpireYcs2();
+            mockExpireYcs2DataLib.Setup(x => x.ExpireYcs2(It.IsAny<ExpireYcs2Data>())).Returns(mockData);
+            var dealData = new ExpireYcs2Data
+            {
+                DEAL_IDS = dealID
+            };
+            var result = new ExpireYcs2Lib(mockExpireYcs2DataLib.Object).ExpireYcs2(dealData);
             Assert.NotNull(result);
         }
         private List<DownloadExpireYcs2Data> ExpireYcs2()

@@ -12,8 +12,8 @@ export class expireYcs2Service {
     constructor(private httpClient: HttpClient) {
 
     }
-    public expireYcs2(dealId) {
-        const apiUrl: string = this.apiBaseUrl + 'ExpireYcs2/' + dealId;
-        return this.httpClient.get(apiUrl);
+    public expireYcs2(dealId:any):Observable<any> {
+        const apiUrl: string = this.apiBaseUrl + 'ExpireYcs2';
+        return this.httpClient.post(apiUrl,dealId);
     }
 }

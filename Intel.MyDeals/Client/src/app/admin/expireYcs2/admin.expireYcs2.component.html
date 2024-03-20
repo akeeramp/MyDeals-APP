@@ -1,22 +1,35 @@
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
 
-
-<div class="col-md-12 k-header-alignment padding-top-20" style=" padding-left: 25px !important;">
-    <h2>Expire YCS2 Deals</h2>
+<div class="col-md-12 k-header-alignment padding-top-20">
+    <h2>Expire YCS2 Deals</h2>    
+</div>
+<div class="col-md-12">
+    <div class="col-md-6">
+        <form [formGroup]="expireYCS2Form">
+        <div class="form-group row">                        
+                <label for="DEAL_IDS" class="col-sm-3 col-form-label" style="padding-left: 23px;">Deal Id(s):</label>
+            <div class="col-sm-7">
+                <kendo-textarea [rows]="4" [cols]="65" resizable="vertical" 
+                                formControlName="DEAL_IDS" id="DEAL_IDS" name="DEAL_IDS" pattern="^[0-9,\s]*$"                                
+                                placeholder="Multiple deal IDs can be separated with comma.">
+                </kendo-textarea>
+                <kendo-formerror *ngIf="formData.DEAL_IDS.touched && formData.DEAL_IDS.errors?.required">
+                    Please enter
+                    valid Deal Ids
+                </kendo-formerror>
+                <kendo-formerror *ngIf="formData.DEAL_IDS.errors?.pattern">
+                    Please enter valid characters. Only numeric
+                    values separated with comma is allowed
+                </kendo-formerror>                            
+            </div>
+            <div class="col-sm-2" style="padding-top: 30px;"><button class="btn btn-primary" (click)="submit()">Submit</button>
+            </div>
+        </div>        
+        </form>
+    </div>        
 </div>
 <div>
-    <div *ngIf="!validateDealId" style=" padding-left:8%">
-        <span style="color:red;">
-            <label class="appro-label">Please enter Deal ID(s) separated by ','</label>
-        </span>
-    </div>
-    <div class="col-md-6" style="margin-top: 15px">
-        <label for="dealId" style="width: 15%; padding-left: 2%"><span style="color:red">*</span><strong>Deal IDs:</strong></label>
-        <kendo-textarea style="width:50%"  [rows]="4" [cols]="65" resizable="vertical" id="dealId" [ngClass]="validateDealId ? 'validDealId': 'invalidDealId'" placeholder="Please enter Deal ID(s) separated by ','" [(ngModel)]="dealId" (keyup)="validateDealID()" required></kendo-textarea>
-        <button (click)="submit()" class="btn btn-primary" style="margin-left: 5px">Submit</button>
-    </div>
-</div>
-    <div class="col-md-12" style="margin-top:5px; margin-bottom:5px" [hidden]="!responseData.length>0">
+    <div class="col-md-12" style="margin-top:5px; margin-bottom:5px" [hidden]="!responseData.length > 0 || !gridData.data.length > 0">
         <div class="box box">
             <div class="box-header with-border">
                 <div class="box-body">
@@ -34,4 +47,5 @@
             </div>
         </div>
     </div>
+</div>
     

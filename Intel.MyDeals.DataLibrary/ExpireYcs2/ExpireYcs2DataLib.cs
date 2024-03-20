@@ -15,12 +15,12 @@ namespace Intel.MyDeals.DataLibrary
         {
         }
      
-        public List<DownloadExpireYcs2Data> ExpireYcs2(string dealId)
+        public List<DownloadExpireYcs2Data> ExpireYcs2(ExpireYcs2Data dealData)
         {
             var ret = new List<DownloadExpireYcs2Data>();            
             var cmd = new Procs.dbo.PR_MYDL_DEAL_EXPIRE_YCS2
             {
-                in_deal_id_list = dealId,
+                in_deal_id_list = dealData.DEAL_IDS,
                 in_emp_wwid = OpUserStack.MyOpUserToken.Usr.WWID
             };            
             try

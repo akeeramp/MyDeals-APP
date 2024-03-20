@@ -16,12 +16,12 @@ namespace Intel.MyDeals.Controllers.API
         }
 
         [Authorize]
-        [HttpGet]
-        [Route("ExpireYcs2/{dealId}")]
-        public List<DownloadExpireYcs2Data> ExpireYcs2(string dealId)
+        [HttpPost]
+        [Route("ExpireYcs2")]
+        public List<DownloadExpireYcs2Data> ExpireYcs2(ExpireYcs2Data dealData)
         {            
-            return SafeExecutor(() => _iExpireYcs2Lib.ExpireYcs2(dealId), 
-                                       $"Unable to get Results for the given {dealId}"
+            return SafeExecutor(() => _iExpireYcs2Lib.ExpireYcs2(dealData), 
+                                       $"Unable to get Results for the given {dealData.DEAL_IDS}"
              );
         }
     }

@@ -19,9 +19,13 @@ namespace Intel.MyDeals.BusinessLogic
             _expireYcs2DataLib = expireYcs2DataLib;
         }
 
-        public List<DownloadExpireYcs2Data> ExpireYcs2(string dealId)
+        public List<DownloadExpireYcs2Data> ExpireYcs2(ExpireYcs2Data dealData)
         {
-            return _expireYcs2DataLib.ExpireYcs2(dealId);
+            if(dealData == null || dealData.DEAL_IDS == null)
+            {
+                return new List<DownloadExpireYcs2Data>();
+            }
+            return _expireYcs2DataLib.ExpireYcs2(dealData);
         }
     }
 }
