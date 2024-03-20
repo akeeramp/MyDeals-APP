@@ -1,10 +1,4 @@
-/* Fix for overflow filter menus */
-kendo-popup:has(kendo-grid-columnmenu-chooser div.k-columnmenu-item[aria-expanded="true"]),
-kendo-popup:has(kendo-grid-columnmenu-filter div.k-columnmenu-item[aria-expanded="true"]) {
-    bottom: 10px !important;
-}
-
-.k-grid.KendoUnifiedCustomerInfo {
+﻿.k-grid.KendoUnifiedCustomerInfo {
     height: calc(100vh - 200px) !important;
     margin-right: 10px;
 }
