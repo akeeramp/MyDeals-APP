@@ -231,7 +231,7 @@
             </div>
             <div class="op-grid-container one-check oppo-grids">
                 <kendo-grid *ngIf="columns.length != 0" #dealEditor id="dealEditor" [data]="gridData" [navigable]="true" [loading]="isLoading" [pageSize]="state.take" [skip]="state.skip"
-                            [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true"
+                            [sort]="state.sort" [filter]="state.filter" [sortable]="true" [reorderable]="true" [resizable]="true" (removeFilter)="remove($evennt)"
                             [pageable]="{type:type,pageSizes: pageSizes,info:info,refresh:true}" (cellClose)="cellCloseHandler($event)"
                             filterable="menu" (dataStateChange)="dataStateChange($event)" (cellClick)="cellClickHandler($event)" (filterChange)="filterChange($event)"
                             class="opUiContainer dashboard op-grid k-grid k-widgetGr k-reorderable k-editable k-grid-lockedcolumns md opDealEditorGrids"
@@ -247,13 +247,21 @@
                                 <dropDown-filter class="de-dropdwn-styl" [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value" operator="isnotnull"
                                                  [filterService]="filterService" [data]="filteringData[column.field]"></dropDown-filter>
                             </div>
-                            <div *ngIf="in_Is_Tender_Dashboard && dropdownFilterColumns.includes(column.field)">
-                                <multicheck-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Text" valueField="Value"
-                                                   [filterService]="filterService" [data]="getTenderFilter(column.field)"></multicheck-filter>
+                            <div *ngIf="in_Is_Tender_Dashboard && dropdownFilterColumns.includes(column.field) && column.field != 'WF_STG_CD' && column.field != 'CUST_MBR_SID'">
+                                <dropDown-filter class="de-dropdwn-styl" [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="DROP_DOWN" valueField="DROP_DOWN" operator="eq"
+                                                 [filterService]="filterService" [data]="getTenderFilter(column.field)"></dropDown-filter>
                             </div>
                             <div *ngIf="in_Is_Tender_Dashboard && tenderDatesFilterColumns.includes(column.field)">
                                 <date-range-filter [field]="column.field" [filter]="filter" [filterService]="filterService">
                                 </date-range-filter>
+                            </div>
+                            <div *ngIf="in_Is_Tender_Dashboard && column.field == 'CUST_MBR_SID'">
+                                <multicheck-filter [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="DROP_DOWN" valueField="DROP_DOWN"
+                                                   [filterService]="filterService" [data]="getTenderFilter(column.field)"></multicheck-filter>
+                            </div>
+                            <div *ngIf="in_Is_Tender_Dashboard && column.field == 'WF_STG_CD'">
+                                <dropDown-filter class="de-dropdwn-styl advance-drop-custstyle" [isPrimitive]="false" [field]="column.field" [currentFilter]="filter" textField="Value" valueField="Value" operator="eq"
+                                                 [filterService]="filterService" [data]="getTenderFilter(column.field)"></dropDown-filter>
                             </div>
                             <div *ngIf="in_Is_Tender_Dashboard && tenderNumericFilterColumns.includes(column.field)">
                                 <kendo-grid-numeric-filter-menu [column]="column" [filter]="filter" [filterService]="filterService" [extra]="false" [format]="'#########'"></kendo-grid-numeric-filter-menu>

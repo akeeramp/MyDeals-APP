@@ -291,7 +291,6 @@ export class dealEditorComponent implements OnDestroy{
 
     getTenderDashboardData() {
         this.gridResult = [];
-        this.ruleData["onTabSelect"] = false;
         setTimeout(() => {
             if (Object.keys(this.in_Search_Results[0]).length > 0) {
                 this.gridResult = this.in_Search_Results;
@@ -313,7 +312,11 @@ export class dealEditorComponent implements OnDestroy{
                 this.gridData.total = this.in_Search_Count;
                 this.state.take = this.ruleData.take;
                 this.state.skip = this.ruleData.skip;
+                this.state.sort = this.ruleData.sort ? this.ruleData.sort : [];
                 this.filteringData = Object.keys(this.filterData).length > 0 ? this.filterData : {};
+            }
+            else {
+                this.gridData = process(this.gridResult, this.state);
             }
             this.isLoading = false;
         }, 0);
@@ -388,7 +391,7 @@ export class dealEditorComponent implements OnDestroy{
         e.preventDefault();
         if (e.title != undefined) {
             this.searchFilter = "";
-            this.clearSearchGrid();
+            this.clearSearch();
             this.selectedTab = e.title;
             var group = this.groups.filter(x => x.name == this.selectedTab);
             if (group[0].isTabHidden) {
@@ -417,10 +420,7 @@ export class dealEditorComponent implements OnDestroy{
                         filters: [],
                     },
                 };
-                this.ruleData.onTabSelect = true;
                 this.gridData = process(this.gridResult, state);
-                this.state.take = this.ruleData.take;
-                this.state.skip = this.ruleData.skip;
                 this.gridData.total = this.in_Search_Count;
             } else this.gridData = process(this.gridResult, this.state);
             this.isLoading = false;
@@ -453,16 +453,17 @@ export class dealEditorComponent implements OnDestroy{
     }
 
     onClose(name: string) {
-        each(this.groups, group => { if (name == group.name) group.isTabHidden = true; } )
+        each(this.groups, group => {
+            if (name == group.name) group.isTabHidden = true;
+        })
     }
 
     dataStateChange(state: DataStateChangeEvent): void {
         this.isLoading = true;
-        if (this.in_Is_Tender_Dashboard && !this.ruleData.onTabSelect) {
+        if (this.in_Is_Tender_Dashboard) {
             this.invokeTenderSearch(state);
         } else {
             this.gridData.data = [];
-            this.ruleData.onTabSelect = false;
             setTimeout(() => {
                 this.state = state;
                 this.gridData = this.gridData.data.length > 0 ? this.gridData : process(this.gridResult, this.state);
@@ -1457,7 +1458,7 @@ export class dealEditorComponent implements OnDestroy{
                 if (this.searchFilter != undefined && this.searchFilter != null && this.searchFilter != "") {
                     if (this.searchFilter.length < 3) {
                         // This breaks the tab filtering
-                        this.clearSearchGrid();
+                        this.clearSearch();
                         return;
                     }
                     else {
@@ -1473,40 +1474,25 @@ export class dealEditorComponent implements OnDestroy{
                         });
                         if (filters.length == 0) filters = [
                             {
-                                "filters": [{
-                                    field: "DC_ID",
-                                    operator: this.in_Is_Tender_Dashboard ? "contains" : "eq",
-                                    value: this.searchFilter
-                                }],
-                                logic : "or"
+                                field: "DC_ID",
+                                operator: "eq",
+                                value: this.searchFilter
                             }, {
-                                "filters": [{
-                                    field: "WF_STG_CD",
-                                    operator: "contains",
-                                    value: this.searchFilter
-                                }],
-                                logic: "or"
+                                field: "WF_STG_CD",
+                                operator: "contains",
+                                value: this.searchFilter
                             }, {
-                                "filters": [{
-                                    field: "PTR_USER_PRD",
-                                    operator: "contains",
-                                    value: this.searchFilter
-                                }],
-                                logic: "or"
+                                field: "PTR_USER_PRD",
+                                operator: "contains",
+                                value: this.searchFilter
                             }, {
-                                "filters": [{
-                                    field: "TITLE",
-                                    operator: "contains",
-                                    value: this.searchFilter
-                                }],
-                                logic: "or"
+                                field: "TITLE",
+                                operator: "contains",
+                                value: this.searchFilter
                             }, {
-                                "filters": [{
-                                    field: "NOTES",
-                                    operator: "contains",
-                                    value: this.searchFilter
-                                }],
-                                logic: "or"
+                                field: "NOTES",
+                                operator: "contains",
+                                value: this.searchFilter
                             }
                         ];
                         this.state.filter = {
@@ -1517,26 +1503,34 @@ export class dealEditorComponent implements OnDestroy{
                     }
                 }
                 else {
-                    this.clearSearchGrid();
+                    this.clearSearch();
                 }
             }
             this.isLoading = false;
         }, 0);
     }
-    clearSearchGrid() {
+    clearSearch() {
         this.isLoading = true;
         setTimeout(() => {
             this.state.filter = {
                 logic: "and",
                 filters: [],
             }
-            this.searchFilter = "";
-            if (this.in_Is_Tender_Dashboard) this.invokeTenderSearch(this.state);
-            else {
-                this.gridData = process(this.gridResult, this.state);
-                this.isLoading = false;
-            }
+            this.gridData = process(this.gridResult, this.state);
+            this.isLoading = false;
         });
+}
+    clearSearchGrid() {
+        this.isLoading = true;
+        this.state.filter = {
+            logic: "and",
+            filters: [],
+        }
+        if (this.in_Is_Tender_Dashboard) {
+            this.invokeTenderSearch(this.state);
+        } else {
+            this.clearSearch();
+        }
     }
     toggleWrap = function () {
         const elements = Array.from(

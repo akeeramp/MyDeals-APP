@@ -21,6 +21,7 @@ import { constantsService } from "../../admin/constants/admin.constants.service"
 import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactivate";
 import { Observable, Subject, forkJoin } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { AttributeBuilder } from "../../core/attributeBuilder/attributeBuilder.component";
 
 @Component({
     selector: 'app-tender-dashboard',
@@ -33,6 +34,7 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
     //RXJS subject for takeuntil
     private readonly destroy$ = new Subject();
     @ViewChild(dealEditorComponent) private deComp: dealEditorComponent;
+    @ViewChild(AttributeBuilder) attrBuilder: AttributeBuilder;
     private startDateValue: Date = new Date(this.momentService.moment().subtract(6, 'months').format("MM/DD/YYYY"));
     private endDateValue: Date = new Date(this.momentService.moment().add(6, 'months').format("MM/DD/YYYY"));
     private showSearchFilters: boolean = true;
@@ -81,7 +83,8 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
     private approveDeals: boolean = false;
     private entireDataDeleted: boolean = false;
 
-    public filterData = [];
+    public filterData: any;
+    public dropdownResponses: any;
      constructor(protected cntrctWdgtSvc: contractStatusWidgetService,
                 protected loggerSvc: logger,
                 protected tenderDashboardSvc: tenderDashboardService,
@@ -263,39 +266,26 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
                     searchUrl += '&$filter=';
                     filter.filters.forEach((item: CompositeFilterDescriptor, ind) => {
                         if (item && item.filters && item.filters.length > 0) {
-                            item.filters.forEach((fltrItem: FilterDescriptor) => {
+                            item.filters.forEach((fltrItem: FilterDescriptor, inInd) => {
                                 if (fltrItem.value != "Select All") {
                                     let tempDate: string;
                                     let column = fltrItem.field.toString();
-                                    searchUrl += ind == 0 && filter.filters.length > 1 ? '(' : '';
+                                    let value = fltrItem.value
+                                    searchUrl += inInd == 0 && filter.filters[ind].filters.length > 1 ? '(' : '';
                                     if (column == 'CUST_MBR_SID') {
-                                        fltrItem.field = 'Customer/CUST_NM';
+                                        column = 'Customer/CUST_NM';
                                     }
                                     else if (column.includes('_DT') || column == 'REBATE_BILLING_START' || column == 'REBATE_BILLING_END') {
-                                        fltrItem.value = fltrItem.value.toLocaleDateString();
+                                        value = value.toLocaleDateString("en-US");
                                     }
                                     let validCol = column.substr(column.length - 4)
 
                                     if (fltrItem.operator == 'contains') {
-                                        if (validCol == '_VAL') {
-                                            searchUrl += "substringof(" + "'" + fltrItem.value + "'," + column.slice(0, -4) + ")"
-                                        }
-                                        else
-                                            searchUrl += "substringof(" + "'" + fltrItem.value + "'," + fltrItem.field + ")"
+                                        searchUrl += "substringof(" + "'" + value + "'," + column + ")"
                                     }
-                                    else if (validCol == '_VAL') {
-                                        searchUrl += column.slice(0, -4) + ' ' + fltrItem.operator + " '" + fltrItem.value + "'"
-                                    }
-                                    else searchUrl += fltrItem.field + ' ' + fltrItem.operator + " '" + fltrItem.value + "'"
-                                    searchUrl += filter.filters.length != (ind + 1) && filter.filters.length > 1 ? ` ${filter.logic} ` : '';
+                                    else searchUrl += column + ' ' + fltrItem.operator + " '" + value + "'"
+                                    searchUrl += filter.filters.length != (ind + 1) && filter.filters.length > 1 ? ' and ' : '';
                                     searchUrl += filter.filters.length == (ind + 1) && filter.filters.length > 1 ? ')' : '';
-                                    if (column == 'CUST_MBR_SID') {
-                                        fltrItem.field = 'CUST_MBR_SID';
-                                    } else if (column.includes('_DT') || column == 'REBATE_BILLING_START' || column == 'REBATE_BILLING_END') {
-                                        fltrItem.value = new Date(fltrItem.value);
-                                    } else if (column == 'OBJ_SID') {
-                                        fltrItem.field = 'DC_ID';
-                                    }
                                 }
                             })
                         }
@@ -347,28 +337,19 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
         let getResponse = {};  //object for fork join
         if (this.ruleData.runrule) {
             this.searchResults = [];//clear out the previuos search results if any
-            getResponse["filterData"] = this.getFilterData( st, en);
         }
         getResponse["searchData"] = this.tenderDashboardSvc.searchTender(st, en, searchText);
         let result:any = await forkJoin(getResponse).toPromise().catch((err) => {
             this.setBusy("", "");
-            this.searchResults = [{}];
-            this.errorMsg = this.ruleData.exportAll ? "Export All Failed. Please try again with more specific Search Options." : "Tender Search Failed.  Please try again with more specific Search Options.";
+            this.errorMsg = this.ruleData.exportAll == 1 ? "Export All Failed. Please try again with more specific Search Options." : "Tender Search Failed.  Please try again with more specific Search Options.";
+            this.searchResults = this.ruleData.exportAll == 1? this.searchResults : [{}];
             this.isSearchFailed = true;
-            this.ruleData.exportAll = this.ruleData.exportAll ? false : this.ruleData.exportAll;
+            this.ruleData.exportAll = this.ruleData.exportAll == 1 ? 0 : this.ruleData.exportAll;
             console.log('Tender Search Failed');
         });
         this.setBusy("", "");
         if (result && result.searchData) {
             this.tenderResultProcessing(result.searchData);
-        }
-        if (result && result.filterData && !result.filterData.includes("FormatException")) {
-            this.tenderFilterProcessing(result.filterData);
-        } else if (this.ruleData.runRule) {
-            if (!this.isSearchFailed) {
-                this.errorMsg = "Filter Data Fetching Failed. Try running the rule again.";
-                this.isSearchFailed = true;
-            }
         }
         this.ruleData.runrule = false;
     }
@@ -410,21 +391,6 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
                 }
             }
         }
-    }
-    tenderFilterProcessing(result) {
-        this.filterData = JSON.parse(result)[0];
-        Object.keys(this.filterData).forEach(key => {
-            let initialVal = this.filterData[key].split(',');
-            let data = [];
-            initialVal.forEach(val => {
-                data.push({ Text: val, Value: val })
-            })
-            this.filterData[key] = data;
-        });
-    }
-    getFilterData(st, en) {
-        let custName = (window.localStorage.selectedCustNames === undefined || window.localStorage.selectedCustNames === "" || window.localStorage.selectedCustNames == '[]') ? "null" : JSON.parse(window.localStorage.selectedCustNames).map(x => x.CUST_NM);
-        return this.tenderDashboardSvc.getTenderFilterData(custName, st.toLocaleDateString('en-US').replaceAll("/", "-"), en.toLocaleDateString('en-US').replaceAll("/", "-"));
     }
     addCustomToTemplates() {
         each(this.templates['ModelTemplates']['PRC_TBL'], (value, key) => {
@@ -860,15 +826,6 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
                 this.loggerSvc.error("Unable to get Dropdown Customers.", error, error.statusText);
             });
     }
-    //getMaxRecordCount(varName: string) {
-    //    this.constantsService.getConstantsByName(varName).pipe(takeUntil(this.destroy$)).subscribe((response) => {
-    //        if (response) {
-    //            this.maxRecordCount = response;
-    //        }
-    //    }, (error) => {
-    //        this.loggerSvc.error("TenderDashboard::unable to get Max Value", error);
-    //    })
-    //}
     runPCTMCT(data) {
         if (data.length > 0) {
             var selectedItem = [];
@@ -1036,7 +993,19 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
         });
     }
     removeLoadingPanel(event) {
-        this.setBusy("","")
+        this.dropdownResponses = this.attrBuilder.dropdownresponses;
+        this.filterData = {
+            "MRKT_SEG": this.dropdownResponses["MRKT_SEG"].map(x => { return { "DROP_DOWN": x.DROP_DOWN } }),
+            "PROGRAM_PAYMENT": this.dropdownResponses["PROGRAM_PAYMENT"].map(x => { return { "DROP_DOWN": x.DROP_DOWN } }),
+            "PAYOUT_BASED_ON": this.dropdownResponses["PAYOUT_BASED_ON"].map(x => { return { "DROP_DOWN": x.DROP_DOWN } }),
+            "SERVER_DEAL_TYPE": this.dropdownResponses["SERVER_DEAL_TYPE"].map(x => { return { "DROP_DOWN": x.DROP_DOWN } }),
+            "CUST_MBR_SID": this.dropdownResponses["Customer.CUST_NM"].map(x => { return { "DROP_DOWN": x.CUST_NM } }),
+            "PERIOD_PROFILE": this.dropdownResponses["PERIOD_PROFILE"].map(x => { return { "DROP_DOWN": x.DROP_DOWN } }),
+            "AR_SETTLEMENT_LVL": this.dropdownResponses["AR_SETTLEMENT_LVL"].map(x => { return { "DROP_DOWN": x.DROP_DOWN } }),
+            "WF_STG_CD": TenderDashboardConfig.advancedSearchColumnConfig.filter(x => x.field == "WF_STG_CD")[0].lookups
+        };
+        this.setBusy("", "")
+
     }
     removeDeletedRow(event) {
         each(this.searchResults, (item,index) => {

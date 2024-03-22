@@ -159,56 +159,7 @@ export class GridUtil {
         var elem = document.createElement('div');
 
         var colList = [];
-        for (var i = 0; i < gridColumns.length; i++) {
-            colHidden = gridColumns[i].hidden !== undefined && gridColumns[i].hidden === true;
-            if (forceHide.indexOf(gridColumns[i].field) >= 0) colHidden = true;
-            if (!colHidden && (gridColumns[i].bypassExport === undefined || gridColumns[i].bypassExport === false)) {
-                var colTitle = gridColumns[i].excelHeaderLabel !== undefined && gridColumns[i].excelHeaderLabel !== ""
-                    ? gridColumns[i].excelHeaderLabel
-                    : gridColumns[i].title;
-
-                rows[0].cells.push({
-                    value: colTitle,
-                    textAlign: "center",
-                    background: "#0071C5",
-                    color: "#ffffff",
-                    wrap: true
-                });
-                colList.push(gridColumns[i].field);
-
-                if (gridColumns[i].width !== undefined) {
-                    colWidths.push({ width: parseInt(gridColumns[i].width) });
-                } else {
-                    colWidths.push({ autoWidth: true });
-                }
-            }
-        }
-
-        for (var a = 0; a < addAlways.length; a++) {
-            if (colList.indexOf(addAlways[a].field) < 0) {
-                rows[0].cells.push({
-                    value: addAlways[a].title,
-                    textAlign: "center",
-                    background: "#0071C5",
-                    color: "#ffffff",
-                    wrap: true
-                });
-                rows[0].height = colHeight;
-                colWidths.push({ autoWidth: true });
-            }
-        }
-        // set prod title
-        var titles = ["Deal #", "Deal Product Name", "Product Type", "Product Category", "Brand", "Family", "Processor", "Product Name", "Material ID", "Division", "Op Code", "Prod Start Date", "Prod End Date"];
-        for (var t = 0; t < titles.length; t++) {
-            rowsProd[0].cells.push({
-                value: titles[t],
-                textAlign: "center",
-                background: "#0071C5",
-                color: "#ffffff",
-                wrap: true
-            });
-
-        }
+        
         for (var i = 0; i < data.length; i++) {
             //push single row for every record
             var dataItem = data[i];
@@ -218,6 +169,29 @@ export class GridUtil {
                     colHidden = gridColumns[c].hidden !== undefined && gridColumns[c].hidden === true;
                     if (forceHide.indexOf(gridColumns[c].field) >= 0) colHidden = true;
                     if (!colHidden && (gridColumns[c].bypassExport === undefined || gridColumns[c].bypassExport === false)) {
+                        //Set Column pref
+                        if ((i == 0)) {
+                            var colTitle = gridColumns[c].excelHeaderLabel !== undefined && gridColumns[c].excelHeaderLabel !== ""
+                                ? gridColumns[c].excelHeaderLabel
+                                : gridColumns[c].title;
+                            rows[0].cells.push({
+                                value: colTitle,
+                                textAlign: "center",
+                                background: "#0071C5",
+                                color: "#ffffff",
+                                wrap: true
+                            });
+                            colList.push(gridColumns[c].field);
+
+                            if (gridColumns[c].width !== undefined) {
+                                colWidths.push({ width: parseInt(gridColumns[c].width) });
+                            } else {
+                                colWidths.push({ autoWidth: true });
+                            }
+                        }
+                        
+
+
                         // get default value
                         if (dataItem[gridColumns[c].field] === undefined || dataItem[gridColumns[c].field] === null)
                             dataItem[gridColumns[c].field] = "";
@@ -282,16 +256,26 @@ export class GridUtil {
                     }
                 }
 
-                for (var a = 0; a < addAlways.length; a++) {
-                    if (colList.indexOf(addAlways[a].field) < 0) {
-                        if (dataItem[addAlways[a].field] === undefined || dataItem[addAlways[a].field] === null)
-                            dataItem[addAlways[a].field] = "";
-
-                        cells.push({
-                            value: dataItem[addAlways[a].field],
+                if (colList.indexOf(addAlways[0].field) < 0) {
+                    if (i == 0) {
+                        rows[0].cells.push({
+                            value: addAlways[0].title,
+                            textAlign: "center",
+                            background: "#0071C5",
+                            color: "#ffffff",
                             wrap: true
                         });
+                        rows[0].height = colHeight;
+                        colWidths.push({ autoWidth: true });
                     }
+
+                    if (dataItem[addAlways[0].field] === undefined || dataItem[addAlways[0].field] === null)
+                        dataItem[addAlways[0].field] = "";
+
+                    cells.push({
+                        value: dataItem[addAlways[0].field],
+                        wrap: true
+                    });
                 }
 
                 rows.push({
@@ -301,6 +285,19 @@ export class GridUtil {
 
                 // Products
                 if (dataItem["products"] !== undefined) {
+                    // set prod title
+                    if (i == 0) {
+                        var titles = ["Deal #", "Deal Product Name", "Product Type", "Product Category", "Brand", "Family", "Processor", "Product Name", "Material ID", "Division", "Op Code", "Prod Start Date", "Prod End Date"];
+                        for (var t = 0; t < titles.length; t++) {
+                            rowsProd[0].cells.push({
+                                value: titles[t],
+                                textAlign: "center",
+                                background: "#0071C5",
+                                color: "#ffffff",
+                                wrap: true
+                            });
+                        }
+                    }
                     hasProds = true;
                     for (var p = 0; p < dataItem["products"].length; p++) {
                         var prd = dataItem["products"][p];
