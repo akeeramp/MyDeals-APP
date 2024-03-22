@@ -266,12 +266,12 @@ export class TenderDashboardComponent implements OnInit, OnDestroy {
                     searchUrl += '&$filter=';
                     filter.filters.forEach((item: CompositeFilterDescriptor, ind) => {
                         if (item && item.filters && item.filters.length > 0) {
-                            item.filters.forEach((fltrItem: FilterDescriptor, inInd) => {
+                            item.filters.forEach((fltrItem: FilterDescriptor) => {
                                 if (fltrItem.value != "Select All") {
                                     let tempDate: string;
                                     let column = fltrItem.field.toString();
                                     let value = fltrItem.value
-                                    searchUrl += inInd == 0 && filter.filters[ind].filters.length > 1 ? '(' : '';
+                                    searchUrl += ind == 0 && filter.filters.length > 1 ? '(' : '';
                                     if (column == 'CUST_MBR_SID') {
                                         column = 'Customer/CUST_NM';
                                     }

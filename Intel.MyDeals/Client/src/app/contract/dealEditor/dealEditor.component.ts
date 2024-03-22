@@ -1516,6 +1516,7 @@ export class dealEditorComponent implements OnDestroy{
                 logic: "and",
                 filters: [],
             }
+            this.state.sort = [];
             this.gridData = process(this.gridResult, this.state);
             this.isLoading = false;
         });
@@ -1526,6 +1527,7 @@ export class dealEditorComponent implements OnDestroy{
             logic: "and",
             filters: [],
         }
+        this.state.sort = [];
         if (this.in_Is_Tender_Dashboard) {
             this.invokeTenderSearch(this.state);
         } else {
