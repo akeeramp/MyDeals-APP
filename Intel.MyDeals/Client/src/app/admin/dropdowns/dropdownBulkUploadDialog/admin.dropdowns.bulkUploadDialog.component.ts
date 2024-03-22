@@ -87,11 +87,12 @@ export class DropdownBulkUploadDialogComponent implements OnInit {
         }
         const NO_DUPLICATE_OR_EMPTY: string[] = Array.from(new Set(noEmptyValues));
 
-        // Remove values that do not adhere to our characterset
+        // Remove values that do not adhere to characterset
         const PATTERN_ACCEPTABLE_CHARACTERS = /^[A-Za-z0-9?!@#$^&*()-_=+.;:©™®\'\"\/\\\s]+$/;
+        const PATTERN_NOT_ACCEPTABLE_SPECIAL_CHARACTERS = /^([^\[\]\<\>]*)$/;
         let failedValues: string[] = [];
         const PASSED_VALUES: string[] = NO_DUPLICATE_OR_EMPTY.filter((value: string) => {
-            if (value.match(PATTERN_ACCEPTABLE_CHARACTERS)) {
+            if (PATTERN_ACCEPTABLE_CHARACTERS.test(value) && PATTERN_NOT_ACCEPTABLE_SPECIAL_CHARACTERS.test(value)) {
                 return true;
             }
 
