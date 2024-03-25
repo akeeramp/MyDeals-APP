@@ -20,7 +20,7 @@
         <link href="/css/angular-bootstrap-toggle.min.css" rel="stylesheet">*@
 
     @* @Styles.Render("~/MyDeals/cssClient") *@
-    <link href="/Client/src/dist/globalStyle.css" rel="stylesheet">
+    <link href='@Scripts.Url("~/Client/src/dist/globalStyle")' rel="stylesheet">
 
     <style>
         .mainBodyStyle {
@@ -55,10 +55,12 @@
     @Scripts.Render("~/bundles/scriptsAng")
     @* Versions of Bootstrap, Bootstrap-Switch, Popper, JQuery must match those in the Angular project's package.json file *@
     <!--<script src="/Scripts/jquery.min.js" async></script>
-    <script src="/Scripts/popper_1.16.1.min.js" async></script>-->   @* Popper.js 1.16.1 is the latest version compatible with Bootstrap 4.x; when upgrading to Bootstrap 5, can upgrade this to @popperjs/core^2.0*@
+    <script src="/Scripts/popper_1.16.1.min.js" async></script>-->
+    @* Popper.js 1.16.1 is the latest version compatible with Bootstrap 4.x; when upgrading to Bootstrap 5, can upgrade this to @popperjs/core^2.0*@
     <!--<script src="/Scripts/bootstrap.min.js" async></script>
     <script src="/Scripts/bootstrap-switch.min.js" async></script>
-    <script src="/Scripts/modernizr-2.8.3.min.js" async></script>--> @* 2.8.3 is the most up to date version compatible with our project, look into upgrading dependency calls or omitting Modernizr from the project in the future*@
+    <script src="/Scripts/modernizr-2.8.3.min.js" async></script>-->
+    @* 2.8.3 is the most up to date version compatible with our project, look into upgrading dependency calls or omitting Modernizr from the project in the future*@
     <!-- #endregion -->
 </head>
 

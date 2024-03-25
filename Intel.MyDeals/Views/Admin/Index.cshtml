@@ -1,4 +1,5 @@
-﻿<script src="~/Client/src/dist/admin.js" async></script>
+﻿@*<script src="~/Client/src/dist/admin.js" async></script>*@
+<script src='@Scripts.Url("~/bundles/admin")' async></script>
 @Styles.Render("~/css/_cache.css")
 @{ ViewBag.Title = "Admin"; }
 <div class="loading-screen">

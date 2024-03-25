@@ -421,22 +421,41 @@ namespace Intel.MyDeals
         public static void RegisterBundlesAngNew(BundleCollection bundles)
         {
             bundles.Add(new ScriptBundle("~/bundles/scriptsAng").Include(
-             "~/Scripts/jquery.min.js",
-              "~/Scripts/popper_1.16.1.min.js",
-              "~/Scripts/bootstrap.min.js",
-              "~/Scripts/bootstrap-switch.min.js",
-             "~/Scripts/modernizr-2.8.3.min.js"
+                "~/Scripts/jquery.min.js",
+                "~/Scripts/popper_1.16.1.min.js",
+                "~/Scripts/bootstrap.min.js",
+                "~/Scripts/bootstrap-switch.min.js",
+                "~/Scripts/modernizr-2.8.3.min.js"));
 
-             ));
             bundles.Add(new StyleBundle("~/MyDeals/cssAng").Include(
-              "~/css/_loadingPanel.directive.css",
-              "~/css/jquery-ui.min.css",
-               "~/css/toastr.min.css",
-               "~/css/it-mlaf.min.css",
-                "~/css/angular-bootstrap-toggle.min.css"
-              ));
+                "~/css/_loadingPanel.directive.css",
+                "~/css/jquery-ui.min.css",
+                "~/css/toastr.min.css",
+                "~/css/it-mlaf.min.css",
+                "~/css/angular-bootstrap-toggle.min.css"));
+                
+            // Cache Busting
+            bundles.Add(new Bundle("~/bundles/admin").Include(
+                "~/Client/src/dist/admin.js"));
 
+            bundles.Add(new Bundle("~/bundles/advance").Include(
+                "~/Client/src/dist/advance.js"));
+
+            bundles.Add(new Bundle("~/bundles/codingPractices").Include(
+                "~/Client/src/dist/codingPractices.js"));
+
+            bundles.Add(new Bundle("~/bundles/contract").Include(
+                "~/Client/src/dist/contract.js"));
+
+            bundles.Add(new Bundle("~/bundles/dashboard").Include(
+                "~/Client/src/dist/dashboard.js"));
+
+            bundles.Add(new Bundle("~/bundles/report").Include(
+                "~/Client/src/dist/report.js"));
+
+            // Changed to fix font loading issue when deployed (not an issue when running locally)
+            bundles.Add(new StyleBundle("~/Client/src/dist/globalStyle").Include(
+                "~/Client/src/dist/globalStyle.css"));
         }
-
     }
 }
