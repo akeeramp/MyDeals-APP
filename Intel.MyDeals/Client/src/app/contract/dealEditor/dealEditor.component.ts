@@ -1618,8 +1618,6 @@ export class dealEditorComponent implements OnDestroy{
     }
     async initialization() {
         try {
-            //adding 50 pagination in Deal editor
-            if (!this.in_Is_Tender_Dashboard) this.pageSizes.push({ text: "50", value: 50 });
             this.isDataLoading = true;
             this.setBusy("Loading Deals", "Gathering deals and security settings.", "Info", true);
             if (!this.in_Is_Tender_Dashboard) {// Contract Manage and Tender Manage have data of specific PS and PT
@@ -1684,8 +1682,9 @@ export class dealEditorComponent implements OnDestroy{
     
     ngOnInit() {
         this.isInitialLoad = true;
+        //adding 50 pagination in Deal editor
+        if (!this.in_Is_Tender_Dashboard) this.pageSizes.push({ text: "50", value: 50 });
         this.initialization();
-
         this._gridResult.pipe(takeUntil(this.destroy$)).subscribe((data) => {
             this.dirty = this.getDirtyFromGridResult(data);
         });

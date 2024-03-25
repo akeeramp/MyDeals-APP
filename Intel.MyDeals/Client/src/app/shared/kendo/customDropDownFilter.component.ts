@@ -21,7 +21,7 @@ export class CustomDropDownFilterComponent implements AfterViewInit {
     @Input() public field: string;
     @Input() public operator: string;
     private selectedValue: any;
-
+    private currentOperator: any;
     private currentData: any;
     private value: any[] = [];
 
@@ -35,7 +35,7 @@ export class CustomDropDownFilterComponent implements AfterViewInit {
             this.operator = "isnull";
         } else if (item != undefined && item == "") {
             this.operator = "isempty";
-        }
+        } else if (item) this.operator = this.currentOperator;
         filter.push({
             field: this.field,
             operator: this.operator,
@@ -53,6 +53,7 @@ export class CustomDropDownFilterComponent implements AfterViewInit {
 
     ngAfterViewInit() {
         this.currentData = this.data;
+        this.currentOperator = this.operator;
         this.value = this.currentFilter.filters.map((f: FilterDescriptor) => f.value);
         if (this.value != undefined && this.value != null && this.value.length > 0) {
             const valuesel = this.field == 'OBJ_SET_TYPE_CD' || this.field == 'WF_STG_CD' ? this.data.filter(x => x.Value == this.value[0]) : this.field == 'Customer_NM' ? this.data.filter(x => x.CUST_NM == this.value[0]) : this.data.filter(x => x.DROP_DOWN == this.value[0]);
