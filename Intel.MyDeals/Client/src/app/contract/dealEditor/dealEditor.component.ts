@@ -163,13 +163,12 @@ export class dealEditorComponent implements OnDestroy{
     };
     private pageSizes: PageSizeItem[] = [
         { text: "10", value: 10 },
-        { text: "25", value: 25 },
-        //{ text: "50", value: 50 }
+        { text: "25", value: 25 }
     ];
     private filteringData: any[] = [];
     filterChange(filter: any): void {
         this.state.filter = filter;
-        if (!this.in_Is_Tender_Dashboard) {
+        if (!this.in_Is_Tender_Dashboard) { //Since tender dashboard is having server side filteration this is not required
             this.gridData = process(this.gridResult, this.state);
             if (filter && filter.filters && filter.filters.length > 0) {
                 filter.filters.forEach((item: CompositeFilterDescriptor) => {
@@ -261,6 +260,7 @@ export class dealEditorComponent implements OnDestroy{
             // Get template for the selected WIP_DEAL
             this.wipTemplate = this.UItemplate["ModelTemplates"]["WIP_DEAL"][`${this.curPricingTable.OBJ_SET_TYPE_CD}`];
             if (this.in_Is_Tender_Dashboard) {
+                //For removing filters in IS_RPL and MISSING_CAP_COST_INFO in tender dashboard
                 this.wipTemplate.columns.forEach(item => {
                     if (item.field == "IS_RPL" || item.field == "MISSING_CAP_COST_INFO") {
                         item.filterable = false;
@@ -277,10 +277,11 @@ export class dealEditorComponent implements OnDestroy{
         if (this.isInitialLoad)
             this.customLayout(false);
         else 
-            this.getTenderDashboardData();
+            if (this.in_Is_Tender_Dashboard) this.getTenderDashboardData(); //To reload the tender dashboard data on reload
             this.setBusy("", "", "", false);
     }
 
+    //To invoke searched on state changes
     invokeTenderSearch(state) {
         this.ruleData.take = state.take,
         this.ruleData.skip = state.skip
@@ -289,6 +290,7 @@ export class dealEditorComponent implements OnDestroy{
         this.invokeSearchDatasource.emit(this.ruleData);
     }
 
+    //loading Tender dashboard 
     getTenderDashboardData() {
         this.gridResult = [];
         setTimeout(() => {
@@ -409,7 +411,6 @@ export class dealEditorComponent implements OnDestroy{
             this.refreshGrid();
         }
         setTimeout(() => {
-            
             if (this.in_Is_Tender_Dashboard) {
                 let state: State = {
                     skip: 0,
@@ -461,6 +462,7 @@ export class dealEditorComponent implements OnDestroy{
     dataStateChange(state: DataStateChangeEvent): void {
         this.isLoading = true;
         if (this.in_Is_Tender_Dashboard) {
+            //to invoke search on state changes
             this.invokeTenderSearch(state);
         } else {
             this.gridData.data = [];
@@ -1572,6 +1574,7 @@ export class dealEditorComponent implements OnDestroy{
         return columns;
     }
     exportToExcel() {
+        //to invoke a search to get 1000 records
         if (this.in_Is_Tender_Dashboard) {
             this.ruleData.exportAll = 1;
             this.ruleData.take = 1000;
@@ -1615,7 +1618,8 @@ export class dealEditorComponent implements OnDestroy{
     }
     async initialization() {
         try {
-            
+            //adding 50 pagination in Deal editor
+            if (!this.in_Is_Tender_Dashboard) this.pageSizes.push({ text: "50", value: 50 });
             this.isDataLoading = true;
             this.setBusy("Loading Deals", "Gathering deals and security settings.", "Info", true);
             if (!this.in_Is_Tender_Dashboard) {// Contract Manage and Tender Manage have data of specific PS and PT
@@ -1695,7 +1699,7 @@ export class dealEditorComponent implements OnDestroy{
     }
 
     ngOnChanges() {
-        //add conditions for tender
+        //To invoke on Data changes from tender dashboard
         if (this.in_Is_Tender_Dashboard) {
             this.getTenderDashboardData();
         }
