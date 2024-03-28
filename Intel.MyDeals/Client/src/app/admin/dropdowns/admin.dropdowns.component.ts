@@ -13,7 +13,7 @@ import { takeUntil } from "rxjs/operators";
 
 import { logger } from "../../shared/logger/logger";
 import { DropdownService } from './admin.dropdowns.service';
-import { UiDropdownItem } from "./admin.dropdowns.model";
+import { UiDropdownItem, UiDropdownResponseItem } from "./admin.dropdowns.model";
 import { PendingChangesGuard } from "../../shared/util/gaurdprotectionDeactivate";
 import { DropdownBulkUploadDialogComponent } from "./dropdownBulkUploadDialog/admin.dropdowns.bulkUploadDialog.component";
 
@@ -33,7 +33,7 @@ import { DropdownBulkUploadDialogComponent } from "./dropdownBulkUploadDialog/ad
 export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnDestroy {
 
     constructor(private dropdownService: DropdownService,
-                private loggerSvc: logger,
+                private loggerService: logger,
                 private dialogService: MatDialog) {
         this.allData = this.allData.bind(this);
     }
@@ -108,7 +108,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
             await this.loadUiDropdown();
         } catch (ex) {
             //in catching any errors on loading
-            this.loggerSvc.error('Something went wrong', 'Error');
+            this.loggerService.error('Something went wrong', 'Error');
             console.error('UI_DROPDOWNS::ngOnInit::', ex);
         }
     }
@@ -132,7 +132,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
 
     async getDealTypeDataSource() {
         this.DealTypeData = await this.dropdownService.getDealTypesDropdowns(true).toPromise().catch((error) => {
-            this.loggerSvc.error("Unable to get Deal Type Dropdowns.", error, error.statusText);
+            this.loggerService.error("Unable to get Deal Type Dropdowns.", error, error.statusText);
         })
         this.fullDistinctSetTypeCd = this.distinctSetTypeCd = distinct(this.DealTypeData, "dropdownName").map(
             item => item.dropdownName
@@ -143,7 +143,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     async getGroupsDataSource() {
         //let checkRestrictionFlag = false;
         let response: any = await this.dropdownService.getDropdownGroups(true).toPromise().catch((error) => {
-            this.loggerSvc.error("Unable to get Group Dropdowns.", error, error.statusText);
+            this.loggerService.error("Unable to get Group Dropdowns.", error, error.statusText);
         })
         response = response.filter(ob => ob.dropdownName !== "SETTLEMENT_PARTNER");
         this.GroupData = response;
@@ -166,7 +166,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
 
     async getCustomersDataSource() {
         this.CustomerData = await this.dropdownService.getCustsDropdowns(true).toPromise().catch((error) => {
-            this.loggerSvc.error("Unable to get Dropdown Customers.", error, error.statusText);
+            this.loggerService.error("Unable to get Dropdown Customers.", error, error.statusText);
         })
         this.distinctCustomerName = distinct(this.CustomerData, "dropdownName").map(
             item => item.dropdownName
@@ -178,7 +178,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
         this.selectedInheritanceGroup = "";
         //let checkRestrictionFlag = false;
         let result: any = await this.dropdownService.getBasicDropdowns(true).toPromise().catch((error) => {
-            this.loggerSvc.error("Unable to get UI Dropdown Values.", error, error.statusText);
+            this.loggerService.error("Unable to get UI Dropdown Values.", error, error.statusText);
         })
         this.setNonCorpInheritableValues(result);
         result = result.filter(ob => ob.ATRB_CD !== "SETTLEMENT_PARTNER");
@@ -211,84 +211,92 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     }
 
     //old one not using now
-    checkRestrictions(dataItem): any {
-        let Id: number;
-        let restrictToConsumptionOnly: boolean;
-        let restrictedGroupList: Array<any>;
-        for (let i = 0; i < dataItem.length; i++) {
-            Id = (dataItem[i].dropdownID === undefined) ? dataItem[i].ATRB_SID : dataItem[i].dropdownID;
-            restrictToConsumptionOnly = ((<any>window).usrRole === 'SA' && !(<any>window).isDeveloper);
-            restrictedGroupList = [3456, 3457, 3458, 3454];
-        }
-        if (restrictToConsumptionOnly === false) {
-            return true;
-        } else {
-            return restrictedGroupList.includes(Id);
-        }
-    }
+    // checkRestrictions(dataItem): any {
+    //     let Id: number;
+    //     let restrictToConsumptionOnly: boolean;
+    //     let restrictedGroupList: Array<any>;
+    //     for (let i = 0; i < dataItem.length; i++) {
+    //         Id = (dataItem[i].dropdownID === undefined) ? dataItem[i].ATRB_SID : dataItem[i].dropdownID;
+    //         restrictToConsumptionOnly = ((<any>window).usrRole === 'SA' && !(<any>window).isDeveloper);
+    //         restrictedGroupList = [3456, 3457, 3458, 3454];
+    //     }
+    //     if (restrictToConsumptionOnly === false) {
+    //         return true;
+    //     } else {
+    //         return restrictedGroupList.includes(Id);
+    //     }
+    // }
 
     checkModelValid(model: any, isNew: boolean) {
-        let IS_MODEL_VALID = true;
-        const cond = this.gridResult.filter(
-            x => x.OBJ_SET_TYPE_CD.toString().toUpperCase().trim() === model.OBJ_SET_TYPE_CD.toString().toUpperCase().trim() &&
+        const MATCHING_DROPDOWNS: Array<UiDropdownResponseItem> = this.gridResult.filter((x: UiDropdownResponseItem) =>
+            x.OBJ_SET_TYPE_CD.toString().toUpperCase().trim() === model.OBJ_SET_TYPE_CD.toString().toUpperCase().trim() &&
                 x.ATRB_CD.toString().toUpperCase().trim() === model.ATRB_CD.toString().toUpperCase().trim() &&
                 x.DROP_DOWN.toString().toUpperCase().trim() === model.DROP_DOWN.toString().toUpperCase().trim() &&
-                x.CUST_NM.toString().toUpperCase().trim() === model.CUST_NM.toString().toUpperCase().trim()
-        );
+                x.CUST_NM.toString().toUpperCase().trim() === model.CUST_NM.toString().toUpperCase().trim());
 
         if (model.DROP_DOWN.indexOf(',') > -1) {
-            this.loggerSvc.warn(model.ATRB_CD + " values can not have embedded commas (,).", "Validation Error");
-            this.errorMsg = model.ATRB_CD + " values can not have embedded commas (,).";
-            IS_MODEL_VALID = false;
+            this.loggerService.warn(model.ATRB_CD + " values cannot have embedded commas (,).", "Validation Error");
+            this.errorMsg = model.ATRB_CD + " values cannot have embedded commas (,).";
+            return false;
         }
 
         if (this.COMP_ATRB_SIDS.indexOf(model.ATRB_SID) > -1) {
             if (model.DROP_DOWN.length > 40) {
-                this.loggerSvc.warn(model.ATRB_CD + " values can not be more than 40 characters long.", "Validation Error");
-                this.errorMsg = model.ATRB_CD + " values can not be more than 40 characters long.";
-                IS_MODEL_VALID = false;
+                this.loggerService.warn(model.ATRB_CD + " values cannot be more than 40 characters long.", "Validation Error");
+                this.errorMsg = model.ATRB_CD + " values cannot be more than 40 characters long.";
+                return false;
             }
         }
 
         if (this.selectedInheritanceGroup == "MRKT_SEG_NON_CORP") {
             this.errorMsg = "MRKT_SEG_NON_CORP values must match an existing MRKT_SEG_COMBINED value.";
-            this.loggerSvc.error("MRKT_SEG_NON_CORP values must match an existing MRKT_SEG_COMBINED value.", "Validation Error");
-            IS_MODEL_VALID = (this.nonCorpInheritableValues.indexOf(model.DROP_DOWN) > -1);
+            this.loggerService.error("MRKT_SEG_NON_CORP values must match an existing MRKT_SEG_COMBINED value.", "Validation Error");
+            
+            if (this.nonCorpInheritableValues.indexOf(model.DROP_DOWN) === -1) {
+                return false;
+            }
         }
 
-        if (isNew && cond.length > 0) {
-            this.errorMsg = "This Combination of Customer,Group,DealType and dropdown already exists.";
-            this.loggerSvc.error("This Combination of Customer,Group,DealType and dropdown already exists.", "Validation Error");
-            IS_MODEL_VALID = false;
-        } else if (!isNew && cond.length > 0) {
-            if (cond.filter(x => x.ACTV_IND === model.ACTV_IND).length == 1) {
+        if (isNew && MATCHING_DROPDOWNS.length > 0) {    // For inserting "new" values
+            this.errorMsg = "This Combination of Customer, Group, DealType, and Dropdown already exists.";
+            this.loggerService.error("This Combination of Customer, Group, DealType, and Dropdown already exists.", "Validation Error");
+            return false;
+        } else if (!isNew && MATCHING_DROPDOWNS.length > 0) {    // For updating existing values
+            if (MATCHING_DROPDOWNS.filter(x => x.ACTV_IND === model.ACTV_IND).length === 1) {
+                const IS_DESCRIPTION_EQUAL = MATCHING_DROPDOWNS.filter(x => x.ATRB_LKUP_DESC.trim() == model.ATRB_LKUP_DESC.trim()).length > 0;
+                const IS_TOOLTIP_EQUAL = MATCHING_DROPDOWNS.filter(x => x.ATRB_LKUP_TTIP.trim() == model.ATRB_LKUP_TTIP.trim()).length > 0;
+
+                if (IS_DESCRIPTION_EQUAL && IS_TOOLTIP_EQUAL) { // TWC3119-913 - Prevent issues when just modifying the description/toolip
+                    this.errorMsg = "This Combination of [Customer, Group, DealType, Dropdown] already exists.";
+                    this.loggerService.error("This Combination of [Customer, Group, DealType, Dropdown] already exists.", "Validation Error");
+                    return false;
+                }
+            } else if (MATCHING_DROPDOWNS.filter(x => x.ACTV_IND != model.ACTV_IND && x.ATRB_LKUP_SID != model.ATRB_LKUP_SID).length == 1) {
                 this.errorMsg = "This Combination of [Customer, Group, DealType, Dropdown] already exists.";
-                this.loggerSvc.error("This Combination of [Customer, Group, DealType, Dropdown] already exists.", "Validation Error");
-                IS_MODEL_VALID = false;
-            } else if (cond.filter(x => x.ACTV_IND != model.ACTV_IND && x.ATRB_LKUP_SID != model.ATRB_LKUP_SID).length == 1) {
-                this.errorMsg = "This Combination of [Customer, Group, DealType, Dropdown] already exists.";
-                this.loggerSvc.error("This Combination of [Customer, Group, DealType, Dropdown] already exists.", "Validation Error");
-                IS_MODEL_VALID = false;
+                this.loggerService.error("This Combination of [Customer, Group, DealType, Dropdown] already exists.", "Validation Error");
+                return false;
             }
         } else {
-            if (indexOf(this.distinctCustomerName, model.CUST_NM) == -1) {
+            if (indexOf(this.distinctCustomerName, model.CUST_NM) === -1) {
                 this.errorMsg = "Please Select Valid Customer Name.";
-                this.loggerSvc.error("Please Select Valid Customer Name.", "Validation Error");
-                IS_MODEL_VALID = false;
+                this.loggerService.error("Please Select Valid Customer Name.", "Validation Error");
+                return false;
             }
-            if (indexOf(this.distinctAtributeCd, model.ATRB_CD) == -1) {
+
+            if (indexOf(this.distinctAtributeCd, model.ATRB_CD) === -1) {
                 this.errorMsg = "Please Select Valid Attribute Code";
-                this.loggerSvc.error("Please Select Valid Attribute Code.", "Validation Error");
-                IS_MODEL_VALID = false;
+                this.loggerService.error("Please Select Valid Attribute Code.", "Validation Error");
+                return false;
             }
-            if (indexOf(this.distinctSetTypeCd, model.OBJ_SET_TYPE_CD) == -1) {
+
+            if (indexOf(this.distinctSetTypeCd, model.OBJ_SET_TYPE_CD) === -1) {
                 this.errorMsg = "Please Select Valid Deal Type";
-                this.loggerSvc.error("Please Select Valid Deal Type.", "Validation Error");
-                IS_MODEL_VALID = false;
+                this.loggerService.error("Please Select Valid Deal Type.", "Validation Error");
+                return false;
             }
         }
 
-        return IS_MODEL_VALID;
+        return true;
     }
     //End of functions
 
@@ -348,55 +356,55 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
     }
 
     saveHandler({ sender, rowIndex, formGroup, isNew, dataItem }) {
-        const ui_dropdown: UiDropdownItem = formGroup.getRawValue();
+        let newUiDropdown: UiDropdownItem = formGroup.getRawValue();
 
         //for disabled formgroup, using the dropdown datasource to get the ID value as in dataItem the value coming as null
-        const filteredDropdown = this.gridResult.filter(x => x.OBJ_SET_TYPE_CD === ui_dropdown.OBJ_SET_TYPE_CD);
-        if (filteredDropdown.length > 0) {
-            ui_dropdown.OBJ_SET_TYPE_SID = filteredDropdown[0].OBJ_SET_TYPE_SID;
+        const FILTERED_DROPDOWN = this.gridResult.filter(x => x.OBJ_SET_TYPE_CD === newUiDropdown.OBJ_SET_TYPE_CD);
+        if (FILTERED_DROPDOWN.length > 0) {
+            newUiDropdown.OBJ_SET_TYPE_SID = FILTERED_DROPDOWN[0].OBJ_SET_TYPE_SID;
         }
 
         if (isNew) {
-            const GroupSID = this.GroupData.filter(x => x.dropdownName == ui_dropdown.ATRB_CD)
+            const GroupSID = this.GroupData.filter(x => x.dropdownName == newUiDropdown.ATRB_CD)
             if (GroupSID.length > 0) {
-                ui_dropdown.ATRB_SID = GroupSID[0]["dropdownID"];
+                newUiDropdown.ATRB_SID = GroupSID[0]["dropdownID"];
             }
-            const customerSID = this.CustomerData.filter(x => x.dropdownName == ui_dropdown.CUST_NM)
+            const customerSID = this.CustomerData.filter(x => x.dropdownName == newUiDropdown.CUST_NM)
             if (customerSID.length > 0) {
-                ui_dropdown.CUST_MBR_SID = customerSID[0]["dropdownID"];
+                newUiDropdown.CUST_MBR_SID = customerSID[0]["dropdownID"];
             }
         }
 
         if (!isNew) {
-            ui_dropdown.ATRB_LKUP_SID = dataItem.ATRB_LKUP_SID;
+            newUiDropdown.ATRB_LKUP_SID = dataItem.ATRB_LKUP_SID;
         }
 
         //check the combination exists
         if (this.isFormChange) {
-            this.isModelValid = this.checkModelValid(ui_dropdown, isNew);
+            this.isModelValid = this.checkModelValid(newUiDropdown, isNew);
             if (this.isModelValid) {
                 if (isNew) {
                     this.isLoading = true;
-                    this.dropdownService.insertBasicDropdowns(ui_dropdown).pipe(takeUntil(this.destroy$)).subscribe((result) => {
+                    this.dropdownService.insertBasicDropdowns(newUiDropdown).pipe(takeUntil(this.destroy$)).subscribe((result) => {
                         this.selectedInheritanceGroup = "";
                         if (result.ATRB_CD == "MRKT_SEG_COMBINED") {
                             this.nonCorpInheritableValues.push(result);
                         }
-                        this.gridResult.push(ui_dropdown);
+                        this.gridResult.push(newUiDropdown);
                         this.loadUiDropdown();
-                        this.loggerSvc.success("New Dropdown Added.")
+                        this.loggerService.success("New Dropdown Added.")
                     }, (error) => {
-                        this.loggerSvc.error("Unable to insert Dropdown.", error);
+                        this.loggerService.error("Unable to insert Dropdown.", error);
                         this.isLoading = false;
                     });
                 } else {
                     this.isLoading = true;
-                    this.dropdownService.updateBasicDropdowns(ui_dropdown).pipe(takeUntil(this.destroy$)).subscribe(() => {
-                        this.gridResult[rowIndex] = ui_dropdown;
-                        this.gridResult.push(ui_dropdown);
+                    this.dropdownService.updateBasicDropdowns(newUiDropdown).pipe(takeUntil(this.destroy$)).subscribe(() => {
+                        this.gridResult[rowIndex] = newUiDropdown;
+                        this.gridResult.push(newUiDropdown);
                         this.loadUiDropdown();
                     }, (error) => {
-                        this.loggerSvc.error("Unable to update UI dropdown data.", error);
+                        this.loggerService.error("Unable to update UI dropdown data.", error);
                         this.isLoading = false;
                     });
                 }
@@ -462,9 +470,9 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
                 }
             }
             this.refreshGrid();
-            this.loggerSvc.success("UI Dropdown successfully deleted or deactivated.")
+            this.loggerService.success("UI Dropdown successfully deleted or deactivated.")
         }, (errorResponse) => {
-            this.loggerSvc.error(
+            this.loggerService.error(
                 "Unable to delete row Data.",
                 errorResponse,
                 errorResponse.statusText
@@ -499,7 +507,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
         this.initialization();
     }
 
-    // destroy the subject so in this casee all RXJS observable will stop once we move out of the component
+    // destroy the subject so in this case all RXJS observable will stop once we move out of the component
     ngOnDestroy() {
         this.destroy$.next();
         this.destroy$.complete();

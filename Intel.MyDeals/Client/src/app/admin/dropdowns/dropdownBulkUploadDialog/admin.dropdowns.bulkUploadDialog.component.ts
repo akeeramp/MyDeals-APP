@@ -1,29 +1,32 @@
 /* eslint-disable @typescript-eslint/no-inferrable-types, prefer-const, no-useless-escape */
-import { Component, Inject, OnInit } from "@angular/core";
+import { Component, Inject, OnDestroy, OnInit } from "@angular/core";
 import { FormControl, FormGroup, Validators } from "@angular/forms";
 import { MAT_DIALOG_DATA, MatDialogRef } from "@angular/material/dialog";
 import { State, process } from "@progress/kendo-data-query";
 import { GridDataResult } from "@progress/kendo-angular-grid";
-import { BehaviorSubject, Observable } from "rxjs";
+import { BehaviorSubject, Observable, Subject } from "rxjs";
+import { takeUntil } from "rxjs/operators";
 
 import { logger } from "../../../shared/logger/logger";
 import { DropdownService } from "../admin.dropdowns.service";
 import { UiDropdownItem, UiDropdownResponseItem } from "../admin.dropdowns.model";
-import { BulkUploadDialogData, ValueProgress, InsertResult, DropdownBaseData } from "./admin.dropdowns.bulkUploadDialog.model";
+import { BulkUploadDialogData, ValueProgress, InsertResult, DropdownBaseData, FailedValue } from "./admin.dropdowns.bulkUploadDialog.model";
 
 @Component({
     selector: 'dropdown-bulk-upload-dialog',
     templateUrl: 'Client/src/app/admin/dropdowns/dropdownBulkUploadDialog/admin.dropdowns.bulkUploadDialog.component.html',
     styleUrls: ['Client/src/app/admin/dropdowns/dropdownBulkUploadDialog/admin.dropdowns.bulkUploadDialog.component.css']
 })
-export class DropdownBulkUploadDialogComponent implements OnInit {
+export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
 
-    private formData: FormGroup;
+    private readonly destroy$ = new Subject();
 
     constructor(private DIALOG_REF: MatDialogRef<DropdownBulkUploadDialogComponent>,
                 @Inject(MAT_DIALOG_DATA) public data: BulkUploadDialogData,
                 private dropdownService: DropdownService,
                 private loggerService: logger) { }
+    
+    private formData: FormGroup;
 
     private disableFormInputs() {
         this.formData.disable();
@@ -79,33 +82,41 @@ export class DropdownBulkUploadDialogComponent implements OnInit {
         for (const VALUE of SPLIT_VALUES) {
             let wipValue: string = VALUE.trim();
 
-            // FUTURE VALIDATION LOGIC HERE, Validation for individual values
-
             if (wipValue != null && wipValue != undefined && !EMPTY_STRING.test(wipValue)) {
                 noEmptyValues.push(wipValue);
             }
         }
         const NO_DUPLICATE_OR_EMPTY: string[] = Array.from(new Set(noEmptyValues));
 
-        // Remove values that do not adhere to characterset
-        const PATTERN_ACCEPTABLE_CHARACTERS = /^[A-Za-z0-9?!@#$^&*()-_=+.;:©™®\'\"\/\\\s]+$/;
-        const PATTERN_NOT_ACCEPTABLE_SPECIAL_CHARACTERS = /^([^\[\]\<\>]*)$/;
-        let failedValues: string[] = [];
+        const PATTERN_ACCEPTABLE_CHARACTERS = /^[A-Za-z0-9?!@#$^&*()-_=+.;:©™®\'\"\/\\\s]+$/;   // When updating, remember to update MESSAGE_ACCEPTABLE_CHARACTERS
+        const PATTERN_NOT_ACCEPTABLE_SPECIAL_CHARACTERS = /^([^\[\]\<\>]*)$/;   // Characters that bypass Acceptable Character pattern (RegEx limitation)
+        let failedValuesMaxLength: FailedValue = {
+            failMessage: `Failed: Values cannot be more than 40 characters long`,
+            values: []
+        };
+        let failedValuesUnsupportedCharacters: FailedValue = { 
+            failMessage: `Failed: This value contains an unsupported character, the accepted characterset for this field is latin alphanumeric (a-z, A-Z, 0-9) and certain special characters (${ this.MESSAGE_ACCEPTABLE_CHARACTERS })`,
+            values: []
+        };
         const PASSED_VALUES: string[] = NO_DUPLICATE_OR_EMPTY.filter((value: string) => {
+            if (value.length > 40) {
+                failedValuesMaxLength.values.push(value);
+                return false;
+            }
+
             if (PATTERN_ACCEPTABLE_CHARACTERS.test(value) && PATTERN_NOT_ACCEPTABLE_SPECIAL_CHARACTERS.test(value)) {
                 return true;
             }
 
-            failedValues.push(value);
+            failedValuesUnsupportedCharacters.values.push(value);
             return false;
         });
-        const FAILED_VALUES_WITH_MESSAGE: Array<InsertResult> = this.createMessageForValues(failedValues,
-            `Failed: This value contains an unsupported character, the accepted characterset for this field is latin alphanumeric (a-z, A-Z, 0-9) and certain special characters (${ this.MESSAGE_ACCEPTABLE_CHARACTERS })`,
-            false);
+        const FAILED_VALUES_WITH_MESSAGE_MAX_LENGTH: Array<InsertResult> = this.createMessageForValues(failedValuesMaxLength.values, failedValuesMaxLength.failMessage, false);
+        const FAILED_VALUES_WITH_MESSAGE_UNSUPPORTED_CHARACTERS: Array<InsertResult> = this.createMessageForValues(failedValuesUnsupportedCharacters.values, failedValuesUnsupportedCharacters.failMessage, false);
 
         return {
             pendingValid: this.returnEmptyIfUndefinedOrNull(PASSED_VALUES) as string[],
-            failedInsertWithMessage: this.returnEmptyIfUndefinedOrNull(FAILED_VALUES_WITH_MESSAGE) as Array<InsertResult>,
+            failedInsertWithMessage: this.returnEmptyIfUndefinedOrNull([...FAILED_VALUES_WITH_MESSAGE_UNSUPPORTED_CHARACTERS, ...FAILED_VALUES_WITH_MESSAGE_MAX_LENGTH]) as Array<InsertResult>,
             successfullyInserted: []
         };
     }
@@ -233,7 +244,7 @@ export class DropdownBulkUploadDialogComponent implements OnInit {
         let isComplete = new BehaviorSubject<boolean>(false);
 
         if (preparedDropdownPayloads && preparedDropdownPayloads.length > 0) {
-            this.dropdownService.insertBulkBasicDropdowns(preparedDropdownPayloads).subscribe((result: Array<UiDropdownResponseItem>) => {
+            this.dropdownService.insertBulkBasicDropdowns(preparedDropdownPayloads).pipe(takeUntil(this.destroy$)).subscribe((result: Array<UiDropdownResponseItem>) => {
                 // API response only contains items that were successfully added, assume others have failed from an internal error
                 const SUCCESSFUL_VALUES: string[] = result.map((responseItem: UiDropdownResponseItem) => { return responseItem.DROP_DOWN });
                 this.insertResults.push(...this.createMessageForValues(SUCCESSFUL_VALUES, 'Successful', true));
@@ -306,7 +317,7 @@ export class DropdownBulkUploadDialogComponent implements OnInit {
     private recycleBasicDropdownsCache(): Observable<[boolean, boolean]> {
         let completionAndSuccessPair = new BehaviorSubject<[boolean, boolean]>([false, false]);
 
-        this.dropdownService.recycleBasicDropdownsCache().subscribe(() => {
+        this.dropdownService.recycleBasicDropdownsCache().pipe(takeUntil(this.destroy$)).subscribe(() => {
             console.log('Successfully reset Basic Dropdowns cache');
             completionAndSuccessPair.next([true, true]);
         }, (error) => {
@@ -336,7 +347,7 @@ export class DropdownBulkUploadDialogComponent implements OnInit {
                 this.recycleBasicDropdownsCache().subscribe((completionAndSuccessPair: [boolean, boolean]) => {
                     if (completionAndSuccessPair[0]) {  // When complete
                         if (completionAndSuccessPair[1]) { // Successfully reset cache
-                            this.dropdownService.getBasicDropdowns(true).subscribe((BASIC_DROPDOWN_DATA: Array<UiDropdownResponseItem>) => {
+                            this.dropdownService.getBasicDropdowns(true).pipe(takeUntil(this.destroy$)).subscribe((BASIC_DROPDOWN_DATA: Array<UiDropdownResponseItem>) => {
                                 if (BASIC_DROPDOWN_DATA !== null && BASIC_DROPDOWN_DATA !== undefined) {
                                     valueProgress = this.removeAndFlagExistingValues(valueProgress, BASIC_DROPDOWN_DATA);
             
@@ -388,6 +399,11 @@ export class DropdownBulkUploadDialogComponent implements OnInit {
 
     ngOnInit(): void {
         this.setupFormGroup();
+    }
+
+    ngOnDestroy(): void {
+        this.destroy$.next();
+        this.destroy$.complete();
     }
 
 }

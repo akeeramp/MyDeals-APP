@@ -28,3 +28,8 @@ export interface DropdownBaseData {
     dropdownName: string;
     dropdownID: number;
 }
+
+export interface FailedValue {
+    failMessage: string;
+    values: string[];
+}
