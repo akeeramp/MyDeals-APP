@@ -310,9 +310,12 @@ export class PTEUtil {
         // Pricing table rows products to be translated
         let pricingTableRowData = currentPricingTableRowData.filter((x) => {
 
-            return ((x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
-                ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true))
-                || (dealType == "KIT") || (isExcludePrdChange) || (Object.keys(JSON.parse(x.PTR_SYS_PRD)).length !== x.PTR_USER_PRD.split(',').length);
+            return (
+                (x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) &&
+                ((x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null) ? ((x.PTR_SYS_INVLD_PRD != "" && x.PTR_SYS_INVLD_PRD != null) ? true : false) : true) ||
+                (((x.PTR_USER_PRD != "" && x.PTR_USER_PRD != null) && (x.PTR_SYS_PRD != "" && x.PTR_SYS_PRD != null)) ? ((Object.keys(JSON.parse(x.PTR_SYS_PRD)).length != x.PTR_USER_PRD.split(',').length) ? true : false) : false)
+                || (dealType == "KIT") || (isExcludePrdChange)
+            );
         });
 
         //find uniq records incase of tier logic
