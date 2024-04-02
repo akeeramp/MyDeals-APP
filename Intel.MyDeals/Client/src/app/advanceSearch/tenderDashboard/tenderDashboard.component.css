@@ -259,6 +259,26 @@ div#horizontal-search-tenderDashboard.padding-design-horizontal-tenderDashboard 
     max-width: 97vw !important;
 }
 
+.NoDataFound {
+    font-weight: bolder;
+    color: #A30003;
+    height: 40px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+#dealEditor .k-grid-norecords {
+    background-color: #EBC3BC !important;
+}
+
+#dealEditor#dealEditor .k-grid-norecords:hover {
+    background-color: #EBC3BC !important;
+}
+
+#dealEditorTab .k-grid .k-grid-content-locked .k-state-hover td, #dealEditorTab .k-grid .k-grid-content-locked tr.k-grid-norecords:hover td {
+    background-color: #EBC3BC !important;
+}
+
 .tender_de_admin kendo-grid#dealEditor .dealCell .uiControlDiv.trackingNumParent.tracker-number-class .vert-center {
     top: 0% !important;
     transform: translateY(0%) !important;
