@@ -9,42 +9,43 @@
         </div>
         <div id="tocExpand" *ngIf="!isVisible" (click)="Toggle()" class="intelicon-up rotateIcon"><span class="font-cp">TOC</span> </div>
     </div>
-        <div class="grid-two" id="codeQuality" style="width: 100%;">
-
-            <div style="margin: 10px;">
-                <h1>My Deals Code Quality Standards</h1>
-                 <p>
-                    MyDeals is a full stack UI application with complex logic and multiple teams are working on it, it is necessary to integrate code quality tools to follow good coding standards.
-                </p>
-                <ul>
-                    <li>
-                        In that way developers will have proper guidelines and minimum processes to follow.
-                    </li>
-                    <li>
-                        This practice can help to enforce strong coding standards; application will have low security threats and better performance.
-                    </li>
-                </ul>
-               <h4>Quality Checks</h4>
-               <p> Following the below Quality checks as part of MyDeals Coding Quality Standards</p>
-                <ul>
-                    <li><b>Unit Testing(NUnit Test Suite):</b> NUnit is unit test framework for all .Net languages.</li>
-                    <li><b>SonarQube:</b> Tool for static analysis of code for any bugs and reviews.</li>
-                    <li><b>CheckMarx:</b> Tool to scan security vulnerabilities.</li>
-                    <li><b>Spectral Scan:</b>  Tool to validate security keys in the source</li>
-                </ul>
-            <p>
-                On each PR, automated quality checks (Sonar Scan and NUnit Test) will run, and code merging will be blocked unless they pass successfully.<br/>
-                <img src="\Client\Images\docs\allChecks-passed.png" alt="" style="height: 300px; margin: 15px 0px;">
-            </p>
-                 <h4 id="developmentAndDeployment">Development & Deployment Process.​</h4>
-               <img src="\Client\Images\docs\DevelopmentAndDeployment.jpg" style="height: 500px; margin: 15px 0px;"/>
+        <div class="grid-two" style="width: 100%;">
+            <div id="codeQuality">
+                <div style="margin: 10px;">
+                    <h1>My Deals Code Quality Standards</h1>
+                    <p>
+                        MyDeals is a full stack UI application with complex logic and multiple teams are working on it, it is necessary to integrate code quality tools to follow good coding standards.
+                    </p>
+                    <ul>
+                        <li>
+                            In that way developers will have proper guidelines and minimum processes to follow.
+                        </li>
+                        <li>
+                            This practice can help to enforce strong coding standards; application will have low security threats and better performance.
+                        </li>
+                    </ul>
+                    <h4>Quality Checks</h4>
+                    <p> Following the below Quality checks as part of MyDeals Coding Quality Standards</p>
+                    <ul>
+                        <li><b>Unit Testing(NUnit Test Suite):</b> NUnit is unit test framework for all .Net languages.</li>
+                        <li><b>SonarQube:</b> Tool for static analysis of code for any bugs and reviews.</li>
+                        <li><b>CheckMarx:</b> Tool to scan security vulnerabilities.</li>
+                        <li><b>Spectral Scan:</b>  Tool to validate security keys in the source</li>
+                    </ul>
+                    <p>
+                        On each PR, automated quality checks (Sonar Scan and NUnit Test) will run, and code merging will be blocked unless they pass successfully.<br />
+                        <img src="\Client\Images\docs\allChecks-passed.png" alt="" style="height: 300px; margin: 15px 0px;">
+                    </p>
+                    <h4 id="developmentAndDeployment">Development & Deployment Process.​</h4>
+                    <img src="\Client\Images\docs\DevelopmentAndDeployment.jpg" style="height: 500px; margin: 15px 0px;" />
                     <ul>
                         <li>
                             <a href="https://intel.sharepoint.com/:p:/r/sites/MyDealsTeam/_layouts/15/Doc.aspx?sourcedoc=%7B0D9E95FD-07A6-431F-84F7-76798427AE2A%7D&file=MyDeals_Codequality_standarization.pptx&action=edit&mobileredirect=true" target="_blank" class="anchorCodingTools">
                                 Click Here
-                               </a> for more information related to <b>Coding Quality Standards & development and deployment process</b>.
+                            </a> for more information related to <b>Coding Quality Standards & development and deployment process</b>.
                         </li>
                     </ul>
+                </div>
                     <div id="unitTest">
                         <h2>Unit Testing</h2>
                         <p>

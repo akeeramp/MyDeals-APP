@@ -506,6 +506,8 @@
     <Content Include="Client\Images\docs\pricingassoc.png" />
     <Content Include="Client\Images\docs\pricingstrategy.png" />
     <Content Include="Client\Images\docs\Pricingtable.png" />
+    <Content Include="Images\docs\PS1.png" />
+    <Content Include="Images\docs\createContract.png" />
     <Content Include="Client\Images\docs\projController.png" />
     <Content Include="Client\Images\docs\projControllerApi.png" />
     <Content Include="Client\Images\docs\projDataCollections.png" />
@@ -514,7 +516,9 @@
     <Content Include="Client\Images\docs\ResolveSPError.png" />
     <Content Include="Client\Images\docs\RunAllTestCases.png" />
     <Content Include="Client\Images\docs\runButton-cs.png" />
-    <Content Include="Client\Images\docs\RDBMS-Dev-Role.png" />
+     <Content Include="Client\Images\docs\submit-review-ui.png" />
+    <Content Include="Client\Images\docs\squash-merge-ui.png" />
+     <Content Include="Client\Images\docs\RDBMS-Dev-Role.png" />
     <Content Include="Client\Images\docs\ErrorExample.png" />
     <Content Include="Client\Images\docs\samplecodesp.png" />
     <Content Include="Client\Images\docs\sampleunittests.png" />
