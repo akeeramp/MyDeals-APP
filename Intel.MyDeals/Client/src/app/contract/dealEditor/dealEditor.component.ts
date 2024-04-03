@@ -1026,8 +1026,14 @@ export class dealEditorComponent implements OnDestroy{
         }
     }
 
-    onColumnChange(val) {
+    isColumnDisabled(field) {
+        if (this.columns.length == 1 && this.columns.filter(x => x.field == field).length > 0) {
+            return true;
+        } else return false;
+    }
 
+    onColumnChange(val) {
+        
         var col = this.wipTemplate.columns.filter(x => x.field == val.field);
         if (col == undefined || col == null || col.length == 0) return;
         var colGrp = this.templates[val.field];
@@ -1042,6 +1048,11 @@ export class dealEditorComponent implements OnDestroy{
             }
         } else {
             if (colGrp != undefined) {
+                if (this.columns.length == 1) {
+                    this.isWarning = true;
+                    this.message = "Action not allowed. Grid must have atleast One Column";
+                    return;
+                }
                 var index = colGrp.Groups.indexOf(this.selectedTab);
                 if (index > -1) {
                     colGrp.Groups.splice(index, 1);

@@ -1,4 +1,4 @@
-﻿import { Component, Input, ViewEncapsulation, OnInit } from '@angular/core';
+﻿import { Component, Input, ViewEncapsulation, OnInit, OnChanges } from '@angular/core';
 import { each } from 'underscore';
 
 @Component({
@@ -7,7 +7,7 @@ import { each } from 'underscore';
     styleUrls: ['Client/src/app/contract/dealEditor/dealEditor.component.css'],
     encapsulation: ViewEncapsulation.None
 })
-export class dealEditorHeaderTemplateComponent implements OnInit{
+export class dealEditorHeaderTemplateComponent implements OnChanges{
 
     constructor() {}
     @Input() in_Field_Name: string = '';
@@ -51,7 +51,7 @@ export class dealEditorHeaderTemplateComponent implements OnInit{
         return true;
     }
 
-    ngOnInit() {
+    ngOnChanges() {
         this.is_Deal_Tools_Checked = this.checkAllSelected();
     }
 }

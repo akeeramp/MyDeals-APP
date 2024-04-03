@@ -127,8 +127,8 @@
                                 </span>
                             </div>
                             <div style="max-height: 230px; overflow: auto; margin-top: 4px; margin-right: 10px; height: auto; ">
-                                <div class="backclass newBackClass" *ngFor="let item of columnOptionsFilter() | orderBy: 'title'">
-                                    &nbsp;&nbsp;<input type='checkbox' [checked]="iscolumnchecked(item.field)" id="colChk{{item.field}}" (click)="onColumnChange(item)" />&nbsp;
+                                <div class="backclass newBackClass" *ngFor="let item of columnOptionsFilter() | orderBy: 'title'; let i=index trackBy i">
+                                    &nbsp;&nbsp;<input type='checkbox' [checked]="iscolumnchecked(item.field)" id="colChk{{item.field}}" (click)="onColumnChange(item)" [disabled]="isColumnDisabled(item.field)"/>&nbsp;
                                     <label for="colChk{{item.field}}">
                                         <span [innerHTML]="item.title | sanitizeHtml"></span>
                                     </label>
