@@ -568,7 +568,7 @@ button.btn.btn-sm.btn-primary.lnavaddbtnstyle {
     position: absolute;
     height: calc(100% - 100px) !important;
     overflow-x: auto;
-    overflow-y: scroll !important;
+    overflow-y: overlay !important;
 }
 
 i.intelicon-vertical-menu.blue_b_fix {
