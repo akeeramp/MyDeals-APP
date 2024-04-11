@@ -5,7 +5,7 @@
 #pubOpGrid .k-cell-inner .k-grid-filter {
     text-align: center !important;
     display: inline-block !important;
-    position: relative !important;
+    position: unset !important;
     padding: 0 !important;
     vertical-align: middle !important;
     align-content: center !important;
