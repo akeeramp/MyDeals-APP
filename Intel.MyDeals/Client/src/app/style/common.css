@@ -183,9 +183,9 @@ kendo-datepicker.date-dashboard-search:hover, kendo-datepicker.date-dashboard-se
     box-shadow: none !important
 }
 
-.htCommentsContainer .htComments.commentHover {
+/* .htCommentsContainer .htComments.commentHover {
     left: 354px !important;
-}
+} */
 
 .added-tender .htCommentsContainer .htComments.commentHover {
     left: 54px !important;
