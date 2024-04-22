@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-inferrable-types */
 import { Component, Input, OnInit, ViewEncapsulation, Output, EventEmitter, OnChanges } from "@angular/core";
 import { GridDataResult, DataStateChangeEvent, PageSizeItem, SelectAllCheckboxState, CellClickEvent, CellCloseEvent } from "@progress/kendo-angular-grid";
 import { distinct, process, State } from "@progress/kendo-data-query";
@@ -30,7 +31,7 @@ export class MeetCompContractComponent implements OnInit, OnChanges {
     @Input() private objSid;
     @Input() private isAdhoc;
     @Input() private objTypeId;
-    @Input() private cId;;
+    @Input() private cId;
     @Input() private pageNm;
     @Input() private meetCompRefresh;
     @Output() tmDirec = new EventEmitter();
@@ -321,55 +322,45 @@ export class MeetCompContractComponent implements OnInit, OnChanges {
         }
     }
 
-    //Triggered on click of checkbox on grid
-    selectProdIDS(selectedID, event) {
+    private isSelectAllChecked: boolean = false;
+    // Triggered on click of checkbox on grid
+    private selectProducts(selectedID: number | 'all', event): void {
         this.isDirty.emit(true);
-        const isSelected = event.target.checked;
-        if (this.state.filter.filters.length > 0) {
-            //UPDATE Selected Filter ROWS
-            const filterData = this.gridData.data;
-            if (selectedID == 'all') {
-                if (isSelected) {
-                    for (let i = 0; i < filterData.length; i++) {
-                        if (filterData[i].MEET_COMP_UPD_FLG.toLowerCase() != 'n') {
-                            this.meetCompMasterdata._elements[filterData[i].RW_NM - 1].IS_SELECTED = true;
-                        }
-                    }
-                }
-                else {
-                    for (let i = 0; i < filterData.length; i++) {
-                        if (filterData[i].MEET_COMP_UPD_FLG.toLowerCase() != 'n') {
-                            this.meetCompMasterdata._elements[filterData[i].RW_NM - 1].IS_SELECTED = false;
-                        }
-                    }
-                }
-            }
-            else {
-                this.meetCompMasterdata._elements[selectedID - 1].IS_SELECTED = isSelected;
-                const filterList = new List<any>(filterData);
-                this.resetDealItems(this.meetCompMasterdata._elements[selectedID - 1].GRP_PRD_SID, filterList, isSelected); // Reset All the Deals not copied from Peers
+
+        const IS_SELECTED = event.target.checked;
+        const IS_ALL_SELECTED: boolean = selectedID == 'all';
+
+        if (IS_ALL_SELECTED) {
+            this.isSelectAllChecked = IS_SELECTED;
+        } else {
+            if (!IS_SELECTED) {
+                this.isSelectAllChecked = false;
             }
         }
-        else {
-            if (selectedID == 'all') {
-                if (isSelected) {
-                    this.meetCompMasterdata._elements.forEach(function (obj) {
-                        if (obj.MEET_COMP_UPD_FLG.toLowerCase() != 'n') {
-                            obj.IS_SELECTED = true;
-                        }
-                    });
+
+        if (this.state.filter.filters.length > 0) { // UPDATE Selected Filter ROWS
+            const FILTER_DATA = this.gridData.data;
+            if (IS_ALL_SELECTED) {
+                for (const DATA of FILTER_DATA) {
+                    if (DATA.MEET_COMP_UPD_FLG.toLowerCase() != 'n') {
+                        this.meetCompMasterdata._elements[DATA.RW_NM - 1].IS_SELECTED = this.isSelectAllChecked;
+                    }
                 }
-                else {
-                    this.meetCompMasterdata._elements.forEach(function (obj) {
-                        if (obj.MEET_COMP_UPD_FLG.toLowerCase() != 'n') {
-                            obj.IS_SELECTED = false;
-                        }
-                    });
-                }
+            } else {
+                this.meetCompMasterdata._elements[(selectedID as number) - 1].IS_SELECTED = IS_SELECTED;
+                const filterList = new List<any>(FILTER_DATA);
+                this.resetDealItems(this.meetCompMasterdata._elements[(selectedID as number) - 1].GRP_PRD_SID, filterList, IS_SELECTED); // Reset All the Deals not copied from Peers
             }
-            else {
-                this.meetCompMasterdata._elements[selectedID - 1].IS_SELECTED = isSelected;
-                this.resetDealItems(this.meetCompMasterdata._elements[selectedID - 1].GRP_PRD_SID, this.meetCompMasterdata, isSelected); // Reset All the Deals not copied from Peers
+        } else {
+            if (IS_ALL_SELECTED) {
+                for (let element of this.meetCompMasterdata._elements) {
+                    if (element.MEET_COMP_UPD_FLG.toLowerCase() != 'n') {
+                        element.IS_SELECTED = this.isSelectAllChecked;
+                    }
+                }
+            } else {
+                this.meetCompMasterdata._elements[(selectedID as number) - 1].IS_SELECTED = IS_SELECTED;
+                this.resetDealItems(this.meetCompMasterdata._elements[(selectedID as number) - 1].GRP_PRD_SID, this.meetCompMasterdata, IS_SELECTED); // Reset All the Deals not copied from Peers
             }
         }
     }
@@ -1021,9 +1012,10 @@ export class MeetCompContractComponent implements OnInit, OnChanges {
 
     async saveAndRunMeetComp() {
         this.tempUpdatedList = [];
-        const isValid = this.isModelValid(this.meetCompUpdatedList);
-        if (isValid) {
-            this.tempUpdatedList = this.meetCompUpdatedList.map(function (x) {
+        const IS_VALID = this.isModelValid(this.meetCompUpdatedList);
+
+        if (IS_VALID) {
+            this.tempUpdatedList = this.meetCompUpdatedList.map((x) => {
                 return {
                     GRP: x.GRP,
                     CUST_NM_SID: x.CUST_NM_SID,
@@ -1043,31 +1035,31 @@ export class MeetCompContractComponent implements OnInit, OnChanges {
                     MEET_COMP_OVERRIDE_UPD_FLG: x.MEET_COMP_OVERRIDE_UPD_FLG
                 }
             });
+
             if (this.tempUpdatedList.length > 0) {
                 this.isDirty.emit(false);
                 this.popUpMessage = this.getMeetCompPopupMessage();
                 if (this.popUpMessage != null) {
                     this.showPopup = true;
-                }
-                else {
-                    
+                } else {     
                     await this.updateMeetComp();
+                    this.selectProducts('all', { target: { checked: false } });
                 }
-            }
-            else if (this.tempUpdatedList.length == 0 && this.isAdhoc == 1) {
+            } else if (this.tempUpdatedList.length == 0 && this.isAdhoc == 1) {
                 this.isDirty.emit(false);
                 await this.forceRunMeetComp();
+                this.selectProducts('all', { target: { checked: false } });
             }
-        }
-        else {
+        } else {
             this.showAlert = true;
             if (this.usrRole == "DA") {
                 this.dispMsg = "Analysis Override Status OR Analysis Override Comments can't be Blank.";
-            }
-            else {
+            } else {
                 this.dispMsg = "Meet comp data is missing for some product(s).Please enter the data and save the changes.";
             }
             this.reBindGridData();
+            this.isSelectAllChecked = false;
+            this.selectProducts('all', { target: { checked: false } });
         }
     }
 
@@ -1131,7 +1123,7 @@ export class MeetCompContractComponent implements OnInit, OnChanges {
         window.open('https://intel.sharepoint.com/sites/mydealstrainingportal/SitePages/Meet-Comp.aspx', '_blank');
     }
 
-    getDealDeatils(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE) {
+    getDealDetails(DEAL_OBJ_SID, GRP_PRD_SID, DEAL_PRD_TYPE) {
         const deal_properties = {
             "DEAL_OBJ_SID": DEAL_OBJ_SID,
             "GRP_PRD_SID": GRP_PRD_SID,
