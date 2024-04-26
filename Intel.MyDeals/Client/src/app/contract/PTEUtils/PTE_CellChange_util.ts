@@ -16,6 +16,17 @@ export class PTE_CellChange_Util {
 
     private static hotTable: Handsontable;
 
+    private static getNextNewRowId(): number {
+        const ROW_IDS: number[] = this.hotTable.getDataAtCol(0);
+        const LOWEST_ID = Math.min(...ROW_IDS);
+
+        if (ROW_IDS.length > 0 && LOWEST_ID < 0) {
+            return LOWEST_ID - 1;
+        } else {    // No new values have been added yet
+            return -100;
+        }
+    }
+
     /* Prod selector autofill changes functions starts here */
     static returnEmptyRow(): number {
         let PTRCount = this.hotTable.countRows();
@@ -387,7 +398,7 @@ export class PTE_CellChange_Util {
             if (!this.isAlreadyChange(selrow)) {
                 //identify the empty row and add it there
                 let empRow = this.returnEmptyRow();
-                let ROW_ID = -100 - empRow;//this.rowDCID();
+                const ROW_ID = this.getNextNewRowId();
                 this.hotTable.alter('remove_row', selrow, 1, 'no-edit');
                 //this line of code is only for KIT incase of success product
                 if (operation && operation.operation) {
@@ -470,7 +481,7 @@ export class PTE_CellChange_Util {
                 })
                 //for length greater than 1 it will either copy or autofill so first cleaning those records since its prod the length can be predicted so deleting full
                 this.hotTable.alter('remove_row', items[0].row, PTE_Config_Util.girdMaxRows, 'no-edit');
-                let ROW_ID = -100 - empRow; 
+                let ROW_ID = this.getNextNewRowId();
                 each(items, (cellItem) => {
                     //let ROW_ID = this.rowDCID();
                     cellItem.new= cellItem.new.toString().replace(/,(\s+)?$/, '');
@@ -571,7 +582,7 @@ export class PTE_CellChange_Util {
             if (!this.isAlreadyChange(selrow)) {
                 //identify the empty row and add it there
                 let empRow = this.returnEmptyRow();
-                let ROW_ID = -100 - empRow;//this.rowDCID(); // will be replace with some other logic
+                const ROW_ID = this.getNextNewRowId();
                 //first deleting the row this will help if the empty row and selected row doest match
                 this.hotTable.alter('remove_row', selrow, 1, 'no-edit');
                 //this line of code is only for KIT incase of success product
@@ -673,10 +684,9 @@ export class PTE_CellChange_Util {
                 this.hotTable.alter('remove_row', items[0].row, items.length * parseInt(curPricingTable.NUM_OF_TIERS), 'no-edit');
                 //identify the empty row and the next empty row will be the consecutive one
                 let empRow = this.returnEmptyRow();
-                let ROW_ID = -100 - empRow;
+                let ROW_ID = this.getNextNewRowId();
                 let mergCells = [];
                 each(items, (cellItem) => {
-                    //let ROW_ID = this.rowDCID(); 
                     //add num of tier rows the logic will be based on autofill value
                     if (items[0].operation && items[0].operation != undefined && cellItem.operation.operation == 'prodsel') {
                         operation = cellItem.operation;
@@ -746,7 +756,7 @@ export class PTE_CellChange_Util {
             if (!this.isAlreadyChange(selrow)) {
                 //identify the empty row and add it there
                 let empRow = this.returnEmptyRow();
-                let ROW_ID = -100 - empRow;//this.rowDCID();// will be replace with some other logic
+                const ROW_ID = this.getNextNewRowId();
                 //first deleting the row this will help if the empty row and selected row doest match
                 this.hotTable.alter('remove_row', selrow, 1, 'no-edit');
                 //this line of code is to mak sure we modify the product background color to sucess
@@ -817,10 +827,9 @@ export class PTE_CellChange_Util {
                 this.hotTable.alter('remove_row', items[0].row, items.length, 'no-edit');
                 //For rows which are not exists identify the empty row and the next empty row will be the consecutive one
                 let empRow = this.returnEmptyRow();
-                let ROW_ID = -100 - empRow;
+                let ROW_ID = this.getNextNewRowId();
                 let updateItems = [];
                 each(items, (cellItem: any) => {
-                    // ROW_ID = this.rowDCID();//random(250); // will be replace with some other logic
                     if (items[0].operation && items[0].operation != undefined && cellItem.operation.operation == 'prodsel') {
                         operation = cellItem.operation;
                         let PTR_col_ind = findIndex(columns, { data: 'PTR_USER_PRD' });
@@ -923,7 +932,7 @@ export class PTE_CellChange_Util {
             if (!this.isAlreadyChange(selrow)) {
                 //identify the empty row and add it there
                 let empRow = this.returnEmptyRow();
-                let ROW_ID = -100 - empRow; //this.rowDCID();//random(250); // will be replace with some other logic
+                const ROW_ID = this.getNextNewRowId();
                 //first deleting the row this will help if the empty row and selected row doest match
                 this.hotTable.alter('remove_row', selrow, 1, 'no-edit');
                 //add num of tier rows the logic will be based on autofill value
@@ -1024,7 +1033,7 @@ export class PTE_CellChange_Util {
             this.hotTable.alter('remove_row', items[0].row, items.length * numOfRows, 'no-edit');
             //identify the empty row and the next empty row will be the consecutive one
             let empRow = this.returnEmptyRow();
-            let ROW_ID = -100 - empRow;
+            let ROW_ID = this.getNextNewRowId();
             let mergCells = [];
             each(items, (cellItem) => {
                 // let ROW_ID = this.rowDCID();
