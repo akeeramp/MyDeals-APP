@@ -1250,8 +1250,8 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                     }
                     if (this.transformResults['Data'].InValidProducts && this.transformResults['Data'].InValidProducts[delRow.DC_ID]) {
                         delete this.transformResults['Data'].InValidProducts[delRow.DC_ID];
-                        if (Object.keys(this.transformResults['Data'].InValidProducts).length == 0)
-                            delete this.transformResults['Data'].InValidProducts;
+                        /*if (Object.keys(this.transformResults['Data'].InValidProducts).length == 0)
+                            delete this.transformResults['Data'].InValidProducts;*/
                     }
                     if (this.transformResults['Data'].ProdctTransformResults && this.transformResults['Data'].ProdctTransformResults[delRow.DC_ID]) {
                         delete this.transformResults['Data'].ProdctTransformResults[delRow.DC_ID];
@@ -1260,8 +1260,8 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                     }
                     if (this.transformResults['Data'].ValidProducts && this.transformResults['Data'].ValidProducts[delRow.DC_ID]) {
                         delete this.transformResults['Data'].ValidProducts[delRow.DC_ID];
-                        if (Object.keys(this.transformResults['Data'].ValidProducts).length == 0)
-                            delete this.transformResults['Data'].ValidProducts;
+                        /*if (Object.keys(this.transformResults['Data'].ValidProducts).length == 0)
+                            delete this.transformResults['Data'].ValidProducts;*/
                     }
                 })
             }
@@ -1661,10 +1661,9 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                     }
                 }
 
-                if (translateResult['Data'].InValidProducts.hasOwnProperty(data.DC_ID) && translateResult['Data'].InValidProducts[data.DC_ID]["I"].length > 0) {
+                if (translateResult['Data'].InValidProducts && translateResult['Data'].InValidProducts.hasOwnProperty(data.DC_ID) && translateResult['Data'].InValidProducts[data.DC_ID]["I"].length > 0) {
                     isInvalid = true;
                 }
-
                 if (translateResult['Data'].DuplicateProducts[data.DC_ID] != undefined && Object.keys(translateResult['Data'].DuplicateProducts[data.DC_ID]).length > 0) {
                     each(translateResult['Data'].DuplicateProducts[data.DC_ID], (item) => {
                         if (item[0].EXCLUDE) {
