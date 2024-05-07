@@ -42,6 +42,7 @@ export class dealEditorEditTemplateComponent {
     private bidActnsDropDownText: string ="text";
     private bidActnsDropDownValue: string = "value";
     private selectedValue: any;
+    public confirmDialog: boolean = false;
     translateDimKey(key) {
         switch (key) {
             case "20_____1":
@@ -72,7 +73,17 @@ export class dealEditorEditTemplateComponent {
                 return "";
         }
     }
-
+    closeDialogs(dataItem: any, field: any) {
+        if (field == 'EXPIRE_YCS2' && dataItem.EXPIRE_YCS2 == 'Yes') {
+            dataItem.EXPIRE_YCS2 = '';
+            this.confirmDialog = false;
+        }
+    }
+    confirmExpire(dataItem: any, field: any) {
+        if (field == 'EXPIRE_YCS2' && dataItem.EXPIRE_YCS2 == 'Yes') {
+            this.confirmDialog = false;
+        }
+    }
     valueChange(dataItem: any, field: any, key?: any): void {        
         if (((field == 'ECAP_PRICE' || field == 'DSCNT_PER_LN') && this.in_Deal_Type == 'KIT') && key != undefined && key != null && key != "" && dataItem[field][key] == null) {
             dataItem[field][key] = 0;
@@ -80,6 +91,9 @@ export class dealEditorEditTemplateComponent {
         if (field == 'KIT_ECAP' && this.in_Deal_Type == 'KIT' && key == undefined) {
             field = "ECAP_PRICE";
             key = '20_____1';
+        }
+        if (field == 'EXPIRE_YCS2' && dataItem.EXPIRE_YCS2 == 'Yes') {
+            this.confirmDialog = true;
         }
        if ((dataItem.isLinked != undefined && dataItem.isLinked) || (dataItem._parentCnt > 1 && !dataItem.isLinked)) {// if modified dataItem is linked, then modifying corresponding columns of all other linked data
             each(this.in_DataSet, (item) => {

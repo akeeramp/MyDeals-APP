@@ -2897,3 +2897,7 @@ i.icon-color-pipe {
     color: #0071c5;
     font-size: 28px;
 }
+
+.paddingReducerExpire .k-content.k-window-content.k-dialog-content {
+    padding: 0;
+}
