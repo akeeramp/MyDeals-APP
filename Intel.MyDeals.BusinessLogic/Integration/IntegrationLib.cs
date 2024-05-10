@@ -488,6 +488,7 @@ namespace Intel.MyDeals.BusinessLogic
             DateTime billingStartDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[currentRec].BillingStartDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             DateTime billingEndDate = DateTime.ParseExact(workRecordDataFields.recordDetails.quote.quoteLine[currentRec].BillingEndDate, "yyyy-MM-dd", null); // Assuming that SF always sends dates in this format
             string consumptionCustomerPlatform = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ConsumptionCustomerPlatform;
+            string consumptionCustomerSegment = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ConsumptionCustomerSegment;
             string consumptionRegion = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ConsumptionRegion;
             string consumptionCountry = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ConsumptionCountry;
             string consumptionReportedSalesGeo = workRecordDataFields.recordDetails.quote.quoteLine[currentRec].ConsumptionReportedSalesGeo;
@@ -949,6 +950,7 @@ namespace Intel.MyDeals.BusinessLogic
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.REBATE_BILLING_START), billingStartDate.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.REBATE_BILLING_END), billingEndDate.ToString("MM/dd/yyyy"));
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.CONSUMPTION_CUST_PLATFORM), consumptionCustomerPlatform);
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.CONSUMPTION_CUST_SEGMENT), consumptionCustomerSegment);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.CONSUMPTION_COUNTRY_REGION), consumptionCountryRegion);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.CONSUMPTION_CUST_RPT_GEO), consumptionReportedSalesGeo);
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[initWipId].GetDataElement(AttributeCodes.DEAL_COMB_TYPE), groupType);
@@ -1553,6 +1555,9 @@ namespace Intel.MyDeals.BusinessLogic
 
             string consumptionCustomerPlatform = workRecordDataFields.recordDetails.quote.quoteLine[i].ConsumptionCustomerPlatform;
             UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.CONSUMPTION_CUST_PLATFORM), consumptionCustomerPlatform == null ? "" : consumptionCustomerPlatform);
+
+            string consumptionCustomerSegment = workRecordDataFields.recordDetails.quote.quoteLine[i].ConsumptionCustomerSegment;
+            UpdateDeValue(myDealsData[OpDataElementType.WIP_DEAL].Data[dealId].GetDataElement(AttributeCodes.CONSUMPTION_CUST_SEGMENT), consumptionCustomerSegment == null ? "" : consumptionCustomerSegment);
 
             string consumptionRegion = workRecordDataFields.recordDetails.quote.quoteLine[i].ConsumptionRegion;
             string consumptionCountry = workRecordDataFields.recordDetails.quote.quoteLine[i].ConsumptionCountry;

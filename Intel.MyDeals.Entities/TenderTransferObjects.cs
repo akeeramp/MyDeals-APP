@@ -302,6 +302,7 @@ namespace Intel.MyDeals.Entities
                     public string BillingStartDate { get; set; }
                     public string BillingEndDate { get; set; }
                     public string ConsumptionCustomerPlatform { get; set; }
+                    public string ConsumptionCustomerSegment { get; set; }
                     public string ConsumptionRegion { get; set; }
                     public string ConsumptionCountry { get; set; }
                     public string ConsumptionReportedSalesGeo { get; set; }

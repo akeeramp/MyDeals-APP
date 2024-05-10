@@ -414,7 +414,8 @@ namespace Intel.MyDeals.Controllers.API
 
             List<string> IqrDropdownAtrbs = new List<string>() {
                 AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
-                AttributeCodes.CONSUMPTION_CUST_PLATFORM
+                AttributeCodes.CONSUMPTION_CUST_PLATFORM,
+                AttributeCodes.CONSUMPTION_CUST_SEGMENT
             };
 
             // Make the update package and send it to outbound Tenders queue
@@ -465,7 +466,8 @@ namespace Intel.MyDeals.Controllers.API
             int recordCount = 0;
             List<string> IqrDropdownAtrbs = new List<string>() {
                 AttributeCodes.CONSUMPTION_CUST_RPT_GEO,
-                AttributeCodes.CONSUMPTION_CUST_PLATFORM
+                AttributeCodes.CONSUMPTION_CUST_PLATFORM,
+                AttributeCodes.CONSUMPTION_CUST_SEGMENT
             };
 
             // Make the update package and send it to outbound Tenders queue
