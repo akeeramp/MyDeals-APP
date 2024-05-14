@@ -1783,6 +1783,12 @@ namespace Intel.MyDeals.BusinessRules
             string isSfDeal = r.Dc.GetDataElementValue(AttributeCodes.SALESFORCE_ID);
             IOpDataElement dePSWFStgCd = r.Dc.GetDataElement(AttributeCodes.PS_WF_STG_CD);
 
+            //Consumption Values
+            string consumptionCustomerPlatform = r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_CUST_PLATFORM);
+            string consumptionCustomerSegment = r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_CUST_SEGMENT);
+            string consumptionReportedSalesGeo = r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_CUST_RPT_GEO);
+            string consumptionCountryRegion = r.Dc.GetDataElementValue(AttributeCodes.CONSUMPTION_COUNTRY_REGION);
+
             int custId;
             int myPrdMbrSid;
             IOpDataElement deProductFilter = r.Dc.GetDataElement(AttributeCodes.PRODUCT_FILTER); // Grab the ECAP product and find ID via dimsid 7 since Tenders Search Screen doesn't store ProdMbrSid as AtrbVal like all other screens.
@@ -1793,7 +1799,7 @@ namespace Intel.MyDeals.BusinessRules
             IOpDataElement deEndCustomer = r.Dc.GetDataElement(AttributeCodes.DC_ID);
 
             OverlapChecksDataLib ochkDataLib = new OverlapChecksDataLib();
-            List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(r.Dc.DcID, dealStartDate, dealEndDate, projectName, endCustomer, endCustomerCntry, custId, myPrdMbrSid);
+            List<OverlappingTenders> overlapsCheckDeals = ochkDataLib.CheckForOverlappingTenders(r.Dc.DcID, dealStartDate, dealEndDate, projectName, endCustomer, endCustomerCntry, custId, myPrdMbrSid, consumptionCustomerPlatform, consumptionCustomerSegment, consumptionReportedSalesGeo, consumptionCountryRegion);
             bool SfConditionsCheck = isSfDeal == "" 
                 || dePSWFStgCd != null 
                 && ((dePSWFStgCd.HasValueChanged == true && (dePSWFStgCd.AtrbValue.ToString() != "Requested" && dePSWFStgCd.AtrbValue.ToString() != "Cancelled")) 

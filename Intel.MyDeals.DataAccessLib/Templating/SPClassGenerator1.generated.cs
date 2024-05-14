@@ -5940,8 +5940,8 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 
 		///<summary>
 		/// ID: 1734453403
-		/// Modified: 8/18/2022 2:33:10 PM
-		/// Parameters: 8
+		/// Modified: 5/14/2024 3:05:25 PM
+		/// Parameters: 12
 		///</summary>
 		public partial class PR_MYDL_GET_OVRLP_TENDERS : SP {
 			public PR_MYDL_GET_OVRLP_TENDERS() {
@@ -6030,6 +6030,50 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			public Int32 PRD_MBR_SID {
 				set { SetParmeter("PRD_MBR_SID", value); }
 				get { return (Int32)GetParameter("PRD_MBR_SID"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(8000)
+			/// Mode: IN
+			/// Max Length: 8000
+			///</summary>
+			[SQLParameterAttribute(9, "ParameterDirection.Input", 8000, false)]
+			public String CONSUMPTION_CUST_PLATFORM {
+				set { SetParmeter("CONSUMPTION_CUST_PLATFORM", value); }
+				get { return (String)GetParameter("CONSUMPTION_CUST_PLATFORM"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(8000)
+			/// Mode: IN
+			/// Max Length: 8000
+			///</summary>
+			[SQLParameterAttribute(10, "ParameterDirection.Input", 8000, false)]
+			public String CONSUMPTION_CUST_SEGMENT {
+				set { SetParmeter("CONSUMPTION_CUST_SEGMENT", value); }
+				get { return (String)GetParameter("CONSUMPTION_CUST_SEGMENT"); }
+		}
+
+		///<summary>
+			/// DataType: varchar(8000)
+			/// Mode: IN
+			/// Max Length: 8000
+			///</summary>
+			[SQLParameterAttribute(11, "ParameterDirection.Input", 8000, false)]
+			public String CONSUMPTION_COUNTRY_REGION {
+				set { SetParmeter("CONSUMPTION_COUNTRY_REGION", value); }
+				get { return (String)GetParameter("CONSUMPTION_COUNTRY_REGION"); }
+			}
+
+			///<summary>
+			/// DataType: varchar(8000)
+			/// Mode: IN
+			/// Max Length: 8000
+			///</summary>
+			[SQLParameterAttribute(12, "ParameterDirection.Input", 8000, false)]
+			public String CONSUMPTION_CUST_RPT_GEO {
+				set { SetParmeter("CONSUMPTION_CUST_RPT_GEO", value); }
+				get { return (String)GetParameter("CONSUMPTION_CUST_RPT_GEO"); }
 			}
 		}
 

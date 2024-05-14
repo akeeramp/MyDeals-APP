@@ -17,9 +17,9 @@ namespace Intel.MyDeals.DataLibrary
     public class OverlapChecksDataLib : IOverlapChecksDataLib
     {
 
-        public List<OverlappingTenders> CheckForOverlappingTenders(int dealId, DateTime startDate, DateTime endDate, string projectName, string endCustomerName, string endCustomerCntry, int customerId, int productId)
+        public List<OverlappingTenders> CheckForOverlappingTenders(int dealId, DateTime startDate, DateTime endDate, string projectName, string endCustomerName, string endCustomerCntry, int customerId, int productId, string consumptionCustomerPlatform, string consumptionCustomerSegment, string consumptionReportedSalesGeo, string consumptionCountryRegion)
         {
-            OpLogPerf.Log("DealDataLib.Save:CheckForOverlappingTenders - Start: StartDt:'{0}', EndDt:'{1}', Project:'{2}', End Cust:'{3}', Customer:{4}, Product:{5}.", startDate, endDate, projectName, endCustomerName, endCustomerCntry, customerId, productId);
+            OpLogPerf.Log("DealDataLib.Save:CheckForOverlappingTenders - Start: StartDt:'{0}', EndDt:'{1}', Project:'{2}', End Cust:'{3}', Customer:{4}, Product:{5}, ConsumptionCustomerPlatform:{6}, ConsumptionCustomerSegment:{7}, ConsumptionReportedSalesGeo:{8}, ConsumptionCountryRegion:{9}.", startDate, endDate, projectName, endCustomerName, endCustomerCntry, customerId, productId, consumptionCustomerPlatform, consumptionCustomerSegment, consumptionReportedSalesGeo, consumptionCountryRegion);
 
             var ret = new List<OverlappingTenders>();
 
@@ -32,7 +32,11 @@ namespace Intel.MyDeals.DataLibrary
                 END_CUSTOMER_RETAIL = endCustomerName,
                 END_CUSTOMER_CNTRY = endCustomerCntry,
                 CUST_MBR_SID = customerId,
-                PRD_MBR_SID = productId
+                PRD_MBR_SID = productId,
+                CONSUMPTION_CUST_PLATFORM = consumptionCustomerPlatform,
+                CONSUMPTION_CUST_SEGMENT = consumptionCustomerSegment,
+                CONSUMPTION_CUST_RPT_GEO = consumptionReportedSalesGeo,
+                CONSUMPTION_COUNTRY_REGION = consumptionCountryRegion
             };
 
             try
@@ -64,7 +68,7 @@ namespace Intel.MyDeals.DataLibrary
                 throw;
             }
 
-            OpLogPerf.Log("DealDataLib.Save:CheckForOverlappingTenders - Done: StartDt:'{0}', EndDt:'{1}', Project:'{2}', End Cust:'{3}', Customer:{4}, Product:{5}.", startDate, endDate, projectName, endCustomerName, endCustomerCntry, customerId, productId);
+            OpLogPerf.Log("DealDataLib.Save:CheckForOverlappingTenders - Done: StartDt:'{0}', EndDt:'{1}', Project:'{2}', End Cust:'{3}', Customer:{4}, Product:{5}, ConsumptionCustomerPlatform:{6}, ConsumptionCustomerSegment:{7}, ConsumptionReportedSalesGeo:{8}, ConsumptionCountryRegion:{9}.", startDate, endDate, projectName, endCustomerName, endCustomerCntry, customerId, productId, consumptionCustomerPlatform, consumptionCustomerSegment, consumptionReportedSalesGeo, consumptionCountryRegion);
 
             return ret;
         }
