@@ -74,13 +74,13 @@ export class dealEditorEditTemplateComponent {
         }
     }
     closeDialogs(dataItem: any, field: any) {
-        if (field == 'EXPIRE_YCS2' && dataItem.EXPIRE_YCS2 == 'Yes') {
-            dataItem.EXPIRE_YCS2 = '';
+        if (field == 'EXPIRE_YCS2') {
             this.confirmDialog = false;
         }
     }
     confirmExpire(dataItem: any, field: any) {
-        if (field == 'EXPIRE_YCS2' && dataItem.EXPIRE_YCS2 == 'Yes') {
+        if (field == 'EXPIRE_YCS2') {
+            PTE_Save_Util.setDataItem(dataItem, field, 'Yes');
             this.confirmDialog = false;
         }
     }
@@ -93,6 +93,7 @@ export class dealEditorEditTemplateComponent {
             key = '20_____1';
         }
         if (field == 'EXPIRE_YCS2' && dataItem.EXPIRE_YCS2 == 'Yes') {
+            dataItem.EXPIRE_YCS2 = '';
             this.confirmDialog = true;
         }
        if ((dataItem.isLinked != undefined && dataItem.isLinked) || (dataItem._parentCnt > 1 && !dataItem.isLinked)) {// if modified dataItem is linked, then modifying corresponding columns of all other linked data
