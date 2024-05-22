@@ -1245,13 +1245,9 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                 each(delRows, (delRow) => {
                     if (this.transformResults['Data'].DuplicateProducts && this.transformResults['Data'].DuplicateProducts[delRow.DC_ID]) {
                         delete this.transformResults['Data'].DuplicateProducts[delRow.DC_ID];
-                        if (Object.keys(this.transformResults['Data'].DuplicateProducts).length == 0)
-                            delete this.transformResults['Data'].DuplicateProducts;
                     }
                     if (this.transformResults['Data'].InValidProducts && this.transformResults['Data'].InValidProducts[delRow.DC_ID]) {
                         delete this.transformResults['Data'].InValidProducts[delRow.DC_ID];
-                        if (Object.keys(this.transformResults['Data'].InValidProducts).length == 0)
-                            delete this.transformResults['Data'].InValidProducts;
                     }
                     if (this.transformResults['Data'].ProdctTransformResults && this.transformResults['Data'].ProdctTransformResults[delRow.DC_ID]) {
                         delete this.transformResults['Data'].ProdctTransformResults[delRow.DC_ID];
@@ -1260,8 +1256,6 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
                     }
                     if (this.transformResults['Data'].ValidProducts && this.transformResults['Data'].ValidProducts[delRow.DC_ID]) {
                         delete this.transformResults['Data'].ValidProducts[delRow.DC_ID];
-                        if (Object.keys(this.transformResults['Data'].ValidProducts).length == 0)
-                            delete this.transformResults['Data'].ValidProducts;
                     }
                 })
             }
