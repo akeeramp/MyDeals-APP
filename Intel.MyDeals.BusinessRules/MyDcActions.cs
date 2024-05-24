@@ -1809,7 +1809,7 @@ namespace Intel.MyDeals.BusinessRules
             if (SfConditionsCheck && overlapsCheckDeals.Count > 0)
             {
                 string overlaps = string.Join(",", overlapsCheckDeals.Select(x => x.DealId));
-                deEndCustomer.AddMessage("This deal overlaps with another deal by having the same Customer, End Customer, Project, Product and overlapping dates. Please make changes to this deal so that it no longer overlaps this existing deal(s)  [" + overlaps + "].");
+                deEndCustomer.AddMessage("This deal overlaps with another deal by having the same Customer, End Customer, Project, Product, Customer Platform, Customer Segment, Customer Reported Sales Geo, Consumption Country/Region and overlapping dates. Please make changes to this deal so that it no longer overlaps this existing deal(s)  [" + overlaps + "].");
             }
         }
 
