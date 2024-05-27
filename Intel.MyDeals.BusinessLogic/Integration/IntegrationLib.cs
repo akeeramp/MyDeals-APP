@@ -14,6 +14,7 @@ using Intel.Opaque.Data;
 using Newtonsoft.Json;
 using Intel.MyDeals.BusinessRules;
 using System.Data;
+using Force.DeepCloner;
 
 namespace Intel.MyDeals.BusinessLogic
 {
@@ -23,13 +24,15 @@ namespace Intel.MyDeals.BusinessLogic
         private readonly IOpDataCollectorLib _dataCollectorLib;
         private readonly IDropdownDataLib _dropdownDataLib;
         private readonly IPrimeCustomersDataLib _primeCustomerLib;
+        private readonly IConstantsLookupsLib _constantsLookupsLib;
         private List<int> UserTokenErrorCodes = new List<int> { 704, 705 }; // Known abort messages for User Token Security
 
-        public IntegrationLib(IJmsDataLib jmsDataLib, IOpDataCollectorLib dataCollectorLib, IPrimeCustomersDataLib primeCustomerLib)
+        public IntegrationLib(IJmsDataLib jmsDataLib, IOpDataCollectorLib dataCollectorLib, IPrimeCustomersDataLib primeCustomerLib, IConstantsLookupsLib constantsLookupsLib)
         {
             _jmsDataLib = jmsDataLib;
             _dataCollectorLib = dataCollectorLib;
             _primeCustomerLib = primeCustomerLib;
+            _constantsLookupsLib = constantsLookupsLib;
         }
 
         public void TestAsyncProcess(Guid myGuid)
@@ -68,21 +71,57 @@ namespace Intel.MyDeals.BusinessLogic
         public Guid SaveSalesForceTenderData(TenderTransferRootObject jsonDataPacket)
         {
             Guid myGuid = Guid.Empty;
-
             List<int> deadIdList = new List<int>() { -100 };
-
-            string jsonData = JsonConvert.SerializeObject(jsonDataPacket, Formatting.Indented);
-
-            // Insert into the stage table here - one deal item (-100 id as new item), one deal data object
-            myGuid = _jmsDataLib.SaveTendersDataToStage("TENDER_DEALS", deadIdList, jsonData);
-
-            var result = _jmsDataLib.CheckProcessedIQRDeals(myGuid, true);
-            if (result)
+            AdminConstant QLLimit = _constantsLookupsLib.GetConstantsByName("IQR_Maximum_Process_Objects_Limit", false);
+            int qLLimtval = int.TryParse(QLLimit.CNST_VAL_TXT, out qLLimtval) ? qLLimtval : 0;
+            if (qLLimtval <= 0)
             {
-                TestAsyncProcess(myGuid);
+                qLLimtval = 1;
+            }
+            var payloadQLCount = jsonDataPacket.recordDetails.quote.quoteLine.Count;
+            Guid firstInListGuid = Guid.Empty;
+
+            if (payloadQLCount <= qLLimtval)
+            {
+                string jsonSinglePayload = JsonConvert.SerializeObject(jsonDataPacket, Formatting.Indented);
+                myGuid = _jmsDataLib.SaveTendersDataToStage("TENDER_DEALS", deadIdList, jsonSinglePayload);
+                firstInListGuid = myGuid;
+            }
+            else
+            {
+                // Copy passed object into a save packet, clear out Quotelines and replace with a quoteline Limit mentioned in the Constants from loop (item)
+                var singleItemSavePacket = jsonDataPacket.DeepClone();
+                List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine> newQL = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine>();
+                foreach (var item in jsonDataPacket.recordDetails.quote.quoteLine)
+                {
+                    newQL.Add(item);
+                    if (newQL.Count == qLLimtval)
+                    {
+                        singleItemSavePacket.recordDetails.quote.quoteLine = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine>(newQL);
+                        string jsonData = JsonConvert.SerializeObject(singleItemSavePacket, Formatting.Indented);
+                        // Insert into the stage table here - one deal item (-100 id as new item), one deal data object
+                        myGuid = _jmsDataLib.SaveTendersDataToStage("TENDER_DEALS", deadIdList, jsonData);
+                        newQL.Clear();
+                        if (firstInListGuid == Guid.Empty) firstInListGuid = myGuid; // Keep the bottom most entry to trigger processing start
+                    }
+                }
+                //Save left over Qutolines in last save 
+                if (newQL.Count > 0)
+                {
+                    singleItemSavePacket.recordDetails.quote.quoteLine = new List<TenderTransferRootObject.RecordDetails.Quote.QuoteLine>(newQL);
+                    string jsonData = JsonConvert.SerializeObject(singleItemSavePacket, Formatting.Indented);
+                    myGuid = _jmsDataLib.SaveTendersDataToStage("TENDER_DEALS", deadIdList, jsonData);
+                    newQL.Clear();
+                }
             }
 
-            return myGuid;
+            var result = _jmsDataLib.CheckProcessedIQRDeals(firstInListGuid, true);
+            if (result)
+            {
+                TestAsyncProcess(firstInListGuid);
+            }
+
+            return firstInListGuid;
         }
 
 
