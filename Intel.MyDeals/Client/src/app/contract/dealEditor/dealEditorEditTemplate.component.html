@@ -147,8 +147,7 @@
     <kendo-dialog *ngIf="confirmDialog" [maxWidth]="600" class="paddingReducerExpire toolsartho-css k-dialog-popup-design">
         <div class="dealToolsKendoAlert" style="padding: 2.4em;">
             <h4 class="k-dialog-heading-four h4Style">Expire YCS2 Confirmation</h4>
-            <p>You are about to Expire the active YCS2 price condition associated with the Customer and Product in SAP.</p>
-            <p>Click YES to continue with the action.</p>
+            <p>Warning! This action will  Expire the active YCS2 price condition which impacts the Customer and Product in SAP. Click Yes to continue.</p>
         </div>
         <kendo-dialog-actions class="kendoAction deal-custom-deal-tools" style="height: auto;">
             <button kendoButton (click)="confirmExpire(in_DataItem, in_Field_Name)" class="toolsOkBtn kendoBtn okBtn ok-btn-pop-up line-height-unset">YES</button>
