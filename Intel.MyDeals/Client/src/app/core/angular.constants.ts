@@ -266,6 +266,9 @@ export const opGridTemplate = {
             "PERIOD_PROFILE": {
                 "Groups": ["Deal Info", "Payment"]
             },
+            "SEND_TO_VISTEX": {
+                "Groups": ["Deal Info"]
+            },
             "RESET_VOLS_ON_PERIOD": {
                 "Groups": ["Deal Info"]
             },
@@ -453,6 +456,9 @@ export const opGridTemplate = {
             },
             "PERIOD_PROFILE": {
                 "Groups": ["Deal Info", "Payment"]
+            },
+            "SEND_TO_VISTEX": {
+                "Groups": ["Deal Info"]
             },
             "RESET_VOLS_ON_PERIOD": {
                 "Groups": ["Deal Info"]
@@ -650,6 +656,9 @@ export const opGridTemplate = {
             },
             "PERIOD_PROFILE": {
                 "Groups": ["Deal Info", "Payment"]
+            },
+            "SEND_TO_VISTEX": {
+                "Groups": ["Deal Info"]
             },
             "RESET_VOLS_ON_PERIOD": {
                 "Groups": ["Deal Info"]
@@ -1141,6 +1150,9 @@ export const opGridTemplate = {
             "PERIOD_PROFILE": {
                 "Groups": ["Deal Info", "Payment"]
             },
+            "SEND_TO_VISTEX": {
+                "Groups": ["Deal Info"]
+            },
             "RESET_VOLS_ON_PERIOD": {
                 "Groups": ["Deal Info"]
             },
@@ -1325,6 +1337,9 @@ export const opGridTemplate = {
             },
             "PERIOD_PROFILE": {
                 "Groups": ["Deal Info", "Payment"]
+            },
+            "SEND_TO_VISTEX": {
+                "Groups": ["Deal Info"]
             },
             "RESET_VOLS_ON_PERIOD": {
                 "Groups": ["Deal Info"]
@@ -1519,6 +1534,9 @@ export const opGridTemplate = {
             },
             "PERIOD_PROFILE": {
                 "Groups": ["Deal Info", "Payment"]
+            },
+            "SEND_TO_VISTEX": {
+                "Groups": ["Deal Info"]
             },
             "RESET_VOLS_ON_PERIOD": {
                 "Groups": ["Deal Info"]

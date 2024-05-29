@@ -1385,29 +1385,42 @@ namespace Intel.MyDeals.BusinessRules
 
         public static void SendToVistexReadOnlyRequiredAndSetValue(params object[] args)
         {
+          try
+          {
             MyOpRuleCore r = new MyOpRuleCore(args);
             if (!r.IsValid) return;
 
-            IOpDataElement deSendToVistex = r.Dc.GetDataElement(AttributeCodes.SEND_TO_VISTEX);
+           IOpDataElement deSendToVistex = r.Dc.GetDataElement(AttributeCodes.SEND_TO_VISTEX);
             IOpDataElement deRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
-
+            IOpDataElement dealtype = r.Dc.GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD);
+            
             if (deSendToVistex == null || deRebateType == null) return;
 
-            string rebateType = deRebateType.AtrbValue.ToString();
+            string rebateType = deRebateType.AtrbValue.ToString().ToLower();
 
-            if (rebateType != "NRE") // Default all non-NRE to NO for SEND_TO_VISTEX
+            if(rebateType== "tender accrual" || rebateType == "mdf spif/per unit activity")
             {
-                deSendToVistex.AtrbValue = "";
+                deSendToVistex.AtrbValue = "No";
                 deSendToVistex.IsReadOnly = true;
             }
-            if (rebateType == "NRE" && deRebateType.HasValueChanged) // If the user changes this back to NRE, remove the SEND_TO_VISTEX value so that they pick a valid one
+            else if (dealtype.AtrbValue.ToString().ToUpper() == "PROGRAM")
             {
-                deSendToVistex.AtrbValue = "";
+                if (rebateType.ToString().ToUpper() == "NRE"  && deSendToVistex.State== OpDataElementState.Unchanged && (deSendToVistex.PrevAtrbValue == null || deSendToVistex.PrevAtrbValue.ToString() == "")) //
+                {
+                    deSendToVistex.AtrbValue = "";
+                    deSendToVistex.IsRequired = true;
+                }
+                if (rebateType.ToString().ToUpper() == "NRE" && deRebateType.HasValueChanged)
+                {
+                        deSendToVistex.AtrbValue = "";
+                        deSendToVistex.IsRequired = true;
+                }
             }
-            if (rebateType == "NRE" && deSendToVistex.AtrbValue.ToString() == "")
-            {
-                deSendToVistex.IsRequired = true;
-            }
+          }
+          catch (Exception ex)
+          {
+                OpLogPerf.Log(ex);
+          }
         }
 
         public static void CheckDropDownValues(params object[] args)

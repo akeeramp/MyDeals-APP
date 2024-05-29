@@ -119,7 +119,13 @@ export class dealEditorEditTemplateComponent {
                     }
                     else {// copy only modified column to all other selected records
                         value = dataItem[field];
-                        PTE_Save_Util.setDataItem(item, field, value);
+                        if (field == "SEND_TO_VISTEX") {
+                            if (dataItem.DC_ID == item.DC_ID)
+                                PTE_Save_Util.setDataItem(item, field, value);
+                        }
+                        else {
+                            PTE_Save_Util.setDataItem(item, field, value);
+                        }
                     }
                 }
             })
@@ -292,7 +298,7 @@ export class dealEditorEditTemplateComponent {
     ngOnInit() {
         this.fields = (this.in_Deal_Type === 'VOL_TIER' || this.in_Deal_Type === 'FLEX') ? PTE_Config_Util.volTierFields : this.in_Deal_Type === 'REV_TIER' ? PTE_Config_Util.revTierFields : PTE_Config_Util.densityFields;
         var keys = Object.keys(this.in_DropDownResponses);
-        each(keys, key => {
+         each(keys, key => {
             if (key == "EXPIRE_FLG")
                 this.dropDowResponse[`${key}`] = this.in_DropDownResponses[key];
             else if (key != "QLTR_BID_GEO")

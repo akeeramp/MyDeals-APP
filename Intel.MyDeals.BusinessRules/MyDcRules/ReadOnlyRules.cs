@@ -480,7 +480,7 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.SendToVistexReadOnlyRequiredAndSetValue,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate},
                     InObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL},
-                    InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()}
+                  //  InObjSetType = new List<string> {OpDataElementSetType.PROGRAM.ToString()}
                 },
 
                 new MyOpRule

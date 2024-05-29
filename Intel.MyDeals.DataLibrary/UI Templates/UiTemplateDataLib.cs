@@ -2648,7 +2648,7 @@ namespace Intel.MyDeals.DataLibrary
                 Id = 3454,
                 AtrbCd = AttributeCodes.SEND_TO_VISTEX,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
-                ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.PROGRAM },
+                //ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
                 Width = 80,
                 Template = "#=gridUtils.uiControlWrapper(data, 'SEND_TO_VISTEX')#",
                 LookupUrl = "/api/Dropdown/GetDropdowns/SEND_TO_VISTEX",

@@ -108,6 +108,11 @@ namespace Intel.MyDeals.BusinessLogic
                     newDe.AtrbValue = deUi.AtrbValue;
                     newDe.State = OpDataElementState.Modified;
                 }
+                else if (newDe.AtrbCd == AttributeCodes.SEND_TO_VISTEX && deUi.AtrbValue != null && deUi.AtrbValue.ToString() != "")
+                {
+                    newDe.AtrbValue = deUi.AtrbValue;
+                    newDe.State = OpDataElementState.Unchanged;
+                }
                 else
                 {
                     newDe.AtrbValue = "";
