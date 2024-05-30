@@ -156,7 +156,7 @@ export class lnavUtil {
         if (isHybrid) {
             dealDisplayOrder = ["ECAP", "VOL_TIER"];
         } else {
-            dealDisplayOrder = ["ECAP", "VOL_TIER", "PROGRAM", "FLEX", "DENSITY", "REV_TIER", "KIT"];
+            dealDisplayOrder = ["ECAP", "VOL_TIER", "PROGRAM", "FLEX", "REV_TIER", "KIT"];
         }
         const items = UItemplate["ModelTemplates"].PRC_TBL;
         each(items, function (value, key) {
