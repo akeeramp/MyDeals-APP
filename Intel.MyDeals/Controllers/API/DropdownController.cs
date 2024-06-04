@@ -318,6 +318,21 @@ namespace Intel.MyDeals.Controllers.API
             return results;
 		}
 
+        [HttpPut]
+        [AntiForgeryValidate]
+        [Route("BulkDeleteDropdowns")]
+        public List<DropdownBulkStatus> BulkDeleteDropdowns(int[] lookupSids)
+        {
+            string csvLookupSids = string.Join(",", lookupSids);
+
+            List<DropdownBulkStatus> deactivatedFromDeleted = SafeExecutor(() => _dropdownLib.DeleteBulkDropdowns(csvLookupSids),
+                $"Unable to delete basic dropdowns");
+
+            // WIP - Need to handle IQR
+
+            return deactivatedFromDeleted;
+        }
+
         //// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
         //[Authorize]
         //[Route("GetRetailPull")]

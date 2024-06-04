@@ -391,6 +391,11 @@ namespace Intel.MyDeals.BusinessLogic
             return _dropdownDataLib.DeleteBasicDropdown(id);
         }
 
+        public List<DropdownBulkStatus> DeleteBulkDropdowns(string lookupSids)
+        {
+            return _dropdownDataLib.ExecuteBulkDeleteSP(lookupSids);
+        }
+
         //// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
         //public List<Dropdown> GetRetailPullSDMDropdown(RetailPullParams filterData)
         //{

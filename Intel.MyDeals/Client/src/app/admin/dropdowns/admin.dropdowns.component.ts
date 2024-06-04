@@ -13,7 +13,7 @@ import { takeUntil } from "rxjs/operators";
 
 import { logger } from "../../shared/logger/logger";
 import { DropdownService } from './admin.dropdowns.service';
-import { UiDropdownItem, UiDropdownResponseItem } from "./admin.dropdowns.model";
+import { UiDropdownItem } from "./admin.dropdowns.model";
 import { PendingChangesGuard } from "../../shared/util/gaurdprotectionDeactivate";
 import { DropdownBulkUploadDialogComponent } from "./dropdownBulkUploadDialog/admin.dropdowns.bulkUploadDialog.component";
 
@@ -210,25 +210,8 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
         }
     }
 
-    //old one not using now
-    // checkRestrictions(dataItem): any {
-    //     let Id: number;
-    //     let restrictToConsumptionOnly: boolean;
-    //     let restrictedGroupList: Array<any>;
-    //     for (let i = 0; i < dataItem.length; i++) {
-    //         Id = (dataItem[i].dropdownID === undefined) ? dataItem[i].ATRB_SID : dataItem[i].dropdownID;
-    //         restrictToConsumptionOnly = ((<any>window).usrRole === 'SA' && !(<any>window).isDeveloper);
-    //         restrictedGroupList = [3456, 3457, 3458, 3454];
-    //     }
-    //     if (restrictToConsumptionOnly === false) {
-    //         return true;
-    //     } else {
-    //         return restrictedGroupList.includes(Id);
-    //     }
-    // }
-
     checkModelValid(model: any, isNew: boolean) {
-        const MATCHING_DROPDOWNS: Array<UiDropdownResponseItem> = this.gridResult.filter((x: UiDropdownResponseItem) =>
+        const MATCHING_DROPDOWNS: Array<UiDropdownItem> = this.gridResult.filter((x: UiDropdownItem) =>
             x.OBJ_SET_TYPE_CD.toString().toUpperCase().trim() === model.OBJ_SET_TYPE_CD.toString().toUpperCase().trim() &&
                 x.ATRB_CD.toString().toUpperCase().trim() === model.ATRB_CD.toString().toUpperCase().trim() &&
                 x.DROP_DOWN.toString().toUpperCase().trim() === model.DROP_DOWN.toString().toUpperCase().trim() &&
@@ -251,7 +234,7 @@ export class AdminDropdownsComponent implements PendingChangesGuard, OnInit, OnD
         if (this.selectedInheritanceGroup == "MRKT_SEG_NON_CORP") {
             this.errorMsg = "MRKT_SEG_NON_CORP values must match an existing MRKT_SEG_COMBINED value.";
             this.loggerService.error("MRKT_SEG_NON_CORP values must match an existing MRKT_SEG_COMBINED value.", "Validation Error");
-            
+
             if (this.nonCorpInheritableValues.indexOf(model.DROP_DOWN) === -1) {
                 return false;
             }

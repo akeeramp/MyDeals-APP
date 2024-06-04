@@ -2741,12 +2741,49 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
 			}
 		}
 
-		///<summary>
-		/// ID: 1037246750
-		/// Modified: 2/20/2019 8:55:49 PM
-		/// Parameters: 0
-		///</summary>
-		public partial class PR_MYDL_CALC_CSKIT_CAP_PRICE : SP {
+        ///<summary>
+        /// ID: 1408932291
+        /// Modified: 5/27/2024 2:41:22 PM
+        /// Parameters: 2
+        ///</summary>
+        public partial class PR_MYDL_BULK_DROPDOWN_DELETE : SP
+        {
+            public PR_MYDL_BULK_DROPDOWN_DELETE()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_BULK_DROPDOWN_DELETE]";
+            }
+
+            ///<summary>
+            /// DataType: varchar(8000)
+            /// Mode: IN
+            /// Max Length: 8000
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 8000, false)]
+            public String LK_UP_SID
+            {
+                set { SetParmeter("LK_UP_SID", value); }
+                get { return (String)GetParameter("LK_UP_SID"); }
+            }
+
+            ///<summary>
+            /// DataType: int
+            /// Mode: IN
+            ///</summary>
+            [SQLParameterAttribute(2, "ParameterDirection.Input", 0, false)]
+            public Int32 EMP_WWID
+            {
+                set { SetParmeter("EMP_WWID", value); }
+                get { return (Int32)GetParameter("EMP_WWID"); }
+            }
+        }
+
+        ///<summary>
+        /// ID: 1037246750
+        /// Modified: 2/20/2019 8:55:49 PM
+        /// Parameters: 0
+        ///</summary>
+        public partial class PR_MYDL_CALC_CSKIT_CAP_PRICE : SP {
 			public PR_MYDL_CALC_CSKIT_CAP_PRICE() {
 				DatabaseName = "MyDeals";
 				StoredProdedureName = "[dbo].[PR_MYDL_CALC_CSKIT_CAP_PRICE]";

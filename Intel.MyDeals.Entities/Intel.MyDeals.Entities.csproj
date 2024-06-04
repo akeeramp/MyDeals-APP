@@ -92,6 +92,7 @@
     <Compile Include="DealIdEcJsonDetails.cs" />
     <Compile Include="DealMassUpdate.cs" />
     <Compile Include="DealRecon.cs" />
+    <Compile Include="DropdownBulkStatus.cs" />
     <Compile Include="DropdownHierarchy.cs" />
     <Compile Include="ContractTransferPacket.cs" />
     <Compile Include="CrudModes.cs" />

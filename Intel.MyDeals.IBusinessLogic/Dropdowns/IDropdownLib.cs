@@ -53,10 +53,12 @@ namespace Intel.MyDeals.IBusinessLogic
 
         bool DeleteBasicDropdowns(int id);
 
-		//// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
-		//List<Dropdown> GetRetailPullSDMDropdown(RetailPullParams filterData);
+        List<DropdownBulkStatus> DeleteBulkDropdowns(string lookupSids);
 
-		List<Dropdown> GetSoldToIdDropdown(int custId, IEnumerable<string> geos, IEnumerable<string> custDivs);
+        //// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in
+        //List<Dropdown> GetRetailPullSDMDropdown(RetailPullParams filterData);
+
+        List<Dropdown> GetSoldToIdDropdown(int custId, IEnumerable<string> geos, IEnumerable<string> custDivs);
 
         List<Dropdown> GetCustomersDropdown();
 

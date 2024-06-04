@@ -16,11 +16,6 @@ div.row.floatRight {
     margin-bottom: -10px;
 }
 
-form,
-div.insertResultsGrid {
-    padding: 20px 20px 0 20px;
-}
-
 .mat-slide-toggle .mat-slide-toggle-bar {
     left: unset !important;
 }
@@ -58,15 +53,17 @@ textarea {
     }
 }
 
-.successStatus {
-    color: forestgreen;
-}
-
-.failStatus {
-    color: orangered;
-}
-
 .specialCharacterText {
     float: right;
     padding-right: 15px;
+}
+
+.download {
+    color: #0071c5 !important;
+    text-decoration: none !important;
+}
+
+.download:hover {
+    color: #004579 !important;
+    text-decoration: underline !important
 }

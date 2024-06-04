@@ -1,17 +1,7 @@
 <link href="/Client/src/app/admin/kendo_grid.css" rel="stylesheet" />
-<div class="panelHeader">Bulk Upload - UI Dropdown<i id="btnClose" class="intelicon-close floatRight" (click)="closeDialog()" title="Close this window"></i></div>
-<form [formGroup]="formData" (ngSubmit)="onSubmit()" *ngIf="!insertTriggered">
+<div class="panelHeader">UI Dropdown - Bulk Action<i id="btnClose" class="intelicon-close floatRight" (click)="closeDialog()" title="Close this window"></i></div>
+<form [formGroup]="formData" (ngSubmit)="onSubmit()" style="margin-top: 25px;overflow-x: clip;">
     <div class="col-md-5 col-sm-12">
-        <div class="row" style="padding-bottom: 10px; padding-top: 10px;">
-            <span class="col-md-3">
-                <label for="isActive">Is Active</label>
-            </span>
-            <span class="col-md-9">
-                <mat-slide-toggle class="toggle-button-custom" color="primary"
-                                  id="isActive" formControlName="ACTV_IND" ngDefaultControl></mat-slide-toggle>
-            </span>
-        </div>
-        <br />
         <div class="row">
             <span class="col-md-3">
                 <label for="dealType">Deal Type</label>
@@ -40,35 +30,51 @@
                 <kendo-combobox [data]="data.customerDropdownData" textField="CUST_NM" valueField="CUST_NM"
                                 id="customer" formControlName="CUST_NM" [valuePrimitive]="true" ngDefaultControl></kendo-combobox>
             </span>
-        </div>    
+        </div>
+        <br />
+        <div class="row">
+            <span class="col-md-6">
+                <a class="download" download target="_blank" [href]="TEMPLATE_URL">Download Excel Template</a>
+            </span>
+            <span class="col-md-6"></span>
+        </div>
     </div>
     <div class="col-md-7 col-sm-12">
-        <div class="row">
-            <span class="col-md-2">
-                <label for="values">Values<br />(Comma Seperated with no padding)</label>
-            </span>
-            <span class="col-md-10">
-                <textarea id="values" formControlName="DROP_DOWN_CSV" ngDefaultControl></textarea>
-            </span>
+        <div class="row all-spread" style="padding-left: 20px;">
+            <hot-table [hotId]="HOT_ID" [settings]="hotSettings" [data]="hotTableData"></hot-table>
         </div>
-        <div class="row specialCharacterText">Acceptable special characters: <strong>{{ MESSAGE_ACCEPTABLE_CHARACTERS }}</strong></div>
+        <div class="row" style="align-items: center; padding-top: 10px;">
+            <div class="col-md-3" *ngIf="!submitTriggered">
+                <div [style.display]="countNonEmptyRows === 0 ? 'unset' : 'none'">
+                    <label for="bulkExcelImport" class="btn btn-primary" type="button" title="Import values from an Excel (*.xlsx) document. NOTE: This will clear the current grid!">Import Excel</label>
+                    <input id="bulkExcelImport" type="file" (change)="onFileChange($event)" [multiple]="false" accept=".xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" style="display: none;" />
+                </div>
+                <div [style.display]="countNonEmptyRows > 0 ? 'unset' : 'none'">
+                    <button class="btn btn-primary" (click)="clearHotGridData()" type="button">Clear Grid</button>
+                </div>
+            </div>
+            <div class="col-md-9">
+                <div class="specialCharacterText">Acceptable special characters: <strong>{{ MESSAGE_ACCEPTABLE_CHARACTERS }}</strong></div>
+            </div>
+        </div>
     </div>
-    <div class="row floatRight">
-        <button class="btn btn-primary" type="button" (click)="closeDialog()">Cancel</button>
-        <button class="btn btn-primary" type="submit" [disabled]="formData.invalid && (formData.dirty || formData.touched)" [ngClass]="{ 'disabled': formData.invalid && (formData.dirty || formData.touched) }">Execute</button>    
+    <div class="row floatRight" style="align-items: baseline;">
+        <div *ngIf="triggerLoading" style="padding-right: 30px;">
+            <img src="/images/loading022.gif" alt="loading spinner gif image" />
+        </div>
+        <div>
+            <input type="checkbox"
+                   id="validOnlyToggle"
+                   title="Only submit valid rows and discards invalid rows, otherwise all rows will have to be updated to enable submit button"
+                   style="width: unset !important; margin-right: 5px;"
+                   [(ngModel)]="onlySubmitValidToggle"
+                   [ngModelOptions]="{ standalone: true }"
+                   [disabled]="submitTriggered" />
+            <label for="validOnlyToggle" title="Only submit valid rows and discards invalid rows, otherwise all rows will have to be updated to enable submit button">Ignore Invalid</label>
+        </div>
+        <span style="width: 10px;"></span>
+        <button class="btn btn-primary" type="button" (click)="closeDialog()" *ngIf="!submitTriggered">Cancel</button>
+        <button class="btn btn-primary" type="button" (click)="closeDialog()" *ngIf="submitTriggered && !triggerLoading">Close</button>
+        <button class="btn btn-primary" type="submit" [disabled]="isExecuteButtonDisabled" [ngClass]="{ 'disabled': isExecuteButtonDisabled }">Execute</button>    
     </div>
 </form>
-<div class="insertResultsGrid" *ngIf="insertTriggered">
-    <kendo-grid [data]="insertResultsGridData" [sort]="insertResultsGridState.sort" [loading]="insertIsLoading">
-        <kendo-grid-column field="value" title="Dropdown Value">
-            <ng-template kendoGridCellTemplate let-dataItem>
-                {{ dataItem.value }}
-            </ng-template>
-        </kendo-grid-column>
-        <kendo-grid-column field="resultMessage" title="Insert Result">
-            <ng-template kendoGridCellTemplate let-dataItem>
-                <span [ngClass]="{ 'successStatus': dataItem.isSuccess, 'failStatus': !dataItem.isSuccess }">{{ dataItem.resultMessage }}</span>
-            </ng-template>
-        </kendo-grid-column>
-    </kendo-grid>
-</div>

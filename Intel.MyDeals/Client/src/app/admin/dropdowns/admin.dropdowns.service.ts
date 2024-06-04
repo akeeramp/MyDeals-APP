@@ -2,7 +2,7 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { Observable } from "rxjs";
 
-import { UiDropdownItem, UiDropdownResponseItem } from "./admin.dropdowns.model";
+import { BulkDeleteResponse, UiDropdownItem } from "./admin.dropdowns.model";
 
 @Injectable({
     providedIn: 'root'
@@ -66,6 +66,11 @@ export class DropdownService {
     public deleteBasicDropdowns(dropdown): Observable<any> {
         const apiUrl = this.API_URL_DROPDOWN + 'DeleteBasicDropdowns';
         return this.httpClient.put(apiUrl, dropdown);
+    }
+
+    public bulkDeleteDropdowns(dropdownLookupSids: number[]): Observable<unknown> {
+        const apiUrl = this.API_URL_DROPDOWN + 'BulkDeleteDropdowns';
+        return this.httpClient.put(apiUrl, dropdownLookupSids);
     }
 
     public insertBasicDropdowns(id: UiDropdownItem): Observable<any> {

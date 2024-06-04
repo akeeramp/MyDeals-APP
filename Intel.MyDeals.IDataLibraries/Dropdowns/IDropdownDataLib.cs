@@ -18,7 +18,9 @@ namespace Intel.MyDeals.IDataLibrary
 
         bool DeleteBasicDropdown(int id);
 
-		List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> dealIds);
+        List<DropdownBulkStatus> ExecuteBulkDeleteSP(string lookupSids);
+
+        List<OverlappingDeal> GetDealGroupDropdown(OpDataElementType opDataElementType, List<int> dealIds);
         void RecycleBasicDropdownCache();
     }
 }

@@ -287,6 +287,54 @@ namespace Intel.MyDeals.DataLibrary
         }
 
         /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="lookupSids">Accepts a comma-seperated string of Dropdown Attribute SIDs</param>
+        /// <returns>List of items that were set to Inactive since they are currently used in Deals / Contracts</returns>
+        public List<DropdownBulkStatus> ExecuteBulkDeleteSP(string lookupSids)
+        {
+            var returnActiveData = new List<DropdownBulkStatus>();
+            Procs.dbo.PR_MYDL_BULK_DROPDOWN_DELETE cmd = new Procs.dbo.PR_MYDL_BULK_DROPDOWN_DELETE();
+
+            if (lookupSids.Length > 0)
+            {
+                cmd = new Procs.dbo.PR_MYDL_BULK_DROPDOWN_DELETE()
+                {
+                    LK_UP_SID = lookupSids,
+                    EMP_WWID = OpUserStack.MyOpUserToken.Usr.WWID
+                };
+
+                try
+                {
+                    using (var rdr = DataAccess.ExecuteReader(cmd))
+                    {
+                        int IDX_ATRB_LKUP_SID = DB.GetReaderOrdinal(rdr, "atrb_lkup_sid");
+                        int IDX_ACTV_IND = DB.GetReaderOrdinal(rdr, "actv_ind");
+
+                        while (rdr.Read())
+                        {
+                            returnActiveData.Add(new DropdownBulkStatus
+                            {
+                                ATRB_LKUP_SID = (IDX_ATRB_LKUP_SID < 0 || rdr.IsDBNull(IDX_ATRB_LKUP_SID)) ? default(System.Int32) : rdr.GetFieldValue<System.Int32>(IDX_ATRB_LKUP_SID),
+                                ACTV_IND = (IDX_ACTV_IND < 0 || rdr.IsDBNull(IDX_ACTV_IND)) ? default(System.Boolean) : rdr.GetFieldValue<System.Boolean>(IDX_ACTV_IND)
+                            });
+                        }
+
+                        // Update Cache after Insert/Update actions
+                        DataCollections.RecycleCache("_getBasicDropdowns");
+                    }
+                }
+                catch (Exception ex)
+                {
+                    OpLogPerf.Log(ex);
+                    throw;
+                }
+            }
+
+            return returnActiveData;
+        }
+
+        /// <summary>
         /// Gets a list of deal groups given a dealId
         /// </summary>
         /// <param name="ids">A dealId</param>
