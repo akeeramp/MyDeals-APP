@@ -359,6 +359,15 @@ export class dealEditorComponent implements OnDestroy{
             this.savingDeal = false;
             each(response.WIP_DEAL, row => {
                 row.PTR_USER_PRD = row.PTR_USER_PRD.split(',').join(', ');
+
+                if(row.PROGRAM_PAYMENT.toString().toLowerCase().includes('frontend')){
+                    row.SEND_TO_VISTEX='No';
+                     each(this.wipTemplate.columns,(col,i)=>{
+                        if(!!col && col.title=='Send to Vistex'){
+                            this.wipTemplate.columns.splice(i,1);
+                        }
+                    })
+                }
             })
             this.gridResult = response.WIP_DEAL;
             this.setWarningDetails();
@@ -499,7 +508,7 @@ export class dealEditorComponent implements OnDestroy{
                     this.filterColumnNew(groupName, columnNew);
                 }
             }
-            
+
             return this.columns;
         }
     }
@@ -1643,7 +1652,7 @@ export class dealEditorComponent implements OnDestroy{
                 this.curPricingTable = { OBJ_SET_TYPE_CD: this.in_Deal_Type };
                 this.dropdownFilterColumns = PTE_Config_Util.tenderDashboardDropColumns;
             }
-            this.getGroupsAndTemplates();
+           await this.getGroupsAndTemplates();
             if (this.isInitialLoad) {
                 if (Object.keys(this.dropdownResponses).length == 0) {
                     this.dropdownResponses = await this.getAllDrowdownValues();

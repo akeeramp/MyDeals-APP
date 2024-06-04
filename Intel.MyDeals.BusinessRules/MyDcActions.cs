@@ -1393,15 +1393,20 @@ namespace Intel.MyDeals.BusinessRules
            IOpDataElement deSendToVistex = r.Dc.GetDataElement(AttributeCodes.SEND_TO_VISTEX);
             IOpDataElement deRebateType = r.Dc.GetDataElement(AttributeCodes.REBATE_TYPE);
             IOpDataElement dealtype = r.Dc.GetDataElement(AttributeCodes.OBJ_SET_TYPE_CD);
-            
-            if (deSendToVistex == null || deRebateType == null) return;
+            IOpDataElement deProgPayment = r.Dc.GetDataElement(AttributeCodes.PROGRAM_PAYMENT);
+
+                if (deSendToVistex == null || deRebateType == null) return;
 
             string rebateType = deRebateType.AtrbValue.ToString().ToLower();
 
-            if(rebateType== "tender accrual" || rebateType == "mdf spif/per unit activity")
+            if(rebateType== "tender accrual" || rebateType == "mdf spif/per unit activity" || deProgPayment.AtrbValue.ToString().ToLower().Contains("frontend"))
             {
                 deSendToVistex.AtrbValue = "No";
                 deSendToVistex.IsReadOnly = true;
+            }
+            else if (rebateType.ToString().ToUpper() != "NRE" && (rebateType != "tender accrual" || rebateType != "mdf spif/per unit activity") && deRebateType.HasValueChanged)
+            {
+                    deSendToVistex.AtrbValue = "Yes";                   
             }
             else if (dealtype.AtrbValue.ToString().ToUpper() == "PROGRAM")
             {
