@@ -42,6 +42,6 @@ namespace Intel.MyDeals.IDataLibrary
 
         DataTable InsertPrimedCustomerData(string endCustomerRetail, string endCustomerCountry, string primCustomerName, int primCustomerId, int primCustomerLvlId, string rplStatusCode, string UnifiedEndCustomerLvl2Name, int empWWID);
         DataTable ResubmissionDeals(string dealId, string endCustomerData);
-
+        bool CheckForIQRDeals(string dealId);
     }
 }

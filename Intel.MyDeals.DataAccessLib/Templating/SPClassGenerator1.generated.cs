@@ -14458,16 +14458,42 @@ namespace Intel.MyDeals.DataAccessLib.StoredProcedures.MyDeals {
             {
                 set { SetParmeter("in_end_cust_data", value); }
                 get { return (String)GetParameter("in_end_cust_data"); }
-            }
-            
+            }            
         }
 
-		///<summary>
-		/// ID: 1081770911
-		/// Modified: 7/13/2018 1:55:33 AM
-		/// Parameters: 4
-		///</summary>
-		public partial class PR_MYDL_UI_GET_OVRLP : SP {
+
+        ///<summary>
+        /// ID: 
+        /// Modified: 03/06/2024 6:34:08 AM
+        /// Parameters: 1
+        ///</summary>
+        public partial class PR_MYDL_CHECK_FOR_IQR_DEALS : SP
+        {
+            public PR_MYDL_CHECK_FOR_IQR_DEALS()
+            {
+                DatabaseName = "MyDeals";
+                StoredProdedureName = "[dbo].[PR_MYDL_CHECK_FOR_IQR_DEALS]";
+            }
+
+            ///<summary>
+            /// DataType: nvarchar(200)
+            /// Mode: IN
+            /// Max Length: 200
+            ///</summary>
+            [SQLParameterAttribute(1, "ParameterDirection.Input", 200, false)]
+            public String in_deal_id
+            {
+                set { SetParmeter("in_deal_id", value); }
+                get { return (String)GetParameter("in_deal_id"); }
+            }
+        }
+
+        ///<summary>
+        /// ID: 1081770911
+        /// Modified: 7/13/2018 1:55:33 AM
+        /// Parameters: 4
+        ///</summary>
+        public partial class PR_MYDL_UI_GET_OVRLP : SP {
 			public PR_MYDL_UI_GET_OVRLP() {
 				DatabaseName = "MyDeals";
 				StoredProdedureName = "[dbo].[PR_MYDL_UI_GET_OVRLP]";

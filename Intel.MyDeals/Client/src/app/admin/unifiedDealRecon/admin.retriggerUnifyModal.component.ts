@@ -69,6 +69,9 @@ export class retriggerUnifyModalComponent implements OnDestroy {
                 if (result.toString() == "true") {
                     this.alertMsg = "Re-Submission Successfull";
                 }
+                else if (result.toString() == "IQR Deals") {
+                    this.alertMsg = "Retrigger UCD request is Enabled only for My Deals originated deals and not IQR Deals";
+                }
                 else if (result.toString() == "false") {
                     this.alertMsg = "Re-Submission Failed";
                 }
@@ -76,7 +79,6 @@ export class retriggerUnifyModalComponent implements OnDestroy {
                     this.alertMsg = result.toString();
                 }
                 this.isAlert = true;
-
             },
                 (error) => {
                     this.alertMsg = "Re-Submission Failed";

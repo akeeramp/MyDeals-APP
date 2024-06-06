@@ -746,5 +746,33 @@ namespace Intel.MyDeals.DataLibrary
                 return null;
             }
         }
+
+        public bool CheckForIQRDeals(string dealId)
+        {
+            try
+            {
+                var isNotIqrDeal = true;
+                var cmd = new Procs.dbo.PR_MYDL_CHECK_FOR_IQR_DEALS()
+                {
+                    in_deal_id = dealId
+                };
+
+                using (var rdr = DataAccess.ExecuteReader(cmd))
+                {
+                    int output = DB.GetReaderOrdinal(rdr, "OUTPUT");
+
+                    while (rdr.Read())
+                    {
+                        isNotIqrDeal = rdr.GetFieldValue<bool>(output);
+                    }
+                }
+                return isNotIqrDeal;
+            }
+            catch (Exception ex)
+            {
+                OpLogPerf.Log(ex);
+                return false;
+            }
+        }
     }
 }
