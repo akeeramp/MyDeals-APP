@@ -359,15 +359,18 @@ export class dealEditorComponent implements OnDestroy{
             this.savingDeal = false;
             each(response.WIP_DEAL, row => {
                 row.PTR_USER_PRD = row.PTR_USER_PRD.split(',').join(', ');
-
-                if(row.PROGRAM_PAYMENT.toString().toLowerCase().includes('frontend')){
-                    row.SEND_TO_VISTEX='No';
+                 
                      each(this.wipTemplate.columns,(col,i)=>{
                         if(!!col && col.title=='Send to Vistex'){
-                            this.wipTemplate.columns.splice(i,1);
+                           // this.wipTemplate.columns.splice(i,1);
+
+                           if(!!row._behaviors.isHidden && !!row._behaviors.isHidden.SEND_TO_VISTEX && row._behaviors.isHidden.SEND_TO_VISTEX==true)
+                            {
+                                col.hidden=true;
+                            }
                         }
                     })
-                }
+               
             })
             this.gridResult = response.WIP_DEAL;
             this.setWarningDetails();
@@ -495,6 +498,14 @@ export class dealEditorComponent implements OnDestroy{
                 }
                 else {
                     if (this.templates[column.field] != undefined && this.templates[column.field].Groups.includes(groupName)) {
+                        if(column.field=="SEND_TO_VISTEX")
+                        {
+                            if(!column.hidden)
+                            {
+                                this.columns.push(column);
+                            }
+                        }
+                        else
                         this.columns.push(column);
                     }
                 }

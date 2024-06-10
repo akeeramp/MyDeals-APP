@@ -25,6 +25,14 @@ namespace Intel.MyDeals.BusinessRules
                     ActionRule = MyDcActions.ShowExpireYCS2,
                     Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate}
                 },
+                new MyOpRule
+                {
+                    Title="Hide Send To Vistex for Tender Deals",
+                    ActionRule = MyDcActions.HideSendToVistexTenders,
+                    InObjType = new List<OpDataElementType> {OpDataElementType.WIP_DEAL},
+                    InObjSetType = new List<string> { OpDataElementSetType.ECAP.ToString(), OpDataElementSetType.KIT.ToString() },
+                    Triggers = new List<MyRulesTrigger> {MyRulesTrigger.OnLoad, MyRulesTrigger.OnValidate}
+                },
 
                 //            new MyOpRule
 				//{

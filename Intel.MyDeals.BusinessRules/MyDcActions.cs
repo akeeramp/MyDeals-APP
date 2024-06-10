@@ -1403,6 +1403,11 @@ namespace Intel.MyDeals.BusinessRules
             {
                 deSendToVistex.AtrbValue = "No";
                 deSendToVistex.IsReadOnly = true;
+                    if (deProgPayment.AtrbValue.ToString().ToLower().Contains("frontend"))
+                    {
+                        deSendToVistex.IsHidden = true;
+                    }
+                
             }
             else if (rebateType.ToString().ToUpper() != "NRE" && (rebateType != "tender accrual" || rebateType != "mdf spif/per unit activity") && deRebateType.HasValueChanged)
             {
@@ -1428,6 +1433,19 @@ namespace Intel.MyDeals.BusinessRules
           }
         }
 
+        public static void HideSendToVistexTenders(params object[] args)
+        {
+            MyOpRuleCore r = new MyOpRuleCore(args);
+            if (!r.IsValid) return;
+
+            string deRebateTypeValue = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
+            IOpDataElement deSendToVistex = r.Dc.GetDataElement(AttributeCodes.SEND_TO_VISTEX);
+
+            if (deRebateTypeValue == "TENDER")
+            {
+                deSendToVistex.IsHidden = true;
+            }
+        }
         public static void CheckDropDownValues(params object[] args)
         {
             // Note: "DO_NOT_ALLOW_BLANK = True" forces a value to be required/populated, same as REQUIRED = TRUE
