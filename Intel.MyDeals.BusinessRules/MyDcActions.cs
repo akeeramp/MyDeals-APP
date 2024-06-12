@@ -1441,7 +1441,7 @@ namespace Intel.MyDeals.BusinessRules
             string deRebateTypeValue = r.Dc.GetDataElementValue(AttributeCodes.REBATE_TYPE);
             IOpDataElement deSendToVistex = r.Dc.GetDataElement(AttributeCodes.SEND_TO_VISTEX);
 
-            if (deRebateTypeValue == "TENDER")
+            if (deRebateTypeValue == "TENDER" && deSendToVistex != null)
             {
                 deSendToVistex.IsHidden = true;
             }
