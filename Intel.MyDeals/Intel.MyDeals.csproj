@@ -516,9 +516,9 @@
     <Content Include="Client\Images\docs\ResolveSPError.png" />
     <Content Include="Client\Images\docs\RunAllTestCases.png" />
     <Content Include="Client\Images\docs\runButton-cs.png" />
-     <Content Include="Client\Images\docs\submit-review-ui.png" />
+    <Content Include="Client\Images\docs\submit-review-ui.png" />
     <Content Include="Client\Images\docs\squash-merge-ui.png" />
-     <Content Include="Client\Images\docs\RDBMS-Dev-Role.png" />
+    <Content Include="Client\Images\docs\RDBMS-Dev-Role.png" />
     <Content Include="Client\Images\docs\ErrorExample.png" />
     <Content Include="Client\Images\docs\samplecodesp.png" />
     <Content Include="Client\Images\docs\sampleunittests.png" />
@@ -597,7 +597,6 @@
     <Content Include="Client\src\app\admin\consumptionCountry\admin.consumptionCountry.component.html" />
     <Content Include="Client\src\app\admin\CustomerVendors\admin.customerVendors.component.html" />
     <Content Include="Client\src\app\admin\CustomerVendors\admin.customerVendors.component.css" />
-    <Content Include="Client\src\app\admin\dropdowns\dropdownBulkUploadDialog\admin.dropdowns.bulkUploadDialog.component.css" />
     <Content Include="Client\src\app\admin\customer\admin.customer.component.html" />
     <Content Include="Client\src\app\admin\dataFix\admin.dataFix.component.css" />
     <Content Include="Client\src\app\admin\dataFix\admin.dataFix.component.html" />
@@ -621,6 +620,7 @@
     <Content Include="Client\src\app\admin\dealTypes\admin.dealTypes.component.css" />
     <Content Include="Client\src\app\admin\dropdowns\admin.dropdowns.component.html" />
     <Content Include="Client\src\app\admin\dropdowns\dropdownBulkUploadDialog\admin.dropdowns.bulkUploadDialog.component.html" />
+    <Content Include="Client\src\app\admin\dropdowns\dropdownBulkUploadDialog\admin.dropdowns.bulkUploadDialog.component.css" />
     <Content Include="Client\src\app\admin\employee\admin.employee.component.css" />
     <Content Include="Client\src\app\admin\employee\admin.employee.component.html" />
     <Content Include="Client\src\app\admin\expireYcs2\admin.expireYcs2.component.css" />

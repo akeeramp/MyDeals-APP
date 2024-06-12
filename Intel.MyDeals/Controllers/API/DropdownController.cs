@@ -280,6 +280,7 @@ namespace Intel.MyDeals.Controllers.API
                 catch(Exception ex)
                 {
                     // Catch the exception to prevent subsequent insertions from failing, UI will compare successes and submitted values to see if there were any that failed
+
                 }
             }
 
@@ -323,14 +324,45 @@ namespace Intel.MyDeals.Controllers.API
         [Route("BulkDeleteDropdowns")]
         public List<DropdownBulkStatus> BulkDeleteDropdowns(int[] lookupSids)
         {
-            string csvLookupSids = string.Join(",", lookupSids);
+            if (lookupSids != null && lookupSids.Length > 0)
+            {
+                string csvLookupSids = string.Join(",", lookupSids);
 
-            List<DropdownBulkStatus> deactivatedFromDeleted = SafeExecutor(() => _dropdownLib.DeleteBulkDropdowns(csvLookupSids),
-                $"Unable to delete basic dropdowns");
+                List<DropdownBulkStatus> deactivatedFromDeleted = SafeExecutor(() => _dropdownLib.DeleteBulkDropdowns(csvLookupSids),
+                    $"Unable to delete basic dropdowns");
 
-            // WIP - Need to handle IQR
+                // Get dropdown value objects by Lookup SID
+                List<BasicDropdown> basicDropdownObjectsByLookupSid = GetBasicDropdowns().Where(basicDropdown => lookupSids.Contains(basicDropdown.ATRB_LKUP_SID)).ToList();
 
-            return deactivatedFromDeleted;
+                // Send IQR
+                if (deactivatedFromDeleted.Count > 0)
+                {
+                    int[] deactivatedSids = deactivatedFromDeleted.Select(deactivated => deactivated.ATRB_LKUP_SID).ToArray();
+                    List<BasicDropdown> deactivatedDropdowns = basicDropdownObjectsByLookupSid.Where(basicDropdown => deactivatedSids.Contains(basicDropdown.ATRB_LKUP_SID)).ToList();
+                    foreach (BasicDropdown deactivatedDropdown in deactivatedDropdowns)
+                    {
+                        UpdateIqrValues(deactivatedDropdown, CrudModes.Update.ToString());
+                    }
+
+                    int[] deletedSids = lookupSids.Except(deactivatedSids).ToArray();
+                    List<BasicDropdown> deletedDropdowns = basicDropdownObjectsByLookupSid.Where(basicDropdown => deletedSids.Contains(basicDropdown.ATRB_LKUP_SID)).ToList();
+                    foreach (BasicDropdown deletedDropdown in deletedDropdowns)
+                    {
+                        UpdateIqrValues(deletedDropdown, CrudModes.Delete.ToString());
+                    }
+                }
+                else
+                {
+                    foreach (BasicDropdown deletedDropdown in basicDropdownObjectsByLookupSid)
+                    {
+                        UpdateIqrValues(deletedDropdown, CrudModes.Delete.ToString());
+                    }
+                }
+
+                return deactivatedFromDeleted;
+            }
+
+            throw new HttpResponseException(System.Net.HttpStatusCode.BadRequest);
         }
 
         //// TODO: Either uncomment the below out or remove it once we re-add Retail Cycle in

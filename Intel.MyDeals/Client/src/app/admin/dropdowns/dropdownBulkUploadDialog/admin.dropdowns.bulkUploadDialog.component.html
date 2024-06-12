@@ -33,24 +33,26 @@
         </div>
         <br />
         <div class="row">
-            <span class="col-md-6">
-                <a class="download" download target="_blank" [href]="TEMPLATE_URL">Download Excel Template</a>
+            <span class="col-md-7">
+                <a class="download" (click)="getExcelTemplate()" [href]="">Download Excel Template</a>
+                <br />
+                <span style="color: gray;font-size: 9px;">There are multiple ways to enter values into the grid,<br />1. Enter directly into the grid,<br />2. Import from Excel,<br />3. Copy / Paste into grid<br />4. Import from Excel then add additional values directly into the grid.<br /><br />* Using Excel Import will clear existing grid data;<br />duplicate entries will be removed.</span>
             </span>
-            <span class="col-md-6"></span>
+            <span class="col-md-5"></span>
         </div>
     </div>
     <div class="col-md-7 col-sm-12">
         <div class="row all-spread" style="padding-left: 20px;">
-            <hot-table [hotId]="HOT_ID" [settings]="hotSettings" [data]="hotTableData"></hot-table>
+            <hot-table [hotId]="HOT_ID" [settings]="hotSettings" [data]="hotTableData" style="border-bottom: gray solid 1px;"></hot-table>
         </div>
         <div class="row" style="align-items: center; padding-top: 10px;">
-            <div class="col-md-3" *ngIf="!submitTriggered">
-                <div [style.display]="countNonEmptyRows === 0 ? 'unset' : 'none'">
-                    <label for="bulkExcelImport" class="btn btn-primary" type="button" title="Import values from an Excel (*.xlsx) document. NOTE: This will clear the current grid!">Import Excel</label>
-                    <input id="bulkExcelImport" type="file" (change)="onFileChange($event)" [multiple]="false" accept=".xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" style="display: none;" />
+            <div class="col-md-3">
+                <div [style.display]="(!submitTriggered && countNonEmptyRows == 0) ? 'unset' : 'none'">
+                    <label for="bulkExcelImport" class="btn btn-primary" type="button" title="Import values from an Excel (*.xlsx) document; duplicate values will be removed. NOTE: This will clear the current grid!">Import Excel</label>
+                    <input id="bulkExcelImport" type="file" (change)="onFileChange($event)" [multiple]="false" accept=".csv,text/csv,application/csv,.xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" style="display: none;" />
                 </div>
-                <div [style.display]="countNonEmptyRows > 0 ? 'unset' : 'none'">
-                    <button class="btn btn-primary" (click)="clearHotGridData()" type="button">Clear Grid</button>
+                <div [style.display]="(!triggerLoading && countNonEmptyRows > 0) ? 'unset' : 'none'">
+                    <button class="btn btn-primary" (click)="clearHotGridData()" type="button" [disabled]="triggerLoading">Clear Grid</button>
                 </div>
             </div>
             <div class="col-md-9">

@@ -56,11 +56,13 @@ textarea {
 .specialCharacterText {
     float: right;
     padding-right: 15px;
+    font-size: 13px;
 }
 
 .download {
     color: #0071c5 !important;
     text-decoration: none !important;
+    cursor: pointer;
 }
 
 .download:hover {
