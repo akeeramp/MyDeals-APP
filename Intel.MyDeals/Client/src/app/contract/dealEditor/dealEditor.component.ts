@@ -500,10 +500,10 @@ export class dealEditorComponent implements OnDestroy{
                     if (this.templates[column.field] != undefined && this.templates[column.field].Groups.includes(groupName)) {
                         if(column.field=="SEND_TO_VISTEX")
                         {
-                            if(!column.hidden)
+                            if(!column.hidden && !this.isTenderContract)
                             {
                                 this.columns.push(column);
-                            }
+                            }      
                         }
                         else
                         this.columns.push(column);

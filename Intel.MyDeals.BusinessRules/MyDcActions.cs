@@ -1444,7 +1444,7 @@ namespace Intel.MyDeals.BusinessRules
             if (deRebateTypeValue == "TENDER" && deSendToVistex != null)
             {
                 deSendToVistex.IsHidden = true;
-            }
+            }             
         }
         public static void CheckDropDownValues(params object[] args)
         {

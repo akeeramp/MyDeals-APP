@@ -119,13 +119,7 @@ export class dealEditorEditTemplateComponent {
                     }
                     else {// copy only modified column to all other selected records
                         value = dataItem[field];
-                        if (field == "SEND_TO_VISTEX") {
-                            if (dataItem.DC_ID == item.DC_ID)
-                                PTE_Save_Util.setDataItem(item, field, value);
-                        }
-                        else {
-                            PTE_Save_Util.setDataItem(item, field, value);
-                        }
+                        PTE_Save_Util.setDataItem(item, field, value);
                     }
                 }
             })
