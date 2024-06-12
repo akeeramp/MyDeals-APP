@@ -80,7 +80,7 @@ jobs:
       #      ./scripts/build_env.ps1 'ClientZip' '${{github.event.inputs.ENV}}' '${{github.workspace}}'
        - name:  Move Publish Site 
          run: |
-           ./scripts/deploy_env.ps1 'MovePublishENV' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
+           ./scripts/deploy_env.ps1 'MovePublishENV' '${{ secrets.APIGEE_KEY }}' '${{ secrets.APIGEE_SECRETE }}' '${{github.event.inputs.ENV}}'
       #  - name:  Remove Client Zip 
       #    run: |
       #      ./scripts/deploy_env.ps1 'RemoveZipENV' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'

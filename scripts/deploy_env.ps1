@@ -40,6 +40,18 @@ try {
       & robocopy output/_PublishedWebsites/Intel.MyDeals $result.DEPLOY_PATH /e /MT /copyall /secfix ;
       if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
         & robocopy Intel.MyDeals/Client/src/dist $ClienLocation /e /MT /copyall /secfix ;
+        #Updating the apigee values - Starts here
+ 	    $weconfigpath = 'output/_PublishedWebsites/Intel.MyDeals/EnvConfig/'+$config +'/Web.Config';
+	    $doc = (Get-Content $weconfigpath) -as [Xml];
+  	    $root = $doc.get_DocumentElement();
+	    $appSettingNodes = $root.appSettings.SelectNodes("add");
+        $apiGeeConsumerKeyNode = $appSettingNodes| Where key -eq  "apiGeeConsumerKey"
+        $apiGeeConsumerKeyNode.value = $USN;
+	    $apiGeeconsumerSecretNode = $appSettingNodes| Where key -eq  "apiGeeconsumerSecret"
+        $apiGeeconsumerSecretNode.value = $PWD;
+	    $doc.Save($weconfigpath);
+    	Write-Host "Config Updated Successfully!!";
+        #updating the apigee Values - Ends here
       if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
       & robocopy output/_PublishedWebsites/Intel.MyDeals/EnvConfig/$config $result.DEPLOY_PATH Web.Config /MT /copyall /secfix;
       if ($lastexitcode -lt 8) { $global:LASTEXITCODE = $null };
