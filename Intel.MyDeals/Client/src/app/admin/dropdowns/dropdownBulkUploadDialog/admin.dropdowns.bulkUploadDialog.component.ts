@@ -241,7 +241,7 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
     }
 
     private readonly HOT_ID = 'bulkUploadValueTable';
-    private readonly HOT_VALUE_INPUT_COLUMNS: Array<ColumnSettings> = [
+    private readonly HOT_COLUMNS: Array<ColumnSettings> = [
         {
             data: 'value',
             title: 'Value',
@@ -346,6 +346,7 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
         }
     }
 
+    // WIP - need to modify logic to update `this.readonlyRows`
     private hotRemoveRows(rowsToRemove: number[]): void {
         if (rowsToRemove.length > 0) {
             rowsToRemove = rowsToRemove.sort((a, b) => { return b - a });   // Descending order to prevent issues with changes row IDs from other removals
@@ -427,14 +428,17 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
      */
     private hotEnableDeleteFromKeys = (event: KeyboardEvent): void => {
         if (event.key != undefined && (event.key === 'Backspace' || event.key === 'Delete')) {
-            const SELECTED_RANGE: [number, number, number, number] = this.hotTable.getSelected()[0];    // Selection Mode is set to a single range w/ 'range'
-            if (SELECTED_RANGE != undefined) {
-                const ROW_START = SELECTED_RANGE[0];
-                const ROW_END = SELECTED_RANGE[2];
+            const HOT_ACTIVE_CELL_EDITOR = this.hotTable.getActiveEditor();
+            if (HOT_ACTIVE_CELL_EDITOR == undefined || !HOT_ACTIVE_CELL_EDITOR.isOpened()) {    // Ignore if the Cell Editor is opened
+                const SELECTED_RANGE: [number, number, number, number] = this.hotTable.getSelected()[0];    // Selection Mode is set to a single range w/ 'range'
+                if (SELECTED_RANGE != undefined) {
+                    const ROW_START = SELECTED_RANGE[0];
+                    const ROW_END = SELECTED_RANGE[2];
 
-                const ROW_RANGE: number[] = range(ROW_START, ROW_END + 1);
+                    const ROW_RANGE: number[] = range(ROW_START, ROW_END + 1);
 
-                this.hotRemoveRows(ROW_RANGE);
+                    this.hotRemoveRows(ROW_RANGE);
+                }
             }
         }
     }
@@ -520,7 +524,7 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
 
     private readonly BASE_HOT_SETTINGS: GridSettings = {
         licenseKey: 'ad331-b00d1-50514-e403f-15422',
-        columns: this.HOT_VALUE_INPUT_COLUMNS,
+        columns: this.HOT_COLUMNS,
         manualColumnResize: true,
         rowHeaders: true,
         minRows: 20,
@@ -896,7 +900,7 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
         if (this.persistentDropdownData == undefined || this.persistentDropdownData.length < 1) {
             this.updatePersistentDropdownData();
 
-            this.updateExistingValuesFromValidForm();   // WIP - Need to add error handling in case this fails again
+            this.updateExistingValuesFromValidForm();   // WIP - Need to add error handling in case this fails again, use `afterRemoveRow` hook
 
             this.hotTable.validateCells();
         }
