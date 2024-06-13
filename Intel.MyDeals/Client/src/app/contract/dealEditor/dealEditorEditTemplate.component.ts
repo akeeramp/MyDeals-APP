@@ -80,7 +80,16 @@ export class dealEditorEditTemplateComponent {
     }
     confirmExpire(dataItem: any, field: any) {
         if (field == 'EXPIRE_YCS2') {
-            PTE_Save_Util.setDataItem(dataItem, field, 'Yes');
+            
+            if ((dataItem.isLinked != undefined && dataItem.isLinked) || (dataItem._parentCnt > 1 && !dataItem.isLinked)) {
+                each(this.in_DataSet, (item) => {
+                    if ((item.isLinked != undefined && item.isLinked && dataItem.isLinked) || (dataItem._parentCnt > 1 && dataItem.DC_PARENT_ID == item.DC_PARENT_ID && !dataItem.isLinked)) {
+                        PTE_Save_Util.setDataItem(item, field, 'Yes');
+                    }
+                })
+            } else {
+                PTE_Save_Util.setDataItem(dataItem, field, 'Yes');
+            }
             this.confirmDialog = false;
         }
     }
