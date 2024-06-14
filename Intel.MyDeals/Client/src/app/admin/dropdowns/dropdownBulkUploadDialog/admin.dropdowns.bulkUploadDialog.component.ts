@@ -15,7 +15,7 @@ import { logger } from "../../../shared/logger/logger";
 import { DropdownService } from "../admin.dropdowns.service";
 import { BulkDeleteResponse, UiDropdownItem } from "../admin.dropdowns.model";
 import { BulkUploadDialogData, InsertResult, DropdownBaseData, BulkDropdownAction, ValidatorStatusMessageOptions, ReadonlyRow, ValueAction, DeleteResult, DeleteState, ValueSidRow } from "./admin.dropdowns.bulkUploadDialog.model";
-import { saveAs } from "file-saver";
+import { HandsonLicenseKey } from "../../../shared/config/handsontable.licenseKey.config";
 
 @Component({
     selector: 'dropdown-bulk-upload-dialog',
@@ -523,7 +523,7 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
     }
 
     private readonly BASE_HOT_SETTINGS: GridSettings = {
-        licenseKey: 'ad331-b00d1-50514-e403f-15422',
+        licenseKey: HandsonLicenseKey.license,
         columns: this.HOT_COLUMNS,
         manualColumnResize: true,
         rowHeaders: true,
@@ -856,6 +856,7 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
 
         const target: DataTransfer = <DataTransfer>(event.target);
         if (target.files.length !== 1) {
+            this.triggerLoading = false;
             throw new Error('Cannot upload multiple files');
         } else {
             const DATA = await target.files[0].arrayBuffer();
@@ -871,25 +872,27 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
                 } as BulkDropdownAction;
             });
 
-            const SANITIZED_VALUES: Array<BulkDropdownAction> = this.sanitizeImportData(MAPPED_VALUES);
+            const SANITIZED_VALUES: Array<BulkDropdownAction> = this.sanitizeImportData(MAPPED_VALUES);     //WIP - Second import doesn't hit here
 
-            this.clearHotGridData();
+            if (SANITIZED_VALUES.length > 0) {
+                this.clearHotGridData();
 
-            setTimeout(() => {
-                if (SANITIZED_VALUES.length > 0) {
+                setTimeout(() => {
                     this.updateHotGridData(SANITIZED_VALUES);
-    
+        
                     this.hotTable.batch(() => {
                         this.hotTable.updateSettings(this.BASE_HOT_SETTINGS);
                         this.hotTable.loadData(SANITIZED_VALUES, 'onFileChange');
     
                         this.initializeAndValidateTable();
                     });
-                }
-            }, 1000);
+    
+                    this.triggerLoading = false;
+                }, 1000);
+            } else {
+                this.triggerLoading = false;
+            }
         }
-
-        this.triggerLoading = false;
     }
 
     private onSubmit(): void {
