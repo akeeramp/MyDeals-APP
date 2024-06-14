@@ -1999,6 +1999,7 @@
     <Content Include="Client\Images\helpicons.psd" />
     <Content Include="Client\src\app\admin\unifiedDealRecon\admin.unifiedDealRecon.component.html" />
     <Content Include="Client\src\app\codingPractices\codingPractices.component.css" />
+    <TypeScriptCompile Include="Client\src\app\shared\config\handsontable.licenseKey.config.ts" />
     <None Include="Properties\PublishProfiles\Dev.pubxml" />
     <None Include="Properties\PublishProfiles\Perf.pubxml" />
     <Content Include="Scripts\intcAnalytics.js" />

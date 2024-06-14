@@ -1,5 +1,6 @@
 import { each, uniq, sortBy, pluck, findWhere, findIndex, reject, find, keys, isUndefined } from 'underscore';
 import Handsontable from 'handsontable';
+import { HandsonLicenseKey } from '../../shared/config/handsontable.licenseKey.config';
 
 import {  PRC_TBL_Model_Column, PRC_TBL_Model_Field } from '../pricingTableEditor/handsontable.interface';
 import { PTE_Common_Util } from '../PTEUtils/PTE_Common_util'
@@ -19,7 +20,7 @@ export class PTEUtil {
         firstDay: 1,
         showWeekNumber: true,
         numberOfMonths: 1,
-        licenseKey: 'ad331-b00d1-50514-e403f-15422',
+        licenseKey: HandsonLicenseKey.license,
     };
    
     static generateHandsontableColumn(isTenderContract:any,

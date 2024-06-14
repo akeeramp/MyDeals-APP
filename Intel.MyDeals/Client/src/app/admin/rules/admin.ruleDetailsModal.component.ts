@@ -11,6 +11,7 @@ import { registerAllModules } from 'handsontable/registry';
 import { HotTableRegisterer } from '@handsontable/angular';
 import { PricingTableEditorService } from '../../contract/pricingTableEditor/pricingTableEditor.service'
 import { MomentService } from "../../shared/moment/moment.service";
+import { HandsonLicenseKey } from '../../shared/config/handsontable.licenseKey.config';
 
 registerAllModules();
 
@@ -91,7 +92,7 @@ export class RuleDetailsModalComponent {
         copyPaste: true,
         colWidths: [350, 160],
         manualColumnResize: true,
-        licenseKey: "ad331-b00d1-50514-e403f-15422",
+        licenseKey: HandsonLicenseKey.license,
     };
     public state: State = {
         skip: 0,

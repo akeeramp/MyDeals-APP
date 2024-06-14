@@ -34,6 +34,7 @@ import { PTE_Validation_Util } from '../PTEUtils/PTE_Validation_util';
 import { OverlappingCheckComponent } from '../ptModals/overlappingCheckDeals/overlappingCheckDeals.component';
 import { FlexOverlappingCheckComponent } from '../ptModals/flexOverlappingDealsCheck/flexOverlappingDealsCheck.component';
 import { dropDownModalComponent } from '../ptModals/dropDownModal/dropDownModal.component';
+import { HandsonLicenseKey } from '../../shared/config/handsontable.licenseKey.config';
 
 @Component({
     selector: 'pricing-table-editor',
@@ -540,7 +541,7 @@ export class PricingTableEditorComponent implements OnInit, AfterViewInit, OnDes
         afterDocumentKeyDown: (event) => {
             this.afterDocumentKeyDown(event);
         },
-        licenseKey: "ad331-b00d1-50514-e403f-15422",
+        licenseKey: HandsonLicenseKey.license,
     };
 
     private columns: Array<Handsontable.ColumnSettings> = [];

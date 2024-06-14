@@ -10,6 +10,7 @@ import { unifiedDealReconService } from './admin.unifiedDealRecon.service';
 import { each } from 'underscore';
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { HandsonLicenseKey } from '../../shared/config/handsontable.licenseKey.config';
 
 @Component({
     selector: "bulk-unify-deals",
@@ -58,7 +59,7 @@ export class bulkUnifyModalComponent implements OnDestroy {
         copyPaste: true,
         comments: true,
         manualColumnResize: true,
-        licenseKey: "ad331-b00d1-50514-e403f-15422",
+        licenseKey: HandsonLicenseKey.license,
     };
 
     myRestrictions: FileRestrictions = {

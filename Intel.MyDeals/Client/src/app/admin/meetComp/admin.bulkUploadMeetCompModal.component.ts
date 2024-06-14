@@ -7,7 +7,7 @@ import { HotTableRegisterer } from '@handsontable/angular';
 import { ExcelColumnsConfig } from '../ExcelColumnsconfig.util';
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
-
+import { HandsonLicenseKey } from '../../shared/config/handsontable.licenseKey.config';
 
 @Component({
     selector: "bulkUploadMeetCompModal",
@@ -64,7 +64,7 @@ export class BulkUploadMeetCompModalComponent implements OnDestroy {
         copyPaste: true,
         comments: true,
         manualColumnResize: true,
-        licenseKey: "ad331-b00d1-50514-e403f-15422",
+        licenseKey: HandsonLicenseKey.license,
     };
 
     fileUploadOptions = {

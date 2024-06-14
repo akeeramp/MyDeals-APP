@@ -13,6 +13,7 @@ import { PendingChangesGuard } from "src/app/shared/util/gaurdprotectionDeactiva
 import { Observable } from "rxjs";
 import { Subject } from "rxjs";
 import { takeUntil } from "rxjs/operators";
+import { HandsonLicenseKey } from '../../shared/config/handsontable.licenseKey.config';
 
 @Component({
   selector: 'admin-bulk-pricing-updates',
@@ -69,7 +70,7 @@ export class BulkPricingUpdatesComponent implements PendingChangesGuard, OnDestr
         comments: true,
         data: this.validBulkPriceUpdates,
         manualColumnResize: true,
-        licenseKey: "ad331-b00d1-50514-e403f-15422",
+        licenseKey: HandsonLicenseKey.license,
         columns: ExcelColumnsConfig.bulkPriceUpdateColumnData,
         nestedHeaders: this.nestedHeaders,
         readOnlyCellClassName: 'readonly-cell',
