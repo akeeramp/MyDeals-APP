@@ -1080,7 +1080,10 @@ namespace Intel.MyDeals.BusinessLogic
             workRecordDataFields.recordDetails.quote.IsUnifiedEndCustomer = isPrimedCustomer == "1" ? true : false;
             workRecordDataFields.recordDetails.quote.UnifiedEndCustomerId = primedCustomerL1Id == "" ? null : primedCustomerL1Id;
             workRecordDataFields.recordDetails.quote.UnifiedCountryEndCustomerId = primedCustomerL2Id;
-            workRecordDataFields.recordDetails.quote.UnifiedEndCustomer = primedCustName;
+            if (isPrimedCustomer == "1" && primedCustName != "")
+            {
+                workRecordDataFields.recordDetails.quote.UnifiedEndCustomer = primedCustName;
+            }
 
             // Update the Meet Comp data now.
             EnterMeetCompData(contPsId, wipDealId, myPrdMbrSid, productLookupObj.MydlPdctName, myPrdCat, myDealPrdType, custId,
