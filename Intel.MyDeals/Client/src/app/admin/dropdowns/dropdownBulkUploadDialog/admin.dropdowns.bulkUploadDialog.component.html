@@ -50,7 +50,7 @@
                 <div [style.display]="(!submitTriggered && countNonEmptyRows == 0) ? 'unset' : 'none'">
                     <button type="button" class="btn btn-primary" (click)="bulkExcelImport.click()" title="Import values from an Excel (*.xlsx) document; duplicate values will be removed. NOTE: This will clear the current grid!">
                         <span>Import Excel</span>
-                        <input #bulkExcelImport type="file" (change)="onFileChange($event)" [multiple]="false" accept=".csv,text/csv,application/csv,.xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" style="display: none;" />
+                        <input #bulkExcelImport type="file" (change)="onFileChange($event)" (click)= "$event.target.value = ''" [multiple]="false" accept=".csv,text/csv,application/csv,.xls,.xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet,application/vnd.ms-excel" style="display: none;" />
                     </button>
                 </div>
                 <div [style.display]="(!triggerLoading && countNonEmptyRows > 0) ? 'unset' : 'none'">

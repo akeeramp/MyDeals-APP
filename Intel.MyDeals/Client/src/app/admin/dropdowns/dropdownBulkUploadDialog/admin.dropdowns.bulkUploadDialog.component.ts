@@ -851,7 +851,7 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
     }
 
     // Excel Upload
-    async onFileChange(event) {
+    private async onFileChange(event) {
         this.triggerLoading = true;
 
         const target: DataTransfer = <DataTransfer>(event.target);
