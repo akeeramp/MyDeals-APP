@@ -2645,7 +2645,7 @@ namespace Intel.MyDeals.DataLibrary
 
             items.Add(new UiTemplateContainerItem  // WIP All types
             {
-                Id = 3454,
+                Id = 3009,
                 AtrbCd = AttributeCodes.SEND_TO_VISTEX,
                 ObjType = new List<OpDataElementType> { OpDataElementType.WIP_DEAL },
                 //ObjSetType = new List<OpDataElementSetType> { OpDataElementSetType.ECAP, OpDataElementSetType.KIT, OpDataElementSetType.PROGRAM, OpDataElementSetType.VOL_TIER, OpDataElementSetType.FLEX, OpDataElementSetType.DENSITY },
