@@ -519,6 +519,18 @@ export class dealEditorComponent implements OnDestroy{
                     this.filterColumnNew(groupName, columnNew);
                 }
             }
+            
+            if( groupName.toLowerCase() == "all"){
+                this.columns.filter((column,i) => {
+                    if(column.field=="SEND_TO_VISTEX")
+                        {
+                            if(this.isTenderContract)
+                            {
+                                this.columns.splice(i,1);
+                            }      
+                        }
+                });
+            }
 
             return this.columns;
         }
