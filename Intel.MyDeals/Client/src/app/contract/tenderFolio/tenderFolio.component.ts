@@ -123,6 +123,7 @@ export class TenderFolioComponent implements OnDestroy {
         });
     }
     getCustomerDivisions(){
+        this.CUST_NM_DIV='';
         this.dataService.getCustDivBySID(this.custSIDObj.CUST_SID).pipe(takeUntil(this.destroy$))
         .subscribe(res => {
             if (res) {
