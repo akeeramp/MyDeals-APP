@@ -72,11 +72,9 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
 
     private updateStatusMessagesByRow(rowIds: number[], statusMessage: string = '') {
         if (rowIds.length > 0) {
-            const STATUS_MESSAGE_COLUMN_INDEX: number = this.hotTable.propToCol('statusMessage');
-
             this.hotTable.batchRender(() => {
                 for (const ROW_ID of rowIds) {
-                    this.hotTable.setDataAtCell(ROW_ID, STATUS_MESSAGE_COLUMN_INDEX, `${ statusMessage }`, 'addStatusMessage');
+                    this.hotTable.setDataAtRowProp(ROW_ID, 'statusMessage', `${ statusMessage }`, 'addStatusMessage');
                 }
             });
         }
@@ -150,12 +148,18 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
 
     private existingValuesFromChosenAttributes: string[] = [];
     private persistentDropdownData: Array<UiDropdownItem> = undefined;
-    private updatePersistentDropdownData(): void {
+    private updatePersistentDropdownData(): Observable<boolean> {
+        let isComplete = new BehaviorSubject<boolean>(false);
+
         this.getBasicDropdowns().subscribe((BASIC_DROPDOW_DATA: Array<UiDropdownItem>) => {
             this.persistentDropdownData = BASIC_DROPDOW_DATA;
+            isComplete.next(true);
         }, (error) => {
             this.persistentDropdownData = undefined;
+            isComplete.next(true);
         });
+        
+        return isComplete.asObservable();
     }
 
     private marketSegmentInvalidValues: string[] = [];
@@ -384,41 +388,39 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
     private hotAfterChanges(changes, source): void {
         if (this.hotTable != undefined && this.hotTable != null) {
             if (!['afterChange', 'addStatusMessage', 'updateCheckboxState'].includes(source)) {
-                const VALUE_COLUMN_INDEX: number = this.hotTable.propToCol('value');
-                const STATUS_MESSAGE_COLUMN_INDEX: number = this.hotTable.propToCol('statusMessage');
+                const ROWS_TO_REMOVE: Set<number> = new Set<number>();
 
-                let rowsToRemove: Set<number> = new Set<number>();
-
-                const VALUES_IN_GRID: string[] = this.hotTable.getDataAtCol(VALUE_COLUMN_INDEX)
+                const VALUES_IN_GRID: string[] = this.hotTable.getDataAtProp('value');
 
                 this.hotTable.batchRender(() => {
                     changes?.forEach(([row, prop, oldValue, newValue]) => {
                         // Sanitize new cells in 'Value' column
                         if (prop === 'value' && (newValue != null && newValue != undefined)) {
                             const SANITIZED_VALUE: string = this.sanitizeValue(newValue);
-        
+
                             // Update cell with sanitized value if necessary
                             if (SANITIZED_VALUE !== newValue) {
-                                this.hotTable.setDataAtCell(row, VALUE_COLUMN_INDEX, SANITIZED_VALUE, 'addStatusMessage');
+                                // this.hotTable.setDataAtCell(row, VALUE_COLUMN_INDEX, SANITIZED_VALUE, 'addStatusMessage');
+                                this.hotTable.setDataAtRowProp(row, 'value', SANITIZED_VALUE, 'updateValue');
                             }
 
                             // Remove Empty Values
                             if (this.EMPTY_STRING.test(SANITIZED_VALUE)) {
-                                rowsToRemove.add(row);
+                                ROWS_TO_REMOVE.add(row);
                             }
-    
+
                             // Handle Duplicate Values
-                            const INDEX_MATCH_VALUE = this.indexOfCaseInsensitive(VALUES_IN_GRID, newValue);
+                            const INDEX_MATCH_VALUE = this.indexOfCaseInsensitive(VALUES_IN_GRID, SANITIZED_VALUE);
                             if (INDEX_MATCH_VALUE !== -1) {
-                                if (INDEX_MATCH_VALUE !== row && !rowsToRemove.has(INDEX_MATCH_VALUE)) {
-                                    this.hotTable.setDataAtCell(row, STATUS_MESSAGE_COLUMN_INDEX, `${ this.DUPLICATE_GRID_VALUE_MESSAGE }`, 'addStatusMessage');
+                                if (INDEX_MATCH_VALUE !== row && !ROWS_TO_REMOVE.has(INDEX_MATCH_VALUE)) {
+                                    this.hotTable.setDataAtRowProp(row, 'statusMessage', `${ this.DUPLICATE_GRID_VALUE_MESSAGE }`, 'addStatusMessage');
                                 }
                             }
                         }
                     });
                 });
 
-                this.hotRemoveRows(Array.from(rowsToRemove));
+                this.hotRemoveRows(Array.from(ROWS_TO_REMOVE));
             }
         }
     }
@@ -756,7 +758,6 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
         this.dropdownService.recycleBasicDropdownsCache().pipe(takeUntil(this.destroy$)).subscribe(() => {
             completionAndSuccessPair.next([true, true]);
         }, (error) => {
-            // this.loggerService.error('Please manually recycle GetBasicDropdowns cache to load all values', 'Recycling Basic Dropdowns Failed', error);
             completionAndSuccessPair.next([true, false]);
         });
 
@@ -817,7 +818,23 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
         if (this.submitTriggered) {
             this.insertResults = [];
             this.deleteResults = [];
-            this.enableFormAndGrid();
+
+            // Reload ALL Dropdown data
+            this.recycleBasicDropdownsCache().subscribe((completionAndSuccessPair: [boolean, boolean]) => {
+                if (completionAndSuccessPair[0]) {  // When complete
+                    if (completionAndSuccessPair[1]) { // Successfully reset cache
+                        setTimeout(() => {
+                            this.reloadDropdownAndValidate();
+
+                            // Only enable the form if the Cache Recycle was successful, otherwise this can cause benign API Errors and not allow the UI logic to prevent inserting existing dropdown values
+                            this.enableFormAndGrid();
+                        }, 500);
+                    } else {    // Failed to reset cache
+                        // Tell user to close and reopen Dialog
+                        this.loggerService.error('Please close and reopen the Bulk Action Dialog to force-Recycle the dropdown cache', 'API Error - Recycle Cache', null);
+                    }
+                }
+            });
         }
     }
 
@@ -872,7 +889,7 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
                 } as BulkDropdownAction;
             });
 
-            const SANITIZED_VALUES: Array<BulkDropdownAction> = this.sanitizeImportData(MAPPED_VALUES);     //WIP - Second import doesn't hit here
+            const SANITIZED_VALUES: Array<BulkDropdownAction> = this.sanitizeImportData(MAPPED_VALUES);
 
             if (SANITIZED_VALUES.length > 0) {
                 this.clearHotGridData();
@@ -895,17 +912,23 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
         }
     }
 
+    private reloadDropdownAndValidate(): void {
+        this.updatePersistentDropdownData().subscribe((isComplete: boolean) => {
+            if (isComplete) {
+                this.updateExistingValuesFromValidForm();   // WIP - Need to add error handling in case this fails again, use `afterRemoveRow` hook
+
+                this.hotTable.validateCells();        
+            }
+        });
+    }
+
     private onSubmit(): void {
         this.submitTriggered = true;
         this.triggerLoading = true;
 
         // Get persistent data if not loaded already
         if (this.persistentDropdownData == undefined || this.persistentDropdownData.length < 1) {
-            this.updatePersistentDropdownData();
-
-            this.updateExistingValuesFromValidForm();   // WIP - Need to add error handling in case this fails again, use `afterRemoveRow` hook
-
-            this.hotTable.validateCells();
+            this.reloadDropdownAndValidate();
         }
 
         if (this.persistentDropdownData != undefined) {
@@ -915,20 +938,26 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
 
                 const BULK_INSERT_VALUES: Array<ValueAction> = [];
                 const BULK_DELETE_VALUES: Array<ValueAction> = [];
+
+                const PENDING_VALUES: Set<string> = new Set<string>(); // To keep track of all values to avoid duplicate / existing values
                 for (const READONLY_ROW of this.readonlyRows) {
                     const VALUE_COLUMN_INDEX: number = this.hotTable.propToCol('value');
         
                     const ROW_METADATA: Array<CellProperties> = this.hotTable.getCellMetaAtRow(READONLY_ROW.row);
 
                     // If row has duplicate status message, ignore
-                    if (!(this.hotTable.getDataAtRowProp(READONLY_ROW.row, 'statusMessage') as string).toUpperCase().includes('DUPLICATE')) {
+                    const ROW_STATUS_MESSAGE: string = (this.hotTable.getDataAtRowProp(READONLY_ROW.row, 'statusMessage') as string);
+                    if (ROW_STATUS_MESSAGE == undefined || ROW_STATUS_MESSAGE == '' || !ROW_STATUS_MESSAGE.toUpperCase().includes('DUPLICATE')) {
                         // Get values that are for bulk insertion
                         if (!READONLY_ROW.isActiveReadonly) {  // If !value.isActive then it's a Insert Row
-                            if (ROW_METADATA[VALUE_COLUMN_INDEX].valid) {    // Is 'value' column valid
+                            if (ROW_METADATA[VALUE_COLUMN_INDEX].valid && !ROW_STATUS_MESSAGE.toUpperCase().includes('EXISTING')) {    // Is 'value' column valid
                                 const ROW_VALUE: string = this.hotTable.getDataAtRowProp(READONLY_ROW.row, 'value');
                                 const ROW_IS_ACTIVE: boolean = this.hotTable.getDataAtRowProp(READONLY_ROW.row, 'isActive');
 
-                                BULK_INSERT_VALUES.push({ rowIndex: READONLY_ROW.row, value: ROW_VALUE, isActive: ROW_IS_ACTIVE });
+                                if (!PENDING_VALUES.has(ROW_VALUE)) {
+                                    PENDING_VALUES.add(ROW_VALUE);
+                                    BULK_INSERT_VALUES.push({ rowIndex: READONLY_ROW.row, value: ROW_VALUE, isActive: ROW_IS_ACTIVE });
+                                }
                             }
                         }
 
@@ -938,7 +967,8 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
                                 const ROW_VALUE: string = this.hotTable.getDataAtRowProp(READONLY_ROW.row, 'value');
                                 const ROW_IS_DELETE: boolean = this.hotTable.getDataAtRowProp(READONLY_ROW.row, 'isDelete');
 
-                                if (ROW_IS_DELETE) {    // If is an existing value and not set to delete, ignore
+                                if (ROW_IS_DELETE && !PENDING_VALUES.has(ROW_VALUE)) {    // If is an existing value and not set to delete, ignore
+                                    PENDING_VALUES.add(ROW_VALUE);
                                     BULK_DELETE_VALUES.push({ rowIndex: READONLY_ROW.row, value: ROW_VALUE, isDelete: ROW_IS_DELETE })
                                 }
                             }
@@ -949,6 +979,10 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
                 this.recycleBasicDropdownsCache().subscribe((completionAndSuccessPair: [boolean, boolean]) => {
                     if (completionAndSuccessPair[0]) {  // When complete
                         if (completionAndSuccessPair[1]) { // Successfully reset cache
+                            // Handle Loading Status
+                            let payloadsCompleted = new BehaviorSubject(0);
+                            const EXPECTED_PAYLOAD_COUNT: number = 0 + (BULK_INSERT_VALUES.length > 0 ? 1 : 0) + (BULK_DELETE_VALUES.length > 0 ? 1 : 0);
+
                             // Insert Values
                             if (BULK_INSERT_VALUES.length > 0) {
                                 const INSERT_PAYLOADS: Array<UiDropdownItem> = this.returnEmptyIfUndefinedOrNull(this.generateDropdownInsertPayloads(BULK_INSERT_VALUES)) as Array<UiDropdownItem>;
@@ -968,9 +1002,7 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
                                                 }
                                             }
 
-                                            if (BULK_DELETE_VALUES.length == 0) {
-                                                this.triggerLoading = false;
-                                            }
+                                            payloadsCompleted.next(payloadsCompleted.getValue() + 1);
                                         }
                                     });
                                 }
@@ -1025,10 +1057,17 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
                                         this.updateStatusMessagesByRow(successfulDeactivateRows, `Successful - Value currently used by deal, deactivated value`);
                                         this.updateStatusMessagesByRow(errorRows, `Failed - Could not delete / deactivate value`);
 
-                                        this.triggerLoading = false;
+                                        payloadsCompleted.next(payloadsCompleted.getValue() + 1);
                                     }
                                 });
                             }
+
+                            // Handle updating Loading status
+                            payloadsCompleted.asObservable().subscribe((completionCount: number) => {
+                                if (completionCount >= EXPECTED_PAYLOAD_COUNT) {
+                                    this.triggerLoading = false;
+                                }
+                            });
                         } else {    // Failed to reset cache
                             const ALL_ROW_INDEX: number[] = this.returnEmptyIfUndefinedOrNull([...BULK_INSERT_VALUES.map((value) => { return value.rowIndex; }),
                                 ...BULK_DELETE_VALUES.map((value) => { return value.rowIndex; })]) as number[];
@@ -1071,11 +1110,19 @@ export class DropdownBulkUploadDialogComponent implements OnInit, OnDestroy {
         this.updateHotGridData([]);
         this.initializeAndValidateTable();
 
-        this.updatePersistentDropdownData();
+        this.updatePersistentDropdownData().subscribe((isComplete: boolean) => {
+            if (isComplete) {
+                // No need to wait for this here 
+            }
+        });
 
         this.formData.valueChanges.subscribe(() => { // trigger loading values to a global array to compare for existing values
             if (this.persistentDropdownData != undefined || this.persistentDropdownData.length > 0) {
                 this.updateExistingValuesFromValidForm();
+
+                if (this.hotTable && this.hotTable != null && this.hotTable != undefined) {
+                    this.hotTable.validateCells();
+                }
             }
         });
     }

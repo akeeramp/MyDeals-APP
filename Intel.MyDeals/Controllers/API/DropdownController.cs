@@ -280,7 +280,6 @@ namespace Intel.MyDeals.Controllers.API
                 catch(Exception ex)
                 {
                     // Catch the exception to prevent subsequent insertions from failing, UI will compare successes and submitted values to see if there were any that failed
-
                 }
             }
 
