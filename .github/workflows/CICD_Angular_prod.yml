@@ -110,3 +110,37 @@ jobs:
        - name:  Deploy Client App 
          run: |
            C:\Abhilash\deploy_env.ps1 'DeployENV' '${{ secrets.USN_PRD }}' '${{ secrets.PWD_PRD }}' '${{github.event.inputs.ENV}}'
+  
+  RunSquawker-Regular:
+    name: Run Squawker 
+    runs-on: [gasp]
+    needs: Deploy-Angular
+    container: "amr-registry.caas.intel.com/squirrels/nodelts-alpine-git-cf:latest"
+    timeout-minutes: 2
+    continue-on-error: true
+    steps:
+       - name:  Squawk for TWC CICD
+         uses: intel-innersource/frameworks.actions.squawker@v3
+         with:
+          squawk_iap: '14464'
+          squawk_team: '3179'
+          application_name: 'MyDeals'
+          repo_url: ${{ github.repositoryUrl }}
+          squawk_environment_name: '${{github.event.inputs.ENV}}'   
+  
+  RunSquawker-Latest:
+    name: Run Squawker 
+    runs-on: [gasp]
+    needs: Deploy_Latest
+    container: "amr-registry.caas.intel.com/squirrels/nodelts-alpine-git-cf:latest"
+    timeout-minutes: 2
+    continue-on-error: true
+    steps:
+       - name:  Squawk for TWC CICD
+         uses: intel-innersource/frameworks.actions.squawker@v3
+         with:
+          squawk_iap: '14464'
+          squawk_team: '3179'
+          application_name: 'MyDeals'
+          repo_url: ${{ github.repositoryUrl }}
+          squawk_environment_name: '${{github.event.inputs.ENV}}' 
